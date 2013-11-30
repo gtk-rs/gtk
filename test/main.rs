@@ -28,6 +28,10 @@ fn my_callback(widget: &mut gtk::Button, callback_data: Option<&mut GtkWidget>) 
     }
 }
 
+fn callback_info_bar(widget: &mut gtk::InfoBar, callback_data: Option<&mut GtkWidget>) {
+    widget.hide();
+}
+
 fn main() {
     rt::init();
     println!("Major: {}, Minor: {}", gtk::version::get_major_version(), gtk::version::get_minor_version());
@@ -59,6 +63,9 @@ fn main() {
     let mut progress_bar = gtk::ProgressBar::new().unwrap();
     let arrow = gtk::Arrow::new(GtkArrowRight, GtkShadowEtchedOut).unwrap();
     let calendar = gtk::Calendar::new().unwrap();
+    let mut info_bar = gtk::InfoBar::new().unwrap();
+    info_bar.show_close_button(true);
+    // info_bar.connect_2p_widget("response", callback_info_bar, Some(&entry));
     progress_bar.set_fraction(0.7);
     spinner.start();
     level_bar.set_value(37.);
@@ -84,6 +91,7 @@ fn main() {
     v_box.add(&check_button);
     v_box.add(&link_button);
     v_box.add(&spin_button);
+    box.add(&info_bar);
     box.add(&v_box);
     box.add(&scale);
     box.add(&level_bar);

@@ -76,4 +76,10 @@ pub trait GtkWidget {
         }
     }
 
+    fn hide(&mut self) -> () {
+        unsafe {
+            ffi::gtk_widget_hide(self.get_widget());
+        }
+    }
 }
+

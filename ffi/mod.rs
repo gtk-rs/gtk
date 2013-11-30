@@ -61,6 +61,7 @@ pub struct C_GtkCalendar;
 pub struct C_GtkAlignment;
 pub struct C_GtkExpander;
 pub struct C_GtkPaned;
+pub struct C_GtkInfoBar;
 
 
 pub struct C_GtkMenu;
@@ -84,6 +85,7 @@ extern "C" {
     pub fn gtk_window_new                      (wtype : GtkWindowType) -> *C_GtkWidget;
     pub fn gtk_window_set_title                (window: *C_GtkWindow, title: *c_char) -> ();
     pub fn gtk_window_get_title                (window: *C_GtkWindow) -> *c_char;
+    pub fn gtk_widget_hide                     (widget: *C_GtkWidget) -> ();
     // pub fn gtk_window_set_role(window: *C_GtkWindow, role: *c_char) -> ();
     // pub fn gtk_window_set_startup_id(window: *C_GtkWindow, startup_id: *c_char) -> ();
     // pub fn gtk_window_get_role(window: *C_GtkWindow) -> *c_char;
@@ -733,6 +735,24 @@ extern "C" {
     pub fn gtk_paned_get_handle_window         (paned: *C_GtkPaned) -> *C_GtkWidget;
 
     //=========================================================================
+    // GtkInfoBar
+    //=========================================================================
+    pub fn gtk_info_bar_new                    () -> *C_GtkWidget;
+    // pub fn gtk_info_bar_new_with_buttons       (const gchar *first_button_text, ...) -> *C_GtkWidget;
+    pub fn gtk_info_bar_add_action_widget      (info_bar: *C_GtkInfoBar, child: *C_GtkWidget, response_id: c_int);
+    pub fn gtk_info_bar_add_button             (info_bar: *C_GtkInfoBar, button_text: *c_char, response_id: c_int) -> *C_GtkWidget;
+    // pub fn gtk_info_bar_add_buttons            (GtkInfoBar *info_bar, const gchar *first_button_text, ...) -> ();
+    pub fn gtk_info_bar_set_response_sensitive (info_bar: *C_GtkInfoBar, response_id: c_int, setting: Gboolean) -> ();
+    pub fn gtk_info_bar_set_default_response   (info_bar: *C_GtkInfoBar, response_id: c_int) -> ();
+    pub fn gtk_info_bar_response               (info_bar: *C_GtkInfoBar, response_id: c_int) -> ();
+    pub fn gtk_info_bar_set_message_type       (info_bar: *C_GtkInfoBar, message_type: GtkMessageType) -> ();
+    pub fn gtk_info_bar_get_message_type       (info_bar: *C_GtkInfoBar) -> GtkMessageType;
+    // pub fn gtk_info_bar_get_action_area        (info_bar: *C_GtkInfoBar) -> *C_GtkWidget;
+    // pub fn gtk_info_bar_get_content_area       (info_bar: *C_GtkInfoBar) -> *C_GtkWidget;
+    pub fn gtk_info_bar_get_show_close_button  (info_bar: *C_GtkInfoBar) -> Gboolean;
+    pub fn gtk_info_bar_set_show_close_button  (info_bar: *C_GtkInfoBar, setting: Gboolean) -> ();
+
+    //=========================================================================
     // Glu fixe code
     //=========================================================================
     pub fn signal_connect(g_object: *C_GtkWidget, signal: *c_char, func: Option<fn()>);
@@ -774,6 +794,7 @@ extern "C" {
     pub fn cast_GtkAlignment(widget: *C_GtkWidget) -> *C_GtkAlignment;
     pub fn cast_GtkExpander(widget: *C_GtkWidget) -> *C_GtkExpander;
     pub fn cast_GtkPaned(widget: *C_GtkWidget) -> *C_GtkPaned;
+    pub fn cast_GtkInfoBar(widget: *C_GtkWidget) -> *C_GtkInfoBar;
 }
 
 

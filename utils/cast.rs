@@ -157,5 +157,8 @@ pub fn GTK_PANED(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkPaned {
     unsafe { ffi::cast_GtkPaned(widget) }
 }
 
+pub fn GTK_INFOBAR(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkInfoBar {
+    unsafe { ffi::cast_GtkInfoBar(widget) }
+}
 
 

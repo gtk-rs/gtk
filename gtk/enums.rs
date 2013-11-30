@@ -722,3 +722,19 @@ pub enum GtkCalendarDisplayOptions {
     /// Just show an indicator, not the full details text when details are provided. See gtk::Calendar::set_detail_func().
     GtkCalendarShowDetails        = 1 << 5
 }
+
+/// The type of message being displayed in the dialog.
+#[repr(C)]
+#[deriving(Clone, Eq, Ord, ToStr)]
+pub enum GtkMessageType {
+    /// Informational message
+    GtkMessageInfo,
+    /// Non-fatal warning message
+    GtkMessageWarning,
+    /// Question requiring a choice
+    GtkMessageQuestion,
+    /// Fatal error message
+    GtkMessageError,
+    /// None of the above, doesn't get an icon
+    GtkMessageOther
+}

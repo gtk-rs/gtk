@@ -48,6 +48,7 @@ pub use gtk::calendar::Calendar;
 pub use gtk::alignment::Alignment;
 pub use gtk::expander::Expander;
 pub use gtk::paned::Paned;
+pub use gtk::infobar::InfoBar;
 
 pub mod enums;
 pub mod version;
@@ -86,6 +87,7 @@ pub mod calendar;
 pub mod alignment;
 pub mod expander;
 pub mod paned;
+pub mod infobar;
 
 pub mod cast;
 
