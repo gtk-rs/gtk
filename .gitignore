@@ -1,0 +1,6 @@
+./bin
+./lib
+configure.in
+*.dylib
+Makefile
+.rust
