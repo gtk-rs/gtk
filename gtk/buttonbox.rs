@@ -25,56 +25,56 @@ use ffi;
 
 /// ButtonBox — A container for arranging buttons
 pub struct ButtonBox {
-	priv pointer: 			*ffi::C_GtkWidget,
-	priv can_drop: 			bool,
-    priv signal_handlers: 	~[~SignalHandler]
+    priv pointer:           *ffi::C_GtkWidget,
+    priv can_drop:          bool,
+    priv signal_handlers:   ~[~SignalHandler]
 }
 
 impl ButtonBox {
-	pub fn new(orientation: GtkOrientation) -> Option<ButtonBox> {
-		let tmp_pointer = unsafe { ffi::gtk_button_box_new(orientation) };
-		check_pointer!(tmp_pointer, ButtonBox)
-	}
+    pub fn new(orientation: GtkOrientation) -> Option<ButtonBox> {
+        let tmp_pointer = unsafe { ffi::gtk_button_box_new(orientation) };
+        check_pointer!(tmp_pointer, ButtonBox)
+    }
 
-	pub fn get_layout(&self) -> GtkButtonBoxStyle {
-		unsafe {
-			ffi::gtk_button_box_get_layout(GTK_BUTTONBOX(self.pointer))
-		}
-	}
+    pub fn get_layout(&self) -> GtkButtonBoxStyle {
+        unsafe {
+            ffi::gtk_button_box_get_layout(GTK_BUTTONBOX(self.pointer))
+        }
+    }
 
-	pub fn get_child_secondary<T: GtkWidget + GtkButton>(&self, child: &T) -> bool {
-		match unsafe { ffi::gtk_button_box_get_child_secondary(GTK_BUTTONBOX(self.pointer), child.get_widget()) } {
-			ffi::Gfalse => false,
-			_		 	=> true
-		}
-	}
+    pub fn get_child_secondary<T: GtkWidget + GtkButton>(&self, child: &T) -> bool {
+        match unsafe { ffi::gtk_button_box_get_child_secondary(GTK_BUTTONBOX(self.pointer), child.get_widget()) } {
+            ffi::Gfalse => false,
+            _           => true
+        }
+    }
 
-	pub fn get_child_non_homogeneous<T: GtkWidget + GtkButton>(&self, child: &T) -> bool {
-		match unsafe { ffi::gtk_button_box_get_child_non_homogeneous(GTK_BUTTONBOX(self.pointer), child.get_widget()) } {
-			ffi::Gfalse => false,
-			_		 	=> true
-		}
-	}
+    pub fn get_child_non_homogeneous<T: GtkWidget + GtkButton>(&self, child: &T) -> bool {
+        match unsafe { ffi::gtk_button_box_get_child_non_homogeneous(GTK_BUTTONBOX(self.pointer), child.get_widget()) } {
+            ffi::Gfalse => false,
+            _           => true
+        }
+    }
 
-	pub fn set_layout(&mut self, layout_style: GtkButtonBoxStyle) -> () {
-		unsafe {
-			ffi::gtk_button_box_set_layout(GTK_BUTTONBOX(self.pointer), layout_style)
-		}
-	}
+    pub fn set_layout(&mut self, layout_style: GtkButtonBoxStyle) -> () {
+        unsafe {
+            ffi::gtk_button_box_set_layout(GTK_BUTTONBOX(self.pointer), layout_style)
+        }
+    }
 
-	pub fn set_child_secondary<T: GtkWidget + GtkButton>(&mut self, child: &T, is_secondary: bool) -> () {
-		match is_secondary {
-			false 	=> unsafe { ffi::gtk_button_box_set_child_secondary(GTK_BUTTONBOX(self.pointer), child.get_widget(), ffi::Gfalse) },
-			true 	=> unsafe { ffi::gtk_button_box_set_child_secondary(GTK_BUTTONBOX(self.pointer), child.get_widget(), ffi::Gtrue) }
-		}
-	}
+    pub fn set_child_secondary<T: GtkWidget + GtkButton>(&mut self, child: &T, is_secondary: bool) -> () {
+        match is_secondary {
+            false   => unsafe { ffi::gtk_button_box_set_child_secondary(GTK_BUTTONBOX(self.pointer), child.get_widget(), ffi::Gfalse) },
+            true    => unsafe { ffi::gtk_button_box_set_child_secondary(GTK_BUTTONBOX(self.pointer), child.get_widget(), ffi::Gtrue) }
+        }
+    }
 
-	pub fn set_child_non_homogeneous<T: GtkWidget + GtkButton>(&mut self, child: &T, non_homogeneous: bool) -> () {
-		match non_homogeneous {
-			false 	=> unsafe { ffi::gtk_button_box_set_child_non_homogeneous(GTK_BUTTONBOX(self.pointer), child.get_widget(), ffi::Gfalse) },
-			true 	=> unsafe { ffi::gtk_button_box_set_child_non_homogeneous(GTK_BUTTONBOX(self.pointer), child.get_widget(), ffi::Gtrue) }
-		}
-	}
+    pub fn set_child_non_homogeneous<T: GtkWidget + GtkButton>(&mut self, child: &T, non_homogeneous: bool) -> () {
+        match non_homogeneous {
+            false   => unsafe { ffi::gtk_button_box_set_child_non_homogeneous(GTK_BUTTONBOX(self.pointer), child.get_widget(), ffi::Gfalse) },
+            true    => unsafe { ffi::gtk_button_box_set_child_non_homogeneous(GTK_BUTTONBOX(self.pointer), child.get_widget(), ffi::Gtrue) }
+        }
+    }
 }
 
 impl_GtkWidget!(ButtonBox)

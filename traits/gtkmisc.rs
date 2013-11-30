@@ -21,32 +21,32 @@ use ffi;
 
 pub trait GtkMisc : GtkWidget {
     fn set_alignment(&mut self, x_align: f32, y_align: f32) -> () {
-    	unsafe {
-    		ffi::gtk_misc_set_alignment(GTK_MISC(self.get_widget()), x_align as c_float, y_align as c_float);
-    	}
+        unsafe {
+            ffi::gtk_misc_set_alignment(GTK_MISC(self.get_widget()), x_align as c_float, y_align as c_float);
+        }
     }
 
     fn set_padding(&mut self, x_pad: i32, y_pad: i32) -> () {
-    	unsafe {
-    		ffi::gtk_misc_set_padding(GTK_MISC(self.get_widget()), x_pad as c_int, y_pad as c_int);
-    	}
+        unsafe {
+            ffi::gtk_misc_set_padding(GTK_MISC(self.get_widget()), x_pad as c_int, y_pad as c_int);
+        }
     }
 
     fn get_alignment(&self) -> (f32, f32) {
-    	let x: c_float = 0.;
-    	let y: c_float = 0.;
-    	unsafe {
-    		ffi::gtk_misc_get_alignment(GTK_MISC(self.get_widget()), &x, &y);
-    	}
-    	(x as f32, y as f32)
+        let x: c_float = 0.;
+        let y: c_float = 0.;
+        unsafe {
+            ffi::gtk_misc_get_alignment(GTK_MISC(self.get_widget()), &x, &y);
+        }
+        (x as f32, y as f32)
     }
 
     fn get_padding(&self) -> (i32, i32) {
-    	let x: c_int = 0;
-    	let y: c_int = 0;
-    	unsafe {
-    		ffi::gtk_misc_get_padding(GTK_MISC(self.get_widget()), &x, &y);
-    	}
-    	(x as i32, y as i32)
+        let x: c_int = 0;
+        let y: c_int = 0;
+        unsafe {
+            ffi::gtk_misc_get_padding(GTK_MISC(self.get_widget()), &x, &y);
+        }
+        (x as i32, y as i32)
     }
 }

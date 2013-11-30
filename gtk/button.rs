@@ -34,52 +34,52 @@ use gtk::enums::GtkIconSize;
 * * `released` : Run First
 */
 pub struct Button {
-	priv pointer: 			*ffi::C_GtkWidget,
-	priv can_drop: 			bool,
-	priv signal_handlers: 	~[~SignalHandler]
+    priv pointer:           *ffi::C_GtkWidget,
+    priv can_drop:          bool,
+    priv signal_handlers:   ~[~SignalHandler]
 }
 
 impl Button {
-	pub fn new() -> Option<Button> {
-		let tmp_pointer = unsafe { ffi::gtk_button_new() };
-		check_pointer!(tmp_pointer, Button)
-	}
+    pub fn new() -> Option<Button> {
+        let tmp_pointer = unsafe { ffi::gtk_button_new() };
+        check_pointer!(tmp_pointer, Button)
+    }
 
-	pub fn new_with_label(label: &str) -> Option<Button> {
-		let tmp_pointer = unsafe { 
-			label.with_c_str(|c_str| { 
-				ffi::gtk_button_new_with_label(c_str) 
-			}) 
-		};
-		check_pointer!(tmp_pointer, Button)
-	}
+    pub fn new_with_label(label: &str) -> Option<Button> {
+        let tmp_pointer = unsafe { 
+            label.with_c_str(|c_str| { 
+                ffi::gtk_button_new_with_label(c_str) 
+            }) 
+        };
+        check_pointer!(tmp_pointer, Button)
+    }
 
-	pub fn new_with_menmonic(mnemonic: &str) -> Option<Button> {
-		let tmp_pointer = unsafe { 
-			mnemonic.with_c_str(|c_str| {
-				ffi::gtk_button_new_with_mnemonic(c_str)
-			})
-		};
-		check_pointer!(tmp_pointer, Button)
-	}
+    pub fn new_with_menmonic(mnemonic: &str) -> Option<Button> {
+        let tmp_pointer = unsafe { 
+            mnemonic.with_c_str(|c_str| {
+                ffi::gtk_button_new_with_mnemonic(c_str)
+            })
+        };
+        check_pointer!(tmp_pointer, Button)
+    }
 
-	pub fn new_from_icon_name(icon_name: &str, size: GtkIconSize) -> Option<Button> {
-		let tmp_pointer = unsafe { 
-			icon_name.with_c_str(|c_str| {
-				ffi::gtk_button_new_from_icon_name(c_str, size) 
-			})
-		};
-		check_pointer!(tmp_pointer, Button)
-	}
+    pub fn new_from_icon_name(icon_name: &str, size: GtkIconSize) -> Option<Button> {
+        let tmp_pointer = unsafe { 
+            icon_name.with_c_str(|c_str| {
+                ffi::gtk_button_new_from_icon_name(c_str, size) 
+            })
+        };
+        check_pointer!(tmp_pointer, Button)
+    }
 
-	pub fn new_from_stock(stock_id: &str) -> Option<Button> {
-		let tmp_pointer = unsafe { 
-			stock_id.with_c_str(|c_str| {
-				ffi::gtk_button_new_from_stock(c_str) 
-			}) 
-		};	
-		check_pointer!(tmp_pointer, Button)
-	}
+    pub fn new_from_stock(stock_id: &str) -> Option<Button> {
+        let tmp_pointer = unsafe { 
+            stock_id.with_c_str(|c_str| {
+                ffi::gtk_button_new_from_stock(c_str) 
+            }) 
+        };  
+        check_pointer!(tmp_pointer, Button)
+    }
 }
 
 impl_GtkWidget!(Button)

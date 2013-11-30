@@ -41,21 +41,21 @@ use ffi;
 * * `toggle-overwrite` : Action
 */
 pub struct Entry {
-	priv pointer: 			*ffi::C_GtkWidget,
-	priv can_drop: 			bool,
-	priv signal_handlers: 	~[~SignalHandler]
+    priv pointer:           *ffi::C_GtkWidget,
+    priv can_drop:          bool,
+    priv signal_handlers:   ~[~SignalHandler]
 }
 
 impl Entry {
-	pub fn new() -> Option<Entry> {
-		let tmp_pointer = unsafe { ffi::gtk_entry_new() };
-		check_pointer!(tmp_pointer, Entry)
-	}
+    pub fn new() -> Option<Entry> {
+        let tmp_pointer = unsafe { ffi::gtk_entry_new() };
+        check_pointer!(tmp_pointer, Entry)
+    }
 
-	pub fn new_with_buffer(buffer: &gtk::EntryBuffer) -> Option<Entry> {
-		let tmp_pointer = unsafe { ffi::gtk_entry_new_with_buffer(buffer.get_pointer()) };
-		check_pointer!(tmp_pointer, Entry)
-	}
+    pub fn new_with_buffer(buffer: &gtk::EntryBuffer) -> Option<Entry> {
+        let tmp_pointer = unsafe { ffi::gtk_entry_new_with_buffer(buffer.get_pointer()) };
+        check_pointer!(tmp_pointer, Entry)
+    }
 }
 
 impl_GtkWidget!(Entry)

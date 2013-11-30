@@ -19,7 +19,7 @@ use traits::GtkWidget;
 
 
 pub trait Signal: GtkWidget {
-	fn connect(&mut self, signal: &str, function: fn()) -> ();
-	fn connect_2p<B>(&mut self, signal: &str, function: fn(&mut Self, *c_void), user_data: Option<&B>) -> () ;
-	fn connect_2p_widget<B: GtkWidget>(&mut self, signal: &str, function: fn(&mut Self, Option<&mut GtkWidget>), user_data: Option<&B>) -> () ;
+    fn connect(&mut self, signal: &str, function: fn()) -> ();
+    fn connect_2p<B>(&mut self, signal: &str, function: fn(&mut Self, *c_void), user_data: Option<&B>) -> () ;
+    fn connect_2p_widget<B: GtkWidget>(&mut self, signal: &str, function: fn(&mut Self, Option<&mut GtkWidget>), user_data: Option<&B>) -> () ;
 }

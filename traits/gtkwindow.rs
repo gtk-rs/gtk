@@ -23,13 +23,13 @@ pub trait GtkWindow : GtkWidget {
     fn set_title(&mut self, title: &str) -> () {
         unsafe {
             title.with_c_str(|c_str| {
-            	ffi::gtk_window_set_title(GTK_WINDOW(self.get_widget()), c_str)
+                ffi::gtk_window_set_title(GTK_WINDOW(self.get_widget()), c_str)
             });
         }
     }
 
     fn get_title(&self) -> ~str {
-    	let c_title = unsafe { ffi::gtk_window_get_title(GTK_WINDOW(self.get_widget())) };
-    	unsafe { str::raw::from_c_str(c_title) }
+        let c_title = unsafe { ffi::gtk_window_get_title(GTK_WINDOW(self.get_widget())) };
+        unsafe { str::raw::from_c_str(c_title) }
     } 
 }

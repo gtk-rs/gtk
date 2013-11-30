@@ -18,7 +18,7 @@ use std::libc::c_int;
 use ffi;
 
 pub trait GtkWidget {
-	#[doc(hidden)]
+    #[doc(hidden)]
     fn get_widget(&self) -> *ffi::C_GtkWidget;
     fn wrap_widget(widget: *ffi::C_GtkWidget) -> Self;
 
@@ -29,51 +29,51 @@ pub trait GtkWidget {
     }
 
     fn set_margin_right(&mut self, margin: i32) -> () {
-    	unsafe {
-    		ffi::gtk_widget_set_margin_right(self.get_widget(), margin as c_int)
-    	}
+        unsafe {
+            ffi::gtk_widget_set_margin_right(self.get_widget(), margin as c_int)
+        }
     }
 
     fn set_margin_left(&mut self, margin: i32) -> () {
-    	unsafe {
-    		ffi::gtk_widget_set_margin_left(self.get_widget(), margin as c_int)
-    	}
+        unsafe {
+            ffi::gtk_widget_set_margin_left(self.get_widget(), margin as c_int)
+        }
     }
 
     fn set_margin_top(&mut self, margin: i32) -> () {
-    	unsafe {
-    		ffi::gtk_widget_set_margin_top(self.get_widget(), margin as c_int)
-    	}
+        unsafe {
+            ffi::gtk_widget_set_margin_top(self.get_widget(), margin as c_int)
+        }
     }
 
     fn set_margin_bottom(&mut self, margin: i32) -> () {
-    	unsafe {
-    		ffi::gtk_widget_set_margin_bottom(self.get_widget(), margin as c_int)
-    	}
+        unsafe {
+            ffi::gtk_widget_set_margin_bottom(self.get_widget(), margin as c_int)
+        }
     }
 
     fn get_margin_right(&mut self) -> i32 {
-    	unsafe {
-    		ffi::gtk_widget_get_margin_right(self.get_widget()) as i32
-    	}
+        unsafe {
+            ffi::gtk_widget_get_margin_right(self.get_widget()) as i32
+        }
     }
 
     fn get_margin_left(&mut self) -> i32 {
-    	unsafe {
-    		ffi::gtk_widget_get_margin_left(self.get_widget()) as i32
-    	}
+        unsafe {
+            ffi::gtk_widget_get_margin_left(self.get_widget()) as i32
+        }
     }
 
     fn get_margin_top(&mut self) -> i32 {
-    	unsafe {
-    		ffi::gtk_widget_get_margin_top(self.get_widget()) as i32
-    	}
+        unsafe {
+            ffi::gtk_widget_get_margin_top(self.get_widget()) as i32
+        }
     }
 
     fn get_margin_bottom(&mut self) -> i32 {
-    	unsafe {
-    		ffi::gtk_widget_get_margin_bottom(self.get_widget()) as i32
-    	}
+        unsafe {
+            ffi::gtk_widget_get_margin_bottom(self.get_widget()) as i32
+        }
     }
 
 }

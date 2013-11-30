@@ -32,17 +32,17 @@ macro_rules! check_pointer(
 macro_rules! impl_GtkWidget(
     ($gtk_struct:ident) => (
         impl GtkWidget for $gtk_struct {
-        	fn get_widget(&self) -> *ffi::C_GtkWidget {
-        		self.pointer
-        	}
+            fn get_widget(&self) -> *ffi::C_GtkWidget {
+                self.pointer
+            }
 
-        	fn wrap_widget(widget: *ffi::C_GtkWidget) -> $gtk_struct {
-        		$gtk_struct {
-        			pointer:         widget,
-        			can_drop:        false,
+            fn wrap_widget(widget: *ffi::C_GtkWidget) -> $gtk_struct {
+                $gtk_struct {
+                    pointer:         widget,
+                    can_drop:        false,
                     signal_handlers: ~[]
-        		}
-        	}
+                }
+            }
         }
     );
 )

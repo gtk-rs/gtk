@@ -25,22 +25,22 @@ use ffi;
 
 /// Arrow — Displays an arrow
 pub struct Arrow {
-	priv pointer: 			*ffi::C_GtkWidget,
-	priv can_drop: 			bool,
-    priv signal_handlers: 	~[~SignalHandler]
+    priv pointer:           *ffi::C_GtkWidget,
+    priv can_drop:          bool,
+    priv signal_handlers:   ~[~SignalHandler]
 }
 
 impl Arrow {
-	pub fn new(arrow_type: GtkArrowType, shadow_type: GtkShadowType) -> Option<Arrow> {
-		let tmp_pointer = unsafe { ffi::gtk_arrow_new(arrow_type, shadow_type) };
+    pub fn new(arrow_type: GtkArrowType, shadow_type: GtkShadowType) -> Option<Arrow> {
+        let tmp_pointer = unsafe { ffi::gtk_arrow_new(arrow_type, shadow_type) };
         check_pointer!(tmp_pointer, Arrow)
-	}
+    }
 
-	pub fn set(&mut self, arrow_type: GtkArrowType, shadow_type: GtkShadowType) -> () {
-		unsafe {
-			ffi::gtk_arrow_set(GTK_ARROW(self.pointer), arrow_type, shadow_type);
-		}
-	}
+    pub fn set(&mut self, arrow_type: GtkArrowType, shadow_type: GtkShadowType) -> () {
+        unsafe {
+            ffi::gtk_arrow_set(GTK_ARROW(self.pointer), arrow_type, shadow_type);
+        }
+    }
 }
 
 impl_GtkWidget!(Arrow)

@@ -24,36 +24,36 @@ use ffi;
 
 /// AspectFrame — A frame that constrains its child to a particular aspect ratio
 pub struct AspectFrame {
-	priv pointer: 			*ffi::C_GtkWidget,
-	priv can_drop: 			bool,
-    priv signal_handlers: 	~[~SignalHandler]
+    priv pointer:           *ffi::C_GtkWidget,
+    priv can_drop:          bool,
+    priv signal_handlers:   ~[~SignalHandler]
 }
 
 impl AspectFrame {
-	pub fn new(label: Option<&str>,
-		  	   x_align: f32,
-		  	   y_align: f32,
-		  	   ratio: f32,
-		  	   obey_child: bool)
-		  	   -> Option<AspectFrame> {
-		let c_obey_child = if obey_child { ffi::Gtrue } else { ffi::Gfalse };
-		let tmp_pointer = match label {
-			Some(l) => unsafe { l.with_c_str(|c_str| { ffi::gtk_aspect_frame_new(c_str, x_align as c_float, y_align as c_float, ratio as c_float, c_obey_child) }) },
-			None 	=> unsafe { ffi::gtk_aspect_frame_new(ptr::null(), x_align as c_float, y_align as c_float, ratio as c_float, c_obey_child) }
-		};
-		check_pointer!(tmp_pointer, AspectFrame)
-	}
+    pub fn new(label: Option<&str>,
+               x_align: f32,
+               y_align: f32,
+               ratio: f32,
+               obey_child: bool)
+               -> Option<AspectFrame> {
+        let c_obey_child = if obey_child { ffi::Gtrue } else { ffi::Gfalse };
+        let tmp_pointer = match label {
+            Some(l) => unsafe { l.with_c_str(|c_str| { ffi::gtk_aspect_frame_new(c_str, x_align as c_float, y_align as c_float, ratio as c_float, c_obey_child) }) },
+            None    => unsafe { ffi::gtk_aspect_frame_new(ptr::null(), x_align as c_float, y_align as c_float, ratio as c_float, c_obey_child) }
+        };
+        check_pointer!(tmp_pointer, AspectFrame)
+    }
 
-	pub fn set(&mut self,
-		  	   x_align: f32,
-		  	   y_align: f32,
-		  	   ratio: f32,
-		  	   obey_child: bool) -> () {
-		let c_obey_child = if obey_child { ffi::Gtrue } else { ffi::Gfalse };
-		unsafe { 
-			ffi::gtk_aspect_frame_set(GTK_ASPECTFRAME(self.get_widget()), x_align as c_float, y_align as c_float, ratio as c_float, c_obey_child);
-		}
-	}
+    pub fn set(&mut self,
+               x_align: f32,
+               y_align: f32,
+               ratio: f32,
+               obey_child: bool) -> () {
+        let c_obey_child = if obey_child { ffi::Gtrue } else { ffi::Gfalse };
+        unsafe { 
+            ffi::gtk_aspect_frame_set(GTK_ASPECTFRAME(self.get_widget()), x_align as c_float, y_align as c_float, ratio as c_float, c_obey_child);
+        }
+    }
 }
 
 impl_GtkWidget!(AspectFrame)

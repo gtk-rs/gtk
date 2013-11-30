@@ -19,15 +19,15 @@ use utils::cast::GTK_ORIENTABLE;
 use ffi;
 
 pub trait GtkOrientable: GtkWidget {
-	fn get_orientation(&self) -> GtkOrientation {
-		unsafe {
-			ffi::gtk_orientable_get_orientation(GTK_ORIENTABLE(self.get_widget()))
-		}
-	}
+    fn get_orientation(&self) -> GtkOrientation {
+        unsafe {
+            ffi::gtk_orientable_get_orientation(GTK_ORIENTABLE(self.get_widget()))
+        }
+    }
 
-	fn set_orientation(&mut self, orientation: GtkOrientation) -> () {
-		unsafe {
-			ffi::gtk_orientable_set_orientation(GTK_ORIENTABLE(self.get_widget()), orientation)
-		}
-	}
+    fn set_orientation(&mut self, orientation: GtkOrientation) -> () {
+        unsafe {
+            ffi::gtk_orientable_set_orientation(GTK_ORIENTABLE(self.get_widget()), orientation)
+        }
+    }
 }

@@ -32,17 +32,17 @@ use ffi;
 * * `populate-popup` : Run Last
 */
 pub struct Label {
-    priv pointer: 			*ffi::C_GtkWidget,
-    priv can_drop: 			bool,
-    priv signal_handlers: 	~[~SignalHandler]
+    priv pointer:           *ffi::C_GtkWidget,
+    priv can_drop:          bool,
+    priv signal_handlers:   ~[~SignalHandler]
 }
 
 impl Label {
     pub fn new(text: &str) -> Option<Label> {
         let tmp_pointer = unsafe { 
-        	text.with_c_str(|c_str| {
-        		ffi::gtk_label_new(c_str) 
-        	}) 
+            text.with_c_str(|c_str| {
+                ffi::gtk_label_new(c_str) 
+            }) 
         };
         check_pointer!(tmp_pointer, Label)
     }

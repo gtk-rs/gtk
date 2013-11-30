@@ -139,14 +139,14 @@ pub use gtk::enums::*;
 #[cfg(target_os="macos")]
 mod platform {
     #[link_args="-lglib-2.0 -lgtk-3.0 -lgobject-2.0 -lgdk-3.0 -lgtk_glue"]
-	extern{}
+    extern{}
 }
 
 #[doc(hidden)]
 #[cfg(target_os="linux")]
 mod platform {
     #[link_args="-lglib-2.0 -lgtk-3 -lgobject-2.0 -lgdk-3 -lgtk_glue"]
-	extern{}
+    extern{}
 }
 
 pub mod utils;

@@ -26,24 +26,24 @@ use ffi;
 
 /// Box — A container box
 pub struct SearchBar {
-	priv pointer: 			*ffi::C_GtkWidget,
-	priv can_drop: 			bool,
-    priv signal_handlers: 	~[~SignalHandler]
+    priv pointer:           *ffi::C_GtkWidget,
+    priv can_drop:          bool,
+    priv signal_handlers:   ~[~SignalHandler]
 }
 
 impl SearchBar {
-	pub fn new() -> Option<SearchBar> {
-		let tmp_pointer = unsafe { ffi::gtk_search_bar_new() };
+    pub fn new() -> Option<SearchBar> {
+        let tmp_pointer = unsafe { ffi::gtk_search_bar_new() };
         check_pointer!(tmp_pointer, SearchBar)
-	}
+    }
 
-	pub fn connect_entry(&mut self, entry: &gtk::Entry) -> () {
-		unsafe {
-			ffi::gtk_search_bar_connect_entry(GTK_SEARCHBAR(self.pointer), GTK_ENTRY(entry.get_widget()));
-		}
-	}
+    pub fn connect_entry(&mut self, entry: &gtk::Entry) -> () {
+        unsafe {
+            ffi::gtk_search_bar_connect_entry(GTK_SEARCHBAR(self.pointer), GTK_ENTRY(entry.get_widget()));
+        }
+    }
 
-	pub fn set_search_mode(&mut self, search_mode: bool) -> () {
+    pub fn set_search_mode(&mut self, search_mode: bool) -> () {
         match search_mode {
             true    => unsafe { ffi::gtk_search_bar_set_search_mode(GTK_SEARCHBAR(self.pointer), ffi::Gtrue) },
             false   => unsafe { ffi::gtk_search_bar_set_search_mode(GTK_SEARCHBAR(self.pointer), ffi::Gfalse) }

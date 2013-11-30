@@ -34,26 +34,26 @@ pub trait GtkContainer : GtkWidget {
     }
 
     fn get_resize_mode(&self) -> GtkResizeMode {
-    	unsafe {
-    		ffi::gtk_container_get_resize_mode(GTK_CONTAINER(self.get_widget()))
-    	}
+        unsafe {
+            ffi::gtk_container_get_resize_mode(GTK_CONTAINER(self.get_widget()))
+        }
     }
 
     fn set_resize_mode(&mut self, resize_mode: GtkResizeMode) -> () {
-    	unsafe {
-    		ffi::gtk_container_set_resize_mode(GTK_CONTAINER(self.get_widget()), resize_mode);
-    	}
+        unsafe {
+            ffi::gtk_container_set_resize_mode(GTK_CONTAINER(self.get_widget()), resize_mode);
+        }
     }
 
     fn get_border_width(&self) -> u32 {
-    	unsafe {
-    		ffi::gtk_container_get_border_width(GTK_CONTAINER(self.get_widget())) as u32
-    	}
+        unsafe {
+            ffi::gtk_container_get_border_width(GTK_CONTAINER(self.get_widget())) as u32
+        }
     }
 
     fn set_border_width(&self, border_width: u32) -> () {
-    	unsafe {
-    		ffi::gtk_container_set_border_width(GTK_CONTAINER(self.get_widget()), border_width as c_uint);
-    	}
+        unsafe {
+            ffi::gtk_container_set_border_width(GTK_CONTAINER(self.get_widget()), border_width as c_uint);
+        }
     }
 }

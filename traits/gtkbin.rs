@@ -16,9 +16,9 @@
 use traits::{GtkWidget, GtkContainer};
 
 pub trait GtkBin: GtkWidget + GtkContainer {
-	// fn get_child(&self) ->  {
+    // fn get_child(&self) ->  {
 
-	// }
+    // }
 }
 
     // pub fn gtk_bin_get_child                   (bin: *C_GtkBin) -> *C_GtkWidget;

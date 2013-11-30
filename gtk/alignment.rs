@@ -25,50 +25,50 @@ use ffi;
 
 /// Alignment — A widget which controls the alignment and size of its child
 pub struct Alignment {
-	priv pointer: 			*ffi::C_GtkWidget,
-	priv can_drop: 			bool,
-    priv signal_handlers: 	~[~SignalHandler]
+    priv pointer:           *ffi::C_GtkWidget,
+    priv can_drop:          bool,
+    priv signal_handlers:   ~[~SignalHandler]
 }
 
 impl Alignment {
-	pub fn new(x_align: f32,
-			   y_align: f32,
-			   x_scale: f32,
-			   y_scale: f32) -> Option<Alignment> {
-		let tmp_pointer = unsafe { ffi::gtk_alignment_new(x_align as c_float, y_align as c_float, x_scale as c_float, y_scale as c_float) };
-		check_pointer!(tmp_pointer, Alignment)
-	}
+    pub fn new(x_align: f32,
+               y_align: f32,
+               x_scale: f32,
+               y_scale: f32) -> Option<Alignment> {
+        let tmp_pointer = unsafe { ffi::gtk_alignment_new(x_align as c_float, y_align as c_float, x_scale as c_float, y_scale as c_float) };
+        check_pointer!(tmp_pointer, Alignment)
+    }
 
-	pub fn set(&mut self,
-			   x_align: f32,
-			   y_align: f32,
-			   x_scale: f32,
-			   y_scale: f32) -> () {
-		unsafe { 
-			ffi::gtk_alignment_set(GTK_ALIGNMENT(self.pointer), x_align as c_float, y_align as c_float, x_scale as c_float, y_scale as c_float) 
-		}
-	}
+    pub fn set(&mut self,
+               x_align: f32,
+               y_align: f32,
+               x_scale: f32,
+               y_scale: f32) -> () {
+        unsafe { 
+            ffi::gtk_alignment_set(GTK_ALIGNMENT(self.pointer), x_align as c_float, y_align as c_float, x_scale as c_float, y_scale as c_float) 
+        }
+    }
 
-	pub fn set_padding(&mut self,
-					   padding_top: u32,
-					   padding_bottom: u32,
-					   padding_left: u32,
-					   padding_right: u32) -> () {
-		unsafe {
-			ffi::gtk_alignment_set_padding(GTK_ALIGNMENT(self.pointer), padding_top as c_uint, padding_bottom as c_uint, padding_left as c_uint, padding_right as c_uint);
-		}
-	}
+    pub fn set_padding(&mut self,
+                       padding_top: u32,
+                       padding_bottom: u32,
+                       padding_left: u32,
+                       padding_right: u32) -> () {
+        unsafe {
+            ffi::gtk_alignment_set_padding(GTK_ALIGNMENT(self.pointer), padding_top as c_uint, padding_bottom as c_uint, padding_left as c_uint, padding_right as c_uint);
+        }
+    }
 
-	pub fn get_padding(&self) -> (u32, u32, u32, u32) {
-		let top = 		0;
-		let bottom = 	0;
-		let left = 		0;
-		let right = 	0;
-		unsafe {
-			ffi::gtk_alignment_get_padding(GTK_ALIGNMENT(self.pointer), &top, &bottom, &left, &right);
-		}
-		(top, bottom, left, right)
-	}
+    pub fn get_padding(&self) -> (u32, u32, u32, u32) {
+        let top =       0;
+        let bottom =    0;
+        let left =      0;
+        let right =     0;
+        unsafe {
+            ffi::gtk_alignment_get_padding(GTK_ALIGNMENT(self.pointer), &top, &bottom, &left, &right);
+        }
+        (top, bottom, left, right)
+    }
 }
 
 impl_GtkWidget!(Alignment)

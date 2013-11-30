@@ -21,27 +21,27 @@ use gtk::Adjustment;
 use ffi;
 
 pub trait GtkScaleButton: GtkWidget + GtkContainer + GtkButton {
-	fn set_adjustment(&mut self, adjustment: &Adjustment) -> () {
-		unsafe {
-			ffi::gtk_scale_button_set_adjustment(GTK_SCALEBUTTON(self.get_widget()), adjustment.get_pointer());
-		}
-	}
+    fn set_adjustment(&mut self, adjustment: &Adjustment) -> () {
+        unsafe {
+            ffi::gtk_scale_button_set_adjustment(GTK_SCALEBUTTON(self.get_widget()), adjustment.get_pointer());
+        }
+    }
 
-	fn set_value(&mut self, value: f64) -> () {
-		unsafe {
-			ffi::gtk_scale_button_set_value(GTK_SCALEBUTTON(self.get_widget()), value as c_double);
-		}
-	}
+    fn set_value(&mut self, value: f64) -> () {
+        unsafe {
+            ffi::gtk_scale_button_set_value(GTK_SCALEBUTTON(self.get_widget()), value as c_double);
+        }
+    }
 
-	fn get_value(&self) -> f64 {
-		unsafe {
-			ffi::gtk_scale_button_get_value(GTK_SCALEBUTTON(self.get_widget())) as f64
-		}
-	}
+    fn get_value(&self) -> f64 {
+        unsafe {
+            ffi::gtk_scale_button_get_value(GTK_SCALEBUTTON(self.get_widget())) as f64
+        }
+    }
 
-	fn get_adjustment(&self) -> Adjustment {
-		unsafe {
-			Adjustment::wrap_pointer(ffi::gtk_scale_button_get_adjustment(GTK_SCALEBUTTON(self.get_widget())))
-		}
-	}
+    fn get_adjustment(&self) -> Adjustment {
+        unsafe {
+            Adjustment::wrap_pointer(ffi::gtk_scale_button_get_adjustment(GTK_SCALEBUTTON(self.get_widget())))
+        }
+    }
 }

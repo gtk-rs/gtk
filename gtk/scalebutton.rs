@@ -31,17 +31,17 @@ use gtk::enums::GtkIconSize;
 * * `value-changed` : Run Last
 */
 pub struct ScaleButton {
-	priv pointer: 			*ffi::C_GtkWidget,
-	priv can_drop: 			bool,
-    priv signal_handlers: 	~[~SignalHandler]
+    priv pointer:           *ffi::C_GtkWidget,
+    priv can_drop:          bool,
+    priv signal_handlers:   ~[~SignalHandler]
 }
 
 impl ScaleButton {
-	// FIXME: icons -> last parameter
-	pub fn new(size: GtkIconSize, min: f64, max: f64, step: f64) -> Option<ScaleButton> {
-		let tmp_pointer = unsafe { ffi::gtk_scale_button_new(size, min as c_double, max as c_double, step as c_double, ptr::null()) };
-		check_pointer!(tmp_pointer, ScaleButton)
-	}
+    // FIXME: icons -> last parameter
+    pub fn new(size: GtkIconSize, min: f64, max: f64, step: f64) -> Option<ScaleButton> {
+        let tmp_pointer = unsafe { ffi::gtk_scale_button_new(size, min as c_double, max as c_double, step as c_double, ptr::null()) };
+        check_pointer!(tmp_pointer, ScaleButton)
+    }
 }
 
 

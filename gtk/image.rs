@@ -23,17 +23,17 @@ use ffi;
 
 /// Image — A widget displaying an image
 pub struct Image {
-    priv pointer: 			*ffi::C_GtkWidget,
-    priv can_drop: 			bool,
-    priv signal_handlers: 	~[~SignalHandler]
+    priv pointer:           *ffi::C_GtkWidget,
+    priv can_drop:          bool,
+    priv signal_handlers:   ~[~SignalHandler]
 }
 
 impl Image {
     pub fn new_from_file(filename: &str) -> Option<Image> {
         let tmp_pointer = unsafe { 
-        	filename.with_c_str(|c_str| {
-        		ffi::gtk_image_new_from_file(c_str) 
-        	})
+            filename.with_c_str(|c_str| {
+                ffi::gtk_image_new_from_file(c_str) 
+            })
         };
         check_pointer!(tmp_pointer, Image)
     }

@@ -32,14 +32,14 @@ use gtk::enums::GtkWindowType;
 * * `set-focus` : Run Last
 */
 pub struct Window {
-    priv pointer:   		*ffi::C_GtkWidget,
-    priv can_drop:  		bool,
-    priv signal_handlers: 	~[~SignalHandler]
+    priv pointer:           *ffi::C_GtkWidget,
+    priv can_drop:          bool,
+    priv signal_handlers:   ~[~SignalHandler]
 }
 
 impl Window {
     pub fn new(window_type: GtkWindowType) -> Option<Window> {
-       	let tmp_pointer = unsafe { ffi::gtk_window_new(window_type) };
+        let tmp_pointer = unsafe { ffi::gtk_window_new(window_type) };
         check_pointer!(tmp_pointer, Window)
     }
 }

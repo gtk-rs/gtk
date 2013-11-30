@@ -23,16 +23,16 @@ use ffi;
 
 /// VolumeButton — A button which pops up a volume control
 pub struct VolumeButton {
-	priv pointer: 			*ffi::C_GtkWidget,
-	priv can_drop: 			bool,
-    priv signal_handlers: 	~[~SignalHandler]
+    priv pointer:           *ffi::C_GtkWidget,
+    priv can_drop:          bool,
+    priv signal_handlers:   ~[~SignalHandler]
 }
 
 impl VolumeButton {
-	pub fn new() -> Option<VolumeButton> {
-		let tmp_pointer = unsafe { ffi::gtk_volume_button_new() };
-		check_pointer!(tmp_pointer, VolumeButton)
-	}
+    pub fn new() -> Option<VolumeButton> {
+        let tmp_pointer = unsafe { ffi::gtk_volume_button_new() };
+        check_pointer!(tmp_pointer, VolumeButton)
+    }
 }
 
 impl_GtkWidget!(VolumeButton)

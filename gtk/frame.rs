@@ -23,19 +23,19 @@ use ffi;
 
 /// Frame — A bin with a decorative frame and optional label
 pub struct Frame {
-	priv pointer: 			*ffi::C_GtkWidget,
-	priv can_drop: 			bool,
-    priv signal_handlers: 	~[~SignalHandler]
+    priv pointer:           *ffi::C_GtkWidget,
+    priv can_drop:          bool,
+    priv signal_handlers:   ~[~SignalHandler]
 }
 
 impl Frame {
-	pub fn new(label: Option<&str>) -> Option<Frame> {
-		let tmp_pointer = match label {
-			Some(l) => unsafe { l.with_c_str(|c_str| { ffi::gtk_frame_new(c_str) }) },
-			None 	=> unsafe { ffi::gtk_frame_new(ptr::null()) }
-		};
-		check_pointer!(tmp_pointer, Frame)
-	}
+    pub fn new(label: Option<&str>) -> Option<Frame> {
+        let tmp_pointer = match label {
+            Some(l) => unsafe { l.with_c_str(|c_str| { ffi::gtk_frame_new(c_str) }) },
+            None    => unsafe { ffi::gtk_frame_new(ptr::null()) }
+        };
+        check_pointer!(tmp_pointer, Frame)
+    }
 }
 
 impl_GtkWidget!(Frame)

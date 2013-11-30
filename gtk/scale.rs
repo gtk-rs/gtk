@@ -33,33 +33,33 @@ use ffi;
 * * `format-value` : Run Last
 */
 pub struct Scale {
-	priv pointer: 			*ffi::C_GtkWidget,
-	priv can_drop: 			bool,
-	priv signal_handlers: 	~[~SignalHandler]
+    priv pointer:           *ffi::C_GtkWidget,
+    priv can_drop:          bool,
+    priv signal_handlers:   ~[~SignalHandler]
 }
 
 impl Scale {
-	pub fn new(orientation: GtkOrientation,
-			   adjustment: &gtk::Adjustment) -> Option<Scale> {
-		let tmp_pointer = unsafe { ffi::gtk_scale_new(orientation, adjustment.get_pointer()) };
-		check_pointer!(tmp_pointer, Scale)
-	}
+    pub fn new(orientation: GtkOrientation,
+               adjustment: &gtk::Adjustment) -> Option<Scale> {
+        let tmp_pointer = unsafe { ffi::gtk_scale_new(orientation, adjustment.get_pointer()) };
+        check_pointer!(tmp_pointer, Scale)
+    }
 
-	pub fn new_with_range(orientation: GtkOrientation,
-			   			  min: f64,
-			   			  max: f64,
-			   			  step: f64) -> Option<Scale> {
-		let tmp_pointer = unsafe { ffi::gtk_scale_new_with_range(orientation, min as c_double, max as c_double, step as c_double) };
-		check_pointer!(tmp_pointer, Scale)
-	}
+    pub fn new_with_range(orientation: GtkOrientation,
+                          min: f64,
+                          max: f64,
+                          step: f64) -> Option<Scale> {
+        let tmp_pointer = unsafe { ffi::gtk_scale_new_with_range(orientation, min as c_double, max as c_double, step as c_double) };
+        check_pointer!(tmp_pointer, Scale)
+    }
 
-	pub fn set_digits(&mut self, digits: i32) -> () {
-		unsafe {
-			ffi::gtk_scale_set_digits(GTK_SCALE(self.pointer), digits as c_int);
-		}
-	}
+    pub fn set_digits(&mut self, digits: i32) -> () {
+        unsafe {
+            ffi::gtk_scale_set_digits(GTK_SCALE(self.pointer), digits as c_int);
+        }
+    }
 
-	pub fn set_draw_value(&mut self, draw_value: bool) -> () {
+    pub fn set_draw_value(&mut self, draw_value: bool) -> () {
         match draw_value {
             true    => unsafe { ffi::gtk_scale_set_draw_value(GTK_SCALE(self.pointer), ffi::Gtrue) },
             false   => unsafe { ffi::gtk_scale_set_draw_value(GTK_SCALE(self.pointer), ffi::Gfalse) }
@@ -88,44 +88,44 @@ impl Scale {
     }
 
     pub fn set_value_pos(&mut self, position: GtkPositionType) -> () {
-    	unsafe {
-    		ffi::gtk_scale_set_value_pos(GTK_SCALE(self.pointer), position);
-    	}
+        unsafe {
+            ffi::gtk_scale_set_value_pos(GTK_SCALE(self.pointer), position);
+        }
     }
 
     pub fn get_digits(&self) -> i32 {
-    	unsafe {
-    		ffi::gtk_scale_get_digits(GTK_SCALE(self.pointer)) as i32
-    	}
+        unsafe {
+            ffi::gtk_scale_get_digits(GTK_SCALE(self.pointer)) as i32
+        }
     }
 
     pub fn get_value_pos(&self) ->GtkPositionType {
-    	unsafe {
-    		ffi::gtk_scale_get_value_pos(GTK_SCALE(self.pointer))
-    	}
+        unsafe {
+            ffi::gtk_scale_get_value_pos(GTK_SCALE(self.pointer))
+        }
     }
 
     pub fn get_layout_offsets(&self) -> (i32, i32) {
-    	let x = 0;
-    	let y = 0;
-    	unsafe {
-    		ffi::gtk_scale_get_layout_offsets(GTK_SCALE(self.pointer), &x, &y);
-    	}
-    	(x, y)
+        let x = 0;
+        let y = 0;
+        unsafe {
+            ffi::gtk_scale_get_layout_offsets(GTK_SCALE(self.pointer), &x, &y);
+        }
+        (x, y)
     }
 
     pub fn add_mark(&mut self, value: f64, position: GtkPositionType, markup: &str) -> () {
-    	unsafe {
-    		markup.with_c_str(|c_str| {
+        unsafe {
+            markup.with_c_str(|c_str| {
                 ffi::gtk_scale_add_mark(GTK_SCALE(self.pointer), value as c_double, position, c_str) 
             });
-    	}
+        }
     }
 
     pub fn clear_marks(&mut self) -> () {
-    	unsafe {
-    		ffi::gtk_scale_clear_marks(GTK_SCALE(self.pointer))
-    	}
+        unsafe {
+            ffi::gtk_scale_clear_marks(GTK_SCALE(self.pointer))
+        }
     }
 }
 

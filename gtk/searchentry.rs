@@ -28,16 +28,16 @@ use ffi;
 * * `search-changed` : Run Last
 */
 pub struct SearchEntry {
-	priv pointer: 			*ffi::C_GtkWidget,
-	priv can_drop: 			bool,
-	priv signal_handlers: 	~[~SignalHandler]
+    priv pointer:           *ffi::C_GtkWidget,
+    priv can_drop:          bool,
+    priv signal_handlers:   ~[~SignalHandler]
 }
 
 impl SearchEntry {
-	pub fn new() -> Option<SearchEntry> {
-		let tmp_pointer = unsafe { ffi::gtk_search_entry_new() };
-		check_pointer!(tmp_pointer, SearchEntry)
-	}
+    pub fn new() -> Option<SearchEntry> {
+        let tmp_pointer = unsafe { ffi::gtk_search_entry_new() };
+        check_pointer!(tmp_pointer, SearchEntry)
+    }
 }
 
 impl_GtkWidget!(SearchEntry)

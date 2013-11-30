@@ -36,62 +36,62 @@ use gtk;
 * * `toggle-handle-focus` : Action
 */
 pub struct Paned {
-	priv pointer: 			*ffi::C_GtkWidget,
-	priv can_drop: 			bool,
-    priv signal_handlers: 	~[~SignalHandler]
+    priv pointer:           *ffi::C_GtkWidget,
+    priv can_drop:          bool,
+    priv signal_handlers:   ~[~SignalHandler]
 }
 
 impl Paned {
-	pub fn new(orientation: GtkOrientation) -> Option<Paned> {
-		let tmp_pointer = unsafe { ffi::gtk_paned_new(orientation) };
-		check_pointer!(tmp_pointer, Paned)
-	}
+    pub fn new(orientation: GtkOrientation) -> Option<Paned> {
+        let tmp_pointer = unsafe { ffi::gtk_paned_new(orientation) };
+        check_pointer!(tmp_pointer, Paned)
+    }
 
-	pub fn add1<T: GtkWidget>(&mut self, child: &T) -> () {
-		unsafe {
-			ffi::gtk_paned_add1(GTK_PANED(self.pointer), child.get_widget())
-		}
-	}
+    pub fn add1<T: GtkWidget>(&mut self, child: &T) -> () {
+        unsafe {
+            ffi::gtk_paned_add1(GTK_PANED(self.pointer), child.get_widget())
+        }
+    }
 
-	pub fn add2<T: GtkWidget>(&mut self, child: &T) -> () {
-		unsafe {
-			ffi::gtk_paned_add2(GTK_PANED(self.pointer), child.get_widget())
-		}
-	}
+    pub fn add2<T: GtkWidget>(&mut self, child: &T) -> () {
+        unsafe {
+            ffi::gtk_paned_add2(GTK_PANED(self.pointer), child.get_widget())
+        }
+    }
 
-	pub fn pack1<T: GtkWidget>(&mut self, child: &T, resize: bool, schrink: bool) -> () {
-		let r = if resize { ffi::Gtrue } else { ffi::Gfalse };
-		let s = if schrink { ffi::Gtrue } else { ffi::Gfalse };
-		unsafe {
-			ffi::gtk_paned_pack1(GTK_PANED(self.pointer), child.get_widget(), r, s);
-		}
-	}
+    pub fn pack1<T: GtkWidget>(&mut self, child: &T, resize: bool, schrink: bool) -> () {
+        let r = if resize { ffi::Gtrue } else { ffi::Gfalse };
+        let s = if schrink { ffi::Gtrue } else { ffi::Gfalse };
+        unsafe {
+            ffi::gtk_paned_pack1(GTK_PANED(self.pointer), child.get_widget(), r, s);
+        }
+    }
 
-	pub fn pack2<T: GtkWidget>(&mut self, child: &T, resize: bool, schrink: bool) -> () {
-		let r = if resize { ffi::Gtrue } else { ffi::Gfalse };
-		let s = if schrink { ffi::Gtrue } else { ffi::Gfalse };
-		unsafe {
-			ffi::gtk_paned_pack2(GTK_PANED(self.pointer), child.get_widget(), r, s);
-		}
-	}
+    pub fn pack2<T: GtkWidget>(&mut self, child: &T, resize: bool, schrink: bool) -> () {
+        let r = if resize { ffi::Gtrue } else { ffi::Gfalse };
+        let s = if schrink { ffi::Gtrue } else { ffi::Gfalse };
+        unsafe {
+            ffi::gtk_paned_pack2(GTK_PANED(self.pointer), child.get_widget(), r, s);
+        }
+    }
 
-	pub fn set_position(&mut self, position: i32) -> () {
-		unsafe {
-			ffi::gtk_paned_set_position(GTK_PANED(self.pointer), position as c_int);
-		}
-	}
+    pub fn set_position(&mut self, position: i32) -> () {
+        unsafe {
+            ffi::gtk_paned_set_position(GTK_PANED(self.pointer), position as c_int);
+        }
+    }
 
-	pub fn get_position(&self) -> i32 {
-		unsafe {
-			ffi::gtk_paned_get_position(GTK_PANED(self.pointer)) as i32
-		}
-	}
+    pub fn get_position(&self) -> i32 {
+        unsafe {
+            ffi::gtk_paned_get_position(GTK_PANED(self.pointer)) as i32
+        }
+    }
 
-	pub fn get_handle_window(&self) -> gtk::Window {
-		unsafe {
-			GtkWidget::wrap_widget(ffi::gtk_paned_get_handle_window(GTK_PANED(self.pointer)))
-		}
-	}
+    pub fn get_handle_window(&self) -> gtk::Window {
+        unsafe {
+            GtkWidget::wrap_widget(ffi::gtk_paned_get_handle_window(GTK_PANED(self.pointer)))
+        }
+    }
 }
 
 impl_GtkWidget!(Paned)

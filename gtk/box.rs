@@ -24,16 +24,16 @@ use ffi;
 
 /// Box — A container box
 pub struct Box {
-	priv pointer: 			*ffi::C_GtkWidget,
-	priv can_drop: 			bool,
-    priv signal_handlers: 	~[~SignalHandler]
+    priv pointer:           *ffi::C_GtkWidget,
+    priv can_drop:          bool,
+    priv signal_handlers:   ~[~SignalHandler]
 }
 
 impl Box {
-	pub fn new(orientation: GtkOrientation, spacing: i32) -> Option<Box> {
-		let tmp_pointer = unsafe { ffi::gtk_box_new(orientation, spacing as c_int) };
+    pub fn new(orientation: GtkOrientation, spacing: i32) -> Option<Box> {
+        let tmp_pointer = unsafe { ffi::gtk_box_new(orientation, spacing as c_int) };
         check_pointer!(tmp_pointer, Box)
-	}
+    }
 }
 
 impl_GtkWidget!(Box)

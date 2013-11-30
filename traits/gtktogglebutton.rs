@@ -18,52 +18,52 @@ use utils::cast::GTK_TOGGLEBUTTON;
 use ffi;
 
 pub trait GtkToggleButton: GtkWidget + GtkContainer + GtkButton {
-	fn set_mode(&mut self, draw_indicate: bool) {
-		match draw_indicate {
-			true 	=> unsafe { ffi::gtk_toggle_button_set_mode(GTK_TOGGLEBUTTON(self.get_widget()), ffi::Gtrue) },
-			false 	=> unsafe { ffi::gtk_toggle_button_set_mode(GTK_TOGGLEBUTTON(self.get_widget()), ffi::Gfalse) }
-		}
-	}
+    fn set_mode(&mut self, draw_indicate: bool) {
+        match draw_indicate {
+            true    => unsafe { ffi::gtk_toggle_button_set_mode(GTK_TOGGLEBUTTON(self.get_widget()), ffi::Gtrue) },
+            false   => unsafe { ffi::gtk_toggle_button_set_mode(GTK_TOGGLEBUTTON(self.get_widget()), ffi::Gfalse) }
+        }
+    }
 
-	fn get_mode(&self) -> bool {
-		match unsafe { ffi::gtk_toggle_button_get_mode(GTK_TOGGLEBUTTON(self.get_widget())) } {
-			ffi::Gfalse 	=> false,
-			_				=> true
-		}
-	}
+    fn get_mode(&self) -> bool {
+        match unsafe { ffi::gtk_toggle_button_get_mode(GTK_TOGGLEBUTTON(self.get_widget())) } {
+            ffi::Gfalse     => false,
+            _               => true
+        }
+    }
 
-	fn toggled(&mut self) -> () {
-		unsafe {
-			ffi::gtk_toggle_button_toggled(GTK_TOGGLEBUTTON(self.get_widget()))
-		}
-	}
+    fn toggled(&mut self) -> () {
+        unsafe {
+            ffi::gtk_toggle_button_toggled(GTK_TOGGLEBUTTON(self.get_widget()))
+        }
+    }
 
-	fn set_active(&mut self, is_active: bool) {
-		match is_active {
-			true 	=> unsafe { ffi::gtk_toggle_button_set_active(GTK_TOGGLEBUTTON(self.get_widget()), ffi::Gtrue) },
-			false 	=> unsafe { ffi::gtk_toggle_button_set_active(GTK_TOGGLEBUTTON(self.get_widget()), ffi::Gfalse) }
-		}
-	}
+    fn set_active(&mut self, is_active: bool) {
+        match is_active {
+            true    => unsafe { ffi::gtk_toggle_button_set_active(GTK_TOGGLEBUTTON(self.get_widget()), ffi::Gtrue) },
+            false   => unsafe { ffi::gtk_toggle_button_set_active(GTK_TOGGLEBUTTON(self.get_widget()), ffi::Gfalse) }
+        }
+    }
 
-	fn get_active(&self) -> bool {
-		match unsafe { ffi::gtk_toggle_button_get_active(GTK_TOGGLEBUTTON(self.get_widget())) } {
-			ffi::Gfalse 	=> false,
-			_				=> true
-		}
-	}
+    fn get_active(&self) -> bool {
+        match unsafe { ffi::gtk_toggle_button_get_active(GTK_TOGGLEBUTTON(self.get_widget())) } {
+            ffi::Gfalse     => false,
+            _               => true
+        }
+    }
 
-	fn set_inconsistent(&mut self, setting: bool) {
-		match setting {
-			true 	=> unsafe { ffi::gtk_toggle_button_set_inconsistent(GTK_TOGGLEBUTTON(self.get_widget()), ffi::Gtrue) },
-			false 	=> unsafe { ffi::gtk_toggle_button_set_inconsistent(GTK_TOGGLEBUTTON(self.get_widget()), ffi::Gfalse) }
-		}
-	}
+    fn set_inconsistent(&mut self, setting: bool) {
+        match setting {
+            true    => unsafe { ffi::gtk_toggle_button_set_inconsistent(GTK_TOGGLEBUTTON(self.get_widget()), ffi::Gtrue) },
+            false   => unsafe { ffi::gtk_toggle_button_set_inconsistent(GTK_TOGGLEBUTTON(self.get_widget()), ffi::Gfalse) }
+        }
+    }
 
-	fn get_inconsistent(&self) -> bool {
-		match unsafe { ffi::gtk_toggle_button_get_inconsistent(GTK_TOGGLEBUTTON(self.get_widget())) } {
-			ffi::Gfalse 	=> false,
-			_				=> true
-		}
-	}
+    fn get_inconsistent(&self) -> bool {
+        match unsafe { ffi::gtk_toggle_button_get_inconsistent(GTK_TOGGLEBUTTON(self.get_widget())) } {
+            ffi::Gfalse     => false,
+            _               => true
+        }
+    }
 }
 

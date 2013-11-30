@@ -29,106 +29,106 @@ use utils::cast::GTK_FONTBUTTON;
 * * `font-set` : Run First
 */
 pub struct FontButton {
-	priv pointer: 			*ffi::C_GtkWidget,
-	priv can_drop: 			bool,
-    priv signal_handlers: 	~[~SignalHandler]
+    priv pointer:           *ffi::C_GtkWidget,
+    priv can_drop:          bool,
+    priv signal_handlers:   ~[~SignalHandler]
 }
 
 impl FontButton {
-	pub fn new() -> Option<FontButton> {
-		let tmp_pointer = unsafe { ffi::gtk_font_button_new() };
-		check_pointer!(tmp_pointer, FontButton)
-	}
+    pub fn new() -> Option<FontButton> {
+        let tmp_pointer = unsafe { ffi::gtk_font_button_new() };
+        check_pointer!(tmp_pointer, FontButton)
+    }
 
-	pub fn new_with_font(font_name: &str) -> Option<FontButton> {
-		let tmp_pointer = unsafe { 
-			font_name.with_c_str(|c_str| {
-				ffi::gtk_font_button_new_with_font(c_str) 
-			}) 
-		};
-		check_pointer!(tmp_pointer, FontButton)
-	}
+    pub fn new_with_font(font_name: &str) -> Option<FontButton> {
+        let tmp_pointer = unsafe { 
+            font_name.with_c_str(|c_str| {
+                ffi::gtk_font_button_new_with_font(c_str) 
+            }) 
+        };
+        check_pointer!(tmp_pointer, FontButton)
+    }
 
-	pub fn set_font_name(&mut self, font_name: &str) -> bool {
-		match unsafe { font_name.with_c_str(|c_str| { ffi::gtk_font_button_set_font_name(GTK_FONTBUTTON(self.pointer), c_str) }) } {
-			ffi::Gfalse 	=> false,
-			_ 				=> true
-		}
-	}
+    pub fn set_font_name(&mut self, font_name: &str) -> bool {
+        match unsafe { font_name.with_c_str(|c_str| { ffi::gtk_font_button_set_font_name(GTK_FONTBUTTON(self.pointer), c_str) }) } {
+            ffi::Gfalse     => false,
+            _               => true
+        }
+    }
 
-	pub fn get_font_name(&self) -> ~str {
-		let c_str = unsafe { ffi::gtk_font_button_get_font_name(GTK_FONTBUTTON(self.pointer)) };
-		unsafe { str::raw::from_c_str(c_str) }
-	}
+    pub fn get_font_name(&self) -> ~str {
+        let c_str = unsafe { ffi::gtk_font_button_get_font_name(GTK_FONTBUTTON(self.pointer)) };
+        unsafe { str::raw::from_c_str(c_str) }
+    }
 
-	pub fn set_show_style(&mut self, show_style: bool) -> () {
-		match show_style {
-			true 	=> unsafe { ffi::gtk_font_button_set_show_style(GTK_FONTBUTTON(self.pointer), ffi::Gtrue) },
-			false 	=> unsafe { ffi::gtk_font_button_set_show_style(GTK_FONTBUTTON(self.pointer), ffi::Gfalse) }
-		}
-	}
+    pub fn set_show_style(&mut self, show_style: bool) -> () {
+        match show_style {
+            true    => unsafe { ffi::gtk_font_button_set_show_style(GTK_FONTBUTTON(self.pointer), ffi::Gtrue) },
+            false   => unsafe { ffi::gtk_font_button_set_show_style(GTK_FONTBUTTON(self.pointer), ffi::Gfalse) }
+        }
+    }
 
-	pub fn get_show_style(&self) -> bool {
-		match unsafe { ffi::gtk_font_button_get_show_style(GTK_FONTBUTTON(self.pointer)) } {
-			ffi::Gfalse 	=> false,
-			_				=> true
-		}
-	}
+    pub fn get_show_style(&self) -> bool {
+        match unsafe { ffi::gtk_font_button_get_show_style(GTK_FONTBUTTON(self.pointer)) } {
+            ffi::Gfalse     => false,
+            _               => true
+        }
+    }
 
-	pub fn set_show_size(&mut self, show_size: bool) -> () {
-		match show_size {
-			true 	=> unsafe { ffi::gtk_font_button_set_show_size(GTK_FONTBUTTON(self.pointer), ffi::Gtrue) },
-			false 	=> unsafe { ffi::gtk_font_button_set_show_size(GTK_FONTBUTTON(self.pointer), ffi::Gfalse) }
-		}
-	}
+    pub fn set_show_size(&mut self, show_size: bool) -> () {
+        match show_size {
+            true    => unsafe { ffi::gtk_font_button_set_show_size(GTK_FONTBUTTON(self.pointer), ffi::Gtrue) },
+            false   => unsafe { ffi::gtk_font_button_set_show_size(GTK_FONTBUTTON(self.pointer), ffi::Gfalse) }
+        }
+    }
 
-	pub fn get_show_size(&self) -> bool {
-		match unsafe { ffi::gtk_font_button_get_show_size(GTK_FONTBUTTON(self.pointer)) } {
-			ffi::Gfalse 	=> false,
-			_				=> true
-		}
-	}
+    pub fn get_show_size(&self) -> bool {
+        match unsafe { ffi::gtk_font_button_get_show_size(GTK_FONTBUTTON(self.pointer)) } {
+            ffi::Gfalse     => false,
+            _               => true
+        }
+    }
 
-	pub fn set_use_font(&mut self, use_font: bool) -> () {
-		match use_font {
-			true 	=> unsafe { ffi::gtk_font_button_set_use_font(GTK_FONTBUTTON(self.pointer), ffi::Gtrue) },
-			false 	=> unsafe { ffi::gtk_font_button_set_use_font(GTK_FONTBUTTON(self.pointer), ffi::Gfalse) }
-		}
-	}
+    pub fn set_use_font(&mut self, use_font: bool) -> () {
+        match use_font {
+            true    => unsafe { ffi::gtk_font_button_set_use_font(GTK_FONTBUTTON(self.pointer), ffi::Gtrue) },
+            false   => unsafe { ffi::gtk_font_button_set_use_font(GTK_FONTBUTTON(self.pointer), ffi::Gfalse) }
+        }
+    }
 
-	pub fn get_use_font(&self) -> bool {
-		match unsafe { ffi::gtk_font_button_get_use_font(GTK_FONTBUTTON(self.pointer)) } {
-			ffi::Gfalse 	=> false,
-			_				=> true
-		}
-	}
+    pub fn get_use_font(&self) -> bool {
+        match unsafe { ffi::gtk_font_button_get_use_font(GTK_FONTBUTTON(self.pointer)) } {
+            ffi::Gfalse     => false,
+            _               => true
+        }
+    }
 
-	pub fn set_use_size(&mut self, use_size: bool) -> () {
-		match use_size {
-			true 	=> unsafe { ffi::gtk_font_button_set_use_size(GTK_FONTBUTTON(self.pointer), ffi::Gtrue) },
-			false 	=> unsafe { ffi::gtk_font_button_set_use_font(GTK_FONTBUTTON(self.pointer), ffi::Gfalse) }
-		}
-	}
+    pub fn set_use_size(&mut self, use_size: bool) -> () {
+        match use_size {
+            true    => unsafe { ffi::gtk_font_button_set_use_size(GTK_FONTBUTTON(self.pointer), ffi::Gtrue) },
+            false   => unsafe { ffi::gtk_font_button_set_use_font(GTK_FONTBUTTON(self.pointer), ffi::Gfalse) }
+        }
+    }
 
-	pub fn get_use_size(&self) -> bool {
-		match unsafe { ffi::gtk_font_button_get_use_size(GTK_FONTBUTTON(self.pointer)) } {
-			ffi::Gfalse 	=> false,
-			_				=> true
-		}
-	}
+    pub fn get_use_size(&self) -> bool {
+        match unsafe { ffi::gtk_font_button_get_use_size(GTK_FONTBUTTON(self.pointer)) } {
+            ffi::Gfalse     => false,
+            _               => true
+        }
+    }
 
-	pub fn set_title(&mut self, title: &str) -> () {
-		unsafe {
-			title.with_c_str(|c_str| {
-				ffi::gtk_font_button_set_title(GTK_FONTBUTTON(self.pointer), c_str)
-			});
-		}
-	}
+    pub fn set_title(&mut self, title: &str) -> () {
+        unsafe {
+            title.with_c_str(|c_str| {
+                ffi::gtk_font_button_set_title(GTK_FONTBUTTON(self.pointer), c_str)
+            });
+        }
+    }
 
-	pub fn get_title(&self) -> ~str {
-		let c_str = unsafe { ffi::gtk_font_button_get_title(GTK_FONTBUTTON(self.pointer)) };
-		unsafe { str::raw::from_c_str(c_str) }
-	}
+    pub fn get_title(&self) -> ~str {
+        let c_str = unsafe { ffi::gtk_font_button_get_title(GTK_FONTBUTTON(self.pointer)) };
+        unsafe { str::raw::from_c_str(c_str) }
+    }
 }
 
 

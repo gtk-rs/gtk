@@ -24,9 +24,9 @@ use ffi;
 
 /// Spinner — Show a spinner animation
 pub struct Spinner {
-    priv pointer: 			*ffi::C_GtkWidget,
-    priv can_drop: 			bool,
-    priv signal_handlers: 	~[~SignalHandler]
+    priv pointer:           *ffi::C_GtkWidget,
+    priv can_drop:          bool,
+    priv signal_handlers:   ~[~SignalHandler]
 }
 
 impl Spinner {
@@ -36,15 +36,15 @@ impl Spinner {
     }
 
     pub fn start(&mut self) -> () {
-    	unsafe {
-    		ffi::gtk_spinner_start(GTK_SPINNER(self.pointer))
-    	}
+        unsafe {
+            ffi::gtk_spinner_start(GTK_SPINNER(self.pointer))
+        }
     }
 
     pub fn stop(&mut self) -> () {
-    	unsafe {
-    		ffi::gtk_spinner_stop(GTK_SPINNER(self.pointer))
-    	}
+        unsafe {
+            ffi::gtk_spinner_stop(GTK_SPINNER(self.pointer))
+        }
     }
 
 }

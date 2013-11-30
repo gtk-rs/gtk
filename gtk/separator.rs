@@ -24,16 +24,16 @@ use gtk::enums::GtkOrientation;
 
 /// Separator — A separator widget
 pub struct Separator {
-	priv pointer: 			*ffi::C_GtkWidget,
-	priv can_drop: 			bool,
-    priv signal_handlers: 	~[~SignalHandler]
+    priv pointer:           *ffi::C_GtkWidget,
+    priv can_drop:          bool,
+    priv signal_handlers:   ~[~SignalHandler]
 }
 
 impl Separator {
-	pub fn new(orientation: GtkOrientation) -> Option<Separator> {
-		let tmp_pointer = unsafe { ffi::gtk_separator_new(orientation) };
-		check_pointer!(tmp_pointer, Separator)
-	}
+    pub fn new(orientation: GtkOrientation) -> Option<Separator> {
+        let tmp_pointer = unsafe { ffi::gtk_separator_new(orientation) };
+        check_pointer!(tmp_pointer, Separator)
+    }
 }
 
 impl_GtkWidget!(Separator)

@@ -18,17 +18,17 @@ use ffi;
 use gtk;
 
 pub struct Widget {
-	priv pointer: 			*ffi::C_GtkWidget
+    priv pointer:           *ffi::C_GtkWidget
 }
 
 impl Widget {
-	pub fn wrap(pointer: *ffi::C_GtkWidget) -> Widget {
-		Widget {
-			pointer: pointer
-		}
-	}
+    pub fn wrap(pointer: *ffi::C_GtkWidget) -> Widget {
+        Widget {
+            pointer: pointer
+        }
+    }
 
-	pub fn to_entry(self) -> gtk::Entry {
-		GtkWidget::wrap_widget(self.pointer)
-	}
+    pub fn to_entry(self) -> gtk::Entry {
+        GtkWidget::wrap_widget(self.pointer)
+    }
 }
