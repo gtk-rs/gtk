@@ -31,9 +31,9 @@ else
 					gcc -shared gtk_glue.o -o $(LIB_PATH)$(LIB_GTK_GLUE).so
 endif
 
-rgtk:				$(LIB_RGTK)
+rgtk:				lib_rgtk
 
-$(LIB_RGTK):		$(RGTK_LIB_RS)
+lib_rgtk:			$(RGTK_LIB_RS)
 					mkdir -p $(LIB_PATH)
 					@echo "$(OK_COLOR) Building librgtk $(NO_COLOR)"
 					$(RUSTC) -L $(LIB_PATH) $(RGTK_LIB_RS) --out-dir=$(LIB_PATH)

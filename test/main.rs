@@ -32,6 +32,10 @@ fn callback_info_bar(widget: &mut gtk::InfoBar, callback_data: Option<&mut GtkWi
     widget.hide();
 }
 
+// fn quit_callback(widget: &mut gtk::Window, callback_data: Option<&mut GtkWidget>) {
+//     widget.hide();
+// }
+
 fn main() {
     rt::init();
     println!("Major: {}, Minor: {}", gtk::version::get_major_version(), gtk::version::get_minor_version());
@@ -79,6 +83,7 @@ fn main() {
     window.add(&frame);
     button.connect_2p_widget("clicked", my_callback, Some(&entry));
     window.connect("delete-event", rt::_main_quit);
+    // window.connect_2p_widget("delete-event", quit_callback, Some(&entry));
     frame.add(&box);
     button_box.add(&button);
     button_box.add(&font_button);

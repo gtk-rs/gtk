@@ -99,10 +99,10 @@ impl InfoBar {
 }
 
 impl_GtkWidget!(InfoBar)
-redirect_callback!(InfoBar)
-redirect_callback_widget!(InfoBar)
+// redirect_callback!(InfoBar)
+// redirect_callback_widget!(InfoBar)
 struct_signal!(InfoBar)
-impl_signals!(InfoBar)
+// impl_signals!(InfoBar)
 
 impl GtkContainer for InfoBar {}
 impl GtkBox for InfoBar {}
