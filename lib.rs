@@ -138,7 +138,6 @@ pub use gtk::enums::*;
 #[doc(hidden)]
 #[cfg(target_os="macos")]
 mod platform {
-    // #[link_args="-lglib-2.0 -lgtk-3.0 -lgobject-2.0 -lgdk-3.0 -lgtk_glue"]
     #[link(name = "glib-2.0")]
     #[link(name = "gtk-3.0")]
     #[link(name = "gobject-2.0")]
@@ -150,7 +149,6 @@ mod platform {
 #[doc(hidden)]
 #[cfg(target_os="linux")]
 mod platform {
-    //#[link_args="-lglib-2.0 -lgtk-3 -lgobject-2.0 -lgdk-3 -lgtk_glue"]
     #[link(name = "glib-2.0")]
     #[link(name = "gtk-3")]
     #[link(name = "gobject-2.0")]
