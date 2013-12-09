@@ -11,7 +11,7 @@
 // GNU Lesser General Public License for more details.
 // 
 // You should have received a copy of the GNU Lesser General Public License
-// along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+// along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 /*!
 rgtk
@@ -113,6 +113,8 @@ __rgtk__ is available under the same license term than GTK+, the LGPL (Lesser Ge
        package_id = "rgtk")];
 
 #[crate_type = "lib"];
+
+#[doc(html_logo_url = "http://www.rust-lang.org/logos/rust-logo-128x128-blk.png")];
 
 // #[pkg_do(make)]
 
