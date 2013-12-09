@@ -1,6 +1,11 @@
 ./bin
 ./lib
 configure.in
+config.log
+config.status
 *.dylib
 Makefile
 .rust
+*.so
+*.o
+*.swp
