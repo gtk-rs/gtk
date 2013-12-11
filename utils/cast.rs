@@ -161,4 +161,9 @@ pub fn GTK_INFOBAR(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkInfoBar {
     unsafe { ffi::cast_GtkInfoBar(widget) }
 }
 
+pub fn GTK_TOOLSHELL(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkToolShell {
+    unsafe { ffi::cast_GtkToolShell(widget) }
+}
+
+
 

@@ -114,7 +114,7 @@ __rgtk__ is available under the same license term than GTK+, the LGPL (Lesser Ge
 
 #[crate_type = "lib"];
 
-#[doc(html_logo_url = "http://www.rust-lang.org/logos/rust-logo-128x128-blk.png")];
+#[allow(dead_code)]; 
 
 // #[pkg_do(make)]
 
@@ -130,6 +130,9 @@ pub use traits::GtkOrientable;
 pub use traits::GtkFrame;
 pub use traits::GtkToggleButton;
 pub use traits::GtkEntry;
+pub use traits::GtkToolShell;
+pub use traits::GtkBin;
+pub use traits::GtkScaleButton;
 
 pub use traits::Signal;
 

@@ -62,6 +62,7 @@ pub struct C_GtkAlignment;
 pub struct C_GtkExpander;
 pub struct C_GtkPaned;
 pub struct C_GtkInfoBar;
+pub struct C_GtkToolShell;
 
 
 pub struct C_GtkMenu;
@@ -753,6 +754,19 @@ extern "C" {
     pub fn gtk_info_bar_set_show_close_button  (info_bar: *C_GtkInfoBar, setting: Gboolean) -> ();
 
     //=========================================================================
+    // GtkToolShell
+    //=========================================================================
+    // pub fn gtk_tool_shell_get_ellipsize_mode   (shell: *C_GtkToolShell) -> PangoEllipsizeMode;
+    pub fn gtk_tool_shell_get_icon_size        (shell: *C_GtkToolShell) -> GtkIconSize;
+    pub fn gtk_tool_shell_get_orientation      (shell: *C_GtkToolShell) -> GtkOrientation;
+    pub fn gtk_tool_shell_get_relief_style     (shell: *C_GtkToolShell) -> GtkReliefStyle;
+    pub fn gtk_tool_shell_get_style            (shell: *C_GtkToolShell) -> GtkToolbarStyle;
+    pub fn gtk_tool_shell_get_text_alignment   (shell: *C_GtkToolShell) -> c_float;
+    pub fn gtk_tool_shell_get_text_orientation (shell: *C_GtkToolShell) -> GtkOrientation;
+    pub fn gtk_tool_shell_rebuild_menu         (shell: *C_GtkToolShell) -> ();
+    // pub fn gtk_tool_shell_get_text_size_group  (shell: *C_GtkToolShell) -> *GtkSizeGroup;
+
+    //=========================================================================
     // Glu fixe code
     //=========================================================================
     pub fn signal_connect(g_object: *C_GtkWidget, signal: *c_char, func: Option<fn()>);
@@ -795,6 +809,7 @@ extern "C" {
     pub fn cast_GtkExpander(widget: *C_GtkWidget) -> *C_GtkExpander;
     pub fn cast_GtkPaned(widget: *C_GtkWidget) -> *C_GtkPaned;
     pub fn cast_GtkInfoBar(widget: *C_GtkWidget) -> *C_GtkInfoBar;
+    pub fn cast_GtkToolShell(widget: *C_GtkWidget) -> *C_GtkToolShell;
 }
 
 

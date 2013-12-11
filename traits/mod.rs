@@ -26,6 +26,7 @@ pub use traits::gtktogglebutton::GtkToggleButton;
 pub use traits::gtkscalebutton::GtkScaleButton;
 pub use traits::gtkentry::GtkEntry;
 pub use traits::gtkbin::GtkBin;
+pub use traits::gtktoolshell::GtkToolShell;
 
 
 pub use traits::signal::Signal;
@@ -44,6 +45,7 @@ pub mod gtktogglebutton;
 pub mod gtkscalebutton;
 pub mod gtkentry;
 pub mod gtkbin;
+pub mod gtktoolshell;
 
 
 
