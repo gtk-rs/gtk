@@ -111,6 +111,7 @@ __rgtk__ is available under the same license term than GTK+, the LGPL (Lesser Ge
 #[link(name = "rgtk",
        vers = "0.0.1",
        package_id = "rgtk")];
+#[pkgid="rgtk"];
 
 #[crate_type = "lib"];
 

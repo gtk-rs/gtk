@@ -49,6 +49,7 @@ pub use gtk::alignment::Alignment;
 pub use gtk::expander::Expander;
 pub use gtk::paned::Paned;
 pub use gtk::infobar::InfoBar;
+pub use gtk::toolbar::ToolBar;
 
 pub mod enums;
 pub mod version;
@@ -88,6 +89,7 @@ pub mod alignment;
 pub mod expander;
 pub mod paned;
 pub mod infobar;
+pub mod toolbar;
 
 pub mod cast;
 
