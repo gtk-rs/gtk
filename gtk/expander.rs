@@ -31,7 +31,7 @@ pub struct Expander {
 }
 
 impl Expander {
-    pub fn new(label: ~str) -> Option<Expander> {
+    pub fn new(label: &str) -> Option<Expander> {
         let tmp_pointer = unsafe { 
             label.with_c_str(|c_str| {
                 ffi::gtk_expander_new(c_str) 
@@ -40,7 +40,7 @@ impl Expander {
         check_pointer!(tmp_pointer, Expander)
     }
 
-    pub fn new_with_mnemonic(mnemonic: ~str) -> Option<Expander> {
+    pub fn new_with_mnemonic(mnemonic: &str) -> Option<Expander> {
         let tmp_pointer = unsafe { 
             mnemonic.with_c_str(|c_str| {
                 ffi::gtk_expander_new_with_mnemonic(c_str) 
@@ -127,7 +127,7 @@ impl Expander {
         }
     }
 
-    pub fn set_label(&mut self, label: ~str) -> () {
+    pub fn set_label(&mut self, label: &str) -> () {
         unsafe {
             label.with_c_str(|c_str| {
                 ffi::gtk_expander_set_label(GTK_EXPANDER(self.pointer), c_str) 
