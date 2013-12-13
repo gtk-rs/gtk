@@ -796,6 +796,33 @@ extern "C" {
     // GtkToolItem
     //=========================================================================
     pub fn gtk_tool_item_new                   () -> *C_GtkWidget;
+    pub fn gtk_tool_item_set_homogeneous       (tool_item: *C_GtkToolItem, homogeneous: Gboolean) -> ();
+    pub fn gtk_tool_item_get_homogeneous       (tool_item: *C_GtkToolItem) -> Gboolean;
+    pub fn gtk_tool_item_set_expand            (tool_item: *C_GtkToolItem, expand: Gboolean) -> ();
+    pub fn gtk_tool_item_get_expand            (tool_item: *C_GtkToolItem) -> Gboolean;
+    pub fn gtk_tool_item_set_tooltip_text      (tool_item: *C_GtkToolItem, text: *c_char) -> ();
+    pub fn gtk_tool_item_set_tooltip_markup    (tool_item: *C_GtkToolItem, markup: *c_char) -> ();
+    pub fn gtk_tool_item_set_use_drag_window   (tool_item: *C_GtkToolItem, use_drag_window: Gboolean) -> ();
+    pub fn gtk_tool_item_get_use_drag_window   (tool_item: *C_GtkToolItem) -> Gboolean;
+    pub fn gtk_tool_item_set_visible_horizontal(tool_item: *C_GtkToolItem, visible_horizontal: Gboolean) -> ();
+    pub fn gtk_tool_item_get_visible_horizontal(tool_item: *C_GtkToolItem) -> Gboolean;
+    pub fn gtk_tool_item_set_visible_vertical  (tool_item: *C_GtkToolItem, visible_vertical: Gboolean) -> ();
+    pub fn gtk_tool_item_get_visible_vertical  (tool_item: *C_GtkToolItem) -> Gboolean;
+    pub fn gtk_tool_item_set_is_important      (tool_item: *C_GtkToolItem, is_important: Gboolean) -> ();
+    pub fn gtk_tool_item_get_is_important      (tool_item: *C_GtkToolItem) -> Gboolean;
+    // pub fn gtk_tool_item_get_ellipsize_mode    (tool_item: *C_GtkToolItem) -> PangoEllipsizeMode;
+    pub fn gtk_tool_item_get_icon_size         (tool_item: *C_GtkToolItem) -> GtkIconSize;
+    pub fn gtk_tool_item_get_orientation       (tool_item: *C_GtkToolItem) -> GtkOrientation;
+    pub fn gtk_tool_item_get_toolbar_style     (tool_item: *C_GtkToolItem) -> GtkToolbarStyle;
+    pub fn gtk_tool_item_get_relief_style      (tool_item: *C_GtkToolItem) -> GtkReliefStyle;
+    pub fn gtk_tool_item_get_text_alignment    (tool_item: *C_GtkToolItem) -> c_float;
+    pub fn gtk_tool_item_get_text_orientation  (tool_item: *C_GtkToolItem) -> GtkOrientation;
+    // pub fn gtk_tool_item_retrieve_proxy_menu_item(tool_item: *C_GtkToolItem) -> *C_GtkWidget;
+    // pub fn gtk_tool_item_get_proxy_menu_item   (tool_item: *C_GtkToolItem, menu_item_id: *c_char) -> *C_GtkWidget;
+    // pub fn gtk_tool_item_set_proxy_menu_item   (tool_item: *C_GtkToolItem, menu_item_id: *c_char, menu_item: *C_GtkWidget) -> ();
+    pub fn gtk_tool_item_rebuild_menu          (tool_item: *C_GtkToolItem) -> ();
+    pub fn gtk_tool_item_toolbar_reconfigured  (tool_item: *C_GtkToolItem) -> ();
+    // pub fn gtk_tool_item_get_text_size_group   (tool_item: *C_GtkToolItem) -> *GtkSizeGroup;
 
     //=========================================================================
     // GtkSeparatorToolItem
