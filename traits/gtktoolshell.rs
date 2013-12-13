@@ -19,45 +19,45 @@ use utils::cast::GTK_TOOLSHELL;
 use gtk::enums::{GtkIconSize, GtkOrientation, GtkReliefStyle, GtkToolbarStyle};
 
 pub trait GtkToolShell: GtkWidget {
-	fn get_icon_size(&self) -> GtkIconSize {
-		unsafe {
-			ffi::gtk_tool_shell_get_icon_size(GTK_TOOLSHELL(self.get_widget()))
-		}
-	}
+    fn get_icon_size(&self) -> GtkIconSize {
+        unsafe {
+            ffi::gtk_tool_shell_get_icon_size(GTK_TOOLSHELL(self.get_widget()))
+        }
+    }
 
-	fn get_orientation(&self) -> GtkOrientation {
-		unsafe {
-			ffi::gtk_tool_shell_get_orientation(GTK_TOOLSHELL(self.get_widget()))
-		}
-	}
+    fn get_orientation(&self) -> GtkOrientation {
+        unsafe {
+            ffi::gtk_tool_shell_get_orientation(GTK_TOOLSHELL(self.get_widget()))
+        }
+    }
 
-	fn get_relief_style(&self) -> GtkReliefStyle {
-		unsafe {
-			ffi::gtk_tool_shell_get_relief_style(GTK_TOOLSHELL(self.get_widget()))
-		}
-	}
+    fn get_relief_style(&self) -> GtkReliefStyle {
+        unsafe {
+            ffi::gtk_tool_shell_get_relief_style(GTK_TOOLSHELL(self.get_widget()))
+        }
+    }
 
-	fn get_style(&self) -> GtkToolbarStyle {
-		unsafe {
-			ffi::gtk_tool_shell_get_style(GTK_TOOLSHELL(self.get_widget()))
-		}
-	}
+    fn get_style(&self) -> GtkToolbarStyle {
+        unsafe {
+            ffi::gtk_tool_shell_get_style(GTK_TOOLSHELL(self.get_widget()))
+        }
+    }
 
-	fn get_text_alignment(&self) -> f32 {
-		unsafe {
-			ffi::gtk_tool_shell_get_text_alignment(GTK_TOOLSHELL(self.get_widget()))
-		}
-	}
+    fn get_text_alignment(&self) -> f32 {
+        unsafe {
+            ffi::gtk_tool_shell_get_text_alignment(GTK_TOOLSHELL(self.get_widget()))
+        }
+    }
 
-	fn get_text_orientation(&self) -> GtkOrientation {
-		unsafe {
-			ffi::gtk_tool_shell_get_text_orientation(GTK_TOOLSHELL(self.get_widget()))
-		}
-	}
+    fn get_text_orientation(&self) -> GtkOrientation {
+        unsafe {
+            ffi::gtk_tool_shell_get_text_orientation(GTK_TOOLSHELL(self.get_widget()))
+        }
+    }
 
-	fn rebuild_menu(&mut self) -> () {
-		unsafe {
-			ffi::gtk_tool_shell_rebuild_menu(GTK_TOOLSHELL(self.get_widget()))
-		}
-	}
+    fn rebuild_menu(&mut self) -> () {
+        unsafe {
+            ffi::gtk_tool_shell_rebuild_menu(GTK_TOOLSHELL(self.get_widget()))
+        }
+    }
 }

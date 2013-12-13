@@ -165,5 +165,12 @@ pub fn GTK_TOOLSHELL(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkToolShell {
     unsafe { ffi::cast_GtkToolShell(widget) }
 }
 
+pub fn GTK_TOOLBAR(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkToolbar {
+    unsafe{ ffi::cast_GtkToolbar(widget) }
+}
+
+pub fn GTK_TOOLITEM(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkToolItem {
+    unsafe{ ffi::cast_GtkToolItem(widget) }
+}
 
 

@@ -63,7 +63,13 @@ pub struct C_GtkExpander;
 pub struct C_GtkPaned;
 pub struct C_GtkInfoBar;
 pub struct C_GtkToolShell;
+pub struct C_GtkToolbar;
 
+pub struct C_GtkToolItem;
+pub struct C_GtkToolButton;
+pub struct C_GtkToggleToolButton;
+pub struct C_GtkRadioToolButton;
+pub struct C_GtkSeparatorToolItem;
 
 pub struct C_GtkMenu;
 pub struct C_GMenuModel;
@@ -767,6 +773,31 @@ extern "C" {
     // pub fn gtk_tool_shell_get_text_size_group  (shell: *C_GtkToolShell) -> *GtkSizeGroup;
 
     //=========================================================================
+    // GtkToolBar
+    //=========================================================================
+    pub fn gtk_toolbar_new                     () -> *C_GtkWidget;
+    pub fn gtk_toolbar_insert                  (toolbar: *C_GtkToolbar, item: *C_GtkToolItem, pos: c_int) -> ();
+    pub fn gtk_toolbar_get_item_index          (toolbar: *C_GtkToolbar, item: *C_GtkToolItem) -> c_int;
+    pub fn gtk_toolbar_get_n_items             (toolbar: *C_GtkToolbar) -> c_int;
+    pub fn gtk_toolbar_get_nth_item            (toolbar: *C_GtkToolbar, n: c_int) -> *C_GtkToolItem;
+    pub fn gtk_toolbar_get_drop_index          (toolbar: *C_GtkToolbar, x: c_int, y: c_int) -> c_int;
+    pub fn gtk_toolbar_set_drop_highlight_item (toolbar: *C_GtkToolbar, item: *C_GtkToolItem, index: c_int) -> ();
+    pub fn gtk_toolbar_set_show_arrow          (toolbar: *C_GtkToolbar, show_array: Gboolean) -> ();
+    pub fn gtk_toolbar_unset_icon_size         (toolbar: *C_GtkToolbar) -> ();
+    pub fn gtk_toolbar_get_show_arrow          (toolbar: *C_GtkToolbar) -> Gboolean;
+    pub fn gtk_toolbar_get_style               (toolbar: *C_GtkToolbar) -> GtkToolbarStyle;
+    pub fn gtk_toolbar_get_icon_size           (toolbar: *C_GtkToolbar) -> GtkIconSize;
+    pub fn gtk_toolbar_get_relief_style        (toolbar: *C_GtkToolbar) -> GtkReliefStyle;
+    pub fn gtk_toolbar_set_style               (toolbar: *C_GtkToolbar, style: GtkToolbarStyle) -> ();
+    pub fn gtk_toolbar_set_icon_size           (toolbar: *C_GtkToolbar, icon_size: GtkIconSize) -> ();
+    pub fn gtk_toolbar_unset_style             (toolbar: *C_GtkToolbar) -> ();
+
+    //=========================================================================
+    // GtkToolItem
+    //=========================================================================
+    pub fn gtk_tool_item_new                   () -> *C_GtkWidget;
+
+    //=========================================================================
     // Glu fixe code
     //=========================================================================
     pub fn signal_connect(g_object: *C_GtkWidget, signal: *c_char, func: Option<fn()>);
@@ -810,6 +841,8 @@ extern "C" {
     pub fn cast_GtkPaned(widget: *C_GtkWidget) -> *C_GtkPaned;
     pub fn cast_GtkInfoBar(widget: *C_GtkWidget) -> *C_GtkInfoBar;
     pub fn cast_GtkToolShell(widget: *C_GtkWidget) -> *C_GtkToolShell;
+    pub fn cast_GtkToolbar(widget: *C_GtkWidget) -> *C_GtkToolbar;
+    pub fn cast_GtkToolItem(widget: *C_GtkWidget) -> *C_GtkToolItem;
 }
 
 

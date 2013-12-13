@@ -1,4 +1,6 @@
 
+#[allow(dead_code)];
+
 #[feature(globs)];
 
 extern mod rgtk;
