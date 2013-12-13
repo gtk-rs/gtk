@@ -798,6 +798,13 @@ extern "C" {
     pub fn gtk_tool_item_new                   () -> *C_GtkWidget;
 
     //=========================================================================
+    // GtkSeparatorToolItem
+    //=========================================================================
+    pub fn gtk_separator_tool_item_new         () -> *C_GtkWidget;
+    pub fn gtk_separator_tool_item_set_draw    (item: *C_GtkSeparatorToolItem, draw: Gboolean) -> ();
+    pub fn gtk_separator_tool_item_get_draw    (item: *C_GtkSeparatorToolItem) -> Gboolean;
+
+    //=========================================================================
     // Glu fixe code
     //=========================================================================
     pub fn signal_connect(g_object: *C_GtkWidget, signal: *c_char, func: Option<fn()>);
@@ -843,6 +850,7 @@ extern "C" {
     pub fn cast_GtkToolShell(widget: *C_GtkWidget) -> *C_GtkToolShell;
     pub fn cast_GtkToolbar(widget: *C_GtkWidget) -> *C_GtkToolbar;
     pub fn cast_GtkToolItem(widget: *C_GtkWidget) -> *C_GtkToolItem;
+    pub fn cast_GtkSeparatorToolItem(widget: *C_GtkWidget) -> *C_GtkSeparatorToolItem;
 }
 
 

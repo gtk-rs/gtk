@@ -173,4 +173,7 @@ pub fn GTK_TOOLITEM(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkToolItem {
     unsafe{ ffi::cast_GtkToolItem(widget) }
 }
 
+pub fn GTK_SEPARATORTOOLITEM(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkSeparatorToolItem {
+    unsafe{ ffi::cast_GtkSeparatorToolItem(widget) }
+}
 
