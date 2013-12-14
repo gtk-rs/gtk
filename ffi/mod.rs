@@ -67,6 +67,7 @@ pub struct C_GtkToolbar;
 
 pub struct C_GtkToolItem;
 pub struct C_GtkToolButton;
+pub struct C_GtkMenuToolButton;
 pub struct C_GtkToggleToolButton;
 pub struct C_GtkRadioToolButton;
 pub struct C_GtkSeparatorToolItem;
@@ -832,6 +833,24 @@ extern "C" {
     pub fn gtk_separator_tool_item_get_draw    (item: *C_GtkSeparatorToolItem) -> Gboolean;
 
     //=========================================================================
+    // GtkToolButton
+    //=========================================================================
+    pub fn gtk_tool_button_new                 (icon_widget: *C_GtkWidget, label: *c_char) -> *C_GtkWidget;
+    pub fn gtk_tool_button_new_from_stock      (stock_id: *c_char) -> *C_GtkWidget;
+    pub fn gtk_tool_button_set_label           (button: *C_GtkToolButton, label: *c_char) -> ();
+    pub fn gtk_tool_button_get_label           (button: *C_GtkToolButton) -> *c_char;
+    pub fn gtk_tool_button_set_use_underline   (button: *C_GtkToolButton, use_underline: Gboolean) -> ();
+    pub fn gtk_tool_button_get_use_underline   (button: *C_GtkToolButton) -> Gboolean;
+    pub fn gtk_tool_button_set_stock_id        (button: *C_GtkToolButton, stock_id: *c_char) -> ();
+    pub fn gtk_tool_button_get_stock_id        (button: *C_GtkToolButton) -> *c_char;
+    pub fn gtk_tool_button_set_icon_name       (button: *C_GtkToolButton, icon_name: *c_char) -> ();
+    pub fn gtk_tool_button_get_icon_name       (button: *C_GtkToolButton) -> *c_char;
+    // pub fn gtk_tool_button_set_icon_widget     (button: *C_GtkToolButton, icon_widget: *C_GtkWidget) -> ();
+    // pub fn gtk_tool_button_get_icon_widget     (button: *C_GtkToolButton) -> *C_GtkWidget;
+    pub fn gtk_tool_button_set_label_widget    (button: *C_GtkToolButton, label_widget: *C_GtkWidget) -> ();
+    pub fn gtk_tool_button_get_label_widget    (button: *C_GtkToolButton) -> *C_GtkWidget;
+
+    //=========================================================================
     // Glu fixe code
     //=========================================================================
     pub fn signal_connect(g_object: *C_GtkWidget, signal: *c_char, func: Option<fn()>);
@@ -877,7 +896,9 @@ extern "C" {
     pub fn cast_GtkToolShell(widget: *C_GtkWidget) -> *C_GtkToolShell;
     pub fn cast_GtkToolbar(widget: *C_GtkWidget) -> *C_GtkToolbar;
     pub fn cast_GtkToolItem(widget: *C_GtkWidget) -> *C_GtkToolItem;
+    pub fn cast_GtkToolButton(widget: *C_GtkWidget) -> *C_GtkToolButton;
     pub fn cast_GtkSeparatorToolItem(widget: *C_GtkWidget) -> *C_GtkSeparatorToolItem;
+    pub fn cast_GtkMenuToolButton(widget: *C_GtkWidget) -> *C_GtkMenuToolButton;
+    pub fn cast_GtkToggleToolButton(widget: *C_GtkWidget) -> *C_GtkToggleToolButton;
+    pub fn cast_GtkRadioToolButton(widget: *C_GtkWidget) -> *C_GtkRadioToolButton;
 }
-
-

@@ -42,10 +42,14 @@ pub trait GtkEntry: GtkWidget {
         }
     }
 
-    fn get_text(&self) -> ~str {
+    fn get_text(&self) -> Option<~str> {
         unsafe { 
             let c_str = ffi::gtk_entry_get_text(GTK_ENTRY(self.get_widget()));
-            str::raw::from_c_str(c_str)
+            if c_str.is_null() {
+                None
+            } else {
+                Some(str::raw::from_c_str(c_str))
+            }
         }
     }
 

@@ -14,11 +14,11 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use ffi;
-use traits::GtkWidget;
+use traits::{GtkWidget, GtkContainer, GtkBin};
 use utils::cast::GTK_TOOLITEM;
 use gtk::enums::{GtkIconSize, GtkOrientation, GtkReliefStyle, GtkToolbarStyle};
 
-pub trait GtkToolItem: GtkWidget {
+pub trait GtkToolItem: GtkWidget + GtkContainer + GtkBin {
     fn set_homogeneous(&mut self, homogeneous: bool) -> () {
          match homogeneous {
             true    => unsafe { ffi::gtk_tool_item_set_homogeneous(GTK_TOOLITEM(self.get_widget()), ffi::Gtrue) },

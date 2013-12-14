@@ -28,6 +28,7 @@ pub use traits::gtkentry::GtkEntry;
 pub use traits::gtkbin::GtkBin;
 pub use traits::gtktoolshell::GtkToolShell;
 pub use traits::gtktoolitem::GtkToolItem;
+pub use traits::gtktoolbutton::GtkToolButton;
 
 
 pub use traits::signal::Signal;
@@ -48,6 +49,7 @@ pub mod gtkentry;
 pub mod gtkbin;
 pub mod gtktoolshell;
 pub mod gtktoolitem;
+pub mod gtktoolbutton;
 
 
 

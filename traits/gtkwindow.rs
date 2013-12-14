@@ -28,8 +28,12 @@ pub trait GtkWindow : GtkWidget {
         }
     }
 
-    fn get_title(&self) -> ~str {
+    fn get_title(&self) -> Option<~str> {
         let c_title = unsafe { ffi::gtk_window_get_title(GTK_WINDOW(self.get_widget())) };
-        unsafe { str::raw::from_c_str(c_title) }
+        if c_title.is_null() {
+            None
+        } else {
+            Some(unsafe { str::raw::from_c_str(c_title) })
+        }
     } 
 }

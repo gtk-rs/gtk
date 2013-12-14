@@ -177,3 +177,20 @@ pub fn GTK_SEPARATORTOOLITEM(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkSeparatorT
     unsafe{ ffi::cast_GtkSeparatorToolItem(widget) }
 }
 
+pub fn GTK_TOOLBUTTON(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkToolButton {
+    unsafe{ ffi::cast_GtkToolButton(widget) }
+}
+
+pub fn GTK_MENUTOOLBUTTON(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkMenuToolButton {
+    unsafe{ ffi::cast_GtkMenuToolButton(widget) }
+}
+
+pub fn GTK_TOGGLETOOLBUTTON(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkToggleToolButton {
+    unsafe{ ffi::cast_GtkToggleToolButton(widget) }
+}
+
+pub fn GTK_RADIOTOOLBUTTON(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkRadioToolButton {
+    unsafe{ ffi::cast_GtkRadioToolButton(widget) }
+}
+
+

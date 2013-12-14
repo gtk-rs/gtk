@@ -199,24 +199,36 @@ pub trait GtkLabel : GtkWidget {
         }
     }
 
-    fn get_text(&self) -> ~str {
+    fn get_text(&self) -> Option<~str> {
         unsafe {
             let c_str = ffi::gtk_label_get_text(GTK_LABEL(self.get_widget()));
-            str::raw::from_c_str(c_str)
+            if c_str.is_null() {
+                None
+            } else {
+                Some(str::raw::from_c_str(c_str))
+            }
         }
     }
 
-    fn get_label(&self) -> ~str {
+    fn get_label(&self) -> Option<~str> {
         unsafe {
             let c_str = ffi::gtk_label_get_label(GTK_LABEL(self.get_widget()));
-            str::raw::from_c_str(c_str)
+            if c_str.is_null() {
+                None
+            } else {
+                Some(str::raw::from_c_str(c_str))
+            }
         }
     }
 
-    fn get_current_uri(&self) -> ~str {
+    fn get_current_uri(&self) -> Option<~str> {
         unsafe {
             let c_str = ffi::gtk_label_get_current_uri(GTK_LABEL(self.get_widget()));
-            str::raw::from_c_str(c_str)
+            if c_str.is_null() {
+                None
+            } else {
+                Some(str::raw::from_c_str(c_str))
+            }
         }
     }
     

@@ -111,7 +111,7 @@ __rgtk__ is available under the same license term than GTK+, the LGPL (Lesser Ge
 #[link(name = "rgtk",
        vers = "0.0.1",
        package_id = "rgtk")];
-#[pkgid="rgtk"];
+#[pkgid="rgtk#0.0.1"];
 
 #[crate_type = "lib"];
 
@@ -134,6 +134,8 @@ pub use traits::GtkEntry;
 pub use traits::GtkToolShell;
 pub use traits::GtkBin;
 pub use traits::GtkScaleButton;
+pub use traits::GtkToolItem;
+pub use traits::GtkToolButton;
 
 pub use traits::Signal;
 

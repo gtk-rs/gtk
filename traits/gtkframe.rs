@@ -56,9 +56,13 @@ pub trait GtkFrame: GtkWidget + GtkContainer {
         }
     }
 
-    fn get_label(&self) -> ~str {
+    fn get_label(&self) -> Option<~str> {
         let c_str = unsafe { ffi::gtk_frame_get_label(GTK_FRAME(self.get_widget())) };
-        unsafe {str::raw::from_c_str(c_str)}
+        if c_str.is_null() {
+            None
+        } else {
+            Some(unsafe {str::raw::from_c_str(c_str)})
+        }
     }
 
     fn gtk_frame_get_shadow_type(&self) -> GtkShadowType {
