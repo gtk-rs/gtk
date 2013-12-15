@@ -52,6 +52,7 @@ pub use gtk::infobar::InfoBar;
 pub use gtk::toolbar::Toolbar;
 pub use gtk::toolitem::ToolItem;
 pub use gtk::separatortoolitem::SeparatorToolItem;
+pub use gtk::toolbutton::ToolButton;
 
 pub mod enums;
 pub mod version;
@@ -94,6 +95,7 @@ pub mod infobar;
 pub mod toolbar;
 pub mod toolitem;
 pub mod separatortoolitem;
+pub mod toolbutton;
 
 pub mod cast;
 
