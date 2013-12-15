@@ -136,6 +136,7 @@ pub use traits::GtkBin;
 pub use traits::GtkScaleButton;
 pub use traits::GtkToolItem;
 pub use traits::GtkToolButton;
+pub use traits::GtkToggleToolButton;
 
 pub use traits::Signal;
 

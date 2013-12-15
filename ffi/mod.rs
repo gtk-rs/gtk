@@ -851,6 +851,35 @@ extern "C" {
     pub fn gtk_tool_button_get_label_widget    (button: *C_GtkToolButton) -> *C_GtkWidget;
 
     //=========================================================================
+    // GtkToggleToolButton
+    //=========================================================================
+    pub fn gtk_toggle_tool_button_new          () -> *C_GtkWidget;
+    pub fn gtk_toggle_tool_button_new_from_stock(stock_id: *c_char) -> *C_GtkWidget;
+    pub fn gtk_toggle_tool_button_set_active   (button: *C_GtkToggleToolButton, is_active: Gboolean) -> ();
+    pub fn gtk_toggle_tool_button_get_active   (button: *C_GtkToggleToolButton) -> Gboolean;
+
+
+    //=========================================================================
+    // GtkRadioToolButton
+    //=========================================================================
+    // pub fn gtk_radio_tool_button_new           (GSList *group) -> *C_GtkWidget;
+    // pub fn gtk_radio_tool_button_new_from_stock(GSList *group, const gchar *stock_id) -> *C_GtkWidget;
+    // pub fn gtk_radio_tool_button_new_from_widget(GtkRadioToolButton *group) -> *C_GtkWidget;
+    // pub fn gtk_radio_tool_button_new_with_stock_from_widget(GtkRadioToolButton *group, const gchar *stock_id) -> *C_GtkWidget;
+    // pub fn gtk_radio_tool_button_get_group     (GtkRadioToolButton *button) -> *GSList;
+    // pub fn gtk_radio_tool_button_set_group     (GtkRadioToolButton *button, GSList *group) -> ();
+
+    //=========================================================================
+    // GtkMenuToolButton
+    //=========================================================================
+    pub fn gtk_menu_tool_button_new            (icon_widget: *C_GtkWidget, label: *c_char) -> *C_GtkWidget;
+    pub fn gtk_menu_tool_button_new_from_stock (stock_id: *c_char) -> *C_GtkWidget;
+    // pub fn gtk_menu_tool_button_set_menu       (button: *C_GtkMenuToolButton, menu: *C_GtkWidget);
+    // pub fn gtk_menu_tool_button_get_menu       (button: *C_GtkMenuToolButton) -> *C_GtkWidget;
+    pub fn gtk_menu_tool_button_set_arrow_tooltip_text(button: *C_GtkMenuToolButton, text: *c_char) -> ();
+    pub fn gtk_menu_tool_button_set_arrow_tooltip_markup(button: *C_GtkMenuToolButton, markup: *c_char) -> ();
+
+    //=========================================================================
     // Glu fixe code
     //=========================================================================
     pub fn signal_connect(g_object: *C_GtkWidget, signal: *c_char, func: Option<fn()>);
