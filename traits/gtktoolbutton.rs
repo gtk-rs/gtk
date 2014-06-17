@@ -14,11 +14,14 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use std::str;
+use std::owned;
 
 use traits::{GtkWidget, GtkContainer, GtkBin, GtkToolItem, GtkLabel};
 use gtk;
 use utils::cast::GTK_TOOLBUTTON;
 use ffi;
+use std;
+use std::owned;
 
 pub trait GtkToolButton: GtkWidget + GtkContainer + GtkBin + GtkToolItem {
     fn set_label(&mut self, label: &str) -> () {
@@ -45,7 +48,7 @@ pub trait GtkToolButton: GtkWidget + GtkContainer + GtkBin + GtkToolItem {
         }
     }
 
-    fn get_label(&self) -> Option<~str> {
+    fn get_label(&self) -> Option<String> {
         unsafe {
             let c_str = ffi::gtk_tool_button_get_label(GTK_TOOLBUTTON(self.get_widget()));
             if c_str.is_null() {
@@ -56,7 +59,7 @@ pub trait GtkToolButton: GtkWidget + GtkContainer + GtkBin + GtkToolItem {
         }
     }
 
-    fn get_stock_id(&self) -> Option<~str> {
+    fn get_stock_id(&self) -> Option<String> {
         unsafe {
             let c_str = ffi::gtk_tool_button_get_stock_id(GTK_TOOLBUTTON(self.get_widget()));
             if c_str.is_null() {
@@ -67,7 +70,7 @@ pub trait GtkToolButton: GtkWidget + GtkContainer + GtkBin + GtkToolItem {
         }
     }
 
-    fn get_icon_name(&self) -> Option<~str> {
+    fn get_icon_name(&self) -> Option<String> {
         unsafe {
             let c_str = ffi::gtk_tool_button_get_icon_name(GTK_TOOLBUTTON(self.get_widget()));
             if c_str.is_null() {

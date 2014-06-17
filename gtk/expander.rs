@@ -15,8 +15,12 @@
 
 //! A container which can hide its child
 
-use std::{ptr, str, cast};
-use std::libc::{c_void, c_int};
+use std;
+use std::owned;
+use std::{ptr, str, owned};
+use std::num::cast;
+use libc::{c_int};
+use libc::{c_void};
 
 use traits::{GtkContainer, GtkWidget, GtkBin, Signal};
 use gtk;
@@ -25,9 +29,9 @@ use ffi;
 
 /// Expander — A container which can hide its child
 pub struct Expander {
-    priv pointer:           *ffi::C_GtkWidget,
-    priv can_drop:          bool,
-    priv signal_handlers:   ~[~SignalHandler]
+    pointer:           *ffi::C_GtkWidget,
+    can_drop:          bool,
+    signal_handlers:   Vec<Box<SignalHandler>>
 }
 
 impl Expander {
@@ -120,7 +124,7 @@ impl Expander {
         }
     }
 
-    pub fn get_label(&self) -> ~str {
+    pub fn get_label(&self) -> String {
         unsafe {
             let c_str = ffi::gtk_expander_get_label(GTK_EXPANDER(self.pointer));
             str::raw::from_c_str(c_str)

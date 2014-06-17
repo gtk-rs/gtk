@@ -15,9 +15,11 @@
 
 //! Adjustment — A representation of an adjustable bounded value
 
-use std::libc::c_double;
+use libc::c_double;
 
 use ffi;
+use std;
+use std::owned;
 
 /**
 * A representation of an adjustable bounded value
@@ -27,8 +29,8 @@ use ffi;
 * * `value-changed` : No Recursion
 */
 pub struct Adjustment {
-    priv pointer:   *ffi::C_GtkAdjustment,
-    priv can_drop:  bool
+    pointer:   *ffi::C_GtkAdjustment,
+    can_drop:  bool
 }
 
 impl Adjustment {

@@ -15,20 +15,24 @@
 
 //! Report important messages to the user
 
-// use std::{ptr, cast};
-use std::libc::{c_void, c_int};
+// use std::ptr;
+use std::num::cast;
+use libc::{c_int};
+use libc::{c_void};
 
 use gtk::enums::GtkMessageType;
 use traits::{GtkContainer, GtkWidget, GtkBox, GtkOrientable};
 use utils::cast::GTK_INFOBAR;
 use gtk;
 use ffi;
+use std;
+use std::owned;
 
 /// InfoBar — Report important messages to the user
 pub struct InfoBar {
-    priv pointer:           *ffi::C_GtkWidget,
-    priv can_drop:          bool,
-    priv signal_handlers:   ~[~SignalHandler]
+    pointer:           *ffi::C_GtkWidget,
+    can_drop:          bool,
+    signal_handlers:   Vec<Box<SignalHandler>>
 }
 
 impl InfoBar {

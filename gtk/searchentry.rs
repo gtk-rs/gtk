@@ -15,11 +15,14 @@
 
 //! An entry which shows a search icon
 
-use std::libc::c_void;
-use std::{ptr, cast};
+use libc::{c_void};
+use std::ptr;
+use std::num::cast;
 
 use traits::{GtkWidget, GtkEntry, Signal};
 use ffi;
+use std;
+use std::owned;
 
 /** 
 * SearchEntry — An entry which shows a search icon
@@ -28,9 +31,9 @@ use ffi;
 * * `search-changed` : Run Last
 */
 pub struct SearchEntry {
-    priv pointer:           *ffi::C_GtkWidget,
-    priv can_drop:          bool,
-    priv signal_handlers:   ~[~SignalHandler]
+    pointer:           *ffi::C_GtkWidget,
+    can_drop:          bool,
+    signal_handlers:   Vec<Box<SignalHandler>>
 }
 
 impl SearchEntry {

@@ -15,12 +15,15 @@
 
 //! A single line text entry field
 
-use std::libc::c_void;
-use std::{ptr, cast};
+use libc::{c_void};
+use std::ptr;
+use std::num::cast;
 
 use traits::{GtkWidget, GtkEntry, Signal};
 use gtk;
 use ffi;
+use std;
+use std::owned;
 
 /** 
 * Entry — A single line text entry field
@@ -41,9 +44,9 @@ use ffi;
 * * `toggle-overwrite` : Action
 */
 pub struct Entry {
-    priv pointer:           *ffi::C_GtkWidget,
-    priv can_drop:          bool,
-    priv signal_handlers:   ~[~SignalHandler]
+    pointer:           *ffi::C_GtkWidget,
+    can_drop:          bool,
+    signal_handlers:   Vec<Box<SignalHandler>>
 }
 
 impl Entry {

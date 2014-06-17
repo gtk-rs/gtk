@@ -14,13 +14,16 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use std::{str};
-use std::libc::{c_int, c_float, c_double};
+use std::owned;
+use libc::{c_int, c_float, c_double};
 
 use traits::GtkWidget;
 use gtk::enums::{GtkEntryIconPosition, GtkImageType, GtkInputPurpose, GtkInputHints};
 use utils::cast::GTK_ENTRY;
 use gtk;
 use ffi;
+use std;
+use std::owned;
 
 pub trait GtkEntry: GtkWidget {
     fn get_buffer(&self) -> gtk::EntryBuffer {
@@ -34,7 +37,7 @@ pub trait GtkEntry: GtkWidget {
         }
     }
 
-    fn set_text(&mut self, text: &str) -> () {
+    fn set_text(&mut self, text: String) -> () {
         unsafe {
             text.with_c_str(|c_str| {
                 ffi::gtk_entry_set_text(GTK_ENTRY(self.get_widget()), c_str)
@@ -42,7 +45,7 @@ pub trait GtkEntry: GtkWidget {
         }
     }
 
-    fn get_text(&self) -> Option<~str> {
+    fn get_text(&self) -> Option<String> {
         unsafe { 
             let c_str = ffi::gtk_entry_get_text(GTK_ENTRY(self.get_widget()));
             if c_str.is_null() {
@@ -150,7 +153,7 @@ pub trait GtkEntry: GtkWidget {
         }
     }
 
-    fn placeholder(&self) -> ~str {
+    fn placeholder(&self) -> String {
         unsafe {
             let c_str = ffi::gtk_entry_get_placeholder_text(GTK_ENTRY(self.get_widget()));
             str::raw::from_c_str(c_str)
@@ -273,14 +276,14 @@ pub trait GtkEntry: GtkWidget {
         }
     }
 
-    fn get_icon_stock(&self, icon_pos: GtkEntryIconPosition) -> ~str {
+    fn get_icon_stock(&self, icon_pos: GtkEntryIconPosition) -> String {
         unsafe {
             let c_str = ffi::gtk_entry_get_icon_stock(GTK_ENTRY(self.get_widget()), icon_pos);
             str::raw::from_c_str(c_str)
         }
     }
 
-    fn get_icon_name(&self, icon_pos: GtkEntryIconPosition) -> ~str {
+    fn get_icon_name(&self, icon_pos: GtkEntryIconPosition) -> String {
         unsafe {
             let c_str = ffi::gtk_entry_get_icon_name(GTK_ENTRY(self.get_widget()), icon_pos);
             str::raw::from_c_str(c_str)
@@ -329,7 +332,7 @@ pub trait GtkEntry: GtkWidget {
         }
     }
 
-    fn get_icon_tooltip_text(&self, icon_pos: GtkEntryIconPosition) -> ~str {
+    fn get_icon_tooltip_text(&self, icon_pos: GtkEntryIconPosition) -> String {
         unsafe {
             let c_str = ffi::gtk_entry_get_icon_tooltip_text(GTK_ENTRY(self.get_widget()), icon_pos);
             str::raw::from_c_str(c_str)
@@ -342,7 +345,7 @@ pub trait GtkEntry: GtkWidget {
         }
     }
 
-    fn get_icon_tooltip_markup(&self, icon_pos: GtkEntryIconPosition) -> ~str {
+    fn get_icon_tooltip_markup(&self, icon_pos: GtkEntryIconPosition) -> String {
         unsafe {
             let c_str = ffi::gtk_entry_get_icon_tooltip_markup(GTK_ENTRY(self.get_widget()), icon_pos);
             str::raw::from_c_str(c_str)

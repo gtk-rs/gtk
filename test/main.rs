@@ -1,9 +1,9 @@
 
-#[allow(dead_code)];
+#![allow(dead_code)]
 
-#[feature(globs)];
+#![feature(globs)]
 
-extern mod rgtk;
+extern crate rgtk;
 
 use rgtk::*;
 
@@ -52,8 +52,8 @@ fn main() {
     println!("Major: {}, Minor: {}", gtk::version::get_major_version(), gtk::version::get_minor_version());
     let mut window = gtk::Window::new(GtkWindowTopLevel).unwrap();
     let mut frame = gtk::Frame::new(Some("Yep a frame")).unwrap();
-    let mut box = gtk::Box::new(GtkOrientationHorizontal, 10).unwrap();
-    let mut v_box = gtk::Box::new(GtkOrientationHorizontal, 10).unwrap();
+    let mut _box = gtk::_Box::new(GtkOrientationHorizontal, 10).unwrap();
+    let mut v_box = gtk::_Box::new(GtkOrientationHorizontal, 10).unwrap();
     let mut button_box = gtk::ButtonBox::new(GtkOrientationHorizontal).unwrap();
     let mut label = gtk::Label::new("Yeah a wonderful label too !").unwrap();
     let mut button = gtk::Button::new_with_label("Whattttt a button !").unwrap();
@@ -86,7 +86,7 @@ fn main() {
     level_bar.set_value(37.);
     switch2.set_active(true);
     frame.set_border_width(10);
-    box.set_border_width(5);
+    _box.set_border_width(5);
     entry.set_placeholder("An Entry with a placeholder !");
     volume_button.set_orientation(GtkOrientationHorizontal);
     label.set_justify(GtkJustifyLeft);
@@ -95,7 +95,7 @@ fn main() {
     button.connect_2p_widget("clicked", my_callback, Some(&entry));
     window.connect("delete-event", rt::_main_quit);
     // window.connect_2p_widget("delete-event", quit_callback, Some(&entry));
-    frame.add(&box);
+    frame.add(&_box);
     button_box.add(&button);
     button_box.add(&font_button);
     button_box.add(&toggle_button);
@@ -107,22 +107,22 @@ fn main() {
     v_box.add(&check_button);
     v_box.add(&link_button);
     v_box.add(&spin_button);
-    box.add(&info_bar);
-    box.add(&v_box);
-    box.add(&scale);
-    box.add(&level_bar);
-    box.add(&button_box);
-    box.add(&progress_bar);
-    box.add(&separator);
-    box.add(&label);
-    box.add(&entry);
-    box.add(&separator2);
-    box.add(&search_entry);
-    box.add(&spinner);
-    box.add(&image);
-    box.add(&arrow);
-    box.add(&calendar);
-    box.set_orientation(GtkOrientationVertical);
+    _box.add(&info_bar);
+    _box.add(&v_box);
+    _box.add(&scale);
+    _box.add(&level_bar);
+    _box.add(&button_box);
+    _box.add(&progress_bar);
+    _box.add(&separator);
+    _box.add(&label);
+    _box.add(&entry);
+    _box.add(&separator2);
+    _box.add(&search_entry);
+    _box.add(&spinner);
+    _box.add(&image);
+    _box.add(&arrow);
+    _box.add(&calendar);
+    _box.set_orientation(GtkOrientationVertical);
     window.show_all();
     rt::_main();
 }

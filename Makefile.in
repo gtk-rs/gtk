@@ -1,3 +1,5 @@
+SHELL     := /bin/bash
+
 ERROR_COLOR=\x1b[31;01m
 OK_COLOR=\x1b[32;01m
 NO_COLOR=\x1b[0m
@@ -8,11 +10,11 @@ SRC = 			gtk_glue/gtk_glue.c
 INC = 			$(shell pkg-config --cflags gtk+-3.0)
 LIBS = 			$(shell pkg-config --libs gtk+-3.0)
 RUSTC = 		rustc
-RGTK_LIB_RS = 	lib.rs
+RGTK_LIB_RS = 	rgtk.rs
 LIB_RGTK =		librgtk.so
 LIB_PATH = 		lib/
 TEST_SRC =		test/main.rs
-TEST = 			gtk_test
+TEST = 			test
 BIN_PATH = 		bin/
 OS =			$(shell uname)
 
@@ -25,10 +27,10 @@ $(LIB_GTK_GLUE):	$(SRC)
 					mkdir -p $(LIB_PATH)
 					@$(ECHO) "$(OK_COLOR) Building lib gtk_glue $(NO_COLOR)"
 ifeq ($(OS), Darwin)
-					$(CC) $(INC) $(LIBS) -dynamiclib -o  $(LIB_PATH)$(LIB_GTK_GLUE).dylib $(SRC)
+					$(CC) $(INC) $(LIBS) -dynamiclib -o $(LIB_PATH)$(LIB_GTK_GLUE).dylib $(SRC)
 else
-					$(CC) $(INC) $(LIBS) -fPIC -c $(SRC)
-					$(CC) -shared gtk_glue.o -o $(LIB_PATH)$(LIB_GTK_GLUE).so
+					$(CC) -fPIC -g -c $(SRC) $(INC) -o /tmp/$(LIB_GTK_GLUE).o $(LIBS)
+					$(CC) -shared -Wl,-soname,$(LIB_GTK_GLUE).so -o $(LIB_PATH)$(LIB_GTK_GLUE).so /tmp/$(LIB_GTK_GLUE).o -lc
 endif
 
 rgtk:				lib_rgtk
@@ -38,13 +40,13 @@ lib_rgtk:			$(RGTK_LIB_RS) $(LIB_GTK_GLUE)
 					@$(ECHO) "$(OK_COLOR) Building librgtk $(NO_COLOR)"
 					$(RUSTC) -L $(LIB_PATH) $(RGTK_LIB_RS) --out-dir=$(LIB_PATH)
 
-test:				$(TEST)
-
-$(TEST):			$(TEST_SRC)
+.PHONY: test
+test:				$(TEST_SRC)
 					@$(ECHO) "$(OK_COLOR) Creating bin/ folder $(NO_COLOR)"
 					mkdir -p $(BIN_PATH)
 					@$(ECHO) "$(OK_COLOR) Building test $(NO_COLOR)"
 					$(RUSTC) -L $(LIB_PATH) $(TEST_SRC) -o $(BIN_PATH)$(TEST)
+					env LD_LIBRARY_PATH=.:lib/ ./bin/$(TEST)
 
 full:				glue rgtk test
 

@@ -14,12 +14,14 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use std::{str, ptr};
-use std::libc::c_float;
+use libc::c_float;
 
 use traits::{GtkWidget, GtkContainer};
 use gtk::enums::{GtkReliefStyle, GtkPositionType};
 use utils::cast::GTK_BUTTON;
 use ffi;
+use std;
+use std::owned;
 
 pub trait GtkButton: GtkWidget + GtkContainer {
     fn pressed(&self) -> () {
@@ -64,9 +66,9 @@ pub trait GtkButton: GtkWidget + GtkContainer {
         }
     }
 
-    fn get_label(&self) -> Option<~str> {
+    fn get_label(&self) -> Option<String> {
         let c_str = unsafe { ffi::gtk_button_get_label(GTK_BUTTON(self.get_widget())) };
-        if ptr::is_null(c_str) {
+        if c_str.is_null() {
             None
         } else {
             Some(unsafe { str::raw::from_c_str(c_str) })

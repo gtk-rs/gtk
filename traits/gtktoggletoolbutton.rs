@@ -17,6 +17,8 @@
 use traits::{GtkWidget, GtkContainer, GtkBin, GtkToolItem, GtkToolButton};
 use utils::cast::GTK_TOGGLETOOLBUTTON;
 use ffi;
+use std;
+use std::owned;
 
 pub trait GtkToggleToolButton: GtkWidget + GtkContainer + GtkBin + GtkToolItem + GtkToolButton {
 

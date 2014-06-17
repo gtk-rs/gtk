@@ -105,19 +105,21 @@ __rgtk__ is available under the same license term than GTK+, the LGPL (Lesser Ge
 
 */
 
-#[feature(globs)];
-#[feature(macro_rules)];
+#![feature(globs)]
+#![feature(macro_rules)]
 
-#[link(name = "rgtk",
-       vers = "0.0.1",
-       package_id = "rgtk")];
-#[pkgid="rgtk#0.0.1"];
+#![link(name = "rgtk",
+        vers = "0.0.1",
+        package_id = "rgtk")]
+#![pkgid="rgtk#0.0.1"]
 
-#[crate_type = "lib"];
+#![crate_type = "lib"]
 
-#[allow(dead_code)]; 
+#![allow(dead_code)] 
 
 // #[pkg_do(make)]
+
+extern crate libc;
 
 // traits reexports
 pub use traits::GtkWidget;

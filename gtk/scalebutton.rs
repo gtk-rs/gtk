@@ -15,11 +15,15 @@
 
 //! A button which pops up a scale
 
-use std::{ptr, cast};
-use std::libc::{c_double, c_void};
+use std::ptr;
+use std::num::cast;
+use libc::{c_double};
+use libc::{c_void};
 
 use traits::{GtkWidget, GtkButton, GtkContainer, GtkScaleButton, GtkOrientable, Signal};
 use ffi;
+use std;
+use std::owned;
 use gtk::enums::GtkIconSize;
 
 /** 
@@ -31,9 +35,9 @@ use gtk::enums::GtkIconSize;
 * * `value-changed` : Run Last
 */
 pub struct ScaleButton {
-    priv pointer:           *ffi::C_GtkWidget,
-    priv can_drop:          bool,
-    priv signal_handlers:   ~[~SignalHandler]
+    pointer:           *ffi::C_GtkWidget,
+    can_drop:          bool,
+    signal_handlers:   Vec<Box<SignalHandler>>
 }
 
 impl ScaleButton {

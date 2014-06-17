@@ -13,12 +13,14 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::libc::{c_int, c_uint};
+use libc::{c_int, c_uint};
 
 use traits::GtkWidget;
 use gtk::enums::{GtkPackType, GtkPackStart};
 use utils::cast::GTK_BOX;
 use ffi;
+use std;
+use std::owned;
 
 pub trait GtkBox: GtkWidget {
     fn pack_start<'r, T: GtkWidget>(&'r mut self, child: &'r T, expand: bool, fill: bool, padding: u32) -> () {

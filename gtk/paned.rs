@@ -15,13 +15,17 @@
 
 //! A widget with two adjustable panes
 
-use std::{ptr, cast};
-use std::libc::{c_void, c_int};
+use std::ptr;
+use std::num::cast;
+use libc::{c_int};
+use libc::{c_void};
 
 use gtk::enums::GtkOrientation;
 use traits::{GtkWidget, GtkContainer, Signal};
 use utils::cast::GTK_PANED;
 use ffi;
+use std;
+use std::owned;
 use gtk;
 
 /**
@@ -36,9 +40,9 @@ use gtk;
 * * `toggle-handle-focus` : Action
 */
 pub struct Paned {
-    priv pointer:           *ffi::C_GtkWidget,
-    priv can_drop:          bool,
-    priv signal_handlers:   ~[~SignalHandler]
+    pointer:           *ffi::C_GtkWidget,
+    can_drop:          bool,
+    signal_handlers:   Vec<Box<SignalHandler>>
 }
 
 impl Paned {

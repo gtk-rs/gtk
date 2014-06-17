@@ -13,11 +13,13 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::libc::{c_float, c_int};
+use libc::{c_float, c_int};
 
 use traits::gtkwidget::GtkWidget;
 use utils::cast::GTK_MISC;
 use ffi;
+use std;
+use std::owned;
 
 pub trait GtkMisc : GtkWidget {
     fn set_alignment(&mut self, x_align: f32, y_align: f32) -> () {

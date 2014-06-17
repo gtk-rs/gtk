@@ -15,10 +15,12 @@
 
 use traits::{GtkWidget};
 use ffi;
+use std;
+use std::owned;
 use gtk;
 
 pub struct Widget {
-    priv pointer:           *ffi::C_GtkWidget
+    pointer:           *ffi::C_GtkWidget
 }
 
 impl Widget {

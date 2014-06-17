@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::libc::{c_int, c_char, c_void, c_float, c_uint, c_double, c_long, c_short};
+use libc::{c_int, c_char, c_float, c_uint, c_double, c_long, c_short, c_void};
 
 use gtk::enums::*;
 use gdk;
@@ -341,17 +341,17 @@ extern "C" {
     // GtkBox                                                                
     //=========================================================================
     pub fn gtk_box_new                         (orientation: GtkOrientation, spacing: c_int) -> *C_GtkWidget;
-    pub fn gtk_box_pack_start                  (box: *C_GtkBox, child: *C_GtkWidget, expand: Gboolean, fill: Gboolean, padding: c_uint) -> ();
-    pub fn gtk_box_pack_end                    (box: *C_GtkBox, child: *C_GtkWidget, expand: Gboolean, fill: Gboolean, padding: c_uint) -> ();
-    pub fn gtk_box_get_homogeneous             (box: *C_GtkBox) -> Gboolean;
-    pub fn gtk_box_set_homogeneous             (box: *C_GtkBox, homogeneous: Gboolean) -> ();
-    pub fn gtk_box_get_spacing                 (box: *C_GtkBox) -> c_int;
-    pub fn gtk_box_set_spacing                 (box: *C_GtkBox, spacing: c_int) -> ();
-    pub fn gtk_box_reorder_child               (box: *C_GtkBox, child: *C_GtkWidget, position: c_int) -> ();
-    pub fn gtk_box_query_child_packing         (box: *C_GtkBox, child: *C_GtkWidget, expand: *Gboolean, fill: *Gboolean, padding: *c_uint, pack_type: *GtkPackType) -> ();
-    pub fn gtk_box_set_child_packing           (box: *C_GtkBox, child: *C_GtkWidget, expand: Gboolean, fill: Gboolean, padding: c_uint, pack_type: GtkPackType) -> ();
-    // pub fn gtk_box_get_baseline_position       (box: *C_GtkBox) -> GtkBaselinePosition;
-    // pub fn gtk_box_set_baseline_position       (box: *C_GtkBox, position: GtkBaselinePosition) -> ();
+    pub fn gtk_box_pack_start                  (_box: *C_GtkBox, child: *C_GtkWidget, expand: Gboolean, fill: Gboolean, padding: c_uint) -> ();
+    pub fn gtk_box_pack_end                    (_box: *C_GtkBox, child: *C_GtkWidget, expand: Gboolean, fill: Gboolean, padding: c_uint) -> ();
+    pub fn gtk_box_get_homogeneous             (_box: *C_GtkBox) -> Gboolean;
+    pub fn gtk_box_set_homogeneous             (_box: *C_GtkBox, homogeneous: Gboolean) -> ();
+    pub fn gtk_box_get_spacing                 (_box: *C_GtkBox) -> c_int;
+    pub fn gtk_box_set_spacing                 (_box: *C_GtkBox, spacing: c_int) -> ();
+    pub fn gtk_box_reorder_child               (_box: *C_GtkBox, child: *C_GtkWidget, position: c_int) -> ();
+    pub fn gtk_box_query_child_packing         (_box: *C_GtkBox, child: *C_GtkWidget, expand: *Gboolean, fill: *Gboolean, padding: *c_uint, pack_type: *GtkPackType) -> ();
+    pub fn gtk_box_set_child_packing           (_box: *C_GtkBox, child: *C_GtkWidget, expand: Gboolean, fill: Gboolean, padding: c_uint, pack_type: GtkPackType) -> ();
+    // pub fn gtk_box_get_baseline_position       (_box: *C_GtkBox) -> GtkBaselinePosition;
+    // pub fn gtk_box_set_baseline_position       (_box: *C_GtkBox, position: GtkBaselinePosition) -> ();
 
     //=========================================================================
     // GtkOrientable                                                         OK

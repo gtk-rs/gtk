@@ -15,18 +15,22 @@
 
 //! A frame that constrains its child to a particular aspect ratio
 
-use std::libc::{c_float, c_void};
-use std::{ptr, cast};
+use libc::{c_float};
+use libc::{c_void};
+use std::ptr;
+use std::num::cast;
 
 use traits::{GtkWidget, GtkFrame, GtkContainer, Signal};
 use utils::cast::GTK_ASPECTFRAME;
 use ffi;
+use std;
+use std::owned;
 
 /// AspectFrame — A frame that constrains its child to a particular aspect ratio
 pub struct AspectFrame {
-    priv pointer:           *ffi::C_GtkWidget,
-    priv can_drop:          bool,
-    priv signal_handlers:   ~[~SignalHandler]
+    pointer:           *ffi::C_GtkWidget,
+    can_drop:          bool,
+    signal_handlers:   Vec<Box<SignalHandler>>
 }
 
 impl AspectFrame {

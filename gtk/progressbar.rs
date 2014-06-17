@@ -15,19 +15,23 @@
 
 //! A widget which indicates progress visually
 
-use std::libc::{c_void, c_double};
-use std::{ptr, str, cast};
+use libc::{c_double};
+use libc::{c_void};
+use std::{ptr, str};
+use std::num::cast;
 
 use traits::{GtkWidget, GtkOrientable, Signal};
 use ffi;
+use std;
+use std::owned::Box;
 use utils::cast::GTK_PROGRESSBAR;
 
 
 /// ProgressBar — A widget which indicates progress visually
 pub struct ProgressBar {
-    priv pointer:           *ffi::C_GtkWidget,
-    priv can_drop:          bool,
-    priv signal_handlers:   ~[~SignalHandler]
+    pointer:           *ffi::C_GtkWidget,
+    can_drop:          bool,
+    signal_handlers:   Vec<Box<SignalHandler>>
 }
 
 impl ProgressBar {
@@ -62,7 +66,7 @@ impl ProgressBar {
         }
     }
 
-    pub fn get_text(&self) -> ~str {
+    pub fn get_text(&self) -> String {
         unsafe {
             let c_str = ffi::gtk_progress_bar_get_text(GTK_PROGRESSBAR(self.pointer));
             str::raw::from_c_str(c_str)

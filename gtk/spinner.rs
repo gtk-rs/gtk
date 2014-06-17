@@ -15,18 +15,21 @@
 
 //! Show a spinner animation
 
-use std::{ptr, cast};
-use std::libc::c_void;
+use std::ptr;
+use std::num::cast;
+use libc::{c_void};
 
 use traits::{GtkWidget, Signal};
 use utils::cast::GTK_SPINNER;
 use ffi;
+use std;
+use std::owned;
 
 /// Spinner — Show a spinner animation
 pub struct Spinner {
-    priv pointer:           *ffi::C_GtkWidget,
-    priv can_drop:          bool,
-    priv signal_handlers:   ~[~SignalHandler]
+    pointer:           *ffi::C_GtkWidget,
+    can_drop:          bool,
+    signal_handlers:   Vec<Box<SignalHandler>>
 }
 
 impl Spinner {

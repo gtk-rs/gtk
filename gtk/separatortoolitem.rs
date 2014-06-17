@@ -15,18 +15,21 @@
 
 //! The base class of widgets that can be added to GtkToolShe
 
-use std::{ptr, cast};
-use std::libc::c_void;
+use std::ptr;
+use std::num::cast;
+use libc::{c_void};
 
 use traits::{GtkContainer, GtkWidget, GtkBin, GtkToolItem, Signal};
 use ffi;
+use std;
+use std::owned;
 use utils::cast::GTK_SEPARATORTOOLITEM;
 
 /// ToolItem — The base class of widgets that can be added to GtkToolShe
 pub struct SeparatorToolItem {
-    priv pointer:           *ffi::C_GtkWidget,
-    priv can_drop:          bool,
-    priv signal_handlers:   ~[~SignalHandler]
+    pointer:           *ffi::C_GtkWidget,
+    can_drop:          bool,
+    signal_handlers:   Vec<Box<SignalHandler>>
 }
 
 impl SeparatorToolItem {

@@ -15,13 +15,18 @@
 
 //! Displays a calendar and allows the user to select a date
 
-use std::{ptr, cast};
-use std::libc::{c_void, c_uint, c_int};
+use std::ptr;
+use std::num::cast;
+use libc::{c_void};
+use libc::{c_uint, c_int};
+use libc::{c_void};
 
 use traits::{GtkWidget, Signal};
 use gtk::enums::GtkCalendarDisplayOptions;
 use utils::cast::GTK_CALENDAR;
 use ffi;
+use std;
+use std::owned;
 
 /**
 * Calendar — Displays a calendar and allows the user to select a date
@@ -36,9 +41,9 @@ use ffi;
 * * `prev-year` : Run First
 */
 pub struct Calendar {
-    priv pointer:           *ffi::C_GtkWidget,
-    priv can_drop:          bool,
-    priv signal_handlers:   ~[~SignalHandler]
+    pointer:           *ffi::C_GtkWidget,
+    can_drop:          bool,
+    signal_handlers:   Vec<Box<SignalHandler>>
 }
 
 impl Calendar {

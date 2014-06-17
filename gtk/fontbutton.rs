@@ -15,11 +15,14 @@
 
 //! A button to launch a font chooser dialog
 
-use std::{ptr, str, cast};
-use std::libc::c_void;
+use std::{ptr, str};
+use std::num::cast;
+use libc::{c_void};
 
 use traits::{GtkWidget, GtkButton, GtkContainer, Signal};
 use ffi;
+use std;
+use std::owned;
 use utils::cast::GTK_FONTBUTTON;
 
 /** 
@@ -29,9 +32,9 @@ use utils::cast::GTK_FONTBUTTON;
 * * `font-set` : Run First
 */
 pub struct FontButton {
-    priv pointer:           *ffi::C_GtkWidget,
-    priv can_drop:          bool,
-    priv signal_handlers:   ~[~SignalHandler]
+    pointer:           *ffi::C_GtkWidget,
+    can_drop:          bool,
+    signal_handlers:   Vec<Box<SignalHandler>>
 }
 
 impl FontButton {
@@ -56,7 +59,7 @@ impl FontButton {
         }
     }
 
-    pub fn get_font_name(&self) -> ~str {
+    pub fn get_font_name(&self) -> String {
         let c_str = unsafe { ffi::gtk_font_button_get_font_name(GTK_FONTBUTTON(self.pointer)) };
         unsafe { str::raw::from_c_str(c_str) }
     }
@@ -125,7 +128,7 @@ impl FontButton {
         }
     }
 
-    pub fn get_title(&self) -> ~str {
+    pub fn get_title(&self) -> String {
         let c_str = unsafe { ffi::gtk_font_button_get_title(GTK_FONTBUTTON(self.pointer)) };
         unsafe { str::raw::from_c_str(c_str) }
     }

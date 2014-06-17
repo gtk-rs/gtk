@@ -14,12 +14,14 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use std::{ptr, str};
-use std::libc::c_float;
+use libc::c_float;
 
 use traits::{GtkWidget, GtkContainer};
 use gtk::enums::GtkShadowType;
 use utils::cast::GTK_FRAME;
 use ffi;
+use std;
+use std::owned;
 
 pub trait GtkFrame: GtkWidget + GtkContainer {
     fn set_label(&mut self, label: Option<&str>) -> () {
@@ -56,7 +58,7 @@ pub trait GtkFrame: GtkWidget + GtkContainer {
         }
     }
 
-    fn get_label(&self) -> Option<~str> {
+    fn get_label(&self) -> Option<String> {
         let c_str = unsafe { ffi::gtk_frame_get_label(GTK_FRAME(self.get_widget())) };
         if c_str.is_null() {
             None

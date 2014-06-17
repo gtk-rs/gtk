@@ -15,14 +15,18 @@
 
 //! Retrieve an integer or floating-point number from the user
 
-use std::{ptr, cast};
-use std::libc::{c_void, c_double, c_uint};
+use std::ptr;
+use std::num::cast;
+use libc::{c_double, c_uint};
+use libc::{c_void};
 
 use gtk::enums::{GtkSpinType, GtkSpinButtonUpdatePolicy};
 use traits::{GtkOrientable, GtkEntry, GtkWidget, Signal};
 use gtk;
 use utils::cast::{GTK_SPINBUTTON};
 use ffi;
+use std;
+use std::owned;
 
 /**
 * SpinButton — Retrieve an integer or floating-point number from the user
@@ -36,9 +40,9 @@ use ffi;
 *
 */
 pub struct SpinButton {
-    priv pointer:           *ffi::C_GtkWidget,
-    priv can_drop:          bool,
-    priv signal_handlers:   ~[~SignalHandler]
+    pointer:           *ffi::C_GtkWidget,
+    can_drop:          bool,
+    signal_handlers:   Vec<Box<SignalHandler>>
 }
 
 impl SpinButton {

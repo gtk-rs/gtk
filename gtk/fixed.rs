@@ -15,18 +15,22 @@
 
 //! A container which allows you to position widgets at fixed coordinates
 
-use std::{ptr, cast};
-use std::libc::{c_void, c_int};
+use std::ptr;
+use std::num::cast;
+use libc::{c_int};
+use libc::{c_void};
 
 use traits::{GtkWidget, GtkContainer, Signal};
 use utils::cast::GTK_FIXED;
 use ffi;
+use std;
+use std::owned;
 
 /// Fixed — A container which allows you to position widgets at fixed coordinates
 pub struct Fixed {
-    priv pointer:           *ffi::C_GtkWidget,
-    priv can_drop:          bool,
-    priv signal_handlers:   ~[~SignalHandler]
+    pointer:           *ffi::C_GtkWidget,
+    can_drop:          bool,
+    signal_handlers:   Vec<Box<SignalHandler>>
 }
 
 impl Fixed {

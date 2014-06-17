@@ -15,11 +15,14 @@
 
 //! A widget that emits a signal when clicked on
 
-use std::libc::c_void;
-use std::{ptr, cast};
+use libc::{c_void};
+use std::ptr;
+use std::num::cast;
 
 use traits::{GtkWidget, GtkButton, GtkBin, GtkContainer, Signal};
 use ffi;
+use std;
+use std::owned;
 use gtk::enums::GtkIconSize;
 
 /** 
@@ -34,9 +37,9 @@ use gtk::enums::GtkIconSize;
 * * `released` : Run First
 */
 pub struct Button {
-    priv pointer:           *ffi::C_GtkWidget,
-    priv can_drop:          bool,
-    priv signal_handlers:   ~[~SignalHandler]
+    pointer:           *ffi::C_GtkWidget,
+    can_drop:          bool,
+    signal_handlers:   Vec<Box<SignalHandler>>
 }
 
 impl Button {

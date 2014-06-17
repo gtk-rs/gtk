@@ -15,17 +15,20 @@
 
 //! Create widgets with a discrete toggle button
 
-use std::{ptr, cast};
-use std::libc::c_void;
+use std::ptr;
+use std::num::cast;
+use libc::{c_void};
 
 use traits::{GtkWidget, GtkButton, GtkContainer, GtkToggleButton, Signal};
 use ffi;
+use std;
+use std::owned;
 
 /// CheckButton — Create widgets with a discrete toggle button
 pub struct CheckButton {
-    priv pointer:           *ffi::C_GtkWidget,
-    priv can_drop:          bool,
-    priv signal_handlers:   ~[~SignalHandler]
+    pointer:           *ffi::C_GtkWidget,
+    can_drop:          bool,
+    signal_handlers:   Vec<Box<SignalHandler>>
 }
 
 impl CheckButton {

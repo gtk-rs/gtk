@@ -16,27 +16,27 @@
 //! Manipulation of colors
 
 /// The Color structure is used to describe a color, similar to the XColor struct used in the X11 drawing API.
-#[deriving(Clone, Eq, Ord, ToStr)]
+#[deriving(Clone, PartialEq, PartialOrd, Show)]
 pub struct Color {
     /// For allocated colors, the pixel value used to draw this color on the screen. Not used anymore.
-    pixel:  u32,
+    pub pixel:  u32,
     /// The red component of the color. This is a value between 0 and 65535, with 65535 indicating full intensity
-    red:    u16,
+    pub red:    u16,
     /// The green component of the color
-    green:  u16,
+    pub green:  u16,
     /// The blue component of the color
-    blue:   u16
+    pub blue:   u16
 }
 
 /// The GdkRGBA structure is used to represent a (possibly translucent) color, in a way that is compatible with cairos notion of color.
-#[deriving(Clone, Eq, Ord, ToStr)]
+#[deriving(Clone, PartialEq, PartialOrd, Show)]
 pub struct RGBA {
     /// The intensity of the red channel from 0.0 to 1.0 inclusive
-    red: f64,
+    pub red: f64,
     /// The intensity of the green channel from 0.0 to 1.0 inclusive
-    green: f64,
+    pub green: f64,
     /// The intensity of the blue channel from 0.0 to 1.0 inclusive
-    blue: f64,
+    pub blue: f64,
     /// The opacity of the color from 0.0 for completely translucent to 1.0 for opaque
-    alpha: f64
+    pub alpha: f64
 }

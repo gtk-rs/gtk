@@ -15,18 +15,22 @@
 
 //! A GtkToolItem containing a button with an additional dropdown menu
 
-use std::{ptr, cast};
-use std::libc::c_void;
+use std::ptr;
+use libc::{c_void};
 
 use traits::{GtkContainer, GtkWidget, GtkBin, GtkToolItem, GtkToolButton, Signal};
 use utils::cast::GTK_MENUTOOLBUTTON;
 use ffi;
+use std;
+use std::owned;
+use std;
+use std::owned;
 
 /// MenuToolButton — A GtkToolItem containing a button with an additional dropdown menu
 pub struct MenuToolButton {
-    priv pointer:           *ffi::C_GtkWidget,
-    priv can_drop:          bool,
-    priv signal_handlers:   ~[~SignalHandler]
+    pointer:           *ffi::C_GtkWidget,
+    can_drop:          bool,
+    signal_handlers:   Vec<Box<SignalHandler>>
 }
 
 impl MenuToolButton {

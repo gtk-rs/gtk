@@ -15,17 +15,20 @@
 
 //! A button which pops up a volume control
 
-use std::{ptr, cast};
-use std::libc::c_void;
+use std::ptr;
+use std::num::cast;
+use libc::{c_void};
 
 use traits::{GtkWidget, GtkButton, GtkContainer, GtkScaleButton, GtkOrientable, Signal};
 use ffi;
+use std;
+use std::owned;
 
 /// VolumeButton — A button which pops up a volume control
 pub struct VolumeButton {
-    priv pointer:           *ffi::C_GtkWidget,
-    priv can_drop:          bool,
-    priv signal_handlers:   ~[~SignalHandler]
+    pointer:           *ffi::C_GtkWidget,
+    can_drop:          bool,
+    signal_handlers:   Vec<Box<SignalHandler>>
 }
 
 impl VolumeButton {

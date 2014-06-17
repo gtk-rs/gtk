@@ -15,19 +15,22 @@
 
 //! Displays an arrow
 
-use std::{ptr, cast};
-use std::libc::c_void;
+use std::ptr;
+use std::num::cast;
+use libc::{c_void};
 
 use gtk::enums::{GtkShadowType, GtkArrowType};
 use traits::{GtkWidget, Signal, GtkMisc};
 use utils::cast::GTK_ARROW;
 use ffi;
+use std;
+use std::owned;
 
 /// Arrow — Displays an arrow
 pub struct Arrow {
-    priv pointer:           *ffi::C_GtkWidget,
-    priv can_drop:          bool,
-    priv signal_handlers:   ~[~SignalHandler]
+    pointer:           *ffi::C_GtkWidget,
+    can_drop:          bool,
+    signal_handlers:   Vec<Box<SignalHandler>>
 }
 
 impl Arrow {

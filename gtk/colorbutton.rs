@@ -15,12 +15,15 @@
 
 //! A button to launch a color selection dialog
 
-use std::{ptr, str, cast};
-use std::libc::c_void;
+use std::{ptr, str};
+use std::num::cast;
+use libc::{c_void};
 
 use traits::{GtkWidget, GtkButton, GtkContainer, Signal};
 use utils::cast::GTK_COLORBUTTON;
 use ffi;
+use std;
+use std::owned;
 use gdk;
 
 /** 
@@ -30,9 +33,9 @@ use gdk;
 * * `color-set` : Run First
 */
 pub struct ColorButton {
-    priv pointer:           *ffi::C_GtkWidget,
-    priv can_drop:          bool,
-    priv signal_handlers:   ~[~SignalHandler]
+    pointer:           *ffi::C_GtkWidget,
+    can_drop:          bool,
+    signal_handlers:   Vec<Box<SignalHandler>>
 }
 
 impl ColorButton {
@@ -113,7 +116,7 @@ impl ColorButton {
         }
     }
 
-    pub fn get_title(&self) -> ~str {
+    pub fn get_title(&self) -> String {
         let c_str = unsafe { ffi::gtk_color_button_get_title(GTK_COLORBUTTON(self.pointer)) };
         unsafe { str::raw::from_c_str(c_str) }
     }

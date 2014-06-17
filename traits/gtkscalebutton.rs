@@ -13,12 +13,14 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::libc::c_double;
+use libc::c_double;
 
 use traits::{GtkWidget, GtkContainer, GtkButton};
 use utils::cast::GTK_SCALEBUTTON;
 use gtk::Adjustment;
 use ffi;
+use std;
+use std::owned;
 
 pub trait GtkScaleButton: GtkWidget + GtkContainer + GtkButton {
     fn set_adjustment(&mut self, adjustment: &Adjustment) -> () {

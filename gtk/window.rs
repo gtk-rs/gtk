@@ -15,11 +15,13 @@
 
 //! Toplevel which can contain other widgets
 
-use std::{ptr, cast};
-use std::libc::c_void;
+use std::ptr;
+use std::num::cast;
+use libc::{c_void};
 
 use traits::{GtkWidget, GtkWindow, GtkContainer, GtkBin, Signal};
 use ffi;
+use std;
 use gtk::enums::GtkWindowType;
 
 /**
@@ -31,10 +33,11 @@ use gtk::enums::GtkWindowType;
 * * `keys-changed` : Run First
 * * `set-focus` : Run Last
 */
+
 pub struct Window {
-    priv pointer:           *ffi::C_GtkWidget,
-    priv can_drop:          bool,
-    priv signal_handlers:   ~[~SignalHandler]
+    pointer:           *ffi::C_GtkWidget,
+    can_drop:          bool,
+    signal_handlers:   Vec<Box<SignalHandler>>
 }
 
 impl Window {

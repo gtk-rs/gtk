@@ -15,19 +15,21 @@
 
 //! A widget which controls the alignment and size of its child
 
-use std::{ptr, cast};
-use std::libc::{c_void, c_float, c_uint};
-
+use std::ptr;
+use std::num::cast;
+use libc::{c_float, c_uint, c_void};
 
 use traits::{GtkWidget, GtkContainer, GtkBin, Signal};
 use utils::cast::GTK_ALIGNMENT;
 use ffi;
+use std;
+use std::owned;
 
 /// Alignment — A widget which controls the alignment and size of its child
 pub struct Alignment {
-    priv pointer:           *ffi::C_GtkWidget,
-    priv can_drop:          bool,
-    priv signal_handlers:   ~[~SignalHandler]
+    pointer:           *ffi::C_GtkWidget,
+    can_drop:          bool,
+    signal_handlers:   Vec<Box<SignalHandler>>
 }
 
 impl Alignment {

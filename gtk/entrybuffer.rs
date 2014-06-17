@@ -15,10 +15,12 @@
 
 //! Text buffer for gtk::Entry
 
-use std::libc::{c_int, c_uint};
+use libc::{c_int, c_uint};
 use std::str;
 
 use ffi;
+use std;
+use std::owned;
 
 // TODO: 
 // Implements custom signal : inserted-text + deleted-text
@@ -33,8 +35,8 @@ use ffi;
 *
 */
 pub struct EntryBuffer {
-    priv pointer: *ffi::C_GtkEntryBuffer,
-    priv can_drop: bool
+    pointer: *ffi::C_GtkEntryBuffer,
+    can_drop: bool
 }
 
 impl EntryBuffer {
@@ -54,7 +56,7 @@ impl EntryBuffer {
         }
     }
 
-    pub fn get_text(&self) -> ~str {
+    pub fn get_text(&self) -> String {
         let c_str = unsafe { ffi::gtk_entry_buffer_get_text(self.pointer) };
         unsafe {str::raw::from_c_str(c_str) }
     }

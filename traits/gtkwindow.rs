@@ -16,6 +16,8 @@
 use std::str;
 
 use ffi;
+use std;
+use std::owned;
 use traits::GtkWidget;
 use utils::cast::GTK_WINDOW;
 
@@ -28,7 +30,7 @@ pub trait GtkWindow : GtkWidget {
         }
     }
 
-    fn get_title(&self) -> Option<~str> {
+    fn get_title(&self) -> Option<String> {
         let c_title = unsafe { ffi::gtk_window_get_title(GTK_WINDOW(self.get_widget())) };
         if c_title.is_null() {
             None

@@ -16,7 +16,7 @@
 pub use gtk::window::Window;
 pub use gtk::label::Label;
 pub use gtk::button::Button;
-pub use gtk::box::Box;
+pub use gtk::_box::_Box;
 pub use gtk::buttonbox::ButtonBox;
 pub use gtk::frame::Frame;
 pub use gtk::aspectframe::AspectFrame;
@@ -61,7 +61,7 @@ pub mod version;
 pub mod window;
 pub mod label;
 pub mod button;
-pub mod box;
+pub mod _box;
 pub mod buttonbox;
 pub mod frame;
 pub mod aspectframe;

@@ -16,6 +16,8 @@
 use std::ptr;
 
 use ffi;
+use std;
+use std::owned;
 
 pub fn init() {
     unsafe {

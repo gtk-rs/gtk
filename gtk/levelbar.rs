@@ -15,13 +15,17 @@
 
 //! A bar that can used as a level indicator
 
-use std::libc::{c_void, c_double};
-use std::{ptr, cast};
+use libc::{c_double};
+use libc::{c_void};
+use std::ptr;
+use std::num::cast;
 
 use traits::{GtkWidget, GtkOrientable, Signal};
 use gtk::enums::{GtkLevelBarMode};
 use utils::cast::GTK_LEVELBAR;
 use ffi;
+use std;
+use std::owned;
 
 /** 
 * LevelBar — A bar that can used as a level indicator
@@ -30,9 +34,9 @@ use ffi;
 * * `offset-changed` : Has Details
 */
 pub struct LevelBar {
-    priv pointer:           *ffi::C_GtkWidget,
-    priv can_drop:          bool,
-    priv signal_handlers:   ~[~SignalHandler]
+    pointer:           *ffi::C_GtkWidget,
+    can_drop:          bool,
+    signal_handlers:   Vec<Box<SignalHandler>>
 }
 
 impl LevelBar {

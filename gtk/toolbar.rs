@@ -15,11 +15,15 @@
 
 //! Create bars of buttons and other widgets
 
-use std::libc::{c_void, c_int};
-use std::{ptr, cast};
+use libc::{c_int};
+use libc::{c_void};
+use std::ptr;
+use std::num::cast;
 
 use traits::{GtkWidget, GtkToolShell, GtkOrientable, GtkContainer, GtkToolItem, Signal};
 use ffi;
+use std;
+use std::owned;
 use utils::cast::{GTK_TOOLBAR, GTK_TOOLITEM};
 use gtk;
 use gtk::enums::{GtkIconSize, GtkReliefStyle, GtkToolbarStyle};
@@ -34,9 +38,9 @@ use gtk::enums::{GtkIconSize, GtkReliefStyle, GtkToolbarStyle};
 * * `style-changed` : Run First
 */
 pub struct Toolbar {
-    priv pointer:           *ffi::C_GtkWidget,
-    priv can_drop:          bool,
-    priv signal_handlers:   ~[~SignalHandler]
+    pointer:           *ffi::C_GtkWidget,
+    can_drop:          bool,
+    signal_handlers:   Vec<Box<SignalHandler>>
 }
 
 impl Toolbar {

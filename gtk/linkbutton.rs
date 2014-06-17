@@ -15,12 +15,15 @@
 
 //! Create buttons bound to a URL
 
-use std::{ptr, str, cast};
-use std::libc::c_void;
+use std::{ptr, str};
+use std::num::cast;
+use libc::{c_void};
 
 use traits::{GtkWidget, GtkButton, GtkContainer, Signal};
 use utils::cast::GTK_LINKBUTTON;
 use ffi;
+use std;
+use std::owned;
 
 /** 
 * LinkButton — Create buttons bound to a URL
@@ -29,9 +32,9 @@ use ffi;
 * * `activate-link` : Run Last
 */
 pub struct LinkButton {
-    priv pointer:           *ffi::C_GtkWidget,
-    priv can_drop:          bool,
-    priv signal_handlers:   ~[~SignalHandler]
+    pointer:           *ffi::C_GtkWidget,
+    can_drop:          bool,
+    signal_handlers:   Vec<Box<SignalHandler>>
 }
 
 impl LinkButton {
@@ -55,7 +58,7 @@ impl LinkButton {
         check_pointer!(tmp_pointer, LinkButton)
     }
 
-    pub fn get_uri(&self) -> ~str {
+    pub fn get_uri(&self) -> String {
         let c_str = unsafe { ffi::gtk_link_button_get_uri(GTK_LINKBUTTON(self.pointer)) };
         unsafe { str::raw::from_c_str(c_str) }
     }

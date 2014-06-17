@@ -15,10 +15,12 @@
 
 //! Fonction to handle the Gtk+ version
 
-use std::libc::c_uint;
+use libc::c_uint;
 use std::{ptr, str};
 
 use ffi;
+use std;
+use std::owned;
 
 pub fn get_major_version() -> u32 {
     unsafe {
@@ -53,9 +55,9 @@ pub fn get_interface_age() -> u32 {
 pub fn check_version(required_major: u32, 
                      required_minor: u32, 
                      required_micro: u32) 
-                     -> Option<~str> {
+                     -> Option<String> {
     let c_str = unsafe { ffi::gtk_check_version(required_major as c_uint, required_minor as c_uint, required_micro as c_uint) };
-    if ptr::is_null(c_str) {
+    if c_str.is_null() {
         None
     } else {
         Some(unsafe {str::raw::from_c_str(c_str) })

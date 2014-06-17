@@ -15,19 +15,23 @@
 
 //! Pack widgets in a rows and columns
 
-use std::{ptr, cast};
-use std::libc::{c_void, c_int, c_uint};
+use std::ptr;
+use std::num::cast;
+use libc::{c_int, c_uint};
+use libc::{c_void};
 
 use gtk::enums::{GtkPositionType};
 use traits::{GtkContainer, GtkWidget, GtkOrientable, Signal};
 use utils::cast::GTK_GRID;
 use ffi;
+use std;
+use std::owned;
 
 /// Grid — Pack widgets in a rows and columns
 pub struct Grid {
-    priv pointer:           *ffi::C_GtkWidget,
-    priv can_drop:          bool,
-    priv signal_handlers:   ~[~SignalHandler]
+    pointer:           *ffi::C_GtkWidget,
+    can_drop:          bool,
+    signal_handlers:   Vec<Box<SignalHandler>>
 }
 
 impl Grid {
