@@ -4,35 +4,35 @@
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // rgtk is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 //! A button to launch a color selection dialog
 
-use std::{ptr, str, cast};
-use std::libc::c_void;
+use std::{ptr, str, mem};
+use libc::c_void;
 
 use traits::{GtkWidget, GtkButton, GtkContainer, Signal};
 use utils::cast::GTK_COLORBUTTON;
 use ffi;
 use gdk;
 
-/** 
+/**
 * ColorButton — A button to launch a color selection dialog
 *
 * # Availables signals :
 * * `color-set` : Run First
 */
 pub struct ColorButton {
-    priv pointer:           *ffi::C_GtkWidget,
-    priv can_drop:          bool,
-    priv signal_handlers:   ~[~SignalHandler]
+    pointer:           *ffi::C_GtkWidget,
+    can_drop:          bool,
+    signal_handlers:   Vec<Box<SignalHandler>>
 }
 
 impl ColorButton {
@@ -108,12 +108,12 @@ impl ColorButton {
     pub fn set_title(&mut self, title: &str) -> () {
         unsafe {
             title.with_c_str(|c_str| {
-                ffi::gtk_color_button_set_title(GTK_COLORBUTTON(self.pointer), c_str) 
+                ffi::gtk_color_button_set_title(GTK_COLORBUTTON(self.pointer), c_str)
             });
         }
     }
 
-    pub fn get_title(&self) -> ~str {
+    pub fn get_title(&self) -> String {
         let c_str = unsafe { ffi::gtk_color_button_get_title(GTK_COLORBUTTON(self.pointer)) };
         unsafe { str::raw::from_c_str(c_str) }
     }

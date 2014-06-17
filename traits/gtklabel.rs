@@ -4,16 +4,16 @@
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // rgtk is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::libc::{c_int, c_double};
+use libc::{c_int, c_double};
 use std::str;
 
 use ffi;
@@ -67,7 +67,7 @@ pub trait GtkLabel : GtkWidget {
             });
         }
     }
-    
+
     fn set_text_with_mnemonic(&mut self, text: &str) -> () {
         unsafe {
             text.with_c_str(|c_str| {
@@ -199,7 +199,7 @@ pub trait GtkLabel : GtkWidget {
         }
     }
 
-    fn get_text(&self) -> Option<~str> {
+    fn get_text(&self) -> Option<String> {
         unsafe {
             let c_str = ffi::gtk_label_get_text(GTK_LABEL(self.get_widget()));
             if c_str.is_null() {
@@ -210,7 +210,7 @@ pub trait GtkLabel : GtkWidget {
         }
     }
 
-    fn get_label(&self) -> Option<~str> {
+    fn get_label(&self) -> Option<String> {
         unsafe {
             let c_str = ffi::gtk_label_get_label(GTK_LABEL(self.get_widget()));
             if c_str.is_null() {
@@ -221,7 +221,7 @@ pub trait GtkLabel : GtkWidget {
         }
     }
 
-    fn get_current_uri(&self) -> Option<~str> {
+    fn get_current_uri(&self) -> Option<String> {
         unsafe {
             let c_str = ffi::gtk_label_get_current_uri(GTK_LABEL(self.get_widget()));
             if c_str.is_null() {
@@ -231,7 +231,7 @@ pub trait GtkLabel : GtkWidget {
             }
         }
     }
-    
+
     fn select_region(&mut self, start_offset: i32, end_offset: i32) -> () {
         unsafe {
             ffi::gtk_label_select_region(GTK_LABEL(self.get_widget()), start_offset as c_int, end_offset as c_int);

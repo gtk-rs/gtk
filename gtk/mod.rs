@@ -4,19 +4,19 @@
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // rgtk is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 pub use gtk::window::Window;
 pub use gtk::label::Label;
 pub use gtk::button::Button;
-pub use gtk::box::Box;
+pub use gtk::bbox::BBox;
 pub use gtk::buttonbox::ButtonBox;
 pub use gtk::frame::Frame;
 pub use gtk::aspectframe::AspectFrame;
@@ -61,7 +61,7 @@ pub mod version;
 pub mod window;
 pub mod label;
 pub mod button;
-pub mod box;
+pub mod bbox;
 pub mod buttonbox;
 pub mod frame;
 pub mod aspectframe;

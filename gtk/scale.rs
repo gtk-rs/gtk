@@ -4,19 +4,19 @@
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // rgtk is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 //! A slider widget for selecting a value from a range
 
-use std::libc::{c_void, c_double, c_int};
-use std::{ptr, cast};
+use libc::{c_void, c_double, c_int};
+use std::{ptr, mem};
 
 use traits::{GtkWidget, GtkOrientable, Signal};
 use gtk::enums::{GtkOrientation, GtkPositionType};
@@ -26,16 +26,16 @@ use ffi;
 
 // TODO : implements GtkRange
 
-/** 
+/**
 * Scale — A slider widget for selecting a value from a range
 *
 * # Signal availables:
 * * `format-value` : Run Last
 */
 pub struct Scale {
-    priv pointer:           *ffi::C_GtkWidget,
-    priv can_drop:          bool,
-    priv signal_handlers:   ~[~SignalHandler]
+    pointer:           *ffi::C_GtkWidget,
+    can_drop:          bool,
+    signal_handlers:   Vec<Box<SignalHandler>>
 }
 
 impl Scale {
@@ -117,7 +117,7 @@ impl Scale {
     pub fn add_mark(&mut self, value: f64, position: GtkPositionType, markup: &str) -> () {
         unsafe {
             markup.with_c_str(|c_str| {
-                ffi::gtk_scale_add_mark(GTK_SCALE(self.pointer), value as c_double, position, c_str) 
+                ffi::gtk_scale_add_mark(GTK_SCALE(self.pointer), value as c_double, position, c_str)
             });
         }
     }

@@ -4,12 +4,12 @@
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // rgtk is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -27,7 +27,7 @@ You should install __GTK+__ developpement library before install __rgtk__.
 
 __rgtk__ use the version 3.10 of __GTK+__, so it should be up to date or the library cannot build.
 
-Then you can build __rgtk__ in two steps: 
+Then you can build __rgtk__ in two steps:
 
 * First build a little c-glue library to deal with some gtk macros by typing :
 
@@ -38,7 +38,7 @@ Then you can build __rgtk__ in two steps:
 * next you can build __rgtk__ with the following command :
 
 ```Shell
-> make 
+> make
 ```
 
 * you can build an awful test main which display some widget :
@@ -101,21 +101,23 @@ Finally all the gtk widget implements the traits GtkWidget.
 License
 =======
 
-__rgtk__ is available under the same license term than GTK+, the LGPL (Lesser General Public license). 
+__rgtk__ is available under the same license term than GTK+, the LGPL (Lesser General Public license).
 
 */
 
-#[feature(globs)];
-#[feature(macro_rules)];
+#![feature(globs)]
+#![feature(macro_rules)]
+#![crate_id = "rgtk#0.0.1"]
+#![crate_type = "lib"]
+#![crate_type = "rlib"]
+#![allow(dead_code)]
+#![allow(non_camel_case_types)]
+#![allow(unused_variable)]
+#![allow(visible_private_types)]
+#![allow(unused_imports)]
+#![allow(non_snake_case_functions)]
 
-#[link(name = "rgtk",
-       vers = "0.0.1",
-       package_id = "rgtk")];
-#[pkgid="rgtk#0.0.1"];
-
-#[crate_type = "lib"];
-
-#[allow(dead_code)]; 
+extern crate libc;
 
 // #[pkg_do(make)]
 

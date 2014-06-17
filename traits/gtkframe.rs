@@ -4,17 +4,17 @@
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // rgtk is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use std::{ptr, str};
-use std::libc::c_float;
+use libc::c_float;
 
 use traits::{GtkWidget, GtkContainer};
 use gtk::enums::GtkShadowType;
@@ -56,7 +56,7 @@ pub trait GtkFrame: GtkWidget + GtkContainer {
         }
     }
 
-    fn get_label(&self) -> Option<~str> {
+    fn get_label(&self) -> Option<String> {
         let c_str = unsafe { ffi::gtk_frame_get_label(GTK_FRAME(self.get_widget())) };
         if c_str.is_null() {
             None

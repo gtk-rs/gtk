@@ -4,19 +4,19 @@
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // rgtk is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 //! Create bars of buttons and other widgets
 
-use std::libc::{c_void, c_int};
-use std::{ptr, cast};
+use libc::{c_void, c_int};
+use std::{ptr, mem};
 
 use traits::{GtkWidget, GtkToolShell, GtkOrientable, GtkContainer, GtkToolItem, Signal};
 use ffi;
@@ -24,7 +24,7 @@ use utils::cast::{GTK_TOOLBAR, GTK_TOOLITEM};
 use gtk;
 use gtk::enums::{GtkIconSize, GtkReliefStyle, GtkToolbarStyle};
 
-/** 
+/**
 * Toolbar — Create bars of buttons and other widgets
 *
 * # Availables signals :
@@ -34,9 +34,9 @@ use gtk::enums::{GtkIconSize, GtkReliefStyle, GtkToolbarStyle};
 * * `style-changed` : Run First
 */
 pub struct Toolbar {
-    priv pointer:           *ffi::C_GtkWidget,
-    priv can_drop:          bool,
-    priv signal_handlers:   ~[~SignalHandler]
+    pointer:           *ffi::C_GtkWidget,
+    can_drop:          bool,
+    signal_handlers:   Vec<Box<SignalHandler>>
 }
 
 impl Toolbar {
@@ -45,7 +45,7 @@ impl Toolbar {
         check_pointer!(tmp_pointer, Toolbar)
     }
 
-    pub fn insert<T: GtkToolItem>(&mut self, 
+    pub fn insert<T: GtkToolItem>(&mut self,
                                   item: &T,
                                   pos: i32) -> () {
         unsafe {

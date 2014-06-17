@@ -4,18 +4,18 @@
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // rgtk is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 //! Adjustment — A representation of an adjustable bounded value
 
-use std::libc::c_double;
+use libc::c_double;
 
 use ffi;
 
@@ -27,8 +27,8 @@ use ffi;
 * * `value-changed` : No Recursion
 */
 pub struct Adjustment {
-    priv pointer:   *ffi::C_GtkAdjustment,
-    priv can_drop:  bool
+    pointer:   *ffi::C_GtkAdjustment,
+    can_drop:  bool
 }
 
 impl Adjustment {
@@ -38,8 +38,8 @@ impl Adjustment {
                step_increment: f64,
                page_increment: f64,
                page_size: f64) -> Option<Adjustment> {
-        let tmp_pointer = unsafe { ffi::gtk_adjustment_new(value as c_double, lower as c_double, 
-                                                           upper as c_double, step_increment as c_double, 
+        let tmp_pointer = unsafe { ffi::gtk_adjustment_new(value as c_double, lower as c_double,
+                                                           upper as c_double, step_increment as c_double,
                                                            page_increment as c_double, page_size as c_double) };
         if tmp_pointer.is_null() {
             None
@@ -155,8 +155,8 @@ impl Adjustment {
                      page_increment: f64,
                      page_size: f64) -> () {
         unsafe {
-            ffi::gtk_adjustment_configure(self.pointer, value as c_double, lower as c_double, 
-                                          upper as c_double, step_increment as c_double, 
+            ffi::gtk_adjustment_configure(self.pointer, value as c_double, lower as c_double,
+                                          upper as c_double, step_increment as c_double,
                                           page_increment as c_double, page_size as c_double);
         }
     }

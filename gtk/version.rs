@@ -4,18 +4,18 @@
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // rgtk is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 //! Fonction to handle the Gtk+ version
 
-use std::libc::c_uint;
+use libc::c_uint;
 use std::{ptr, str};
 
 use ffi;
@@ -50,12 +50,12 @@ pub fn get_interface_age() -> u32 {
     }
 }
 
-pub fn check_version(required_major: u32, 
-                     required_minor: u32, 
-                     required_micro: u32) 
-                     -> Option<~str> {
+pub fn check_version(required_major: u32,
+                     required_minor: u32,
+                     required_micro: u32)
+                     -> Option<String> {
     let c_str = unsafe { ffi::gtk_check_version(required_major as c_uint, required_minor as c_uint, required_micro as c_uint) };
-    if ptr::is_null(c_str) {
+    if c_str.is_null() {
         None
     } else {
         Some(unsafe {str::raw::from_c_str(c_str) })

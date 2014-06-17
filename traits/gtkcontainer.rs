@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::libc::c_uint;
+use libc::c_uint;
 
 use traits::gtkwidget::GtkWidget;
 use utils::cast::GTK_CONTAINER;

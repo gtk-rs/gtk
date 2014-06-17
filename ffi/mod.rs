@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::libc::{c_int, c_char, c_void, c_float, c_uint, c_double, c_long, c_short};
+use libc::{c_int, c_char, c_void, c_float, c_uint, c_double, c_long, c_short};
 
 use gtk::enums::*;
 use gdk;
@@ -21,6 +21,8 @@ use gdk;
 pub type Gboolean = c_int;
 pub static Gfalse:  c_int = 0;
 pub static Gtrue:   c_int = !Gfalse;
+
+pub type gpointer = *c_void;
 
 pub struct C_GtkWidget;
 pub struct C_GtkWindow;
@@ -74,6 +76,8 @@ pub struct C_GtkSeparatorToolItem;
 
 pub struct C_GtkMenu;
 pub struct C_GMenuModel;
+
+pub struct C_GClosure;
 
 extern "C" {
 
@@ -341,15 +345,15 @@ extern "C" {
     // GtkBox                                                                
     //=========================================================================
     pub fn gtk_box_new                         (orientation: GtkOrientation, spacing: c_int) -> *C_GtkWidget;
-    pub fn gtk_box_pack_start                  (box: *C_GtkBox, child: *C_GtkWidget, expand: Gboolean, fill: Gboolean, padding: c_uint) -> ();
-    pub fn gtk_box_pack_end                    (box: *C_GtkBox, child: *C_GtkWidget, expand: Gboolean, fill: Gboolean, padding: c_uint) -> ();
-    pub fn gtk_box_get_homogeneous             (box: *C_GtkBox) -> Gboolean;
-    pub fn gtk_box_set_homogeneous             (box: *C_GtkBox, homogeneous: Gboolean) -> ();
-    pub fn gtk_box_get_spacing                 (box: *C_GtkBox) -> c_int;
-    pub fn gtk_box_set_spacing                 (box: *C_GtkBox, spacing: c_int) -> ();
-    pub fn gtk_box_reorder_child               (box: *C_GtkBox, child: *C_GtkWidget, position: c_int) -> ();
-    pub fn gtk_box_query_child_packing         (box: *C_GtkBox, child: *C_GtkWidget, expand: *Gboolean, fill: *Gboolean, padding: *c_uint, pack_type: *GtkPackType) -> ();
-    pub fn gtk_box_set_child_packing           (box: *C_GtkBox, child: *C_GtkWidget, expand: Gboolean, fill: Gboolean, padding: c_uint, pack_type: GtkPackType) -> ();
+    pub fn gtk_box_pack_start                  (gbox: *C_GtkBox, child: *C_GtkWidget, expand: Gboolean, fill: Gboolean, padding: c_uint) -> ();
+    pub fn gtk_box_pack_end                    (gbox: *C_GtkBox, child: *C_GtkWidget, expand: Gboolean, fill: Gboolean, padding: c_uint) -> ();
+    pub fn gtk_box_get_homogeneous             (gbox: *C_GtkBox) -> Gboolean;
+    pub fn gtk_box_set_homogeneous             (gbox: *C_GtkBox, homogeneous: Gboolean) -> ();
+    pub fn gtk_box_get_spacing                 (gbox: *C_GtkBox) -> c_int;
+    pub fn gtk_box_set_spacing                 (gbox: *C_GtkBox, spacing: c_int) -> ();
+    pub fn gtk_box_reorder_child               (gbox: *C_GtkBox, child: *C_GtkWidget, position: c_int) -> ();
+    pub fn gtk_box_query_child_packing         (gbox: *C_GtkBox, child: *C_GtkWidget, expand: *Gboolean, fill: *Gboolean, padding: *c_uint, pack_type: *GtkPackType) -> ();
+    pub fn gtk_box_set_child_packing           (gbox: *C_GtkBox, child: *C_GtkWidget, expand: Gboolean, fill: Gboolean, padding: c_uint, pack_type: GtkPackType) -> ();
     // pub fn gtk_box_get_baseline_position       (box: *C_GtkBox) -> GtkBaselinePosition;
     // pub fn gtk_box_set_baseline_position       (box: *C_GtkBox, position: GtkBaselinePosition) -> ();
 
@@ -884,6 +888,8 @@ extern "C" {
     //=========================================================================
     pub fn signal_connect(g_object: *C_GtkWidget, signal: *c_char, func: Option<fn()>);
     pub fn signal_connect_2params(g_object: *C_GtkWidget, signal: *c_char, func: Option<extern "C" fn(*C_GtkWidget, *c_void)>, params: *c_void);
+    pub fn g_signal_connect_data               (instance: gpointer, detailed_signal: *c_char, c_hanlder: Option<extern "C" fn()>, 
+                                                data: gpointer, destroy_data: Option<extern "C" fn(gpointer, *C_GClosure)>, connect_flags: i32);
 
     //=========================================================================
     // GTK Casts functions

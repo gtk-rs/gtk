@@ -4,19 +4,19 @@
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // rgtk is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 //! A container which can hide its child
 
-use std::{ptr, str, cast};
-use std::libc::{c_void, c_int};
+use std::{ptr, str, mem};
+use libc::{c_void, c_int};
 
 use traits::{GtkContainer, GtkWidget, GtkBin, Signal};
 use gtk;
@@ -25,31 +25,31 @@ use ffi;
 
 /// Expander — A container which can hide its child
 pub struct Expander {
-    priv pointer:           *ffi::C_GtkWidget,
-    priv can_drop:          bool,
-    priv signal_handlers:   ~[~SignalHandler]
+    pointer:           *ffi::C_GtkWidget,
+    can_drop:          bool,
+    signal_handlers:   Vec<Box<SignalHandler>>
 }
 
 impl Expander {
     pub fn new(label: &str) -> Option<Expander> {
-        let tmp_pointer = unsafe { 
+        let tmp_pointer = unsafe {
             label.with_c_str(|c_str| {
-                ffi::gtk_expander_new(c_str) 
-            }) 
+                ffi::gtk_expander_new(c_str)
+            })
         };
         check_pointer!(tmp_pointer, Expander)
     }
 
     pub fn new_with_mnemonic(mnemonic: &str) -> Option<Expander> {
-        let tmp_pointer = unsafe { 
+        let tmp_pointer = unsafe {
             mnemonic.with_c_str(|c_str| {
-                ffi::gtk_expander_new_with_mnemonic(c_str) 
-            }) 
+                ffi::gtk_expander_new_with_mnemonic(c_str)
+            })
         };
         check_pointer!(tmp_pointer, Expander)
     }
 
-   
+
     pub fn set_expanded(&mut self, expanded: bool) -> () {
         match expanded {
             true    => unsafe { ffi::gtk_expander_set_expanded(GTK_EXPANDER(self.pointer), ffi::Gtrue) },
@@ -120,7 +120,7 @@ impl Expander {
         }
     }
 
-    pub fn get_label(&self) -> ~str {
+    pub fn get_label(&self) -> String {
         unsafe {
             let c_str = ffi::gtk_expander_get_label(GTK_EXPANDER(self.pointer));
             str::raw::from_c_str(c_str)
@@ -130,7 +130,7 @@ impl Expander {
     pub fn set_label(&mut self, label: &str) -> () {
         unsafe {
             label.with_c_str(|c_str| {
-                ffi::gtk_expander_set_label(GTK_EXPANDER(self.pointer), c_str) 
+                ffi::gtk_expander_set_label(GTK_EXPANDER(self.pointer), c_str)
             });
         }
     }

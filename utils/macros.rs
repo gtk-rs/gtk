@@ -4,16 +4,16 @@
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // rgtk is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-#[macro_escape];
+#![macro_escape]
 
 macro_rules! check_pointer(
     ($tmp_pointer:ident, $gtk_struct:ident) => (
@@ -23,7 +23,7 @@ macro_rules! check_pointer(
             Some($gtk_struct {
                 pointer:            $tmp_pointer,
                 can_drop:           true,
-                signal_handlers:    ~[]
+                signal_handlers:    Vec::new()
             })
         }
     );
@@ -40,7 +40,7 @@ macro_rules! impl_GtkWidget(
                 $gtk_struct {
                     pointer:         widget,
                     can_drop:        false,
-                    signal_handlers: ~[]
+                    signal_handlers: Vec::new()
                 }
             }
         }
@@ -50,7 +50,7 @@ macro_rules! impl_GtkWidget(
 macro_rules! redirect_callback(
     ($gtk_struct:ident) => (
         extern fn redirect_callback(widget: *ffi::C_GtkWidget, user_data: *c_void) -> () {
-            let mut button = $gtk_struct { pointer: widget, can_drop: false, signal_handlers: ~[]};
+            let mut button = $gtk_struct { pointer: widget, can_drop: false, signal_handlers: Vec::new()};
             let sighandler = unsafe {(user_data as *SignalHandler).to_option().unwrap()};
             let func = sighandler.function.unwrap();
             func(&mut button, sighandler.user_data);
@@ -61,15 +61,15 @@ macro_rules! redirect_callback(
 macro_rules! redirect_callback_widget(
     ($gtk_struct:ident) => (
         extern fn redirect_callback_widget(widget: *ffi::C_GtkWidget, user_data: *c_void) -> () {
-            let mut button = $gtk_struct { pointer: widget, can_drop: false, signal_handlers: ~[]};
+            let mut button = box $gtk_struct { pointer: widget, can_drop: false, signal_handlers: Vec::new()};
             let sighandler = unsafe {(user_data as *SignalHandler).to_option().unwrap()};
-            let user_data = if !user_data.is_null() { 
-                Some(unsafe { cast::transmute_mut((sighandler.user_data  as *$gtk_struct).to_option().unwrap())  as &mut GtkWidget})
-            }  else {
-                None
-            };
+            // let user_data: Option<Box<GtkWidget>> = if !user_data.is_null() {
+            //     Some(unsafe { mem::transmute::<*c_void, Box<GtkWidget>>((sighandler.user_data).to_option().unwrap())})
+            // }  else {
+            //     None
+            // };
             let func = sighandler.function_widget.unwrap();
-            func(&mut button, user_data);
+            func(button, None)
         }
     );
 )
@@ -90,51 +90,51 @@ macro_rules! impl_signals(
     ($gtk_struct:ident) => (
         impl Signal for $gtk_struct {
             fn connect(&mut self, signal: &str, function: fn()) -> () {
-                unsafe { 
+                unsafe {
                     signal.with_c_str(|c_str| {
                         ffi::signal_connect(self.pointer, c_str, Some(function))
                     })
                 }
             }
 
-            fn connect_2p<B>(&mut self, 
-                             signal: &str, 
-                             function: fn(&mut $gtk_struct, *c_void), 
+            fn connect_2p<B>(&mut self,
+                             signal: &str,
+                             function: fn(&mut $gtk_struct, *c_void),
                              user_data: Option<&B>) -> () {
-                let tmp_sighandler = ~SignalHandler {
+                let tmp_sighandler = box SignalHandler {
                     function: Some(function),
                     function_widget: None,
-                    user_data: ptr::to_unsafe_ptr(user_data.unwrap()) as *c_void
+                    user_data: unsafe { mem::transmute(user_data.unwrap()) }
                 };
-                unsafe{ 
-                    signal.with_c_str(|c_str| {
-                        ffi::signal_connect_2params(self.pointer, 
-                                                    c_str, 
-                                                    Some(redirect_callback), 
-                                                    ptr::to_unsafe_ptr(tmp_sighandler) as *c_void) 
-                    });
-                }
-                self.signal_handlers.push(tmp_sighandler);
+                // unsafe{
+                //     signal.with_c_str(|c_str| {
+                //         ffi::signal_connect_2params(self.pointer,
+                //                                     c_str,
+                //                                     Some(redirect_callback),
+                //                                     mem::transmute(tmp_sighandler))
+                //     });
+                // }
+                // self.signal_handlers.push(tmp_sighandler);
             }
 
-            fn connect_2p_widget<B: GtkWidget>(&mut self, 
-                                               signal: &str, 
-                                               function: fn(&mut $gtk_struct, Option<&mut GtkWidget>), 
+            fn connect_2p_widget<B: GtkWidget>(&mut self,
+                                               signal: &str,
+                                               function: fn(&mut $gtk_struct, Option<&mut GtkWidget>),
                                                user_data: Option<&B>) -> () {
-                let tmp_sighandler = ~SignalHandler {
-                    function: None, 
+                let tmp_sighandler = box SignalHandler {
+                    function: None,
                     function_widget: Some(function),
-                    user_data: if user_data.is_some() {ptr::to_unsafe_ptr(user_data.unwrap()) as *c_void } else { ptr::null() }
+                    user_data: if user_data.is_some() { unsafe { mem::transmute(user_data.unwrap()) } } else { ptr::null() }
                 };
-                unsafe{ 
-                    signal.with_c_str(|c_str| {
-                        ffi::signal_connect_2params(self.pointer, 
-                                                    c_str, 
-                                                    Some(redirect_callback_widget), 
-                                                    ptr::to_unsafe_ptr(tmp_sighandler) as *c_void) 
-                    });
-                }
-                self.signal_handlers.push(tmp_sighandler);
+                // unsafe{
+                //     signal.with_c_str(|c_str| {
+                //         ffi::signal_connect_2params(self.pointer,
+                //                                     c_str,
+                //                                     Some(redirect_callback_widget),
+                //                                     mem::transmute(tmp_sighandler))
+                //     });
+                // }
+                // self.signal_handlers.push(tmp_sighandler);
             }
 
         }

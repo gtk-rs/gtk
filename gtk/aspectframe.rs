@@ -4,19 +4,19 @@
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // rgtk is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 //! A frame that constrains its child to a particular aspect ratio
 
-use std::libc::{c_float, c_void};
-use std::{ptr, cast};
+use libc::{c_float, c_void};
+use std::{ptr, mem};
 
 use traits::{GtkWidget, GtkFrame, GtkContainer, Signal};
 use utils::cast::GTK_ASPECTFRAME;
@@ -24,9 +24,9 @@ use ffi;
 
 /// AspectFrame — A frame that constrains its child to a particular aspect ratio
 pub struct AspectFrame {
-    priv pointer:           *ffi::C_GtkWidget,
-    priv can_drop:          bool,
-    priv signal_handlers:   ~[~SignalHandler]
+    pointer:           *ffi::C_GtkWidget,
+    can_drop:          bool,
+    signal_handlers:   Vec<Box<SignalHandler>>
 }
 
 impl AspectFrame {
@@ -50,7 +50,7 @@ impl AspectFrame {
                ratio: f32,
                obey_child: bool) -> () {
         let c_obey_child = if obey_child { ffi::Gtrue } else { ffi::Gfalse };
-        unsafe { 
+        unsafe {
             ffi::gtk_aspect_frame_set(GTK_ASPECTFRAME(self.get_widget()), x_align as c_float, y_align as c_float, ratio as c_float, c_obey_child);
         }
     }

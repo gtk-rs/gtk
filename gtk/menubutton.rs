@@ -4,19 +4,19 @@
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // rgtk is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 //! A widget that shows a menu when clicked on
 
-use std::{ptr, cast};
-use std::libc::c_void;
+use std::{ptr, mem};
+use libc::c_void;
 
 use traits::{GtkWidget, GtkButton, GtkContainer, GtkToggleButton, Signal};
 use ffi;
@@ -25,9 +25,9 @@ use gtk::enums::GtkArrowType;
 
 /// MenuButton — A widget that shows a menu when clicked on
 pub struct MenuButton {
-    priv pointer:           *ffi::C_GtkWidget,
-    priv can_drop:          bool,
-    priv signal_handlers:   ~[~SignalHandler]
+    pointer:           *ffi::C_GtkWidget,
+    can_drop:          bool,
+    signal_handlers:   Vec<Box<SignalHandler>>
 }
 
 impl MenuButton {

@@ -4,23 +4,23 @@
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // rgtk is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 //! Text buffer for gtk::Entry
 
-use std::libc::{c_int, c_uint};
+use libc::{c_int, c_uint};
 use std::str;
 
 use ffi;
 
-// TODO: 
+// TODO:
 // Implements custom signal : inserted-text + deleted-text
 
 
@@ -33,16 +33,16 @@ use ffi;
 *
 */
 pub struct EntryBuffer {
-    priv pointer: *ffi::C_GtkEntryBuffer,
-    priv can_drop: bool
+    pointer: *ffi::C_GtkEntryBuffer,
+    can_drop: bool
 }
 
 impl EntryBuffer {
     pub fn new(initial_chars: &str) -> Option<EntryBuffer> {
-        let tmp_pointer = unsafe { 
+        let tmp_pointer = unsafe {
             initial_chars.with_c_str(|c_str| {
-                ffi::gtk_entry_buffer_new(c_str, initial_chars.len() as c_int) 
-            }) 
+                ffi::gtk_entry_buffer_new(c_str, initial_chars.len() as c_int)
+            })
         };
         if tmp_pointer.is_null() {
             None
@@ -54,7 +54,7 @@ impl EntryBuffer {
         }
     }
 
-    pub fn get_text(&self) -> ~str {
+    pub fn get_text(&self) -> String {
         let c_str = unsafe { ffi::gtk_entry_buffer_get_text(self.pointer) };
         unsafe {str::raw::from_c_str(c_str) }
     }
@@ -62,7 +62,7 @@ impl EntryBuffer {
     pub fn set_text(&mut self, text: &str) -> () {
         unsafe {
             text.with_c_str(|c_str| {
-                ffi::gtk_entry_buffer_set_text(self.pointer, c_str, text.len() as c_int) 
+                ffi::gtk_entry_buffer_set_text(self.pointer, c_str, text.len() as c_int)
             });
         }
     }
@@ -99,7 +99,7 @@ impl EntryBuffer {
 
     pub fn delete_text(&mut self, position: u32, n_chars: u32) -> u32 {
         unsafe {
-            ffi::gtk_entry_buffer_delete_text(self.pointer, position as c_uint, n_chars as c_uint) as u32 
+            ffi::gtk_entry_buffer_delete_text(self.pointer, position as c_uint, n_chars as c_uint) as u32
         }
     }
 

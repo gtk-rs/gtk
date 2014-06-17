@@ -4,19 +4,19 @@
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // rgtk is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 //! Pack widgets in a rows and columns
 
-use std::{ptr, cast};
-use std::libc::{c_void, c_int, c_uint};
+use std::{ptr, mem};
+use libc::{c_void, c_int, c_uint};
 
 use gtk::enums::{GtkPositionType};
 use traits::{GtkContainer, GtkWidget, GtkOrientable, Signal};
@@ -25,9 +25,9 @@ use ffi;
 
 /// Grid — Pack widgets in a rows and columns
 pub struct Grid {
-    priv pointer:           *ffi::C_GtkWidget,
-    priv can_drop:          bool,
-    priv signal_handlers:   ~[~SignalHandler]
+    pointer:           *ffi::C_GtkWidget,
+    can_drop:          bool,
+    signal_handlers:   Vec<Box<SignalHandler>>
 }
 
 impl Grid {
@@ -36,15 +36,15 @@ impl Grid {
         check_pointer!(tmp_pointer, Grid)
     }
 
-    pub fn attach<T: GtkWidget>(&mut self, 
-                                child: &T, 
-                                left: i32, 
-                                top: i32, 
-                                width: i32, 
+    pub fn attach<T: GtkWidget>(&mut self,
+                                child: &T,
+                                left: i32,
+                                top: i32,
+                                width: i32,
                                 height: i32) -> () {
         unsafe {
-            ffi::gtk_grid_attach(GTK_GRID(self.pointer), 
-                                 child.get_widget(), 
+            ffi::gtk_grid_attach(GTK_GRID(self.pointer),
+                                 child.get_widget(),
                                  left as c_int,
                                  top as c_int,
                                  width as c_int,
@@ -52,14 +52,14 @@ impl Grid {
         }
     }
 
-    pub fn attach_next_to<T: GtkWidget>(&mut self, 
-                                        child: &T, 
+    pub fn attach_next_to<T: GtkWidget>(&mut self,
+                                        child: &T,
                                         sibling: &T,
-                                        side: GtkPositionType, 
-                                        width: i32, 
+                                        side: GtkPositionType,
+                                        width: i32,
                                         height: i32) -> () {
         unsafe {
-            ffi::gtk_grid_attach_next_to(GTK_GRID(self.pointer), 
+            ffi::gtk_grid_attach_next_to(GTK_GRID(self.pointer),
                                          child.get_widget(),
                                          sibling.get_widget(),
                                          side,
@@ -119,7 +119,7 @@ impl Grid {
     }
 
     pub fn get_row_spacing(&self) -> u32 {
-        unsafe { 
+        unsafe {
             ffi::gtk_grid_get_row_spacing(GTK_GRID(self.pointer)) as u32
         }
     }
@@ -173,7 +173,6 @@ impl_signals!(Grid)
 impl GtkContainer for Grid {}
 impl GtkOrientable for Grid {}
 
-   
-    
-    
-   
+
+
+
