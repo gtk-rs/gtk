@@ -1,60 +1,66 @@
-SHELL     := /bin/bash
+SHELL := /bin/bash
 
-ERROR_COLOR=\x1b[31;01m
-OK_COLOR=\x1b[32;01m
-NO_COLOR=\x1b[0m
-ECHO = echo -e
+ERROR_COLOR = \x1b[31;01m
+OK_COLOR    = \x1b[32;01m
+NO_COLOR    = \x1b[0m
+ECHO 		= echo -e
 
-LIB_GTK_GLUE = 	libgtk_glue
-SRC = 			gtk_glue/gtk_glue.c
-INC = 			$(shell pkg-config --cflags gtk+-3.0)
-LIBS = 			$(shell pkg-config --libs gtk+-3.0)
-RUSTC = 		rustc
-RGTK_LIB_RS = 	rgtk.rs
-LIB_RGTK =		librgtk.so
-LIB_PATH = 		lib/
-TEST_SRC =		test/main.rs
-TEST = 			test
-BIN_PATH = 		bin/
-OS =			$(shell uname)
+LIBNAME             = rustgtk
 
-all: 				rgtk
+GLUE_LIBNAME 		= lib$(LIBNAME)_glue
+GLUE_SRC			= gtk_glue/gtk_glue.c
 
-glue: 				$(LIB_GTK_GLUE)
+TEST_SRC 		  	= test/main.rs
 
-$(LIB_GTK_GLUE):	$(SRC)
-					@$(ECHO) "$(OK_COLOR) Creating lib/ folder $(NO_COLOR)"
-					mkdir -p $(LIB_PATH)
-					@$(ECHO) "$(OK_COLOR) Building lib gtk_glue $(NO_COLOR)"
+INC 				= $(shell pkg-config --cflags gtk+-3.0)
+LIBS 				= $(shell pkg-config --libs gtk+-3.0)
+RUSTC 				= rustc
+OS 					= $(shell uname)
+
+.DEFAULT: rustgtk
+.PHONY: rustgtk
+rustgtk: glue rustgtk-build | lib/
+
+.PHONY: rustgtk-build
+rustgtk-build: src/*
+					@$(ECHO) "$(OK_COLOR) Building rustgtk.rlib $(NO_COLOR)"
+					$(RUSTC) -L lib/ src/$(LIBNAME).rs --out-dir lib/
+
+#make rulse for the glue library
+.PHONY: glue
 ifeq ($(OS), Darwin)
-					$(CC) $(INC) $(LIBS) -dynamiclib -o $(LIB_PATH)$(LIB_GTK_GLUE).dylib $(SRC)
+glue : lib/$(GLUE_LIBNAME).dylib
 else
-					$(CC) -fPIC -g -c $(SRC) $(INC) -o /tmp/$(LIB_GTK_GLUE).o $(LIBS)
-					$(CC) -shared -Wl,-soname,$(LIB_GTK_GLUE).so -o $(LIB_PATH)$(LIB_GTK_GLUE).so /tmp/$(LIB_GTK_GLUE).o -lc
+glue : lib/$(GLUE_LIBNAME).so
 endif
 
-rgtk:				lib_rgtk
+lib/$(GLUE_LIBNAME).dylib: $(GLUE_SRC) | lib/ tmp/
+					$(CC) $(INC) $(LIBS) -dynamiclib -o lib/$(GLUE_LIBNAME).dylib $(SRC)
 
-lib_rgtk:			$(RGTK_LIB_RS) $(LIB_GTK_GLUE)
-					mkdir -p $(LIB_PATH)
-					@$(ECHO) "$(OK_COLOR) Building librgtk $(NO_COLOR)"
-					$(RUSTC) -L $(LIB_PATH) $(RGTK_LIB_RS) --out-dir=$(LIB_PATH)
+lib/$(GLUE_LIBNAME).o:     $(GLUE_SRC) | lib/
+					$(CC) -fPIC -g -c $^ $(INC) -o $@ $(LIBS)
+
+lib/$(GLUE_LIBNAME).so:    lib/$(GLUE_LIBNAME).o | lib/
+					$(CC) -shared -Wl,-soname,$(GLUE_LIBNAME).so -o $@ $^ -lc
 
 .PHONY: test
-test:				$(TEST_SRC)
-					@$(ECHO) "$(OK_COLOR) Creating bin/ folder $(NO_COLOR)"
-					mkdir -p $(BIN_PATH)
+test:				$(TEST_SRC) | bin/
 					@$(ECHO) "$(OK_COLOR) Building test $(NO_COLOR)"
-					$(RUSTC) -L $(LIB_PATH) $(TEST_SRC) -o $(BIN_PATH)$(TEST)
-					env LD_LIBRARY_PATH=.:lib/ ./bin/$(TEST)
+					$(RUSTC) -L ./lib/ $(TEST_SRC) -o bin/test
+					env LD_LIBRARY_PATH=.:lib/ ./bin/test
 
-full:				glue rgtk test
+lib:
+					mkdir -p $@
+					@$(ECHO) "$(OK_COLOR) Created $@ foldder $(NO_COLOR)"
 
+bin:
+					mkdir -p $@
+					@$(ECHO) "$(OK_COLOR) Created $@ foldder $(NO_COLOR)"
+
+.PHONY: full
+full:				glue rustgtk test
+
+.PHONY: clean
 clean:
-					rm -rf $(LIB_PATH)
+					rm -rf tmp/ lib/
 
-fclean:				clean
-					rm -rf $(BIN_PATH)
-
-
-re: 				clean all

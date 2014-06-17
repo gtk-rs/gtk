@@ -1,11 +1,9 @@
 
-#![allow(dead_code)]
-
 #![feature(globs)]
 
-extern crate rgtk;
+extern crate rustgtk;
 
-use rgtk::*;
+use rustgtk::*;
 
 
 #[doc(hidden)]
@@ -15,7 +13,7 @@ mod platform {
     #[link(name = "gtk-3.0")]
     #[link(name = "gobject-2.0")]
     #[link(name = "gdk-3.0")]
-    #[link(name = "gtk_glue")]
+    #[link(name = "rustgtk_glue")]
     extern{}
 }
 
@@ -26,7 +24,7 @@ mod platform {
     #[link(name = "gtk-3")]
     #[link(name = "gobject-2.0")]
     #[link(name = "gdk-3")]
-    #[link(name = "gtk_glue")]
+    #[link(name = "rustgtk_glue")]
     extern{}
 }
 
