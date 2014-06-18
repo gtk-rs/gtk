@@ -1,5 +1,5 @@
-./bin
-./lib
+bin/
+lib/
 configure.in
 config.log
 config.status
