@@ -46,7 +46,7 @@ fn callback_info_bar(widget: &mut gtk::InfoBar, callback_data: Option<&mut GtkWi
 // }
 
 fn main() {
-    rt::init();
+    gtk::init();
     println!("Major: {}, Minor: {}", gtk::version::get_major_version(), gtk::version::get_minor_version());
     let mut window = gtk::Window::new(GtkWindowTopLevel).unwrap();
     let mut frame = gtk::Frame::new(Some("Yep a frame")).unwrap();
@@ -91,7 +91,7 @@ fn main() {
     window.set_title("Yeah a beautiful window with rgtk !");
     window.add(&frame);
     button.connect_2p_widget("clicked", my_callback, Some(&entry));
-    window.connect("delete-event", rt::_main_quit);
+    window.connect("delete-event", gtk::main_quit);
     // window.connect_2p_widget("delete-event", quit_callback, Some(&entry));
     frame.add(&_box);
     button_box.add(&button);
@@ -122,6 +122,6 @@ fn main() {
     _box.add(&calendar);
     _box.set_orientation(GtkOrientationVertical);
     window.show_all();
-    rt::_main();
+    gtk::main();
 }
 

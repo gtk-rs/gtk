@@ -171,7 +171,6 @@ mod platform {
 }
 
 pub mod utils;
-pub mod rt;
 pub mod traits;
 pub mod gtk;
 pub mod gdk;

@@ -13,6 +13,11 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rustgtk.  If not, see <http://www.gnu.org/licenses/>.
 
+use std::ptr;
+use ffi;
+use std;
+
+
 pub use gtk::window::Window;
 pub use gtk::label::Label;
 pub use gtk::button::Button;
@@ -55,6 +60,45 @@ pub use gtk::separatortoolitem::SeparatorToolItem;
 pub use gtk::toolbutton::ToolButton;
 pub use gtk::toggletoolbutton::ToggleToolButton;
 pub use gtk::menutoolbutton::MenuToolButton;
+
+pub fn init() {
+    unsafe {
+        ffi::gtk_init(ptr::null(), ptr::null());
+    }
+}
+
+pub fn main() {
+    unsafe {
+        ffi::gtk_main();
+    }
+}
+
+pub fn main_quit() {
+    unsafe {
+        ffi::gtk_main_quit();
+    }
+}
+
+pub fn main_level() -> u32 {
+    unsafe {
+        ffi::gtk_main_level() as u32
+    }
+}
+
+pub fn main_iteration() -> bool {
+    match unsafe { ffi::gtk_main_iteration() } {
+        ffi::Gfalse => false,
+        _           => true
+    }
+}
+
+pub fn main_iteration_do(blocking: bool) -> bool {
+    let c_blocking = if blocking { ffi::Gtrue } else { ffi::Gfalse };
+    match unsafe { ffi::gtk_main_iteration_do(c_blocking) } {
+        ffi::Gfalse => false,
+        _           => true
+    }
+}
 
 pub mod enums;
 pub mod version;
@@ -100,7 +144,4 @@ pub mod separatortoolitem;
 pub mod toolbutton;
 pub mod toggletoolbutton;
 pub mod menutoolbutton;
-
 pub mod cast;
-
-
