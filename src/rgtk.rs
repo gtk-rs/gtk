@@ -1,21 +1,21 @@
-// This file is part of rustgtk.
+// This file is part of rgtk.
 //
-// rustgtk is free software: you can redistribute it and/or modify
+// rgtk is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 // 
-// rustgtk is distributed in the hope that it will be useful,
+// rgtk is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with rustgtk.  If not, see <http://www.gnu.org/licenses/>.
+// along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 /*!
 
-rustgtk
+rgtk
 ====
 
 __Rust__ bindings and wrappers for __GTK+__
@@ -24,11 +24,11 @@ __Rust__ bindings and wrappers for __GTK+__
 Installation
 ============
 
-You should install __GTK+__ developpement library before install __rustgtk__.
+You should install __GTK+__ developpement library before install __rgtk__.
 
-__rustgtk__ use the version 3.10 of __GTK+__, so it should be up to date or the library cannot build.
+__rgtk__ use the version 3.10 of __GTK+__, so it should be up to date or the library cannot build.
 
-Then you can build __rustgtk__ in two steps: 
+Then you can build __rgtk__ in two steps: 
 
 * First build a little c-glue library to deal with some gtk macros by typing :
 
@@ -36,7 +36,7 @@ Then you can build __rustgtk__ in two steps:
 > make glue
 ```
 
-* next you can build __rustgtk__ with the following command :
+* next you can build __rgtk__ with the following command :
 
 ```Shell
 > make
@@ -49,22 +49,22 @@ Then you can build __rustgtk__ in two steps:
 ```
 
 
-__rustgtk__ should build / work on osx and Linux.
+__rgtk__ should build / work on osx and Linux.
 
 
-Use __rustgtk__
+Use __rgtk__
 ============
 
 To respect __GTK+__ inheritence, all the functionnalities of gtk widgets are dispatched between class implementation and trait default methods.
 
-That's why all the widgets are in the module gtk, and all the main traits are reexport on the main module of __rustgtk__.
+That's why all the widgets are in the module gtk, and all the main traits are reexport on the main module of __rgtk__.
 
-To use __rustgtk__, you can simply do :
+To use __rgtk__, you can simply do :
 
 ```Rust
-extern mod rustgtk;
+extern mod rgtk;
 
-use rustgtk::*;
+use rgtk::*;
 ```
 
 You can now access easily all the widgets and all the traits methods:
@@ -82,7 +82,7 @@ Contributor you're welcome !
 
 You probably know but __Gtk+__ use it own Object system : inherited class and interface.
 
-To respect this design I follow a special design on __rustgtk__ :
+To respect this design I follow a special design on __rgtk__ :
 
 * Interface -> Implement them on a trait with only default methods.
 * Class -> Implement the construct on the class impl and other methods on a traits.
@@ -102,13 +102,13 @@ Finally all the gtk widget implements the traits GtkWidget.
 License
 =======
 
-__rustgtk__ is available under the same license term than GTK+, the LGPL (Lesser General Public license). 
+__rgtk__ is available under the same license term than GTK+, the LGPL (Lesser General Public license). 
 */
 
 #![feature(globs)]
 #![feature(macro_rules)]
 
-#![crate_id = "rustgtk#0.0.1"]
+#![crate_id = "rgtk#0.0.1"]
 #![crate_type = "lib"]
 #![crate_type = "rlib"]
 
@@ -155,7 +155,7 @@ mod platform {
     #[link(name = "gtk-3.0")]
     #[link(name = "gobject-2.0")]
     #[link(name = "gdk-3.0")]
-    #[link(name = "rustgtk_glue", kind = "static")]
+    #[link(name = "rgtk_glue", kind = "static")]
     extern{}
 }
 
@@ -166,7 +166,7 @@ mod platform {
     #[link(name = "gtk-3")]
     #[link(name = "gobject-2.0")]
     #[link(name = "gdk-3")]
-    #[link(name = "rustgtk_glue", kind = "static")]
+    #[link(name = "rgtk_glue", kind = "static")]
     extern{}
 }
 

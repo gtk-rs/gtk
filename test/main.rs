@@ -1,9 +1,9 @@
 
 #![feature(globs)]
 
-extern crate rustgtk;
+extern crate rgtk;
 
-use rustgtk::*;
+use rgtk::*;
 
 
 #[doc(hidden)]

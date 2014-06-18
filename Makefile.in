@@ -5,7 +5,7 @@ OK_COLOR    = \x1b[32;01m
 NO_COLOR    = \x1b[0m
 ECHO 		= echo -e
 
-LIBNAME             = rustgtk
+LIBNAME             = rgtk
 
 GLUE_LIBNAME 		= lib$(LIBNAME)_glue
 GLUE_SRC			= gtk_glue/gtk_glue.c
@@ -17,13 +17,13 @@ LIBS 				= $(shell pkg-config --libs gtk+-3.0)
 RUSTC 				= rustc
 OS 					= $(shell uname)
 
-.DEFAULT: rustgtk
-.PHONY: rustgtk
-rustgtk: glue rustgtk-build | lib/
+.DEFAULT: rgtk
+.PHONY: rgtk
+rgtk: glue rgtk-build | lib/
 
-.PHONY: rustgtk-build
-rustgtk-build: src/*
-					@$(ECHO) "$(OK_COLOR) Building rustgtk.rlib $(NO_COLOR)"
+.PHONY: rgtk-build
+rgtk-build: src/*
+					@$(ECHO) "$(OK_COLOR) Building rgtk.rlib $(NO_COLOR)"
 					$(RUSTC) -L lib/ src/$(LIBNAME).rs --out-dir lib/
 
 #make rulse for the glue library
@@ -54,7 +54,7 @@ test:				$(TEST_SRC) | bin/
 
 .PHONY: doc
 doc: 				
-					rustdoc -o doc/ src/rustgtk.rs
+					rustdoc -o doc/ src/rgtk.rs
 					chmod -R 755 doc/ 
 
 lib/:
@@ -66,7 +66,7 @@ bin/:
 					@$(ECHO) "$(OK_COLOR) Created $@ foldder $(NO_COLOR)"
 
 .PHONY: full
-full:				glue rustgtk test
+full:				glue rgtk test
 
 .PHONY: clean
 clean:
