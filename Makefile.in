@@ -52,6 +52,11 @@ test:				$(TEST_SRC) | bin/
 					$(RUSTC) -L lib/ $(TEST_SRC) -o bin/test
 					./bin/test
 
+.PHONY: doc
+doc: 				
+					rustdoc -o doc/ src/rustgtk.rs
+					chmod -R 755 doc/ 
+
 lib/:
 					mkdir -p $@
 					@$(ECHO) "$(OK_COLOR) Created $@ foldder $(NO_COLOR)"
@@ -65,5 +70,5 @@ full:				glue rustgtk test
 
 .PHONY: clean
 clean:
-					rm -rf tmp/ lib/
+					rm -rf tmp/ lib/ doc/
 
