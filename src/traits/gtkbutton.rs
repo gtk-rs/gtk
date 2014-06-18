@@ -4,12 +4,12 @@
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // rgtk is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -169,5 +169,44 @@ pub trait GtkButton: GtkWidget + GtkContainer {
             ffi::Gfalse     => false,
             _               => true
         }
+    }
+
+    fn connect_clicked_signal(&self, handler: Box<ButtonClickedHandler>) {
+        let data = unsafe { mem::transmute::<Box<Box<ButtonClickedHandler>>, ffi::gpointer>(box handler) };
+        "clicked".with_c_str(|cstr| {
+            unsafe {
+                ffi::g_signal_connect_data(self.get_widget() as ffi::gpointer,
+                    cstr,
+                    Some(mem::transmute(widget_destroy_callback)),
+                    data,
+                    Some(drop_widget_destroy_handler),
+                    0);
+            }
+        });
+    }
+}
+
+
+pub trait ButtonClickedHandler {
+    fn callback(&mut self, button: &mut gtk::Button);
+}
+
+extern "C" fn widget_destroy_callback(object: *ffi::C_GtkWidget, user_data: ffi::gpointer) {
+    let mut handler = unsafe { mem::transmute::<ffi::gpointer, Box<Box<ButtonClickedHandler>>>(user_data) };
+
+    // let mut window = check_pointer!(object, Window).unwrap();
+    // window.can_drop = false;
+    let mut button: gtk::Button = GtkWidget::wrap_widget(object);
+    handler.callback(&mut button);
+
+    unsafe {
+        mem::forget(handler);
+    }
+}
+
+extern "C" fn drop_widget_destroy_handler(data: ffi::gpointer, _closure: *ffi::C_GClosure) {
+    unsafe {
+        let handler = mem::transmute::<ffi::gpointer, Box<Box<ButtonClickedHandler>>>(data);
+        drop(handler);
     }
 }

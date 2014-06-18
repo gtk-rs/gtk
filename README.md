@@ -1,7 +1,7 @@
-gtk-rust
+rgtk
 ====
 
-__Rust 0.11__ bindings and wrappers for __GTK+__, forked from [jeremyletang/rgtk](//github.com/jeremyletang/rgtk)
+__Rust__ bindings and wrappers for __GTK+__
 
 
 Installation
