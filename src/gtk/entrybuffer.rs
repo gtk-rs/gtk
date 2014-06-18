@@ -21,7 +21,7 @@ use std::str;
 use ffi;
 use std;
 
-// TODO: 
+// TODO:
 // Implements custom signal : inserted-text + deleted-text
 
 
@@ -40,10 +40,10 @@ pub struct EntryBuffer {
 
 impl EntryBuffer {
     pub fn new(initial_chars: &str) -> Option<EntryBuffer> {
-        let tmp_pointer = unsafe { 
+        let tmp_pointer = unsafe {
             initial_chars.with_c_str(|c_str| {
-                ffi::gtk_entry_buffer_new(c_str, initial_chars.len() as c_int) 
-            }) 
+                ffi::gtk_entry_buffer_new(c_str, initial_chars.len() as c_int)
+            })
         };
         if tmp_pointer.is_null() {
             None
@@ -63,7 +63,7 @@ impl EntryBuffer {
     pub fn set_text(&mut self, text: &str) -> () {
         unsafe {
             text.with_c_str(|c_str| {
-                ffi::gtk_entry_buffer_set_text(self.pointer, c_str, text.len() as c_int) 
+                ffi::gtk_entry_buffer_set_text(self.pointer, c_str, text.len() as c_int)
             });
         }
     }
@@ -100,7 +100,7 @@ impl EntryBuffer {
 
     pub fn delete_text(&mut self, position: u32, n_chars: u32) -> u32 {
         unsafe {
-            ffi::gtk_entry_buffer_delete_text(self.pointer, position as c_uint, n_chars as c_uint) as u32 
+            ffi::gtk_entry_buffer_delete_text(self.pointer, position as c_uint, n_chars as c_uint) as u32
         }
     }
 

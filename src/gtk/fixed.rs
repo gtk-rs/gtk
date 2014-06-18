@@ -37,18 +37,18 @@ impl Fixed {
         check_pointer!(tmp_pointer, Fixed)
     }
 
-    pub fn put<T: GtkWidget>(&mut self, 
-                             widget: &T, 
-                             x: i32, 
+    pub fn put<T: GtkWidget>(&mut self,
+                             widget: &T,
+                             x: i32,
                              y: i32) -> () {
         unsafe {
             ffi::gtk_fixed_put(GTK_FIXED(self.get_widget()), widget.get_widget(), x as c_int, y as c_int);
         }
     }
 
-    pub fn move<T: GtkWidget>(&mut self, 
-                              widget: &T, 
-                              x: i32, 
+    pub fn move<T: GtkWidget>(&mut self,
+                              widget: &T,
+                              x: i32,
                               y: i32) -> () {
         unsafe {
             ffi::gtk_fixed_move(GTK_FIXED(self.get_widget()), widget.get_widget(), x as c_int, y as c_int);

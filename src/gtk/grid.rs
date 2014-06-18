@@ -38,15 +38,15 @@ impl Grid {
         check_pointer!(tmp_pointer, Grid)
     }
 
-    pub fn attach<T: GtkWidget>(&mut self, 
-                                child: &T, 
-                                left: i32, 
-                                top: i32, 
-                                width: i32, 
+    pub fn attach<T: GtkWidget>(&mut self,
+                                child: &T,
+                                left: i32,
+                                top: i32,
+                                width: i32,
                                 height: i32) -> () {
         unsafe {
-            ffi::gtk_grid_attach(GTK_GRID(self.pointer), 
-                                 child.get_widget(), 
+            ffi::gtk_grid_attach(GTK_GRID(self.pointer),
+                                 child.get_widget(),
                                  left as c_int,
                                  top as c_int,
                                  width as c_int,
@@ -54,14 +54,14 @@ impl Grid {
         }
     }
 
-    pub fn attach_next_to<T: GtkWidget>(&mut self, 
-                                        child: &T, 
+    pub fn attach_next_to<T: GtkWidget>(&mut self,
+                                        child: &T,
                                         sibling: &T,
-                                        side: GtkPositionType, 
-                                        width: i32, 
+                                        side: GtkPositionType,
+                                        width: i32,
                                         height: i32) -> () {
         unsafe {
-            ffi::gtk_grid_attach_next_to(GTK_GRID(self.pointer), 
+            ffi::gtk_grid_attach_next_to(GTK_GRID(self.pointer),
                                          child.get_widget(),
                                          sibling.get_widget(),
                                          side,
@@ -121,7 +121,7 @@ impl Grid {
     }
 
     pub fn get_row_spacing(&self) -> u32 {
-        unsafe { 
+        unsafe {
             ffi::gtk_grid_get_row_spacing(GTK_GRID(self.pointer)) as u32
         }
     }
@@ -175,7 +175,6 @@ impl_signals!(Grid)
 impl GtkContainer for Grid {}
 impl GtkOrientable for Grid {}
 
-   
-    
-    
-   
+
+
+

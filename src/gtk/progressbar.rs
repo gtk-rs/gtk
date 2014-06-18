@@ -60,7 +60,7 @@ impl ProgressBar {
     pub fn set_text(&mut self, text: &str) -> () {
         unsafe {
             text.with_c_str(|c_str| {
-                ffi::gtk_progress_bar_set_text(GTK_PROGRESSBAR(self.pointer), c_str) 
+                ffi::gtk_progress_bar_set_text(GTK_PROGRESSBAR(self.pointer), c_str)
             });
         }
     }

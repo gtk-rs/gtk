@@ -26,7 +26,7 @@ use utils::cast::{GTK_TOOLBAR, GTK_TOOLITEM};
 use gtk;
 use gtk::enums::{GtkIconSize, GtkReliefStyle, GtkToolbarStyle};
 
-/** 
+/**
 * Toolbar — Create bars of buttons and other widgets
 *
 * # Availables signals :
@@ -47,7 +47,7 @@ impl Toolbar {
         check_pointer!(tmp_pointer, Toolbar)
     }
 
-    pub fn insert<T: GtkToolItem>(&mut self, 
+    pub fn insert<T: GtkToolItem>(&mut self,
                                   item: &T,
                                   pos: i32) -> () {
         unsafe {

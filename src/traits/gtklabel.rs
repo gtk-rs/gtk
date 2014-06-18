@@ -68,7 +68,7 @@ pub trait GtkLabel : GtkWidget {
             });
         }
     }
-    
+
     fn set_text_with_mnemonic(&mut self, text: &str) -> () {
         unsafe {
             text.with_c_str(|c_str| {
@@ -232,7 +232,7 @@ pub trait GtkLabel : GtkWidget {
             }
         }
     }
-    
+
     fn select_region(&mut self, start_offset: i32, end_offset: i32) -> () {
         unsafe {
             ffi::gtk_label_select_region(GTK_LABEL(self.get_widget()), start_offset as c_int, end_offset as c_int);

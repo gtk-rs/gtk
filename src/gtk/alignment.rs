@@ -44,8 +44,8 @@ impl Alignment {
                y_align: f32,
                x_scale: f32,
                y_scale: f32) -> () {
-        unsafe { 
-            ffi::gtk_alignment_set(GTK_ALIGNMENT(self.pointer), x_align as c_float, y_align as c_float, x_scale as c_float, y_scale as c_float) 
+        unsafe {
+            ffi::gtk_alignment_set(GTK_ALIGNMENT(self.pointer), x_align as c_float, y_align as c_float, x_scale as c_float, y_scale as c_float)
         }
     }
 

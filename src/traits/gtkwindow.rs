@@ -36,5 +36,5 @@ pub trait GtkWindow : GtkWidget {
         } else {
             Some(unsafe { str::raw::from_c_str(c_title) })
         }
-    } 
+    }
 }

@@ -23,7 +23,7 @@ use ffi;
 use std;
 use gtk::enums::GtkIconSize;
 
-/** 
+/**
 * Button — A widget that emits a signal when clicked on
 *
 * # Availables signals :
@@ -47,16 +47,16 @@ impl Button {
     }
 
     pub fn new_with_label(label: &str) -> Option<Button> {
-        let tmp_pointer = unsafe { 
-            label.with_c_str(|c_str| { 
-                ffi::gtk_button_new_with_label(c_str) 
-            }) 
+        let tmp_pointer = unsafe {
+            label.with_c_str(|c_str| {
+                ffi::gtk_button_new_with_label(c_str)
+            })
         };
         check_pointer!(tmp_pointer, Button)
     }
 
     pub fn new_with_menmonic(mnemonic: &str) -> Option<Button> {
-        let tmp_pointer = unsafe { 
+        let tmp_pointer = unsafe {
             mnemonic.with_c_str(|c_str| {
                 ffi::gtk_button_new_with_mnemonic(c_str)
             })
@@ -65,20 +65,20 @@ impl Button {
     }
 
     pub fn new_from_icon_name(icon_name: &str, size: GtkIconSize) -> Option<Button> {
-        let tmp_pointer = unsafe { 
+        let tmp_pointer = unsafe {
             icon_name.with_c_str(|c_str| {
-                ffi::gtk_button_new_from_icon_name(c_str, size) 
+                ffi::gtk_button_new_from_icon_name(c_str, size)
             })
         };
         check_pointer!(tmp_pointer, Button)
     }
 
     pub fn new_from_stock(stock_id: &str) -> Option<Button> {
-        let tmp_pointer = unsafe { 
+        let tmp_pointer = unsafe {
             stock_id.with_c_str(|c_str| {
-                ffi::gtk_button_new_from_stock(c_str) 
-            }) 
-        };  
+                ffi::gtk_button_new_from_stock(c_str)
+            })
+        };
         check_pointer!(tmp_pointer, Button)
     }
 }

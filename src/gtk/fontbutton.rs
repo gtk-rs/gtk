@@ -23,7 +23,7 @@ use ffi;
 use std;
 use utils::cast::GTK_FONTBUTTON;
 
-/** 
+/**
 * FontButton — A button to launch a font chooser dialog
 *
 * # Availables signals :
@@ -42,10 +42,10 @@ impl FontButton {
     }
 
     pub fn new_with_font(font_name: &str) -> Option<FontButton> {
-        let tmp_pointer = unsafe { 
+        let tmp_pointer = unsafe {
             font_name.with_c_str(|c_str| {
-                ffi::gtk_font_button_new_with_font(c_str) 
-            }) 
+                ffi::gtk_font_button_new_with_font(c_str)
+            })
         };
         check_pointer!(tmp_pointer, FontButton)
     }

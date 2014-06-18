@@ -23,7 +23,7 @@ use gtk;
 use ffi;
 use std;
 
-/** 
+/**
 * Entry — A single line text entry field
 *
 * # Availables signals :

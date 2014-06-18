@@ -28,7 +28,7 @@ use std;
 
 // TODO : implements GtkRange
 
-/** 
+/**
 * Scale — A slider widget for selecting a value from a range
 *
 * # Signal availables:
@@ -119,7 +119,7 @@ impl Scale {
     pub fn add_mark(&mut self, value: f64, position: GtkPositionType, markup: &str) -> () {
         unsafe {
             markup.with_c_str(|c_str| {
-                ffi::gtk_scale_add_mark(GTK_SCALE(self.pointer), value as c_double, position, c_str) 
+                ffi::gtk_scale_add_mark(GTK_SCALE(self.pointer), value as c_double, position, c_str)
             });
         }
     }

@@ -22,7 +22,7 @@ use traits::{GtkWidget, GtkButton, GtkContainer, GtkToggleButton, Signal};
 use ffi;
 use std;
 
-/** 
+/**
 * ToggleButton — A button to launch a font chooser dialog
 *
 * # Availables signals :
@@ -41,19 +41,19 @@ impl ToggleButton {
     }
 
     pub fn new_with_label(label: &str) -> Option<ToggleButton> {
-        let tmp_pointer = unsafe { 
+        let tmp_pointer = unsafe {
             label.with_c_str(|c_str| {
-                ffi::gtk_toggle_button_new_with_label(c_str) 
-            }) 
+                ffi::gtk_toggle_button_new_with_label(c_str)
+            })
         };
         check_pointer!(tmp_pointer, ToggleButton)
     }
 
     pub fn new_with_mnemonic(mnemonic: &str) -> Option<ToggleButton> {
-        let tmp_pointer = unsafe { 
-            mnemonic.with_c_str(|c_str| { 
-                ffi::gtk_toggle_button_new_with_mnemonic(c_str) 
-            }) 
+        let tmp_pointer = unsafe {
+            mnemonic.with_c_str(|c_str| {
+                ffi::gtk_toggle_button_new_with_mnemonic(c_str)
+            })
         };
         check_pointer!(tmp_pointer, ToggleButton)
     }

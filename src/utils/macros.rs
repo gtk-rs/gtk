@@ -63,8 +63,8 @@ macro_rules! redirect_callback_widget(
         extern fn redirect_callback_widget(widget: *ffi::C_GtkWidget, user_data: *c_void) -> () {
             let mut button = $gtk_struct { pointer: widget, can_drop: false, signal_handlers: Vec::new()};
             let sighandler = unsafe {(user_data as *SignalHandler).to_option().unwrap()};
-            let user_data = if !user_data.is_null() { 
-                Some(unsafe { 
+            let user_data = if !user_data.is_null() {
+                Some(unsafe {
                     let tmp: &mut $gtk_struct = std::mem::transmute(sighandler.user_data as *mut $gtk_struct);
                     tmp as &mut GtkWidget
                 })
@@ -93,16 +93,16 @@ macro_rules! impl_signals(
     ($gtk_struct:ident) => (
         impl Signal for $gtk_struct {
             fn connect(&mut self, signal: &str, function: fn()) -> () {
-                unsafe { 
+                unsafe {
                     signal.with_c_str(|c_str| {
                         ffi::signal_connect(self.pointer, c_str, Some(function))
                     })
                 }
             }
 
-            fn connect_2p<B>(&mut self, 
-                             signal: &str, 
-                             function: fn(&mut $gtk_struct, *c_void), 
+            fn connect_2p<B>(&mut self,
+                             signal: &str,
+                             function: fn(&mut $gtk_struct, *c_void),
                              user_data: Option<&B>) -> () {
                 unsafe {
                     let tmp_sighandler_ptr: *c_void = std::mem::transmute(box SignalHandler {
@@ -111,30 +111,30 @@ macro_rules! impl_signals(
                         user_data: std::mem::transmute(user_data.unwrap())
                     });
                     signal.with_c_str(|c_str| {
-                        ffi::signal_connect_2params(self.pointer, 
-                                                    c_str, 
-                                                    Some(redirect_callback), 
-                                                    tmp_sighandler_ptr) 
+                        ffi::signal_connect_2params(self.pointer,
+                                                    c_str,
+                                                    Some(redirect_callback),
+                                                    tmp_sighandler_ptr)
                     });
                     self.signal_handlers.push(std::mem::transmute(tmp_sighandler_ptr));
                 }
             }
 
-            fn connect_2p_widget<B: GtkWidget>(&mut self, 
-                                               signal: &str, 
-                                               function: fn(&mut $gtk_struct, Option<&mut GtkWidget>), 
+            fn connect_2p_widget<B: GtkWidget>(&mut self,
+                                               signal: &str,
+                                               function: fn(&mut $gtk_struct, Option<&mut GtkWidget>),
                                                user_data: Option<&B>) -> () {
-                unsafe{ 
+                unsafe{
                     let tmp_sighandler_ptr: *c_void = std::mem::transmute(box SignalHandler {
-                        function: None, 
+                        function: None,
                         function_widget: Some(function),
                         user_data: if user_data.is_some() { std::mem::transmute(user_data.unwrap()) } else { ptr::null() }
                     });
 
                     signal.with_c_str(|c_str| {
-                        ffi::signal_connect_2params(self.pointer, 
-                                                    c_str, 
-                                                    Some(redirect_callback_widget), 
+                        ffi::signal_connect_2params(self.pointer,
+                                                    c_str,
+                                                    Some(redirect_callback_widget),
                                                     tmp_sighandler_ptr)
                     });
 

@@ -44,8 +44,8 @@ pub struct SpinButton {
 }
 
 impl SpinButton {
-    pub fn new(adjustment: &gtk::Adjustment, 
-               climb_rate: f64, 
+    pub fn new(adjustment: &gtk::Adjustment,
+               climb_rate: f64,
                digits: u32) -> Option<SpinButton> {
         let tmp_pointer = unsafe { ffi::gtk_spin_button_new(adjustment.get_pointer(), climb_rate as c_double, digits as c_uint) };
         check_pointer!(tmp_pointer, SpinButton)

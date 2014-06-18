@@ -24,7 +24,7 @@ use ffi;
 use std;
 use gdk;
 
-/** 
+/**
 * ColorButton — A button to launch a color selection dialog
 *
 * # Availables signals :
@@ -109,7 +109,7 @@ impl ColorButton {
     pub fn set_title(&mut self, title: &str) -> () {
         unsafe {
             title.with_c_str(|c_str| {
-                ffi::gtk_color_button_set_title(GTK_COLORBUTTON(self.pointer), c_str) 
+                ffi::gtk_color_button_set_title(GTK_COLORBUTTON(self.pointer), c_str)
             });
         }
     }

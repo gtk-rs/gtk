@@ -15,16 +15,16 @@
 
 //! Enumeration used with widgets
 
-/// A gtk::Window can be one of these types. Most things you'd consider a "window" 
-/// should have type GtkWindowTopLevel; windows with this type are managed by the window manager 
-/// and have a frame by default (call gtk::window::set_decorated() to toggle the frame). 
+/// A gtk::Window can be one of these types. Most things you'd consider a "window"
+/// should have type GtkWindowTopLevel; windows with this type are managed by the window manager
+/// and have a frame by default (call gtk::window::set_decorated() to toggle the frame).
 ///
-/// Windows with type GtkWindowPopUp are ignored by the window manager; window manager keybindings won't work on them, 
-/// the window manager won't decorate the window with a frame, many GTK+ features that rely on the window manager will not work 
-/// (e.g. resize grips and maximization/minimization). 
-/// 
-/// GGtkWindowPopUp is used to implement widgets such as gtk::Menu 
-/// or tooltips that you normally don't think of as windows per se. Nearly all windows should be GtkWindowTopLevel. 
+/// Windows with type GtkWindowPopUp are ignored by the window manager; window manager keybindings won't work on them,
+/// the window manager won't decorate the window with a frame, many GTK+ features that rely on the window manager will not work
+/// (e.g. resize grips and maximization/minimization).
+///
+/// GGtkWindowPopUp is used to implement widgets such as gtk::Menu
+/// or tooltips that you normally don't think of as windows per se. Nearly all windows should be GtkWindowTopLevel.
 /// In particular, do not use GtkWindowPopUp just to turn off the window borders; use gtk_window_set_decorated() for that.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
@@ -35,8 +35,8 @@ pub enum GtkWindowType {
     GtkWindowPopUp
 }
 
-/// Window placement can be influenced using this enumeration. 
-/// Note that using GtkWinPosCenterAlways is almost always a bad idea. 
+/// Window placement can be influenced using this enumeration.
+/// Note that using GtkWinPosCenterAlways is almost always a bad idea.
 /// It won't necessarily work well with all window managers or on all windowing systems.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
@@ -53,7 +53,7 @@ pub enum GtkWindowPosition{
     GtkWinPosCenterOnParent
 }
 
-/// Used to dictate the style that a gtk::ButtonBox uses to layout the buttons it contains. 
+/// Used to dictate the style that a gtk::ButtonBox uses to layout the buttons it contains.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
 pub enum GtkButtonBoxStyle {
@@ -69,7 +69,7 @@ pub enum GtkButtonBoxStyle {
     GtkButtonBoxCenter
 }
 
-/// Represents the orientation of widgets which can be switched between 
+/// Represents the orientation of widgets which can be switched between
 /// horizontal and vertical orientation on the fly, like gtk::Toolbar.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
@@ -92,7 +92,7 @@ pub enum  GtkDirectionType {
     GtkDirRight
 }
 
-/// Specifies which corner a child widget should be placed in when packed into a gtk::ScrolledWindow. 
+/// Specifies which corner a child widget should be placed in when packed into a gtk::ScrolledWindow.
 /// This is effectively the opposite of where the scroll bars are placed.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
@@ -155,7 +155,7 @@ pub enum GtkSortType {
     GtkSortDescending
 }
 
-/// Describes a widget state. Widget states are used to match the widget against CSS pseudo-classes. 
+/// Describes a widget state. Widget states are used to match the widget against CSS pseudo-classes.
 /// Note that GTK extends the regular CSS classes and sometimes uses different names.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
@@ -182,7 +182,7 @@ pub enum GtkStateFlags {
     GtkStateFlagDirRTL       = 1 << 8
 }
 
-/// Gives an indication why a drag operation failed. 
+/// Gives an indication why a drag operation failed.
 /// The value can by obtained by connecting to the "drag-failed" signal.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
@@ -208,7 +208,7 @@ pub enum GtkAccelFlags {
     /// display in GtkAccelLabel?
     GtkAccelVisible        = 1 << 0,
     /// is it removable?
-    GtkAccelLocked         = 1 << 1, 
+    GtkAccelLocked         = 1 << 1,
     /// Comparison mask
     GtkAccelMask           = 0x07
 }
@@ -263,7 +263,7 @@ pub enum GtkDeleteType {
     GtkDeleteWordsEnd,
     /// delete words
     GtkDeleteWords,
-    /// delete lines 
+    /// delete lines
     GtkDeleteDisplayLines,
     /// deletes lines end
     GtkDeleteDisplayLineEnd,
@@ -391,7 +391,7 @@ pub enum GtkPolicyType {
     GtkPolicyNever
 }
 
-/// Describes which edge of a widget a certain feature is positioned at, e.g. the tabs of a GtkNotebook, 
+/// Describes which edge of a widget a certain feature is positioned at, e.g. the tabs of a GtkNotebook,
 /// the handle of a GtkHandleBox or the label of a GtkScale.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
@@ -484,7 +484,7 @@ pub enum GtkShadowType {
 
 /// This type indicates the current state of a widget; the state determines how the widget is drawn.
 ///
-/// The GtkStateType enumeration is also used to identify different colors in a GtkStyle for drawing, 
+/// The GtkStateType enumeration is also used to identify different colors in a GtkStyle for drawing,
 /// so states can be used for subparts of a widget as well as entire widgets.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
@@ -499,16 +499,16 @@ pub enum GtkStateType {
     GtkStateSelected,
     /// State indicating that the widget is unresponsive to user actions.
     GtkStateInsensitive,
-    /// The widget is inconsistent, such as checkbuttons or radiobuttons that aren't either set to true nor false, 
+    /// The widget is inconsistent, such as checkbuttons or radiobuttons that aren't either set to true nor false,
     /// or buttons requiring the user attention.
     GtkStateInconsistent,
     /// The widget has the keyboard focus
     GtkStateFocused
 }
 
-/// Used to customize the appearance of a GtkToolbar. 
+/// Used to customize the appearance of a GtkToolbar.
 ///
-/// Note that setting the toolbar style overrides the user's preferences for the default toolbar style. 
+/// Note that setting the toolbar style overrides the user's preferences for the default toolbar style.
 /// Note that if the button has only a label set and GTK_TOOLBAR_ICONS is used, the label will be visible, and vice versa.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
@@ -613,8 +613,8 @@ pub enum GtkInputHints {
     GtkInputHintInhibitOsk          = 1 << 7
 }
 
-/// Describes primary purpose of the input widget. 
-/// This information is useful for on-screen keyboards 
+/// Describes primary purpose of the input widget.
+/// This information is useful for on-screen keyboards
 /// and similar input methods to decide which keys should be presented to the user.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
@@ -663,7 +663,7 @@ pub enum GtkImageType {
     GtkImageSurface
 }
 
-/// The values of the GtkSpinType enumeration are used 
+/// The values of the GtkSpinType enumeration are used
 /// to specify the change to make in gtk::SpinButton::spin().
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
@@ -684,19 +684,19 @@ pub enum GtkSpinType {
     GtkSpinUserDefined
 }
 
-/// The spin button update policy determines whether the spin button displays values 
+/// The spin button update policy determines whether the spin button displays values
 /// even if they are outside the bounds of its adjustment. See gtk::SpinButton::set_update_policy().
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
 pub enum GtkSpinButtonUpdatePolicy {
     /// When refreshing your Gtk::SpinButton, the value is always displayed
     GtkUpdateAlways,
-    /// When refreshing your Gtk::SpinButton, the value is only displayed 
+    /// When refreshing your Gtk::SpinButton, the value is only displayed
     /// if it is valid within the bounds of the spin button's adjustment
     GtkUpdateIfValid
 }
 
-/// Describes how GtkLevelBar contents should be rendered. 
+/// Describes how GtkLevelBar contents should be rendered.
 /// Note that this enumeration could be extended with additional modes in the future.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]

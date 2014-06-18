@@ -25,7 +25,7 @@ use utils::cast::GTK_LEVELBAR;
 use ffi;
 use std;
 
-/** 
+/**
 * LevelBar — A bar that can used as a level indicator
 *
 * # Signal availables:
@@ -113,7 +113,7 @@ impl LevelBar {
     pub fn add_offset_value(&mut self, name: &str, value: f64) -> () {
         unsafe {
             name.with_c_str(|c_str| {
-                ffi::gtk_level_bar_add_offset_value(GTK_LEVELBAR(self.pointer), c_str, value as c_double) 
+                ffi::gtk_level_bar_add_offset_value(GTK_LEVELBAR(self.pointer), c_str, value as c_double)
             });
         }
     }
@@ -121,7 +121,7 @@ impl LevelBar {
     pub fn remove_offset_value(&mut self, name: &str) -> () {
         unsafe {
             name.with_c_str(|c_str| {
-                ffi::gtk_level_bar_remove_offset_value(GTK_LEVELBAR(self.pointer), c_str) 
+                ffi::gtk_level_bar_remove_offset_value(GTK_LEVELBAR(self.pointer), c_str)
             });
         }
     }

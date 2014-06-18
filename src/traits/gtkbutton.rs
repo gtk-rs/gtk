@@ -115,7 +115,7 @@ pub trait GtkButton: GtkWidget + GtkContainer {
             true    => unsafe { ffi::gtk_button_set_focus_on_click(GTK_BUTTON(self.get_widget()), ffi::Gtrue) },
             false   => unsafe { ffi::gtk_button_set_focus_on_click(GTK_BUTTON(self.get_widget()), ffi::Gfalse) }
         }
-    } 
+    }
 
     fn get_focus_on_click(&self) -> bool {
         match unsafe { ffi::gtk_button_get_focus_on_click(GTK_BUTTON(self.get_widget())) } {

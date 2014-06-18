@@ -27,7 +27,7 @@ pub trait GtkBox: GtkWidget {
         let c_fill = if fill { ffi::Gtrue } else { ffi::Gfalse };
         unsafe {
             ffi::gtk_box_pack_start(GTK_BOX(self.get_widget()), child.get_widget(), c_expand, c_fill, padding as c_uint);
-        }       
+        }
     }
 
     fn pack_end<'r, T: GtkWidget>(&'r mut self, child: &'r T, expand: bool, fill: bool, padding: u32) -> () {
@@ -35,7 +35,7 @@ pub trait GtkBox: GtkWidget {
         let c_fill = if fill { ffi::Gtrue } else { ffi::Gfalse };
         unsafe {
             ffi::gtk_box_pack_end(GTK_BOX(self.get_widget()), child.get_widget(), c_expand, c_fill, padding as c_uint);
-        }       
+        }
     }
 
     fn get_homogeneous(&self) -> bool {

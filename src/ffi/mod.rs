@@ -13,9 +13,9 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-#![allow(non_camel_case_types)]
-
 use libc::{c_int, c_char, c_float, c_uint, c_double, c_long, c_short, c_void};
+
+#![allow(non_camel_case_types)]
 
 use gtk::enums::*;
 use gdk;
@@ -23,6 +23,8 @@ use gdk;
 pub type Gboolean = c_int;
 pub static Gfalse:  c_int = 0;
 pub static Gtrue:   c_int = !Gfalse;
+
+pub type gpointer = *c_void;
 
 pub struct C_GtkWidget;
 pub struct C_GtkWindow;
@@ -77,6 +79,8 @@ pub struct C_GtkSeparatorToolItem;
 pub struct C_GtkMenu;
 pub struct C_GMenuModel;
 
+pub struct C_GClosure;
+
 extern "C" {
 
     //=========================================================================
@@ -110,7 +114,7 @@ extern "C" {
     // pub fn gtk_window_activate_default(window: *C_GtkWindow) -> Gboolean;
     // pub fn gtk_window_get_type() -> ();
 
-    
+
     //=========================================================================
     // GtkWidget
     //=========================================================================
@@ -269,7 +273,7 @@ extern "C" {
     pub fn gtk_check_button_new_with_mnemonic  (label: *c_char) -> *C_GtkWidget;
 
     //=========================================================================
-    // GtkRadioButton                                                      TODO  
+    // GtkRadioButton                                                      TODO
     //=========================================================================
     // pub fn gtk_radio_button_new                (GSList *group) -> *C_GtkWidget;
     // pub fn gtk_radio_button_new_from_widget    (GtkRadioButton *radio_group_member) -> *C_GtkWidget;
@@ -322,7 +326,7 @@ extern "C" {
     pub fn gtk_link_button_set_visited         (link_button: *C_GtkLinkButton, visited: Gboolean) -> ();
 
     //=========================================================================
-    // GtkScaleButton                                                        
+    // GtkScaleButton
     //=========================================================================
     pub fn gtk_scale_button_new                (size: GtkIconSize, min: c_double, max: c_double, step: c_double, icons: **c_char) -> *C_GtkWidget;
     pub fn gtk_scale_button_set_adjustment     (button: *C_GtkScaleButton, adjustment: *C_GtkAdjustment) -> ();
@@ -335,25 +339,25 @@ extern "C" {
     // pub fn gtk_scale_button_get_minus_button   (button: *C_GtkScaleButton) -> *C_GtkWidget;
 
     //=========================================================================
-    // GtkVolumeButton                                                       OK                                                        
+    // GtkVolumeButton                                                       OK
     //=========================================================================
     pub fn gtk_volume_button_new               () -> *C_GtkWidget;
 
     //=========================================================================
-    // GtkBox                                                                
+    // GtkBox
     //=========================================================================
     pub fn gtk_box_new                         (orientation: GtkOrientation, spacing: c_int) -> *C_GtkWidget;
-    pub fn gtk_box_pack_start                  (_box: *C_GtkBox, child: *C_GtkWidget, expand: Gboolean, fill: Gboolean, padding: c_uint) -> ();
-    pub fn gtk_box_pack_end                    (_box: *C_GtkBox, child: *C_GtkWidget, expand: Gboolean, fill: Gboolean, padding: c_uint) -> ();
-    pub fn gtk_box_get_homogeneous             (_box: *C_GtkBox) -> Gboolean;
-    pub fn gtk_box_set_homogeneous             (_box: *C_GtkBox, homogeneous: Gboolean) -> ();
-    pub fn gtk_box_get_spacing                 (_box: *C_GtkBox) -> c_int;
-    pub fn gtk_box_set_spacing                 (_box: *C_GtkBox, spacing: c_int) -> ();
-    pub fn gtk_box_reorder_child               (_box: *C_GtkBox, child: *C_GtkWidget, position: c_int) -> ();
-    pub fn gtk_box_query_child_packing         (_box: *C_GtkBox, child: *C_GtkWidget, expand: *Gboolean, fill: *Gboolean, padding: *c_uint, pack_type: *GtkPackType) -> ();
-    pub fn gtk_box_set_child_packing           (_box: *C_GtkBox, child: *C_GtkWidget, expand: Gboolean, fill: Gboolean, padding: c_uint, pack_type: GtkPackType) -> ();
-    // pub fn gtk_box_get_baseline_position       (_box: *C_GtkBox) -> GtkBaselinePosition;
-    // pub fn gtk_box_set_baseline_position       (_box: *C_GtkBox, position: GtkBaselinePosition) -> ();
+    pub fn gtk_box_pack_start                  (gbox: *C_GtkBox, child: *C_GtkWidget, expand: Gboolean, fill: Gboolean, padding: c_uint) -> ();
+    pub fn gtk_box_pack_end                    (gbox: *C_GtkBox, child: *C_GtkWidget, expand: Gboolean, fill: Gboolean, padding: c_uint) -> ();
+    pub fn gtk_box_get_homogeneous             (gbox: *C_GtkBox) -> Gboolean;
+    pub fn gtk_box_set_homogeneous             (gbox: *C_GtkBox, homogeneous: Gboolean) -> ();
+    pub fn gtk_box_get_spacing                 (gbox: *C_GtkBox) -> c_int;
+    pub fn gtk_box_set_spacing                 (gbox: *C_GtkBox, spacing: c_int) -> ();
+    pub fn gtk_box_reorder_child               (gbox: *C_GtkBox, child: *C_GtkWidget, position: c_int) -> ();
+    pub fn gtk_box_query_child_packing         (gbox: *C_GtkBox, child: *C_GtkWidget, expand: *Gboolean, fill: *Gboolean, padding: *c_uint, pack_type: *GtkPackType) -> ();
+    pub fn gtk_box_set_child_packing           (gbox: *C_GtkBox, child: *C_GtkWidget, expand: Gboolean, fill: Gboolean, padding: c_uint, pack_type: GtkPackType) -> ();
+    // pub fn gtk_box_get_baseline_position       (gbox: *C_GtkBox) -> GtkBaselinePosition;
+    // pub fn gtk_box_set_baseline_position       (gbox: *C_GtkBox, position: GtkBaselinePosition) -> ();
 
     //=========================================================================
     // GtkOrientable                                                         OK
@@ -409,7 +413,7 @@ extern "C" {
     pub fn gtk_fixed_move                      (fixed: *C_GtkFixed, widget: *C_GtkWidget, x: c_int, y: c_int) -> ();
 
     //=========================================================================
-    // GtkBin                                                                
+    // GtkBin
     //=========================================================================
     // pub fn gtk_bin_get_child                   (bin: *C_GtkBin) -> *C_GtkWidget;
 
@@ -441,7 +445,7 @@ extern "C" {
     pub fn gtk_adjustment_set_upper            (adjustment: *C_GtkAdjustment, upper: c_double) -> ();
 
     //=========================================================================
-    // GtkGrid                                                         
+    // GtkGrid
     //=========================================================================
     pub fn gtk_grid_new                        () -> *C_GtkWidget;
     pub fn gtk_grid_attach                     (grid: *C_GtkGrid, child: *C_GtkWidget, left: c_int, top: c_int, width: c_int, height: c_int) -> ();
@@ -481,7 +485,7 @@ extern "C" {
     pub fn gtk_entry_buffer_emit_inserted_text (buffer: *C_GtkEntryBuffer, position: c_uint, chars: *c_char, n_chars: c_int) -> ();
 
     //=========================================================================
-    // GtkEntry                                                        
+    // GtkEntry
     //=========================================================================
     pub fn gtk_entry_new                       () -> *C_GtkWidget;
     pub fn gtk_entry_new_with_buffer           (buffer: *C_GtkEntryBuffer) -> *C_GtkWidget;
@@ -570,7 +574,7 @@ extern "C" {
     pub fn gtk_switch_get_active               (switch: *C_GtkSwitch) -> Gboolean;
 
     //=========================================================================
-    // GtkScale                                                         
+    // GtkScale
     //=========================================================================
     pub fn gtk_scale_new                       (orientation: GtkOrientation, adjustment: *C_GtkAdjustment) -> *C_GtkWidget;
     pub fn gtk_scale_new_with_range            (orientation: GtkOrientation, min: c_double, max: c_double, step: c_double) -> *C_GtkWidget;
@@ -588,7 +592,7 @@ extern "C" {
     pub fn gtk_scale_clear_marks               (scale: *C_GtkScale) -> ();
 
     //=========================================================================
-    // GtkLevelBar                                                        
+    // GtkLevelBar
     //=========================================================================
     pub fn gtk_level_bar_new                   () -> *C_GtkWidget;
     pub fn gtk_level_bar_new_for_interval      (min_value: c_double, max_value: c_double) -> *C_GtkWidget;
@@ -607,7 +611,7 @@ extern "C" {
     pub fn gtk_level_bar_get_offset_value      (bar: *C_GtkLevelBar, name: *c_char, value: *c_double) -> Gboolean;
 
     //=========================================================================
-    // GtkSearchBar                                                        
+    // GtkSearchBar
     //=========================================================================
     pub fn gtk_search_bar_new                  () -> *C_GtkWidget;
     pub fn gtk_search_bar_connect_entry        (bar: *C_GtkSearchBar, entry: *C_GtkEntry) -> ();
@@ -618,7 +622,7 @@ extern "C" {
     // pub fn gtk_search_bar_handle_event         (bar: *C_GtkSearchBar, event: *GdkEvent) -> Gboolean;
 
     //=========================================================================
-    // GtkSpinButton                                                       
+    // GtkSpinButton
     //=========================================================================
     pub fn gtk_spin_button_configure           (spin_button: *C_GtkSpinButton, adjustment: *C_GtkAdjustment, climb_rate: c_double, digits: c_uint) -> ();
     pub fn gtk_spin_button_new                 (adjustment: *C_GtkAdjustment, climb_rate: c_double, digits: c_uint) -> *C_GtkWidget;
@@ -653,12 +657,12 @@ extern "C" {
     pub fn gtk_spinner_stop                    (spinner: *C_GtkSpinner) -> ();
 
     //=========================================================================
-    // GtkImage                                                           
+    // GtkImage
     //=========================================================================
     pub fn gtk_image_new_from_file             (filename: *c_char) -> *C_GtkWidget;
 
     //=========================================================================
-    // GtkProgressBar                                                          
+    // GtkProgressBar
     //=========================================================================
     pub fn gtk_progress_bar_new                () -> *C_GtkWidget;
     pub fn gtk_progress_bar_pulse              (pbar: *C_GtkProgressBar) -> ();
@@ -682,7 +686,7 @@ extern "C" {
     pub fn gtk_arrow_set                       (arrow: *C_GtkArrow,arrow_type: GtkArrowType, shadow_type: GtkShadowType) -> ();
 
     //=========================================================================
-    // GtkCalendar                                                
+    // GtkCalendar
     //=========================================================================
     pub fn gtk_calendar_new                    () -> *C_GtkWidget;
     pub fn gtk_calendar_select_month           (calendar: *C_GtkCalendar, month: c_uint, year: c_uint) -> ();

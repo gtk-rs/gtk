@@ -52,7 +52,7 @@ impl AspectFrame {
                ratio: f32,
                obey_child: bool) -> () {
         let c_obey_child = if obey_child { ffi::Gtrue } else { ffi::Gfalse };
-        unsafe { 
+        unsafe {
             ffi::gtk_aspect_frame_set(GTK_ASPECTFRAME(self.get_widget()), x_align as c_float, y_align as c_float, ratio as c_float, c_obey_child);
         }
     }

@@ -44,7 +44,7 @@ pub trait GtkEntry: GtkWidget {
     }
 
     fn get_text(&self) -> Option<String> {
-        unsafe { 
+        unsafe {
             let c_str = ffi::gtk_entry_get_text(GTK_ENTRY(self.get_widget()));
             if c_str.is_null() {
                 None
@@ -155,7 +155,7 @@ pub trait GtkEntry: GtkWidget {
         unsafe {
             let c_str = ffi::gtk_entry_get_placeholder_text(GTK_ENTRY(self.get_widget()));
             str::raw::from_c_str(c_str)
-        } 
+        }
     }
 
     fn get_overwrite_mode(&self) -> bool {
@@ -358,7 +358,7 @@ pub trait GtkEntry: GtkWidget {
 
     fn set_input_purpose(&mut self, purpose: GtkInputPurpose) -> () {
         unsafe {
-            ffi::gtk_entry_set_input_purpose(GTK_ENTRY(self.get_widget()), purpose) 
+            ffi::gtk_entry_set_input_purpose(GTK_ENTRY(self.get_widget()), purpose)
         }
     }
 
@@ -370,7 +370,7 @@ pub trait GtkEntry: GtkWidget {
 
     fn set_input_hints(&mut self, hints: GtkInputHints) -> () {
         unsafe {
-            ffi::gtk_entry_set_input_hints(GTK_ENTRY(self.get_widget()), hints) 
+            ffi::gtk_entry_set_input_hints(GTK_ENTRY(self.get_widget()), hints)
         }
     }
 

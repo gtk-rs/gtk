@@ -22,7 +22,7 @@ use traits::{GtkWidget, GtkEntry, Signal};
 use ffi;
 use std;
 
-/** 
+/**
 * SearchEntry — An entry which shows a search icon
 *
 * # Signal availables:

@@ -24,7 +24,7 @@ use ffi;
 use std;
 use gtk::enums::GtkIconSize;
 
-/** 
+/**
 * ScaleButton — A button which pops up a scale
 *
 * # Availables signals :
