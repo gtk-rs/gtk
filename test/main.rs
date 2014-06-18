@@ -13,7 +13,6 @@ mod platform {
     #[link(name = "gtk-3.0")]
     #[link(name = "gobject-2.0")]
     #[link(name = "gdk-3.0")]
-    #[link(name = "rustgtk_glue")]
     extern{}
 }
 
@@ -24,7 +23,6 @@ mod platform {
     #[link(name = "gtk-3")]
     #[link(name = "gobject-2.0")]
     #[link(name = "gdk-3")]
-    #[link(name = "rustgtk_glue")]
     extern{}
 }
 

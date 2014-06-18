@@ -31,14 +31,17 @@ rustgtk-build: src/*
 ifeq ($(OS), Darwin)
 glue : lib/$(GLUE_LIBNAME).dylib
 else
-glue : lib/$(GLUE_LIBNAME).so
+glue : lib/$(GLUE_LIBNAME).a
 endif
 
 lib/$(GLUE_LIBNAME).dylib: $(GLUE_SRC) | lib/ tmp/
 					$(CC) $(INC) $(LIBS) -dynamiclib -o lib/$(GLUE_LIBNAME).dylib $(SRC)
 
-lib/$(GLUE_LIBNAME).o:     $(GLUE_SRC) | lib/
-					$(CC) -fPIC -g -c $^ $(INC) -o $@ $(LIBS)
+lib/$(GLUE_LIBNAME).o: $(GLUE_SRC) | lib/
+					$(CC) -g -c $^ $(INC) -o $@ $(LIBS)
+
+lib/$(GLUE_LIBNAME).a: lib/$(GLUE_LIBNAME).o | lib/
+					ar -rcs $@ $^ 
 
 lib/$(GLUE_LIBNAME).so:    lib/$(GLUE_LIBNAME).o | lib/
 					$(CC) -shared -Wl,-soname,$(GLUE_LIBNAME).so -o $@ $^ -lc
@@ -46,14 +49,14 @@ lib/$(GLUE_LIBNAME).so:    lib/$(GLUE_LIBNAME).o | lib/
 .PHONY: test
 test:				$(TEST_SRC) | bin/
 					@$(ECHO) "$(OK_COLOR) Building test $(NO_COLOR)"
-					$(RUSTC) -L ./lib/ $(TEST_SRC) -o bin/test
-					env LD_LIBRARY_PATH=.:lib/ ./bin/test
+					$(RUSTC) -L lib/ $(TEST_SRC) -o bin/test
+					./bin/test
 
-lib:
+lib/:
 					mkdir -p $@
 					@$(ECHO) "$(OK_COLOR) Created $@ foldder $(NO_COLOR)"
 
-bin:
+bin/:
 					mkdir -p $@
 					@$(ECHO) "$(OK_COLOR) Created $@ foldder $(NO_COLOR)"
 
