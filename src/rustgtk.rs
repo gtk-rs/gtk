@@ -9,7 +9,7 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public License
 // along with rustgtk.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -39,7 +39,7 @@ Then you can build __rustgtk__ in two steps:
 * next you can build __rustgtk__ with the following command :
 
 ```Shell
-> make 
+> make
 ```
 
 * you can build an awful test main which display some widget :
@@ -103,18 +103,21 @@ License
 =======
 
 __rustgtk__ is available under the same license term than GTK+, the LGPL (Lesser General Public license). 
-
 */
 
 #![feature(globs)]
 #![feature(macro_rules)]
 
-#![link(name = "rustgtk",
-        vers = "0.0.1",
-        package_id = "rustgtk")]
-#![pkgid="rustgtk#0.0.1"]
-
+#![crate_id = "rustgtk#0.0.1"]
 #![crate_type = "lib"]
+#![crate_type = "rlib"]
+
+#![allow(dead_code)]
+#![allow(non_camel_case_types)]
+#![allow(unused_variable)]
+#![allow(visible_private_types)]
+#![allow(unused_imports)]
+#![allow(non_snake_case_functions)]
 
 // #[pkg_do(make)]
 
