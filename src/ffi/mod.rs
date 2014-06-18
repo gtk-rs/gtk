@@ -13,9 +13,9 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use libc::{c_int, c_char, c_float, c_uint, c_double, c_long, c_short, c_void};
-
 #![allow(non_camel_case_types)]
+
+use libc::{c_int, c_char, c_float, c_uint, c_double, c_long, c_short, c_void};
 
 use gtk::enums::*;
 use gdk;
@@ -890,6 +890,8 @@ extern "C" {
     //=========================================================================
     pub fn signal_connect(g_object: *C_GtkWidget, signal: *c_char, func: Option<fn()>);
     pub fn signal_connect_2params(g_object: *C_GtkWidget, signal: *c_char, func: Option<extern "C" fn(*C_GtkWidget, *c_void)>, params: *c_void);
+    pub fn g_signal_connect_data(instance: gpointer, detailed_signal: *c_char, c_hanlder: Option<extern "C" fn()>,
+                                 data: gpointer, destroy_data: Option<extern "C" fn(gpointer, *C_GClosure)>, connect_flags: i32);
 
     //=========================================================================
     // GTK Casts functions
