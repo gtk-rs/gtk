@@ -15,12 +15,10 @@
 
 //! A GtkToolItem containing a toggle button
 
-use std::ptr;
 use libc::{c_void};
 
 use traits::{GtkContainer, GtkWidget, GtkBin, GtkToolItem, GtkToolButton, GtkToggleToolButton, Signal};
 use ffi;
-use std;
 
 /// ToggleToolButton — A GtkToolItem containing a toggle button
 pub struct ToggleToolButton {

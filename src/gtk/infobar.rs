@@ -15,9 +15,8 @@
 
 //! Report important messages to the user
 
-// use std::ptr;
-use libc::{c_int};
-use libc::{c_void};
+use libc::{c_int, c_void};
+use std::ptr;
 
 use gtk::enums::GtkMessageType;
 use traits::{GtkContainer, GtkWidget, GtkBox, GtkOrientable};

@@ -16,11 +16,9 @@
 //! An entry which shows a search icon
 
 use libc::{c_void};
-use std::ptr;
 
 use traits::{GtkWidget, GtkEntry, Signal};
 use ffi;
-use std;
 
 /**
 * SearchEntry — An entry which shows a search icon

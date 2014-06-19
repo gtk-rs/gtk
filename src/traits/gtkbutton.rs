@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::{str, ptr, mem};
+use std::{str, mem};
 use libc::c_float;
 
 use traits::{GtkWidget, GtkContainer};

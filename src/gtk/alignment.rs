@@ -15,13 +15,11 @@
 
 //! A widget which controls the alignment and size of its child
 
-use std::ptr;
 use libc::{c_float, c_uint, c_void};
 
 use traits::{GtkWidget, GtkContainer, GtkBin, Signal};
 use utils::cast::GTK_ALIGNMENT;
 use ffi;
-use std;
 
 /// Alignment — A widget which controls the alignment and size of its child
 pub struct Alignment {

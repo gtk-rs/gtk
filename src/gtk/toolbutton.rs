@@ -15,12 +15,11 @@
 
 //! A GtkToolItem subclass that displays buttons
 
-use std::ptr;
 use libc::{c_void};
+use std::ptr;
 
 use traits::{GtkContainer, GtkWidget, GtkBin, GtkToolItem, GtkToolButton, Signal};
 use ffi;
-use std;
 
 /// ToolButton — A GtkToolItem subclass that displays buttons
 pub struct ToolButton {

@@ -15,12 +15,11 @@
 
 //! A button to launch a font chooser dialog
 
-use std::{ptr, str};
-use libc::{c_void};
+use std::str;
+use libc::c_void;
 
 use traits::{GtkWidget, GtkButton, GtkContainer, Signal};
 use ffi;
-use std;
 use utils::cast::GTK_FONTBUTTON;
 
 /**

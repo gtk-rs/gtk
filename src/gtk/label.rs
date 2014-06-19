@@ -15,12 +15,10 @@
 
 //! A widget that displays a small to medium amount of text
 
-use std::ptr;
 use libc::{c_void};
 
 use traits::{GtkWidget, GtkMisc, GtkLabel, Signal};
 use ffi;
-use std;
 
 /**
 * Label — A widget that displays a small to medium amount of text

@@ -15,10 +15,8 @@
 
 //! A container which can hide its child
 
-use std;
-use std::{ptr, str, owned};
-use libc::{c_int};
-use libc::{c_void};
+use std::str;
+use libc::{c_int, c_void};
 
 use traits::{GtkContainer, GtkWidget, GtkBin, Signal};
 use gtk;

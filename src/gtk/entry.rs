@@ -16,12 +16,10 @@
 //! A single line text entry field
 
 use libc::{c_void};
-use std::ptr;
 
 use traits::{GtkWidget, GtkEntry, Signal};
 use gtk;
 use ffi;
-use std;
 
 /**
 * Entry — A single line text entry field

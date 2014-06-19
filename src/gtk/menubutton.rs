@@ -15,12 +15,10 @@
 
 //! A widget that shows a menu when clicked on
 
-use std::ptr;
 use libc::{c_void};
 
 use traits::{GtkWidget, GtkButton, GtkContainer, GtkToggleButton, Signal};
 use ffi;
-use std;
 use utils::cast::GTK_MENUBUTTON;
 use gtk::enums::GtkArrowType;
 

@@ -15,15 +15,12 @@
 
 //! A widget with two adjustable panes
 
-use std::ptr;
-use libc::{c_int};
-use libc::{c_void};
+use libc::{c_int, c_void};
 
 use gtk::enums::GtkOrientation;
 use traits::{GtkWidget, GtkContainer, Signal};
 use utils::cast::GTK_PANED;
 use ffi;
-use std;
 use gtk;
 
 /**

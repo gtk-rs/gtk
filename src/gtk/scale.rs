@@ -15,16 +15,13 @@
 
 //! A slider widget for selecting a value from a range
 
-use libc::{c_double, c_int};
-use libc::{c_void};
-use std::ptr;
+use libc::{c_double, c_int, c_void};
 
 use traits::{GtkWidget, GtkOrientable, Signal};
 use gtk::enums::{GtkOrientation, GtkPositionType};
 use utils::cast::GTK_SCALE;
 use gtk;
 use ffi;
-use std;
 
 // TODO : implements GtkRange
 

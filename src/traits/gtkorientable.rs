@@ -17,7 +17,6 @@ use gtk::enums::GtkOrientation;
 use traits::GtkWidget;
 use utils::cast::GTK_ORIENTABLE;
 use ffi;
-use std;
 
 pub trait GtkOrientable: GtkWidget {
     fn get_orientation(&self) -> GtkOrientation {

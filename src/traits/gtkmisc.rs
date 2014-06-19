@@ -18,7 +18,6 @@ use libc::{c_float, c_int};
 use traits::gtkwidget::GtkWidget;
 use utils::cast::GTK_MISC;
 use ffi;
-use std;
 
 pub trait GtkMisc : GtkWidget {
     fn set_alignment(&mut self, x_align: f32, y_align: f32) -> () {

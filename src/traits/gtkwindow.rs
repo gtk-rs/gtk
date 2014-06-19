@@ -14,9 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use std::str;
-
 use ffi;
-use std;
 use traits::GtkWidget;
 use utils::cast::GTK_WINDOW;
 

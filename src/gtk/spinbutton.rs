@@ -15,16 +15,13 @@
 
 //! Retrieve an integer or floating-point number from the user
 
-use std::ptr;
-use libc::{c_double, c_uint};
-use libc::{c_void};
+use libc::{c_double, c_uint, c_void};
 
 use gtk::enums::{GtkSpinType, GtkSpinButtonUpdatePolicy};
 use traits::{GtkOrientable, GtkEntry, GtkWidget, Signal};
 use gtk;
 use utils::cast::{GTK_SPINBUTTON};
 use ffi;
-use std;
 
 /**
 * SpinButton — Retrieve an integer or floating-point number from the user

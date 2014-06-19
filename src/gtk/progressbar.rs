@@ -15,14 +15,10 @@
 
 //! A widget which indicates progress visually
 
-use libc::{c_double};
-use libc::{c_void};
-use std::{ptr, str};
-
+use libc::{c_double, c_void};
+use std::str;
 use traits::{GtkWidget, GtkOrientable, Signal};
 use ffi;
-use std;
-use std::owned::Box;
 use utils::cast::GTK_PROGRESSBAR;
 
 

@@ -15,12 +15,10 @@
 
 //! The base class of widgets that can be added to GtkToolShe
 
-use std::ptr;
 use libc::{c_void};
 
 use traits::{GtkContainer, GtkWidget, GtkBin, GtkToolItem, Signal};
 use ffi;
-use std;
 
 /// ToolItem — The base class of widgets that can be added to GtkToolShe
 pub struct ToolItem {

@@ -15,12 +15,11 @@
 
 //! A bin with a decorative frame and optional label
 
-use std::ptr;
 use libc::{c_void};
+use std::ptr;
 
 use traits::{GtkWidget, GtkFrame, GtkContainer, GtkBin, Signal};
 use ffi;
-use std;
 
 /// Frame — A bin with a decorative frame and optional label
 pub struct Frame {

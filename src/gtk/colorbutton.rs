@@ -15,13 +15,12 @@
 
 //! A button to launch a color selection dialog
 
-use std::{ptr, str};
+use std::str;
 use libc::{c_void};
 
 use traits::{GtkWidget, GtkButton, GtkContainer, Signal};
 use utils::cast::GTK_COLORBUTTON;
 use ffi;
-use std;
 use gdk;
 
 /**

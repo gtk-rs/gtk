@@ -17,7 +17,6 @@ use libc::{c_int, c_double};
 use std::str;
 
 use ffi;
-use std;
 use traits::GtkWidget;
 use gtk::enums::GtkJustification;
 use utils::cast::GTK_LABEL;

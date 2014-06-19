@@ -15,13 +15,11 @@
 
 //! A button which pops up a scale
 
+use libc::{c_double, c_void};
 use std::ptr;
-use libc::{c_double};
-use libc::{c_void};
 
 use traits::{GtkWidget, GtkButton, GtkContainer, GtkScaleButton, GtkOrientable, Signal};
 use ffi;
-use std;
 use gtk::enums::GtkIconSize;
 
 /**

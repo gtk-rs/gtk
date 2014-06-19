@@ -16,7 +16,6 @@
 use traits::{GtkWidget, GtkContainer, GtkButton};
 use utils::cast::GTK_TOGGLEBUTTON;
 use ffi;
-use std;
 
 pub trait GtkToggleButton: GtkWidget + GtkContainer + GtkButton {
     fn set_mode(&mut self, draw_indicate: bool) {

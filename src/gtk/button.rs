@@ -16,11 +16,9 @@
 //! A widget that emits a signal when clicked on
 
 use libc::{c_void};
-use std::ptr;
 
 use traits::{GtkWidget, GtkButton, GtkBin, GtkContainer, Signal};
 use ffi;
-use std;
 use gtk::enums::GtkIconSize;
 
 /**

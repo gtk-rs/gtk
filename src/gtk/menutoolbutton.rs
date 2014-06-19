@@ -15,14 +15,12 @@
 
 //! A GtkToolItem containing a button with an additional dropdown menu
 
-use std::ptr;
 use libc::{c_void};
+use std::ptr;
 
 use traits::{GtkContainer, GtkWidget, GtkBin, GtkToolItem, GtkToolButton, Signal};
 use utils::cast::GTK_MENUTOOLBUTTON;
 use ffi;
-use std;
-use std;
 
 /// MenuToolButton — A GtkToolItem containing a button with an additional dropdown menu
 pub struct MenuToolButton {

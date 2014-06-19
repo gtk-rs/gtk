@@ -15,15 +15,12 @@
 
 //! A bar that can used as a level indicator
 
-use libc::{c_double};
-use libc::{c_void};
-use std::ptr;
+use libc::{c_double, c_void};
 
 use traits::{GtkWidget, GtkOrientable, Signal};
 use gtk::enums::{GtkLevelBarMode};
 use utils::cast::GTK_LEVELBAR;
 use ffi;
-use std;
 
 /**
 * LevelBar — A bar that can used as a level indicator

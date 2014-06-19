@@ -15,12 +15,10 @@
 
 //! A button which pops up a volume control
 
-use std::ptr;
 use libc::{c_void};
 
 use traits::{GtkWidget, GtkButton, GtkContainer, GtkScaleButton, GtkOrientable, Signal};
 use ffi;
-use std;
 
 /// VolumeButton — A button which pops up a volume control
 pub struct VolumeButton {

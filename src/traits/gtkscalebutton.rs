@@ -19,7 +19,6 @@ use traits::{GtkWidget, GtkContainer, GtkButton};
 use utils::cast::GTK_SCALEBUTTON;
 use gtk::Adjustment;
 use ffi;
-use std;
 
 pub trait GtkScaleButton: GtkWidget + GtkContainer + GtkButton {
     fn set_adjustment(&mut self, adjustment: &Adjustment) -> () {

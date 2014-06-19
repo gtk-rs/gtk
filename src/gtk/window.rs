@@ -15,12 +15,10 @@
 
 //! Toplevel which can contain other widgets
 
-use std::ptr;
 use libc::{c_void};
 
 use traits::{GtkWidget, GtkWindow, GtkContainer, GtkBin, Signal};
 use ffi;
-use std;
 use gtk::enums::GtkWindowType;
 
 /**

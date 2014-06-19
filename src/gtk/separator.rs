@@ -15,12 +15,10 @@
 
 //! A separator widget
 
-use std::ptr;
 use libc::{c_void};
 
 use traits::{GtkWidget, GtkOrientable, Signal};
 use ffi;
-use std;
 use gtk::enums::GtkOrientation;
 
 /// Separator — A separator widget

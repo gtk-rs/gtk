@@ -15,14 +15,11 @@
 
 //! A container which allows you to position widgets at fixed coordinates
 
-use std::ptr;
-use libc::{c_int};
-use libc::{c_void};
+use libc::{c_int, c_void};
 
 use traits::{GtkWidget, GtkContainer, Signal};
 use utils::cast::GTK_FIXED;
 use ffi;
-use std;
 
 /// Fixed — A container which allows you to position widgets at fixed coordinates
 pub struct Fixed {

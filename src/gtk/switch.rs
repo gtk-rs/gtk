@@ -15,13 +15,11 @@
 
 //! A "light switch" style toggle
 
-use std::ptr;
 use libc::{c_void};
 
 use traits::{GtkWidget, Signal};
 use utils::cast::GTK_SWITCH;
 use ffi;
-use std;
 
 /*
 * Switch — A "light switch" style toggle

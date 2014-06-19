@@ -15,12 +15,10 @@
 
 //! Create widgets with a discrete toggle button
 
-use std::ptr;
 use libc::{c_void};
 
 use traits::{GtkWidget, GtkButton, GtkContainer, GtkToggleButton, Signal};
 use ffi;
-use std;
 
 /// CheckButton — Create widgets with a discrete toggle button
 pub struct CheckButton {

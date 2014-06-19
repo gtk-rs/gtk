@@ -21,7 +21,6 @@ use libc::{c_int, c_void};
 use gtk::enums::GtkOrientation;
 use traits::{GtkContainer, GtkWidget, GtkBox, GtkOrientable, Signal};
 use ffi;
-use std;
 
 /// Box — A container box
 pub struct _Box {

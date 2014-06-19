@@ -15,7 +15,6 @@
 
 //! A container box
 
-use std::ptr;
 use libc::{c_void};
 
 
@@ -23,7 +22,6 @@ use traits::{GtkContainer, GtkWidget, GtkBin, Signal};
 use gtk;
 use utils::cast::{GTK_SEARCHBAR, GTK_ENTRY};
 use ffi;
-use std;
 
 /// Box — A container box
 pub struct SearchBar {

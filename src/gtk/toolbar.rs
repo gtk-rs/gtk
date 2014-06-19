@@ -15,13 +15,10 @@
 
 //! Create bars of buttons and other widgets
 
-use libc::{c_int};
-use libc::{c_void};
-use std::ptr;
+use libc::{c_int, c_void};
 
 use traits::{GtkWidget, GtkToolShell, GtkOrientable, GtkContainer, GtkToolItem, Signal};
 use ffi;
-use std;
 use utils::cast::{GTK_TOOLBAR, GTK_TOOLITEM};
 use gtk;
 use gtk::enums::{GtkIconSize, GtkReliefStyle, GtkToolbarStyle};

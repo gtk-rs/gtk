@@ -18,7 +18,6 @@
 use libc::c_double;
 
 use ffi;
-use std;
 
 /**
 * A representation of an adjustable bounded value

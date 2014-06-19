@@ -15,16 +15,12 @@
 
 //! Displays a calendar and allows the user to select a date
 
-use std::ptr;
-use libc::{c_void};
-use libc::{c_uint, c_int};
-use libc::{c_void};
+use libc::{c_void, c_uint, c_int, c_void};
 
 use traits::{GtkWidget, Signal};
 use gtk::enums::GtkCalendarDisplayOptions;
 use utils::cast::GTK_CALENDAR;
 use ffi;
-use std;
 
 /**
 * Calendar — Displays a calendar and allows the user to select a date

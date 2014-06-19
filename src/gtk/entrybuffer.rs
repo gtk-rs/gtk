@@ -19,7 +19,6 @@ use libc::{c_int, c_uint};
 use std::str;
 
 use ffi;
-use std;
 
 // TODO:
 // Implements custom signal : inserted-text + deleted-text

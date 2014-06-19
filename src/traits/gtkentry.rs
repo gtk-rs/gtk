@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::{str};
+use std::str;
 use libc::{c_int, c_float, c_double};
 
 use traits::GtkWidget;
@@ -21,7 +21,6 @@ use gtk::enums::{GtkEntryIconPosition, GtkImageType, GtkInputPurpose, GtkInputHi
 use utils::cast::GTK_ENTRY;
 use gtk;
 use ffi;
-use std;
 
 pub trait GtkEntry: GtkWidget {
     fn get_buffer(&self) -> gtk::EntryBuffer {

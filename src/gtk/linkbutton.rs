@@ -15,13 +15,12 @@
 
 //! Create buttons bound to a URL
 
-use std::{ptr, str};
-use libc::{c_void};
+use std::str;
+use libc::c_void;
 
 use traits::{GtkWidget, GtkButton, GtkContainer, Signal};
 use utils::cast::GTK_LINKBUTTON;
 use ffi;
-use std;
 
 /**
 * LinkButton — Create buttons bound to a URL

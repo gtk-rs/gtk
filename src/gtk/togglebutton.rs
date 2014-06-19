@@ -15,12 +15,10 @@
 
 //! A button to launch a font chooser dialog
 
-use std::ptr;
 use libc::{c_void};
 
 use traits::{GtkWidget, GtkButton, GtkContainer, GtkToggleButton, Signal};
 use ffi;
-use std;
 
 /**
 * ToggleButton — A button to launch a font chooser dialog

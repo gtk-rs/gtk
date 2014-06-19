@@ -15,14 +15,12 @@
 
 //! Displays an arrow
 
-use std::ptr;
 use libc::{c_void};
 
 use gtk::enums::{GtkShadowType, GtkArrowType};
 use traits::{GtkWidget, Signal, GtkMisc};
 use utils::cast::GTK_ARROW;
 use ffi;
-use std;
 
 /// Arrow — Displays an arrow
 pub struct Arrow {

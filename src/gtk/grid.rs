@@ -15,15 +15,12 @@
 
 //! Pack widgets in a rows and columns
 
-use std::ptr;
-use libc::{c_int, c_uint};
-use libc::{c_void};
+use libc::{c_int, c_uint, c_void};
 
 use gtk::enums::{GtkPositionType};
 use traits::{GtkContainer, GtkWidget, GtkOrientable, Signal};
 use utils::cast::GTK_GRID;
 use ffi;
-use std;
 
 /// Grid — Pack widgets in a rows and columns
 pub struct Grid {

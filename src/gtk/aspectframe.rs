@@ -15,14 +15,12 @@
 
 //! A frame that constrains its child to a particular aspect ratio
 
-use libc::{c_float};
-use libc::{c_void};
+use libc::{c_float, c_void};
 use std::ptr;
 
 use traits::{GtkWidget, GtkFrame, GtkContainer, Signal};
 use utils::cast::GTK_ASPECTFRAME;
 use ffi;
-use std;
 
 /// AspectFrame — A frame that constrains its child to a particular aspect ratio
 pub struct AspectFrame {

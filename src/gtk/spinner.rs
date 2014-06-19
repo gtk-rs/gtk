@@ -15,13 +15,11 @@
 
 //! Show a spinner animation
 
-use std::ptr;
 use libc::{c_void};
 
 use traits::{GtkWidget, Signal};
 use utils::cast::GTK_SPINNER;
 use ffi;
-use std;
 
 /// Spinner — Show a spinner animation
 pub struct Spinner {

@@ -13,14 +13,13 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::{ptr, str};
+use std::{str, ptr};
 use libc::c_float;
 
 use traits::{GtkWidget, GtkContainer};
 use gtk::enums::GtkShadowType;
 use utils::cast::GTK_FRAME;
 use ffi;
-use std;
 
 pub trait GtkFrame: GtkWidget + GtkContainer {
     fn set_label(&mut self, label: Option<&str>) -> () {

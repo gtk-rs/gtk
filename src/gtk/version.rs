@@ -16,10 +16,8 @@
 //! Fonction to handle the Gtk+ version
 
 use libc::c_uint;
-use std::{ptr, str};
-
+use std::str;
 use ffi;
-use std;
 
 pub fn get_major_version() -> u32 {
     unsafe {

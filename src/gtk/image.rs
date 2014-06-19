@@ -15,12 +15,10 @@
 
 //! A widget displaying an image
 
-use std::ptr;
 use libc::{c_void};
 
 use traits::{GtkWidget, GtkMisc, Signal};
 use ffi;
-use std;
 
 /// Image — A widget displaying an image
 pub struct Image {

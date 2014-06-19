@@ -15,7 +15,6 @@
 
 use traits::{GtkWidget};
 use ffi;
-use std;
 use gtk;
 
 pub struct Widget {

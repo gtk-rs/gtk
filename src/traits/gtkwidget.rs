@@ -16,7 +16,6 @@
 use libc::c_int;
 
 use ffi;
-use std;
 
 pub trait GtkWidget {
     #[doc(hidden)]

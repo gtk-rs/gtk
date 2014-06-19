@@ -14,7 +14,6 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use ffi;
-use std;
 use traits::GtkWidget;
 use utils::cast::GTK_TOOLSHELL;
 use gtk::enums::{GtkIconSize, GtkOrientation, GtkReliefStyle, GtkToolbarStyle};

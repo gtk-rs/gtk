@@ -19,7 +19,6 @@ use traits::{GtkWidget, GtkContainer, GtkBin, GtkToolItem, GtkLabel};
 use gtk;
 use utils::cast::GTK_TOOLBUTTON;
 use ffi;
-use std;
 
 pub trait GtkToolButton: GtkWidget + GtkContainer + GtkBin + GtkToolItem {
     fn set_label(&mut self, label: &str) -> () {

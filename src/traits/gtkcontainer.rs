@@ -19,7 +19,6 @@ use traits::gtkwidget::GtkWidget;
 use utils::cast::GTK_CONTAINER;
 use gtk::enums::GtkResizeMode;
 use ffi;
-use std;
 
 pub trait GtkContainer : GtkWidget {
     fn add<'r, T: GtkWidget>(&'r mut self, widget: &'r T) {

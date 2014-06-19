@@ -15,14 +15,12 @@
 
 //! A container for arranging buttons
 
-use std::ptr;
 use libc::{c_void};
 
 use gtk::enums::{GtkOrientation, GtkButtonBoxStyle};
 use traits::{GtkContainer, GtkWidget, GtkBox, GtkOrientable, GtkButton, Signal};
 use utils::cast::GTK_BUTTONBOX;
 use ffi;
-use std;
 
 /// ButtonBox — A container for arranging buttons
 pub struct ButtonBox {
