@@ -14,6 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 #![allow(non_camel_case_types)]
+#![allow(dead_code)]
 
 use libc::{c_int, c_char, c_float, c_uint, c_double, c_long, c_short, c_void};
 

@@ -15,8 +15,10 @@
 
 //! Adjustment — A representation of an adjustable bounded value
 
-use libc::c_double;
 
+#![allow(visible_private_types)]
+
+use libc::c_double;
 use ffi;
 
 /**

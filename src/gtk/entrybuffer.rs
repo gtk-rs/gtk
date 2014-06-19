@@ -15,9 +15,11 @@
 
 //! Text buffer for gtk::Entry
 
+
+#![allow(visible_private_types)]
+
 use libc::{c_int, c_uint};
 use std::str;
-
 use ffi;
 
 // TODO:

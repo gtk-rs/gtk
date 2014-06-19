@@ -13,6 +13,8 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
+// NB: This file is not actually packaged into rgtk
+
 use traits::{GtkWidget};
 use ffi;
 use gtk;

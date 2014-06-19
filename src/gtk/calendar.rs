@@ -15,7 +15,7 @@
 
 //! Displays a calendar and allows the user to select a date
 
-use libc::{c_void, c_uint, c_int, c_void};
+use libc::{c_void, c_uint, c_int};
 
 use traits::{GtkWidget, Signal};
 use gtk::enums::GtkCalendarDisplayOptions;

@@ -15,7 +15,6 @@
 
 //! A container box
 
-use std::{ptr};
 use libc::{c_int, c_void};
 
 use gtk::enums::GtkOrientation;
