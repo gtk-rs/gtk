@@ -1,6 +1,4 @@
 
-#![allow(dead_code)]
-
 #![feature(globs)]
 
 extern crate rgtk;
@@ -15,7 +13,6 @@ mod platform {
     #[link(name = "gtk-3.0")]
     #[link(name = "gobject-2.0")]
     #[link(name = "gdk-3.0")]
-    #[link(name = "gtk_glue")]
     extern{}
 }
 
@@ -26,23 +23,17 @@ mod platform {
     #[link(name = "gtk-3")]
     #[link(name = "gobject-2.0")]
     #[link(name = "gdk-3")]
-    #[link(name = "gtk_glue")]
     extern{}
 }
 
 
-pub struct Click<'s> { entry: &'s gtk::Entry }
-impl<'s> traits::gtkbutton::ButtonClickedHandler for Click<'s> {
-    fn callback(&mut self, button: &mut gtk::Button) {
-        println!("Clicked");
+
+fn my_callback(widget: &mut gtk::Button, callback_data: Option<&mut GtkWidget>) {
+    if callback_data.is_some() { 
+        let mut i = gtk::cast::to_entry(callback_data.unwrap());
+        i.set_text(widget.get_label().unwrap());
     }
 }
-// fn my_callback(widget: &mut gtk::Button, callback_data: Option<&mut GtkWidget>) {
-//     if callback_data.is_some() {
-//         let mut i = gtk::mem::to_entry(callback_data.unwrap());
-//         i.set_text(widget.get_label().unwrap());
-//     }
-// }
 
 fn callback_info_bar(widget: &mut gtk::InfoBar, callback_data: Option<&mut GtkWidget>) {
     widget.hide();
@@ -53,12 +44,12 @@ fn callback_info_bar(widget: &mut gtk::InfoBar, callback_data: Option<&mut GtkWi
 // }
 
 fn main() {
-    rt::init();
+    gtk::init();
     println!("Major: {}, Minor: {}", gtk::version::get_major_version(), gtk::version::get_minor_version());
     let mut window = gtk::Window::new(GtkWindowTopLevel).unwrap();
     let mut frame = gtk::Frame::new(Some("Yep a frame")).unwrap();
-    let mut bbox = gtk::BBox::new(GtkOrientationHorizontal, 10).unwrap();
-    let mut v_box = gtk::BBox::new(GtkOrientationHorizontal, 10).unwrap();
+    let mut _box = gtk::_Box::new(GtkOrientationHorizontal, 10).unwrap();
+    let mut v_box = gtk::_Box::new(GtkOrientationHorizontal, 10).unwrap();
     let mut button_box = gtk::ButtonBox::new(GtkOrientationHorizontal).unwrap();
     let mut label = gtk::Label::new("Yeah a wonderful label too !").unwrap();
     let mut button = gtk::Button::new_with_label("Whattttt a button !").unwrap();
@@ -69,7 +60,7 @@ fn main() {
     let menu_button = gtk::MenuButton::new().unwrap();
     let link_button = gtk::LinkButton::new("www.rust-lang.org").unwrap();
     let mut volume_button = gtk::VolumeButton::new().unwrap();
-    let mut entry = gtk::Entry::new().unwrap();
+    let mut entry = gtk::Entry::new().unwrap();    
     let search_entry = gtk::SearchEntry::new().unwrap();
     let separator = gtk::Separator::new(GtkOrientationHorizontal).unwrap();
     let separator2 = gtk::Separator::new(GtkOrientationHorizontal).unwrap();
@@ -91,17 +82,16 @@ fn main() {
     level_bar.set_value(37.);
     switch2.set_active(true);
     frame.set_border_width(10);
-    bbox.set_border_width(5);
+    _box.set_border_width(5);
     entry.set_placeholder("An Entry with a placeholder !");
     volume_button.set_orientation(GtkOrientationHorizontal);
     label.set_justify(GtkJustifyLeft);
     window.set_title("Yeah a beautiful window with rgtk !");
     window.add(&frame);
-    button.connect_clicked_signal(box Click { entry: &entry } as Box<traits::gtkbutton::ButtonClickedHandler>);
-    // button.connect_2p_widget("clicked", my_callback, Some(&entry));
-    window.connect("delete-event", rt::_main_quit);
+    button.connect_2p_widget("clicked", my_callback, Some(&entry));
+    window.connect("delete-event", gtk::main_quit);
     // window.connect_2p_widget("delete-event", quit_callback, Some(&entry));
-    frame.add(&bbox);
+    frame.add(&_box);
     button_box.add(&button);
     button_box.add(&font_button);
     button_box.add(&toggle_button);
@@ -113,23 +103,23 @@ fn main() {
     v_box.add(&check_button);
     v_box.add(&link_button);
     v_box.add(&spin_button);
-    bbox.add(&info_bar);
-    bbox.add(&v_box);
-    bbox.add(&scale);
-    bbox.add(&level_bar);
-    bbox.add(&button_box);
-    bbox.add(&progress_bar);
-    bbox.add(&separator);
-    bbox.add(&label);
-    bbox.add(&entry);
-    bbox.add(&separator2);
-    bbox.add(&search_entry);
-    bbox.add(&spinner);
-    bbox.add(&image);
-    bbox.add(&arrow);
-    bbox.add(&calendar);
-    bbox.set_orientation(GtkOrientationVertical);
+    _box.add(&info_bar);
+    _box.add(&v_box);
+    _box.add(&scale);
+    _box.add(&level_bar);
+    _box.add(&button_box);
+    _box.add(&progress_bar);
+    _box.add(&separator);
+    _box.add(&label);
+    _box.add(&entry);
+    _box.add(&separator2);
+    _box.add(&search_entry);
+    _box.add(&spinner);
+    _box.add(&image);
+    _box.add(&arrow);
+    _box.add(&calendar);
+    _box.set_orientation(GtkOrientationVertical);
     window.show_all();
-    rt::_main();
+    gtk::main();
 }
 
