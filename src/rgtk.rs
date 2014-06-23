@@ -117,6 +117,24 @@ __rgtk__ is available under the same license term than GTK+, the LGPL (Lesser Ge
 // #[pkg_do(make)]
 extern crate libc;
 
+pub use GtkWidgetTrait          = gtk::WidgetTrait;
+pub use GtkContainerTrait       = gtk::ContainerTrait;
+pub use GtkWindowTrait          = gtk::WindowTrait;
+pub use GtkMiscTrait            = gtk::MiscTrait;
+pub use GtkButtonTrait          = gtk::ButtonTrait;
+pub use GtkLabelTrait           = gtk::LabelTrait;
+pub use Gtk_BoxTrait            = gtk::_BoxTrait;
+pub use GtkOrientableTrait      = gtk::OrientableTrait;
+pub use GtkFrameTrait           = gtk::FrameTrait;
+pub use GtkToggleButtonTrait    = gtk::ToggleButtonTrait;
+pub use GtkScaleButtonTrait     = gtk::ScaleButtonTrait;
+pub use GtkEntryTrait           = gtk::EntryTrait;
+pub use GtkBinTrait             = gtk::BinTrait;
+pub use GtkToolShellTrait       = gtk::ToolShellTrait;
+pub use GtkToolItemTrait        = gtk::ToolItemTrait;
+pub use GtkToolButtonTrait      = gtk::ToolButtonTrait;
+pub use GtkToggleToolButtonTrait= gtk::ToggleToolButtonTrait;
+
 #[doc(hidden)]
 #[cfg(target_os="macos")]
 mod platform {

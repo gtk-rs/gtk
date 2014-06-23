@@ -9,7 +9,6 @@ extern crate collections;
 use log::macros::*;
 
 use rgtk::*;
-use rgtk::gtk::traits::*;
 use rgtk::gtk::signals;
 
 use collections::String;
