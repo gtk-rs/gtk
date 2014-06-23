@@ -16,275 +16,282 @@
 //! Enumeration used with widgets
 
 /// A gtk::Window can be one of these types. Most things you'd consider a "window"
-/// should have type GtkWindowTopLevel; windows with this type are managed by the window manager
+/// should have type WindowTopLevel; windows with this type are managed by the window manager
 /// and have a frame by default (call gtk::window::set_decorated() to toggle the frame).
 ///
-/// Windows with type GtkWindowPopUp are ignored by the window manager; window manager keybindings won't work on them,
+/// Windows with type WindowPopUp are ignored by the window manager; window manager keybindings won't work on them,
 /// the window manager won't decorate the window with a frame, many GTK+ features that rely on the window manager will not work
 /// (e.g. resize grips and maximization/minimization).
 ///
 /// GGtkWindowPopUp is used to implement widgets such as gtk::Menu
-/// or tooltips that you normally don't think of as windows per se. Nearly all windows should be GtkWindowTopLevel.
-/// In particular, do not use GtkWindowPopUp just to turn off the window borders; use gtk_window_set_decorated() for that.
+/// or tooltips that you normally don't think of as windows per se. Nearly all windows should be WindowTopLevel.
+/// In particular, do not use WindowPopUp just to turn off the window borders; use gtk_window_set_decorated() for that.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkWindowType {
+pub enum WindowType {
     /// A regular window, such as a dialog.
-    GtkWindowTopLevel,
+    WindowTopLevel,
     /// A special window such as a tooltip.
-    GtkWindowPopUp
+    WindowPopUp
+}
+
+/// Reading directions for text
+pub enum TextDirection{
+    TextDirNone,
+    TextDirLtr,
+    TextDirRtl
 }
 
 /// Window placement can be influenced using this enumeration.
-/// Note that using GtkWinPosCenterAlways is almost always a bad idea.
+/// Note that using WinPosCenterAlways is almost always a bad idea.
 /// It won't necessarily work well with all window managers or on all windowing systems.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkWindowPosition{
+pub enum WindowPosition{
     /// No influence is made on placement.
-    GtkWinPosNone,
+    WinPosNone,
     /// Windows should be placed in the center of the screen.
-    GtkWinPosCenter,
+    WinPosCenter,
     /// Windows should be placed at the current mouse position.
-    GtkWinPosMouse,
+    WinPosMouse,
     /// Keep window centered as it changes size, etc.
-    GtkWinPosCenterAlways,
+    WinPosCenterAlways,
     /// Center the window on its transient parent (see window.set_transient_for()).
-    GtkWinPosCenterOnParent
+    WinPosCenterOnParent
 }
 
 /// Used to dictate the style that a gtk::ButtonBox uses to layout the buttons it contains.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkButtonBoxStyle {
+pub enum ButtonBoxStyle {
     /// Buttons are evenly spread across the box.
-    GtkButtonBoxSpread = 1,
+    ButtonBoxSpread = 1,
     /// Buttons are placed at the edges of the box.
-    GtkButtonBoxEdge,
+    ButtonBoxEdge,
     /// Buttons are grouped towards the start of the box, (on the left for a HBox, or the top for a VBox).
-    GtkButtonBoxStart,
+    ButtonBoxStart,
     /// Buttons are grouped towards the end of the box, (on the right for a HBox, or the bottom for a VBox).
-    GtkButtonBoxEnd,
+    ButtonBoxEnd,
     /// Buttons are centered in the box. Since 2.12.
-    GtkButtonBoxCenter
+    ButtonBoxCenter
 }
 
 /// Represents the orientation of widgets which can be switched between
 /// horizontal and vertical orientation on the fly, like gtk::Toolbar.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkOrientation {
+pub enum Orientation {
     /// The widget is in horizontal orientation.
-    GtkOrientationHorizontal,
+    OrientationHorizontal,
     /// The widget is in vertical orientation.
-    GtkOrientationVertical
+    OrientationVertical
 }
 
 /// Availables direction types
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum  GtkDirectionType {
-    GtkDirTabForward,
-    GtkDirTabBackward,
-    GtkDirUp,
-    GtkDirDown,
-    GtkDirLeft,
-    GtkDirRight
+pub enum  DirectionType {
+    DirTabForward,
+    DirTabBackward,
+    DirUp,
+    DirDown,
+    DirLeft,
+    DirRight
 }
 
 /// Specifies which corner a child widget should be placed in when packed into a gtk::ScrolledWindow.
 /// This is effectively the opposite of where the scroll bars are placed.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum  GtkCornerType {
+pub enum  CornerType {
     /// Place the scrollbars on the right and bottom of the widget (default behaviour).
-    GtkCornerTopLeft,
+    CornerTopLeft,
     /// Place the scrollbars on the top and right of the widget.
-    GtkCornerBottomLeft,
+    CornerBottomLeft,
     /// Place the scrollbars on the left and bottom of the widget.
-    GtkCornerTopRight,
+    CornerTopRight,
     /// Place the scrollbars on the top and left of the widget.
-    GtkCornerBottomRight
+    CornerBottomRight
 }
 
 /// Availables resize modes
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkResizeMode {
+pub enum ResizeMode {
     /// Pass resize request to the parent
-    GtkResizeParent,
+    ResizeParent,
     /// Queue resizes on this widget
-    GtkResizeQueue,
+    ResizeQueue,
     /// Resize immediately. Deprecated.
-    GtkOrientationtkResizeImmediate
+    OrientationtkResizeImmediate
 }
 
 /// Describes how the border of a UI element should be rendered.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkBorderStyle {
+pub enum BorderStyle {
     /// No visible border
-    GtkBorderStyleNone,
+    BorderStyleNone,
     /// A single line segment
-    GtkBorderStyleSolid,
+    BorderStyleSolid,
     /// Looks as if the content is sunken into the canvas
-    GtkBorderStyleInset,
+    BorderStyleInset,
     /// Looks as if the content is coming out of the canvas
-    GtkBorderStyleOutset,
-    /// Same as GtkBorderStyleNone
-    GtkBorderStyleHidden,
+    BorderStyleOutset,
+    /// Same as BorderStyleNone
+    BorderStyleHidden,
     /// A series of round dots
-    GtkBorderStyleDotted,
+    BorderStyleDotted,
     /// A series of square-ended dashes
-    GtkBorderStyleDashed,
+    BorderStyleDashed,
     /// Two parallel lines with some space between them
-    GtkBorderStyleDouble,
+    BorderStyleDouble,
     /// Looks as if it were carved in the canvas
-    GtkBorderStyleGroove,
+    BorderStyleGroove,
     /// Looks as if it were coming out of the canvas
-    GtkBorderStyleRidge
+    BorderStyleRidge
 }
 
 /// Determines the direction of a sort.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkSortType {
+pub enum SortType {
     /// Sorting is in ascending order
-    GtkSortAscending,
+    SortAscending,
     /// Sorting is in descending order.
-    GtkSortDescending
+    SortDescending
 }
 
 /// Describes a widget state. Widget states are used to match the widget against CSS pseudo-classes.
 /// Note that GTK extends the regular CSS classes and sometimes uses different names.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkStateFlags {
+pub enum StateFlags {
     /// State during normal operation.
-    GtkStateFlagNormal       = 0,
+    StateFlagNormal       = 0,
     /// Widget is active.
-    GtkStateFlagActive       = 1 << 0,
+    StateFlagActive       = 1 << 0,
     /// Widget has a mouse pointer over it.
-    GtkStateFlagPrelight     = 1 << 1,
+    StateFlagPrelight     = 1 << 1,
     /// Widget is selected.
-    GtkStateFlagSelected     = 1 << 2,
+    StateFlagSelected     = 1 << 2,
     /// Widget is insensitive.
-    GtkStateFlagInsensitive  = 1 << 3,
+    StateFlagInsensitive  = 1 << 3,
     /// Widget is inconsistent.
-    GtkStateFlagInconsistent = 1 << 4,
+    StateFlagInconsistent = 1 << 4,
     /// Widget has the keyboard focus.
-    GtkStateFlagFocused      = 1 << 5,
+    StateFlagFocused      = 1 << 5,
     /// Widget is in a background toplevel window.
-    GtkStateFlagBackDrop     = 1 << 6,
+    StateFlagBackDrop     = 1 << 6,
     /// Widget is in left-to-right text direction. Since 3.8
-    GtkStateFlagDirLTR       = 1 << 7,
+    StateFlagDirLTR       = 1 << 7,
     /// Widget is in right-to-left text direction. Since 3.8
-    GtkStateFlagDirRTL       = 1 << 8
+    StateFlagDirRTL       = 1 << 8
 }
 
 /// Gives an indication why a drag operation failed.
 /// The value can by obtained by connecting to the "drag-failed" signal.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkDragResult {
+pub enum DragResult {
     /// The drag operation was successful.
-    GtkDragResultSuccess,
+    DragResultSuccess,
     /// No suitable drag target.
-    GtkDragResultNoTarget,
+    DragResultNoTarget,
     /// The user cancelled the drag operation.
-    GtkDragResultUserCanceled,
+    DragResultUserCanceled,
     /// The drag operation timed out.
-    GtkDragResultTimeoutExpired,
+    DragResultTimeoutExpired,
     /// The pointer or keyboard grab used for the drag operation was broken.
-    GtkDragResultGrabBroken,
+    DragResultGrabBroken,
     /// The drag operation failed due to some unspecified error.
-    GtkDragResultError
+    DragResultError
 }
 
 /// Availables accel flags
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkAccelFlags {
-    /// display in GtkAccelLabel?
-    GtkAccelVisible        = 1 << 0,
+pub enum AccelFlags {
+    /// display in AccelLabel?
+    AccelVisible        = 1 << 0,
     /// is it removable?
-    GtkAccelLocked         = 1 << 1,
+    AccelLocked         = 1 << 1,
     /// Comparison mask
-    GtkAccelMask           = 0x07
+    AccelMask           = 0x07
 }
 
 /// Used to specify the placement of scroll arrows in scrolling menus.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkArrowPlacement {
+pub enum ArrowPlacement {
     /// Place one arrow on each end of the menu.
-    GtkArrowsBoth,
+    ArrowsBoth,
     /// Place both arrows at the top of the menu.
-    GtkArrowsStart,
+    ArrowsStart,
     /// Place both arrows at the bottom of the menu.
-    GtkArrowsEnd
+    ArrowsEnd
 }
 
-/// Used to indicate the direction in which a GtkArrow should point.
+/// Used to indicate the direction in which a Arrow should point.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkArrowType {
+pub enum ArrowType {
     /// Represents an upward pointing arrow.
-    GtkArrowUp,
+    ArrowUp,
     /// Represents a downward pointing arrow.
-    GtkArrowDown,
+    ArrowDown,
     /// Represents a left pointing arrow.
-    GtkArrowLeft,
+    ArrowLeft,
     /// Represents a right pointing arrow.
-    GtkArrowRight,
+    ArrowRight,
     /// No arrow. Since 2.10.
-    GtkArrowNone
+    ArrowNone
 }
 
 /// Denotes the expansion properties that a widget will have when it (or its parent) is resized.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkAttachOptions {
+pub enum AttachOptions {
     /// the widget should expand to take up any extra space in its container that has been allocated.
-    GtkExpand = 1 << 0,
+    Expand = 1 << 0,
     /// the widget should shrink as and when possible.
-    GtkShrink = 1 << 1,
+    Shrink = 1 << 1,
     /// the widget should fill the space allocated to it.
-    GtkFill   = 1 << 2
+    Fill   = 1 << 2
 }
 
 /// Deleting modes
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkDeleteType {
+pub enum DeleteType {
     /// delete chars
-    GtkDeleteChars,
+    DeleteChars,
     /// delete only the portion of the word to the left/right of cursor if we're in the middle of a word
-    GtkDeleteWordsEnd,
+    DeleteWordsEnd,
     /// delete words
-    GtkDeleteWords,
+    DeleteWords,
     /// delete lines
-    GtkDeleteDisplayLines,
+    DeleteDisplayLines,
     /// deletes lines end
-    GtkDeleteDisplayLineEnd,
+    DeleteDisplayLineEnd,
     /// like C-k in Emacs (or its reverse)
-    GtkDeleteParagraphEnds,
+    DeleteParagraphEnds,
     /// C-k in pico, kill whole line
-    GtkDeleteParagraphs,
+    DeleteParagraphs,
     /// M-\ in Emacs
-    GtkDeleteWhitespac
+    DeleteWhitespac
 }
 
-/// Used to specify the style of the expanders drawn by a GtkTreeView.
+/// Used to specify the style of the expanders drawn by a TreeView.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkExpanderStyle {
+pub enum ExpanderStyle {
     /// The style used for a collapsed subtree.
-    GtkExpanderCollapsed,
+    ExpanderCollapsed,
     /// Intermediate style used during animation.
-    GtkExpanderSemiCollapsed,
+    ExpanderSemiCollapsed,
     /// Intermediate style used during animation.
-    GtkExpanderSemiExpanded,
+    ExpanderSemiExpanded,
     /// The style used for an expanded subtree.
     GGtkExpanderExpanded
 }
@@ -292,124 +299,124 @@ pub enum GtkExpanderStyle {
 /// preedit style
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkIMPreeditStyle {
-    GtkImPreeditNothing,
-    GtkImPreeditCallback,
-    GtkImPreeditNone
+pub enum IMPreeditStyle {
+    ImPreeditNothing,
+    ImPreeditCallback,
+    ImPreeditNone
 }
 
 /// Status styles
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkIMStatusStyle {
-    GtkImStatusNothing,
-    GtkImStatusCallback,
-    GtkImStatusNone
+pub enum IMStatusStyle {
+    ImStatusNothing,
+    ImStatusCallback,
+    ImStatusNone
 }
 
-/// Used for justifying the text inside a GtkLabel widget. (See also GtkAlignment).
+/// Used for justifying the text inside a Label widget. (See also Alignment).
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkJustification {
+pub enum Justification {
     /// The text is placed at the left edge of the label.
-    GtkJustifyLeft,
+    JustifyLeft,
     /// The text is placed at the right edge of the label.
-    GtkJustifyRight,
+    JustifyRight,
     /// The text is placed in the center of the label.
-    GtkJustifyCenter,
+    JustifyCenter,
     /// The text is placed is distributed across the label.
-    GtkJustifyFill
+    JustifyFill
 }
 
 /// Availables movement steps
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkMovementStep {
+pub enum MovementStep {
     /// Move forward or back by graphemes
-    GtkMovementLogicalPosition,
+    MovementLogicalPosition,
     /// Move left or right by graphemes
-    GtkMovementVisualPositions,
+    MovementVisualPositions,
     /// Move forward or back by words
-    GtkMovementWords,
+    MovementWords,
     /// Move up or down lines (wrapped lines)
-    GtkMovementDisplayLines,
+    MovementDisplayLines,
     /// Move to either end of a line
-    GtkMovementDisplayLineEnds,
+    MovementDisplayLineEnds,
     /// Move up or down paragraphs (newline-ended lines)
-    GtkMovementParagraphs,
+    MovementParagraphs,
     /// Move to either end of a paragraph
-    GtkMovementParagraphEnds,
+    MovementParagraphEnds,
     /// Move by pages
-    GtkMovementPages,
+    MovementPages,
     /// Move to ends of the buffer
-    GtkMovementBufferEnds,
+    MovementBufferEnds,
     /// Move horizontally by pages
-    GtkMovementHorizontalPages
+    MovementHorizontalPages
 }
 
-/// Represents the packing location GtkBox children. (See: GtkVBox, GtkHBox, and GtkButtonBox).
+/// Represents the packing location Box children. (See: VBox, HBox, and ButtonBox).
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkPackType {
+pub enum PackType {
     /// The child is packed into the start of the box
-    GtkPackStart,
+    PackStart,
     /// The child is packed into the end of the box
-    GtkPackEnd
+    PackEnd
 }
 
 
 /// Availables Gtk path priority
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkPathPriorityType {
-    GtkPathPrioLowest       = 0,
-    GtkPathPrioGtk          = 4,
-    GtkPathPrioApplication  = 8,
-    GtkPathPrioTheme        = 10,
-    GtkPathPrioRc           = 12,
-    GtkPathPrioHighest      = 15
+pub enum PathPriorityType {
+    PathPrioLowest       = 0,
+    PathPrioGtk          = 4,
+    PathPrioApplication  = 8,
+    PathPrioTheme        = 10,
+    PathPrioRc           = 12,
+    PathPrioHighest      = 15
 }
 
 /// Availables Gtk path types
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkPathType {
-    GtkPathWidget,
-    GtkPathWidgetClass,
-    GtkPathClass
+pub enum PathType {
+    PathWidget,
+    PathWidgetClass,
+    PathClass
 }
 
 /// Determines when a scroll bar will be visible.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkPolicyType {
+pub enum PolicyType {
     /// The scrollbar is always visible.
-    GtkPolicyAlways,
-    /// The scrollbar will appear and disappear as necessary. For example, when all of a GtkCList can not be seen.
-    GtkPolicyAutomatic,
+    PolicyAlways,
+    /// The scrollbar will appear and disappear as necessary. For example, when all of a CList can not be seen.
+    PolicyAutomatic,
     /// The scrollbar will never appear.
-    GtkPolicyNever
+    PolicyNever
 }
 
-/// Describes which edge of a widget a certain feature is positioned at, e.g. the tabs of a GtkNotebook,
-/// the handle of a GtkHandleBox or the label of a GtkScale.
+/// Describes which edge of a widget a certain feature is positioned at, e.g. the tabs of a Notebook,
+/// the handle of a HandleBox or the label of a Scale.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkPositionType {
+pub enum PositionType {
     /// The feature is at the left edge.
-    GtkPosLeft,
+    PosLeft,
     /// The feature is at the right edge.
-    GtkPosRight,
+    PosRight,
     /// The feature is at the top edge.
-    GtkPosTop,
+    PosTop,
     /// The feature is at the bottom edge.
-    GtkPosBottom
+    PosBottom
 }
 
-/// Indicated the relief to be drawn around a GtkButton.
+/// Indicated the relief to be drawn around a Button.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkReliefStyle {
+pub enum ReliefStyle {
     /// Draw a normal relief.
     GTkReliefNormal,
     /// A half relief.
@@ -421,196 +428,196 @@ pub enum GtkReliefStyle {
 /// Available scroll steps
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkScrollStep {
-  GtkScrollSteps,
-  GtkScrollPages,
-  GtkScrollEnds,
-  GtkScrollHorizontalSteps,
-  GtkScrollHorizontalPages,
-  GtkScrollHorizontalEnds
+pub enum ScrollStep {
+  ScrollSteps,
+  ScrollPages,
+  ScrollEnds,
+  ScrollHorizontalSteps,
+  ScrollHorizontalPages,
+  ScrollHorizontalEnds
 }
 
 /// Available scroll types
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkScrollType {
-  GtkScrollNone,
-  GtkScrollJump,
-  GtkScrollStepBackward,
-  GtkScrollStepForward,
-  GtkScrollPageBackward,
-  GtkScrollPageForward,
-  GtkScrollStepUp,
-  GtkScrollStepDown,
-  GtkScrollPageUp,
-  GtkScrollPageDown,
-  GtkScrollStepLeft,
-  GtkScrollStepRight,
-  GtkScrollPageLeft,
-  GtkScrollPageRight,
-  GtkScrollStart,
-  GtkScrollEnd
+pub enum ScrollType {
+  ScrollNone,
+  ScrollJump,
+  ScrollStepBackward,
+  ScrollStepForward,
+  ScrollPageBackward,
+  ScrollPageForward,
+  ScrollStepUp,
+  ScrollStepDown,
+  ScrollPageUp,
+  ScrollPageDown,
+  ScrollStepLeft,
+  ScrollStepRight,
+  ScrollPageLeft,
+  ScrollPageRight,
+  ScrollStart,
+  ScrollEnd
 }
 
 /// Used to control what selections users are allowed to make.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkSelectionMode {
+pub enum SelectionMode {
     /// No selection is possible.
-    GtkSelectionNone,
+    SelectionNone,
     /// Zero or one element may be selected.
-    GtkSelectionSingle,
+    SelectionSingle,
     /// Exactly one element is selected.
-    GtkSelectionBrowse,
+    SelectionBrowse,
     /// Any number of elements may be selected.
-    GtkSelectionMultiple
+    SelectionMultiple
 }
 
-/// Used to change the appearance of an outline typically provided by a GtkFrame
+/// Used to change the appearance of an outline typically provided by a Frame
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkShadowType {
+pub enum ShadowType {
     /// No outline.
-    GtkShadowNone,
+    ShadowNone,
     /// The outline is bevelled inwards.
-    GtkShadowIm,
+    ShadowIm,
     /// The outline is bevelled outwards like a button.
-    GtkShadowOut,
+    ShadowOut,
     /// The outline has a sunken 3d appearance.
-    GtkShadowEtchedIn,
+    ShadowEtchedIn,
     /// The outline has a raised 3d appearance.
-    GtkShadowEtchedOut
+    ShadowEtchedOut
 }
 
 /// This type indicates the current state of a widget; the state determines how the widget is drawn.
 ///
-/// The GtkStateType enumeration is also used to identify different colors in a GtkStyle for drawing,
+/// The StateType enumeration is also used to identify different colors in a Style for drawing,
 /// so states can be used for subparts of a widget as well as entire widgets.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkStateType {
+pub enum StateType {
     /// State during normal operation.
-    GtkStateNormal,
+    StateNormal,
     /// State of a currently active widget, such as a depressed button.
-    GtkStateActive,
+    StateActive,
     /// State indicating that the mouse pointer is over the widget and the widget will respond to mouse clicks.
-    GtkStatePrelight,
+    StatePrelight,
     /// State of a selected item, such the selected row in a list.
-    GtkStateSelected,
+    StateSelected,
     /// State indicating that the widget is unresponsive to user actions.
-    GtkStateInsensitive,
+    StateInsensitive,
     /// The widget is inconsistent, such as checkbuttons or radiobuttons that aren't either set to true nor false,
     /// or buttons requiring the user attention.
-    GtkStateInconsistent,
+    StateInconsistent,
     /// The widget has the keyboard focus
-    GtkStateFocused
+    StateFocused
 }
 
-/// Used to customize the appearance of a GtkToolbar.
+/// Used to customize the appearance of a Toolbar.
 ///
 /// Note that setting the toolbar style overrides the user's preferences for the default toolbar style.
 /// Note that if the button has only a label set and GTK_TOOLBAR_ICONS is used, the label will be visible, and vice versa.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkToolbarStyle {
+pub enum ToolbarStyle {
     /// Buttons display only icons in the toolbar.
-    GtkToolbarIcons,
+    ToolbarIcons,
     /// Buttons display only text labels in the toolbar.
-    GtkToolbarText,
+    ToolbarText,
     /// Buttons display text and icons in the toolbar.
-    GtkToolbarBoth,
+    ToolbarBoth,
     /// Buttons display icons and text alongside each other, rather than vertically stacked
-    GtkToolbarBothHoriz
+    ToolbarBothHoriz
 }
 
 /// Describes how a rendered element connects to adjacent elements.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkJunctionSides {
+pub enum JunctionSides {
     /// No junctions.
-    GtkJunctionNone               = 0,
+    JunctionNone               = 0,
     /// Element connects on the top-left corner.
-    GtkJunctionCornerTopleft      = 1 << 0,
+    JunctionCornerTopleft      = 1 << 0,
     /// Element connects on the top-right corner.
-    GtkJunctionCornerTopRight     = 1 << 1,
+    JunctionCornerTopRight     = 1 << 1,
     /// Element connects on the bottom-left corner.
-    GtkJunctionCornerBottomLeft   = 1 << 2,
+    JunctionCornerBottomLeft   = 1 << 2,
     /// Element connects on the bottom-right corner.
-    GtkJunctionCornerBottomRight  = 1 << 3,
+    JunctionCornerBottomRight  = 1 << 3,
     /// Element connects on the top side.
-    GtkJunctionTop                = (1 << 0 | 1 << 1),
+    JunctionTop                = (1 << 0 | 1 << 1),
     /// Element connects on the bottom side.
-    GtkJunctionBottom             = (1 << 2 | 1 << 3),
+    JunctionBottom             = (1 << 2 | 1 << 3),
     /// Element connects on the left side.
-    GtkJunctionLeft               = (1 << 0 | 1 << 2),
+    JunctionLeft               = (1 << 0 | 1 << 2),
     /// Element connects on the right side.
-    GtkJunctionRight              = (1 << 1 | 1 << 3)
+    JunctionRight              = (1 << 1 | 1 << 3)
 }
 
 /// Describes a region within a widget.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkRegionFlags {
+pub enum RegionFlags {
     /// Region has an even number within a set.
-    GtkRegionEven    = 1 << 0,
+    RegionEven    = 1 << 0,
     /// Region has an odd number within a set.
-    GtkRegionOdd     = 1 << 1,
+    RegionOdd     = 1 << 1,
     /// Region is the first one within a set.
-    GtkRegionFirst   = 1 << 2,
+    RegionFirst   = 1 << 2,
     /// Region is the last one within a set.
-    GtkRegionLast    = 1 << 3,
+    RegionLast    = 1 << 3,
     /// Region is the only one within a set.
-    GtkRegionOnly    = 1 << 4,
+    RegionOnly    = 1 << 4,
     /// Region is part of a sorted area.
-    GtkRegionSorted  = 1 << 5
+    RegionSorted  = 1 << 5
 }
 
 /// Icon Sizes : temporary
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkIconSize {
-  GtkIconSizeInvalid,
-  GtkIconSizeMemu,
-  GtkIconSizeSmallToolbar,
-  GtkIconSizeLargeToolbar,
-  GtkIconSizeButton,
-  GtkIconSizeDnd,
-  GtkIconSizeDisalog
+pub enum IconSize {
+  IconSizeInvalid,
+  IconSizeMemu,
+  IconSizeSmallToolbar,
+  IconSizeLargeToolbar,
+  IconSizeButton,
+  IconSizeDnd,
+  IconSizeDisalog
 }
 
 /// Specifies the side of the entry at which an icon is placed.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkEntryIconPosition {
+pub enum EntryIconPosition {
     /// At the beginning of the entry (depending on the text direction).
-    GtkEntryIconPrimary,
+    EntryIconPrimary,
     /// At the end of the entry (depending on the text direction).
-    GtkEntryIconSecondary
+    EntryIconSecondary
 }
 
 /// Describes hints that might be taken into account by input methods or applications.
-/// Note that input methods may already tailor their behaviour according to the GtkInputPurpose of the entry.
+/// Note that input methods may already tailor their behaviour according to the InputPurpose of the entry.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkInputHints {
+pub enum InputHints {
     /// No special behaviour suggested
-    GtkInputHintNone                = 0,
+    InputHintNone                = 0,
     /// Suggest checking for typos
-    GtkInputHintSpellcheck          = 1 << 0,
+    InputHintSpellcheck          = 1 << 0,
     /// Suggest not checking for typos
-    GtkInputHintNoSpellcheck        = 1 << 1,
+    InputHintNoSpellcheck        = 1 << 1,
     /// Suggest word completion
-    GtkInputHintWordCompletion      = 1 << 2,
+    InputHintWordCompletion      = 1 << 2,
     /// Suggest to convert all text to lowercase
-    GtkInputHintLowercase           = 1 << 3,
+    InputHintLowercase           = 1 << 3,
     /// Suggest to capitalize all text
-    GtkInputHintUppercaseChars      = 1 << 4,
+    InputHintUppercaseChars      = 1 << 4,
     /// Suggest to capitalize the first character of each word
-    GtkInputHintUppercaseWords      = 1 << 5,
+    InputHintUppercaseWords      = 1 << 5,
     /// Suggest to capitalize the first word of each sentence
-    GtkInputHintUppercaseSentences  = 1 << 6,
+    InputHintUppercaseSentences  = 1 << 6,
     /// Suggest to not show an onscreen keyboard (e.g for a calculator that already has all the keys).
-    GtkInputHintInhibitOsk          = 1 << 7
+    InputHintInhibitOsk          = 1 << 7
 }
 
 /// Describes primary purpose of the input widget.
@@ -618,123 +625,123 @@ pub enum GtkInputHints {
 /// and similar input methods to decide which keys should be presented to the user.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkInputPurpose {
+pub enum InputPurpose {
     /// Allow any character
-    GtkInputPurposeFreeForm,
+    InputPurposeFreeForm,
     /// Allow only alphabetic characters
-    GtkInputPurposeAlpha,
+    InputPurposeAlpha,
     /// Allow only digits
-    GtkInputPurposeDigits,
+    InputPurposeDigits,
     /// Edited field expects numbers
-    GtkInputPurposeNumber,
+    InputPurposeNumber,
     /// Edited field expects phone number
-    GtkInputPurposePhone,
+    InputPurposePhone,
     /// Edited field expects URL
-    GtkInputPurposeUrl,
+    InputPurposeUrl,
     /// Edited field expects email address
-    GtkInputPurposeEmail,
+    InputPurposeEmail,
     /// Edited field expects the name of a person
-    GtkInputPurposeName,
-    /// Like GtkInputPurposeFreeForm, but characters are hidden
-    GtkInputPurposePassword,
-    /// Like GtkInputPurposeDigits, but characters are hidden
-    GtkInputPurposePin
+    InputPurposeName,
+    /// Like InputPurposeFreeForm, but characters are hidden
+    InputPurposePassword,
+    /// Like InputPurposeDigits, but characters are hidden
+    InputPurposePin
 }
 
-/// Describes the image data representation used by a GtkImage.
+/// Describes the image data representation used by a Image.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkImageType {
+pub enum ImageType {
     /// there is no image displayed by the widget
-    GtkImageEmpty,
+    ImageEmpty,
     /// the widget contains a Gdk::Pixbuf
-    GtkImagePixbuf,
+    ImagePixbuf,
     /// the widget contains a stock icon name (see Stock Items(3))
-    GtkImageStock,
+    ImageStock,
     /// the widget contains a Gtk::IconSet
-    GtkImageIconSet,
+    ImageIconSet,
     /// the widget contains a Gdk::PixbufAnimation
-    GtkImageAnimation,
+    ImageAnimation,
     /// the widget contains a named icon. This image type was added in GTK+ 2.6
-    GtkImageIconName,
+    ImageIconName,
     /// the widget contains a GIcon. This image type was added in GTK+ 2.14
-    GtkImageGIcon,
+    ImageGIcon,
     /// the widget contains a cairo_surface_t. This image type was added in GTK+ 3.10
-    GtkImageSurface
+    ImageSurface
 }
 
-/// The values of the GtkSpinType enumeration are used
+/// The values of the SpinType enumeration are used
 /// to specify the change to make in gtk::SpinButton::spin().
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkSpinType {
+pub enum SpinType {
     /// Increment by the adjustments step increment.
-    GtkSpinStepForward,
+    SpinStepForward,
     /// Decrement by the adjustments step increment.
-    GtkSpinStepBackward,
+    SpinStepBackward,
     /// Increment by the adjustments page increment.
-    GtkSpinPageForward,
+    SpinPageForward,
     /// Decrement by the adjustments page increment.
-    GtkSpinPageBackward,
+    SpinPageBackward,
     /// Go to the adjustments lower bound.
-    GtkSpinHome,
+    SpinHome,
     /// Go to the adjustments upper bound.
-    GtkSpinEnd,
+    SpinEnd,
     /// Change by a specified amount.
-    GtkSpinUserDefined
+    SpinUserDefined
 }
 
 /// The spin button update policy determines whether the spin button displays values
 /// even if they are outside the bounds of its adjustment. See gtk::SpinButton::set_update_policy().
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkSpinButtonUpdatePolicy {
+pub enum SpinButtonUpdatePolicy {
     /// When refreshing your Gtk::SpinButton, the value is always displayed
-    GtkUpdateAlways,
+    UpdateAlways,
     /// When refreshing your Gtk::SpinButton, the value is only displayed
     /// if it is valid within the bounds of the spin button's adjustment
-    GtkUpdateIfValid
+    UpdateIfValid
 }
 
-/// Describes how GtkLevelBar contents should be rendered.
+/// Describes how LevelBar contents should be rendered.
 /// Note that this enumeration could be extended with additional modes in the future.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkLevelBarMode {
+pub enum LevelBarMode {
     /// the bar has a continuous mode
-    GtkLevelBarModeContinuous,
+    LevelBarModeContinuous,
     /// the bar has a discrete mode
-    GtkLevelBarModeDiscrete
+    LevelBarModeDiscrete
 }
 
 /// These options can be used to influence the display and behaviour of a gtk::Calendar.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkCalendarDisplayOptions {
+pub enum CalendarDisplayOptions {
     /// Specifies that the month and year should be displayed.
-    GtkCalendarShowHeading        = 1 << 0,
+    CalendarShowHeading        = 1 << 0,
     /// Specifies that three letter day descriptions should be present.
-    GtkCalendarShowDayNames       = 1 << 1,
+    CalendarShowDayNames       = 1 << 1,
     /// Prevents the user from switching months with the calendar.
-    GtkCalendarNoMonthChange      = 1 << 2,
+    CalendarNoMonthChange      = 1 << 2,
     /// Displays each week numbers of the current year, down the left side of the calendar.
-    GtkCalendarShowWeekNumbers    = 1 << 3,
+    CalendarShowWeekNumbers    = 1 << 3,
     /// Just show an indicator, not the full details text when details are provided. See gtk::Calendar::set_detail_func().
-    GtkCalendarShowDetails        = 1 << 5
+    CalendarShowDetails        = 1 << 5
 }
 
 /// The type of message being displayed in the dialog.
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum GtkMessageType {
+pub enum MessageType {
     /// Informational message
-    GtkMessageInfo,
+    MessageInfo,
     /// Non-fatal warning message
-    GtkMessageWarning,
+    MessageWarning,
     /// Question requiring a choice
-    GtkMessageQuestion,
+    MessageQuestion,
     /// Fatal error message
-    GtkMessageError,
+    MessageError,
     /// None of the above, doesn't get an icon
-    GtkMessageOther
+    MessageOther
 }

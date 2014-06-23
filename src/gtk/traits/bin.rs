@@ -13,14 +13,12 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-pub use self::color::*;
-pub use self::events::*;
-pub use self::device::*;
-pub use self::window::*;
-pub use self::types::*;
+use gtk::traits::{WidgetTrait, ContainerTrait};
 
-mod color;
-mod events;
-mod device;
-mod window;
-mod types;
+pub trait BinTrait: WidgetTrait + ContainerTrait {
+    // fn get_child(&self) ->  {
+
+    // }
+}
+
+    // pub fn gtk_bin_get_child                   (bin: *C_GtkBin) -> *C_GtkWidgetTrait;

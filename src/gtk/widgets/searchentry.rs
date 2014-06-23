@@ -13,14 +13,29 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-pub use self::color::*;
-pub use self::events::*;
-pub use self::device::*;
-pub use self::window::*;
-pub use self::types::*;
+//! An entry which shows a search icon
 
-mod color;
-mod events;
-mod device;
-mod window;
-mod types;
+
+
+use ffi;
+use gtk::traits::*;
+/**
+* SearchEntry — An entry which shows a search icon
+*
+* # Signal availables:
+* * `search-changed` : Run Last
+*/
+struct_Widget!(SearchEntry)
+
+
+impl SearchEntry {
+    pub fn new() -> Option<SearchEntry> {
+        let tmp_pointer = unsafe { ffi::gtk_search_entry_new() };
+        check_pointer!(tmp_pointer, SearchEntry)
+    }
+}
+
+impl_GtkWidget!(SearchEntry)
+
+
+impl EntryTrait for SearchEntry {}

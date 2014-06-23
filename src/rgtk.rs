@@ -115,33 +115,7 @@ __rgtk__ is available under the same license term than GTK+, the LGPL (Lesser Ge
 #![allow(dead_code)] // TODO: drop this
 
 // #[pkg_do(make)]
-
 extern crate libc;
-
-// traits reexports
-pub use traits::GtkWidget;
-pub use traits::GtkWindow;
-pub use traits::GtkContainer;
-pub use traits::GtkMisc;
-pub use traits::GtkButton;
-pub use traits::GtkLabel;
-pub use traits::GtkBox;
-pub use traits::GtkOrientable;
-pub use traits::GtkFrame;
-pub use traits::GtkToggleButton;
-pub use traits::GtkEntry;
-pub use traits::GtkToolShell;
-pub use traits::GtkBin;
-pub use traits::GtkScaleButton;
-pub use traits::GtkToolItem;
-pub use traits::GtkToolButton;
-pub use traits::GtkToggleToolButton;
-
-pub use traits::Signal;
-
-// reexport enums
-pub use gtk::enums::*;
-
 
 #[doc(hidden)]
 #[cfg(target_os="macos")]
@@ -166,7 +140,6 @@ mod platform {
 }
 
 pub mod utils;
-pub mod traits;
 pub mod gtk;
 pub mod gdk;
 pub mod glib;

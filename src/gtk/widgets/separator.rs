@@ -13,14 +13,26 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-pub use self::color::*;
-pub use self::events::*;
-pub use self::device::*;
-pub use self::window::*;
-pub use self::types::*;
+//! A separator widget
 
-mod color;
-mod events;
-mod device;
-mod window;
-mod types;
+
+
+use ffi;
+use gtk::traits::*;
+use gtk::Orientation;
+
+/// Separator — A separator widget
+struct_Widget!(Separator)
+
+
+impl Separator {
+    pub fn new(orientation: Orientation) -> Option<Separator> {
+        let tmp_pointer = unsafe { ffi::gtk_separator_new(orientation) };
+        check_pointer!(tmp_pointer, Separator)
+    }
+}
+
+impl_GtkWidget!(Separator)
+
+
+impl OrientableTrait for Separator {}

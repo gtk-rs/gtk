@@ -13,14 +13,26 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-pub use self::color::*;
-pub use self::events::*;
-pub use self::device::*;
-pub use self::window::*;
-pub use self::types::*;
+//! The base class of widgets that can be added to ToolShe
 
-mod color;
-mod events;
-mod device;
-mod window;
-mod types;
+
+
+use ffi;
+use gtk::traits::*;
+/// ToolItem — The base class of widgets that can be added to ToolShe
+struct_Widget!(ToolItem)
+
+
+impl ToolItem {
+    pub fn new() -> Option<ToolItem> {
+        let tmp_pointer = unsafe { ffi::gtk_tool_item_new() };
+        check_pointer!(tmp_pointer, ToolItem)
+    }
+}
+
+impl_GtkWidget!(ToolItem)
+
+
+impl ContainerTrait for ToolItem {}
+impl BinTrait for ToolItem {}
+impl ToolItemTrait for ToolItem {}

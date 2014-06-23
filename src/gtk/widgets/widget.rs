@@ -13,14 +13,25 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-pub use self::color::*;
-pub use self::events::*;
-pub use self::device::*;
-pub use self::window::*;
-pub use self::types::*;
+// NB: This file is not actually packaged into rgtk
 
-mod color;
-mod events;
-mod device;
-mod window;
-mod types;
+use ffi;
+use gtk::traits::*;
+use gtk;
+use gtk::traits::*;
+
+pub struct Widget {
+    pointer:           *ffi::C_GtkWidget
+}
+
+impl Widget {
+    pub fn wrap(pointer: *ffi::C_GtkWidget) -> Widget {
+        Widget {
+            pointer: pointer
+        }
+    }
+
+    pub fn to_entry(self) -> gtk::Entry {
+        WidgetTrait::wrap_widget(self.pointer)
+    }
+}

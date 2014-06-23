@@ -13,14 +13,36 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-pub use self::color::*;
-pub use self::events::*;
-pub use self::device::*;
-pub use self::window::*;
-pub use self::types::*;
+//! Show a spinner animation
 
-mod color;
-mod events;
-mod device;
-mod window;
-mod types;
+
+
+use utils::cast::GTK_SPINNER;
+use ffi;
+use gtk::traits::*;
+/// Spinner — Show a spinner animation
+struct_Widget!(Spinner)
+
+
+impl Spinner {
+    pub fn new() -> Option<Spinner> {
+        let tmp_pointer = unsafe { ffi::gtk_spinner_new() };
+        check_pointer!(tmp_pointer, Spinner)
+    }
+
+    pub fn start(&mut self) -> () {
+        unsafe {
+            ffi::gtk_spinner_start(GTK_SPINNER(self.pointer))
+        }
+    }
+
+    pub fn stop(&mut self) -> () {
+        unsafe {
+            ffi::gtk_spinner_stop(GTK_SPINNER(self.pointer))
+        }
+    }
+
+}
+
+impl_GtkWidget!(Spinner)
+

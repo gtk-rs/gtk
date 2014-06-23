@@ -13,14 +13,37 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-pub use self::color::*;
-pub use self::events::*;
-pub use self::device::*;
-pub use self::window::*;
-pub use self::types::*;
+//! Toplevel which can contain other widgets
 
-mod color;
-mod events;
-mod device;
-mod window;
-mod types;
+
+
+use ffi;
+use gtk::traits::*;
+use gtk::WindowType;
+
+/**
+* Window — Toplevel which can contain other widgets
+*
+* # Available signals:
+* * `activate-default` : Action
+* * `activate-focus` : Action
+* * `keys-changed` : Run First
+* * `set-focus` : Run Last
+*/
+
+struct_Widget!(Window)
+
+
+impl Window {
+    pub fn new(window_type: WindowType) -> Option<Window> {
+        let tmp_pointer = unsafe { ffi::gtk_window_new(window_type) };
+        check_pointer!(tmp_pointer, Window)
+    }
+}
+
+impl_GtkWidget!(Window)
+
+
+impl ContainerTrait for Window {}
+impl WindowTrait for Window {}
+impl BinTrait for Window {}

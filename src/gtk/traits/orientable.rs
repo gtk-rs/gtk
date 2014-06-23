@@ -13,14 +13,21 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-pub use self::color::*;
-pub use self::events::*;
-pub use self::device::*;
-pub use self::window::*;
-pub use self::types::*;
+use gtk::enums::Orientation;
+use gtk::traits::WidgetTrait;
+use utils::cast::GTK_ORIENTABLE;
+use ffi;
 
-mod color;
-mod events;
-mod device;
-mod window;
-mod types;
+pub trait OrientableTrait: WidgetTrait {
+    fn get_orientation(&self) -> Orientation {
+        unsafe {
+            ffi::gtk_orientable_get_orientation(GTK_ORIENTABLE(self.get_widget()))
+        }
+    }
+
+    fn set_orientation(&mut self, orientation: Orientation) -> () {
+        unsafe {
+            ffi::gtk_orientable_set_orientation(GTK_ORIENTABLE(self.get_widget()), orientation)
+        }
+    }
+}

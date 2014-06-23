@@ -13,14 +13,30 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-pub use self::color::*;
-pub use self::events::*;
-pub use self::device::*;
-pub use self::window::*;
-pub use self::types::*;
+//! A bin with a decorative frame and optional label
 
-mod color;
-mod events;
-mod device;
-mod window;
-mod types;
+
+use std::ptr;
+
+use ffi;
+use gtk::traits::*;
+/// Frame — A bin with a decorative frame and optional label
+struct_Widget!(Frame)
+
+
+impl Frame {
+    pub fn new(label: Option<&str>) -> Option<Frame> {
+        let tmp_pointer = match label {
+            Some(l) => unsafe { l.with_c_str(|c_str| { ffi::gtk_frame_new(c_str) }) },
+            None    => unsafe { ffi::gtk_frame_new(ptr::null()) }
+        };
+        check_pointer!(tmp_pointer, Frame)
+    }
+}
+
+impl_GtkWidget!(Frame)
+
+
+impl FrameTrait for Frame {}
+impl ContainerTrait for Frame {}
+impl BinTrait for Frame {}
