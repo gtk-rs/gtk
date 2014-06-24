@@ -99,6 +99,7 @@ pub use self::filechooserdialog::FileChooserDialog;
 pub use self::appinfo::AppInfo;
 pub use self::applaunchcontext::AppLaunchContext;
 pub use self::appchooserdialog::AppChooserDialog;
+pub use self::drawingarea::DrawingArea;
 
 pub mod window;
 pub mod label;
@@ -186,3 +187,4 @@ pub mod filechooserdialog;
 pub mod appinfo;
 pub mod applaunchcontext;
 pub mod appchooserdialog;
+pub mod drawingarea;

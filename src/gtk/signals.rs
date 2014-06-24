@@ -25,6 +25,7 @@ use gtk::ffi;
 use gdk;
 use glib;
 use gtk;
+use cairo;
 
 pub trait Signal<'a>{
     fn get_signal_name(&self) -> &str;
@@ -51,6 +52,7 @@ macro_rules! signal(
             use gdk;
             use glib;
             use gtk;
+            use cairo;
 
             pub extern fn trampoline(widget : *mut ffi::C_GtkWidget, user_data : *mut Box<super::Signal>) -> $ret_type{
                 unsafe{
@@ -74,6 +76,7 @@ macro_rules! signal(
             use gdk;
             use glib;
             use gtk;
+            use cairo;
 
             pub extern fn trampoline(widget : *mut ffi::C_GtkWidget, $($arg_name : $arg_type),* , user_data : *mut Box<super::Signal>) -> $ret_type{
                 unsafe{
@@ -103,6 +106,7 @@ macro_rules! signal(
             use gdk;
             use glib;
             use gtk;
+            use cairo;
 
             pub extern fn trampoline(widget : *mut ffi::C_GtkWidget, $($t_arg_nm : $t_arg_ty),* , user_data : *mut Box<super::Signal>) -> $t_ret_ty{
                 unsafe{
@@ -162,7 +166,7 @@ signal!(child_notify,           ChildNotify(spec : glib::ParamSpec) -> ())
 signal!(composited_changed,     CompositedChanged() -> ())
 signal!(destroy,                Destroy() -> ())
 signal!(direction_changed,      DirectionChanged(previous_direction: gtk::TextDirection) -> ())
-signal!(draw,                   Draw(cairo_context : *mut c_void) -> ()) //TODO
+signal!(draw,                   Draw(ctx : cairo::Context) -> ()) //TODO
 signal!(focus,                  Focus(direction : gtk::DirectionType) -> bool)
 signal!(grab_focus,             GrabFocus() -> ())
 signal!(grab_notify,            GrabNotify(was_grabbed : bool) -> ())

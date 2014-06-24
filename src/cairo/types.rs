@@ -13,3 +13,5 @@ pub struct cairo_line_cap_t;
 pub struct cairo_operator_t;
 pub struct cairo_rectangle_list_t;
 pub struct cairo_content_t;
+pub struct cairo_path_t;
+pub struct cairo_glyph_t;

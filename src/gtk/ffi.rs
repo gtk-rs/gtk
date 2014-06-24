@@ -1364,6 +1364,11 @@ extern "C" {
     pub fn gtk_action_bar_pack_end          (action_bar: *mut C_GtkActionBar, child: *mut C_GtkWidget);
 
     //=========================================================================
+    // GtkDrawingArea
+    //=========================================================================
+    pub fn gtk_drawing_area_new                 () -> *C_GtkWidget;
+
+    //=========================================================================
     // Glue fixe code
     //=========================================================================
     pub fn glue_signal_connect(g_object: *mut C_GtkWidget,

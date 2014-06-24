@@ -1,16 +1,12 @@
 
-#![macro_escape]
 
-use libc::{c_int, c_uint, c_char, c_double};
 use std::mem::transmute;
 
+use cairo::ffi;
 use cairo::types::{
 	cairo_t,
 	cairo_surface_t,
 	cairo_pattern_t,
-	//cairo_destroy_func_t,
-	//key,
-	//dashes,
 	cairo_operator_t,
 	cairo_rectangle_list_t,
 	cairo_content_t
@@ -22,12 +18,12 @@ pub struct Context{
 }
 
 impl Context{
-	fn check_state(&self){
+	pub fn check_state(&self){
 		let status = self.status();
 
 		if status != status::Success{
 			unsafe{
-				fail!("Cairo crashed with: {}", cairo_status_to_string(status))
+				fail!("Cairo crashed with: {}", ffi::cairo_status_to_string(status))
 			}
 		}
 	}
@@ -35,80 +31,92 @@ impl Context{
 	pub fn new (target: *cairo_surface_t) -> Context {
 		unsafe {
 			Context {
-				pointer: cairo_create(target)
+				pointer: ffi::cairo_create(target)
 			}
 		}
 	}
 
-	//fn cairo_reference (cr: *cairo_t) -> *cairo_t;
+	//fn ffi::cairo_reference (cr: *cairo_t) -> *cairo_t;
 
-	//fn cairo_destroy (cr: *cairo_t);
+	//fn ffi::cairo_destroy (cr: *cairo_t);
 
 	pub fn status (&self) -> Status {
 		unsafe {
-			cairo_status(self.pointer)
+			ffi::cairo_status(self.pointer)
 		}
 	}
 
 	pub fn save (&self) {
 		unsafe {
-			cairo_save(self.pointer)
+			ffi::cairo_save(self.pointer)
 		}
 		self.check_state()
 	}
 
 	pub fn restore (&self) {
 		unsafe{
-			cairo_restore(self.pointer)
+			ffi::cairo_restore(self.pointer)
 		}
 		self.check_state()
 	}
 
-	//fn cairo_get_target (cr: *cairo_t) -> *cairo_surface_t;
+	//fn ffi::cairo_get_target (cr: *cairo_t) -> *cairo_surface_t;
 
-	//fn cairo_push_group (cr: *cairo_t);
+	//fn ffi::cairo_push_group (cr: *cairo_t);
 
-	//fn cairo_push_group_with_content (cr: *cairo_t, content: cairo_content_t);
+	//fn ffi::cairo_push_group_with_content (cr: *cairo_t, content: cairo_content_t);
 
-	//fn cairo_pop_group (cr: *cairo_t) -> *cairo_pattern_t;
+	//fn ffi::cairo_pop_group (cr: *cairo_t) -> *cairo_pattern_t;
 
-	//fn cairo_pop_group_to_source (cr: *cairo_t);
+	//fn ffi::cairo_pop_group_to_source (cr: *cairo_t);
 
-	//fn cairo_get_group_target (cr: *cairo_t) -> *cairo_surface_t;
+	//fn ffi::cairo_get_group_target (cr: *cairo_t) -> *cairo_surface_t;
 
-	//fn cairo_set_source_rgb (cr: *cairo_t, red: c_double, green: c_double, blue: c_double);
+	pub fn set_source_rgb(&self, red: f64, green: f64, blue: f64){
+		unsafe{
+			ffi::cairo_set_source_rgb(self.pointer, red, green, blue)
+		}
+	}
 
-	//fn cairo_set_source_rgba (cr: *cairo_t, red: c_double, green: c_double, blue: c_double, alpha: c_double);
+	pub fn set_source_rgba(&self, red: f64, green: f64, blue: f64, alpha: f64){
+		unsafe{
+			ffi::cairo_set_source_rgba(self.pointer, red, green, blue, alpha)
+		}
+	}
 
-	//fn cairo_set_source (cr: *cairo_t, source: *cairo_pattern_t);
+	//fn ffi::cairo_set_source_rgb (cr: *cairo_t, red: c_double, green: c_double, blue: c_double);
 
-	//fn cairo_set_source_surface (cr: *cairo_t, surface: *cairo_surface_t, x: c_double, y: c_double);
+	//fn ffi::cairo_set_source_rgba (cr: *cairo_t, red: c_double, green: c_double, blue: c_double, alpha: c_double);
 
-	//fn cairo_get_source (cr: *cairo_t) -> *cairo_pattern_t;
+	//fn ffi::cairo_set_source (cr: *cairo_t, source: *cairo_pattern_t);
+
+	//fn ffi::cairo_set_source_surface (cr: *cairo_t, surface: *cairo_surface_t, x: c_double, y: c_double);
+
+	//fn ffi::cairo_get_source (cr: *cairo_t) -> *cairo_pattern_t;
 
 	pub fn set_antialias(&self, antialias : Antialias){
 		unsafe{
-			cairo_set_antialias(self.pointer, antialias)
+			ffi::cairo_set_antialias(self.pointer, antialias)
 		}
 		self.check_state()
 	}
 
 	pub fn get_antialias(&self) -> Antialias{
 		unsafe{
-			cairo_get_antialias(self.pointer)
+			ffi::cairo_get_antialias(self.pointer)
 		}
 	}
 
 	pub fn set_dash(&self, dashes: &[f64], num_dashes: i32, offset: f64){
 		unsafe{
-			cairo_set_dash(self.pointer, dashes.as_ptr(), num_dashes, offset)
+			ffi::cairo_set_dash(self.pointer, dashes.as_ptr(), num_dashes, offset)
 		}
 		self.check_state(); //Possible invalid dashes value
 	}
 
 	pub fn get_dash_count(&self) -> i32{
 		unsafe{
-			cairo_get_dash_count(self.pointer)
+			ffi::cairo_get_dash_count(self.pointer)
 		}
 	}
 
@@ -119,7 +127,7 @@ impl Context{
 
 		unsafe{
 			let offset_ptr : *f64 = transmute(offset);
-			cairo_get_dash(self.pointer, dashes.as_ptr(), offset_ptr);
+			ffi::cairo_get_dash(self.pointer, dashes.as_ptr(), offset_ptr);
 			(dashes, *offset_ptr)
 		}
 	}
@@ -137,91 +145,91 @@ impl Context{
 
 	pub fn set_fill_rule(&self, fill_rule : FillRule){
 		unsafe{
-			cairo_set_fill_rule(self.pointer, fill_rule);
+			ffi::cairo_set_fill_rule(self.pointer, fill_rule);
 		}
 		self.check_state();
 	}
 
 	pub fn get_fill_rule(&self) -> FillRule{
 		unsafe{
-			cairo_get_fill_rule(self.pointer)
+			ffi::cairo_get_fill_rule(self.pointer)
 		}
 	}
 
 	pub fn set_line_cap(&self, arg: LineCap){
 		unsafe{
-			cairo_set_line_cap(self.pointer, arg)
+			ffi::cairo_set_line_cap(self.pointer, arg)
 		}
 		self.check_state();
 	}
 
 	pub fn get_line_cap(&self) -> LineCap{
 		unsafe{
-			cairo_get_line_cap(self.pointer)
+			ffi::cairo_get_line_cap(self.pointer)
 		}
 	}
 
 	pub fn set_line_join(&self, arg: LineJoin){
 		unsafe{
-			cairo_set_line_join(self.pointer, arg)
+			ffi::cairo_set_line_join(self.pointer, arg)
 		}
 		self.check_state();
 	}
 
 	pub fn get_line_join(&self) -> LineJoin{
 		unsafe{
-			cairo_get_line_join(self.pointer)
+			ffi::cairo_get_line_join(self.pointer)
 		}
 	}
 
 	pub fn set_line_width(&self, arg: f64){
 		unsafe{
-			cairo_set_line_width(self.pointer, arg)
+			ffi::cairo_set_line_width(self.pointer, arg)
 		}
 		self.check_state();
 	}
 
 	pub fn get_line_width(&self) -> f64{
 		unsafe{
-			cairo_get_line_width(self.pointer)
+			ffi::cairo_get_line_width(self.pointer)
 		}
 	}
 
 	pub fn set_miter_limit(&self, arg: f64){
 		unsafe{
-			cairo_set_miter_limit(self.pointer, arg)
+			ffi::cairo_set_miter_limit(self.pointer, arg)
 		}
 		self.check_state();
 	}
 
 	pub fn get_miter_limit(&self) -> f64{
 		unsafe{
-			cairo_get_miter_limit(self.pointer)
+			ffi::cairo_get_miter_limit(self.pointer)
 		}
 	}
 
 	pub fn set_tolerance(&self, arg: f64){
 		unsafe{
-			cairo_set_tolerance(self.pointer, arg)
+			ffi::cairo_set_tolerance(self.pointer, arg)
 		}
 		self.check_state();
 	}
 
 	pub fn get_tolerance(&self) -> f64{
 		unsafe{
-			cairo_get_tolerance(self.pointer)
+			ffi::cairo_get_tolerance(self.pointer)
 		}
 	}
 
 	pub fn clip(&self){
 		unsafe{
-			cairo_clip(self.pointer)
+			ffi::cairo_clip(self.pointer)
 		}
 	}
 
 	pub fn clip_preserve(&self){
 		unsafe{
-			cairo_clip_preserve(self.pointer)
+			ffi::cairo_clip_preserve(self.pointer)
 		}
 	}
 
@@ -231,14 +239,14 @@ impl Context{
 			let y1 : *f64 = transmute(box 0.0);
 			let x2 : *f64 = transmute(box 0.0);
 			let y2 : *f64 = transmute(box 0.0);
-			cairo_clip_extents(self.pointer, x1, y1, x2, y2);
+			ffi::cairo_clip_extents(self.pointer, x1, y1, x2, y2);
 			(*x1, *y1, *x2, *y2)
 		}
 	}
 
 	pub fn in_clip(&self, x:f64, y:f64) -> bool{
 		unsafe{
-			if cairo_in_clip(self.pointer, x, y) != 0 {
+			if ffi::cairo_in_clip(self.pointer, x, y) != 0 {
 				true
 			}else{
 				false
@@ -248,25 +256,25 @@ impl Context{
 
 	pub fn reset_clip(&self){
 		unsafe{
-			cairo_reset_clip(self.pointer)
+			ffi::cairo_reset_clip(self.pointer)
 		}
 		self.check_state()
 	}
 
 
-	//fn cairo_rectangle_list_destroy (rectangle_list: *cairo_rectangle_list_t);
+	//fn ffi::cairo_rectangle_list_destroy (rectangle_list: *cairo_rectangle_list_t);
 
-	//fn cairo_copy_clip_rectangle_list (cr: *cairo_t) -> *cairo_rectangle_list_t;
+	//fn ffi::cairo_copy_clip_rectangle_list (cr: *cairo_t) -> *cairo_rectangle_list_t;
 
 	pub fn fill(&self){
 		unsafe{
-			cairo_fill(self.pointer)
+			ffi::cairo_fill(self.pointer)
 		}
 	}
 
 	pub fn fill_preserve(&self){
 		unsafe{
-			cairo_fill_preserve(self.pointer)
+			ffi::cairo_fill_preserve(self.pointer)
 		}
 	}
 
@@ -276,14 +284,14 @@ impl Context{
 			let y1 : *f64 = transmute(box 0.0);
 			let x2 : *f64 = transmute(box 0.0);
 			let y2 : *f64 = transmute(box 0.0);
-			cairo_fill_extents(self.pointer, x1, y1, x2, y2);
+			ffi::cairo_fill_extents(self.pointer, x1, y1, x2, y2);
 			(*x1, *y1, *x2, *y2)
 		}
 	}
 
 	pub fn in_fill(&self, x:f64, y:f64) -> bool{
 		unsafe{
-			if cairo_in_fill(self.pointer, x, y) != 0 {
+			if ffi::cairo_in_fill(self.pointer, x, y) != 0 {
 				true
 			}else{
 				false
@@ -291,23 +299,31 @@ impl Context{
 		}
 	}
 
-	//fn cairo_mask (cr: *cairo_t, pattern: *cairo_pattern_t);
+	//fn ffi::cairo_mask (cr: *cairo_t, pattern: *cairo_pattern_t);
 
-	//fn cairo_mask_surface (cr: *cairo_t, surface: *cairo_surface_t, surface_x: c_double, surface_y: c_double);
+	//fn ffi::cairo_mask_surface (cr: *cairo_t, surface: *cairo_surface_t, surface_x: c_double, surface_y: c_double);
 
-	//fn cairo_paint (cr: *cairo_t);
+	pub fn paint(&self){
+		unsafe{
+			ffi::cairo_paint(self.pointer)
+		}
+	}
 
-	//fn cairo_paint_with_alpha (cr: *cairo_t, alpha: c_double);
+	pub fn paint_with_alpha(&self, alpha: f64){
+		unsafe{
+			ffi::cairo_paint_with_alpha(self.pointer, alpha)
+		}
+	}
 
 	pub fn stroke(&self){
 		unsafe{
-			cairo_stroke(self.pointer)
+			ffi::cairo_stroke(self.pointer)
 		}
 	}
 
 	pub fn stroke_preserve(&self){
 		unsafe{
-			cairo_stroke_preserve(self.pointer)
+			ffi::cairo_stroke_preserve(self.pointer)
 		}
 	}
 
@@ -317,14 +333,14 @@ impl Context{
 			let y1 : *f64 = transmute(box 0.0);
 			let x2 : *f64 = transmute(box 0.0);
 			let y2 : *f64 = transmute(box 0.0);
-			cairo_stroke_extents(self.pointer, x1, y1, x2, y2);
+			ffi::cairo_stroke_extents(self.pointer, x1, y1, x2, y2);
 			(*x1, *y1, *x2, *y2)
 		}
 	}
 
 	pub fn in_stroke(&self, x:f64, y:f64) -> bool{
 		unsafe{
-			if cairo_in_stroke(self.pointer, x, y) != 0 {
+			if ffi::cairo_in_stroke(self.pointer, x, y) != 0 {
 				true
 			}else{
 				false
@@ -334,150 +350,135 @@ impl Context{
 
 	pub fn copy_page(&self){
 		unsafe{
-			cairo_copy_page(self.pointer)
+			ffi::cairo_copy_page(self.pointer)
 		}
 	}
 
 	pub fn show_page(&self){
 		unsafe{
-			cairo_show_page(self.pointer)
+			ffi::cairo_show_page(self.pointer)
 		}
 	}
 
-	pub fn get_reference_count(&self) -> c_uint{
+	pub fn get_reference_count(&self) -> u32{
 		unsafe{
-			cairo_get_reference_count(self.pointer)
+			ffi::cairo_get_reference_count(self.pointer)
 		}
 	}
 
-	//fn cairo_set_user_data (cr: *cairo_t, cairo_user_data_key_t: const *key, user_data: *c_void, destroy: cairo_destroy_func_t) -> Status;
+	//Cairo Path
 
-	//fn cairo_get_user_data (cr: *cairo_t, cairo_user_data_key_t: const *key) -> *c_c_void;
-}
+	//fn ffi::cairo_set_user_data (cr: *cairo_t, cairo_user_data_key_t: const *key, user_data: *c_void, destroy: cairo_destroy_func_t) -> Status;
 
-#[link(name = "cairo")]
-extern "C" {
-	fn cairo_create (target: *cairo_surface_t) -> *cairo_t;
+	//fn ffi::cairo_get_user_data (cr: *cairo_t, cairo_user_data_key_t: const *key) -> *c_c_void;
 
-	fn cairo_reference (cr: *cairo_t) -> *cairo_t;
+	//fn ffi::cairo_copy_path(cr: *cairo_t) -> cairo_path_t;
 
-	fn cairo_destroy (cr: *cairo_t);
+   //fn ffi::cairo_copy_path_flat(cr: *cairo_t) -> cairo_path_t;
 
-	fn cairo_status (cr: *cairo_t) -> Status;
+   /*pub fn append_path(&self, path: *cairo_path_t){
+      unsafe{
+         ffi::cairo_append_path(self.pointer, path)
+      }
+   }*/
 
-	fn cairo_save (cr: *cairo_t);
+   //fn ffi::cairo_copy_path(cr: *cairo_t) -> cairo_path_t;
 
-	fn cairo_restore (cr: *cairo_t);
+   //fn ffi::cairo_copy_path_flat(cr: *cairo_t) -> cairo_path_t;
 
-	fn cairo_get_target (cr: *cairo_t) -> *cairo_surface_t;
+   //fn ffi::cairo_append_path(cr: *cairo_t, path: *cairo_path_t);
 
-	fn cairo_push_group (cr: *cairo_t);
+   //fn ffi::cairo_has_current_point(cr: *cairo_t);
 
-	fn cairo_push_group_with_content (cr: *cairo_t, content: cairo_content_t);
+   //fn ffi::cairo_get_current_point(cr: *cairo_t, x: *c_double, y: *c_double);
 
-	fn cairo_pop_group (cr: *cairo_t) -> *cairo_pattern_t;
+   pub fn new_path(&self){
+      unsafe{
+         ffi::cairo_new_path(self.pointer)
+      }
+   }
 
-	fn cairo_pop_group_to_source (cr: *cairo_t);
+   pub fn new_sub_path(&self){
+      unsafe{
+         ffi::cairo_new_sub_path(self.pointer)
+      }
+   }
 
-	fn cairo_get_group_target (cr: *cairo_t) -> *cairo_surface_t;
+   pub fn close_path(&self){
+      unsafe{
+         ffi::cairo_close_path(self.pointer)
+      }
+   }
 
-	fn cairo_set_source_rgb (cr: *cairo_t, red: c_double, green: c_double, blue: c_double);
+   pub fn arc(&self, xc: f64, yc: f64, radius: f64, angle1: f64, angle2: f64){
+      unsafe{
+         ffi::cairo_arc(self.pointer, xc, yc, radius, angle1, angle2)
+      }
+   }
 
-	fn cairo_set_source_rgba (cr: *cairo_t, red: c_double, green: c_double, blue: c_double, alpha: c_double);
+   pub fn arc_negative(&self, xc: f64, yc: f64, radius: f64, angle1: f64, angle2: f64){
+      unsafe{
+         ffi::cairo_arc_negative(self.pointer, xc, yc, radius, angle1, angle2)
+      }
+   }
 
-	fn cairo_set_source (cr: *cairo_t, source: *cairo_pattern_t);
+   pub fn curve_to(&self, x1: f64, y1: f64, x2: f64, y2: f64, x3: f64, y3: f64){
+      unsafe{
+         ffi::cairo_curve_to(self.pointer, x1, y1, x2, y2, x3, y3)
+      }
+   }
 
-	fn cairo_set_source_surface (cr: *cairo_t, surface: *cairo_surface_t, x: c_double, y: c_double);
+   pub fn line_to(&self, x: f64, y: f64){
+      unsafe{
+         ffi::cairo_line_to(self.pointer, x, y)
+      }
+   }
 
-	fn cairo_get_source (cr: *cairo_t) -> *cairo_pattern_t;
+   pub fn move_to(&self, x: f64, y: f64){
+      unsafe{
+         ffi::cairo_move_to(self.pointer, x, y)
+      }
+   }
 
-	fn cairo_set_antialias (cr: *cairo_t, antialias: Antialias);
+   pub fn rectangle(&self, x: f64, y: f64, width: f64, height: f64){
+      unsafe{
+         ffi::cairo_rectangle(self.pointer, x, y, width, height)
+      }
+   }
 
-	fn cairo_get_antialias (cr: *cairo_t) -> Antialias;
+   pub fn text_path(&self, str : &str){
+      unsafe{
+         str.with_c_str(|str|{
+            ffi::cairo_text_path(self.pointer, str)
+         })
+      }
+   }
 
-	fn cairo_set_dash (cr: *cairo_t, dashes : *c_double, num_dashes: c_int, offset: c_double);
+   //fn ffi::cairo_glyph_path(cr: *cairo_t, glyphs: *cairo_glyph_t, num_glyphs: int);
 
-	fn cairo_get_dash_count (cr: *cairo_t) -> c_int;
+   pub fn rel_curve_to(&self, dx1: f64, dy1: f64, dx2: f64, dy2: f64, dx3: f64, dy3: f64){
+      unsafe{
+         ffi::cairo_rel_curve_to(self.pointer, dx1, dy1, dx2, dy2, dx3, dy3)
+      }
+   }
 
-	fn cairo_get_dash (cr: *cairo_t, dashes: *c_double, offset: *c_double);
+   pub fn rel_line_to(&self, dx: f64, dy: f64){
+      unsafe{
+         ffi::cairo_rel_line_to(self.pointer, dx, dy)
+      }
+   }
 
-	fn cairo_set_fill_rule (cr: *cairo_t, fill_rule: FillRule);
+   pub fn rel_move_to(&self, dx: f64, dy: f64){
+      unsafe{
+         ffi::cairo_rel_move_to(self.pointer, dx, dy)
+      }
+   }
 
-	fn cairo_get_fill_rule (cr: *cairo_t) -> FillRule;
+   //fn ffi::cairo_rel_curve_to(cr: *cairo_t, dx1: c_double, dy1: c_double, dx2: c_double, dy2: c_double, dx3: c_double, dy3: c_double);
 
-	fn cairo_set_line_cap (cr: *cairo_t, line_cap: LineCap);
+   //fn ffi::cairo_rel_line_to(cr: *cairo_t, dx: c_double, dy: c_double);
 
-	fn cairo_get_line_cap (cr: *cairo_t) -> LineCap;
+   //fn ffi::cairo_rel_move_to(cr: *cairo_t, dx: c_double, dy: c_double);
 
-	fn cairo_set_line_join (cr: *cairo_t, line_join: LineJoin);
-
-	fn cairo_get_line_join (cr: *cairo_t) -> LineJoin;
-
-	fn cairo_set_line_width (cr: *cairo_t, width: c_double);
-
-	fn cairo_get_line_width (cr: *cairo_t) -> c_double;
-
-	fn cairo_set_miter_limit (cr: *cairo_t, limit: c_double);
-
-	fn cairo_get_miter_limit (cr: *cairo_t) -> c_double;
-
-	fn cairo_set_operator (cr: *cairo_t, op: cairo_operator_t);
-
-	fn cairo_get_operator (cr: *cairo_t) -> cairo_operator_t;
-
-	fn cairo_set_tolerance (cr: *cairo_t, tolerance: c_double);
-
-	fn cairo_get_tolerance (cr: *cairo_t) -> c_double;
-
-	fn cairo_clip (cr: *cairo_t);
-
-	fn cairo_clip_preserve (cr: *cairo_t);
-
-	fn cairo_clip_extents (cr: *cairo_t, x1: *c_double, y1: *c_double, x2: *c_double, y2: *c_double);
-
-	fn cairo_in_clip (cr: *cairo_t, x: c_double, y: c_double) -> c_int;
-
-	fn cairo_reset_clip (cr: *cairo_t);
-
-	fn cairo_rectangle_list_destroy (rectangle_list: *cairo_rectangle_list_t);
-
-	fn cairo_copy_clip_rectangle_list (cr: *cairo_t) -> *cairo_rectangle_list_t;
-
-	fn cairo_fill (cr: *cairo_t);
-
-	fn cairo_fill_preserve (cr: *cairo_t);
-
-	fn cairo_fill_extents (cr: *cairo_t, x1: *c_double, y1: *c_double, x2: *c_double, y2: *c_double);
-
-	fn cairo_in_fill (cr: *cairo_t, x: c_double, y: c_double) -> c_int;
-
-	fn cairo_mask (cr: *cairo_t, pattern: *cairo_pattern_t);
-
-	fn cairo_mask_surface (cr: *cairo_t, surface: *cairo_surface_t, surface_x: c_double, surface_y: c_double);
-
-	fn cairo_paint (cr: *cairo_t);
-
-	fn cairo_paint_with_alpha (cr: *cairo_t, alpha: c_double);
-
-	fn cairo_stroke (cr: *cairo_t);
-
-	fn cairo_stroke_preserve (cr: *cairo_t);
-
-	fn cairo_stroke_extents (cr: *cairo_t, x1: *c_double, y1: *c_double, x2: *c_double, y2: *c_double);
-
-	fn cairo_in_stroke (cr: *cairo_t, x: c_double, y: c_double) -> c_int;
-
-	fn cairo_copy_page (cr: *cairo_t);
-
-	fn cairo_show_page (cr: *cairo_t);
-
-	fn cairo_get_reference_count (cr: *cairo_t) -> c_uint;
-
-	//fn cairo_set_user_data (cr: *cairo_t, cairo_user_data_key_t: /*const*/ *key, user_data: *c_void, destroy: cairo_destroy_func_t) -> Status;
-
-	//fn cairo_get_user_data (cr: *cairo_t, cairo_user_data_key_t: /*const*/ *key) -> *c_void;
-
-	//Error handling
-
-	fn cairo_status_to_string (status : Status) -> *c_char;
+   //fn ffi::cairo_path_extents(cr: *cairo_t, x1: *c_double, y1: *c_double, x2: *c_double, y2: *c_double);
 }

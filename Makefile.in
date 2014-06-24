@@ -48,6 +48,12 @@ test:				$(TEST_SRC) | test/bin/
 					$(RUSTC) -L target/ $(TEST_SRC) -o ./test/bin/test
 					./test/bin/test
 
+.PHONY: cairotest
+cairotest:			test/cairo.rs | test/bin/
+					@$(ECHO) "$(OK_COLOR) Building cairo test $(NO_COLOR)"
+					$(RUSTC) -L target/ test/cairo.rs -o ./test/bin/cairo
+					./test/bin/cairo
+
 .PHONY: doc
 doc:
 					rustdoc -o doc/ src/rgtk.rs
