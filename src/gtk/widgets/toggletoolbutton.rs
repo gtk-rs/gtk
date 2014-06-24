@@ -15,13 +15,11 @@
 
 //! A ToolItem containing a toggle button
 
-
-
 use gtk::ffi;
 use gtk::traits;
+
 /// ToggleToolButton — A ToolItem containing a toggle button
 struct_Widget!(ToggleToolButton)
-
 
 impl ToggleToolButton {
     pub fn new() -> Option<ToggleToolButton> {
@@ -37,8 +35,8 @@ impl ToggleToolButton {
     }
 }
 
+impl_drop!(ToggleToolButton)
 impl_TraitWidget!(ToggleToolButton)
-
 
 impl traits::Container for ToggleToolButton {}
 impl traits::Bin for ToggleToolButton {}

@@ -27,7 +27,6 @@ use gtk::traits::Widget;
 /// Box — A container box
 struct_Widget!(SearchBar)
 
-
 impl SearchBar {
     pub fn new() -> Option<SearchBar> {
         let tmp_pointer = unsafe { ffi::gtk_search_bar_new() };
@@ -69,8 +68,8 @@ impl SearchBar {
     }
 }
 
+impl_drop!(SearchBar)
 impl_TraitWidget!(SearchBar)
-
 
 impl traits::Container for SearchBar {}
 impl traits::Bin for SearchBar {}

@@ -127,10 +127,8 @@ impl FontButton {
     }
 }
 
-
+impl_drop!(FontButton)
 impl_TraitWidget!(FontButton)
-
 
 impl traits::Container for FontButton {}
 impl traits::Button for FontButton {}
-

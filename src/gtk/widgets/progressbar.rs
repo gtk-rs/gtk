@@ -106,8 +106,7 @@ impl ProgressBar {
     }
 }
 
+impl_drop!(ProgressBar)
 impl_TraitWidget!(ProgressBar)
 
-
 impl traits::Orientable for ProgressBar {}
-

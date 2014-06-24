@@ -20,6 +20,7 @@
 use gtk;
 use gtk::ffi;
 use gtk::traits;
+
 /**
 * Entry — A single line text entry field
 *
@@ -52,7 +53,7 @@ impl Entry {
     }
 }
 
+impl_drop!(Entry)
 impl_TraitWidget!(Entry)
 
 impl traits::Entry for Entry {}
-

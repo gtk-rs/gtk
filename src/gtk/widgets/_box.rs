@@ -30,6 +30,7 @@ impl _Box {
     }
 }
 
+impl_drop!(_Box)
 impl_TraitWidget!(_Box)
 
 impl traits::Container for _Box {}

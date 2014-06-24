@@ -22,6 +22,7 @@ use gtk;
 use gtk::cast::{GTK_SPINBUTTON};
 use gtk::ffi;
 use gtk::traits;
+
 /**
 * SpinButton — Retrieve an integer or floating-point number from the user
 *
@@ -196,8 +197,8 @@ impl SpinButton {
 // pub fn gtk_spin_button_get_update_policy   (spin_button: *C_GtkSpinButton) -> SpinButtonUpdatePolicy;
 // pub fn gtk_spin_button_get_value           (spin_button: *C_GtkSpinButton) -> c_double;
 
+impl_drop!(SpinButton)
 impl_TraitWidget!(SpinButton)
-
 
 impl traits::Entry for SpinButton {}
 impl traits::Orientable for SpinButton {}

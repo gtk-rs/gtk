@@ -19,6 +19,7 @@
 
 use gtk::ffi;
 use gtk::traits;
+
 /**
 * Label — A widget that displays a small to medium amount of text
 *
@@ -52,8 +53,8 @@ impl Label {
     }
 }
 
+impl_drop!(Label)
 impl_TraitWidget!(Label)
-
 
 impl traits::Misc for Label {}
 impl traits::Label for Label {}

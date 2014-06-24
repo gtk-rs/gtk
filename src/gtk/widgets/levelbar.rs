@@ -21,6 +21,7 @@ use gtk::enums::{LevelBarMode};
 use gtk::cast::GTK_LEVELBAR;
 use gtk::ffi;
 use gtk::traits;
+
 /**
 * LevelBar — A bar that can used as a level indicator
 *
@@ -127,7 +128,7 @@ impl LevelBar {
     }
 }
 
+impl_drop!(LevelBar)
 impl_TraitWidget!(LevelBar)
-
 
 impl traits::Orientable for LevelBar {}

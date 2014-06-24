@@ -20,6 +20,7 @@ use libc::{c_uint, c_int};
 use gtk::enums::CalendarDisplayOptions;
 use gtk::cast::GTK_CALENDAR;
 use gtk::ffi;
+
 /**
 * Calendar — Displays a calendar and allows the user to select a date
 *
@@ -125,9 +126,5 @@ impl Calendar {
 
 }
 
+impl_drop!(Calendar)
 impl_TraitWidget!(Calendar)
-
-
-
-
-

@@ -65,10 +65,8 @@ impl Alignment {
     }
 }
 
+impl_drop!(Alignment)
 impl_TraitWidget!(Alignment)
-
 
 impl traits::Container for Alignment {}
 impl traits::Bin for Alignment {}
-
-

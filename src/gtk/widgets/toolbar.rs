@@ -34,7 +34,6 @@ use gtk::{IconSize, ReliefStyle, ToolbarStyle};
 */
 struct_Widget!(Toolbar)
 
-
 impl Toolbar {
     pub fn new() -> Option<Toolbar> {
         let tmp_pointer = unsafe { ffi::gtk_toolbar_new() };
@@ -141,10 +140,9 @@ impl Toolbar {
     }
 }
 
+impl_drop!(Toolbar)
 impl_TraitWidget!(Toolbar)
-
 
 impl traits::Container for Toolbar {}
 impl traits::ToolShell for Toolbar {}
 impl traits::Orientable for Toolbar {}
-

@@ -16,7 +16,6 @@
 //! Toplevel which can contain other widgets
 
 
-
 use gtk::ffi;
 use gtk::traits;
 use gtk::WindowType;
@@ -30,9 +29,7 @@ use gtk::WindowType;
 * * `keys-changed` : Run First
 * * `set-focus` : Run Last
 */
-
 struct_Widget!(Window)
-
 
 impl Window {
     pub fn new(window_type: WindowType) -> Option<Window> {
@@ -41,8 +38,8 @@ impl Window {
     }
 }
 
+impl_drop!(Window)
 impl_TraitWidget!(Window)
-
 
 impl traits::Container for Window {}
 impl traits::Window for Window {}
