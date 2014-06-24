@@ -47,9 +47,9 @@ target/$(GLUE_LIBNAME).so:    target/$(GLUE_LIBNAME).o | target/
 					$(CC) -shared -Wl,-soname,$(GLUE_LIBNAME).so -o $@ $^ -lc
 
 .PHONY: test
-test:				$(TEST_SRC) | bin/
+test:				$(TEST_SRC) | test/bin/
 					@$(ECHO) "$(OK_COLOR) Building test $(NO_COLOR)"
-					$(RUSTC) -L target/ $(TEST_SRC) -o test/bin/test
+					$(RUSTC) -L target/ $(TEST_SRC) -o ./test/bin/test
 					./test/bin/test
 
 .PHONY: doc
@@ -61,7 +61,7 @@ target/:
 					mkdir -p $@
 					@$(ECHO) "$(OK_COLOR) Created $@ foldder $(NO_COLOR)"
 
-bin/:
+test/bin/:
 					mkdir -p $@
 					@$(ECHO) "$(OK_COLOR) Created $@ foldder $(NO_COLOR)"
 
