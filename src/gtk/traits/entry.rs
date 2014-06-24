@@ -18,9 +18,9 @@ use libc::{c_int, c_float, c_double};
 
 use gtk::traits::Widget;
 use gtk::enums::{EntryIconPosition, ImageType, InputPurpose, InputHints};
-use utils::cast::GTK_ENTRY;
+use gtk::cast::GTK_ENTRY;
 use gtk;
-use ffi;
+use gtk::ffi;
 
 pub trait Entry: Widget {
     fn get_buffer(&self) -> gtk::EntryBuffer {

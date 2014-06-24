@@ -15,12 +15,11 @@
 
 //! A container for arranging buttons
 
-
-
 use gtk::enums::{Orientation, ButtonBoxStyle};
-use utils::cast::GTK_BUTTONBOX;
-use ffi;
+use gtk::cast::GTK_BUTTONBOX;
+use gtk::ffi;
 use gtk::traits;
+
 /// ButtonBox — A container for arranging buttons
 struct_Widget!(ButtonBox)
 
@@ -71,8 +70,8 @@ impl ButtonBox {
     }
 }
 
-impl_GtkWidget!(ButtonBox)
-
+impl_drop!(ButtonBox)
+impl_TraitWidget!(ButtonBox)
 
 impl traits::Container for ButtonBox {}
 impl traits::_Box for ButtonBox {}

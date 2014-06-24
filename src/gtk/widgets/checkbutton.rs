@@ -15,10 +15,9 @@
 
 //! Create widgets with a discrete toggle button
 
-
-
-use ffi;
+use gtk::ffi;
 use gtk::traits;
+
 /// CheckButton — Create widgets with a discrete toggle button
 struct_Widget!(CheckButton)
 
@@ -49,9 +48,8 @@ impl CheckButton {
 
 }
 
-impl_GtkWidget!(CheckButton)
-
-
+impl_drop!(CheckButton)
+impl_TraitWidget!(CheckButton)
 
 impl traits::Container for CheckButton {}
 impl traits::Button for CheckButton {}

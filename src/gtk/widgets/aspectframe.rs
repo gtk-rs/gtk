@@ -18,9 +18,10 @@
 use libc::c_float;
 use std::ptr;
 
-use utils::cast::GTK_ASPECTFRAME;
-use ffi;
+use gtk::cast::GTK_ASPECTFRAME;
+use gtk::ffi;
 use gtk::traits;
+
 /// AspectFrame — A frame that constrains its child to a particular aspect ratio
 struct_Widget!(AspectFrame)
 
@@ -51,7 +52,8 @@ impl AspectFrame {
     }
 }
 
-impl_GtkWidget!(AspectFrame)
+impl_drop!(AspectFrame)
+impl_TraitWidget!(AspectFrame)
 
 impl traits::Frame for AspectFrame {}
 impl traits::Container for AspectFrame {}

@@ -17,7 +17,7 @@
 
 
 
-use ffi;
+use gtk::ffi;
 use gtk::traits;
 use gtk::IconSize;
 
@@ -78,10 +78,9 @@ impl Button {
     }
 }
 
-impl_GtkWidget!(Button)
-
+impl_drop!(Button)
+impl_TraitWidget!(Button)
 
 impl traits::Container for Button {}
 impl traits::Button for Button {}
 impl traits::Bin for Button {}
-

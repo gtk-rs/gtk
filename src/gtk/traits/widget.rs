@@ -16,13 +16,13 @@
 #![allow(visible_private_types)]
 
 use libc::c_int;
-use ffi;
+use gtk::ffi;
 use gtk::signals::Signal;
 
 pub trait Widget {
     #[doc(hidden)]
     fn get_widget(&self) -> *ffi::C_GtkWidget;
-    fn wrap_widget(widget: *ffi::C_GtkWidget) -> Self;
+    fn wrap(widget: *ffi::C_GtkWidget) -> Self;
 
     fn show_all(&mut self) -> () {
         unsafe {

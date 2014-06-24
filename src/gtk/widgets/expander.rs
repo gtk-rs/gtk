@@ -19,8 +19,8 @@ use std::str;
 use libc::c_int;
 
 use gtk;
-use utils::cast::GTK_EXPANDER;
-use ffi;
+use gtk::cast::GTK_EXPANDER;
+use gtk::ffi;
 use gtk::traits;
 use gtk::traits::Widget;
 
@@ -153,14 +153,13 @@ impl Expander {
 
     pub fn get_label_widget(&mut self) -> gtk::Label {
         unsafe {
-            traits::Widget::wrap_widget(ffi::gtk_expander_get_label_widget(GTK_EXPANDER(self.pointer)))
+            traits::Widget::wrap(ffi::gtk_expander_get_label_widget(GTK_EXPANDER(self.pointer)))
         }
     }
 }
 
-impl_GtkWidget!(Expander)
-
+impl_drop!(Expander)
+impl_TraitWidget!(Expander)
 
 impl traits::Container for Expander {}
 impl traits::Bin for Expander {}
-

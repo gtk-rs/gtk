@@ -18,8 +18,8 @@
 use std::str;
 
 
-use utils::cast::GTK_COLORBUTTON;
-use ffi;
+use gtk::cast::GTK_COLORBUTTON;
+use gtk::ffi;
 use gtk::traits;
 use gdk;
 
@@ -116,9 +116,8 @@ impl ColorButton {
     }
 }
 
-impl_GtkWidget!(ColorButton)
-
+impl_drop!(ColorButton)
+impl_TraitWidget!(ColorButton)
 
 impl traits::Container for ColorButton {}
 impl traits::Button for ColorButton {}
-

@@ -15,14 +15,13 @@
 
 //! A ToolItem subclass that displays buttons
 
-
 use std::ptr;
 
-use ffi;
+use gtk::ffi;
 use gtk::traits;
+
 /// ToolButton — A ToolItem subclass that displays buttons
 struct_Widget!(ToolButton)
-
 
 impl ToolButton {
     pub fn new<T: traits::Widget>(icon_widget: Option<&T>, label: Option<&str>) -> Option<ToolButton> {
@@ -55,8 +54,8 @@ impl ToolButton {
     }
 }
 
-impl_GtkWidget!(ToolButton)
-
+impl_drop!(ToolButton)
+impl_TraitWidget!(ToolButton)
 
 impl traits::Container for ToolButton {}
 impl traits::Bin for ToolButton {}

@@ -15,12 +15,12 @@
 
 //! A ToolItem containing a button with an additional dropdown menu
 
-
 use std::ptr;
 
-use utils::cast::GTK_MENUTOOLBUTTON;
-use ffi;
+use gtk::cast::GTK_MENUTOOLBUTTON;
+use gtk::ffi;
 use gtk::traits;
+
 /// MenuToolButton — A ToolItem containing a button with an additional dropdown menu
 struct_Widget!(MenuToolButton)
 
@@ -49,31 +49,31 @@ impl MenuToolButton {
     }
 
     pub fn new_from_stock(stock_id: &str) -> Option<MenuToolButton> {
-    	let tmp_pointer = stock_id.with_c_str(|c_str| {
-    		unsafe { ffi::gtk_menu_tool_button_new_from_stock(c_str) }
-    	});
-    	check_pointer!(tmp_pointer, MenuToolButton)
+        let tmp_pointer = stock_id.with_c_str(|c_str| {
+            unsafe { ffi::gtk_menu_tool_button_new_from_stock(c_str) }
+        });
+        check_pointer!(tmp_pointer, MenuToolButton)
     }
 
     pub fn set_arrow_tooltip_text(&mut self, text: &str) -> () {
-    	text.with_c_str(|c_str| {
-    		unsafe {
-    			ffi::gtk_menu_tool_button_set_arrow_tooltip_text(GTK_MENUTOOLBUTTON(self.pointer), c_str)
-    		}
-    	})
+        text.with_c_str(|c_str| {
+            unsafe {
+                ffi::gtk_menu_tool_button_set_arrow_tooltip_text(GTK_MENUTOOLBUTTON(self.pointer), c_str)
+            }
+        })
     }
 
     pub fn set_arrow_tooltip_markup(&mut self, markup: &str) -> () {
-    	markup.with_c_str(|c_str| {
-    		unsafe {
-    			ffi::gtk_menu_tool_button_set_arrow_tooltip_markup(GTK_MENUTOOLBUTTON(self.pointer), c_str)
-    		}
-    	})
+        markup.with_c_str(|c_str| {
+            unsafe {
+                ffi::gtk_menu_tool_button_set_arrow_tooltip_markup(GTK_MENUTOOLBUTTON(self.pointer), c_str)
+            }
+        })
     }
 }
 
-impl_GtkWidget!(MenuToolButton)
-
+impl_drop!(MenuToolButton)
+impl_TraitWidget!(MenuToolButton)
 
 impl traits::Container for MenuToolButton {}
 impl traits::Bin for MenuToolButton {}

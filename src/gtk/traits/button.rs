@@ -18,8 +18,8 @@ use libc::c_float;
 
 use gtk::traits::{Widget, Container};
 use gtk::enums::{ReliefStyle, PositionType};
-use utils::cast::GTK_BUTTON;
-use ffi;
+use gtk::cast::GTK_BUTTON;
+use gtk::ffi;
 use gtk;
 
 pub trait Button: Widget + Container {
@@ -196,7 +196,7 @@ extern "C" fn widget_destroy_callback(object: *ffi::C_GtkWidget, user_data: ffi:
 
     // let mut window = check_pointer!(object, Window).unwrap();
     // window.can_drop = false;
-    let mut button: gtk::Button = Widget::wrap_widget(object);
+    let mut button: gtk::Button = Widget::wrap(object);
     handler.callback(&mut button);
 
     unsafe {

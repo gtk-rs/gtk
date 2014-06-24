@@ -18,8 +18,8 @@
 use libc::c_int;
 
 use gtk::enums::Orientation;
-use utils::cast::GTK_PANED;
-use ffi;
+use gtk::cast::GTK_PANED;
+use gtk::ffi;
 use gtk::traits;
 use gtk;
 
@@ -84,13 +84,12 @@ impl Paned {
 
     pub fn get_handle_window(&self) -> gtk::Window {
         unsafe {
-            traits::Widget::wrap_widget(ffi::gtk_paned_get_handle_window(GTK_PANED(self.pointer)))
+            traits::Widget::wrap(ffi::gtk_paned_get_handle_window(GTK_PANED(self.pointer)))
         }
     }
 }
 
-impl_GtkWidget!(Paned)
-
+impl_drop!(Paned)
+impl_TraitWidget!(Paned)
 
 impl traits::Container for Paned {}
-

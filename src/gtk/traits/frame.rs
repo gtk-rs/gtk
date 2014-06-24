@@ -18,8 +18,8 @@ use libc::c_float;
 
 use gtk::traits::{Widget, Container};
 use gtk::enums::ShadowType;
-use utils::cast::GTK_FRAME;
-use ffi;
+use gtk::cast::GTK_FRAME;
+use gtk::ffi;
 
 pub trait Frame: Widget + Container {
     fn set_label(&mut self, label: Option<&str>) -> () {

@@ -16,10 +16,10 @@
 use libc::{c_int, c_double};
 use std::str;
 
-use ffi;
+use gtk::ffi;
 use gtk::traits::Widget;
 use gtk::enums::Justification;
-use utils::cast::GTK_LABEL;
+use gtk::cast::GTK_LABEL;
 
 pub trait Label : Widget {
     fn set_label(&mut self, text: &str) -> () {

@@ -13,8 +13,9 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use ffi;
-use std::ptr;
+use libc::c_uint;
+use std::{str,ptr};
+use gtk::ffi;
 
 pub fn init() {
     unsafe {
@@ -54,3 +55,45 @@ pub fn main_iteration_do(blocking: bool) -> bool {
         _           => true
     }
 }
+
+pub fn get_major_version() -> u32 {
+    unsafe {
+        ffi::gtk_get_major_version() as u32
+    }
+}
+
+pub fn get_minor_version() -> u32 {
+    unsafe {
+        ffi::gtk_get_minor_version() as u32
+    }
+}
+
+pub fn get_micro_version() -> u32 {
+    unsafe {
+        ffi::gtk_get_micro_version() as u32
+    }
+}
+
+pub fn get_binary_age() -> u32 {
+    unsafe {
+        ffi::gtk_get_binary_age() as u32
+    }
+}
+
+pub fn get_interface_age() -> u32 {
+    unsafe {
+        ffi::gtk_get_interface_age() as u32
+    }
+}
+
+pub fn check_version(required_major: u32,
+                     required_minor: u32,
+                     required_micro: u32)
+                     -> Option<String> {
+    let c_str = unsafe { ffi::gtk_check_version(required_major as c_uint, required_minor as c_uint, required_micro as c_uint) };
+    if c_str.is_null() {
+        None
+    } else {
+        Some(unsafe {str::raw::from_c_str(c_str) })
+    }
+ }

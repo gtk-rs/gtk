@@ -15,10 +15,9 @@
 
 //! A button to launch a font chooser dialog
 
-
-
-use ffi;
+use gtk::ffi;
 use gtk::traits;
+
 /**
 * ToggleButton — A button to launch a font chooser dialog
 *
@@ -26,7 +25,6 @@ use gtk::traits;
 * * `toggled` : Run First
 */
 struct_Widget!(ToggleButton)
-
 
 impl ToggleButton {
     pub fn new() -> Option<ToggleButton> {
@@ -54,8 +52,8 @@ impl ToggleButton {
 
 }
 
-impl_GtkWidget!(ToggleButton)
-
+impl_drop!(ToggleButton)
+impl_TraitWidget!(ToggleButton)
 
 impl traits::Container for ToggleButton {}
 impl traits::Button for ToggleButton {}

@@ -18,7 +18,7 @@
 use libc::c_double;
 use std::ptr;
 
-use ffi;
+use gtk::ffi;
 use gtk::traits;
 use gtk::IconSize;
 
@@ -32,7 +32,6 @@ use gtk::IconSize;
 */
 struct_Widget!(ScaleButton)
 
-
 impl ScaleButton {
     // FIXME: icons -> last parameter
     pub fn new(size: IconSize, min: f64, max: f64, step: f64) -> Option<ScaleButton> {
@@ -41,10 +40,8 @@ impl ScaleButton {
     }
 }
 
-
-
-impl_GtkWidget!(ScaleButton)
-
+impl_drop!(ScaleButton)
+impl_TraitWidget!(ScaleButton)
 
 impl traits::Container for ScaleButton {}
 impl traits::Button for ScaleButton {}

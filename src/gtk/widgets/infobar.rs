@@ -18,10 +18,11 @@
 use libc::c_int;
 
 use gtk::enums::MessageType;
-use utils::cast::GTK_INFOBAR;
+use gtk::cast::GTK_INFOBAR;
 use gtk;
-use ffi;
+use gtk::ffi;
 use gtk::traits;
+
 /// InfoBar — Report important messages to the user
 struct_Widget!(InfoBar)
 
@@ -43,7 +44,7 @@ impl InfoBar {
                 ffi::gtk_info_bar_add_button(GTK_INFOBAR(self.pointer), c_str, response_id as c_int)
             })
         };
-        traits::Widget::wrap_widget(button)
+        traits::Widget::wrap(button)
     }
 
     pub fn set_response_sensitive(&mut self, response_id: i32, setting: bool) -> () {
@@ -92,7 +93,8 @@ impl InfoBar {
     }
 }
 
-impl_GtkWidget!(InfoBar)
+impl_drop!(InfoBar)
+impl_TraitWidget!(InfoBar)
 
 impl traits::Container for InfoBar {}
 impl traits::_Box for InfoBar {}

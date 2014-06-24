@@ -17,14 +17,13 @@
 
 
 
-use ffi;
+use gtk::ffi;
 use gtk::traits;
-use utils::cast::GTK_MENUBUTTON;
+use gtk::cast::GTK_MENUBUTTON;
 use gtk::ArrowType;
 
 /// MenuButton — A widget that shows a menu when clicked on
 struct_Widget!(MenuButton)
-
 
 impl MenuButton {
     pub fn new() -> Option<MenuButton> {
@@ -57,8 +56,8 @@ impl MenuButton {
     }
 }
 
-impl_GtkWidget!(MenuButton)
-
+impl_drop!(MenuButton)
+impl_TraitWidget!(MenuButton)
 
 impl traits::Container for MenuButton {}
 impl traits::Button for MenuButton {}

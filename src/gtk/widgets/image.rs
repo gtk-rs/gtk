@@ -15,10 +15,9 @@
 
 //! A widget displaying an image
 
-
-
-use ffi;
+use gtk::ffi;
 use gtk::traits;
+
 /// Image — A widget displaying an image
 struct_Widget!(Image)
 
@@ -34,7 +33,7 @@ impl Image {
     }
 }
 
-impl_GtkWidget!(Image)
-
+impl_drop!(Image)
+impl_TraitWidget!(Image)
 
 impl traits::Misc for Image {}

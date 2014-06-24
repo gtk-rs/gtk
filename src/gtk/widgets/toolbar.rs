@@ -17,9 +17,9 @@
 
 use libc::c_int;
 
-use ffi;
+use gtk::ffi;
 use gtk::traits;
-use utils::cast::{GTK_TOOLBAR, GTK_TOOLITEM};
+use gtk::cast::{GTK_TOOLBAR, GTK_TOOLITEM};
 use gtk;
 use gtk::{IconSize, ReliefStyle, ToolbarStyle};
 
@@ -33,7 +33,6 @@ use gtk::{IconSize, ReliefStyle, ToolbarStyle};
 * * `style-changed` : Run First
 */
 struct_Widget!(Toolbar)
-
 
 impl Toolbar {
     pub fn new() -> Option<Toolbar> {
@@ -67,7 +66,7 @@ impl Toolbar {
             if tmp_pointer.is_null() {
                 None
             } else {
-                Some(traits::Widget::wrap_widget(tmp_pointer))
+                Some(traits::Widget::wrap(tmp_pointer))
             }
         }
     }
@@ -141,10 +140,9 @@ impl Toolbar {
     }
 }
 
-impl_GtkWidget!(Toolbar)
-
+impl_drop!(Toolbar)
+impl_TraitWidget!(Toolbar)
 
 impl traits::Container for Toolbar {}
 impl traits::ToolShell for Toolbar {}
 impl traits::Orientable for Toolbar {}
-

@@ -15,7 +15,7 @@
 
 // NB: This file is not actually packaged into rgtk
 
-use ffi;
+use gtk::ffi;
 use gtk::traits;
 use gtk;
 use gtk::traits;
@@ -32,6 +32,6 @@ impl Widget {
     }
 
     pub fn to_entry(self) -> gtk::Entry {
-        traits::Widget::wrap_widget(self.pointer)
+        traits::Widget::wrap(self.pointer)
     }
 }

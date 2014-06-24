@@ -18,9 +18,10 @@
 use libc::{c_int, c_uint};
 
 use gtk::enums::{PositionType};
-use utils::cast::GTK_GRID;
-use ffi;
+use gtk::cast::GTK_GRID;
+use gtk::ffi;
 use gtk::traits;
+
 /// Grid — Pack widgets in a rows and columns
 struct_Widget!(Grid)
 
@@ -157,13 +158,8 @@ impl Grid {
     }
 }
 
-
-impl_GtkWidget!(Grid)
-
+impl_drop!(Grid)
+impl_TraitWidget!(Grid)
 
 impl traits::Container for Grid {}
 impl traits::Orientable for Grid {}
-
-
-
-

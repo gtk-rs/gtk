@@ -14,8 +14,8 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use libc::{c_float, c_int};
-use utils::cast::GTK_MISC;
-use ffi;
+use gtk::cast::GTK_MISC;
+use gtk::ffi;
 use gtk::traits::Widget;
 
 pub trait Misc : Widget {

@@ -13,9 +13,9 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use ffi;
+use gtk::ffi;
 use gtk::traits::{Widget, Container, Bin};
-use utils::cast::GTK_TOOLITEM;
+use gtk::cast::GTK_TOOLITEM;
 use gtk::{IconSize, Orientation, ReliefStyle, ToolbarStyle};
 
 pub trait ToolItem: Widget + Container + Bin {

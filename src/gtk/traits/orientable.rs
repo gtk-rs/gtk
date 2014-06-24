@@ -15,8 +15,8 @@
 
 use gtk::enums::Orientation;
 use gtk::traits::Widget;
-use utils::cast::GTK_ORIENTABLE;
-use ffi;
+use gtk::cast::GTK_ORIENTABLE;
+use gtk::ffi;
 
 pub trait Orientable: Widget {
     fn get_orientation(&self) -> Orientation {
