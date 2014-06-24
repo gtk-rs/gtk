@@ -90,7 +90,7 @@ fn main() {
 
     button.connect(signals::Clicked::new(||{
         //entry.set_text("Clicked!".to_string());
-        let dialog = gtk::AboutDialog::new().unwrap();
+        let dialog = gtk::ColorChooserDialog::new("test", None).unwrap();
 
         dialog.run();
     }));

@@ -197,3 +197,11 @@ pub fn GTK_DIALOG(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkDialog {
 pub fn GTK_ABOUT_DIALOG(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkAboutDialog {
     unsafe{ ffi::cast_GtkAboutDialog(widget) }
 }
+
+pub fn GTK_COLOR_CHOOSER_DIALOG(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkColorChooserDialog {
+    unsafe{ ffi::cast_GtkColorChooserDialog(widget) }
+}
+
+pub fn GTK_COLOR_CHOOSER(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkColorChooser {
+    unsafe{ ffi::cast_GtkColorChooser(widget) }
+}

@@ -71,6 +71,7 @@ pub struct C_GtkToolShell;
 pub struct C_GtkToolbar;
 pub struct C_GtkDialog;
 pub struct C_GtkAboutDialog;
+pub struct C_GtkColorChooserDialog;
 
 pub struct C_GtkToolItem;
 pub struct C_GtkToolButton;
@@ -83,6 +84,8 @@ pub struct C_GtkMenu;
 pub struct C_GMenuModel;
 
 pub struct C_GClosure;
+
+pub struct C_GtkColorChooser;
 
 extern "C" {
 
@@ -238,7 +241,21 @@ extern "C" {
     // pub fn gtk_button_get_event_window         (button: *C_GtkButton) -> *C_GdkWindow;
 
     //=========================================================================
-    // GtkAbout                                                          NOT OK
+    // GtkColorChooser                                                       OK
+    //=========================================================================
+    pub fn gtk_color_chooser_get_rgba          (chooser: *C_GtkColorChooser, color: *gdk::RGBA) -> ();
+    pub fn gtk_color_chooser_set_rgba          (chooser: *C_GtkColorChooser, color: *gdk::RGBA) -> ();
+    pub fn gtk_color_chooser_get_use_alpha     (chooser: *C_GtkColorChooser) -> Gboolean;
+    pub fn gtk_color_chooser_set_use_alpha     (chooser: *C_GtkColorChooser, use_alpha: Gboolean) -> ();
+    pub fn gtk_color_chooser_add_palette       (chooser: *C_GtkColorChooser, orientation: gtk::Orientation, colors_per_line: i32, n_colors: i32, colors: *gdk::RGBA) -> ();
+
+    //=========================================================================
+    // GtkColorChooserDialog                                                 OK
+    //=========================================================================
+    pub fn gtk_color_chooser_dialog_new        (title: *c_char, parent: *C_GtkWindow) -> *C_GtkWidget;
+
+    //=========================================================================
+    // GtkDialog                                                         NOT OK
     //=========================================================================
     pub fn gtk_dialog_new                      () -> *C_GtkWidget;
     //pub fn gtk_dialog_new_with_buttons         (title: *c_char, parent: *C_GtkWindow, flags: DialogFlags, first_button_text: *c_char, ...) -> *C_GtkWidget;
@@ -1005,5 +1022,7 @@ extern "C" {
     pub fn cast_GtkRadioToolButton(widget: *C_GtkWidget) -> *C_GtkRadioToolButton;
     pub fn cast_GtkDialog(widget: *C_GtkWidget) -> *C_GtkDialog;
     pub fn cast_GtkAboutDialog(widget: *C_GtkWidget) -> *C_GtkAboutDialog;
+    pub fn cast_GtkColorChooserDialog(widget: *C_GtkWidget) -> *C_GtkColorChooserDialog;
+    pub fn cast_GtkColorChooser(widget: *C_GtkWidget) -> *C_GtkColorChooser;
     pub fn cast_GtkAdjustment(widget: *C_GtkWidget) -> *C_GtkAdjustment;
 }

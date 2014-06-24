@@ -15,41 +15,43 @@
 
 pub use self::color::{Color, RGBA};
 pub use self::events::{
-	EventType,
-	Event,
-	EventAny,
-	EventExpose,
-	EventVisibility,
-	EventMotion,
-	EventButton,
-	EventTouch,
-	EventScroll,
-	EventKey,
-	EventCrossing,
-	EventFocus,
-	EventConfigure,
-	EventProperty,
-	EventSelection,
-	EventOwnerChange,
-	EventProximity,
-	EventSetting,
-	EventWindowState,
-	EventGrabBroken,
-	EventDND,
-	VisibilityState,
-	ScrollDirection,
-	NotifyType,
-	CrossingMode,
-	PropertyState,
-	WindowState,
-	SettingAction,
-	OwnerChange
+    EventType,
+    Event,
+    EventAny,
+    EventExpose,
+    EventVisibility,
+    EventMotion,
+    EventButton,
+    EventTouch,
+    EventScroll,
+    EventKey,
+    EventCrossing,
+    EventFocus,
+    EventConfigure,
+    EventProperty,
+    EventSelection,
+    EventOwnerChange,
+    EventProximity,
+    EventSetting,
+    EventWindowState,
+    EventGrabBroken,
+    EventDND,
+    VisibilityState,
+    ScrollDirection,
+    NotifyType,
+    CrossingMode,
+    PropertyState,
+    WindowState,
+    SettingAction,
+    OwnerChange
 };
+
 pub use self::device::{Device};
 pub use self::window::{Window};
 pub use self::types::{Atom, Screen, Rectangle};
+pub use self::color::RGBA;
 
-mod color;
+pub mod color;
 mod events;
 mod device;
 mod window;
