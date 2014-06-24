@@ -74,4 +74,3 @@ fn main() {
     window.show_all();
     gtk::main();
 }
-

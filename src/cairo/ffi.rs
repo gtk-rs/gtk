@@ -129,10 +129,6 @@ extern "C" {
 
 	pub fn cairo_get_reference_count (cr: *cairo_t) -> c_uint;
 
-	//fn cairo_set_user_data (cr: *cairo_t, cairo_user_data_key_t: /*const*/ *key, user_data: *c_void, destroy: cairo_destroy_func_t) -> Status;
-
-	//fn cairo_get_user_data (cr: *cairo_t, cairo_user_data_key_t: /*const*/ *key) -> *c_void;
-
 	//Error handling
 
 	pub fn cairo_status_to_string (status : Status) -> *c_char;
