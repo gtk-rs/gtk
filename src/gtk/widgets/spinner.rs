@@ -13,44 +13,35 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-pub use self::color::{Color, RGBA};
-pub use self::events::{
-	EventType,
-	Event,
-	EventAny,
-	EventExpose,
-	EventVisibility,
-	EventMotion,
-	EventButton,
-	EventTouch,
-	EventScroll,
-	EventKey,
-	EventCrossing,
-	EventFocus,
-	EventConfigure,
-	EventProperty,
-	EventSelection,
-	EventOwnerChange,
-	EventProximity,
-	EventSetting,
-	EventWindowState,
-	EventGrabBroken,
-	EventDND,
-	VisibilityState,
-	ScrollDirection,
-	NotifyType,
-	CrossingMode,
-	PropertyState,
-	WindowState,
-	SettingAction,
-	OwnerChange
-};
-pub use self::device::{Device};
-pub use self::window::{Window};
-pub use self::types::{Atom, Screen, Rectangle};
+//! Show a spinner animation
 
-mod color;
-mod events;
-mod device;
-mod window;
-mod types;
+
+
+use utils::cast::GTK_SPINNER;
+use ffi;
+/// Spinner — Show a spinner animation
+struct_Widget!(Spinner)
+
+
+impl Spinner {
+    pub fn new() -> Option<Spinner> {
+        let tmp_pointer = unsafe { ffi::gtk_spinner_new() };
+        check_pointer!(tmp_pointer, Spinner)
+    }
+
+    pub fn start(&mut self) -> () {
+        unsafe {
+            ffi::gtk_spinner_start(GTK_SPINNER(self.pointer))
+        }
+    }
+
+    pub fn stop(&mut self) -> () {
+        unsafe {
+            ffi::gtk_spinner_stop(GTK_SPINNER(self.pointer))
+        }
+    }
+
+}
+
+impl_GtkWidget!(Spinner)
+

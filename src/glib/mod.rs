@@ -12,3 +12,39 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
+
+use libc::c_char;
+
+// An opaque structure used as the base of all interface types.
+pub struct TypeInterface;
+
+// An opaque structure used as the base of all type instances.
+pub struct TypeInstance;
+
+// An opaque structure used as the base of all classes.
+pub struct TypeClass;
+
+//FIXME: Check if this is actually correct (maybe not since ParamFlags is depricated)
+pub enum ParamFlags{
+	Readable,
+	Writable,
+	ReadWrite,
+	Construct,
+	ConstructOnly,
+	LaxValidation,
+	StaticName,
+	Private,
+	StaticNick,
+	StaticBlurb,
+	Deprecated
+}
+
+pub type GType = uint; //FIXME: this is probably wrong
+
+pub struct ParamSpec {
+	g_type_instance: TypeInstance,
+	name: *c_char,
+	flags: ParamFlags,
+	value_type: GType,
+	owner_type: GType
+}

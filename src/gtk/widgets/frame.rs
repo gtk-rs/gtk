@@ -13,44 +13,30 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-pub use self::color::{Color, RGBA};
-pub use self::events::{
-	EventType,
-	Event,
-	EventAny,
-	EventExpose,
-	EventVisibility,
-	EventMotion,
-	EventButton,
-	EventTouch,
-	EventScroll,
-	EventKey,
-	EventCrossing,
-	EventFocus,
-	EventConfigure,
-	EventProperty,
-	EventSelection,
-	EventOwnerChange,
-	EventProximity,
-	EventSetting,
-	EventWindowState,
-	EventGrabBroken,
-	EventDND,
-	VisibilityState,
-	ScrollDirection,
-	NotifyType,
-	CrossingMode,
-	PropertyState,
-	WindowState,
-	SettingAction,
-	OwnerChange
-};
-pub use self::device::{Device};
-pub use self::window::{Window};
-pub use self::types::{Atom, Screen, Rectangle};
+//! A bin with a decorative frame and optional label
 
-mod color;
-mod events;
-mod device;
-mod window;
-mod types;
+
+use std::ptr;
+
+use ffi;
+use gtk::traits;
+/// Frame — A bin with a decorative frame and optional label
+struct_Widget!(Frame)
+
+
+impl Frame {
+    pub fn new(label: Option<&str>) -> Option<Frame> {
+        let tmp_pointer = match label {
+            Some(l) => unsafe { l.with_c_str(|c_str| { ffi::gtk_frame_new(c_str) }) },
+            None    => unsafe { ffi::gtk_frame_new(ptr::null()) }
+        };
+        check_pointer!(tmp_pointer, Frame)
+    }
+}
+
+impl_GtkWidget!(Frame)
+
+
+impl traits::Frame for Frame {}
+impl traits::Container for Frame {}
+impl traits::Bin for Frame {}

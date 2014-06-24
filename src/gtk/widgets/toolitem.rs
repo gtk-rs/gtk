@@ -13,44 +13,26 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-pub use self::color::{Color, RGBA};
-pub use self::events::{
-	EventType,
-	Event,
-	EventAny,
-	EventExpose,
-	EventVisibility,
-	EventMotion,
-	EventButton,
-	EventTouch,
-	EventScroll,
-	EventKey,
-	EventCrossing,
-	EventFocus,
-	EventConfigure,
-	EventProperty,
-	EventSelection,
-	EventOwnerChange,
-	EventProximity,
-	EventSetting,
-	EventWindowState,
-	EventGrabBroken,
-	EventDND,
-	VisibilityState,
-	ScrollDirection,
-	NotifyType,
-	CrossingMode,
-	PropertyState,
-	WindowState,
-	SettingAction,
-	OwnerChange
-};
-pub use self::device::{Device};
-pub use self::window::{Window};
-pub use self::types::{Atom, Screen, Rectangle};
+//! The base class of widgets that can be added to ToolShe
 
-mod color;
-mod events;
-mod device;
-mod window;
-mod types;
+
+
+use ffi;
+use gtk::traits;
+/// ToolItem — The base class of widgets that can be added to ToolShe
+struct_Widget!(ToolItem)
+
+
+impl ToolItem {
+    pub fn new() -> Option<ToolItem> {
+        let tmp_pointer = unsafe { ffi::gtk_tool_item_new() };
+        check_pointer!(tmp_pointer, ToolItem)
+    }
+}
+
+impl_GtkWidget!(ToolItem)
+
+
+impl traits::Container for ToolItem {}
+impl traits::Bin for ToolItem {}
+impl traits::ToolItem for ToolItem {}

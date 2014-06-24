@@ -13,44 +13,28 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-pub use self::color::{Color, RGBA};
-pub use self::events::{
-	EventType,
-	Event,
-	EventAny,
-	EventExpose,
-	EventVisibility,
-	EventMotion,
-	EventButton,
-	EventTouch,
-	EventScroll,
-	EventKey,
-	EventCrossing,
-	EventFocus,
-	EventConfigure,
-	EventProperty,
-	EventSelection,
-	EventOwnerChange,
-	EventProximity,
-	EventSetting,
-	EventWindowState,
-	EventGrabBroken,
-	EventDND,
-	VisibilityState,
-	ScrollDirection,
-	NotifyType,
-	CrossingMode,
-	PropertyState,
-	WindowState,
-	SettingAction,
-	OwnerChange
-};
-pub use self::device::{Device};
-pub use self::window::{Window};
-pub use self::types::{Atom, Screen, Rectangle};
+//! A widget displaying an image
 
-mod color;
-mod events;
-mod device;
-mod window;
-mod types;
+
+
+use ffi;
+use gtk::traits;
+/// Image — A widget displaying an image
+struct_Widget!(Image)
+
+
+impl Image {
+    pub fn new_from_file(filename: &str) -> Option<Image> {
+        let tmp_pointer = unsafe {
+            filename.with_c_str(|c_str| {
+                ffi::gtk_image_new_from_file(c_str)
+            })
+        };
+        check_pointer!(tmp_pointer, Image)
+    }
+}
+
+impl_GtkWidget!(Image)
+
+
+impl traits::Misc for Image {}

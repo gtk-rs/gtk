@@ -15,11 +15,7 @@
 
 #include <gtk/gtk.h>
 
-void signal_connect(void *g_object, char *signal, void (*func)()) {
-    g_signal_connect(G_OBJECT(g_object), signal, G_CALLBACK(func), NULL);
-}
-
-void signal_connect_2params(void *g_object, char *signal, void (*func)(void*, void*), void *user_param) {
+void glue_signal_connect(void *g_object, char *signal, void (*func)(void*, void*), void *user_param) {
     g_signal_connect(G_OBJECT(g_object), signal, G_CALLBACK(func), user_param);
 }
 

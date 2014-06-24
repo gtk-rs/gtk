@@ -13,44 +13,25 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-pub use self::color::{Color, RGBA};
-pub use self::events::{
-	EventType,
-	Event,
-	EventAny,
-	EventExpose,
-	EventVisibility,
-	EventMotion,
-	EventButton,
-	EventTouch,
-	EventScroll,
-	EventKey,
-	EventCrossing,
-	EventFocus,
-	EventConfigure,
-	EventProperty,
-	EventSelection,
-	EventOwnerChange,
-	EventProximity,
-	EventSetting,
-	EventWindowState,
-	EventGrabBroken,
-	EventDND,
-	VisibilityState,
-	ScrollDirection,
-	NotifyType,
-	CrossingMode,
-	PropertyState,
-	WindowState,
-	SettingAction,
-	OwnerChange
-};
-pub use self::device::{Device};
-pub use self::window::{Window};
-pub use self::types::{Atom, Screen, Rectangle};
+//! A container box
 
-mod color;
-mod events;
-mod device;
-mod window;
-mod types;
+use libc::c_int;
+
+use gtk::enums::Orientation;
+use ffi;
+use gtk::traits;
+/// Box — A container box
+struct_Widget!(_Box)
+
+impl _Box {
+    pub fn new(orientation: Orientation, spacing: i32) -> Option<_Box> {
+        let tmp_pointer = unsafe { ffi::gtk_box_new(orientation, spacing as c_int) };
+        check_pointer!(tmp_pointer, _Box)
+    }
+}
+
+impl_GtkWidget!(_Box)
+
+impl traits::Container for _Box {}
+impl traits::_Box for _Box {}
+impl traits::Orientable for _Box {}

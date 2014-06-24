@@ -22,16 +22,24 @@ macro_rules! check_pointer(
         } else {
             Some($gtk_struct {
                 pointer:            $tmp_pointer,
-                can_drop:           true,
-                signal_handlers:    Vec::new()
+                can_drop:           true
             })
+        }
+    );
+)
+
+macro_rules! struct_Widget(
+    ($gtk_struct:ident) => (
+        pub struct $gtk_struct {
+            pointer:           *ffi::C_GtkWidget,
+            can_drop:          bool
         }
     );
 )
 
 macro_rules! impl_GtkWidget(
     ($gtk_struct:ident) => (
-        impl GtkWidget for $gtk_struct {
+        impl ::gtk::traits::Widget for $gtk_struct {
             fn get_widget(&self) -> *ffi::C_GtkWidget {
                 self.pointer
             }
@@ -39,47 +47,14 @@ macro_rules! impl_GtkWidget(
             fn wrap_widget(widget: *ffi::C_GtkWidget) -> $gtk_struct {
                 $gtk_struct {
                     pointer:         widget,
-                    can_drop:        false,
-                    signal_handlers: Vec::new()
+                    can_drop:        false
                 }
             }
         }
     );
 )
 
-macro_rules! redirect_callback(
-    ($gtk_struct:ident) => (
-        extern fn redirect_callback(widget: *ffi::C_GtkWidget, user_data: *c_void) -> () {
-            let mut button = $gtk_struct { pointer: widget, can_drop: false, signal_handlers: Vec::new()};
-            let sighandler = unsafe {(user_data as *SignalHandler).to_option().unwrap()};
-            let func = sighandler.function.unwrap();
-            func(&mut button, sighandler.user_data);
-        }
-    );
-)
-
-macro_rules! redirect_callback_widget(
-    ($gtk_struct:ident) => (
-        extern fn redirect_callback_widget(widget: *ffi::C_GtkWidget, user_data: *c_void) -> () {
-            use std::mem::transmute;
-
-            let mut button = $gtk_struct { pointer: widget, can_drop: false, signal_handlers: Vec::new()};
-            let sighandler = unsafe {(user_data as *SignalHandler).to_option().unwrap()};
-            let user_data = if !user_data.is_null() {
-                Some(unsafe {
-                    let tmp: &mut $gtk_struct = transmute(sighandler.user_data as *mut $gtk_struct);
-                    tmp as &mut GtkWidget
-                })
-            }  else {
-                None
-            };
-            let func = sighandler.function_widget.unwrap();
-            func(&mut button, user_data);
-        }
-    );
-)
-
-macro_rules! struct_signal(
+/*macro_rules! struct_signal(
     ($gtk_struct:ident) => (
 
         #[doc(hidden)]
@@ -89,10 +64,9 @@ macro_rules! struct_signal(
             user_data: *c_void
         }
     );
-)
+)*/
 
-
-macro_rules! impl_signals(
+/*macro_rules! impl_signals(
     ($gtk_struct:ident) => (
         impl Signal for $gtk_struct {
             fn connect(&mut self, signal: &str, function: fn()) -> () {
@@ -152,4 +126,4 @@ macro_rules! impl_signals(
 
         }
     );
-)
+)*/

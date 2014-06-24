@@ -13,44 +13,27 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-pub use self::color::{Color, RGBA};
-pub use self::events::{
-	EventType,
-	Event,
-	EventAny,
-	EventExpose,
-	EventVisibility,
-	EventMotion,
-	EventButton,
-	EventTouch,
-	EventScroll,
-	EventKey,
-	EventCrossing,
-	EventFocus,
-	EventConfigure,
-	EventProperty,
-	EventSelection,
-	EventOwnerChange,
-	EventProximity,
-	EventSetting,
-	EventWindowState,
-	EventGrabBroken,
-	EventDND,
-	VisibilityState,
-	ScrollDirection,
-	NotifyType,
-	CrossingMode,
-	PropertyState,
-	WindowState,
-	SettingAction,
-	OwnerChange
-};
-pub use self::device::{Device};
-pub use self::window::{Window};
-pub use self::types::{Atom, Screen, Rectangle};
+//! A button which pops up a volume control
 
-mod color;
-mod events;
-mod device;
-mod window;
-mod types;
+
+
+use ffi;
+use gtk::traits;
+/// VolumeButton — A button which pops up a volume control
+struct_Widget!(VolumeButton)
+
+
+impl VolumeButton {
+    pub fn new() -> Option<VolumeButton> {
+        let tmp_pointer = unsafe { ffi::gtk_volume_button_new() };
+        check_pointer!(tmp_pointer, VolumeButton)
+    }
+}
+
+impl_GtkWidget!(VolumeButton)
+
+
+impl traits::Container for VolumeButton {}
+impl traits::Button for VolumeButton {}
+impl traits::ScaleButton for VolumeButton {}
+impl traits::Orientable for VolumeButton {}

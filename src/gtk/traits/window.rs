@@ -13,44 +13,26 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-pub use self::color::{Color, RGBA};
-pub use self::events::{
-	EventType,
-	Event,
-	EventAny,
-	EventExpose,
-	EventVisibility,
-	EventMotion,
-	EventButton,
-	EventTouch,
-	EventScroll,
-	EventKey,
-	EventCrossing,
-	EventFocus,
-	EventConfigure,
-	EventProperty,
-	EventSelection,
-	EventOwnerChange,
-	EventProximity,
-	EventSetting,
-	EventWindowState,
-	EventGrabBroken,
-	EventDND,
-	VisibilityState,
-	ScrollDirection,
-	NotifyType,
-	CrossingMode,
-	PropertyState,
-	WindowState,
-	SettingAction,
-	OwnerChange
-};
-pub use self::device::{Device};
-pub use self::window::{Window};
-pub use self::types::{Atom, Screen, Rectangle};
+use std::str;
+use ffi;
+use gtk::traits::Widget;
+use utils::cast::GTK_WINDOW;
 
-mod color;
-mod events;
-mod device;
-mod window;
-mod types;
+pub trait Window : Widget {
+    fn set_title(&mut self, title: &str) -> () {
+        unsafe {
+            title.with_c_str(|c_str| {
+                ffi::gtk_window_set_title(GTK_WINDOW(self.get_widget()), c_str)
+            });
+        }
+    }
+
+    fn get_title(&self) -> Option<String> {
+        let c_title = unsafe { ffi::gtk_window_get_title(GTK_WINDOW(self.get_widget())) };
+        if c_title.is_null() {
+            None
+        } else {
+            Some(unsafe { str::raw::from_c_str(c_title) })
+        }
+    }
+}
