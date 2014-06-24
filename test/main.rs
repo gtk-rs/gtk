@@ -60,7 +60,7 @@ fn main() {
     let mut level_bar = gtk::LevelBar::new_for_interval(0., 100.).unwrap();
     let spin_button = gtk::SpinButton::new_with_range(0., 100., 1.).unwrap();
     let mut spinner = gtk::Spinner::new().unwrap();
-    let image = gtk::Image::new_from_file("./resources/gtk.jpg").unwrap();
+    let image = gtk::Image::new_from_file("./test/resources/gtk.jpg").unwrap();
     let mut progress_bar = gtk::ProgressBar::new().unwrap();
     let arrow = gtk::Arrow::new(gtk::arrow_type::Right, gtk::shadow_type::EtchedOut).unwrap();
     let calendar = gtk::Calendar::new().unwrap();

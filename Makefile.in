@@ -49,8 +49,8 @@ target/$(GLUE_LIBNAME).so:    target/$(GLUE_LIBNAME).o | target/
 .PHONY: test
 test:				$(TEST_SRC) | bin/
 					@$(ECHO) "$(OK_COLOR) Building test $(NO_COLOR)"
-					$(RUSTC) -L target/ $(TEST_SRC) -o bin/test
-					./bin/test
+					$(RUSTC) -L target/ $(TEST_SRC) -o test/bin/test
+					./test/bin/test
 
 .PHONY: doc
 doc:
