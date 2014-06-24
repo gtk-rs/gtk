@@ -18,7 +18,7 @@
 use libc::c_double;
 use std::str;
 use ffi;
-use gtk::traits::*;
+use gtk::traits;
 use utils::cast::GTK_PROGRESSBAR;
 
 
@@ -109,5 +109,5 @@ impl ProgressBar {
 impl_GtkWidget!(ProgressBar)
 
 
-impl OrientableTrait for ProgressBar {}
+impl traits::OrientableTrait for ProgressBar {}
 

@@ -18,7 +18,7 @@
 
 
 use ffi;
-use gtk::traits::*;
+use gtk::traits;
 /// VolumeButton — A button which pops up a volume control
 struct_Widget!(VolumeButton)
 
@@ -33,7 +33,7 @@ impl VolumeButton {
 impl_GtkWidget!(VolumeButton)
 
 
-impl ContainerTrait for VolumeButton {}
-impl ButtonTrait for VolumeButton {}
-impl ScaleButtonTrait for VolumeButton {}
-impl OrientableTrait for VolumeButton {}
+impl traits::ContainerTrait for VolumeButton {}
+impl traits::ButtonTrait for VolumeButton {}
+impl traits::ScaleButtonTrait for VolumeButton {}
+impl traits::OrientableTrait for VolumeButton {}

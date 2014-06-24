@@ -18,7 +18,7 @@
 
 
 use ffi;
-use gtk::traits::*;
+use gtk::traits;
 /**
 * ToggleButton — A button to launch a font chooser dialog
 *
@@ -57,6 +57,6 @@ impl ToggleButton {
 impl_GtkWidget!(ToggleButton)
 
 
-impl ContainerTrait for ToggleButton {}
-impl ButtonTrait for ToggleButton {}
-impl ToggleButtonTrait for ToggleButton {}
+impl traits::ContainerTrait for ToggleButton {}
+impl traits::ButtonTrait for ToggleButton {}
+impl traits::ToggleButtonTrait for ToggleButton {}

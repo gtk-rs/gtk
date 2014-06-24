@@ -21,7 +21,9 @@
 use gtk;
 use utils::cast::{GTK_SEARCHBAR, GTK_ENTRY};
 use ffi;
-use gtk::traits::*;
+use gtk::traits;
+use gtk::traits::WidgetTrait;
+
 /// Box — A container box
 struct_Widget!(SearchBar)
 
@@ -70,5 +72,5 @@ impl SearchBar {
 impl_GtkWidget!(SearchBar)
 
 
-impl ::gtk::traits::ContainerTrait for SearchBar {}
-impl BinTrait for SearchBar {}
+impl traits::ContainerTrait for SearchBar {}
+impl traits::BinTrait for SearchBar {}

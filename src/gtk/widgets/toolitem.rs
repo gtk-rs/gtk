@@ -18,7 +18,7 @@
 
 
 use ffi;
-use gtk::traits::*;
+use gtk::traits;
 /// ToolItem — The base class of widgets that can be added to ToolShe
 struct_Widget!(ToolItem)
 
@@ -33,6 +33,6 @@ impl ToolItem {
 impl_GtkWidget!(ToolItem)
 
 
-impl ContainerTrait for ToolItem {}
-impl BinTrait for ToolItem {}
-impl ToolItemTrait for ToolItem {}
+impl traits::ContainerTrait for ToolItem {}
+impl traits::BinTrait for ToolItem {}
+impl traits::ToolItemTrait for ToolItem {}

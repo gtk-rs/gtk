@@ -19,7 +19,7 @@
 
 use utils::cast::GTK_SPINNER;
 use ffi;
-use gtk::traits::*;
+use gtk::traits;
 /// Spinner — Show a spinner animation
 struct_Widget!(Spinner)
 

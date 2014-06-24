@@ -21,7 +21,7 @@ use gtk::enums::{Orientation, PositionType};
 use utils::cast::GTK_SCALE;
 use gtk;
 use ffi;
-use gtk::traits::*;
+use gtk::traits;
 // TODO : implements Range
 
 /**
@@ -126,4 +126,4 @@ impl Scale {
 impl_GtkWidget!(Scale)
 
 
-impl OrientableTrait for Scale {}
+impl traits::OrientableTrait for Scale {}

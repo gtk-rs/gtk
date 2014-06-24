@@ -20,7 +20,7 @@
 use gtk::enums::{ShadowType, ArrowType};
 use utils::cast::GTK_ARROW;
 use ffi;
-use gtk::traits::*;
+use gtk::traits;
 /// Arrow — Displays an arrow
 struct_Widget!(Arrow)
 
@@ -40,4 +40,4 @@ impl Arrow {
 impl_GtkWidget!(Arrow)
 
 
-impl MiscTrait for Arrow {}
+impl traits::MiscTrait for Arrow {}

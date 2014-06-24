@@ -21,7 +21,7 @@ use gtk::enums::{SpinType, SpinButtonUpdatePolicy};
 use gtk;
 use utils::cast::{GTK_SPINBUTTON};
 use ffi;
-use gtk::traits::*;
+use gtk::traits;
 /**
 * SpinButton — Retrieve an integer or floating-point number from the user
 *
@@ -199,5 +199,5 @@ impl SpinButton {
 impl_GtkWidget!(SpinButton)
 
 
-impl EntryTrait for SpinButton {}
-impl OrientableTrait for SpinButton {}
+impl traits::EntryTrait for SpinButton {}
+impl traits::OrientableTrait for SpinButton {}

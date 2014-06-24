@@ -20,7 +20,7 @@ use std::ptr;
 
 use utils::cast::GTK_ASPECTFRAME;
 use ffi;
-use gtk::traits::*;
+use gtk::traits;
 /// AspectFrame — A frame that constrains its child to a particular aspect ratio
 struct_Widget!(AspectFrame)
 
@@ -53,5 +53,5 @@ impl AspectFrame {
 
 impl_GtkWidget!(AspectFrame)
 
-impl FrameTrait for AspectFrame {}
-impl ContainerTrait for AspectFrame {}
+impl traits::FrameTrait for AspectFrame {}
+impl traits::ContainerTrait for AspectFrame {}

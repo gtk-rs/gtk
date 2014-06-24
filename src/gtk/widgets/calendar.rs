@@ -20,7 +20,7 @@ use libc::{c_uint, c_int};
 use gtk::enums::CalendarDisplayOptions;
 use utils::cast::GTK_CALENDAR;
 use ffi;
-use gtk::traits::*;
+use gtk::traits;
 /**
 * Calendar — Displays a calendar and allows the user to select a date
 *

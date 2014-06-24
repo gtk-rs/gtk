@@ -20,7 +20,7 @@ use std::str;
 
 use utils::cast::GTK_LINKBUTTON;
 use ffi;
-use gtk::traits::*;
+use gtk::traits;
 /**
 * LinkButton — Create buttons bound to a URL
 *
@@ -82,6 +82,6 @@ impl LinkButton {
 impl_GtkWidget!(LinkButton)
 
 
-impl ContainerTrait for LinkButton {}
-impl ButtonTrait for LinkButton {}
+impl traits::ContainerTrait for LinkButton {}
+impl traits::ButtonTrait for LinkButton {}
 

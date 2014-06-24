@@ -21,7 +21,9 @@ use libc::c_int;
 use gtk;
 use utils::cast::GTK_EXPANDER;
 use ffi;
-use gtk::traits::*;
+use gtk::traits;
+use gtk::traits::WidgetTrait;
+
 /// Expander — A container which can hide its child
 struct_Widget!(Expander)
 
@@ -151,15 +153,14 @@ impl Expander {
 
     pub fn get_label_widget(&mut self) -> gtk::Label {
         unsafe {
-            WidgetTrait::wrap_widget(ffi::gtk_expander_get_label_widget(GTK_EXPANDER(self.pointer)))
+            traits::WidgetTrait::wrap_widget(ffi::gtk_expander_get_label_widget(GTK_EXPANDER(self.pointer)))
         }
     }
-
 }
 
 impl_GtkWidget!(Expander)
 
 
-impl ContainerTrait for Expander {}
-impl BinTrait for Expander {}
+impl traits::ContainerTrait for Expander {}
+impl traits::BinTrait for Expander {}
 

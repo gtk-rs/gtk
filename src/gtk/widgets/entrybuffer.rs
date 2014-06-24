@@ -21,7 +21,7 @@
 use libc::{c_int, c_uint};
 use std::str;
 use ffi;
-use gtk::traits::*;
+use gtk::traits;
 // TODO:
 // Implements custom signal : inserted-text + deleted-text
 

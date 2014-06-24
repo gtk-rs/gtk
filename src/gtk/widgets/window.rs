@@ -18,7 +18,7 @@
 
 
 use ffi;
-use gtk::traits::*;
+use gtk::traits;
 use gtk::WindowType;
 
 /**
@@ -44,6 +44,6 @@ impl Window {
 impl_GtkWidget!(Window)
 
 
-impl ContainerTrait for Window {}
-impl WindowTrait for Window {}
-impl BinTrait for Window {}
+impl traits::ContainerTrait for Window {}
+impl traits::WindowTrait for Window {}
+impl traits::BinTrait for Window {}

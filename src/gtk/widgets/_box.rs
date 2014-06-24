@@ -19,7 +19,7 @@ use libc::c_int;
 
 use gtk::enums::Orientation;
 use ffi;
-use gtk::traits::*;
+use gtk::traits;
 /// Box — A container box
 struct_Widget!(_Box)
 
@@ -32,6 +32,6 @@ impl _Box {
 
 impl_GtkWidget!(_Box)
 
-impl ContainerTrait for _Box {}
-impl _BoxTrait for _Box {}
-impl OrientableTrait for _Box {}
+impl traits::ContainerTrait for _Box {}
+impl traits::_BoxTrait for _Box {}
+impl traits::OrientableTrait for _Box {}

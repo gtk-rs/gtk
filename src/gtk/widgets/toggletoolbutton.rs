@@ -18,7 +18,7 @@
 
 
 use ffi;
-use gtk::traits::*;
+use gtk::traits;
 /// ToggleToolButton — A ToolItem containing a toggle button
 struct_Widget!(ToggleToolButton)
 
@@ -40,8 +40,8 @@ impl ToggleToolButton {
 impl_GtkWidget!(ToggleToolButton)
 
 
-impl ContainerTrait for ToggleToolButton {}
-impl BinTrait for ToggleToolButton {}
-impl ToolItemTrait for ToggleToolButton {}
-impl ToolButtonTrait for ToggleToolButton {}
-impl ToggleToolButtonTrait for ToggleToolButton {}
+impl traits::ContainerTrait for ToggleToolButton {}
+impl traits::BinTrait for ToggleToolButton {}
+impl traits::ToolItemTrait for ToggleToolButton {}
+impl traits::ToolButtonTrait for ToggleToolButton {}
+impl traits::ToggleToolButtonTrait for ToggleToolButton {}

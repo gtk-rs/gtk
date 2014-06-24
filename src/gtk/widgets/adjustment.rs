@@ -20,7 +20,7 @@
 
 use libc::c_double;
 use ffi;
-use gtk::traits::*;
+use gtk::traits;
 /**
 * A representation of an adjustable bounded value
 *

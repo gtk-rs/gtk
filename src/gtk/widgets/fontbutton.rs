@@ -18,7 +18,7 @@
 use std::str;
 
 use ffi;
-use gtk::traits::*;
+use gtk::traits;
 use utils::cast::GTK_FONTBUTTON;
 
 /**
@@ -131,6 +131,6 @@ impl FontButton {
 impl_GtkWidget!(FontButton)
 
 
-impl ContainerTrait for FontButton {}
-impl ButtonTrait for FontButton {}
+impl traits::ContainerTrait for FontButton {}
+impl traits::ButtonTrait for FontButton {}
 

@@ -18,7 +18,7 @@
 
 
 use ffi;
-use gtk::traits::*;
+use gtk::traits;
 /**
 * SearchEntry — An entry which shows a search icon
 *
@@ -38,4 +38,4 @@ impl SearchEntry {
 impl_GtkWidget!(SearchEntry)
 
 
-impl EntryTrait for SearchEntry {}
+impl traits::EntryTrait for SearchEntry {}

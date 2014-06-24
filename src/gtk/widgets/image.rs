@@ -18,7 +18,7 @@
 
 
 use ffi;
-use gtk::traits::*;
+use gtk::traits;
 /// Image — A widget displaying an image
 struct_Widget!(Image)
 
@@ -37,4 +37,4 @@ impl Image {
 impl_GtkWidget!(Image)
 
 
-impl MiscTrait for Image {}
+impl traits::MiscTrait for Image {}
