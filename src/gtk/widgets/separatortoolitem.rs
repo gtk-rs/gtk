@@ -15,15 +15,12 @@
 
 //! The base class of widgets that can be added to ToolShe
 
-
-
 use gtk::ffi;
 use gtk::traits;
 use gtk::cast::GTK_SEPARATORTOOLITEM;
 
 /// ToolItem — The base class of widgets that can be added to ToolShe
 struct_Widget!(SeparatorToolItem)
-
 
 impl SeparatorToolItem {
     pub fn new() -> Option<SeparatorToolItem> {
@@ -32,22 +29,22 @@ impl SeparatorToolItem {
     }
 
     pub fn set_draw(&mut self, draw: bool) -> () {
-    	match draw {
+        match draw {
             true    => unsafe { ffi::gtk_separator_tool_item_set_draw(GTK_SEPARATORTOOLITEM(self.pointer), ffi::Gtrue) },
             false   => unsafe { ffi::gtk_separator_tool_item_set_draw(GTK_SEPARATORTOOLITEM(self.pointer), ffi::Gfalse) }
         }
     }
 
     pub fn get_draw(&self) -> bool {
-    	match unsafe { ffi::gtk_separator_tool_item_get_draw(GTK_SEPARATORTOOLITEM(self.pointer)) } {
+        match unsafe { ffi::gtk_separator_tool_item_get_draw(GTK_SEPARATORTOOLITEM(self.pointer)) } {
             ffi::Gfalse     => false,
             _               => true
         }
     }
 }
 
+impl_drop!(SeparatorToolItem)
 impl_TraitWidget!(SeparatorToolItem)
-
 
 impl traits::Container for SeparatorToolItem {}
 impl traits::Bin for SeparatorToolItem {}

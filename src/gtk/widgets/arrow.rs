@@ -37,7 +37,7 @@ impl Arrow {
     }
 }
 
+impl_drop!(Arrow)
 impl_TraitWidget!(Arrow)
-
 
 impl traits::Misc for Arrow {}

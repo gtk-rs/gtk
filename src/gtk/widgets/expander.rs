@@ -158,9 +158,8 @@ impl Expander {
     }
 }
 
+impl_drop!(Expander)
 impl_TraitWidget!(Expander)
-
 
 impl traits::Container for Expander {}
 impl traits::Bin for Expander {}
-

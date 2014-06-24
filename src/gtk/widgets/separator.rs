@@ -15,8 +15,6 @@
 
 //! A separator widget
 
-
-
 use gtk::ffi;
 use gtk::traits;
 use gtk::Orientation;
@@ -32,7 +30,7 @@ impl Separator {
     }
 }
 
+impl_drop!(Separator)
 impl_TraitWidget!(Separator)
-
 
 impl traits::Orientable for Separator {}

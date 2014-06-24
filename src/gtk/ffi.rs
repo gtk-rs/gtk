@@ -129,6 +129,7 @@ extern "C" {
     pub fn gtk_widget_get_margin_left          (widget: *C_GtkWidget) -> c_int;
     pub fn gtk_widget_get_margin_top           (widget: *C_GtkWidget) -> c_int;
     pub fn gtk_widget_get_margin_bottom        (widget: *C_GtkWidget) -> c_int;
+    pub fn gtk_widget_destroy                  (widget: *C_GtkWidget);
 
     //=========================================================================
     // GtkLabel
@@ -945,4 +946,5 @@ extern "C" {
     pub fn cast_GtkMenuToolButton(widget: *C_GtkWidget) -> *C_GtkMenuToolButton;
     pub fn cast_GtkToggleToolButton(widget: *C_GtkWidget) -> *C_GtkToggleToolButton;
     pub fn cast_GtkRadioToolButton(widget: *C_GtkWidget) -> *C_GtkRadioToolButton;
+    pub fn cast_GtkAdjustment(widget: *C_GtkWidget) -> *C_GtkAdjustment;
 }

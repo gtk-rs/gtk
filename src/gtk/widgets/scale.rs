@@ -123,7 +123,7 @@ impl Scale {
     }
 }
 
+impl_drop!(Scale)
 impl_TraitWidget!(Scale)
-
 
 impl traits::Orientable for Scale {}

@@ -26,35 +26,25 @@ pub fn GTK_BIN(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkBin {
     unsafe { ffi::cast_GtkBin(widget) }
 }
 
-
 pub fn GTK_BUTTON(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkButton {
     unsafe { ffi::cast_GtkButton(widget) }
 }
-
 
 pub fn GTK_CONTAINER(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkContainer {
     unsafe { ffi::cast_GtkContainer(widget) }
 }
 
-
-
 pub fn GTK_FRAME(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkFrame {
     unsafe { ffi::cast_GtkFrame(widget) }
 }
-
-
 
 pub fn GTK_LABEL(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkLabel {
     unsafe { ffi::cast_GtkLabel(widget) }
 }
 
-
-
 pub fn GTK_MISC(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkMisc {
     unsafe { ffi::cast_GtkMisc(widget) }
 }
-
-
 
 pub fn GTK_ORIENTABLE(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkOrientable {
     unsafe { ffi::cast_GtkOrientable(widget) }
@@ -196,4 +186,7 @@ pub fn GTK_RADIOTOOLBUTTON(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkRadioToolBut
     unsafe{ ffi::cast_GtkRadioToolButton(widget) }
 }
 
+pub fn GTK_ADJUSTMENT(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkAdjustment {
+    unsafe{ ffi::cast_GtkAdjustment(widget) }
+}
 

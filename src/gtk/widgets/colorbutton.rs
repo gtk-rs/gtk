@@ -116,9 +116,8 @@ impl ColorButton {
     }
 }
 
+impl_drop!(ColorButton)
 impl_TraitWidget!(ColorButton)
-
 
 impl traits::Container for ColorButton {}
 impl traits::Button for ColorButton {}
-

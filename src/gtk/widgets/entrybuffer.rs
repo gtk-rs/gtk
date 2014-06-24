@@ -24,7 +24,6 @@ use gtk::ffi;
 // TODO:
 // Implements custom signal : inserted-text + deleted-text
 
-
 /**
 * EntryBuffer — Text buffer for gtk::Entry
 *

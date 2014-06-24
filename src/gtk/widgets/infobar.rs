@@ -22,6 +22,7 @@ use gtk::cast::GTK_INFOBAR;
 use gtk;
 use gtk::ffi;
 use gtk::traits;
+
 /// InfoBar — Report important messages to the user
 struct_Widget!(InfoBar)
 
@@ -92,6 +93,7 @@ impl InfoBar {
     }
 }
 
+impl_drop!(InfoBar)
 impl_TraitWidget!(InfoBar)
 
 impl traits::Container for InfoBar {}

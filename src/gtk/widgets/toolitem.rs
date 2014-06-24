@@ -15,13 +15,11 @@
 
 //! The base class of widgets that can be added to ToolShe
 
-
-
 use gtk::ffi;
 use gtk::traits;
+
 /// ToolItem — The base class of widgets that can be added to ToolShe
 struct_Widget!(ToolItem)
-
 
 impl ToolItem {
     pub fn new() -> Option<ToolItem> {
@@ -30,8 +28,8 @@ impl ToolItem {
     }
 }
 
+impl_drop!(ToolItem)
 impl_TraitWidget!(ToolItem)
-
 
 impl traits::Container for ToolItem {}
 impl traits::Bin for ToolItem {}

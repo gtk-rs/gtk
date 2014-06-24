@@ -15,10 +15,9 @@
 
 //! An entry which shows a search icon
 
-
-
 use gtk::ffi;
 use gtk::traits;
+
 /**
 * SearchEntry — An entry which shows a search icon
 *
@@ -27,7 +26,6 @@ use gtk::traits;
 */
 struct_Widget!(SearchEntry)
 
-
 impl SearchEntry {
     pub fn new() -> Option<SearchEntry> {
         let tmp_pointer = unsafe { ffi::gtk_search_entry_new() };
@@ -35,7 +33,7 @@ impl SearchEntry {
     }
 }
 
+impl_drop!(SearchEntry)
 impl_TraitWidget!(SearchEntry)
-
 
 impl traits::Entry for SearchEntry {}

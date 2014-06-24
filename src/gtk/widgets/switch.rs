@@ -15,8 +15,6 @@
 
 //! A "light switch" style toggle
 
-
-
 use gtk::cast::GTK_SWITCH;
 use gtk::ffi;
 /*
@@ -26,7 +24,6 @@ use gtk::ffi;
 * * `activate` : Action
 */
 struct_Widget!(Switch)
-
 
 impl Switch {
     pub fn new() -> Option<Switch> {
@@ -49,5 +46,5 @@ impl Switch {
     }
 }
 
+impl_drop!(Switch)
 impl_TraitWidget!(Switch)
-
