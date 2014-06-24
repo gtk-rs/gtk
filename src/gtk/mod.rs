@@ -13,133 +13,166 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use ffi;
-use std::ptr;
+pub use self::rt::{
+	init,
+	main,
+	main_quit,
+	main_level,
+	main_iteration,
+	main_iteration_do
+};
 
-pub use gtk::window::Window;
-pub use gtk::label::Label;
-pub use gtk::button::Button;
-pub use gtk::_box::_Box;
-pub use gtk::buttonbox::ButtonBox;
-pub use gtk::frame::Frame;
-pub use gtk::aspectframe::AspectFrame;
-pub use gtk::fixed::Fixed;
-pub use gtk::separator::Separator;
-pub use gtk::fontbutton::FontButton;
-pub use gtk::togglebutton::ToggleButton;
-pub use gtk::checkbutton::CheckButton;
-pub use gtk::menubutton::MenuButton;
-pub use gtk::colorbutton::ColorButton;
-pub use gtk::linkbutton::LinkButton;
-pub use gtk::adjustment::Adjustment;
-pub use gtk::scalebutton::ScaleButton;
-pub use gtk::volumebutton::VolumeButton;
-pub use gtk::grid::Grid;
-pub use gtk::entrybuffer::EntryBuffer;
-pub use gtk::entry::Entry;
-pub use gtk::searchentry::SearchEntry;
-pub use gtk::switch::Switch;
-pub use gtk::scale::Scale;
-pub use gtk::levelbar::LevelBar;
-pub use gtk::searchbar::SearchBar;
-pub use gtk::spinbutton::SpinButton;
-pub use gtk::spinner::Spinner;
-pub use gtk::image::Image;
-pub use gtk::progressbar::ProgressBar;
-pub use gtk::arrow::Arrow;
-pub use gtk::calendar::Calendar;
-pub use gtk::alignment::Alignment;
-pub use gtk::expander::Expander;
-pub use gtk::paned::Paned;
-pub use gtk::infobar::InfoBar;
-pub use gtk::toolbar::Toolbar;
-pub use gtk::toolitem::ToolItem;
-pub use gtk::separatortoolitem::SeparatorToolItem;
-pub use gtk::toolbutton::ToolButton;
-pub use gtk::toggletoolbutton::ToggleToolButton;
-pub use gtk::menutoolbutton::MenuToolButton;
+pub use self::widgets::{
+	Window,
+	Label,
+	Button,
+	_Box,
+	ButtonBox,
+	Frame,
+	AspectFrame,
+	Fixed,
+	Separator,
+	FontButton,
+	ToggleButton,
+	CheckButton,
+	MenuButton,
+	ColorButton,
+	LinkButton,
+	Adjustment,
+	ScaleButton,
+	VolumeButton,
+	Grid,
+	EntryBuffer,
+	Entry,
+	SearchEntry,
+	Switch,
+	Scale,
+	LevelBar,
+	SearchBar,
+	SpinButton,
+	Spinner,
+	Image,
+	ProgressBar,
+	Arrow,
+	Calendar,
+	Alignment,
+	Expander,
+	Paned,
+	InfoBar,
+	Toolbar,
+	ToolItem,
+	SeparatorToolItem,
+	ToolButton,
+	ToggleToolButton,
+	MenuToolButton
+};
 
-pub fn init() {
-    unsafe {
-        ffi::gtk_init(ptr::null(), ptr::null());
-    }
-}
+pub use self::enums::{
+	window_type,
+	WindowType,
+	text_direction,
+	TextDirection,
+	window_position,
+	WindowPosition,
+	button_box_style,
+	ButtonBoxStyle,
+	orientation,
+	Orientation,
+	direction_type,
+	DirectionType,
+	corner_type,
+	CornerType,
+	resize_mode,
+	ResizeMode,
+	border_style,
+	BorderStyle,
+	sort_type,
+	SortType,
+	state_flags,
+	StateFlags,
+	drag_result,
+	DragResult,
+	accel_flags,
+	AccelFlags,
+	arrow_placement,
+	ArrowPlacement,
+	arrow_type,
+	ArrowType,
+	attach_options,
+	AttachOptions,
+	delete_type,
+	DeleteType,
+	expander_style,
+	ExpanderStyle,
+	im_preedit_style,
+	IMPreeditStyle,
+	im_status_style,
+	IMStatusStyle,
+	justification,
+	Justification,
+	movement_step,
+	MovementStep,
+	pack_type,
+	PackType,
+	path_priority_type,
+	PathPriorityType,
+	path_type,
+	PathType,
+	policy_type,
+	PolicyType,
+	position_type,
+	PositionType,
+	relief_style,
+	ReliefStyle,
+	scroll_step,
+	ScrollStep,
+	scroll_type,
+	ScrollType,
+	selection_mode,
+	SelectionMode,
+	shadow_type,
+	ShadowType,
+	state_type,
+	StateType,
+	toolbar_style,
+	ToolbarStyle,
+	junction_sides,
+	JunctionSides,
+	region_flags,
+	RegionFlags,
+	icon_size,
+	IconSize,
+	entry_icon_position,
+	EntryIconPosition,
+	input_hints,
+	InputHints,
+	input_purpose,
+	InputPurpose,
+	image_type,
+	ImageType,
+	spin_type,
+	SpinType,
+	spin_button_update_policy,
+	SpinButtonUpdatePolicy,
+	level_bar_mode,
+	LevelBarMode,
+	calendar_display_options,
+	CalendarDisplayOptions,
+	message_type,
+	MessageType
+};
 
-pub fn main() {
-    unsafe {
-        ffi::gtk_main();
-    }
-}
+pub use self::types::{
+	Tooltip,
+	WidgetHelpType
+};
 
-pub fn main_quit() {
-    unsafe {
-        ffi::gtk_main_quit();
-    }
-}
-
-pub fn main_level() -> u32 {
-    unsafe {
-        ffi::gtk_main_level() as u32
-    }
-}
-
-pub fn main_iteration() -> bool {
-    match unsafe { ffi::gtk_main_iteration() } {
-        ffi::Gfalse => false,
-        _           => true
-    }
-}
-
-pub fn main_iteration_do(blocking: bool) -> bool {
-    let c_blocking = if blocking { ffi::Gtrue } else { ffi::Gfalse };
-    match unsafe { ffi::gtk_main_iteration_do(c_blocking) } {
-        ffi::Gfalse => false,
-        _           => true
-    }
-}
-
-pub mod enums;
-pub mod version;
-pub mod window;
-pub mod label;
-pub mod button;
-pub mod _box;
-pub mod buttonbox;
-pub mod frame;
-pub mod aspectframe;
-pub mod fixed;
-pub mod separator;
-pub mod fontbutton;
-pub mod togglebutton;
-pub mod checkbutton;
-pub mod menubutton;
-pub mod colorbutton;
-pub mod linkbutton;
-pub mod adjustment;
-pub mod scalebutton;
-pub mod volumebutton;
-pub mod grid;
-pub mod entrybuffer;
-pub mod entry;
-pub mod searchentry;
-pub mod switch;
-pub mod scale;
-pub mod levelbar;
-pub mod searchbar;
-pub mod spinbutton;
-pub mod spinner;
-pub mod image;
-pub mod progressbar;
-pub mod arrow;
-pub mod calendar;
-pub mod alignment;
-pub mod expander;
-pub mod paned;
-pub mod infobar;
-pub mod toolbar;
-pub mod toolitem;
-pub mod separatortoolitem;
-pub mod toolbutton;
-pub mod toggletoolbutton;
-pub mod menutoolbutton;
 pub mod cast;
+pub mod version;
+pub mod traits;
+pub mod signals;
+
+mod rt;
+mod widgets;
+mod enums;
+mod types;

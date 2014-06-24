@@ -13,44 +13,37 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-pub use self::color::{Color, RGBA};
-pub use self::events::{
-	EventType,
-	Event,
-	EventAny,
-	EventExpose,
-	EventVisibility,
-	EventMotion,
-	EventButton,
-	EventTouch,
-	EventScroll,
-	EventKey,
-	EventCrossing,
-	EventFocus,
-	EventConfigure,
-	EventProperty,
-	EventSelection,
-	EventOwnerChange,
-	EventProximity,
-	EventSetting,
-	EventWindowState,
-	EventGrabBroken,
-	EventDND,
-	VisibilityState,
-	ScrollDirection,
-	NotifyType,
-	CrossingMode,
-	PropertyState,
-	WindowState,
-	SettingAction,
-	OwnerChange
-};
-pub use self::device::{Device};
-pub use self::window::{Window};
-pub use self::types::{Atom, Screen, Rectangle};
+//! Toplevel which can contain other widgets
 
-mod color;
-mod events;
-mod device;
-mod window;
-mod types;
+
+
+use ffi;
+use gtk::traits;
+use gtk::WindowType;
+
+/**
+* Window — Toplevel which can contain other widgets
+*
+* # Available signals:
+* * `activate-default` : Action
+* * `activate-focus` : Action
+* * `keys-changed` : Run First
+* * `set-focus` : Run Last
+*/
+
+struct_Widget!(Window)
+
+
+impl Window {
+    pub fn new(window_type: WindowType) -> Option<Window> {
+        let tmp_pointer = unsafe { ffi::gtk_window_new(window_type) };
+        check_pointer!(tmp_pointer, Window)
+    }
+}
+
+impl_GtkWidget!(Window)
+
+
+impl traits::Container for Window {}
+impl traits::Window for Window {}
+impl traits::Bin for Window {}

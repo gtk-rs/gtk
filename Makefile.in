@@ -14,61 +14,55 @@ TEST_SRC 		  	= test/main.rs
 
 INC 				= $(shell pkg-config --cflags gtk+-3.0)
 LIBS 				= $(shell pkg-config --libs gtk+-3.0)
-RUSTC 				= rustc
+RUSTC 				= rustc -g
 OS 					= $(shell uname)
 
 .DEFAULT: rgtk
 .PHONY: rgtk
-rgtk: glue rgtk-build | lib/
+rgtk: glue rgtk-build | target/
 
 .PHONY: rgtk-build
 rgtk-build: src/*
 					@$(ECHO) "$(OK_COLOR) Building rgtk.rlib $(NO_COLOR)"
-					$(RUSTC) -L lib/ src/$(LIBNAME).rs --out-dir lib/
+					$(RUSTC) -L target/ src/$(LIBNAME).rs --out-dir target/
 
-#make rulse for the glue library
-.PHONY: glue
-ifeq ($(OS), Darwin)
-glue : lib/$(GLUE_LIBNAME).dylib
-else
-glue : lib/$(GLUE_LIBNAME).a
-endif
+glue : target/$(GLUE_LIBNAME).a
 
-lib/$(GLUE_LIBNAME).dylib: $(GLUE_SRC) | lib/ tmp/
-					$(CC) $(INC) $(LIBS) -dynamiclib -o lib/$(GLUE_LIBNAME).dylib $(SRC)
+target/$(GLUE_LIBNAME).dylib: $(GLUE_SRC) | target/
+					$(CC) $(INC) $(LIBS) -dynamiclib -o target/$(GLUE_LIBNAME).dylib $(SRC)
 
-lib/$(GLUE_LIBNAME).o: $(GLUE_SRC) | lib/
+target/$(GLUE_LIBNAME).o: $(GLUE_SRC) | target/
 					$(CC) -g -c $^ $(INC) -o $@ $(LIBS)
 
-lib/$(GLUE_LIBNAME).a: lib/$(GLUE_LIBNAME).o | lib/
-					ar -rcs $@ $^ 
+target/$(GLUE_LIBNAME).a: target/$(GLUE_LIBNAME).o | target/
+					ar -rcs $@ $^
 
-lib/$(GLUE_LIBNAME).so:    lib/$(GLUE_LIBNAME).o | lib/
+target/$(GLUE_LIBNAME).so:    target/$(GLUE_LIBNAME).o | target/
 					$(CC) -shared -Wl,-soname,$(GLUE_LIBNAME).so -o $@ $^ -lc
 
 .PHONY: test
 test:				$(TEST_SRC) | bin/
 					@$(ECHO) "$(OK_COLOR) Building test $(NO_COLOR)"
-					$(RUSTC) -L lib/ $(TEST_SRC) -o bin/test
+					$(RUSTC) -L target/ $(TEST_SRC) -o bin/test
 					./bin/test
 
 .PHONY: doc
-doc: 				
+doc:
 					rustdoc -o doc/ src/rgtk.rs
-					chmod -R 755 doc/ 
+					chmod -R 755 doc/
 
-lib/:
+target/:
 					mkdir -p $@
-					@$(ECHO) "$(OK_COLOR) Created $@ foldder $(NO_COLOR)"
+					@$(ECHO) "$(OK_COLOR) Created $@ folder $(NO_COLOR)"
 
 bin/:
 					mkdir -p $@
-					@$(ECHO) "$(OK_COLOR) Created $@ foldder $(NO_COLOR)"
+					@$(ECHO) "$(OK_COLOR) Created $@ folder $(NO_COLOR)"
 
 .PHONY: full
 full:				glue rgtk test
 
 .PHONY: clean
 clean:
-					rm -rf tmp/ lib/ doc/
+					rm -rf target/ doc/
 

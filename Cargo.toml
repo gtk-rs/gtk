@@ -1,0 +1,13 @@
+[package]
+name = "rgtk"
+version = "0.0.1"
+authors = ["letang.jeremy@gmail.com", "mathijs.henquet@gmail.com"]
+build = "make glue"
+
+[[lib]]
+name = "rgtk"
+crate-type = ["rlib"]
+
+[[bin]]
+name = "test"
+path = "test/main.rs"

@@ -13,44 +13,31 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-pub use self::color::{Color, RGBA};
-pub use self::events::{
-	EventType,
-	Event,
-	EventAny,
-	EventExpose,
-	EventVisibility,
-	EventMotion,
-	EventButton,
-	EventTouch,
-	EventScroll,
-	EventKey,
-	EventCrossing,
-	EventFocus,
-	EventConfigure,
-	EventProperty,
-	EventSelection,
-	EventOwnerChange,
-	EventProximity,
-	EventSetting,
-	EventWindowState,
-	EventGrabBroken,
-	EventDND,
-	VisibilityState,
-	ScrollDirection,
-	NotifyType,
-	CrossingMode,
-	PropertyState,
-	WindowState,
-	SettingAction,
-	OwnerChange
-};
-pub use self::device::{Device};
-pub use self::window::{Window};
-pub use self::types::{Atom, Screen, Rectangle};
+//! Displays an arrow
 
-mod color;
-mod events;
-mod device;
-mod window;
-mod types;
+
+
+use gtk::enums::{ShadowType, ArrowType};
+use utils::cast::GTK_ARROW;
+use ffi;
+use gtk::traits;
+/// Arrow — Displays an arrow
+struct_Widget!(Arrow)
+
+impl Arrow {
+    pub fn new(arrow_type: ArrowType, shadow_type: ShadowType) -> Option<Arrow> {
+        let tmp_pointer = unsafe { ffi::gtk_arrow_new(arrow_type, shadow_type) };
+        check_pointer!(tmp_pointer, Arrow)
+    }
+
+    pub fn set(&mut self, arrow_type: ArrowType, shadow_type: ShadowType) -> () {
+        unsafe {
+            ffi::gtk_arrow_set(GTK_ARROW(self.pointer), arrow_type, shadow_type);
+        }
+    }
+}
+
+impl_GtkWidget!(Arrow)
+
+
+impl traits::Misc for Arrow {}

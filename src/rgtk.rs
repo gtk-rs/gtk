@@ -105,43 +105,31 @@ License
 __rgtk__ is available under the same license term than GTK+, the LGPL (Lesser General Public license).
 */
 
-#![feature(globs)]
-#![feature(macro_rules)]
-
-#![crate_id = "rgtk#0.0.1"]
+#![crate_id = "rgtk"]
 #![crate_type = "lib"]
 #![crate_type = "rlib"]
-
+#![feature(macro_rules)]
 #![allow(dead_code)] // TODO: drop this
-
-// #[pkg_do(make)]
 
 extern crate libc;
 
-// traits reexports
-pub use traits::GtkWidget;
-pub use traits::GtkWindow;
-pub use traits::GtkContainer;
-pub use traits::GtkMisc;
-pub use traits::GtkButton;
-pub use traits::GtkLabel;
-pub use traits::GtkBox;
-pub use traits::GtkOrientable;
-pub use traits::GtkFrame;
-pub use traits::GtkToggleButton;
-pub use traits::GtkEntry;
-pub use traits::GtkToolShell;
-pub use traits::GtkBin;
-pub use traits::GtkScaleButton;
-pub use traits::GtkToolItem;
-pub use traits::GtkToolButton;
-pub use traits::GtkToggleToolButton;
-
-pub use traits::Signal;
-
-// reexport enums
-pub use gtk::enums::*;
-
+pub use GtkWidgetTrait          = gtk::traits::Widget;
+pub use GtkContainerTrait       = gtk::traits::Container;
+pub use GtkWindowTrait          = gtk::traits::Window;
+pub use GtkMiscTrait            = gtk::traits::Misc;
+pub use GtkButtonTrait          = gtk::traits::Button;
+pub use GtkLabelTrait           = gtk::traits::Label;
+pub use Gtk_BoxTrait            = gtk::traits::_Box;
+pub use GtkOrientableTrait      = gtk::traits::Orientable;
+pub use GtkFrameTrait           = gtk::traits::Frame;
+pub use GtkToggleButtonTrait    = gtk::traits::ToggleButton;
+pub use GtkScaleButtonTrait     = gtk::traits::ScaleButton;
+pub use GtkEntryTrait           = gtk::traits::Entry;
+pub use GtkBinTrait             = gtk::traits::Bin;
+pub use GtkToolShellTrait       = gtk::traits::ToolShell;
+pub use GtkToolItemTrait        = gtk::traits::ToolItem;
+pub use GtkToolButtonTrait      = gtk::traits::ToolButton;
+pub use GtkToggleToolButtonTrait= gtk::traits::ToggleToolButton;
 
 #[doc(hidden)]
 #[cfg(target_os="macos")]
@@ -166,7 +154,6 @@ mod platform {
 }
 
 pub mod utils;
-pub mod traits;
 pub mod gtk;
 pub mod gdk;
 pub mod glib;
