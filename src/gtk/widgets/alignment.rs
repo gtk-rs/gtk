@@ -68,7 +68,7 @@ impl Alignment {
 impl_GtkWidget!(Alignment)
 
 
-impl traits::ContainerTrait for Alignment {}
-impl traits::BinTrait for Alignment {}
+impl traits::Container for Alignment {}
+impl traits::Bin for Alignment {}
 
 

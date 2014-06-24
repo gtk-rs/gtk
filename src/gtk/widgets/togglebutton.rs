@@ -57,6 +57,6 @@ impl ToggleButton {
 impl_GtkWidget!(ToggleButton)
 
 
-impl traits::ContainerTrait for ToggleButton {}
-impl traits::ButtonTrait for ToggleButton {}
-impl traits::ToggleButtonTrait for ToggleButton {}
+impl traits::Container for ToggleButton {}
+impl traits::Button for ToggleButton {}
+impl traits::ToggleButton for ToggleButton {}

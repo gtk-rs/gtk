@@ -26,7 +26,7 @@ struct_Widget!(MenuToolButton)
 
 
 impl MenuToolButton {
-    pub fn new<T: traits::WidgetTrait>(icon_widget: Option<&T>, label: Option<&str>) -> Option<MenuToolButton> {
+    pub fn new<T: traits::Widget>(icon_widget: Option<&T>, label: Option<&str>) -> Option<MenuToolButton> {
         let tmp_pointer: *ffi::C_GtkWidget = unsafe {
             match label {
                 Some(l) => {
@@ -75,8 +75,8 @@ impl MenuToolButton {
 impl_GtkWidget!(MenuToolButton)
 
 
-impl traits::ContainerTrait for MenuToolButton {}
-impl traits::BinTrait for MenuToolButton {}
-impl traits::ToolItemTrait for MenuToolButton {}
-impl traits::ToolButtonTrait for MenuToolButton {}
+impl traits::Container for MenuToolButton {}
+impl traits::Bin for MenuToolButton {}
+impl traits::ToolItem for MenuToolButton {}
+impl traits::ToolButton for MenuToolButton {}
 

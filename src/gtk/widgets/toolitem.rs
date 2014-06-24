@@ -33,6 +33,6 @@ impl ToolItem {
 impl_GtkWidget!(ToolItem)
 
 
-impl traits::ContainerTrait for ToolItem {}
-impl traits::BinTrait for ToolItem {}
-impl traits::ToolItemTrait for ToolItem {}
+impl traits::Container for ToolItem {}
+impl traits::Bin for ToolItem {}
+impl traits::ToolItem for ToolItem {}

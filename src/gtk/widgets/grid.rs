@@ -30,7 +30,7 @@ impl Grid {
         check_pointer!(tmp_pointer, Grid)
     }
 
-    pub fn attach<T: traits::WidgetTrait>(&mut self,
+    pub fn attach<T: traits::Widget>(&mut self,
                                 child: &T,
                                 left: i32,
                                 top: i32,
@@ -46,7 +46,7 @@ impl Grid {
         }
     }
 
-    pub fn attach_next_to<T: traits::WidgetTrait>(&mut self,
+    pub fn attach_next_to<T: traits::Widget>(&mut self,
                                         child: &T,
                                         sibling: &T,
                                         side: PositionType,
@@ -86,7 +86,7 @@ impl Grid {
         }
     }
 
-    pub fn insert_next_to<T: traits::WidgetTrait>(&mut self, sibling: &T, side: PositionType) -> () {
+    pub fn insert_next_to<T: traits::Widget>(&mut self, sibling: &T, side: PositionType) -> () {
         unsafe {
             ffi::gtk_grid_insert_next_to(GTK_GRID(self.pointer), sibling.get_widget(), side);
         }
@@ -161,8 +161,8 @@ impl Grid {
 impl_GtkWidget!(Grid)
 
 
-impl traits::ContainerTrait for Grid {}
-impl traits::OrientableTrait for Grid {}
+impl traits::Container for Grid {}
+impl traits::Orientable for Grid {}
 
 
 

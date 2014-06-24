@@ -20,14 +20,14 @@ use gtk::enums::ResizeMode;
 use ffi;
 use gtk::traits;
 
-pub trait ContainerTrait : traits::WidgetTrait {
-    fn add<'r, T: traits::WidgetTrait>(&'r mut self, widget: &'r T) {
+pub trait Container : traits::Widget {
+    fn add<'r, T: traits::Widget>(&'r mut self, widget: &'r T) {
         unsafe {
             ffi::gtk_container_add(GTK_CONTAINER(self.get_widget()), widget.get_widget());
         }
     }
 
-    fn remove<'r, T: traits::WidgetTrait>(&'r mut self, widget: &'r T) {
+    fn remove<'r, T: traits::Widget>(&'r mut self, widget: &'r T) {
         unsafe {
             ffi::gtk_container_remove(GTK_CONTAINER(self.get_widget()), widget.get_widget());
         }

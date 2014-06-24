@@ -37,6 +37,6 @@ impl Frame {
 impl_GtkWidget!(Frame)
 
 
-impl traits::FrameTrait for Frame {}
-impl traits::ContainerTrait for Frame {}
-impl traits::BinTrait for Frame {}
+impl traits::Frame for Frame {}
+impl traits::Container for Frame {}
+impl traits::Bin for Frame {}

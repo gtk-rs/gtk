@@ -32,7 +32,7 @@ impl MenuButton {
         check_pointer!(tmp_pointer, MenuButton)
     }
 
-    pub fn set_popup<T: traits::WidgetTrait>(&mut self, popup: &T) -> () {
+    pub fn set_popup<T: traits::Widget>(&mut self, popup: &T) -> () {
         unsafe {
             ffi::gtk_menu_button_set_popup(GTK_MENUBUTTON(self.pointer), popup.get_widget());
         }
@@ -50,7 +50,7 @@ impl MenuButton {
         }
     }
 
-    pub fn set_align_widget<T: traits::WidgetTrait>(&mut self, align_widget: &T) -> () {
+    pub fn set_align_widget<T: traits::Widget>(&mut self, align_widget: &T) -> () {
         unsafe {
             ffi::gtk_menu_button_set_align_widget(GTK_MENUBUTTON(self.pointer), align_widget.get_widget())
         }
@@ -60,7 +60,7 @@ impl MenuButton {
 impl_GtkWidget!(MenuButton)
 
 
-impl traits::ContainerTrait for MenuButton {}
-impl traits::ButtonTrait for MenuButton {}
-impl traits::ToggleButtonTrait for MenuButton {}
+impl traits::Container for MenuButton {}
+impl traits::Button for MenuButton {}
+impl traits::ToggleButton for MenuButton {}
 

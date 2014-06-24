@@ -15,12 +15,12 @@
 
 use std::str;
 
-use gtk::traits::{WidgetTrait, ContainerTrait, BinTrait, ToolItemTrait, LabelTrait};
+use gtk::traits::{Widget, Container, Bin, ToolItem, Label};
 use gtk;
 use utils::cast::GTK_TOOLBUTTON;
 use ffi;
 
-pub trait ToolButtonTrait: WidgetTrait + ContainerTrait + BinTrait + ToolItemTrait {
+pub trait ToolButton: Widget + Container + Bin + ToolItem {
     fn set_label(&mut self, label: &str) -> () {
         unsafe {
             label.with_c_str(|c_str| {
@@ -92,7 +92,7 @@ pub trait ToolButtonTrait: WidgetTrait + ContainerTrait + BinTrait + ToolItemTra
         }
     }
 
-    fn set_label_widget<T: LabelTrait>(&mut self, label: &T) -> () {
+    fn set_label_widget<T: Label>(&mut self, label: &T) -> () {
         unsafe {
             ffi::gtk_tool_button_set_label_widget(GTK_TOOLBUTTON(self.get_widget()), label.get_widget())
         }
@@ -104,7 +104,7 @@ pub trait ToolButtonTrait: WidgetTrait + ContainerTrait + BinTrait + ToolItemTra
             if tmp_pointer.is_null() {
                 None
             } else {
-                Some(WidgetTrait::wrap_widget(tmp_pointer))
+                Some(Widget::wrap_widget(tmp_pointer))
             }
         }
     }

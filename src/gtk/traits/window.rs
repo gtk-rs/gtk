@@ -15,10 +15,10 @@
 
 use std::str;
 use ffi;
-use gtk::traits::WidgetTrait;
+use gtk::traits::Widget;
 use utils::cast::GTK_WINDOW;
 
-pub trait WindowTrait : WidgetTrait {
+pub trait Window : Widget {
     fn set_title(&mut self, title: &str) -> () {
         unsafe {
             title.with_c_str(|c_str| {

@@ -32,6 +32,6 @@ impl _Box {
 
 impl_GtkWidget!(_Box)
 
-impl traits::ContainerTrait for _Box {}
-impl traits::_BoxTrait for _Box {}
-impl traits::OrientableTrait for _Box {}
+impl traits::Container for _Box {}
+impl traits::_Box for _Box {}
+impl traits::Orientable for _Box {}

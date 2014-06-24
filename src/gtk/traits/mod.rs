@@ -13,23 +13,23 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-pub use self::widget::WidgetTrait;
-pub use self::container::ContainerTrait;
-pub use self::window::WindowTrait;
-pub use self::misc::MiscTrait;
-pub use self::button::ButtonTrait;
-pub use self::label::LabelTrait;
-pub use self::_box::_BoxTrait;
-pub use self::orientable::OrientableTrait;
-pub use self::frame::FrameTrait;
-pub use self::togglebutton::ToggleButtonTrait;
-pub use self::scalebutton::ScaleButtonTrait;
-pub use self::entry::EntryTrait;
-pub use self::bin::BinTrait;
-pub use self::toolshell::ToolShellTrait;
-pub use self::toolitem::ToolItemTrait;
-pub use self::toolbutton::ToolButtonTrait;
-pub use self::toggletoolbutton::ToggleToolButtonTrait;
+pub use self::widget::Widget;
+pub use self::container::Container;
+pub use self::window::Window;
+pub use self::misc::Misc;
+pub use self::button::Button;
+pub use self::label::Label;
+pub use self::_box::_Box;
+pub use self::orientable::Orientable;
+pub use self::frame::Frame;
+pub use self::togglebutton::ToggleButton;
+pub use self::scalebutton::ScaleButton;
+pub use self::entry::Entry;
+pub use self::bin::Bin;
+pub use self::toolshell::ToolShell;
+pub use self::toolitem::ToolItem;
+pub use self::toolbutton::ToolButton;
+pub use self::toggletoolbutton::ToggleToolButton;
 
 pub mod widget;
 pub mod container;

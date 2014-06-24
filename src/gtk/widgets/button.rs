@@ -81,7 +81,7 @@ impl Button {
 impl_GtkWidget!(Button)
 
 
-impl traits::ContainerTrait for Button {}
-impl traits::ButtonTrait for Button {}
-impl traits::BinTrait for Button {}
+impl traits::Container for Button {}
+impl traits::Button for Button {}
+impl traits::Bin for Button {}
 

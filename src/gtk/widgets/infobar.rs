@@ -31,7 +31,7 @@ impl InfoBar {
         check_pointer!(tmp_pointer, InfoBar)
     }
 
-    pub fn add_action_widget<T: traits::WidgetTrait>(&mut self, child: &T, response_id: i32) -> () {
+    pub fn add_action_widget<T: traits::Widget>(&mut self, child: &T, response_id: i32) -> () {
         unsafe {
             ffi::gtk_info_bar_add_action_widget(GTK_INFOBAR(self.pointer), child.get_widget(), response_id as c_int)
         }
@@ -43,7 +43,7 @@ impl InfoBar {
                 ffi::gtk_info_bar_add_button(GTK_INFOBAR(self.pointer), c_str, response_id as c_int)
             })
         };
-        traits::WidgetTrait::wrap_widget(button)
+        traits::Widget::wrap_widget(button)
     }
 
     pub fn set_response_sensitive(&mut self, response_id: i32, setting: bool) -> () {
@@ -94,6 +94,6 @@ impl InfoBar {
 
 impl_GtkWidget!(InfoBar)
 
-impl traits::ContainerTrait for InfoBar {}
-impl traits::_BoxTrait for InfoBar {}
-impl traits::OrientableTrait for InfoBar {}
+impl traits::Container for InfoBar {}
+impl traits::_Box for InfoBar {}
+impl traits::Orientable for InfoBar {}

@@ -38,4 +38,4 @@ impl SearchEntry {
 impl_GtkWidget!(SearchEntry)
 
 
-impl traits::EntryTrait for SearchEntry {}
+impl traits::Entry for SearchEntry {}

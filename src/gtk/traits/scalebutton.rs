@@ -15,12 +15,12 @@
 
 use libc::c_double;
 
-use gtk::traits::{WidgetTrait, ContainerTrait, ButtonTrait};
+use gtk::traits::{Widget, Container, Button};
 use utils::cast::GTK_SCALEBUTTON;
 use gtk::widgets::Adjustment;
 use ffi;
 
-pub trait ScaleButtonTrait: WidgetTrait + ContainerTrait + ButtonTrait {
+pub trait ScaleButton: Widget + Container + Button {
     fn set_adjustment(&mut self, adjustment: &Adjustment) -> () {
         unsafe {
             ffi::gtk_scale_button_set_adjustment(GTK_SCALEBUTTON(self.get_widget()), adjustment.get_pointer());

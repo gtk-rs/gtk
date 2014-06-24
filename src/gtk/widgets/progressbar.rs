@@ -109,5 +109,5 @@ impl ProgressBar {
 impl_GtkWidget!(ProgressBar)
 
 
-impl traits::OrientableTrait for ProgressBar {}
+impl traits::Orientable for ProgressBar {}
 

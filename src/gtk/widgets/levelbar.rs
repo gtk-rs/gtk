@@ -130,4 +130,4 @@ impl LevelBar {
 impl_GtkWidget!(LevelBar)
 
 
-impl traits::OrientableTrait for LevelBar {}
+impl traits::Orientable for LevelBar {}

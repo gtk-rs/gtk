@@ -30,7 +30,7 @@ impl Fixed {
         check_pointer!(tmp_pointer, Fixed)
     }
 
-    pub fn put<T: traits::WidgetTrait>(&mut self,
+    pub fn put<T: traits::Widget>(&mut self,
                              widget: &T,
                              x: i32,
                              y: i32) -> () {
@@ -39,7 +39,7 @@ impl Fixed {
         }
     }
 
-    pub fn move<T: traits::WidgetTrait>(&mut self,
+    pub fn move<T: traits::Widget>(&mut self,
                               widget: &T,
                               x: i32,
                               y: i32) -> () {
@@ -52,4 +52,4 @@ impl Fixed {
 impl_GtkWidget!(Fixed)
 
 
-impl traits::ContainerTrait for Fixed {}
+impl traits::Container for Fixed {}

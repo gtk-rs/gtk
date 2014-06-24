@@ -14,11 +14,11 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::enums::Orientation;
-use gtk::traits::WidgetTrait;
+use gtk::traits::Widget;
 use utils::cast::GTK_ORIENTABLE;
 use ffi;
 
-pub trait OrientableTrait: WidgetTrait {
+pub trait Orientable: Widget {
     fn get_orientation(&self) -> Orientation {
         unsafe {
             ffi::gtk_orientable_get_orientation(GTK_ORIENTABLE(self.get_widget()))

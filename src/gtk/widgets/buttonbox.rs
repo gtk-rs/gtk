@@ -36,14 +36,14 @@ impl ButtonBox {
         }
     }
 
-    pub fn get_child_secondary<T: traits::WidgetTrait + traits::ButtonTrait>(&self, child: &T) -> bool {
+    pub fn get_child_secondary<T: traits::Widget + traits::Button>(&self, child: &T) -> bool {
         match unsafe { ffi::gtk_button_box_get_child_secondary(GTK_BUTTONBOX(self.pointer), child.get_widget()) } {
             ffi::Gfalse => false,
             _           => true
         }
     }
 
-    pub fn get_child_non_homogeneous<T: traits::WidgetTrait + traits::ButtonTrait>(&self, child: &T) -> bool {
+    pub fn get_child_non_homogeneous<T: traits::Widget + traits::Button>(&self, child: &T) -> bool {
         match unsafe { ffi::gtk_button_box_get_child_non_homogeneous(GTK_BUTTONBOX(self.pointer), child.get_widget()) } {
             ffi::Gfalse => false,
             _           => true
@@ -56,14 +56,14 @@ impl ButtonBox {
         }
     }
 
-    pub fn set_child_secondary<T: traits::WidgetTrait + traits::ButtonTrait>(&mut self, child: &T, is_secondary: bool) -> () {
+    pub fn set_child_secondary<T: traits::Widget + traits::Button>(&mut self, child: &T, is_secondary: bool) -> () {
         match is_secondary {
             false   => unsafe { ffi::gtk_button_box_set_child_secondary(GTK_BUTTONBOX(self.pointer), child.get_widget(), ffi::Gfalse) },
             true    => unsafe { ffi::gtk_button_box_set_child_secondary(GTK_BUTTONBOX(self.pointer), child.get_widget(), ffi::Gtrue) }
         }
     }
 
-    pub fn set_child_non_homogeneous<T: traits::WidgetTrait + traits::ButtonTrait>(&mut self, child: &T, non_homogeneous: bool) -> () {
+    pub fn set_child_non_homogeneous<T: traits::Widget + traits::Button>(&mut self, child: &T, non_homogeneous: bool) -> () {
         match non_homogeneous {
             false   => unsafe { ffi::gtk_button_box_set_child_non_homogeneous(GTK_BUTTONBOX(self.pointer), child.get_widget(), ffi::Gfalse) },
             true    => unsafe { ffi::gtk_button_box_set_child_non_homogeneous(GTK_BUTTONBOX(self.pointer), child.get_widget(), ffi::Gtrue) }
@@ -74,6 +74,6 @@ impl ButtonBox {
 impl_GtkWidget!(ButtonBox)
 
 
-impl traits::ContainerTrait for ButtonBox {}
-impl traits::_BoxTrait for ButtonBox {}
-impl traits::OrientableTrait for ButtonBox {}
+impl traits::Container for ButtonBox {}
+impl traits::_Box for ButtonBox {}
+impl traits::Orientable for ButtonBox {}

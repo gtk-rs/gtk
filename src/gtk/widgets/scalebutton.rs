@@ -46,7 +46,7 @@ impl ScaleButton {
 impl_GtkWidget!(ScaleButton)
 
 
-impl traits::ContainerTrait for ScaleButton {}
-impl traits::ButtonTrait for ScaleButton {}
-impl traits::ScaleButtonTrait for ScaleButton {}
-impl traits::OrientableTrait for ScaleButton {}
+impl traits::Container for ScaleButton {}
+impl traits::Button for ScaleButton {}
+impl traits::ScaleButton for ScaleButton {}
+impl traits::Orientable for ScaleButton {}

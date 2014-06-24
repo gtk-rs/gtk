@@ -42,19 +42,19 @@ impl Paned {
         check_pointer!(tmp_pointer, Paned)
     }
 
-    pub fn add1<T: traits::WidgetTrait>(&mut self, child: &T) -> () {
+    pub fn add1<T: traits::Widget>(&mut self, child: &T) -> () {
         unsafe {
             ffi::gtk_paned_add1(GTK_PANED(self.pointer), child.get_widget())
         }
     }
 
-    pub fn add2<T: traits::WidgetTrait>(&mut self, child: &T) -> () {
+    pub fn add2<T: traits::Widget>(&mut self, child: &T) -> () {
         unsafe {
             ffi::gtk_paned_add2(GTK_PANED(self.pointer), child.get_widget())
         }
     }
 
-    pub fn pack1<T: traits::WidgetTrait>(&mut self, child: &T, resize: bool, schrink: bool) -> () {
+    pub fn pack1<T: traits::Widget>(&mut self, child: &T, resize: bool, schrink: bool) -> () {
         let r = if resize { ffi::Gtrue } else { ffi::Gfalse };
         let s = if schrink { ffi::Gtrue } else { ffi::Gfalse };
         unsafe {
@@ -62,7 +62,7 @@ impl Paned {
         }
     }
 
-    pub fn pack2<T: traits::WidgetTrait>(&mut self, child: &T, resize: bool, schrink: bool) -> () {
+    pub fn pack2<T: traits::Widget>(&mut self, child: &T, resize: bool, schrink: bool) -> () {
         let r = if resize { ffi::Gtrue } else { ffi::Gfalse };
         let s = if schrink { ffi::Gtrue } else { ffi::Gfalse };
         unsafe {
@@ -84,7 +84,7 @@ impl Paned {
 
     pub fn get_handle_window(&self) -> gtk::Window {
         unsafe {
-            traits::WidgetTrait::wrap_widget(ffi::gtk_paned_get_handle_window(GTK_PANED(self.pointer)))
+            traits::Widget::wrap_widget(ffi::gtk_paned_get_handle_window(GTK_PANED(self.pointer)))
         }
     }
 }
@@ -92,5 +92,5 @@ impl Paned {
 impl_GtkWidget!(Paned)
 
 
-impl traits::ContainerTrait for Paned {}
+impl traits::Container for Paned {}
 

@@ -53,5 +53,5 @@ impl AspectFrame {
 
 impl_GtkWidget!(AspectFrame)
 
-impl traits::FrameTrait for AspectFrame {}
-impl traits::ContainerTrait for AspectFrame {}
+impl traits::Frame for AspectFrame {}
+impl traits::Container for AspectFrame {}

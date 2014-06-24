@@ -32,6 +32,6 @@ impl Widget {
     }
 
     pub fn to_entry(self) -> gtk::Entry {
-        traits::WidgetTrait::wrap_widget(self.pointer)
+        traits::Widget::wrap_widget(self.pointer)
     }
 }

@@ -37,4 +37,4 @@ impl Image {
 impl_GtkWidget!(Image)
 
 
-impl traits::MiscTrait for Image {}
+impl traits::Misc for Image {}

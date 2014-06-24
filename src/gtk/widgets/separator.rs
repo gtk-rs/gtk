@@ -35,4 +35,4 @@ impl Separator {
 impl_GtkWidget!(Separator)
 
 
-impl traits::OrientableTrait for Separator {}
+impl traits::Orientable for Separator {}

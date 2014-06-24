@@ -49,6 +49,6 @@ impl SeparatorToolItem {
 impl_GtkWidget!(SeparatorToolItem)
 
 
-impl traits::ContainerTrait for SeparatorToolItem {}
-impl traits::BinTrait for SeparatorToolItem {}
-impl traits::ToolItemTrait for SeparatorToolItem {}
+impl traits::Container for SeparatorToolItem {}
+impl traits::Bin for SeparatorToolItem {}
+impl traits::ToolItem for SeparatorToolItem {}

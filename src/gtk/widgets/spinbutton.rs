@@ -199,5 +199,5 @@ impl SpinButton {
 impl_GtkWidget!(SpinButton)
 
 
-impl traits::EntryTrait for SpinButton {}
-impl traits::OrientableTrait for SpinButton {}
+impl traits::Entry for SpinButton {}
+impl traits::Orientable for SpinButton {}

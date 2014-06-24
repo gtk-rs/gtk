@@ -119,6 +119,6 @@ impl ColorButton {
 impl_GtkWidget!(ColorButton)
 
 
-impl traits::ContainerTrait for ColorButton {}
-impl traits::ButtonTrait for ColorButton {}
+impl traits::Container for ColorButton {}
+impl traits::Button for ColorButton {}
 

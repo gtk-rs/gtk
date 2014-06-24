@@ -33,7 +33,7 @@ impl VolumeButton {
 impl_GtkWidget!(VolumeButton)
 
 
-impl traits::ContainerTrait for VolumeButton {}
-impl traits::ButtonTrait for VolumeButton {}
-impl traits::ScaleButtonTrait for VolumeButton {}
-impl traits::OrientableTrait for VolumeButton {}
+impl traits::Container for VolumeButton {}
+impl traits::Button for VolumeButton {}
+impl traits::ScaleButton for VolumeButton {}
+impl traits::Orientable for VolumeButton {}

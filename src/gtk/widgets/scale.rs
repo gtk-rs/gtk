@@ -126,4 +126,4 @@ impl Scale {
 impl_GtkWidget!(Scale)
 
 
-impl traits::OrientableTrait for Scale {}
+impl traits::Orientable for Scale {}

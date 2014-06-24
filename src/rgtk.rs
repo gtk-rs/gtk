@@ -117,23 +117,23 @@ __rgtk__ is available under the same license term than GTK+, the LGPL (Lesser Ge
 // #[pkg_do(make)]
 extern crate libc;
 
-pub use GtkWidgetTrait          = gtk::traits::WidgetTrait;
-pub use GtkContainerTrait       = gtk::traits::ContainerTrait;
-pub use GtkWindowTrait          = gtk::traits::WindowTrait;
-pub use GtkMiscTrait            = gtk::traits::MiscTrait;
-pub use GtkButtonTrait          = gtk::traits::ButtonTrait;
-pub use GtkLabelTrait           = gtk::traits::LabelTrait;
-pub use Gtk_BoxTrait            = gtk::traits::_BoxTrait;
-pub use GtkOrientableTrait      = gtk::traits::OrientableTrait;
-pub use GtkFrameTrait           = gtk::traits::FrameTrait;
-pub use GtkToggleButtonTrait    = gtk::traits::ToggleButtonTrait;
-pub use GtkScaleButtonTrait     = gtk::traits::ScaleButtonTrait;
-pub use GtkEntryTrait           = gtk::traits::EntryTrait;
-pub use GtkBinTrait             = gtk::traits::BinTrait;
-pub use GtkToolShellTrait       = gtk::traits::ToolShellTrait;
-pub use GtkToolItemTrait        = gtk::traits::ToolItemTrait;
-pub use GtkToolButtonTrait      = gtk::traits::ToolButtonTrait;
-pub use GtkToggleToolButtonTrait= gtk::traits::ToggleToolButtonTrait;
+pub use GtkWidgetTrait          = gtk::traits::Widget;
+pub use GtkContainerTrait       = gtk::traits::Container;
+pub use GtkWindowTrait          = gtk::traits::Window;
+pub use GtkMiscTrait            = gtk::traits::Misc;
+pub use GtkButtonTrait          = gtk::traits::Button;
+pub use GtkLabelTrait           = gtk::traits::Label;
+pub use Gtk_BoxTrait            = gtk::traits::_Box;
+pub use GtkOrientableTrait      = gtk::traits::Orientable;
+pub use GtkFrameTrait           = gtk::traits::Frame;
+pub use GtkToggleButtonTrait    = gtk::traits::ToggleButton;
+pub use GtkScaleButtonTrait     = gtk::traits::ScaleButton;
+pub use GtkEntryTrait           = gtk::traits::Entry;
+pub use GtkBinTrait             = gtk::traits::Bin;
+pub use GtkToolShellTrait       = gtk::traits::ToolShell;
+pub use GtkToolItemTrait        = gtk::traits::ToolItem;
+pub use GtkToolButtonTrait      = gtk::traits::ToolButton;
+pub use GtkToggleToolButtonTrait= gtk::traits::ToggleToolButton;
 
 #[doc(hidden)]
 #[cfg(target_os="macos")]

@@ -54,5 +54,5 @@ impl Entry {
 
 impl_GtkWidget!(Entry)
 
-impl traits::EntryTrait for Entry {}
+impl traits::Entry for Entry {}
 

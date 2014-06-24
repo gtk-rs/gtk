@@ -17,11 +17,11 @@ use libc::{c_int, c_double};
 use std::str;
 
 use ffi;
-use gtk::traits::WidgetTrait;
+use gtk::traits::Widget;
 use gtk::enums::Justification;
 use utils::cast::GTK_LABEL;
 
-pub trait LabelTrait : WidgetTrait {
+pub trait Label : Widget {
     fn set_label(&mut self, text: &str) -> () {
         unsafe {
             text.with_c_str(|c_str| {

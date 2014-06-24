@@ -19,7 +19,7 @@ use libc::c_int;
 use ffi;
 use gtk::signals::Signal;
 
-pub trait WidgetTrait {
+pub trait Widget {
     #[doc(hidden)]
     fn get_widget(&self) -> *ffi::C_GtkWidget;
     fn wrap_widget(widget: *ffi::C_GtkWidget) -> Self;

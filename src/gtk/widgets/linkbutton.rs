@@ -82,6 +82,6 @@ impl LinkButton {
 impl_GtkWidget!(LinkButton)
 
 
-impl traits::ContainerTrait for LinkButton {}
-impl traits::ButtonTrait for LinkButton {}
+impl traits::Container for LinkButton {}
+impl traits::Button for LinkButton {}
 

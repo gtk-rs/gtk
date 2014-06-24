@@ -1,7 +1,7 @@
 
 use gtk;
-use gtk::traits::WidgetTrait;
+use gtk::traits::Widget;
 
-pub fn to_entry(widget: &WidgetTrait) -> gtk::Entry {
-    WidgetTrait::wrap_widget(widget.get_widget())
+pub fn to_entry(widget: &Widget) -> gtk::Entry {
+    Widget::wrap_widget(widget.get_widget())
 }

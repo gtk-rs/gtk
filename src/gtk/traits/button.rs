@@ -16,13 +16,13 @@
 use std::{str, mem};
 use libc::c_float;
 
-use gtk::traits::{WidgetTrait, ContainerTrait};
+use gtk::traits::{Widget, Container};
 use gtk::enums::{ReliefStyle, PositionType};
 use utils::cast::GTK_BUTTON;
 use ffi;
 use gtk;
 
-pub trait ButtonTrait: WidgetTrait + ContainerTrait {
+pub trait Button: Widget + Container {
     fn pressed(&self) -> () {
         unsafe {
             ffi::gtk_button_pressed(GTK_BUTTON(self.get_widget()));
@@ -139,7 +139,7 @@ pub trait ButtonTrait: WidgetTrait + ContainerTrait {
         (x_align as f32, y_align as f32)
     }
 
-    fn set_image<T: WidgetTrait>(&mut self, image: &T) -> () {
+    fn set_image<T: Widget>(&mut self, image: &T) -> () {
         unsafe {
             ffi::gtk_button_set_image(GTK_BUTTON(self.get_widget()), image.get_widget());
         }
@@ -194,9 +194,9 @@ pub trait ButtonClickedHandler {
 extern "C" fn widget_destroy_callback(object: *ffi::C_GtkWidget, user_data: ffi::gpointer) {
     let mut handler = unsafe { mem::transmute::<ffi::gpointer, Box<Box<ButtonClickedHandler>>>(user_data) };
 
-    // let mut window = check_pointer!(object, WindowTrait).unwrap();
+    // let mut window = check_pointer!(object, Window).unwrap();
     // window.can_drop = false;
-    let mut button: gtk::Button = WidgetTrait::wrap_widget(object);
+    let mut button: gtk::Button = Widget::wrap_widget(object);
     handler.callback(&mut button);
 
     unsafe {

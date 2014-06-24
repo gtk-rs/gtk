@@ -14,11 +14,11 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use ffi;
-use gtk::traits::WidgetTrait;
+use gtk::traits::Widget;
 use utils::cast::GTK_TOOLSHELL;
 use gtk::enums::{IconSize, Orientation, ReliefStyle, ToolbarStyle};
 
-pub trait ToolShellTrait: WidgetTrait {
+pub trait ToolShell: Widget {
     fn get_icon_size(&self) -> IconSize {
         unsafe {
             ffi::gtk_tool_shell_get_icon_size(GTK_TOOLSHELL(self.get_widget()))

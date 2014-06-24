@@ -40,4 +40,4 @@ impl Arrow {
 impl_GtkWidget!(Arrow)
 
 
-impl traits::MiscTrait for Arrow {}
+impl traits::Misc for Arrow {}

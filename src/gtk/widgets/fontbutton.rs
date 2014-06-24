@@ -131,6 +131,6 @@ impl FontButton {
 impl_GtkWidget!(FontButton)
 
 
-impl traits::ContainerTrait for FontButton {}
-impl traits::ButtonTrait for FontButton {}
+impl traits::Container for FontButton {}
+impl traits::Button for FontButton {}
 

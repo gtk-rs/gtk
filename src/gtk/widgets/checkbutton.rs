@@ -53,6 +53,6 @@ impl_GtkWidget!(CheckButton)
 
 
 
-impl traits::ContainerTrait for CheckButton {}
-impl traits::ButtonTrait for CheckButton {}
-impl traits::ToggleButtonTrait for CheckButton {}
+impl traits::Container for CheckButton {}
+impl traits::Button for CheckButton {}
+impl traits::ToggleButton for CheckButton {}

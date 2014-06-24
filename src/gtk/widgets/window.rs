@@ -44,6 +44,6 @@ impl Window {
 impl_GtkWidget!(Window)
 
 
-impl traits::ContainerTrait for Window {}
-impl traits::WindowTrait for Window {}
-impl traits::BinTrait for Window {}
+impl traits::Container for Window {}
+impl traits::Window for Window {}
+impl traits::Bin for Window {}

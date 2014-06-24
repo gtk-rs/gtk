@@ -13,12 +13,12 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::traits::{WidgetTrait, ContainerTrait};
+use gtk::traits::{Widget, Container};
 
-pub trait BinTrait: WidgetTrait + ContainerTrait {
+pub trait Bin: Widget + Container {
     // fn get_child(&self) ->  {
 
     // }
 }
 
-    // pub fn gtk_bin_get_child                   (bin: *C_GtkBin) -> *C_GtkWidgetTrait;
+    // pub fn gtk_bin_get_child                   (bin: *C_GtkBin) -> *C_GtkWidget;

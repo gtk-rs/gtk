@@ -55,5 +55,5 @@ impl Label {
 impl_GtkWidget!(Label)
 
 
-impl traits::MiscTrait for Label {}
-impl traits::LabelTrait for Label {}
+impl traits::Misc for Label {}
+impl traits::Label for Label {}

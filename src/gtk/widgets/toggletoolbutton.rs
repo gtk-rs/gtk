@@ -40,8 +40,8 @@ impl ToggleToolButton {
 impl_GtkWidget!(ToggleToolButton)
 
 
-impl traits::ContainerTrait for ToggleToolButton {}
-impl traits::BinTrait for ToggleToolButton {}
-impl traits::ToolItemTrait for ToggleToolButton {}
-impl traits::ToolButtonTrait for ToggleToolButton {}
-impl traits::ToggleToolButtonTrait for ToggleToolButton {}
+impl traits::Container for ToggleToolButton {}
+impl traits::Bin for ToggleToolButton {}
+impl traits::ToolItem for ToggleToolButton {}
+impl traits::ToolButton for ToggleToolButton {}
+impl traits::ToggleToolButton for ToggleToolButton {}

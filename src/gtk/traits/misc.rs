@@ -16,9 +16,9 @@
 use libc::{c_float, c_int};
 use utils::cast::GTK_MISC;
 use ffi;
-use gtk::traits::WidgetTrait;
+use gtk::traits::Widget;
 
-pub trait MiscTrait : WidgetTrait {
+pub trait Misc : Widget {
     fn set_alignment(&mut self, x_align: f32, y_align: f32) -> () {
         unsafe {
             ffi::gtk_misc_set_alignment(GTK_MISC(self.get_widget()), x_align as c_float, y_align as c_float);
