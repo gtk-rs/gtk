@@ -19,7 +19,13 @@ pub use self::rt::{
 	main_quit,
 	main_level,
 	main_iteration,
-	main_iteration_do
+	main_iteration_do,
+	get_major_version,
+	get_minor_version,
+	get_micro_version,
+	get_binary_age,
+	get_interface_age,
+	check_version
 };
 
 pub use self::widgets::{
@@ -167,12 +173,13 @@ pub use self::types::{
 	WidgetHelpType
 };
 
-pub mod cast;
-pub mod version;
 pub mod traits;
 pub mod signals;
 
+mod macros;
+mod cast;
 mod rt;
 mod widgets;
 mod enums;
 mod types;
+mod ffi;

@@ -17,8 +17,8 @@ use std::str;
 
 use gtk::traits::{Widget, Container, Bin, ToolItem, Label};
 use gtk;
-use utils::cast::GTK_TOOLBUTTON;
-use ffi;
+use gtk::cast::GTK_TOOLBUTTON;
+use gtk::ffi;
 
 pub trait ToolButton: Widget + Container + Bin + ToolItem {
     fn set_label(&mut self, label: &str) -> () {

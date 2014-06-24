@@ -17,8 +17,8 @@
 
 
 
-use utils::cast::GTK_SWITCH;
-use ffi;
+use gtk::cast::GTK_SWITCH;
+use gtk::ffi;
 /*
 * Switch — A "light switch" style toggle
 *
@@ -49,5 +49,5 @@ impl Switch {
     }
 }
 
-impl_GtkWidget!(Switch)
+impl_TraitWidget!(Switch)
 

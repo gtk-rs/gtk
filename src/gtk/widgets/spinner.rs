@@ -17,8 +17,8 @@
 
 
 
-use utils::cast::GTK_SPINNER;
-use ffi;
+use gtk::cast::GTK_SPINNER;
+use gtk::ffi;
 /// Spinner — Show a spinner animation
 struct_Widget!(Spinner)
 
@@ -43,5 +43,5 @@ impl Spinner {
 
 }
 
-impl_GtkWidget!(Spinner)
+impl_TraitWidget!(Spinner)
 

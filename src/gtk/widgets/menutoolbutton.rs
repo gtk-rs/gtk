@@ -18,8 +18,8 @@
 
 use std::ptr;
 
-use utils::cast::GTK_MENUTOOLBUTTON;
-use ffi;
+use gtk::cast::GTK_MENUTOOLBUTTON;
+use gtk::ffi;
 use gtk::traits;
 /// MenuToolButton — A ToolItem containing a button with an additional dropdown menu
 struct_Widget!(MenuToolButton)
@@ -72,7 +72,7 @@ impl MenuToolButton {
     }
 }
 
-impl_GtkWidget!(MenuToolButton)
+impl_TraitWidget!(MenuToolButton)
 
 
 impl traits::Container for MenuToolButton {}

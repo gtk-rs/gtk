@@ -14,9 +14,9 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use std::str;
-use ffi;
+use gtk::ffi;
 use gtk::traits::Widget;
-use utils::cast::GTK_WINDOW;
+use gtk::cast::GTK_WINDOW;
 
 pub trait Window : Widget {
     fn set_title(&mut self, title: &str) -> () {

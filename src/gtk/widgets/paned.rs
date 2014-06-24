@@ -18,8 +18,8 @@
 use libc::c_int;
 
 use gtk::enums::Orientation;
-use utils::cast::GTK_PANED;
-use ffi;
+use gtk::cast::GTK_PANED;
+use gtk::ffi;
 use gtk::traits;
 use gtk;
 
@@ -89,7 +89,7 @@ impl Paned {
     }
 }
 
-impl_GtkWidget!(Paned)
+impl_TraitWidget!(Paned)
 
 
 impl traits::Container for Paned {}

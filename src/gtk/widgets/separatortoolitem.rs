@@ -17,9 +17,9 @@
 
 
 
-use ffi;
+use gtk::ffi;
 use gtk::traits;
-use utils::cast::GTK_SEPARATORTOOLITEM;
+use gtk::cast::GTK_SEPARATORTOOLITEM;
 
 /// ToolItem — The base class of widgets that can be added to ToolShe
 struct_Widget!(SeparatorToolItem)
@@ -46,7 +46,7 @@ impl SeparatorToolItem {
     }
 }
 
-impl_GtkWidget!(SeparatorToolItem)
+impl_TraitWidget!(SeparatorToolItem)
 
 
 impl traits::Container for SeparatorToolItem {}

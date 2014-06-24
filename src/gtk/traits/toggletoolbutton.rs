@@ -14,8 +14,8 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::traits::{Widget, Container, Bin, ToolItem, ToolButton};
-use utils::cast::GTK_TOGGLETOOLBUTTON;
-use ffi;
+use gtk::cast::GTK_TOGGLETOOLBUTTON;
+use gtk::ffi;
 
 pub trait ToggleToolButton: Widget + Container + Bin + ToolItem + ToolButton {
 

@@ -18,7 +18,7 @@
 
 use std::ptr;
 
-use ffi;
+use gtk::ffi;
 use gtk::traits;
 /// Frame — A bin with a decorative frame and optional label
 struct_Widget!(Frame)
@@ -34,7 +34,7 @@ impl Frame {
     }
 }
 
-impl_GtkWidget!(Frame)
+impl_TraitWidget!(Frame)
 
 
 impl traits::Frame for Frame {}

@@ -19,8 +19,8 @@
 
 
 use gtk;
-use utils::cast::{GTK_SEARCHBAR, GTK_ENTRY};
-use ffi;
+use gtk::cast::{GTK_SEARCHBAR, GTK_ENTRY};
+use gtk::ffi;
 use gtk::traits;
 use gtk::traits::Widget;
 
@@ -69,7 +69,7 @@ impl SearchBar {
     }
 }
 
-impl_GtkWidget!(SearchBar)
+impl_TraitWidget!(SearchBar)
 
 
 impl traits::Container for SearchBar {}

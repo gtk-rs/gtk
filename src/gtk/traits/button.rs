@@ -18,8 +18,8 @@ use libc::c_float;
 
 use gtk::traits::{Widget, Container};
 use gtk::enums::{ReliefStyle, PositionType};
-use utils::cast::GTK_BUTTON;
-use ffi;
+use gtk::cast::GTK_BUTTON;
+use gtk::ffi;
 use gtk;
 
 pub trait Button: Widget + Container {

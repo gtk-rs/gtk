@@ -16,7 +16,7 @@
 #![allow(visible_private_types)]
 
 use libc::c_int;
-use ffi;
+use gtk::ffi;
 use gtk::signals::Signal;
 
 pub trait Widget {

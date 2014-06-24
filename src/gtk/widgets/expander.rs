@@ -19,8 +19,8 @@ use std::str;
 use libc::c_int;
 
 use gtk;
-use utils::cast::GTK_EXPANDER;
-use ffi;
+use gtk::cast::GTK_EXPANDER;
+use gtk::ffi;
 use gtk::traits;
 use gtk::traits::Widget;
 
@@ -158,7 +158,7 @@ impl Expander {
     }
 }
 
-impl_GtkWidget!(Expander)
+impl_TraitWidget!(Expander)
 
 
 impl traits::Container for Expander {}

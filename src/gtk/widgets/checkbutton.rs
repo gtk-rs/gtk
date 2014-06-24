@@ -17,7 +17,7 @@
 
 
 
-use ffi;
+use gtk::ffi;
 use gtk::traits;
 /// CheckButton — Create widgets with a discrete toggle button
 struct_Widget!(CheckButton)
@@ -49,7 +49,7 @@ impl CheckButton {
 
 }
 
-impl_GtkWidget!(CheckButton)
+impl_TraitWidget!(CheckButton)
 
 
 

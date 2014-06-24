@@ -19,7 +19,7 @@
 #![allow(visible_private_types)]
 
 use libc::c_double;
-use ffi;
+use gtk::ffi;
 /**
 * A representation of an adjustable bounded value
 *

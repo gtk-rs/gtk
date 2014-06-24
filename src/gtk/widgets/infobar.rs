@@ -18,9 +18,9 @@
 use libc::c_int;
 
 use gtk::enums::MessageType;
-use utils::cast::GTK_INFOBAR;
+use gtk::cast::GTK_INFOBAR;
 use gtk;
-use ffi;
+use gtk::ffi;
 use gtk::traits;
 /// InfoBar — Report important messages to the user
 struct_Widget!(InfoBar)
@@ -92,7 +92,7 @@ impl InfoBar {
     }
 }
 
-impl_GtkWidget!(InfoBar)
+impl_TraitWidget!(InfoBar)
 
 impl traits::Container for InfoBar {}
 impl traits::_Box for InfoBar {}
