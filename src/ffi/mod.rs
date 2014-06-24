@@ -69,6 +69,7 @@ pub struct C_GtkPaned;
 pub struct C_GtkInfoBar;
 pub struct C_GtkToolShell;
 pub struct C_GtkToolbar;
+pub struct C_GtkAboutDialog;
 
 pub struct C_GtkToolItem;
 pub struct C_GtkToolButton;
@@ -233,6 +234,43 @@ extern "C" {
     pub fn gtk_button_set_always_show_image    (button: *C_GtkButton, always_show: Gboolean) -> ();
     pub fn gtk_button_get_always_show_image    (button: *C_GtkButton) -> Gboolean;
     // pub fn gtk_button_get_event_window         (button: *C_GtkButton) -> *C_GdkWindow;
+
+    //=========================================================================
+    // GtkAboutDialog                                                    NOT OK
+    //=========================================================================
+    pub fn gtk_about_dialog_new                () -> *C_GtkWidget;
+    //pub fn gtk_show_about_dialog               (parent: *GtkWindow, first_property_name: *c_char, ...) -> ();
+    pub fn gtk_about_dialog_get_program_name   (about: *C_GtkAboutDialog) -> *c_char;
+    pub fn gtk_about_dialog_set_program_name   (about: *C_GtkAboutDialog, name: *c_char) -> ();
+    pub fn gtk_about_dialog_get_version        (about: *C_GtkAboutDialog) -> *c_char;
+    pub fn gtk_about_dialog_set_version        (about: *C_GtkAboutDialog, version: *c_char) -> ();
+    pub fn gtk_about_dialog_get_copyright      (about: *C_GtkAboutDialog) -> *c_char;
+    pub fn gtk_about_dialog_set_copyright      (about: *C_GtkAboutDialog, copyright: *c_char) -> ();
+    pub fn gtk_about_dialog_get_comments       (about: *C_GtkAboutDialog) -> *c_char;
+    pub fn gtk_about_dialog_set_comments       (about: *C_GtkAboutDialog, comments: *c_char) -> ();
+    pub fn gtk_about_dialog_get_license        (about: *C_GtkAboutDialog) -> *c_char;
+    pub fn gtk_about_dialog_set_license        (about: *C_GtkAboutDialog, comments: *c_char) -> ();
+    //pub fn gtk_about_dialog_get_license_type   (about: *C_GtkAboutDialog) -> GtkLicense;
+    //pub fn gtk_about_dialog_set_license_type   (about: *C_GtkAboutDialog, license_type: GtkLicense) -> ();
+    pub fn gtk_about_dialog_get_wrap_license   (about: *C_GtkAboutDialog) -> Gboolean;
+    pub fn gtk_about_dialog_set_wrap_license   (about: *C_GtkAboutDialog, wrap_license: Gboolean) -> ();
+    pub fn gtk_about_dialog_get_website        (about: *C_GtkAboutDialog) -> *c_char;
+    pub fn gtk_about_dialog_set_website        (about: *C_GtkAboutDialog, website: *c_char) -> ();
+    pub fn gtk_about_dialog_get_website_label  (about: *C_GtkAboutDialog) -> *c_char;
+    pub fn gtk_about_dialog_set_website_label  (about: *C_GtkAboutDialog, website_label: *c_char) -> ();
+    //pub fn gtk_about_dialog_get_authors        (about: *C_GtkAboutDialog) -> **c_char;
+    //pub fn gtk_about_dialog_set_authors        (about: *C_GtkAboutDialog, authors: **c_char) -> ();
+    //pub fn gtk_about_dialog_get_documenters    (about: *C_GtkAboutDialog) -> **c_char;
+    //pub fn gtk_about_dialog_set_documenters    (about: *C_GtkAboutDialog, documents: **c_char) -> ();
+    //pub fn gtk_about_dialog_get_artists        (about: *C_GtkAboutDialog) -> **c_char;
+    //pub fn gtk_about_dialog_set_artists        (about: *C_GtkAboutDialog, artists: **c_char) -> ();
+    pub fn gtk_about_dialog_get_translator_credits(about: *C_GtkAboutDialog) -> *c_char;
+    pub fn gtk_about_dialog_set_translator_credits(about: *C_GtkAboutDialog, translator_credits: *c_char) -> ();
+    pub fn gtk_about_dialog_get_logo           (about: *C_GtkAboutDialog) -> *C_GdkPixbuf;
+    pub fn gtk_about_dialog_set_logo           (about: *C_GtkAboutDialog, logo: *C_GdkPixbuf) -> ();
+    pub fn gtk_about_dialog_get_logo_icon_name (about: *C_GtkAboutDialog) -> *c_char;
+    pub fn gtk_about_dialog_set_logo_icon_name (about: *C_GtkAboutDialog, icon_name: *c_char) -> ();
+    pub fn gtk_about_dialog_add_credit_section (about: *C_GtkAboutDialog, section_name: *c_char, people: **c_char) -> ();
 
     //=========================================================================
     // GtkFontButton                                                         OK
