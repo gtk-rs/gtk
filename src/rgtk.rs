@@ -130,6 +130,7 @@ pub use GtkToolShellTrait       = gtk::traits::ToolShell;
 pub use GtkToolItemTrait        = gtk::traits::ToolItem;
 pub use GtkToolButtonTrait      = gtk::traits::ToolButton;
 pub use GtkToggleToolButtonTrait= gtk::traits::ToggleToolButton;
+pub use GtkDialogTrait          = gtk::traits::Dialog;
 
 #[doc(hidden)]
 #[cfg(target_os="macos")]

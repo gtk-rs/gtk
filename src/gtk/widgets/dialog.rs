@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use ffi;
+use gtk::ffi;
 use gtk::traits;
 
 struct_Widget!(Dialog)
@@ -21,8 +21,9 @@ struct_Widget!(Dialog)
 impl Dialog {
     fn new() -> Option<Dialog> {
         let tmp_pointer = unsafe {
-            ffi::gtk_dialog_new();
+            ffi::gtk_dialog_new()
         };
+
         if tmp_pointer.is_null() {
             None
         } else {
@@ -42,9 +43,9 @@ impl Dialog {
     }*/
 }
 
-impl_GtkWidget!(Dialog)
+impl_drop!(Dialog)
+impl_TraitWidget!(Dialog)
 
-impl traits::Widget for Dialog {}
 impl traits::Container for Dialog {}
 impl traits::Bin for Dialog {}
 impl traits::Window for Dialog {}

@@ -73,6 +73,9 @@ pub use self::spin_button_update_policy::SpinButtonUpdatePolicy;
 pub use self::level_bar_mode::LevelBarMode;
 pub use self::calendar_display_options::CalendarDisplayOptions;
 pub use self::message_type::MessageType;
+pub use self::license::License;
+pub use self::response_type::ResponseType;
+pub use self::dialog_flags::DialogFlags;
 
 pub mod window_type{
     #[repr(C)]
@@ -904,6 +907,7 @@ pub mod dialog_flags {
 
 /// The type of license for an application.
 /// This enumeration can be expanded at later date.
+#[allow(non_camel_case_types)]
 pub mod license {
     #[repr(C)]
     #[deriving(Clone, PartialEq, PartialOrd, Show)]

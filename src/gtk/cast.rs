@@ -190,3 +190,10 @@ pub fn GTK_ADJUSTMENT(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkAdjustment {
     unsafe{ ffi::cast_GtkAdjustment(widget) }
 }
 
+pub fn GTK_DIALOG(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkDialog {
+    unsafe{ ffi::cast_GtkDialog(widget) }
+}
+
+pub fn GTK_ABOUT_DIALOG(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkAboutDialog {
+    unsafe{ ffi::cast_GtkAboutDialog(widget) }
+}

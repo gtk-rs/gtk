@@ -89,7 +89,10 @@ fn main() {
     window.add(&frame);
 
     button.connect(signals::Clicked::new(||{
-        entry.set_text("Clicked!".to_string());
+        //entry.set_text("Clicked!".to_string());
+        let dialog = gtk::AboutDialog::new().unwrap();
+
+        dialog.run();
     }));
 
     window.connect(signals::DeleteEvent::new(|event_type|{
@@ -129,4 +132,3 @@ fn main() {
     window.show_all();
     gtk::main();
 }
-

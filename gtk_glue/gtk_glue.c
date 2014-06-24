@@ -31,14 +31,6 @@ GtkWindow* cast_GtkWindow(GtkWidget* widget) {
     return GTK_WINDOW(widget);
 }
 
-GtkDialog* cast_GtkDialog(GtkWidget* widget) {
-    return GTK_DIALOG(widget);
-}
-
-GtkAboutDialog* cast_GtkAboutDialog(GtkWidget* widget) {
-    return GTK_ABOUT_DIALOG(widget);
-}
-
 GtkContainer* cast_GtkContainer(GtkWidget* widget) {
     return GTK_CONTAINER(widget);
 }

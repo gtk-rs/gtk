@@ -270,8 +270,8 @@ extern "C" {
     pub fn gtk_about_dialog_set_comments       (about: *C_GtkAboutDialog, comments: *c_char) -> ();
     pub fn gtk_about_dialog_get_license        (about: *C_GtkAboutDialog) -> *c_char;
     pub fn gtk_about_dialog_set_license        (about: *C_GtkAboutDialog, comments: *c_char) -> ();
-    pub fn gtk_about_dialog_get_license_type   (about: *C_GtkAboutDialog) -> GtkLicense;
-    pub fn gtk_about_dialog_set_license_type   (about: *C_GtkAboutDialog, license_type: GtkLicense) -> ();
+    pub fn gtk_about_dialog_get_license_type   (about: *C_GtkAboutDialog) -> gtk::License;
+    pub fn gtk_about_dialog_set_license_type   (about: *C_GtkAboutDialog, license_type: gtk::License) -> ();
     pub fn gtk_about_dialog_get_wrap_license   (about: *C_GtkAboutDialog) -> Gboolean;
     pub fn gtk_about_dialog_set_wrap_license   (about: *C_GtkAboutDialog, wrap_license: Gboolean) -> ();
     pub fn gtk_about_dialog_get_website        (about: *C_GtkAboutDialog) -> *c_char;
@@ -286,8 +286,8 @@ extern "C" {
     pub fn gtk_about_dialog_set_artists        (about: *C_GtkAboutDialog, artists: **c_char) -> ();
     pub fn gtk_about_dialog_get_translator_credits(about: *C_GtkAboutDialog) -> *c_char;
     pub fn gtk_about_dialog_set_translator_credits(about: *C_GtkAboutDialog, translator_credits: *c_char) -> ();
-    pub fn gtk_about_dialog_get_logo           (about: *C_GtkAboutDialog) -> *C_GdkPixbuf;
-    pub fn gtk_about_dialog_set_logo           (about: *C_GtkAboutDialog, logo: *C_GdkPixbuf) -> ();
+    //pub fn gtk_about_dialog_get_logo           (about: *C_GtkAboutDialog) -> *C_GdkPixbuf;
+    //pub fn gtk_about_dialog_set_logo           (about: *C_GtkAboutDialog, logo: *C_GdkPixbuf) -> ();
     pub fn gtk_about_dialog_get_logo_icon_name (about: *C_GtkAboutDialog) -> *c_char;
     pub fn gtk_about_dialog_set_logo_icon_name (about: *C_GtkAboutDialog, icon_name: *c_char) -> ();
     pub fn gtk_about_dialog_add_credit_section (about: *C_GtkAboutDialog, section_name: *c_char, people: **c_char) -> ();

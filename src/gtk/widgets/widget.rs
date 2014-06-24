@@ -16,7 +16,6 @@
 // NB: This file is not actually packaged into rgtk
 
 use gtk::ffi;
-use gtk::traits;
 use gtk;
 use gtk::traits;
 
@@ -25,10 +24,17 @@ pub struct Widget {
 }
 
 impl Widget {
+    #[allow(visible_private_types)]
     pub fn wrap(pointer: *ffi::C_GtkWidget) -> Widget {
         Widget {
             pointer: pointer
         }
+    }
+
+    #[doc(hidden)]
+    #[allow(visible_private_types)]
+    pub fn get_widget(&self) -> *ffi::C_GtkWidget {
+        self.pointer
     }
 
     pub fn to_entry(self) -> gtk::Entry {

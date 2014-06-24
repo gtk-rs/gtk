@@ -30,6 +30,7 @@ pub use self::toolshell::ToolShell;
 pub use self::toolitem::ToolItem;
 pub use self::toolbutton::ToolButton;
 pub use self::toggletoolbutton::ToggleToolButton;
+pub use self::dialog::Dialog;
 
 pub mod widget;
 pub mod container;
@@ -48,3 +49,4 @@ pub mod toolshell;
 pub mod toolitem;
 pub mod toolbutton;
 pub mod toggletoolbutton;
+pub mod dialog;
