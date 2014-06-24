@@ -15,7 +15,7 @@
 
 // NB: This file is not actually packaged into rgtk
 
-use ffi;
+use gtk::ffi;
 use gtk::traits;
 use gtk;
 use gtk::traits;

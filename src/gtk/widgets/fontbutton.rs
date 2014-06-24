@@ -17,9 +17,9 @@
 
 use std::str;
 
-use ffi;
+use gtk::ffi;
 use gtk::traits;
-use utils::cast::GTK_FONTBUTTON;
+use gtk::cast::GTK_FONTBUTTON;
 
 /**
 * FontButton — A button to launch a font chooser dialog
@@ -128,7 +128,7 @@ impl FontButton {
 }
 
 
-impl_GtkWidget!(FontButton)
+impl_TraitWidget!(FontButton)
 
 
 impl traits::Container for FontButton {}

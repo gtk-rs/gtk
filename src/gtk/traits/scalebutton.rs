@@ -16,9 +16,9 @@
 use libc::c_double;
 
 use gtk::traits::{Widget, Container, Button};
-use utils::cast::GTK_SCALEBUTTON;
+use gtk::cast::GTK_SCALEBUTTON;
 use gtk::widgets::Adjustment;
-use ffi;
+use gtk::ffi;
 
 pub trait ScaleButton: Widget + Container + Button {
     fn set_adjustment(&mut self, adjustment: &Adjustment) -> () {

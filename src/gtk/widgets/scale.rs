@@ -18,9 +18,9 @@
 use libc::{c_double, c_int};
 
 use gtk::enums::{Orientation, PositionType};
-use utils::cast::GTK_SCALE;
+use gtk::cast::GTK_SCALE;
 use gtk;
-use ffi;
+use gtk::ffi;
 use gtk::traits;
 // TODO : implements Range
 
@@ -123,7 +123,7 @@ impl Scale {
     }
 }
 
-impl_GtkWidget!(Scale)
+impl_TraitWidget!(Scale)
 
 
 impl traits::Orientable for Scale {}

@@ -35,7 +35,7 @@ mod platform {
 
 fn main() {
     gtk::init();
-    println!("Major: {}, Minor: {}", gtk::version::get_major_version(), gtk::version::get_minor_version());
+    println!("Major: {}, Minor: {}", gtk::get_major_version(), gtk::get_minor_version());
     let mut window = gtk::Window::new(gtk::window_type::TopLevel).unwrap();
     let mut frame = gtk::Frame::new(Some("Yep a frame")).unwrap();
     let mut _box = gtk::_Box::new(gtk::orientation::Horizontal, 10).unwrap();

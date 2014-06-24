@@ -17,9 +17,9 @@
 
 
 
-use ffi;
+use gtk::ffi;
 use gtk::traits;
-use utils::cast::GTK_MENUBUTTON;
+use gtk::cast::GTK_MENUBUTTON;
 use gtk::ArrowType;
 
 /// MenuButton — A widget that shows a menu when clicked on
@@ -57,7 +57,7 @@ impl MenuButton {
     }
 }
 
-impl_GtkWidget!(MenuButton)
+impl_TraitWidget!(MenuButton)
 
 
 impl traits::Container for MenuButton {}

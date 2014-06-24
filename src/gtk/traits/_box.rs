@@ -17,8 +17,8 @@ use libc::{c_int, c_uint};
 
 use gtk::traits::Widget;
 use gtk::{PackType, pack_type};
-use utils::cast::GTK_BOX;
-use ffi;
+use gtk::cast::GTK_BOX;
+use gtk::ffi;
 
 pub trait _Box: Widget {
     fn pack_start<'r, T: Widget>(&'r mut self, child: &'r T, expand: bool, fill: bool, padding: u32) -> () {

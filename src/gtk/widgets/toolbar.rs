@@ -17,9 +17,9 @@
 
 use libc::c_int;
 
-use ffi;
+use gtk::ffi;
 use gtk::traits;
-use utils::cast::{GTK_TOOLBAR, GTK_TOOLITEM};
+use gtk::cast::{GTK_TOOLBAR, GTK_TOOLITEM};
 use gtk;
 use gtk::{IconSize, ReliefStyle, ToolbarStyle};
 
@@ -141,7 +141,7 @@ impl Toolbar {
     }
 }
 
-impl_GtkWidget!(Toolbar)
+impl_TraitWidget!(Toolbar)
 
 
 impl traits::Container for Toolbar {}

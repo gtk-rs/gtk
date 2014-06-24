@@ -15,9 +15,9 @@
 
 use libc::c_uint;
 
-use utils::cast::GTK_CONTAINER;
+use gtk::cast::GTK_CONTAINER;
 use gtk::enums::ResizeMode;
-use ffi;
+use gtk::ffi;
 use gtk::traits;
 
 pub trait Container : traits::Widget {

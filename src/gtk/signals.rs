@@ -21,7 +21,7 @@
 
 use std::mem::transmute;
 use libc::c_void;
-use ffi;
+use gtk::ffi;
 use gdk;
 use glib;
 use gtk;
@@ -47,7 +47,7 @@ macro_rules! signal(
         mod $signal{
             use std::mem::transmute;
             use libc::c_void;
-            use ffi;
+            use gtk::ffi;
             use gdk;
             use glib;
             use gtk;
@@ -70,7 +70,7 @@ macro_rules! signal(
         mod $signal{
             use std::mem::transmute;
             use libc::c_void;
-            use ffi;
+            use gtk::ffi;
             use gdk;
             use glib;
             use gtk;
@@ -99,7 +99,7 @@ macro_rules! signal(
 
             use std::mem::transmute;
             use libc::c_void;
-            use ffi;
+            use gtk::ffi;
             use gdk;
             use glib;
             use gtk;

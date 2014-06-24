@@ -18,7 +18,7 @@
 
 use std::ptr;
 
-use ffi;
+use gtk::ffi;
 use gtk::traits;
 /// ToolButton — A ToolItem subclass that displays buttons
 struct_Widget!(ToolButton)
@@ -55,7 +55,7 @@ impl ToolButton {
     }
 }
 
-impl_GtkWidget!(ToolButton)
+impl_TraitWidget!(ToolButton)
 
 
 impl traits::Container for ToolButton {}

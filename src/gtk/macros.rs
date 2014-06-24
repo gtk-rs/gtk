@@ -37,7 +37,7 @@ macro_rules! struct_Widget(
     );
 )
 
-macro_rules! impl_GtkWidget(
+macro_rules! impl_TraitWidget(
     ($gtk_struct:ident) => (
         impl ::gtk::traits::Widget for $gtk_struct {
             fn get_widget(&self) -> *ffi::C_GtkWidget {

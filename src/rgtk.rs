@@ -152,8 +152,6 @@ mod platform {
     extern{}
 }
 
-pub mod utils;
 pub mod gtk;
 pub mod gdk;
 pub mod glib;
-mod ffi;

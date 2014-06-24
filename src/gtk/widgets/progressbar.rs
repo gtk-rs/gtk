@@ -17,9 +17,9 @@
 
 use libc::c_double;
 use std::str;
-use ffi;
+use gtk::ffi;
 use gtk::traits;
-use utils::cast::GTK_PROGRESSBAR;
+use gtk::cast::GTK_PROGRESSBAR;
 
 
 /// ProgressBar — A widget which indicates progress visually
@@ -106,7 +106,7 @@ impl ProgressBar {
     }
 }
 
-impl_GtkWidget!(ProgressBar)
+impl_TraitWidget!(ProgressBar)
 
 
 impl traits::Orientable for ProgressBar {}
