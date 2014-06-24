@@ -67,7 +67,7 @@ impl Toolbar {
             if tmp_pointer.is_null() {
                 None
             } else {
-                Some(traits::Widget::wrap_widget(tmp_pointer))
+                Some(traits::Widget::wrap(tmp_pointer))
             }
         }
     }

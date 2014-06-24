@@ -44,7 +44,7 @@ macro_rules! impl_TraitWidget(
                 self.pointer
             }
 
-            fn wrap_widget(widget: *ffi::C_GtkWidget) -> $gtk_struct {
+            fn wrap(widget: *ffi::C_GtkWidget) -> $gtk_struct {
                 $gtk_struct {
                     pointer:         widget,
                     can_drop:        false

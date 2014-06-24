@@ -104,7 +104,7 @@ pub trait ToolButton: Widget + Container + Bin + ToolItem {
             if tmp_pointer.is_null() {
                 None
             } else {
-                Some(Widget::wrap_widget(tmp_pointer))
+                Some(Widget::wrap(tmp_pointer))
             }
         }
     }
