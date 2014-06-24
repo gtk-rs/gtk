@@ -47,7 +47,7 @@ pub enum EventType{
   TouchCancel      = 40
 }
 
-trait Event {
+pub trait Event {
   fn get_send_event(&self) -> bool{
     unsafe{
       let event_any : &EventAny = mem::transmute(self);

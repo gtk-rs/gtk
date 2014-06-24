@@ -13,11 +13,41 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-pub use self::color::*;
-pub use self::events::*;
-pub use self::device::*;
-pub use self::window::*;
-pub use self::types::*;
+pub use self::color::{Color, RGBA};
+pub use self::events::{
+	EventType,
+	Event,
+	EventAny,
+	EventExpose,
+	EventVisibility,
+	EventMotion,
+	EventButton,
+	EventTouch,
+	EventScroll,
+	EventKey,
+	EventCrossing,
+	EventFocus,
+	EventConfigure,
+	EventProperty,
+	EventSelection,
+	EventOwnerChange,
+	EventProximity,
+	EventSetting,
+	EventWindowState,
+	EventGrabBroken,
+	EventDND,
+	VisibilityState,
+	ScrollDirection,
+	NotifyType,
+	CrossingMode,
+	PropertyState,
+	WindowState,
+	SettingAction,
+	OwnerChange
+};
+pub use self::device::{Device};
+pub use self::window::{Window};
+pub use self::types::{Atom, Screen, Rectangle};
 
 mod color;
 mod events;
