@@ -160,5 +160,6 @@ mod platform {
 }
 
 pub mod gtk;
+pub mod cairo;
 pub mod gdk;
 pub mod glib;
