@@ -196,4 +196,6 @@ pub fn GTK_RADIOTOOLBUTTON(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkRadioToolBut
     unsafe{ ffi::cast_GtkRadioToolButton(widget) }
 }
 
-
+pub fn GTK_DIALOG(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkDialog {
+    unsafe { ffi::cast_GtkDialog(widget) }
+}

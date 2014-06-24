@@ -69,6 +69,7 @@ pub struct C_GtkPaned;
 pub struct C_GtkInfoBar;
 pub struct C_GtkToolShell;
 pub struct C_GtkToolbar;
+pub struct C_GtkDialog;
 pub struct C_GtkAboutDialog;
 
 pub struct C_GtkToolItem;
@@ -236,6 +237,24 @@ extern "C" {
     // pub fn gtk_button_get_event_window         (button: *C_GtkButton) -> *C_GdkWindow;
 
     //=========================================================================
+    // GtkAbout                                                          NOT OK
+    //=========================================================================
+    pub fn gtk_dialog_new                      () -> *C_GtkWidget;
+    //pub fn gtk_dialog_new_with_buttons         (title: *c_char, parent: *C_GtkWindow, flags: DialogFlags, first_button_text: *c_char, ...) -> *C_GtkWidget;
+    pub fn gtk_dialog_run                      (dialog: *C_GtkDialog) -> i32;
+    pub fn gtk_dialog_response                 (dialog: *C_GtkDialog, response_id: i32) -> ();
+    pub fn gtk_dialog_add_button               (dialog: *C_GtkDialog, button_text: *c_char, response_id: i32) -> *C_GtkWidget;
+    //pub fn gtk_dialog_add_buttons              (dialog: *C_GtkDialog, first_button_text: *c_char, ...) -> ();
+    pub fn gtk_dialog_add_action_widget        (dialog: *C_GtkDialog, child: *C_GtkWidget, response_id: i32) -> ();
+    pub fn gtk_dialog_set_default_response     (dialog: *C_GtkDialog, response_id: i32) -> ();
+    pub fn gtk_dialog_set_response_sensitive   (dialog: *C_GtkDialog, response_id: i32, setting: Gboolean) -> ();
+    pub fn gtk_dialog_get_response_for_widget  (dialog: *C_GtkDialog, widget: *C_GtkWidget) -> i32;
+    pub fn gtk_dialog_get_widget_for_response  (dialog: *C_GtkDialog, response_id: i32) -> *C_GtkWidget;
+    pub fn gtk_dialog_get_action_area          (dialog: *C_GtkDialog) -> *C_GtkWidget;
+    pub fn gtk_dialog_get_content_area         (dialog: *C_GtkDialog) -> *C_GtkWidget;
+    pub fn gtk_dialog_get_header_bar           (dialog: *C_GtkDialog) -> *C_GtkWidget;
+
+    //=========================================================================
     // GtkAboutDialog                                                    NOT OK
     //=========================================================================
     pub fn gtk_about_dialog_new                () -> *C_GtkWidget;
@@ -250,20 +269,20 @@ extern "C" {
     pub fn gtk_about_dialog_set_comments       (about: *C_GtkAboutDialog, comments: *c_char) -> ();
     pub fn gtk_about_dialog_get_license        (about: *C_GtkAboutDialog) -> *c_char;
     pub fn gtk_about_dialog_set_license        (about: *C_GtkAboutDialog, comments: *c_char) -> ();
-    //pub fn gtk_about_dialog_get_license_type   (about: *C_GtkAboutDialog) -> GtkLicense;
-    //pub fn gtk_about_dialog_set_license_type   (about: *C_GtkAboutDialog, license_type: GtkLicense) -> ();
+    pub fn gtk_about_dialog_get_license_type   (about: *C_GtkAboutDialog) -> GtkLicense;
+    pub fn gtk_about_dialog_set_license_type   (about: *C_GtkAboutDialog, license_type: GtkLicense) -> ();
     pub fn gtk_about_dialog_get_wrap_license   (about: *C_GtkAboutDialog) -> Gboolean;
     pub fn gtk_about_dialog_set_wrap_license   (about: *C_GtkAboutDialog, wrap_license: Gboolean) -> ();
     pub fn gtk_about_dialog_get_website        (about: *C_GtkAboutDialog) -> *c_char;
     pub fn gtk_about_dialog_set_website        (about: *C_GtkAboutDialog, website: *c_char) -> ();
     pub fn gtk_about_dialog_get_website_label  (about: *C_GtkAboutDialog) -> *c_char;
     pub fn gtk_about_dialog_set_website_label  (about: *C_GtkAboutDialog, website_label: *c_char) -> ();
-    //pub fn gtk_about_dialog_get_authors        (about: *C_GtkAboutDialog) -> **c_char;
-    //pub fn gtk_about_dialog_set_authors        (about: *C_GtkAboutDialog, authors: **c_char) -> ();
-    //pub fn gtk_about_dialog_get_documenters    (about: *C_GtkAboutDialog) -> **c_char;
-    //pub fn gtk_about_dialog_set_documenters    (about: *C_GtkAboutDialog, documents: **c_char) -> ();
-    //pub fn gtk_about_dialog_get_artists        (about: *C_GtkAboutDialog) -> **c_char;
-    //pub fn gtk_about_dialog_set_artists        (about: *C_GtkAboutDialog, artists: **c_char) -> ();
+    pub fn gtk_about_dialog_get_authors        (about: *C_GtkAboutDialog) -> **c_char;
+    pub fn gtk_about_dialog_set_authors        (about: *C_GtkAboutDialog, authors: **c_char) -> ();
+    pub fn gtk_about_dialog_get_documenters    (about: *C_GtkAboutDialog) -> **c_char;
+    pub fn gtk_about_dialog_set_documenters    (about: *C_GtkAboutDialog, documents: **c_char) -> ();
+    pub fn gtk_about_dialog_get_artists        (about: *C_GtkAboutDialog) -> **c_char;
+    pub fn gtk_about_dialog_set_artists        (about: *C_GtkAboutDialog, artists: **c_char) -> ();
     pub fn gtk_about_dialog_get_translator_credits(about: *C_GtkAboutDialog) -> *c_char;
     pub fn gtk_about_dialog_set_translator_credits(about: *C_GtkAboutDialog, translator_credits: *c_char) -> ();
     pub fn gtk_about_dialog_get_logo           (about: *C_GtkAboutDialog) -> *C_GdkPixbuf;
@@ -983,4 +1002,6 @@ extern "C" {
     pub fn cast_GtkMenuToolButton(widget: *C_GtkWidget) -> *C_GtkMenuToolButton;
     pub fn cast_GtkToggleToolButton(widget: *C_GtkWidget) -> *C_GtkToggleToolButton;
     pub fn cast_GtkRadioToolButton(widget: *C_GtkWidget) -> *C_GtkRadioToolButton;
+    pub fn cast_GtkDialog(widget: *C_GtkWidget) -> *C_GtkDialog;
+    pub fn cast_GtkAboutDialog(widget: *C_GtkWidget) -> *C_GtkAboutDialog;
 }
