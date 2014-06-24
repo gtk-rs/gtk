@@ -153,7 +153,7 @@ impl Expander {
 
     pub fn get_label_widget(&mut self) -> gtk::Label {
         unsafe {
-            traits::Widget::wrap_widget(ffi::gtk_expander_get_label_widget(GTK_EXPANDER(self.pointer)))
+            traits::Widget::wrap(ffi::gtk_expander_get_label_widget(GTK_EXPANDER(self.pointer)))
         }
     }
 }
