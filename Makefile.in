@@ -26,15 +26,9 @@ rgtk-build: src/*
 					@$(ECHO) "$(OK_COLOR) Building rgtk.rlib $(NO_COLOR)"
 					$(RUSTC) -L target/ src/$(LIBNAME).rs --out-dir target/
 
-#make rulse for the glue library
-.PHONY: glue
-ifeq ($(OS), Darwin)
-glue : target/$(GLUE_LIBNAME).dylib
-else
 glue : target/$(GLUE_LIBNAME).a
-endif
 
-target/$(GLUE_LIBNAME).dylib: $(GLUE_SRC) | target/ tmp/
+target/$(GLUE_LIBNAME).dylib: $(GLUE_SRC) | target/
 					$(CC) $(INC) $(LIBS) -dynamiclib -o target/$(GLUE_LIBNAME).dylib $(SRC)
 
 target/$(GLUE_LIBNAME).o: $(GLUE_SRC) | target/
@@ -59,16 +53,16 @@ doc:
 
 target/:
 					mkdir -p $@
-					@$(ECHO) "$(OK_COLOR) Created $@ foldder $(NO_COLOR)"
+					@$(ECHO) "$(OK_COLOR) Created $@ folder $(NO_COLOR)"
 
 bin/:
 					mkdir -p $@
-					@$(ECHO) "$(OK_COLOR) Created $@ foldder $(NO_COLOR)"
+					@$(ECHO) "$(OK_COLOR) Created $@ folder $(NO_COLOR)"
 
 .PHONY: full
 full:				glue rgtk test
 
 .PHONY: clean
 clean:
-					rm -rf tmp/ target/ doc/
+					rm -rf target/ doc/
 

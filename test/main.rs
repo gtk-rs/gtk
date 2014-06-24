@@ -1,4 +1,5 @@
 
+#![crate_id = "test"]
 #![feature(globs)]
 
 extern crate rgtk;
