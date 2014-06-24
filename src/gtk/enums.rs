@@ -26,722 +26,864 @@
 /// GGtkWindowPopUp is used to implement widgets such as gtk::Menu
 /// or tooltips that you normally don't think of as windows per se. Nearly all windows should be WindowTopLevel.
 /// In particular, do not use WindowPopUp just to turn off the window borders; use gtk_window_set_decorated() for that.
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum WindowType {
-    /// A regular window, such as a dialog.
-    WindowTopLevel,
-    /// A special window such as a tooltip.
-    WindowPopUp
+
+pub use self::window_type::WindowType;
+pub use self::text_direction::TextDirection;
+pub use self::window_position::WindowPosition;
+pub use self::button_box_style::ButtonBoxStyle;
+pub use self::orientation::Orientation;
+pub use self::direction_type::DirectionType;
+pub use self::corner_type::CornerType;
+pub use self::resize_mode::ResizeMode;
+pub use self::border_style::BorderStyle;
+pub use self::sort_type::SortType;
+pub use self::state_flags::StateFlags;
+pub use self::drag_result::DragResult;
+pub use self::accel_flags::AccelFlags;
+pub use self::arrow_placement::ArrowPlacement;
+pub use self::arrow_type::ArrowType;
+pub use self::attach_options::AttachOptions;
+pub use self::delete_type::DeleteType;
+pub use self::expander_style::ExpanderStyle;
+pub use self::im_preedit_style::IMPreeditStyle;
+pub use self::im_status_style::IMStatusStyle;
+pub use self::justification::Justification;
+pub use self::movement_step::MovementStep;
+pub use self::pack_type::PackType;
+pub use self::path_priority_type::PathPriorityType;
+pub use self::path_type::PathType;
+pub use self::policy_type::PolicyType;
+pub use self::position_type::PositionType;
+pub use self::relief_style::ReliefStyle;
+pub use self::scroll_step::ScrollStep;
+pub use self::scroll_type::ScrollType;
+pub use self::selection_mode::SelectionMode;
+pub use self::shadow_type::ShadowType;
+pub use self::state_type::StateType;
+pub use self::toolbar_style::ToolbarStyle;
+pub use self::junction_sides::JunctionSides;
+pub use self::region_flags::RegionFlags;
+pub use self::icon_size::IconSize;
+pub use self::entry_icon_position::EntryIconPosition;
+pub use self::input_hints::InputHints;
+pub use self::input_purpose::InputPurpose;
+pub use self::image_type::ImageType;
+pub use self::spin_type::SpinType;
+pub use self::spin_button_update_policy::SpinButtonUpdatePolicy;
+pub use self::level_bar_mode::LevelBarMode;
+pub use self::calendar_display_options::CalendarDisplayOptions;
+pub use self::message_type::MessageType;
+
+pub mod window_type{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum WindowType{
+        /// A regular window, such as a dialog.
+        TopLevel,
+        /// A special window such as a tooltip.
+        PopUp
+    }
 }
 
 /// Reading directions for text
-pub enum TextDirection{
-    TextDirNone,
-    TextDirLtr,
-    TextDirRtl
+pub mod text_direction{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum TextDirection{
+        None,
+        Ltr,
+        Rtl
+    }
 }
 
 /// Window placement can be influenced using this enumeration.
 /// Note that using WinPosCenterAlways is almost always a bad idea.
 /// It won't necessarily work well with all window managers or on all windowing systems.
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum WindowPosition{
-    /// No influence is made on placement.
-    WinPosNone,
-    /// Windows should be placed in the center of the screen.
-    WinPosCenter,
-    /// Windows should be placed at the current mouse position.
-    WinPosMouse,
-    /// Keep window centered as it changes size, etc.
-    WinPosCenterAlways,
-    /// Center the window on its transient parent (see window.set_transient_for()).
-    WinPosCenterOnParent
+pub mod window_position{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum WindowPosition{
+        /// No influence is made on placement.
+        None,
+        /// Windows should be placed in the center of the screen.
+        Center,
+        /// Windows should be placed at the current mouse position.
+        Mouse,
+        /// Keep window centered as it changes size, etc.
+        CenterAlways,
+        /// Center the window on its transient parent (see window.set_transient_for()).
+        CenterOnParent
+    }
 }
 
 /// Used to dictate the style that a gtk::ButtonBox uses to layout the buttons it contains.
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum ButtonBoxStyle {
-    /// Buttons are evenly spread across the box.
-    ButtonBoxSpread = 1,
-    /// Buttons are placed at the edges of the box.
-    ButtonBoxEdge,
-    /// Buttons are grouped towards the start of the box, (on the left for a HBox, or the top for a VBox).
-    ButtonBoxStart,
-    /// Buttons are grouped towards the end of the box, (on the right for a HBox, or the bottom for a VBox).
-    ButtonBoxEnd,
-    /// Buttons are centered in the box. Since 2.12.
-    ButtonBoxCenter
+pub mod button_box_style{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum ButtonBoxStyle{
+        /// Buttons are evenly spread across the box.
+        Spread = 1,
+        /// Buttons are placed at the edges of the box.
+        Edge,
+        /// Buttons are grouped towards the start of the box, (on the left for a HBox, or the top for a VBox).
+        Start,
+        /// Buttons are grouped towards the end of the box, (on the right for a HBox, or the bottom for a VBox).
+        End,
+        /// Buttons are centered in the box. Since 2.12.
+        Center
+    }
 }
 
 /// Represents the orientation of widgets which can be switched between
 /// horizontal and vertical orientation on the fly, like gtk::Toolbar.
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum Orientation {
-    /// The widget is in horizontal orientation.
-    OrientationHorizontal,
-    /// The widget is in vertical orientation.
-    OrientationVertical
+pub mod orientation{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum Orientation{
+        /// The widget is in horizontal orientation.
+        Horizontal,
+        /// The widget is in vertical orientation.
+        Vertical
+    }
 }
 
 /// Availables direction types
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum  DirectionType {
-    DirTabForward,
-    DirTabBackward,
-    DirUp,
-    DirDown,
-    DirLeft,
-    DirRight
+pub mod direction_type{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum DirectionType{
+        TabForward,
+        TabBackward,
+        Up,
+        Down,
+        Left,
+        Right
+    }
 }
 
 /// Specifies which corner a child widget should be placed in when packed into a gtk::ScrolledWindow.
 /// This is effectively the opposite of where the scroll bars are placed.
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum  CornerType {
-    /// Place the scrollbars on the right and bottom of the widget (default behaviour).
-    CornerTopLeft,
-    /// Place the scrollbars on the top and right of the widget.
-    CornerBottomLeft,
-    /// Place the scrollbars on the left and bottom of the widget.
-    CornerTopRight,
-    /// Place the scrollbars on the top and left of the widget.
-    CornerBottomRight
+pub mod corner_type{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum CornerType{
+        /// Place the scrollbars on the right and bottom of the widget (default behaviour).
+        TopLeft,
+        /// Place the scrollbars on the top and right of the widget.
+        BottomLeft,
+        /// Place the scrollbars on the left and bottom of the widget.
+        TopRight,
+        /// Place the scrollbars on the top and left of the widget.
+        BottomRight
+    }
 }
 
 /// Availables resize modes
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum ResizeMode {
-    /// Pass resize request to the parent
-    ResizeParent,
-    /// Queue resizes on this widget
-    ResizeQueue,
-    /// Resize immediately. Deprecated.
-    OrientationtkResizeImmediate
+pub mod resize_mode{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum ResizeMode{
+        /// Pass resize request to the parent
+        Parent,
+        /// Queue resizes on this widget
+        Queue,
+        /// Resize immediately. Deprecated.
+        Immediate
+    }
 }
 
 /// Describes how the border of a UI element should be rendered.
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum BorderStyle {
-    /// No visible border
-    BorderStyleNone,
-    /// A single line segment
-    BorderStyleSolid,
-    /// Looks as if the content is sunken into the canvas
-    BorderStyleInset,
-    /// Looks as if the content is coming out of the canvas
-    BorderStyleOutset,
-    /// Same as BorderStyleNone
-    BorderStyleHidden,
-    /// A series of round dots
-    BorderStyleDotted,
-    /// A series of square-ended dashes
-    BorderStyleDashed,
-    /// Two parallel lines with some space between them
-    BorderStyleDouble,
-    /// Looks as if it were carved in the canvas
-    BorderStyleGroove,
-    /// Looks as if it were coming out of the canvas
-    BorderStyleRidge
+pub mod border_style{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum BorderStyle{
+        /// No visible border
+        None,
+        /// A single line segment
+        Solid,
+        /// Looks as if the content is sunken into the canvas
+        Inset,
+        /// Looks as if the content is coming out of the canvas
+        Outset,
+        /// Same as BorderStyleNone
+        Hidden,
+        /// A series of round dots
+        Dotted,
+        /// A series of square-ended dashes
+        Dashed,
+        /// Two parallel lines with some space between them
+        Double,
+        /// Looks as if it were carved in the canvas
+        Groove,
+        /// Looks as if it were coming out of the canvas
+        Ridge
+    }
 }
 
 /// Determines the direction of a sort.
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum SortType {
-    /// Sorting is in ascending order
-    SortAscending,
-    /// Sorting is in descending order.
-    SortDescending
+pub mod sort_type{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum SortType{
+        /// Sorting is in ascending order
+        Ascending,
+        /// Sorting is in descending order.
+        Descending
+    }
 }
 
 /// Describes a widget state. Widget states are used to match the widget against CSS pseudo-classes.
 /// Note that GTK extends the regular CSS classes and sometimes uses different names.
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum StateFlags {
-    /// State during normal operation.
-    StateFlagNormal       = 0,
-    /// Widget is active.
-    StateFlagActive       = 1 << 0,
-    /// Widget has a mouse pointer over it.
-    StateFlagPrelight     = 1 << 1,
-    /// Widget is selected.
-    StateFlagSelected     = 1 << 2,
-    /// Widget is insensitive.
-    StateFlagInsensitive  = 1 << 3,
-    /// Widget is inconsistent.
-    StateFlagInconsistent = 1 << 4,
-    /// Widget has the keyboard focus.
-    StateFlagFocused      = 1 << 5,
-    /// Widget is in a background toplevel window.
-    StateFlagBackDrop     = 1 << 6,
-    /// Widget is in left-to-right text direction. Since 3.8
-    StateFlagDirLTR       = 1 << 7,
-    /// Widget is in right-to-left text direction. Since 3.8
-    StateFlagDirRTL       = 1 << 8
+pub mod state_flags{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum StateFlags{
+        /// State during normal operation.
+        Normal       = 0,
+        /// Widget is active.
+        Active       = 1 << 0,
+        /// Widget has a mouse pointer over it.
+        Prelight     = 1 << 1,
+        /// Widget is selected.
+        Selected     = 1 << 2,
+        /// Widget is insensitive.
+        Insensitive  = 1 << 3,
+        /// Widget is inconsistent.
+        Inconsistent = 1 << 4,
+        /// Widget has the keyboard focus.
+        Focused      = 1 << 5,
+        /// Widget is in a background toplevel window.
+        BackDrop     = 1 << 6,
+        /// Widget is in left-to-right text direction. Since 3.8
+        DirLTR       = 1 << 7,
+        /// Widget is in right-to-left text direction. Since 3.8
+        DirRTL       = 1 << 8
+    }
 }
 
 /// Gives an indication why a drag operation failed.
 /// The value can by obtained by connecting to the "drag-failed" signal.
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum DragResult {
-    /// The drag operation was successful.
-    DragResultSuccess,
-    /// No suitable drag target.
-    DragResultNoTarget,
-    /// The user cancelled the drag operation.
-    DragResultUserCanceled,
-    /// The drag operation timed out.
-    DragResultTimeoutExpired,
-    /// The pointer or keyboard grab used for the drag operation was broken.
-    DragResultGrabBroken,
-    /// The drag operation failed due to some unspecified error.
-    DragResultError
+pub mod drag_result{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum DragResult{
+        /// The drag operation was successful.
+        Success,
+        /// No suitable drag target.
+        NoTarget,
+        /// The user cancelled the drag operation.
+        UserCanceled,
+        /// The drag operation timed out.
+        TimeoutExpired,
+        /// The pointer or keyboard grab used for the drag operation was broken.
+        GrabBroken,
+        /// The drag operation failed due to some unspecified error.
+        Error
+    }
 }
 
 /// Availables accel flags
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum AccelFlags {
-    /// display in AccelLabel?
-    AccelVisible        = 1 << 0,
-    /// is it removable?
-    AccelLocked         = 1 << 1,
-    /// Comparison mask
-    AccelMask           = 0x07
+pub mod accel_flags{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum AccelFlags{
+        /// display in AccelLabel?
+        Visible        = 1 << 0,
+        /// is it removable?
+        Locked         = 1 << 1,
+        /// Comparison mask
+        Mask           = 0x07
+    }
 }
 
 /// Used to specify the placement of scroll arrows in scrolling menus.
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum ArrowPlacement {
-    /// Place one arrow on each end of the menu.
-    ArrowsBoth,
-    /// Place both arrows at the top of the menu.
-    ArrowsStart,
-    /// Place both arrows at the bottom of the menu.
-    ArrowsEnd
+pub mod arrow_placement{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum ArrowPlacement{
+        /// Place one arrow on each end of the menu.
+        Both,
+        /// Place both arrows at the top of the menu.
+        Start,
+        /// Place both arrows at the bottom of the menu.
+        End
+    }
 }
 
 /// Used to indicate the direction in which a Arrow should point.
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum ArrowType {
-    /// Represents an upward pointing arrow.
-    ArrowUp,
-    /// Represents a downward pointing arrow.
-    ArrowDown,
-    /// Represents a left pointing arrow.
-    ArrowLeft,
-    /// Represents a right pointing arrow.
-    ArrowRight,
-    /// No arrow. Since 2.10.
-    ArrowNone
+pub mod arrow_type{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum ArrowType{
+        /// Represents an upward pointing arrow.
+        Up,
+        /// Represents a downward pointing arrow.
+        Down,
+        /// Represents a left pointing arrow.
+        Left,
+        /// Represents a right pointing arrow.
+        Right,
+        /// No arrow. Since 2.10.
+        None
+    }
 }
 
 /// Denotes the expansion properties that a widget will have when it (or its parent) is resized.
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum AttachOptions {
-    /// the widget should expand to take up any extra space in its container that has been allocated.
-    Expand = 1 << 0,
-    /// the widget should shrink as and when possible.
-    Shrink = 1 << 1,
-    /// the widget should fill the space allocated to it.
-    Fill   = 1 << 2
+pub mod attach_options{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum AttachOptions{
+        /// the widget should expand to take up any extra space in its container that has been allocated.
+        Expand = 1 << 0,
+        /// the widget should shrink as and when possible.
+        Shrink = 1 << 1,
+        /// the widget should fill the space allocated to it.
+        Fill   = 1 << 2
+    }
 }
 
 /// Deleting modes
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum DeleteType {
-    /// delete chars
-    DeleteChars,
-    /// delete only the portion of the word to the left/right of cursor if we're in the middle of a word
-    DeleteWordsEnd,
-    /// delete words
-    DeleteWords,
-    /// delete lines
-    DeleteDisplayLines,
-    /// deletes lines end
-    DeleteDisplayLineEnd,
-    /// like C-k in Emacs (or its reverse)
-    DeleteParagraphEnds,
-    /// C-k in pico, kill whole line
-    DeleteParagraphs,
-    /// M-\ in Emacs
-    DeleteWhitespac
+pub mod delete_type{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum DeleteType{
+        /// delete chars
+        Chars,
+        /// delete only the portion of the word to the left/right of cursor if we're in the middle of a word
+        WordsEnd,
+        /// delete words
+        Words,
+        /// delete lines
+        DisplayLines,
+        /// deletes lines end
+        DisplayLineEnd,
+        /// like C-k in Emacs (or its reverse)
+        ParagraphEnds,
+        /// C-k in pico, kill whole line
+        Paragraphs,
+        /// M-\ in Emacs
+        Whitespac
+    }
 }
 
 /// Used to specify the style of the expanders drawn by a TreeView.
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum ExpanderStyle {
-    /// The style used for a collapsed subtree.
-    ExpanderCollapsed,
-    /// Intermediate style used during animation.
-    ExpanderSemiCollapsed,
-    /// Intermediate style used during animation.
-    ExpanderSemiExpanded,
-    /// The style used for an expanded subtree.
-    GGtkExpanderExpanded
+pub mod expander_style{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum ExpanderStyle{
+        /// The style used for a collapsed subtree.
+        Collapsed,
+        /// Intermediate style used during animation.
+        SemiCollapsed,
+        /// Intermediate style used during animation.
+        SemiExpanded,
+        /// The style used for an expanded subtree.
+        Expanded
+    }
 }
 
 /// preedit style
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum IMPreeditStyle {
-    ImPreeditNothing,
-    ImPreeditCallback,
-    ImPreeditNone
+pub mod im_preedit_style{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum IMPreeditStyle{
+        Nothing,
+        Callback,
+        None
+    }
 }
 
 /// Status styles
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum IMStatusStyle {
-    ImStatusNothing,
-    ImStatusCallback,
-    ImStatusNone
+pub mod im_status_style{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum IMStatusStyle{
+        Nothing,
+        Callback,
+        None
+    }
 }
 
 /// Used for justifying the text inside a Label widget. (See also Alignment).
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum Justification {
-    /// The text is placed at the left edge of the label.
-    JustifyLeft,
-    /// The text is placed at the right edge of the label.
-    JustifyRight,
-    /// The text is placed in the center of the label.
-    JustifyCenter,
-    /// The text is placed is distributed across the label.
-    JustifyFill
+pub mod justification{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum Justification{
+        /// The text is placed at the left edge of the label.
+        Left,
+        /// The text is placed at the right edge of the label.
+        Right,
+        /// The text is placed in the center of the label.
+        Center,
+        /// The text is placed is distributed across the label.
+        Fill
+    }
 }
 
 /// Availables movement steps
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum MovementStep {
-    /// Move forward or back by graphemes
-    MovementLogicalPosition,
-    /// Move left or right by graphemes
-    MovementVisualPositions,
-    /// Move forward or back by words
-    MovementWords,
-    /// Move up or down lines (wrapped lines)
-    MovementDisplayLines,
-    /// Move to either end of a line
-    MovementDisplayLineEnds,
-    /// Move up or down paragraphs (newline-ended lines)
-    MovementParagraphs,
-    /// Move to either end of a paragraph
-    MovementParagraphEnds,
-    /// Move by pages
-    MovementPages,
-    /// Move to ends of the buffer
-    MovementBufferEnds,
-    /// Move horizontally by pages
-    MovementHorizontalPages
+pub mod movement_step{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum MovementStep{
+        /// Move forward or back by graphemes
+        LogicalPosition,
+        /// Move left or right by graphemes
+        VisualPositions,
+        /// Move forward or back by words
+        Words,
+        /// Move up or down lines (wrapped lines)
+        DisplayLines,
+        /// Move to either end of a line
+        DisplayLineEnds,
+        /// Move up or down paragraphs (newline-ended lines)
+        Paragraphs,
+        /// Move to either end of a paragraph
+        ParagraphEnds,
+        /// Move by pages
+        Pages,
+        /// Move to ends of the buffer
+        BufferEnds,
+        /// Move horizontally by pages
+        HorizontalPages
+    }
 }
 
 /// Represents the packing location Box children. (See: VBox, HBox, and ButtonBox).
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum PackType {
-    /// The child is packed into the start of the box
-    PackStart,
-    /// The child is packed into the end of the box
-    PackEnd
+pub mod pack_type{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum PackType{
+        /// The child is packed into the start of the box
+        Start,
+        /// The child is packed into the end of the box
+        End
+    }
 }
 
 
 /// Availables Gtk path priority
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum PathPriorityType {
-    PathPrioLowest       = 0,
-    PathPrioGtk          = 4,
-    PathPrioApplication  = 8,
-    PathPrioTheme        = 10,
-    PathPrioRc           = 12,
-    PathPrioHighest      = 15
+pub mod path_priority_type{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum PathPriorityType{
+        Lowest       = 0,
+        Gtk          = 4,
+        Application  = 8,
+        Theme        = 10,
+        Rc           = 12,
+        Highest      = 15
+    }
 }
 
 /// Availables Gtk path types
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum PathType {
-    PathWidget,
-    PathWidgetClass,
-    PathClass
+pub mod path_type{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum PathType{
+        Widget,
+        WidgetClass,
+        Class
+    }
 }
 
 /// Determines when a scroll bar will be visible.
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum PolicyType {
-    /// The scrollbar is always visible.
-    PolicyAlways,
-    /// The scrollbar will appear and disappear as necessary. For example, when all of a CList can not be seen.
-    PolicyAutomatic,
-    /// The scrollbar will never appear.
-    PolicyNever
+pub mod policy_type{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum PolicyType{
+        /// The scrollbar is always visible.
+        Always,
+        /// The scrollbar will appear and disappear as necessary. For example, when all of a CList can not be seen.
+        Automatic,
+        /// The scrollbar will never appear.
+        Never
+    }
 }
 
 /// Describes which edge of a widget a certain feature is positioned at, e.g. the tabs of a Notebook,
 /// the handle of a HandleBox or the label of a Scale.
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum PositionType {
-    /// The feature is at the left edge.
-    PosLeft,
-    /// The feature is at the right edge.
-    PosRight,
-    /// The feature is at the top edge.
-    PosTop,
-    /// The feature is at the bottom edge.
-    PosBottom
+pub mod position_type{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum PositionType{
+        /// The feature is at the left edge.
+        Left,
+        /// The feature is at the right edge.
+        Right,
+        /// The feature is at the top edge.
+        Top,
+        /// The feature is at the bottom edge.
+        Bottom
+    }
 }
 
 /// Indicated the relief to be drawn around a Button.
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum ReliefStyle {
-    /// Draw a normal relief.
-    GTkReliefNormal,
-    /// A half relief.
-    GTkReliefHalf,
-    /// No relief.
-    GTkReliefNone
+pub mod relief_style{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum ReliefStyle{
+        /// Draw a normal relief.
+        Normal,
+        /// A half relief.
+        Half,
+        /// No relief.
+        None
+    }
 }
 
 /// Available scroll steps
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum ScrollStep {
-  ScrollSteps,
-  ScrollPages,
-  ScrollEnds,
-  ScrollHorizontalSteps,
-  ScrollHorizontalPages,
-  ScrollHorizontalEnds
+pub mod scroll_step{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum ScrollStep{
+        Steps,
+        Pages,
+        Ends,
+        HorizontalSteps,
+        HorizontalPages,
+        HorizontalEnds
+    }
 }
 
 /// Available scroll types
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum ScrollType {
-  ScrollNone,
-  ScrollJump,
-  ScrollStepBackward,
-  ScrollStepForward,
-  ScrollPageBackward,
-  ScrollPageForward,
-  ScrollStepUp,
-  ScrollStepDown,
-  ScrollPageUp,
-  ScrollPageDown,
-  ScrollStepLeft,
-  ScrollStepRight,
-  ScrollPageLeft,
-  ScrollPageRight,
-  ScrollStart,
-  ScrollEnd
+pub mod scroll_type{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum ScrollType{
+        None,
+        Jump,
+        StepBackward,
+        StepForward,
+        PageBackward,
+        PageForward,
+        StepUp,
+        StepDown,
+        PageUp,
+        PageDown,
+        StepLeft,
+        StepRight,
+        PageLeft,
+        PageRight,
+        Start,
+        End
+    }
 }
 
 /// Used to control what selections users are allowed to make.
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum SelectionMode {
-    /// No selection is possible.
-    SelectionNone,
-    /// Zero or one element may be selected.
-    SelectionSingle,
-    /// Exactly one element is selected.
-    SelectionBrowse,
-    /// Any number of elements may be selected.
-    SelectionMultiple
+pub mod selection_mode{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum SelectionMode{
+        /// No selection is possible.
+        None,
+        /// Zero or one element may be selected.
+        Single,
+        /// Exactly one element is selected.
+        Browse,
+        /// Any number of elements may be selected.
+        Multiple
+    }
 }
 
 /// Used to change the appearance of an outline typically provided by a Frame
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum ShadowType {
-    /// No outline.
-    ShadowNone,
-    /// The outline is bevelled inwards.
-    ShadowIm,
-    /// The outline is bevelled outwards like a button.
-    ShadowOut,
-    /// The outline has a sunken 3d appearance.
-    ShadowEtchedIn,
-    /// The outline has a raised 3d appearance.
-    ShadowEtchedOut
+pub mod shadow_type{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum ShadowType{
+        /// No outline.
+        None,
+        /// The outline is bevelled inwards.
+        Im,
+        /// The outline is bevelled outwards like a button.
+        Out,
+        /// The outline has a sunken 3d appearance.
+        EtchedIn,
+        /// The outline has a raised 3d appearance.
+        EtchedOut
+    }
 }
 
 /// This type indicates the current state of a widget; the state determines how the widget is drawn.
 ///
 /// The StateType enumeration is also used to identify different colors in a Style for drawing,
 /// so states can be used for subparts of a widget as well as entire widgets.
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum StateType {
-    /// State during normal operation.
-    StateNormal,
-    /// State of a currently active widget, such as a depressed button.
-    StateActive,
-    /// State indicating that the mouse pointer is over the widget and the widget will respond to mouse clicks.
-    StatePrelight,
-    /// State of a selected item, such the selected row in a list.
-    StateSelected,
-    /// State indicating that the widget is unresponsive to user actions.
-    StateInsensitive,
-    /// The widget is inconsistent, such as checkbuttons or radiobuttons that aren't either set to true nor false,
-    /// or buttons requiring the user attention.
-    StateInconsistent,
-    /// The widget has the keyboard focus
-    StateFocused
+pub mod state_type{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum StateType{
+        /// State during normal operation.
+        Normal,
+        /// State of a currently active widget, such as a depressed button.
+        Active,
+        /// State indicating that the mouse pointer is over the widget and the widget will respond to mouse clicks.
+        Prelight,
+        /// State of a selected item, such the selected row in a list.
+        Selected,
+        /// State indicating that the widget is unresponsive to user actions.
+        Insensitive,
+        /// The widget is inconsistent, such as checkbuttons or radiobuttons that aren't either set to true nor false,
+        /// or buttons requiring the user attention.
+        Inconsistent,
+        /// The widget has the keyboard focus
+        Focused
+    }
 }
 
 /// Used to customize the appearance of a Toolbar.
 ///
 /// Note that setting the toolbar style overrides the user's preferences for the default toolbar style.
 /// Note that if the button has only a label set and GTK_TOOLBAR_ICONS is used, the label will be visible, and vice versa.
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum ToolbarStyle {
-    /// Buttons display only icons in the toolbar.
-    ToolbarIcons,
-    /// Buttons display only text labels in the toolbar.
-    ToolbarText,
-    /// Buttons display text and icons in the toolbar.
-    ToolbarBoth,
-    /// Buttons display icons and text alongside each other, rather than vertically stacked
-    ToolbarBothHoriz
+pub mod toolbar_style{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum ToolbarStyle{
+        /// Buttons display only icons in the toolbar.
+        Icons,
+        /// Buttons display only text labels in the toolbar.
+        Text,
+        /// Buttons display text and icons in the toolbar.
+        Both,
+        /// Buttons display icons and text alongside each other, rather than vertically stacked
+        BothHoriz
+    }
 }
 
 /// Describes how a rendered element connects to adjacent elements.
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum JunctionSides {
-    /// No junctions.
-    JunctionNone               = 0,
-    /// Element connects on the top-left corner.
-    JunctionCornerTopleft      = 1 << 0,
-    /// Element connects on the top-right corner.
-    JunctionCornerTopRight     = 1 << 1,
-    /// Element connects on the bottom-left corner.
-    JunctionCornerBottomLeft   = 1 << 2,
-    /// Element connects on the bottom-right corner.
-    JunctionCornerBottomRight  = 1 << 3,
-    /// Element connects on the top side.
-    JunctionTop                = (1 << 0 | 1 << 1),
-    /// Element connects on the bottom side.
-    JunctionBottom             = (1 << 2 | 1 << 3),
-    /// Element connects on the left side.
-    JunctionLeft               = (1 << 0 | 1 << 2),
-    /// Element connects on the right side.
-    JunctionRight              = (1 << 1 | 1 << 3)
+pub mod junction_sides{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum JunctionSides{
+        /// No junctions.
+        None               = 0,
+        /// Element connects on the top-left corner.
+        CornerTopleft      = 1 << 0,
+        /// Element connects on the top-right corner.
+        CornerTopRight     = 1 << 1,
+        /// Element connects on the bottom-left corner.
+        CornerBottomLeft   = 1 << 2,
+        /// Element connects on the bottom-right corner.
+        CornerBottomRight  = 1 << 3,
+        /// Element connects on the top side.
+        Top                = (1 << 0 | 1 << 1),
+        /// Element connects on the bottom side.
+        Bottom             = (1 << 2 | 1 << 3),
+        /// Element connects on the left side.
+        Left               = (1 << 0 | 1 << 2),
+        /// Element connects on the right side.
+        Right              = (1 << 1 | 1 << 3)
+    }
 }
 
 /// Describes a region within a widget.
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum RegionFlags {
-    /// Region has an even number within a set.
-    RegionEven    = 1 << 0,
-    /// Region has an odd number within a set.
-    RegionOdd     = 1 << 1,
-    /// Region is the first one within a set.
-    RegionFirst   = 1 << 2,
-    /// Region is the last one within a set.
-    RegionLast    = 1 << 3,
-    /// Region is the only one within a set.
-    RegionOnly    = 1 << 4,
-    /// Region is part of a sorted area.
-    RegionSorted  = 1 << 5
+pub mod region_flags{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum RegionFlags{
+        /// Region has an even number within a set.
+        Even    = 1 << 0,
+        /// Region has an odd number within a set.
+        Odd     = 1 << 1,
+        /// Region is the first one within a set.
+        First   = 1 << 2,
+        /// Region is the last one within a set.
+        Last    = 1 << 3,
+        /// Region is the only one within a set.
+        Only    = 1 << 4,
+        /// Region is part of a sorted area.
+        Sorted  = 1 << 5
+    }
 }
 
 /// Icon Sizes : temporary
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum IconSize {
-  IconSizeInvalid,
-  IconSizeMemu,
-  IconSizeSmallToolbar,
-  IconSizeLargeToolbar,
-  IconSizeButton,
-  IconSizeDnd,
-  IconSizeDisalog
+pub mod icon_size{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum IconSize{
+        Invalid,
+        Memu,
+        SmallToolbar,
+        LargeToolbar,
+        Button,
+        Dnd,
+        Disalog
+    }
 }
 
 /// Specifies the side of the entry at which an icon is placed.
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum EntryIconPosition {
-    /// At the beginning of the entry (depending on the text direction).
-    EntryIconPrimary,
-    /// At the end of the entry (depending on the text direction).
-    EntryIconSecondary
+pub mod entry_icon_position{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum EntryIconPosition{
+        /// At the beginning of the entry (depending on the text direction).
+        Primary,
+        /// At the end of the entry (depending on the text direction).
+        Secondary
+    }
 }
 
 /// Describes hints that might be taken into account by input methods or applications.
 /// Note that input methods may already tailor their behaviour according to the InputPurpose of the entry.
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum InputHints {
-    /// No special behaviour suggested
-    InputHintNone                = 0,
-    /// Suggest checking for typos
-    InputHintSpellcheck          = 1 << 0,
-    /// Suggest not checking for typos
-    InputHintNoSpellcheck        = 1 << 1,
-    /// Suggest word completion
-    InputHintWordCompletion      = 1 << 2,
-    /// Suggest to convert all text to lowercase
-    InputHintLowercase           = 1 << 3,
-    /// Suggest to capitalize all text
-    InputHintUppercaseChars      = 1 << 4,
-    /// Suggest to capitalize the first character of each word
-    InputHintUppercaseWords      = 1 << 5,
-    /// Suggest to capitalize the first word of each sentence
-    InputHintUppercaseSentences  = 1 << 6,
-    /// Suggest to not show an onscreen keyboard (e.g for a calculator that already has all the keys).
-    InputHintInhibitOsk          = 1 << 7
+pub mod input_hints{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum InputHints{
+        /// No special behaviour suggested
+        None                = 0,
+        /// Suggest checking for typos
+        Spellcheck          = 1 << 0,
+        /// Suggest not checking for typos
+        NoSpellcheck        = 1 << 1,
+        /// Suggest word completion
+        WordCompletion      = 1 << 2,
+        /// Suggest to convert all text to lowercase
+        Lowercase           = 1 << 3,
+        /// Suggest to capitalize all text
+        UppercaseChars      = 1 << 4,
+        /// Suggest to capitalize the first character of each word
+        UppercaseWords      = 1 << 5,
+        /// Suggest to capitalize the first word of each sentence
+        UppercaseSentences  = 1 << 6,
+        /// Suggest to not show an onscreen keyboard (e.g for a calculator that already has all the keys).
+        InhibitOsk          = 1 << 7
+    }
 }
 
 /// Describes primary purpose of the input widget.
 /// This information is useful for on-screen keyboards
 /// and similar input methods to decide which keys should be presented to the user.
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum InputPurpose {
-    /// Allow any character
-    InputPurposeFreeForm,
-    /// Allow only alphabetic characters
-    InputPurposeAlpha,
-    /// Allow only digits
-    InputPurposeDigits,
-    /// Edited field expects numbers
-    InputPurposeNumber,
-    /// Edited field expects phone number
-    InputPurposePhone,
-    /// Edited field expects URL
-    InputPurposeUrl,
-    /// Edited field expects email address
-    InputPurposeEmail,
-    /// Edited field expects the name of a person
-    InputPurposeName,
-    /// Like InputPurposeFreeForm, but characters are hidden
-    InputPurposePassword,
-    /// Like InputPurposeDigits, but characters are hidden
-    InputPurposePin
+pub mod input_purpose{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum InputPurpose{
+        /// Allow any character
+        FreeForm,
+        /// Allow only alphabetic characters
+        Alpha,
+        /// Allow only digits
+        Digits,
+        /// Edited field expects numbers
+        Number,
+        /// Edited field expects phone number
+        Phone,
+        /// Edited field expects URL
+        Url,
+        /// Edited field expects email address
+        Email,
+        /// Edited field expects the name of a person
+        Name,
+        /// Like InputPurposeFreeForm, but characters are hidden
+        Password,
+        /// Like InputPurposeDigits, but characters are hidden
+        Pin
+    }
 }
 
 /// Describes the image data representation used by a Image.
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum ImageType {
-    /// there is no image displayed by the widget
-    ImageEmpty,
-    /// the widget contains a Gdk::Pixbuf
-    ImagePixbuf,
-    /// the widget contains a stock icon name (see Stock Items(3))
-    ImageStock,
-    /// the widget contains a Gtk::IconSet
-    ImageIconSet,
-    /// the widget contains a Gdk::PixbufAnimation
-    ImageAnimation,
-    /// the widget contains a named icon. This image type was added in GTK+ 2.6
-    ImageIconName,
-    /// the widget contains a GIcon. This image type was added in GTK+ 2.14
-    ImageGIcon,
-    /// the widget contains a cairo_surface_t. This image type was added in GTK+ 3.10
-    ImageSurface
+pub mod image_type{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum ImageType{
+        /// there is no image displayed by the widget
+        Empty,
+        /// the widget contains a Gdk::Pixbuf
+        Pixbuf,
+        /// the widget contains a stock icon name (see Stock Items(3))
+        Stock,
+        /// the widget contains a Gtk::IconSet
+        IconSet,
+        /// the widget contains a Gdk::PixbufAnimation
+        Animation,
+        /// the widget contains a named icon. This image type was added in GTK+ 2.6
+        IconName,
+        /// the widget contains a GIcon. This image type was added in GTK+ 2.14
+        GIcon,
+        /// the widget contains a cairo_surface_t. This image type was added in GTK+ 3.10
+        Surface
+    }
 }
 
 /// The values of the SpinType enumeration are used
 /// to specify the change to make in gtk::SpinButton::spin().
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum SpinType {
-    /// Increment by the adjustments step increment.
-    SpinStepForward,
-    /// Decrement by the adjustments step increment.
-    SpinStepBackward,
-    /// Increment by the adjustments page increment.
-    SpinPageForward,
-    /// Decrement by the adjustments page increment.
-    SpinPageBackward,
-    /// Go to the adjustments lower bound.
-    SpinHome,
-    /// Go to the adjustments upper bound.
-    SpinEnd,
-    /// Change by a specified amount.
-    SpinUserDefined
+pub mod spin_type{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum SpinType{
+        /// Increment by the adjustments step increment.
+        StepForward,
+        /// Decrement by the adjustments step increment.
+        StepBackward,
+        /// Increment by the adjustments page increment.
+        PageForward,
+        /// Decrement by the adjustments page increment.
+        PageBackward,
+        /// Go to the adjustments lower bound.
+        Home,
+        /// Go to the adjustments upper bound.
+        End,
+        /// Change by a specified amount.
+        UserDefined
+    }
 }
 
 /// The spin button update policy determines whether the spin button displays values
 /// even if they are outside the bounds of its adjustment. See gtk::SpinButton::set_update_policy().
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum SpinButtonUpdatePolicy {
-    /// When refreshing your Gtk::SpinButton, the value is always displayed
-    UpdateAlways,
-    /// When refreshing your Gtk::SpinButton, the value is only displayed
-    /// if it is valid within the bounds of the spin button's adjustment
-    UpdateIfValid
+pub mod spin_button_update_policy{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum SpinButtonUpdatePolicy{
+        /// When refreshing your Gtk::SpinButton, the value is always displayed
+        Always,
+        /// When refreshing your Gtk::SpinButton, the value is only displayed
+        /// if it is valid within the bounds of the spin button's adjustment
+        IfValid
+    }
 }
 
 /// Describes how LevelBar contents should be rendered.
 /// Note that this enumeration could be extended with additional modes in the future.
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum LevelBarMode {
-    /// the bar has a continuous mode
-    LevelBarModeContinuous,
-    /// the bar has a discrete mode
-    LevelBarModeDiscrete
+pub mod level_bar_mode{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum LevelBarMode{
+        /// the bar has a continuous mode
+        Continuous,
+        /// the bar has a discrete mode
+        Discrete
+    }
 }
 
 /// These options can be used to influence the display and behaviour of a gtk::Calendar.
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum CalendarDisplayOptions {
-    /// Specifies that the month and year should be displayed.
-    CalendarShowHeading        = 1 << 0,
-    /// Specifies that three letter day descriptions should be present.
-    CalendarShowDayNames       = 1 << 1,
-    /// Prevents the user from switching months with the calendar.
-    CalendarNoMonthChange      = 1 << 2,
-    /// Displays each week numbers of the current year, down the left side of the calendar.
-    CalendarShowWeekNumbers    = 1 << 3,
-    /// Just show an indicator, not the full details text when details are provided. See gtk::Calendar::set_detail_func().
-    CalendarShowDetails        = 1 << 5
+pub mod calendar_display_options{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum CalendarDisplayOptions{
+        /// Specifies that the month and year should be displayed.
+        ShowHeading        = 1 << 0,
+        /// Specifies that three letter day descriptions should be present.
+        ShowDayNames       = 1 << 1,
+        /// Prevents the user from switching months with the calendar.
+        NoMonthChange      = 1 << 2,
+        /// Displays each week numbers of the current year, down the left side of the calendar.
+        ShowWeekNumbers    = 1 << 3,
+        /// Just show an indicator, not the full details text when details are provided. See gtk::Calendar::set_detail_func().
+        ShowDetails        = 1 << 5
+    }
 }
 
 /// The type of message being displayed in the dialog.
-#[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show)]
-pub enum MessageType {
-    /// Informational message
-    MessageInfo,
-    /// Non-fatal warning message
-    MessageWarning,
-    /// Question requiring a choice
-    MessageQuestion,
-    /// Fatal error message
-    MessageError,
-    /// None of the above, doesn't get an icon
-    MessageOther
+pub mod message_type{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum MessageType{
+        /// Informational message
+        Info,
+        /// Non-fatal warning message
+        Warning,
+        /// Question requiring a choice
+        Question,
+        /// Fatal error message
+        Error,
+        /// None of the above, doesn't get an icon
+        Other
+    }
 }

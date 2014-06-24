@@ -19,7 +19,6 @@
 
 use utils::cast::GTK_SWITCH;
 use ffi;
-use gtk::traits;
 /*
 * Switch — A "light switch" style toggle
 *

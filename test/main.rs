@@ -36,11 +36,11 @@ mod platform {
 fn main() {
     gtk::init();
     println!("Major: {}, Minor: {}", gtk::version::get_major_version(), gtk::version::get_minor_version());
-    let mut window = gtk::Window::new(gtk::WindowTopLevel).unwrap();
+    let mut window = gtk::Window::new(gtk::window_type::TopLevel).unwrap();
     let mut frame = gtk::Frame::new(Some("Yep a frame")).unwrap();
-    let mut _box = gtk::_Box::new(gtk::OrientationHorizontal, 10).unwrap();
-    let mut v_box = gtk::_Box::new(gtk::OrientationHorizontal, 10).unwrap();
-    let mut button_box = gtk::ButtonBox::new(gtk::OrientationHorizontal).unwrap();
+    let mut _box = gtk::_Box::new(gtk::orientation::Horizontal, 10).unwrap();
+    let mut v_box = gtk::_Box::new(gtk::orientation::Horizontal, 10).unwrap();
+    let mut button_box = gtk::ButtonBox::new(gtk::orientation::Horizontal).unwrap();
     let mut label = gtk::Label::new("Yeah a wonderful label too !").unwrap();
     let mut button = gtk::Button::new_with_label("Whattttt a button !").unwrap();
     let font_button = gtk::FontButton::new().unwrap();
@@ -52,17 +52,17 @@ fn main() {
     let mut volume_button = gtk::VolumeButton::new().unwrap();
     let mut entry = gtk::Entry::new().unwrap();
     let search_entry = gtk::SearchEntry::new().unwrap();
-    let separator = gtk::Separator::new(gtk::OrientationHorizontal).unwrap();
-    let separator2 = gtk::Separator::new(gtk::OrientationHorizontal).unwrap();
+    let separator = gtk::Separator::new(gtk::orientation::Horizontal).unwrap();
+    let separator2 = gtk::Separator::new(gtk::orientation::Horizontal).unwrap();
     let switch = gtk::Switch::new().unwrap();
     let mut switch2 = gtk::Switch::new().unwrap();
-    let scale = gtk::Scale::new_with_range(gtk::OrientationHorizontal, 0., 100., 1.).unwrap();
+    let scale = gtk::Scale::new_with_range(gtk::orientation::Horizontal, 0., 100., 1.).unwrap();
     let mut level_bar = gtk::LevelBar::new_for_interval(0., 100.).unwrap();
     let spin_button = gtk::SpinButton::new_with_range(0., 100., 1.).unwrap();
     let mut spinner = gtk::Spinner::new().unwrap();
     let image = gtk::Image::new_from_file("./resources/gtk.jpg").unwrap();
     let mut progress_bar = gtk::ProgressBar::new().unwrap();
-    let arrow = gtk::Arrow::new(gtk::ArrowRight, gtk::ShadowEtchedOut).unwrap();
+    let arrow = gtk::Arrow::new(gtk::arrow_type::Right, gtk::shadow_type::EtchedOut).unwrap();
     let calendar = gtk::Calendar::new().unwrap();
     let mut info_bar = gtk::InfoBar::new().unwrap();
 
@@ -82,8 +82,8 @@ fn main() {
     frame.set_border_width(10);
     _box.set_border_width(5);
     entry.set_placeholder("An Entry with a placeholder !");
-    volume_button.set_orientation(gtk::OrientationHorizontal);
-    label.set_justify(gtk::JustifyLeft);
+    volume_button.set_orientation(gtk::orientation::Horizontal);
+    label.set_justify(gtk::justification::Left);
     window.set_title("Yeah a beautiful window with rgtk !");
     window.add(&frame);
 
@@ -123,7 +123,7 @@ fn main() {
     _box.add(&image);
     _box.add(&arrow);
     _box.add(&calendar);
-    _box.set_orientation(gtk::OrientationVertical);
+    _box.set_orientation(gtk::orientation::Vertical);
 
     window.show_all();
     gtk::main();
