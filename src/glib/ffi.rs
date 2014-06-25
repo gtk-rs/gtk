@@ -17,11 +17,15 @@
 
 use libc::{c_int, c_void, c_uint};
 
-pub struct C_GList;
+pub struct C_GList {
+  pub data: *c_void,
+  pub next: *C_GList,
+  pub prev: *C_GList
+}
 
 pub struct C_GSList {
   pub data: *c_void,
-  next: *C_GSList
+  pub next: *C_GSList
 }
 
 
@@ -29,7 +33,7 @@ pub struct C_GSList {
 extern "C" {
 
     //=========================================================================
-    // GList
+    // GSList
     //=========================================================================
     pub fn g_slist_free                    (list: *C_GSList);
     pub fn g_slist_append                  (list: *C_GSList, data: *c_void) -> *C_GSList;
@@ -53,6 +57,34 @@ extern "C" {
     pub fn g_slist_find                    (list: *C_GSList, data: *c_void) -> *C_GSList;
     // pub fn g_slist_find_custom             (list: *C_GSList, data: *c_void, GCompareFunc      func) -> *C_GSList;
     pub fn g_slist_position                (list: *C_GSList, link_: C_GSList) -> c_int;
+    // pub fn g_slist_index                   (list: *C_GSList, data: *c_void) -> c_int;
+
+    //=========================================================================
+    // GList
+    //=========================================================================
+    pub fn g_list_free                    (list: *C_GList);
+    pub fn g_list_append                  (list: *C_GList, data: *c_void) -> *C_GList;
+    pub fn g_list_prepend                 (list: *C_GList, data: *c_void) -> *C_GList;
+    pub fn g_list_insert                  (list: *C_GList, data: *c_void, position: c_int) -> *C_GList;
+    pub fn g_list_concat                  (list: *C_GList, list2: *C_GList) -> *C_GList;
+    pub fn g_list_nth_data                (list: *C_GList, n: c_uint) -> *c_void;
+    pub fn g_list_length                  (list: *C_GList) -> c_uint;
+    pub fn g_list_last                    (list: *C_GList) -> *C_GList;
+    pub fn g_list_first                    (list: *C_GList) -> *C_GList;
+    pub fn g_list_copy                    (list: *C_GList) -> *C_GList;
+    pub fn g_list_reverse                 (list: *C_GList) -> *C_GList;
+    // pub fn g_slist_free_full               (list: *C_GSList, GDestroyNotify    free_func);
+    // pub fn g_slist_free_1                  (list: *C_GSList);
+    // pub fn g_slist_insert_sorted           (list: *C_GSList, data: *c_void, GCompareFunc      func) -> *C_GSList;
+    // pub fn g_slist_insert_sorted_with_data (list: *C_GSList, data: *c_void, GCompareDataFunc  func, gpointer          user_data) -> *C_GSList;
+    // pub fn g_slist_insert_before           (list: *C_GSList, GSList           *sibling, gpointer          data) -> *C_GSList;
+    pub fn g_list_remove                  (list: *C_GList, data: *c_void) -> *C_GList;
+    pub fn g_list_remove_all              (list: *C_GList, data: *c_void) -> *C_GList;
+    pub fn g_list_remove_link             (list: *C_GList, link_: C_GList) -> *C_GList;
+    pub fn g_list_delete_link             (list: *C_GList, link_: C_GList) -> *C_GList;
+    pub fn g_list_find                    (list: *C_GList, data: *c_void) -> *C_GList;
+    // pub fn g_slist_find_custom             (list: *C_GSList, data: *c_void, GCompareFunc      func) -> *C_GSList;
+    pub fn g_list_position                (list: *C_GList, link_: C_GList) -> c_int;
     // pub fn g_slist_index                   (list: *C_GSList, data: *c_void) -> c_int;
 
 }

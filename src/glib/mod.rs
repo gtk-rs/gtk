@@ -15,8 +15,8 @@
 
 use libc::c_char;
 
-pub use self::list::List;
-pub use self::slist::SList;
+pub use self::list::{List, Elem, RevElem};
+pub use self::slist::{SList, SElem};
 pub use self::glib_container::GlibContainer;
 
 mod list;
