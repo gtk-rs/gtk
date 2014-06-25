@@ -337,6 +337,14 @@ GtkAboutDialog* cast_GtkAboutDialog(GtkWidget* widget) {
     return GTK_ABOUT_DIALOG(widget);
 }
 
+GtkColorChooserDialog* cast_GtkColorChooserDialog(GtkWidget* widget) {
+    return GTK_COLOR_CHOOSER_DIALOG(widget);
+}
+
+GtkColorChooser* cast_GtkColorChooser(GtkWidget* widget) {
+    return GTK_COLOR_CHOOSER(widget);
+}
+
 GtkAdjustment* cast_GtkAdjustment(GtkWidget* widget) {
     return GTK_ADJUSTMENT(widget);
 }

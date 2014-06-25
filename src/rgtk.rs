@@ -131,6 +131,7 @@ pub use GtkToolItemTrait        = gtk::traits::ToolItem;
 pub use GtkToolButtonTrait      = gtk::traits::ToolButton;
 pub use GtkToggleToolButtonTrait= gtk::traits::ToggleToolButton;
 pub use GtkDialogTrait          = gtk::traits::Dialog;
+pub use GtkColorChooserTrait    = gtk::traits::ColorChooser;
 
 #[doc(hidden)]
 #[cfg(target_os="macos")]

@@ -73,6 +73,7 @@ pub use self::widgets::{
     MenuToolButton,
     Dialog,
     AboutDialog,
+    ColorChooserDialog,
     Widget // FIXME @jeremyletang
 };
 

@@ -31,6 +31,7 @@ pub use self::toolitem::ToolItem;
 pub use self::toolbutton::ToolButton;
 pub use self::toggletoolbutton::ToggleToolButton;
 pub use self::dialog::Dialog;
+pub use self::colorchooser::ColorChooser;
 
 pub mod widget;
 pub mod container;
@@ -50,3 +51,4 @@ pub mod toolitem;
 pub mod toolbutton;
 pub mod toggletoolbutton;
 pub mod dialog;
+pub mod colorchooser;
