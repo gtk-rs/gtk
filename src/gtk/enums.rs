@@ -76,6 +76,8 @@ pub use self::message_type::MessageType;
 pub use self::license::License;
 pub use self::response_type::ResponseType;
 pub use self::dialog_flags::DialogFlags;
+pub use self::file_chooser_action::FileChooserAction;
+pub use self::buttons_type::ButtonsType;
 
 pub mod window_type{
     #[repr(C)]
@@ -874,10 +876,10 @@ pub mod calendar_display_options{
 }
 
 /// The type of message being displayed in the dialog.
-pub mod message_type{
+pub mod message_type {
     #[repr(C)]
     #[deriving(Clone, PartialEq, PartialOrd, Show)]
-    pub enum MessageType{
+    pub enum MessageType {
         /// Informational message
         Info,
         /// Non-fatal warning message
@@ -888,6 +890,27 @@ pub mod message_type{
         Error,
         /// None of the above, doesn't get an icon
         Other
+    }
+}
+
+/// Prebuilt sets of buttons for the dialog.
+/// If none of these choices are appropriate, simply use GTK_BUTTONS_NONE then call gtk_dialog_add_buttons().
+pub mod buttons_type {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum ButtonsType {
+        /// no buttons at all
+        None,
+        /// an OK button
+        Ok,
+        /// a Close button
+        Close,
+        /// a Cancel button
+        Cancel,
+        /// Yes and No buttons
+        YesNo,
+        /// OK and Cancel buttons
+        OkCancel
     }
 }
 
@@ -969,5 +992,21 @@ pub mod response_type {
         Apply       = -10,
         /// Returned by Help buttons in GTK+ dialogs
         Help        = -11
+    }
+}
+
+/// Describes whether a GtkFileChooser is being used to open existing files or to save to a possibly new file.
+pub mod file_chooser_action {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum FileChooserAction {
+        /// Indicates open mode. The file chooser will only let the user pick an existing file.
+        Open,
+        /// Indicates save mode. The file chooser will let the user pick an existing file, or type in a new filename.
+        Save,
+        /// Indicates an Open mode for selecting folders. The file chooser will let the user pick an existing folder.
+        SelectFolder,
+        /// Indicates a mode for creating a new folder. The file chooser will let the user name an existing or new folder.
+        CreateFolder
     }
 }

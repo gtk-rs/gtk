@@ -71,6 +71,8 @@ pub struct C_GtkToolShell;
 pub struct C_GtkToolbar;
 pub struct C_GtkDialog;
 pub struct C_GtkAboutDialog;
+pub struct C_GtkMessageDialog;
+pub struct C_GtkAppChooserDialog;
 pub struct C_GtkColorChooserDialog;
 
 pub struct C_GtkToolItem;
@@ -253,6 +255,32 @@ extern "C" {
     // GtkColorChooserDialog                                                 OK
     //=========================================================================
     pub fn gtk_color_chooser_dialog_new        (title: *c_char, parent: *C_GtkWindow) -> *C_GtkWidget;
+
+    //=========================================================================
+    // GtkFileChooserDialog                                              NOT OK
+    //=========================================================================
+    //pub fn gtk_file_chooser_dialog_new         (title: *c_char, parent: *C_GtkWindow, action: FileChooserAction, first_button_text: *c_char, ...) -> *C_GtkWidget;
+
+    //=========================================================================
+    // GtkAppChooserDialog                                               NOT OK
+    //=========================================================================
+    //pub fn gtk_app_chooser_dialog_new          (title: *c_char, flags: gtk::DialogFlags, file: *C_Gfile) -> *C_GtkWidget;
+    pub fn gtk_app_chooser_dialog_new_for_content_type(parent: *C_GtkWindow, flags: gtk::DialogFlags, content_type: *c_char) -> *C_GtkWidget;
+    pub fn gtk_app_chooser_dialog_get_widget   (_self: *C_GtkAppChooserDialog) -> *C_GtkWidget;
+    pub fn gtk_app_chooser_dialog_set_heading  (_self: *C_GtkAppChooserDialog, heading: *c_char) -> ();
+    pub fn gtk_app_chooser_dialog_get_heading  (_self: *C_GtkAppChooserDialog) -> *c_char;
+
+    //=========================================================================
+    // GtkMessageDialog                                                  NOT OK
+    //=========================================================================
+    pub fn gtk_message_dialog_new              (parent: *C_GtkWindow, flags: gtk::DialogFlags, _type: gtk::MessageType, buttons: gtk::ButtonsType,
+        message_format: *c_char, ...) -> *C_GtkWidget;
+    pub fn gtk_message_dialog_new_with_markup  (parent: *C_GtkWindow, flags: gtk::DialogFlags, _type: gtk::MessageType, buttons: gtk::ButtonsType,
+        message_format: *c_char, ...) -> *C_GtkWidget;
+    pub fn gtk_message_dialog_set_markup       (message_dialog: *C_GtkMessageDialog, str: *c_char) -> ();
+    //pub fn gtk_message_dialog_format_secondary_text(message_dialog: *C_GtkMessageDialog, message_format: *c_char, ...) -> ();
+    pub fn gtk_message_dialog_format_secondary_markup(message_dialog: *C_GtkMessageDialog, message_format: *c_char, ...) -> ();
+    pub fn gtk_message_dialog_get_message_area (message_dialog: *C_GtkMessageDialog) -> *C_GtkWidget;
 
     //=========================================================================
     // GtkDialog                                                         NOT OK
@@ -1022,6 +1050,7 @@ extern "C" {
     pub fn cast_GtkRadioToolButton(widget: *C_GtkWidget) -> *C_GtkRadioToolButton;
     pub fn cast_GtkDialog(widget: *C_GtkWidget) -> *C_GtkDialog;
     pub fn cast_GtkAboutDialog(widget: *C_GtkWidget) -> *C_GtkAboutDialog;
+    pub fn cast_GtkMessageDialog(widget: *C_GtkWidget) -> *C_GtkMessageDialog;
     pub fn cast_GtkColorChooserDialog(widget: *C_GtkWidget) -> *C_GtkColorChooserDialog;
     pub fn cast_GtkColorChooser(widget: *C_GtkWidget) -> *C_GtkColorChooser;
     pub fn cast_GtkAdjustment(widget: *C_GtkWidget) -> *C_GtkAdjustment;

@@ -74,6 +74,7 @@ pub use self::widgets::{
     Dialog,
     AboutDialog,
     ColorChooserDialog,
+    MessageDialog,
     Widget // FIXME @jeremyletang
 };
 
@@ -175,7 +176,11 @@ pub use self::enums::{
     response_type,
     ResponseType,
     dialog_flags,
-    DialogFlags
+    DialogFlags,
+    file_chooser_action,
+    FileChooserAction,
+    buttons_type,
+    ButtonsType
 };
 
 pub use self::types::{

@@ -90,7 +90,8 @@ fn main() {
 
     button.connect(signals::Clicked::new(||{
         //entry.set_text("Clicked!".to_string());
-        let dialog = gtk::ColorChooserDialog::new("test", None).unwrap();
+        let dialog = gtk::MessageDialog::new_with_markup(None, gtk::dialog_flags::Modal, gtk::message_type::Info,
+            gtk::buttons_type::OkCancel, "This is a trap !").unwrap();
 
         dialog.run();
     }));

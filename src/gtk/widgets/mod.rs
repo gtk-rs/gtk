@@ -57,6 +57,7 @@ pub use self::toggletoolbutton::ToggleToolButton;
 pub use self::menutoolbutton::MenuToolButton;
 pub use self::dialog::Dialog;
 pub use self::aboutdialog::AboutDialog;
+pub use self::messagedialog::MessageDialog;
 pub use self::colorchooserdialog::ColorChooserDialog;
 pub use self::widget::Widget;
 
@@ -106,3 +107,4 @@ pub mod dialog;
 pub mod aboutdialog;
 pub mod widget;
 pub mod colorchooserdialog;
+pub mod messagedialog;
