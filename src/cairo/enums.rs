@@ -127,3 +127,13 @@ pub enum PathDataType{
     PathCurveTo,
     PathClosePath
 }
+
+pub enum Glyph {}
+pub enum FontSlant {}
+pub enum FontWeight {}
+pub enum TextCluster {}
+pub enum TextClusterFlags {}
+pub enum FontType {}
+pub enum SubpixelOrder {}
+pub enum HintStyle {}
+pub enum HintMetrics {}

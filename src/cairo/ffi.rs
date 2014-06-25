@@ -7,13 +7,41 @@ use cairo::types::{
 	cairo_rectangle_list_t,
 	cairo_content_t,
 	cairo_path_t,
-	cairo_glyph_t,
-	cairo_bool_t
+	cairo_bool_t,
+	cairo_region_t,
+	cairo_font_face_t,
+	cairo_scaled_font_t,
+	cairo_font_options_t,
+	cairo_matrix_t,
+	cairo_font_extents_t,
+	cairo_rectangle_int_t,
+	cairo_extend_t,
+	cairo_text_extents_t,
+	cairo_filter_t,
+	cairo_region_overlap_t,
+	cairo_pattern_type_t
 };
-use cairo::enums::{Status, status, Antialias, LineCap, LineJoin, FillRule};
+use cairo::enums::{
+	Status,
+	Antialias,
+	LineCap,
+	LineJoin,
+	FillRule,
+	Glyph,
+	FontSlant,
+	FontWeight,
+	TextCluster,
+	TextClusterFlags,
+	FontType,
+	SubpixelOrder,
+	HintStyle,
+	HintMetrics
+};
 
 #[link(name = "cairo")]
 extern "C" {
+
+	//CAIRO CONTEXT
 	pub fn cairo_create (target: *cairo_surface_t) -> *cairo_t;
 
 	pub fn cairo_reference (cr: *cairo_t) -> *cairo_t;
@@ -130,10 +158,14 @@ extern "C" {
 
 	pub fn cairo_get_reference_count (cr: *cairo_t) -> c_uint;
 
-	//Error handling
+
+	//CAIRO UTILS: Error handling
+
 	pub fn cairo_status_to_string (status : Status) -> *c_char;
 
-	//Paths
+
+	//CAIRO PATHS
+
 	pub fn cairo_copy_path(cr: *cairo_t) -> *cairo_path_t;
 
 	pub fn cairo_copy_path_flat(cr: *cairo_t) -> *cairo_path_t;
@@ -164,7 +196,7 @@ extern "C" {
 
 	pub fn cairo_rectangle(cr: *cairo_t, x: c_double, y: c_double, width: c_double, height: c_double);
 
-	pub fn cairo_glyph_path(cr: *cairo_t, glyphs: *cairo_glyph_t, num_glyphs: c_int);
+	pub fn cairo_glyph_path(cr: *cairo_t, glyphs: *Glyph, num_glyphs: c_int);
 
 	pub fn cairo_text_path(cr: *cairo_t, utf8: *c_char);
 
@@ -175,4 +207,337 @@ extern "C" {
 	pub fn cairo_rel_move_to(cr: *cairo_t, dx: c_double, dy: c_double);
 
 	pub fn cairo_path_extents(cr: *cairo_t, x1: *c_double, y1: *c_double, x2: *c_double, y2: *c_double);
+
+
+	//CAIRO TRANSFORMATIONS
+
+	pub fn cairo_translate(cr: *cairo_t, tx: c_double, ty: c_double);
+
+	pub fn cairo_scale(cr: *cairo_t, sx: c_double, sy: c_double);
+
+	pub fn cairo_rotate(cr: *cairo_t, angle: c_double);
+
+	pub fn cairo_transform(cr: *cairo_t, matrix: *cairo_matrix_t);
+
+	pub fn cairo_set_matrix(cr: *cairo_t, matrix: *cairo_matrix_t);
+
+	pub fn cairo_get_matrix(cr: *cairo_t, matrix: *cairo_matrix_t);
+
+	pub fn cairo_identity_matrix(cr: *cairo_t);
+
+	pub fn cairo_user_to_device(cr: *cairo_t, x: *c_double, y: *c_double);
+
+	pub fn cairo_user_to_device_distance(cr: *cairo_t, dx: *c_double, dy: *c_double);
+
+	pub fn cairo_device_to_user(cr: *cairo_t, x: *c_double, y: *c_double);
+
+	pub fn cairo_device_to_user_distance(cr: *cairo_t, dx: *c_double, dy: *c_double);
+
+
+	//CAIRO PATTERNS
+
+	pub fn cairo_pattern_add_color_stop_rgb(pattern: *cairo_pattern_t, offset: c_double, red: c_double, green: c_double, blue: c_double);
+
+	pub fn cairo_pattern_add_color_stop_rgba(pattern: *cairo_pattern_t, offset: c_double, red: c_double, green: c_double, blue: c_double, alpha: c_double);
+
+	pub fn cairo_pattern_get_color_stop_count(pattern: *cairo_pattern_t, count: *c_int) -> Status;
+
+	pub fn cairo_pattern_get_color_stop_rgba(pattern: *cairo_pattern_t, index: c_int, offset: *c_double, red: *c_double, green: *c_double, blue: *c_double, alpha: *c_double) -> Status;
+
+	pub fn cairo_pattern_create_rgb(red: c_double, green: c_double, blue: c_double) -> *cairo_pattern_t;
+
+	pub fn cairo_pattern_create_rgba(red: c_double, green: c_double, blue: c_double, alpha: c_double) -> *cairo_pattern_t;
+
+	pub fn cairo_pattern_get_rgba(pattern: *cairo_pattern_t, red: *c_double, green: *c_double, blue: *c_double, alpha: *c_double) -> Status;
+
+	pub fn cairo_pattern_create_for_surface(surface: *cairo_surface_t) -> *cairo_pattern_t;
+
+	pub fn cairo_pattern_get_surface(pattern: *cairo_pattern_t, surface: **cairo_surface_t) -> Status;
+
+	pub fn cairo_pattern_create_linear(x0: c_double, y0: c_double, x1: c_double, y1: c_double) -> *cairo_pattern_t;
+
+	pub fn cairo_pattern_get_linear_points(pattern: *cairo_pattern_t, x0: *c_double, y0: *c_double, x1: *c_double, y1: *c_double) -> Status;
+
+	pub fn cairo_pattern_create_radial(cx0: c_double, cy0: c_double, radius0: c_double, cx1: c_double, cy1: c_double, radius1: c_double) -> *cairo_pattern_t;
+
+	pub fn cairo_pattern_get_radial_circles(pattern: *cairo_pattern_t, x0: *c_double, y0: *c_double, r0: *c_double, x1: *c_double, y1: *c_double, r1: *c_double) -> Status;
+
+	pub fn cairo_pattern_create_mesh() -> *cairo_pattern_t;
+
+	pub fn cairo_mesh_pattern_begin_patch(pattern: *cairo_pattern_t);
+
+	pub fn cairo_mesh_pattern_end_patch(pattern: *cairo_pattern_t);
+
+	pub fn cairo_mesh_pattern_move_to(pattern: *cairo_pattern_t, x: c_double, y: c_double);
+
+	pub fn cairo_mesh_pattern_line_to(pattern: *cairo_pattern_t, x: c_double, y: c_double);
+
+	pub fn cairo_mesh_pattern_curve_to(pattern: *cairo_pattern_t, x1: c_double, y1: c_double, x2: c_double, y2: c_double, x3: c_double, y3: c_double);
+
+	pub fn cairo_mesh_pattern_set_control_point(pattern: *cairo_pattern_t, point_num: c_uint, x: c_double, y: c_double);
+
+	pub fn cairo_mesh_pattern_set_corner_color_rgb(pattern: *cairo_pattern_t, corner_num: c_uint, red: c_double, green: c_double, blue: c_double);
+
+	pub fn cairo_mesh_pattern_set_corner_color_rgba(pattern: *cairo_pattern_t, corner_num: c_uint, red: c_double, green: c_double, blue: c_double, alpha: c_double);
+
+	pub fn cairo_mesh_pattern_get_patch_count(pattern: *cairo_pattern_t, count: *c_uint) -> Status;
+
+	pub fn cairo_mesh_pattern_get_path(pattern: *cairo_pattern_t, patch_num: c_uint) -> *cairo_path_t;
+
+	pub fn cairo_mesh_pattern_get_control_point(pattern: *cairo_pattern_t, patch_num: c_uint, point_num: c_uint, x: *c_double, y: *c_double) -> Status;
+
+	pub fn cairo_mesh_pattern_get_corner_color_rgba(pattern: *cairo_pattern_t, patch_num: c_uint, corner_num: c_uint, red: *c_double, green: *c_double, blue: *c_double, alpha: *c_double) -> Status;
+
+	pub fn cairo_pattern_reference(pattern: *cairo_pattern_t) -> *cairo_pattern_t;
+
+	pub fn cairo_pattern_destroy(pattern: *cairo_pattern_t);
+
+	pub fn cairo_pattern_status(pattern: *cairo_pattern_t) -> Status;
+
+	//enum                cairo_extend_t;
+	pub fn cairo_pattern_set_extend(pattern: *cairo_pattern_t, extend: cairo_extend_t);
+
+	pub fn cairo_pattern_get_extend(pattern: *cairo_pattern_t) -> cairo_extend_t;
+
+	//enum                cairo_filter_t;
+	pub fn cairo_pattern_set_filter(pattern: *cairo_pattern_t, filter: cairo_filter_t);
+
+	pub fn cairo_pattern_get_filter(pattern: *cairo_pattern_t) -> cairo_filter_t;
+
+	pub fn cairo_pattern_set_matrix(pattern: *cairo_pattern_t, matrix: *cairo_matrix_t);
+
+	pub fn cairo_pattern_get_matrix(pattern: *cairo_pattern_t, matrix: *cairo_matrix_t);
+
+	//enum                cairo_pattern_type_t;
+	pub fn cairo_pattern_get_type(pattern: *cairo_pattern_t) -> cairo_pattern_type_t;
+
+	pub fn cairo_pattern_get_reference_count(pattern: *cairo_pattern_t) -> c_uint;
+
+	//pub fn cairo_pattern_set_user_data(pattern: *cairo_pattern_t, key: *cairo_user_data_key_t, user_data: *void, destroy: cairo_destroy_func_t) -> Status;
+
+	//pub fn cairo_pattern_get_user_data(pattern: *cairo_pattern_t, key: *cairo_user_data_key_t) -> *void;
+
+
+	//CAIRO REGIONS
+
+	pub fn cairo_region_create() -> *cairo_region_t;
+
+	pub fn cairo_region_create_rectangle(rectangle: *cairo_rectangle_int_t) -> *cairo_region_t;
+
+	pub fn cairo_region_create_rectangles(rects: *cairo_rectangle_int_t, count: c_int) -> *cairo_region_t;
+
+	pub fn cairo_region_copy(original: *cairo_region_t) -> *cairo_region_t;
+
+	pub fn cairo_region_reference(region: *cairo_region_t) -> *cairo_region_t;
+
+	pub fn cairo_region_destroy(region: *cairo_region_t);
+
+	pub fn cairo_region_status(region: *cairo_region_t) -> Status;
+
+	pub fn cairo_region_get_extents(region: *cairo_region_t, extents: *cairo_rectangle_int_t);
+
+	pub fn cairo_region_num_rectangles(region: *cairo_region_t) -> c_int;
+
+	pub fn cairo_region_get_rectangle(region: *cairo_region_t, nth: c_int, rectangle: *cairo_rectangle_int_t);
+
+	pub fn cairo_region_is_empty(region: *cairo_region_t) -> cairo_bool_t;
+
+	pub fn cairo_region_contains_point(region: *cairo_region_t, x: c_int, y: c_int) -> cairo_bool_t;
+
+	//enum                cairo_region_overlap_t;
+	pub fn cairo_region_contains_rectangle(region: *cairo_region_t, rectangle: *cairo_rectangle_int_t) -> cairo_region_overlap_t;
+
+	pub fn cairo_region_equal(a: *cairo_region_t, b: *cairo_region_t) -> cairo_bool_t;
+
+	pub fn cairo_region_translate(region: *cairo_region_t, dx: c_int, dy: c_int);
+
+	pub fn cairo_region_intersect(dst: *cairo_region_t, other: *cairo_region_t) -> Status;
+
+	pub fn cairo_region_intersect_rectangle(dst: *cairo_region_t, rectangle: *cairo_rectangle_int_t) -> Status;
+
+	pub fn cairo_region_subtract(dst: *cairo_region_t, other: *cairo_region_t) -> Status;
+
+	pub fn cairo_region_subtract_rectangle(dst: *cairo_region_t, rectangle: *cairo_rectangle_int_t) -> Status;
+
+	pub fn cairo_region_union(dst: *cairo_region_t, other: *cairo_region_t) -> Status;
+
+	pub fn cairo_region_union_rectangle(dst: *cairo_region_t, rectangle: *cairo_rectangle_int_t) -> Status;
+
+	pub fn cairo_region_xor(dst: *cairo_region_t, other: *cairo_region_t) -> Status;
+
+	pub fn cairo_region_xor_rectangle(dst: *cairo_region_t, rectangle: *cairo_rectangle_int_t) -> Status;
+
+
+	//text
+
+	pub fn cairo_select_font_face(cr: *cairo_t, family: *char, slant: FontSlant, weight: FontWeight);
+
+	pub fn cairo_set_font_size(cr: *cairo_t, size: c_double);
+
+	pub fn cairo_set_font_matrix(cr: *cairo_t, matrix: *cairo_matrix_t);
+
+	pub fn cairo_get_font_matrix(cr: *cairo_t, matrix: *cairo_matrix_t);
+
+	pub fn cairo_set_font_options(cr: *cairo_t, options: *cairo_font_options_t);
+
+	pub fn cairo_get_font_options(cr: *cairo_t, options: *cairo_font_options_t);
+
+	pub fn cairo_set_font_face(cr: *cairo_t, font_face: *cairo_font_face_t);
+
+	pub fn cairo_get_font_face(cr: *cairo_t) -> *cairo_font_face_t;
+
+	pub fn cairo_set_scaled_font(cr: *cairo_t, scaled_font: *cairo_scaled_font_t);
+
+	pub fn cairo_get_scaled_font(cr: *cairo_t) -> *cairo_scaled_font_t;
+
+	pub fn cairo_show_text(cr: *cairo_t, utf8: *char);
+
+	pub fn cairo_show_glyphs(cr: *cairo_t, glyphs: *Glyph, num_glyphs: c_int);
+
+	pub fn cairo_show_text_glyphs(cr: *cairo_t, utf8: *char, utf8_len: c_int, glyphs: *Glyph, num_glyphs: c_int, clusters: *TextCluster, num_clusters: c_int, cluster_flags: TextClusterFlags);
+
+	pub fn cairo_font_extents(cr: *cairo_t, extents: *cairo_font_extents_t);
+
+	pub fn cairo_text_extents(cr: *cairo_t, utf8: *char, extents: *cairo_text_extents_t);
+
+	pub fn cairo_glyph_extents(cr: *cairo_t, glyphs: *Glyph, num_glyphs: c_int, extents: *cairo_text_extents_t);
+
+	pub fn cairo_toy_font_face_create(family: *char, slant: FontSlant, weight: FontWeight) -> *cairo_font_face_t;
+
+	pub fn cairo_toy_font_face_get_family(font_face: *cairo_font_face_t) -> *c_char;
+
+	pub fn cairo_toy_font_face_get_slant(font_face: *cairo_font_face_t) -> FontSlant;
+
+	pub fn cairo_toy_font_face_get_weight(font_face: *cairo_font_face_t) -> FontWeight;
+
+	pub fn cairo_glyph_allocate(num_glyphs: c_int) -> *Glyph;
+
+	pub fn cairo_glyph_free(glyphs: *Glyph);
+
+	pub fn cairo_text_cluster_allocate(num_clusters: c_int) -> *TextCluster;
+
+	pub fn cairo_text_cluster_free(clusters: *TextCluster);
+
+
+	//CAIRO RASTER
+
+	//pub fn cairo_pattern_create_raster_source(user_data: *void, content: cairo_content_t, width: c_int, height: c_int) -> *cairo_pattern_t;
+
+	//pub fn cairo_raster_source_pattern_set_callback_data(pattern: *cairo_pattern_t, data: *void);
+
+	//pub fn cairo_raster_source_pattern_get_callback_data(pattern: *cairo_pattern_t) -> *void;
+
+	/* FIXME how do we do these _func_t types?
+	pub fn cairo_raster_source_pattern_set_acquire(pattern: *cairo_pattern_t, acquire: cairo_raster_source_acquire_func_t, release: cairo_raster_source_release_func_t);
+
+	pub fn cairo_raster_source_pattern_get_acquire(pattern: *cairo_pattern_t, acquire: *cairo_raster_source_acquire_func_t, release: *cairo_raster_source_release_func_t);
+
+	pub fn cairo_raster_source_pattern_set_snapshot(pattern: *cairo_pattern_t, snapshot: cairo_raster_source_snapshot_func_t);
+
+	pub fn cairo_raster_source_pattern_get_snapshot(pattern: *cairo_pattern_t) -> cairo_raster_source_snapshot_func_t;
+
+	pub fn cairo_raster_source_pattern_set_copy(pattern: *cairo_pattern_t, copy: cairo_raster_source_copy_func_t);
+
+	pub fn cairo_raster_source_pattern_get_copy(pattern: *cairo_pattern_t) -> cairo_raster_source_copy_func_t;
+
+	pub fn cairo_raster_source_pattern_set_finish(pattern: *cairo_pattern_t, finish: cairo_raster_source_finish_func_t);
+
+	pub fn cairo_raster_source_pattern_get_finish(pattern: *cairo_pattern_t) -> cairo_raster_source_finish_func_t;
+	*/
+
+	//cairo_surface_t     (*cairo_raster_source_acquire_func_t)
+	//                                                        (pattern: *cairo_pattern_t, callback_data: *void, target: *cairo_surface_t, extents: *cairo_rectangle_int_t);
+	//void                (*cairo_raster_source_release_func_t)
+	//                                                        (pattern: *cairo_pattern_t, callback_data: *void, surface: *cairo_surface_t);
+	//Status      (*cairo_raster_source_snapshot_func_t)
+	//                                                        (pattern: *cairo_pattern_t, callback_data: *void);
+	//Status      (*cairo_raster_source_copy_func_t)  (pattern: *cairo_pattern_t, callback_data: *void, other: *cairo_pattern_t);
+	//void                (*cairo_raster_source_finish_func_t)
+	//                                                        (pattern: *cairo_pattern_t, callback_data: *void);
+
+	//CAIRO FONT
+	pub fn cairo_font_face_reference(font_face: *cairo_font_face_t) -> *cairo_font_face_t;
+
+	pub fn cairo_font_face_destroy(font_face: *cairo_font_face_t);
+
+	pub fn cairo_font_face_status(font_face: *cairo_font_face_t) -> Status;
+
+	pub fn cairo_font_face_get_type(font_face: *cairo_font_face_t) -> FontType;
+
+	pub fn cairo_font_face_get_reference_count(font_face: *cairo_font_face_t) -> c_uint;
+
+	//pub fn cairo_font_face_set_user_data(font_face: *cairo_font_face_t, key: *cairo_user_data_key_t, user_data: *void, destroy: cairo_destroy_func_t) -> Status;
+
+	//pub fn cairo_font_face_get_user_data(font_face: *cairo_font_face_t, key: *cairo_user_data_key_t) -> *void;
+
+
+	//CAIRO SCALED FONT
+	pub fn cairo_scaled_font_create(font_face: *cairo_font_face_t, font_matrix: *cairo_matrix_t, ctm: *cairo_matrix_t, options: *cairo_font_options_t) -> *cairo_scaled_font_t;
+
+	pub fn cairo_scaled_font_reference(scaled_font: *cairo_scaled_font_t) -> *cairo_scaled_font_t;
+
+	pub fn cairo_scaled_font_destroy(scaled_font: *cairo_scaled_font_t);
+
+	pub fn cairo_scaled_font_status(scaled_font: *cairo_scaled_font_t) -> Status;
+
+	//                    cairo_font_extents_t;
+	pub fn cairo_scaled_font_extents(scaled_font: *cairo_scaled_font_t, extents: *cairo_font_extents_t);
+
+	//                    cairo_text_extents_t;
+	pub fn cairo_scaled_font_text_extents(scaled_font: *cairo_scaled_font_t, utf8: *char, extents: *cairo_text_extents_t);
+
+	pub fn cairo_scaled_font_glyph_extents(scaled_font: *cairo_scaled_font_t, glyphs: *Glyph, num_glyphs: c_int, extents: *cairo_text_extents_t);
+
+	pub fn cairo_scaled_font_text_to_glyphs(scaled_font: *cairo_scaled_font_t, x: c_double, y: c_double, utf8: *char, utf8_len: c_int, glyphs: **Glyph, num_glyphs: *c_int, clusters: **TextCluster, num_clusters: *c_int, cluster_flags: *TextClusterFlags) -> Status;
+
+	pub fn cairo_scaled_font_get_font_face(scaled_font: *cairo_scaled_font_t) -> *cairo_font_face_t;
+
+	pub fn cairo_scaled_font_get_font_options(scaled_font: *cairo_scaled_font_t, options: *cairo_font_options_t);
+
+	pub fn cairo_scaled_font_get_font_matrix(scaled_font: *cairo_scaled_font_t, font_matrix: *cairo_matrix_t);
+
+	pub fn cairo_scaled_font_get_ctm(scaled_font: *cairo_scaled_font_t, ctm: *cairo_matrix_t);
+
+	pub fn cairo_scaled_font_get_scale_matrix(scaled_font: *cairo_scaled_font_t, scale_matrix: *cairo_matrix_t);
+
+	pub fn cairo_scaled_font_get_type(scaled_font: *cairo_scaled_font_t) -> FontType;
+
+	pub fn cairo_scaled_font_get_reference_count(font_face: *cairo_font_face_t) -> c_uint;
+
+	//pub fn cairo_scaled_font_set_user_data(scaled_font: *cairo_scaled_font_t, key: *cairo_user_data_key_t, user_data: *void, destroy: cairo_destroy_func_t) -> Status;
+
+	//pub fn cairo_scaled_font_get_user_data(scaled_font: *cairo_scaled_font_t, key: *cairo_user_data_key_t) -> *void;
+
+
+	//CAIRO FONT OPTIONS
+
+	pub fn cairo_font_options_create() -> *cairo_font_options_t;
+
+	pub fn cairo_font_options_copy(original: *cairo_font_options_t) -> *cairo_font_options_t;
+
+	pub fn cairo_font_options_destroy(options: *cairo_font_options_t);
+
+	pub fn cairo_font_options_status(options: *cairo_font_options_t) -> Status;
+
+	pub fn cairo_font_options_merge(options: *cairo_font_options_t, other: *cairo_font_options_t);
+
+	//unsigned long       cairo_font_options_hash             (options: *cairo_font_options_t);
+	pub fn cairo_font_options_equal(options: *cairo_font_options_t, other: *cairo_font_options_t) -> cairo_bool_t;
+
+	pub fn cairo_font_options_set_antialias(options: *cairo_font_options_t, antialias: Antialias);
+
+	pub fn cairo_font_options_get_antialias(options: *cairo_font_options_t) -> Antialias;
+
+	pub fn cairo_font_options_set_subpixel_order(options: *cairo_font_options_t, subpixel_order: SubpixelOrder);
+
+	pub fn cairo_font_options_get_subpixel_order(options: *cairo_font_options_t) -> SubpixelOrder;
+
+	pub fn cairo_font_options_set_hint_style(options: *cairo_font_options_t, hint_style: HintStyle);
+
+	pub fn cairo_font_options_get_hint_style(options: *cairo_font_options_t) -> HintStyle;
+
+	pub fn cairo_font_options_set_hint_metrics(options: *cairo_font_options_t, hint_metrics: HintMetrics);
+
+	pub fn cairo_font_options_get_hint_metrics(options: *cairo_font_options_t) -> HintMetrics;
+
 }
