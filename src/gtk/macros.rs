@@ -65,22 +65,3 @@ macro_rules! impl_drop(
         }
     );
 )
-
-macro_rules! struct_ColorChooser(
-    ($gtk_struct:ident) => (
-        pub struct $gtk_struct {
-            rgba:      *gdk::RGBA,
-            use_aplha: ffi::Gboolean
-        }
-    );
-)
-
-macro_rules! impl_TraitColorChooser(
-    ($gtk_struct:ident) => (
-        impl ::gtk::traits::ColorChooser for $gtk_struct {
-            pub fn get_self_color(&self) -> *ffi::C_GtkColorChooser {
-                &unsafe { ::std::mem::transmute(self) }
-            }
-        }
-    );
-)

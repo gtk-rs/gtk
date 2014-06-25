@@ -38,14 +38,18 @@ pub trait ColorChooser {
         unsafe { ffi::gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(self.get_widget()), &color) };
     }
 
-    #[allow(visible_private_types)]
-    fn get_use_alpha(&self) -> ffi::Gboolean {
-        unsafe { ffi::gtk_color_chooser_get_use_alpha(GTK_COLOR_CHOOSER(self.get_widget())) }
+    fn get_use_alpha(&self) -> bool {
+        match unsafe { ffi::gtk_color_chooser_get_use_alpha(GTK_COLOR_CHOOSER(self.get_widget())) } {
+            ffi::Gfalse => false,
+            _ => true
+        }
     }
 
-    #[allow(visible_private_types)]
-    fn set_use_alpha(&self, use_alpha: ffi::Gboolean) -> () {
-        unsafe { ffi::gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(self.get_widget()), use_alpha) }
+    fn set_use_alpha(&self, use_alpha: bool) -> () {
+        unsafe { ffi::gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(self.get_widget()), match use_alpha {
+            false => ffi::Gfalse,
+            _ => ffi::Gtrue
+        }) }
     }
 
     fn add_palette(&self, orientation: enums::Orientation, colors_per_line: i32, colors: Vec<gdk::RGBA>) -> () {
