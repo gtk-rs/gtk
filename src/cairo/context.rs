@@ -9,9 +9,11 @@ use cairo::types::{
 	cairo_pattern_t,
 	cairo_operator_t,
 	cairo_rectangle_list_t,
-	cairo_content_t
+	cairo_content_t,
+	cairo_bool_t
 };
 use cairo::enums::{Status, status, Antialias, LineCap, LineJoin, FillRule};
+use cairo;
 
 pub struct Context{
 	pointer: *cairo_t
@@ -246,11 +248,7 @@ impl Context{
 
 	pub fn in_clip(&self, x:f64, y:f64) -> bool{
 		unsafe{
-			if ffi::cairo_in_clip(self.pointer, x, y) != 0 {
-				true
-			}else{
-				false
-			}
+			ffi::cairo_in_clip(self.pointer, x, y).as_bool()
 		}
 	}
 
@@ -291,11 +289,7 @@ impl Context{
 
 	pub fn in_fill(&self, x:f64, y:f64) -> bool{
 		unsafe{
-			if ffi::cairo_in_fill(self.pointer, x, y) != 0 {
-				true
-			}else{
-				false
-			}
+			ffi::cairo_in_fill(self.pointer, x, y).as_bool()
 		}
 	}
 
@@ -340,11 +334,7 @@ impl Context{
 
 	pub fn in_stroke(&self, x:f64, y:f64) -> bool{
 		unsafe{
-			if ffi::cairo_in_stroke(self.pointer, x, y) != 0 {
-				true
-			}else{
-				false
-			}
+			ffi::cairo_in_stroke(self.pointer, x, y).as_bool()
 		}
 	}
 
@@ -367,118 +357,120 @@ impl Context{
 	}
 
 	//Cairo Path
+	pub fn copy_path(&self) -> cairo::Path{
+		unsafe{
+			cairo::Path::wrap(ffi::cairo_copy_path(self.pointer))
+		}
+	}
 
-	//fn ffi::cairo_set_user_data (cr: *cairo_t, cairo_user_data_key_t: const *key, user_data: *c_void, destroy: cairo_destroy_func_t) -> Status;
+	pub fn copy_path_flat(&self) -> cairo::Path{
+		unsafe{
+			cairo::Path::wrap(ffi::cairo_copy_path_flat(self.pointer))
+		}
+	}
 
-	//fn ffi::cairo_get_user_data (cr: *cairo_t, cairo_user_data_key_t: const *key) -> *c_c_void;
+	pub fn append_path(&self, path: cairo::Path) {
+		unsafe{
+			ffi::cairo_append_path(self.pointer, path.pointer)
+		}
+	}
 
-	//fn ffi::cairo_copy_path(cr: *cairo_t) -> cairo_path_t;
+	pub fn has_current_point(&self) -> bool{
+		unsafe{
+			ffi::cairo_has_current_point(self.pointer).as_bool()
+		}
+	}
 
-   //fn ffi::cairo_copy_path_flat(cr: *cairo_t) -> cairo_path_t;
+	pub fn get_current_point(&self) -> (f64, f64) {
+		unsafe{
+			let x = transmute(box 0.0);
+			let y = transmute(box 0.0);
+			ffi::cairo_get_current_point(self.pointer, x, y);
+			(*x, *y)
+		}
+	}
 
-   /*pub fn append_path(&self, path: *cairo_path_t){
-      unsafe{
-         ffi::cairo_append_path(self.pointer, path)
-      }
-   }*/
+	pub fn new_path(&self){
+		unsafe{
+			ffi::cairo_new_path(self.pointer)
+		}
+	}
 
-   //fn ffi::cairo_copy_path(cr: *cairo_t) -> cairo_path_t;
+	pub fn new_sub_path(&self){
+		unsafe{
+			ffi::cairo_new_sub_path(self.pointer)
+		}
+	}
 
-   //fn ffi::cairo_copy_path_flat(cr: *cairo_t) -> cairo_path_t;
+	pub fn close_path(&self){
+		unsafe{
+			ffi::cairo_close_path(self.pointer)
+		}
+	}
 
-   //fn ffi::cairo_append_path(cr: *cairo_t, path: *cairo_path_t);
+	pub fn arc(&self, xc: f64, yc: f64, radius: f64, angle1: f64, angle2: f64){
+		unsafe{
+			ffi::cairo_arc(self.pointer, xc, yc, radius, angle1, angle2)
+		}
+	}
 
-   //fn ffi::cairo_has_current_point(cr: *cairo_t);
+	pub fn arc_negative(&self, xc: f64, yc: f64, radius: f64, angle1: f64, angle2: f64){
+		unsafe{
+			ffi::cairo_arc_negative(self.pointer, xc, yc, radius, angle1, angle2)
+		}
+	}
 
-   //fn ffi::cairo_get_current_point(cr: *cairo_t, x: *c_double, y: *c_double);
+	pub fn curve_to(&self, x1: f64, y1: f64, x2: f64, y2: f64, x3: f64, y3: f64){
+		unsafe{
+			ffi::cairo_curve_to(self.pointer, x1, y1, x2, y2, x3, y3)
+		}
+	}
 
-   pub fn new_path(&self){
-      unsafe{
-         ffi::cairo_new_path(self.pointer)
-      }
-   }
+	pub fn line_to(&self, x: f64, y: f64){
+		unsafe{
+			ffi::cairo_line_to(self.pointer, x, y)
+		}
+	}
 
-   pub fn new_sub_path(&self){
-      unsafe{
-         ffi::cairo_new_sub_path(self.pointer)
-      }
-   }
+	pub fn move_to(&self, x: f64, y: f64){
+		unsafe{
+			ffi::cairo_move_to(self.pointer, x, y)
+		}
+	}
 
-   pub fn close_path(&self){
-      unsafe{
-         ffi::cairo_close_path(self.pointer)
-      }
-   }
+	pub fn rectangle(&self, x: f64, y: f64, width: f64, height: f64){
+		unsafe{
+			ffi::cairo_rectangle(self.pointer, x, y, width, height)
+		}
+	}
 
-   pub fn arc(&self, xc: f64, yc: f64, radius: f64, angle1: f64, angle2: f64){
-      unsafe{
-         ffi::cairo_arc(self.pointer, xc, yc, radius, angle1, angle2)
-      }
-   }
+	pub fn text_path(&self, str : &str){
+		unsafe{
+			str.with_c_str(|str|{
+				ffi::cairo_text_path(self.pointer, str)
+			})
+		}
+	}
 
-   pub fn arc_negative(&self, xc: f64, yc: f64, radius: f64, angle1: f64, angle2: f64){
-      unsafe{
-         ffi::cairo_arc_negative(self.pointer, xc, yc, radius, angle1, angle2)
-      }
-   }
+	//fn ffi::cairo_glyph_path(cr: *cairo_t, glyphs: *cairo_glyph_t, num_glyphs: int);
 
-   pub fn curve_to(&self, x1: f64, y1: f64, x2: f64, y2: f64, x3: f64, y3: f64){
-      unsafe{
-         ffi::cairo_curve_to(self.pointer, x1, y1, x2, y2, x3, y3)
-      }
-   }
+	pub fn rel_curve_to(&self, dx1: f64, dy1: f64, dx2: f64, dy2: f64, dx3: f64, dy3: f64){
+		unsafe{
+			ffi::cairo_rel_curve_to(self.pointer, dx1, dy1, dx2, dy2, dx3, dy3)
+		}
+	}
 
-   pub fn line_to(&self, x: f64, y: f64){
-      unsafe{
-         ffi::cairo_line_to(self.pointer, x, y)
-      }
-   }
+	pub fn rel_line_to(&self, dx: f64, dy: f64){
+		unsafe{
+			ffi::cairo_rel_line_to(self.pointer, dx, dy)
+		}
+	}
 
-   pub fn move_to(&self, x: f64, y: f64){
-      unsafe{
-         ffi::cairo_move_to(self.pointer, x, y)
-      }
-   }
+	pub fn rel_move_to(&self, dx: f64, dy: f64){
+		unsafe{
+	  		ffi::cairo_rel_move_to(self.pointer, dx, dy)
+	  	}
+	}
 
-   pub fn rectangle(&self, x: f64, y: f64, width: f64, height: f64){
-      unsafe{
-         ffi::cairo_rectangle(self.pointer, x, y, width, height)
-      }
-   }
-
-   pub fn text_path(&self, str : &str){
-      unsafe{
-         str.with_c_str(|str|{
-            ffi::cairo_text_path(self.pointer, str)
-         })
-      }
-   }
-
-   //fn ffi::cairo_glyph_path(cr: *cairo_t, glyphs: *cairo_glyph_t, num_glyphs: int);
-
-   pub fn rel_curve_to(&self, dx1: f64, dy1: f64, dx2: f64, dy2: f64, dx3: f64, dy3: f64){
-      unsafe{
-         ffi::cairo_rel_curve_to(self.pointer, dx1, dy1, dx2, dy2, dx3, dy3)
-      }
-   }
-
-   pub fn rel_line_to(&self, dx: f64, dy: f64){
-      unsafe{
-         ffi::cairo_rel_line_to(self.pointer, dx, dy)
-      }
-   }
-
-   pub fn rel_move_to(&self, dx: f64, dy: f64){
-      unsafe{
-         ffi::cairo_rel_move_to(self.pointer, dx, dy)
-      }
-   }
-
-   //fn ffi::cairo_rel_curve_to(cr: *cairo_t, dx1: c_double, dy1: c_double, dx2: c_double, dy2: c_double, dx3: c_double, dy3: c_double);
-
-   //fn ffi::cairo_rel_line_to(cr: *cairo_t, dx: c_double, dy: c_double);
-
-   //fn ffi::cairo_rel_move_to(cr: *cairo_t, dx: c_double, dy: c_double);
-
-   //fn ffi::cairo_path_extents(cr: *cairo_t, x1: *c_double, y1: *c_double, x2: *c_double, y2: *c_double);
+	//fn ffi::cairo_path_extents(cr: *cairo_t, x1: *c_double, y1: *c_double, x2: *c_double, y2: *c_double);
 }

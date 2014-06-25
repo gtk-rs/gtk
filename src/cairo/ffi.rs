@@ -7,7 +7,8 @@ use cairo::types::{
 	cairo_rectangle_list_t,
 	cairo_content_t,
 	cairo_path_t,
-	cairo_glyph_t
+	cairo_glyph_t,
+	cairo_bool_t
 };
 use cairo::enums::{Status, status, Antialias, LineCap, LineJoin, FillRule};
 
@@ -91,7 +92,7 @@ extern "C" {
 
 	pub fn cairo_clip_extents (cr: *cairo_t, x1: *c_double, y1: *c_double, x2: *c_double, y2: *c_double);
 
-	pub fn cairo_in_clip (cr: *cairo_t, x: c_double, y: c_double) -> c_int;
+	pub fn cairo_in_clip (cr: *cairo_t, x: c_double, y: c_double) -> cairo_bool_t;
 
 	pub fn cairo_reset_clip (cr: *cairo_t);
 
@@ -105,7 +106,7 @@ extern "C" {
 
 	pub fn cairo_fill_extents (cr: *cairo_t, x1: *c_double, y1: *c_double, x2: *c_double, y2: *c_double);
 
-	pub fn cairo_in_fill (cr: *cairo_t, x: c_double, y: c_double) -> c_int;
+	pub fn cairo_in_fill (cr: *cairo_t, x: c_double, y: c_double) -> cairo_bool_t;
 
 	pub fn cairo_mask (cr: *cairo_t, pattern: *cairo_pattern_t);
 
@@ -121,7 +122,7 @@ extern "C" {
 
 	pub fn cairo_stroke_extents (cr: *cairo_t, x1: *c_double, y1: *c_double, x2: *c_double, y2: *c_double);
 
-	pub fn cairo_in_stroke (cr: *cairo_t, x: c_double, y: c_double) -> c_int;
+	pub fn cairo_in_stroke (cr: *cairo_t, x: c_double, y: c_double) -> cairo_bool_t;
 
 	pub fn cairo_copy_page (cr: *cairo_t);
 
@@ -130,20 +131,18 @@ extern "C" {
 	pub fn cairo_get_reference_count (cr: *cairo_t) -> c_uint;
 
 	//Error handling
-
 	pub fn cairo_status_to_string (status : Status) -> *c_char;
 
 	//Paths
+	pub fn cairo_copy_path(cr: *cairo_t) -> *cairo_path_t;
 
-	pub fn cairo_copy_path(cr: *cairo_t) -> cairo_path_t;
-
-	pub fn cairo_copy_path_flat(cr: *cairo_t) -> cairo_path_t;
+	pub fn cairo_copy_path_flat(cr: *cairo_t) -> *cairo_path_t;
 
 	pub fn cairo_path_destroy(path: *cairo_path_t);
 
 	pub fn cairo_append_path(cr: *cairo_t, path: *cairo_path_t);
 
-	pub fn cairo_has_current_point(cr: *cairo_t);
+	pub fn cairo_has_current_point(cr: *cairo_t) -> cairo_bool_t;
 
 	pub fn cairo_get_current_point(cr: *cairo_t, x: *c_double, y: *c_double);
 

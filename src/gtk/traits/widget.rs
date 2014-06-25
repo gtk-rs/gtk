@@ -102,5 +102,17 @@ pub trait Widget {
             });
         }
     }
+
+    fn get_allocated_width(&self) -> i32{
+        unsafe{
+            ffi::gtk_widget_get_allocated_width(self.get_widget())
+        }
+    }
+
+    fn get_allocated_height(&self) -> i32{
+        unsafe{
+            ffi::gtk_widget_get_allocated_height(self.get_widget())
+        }
+    }
 }
 

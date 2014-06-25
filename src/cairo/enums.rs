@@ -119,3 +119,11 @@ pub enum Operator {
     OperatorHslColor,
     OperatorHslLuminosity
 }
+
+#[repr(C)]
+pub enum PathDataType{
+    PathMoveTo,
+    PathLineTo,
+    PathCurveTo,
+    PathClosePath
+}

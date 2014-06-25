@@ -40,7 +40,7 @@ fn main() {
 
     // Stolen from www.gtkforums.com/viewtopic.php?f=3&t=988&p=195286#p195286
     drawing_area.connect(signals::Draw::new(|ctx|{
-        ctx.set_source_rgb(1.0,1.0,1.0);
+        ctx.set_source_rgb(250.0/255.0, 224.0/255.0, 55.0/255.0);
         ctx.paint();
 
         /* set color for rectangle */
@@ -49,6 +49,11 @@ fn main() {
         ctx.set_line_width(6.0);
         /* draw the rectangle's path beginning at 3,3 */
         ctx.rectangle(3.0, 3.0, 100.0, 100.0);
+
+        println!("Is in: {} {}", ctx.in_fill(0.0, 0.0), ctx.in_fill(5.0, 5.0))
+
+        ctx.fill_preserve();
+
         /* stroke the rectangle's path with the chosen color so it's actually visible */
         ctx.stroke();
 
@@ -65,6 +70,8 @@ fn main() {
         ctx.line_to(200.0, 160.0);
         ctx.stroke();
     }));
+
+    window.set_default_size(500, 500);
 
     window.connect(signals::DeleteEvent::new(|event_type|{
         gtk::main_quit();

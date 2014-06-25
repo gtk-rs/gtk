@@ -1,10 +1,18 @@
-
 pub use self::context::Context;
-pub use self::enums::{Status};
+pub use self::paths::Path;
+pub use self::enums::{
+	Status,
+	Antialias,
+	FillRule,
+	LineCap,
+	LineJoin,
+	Operator,
+	PathDataType
+};
 
-pub mod context;
 pub mod enums;
 pub mod types;
-pub mod paths;
 
+mod context;
+mod paths;
 mod ffi;
