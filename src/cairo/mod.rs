@@ -1,5 +1,9 @@
 pub use self::context::Context;
-pub use self::paths::Path;
+pub use self::paths::{
+	Path,
+	PathIterator,
+	PathSegment
+};
 pub use self::enums::{
 	Status,
 	Antialias,

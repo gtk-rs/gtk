@@ -1,9 +1,7 @@
 
-use libc::{c_int, c_uint, c_char, c_double};
 use std::mem::transmute;
 use std::iter::Iterator;
 use cairo::enums::{
-    PathDataType,
     PathMoveTo,
     PathLineTo,
     PathCurveTo,
@@ -13,6 +11,7 @@ use cairo::types::{
     cairo_path_t,
     cairo_path_data_header
 };
+use cairo::ffi;
 
 pub struct Path{
     pub pointer : *cairo_path_t
@@ -25,7 +24,7 @@ impl Path{
         }
     }
 
-    pub fn iter(&self) -> PathIterator{
+    pub fn iter(&self) -> PathIterator {
         unsafe{
             let length = (*self.pointer).num_data as uint;
             let data_ptr = (*self.pointer).data;
@@ -35,6 +34,14 @@ impl Path{
                 i: 0,
                 num_data: length
             }
+        }
+    }
+}
+
+impl Drop for Path{
+    fn drop(&mut self){
+        unsafe{
+            ffi::cairo_path_destroy(self.pointer);
         }
     }
 }
@@ -56,7 +63,7 @@ impl Iterator<PathSegment> for PathIterator{
     fn next(&mut self) -> Option<PathSegment>{
         let i = self.i;
 
-        if(i >= self.num_data){
+        if i >= self.num_data{
             return None;
         }
 
@@ -65,7 +72,7 @@ impl Iterator<PathSegment> for PathIterator{
             (data_header.data_type, data_header.length)
         };
 
-        self.i += (length as uint);
+        self.i += length as uint;
 
         Some(match data_type {
             PathMoveTo => MoveTo(*self.data.get(i+1)),
