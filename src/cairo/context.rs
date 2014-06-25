@@ -5,15 +5,9 @@ use std::mem::transmute;
 use cairo::ffi;
 use cairo::types::{
 	cairo_t,
-	cairo_surface_t,
-	cairo_pattern_t,
-	cairo_operator_t,
-	cairo_rectangle_list_t,
-	cairo_content_t,
-	cairo_bool_t
+	cairo_surface_t
 };
-use cairo::enums::{Status, status, Antialias, LineCap, LineJoin, FillRule};
-use cairo;
+use cairo::enums::{Status, Antialias, LineCap, LineJoin, FillRule};
 
 pub struct Context{
 	pub pointer: *cairo_t
@@ -21,13 +15,7 @@ pub struct Context{
 
 impl Context{
 	pub fn check_state(&self){
-		let status = self.status();
-
-		if status != status::Success{
-			unsafe{
-				fail!("Cairo crashed with: {}", ffi::cairo_status_to_string(status))
-			}
-		}
+		self.status().check();
 	}
 
 	pub fn new (target: *cairo_surface_t) -> Context {
@@ -64,13 +52,27 @@ impl Context{
 
 	//fn ffi::cairo_get_target (cr: *cairo_t) -> *cairo_surface_t;
 
-	//fn ffi::cairo_push_group (cr: *cairo_t);
+	pub fn push_group(&self){
+		unsafe{
+			ffi::cairo_push_group(self.pointer)
+		}
+	}
 
-	//fn ffi::cairo_push_group_with_content (cr: *cairo_t, content: cairo_content_t);
+	/*
+	pub fn push_group_with_content(&self, content: Content){
+		unsafe{
+			ffi::cairo_push_group_with_content(self.pointer, content)
+		}
+	}
+	*/
 
 	//fn ffi::cairo_pop_group (cr: *cairo_t) -> *cairo_pattern_t;
 
-	//fn ffi::cairo_pop_group_to_source (cr: *cairo_t);
+	pub fn pop_group_to_source(&self){
+		unsafe{
+			ffi::cairo_pop_group_to_source(self.pointer)
+		}
+	}
 
 	//fn ffi::cairo_get_group_target (cr: *cairo_t) -> *cairo_surface_t;
 

@@ -15,9 +15,7 @@ use cairo::types::{
 	cairo_matrix_t,
 	cairo_font_extents_t,
 	cairo_rectangle_int_t,
-	cairo_extend_t,
 	cairo_text_extents_t,
-	cairo_filter_t,
 	cairo_region_overlap_t,
 	cairo_pattern_type_t
 };
@@ -35,7 +33,9 @@ use cairo::enums::{
 	FontType,
 	SubpixelOrder,
 	HintStyle,
-	HintMetrics
+	HintMetrics,
+	Extend,
+	Filter
 };
 
 #[link(name = "cairo")]
@@ -294,15 +294,13 @@ extern "C" {
 
 	pub fn cairo_pattern_status(pattern: *cairo_pattern_t) -> Status;
 
-	//enum                cairo_extend_t;
-	pub fn cairo_pattern_set_extend(pattern: *cairo_pattern_t, extend: cairo_extend_t);
+	pub fn cairo_pattern_set_extend(pattern: *cairo_pattern_t, extend: Extend);
 
-	pub fn cairo_pattern_get_extend(pattern: *cairo_pattern_t) -> cairo_extend_t;
+	pub fn cairo_pattern_get_extend(pattern: *cairo_pattern_t) -> Extend;
 
-	//enum                cairo_filter_t;
-	pub fn cairo_pattern_set_filter(pattern: *cairo_pattern_t, filter: cairo_filter_t);
+	pub fn cairo_pattern_set_filter(pattern: *cairo_pattern_t, filter: Filter);
 
-	pub fn cairo_pattern_get_filter(pattern: *cairo_pattern_t) -> cairo_filter_t;
+	pub fn cairo_pattern_get_filter(pattern: *cairo_pattern_t) -> Filter;
 
 	pub fn cairo_pattern_set_matrix(pattern: *cairo_pattern_t, matrix: *cairo_matrix_t);
 

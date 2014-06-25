@@ -1,50 +1,69 @@
-pub use self::status::Status;
 
-pub mod status{
-    #[repr(C)]
-    #[deriving(PartialEq)]
-    pub enum Status {
-        Success = 0,
+use std::fmt::{Show, FormatError};
+use cairo::ffi;
+use std::c_str::CString;
 
-        NoMemory,
-        InvalidRestore,
-        InvalidPopGroup,
-        NoCurrentPoint,
-        InvalidMatrix,
-        InvalidStatus,
-        NullPointer,
-        InvalidString,
-        InvalidPathData,
-        ReadError,
-        WriteError,
-        SurfaceFinished,
-        SurfaceTypeMismatch,
-        PatternTypeMismatch,
-        InvalidContent,
-        InvalidFormat,
-        InvalidVisual,
-        FileNotFound,
-        InvalidDash,
-        InvalidDscComment,
-        InvalidIndex,
-        ClipNotRepresentable,
-        TempFileError,
-        InvalidStride,
-        FontTypeMismatch,
-        UserFontImmutable,
-        UserFontError,
-        NegativeCount,
-        InvalidClusters,
-        InvalidSlant,
-        InvalidWeight,
-        InvalidSize,
-        UserFontNotImplemented,
-        DeviceTypeMismatch,
-        DeviceError,
-        InvalidMeshConstruction,
-        DeviceFinished,
+#[repr(C)]
+#[deriving(PartialEq)]
+pub enum Status {
+    StatusSuccess = 0,
 
-        LastStatus
+    StatusNoMemory,
+    StatusInvalidRestore,
+    StatusInvalidPopGroup,
+    StatusNoCurrentPoint,
+    StatusInvalidMatrix,
+    StatusInvalidStatus,
+    StatusNullPointer,
+    StatusInvalidString,
+    StatusInvalidPathData,
+    StatusReadError,
+    StatusWriteError,
+    StatusSurfaceFinished,
+    StatusSurfaceTypeMismatch,
+    StatusPatternTypeMismatch,
+    StatusInvalidContent,
+    StatusInvalidFormat,
+    StatusInvalidVisual,
+    StatusFileNotFound,
+    StatusInvalidDash,
+    StatusInvalidDscComment,
+    StatusInvalidIndex,
+    StatusClipNotRepresentable,
+    StatusTempFileError,
+    StatusInvalidStride,
+    StatusFontTypeMismatch,
+    StatusUserFontImmutable,
+    StatusUserFontError,
+    StatusNegativeCount,
+    StatusInvalidClusters,
+    StatusInvalidSlant,
+    StatusInvalidWeight,
+    StatusInvalidSize,
+    StatusUserFontNotImplemented,
+    StatusDeviceTypeMismatch,
+    StatusDeviceError,
+    StatusInvalidMeshConstruction,
+    StatusDeviceFinished,
+
+    StatusLastStatus
+}
+
+impl Show for Status{
+    fn fmt(&self, formatter: &mut ::std::fmt::Formatter) -> Result<(), FormatError>{
+        let c_str = unsafe{
+            let char_ptr = ffi::cairo_status_to_string(*self);
+            CString::new(char_ptr, true) //FIXME I'm not sure if we actually own the str send in by cairo
+        };
+        c_str.as_str().unwrap().fmt(formatter)
+    }
+}
+
+impl Status{
+    pub fn check(&self){
+        if *self != StatusSuccess {
+            fail!("Cairo error {}", *self)
+        }
     }
 }
 
@@ -126,6 +145,31 @@ pub enum PathDataType{
     PathLineTo,
     PathCurveTo,
     PathClosePath
+}
+
+#[repr(C)]
+pub enum Content{
+    ContentColor      = 0x1000,
+    ContentAlpha      = 0x2000,
+    ContentColorAlpha = 0x3000
+}
+
+#[repr(C)]
+pub enum Extend{
+    ExtendNone,
+    ExtendRepeat,
+    ExtendReflect,
+    ExtendPad
+}
+
+#[repr(C)]
+pub enum Filter{
+    FilterFast,
+    FilterGood,
+    FilterBest,
+    FilterNearest,
+    FilterBilinear,
+    FilterGaussian
 }
 
 pub enum Glyph {}

@@ -14,11 +14,25 @@ pub use self::enums::{
 	PathDataType
 };
 
+pub use self::patterns::{
+	//Traits
+	Pattern,
+	Gradient,
+
+	//Structs
+	LinearGradient,
+	RadialGradient,
+	SolidPattern,
+	SurfacePattern,
+	Mesh
+};
+
 pub mod enums;
 pub mod types;
 
 mod context;
 mod paths;
 mod transformations;
+mod patterns;
 
 mod ffi;
