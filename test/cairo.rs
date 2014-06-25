@@ -6,12 +6,9 @@ extern crate log;
 extern crate debug;
 extern crate collections;
 
-use log::macros::*;
-
+use std::f64::consts::PI_2;
 use rgtk::*;
 use rgtk::gtk::signals;
-
-use collections::String;
 
 #[doc(hidden)]
 #[cfg(target_os="macos")]
@@ -42,46 +39,48 @@ fn main() {
     drawing_area.connect(signals::Draw::new(|ctx|{
         println!("BeginDraw")
 
+        let width = drawing_area.get_allocated_width();
+        let height = drawing_area.get_allocated_height();
+
+        ctx.scale(width as f64, height as f64);
+
         ctx.set_source_rgb(250.0/255.0, 224.0/255.0, 55.0/255.0);
         ctx.paint();
 
-        /* set color for rectangle */
-        ctx.set_source_rgb(0.42, 0.65, 0.80);
-        /* set the line width */
-        ctx.set_line_width(6.0);
-        /* draw the rectangle's path beginning at 3,3 */
-        ctx.rectangle(3.0, 3.0, 100.0, 100.0);
+        ctx.set_line_width(0.05);
 
-        println!("Is in: {} {}", ctx.in_fill(0.0, 0.0), ctx.in_fill(5.0, 5.0))
-
-        ctx.fill_preserve();
-
-        /* stroke the rectangle's path with the chosen color so it's actually visible */
+        /* border */
+        ctx.set_source_rgb(0.3, 0.3, 0.3);
+        ctx.rectangle(0.0, 0.0, 1.0, 1.0);
         ctx.stroke();
+
+        ctx.set_line_width(0.03);
 
         /* draw circle */
-        ctx.set_source_rgb(0.17, 0.63, 0.12);
-        ctx.set_line_width(2.0);
-        ctx.arc(150.0, 210.0, 20.0, 0.0, 2.0*3.14);
+        ctx.arc(0.5, 0.5, 0.4, 0.0, PI_2);
         ctx.stroke();
 
-        /* draw horizontal line */
-        ctx.set_source_rgb(0.77, 0.16, 0.13);
-        ctx.set_line_width(6.0);
-        ctx.move_to(80.0,160.0);
-        ctx.line_to(200.0, 160.0);
+
+        /* mouth */
+        let mouth_top = 0.68;
+        let mouth_width = 0.38;
+
+        let mouth_dx = 0.10;
+        let mouth_dy = 0.10;
+
+        ctx.move_to( 0.50 - mouth_width/2.0, mouth_top);
+        ctx.curve_to(0.50 - mouth_dx,        mouth_top + mouth_dy,
+                     0.50 + mouth_dx,        mouth_top + mouth_dy,
+                     0.50 + mouth_width/2.0, mouth_top);
         ctx.stroke();
 
-        ctx.move_to(50.0, 50.0);
-        ctx.line_to(75.0, 75.0);
-        ctx.line_to(75.0, 25.0);
-        ctx.line_to(25.0, 25.0);
+        let eye_y = 0.38;
+        let eye_dx = 0.15;
+        ctx.arc(0.5 - eye_dx, eye_y, 0.05, 0.0, PI_2);
+        ctx.fill();
 
-        for item in ctx.copy_path().iter() {
-            println!("{}", item)
-        }
-
-        println!("EndDraw\n")
+        ctx.arc(0.5 + eye_dx, eye_y, 0.05, 0.0, PI_2);
+        ctx.fill();
     }));
 
     window.set_default_size(500, 500);

@@ -84,7 +84,7 @@ pub trait Widget {
         }
     }
 
-    fn connect<'a>(&mut self, signal: Box<Signal<'a>>) -> () {
+    fn connect<'a>(&self, signal: Box<Signal<'a>>) -> () {
         use std::mem::transmute;
 
         unsafe {
