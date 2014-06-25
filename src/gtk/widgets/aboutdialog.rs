@@ -123,14 +123,18 @@ impl AboutDialog {
         };
     }
 
-    #[allow(visible_private_types)]
-    pub fn get_wrap_license(&self) -> ffi::Gboolean {
-        unsafe { ffi::gtk_about_dialog_get_wrap_license(GTK_ABOUT_DIALOG(self.get_widget())) }
+    pub fn get_wrap_license(&self) -> bool {
+        match unsafe { ffi::gtk_about_dialog_get_wrap_license(GTK_ABOUT_DIALOG(self.get_widget())) } {
+            ffi::Gfalse => false,
+            _ => true
+        }
     }
 
-    #[allow(visible_private_types)]
-    pub fn set_wrap_license(&self, wrap_license: ffi::Gboolean) -> () {
-        unsafe { ffi::gtk_about_dialog_set_wrap_license(GTK_ABOUT_DIALOG(self.get_widget()), wrap_license) }
+    pub fn set_wrap_license(&self, wrap_license: bool) -> () {
+        unsafe { ffi::gtk_about_dialog_set_wrap_license(GTK_ABOUT_DIALOG(self.get_widget()), match wrap_license {
+            true => ffi::Gtrue,
+            _ => ffi::Gfalse
+        }) }
     }
 
     pub fn get_license_type(&self) -> enums::License {

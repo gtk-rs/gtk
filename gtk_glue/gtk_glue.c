@@ -71,10 +71,6 @@ GtkComboBox* cast_GtkComboBox(GtkWidget* widget) {
     return GTK_COMBO_BOX(widget);
 }
 
-GtkMessageDialog* cast_GtkMessageDialog(GtkWidget* widget) {
-    return GTK_MESSAGE_DIALOG(widget);
-}
-
 GtkAccessible* cast_GtkAccessible(void* widget) {
     return GTK_ACCESSIBLE(widget);
 }
@@ -335,6 +331,10 @@ GtkDialog* cast_GtkDialog(GtkWidget* widget) {
 
 GtkAboutDialog* cast_GtkAboutDialog(GtkWidget* widget) {
     return GTK_ABOUT_DIALOG(widget);
+}
+
+GtkMessageDialog* cast_GtkMessageDialog(GtkWidget* widget) {
+    return GTK_MESSAGE_DIALOG(widget);
 }
 
 GtkColorChooserDialog* cast_GtkColorChooserDialog(GtkWidget* widget) {

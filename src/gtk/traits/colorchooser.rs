@@ -19,7 +19,7 @@ use gtk::traits;
 use gdk;
 use gtk::cast::GTK_COLOR_CHOOSER;
 
-pub trait ColorChooser: traits::Widget{
+pub trait ColorChooser: traits::Widget {
     fn get_rgba(&self) -> gdk::RGBA {
         let color = gdk::RGBA {
             red: 0f64,
