@@ -49,9 +49,8 @@ pub use self::events::{
 pub use self::device::{Device};
 pub use self::window::{Window};
 pub use self::types::{Atom, Screen, Rectangle};
-pub use self::color::RGBA;
 
-pub mod color;
+mod color;
 mod events;
 mod device;
 mod window;

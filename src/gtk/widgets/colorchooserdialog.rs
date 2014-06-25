@@ -47,11 +47,4 @@ impl traits::Container for ColorChooserDialog {}
 impl traits::Bin for ColorChooserDialog {}
 impl traits::Window for ColorChooserDialog {}
 impl traits::Dialog for ColorChooserDialog {}
-impl traits::ColorChooser for ColorChooserDialog {
-    // I need to find a better way to do it
-    #[doc(hidden)]
-    #[allow(visible_private_types)]
-    fn get_widget(&self) -> *ffi::C_GtkWidget {
-        self.pointer
-    }
-}
+impl traits::ColorChooser for ColorChooserDialog {}

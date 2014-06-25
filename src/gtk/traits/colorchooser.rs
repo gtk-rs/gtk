@@ -15,14 +15,11 @@
 
 use gtk::ffi;
 use gtk::enums;
+use gtk::traits;
 use gdk;
 use gtk::cast::GTK_COLOR_CHOOSER;
 
-pub trait ColorChooser {
-    #[doc(hidden)]
-    #[allow(visible_private_types)]
-    fn get_widget(&self) -> *ffi::C_GtkWidget;
-
+pub trait ColorChooser: traits::Widget{
     fn get_rgba(&self) -> gdk::RGBA {
         let color = gdk::RGBA {
             red: 0f64,
