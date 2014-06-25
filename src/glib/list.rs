@@ -40,6 +40,15 @@ impl<T> List<T> {
         }
     }
 
+    pub fn from_vec(values: Vec<T>) -> List<T> {
+        FromIterator::from_iter(values.move_iter())
+    }
+
+    pub fn from_slice<T: Clone>(values: &[T]) -> List<T> {
+        let v: Vec<T> = values.iter().map(|x| (*x).clone()).collect();
+        FromIterator::from_iter(v.move_iter())
+    }
+
     pub fn append(&mut self, data: T) {
         unsafe {
             self.pointer = ffi::g_list_append(self.pointer, mem::transmute(box data));
