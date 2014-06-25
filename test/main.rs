@@ -3,36 +3,9 @@
 #![feature(globs)]
 
 extern crate rgtk;
-extern crate log;
-extern crate debug;
-extern crate collections;
-
-use log::macros::*;
 
 use rgtk::*;
 use rgtk::gtk::signals;
-
-use collections::String;
-
-#[doc(hidden)]
-#[cfg(target_os="macos")]
-mod platform {
-    #[link(name = "glib-2.0")]
-    #[link(name = "gtk-3.0")]
-    #[link(name = "gobject-2.0")]
-    #[link(name = "gdk-3.0")]
-    extern{}
-}
-
-#[doc(hidden)]
-#[cfg(target_os="linux")]
-mod platform {
-    #[link(name = "glib-2.0")]
-    #[link(name = "gtk-3")]
-    #[link(name = "gobject-2.0")]
-    #[link(name = "gdk-3")]
-    extern{}
-}
 
 fn main() {
     gtk::init();
@@ -69,7 +42,6 @@ fn main() {
 
     println!("test");
 
-    let mut test = 0;
     info_bar.show_close_button(true);
 
     /*info_bar.connect(signals::Response::new(|response_id| {
@@ -96,7 +68,7 @@ fn main() {
         dialog.run();
     }));
 
-    window.connect(signals::DeleteEvent::new(|event_type|{
+    window.connect(signals::DeleteEvent::new(|_|{
         gtk::main_quit();
         true
     }));

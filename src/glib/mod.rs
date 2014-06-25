@@ -15,6 +15,15 @@
 
 use libc::c_char;
 
+pub use self::list::{List, Elem, RevElem};
+pub use self::slist::{SList, SElem};
+pub use self::glib_container::GlibContainer;
+
+mod list;
+mod slist;
+mod ffi;
+mod glib_container;
+
 // An opaque structure used as the base of all interface types.
 pub struct TypeInterface;
 
