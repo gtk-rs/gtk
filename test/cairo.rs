@@ -40,6 +40,8 @@ fn main() {
 
     // Stolen from www.gtkforums.com/viewtopic.php?f=3&t=988&p=195286#p195286
     drawing_area.connect(signals::Draw::new(|ctx|{
+        println!("BeginDraw")
+
         ctx.set_source_rgb(250.0/255.0, 224.0/255.0, 55.0/255.0);
         ctx.paint();
 
@@ -69,6 +71,17 @@ fn main() {
         ctx.move_to(80.0,160.0);
         ctx.line_to(200.0, 160.0);
         ctx.stroke();
+
+        ctx.move_to(50.0, 50.0);
+        ctx.line_to(75.0, 75.0);
+        ctx.line_to(75.0, 25.0);
+        ctx.line_to(25.0, 25.0);
+
+        for item in ctx.copy_path().iter() {
+            println!("{}", item)
+        }
+
+        println!("EndDraw\n")
     }));
 
     window.set_default_size(500, 500);
