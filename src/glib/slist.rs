@@ -25,6 +25,10 @@ pub struct SList<T> {
     pointer: *ffi::C_GSList
 }
 
+pub struct SElem<'a, T> {
+    pointer: *ffi::C_GSList
+}
+
 impl<T> SList<T> {
     pub fn new() -> SList<T> {
         SList {
@@ -34,13 +38,13 @@ impl<T> SList<T> {
 
     pub fn append(&mut self, data: T) {
         unsafe {
-            ffi::g_slist_append(self.pointer, mem::transmute(box data));
+            self.pointer = ffi::g_slist_append(self.pointer, mem::transmute(box data));
         }
     }
 
     pub fn prepend(&mut self, data: T) {
         unsafe {
-            ffi::g_slist_prepend(self.pointer, mem::transmute(box data));
+            self.pointer = ffi::g_slist_prepend(self.pointer, mem::transmute(box data));
         }
     }
 
@@ -57,7 +61,7 @@ impl<T> SList<T> {
 
     pub fn insert(&mut self, data: T, position: i32) {
         unsafe {
-            ffi::g_slist_insert(self.pointer, mem::transmute(box data), position);
+            self.pointer = ffi::g_slist_insert(self.pointer, mem::transmute(box data), position);
         }
     }
 
@@ -69,7 +73,39 @@ impl<T> SList<T> {
 
     pub fn reverse(&mut self) {
         unsafe {
-            ffi::g_slist_reverse(self.pointer);
+            self.pointer = ffi::g_slist_reverse(self.pointer);
+        }
+    }
+
+    pub fn iter(&self) -> SElem<T> {
+        SElem {
+            pointer: self.pointer
+        }
+    }
+}
+
+impl<T> Mutable for SList<T> {
+    fn clear(&mut self) {
+        unsafe {
+            ffi::g_slist_free(self.pointer)
+        }
+    }
+}
+
+impl<'a, T> Index<uint, &'a T> for SList<T> {
+    fn index(&self, _rhs: &uint) -> &'a T {
+        self.nth(*_rhs as u32)
+    }
+}
+
+impl<'a, T> Iterator<&'a T> for SElem<'a, T> {
+    fn next(&mut self) -> Option<&'a T> {
+        if self.pointer.is_null() {
+            None
+        } else {
+            let ret = unsafe { mem::transmute::<*c_void, &T>((*self.pointer).data)};
+            unsafe { self.pointer = (*self.pointer).next; }
+            Some(ret)
         }
     }
 }
