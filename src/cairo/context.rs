@@ -234,14 +234,16 @@ impl Context{
     }
 
     pub fn clip_extents(&self) -> (f64,f64,f64,f64){
+        let x1 : f64 = 0.0;
+        let y1 : f64 = 0.0;
+        let x2 : f64 = 0.0;
+        let y2 : f64 = 0.0;
+
         unsafe{
-            let x1 : *f64 = transmute(box 0.0);
-            let y1 : *f64 = transmute(box 0.0);
-            let x2 : *f64 = transmute(box 0.0);
-            let y2 : *f64 = transmute(box 0.0);
-            ffi::cairo_clip_extents(self.pointer, x1, y1, x2, y2);
-            (*x1, *y1, *x2, *y2)
+            ffi::cairo_clip_extents(self.pointer, &x1, &y1, &x2, &y2);
         }
+
+        (x1, y1, x2, y2)
     }
 
     pub fn in_clip(&self, x:f64, y:f64) -> bool{
@@ -275,14 +277,16 @@ impl Context{
     }
 
     pub fn fill_extents(&self) -> (f64,f64,f64,f64){
+        let x1 : f64 = 0.0;
+        let y1 : f64 = 0.0;
+        let x2 : f64 = 0.0;
+        let y2 : f64 = 0.0;
+
         unsafe{
-            let x1 : *f64 = transmute(box 0.0);
-            let y1 : *f64 = transmute(box 0.0);
-            let x2 : *f64 = transmute(box 0.0);
-            let y2 : *f64 = transmute(box 0.0);
-            ffi::cairo_fill_extents(self.pointer, x1, y1, x2, y2);
-            (*x1, *y1, *x2, *y2)
+            ffi::cairo_fill_extents(self.pointer, &x1, &y1, &x2, &y2);
         }
+
+        (x1, y1, x2, y2)
     }
 
     pub fn in_fill(&self, x:f64, y:f64) -> bool{
@@ -320,14 +324,16 @@ impl Context{
     }
 
     pub fn stroke_extents(&self) -> (f64,f64,f64,f64){
+        let x1 : f64 = 0.0;
+        let y1 : f64 = 0.0;
+        let x2 : f64 = 0.0;
+        let y2 : f64 = 0.0;
+
         unsafe{
-            let x1 : *f64 = transmute(box 0.0);
-            let y1 : *f64 = transmute(box 0.0);
-            let x2 : *f64 = transmute(box 0.0);
-            let y2 : *f64 = transmute(box 0.0);
-            ffi::cairo_stroke_extents(self.pointer, x1, y1, x2, y2);
-            (*x1, *y1, *x2, *y2)
+            ffi::cairo_stroke_extents(self.pointer, &x1, &y1, &x2, &y2);
         }
+
+        (x1, y1, x2, y2)
     }
 
     pub fn in_stroke(&self, x:f64, y:f64) -> bool{
