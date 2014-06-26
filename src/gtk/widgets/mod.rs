@@ -67,6 +67,7 @@ pub use self::overlay::Overlay;
 pub use self::layout::Layout;
 pub use self::header_bar::HeaderBar;
 pub use self::flow_box::{FlowBox, FlowBoxChild};
+pub use self::action_bar::ActionBar;
 pub use self::widget::Widget;
 
 pub mod window;
@@ -124,3 +125,4 @@ pub mod overlay;
 pub mod layout;
 pub mod header_bar;
 pub mod flow_box;
+pub mod action_bar;

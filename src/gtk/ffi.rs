@@ -84,6 +84,7 @@ pub struct C_GtkLayout;
 pub struct C_GtkHeaderBar;
 pub struct C_GtkFlowBox;
 pub struct C_GtkFlowBoxChild;
+pub struct C_GtkActionBar;
 
 pub struct C_GtkToolItem;
 pub struct C_GtkToolButton;
@@ -1171,6 +1172,16 @@ extern "C" {
     // GList                *gtk_flow_box_get_selected_children        (_box: *C_GtkFlowBox);
 
     //=========================================================================
+    // GtkActionBar                                                          OK
+    //=========================================================================
+    pub fn gtk_action_bar_new               () -> *C_GtkWidget;
+    pub fn gtk_action_bar_get_center_widget (action_bar: *C_GtkActionBar) -> *C_GtkWidget;
+    pub fn gtk_action_bar_set_center_widget (action_bar: *C_GtkActionBar, center_widget: *C_GtkWidget);
+    pub fn gtk_action_bar_pack_start        (action_bar: *C_GtkActionBar, child: *C_GtkWidget);
+    pub fn gtk_action_bar_pack_end          (action_bar: *C_GtkActionBar, child: *C_GtkWidget);
+
+
+    //=========================================================================
     // GtkFlowBoxChild                                                       OK
     //=========================================================================
     pub fn gtk_flow_box_child_new () -> *C_GtkWidget;
@@ -1253,4 +1264,5 @@ extern "C" {
     pub fn cast_GtkHeaderBar(widget: *C_GtkWidget) -> *C_GtkHeaderBar;
     pub fn cast_GtkFlowBox(widget: *C_GtkWidget) -> *C_GtkFlowBox;
     pub fn cast_GtkFlowBoxChild(widget: *C_GtkWidget) -> *C_GtkFlowBoxChild;
+    pub fn cast_GtkActionBar(widget: *C_GtkWidget) -> *C_GtkActionBar;
 }
