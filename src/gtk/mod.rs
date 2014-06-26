@@ -81,6 +81,7 @@ pub use self::widgets::{
     Revealer,
     Overlay,
     Layout,
+    HeaderBar,
     Widget // FIXME @jeremyletang
 };
 
