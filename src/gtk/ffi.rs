@@ -76,6 +76,7 @@ pub struct C_GtkAppChooserDialog;
 pub struct C_GtkColorChooserDialog;
 pub struct C_GtkNotebook;
 pub struct C_GtkStack;
+pub struct C_GtkStackSwitcher;
 
 pub struct C_GtkToolItem;
 pub struct C_GtkToolButton;
@@ -1070,6 +1071,12 @@ extern "C" {
     pub fn gtk_stack_set_transition_type     (stack: *C_GtkStack, transition: gtk::StackTransitionType);
     pub fn gtk_stack_get_transition_type     (stack: *C_GtkStack) -> gtk::StackTransitionType;
 
+    //=========================================================================
+    // GtkStackSwitcher                                                      OK
+    //=========================================================================
+    pub fn gtk_stack_switcher_new () -> *C_GtkWidget;
+    pub fn gtk_stack_switcher_set_stack (switcher: *C_GtkStackSwitcher, stack: *C_GtkStack);
+    pub fn gtk_stack_switcher_get_stack (switcher: *C_GtkStackSwitcher) -> *C_GtkWidget;
 
     //=========================================================================
     // Glue fixe code
@@ -1138,4 +1145,5 @@ extern "C" {
     pub fn cast_GtkAdjustment(widget: *C_GtkWidget) -> *C_GtkAdjustment;
     pub fn cast_GtkNotebook(widget: *C_GtkWidget) -> *C_GtkNotebook;
     pub fn cast_GtkStack(widget: *C_GtkWidget) -> *C_GtkStack;
+    pub fn cast_GtkStackSwitcher(widget: *C_GtkWidget) -> *C_GtkStackSwitcher;
 }

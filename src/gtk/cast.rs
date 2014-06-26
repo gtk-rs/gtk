@@ -218,3 +218,6 @@ pub fn GTK_STACK(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkStack {
     unsafe{ ffi::cast_GtkStack(widget) }
 }
 
+pub fn GTK_STACK_SWITCHER(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkStackSwitcher {
+    unsafe{ ffi::cast_GtkStackSwitcher(widget) }
+}

@@ -77,6 +77,7 @@ pub use self::widgets::{
     MessageDialog,
     NoteBook,
     Stack,
+    StackSwitcher,
     Widget // FIXME @jeremyletang
 };
 
