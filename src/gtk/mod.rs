@@ -76,6 +76,7 @@ pub use self::widgets::{
     ColorChooserDialog,
     MessageDialog,
     NoteBook,
+    Stack,
     Widget // FIXME @jeremyletang
 };
 
@@ -181,7 +182,9 @@ pub use self::enums::{
     file_chooser_action,
     FileChooserAction,
     buttons_type,
-    ButtonsType
+    ButtonsType,
+    stack_transition_type,
+    StackTransitionType
 };
 
 pub use self::types::{

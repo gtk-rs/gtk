@@ -78,6 +78,7 @@ pub use self::response_type::ResponseType;
 pub use self::dialog_flags::DialogFlags;
 pub use self::file_chooser_action::FileChooserAction;
 pub use self::buttons_type::ButtonsType;
+pub use self::stack_transition_type::StackTransitionType;
 
 pub mod window_type{
     #[repr(C)]
@@ -1008,5 +1009,47 @@ pub mod file_chooser_action {
         SelectFolder,
         /// Indicates a mode for creating a new folder. The file chooser will let the user name an existing or new folder.
         CreateFolder
+    }
+}
+
+/// Describe the possible transitions between pages in a GtkStack widget.
+pub mod stack_transition_type {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum StackTransitionType {
+        /// No transition
+        None,
+        /// A cross-fade
+        CrossFade,
+        /// Slide from left to right
+        SlideRight,
+        /// Slide from right to left
+        SlideLeft,
+        /// Slide from bottom up
+        SlideUp,
+        /// Slide from top down
+        SlideDown,
+        /// Slide from left or right according to the children order
+        SlideLeftRight,
+        /// Slide from top down or bottom up according to the order
+        SlideUpDown,
+        /// Cover the old page by sliding up. Since 3.12
+        OverUp,
+        /// Cover the old page by sliding down. Since: 3.12
+        OverDown,
+        /// Cover the old page by sliding to the left. Since: 3.12
+        OverLeft,
+        /// Cover the old page by sliding to the right. Since: 3.12
+        OverRight,
+        /// Uncover the new page by sliding up. Since 3.12
+        UnderUp,
+        /// Uncover the new page by sliding down. Since: 3.12
+        UnderDown,
+        /// Uncover the new page by sliding to the left. Since: 3.12
+        UnderLeft,
+        /// Uncover the new page by sliding to the right. Since: 3.12
+        UnderRight,
+        /// Cover the old page or uncover the new page, according to order. Since: 3.12
+        OverUpDown
     }
 }
