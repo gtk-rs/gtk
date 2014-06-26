@@ -65,3 +65,14 @@ macro_rules! impl_drop(
         }
     );
 )
+
+// Useful for function wich take a valid widget or NULL for a default widget
+// takes an option<&trait::Widget> and return the c widget pointer or ptr::null()
+macro_rules! get_widget(
+    ($w:ident) => (
+        match $w {
+            Some(ref _w) => _w.get_widget(),
+            None => ::std::ptr::null()
+        };
+    );
+)

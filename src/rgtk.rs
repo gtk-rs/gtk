@@ -133,6 +133,7 @@ pub use GtkToolButtonTrait      = gtk::traits::ToolButton;
 pub use GtkToggleToolButtonTrait= gtk::traits::ToggleToolButton;
 pub use GtkDialogTrait          = gtk::traits::Dialog;
 pub use GtkColorChooserTrait    = gtk::traits::ColorChooser;
+pub use GtkScrollableTrait      = gtk::traits::Scrollable;
 
 #[doc(hidden)]
 #[cfg(target_os="macos")]

@@ -209,3 +209,55 @@ pub fn GTK_COLOR_CHOOSER_DIALOG(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkColorCh
 pub fn GTK_COLOR_CHOOSER(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkColorChooser {
     unsafe{ ffi::cast_GtkColorChooser(widget) }
 }
+
+pub fn GTK_NOTEBOOK(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkNotebook {
+    unsafe{ ffi::cast_GtkNotebook(widget) }
+}
+
+pub fn GTK_STACK(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkStack {
+    unsafe{ ffi::cast_GtkStack(widget) }
+}
+
+pub fn GTK_STACK_SWITCHER(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkStackSwitcher {
+    unsafe{ ffi::cast_GtkStackSwitcher(widget) }
+}
+
+pub fn GTK_REVEALER(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkRevealer {
+    unsafe{ ffi::cast_GtkRevealer(widget) }
+}
+
+pub fn GTK_OVERLAY(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkOverlay {
+    unsafe{ ffi::cast_GtkOverlay(widget) }
+}
+
+pub fn GTK_SCROLLABLE(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkScrollable {
+    unsafe{ ffi::cast_GtkScrollable(widget) }
+}
+
+pub fn GTK_LAYOUT(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkLayout {
+    unsafe{ ffi::cast_GtkLayout(widget) }
+}
+
+pub fn GTK_HEADER_BAR(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkHeaderBar {
+    unsafe{ ffi::cast_GtkHeaderBar(widget) }
+}
+
+pub fn GTK_FLOW_BOX(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkFlowBox {
+    unsafe{ ffi::cast_GtkFlowBox(widget) }
+}
+
+pub fn GTK_FLOW_BOX_CHILD(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkFlowBoxChild {
+    unsafe{ ffi::cast_GtkFlowBoxChild(widget) }
+}
+
+pub fn GTK_LIST_BOX(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkListBox {
+    unsafe{ ffi::cast_GtkListBox(widget) }
+}
+
+pub fn GTK_LIST_BOX_ROW(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkListBoxRow {
+    unsafe{ ffi::cast_GtkListBoxRow(widget) }
+}
+
+pub fn GTK_ACTION_BAR(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkActionBar {
+    unsafe{ ffi::cast_GtkActionBar(widget) }
+}

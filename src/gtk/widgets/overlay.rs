@@ -13,19 +13,30 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::cast::GTK_BIN;
-use gtk::traits;
-use gtk::ffi;
+//! A container which overlays widgets on top of each other
 
-pub trait Bin: traits::Widget + traits::Container {
-    fn get_child<T: traits::Widget>(&self) ->  Option<T> {
-        let tmp_pointer = unsafe {
-            ffi::gtk_bin_get_child(GTK_BIN(self.get_widget()))
-        };
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            Some(traits::Widget::wrap(tmp_pointer))
+use gtk::cast::{GTK_OVERLAY};
+use gtk::ffi;
+use gtk::traits;
+
+/// GtkOverlay — A container which overlays widgets on top of each other
+struct_Widget!(Overlay)
+
+impl Overlay {
+    pub fn new() -> Option<Overlay> {
+        let tmp_pointer = unsafe { ffi::gtk_overlay_new() };
+        check_pointer!(tmp_pointer, Overlay)
+    }
+
+    pub fn add_overlay<T: traits::Widget>(&mut self, widget: &T) {
+        unsafe {
+            ffi::gtk_overlay_add_overlay(GTK_OVERLAY(self.pointer), widget.get_widget())
         }
     }
 }
+
+impl_drop!(Overlay)
+impl_TraitWidget!(Overlay)
+
+impl traits::Container for Overlay {}
+impl traits::Bin for Overlay {}

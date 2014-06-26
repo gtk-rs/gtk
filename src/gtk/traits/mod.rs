@@ -32,6 +32,7 @@ pub use self::toolbutton::ToolButton;
 pub use self::toggletoolbutton::ToggleToolButton;
 pub use self::dialog::Dialog;
 pub use self::colorchooser::ColorChooser;
+pub use self::scrollable::Scrollable;
 
 pub mod widget;
 pub mod container;
@@ -52,3 +53,4 @@ pub mod toolbutton;
 pub mod toggletoolbutton;
 pub mod dialog;
 pub mod colorchooser;
+pub mod scrollable;

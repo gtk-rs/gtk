@@ -74,6 +74,19 @@ pub struct C_GtkAboutDialog;
 pub struct C_GtkMessageDialog;
 pub struct C_GtkAppChooserDialog;
 pub struct C_GtkColorChooserDialog;
+pub struct C_GtkNotebook;
+pub struct C_GtkStack;
+pub struct C_GtkStackSwitcher;
+pub struct C_GtkRevealer;
+pub struct C_GtkOverlay;
+pub struct C_GtkScrollable;
+pub struct C_GtkLayout;
+pub struct C_GtkHeaderBar;
+pub struct C_GtkFlowBox;
+pub struct C_GtkFlowBoxChild;
+pub struct C_GtkListBox;
+pub struct C_GtkListBoxRow;
+pub struct C_GtkActionBar;
 
 pub struct C_GtkToolItem;
 pub struct C_GtkToolButton;
@@ -88,6 +101,18 @@ pub struct C_GMenuModel;
 pub struct C_GClosure;
 
 pub struct C_GtkColorChooser;
+
+
+pub fn to_gboolean(b: bool) -> Gboolean{
+    match b {
+        true => Gtrue,
+        false => Gfalse
+    }
+}
+
+pub fn to_bool(b: Gboolean) -> bool {
+    b == Gtrue
+}
 
 extern "C" {
 
@@ -517,9 +542,9 @@ extern "C" {
     pub fn gtk_fixed_move                      (fixed: *C_GtkFixed, widget: *C_GtkWidget, x: c_int, y: c_int) -> ();
 
     //=========================================================================
-    // GtkBin
+    // GtkBin                                                                OK
     //=========================================================================
-    // pub fn gtk_bin_get_child                   (bin: *C_GtkBin) -> *C_GtkWidget;
+    pub fn gtk_bin_get_child                   (bin: *C_GtkBin) -> *C_GtkWidget;
 
     //=========================================================================
     // GtkSeparator                                                          OK
@@ -990,6 +1015,215 @@ extern "C" {
     pub fn gtk_menu_tool_button_set_arrow_tooltip_markup(button: *C_GtkMenuToolButton, markup: *c_char) -> ();
 
     //=========================================================================
+    // GtkNoteBook                                                           OK
+    //=========================================================================
+    pub fn gtk_notebook_new               () -> *C_GtkWidget;
+    pub fn gtk_notebook_append_page       (notebook: *C_GtkNotebook, child: *C_GtkWidget, tab_label: *C_GtkWidget) -> c_int;
+    pub fn gtk_notebook_append_page_menu  (notebook: *C_GtkNotebook, child: *C_GtkWidget, tab_label: *C_GtkWidget, menu_label: *C_GtkWidget) -> c_int;
+    pub fn gtk_notebook_prepend_page      (notebook: *C_GtkNotebook, child: *C_GtkWidget, tab_label: *C_GtkWidget) -> c_int;
+    pub fn gtk_notebook_prepend_page_menu (notebook: *C_GtkNotebook, child: *C_GtkWidget, tab_label: *C_GtkWidget, menu_label: *C_GtkWidget) -> c_int;
+    pub fn gtk_notebook_insert_page       (notebook: *C_GtkNotebook, child: *C_GtkWidget, tab_label: *C_GtkWidget, position: c_int) -> c_int;
+    pub fn gtk_notebook_insert_page_menu  (notebook: *C_GtkNotebook, child: *C_GtkWidget, tab_label: *C_GtkWidget, menu_label: *C_GtkWidget, position: c_int) -> c_int;
+    pub fn gtk_notebook_remove_page       (notebook: *C_GtkNotebook, page_num: c_int);
+    pub fn gtk_notebook_set_group_name    (notebook: *C_GtkNotebook, group_name: *c_char);
+    pub fn gtk_notebook_get_group_name    (notebook: *C_GtkNotebook) -> *c_char;
+    pub fn gtk_notebook_get_current_page  (notebook: *C_GtkNotebook) -> c_int;
+    pub fn gtk_notebook_get_nth_page      (notebook: *C_GtkNotebook, page_num: c_int) -> *C_GtkWidget;
+    pub fn gtk_notebook_get_n_pages       (notebook: *C_GtkNotebook) -> c_int;
+    pub fn gtk_notebook_page_num          (notebook: *C_GtkNotebook, child: *C_GtkWidget) -> c_int;
+    pub fn gtk_notebook_set_current_page  (notebook: *C_GtkNotebook, page_num: c_int);
+    pub fn gtk_notebook_next_page         (notebook: *C_GtkNotebook);
+    pub fn gtk_notebook_prev_page         (notebook: *C_GtkNotebook);
+    pub fn gtk_notebook_set_show_border   (notebook: *C_GtkNotebook, show_border: Gboolean);
+    pub fn gtk_notebook_get_show_border   (notebook: *C_GtkNotebook) -> Gboolean;
+    pub fn gtk_notebook_set_show_tabs     (notebook: *C_GtkNotebook, show_tabs: Gboolean);
+    pub fn gtk_notebook_get_show_tabs     (notebook: *C_GtkNotebook) -> Gboolean;
+    pub fn gtk_notebook_set_tab_pos       (notebook: *C_GtkNotebook, pos: gtk::PositionType);
+    pub fn gtk_notebook_get_tab_pos       (notebook: *C_GtkNotebook) -> gtk::PositionType;
+    pub fn gtk_notebook_set_scrollable    (notebook: *C_GtkNotebook, scrollable: Gboolean);
+    pub fn gtk_notebook_get_scrollable    (notebook: *C_GtkNotebook) -> Gboolean;
+    pub fn gtk_notebook_get_tab_hborder   (notebook: *C_GtkNotebook) -> u16;
+    pub fn gtk_notebook_get_tab_vborder   (notebook: *C_GtkNotebook) -> u16;
+    pub fn gtk_notebook_popup_enable      (notebook: *C_GtkNotebook);
+    pub fn gtk_notebook_popup_disable     (notebook: *C_GtkNotebook);
+    pub fn gtk_notebook_get_tab_label     (notebook: *C_GtkNotebook, child: *C_GtkWidget) -> *C_GtkWidget;
+    pub fn gtk_notebook_set_tab_label     (notebook: *C_GtkNotebook, child: *C_GtkWidget, tab_label: *C_GtkWidget);
+    pub fn gtk_notebook_set_tab_label_text(notebook: *C_GtkNotebook, child: *C_GtkWidget, tab_text: *c_char);
+    pub fn gtk_notebook_get_tab_label_text(notebook: *C_GtkNotebook, child: *C_GtkWidget) -> *c_char;
+    pub fn gtk_notebook_get_menu_label    (notebook: *C_GtkNotebook, child: *C_GtkWidget) -> *C_GtkWidget;
+    pub fn gtk_notebook_set_menu_label    (notebook: *C_GtkNotebook, child: *C_GtkWidget, menu_label: *C_GtkWidget);
+    pub fn gtk_notebook_set_menu_label_text(notebook: *C_GtkNotebook, child: *C_GtkWidget, menu_text: *c_char);
+    pub fn gtk_notebook_get_menu_label_text(notebook: *C_GtkNotebook, child: *C_GtkWidget) -> *c_char;
+    pub fn gtk_notebook_reorder_child     (notebook: *C_GtkNotebook, child: *C_GtkWidget, position: c_int);
+    pub fn gtk_notebook_get_tab_reorderable(notebook: *C_GtkNotebook, child: *C_GtkWidget) -> Gboolean;
+    pub fn gtk_notebook_set_tab_reorderable(notebook: *C_GtkNotebook, child: *C_GtkWidget, reorderable: Gboolean);
+    pub fn gtk_notebook_get_tab_detachable(notebook: *C_GtkNotebook, child: *C_GtkWidget) -> Gboolean;
+    pub fn gtk_notebook_set_tab_detachable(notebook: *C_GtkNotebook, child: *C_GtkWidget, detachable: Gboolean);
+    pub fn gtk_notebook_get_action_widget (notebook: *C_GtkNotebook,pack_type: gtk::PackType) -> *C_GtkWidget;
+    pub fn gtk_notebook_set_action_widget (notebook: *C_GtkNotebook, child: *C_GtkWidget, pack_type: gtk::PackType);
+
+
+    //=========================================================================
+    // GtkStack                                                              OK
+    //=========================================================================
+    pub fn gtk_stack_new                     () -> *C_GtkWidget;
+    pub fn gtk_stack_add_named               (stack: *C_GtkStack, child: *C_GtkWidget, name: *c_char);
+    pub fn gtk_stack_add_titled              (stack: *C_GtkStack, child: *C_GtkWidget, name: *c_char, title: *c_char);
+    pub fn gtk_stack_set_visible_child       (stack: *C_GtkStack, child: *C_GtkWidget);
+    pub fn gtk_stack_get_visible_child       (stack: *C_GtkStack) -> *C_GtkWidget;
+    pub fn gtk_stack_set_visible_child_name  (stack: *C_GtkStack, name: *c_char);
+    pub fn gtk_stack_get_visible_child_name  (stack: *C_GtkStack) -> *c_char;
+    pub fn gtk_stack_set_visible_child_full  (stack: *C_GtkStack, name: *c_char, transition: gtk::StackTransitionType);
+    pub fn gtk_stack_set_homogeneous         (stack: *C_GtkStack, homogeneous: Gboolean);
+    pub fn gtk_stack_get_homogeneous         (stack: *C_GtkStack) -> Gboolean;
+    pub fn gtk_stack_set_transition_duration (stack: *C_GtkStack, duration: c_uint);
+    pub fn gtk_stack_get_transition_duration (stack: *C_GtkStack) -> c_uint;
+    pub fn gtk_stack_set_transition_type     (stack: *C_GtkStack, transition: gtk::StackTransitionType);
+    pub fn gtk_stack_get_transition_type     (stack: *C_GtkStack) -> gtk::StackTransitionType;
+
+    //=========================================================================
+    // GtkStackSwitcher                                                      OK
+    //=========================================================================
+    pub fn gtk_stack_switcher_new       () -> *C_GtkWidget;
+    pub fn gtk_stack_switcher_set_stack (switcher: *C_GtkStackSwitcher, stack: *C_GtkStack);
+    pub fn gtk_stack_switcher_get_stack (switcher: *C_GtkStackSwitcher) -> *C_GtkWidget;
+
+
+    //=========================================================================
+    // GtkRevealer                                                           OK
+    //=========================================================================
+    pub fn gtk_revealer_new                     () -> *C_GtkWidget;
+    pub fn gtk_revealer_get_reveal_child        (revealer: *C_GtkRevealer) -> Gboolean;
+    pub fn gtk_revealer_set_reveal_child        (revealer: *C_GtkRevealer, reveal_child: Gboolean);
+    pub fn gtk_revealer_get_child_revealed      (revealer: *C_GtkRevealer) -> Gboolean;
+    pub fn gtk_revealer_get_transition_duration (revealer: *C_GtkRevealer) -> c_uint;
+    pub fn gtk_revealer_set_transition_duration (revealer: *C_GtkRevealer, duration: c_uint);
+    pub fn gtk_revealer_set_transition_type     (revealer: *C_GtkRevealer, transition: gtk::RevealerTransitionType);
+    pub fn gtk_revealer_get_transition_type     (revealer: *C_GtkRevealer) -> gtk::RevealerTransitionType;
+
+    //=========================================================================
+    // GtkOverlay                                                            OK
+    //=========================================================================
+    pub fn gtk_overlay_new () -> *C_GtkWidget;
+    pub fn gtk_overlay_add_overlay (overlay: *C_GtkOverlay, widget: *C_GtkWidget);
+
+    //=========================================================================
+    // GtkScrollable                                                         OK
+    //=========================================================================
+    pub fn gtk_scrollable_get_hadjustment        (scrollable: *C_GtkScrollable) -> *C_GtkAdjustment;
+    pub fn gtk_scrollable_set_hadjustment        (scrollable: *C_GtkScrollable, hadjustment: *C_GtkAdjustment);
+    pub fn gtk_scrollable_get_vadjustment        (scrollable: *C_GtkScrollable) -> *C_GtkAdjustment;
+    pub fn gtk_scrollable_set_vadjustment        (scrollable: *C_GtkScrollable, vadjustment: *C_GtkAdjustment);
+    pub fn gtk_scrollable_get_hscroll_policy     (scrollable: *C_GtkScrollable) -> gtk::ScrollablePolicy;
+    pub fn gtk_scrollable_set_hscroll_policy     (scrollable: *C_GtkScrollable, policy: gtk::ScrollablePolicy);
+    pub fn gtk_scrollable_get_vscroll_policy     (scrollable: *C_GtkScrollable) -> gtk::ScrollablePolicy;
+    pub fn gtk_scrollable_set_vscroll_policy     (scrollable: *C_GtkScrollable, policy: gtk::ScrollablePolicy);
+
+    //=========================================================================
+    // GtkLayout
+    //=========================================================================
+    pub fn gtk_layout_new             (hadjustment: *C_GtkAdjustment, vadjustment: *C_GtkAdjustment) -> *C_GtkWidget;
+    pub fn gtk_layout_put             (layout: *C_GtkLayout, child_widget: *C_GtkWidget, x: c_int, y: c_int);
+    pub fn gtk_layout_move            (layout: *C_GtkLayout, child_widget: *C_GtkWidget, x: c_int, y: c_int);
+    pub fn gtk_layout_set_size        (layout: *C_GtkLayout, width: c_uint, height: c_uint);
+    pub fn gtk_layout_get_size        (layout: *C_GtkLayout, width: *c_uint, height: *c_uint);
+    // pub fn gtk_layout_get_bin_window  (layout: *C_GtkLayout) -> *C_GdkWindow;
+
+    //=========================================================================
+    // GtkHeaderBar                                                          OK
+    //=========================================================================
+    pub fn gtk_header_bar_new               () -> *C_GtkWidget;
+    pub fn gtk_header_bar_set_title         (bar: *C_GtkHeaderBar, title: *c_char);
+    pub fn gtk_header_bar_get_title         (bar: *C_GtkHeaderBar) -> *c_char;
+    pub fn gtk_header_bar_set_subtitle      (bar: *C_GtkHeaderBar, subtitle: *c_char);
+    pub fn gtk_header_bar_get_subtitle      (bar: *C_GtkHeaderBar) -> *c_char;
+    pub fn gtk_header_bar_set_custom_title  (bar: *C_GtkHeaderBar, title_widget: *C_GtkWidget);
+    pub fn gtk_header_bar_get_custom_title  (bar: *C_GtkHeaderBar) -> *C_GtkWidget;
+    pub fn gtk_header_bar_pack_start        (bar: *C_GtkHeaderBar, child: *C_GtkWidget);
+    pub fn gtk_header_bar_pack_end          (bar: *C_GtkHeaderBar, child: *C_GtkWidget);
+    pub fn gtk_header_bar_get_show_close_button (bar: *C_GtkHeaderBar) -> Gboolean;
+    pub fn gtk_header_bar_set_show_close_button (bar: *C_GtkHeaderBar, setting: Gboolean);
+
+    //=========================================================================
+    // GtkFlowBox                                                            OK
+    //=========================================================================
+    pub fn gtk_flow_box_new                       () -> *C_GtkWidget;
+    pub fn gtk_flow_box_set_homogeneous           (_box: *C_GtkFlowBox, homogeneous: Gboolean);
+    pub fn gtk_flow_box_get_homogeneous           (_box: *C_GtkFlowBox) -> Gboolean;
+    pub fn gtk_flow_box_set_row_spacing           (_box: *C_GtkFlowBox, spacing: c_uint);
+    pub fn gtk_flow_box_get_row_spacing           (_box: *C_GtkFlowBox) -> c_uint;
+    pub fn gtk_flow_box_set_column_spacing        (_box: *C_GtkFlowBox, spacing: c_uint);
+    pub fn gtk_flow_box_get_column_spacing        (_box: *C_GtkFlowBox) -> c_uint;
+    pub fn gtk_flow_box_set_min_children_per_line (_box: *C_GtkFlowBox, n_children: c_uint);
+    pub fn gtk_flow_box_get_min_children_per_line (_box: *C_GtkFlowBox) -> c_uint;
+    pub fn gtk_flow_box_set_max_children_per_line (_box: *C_GtkFlowBox, n_children: c_uint);
+    pub fn gtk_flow_box_get_max_children_per_line (_box: *C_GtkFlowBox) -> c_uint;
+    pub fn gtk_flow_box_set_activate_on_single_click (_box: *C_GtkFlowBox, single: Gboolean);
+    pub fn gtk_flow_box_get_activate_on_single_click (_box: *C_GtkFlowBox) -> Gboolean;
+    pub fn gtk_flow_box_insert                       (_box: *C_GtkFlowBox, widget: *C_GtkWidget, position: c_int);
+    pub fn gtk_flow_box_get_child_at_index           (_box: *C_GtkFlowBox, idx: c_int) -> *C_GtkFlowBoxChild;
+    pub fn gtk_flow_box_select_child                 (_box: *C_GtkFlowBox, child: *C_GtkFlowBoxChild);
+    pub fn gtk_flow_box_unselect_child               (_box: *C_GtkFlowBox, child: *C_GtkFlowBoxChild);
+    pub fn gtk_flow_box_select_all                   (_box: *C_GtkFlowBox);
+    pub fn gtk_flow_box_unselect_all                 (_box: *C_GtkFlowBox);
+    pub fn gtk_flow_box_set_selection_mode           (_box: *C_GtkFlowBox, mode: gtk::SelectionMode);
+    pub fn gtk_flow_box_get_selection_mode           (_box: *C_GtkFlowBox) -> gtk::SelectionMode;
+    pub fn gtk_flow_box_set_hadjustment              (_box: *C_GtkFlowBox, adjustment: *C_GtkAdjustment);
+    pub fn gtk_flow_box_set_vadjustment              (_box: *C_GtkFlowBox, adjustment: *C_GtkAdjustment);
+    // void                  gtk_flow_box_selected_foreach             (_box: *C_GtkFlowBox, GtkFlowBoxForeachFunc func, gpointer           data);
+    // GList                *gtk_flow_box_get_selected_children        (_box: *C_GtkFlowBox);
+
+    //=========================================================================
+    // GtkFlowBoxChild                                                       OK
+    //=========================================================================
+    pub fn gtk_flow_box_child_new () -> *C_GtkWidget;
+    pub fn gtk_flow_box_child_get_index (child: *C_GtkFlowBoxChild) -> c_int;
+    pub fn gtk_flow_box_child_is_selected (child: *C_GtkFlowBoxChild) -> Gboolean;
+    pub fn gtk_flow_box_child_changed (child: *C_GtkFlowBoxChild);
+
+    //=========================================================================
+    // GtkListBox                                                            OK
+    //=========================================================================
+    pub fn gtk_list_box_new                          () -> *C_GtkWidget;
+    pub fn gtk_list_box_prepend                      (list_box: *C_GtkListBox, child: *C_GtkWidget);
+    pub fn gtk_list_box_insert                       (list_box: *C_GtkListBox, child: *C_GtkWidget, position: c_int);
+    pub fn gtk_list_box_get_selected_row             (list_box: *C_GtkListBox) -> *C_GtkListBoxRow;
+    pub fn gtk_list_box_get_row_at_index             (list_box: *C_GtkListBox, index: c_int) -> *C_GtkListBoxRow;
+    pub fn gtk_list_box_get_row_at_y                 (list_box: *C_GtkListBox, y: c_int) -> *C_GtkListBoxRow;
+    pub fn gtk_list_box_select_row                   (list_box: *C_GtkListBox, row: *C_GtkListBoxRow);
+    pub fn gtk_list_box_set_placeholder              (list_box: *C_GtkListBox, placeholder: *C_GtkWidget);
+    pub fn gtk_list_box_set_adjustment               (list_box: *C_GtkListBox, adjustment: *C_GtkAdjustment);
+    pub fn gtk_list_box_get_adjustment               (list_box: *C_GtkListBox) -> *C_GtkAdjustment;
+    pub fn gtk_list_box_set_selection_mode           (list_box: *C_GtkListBox, mode: gtk::SelectionMode);
+    pub fn gtk_list_box_get_selection_mode           (list_box: *C_GtkListBox) -> gtk::SelectionMode;
+    // pub fn gtk_list_box_invalidate_filter            (list_box: *C_GtkListBox);
+    // pub fn gtk_list_box_invalidate_sort              (list_box: *C_GtkListBox);
+    pub fn gtk_list_box_invalidate_headers           (list_box: *C_GtkListBox);
+    pub fn gtk_list_box_set_activate_on_single_click (list_box: *C_GtkListBox, simgle: Gboolean);
+    pub fn gtk_list_box_get_activate_on_single_click (list_box: *C_GtkListBox) -> Gboolean;
+    pub fn gtk_list_box_drag_unhighlight_row         (list_box: *C_GtkListBox);
+    pub fn gtk_list_box_drag_highlight_row           (list_box: *C_GtkListBox, row: *C_GtkListBoxRow);
+
+
+    //=========================================================================
+    // GtkListBoxRow                                                         OK
+    //=========================================================================
+    pub fn gtk_list_box_row_new         () -> *C_GtkWidget;
+    pub fn gtk_list_box_row_changed     (row: *C_GtkListBoxRow);
+    pub fn gtk_list_box_row_get_header  (row: *C_GtkListBoxRow) -> *C_GtkWidget;
+    pub fn gtk_list_box_row_set_header  (row: *C_GtkListBoxRow, header: *C_GtkWidget);
+    pub fn gtk_list_box_row_get_index   (row: *C_GtkListBoxRow) -> c_int;
+
+    //=========================================================================
+    // GtkActionBar                                                          OK
+    //=========================================================================
+    pub fn gtk_action_bar_new               () -> *C_GtkWidget;
+    pub fn gtk_action_bar_get_center_widget (action_bar: *C_GtkActionBar) -> *C_GtkWidget;
+    pub fn gtk_action_bar_set_center_widget (action_bar: *C_GtkActionBar, center_widget: *C_GtkWidget);
+    pub fn gtk_action_bar_pack_start        (action_bar: *C_GtkActionBar, child: *C_GtkWidget);
+    pub fn gtk_action_bar_pack_end          (action_bar: *C_GtkActionBar, child: *C_GtkWidget);
+
+    //=========================================================================
     // Glue fixe code
     //=========================================================================
     pub fn glue_signal_connect(g_object: *C_GtkWidget,
@@ -1054,4 +1288,17 @@ extern "C" {
     pub fn cast_GtkColorChooserDialog(widget: *C_GtkWidget) -> *C_GtkColorChooserDialog;
     pub fn cast_GtkColorChooser(widget: *C_GtkWidget) -> *C_GtkColorChooser;
     pub fn cast_GtkAdjustment(widget: *C_GtkWidget) -> *C_GtkAdjustment;
+    pub fn cast_GtkNotebook(widget: *C_GtkWidget) -> *C_GtkNotebook;
+    pub fn cast_GtkStack(widget: *C_GtkWidget) -> *C_GtkStack;
+    pub fn cast_GtkStackSwitcher(widget: *C_GtkWidget) -> *C_GtkStackSwitcher;
+    pub fn cast_GtkRevealer(widget: *C_GtkWidget) -> *C_GtkRevealer;
+    pub fn cast_GtkOverlay(widget: *C_GtkWidget) -> *C_GtkOverlay;
+    pub fn cast_GtkScrollable(widget: *C_GtkWidget) -> *C_GtkScrollable;
+    pub fn cast_GtkLayout(widget: *C_GtkWidget) -> *C_GtkLayout;
+    pub fn cast_GtkHeaderBar(widget: *C_GtkWidget) -> *C_GtkHeaderBar;
+    pub fn cast_GtkFlowBox(widget: *C_GtkWidget) -> *C_GtkFlowBox;
+    pub fn cast_GtkFlowBoxChild(widget: *C_GtkWidget) -> *C_GtkFlowBoxChild;
+    pub fn cast_GtkListBox(widget: *C_GtkWidget) -> *C_GtkListBox;
+    pub fn cast_GtkListBoxRow(widget: *C_GtkWidget) -> *C_GtkListBoxRow;
+    pub fn cast_GtkActionBar(widget: *C_GtkWidget) -> *C_GtkActionBar;
 }

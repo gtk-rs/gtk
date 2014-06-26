@@ -75,6 +75,18 @@ pub use self::widgets::{
     AboutDialog,
     ColorChooserDialog,
     MessageDialog,
+    NoteBook,
+    Stack,
+    StackSwitcher,
+    Revealer,
+    Overlay,
+    Layout,
+    HeaderBar,
+    FlowBox,
+    FlowBoxChild,
+    ListBox,
+    ListBoxRow,
+    ActionBar,
     Widget // FIXME @jeremyletang
 };
 
@@ -180,7 +192,13 @@ pub use self::enums::{
     file_chooser_action,
     FileChooserAction,
     buttons_type,
-    ButtonsType
+    ButtonsType,
+    stack_transition_type,
+    StackTransitionType,
+    revealer_transition_type,
+    RevealerTransitionType,
+    scrollable_policy,
+    ScrollablePolicy
 };
 
 pub use self::types::{

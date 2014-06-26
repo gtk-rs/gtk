@@ -349,6 +349,50 @@ GtkAdjustment* cast_GtkAdjustment(GtkWidget* widget) {
     return GTK_ADJUSTMENT(widget);
 }
 
+GtkStack* cast_GtkStack(GtkWidget* widget) {
+    return GTK_STACK(widget);
+}
+
+GtkStackSwitcher* cast_GtkStackSwitcher(GtkWidget* widget) {
+    return GTK_STACK_SWITCHER(widget);
+}
+
+GtkRevealer* cast_GtkRevealer(GtkWidget* widget) {
+    return GTK_REVEALER(widget);
+}
+
+GtkOverlay* cast_GtkOverlay(GtkWidget* widget) {
+    return GTK_OVERLAY(widget);
+}
+
+GtkScrollable* cast_GtkScrollable(GtkWidget* widget) {
+    return GTK_SCROLLABLE(widget);
+}
+
+GtkHeaderBar* cast_GtkHeaderBar(GtkWidget* widget) {
+    return GTK_HEADER_BAR(widget);
+}
+
+GtkFlowBox* cast_GtkFlowBox(GtkWidget* widget) {
+    return GTK_FLOW_BOX(widget);
+}
+
+GtkFlowBoxChild* cast_GtkFlowBoxChild(GtkWidget* widget) {
+    return GTK_FLOW_BOX_CHILD(widget);
+}
+
+GtkActionBar* cast_GtkActionBar(GtkWidget* widget) {
+    return GTK_ACTION_BAR(widget);
+}
+
+GtkListBox* cast_GtkListBox(GtkWidget* widget) {
+    return GTK_LIST_BOX(widget);
+}
+
+GtkListBoxRow* cast_GtkListBoxRow(GtkWidget* widget) {
+    return GTK_LIST_BOX_ROW(widget);
+}
+
 /* MAC OS dylib
 gcc -I/usr/local/include/gtk-3.0 -I/usr/local/include/glib-2.0 -I/usr/local/include/gobject-introspection-1.0 -I/usr/local/Cellar/glib/2.38.1/lib/glib-2.0/include/ -I/usr/local/Cellar/pango/1.36.0/include/pango-1.0/ -I/usr/local/Cellar/cairo/1.12.16/include/cairo/ -I/usr/local/Cellar/gdk-pixbuf/2.30.0/include/gdk-pixbuf-2.0/ -I/usr/local/Cellar/atk/2.10.0/include/atk-1.0/ -lglib-2.0 -lgtk-3.0 -lgobject-2.0 -dynamiclib -o libgtk_glue.dylib -dy gtk_glue.c
 */
