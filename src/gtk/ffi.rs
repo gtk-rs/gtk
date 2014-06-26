@@ -77,6 +77,7 @@ pub struct C_GtkColorChooserDialog;
 pub struct C_GtkNotebook;
 pub struct C_GtkStack;
 pub struct C_GtkStackSwitcher;
+pub struct C_GtkRevealer;
 
 pub struct C_GtkToolItem;
 pub struct C_GtkToolButton;
@@ -1074,9 +1075,22 @@ extern "C" {
     //=========================================================================
     // GtkStackSwitcher                                                      OK
     //=========================================================================
-    pub fn gtk_stack_switcher_new () -> *C_GtkWidget;
+    pub fn gtk_stack_switcher_new       () -> *C_GtkWidget;
     pub fn gtk_stack_switcher_set_stack (switcher: *C_GtkStackSwitcher, stack: *C_GtkStack);
     pub fn gtk_stack_switcher_get_stack (switcher: *C_GtkStackSwitcher) -> *C_GtkWidget;
+
+
+    //=========================================================================
+    // GtkRevealer                                                           OK
+    //=========================================================================
+    pub fn gtk_revealer_new                     () -> *C_GtkWidget;
+    pub fn gtk_revealer_get_reveal_child        (revealer: *C_GtkRevealer) -> Gboolean;
+    pub fn gtk_revealer_set_reveal_child        (revealer: *C_GtkRevealer, reveal_child: Gboolean);
+    pub fn gtk_revealer_get_child_revealed      (revealer: *C_GtkRevealer) -> Gboolean;
+    pub fn gtk_revealer_get_transition_duration (revealer: *C_GtkRevealer) -> c_uint;
+    pub fn gtk_revealer_set_transition_duration (revealer: *C_GtkRevealer, duration: c_uint);
+    pub fn gtk_revealer_set_transition_type     (revealer: *C_GtkRevealer, transition: gtk::RevealerTransitionType);
+    pub fn gtk_revealer_get_transition_type     (revealer: *C_GtkRevealer) -> gtk::RevealerTransitionType;
 
     //=========================================================================
     // Glue fixe code
@@ -1146,4 +1160,5 @@ extern "C" {
     pub fn cast_GtkNotebook(widget: *C_GtkWidget) -> *C_GtkNotebook;
     pub fn cast_GtkStack(widget: *C_GtkWidget) -> *C_GtkStack;
     pub fn cast_GtkStackSwitcher(widget: *C_GtkWidget) -> *C_GtkStackSwitcher;
+    pub fn cast_GtkRevealer(widget: *C_GtkWidget) -> *C_GtkRevealer;
 }

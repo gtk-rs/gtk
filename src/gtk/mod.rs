@@ -78,6 +78,7 @@ pub use self::widgets::{
     NoteBook,
     Stack,
     StackSwitcher,
+    Revealer,
     Widget // FIXME @jeremyletang
 };
 
@@ -185,7 +186,9 @@ pub use self::enums::{
     buttons_type,
     ButtonsType,
     stack_transition_type,
-    StackTransitionType
+    StackTransitionType,
+    revealer_transition_type,
+    RevealerTransitionType
 };
 
 pub use self::types::{
