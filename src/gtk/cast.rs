@@ -238,3 +238,7 @@ pub fn GTK_LAYOUT(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkLayout {
     unsafe{ ffi::cast_GtkLayout(widget) }
 }
 
+pub fn GTK_HEADER_BAR(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkHeaderBar {
+    unsafe{ ffi::cast_GtkHeaderBar(widget) }
+}
+

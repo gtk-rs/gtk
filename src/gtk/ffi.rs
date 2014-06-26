@@ -81,6 +81,7 @@ pub struct C_GtkRevealer;
 pub struct C_GtkOverlay;
 pub struct C_GtkScrollable;
 pub struct C_GtkLayout;
+pub struct C_GtkHeaderBar;
 
 pub struct C_GtkToolItem;
 pub struct C_GtkToolButton;
@@ -1124,6 +1125,21 @@ extern "C" {
     // pub fn gtk_layout_get_bin_window  (layout: *C_GtkLayout) -> *C_GdkWindow;
 
     //=========================================================================
+    // GtkHeaderBar                                                          OK
+    //=========================================================================
+    pub fn gtk_header_bar_new               () -> *C_GtkWidget;
+    pub fn gtk_header_bar_set_title         (bar: *C_GtkHeaderBar, title: *c_char);
+    pub fn gtk_header_bar_get_title         (bar: *C_GtkHeaderBar) -> *c_char;
+    pub fn gtk_header_bar_set_subtitle      (bar: *C_GtkHeaderBar, subtitle: *c_char);
+    pub fn gtk_header_bar_get_subtitle      (bar: *C_GtkHeaderBar) -> *c_char;
+    pub fn gtk_header_bar_set_custom_title  (bar: *C_GtkHeaderBar, title_widget: *C_GtkWidget);
+    pub fn gtk_header_bar_get_custom_title  (bar: *C_GtkHeaderBar) -> *C_GtkWidget;
+    pub fn gtk_header_bar_pack_start        (bar: *C_GtkHeaderBar, child: *C_GtkWidget);
+    pub fn gtk_header_bar_pack_end          (bar: *C_GtkHeaderBar, child: *C_GtkWidget);
+    pub fn gtk_header_bar_get_show_close_button (bar: *C_GtkHeaderBar) -> Gboolean;
+    pub fn gtk_header_bar_set_show_close_button (bar: *C_GtkHeaderBar, setting: Gboolean);
+
+    //=========================================================================
     // Glue fixe code
     //=========================================================================
     pub fn glue_signal_connect(g_object: *C_GtkWidget,
@@ -1195,4 +1211,5 @@ extern "C" {
     pub fn cast_GtkOverlay(widget: *C_GtkWidget) -> *C_GtkOverlay;
     pub fn cast_GtkScrollable(widget: *C_GtkWidget) -> *C_GtkScrollable;
     pub fn cast_GtkLayout(widget: *C_GtkWidget) -> *C_GtkLayout;
+    pub fn cast_GtkHeaderBar(widget: *C_GtkWidget) -> *C_GtkHeaderBar;
 }
