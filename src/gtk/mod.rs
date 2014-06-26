@@ -84,6 +84,8 @@ pub use self::widgets::{
     HeaderBar,
     FlowBox,
     FlowBoxChild,
+    ListBox,
+    ListBoxRow,
     ActionBar,
     Widget // FIXME @jeremyletang
 };

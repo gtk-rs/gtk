@@ -84,6 +84,8 @@ pub struct C_GtkLayout;
 pub struct C_GtkHeaderBar;
 pub struct C_GtkFlowBox;
 pub struct C_GtkFlowBoxChild;
+pub struct C_GtkListBox;
+pub struct C_GtkListBoxRow;
 pub struct C_GtkActionBar;
 
 pub struct C_GtkToolItem;
@@ -1172,6 +1174,47 @@ extern "C" {
     // GList                *gtk_flow_box_get_selected_children        (_box: *C_GtkFlowBox);
 
     //=========================================================================
+    // GtkFlowBoxChild                                                       OK
+    //=========================================================================
+    pub fn gtk_flow_box_child_new () -> *C_GtkWidget;
+    pub fn gtk_flow_box_child_get_index (child: *C_GtkFlowBoxChild) -> c_int;
+    pub fn gtk_flow_box_child_is_selected (child: *C_GtkFlowBoxChild) -> Gboolean;
+    pub fn gtk_flow_box_child_changed (child: *C_GtkFlowBoxChild);
+
+    //=========================================================================
+    // GtkListBox                                                            OK
+    //=========================================================================
+    pub fn gtk_list_box_new                          () -> *C_GtkWidget;
+    pub fn gtk_list_box_prepend                      (list_box: *C_GtkListBox, child: *C_GtkWidget);
+    pub fn gtk_list_box_insert                       (list_box: *C_GtkListBox, child: *C_GtkWidget, position: c_int);
+    pub fn gtk_list_box_get_selected_row             (list_box: *C_GtkListBox) -> *C_GtkListBoxRow;
+    pub fn gtk_list_box_get_row_at_index             (list_box: *C_GtkListBox, index: c_int) -> *C_GtkListBoxRow;
+    pub fn gtk_list_box_get_row_at_y                 (list_box: *C_GtkListBox, y: c_int) -> *C_GtkListBoxRow;
+    pub fn gtk_list_box_select_row                   (list_box: *C_GtkListBox, row: *C_GtkListBoxRow);
+    pub fn gtk_list_box_set_placeholder              (list_box: *C_GtkListBox, placeholder: *C_GtkWidget);
+    pub fn gtk_list_box_set_adjustment               (list_box: *C_GtkListBox, adjustment: *C_GtkAdjustment);
+    pub fn gtk_list_box_get_adjustment               (list_box: *C_GtkListBox) -> *C_GtkAdjustment;
+    pub fn gtk_list_box_set_selection_mode           (list_box: *C_GtkListBox, mode: gtk::SelectionMode);
+    pub fn gtk_list_box_get_selection_mode           (list_box: *C_GtkListBox) -> gtk::SelectionMode;
+    // pub fn gtk_list_box_invalidate_filter            (list_box: *C_GtkListBox);
+    // pub fn gtk_list_box_invalidate_sort              (list_box: *C_GtkListBox);
+    pub fn gtk_list_box_invalidate_headers           (list_box: *C_GtkListBox);
+    pub fn gtk_list_box_set_activate_on_single_click (list_box: *C_GtkListBox, simgle: Gboolean);
+    pub fn gtk_list_box_get_activate_on_single_click (list_box: *C_GtkListBox) -> Gboolean;
+    pub fn gtk_list_box_drag_unhighlight_row         (list_box: *C_GtkListBox);
+    pub fn gtk_list_box_drag_highlight_row           (list_box: *C_GtkListBox, row: *C_GtkListBoxRow);
+
+
+    //=========================================================================
+    // GtkListBoxRow                                                         OK
+    //=========================================================================
+    pub fn gtk_list_box_row_new         () -> *C_GtkWidget;
+    pub fn gtk_list_box_row_changed     (row: *C_GtkListBoxRow);
+    pub fn gtk_list_box_row_get_header  (row: *C_GtkListBoxRow) -> *C_GtkWidget;
+    pub fn gtk_list_box_row_set_header  (row: *C_GtkListBoxRow, header: *C_GtkWidget);
+    pub fn gtk_list_box_row_get_index   (row: *C_GtkListBoxRow) -> c_int;
+
+    //=========================================================================
     // GtkActionBar                                                          OK
     //=========================================================================
     pub fn gtk_action_bar_new               () -> *C_GtkWidget;
@@ -1179,15 +1222,6 @@ extern "C" {
     pub fn gtk_action_bar_set_center_widget (action_bar: *C_GtkActionBar, center_widget: *C_GtkWidget);
     pub fn gtk_action_bar_pack_start        (action_bar: *C_GtkActionBar, child: *C_GtkWidget);
     pub fn gtk_action_bar_pack_end          (action_bar: *C_GtkActionBar, child: *C_GtkWidget);
-
-
-    //=========================================================================
-    // GtkFlowBoxChild                                                       OK
-    //=========================================================================
-    pub fn gtk_flow_box_child_new () -> *C_GtkWidget;
-    pub fn gtk_flow_box_child_get_index (child: *C_GtkFlowBoxChild) -> c_int;
-    pub fn gtk_flow_box_child_is_selected (child: *C_GtkFlowBoxChild) -> Gboolean;
-    pub fn gtk_flow_box_child_changed (child: *C_GtkFlowBoxChild);
 
     //=========================================================================
     // Glue fixe code
@@ -1264,5 +1298,7 @@ extern "C" {
     pub fn cast_GtkHeaderBar(widget: *C_GtkWidget) -> *C_GtkHeaderBar;
     pub fn cast_GtkFlowBox(widget: *C_GtkWidget) -> *C_GtkFlowBox;
     pub fn cast_GtkFlowBoxChild(widget: *C_GtkWidget) -> *C_GtkFlowBoxChild;
+    pub fn cast_GtkListBox(widget: *C_GtkWidget) -> *C_GtkListBox;
+    pub fn cast_GtkListBoxRow(widget: *C_GtkWidget) -> *C_GtkListBoxRow;
     pub fn cast_GtkActionBar(widget: *C_GtkWidget) -> *C_GtkActionBar;
 }
