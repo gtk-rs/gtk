@@ -59,6 +59,7 @@ pub use self::dialog::Dialog;
 pub use self::aboutdialog::AboutDialog;
 pub use self::messagedialog::MessageDialog;
 pub use self::colorchooserdialog::ColorChooserDialog;
+pub use self::notebook::NoteBook;
 pub use self::widget::Widget;
 
 pub mod window;
@@ -108,3 +109,4 @@ pub mod aboutdialog;
 pub mod widget;
 pub mod colorchooserdialog;
 pub mod messagedialog;
+pub mod notebook;

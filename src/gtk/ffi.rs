@@ -74,6 +74,7 @@ pub struct C_GtkAboutDialog;
 pub struct C_GtkMessageDialog;
 pub struct C_GtkAppChooserDialog;
 pub struct C_GtkColorChooserDialog;
+pub struct C_GtkNotebook;
 
 pub struct C_GtkToolItem;
 pub struct C_GtkToolButton;
@@ -88,6 +89,18 @@ pub struct C_GMenuModel;
 pub struct C_GClosure;
 
 pub struct C_GtkColorChooser;
+
+
+pub fn to_gboolean(b: bool) -> Gboolean{
+    match b {
+        true => Gtrue,
+        false => Gfalse
+    }
+}
+
+pub fn to_bool(b: Gboolean) -> bool {
+    b == Gtrue
+}
 
 extern "C" {
 
@@ -990,6 +1003,56 @@ extern "C" {
     pub fn gtk_menu_tool_button_set_arrow_tooltip_markup(button: *C_GtkMenuToolButton, markup: *c_char) -> ();
 
     //=========================================================================
+    // GtkNoteBook
+    //=========================================================================
+    pub fn gtk_notebook_new               () -> *C_GtkWidget;
+    pub fn gtk_notebook_append_page       (notebook: *C_GtkNotebook, child: *C_GtkWidget, tab_label: *C_GtkWidget) -> c_int;
+    pub fn gtk_notebook_append_page_menu  (notebook: *C_GtkNotebook, child: *C_GtkWidget, tab_label: *C_GtkWidget, menu_label: *C_GtkWidget) -> c_int;
+    pub fn gtk_notebook_prepend_page      (notebook: *C_GtkNotebook, child: *C_GtkWidget, tab_label: *C_GtkWidget) -> c_int;
+    pub fn gtk_notebook_prepend_page_menu (notebook: *C_GtkNotebook, child: *C_GtkWidget, tab_label: *C_GtkWidget, menu_label: *C_GtkWidget) -> c_int;
+    pub fn gtk_notebook_insert_page       (notebook: *C_GtkNotebook, child: *C_GtkWidget, tab_label: *C_GtkWidget, position: c_int) -> c_int;
+    pub fn gtk_notebook_insert_page_menu  (notebook: *C_GtkNotebook, child: *C_GtkWidget, tab_label: *C_GtkWidget, menu_label: *C_GtkWidget, position: c_int) -> c_int;
+    pub fn gtk_notebook_remove_page       (notebook: *C_GtkNotebook, page_num: c_int);
+    pub fn gtk_notebook_set_group_name    (notebook: *C_GtkNotebook, group_name: *c_char);
+    pub fn gtk_notebook_get_group_name    (notebook: *C_GtkNotebook) -> *c_char;
+    pub fn gtk_notebook_get_current_page  (notebook: *C_GtkNotebook) -> c_int;
+    pub fn gtk_notebook_get_nth_page      (notebook: *C_GtkNotebook, page_num: c_int) -> *C_GtkWidget;
+    pub fn gtk_notebook_get_n_pages       (notebook: *C_GtkNotebook) -> c_int;
+    pub fn gtk_notebook_page_num          (notebook: *C_GtkNotebook, child: *C_GtkWidget) -> c_int;
+    pub fn gtk_notebook_set_current_page  (notebook: *C_GtkNotebook, page_num: c_int);
+    pub fn gtk_notebook_next_page         (notebook: *C_GtkNotebook);
+    pub fn gtk_notebook_prev_page         (notebook: *C_GtkNotebook);
+    pub fn gtk_notebook_set_show_border   (notebook: *C_GtkNotebook, show_border: Gboolean);
+    pub fn gtk_notebook_get_show_border   (notebook: *C_GtkNotebook) -> Gboolean;
+    pub fn gtk_notebook_set_show_tabs     (notebook: *C_GtkNotebook, show_tabs: Gboolean);
+    pub fn gtk_notebook_get_show_tabs     (notebook: *C_GtkNotebook) -> Gboolean;
+    pub fn gtk_notebook_set_tab_pos       (notebook: *C_GtkNotebook, pos: gtk::PositionType);
+    pub fn gtk_notebook_get_tab_pos       (notebook: *C_GtkNotebook) -> gtk::PositionType;
+    pub fn gtk_notebook_set_scrollable    (notebook: *C_GtkNotebook, scrollable: Gboolean);
+    pub fn gtk_notebook_get_scrollable    (notebook: *C_GtkNotebook) -> Gboolean;
+    pub fn gtk_notebook_get_tab_hborder   (notebook: *C_GtkNotebook) -> u16;
+    pub fn gtk_notebook_get_tab_vborder   (notebook: *C_GtkNotebook) -> u16;
+    pub fn gtk_notebook_popup_enable      (notebook: *C_GtkNotebook);
+    pub fn gtk_notebook_popup_disable     (notebook: *C_GtkNotebook);
+    pub fn gtk_notebook_get_tab_label     (notebook: *C_GtkNotebook, child: *C_GtkWidget) -> *C_GtkWidget;
+    pub fn gtk_notebook_set_tab_label     (notebook: *C_GtkNotebook, child: *C_GtkWidget, tab_label: *C_GtkWidget);
+    pub fn gtk_notebook_set_tab_label_text(notebook: *C_GtkNotebook, child: *C_GtkWidget, tab_text: *c_char);
+    pub fn gtk_notebook_get_tab_label_text(notebook: *C_GtkNotebook, child: *C_GtkWidget) -> *c_char;
+    pub fn gtk_notebook_get_menu_label    (notebook: *C_GtkNotebook, child: *C_GtkWidget) -> *C_GtkWidget;
+    pub fn gtk_notebook_set_menu_label    (notebook: *C_GtkNotebook, child: *C_GtkWidget, menu_label: *C_GtkWidget);
+    pub fn gtk_notebook_set_menu_label_text(notebook: *C_GtkNotebook, child: *C_GtkWidget, menu_text: *c_char);
+    pub fn gtk_notebook_get_menu_label_text(notebook: *C_GtkNotebook, child: *C_GtkWidget) -> *c_char;
+    pub fn gtk_notebook_reorder_child     (notebook: *C_GtkNotebook, child: *C_GtkWidget, position: c_int);
+    pub fn gtk_notebook_get_tab_reorderable(notebook: *C_GtkNotebook, child: *C_GtkWidget) -> Gboolean;
+    pub fn gtk_notebook_set_tab_reorderable(notebook: *C_GtkNotebook, child: *C_GtkWidget, reorderable: Gboolean);
+    pub fn gtk_notebook_get_tab_detachable(notebook: *C_GtkNotebook, child: *C_GtkWidget) -> Gboolean;
+    pub fn gtk_notebook_set_tab_detachable(notebook: *C_GtkNotebook, child: *C_GtkWidget, detachable: Gboolean);
+    pub fn gtk_notebook_get_action_widget (notebook: *C_GtkNotebook,pack_type: gtk::PackType) -> *C_GtkWidget;
+    pub fn gtk_notebook_set_action_widget (notebook: *C_GtkNotebook, child: *C_GtkWidget, pack_type: gtk::PackType);
+
+
+
+    //=========================================================================
     // Glue fixe code
     //=========================================================================
     pub fn glue_signal_connect(g_object: *C_GtkWidget,
@@ -1054,4 +1117,5 @@ extern "C" {
     pub fn cast_GtkColorChooserDialog(widget: *C_GtkWidget) -> *C_GtkColorChooserDialog;
     pub fn cast_GtkColorChooser(widget: *C_GtkWidget) -> *C_GtkColorChooser;
     pub fn cast_GtkAdjustment(widget: *C_GtkWidget) -> *C_GtkAdjustment;
+    pub fn cast_GtkNotebook(widget: *C_GtkWidget) -> *C_GtkNotebook;
 }
