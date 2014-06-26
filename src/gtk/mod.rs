@@ -75,6 +75,7 @@ pub use self::widgets::{
     AboutDialog,
     ColorChooserDialog,
     MessageDialog,
+    NoteBook,
     Widget // FIXME @jeremyletang
 };
 

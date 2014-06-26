@@ -209,3 +209,7 @@ pub fn GTK_COLOR_CHOOSER_DIALOG(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkColorCh
 pub fn GTK_COLOR_CHOOSER(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkColorChooser {
     unsafe{ ffi::cast_GtkColorChooser(widget) }
 }
+
+pub fn GTK_NOTEBOOK(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkNotebook {
+    unsafe{ ffi::cast_GtkNotebook(widget) }
+}
