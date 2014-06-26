@@ -250,6 +250,14 @@ pub fn GTK_FLOW_BOX_CHILD(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkFlowBoxChild 
     unsafe{ ffi::cast_GtkFlowBoxChild(widget) }
 }
 
+pub fn GTK_LIST_BOX(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkListBox {
+    unsafe{ ffi::cast_GtkListBox(widget) }
+}
+
+pub fn GTK_LIST_BOX_ROW(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkListBoxRow {
+    unsafe{ ffi::cast_GtkListBoxRow(widget) }
+}
+
 pub fn GTK_ACTION_BAR(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkActionBar {
     unsafe{ ffi::cast_GtkActionBar(widget) }
 }
