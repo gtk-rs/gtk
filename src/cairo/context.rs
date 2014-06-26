@@ -3,7 +3,7 @@
 use std::mem::transmute;
 
 use cairo::ffi;
-use cairo::types::{
+use cairo::ffi::{
     cairo_t,
     cairo_surface_t
 };
@@ -14,8 +14,8 @@ pub struct Context{
 }
 
 impl Context{
-    pub fn check_state(&self){
-        self.status().check();
+    pub fn ensure_status(&self){
+        self.status().ensure_valid();
     }
 
     pub fn new (target: *cairo_surface_t) -> Context {
@@ -40,14 +40,14 @@ impl Context{
         unsafe {
             ffi::cairo_save(self.pointer)
         }
-        self.check_state()
+        self.ensure_status()
     }
 
     pub fn restore (&self) {
         unsafe{
             ffi::cairo_restore(self.pointer)
         }
-        self.check_state()
+        self.ensure_status()
     }
 
     //fn ffi::cairo_get_target (cr: *cairo_t) -> *cairo_surface_t;
@@ -98,7 +98,7 @@ impl Context{
         unsafe{
             ffi::cairo_set_antialias(self.pointer, antialias)
         }
-        self.check_state()
+        self.ensure_status()
     }
 
     pub fn get_antialias(&self) -> Antialias{
@@ -111,7 +111,7 @@ impl Context{
         unsafe{
             ffi::cairo_set_dash(self.pointer, dashes.as_ptr(), num_dashes, offset)
         }
-        self.check_state(); //Possible invalid dashes value
+        self.ensure_status(); //Possible invalid dashes value
     }
 
     pub fn get_dash_count(&self) -> i32{
@@ -147,7 +147,7 @@ impl Context{
         unsafe{
             ffi::cairo_set_fill_rule(self.pointer, fill_rule);
         }
-        self.check_state();
+        self.ensure_status();
     }
 
     pub fn get_fill_rule(&self) -> FillRule{
@@ -160,7 +160,7 @@ impl Context{
         unsafe{
             ffi::cairo_set_line_cap(self.pointer, arg)
         }
-        self.check_state();
+        self.ensure_status();
     }
 
     pub fn get_line_cap(&self) -> LineCap{
@@ -173,7 +173,7 @@ impl Context{
         unsafe{
             ffi::cairo_set_line_join(self.pointer, arg)
         }
-        self.check_state();
+        self.ensure_status();
     }
 
     pub fn get_line_join(&self) -> LineJoin{
@@ -186,7 +186,7 @@ impl Context{
         unsafe{
             ffi::cairo_set_line_width(self.pointer, arg)
         }
-        self.check_state();
+        self.ensure_status();
     }
 
     pub fn get_line_width(&self) -> f64{
@@ -199,7 +199,7 @@ impl Context{
         unsafe{
             ffi::cairo_set_miter_limit(self.pointer, arg)
         }
-        self.check_state();
+        self.ensure_status();
     }
 
     pub fn get_miter_limit(&self) -> f64{
@@ -212,7 +212,7 @@ impl Context{
         unsafe{
             ffi::cairo_set_tolerance(self.pointer, arg)
         }
-        self.check_state();
+        self.ensure_status();
     }
 
     pub fn get_tolerance(&self) -> f64{
@@ -256,7 +256,7 @@ impl Context{
         unsafe{
             ffi::cairo_reset_clip(self.pointer)
         }
-        self.check_state()
+        self.ensure_status()
     }
 
 

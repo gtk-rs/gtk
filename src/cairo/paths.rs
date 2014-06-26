@@ -8,7 +8,7 @@ use cairo::enums::{
     PathCurveTo,
     PathClosePath
 };
-use cairo::types::{
+use cairo::ffi::{
     cairo_path_t,
     cairo_path_data_header
 };
@@ -20,6 +20,12 @@ pub struct Path{
 }
 
 impl Path{
+    pub fn ensure_status(&self){
+        unsafe{
+            (*self.pointer).status.ensure_valid()
+        }
+    }
+
     pub fn wrap(pointer: *cairo_path_t) -> Path{
         Path{
             pointer: pointer

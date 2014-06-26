@@ -24,15 +24,20 @@ pub use self::patterns::{
     RadialGradient,
     SolidPattern,
     SurfacePattern,
-    Mesh
+    Mesh,
+
+    //Enum
+    MeshCorner,
+    MeshCorner0,
+    MeshCorner1,
+    MeshCorner2,
+    MeshCorner3
 };
 
 pub mod enums;
-pub mod types;
+pub mod ffi;
 
 mod context;
 mod paths;
 mod transformations;
 mod patterns;
-
-mod ffi;

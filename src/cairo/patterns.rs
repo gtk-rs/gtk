@@ -1,21 +1,28 @@
 
-use libc::{c_double, c_int};
+use libc::{c_double, c_int, c_uint};
 use std::mem::transmute;
 use cairo::enums::{
     Extend,
     Filter,
     Status
 };
-use cairo::types::{
+use cairo::ffi;
+use cairo::ffi::{
     cairo_pattern_t
 };
-use cairo::ffi;
+use cairo::{
+    Path
+};
 
 //Quite some changes from the C api but all suggested by the cairo devs.
 //See http://cairographics.org/manual/bindings-patterns.html for more info
 
 pub trait Pattern{
     fn get_ptr(&self) -> *cairo_pattern_t;
+
+    fn ensure_status(&self){
+        self.status().ensure_valid();
+    }
 
     fn status(&self) -> Status{
         unsafe{
@@ -123,7 +130,7 @@ impl SolidPattern{
             let blue : *c_double = transmute(box 0.0);
             let alpha: *c_double = transmute(box 0.0);
 
-            ffi::cairo_pattern_get_rgba(self.pointer, red, green, blue, alpha).check();
+            ffi::cairo_pattern_get_rgba(self.pointer, red, green, blue, alpha).ensure_valid();
 
             (*red, *green, *blue, *alpha)
         }
@@ -150,7 +157,7 @@ pub trait Gradient : Pattern {
             let count : *c_int = transmute(box 0);
             let result = ffi::cairo_pattern_get_color_stop_count(self.get_ptr(), count);
 
-            result.check(); // Not sure if these are needed
+            result.ensure_valid(); // Not sure if these are needed
 
             count as int
         }
@@ -164,7 +171,7 @@ pub trait Gradient : Pattern {
             let blue  : *c_double = transmute(box 0.0);
             let alpha : *c_double = transmute(box 0.0);
 
-            ffi::cairo_pattern_get_color_stop_rgba(self.get_ptr(), index as c_int, offset, red, green, blue, alpha).check();
+            ffi::cairo_pattern_get_color_stop_rgba(self.get_ptr(), index as c_int, offset, red, green, blue, alpha).ensure_valid();
 
             (*offset, *red, *green, *blue, *alpha)
         }
@@ -189,7 +196,7 @@ impl LinearGradient{
             let x1 : *c_double = transmute(box 0.0);
             let y1 : *c_double = transmute(box 0.0);
 
-            ffi::cairo_pattern_get_linear_points(self.pointer, x0, y0, x1, y1).check();
+            ffi::cairo_pattern_get_linear_points(self.pointer, x0, y0, x1, y1).ensure_valid();
 
 
             (*x0, *y0, *x1, *y1)
@@ -219,7 +226,7 @@ impl RadialGradient{
             let y1 : *c_double = transmute(box 0.0);
             let r1 : *c_double = transmute(box 0.0);
 
-            ffi::cairo_pattern_get_radial_circles(self.pointer, x0, y0, r0, x1, y1, r1).check();
+            ffi::cairo_pattern_get_radial_circles(self.pointer, x0, y0, r0, x1, y1, r1).ensure_valid();
 
             (*x0, *y0, *x1, *y1)
         }
@@ -238,6 +245,13 @@ impl SurfacePattern{
 
 
 
+pub enum MeshCorner{
+    MeshCorner0,
+    MeshCorner1,
+    MeshCorner2,
+    MeshCorner3
+}
+
 pattern_type!(Mesh)
 
 impl Mesh{
@@ -251,43 +265,97 @@ impl Mesh{
         unsafe{
             ffi::cairo_mesh_pattern_begin_patch(self.pointer)
         }
+        self.ensure_status();
     }
 
     pub fn end_patch(&self){
         unsafe{
             ffi::cairo_mesh_pattern_end_patch(self.pointer)
         }
+        self.ensure_status();
     }
 
     pub fn move_to(&self, x: f64, y: f64){
         unsafe{
             ffi::cairo_mesh_pattern_move_to(self.pointer, x, y)
         }
+        self.ensure_status();
     }
 
     pub fn line_to(&self, x: f64, y: f64){
         unsafe{
             ffi::cairo_mesh_pattern_line_to(self.pointer, x, y)
         }
+        self.ensure_status();
     }
 
     pub fn curve_to(&self, x1: f64, y1: f64, x2: f64, y2: f64, x3: f64, y3: f64){
         unsafe{
             ffi::cairo_mesh_pattern_curve_to(self.pointer, x1, y1, x2, y2, x3, y3)
         }
+        self.ensure_status();
     }
 
-    //pub fn cairo_mesh_pattern_set_control_point(pattern: *cairo_pattern_t, point_num: c_uint, x: c_double, y: c_double);
+    pub fn set_control_point(&self, corner: MeshCorner, x: f64, y: f64){
+        unsafe{
+            ffi::cairo_mesh_pattern_set_control_point(self.pointer, corner as c_uint, x, y)
+        }
+        self.ensure_status();
+    }
 
-    //pub fn cairo_mesh_pattern_set_corner_color_rgb(pattern: *cairo_pattern_t, corner_num: c_uint, red: c_double, green: c_double, blue: c_double);
+    pub fn get_control_point(&self, patch_num: uint, corner: MeshCorner) -> (f64, f64){
+        let x: c_double = 0.0;
+        let y: c_double = 0.0;
 
-    //pub fn cairo_mesh_pattern_set_corner_color_rgba(pattern: *cairo_pattern_t, corner_num: c_uint, red: c_double, green: c_double, blue: c_double, alpha: c_double);
+        let status = unsafe{
+            ffi::cairo_mesh_pattern_get_control_point(self.pointer, patch_num as c_uint, corner as c_uint, &x, &y)
+        };
+        status.ensure_valid();
 
-    //pub fn cairo_mesh_pattern_get_patch_count(pattern: *cairo_pattern_t, count: *c_uint) -> Status;
+        (x, y)
+    }
 
-    //pub fn cairo_mesh_pattern_get_path(pattern: *cairo_pattern_t, patch_num: c_uint) -> *cairo_path_t;
+    pub fn set_corner_color_rgb(&self, corner: MeshCorner, red: f64, green: f64, blue: f64){
+        unsafe{
+            ffi::cairo_mesh_pattern_set_corner_color_rgb(self.pointer, corner as c_uint, red, green, blue)
+        }
+        self.ensure_status();
+    }
 
-    //pub fn cairo_mesh_pattern_get_control_point(pattern: *cairo_pattern_t, patch_num: c_uint, point_num: c_uint, x: *c_double, y: *c_double) -> Status;
+    pub fn set_corner_color_rgba(&self, corner: MeshCorner, red: f64, green: f64, blue: f64, alpha: f64){
+        unsafe{
+            ffi::cairo_mesh_pattern_set_corner_color_rgba(self.pointer, corner as c_uint, red, green, blue, alpha)
+        }
+        self.ensure_status();
+    }
 
-    //pub fn cairo_mesh_pattern_get_corner_color_rgba(pattern: *cairo_pattern_t, patch_num: c_uint, corner_num: c_uint, red: *c_double, green: *c_double, blue: *c_double, alpha: *c_double) -> Status;
+    pub fn get_corner_color_rgba(&self, patch_num: uint, corner: MeshCorner) -> (f64, f64, f64, f64){
+        let red: c_double = 0.0;
+        let green: c_double = 0.0;
+        let blue: c_double = 0.0;
+        let alpha: c_double = 0.0;
+
+        let status = unsafe{
+            ffi::cairo_mesh_pattern_get_corner_color_rgba(self.pointer, patch_num as c_uint, corner as c_uint, &red, &green, &blue, &alpha)
+        };
+        status.ensure_valid();
+
+        (red, green, blue, alpha)
+    }
+
+    pub fn get_patch_count(&self) -> uint{
+        let count: c_uint = 0;
+        unsafe{
+            ffi::cairo_mesh_pattern_get_patch_count(self.pointer, &count).ensure_valid();
+        }
+        count as uint
+    }
+
+    pub fn get_path(&self, patch_num: uint) -> Path{
+        let path: Path = Path::wrap(unsafe{
+            ffi::cairo_mesh_pattern_get_path(self.pointer, patch_num as c_uint)
+        });
+        path.ensure_status();
+        path
+    }
 }
