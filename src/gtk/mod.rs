@@ -79,6 +79,7 @@ pub use self::widgets::{
     Stack,
     StackSwitcher,
     Revealer,
+    Overlay,
     Widget // FIXME @jeremyletang
 };
 

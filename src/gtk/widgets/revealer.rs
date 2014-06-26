@@ -77,4 +77,4 @@ impl_drop!(Revealer)
 impl_TraitWidget!(Revealer)
 
 impl traits::Container for Revealer {}
-impl traits::_Box for Revealer {}
+impl traits::Bin for Revealer {}

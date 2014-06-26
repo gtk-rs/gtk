@@ -225,3 +225,7 @@ pub fn GTK_STACK_SWITCHER(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkStackSwitcher
 pub fn GTK_REVEALER(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkRevealer {
     unsafe{ ffi::cast_GtkRevealer(widget) }
 }
+
+pub fn GTK_OVERLAY(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkOverlay {
+    unsafe{ ffi::cast_GtkOverlay(widget) }
+}
