@@ -1,17 +1,15 @@
 #![allow(non_camel_case_types)]
 
 use cairo::context::Rectangle;
-use libc::{c_int, c_uint, c_char, c_double};
+use libc::{c_int, c_uint, c_char, c_double, c_ulong};
 use cairo::enums::{
     Status,
     Antialias,
     LineCap,
     LineJoin,
     FillRule,
-    Glyph,
     FontSlant,
     FontWeight,
-    TextCluster,
     TextClusterFlags,
     FontType,
     SubpixelOrder,
@@ -22,6 +20,13 @@ use cairo::enums::{
     PathDataType,
     PatternType
 };
+use cairo::fonts::{
+    FontExtents,
+    Glyph,
+    TextCluster,
+    TextExtents
+};
+use cairo::matrices::Matrix;
 use cairo;
 
 pub struct cairo_t;
@@ -64,18 +69,7 @@ pub struct cairo_region_t;
 pub struct cairo_font_face_t;
 pub struct cairo_scaled_font_t;
 pub struct cairo_font_options_t;
-pub struct cairo_matrix_t;
-
-pub struct cairo_font_extents_t{
-    ascent: c_double,
-    descent: c_double,
-    height: c_double,
-    max_x_advance: c_double,
-    max_y_advance: c_double,
-}
-
 pub struct cairo_extend_t;
-pub struct cairo_text_extents_t;
 pub struct cairo_filter_t;
 pub struct cairo_region_overlap_t;
 
@@ -258,11 +252,11 @@ extern "C" {
 
     pub fn cairo_rotate(cr: *cairo_t, angle: c_double);
 
-    pub fn cairo_transform(cr: *cairo_t, matrix: *cairo_matrix_t);
+    pub fn cairo_transform(cr: *cairo_t, matrix: *Matrix);
 
-    pub fn cairo_set_matrix(cr: *cairo_t, matrix: *cairo_matrix_t);
+    pub fn cairo_set_matrix(cr: *cairo_t, matrix: *Matrix);
 
-    pub fn cairo_get_matrix(cr: *cairo_t, matrix: *cairo_matrix_t);
+    pub fn cairo_get_matrix(cr: *cairo_t, matrix: *Matrix);
 
     pub fn cairo_identity_matrix(cr: *cairo_t);
 
@@ -343,9 +337,9 @@ extern "C" {
 
     pub fn cairo_pattern_get_filter(pattern: *cairo_pattern_t) -> Filter;
 
-    pub fn cairo_pattern_set_matrix(pattern: *cairo_pattern_t, matrix: *cairo_matrix_t);
+    pub fn cairo_pattern_set_matrix(pattern: *cairo_pattern_t, matrix: *Matrix);
 
-    pub fn cairo_pattern_get_matrix(pattern: *cairo_pattern_t, matrix: *cairo_matrix_t);
+    pub fn cairo_pattern_get_matrix(pattern: *cairo_pattern_t, matrix: *Matrix);
 
     pub fn cairo_pattern_get_type(pattern: *cairo_pattern_t) -> PatternType;
 
@@ -408,13 +402,13 @@ extern "C" {
 
     //text
 
-    pub fn cairo_select_font_face(cr: *cairo_t, family: *char, slant: FontSlant, weight: FontWeight);
+    pub fn cairo_select_font_face(cr: *cairo_t, family: *c_char, slant: FontSlant, weight: FontWeight);
 
     pub fn cairo_set_font_size(cr: *cairo_t, size: c_double);
 
-    pub fn cairo_set_font_matrix(cr: *cairo_t, matrix: *cairo_matrix_t);
+    pub fn cairo_set_font_matrix(cr: *cairo_t, matrix: *Matrix);
 
-    pub fn cairo_get_font_matrix(cr: *cairo_t, matrix: *cairo_matrix_t);
+    pub fn cairo_get_font_matrix(cr: *cairo_t, matrix: *Matrix);
 
     pub fn cairo_set_font_options(cr: *cairo_t, options: *cairo_font_options_t);
 
@@ -428,19 +422,19 @@ extern "C" {
 
     pub fn cairo_get_scaled_font(cr: *cairo_t) -> *cairo_scaled_font_t;
 
-    pub fn cairo_show_text(cr: *cairo_t, utf8: *char);
+    pub fn cairo_show_text(cr: *cairo_t, utf8: *c_char);
 
     pub fn cairo_show_glyphs(cr: *cairo_t, glyphs: *Glyph, num_glyphs: c_int);
 
-    pub fn cairo_show_text_glyphs(cr: *cairo_t, utf8: *char, utf8_len: c_int, glyphs: *Glyph, num_glyphs: c_int, clusters: *TextCluster, num_clusters: c_int, cluster_flags: TextClusterFlags);
+    pub fn cairo_show_text_glyphs(cr: *cairo_t, utf8: *c_char, utf8_len: c_int, glyphs: *Glyph, num_glyphs: c_int, clusters: *TextCluster, num_clusters: c_int, cluster_flags: TextClusterFlags);
 
-    pub fn cairo_font_extents(cr: *cairo_t, extents: *cairo_font_extents_t);
+    pub fn cairo_font_extents(cr: *cairo_t, extents: *FontExtents);
 
-    pub fn cairo_text_extents(cr: *cairo_t, utf8: *char, extents: *cairo_text_extents_t);
+    pub fn cairo_text_extents(cr: *cairo_t, utf8: *c_char, extents: *TextExtents);
 
-    pub fn cairo_glyph_extents(cr: *cairo_t, glyphs: *Glyph, num_glyphs: c_int, extents: *cairo_text_extents_t);
+    pub fn cairo_glyph_extents(cr: *cairo_t, glyphs: *Glyph, num_glyphs: c_int, extents: *TextExtents);
 
-    pub fn cairo_toy_font_face_create(family: *char, slant: FontSlant, weight: FontWeight) -> *cairo_font_face_t;
+    pub fn cairo_toy_font_face_create(family: *c_char, slant: FontSlant, weight: FontWeight) -> *cairo_font_face_t;
 
     pub fn cairo_toy_font_face_get_family(font_face: *cairo_font_face_t) -> *c_char;
 
@@ -510,7 +504,7 @@ extern "C" {
 
 
     //CAIRO SCALED FONT
-    pub fn cairo_scaled_font_create(font_face: *cairo_font_face_t, font_matrix: *cairo_matrix_t, ctm: *cairo_matrix_t, options: *cairo_font_options_t) -> *cairo_scaled_font_t;
+    pub fn cairo_scaled_font_create(font_face: *cairo_font_face_t, font_matrix: *Matrix, ctm: *Matrix, options: *cairo_font_options_t) -> *cairo_scaled_font_t;
 
     pub fn cairo_scaled_font_reference(scaled_font: *cairo_scaled_font_t) -> *cairo_scaled_font_t;
 
@@ -518,29 +512,29 @@ extern "C" {
 
     pub fn cairo_scaled_font_status(scaled_font: *cairo_scaled_font_t) -> Status;
 
-    //                    cairo_font_extents_t;
-    pub fn cairo_scaled_font_extents(scaled_font: *cairo_scaled_font_t, extents: *cairo_font_extents_t);
+    //                    FontExtents;
+    pub fn cairo_scaled_font_extents(scaled_font: *cairo_scaled_font_t, extents: *FontExtents);
 
-    //                    cairo_text_extents_t;
-    pub fn cairo_scaled_font_text_extents(scaled_font: *cairo_scaled_font_t, utf8: *char, extents: *cairo_text_extents_t);
+    //                    TextExtents;
+    pub fn cairo_scaled_font_text_extents(scaled_font: *cairo_scaled_font_t, utf8: *c_char, extents: *TextExtents);
 
-    pub fn cairo_scaled_font_glyph_extents(scaled_font: *cairo_scaled_font_t, glyphs: *Glyph, num_glyphs: c_int, extents: *cairo_text_extents_t);
+    pub fn cairo_scaled_font_glyph_extents(scaled_font: *cairo_scaled_font_t, glyphs: *Glyph, num_glyphs: c_int, extents: *TextExtents);
 
-    pub fn cairo_scaled_font_text_to_glyphs(scaled_font: *cairo_scaled_font_t, x: c_double, y: c_double, utf8: *char, utf8_len: c_int, glyphs: **Glyph, num_glyphs: *c_int, clusters: **TextCluster, num_clusters: *c_int, cluster_flags: *TextClusterFlags) -> Status;
+    pub fn cairo_scaled_font_text_to_glyphs(scaled_font: *cairo_scaled_font_t, x: c_double, y: c_double, utf8: *c_char, utf8_len: c_int, glyphs: **Glyph, num_glyphs: *c_int, clusters: **TextCluster, num_clusters: *c_int, cluster_flags: *TextClusterFlags) -> Status;
 
     pub fn cairo_scaled_font_get_font_face(scaled_font: *cairo_scaled_font_t) -> *cairo_font_face_t;
 
     pub fn cairo_scaled_font_get_font_options(scaled_font: *cairo_scaled_font_t, options: *cairo_font_options_t);
 
-    pub fn cairo_scaled_font_get_font_matrix(scaled_font: *cairo_scaled_font_t, font_matrix: *cairo_matrix_t);
+    pub fn cairo_scaled_font_get_font_matrix(scaled_font: *cairo_scaled_font_t, font_matrix: *Matrix);
 
-    pub fn cairo_scaled_font_get_ctm(scaled_font: *cairo_scaled_font_t, ctm: *cairo_matrix_t);
+    pub fn cairo_scaled_font_get_ctm(scaled_font: *cairo_scaled_font_t, ctm: *Matrix);
 
-    pub fn cairo_scaled_font_get_scale_matrix(scaled_font: *cairo_scaled_font_t, scale_matrix: *cairo_matrix_t);
+    pub fn cairo_scaled_font_get_scale_matrix(scaled_font: *cairo_scaled_font_t, scale_matrix: *Matrix);
 
     pub fn cairo_scaled_font_get_type(scaled_font: *cairo_scaled_font_t) -> FontType;
 
-    pub fn cairo_scaled_font_get_reference_count(font_face: *cairo_font_face_t) -> c_uint;
+    pub fn cairo_scaled_font_get_reference_count(font_face: *cairo_scaled_font_t) -> c_uint;
 
     //pub fn cairo_scaled_font_set_user_data(scaled_font: *cairo_scaled_font_t, key: *cairo_user_data_key_t, user_data: *void, destroy: cairo_destroy_func_t) -> Status;
 
@@ -559,7 +553,8 @@ extern "C" {
 
     pub fn cairo_font_options_merge(options: *cairo_font_options_t, other: *cairo_font_options_t);
 
-    //unsigned long       cairo_font_options_hash             (options: *cairo_font_options_t);
+    pub fn cairo_font_options_hash(options: *cairo_font_options_t) -> c_ulong;
+
     pub fn cairo_font_options_equal(options: *cairo_font_options_t, other: *cairo_font_options_t) -> cairo_bool_t;
 
     pub fn cairo_font_options_set_antialias(options: *cairo_font_options_t, antialias: Antialias);
@@ -577,5 +572,25 @@ extern "C" {
     pub fn cairo_font_options_set_hint_metrics(options: *cairo_font_options_t, hint_metrics: HintMetrics);
 
     pub fn cairo_font_options_get_hint_metrics(options: *cairo_font_options_t) -> HintMetrics;
+
+    // CAIRO MATRIX
+
+    pub fn cairo_matrix_multiply(matrix: *mut Matrix, left: *Matrix, right: *Matrix);
+
+    pub fn cairo_matrix_init(matrix: *mut Matrix, xx: f64, yx: f64, xy: f64, yy: f64, x0: f64, y0: f64);
+
+    pub fn cairo_matrix_init_identity(matrix: *mut Matrix);
+
+    pub fn cairo_matrix_translate(matrix: *mut Matrix, tx: f64, ty: f64);
+
+    pub fn cairo_matrix_scale(matrix: *mut Matrix, sx: f64, sy: f64);
+
+    pub fn cairo_matrix_rotate(matrix: *mut Matrix, angle: f64);
+
+    pub fn cairo_matrix_invert(matrix: *mut Matrix) -> Status;
+
+    pub fn cairo_matrix_transform_distance(matrix: *Matrix, dx: *f64, dy: *f64);
+
+    pub fn cairo_matrix_transform_point(matrix: *Matrix, x: *f64, y: *f64);
 
 }

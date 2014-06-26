@@ -182,12 +182,55 @@ pub enum PatternType{
     PatternTypeRasterSource
 }
 
-pub enum Glyph {}
-pub enum FontSlant {}
-pub enum FontWeight {}
-pub enum TextCluster {}
-pub enum TextClusterFlags {}
-pub enum FontType {}
-pub enum SubpixelOrder {}
-pub enum HintStyle {}
-pub enum HintMetrics {}
+#[repr(C)]
+pub enum FontSlant {
+    FontSlantNormal,
+    FontSlantItalic,
+    FontSlantOblique
+}
+
+#[repr(C)]
+pub enum FontWeight {
+    FontWeightNormal,
+    FontWeightBold
+}
+
+#[repr(C)]
+pub enum TextClusterFlags {
+    TextClusterFlagNone     = 0x00000000,
+    TextClusterFlagBackward = 0x00000001
+}
+
+#[repr(C)]
+pub enum FontType {
+    FontTypeToy,
+    FontTypeFt,
+    FontTypeWin32,
+    FontTypeQuartz,
+    FontTypeUser
+}
+
+#[repr(C)]
+pub enum SubpixelOrder {
+    SubpixelOrderDefault,
+    SubpixelOrderRgb,
+    SubpixelOrderBgr,
+    SubpixelOrderVrgb,
+    SubpixelOrderVbgr
+}
+
+#[repr(C)]
+pub enum HintStyle {
+    HintStyleDefault,
+    HintStyleNone,
+    HintStyleSlight,
+    HintStyleMedium,
+    HintStyleFull
+}
+
+#[repr(C)]
+pub enum HintMetrics {
+    HintMetricsDefault,
+    HintMetricsOff,
+    HintMetricsOn
+}

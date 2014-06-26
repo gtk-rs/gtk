@@ -9,6 +9,12 @@ extern crate collections;
 use std::f64::consts::PI_2;
 use rgtk::*;
 use rgtk::gtk::signals;
+use std::str;
+
+use rgtk::cairo::enums::{
+    FontSlantNormal,
+    FontWeightNormal
+};
 
 #[doc(hidden)]
 #[cfg(target_os="macos")]
@@ -39,7 +45,20 @@ fn main() {
     drawing_area.connect(signals::Draw::new(|ctx|{
         println!("BeginDraw")
 
-        let width = drawing_area.get_allocated_width();
+        ctx.select_font_face("Ubuntu Sans", FontSlantNormal, FontWeightNormal);
+
+        ctx.set_font_size(16.0);
+
+        let alphabet: &str = "AbCdEfGhIjKlMnOpQrStUvWxYz";
+        for letter in alphabet.chars() {
+            let letterstr = str::from_char(letter);
+            let extents = ctx.text_extents(letterstr.clone());
+            ctx.move_to(0.0 + 0.5 - extents.x_bearing - extents.width  / 2.0,
+                              0.5 - extents.y_bearing - extents.height / 2.0);
+            ctx.show_text(letterstr);
+        }
+
+        /*let width = drawing_area.get_allocated_width();
         let height = drawing_area.get_allocated_height();
 
         ctx.scale(width as f64, height as f64);
@@ -49,19 +68,19 @@ fn main() {
 
         ctx.set_line_width(0.05);
 
-        /* border */
+        // border
         ctx.set_source_rgb(0.3, 0.3, 0.3);
         ctx.rectangle(0.0, 0.0, 1.0, 1.0);
         ctx.stroke();
 
         ctx.set_line_width(0.03);
 
-        /* draw circle */
+        // draw circle
         ctx.arc(0.5, 0.5, 0.4, 0.0, PI_2);
         ctx.stroke();
 
 
-        /* mouth */
+        // mouth
         let mouth_top = 0.68;
         let mouth_width = 0.38;
 
@@ -84,6 +103,7 @@ fn main() {
 
         ctx.arc(0.5 + eye_dx, eye_y, 0.05, 0.0, PI_2);
         ctx.fill();
+        */
     }));
 
     window.set_default_size(500, 500);

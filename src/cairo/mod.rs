@@ -2,11 +2,13 @@ pub use self::context::{
     Context,
     Rectangle
 };
+
 pub use self::paths::{
     Path,
     PathSegments,
     PathSegment
 };
+
 pub use self::enums::{
     Status,
     Antialias,
@@ -37,10 +39,25 @@ pub use self::patterns::{
     MeshCorner3
 };
 
+pub use self::fonts::{
+    FontFace,
+    ScaledFont,
+    FontOptions,
+
+    Glyph,
+    FontExtents,
+    TextExtents,
+    TextCluster,
+};
+
+pub use self::matrices::Matrix;
+
 pub mod enums;
 pub mod ffi;
 
+mod fonts;
 mod context;
 mod paths;
 mod transformations;
 mod patterns;
+mod matrices;

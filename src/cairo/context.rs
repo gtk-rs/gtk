@@ -80,11 +80,12 @@ impl Context{
         }
     }
 
+    /*
     pub fn push_group_with_content(&self, content: Content){
         unsafe{
             ffi::cairo_push_group_with_content(self.pointer, content)
         }
-    }
+    }*/
 
     pub fn pop_group(&self) -> Box<Pattern>{
         unsafe{
