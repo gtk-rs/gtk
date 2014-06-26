@@ -79,6 +79,7 @@ pub use self::dialog_flags::DialogFlags;
 pub use self::file_chooser_action::FileChooserAction;
 pub use self::buttons_type::ButtonsType;
 pub use self::stack_transition_type::StackTransitionType;
+pub use self::revealer_transition_type::RevealerTransitionType;
 
 pub mod window_type{
     #[repr(C)]
@@ -1053,3 +1054,24 @@ pub mod stack_transition_type {
         OverUpDown
     }
 }
+
+/// Describe the possible transitions when the child of a GtkRevealer widget is shown or hidden.
+pub mod revealer_transition_type {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum RevealerTransitionType {
+        /// No transition
+        None,
+        /// Fade in
+        CrossFade,
+        /// Slide in from the left
+        SlideRight,
+        /// Slide in from the right
+        SlideLeft,
+        /// Slide in from the bottom
+        SlideUp,
+        /// Slide in from the top
+        SlideDown
+    }
+}
+

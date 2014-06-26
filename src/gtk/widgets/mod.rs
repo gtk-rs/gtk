@@ -62,6 +62,7 @@ pub use self::colorchooserdialog::ColorChooserDialog;
 pub use self::notebook::NoteBook;
 pub use self::stack::Stack;
 pub use self::stack_switcher::StackSwitcher;
+pub use self::revealer::Revealer;
 pub use self::widget::Widget;
 
 pub mod window;
@@ -114,3 +115,4 @@ pub mod messagedialog;
 pub mod notebook;
 pub mod stack;
 pub mod stack_switcher;
+pub mod revealer;
