@@ -1,5 +1,6 @@
 #![allow(non_camel_case_types)]
 
+use cairo::context::Rectangle;
 use libc::{c_int, c_uint, c_char, c_double};
 use cairo::enums::{
     Status,
@@ -18,7 +19,8 @@ use cairo::enums::{
     HintMetrics,
     Extend,
     Filter,
-    PathDataType
+    PathDataType,
+    PatternType
 };
 use cairo;
 
@@ -31,7 +33,11 @@ pub struct cairo_destroy_func_t;
 pub struct cairo_line_join_t;
 pub struct cairo_line_cap_t;
 pub struct cairo_operator_t;
-pub struct cairo_rectangle_list_t;
+pub struct cairo_rectangle_list_t{
+    pub status: Status,
+    pub rectangles: *mut Rectangle,
+    pub num_rectangles: c_int
+}
 pub struct cairo_rectangle_int_t;
 pub struct cairo_content_t;
 pub struct cairo_path_t{
@@ -72,7 +78,6 @@ pub struct cairo_extend_t;
 pub struct cairo_text_extents_t;
 pub struct cairo_filter_t;
 pub struct cairo_region_overlap_t;
-pub struct cairo_pattern_type_t;
 
 #[link(name = "cairo")]
 extern "C" {
@@ -342,8 +347,7 @@ extern "C" {
 
     pub fn cairo_pattern_get_matrix(pattern: *cairo_pattern_t, matrix: *cairo_matrix_t);
 
-    //enum                cairo_pattern_type_t;
-    pub fn cairo_pattern_get_type(pattern: *cairo_pattern_t) -> cairo_pattern_type_t;
+    pub fn cairo_pattern_get_type(pattern: *cairo_pattern_t) -> PatternType;
 
     pub fn cairo_pattern_get_reference_count(pattern: *cairo_pattern_t) -> c_uint;
 

@@ -172,6 +172,16 @@ pub enum Filter{
     FilterGaussian
 }
 
+#[repr(C)]
+pub enum PatternType{
+    PatternTypeSolid,
+    PatternTypeSurface,
+    PatternTypeLinearGradient,
+    PatternTypeRadialGradient,
+    PatternTypeMesh,
+    PatternTypeRasterSource
+}
+
 pub enum Glyph {}
 pub enum FontSlant {}
 pub enum FontWeight {}

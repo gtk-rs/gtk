@@ -1,6 +1,6 @@
 
-
 use std::mem::transmute;
+use std::c_vec::CVec;
 
 use cairo::ffi;
 use cairo::ffi::{
@@ -8,9 +8,35 @@ use cairo::ffi::{
     cairo_surface_t
 };
 use cairo::enums::{Status, Antialias, LineCap, LineJoin, FillRule};
+use cairo::patterns::{wrap_pattern, Pattern};
+
+pub struct Rectangle{
+    x: f64,
+    y: f64,
+    width: f64,
+    height: f64,
+}
 
 pub struct Context{
     pub pointer: *cairo_t
+}
+
+impl Clone for Context{
+    fn clone(&self) -> Context{
+        Context {
+            pointer: unsafe{
+                ffi::cairo_reference(self.pointer)
+            }
+        }
+    }
+}
+
+impl Drop for Context{
+    fn drop(&mut self){
+        unsafe{
+            ffi::cairo_destroy(self.pointer)
+        }
+    }
 }
 
 impl Context{
@@ -18,17 +44,13 @@ impl Context{
         self.status().ensure_valid();
     }
 
-    pub fn new (target: *cairo_surface_t) -> Context {
+    pub fn new(target: *cairo_surface_t) -> Context {
         unsafe {
             Context {
                 pointer: ffi::cairo_create(target)
             }
         }
     }
-
-    //fn ffi::cairo_reference (cr: *cairo_t) -> *cairo_t;
-
-    //fn ffi::cairo_destroy (cr: *cairo_t);
 
     pub fn status (&self) -> Status {
         unsafe {
@@ -58,15 +80,17 @@ impl Context{
         }
     }
 
-    /*
     pub fn push_group_with_content(&self, content: Content){
         unsafe{
             ffi::cairo_push_group_with_content(self.pointer, content)
         }
     }
-    */
 
-    //fn ffi::cairo_pop_group (cr: *cairo_t) -> *cairo_pattern_t;
+    pub fn pop_group(&self) -> Box<Pattern>{
+        unsafe{
+            wrap_pattern(ffi::cairo_pop_group(self.pointer))
+        }
+    }
 
     pub fn pop_group_to_source(&self){
         unsafe{
@@ -88,11 +112,20 @@ impl Context{
         }
     }
 
-    //fn ffi::cairo_set_source (cr: *cairo_t, source: *cairo_pattern_t);
+    pub fn set_source(&self, source: &Pattern){
+        unsafe{
+            ffi::cairo_set_source(self.pointer, source.get_ptr());
+        }
+        self.ensure_status();
+    }
+
+    pub fn get_source(&self) -> Box<Pattern>{
+        unsafe{
+            wrap_pattern(ffi::cairo_get_source(self.pointer))
+        }
+    }
 
     //fn ffi::cairo_set_source_surface (cr: *cairo_t, surface: *cairo_surface_t, x: c_double, y: c_double);
-
-    //fn ffi::cairo_get_source (cr: *cairo_t) -> *cairo_pattern_t;
 
     pub fn set_antialias(&self, antialias : Antialias){
         unsafe{
@@ -259,10 +292,17 @@ impl Context{
         self.ensure_status()
     }
 
+    pub fn copy_clip_rectangle_list(&self) -> CVec<Rectangle>{
+        unsafe{
+            let rectangle_list = ffi::cairo_copy_clip_rectangle_list(self.pointer);
 
-    //fn ffi::cairo_rectangle_list_destroy (rectangle_list: *cairo_rectangle_list_t);
+            (*rectangle_list).status.ensure_valid();
 
-    //fn ffi::cairo_copy_clip_rectangle_list (cr: *cairo_t) -> *cairo_rectangle_list_t;
+            CVec::new_with_dtor((*rectangle_list).rectangles, (*rectangle_list).num_rectangles as uint, proc(){
+                ffi::cairo_rectangle_list_destroy(rectangle_list)
+            })
+        }
+    }
 
     pub fn fill(&self){
         unsafe{
@@ -295,7 +335,11 @@ impl Context{
         }
     }
 
-    //fn ffi::cairo_mask (cr: *cairo_t, pattern: *cairo_pattern_t);
+    pub fn mask(&self, pattern: &Pattern){
+        unsafe{
+            ffi::cairo_mask(self.pointer, pattern.get_ptr())
+        }
+    }
 
     //fn ffi::cairo_mask_surface (cr: *cairo_t, surface: *cairo_surface_t, surface_x: c_double, surface_y: c_double);
 

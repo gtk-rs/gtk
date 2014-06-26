@@ -1,4 +1,7 @@
-pub use self::context::Context;
+pub use self::context::{
+    Context,
+    Rectangle
+};
 pub use self::paths::{
     Path,
     PathSegments,

@@ -4,7 +4,14 @@ use std::mem::transmute;
 use cairo::enums::{
     Extend,
     Filter,
-    Status
+    Status,
+
+    PatternTypeSolid,
+    PatternTypeSurface,
+    PatternTypeLinearGradient,
+    PatternTypeRadialGradient,
+    PatternTypeMesh,
+    PatternTypeRasterSource,
 };
 use cairo::ffi;
 use cairo::ffi::{
@@ -16,6 +23,21 @@ use cairo::{
 
 //Quite some changes from the C api but all suggested by the cairo devs.
 //See http://cairographics.org/manual/bindings-patterns.html for more info
+
+
+//TODO Does anyone know a way to do this without dynamic dispatch -- @mthq
+pub fn wrap_pattern(ptr: *cairo_pattern_t) -> Box<Pattern>{
+    let pattern_type = unsafe{ ffi::cairo_pattern_get_type(ptr) };
+
+    match pattern_type{
+        PatternTypeSolid            => box SolidPattern::wrap(ptr)   as Box<Pattern>,
+        PatternTypeSurface          => box SurfacePattern::wrap(ptr) as Box<Pattern>,
+        PatternTypeLinearGradient   => box LinearGradient::wrap(ptr) as Box<Pattern>,
+        PatternTypeRadialGradient   => box RadialGradient::wrap(ptr) as Box<Pattern>,
+        PatternTypeMesh             => box Mesh::wrap(ptr)           as Box<Pattern>,
+        PatternTypeRasterSource     => fail!("Not implemented")
+    }
+}
 
 pub trait Pattern{
     fn get_ptr(&self) -> *cairo_pattern_t;
