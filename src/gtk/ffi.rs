@@ -79,6 +79,8 @@ pub struct C_GtkStack;
 pub struct C_GtkStackSwitcher;
 pub struct C_GtkRevealer;
 pub struct C_GtkOverlay;
+pub struct C_GtkScrollable;
+pub struct C_GtkLayout;
 
 pub struct C_GtkToolItem;
 pub struct C_GtkToolButton;
@@ -1100,6 +1102,28 @@ extern "C" {
     pub fn gtk_overlay_add_overlay (overlay: *C_GtkOverlay, widget: *C_GtkWidget);
 
     //=========================================================================
+    // GtkScrollable                                                         OK
+    //=========================================================================
+    pub fn gtk_scrollable_get_hadjustment        (scrollable: *C_GtkScrollable) -> *C_GtkAdjustment;
+    pub fn gtk_scrollable_set_hadjustment        (scrollable: *C_GtkScrollable, hadjustment: *C_GtkAdjustment);
+    pub fn gtk_scrollable_get_vadjustment        (scrollable: *C_GtkScrollable) -> *C_GtkAdjustment;
+    pub fn gtk_scrollable_set_vadjustment        (scrollable: *C_GtkScrollable, vadjustment: *C_GtkAdjustment);
+    pub fn gtk_scrollable_get_hscroll_policy     (scrollable: *C_GtkScrollable) -> gtk::ScrollablePolicy;
+    pub fn gtk_scrollable_set_hscroll_policy     (scrollable: *C_GtkScrollable, policy: gtk::ScrollablePolicy);
+    pub fn gtk_scrollable_get_vscroll_policy     (scrollable: *C_GtkScrollable) -> gtk::ScrollablePolicy;
+    pub fn gtk_scrollable_set_vscroll_policy     (scrollable: *C_GtkScrollable, policy: gtk::ScrollablePolicy);
+
+    //=========================================================================
+    // GtkLayout
+    //=========================================================================
+    pub fn gtk_layout_new             (hadjustment: *C_GtkAdjustment, vadjustment: *C_GtkAdjustment) -> *C_GtkWidget;
+    pub fn gtk_layout_put             (layout: *C_GtkLayout, child_widget: *C_GtkWidget, x: c_int, y: c_int);
+    pub fn gtk_layout_move            (layout: *C_GtkLayout, child_widget: *C_GtkWidget, x: c_int, y: c_int);
+    pub fn gtk_layout_set_size        (layout: *C_GtkLayout, width: c_uint, height: c_uint);
+    pub fn gtk_layout_get_size        (layout: *C_GtkLayout, width: *c_uint, height: *c_uint);
+    // pub fn gtk_layout_get_bin_window  (layout: *C_GtkLayout) -> *C_GdkWindow;
+
+    //=========================================================================
     // Glue fixe code
     //=========================================================================
     pub fn glue_signal_connect(g_object: *C_GtkWidget,
@@ -1169,4 +1193,6 @@ extern "C" {
     pub fn cast_GtkStackSwitcher(widget: *C_GtkWidget) -> *C_GtkStackSwitcher;
     pub fn cast_GtkRevealer(widget: *C_GtkWidget) -> *C_GtkRevealer;
     pub fn cast_GtkOverlay(widget: *C_GtkWidget) -> *C_GtkOverlay;
+    pub fn cast_GtkScrollable(widget: *C_GtkWidget) -> *C_GtkScrollable;
+    pub fn cast_GtkLayout(widget: *C_GtkWidget) -> *C_GtkLayout;
 }

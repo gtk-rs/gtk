@@ -64,6 +64,7 @@ pub use self::stack::Stack;
 pub use self::stack_switcher::StackSwitcher;
 pub use self::revealer::Revealer;
 pub use self::overlay::Overlay;
+pub use self::layout::Layout;
 pub use self::widget::Widget;
 
 pub mod window;
@@ -118,3 +119,4 @@ pub mod stack;
 pub mod stack_switcher;
 pub mod revealer;
 pub mod overlay;
+pub mod layout;
