@@ -82,6 +82,8 @@ pub use self::widgets::{
     Overlay,
     Layout,
     HeaderBar,
+    FlowBox,
+    FlowBoxChild,
     Widget // FIXME @jeremyletang
 };
 

@@ -82,6 +82,8 @@ pub struct C_GtkOverlay;
 pub struct C_GtkScrollable;
 pub struct C_GtkLayout;
 pub struct C_GtkHeaderBar;
+pub struct C_GtkFlowBox;
+pub struct C_GtkFlowBoxChild;
 
 pub struct C_GtkToolItem;
 pub struct C_GtkToolButton;
@@ -537,9 +539,9 @@ extern "C" {
     pub fn gtk_fixed_move                      (fixed: *C_GtkFixed, widget: *C_GtkWidget, x: c_int, y: c_int) -> ();
 
     //=========================================================================
-    // GtkBin
+    // GtkBin                                                                OK
     //=========================================================================
-    // pub fn gtk_bin_get_child                   (bin: *C_GtkBin) -> *C_GtkWidget;
+    pub fn gtk_bin_get_child                   (bin: *C_GtkBin) -> *C_GtkWidget;
 
     //=========================================================================
     // GtkSeparator                                                          OK
@@ -1140,6 +1142,43 @@ extern "C" {
     pub fn gtk_header_bar_set_show_close_button (bar: *C_GtkHeaderBar, setting: Gboolean);
 
     //=========================================================================
+    // GtkFlowBox                                                            OK
+    //=========================================================================
+    pub fn gtk_flow_box_new                       () -> *C_GtkWidget;
+    pub fn gtk_flow_box_set_homogeneous           (_box: *C_GtkFlowBox, homogeneous: Gboolean);
+    pub fn gtk_flow_box_get_homogeneous           (_box: *C_GtkFlowBox) -> Gboolean;
+    pub fn gtk_flow_box_set_row_spacing           (_box: *C_GtkFlowBox, spacing: c_uint);
+    pub fn gtk_flow_box_get_row_spacing           (_box: *C_GtkFlowBox) -> c_uint;
+    pub fn gtk_flow_box_set_column_spacing        (_box: *C_GtkFlowBox, spacing: c_uint);
+    pub fn gtk_flow_box_get_column_spacing        (_box: *C_GtkFlowBox) -> c_uint;
+    pub fn gtk_flow_box_set_min_children_per_line (_box: *C_GtkFlowBox, n_children: c_uint);
+    pub fn gtk_flow_box_get_min_children_per_line (_box: *C_GtkFlowBox) -> c_uint;
+    pub fn gtk_flow_box_set_max_children_per_line (_box: *C_GtkFlowBox, n_children: c_uint);
+    pub fn gtk_flow_box_get_max_children_per_line (_box: *C_GtkFlowBox) -> c_uint;
+    pub fn gtk_flow_box_set_activate_on_single_click (_box: *C_GtkFlowBox, single: Gboolean);
+    pub fn gtk_flow_box_get_activate_on_single_click (_box: *C_GtkFlowBox) -> Gboolean;
+    pub fn gtk_flow_box_insert                       (_box: *C_GtkFlowBox, widget: *C_GtkWidget, position: c_int);
+    pub fn gtk_flow_box_get_child_at_index           (_box: *C_GtkFlowBox, idx: c_int) -> *C_GtkFlowBoxChild;
+    pub fn gtk_flow_box_select_child                 (_box: *C_GtkFlowBox, child: *C_GtkFlowBoxChild);
+    pub fn gtk_flow_box_unselect_child               (_box: *C_GtkFlowBox, child: *C_GtkFlowBoxChild);
+    pub fn gtk_flow_box_select_all                   (_box: *C_GtkFlowBox);
+    pub fn gtk_flow_box_unselect_all                 (_box: *C_GtkFlowBox);
+    pub fn gtk_flow_box_set_selection_mode           (_box: *C_GtkFlowBox, mode: gtk::SelectionMode);
+    pub fn gtk_flow_box_get_selection_mode           (_box: *C_GtkFlowBox) -> gtk::SelectionMode;
+    pub fn gtk_flow_box_set_hadjustment              (_box: *C_GtkFlowBox, adjustment: *C_GtkAdjustment);
+    pub fn gtk_flow_box_set_vadjustment              (_box: *C_GtkFlowBox, adjustment: *C_GtkAdjustment);
+    // void                  gtk_flow_box_selected_foreach             (_box: *C_GtkFlowBox, GtkFlowBoxForeachFunc func, gpointer           data);
+    // GList                *gtk_flow_box_get_selected_children        (_box: *C_GtkFlowBox);
+
+    //=========================================================================
+    // GtkFlowBoxChild                                                       OK
+    //=========================================================================
+    pub fn gtk_flow_box_child_new () -> *C_GtkWidget;
+    pub fn gtk_flow_box_child_get_index (child: *C_GtkFlowBoxChild) -> c_int;
+    pub fn gtk_flow_box_child_is_selected (child: *C_GtkFlowBoxChild) -> Gboolean;
+    pub fn gtk_flow_box_child_changed (child: *C_GtkFlowBoxChild);
+
+    //=========================================================================
     // Glue fixe code
     //=========================================================================
     pub fn glue_signal_connect(g_object: *C_GtkWidget,
@@ -1212,4 +1251,6 @@ extern "C" {
     pub fn cast_GtkScrollable(widget: *C_GtkWidget) -> *C_GtkScrollable;
     pub fn cast_GtkLayout(widget: *C_GtkWidget) -> *C_GtkLayout;
     pub fn cast_GtkHeaderBar(widget: *C_GtkWidget) -> *C_GtkHeaderBar;
+    pub fn cast_GtkFlowBox(widget: *C_GtkWidget) -> *C_GtkFlowBox;
+    pub fn cast_GtkFlowBoxChild(widget: *C_GtkWidget) -> *C_GtkFlowBoxChild;
 }

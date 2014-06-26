@@ -13,12 +13,19 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::traits::{Widget, Container};
+use gtk::cast::GTK_BIN;
+use gtk::traits;
+use gtk::ffi;
 
-pub trait Bin: Widget + Container {
-    // fn get_child(&self) ->  {
-
-    // }
+pub trait Bin: traits::Widget + traits::Container {
+    fn get_child<T: traits::Widget>(&self) ->  Option<T> {
+        let tmp_pointer = unsafe {
+            ffi::gtk_bin_get_child(GTK_BIN(self.get_widget()))
+        };
+        if tmp_pointer.is_null() {
+            None
+        } else {
+            Some(traits::Widget::wrap(tmp_pointer))
+        }
+    }
 }
-
-    // pub fn gtk_bin_get_child                   (bin: *C_GtkBin) -> *C_GtkWidget;
