@@ -72,6 +72,9 @@ fn main() {
         ctx.curve_to(0.50 - mouth_dx,        mouth_top + mouth_dy,
                      0.50 + mouth_dx,        mouth_top + mouth_dy,
                      0.50 + mouth_width/2.0, mouth_top);
+
+        println!("Extents: {}", ctx.fill_extents());
+
         ctx.stroke();
 
         let eye_y = 0.38;

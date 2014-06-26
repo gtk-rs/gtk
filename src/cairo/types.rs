@@ -17,7 +17,7 @@ pub struct cairo_rectangle_list_t;
 pub struct cairo_rectangle_int_t;
 pub struct cairo_content_t;
 pub struct cairo_path_t{
-	pub status: cairo::Status,
+    pub status: cairo::Status,
     pub data: *mut (c_double, c_double),
     pub num_data: c_int
 }
@@ -28,13 +28,13 @@ pub struct cairo_path_data_header{
 pub struct cairo_glyph_t;
 
 pub struct cairo_bool_t{
-	value: c_int
+    value: c_int
 }
 
 impl cairo_bool_t{
-	pub fn as_bool(&self) -> bool{
-		self.value != 0
-	}
+    pub fn as_bool(&self) -> bool{
+        self.value != 0
+    }
 }
 pub struct cairo_region_t;
 pub struct cairo_font_face_t;
