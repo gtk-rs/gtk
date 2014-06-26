@@ -75,6 +75,7 @@ pub struct C_GtkMessageDialog;
 pub struct C_GtkAppChooserDialog;
 pub struct C_GtkColorChooserDialog;
 pub struct C_GtkNotebook;
+pub struct C_GtkStack;
 
 pub struct C_GtkToolItem;
 pub struct C_GtkToolButton;
@@ -1003,7 +1004,7 @@ extern "C" {
     pub fn gtk_menu_tool_button_set_arrow_tooltip_markup(button: *C_GtkMenuToolButton, markup: *c_char) -> ();
 
     //=========================================================================
-    // GtkNoteBook
+    // GtkNoteBook                                                           OK
     //=========================================================================
     pub fn gtk_notebook_new               () -> *C_GtkWidget;
     pub fn gtk_notebook_append_page       (notebook: *C_GtkNotebook, child: *C_GtkWidget, tab_label: *C_GtkWidget) -> c_int;
@@ -1050,6 +1051,24 @@ extern "C" {
     pub fn gtk_notebook_get_action_widget (notebook: *C_GtkNotebook,pack_type: gtk::PackType) -> *C_GtkWidget;
     pub fn gtk_notebook_set_action_widget (notebook: *C_GtkNotebook, child: *C_GtkWidget, pack_type: gtk::PackType);
 
+
+    //=========================================================================
+    // GtkStack                                                              OK
+    //=========================================================================
+    pub fn gtk_stack_new                     () -> *C_GtkWidget;
+    pub fn gtk_stack_add_named               (stack: *C_GtkStack, child: *C_GtkWidget, name: *c_char);
+    pub fn gtk_stack_add_titled              (stack: *C_GtkStack, child: *C_GtkWidget, name: *c_char, title: *c_char);
+    pub fn gtk_stack_set_visible_child       (stack: *C_GtkStack, child: *C_GtkWidget);
+    pub fn gtk_stack_get_visible_child       (stack: *C_GtkStack) -> *C_GtkWidget;
+    pub fn gtk_stack_set_visible_child_name  (stack: *C_GtkStack, name: *c_char);
+    pub fn gtk_stack_get_visible_child_name  (stack: *C_GtkStack) -> *c_char;
+    pub fn gtk_stack_set_visible_child_full  (stack: *C_GtkStack, name: *c_char, transition: gtk::StackTransitionType);
+    pub fn gtk_stack_set_homogeneous         (stack: *C_GtkStack, homogeneous: Gboolean);
+    pub fn gtk_stack_get_homogeneous         (stack: *C_GtkStack) -> Gboolean;
+    pub fn gtk_stack_set_transition_duration (stack: *C_GtkStack, duration: c_uint);
+    pub fn gtk_stack_get_transition_duration (stack: *C_GtkStack) -> c_uint;
+    pub fn gtk_stack_set_transition_type     (stack: *C_GtkStack, transition: gtk::StackTransitionType);
+    pub fn gtk_stack_get_transition_type     (stack: *C_GtkStack) -> gtk::StackTransitionType;
 
 
     //=========================================================================
@@ -1118,4 +1137,5 @@ extern "C" {
     pub fn cast_GtkColorChooser(widget: *C_GtkWidget) -> *C_GtkColorChooser;
     pub fn cast_GtkAdjustment(widget: *C_GtkWidget) -> *C_GtkAdjustment;
     pub fn cast_GtkNotebook(widget: *C_GtkWidget) -> *C_GtkNotebook;
+    pub fn cast_GtkStack(widget: *C_GtkWidget) -> *C_GtkStack;
 }
