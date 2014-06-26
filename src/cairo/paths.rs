@@ -26,12 +26,12 @@ impl Path{
         }
     }
 
-    pub fn iter(&self) -> PathIterator {
+    pub fn iter(&self) -> PathSegments {
         unsafe{
             let length = (*self.pointer).num_data as uint;
             let data_ptr = (*self.pointer).data;
 
-            PathIterator {
+            PathSegments {
                 data: CVec::new(data_ptr, length),
                 i: 0,
                 num_data: length
@@ -56,13 +56,13 @@ pub enum PathSegment{
     ClosePath
 }
 
-pub struct PathIterator<'a>{
+pub struct PathSegments<'a>{
     data: CVec<(f64, f64)>,
     i: uint,
     num_data: uint
 }
 
-impl<'a> Iterator<PathSegment> for PathIterator<'a>{
+impl<'a> Iterator<PathSegment> for PathSegments<'a>{
     fn next(&mut self) -> Option<PathSegment>{
         let i = self.i;
 

@@ -33,7 +33,7 @@ mod platform {
 fn main() {
     gtk::init();
     let mut window = gtk::Window::new(gtk::window_type::TopLevel).unwrap();
-    let mut drawing_area = gtk::DrawingArea::new().unwrap();
+    let drawing_area = gtk::DrawingArea::new().unwrap();
 
     // Stolen from www.gtkforums.com/viewtopic.php?f=3&t=988&p=195286#p195286
     drawing_area.connect(signals::Draw::new(|ctx|{

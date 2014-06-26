@@ -1,30 +1,30 @@
 pub use self::context::Context;
 pub use self::paths::{
-	Path,
-	PathIterator,
-	PathSegment
+    Path,
+    PathSegments,
+    PathSegment
 };
 pub use self::enums::{
-	Status,
-	Antialias,
-	FillRule,
-	LineCap,
-	LineJoin,
-	Operator,
-	PathDataType
+    Status,
+    Antialias,
+    FillRule,
+    LineCap,
+    LineJoin,
+    Operator,
+    PathDataType
 };
 
 pub use self::patterns::{
-	//Traits
-	Pattern,
-	Gradient,
+    //Traits
+    Pattern,
+    Gradient,
 
-	//Structs
-	LinearGradient,
-	RadialGradient,
-	SolidPattern,
-	SurfacePattern,
-	Mesh
+    //Structs
+    LinearGradient,
+    RadialGradient,
+    SolidPattern,
+    SurfacePattern,
+    Mesh
 };
 
 pub mod enums;

@@ -1,7 +1,6 @@
 
 
 use std::mem::transmute;
-use std::ptr;
 
 use cairo::ffi;
 use cairo::types::{
