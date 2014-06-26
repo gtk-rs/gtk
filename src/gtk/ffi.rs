@@ -78,6 +78,7 @@ pub struct C_GtkNotebook;
 pub struct C_GtkStack;
 pub struct C_GtkStackSwitcher;
 pub struct C_GtkRevealer;
+pub struct C_GtkOverlay;
 
 pub struct C_GtkToolItem;
 pub struct C_GtkToolButton;
@@ -1093,6 +1094,12 @@ extern "C" {
     pub fn gtk_revealer_get_transition_type     (revealer: *C_GtkRevealer) -> gtk::RevealerTransitionType;
 
     //=========================================================================
+    // GtkOverlay                                                            OK
+    //=========================================================================
+    pub fn gtk_overlay_new () -> *C_GtkWidget;
+    pub fn gtk_overlay_add_overlay (overlay: *C_GtkOverlay, widget: *C_GtkWidget);
+
+    //=========================================================================
     // Glue fixe code
     //=========================================================================
     pub fn glue_signal_connect(g_object: *C_GtkWidget,
@@ -1161,4 +1168,5 @@ extern "C" {
     pub fn cast_GtkStack(widget: *C_GtkWidget) -> *C_GtkStack;
     pub fn cast_GtkStackSwitcher(widget: *C_GtkWidget) -> *C_GtkStackSwitcher;
     pub fn cast_GtkRevealer(widget: *C_GtkWidget) -> *C_GtkRevealer;
+    pub fn cast_GtkOverlay(widget: *C_GtkWidget) -> *C_GtkOverlay;
 }
