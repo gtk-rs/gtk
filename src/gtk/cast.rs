@@ -245,7 +245,11 @@ pub fn GTK_HEADER_BAR(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkHeaderBar {
 pub fn GTK_FLOW_BOX(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkFlowBox {
     unsafe{ ffi::cast_GtkFlowBox(widget) }
 }
+
 pub fn GTK_FLOW_BOX_CHILD(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkFlowBoxChild {
     unsafe{ ffi::cast_GtkFlowBoxChild(widget) }
 }
 
+pub fn GTK_ACTION_BAR(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkActionBar {
+    unsafe{ ffi::cast_GtkActionBar(widget) }
+}
