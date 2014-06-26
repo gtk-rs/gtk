@@ -80,6 +80,7 @@ pub use self::file_chooser_action::FileChooserAction;
 pub use self::buttons_type::ButtonsType;
 pub use self::stack_transition_type::StackTransitionType;
 pub use self::revealer_transition_type::RevealerTransitionType;
+pub use self::scrollable_policy::ScrollablePolicy;
 
 pub mod window_type{
     #[repr(C)]
@@ -1075,3 +1076,15 @@ pub mod revealer_transition_type {
     }
 }
 
+/// The policy to be used in a scrollable widget when updating the scrolled window adjustments in
+/// a given orientation.
+pub mod scrollable_policy {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum ScrollablePolicy {
+        /// Scrollable adjustments are based on the minimum size
+        Minimum,
+        /// Scrollable adjustments are based on the natural size
+        Natural
+    }
+}

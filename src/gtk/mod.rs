@@ -80,6 +80,7 @@ pub use self::widgets::{
     StackSwitcher,
     Revealer,
     Overlay,
+    Layout,
     Widget // FIXME @jeremyletang
 };
 
@@ -189,7 +190,9 @@ pub use self::enums::{
     stack_transition_type,
     StackTransitionType,
     revealer_transition_type,
-    RevealerTransitionType
+    RevealerTransitionType,
+    scrollable_policy,
+    ScrollablePolicy
 };
 
 pub use self::types::{

@@ -229,3 +229,12 @@ pub fn GTK_REVEALER(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkRevealer {
 pub fn GTK_OVERLAY(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkOverlay {
     unsafe{ ffi::cast_GtkOverlay(widget) }
 }
+
+pub fn GTK_SCROLLABLE(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkScrollable {
+    unsafe{ ffi::cast_GtkScrollable(widget) }
+}
+
+pub fn GTK_LAYOUT(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkLayout {
+    unsafe{ ffi::cast_GtkLayout(widget) }
+}
+
