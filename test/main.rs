@@ -17,6 +17,7 @@ fn main() {
     let mut button_box = gtk::ButtonBox::new(gtk::orientation::Horizontal).unwrap();
     let mut label = gtk::Label::new("Yeah a wonderful label too !").unwrap();
     let mut button = gtk::Button::new_with_label("Whattttt a button !").unwrap();
+    let mut file_button = gtk::Button::new_with_label("file ?").unwrap();
     let font_button = gtk::FontButton::new().unwrap();
     let toggle_button = gtk::ToggleButton::new_with_label("Toggle Me !").unwrap();
     let check_button = gtk::CheckButton::new_with_label("Labeled check button").unwrap();
@@ -67,6 +68,12 @@ fn main() {
 
         dialog.run();
     }));
+    file_button.connect(signals::Clicked::new(||{
+        //entry.set_text("Clicked!".to_string());
+        let dialog2 = gtk::FileChooserDialog::new("Choose a file", None, gtk::file_chooser_action::Open).unwrap();
+
+        dialog2.run();
+    }));
 
     window.connect(signals::DeleteEvent::new(|_|{
         gtk::main_quit();
@@ -75,6 +82,7 @@ fn main() {
 
     frame.add(&_box);
     button_box.add(&button);
+    button_box.add(&file_button);
     button_box.add(&font_button);
     button_box.add(&toggle_button);
     button_box.add(&color_button);

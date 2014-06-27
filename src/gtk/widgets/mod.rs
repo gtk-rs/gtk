@@ -70,6 +70,8 @@ pub use self::flow_box::{FlowBox, FlowBoxChild};
 pub use self::list_box::{ListBox, ListBoxRow};
 pub use self::action_bar::ActionBar;
 pub use self::widget::Widget;
+pub use self::filefilter::FileFilter;
+pub use self::filechooserdialog::FileChooserDialog;
 
 pub mod window;
 pub mod label;
@@ -128,3 +130,5 @@ pub mod header_bar;
 pub mod flow_box;
 pub mod list_box;
 pub mod action_bar;
+pub mod filefilter;
+pub mod filechooserdialog;

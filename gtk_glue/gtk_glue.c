@@ -373,6 +373,7 @@ GtkHeaderBar* cast_GtkHeaderBar(GtkWidget* widget) {
     return GTK_HEADER_BAR(widget);
 }
 
+#ifdef GTK_3_12
 GtkFlowBox* cast_GtkFlowBox(GtkWidget* widget) {
     return GTK_FLOW_BOX(widget);
 }
@@ -384,6 +385,7 @@ GtkFlowBoxChild* cast_GtkFlowBoxChild(GtkWidget* widget) {
 GtkActionBar* cast_GtkActionBar(GtkWidget* widget) {
     return GTK_ACTION_BAR(widget);
 }
+#endif
 
 GtkListBox* cast_GtkListBox(GtkWidget* widget) {
     return GTK_LIST_BOX(widget);

@@ -87,6 +87,8 @@ pub use self::widgets::{
     ListBox,
     ListBoxRow,
     ActionBar,
+    FileFilter,
+    FileChooserDialog,
     Widget // FIXME @jeremyletang
 };
 
@@ -198,7 +200,9 @@ pub use self::enums::{
     revealer_transition_type,
     RevealerTransitionType,
     scrollable_policy,
-    ScrollablePolicy
+    ScrollablePolicy,
+    file_filter_flags,
+    FileFilterFlags
 };
 
 pub use self::types::{
@@ -215,4 +219,4 @@ mod rt;
 mod widgets;
 mod enums;
 mod types;
-mod ffi;
+pub mod ffi;
