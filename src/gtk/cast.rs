@@ -262,10 +262,10 @@ pub fn GTK_ACTION_BAR(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkActionBar
     unsafe{ ffi::cast_GtkActionBar(widget) }
 }
 
-pub fn GTK_FILE_CHOOSER(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkFileChooser {
+pub fn GTK_FILE_CHOOSER(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkFileChooser {
     unsafe{ ffi::cast_GtkFileChooser(widget) }
 }
 
-pub fn GTK_FILE_FILTER(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkFileFilter {
+pub fn GTK_FILE_FILTER(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkFileFilter {
     unsafe{ ffi::cast_GtkFileFilter(widget) }
 }

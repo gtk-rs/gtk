@@ -22,17 +22,17 @@ use glib::ffi;
 use glib::GlibContainer;
 
 pub struct SList<T> {
-    pointer: *ffi::C_GSList
+    pointer: *mut ffi::C_GSList
 }
 
 pub struct SElem<'a, T> {
-    pointer: *ffi::C_GSList
+    pointer: *mut ffi::C_GSList
 }
 
 impl<T> SList<T> {
     pub fn new() -> SList<T> {
         SList {
-            pointer: ::std::ptr::null()
+            pointer: ::std::ptr::mut_null()
         }
     }
 
@@ -59,13 +59,13 @@ impl<T> SList<T> {
 
     pub fn nth(&self, n: u32) -> &T {
         unsafe {
-            mem::transmute::<*c_void, &T>(ffi::g_slist_nth_data(self.pointer, n))
+            mem::transmute::<*mut c_void, &T>(ffi::g_slist_nth_data(self.pointer, n))
         }
     }
 
     pub fn last(&self) -> &T {
         let elem = unsafe { ffi::g_slist_last(self.pointer) };
-        unsafe { mem::transmute::<*c_void, &T>((*elem).data)}
+        unsafe { mem::transmute::<*mut c_void, &T>((*elem).data)}
     }
 
     pub fn insert(&mut self, data: T, position: i32) {
@@ -112,7 +112,7 @@ impl<'a, T> Iterator<&'a T> for SElem<'a, T> {
         if self.pointer.is_null() {
             None
         } else {
-            let ret = unsafe { mem::transmute::<*c_void, &T>((*self.pointer).data)};
+            let ret = unsafe { mem::transmute::<*mut c_void, &T>((*self.pointer).data)};
             unsafe { self.pointer = (*self.pointer).next; }
             Some(ret)
         }
@@ -156,14 +156,14 @@ impl<T> Drop for SList<T> {
     }
 }
 
-impl<T> GlibContainer<*ffi::C_GSList> for SList<T> {
-    fn wrap(pointer: *ffi::C_GSList) -> SList<T> {
+impl<T> GlibContainer<*mut ffi::C_GSList> for SList<T> {
+    fn wrap(pointer: *mut ffi::C_GSList) -> SList<T> {
         SList {
             pointer: pointer
         }
     }
 
-    fn unwrap(&self) -> *ffi::C_GSList {
+    fn unwrap(&self) -> *mut ffi::C_GSList {
         self.pointer
     }
 }

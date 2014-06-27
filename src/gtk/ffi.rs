@@ -275,56 +275,56 @@ extern "C" {
     // GtkFileChooser                                                    NOT OK
     //=========================================================================
     // FIXME : check if memory is freed when a *c_char is returned
-    pub fn gtk_file_chooser_set_action         (chooser: *C_GtkFileChooser, action: gtk::FileChooserAction) -> ();
-    pub fn gtk_file_chooser_get_action         (chooser: *C_GtkFileChooser) -> gtk::FileChooserAction;
-    pub fn gtk_file_chooser_set_local_only     (chooser: *C_GtkFileChooser, local_only: Gboolean) -> ();
-    pub fn gtk_file_chooser_get_local_only     (chooser: *C_GtkFileChooser) -> Gboolean;
-    pub fn gtk_file_chooser_set_select_multiple(chooser: *C_GtkFileChooser, select_multiple: Gboolean) -> ();
-    pub fn gtk_file_chooser_get_select_multiple(chooser: *C_GtkFileChooser) -> Gboolean;
-    pub fn gtk_file_chooser_set_show_hidden    (chooser: *C_GtkFileChooser, show_hidden: Gboolean) -> ();
-    pub fn gtk_file_chooser_get_show_hidden    (chooser: *C_GtkFileChooser) -> Gboolean;
-    pub fn gtk_file_chooser_set_do_overwrite_confirmation(chooser: *C_GtkFileChooser, do_overwrite_confirmation: Gboolean) -> ();
-    pub fn gtk_file_chooser_get_do_overwrite_confirmation(chooser: *C_GtkFileChooser) -> Gboolean;
-    pub fn gtk_file_chooser_set_create_folders (chooser: *C_GtkFileChooser, create_folders: Gboolean) -> ();
-    pub fn gtk_file_chooser_get_create_folders (chooser: *C_GtkFileChooser) -> Gboolean;
-    pub fn gtk_file_chooser_set_current_name   (chooser: *C_GtkFileChooser, name: *c_char) -> ();
-    pub fn gtk_file_chooser_get_current_name   (chooser: *C_GtkFileChooser) -> *c_char;
-    pub fn gtk_file_chooser_set_filename       (chooser: *C_GtkFileChooser, filename: *c_char) -> Gboolean;
-    pub fn gtk_file_chooser_get_filename       (chooser: *C_GtkFileChooser) -> *c_char;
-    pub fn gtk_file_chooser_select_filename    (chooser: *C_GtkFileChooser, filename: *c_char) -> Gboolean;
-    pub fn gtk_file_chooser_unselect_filename  (chooser: *C_GtkFileChooser, filename: *c_char) -> ();
-    pub fn gtk_file_chooser_select_all         (chooser: *C_GtkFileChooser) -> ();
-    pub fn gtk_file_chooser_unselect_all       (chooser: *C_GtkFileChooser) -> ();
-    pub fn gtk_file_chooser_get_filenames      (chooser: *C_GtkFileChooser) -> *glib::ffi::C_GSList;
-    pub fn gtk_file_chooser_set_current_folder (chooser: *C_GtkFileChooser, filename: *c_char) -> Gboolean;
-    pub fn gtk_file_chooser_get_current_folder (chooser: *C_GtkFileChooser) -> *c_char;
-    pub fn gtk_file_chooser_set_uri            (chooser: *C_GtkFileChooser, uri: *c_char) -> Gboolean;
-    pub fn gtk_file_chooser_get_uri            (chooser: *C_GtkFileChooser) -> *c_char;
-    pub fn gtk_file_chooser_select_uri         (chooser: *C_GtkFileChooser, uri: *c_char) -> Gboolean;
-    pub fn gtk_file_chooser_unselect_uri       (chooser: *C_GtkFileChooser, uri: *c_char) -> ();
-    pub fn gtk_file_chooser_get_uris           (chooser: *C_GtkFileChooser) -> *glib::ffi::C_GSList;
-    pub fn gtk_file_chooser_set_current_folder_uri(chooser: *C_GtkFileChooser, uri: *c_char) -> Gboolean;
-    pub fn gtk_file_chooser_get_current_folder_uri(chooser: *C_GtkFileChooser) -> *c_char;
-    pub fn gtk_file_chooser_set_preview_widget (chooser: *C_GtkFileChooser, preview_widget: *C_GtkWidget) -> ();
-    pub fn gtk_file_chooser_get_preview_widget (chooser: *C_GtkFileChooser) -> *C_GtkWidget;
-    pub fn gtk_file_chooser_set_preview_widget_active(chooser: *C_GtkFileChooser, active: Gboolean) -> ();
-    pub fn gtk_file_chooser_get_preview_widget_active(chooser: *C_GtkFileChooser) -> Gboolean;
-    pub fn gtk_file_chooser_set_use_preview_label(chooser: *C_GtkFileChooser, use_label: Gboolean) -> ();
-    pub fn gtk_file_chooser_get_use_preview_label(chooser: *C_GtkFileChooser) -> Gboolean;
-    pub fn gtk_file_chooser_get_preview_filename(chooser: *C_GtkFileChooser) -> *c_char;
-    pub fn gtk_file_chooser_get_preview_uri    (chooser: *C_GtkFileChooser) -> *c_char;
-    pub fn gtk_file_chooser_set_extra_widget   (chooser: *C_GtkFileChooser, extra_widget: *C_GtkWidget) -> ();
-    pub fn gtk_file_chooser_get_extra_widget   (chooser: *C_GtkFileChooser) -> *C_GtkWidget;
-    pub fn gtk_file_chooser_add_filter         (chooser: *C_GtkFileChooser, filter: *C_GtkFileFilter) -> ();
-    pub fn gtk_file_chooser_remove_filter      (chooser: *C_GtkFileChooser, filter: *C_GtkFileFilter) -> ();
+    pub fn gtk_file_chooser_set_action         (chooser: *mut C_GtkFileChooser, action: gtk::FileChooserAction) -> ();
+    pub fn gtk_file_chooser_get_action         (chooser: *mut C_GtkFileChooser) -> gtk::FileChooserAction;
+    pub fn gtk_file_chooser_set_local_only     (chooser: *mut C_GtkFileChooser, local_only: Gboolean) -> ();
+    pub fn gtk_file_chooser_get_local_only     (chooser: *mut C_GtkFileChooser) -> Gboolean;
+    pub fn gtk_file_chooser_set_select_multiple(chooser: *mut C_GtkFileChooser, select_multiple: Gboolean) -> ();
+    pub fn gtk_file_chooser_get_select_multiple(chooser: *mut C_GtkFileChooser) -> Gboolean;
+    pub fn gtk_file_chooser_set_show_hidden    (chooser: *mut C_GtkFileChooser, show_hidden: Gboolean) -> ();
+    pub fn gtk_file_chooser_get_show_hidden    (chooser: *mut C_GtkFileChooser) -> Gboolean;
+    pub fn gtk_file_chooser_set_do_overwrite_confirmation(chooser: *mut C_GtkFileChooser, do_overwrite_confirmation: Gboolean) -> ();
+    pub fn gtk_file_chooser_get_do_overwrite_confirmation(chooser: *mut C_GtkFileChooser) -> Gboolean;
+    pub fn gtk_file_chooser_set_create_folders (chooser: *mut C_GtkFileChooser, create_folders: Gboolean) -> ();
+    pub fn gtk_file_chooser_get_create_folders (chooser: *mut C_GtkFileChooser) -> Gboolean;
+    pub fn gtk_file_chooser_set_current_name   (chooser: *mut C_GtkFileChooser, name: *c_char) -> ();
+    pub fn gtk_file_chooser_get_current_name   (chooser: *mut C_GtkFileChooser) -> *c_char;
+    pub fn gtk_file_chooser_set_filename       (chooser: *mut C_GtkFileChooser, filename: *c_char) -> Gboolean;
+    pub fn gtk_file_chooser_get_filename       (chooser: *mut C_GtkFileChooser) -> *c_char;
+    pub fn gtk_file_chooser_select_filename    (chooser: *mut C_GtkFileChooser, filename: *c_char) -> Gboolean;
+    pub fn gtk_file_chooser_unselect_filename  (chooser: *mut C_GtkFileChooser, filename: *c_char) -> ();
+    pub fn gtk_file_chooser_select_all         (chooser: *mut C_GtkFileChooser) -> ();
+    pub fn gtk_file_chooser_unselect_all       (chooser: *mut C_GtkFileChooser) -> ();
+    pub fn gtk_file_chooser_get_filenames      (chooser: *mut C_GtkFileChooser) -> *mut glib::ffi::C_GSList;
+    pub fn gtk_file_chooser_set_current_folder (chooser: *mut C_GtkFileChooser, filename: *c_char) -> Gboolean;
+    pub fn gtk_file_chooser_get_current_folder (chooser: *mut C_GtkFileChooser) -> *c_char;
+    pub fn gtk_file_chooser_set_uri            (chooser: *mut C_GtkFileChooser, uri: *c_char) -> Gboolean;
+    pub fn gtk_file_chooser_get_uri            (chooser: *mut C_GtkFileChooser) -> *c_char;
+    pub fn gtk_file_chooser_select_uri         (chooser: *mut C_GtkFileChooser, uri: *c_char) -> Gboolean;
+    pub fn gtk_file_chooser_unselect_uri       (chooser: *mut C_GtkFileChooser, uri: *c_char) -> ();
+    pub fn gtk_file_chooser_get_uris           (chooser: *mut C_GtkFileChooser) -> *mut glib::ffi::C_GSList;
+    pub fn gtk_file_chooser_set_current_folder_uri(chooser: *mut C_GtkFileChooser, uri: *c_char) -> Gboolean;
+    pub fn gtk_file_chooser_get_current_folder_uri(chooser: *mut C_GtkFileChooser) -> *c_char;
+    pub fn gtk_file_chooser_set_preview_widget (chooser: *mut C_GtkFileChooser, preview_widget: *mut C_GtkWidget) -> ();
+    pub fn gtk_file_chooser_get_preview_widget (chooser: *mut C_GtkFileChooser) -> *mut C_GtkWidget;
+    pub fn gtk_file_chooser_set_preview_widget_active(chooser: *mut C_GtkFileChooser, active: Gboolean) -> ();
+    pub fn gtk_file_chooser_get_preview_widget_active(chooser: *mut C_GtkFileChooser) -> Gboolean;
+    pub fn gtk_file_chooser_set_use_preview_label(chooser: *mut C_GtkFileChooser, use_label: Gboolean) -> ();
+    pub fn gtk_file_chooser_get_use_preview_label(chooser: *mut C_GtkFileChooser) -> Gboolean;
+    pub fn gtk_file_chooser_get_preview_filename(chooser: *mut C_GtkFileChooser) -> *c_char;
+    pub fn gtk_file_chooser_get_preview_uri    (chooser: *mut C_GtkFileChooser) -> *c_char;
+    pub fn gtk_file_chooser_set_extra_widget   (chooser: *mut C_GtkFileChooser, extra_widget: *mut C_GtkWidget) -> ();
+    pub fn gtk_file_chooser_get_extra_widget   (chooser: *mut C_GtkFileChooser) -> *mut C_GtkWidget;
+    pub fn gtk_file_chooser_add_filter         (chooser: *mut C_GtkFileChooser, filter: *mut C_GtkFileFilter) -> ();
+    pub fn gtk_file_chooser_remove_filter      (chooser: *mut C_GtkFileChooser, filter: *mut C_GtkFileFilter) -> ();
     //pub fn gtk_file_chooser_list_filters       (chooser: *C_GtkFileChooser) -> *glib::ffi::C_GSList;
-    pub fn gtk_file_chooser_set_filter         (chooser: *C_GtkFileChooser, filter: *C_GtkFileFilter) -> ();
-    pub fn gtk_file_chooser_get_filter         (chooser: *C_GtkFileChooser) -> *C_GtkFileFilter;
-    pub fn gtk_file_chooser_add_shortcut_folder(chooser: *C_GtkFileChooser, folder: *c_char, error: **glib::ffi::C_GError) -> Gboolean;
-    pub fn gtk_file_chooser_remove_shortcut_folder(chooser: *C_GtkFileChooser, folder: *c_char, error: **glib::ffi::C_GError) -> Gboolean;
+    pub fn gtk_file_chooser_set_filter         (chooser: *mut C_GtkFileChooser, filter: *mut C_GtkFileFilter) -> ();
+    pub fn gtk_file_chooser_get_filter         (chooser: *mut C_GtkFileChooser) -> *mut C_GtkFileFilter;
+    pub fn gtk_file_chooser_add_shortcut_folder(chooser: *mut C_GtkFileChooser, folder: *c_char, error: *mut *mut glib::ffi::C_GError) -> Gboolean;
+    pub fn gtk_file_chooser_remove_shortcut_folder(chooser: *mut C_GtkFileChooser, folder: *c_char, error: *mut *mut glib::ffi::C_GError) -> Gboolean;
     //pub fn gtk_file_chooser_list_shortcut_folders(chooser: *C_GtkFileChooser) -> *glib::ffi::C_GSList;
-    pub fn gtk_file_chooser_add_shortcut_folder_uri(chooser: *C_GtkFileChooser, uri: *c_char, error: **glib::ffi::C_GError) -> Gboolean;
-    pub fn gtk_file_chooser_remove_shortcut_folder_uri(chooser: *C_GtkFileChooser, uri: *c_char, error: **glib::ffi::C_GError) -> Gboolean;
+    pub fn gtk_file_chooser_add_shortcut_folder_uri(chooser: *mut C_GtkFileChooser, uri: *c_char, error: *mut *mut glib::ffi::C_GError) -> Gboolean;
+    pub fn gtk_file_chooser_remove_shortcut_folder_uri(chooser: *mut C_GtkFileChooser, uri: *c_char, error: *mut *mut glib::ffi::C_GError) -> Gboolean;
     //pub fn gtk_file_chooser_list_shortcut_folder_uris(chooser: *C_GtkFileChooser) -> *glib::ffi::C_GSList;
     //pub fn gtk_file_chooser_get_current_folder_file(chooser: *C_GtkFileChooser) -> *C_Gfile;
     //pub fn gtk_file_chooser_get_file           (chooser: *C_GtkFileChooser) -> *C_Gfile;
@@ -338,20 +338,20 @@ extern "C" {
     //=========================================================================
     // GtkFileFilter                                                     NOT OK
     //=========================================================================
-    pub fn gtk_file_filter_new                 () -> *C_GtkFileFilter;
-    pub fn gtk_file_filter_set_name            (filter: *C_GtkFileFilter, name: *c_char) -> ();
-    pub fn gtk_file_filter_get_name            (filter: *C_GtkFileFilter) -> *c_char;
-    pub fn gtk_file_filter_add_mime_type       (filter: *C_GtkFileFilter, mime_type: *c_char) -> ();
-    pub fn gtk_file_filter_add_pattern         (filter: *C_GtkFileFilter, pattern: *c_char) -> ();
-    pub fn gtk_file_filter_add_pixbuf_formats  (filter: *C_GtkFileFilter) -> ();
+    pub fn gtk_file_filter_new                 () -> *mut C_GtkFileFilter;
+    pub fn gtk_file_filter_set_name            (filter: *mut C_GtkFileFilter, name: *c_char) -> ();
+    pub fn gtk_file_filter_get_name            (filter: *mut C_GtkFileFilter) -> *c_char;
+    pub fn gtk_file_filter_add_mime_type       (filter: *mut C_GtkFileFilter, mime_type: *c_char) -> ();
+    pub fn gtk_file_filter_add_pattern         (filter: *mut C_GtkFileFilter, pattern: *c_char) -> ();
+    pub fn gtk_file_filter_add_pixbuf_formats  (filter: *mut C_GtkFileFilter) -> ();
     //pub fn gtk_file_filter_add_custom          (filter: *C_GtkFileFilter, func: *C_GtkFileFilterFunc, data: *c_void, notify: *C_GDestroyNotif) -> ();
 
     //=========================================================================
     // GtkFileChooserDialog                                              NOT OK
     //=========================================================================
     //pub fn gtk_file_chooser_dialog_new         (title: *c_char, parent: *C_GtkWindow, action: gtk::FileChooserAction, first_button_text: *c_char, ...) -> *C_GtkWidget;
-    pub fn gtk_file_chooser_dialog_new         (title: *c_char, parent: *C_GtkWindow, action: gtk::FileChooserAction, button_text1: *c_char,
-        type1: gtk::ResponseType, button_text2: *c_char, type2: gtk::ResponseType, end: *c_void) -> *C_GtkWidget;
+    pub fn gtk_file_chooser_dialog_new         (title: *c_char, parent: *mut C_GtkWindow, action: gtk::FileChooserAction, button_text1: *c_char,
+        type1: gtk::ResponseType, button_text2: *c_char, type2: gtk::ResponseType, end: *mut c_void) -> *mut C_GtkWidget;
 
     //=========================================================================
     // GtkColorChooser                                                       OK
@@ -1382,6 +1382,6 @@ extern "C" {
     pub fn cast_GtkListBox(widget: *mut C_GtkWidget) -> *mut C_GtkListBox;
     pub fn cast_GtkListBoxRow(widget: *mut C_GtkWidget) -> *mut C_GtkListBoxRow;
     pub fn cast_GtkActionBar(widget: *mut C_GtkWidget) -> *mut C_GtkActionBar;
-    pub fn cast_GtkFileFilter(widget: *C_GtkWidget) -> *C_GtkFileFilter;
-    pub fn cast_GtkFileChooser(widget: *C_GtkWidget) -> *C_GtkFileChooser;
+    pub fn cast_GtkFileFilter(widget: *mut C_GtkWidget) -> *mut C_GtkFileFilter;
+    pub fn cast_GtkFileChooser(widget: *mut C_GtkWidget) -> *mut C_GtkFileChooser;
 }

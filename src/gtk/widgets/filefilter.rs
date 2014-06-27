@@ -28,7 +28,7 @@ impl FileFilter {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(traits::Widget::wrap(tmp_pointer as *ffi::C_GtkWidget))
+            Some(traits::Widget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 
