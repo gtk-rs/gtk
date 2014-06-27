@@ -15,7 +15,10 @@
 
 #![allow(non_camel_case_types)]
 
-use libc::{c_int, c_void, c_uint};
+use libc::{c_int, c_void, c_uint, c_char};
+use gtk::ffi;
+
+pub type GQuark = u32;
 
 pub struct C_GList {
   pub data: *c_void,
@@ -28,7 +31,11 @@ pub struct C_GSList {
   pub next: *C_GSList
 }
 
-
+pub struct C_GError {
+    pub domain : GQuark,
+    pub code   : i32,
+    pub message: *c_char
+}
 
 extern "C" {
 
@@ -87,4 +94,19 @@ extern "C" {
     pub fn g_list_position                (list: *C_GList, link_: C_GList) -> c_int;
     // pub fn g_slist_index                   (list: *C_GSList, data: *c_void) -> c_int;
 
+    //=========================================================================
+    // GError
+    //=========================================================================
+    //pub fn g_error_new                    (domain: GQuark, code: c_int, format: *c_char, ...) -> *C_GError;
+    pub fn g_error_new_literal            (domain: GQuark, code: c_int, message: *c_char) -> *C_GError;
+    //pub fn g_error_new_valist             (domain: GQuark, code: c_int, fomat: *c_char, args: va_list) -> *C_GError;
+    pub fn g_error_free                   (error: *C_GError) -> ();
+    pub fn g_error_copy                   (error: *C_GError) -> *C_GError;
+    pub fn g_error_matches                (error: *C_GError, domain: GQuark, code: c_int) -> ffi::Gboolean;
+    //pub fn g_set_error                    (error: **C_GError, domain: GQuark, code: c_int, format: *c_char, ...) -> ();
+    pub fn g_set_error_literal            (error: **C_GError, domain: GQuark, code: c_int, message: *c_char) -> ();
+    pub fn g_propagate_error              (dest: **C_GError, src: *C_GError) -> ();
+    pub fn g_clear_error                  (err: **C_GError) -> ();
+    //pub fn g_prefix_error                 (err: **C_GError, format: *c_char, ...) -> ();
+    //pub fn g_propagate_prefixed_error     (dest: **C_GError, src: *C_GError, format: *c_char, ...) -> ();
 }

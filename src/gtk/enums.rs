@@ -81,6 +81,7 @@ pub use self::buttons_type::ButtonsType;
 pub use self::stack_transition_type::StackTransitionType;
 pub use self::revealer_transition_type::RevealerTransitionType;
 pub use self::scrollable_policy::ScrollablePolicy;
+pub use self::file_filter_flags::FileFilterFlags;
 
 pub mod window_type{
     #[repr(C)]
@@ -1011,6 +1012,22 @@ pub mod file_chooser_action {
         SelectFolder,
         /// Indicates a mode for creating a new folder. The file chooser will let the user name an existing or new folder.
         CreateFolder
+    }
+}
+
+/// These flags indicate what parts of a GtkFileFilterInfo struct are filled or need to be filled.
+pub mod file_filter_flags {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum FileFilterFlags {
+        /// the filename of the file being tested
+        Filename,
+        /// the URI for the file being tested
+        Uri,
+        /// the string that will be used to display the file in the file chooser
+        DisplayName,
+        /// the mime type of the file
+        MimeType
     }
 }
 

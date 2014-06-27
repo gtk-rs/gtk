@@ -261,3 +261,11 @@ pub fn GTK_LIST_BOX_ROW(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkListBoxRow {
 pub fn GTK_ACTION_BAR(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkActionBar {
     unsafe{ ffi::cast_GtkActionBar(widget) }
 }
+
+pub fn GTK_FILE_CHOOSER(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkFileChooser {
+    unsafe{ ffi::cast_GtkFileChooser(widget) }
+}
+
+pub fn GTK_FILE_FILTER(widget: *ffi::C_GtkWidget) -> *ffi::C_GtkFileFilter {
+    unsafe{ ffi::cast_GtkFileFilter(widget) }
+}
