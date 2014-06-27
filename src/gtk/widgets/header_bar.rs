@@ -15,6 +15,8 @@
 
 //! A box with a centered child
 
+// FIXME: add missing methods (3.12)
+
 use gtk::cast::{GTK_HEADER_BAR};
 use gtk::ffi;
 use gtk::traits;

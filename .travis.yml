@@ -1,0 +1,15 @@
+before_install:
+  - yes | sudo add-apt-repository ppa:cmrx64/cargo
+  - yes | sudo add-apt-repository ppa:ricotz/testing
+  - sudo apt-get update
+install:
+  - sudo apt-get install cargo
+  - wget http://static.rust-lang.org/dist/rust-nightly-x86_64-unknown-linux-gnu.tar.gz
+  - tar xzf rust-nightly-x86_64-unknown-linux-gnu.tar.gz
+  - export PATH=$PATH:$(pwd)/rust-nightly-x86_64-unknown-linux-gnu/bin
+  - sudo apt-get install gtk+3.0 libgtk-3-dev
+script:
+  - rustc --version
+  - pkg-config --modversion gtk+-3.0
+  - ./configure
+  - make GTK_VERSION=GTK_3_6

@@ -59,6 +59,8 @@ impl Button {
         check_pointer!(tmp_pointer, Button)
     }
 
+    #[cfg(GTK_3_10)]
+    #[cfg(GTK_3_12)]
     pub fn new_from_icon_name(icon_name: &str, size: IconSize) -> Option<Button> {
         let tmp_pointer = unsafe {
             icon_name.with_c_str(|c_str| {
