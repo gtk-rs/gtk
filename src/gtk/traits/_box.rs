@@ -70,24 +70,38 @@ pub trait _Box: Widget {
     }
 
     fn query_child_packing<'r, T: Widget>(&self, child: &'r T) -> (bool, bool, u32, PackType) {
-        let c_expand = 0;
-        let c_padding = 0;
-        let c_fill = 0;
-        let pack_type: PackType = pack_type::Start;
+        let mut c_expand = 0;
+        let mut c_padding = 0;
+        let mut c_fill = 0;
+        let mut pack_type: PackType = pack_type::Start;
         unsafe {
-            ffi::gtk_box_query_child_packing(GTK_BOX(self.get_widget()), child.get_widget(), &c_expand, &c_fill, &c_padding, &pack_type);
+            ffi::gtk_box_query_child_packing(GTK_BOX(self.get_widget()),
+                                             child.get_widget(),
+                                             &mut c_expand,
+                                             &mut c_fill,
+                                             &mut c_padding,
+                                             &mut pack_type);
         }
         let expand = if c_expand == ffi::Gfalse { false } else { true };
         let fill = if c_fill == ffi::Gfalse { false } else { true };
         (expand, fill, c_padding as u32, pack_type)
     }
 
-    fn set_child_packing<'r, T: Widget>(&mut self, child: &'r T, expand: bool, fill: bool, padding: u32, pack_type: PackType) -> () {
+    fn set_child_packing<'r, T: Widget>(&mut self,
+                                        child: &'r T,
+                                        expand: bool,
+                                        fill: bool,
+                                        padding: u32,
+                                        pack_type: PackType) {
         let c_expand = if expand { ffi::Gtrue } else { ffi::Gfalse };
         let c_fill = if fill { ffi::Gtrue } else { ffi::Gfalse };
         unsafe {
-            ffi::gtk_box_set_child_packing(GTK_BOX(self.get_widget()), child.get_widget(), c_expand, c_fill, padding as c_uint, pack_type);
+            ffi::gtk_box_set_child_packing(GTK_BOX(self.get_widget()),
+                                           child.get_widget(),
+                                           c_expand,
+                                           c_fill,
+                                           padding as c_uint,
+                                           pack_type);
         }
     }
 }
-

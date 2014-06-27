@@ -21,8 +21,8 @@ use gtk::signals::Signal;
 
 pub trait Widget {
     #[doc(hidden)]
-    fn get_widget(&self) -> *ffi::C_GtkWidget;
-    fn wrap(widget: *ffi::C_GtkWidget) -> Self;
+    fn get_widget(&self) -> *mut ffi::C_GtkWidget;
+    fn wrap(widget: *mut ffi::C_GtkWidget) -> Self;
 
     fn show_all(&mut self) -> () {
         unsafe {

@@ -42,10 +42,10 @@ pub trait Frame: Widget + Container {
     }
 
     fn get_label_align(&self) -> (f32, f32) {
-        let x_align = 0.;
-        let y_align = 0.;
+        let mut x_align = 0.;
+        let mut y_align = 0.;
         unsafe {
-            ffi::gtk_frame_get_label_align(GTK_FRAME(self.get_widget()), &x_align, &y_align);
+            ffi::gtk_frame_get_label_align(GTK_FRAME(self.get_widget()), &mut x_align, &mut y_align);
         }
         (x_align as f32, y_align as f32)
     }

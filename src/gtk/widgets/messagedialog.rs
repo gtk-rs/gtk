@@ -25,7 +25,7 @@ impl MessageDialog {
     pub fn new(parent: Option<gtk::Window>, flags: gtk::DialogFlags, _type: gtk::MessageType, buttons: gtk::ButtonsType) -> Option<MessageDialog> {
         let tmp_pointer = unsafe { ffi::gtk_message_dialog_new(match parent {
                 Some(ref p) => GTK_WINDOW(p.get_widget()),
-                None => ::std::ptr::null()
+                None => ::std::ptr::mut_null()
             }, flags, _type, buttons, ::std::ptr::null())
         };
 

@@ -52,7 +52,7 @@ impl ListBox {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(traits::Widget::wrap(tmp_pointer as *ffi::C_GtkWidget))
+            Some(traits::Widget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 
@@ -63,7 +63,7 @@ impl ListBox {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(traits::Widget::wrap(tmp_pointer as *ffi::C_GtkWidget))
+            Some(traits::Widget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 
@@ -74,7 +74,7 @@ impl ListBox {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(traits::Widget::wrap(tmp_pointer as *ffi::C_GtkWidget))
+            Some(traits::Widget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 
@@ -150,7 +150,7 @@ impl ListBox {
     pub fn drag_highlight_row(&mut self, row: &ListBoxRow) {
         unsafe {
             ffi::gtk_list_box_drag_highlight_row(GTK_LIST_BOX(self.pointer),
-                                                 row.get_widget() as *ffi::C_GtkListBoxRow)
+                                                 row.get_widget() as *mut ffi::C_GtkListBoxRow)
         }
     }
 }

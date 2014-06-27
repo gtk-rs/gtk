@@ -27,7 +27,7 @@ impl ColorChooserDialog {
             title.with_c_str(|c_str|{
                 ffi::gtk_color_chooser_dialog_new(c_str, match parent {
                     Some(ref p) => GTK_WINDOW(p.get_widget()),
-                    None => ::std::ptr::null()
+                    None => ::std::ptr::mut_null()
                 })
             })
         };

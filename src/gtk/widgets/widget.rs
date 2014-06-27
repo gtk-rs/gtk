@@ -20,12 +20,12 @@ use gtk;
 use gtk::traits;
 
 pub struct Widget {
-    pointer:           *ffi::C_GtkWidget
+    pointer: *mut ffi::C_GtkWidget
 }
 
 impl Widget {
     #[allow(visible_private_types)]
-    pub fn wrap(pointer: *ffi::C_GtkWidget) -> Widget {
+    pub fn wrap(pointer: *mut ffi::C_GtkWidget) -> Widget {
         Widget {
             pointer: pointer
         }
@@ -33,7 +33,7 @@ impl Widget {
 
     #[doc(hidden)]
     #[allow(visible_private_types)]
-    pub fn get_widget(&self) -> *ffi::C_GtkWidget {
+    pub fn get_widget(&self) -> *mut ffi::C_GtkWidget {
         self.pointer
     }
 

@@ -28,7 +28,7 @@ use gtk::ffi;
 * * `value-changed` : No Recursion
 */
 pub struct Adjustment {
-    pointer:   *ffi::C_GtkAdjustment,
+    pointer:   *mut ffi::C_GtkAdjustment,
     can_drop:  bool
 }
 
@@ -163,12 +163,12 @@ impl Adjustment {
     }
 
     #[doc(hidden)]
-    pub fn get_pointer(&self) -> *ffi::C_GtkAdjustment {
+    pub fn get_pointer(&self) -> *mut ffi::C_GtkAdjustment {
         self.pointer
     }
 
     #[doc(hidden)]
-    pub fn wrap_pointer(c_adjustment: *ffi::C_GtkAdjustment) -> Adjustment {
+    pub fn wrap_pointer(c_adjustment: *mut ffi::C_GtkAdjustment) -> Adjustment {
         Adjustment {
             pointer: c_adjustment,
             can_drop: false
