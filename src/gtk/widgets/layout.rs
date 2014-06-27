@@ -57,10 +57,10 @@ impl Layout {
     }
 
     pub fn get_size(&mut self) -> (u32, u32) {
-        let width = 0;
-        let height = 0;
+        let mut width = 0;
+        let mut height = 0;
 
-        unsafe { ffi::gtk_layout_get_size(GTK_LAYOUT(self.pointer), &width, &height); }
+        unsafe { ffi::gtk_layout_get_size(GTK_LAYOUT(self.pointer), &mut width, &mut height); }
         (width, height)
     }
 }

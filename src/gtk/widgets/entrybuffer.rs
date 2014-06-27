@@ -33,7 +33,7 @@ use gtk::ffi;
 *
 */
 pub struct EntryBuffer {
-    pointer: *ffi::C_GtkEntryBuffer,
+    pointer: *mut ffi::C_GtkEntryBuffer,
     can_drop: bool
 }
 
@@ -116,12 +116,12 @@ impl EntryBuffer {
     }
 
     #[doc(hidden)]
-    pub fn get_pointer(&self) -> *ffi::C_GtkEntryBuffer {
+    pub fn get_pointer(&self) -> *mut ffi::C_GtkEntryBuffer {
         self.pointer
     }
 
     #[doc(hidden)]
-    pub fn wrap_pointer(pointer: *ffi::C_GtkEntryBuffer) -> EntryBuffer {
+    pub fn wrap_pointer(pointer: *mut ffi::C_GtkEntryBuffer) -> EntryBuffer {
         EntryBuffer {
             pointer:    pointer,
             can_drop:   false

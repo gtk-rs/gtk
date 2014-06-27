@@ -131,10 +131,10 @@ pub trait Button: Widget + Container {
     }
 
     fn get_alignment(&self) -> (f32, f32) {
-        let x_align = 0.1;
-        let y_align = 0.1;
+        let mut x_align = 0.1;
+        let mut y_align = 0.1;
         unsafe {
-            ffi::gtk_button_get_alignment(GTK_BUTTON(self.get_widget()), &x_align, &y_align);
+            ffi::gtk_button_get_alignment(GTK_BUTTON(self.get_widget()), &mut x_align, &mut y_align);
         }
         (x_align as f32, y_align as f32)
     }
@@ -191,7 +191,7 @@ pub trait ButtonClickedHandler {
     fn callback(&mut self, button: &mut gtk::Button);
 }
 
-extern "C" fn widget_destroy_callback(object: *ffi::C_GtkWidget, user_data: ffi::gpointer) {
+extern "C" fn widget_destroy_callback(object: *mut ffi::C_GtkWidget, user_data: ffi::gpointer) {
     let mut handler = unsafe { mem::transmute::<ffi::gpointer, Box<Box<ButtonClickedHandler>>>(user_data) };
 
     // let mut window = check_pointer!(object, Window).unwrap();

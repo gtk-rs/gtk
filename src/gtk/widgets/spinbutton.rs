@@ -164,19 +164,19 @@ impl SpinButton {
     }
 
     pub fn get_increments(&self) -> (f64, f64) {
-        let step = 0.;
-        let page = 0.;
+        let mut step = 0.;
+        let mut page = 0.;
         unsafe {
-            ffi::gtk_spin_button_get_increments(GTK_SPINBUTTON(self.pointer), &step, &page);
+            ffi::gtk_spin_button_get_increments(GTK_SPINBUTTON(self.pointer), &mut step, &mut page);
         }
         (step, page)
     }
 
     pub fn get_range(&self) -> (f64, f64) {
-        let min = 0.;
-        let max = 0.;
+        let mut min = 0.;
+        let mut max = 0.;
         unsafe {
-            ffi::gtk_spin_button_get_range(GTK_SPINBUTTON(self.pointer), &min, &max);
+            ffi::gtk_spin_button_get_range(GTK_SPINBUTTON(self.pointer), &mut min, &mut max);
         }
         (min, max)
     }

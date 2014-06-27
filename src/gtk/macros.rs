@@ -31,7 +31,7 @@ macro_rules! check_pointer(
 macro_rules! struct_Widget(
     ($gtk_struct:ident) => (
         pub struct $gtk_struct {
-            pointer:           *ffi::C_GtkWidget,
+            pointer:           *mut ffi::C_GtkWidget,
             can_drop:          bool
         }
     );
@@ -40,11 +40,11 @@ macro_rules! struct_Widget(
 macro_rules! impl_TraitWidget(
     ($gtk_struct:ident) => (
         impl ::gtk::traits::Widget for $gtk_struct {
-            fn get_widget(&self) -> *ffi::C_GtkWidget {
+            fn get_widget(&self) -> *mut ffi::C_GtkWidget {
                 self.pointer
             }
 
-            fn wrap(widget: *ffi::C_GtkWidget) -> $gtk_struct {
+            fn wrap(widget: *mut ffi::C_GtkWidget) -> $gtk_struct {
                 $gtk_struct {
                     pointer:         widget,
                     can_drop:        false
@@ -72,7 +72,7 @@ macro_rules! get_widget(
     ($w:ident) => (
         match $w {
             Some(ref _w) => _w.get_widget(),
-            None => ::std::ptr::null()
+            None => ::std::ptr::mut_null()
         };
     );
 )

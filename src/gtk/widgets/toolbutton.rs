@@ -25,20 +25,20 @@ struct_Widget!(ToolButton)
 
 impl ToolButton {
     pub fn new<T: traits::Widget>(icon_widget: Option<&T>, label: Option<&str>) -> Option<ToolButton> {
-        let tmp_pointer: *ffi::C_GtkWidget = unsafe {
+        let tmp_pointer = unsafe {
             match label {
                 Some(l) => {
                     l.with_c_str(|c_str| {
                         match icon_widget {
                             Some(i) => ffi::gtk_tool_button_new(i.get_widget(), c_str),
-                            None    => ffi::gtk_tool_button_new(ptr::null(), c_str)
+                            None    => ffi::gtk_tool_button_new(ptr::mut_null(), c_str)
                         }
                     })
                 },
                 None    => {
                     match icon_widget {
                         Some(i) => ffi::gtk_tool_button_new(i.get_widget(), ptr::null()),
-                        None    => ffi::gtk_tool_button_new(ptr::null(), ptr::null())
+                        None    => ffi::gtk_tool_button_new(ptr::mut_null(), ptr::null())
                     }
                 }
             }

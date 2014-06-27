@@ -22,21 +22,21 @@ use glib::ffi;
 use glib::GlibContainer;
 
 pub struct List<T> {
-    pointer: *ffi::C_GList
+    pointer: *mut ffi::C_GList
 }
 
 pub struct Elem<'a, T> {
-    pointer: *ffi::C_GList
+    pointer: *mut ffi::C_GList
 }
 
 pub struct RevElem<'a, T> {
-    pointer: *ffi::C_GList
+    pointer: *mut ffi::C_GList
 }
 
 impl<T> List<T> {
     pub fn new() -> List<T> {
         List {
-            pointer: ::std::ptr::null()
+            pointer: ::std::ptr::mut_null()
         }
     }
 
@@ -63,18 +63,18 @@ impl<T> List<T> {
 
     pub fn nth(&self, n: u32) -> &T {
         unsafe {
-            mem::transmute::<*c_void, &T>(ffi::g_list_nth_data(self.pointer, n))
+            mem::transmute::<*mut c_void, &T>(ffi::g_list_nth_data(self.pointer, n))
         }
     }
 
     pub fn last(&self) -> &T {
         let elem = unsafe { ffi::g_list_last(self.pointer) };
-        unsafe { mem::transmute::<*c_void, &T>((*elem).data)}
+        unsafe { mem::transmute::<*mut c_void, &T>((*elem).data)}
     }
 
     pub fn first(&self) -> &T {
         let elem = unsafe { ffi::g_list_first(self.pointer) };
-        unsafe { mem::transmute::<*c_void, &T>((*elem).data)}
+        unsafe { mem::transmute::<*mut c_void, &T>((*elem).data)}
     }
 
     pub fn insert(&mut self, data: T, position: i32) {
@@ -133,7 +133,7 @@ impl<'a, T> Iterator<&'a T> for Elem<'a, T> {
         if self.pointer.is_null() {
             None
         } else {
-            let ret = unsafe { mem::transmute::<*c_void, &T>((*self.pointer).data)};
+            let ret = unsafe { mem::transmute::<*mut c_void, &T>((*self.pointer).data)};
             unsafe { self.pointer = (*self.pointer).next; }
             Some(ret)
         }
@@ -145,7 +145,7 @@ impl<'a, T> Iterator<&'a T> for RevElem<'a, T> {
         if self.pointer.is_null() {
             None
         } else {
-            let ret = unsafe { mem::transmute::<*c_void, &T>((*self.pointer).data)};
+            let ret = unsafe { mem::transmute::<*mut c_void, &T>((*self.pointer).data)};
             unsafe { self.pointer = (*self.pointer).prev; }
             Some(ret)
         }
@@ -183,14 +183,14 @@ impl<T> Drop for List<T> {
     }
 }
 
-impl<T> GlibContainer<*ffi::C_GList> for List<T> {
-    fn wrap(pointer: *ffi::C_GList) -> List<T> {
+impl<T> GlibContainer<*mut ffi::C_GList> for List<T> {
+    fn wrap(pointer: *mut ffi::C_GList) -> List<T> {
         List {
             pointer: pointer
         }
     }
 
-    fn unwrap(&self) -> *ffi::C_GList {
+    fn unwrap(&self) -> *mut ffi::C_GList {
         self.pointer
     }
 }

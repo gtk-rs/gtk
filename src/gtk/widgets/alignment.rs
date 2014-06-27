@@ -54,12 +54,12 @@ impl Alignment {
     }
 
     pub fn get_padding(&self) -> (u32, u32, u32, u32) {
-        let top =       0;
-        let bottom =    0;
-        let left =      0;
-        let right =     0;
+        let mut top =       0;
+        let mut bottom =    0;
+        let mut left =      0;
+        let mut right =     0;
         unsafe {
-            ffi::gtk_alignment_get_padding(GTK_ALIGNMENT(self.pointer), &top, &bottom, &left, &right);
+            ffi::gtk_alignment_get_padding(GTK_ALIGNMENT(self.pointer), &mut top, &mut bottom, &mut left, &mut right);
         }
         (top, bottom, left, right)
     }

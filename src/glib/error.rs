@@ -20,7 +20,7 @@ use glib;
 use gtk;
 
 pub struct Error {
-    pointer: *ffi::C_GError
+    pointer: *mut ffi::C_GError
 }
 
 impl Error {
@@ -39,9 +39,9 @@ impl Error {
     }
 
     pub fn release(&mut self) -> () {
-        if self.pointer != ::std::ptr::null() {
+        if self.pointer.is_not_null() {
             unsafe { ffi::g_error_free(self.pointer) };
-            self.pointer = ::std::ptr::null();
+            self.pointer = ::std::ptr::mut_null();
         }
     }
 
@@ -52,15 +52,15 @@ impl Error {
         }
     }
 
-    pub fn set(&self, domain: GQuark, code: i32, message: &str) -> () {
+    pub fn set(&mut self, domain: GQuark, code: i32, message: &str) -> () {
         unsafe { message.with_c_str(|c_str| {
-                ffi::g_set_error_literal(&self.pointer, domain, code, c_str)
+                ffi::g_set_error_literal(&mut self.pointer, domain, code, c_str)
             })
         }
     }
 
-    pub fn propagate(&self, other: &Error) -> () {
-        unsafe { ffi::g_propagate_error(&self.pointer, other.pointer) }
+    pub fn propagate(&mut self, other: &Error) -> () {
+        unsafe { ffi::g_propagate_error(&mut self.pointer, other.pointer) }
     }
 }
 
@@ -70,7 +70,7 @@ impl Clone for Error {
 
         if tmp_pointer.is_null() {
             Error {
-                pointer: ::std::ptr::null()
+                pointer: ::std::ptr::mut_null()
             }
         } else {
             glib::GlibContainer::wrap(tmp_pointer)
@@ -84,14 +84,14 @@ impl Drop for Error {
     }
 }
 
-impl GlibContainer<*ffi::C_GError> for Error {
-    fn wrap(pointer: *ffi::C_GError) -> Error {
+impl GlibContainer<*mut ffi::C_GError> for Error {
+    fn wrap(pointer: *mut ffi::C_GError) -> Error {
         Error {
             pointer: pointer
         }
     }
 
-    fn unwrap(&self) -> *ffi::C_GError {
+    fn unwrap(&self) -> *mut ffi::C_GError {
         self.pointer
     }
 }

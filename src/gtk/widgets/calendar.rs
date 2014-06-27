@@ -91,11 +91,11 @@ impl Calendar {
     }
 
     pub fn get_date(&self) -> (u32, u32, u32) {
-        let year = 0;
-        let month = 0;
-        let day = 0;
+        let mut year = 0;
+        let mut month = 0;
+        let mut day = 0;
         unsafe {
-            ffi::gtk_calendar_get_date(GTK_CALENDAR(self.pointer), &year, &month, &day);
+            ffi::gtk_calendar_get_date(GTK_CALENDAR(self.pointer), &mut year, &mut month, &mut day);
         }
         (year, month, day)
     }
