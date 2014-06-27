@@ -200,9 +200,13 @@ pub use self::enums::{
     revealer_transition_type,
     RevealerTransitionType,
     scrollable_policy,
+<<<<<<< HEAD
     ScrollablePolicy,
     file_filter_flags,
     FileFilterFlags
+=======
+    ScrollablePolicy
+>>>>>>> upstream/master
 };
 
 pub use self::types::{
@@ -219,4 +223,8 @@ mod rt;
 mod widgets;
 mod enums;
 mod types;
+<<<<<<< HEAD
 pub mod ffi;
+=======
+mod ffi;
+>>>>>>> upstream/master

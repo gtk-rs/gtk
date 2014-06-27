@@ -81,7 +81,10 @@ pub use self::buttons_type::ButtonsType;
 pub use self::stack_transition_type::StackTransitionType;
 pub use self::revealer_transition_type::RevealerTransitionType;
 pub use self::scrollable_policy::ScrollablePolicy;
+<<<<<<< HEAD
 pub use self::file_filter_flags::FileFilterFlags;
+=======
+>>>>>>> upstream/master
 
 pub mod window_type{
     #[repr(C)]

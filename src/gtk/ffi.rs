@@ -75,8 +75,11 @@ pub struct C_GtkAboutDialog;
 pub struct C_GtkMessageDialog;
 pub struct C_GtkAppChooserDialog;
 pub struct C_GtkColorChooserDialog;
+<<<<<<< HEAD
 pub struct C_GtkFileChooserDialog;
 pub struct C_GtkFileChooser;
+=======
+>>>>>>> upstream/master
 pub struct C_GtkNotebook;
 pub struct C_GtkStack;
 pub struct C_GtkStackSwitcher;
@@ -90,7 +93,10 @@ pub struct C_GtkFlowBoxChild;
 pub struct C_GtkListBox;
 pub struct C_GtkListBoxRow;
 pub struct C_GtkActionBar;
+<<<<<<< HEAD
 pub struct C_GtkFileFilter;
+=======
+>>>>>>> upstream/master
 
 pub struct C_GtkToolItem;
 pub struct C_GtkToolButton;
