@@ -349,7 +349,9 @@ extern "C" {
     //=========================================================================
     // GtkFileChooserDialog                                              NOT OK
     //=========================================================================
-    pub fn gtk_file_chooser_dialog_new         (title: *c_char, parent: *C_GtkWindow, action: gtk::FileChooserAction, first_button_text: *c_char, ...) -> *C_GtkWidget;
+    //pub fn gtk_file_chooser_dialog_new         (title: *c_char, parent: *C_GtkWindow, action: gtk::FileChooserAction, first_button_text: *c_char, ...) -> *C_GtkWidget;
+    pub fn gtk_file_chooser_dialog_new         (title: *c_char, parent: *C_GtkWindow, action: gtk::FileChooserAction, button_text1: *c_char,
+        type1: gtk::ResponseType, button_text2: *c_char, type2: gtk::ResponseType, end: *c_void) -> *C_GtkWidget;
 
     //=========================================================================
     // GtkColorChooser                                                       OK

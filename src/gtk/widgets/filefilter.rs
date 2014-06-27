@@ -18,7 +18,6 @@ use gtk::traits;
 use gtk::traits::Widget;
 use std::str;
 use gtk::cast::GTK_FILE_FILTER;
-use gtk::enums;
 
 struct_Widget!(FileFilter)
 
@@ -29,7 +28,7 @@ impl FileFilter {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(traits::Widget::wrap(tmp_pointer))
+            Some(traits::Widget::wrap(tmp_pointer as *ffi::C_GtkWidget))
         }
     }
 

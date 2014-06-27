@@ -22,7 +22,7 @@ pub use self::error::{Error};
 
 mod list;
 mod slist;
-mod ffi;
+pub mod ffi;
 mod glib_container;
 mod error;
 

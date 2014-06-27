@@ -149,12 +149,12 @@ impl<T> Clone for SList<T> {
     }
 }
 
-#[unsafe_destructor]
-impl<T> Drop for SList<T> {
+//#[unsafe_destructor]
+/*impl<T> Drop for SList<T> {
     fn drop(&mut self) {
         unsafe { ffi::g_slist_free(self.pointer); }
     }
-}
+}*/
 
 impl<T> GlibContainer<*ffi::C_GSList> for SList<T> {
     fn wrap(pointer: *ffi::C_GSList) -> SList<T> {

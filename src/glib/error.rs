@@ -16,6 +16,8 @@
 use glib::ffi;
 use glib::ffi::{GQuark};
 use glib::GlibContainer;
+use glib;
+use gtk;
 
 pub struct Error {
     pointer: *ffi::C_GError
@@ -45,7 +47,7 @@ impl Error {
 
     pub fn matches(&self, domain: GQuark, code: i32) -> bool {
         match unsafe { ffi::g_error_matches(self.pointer, domain, code) } {
-            GFalse => false,
+            gtk::ffi::Gfalse => false,
             _ => true
         }
     }
@@ -63,13 +65,15 @@ impl Error {
 }
 
 impl Clone for Error {
-    fn clone(&self) -> Option<Error> {
+    fn clone(&self) -> Error {
         let tmp_pointer = unsafe { ffi::g_error_copy(self.pointer) };
 
         if tmp_pointer.is_null() {
-            None
+            Error {
+                pointer: ::std::ptr::null()
+            }
         } else {
-            Some(Error{pointer: tmp_pointer})
+            glib::GlibContainer::wrap(tmp_pointer)
         }
     }
 }
