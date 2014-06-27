@@ -94,7 +94,6 @@ extern "C" {
     pub fn g_list_position                (list: *C_GList, link_: C_GList) -> c_int;
     // pub fn g_slist_index                   (list: *C_GSList, data: *c_void) -> c_int;
 
-<<<<<<< HEAD
     //=========================================================================
     // GError
     //=========================================================================
@@ -110,6 +109,4 @@ extern "C" {
     pub fn g_clear_error                  (err: **C_GError) -> ();
     //pub fn g_prefix_error                 (err: **C_GError, format: *c_char, ...) -> ();
     //pub fn g_propagate_prefixed_error     (dest: **C_GError, src: *C_GError, format: *c_char, ...) -> ();
-=======
->>>>>>> upstream/master
 }

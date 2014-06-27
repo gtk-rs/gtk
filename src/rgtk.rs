@@ -110,7 +110,7 @@ __rgtk__ is available under the same license term than GTK+, the LGPL (Lesser Ge
 #![crate_type = "rlib"]
 #![feature(macro_rules)]
 #![allow(dead_code)] // TODO: drop this
-//#![feature(unsafe_destructor)]
+#![feature(unsafe_destructor)]
 
 extern crate libc;
 
@@ -134,10 +134,7 @@ pub use GtkToggleToolButtonTrait= gtk::traits::ToggleToolButton;
 pub use GtkDialogTrait          = gtk::traits::Dialog;
 pub use GtkColorChooserTrait    = gtk::traits::ColorChooser;
 pub use GtkScrollableTrait      = gtk::traits::Scrollable;
-<<<<<<< HEAD
 pub use GtkFileChooser          = gtk::traits::FileChooser;
-=======
->>>>>>> upstream/master
 
 #[doc(hidden)]
 #[cfg(target_os="macos")]

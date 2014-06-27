@@ -33,10 +33,7 @@ pub use self::toggletoolbutton::ToggleToolButton;
 pub use self::dialog::Dialog;
 pub use self::colorchooser::ColorChooser;
 pub use self::scrollable::Scrollable;
-<<<<<<< HEAD
 pub use self::filechooser::FileChooser;
-=======
->>>>>>> upstream/master
 
 pub mod widget;
 pub mod container;
@@ -58,7 +55,4 @@ pub mod toggletoolbutton;
 pub mod dialog;
 pub mod colorchooser;
 pub mod scrollable;
-<<<<<<< HEAD
 pub mod filechooser;
-=======
->>>>>>> upstream/master
