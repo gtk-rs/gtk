@@ -89,6 +89,9 @@ pub use self::widgets::{
     ActionBar,
     FileFilter,
     FileChooserDialog,
+    AppInfo,
+    AppLaunchContext,
+    AppChooserDialog,
     Widget // FIXME @jeremyletang
 };
 
@@ -202,7 +205,9 @@ pub use self::enums::{
     scrollable_policy,
     ScrollablePolicy,
     file_filter_flags,
-    FileFilterFlags
+    FileFilterFlags,
+    app_info_create_flags,
+    AppInfoCreateFlags
 };
 
 pub use self::types::{

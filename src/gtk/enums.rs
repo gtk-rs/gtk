@@ -82,6 +82,7 @@ pub use self::stack_transition_type::StackTransitionType;
 pub use self::revealer_transition_type::RevealerTransitionType;
 pub use self::scrollable_policy::ScrollablePolicy;
 pub use self::file_filter_flags::FileFilterFlags;
+pub use self::app_info_create_flags::AppInfoCreateFlags;
 
 pub mod window_type{
     #[repr(C)]
@@ -1103,5 +1104,21 @@ pub mod scrollable_policy {
         Minimum,
         /// Scrollable adjustments are based on the natural size
         Natural
+    }
+}
+
+/// Flags used when creating a GAppInfo.
+pub mod app_info_create_flags {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum AppInfoCreateFlags {
+        /// No flags.
+        None,
+        /// Application opens in a terminal window.
+        NeedsTerminal,
+        /// Application supports URI arguments.
+        SupportsUris,
+        /// Application supports startup notification.
+        SupportsStartupNotification
     }
 }

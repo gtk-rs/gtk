@@ -72,6 +72,9 @@ pub use self::action_bar::ActionBar;
 pub use self::widget::Widget;
 pub use self::filefilter::FileFilter;
 pub use self::filechooserdialog::FileChooserDialog;
+pub use self::appinfo::AppInfo;
+pub use self::applaunchcontext::AppLaunchContext;
+pub use self::appchooserdialog::AppChooserDialog;
 
 pub mod window;
 pub mod label;
@@ -132,3 +135,6 @@ pub mod list_box;
 pub mod action_bar;
 pub mod filefilter;
 pub mod filechooserdialog;
+pub mod appinfo;
+pub mod applaunchcontext;
+pub mod appchooserdialog;
