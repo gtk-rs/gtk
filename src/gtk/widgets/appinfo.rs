@@ -13,6 +13,8 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
+#![allow(unused_imports)]
+
 use gtk::ffi;
 use gtk::traits;
 use gtk::cast::{GTK_APP_INFO, GTK_APP_LAUNCH_CONTEXT};
