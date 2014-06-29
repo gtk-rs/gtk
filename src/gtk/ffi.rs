@@ -26,7 +26,7 @@ pub type Gboolean = c_int;
 pub static Gfalse:  c_int = 0;
 pub static Gtrue:   c_int = !Gfalse;
 
-pub type gpointer = *c_void;
+pub type gpointer = *const c_void;
 
 pub struct C_GtkWidget;
 pub struct C_GtkWindow;
@@ -126,7 +126,7 @@ extern "C" {
     //=========================================================================
     // Gtk Main Loop + events
     //=========================================================================
-    pub fn gtk_init                            (argc: *c_int, argv: ***c_char) -> ();
+    pub fn gtk_init                            (argc: *const c_int, argv: *const *const *const c_char) -> ();
     pub fn gtk_main                            () -> ();
     pub fn gtk_main_quit                       () -> ();
     pub fn gtk_main_level                      () -> c_uint;
@@ -137,21 +137,21 @@ extern "C" {
     // GtkWindow
     //=========================================================================
     pub fn gtk_window_new                      (wtype : gtk::WindowType) -> *mut C_GtkWidget;
-    pub fn gtk_window_set_title                (window: *mut C_GtkWindow, title: *c_char) -> ();
-    pub fn gtk_window_get_title                (window: *mut C_GtkWindow) -> *c_char;
+    pub fn gtk_window_set_title                (window: *mut C_GtkWindow, title: *const c_char) -> ();
+    pub fn gtk_window_get_title                (window: *mut C_GtkWindow) -> *const c_char;
     pub fn gtk_widget_hide                     (widget: *mut C_GtkWidget) -> ();
-    // pub fn gtk_window_set_role(window: *C_GtkWindow, role: *c_char) -> ();
-    // pub fn gtk_window_set_startup_id(window: *C_GtkWindow, startup_id: *c_char) -> ();
-    // pub fn gtk_window_get_role(window: *C_GtkWindow) -> *c_char;
-    // pub fn gtk_window_add_accel_group(window: *C_GtkWindow, accel_group: *GtkAccelGroup) -> ();
-    // pub fn gtk_window_remove_accel_group(window: *C_GtkWindow, accel_group: *GtkAccelGroup) -> ();
-    // pub fn gtk_window_set_position(window: *C_GtkWindow,position: gtk::WindowPosition) -> ();
-    // pub fn gtk_window_activate_focus(window: *C_GtkWindow) -> Gboolean;
-    // pub fn gtk_window_set_focus(window: *C_GtkWindow, focus: *C_GtkWidget) -> ();
-    // pub fn gtk_window_get_focus(window: *C_GtkWindow) -> *C_GtkWidget;
-    // pub fn gtk_window_set_default(window: *C_GtkWindow, default_widget: *C_GtkWidget) -> ();
-    // pub fn gtk_window_get_default_widget(window: *C_GtkWindow) -> *C_GtkWidget;
-    // pub fn gtk_window_activate_default(window: *C_GtkWindow) -> Gboolean;
+    // pub fn gtk_window_set_role(window: *const const C_GtkWindow, role: *const c_char) -> ();
+    // pub fn gtk_window_set_startup_id(window: *const const C_GtkWindow, startup_id: *const c_char) -> ();
+    // pub fn gtk_window_get_role(window: *const const C_GtkWindow) -> *const c_char;
+    // pub fn gtk_window_add_accel_group(window: *const const C_GtkWindow, accel_group: *GtkAccelGroup) -> ();
+    // pub fn gtk_window_remove_accel_group(window: *const const C_GtkWindow, accel_group: *GtkAccelGroup) -> ();
+    // pub fn gtk_window_set_position(window: *const const C_GtkWindow,position: gtk::WindowPosition) -> ();
+    // pub fn gtk_window_activate_focus(window: *const const C_GtkWindow) -> Gboolean;
+    // pub fn gtk_window_set_focus(window: *const const C_GtkWindow, focus: *const const C_GtkWidget) -> ();
+    // pub fn gtk_window_get_focus(window: *const const C_GtkWindow) -> *const const C_GtkWidget;
+    // pub fn gtk_window_set_default(window: *const const C_GtkWindow, default_widget: *const const C_GtkWidget) -> ();
+    // pub fn gtk_window_get_default_widget(window: *const const C_GtkWindow) -> *const const C_GtkWidget;
+    // pub fn gtk_window_activate_default(window: *const const C_GtkWindow) -> Gboolean;
     // pub fn gtk_window_get_type() -> ();
 
 
@@ -173,41 +173,41 @@ extern "C" {
     //=========================================================================
     // GtkLabel
     //=========================================================================
-    pub fn gtk_label_new                       (text: *c_char) -> *mut C_GtkWidget;
-    pub fn gtk_label_set_label                 (label: *mut C_GtkLabel, text: *c_char);
+    pub fn gtk_label_new                       (text: *const c_char) -> *mut C_GtkWidget;
+    pub fn gtk_label_set_label                 (label: *mut C_GtkLabel, text: *const c_char);
     pub fn gtk_label_set_justify               (label: *mut C_GtkLabel, jtype: gtk::Justification);
-    pub fn gtk_label_set_text                  (label: *mut C_GtkLabel, stext: *c_char) -> ();
-    // pub fn gtk_label_set_attributes            (label: *C_GtkLabel, PangoAttrList *attrs) -> ();
-    pub fn gtk_label_set_markup                (label: *mut C_GtkLabel, text: *c_char) -> ();
-    pub fn gtk_label_set_markup_with_mnemonic  (label: *mut C_GtkLabel, text: *c_char) -> ();
-    pub fn gtk_label_set_pattern               (label: *mut C_GtkLabel, text: *c_char) -> ();
-    // pub fn gtk_label_set_ellipsize             (label: *C_GtkLabel, PangoEllipsizeMode mode) -> ();
+    pub fn gtk_label_set_text                  (label: *mut C_GtkLabel, stext: *const c_char) -> ();
+    // pub fn gtk_label_set_attributes            (label: *const const C_GtkLabel, PangoAttrList *attrs) -> ();
+    pub fn gtk_label_set_markup                (label: *mut C_GtkLabel, text: *const c_char) -> ();
+    pub fn gtk_label_set_markup_with_mnemonic  (label: *mut C_GtkLabel, text: *const c_char) -> ();
+    pub fn gtk_label_set_pattern               (label: *mut C_GtkLabel, text: *const c_char) -> ();
+    // pub fn gtk_label_set_ellipsize             (label: *const const C_GtkLabel, PangoEllipsizeMode mode) -> ();
     pub fn gtk_label_set_width_chars           (label: *mut C_GtkLabel, n_chars: c_int) -> ();
     pub fn gtk_label_set_max_width_chars       (label: *mut C_GtkLabel, n_chars: c_int) -> ();
     pub fn gtk_label_set_line_wrap             (label: *mut C_GtkLabel, wrap: Gboolean) -> ();
-    // pub fn gtk_label_set_line_wrap_mode        (label: *C_GtkLabel, PangoWrapMode wrap_mode);
+    // pub fn gtk_label_set_line_wrap_mode        (label: *const const C_GtkLabel, PangoWrapMode wrap_mode);
     pub fn gtk_label_set_lines                 (label: *mut C_GtkLabel, lines: c_int) -> ();
-    pub fn gtk_label_get_layout_offsets        (label: *mut C_GtkLabel, x: *c_int, y: *c_int) -> ();
+    pub fn gtk_label_get_layout_offsets        (label: *mut C_GtkLabel, x: *const c_int, y: *const c_int) -> ();
     pub fn gtk_label_get_mnemonic_keyval       (label: *mut C_GtkLabel) -> c_uint;
     pub fn gtk_label_get_selectable            (label: *mut C_GtkLabel) -> Gboolean;
-    pub fn gtk_label_get_text                  (label: *mut C_GtkLabel) -> *c_char;
-    pub fn gtk_label_new_with_mnemonic         (text: *c_char) -> *mut C_GtkWidget;
+    pub fn gtk_label_get_text                  (label: *mut C_GtkLabel) -> *const c_char;
+    pub fn gtk_label_new_with_mnemonic         (text: *const c_char) -> *mut C_GtkWidget;
     pub fn gtk_label_select_region             (label: *mut C_GtkLabel, start_offset: c_int, end_offset: c_int) -> ();
-    // pub fn gtk_label_set_mnemonic_widget       (label: *C_GtkLabel, widget: *C_GtkWidget) -> ();
+    // pub fn gtk_label_set_mnemonic_widget       (label: *const const C_GtkLabel, widget: *const const C_GtkWidget) -> ();
     pub fn gtk_label_set_selectable            (label: *mut C_GtkLabel, gsetting: Gboolean) -> ();
-    pub fn gtk_label_set_text_with_mnemonic    (label: *mut C_GtkLabel, text: *c_char) -> ();
-    // pub fn gtk_label_get_attributes            (label: *C_GtkLabel) -> *PangoAttrList;
+    pub fn gtk_label_set_text_with_mnemonic    (label: *mut C_GtkLabel, text: *const c_char) -> ();
+    // pub fn gtk_label_get_attributes            (label: *const const C_GtkLabel) -> *PangoAttrList;
     pub fn gtk_label_get_justify               (label: *mut C_GtkLabel) -> gtk::Justification;
-    // pub fn gtk_label_get_ellipsize             (label: *C_GtkLabel) -> PangoEllipsizeMode;
+    // pub fn gtk_label_get_ellipsize             (label: *const const C_GtkLabel) -> PangoEllipsizeMode;
     pub fn gtk_label_get_width_chars           (label: *mut C_GtkLabel) -> c_int;
     pub fn gtk_label_get_max_width_chars       (label: *mut C_GtkLabel) -> c_int;
-    pub fn gtk_label_get_label                 (label: *mut C_GtkLabel) -> *c_char;
-    // pub fn gtk_label_get_layout                (label: *C_GtkLabel) -> *PangoLayout;
+    pub fn gtk_label_get_label                 (label: *mut C_GtkLabel) -> *const c_char;
+    // pub fn gtk_label_get_layout                (label: *const const C_GtkLabel) -> *PangoLayout;
     pub fn gtk_label_get_line_wrap             (label: *mut C_GtkLabel) -> Gboolean;
-    // pub fn gtk_label_get_line_wrap_mode        (label: *C_GtkLabel) -> PangoWrapMode;
+    // pub fn gtk_label_get_line_wrap_mode        (label: *const const C_GtkLabel) -> PangoWrapMode;
     pub fn gtk_label_get_lines                 (label: *mut C_GtkLabel) -> c_int;
-    // pub fn gtk_label_get_mnemonic_widget       (label: *C_GtkLabel) -> *C_GtkWidget;
-    pub fn gtk_label_get_selection_bounds      (label: *mut C_GtkLabel, start: *c_int, end: *c_int) -> Gboolean;
+    // pub fn gtk_label_get_mnemonic_widget       (label: *const const C_GtkLabel) -> *const const C_GtkWidget;
+    pub fn gtk_label_get_selection_bounds      (label: *mut C_GtkLabel, start: *const c_int, end: *const c_int) -> Gboolean;
     pub fn gtk_label_get_use_markup            (label: *mut C_GtkLabel) -> Gboolean;
     pub fn gtk_label_get_use_underline         (label: *mut C_GtkLabel) -> Gboolean;
     pub fn gtk_label_get_single_line_mode      (label: *mut C_GtkLabel) -> Gboolean;
@@ -216,7 +216,7 @@ extern "C" {
     pub fn gtk_label_set_use_underline         (label: *mut C_GtkLabel, setting: Gboolean) -> ();
     pub fn gtk_label_set_single_line_mode      (label: *mut C_GtkLabel, single_line_mod: Gboolean) -> ();
     pub fn gtk_label_set_angle                 (label: *mut C_GtkLabel, angle: c_double) -> ();
-    pub fn gtk_label_get_current_uri           (label: *mut C_GtkLabel) -> *c_char;
+    pub fn gtk_label_get_current_uri           (label: *mut C_GtkLabel) -> *const c_char;
     pub fn gtk_label_set_track_visited_links   (label: *mut C_GtkLabel, track_links: Gboolean) -> ();
     pub fn gtk_label_get_track_visited_links   (label: *mut C_GtkLabel) -> Gboolean;
 
@@ -238,17 +238,17 @@ extern "C" {
 
     pub fn gtk_misc_set_alignment              (misc: *mut C_GtkMisc, xalign: c_float, yalign: c_float) -> ();
     pub fn gtk_misc_set_padding                (misc: *mut C_GtkMisc, xpad: c_int, ypad: c_int) -> ();
-    pub fn gtk_misc_get_alignment              (misc: *mut C_GtkMisc, xalign: *c_float, yalign: *c_float) -> ();
-    pub fn gtk_misc_get_padding                (misc: *mut C_GtkMisc, xpad: *c_int, ypad: *c_int) -> ();
+    pub fn gtk_misc_get_alignment              (misc: *mut C_GtkMisc, xalign: *const c_float, yalign: *const c_float) -> ();
+    pub fn gtk_misc_get_padding                (misc: *mut C_GtkMisc, xpad: *const c_int, ypad: *const c_int) -> ();
 
     //=========================================================================
     // GtkButton                                                             OK
     //=========================================================================
     pub fn gtk_button_new                      () -> *mut C_GtkWidget;
-    pub fn gtk_button_new_with_label           (label: *c_char) -> *mut C_GtkWidget;
-    pub fn gtk_button_new_with_mnemonic        (label: *c_char) -> *mut C_GtkWidget;
-    pub fn gtk_button_new_from_icon_name       (icon_id: *c_char, size: gtk::IconSize) -> *mut C_GtkWidget;
-    pub fn gtk_button_new_from_stock           (stock_id: *c_char) -> *mut C_GtkWidget;
+    pub fn gtk_button_new_with_label           (label: *const c_char) -> *mut C_GtkWidget;
+    pub fn gtk_button_new_with_mnemonic        (label: *const c_char) -> *mut C_GtkWidget;
+    pub fn gtk_button_new_from_icon_name       (icon_id: *const c_char, size: gtk::IconSize) -> *mut C_GtkWidget;
+    pub fn gtk_button_new_from_stock           (stock_id: *const c_char) -> *mut C_GtkWidget;
     pub fn gtk_button_pressed                  (button: *mut C_GtkButton) -> ();
     pub fn gtk_button_released                 (button: *mut C_GtkButton) -> ();
     pub fn gtk_button_clicked                  (button: *mut C_GtkButton) -> ();
@@ -256,8 +256,8 @@ extern "C" {
     pub fn gtk_button_leave                    (button: *mut C_GtkButton) -> ();
     pub fn gtk_button_set_relief               (button: *mut C_GtkButton, newstyle: gtk::ReliefStyle) -> ();
     pub fn gtk_button_get_relief               (button: *mut C_GtkButton) -> gtk::ReliefStyle;
-    pub fn gtk_button_get_label                (button: *mut C_GtkButton) -> *c_char;
-    pub fn gtk_button_set_label                (button: *mut C_GtkButton, label: *c_char) -> ();
+    pub fn gtk_button_get_label                (button: *mut C_GtkButton) -> *const c_char;
+    pub fn gtk_button_set_label                (button: *mut C_GtkButton, label: *const c_char) -> ();
     pub fn gtk_button_get_use_stock            (button: *mut C_GtkButton) -> Gboolean;
     pub fn gtk_button_set_use_stock            (button: *mut C_GtkButton, use_stock: Gboolean) -> ();
     pub fn gtk_button_get_use_underline        (button: *mut C_GtkButton) -> Gboolean;
@@ -267,17 +267,17 @@ extern "C" {
     pub fn gtk_button_set_alignment            (button: *mut C_GtkButton, xalign: c_float, yalign: c_float) -> ();
     pub fn gtk_button_get_alignment            (button: *mut C_GtkButton, xalign: *mut c_float, yalign: *mut c_float) -> ();
     pub fn gtk_button_set_image                (button: *mut C_GtkButton, image: *mut C_GtkWidget) -> ();
-    // pub fn gtk_button_get_image                (button: *C_GtkButton) -> *C_GtkWidget;
+    // pub fn gtk_button_get_image                (button: *const const C_GtkButton) -> *const const C_GtkWidget;
     pub fn gtk_button_set_image_position       (button: *mut C_GtkButton, position: gtk::PositionType) -> ();
     pub fn gtk_button_get_image_position       (button: *mut C_GtkButton) -> gtk::PositionType;
     pub fn gtk_button_set_always_show_image    (button: *mut C_GtkButton, always_show: Gboolean) -> ();
     pub fn gtk_button_get_always_show_image    (button: *mut C_GtkButton) -> Gboolean;
-    // pub fn gtk_button_get_event_window         (button: *C_GtkButton) -> *C_GdkWindow;
+    // pub fn gtk_button_get_event_window         (button: *const const C_GtkButton) -> *const const C_GdkWindow;
 
     //=========================================================================
     // GtkFileChooser                                                    NOT OK
     //=========================================================================
-    // FIXME : check if memory is freed when a *c_char is returned
+    // FIXME : check if memory is freed when a *const c_char is returned
     pub fn gtk_file_chooser_set_action         (chooser: *mut C_GtkFileChooser, action: gtk::FileChooserAction) -> ();
     pub fn gtk_file_chooser_get_action         (chooser: *mut C_GtkFileChooser) -> gtk::FileChooserAction;
     pub fn gtk_file_chooser_set_local_only     (chooser: *mut C_GtkFileChooser, local_only: Gboolean) -> ();
@@ -290,85 +290,85 @@ extern "C" {
     pub fn gtk_file_chooser_get_do_overwrite_confirmation(chooser: *mut C_GtkFileChooser) -> Gboolean;
     pub fn gtk_file_chooser_set_create_folders (chooser: *mut C_GtkFileChooser, create_folders: Gboolean) -> ();
     pub fn gtk_file_chooser_get_create_folders (chooser: *mut C_GtkFileChooser) -> Gboolean;
-    pub fn gtk_file_chooser_set_current_name   (chooser: *mut C_GtkFileChooser, name: *c_char) -> ();
-    pub fn gtk_file_chooser_get_current_name   (chooser: *mut C_GtkFileChooser) -> *c_char;
-    pub fn gtk_file_chooser_set_filename       (chooser: *mut C_GtkFileChooser, filename: *c_char) -> Gboolean;
-    pub fn gtk_file_chooser_get_filename       (chooser: *mut C_GtkFileChooser) -> *c_char;
-    pub fn gtk_file_chooser_select_filename    (chooser: *mut C_GtkFileChooser, filename: *c_char) -> Gboolean;
-    pub fn gtk_file_chooser_unselect_filename  (chooser: *mut C_GtkFileChooser, filename: *c_char) -> ();
+    pub fn gtk_file_chooser_set_current_name   (chooser: *mut C_GtkFileChooser, name: *const c_char) -> ();
+    pub fn gtk_file_chooser_get_current_name   (chooser: *mut C_GtkFileChooser) -> *const c_char;
+    pub fn gtk_file_chooser_set_filename       (chooser: *mut C_GtkFileChooser, filename: *const c_char) -> Gboolean;
+    pub fn gtk_file_chooser_get_filename       (chooser: *mut C_GtkFileChooser) -> *const c_char;
+    pub fn gtk_file_chooser_select_filename    (chooser: *mut C_GtkFileChooser, filename: *const c_char) -> Gboolean;
+    pub fn gtk_file_chooser_unselect_filename  (chooser: *mut C_GtkFileChooser, filename: *const c_char) -> ();
     pub fn gtk_file_chooser_select_all         (chooser: *mut C_GtkFileChooser) -> ();
     pub fn gtk_file_chooser_unselect_all       (chooser: *mut C_GtkFileChooser) -> ();
     pub fn gtk_file_chooser_get_filenames      (chooser: *mut C_GtkFileChooser) -> *mut glib::ffi::C_GSList;
-    pub fn gtk_file_chooser_set_current_folder (chooser: *mut C_GtkFileChooser, filename: *c_char) -> Gboolean;
-    pub fn gtk_file_chooser_get_current_folder (chooser: *mut C_GtkFileChooser) -> *c_char;
-    pub fn gtk_file_chooser_set_uri            (chooser: *mut C_GtkFileChooser, uri: *c_char) -> Gboolean;
-    pub fn gtk_file_chooser_get_uri            (chooser: *mut C_GtkFileChooser) -> *c_char;
-    pub fn gtk_file_chooser_select_uri         (chooser: *mut C_GtkFileChooser, uri: *c_char) -> Gboolean;
-    pub fn gtk_file_chooser_unselect_uri       (chooser: *mut C_GtkFileChooser, uri: *c_char) -> ();
+    pub fn gtk_file_chooser_set_current_folder (chooser: *mut C_GtkFileChooser, filename: *const c_char) -> Gboolean;
+    pub fn gtk_file_chooser_get_current_folder (chooser: *mut C_GtkFileChooser) -> *const c_char;
+    pub fn gtk_file_chooser_set_uri            (chooser: *mut C_GtkFileChooser, uri: *const c_char) -> Gboolean;
+    pub fn gtk_file_chooser_get_uri            (chooser: *mut C_GtkFileChooser) -> *const c_char;
+    pub fn gtk_file_chooser_select_uri         (chooser: *mut C_GtkFileChooser, uri: *const c_char) -> Gboolean;
+    pub fn gtk_file_chooser_unselect_uri       (chooser: *mut C_GtkFileChooser, uri: *const c_char) -> ();
     pub fn gtk_file_chooser_get_uris           (chooser: *mut C_GtkFileChooser) -> *mut glib::ffi::C_GSList;
-    pub fn gtk_file_chooser_set_current_folder_uri(chooser: *mut C_GtkFileChooser, uri: *c_char) -> Gboolean;
-    pub fn gtk_file_chooser_get_current_folder_uri(chooser: *mut C_GtkFileChooser) -> *c_char;
+    pub fn gtk_file_chooser_set_current_folder_uri(chooser: *mut C_GtkFileChooser, uri: *const c_char) -> Gboolean;
+    pub fn gtk_file_chooser_get_current_folder_uri(chooser: *mut C_GtkFileChooser) -> *const c_char;
     pub fn gtk_file_chooser_set_preview_widget (chooser: *mut C_GtkFileChooser, preview_widget: *mut C_GtkWidget) -> ();
     pub fn gtk_file_chooser_get_preview_widget (chooser: *mut C_GtkFileChooser) -> *mut C_GtkWidget;
     pub fn gtk_file_chooser_set_preview_widget_active(chooser: *mut C_GtkFileChooser, active: Gboolean) -> ();
     pub fn gtk_file_chooser_get_preview_widget_active(chooser: *mut C_GtkFileChooser) -> Gboolean;
     pub fn gtk_file_chooser_set_use_preview_label(chooser: *mut C_GtkFileChooser, use_label: Gboolean) -> ();
     pub fn gtk_file_chooser_get_use_preview_label(chooser: *mut C_GtkFileChooser) -> Gboolean;
-    pub fn gtk_file_chooser_get_preview_filename(chooser: *mut C_GtkFileChooser) -> *c_char;
-    pub fn gtk_file_chooser_get_preview_uri    (chooser: *mut C_GtkFileChooser) -> *c_char;
+    pub fn gtk_file_chooser_get_preview_filename(chooser: *mut C_GtkFileChooser) -> *const c_char;
+    pub fn gtk_file_chooser_get_preview_uri    (chooser: *mut C_GtkFileChooser) -> *const c_char;
     pub fn gtk_file_chooser_set_extra_widget   (chooser: *mut C_GtkFileChooser, extra_widget: *mut C_GtkWidget) -> ();
     pub fn gtk_file_chooser_get_extra_widget   (chooser: *mut C_GtkFileChooser) -> *mut C_GtkWidget;
     pub fn gtk_file_chooser_add_filter         (chooser: *mut C_GtkFileChooser, filter: *mut C_GtkFileFilter) -> ();
     pub fn gtk_file_chooser_remove_filter      (chooser: *mut C_GtkFileChooser, filter: *mut C_GtkFileFilter) -> ();
-    //pub fn gtk_file_chooser_list_filters       (chooser: *C_GtkFileChooser) -> *glib::ffi::C_GSList;
+    //pub fn gtk_file_chooser_list_filters       (chooser: *const const C_GtkFileChooser) -> *glib::ffi::C_GSList;
     pub fn gtk_file_chooser_set_filter         (chooser: *mut C_GtkFileChooser, filter: *mut C_GtkFileFilter) -> ();
     pub fn gtk_file_chooser_get_filter         (chooser: *mut C_GtkFileChooser) -> *mut C_GtkFileFilter;
-    pub fn gtk_file_chooser_add_shortcut_folder(chooser: *mut C_GtkFileChooser, folder: *c_char, error: *mut *mut glib::ffi::C_GError) -> Gboolean;
-    pub fn gtk_file_chooser_remove_shortcut_folder(chooser: *mut C_GtkFileChooser, folder: *c_char, error: *mut *mut glib::ffi::C_GError) -> Gboolean;
-    //pub fn gtk_file_chooser_list_shortcut_folders(chooser: *C_GtkFileChooser) -> *glib::ffi::C_GSList;
-    pub fn gtk_file_chooser_add_shortcut_folder_uri(chooser: *mut C_GtkFileChooser, uri: *c_char, error: *mut *mut glib::ffi::C_GError) -> Gboolean;
-    pub fn gtk_file_chooser_remove_shortcut_folder_uri(chooser: *mut C_GtkFileChooser, uri: *c_char, error: *mut *mut glib::ffi::C_GError) -> Gboolean;
-    //pub fn gtk_file_chooser_list_shortcut_folder_uris(chooser: *C_GtkFileChooser) -> *glib::ffi::C_GSList;
-    //pub fn gtk_file_chooser_get_current_folder_file(chooser: *C_GtkFileChooser) -> *C_Gfile;
-    //pub fn gtk_file_chooser_get_file           (chooser: *C_GtkFileChooser) -> *C_Gfile;
-    //pub fn gtk_file_chooser_get_files          (chooser: *C_GtkFileChooser) -> *glib::ffi::C_GSList;
-    //pub fn gtk_file_chooser_get_preview_file   (chooser: *C_GtkFileChooser) -> *C_Gfile;
-    //pub fn gtk_file_chooser_select_file        (chooser: *C_GtkFileChooser, file: *C_Gfile, error: **glib::ffi::C_GError) -> Gboolean;
-    //pub fn gtk_file_chooser_set_current_folder_file(chooser: *C_GtkFileChooser, file: *C_Gfile, error: **glib::ffi::C_GError) -> Gboolean;
-    //pub fn gtk_file_chooser_set_file           (chooser: *C_GtkFileChooser, file: *C_Gfile, error: **glib::ffi::C_GError) -> Gboolean;
-    //pub fn gtk_file_chooser_unselect_file        (chooser: *C_GtkFileChooser, file: *C_Gfile) -> ();
+    pub fn gtk_file_chooser_add_shortcut_folder(chooser: *mut C_GtkFileChooser, folder: *const c_char, error: *mut *mut glib::ffi::C_GError) -> Gboolean;
+    pub fn gtk_file_chooser_remove_shortcut_folder(chooser: *mut C_GtkFileChooser, folder: *const c_char, error: *mut *mut glib::ffi::C_GError) -> Gboolean;
+    //pub fn gtk_file_chooser_list_shortcut_folders(chooser: *const const C_GtkFileChooser) -> *glib::ffi::C_GSList;
+    pub fn gtk_file_chooser_add_shortcut_folder_uri(chooser: *mut C_GtkFileChooser, uri: *const c_char, error: *mut *mut glib::ffi::C_GError) -> Gboolean;
+    pub fn gtk_file_chooser_remove_shortcut_folder_uri(chooser: *mut C_GtkFileChooser, uri: *const c_char, error: *mut *mut glib::ffi::C_GError) -> Gboolean;
+    //pub fn gtk_file_chooser_list_shortcut_folder_uris(chooser: *const const C_GtkFileChooser) -> *glib::ffi::C_GSList;
+    //pub fn gtk_file_chooser_get_current_folder_file(chooser: *const const C_GtkFileChooser) -> *const const C_Gfile;
+    //pub fn gtk_file_chooser_get_file           (chooser: *const const C_GtkFileChooser) -> *const const C_Gfile;
+    //pub fn gtk_file_chooser_get_files          (chooser: *const const C_GtkFileChooser) -> *glib::ffi::C_GSList;
+    //pub fn gtk_file_chooser_get_preview_file   (chooser: *const const C_GtkFileChooser) -> *const const C_Gfile;
+    //pub fn gtk_file_chooser_select_file        (chooser: *const const C_GtkFileChooser, file: *const const C_Gfile, error: **glib::ffi::C_GError) -> Gboolean;
+    //pub fn gtk_file_chooser_set_current_folder_file(chooser: *const const C_GtkFileChooser, file: *const const C_Gfile, error: **glib::ffi::C_GError) -> Gboolean;
+    //pub fn gtk_file_chooser_set_file           (chooser: *const const C_GtkFileChooser, file: *const const C_Gfile, error: **glib::ffi::C_GError) -> Gboolean;
+    //pub fn gtk_file_chooser_unselect_file        (chooser: *const const C_GtkFileChooser, file: *const const C_Gfile) -> ();
 
     //=========================================================================
     // GtkFileFilter                                                     NOT OK
     //=========================================================================
     pub fn gtk_file_filter_new                 () -> *mut C_GtkFileFilter;
-    pub fn gtk_file_filter_set_name            (filter: *mut C_GtkFileFilter, name: *c_char) -> ();
-    pub fn gtk_file_filter_get_name            (filter: *mut C_GtkFileFilter) -> *c_char;
-    pub fn gtk_file_filter_add_mime_type       (filter: *mut C_GtkFileFilter, mime_type: *c_char) -> ();
-    pub fn gtk_file_filter_add_pattern         (filter: *mut C_GtkFileFilter, pattern: *c_char) -> ();
+    pub fn gtk_file_filter_set_name            (filter: *mut C_GtkFileFilter, name: *const c_char) -> ();
+    pub fn gtk_file_filter_get_name            (filter: *mut C_GtkFileFilter) -> *const c_char;
+    pub fn gtk_file_filter_add_mime_type       (filter: *mut C_GtkFileFilter, mime_type: *const c_char) -> ();
+    pub fn gtk_file_filter_add_pattern         (filter: *mut C_GtkFileFilter, pattern: *const c_char) -> ();
     pub fn gtk_file_filter_add_pixbuf_formats  (filter: *mut C_GtkFileFilter) -> ();
-    //pub fn gtk_file_filter_add_custom          (filter: *C_GtkFileFilter, func: *C_GtkFileFilterFunc, data: *c_void, notify: *C_GDestroyNotif) -> ();
+    //pub fn gtk_file_filter_add_custom          (filter: *const const C_GtkFileFilter, func: *const const C_GtkFileFilterFunc, data: *const c_void, notify: *const const C_GDestroyNotif) -> ();
 
     //=========================================================================
     // GtkFileChooserDialog                                              NOT OK
     //=========================================================================
-    //pub fn gtk_file_chooser_dialog_new         (title: *c_char, parent: *C_GtkWindow, action: gtk::FileChooserAction, first_button_text: *c_char, ...) -> *C_GtkWidget;
-    pub fn gtk_file_chooser_dialog_new         (title: *c_char, parent: *mut C_GtkWindow, action: gtk::FileChooserAction, button_text1: *c_char,
-        type1: gtk::ResponseType, button_text2: *c_char, type2: gtk::ResponseType, end: *mut c_void) -> *mut C_GtkWidget;
+    //pub fn gtk_file_chooser_dialog_new         (title: *const c_char, parent: *const const C_GtkWindow, action: gtk::FileChooserAction, first_button_text: *const c_char, ...) -> *const const C_GtkWidget;
+    pub fn gtk_file_chooser_dialog_new         (title: *const c_char, parent: *mut C_GtkWindow, action: gtk::FileChooserAction, button_text1: *const c_char,
+        type1: gtk::ResponseType, button_text2: *const c_char, type2: gtk::ResponseType, end: *mut c_void) -> *mut C_GtkWidget;
 
     //=========================================================================
     // GtkColorChooser                                                       OK
     //=========================================================================
-    pub fn gtk_color_chooser_get_rgba          (chooser: *mut C_GtkColorChooser, color: *gdk::RGBA) -> ();
-    pub fn gtk_color_chooser_set_rgba          (chooser: *mut C_GtkColorChooser, color: *gdk::RGBA) -> ();
+    pub fn gtk_color_chooser_get_rgba          (chooser: *mut C_GtkColorChooser, color: *const gdk::RGBA) -> ();
+    pub fn gtk_color_chooser_set_rgba          (chooser: *mut C_GtkColorChooser, color: *const gdk::RGBA) -> ();
     pub fn gtk_color_chooser_get_use_alpha     (chooser: *mut C_GtkColorChooser) -> Gboolean;
     pub fn gtk_color_chooser_set_use_alpha     (chooser: *mut C_GtkColorChooser, use_alpha: Gboolean) -> ();
-    pub fn gtk_color_chooser_add_palette       (chooser: *mut C_GtkColorChooser, orientation: gtk::Orientation, colors_per_line: i32, n_colors: i32, colors: *gdk::RGBA) -> ();
+    pub fn gtk_color_chooser_add_palette       (chooser: *mut C_GtkColorChooser, orientation: gtk::Orientation, colors_per_line: i32, n_colors: i32, colors: *const gdk::RGBA) -> ();
 
     //=========================================================================
     // GtkColorChooserDialog                                                 OK
     //=========================================================================
-    pub fn gtk_color_chooser_dialog_new        (title: *c_char, parent: *mut C_GtkWindow) -> *mut C_GtkWidget;
+    pub fn gtk_color_chooser_dialog_new        (title: *const c_char, parent: *mut C_GtkWindow) -> *mut C_GtkWidget;
 
     //=========================================================================
     // GtkAppLaunchContext                                               NOT OK
@@ -429,33 +429,33 @@ extern "C" {
     //=========================================================================
     // GtkAppChooserDialog                                               NOT OK
     //=========================================================================
-    //pub fn gtk_app_chooser_dialog_new          (title: *c_char, flags: gtk::DialogFlags, file: *C_Gfile) -> *C_GtkWidget;
-    pub fn gtk_app_chooser_dialog_new_for_content_type(parent: *mut C_GtkWindow, flags: gtk::DialogFlags, content_type: *c_char) -> *mut C_GtkWidget;
+    //pub fn gtk_app_chooser_dialog_new          (title: *const c_char, flags: gtk::DialogFlags, file: *const const C_Gfile) -> *const const C_GtkWidget;
+    pub fn gtk_app_chooser_dialog_new_for_content_type(parent: *mut C_GtkWindow, flags: gtk::DialogFlags, content_type: *const c_char) -> *mut C_GtkWidget;
     pub fn gtk_app_chooser_dialog_get_widget   (_self: *mut C_GtkAppChooserDialog) -> *mut C_GtkWidget;
-    pub fn gtk_app_chooser_dialog_set_heading  (_self: *mut C_GtkAppChooserDialog, heading: *c_char) -> ();
-    pub fn gtk_app_chooser_dialog_get_heading  (_self: *mut C_GtkAppChooserDialog) -> *c_char;
+    pub fn gtk_app_chooser_dialog_set_heading  (_self: *mut C_GtkAppChooserDialog, heading: *const c_char) -> ();
+    pub fn gtk_app_chooser_dialog_get_heading  (_self: *mut C_GtkAppChooserDialog) -> *const c_char;
 
     //=========================================================================
     // GtkMessageDialog                                                  NOT OK
     //=========================================================================
     pub fn gtk_message_dialog_new              (parent: *mut C_GtkWindow, flags: gtk::DialogFlags, _type: gtk::MessageType, buttons: gtk::ButtonsType,
-        message_format: *c_char, ...) -> *mut C_GtkWidget;
+        message_format: *const c_char, ...) -> *mut C_GtkWidget;
     pub fn gtk_message_dialog_new_with_markup  (parent: *mut C_GtkWindow, flags: gtk::DialogFlags, _type: gtk::MessageType, buttons: gtk::ButtonsType,
-        message_format: *c_char, ...) -> *mut C_GtkWidget;
-    pub fn gtk_message_dialog_set_markup       (message_dialog: *mut C_GtkMessageDialog, str: *c_char) -> ();
-    //pub fn gtk_message_dialog_format_secondary_text(message_dialog: *C_GtkMessageDialog, message_format: *c_char, ...) -> ();
-    pub fn gtk_message_dialog_format_secondary_markup(message_dialog: *mut C_GtkMessageDialog, message_format: *c_char, ...) -> ();
+        message_format: *const c_char, ...) -> *mut C_GtkWidget;
+    pub fn gtk_message_dialog_set_markup       (message_dialog: *mut C_GtkMessageDialog, str: *const c_char) -> ();
+    //pub fn gtk_message_dialog_format_secondary_text(message_dialog: *const const C_GtkMessageDialog, message_format: *const c_char, ...) -> ();
+    pub fn gtk_message_dialog_format_secondary_markup(message_dialog: *mut C_GtkMessageDialog, message_format: *const c_char, ...) -> ();
     pub fn gtk_message_dialog_get_message_area (message_dialog: *mut C_GtkMessageDialog) -> *mut C_GtkWidget;
 
     //=========================================================================
     // GtkDialog                                                         NOT OK
     //=========================================================================
     pub fn gtk_dialog_new                      () -> *mut C_GtkWidget;
-    //pub fn gtk_dialog_new_with_buttons         (title: *c_char, parent: *C_GtkWindow, flags: DialogFlags, first_button_text: *c_char, ...) -> *C_GtkWidget;
+    //pub fn gtk_dialog_new_with_buttons         (title: *const c_char, parent: *const const C_GtkWindow, flags: DialogFlags, first_button_text: *const c_char, ...) -> *const const C_GtkWidget;
     pub fn gtk_dialog_run                      (dialog: *mut C_GtkDialog) -> i32;
     pub fn gtk_dialog_response                 (dialog: *mut C_GtkDialog, response_id: i32) -> ();
-    pub fn gtk_dialog_add_button               (dialog: *mut C_GtkDialog, button_text: *c_char, response_id: i32) -> *mut C_GtkWidget;
-    //pub fn gtk_dialog_add_buttons              (dialog: *C_GtkDialog, first_button_text: *c_char, ...) -> ();
+    pub fn gtk_dialog_add_button               (dialog: *mut C_GtkDialog, button_text: *const c_char, response_id: i32) -> *mut C_GtkWidget;
+    //pub fn gtk_dialog_add_buttons              (dialog: *const const C_GtkDialog, first_button_text: *const c_char, ...) -> ();
     pub fn gtk_dialog_add_action_widget        (dialog: *mut C_GtkDialog, child: *mut C_GtkWidget, response_id: i32) -> ();
     pub fn gtk_dialog_set_default_response     (dialog: *mut C_GtkDialog, response_id: i32) -> ();
     pub fn gtk_dialog_set_response_sensitive   (dialog: *mut C_GtkDialog, response_id: i32, setting: Gboolean) -> ();
@@ -469,46 +469,46 @@ extern "C" {
     // GtkAboutDialog                                                    NOT OK
     //=========================================================================
     pub fn gtk_about_dialog_new                () -> *mut C_GtkWidget;
-    //pub fn gtk_show_about_dialog               (parent: *GtkWindow, first_property_name: *c_char, ...) -> ();
-    pub fn gtk_about_dialog_get_program_name   (about: *mut C_GtkAboutDialog) -> *c_char;
-    pub fn gtk_about_dialog_set_program_name   (about: *mut C_GtkAboutDialog, name: *c_char) -> ();
-    pub fn gtk_about_dialog_get_version        (about: *mut C_GtkAboutDialog) -> *c_char;
-    pub fn gtk_about_dialog_set_version        (about: *mut C_GtkAboutDialog, version: *c_char) -> ();
-    pub fn gtk_about_dialog_get_copyright      (about: *mut C_GtkAboutDialog) -> *c_char;
-    pub fn gtk_about_dialog_set_copyright      (about: *mut C_GtkAboutDialog, copyright: *c_char) -> ();
-    pub fn gtk_about_dialog_get_comments       (about: *mut C_GtkAboutDialog) -> *c_char;
-    pub fn gtk_about_dialog_set_comments       (about: *mut C_GtkAboutDialog, comments: *c_char) -> ();
-    pub fn gtk_about_dialog_get_license        (about: *mut C_GtkAboutDialog) -> *c_char;
-    pub fn gtk_about_dialog_set_license        (about: *mut C_GtkAboutDialog, comments: *c_char) -> ();
+    //pub fn gtk_show_about_dialog               (parent: *GtkWindow, first_property_name: *const c_char, ...) -> ();
+    pub fn gtk_about_dialog_get_program_name   (about: *mut C_GtkAboutDialog) -> *const c_char;
+    pub fn gtk_about_dialog_set_program_name   (about: *mut C_GtkAboutDialog, name: *const c_char) -> ();
+    pub fn gtk_about_dialog_get_version        (about: *mut C_GtkAboutDialog) -> *const c_char;
+    pub fn gtk_about_dialog_set_version        (about: *mut C_GtkAboutDialog, version: *const c_char) -> ();
+    pub fn gtk_about_dialog_get_copyright      (about: *mut C_GtkAboutDialog) -> *const c_char;
+    pub fn gtk_about_dialog_set_copyright      (about: *mut C_GtkAboutDialog, copyright: *const c_char) -> ();
+    pub fn gtk_about_dialog_get_comments       (about: *mut C_GtkAboutDialog) -> *const c_char;
+    pub fn gtk_about_dialog_set_comments       (about: *mut C_GtkAboutDialog, comments: *const c_char) -> ();
+    pub fn gtk_about_dialog_get_license        (about: *mut C_GtkAboutDialog) -> *const c_char;
+    pub fn gtk_about_dialog_set_license        (about: *mut C_GtkAboutDialog, comments: *const c_char) -> ();
     pub fn gtk_about_dialog_get_license_type   (about: *mut C_GtkAboutDialog) -> gtk::License;
     pub fn gtk_about_dialog_set_license_type   (about: *mut C_GtkAboutDialog, license_type: gtk::License) -> ();
     pub fn gtk_about_dialog_get_wrap_license   (about: *mut C_GtkAboutDialog) -> Gboolean;
     pub fn gtk_about_dialog_set_wrap_license   (about: *mut C_GtkAboutDialog, wrap_license: Gboolean) -> ();
-    pub fn gtk_about_dialog_get_website        (about: *mut C_GtkAboutDialog) -> *c_char;
-    pub fn gtk_about_dialog_set_website        (about: *mut C_GtkAboutDialog, website: *c_char) -> ();
-    pub fn gtk_about_dialog_get_website_label  (about: *mut C_GtkAboutDialog) -> *c_char;
-    pub fn gtk_about_dialog_set_website_label  (about: *mut C_GtkAboutDialog, website_label: *c_char) -> ();
-    pub fn gtk_about_dialog_get_authors        (about: *mut C_GtkAboutDialog) -> **c_char;
-    pub fn gtk_about_dialog_set_authors        (about: *mut C_GtkAboutDialog, authors: **c_char) -> ();
-    pub fn gtk_about_dialog_get_documenters    (about: *mut C_GtkAboutDialog) -> **c_char;
-    pub fn gtk_about_dialog_set_documenters    (about: *mut C_GtkAboutDialog, documents: **c_char) -> ();
-    pub fn gtk_about_dialog_get_artists        (about: *mut C_GtkAboutDialog) -> **c_char;
-    pub fn gtk_about_dialog_set_artists        (about: *mut C_GtkAboutDialog, artists: **c_char) -> ();
-    pub fn gtk_about_dialog_get_translator_credits(about: *mut C_GtkAboutDialog) -> *c_char;
-    pub fn gtk_about_dialog_set_translator_credits(about: *mut C_GtkAboutDialog, translator_credits: *c_char) -> ();
-    //pub fn gtk_about_dialog_get_logo           (about: *C_GtkAboutDialog) -> *C_GdkPixbuf;
-    //pub fn gtk_about_dialog_set_logo           (about: *C_GtkAboutDialog, logo: *C_GdkPixbuf) -> ();
-    pub fn gtk_about_dialog_get_logo_icon_name (about: *mut C_GtkAboutDialog) -> *c_char;
-    pub fn gtk_about_dialog_set_logo_icon_name (about: *mut C_GtkAboutDialog, icon_name: *c_char) -> ();
-    pub fn gtk_about_dialog_add_credit_section (about: *mut C_GtkAboutDialog, section_name: *c_char, people: **c_char) -> ();
+    pub fn gtk_about_dialog_get_website        (about: *mut C_GtkAboutDialog) -> *const c_char;
+    pub fn gtk_about_dialog_set_website        (about: *mut C_GtkAboutDialog, website: *const c_char) -> ();
+    pub fn gtk_about_dialog_get_website_label  (about: *mut C_GtkAboutDialog) -> *const c_char;
+    pub fn gtk_about_dialog_set_website_label  (about: *mut C_GtkAboutDialog, website_label: *const c_char) -> ();
+    pub fn gtk_about_dialog_get_authors        (about: *mut C_GtkAboutDialog) -> *const *const c_char;
+    pub fn gtk_about_dialog_set_authors        (about: *mut C_GtkAboutDialog, authors: *const *const c_char) -> ();
+    pub fn gtk_about_dialog_get_documenters    (about: *mut C_GtkAboutDialog) -> *const *const c_char;
+    pub fn gtk_about_dialog_set_documenters    (about: *mut C_GtkAboutDialog, documents: *const *const c_char) -> ();
+    pub fn gtk_about_dialog_get_artists        (about: *mut C_GtkAboutDialog) -> *const *const c_char;
+    pub fn gtk_about_dialog_set_artists        (about: *mut C_GtkAboutDialog, artists: *const *const c_char) -> ();
+    pub fn gtk_about_dialog_get_translator_credits(about: *mut C_GtkAboutDialog) -> *const c_char;
+    pub fn gtk_about_dialog_set_translator_credits(about: *mut C_GtkAboutDialog, translator_credits: *const c_char) -> ();
+    //pub fn gtk_about_dialog_get_logo           (about: *const const C_GtkAboutDialog) -> *const const C_GdkPixbuf;
+    //pub fn gtk_about_dialog_set_logo           (about: *const const C_GtkAboutDialog, logo: *const const C_GdkPixbuf) -> ();
+    pub fn gtk_about_dialog_get_logo_icon_name (about: *mut C_GtkAboutDialog) -> *const c_char;
+    pub fn gtk_about_dialog_set_logo_icon_name (about: *mut C_GtkAboutDialog, icon_name: *const c_char) -> ();
+    pub fn gtk_about_dialog_add_credit_section (about: *mut C_GtkAboutDialog, section_name: *const c_char, people: *const *const c_char) -> ();
 
     //=========================================================================
     // GtkFontButton                                                         OK
     //=========================================================================
     pub fn gtk_font_button_new                 () -> *mut C_GtkWidget;
-    pub fn gtk_font_button_new_with_font       (fontname: *c_char) -> *mut C_GtkWidget;
-    pub fn gtk_font_button_set_font_name       (font_button: *mut C_GtkFontButton, fontname: *c_char) -> Gboolean;
-    pub fn gtk_font_button_get_font_name       (font_button: *mut C_GtkFontButton) -> *c_char;
+    pub fn gtk_font_button_new_with_font       (fontname: *const c_char) -> *mut C_GtkWidget;
+    pub fn gtk_font_button_set_font_name       (font_button: *mut C_GtkFontButton, fontname: *const c_char) -> Gboolean;
+    pub fn gtk_font_button_get_font_name       (font_button: *mut C_GtkFontButton) -> *const c_char;
     pub fn gtk_font_button_set_show_style      (font_button: *mut C_GtkFontButton, show_style: Gboolean) -> ();
     pub fn gtk_font_button_get_show_style      (font_button: *mut C_GtkFontButton) -> Gboolean;
     pub fn gtk_font_button_set_show_size       (font_button: *mut C_GtkFontButton, show_size: Gboolean) -> ();
@@ -517,15 +517,15 @@ extern "C" {
     pub fn gtk_font_button_get_use_font        (font_button: *mut C_GtkFontButton) -> Gboolean;
     pub fn gtk_font_button_set_use_size        (font_button: *mut C_GtkFontButton, use_size: Gboolean) -> ();
     pub fn gtk_font_button_get_use_size        (font_button: *mut C_GtkFontButton) -> Gboolean;
-    pub fn gtk_font_button_set_title           (font_button: *mut C_GtkFontButton, title: *c_char) -> ();
-    pub fn gtk_font_button_get_title           (font_button: *mut C_GtkFontButton) -> *c_char;
+    pub fn gtk_font_button_set_title           (font_button: *mut C_GtkFontButton, title: *const c_char) -> ();
+    pub fn gtk_font_button_get_title           (font_button: *mut C_GtkFontButton) -> *const c_char;
 
     //=========================================================================
     // GtkToggleButton                                                       OK
     //=========================================================================
     pub fn gtk_toggle_button_new               () -> *mut C_GtkWidget;
-    pub fn gtk_toggle_button_new_with_label    (label: *c_char) -> *mut C_GtkWidget;
-    pub fn gtk_toggle_button_new_with_mnemonic (label: *c_char) -> *mut C_GtkWidget;
+    pub fn gtk_toggle_button_new_with_label    (label: *const c_char) -> *mut C_GtkWidget;
+    pub fn gtk_toggle_button_new_with_mnemonic (label: *const c_char) -> *mut C_GtkWidget;
     pub fn gtk_toggle_button_set_mode          (toggle_button: *mut C_GtkToggleButton, draw_indicator: Gboolean) -> ();
     pub fn gtk_toggle_button_get_mode          (toggle_button: *mut C_GtkToggleButton) -> Gboolean;
     pub fn gtk_toggle_button_toggled           (toggle_button: *mut C_GtkToggleButton) -> ();
@@ -538,18 +538,18 @@ extern "C" {
     // GtkCheckButton                                                        OK
     //=========================================================================
     pub fn gtk_check_button_new                () -> *mut C_GtkWidget;
-    pub fn gtk_check_button_new_with_label     (label: *c_char) -> *mut C_GtkWidget;
-    pub fn gtk_check_button_new_with_mnemonic  (label: *c_char) -> *mut C_GtkWidget;
+    pub fn gtk_check_button_new_with_label     (label: *const c_char) -> *mut C_GtkWidget;
+    pub fn gtk_check_button_new_with_mnemonic  (label: *const c_char) -> *mut C_GtkWidget;
 
     //=========================================================================
     // GtkRadioButton                                                      TODO
     //=========================================================================
-    // pub fn gtk_radio_button_new                (GSList *group) -> *C_GtkWidget;
-    // pub fn gtk_radio_button_new_from_widget    (GtkRadioButton *radio_group_member) -> *C_GtkWidget;
-    // pub fn gtk_radio_button_new_with_label     (GSList *group, const gchar *label) -> *C_GtkWidget;
-    // pub fn tk_radio_button_new_with_label_from_widget (GtkRadioButton *radio_group_member, const gchar *label) -> *C_GtkWidget;
-    // pub fn gtk_radio_button_new_with_mnemonic  (GSList *group, const gchar *label) -> *C_GtkWidget;
-    // pub fn gtk_radio_button_new_with_mnemonic_from_widget(GtkRadioButton *radio_group_member,  const gchar *label) -> *C_GtkWidget;
+    // pub fn gtk_radio_button_new                (GSList *group) -> *const const C_GtkWidget;
+    // pub fn gtk_radio_button_new_from_widget    (GtkRadioButton *radio_group_member) -> *const const C_GtkWidget;
+    // pub fn gtk_radio_button_new_with_label     (GSList *group, const gchar *label) -> *const const C_GtkWidget;
+    // pub fn tk_radio_button_new_with_label_from_widget (GtkRadioButton *radio_group_member, const gchar *label) -> *const const C_GtkWidget;
+    // pub fn gtk_radio_button_new_with_mnemonic  (GSList *group, const gchar *label) -> *const const C_GtkWidget;
+    // pub fn gtk_radio_button_new_with_mnemonic_from_widget(GtkRadioButton *radio_group_member,  const gchar *label) -> *const const C_GtkWidget;
     // pub fn gtk_radio_button_set_group          (GtkRadioButton *radio_button, GSList *group) -> ();
     // pub fn gtk_radio_button_get_group          (GtkRadioButton *radio_button) -> *GSList;
     // pub fn gtk_radio_button_join_group         (GtkRadioButton *radio_button, GtkRadioButton *group_source) -> ();
@@ -559,53 +559,53 @@ extern "C" {
     //=========================================================================
     pub fn gtk_menu_button_new                 () -> *mut C_GtkWidget;
     pub fn gtk_menu_button_set_popup           (menu_button: *mut C_GtkMenuButton, popup: *mut C_GtkWidget) -> ();
-    // pub fn gtk_menu_button_get_popup           (menu_button: *C_GtkMenuButton) -> *C_GtkMenu;
-    // pub fn gtk_menu_button_set_menu_model      (menu_button: *C_GtkMenuButton, menu_model: *C_GMenuModel) -> ();
-    // pub fn gtk_menu_button_get_menu_model      (menu_button: *C_GtkMenuButton) -> C_GMenuModel;
+    // pub fn gtk_menu_button_get_popup           (menu_button: *const const C_GtkMenuButton) -> *const const C_GtkMenu;
+    // pub fn gtk_menu_button_set_menu_model      (menu_button: *const const C_GtkMenuButton, menu_model: *const const C_GMenuModel) -> ();
+    // pub fn gtk_menu_button_get_menu_model      (menu_button: *const const C_GtkMenuButton) -> C_GMenuModel;
     pub fn gtk_menu_button_set_direction       (menu_button: *mut C_GtkMenuButton, direction: gtk::ArrowType) -> ();
     pub fn gtk_menu_button_get_direction       (menu_button: *mut C_GtkMenuButton) -> gtk::ArrowType;
     pub fn gtk_menu_button_set_align_widget    (menu_button: *mut C_GtkMenuButton, align_widget: *mut C_GtkWidget) -> ();
-    // pub fn gtk_menu_button_get_align_widget    (menu_button: *C_GtkMenuButton) -> *C_GtkWidget;
+    // pub fn gtk_menu_button_get_align_widget    (menu_button: *const const C_GtkMenuButton) -> *const const C_GtkWidget;
 
     //=========================================================================
     // GtkColorButton                                                        OK
     //=========================================================================
     pub fn gtk_color_button_new                () -> *mut C_GtkWidget;
-    pub fn gtk_color_button_new_with_color     (color: *gdk::Color) -> *mut C_GtkWidget;
-    pub fn gtk_color_button_new_with_rgba      (rgba: *gdk::RGBA) -> *mut C_GtkWidget;
-    pub fn gtk_color_button_set_color          (button: *mut C_GtkColorButton, color: *gdk::Color) -> ();
-    pub fn gtk_color_button_get_color          (button: *mut C_GtkColorButton, color: *gdk::Color) -> ();
+    pub fn gtk_color_button_new_with_color     (color: *const gdk::Color) -> *mut C_GtkWidget;
+    pub fn gtk_color_button_new_with_rgba      (rgba: *const gdk::RGBA) -> *mut C_GtkWidget;
+    pub fn gtk_color_button_set_color          (button: *mut C_GtkColorButton, color: *const gdk::Color) -> ();
+    pub fn gtk_color_button_get_color          (button: *mut C_GtkColorButton, color: *const gdk::Color) -> ();
     pub fn gtk_color_button_set_alpha          (button: *mut C_GtkColorButton, alpha: u16) -> ();
     pub fn gtk_color_button_get_alpha          (button: *mut C_GtkColorButton) -> u16;
-    pub fn gtk_color_button_set_rgba           (button: *mut C_GtkColorButton, rgba: *gdk::RGBA) -> ();
-    pub fn gtk_color_button_get_rgba           (button: *mut C_GtkColorButton, rgba: *gdk::RGBA) -> ();
+    pub fn gtk_color_button_set_rgba           (button: *mut C_GtkColorButton, rgba: *const gdk::RGBA) -> ();
+    pub fn gtk_color_button_get_rgba           (button: *mut C_GtkColorButton, rgba: *const gdk::RGBA) -> ();
     pub fn gtk_color_button_set_use_alpha      (button: *mut C_GtkColorButton, use_alpha: Gboolean) -> ();
     pub fn gtk_color_button_get_use_alpha      (button: *mut C_GtkColorButton) -> Gboolean;
-    pub fn gtk_color_button_set_title          (button: *mut C_GtkColorButton, title: *c_char) -> ();
-    pub fn gtk_color_button_get_title          (button: *mut C_GtkColorButton) -> *c_char;
+    pub fn gtk_color_button_set_title          (button: *mut C_GtkColorButton, title: *const c_char) -> ();
+    pub fn gtk_color_button_get_title          (button: *mut C_GtkColorButton) -> *const c_char;
 
     //=========================================================================
     // GtkLinkButton                                                         OK
     //=========================================================================
-    pub fn gtk_link_button_new                 (uri: *c_char) -> *mut C_GtkWidget;
-    pub fn gtk_link_button_new_with_label      (uri: *c_char, label: *c_char) -> *mut C_GtkWidget;
-    pub fn gtk_link_button_get_uri             (link_button: *mut C_GtkLinkButton) -> *c_char;
-    pub fn gtk_link_button_set_uri             (link_button: *mut C_GtkLinkButton, uri: *c_char) -> ();
+    pub fn gtk_link_button_new                 (uri: *const c_char) -> *mut C_GtkWidget;
+    pub fn gtk_link_button_new_with_label      (uri: *const c_char, label: *const c_char) -> *mut C_GtkWidget;
+    pub fn gtk_link_button_get_uri             (link_button: *mut C_GtkLinkButton) -> *const c_char;
+    pub fn gtk_link_button_set_uri             (link_button: *mut C_GtkLinkButton, uri: *const c_char) -> ();
     pub fn gtk_link_button_get_visited         (link_button: *mut C_GtkLinkButton) -> Gboolean;
     pub fn gtk_link_button_set_visited         (link_button: *mut C_GtkLinkButton, visited: Gboolean) -> ();
 
     //=========================================================================
     // GtkScaleButton
     //=========================================================================
-    pub fn gtk_scale_button_new                (size: gtk::IconSize, min: c_double, max: c_double, step: c_double, icons: **c_char) -> *mut C_GtkWidget;
+    pub fn gtk_scale_button_new                (size: gtk::IconSize, min: c_double, max: c_double, step: c_double, icons: *const *const c_char) -> *mut C_GtkWidget;
     pub fn gtk_scale_button_set_adjustment     (button: *mut C_GtkScaleButton, adjustment: *mut C_GtkAdjustment) -> ();
-    // pub fn gtk_scale_button_set_icons          (button: *C_GtkScaleButton, icons: **c_char) -> ();
+    // pub fn gtk_scale_button_set_icons          (button: *const const C_GtkScaleButton, icons: *const *const c_char) -> ();
     pub fn gtk_scale_button_set_value          (button: *mut C_GtkScaleButton, value: c_double) -> ();
     pub fn gtk_scale_button_get_adjustment     (button: *mut C_GtkScaleButton) -> *mut C_GtkAdjustment;
     pub fn gtk_scale_button_get_value          (button: *mut C_GtkScaleButton) -> c_double;
-    // pub fn gtk_scale_button_get_popup          (button: *C_GtkScaleButton) -> *C_GtkWidget;
-    // pub fn gtk_scale_button_get_plus_button    (button: *C_GtkScaleButton) -> *C_GtkWidget;
-    // pub fn gtk_scale_button_get_minus_button   (button: *C_GtkScaleButton) -> *C_GtkWidget;
+    // pub fn gtk_scale_button_get_popup          (button: *const const C_GtkScaleButton) -> *const const C_GtkWidget;
+    // pub fn gtk_scale_button_get_plus_button    (button: *const const C_GtkScaleButton) -> *const const C_GtkWidget;
+    // pub fn gtk_scale_button_get_minus_button   (button: *const const C_GtkScaleButton) -> *const const C_GtkWidget;
 
     //=========================================================================
     // GtkVolumeButton                                                       OK
@@ -625,8 +625,8 @@ extern "C" {
     pub fn gtk_box_reorder_child               (gbox: *mut C_GtkBox, child: *mut C_GtkWidget, position: c_int) -> ();
     pub fn gtk_box_query_child_packing         (gbox: *mut C_GtkBox, child: *mut C_GtkWidget, expand: *mut Gboolean, fill: *mut Gboolean, padding: *mut c_uint, pack_type: *mut gtk::PackType) -> ();
     pub fn gtk_box_set_child_packing           (gbox: *mut C_GtkBox, child: *mut C_GtkWidget, expand: Gboolean, fill: Gboolean, padding: c_uint, pack_type: gtk::PackType) -> ();
-    // pub fn gtk_box_get_baseline_position       (gbox: *C_GtkBox) -> gtk::BaselinePosition;
-    // pub fn gtk_box_set_baseline_position       (gbox: *C_GtkBox, position: gtk::BaselinePosition) -> ();
+    // pub fn gtk_box_get_baseline_position       (gbox: *const const C_GtkBox) -> gtk::BaselinePosition;
+    // pub fn gtk_box_set_baseline_position       (gbox: *const const C_GtkBox, position: gtk::BaselinePosition) -> ();
 
     //=========================================================================
     // GtkOrientable                                                         OK
@@ -653,25 +653,25 @@ extern "C" {
     pub fn gtk_get_micro_version               () -> c_uint;
     pub fn gtk_get_binary_age                  () -> c_uint;
     pub fn gtk_get_interface_age               () -> c_uint;
-    pub fn gtk_check_version                   (required_major: c_uint, required_minor: c_uint, required_micro: c_uint) -> *c_char;
+    pub fn gtk_check_version                   (required_major: c_uint, required_minor: c_uint, required_micro: c_uint) -> *const c_char;
 
     //=========================================================================
     // GtkFrame                                                              OK
     //=========================================================================
-    pub fn gtk_frame_new                       (label: *c_char) -> *mut C_GtkWidget;
-    pub fn gtk_frame_set_label                 (frame: *mut C_GtkFrame, label: *c_char) -> ();
+    pub fn gtk_frame_new                       (label: *const c_char) -> *mut C_GtkWidget;
+    pub fn gtk_frame_set_label                 (frame: *mut C_GtkFrame, label: *const c_char) -> ();
     pub fn gtk_frame_set_label_widget          (frame: *mut C_GtkFrame, label_widget: *mut C_GtkWidget) -> ();
     pub fn gtk_frame_set_label_align           (frame: *mut C_GtkFrame, xalign: c_float, yalign: c_float) -> ();
     pub fn gtk_frame_set_shadow_type           (frame: *mut C_GtkFrame, st_type: gtk::ShadowType) -> ();
-    pub fn gtk_frame_get_label                 (frame: *mut C_GtkFrame) -> *c_char;
+    pub fn gtk_frame_get_label                 (frame: *mut C_GtkFrame) -> *const c_char;
     pub fn gtk_frame_get_label_align           (frame: *mut C_GtkFrame, xalign: *mut c_float, yalign: *mut c_float) -> ();
-    // pub fn gtk_frame_get_label_widget          (frame: *C_GtkFrame) -> *C_GtkWidget;
+    // pub fn gtk_frame_get_label_widget          (frame: *const const C_GtkFrame) -> *const const C_GtkWidget;
     pub fn gtk_frame_get_shadow_type           (frame: *mut C_GtkFrame) -> gtk::ShadowType;
 
     //=========================================================================
     // GtkAspectFrame                                                        OK
     //=========================================================================
-    pub fn gtk_aspect_frame_new                (label: *c_char, xalign: c_float, yalign: c_float, ratio: c_float, obey_child: Gboolean) -> *mut C_GtkWidget;
+    pub fn gtk_aspect_frame_new                (label: *const c_char, xalign: c_float, yalign: c_float, ratio: c_float, obey_child: Gboolean) -> *mut C_GtkWidget;
     pub fn gtk_aspect_frame_set                (aspect_frame: *mut C_GtkAspectFrame, xalign: c_float, yalign: c_float, ratio: c_float, obey_child: Gboolean) -> ();
 
     //=========================================================================
@@ -719,7 +719,7 @@ extern "C" {
     pub fn gtk_grid_new                        () -> *mut C_GtkWidget;
     pub fn gtk_grid_attach                     (grid: *mut C_GtkGrid, child: *mut C_GtkWidget, left: c_int, top: c_int, width: c_int, height: c_int) -> ();
     pub fn gtk_grid_attach_next_to             (grid: *mut C_GtkGrid, child: *mut C_GtkWidget, sibling: *mut C_GtkWidget, side: gtk::PositionType, width: c_int, height: c_int) -> ();
-    // pub fn gtk_grid_get_child_at               (grid: *C_GtkGrid, left: c_int, top: c_int) -> *C_GtkWidget;
+    // pub fn gtk_grid_get_child_at               (grid: *const const C_GtkGrid, left: c_int, top: c_int) -> *const const C_GtkWidget;
     pub fn gtk_grid_insert_row                 (grid: *mut C_GtkGrid, position: c_int) -> ();
     pub fn gtk_grid_insert_column              (grid: *mut C_GtkGrid, position: c_int) -> ();
     pub fn gtk_grid_remove_row                 (grid: *mut C_GtkGrid, position: c_int) -> ();
@@ -735,23 +735,23 @@ extern "C" {
     pub fn gtk_grid_get_column_spacing         (grid: *mut C_GtkGrid) -> c_uint;
     pub fn gtk_grid_get_baseline_row           (grid: *mut C_GtkGrid) -> c_int;
     pub fn gtk_grid_set_baseline_row           (grid: *mut C_GtkGrid, row: c_int) -> ();
-    // pub fn gtk_grid_get_row_baseline_position  (grid: *C_GtkGrid, row: c_int);
-    // pub fn gtk_grid_set_row_baseline_position  (grid: *C_GtkGrid, row: c_int, pos: gtk::BaselinePosition) -> ();
+    // pub fn gtk_grid_get_row_baseline_position  (grid: *const const C_GtkGrid, row: c_int);
+    // pub fn gtk_grid_set_row_baseline_position  (grid: *const const C_GtkGrid, row: c_int, pos: gtk::BaselinePosition) -> ();
 
     //=========================================================================
     // GtkEntryBuffer                                                        OK
     //=========================================================================
-    pub fn gtk_entry_buffer_new                (initial_chars: *c_char, n_initial_chars: c_int) -> *mut C_GtkEntryBuffer;
-    pub fn gtk_entry_buffer_get_text           (buffer: *mut C_GtkEntryBuffer) -> *c_char;
-    pub fn gtk_entry_buffer_set_text           (buffer: *mut C_GtkEntryBuffer, chars: *c_char, n_chars: c_int) -> ();
+    pub fn gtk_entry_buffer_new                (initial_chars: *const c_char, n_initial_chars: c_int) -> *mut C_GtkEntryBuffer;
+    pub fn gtk_entry_buffer_get_text           (buffer: *mut C_GtkEntryBuffer) -> *const c_char;
+    pub fn gtk_entry_buffer_set_text           (buffer: *mut C_GtkEntryBuffer, chars: *const c_char, n_chars: c_int) -> ();
     pub fn gtk_entry_buffer_get_bytes          (buffer: *mut C_GtkEntryBuffer) -> c_long;
     pub fn gtk_entry_buffer_get_length         (buffer: *mut C_GtkEntryBuffer) -> c_uint;
     pub fn gtk_entry_buffer_get_max_length     (buffer: *mut C_GtkEntryBuffer) -> c_int;
     pub fn gtk_entry_buffer_set_max_length     (buffer: *mut C_GtkEntryBuffer, max_length: c_int) -> ();
-    pub fn gtk_entry_buffer_insert_text        (buffer: *mut C_GtkEntryBuffer, position: c_uint, chars: *c_char, n_chars: c_int);
+    pub fn gtk_entry_buffer_insert_text        (buffer: *mut C_GtkEntryBuffer, position: c_uint, chars: *const c_char, n_chars: c_int);
     pub fn gtk_entry_buffer_delete_text        (buffer: *mut C_GtkEntryBuffer, position: c_uint, n_char: c_uint) -> c_uint;
     pub fn gtk_entry_buffer_emit_deleted_text  (buffer: *mut C_GtkEntryBuffer, position: c_uint, n_chars: c_uint) -> ();
-    pub fn gtk_entry_buffer_emit_inserted_text (buffer: *mut C_GtkEntryBuffer, position: c_uint, chars: *c_char, n_chars: c_int) -> ();
+    pub fn gtk_entry_buffer_emit_inserted_text (buffer: *mut C_GtkEntryBuffer, position: c_uint, chars: *const c_char, n_chars: c_int) -> ();
 
     //=========================================================================
     // GtkEntry
@@ -760,39 +760,39 @@ extern "C" {
     pub fn gtk_entry_new_with_buffer           (buffer: *mut C_GtkEntryBuffer) -> *mut C_GtkWidget;
     pub fn gtk_entry_get_buffer                (entry: *mut C_GtkEntry) -> *mut C_GtkEntryBuffer;
     pub fn gtk_entry_set_buffer                (entry: *mut C_GtkEntry, buffer: *mut C_GtkEntryBuffer) -> ();
-    pub fn gtk_entry_set_text                  (entry: *mut C_GtkEntry, text: *c_char) -> ();
-    pub fn gtk_entry_get_text                  (entry: *mut C_GtkEntry) -> *c_char;
+    pub fn gtk_entry_set_text                  (entry: *mut C_GtkEntry, text: *const c_char) -> ();
+    pub fn gtk_entry_get_text                  (entry: *mut C_GtkEntry) -> *const c_char;
     pub fn gtk_entry_get_text_length           (entry: *mut C_GtkEntry) -> c_short;
-    // pub fn gtk_entry_get_text_area             (entry: *C_GtkEntry, text_area: *GdkRectangle) -> ();
+    // pub fn gtk_entry_get_text_area             (entry: *const const C_GtkEntry, text_area: *GdkRectangle) -> ();
     pub fn gtk_entry_set_visibility            (entry: *mut C_GtkEntry, visible: Gboolean) -> ();
     pub fn gtk_entry_set_invisible_char        (entry: *mut C_GtkEntry, ch: c_int) -> ();
     pub fn gtk_entry_unset_invisible_char      (entry: *mut C_GtkEntry) -> ();
     pub fn gtk_entry_set_max_length            (entry: *mut C_GtkEntry, max: c_int) -> ();
     pub fn gtk_entry_get_activates_default     (entry: *mut C_GtkEntry) -> Gboolean;
     pub fn gtk_entry_get_has_frame             (entry: *mut C_GtkEntry) -> Gboolean;
-    // pub fn gtk_entry_get_inner_border          (entry: *C_GtkEntry) -> *C_GtkBorder;
+    // pub fn gtk_entry_get_inner_border          (entry: *const const C_GtkEntry) -> *const const C_GtkBorder;
     pub fn gtk_entry_get_width_chars           (entry: *mut C_GtkEntry) -> c_int;
     pub fn gtk_entry_set_activates_default     (entry: *mut C_GtkEntry, setting: Gboolean) -> ();
     pub fn gtk_entry_set_has_frame             (entry: *mut C_GtkEntry, setting: Gboolean) -> ();
-    // pub fn gtk_entry_set_inner_border          (entry: *C_GtkEntry, border: *C_GtkBorder) -> ();
+    // pub fn gtk_entry_set_inner_border          (entry: *const const C_GtkEntry, border: *const const C_GtkBorder) -> ();
     pub fn gtk_entry_set_width_chars           (entry: *mut C_GtkEntry, n_chars: c_int) -> ();
     pub fn gtk_entry_get_invisible_char        (entry: *mut C_GtkEntry) -> c_uint;
     pub fn gtk_entry_set_alignment             (entry: *mut C_GtkEntry, xalign: c_float) -> ();
-    pub fn gtk_entry_get_alignment             (entry: *mut C_GtkEntry) -> *c_float;
-    pub fn gtk_entry_set_placeholder_text      (entry: *mut C_GtkEntry, text: *c_char) -> ();
-    pub fn gtk_entry_get_placeholder_text      (entry: *mut C_GtkEntry) -> *c_char;
+    pub fn gtk_entry_get_alignment             (entry: *mut C_GtkEntry) -> *const c_float;
+    pub fn gtk_entry_set_placeholder_text      (entry: *mut C_GtkEntry, text: *const c_char) -> ();
+    pub fn gtk_entry_get_placeholder_text      (entry: *mut C_GtkEntry) -> *const c_char;
     pub fn gtk_entry_set_overwrite_mode        (entry: *mut C_GtkEntry, overwrite: Gboolean) -> ();
     pub fn gtk_entry_get_overwrite_mode        (entry: *mut C_GtkEntry) -> Gboolean;
-    // pub fn gtk_entry_get_layout                (entry: *C_GtkEntry) -> *PangoLayout;
-    pub fn gtk_entry_get_layout_offsets        (entry: *mut C_GtkEntry, x: *c_int,  y: *c_int) -> ();
+    // pub fn gtk_entry_get_layout                (entry: *const const C_GtkEntry) -> *PangoLayout;
+    pub fn gtk_entry_get_layout_offsets        (entry: *mut C_GtkEntry, x: *const c_int,  y: *const c_int) -> ();
     pub fn gtk_entry_layout_index_to_text_index(entry: *mut C_GtkEntry, layout_index: c_int) -> c_int;
     pub fn gtk_entry_text_index_to_layout_index(entry: *mut C_GtkEntry,  text_index: c_int) -> c_int;
-    // pub fn gtk_entry_set_attributes            (entry: *C_GtkEntry, attrs: *PangoAttrList) -> ();
-    // pub fn gtk_entry_get_attributes            (entry: *C_GtkEntry) -> *PangoAttrList;
+    // pub fn gtk_entry_set_attributes            (entry: *const const C_GtkEntry, attrs: *PangoAttrList) -> ();
+    // pub fn gtk_entry_get_attributes            (entry: *const const C_GtkEntry) -> *PangoAttrList;
     pub fn gtk_entry_get_max_length            (entry: *mut C_GtkEntry) -> c_int;
     pub fn gtk_entry_get_visibility            (entry: *mut C_GtkEntry) -> Gboolean;
-    // pub fn gtk_entry_set_completion            (entry: *C_GtkEntry, completion: *C_GtkEntryCompletion) -> ();
-    // pub fn gtk_entry_get_completion            (entry: *C_GtkEntry) -> *GtkEntryCompletion;
+    // pub fn gtk_entry_set_completion            (entry: *const const C_GtkEntry, completion: *const const C_GtkEntryCompletion) -> ();
+    // pub fn gtk_entry_get_completion            (entry: *const const C_GtkEntry) -> *GtkEntryCompletion;
     pub fn gtk_entry_set_cursor_hadjustment    (entry: *mut C_GtkEntry, adjustment: *mut C_GtkAdjustment) -> ();
     pub fn gtk_entry_get_cursor_hadjustment    (entry: *mut C_GtkEntry) -> *mut C_GtkAdjustment;
     pub fn gtk_entry_set_progress_fraction     (entry: *mut C_GtkEntry, fraction: c_double) -> ();
@@ -800,31 +800,31 @@ extern "C" {
     pub fn gtk_entry_set_progress_pulse_step   (entry: *mut C_GtkEntry, fraction: c_double) -> ();
     pub fn gtk_entry_get_progress_pulse_step   (entry: *mut C_GtkEntry) -> c_double;
     pub fn gtk_entry_progress_pulse            (entry: *mut C_GtkEntry) -> ();
-    // pub fn gtk_entry_im_context_filter_keypress(entry: *C_GtkEntry, event: *GdkEventKey) -> Gboolean;
+    // pub fn gtk_entry_im_context_filter_keypress(entry: *const const C_GtkEntry, event: *GdkEventKey) -> Gboolean;
     pub fn gtk_entry_reset_im_context          (entry: *mut C_GtkEntry) -> ();
-    // pub fn gtk_entry_get_tabs                  (entry: *C_GtkEntry) -> *PangoTabArray;
-    // pub fn gtk_entry_set_tabs                  (entry: *C_GtkEntry, tabs: *PangoTabArray) -> ();
-    // pub fn gtk_entry_set_icon_from_pixbuf      (entry: *C_GtkEntry, icon_pos: gtk::EntryIconPosition, pixbuf: *GdkPixbuf) -> ();
-    pub fn gtk_entry_set_icon_from_stock       (entry: *mut C_GtkEntry, icon_pos: gtk::EntryIconPosition, stock_id: *c_char) -> ();
-    pub fn gtk_entry_set_icon_from_icon_name   (entry: *mut C_GtkEntry, icon_pos: gtk::EntryIconPosition, icon_name: *c_char) -> ();
-    // pub fn gtk_entry_set_icon_from_gicon       (entry: *C_GtkEntry, icon_pos: gtk::EntryIconPosition, icon: *GIcon) -> ();
+    // pub fn gtk_entry_get_tabs                  (entry: *const const C_GtkEntry) -> *PangoTabArray;
+    // pub fn gtk_entry_set_tabs                  (entry: *const const C_GtkEntry, tabs: *PangoTabArray) -> ();
+    // pub fn gtk_entry_set_icon_from_pixbuf      (entry: *const const C_GtkEntry, icon_pos: gtk::EntryIconPosition, pixbuf: *GdkPixbuf) -> ();
+    pub fn gtk_entry_set_icon_from_stock       (entry: *mut C_GtkEntry, icon_pos: gtk::EntryIconPosition, stock_id: *const c_char) -> ();
+    pub fn gtk_entry_set_icon_from_icon_name   (entry: *mut C_GtkEntry, icon_pos: gtk::EntryIconPosition, icon_name: *const c_char) -> ();
+    // pub fn gtk_entry_set_icon_from_gicon       (entry: *const const C_GtkEntry, icon_pos: gtk::EntryIconPosition, icon: *GIcon) -> ();
     pub fn gtk_entry_get_icon_storage_type     (entry: *mut C_GtkEntry, icon_pos: gtk::EntryIconPosition) -> gtk::ImageType;
-    // pub fn gtk_entry_get_icon_pixbuf           (entry: *C_GtkEntry, icon_pos: gtk::EntryIconPosition) -> *C_GdkPixbuf;
-    pub fn gtk_entry_get_icon_stock            (entry: *mut C_GtkEntry, icon_pos: gtk::EntryIconPosition) -> *c_char;
-    pub fn gtk_entry_get_icon_name             (entry: *mut C_GtkEntry, icon_pos: gtk::EntryIconPosition) -> *c_char;
-    // pub fn gtk_entry_get_icon_gicon            (entry: *C_GtkEntry, icon_pos: gtk::EntryIconPosition) -> *GIcon;
+    // pub fn gtk_entry_get_icon_pixbuf           (entry: *const const C_GtkEntry, icon_pos: gtk::EntryIconPosition) -> *const const C_GdkPixbuf;
+    pub fn gtk_entry_get_icon_stock            (entry: *mut C_GtkEntry, icon_pos: gtk::EntryIconPosition) -> *const c_char;
+    pub fn gtk_entry_get_icon_name             (entry: *mut C_GtkEntry, icon_pos: gtk::EntryIconPosition) -> *const c_char;
+    // pub fn gtk_entry_get_icon_gicon            (entry: *const const C_GtkEntry, icon_pos: gtk::EntryIconPosition) -> *GIcon;
     pub fn gtk_entry_set_icon_activatable      (entry: *mut C_GtkEntry, icon_pos: gtk::EntryIconPosition, activatable: Gboolean) -> ();
     pub fn gtk_entry_get_icon_activatable      (entry: *mut C_GtkEntry, icon_pos: gtk::EntryIconPosition) -> Gboolean;
     pub fn gtk_entry_set_icon_sensitive        (entry: *mut C_GtkEntry, icon_pos: gtk::EntryIconPosition, sensitive: Gboolean) -> ();
     pub fn gtk_entry_get_icon_sensitive        (entry: *mut C_GtkEntry, icon_pos: gtk::EntryIconPosition) -> Gboolean;
     pub fn gtk_entry_get_icon_at_pos           (entry: *mut C_GtkEntry, x: c_int, y: c_int) -> c_int;
-    pub fn gtk_entry_set_icon_tooltip_text     (entry: *mut C_GtkEntry, icon_pos: gtk::EntryIconPosition, tooltip: *c_char) -> ();
-    pub fn gtk_entry_get_icon_tooltip_text     (entry: *mut C_GtkEntry, icon_pos: gtk::EntryIconPosition) -> *c_char;
-    pub fn gtk_entry_set_icon_tooltip_markup   (entry: *mut C_GtkEntry, icon_pos: gtk::EntryIconPosition, tooltip: *c_char) -> ();
-    pub fn gtk_entry_get_icon_tooltip_markup   (entry: *mut C_GtkEntry, icon_pos: gtk::EntryIconPosition) -> *c_char;
-    // pub fn gtk_entry_set_icon_drag_source      (entry: *C_GtkEntry, icon_pos: gtk::EntryIconPosition, target_list: *GtkTargetList, actions: GdkDragAction) -> ();
+    pub fn gtk_entry_set_icon_tooltip_text     (entry: *mut C_GtkEntry, icon_pos: gtk::EntryIconPosition, tooltip: *const c_char) -> ();
+    pub fn gtk_entry_get_icon_tooltip_text     (entry: *mut C_GtkEntry, icon_pos: gtk::EntryIconPosition) -> *const c_char;
+    pub fn gtk_entry_set_icon_tooltip_markup   (entry: *mut C_GtkEntry, icon_pos: gtk::EntryIconPosition, tooltip: *const c_char) -> ();
+    pub fn gtk_entry_get_icon_tooltip_markup   (entry: *mut C_GtkEntry, icon_pos: gtk::EntryIconPosition) -> *const c_char;
+    // pub fn gtk_entry_set_icon_drag_source      (entry: *const const C_GtkEntry, icon_pos: gtk::EntryIconPosition, target_list: *GtkTargetList, actions: GdkDragAction) -> ();
     pub fn gtk_entry_get_current_icon_drag_source(entry: *mut C_GtkEntry) -> c_int;
-    // pub fn gtk_entry_get_icon_area             (entry: *C_GtkEntry, icon_pos: gtk::EntryIconPosition, icon_area: *GdkRectangle) -> ();
+    // pub fn gtk_entry_get_icon_area             (entry: *const const C_GtkEntry, icon_pos: gtk::EntryIconPosition, icon_area: *GdkRectangle) -> ();
     pub fn gtk_entry_set_input_purpose         (entry: *mut C_GtkEntry, purpose: gtk::InputPurpose) -> ();
     pub fn gtk_entry_get_input_purpose         (entry: *mut C_GtkEntry) -> gtk::InputPurpose;
     pub fn gtk_entry_set_input_hints           (entry: *mut C_GtkEntry, hints: gtk::InputHints) -> ();
@@ -855,9 +855,9 @@ extern "C" {
     pub fn gtk_scale_get_draw_value            (scale: *mut C_GtkScale) -> Gboolean;
     pub fn gtk_scale_get_has_origin            (scale: *mut C_GtkScale) -> Gboolean;
     pub fn gtk_scale_get_value_pos             (scale: *mut C_GtkScale) -> gtk::PositionType;
-    // pub fn gtk_scale_get_layout                (scale: *C_GtkScale) -> *PangoLayout;
-    pub fn gtk_scale_get_layout_offsets        (scale: *mut C_GtkScale, x: *c_int, y: *c_int) -> ();
-    pub fn gtk_scale_add_mark                  (scale: *mut C_GtkScale, value: c_double, position: gtk::PositionType, markup: *c_char) -> ();
+    // pub fn gtk_scale_get_layout                (scale: *const const C_GtkScale) -> *PangoLayout;
+    pub fn gtk_scale_get_layout_offsets        (scale: *mut C_GtkScale, x: *const c_int, y: *const c_int) -> ();
+    pub fn gtk_scale_add_mark                  (scale: *mut C_GtkScale, value: c_double, position: gtk::PositionType, markup: *const c_char) -> ();
     pub fn gtk_scale_clear_marks               (scale: *mut C_GtkScale) -> ();
 
     //=========================================================================
@@ -875,9 +875,9 @@ extern "C" {
     pub fn gtk_level_bar_get_max_value         (bar: *mut C_GtkLevelBar) -> c_double;
     pub fn gtk_level_bar_set_inverted          (bar: *mut C_GtkLevelBar, inverted: Gboolean) -> ();
     pub fn gtk_level_bar_get_inverted          (bar: *mut C_GtkLevelBar) -> Gboolean;
-    pub fn gtk_level_bar_add_offset_value      (bar: *mut C_GtkLevelBar, name: *c_char, value: c_double) -> ();
-    pub fn gtk_level_bar_remove_offset_value   (bar: *mut C_GtkLevelBar, name: *c_char) -> ();
-    pub fn gtk_level_bar_get_offset_value      (bar: *mut C_GtkLevelBar, name: *c_char, value: *c_double) -> Gboolean;
+    pub fn gtk_level_bar_add_offset_value      (bar: *mut C_GtkLevelBar, name: *const c_char, value: c_double) -> ();
+    pub fn gtk_level_bar_remove_offset_value   (bar: *mut C_GtkLevelBar, name: *const c_char) -> ();
+    pub fn gtk_level_bar_get_offset_value      (bar: *mut C_GtkLevelBar, name: *const c_char, value: *const c_double) -> Gboolean;
 
     //=========================================================================
     // GtkSearchBar
@@ -888,7 +888,7 @@ extern "C" {
     pub fn gtk_search_bar_set_search_mode      (bar: *mut C_GtkSearchBar, search_mode: Gboolean) -> ();
     pub fn gtk_search_bar_get_show_close_button(bar: *mut C_GtkSearchBar) -> Gboolean;
     pub fn gtk_search_bar_set_show_close_button(bar: *mut C_GtkSearchBar, visible: Gboolean) -> ();
-    // pub fn gtk_search_bar_handle_event         (bar: *C_GtkSearchBar, event: *GdkEvent) -> Gboolean;
+    // pub fn gtk_search_bar_handle_event         (bar: *const const C_GtkSearchBar, event: *GdkEvent) -> Gboolean;
 
     //=========================================================================
     // GtkSpinButton
@@ -928,7 +928,7 @@ extern "C" {
     //=========================================================================
     // GtkImage
     //=========================================================================
-    pub fn gtk_image_new_from_file             (filename: *c_char) -> *mut C_GtkWidget;
+    pub fn gtk_image_new_from_file             (filename: *const c_char) -> *mut C_GtkWidget;
 
     //=========================================================================
     // GtkProgressBar
@@ -941,10 +941,10 @@ extern "C" {
     pub fn gtk_progress_bar_get_inverted       (pbar: *mut C_GtkProgressBar) -> Gboolean;
     pub fn gtk_progress_bar_set_show_text      (pbar: *mut C_GtkProgressBar, show_text: Gboolean) -> ();
     pub fn gtk_progress_bar_get_show_text      (pbar: *mut C_GtkProgressBar) -> Gboolean;
-    pub fn gtk_progress_bar_set_text           (pbar: *mut C_GtkProgressBar, text: *c_char) -> ();
-    pub fn gtk_progress_bar_get_text           (pbar: *mut C_GtkProgressBar) -> *c_char;
-    // pub fn gtk_progress_bar_set_ellipsize      (pbar: *C_GtkProgressBar, mode: PangoEllipsizeMode) -> ();
-    // pub fn gtk_progress_bar_get_ellipsize      (pbar: *C_GtkProgressBar) -> PangoEllipsizeMode
+    pub fn gtk_progress_bar_set_text           (pbar: *mut C_GtkProgressBar, text: *const c_char) -> ();
+    pub fn gtk_progress_bar_get_text           (pbar: *mut C_GtkProgressBar) -> *const c_char;
+    // pub fn gtk_progress_bar_set_ellipsize      (pbar: *const const C_GtkProgressBar, mode: PangoEllipsizeMode) -> ();
+    // pub fn gtk_progress_bar_get_ellipsize      (pbar: *const const C_GtkProgressBar) -> PangoEllipsizeMode
     pub fn gtk_progress_bar_set_pulse_step     (pbar: *mut C_GtkProgressBar, fraction: c_double) -> ();
     pub fn gtk_progress_bar_get_pulse_step     (pbar: *mut C_GtkProgressBar) -> c_double;
 
@@ -967,7 +967,7 @@ extern "C" {
     pub fn gtk_calendar_get_display_options    (calendar: *mut C_GtkCalendar) -> gtk::CalendarDisplayOptions;
     pub fn gtk_calendar_set_display_options    (calendar: *mut C_GtkCalendar, flags: gtk::CalendarDisplayOptions) -> ();
     pub fn gtk_calendar_get_date               (calendar: *mut C_GtkCalendar, year: *mut c_uint, month: *mut c_uint, day: *mut c_uint) -> ();
-    // pub fn gtk_calendar_set_detail_func        (calendar: *C_GtkCalendar, GtkCalendarDetailFunc func, gpointer data, GDestroyNotify destroy) -> ();
+    // pub fn gtk_calendar_set_detail_func        (calendar: *const const C_GtkCalendar, GtkCalendarDetailFunc func, gpointer data, GDestroyNotify destroy) -> ();
     pub fn gtk_calendar_get_detail_width_chars (calendar: *mut C_GtkCalendar) -> c_int;
     pub fn gtk_calendar_set_detail_width_chars (calendar: *mut C_GtkCalendar, chars: c_int) -> ();
     pub fn gtk_calendar_get_detail_height_rows (calendar: *mut C_GtkCalendar) -> c_int;
@@ -984,14 +984,14 @@ extern "C" {
     //=========================================================================
     // GtkExpander                                                           OK
     //=========================================================================
-    pub fn gtk_expander_new                    (label: *c_char) -> *mut C_GtkWidget;
-    pub fn gtk_expander_new_with_mnemonic      (label: *c_char) -> *mut C_GtkWidget;
+    pub fn gtk_expander_new                    (label: *const c_char) -> *mut C_GtkWidget;
+    pub fn gtk_expander_new_with_mnemonic      (label: *const c_char) -> *mut C_GtkWidget;
     pub fn gtk_expander_set_expanded           (expander: *mut C_GtkExpander, expanded: Gboolean) -> ();
     pub fn gtk_expander_get_expanded           (expander: *mut C_GtkExpander) -> Gboolean;
     pub fn gtk_expander_set_spacing            (expander: *mut C_GtkExpander, spacing: c_int) -> ();
     pub fn gtk_expander_get_spacing            (expander: *mut C_GtkExpander) -> c_int;
-    pub fn gtk_expander_set_label              (expander: *mut C_GtkExpander, label: *c_char) -> ();
-    pub fn gtk_expander_get_label              (expander: *mut C_GtkExpander) -> *c_char;
+    pub fn gtk_expander_set_label              (expander: *mut C_GtkExpander, label: *const c_char) -> ();
+    pub fn gtk_expander_get_label              (expander: *mut C_GtkExpander) -> *const c_char;
     pub fn gtk_expander_set_use_underline      (expander: *mut C_GtkExpander, use_underline: Gboolean)-> ();
     pub fn gtk_expander_get_use_underline      (expander: *mut C_GtkExpander) -> Gboolean;
     pub fn gtk_expander_set_use_markup         (expander: *mut C_GtkExpander, use_markup: Gboolean) -> ();
@@ -1011,8 +1011,8 @@ extern "C" {
     pub fn gtk_paned_add2                      (paned: *mut C_GtkPaned, child: *mut C_GtkWidget) -> ();
     pub fn gtk_paned_pack1                     (paned: *mut C_GtkPaned, child: *mut C_GtkWidget, resize: Gboolean, schrink: Gboolean) -> ();
     pub fn gtk_paned_pack2                     (paned: *mut C_GtkPaned, child: *mut C_GtkWidget, resize: Gboolean, schrink: Gboolean) -> ();
-    // pub fn gtk_paned_get_child1                (paned: *C_GtkPaned) -> *C_GtkWidget;
-    // pub fn gtk_paned_get_child2                (paned: *C_GtkPaned) -> *C_GtkWidget;
+    // pub fn gtk_paned_get_child1                (paned: *const const C_GtkPaned) -> *const const C_GtkWidget;
+    // pub fn gtk_paned_get_child2                (paned: *const const C_GtkPaned) -> *const const C_GtkWidget;
     pub fn gtk_paned_set_position              (paned: *mut C_GtkPaned, position: c_int) -> ();
     pub fn gtk_paned_get_position              (paned: *mut C_GtkPaned) -> c_int;
     pub fn gtk_paned_get_handle_window         (paned: *mut C_GtkPaned) -> *mut C_GtkWidget;
@@ -1021,24 +1021,24 @@ extern "C" {
     // GtkInfoBar
     //=========================================================================
     pub fn gtk_info_bar_new                    () -> *mut C_GtkWidget;
-    // pub fn gtk_info_bar_new_with_buttons       (const gchar *first_button_text, ...) -> *C_GtkWidget;
+    // pub fn gtk_info_bar_new_with_buttons       (const gchar *first_button_text, ...) -> *const const C_GtkWidget;
     pub fn gtk_info_bar_add_action_widget      (info_bar: *mut C_GtkInfoBar, child: *mut C_GtkWidget, response_id: c_int);
-    pub fn gtk_info_bar_add_button             (info_bar: *mut C_GtkInfoBar, button_text: *c_char, response_id: c_int) -> *mut C_GtkWidget;
+    pub fn gtk_info_bar_add_button             (info_bar: *mut C_GtkInfoBar, button_text: *const c_char, response_id: c_int) -> *mut C_GtkWidget;
     // pub fn gtk_info_bar_add_buttons            (GtkInfoBar *info_bar, const gchar *first_button_text, ...) -> ();
     pub fn gtk_info_bar_set_response_sensitive (info_bar: *mut C_GtkInfoBar, response_id: c_int, setting: Gboolean) -> ();
     pub fn gtk_info_bar_set_default_response   (info_bar: *mut C_GtkInfoBar, response_id: c_int) -> ();
     pub fn gtk_info_bar_response               (info_bar: *mut C_GtkInfoBar, response_id: c_int) -> ();
     pub fn gtk_info_bar_set_message_type       (info_bar: *mut C_GtkInfoBar, message_type: gtk::MessageType) -> ();
     pub fn gtk_info_bar_get_message_type       (info_bar: *mut C_GtkInfoBar) -> gtk::MessageType;
-    // pub fn gtk_info_bar_get_action_area        (info_bar: *C_GtkInfoBar) -> *C_GtkWidget;
-    // pub fn gtk_info_bar_get_content_area       (info_bar: *C_GtkInfoBar) -> *C_GtkWidget;
+    // pub fn gtk_info_bar_get_action_area        (info_bar: *const const C_GtkInfoBar) -> *const const C_GtkWidget;
+    // pub fn gtk_info_bar_get_content_area       (info_bar: *const const C_GtkInfoBar) -> *const const C_GtkWidget;
     pub fn gtk_info_bar_get_show_close_button  (info_bar: *mut C_GtkInfoBar) -> Gboolean;
     pub fn gtk_info_bar_set_show_close_button  (info_bar: *mut C_GtkInfoBar, setting: Gboolean) -> ();
 
     //=========================================================================
     // GtkToolShell
     //=========================================================================
-    // pub fn gtk_tool_shell_get_ellipsize_mode   (shell: *C_GtkToolShell) -> PangoEllipsizeMode;
+    // pub fn gtk_tool_shell_get_ellipsize_mode   (shell: *const const C_GtkToolShell) -> PangoEllipsizeMode;
     pub fn gtk_tool_shell_get_icon_size        (shell: *mut C_GtkToolShell) -> gtk::IconSize;
     pub fn gtk_tool_shell_get_orientation      (shell: *mut C_GtkToolShell) -> gtk::Orientation;
     pub fn gtk_tool_shell_get_relief_style     (shell: *mut C_GtkToolShell) -> gtk::ReliefStyle;
@@ -1046,7 +1046,7 @@ extern "C" {
     pub fn gtk_tool_shell_get_text_alignment   (shell: *mut C_GtkToolShell) -> c_float;
     pub fn gtk_tool_shell_get_text_orientation (shell: *mut C_GtkToolShell) -> gtk::Orientation;
     pub fn gtk_tool_shell_rebuild_menu         (shell: *mut C_GtkToolShell) -> ();
-    // pub fn gtk_tool_shell_get_text_size_group  (shell: *C_GtkToolShell) -> *GtkSizeGroup;
+    // pub fn gtk_tool_shell_get_text_size_group  (shell: *const const C_GtkToolShell) -> *GtkSizeGroup;
 
     //=========================================================================
     // GtkToolBar
@@ -1076,8 +1076,8 @@ extern "C" {
     pub fn gtk_tool_item_get_homogeneous       (tool_item: *mut C_GtkToolItem) -> Gboolean;
     pub fn gtk_tool_item_set_expand            (tool_item: *mut C_GtkToolItem, expand: Gboolean) -> ();
     pub fn gtk_tool_item_get_expand            (tool_item: *mut C_GtkToolItem) -> Gboolean;
-    pub fn gtk_tool_item_set_tooltip_text      (tool_item: *mut C_GtkToolItem, text: *c_char) -> ();
-    pub fn gtk_tool_item_set_tooltip_markup    (tool_item: *mut C_GtkToolItem, markup: *c_char) -> ();
+    pub fn gtk_tool_item_set_tooltip_text      (tool_item: *mut C_GtkToolItem, text: *const c_char) -> ();
+    pub fn gtk_tool_item_set_tooltip_markup    (tool_item: *mut C_GtkToolItem, markup: *const c_char) -> ();
     pub fn gtk_tool_item_set_use_drag_window   (tool_item: *mut C_GtkToolItem, use_drag_window: Gboolean) -> ();
     pub fn gtk_tool_item_get_use_drag_window   (tool_item: *mut C_GtkToolItem) -> Gboolean;
     pub fn gtk_tool_item_set_visible_horizontal(tool_item: *mut C_GtkToolItem, visible_horizontal: Gboolean) -> ();
@@ -1086,19 +1086,19 @@ extern "C" {
     pub fn gtk_tool_item_get_visible_vertical  (tool_item: *mut C_GtkToolItem) -> Gboolean;
     pub fn gtk_tool_item_set_is_important      (tool_item: *mut C_GtkToolItem, is_important: Gboolean) -> ();
     pub fn gtk_tool_item_get_is_important      (tool_item: *mut C_GtkToolItem) -> Gboolean;
-    // pub fn gtk_tool_item_get_ellipsize_mode    (tool_item: *C_GtkToolItem) -> PangoEllipsizeMode;
+    // pub fn gtk_tool_item_get_ellipsize_mode    (tool_item: *const const C_GtkToolItem) -> PangoEllipsizeMode;
     pub fn gtk_tool_item_get_icon_size         (tool_item: *mut C_GtkToolItem) -> gtk::IconSize;
     pub fn gtk_tool_item_get_orientation       (tool_item: *mut C_GtkToolItem) -> gtk::Orientation;
     pub fn gtk_tool_item_get_toolbar_style     (tool_item: *mut C_GtkToolItem) -> gtk::ToolbarStyle;
     pub fn gtk_tool_item_get_relief_style      (tool_item: *mut C_GtkToolItem) -> gtk::ReliefStyle;
     pub fn gtk_tool_item_get_text_alignment    (tool_item: *mut C_GtkToolItem) -> c_float;
     pub fn gtk_tool_item_get_text_orientation  (tool_item: *mut C_GtkToolItem) -> gtk::Orientation;
-    // pub fn gtk_tool_item_retrieve_proxy_menu_item(tool_item: *C_GtkToolItem) -> *C_GtkWidget;
-    // pub fn gtk_tool_item_get_proxy_menu_item   (tool_item: *C_GtkToolItem, menu_item_id: *c_char) -> *C_GtkWidget;
-    // pub fn gtk_tool_item_set_proxy_menu_item   (tool_item: *C_GtkToolItem, menu_item_id: *c_char, menu_item: *C_GtkWidget) -> ();
+    // pub fn gtk_tool_item_retrieve_proxy_menu_item(tool_item: *const const C_GtkToolItem) -> *const const C_GtkWidget;
+    // pub fn gtk_tool_item_get_proxy_menu_item   (tool_item: *const const C_GtkToolItem, menu_item_id: *const c_char) -> *const const C_GtkWidget;
+    // pub fn gtk_tool_item_set_proxy_menu_item   (tool_item: *const const C_GtkToolItem, menu_item_id: *const c_char, menu_item: *const const C_GtkWidget) -> ();
     pub fn gtk_tool_item_rebuild_menu          (tool_item: *mut C_GtkToolItem) -> ();
     pub fn gtk_tool_item_toolbar_reconfigured  (tool_item: *mut C_GtkToolItem) -> ();
-    // pub fn gtk_tool_item_get_text_size_group   (tool_item: *C_GtkToolItem) -> *GtkSizeGroup;
+    // pub fn gtk_tool_item_get_text_size_group   (tool_item: *const const C_GtkToolItem) -> *GtkSizeGroup;
 
     //=========================================================================
     // GtkSeparatorToolItem
@@ -1110,18 +1110,18 @@ extern "C" {
     //=========================================================================
     // GtkToolButton
     //=========================================================================
-    pub fn gtk_tool_button_new                 (icon_widget: *mut C_GtkWidget, label: *c_char) -> *mut C_GtkWidget;
-    pub fn gtk_tool_button_new_from_stock      (stock_id: *c_char) -> *mut C_GtkWidget;
-    pub fn gtk_tool_button_set_label           (button: *mut C_GtkToolButton, label: *c_char) -> ();
-    pub fn gtk_tool_button_get_label           (button: *mut C_GtkToolButton) -> *c_char;
+    pub fn gtk_tool_button_new                 (icon_widget: *mut C_GtkWidget, label: *const c_char) -> *mut C_GtkWidget;
+    pub fn gtk_tool_button_new_from_stock      (stock_id: *const c_char) -> *mut C_GtkWidget;
+    pub fn gtk_tool_button_set_label           (button: *mut C_GtkToolButton, label: *const c_char) -> ();
+    pub fn gtk_tool_button_get_label           (button: *mut C_GtkToolButton) -> *const c_char;
     pub fn gtk_tool_button_set_use_underline   (button: *mut C_GtkToolButton, use_underline: Gboolean) -> ();
     pub fn gtk_tool_button_get_use_underline   (button: *mut C_GtkToolButton) -> Gboolean;
-    pub fn gtk_tool_button_set_stock_id        (button: *mut C_GtkToolButton, stock_id: *c_char) -> ();
-    pub fn gtk_tool_button_get_stock_id        (button: *mut C_GtkToolButton) -> *c_char;
-    pub fn gtk_tool_button_set_icon_name       (button: *mut C_GtkToolButton, icon_name: *c_char) -> ();
-    pub fn gtk_tool_button_get_icon_name       (button: *mut C_GtkToolButton) -> *c_char;
-    // pub fn gtk_tool_button_set_icon_widget     (button: *C_GtkToolButton, icon_widget: *C_GtkWidget) -> ();
-    // pub fn gtk_tool_button_get_icon_widget     (button: *C_GtkToolButton) -> *C_GtkWidget;
+    pub fn gtk_tool_button_set_stock_id        (button: *mut C_GtkToolButton, stock_id: *const c_char) -> ();
+    pub fn gtk_tool_button_get_stock_id        (button: *mut C_GtkToolButton) -> *const c_char;
+    pub fn gtk_tool_button_set_icon_name       (button: *mut C_GtkToolButton, icon_name: *const c_char) -> ();
+    pub fn gtk_tool_button_get_icon_name       (button: *mut C_GtkToolButton) -> *const c_char;
+    // pub fn gtk_tool_button_set_icon_widget     (button: *const const C_GtkToolButton, icon_widget: *const const C_GtkWidget) -> ();
+    // pub fn gtk_tool_button_get_icon_widget     (button: *const const C_GtkToolButton) -> *const const C_GtkWidget;
     pub fn gtk_tool_button_set_label_widget    (button: *mut C_GtkToolButton, label_widget: *mut C_GtkWidget) -> ();
     pub fn gtk_tool_button_get_label_widget    (button: *mut C_GtkToolButton) -> *mut C_GtkWidget;
 
@@ -1129,7 +1129,7 @@ extern "C" {
     // GtkToggleToolButton
     //=========================================================================
     pub fn gtk_toggle_tool_button_new          () -> *mut C_GtkWidget;
-    pub fn gtk_toggle_tool_button_new_from_stock(stock_id: *c_char) -> *mut C_GtkWidget;
+    pub fn gtk_toggle_tool_button_new_from_stock(stock_id: *const c_char) -> *mut C_GtkWidget;
     pub fn gtk_toggle_tool_button_set_active   (button: *mut C_GtkToggleToolButton, is_active: Gboolean) -> ();
     pub fn gtk_toggle_tool_button_get_active   (button: *mut C_GtkToggleToolButton) -> Gboolean;
 
@@ -1137,22 +1137,22 @@ extern "C" {
     //=========================================================================
     // GtkRadioToolButton
     //=========================================================================
-    // pub fn gtk_radio_tool_button_new           (GSList *group) -> *C_GtkWidget;
-    // pub fn gtk_radio_tool_button_new_from_stock(GSList *group, const gchar *stock_id) -> *C_GtkWidget;
-    // pub fn gtk_radio_tool_button_new_from_widget(GtkRadioToolButton *group) -> *C_GtkWidget;
-    // pub fn gtk_radio_tool_button_new_with_stock_from_widget(GtkRadioToolButton *group, const gchar *stock_id) -> *C_GtkWidget;
+    // pub fn gtk_radio_tool_button_new           (GSList *group) -> *const const C_GtkWidget;
+    // pub fn gtk_radio_tool_button_new_from_stock(GSList *group, const gchar *stock_id) -> *const const C_GtkWidget;
+    // pub fn gtk_radio_tool_button_new_from_widget(GtkRadioToolButton *group) -> *const const C_GtkWidget;
+    // pub fn gtk_radio_tool_button_new_with_stock_from_widget(GtkRadioToolButton *group, const gchar *stock_id) -> *const const C_GtkWidget;
     // pub fn gtk_radio_tool_button_get_group     (GtkRadioToolButton *button) -> *GSList;
     // pub fn gtk_radio_tool_button_set_group     (GtkRadioToolButton *button, GSList *group) -> ();
 
     //=========================================================================
     // GtkMenuToolButton
     //=========================================================================
-    pub fn gtk_menu_tool_button_new            (icon_widget: *mut C_GtkWidget, label: *c_char) -> *mut C_GtkWidget;
-    pub fn gtk_menu_tool_button_new_from_stock (stock_id: *c_char) -> *mut C_GtkWidget;
-    // pub fn gtk_menu_tool_button_set_menu       (button: *C_GtkMenuToolButton, menu: *C_GtkWidget);
-    // pub fn gtk_menu_tool_button_get_menu       (button: *C_GtkMenuToolButton) -> *C_GtkWidget;
-    pub fn gtk_menu_tool_button_set_arrow_tooltip_text(button: *mut C_GtkMenuToolButton, text: *c_char) -> ();
-    pub fn gtk_menu_tool_button_set_arrow_tooltip_markup(button: *mut C_GtkMenuToolButton, markup: *c_char) -> ();
+    pub fn gtk_menu_tool_button_new            (icon_widget: *mut C_GtkWidget, label: *const c_char) -> *mut C_GtkWidget;
+    pub fn gtk_menu_tool_button_new_from_stock (stock_id: *const c_char) -> *mut C_GtkWidget;
+    // pub fn gtk_menu_tool_button_set_menu       (button: *const const C_GtkMenuToolButton, menu: *const const C_GtkWidget);
+    // pub fn gtk_menu_tool_button_get_menu       (button: *const const C_GtkMenuToolButton) -> *const const C_GtkWidget;
+    pub fn gtk_menu_tool_button_set_arrow_tooltip_text(button: *mut C_GtkMenuToolButton, text: *const c_char) -> ();
+    pub fn gtk_menu_tool_button_set_arrow_tooltip_markup(button: *mut C_GtkMenuToolButton, markup: *const c_char) -> ();
 
     //=========================================================================
     // GtkNoteBook                                                           OK
@@ -1165,8 +1165,8 @@ extern "C" {
     pub fn gtk_notebook_insert_page       (notebook: *mut C_GtkNotebook, child: *mut C_GtkWidget, tab_label: *mut C_GtkWidget, position: c_int) -> c_int;
     pub fn gtk_notebook_insert_page_menu  (notebook: *mut C_GtkNotebook, child: *mut C_GtkWidget, tab_label: *mut C_GtkWidget, menu_label: *mut C_GtkWidget, position: c_int) -> c_int;
     pub fn gtk_notebook_remove_page       (notebook: *mut C_GtkNotebook, page_num: c_int);
-    pub fn gtk_notebook_set_group_name    (notebook: *mut C_GtkNotebook, group_name: *c_char);
-    pub fn gtk_notebook_get_group_name    (notebook: *mut C_GtkNotebook) -> *c_char;
+    pub fn gtk_notebook_set_group_name    (notebook: *mut C_GtkNotebook, group_name: *const c_char);
+    pub fn gtk_notebook_get_group_name    (notebook: *mut C_GtkNotebook) -> *const c_char;
     pub fn gtk_notebook_get_current_page  (notebook: *mut C_GtkNotebook) -> c_int;
     pub fn gtk_notebook_get_nth_page      (notebook: *mut C_GtkNotebook, page_num: c_int) -> *mut C_GtkWidget;
     pub fn gtk_notebook_get_n_pages       (notebook: *mut C_GtkNotebook) -> c_int;
@@ -1188,12 +1188,12 @@ extern "C" {
     pub fn gtk_notebook_popup_disable     (notebook: *mut C_GtkNotebook);
     pub fn gtk_notebook_get_tab_label     (notebook: *mut C_GtkNotebook, child: *mut C_GtkWidget) -> *mut C_GtkWidget;
     pub fn gtk_notebook_set_tab_label     (notebook: *mut C_GtkNotebook, child: *mut C_GtkWidget, tab_label: *mut C_GtkWidget);
-    pub fn gtk_notebook_set_tab_label_text(notebook: *mut C_GtkNotebook, child: *mut C_GtkWidget, tab_text: *c_char);
-    pub fn gtk_notebook_get_tab_label_text(notebook: *mut C_GtkNotebook, child: *mut C_GtkWidget) -> *c_char;
+    pub fn gtk_notebook_set_tab_label_text(notebook: *mut C_GtkNotebook, child: *mut C_GtkWidget, tab_text: *const c_char);
+    pub fn gtk_notebook_get_tab_label_text(notebook: *mut C_GtkNotebook, child: *mut C_GtkWidget) -> *const c_char;
     pub fn gtk_notebook_get_menu_label    (notebook: *mut C_GtkNotebook, child: *mut C_GtkWidget) -> *mut C_GtkWidget;
     pub fn gtk_notebook_set_menu_label    (notebook: *mut C_GtkNotebook, child: *mut C_GtkWidget, menu_label: *mut C_GtkWidget);
-    pub fn gtk_notebook_set_menu_label_text(notebook: *mut C_GtkNotebook, child: *mut C_GtkWidget, menu_text: *c_char);
-    pub fn gtk_notebook_get_menu_label_text(notebook: *mut C_GtkNotebook, child: *mut C_GtkWidget) -> *c_char;
+    pub fn gtk_notebook_set_menu_label_text(notebook: *mut C_GtkNotebook, child: *mut C_GtkWidget, menu_text: *const c_char);
+    pub fn gtk_notebook_get_menu_label_text(notebook: *mut C_GtkNotebook, child: *mut C_GtkWidget) -> *const c_char;
     pub fn gtk_notebook_reorder_child     (notebook: *mut C_GtkNotebook, child: *mut C_GtkWidget, position: c_int);
     pub fn gtk_notebook_get_tab_reorderable(notebook: *mut C_GtkNotebook, child: *mut C_GtkWidget) -> Gboolean;
     pub fn gtk_notebook_set_tab_reorderable(notebook: *mut C_GtkNotebook, child: *mut C_GtkWidget, reorderable: Gboolean);
@@ -1207,13 +1207,13 @@ extern "C" {
     // GtkStack                                                              OK
     //=========================================================================
     pub fn gtk_stack_new                     () -> *mut C_GtkWidget;
-    pub fn gtk_stack_add_named               (stack: *mut C_GtkStack, child: *mut C_GtkWidget, name: *c_char);
-    pub fn gtk_stack_add_titled              (stack: *mut C_GtkStack, child: *mut C_GtkWidget, name: *c_char, title: *c_char);
+    pub fn gtk_stack_add_named               (stack: *mut C_GtkStack, child: *mut C_GtkWidget, name: *const c_char);
+    pub fn gtk_stack_add_titled              (stack: *mut C_GtkStack, child: *mut C_GtkWidget, name: *const c_char, title: *const c_char);
     pub fn gtk_stack_set_visible_child       (stack: *mut C_GtkStack, child: *mut C_GtkWidget);
     pub fn gtk_stack_get_visible_child       (stack: *mut C_GtkStack) -> *mut C_GtkWidget;
-    pub fn gtk_stack_set_visible_child_name  (stack: *mut C_GtkStack, name: *c_char);
-    pub fn gtk_stack_get_visible_child_name  (stack: *mut C_GtkStack) -> *c_char;
-    pub fn gtk_stack_set_visible_child_full  (stack: *mut C_GtkStack, name: *c_char, transition: gtk::StackTransitionType);
+    pub fn gtk_stack_set_visible_child_name  (stack: *mut C_GtkStack, name: *const c_char);
+    pub fn gtk_stack_get_visible_child_name  (stack: *mut C_GtkStack) -> *const c_char;
+    pub fn gtk_stack_set_visible_child_full  (stack: *mut C_GtkStack, name: *const c_char, transition: gtk::StackTransitionType);
     pub fn gtk_stack_set_homogeneous         (stack: *mut C_GtkStack, homogeneous: Gboolean);
     pub fn gtk_stack_get_homogeneous         (stack: *mut C_GtkStack) -> Gboolean;
     pub fn gtk_stack_set_transition_duration (stack: *mut C_GtkStack, duration: c_uint);
@@ -1267,16 +1267,16 @@ extern "C" {
     pub fn gtk_layout_move            (layout: *mut C_GtkLayout, child_widget: *mut C_GtkWidget, x: c_int, y: c_int);
     pub fn gtk_layout_set_size        (layout: *mut C_GtkLayout, width: c_uint, height: c_uint);
     pub fn gtk_layout_get_size        (layout: *mut C_GtkLayout, width: *mut c_uint, height: *mut c_uint);
-    // pub fn gtk_layout_get_bin_window  (layout: *C_GtkLayout) -> *C_GdkWindow;
+    // pub fn gtk_layout_get_bin_window  (layout: *const const C_GtkLayout) -> *const const C_GdkWindow;
 
     //=========================================================================
     // GtkHeaderBar                                                          OK
     //=========================================================================
     pub fn gtk_header_bar_new               () -> *mut C_GtkWidget;
-    pub fn gtk_header_bar_set_title         (bar: *mut C_GtkHeaderBar, title: *c_char);
-    pub fn gtk_header_bar_get_title         (bar: *mut C_GtkHeaderBar) -> *c_char;
-    pub fn gtk_header_bar_set_subtitle      (bar: *mut C_GtkHeaderBar, subtitle: *c_char);
-    pub fn gtk_header_bar_get_subtitle      (bar: *mut C_GtkHeaderBar) -> *c_char;
+    pub fn gtk_header_bar_set_title         (bar: *mut C_GtkHeaderBar, title: *const c_char);
+    pub fn gtk_header_bar_get_title         (bar: *mut C_GtkHeaderBar) -> *const c_char;
+    pub fn gtk_header_bar_set_subtitle      (bar: *mut C_GtkHeaderBar, subtitle: *const c_char);
+    pub fn gtk_header_bar_get_subtitle      (bar: *mut C_GtkHeaderBar) -> *const c_char;
     pub fn gtk_header_bar_set_custom_title  (bar: *mut C_GtkHeaderBar, title_widget: *mut C_GtkWidget);
     pub fn gtk_header_bar_get_custom_title  (bar: *mut C_GtkHeaderBar) -> *mut C_GtkWidget;
     pub fn gtk_header_bar_pack_start        (bar: *mut C_GtkHeaderBar, child: *mut C_GtkWidget);
@@ -1310,8 +1310,8 @@ extern "C" {
     pub fn gtk_flow_box_get_selection_mode           (_box: *mut C_GtkFlowBox) -> gtk::SelectionMode;
     pub fn gtk_flow_box_set_hadjustment              (_box: *mut C_GtkFlowBox, adjustment: *mut C_GtkAdjustment);
     pub fn gtk_flow_box_set_vadjustment              (_box: *mut C_GtkFlowBox, adjustment: *mut C_GtkAdjustment);
-    // void                  gtk_flow_box_selected_foreach             (_box: *C_GtkFlowBox, GtkFlowBoxForeachFunc func, gpointer           data);
-    // GList                *gtk_flow_box_get_selected_children        (_box: *C_GtkFlowBox);
+    // void                  gtk_flow_box_selected_foreach             (_box: *const const C_GtkFlowBox, GtkFlowBoxForeachFunc func, gpointer           data);
+    // GList                *gtk_flow_box_get_selected_children        (_box: *const const C_GtkFlowBox);
 
     //=========================================================================
     // GtkFlowBoxChild                                                       OK
@@ -1336,8 +1336,8 @@ extern "C" {
     pub fn gtk_list_box_get_adjustment               (list_box: *mut C_GtkListBox) -> *mut C_GtkAdjustment;
     pub fn gtk_list_box_set_selection_mode           (list_box: *mut C_GtkListBox, mode: gtk::SelectionMode);
     pub fn gtk_list_box_get_selection_mode           (list_box: *mut C_GtkListBox) -> gtk::SelectionMode;
-    // pub fn gtk_list_box_invalidate_filter            (list_box: *C_GtkListBox);
-    // pub fn gtk_list_box_invalidate_sort              (list_box: *C_GtkListBox);
+    // pub fn gtk_list_box_invalidate_filter            (list_box: *const const C_GtkListBox);
+    // pub fn gtk_list_box_invalidate_sort              (list_box: *const const C_GtkListBox);
     pub fn gtk_list_box_invalidate_headers           (list_box: *mut C_GtkListBox);
     pub fn gtk_list_box_set_activate_on_single_click (list_box: *mut C_GtkListBox, simgle: Gboolean);
     pub fn gtk_list_box_get_activate_on_single_click (list_box: *mut C_GtkListBox) -> Gboolean;
@@ -1367,14 +1367,14 @@ extern "C" {
     // Glue fixe code
     //=========================================================================
     pub fn glue_signal_connect(g_object: *mut C_GtkWidget,
-                               signal: *c_char,
+                               signal: *const c_char,
                                func: Option<extern "C" fn()>,
-                               user_data: *c_void);
+                               user_data: *const c_void);
     pub fn g_signal_connect_data(instance: gpointer,
-                                 detailed_signal: *c_char,
+                                 detailed_signal: *const c_char,
                                  c_hanlder: Option<extern "C" fn()>,
                                  data: gpointer,
-                                 destroy_data: Option<extern "C" fn(gpointer, *C_GClosure)>,
+                                 destroy_data: Option<extern "C" fn(gpointer, *const C_GClosure)>,
                                  connect_flags: i32);
 
     //=========================================================================

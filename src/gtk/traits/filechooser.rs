@@ -174,7 +174,7 @@ pub trait FileChooser: traits::Widget {
         if tmp_pointer.is_null() {
             glib::SList::new()
         } else {
-            let old_list : glib::SList<*c_char> = glib::GlibContainer::wrap(tmp_pointer);
+            let old_list : glib::SList<*const c_char> = glib::GlibContainer::wrap(tmp_pointer);
             let mut tmp_vec = glib::SList::new();
 
             for it in old_list.iter() {
@@ -253,7 +253,7 @@ pub trait FileChooser: traits::Widget {
         if tmp_pointer.is_null() {
             glib::SList::new()
         } else {
-            let old_list : glib::SList<*c_char> = glib::GlibContainer::wrap(tmp_pointer);
+            let old_list : glib::SList<*const c_char> = glib::GlibContainer::wrap(tmp_pointer);
             let mut tmp_vec = glib::SList::new();
 
             for it in old_list.iter() {

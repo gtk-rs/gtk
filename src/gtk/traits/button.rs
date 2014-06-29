@@ -204,7 +204,7 @@ extern "C" fn widget_destroy_callback(object: *mut ffi::C_GtkWidget, user_data: 
     }
 }
 
-extern "C" fn drop_widget_destroy_handler(data: ffi::gpointer, _closure: *ffi::C_GClosure) {
+extern "C" fn drop_widget_destroy_handler(data: ffi::gpointer, _closure: *const ffi::C_GClosure) {
     unsafe {
         let handler = mem::transmute::<ffi::gpointer, Box<Box<ButtonClickedHandler>>>(data);
         drop(handler);

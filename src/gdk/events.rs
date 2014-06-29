@@ -58,7 +58,7 @@ pub trait Event {
 
 pub struct EventAny{
   pub _type : gdk::EventType,
-  pub window : *gdk::Window,
+  pub window : *mut gdk::Window,
   send_event : i8,
 
 }
@@ -67,11 +67,11 @@ impl Event for EventAny {}
 
 pub struct EventExpose{
   pub _type : gdk::EventType,
-  pub window : *gdk::Window,
+  pub window : *mut gdk::Window,
   send_event : i8,
 
   pub area : gdk::Rectangle,
-  pub region : *c_void, //TODO cairo_region_t
+  pub region : *mut c_void, //TODO cairo_region_t
   pub count : int, /* If non-zero, how many more events follow. */
 }
 
@@ -79,7 +79,7 @@ impl Event for EventExpose {}
 
 pub struct EventVisibility{
   pub _type : gdk::EventType,
-  pub window : *gdk::Window,
+  pub window : *mut gdk::Window,
   send_event : i8,
 
   state : gdk::VisibilityState,
@@ -89,16 +89,16 @@ impl Event for EventVisibility {}
 
 pub struct EventMotion{
   pub _type : gdk::EventType,
-  pub window : *gdk::Window,
+  pub window : *mut gdk::Window,
   send_event : i8,
 
   time : u32,
   x : f64,
   y : f64,
-  axes : *f64,
+  axes : *mut f64,
   state : uint,
   is_hint : i16,
-  device : *gdk::Device,
+  device : *mut gdk::Device,
   x_root : f64,
   y_root : f64,
 }
@@ -107,16 +107,16 @@ impl Event for EventMotion {}
 
 pub struct EventButton{
   pub _type : gdk::EventType,
-  pub window : *gdk::Window,
+  pub window : *mut gdk::Window,
   send_event : i8,
 
   time : u32,
   x : f64,
   y : f64,
-  axes : *f64,
+  axes : *mut f64,
   state : uint,
   button : uint,
-  device : *gdk::Device,
+  device : *mut gdk::Device,
   x_root : f64,
   y_root : f64,
 }
@@ -125,17 +125,17 @@ impl Event for EventButton {}
 
 pub struct EventTouch{
   pub _type : gdk::EventType,
-  pub window : *gdk::Window,
+  pub window : *mut gdk::Window,
   send_event : i8,
 
   pub time : u32,
   pub x : f64,
   pub y : f64,
-  pub axes : *f64,
+  pub axes : *mut f64,
   pub state : uint,
-  pub sequence : *c_void, //gdk::EventSequence
+  pub sequence : *mut c_void, //gdk::EventSequence
   pub emulating_pointer : bool,
-  pub device : *gdk::Device,
+  pub device : *mut gdk::Device,
   pub x_root : f64,
   pub y_root : f64,
 }
@@ -144,7 +144,7 @@ impl Event for EventTouch {}
 
 pub struct EventScroll{
   pub _type : gdk::EventType,
-  pub window : *gdk::Window,
+  pub window : *mut gdk::Window,
   send_event : i8,
 
   pub time : u32,
@@ -152,7 +152,7 @@ pub struct EventScroll{
   pub y : f64,
   pub state : uint,
   pub direction : gdk::ScrollDirection,
-  pub device : *gdk::Device,
+  pub device : *mut gdk::Device,
   pub x_root : f64,
   pub y_root : f64,
   pub delta_x : f64,
@@ -163,14 +163,14 @@ impl Event for EventScroll {}
 
 pub struct EventKey{
   pub _type : gdk::EventType,
-  pub window : *gdk::Window,
+  pub window : *mut gdk::Window,
   send_event : i8,
 
   pub time : u32,
   pub state : uint,
   pub keyval : uint,
   pub length : int,
-  pub string : *char,
+  pub string : *mut char,
   pub hardware_keycode : u16,
   pub group : u8,
   pub is_modified: uint
@@ -180,7 +180,7 @@ impl Event for EventKey {}
 
 pub struct EventCrossing{
   pub _type : gdk::EventType,
-  pub window : *gdk::Window,
+  pub window : *mut gdk::Window,
   send_event : i8,
 
   pub subwindow : gdk::Window,
@@ -199,7 +199,7 @@ impl Event for EventCrossing {}
 
 pub struct EventFocus{
   pub _type : gdk::EventType,
-  pub window : *gdk::Window,
+  pub window : *mut gdk::Window,
   send_event : i8,
 
   _in : i16,
@@ -209,7 +209,7 @@ impl Event for EventFocus {}
 
 pub struct EventConfigure{
   pub _type : gdk::EventType,
-  pub window : *gdk::Window,
+  pub window : *mut gdk::Window,
   send_event : i8,
 
   pub x : int,
@@ -222,7 +222,7 @@ impl Event for EventConfigure {}
 
 pub struct EventProperty{
   pub _type : gdk::EventType,
-  pub window : *gdk::Window,
+  pub window : *mut gdk::Window,
   send_event : i8,
 
   atom : gdk::Atom,
@@ -234,24 +234,24 @@ impl Event for EventProperty {}
 
 pub struct EventSelection{
   pub _type : gdk::EventType,
-  pub window : *gdk::Window,
+  pub window : *mut gdk::Window,
   send_event : i8,
 
   pub selection : gdk::Atom,
   pub target : gdk::Atom,
   pub property : gdk::Atom,
   pub time : u32,
-  pub requestor : *gdk::Window,
+  pub requestor : *mut gdk::Window,
 }
 
 impl Event for EventSelection {}
 
 pub struct EventOwnerChange{
   pub _type : gdk::EventType,
-  pub window : *gdk::Window,
+  pub window : *mut gdk::Window,
   send_event : i8,
 
-  pub owner : *gdk::Window,
+  pub owner : *mut gdk::Window,
   pub reason : gdk::OwnerChange,
   pub selection : gdk::Atom,
   pub time : u32,
@@ -262,29 +262,29 @@ impl Event for EventOwnerChange {}
 
 pub struct EventProximity{
   pub _type : gdk::EventType,
-  pub window : *gdk::Window,
+  pub window : *mut gdk::Window,
   send_event : i8,
 
   pub time : u32,
-  pub device : *gdk::Device,
+  pub device : *mut gdk::Device,
 }
 
 impl Event for EventProximity {}
 
 pub struct EventSetting{
   pub _type : gdk::EventType,
-  pub window : *gdk::Window,
+  pub window : *mut gdk::Window,
   send_event : i8,
 
   pub action : gdk::SettingAction,
-  pub name : *char,
+  pub name : *mut char,
 }
 
 impl Event for EventSetting {}
 
 pub struct EventWindowState{
   pub _type : gdk::EventType,
-  pub window : *gdk::Window,
+  pub window : *mut gdk::Window,
   send_event : i8,
 
   pub changed_mask : gdk::WindowState,
@@ -295,22 +295,22 @@ impl Event for EventWindowState {}
 
 pub struct EventGrabBroken {
   pub _type : gdk::EventType,
-  pub window : *gdk::Window,
+  pub window : *mut gdk::Window,
   send_event : i8,
 
   pub keyboard : bool,
   pub implicit : bool,
-  pub grab_window : *gdk::Window,
+  pub grab_window : *mut gdk::Window,
 }
 
 impl Event for EventGrabBroken  {}
 
 pub struct EventDND {
   pub _type : gdk::EventType,
-  pub window : *gdk::Window,
+  pub window : *mut gdk::Window,
   send_event : i8,
 
-  pub context : *c_void, //gdk::DragContext
+  pub context : *mut c_void, //gdk::DragContext
   pub time : u32,
   pub x_root : i16, //short
   pub y_root : i16, //short
