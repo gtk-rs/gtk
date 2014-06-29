@@ -17,6 +17,8 @@ LIBS 				= $(shell pkg-config --libs gtk+-3.0)
 RUSTC 				= rustc -g
 OS 					= $(shell uname)
 
+GTK_VERSION ?= GTK_3_12
+
 .DEFAULT: rgtk
 .PHONY: rgtk
 rgtk: glue rgtk-build | target/
@@ -24,7 +26,7 @@ rgtk: glue rgtk-build | target/
 .PHONY: rgtk-build
 rgtk-build: src/*
 					@$(ECHO) "$(OK_COLOR) Building rgtk.rlib $(NO_COLOR)"
-					$(RUSTC) -L target/ src/$(LIBNAME).rs --out-dir target/
+					$(RUSTC) --cfg $(GTK_VERSION) -L target/ src/$(LIBNAME).rs --out-dir target/
 
 glue : target/$(GLUE_LIBNAME).a
 

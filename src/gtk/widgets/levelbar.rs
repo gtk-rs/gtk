@@ -89,6 +89,9 @@ impl LevelBar {
         }
     }
 
+    #[cfg(GTK_3_8)]
+    #[cfg(GTK_3_10)]
+    #[cfg(GTK_3_12)]
     pub fn set_inverted(&mut self, inverted: bool) -> () {
         match inverted {
             true    => unsafe { ffi::gtk_level_bar_set_inverted(GTK_LEVELBAR(self.pointer), ffi::Gtrue) },
@@ -96,6 +99,9 @@ impl LevelBar {
         }
     }
 
+    #[cfg(GTK_3_8)]
+    #[cfg(GTK_3_10)]
+    #[cfg(GTK_3_12)]
     pub fn get_inverted(&self) -> bool {
         match unsafe { ffi::gtk_level_bar_get_inverted(GTK_LEVELBAR(self.pointer)) } {
             ffi::Gfalse     => false,

@@ -15,6 +15,8 @@
 
 //! A stacking container
 
+// FIXME: add missing methods (3.12)
+
 use gtk;
 use gtk::cast::GTK_STACK;
 use gtk::ffi;

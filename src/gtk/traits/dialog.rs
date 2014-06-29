@@ -108,6 +108,7 @@ pub trait Dialog: traits::Widget + traits::Container + traits::Bin + traits::Win
         }
     }
 
+    #[cfg(GTK_3_12)]
     fn get_header_bar(&self) -> Option<gtk::Widget> {
         let tmp_pointer = unsafe { ffi::gtk_dialog_get_header_bar(GTK_DIALOG(self.get_widget())) };
 

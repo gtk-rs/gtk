@@ -15,6 +15,8 @@
 
 //! Pack widgets in a rows and columns
 
+// FIXME: Missings methods
+
 use libc::{c_int, c_uint};
 
 use gtk::enums::{PositionType};
@@ -75,12 +77,16 @@ impl Grid {
         }
     }
 
+    #[cfg(GTK_3_10)]
+    #[cfg(GTK_3_12)]
      pub fn remove_row(&mut self, position: i32) -> () {
         unsafe {
             ffi::gtk_grid_remove_row(GTK_GRID(self.pointer), position as c_int);
         }
     }
 
+    #[cfg(GTK_3_10)]
+    #[cfg(GTK_3_12)]
      pub fn remove_column(&mut self, position: i32) -> () {
         unsafe {
             ffi::gtk_grid_remove_column(GTK_GRID(self.pointer), position as c_int);
@@ -145,12 +151,16 @@ impl Grid {
         }
     }
 
+    #[cfg(GTK_3_10)]
+    #[cfg(GTK_3_12)]
     pub fn get_baseline_row(&self) -> i32 {
         unsafe {
             ffi::gtk_grid_get_baseline_row(GTK_GRID(self.pointer)) as i32
         }
     }
 
+    #[cfg(GTK_3_10)]
+    #[cfg(GTK_3_12)]
     pub fn set_baseline_row(&mut self, row: i32) -> () {
         unsafe {
             ffi::gtk_grid_set_baseline_row(GTK_GRID(self.pointer), row as c_int);

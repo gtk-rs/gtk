@@ -28,6 +28,35 @@ pub use self::rt::{
     check_version
 };
 
+#[cfg(GTK_3_6)]
+#[cfg(GTK_3_8)]
+#[cfg(GTK_3_10)]
+#[cfg(GTK_3_12)]
+pub use self::widgets::{
+    MenuButton,
+    LevelBar,
+};
+
+#[cfg(GTK_3_10)]
+#[cfg(GTK_3_12)]
+pub use self::widgets::{
+    SearchEntry,
+    SearchBar,
+    Stack,
+    StackSwitcher,
+    Revealer,
+    HeaderBar,
+    ListBox,
+    ListBoxRow,
+};
+
+#[cfg(GTK_3_12)]
+pub use self::widgets::{
+    FlowBox,
+    FlowBoxChild,
+    ActionBar,
+};
+
 pub use self::widgets::{
     Window,
     Label,
@@ -41,7 +70,6 @@ pub use self::widgets::{
     FontButton,
     ToggleButton,
     CheckButton,
-    MenuButton,
     ColorButton,
     LinkButton,
     Adjustment,
@@ -50,11 +78,8 @@ pub use self::widgets::{
     Grid,
     EntryBuffer,
     Entry,
-    SearchEntry,
     Switch,
     Scale,
-    LevelBar,
-    SearchBar,
     SpinButton,
     Spinner,
     Image,
@@ -76,17 +101,8 @@ pub use self::widgets::{
     ColorChooserDialog,
     MessageDialog,
     NoteBook,
-    Stack,
-    StackSwitcher,
-    Revealer,
     Overlay,
     Layout,
-    HeaderBar,
-    FlowBox,
-    FlowBoxChild,
-    ListBox,
-    ListBoxRow,
-    ActionBar,
     FileFilter,
     FileChooserDialog,
     AppInfo,

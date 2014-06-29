@@ -289,24 +289,12 @@ GtkOrientable* cast_GtkOrientable(GtkWidget* widget) {
     return GTK_ORIENTABLE(widget);
 }
 
-GtkMenuButton* cast_GtkMenuButton(GtkWidget* widget) {
-    return GTK_MENU_BUTTON(widget);
-}
-
 GtkGrid* cast_GtkGrid(GtkWidget* widget) {
     return GTK_GRID(widget);
 }
 
 GtkSwitch* cast_GtkSwitch(GtkWidget* widget) {
     return GTK_SWITCH(widget);
-}
-
-GtkLevelBar* cast_GtkLevelBar(GtkWidget* widget) {
-    return GTK_LEVEL_BAR(widget);
-}
-
-GtkSearchBar* cast_GtkSearchBar(GtkWidget* widget) {
-    return GTK_SEARCH_BAR(widget);
 }
 
 GtkArrow* cast_GtkArrow(GtkWidget* widget) {
@@ -349,6 +337,42 @@ GtkAdjustment* cast_GtkAdjustment(GtkWidget* widget) {
     return GTK_ADJUSTMENT(widget);
 }
 
+GtkOverlay* cast_GtkOverlay(GtkWidget* widget) {
+    return GTK_OVERLAY(widget);
+}
+
+GtkScrollable* cast_GtkScrollable(GtkWidget* widget) {
+    return GTK_SCROLLABLE(widget);
+}
+
+GtkAppChooser* cast_GtkAppChooser(GtkWidget* widget) {
+    return GTK_APP_CHOOSER(widget);
+}
+
+GtkAppChooserDialog* cast_GtkAppChooserDialog(GtkWidget* widget) {
+    return GTK_APP_CHOOSER_DIALOG(widget);
+}
+
+GtkLevelBar* cast_GtkLevelBar(GtkWidget* widget) {
+    return GTK_LEVEL_BAR(widget);
+}
+
+/* specific versions */
+
+#ifdef GTK_3_6
+
+GtkMenuButton* cast_GtkMenuButton(GtkWidget* widget) {
+    return GTK_MENU_BUTTON(widget);
+}
+
+#endif
+
+#ifdef GTK_3_10
+
+GtkSearchBar* cast_GtkSearchBar(GtkWidget* widget) {
+    return GTK_SEARCH_BAR(widget);
+}
+
 GtkStack* cast_GtkStack(GtkWidget* widget) {
     return GTK_STACK(widget);
 }
@@ -361,19 +385,22 @@ GtkRevealer* cast_GtkRevealer(GtkWidget* widget) {
     return GTK_REVEALER(widget);
 }
 
-GtkOverlay* cast_GtkOverlay(GtkWidget* widget) {
-    return GTK_OVERLAY(widget);
-}
-
-GtkScrollable* cast_GtkScrollable(GtkWidget* widget) {
-    return GTK_SCROLLABLE(widget);
-}
-
 GtkHeaderBar* cast_GtkHeaderBar(GtkWidget* widget) {
     return GTK_HEADER_BAR(widget);
 }
 
+GtkListBox* cast_GtkListBox(GtkWidget* widget) {
+    return GTK_LIST_BOX(widget);
+}
+
+GtkListBoxRow* cast_GtkListBoxRow(GtkWidget* widget) {
+    return GTK_LIST_BOX_ROW(widget);
+}
+
+#endif
+
 #ifdef GTK_3_12
+
 GtkFlowBox* cast_GtkFlowBox(GtkWidget* widget) {
     return GTK_FLOW_BOX(widget);
 }
@@ -385,23 +412,8 @@ GtkFlowBoxChild* cast_GtkFlowBoxChild(GtkWidget* widget) {
 GtkActionBar* cast_GtkActionBar(GtkWidget* widget) {
     return GTK_ACTION_BAR(widget);
 }
+
 #endif
-
-GtkListBox* cast_GtkListBox(GtkWidget* widget) {
-    return GTK_LIST_BOX(widget);
-}
-
-GtkListBoxRow* cast_GtkListBoxRow(GtkWidget* widget) {
-    return GTK_LIST_BOX_ROW(widget);
-}
-
-GtkAppChooser* cast_GtkAppChooser(GtkWidget* widget) {
-    return GTK_APP_CHOOSER(widget);
-}
-
-GtkAppChooserDialog* cast_GtkAppChooserDialog(GtkWidget* widget) {
-    return GTK_APP_CHOOSER_DIALOG(widget);
-}
 
 /*GAppInfo* cast_GtkAppInfo(GtkWidget* widget) {
     return G_APP_INFO(widget);

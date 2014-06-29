@@ -25,6 +25,10 @@ pub use self::separator::Separator;
 pub use self::fontbutton::FontButton;
 pub use self::togglebutton::ToggleButton;
 pub use self::checkbutton::CheckButton;
+#[cfg(GTK_3_6)]
+#[cfg(GTK_3_8)]
+#[cfg(GTK_3_10)]
+#[cfg(GTK_3_12)]
 pub use self::menubutton::MenuButton;
 pub use self::colorbutton::ColorButton;
 pub use self::linkbutton::LinkButton;
@@ -34,10 +38,18 @@ pub use self::volumebutton::VolumeButton;
 pub use self::grid::Grid;
 pub use self::entrybuffer::EntryBuffer;
 pub use self::entry::Entry;
+#[cfg(GTK_3_10)]
+#[cfg(GTK_3_12)]
 pub use self::searchentry::SearchEntry;
 pub use self::switch::Switch;
 pub use self::scale::Scale;
+#[cfg(GTK_3_6)]
+#[cfg(GTK_3_8)]
+#[cfg(GTK_3_10)]
+#[cfg(GTK_3_12)]
 pub use self::levelbar::LevelBar;
+#[cfg(GTK_3_10)]
+#[cfg(GTK_3_12)]
 pub use self::searchbar::SearchBar;
 pub use self::spinbutton::SpinButton;
 pub use self::spinner::Spinner;
@@ -60,14 +72,26 @@ pub use self::aboutdialog::AboutDialog;
 pub use self::messagedialog::MessageDialog;
 pub use self::colorchooserdialog::ColorChooserDialog;
 pub use self::notebook::NoteBook;
+#[cfg(GTK_3_10)]
+#[cfg(GTK_3_12)]
 pub use self::stack::Stack;
+#[cfg(GTK_3_10)]
+#[cfg(GTK_3_12)]
 pub use self::stack_switcher::StackSwitcher;
+#[cfg(GTK_3_10)]
+#[cfg(GTK_3_12)]
 pub use self::revealer::Revealer;
 pub use self::overlay::Overlay;
 pub use self::layout::Layout;
+#[cfg(GTK_3_10)]
+#[cfg(GTK_3_12)]
 pub use self::header_bar::HeaderBar;
+#[cfg(GTK_3_12)]
 pub use self::flow_box::{FlowBox, FlowBoxChild};
+#[cfg(GTK_3_10)]
+#[cfg(GTK_3_12)]
 pub use self::list_box::{ListBox, ListBoxRow};
+#[cfg(GTK_3_12)]
 pub use self::action_bar::ActionBar;
 pub use self::widget::Widget;
 pub use self::filefilter::FileFilter;
@@ -88,6 +112,10 @@ pub mod separator;
 pub mod fontbutton;
 pub mod togglebutton;
 pub mod checkbutton;
+#[cfg(GTK_3_6)]
+#[cfg(GTK_3_8)]
+#[cfg(GTK_3_10)]
+#[cfg(GTK_3_12)]
 pub mod menubutton;
 pub mod colorbutton;
 pub mod linkbutton;
@@ -97,10 +125,18 @@ pub mod volumebutton;
 pub mod grid;
 pub mod entrybuffer;
 pub mod entry;
+#[cfg(GTK_3_10)]
+#[cfg(GTK_3_12)]
 pub mod searchentry;
 pub mod switch;
 pub mod scale;
+#[cfg(GTK_3_6)]
+#[cfg(GTK_3_8)]
+#[cfg(GTK_3_10)]
+#[cfg(GTK_3_12)]
 pub mod levelbar;
+#[cfg(GTK_3_10)]
+#[cfg(GTK_3_12)]
 pub mod searchbar;
 pub mod spinbutton;
 pub mod spinner;
@@ -124,14 +160,26 @@ pub mod widget;
 pub mod colorchooserdialog;
 pub mod messagedialog;
 pub mod notebook;
+#[cfg(GTK_3_10)]
+#[cfg(GTK_3_12)]
 pub mod stack;
+#[cfg(GTK_3_10)]
+#[cfg(GTK_3_12)]
 pub mod stack_switcher;
+#[cfg(GTK_3_10)]
+#[cfg(GTK_3_12)]
 pub mod revealer;
 pub mod overlay;
 pub mod layout;
+#[cfg(GTK_3_10)]
+#[cfg(GTK_3_12)]
 pub mod header_bar;
+#[cfg(GTK_3_12)]
 pub mod flow_box;
+#[cfg(GTK_3_10)]
+#[cfg(GTK_3_12)]
 pub mod list_box;
+#[cfg(GTK_3_12)]
 pub mod action_bar;
 pub mod filefilter;
 pub mod filechooserdialog;
