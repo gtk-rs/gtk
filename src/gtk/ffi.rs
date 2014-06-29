@@ -423,7 +423,7 @@ extern "C" {
     // GtkAppChooser                                                         OK
     //=========================================================================
     pub fn gtk_app_chooser_get_app_info        (_self: *mut C_GtkAppChooser) -> *mut C_GAppInfo;
-    pub fn gtk_app_chooser_get_content_type    (_self: *mut C_GtkAppChooser) -> *c_char;
+    pub fn gtk_app_chooser_get_content_type    (_self: *mut C_GtkAppChooser) -> *const c_char;
     pub fn gtk_app_chooser_refresh             (_self: *mut C_GtkAppChooser) -> ();
 
     //=========================================================================
