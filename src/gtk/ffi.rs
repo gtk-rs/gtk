@@ -91,6 +91,9 @@ pub struct C_GtkListBox;
 pub struct C_GtkListBoxRow;
 pub struct C_GtkActionBar;
 pub struct C_GtkFileFilter;
+pub struct C_GtkAppChooser;
+pub struct C_GAppLaunchContext;
+pub struct C_GAppInfo;
 
 pub struct C_GtkToolItem;
 pub struct C_GtkToolButton;
@@ -366,6 +369,62 @@ extern "C" {
     // GtkColorChooserDialog                                                 OK
     //=========================================================================
     pub fn gtk_color_chooser_dialog_new        (title: *c_char, parent: *mut C_GtkWindow) -> *mut C_GtkWidget;
+
+    //=========================================================================
+    // GtkAppLaunchContext                                               NOT OK
+    //=========================================================================
+    /// Error : /usr/lib/x86_64-linux-gnu/libgio-2.0.so.0: error adding symbols: DSO missing from command line
+    /*pub fn g_app_launch_context_new            () -> *mut C_GAppLaunchContext;
+    pub fn g_app_launch_context_setenv         (launch_context: *mut C_GAppLaunchContext, variable: *c_char, value: *c_char) -> ();
+    pub fn g_app_launch_context_unsetenv       (launch_context: *mut C_GAppLaunchContext, variable: *c_char) -> ();
+    pub fn g_app_launch_context_get_environment(launch_context: *mut C_GAppLaunchContext) -> **c_char;
+    //pub fn g_app_launch_context_get_display    (launch_context: *mut C_GAppLaunchContext, app_info: *mut C_GAppInfo, files: *mut glib::ffi::C_GList) -> *c_char;
+    //pub fn g_app_launch_context_get_startup_notify_id(launch_context: *mut C_GAppLaunchContext, app_info: *mut C_GAppInfo, files: *mut glib::ffi::C_GList) -> *c_char;
+    pub fn g_app_launch_context_launch_failed  (launch_context: *mut C_GAppLaunchContext, startup_notify_id: *c_char) -> ();*/
+
+    //=========================================================================
+    // GtkAppInfo                                                        NOT OK
+    //=========================================================================
+    /// Error : /usr/lib/x86_64-linux-gnu/libgio-2.0.so.0: error adding symbols: DSO missing from command line
+    /*pub fn g_app_info_create_from_commandline  (commande_line: *c_char, application_name: *c_char, flag: gtk::AppInfoCreateFlags, error: *mut *mut glib::ffi::C_GError) -> *mut C_GAppInfo;
+    pub fn g_app_info_dup                      (app_info: *mut C_GAppInfo) -> *mut C_GAppInfo;
+    pub fn g_app_info_equal                    (app_info1: *mut C_GAppInfo, app_info2: *mut C_GAppInfo) -> Gboolean;
+    pub fn g_app_info_get_id                   (app_info: *mut C_GAppInfo) -> *c_char;
+    pub fn g_app_info_get_name                 (app_info: *mut C_GAppInfo) -> *c_char;
+    pub fn g_app_info_get_display_name         (app_info: *mut C_GAppInfo) -> *c_char;
+    pub fn g_app_info_get_description          (app_info: *mut C_GAppInfo) -> *c_char;
+    pub fn g_app_info_get_executable           (app_info: *mut C_GAppInfo) -> *c_char;
+    pub fn g_app_info_get_commandline          (app_info: *mut C_GAppInfo) -> *c_char;
+    //pub fn g_app_info_get_icon                 (app_info: *mut C_GAppInfo) -> *mut C_GIcon;
+    //pub fn g_app_info_launch                   (app_info: *mut C_GAppInfo, files: *mut glib::ffi::C_GList, launch_context: *mut C_GAppLaunchContext, error: *mut *mut glib::ffi::C_GError) -> Gboolean;
+    pub fn g_app_info_supports_files           (app_info: *mut C_GAppInfo) -> Gboolean;
+    pub fn g_app_info_supports_uris            (app_info: *mut C_GAppInfo) -> Gboolean;
+    //pub fn g_app_info_launch_uris              (app_info: *mut C_GAppInfo, uris: *mut glib::ffi::C_GList, launch_context: *mut C_GAppLaunchContext, error: *mut *mut glib::ffi::C_GError) -> Gboolean;
+    pub fn g_app_info_should_show              (app_info: *mut C_GAppInfo) -> Gboolean;
+    pub fn g_app_info_can_delete               (app_info: *mut C_GAppInfo) -> Gboolean;
+    pub fn g_app_info_delete                   (app_info: *mut C_GAppInfo) -> Gboolean;
+    pub fn g_app_info_reset_type_associations  (content_type: *c_char) -> ();
+    pub fn g_app_info_set_as_default_for_type  (app_info: *mut C_GAppInfo, content_type: *c_char, error: *mut *mut glib::ffi::C_GError) -> Gboolean;
+    pub fn g_app_info_set_as_default_for_extension(app_info: *mut C_GAppInfo, extension: *c_char, error: *mut *mut glib::ffi::C_GError) -> Gboolean;
+    pub fn g_app_info_set_as_last_used_for_type(app_info: *mut C_GAppInfo, content_type: *c_char, error: *mut *mut glib::ffi::C_GError) -> Gboolean;
+    pub fn g_app_info_add_supports_type        (app_info: *mut C_GAppInfo, content_type: *c_char, error: *mut *mut glib::ffi::C_GError) -> Gboolean;
+    pub fn g_app_info_can_remove_supports_type (app_info: *mut C_GAppInfo) -> Gboolean;
+    pub fn g_app_info_remove_supports_type     (app_info: *mut C_GAppInfo, content_type: *c_char, error: *mut *mut glib::ffi::C_GError) -> Gboolean;
+    pub fn g_app_info_get_supported_types      (app_info: *mut C_GAppInfo) -> **c_char;
+    //pub fn g_app_info_get_all                  () -> *mut glib::ffi::C_GList;
+    //pub fn g_app_info_get_all_for_type         (content_type: *c_char) -> *mut glib::ffi::C_GList;
+    pub fn g_app_info_get_default_for_type     (content_type: *c_char, must_support_uris: Gboolean) -> *mut C_GAppInfo;
+    pub fn g_app_info_get_default_for_uri_scheme(uri_scheme: *c_char) -> *mut C_GAppInfo;
+    //pub fn g_app_info_get_fallback_for_type    (content_type: *c_char) -> *mut glib::ffi::C_GList;
+    //pub fn g_app_info_get_recommended_for_type (content_type: *c_char) -> *mut glib::ffi::C_GList;
+    pub fn g_app_info_launch_default_for_uri   (uri: *c_char, launch_context: *mut C_GAppLaunchContext, error: *mut *mut glib::ffi::C_GError) -> Gboolean;*/
+
+    //=========================================================================
+    // GtkAppChooser                                                         OK
+    //=========================================================================
+    pub fn gtk_app_chooser_get_app_info        (_self: *mut C_GtkAppChooser) -> *mut C_GAppInfo;
+    pub fn gtk_app_chooser_get_content_type    (_self: *mut C_GtkAppChooser) -> *c_char;
+    pub fn gtk_app_chooser_refresh             (_self: *mut C_GtkAppChooser) -> ();
 
     //=========================================================================
     // GtkAppChooserDialog                                               NOT OK
@@ -1384,4 +1443,8 @@ extern "C" {
     pub fn cast_GtkActionBar(widget: *mut C_GtkWidget) -> *mut C_GtkActionBar;
     pub fn cast_GtkFileFilter(widget: *mut C_GtkWidget) -> *mut C_GtkFileFilter;
     pub fn cast_GtkFileChooser(widget: *mut C_GtkWidget) -> *mut C_GtkFileChooser;
+    pub fn cast_GtkAppChooser(widget: *mut C_GtkWidget) -> *mut C_GtkAppChooser;
+    pub fn cast_GtkAppChooserDialog(widget: *mut C_GtkWidget) -> *mut C_GtkAppChooserDialog;
+    pub fn cast_GtkAppInfo(widget: *mut C_GtkWidget) -> *mut C_GAppInfo;
+    pub fn cast_GtkAppLaunchContext(widget: *mut C_GtkWidget) -> *mut C_GAppLaunchContext;
 }

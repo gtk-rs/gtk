@@ -269,3 +269,19 @@ pub fn GTK_FILE_CHOOSER(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkFileCho
 pub fn GTK_FILE_FILTER(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkFileFilter {
     unsafe{ ffi::cast_GtkFileFilter(widget) }
 }
+
+pub fn GTK_APP_CHOOSER(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkAppChooser {
+    unsafe{ ffi::cast_GtkAppChooser(widget) }
+}
+
+pub fn GTK_APP_CHOOSER_DIALOG(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkAppChooserDialog {
+    unsafe{ ffi::cast_GtkAppChooserDialog(widget) }
+}
+
+pub fn GTK_APP_INFO(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GAppInfo {
+    unsafe{ ffi::cast_GtkAppInfo(widget) }
+}
+
+pub fn GTK_APP_LAUNCH_CONTEXT(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GAppLaunchContext {
+    unsafe{ ffi::cast_GtkAppLaunchContext(widget) }
+}
