@@ -54,7 +54,7 @@ pub type GType = uint; //FIXME: this is probably wrong
 
 pub struct ParamSpec {
     g_type_instance: TypeInstance,
-    name: *c_char,
+    name: *mut c_char,
     flags: ParamFlags,
     value_type: GType,
     owner_type: GType

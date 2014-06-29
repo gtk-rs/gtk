@@ -58,10 +58,10 @@ extern "C" {
     // pub fn g_slist_insert_sorted_with_data (list: *C_GSList, data: *c_void, GCompareDataFunc  func, gpointer          user_data) -> *C_GSList;
     // pub fn g_slist_insert_before           (list: *C_GSList, GSList           *sibling, gpointer          data) -> *C_GSList;
     pub fn g_slist_remove                  (list: *mut C_GSList, data: *mut c_void) -> *mut C_GSList;
-    pub fn g_slist_remove_all              (list: *mut C_GSList, data: *mut c_void) -> *C_GSList;
+    pub fn g_slist_remove_all              (list: *mut C_GSList, data: *mut c_void) -> *mut C_GSList;
     pub fn g_slist_remove_link             (list: *mut C_GSList, link_: C_GSList) -> *mut C_GSList;
     pub fn g_slist_delete_link             (list: *mut C_GSList, link_: C_GSList) -> *mut C_GSList;
-    pub fn g_slist_find                    (list: *mut C_GSList, data: *c_void) -> *mut C_GSList;
+    pub fn g_slist_find                    (list: *mut C_GSList, data: *mut c_void) -> *mut C_GSList;
     // pub fn g_slist_find_custom             (list: *C_GSList, data: *c_void, GCompareFunc      func) -> *C_GSList;
     pub fn g_slist_position                (list: *mut C_GSList, link_: C_GSList) -> c_int;
     // pub fn g_slist_index                   (list: *C_GSList, data: *c_void) -> c_int;
@@ -91,20 +91,20 @@ extern "C" {
     pub fn g_list_delete_link             (list: *mut C_GList, link_: C_GList) -> *mut C_GList;
     pub fn g_list_find                    (list: *mut C_GList, data: *mut c_void) -> *mut C_GList;
     // pub fn g_slist_find_custom             (list: *C_GSList, data: *c_void, GCompareFunc      func) -> *C_GSList;
-    pub fn g_list_position                (list: *C_GList, link_: C_GList) -> c_int;
+    pub fn g_list_position                (list: *mut C_GList, link_: C_GList) -> c_int;
     // pub fn g_slist_index                   (list: *C_GSList, data: *c_void) -> c_int;
 
     //=========================================================================
     // GError
     //=========================================================================
     //pub fn g_error_new                    (domain: GQuark, code: c_int, format: *c_char, ...) -> *C_GError;
-    pub fn g_error_new_literal            (domain: GQuark, code: c_int, message: *c_char) -> *mut C_GError;
+    pub fn g_error_new_literal            (domain: GQuark, code: c_int, message: *const c_char) -> *mut C_GError;
     //pub fn g_error_new_valist             (domain: GQuark, code: c_int, fomat: *c_char, args: va_list) -> *C_GError;
     pub fn g_error_free                   (error: *mut C_GError) -> ();
     pub fn g_error_copy                   (error: *mut C_GError) -> *mut C_GError;
     pub fn g_error_matches                (error: *mut C_GError, domain: GQuark, code: c_int) -> ffi::Gboolean;
     //pub fn g_set_error                    (error: **C_GError, domain: GQuark, code: c_int, format: *c_char, ...) -> ();
-    pub fn g_set_error_literal            (error: *mut *mut C_GError, domain: GQuark, code: c_int, message: *c_char) -> ();
+    pub fn g_set_error_literal            (error: *mut *mut C_GError, domain: GQuark, code: c_int, message: *const c_char) -> ();
     pub fn g_propagate_error              (dest: *mut *mut C_GError, src: *mut C_GError) -> ();
     pub fn g_clear_error                  (err: *mut *mut C_GError) -> ();
     //pub fn g_prefix_error                 (err: **C_GError, format: *c_char, ...) -> ();
