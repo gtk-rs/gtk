@@ -11,7 +11,9 @@ __rgtk__ use autoconf tools to build, so you should install them on your system.
 
 You should install __GTK+__ developpement library before install __rgtk__.
 
-__rgtk__ use the version 3.10 of __GTK+__, so it should be up to date or the library cannot build.
+__rgtk__ use the 3.12 version of __GTK+__, so it should be up to date or the library cannot build. However, we have added conditional compilations to handle 3.6, 3.8 and 3.10 versions.
+
+We are currently targetting rust master compiler to build __rgtk__.
 
 Then you can build __rgtk__ in two steps: 
 
