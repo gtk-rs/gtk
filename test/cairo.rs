@@ -45,20 +45,7 @@ fn main() {
     drawing_area.connect(signals::Draw::new(|ctx|{
         println!("BeginDraw")
 
-        ctx.select_font_face("Ubuntu Sans", FontSlantNormal, FontWeightNormal);
-
-        ctx.set_font_size(16.0);
-
-        let alphabet: &str = "AbCdEfGhIjKlMnOpQrStUvWxYz";
-        for letter in alphabet.chars() {
-            let letterstr = str::from_char(letter);
-            let extents = ctx.text_extents(letterstr.clone());
-            ctx.move_to(0.0 + 0.5 - extents.x_bearing - extents.width  / 2.0,
-                              0.5 - extents.y_bearing - extents.height / 2.0);
-            ctx.show_text(letterstr);
-        }
-
-        /*let width = drawing_area.get_allocated_width();
+        let width = drawing_area.get_allocated_width();
         let height = drawing_area.get_allocated_height();
 
         ctx.scale(width as f64, height as f64);
@@ -103,7 +90,7 @@ fn main() {
 
         ctx.arc(0.5 + eye_dx, eye_y, 0.05, 0.0, PI_2);
         ctx.fill();
-        */
+
     }));
 
     window.set_default_size(500, 500);

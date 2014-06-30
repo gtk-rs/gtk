@@ -3,6 +3,7 @@ use std::clone::Clone;
 use std::cmp::PartialEq;
 use std::ops::Drop;
 use std::c_str::CString;
+use std::mem::transmute;
 
 use cairo;
 use cairo::enums::{
@@ -80,85 +81,86 @@ pub struct TextExtents {
 }
 
 
-pub struct FontOptions{
-    pointer: *cairo_font_options_t
-}
+pub struct FontOptions(*cairo_font_options_t);
 
 impl FontOptions{
     pub fn new() -> FontOptions{
-        let font_options = FontOptions{
-            pointer: unsafe{
-                ffi::cairo_font_options_create()
-            }
+        let font_options = unsafe{
+            FontOptions(ffi::cairo_font_options_create())
         };
         font_options.ensure_status();
         font_options
     }
 
+    pub fn get_ptr(&self) -> *cairo_font_options_t{
+        let FontOptions(ptr) = *self;
+        ptr
+    }
+
     pub fn ensure_status(&self){
         let status = unsafe{
-            ffi::cairo_font_options_status(self.pointer)
+            ffi::cairo_font_options_status(self.get_ptr())
         };
         status.ensure_valid()
     }
 
     pub fn merge(&mut self, other: &FontOptions){
         unsafe{
-            ffi::cairo_font_options_merge(self.pointer, other.pointer)
+            ffi::cairo_font_options_merge(self.get_ptr(), other.get_ptr())
         }
     }
 
     pub fn hash(&self) -> u64{
         unsafe{
-            ffi::cairo_font_options_hash(self.pointer)
+            ffi::cairo_font_options_hash(self.get_ptr())
         }
     }
 
     pub fn set_antialias(&self, antialias: Antialias){
         unsafe{
-            ffi::cairo_font_options_set_antialias(self.pointer, antialias)
+            ffi::cairo_font_options_set_antialias(self.get_ptr(), antialias)
         }
     }
 
     pub fn get_antialias(&self) -> Antialias{
         unsafe{
-            ffi::cairo_font_options_get_antialias(self.pointer)
+            ffi::cairo_font_options_get_antialias(self.get_ptr())
         }
     }
 
     pub fn set_subpixel_order(&self, order: SubpixelOrder){
         unsafe{
-            ffi::cairo_font_options_set_subpixel_order(self.pointer, order)
+            ffi::cairo_font_options_set_subpixel_order(self.get_ptr(), order)
         }
     }
 
     pub fn get_subpixel_order(&self) -> SubpixelOrder{
         unsafe{
-            ffi::cairo_font_options_get_subpixel_order(self.pointer)
+            ffi::cairo_font_options_get_subpixel_order(self.get_ptr())
         }
     }
 
     pub fn set_hint_style(&self, hint_style: HintStyle){
         unsafe{
-            ffi::cairo_font_options_set_hint_style(self.pointer, hint_style)
+            ffi::cairo_font_options_set_hint_style(self.get_ptr(), hint_style)
         }
     }
 
     pub fn get_hint_style(&self) -> HintStyle{
         unsafe{
-            ffi::cairo_font_options_get_hint_style(self.pointer)
+            ffi::cairo_font_options_get_hint_style(self.get_ptr())
         }
     }
 
     pub fn set_hint_metrics(&self, hint_metrics: HintMetrics){
         unsafe{
-            ffi::cairo_font_options_set_hint_metrics(self.pointer, hint_metrics)
+            ffi::cairo_font_options_set_hint_metrics(self.get_ptr(), hint_metrics)
         }
     }
 
     pub fn get_hint_metrics(&self) -> HintMetrics{
         unsafe{
-            ffi::cairo_font_options_get_hint_metrics(self.pointer)
+            ffi::cairo_font_options_get_hint_metrics(self.get_ptr())
         }
     }
 }
@@ -166,17 +168,15 @@ impl FontOptions{
 impl PartialEq for FontOptions{
     fn eq(&self, other: &FontOptions) -> bool{
         unsafe{
-            ffi::cairo_font_options_equal(self.pointer, other.pointer).as_bool()
+            ffi::cairo_font_options_equal(self.get_ptr(), other.get_ptr()).as_bool()
         }
     }
 }
 
 impl Clone for FontOptions{
     fn clone(&self) -> FontOptions{
-        FontOptions {
-            pointer: unsafe{
-                ffi::cairo_font_options_copy(self.pointer)
-            }
+        unsafe{
+            FontOptions(ffi::cairo_font_options_copy(self.get_ptr()))
         }
     }
 }
@@ -184,7 +184,7 @@ impl Clone for FontOptions{
 impl Drop for FontOptions{
     fn drop(&mut self){
         unsafe{
-            ffi::cairo_font_options_destroy(self.pointer)
+            ffi::cairo_font_options_destroy(self.get_ptr())
         }
     }
 }
@@ -192,26 +192,27 @@ impl Drop for FontOptions{
 
 
 
-pub struct FontFace{
-    pointer: *cairo_font_face_t
-}
+pub struct FontFace(*cairo_font_face_t);
 
 impl FontFace{
+    pub fn get_ptr(&self) -> *cairo_font_face_t{
+        let FontFace(ptr) = *self;
+        ptr
+    }
+
     pub fn toy_create<S: ToCStr>(family: S, slant: FontSlant, weight: FontWeight) -> FontFace{
-        let font_face = FontFace{
-            pointer: unsafe{
-                family.with_c_str(|family|{
-                    ffi::cairo_toy_font_face_create(family, slant, weight)
-                })
-            }
-        };
+        let font_face = FontFace(unsafe{
+            family.with_c_str(|family|{
+                ffi::cairo_toy_font_face_create(family, slant, weight)
+            })
+        });
         font_face.ensure_status();
         font_face
     }
 
     pub fn toy_get_family(&self) -> String{
         unsafe{
-            let ptr = ffi::cairo_toy_font_face_get_family(self.pointer);
+            let ptr = ffi::cairo_toy_font_face_get_family(self.get_ptr());
             let c_str = CString::new(ptr, false);
             c_str.as_str().unwrap().to_string()
         }
@@ -219,42 +220,40 @@ impl FontFace{
 
     pub fn toy_get_slant(&self) -> FontSlant{
         unsafe{
-            ffi::cairo_toy_font_face_get_slant(self.pointer)
+            ffi::cairo_toy_font_face_get_slant(self.get_ptr())
         }
     }
 
     pub fn toy_get_weight(&self) -> FontWeight{
         unsafe{
-            ffi::cairo_toy_font_face_get_weight(self.pointer)
+            ffi::cairo_toy_font_face_get_weight(self.get_ptr())
         }
     }
 
     pub fn ensure_status(&self){
         let status = unsafe{
-            ffi::cairo_font_face_status(self.pointer)
+            ffi::cairo_font_face_status(self.get_ptr())
         };
         status.ensure_valid()
     }
 
     pub fn get_type(&self) -> FontType{
         unsafe{
-            ffi::cairo_font_face_get_type(self.pointer)
+            ffi::cairo_font_face_get_type(self.get_ptr())
         }
     }
 
     pub fn get_reference_count(&self) -> uint{
         unsafe{
-            ffi::cairo_font_face_get_reference_count(self.pointer) as uint
+            ffi::cairo_font_face_get_reference_count(self.get_ptr()) as uint
         }
     }
 }
 
 impl Clone for FontFace{
     fn clone(&self) -> FontFace{
-        FontFace{
-            pointer: unsafe{
-                ffi::cairo_font_face_reference(self.pointer)
-            }
+        unsafe{
+            FontFace(ffi::cairo_font_face_reference(self.get_ptr()))
         }
     }
 }
@@ -262,23 +261,24 @@ impl Clone for FontFace{
 impl Drop for FontFace{
     fn drop(&mut self){
         unsafe{
-            ffi::cairo_font_face_destroy(self.pointer)
+            ffi::cairo_font_face_destroy(self.get_ptr())
         }
     }
 }
 
 
 
-pub struct ScaledFont{
-    pointer: *cairo_scaled_font_t
-}
+pub struct ScaledFont(*cairo_scaled_font_t);
 
 impl ScaledFont{
+    pub fn get_ptr(&self) -> *cairo_scaled_font_t{
+        let ScaledFont(ptr) = *self;
+        ptr
+    }
+
     pub fn new(font_face: FontFace, font_matrix: &Matrix, ctm: &Matrix, options: FontOptions) -> ScaledFont{
-        let scaled_font = ScaledFont{
-            pointer: unsafe{
-                ffi::cairo_scaled_font_create(font_face.pointer, font_matrix, ctm, options.pointer)
-            }
+        let scaled_font = unsafe{
+            ScaledFont(ffi::cairo_scaled_font_create(font_face.get_ptr(), font_matrix, ctm, options.get_ptr()))
         };
         scaled_font.ensure_status();
         scaled_font
@@ -286,20 +286,20 @@ impl ScaledFont{
 
     pub fn ensure_status(&self){
         let status = unsafe{
-            ffi::cairo_scaled_font_status(self.pointer)
+            ffi::cairo_scaled_font_status(self.get_ptr())
         };
         status.ensure_valid()
     }
 
     pub fn get_type(&self) -> FontType{
         unsafe{
-            ffi::cairo_scaled_font_get_type(self.pointer)
+            ffi::cairo_scaled_font_get_type(self.get_ptr())
         }
     }
 
     pub fn get_reference_count(&self) -> uint{
         unsafe{
-            ffi::cairo_scaled_font_get_reference_count(self.pointer) as uint
+            ffi::cairo_scaled_font_get_reference_count(self.get_ptr()) as uint
         }
     }
 
@@ -326,10 +326,8 @@ impl ScaledFont{
 
 impl Clone for ScaledFont{
     fn clone(&self) -> ScaledFont{
-        ScaledFont{
-            pointer: unsafe{
-                ffi::cairo_scaled_font_reference(self.pointer)
-            }
+        unsafe{
+            ScaledFont(ffi::cairo_scaled_font_reference(self.get_ptr()))
         }
     }
 }
@@ -337,7 +335,7 @@ impl Clone for ScaledFont{
 impl Drop for ScaledFont{
     fn drop(&mut self){
         unsafe{
-            ffi::cairo_scaled_font_destroy(self.pointer)
+            ffi::cairo_scaled_font_destroy(self.get_ptr())
         }
     }
 }
@@ -348,78 +346,74 @@ impl cairo::Context{
     pub fn select_font_face<S: ToCStr>(&self, family: S, slant: FontSlant, weight: FontWeight){
         unsafe{
             family.with_c_str(|family|{
-                ffi::cairo_select_font_face(self.pointer, family, slant, weight)
+                ffi::cairo_select_font_face(self.get_ptr(), family, slant, weight)
             })
         }
     }
 
     pub fn set_font_size(&self, size: f64){
         unsafe{
-            ffi::cairo_set_font_size(self.pointer, size)
+            ffi::cairo_set_font_size(self.get_ptr(), size)
         }
     }
 
     //FIXME probably needs a heap allocation
     pub fn set_font_matrix(&self, matrix: Matrix){
         unsafe{
-            ffi::cairo_set_font_matrix(self.pointer, &matrix)
+            ffi::cairo_set_font_matrix(self.get_ptr(), &matrix)
         }
     }
 
     pub fn get_font_matrix(&self) -> Matrix{
         let matrix = Matrix::null();
         unsafe{
-            ffi::cairo_get_font_matrix(self.pointer, &matrix);
+            ffi::cairo_get_font_matrix(self.get_ptr(), &matrix);
         }
         matrix
     }
 
     pub fn set_font_options(&self, options: FontOptions){
         unsafe{
-            ffi::cairo_set_font_options(self.pointer, options.pointer)
+            ffi::cairo_set_font_options(self.get_ptr(), options.get_ptr())
         }
     }
 
     pub fn get_font_options(&self) -> FontOptions{
         let out = FontOptions::new();
         unsafe{
-            ffi::cairo_get_font_options(self.pointer, out.pointer);
+            ffi::cairo_get_font_options(self.get_ptr(), out.get_ptr());
         }
         out
     }
 
     pub fn set_font_face(&self, font_face: FontFace){
         unsafe{
-            ffi::cairo_set_font_face(self.pointer, font_face.pointer)
+            ffi::cairo_set_font_face(self.get_ptr(), font_face.get_ptr())
         }
     }
 
     pub fn get_font_face(&self) -> FontFace{
-        FontFace{
-            pointer: unsafe{
-                ffi::cairo_get_font_face(self.pointer)
-            }
+        unsafe{
+            FontFace(ffi::cairo_get_font_face(self.get_ptr()))
         }
     }
 
     pub fn set_scaled_font(&self, scaled_font: ScaledFont){
         unsafe{
-            ffi::cairo_set_scaled_font(self.pointer, scaled_font.pointer)
+            ffi::cairo_set_scaled_font(self.get_ptr(), scaled_font.get_ptr())
         }
     }
 
     pub fn get_scaled_font(&self) -> ScaledFont{
-        ScaledFont{
-            pointer: unsafe{
-                ffi::cairo_get_scaled_font(self.pointer)
-            }
+        unsafe{
+            ScaledFont(ffi::cairo_get_scaled_font(self.get_ptr()))
         }
     }
 
     pub fn show_text<S: ToCStr>(&self, text: S){
         unsafe{
             text.with_c_str(|text|{
-                ffi::cairo_show_text(self.pointer, text)
+                ffi::cairo_show_text(self.get_ptr(), text)
             })
         }
     }
@@ -427,7 +421,7 @@ impl cairo::Context{
     pub fn show_glyphs<V: Vector<Glyph>>(&self, vec: V){
         unsafe{
             let slice: &[Glyph] = vec.as_slice();
-            ffi::cairo_show_glyphs(self.pointer, slice.as_ptr(), slice.len() as c_int)
+            ffi::cairo_show_glyphs(self.get_ptr(), slice.as_ptr(), slice.len() as c_int)
         }
     }
 
@@ -443,7 +437,7 @@ impl cairo::Context{
             let clusters: &[TextCluster] = cluster_vec.as_slice();
 
             text.with_c_str(|text| {
-                ffi::cairo_show_text_glyphs(self.pointer,
+                ffi::cairo_show_text_glyphs(self.get_ptr(),
                                        text,
                                        -1 as c_int, //NUL terminated
                                        glyphs.as_ptr(),
@@ -465,7 +459,7 @@ impl cairo::Context{
         };
 
         unsafe{
-            ffi::cairo_font_extents(self.pointer, &extents);
+            ffi::cairo_font_extents(self.get_ptr(), &extents);
         }
 
         extents
@@ -483,7 +477,7 @@ impl cairo::Context{
 
         text.with_c_str(|text|{
             unsafe{
-                ffi::cairo_text_extents(self.pointer, text, &extents)
+                ffi::cairo_text_extents(self.get_ptr(), text, &extents)
             }
         });
 
@@ -503,7 +497,7 @@ impl cairo::Context{
         let glyphs = glyph_vec.as_slice();
 
         unsafe{
-            ffi::cairo_glyph_extents(self.pointer, glyphs.as_ptr(), glyphs.len() as c_int, &extents);
+            ffi::cairo_glyph_extents(self.get_ptr(), glyphs.as_ptr(), glyphs.len() as c_int, &extents);
         }
 
         extents

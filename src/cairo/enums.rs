@@ -53,7 +53,7 @@ impl Show for Status{
     fn fmt(&self, formatter: &mut ::std::fmt::Formatter) -> Result<(), FormatError>{
         let c_str = unsafe{
             let char_ptr = ffi::cairo_status_to_string(*self);
-            CString::new(char_ptr, true) //FIXME I'm not sure if we actually own the str send in by cairo
+            CString::new(char_ptr, false) //FIXME I'm not sure if we actually own the str send in by cairo
         };
         c_str.as_str().unwrap().fmt(formatter)
     }
