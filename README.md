@@ -1,4 +1,4 @@
-rgtk
+rgtk [![Build Status](https://travis-ci.org/jeremyletang/rgtk.svg?branch=master)](https://travis-ci.org/jeremyletang/rgtk)
 ====
 
 __Rust__ bindings and wrappers for __GTK+__
