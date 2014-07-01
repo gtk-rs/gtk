@@ -26,6 +26,7 @@ use gdk;
 use glib;
 use gtk;
 use cairo;
+use std::any::Any;
 
 pub trait Signal<'a>{
     fn get_signal_name(&self) -> &str;
@@ -33,6 +34,8 @@ pub trait Signal<'a>{
     fn get_trampoline(&self) -> extern "C" fn();
 
     fn fetch_cb(&self) -> *mut ||;
+
+    fn get_user_data<'b>(&'b self) -> &'b Option<Box<Any>>;
 }
 
 // The defintion of the signal macro is split in a argumentless and
@@ -53,17 +56,17 @@ macro_rules! signal(
             use glib;
             use gtk;
             use cairo;
+            use std::any::Any;
 
-            pub extern fn trampoline(widget : *mut ffi::C_GtkWidget, user_data_raw : *mut (Box<super::Signal>, Option<Box<Any>>)) -> $ret_type{
+            pub extern fn trampoline(widget : *mut ffi::C_GtkWidget, signal: *mut Box<super::Signal>) -> $ret_type{
                 unsafe{
-                    let (ref signal, ref user_data_option) = *user_data_raw;
-                    match user_data_option{
-                        Some(ref user_data) => {
-                            let cb : *mut |Box<Any>| -> $ret_type = transmute(signal.fetch_cb());
+                    match (*signal).get_user_data(){
+                        &Some(ref user_data) => {
+                            let cb : *mut |&Any| -> $ret_type = transmute((*signal).fetch_cb());
                             (*cb)(user_data)
                         },
-                        None => {
-                            let cb : *mut || -> $ret_type = transmute(signal.fetch_cb());
+                        &None => {
+                            let cb : *mut || -> $ret_type = transmute((*signal).fetch_cb());
                             (*cb)()
                         },
                     }
@@ -85,17 +88,17 @@ macro_rules! signal(
             use glib;
             use gtk;
             use cairo;
+            use std::any::Any;
 
-            pub extern fn trampoline(widget : *mut ffi::C_GtkWidget, $($arg_name : $arg_type),* , user_data_raw : *mut (Box<super::Signal>, Option<Box<Any>>)) -> $ret_type{
+            pub extern fn trampoline(widget : *mut ffi::C_GtkWidget, $($arg_name : $arg_type),* , signal: *mut Box<super::Signal>) -> $ret_type{
                 unsafe{
-                    let (ref signal, ref user_data_option) = *user_data_raw;
-                    match user_data_option{
-                        Some(ref user_data) => {
-                            let cb : *mut |$($arg_type),*, Box<Any>| -> $ret_type = transmute(signal.fetch_cb());
+                    match (*signal).get_user_data(){
+                        &Some(ref user_data) => {
+                            let cb : *mut |$($arg_type),*, &Any| -> $ret_type = transmute((*signal).fetch_cb());
                             (*cb)($($arg_name),*, user_data)
                         },
-                        None => {
-                            let cb : *mut |$($arg_type),*| -> $ret_type = transmute(signal.fetch_cb());
+                        &None => {
+                            let cb : *mut |$($arg_type),*| -> $ret_type = transmute((*signal).fetch_cb());
                             (*cb)($($arg_name),*)
                         },
                     }
@@ -122,21 +125,33 @@ macro_rules! signal(
             use glib;
             use gtk;
             use cairo;
+            use std::any::Any;
 
 
-            pub extern fn trampoline(widget : *mut ffi::C_GtkWidget, $($t_arg_nm : $t_arg_ty),* , user_data_raw : *mut (Box<super::Signal>, Option<Box<Any>>)) -> $t_ret_ty{
+            pub extern fn trampoline(widget: *mut ffi::C_GtkWidget, $($t_arg_nm : $t_arg_ty),* , signal: *mut Box<super::Signal>) -> $t_ret_ty{
                 unsafe{
-                    let (ref signal, ref user_data_option) = *user_data_raw;
-                    match user_data_option{
-                        Some(ref user_data) => {
-                            let cb : *mut |$($arg_type),*, Box<Any>| -> $ret_type = transmute(signal.fetch_cb());
-                            let out = $t_blck;
-                            out(cb)
+                    match (*signal).get_user_data(){
+                        &Some(ref user_data) => {
+                            let cb: *mut |$($arg_type),*, &Any| -> $ret_type = transmute((*signal).fetch_cb());
+
+                            let cont = |$($arg_name: $arg_type),*| {
+                                (*cb)($($arg_name),* , user_data)
+                            };
+
+                            let custom_trampoline = $t_blck;
+
+                            custom_trampoline(cont)
                         },
-                        None => {
-                            let cb : *mut |$($arg_type),*| -> $ret_type = transmute(signal.fetch_cb());
-                            let out = $t_blck;
-                            out(cb)
+                        &None => {
+                            let cb : *mut |$($arg_type),*| -> $ret_type = transmute((*signal).fetch_cb());
+
+                            let cont = |$($arg_name: $arg_type),*| {
+                                (*cb)($($arg_name),*)
+                            };
+
+                            let custom_trampoline = $t_blck;
+
+                            custom_trampoline(cont)
                         },
                     }
                 }
@@ -148,22 +163,24 @@ macro_rules! signal(
     ($signal:ident, $class:ident [ $(($arg_name:ident : $arg_type:ty)),* ] -> $ret_type:ty) => (
         pub struct $class<'a>{
             pub cb: |$($arg_type),*|:'a -> $ret_type,
-            pub user_data: Box<Any>
+            pub user_data: Option<Box<Any>>
         }
 
         impl<'a> $class<'a>{
             pub fn new (cb : |$($arg_type),* |:'a -> $ret_type) -> Box<Signal<'a>> {
                 box $class{
-                    cb: cb
+                    cb: cb,
+                    user_data: None
                 } as Box<Signal<'a>>
             }
 
-            pub fn new_with_data (user_data: Box<Any>, cb: |$($arg_type),*, Box<Any>|:'a -> $ret_type) -> Box<Signal<'a>> {
+            //TODO: Rust lexer bug here, can't parse the middel `,` in `|$($arg_type),* , Box<Any>|`
+            /*pub fn new_with_data (user_data: Box<Any>, cb: |$($arg_type),*, Box<Any>|:'a -> $ret_type) -> Box<Signal<'a>> {
                 box $class{
                     cb: cb,
                     user_data: user_data
                 } as Box<Signal<'a>>
-            }
+            }*/
         }
 
         impl<'a> Signal<'a> for $class<'a>{
@@ -182,6 +199,10 @@ macro_rules! signal(
                     transmute(&self.cb)
                 }
             }
+
+            fn get_user_data<'b>(&'b self) -> &'b Option<Box<Any>>{
+                &self.user_data
+            }
         }
     );
 )
@@ -199,8 +220,8 @@ signal!(child_notify,           ChildNotify(spec : glib::ParamSpec) -> ())
 signal!(composited_changed,     CompositedChanged() -> ())
 signal!(destroy,                Destroy() -> ())
 signal!(direction_changed,      DirectionChanged(previous_direction: gtk::TextDirection) -> ())
-signal!(draw,                   Draw(ctx: cairo::Context) -> (), trampoline(ctx_raw: *cairo::ffi::cairo_t) -> () |cb: *|cairo::Context|| {
-    (*cb)(cairo::Context::wrap(ctx_raw))
+signal!(draw,                   Draw(ctx: cairo::Context) -> (), trampoline(ctx_raw: *mut cairo::ffi::cairo_t) -> () |cb: |cairo::Context|| {
+    cb(cairo::Context::wrap(ctx_raw))
 })
 signal!(focus,                  Focus(direction : gtk::DirectionType) -> bool)
 signal!(grab_focus,             GrabFocus() -> ())

@@ -18,7 +18,7 @@ pub struct Rectangle{
 }
 
 #[repr(C)]
-pub struct Context(*cairo_t);
+pub struct Context(*mut cairo_t);
 
 impl Clone for Context{
     fn clone(&self) -> Context{
@@ -37,12 +37,12 @@ impl Drop for Context{
 }
 
 impl Context{
-    pub fn get_ptr(&self) -> *cairo_t{
+    pub fn get_ptr(&self) -> *mut cairo_t{
         let Context(ptr) = *self;
         ptr
     }
 
-    pub fn wrap(ptr: *cairo_t) -> Context{
+    pub fn wrap(ptr: *mut cairo_t) -> Context{
         unsafe{
             Context(ffi::cairo_reference(ptr))
         }
@@ -52,7 +52,7 @@ impl Context{
         self.status().ensure_valid();
     }
 
-    pub fn new(target: *cairo_surface_t) -> Context {
+    pub fn new(target: *mut cairo_surface_t) -> Context {
         unsafe {
             Context(ffi::cairo_create(target))
         }
@@ -78,7 +78,7 @@ impl Context{
         self.ensure_status()
     }
 
-    //fn ffi::cairo_get_target (cr: *cairo_t) -> *cairo_surface_t;
+    //fn ffi::cairo_get_target (cr: *mut cairo_t) -> *mut cairo_surface_t;
 
     pub fn push_group(&self){
         unsafe{
@@ -105,7 +105,7 @@ impl Context{
         }
     }
 
-    //fn ffi::cairo_get_group_target (cr: *cairo_t) -> *cairo_surface_t;
+    //fn ffi::cairo_get_group_target (cr: *mut cairo_t) -> *mut cairo_surface_t;
 
     pub fn set_source_rgb(&self, red: f64, green: f64, blue: f64){
         unsafe{
@@ -132,7 +132,7 @@ impl Context{
         }
     }
 
-    //fn ffi::cairo_set_source_surface (cr: *cairo_t, surface: *cairo_surface_t, x: c_double, y: c_double);
+    //fn ffi::cairo_set_source_surface (cr: *mut cairo_t, surface: *mut cairo_surface_t, x: c_double, y: c_double);
 
     pub fn set_antialias(&self, antialias : Antialias){
         unsafe{
@@ -162,12 +162,12 @@ impl Context{
 
     pub fn get_dash(&self) -> (Vec<f64>, f64){
         let dash_count = self.get_dash_count() as uint;
-        let dashes : Vec<f64> = Vec::with_capacity(dash_count);
-        let offset : Box<f64> = box 0.0;
+        let mut dashes : Vec<f64> = Vec::with_capacity(dash_count);
+        let mut offset : Box<f64> = box 0.0;
 
         unsafe{
-            let offset_ptr : *f64 = transmute(offset);
-            ffi::cairo_get_dash(self.get_ptr(), dashes.as_ptr(), offset_ptr);
+            let offset_ptr : *mut f64 = transmute(offset);
+            ffi::cairo_get_dash(self.get_ptr(), dashes.as_mut_ptr(), offset_ptr);
             (dashes, *offset_ptr)
         }
     }
@@ -274,13 +274,13 @@ impl Context{
     }
 
     pub fn clip_extents(&self) -> (f64,f64,f64,f64){
-        let x1 : f64 = 0.0;
-        let y1 : f64 = 0.0;
-        let x2 : f64 = 0.0;
-        let y2 : f64 = 0.0;
+        let mut x1: f64 = 0.0;
+        let mut y1: f64 = 0.0;
+        let mut x2: f64 = 0.0;
+        let mut y2: f64 = 0.0;
 
         unsafe{
-            ffi::cairo_clip_extents(self.get_ptr(), &x1, &y1, &x2, &y2);
+            ffi::cairo_clip_extents(self.get_ptr(), &mut x1, &mut y1, &mut x2, &mut y2);
         }
 
         (x1, y1, x2, y2)
@@ -324,13 +324,13 @@ impl Context{
     }
 
     pub fn fill_extents(&self) -> (f64,f64,f64,f64){
-        let x1 : f64 = 0.0;
-        let y1 : f64 = 0.0;
-        let x2 : f64 = 0.0;
-        let y2 : f64 = 0.0;
+        let mut x1: f64 = 0.0;
+        let mut y1: f64 = 0.0;
+        let mut x2: f64 = 0.0;
+        let mut y2: f64 = 0.0;
 
         unsafe{
-            ffi::cairo_fill_extents(self.get_ptr(), &x1, &y1, &x2, &y2);
+            ffi::cairo_fill_extents(self.get_ptr(), &mut x1, &mut y1, &mut x2, &mut y2);
         }
 
         (x1, y1, x2, y2)
@@ -348,7 +348,7 @@ impl Context{
         }
     }
 
-    //fn ffi::cairo_mask_surface (cr: *cairo_t, surface: *cairo_surface_t, surface_x: c_double, surface_y: c_double);
+    //fn ffi::cairo_mask_surface (cr: *mut cairo_t, surface: *mut cairo_surface_t, surface_x: c_double, surface_y: c_double);
 
     pub fn paint(&self){
         unsafe{
@@ -375,13 +375,13 @@ impl Context{
     }
 
     pub fn stroke_extents(&self) -> (f64,f64,f64,f64){
-        let x1 : f64 = 0.0;
-        let y1 : f64 = 0.0;
-        let x2 : f64 = 0.0;
-        let y2 : f64 = 0.0;
+        let mut x1: f64 = 0.0;
+        let mut y1: f64 = 0.0;
+        let mut x2: f64 = 0.0;
+        let mut y2: f64 = 0.0;
 
         unsafe{
-            ffi::cairo_stroke_extents(self.get_ptr(), &x1, &y1, &x2, &y2);
+            ffi::cairo_stroke_extents(self.get_ptr(), &mut x1, &mut y1, &mut x2, &mut y2);
         }
 
         (x1, y1, x2, y2)

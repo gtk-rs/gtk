@@ -88,12 +88,10 @@ pub trait Widget {
         use std::mem::transmute;
 
         unsafe {
-            let user_data_outer = signal.get_user_data();
             let signal_name     = signal.get_signal_name();
             let trampoline      = signal.get_trampoline();
 
-            let user_data_inner = (signal, user_data_outer);
-            let user_data_ptr   = transmute(box user_data_inner);
+            let user_data_ptr   = transmute(box signal);
 
             signal_name.replace("_", "-").with_c_str(|signal_name| {
                 ffi::glue_signal_connect(

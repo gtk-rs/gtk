@@ -1,4 +1,5 @@
 
+use libc::{c_double};
 use std::mem::transmute;
 use cairo::enums::{
 };
@@ -40,8 +41,8 @@ impl cairo::Context{
 
     pub fn user_to_device(&self, x: f64, y: f64) -> (f64, f64) {
         unsafe{
-            let x_ptr: *f64 = transmute(box x);
-            let y_ptr: *f64 = transmute(box y);
+            let x_ptr: *mut c_double = transmute(box x);
+            let y_ptr: *mut c_double = transmute(box y);
 
             ffi::cairo_user_to_device(self.get_ptr(), x_ptr, y_ptr);
 
@@ -54,8 +55,8 @@ impl cairo::Context{
 
     pub fn user_to_device_distance(&self, dx: f64, dy: f64) -> (f64, f64) {
         unsafe{
-            let dx_ptr: *f64 = transmute(box dx);
-            let dy_ptr: *f64 = transmute(box dy);
+            let dx_ptr: *mut c_double = transmute(box dx);
+            let dy_ptr: *mut c_double = transmute(box dy);
 
             ffi::cairo_user_to_device_distance(self.get_ptr(), dx_ptr, dy_ptr);
 
@@ -68,8 +69,8 @@ impl cairo::Context{
 
     pub fn device_to_user(&self, x: f64, y: f64) -> (f64, f64) {
         unsafe{
-            let x_ptr: *f64 = transmute(box x);
-            let y_ptr: *f64 = transmute(box y);
+            let x_ptr: *mut c_double = transmute(box x);
+            let y_ptr: *mut c_double = transmute(box y);
 
             ffi::cairo_device_to_user(self.get_ptr(), x_ptr, y_ptr);
 
@@ -82,8 +83,8 @@ impl cairo::Context{
 
     pub fn device_to_user_distance(&self, dx: f64, dy: f64) -> (f64, f64) {
         unsafe{
-            let dx_ptr: *f64 = transmute(box dx);
-            let dy_ptr: *f64 = transmute(box dy);
+            let dx_ptr: *mut c_double = transmute(box dx);
+            let dy_ptr: *mut c_double = transmute(box dy);
 
             ffi::cairo_device_to_user_distance(self.get_ptr(), dx_ptr, dy_ptr);
 

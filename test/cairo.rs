@@ -7,9 +7,11 @@ extern crate debug;
 extern crate collections;
 
 use std::f64::consts::PI_2;
+use std::str;
+
 use rgtk::*;
 use rgtk::gtk::signals;
-use std::str;
+use rgtk::gtk::DrawingArea;
 
 use rgtk::cairo::enums::{
     FontSlantNormal,
@@ -38,7 +40,10 @@ mod platform {
 
 fn main() {
     gtk::init();
-    demo(500, 500, |cr| {
+
+    drawable(500, 500, |cr| {
+        cr.scale(500.0, 500.0);
+
         cr.set_source_rgb(250.0/255.0, 224.0/255.0, 55.0/255.0);
         cr.paint();
 
@@ -81,7 +86,9 @@ fn main() {
         cr.fill();
     });
 
-    demo(500, 500, |cr| {
+    drawable(500, 500, |cr| {
+        cr.scale(500.0, 500.0);
+
         cr.select_font_face("Sans",
                               cairo::enums::FontSlantNormal,
                               cairo::enums::FontWeightNormal);
@@ -104,51 +111,21 @@ fn main() {
         cr.fill();
     });
 
-    let mut window = gtk::Window::new(gtk::window_type::TopLevel).unwrap();
-    let drawing_area = gtk::DrawingArea::new().unwrap();
-
-    drawing_area.connect(signals::Draw::new(|cr|{
-        let width  = drawing_area.get_allocated_width();
-        let height = drawing_area.get_allocated_height();
-
-        cr.scale(width as f64, height as f64);
-    }));
-
-    window.set_default_size(500, 500);
-
-    window.connect(signals::DeleteEvent::new(|event_type|{
-        gtk::main_quit();
-        true
-    }));
-    window.add(&drawing_area);
-    window.show_all();
-
     gtk::main();
 }
 
-pub fn demo(width: i32, height: i32, draw_fn: |cairo::Context|){
+pub fn drawable(width: i32, height: i32, draw_fn: |cairo::Context|){
     let mut window = gtk::Window::new(gtk::window_type::TopLevel).unwrap();
-    let drawing_area = box gtk::DrawingArea::new().unwrap();
+    let drawing_area = box DrawingArea::new().unwrap();
 
-    drawing_area.connect(signals::Draw::new_with_data(drawing_area, |cr, data|{
-        drawing_area = data.as_ref<gtk::DrawingArea>().unwrap();
-
-        let width  = drawing_area.get_allocated_width();
-        let height = drawing_area.get_allocated_height();
-
-        cr.scale(width as f64, height as f64);
-    }));
+    drawing_area.connect(signals::Draw::new(draw_fn));
 
     window.set_default_size(width, height);
 
-    window.connect(signals::DeleteEvent::new(|event_type|{
+    window.connect(signals::DeleteEvent::new(|_|{
         gtk::main_quit();
         true
     }));
     window.add(drawing_area);
     window.show_all();
-}
-
-pub fn draw_signal(cr: cairo::Context){
-
 }

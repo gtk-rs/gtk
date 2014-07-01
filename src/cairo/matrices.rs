@@ -79,16 +79,22 @@ impl Matrix{
 		result.ensure_valid();
 	}
 
-	pub fn transform_distance(&self, dx: f64, dy: f64) -> (f64, f64){
+	pub fn transform_distance(&self, _dx: f64, _dy: f64) -> (f64, f64){
+		let mut dx = _dx;
+		let mut dy = _dy;
+
 		unsafe{
-			ffi::cairo_matrix_transform_distance(self, &dx, &dy);
+			ffi::cairo_matrix_transform_distance(self, &mut dx, &mut dy);
 		}
 		(dx, dy)
 	}
 
-	pub fn transform_point(&self, x: f64, y: f64) -> (f64, f64){
+	pub fn transform_point(&self, _x: f64, _y: f64) -> (f64, f64){
+		let mut x = _x;
+		let mut y = _y;
+
 		unsafe{
-			ffi::cairo_matrix_transform_point(self, &x, &y);
+			ffi::cairo_matrix_transform_point(self, &mut x, &mut y);
 		}
 		(x, y)
 	}

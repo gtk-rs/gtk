@@ -15,28 +15,28 @@ use cairo::ffi::{
 use cairo::ffi;
 use cairo;
 
-pub struct Path(*cairo_path_t);
+pub struct Path(*mut cairo_path_t);
 
 impl Path{
-    pub fn get_ptr(&self) -> *cairo_path_t{
+    pub fn get_ptr(&self) -> *mut cairo_path_t{
         let Path(ptr) = *self;
         ptr
     }
 
     pub fn ensure_status(&self){
         unsafe{
-            let ptr: *cairo_path_t = self.get_ptr();
+            let ptr: *mut cairo_path_t = self.get_ptr();
             (*ptr).status.ensure_valid()
         }
     }
 
-    pub fn wrap(pointer: *cairo_path_t) -> Path{
+    pub fn wrap(pointer: *mut cairo_path_t) -> Path{
         Path(pointer)
     }
 
     pub fn iter(&self) -> PathSegments {
         unsafe{
-            let ptr: *cairo_path_t = self.get_ptr();
+            let ptr: *mut cairo_path_t = self.get_ptr();
             let length = (*ptr).num_data as uint;
             let data_ptr = (*ptr).data;
 
@@ -124,8 +124,8 @@ impl cairo::Context{
 
     pub fn get_current_point(&self) -> (f64, f64) {
         unsafe{
-            let x = transmute(box 0.0);
-            let y = transmute(box 0.0);
+            let x = transmute(box 0.0f64);
+            let y = transmute(box 0.0f64);
             ffi::cairo_get_current_point(self.get_ptr(), x, y);
             (*x, *y)
         }
@@ -193,7 +193,7 @@ impl cairo::Context{
         }
     }
 
-    //fn ffi::cairo_glyph_path(cr: *cairo_t, glyphs: *cairo_glyph_t, num_glyphs: int);
+    //fn ffi::cairo_glyph_path(cr: *mut cairo_t, glyphs: *mut cairo_glyph_t, num_glyphs: int);
 
     pub fn rel_curve_to(&self, dx1: f64, dy1: f64, dx2: f64, dy2: f64, dx3: f64, dy3: f64){
         unsafe{
@@ -213,5 +213,5 @@ impl cairo::Context{
         }
     }
 
-    //fn ffi::cairo_path_extents(cr: *cairo_t, x1: *c_double, y1: *c_double, x2: *c_double, y2: *c_double);
+    //fn ffi::cairo_path_extents(cr: *mut cairo_t, x1: *mut c_double, y1: *mut c_double, x2: *mut c_double, y2: *mut c_double);
 }

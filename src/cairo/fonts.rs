@@ -81,7 +81,7 @@ pub struct TextExtents {
 }
 
 
-pub struct FontOptions(*cairo_font_options_t);
+pub struct FontOptions(*mut cairo_font_options_t);
 
 impl FontOptions{
     pub fn new() -> FontOptions{
@@ -92,7 +92,7 @@ impl FontOptions{
         font_options
     }
 
-    pub fn get_ptr(&self) -> *cairo_font_options_t{
+    pub fn get_ptr(&self) -> *mut cairo_font_options_t{
         let FontOptions(ptr) = *self;
         ptr
     }
@@ -104,7 +104,7 @@ impl FontOptions{
         status.ensure_valid()
     }
 
-    pub fn merge(&mut self, other: &FontOptions){
+    pub fn merge(&mut self, other: &mut FontOptions){
         unsafe{
             ffi::cairo_font_options_merge(self.get_ptr(), other.get_ptr())
         }
@@ -192,10 +192,10 @@ impl Drop for FontOptions{
 
 
 
-pub struct FontFace(*cairo_font_face_t);
+pub struct FontFace(*mut cairo_font_face_t);
 
 impl FontFace{
-    pub fn get_ptr(&self) -> *cairo_font_face_t{
+    pub fn get_ptr(&self) -> *mut cairo_font_face_t{
         let FontFace(ptr) = *self;
         ptr
     }
@@ -268,15 +268,15 @@ impl Drop for FontFace{
 
 
 
-pub struct ScaledFont(*cairo_scaled_font_t);
+pub struct ScaledFont(*mut cairo_scaled_font_t);
 
 impl ScaledFont{
-    pub fn get_ptr(&self) -> *cairo_scaled_font_t{
+    pub fn get_ptr(&self) -> *mut cairo_scaled_font_t{
         let ScaledFont(ptr) = *self;
         ptr
     }
 
-    pub fn new(font_face: FontFace, font_matrix: &Matrix, ctm: &Matrix, options: FontOptions) -> ScaledFont{
+    pub fn new(font_face: FontFace, font_matrix: &mut Matrix, ctm: &mut Matrix, options: FontOptions) -> ScaledFont{
         let scaled_font = unsafe{
             ScaledFont(ffi::cairo_scaled_font_create(font_face.get_ptr(), font_matrix, ctm, options.get_ptr()))
         };
@@ -303,24 +303,24 @@ impl ScaledFont{
         }
     }
 
-    //pub fn cairo_scaled_font_extents(scaled_font: *cairo_scaled_font_t, extents: *cairo_font_extents_t);
+    //pub fn cairo_scaled_font_extents(scaled_font: *mut cairo_scaled_font_t, extents: *mut cairo_font_extents_t);
 
     //                    cairo_text_extents_t;
-    //pub fn cairo_scaled_font_text_extents(scaled_font: *cairo_scaled_font_t, utf8: *char, extents: *cairo_text_extents_t);
+    //pub fn cairo_scaled_font_text_extents(scaled_font: *mut cairo_scaled_font_t, utf8: *mut char, extents: *mut cairo_text_extents_t);
 
-    //pub fn cairo_scaled_font_glyph_extents(scaled_font: *cairo_scaled_font_t, glyphs: *Glyph, num_glyphs: c_int, extents: *cairo_text_extents_t);
+    //pub fn cairo_scaled_font_glyph_extents(scaled_font: *mut cairo_scaled_font_t, glyphs: *mut Glyph, num_glyphs: c_int, extents: *mut cairo_text_extents_t);
 
-    //pub fn cairo_scaled_font_text_to_glyphs(scaled_font: *cairo_scaled_font_t, x: c_double, y: c_double, utf8: *char, utf8_len: c_int, glyphs: **Glyph, num_glyphs: *c_int, clusters: **TextCluster, num_clusters: *c_int, cluster_flags: *TextClusterFlags) -> Status;
+    //pub fn cairo_scaled_font_text_to_glyphs(scaled_font: *mut cairo_scaled_font_t, x: c_double, y: c_double, utf8: *mut char, utf8_len: c_int, glyphs: **mut Glyph, num_glyphs: *mut c_int, clusters: **mut TextCluster, num_clusters: *mut c_int, cluster_flags: *mut TextClusterFlags) -> Status;
 
-    //pub fn cairo_scaled_font_get_font_face(scaled_font: *cairo_scaled_font_t) -> *cairo_font_face_t;
+    //pub fn cairo_scaled_font_get_font_face(scaled_font: *mut cairo_scaled_font_t) -> *mut cairo_font_face_t;
 
-    //pub fn cairo_scaled_font_get_font_options(scaled_font: *cairo_scaled_font_t, options: *cairo_font_options_t);
+    //pub fn cairo_scaled_font_get_font_options(scaled_font: *mut cairo_scaled_font_t, options: *mut cairo_font_options_t);
 
-    //pub fn cairo_scaled_font_get_font_matrix(scaled_font: *cairo_scaled_font_t, font_matrix: *cairo_matrix_t);
+    //pub fn cairo_scaled_font_get_font_matrix(scaled_font: *mut cairo_scaled_font_t, font_matrix: *mut cairo_matrix_t);
 
-    //pub fn cairo_scaled_font_get_ctm(scaled_font: *cairo_scaled_font_t, ctm: *cairo_matrix_t);
+    //pub fn cairo_scaled_font_get_ctm(scaled_font: *mut cairo_scaled_font_t, ctm: *mut cairo_matrix_t);
 
-    //pub fn cairo_scaled_font_get_scale_matrix(scaled_font: *cairo_scaled_font_t, scale_matrix: *cairo_matrix_t);
+    //pub fn cairo_scaled_font_get_scale_matrix(scaled_font: *mut cairo_scaled_font_t, scale_matrix: *cairo_matrix_t);
 
 }
 
@@ -365,9 +365,9 @@ impl cairo::Context{
     }
 
     pub fn get_font_matrix(&self) -> Matrix{
-        let matrix = Matrix::null();
+        let mut matrix = Matrix::null();
         unsafe{
-            ffi::cairo_get_font_matrix(self.get_ptr(), &matrix);
+            ffi::cairo_get_font_matrix(self.get_ptr(), &mut matrix);
         }
         matrix
     }
@@ -450,7 +450,7 @@ impl cairo::Context{
     }
 
     pub fn font_extents(&self) -> FontExtents{
-        let extents = FontExtents{
+        let mut extents = FontExtents{
             ascent: 0.0,
             descent: 0.0,
             height: 0.0,
@@ -459,14 +459,14 @@ impl cairo::Context{
         };
 
         unsafe{
-            ffi::cairo_font_extents(self.get_ptr(), &extents);
+            ffi::cairo_font_extents(self.get_ptr(), &mut extents);
         }
 
         extents
     }
 
     pub fn text_extents<S: ToCStr>(&self, text: S) -> TextExtents{
-        let extents = TextExtents{
+        let mut extents = TextExtents{
             x_bearing: 0.0,
             y_bearing: 0.0,
             width: 0.0,
@@ -477,7 +477,7 @@ impl cairo::Context{
 
         text.with_c_str(|text|{
             unsafe{
-                ffi::cairo_text_extents(self.get_ptr(), text, &extents)
+                ffi::cairo_text_extents(self.get_ptr(), text, &mut extents)
             }
         });
 
@@ -485,7 +485,7 @@ impl cairo::Context{
     }
 
     pub fn glyph_extents<G: Vector<Glyph>>(&self, glyph_vec: G) -> TextExtents{
-        let extents = TextExtents{
+        let mut extents = TextExtents{
             x_bearing: 0.0,
             y_bearing: 0.0,
             width: 0.0,
@@ -497,7 +497,7 @@ impl cairo::Context{
         let glyphs = glyph_vec.as_slice();
 
         unsafe{
-            ffi::cairo_glyph_extents(self.get_ptr(), glyphs.as_ptr(), glyphs.len() as c_int, &extents);
+            ffi::cairo_glyph_extents(self.get_ptr(), glyphs.as_ptr(), glyphs.len() as c_int, &mut extents);
         }
 
         extents

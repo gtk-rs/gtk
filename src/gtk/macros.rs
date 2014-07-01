@@ -56,13 +56,13 @@ macro_rules! impl_TraitWidget(
 
 macro_rules! impl_drop(
     ($gtk_struct:ident) => (
-        impl Drop for $gtk_struct {
+        /*impl Drop for $gtk_struct {
             fn drop(&mut self) {
                 if self.can_drop {
                     unsafe { ffi::gtk_widget_destroy(self.pointer); }
                 }
             }
-        }
+        }*/
     );
 )
 

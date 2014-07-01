@@ -108,7 +108,8 @@ pub use self::widgets::{
     AppInfo,
     AppLaunchContext,
     AppChooserDialog,
-    Widget // FIXME @jeremyletang
+    Widget, // FIXME @jeremyletang
+    DrawingArea
 };
 
 pub use self::enums::{
