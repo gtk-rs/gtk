@@ -54,11 +54,19 @@ macro_rules! signal(
             use gtk;
             use cairo;
 
-            pub extern fn trampoline(widget : *mut ffi::C_GtkWidget, user_data : *mut Box<super::Signal>) -> $ret_type{
+            pub extern fn trampoline(widget : *mut ffi::C_GtkWidget, user_data_raw : *mut (Box<super::Signal>, Option<Box<Any>>)) -> $ret_type{
                 unsafe{
-                    let ref signal = *user_data;
-                    let cb : *mut || -> $ret_type = transmute(signal.fetch_cb());
-                    (*cb)()
+                    let (ref signal, ref user_data_option) = *user_data_raw;
+                    match user_data_option{
+                        Some(ref user_data) => {
+                            let cb : *mut |Box<Any>| -> $ret_type = transmute(signal.fetch_cb());
+                            (*cb)(user_data)
+                        },
+                        None => {
+                            let cb : *mut || -> $ret_type = transmute(signal.fetch_cb());
+                            (*cb)()
+                        },
+                    }
                 }
             }
         }
@@ -78,12 +86,19 @@ macro_rules! signal(
             use gtk;
             use cairo;
 
-            pub extern fn trampoline(widget : *mut ffi::C_GtkWidget, $($arg_name : $arg_type),* , user_data : *mut Box<super::Signal>) -> $ret_type{
+            pub extern fn trampoline(widget : *mut ffi::C_GtkWidget, $($arg_name : $arg_type),* , user_data_raw : *mut (Box<super::Signal>, Option<Box<Any>>)) -> $ret_type{
                 unsafe{
-                    let ref signal = *user_data;
-                    let cb_raw = signal.fetch_cb();
-                    let cb : *mut |$($arg_type),* | -> $ret_type = transmute(cb_raw);
-                    (*cb)($($arg_name),*)
+                    let (ref signal, ref user_data_option) = *user_data_raw;
+                    match user_data_option{
+                        Some(ref user_data) => {
+                            let cb : *mut |$($arg_type),*, Box<Any>| -> $ret_type = transmute(signal.fetch_cb());
+                            (*cb)($($arg_name),*, user_data)
+                        },
+                        None => {
+                            let cb : *mut |$($arg_type),*| -> $ret_type = transmute(signal.fetch_cb());
+                            (*cb)($($arg_name),*)
+                        },
+                    }
                 }
             }
         }
@@ -108,18 +123,22 @@ macro_rules! signal(
             use gtk;
             use cairo;
 
-            pub extern fn trampoline(widget : *mut ffi::C_GtkWidget, $($t_arg_nm : $t_arg_ty),* , user_data : *mut Box<super::Signal>) -> $t_ret_ty{
+
+            pub extern fn trampoline(widget : *mut ffi::C_GtkWidget, $($t_arg_nm : $t_arg_ty),* , user_data_raw : *mut (Box<super::Signal>, Option<Box<Any>>)) -> $t_ret_ty{
                 unsafe{
-                    let ref signal = *user_data;
-<<<<<<< HEAD
-                    let cb : *mut |$($arg_type),*mut | -> $ret_type = transmute(signal.fetch_cb());
-                    let out = $blck
-                    out
-=======
-                    let cb : *mut |$($arg_type),*| -> $ret_type = transmute(signal.fetch_cb());
-                    let out = $t_blck;
-                    out(cb)
->>>>>>> Fixed errors and implemented a custom trampoline for signal draw
+                    let (ref signal, ref user_data_option) = *user_data_raw;
+                    match user_data_option{
+                        Some(ref user_data) => {
+                            let cb : *mut |$($arg_type),*, Box<Any>| -> $ret_type = transmute(signal.fetch_cb());
+                            let out = $t_blck;
+                            out(cb)
+                        },
+                        None => {
+                            let cb : *mut |$($arg_type),*| -> $ret_type = transmute(signal.fetch_cb());
+                            let out = $t_blck;
+                            out(cb)
+                        },
+                    }
                 }
             }
         }
@@ -128,13 +147,21 @@ macro_rules! signal(
     //General case
     ($signal:ident, $class:ident [ $(($arg_name:ident : $arg_type:ty)),* ] -> $ret_type:ty) => (
         pub struct $class<'a>{
-            pub cb: |$($arg_type),* |:'a -> $ret_type
+            pub cb: |$($arg_type),*|:'a -> $ret_type,
+            pub user_data: Box<Any>
         }
 
         impl<'a> $class<'a>{
             pub fn new (cb : |$($arg_type),* |:'a -> $ret_type) -> Box<Signal<'a>> {
                 box $class{
                     cb: cb
+                } as Box<Signal<'a>>
+            }
+
+            pub fn new_with_data (user_data: Box<Any>, cb: |$($arg_type),*, Box<Any>|:'a -> $ret_type) -> Box<Signal<'a>> {
+                box $class{
+                    cb: cb,
+                    user_data: user_data
                 } as Box<Signal<'a>>
             }
         }
