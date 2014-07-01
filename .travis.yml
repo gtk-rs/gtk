@@ -1,3 +1,6 @@
+env:
+  global:
+    - secure: JVc1f8AaB4oumQU4jh9gXEfb+1tVrxJ/3NQ0rLEeUQNMpUSUGDUCXAIjbD8+meDXTSg19S0Utf3Wac6gms9+I9rgE4S5JHF9aCisio9zoUt5bMkZLaaveyvhnkDQJJLD2JgfXGMrUFxl/FjgW2vyj4O83wQMiI6eg3Jyp0Fon7M=
 before_install:
   - yes | sudo add-apt-repository ppa:cmrx64/cargo
   - yes | sudo add-apt-repository ppa:ricotz/testing
@@ -13,3 +16,6 @@ script:
   - pkg-config --modversion gtk+-3.0
   - ./configure
   - make GTK_VERSION=GTK_3_6
+  - rustdoc -o doc src/rgtk.rs
+after_script:
+  - curl http://www.rust-ci.org/artifacts/put?t=$RUSTCI_TOKEN | sh
