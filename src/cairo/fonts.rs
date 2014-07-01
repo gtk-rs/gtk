@@ -3,7 +3,6 @@ use std::clone::Clone;
 use std::cmp::PartialEq;
 use std::ops::Drop;
 use std::c_str::CString;
-use std::mem::transmute;
 
 use cairo;
 use cairo::enums::{

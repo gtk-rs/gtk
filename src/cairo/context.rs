@@ -1,5 +1,4 @@
 
-use std::mem::transmute;
 use std::c_vec::CVec;
 
 use cairo::ffi;
@@ -162,13 +161,12 @@ impl Context{
 
     pub fn get_dash(&self) -> (Vec<f64>, f64){
         let dash_count = self.get_dash_count() as uint;
-        let mut dashes : Vec<f64> = Vec::with_capacity(dash_count);
-        let mut offset : Box<f64> = box 0.0;
+        let mut dashes: Vec<f64> = Vec::with_capacity(dash_count);
+        let mut offset: f64 = 0.0;
 
         unsafe{
-            let offset_ptr : *mut f64 = transmute(offset);
-            ffi::cairo_get_dash(self.get_ptr(), dashes.as_mut_ptr(), offset_ptr);
-            (dashes, *offset_ptr)
+            ffi::cairo_get_dash(self.get_ptr(), dashes.as_mut_ptr(), &mut offset);
+            (dashes, offset)
         }
     }
 
