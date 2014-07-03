@@ -42,17 +42,15 @@ target/$(GLUE_LIBNAME).a: target/$(GLUE_LIBNAME).o | target/
 target/$(GLUE_LIBNAME).so:    target/$(GLUE_LIBNAME).o | target/
 					$(CC) -shared -Wl,-soname,$(GLUE_LIBNAME).so -o $@ $^ -lc
 
-.PHONY: test
-test:				$(TEST_SRC) | test/bin/
-					@$(ECHO) "$(OK_COLOR) Building test $(NO_COLOR)"
-					$(RUSTC) -L target/ $(TEST_SRC) -o ./test/bin/test
-					./test/bin/test
+.PHONY: gtktest
+gtktest:			src/bin/gtktest.rs | target
+					@$(ECHO) "$(OK_COLOR) Building gtk test $(NO_COLOR)"
+					$(RUSTC) -L target/ src/bin/gtktest.rs -o ./target/gtktest
 
 .PHONY: cairotest
-cairotest:			test/cairo.rs | test/bin/
+cairotest:			src/bin/cairotest.rs | target
 					@$(ECHO) "$(OK_COLOR) Building cairo test $(NO_COLOR)"
-					$(RUSTC) -L target/ test/cairo.rs -o ./test/bin/cairo
-					./test/bin/cairo
+					$(RUSTC) -L target/ src/bin/cairotest.rs -o ./target/cairotest
 
 .PHONY: doc
 doc:
@@ -63,12 +61,8 @@ target/:
 					mkdir -p $@
 					@$(ECHO) "$(OK_COLOR) Created $@ folder $(NO_COLOR)"
 
-test/bin/:
-					mkdir -p $@
-					@$(ECHO) "$(OK_COLOR) Created $@ folder $(NO_COLOR)"
-
 .PHONY: full
-full:				glue rgtk test
+full:				glue rgtk test cairotest
 
 .PHONY: clean
 clean:

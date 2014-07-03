@@ -7,7 +7,6 @@ extern crate debug;
 extern crate collections;
 
 use std::f64::consts::PI_2;
-use std::str;
 
 use rgtk::*;
 use rgtk::gtk::signals;
@@ -17,26 +16,6 @@ use rgtk::cairo::enums::{
     FontSlantNormal,
     FontWeightNormal
 };
-
-#[doc(hidden)]
-#[cfg(target_os="macos")]
-mod platform {
-    #[link(name = "glib-2.0")]
-    #[link(name = "gtk-3.0")]
-    #[link(name = "gobject-2.0")]
-    #[link(name = "gdk-3.0")]
-    extern{}
-}
-
-#[doc(hidden)]
-#[cfg(target_os="linux")]
-mod platform {
-    #[link(name = "glib-2.0")]
-    #[link(name = "gtk-3")]
-    #[link(name = "gobject-2.0")]
-    #[link(name = "gdk-3")]
-    extern{}
-}
 
 fn main() {
     gtk::init();

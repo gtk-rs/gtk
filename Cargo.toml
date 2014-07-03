@@ -9,5 +9,7 @@ name = "rgtk"
 crate-type = ["rlib"]
 
 [[bin]]
-name = "test"
-path = "test/main.rs"
+name = "gtktest"
+
+[[bin]]
+name ="cairotest"
