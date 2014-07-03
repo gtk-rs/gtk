@@ -35,4 +35,10 @@ pub trait Window : Widget {
             Some(unsafe { str::raw::from_c_str(c_title) })
         }
     }
+
+    fn set_default_size(&self, width: i32, height: i32){
+        unsafe{
+            ffi::gtk_window_set_default_size(self.get_widget(), width, height)
+        }
+    }
 }

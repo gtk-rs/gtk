@@ -84,22 +84,35 @@ pub trait Widget {
         }
     }
 
-    fn connect<'a>(&mut self, signal: Box<Signal<'a>>) -> () {
+    fn connect<'a>(&self, signal: Box<Signal<'a>>) -> () {
         use std::mem::transmute;
 
         unsafe {
-            let signal_name = signal.get_signal_name();
-            let trampoline  = signal.get_trampoline();
-            let ptr = transmute(box signal);
+            let signal_name     = signal.get_signal_name();
+            let trampoline      = signal.get_trampoline();
+
+            let user_data_ptr   = transmute(box signal);
 
             signal_name.replace("_", "-").with_c_str(|signal_name| {
                 ffi::glue_signal_connect(
                     self.get_widget(),
                     signal_name,
                     Some(trampoline),
-                    ptr
+                    user_data_ptr
                 )
             });
+        }
+    }
+
+    fn get_allocated_width(&self) -> i32{
+        unsafe{
+            ffi::gtk_widget_get_allocated_width(self.get_widget()) as i32
+        }
+    }
+
+    fn get_allocated_height(&self) -> i32{
+        unsafe{
+            ffi::gtk_widget_get_allocated_height(self.get_widget()) as i32
         }
     }
 }

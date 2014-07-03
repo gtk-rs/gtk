@@ -140,6 +140,7 @@ extern "C" {
     pub fn gtk_window_set_title                (window: *mut C_GtkWindow, title: *const c_char) -> ();
     pub fn gtk_window_get_title                (window: *mut C_GtkWindow) -> *const c_char;
     pub fn gtk_widget_hide                     (widget: *mut C_GtkWidget) -> ();
+    pub fn gtk_window_set_default_size         (widget: *mut C_GtkWidget, width: c_int, height: c_int);
     // pub fn gtk_window_set_role(window: *const const C_GtkWindow, role: *const c_char) -> ();
     // pub fn gtk_window_set_startup_id(window: *const const C_GtkWindow, startup_id: *const c_char) -> ();
     // pub fn gtk_window_get_role(window: *const const C_GtkWindow) -> *const c_char;
@@ -168,6 +169,8 @@ extern "C" {
     pub fn gtk_widget_get_margin_left          (widget: *mut C_GtkWidget) -> c_int;
     pub fn gtk_widget_get_margin_top           (widget: *mut C_GtkWidget) -> c_int;
     pub fn gtk_widget_get_margin_bottom        (widget: *mut C_GtkWidget) -> c_int;
+    pub fn gtk_widget_get_allocated_width      (widget: *mut C_GtkWidget) -> c_int;
+    pub fn gtk_widget_get_allocated_height     (widget: *mut C_GtkWidget) -> c_int;
     pub fn gtk_widget_destroy                  (widget: *mut C_GtkWidget);
 
     //=========================================================================
@@ -1362,6 +1365,11 @@ extern "C" {
     pub fn gtk_action_bar_set_center_widget (action_bar: *mut C_GtkActionBar, center_widget: *mut C_GtkWidget);
     pub fn gtk_action_bar_pack_start        (action_bar: *mut C_GtkActionBar, child: *mut C_GtkWidget);
     pub fn gtk_action_bar_pack_end          (action_bar: *mut C_GtkActionBar, child: *mut C_GtkWidget);
+
+    //=========================================================================
+    // GtkDrawingArea
+    //=========================================================================
+    pub fn gtk_drawing_area_new                 () -> *mut C_GtkWidget;
 
     //=========================================================================
     // Glue fixe code
