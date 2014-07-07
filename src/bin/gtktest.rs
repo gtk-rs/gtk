@@ -16,9 +16,9 @@ fn main() {
     let mut v_box = gtk::_Box::new(gtk::orientation::Horizontal, 10).unwrap();
     let mut button_box = gtk::ButtonBox::new(gtk::orientation::Horizontal).unwrap();
     let mut label = gtk::Label::new("Yeah a wonderful label too !").unwrap();
-    let mut button = gtk::Button::new_with_label("Whattttt a button !").unwrap();
-    let mut app_button = gtk::Button::new_with_label("App ?").unwrap();
-    let mut file_button = gtk::Button::new_with_label("file ?").unwrap();
+    let button = gtk::Button::new_with_label("Whattttt a button !").unwrap();
+    let app_button = gtk::Button::new_with_label("App ?").unwrap();
+    let file_button = gtk::Button::new_with_label("file ?").unwrap();
     let font_button = gtk::FontButton::new().unwrap();
     let toggle_button = gtk::ToggleButton::new_with_label("Toggle Me !").unwrap();
     let check_button = gtk::CheckButton::new_with_label("Labeled check button").unwrap();
