@@ -22,6 +22,7 @@ GTK_VERSION ?= GTK_3_12
 .DEFAULT: rgtk
 .PHONY: rgtk
 rgtk: glue rgtk-build | target/
+examples: gtktest cairotest
 
 .PHONY: rgtk-build
 rgtk-build: src/*
