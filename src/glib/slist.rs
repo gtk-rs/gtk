@@ -101,8 +101,8 @@ impl<T> Mutable for SList<T> {
     }
 }
 
-impl<'a, T> Index<uint, &'a T> for SList<T> {
-    fn index(&self, _rhs: &uint) -> &'a T {
+impl<T> Index<uint, T> for SList<T> {
+    fn index<'a>(&'a self, _rhs: &uint) -> &'a T {
         self.nth(*_rhs as u32)
     }
 }

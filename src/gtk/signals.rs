@@ -62,8 +62,8 @@ macro_rules! signal(
                 unsafe{
                     match (*signal).get_user_data(){
                         &Some(ref user_data) => {
-                            let cb : *mut |&Any| -> $ret_type = transmute((*signal).fetch_cb());
-                            (*cb)(user_data)
+                            let cb : *mut |*const c_void| -> $ret_type = transmute((*signal).fetch_cb());
+                            (*cb)(::std::mem::transmute(user_data))
                         },
                         &None => {
                             let cb : *mut || -> $ret_type = transmute((*signal).fetch_cb());
@@ -94,8 +94,8 @@ macro_rules! signal(
                 unsafe{
                     match (*signal).get_user_data(){
                         &Some(ref user_data) => {
-                            let cb : *mut |$($arg_type),*, &Any| -> $ret_type = transmute((*signal).fetch_cb());
-                            (*cb)($($arg_name),*, user_data)
+                            let cb : *mut |$($arg_type),*, *const c_void| -> $ret_type = transmute((*signal).fetch_cb());
+                            (*cb)($($arg_name),*, ::std::mem::transmute(user_data))
                         },
                         &None => {
                             let cb : *mut |$($arg_type),*| -> $ret_type = transmute((*signal).fetch_cb());
@@ -132,10 +132,10 @@ macro_rules! signal(
                 unsafe{
                     match (*signal).get_user_data(){
                         &Some(ref user_data) => {
-                            let cb: *mut |$($arg_type),*, &Any| -> $ret_type = transmute((*signal).fetch_cb());
+                            let cb: *mut |$($arg_type),*, *const c_void| -> $ret_type = transmute((*signal).fetch_cb());
 
                             let cont = |$($arg_name: $arg_type),*| {
-                                (*cb)($($arg_name),* , user_data)
+                                (*cb)($($arg_name),* , ::std::mem::transmute(user_data))
                             };
 
                             let custom_trampoline = $t_blck;
