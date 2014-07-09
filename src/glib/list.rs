@@ -122,11 +122,11 @@ impl<T> Mutable for List<T> {
     }
 }
 
-/*impl<T> Index<uint, T> for List<T> {
+impl<T> Index<uint, T> for List<T> {
     fn index<'a>(&'a self, _rhs: &uint) -> &'a T {
         self.nth(*_rhs as u32)
     }
-}*/
+}
 
 impl<'a, T> Iterator<&'a T> for Elem<'a, T> {
     fn next(&mut self) -> Option<&'a T> {
