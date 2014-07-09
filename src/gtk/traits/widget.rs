@@ -78,6 +78,12 @@ pub trait Widget {
         }
     }
 
+    fn set_size_request(&mut self, width: i32, height: i32) {
+        unsafe{
+            ffi::gtk_widget_set_size_request(self.get_widget(), width, height)
+        }
+    }
+
     fn hide(&mut self) -> () {
         unsafe {
             ffi::gtk_widget_hide(self.get_widget());
