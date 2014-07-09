@@ -172,6 +172,7 @@ extern "C" {
     pub fn gtk_widget_get_allocated_width      (widget: *mut C_GtkWidget) -> c_int;
     pub fn gtk_widget_get_allocated_height     (widget: *mut C_GtkWidget) -> c_int;
     pub fn gtk_widget_destroy                  (widget: *mut C_GtkWidget);
+    pub fn gtk_widget_set_size_request         (widget: *mut C_GtkWidget, width: c_int, height: c_int);
 
     //=========================================================================
     // GtkLabel
