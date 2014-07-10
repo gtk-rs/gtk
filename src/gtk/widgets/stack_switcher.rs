@@ -18,7 +18,7 @@
 use gtk;
 use gtk::cast::{GTK_STACK_SWITCHER, GTK_STACK};
 use gtk::ffi;
-use gtk::traits::Widget;
+use gtk::ffi::FFIWidget;
 use gtk::traits;
 
 /// GtkStackSwitcher — A controller for GtkStack
@@ -42,7 +42,7 @@ impl StackSwitcher {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(traits::Widget::wrap(tmp_pointer))
+            Some(ffi::FFIWidget::wrap(tmp_pointer))
         }
     }
 }

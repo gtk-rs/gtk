@@ -39,7 +39,7 @@ impl AppInfo {/*
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(traits::Widget::wrap(tmp_pointer as *mut gtk::ffi::C_GtkWidget))
+            Some(ffi::FFIWidget::wrap(tmp_pointer as *mut gtk::ffi::C_GtkWidget))
         }
     }
 
@@ -289,7 +289,7 @@ impl AppInfo {/*
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(traits::Widget::wrap(tmp_pointer as *mut gtk::ffi::C_GtkWidget))
+            Some(ffi::FFIWidget::wrap(tmp_pointer as *mut gtk::ffi::C_GtkWidget))
         }
     }
 
@@ -303,7 +303,7 @@ impl AppInfo {/*
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(traits::Widget::wrap(tmp_pointer as *mut gtk::ffi::C_GtkWidget))
+            Some(ffi::FFIWidget::wrap(tmp_pointer as *mut gtk::ffi::C_GtkWidget))
         }
     }
 
@@ -351,7 +351,7 @@ impl AppInfo {/*
     fn clone(&self) -> AppInfo {
         let tmp_pointer = unsafe { ffi::g_app_info_dup(GTK_APP_INFO(self.get_widget())) };
 
-        traits::Widget::wrap(tmp_pointer as *mut gtk::ffi::C_GtkWidget)
+        ffi::FFIWidget::wrap(tmp_pointer as *mut gtk::ffi::C_GtkWidget)
     }
 }
 

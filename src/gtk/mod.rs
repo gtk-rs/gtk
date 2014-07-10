@@ -241,4 +241,4 @@ mod rt;
 mod widgets;
 mod enums;
 mod types;
-pub mod ffi;
+mod ffi;

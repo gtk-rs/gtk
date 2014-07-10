@@ -14,8 +14,8 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::ffi;
+use gtk::ffi::FFIWidget;
 use gtk::traits;
-use gtk::traits::Widget;
 use std::str;
 use gtk::cast::GTK_ABOUT_DIALOG;
 use gtk::enums;
@@ -29,7 +29,7 @@ impl AboutDialog {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(traits::Widget::wrap(tmp_pointer))
+            Some(ffi::FFIWidget::wrap(tmp_pointer))
         }
     }
 
@@ -298,7 +298,7 @@ impl AboutDialog {
         if logo.is_null() {
             None
         } else {
-            Some(unsafe { traits::Widget::wrap(logo) })
+            Some(unsafe { ffi::FFIWidget::wrap(logo) })
         }
     }
 

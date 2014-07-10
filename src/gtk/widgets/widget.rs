@@ -17,7 +17,6 @@
 
 use gtk::ffi;
 use gtk;
-use gtk::traits;
 
 pub struct Widget {
     pointer: *mut ffi::C_GtkWidget
@@ -38,6 +37,6 @@ impl Widget {
     }
 
     pub fn to_entry(self) -> gtk::Entry {
-        traits::Widget::wrap(self.pointer)
+        ffi::FFIWidget::wrap(self.pointer)
     }
 }

@@ -22,7 +22,7 @@ use gtk;
 use gtk::cast::{GTK_SEARCHBAR, GTK_ENTRY};
 use gtk::ffi;
 use gtk::traits;
-use gtk::traits::Widget;
+use gtk::ffi::FFIWidget;
 
 /// Box — A container box
 struct_Widget!(SearchBar)

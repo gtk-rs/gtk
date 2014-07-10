@@ -204,7 +204,7 @@ extern "C" fn widget_destroy_callback(object: *mut ffi::C_GtkWidget, user_data: 
 
     // let mut window = check_pointer!(object, Window).unwrap();
     // window.can_drop = false;
-    let mut button: gtk::Button = Widget::wrap(object);
+    let mut button: gtk::Button = ffi::FFIWidget::wrap(object);
     handler.callback(&mut button);
 
     unsafe {

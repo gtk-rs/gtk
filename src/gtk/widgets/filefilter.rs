@@ -14,8 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::ffi;
-use gtk::traits;
-use gtk::traits::Widget;
+use gtk::ffi::FFIWidget;
 use std::str;
 use gtk::cast::GTK_FILE_FILTER;
 
@@ -28,7 +27,7 @@ impl FileFilter {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(traits::Widget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(ffi::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 

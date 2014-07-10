@@ -84,7 +84,7 @@ impl Paned {
 
     pub fn get_handle_window(&self) -> gtk::Window {
         unsafe {
-            traits::Widget::wrap(ffi::gtk_paned_get_handle_window(GTK_PANED(self.pointer)))
+            ffi::FFIWidget::wrap(ffi::gtk_paned_get_handle_window(GTK_PANED(self.pointer)))
         }
     }
 }

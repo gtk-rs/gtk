@@ -16,11 +16,11 @@
 use gtk::traits;
 use gtk::cast::{GTK_FILE_CHOOSER, GTK_FILE_FILTER};
 use gtk::ffi;
+use gtk::ffi::FFIWidget;
 use gtk;
 use glib;
 use std::str;
 use libc::c_char;
-use gtk::traits::Widget;
 use glib::GlibContainer;
 
 pub trait FileChooser: traits::Widget {
@@ -380,7 +380,7 @@ pub trait FileChooser: traits::Widget {
         if tmp.is_null() {
             None
         } else {
-            Some(traits::Widget::wrap(tmp as *mut ffi::C_GtkWidget))
+            Some(ffi::FFIWidget::wrap(tmp as *mut ffi::C_GtkWidget))
         }
     }
 

@@ -14,8 +14,8 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::ffi;
+use gtk::ffi::FFIWidget;
 use gtk::traits;
-use gtk::traits::Widget;
 use gtk::cast::{GTK_WINDOW};
 use gtk;
 
@@ -35,7 +35,7 @@ impl ColorChooserDialog {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(traits::Widget::wrap(tmp_pointer))
+            Some(ffi::FFIWidget::wrap(tmp_pointer))
         }
     }
 }

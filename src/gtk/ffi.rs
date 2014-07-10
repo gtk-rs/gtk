@@ -123,6 +123,11 @@ pub fn to_bool(b: Gboolean) -> bool {
     b == Gtrue
 }
 
+pub trait FFIWidget {
+    fn get_widget(&self) -> *mut C_GtkWidget;
+    fn wrap(widget: *mut C_GtkWidget) -> Self;
+}
+
 extern "C" {
 
     //=========================================================================

@@ -18,7 +18,7 @@
 use gtk;
 use gtk::cast::{GTK_LIST_BOX_ROW, GTK_LIST_BOX};
 use gtk::ffi;
-use gtk::traits::Widget;
+use gtk::ffi::FFIWidget;
 use gtk::traits;
 
 /// GtkFlowBox — A container that allows reflowing its children
@@ -52,7 +52,7 @@ impl ListBox {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(traits::Widget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(ffi::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 
@@ -63,7 +63,7 @@ impl ListBox {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(traits::Widget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(ffi::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 
@@ -74,7 +74,7 @@ impl ListBox {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(traits::Widget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(ffi::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 
@@ -185,7 +185,7 @@ impl ListBoxRow {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(traits::Widget::wrap(tmp_pointer))
+            Some(ffi::FFIWidget::wrap(tmp_pointer))
         }
     }
 

@@ -16,9 +16,12 @@
 #![allow(non_camel_case_types)]
 
 use libc::{c_int, c_void, c_uint, c_char};
-use gtk::ffi;
 
 pub type GQuark = u32;
+
+pub type Gboolean = c_int;
+pub static Gfalse:  c_int = 0;
+pub static Gtrue:   c_int = !Gfalse;
 
 pub struct C_GList {
   pub data: *mut c_void,
@@ -102,7 +105,7 @@ extern "C" {
     //pub fn g_error_new_valist             (domain: GQuark, code: c_int, fomat: *c_char, args: va_list) -> *C_GError;
     pub fn g_error_free                   (error: *mut C_GError) -> ();
     pub fn g_error_copy                   (error: *mut C_GError) -> *mut C_GError;
-    pub fn g_error_matches                (error: *mut C_GError, domain: GQuark, code: c_int) -> ffi::Gboolean;
+    pub fn g_error_matches                (error: *mut C_GError, domain: GQuark, code: c_int) -> Gboolean;
     //pub fn g_set_error                    (error: **C_GError, domain: GQuark, code: c_int, format: *c_char, ...) -> ();
     pub fn g_set_error_literal            (error: *mut *mut C_GError, domain: GQuark, code: c_int, message: *const c_char) -> ();
     pub fn g_propagate_error              (dest: *mut *mut C_GError, src: *mut C_GError) -> ();

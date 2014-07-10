@@ -31,7 +31,7 @@ impl AppLaunchContext {/*
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(traits::Widget::wrap(tmp_pointer as *mut gtk::ffi::C_GtkWidget))
+            Some(ffi::FFIWidget::wrap(tmp_pointer as *mut gtk::ffi::C_GtkWidget))
         }
     }
 

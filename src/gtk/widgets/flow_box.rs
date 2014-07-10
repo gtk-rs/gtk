@@ -18,7 +18,7 @@
 use gtk;
 use gtk::cast::{GTK_FLOW_BOX_CHILD, GTK_FLOW_BOX};
 use gtk::ffi;
-use gtk::traits::Widget;
+use gtk::ffi::FFIWidget;
 use gtk::traits;
 
 /// GtkFlowBox — A container that allows reflowing its children
@@ -119,7 +119,7 @@ impl FlowBox {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(traits::Widget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(ffi::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 

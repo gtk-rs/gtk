@@ -44,7 +44,7 @@ impl InfoBar {
                 ffi::gtk_info_bar_add_button(GTK_INFOBAR(self.pointer), c_str, response_id as c_int)
             })
         };
-        traits::Widget::wrap(button)
+        ffi::FFIWidget::wrap(button)
     }
 
     pub fn set_response_sensitive(&mut self, response_id: i32, setting: bool) -> () {
