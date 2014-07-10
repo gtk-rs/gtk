@@ -1,15 +1,14 @@
 env:
   global:
     - secure: JVc1f8AaB4oumQU4jh9gXEfb+1tVrxJ/3NQ0rLEeUQNMpUSUGDUCXAIjbD8+meDXTSg19S0Utf3Wac6gms9+I9rgE4S5JHF9aCisio9zoUt5bMkZLaaveyvhnkDQJJLD2JgfXGMrUFxl/FjgW2vyj4O83wQMiI6eg3Jyp0Fon7M=
+    - LD_LIBRARY_PATH=/usr/local/lib
 before_install:
   - yes | sudo add-apt-repository ppa:cmrx64/cargo
   - yes | sudo add-apt-repository ppa:ricotz/testing
   - sudo apt-get update
 install:
   - sudo apt-get install cargo
-  - wget http://static.rust-lang.org/dist/rust-nightly-x86_64-unknown-linux-gnu.tar.gz
-  - tar xzf rust-nightly-x86_64-unknown-linux-gnu.tar.gz
-  - export PATH=$PATH:$(pwd)/rust-nightly-x86_64-unknown-linux-gnu/bin
+  - curl http://www.rust-lang.org/rustup.sh | sudo sh -
   - sudo apt-get install gtk+3.0 libgtk-3-dev
 script:
   - rustc --version
