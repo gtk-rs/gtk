@@ -17,21 +17,12 @@
 
 Bindings and wrappers for __GTK__
 
-To implement __GTK+__ inheritance in rust, we implemented gtk superclasses as traits located in `rgtk::gtk::traits::*`. The various widgets implement these traits and live in `rgtk::gtk::*`.
+To implement __GTK+__ inheritance in rust, we implemented gtk superclasses as traits
+located in `rgtk::gtk::traits::*`. The various widgets implement these traits and
+live in `rgtk::gtk::widgets::*` and are rexported into `rgtk::gtk::*`.
 
-For you're conveniance the various traits are reexported in the `rgtk::*` namespace as `Gtk{trait_name}Trait` so you can just use...
-
-```Rust
-extern mod rgtk;
-use rgtk::*;
-```
-
-...to easily access all the gtk widgets and all traits methods:
-
-```Rust
-let button = gtk::Button:new(); // You have access to the struct methods of gtk::Button aswell
-                                // as the trait methods from gtk::traits::Button as GtkButtonTrait.
-```
+GTK Inhertance in rgtk
+======================
 
 You probably know but __Gtk+__ uses its own GObject system: inherited class and interface.
 
@@ -52,6 +43,8 @@ GtkButtonBox is a sub-class of GtkBox, the struct `gtk::ButtonBox` implements al
 Finally all the gtk widgets implement the trait gtk::traits::Widget.
 */
 
+
+// These are/should be inlined
 pub use self::rt::{
     init,
     main,
@@ -67,40 +60,13 @@ pub use self::rt::{
     check_version
 };
 
-#[cfg(GTK_3_6)]
-#[cfg(GTK_3_8)]
-#[cfg(GTK_3_10)]
-#[cfg(GTK_3_12)]
-pub use self::widgets::{
-    MenuButton,
-    LevelBar,
-};
 
-#[cfg(GTK_3_10)]
-#[cfg(GTK_3_12)]
-pub use self::widgets::{
-    SearchEntry,
-    SearchBar,
-    Stack,
-    StackSwitcher,
-    Revealer,
-    HeaderBar,
-    ListBox,
-    ListBoxRow,
-};
-
-#[cfg(GTK_3_12)]
-pub use self::widgets::{
-    FlowBox,
-    FlowBoxChild,
-    ActionBar,
-};
-
+/// GTK Widgets for all versions
 pub use self::widgets::{
     Window,
     Label,
     Button,
-    _Box,
+    Box,
     ButtonBox,
     Frame,
     AspectFrame,
@@ -151,133 +117,174 @@ pub use self::widgets::{
     DrawingArea
 };
 
+#[cfg(GTK_3_6)]
+#[cfg(GTK_3_8)]
+#[cfg(GTK_3_10)]
+#[cfg(GTK_3_12)]
+/// GTK Widgets for versions since GTK 3.6
+pub use self::widgets::{
+    MenuButton,
+    LevelBar,
+};
+
+#[cfg(GTK_3_10)]
+#[cfg(GTK_3_12)]
+/// GTK Widgets for versions since GTK 3.10
+pub use self::widgets::{
+    SearchEntry,
+    SearchBar,
+    Stack,
+    StackSwitcher,
+    Revealer,
+    HeaderBar,
+    ListBox,
+    ListBoxRow,
+};
+
+#[cfg(GTK_3_12)]
+/// GTK Widgets for versions since GTK 3.12
+pub use self::widgets::{
+    FlowBox,
+    FlowBoxChild,
+    ActionBar,
+};
+
+/// GTK Enum members, see submodule `enum` for more info
 pub use self::enums::{
     window_type,
-    WindowType,
     text_direction,
-    TextDirection,
     window_position,
-    WindowPosition,
     button_box_style,
-    ButtonBoxStyle,
     orientation,
-    Orientation,
     direction_type,
-    DirectionType,
     corner_type,
-    CornerType,
     resize_mode,
-    ResizeMode,
     border_style,
-    BorderStyle,
     sort_type,
-    SortType,
     state_flags,
-    StateFlags,
     drag_result,
-    DragResult,
     accel_flags,
-    AccelFlags,
     arrow_placement,
-    ArrowPlacement,
     arrow_type,
-    ArrowType,
     attach_options,
-    AttachOptions,
     delete_type,
-    DeleteType,
     expander_style,
-    ExpanderStyle,
     im_preedit_style,
-    IMPreeditStyle,
     im_status_style,
-    IMStatusStyle,
     justification,
-    Justification,
     movement_step,
-    MovementStep,
     pack_type,
-    PackType,
     path_priority_type,
-    PathPriorityType,
     path_type,
-    PathType,
     policy_type,
-    PolicyType,
     position_type,
-    PositionType,
     relief_style,
-    ReliefStyle,
     scroll_step,
-    ScrollStep,
     scroll_type,
-    ScrollType,
     selection_mode,
-    SelectionMode,
     shadow_type,
-    ShadowType,
     state_type,
-    StateType,
     toolbar_style,
-    ToolbarStyle,
     junction_sides,
-    JunctionSides,
     region_flags,
-    RegionFlags,
     icon_size,
-    IconSize,
     entry_icon_position,
-    EntryIconPosition,
     input_hints,
-    InputHints,
     input_purpose,
-    InputPurpose,
     image_type,
-    ImageType,
     spin_type,
-    SpinType,
     spin_button_update_policy,
-    SpinButtonUpdatePolicy,
     level_bar_mode,
-    LevelBarMode,
     calendar_display_options,
-    CalendarDisplayOptions,
     message_type,
-    MessageType,
     license,
-    License,
     response_type,
-    ResponseType,
     dialog_flags,
-    DialogFlags,
     file_chooser_action,
-    FileChooserAction,
     buttons_type,
-    ButtonsType,
     stack_transition_type,
-    StackTransitionType,
     revealer_transition_type,
-    RevealerTransitionType,
     scrollable_policy,
-    ScrollablePolicy,
     file_filter_flags,
-    FileFilterFlags,
     app_info_create_flags,
+};
+
+
+/// GTK Enum types
+pub use self::enums::{
+    WindowType,
+    TextDirection,
+    WindowPosition,
+    ButtonBoxStyle,
+    Orientation,
+    DirectionType,
+    CornerType,
+    ResizeMode,
+    BorderStyle,
+    SortType,
+    StateFlags,
+    DragResult,
+    AccelFlags,
+    ArrowPlacement,
+    ArrowType,
+    AttachOptions,
+    DeleteType,
+    ExpanderStyle,
+    IMPreeditStyle,
+    IMStatusStyle,
+    Justification,
+    MovementStep,
+    PackType,
+    PathPriorityType,
+    PathType,
+    PolicyType,
+    PositionType,
+    ReliefStyle,
+    ScrollStep,
+    ScrollType,
+    SelectionMode,
+    ShadowType,
+    StateType,
+    ToolbarStyle,
+    JunctionSides,
+    RegionFlags,
+    IconSize,
+    EntryIconPosition,
+    InputHints,
+    InputPurpose,
+    ImageType,
+    SpinType,
+    SpinButtonUpdatePolicy,
+    LevelBarMode,
+    CalendarDisplayOptions,
+    MessageType,
+    License,
+    ResponseType,
+    DialogFlags,
+    FileChooserAction,
+    ButtonsType,
+    StackTransitionType,
+    RevealerTransitionType,
+    ScrollablePolicy,
+    FileFilterFlags,
     AppInfoCreateFlags
 };
 
+/// GTK various struct
 pub use self::types::{
     Tooltip,
     WidgetHelpType
 };
 
-pub mod traits;
-pub mod signals;
-
 mod macros;
 mod cast;
 mod rt;
-mod widgets;
-mod enums;
-mod types;
-mod ffi;
+
+pub mod traits;
+pub mod signals;
+pub mod widgets;
+pub mod enums;
+pub mod types;
+
+#[doc(hidden)]
+pub mod ffi;

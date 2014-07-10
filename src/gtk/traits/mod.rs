@@ -19,7 +19,7 @@ pub use self::window::Window;
 pub use self::misc::Misc;
 pub use self::button::Button;
 pub use self::label::Label;
-pub use self::_box::_Box;
+pub use self::_box::Box;
 pub use self::orientable::Orientable;
 pub use self::frame::Frame;
 pub use self::togglebutton::ToggleButton;

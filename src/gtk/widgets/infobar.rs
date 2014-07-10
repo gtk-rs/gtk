@@ -101,5 +101,5 @@ impl_drop!(InfoBar)
 impl_TraitWidget!(InfoBar)
 
 impl traits::Container for InfoBar {}
-impl traits::_Box for InfoBar {}
+impl traits::Box for InfoBar {}
 impl traits::Orientable for InfoBar {}

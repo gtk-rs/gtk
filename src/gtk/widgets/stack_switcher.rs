@@ -51,4 +51,4 @@ impl_drop!(StackSwitcher)
 impl_TraitWidget!(StackSwitcher)
 
 impl traits::Container for StackSwitcher {}
-impl traits::_Box for StackSwitcher {}
+impl traits::Box for StackSwitcher {}

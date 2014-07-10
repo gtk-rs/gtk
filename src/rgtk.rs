@@ -19,7 +19,11 @@ Bindings and wrappers for __GTK+__, __GLib__ and __Cairo__.
 
 The various parts of __rgtk__ can be found in the submodules __gtk__, __gdk__, __glib__ and __cairo__.
 
-For you're conveniance the various traits are reexported in the `rgtk::*` namespace as `{Gtk/Gdk/Glib/Cairo}{trait_name}Trait` so you can just use...
+Trait reexports
+===============
+
+For you're conveniance the various traits of `rgtk` are reexported in the `rgtk::*`
+namespace as `{Gtk/Gdk/Glib/Cairo}{trait_name}Trait` so you can just use...
 
 ```Rust
 extern mod rgtk;
@@ -49,7 +53,7 @@ pub use GtkWindowTrait          = gtk::traits::Window;
 pub use GtkMiscTrait            = gtk::traits::Misc;
 pub use GtkButtonTrait          = gtk::traits::Button;
 pub use GtkLabelTrait           = gtk::traits::Label;
-pub use Gtk_BoxTrait            = gtk::traits::_Box;
+pub use GtkBoxTrait             = gtk::traits::Box;
 pub use GtkOrientableTrait      = gtk::traits::Orientable;
 pub use GtkFrameTrait           = gtk::traits::Frame;
 pub use GtkToggleButtonTrait    = gtk::traits::ToggleButton;

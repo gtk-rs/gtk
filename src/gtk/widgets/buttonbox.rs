@@ -74,5 +74,5 @@ impl_drop!(ButtonBox)
 impl_TraitWidget!(ButtonBox)
 
 impl traits::Container for ButtonBox {}
-impl traits::_Box for ButtonBox {}
+impl traits::Box for ButtonBox {}
 impl traits::Orientable for ButtonBox {}
