@@ -114,7 +114,6 @@ pub use self::widgets::{
     AppInfo,
     AppLaunchContext,
     AppChooserDialog,
-    Widget, // FIXME @jeremyletang
     DrawingArea
 };
 
