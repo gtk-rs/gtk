@@ -13,6 +13,45 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
+/*!
+
+Bindings and wrappers for __GTK__
+
+To implement __GTK+__ inheritance in rust, we implemented gtk superclasses as traits located in `rgtk::gtk::traits::*`. The various widgets implement these traits and live in `rgtk::gtk::*`.
+
+For you're conveniance the various traits are reexported in the `rgtk::*` namespace as `Gtk{trait_name}Trait` so you can just use...
+
+```Rust
+extern mod rgtk;
+use rgtk::*;
+```
+
+...to easily access all the gtk widgets and all traits methods:
+
+```Rust
+let button = gtk::Button:new(); // You have access to the struct methods of gtk::Button aswell
+                                // as the trait methods from gtk::traits::Button as GtkButtonTrait.
+```
+
+You probably know but __Gtk+__ uses its own GObject system: inherited class and interface.
+
+To respect this design I follow a special design on __rgtk__:
+
+* Interface -> Implement them on a trait with only default methods.
+* Class -> Implement the construct on the class impl and other methods on a traits.
+* Sub-class -> Implement all the methods on the class.
+
+Exemple for GtkOrientable, GtkBox, GtkButtonBox:
+
+GtkOrientable is an interface with all the methods implemented as default method of the trait gtk::traits::Orientable.
+
+GtkBox is a class with constructors implemented on the struct `gtk::Box`, and the other method as default methods of the trait `gtk::traits::Box`. So `gtk::Box` implements `gtk::traits::Orientable` and `gtk::traits::Box`.
+
+GtkButtonBox is a sub-class of GtkBox, the struct `gtk::ButtonBox` implements all the methods of GtkButtonBox and the traits `gtk::traits::Orientable` and `gtk::traits::Box`.
+
+Finally all the gtk widgets implement the trait gtk::traits::Widget.
+*/
+
 pub use self::rt::{
     init,
     main,
