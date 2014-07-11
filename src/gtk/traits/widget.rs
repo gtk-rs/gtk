@@ -330,17 +330,17 @@ pub trait Widget: ffi::FFIWidget {
         }
     }
 
-    fn list_mnemonic_labels(&self) -> glib::List<Self> {
+    fn list_mnemonic_labels(&self) -> glib::List<Box<Self>> {
         let tmp = unsafe { ffi::gtk_widget_list_mnemonic_labels(self.get_widget()) };
 
         if tmp.is_null() {
             glib::List::new()
         } else {
             let old_list : glib::List<*mut ffi::C_GtkWidget> = glib::GlibContainer::wrap(tmp);
-            let mut tmp_vec : glib::List<Self> = glib::List::new();
+            let mut tmp_vec : glib::List<Box<Self>> = glib::List::new();
 
             for it in old_list.iter() {
-                tmp_vec.append(ffi::FFIWidget::wrap(*it));
+                tmp_vec.append(box ffi::FFIWidget::wrap(*it));
             }
             tmp_vec
         }

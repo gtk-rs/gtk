@@ -871,7 +871,7 @@ extern "C" {
     pub fn gtk_entry_set_width_chars           (entry: *mut C_GtkEntry, n_chars: c_int) -> ();
     pub fn gtk_entry_get_invisible_char        (entry: *mut C_GtkEntry) -> c_uint;
     pub fn gtk_entry_set_alignment             (entry: *mut C_GtkEntry, xalign: c_float) -> ();
-    pub fn gtk_entry_get_alignment             (entry: *mut C_GtkEntry) -> *const c_float;
+    pub fn gtk_entry_get_alignment             (entry: *mut C_GtkEntry) -> c_float;
     pub fn gtk_entry_set_placeholder_text      (entry: *mut C_GtkEntry, text: *const c_char) -> ();
     pub fn gtk_entry_get_placeholder_text      (entry: *mut C_GtkEntry) -> *const c_char;
     pub fn gtk_entry_set_overwrite_mode        (entry: *mut C_GtkEntry, overwrite: Gboolean) -> ();
