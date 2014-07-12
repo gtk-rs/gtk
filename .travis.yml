@@ -1,13 +1,11 @@
 env:
   global:
-- secure: Y54+rp1PAluCbrJmC0iYiGMqfY9eWbI7xtDnRiiq1FhyCT8n/Qw3staycuEX+EIcw9RZclHYGcjn8Z1QMI/jxZ9yGMpFlHz85tUnM/Ms2DEHh9/2HzGNEi74CPETirYC8rcftoiDpJ99XM6DXmXQPUiijJhtu87c8iWcmabVBQo=
+    - secure: cRbvQ7JYJzUdxjf1XJIQuCIwrvZbLxNUYkSfKfnRrqnbFKXNWW8cKBFaVQWPwmDrocGBwZVEsYPxra88dZtro0NIRmRuZzZ2jZfbCeatGPveQGGxsst9a5UXX8LYnk7w3M4aOLtIgjG90vD+FgyouhZdPZwCGEodtGYieeLnwrM=
     - LD_LIBRARY_PATH=/usr/local/lib
 before_install:
-  - yes | sudo add-apt-repository ppa:cmrx64/cargo
   - yes | sudo add-apt-repository ppa:ricotz/testing
   - sudo apt-get update
 install:
-  - sudo apt-get install cargo
   - curl http://www.rust-lang.org/rustup.sh | sudo sh -
   - sudo apt-get install gtk+3.0 libgtk-3-dev
 script:
@@ -15,6 +13,6 @@ script:
   - pkg-config --modversion gtk+-3.0
   - ./configure
   - make GTK_VERSION=GTK_3_6
-  - rustdoc -o doc src/rgtk.rs
+  - rustdoc --cfg GTK_3_6 -o doc src/rgtk.rs
 after_script:
   - curl http://www.rust-ci.org/artifacts/put?t=$RUSTCI_TOKEN | sh
