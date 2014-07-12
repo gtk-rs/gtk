@@ -1,6 +1,6 @@
 env:
   global:
-    - secure: EdDFhvUGbG10dN2ePjLXPJSuFC8QwkwsnKCkJ4Yy6TfRwcdGCFK2C91oCCgMfOTqhkNDlOgLAfRz8LD0S7bytafUu5g9gtRjVVS1IjTPQhZyVpB6tki91fNEdAQD/6MU7dFhTSaat4MzBlqyhbTTE0ewP2Fank0imtH+hzLb7Y4=
+- secure: Y54+rp1PAluCbrJmC0iYiGMqfY9eWbI7xtDnRiiq1FhyCT8n/Qw3staycuEX+EIcw9RZclHYGcjn8Z1QMI/jxZ9yGMpFlHz85tUnM/Ms2DEHh9/2HzGNEi74CPETirYC8rcftoiDpJ99XM6DXmXQPUiijJhtu87c8iWcmabVBQo=
     - LD_LIBRARY_PATH=/usr/local/lib
 before_install:
   - yes | sudo add-apt-repository ppa:cmrx64/cargo
