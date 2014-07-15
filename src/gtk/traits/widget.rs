@@ -15,7 +15,7 @@
 
 #![allow(visible_private_types)]
 
-use libc::c_int;
+use libc::{c_int, c_char};
 use gtk::ffi;
 use gtk::signals::Signal;
 use gtk::enums;
@@ -359,6 +359,292 @@ pub trait Widget: ffi::FFIWidget {
             ffi::Gtrue => true,
             _ => false
         }
+    }
+
+    fn error_bell(&self) {
+        unsafe { ffi::gtk_widget_error_bell(self.get_widget()) }
+    }
+
+    fn keynav_failed(&self, direction: gtk::DirectionType) -> bool {
+        match unsafe { ffi::gtk_widget_keynav_failed(self.get_widget(), direction) } {
+            ffi::Gtrue => true,
+            _ => false
+        }
+    }
+
+    fn get_tooltip_markup(&self) -> Option<String> {
+        let tmp = unsafe { ffi::gtk_widget_get_tooltip_markup(self.get_widget()) };
+
+        if tmp.is_null() {
+            None
+        } else {
+            Some(unsafe { ::std::str::raw::from_c_str(tmp as *const c_char) })
+        }
+    }
+
+    fn set_tooltip_markup(&self, markup: &str) {
+        unsafe {
+            markup.with_c_str(|c_str|{
+                ffi::gtk_widget_set_tooltip_markup(self.get_widget(), c_str as *mut c_char)
+            })
+        }
+    }
+
+
+    fn get_tooltip_text(&self) -> Option<String> {
+        let tmp = unsafe { ffi::gtk_widget_get_tooltip_text(self.get_widget()) };
+
+        if tmp.is_null() {
+            None
+        } else {
+            Some(unsafe { ::std::str::raw::from_c_str(tmp as *const c_char) })
+        }
+    }
+
+    fn set_tooltip_text(&self, text: &str) {
+        unsafe {
+            text.with_c_str(|c_str|{
+                ffi::gtk_widget_set_tooltip_text(self.get_widget(), c_str as *mut c_char)
+            })
+        }
+    }
+
+    fn get_has_tooltip(&self) -> bool {
+        match unsafe { ffi::gtk_widget_get_has_tooltip(self.get_widget()) } {
+            ffi::Gtrue => true,
+            _ => false
+        }
+    }
+
+    fn set_has_tooltip(&self, has_tooltip: bool) {
+        unsafe { ffi::gtk_widget_set_has_tooltip(self.get_widget(), match has_tooltip {
+            true => ffi::Gtrue,
+            false => ffi::Gfalse
+        }) }
+    }
+
+    fn trigger_tooltip_query(&self) {
+        unsafe { ffi::gtk_widget_trigger_tooltip_query(self.get_widget()) }
+    }
+
+    fn get_allocated_baseline(&self) -> i32 {
+        unsafe { ffi::gtk_widget_get_allocated_baseline(self.get_widget()) }
+    }
+
+    fn get_app_paintable(&self) -> bool {
+        match unsafe { ffi::gtk_widget_get_app_paintable(self.get_widget()) } {
+            ffi::Gtrue => true,
+            _ => false
+        }
+    }
+
+    fn get_can_default(&self) -> bool {
+        match unsafe { ffi::gtk_widget_get_can_default(self.get_widget()) } {
+            ffi::Gtrue => true,
+            _ => false
+        }
+    }
+
+    fn set_can_default(&self, can_default: bool) {
+        unsafe { ffi::gtk_widget_set_can_default(self.get_widget(), match can_default {
+            true => ffi::Gtrue,
+            false => ffi::Gfalse
+        }) }
+    }
+
+    fn get_can_focus(&self) -> bool {
+        match unsafe { ffi::gtk_widget_get_can_focus(self.get_widget()) } {
+            ffi::Gtrue => true,
+            _ => false
+        }
+    }
+
+    fn set_can_focus(&self, can_focus: bool) {
+        unsafe { ffi::gtk_widget_set_can_focus(self.get_widget(), match can_focus {
+            true => ffi::Gtrue,
+            false => ffi::Gfalse
+        }) }
+    }
+
+    fn get_double_buffered(&self) -> bool {
+        match unsafe { ffi::gtk_widget_get_double_buffered(self.get_widget()) } {
+            ffi::Gtrue => true,
+            _ => false
+        }
+    }
+
+    fn get_has_window(&self) -> bool {
+        match unsafe { ffi::gtk_widget_get_has_window(self.get_widget()) } {
+            ffi::Gtrue => true,
+            _ => false
+        }
+    }
+
+    fn set_has_window(&self, has_window: bool) {
+        unsafe { ffi::gtk_widget_set_has_window(self.get_widget(), match has_window {
+            true => ffi::Gtrue,
+            false => ffi::Gfalse
+        }) }
+    }
+
+    fn get_sensitive(&self) -> bool {
+        match unsafe { ffi::gtk_widget_get_sensitive(self.get_widget()) } {
+            ffi::Gtrue => true,
+            _ => false
+        }
+    }
+
+    fn is_sensitive(&self) -> bool {
+        match unsafe { ffi::gtk_widget_is_sensitive(self.get_widget()) } {
+            ffi::Gtrue => true,
+            _ => false
+        }
+    }
+
+    fn get_visible(&self) -> bool {
+        match unsafe { ffi::gtk_widget_get_visible(self.get_widget()) } {
+            ffi::Gtrue => true,
+            _ => false
+        }
+    }
+
+    fn is_visible(&self) -> bool {
+        match unsafe { ffi::gtk_widget_is_visible(self.get_widget()) } {
+            ffi::Gtrue => true,
+            _ => false
+        }
+    }
+
+    fn set_visible(&self, visible: bool) {
+        unsafe { ffi::gtk_widget_set_visible(self.get_widget(), match visible {
+            true => ffi::Gtrue,
+            false => ffi::Gfalse
+        }) }
+    }
+
+    fn set_state_flags(&self, flags: gtk::StateFlags, clear: bool) {
+        unsafe { ffi::gtk_widget_set_state_flags(self.get_widget(), flags, match clear {
+            true => ffi::Gtrue,
+            false => ffi::Gfalse
+        }) }
+    }
+
+    fn unset_state_flags(&self, flags: gtk::StateFlags) {
+        unsafe { ffi::gtk_widget_unset_state_flags(self.get_widget(), flags) }
+    }
+
+    fn get_state_flags(&self) -> gtk::StateFlags {
+        unsafe { ffi::gtk_widget_get_state_flags(self.get_widget()) }
+    }
+
+    fn has_default(&self) -> bool {
+        match unsafe { ffi::gtk_widget_has_default(self.get_widget()) } {
+            ffi::Gtrue => true,
+            _ => false
+        }
+    }
+
+    fn has_focus(&self) -> bool {
+        match unsafe { ffi::gtk_widget_has_focus(self.get_widget()) } {
+            ffi::Gtrue => true,
+            _ => false
+        }
+    }
+
+    fn has_visible_focus(&self) -> bool {
+        match unsafe { ffi::gtk_widget_has_visible_focus(self.get_widget()) } {
+            ffi::Gtrue => true,
+            _ => false
+        }
+    }
+
+    fn has_grab(&self) -> bool {
+        match unsafe { ffi::gtk_widget_has_grab(self.get_widget()) } {
+            ffi::Gtrue => true,
+            _ => false
+        }
+    }
+
+    fn is_drawable(&self) -> bool {
+        match unsafe { ffi::gtk_widget_is_drawable(self.get_widget()) } {
+            ffi::Gtrue => true,
+            _ => false
+        }
+    }
+
+    fn is_toplevel(&self) -> bool {
+        match unsafe { ffi::gtk_widget_is_toplevel(self.get_widget()) } {
+            ffi::Gtrue => true,
+            _ => false
+        }
+    }
+
+    fn set_receives_default(&self, receives_default: bool) {
+        unsafe { ffi::gtk_widget_set_receives_default(self.get_widget(), match receives_default {
+            true => ffi::Gtrue,
+            false => ffi::Gfalse
+        }) }
+    }
+
+    fn get_receives_default(&self) -> bool {
+        match unsafe { ffi::gtk_widget_get_receives_default(self.get_widget()) } {
+            ffi::Gtrue => true,
+            _ => false
+        }
+    }
+
+    fn set_support_multidevice(&self, support_multidevice: bool) {
+        unsafe { ffi::gtk_widget_set_support_multidevice(self.get_widget(), match support_multidevice {
+            true => ffi::Gtrue,
+            false => ffi::Gfalse
+        }) }
+    }
+
+    fn get_support_multidevice(&self) -> bool {
+        match unsafe { ffi::gtk_widget_get_support_multidevice(self.get_widget()) } {
+            ffi::Gtrue => true,
+            _ => false
+        }
+    }
+
+    fn set_realized(&self, realized: bool) {
+        unsafe { ffi::gtk_widget_set_realized(self.get_widget(), match realized {
+            true => ffi::Gtrue,
+            false => ffi::Gfalse
+        }) }
+    }
+
+    fn get_realized(&self) -> bool {
+        match unsafe { ffi::gtk_widget_get_realized(self.get_widget()) } {
+            ffi::Gtrue => true,
+            _ => false
+        }
+    }
+
+    fn set_mapped(&self, mapped: bool) {
+        unsafe { ffi::gtk_widget_set_mapped(self.get_widget(), match mapped {
+            true => ffi::Gtrue,
+            false => ffi::Gfalse
+        }) }
+    }
+
+    fn get_mapped(&self) -> bool {
+        match unsafe { ffi::gtk_widget_get_mapped(self.get_widget()) } {
+            ffi::Gtrue => true,
+            _ => false
+        }
+    }
+
+    fn get_modifier_mask(&self, intent: gdk::ModifierIntent) -> gdk::ModifierType {
+        unsafe { ffi::gtk_widget_get_modifier_mask(self.get_widget(), intent) }
+    }
+
+    fn set_opacity(&self, opacity: f64) {
+        unsafe { ffi::gtk_widget_set_opacity(self.get_widget(), opacity) }
+    }
+
+    fn get_opacity(&self) -> f64 {
+        unsafe { ffi::gtk_widget_get_opacity(self.get_widget()) }
     }
 
     fn set_margin_right(&mut self, margin: i32) -> () {

@@ -46,6 +46,13 @@ pub use self::events::{
     OwnerChange
 };
 
+pub use self::enums::{
+    modifier_intent,
+    ModifierIntent,
+    modifier_type,
+    ModifierType
+};
+
 pub use self::device::{Device};
 pub use self::window::{Window};
 pub use self::types::{Atom, Screen, Rectangle};
@@ -55,3 +62,4 @@ mod events;
 mod device;
 mod window;
 mod types;
+mod enums;
