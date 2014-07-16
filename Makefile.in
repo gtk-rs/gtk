@@ -63,7 +63,7 @@ target/:
 					@$(ECHO) "$(OK_COLOR) Created $@ folder $(NO_COLOR)"
 
 .PHONY: full
-full:				glue rgtk test cairotest
+full:				glue rgtk gtktest cairotest
 
 .PHONY: clean
 clean:

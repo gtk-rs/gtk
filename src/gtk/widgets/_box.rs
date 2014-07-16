@@ -22,6 +22,8 @@ use std::prelude::{Option, Some, None, RawPtr};
 use gtk::enums::Orientation;
 use gtk::ffi;
 use gtk::traits;
+use std::clone::Clone;
+use std::ops::Drop;
 /// Box — A container box
 struct_Widget!(Box)
 
