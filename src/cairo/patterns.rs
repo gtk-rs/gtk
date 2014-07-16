@@ -101,6 +101,14 @@ macro_rules! pattern_type(
                     pointer: pointer
                 }
             }
+
+            pub fn reference(&self) -> $pattern_type{
+                $pattern_type{
+                    pointer: unsafe{
+                        ffi::cairo_pattern_reference(self.pointer)
+                    }
+                }
+            }
         }
 
         impl Pattern for $pattern_type{
@@ -113,16 +121,6 @@ macro_rules! pattern_type(
             fn drop(&mut self){
                 unsafe{
                     ffi::cairo_pattern_destroy(self.pointer)
-                }
-            }
-        }
-
-        impl Clone for $pattern_type{
-            fn clone(&self) -> $pattern_type{
-                $pattern_type{
-                    pointer: unsafe{
-                        ffi::cairo_pattern_reference(self.pointer)
-                    }
                 }
             }
         }
