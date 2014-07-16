@@ -61,9 +61,13 @@ Finally build documentation using:
 > make doc
 ```
 
-The documentation can be accessed using your browser at
+You're local copy can be accessed using your browser at
 
 file:///{rgtk_location}/doc/rgtk/index.html
+
+you can also access a daily build of the docs via the internet
+
+http://rust-ci.org/jeremyletang/rgtk/doc/rgtk/
 
 Use __rgtk__
 ============
