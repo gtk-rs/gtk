@@ -247,10 +247,8 @@ impl FontFace{
             ffi::cairo_font_face_get_reference_count(self.get_ptr()) as uint
         }
     }
-}
 
-impl Clone for FontFace{
-    fn clone(&self) -> FontFace{
+    pub fn reference(&self) -> FontFace{
         unsafe{
             FontFace(ffi::cairo_font_face_reference(self.get_ptr()))
         }
@@ -321,10 +319,8 @@ impl ScaledFont{
 
     //pub fn cairo_scaled_font_get_scale_matrix(scaled_font: *mut cairo_scaled_font_t, scale_matrix: *cairo_matrix_t);
 
-}
 
-impl Clone for ScaledFont{
-    fn clone(&self) -> ScaledFont{
+    fn reference(&self) -> ScaledFont{
         unsafe{
             ScaledFont(ffi::cairo_scaled_font_reference(self.get_ptr()))
         }
@@ -338,8 +334,6 @@ impl Drop for ScaledFont{
         }
     }
 }
-
-
 
 impl cairo::Context{
     pub fn select_font_face<S: ToCStr>(&self, family: S, slant: FontSlant, weight: FontWeight){

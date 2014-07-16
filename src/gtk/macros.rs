@@ -20,9 +20,12 @@ macro_rules! check_pointer(
         if $tmp_pointer.is_null() {
             None
         } else {
+            unsafe{
+                ::glib::ffi::g_object_ref($tmp_pointer as *mut ::glib::ffi::C_GObject);
+            }
+
             Some($gtk_struct {
-                pointer:            $tmp_pointer,
-                can_drop:           true
+                pointer: $tmp_pointer
             })
         }
     );
@@ -31,8 +34,7 @@ macro_rules! check_pointer(
 macro_rules! struct_Widget(
     ($gtk_struct:ident) => (
         pub struct $gtk_struct {
-            pointer:           *mut ffi::C_GtkWidget,
-            can_drop:          bool
+            pointer: *mut ffi::C_GtkWidget
         }
     );
 )
@@ -45,9 +47,12 @@ macro_rules! impl_TraitWidget(
             }
 
             fn wrap(widget: *mut ffi::C_GtkWidget) -> $gtk_struct {
+                unsafe{
+                    ::glib::ffi::g_object_ref(widget as *mut ::glib::ffi::C_GObject);
+                }
+
                 $gtk_struct {
-                    pointer:         widget,
-                    can_drop:        false
+                    pointer: widget
                 }
             }
         }
@@ -58,13 +63,25 @@ macro_rules! impl_TraitWidget(
 
 macro_rules! impl_drop(
     ($gtk_struct:ident) => (
-        /*impl Drop for $gtk_struct {
+        impl Drop for $gtk_struct {
             fn drop(&mut self) {
-                if self.can_drop {
-                    unsafe { ffi::gtk_widget_destroy(self.pointer); }
+                unsafe {
+                    ::glib::ffi::g_object_unref(self.pointer as *mut ::glib::ffi::C_GObject);
                 }
             }
-        }*/
+        }
+
+        impl Clone for $gtk_struct {
+            fn clone(&self) -> $gtk_struct {
+                let pointer = unsafe {
+                    ::glib::ffi::g_object_ref(self.pointer as *mut ::glib::ffi::C_GObject)
+                };
+
+                $gtk_struct {
+                    pointer: pointer as *mut ffi::C_GtkWidget
+                }
+            }
+        }
     );
 )
 

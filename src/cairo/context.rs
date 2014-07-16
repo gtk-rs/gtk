@@ -19,14 +19,6 @@ pub struct Rectangle{
 #[repr(C)]
 pub struct Context(*mut cairo_t);
 
-impl Clone for Context{
-    fn clone(&self) -> Context{
-        unsafe{
-            Context(ffi::cairo_reference(self.get_ptr()))
-        }
-    }
-}
-
 impl Drop for Context{
     fn drop(&mut self){
         unsafe{
@@ -44,6 +36,12 @@ impl Context{
     pub fn wrap(ptr: *mut cairo_t) -> Context{
         unsafe{
             Context(ffi::cairo_reference(ptr))
+        }
+    }
+
+    pub fn reference(&self) -> Context{
+        unsafe{
+            Context(ffi::cairo_reference(self.get_ptr()))
         }
     }
 
