@@ -19,7 +19,7 @@ For OSX:
 > brew install autoconf
 ```
 
-You should also install __GTK+__, __GLib__ and __Cairo__ development files before installing __rgtk__. Optionally it is recommended to install the debug packages containing helpful debug symbols.
+You should also install __GTK+__, __GLib__ and __Cairo__ development files before installing __rgtk__. Optionally, it is recommended to install the debug packages containing helpful debug symbols.
 
 For debian based system:
 ```Shell
@@ -44,6 +44,7 @@ Then you can build __rgtk__ by generating the make file and then running `make`.
 ```
 
 In src/bin you can find some tests showing of some functionality, these can be build and run as follows:
+
 ```Shell
 > make gtktest
 > ./target/gtktest
@@ -52,7 +53,7 @@ In src/bin you can find some tests showing of some functionality, these can be b
 > ./target/cairotest
 ```
 
-__rgtk__ should build and work on both OSX and GNU/Linux, we plan on adding windows support in the future.
+__rgtk__ should build and work on both OSX and GNU/Linux. We plan on adding windows support in the future.
 
 
 Finally build documentation using:
@@ -61,11 +62,11 @@ Finally build documentation using:
 > make doc
 ```
 
-You're local copy can be accessed using your browser at
+Your local copy can be accessed using your browser at
 
 file:///{rgtk_location}/doc/rgtk/index.html
 
-you can also access a daily build of the docs via the internet
+You can also access a daily build of the docs via the internet:
 
 http://rust-ci.org/jeremyletang/rgtk/doc/rgtk/
 
@@ -74,7 +75,7 @@ Use __rgtk__
 
 To implement __GTK+__ inheritance in rust, we implemented gtk superclasses as traits located in `rgtk::gtk::traits::*`. The various widgets implement these traits and live in `rgtk::gtk::*`.
 
-For you're conveniance the various traits are reexported in the `rgtk::*` namespace as `Gtk{trait_name}Trait` so you can just use...
+For your convenience the various traits are reexported in the `rgtk::*` namespace as `Gtk{trait_name}Trait` so you can just use...
 
 ```Rust
 extern mod rgtk;
@@ -95,21 +96,21 @@ Contributor you're welcome!
 
 You probably know but __Gtk+__ uses its own GObject system: inherited class and interface.
 
-To respect this design I follow a special design on __rgtk__:
+To respect this design, I follow a special design on __rgtk__:
 
 * Interface -> Implement them on a trait with only default methods.
 * Class -> Implement the construct on the class impl and other methods on a traits.
 * Sub-class -> Implement all the methods on the class.
 
-Exemple for GtkOrientable, GtkBox, GtkButtonBox:
+Example for GtkOrientable, GtkBox, GtkButtonBox:
 
-GtkOrientable is an interface with all the methods implemented as default method of the trait gtk::traits::Orientable.
+GtkOrientable is an interface with all methods implemented as default method of the trait gtk::traits::Orientable.
 
 GtkBox is a class with constructors implemented on the struct `gtk::Box`, and the other method as default methods of the trait `gtk::traits::Box`. So `gtk::Box` implements `gtk::traits::Orientable` and `gtk::traits::Box`.
 
 GtkButtonBox is a sub-class of GtkBox, the struct `gtk::ButtonBox` implements all the methods of GtkButtonBox and the traits `gtk::traits::Orientable` and `gtk::traits::Box`.
 
-Finally all the gtk widgets implement the trait gtk::traits::Widget.
+Finally, all the gtk widgets implement the trait gtk::traits::Widget.
 
 License
 =======
