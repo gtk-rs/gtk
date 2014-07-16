@@ -11,8 +11,8 @@ fn main() {
     println!("Major: {}, Minor: {}", gtk::get_major_version(), gtk::get_minor_version());
     let mut window = gtk::Window::new(gtk::window_type::TopLevel).unwrap();
     let mut frame = gtk::Frame::new(Some("Yep a frame")).unwrap();
-    let mut _box = gtk::_Box::new(gtk::orientation::Horizontal, 10).unwrap();
-    let mut v_box = gtk::_Box::new(gtk::orientation::Horizontal, 10).unwrap();
+    let mut _box = gtk::Box::new(gtk::orientation::Horizontal, 10).unwrap();
+    let mut v_box = gtk::Box::new(gtk::orientation::Horizontal, 10).unwrap();
     let mut button_box = gtk::ButtonBox::new(gtk::orientation::Horizontal).unwrap();
     let mut label = gtk::Label::new("Yeah a wonderful label too !").unwrap();
     let button = gtk::Button::new_with_label("Whattttt a button !").unwrap();
