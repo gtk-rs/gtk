@@ -1,88 +1,117 @@
 rgtk [![Build Status](https://travis-ci.org/jeremyletang/rgtk.svg?branch=master)](https://travis-ci.org/jeremyletang/rgtk)
 ====
 
-__Rust__ bindings and wrappers for __GTK+__
-
+__Rust__ bindings and wrappers for __GTK+__, __GLib__ and __Cairo__.
 
 Installation
 ============
 
-__rgtk__ use autoconf tools to build, so you should install them on your system.
+__rgtk__ uses autoconf tools to build, so you should install them on your system.
 
-You should install __GTK+__ developpement library before install __rgtk__.
 
-__rgtk__ use the 3.12 version of __GTK+__, so it should be up to date or the library cannot build. However, we have added conditional compilations to handle 3.6, 3.8 and 3.10 versions.
-
-We are currently targetting rust master compiler to build __rgtk__.
-
-Then you can build __rgtk__ in two steps: 
-
-* First build a little c-glue library to deal with some gtk macros by typing :
-
+For debian based systems:
 ```Shell
-> make glue
+> apt-get install autoconf
 ```
 
-* next you can build __rgtk__ with the following command :
-
+For OSX:
 ```Shell
-> make 
+> brew install autoconf
 ```
 
-* you can build an awful test main which display some widget :
+You should also install __GTK+__, __GLib__ and __Cairo__ development files before installing __rgtk__. Optionally it is recommended to install the debug packages containing helpful debug symbols.
 
+For debian based system:
 ```Shell
-> make test
+> apt-get install libgtk-3-dev   libglib2.0-dev   libcairo2-dev
+> apt-get install libgtk-3-0-dbg libglib2.0-0-dbg libcairo2-dbg
 ```
 
-__rgtk__ should build / work on osx and Linux.
+For OSX:
+```Shell
+> apt-get install gtk+3
+```
 
+__rgtk__ targets __GTK+__ 3.12 but can also compile older versions 3.6, 3.8 and 3.10. Setting the environment variable `GTK_VERSION` to any of `GTK_3_6`, `GTK_3_8`, `GTK_3_10`, `GTK_3_12` allows pick a version. The default is GTK_3_12.
+
+We are currently targetting rust master compiler to build __rgtk__, make sure you have the latest version before submitting any bugs.
+
+Then you can build __rgtk__ by generating the make file and then running `make`.
+
+```Shell
+> ./configure
+> make
+```
+
+In src/bin you can find some tests showing of some functionality, these can be build and run as follows:
+```Shell
+> make gtktest
+> ./target/gtktest
+
+> make cairotest
+> ./target/cairotest
+```
+
+__rgtk__ should build and work on both OSX and GNU/Linux, we plan on adding windows support in the future.
+
+
+Finally build documentation using:
+
+```Shell
+> make doc
+```
+
+You're local copy can be accessed using your browser at
+
+file:///{rgtk_location}/doc/rgtk/index.html
+
+you can also access a daily build of the docs via the internet
+
+http://rust-ci.org/jeremyletang/rgtk/doc/rgtk/
 
 Use __rgtk__
 ============
 
-To respect __GTK+__ inheritence, all the functionnalities of gtk widgets are dispatched between class implementation and trait default methods.
+To implement __GTK+__ inheritance in rust, we implemented gtk superclasses as traits located in `rgtk::gtk::traits::*`. The various widgets implement these traits and live in `rgtk::gtk::*`.
 
-That's why all the widgets are in the module gtk, and all the main traits are reexport on the main module of __rgtk__.
-
-To use __rgtk__, you can simply do :
+For you're conveniance the various traits are reexported in the `rgtk::*` namespace as `Gtk{trait_name}Trait` so you can just use...
 
 ```Rust
 extern mod rgtk;
 use rgtk::*;
 ```
 
-You can now access easily all the widgets and all the traits methods:
+...to easily access all the gtk widgets and all traits methods:
 
 ```Rust
-let button = gtk::Button:new(); // You have access to the methods of the button and all the method of the trait GtkButton.
+let button = gtk::Button:new(); // You have access to the struct methods of gtk::Button aswell
+                                // as the trait methods from gtk::traits::Button as GtkButtonTrait.
 ```
-
 
 Contribute
 ==========
 
-Contributor you're welcome !
+Contributor you're welcome!
 
-You probably know but __Gtk+__ use it own Object system : inherited class and interface.
+You probably know but __Gtk+__ uses its own GObject system: inherited class and interface.
 
-To respect this design I follow a special design on __rgtk__ :
+To respect this design I follow a special design on __rgtk__:
 
 * Interface -> Implement them on a trait with only default methods.
 * Class -> Implement the construct on the class impl and other methods on a traits.
 * Sub-class -> Implement all the methods on the class.
 
-Exemple for GtkOrientable, GtkBox, GtkButtonBox :
+Exemple for GtkOrientable, GtkBox, GtkButtonBox:
 
-GtkOrientable is an interface with all the methods implemented as default method of the trait GtkOrientable.
+GtkOrientable is an interface with all the methods implemented as default method of the trait gtk::traits::Orientable.
 
-GtkBox is a class with constructors implemented on the class gtk::Box, and the other method as default methods of the trait GtkBox. So gtk::Box implement GtkOrientable and GtkBox.
+GtkBox is a class with constructors implemented on the struct `gtk::Box`, and the other method as default methods of the trait `gtk::traits::Box`. So `gtk::Box` implements `gtk::traits::Orientable` and `gtk::traits::Box`.
 
-GtkButtonBox is a sub-class of GtkBox, the class gtk::ButtonBox implement all the methods of GtkButtonBox, the trait GtkOrientable and GtkBox.
+GtkButtonBox is a sub-class of GtkBox, the struct `gtk::ButtonBox` implements all the methods of GtkButtonBox and the traits `gtk::traits::Orientable` and `gtk::traits::Box`.
 
-Finally all the gtk widget implements the traits GtkWidget.
+Finally all the gtk widgets implement the trait gtk::traits::Widget.
 
 License
 =======
 
-__rgtk__ is available under the same license term than GTK+, the LGPL (Lesser General Public license). 
+__rgtk__ is available under the same license term as GTK+: the LGPL (Lesser General Public license).

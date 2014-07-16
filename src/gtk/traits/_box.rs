@@ -20,7 +20,7 @@ use gtk::{PackType, pack_type};
 use gtk::cast::GTK_BOX;
 use gtk::ffi;
 
-pub trait _Box: Widget {
+pub trait Box: Widget {
     fn pack_start<'r, T: Widget>(&'r mut self, child: &'r T, expand: bool, fill: bool, padding: u32) -> () {
         let c_expand = if expand { ffi::Gtrue } else { ffi::Gfalse };
         let c_fill = if fill { ffi::Gtrue } else { ffi::Gfalse };

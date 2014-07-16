@@ -16,7 +16,7 @@
 pub use self::window::Window;
 pub use self::label::Label;
 pub use self::button::Button;
-pub use self::_box::_Box;
+pub use self::_box::Box;
 pub use self::buttonbox::ButtonBox;
 pub use self::frame::Frame;
 pub use self::aspectframe::AspectFrame;
@@ -101,90 +101,90 @@ pub use self::applaunchcontext::AppLaunchContext;
 pub use self::appchooserdialog::AppChooserDialog;
 pub use self::drawingarea::DrawingArea;
 
-pub mod window;
-pub mod label;
-pub mod button;
-pub mod _box;
-pub mod buttonbox;
-pub mod frame;
-pub mod aspectframe;
-pub mod fixed;
-pub mod separator;
-pub mod fontbutton;
-pub mod togglebutton;
-pub mod checkbutton;
+mod window;
+mod label;
+mod button;
+mod _box;
+mod buttonbox;
+mod frame;
+mod aspectframe;
+mod fixed;
+mod separator;
+mod fontbutton;
+mod togglebutton;
+mod checkbutton;
 #[cfg(GTK_3_6)]
 #[cfg(GTK_3_8)]
 #[cfg(GTK_3_10)]
 #[cfg(GTK_3_12)]
-pub mod menubutton;
-pub mod colorbutton;
-pub mod linkbutton;
-pub mod adjustment;
-pub mod scalebutton;
-pub mod volumebutton;
-pub mod grid;
-pub mod entrybuffer;
-pub mod entry;
+mod menubutton;
+mod colorbutton;
+mod linkbutton;
+mod adjustment;
+mod scalebutton;
+mod volumebutton;
+mod grid;
+mod entrybuffer;
+mod entry;
 #[cfg(GTK_3_10)]
 #[cfg(GTK_3_12)]
-pub mod searchentry;
-pub mod switch;
-pub mod scale;
+mod searchentry;
+mod switch;
+mod scale;
 #[cfg(GTK_3_6)]
 #[cfg(GTK_3_8)]
 #[cfg(GTK_3_10)]
 #[cfg(GTK_3_12)]
-pub mod levelbar;
+mod levelbar;
 #[cfg(GTK_3_10)]
 #[cfg(GTK_3_12)]
-pub mod searchbar;
-pub mod spinbutton;
-pub mod spinner;
-pub mod image;
-pub mod progressbar;
-pub mod arrow;
-pub mod calendar;
-pub mod alignment;
-pub mod expander;
-pub mod paned;
-pub mod infobar;
-pub mod toolbar;
-pub mod toolitem;
-pub mod separatortoolitem;
-pub mod toolbutton;
-pub mod toggletoolbutton;
-pub mod menutoolbutton;
-pub mod dialog;
-pub mod aboutdialog;
-pub mod widget;
-pub mod colorchooserdialog;
-pub mod messagedialog;
-pub mod notebook;
+mod searchbar;
+mod spinbutton;
+mod spinner;
+mod image;
+mod progressbar;
+mod arrow;
+mod calendar;
+mod alignment;
+mod expander;
+mod paned;
+mod infobar;
+mod toolbar;
+mod toolitem;
+mod separatortoolitem;
+mod toolbutton;
+mod toggletoolbutton;
+mod menutoolbutton;
+mod dialog;
+mod aboutdialog;
+mod widget;
+mod colorchooserdialog;
+mod messagedialog;
+mod notebook;
 #[cfg(GTK_3_10)]
 #[cfg(GTK_3_12)]
-pub mod stack;
+mod stack;
 #[cfg(GTK_3_10)]
 #[cfg(GTK_3_12)]
-pub mod stack_switcher;
+mod stack_switcher;
 #[cfg(GTK_3_10)]
 #[cfg(GTK_3_12)]
-pub mod revealer;
-pub mod overlay;
-pub mod layout;
+mod revealer;
+mod overlay;
+mod layout;
 #[cfg(GTK_3_10)]
 #[cfg(GTK_3_12)]
-pub mod header_bar;
+mod header_bar;
 #[cfg(GTK_3_12)]
-pub mod flow_box;
+mod flow_box;
 #[cfg(GTK_3_10)]
 #[cfg(GTK_3_12)]
-pub mod list_box;
+mod list_box;
 #[cfg(GTK_3_12)]
-pub mod action_bar;
-pub mod filefilter;
-pub mod filechooserdialog;
-pub mod appinfo;
-pub mod applaunchcontext;
-pub mod appchooserdialog;
-pub mod drawingarea;
+mod action_bar;
+mod filefilter;
+mod filechooserdialog;
+mod appinfo;
+mod applaunchcontext;
+mod appchooserdialog;
+mod drawingarea;

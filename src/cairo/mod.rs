@@ -1,3 +1,8 @@
+
+/*!
+Bindings and wrappers for __Cairo__
+*/
+
 pub use self::context::{
     Context,
     Rectangle

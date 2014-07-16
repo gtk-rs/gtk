@@ -13,26 +13,28 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-//! A container box
+#![no_implicit_prelude]
 
+//! A container box
 use libc::c_int;
+use std::prelude::{Option, Some, None, RawPtr};
 
 use gtk::enums::Orientation;
 use gtk::ffi;
 use gtk::traits;
 /// Box — A container box
-struct_Widget!(_Box)
+struct_Widget!(Box)
 
-impl _Box {
-    pub fn new(orientation: Orientation, spacing: i32) -> Option<_Box> {
+impl Box {
+    pub fn new(orientation: Orientation, spacing: i32) -> Option<Box> {
         let tmp_pointer = unsafe { ffi::gtk_box_new(orientation, spacing as c_int) };
-        check_pointer!(tmp_pointer, _Box)
+        check_pointer!(tmp_pointer, Box)
     }
 }
 
-impl_drop!(_Box)
-impl_TraitWidget!(_Box)
+impl_drop!(Box)
+impl_TraitWidget!(Box)
 
-impl traits::Container for _Box {}
-impl traits::_Box for _Box {}
-impl traits::Orientable for _Box {}
+impl traits::Container for Box {}
+impl traits::Box for Box {}
+impl traits::Orientable for Box {}

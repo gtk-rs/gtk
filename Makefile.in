@@ -55,7 +55,7 @@ cairotest:			src/bin/cairotest.rs | target
 
 .PHONY: doc
 doc:
-					rustdoc -o doc/ src/rgtk.rs
+					rustdoc --cfg $(GTK_VERSION) -o doc/ src/rgtk.rs
 					chmod -R 755 doc/
 
 target/:
