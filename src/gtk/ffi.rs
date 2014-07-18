@@ -166,7 +166,7 @@ extern "C" {
     // GtkWidget                                                         NOT OK
     //=========================================================================
     //pub fn gtk_widget_new                      (type: GType, first_property_name: *const c_char, ...) -> *mut C_GtkWidget;
-    //pub fn gtk_widget_destroyed                (widget: *mut C_GtkWidget, widget_pointer: *mut *mut C_GtkWidget);
+    pub fn gtk_widget_destroyed                (widget: *mut C_GtkWidget, widget_pointer: *mut *mut C_GtkWidget);
     pub fn gtk_widget_show                     (widget: *mut C_GtkWidget);
     pub fn gtk_widget_show_now                 (widget: *mut C_GtkWidget);
     pub fn gtk_widget_show_all                 (widget: *mut C_GtkWidget);
@@ -180,11 +180,20 @@ extern "C" {
     pub fn gtk_widget_queue_resize             (widget: *mut C_GtkWidget);
     pub fn gtk_widget_queue_resize_no_redraw   (widget: *mut C_GtkWidget);
     //pub fn gtk_widget_get_frame_clock          (widget: *mut C_GtkWidget) -> *mut C_GdkFrameClock;
+    //pub fn gtk_widget_add_tick_callback        (widget: *mut C_GtkWidget, callback: C_GtkTickCallback, user_data: gpointer, notify: C_GDestroyNotify) -> c_uint;
+    //pub fn gtk_widget_remove_tick_callback     (widget: *mut C_GtkWidget, id: c_uint);
     pub fn gtk_widget_get_scale_factor         (widget: *mut C_GtkWidget) -> c_int;
     //pub fn gtk_widget_size_request             (widget: *mut C_GtkWidget, requisition: *mut C_GtkRequisition);
     //pub fn gtk_widget_get_child_requisition    (widget: *mut C_GtkWidget, requisition: *mut C_GtkRequisition);
     //pub fn gtk_widget_size_allocate            (widget: *mut C_GtkWidget, allocation: *mut C_GtkAllocation);
     //pub fn gtk_widget_size_allocate_with_baseline(widget: *mut C_GtkWidget, allocation: *mut C_GtkAllocation, baseline: c_int);
+    //pub fn gtk_widget_add_accelerator          (widget: *mut C_GtkWidget, accel_signal: *const c_char, accel_group: *mut C_GtkAccelGroup,
+        //accel_key: c_uint, accel_mods: gdk::ModifierType, accel_flags: gtk::AccelFlags);
+    //pub fn gtk_widget_remove_accelerator       (widget: *mut C_GtkWidget, accel_group: *mut C_GtkAccelGroup, accel_key: c_uint, accel_mods: gdk::ModifierType) -> Gboolean;
+    //pub fn gtk_widget_set_accel_path           (widget: *mut C_GtkWidget, accel_path: *const c_char, accel_group: *mut C_GtkAccelGroup);
+    //pub fn gtk_widget_list_accel_closures      (widget: *mut C_GtkWidget) -> *mut glib::GList;
+    //pub fn gtk_widget_can_activate_accel       (widget: *mut C_GtkWidget, signal_id: c_uint) -> Gboolean;
+    //pub fn gtk_widget_event                    (widget: *mut C_GtkWidget, event: *mut gdk::Event) -> Gboolean;
     pub fn gtk_widget_activate                 (widget: *mut C_GtkWidget) -> Gboolean;
     pub fn gtk_widget_reparent                 (widget: *mut C_GtkWidget, new_parent: *mut C_GtkWidget);
     //pub fn gtk_widget_intersect                (widget: *mut C_GtkWidget, area: *const C_GdkRectangle, intersection: *mut C_GdkRectangle) -> Gboolean;
@@ -193,23 +202,32 @@ extern "C" {
     pub fn gtk_widget_grab_default             (widget: *mut C_GtkWidget);
     pub fn gtk_widget_set_name                 (widget: *mut C_GtkWidget, name: *const c_char);
     pub fn gtk_widget_get_name                 (widget: *mut C_GtkWidget) -> *const c_char;
-    pub fn gtk_widget_set_state                (widget: *mut C_GtkWidget, state: gtk::StateType);
     pub fn gtk_widget_set_sensitive            (widget: *mut C_GtkWidget, sensitive: Gboolean);
     pub fn gtk_widget_set_parent               (widget: *mut C_GtkWidget, parent: *mut C_GtkWidget);
     //pub fn gtk_widget_set_parent_window        (widget: *mut C_GtkWindow, parent_window: *mut gdk::Window);
     //pub fn gtk_widget_get_parent_window        (widget: *mut C_GtkWindow) -> *mut gdk::Window;
+    //pub fn gtk_widget_set_events               (widget: *mut C_GtkWidget, events: c_int);
+    //pub fn gtk_widget_get_events               (widget: *mut C_GtkWidget) -> c_int;
+    //pub fn gtk_widget_add_events               (widget: *mut C_GtkWidget, events: c_int);
+    //pub fn gtk_widget_set_device_events        (widget: *mut C_GtkWidget, device: *mut C_GdkDevice, events: gdk::EventMask);
+    //pub fn gtk_widget_get_device_events        (widget: *mut C_GtkWidget, device: *mut C_GdkDevice) -> gdk::EventMask;
+    //pub fn gtk_widget_add_device_events        (widget: *mut C_GtkWidget, device: *mut C_GdkDevice, events: gdk::EventMask);
+    //pub fn gtk_widget_set_device_enabled       (widget: *mut C_GtkWidget, device: *mut C_GdkDevice, enabled: Gboolean);
+    //pub fn gtk_widget_get_device_enabled       (widget: *mut C_GtkWidget, device: *mut C_GdkDevice) -> Gboolean;
     pub fn gtk_widget_get_toplevel             (widget: *mut C_GtkWidget) -> *mut C_GtkWidget;
     pub fn gtk_widget_get_ancestor             (widget: *mut C_GtkWidget, widget_type: GType) -> *mut C_GtkWidget;
+    //pub fn gtk_widget_get_visual               (widget: *mut C_GtkWidget) -> *mut C_GdkVisual;
+    //pub fn gtk_widget_set_visual               (widget: *mut C_GtkWidget, visual: *mut C_GdkVisual);
     pub fn gtk_widget_is_ancestor              (widget: *mut C_GtkWidget, ancestor: *mut C_GtkWidget) -> Gboolean;
+    pub fn gtk_widget_translate_coordinates    (widget: *mut C_GtkWidget, dest_widget: *mut C_GtkWidget, src_x: c_int, src_y: c_int,
+        dest_x: *mut c_int, dest_y: *mut c_int) -> Gboolean;
     pub fn gtk_widget_hide_on_delete           (widget: *mut C_GtkWidget) -> Gboolean;
     pub fn gtk_widget_set_direction            (widget: *mut C_GtkWidget, dir: gtk::TextDirection);
     pub fn gtk_widget_get_direction            (widget: *mut C_GtkWidget) -> gtk::TextDirection;
     pub fn gtk_widget_set_default_direction    (dir: gtk::TextDirection);
     pub fn gtk_widget_get_default_direction    () -> gtk::TextDirection;
-    //pub fn gtk_widget_get_visual               (widget: *mut C_GtkWidget) -> *mut gdk::C_GdkVisual;
-    //pub fn gtk_widget_set_visual               (widget: *mut C_GtkWidget, visual: *mut gdk::C_GdkVisual);
-    pub fn gtk_widget_translate_coordinates    (widget: *mut C_GtkWidget, dest_widget: *mut C_GtkWidget, src_x: c_int, src_y: c_int,
-        dest_x: *mut c_int, dest_y: *mut c_int) -> Gboolean;
+    //pub fn gtk_widget_shape_combine_region     (widget: *mut C_GtkWidget, region: *mut cairo_region_t);
+    //pub fn gtk_widget_input_shape_combine_region(widget: *mut C_GtkWidget, region: *mut cairo_region_t);
     pub fn gtk_widget_override_background_color(widget: *mut C_GtkWidget, state: gtk::StateFlags, color: *const gdk::RGBA);
     pub fn gtk_widget_override_color           (widget: *mut C_GtkWidget, state: gtk::StateFlags, color: *const gdk::RGBA);
     //pub fn gtk_widget_override_font            (widget: *mut C_GtkWidget, font_desc: *const PangoFontDescription);
@@ -231,18 +249,26 @@ extern "C" {
     //pub fn gtk_widget_region_intersect         (widget: *mut C_GtkWidget, region: *const cairo_region_t) -> *mut cairo_region_t;
     //pub fn gtk_widget_send_expose              (widget: *mut C_GtkWidget, event: *mut gdk::Event) -> c_int;
     //pub fn gtk_widget_send_focus_change        (widget: *mut C_GtkWidget, event: *mut gdk::Event) -> Gboolean;
+    //pub fn gtk_widget_style_get                (widget: *mut C_GtkWidget, first_property_name: *const c_char, ...);
+    //pub fn gtk_widget_style_get_property       (widget: *mut C_GtkWidget, property_name: *const c_char, value: *mut GValue);
+    //pub fn gtk_widget_style_get_valist         (widget: *mut C_GtkWidget, first_property_name: *const c_char, va_args: va_list);
     //pub fn gtk_widget_class_set_accessible_type(widget_class: *mut C_GtkWidgetClass, _type: GType);
     //pub fn gtk_widget_class_set_accessible_role(widget_class: *mut C_GtkWidgetClass, role: C_AtkRole);
     //pub fn gtk_widget_class_get_accessible     (widget_class: *mut C_GtkWidgetClass) -> *mut C_AtkObject;
     pub fn gtk_widget_child_focus              (widget: *mut C_GtkWidget, direction: gtk::DirectionType) -> Gboolean;
+    pub fn gtk_widget_child_notify             (widget: *mut C_GtkWidget, child_property: *const c_char);
+    pub fn gtk_widget_freeze_child_notify      (widget: *mut C_GtkWidget);
     pub fn gtk_widget_get_child_visible        (widget: *mut C_GtkWidget) -> Gboolean;
     pub fn gtk_widget_get_parent               (widget: *mut C_GtkWidget) -> *mut C_GtkWidget;
     //pub fn gtk_widget_get_settings             (widget: *mut C_GtkWidget) -> *mut C_GtkSettings;
-    //pub fn gtk_widget_get_settings             (widget: *mut C_GtkWidget, selection: gdk::Atom) -> *mut C_GtkClipboard;
+    //pub fn gtk_widget_get_clipboard            (widget: *mut C_GtkWidget, selection: gdk::Atom) -> *mut C_GtkClipboard;
     //pub fn gtk_widget_get_display              (widget: *mut C_GtkWidget) -> *mut gdk::Display;
     //pub fn gtk_widget_get_screen               (widget: *mut C_GtkWidget) -> *mut gdk::Screen;
     pub fn gtk_widget_has_screen               (widget: *mut C_GtkWidget) -> Gboolean;
+    pub fn gtk_widget_get_size_request         (widget: *mut C_GtkWidget, width: *mut c_int, height: *mut c_int);
     pub fn gtk_widget_set_child_visible        (widget: *mut C_GtkWidget, is_visible: Gboolean);
+    pub fn gtk_widget_set_size_request         (widget: *mut C_GtkWidget, width: c_int, height: c_int);
+    pub fn gtk_widget_thaw_child_notify        (widget: *mut C_GtkWidget);
     pub fn gtk_widget_set_no_show_all          (widget: *mut C_GtkWidget, no_show_all: Gboolean);
     pub fn gtk_widget_get_no_show_all          (widget: *mut C_GtkWidget) -> Gboolean;
     pub fn gtk_widget_list_mnemonic_labels     (widget: *mut C_GtkWidget) -> *mut glib::ffi::C_GList;
@@ -265,6 +291,8 @@ extern "C" {
     //pub fn gtk_widget_unregister_window        (widget: *mut C_GtkWidget, window: *mut C_GtkWindow);
     //pub fn gtk_cairo_should_draw_window        (cr: *mut cairo_t, window: *mut C_GtkWindow);
     //pub fn gtk_cairo_transform_to_window       (cr: *mut cairo_t, widget: *mut C_GtkWidget, window: *mut C_GtkWindow);
+    pub fn gtk_widget_get_allocated_width      (widget: *mut C_GtkWidget) -> c_int;
+    pub fn gtk_widget_get_allocated_height     (widget: *mut C_GtkWidget) -> c_int;
     //pub fn gtk_widget_get_allocation           (widget: *mut C_GtkWidget, allocation: *mut C_GtkAllocation);
     //pub fn gtk_widget_set_allocation           (widget: *mut C_GtkWidget, allocation: *const C_GtkAllocation);
     pub fn gtk_widget_get_allocated_baseline   (widget: *mut C_GtkWidget) -> c_int;
@@ -306,43 +334,43 @@ extern "C" {
     pub fn gtk_widget_set_opacity              (widget: *mut C_GtkWidget, opacity: c_double);
     //pub fn gtk_widget_get_path                 (widget: *mut C_GtkWidget) -> *mut C_GtkWidgetPath;
     //pub fn gtk_widget_get_style_context        (widget: *mut C_GtkWidget) -> *mut C_GtkStyleContext;
-    //pub fn gtk_widget_reset_style              (widget: *mut C_GtkWidget);
+    pub fn gtk_widget_reset_style              (widget: *mut C_GtkWidget);
     //pub fn gtk_requisition_new                 () -> *mut C_GtkRequisition;
     //pub fn gtk_requisition_copy                (requisition: *const C_GtkRequisition) -> *mut C_GtkRequisition;
     //pub fn gtk_requisition_free                (requisition: *mut C_GtkRequisition);
-    //pub fn gtk_widget_get_preferred_height     (widget: *mut C_GtkWidget, minimum_height: *mut c_int, natural_height: *mut c_int);
-    //pub fn gtk_widget_get_preferred_width      (widget: *mut C_GtkWidget, minimum_width: *mut c_int, natural_width: *mut c_int);
-    //pub fn gtk_widget_get_preferred_height_for_width(widget: *mut C_GtkWidget, width: c_int, minimum_height: *mut c_int, natural_height: *mut c_int);
-    //pub fn gtk_widget_get_preferred_width_for_height(widget: *mut C_GtkWidget, height: c_int, minimum_width: *mut c_int, natural_width: *mut c_int);
-    //pub fn gtk_widget_get_preferred_height_and_baseline_for_width(widget: *mut C_GtkWidget, width: c_int, minimum_height: *mut c_int,
-        //natural_height: *mut c_int, minimum_baseline: *mut c_int, natural_baseline: *mut c_int);
-    //pub fn gtk_widget_get_request_mode         (widget: *mut C_GtkWidget) -> C_GtkSizeRequestMode;
+    pub fn gtk_widget_get_preferred_height     (widget: *mut C_GtkWidget, minimum_height: *mut c_int, natural_height: *mut c_int);
+    pub fn gtk_widget_get_preferred_width      (widget: *mut C_GtkWidget, minimum_width: *mut c_int, natural_width: *mut c_int);
+    pub fn gtk_widget_get_preferred_height_for_width(widget: *mut C_GtkWidget, width: c_int, minimum_height: *mut c_int, natural_height: *mut c_int);
+    pub fn gtk_widget_get_preferred_width_for_height(widget: *mut C_GtkWidget, height: c_int, minimum_width: *mut c_int, natural_width: *mut c_int);
+    pub fn gtk_widget_get_preferred_height_and_baseline_for_width(widget: *mut C_GtkWidget, width: c_int, minimum_height: *mut c_int,
+        natural_height: *mut c_int, minimum_baseline: *mut c_int, natural_baseline: *mut c_int);
+    pub fn gtk_widget_get_request_mode         (widget: *mut C_GtkWidget) -> gtk::SizeRequestMode;
     //pub fn gtk_widget_get_preferred_size       (widget: *mut C_GtkWidget, minimum_size: *mut C_GtkRequisition, natural_size: *mut C_GtkRequisition);
     //pub fn gtk_distribute_natural_allocation   (extra_space: c_int, n_requested_sizes: c_uint, sizes: *mut C_GtkRequestedSizes) -> c_int;
-    //pub fn gtk_widget_get_halign               (widget: *mut C_GtkWidget) -> C_GtkAlign;
-    //pub fn gtk_widget_set_halign               (widget: *mut C_GtkWidget, align: C_GtkAlign);
-    //pub fn gtk_widget_get_valign               (widget: *mut C_GtkWidget) -> C_GtkAlign;
-    //pub fn gtk_widget_get_valign_with_baseline (widget: *mut C_GtkWidget) -> C_GtkAlign;
-    //pub fn gtk_widget_set_valign               (widget: *mut C_GtkWidget, align: C_GtkAlign);
-    //pub fn gtk_widget_get_margin_start         (widget: *mut C_GtkWidget) -> c_int;
-    //pub fn gtk_widget_set_margin_start         (widget: *mut C_GtkWidget, margin: c_int);
-    //pub fn gtk_widget_get_margin_end           (widget: *mut C_GtkWidget) -> c_int;
-    //pub fn gtk_widget_set_margin_end           (widget: *mut C_GtkWidget, margin: c_int);
-    //pub fn gtk_widget_get_margin_top           (widget: *mut C_GtkWidget) -> c_int;
-    //pub fn gtk_widget_set_margin_top           (widget: *mut C_GtkWidget, margin: c_int);
-    //pub fn gtk_widget_get_margin_bottom        (widget: *mut C_GtkWidget) -> c_int;
-    //pub fn gtk_widget_set_margin_bottom        (widget: *mut C_GtkWidget, margin: c_int);
-    //pub fn gtk_widget_get_hexpand              (widget: *mut C_GtkWidget) -> Gboolean;
-    //pub fn gtk_widget_set_hexpand              (widget: *mut C_GtkWidget, expand: Gboolean);
-    //pub fn gtk_widget_get_hexpand_set          (widget: *mut C_GtkWidget) -> Gboolean;
-    //pub fn gtk_widget_set_hexpand_set          (widget: *mut C_GtkWidget, expand: Gboolean);
-    //pub fn gtk_widget_get_vexpand              (widget: *mut C_GtkWidget) -> Gboolean;
-    //pub fn gtk_widget_set_vexpand              (widget: *mut C_GtkWidget, expand: Gboolean);
-    //pub fn gtk_widget_get_vexpand_set          (widget: *mut C_GtkWidget) -> Gboolean;
-    //pub fn gtk_widget_set_vexpand_set          (widget: *mut C_GtkWidget, expand: Gboolean);
-    //pub fn gtk_widget_queue_compute_expand     (widget: *mut C_GtkWidget);
-    //pub fn gtk_widget_compute_expand           (widget: *mut C_GtkWidget, orientation: gtk::Orientation) -> Gboolean;
-    //pub fn gtk_widget_init_template            (widget: *mut C_GtkWidget);
+    pub fn gtk_widget_get_halign               (widget: *mut C_GtkWidget) -> gtk::Align;
+    pub fn gtk_widget_set_halign               (widget: *mut C_GtkWidget, align: gtk::Align);
+    pub fn gtk_widget_get_valign               (widget: *mut C_GtkWidget) -> gtk::Align;
+    pub fn gtk_widget_get_valign_with_baseline (widget: *mut C_GtkWidget) -> gtk::Align;
+    pub fn gtk_widget_set_valign               (widget: *mut C_GtkWidget, align: gtk::Align);
+    pub fn gtk_widget_get_margin_start         (widget: *mut C_GtkWidget) -> c_int;
+    pub fn gtk_widget_set_margin_start         (widget: *mut C_GtkWidget, margin: c_int);
+    pub fn gtk_widget_get_margin_end           (widget: *mut C_GtkWidget) -> c_int;
+    pub fn gtk_widget_set_margin_end           (widget: *mut C_GtkWidget, margin: c_int);
+    pub fn gtk_widget_get_margin_top           (widget: *mut C_GtkWidget) -> c_int;
+    pub fn gtk_widget_set_margin_top           (widget: *mut C_GtkWidget, margin: c_int);
+    pub fn gtk_widget_get_margin_bottom        (widget: *mut C_GtkWidget) -> c_int;
+    pub fn gtk_widget_set_margin_bottom        (widget: *mut C_GtkWidget, margin: c_int);
+    pub fn gtk_widget_get_hexpand              (widget: *mut C_GtkWidget) -> Gboolean;
+    pub fn gtk_widget_set_hexpand              (widget: *mut C_GtkWidget, expand: Gboolean);
+    pub fn gtk_widget_get_hexpand_set          (widget: *mut C_GtkWidget) -> Gboolean;
+    pub fn gtk_widget_set_hexpand_set          (widget: *mut C_GtkWidget, expand: Gboolean);
+    pub fn gtk_widget_get_vexpand              (widget: *mut C_GtkWidget) -> Gboolean;
+    pub fn gtk_widget_set_vexpand              (widget: *mut C_GtkWidget, expand: Gboolean);
+    pub fn gtk_widget_get_vexpand_set          (widget: *mut C_GtkWidget) -> Gboolean;
+    pub fn gtk_widget_set_vexpand_set          (widget: *mut C_GtkWidget, expand: Gboolean);
+    pub fn gtk_widget_queue_compute_expand     (widget: *mut C_GtkWidget);
+    pub fn gtk_widget_compute_expand           (widget: *mut C_GtkWidget, orientation: gtk::Orientation) -> Gboolean;
+    pub fn gtk_widget_init_template            (widget: *mut C_GtkWidget);
     //pub fn gtk_widget_class_set_template       (widget_class: *mut C_GtkWidgetClass, template_bytes: *mut C_GBytes);
     //pub fn gtk_widget_class_set_template_from_resource(widget_class: *mut C_GtkWidgetClass, resource_name: *const c_char);
     //pub fn gtk_widget_get_template_child       (widget: *mut C_GtkWidget, widget_type: GType, name: *const c_char) -> *mut C_GObject;
@@ -350,23 +378,10 @@ extern "C" {
     //pub fn gtk_widget_class_bind_template_callback_full(widget_class: *mut C_GtkWidgetClass, callback_name: *const c_char, callback_symbol: GCallback);
     //pub fn gtk_widget_class_set_connect_func   (widget_class: *mut C_GtkWidgetClass, connect_func: C_GtkBuilderConnectFunc,
         //connect_data: gpointer, connect_data_destroy: C_GDestroyNotify);
-    //pub fn GtkTickCallback                     (widget: *mut C_GtkWidget, frame_clock: *mut C_GdkFrameClock, user_data: gpointer) -> Gboolean;
 
-    pub fn gtk_widget_set_margin_right         (widget: *mut C_GtkWidget, margin: c_int) -> ();
-    pub fn gtk_widget_set_margin_left          (widget: *mut C_GtkWidget, margin: c_int) -> ();
-    pub fn gtk_widget_set_margin_top           (widget: *mut C_GtkWidget, margin: c_int) -> ();
-    pub fn gtk_widget_set_margin_bottom        (widget: *mut C_GtkWidget, margin: c_int) -> ();
-    pub fn gtk_widget_get_margin_right         (widget: *mut C_GtkWidget) -> c_int;
-    pub fn gtk_widget_get_margin_left          (widget: *mut C_GtkWidget) -> c_int;
-    pub fn gtk_widget_get_margin_top           (widget: *mut C_GtkWidget) -> c_int;
-    pub fn gtk_widget_get_margin_bottom        (widget: *mut C_GtkWidget) -> c_int;
-    pub fn gtk_widget_get_allocated_width      (widget: *mut C_GtkWidget) -> c_int;
-    pub fn gtk_widget_get_allocated_height     (widget: *mut C_GtkWidget) -> c_int;
     pub fn gtk_widget_destroy                  (widget: *mut C_GtkWidget);
     pub fn gtk_widget_in_destruction           (widget: *mut C_GtkWidget) -> Gboolean;
     pub fn gtk_widget_unparent                 (widget: *mut C_GtkWidget) -> ();
-    pub fn gtk_widget_get_size_request         (widget: *mut C_GtkWidget, width: *mut c_int, height: *mut c_int) -> ();
-    pub fn gtk_widget_set_size_request         (widget: *mut C_GtkWidget, width: c_int, height: c_int) -> ();
 
     //----------
     //- MACROS -
@@ -376,6 +391,11 @@ extern "C" {
     //gtk_widget_class_bind_template_child_private(widget_class, TypeName, member_name) -> gtk_widget_class_bind_template_child_full
     //gtk_widget_class_bind_template_child_internal_private(widget_class, TypeName, member_name) -> gtk_widget_class_bind_template_child_full
     //gtk_widget_class_bind_template_callback(widget_class, callback) -> gtk_widget_class_bind_template_callback_full
+
+    //-----------
+    //-CALLBACKS-
+    //-----------
+    //pub fn C_GtkTickCallback                     (widget: *mut C_GtkWidget, frame_clock: *mut C_GdkFrameClock, user_data: gpointer) -> Gboolean;
 
     //=========================================================================
     // GtkLabel

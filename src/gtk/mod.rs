@@ -207,6 +207,8 @@ pub use self::enums::{
     scrollable_policy,
     file_filter_flags,
     app_info_create_flags,
+    size_request_mode,
+    align
 };
 
 
@@ -267,7 +269,9 @@ pub use self::enums::{
     RevealerTransitionType,
     ScrollablePolicy,
     FileFilterFlags,
-    AppInfoCreateFlags
+    AppInfoCreateFlags,
+    SizeRequestMode,
+    Align
 };
 
 /// GTK various struct
