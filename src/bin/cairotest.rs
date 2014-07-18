@@ -105,6 +105,6 @@ pub fn drawable(width: i32, height: i32, draw_fn: |cairo::Context|){
         gtk::main_quit();
         true
     }));
-    window.add(drawing_area);
+    window.add(&*drawing_area);
     window.show_all();
 }
