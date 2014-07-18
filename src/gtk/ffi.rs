@@ -165,6 +165,8 @@ extern "C" {
     //=========================================================================
     // GtkWidget                                                         NOT OK
     //=========================================================================
+    //pub fn gtk_widget_new                      (type: GType, first_property_name: *const c_char, ...) -> *mut C_GtkWidget;
+    //pub fn gtk_widget_destroyed                (widget: *mut C_GtkWidget, widget_pointer: *mut *mut C_GtkWidget);
     pub fn gtk_widget_show                     (widget: *mut C_GtkWidget);
     pub fn gtk_widget_show_now                 (widget: *mut C_GtkWidget);
     pub fn gtk_widget_show_all                 (widget: *mut C_GtkWidget);
@@ -173,7 +175,7 @@ extern "C" {
     pub fn gtk_widget_unmap                    (widget: *mut C_GtkWidget);
     pub fn gtk_widget_realize                  (widget: *mut C_GtkWidget);
     pub fn gtk_widget_unrealize                (widget: *mut C_GtkWidget);
-    //pub fn gtk_widget_draw                     (widget: *mut C_GtkWidget, cr: *mut cairo);
+    //pub fn gtk_widget_draw                     (widget: *mut C_GtkWidget, cr: *mut cairo_t);
     pub fn gtk_widget_queue_draw               (widget: *mut C_GtkWidget);
     pub fn gtk_widget_queue_resize             (widget: *mut C_GtkWidget);
     pub fn gtk_widget_queue_resize_no_redraw   (widget: *mut C_GtkWidget);
@@ -302,6 +304,54 @@ extern "C" {
     //pub fn gtk_widget_insert_action_group      (widget: *mut C_GtkWidget, name: *mut c_char, group: *mut GActionGroup);
     pub fn gtk_widget_get_opacity              (widget: *mut C_GtkWidget) -> c_double;
     pub fn gtk_widget_set_opacity              (widget: *mut C_GtkWidget, opacity: c_double);
+    //pub fn gtk_widget_get_path                 (widget: *mut C_GtkWidget) -> *mut C_GtkWidgetPath;
+    //pub fn gtk_widget_get_style_context        (widget: *mut C_GtkWidget) -> *mut C_GtkStyleContext;
+    //pub fn gtk_widget_reset_style              (widget: *mut C_GtkWidget);
+    //pub fn gtk_requisition_new                 () -> *mut C_GtkRequisition;
+    //pub fn gtk_requisition_copy                (requisition: *const C_GtkRequisition) -> *mut C_GtkRequisition;
+    //pub fn gtk_requisition_free                (requisition: *mut C_GtkRequisition);
+    //pub fn gtk_widget_get_preferred_height     (widget: *mut C_GtkWidget, minimum_height: *mut c_int, natural_height: *mut c_int);
+    //pub fn gtk_widget_get_preferred_width      (widget: *mut C_GtkWidget, minimum_width: *mut c_int, natural_width: *mut c_int);
+    //pub fn gtk_widget_get_preferred_height_for_width(widget: *mut C_GtkWidget, width: c_int, minimum_height: *mut c_int, natural_height: *mut c_int);
+    //pub fn gtk_widget_get_preferred_width_for_height(widget: *mut C_GtkWidget, height: c_int, minimum_width: *mut c_int, natural_width: *mut c_int);
+    //pub fn gtk_widget_get_preferred_height_and_baseline_for_width(widget: *mut C_GtkWidget, width: c_int, minimum_height: *mut c_int,
+        //natural_height: *mut c_int, minimum_baseline: *mut c_int, natural_baseline: *mut c_int);
+    //pub fn gtk_widget_get_request_mode         (widget: *mut C_GtkWidget) -> C_GtkSizeRequestMode;
+    //pub fn gtk_widget_get_preferred_size       (widget: *mut C_GtkWidget, minimum_size: *mut C_GtkRequisition, natural_size: *mut C_GtkRequisition);
+    //pub fn gtk_distribute_natural_allocation   (extra_space: c_int, n_requested_sizes: c_uint, sizes: *mut C_GtkRequestedSizes) -> c_int;
+    //pub fn gtk_widget_get_halign               (widget: *mut C_GtkWidget) -> C_GtkAlign;
+    //pub fn gtk_widget_set_halign               (widget: *mut C_GtkWidget, align: C_GtkAlign);
+    //pub fn gtk_widget_get_valign               (widget: *mut C_GtkWidget) -> C_GtkAlign;
+    //pub fn gtk_widget_get_valign_with_baseline (widget: *mut C_GtkWidget) -> C_GtkAlign;
+    //pub fn gtk_widget_set_valign               (widget: *mut C_GtkWidget, align: C_GtkAlign);
+    //pub fn gtk_widget_get_margin_start         (widget: *mut C_GtkWidget) -> c_int;
+    //pub fn gtk_widget_set_margin_start         (widget: *mut C_GtkWidget, margin: c_int);
+    //pub fn gtk_widget_get_margin_end           (widget: *mut C_GtkWidget) -> c_int;
+    //pub fn gtk_widget_set_margin_end           (widget: *mut C_GtkWidget, margin: c_int);
+    //pub fn gtk_widget_get_margin_top           (widget: *mut C_GtkWidget) -> c_int;
+    //pub fn gtk_widget_set_margin_top           (widget: *mut C_GtkWidget, margin: c_int);
+    //pub fn gtk_widget_get_margin_bottom        (widget: *mut C_GtkWidget) -> c_int;
+    //pub fn gtk_widget_set_margin_bottom        (widget: *mut C_GtkWidget, margin: c_int);
+    //pub fn gtk_widget_get_hexpand              (widget: *mut C_GtkWidget) -> Gboolean;
+    //pub fn gtk_widget_set_hexpand              (widget: *mut C_GtkWidget, expand: Gboolean);
+    //pub fn gtk_widget_get_hexpand_set          (widget: *mut C_GtkWidget) -> Gboolean;
+    //pub fn gtk_widget_set_hexpand_set          (widget: *mut C_GtkWidget, expand: Gboolean);
+    //pub fn gtk_widget_get_vexpand              (widget: *mut C_GtkWidget) -> Gboolean;
+    //pub fn gtk_widget_set_vexpand              (widget: *mut C_GtkWidget, expand: Gboolean);
+    //pub fn gtk_widget_get_vexpand_set          (widget: *mut C_GtkWidget) -> Gboolean;
+    //pub fn gtk_widget_set_vexpand_set          (widget: *mut C_GtkWidget, expand: Gboolean);
+    //pub fn gtk_widget_queue_compute_expand     (widget: *mut C_GtkWidget);
+    //pub fn gtk_widget_compute_expand           (widget: *mut C_GtkWidget, orientation: gtk::Orientation) -> Gboolean;
+    //pub fn gtk_widget_init_template            (widget: *mut C_GtkWidget);
+    //pub fn gtk_widget_class_set_template       (widget_class: *mut C_GtkWidgetClass, template_bytes: *mut C_GBytes);
+    //pub fn gtk_widget_class_set_template_from_resource(widget_class: *mut C_GtkWidgetClass, resource_name: *const c_char);
+    //pub fn gtk_widget_get_template_child       (widget: *mut C_GtkWidget, widget_type: GType, name: *const c_char) -> *mut C_GObject;
+    //pub fn gtk_widget_class_bind_template_child_full(widget_class: *mut C_GtkWidgetClass, name: *const c_char, internal_child: Gboolean, struct_offset: gssize);
+    //pub fn gtk_widget_class_bind_template_callback_full(widget_class: *mut C_GtkWidgetClass, callback_name: *const c_char, callback_symbol: GCallback);
+    //pub fn gtk_widget_class_set_connect_func   (widget_class: *mut C_GtkWidgetClass, connect_func: C_GtkBuilderConnectFunc,
+        //connect_data: gpointer, connect_data_destroy: C_GDestroyNotify);
+    //pub fn GtkTickCallback                     (widget: *mut C_GtkWidget, frame_clock: *mut C_GdkFrameClock, user_data: gpointer) -> Gboolean;
+
     pub fn gtk_widget_set_margin_right         (widget: *mut C_GtkWidget, margin: c_int) -> ();
     pub fn gtk_widget_set_margin_left          (widget: *mut C_GtkWidget, margin: c_int) -> ();
     pub fn gtk_widget_set_margin_top           (widget: *mut C_GtkWidget, margin: c_int) -> ();
@@ -317,6 +367,15 @@ extern "C" {
     pub fn gtk_widget_unparent                 (widget: *mut C_GtkWidget) -> ();
     pub fn gtk_widget_get_size_request         (widget: *mut C_GtkWidget, width: *mut c_int, height: *mut c_int) -> ();
     pub fn gtk_widget_set_size_request         (widget: *mut C_GtkWidget, width: c_int, height: c_int) -> ();
+
+    //----------
+    //- MACROS -
+    //----------
+    //gtk_widget_class_bind_template_child(widget_class, TypeName, member_name) -> gtk_widget_class_bind_template_child_full
+    //gtk_widget_class_bind_template_child_internal(widget_class, TypeName, member_name) -> gtk_widget_class_bind_template_child_full
+    //gtk_widget_class_bind_template_child_private(widget_class, TypeName, member_name) -> gtk_widget_class_bind_template_child_full
+    //gtk_widget_class_bind_template_child_internal_private(widget_class, TypeName, member_name) -> gtk_widget_class_bind_template_child_full
+    //gtk_widget_class_bind_template_callback(widget_class, callback) -> gtk_widget_class_bind_template_callback_full
 
     //=========================================================================
     // GtkLabel
