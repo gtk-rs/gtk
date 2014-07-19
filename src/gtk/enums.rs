@@ -83,6 +83,8 @@ pub use self::revealer_transition_type::RevealerTransitionType;
 pub use self::scrollable_policy::ScrollablePolicy;
 pub use self::file_filter_flags::FileFilterFlags;
 pub use self::app_info_create_flags::AppInfoCreateFlags;
+pub use self::size_request_mode::SizeRequestMode;
+pub use self::align::Align;
 
 pub mod window_type{
     #[repr(C)]
@@ -1120,5 +1122,37 @@ pub mod app_info_create_flags {
         SupportsUris,
         /// Application supports startup notification.
         SupportsStartupNotification
+    }
+}
+
+/// Specifies a preference for height-for-width or width-for-height geometry management.
+pub mod size_request_mode {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum SizeRequestMode {
+        /// Prefer height-for-width geometry management
+        HeightForWidth,
+        /// Prefer width-for-height geometry management
+        WidthForHeight,
+        /// Don’t trade height-for-width or width-for-height
+        ConstantSize
+    }
+}
+
+/// Controls how a widget deals with extra space in a single (x or y) dimension.
+pub mod align {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum Align {
+        /// stretch to fill all space if possible, center if no meaningful way to stretch
+        Fill,
+        /// snap to left or top side, leaving space on right or bottom
+        Start,
+        /// snap to right or bottom side, leaving space on left or top
+        End,
+        /// center natural width of widget inside the allocation
+        Center,
+        /// align the widget according to the baseline.
+        AlignBaseline
     }
 }

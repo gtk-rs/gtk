@@ -112,10 +112,6 @@ pub trait Widget: ffi::FFIWidget {
         }
     }
 
-    fn set_state(&self, state: enums::StateType) {
-        unsafe { ffi::gtk_widget_set_state(self.get_widget(), state) }
-    }
-
     fn set_sensitive(&self, sensitive: bool) {
         unsafe { ffi::gtk_widget_set_sensitive(self.get_widget(), match sensitive {
             true => ffi::Gtrue,
@@ -647,18 +643,6 @@ pub trait Widget: ffi::FFIWidget {
         unsafe { ffi::gtk_widget_get_opacity(self.get_widget()) }
     }
 
-    fn set_margin_right(&mut self, margin: i32) -> () {
-        unsafe {
-            ffi::gtk_widget_set_margin_right(self.get_widget(), margin as c_int)
-        }
-    }
-
-    fn set_margin_left(&mut self, margin: i32) -> () {
-        unsafe {
-            ffi::gtk_widget_set_margin_left(self.get_widget(), margin as c_int)
-        }
-    }
-
     fn set_margin_top(&mut self, margin: i32) -> () {
         unsafe {
             ffi::gtk_widget_set_margin_top(self.get_widget(), margin as c_int)
@@ -668,18 +652,6 @@ pub trait Widget: ffi::FFIWidget {
     fn set_margin_bottom(&mut self, margin: i32) -> () {
         unsafe {
             ffi::gtk_widget_set_margin_bottom(self.get_widget(), margin as c_int)
-        }
-    }
-
-    fn get_margin_right(&mut self) -> i32 {
-        unsafe {
-            ffi::gtk_widget_get_margin_right(self.get_widget()) as i32
-        }
-    }
-
-    fn get_margin_left(&mut self) -> i32 {
-        unsafe {
-            ffi::gtk_widget_get_margin_left(self.get_widget()) as i32
         }
     }
 
@@ -715,15 +687,196 @@ pub trait Widget: ffi::FFIWidget {
         }
     }
 
-    fn get_allocated_width(&self) -> i32{
+    fn get_allocated_width(&self) -> i32 {
         unsafe{
             ffi::gtk_widget_get_allocated_width(self.get_widget()) as i32
         }
     }
 
-    fn get_allocated_height(&self) -> i32{
+    fn get_allocated_height(&self) -> i32 {
         unsafe{
             ffi::gtk_widget_get_allocated_height(self.get_widget()) as i32
         }
+    }
+
+    fn reset_style(&self) {
+        unsafe { ffi::gtk_widget_reset_style(self.get_widget()) }
+    }
+
+    fn get_preferred_height(&self) -> (i32, i32) {
+        let mut minimum_height = 0i32;
+        let mut natural_height = 0i32;
+
+        unsafe { ffi::gtk_widget_get_preferred_height(self.get_widget(), &mut minimum_height, &mut natural_height); }
+        (minimum_height, natural_height)
+    }
+
+    fn get_preferred_width(&self) -> (i32, i32) {
+        let mut minimum_width = 0i32;
+        let mut natural_width = 0i32;
+
+        unsafe { ffi::gtk_widget_get_preferred_width(self.get_widget(), &mut minimum_width, &mut natural_width); }
+        (minimum_width, natural_width)
+    }
+
+    fn get_preferred_height_for_width(&self, width: i32) -> (i32, i32) {
+        let mut minimum_height = 0i32;
+        let mut natural_height = 0i32;
+
+        unsafe { ffi::gtk_widget_get_preferred_height_for_width(self.get_widget(), width, &mut minimum_height, &mut natural_height) };
+        (minimum_height, natural_height)
+    }
+
+    fn get_preferred_width_for_height(&self, height: i32) -> (i32, i32) {
+        let mut minimum_width = 0i32;
+        let mut natural_width = 0i32;
+
+        unsafe { ffi::gtk_widget_get_preferred_width_for_height(self.get_widget(), height, &mut minimum_width, &mut natural_width) };
+        (minimum_width, natural_width)
+    }
+    
+    fn get_preferred_height_and_baseline_for_width(&self, width: i32) -> (i32, i32, i32, i32) {
+        let mut minimum_height = 0i32;
+        let mut natural_height = 0i32;
+        let mut minimum_baseline = 0i32;
+        let mut natural_baseline = 0i32;
+
+        unsafe { ffi::gtk_widget_get_preferred_height_and_baseline_for_width(self.get_widget(), width, &mut minimum_height,
+            &mut natural_height, &mut minimum_baseline, &mut natural_baseline) };
+
+        (minimum_height, natural_height, minimum_baseline, natural_baseline)
+    }
+
+    fn get_request_mode(&self) -> gtk::SizeRequestMode {
+        unsafe { ffi::gtk_widget_get_request_mode(self.get_widget()) }
+    }
+
+    fn get_halign(&self) -> gtk::Align {
+        unsafe { ffi::gtk_widget_get_halign(self.get_widget()) }
+    }
+
+    fn set_halign(&self, align: gtk::Align) {
+        unsafe { ffi::gtk_widget_set_halign(self.get_widget(), align) }
+    }
+
+    fn get_valign(&self) -> gtk::Align {
+        unsafe { ffi::gtk_widget_get_valign(self.get_widget()) }
+    }
+
+    fn get_valign_with_baseline(&self) -> gtk::Align {
+        unsafe { ffi::gtk_widget_get_valign_with_baseline(self.get_widget()) }
+    }
+
+    fn set_valign(&self, align: gtk::Align) {
+        unsafe { ffi::gtk_widget_set_valign(self.get_widget(), align) }
+    }
+
+    fn get_margin_start(&self) -> i32 {
+        unsafe { ffi::gtk_widget_get_margin_start(self.get_widget()) }
+    }
+
+    fn set_margin_start(&self, margin: i32) {
+        unsafe { ffi::gtk_widget_set_margin_start(self.get_widget(), margin) }
+    }
+
+    fn get_margin_end(&self) -> i32 {
+        unsafe { ffi::gtk_widget_get_margin_end(self.get_widget()) }
+    }
+
+    fn set_margin_end(&self, margin: i32) {
+        unsafe { ffi::gtk_widget_set_margin_end(self.get_widget(), margin) }
+    }
+
+    fn get_hexpand(&self) -> bool {
+        match unsafe { ffi::gtk_widget_get_hexpand(self.get_widget()) } {
+            ffi::Gtrue => true,
+            _ => false
+        }
+    }
+
+    fn set_hexpand(&self, expand: bool) {
+        unsafe { ffi::gtk_widget_set_hexpand(self.get_widget(), match expand {
+            true => ffi::Gtrue,
+            false => ffi::Gfalse
+        }) }
+    }
+
+    fn get_hexpand_set(&self) -> bool {
+        match unsafe { ffi::gtk_widget_get_hexpand_set(self.get_widget()) } {
+            ffi::Gtrue => true,
+            _ => false
+        }
+    }
+
+    fn set_hexpand_set(&self, expand: bool) {
+        unsafe { ffi::gtk_widget_set_hexpand_set(self.get_widget(), match expand {
+            true => ffi::Gtrue,
+            false => ffi::Gfalse
+        }) }
+    }
+
+    fn get_vexpand(&self) -> bool {
+        match unsafe { ffi::gtk_widget_get_vexpand(self.get_widget()) } {
+            ffi::Gtrue => true,
+            _ => false
+        }
+    }
+
+    fn set_vexpand(&self, expand: bool) {
+        unsafe { ffi::gtk_widget_set_vexpand(self.get_widget(), match expand {
+            true => ffi::Gtrue,
+            false => ffi::Gfalse
+        }) }
+    }
+
+    fn get_vexpand_set(&self) -> bool {
+        match unsafe { ffi::gtk_widget_get_vexpand_set(self.get_widget()) } {
+            ffi::Gtrue => true,
+            _ => false
+        }
+    }
+
+    fn set_vexpand_set(&self, expand: bool) {
+        unsafe { ffi::gtk_widget_set_vexpand_set(self.get_widget(), match expand {
+            true => ffi::Gtrue,
+            false => ffi::Gfalse
+        }) }
+    }
+
+    fn queue_compute_expand(&self) {
+        unsafe { ffi::gtk_widget_queue_compute_expand(self.get_widget()) }
+    }
+
+    fn compute_expand(&self, orientation: gtk::Orientation) -> bool {
+        match unsafe { ffi::gtk_widget_compute_expand(self.get_widget(), orientation) } {
+            ffi::Gtrue => true,
+            _ => false
+        }
+    }
+
+    fn init_template(&self) {
+        unsafe { ffi::gtk_widget_init_template(self.get_widget()) }
+    }
+
+    fn thaw_child_notify(&self) {
+        unsafe { ffi::gtk_widget_thaw_child_notify(self.get_widget()) }
+    }
+
+    fn freeze_child_notify(&self) {
+        unsafe { ffi::gtk_widget_freeze_child_notify(self.get_widget()) }
+    }
+
+    fn child_notify(&self, child_property: &str) {
+        unsafe { 
+            child_property.with_c_str(|c_str| {
+                ffi::gtk_widget_child_notify(self.get_widget(), c_str)
+            })
+        }
+    }
+
+    fn destroyed(&self, other: &Self) {
+        let mut tmp = other.get_widget();
+
+        unsafe { ffi::gtk_widget_destroyed(self.get_widget(), &mut tmp) }
     }
 }
