@@ -671,7 +671,7 @@ pub trait Widget: ffi::FFIWidget {
         use std::mem::transmute;
 
         unsafe {
-            let signal_name     = signal.get_signal_name();
+            let signal_name     = signal.get_signal_name().to_string();
             let trampoline      = signal.get_trampoline();
 
             let user_data_ptr   = transmute(box signal);
