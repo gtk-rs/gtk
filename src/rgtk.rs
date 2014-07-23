@@ -68,6 +68,7 @@ pub use GtkDialogTrait          = gtk::traits::Dialog;
 pub use GtkColorChooserTrait    = gtk::traits::ColorChooser;
 pub use GtkScrollableTrait      = gtk::traits::Scrollable;
 pub use GtkFileChooserTrait     = gtk::traits::FileChooser;
+pub use GtkFontChooserTrait     = gtk::traits::FontChooser;
 pub use GtkAppChooserTrait      = gtk::traits::AppChooser;
 
 #[doc(hidden)]

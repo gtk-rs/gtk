@@ -35,6 +35,7 @@ pub use self::colorchooser::ColorChooser;
 pub use self::scrollable::Scrollable;
 pub use self::filechooser::FileChooser;
 pub use self::appchooser::AppChooser;
+pub use self::fontchooser::FontChooser;
 
 pub mod widget;
 pub mod container;
@@ -58,3 +59,4 @@ pub mod colorchooser;
 pub mod scrollable;
 pub mod filechooser;
 pub mod appchooser;
+pub mod fontchooser;

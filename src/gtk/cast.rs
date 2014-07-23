@@ -278,6 +278,14 @@ pub fn GTK_APP_CHOOSER_DIALOG(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkA
     unsafe{ ffi::cast_GtkAppChooserDialog(widget) }
 }
 
+pub fn GTK_FONT_CHOOSER(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkFontChooser {
+    unsafe{ ffi::cast_GtkFontChooser(widget) }
+}
+
+pub fn GTK_FONT_CHOOSER_DIALOG(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkFontChooserDialog {
+    unsafe{ ffi::cast_GtkFontChooserDialog(widget) }
+}
+
 pub fn GTK_APP_INFO(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GAppInfo {
     unsafe{ ffi::cast_GtkAppInfo(widget) }
 }

@@ -357,6 +357,14 @@ GtkLevelBar* cast_GtkLevelBar(GtkWidget* widget) {
     return GTK_LEVEL_BAR(widget);
 }
 
+GtkFontChooserDialog* cast_GtkFontChooserDialog(GtkWidget* widget) {
+    return GTK_FONT_CHOOSER_DIALOG(widget);
+}
+
+GtkFontChooser* cast_GtkFontChooser(GtkWidget* widget) {
+    return GTK_FONT_CHOOSER(widget);
+}
+
 /* specific versions */
 
 #ifdef GTK_3_6
