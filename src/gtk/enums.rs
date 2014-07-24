@@ -85,6 +85,8 @@ pub use self::file_filter_flags::FileFilterFlags;
 pub use self::app_info_create_flags::AppInfoCreateFlags;
 pub use self::size_request_mode::SizeRequestMode;
 pub use self::align::Align;
+pub use self::g_connect_flags::GConnectFlags;
+pub use self::builder_error::BuilderError;
 
 pub mod window_type{
     #[repr(C)]
@@ -1154,5 +1156,47 @@ pub mod align {
         Center,
         /// align the widget according to the baseline.
         AlignBaseline
+    }
+}
+
+/// The connection flags are used to specify the behaviour of a signal's connection.
+pub mod g_connect_flags {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum GConnectFlags {
+        /// whether the handler should be called before or after the default handler of the signal.
+        After,
+        /// whether the instance and data should be swapped when calling the handler; see g_signal_connect_swapped() for an example.
+        Swapped
+    }
+}
+
+/// Error codes that identify various errors that can occur while using GtkBuilder.
+pub mod builder_error {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum BuilderError {
+        /// A type-func attribute didn’t name a function that returns a GType.
+        InvalidTypeFunction,
+        /// The input contained a tag that GtkBuilder can’t handle.
+        UnhandledTag,
+        /// An attribute that is required by GtkBuilder was missing.
+        MissingAttribute,
+        /// GtkBuilder found an attribute that it doesn’t understand.
+        InvalidAttribute,
+        /// GtkBuilder found a tag that it doesn’t understand.
+        InvalidTag,
+        /// A required property value was missing.
+        MissingPropertyValue,
+        /// GtkBuilder couldn’t parse some attribute value.
+        InvalidValue,
+        /// The input file requires a newer version of GTK+.
+        VersionMismatch,
+        /// An object id occurred twice.
+        DuplicateID,
+        /// A specified object type is of the same type or derived from the type of the composite class being extended with builder XML.
+        ObjectTypeRefused,
+        /// The wrong type was specified in a composite class’s template XML
+        TemplateMismatch
     }
 }

@@ -104,6 +104,7 @@ pub use self::widgets::{
     Dialog,
     AboutDialog,
     ColorChooserDialog,
+    FontChooserDialog,
     MessageDialog,
     NoteBook,
     Overlay,
@@ -208,7 +209,9 @@ pub use self::enums::{
     file_filter_flags,
     app_info_create_flags,
     size_request_mode,
-    align
+    align,
+    g_connect_flags,
+    builder_error
 };
 
 
@@ -271,7 +274,9 @@ pub use self::enums::{
     FileFilterFlags,
     AppInfoCreateFlags,
     SizeRequestMode,
-    Align
+    Align,
+    GConnectFlags,
+    BuilderError
 };
 
 /// GTK various struct

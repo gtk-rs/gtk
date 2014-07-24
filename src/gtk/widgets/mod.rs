@@ -25,6 +25,7 @@ pub use self::separator::Separator;
 pub use self::fontbutton::FontButton;
 pub use self::togglebutton::ToggleButton;
 pub use self::checkbutton::CheckButton;
+pub use self::fontchooserdialog::FontChooserDialog;
 #[cfg(GTK_3_6)]
 #[cfg(GTK_3_8)]
 #[cfg(GTK_3_10)]
@@ -159,6 +160,7 @@ mod dialog;
 mod aboutdialog;
 mod widget;
 mod colorchooserdialog;
+mod fontchooserdialog;
 mod messagedialog;
 mod notebook;
 #[cfg(GTK_3_10)]

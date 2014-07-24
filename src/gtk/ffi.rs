@@ -96,6 +96,9 @@ pub struct C_GtkFileFilter;
 pub struct C_GtkAppChooser;
 pub struct C_GAppLaunchContext;
 pub struct C_GAppInfo;
+pub struct C_GtkFontChooser;
+pub struct C_GtkFontChooserDialog;
+pub struct C_GtkBuildable;
 
 pub struct C_GtkToolItem;
 pub struct C_GtkToolButton;
@@ -111,6 +114,8 @@ pub struct C_GClosure;
 
 pub struct C_GtkColorChooser;
 
+// not useful to implement for the moment
+pub struct C_GtkBuilder;
 
 pub fn to_gboolean(b: bool) -> Gboolean{
     match b {
@@ -584,6 +589,31 @@ extern "C" {
         type1: gtk::ResponseType, button_text2: *const c_char, type2: gtk::ResponseType, end: *mut c_void) -> *mut C_GtkWidget;
 
     //=========================================================================
+    // GtkFontChooser                                                    NOT OK
+    //=========================================================================
+    //pub fn gtk_font_chooser_get_font_family    (font_chooser: *mut C_GtkFontChooser) -> *mut PangoFontFamily;
+    //pub fn gtk_font_chooser_get_font_face      (font_chooser: *mut C_GtkFontChooser) -> *mut PangoFontFace;
+    pub fn gtk_font_chooser_get_font_size      (font_chooser: *mut C_GtkFontChooser) -> c_int;
+    pub fn gtk_font_chooser_get_font           (font_chooser: *mut C_GtkFontChooser) -> *mut c_char;
+    pub fn gtk_font_chooser_set_font           (font_chooser: *mut C_GtkFontChooser, font_name: *mut c_char);
+    //pub fn gtk_font_chooser_get_font_desc      (font_chooser: *mut C_GtkFontChooser) -> *mut PangoFontDescription;
+    //pub fn gtk_font_chooser_set_font_desc      (font_chooser: *mut C_GtkFontChooser, font_desc: *const PangoFontDescription;
+    pub fn gtk_font_chooser_get_preview_text   (font_chooser: *mut C_GtkFontChooser) -> *mut c_char;
+    pub fn gtk_font_chooser_set_preview_text   (font_chooser: *mut C_GtkFontChooser, text: *const c_char);
+    pub fn gtk_font_chooser_get_show_preview_entry(font_chooser: *mut C_GtkFontChooser) -> Gboolean;
+    pub fn gtk_font_chooser_set_show_preview_entry(font_chooser: *mut C_GtkFontChooser, show_preview_entry: Gboolean);
+    //pub fn gtk_font_chooser_set_filter_func    (font_chooser: *mut C_GtkFontChooser, filter: GtkFontFilterFunc, user_data: *mut c_void,
+        //destroy: C_GDestroyNotify);
+
+    //function pointer
+    //let GtkFontFilterFunc = fn(family: *const PangoFontFamily, face: *const PangoFontFace, data: *mut c_void) -> Gboolean;
+
+    //=========================================================================
+    // GtkFontChooserDialog                                              NOT OK
+    //=========================================================================
+    pub fn gtk_font_chooser_dialog_new         (title: *const c_char, parent: *mut C_GtkWindow) -> *mut C_GtkWidget;
+
+    //=========================================================================
     // GtkColorChooser                                                       OK
     //=========================================================================
     pub fn gtk_color_chooser_get_rgba          (chooser: *mut C_GtkColorChooser, color: *const gdk::RGBA) -> ();
@@ -645,6 +675,23 @@ extern "C" {
     //pub fn g_app_info_get_fallback_for_type    (content_type: *c_char) -> *mut glib::ffi::C_GList;
     //pub fn g_app_info_get_recommended_for_type (content_type: *c_char) -> *mut glib::ffi::C_GList;
     pub fn g_app_info_launch_default_for_uri   (uri: *c_char, launch_context: *mut C_GAppLaunchContext, error: *mut *mut glib::ffi::C_GError) -> Gboolean;*/
+
+    //=========================================================================
+    // GtkBuildable                                                      NOT OK
+    //=========================================================================
+    pub fn gtk_buildable_set_name              (buildable: *mut C_GtkBuildable, name: *const c_char);
+    pub fn gtk_buildable_get_name              (buildable: *mut C_GtkBuildable) -> *const c_char;
+    //pub fn gtk_buildable_add_child             (buildable: *mut C_GtkBuildable, builder: *mut C_GtkBuilder, child: *mut C_GObject, _type: *const c_char);
+    //pub fn gtk_buildable_set_buildable_property(buildable: *mut C_GtkBuildable, builder: *mut C_GtkBuilder, name: *const c_char, value: *const C_GValue);
+    //pub fn gtk_buildable_construct_child       (buildable: *mut C_GtkBuildable, builder: *mut C_GtkBuilder, name: *const c_char) -> *mut C_GObject;
+    //pub fn gtk_buildable_custom_tag_start      (buildable: *mut C_GtkBuildable, builder: *mut C_GtkBuilder, child: *mut C_GObject, tag_name: *const c_char,
+        //parser: *mut C_GMarkupParser, data: *mut c_void) -> Gboolean;
+    //pub fn gtk_buildable_custom_tag_end        (buildable: *mut C_GtkBuildable, builder: *mut C_GtkBuilder, child: *mut C_GObject, tag_name: *const c_char,
+        //data: *mut c_void);
+    //pub fn gtk_buildable_custom_tag_finished   (buildable: *mut C_GtkBuildable, builder: *mut C_GtkBuilder, child: *mut C_GObject, tag_name: *const c_char,
+        //data: *mut c_void);
+    pub fn gtk_buildable_parser_finished       (buildable: *mut C_GtkBuildable, builder: *mut C_GtkBuilder);
+    pub fn gtk_buildable_get_internal_child    (buildable: *mut C_GtkBuildable, builder: *mut C_GtkBuilder, child_name: *const c_char);
 
     //=========================================================================
     // GtkAppChooser                                                         OK
@@ -1571,7 +1618,6 @@ extern "C" {
     pub fn gtk_list_box_drag_unhighlight_row         (list_box: *mut C_GtkListBox);
     pub fn gtk_list_box_drag_highlight_row           (list_box: *mut C_GtkListBox, row: *mut C_GtkListBoxRow);
 
-
     //=========================================================================
     // GtkListBoxRow                                                         OK
     //=========================================================================
@@ -1608,6 +1654,44 @@ extern "C" {
                                  data: gpointer,
                                  destroy_data: Option<extern "C" fn(gpointer, *const C_GClosure)>,
                                  connect_flags: i32);
+
+
+    // Not useful to implement but functions are declared at least...
+    //=========================================================================
+    // GtkBuilder                                                        NOT OK
+    //=========================================================================
+    //pub fn gtk_builder_new                     () -> *mut C_GtkBuilder;
+    //pub fn gtk_builder_new_from_file           (file_name: *const c_char) -> *mut C_GtkBuilder;
+    //pub fn gtk_builder_new_from_resource       (resource_path: *const c_char) -> *mut C_GtkBuilder;
+    //pub fn gtk_builder_new_from_string         (string: *const c_char, length: c_long) -> *mut C_GtkBuilder;
+    //pub fn gtk_builder_add_callback_symbol     (builder: *mut C_GtkBuilder, callback_name: *const c_char, callback_symbol: GCallback);
+    //pub fn gtk_builder_add_callback_symbols    (builder: *mut C_GtkBuilder, callback_name: *const c_char, first_callback_symbol: GCallback, ...);
+    //pub fn gtk_builder_lookup_callback_symbol  (builder: *mut C_GtkBuilder, callback_name: *const c_char) -> GCallback;
+    //pub fn gtk_builder_add_from_file           (builder: *mut C_GtkBuilder, file_name: *const c_char, error: *mut *mut C_GError) -> c_uint;
+    //pub fn gtk_builder_add_from_resource       (builder: *mut C_GtkBuilder, resource_name: *const c_char, error: *mut *mut C_GError) -> c_uint;
+    //pub fn gtk_builder_add_from_string         (builder: *mut C_GtkBuilder, buffer: *const c_char, length: c_long, error: *mut *mut C_GError) -> c_uint;
+    //pub fn gtk_builder_add_objects_from_file   (builder: *mut C_GtkBuilder, file_name: *const c_char, object_ids: *mut *mut c_char, error: *mut *mut C_GError) -> c_uint;
+    //pub fn gtk_builder_add_objects_from_string (builder: *mut C_GtkBuilder, buffer: *const c_char, length: c_long, object_ids: *mut *mut c_char, error: *mut *mut C_GError) -> c_uint;
+    //pub fn gtk_builder_add_objects_from_resource(builder: *mut C_GtkBuilder, resource_name: *const c_char, object_ids: *mut *mut c_char, error: *mut *mut C_GError) -> c_uint;
+    //pub fn gtk_builder_get_object              (builder: *mut C_GtkBuilder, name: *const c_char) -> *mut C_GObject;
+    //pub fn gtk_builder_get_objects             (builder: *mut C_GtkBuilder) -> *mut GSList;
+    //pub fn gtk_builder_expose_object           (builder: *mut C_GtkBuilder, name: *const c_char, object: *mut C_GObject);
+    //pub fn gtk_builder_connect_signals         (builder: *mut C_GtkBuilder, user_data: *mut c_void);
+    //pub fn gtk_builder_connect_signals_full    (builder: *mut C_GtkBuilder, func: GtkBuilderConnectFunc, user_data: *mut c_void);
+    //pub fn gtk_builder_set_translation_domain  (builder: *mut C_GtkBuilder, domain: *const c_char);
+    //pub fn gtk_builder_get_translation_domain  (builder: *mut C_GtkBuilder) -> *const c_char;
+    //pub fn gtk_builder_set_application         (builder: *mut C_GtkBuilder, application: *mut C_GtkApplication);
+    //pub fn gtk_builder_get_application         (builder: *mut C_GtkBuilder) -> *mut C_GtkApplication;
+    //pub fn gtk_builder_get_type_from_name      (builder: *mut C_GtkBuilder, type_name: *const c_char) -> GType;
+    //pub fn gtk_builder_value_from_string       (builder: *mut C_GtkBuilder, pspec: *mut C_GParamSpec, string: *const c_char, value: *mut GValue,
+        //error: *mut *mut C_GError) -> Gboolean;
+    //pub fn gtk_builder_value_from_string_type  (builder: *mut C_GtkBuilder, _type: GType, string: *const c_char, value: *mut GValue,
+        //error: *mut *mut C_GError) -> Gboolean;
+
+    //function pointer
+    //let GtkBuilderConnectFunc = fn(builder: *mut C_GtkBuilder, object: *mut C_GObject, signal_name: *const c_char, handler_name: *const c_char,
+        //connect_object: *mut C_GObject, flags: gtk::GConnectFlags, user_data: *mut c_void);
+
 
     //=========================================================================
     // GTK Casts functions
@@ -1679,4 +1763,6 @@ extern "C" {
     pub fn cast_GtkAppChooserDialog(widget: *mut C_GtkWidget) -> *mut C_GtkAppChooserDialog;
     pub fn cast_GtkAppInfo(widget: *mut C_GtkWidget) -> *mut C_GAppInfo;
     pub fn cast_GtkAppLaunchContext(widget: *mut C_GtkWidget) -> *mut C_GAppLaunchContext;
+    pub fn cast_GtkFontChooserDialog(widget: *mut C_GtkWidget) -> *mut C_GtkFontChooserDialog;
+    pub fn cast_GtkFontChooser(widget: *mut C_GtkWidget) -> *mut C_GtkFontChooser;
 }
