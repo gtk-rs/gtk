@@ -94,7 +94,6 @@ pub use self::flow_box::{FlowBox, FlowBoxChild};
 pub use self::list_box::{ListBox, ListBoxRow};
 #[cfg(GTK_3_12)]
 pub use self::action_bar::ActionBar;
-pub use self::widget::Widget;
 pub use self::filefilter::FileFilter;
 pub use self::filechooserdialog::FileChooserDialog;
 pub use self::appinfo::AppInfo;
@@ -158,7 +157,6 @@ mod toggletoolbutton;
 mod menutoolbutton;
 mod dialog;
 mod aboutdialog;
-mod widget;
 mod colorchooserdialog;
 mod fontchooserdialog;
 mod messagedialog;

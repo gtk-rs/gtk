@@ -55,7 +55,7 @@ pub trait Dialog: traits::Widget + traits::Container + traits::Bin + traits::Win
         ret
     }
 
-    fn add_action_widget(&self, child: &gtk::Widget, response_id: i32) -> () {
+    fn add_action_widget(&self, child: &traits::Widget, response_id: i32) -> () {
         unsafe { ffi::gtk_dialog_add_action_widget(GTK_DIALOG(self.get_widget()), child.get_widget(), response_id) }
     }
 
@@ -68,7 +68,7 @@ pub trait Dialog: traits::Widget + traits::Container + traits::Bin + traits::Win
         unsafe { ffi::gtk_dialog_set_response_sensitive(GTK_DIALOG(self.get_widget()), response_id, setting) }
     }
 
-    fn get_response_for_widget(&self, widget: &gtk::Widget) -> Result<i32, enums::ResponseType> {
+    fn get_response_for_widget(&self, widget: &traits::Widget) -> Result<i32, enums::ResponseType> {
         let tmp = unsafe { ffi::gtk_dialog_get_response_for_widget(GTK_DIALOG(self.get_widget()), widget.get_widget()) };
 
         if tmp < 0 {
@@ -78,44 +78,44 @@ pub trait Dialog: traits::Widget + traits::Container + traits::Bin + traits::Win
         }
     }
 
-    fn get_widget_for_reponse(&self, response_id: i32) -> Option<gtk::Widget> {
+    fn get_widget_for_reponse<T: traits::Widget>(&self, response_id: i32) -> Option<T> {
         let tmp_pointer = unsafe { ffi::gtk_dialog_get_widget_for_response(GTK_DIALOG(self.get_widget()), response_id) };
 
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::Widget::wrap(tmp_pointer))
+            Some(ffi::FFIWidget::wrap(tmp_pointer))
         }
     }
 
-    fn get_action_area(&self) -> Option<gtk::Widget> {
+    fn get_action_area<T: traits::Widget>(&self) -> Option<T> {
         let tmp_pointer = unsafe { ffi::gtk_dialog_get_action_area(GTK_DIALOG(self.get_widget())) };
 
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::Widget::wrap(tmp_pointer))
+            Some(ffi::FFIWidget::wrap(tmp_pointer))
         }
     }
 
-    fn get_content_area(&self) -> Option<gtk::Widget> {
+    fn get_content_area<T: traits::Widget>(&self) -> Option<T> {
         let tmp_pointer = unsafe { ffi::gtk_dialog_get_content_area(GTK_DIALOG(self.get_widget())) };
 
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::Widget::wrap(tmp_pointer))
+            Some(ffi::FFIWidget::wrap(tmp_pointer))
         }
     }
 
     #[cfg(GTK_3_12)]
-    fn get_header_bar(&self) -> Option<gtk::Widget> {
+    fn get_header_bar<T: traits::Widget>(&self) -> Option<T> {
         let tmp_pointer = unsafe { ffi::gtk_dialog_get_header_bar(GTK_DIALOG(self.get_widget())) };
 
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::Widget::wrap(tmp_pointer))
+            Some(ffi::FFIWidget::wrap(tmp_pointer))
         }
     }
 }

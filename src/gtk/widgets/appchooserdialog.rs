@@ -40,13 +40,13 @@ impl AppChooserDialog {
         }
     }
 
-    pub fn widget(&self) -> Option<gtk::Widget> {
+    pub fn widget<T: traits::Widget>(&self) -> Option<T> {
         let tmp_pointer = unsafe { ffi::gtk_app_chooser_dialog_get_widget(GTK_APP_CHOOSER_DIALOG(self.get_widget())) };
 
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::Widget::wrap(tmp_pointer))
+            Some(ffi::FFIWidget::wrap(tmp_pointer))
         }
     }
 
