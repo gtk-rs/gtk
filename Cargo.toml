@@ -2,14 +2,9 @@
 name = "rgtk"
 version = "0.0.1"
 authors = ["letang.jeremy@gmail.com", "mathijs.henquet@gmail.com", "guillaume1.gomez@gmail.com"]
-build = "make glue"
+build = "./cargobuild.sh"
 
 [[lib]]
 name = "rgtk"
 crate-type = ["rlib"]
-
-[[bin]]
-name = "gtktest"
-
-[[bin]]
-name ="cairotest"
+path = "src/rgtk.rs"
