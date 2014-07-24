@@ -99,7 +99,7 @@ pub struct C_GAppInfo;
 pub struct C_GtkFontChooser;
 pub struct C_GtkFontChooserDialog;
 pub struct C_GtkBuildable;
-pub struct C_GtkPageSetupUnixDialog;
+//pub struct C_GtkPageSetupUnixDialog;
 pub struct C_GtkPrintSettings;
 pub struct C_GtkPageSetup;
 pub struct C_GtkPaperSize;
@@ -671,7 +671,7 @@ extern "C" {
     pub fn gtk_print_settings_get_orientation  (settings: *mut C_GtkPrintSettings) -> gtk::PageOrientation;
     pub fn gtk_print_settings_set_orientation  (settings: *mut C_GtkPrintSettings, orientation: gtk::PageOrientation);
     pub fn gtk_print_settings_get_paper_size   (settings: *mut C_GtkPrintSettings) -> *mut C_GtkPaperSize;
-    pub fn gtk_print_settings_get_paper_size   (settings: *mut C_GtkPrintSettings, paper_size: *mut C_GtkPaperSize);
+    pub fn gtk_print_settings_set_paper_size   (settings: *mut C_GtkPrintSettings, paper_size: *mut C_GtkPaperSize);
     pub fn gtk_print_settings_get_paper_width  (settings: *mut C_GtkPrintSettings, unit: gtk::Unit) -> c_double;
     pub fn gtk_print_settings_set_paper_width  (settings: *mut C_GtkPrintSettings, width: c_double, unit: gtk::Unit);
     pub fn gtk_print_settings_get_paper_height (settings: *mut C_GtkPrintSettings, unit: gtk::Unit) -> c_double;
@@ -688,6 +688,40 @@ extern "C" {
     //pub fn gtk_print_settings_set_quality      (settings: *mut C_GtkPrintSettings, quality: C_GtkPrintQuality);
     pub fn gtk_print_settings_get_n_copies     (settings: *mut C_GtkPrintSettings) -> c_int;
     pub fn gtk_print_settings_set_n_copies     (settings: *mut C_GtkPrintSettings, num_copies: c_int);
+    pub fn gtk_print_settings_get_number_up    (settings: *mut C_GtkPrintSettings) -> gtk::NumberUpLayout;
+    pub fn gtk_print_settings_set_number_up    (settings: *mut C_GtkPrintSettings, number_up: gtk::NumberUpLayout);
+    pub fn gtk_print_settings_get_resolution   (settings: *mut C_GtkPrintSettings) -> c_int;
+    pub fn gtk_print_settings_set_resolution   (settings: *mut C_GtkPrintSettings, resolution: c_int);
+    pub fn gtk_print_settings_set_resolution_xy(settings: *mut C_GtkPrintSettings, resolution_x: c_int, resolution_y: c_int);
+    pub fn gtk_print_settings_get_resolution_x (settings: *mut C_GtkPrintSettings) -> c_int;
+    pub fn gtk_print_settings_get_resolution_y (settings: *mut C_GtkPrintSettings) -> c_int;
+    pub fn gtk_print_settings_get_printer_lpi  (settings: *mut C_GtkPrintSettings) -> f64;
+    pub fn gtk_print_settings_set_printer_lpi  (settings: *mut C_GtkPrintSettings, lpi: f64);
+    pub fn gtk_print_settings_get_scale        (settings: *mut C_GtkPrintSettings) -> f64;
+    pub fn gtk_print_settings_set_scale        (settings: *mut C_GtkPrintSettings, scale: f64);
+    pub fn gtk_print_settings_get_print_pages  (settings: *mut C_GtkPrintSettings) -> gtk::PrintPages;
+    pub fn gtk_print_settings_set_print_pages  (settings: *mut C_GtkPrintSettings, pages: gtk::PrintPages);
+    //pub fn gtk_print_settings_get_page_ranges  (settings: *mut C_GtkPrintSettings, num_ranges: *mut c_int) -> *mut C_GtkPageRange;
+    //pub fn gtk_print_settings_set_page_ranges  (settings: *mut C_GtkPrintSettings, page_ranges: *mut C_GtkPageRange, num_range: *mut c_int);
+    pub fn gtk_print_settings_get_page_set     (settings: *mut C_GtkPrintSettings) -> gtk::PageSet;
+    pub fn gtk_print_settings_set_page_set     (settings: *mut C_GtkPrintSettings, page_set: gtk::PageSet);
+    pub fn gtk_print_settings_get_default_source(settings: *mut C_GtkPrintSettings) -> *const c_char;
+    pub fn gtk_print_settings_set_default_source(settings: *mut C_GtkPrintSettings, default_source: *const c_char);
+    pub fn gtk_print_settings_get_media_type   (settings: *mut C_GtkPrintSettings) -> *const c_char;
+    pub fn gtk_print_settings_set_media_type   (settings: *mut C_GtkPrintSettings, media_type: *const c_char);
+    pub fn gtk_print_settings_get_dither       (settings: *mut C_GtkPrintSettings) -> *const c_char;
+    pub fn gtk_print_settings_set_dither       (settings: *mut C_GtkPrintSettings, dither: *const c_char);
+    pub fn gtk_print_settings_get_finishings   (settings: *mut C_GtkPrintSettings) -> *const c_char;
+    pub fn gtk_print_settings_set_finishings   (settings: *mut C_GtkPrintSettings, finishings: *const c_char);
+    pub fn gtk_print_settings_get_output_bin   (settings: *mut C_GtkPrintSettings) -> *const c_char;
+    pub fn gtk_print_settings_set_output_bin   (settings: *mut C_GtkPrintSettings, output_bin: *const c_char);
+    //pub fn gtk_print_settings_new_from_file    (file_name: *const c_char, error: *mut *mut C_GError) -> *mut C_GtkPrintSettings;
+    //pub fn gtk_print_settings_new_from_key_file(key_file: *mut C_GKeyFile, group_name: *const c_char, error: *mut *mut C_GError) -> *mut C_GtkPrintSettings;
+    //pub fn gtk_print_settings_load_file        (settings: *mut C_GtkPrintSettings, file_name: *const c_char, error: *mut *mut C_GError) -> Gboolean;
+    //pub fn gtk_print_settings_load_key_file    (settings: *mut C_GtkPrintSettings, key_file: *mut C_GKeyFile, group_name: *const c_char,
+    //    error: *mut *mut C_GError) -> Gboolean;
+    //pub fn gtk_print_settings_to_file          (settings: *mut C_GtkPrintSettings, file_name: *const c_char, error: *mut *mut C_GError) -> Gboolean;
+    //pub fn gtk_print_settings_to_key_file      (settings: *mut C_GtkPrintSettings, key_file: *mut C_GKeyFile, group_name: *const c_char) -> Gboolean;
 
     //callbacks
     //let GtkPrintSettingsFunc = fn(key: *const c_char, value: *const c_char, user_data: *mut c_void);
@@ -695,11 +729,11 @@ extern "C" {
     //=========================================================================
     // GtkPageSetupUnixDialog                                            NOT OK
     //=========================================================================
-    pub fn gtk_page_setup_unix_dialog_new      (title: *const c_char, parent: *mut C_GtkWindow) -> *mut C_GtkWidget;
+    /*pub fn gtk_page_setup_unix_dialog_new      (title: *const c_char, parent: *mut C_GtkWindow) -> *mut C_GtkWidget;
     pub fn gtk_page_setup_unix_dialog_set_page_setup(dialog: *mut C_GtkPageSetupUnixDialog, page_setup: *mut C_GtkPageSetup);
     pub fn gtk_page_setup_unix_dialog_get_page_setup(dialog: *mut C_GtkPageSetupUnixDialog) -> *mut C_GtkPageSetup;
     pub fn gtk_page_setup_unix_dialog_set_print_settings(dialog: *mut C_GtkPageSetupUnixDialog, print_settings: *mut C_GtkPrintSettings);
-    pub fn gtk_page_setup_unix_dialog_get_print_settings(dialog: *mut C_GtkPageSetupUnixDialog) -> *mut C_GtkPrintSettings;
+    pub fn gtk_page_setup_unix_dialog_get_print_settings(dialog: *mut C_GtkPageSetupUnixDialog) -> *mut C_GtkPrintSettings;*/
 
     //=========================================================================
     // GtkFontChooser                                                    NOT OK
@@ -1878,4 +1912,8 @@ extern "C" {
     pub fn cast_GtkAppLaunchContext(widget: *mut C_GtkWidget) -> *mut C_GAppLaunchContext;
     pub fn cast_GtkFontChooserDialog(widget: *mut C_GtkWidget) -> *mut C_GtkFontChooserDialog;
     pub fn cast_GtkFontChooser(widget: *mut C_GtkWidget) -> *mut C_GtkFontChooser;
+    pub fn cast_GtkPaperSize(widget: *mut C_GtkWidget) -> *mut C_GtkPaperSize;
+    pub fn cast_GtkPageSetup(widget: *mut C_GtkWidget) -> *mut C_GtkPageSetup;
+    //pub fn cast_PageSetupUnixDialog(widget: *mut C_GtkWidget) -> *mut C_GtkPageSetupUnixDialog;
+    pub fn cast_GtkPrintSettings(widget: *mut C_GtkWidget) -> *mut C_GtkPrintSettings;
 }

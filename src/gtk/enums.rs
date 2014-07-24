@@ -89,6 +89,9 @@ pub use self::g_connect_flags::GConnectFlags;
 pub use self::builder_error::BuilderError;
 pub use self::page_orientation::PageOrientation;
 pub use self::unit::Unit;
+pub use self::number_up_layout::NumberUpLayout;
+pub use self::print_pages::PrintPages;
+pub use self::page_set::PageSet;
 
 pub mod window_type{
     #[repr(C)]
@@ -1232,5 +1235,59 @@ pub mod unit {
         Inch,
         /// Dimensions in millimeters
         MM
+    }
+}
+
+/// Used to determine the layout of pages on a sheet when printing multiple pages per sheet.
+pub mod number_up_layout {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum NumberUpLayout {
+        /// 1 2 3 4
+        LeftToRight_TopToBottom,
+        /// 3 4 2 1
+        LeftToRight_BottomToTop,
+        /// 2 1 4 3
+        RightToLeft_TopToBottom,
+        /// 4 3 2 1
+        RightToLeft_BottomToTop,
+        /// 1 3 2 4
+        TopToBottom_LeftToRight,
+        /// 3 1 4 2
+        TopToBottom_RightToLeft,
+        /// 2 4 1 3
+        BottomToTop_LeftToRight,
+        /// 4 2 3 1
+        BottomToTop_RightToLeft
+    }
+}
+
+/// Used to know which quantity you want to print
+pub mod print_pages {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum PrintPages {
+        /// All pages.
+        All,
+        /// Current page.
+        Current,
+        /// Range of pages.
+        Ranges,
+        /// Selected pages.
+        Selection
+    }
+}
+
+/// Different types of page to set
+pub mod page_set {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum PageSet {
+        /// All pages.
+        All,
+        /// Even pages.
+        Even,
+        /// Odd pages.
+        Odd
     }
 }

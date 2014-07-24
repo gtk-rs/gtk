@@ -15,8 +15,8 @@
 
 use gtk::ffi;
 use gtk::ffi::FFIWidget;
-use std::str;
 use gtk::cast::{GTK_PAGE_SETUP, GTK_PAPER_SIZE};
+use gtk;
 
 struct_Widget!(PageSetup)
 
@@ -49,7 +49,7 @@ impl PageSetup {
         unsafe { ffi::gtk_page_setup_set_orientation(GTK_PAGE_SETUP(self.get_widget()), orientation) }
     }
 
-    pub fn get_paper_size(&self) -> gtk::PaperSize {
+    pub fn get_paper_size(&self) -> Option<gtk::PaperSize> {
         let tmp_pointer = unsafe { ffi::gtk_page_setup_get_paper_size(GTK_PAGE_SETUP(self.get_widget())) };
 
         if tmp_pointer.is_null() {
@@ -95,7 +95,7 @@ impl PageSetup {
         unsafe { ffi::gtk_page_setup_set_right_margin(GTK_PAGE_SETUP(self.get_widget()), margin, unit) }
     }
 
-    pub fn set_paper_size_and_default_margins(&self, size: &PaperSize) {
+    pub fn set_paper_size_and_default_margins(&self, size: &gtk::PaperSize) {
         unsafe { ffi::gtk_page_setup_set_paper_size_and_default_margins(GTK_PAGE_SETUP(self.get_widget()), GTK_PAPER_SIZE(size.get_widget())) }
     }
 

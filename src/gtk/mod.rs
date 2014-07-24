@@ -114,7 +114,11 @@ pub use self::widgets::{
     AppInfo,
     AppLaunchContext,
     AppChooserDialog,
-    DrawingArea
+    DrawingArea,
+    PageSetup,
+    PaperSize,
+    PrintSettings,
+//    PageSetupUnixDialog
 };
 
 #[cfg(GTK_3_6)]
@@ -212,7 +216,10 @@ pub use self::enums::{
     g_connect_flags,
     builder_error,
     page_orientation,
-    unit
+    unit,
+    number_up_layout,
+    print_pages,
+    page_set
 };
 
 
@@ -279,7 +286,10 @@ pub use self::enums::{
     GConnectFlags,
     BuilderError,
     PageOrientation,
-    Unit
+    Unit,
+    NumberUpLayout,
+    PrintPages,
+    PageSet
 };
 
 /// GTK various struct

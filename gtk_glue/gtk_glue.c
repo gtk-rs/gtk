@@ -365,6 +365,24 @@ GtkFontChooser* cast_GtkFontChooser(GtkWidget* widget) {
     return GTK_FONT_CHOOSER(widget);
 }
 
+GtkPageSetup* cast_GtkPageSetup(GtkWidget* widget) {
+    return GTK_PAGE_SETUP(widget);
+}
+
+// need to fix this later
+GtkPaperSize* cast_GtkPaperSize(GtkWidget* widget) {
+    return (GtkPaperSize*)widget;
+}
+
+// It seems that this type doesn't exist...
+/*GtkPageSetupUnixDialog* cast_GtkPageSetupUnixDialog(GtkWidget* widget) {
+    return GTK_PAGE_SETUP_UNIX_DIALOG(widget);
+}*/
+
+GtkPrintSettings* cast_GtkPrintSettings(GtkWidget* widget) {
+    return GTK_PRINT_SETTINGS(widget);
+}
+
 /* specific versions */
 
 #ifdef GTK_3_6

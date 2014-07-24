@@ -17,6 +17,8 @@ use gtk::ffi;
 use gtk::ffi::FFIWidget;
 use std::str;
 use gtk::cast::{GTK_PAPER_SIZE};
+use gtk;
+use glib;
 
 struct_Widget!(PaperSize)
 
@@ -84,7 +86,7 @@ impl PaperSize {
         }
     }
 
-    pub fn get_paper_sizes(include_custom: bool) -> glib::List<Box<Self>> {
+    pub fn get_paper_sizes(include_custom: bool) -> glib::List<Box<PaperSize>> {
         let tmp = unsafe { ffi::gtk_paper_size_get_paper_sizes(match include_custom {
             true => ffi::Gtrue,
             false => ffi::Gfalse
@@ -94,7 +96,7 @@ impl PaperSize {
             glib::List::new()
         } else {
             let old_list : glib::List<*mut ffi::C_GtkWidget> = glib::GlibContainer::wrap(tmp);
-            let mut tmp_vec : glib::List<Box<Self>> = glib::List::new();
+            let mut tmp_vec : glib::List<Box<PaperSize>> = glib::List::new();
 
             for it in old_list.iter() {
                 tmp_vec.append(box ffi::FFIWidget::wrap(*it));
@@ -109,7 +111,7 @@ impl PaperSize {
         if tmp.is_null() {
             None
         } else {
-            Some(::str::raw::from_c_str(tmp))
+            Some(unsafe { str::raw::from_c_str(tmp) })
         }
     }
 
@@ -119,7 +121,7 @@ impl PaperSize {
         if tmp.is_null() {
             None
         } else {
-            Some(::str::raw::from_c_str(tmp))
+            Some(unsafe { str::raw::from_c_str(tmp) })
         }
     }
 
@@ -129,7 +131,7 @@ impl PaperSize {
         if tmp.is_null() {
             None
         } else {
-            Some(::str::raw::from_c_str(tmp))
+            Some(unsafe { str::raw::from_c_str(tmp) })
         }
     }
 
@@ -174,7 +176,7 @@ impl PaperSize {
         if tmp.is_null() {
             None
         } else {
-            Some(::str::raw::from_c_str(tmp))
+            Some(unsafe { str::raw::from_c_str(tmp) })
         }
     }
 }
@@ -188,7 +190,7 @@ impl Drop for PaperSize {
     }
 }
 
-impl Clone for $gtk_struct {
+impl Clone for PaperSize {
     fn clone(&self) -> PaperSize {
         let pointer = unsafe {
             ::glib::ffi::g_object_ref(self.pointer as *mut ::glib::ffi::C_GObject)

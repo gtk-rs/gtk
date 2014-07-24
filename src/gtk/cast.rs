@@ -293,3 +293,19 @@ pub fn GTK_APP_INFO(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GAppInfo {
 pub fn GTK_APP_LAUNCH_CONTEXT(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GAppLaunchContext {
     unsafe{ ffi::cast_GtkAppLaunchContext(widget) }
 }
+
+pub fn GTK_PAGE_SETUP(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkPageSetup {
+    unsafe{ ffi::cast_GtkPageSetup(widget) }
+}
+
+pub fn GTK_PAPER_SIZE(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkPaperSize {
+    unsafe{ ffi::cast_GtkPaperSize(widget) }
+}
+
+/*pub fn GTK_PAGE_SETUP_UNIX_DIALOG(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_PageSetupUnixDialog {
+    unsafe{ ffi::cast_PageSetupUnixDialog(widget) }
+}*/
+
+pub fn GTK_PRINT_SETTINGS(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkPrintSettings {
+    unsafe{ ffi::cast_GtkPrintSettings(widget) }
+}
