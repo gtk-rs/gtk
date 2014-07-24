@@ -87,6 +87,8 @@ pub use self::size_request_mode::SizeRequestMode;
 pub use self::align::Align;
 pub use self::g_connect_flags::GConnectFlags;
 pub use self::builder_error::BuilderError;
+pub use self::page_orientation::PageOrientation;
+pub use self::unit::Unit;
 
 pub mod window_type{
     #[repr(C)]
@@ -1198,5 +1200,37 @@ pub mod builder_error {
         ObjectTypeRefused,
         /// The wrong type was specified in a composite class’s template XML
         TemplateMismatch
+    }
+}
+
+/// Orientation of a page
+pub mod page_orientation {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum PageOrientation {
+        /// Portrait mode.
+        Portrait,
+        /// Landscape mode.
+        Landscape,
+        /// Reverse portrait mode.
+        ReversePortrait,
+        /// Reverse landscape mode.
+        ReverseLandscape
+    }
+}
+
+/// Unit systems
+pub mod unit {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum Unit {
+        /// No units.
+        None,
+        /// Dimensions in points.
+        Points,
+        /// Dimensions in inches.
+        Inch,
+        /// Dimensions in millimeters
+        MM
     }
 }

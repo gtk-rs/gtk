@@ -21,7 +21,7 @@ To implement __GTK+__ inheritance in rust, we implemented gtk superclasses as tr
 located in `rgtk::gtk::traits::*`. The various widgets implement these traits and
 live in `rgtk::gtk::widgets::*` and are rexported into `rgtk::gtk::*`.
 
-GTK Inhertance in rgtk
+GTK Inheritance in rgtk
 ======================
 
 You probably know but __Gtk+__ uses its own GObject system: inherited class and interface.
@@ -210,7 +210,9 @@ pub use self::enums::{
     size_request_mode,
     align,
     g_connect_flags,
-    builder_error
+    builder_error,
+    page_orientation,
+    unit
 };
 
 
@@ -275,7 +277,9 @@ pub use self::enums::{
     SizeRequestMode,
     Align,
     GConnectFlags,
-    BuilderError
+    BuilderError,
+    PageOrientation,
+    Unit
 };
 
 /// GTK various struct

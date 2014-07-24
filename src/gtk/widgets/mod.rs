@@ -100,6 +100,7 @@ pub use self::appinfo::AppInfo;
 pub use self::applaunchcontext::AppLaunchContext;
 pub use self::appchooserdialog::AppChooserDialog;
 pub use self::drawingarea::DrawingArea;
+pub use self::pagesetup::PageSetup;
 
 mod window;
 mod label;
@@ -187,4 +188,5 @@ mod filechooserdialog;
 mod appinfo;
 mod applaunchcontext;
 mod appchooserdialog;
-mod drawingarea;
+mod drawingarea
+mod pagesetup;
