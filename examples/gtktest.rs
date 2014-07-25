@@ -1,5 +1,5 @@
-
 #![feature(globs)]
+#![crate_type = "bin"]
 
 extern crate rgtk;
 
