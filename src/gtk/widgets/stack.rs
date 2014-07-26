@@ -22,6 +22,7 @@ use gtk::cast::GTK_STACK;
 use gtk::ffi;
 use gtk::traits::Widget;
 use gtk::traits;
+use std::string;
 
 /// GtkStack — A stacking container
 struct_Widget!(Stack)
@@ -84,7 +85,7 @@ impl Stack {
         if c_name.is_null() {
             None
         } else {
-            Some(unsafe { ::std::str::raw::from_c_str(c_name) })
+            Some(unsafe { string::raw::from_buf(c_name as *const u8) })
         }
     }
 

@@ -16,9 +16,9 @@
 use gtk::ffi;
 use gtk::ffi::FFIWidget;
 use gtk::traits;
-use std::str;
 use gtk::cast::GTK_ABOUT_DIALOG;
 use gtk::enums;
+use std::string;
 
 struct_Widget!(AboutDialog)
 
@@ -39,7 +39,7 @@ impl AboutDialog {
         if name.is_null() {
             None
         } else {
-            Some(unsafe { str::raw::from_c_str(name) })
+            Some(unsafe { string::raw::from_buf(name as *const u8) })
         }
     }
 
@@ -57,7 +57,7 @@ impl AboutDialog {
         if version.is_null() {
             None
         } else {
-            Some(unsafe { str::raw::from_c_str(version) })
+            Some(unsafe { string::raw::from_buf(version as *const u8) })
         }
     }
 
@@ -75,7 +75,7 @@ impl AboutDialog {
         if copyright.is_null() {
             None
         } else {
-            Some(unsafe { str::raw::from_c_str(copyright) })
+            Some(unsafe { string::raw::from_buf(copyright as *const u8) })
         }
     }
 
@@ -93,7 +93,7 @@ impl AboutDialog {
         if comments.is_null() {
             None
         } else {
-            Some(unsafe { str::raw::from_c_str(comments) })
+            Some(unsafe { string::raw::from_buf(comments as *const u8) })
         }
     }
 
@@ -111,7 +111,7 @@ impl AboutDialog {
         if license.is_null() {
             None
         } else {
-            Some(unsafe { str::raw::from_c_str(license) })
+            Some(unsafe { string::raw::from_buf(license as *const u8) })
         }
     }
 
@@ -151,7 +151,7 @@ impl AboutDialog {
         if website.is_null() {
             None
         } else {
-            Some(unsafe { str::raw::from_c_str(website) })
+            Some(unsafe { string::raw::from_buf(website as *const u8) })
         }
     }
 
@@ -169,7 +169,7 @@ impl AboutDialog {
         if website_label.is_null() {
             None
         } else {
-            Some(unsafe { str::raw::from_c_str(website_label) })
+            Some(unsafe { string::raw::from_buf(website_label as *const u8) })
         }
     }
 
@@ -195,7 +195,7 @@ impl AboutDialog {
                     if tmp.is_null() {
                         break;
                     }
-                    ret.push(str::raw::from_c_str(*tmp));
+                    ret.push(string::raw::from_buf(*tmp as *const u8));
                     it += 1;
                 }
             }
@@ -226,7 +226,7 @@ impl AboutDialog {
                     if tmp.is_null() {
                         break;
                     }
-                    ret.push(str::raw::from_c_str(*tmp));
+                    ret.push(string::raw::from_buf(*tmp as *const u8));
                     it += 1;
                 }
             }
@@ -257,7 +257,7 @@ impl AboutDialog {
                     if tmp.is_null() {
                         break;
                     }
-                    ret.push(str::raw::from_c_str(*tmp));
+                    ret.push(string::raw::from_buf(*tmp as *const u8));
                     it += 1;
                 }
             }
@@ -280,7 +280,7 @@ impl AboutDialog {
         if translator_credits.is_null() {
             None
         } else {
-            Some(unsafe { str::raw::from_c_str(translator_credits) })
+            Some(unsafe { string::raw::from_buf(translator_credits as *const u8) })
         }
     }
 
@@ -312,7 +312,7 @@ impl AboutDialog {
         if logo_icon_name.is_null() {
             None
         } else {
-            Some(unsafe { str::raw::from_c_str(logo_icon_name) })
+            Some(unsafe { string::raw::from_buf(logo_icon_name as *const u8) })
         }
     }
 

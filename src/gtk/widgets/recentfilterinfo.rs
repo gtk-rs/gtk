@@ -16,8 +16,7 @@
 use gtk::ffi;
 use gtk;
 use std::default::Default;
-use std::str;
-use libc::c_char;
+use std::string;
 
 pub struct RecentFilterInfo {
     contains: gtk::RecentFilterFlags,
@@ -47,7 +46,7 @@ impl RecentFilterInfo {
                         break;
                     }
                     count = count + 1;
-                    tmp_app.push(str::raw::from_c_str(*tmp as *const c_char));
+                    tmp_app.push(string::raw::from_buf(*tmp as *const u8));
                 }
                 count = 0;
                 loop {
@@ -57,13 +56,13 @@ impl RecentFilterInfo {
                         break;
                     }
                     count = count + 1;
-                    tmp_groups.push(str::raw::from_c_str(*tmp as *const c_char));
+                    tmp_groups.push(string::raw::from_buf(*tmp as *const u8));
                 }
                 RecentFilterInfo {
                     contains: (*ptr).contains,
-                    uri: str::raw::from_c_str((*ptr).uri),
-                    display_name: str::raw::from_c_str((*ptr).display_name),
-                    mime_type: str::raw::from_c_str((*ptr).mime_type),
+                    uri: string::raw::from_buf((*ptr).uri as *const u8),
+                    display_name: string::raw::from_buf((*ptr).display_name as *const u8),
+                    mime_type: string::raw::from_buf((*ptr).mime_type as *const u8),
                     applications: tmp_app,
                     groups: tmp_groups,
                     age: (*ptr).age

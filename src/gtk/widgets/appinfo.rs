@@ -23,6 +23,7 @@ use gtk::traits::Widget;
 use glib;
 use glib::GlibContainer;
 use std::str;
+use std::string;
 
 struct_Widget!(AppInfo)
 
@@ -56,7 +57,7 @@ impl AppInfo {/*
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(unsafe {str::raw::from_c_str(tmp_pointer) })
+            Some(unsafe {string::raw::from_buf(tmp_pointer) })
         }
     }
 
@@ -66,7 +67,7 @@ impl AppInfo {/*
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(unsafe { str::raw::from_c_str(tmp_pointer) })
+            Some(unsafe { string::raw::from_buf(tmp_pointer) })
         }
     }
 
@@ -76,7 +77,7 @@ impl AppInfo {/*
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(unsafe { str::raw::from_c_str(tmp_pointer) })
+            Some(unsafe { string::raw::from_buf(tmp_pointer) })
         }
     }
 
@@ -86,7 +87,7 @@ impl AppInfo {/*
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(unsafe { str::raw::from_c_str(tmp_pointer) })
+            Some(unsafe { string::raw::from_buf(tmp_pointer) })
         }
     }
 
@@ -96,7 +97,7 @@ impl AppInfo {/*
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(unsafe { str::raw::from_c_str(tmp_pointer) })
+            Some(unsafe { string::raw::from_buf(tmp_pointer) })
         }
     }
 
@@ -106,7 +107,7 @@ impl AppInfo {/*
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(unsafe { str::raw::from_c_str(tmp_pointer) })
+            Some(unsafe { string::raw::from_buf(tmp_pointer) })
         }
     }
 
@@ -249,7 +250,7 @@ impl AppInfo {/*
                     if tmp.is_null() {
                         break;
                     }
-                    ret.push(str::raw::from_c_str(*tmp));
+                    ret.push(string::raw::from_buf(*tmp));
                     it += 1;
                 }
             }

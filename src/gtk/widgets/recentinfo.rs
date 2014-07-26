@@ -15,9 +15,8 @@
 
 use gtk::ffi;
 use gtk::ffi::FFIWidget;
-use std::str;
 use gtk::cast::GTK_RECENT_INFO;
-use libc::c_char;
+use std::string;
 
 struct_Widget!(RecentInfo)
 
@@ -42,7 +41,7 @@ impl RecentInfo {
         if uri.is_null() {
             None
         } else {
-            Some(unsafe { str::raw::from_c_str(uri) })
+            Some(unsafe { string::raw::from_buf(uri as *const u8) })
         }
     }
 
@@ -52,7 +51,7 @@ impl RecentInfo {
         if display_name.is_null() {
             None
         } else {
-            Some(unsafe { str::raw::from_c_str(display_name) })
+            Some(unsafe { string::raw::from_buf(display_name as *const u8) })
         }
     }
 
@@ -62,7 +61,7 @@ impl RecentInfo {
         if description.is_null() {
             None
         } else {
-            Some(unsafe { str::raw::from_c_str(description) })
+            Some(unsafe { string::raw::from_buf(description as *const u8) })
         }
     }
 
@@ -72,7 +71,7 @@ impl RecentInfo {
         if mime_type.is_null() {
             None
         } else {
-            Some(unsafe { str::raw::from_c_str(mime_type) })
+            Some(unsafe { string::raw::from_buf(mime_type as *const u8) })
         }
     }
 
@@ -111,7 +110,7 @@ impl RecentInfo {
         if app_exec.is_null() {
             (ret, String::new(), count, time_)
         } else {
-            (ret, unsafe { str::raw::from_c_str(app_exec as *const c_char)}, count, time_)
+            (ret, unsafe { string::raw::from_buf(app_exec as *const u8)}, count, time_)
         }
     }
 
@@ -125,7 +124,7 @@ impl RecentInfo {
             let mut ret = Vec::with_capacity(length as uint);
 
             for count in range(0i64, length) {
-                ret.push(unsafe { str::raw::from_c_str(*tmp.offset(count as int) as *const c_char) });
+                ret.push(unsafe { string::raw::from_buf(*tmp.offset(count as int) as *const u8) });
             }
             Some(ret)
         }
@@ -137,7 +136,7 @@ impl RecentInfo {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { str::raw::from_c_str(tmp as *const c_char) })
+            Some(unsafe { string::raw::from_buf(tmp as *const u8) })
         }
     }
 
@@ -160,7 +159,7 @@ impl RecentInfo {
             let mut ret = Vec::with_capacity(length as uint);
 
             for count in range(0i64, length) {
-                ret.push(unsafe { str::raw::from_c_str(*tmp.offset(count as int) as *const c_char) });
+                ret.push(unsafe { string::raw::from_buf(*tmp.offset(count as int) as *const u8) });
             }
             Some(ret)
         }
@@ -181,7 +180,7 @@ impl RecentInfo {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { str::raw::from_c_str(tmp as *const c_char) })
+            Some(unsafe { string::raw::from_buf(tmp as *const u8) })
         }
     }
 
@@ -191,7 +190,7 @@ impl RecentInfo {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { str::raw::from_c_str(tmp as *const c_char) })
+            Some(unsafe { string::raw::from_buf(tmp as *const u8) })
         }
     }
 

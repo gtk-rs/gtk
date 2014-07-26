@@ -19,9 +19,9 @@ use gtk::ffi;
 use gtk::ffi::FFIWidget;
 use gtk;
 use glib;
-use std::str;
 use libc::c_char;
 use glib::GlibContainer;
+use std::string;
 
 pub trait FileChooser: traits::Widget {
     fn set_action(&self, action: gtk::FileChooserAction) -> () {
@@ -116,7 +116,7 @@ pub trait FileChooser: traits::Widget {
         if name.is_null() {
             None
         } else {
-            Some(unsafe { str::raw::from_c_str(name) })
+            Some(unsafe { string::raw::from_buf(name as *const u8) })
         }
     }
 
@@ -137,7 +137,7 @@ pub trait FileChooser: traits::Widget {
         if filename.is_null() {
             None
         } else {
-            Some(unsafe { str::raw::from_c_str(filename) })
+            Some(unsafe { string::raw::from_buf(filename as *const u8) })
         }
     }
 
@@ -179,7 +179,7 @@ pub trait FileChooser: traits::Widget {
 
             for it in old_list.iter() {
                 unsafe {
-                    tmp_vec.append(str::raw::from_c_str(*it));
+                    tmp_vec.append(string::raw::from_buf(*it as *const u8));
                 }
             }
             tmp_vec
@@ -203,7 +203,7 @@ pub trait FileChooser: traits::Widget {
         if filename.is_null() {
             None
         } else {
-            Some(unsafe { str::raw::from_c_str(filename) })
+            Some(unsafe { string::raw::from_buf(filename as *const u8) })
         }
     }
 
@@ -224,7 +224,7 @@ pub trait FileChooser: traits::Widget {
         if uri.is_null() {
             None
         } else {
-            Some(unsafe { str::raw::from_c_str(uri) })
+            Some(unsafe { string::raw::from_buf(uri as *const u8) })
         }
     }
 
@@ -258,7 +258,7 @@ pub trait FileChooser: traits::Widget {
 
             for it in old_list.iter() {
                 unsafe {
-                    tmp_vec.append(str::raw::from_c_str(*it));
+                    tmp_vec.append(string::raw::from_buf(*it as *const u8));
                 }
             }
             tmp_vec
@@ -282,7 +282,7 @@ pub trait FileChooser: traits::Widget {
         if uri.is_null() {
             None
         } else {
-            Some(unsafe { str::raw::from_c_str(uri) })
+            Some(unsafe { string::raw::from_buf(uri as *const u8) })
         }
     }
 
@@ -334,7 +334,7 @@ pub trait FileChooser: traits::Widget {
         if filename.is_null() {
             None
         } else {
-            Some(unsafe { str::raw::from_c_str(filename) })
+            Some(unsafe { string::raw::from_buf(filename as *const u8) })
         }
     }
 
@@ -344,7 +344,7 @@ pub trait FileChooser: traits::Widget {
         if uri.is_null() {
             None
         } else {
-            Some(unsafe { str::raw::from_c_str(uri) })
+            Some(unsafe { string::raw::from_buf(uri as *const u8) })
         }
     }
 

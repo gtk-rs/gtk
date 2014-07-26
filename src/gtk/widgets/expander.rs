@@ -15,7 +15,6 @@
 
 //! A container which can hide its child
 
-use std::str;
 use libc::c_int;
 
 use gtk;
@@ -23,6 +22,7 @@ use gtk::cast::GTK_EXPANDER;
 use gtk::ffi;
 use gtk::ffi::FFIWidget;
 use gtk::traits;
+use std::string;
 
 /// Expander — A container which can hide its child
 struct_Widget!(Expander)
@@ -121,7 +121,7 @@ impl Expander {
     pub fn get_label(&self) -> String {
         unsafe {
             let c_str = ffi::gtk_expander_get_label(GTK_EXPANDER(self.pointer));
-            str::raw::from_c_str(c_str)
+            string::raw::from_buf(c_str as *const u8)
         }
     }
 

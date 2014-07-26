@@ -14,9 +14,9 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::ffi;
-use std::str;
 use std::default::Default;
 use libc::c_char;
+use std::string;
 
 pub struct RecentData {
     display_name: String,
@@ -45,14 +45,14 @@ impl RecentData {
                         break;
                     }
                     count = count + 1;
-                    tmp_groups.push(str::raw::from_c_str(*tmp as *const c_char));
+                    tmp_groups.push(string::raw::from_buf(*tmp as *const u8));
                 }
                 RecentData {
-                    display_name: str::raw::from_c_str((*ptr).display_name as *const c_char),
-                    description: str::raw::from_c_str((*ptr).description as *const c_char),
-                    mime_type: str::raw::from_c_str((*ptr).mime_type as *const c_char),
-                    app_name: str::raw::from_c_str((*ptr).app_name as *const c_char),
-                    app_exec: str::raw::from_c_str((*ptr).app_exec as *const c_char),
+                    display_name: string::raw::from_buf((*ptr).display_name as *const u8),
+                    description: string::raw::from_buf((*ptr).description as *const u8),
+                    mime_type: string::raw::from_buf((*ptr).mime_type as *const u8),
+                    app_name: string::raw::from_buf((*ptr).app_name as *const u8),
+                    app_exec: string::raw::from_buf((*ptr).app_exec as *const u8),
                     groups: tmp_groups,
                     is_private: match (*ptr).is_private {
                     	ffi::Gtrue => true,

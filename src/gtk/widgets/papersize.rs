@@ -15,10 +15,10 @@
 
 use gtk::ffi;
 use gtk::ffi::FFIWidget;
-use std::str;
 use gtk::cast::{GTK_PAPER_SIZE};
 use gtk;
 use glib;
+use std::string;
 
 struct_Widget!(PaperSize)
 
@@ -111,7 +111,7 @@ impl PaperSize {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { str::raw::from_c_str(tmp) })
+            Some(unsafe { string::raw::from_buf(tmp as *const u8) })
         }
     }
 
@@ -121,7 +121,7 @@ impl PaperSize {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { str::raw::from_c_str(tmp) })
+            Some(unsafe { string::raw::from_buf(tmp as *const u8) })
         }
     }
 
@@ -131,7 +131,7 @@ impl PaperSize {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { str::raw::from_c_str(tmp) })
+            Some(unsafe { string::raw::from_buf(tmp as *const u8) })
         }
     }
 
@@ -176,7 +176,7 @@ impl PaperSize {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { str::raw::from_c_str(tmp) })
+            Some(unsafe { string::raw::from_buf(tmp as *const u8) })
         }
     }
 }

@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::{str, mem};
+use std::mem;
 use libc::c_float;
 
 use gtk::traits::{Widget, Container};
@@ -21,6 +21,7 @@ use gtk::enums::{ReliefStyle, PositionType};
 use gtk::cast::GTK_BUTTON;
 use gtk::ffi;
 use gtk;
+use std::string;
 
 pub trait Button: Widget + Container {
     fn pressed(&self) -> () {
@@ -70,7 +71,7 @@ pub trait Button: Widget + Container {
         if c_str.is_null() {
             None
         } else {
-            Some(unsafe { str::raw::from_c_str(c_str) })
+            Some(unsafe { string::raw::from_buf(c_str as *const u8) })
         }
     }
 

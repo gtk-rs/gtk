@@ -14,12 +14,12 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use libc::{c_int, c_double};
-use std::str;
 
 use gtk::ffi;
 use gtk::traits::Widget;
 use gtk::enums::Justification;
 use gtk::cast::GTK_LABEL;
+use std::string;
 
 pub trait Label : Widget {
     fn set_label(&mut self, text: &str) -> () {
@@ -209,7 +209,7 @@ pub trait Label : Widget {
             if c_str.is_null() {
                 None
             } else {
-                Some(str::raw::from_c_str(c_str))
+                Some(string::raw::from_buf(c_str as *const u8))
             }
         }
     }
@@ -220,7 +220,7 @@ pub trait Label : Widget {
             if c_str.is_null() {
                 None
             } else {
-                Some(str::raw::from_c_str(c_str))
+                Some(string::raw::from_buf(c_str as *const u8))
             }
         }
     }
@@ -231,7 +231,7 @@ pub trait Label : Widget {
             if c_str.is_null() {
                 None
             } else {
-                Some(str::raw::from_c_str(c_str))
+                Some(string::raw::from_buf(c_str as *const u8))
             }
         }
     }

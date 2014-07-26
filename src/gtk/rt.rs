@@ -14,8 +14,9 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use libc::c_uint;
-use std::{str,ptr};
+use std::ptr;
 use gtk::ffi;
+use std::string;
 
 pub fn init() {
     unsafe {
@@ -94,6 +95,6 @@ pub fn check_version(required_major: u32,
     if c_str.is_null() {
         None
     } else {
-        Some(unsafe {str::raw::from_c_str(c_str) })
+        Some(unsafe {string::raw::from_buf(c_str as *const u8) })
     }
  }

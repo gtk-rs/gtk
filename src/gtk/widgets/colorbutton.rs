@@ -15,13 +15,11 @@
 
 //! A button to launch a color selection dialog
 
-use std::str;
-
-
 use gtk::cast::GTK_COLORBUTTON;
 use gtk::ffi;
 use gtk::traits;
 use gdk;
+use std::string;
 
 /**
 * ColorButton — A button to launch a color selection dialog
@@ -112,7 +110,7 @@ impl ColorButton {
 
     pub fn get_title(&self) -> String {
         let c_str = unsafe { ffi::gtk_color_button_get_title(GTK_COLORBUTTON(self.pointer)) };
-        unsafe { str::raw::from_c_str(c_str) }
+        unsafe { string::raw::from_buf(c_str as *const u8) }
     }
 }
 

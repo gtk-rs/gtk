@@ -19,8 +19,7 @@ use gtk::ffi;
 use gtk::ffi::FFIWidget;
 use gtk;
 use glib;
-use std::str;
-use libc::c_char;
+use std::string;
 
 pub trait RecentChooser: traits::Widget {
     fn set_show_private(&self, show_private: bool) {
@@ -129,7 +128,7 @@ pub trait RecentChooser: traits::Widget {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { str::raw::from_c_str(tmp as *const c_char) })
+            Some(unsafe { string::raw::from_buf(tmp as *const u8) })
         }
     }
 
@@ -186,7 +185,7 @@ pub trait RecentChooser: traits::Widget {
             let mut ret = Vec::with_capacity(length as uint);
 
             for count in range(0i64, length) {
-                ret.push(unsafe { str::raw::from_c_str(*tmp.offset(count as int) as *const c_char) });
+                ret.push(unsafe { string::raw::from_buf(*tmp.offset(count as int) as *const u8) });
             }
             Some(ret)
         }
