@@ -309,3 +309,23 @@ pub fn GTK_PAPER_SIZE(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkPaperSize
 pub fn GTK_PRINT_SETTINGS(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkPrintSettings {
     unsafe{ ffi::cast_GtkPrintSettings(widget) }
 }
+
+pub fn GTK_RECENT_CHOOSER_DIALOG(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkRecentChooserDialog {
+    unsafe{ ffi::cast_GtkRecentChooserDialog(widget) }
+}
+
+pub fn GTK_RECENT_MANAGER(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkRecentManager {
+    unsafe{ ffi::cast_GtkRecentManager(widget) }
+}
+
+pub fn GTK_RECENT_CHOOSER(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkRecentChooser {
+    unsafe{ ffi::cast_GtkRecentChooser(widget) }
+}
+
+pub fn GTK_RECENT_FILTER(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkRecentFilter {
+    unsafe{ ffi::cast_GtkRecentFilter(widget) }
+}
+
+pub fn GTK_RECENT_INFO(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkRecentInfo {
+    unsafe{ ffi::cast_GtkRecentInfo(widget) }
+}

@@ -92,6 +92,8 @@ pub use self::unit::Unit;
 pub use self::number_up_layout::NumberUpLayout;
 pub use self::print_pages::PrintPages;
 pub use self::page_set::PageSet;
+pub use self::recent_sort_type::RecentSortType;
+pub use self::recent_filter_flags::RecentFilterFlags;
 
 pub mod window_type{
     #[repr(C)]
@@ -1289,5 +1291,41 @@ pub mod page_set {
         Even,
         /// Odd pages.
         Odd
+    }
+}
+
+/// Used to specify the sorting method to be applyed to the recently used resource list.
+pub mod recent_sort_type {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum RecentSortType {
+        /// Do not sort the returned list of recently used resources.
+        None,
+        /// Sort the returned list with the most recently used items first.
+        MRU,
+        /// Sort the returned list with the least recently used items first.
+        LRU,
+        /// Sort the returned list using a custom sorting function passed using gtk_recent_chooser_set_sort_func().
+        Custom
+    }
+}
+
+/// These flags indicate what parts of a GtkRecentFilterInfo struct are filled or need to be filled.
+pub mod recent_filter_flags {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum RecentFilterFlags {
+        /// the URI of the file being tested
+        URI,
+        /// the string that will be used to display the file in the recent chooser
+        DisplayName,
+        /// the string that will be used to display the file in the recent chooser
+        MimeType,
+        /// the list of applications that have registered the file
+        Application,
+        /// the groups to which the file belongs to
+        Group,
+        /// the number of days elapsed since the file has been registered
+        Age
     }
 }

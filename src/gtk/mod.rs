@@ -118,7 +118,13 @@ pub use self::widgets::{
     PageSetup,
     PaperSize,
     PrintSettings,
-//    PageSetupUnixDialog
+    RecentChooserDialog,
+    //PageSetupUnixDialog
+    RecentInfo,
+    RecentFilter,
+    RecentFilterInfo,
+    RecentData,
+    RecentManager
 };
 
 #[cfg(GTK_3_6)]
@@ -219,7 +225,9 @@ pub use self::enums::{
     unit,
     number_up_layout,
     print_pages,
-    page_set
+    page_set,
+    recent_sort_type,
+    recent_filter_flags
 };
 
 
@@ -289,7 +297,9 @@ pub use self::enums::{
     Unit,
     NumberUpLayout,
     PrintPages,
-    PageSet
+    PageSet,
+    RecentSortType,
+    RecentFilterFlags
 };
 
 /// GTK various struct

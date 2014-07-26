@@ -29,6 +29,7 @@ pub static Gfalse:  c_int = 0;
 pub static Gtrue:   c_int = !Gfalse;
 
 pub type gpointer = *const c_void;
+pub type time_t = i64;
 
 pub struct C_GtkWidget;
 pub struct C_GtkWindow;
@@ -103,6 +104,29 @@ pub struct C_GtkBuildable;
 pub struct C_GtkPrintSettings;
 pub struct C_GtkPageSetup;
 pub struct C_GtkPaperSize;
+pub struct C_GtkRecentData {
+    pub display_name: *mut c_char,
+    pub description: *mut c_char,
+    pub mime_type: *mut c_char,
+    pub app_name: *mut c_char,
+    pub app_exec: *mut c_char,
+    pub groups: *mut *mut c_char,
+    pub is_private: Gboolean
+}
+pub struct C_GtkRecentInfo;
+pub struct C_GtkRecentFilter;
+pub struct C_GtkRecentFilterInfo {
+    pub contains: gtk::RecentFilterFlags,
+    pub uri: *const c_char,
+    pub display_name: *const c_char,
+    pub mime_type: *const c_char,
+    pub applications: *const *const c_char,
+    pub groups: *const *const c_char,
+    pub age: c_int
+}
+pub struct C_GtkRecentManager;
+pub struct C_GtkRecentChooser;
+pub struct C_GtkRecentChooserDialog;
 
 pub struct C_GtkToolItem;
 pub struct C_GtkToolButton;
@@ -471,14 +495,13 @@ extern "C" {
     //=========================================================================
     // GtkMisc                                                               OK
     //=========================================================================
-
     pub fn gtk_misc_set_alignment              (misc: *mut C_GtkMisc, xalign: c_float, yalign: c_float) -> ();
     pub fn gtk_misc_set_padding                (misc: *mut C_GtkMisc, xpad: c_int, ypad: c_int) -> ();
     pub fn gtk_misc_get_alignment              (misc: *mut C_GtkMisc, xalign: *const c_float, yalign: *const c_float) -> ();
     pub fn gtk_misc_get_padding                (misc: *mut C_GtkMisc, xpad: *const c_int, ypad: *const c_int) -> ();
 
     //=========================================================================
-    // GtkButton                                                             OK
+    // GtkButton                                                         NOT OK
     //=========================================================================
     pub fn gtk_button_new                      () -> *mut C_GtkWidget;
     pub fn gtk_button_new_with_label           (label: *const c_char) -> *mut C_GtkWidget;
@@ -734,6 +757,116 @@ extern "C" {
     pub fn gtk_page_setup_unix_dialog_get_page_setup(dialog: *mut C_GtkPageSetupUnixDialog) -> *mut C_GtkPageSetup;
     pub fn gtk_page_setup_unix_dialog_set_print_settings(dialog: *mut C_GtkPageSetupUnixDialog, print_settings: *mut C_GtkPrintSettings);
     pub fn gtk_page_setup_unix_dialog_get_print_settings(dialog: *mut C_GtkPageSetupUnixDialog) -> *mut C_GtkPrintSettings;*/
+
+    //=========================================================================
+    // GtkRecentChooser                                                  NOT OK
+    //=========================================================================
+    pub fn gtk_recent_chooser_set_show_private (chooser: *mut C_GtkRecentChooser, show_private: Gboolean);
+    pub fn gtk_recent_chooser_get_show_private (chooser: *mut C_GtkRecentChooser) -> Gboolean;
+    pub fn gtk_recent_chooser_set_show_not_found(chooser: *mut C_GtkRecentChooser, show_not_found: Gboolean);
+    pub fn gtk_recent_chooser_get_show_not_found(chooser: *mut C_GtkRecentChooser) -> Gboolean;
+    pub fn gtk_recent_chooser_set_show_icons   (chooser: *mut C_GtkRecentChooser, show_icons: Gboolean);
+    pub fn gtk_recent_chooser_get_show_icons   (chooser: *mut C_GtkRecentChooser) -> Gboolean;
+    pub fn gtk_recent_chooser_set_select_multiple(chooser: *mut C_GtkRecentChooser, select_multiple: Gboolean);
+    pub fn gtk_recent_chooser_get_select_multiple(chooser: *mut C_GtkRecentChooser) -> Gboolean;
+    pub fn gtk_recent_chooser_set_local_only   (chooser: *mut C_GtkRecentChooser, local_only: Gboolean);
+    pub fn gtk_recent_chooser_get_local_only   (chooser: *mut C_GtkRecentChooser) -> Gboolean;
+    pub fn gtk_recent_chooser_set_limit        (chooser: *mut C_GtkRecentChooser, limit: c_int);
+    pub fn gtk_recent_chooser_get_limit        (chooser: *mut C_GtkRecentChooser) -> c_int;
+    pub fn gtk_recent_chooser_set_show_tips    (chooser: *mut C_GtkRecentChooser, show_tips: Gboolean);
+    pub fn gtk_recent_chooser_get_show_tips    (chooser: *mut C_GtkRecentChooser) -> Gboolean;
+    pub fn gtk_recent_chooser_set_sort_type    (chooser: *mut C_GtkRecentChooser, sort_type: gtk::RecentSortType);
+    pub fn gtk_recent_chooser_get_sort_type    (chooser: *mut C_GtkRecentChooser) -> gtk::RecentSortType;
+    //pub fn gtk_recent_chooser_set_sort_func    (chooser: *mut C_GtkRecentChooser, sort_func: RecentSortFunc, sort_data: *mut c_void, data_destroy: C_GDestroyNotify);
+    //pub fn gtk_recent_chooser_set_current_uri  (chooser: *mut C_GtkRecentChooser, uri: *const c_char, error: *mut *mut C_GError);
+    pub fn gtk_recent_chooser_get_current_uri  (chooser: *mut C_GtkRecentChooser) -> *mut c_char;
+    pub fn gtk_recent_chooser_get_current_item (chooser: *mut C_GtkRecentChooser) -> *mut C_GtkRecentInfo;
+    //pub fn gtk_recent_chooser_select_uri       (chooser: *mut C_GtkRecentChooser, uri: *const c_char, error: *mut *mut C_GError) -> Gboolean;
+    pub fn gtk_recent_chooser_unselect_uri     (chooser: *mut C_GtkRecentChooser, uri: *const c_char) -> Gboolean;
+    pub fn gtk_recent_chooser_select_all       (chooser: *mut C_GtkRecentChooser);
+    pub fn gtk_recent_chooser_unselect_all     (chooser: *mut C_GtkRecentChooser);
+    pub fn gtk_recent_chooser_get_items        (chooser: *mut C_GtkRecentChooser) -> *mut glib::ffi::C_GList;
+    pub fn gtk_recent_chooser_get_uris         (chooser: *mut C_GtkRecentChooser, length: *mut c_long) -> *mut *mut c_char;
+    pub fn gtk_recent_chooser_add_filter       (chooser: *mut C_GtkRecentChooser, filter: *mut C_GtkRecentFilter);
+    pub fn gtk_recent_chooser_remove_filter    (chooser: *mut C_GtkRecentChooser, filter: *mut C_GtkRecentFilter);
+    pub fn gtk_recent_chooser_list_filters     (chooser: *mut C_GtkRecentChooser) -> *mut glib::ffi::C_GSList;
+    pub fn gtk_recent_chooser_set_filter       (chooser: *mut C_GtkRecentChooser, filter: *mut C_GtkRecentFilter);
+    pub fn gtk_recent_chooser_get_filter       (chooser: *mut C_GtkRecentChooser) -> *mut C_GtkRecentFilter;
+
+    //callback
+    //let GtkRecentSortFunc = fn(a: *mut C_GtkRecentInfo, b: *mut C_GtkRecentInfo, user_data: *mut c_void); 
+
+    //=========================================================================
+    // GtkRecentFilter                                                   NOT OK
+    //=========================================================================
+    pub fn gtk_recent_filter_new               () -> *mut C_GtkRecentFilter;
+    pub fn gtk_recent_filter_get_name          (filter: *mut C_GtkRecentFilter) -> *const c_char;
+    pub fn gtk_recent_filter_set_name          (filter: *mut C_GtkRecentFilter, name: *const c_char);
+    pub fn gtk_recent_filter_add_mime_type     (filter: *mut C_GtkRecentFilter, mime_type: *const c_char);
+    pub fn gtk_recent_filter_add_pattern       (filter: *mut C_GtkRecentFilter, pattern: *const c_char);
+    pub fn gtk_recent_filter_add_pixbuf_formats(filter: *mut C_GtkRecentFilter);
+    pub fn gtk_recent_filter_add_application   (filter: *mut C_GtkRecentFilter, application: *const c_char);
+    pub fn gtk_recent_filter_add_group         (filter: *mut C_GtkRecentFilter, group: *const c_char);
+    pub fn gtk_recent_filter_add_age           (filter: *mut C_GtkRecentFilter, days: c_int);
+    //pub fn gtk_recent_filter_add_custom        (filter: *mut C_GtkRecentFilter, needed: gtk::RecentFilterFlags, func: GtkRecentFilterFunc,
+        //data: *mut c_void, data_destroy: C_GDestroyNotify);
+    pub fn gtk_recent_filter_get_needed        (filter: *mut C_GtkRecentFilter) -> gtk::RecentFilterFlags;
+    pub fn gtk_recent_filter_filter            (filter: *mut C_GtkRecentFilter, filter_info: *const C_GtkRecentFilterInfo) -> Gboolean;
+
+    //callback
+    //let GtkRecentFilterFunc = fn(filter_info: *const C_GtkRecentFilterInfo, user_data: *mut c_void) -> Gboolean;
+
+    //=========================================================================
+    // GtkRecentChooserDialog                                            NOT OK
+    //=========================================================================
+    pub fn gtk_recent_chooser_dialog_new       (title: *const c_char, parent: *mut C_GtkWindow, first_button_text: *const c_char, ...) -> *mut C_GtkWidget;
+    pub fn gtk_recent_chooser_dialog_new_for_manager(title: *const c_char, parent: *mut C_GtkWindow, manager: *mut C_GtkRecentManager,
+        first_button_text: *const c_char, ...) -> *mut C_GtkWidget;
+
+    //=========================================================================
+    // GtkRecentManager                                                  NOT OK
+    //=========================================================================
+    pub fn gtk_recent_manager_new              () -> *mut C_GtkRecentManager;
+    pub fn gtk_recent_manager_get_default      () -> *mut C_GtkRecentManager;
+    pub fn gtk_recent_manager_add_item         (manager: *mut C_GtkRecentManager, uri: *const c_char) -> Gboolean;
+    pub fn gtk_recent_manager_add_full         (manager: *mut C_GtkRecentManager, uri: *const c_char, recent_data: *const C_GtkRecentData) -> Gboolean;
+    //pub fn gtk_recent_manager_remove_item      (manager: *mut C_GtkRecentManager, uri: *const c_char, error: *mut *mut C_GError) -> Gboolean;
+    //pub fn gtk_recent_manager_lookup_item      (manager: *mut C_GtkRecentManager, uri: *const c_char, error: *mut *mut C_GError) -> *mut C_GtkRecentInfo;
+    pub fn gtk_recent_manager_has_item         (manager: *mut C_GtkRecentManager, uri: *const c_char) -> Gboolean;
+    //pub fn gtk_recent_manager_lookup_item      (manager: *mut C_GtkRecentManager, uri: *const c_char, new_uri: *const c_char,
+        //error: *mut *mut C_GError) -> *mut C_GtkRecentInfo;
+    pub fn gtk_recent_manager_get_items        (manager: *mut C_GtkRecentManager) -> *mut glib::ffi::C_GList;
+    //pub fn gtk_recent_manager_purge_items      (manager: *mut C_GtkRecentManager, error: *mut *mut C_GError) -> Gboolean;
+
+    //=========================================================================
+    // GtkRecentInfo                                                     NOT OK
+    //=========================================================================
+    pub fn gtk_recent_info_ref                 (info: *mut C_GtkRecentInfo) -> *mut C_GtkRecentInfo;
+    pub fn gtk_recent_info_unref               (info: *mut C_GtkRecentInfo);
+    pub fn gtk_recent_info_get_uri             (info: *mut C_GtkRecentInfo) -> *const c_char;
+    pub fn gtk_recent_info_get_display_name    (info: *mut C_GtkRecentInfo) -> *const c_char;
+    pub fn gtk_recent_info_get_description     (info: *mut C_GtkRecentInfo) -> *const c_char;
+    pub fn gtk_recent_info_get_mime_type       (info: *mut C_GtkRecentInfo) -> *const c_char;
+    pub fn gtk_recent_info_get_added           (info: *mut C_GtkRecentInfo) -> time_t;
+    pub fn gtk_recent_info_get_modified        (info: *mut C_GtkRecentInfo) -> time_t;
+    pub fn gtk_recent_info_get_visited         (info: *mut C_GtkRecentInfo) -> time_t;
+    pub fn gtk_recent_info_get_private_hint    (info: *mut C_GtkRecentInfo) -> Gboolean;
+    pub fn gtk_recent_info_get_application_info(info: *mut C_GtkRecentInfo, app_name: *const c_char, app_exec: *const *mut c_char,
+        count: *mut c_uint, time_: *mut time_t) -> Gboolean;
+    pub fn gtk_recent_info_get_applications    (info: *mut C_GtkRecentInfo, length: *mut c_long) -> *mut *mut c_char;
+    pub fn gtk_recent_info_last_application    (info: *mut C_GtkRecentInfo) -> *mut c_char;
+    pub fn gtk_recent_info_has_application     (info: *mut C_GtkRecentInfo, app_name: *const c_char) -> Gboolean;
+    //pub fn gtk_recent_info_create_app_info     (info: *mut C_GtkRecentInfo, app_name: *const c_char, error: *mut *mut C_GError) -> *mut C_GAppInfo;
+    pub fn gtk_recent_info_get_groups          (info: *mut C_GtkRecentInfo, length: *mut c_long) -> *mut *mut c_char;
+    pub fn gtk_recent_info_has_group           (info: *mut C_GtkRecentInfo, group_name: *const c_char) -> Gboolean;
+    //pub fn gtk_recent_info_get_icon            (info: *mut C_GtkRecentInfo, size: c_int) -> *mut gtk::ffi::C_GdkPixbuf;
+    //pub fn gtk_recent_info_get_gicon           (info: *mut C_GtkRecentInfo) -> *mut gtk::ffi::C_GIcon;
+    pub fn gtk_recent_info_get_short_name      (info: *mut C_GtkRecentInfo) -> *mut c_char;
+    pub fn gtk_recent_info_get_uri_display     (info: *mut C_GtkRecentInfo) -> *mut c_char;
+    pub fn gtk_recent_info_get_age             (info: *mut C_GtkRecentInfo) -> c_int;
+    pub fn gtk_recent_info_is_local            (info: *mut C_GtkRecentInfo) -> Gboolean;
+    pub fn gtk_recent_info_exists              (info: *mut C_GtkRecentInfo) -> Gboolean;
+    pub fn gtk_recent_info_match               (info_a: *mut C_GtkRecentInfo, info_b: *mut C_GtkRecentInfo) -> Gboolean;
 
     //=========================================================================
     // GtkFontChooser                                                    NOT OK
@@ -1916,4 +2049,9 @@ extern "C" {
     pub fn cast_GtkPageSetup(widget: *mut C_GtkWidget) -> *mut C_GtkPageSetup;
     //pub fn cast_PageSetupUnixDialog(widget: *mut C_GtkWidget) -> *mut C_GtkPageSetupUnixDialog;
     pub fn cast_GtkPrintSettings(widget: *mut C_GtkWidget) -> *mut C_GtkPrintSettings;
+    pub fn cast_GtkRecentChooserDialog(widget: *mut C_GtkWidget) -> *mut C_GtkRecentChooserDialog;
+    pub fn cast_GtkRecentManager(widget: *mut C_GtkWidget) -> *mut C_GtkRecentManager;
+    pub fn cast_GtkRecentChooser(widget: *mut C_GtkWidget) -> *mut C_GtkRecentChooser;
+    pub fn cast_GtkRecentFilter(widget: *mut C_GtkWidget) -> *mut C_GtkRecentFilter;
+    pub fn cast_GtkRecentInfo(widget: *mut C_GtkWidget) -> *mut C_GtkRecentInfo;
 }

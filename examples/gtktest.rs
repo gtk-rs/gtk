@@ -16,6 +16,7 @@ fn main() {
     let mut button_box = gtk::ButtonBox::new(gtk::orientation::Horizontal).unwrap();
     let mut label = gtk::Label::new("Yeah a wonderful label too !").unwrap();
     let button = gtk::Button::new_with_label("Whattttt a button !").unwrap();
+    let button_recent = gtk::Button::new_with_label("Choose a recent one !").unwrap();
     let button_font = gtk::Button::new_with_label("Choose a font !").unwrap();
     let app_button = gtk::Button::new_with_label("App ?").unwrap();
     let file_button = gtk::Button::new_with_label("file ?").unwrap();
@@ -74,6 +75,11 @@ fn main() {
 
         dialog.run();
     }));
+    button_recent.connect(signals::Clicked::new(||{
+        let dialog = gtk::RecentChooserDialog::new("Recent chooser test", None).unwrap();
+
+        dialog.run();
+    }));
     file_button.connect(signals::Clicked::new(||{
         //entry.set_text("Clicked!".to_string());
         let dialog2 = gtk::FileChooserDialog::new("Choose a file", None, gtk::file_chooser_action::Open).unwrap();
@@ -95,6 +101,7 @@ fn main() {
     frame.add(&_box);
     button_box.add(&button);
     button_box.add(&button_font);
+    button_box.add(&button_recent);
     button_box.add(&file_button);
     button_box.add(&app_button);
     button_box.add(&font_button);
