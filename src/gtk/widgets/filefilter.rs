@@ -15,8 +15,8 @@
 
 use gtk::ffi;
 use gtk::ffi::FFIWidget;
-use std::str;
 use gtk::cast::GTK_FILE_FILTER;
+use std::string;
 
 struct_Widget!(FileFilter)
 
@@ -45,7 +45,7 @@ impl FileFilter {
         if name.is_null() {
             None
         } else {
-            Some(unsafe { str::raw::from_c_str(name) })
+            Some(unsafe { string::raw::from_buf(name as *const u8) })
         }
     }
 

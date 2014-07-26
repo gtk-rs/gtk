@@ -87,6 +87,13 @@ pub use self::size_request_mode::SizeRequestMode;
 pub use self::align::Align;
 pub use self::g_connect_flags::GConnectFlags;
 pub use self::builder_error::BuilderError;
+pub use self::page_orientation::PageOrientation;
+pub use self::unit::Unit;
+pub use self::number_up_layout::NumberUpLayout;
+pub use self::print_pages::PrintPages;
+pub use self::page_set::PageSet;
+pub use self::recent_sort_type::RecentSortType;
+pub use self::recent_filter_flags::RecentFilterFlags;
 
 pub mod window_type{
     #[repr(C)]
@@ -1198,5 +1205,127 @@ pub mod builder_error {
         ObjectTypeRefused,
         /// The wrong type was specified in a composite class’s template XML
         TemplateMismatch
+    }
+}
+
+/// Orientation of a page
+pub mod page_orientation {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum PageOrientation {
+        /// Portrait mode.
+        Portrait,
+        /// Landscape mode.
+        Landscape,
+        /// Reverse portrait mode.
+        ReversePortrait,
+        /// Reverse landscape mode.
+        ReverseLandscape
+    }
+}
+
+/// Unit systems
+pub mod unit {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum Unit {
+        /// No units.
+        None,
+        /// Dimensions in points.
+        Points,
+        /// Dimensions in inches.
+        Inch,
+        /// Dimensions in millimeters
+        MM
+    }
+}
+
+/// Used to determine the layout of pages on a sheet when printing multiple pages per sheet.
+pub mod number_up_layout {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum NumberUpLayout {
+        /// 1 2 3 4
+        LeftToRight_TopToBottom,
+        /// 3 4 2 1
+        LeftToRight_BottomToTop,
+        /// 2 1 4 3
+        RightToLeft_TopToBottom,
+        /// 4 3 2 1
+        RightToLeft_BottomToTop,
+        /// 1 3 2 4
+        TopToBottom_LeftToRight,
+        /// 3 1 4 2
+        TopToBottom_RightToLeft,
+        /// 2 4 1 3
+        BottomToTop_LeftToRight,
+        /// 4 2 3 1
+        BottomToTop_RightToLeft
+    }
+}
+
+/// Used to know which quantity you want to print
+pub mod print_pages {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum PrintPages {
+        /// All pages.
+        All,
+        /// Current page.
+        Current,
+        /// Range of pages.
+        Ranges,
+        /// Selected pages.
+        Selection
+    }
+}
+
+/// Different types of page to set
+pub mod page_set {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum PageSet {
+        /// All pages.
+        All,
+        /// Even pages.
+        Even,
+        /// Odd pages.
+        Odd
+    }
+}
+
+/// Used to specify the sorting method to be applyed to the recently used resource list.
+pub mod recent_sort_type {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum RecentSortType {
+        /// Do not sort the returned list of recently used resources.
+        None,
+        /// Sort the returned list with the most recently used items first.
+        MRU,
+        /// Sort the returned list with the least recently used items first.
+        LRU,
+        /// Sort the returned list using a custom sorting function passed using gtk_recent_chooser_set_sort_func().
+        Custom
+    }
+}
+
+/// These flags indicate what parts of a GtkRecentFilterInfo struct are filled or need to be filled.
+pub mod recent_filter_flags {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum RecentFilterFlags {
+        /// the URI of the file being tested
+        URI,
+        /// the string that will be used to display the file in the recent chooser
+        DisplayName,
+        /// the string that will be used to display the file in the recent chooser
+        MimeType,
+        /// the list of applications that have registered the file
+        Application,
+        /// the groups to which the file belongs to
+        Group,
+        /// the number of days elapsed since the file has been registered
+        Age
     }
 }

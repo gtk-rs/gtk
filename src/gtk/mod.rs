@@ -21,7 +21,7 @@ To implement __GTK+__ inheritance in rust, we implemented gtk superclasses as tr
 located in `rgtk::gtk::traits::*`. The various widgets implement these traits and
 live in `rgtk::gtk::widgets::*` and are rexported into `rgtk::gtk::*`.
 
-GTK Inhertance in rgtk
+GTK Inheritance in rgtk
 ======================
 
 You probably know but __Gtk+__ uses its own GObject system: inherited class and interface.
@@ -114,7 +114,17 @@ pub use self::widgets::{
     AppInfo,
     AppLaunchContext,
     AppChooserDialog,
-    DrawingArea
+    DrawingArea,
+    PageSetup,
+    PaperSize,
+    PrintSettings,
+    RecentChooserDialog,
+    //PageSetupUnixDialog
+    RecentInfo,
+    RecentFilter,
+    RecentFilterInfo,
+    RecentData,
+    RecentManager
 };
 
 #[cfg(GTK_3_6)]
@@ -210,7 +220,14 @@ pub use self::enums::{
     size_request_mode,
     align,
     g_connect_flags,
-    builder_error
+    builder_error,
+    page_orientation,
+    unit,
+    number_up_layout,
+    print_pages,
+    page_set,
+    recent_sort_type,
+    recent_filter_flags
 };
 
 
@@ -275,7 +292,14 @@ pub use self::enums::{
     SizeRequestMode,
     Align,
     GConnectFlags,
-    BuilderError
+    BuilderError,
+    PageOrientation,
+    Unit,
+    NumberUpLayout,
+    PrintPages,
+    PageSet,
+    RecentSortType,
+    RecentFilterFlags
 };
 
 /// GTK various struct

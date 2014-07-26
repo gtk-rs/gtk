@@ -13,7 +13,6 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::str;
 use libc::{c_int, c_float, c_double};
 
 use gtk::traits::Widget;
@@ -21,6 +20,7 @@ use gtk::enums::{EntryIconPosition, ImageType, InputPurpose, InputHints};
 use gtk::cast::GTK_ENTRY;
 use gtk;
 use gtk::ffi;
+use std::string;
 
 pub trait Entry: Widget {
     fn get_buffer(&self) -> gtk::EntryBuffer {
@@ -48,7 +48,7 @@ pub trait Entry: Widget {
             if c_str.is_null() {
                 None
             } else {
-                Some(str::raw::from_c_str(c_str))
+                Some(string::raw::from_buf(c_str as *const u8))
             }
         }
     }
@@ -153,7 +153,7 @@ pub trait Entry: Widget {
     fn placeholder(&self) -> String {
         unsafe {
             let c_str = ffi::gtk_entry_get_placeholder_text(GTK_ENTRY(self.get_widget()));
-            str::raw::from_c_str(c_str)
+            string::raw::from_buf(c_str as *const u8)
         }
     }
 
@@ -276,14 +276,14 @@ pub trait Entry: Widget {
     fn get_icon_stock(&self, icon_pos: EntryIconPosition) -> String {
         unsafe {
             let c_str = ffi::gtk_entry_get_icon_stock(GTK_ENTRY(self.get_widget()), icon_pos);
-            str::raw::from_c_str(c_str)
+            string::raw::from_buf(c_str as *const u8)
         }
     }
 
     fn get_icon_name(&self, icon_pos: EntryIconPosition) -> String {
         unsafe {
             let c_str = ffi::gtk_entry_get_icon_name(GTK_ENTRY(self.get_widget()), icon_pos);
-            str::raw::from_c_str(c_str)
+            string::raw::from_buf(c_str as *const u8)
         }
     }
 
@@ -332,7 +332,7 @@ pub trait Entry: Widget {
     fn get_icon_tooltip_text(&self, icon_pos: EntryIconPosition) -> String {
         unsafe {
             let c_str = ffi::gtk_entry_get_icon_tooltip_text(GTK_ENTRY(self.get_widget()), icon_pos);
-            str::raw::from_c_str(c_str)
+            string::raw::from_buf(c_str as *const u8)
         }
     }
 
@@ -345,7 +345,7 @@ pub trait Entry: Widget {
     fn get_icon_tooltip_markup(&self, icon_pos: EntryIconPosition) -> String {
         unsafe {
             let c_str = ffi::gtk_entry_get_icon_tooltip_markup(GTK_ENTRY(self.get_widget()), icon_pos);
-            str::raw::from_c_str(c_str)
+            string::raw::from_buf(c_str as *const u8)
         }
     }
 

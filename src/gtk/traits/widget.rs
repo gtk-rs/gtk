@@ -22,6 +22,7 @@ use gtk::enums;
 use gdk;
 use gtk;
 use glib;
+use std::string;
 
 pub trait Widget: ffi::FFIWidget {
     fn show_all(&mut self) -> () {
@@ -108,7 +109,7 @@ pub trait Widget: ffi::FFIWidget {
         if tmp.is_null() {
             None
         } else {
-            unsafe { Some(::std::str::raw::from_c_str(tmp)) }
+            unsafe { Some(string::raw::from_buf(tmp as *const u8)) }
         }
     }
 
@@ -374,7 +375,7 @@ pub trait Widget: ffi::FFIWidget {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { ::std::str::raw::from_c_str(tmp as *const c_char) })
+            Some(unsafe { string::raw::from_buf(tmp as *const u8) })
         }
     }
 
@@ -393,7 +394,7 @@ pub trait Widget: ffi::FFIWidget {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { ::std::str::raw::from_c_str(tmp as *const c_char) })
+            Some(unsafe { string::raw::from_buf(tmp as *const u8) })
         }
     }
 

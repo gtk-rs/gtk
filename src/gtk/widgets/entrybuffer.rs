@@ -19,8 +19,8 @@
 #![allow(visible_private_types)]
 
 use libc::{c_int, c_uint};
-use std::str;
 use gtk::ffi;
+use std::string;
 // TODO:
 // Implements custom signal : inserted-text + deleted-text
 
@@ -56,7 +56,7 @@ impl EntryBuffer {
 
     pub fn get_text(&self) -> String {
         let c_str = unsafe { ffi::gtk_entry_buffer_get_text(self.pointer) };
-        unsafe {str::raw::from_c_str(c_str) }
+        unsafe {string::raw::from_buf(c_str as *const u8) }
     }
 
     pub fn set_text(&mut self, text: &str) -> () {

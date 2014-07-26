@@ -17,7 +17,7 @@ use gtk::ffi;
 use gtk::traits;
 use gtk::cast::GTK_APP_CHOOSER;
 use gtk;
-use std::str;
+use std::string;
 
 pub trait AppChooser: traits::Widget {
     fn get_app_info(&self) -> Option<gtk::AppInfo> {
@@ -36,7 +36,7 @@ pub trait AppChooser: traits::Widget {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(unsafe { str::raw::from_c_str(tmp_pointer) })
+            Some(unsafe { string::raw::from_buf(tmp_pointer as *const u8) })
         }
     }
 

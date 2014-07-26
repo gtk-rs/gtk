@@ -13,10 +13,10 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::str;
 use gtk::ffi;
 use gtk::traits::Widget;
 use gtk::cast::GTK_WINDOW;
+use std::string;
 
 pub trait Window : Widget {
     fn set_title(&mut self, title: &str) -> () {
@@ -32,7 +32,7 @@ pub trait Window : Widget {
         if c_title.is_null() {
             None
         } else {
-            Some(unsafe { str::raw::from_c_str(c_title) })
+            Some(unsafe { string::raw::from_buf(c_title as *const u8) })
         }
     }
 
