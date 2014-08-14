@@ -94,6 +94,7 @@ pub use self::print_pages::PrintPages;
 pub use self::page_set::PageSet;
 pub use self::recent_sort_type::RecentSortType;
 pub use self::recent_filter_flags::RecentFilterFlags;
+pub use self::widget_help_type::WidgetHelpType;
 
 pub mod window_type{
     #[repr(C)]
@@ -1327,5 +1328,17 @@ pub mod recent_filter_flags {
         Group,
         /// the number of days elapsed since the file has been registered
         Age
+    }
+}
+
+/// Kinds of widget-specific help. Used by the ::show-help signal.
+pub mod widget_help_type {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum WidgetHelpType {
+        /// Tooltip
+        WidgetHelpTooltip,
+        /// What’s this
+        WidgetHelpWhatsThis
     }
 }

@@ -29,4 +29,4 @@ pub struct Tooltip;
   guint custom_was_reset : 1;
 };*/
 
-pub struct WidgetHelpType;
+// pub struct WidgetHelpType;

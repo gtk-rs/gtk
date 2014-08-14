@@ -227,7 +227,8 @@ pub use self::enums::{
     print_pages,
     page_set,
     recent_sort_type,
-    recent_filter_flags
+    recent_filter_flags,
+    widget_help_type
 };
 
 
@@ -299,13 +300,13 @@ pub use self::enums::{
     PrintPages,
     PageSet,
     RecentSortType,
-    RecentFilterFlags
+    RecentFilterFlags,
+    WidgetHelpType
 };
 
 /// GTK various struct
 pub use self::types::{
     Tooltip,
-    WidgetHelpType
 };
 
 mod macros;
