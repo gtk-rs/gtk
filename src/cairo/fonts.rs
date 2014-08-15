@@ -111,7 +111,7 @@ impl FontOptions{
 
     pub fn hash(&self) -> u64{
         unsafe{
-            ffi::cairo_font_options_hash(self.get_ptr())
+            ffi::cairo_font_options_hash(self.get_ptr()) as u64
         }
     }
 

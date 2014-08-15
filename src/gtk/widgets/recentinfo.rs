@@ -123,7 +123,7 @@ impl RecentInfo {
         } else {
             let mut ret = Vec::with_capacity(length as uint);
 
-            for count in range(0i64, length) {
+            for count in range(0, length) {
                 ret.push(unsafe { string::raw::from_buf(*tmp.offset(count as int) as *const u8) });
             }
             Some(ret)
@@ -148,9 +148,9 @@ impl RecentInfo {
             _ => false
         }
     }
-    
+
     pub fn get_groups(&self) -> Option<Vec<String>> {
-        let mut length = 0i64;
+        let mut length = 0;
         let tmp = unsafe { ffi::gtk_recent_info_get_groups(GTK_RECENT_INFO(self.get_widget()), &mut length) };
 
         if tmp.is_null() {
@@ -158,7 +158,7 @@ impl RecentInfo {
         } else {
             let mut ret = Vec::with_capacity(length as uint);
 
-            for count in range(0i64, length) {
+            for count in range(0, length) {
                 ret.push(unsafe { string::raw::from_buf(*tmp.offset(count as int) as *const u8) });
             }
             Some(ret)

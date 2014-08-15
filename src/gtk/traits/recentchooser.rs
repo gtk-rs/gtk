@@ -176,7 +176,7 @@ pub trait RecentChooser: traits::Widget {
     }
 
     fn get_uris(&self) -> Option<Vec<String>> {
-        let mut length = 0i64;
+        let mut length = 0;
         let tmp = unsafe { ffi::gtk_recent_chooser_get_uris(GTK_RECENT_CHOOSER(self.get_widget()), &mut length) };
 
         if tmp.is_null() {
@@ -184,7 +184,7 @@ pub trait RecentChooser: traits::Widget {
         } else {
             let mut ret = Vec::with_capacity(length as uint);
 
-            for count in range(0i64, length) {
+            for count in range(0, length) {
                 ret.push(unsafe { string::raw::from_buf(*tmp.offset(count as int) as *const u8) });
             }
             Some(ret)
