@@ -411,7 +411,7 @@ impl cairo::Context{
         }
     }
 
-    pub fn show_glyphs<V: Vector<Glyph>>(&self, vec: V){
+    pub fn show_glyphs<V: Slice<Glyph>>(&self, vec: V){
         unsafe{
             let slice: &[Glyph] = vec.as_slice();
             ffi::cairo_show_glyphs(self.get_ptr(), slice.as_ptr(), slice.len() as c_int)
@@ -419,8 +419,8 @@ impl cairo::Context{
     }
 
     pub fn show_text_glyphs<S: ToCStr,
-                            V: Vector<Glyph>,
-                            W: Vector<TextCluster>>(&self,
+                            V: Slice<Glyph>,
+                            W: Slice<TextCluster>>(&self,
                                        text: S,
                                        glyph_vec: V,
                                        cluster_vec: W,
@@ -477,7 +477,7 @@ impl cairo::Context{
         extents
     }
 
-    pub fn glyph_extents<G: Vector<Glyph>>(&self, glyph_vec: G) -> TextExtents{
+    pub fn glyph_extents<G: Slice<Glyph>>(&self, glyph_vec: G) -> TextExtents{
         let mut extents = TextExtents{
             x_bearing: 0.0,
             y_bearing: 0.0,
