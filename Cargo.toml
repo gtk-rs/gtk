@@ -4,7 +4,7 @@ version = "0.0.1"
 authors = ["letang.jeremy@gmail.com", "mathijs.henquet@gmail.com", "guillaume1.gomez@gmail.com"]
 build = "sh cargobuild.sh"
 
-[[lib]]
+[lib]
 name = "rgtk"
 crate_type = ["rlib"]
 path = "src/rgtk.rs"
