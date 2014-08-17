@@ -42,6 +42,7 @@ fn main() {
     let arrow = gtk::Arrow::new(gtk::arrow_type::Right, gtk::shadow_type::EtchedOut).unwrap();
     let calendar = gtk::Calendar::new().unwrap();
     let mut info_bar = gtk::InfoBar::new().unwrap();
+    let tmp_button = gtk::Button::new_from_icon_name("edit-clear", gtk::icon_size::Button).unwrap();
 
     println!("test");
 
@@ -99,6 +100,7 @@ fn main() {
     }));
 
     frame.add(&_box);
+    button_box.add(&tmp_button);
     button_box.add(&button);
     button_box.add(&button_font);
     button_box.add(&button_recent);
