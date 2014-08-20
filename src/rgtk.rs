@@ -47,29 +47,29 @@ let button = gtk::Button:new(); // trait gtk::traits::Button reexported as GtkBu
 
 extern crate libc;
 
-pub use GtkWidgetTrait          = gtk::traits::Widget;
-pub use GtkContainerTrait       = gtk::traits::Container;
-pub use GtkWindowTrait          = gtk::traits::Window;
-pub use GtkMiscTrait            = gtk::traits::Misc;
-pub use GtkButtonTrait          = gtk::traits::Button;
-pub use GtkLabelTrait           = gtk::traits::Label;
-pub use GtkBoxTrait             = gtk::traits::Box;
-pub use GtkOrientableTrait      = gtk::traits::Orientable;
-pub use GtkFrameTrait           = gtk::traits::Frame;
-pub use GtkToggleButtonTrait    = gtk::traits::ToggleButton;
-pub use GtkScaleButtonTrait     = gtk::traits::ScaleButton;
-pub use GtkEntryTrait           = gtk::traits::Entry;
-pub use GtkBinTrait             = gtk::traits::Bin;
-pub use GtkToolShellTrait       = gtk::traits::ToolShell;
-pub use GtkToolItemTrait        = gtk::traits::ToolItem;
-pub use GtkToolButtonTrait      = gtk::traits::ToolButton;
-pub use GtkToggleToolButtonTrait= gtk::traits::ToggleToolButton;
-pub use GtkDialogTrait          = gtk::traits::Dialog;
-pub use GtkColorChooserTrait    = gtk::traits::ColorChooser;
-pub use GtkScrollableTrait      = gtk::traits::Scrollable;
-pub use GtkFileChooserTrait     = gtk::traits::FileChooser;
-pub use GtkFontChooserTrait     = gtk::traits::FontChooser;
-pub use GtkAppChooserTrait      = gtk::traits::AppChooser;
+pub use gtk::traits::Widget           as GtkWidgetTrait;
+pub use gtk::traits::Container        as GtkContainerTrait;
+pub use gtk::traits::Window           as GtkWindowTrait;
+pub use gtk::traits::Misc             as GtkMiscTrait;
+pub use gtk::traits::Button           as GtkButtonTrait;
+pub use gtk::traits::Label            as GtkLabelTrait;
+pub use gtk::traits::Box              as GtkBoxTrait;
+pub use gtk::traits::Orientable       as GtkOrientableTrait;
+pub use gtk::traits::Frame            as GtkFrameTrait;
+pub use gtk::traits::ToggleButton     as GtkToggleButtonTrait;
+pub use gtk::traits::ScaleButton      as GtkScaleButtonTrait;
+pub use gtk::traits::Entry            as GtkEntryTrait;
+pub use gtk::traits::Bin              as GtkBinTrait;
+pub use gtk::traits::ToolShell        as GtkToolShellTrait;
+pub use gtk::traits::ToolItem         as GtkToolItemTrait;
+pub use gtk::traits::ToolButton       as GtkToolButtonTrait;
+pub use gtk::traits::ToggleToolButton as GtkToggleToolButtonTrait;
+pub use gtk::traits::Dialog           as GtkDialogTrait;
+pub use gtk::traits::ColorChooser     as GtkColorChooserTrait;
+pub use gtk::traits::Scrollable       as GtkScrollableTrait;
+pub use gtk::traits::FileChooser      as GtkFileChooserTrait;
+pub use gtk::traits::FontChooser      as GtkFontChooserTrait;
+pub use gtk::traits::AppChooser       as GtkAppChooserTrait;
 
 #[doc(hidden)]
 #[cfg(target_os="macos")]
