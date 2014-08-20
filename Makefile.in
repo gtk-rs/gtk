@@ -41,7 +41,7 @@ $(GLUE_DST)/$(GLUE_LIBNAME).dylib: $(GLUE_SRC) | $(GLUE_DST)/
 					$(CC) $(INC) $(LIBS) -dynamiclib -o $(GLUE_DST)/$(GLUE_LIBNAME).dylib $(SRC)
 
 $(GLUE_DST)/$(GLUE_LIBNAME).o: $(GLUE_SRC) | $(GLUE_DST)/
-					$(CC) -g -c $^ $(INC) -o $@ $(LIBS)
+					$(CC) -g -c $^ $(INC) -o $@ $(LIBS) -fPIC
 
 $(GLUE_DST)/$(GLUE_LIBNAME).a: $(GLUE_DST)/$(GLUE_LIBNAME).o | $(GLUE_DST)/
 					ar -rcs $@ $^
