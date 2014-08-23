@@ -52,7 +52,7 @@ $(GLUE_DST)/$(GLUE_LIBNAME).so:    $(GLUE_DST)/$(GLUE_LIBNAME).o | $(GLUE_DST)/
 # Examples
 .PHONY: examples cairotest gtktest
 
-examples: cairotest gtktest
+examples: cairotest gtktest basic
 
 cairotest:	$(EXAMPLE_DIR)cairotest
 					@$(ECHO) "$(OK_COLOR) Building $@ $(NO_COLOR)"
@@ -60,12 +60,27 @@ cairotest:	$(EXAMPLE_DIR)cairotest
 gtktest: 	$(EXAMPLE_DIR)gtktest
 					@$(ECHO) "$(OK_COLOR) Building $@ $(NO_COLOR)"
 
+basic: 		$(EXAMPLE_DIR)basic
+					@$(ECHO) "$(OK_COLOR) Building $@ $(NO_COLOR)"
+
+sync_widgets: 	$(EXAMPLE_DIR)sync_widgets
+					@$(ECHO) "$(OK_COLOR) Building $@ $(NO_COLOR)"
+
+
 $(EXAMPLE_DIR)cairotest: rgtk examples/cairotest.rs | $(EXAMPLE_DIR)
 					$(RUSTC) -L target/ examples/cairotest.rs -o $@
 
 
 $(EXAMPLE_DIR)gtktest: rgtk examples/gtktest.rs | $(EXAMPLE_DIR)
 					$(RUSTC) -L target/ examples/gtktest.rs -o $@
+
+
+$(EXAMPLE_DIR)basic: rgtk examples/basic.rs | $(EXAMPLE_DIR)
+					$(RUSTC) -L target/ examples/basic.rs -o $@
+
+
+$(EXAMPLE_DIR)sync_widgets: rgtk examples/sync_widgets.rs | $(EXAMPLE_DIR)
+					$(RUSTC) -L target/ examples/sync_widgets.rs -o $@
 
 .PHONY: doc
 doc:

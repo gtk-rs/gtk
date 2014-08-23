@@ -50,6 +50,10 @@ pub fn GTK_ORIENTABLE(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkOrientabl
     unsafe { ffi::cast_GtkOrientable(widget) }
 }
 
+pub fn GTK_RANGE(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkRange {
+    unsafe { ffi::cast_GtkRange(widget) }
+}
+
 pub fn GTK_BOX(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkBox {
     unsafe { ffi::cast_GtkBox(widget) }
 

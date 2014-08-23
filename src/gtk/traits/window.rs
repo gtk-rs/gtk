@@ -16,6 +16,8 @@
 use gtk::ffi;
 use gtk::traits::Widget;
 use gtk::cast::GTK_WINDOW;
+use gtk::enums::WindowPosition;
+
 use std::string;
 
 pub trait Window : Widget {
@@ -37,8 +39,15 @@ pub trait Window : Widget {
     }
 
     fn set_default_size(&self, width: i32, height: i32){
-        unsafe{
+        unsafe {
             ffi::gtk_window_set_default_size(self.get_widget(), width, height)
         }
+    }
+
+    fn set_window_position(&self, window_position: WindowPosition) {
+        unsafe {
+            ffi::gtk_window_set_position(GTK_WINDOW(self.get_widget()), window_position);
+        }
+
     }
 }
