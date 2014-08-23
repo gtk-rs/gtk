@@ -37,3 +37,4 @@ impl_drop!(SearchEntry)
 impl_TraitWidget!(SearchEntry)
 
 impl traits::Entry for SearchEntry {}
+impl traits::Editable for SearchEntry {}

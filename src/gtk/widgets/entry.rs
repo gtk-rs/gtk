@@ -57,3 +57,4 @@ impl_drop!(Entry)
 impl_TraitWidget!(Entry)
 
 impl traits::Entry for Entry {}
+impl traits::Editable for Entry {}
