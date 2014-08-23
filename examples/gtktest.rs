@@ -62,6 +62,7 @@ fn main() {
     volume_button.set_orientation(gtk::orientation::Horizontal);
     label.set_justify(gtk::justification::Left);
     window.set_title("Yeah a beautiful window with rgtk !");
+    window.set_window_position(gtk::window_position::Center);
     window.add(&frame);
 
     button.connect(signals::Clicked::new(||{

@@ -14,7 +14,6 @@ fn main() {
     window.set_border_width(10);
     window.set_window_position(gtk::window_position::Center);
     window.set_default_size(350, 70);
-    //window.destroy.connect (Gtk.main_quit);
 
     window.connect(signals::DeleteEvent::new(|_|{
         gtk::main_quit();
@@ -22,9 +21,6 @@ fn main() {
     }));
 
     let button = gtk::Button::new_with_label("Click me!").unwrap();
-    // button.clicked.connect (() => {
-    //     button.label = "Thank you";
-    // });
 
 	window.add(&button);
 
