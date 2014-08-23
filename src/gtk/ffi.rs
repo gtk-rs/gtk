@@ -180,12 +180,13 @@ extern "C" {
     pub fn gtk_window_set_title                (window: *mut C_GtkWindow, title: *const c_char) -> ();
     pub fn gtk_window_get_title                (window: *mut C_GtkWindow) -> *const c_char;
     pub fn gtk_window_set_default_size         (widget: *mut C_GtkWidget, width: c_int, height: c_int);
+    pub fn gtk_window_set_position             (window: *mut C_GtkWindow, position: gtk::WindowPosition) -> ();
+
     // pub fn gtk_window_set_role(window: *const const C_GtkWindow, role: *const c_char) -> ();
     // pub fn gtk_window_set_startup_id(window: *const const C_GtkWindow, startup_id: *const c_char) -> ();
     // pub fn gtk_window_get_role(window: *const const C_GtkWindow) -> *const c_char;
     // pub fn gtk_window_add_accel_group(window: *const const C_GtkWindow, accel_group: *GtkAccelGroup) -> ();
     // pub fn gtk_window_remove_accel_group(window: *const const C_GtkWindow, accel_group: *GtkAccelGroup) -> ();
-    // pub fn gtk_window_set_position(window: *const const C_GtkWindow,position: gtk::WindowPosition) -> ();
     // pub fn gtk_window_activate_focus(window: *const const C_GtkWindow) -> Gboolean;
     // pub fn gtk_window_set_focus(window: *const const C_GtkWindow, focus: *const const C_GtkWidget) -> ();
     // pub fn gtk_window_get_focus(window: *const const C_GtkWindow) -> *const const C_GtkWidget;
@@ -794,7 +795,7 @@ extern "C" {
     pub fn gtk_recent_chooser_get_filter       (chooser: *mut C_GtkRecentChooser) -> *mut C_GtkRecentFilter;
 
     //callback
-    //let GtkRecentSortFunc = fn(a: *mut C_GtkRecentInfo, b: *mut C_GtkRecentInfo, user_data: *mut c_void); 
+    //let GtkRecentSortFunc = fn(a: *mut C_GtkRecentInfo, b: *mut C_GtkRecentInfo, user_data: *mut c_void);
 
     //=========================================================================
     // GtkRecentFilter                                                   NOT OK
