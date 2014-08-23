@@ -13,15 +13,10 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::ptr;
-use libc::c_float;
-
 use gtk;
-use gtk::traits::{Widget, Container};
-use gtk::enums::ShadowType;
+use gtk::traits::Widget;
 use gtk::cast::GTK_RANGE;
 use gtk::ffi;
-use std::string;
 
 pub trait Range: Widget {
     fn set_adjustment(&mut self, adjustment: &gtk::Adjustment) -> () {
@@ -30,7 +25,7 @@ pub trait Range: Widget {
         }
     }
 
-	fn get_adjustment(&self) -> gtk::Adjustment {
+    fn get_adjustment(&self) -> gtk::Adjustment {
         unsafe {
             gtk::Adjustment::wrap_pointer(ffi::gtk_range_get_adjustment(GTK_RANGE(self.get_widget())))
         }

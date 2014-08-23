@@ -9,6 +9,7 @@ use cairo::ffi::{
 use cairo::enums::{Status, Antialias, LineCap, LineJoin, FillRule};
 use cairo::patterns::{wrap_pattern, Pattern};
 
+#[repr(C)]
 pub struct Rectangle{
     x: f64,
     y: f64,

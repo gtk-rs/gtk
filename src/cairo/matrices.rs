@@ -3,6 +3,7 @@ use libc::{c_double};
 
 use cairo::ffi;
 
+#[repr(C)]
 pub struct Matrix{
     xx: c_double,
     yx: c_double,

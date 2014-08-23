@@ -1,5 +1,6 @@
 use libc::{c_void};
 
+#[repr(C)]
 pub struct Rectangle { //FIXME should be just an alias to cairo_rectangle_int_t
     x: int,
     y: int,
@@ -9,4 +10,5 @@ pub struct Rectangle { //FIXME should be just an alias to cairo_rectangle_int_t
 
 pub type Atom = *mut c_void;
 
+#[repr(C)]
 pub struct Screen;

@@ -23,23 +23,27 @@ pub type Gboolean = c_int;
 pub static Gfalse:  c_int = 0;
 pub static Gtrue:   c_int = !Gfalse;
 
+#[repr(C)]
 pub struct C_GList {
   pub data: *mut c_void,
   pub next: *mut C_GList,
   pub prev: *mut C_GList
 }
 
+#[repr(C)]
 pub struct C_GSList {
   pub data: *mut c_void,
   pub next: *mut C_GSList
 }
 
+#[repr(C)]
 pub struct C_GError {
     pub domain : GQuark,
     pub code   : i32,
     pub message: *mut c_char
 }
 
+#[repr(C)]
 pub struct C_GObject;
 
 extern "C" {

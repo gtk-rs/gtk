@@ -31,80 +31,154 @@ pub static Gtrue:   c_int = !Gfalse;
 pub type gpointer = *const c_void;
 pub type time_t = i64;
 
+#[repr(C)]
 pub struct C_GtkWidget;
+#[repr(C)]
 pub struct C_GtkWindow;
+#[repr(C)]
 pub struct C_GtkLabel;
+#[repr(C)]
 pub struct C_GtkMisc;
+#[repr(C)]
 pub struct C_GtkButton;
+#[repr(C)]
 pub struct C_GtkBox;
+#[repr(C)]
 pub struct C_GtkOrientable;
+#[repr(C)]
 pub struct C_GtkRange;
+#[repr(C)]
 pub struct C_GtkButtonBox;
+#[repr(C)]
 pub struct C_GtkFrame;
+#[repr(C)]
 pub struct C_GtkAspectFrame;
+#[repr(C)]
 pub struct C_GtkFixed;
+#[repr(C)]
 pub struct C_GtkBin;
+#[repr(C)]
 pub struct C_GtkContainer;
+#[repr(C)]
 pub struct C_GtkFontButton;
+#[repr(C)]
 pub struct C_GtkToggleButton;
+#[repr(C)]
 pub struct C_GtkCheckButton;
+#[repr(C)]
 pub struct C_GtkMenuButton;
+#[repr(C)]
 pub struct C_GtkColorButton;
+#[repr(C)]
 pub struct C_GtkLinkButton;
+#[repr(C)]
 pub struct C_GtkAdjustment;
+#[repr(C)]
 pub struct C_GtkScaleButton;
+#[repr(C)]
 pub struct C_GtkVolumeButton;
+#[repr(C)]
 pub struct C_GtkGrid;
+#[repr(C)]
 pub struct C_GtkEntryBuffer;
+#[repr(C)]
 pub struct C_GtkEntry;
+#[repr(C)]
 pub struct C_GtkSearchEntry;
+#[repr(C)]
 pub struct C_GtkSwitch;
+#[repr(C)]
 pub struct C_GtkScale;
+#[repr(C)]
 pub struct C_GtkLevelBar;
+#[repr(C)]
 pub struct C_GtkSearchBar;
+#[repr(C)]
 pub struct C_GtkSpinButton;
+#[repr(C)]
 pub struct C_GtkSpinner;
+#[repr(C)]
 pub struct C_GtkImage;
+#[repr(C)]
 pub struct C_GtkProgressBar;
+#[repr(C)]
 pub struct C_GtkArrow;
+#[repr(C)]
 pub struct C_GtkCalendar;
+#[repr(C)]
 pub struct C_GtkAlignment;
+#[repr(C)]
 pub struct C_GtkExpander;
+#[repr(C)]
 pub struct C_GtkPaned;
+#[repr(C)]
 pub struct C_GtkInfoBar;
+#[repr(C)]
 pub struct C_GtkToolShell;
+#[repr(C)]
 pub struct C_GtkToolbar;
+#[repr(C)]
 pub struct C_GtkDialog;
+#[repr(C)]
 pub struct C_GtkAboutDialog;
+#[repr(C)]
 pub struct C_GtkMessageDialog;
+#[repr(C)]
 pub struct C_GtkAppChooserDialog;
+#[repr(C)]
 pub struct C_GtkColorChooserDialog;
+#[repr(C)]
 pub struct C_GtkFileChooserDialog;
+#[repr(C)]
 pub struct C_GtkFileChooser;
+#[repr(C)]
 pub struct C_GtkNotebook;
+#[repr(C)]
 pub struct C_GtkStack;
+#[repr(C)]
 pub struct C_GtkStackSwitcher;
+#[repr(C)]
 pub struct C_GtkRevealer;
+#[repr(C)]
 pub struct C_GtkOverlay;
+#[repr(C)]
 pub struct C_GtkScrollable;
+#[repr(C)]
 pub struct C_GtkLayout;
+#[repr(C)]
 pub struct C_GtkHeaderBar;
+#[repr(C)]
 pub struct C_GtkFlowBox;
+#[repr(C)]
 pub struct C_GtkFlowBoxChild;
+#[repr(C)]
 pub struct C_GtkListBox;
+#[repr(C)]
 pub struct C_GtkListBoxRow;
+#[repr(C)]
 pub struct C_GtkActionBar;
+#[repr(C)]
 pub struct C_GtkFileFilter;
+#[repr(C)]
 pub struct C_GtkAppChooser;
+#[repr(C)]
 pub struct C_GAppLaunchContext;
+#[repr(C)]
 pub struct C_GAppInfo;
+#[repr(C)]
 pub struct C_GtkFontChooser;
+#[repr(C)]
 pub struct C_GtkFontChooserDialog;
+#[repr(C)]
 pub struct C_GtkBuildable;
 //pub struct C_GtkPageSetupUnixDialog;
+#[repr(C)]
 pub struct C_GtkPrintSettings;
+#[repr(C)]
 pub struct C_GtkPageSetup;
+#[repr(C)]
 pub struct C_GtkPaperSize;
+#[repr(C)]
 pub struct C_GtkRecentData {
     pub display_name: *mut c_char,
     pub description: *mut c_char,
@@ -114,8 +188,11 @@ pub struct C_GtkRecentData {
     pub groups: *mut *mut c_char,
     pub is_private: Gboolean
 }
+#[repr(C)]
 pub struct C_GtkRecentInfo;
+#[repr(C)]
 pub struct C_GtkRecentFilter;
+#[repr(C)]
 pub struct C_GtkRecentFilterInfo {
     pub contains: gtk::RecentFilterFlags,
     pub uri: *const c_char,
@@ -125,25 +202,39 @@ pub struct C_GtkRecentFilterInfo {
     pub groups: *const *const c_char,
     pub age: c_int
 }
+#[repr(C)]
 pub struct C_GtkRecentManager;
+#[repr(C)]
 pub struct C_GtkRecentChooser;
+#[repr(C)]
 pub struct C_GtkRecentChooserDialog;
 
+#[repr(C)]
 pub struct C_GtkToolItem;
+#[repr(C)]
 pub struct C_GtkToolButton;
+#[repr(C)]
 pub struct C_GtkMenuToolButton;
+#[repr(C)]
 pub struct C_GtkToggleToolButton;
+#[repr(C)]
 pub struct C_GtkRadioToolButton;
+#[repr(C)]
 pub struct C_GtkSeparatorToolItem;
 
+#[repr(C)]
 pub struct C_GtkMenu;
+#[repr(C)]
 pub struct C_GMenuModel;
 
+#[repr(C)]
 pub struct C_GClosure;
 
+#[repr(C)]
 pub struct C_GtkColorChooser;
 
 // not useful to implement for the moment
+#[repr(C)]
 pub struct C_GtkBuilder;
 
 pub fn to_gboolean(b: bool) -> Gboolean{

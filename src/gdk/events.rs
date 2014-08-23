@@ -55,6 +55,7 @@ pub trait Event {
   }
 }
 
+#[repr(C)]
 pub struct EventAny {
   pub _type : gdk::EventType,
   pub window : *mut gdk::Window,

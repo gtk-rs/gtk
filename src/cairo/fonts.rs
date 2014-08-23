@@ -25,11 +25,13 @@ use cairo::ffi::{
 };
 
 
+#[repr(C)]
 pub struct TextCluster {
     num_bytes: c_int,
     num_glyphs: c_int
 }
 
+#[repr(C)]
 pub struct Glyph{
     index: c_ulong,
     x: c_double,
@@ -62,6 +64,7 @@ impl TextCluster{
 }
 */
 
+#[repr(C)]
 pub struct FontExtents{
     pub ascent: c_double,
     pub descent: c_double,
@@ -70,6 +73,7 @@ pub struct FontExtents{
     pub max_y_advance: c_double,
 }
 
+#[repr(C)]
 pub struct TextExtents {
     pub x_bearing: c_double,
     pub y_bearing: c_double,
