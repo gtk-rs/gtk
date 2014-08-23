@@ -38,6 +38,7 @@ pub struct C_GtkMisc;
 pub struct C_GtkButton;
 pub struct C_GtkBox;
 pub struct C_GtkOrientable;
+pub struct C_GtkRange;
 pub struct C_GtkButtonBox;
 pub struct C_GtkFrame;
 pub struct C_GtkAspectFrame;
@@ -1416,6 +1417,12 @@ extern "C" {
     pub fn gtk_scale_clear_marks               (scale: *mut C_GtkScale) -> ();
 
     //=========================================================================
+    // GtkRange
+    //=========================================================================
+    pub fn gtk_range_set_adjustment            (scale: *mut C_GtkRange, adjustment: *mut C_GtkAdjustment) -> ();
+    pub fn gtk_range_get_adjustment            (scale: *mut C_GtkRange) -> *mut C_GtkAdjustment;
+
+    //=========================================================================
     // GtkLevelBar
     //=========================================================================
     pub fn gtk_level_bar_new                   () -> *mut C_GtkWidget;
@@ -1985,6 +1992,7 @@ extern "C" {
     pub fn cast_GtkLabel(widget: *mut C_GtkWidget) -> *mut C_GtkLabel;
     pub fn cast_GtkMisc(widget: *mut C_GtkWidget) -> *mut C_GtkMisc;
     pub fn cast_GtkOrientable(widget: *mut C_GtkWidget) -> *mut C_GtkOrientable;
+    pub fn cast_GtkRange(widget: *mut C_GtkWidget) -> *mut C_GtkRange;
     pub fn cast_GtkBox(widget: *mut C_GtkWidget) -> *mut C_GtkBox;
     pub fn cast_GtkFixed(widget: *mut C_GtkWidget) -> *mut C_GtkFixed;
     pub fn cast_GtkButtonBox(widget: *mut C_GtkWidget) -> *mut C_GtkButtonBox;

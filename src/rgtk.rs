@@ -70,6 +70,7 @@ pub use gtk::traits::Scrollable       as GtkScrollableTrait;
 pub use gtk::traits::FileChooser      as GtkFileChooserTrait;
 pub use gtk::traits::FontChooser      as GtkFontChooserTrait;
 pub use gtk::traits::AppChooser       as GtkAppChooserTrait;
+pub use gtk::traits::Range            as GtkAppRangeTrait;
 
 #[doc(hidden)]
 #[cfg(target_os="macos")]

@@ -1,3 +1,7 @@
+//! # Basic Sample
+//!
+//! This sample demonstrates how to create a toplevel `window`, set its title, size and position, how to add a `button` to this `window` and how to connect signals with actions.
+
 #![feature(globs)]
 #![crate_type = "bin"]
 
@@ -15,7 +19,7 @@ fn main() {
     window.set_window_position(gtk::window_position::Center);
     window.set_default_size(350, 70);
 
-    window.connect(signals::DeleteEvent::new(|_|{
+    window.connect(signals::DeleteEvent::new(|_| {
         gtk::main_quit();
         true
     }));

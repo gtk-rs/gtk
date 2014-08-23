@@ -22,7 +22,6 @@ use gtk::cast::GTK_SCALE;
 use gtk;
 use gtk::ffi;
 use gtk::traits;
-// TODO : implements Range
 
 /**
 * Scale — A slider widget for selecting a value from a range
@@ -127,3 +126,4 @@ impl_drop!(Scale)
 impl_TraitWidget!(Scale)
 
 impl traits::Orientable for Scale {}
+impl traits::Range for Scale {}

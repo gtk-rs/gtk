@@ -326,3 +326,7 @@ signal!(clicked,            Clicked() -> ())
 
 //GtkDialog
 signal!(response,           Response(response_id : int) -> ())
+
+//GtkAdjustment
+//https://developer.gnome.org/gtk3/stable/GtkAdjustment.html#GtkAdjustment.signals
+signal!(value_changed,      ValueChanged() -> ())

@@ -37,6 +37,7 @@ pub use self::filechooser::FileChooser;
 pub use self::appchooser::AppChooser;
 pub use self::fontchooser::FontChooser;
 pub use self::recentchooser::RecentChooser;
+pub use self::range::Range;
 
 pub mod widget;
 pub mod container;
@@ -62,3 +63,4 @@ pub mod filechooser;
 pub mod appchooser;
 pub mod fontchooser;
 pub mod recentchooser;
+pub mod range;
