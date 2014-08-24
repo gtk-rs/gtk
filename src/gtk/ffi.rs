@@ -232,12 +232,14 @@ pub struct C_GClosure;
 
 #[repr(C)]
 pub struct C_GtkColorChooser;
+#[repr(C)]
+pub struct C_GtkEditable;
 
 // not useful to implement for the moment
 #[repr(C)]
 pub struct C_GtkBuilder;
 
-pub fn to_gboolean(b: bool) -> Gboolean{
+pub fn to_gboolean(b: bool) -> Gboolean {
     match b {
         true => Gtrue,
         false => Gfalse
@@ -2021,6 +2023,23 @@ extern "C" {
     pub fn gtk_drawing_area_new                 () -> *mut C_GtkWidget;
 
     //=========================================================================
+    // GtkDrawingArea                                                        OK
+    //=========================================================================
+    pub fn gtk_editable_select_region        (editable: *mut C_GtkEditable, start_pos: c_int, end_pos: c_int);
+    pub fn gtk_editable_get_selection_bounds (editable: *mut C_GtkEditable, start_pos: *mut c_int, end_pos: *mut c_int) -> Gboolean;
+    pub fn gtk_editable_insert_text          (editable: *mut C_GtkEditable, new_text: *const c_char, new_text_length: c_int, position: c_int);
+    pub fn gtk_editable_delete_text          (editable: *mut C_GtkEditable, start_pos: c_int, end_pos: c_int);
+    pub fn gtk_editable_get_chars            (editable: *mut C_GtkEditable, start_pos: c_int, end_pos: c_int) -> *const c_char;
+    pub fn gtk_editable_cut_clipboard        (editable: *mut C_GtkEditable);
+    pub fn gtk_editable_copy_clipboard       (editable: *mut C_GtkEditable);
+    pub fn gtk_editable_paste_clipboard      (editable: *mut C_GtkEditable);
+    pub fn gtk_editable_delete_selection     (editable: *mut C_GtkEditable);
+    pub fn gtk_editable_set_position         (editable: *mut C_GtkEditable, position: c_int);
+    pub fn gtk_editable_get_position         (editable: *mut C_GtkEditable) -> c_int;
+    pub fn gtk_editable_set_editable         (editable: *mut C_GtkEditable, is_editable: Gboolean);
+    pub fn gtk_editable_get_editable         (editable: *mut C_GtkEditable) -> Gboolean;
+
+    //=========================================================================
     // Glue fixe code
     //=========================================================================
     pub fn glue_signal_connect(g_object: *mut C_GtkWidget,
@@ -2154,4 +2173,5 @@ extern "C" {
     pub fn cast_GtkRecentChooser(widget: *mut C_GtkWidget) -> *mut C_GtkRecentChooser;
     pub fn cast_GtkRecentFilter(widget: *mut C_GtkWidget) -> *mut C_GtkRecentFilter;
     pub fn cast_GtkRecentInfo(widget: *mut C_GtkWidget) -> *mut C_GtkRecentInfo;
+    pub fn cast_GtkEditable(widget: *mut C_GtkWidget) -> *mut C_GtkEditable;
 }

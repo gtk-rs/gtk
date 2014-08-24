@@ -333,3 +333,7 @@ pub fn GTK_RECENT_FILTER(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkRecent
 pub fn GTK_RECENT_INFO(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkRecentInfo {
     unsafe{ ffi::cast_GtkRecentInfo(widget) }
 }
+
+pub fn GTK_EDITABLE(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkEditable {
+    unsafe{ ffi::cast_GtkEditable(widget) }
+}

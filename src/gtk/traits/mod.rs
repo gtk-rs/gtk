@@ -38,6 +38,7 @@ pub use self::appchooser::AppChooser;
 pub use self::fontchooser::FontChooser;
 pub use self::recentchooser::RecentChooser;
 pub use self::range::Range;
+pub use self::editable::Editable;
 
 pub mod widget;
 pub mod container;
@@ -64,3 +65,4 @@ pub mod appchooser;
 pub mod fontchooser;
 pub mod recentchooser;
 pub mod range;
+pub mod editable;
