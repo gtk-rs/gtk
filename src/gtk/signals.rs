@@ -35,7 +35,7 @@ pub trait Signal<'a>{
 
     fn fetch_cb(&self) -> *mut ||;
 
-    fn get_user_data<'b>(&'b self) -> &'b Option<Box<Any>>;
+    fn get_user_data<'b>(&'b self) -> &'b Option<Box<Any + 'a>>;
 }
 
 // The defintion of the signal macro is split in a argumentless and
@@ -163,7 +163,7 @@ macro_rules! signal(
     ($signal:ident, $class:ident [ $(($arg_name:ident : $arg_type:ty)),* ] -> $ret_type:ty) => (
         pub struct $class<'a>{
             pub cb: |$($arg_type),*|:'a -> $ret_type,
-            pub user_data: Option<Box<Any>>
+            pub user_data: Option<Box<Any + 'a>>
         }
 
         impl<'a> $class<'a>{
@@ -200,7 +200,7 @@ macro_rules! signal(
                 }
             }
 
-            fn get_user_data<'b>(&'b self) -> &'b Option<Box<Any>>{
+            fn get_user_data<'b>(&'b self) -> &'b Option<Box<Any + 'a>>{
                 &self.user_data
             }
         }
@@ -209,7 +209,7 @@ macro_rules! signal(
 
 //GObject
 //https://developer.gnome.org/gobject/unstable/gobject-The-Base-Object-Type.html#gobject-The-Base-Object-Type.signals
-signal!(notify,	Notify(g_param_spec:c_void) -> ())
+signal!(notify, Notify(g_param_spec:c_void) -> ())
 
 //GtkWidget
 //https://developer.gnome.org/gtk3/stable/GtkWidget.html#GtkWidget.signals
