@@ -26,7 +26,7 @@ use cairo::{
 
 
 //TODO Does anyone know a way to do this without dynamic dispatch -- @mthq
-pub fn wrap_pattern(ptr: *mut cairo_pattern_t) -> Box<Pattern>{
+pub fn wrap_pattern<'a>(ptr: *mut cairo_pattern_t) -> Box<Pattern + 'a>{
     let pattern_type = unsafe{ ffi::cairo_pattern_get_type(ptr) };
 
     match pattern_type{
