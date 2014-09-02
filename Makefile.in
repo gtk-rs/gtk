@@ -97,3 +97,4 @@ full:				glue rgtk examples
 clean:
 					rm -rf target/ doc/
 
+re: clean glue rgtk
