@@ -383,7 +383,7 @@ GtkPrintSettings* cast_GtkPrintSettings(GtkWidget* widget) {
     return GTK_PRINT_SETTINGS(widget);
 }
 
-GtkRecentChooserDialog* cast_GGtkRecentChooserDialog(GtkWidget* widget) {
+GtkRecentChooserDialog* cast_GtkRecentChooserDialog(GtkWidget* widget) {
     return GTK_RECENT_CHOOSER_DIALOG(widget);
 }
 
@@ -406,7 +406,7 @@ GtkRecentInfo* cast_GtkRecentInfo(GtkWidget* widget) {
 
 /* specific versions */
 
-#ifdef GTK_3_6
+#if defined(GTK_3_6) || defined(GTK_3_10) || defined(GTK_3_12)
 
 GtkMenuButton* cast_GtkMenuButton(GtkWidget* widget) {
     return GTK_MENU_BUTTON(widget);
@@ -414,7 +414,7 @@ GtkMenuButton* cast_GtkMenuButton(GtkWidget* widget) {
 
 #endif
 
-#ifdef GTK_3_10
+#if defined(GTK_3_10) || defined(GTK_3_12)
 
 GtkSearchBar* cast_GtkSearchBar(GtkWidget* widget) {
     return GTK_SEARCH_BAR(widget);
@@ -446,7 +446,7 @@ GtkListBoxRow* cast_GtkListBoxRow(GtkWidget* widget) {
 
 #endif
 
-#ifdef GTK_3_12
+#if defined(GTK_3_12)
 
 GtkFlowBox* cast_GtkFlowBox(GtkWidget* widget) {
     return GTK_FLOW_BOX(widget);
