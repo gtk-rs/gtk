@@ -115,7 +115,7 @@ impl RecentInfo {
     }
 
     pub fn get_applications(&self) -> Option<Vec<String>> {
-        let mut length = 0i64;
+        let mut length = 0;
         let tmp = unsafe { ffi::gtk_recent_info_get_applications(GTK_RECENT_INFO(self.get_widget()), &mut length) };
 
         if tmp.is_null() {
