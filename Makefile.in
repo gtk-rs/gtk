@@ -32,7 +32,7 @@ examples: gtktest cairotest
 .PHONY: rgtk-build
 rgtk-build: src/*
 					@$(ECHO) "$(OK_COLOR) Building rgtk.rlib $(NO_COLOR)"
-					$(RUSTC) --cfg $(GTK_VERSION) -L $(GLUE_DST) src/$(LIBNAME).rs --out-dir target/
+					$(RUSTC) src/$(LIBNAME).rs --cfg $(GTK_VERSION) -L $(GLUE_DST) --out-dir target/
 
 .PHONY:
 glue : $(GLUE_DST)/$(GLUE_LIBNAME).a
