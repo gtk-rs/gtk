@@ -32,7 +32,7 @@ examples: gtktest cairotest
 .PHONY: rgtk-build
 rgtk-build: src/*
 					@$(ECHO) "$(OK_COLOR) Building rgtk.rlib $(NO_COLOR)"
-					$(RUSTC) --cfg $(GTK_VERSION) -L $(GLUE_DST) src/$(LIBNAME).rs --out-dir target/
+					$(RUSTC) src/$(LIBNAME).rs --cfg $(GTK_VERSION) -L $(GLUE_DST) --out-dir target/
 
 .PHONY:
 glue : $(GLUE_DST)/$(GLUE_LIBNAME).a
@@ -41,7 +41,7 @@ $(GLUE_DST)/$(GLUE_LIBNAME).dylib: $(GLUE_SRC) | $(GLUE_DST)/
 					$(CC) $(INC) $(LIBS) -dynamiclib -o $(GLUE_DST)/$(GLUE_LIBNAME).dylib $(SRC)
 
 $(GLUE_DST)/$(GLUE_LIBNAME).o: $(GLUE_SRC) | $(GLUE_DST)/
-					$(CC) -g -c $^ $(INC) -o $@ $(LIBS) -fPIC
+					$(CC) -D$(GTK_VERSION) -g -c $^ $(INC) -o $@ $(LIBS) -fPIC
 
 $(GLUE_DST)/$(GLUE_LIBNAME).a: $(GLUE_DST)/$(GLUE_LIBNAME).o | $(GLUE_DST)/
 					ar -rcs $@ $^

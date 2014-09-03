@@ -383,7 +383,7 @@ GtkPrintSettings* cast_GtkPrintSettings(GtkWidget* widget) {
     return GTK_PRINT_SETTINGS(widget);
 }
 
-GtkRecentChooserDialog* cast_GGtkRecentChooserDialog(GtkWidget* widget) {
+GtkRecentChooserDialog* cast_GtkRecentChooserDialog(GtkWidget* widget) {
     return GTK_RECENT_CHOOSER_DIALOG(widget);
 }
 
@@ -406,7 +406,7 @@ GtkRecentInfo* cast_GtkRecentInfo(GtkWidget* widget) {
 
 /* specific versions */
 
-#ifdef GTK_3_6
+#if defined(GTK_3_6) || defined(GTK_3_10) || defined(GTK_3_12)
 
 GtkMenuButton* cast_GtkMenuButton(GtkWidget* widget) {
     return GTK_MENU_BUTTON(widget);
@@ -414,7 +414,7 @@ GtkMenuButton* cast_GtkMenuButton(GtkWidget* widget) {
 
 #endif
 
-#ifdef GTK_3_10
+#if defined(GTK_3_10) || defined(GTK_3_12)
 
 GtkSearchBar* cast_GtkSearchBar(GtkWidget* widget) {
     return GTK_SEARCH_BAR(widget);
@@ -446,7 +446,7 @@ GtkListBoxRow* cast_GtkListBoxRow(GtkWidget* widget) {
 
 #endif
 
-#ifdef GTK_3_12
+#if defined(GTK_3_12)
 
 GtkFlowBox* cast_GtkFlowBox(GtkWidget* widget) {
     return GTK_FLOW_BOX(widget);
@@ -462,13 +462,13 @@ GtkActionBar* cast_GtkActionBar(GtkWidget* widget) {
 
 #endif
 
-/*GAppInfo* cast_GtkAppInfo(GtkWidget* widget) {
+GAppInfo* cast_GtkAppInfo(GtkWidget* widget) {
     return G_APP_INFO(widget);
 }
 
 GAppLaunchContext* cast_GtkAppLaunchContext(GtkWidget* widget) {
     return G_APP_LAUNCH_CONTEXT(widget);
-}*/
+}
 
 /* MAC OS dylib
 gcc -I/usr/local/include/gtk-3.0 -I/usr/local/include/glib-2.0 -I/usr/local/include/gobject-introspection-1.0 -I/usr/local/Cellar/glib/2.38.1/lib/glib-2.0/include/ -I/usr/local/Cellar/pango/1.36.0/include/pango-1.0/ -I/usr/local/Cellar/cairo/1.12.16/include/cairo/ -I/usr/local/Cellar/gdk-pixbuf/2.30.0/include/gdk-pixbuf-2.0/ -I/usr/local/Cellar/atk/2.10.0/include/atk-1.0/ -lglib-2.0 -lgtk-3.0 -lgobject-2.0 -dynamiclib -o libgtk_glue.dylib -dy gtk_glue.c

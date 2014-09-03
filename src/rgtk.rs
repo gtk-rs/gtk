@@ -78,6 +78,7 @@ pub use gtk::traits::Editable         as GtkEditableTrait;
 mod platform {
     #[link(name = "glib-2.0")]
     #[link(name = "gtk-3.0")]
+    #[link(name = "gio-2.0")]
     #[link(name = "gobject-2.0")]
     #[link(name = "gdk-3.0")]
     #[link(name = "rgtk_glue", kind = "static")]
@@ -89,6 +90,19 @@ mod platform {
 mod platform {
     #[link(name = "glib-2.0")]
     #[link(name = "gtk-3")]
+    #[link(name = "gio-2.0")]
+    #[link(name = "gobject-2.0")]
+    #[link(name = "gdk-3")]
+    #[link(name = "rgtk_glue", kind = "static")]
+    extern{}
+}
+
+#[doc(hidden)]
+#[cfg(target_os="windows")]
+mod platform {
+    #[link(name = "glib-2.0")]
+    #[link(name = "gtk-3")]
+    #[link(name = "gio-2.0")]
     #[link(name = "gobject-2.0")]
     #[link(name = "gdk-3")]
     #[link(name = "rgtk_glue", kind = "static")]
