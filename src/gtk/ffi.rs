@@ -239,6 +239,19 @@ pub struct C_GtkEditable;
 #[repr(C)]
 pub struct C_GtkBuilder;
 
+#[repr(C)]
+pub struct C_GtkTextView;
+#[repr(C)]
+pub struct C_GtkTextBuffer;
+#[repr(C)]
+pub struct C_GtkTextTagTable;
+
+#[repr(C)]
+pub struct C_GtkScrolledWindow;
+
+#[repr(C)]
+pub struct C_GtkIconSize;
+
 pub fn to_gboolean(b: bool) -> Gboolean {
     match b {
         true => Gtrue,
@@ -1583,7 +1596,8 @@ extern "C" {
     //=========================================================================
     // GtkImage
     //=========================================================================
-    pub fn gtk_image_new_from_file             (filename: *const c_char) -> *mut C_GtkWidget;
+    pub fn gtk_image_new_from_file              (filename: *const c_char) -> *mut C_GtkWidget;
+    pub fn gtk_image_new_from_icon_name         (icon_name: *const c_char, size: gtk::IconSize) -> *mut C_GtkWidget;
 
     //=========================================================================
     // GtkProgressBar
@@ -2040,6 +2054,31 @@ extern "C" {
     pub fn gtk_editable_get_editable         (editable: *mut C_GtkEditable) -> Gboolean;
 
     //=========================================================================
+    // GtkTextView                                                       NOT OK
+    //=========================================================================
+    pub fn gtk_text_view_new                () -> *mut C_GtkWidget;
+    pub fn gtk_text_view_new_with_buffer    (buffer: *mut C_GtkTextBuffer) -> *mut C_GtkWidget;
+    pub fn gtk_text_view_set_buffer         (text_view: *mut C_GtkTextView, buffer: *mut C_GtkTextBuffer);
+    pub fn gtk_text_view_get_buffer         (text_view: *mut C_GtkTextView) -> *mut C_GtkWidget;
+
+    //=========================================================================
+    // GtkTextBuffer                                                     NOT OK
+    //=========================================================================
+    pub fn gtk_text_buffer_new      (text_tag_table: *mut C_GtkTextTagTable) -> *mut C_GtkWidget;
+    pub fn gtk_text_buffer_set_text (buffer: *mut C_GtkTextBuffer, text: *const c_char, length: c_int);
+
+    //=========================================================================
+    // GtkTextTagTable                                                   NOT OK
+    //=========================================================================
+    pub fn gtk_text_tag_table_new   () -> *mut C_GtkWidget;
+
+    //=========================================================================
+    // GtkScrolledWindow                                                 NOT OK
+    //=========================================================================
+    pub fn gtk_scrolled_window_new          (h_adjustment: *mut C_GtkAdjustment, v_adjustment: *mut C_GtkAdjustment) -> *mut C_GtkWidget;
+    pub fn gtk_scrolled_window_set_policy   (scrolled_window: *mut C_GtkScrolledWindow, h_scrollbar_policy: gtk::PolicyType, v_scrollbar_policy: gtk::PolicyType);
+
+    //=========================================================================
     // Glue fixe code
     //=========================================================================
     pub fn glue_signal_connect(g_object: *mut C_GtkWidget,
@@ -2174,4 +2213,8 @@ extern "C" {
     pub fn cast_GtkRecentFilter(widget: *mut C_GtkWidget) -> *mut C_GtkRecentFilter;
     pub fn cast_GtkRecentInfo(widget: *mut C_GtkWidget) -> *mut C_GtkRecentInfo;
     pub fn cast_GtkEditable(widget: *mut C_GtkWidget) -> *mut C_GtkEditable;
+    pub fn cast_GtkTextView(widget: *mut C_GtkWidget) -> *mut C_GtkTextView;
+    pub fn cast_GtkTextBuffer(widget: *mut C_GtkWidget) -> *mut C_GtkTextBuffer;
+    pub fn cast_GtkTextTagTable(widget: *mut C_GtkWidget) -> *mut C_GtkTextTagTable;
+    pub fn cast_GtkScrolledWindow(widget: *mut C_GtkWidget) -> *mut C_GtkScrolledWindow;
 }

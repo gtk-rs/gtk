@@ -12,39 +12,34 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
-
-//! A widget displaying an image
+use std::ptr;
 
 use gtk;
 use gtk::ffi;
+use gtk::ffi::FFIWidget;
 use gtk::traits;
+use gtk::cast::GTK_TEXT_TAG_TABLE;
 
-/// Image — A widget displaying an image
-struct_Widget!(Image)
+/// GtkTextBuffer — Stores attributed text for display in a GtkTextView
 
+struct_Widget!(TextBuffer)
 
-impl Image {
-    pub fn new_from_file(filename: &str) -> Option<Image> {
+impl TextBuffer {
+    pub fn new(text_tag_table: Option<gtk::TextTagTable>) -> Option<TextBuffer> {
         let tmp_pointer = unsafe {
-            filename.with_c_str(|c_str| {
-                ffi::gtk_image_new_from_file(c_str)
-            })
+            match text_tag_table {
+                Some(ttl) => ffi::gtk_text_buffer_new(GTK_TEXT_TAG_TABLE(ttl.get_widget())),
+                None      => ffi::gtk_text_buffer_new(ptr::mut_null())
+            }
         };
-        check_pointer!(tmp_pointer, Image)
-    }
 
-    pub fn new_from_icon_name(icon_name: &str, size: gtk::IconSize) -> Option<Image> {
-    	let tmp_pointer = unsafe {
-            icon_name.with_c_str(|c_str| {
-                ffi::gtk_image_new_from_icon_name(c_str, size)
-            })
-        };
-        check_pointer!(tmp_pointer, Image)
+        check_pointer!(tmp_pointer, TextBuffer)
     }
-
 }
 
-impl_drop!(Image)
-impl_TraitWidget!(Image)
+impl_drop!(TextBuffer)
+impl_TraitWidget!(TextBuffer)
 
-impl traits::Misc for Image {}
+impl traits::TextBuffer for TextBuffer {}
+
+

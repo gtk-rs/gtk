@@ -13,38 +13,32 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-//! A widget displaying an image
-
 use gtk;
+use gtk::TextBuffer;
 use gtk::ffi;
+use gtk::ffi::FFIWidget;
 use gtk::traits;
+use gtk::cast::GTK_TEXT_BUFFER;
 
-/// Image — A widget displaying an image
-struct_Widget!(Image)
+/// GtkTextView — Widget that displays a GtkTextBuffer
 
+struct_Widget!(TextView)
 
-impl Image {
-    pub fn new_from_file(filename: &str) -> Option<Image> {
+impl TextView {
+    pub fn new() -> Option<TextView> {
+        let tmp_pointer = unsafe { ffi::gtk_text_view_new() };
+        check_pointer!(tmp_pointer, TextView)
+    }
+
+    pub fn new_with_buffer(buffer: gtk::TextBuffer) -> Option<TextView> {
         let tmp_pointer = unsafe {
-            filename.with_c_str(|c_str| {
-                ffi::gtk_image_new_from_file(c_str)
-            })
+            ffi::gtk_text_view_new_with_buffer(GTK_TEXT_BUFFER(buffer.get_widget()))
         };
-        check_pointer!(tmp_pointer, Image)
+        check_pointer!(tmp_pointer, TextView)
     }
-
-    pub fn new_from_icon_name(icon_name: &str, size: gtk::IconSize) -> Option<Image> {
-    	let tmp_pointer = unsafe {
-            icon_name.with_c_str(|c_str| {
-                ffi::gtk_image_new_from_icon_name(c_str, size)
-            })
-        };
-        check_pointer!(tmp_pointer, Image)
-    }
-
 }
 
-impl_drop!(Image)
-impl_TraitWidget!(Image)
-
-impl traits::Misc for Image {}
+impl_drop!(TextView)
+impl_TraitWidget!(TextView)
+impl traits::TextView for TextView {}
+impl traits::Scrollable for TextView {}

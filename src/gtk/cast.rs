@@ -337,3 +337,19 @@ pub fn GTK_RECENT_INFO(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkRecentIn
 pub fn GTK_EDITABLE(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkEditable {
     unsafe{ ffi::cast_GtkEditable(widget) }
 }
+
+pub fn GTK_TEXT_VIEW(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkTextView {
+    unsafe{ ffi::cast_GtkTextView(widget) }
+}
+
+pub fn GTK_TEXT_BUFFER(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkTextBuffer {
+    unsafe{ ffi::cast_GtkTextBuffer(widget) }
+}
+
+pub fn GTK_TEXT_TAG_TABLE(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkTextTagTable{
+    unsafe{ ffi::cast_GtkTextTagTable(widget) }
+}
+
+pub fn GTK_SCROLLED_WINDOW(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkScrolledWindow {
+    unsafe{ ffi::cast_GtkScrolledWindow(widget) }
+}

@@ -66,6 +66,9 @@ basic: 		$(EXAMPLE_DIR)basic
 sync_widgets: 	$(EXAMPLE_DIR)sync_widgets
 					@$(ECHO) "$(OK_COLOR) Building $@ $(NO_COLOR)"
 
+text_viewer: 	$(EXAMPLE_DIR)text_viewer
+					@$(ECHO) "$(OK_COLOR) Building $@ $(NO_COLOR)"
+
 
 $(EXAMPLE_DIR)cairotest: rgtk examples/cairotest.rs | $(EXAMPLE_DIR)
 					$(RUSTC) -L target/ examples/cairotest.rs -o $@
@@ -81,6 +84,9 @@ $(EXAMPLE_DIR)basic: rgtk examples/basic.rs | $(EXAMPLE_DIR)
 
 $(EXAMPLE_DIR)sync_widgets: rgtk examples/sync_widgets.rs | $(EXAMPLE_DIR)
 					$(RUSTC) -L target/ examples/sync_widgets.rs -o $@
+
+$(EXAMPLE_DIR)text_viewer: rgtk examples/text_viewer.rs | $(EXAMPLE_DIR)
+					$(RUSTC) -L target/ examples/text_viewer.rs -o $@
 
 .PHONY: doc
 doc:

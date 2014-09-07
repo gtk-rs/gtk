@@ -110,6 +110,10 @@ pub use self::recentinfo::RecentInfo;
 pub use self::recentfilterinfo::RecentFilterInfo;
 pub use self::recentdata::RecentData;
 pub use self::recentmanager::RecentManager;
+pub use self::textview::TextView;
+pub use self::textbuffer::TextBuffer;
+pub use self::texttagtable::TextTagTable;
+pub use self::scrolledwindow::ScrolledWindow;
 
 mod window;
 mod label;
@@ -208,3 +212,7 @@ mod recentinfo;
 mod recentfilterinfo;
 mod recentdata;
 mod recentmanager;
+mod textview;
+mod textbuffer;
+mod texttagtable;
+mod scrolledwindow;

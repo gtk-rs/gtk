@@ -509,10 +509,10 @@ pub mod path_type{
 }
 
 /// Determines when a scroll bar will be visible.
-pub mod policy_type{
+pub mod policy_type {
     #[repr(C)]
     #[deriving(Clone, PartialEq, PartialOrd, Show)]
-    pub enum PolicyType{
+    pub enum PolicyType {
         /// The scrollbar is always visible.
         Always,
         /// The scrollbar will appear and disappear as necessary. For example, when all of a CList can not be seen.
@@ -716,18 +716,25 @@ pub mod region_flags{
     }
 }
 
-/// Icon Sizes : temporary
-pub mod icon_size{
+/// Built-in stock icon sizes
+pub mod icon_size {
     #[repr(C)]
     #[deriving(Clone, PartialEq, PartialOrd, Show)]
-    pub enum IconSize{
+    pub enum IconSize {
+        // Invalid size
         Invalid,
-        Memu,
+        // Size appropriate for menus (16px)
+        Menu,
+        // Size appropriate for small toolbars (16px)
         SmallToolbar,
+        // Size appropriate for large toolbars (24px)
         LargeToolbar,
+        // Size appropriate for buttons (16px)
         Button,
+        // Size appropriate for drag and drop (32px)
         Dnd,
-        Disalog
+        // Size appropriate for dialogs (48px)
+        Dialog
     }
 }
 
@@ -985,7 +992,7 @@ pub mod license {
 /// All predefined values are negative, GTK+ leaves positive values for application-defined response ids.
 pub mod response_type {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show, FromPrimitive)]
     pub enum ResponseType {
         /// Returned if an action widget has no response id, or if the dialog gets programmatically hidden or destroyed
         None        = -1,

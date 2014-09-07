@@ -124,7 +124,11 @@ pub use self::widgets::{
     RecentFilter,
     RecentFilterInfo,
     RecentData,
-    RecentManager
+    RecentManager,
+    TextView,
+    TextBuffer,
+    TextTagTable,
+    ScrolledWindow
 };
 
 #[cfg(GTK_3_6)]

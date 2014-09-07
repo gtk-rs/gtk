@@ -735,7 +735,7 @@ pub trait Widget: ffi::FFIWidget {
         unsafe { ffi::gtk_widget_get_preferred_width_for_height(self.get_widget(), height, &mut minimum_width, &mut natural_width) };
         (minimum_width, natural_width)
     }
-    
+
     fn get_preferred_height_and_baseline_for_width(&self, width: i32) -> (i32, i32, i32, i32) {
         let mut minimum_height = 0i32;
         let mut natural_height = 0i32;
@@ -868,11 +868,15 @@ pub trait Widget: ffi::FFIWidget {
     }
 
     fn child_notify(&self, child_property: &str) {
-        unsafe { 
+        unsafe {
             child_property.with_c_str(|c_str| {
                 ffi::gtk_widget_child_notify(self.get_widget(), c_str)
             })
         }
+    }
+
+    fn destroy(&self) {
+        unsafe { ffi::gtk_widget_destroy(self.get_widget()) }
     }
 
     fn destroyed(&self, other: &Self) {
