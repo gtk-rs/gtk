@@ -43,6 +43,9 @@ pub use self::textview::TextView;
 pub use self::textbuffer::TextBuffer;
 pub use self::scrolledwindow::ScrolledWindow;
 pub use self::cellrenderer::CellRenderer;
+pub use self::menushell::MenuShell;
+pub use self::menuitem::MenuItem;
+pub use self::checkmenuitem::CheckMenuItem;
 
 pub mod widget;
 pub mod container;
@@ -74,3 +77,6 @@ pub mod textview;
 pub mod textbuffer;
 pub mod scrolledwindow;
 pub mod cellrenderer;
+pub mod menushell;
+pub mod menuitem;
+pub mod checkmenuitem;

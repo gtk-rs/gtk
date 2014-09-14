@@ -163,147 +163,147 @@ pub fn GTK_TOOLSHELL(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkToolShell 
 }
 
 pub fn GTK_TOOLBAR(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkToolbar {
-    unsafe{ ffi::cast_GtkToolbar(widget) }
+    unsafe { ffi::cast_GtkToolbar(widget) }
 }
 
 pub fn GTK_TOOLITEM(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkToolItem {
-    unsafe{ ffi::cast_GtkToolItem(widget) }
+    unsafe { ffi::cast_GtkToolItem(widget) }
 }
 
 pub fn GTK_SEPARATORTOOLITEM(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkSeparatorToolItem {
-    unsafe{ ffi::cast_GtkSeparatorToolItem(widget) }
+    unsafe { ffi::cast_GtkSeparatorToolItem(widget) }
 }
 
 pub fn GTK_TOOLBUTTON(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkToolButton {
-    unsafe{ ffi::cast_GtkToolButton(widget) }
+    unsafe { ffi::cast_GtkToolButton(widget) }
 }
 
 pub fn GTK_MENUTOOLBUTTON(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkMenuToolButton {
-    unsafe{ ffi::cast_GtkMenuToolButton(widget) }
+    unsafe { ffi::cast_GtkMenuToolButton(widget) }
 }
 
 pub fn GTK_TOGGLETOOLBUTTON(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkToggleToolButton {
-    unsafe{ ffi::cast_GtkToggleToolButton(widget) }
+    unsafe { ffi::cast_GtkToggleToolButton(widget) }
 }
 
 pub fn GTK_RADIOTOOLBUTTON(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkRadioToolButton {
-    unsafe{ ffi::cast_GtkRadioToolButton(widget) }
+    unsafe { ffi::cast_GtkRadioToolButton(widget) }
 }
 
 pub fn GTK_ADJUSTMENT(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkAdjustment {
-    unsafe{ ffi::cast_GtkAdjustment(widget) }
+    unsafe { ffi::cast_GtkAdjustment(widget) }
 }
 
 pub fn GTK_DIALOG(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkDialog {
-    unsafe{ ffi::cast_GtkDialog(widget) }
+    unsafe { ffi::cast_GtkDialog(widget) }
 }
 
 pub fn GTK_ABOUT_DIALOG(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkAboutDialog {
-    unsafe{ ffi::cast_GtkAboutDialog(widget) }
+    unsafe { ffi::cast_GtkAboutDialog(widget) }
 }
 
 pub fn GTK_MESSAGE_DIALOG(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkMessageDialog {
-    unsafe{ ffi::cast_GtkMessageDialog(widget) }
+    unsafe { ffi::cast_GtkMessageDialog(widget) }
 }
 
 pub fn GTK_COLOR_CHOOSER_DIALOG(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkColorChooserDialog {
-    unsafe{ ffi::cast_GtkColorChooserDialog(widget) }
+    unsafe { ffi::cast_GtkColorChooserDialog(widget) }
 }
 
 pub fn GTK_COLOR_CHOOSER(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkColorChooser {
-    unsafe{ ffi::cast_GtkColorChooser(widget) }
+    unsafe { ffi::cast_GtkColorChooser(widget) }
 }
 
 pub fn GTK_NOTEBOOK(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkNotebook {
-    unsafe{ ffi::cast_GtkNotebook(widget) }
+    unsafe { ffi::cast_GtkNotebook(widget) }
 }
 
 pub fn GTK_STACK(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkStack {
-    unsafe{ ffi::cast_GtkStack(widget) }
+    unsafe { ffi::cast_GtkStack(widget) }
 }
 
 pub fn GTK_STACK_SWITCHER(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkStackSwitcher {
-    unsafe{ ffi::cast_GtkStackSwitcher(widget) }
+    unsafe { ffi::cast_GtkStackSwitcher(widget) }
 }
 
 pub fn GTK_REVEALER(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkRevealer {
-    unsafe{ ffi::cast_GtkRevealer(widget) }
+    unsafe { ffi::cast_GtkRevealer(widget) }
 }
 
 pub fn GTK_OVERLAY(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkOverlay {
-    unsafe{ ffi::cast_GtkOverlay(widget) }
+    unsafe { ffi::cast_GtkOverlay(widget) }
 }
 
 pub fn GTK_SCROLLABLE(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkScrollable {
-    unsafe{ ffi::cast_GtkScrollable(widget) }
+    unsafe { ffi::cast_GtkScrollable(widget) }
 }
 
 pub fn GTK_LAYOUT(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkLayout {
-    unsafe{ ffi::cast_GtkLayout(widget) }
+    unsafe { ffi::cast_GtkLayout(widget) }
 }
 
 pub fn GTK_HEADER_BAR(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkHeaderBar {
-    unsafe{ ffi::cast_GtkHeaderBar(widget) }
+    unsafe { ffi::cast_GtkHeaderBar(widget) }
 }
 
 pub fn GTK_FLOW_BOX(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkFlowBox {
-    unsafe{ ffi::cast_GtkFlowBox(widget) }
+    unsafe { ffi::cast_GtkFlowBox(widget) }
 }
 
 pub fn GTK_FLOW_BOX_CHILD(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkFlowBoxChild {
-    unsafe{ ffi::cast_GtkFlowBoxChild(widget) }
+    unsafe { ffi::cast_GtkFlowBoxChild(widget) }
 }
 
 pub fn GTK_LIST_BOX(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkListBox {
-    unsafe{ ffi::cast_GtkListBox(widget) }
+    unsafe { ffi::cast_GtkListBox(widget) }
 }
 
 pub fn GTK_LIST_BOX_ROW(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkListBoxRow {
-    unsafe{ ffi::cast_GtkListBoxRow(widget) }
+    unsafe { ffi::cast_GtkListBoxRow(widget) }
 }
 
 pub fn GTK_ACTION_BAR(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkActionBar {
-    unsafe{ ffi::cast_GtkActionBar(widget) }
+    unsafe { ffi::cast_GtkActionBar(widget) }
 }
 
 pub fn GTK_FILE_CHOOSER(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkFileChooser {
-    unsafe{ ffi::cast_GtkFileChooser(widget) }
+    unsafe { ffi::cast_GtkFileChooser(widget) }
 }
 
 pub fn GTK_FILE_FILTER(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkFileFilter {
-    unsafe{ ffi::cast_GtkFileFilter(widget) }
+    unsafe { ffi::cast_GtkFileFilter(widget) }
 }
 
 pub fn GTK_APP_CHOOSER(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkAppChooser {
-    unsafe{ ffi::cast_GtkAppChooser(widget) }
+    unsafe { ffi::cast_GtkAppChooser(widget) }
 }
 
 pub fn GTK_APP_CHOOSER_DIALOG(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkAppChooserDialog {
-    unsafe{ ffi::cast_GtkAppChooserDialog(widget) }
+    unsafe { ffi::cast_GtkAppChooserDialog(widget) }
 }
 
 pub fn GTK_FONT_CHOOSER(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkFontChooser {
-    unsafe{ ffi::cast_GtkFontChooser(widget) }
+    unsafe { ffi::cast_GtkFontChooser(widget) }
 }
 
 pub fn GTK_FONT_CHOOSER_DIALOG(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkFontChooserDialog {
-    unsafe{ ffi::cast_GtkFontChooserDialog(widget) }
+    unsafe { ffi::cast_GtkFontChooserDialog(widget) }
 }
 
 pub fn GTK_APP_INFO(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GAppInfo {
-    unsafe{ ffi::cast_GtkAppInfo(widget) }
+    unsafe { ffi::cast_GtkAppInfo(widget) }
 }
 
 pub fn GTK_APP_LAUNCH_CONTEXT(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GAppLaunchContext {
-    unsafe{ ffi::cast_GtkAppLaunchContext(widget) }
+    unsafe { ffi::cast_GtkAppLaunchContext(widget) }
 }
 
 pub fn GTK_PAGE_SETUP(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkPageSetup {
-    unsafe{ ffi::cast_GtkPageSetup(widget) }
+    unsafe { ffi::cast_GtkPageSetup(widget) }
 }
 
 pub fn GTK_PAPER_SIZE(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkPaperSize {
-    unsafe{ ffi::cast_GtkPaperSize(widget) }
+    unsafe { ffi::cast_GtkPaperSize(widget) }
 }
 
 /*pub fn GTK_PAGE_SETUP_UNIX_DIALOG(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_PageSetupUnixDialog {
@@ -311,51 +311,51 @@ pub fn GTK_PAPER_SIZE(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkPaperSize
 }*/
 
 pub fn GTK_PRINT_SETTINGS(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkPrintSettings {
-    unsafe{ ffi::cast_GtkPrintSettings(widget) }
+    unsafe { ffi::cast_GtkPrintSettings(widget) }
 }
 
 pub fn GTK_RECENT_CHOOSER_DIALOG(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkRecentChooserDialog {
-    unsafe{ ffi::cast_GtkRecentChooserDialog(widget) }
+    unsafe { ffi::cast_GtkRecentChooserDialog(widget) }
 }
 
 pub fn GTK_RECENT_MANAGER(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkRecentManager {
-    unsafe{ ffi::cast_GtkRecentManager(widget) }
+    unsafe { ffi::cast_GtkRecentManager(widget) }
 }
 
 pub fn GTK_RECENT_CHOOSER(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkRecentChooser {
-    unsafe{ ffi::cast_GtkRecentChooser(widget) }
+    unsafe { ffi::cast_GtkRecentChooser(widget) }
 }
 
 pub fn GTK_RECENT_FILTER(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkRecentFilter {
-    unsafe{ ffi::cast_GtkRecentFilter(widget) }
+    unsafe { ffi::cast_GtkRecentFilter(widget) }
 }
 
 pub fn GTK_RECENT_INFO(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkRecentInfo {
-    unsafe{ ffi::cast_GtkRecentInfo(widget) }
+    unsafe { ffi::cast_GtkRecentInfo(widget) }
 }
 
 pub fn GTK_EDITABLE(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkEditable {
-    unsafe{ ffi::cast_GtkEditable(widget) }
+    unsafe { ffi::cast_GtkEditable(widget) }
 }
 
 pub fn GTK_TEXT_VIEW(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkTextView {
-    unsafe{ ffi::cast_GtkTextView(widget) }
+    unsafe { ffi::cast_GtkTextView(widget) }
 }
 
 pub fn GTK_TEXT_BUFFER(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkTextBuffer {
-    unsafe{ ffi::cast_GtkTextBuffer(widget) }
+    unsafe { ffi::cast_GtkTextBuffer(widget) }
 }
 
 pub fn GTK_TEXT_TAG_TABLE(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkTextTagTable{
-    unsafe{ ffi::cast_GtkTextTagTable(widget) }
+    unsafe { ffi::cast_GtkTextTagTable(widget) }
 }
 
 pub fn GTK_SCROLLED_WINDOW(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkScrolledWindow {
-    unsafe{ ffi::cast_GtkScrolledWindow(widget) }
+    unsafe { ffi::cast_GtkScrolledWindow(widget) }
 }
 
 pub fn GTK_RADIOBUTTON(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkRadioButton {
-    unsafe{ ffi::cast_GtkRadioButton(widget) }
+    unsafe { ffi::cast_GtkRadioButton(widget) }
 }
 
 pub fn GTK_CELL_RENDERER(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkCellRenderer {
@@ -363,5 +363,17 @@ pub fn GTK_CELL_RENDERER(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkCellRe
 }
 
 pub fn GTK_TREE_VIEW(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkTreeView {
-    unsafe{ ffi::cast_GtkTreeView(widget) }
+    unsafe { ffi::cast_GtkTreeView(widget) }
+}
+
+pub fn GTK_MENU_SHELL(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkMenuShell {
+    unsafe { ffi::cast_GtkMenuShell(widget) }
+}
+
+pub fn GTK_MENU_ITEM(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkMenuItem {
+    unsafe { ffi::cast_GtkMenuItem(widget) }
+}
+
+pub fn GTK_CHECK_MENU_ITEM(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkCheckMenuItem {
+    unsafe { ffi::cast_GtkCheckMenuItem(widget) }
 }

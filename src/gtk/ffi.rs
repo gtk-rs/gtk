@@ -280,6 +280,15 @@ pub struct C_GtkTreeView;
 #[repr(C)]
 pub struct C_GtkTreeViewColumn;
 
+#[repr(C)]
+pub struct C_GtkMenuShell;
+
+#[repr(C)]
+pub struct C_GtkMenuItem;
+
+#[repr(C)]
+pub struct C_GtkCheckMenuItem;
+
 pub fn to_gboolean(b: bool) -> Gboolean {
     match b {
         true => Gtrue,
@@ -2428,6 +2437,66 @@ extern "C" {
 
 
     //=========================================================================
+    // GtkMenuShell
+    //=========================================================================
+    pub fn gtk_menu_shell_append         (menu_shell: *mut C_GtkMenuShell, child: *mut C_GtkWidget);
+    pub fn gtk_menu_shell_prepend        (menu_shell: *mut C_GtkMenuShell, child: *mut C_GtkWidget);
+    pub fn gtk_menu_shell_insert         (menu_shell: *mut C_GtkMenuShell, child: *mut C_GtkWidget, position: c_int);
+    pub fn gtk_menu_shell_deactivate     (menu_shell: *mut C_GtkMenuShell);
+    pub fn gtk_menu_shell_select_item    (menu_shell: *mut C_GtkMenuShell, menu_item: *mut C_GtkWidget);
+    pub fn gtk_menu_shell_deselect       (menu_shell: *mut C_GtkMenuShell);
+    pub fn gtk_menu_shell_activate_item  (menu_shell: *mut C_GtkMenuShell, menu_item: *mut C_GtkWidget, force_deactivate: Gboolean);
+    pub fn gtk_menu_shell_select_first   (menu_shell: *mut C_GtkMenuShell, search_sensitive: Gboolean);
+    pub fn gtk_menu_shell_cancel         (menu_shell: *mut C_GtkMenuShell);
+    pub fn gtk_menu_shell_get_take_focus (menu_shell: *mut C_GtkMenuShell) -> Gboolean;
+    pub fn gtk_menu_shell_set_take_focus (menu_shell: *mut C_GtkMenuShell, take_focus: Gboolean);
+    pub fn gtk_menu_shell_get_selected_item (menu_shell: *mut C_GtkMenuShell) -> *mut C_GtkWidget;
+    pub fn gtk_menu_shell_get_parent_shell  (menu_shell: *mut C_GtkMenuShell) -> *mut C_GtkWidget;
+    // GDK_AVAILABLE_IN_3_6
+    // pub fn gtk_menu_shell_bind_model   (menu_shell: *mut C_GtkMenuShell, model: *mut C_GMenuModel, action_namespace: *mut c_char, with_separators: Gboolean);
+
+    //=========================================================================
+    // GtkMenuItem
+    //=========================================================================
+    pub fn gtk_menu_item_new                  () -> *mut C_GtkWidget;
+    pub fn gtk_menu_item_new_with_label       (label: *const c_char) -> *mut C_GtkWidget;
+    pub fn gtk_menu_item_new_with_mnemonic    (label: *const c_char) -> *mut C_GtkWidget;
+    pub fn gtk_menu_item_set_submenu          (menu_item: *mut C_GtkMenuItem, submenu: *mut C_GtkWidget);
+    pub fn gtk_menu_item_get_submenu          (menu_item: *mut C_GtkMenuItem) -> *mut C_GtkWidget;
+    pub fn gtk_menu_item_select               (menu_item: *mut C_GtkMenuItem);
+    pub fn gtk_menu_item_deselect             (menu_item: *mut C_GtkMenuItem);
+    pub fn gtk_menu_item_activate             (menu_item: *mut C_GtkMenuItem);
+    pub fn gtk_menu_item_toggle_size_request  (menu_item: *mut C_GtkMenuItem, requisition: *mut c_int);
+    pub fn gtk_menu_item_toggle_size_allocate (menu_item: *mut C_GtkMenuItem, allocation: c_int);
+    pub fn gtk_menu_item_set_accel_path    (menu_item: *mut C_GtkMenuItem, accel_path: *const c_char);
+    pub fn gtk_menu_item_get_accel_path    (menu_item: *mut C_GtkMenuItem) -> *const c_char;
+    pub fn gtk_menu_item_set_label         (menu_item: *mut C_GtkMenuItem, label: *const c_char);
+    pub fn gtk_menu_item_get_label         (menu_item: *mut C_GtkMenuItem) -> *const c_char;
+    pub fn gtk_menu_item_set_use_underline    (menu_item: *mut C_GtkMenuItem, setting: Gboolean);
+    pub fn gtk_menu_item_get_use_underline    (menu_item: *mut C_GtkMenuItem) -> Gboolean;
+    pub fn gtk_menu_item_set_reserve_indicator (Gmenu_item: *mut C_GtkMenuItem, reserve: Gboolean);
+    pub fn gtk_menu_item_get_reserve_indicator (menu_item: *mut C_GtkMenuItem) -> Gboolean;
+
+    //=========================================================================
+    // GtkSeparatorMenuItem
+    //=========================================================================
+    pub fn gtk_separator_menu_item_new() -> *mut C_GtkWidget;
+
+    //=========================================================================
+    // GtkSeparatorMenuItem
+    //=========================================================================
+    pub fn gtk_check_menu_item_new               () -> *mut C_GtkWidget;
+    pub fn gtk_check_menu_item_new_with_label    (label: *const c_char) -> *mut C_GtkWidget;
+    pub fn gtk_check_menu_item_new_with_mnemonic (label: *const c_char) -> *mut C_GtkWidget;
+    pub fn gtk_check_menu_item_set_active        (check_menu_item: *mut C_GtkCheckMenuItem, is_active: Gboolean);
+    pub fn gtk_check_menu_item_get_active        (check_menu_item: *mut C_GtkCheckMenuItem) -> Gboolean;
+    pub fn gtk_check_menu_item_toggled           (check_menu_item: *mut C_GtkCheckMenuItem);
+    pub fn gtk_check_menu_item_set_inconsistent  (check_menu_item: *mut C_GtkCheckMenuItem, setting: Gboolean);
+    pub fn gtk_check_menu_item_get_inconsistent  (check_menu_item: *mut C_GtkCheckMenuItem) -> Gboolean;
+    pub fn gtk_check_menu_item_set_draw_as_radio (check_menu_item: *mut C_GtkCheckMenuItem, draw_as_radio: Gboolean);
+    pub fn gtk_check_menu_item_get_draw_as_radio (check_menu_item: *mut C_GtkCheckMenuItem) -> Gboolean;
+
+    //=========================================================================
     // Glue fixe code
     //=========================================================================
     pub fn glue_signal_connect(g_object: *mut C_GtkWidget,
@@ -2569,4 +2638,7 @@ extern "C" {
     pub fn cast_GtkRadioButton(widget: *mut C_GtkWidget) -> *mut C_GtkRadioButton;
     pub fn cast_GtkTreeView(widget: *mut C_GtkWidget) -> *mut C_GtkTreeView;
     pub fn cast_GtkCellRenderer(widget: *mut C_GtkWidget) -> *mut C_GtkCellRenderer;
+    pub fn cast_GtkMenuShell(widget: *mut C_GtkWidget) -> *mut C_GtkMenuShell;
+    pub fn cast_GtkMenuItem(widget: *mut C_GtkWidget) -> *mut C_GtkMenuItem;
+    pub fn cast_GtkCheckMenuItem(widget: *mut C_GtkWidget) -> *mut C_GtkCheckMenuItem;
 }

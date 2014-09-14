@@ -120,6 +120,9 @@ pub use self::scrolledwindow::ScrolledWindow;
 pub use self::radiobutton::RadioButton;
 pub use self::treeview::TreeView;
 pub use self::treeview_column::TreeViewColumn;
+pub use self::menuitem::MenuItem;
+pub use self::separator_menuitem::SeparatorMenuItem;
+pub use self::checkmenuitem::CheckMenuItem;
 
 mod window;
 mod label;
@@ -228,3 +231,6 @@ mod treeview_column;
 mod treepath;
 mod treeiter;
 mod treemodel;
+mod menuitem;
+mod separator_menuitem;
+mod checkmenuitem;

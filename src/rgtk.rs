@@ -72,6 +72,9 @@ pub use gtk::traits::FontChooser      as GtkFontChooserTrait;
 pub use gtk::traits::AppChooser       as GtkAppChooserTrait;
 pub use gtk::traits::Range            as GtkRangeTrait;
 pub use gtk::traits::Editable         as GtkEditableTrait;
+pub use gtk::traits::MenuShell        as GtkMenuShellTrait;
+pub use gtk::traits::MenuItem         as GtkMenuItemTrait;
+pub use gtk::traits::CheckMenuItem    as GtkCheckMenuItemTrait;
 
 #[doc(hidden)]
 #[cfg(target_os="macos")]

@@ -134,7 +134,10 @@ pub use self::widgets::{
     TreeViewColumn,
     TreePath,
     TreeIter,
-    TreeModel
+    TreeModel,
+    MenuItem,
+    SeparatorMenuItem,
+    CheckMenuItem
 };
 
 #[cfg(GTK_3_6)]
