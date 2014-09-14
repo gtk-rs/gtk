@@ -130,7 +130,8 @@ pub use self::widgets::{
     TextTagTable,
     ScrolledWindow,
     RadioButton,
-    TreeView
+    TreeView,
+    TreeViewColumn
 };
 
 #[cfg(GTK_3_6)]
@@ -235,9 +236,9 @@ pub use self::enums::{
     recent_sort_type,
     recent_filter_flags,
     widget_help_type,
-    tree_view_grid_lines
+    tree_view_grid_lines,
+    tree_view_column_sizing
 };
-
 
 /// GTK Enum types
 pub use self::enums::{
@@ -311,7 +312,8 @@ pub use self::enums::{
     WidgetHelpType,
     TextWindowType,
     WrapMode,
-    TreeViewGridLines
+    TreeViewGridLines,
+    TreeViewColumnSizing
 };
 
 /// GTK various struct
