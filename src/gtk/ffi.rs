@@ -208,6 +208,10 @@ pub struct C_GtkRecentManager;
 pub struct C_GtkRecentChooser;
 #[repr(C)]
 pub struct C_GtkRecentChooserDialog;
+#[repr(C)]
+pub struct C_GtkCellRendererClass;
+#[repr(C)]
+pub struct C_GtkCellRenderer;
 
 #[repr(C)]
 pub struct C_GtkToolItem;
@@ -557,7 +561,7 @@ extern "C" {
     //pub fn C_GtkTickCallback                     (widget: *mut C_GtkWidget, frame_clock: *mut C_GdkFrameClock, user_data: gpointer) -> Gboolean;
 
     //=========================================================================
-    // GtkLabel
+    // GtkLabel                                                          NOT OK
     //=========================================================================
     pub fn gtk_label_new                       (text: *const c_char) -> *mut C_GtkWidget;
     pub fn gtk_label_set_label                 (label: *mut C_GtkLabel, text: *const c_char);
@@ -607,7 +611,7 @@ extern "C" {
     pub fn gtk_label_get_track_visited_links   (label: *mut C_GtkLabel) -> Gboolean;
 
     //=========================================================================
-    // GtkContainer
+    // GtkContainer                                                          OK
     //=========================================================================
     pub fn gtk_container_add                   (container: *mut C_GtkContainer, widget: *mut C_GtkWidget);
     pub fn gtk_container_remove                (container: *mut C_GtkContainer, widget: *mut C_GtkWidget) -> ();
@@ -625,6 +629,43 @@ extern "C" {
     pub fn gtk_misc_set_padding                (misc: *mut C_GtkMisc, xpad: c_int, ypad: c_int) -> ();
     pub fn gtk_misc_get_alignment              (misc: *mut C_GtkMisc, xalign: *const c_float, yalign: *const c_float) -> ();
     pub fn gtk_misc_get_padding                (misc: *mut C_GtkMisc, xpad: *const c_int, ypad: *const c_int) -> ();
+
+    //=========================================================================
+    // GtkCellRenderer                                                   NOT OK
+    //=========================================================================
+    //pub fn gtk_cell_renderer_class_set_accessible_type(renderer_class: *mut C_GtkCellRendererClass, _type: GType);
+    //pub fn gtk_cell_renderer_get_aligned_area  (cell: *mut C_GtkCellRenderer, widget: *mut C_GtkWidget, flags: gtk::CellRendererState,
+    //    cell_area: *const GdkRectangle, aligned_area: *mut GdkRectangle);
+    //pub fn gtk_cell_renderer_render            (cell: *mut C_GtkCellRenderer, cr: *mut cairo_t, widget: *mut C_GtkWidget,
+    //    background_area: *const GdkRectangle, cell_area: *const GdkRectangle, flags: gtk::CellRendererState);
+    //pub fn gtk_cell_renderer_activate          (cell: *mut C_GtkCellRenderer, event: *mut GdkEvent, widget: *mut C_GtkWidget, path: *const c_char,
+    //    background_area: *const GdkRectangle, cell_area: *const GdkRectangle, flags: gtk::CellRendererState) -> Gboolean;
+    //pub fn gtk_cell_renderer_start_editing     (cell: *mut C_GtkCellRenderer, event: *mut GdkEvent, widget: *mut C_GtkWidget, path: *const c_char,
+    //    background_area: *const GdkRectangle, cell_area: *const GdkRectangle, flags: gtk::CellRendererState) -> *mut C_GtkCellEditable;
+    pub fn gtk_cell_renderer_stop_editing      (cell: *mut C_GtkCellRenderer, canceled: Gboolean) -> ();
+    pub fn gtk_cell_renderer_get_fixed_size    (cell: *mut C_GtkCellRenderer, width: *mut c_int, height: *mut c_int) -> ();
+    pub fn gtk_cell_renderer_set_fixed_size    (cell: *mut C_GtkCellRenderer, width: c_int, height: c_int) -> ();
+    pub fn gtk_cell_renderer_get_visible       (cell: *mut C_GtkCellRenderer) -> Gboolean;
+    pub fn gtk_cell_renderer_set_visible       (cell: *mut C_GtkCellRenderer, visible: Gboolean) -> ();
+    pub fn gtk_cell_renderer_get_sensitive     (cell: *mut C_GtkCellRenderer) -> Gboolean;
+    pub fn gtk_cell_renderer_set_sensitive     (cell: *mut C_GtkCellRenderer, sensitive: Gboolean) -> ();
+    pub fn gtk_cell_renderer_get_alignment     (cell: *mut C_GtkCellRenderer, xalign: *mut c_float, yalign: *mut c_float) -> ();
+    pub fn gtk_cell_renderer_set_alignment     (cell: *mut C_GtkCellRenderer, xalign: c_float, yalign: c_float) -> ();
+    pub fn gtk_cell_renderer_get_padding       (cell: *mut C_GtkCellRenderer, xpad: *mut c_int, ypad: *mut c_int) -> ();
+    pub fn gtk_cell_renderer_set_padding       (cell: *mut C_GtkCellRenderer, xpad: c_int, ypad: c_int) -> ();
+    pub fn gtk_cell_renderer_get_state         (cell: *mut C_GtkCellRenderer, widget: *mut C_GtkWidget, cell_state: gtk::CellRendererState) -> gtk::StateFlags;
+    pub fn gtk_cell_renderer_is_activatable    (cell: *mut C_GtkCellRenderer) -> Gboolean;
+    pub fn gtk_cell_renderer_get_preferred_height(cell: *mut C_GtkCellRenderer, widget: *mut C_GtkWidget, minimum_size: *mut c_int,
+        natural_size: *mut c_int) -> ();
+    pub fn gtk_cell_renderer_get_preferred_height_for_width(cell: *mut C_GtkCellRenderer, widget: *mut C_GtkWidget, width: c_int,
+        minimum_size: *mut c_int, natural_size: *mut c_int) -> ();
+    //pub fn gtk_cell_renderer_get_preferred_size(cell: *mut C_GtkCellRenderer, widget: *mut C_GtkWidget, minimum_size: *mut C_GtkRequisition,
+    //    natural_size: *mut C_GtkRequisition) -> ();
+    pub fn gtk_cell_renderer_get_preferred_width(cell: *mut C_GtkCellRenderer, widget: *mut C_GtkWidget, minimum_size: *mut c_int,
+        natural_size: *mut c_int) -> ();
+    pub fn gtk_cell_renderer_get_preferred_width_for_height(cell: *mut C_GtkCellRenderer, widget: *mut C_GtkWidget, height: c_int,
+        minimum_size: *mut c_int, natural_size: *mut c_int) -> ();
+    pub fn gtk_cell_renderer_get_request_mode(cell: *mut C_GtkCellRenderer) -> gtk::SizeRequestMode;
 
     //=========================================================================
     // GtkButton                                                         NOT OK
@@ -2458,4 +2499,5 @@ extern "C" {
     pub fn cast_GtkScrolledWindow(widget: *mut C_GtkWidget) -> *mut C_GtkScrolledWindow;
     pub fn cast_GtkRadioButton(widget: *mut C_GtkWidget) -> *mut C_GtkRadioButton;
     pub fn cast_GtkTreeView(widget: *mut C_GtkWidget) -> *mut C_GtkTreeView;
+    pub fn cast_GtkCellRenderer(widget: *mut C_GtkWidget) -> *mut C_GtkCellRenderer;
 }

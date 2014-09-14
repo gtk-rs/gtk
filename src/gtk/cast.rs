@@ -356,6 +356,9 @@ pub fn GTK_SCROLLED_WINDOW(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkScro
 
 pub fn GTK_RADIOBUTTON(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkRadioButton {
     unsafe{ ffi::cast_GtkRadioButton(widget) }
+
+pub fn GTK_CELL_RENDERER(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkCellRenderer {
+    unsafe { ffi::cast_GtkCellRenderer(widget) }
 }
 
 pub fn GTK_TREE_VIEW(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkTreeView {

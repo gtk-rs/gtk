@@ -1,0 +1,202 @@
+// This file is part of rgtk.
+//
+// rgtk is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// rgtk is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
+
+#![allow(visible_private_types)]
+
+use gtk::ffi;
+use std::c_str::CString;
+use std::c_vec::CVec;
+use std::string::raw::from_buf;
+
+pub struct TreePath {
+    pointer:   *mut ffi::C_GtkTreePath,
+    container: CVec<i32>
+}
+
+impl TreePath {
+    pub fn new() -> Option<TreePath> {
+        let tmp = unsafe { ffi::gtk_tree_path_new() };
+
+        if tmp.is_null() {
+            None
+        } else {
+            unsafe {
+                Some(TreePath {
+                    pointer: tmp,
+                    container: CVec::new(::std::ptr::mut_null(), 0)
+                })
+            }
+        }
+    }
+
+    pub fn new_from_string(path: &str) -> Option<TreePath> {
+        let tmp = unsafe {
+            path.with_c_str(|c_str| {
+                ffi::gtk_tree_path_new_from_string(c_str)
+            })
+        };
+
+        if tmp.is_null() {
+            None
+        } else {
+            unsafe {
+                Some(TreePath {
+                    pointer: tmp,
+                    container: CVec::new(::std::ptr::mut_null(), 0)
+                })
+            }
+        }
+    }
+
+    pub fn new_from_indicesv(indices: &mut [i32]) -> Option<TreePath> {
+        let tmp = unsafe { ffi::gtk_tree_path_new_from_indicesv(indices.as_mut_ptr(), indices.len() as u64) };
+
+        if tmp.is_null() {
+            None
+        } else {
+            unsafe {
+                Some(TreePath {
+                    pointer: tmp,
+                    container: CVec::new(::std::ptr::mut_null(), 0)
+                })
+            }
+        }
+    }
+
+    pub fn new_first() -> Option<TreePath> {
+        let tmp = unsafe { ffi::gtk_tree_path_new_first() };
+
+        if tmp.is_null() {
+            None
+        } else {
+            unsafe {
+                Some(TreePath {
+                    pointer: tmp,
+                    container: CVec::new(::std::ptr::mut_null(), 0)
+                })
+            }
+        }
+    }
+
+    #[allow(unused_variable)]
+    pub fn to_string(&self) -> String {
+        let string = unsafe { ffi::gtk_tree_path_to_string(self.pointer) };
+
+        if string.is_null() {
+            String::new()
+        } else {
+            unsafe {
+                // used to free the returned string
+                let container = CString::new(string as *const i8, true);
+
+                from_buf(string as *const u8)
+            }
+        }
+    }
+
+    pub fn append_index(&self, index_: i32) {
+        unsafe { ffi::gtk_tree_path_append_index(self.pointer, index_) }
+    }
+
+    pub fn prepend_index(&self, index_: i32) {
+        unsafe { ffi::gtk_tree_path_prepend_index(self.pointer, index_) }
+    }
+
+    pub fn get_depth(&self) -> i32 {
+        unsafe { ffi::gtk_tree_path_get_depth(self.pointer) }
+    }
+
+    pub fn get_indices<'r>(&'r mut self) -> &'r [i32] {
+        let tmp = unsafe { ffi::gtk_tree_path_get_indices(self.pointer) };
+        let depth = self.get_depth();
+
+        unsafe {
+            self.container = CVec::new(tmp, depth as uint);
+            self.container.as_slice()
+        }
+    }
+
+    pub fn copy(&self) -> Option<TreePath> {
+        let tmp = unsafe { ffi::gtk_tree_path_copy(self.pointer) };
+
+        if tmp.is_null() {
+            None
+        } else {
+            unsafe {
+                Some(TreePath {
+                    pointer: tmp,
+                    container: CVec::new(::std::ptr::mut_null(), 0)
+                })
+            }
+        }
+    }
+
+    pub fn compare(&self, other: &TreePath) -> i32 {
+        unsafe { ffi::gtk_tree_path_compare(self.pointer as *const ffi::C_GtkTreePath, other.pointer as *const ffi::C_GtkTreePath) }
+    }
+
+    pub fn next(&self) {
+        unsafe { ffi::gtk_tree_path_next(self.pointer) }
+    }
+
+    pub fn prev(&self) {
+        unsafe { ffi::gtk_tree_path_prev(self.pointer) }
+    }
+
+    pub fn path_up(&self) -> bool {
+        match unsafe { ffi::gtk_tree_path_up(self.pointer) } {
+            0 => false,
+            _ => true
+        }
+    }
+
+    pub fn path_down(&self) {
+        unsafe { ffi::gtk_tree_path_down(self.pointer) }
+    }
+
+    pub fn is_ancestor(&self, descendant: &TreePath) -> bool {
+        match unsafe { ffi::gtk_tree_path_is_ancestor(self.pointer, descendant.pointer) } {
+            0 => false,
+            _ => true
+        }
+    }
+
+    pub fn is_descendant(&self, ancestor: &TreePath) -> bool {
+        match unsafe { ffi::gtk_tree_path_is_descendant(self.pointer, ancestor.pointer) } {
+            0 => false,
+            _ => true
+        }
+    }
+
+    pub fn drop(&mut self) {
+        unsafe { ffi::gtk_tree_path_free(self.pointer) }
+        self.pointer = ::std::ptr::mut_null();
+    }
+
+    #[doc(hidden)]
+    pub fn get_pointer(&self) -> *mut ffi::C_GtkTreePath {
+        self.pointer
+    }
+
+    #[doc(hidden)]
+    pub fn wrap_pointer(c_treepath: *mut ffi::C_GtkTreePath) -> TreePath {
+        unsafe {
+            TreePath {
+                pointer: c_treepath,
+                container: CVec::new(::std::ptr::mut_null(), 0)
+            }
+        }
+    }
+}

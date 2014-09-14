@@ -42,6 +42,7 @@ pub use self::editable::Editable;
 pub use self::textview::TextView;
 pub use self::textbuffer::TextBuffer;
 pub use self::scrolledwindow::ScrolledWindow;
+pub use self::cellrenderer::CellRenderer;
 
 pub mod widget;
 pub mod container;
@@ -72,3 +73,4 @@ pub mod editable;
 pub mod textview;
 pub mod textbuffer;
 pub mod scrolledwindow;
+pub mod cellrenderer;
