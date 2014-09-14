@@ -16,7 +16,7 @@
 #![allow(non_camel_case_types)]
 #![allow(dead_code)]
 
-use libc::{c_int, c_char, c_float, c_uint, c_double, c_long, c_short, c_void};
+use libc::{c_int, c_char, c_float, c_uint, c_double, c_long, c_short, c_void, c_ulong};
 
 use gdk;
 use gtk;
@@ -212,6 +212,10 @@ pub struct C_GtkRecentChooserDialog;
 pub struct C_GtkCellRendererClass;
 #[repr(C)]
 pub struct C_GtkCellRenderer;
+#[repr(C)]
+pub struct C_GtkTreeModel;
+#[repr(C)]
+pub struct C_GtkTreePath;
 
 #[repr(C)]
 pub struct C_GtkToolItem;
@@ -629,6 +633,36 @@ extern "C" {
     pub fn gtk_misc_set_padding                (misc: *mut C_GtkMisc, xpad: c_int, ypad: c_int) -> ();
     pub fn gtk_misc_get_alignment              (misc: *mut C_GtkMisc, xalign: *const c_float, yalign: *const c_float) -> ();
     pub fn gtk_misc_get_padding                (misc: *mut C_GtkMisc, xpad: *const c_int, ypad: *const c_int) -> ();
+
+    //=========================================================================
+    // GtkTreePath                                                       NOT OK
+    //=========================================================================
+    pub fn gtk_tree_path_new                   () -> *mut C_GtkTreePath;
+    pub fn gtk_tree_path_new_from_string       (path: *const c_char) -> *mut C_GtkTreePath;
+    //pub fn gtk_tree_path_new_from_indices      (first_index: c_int, ...) -> *mut C_GtkTreePath;
+    pub fn gtk_tree_path_new_from_indicesv     (indices: *mut c_int, length: c_ulong) -> *mut C_GtkTreePath;
+    pub fn gtk_tree_path_to_string             (path: *mut C_GtkTreePath) -> *mut c_char;
+    pub fn gtk_tree_path_new_first             () -> *mut C_GtkTreePath;
+    pub fn gtk_tree_path_append_index          (path: *mut C_GtkTreePath, index_: c_int);
+    pub fn gtk_tree_path_prepend_index         (path: *mut C_GtkTreePath, index_: c_int);
+    pub fn gtk_tree_path_get_depth             (path: *mut C_GtkTreePath) -> c_int;
+    pub fn gtk_tree_path_get_indices           (path: *mut C_GtkTreePath) -> *mut c_int;
+    pub fn gtk_tree_path_get_indices_with_depth(path: *mut C_GtkTreePath, depth: *mut c_int) -> *mut c_int;
+    pub fn gtk_tree_path_free                  (path: *mut C_GtkTreePath);
+    pub fn gtk_tree_path_copy                  (path: *mut C_GtkTreePath) -> *mut C_GtkTreePath;
+    pub fn gtk_tree_path_compare               (a: *const C_GtkTreePath, b: *const C_GtkTreePath) -> i32;
+    pub fn gtk_tree_path_next                  (path: *mut C_GtkTreePath);
+    pub fn gtk_tree_path_prev                  (path: *mut C_GtkTreePath);
+    pub fn gtk_tree_path_up                    (path: *mut C_GtkTreePath) -> Gboolean;
+    pub fn gtk_tree_path_down                  (path: *mut C_GtkTreePath);
+    pub fn gtk_tree_path_is_ancestor           (path: *mut C_GtkTreePath, descendant: *mut C_GtkTreePath) -> Gboolean;
+    pub fn gtk_tree_path_is_descendant         (path: *mut C_GtkTreePath, ancestor: *mut C_GtkTreePath) -> Gboolean;
+
+    //=========================================================================
+    // GtkTreeModel                                                      NOT OK
+    //=========================================================================
+    //pub type GtkTreeModelForeachFunc = Option<extern "C" fn(model: *mut C_GtkTreeModel, path: *mut C_GtkTreePath, iter: *mut C_GtkIter,
+    //    data: gpointer) -> Gboolean>;
 
     //=========================================================================
     // GtkCellRenderer                                                   NOT OK

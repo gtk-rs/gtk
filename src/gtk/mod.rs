@@ -131,7 +131,9 @@ pub use self::widgets::{
     ScrolledWindow,
     RadioButton,
     TreeView,
-    TreeViewColumn
+    TreeViewColumn,
+    RadioButton,
+    TreePath
 };
 
 #[cfg(GTK_3_6)]
