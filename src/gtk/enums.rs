@@ -95,6 +95,8 @@ pub use self::page_set::PageSet;
 pub use self::recent_sort_type::RecentSortType;
 pub use self::recent_filter_flags::RecentFilterFlags;
 pub use self::widget_help_type::WidgetHelpType;
+pub use self::text_window_type::TextWindowType;
+pub use self::wrap_mode::WrapMode;
 
 pub mod window_type{
     #[repr(C)]
@@ -1347,5 +1349,41 @@ pub mod widget_help_type {
         WidgetHelpTooltip,
         /// What’s this
         WidgetHelpWhatsThis
+    }
+}
+
+/// Used to reference the parts of GtkTextView.
+pub mod text_window_type {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum TextWindowType {
+        /// Window that floats over scrolling areas.
+        Widget,
+        /// Scrollable text window.
+        Text,
+        /// Left side border window.
+        Left,
+        /// Right side border window.
+        Right,
+        /// Top border window.
+        Top,
+        // Bottom border window.
+        Bottom
+    }
+}
+
+/// Describes a type of line wrapping.
+pub mod wrap_mode {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum WrapMode {
+        /// do not wrap lines; just make the text area wider
+        None,
+        /// wrap text, breaking lines anywhere the cursor can appear (between characters, usually - if you want to be technical, between graphemes, see pango_get_log_attrs())
+        Char,
+        /// wrap text, breaking lines in between words
+        Word,
+        /// wrap text, breaking lines in between words, or if that is not enough, also between graphemes
+        WordChar
     }
 }

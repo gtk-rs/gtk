@@ -305,7 +305,9 @@ pub use self::enums::{
     PageSet,
     RecentSortType,
     RecentFilterFlags,
-    WidgetHelpType
+    WidgetHelpType,
+    TextWindowType,
+    WrapMode,
 };
 
 /// GTK various struct
