@@ -100,6 +100,7 @@ pub use self::wrap_mode::WrapMode;
 pub use self::tree_view_grid_lines::TreeViewGridLines;
 pub use self::tree_view_column_sizing::TreeViewColumnSizing;
 pub use self::cell_renderer_state::CellRendererState;
+pub use self::tree_model_flags::TreeModelFlags;
 
 pub mod window_type{
     #[repr(C)]
@@ -1443,5 +1444,17 @@ pub mod cell_renderer_state {
         Expandable,
         /// The cell is in a row that is expanded.
         Expanded
+    }
+}
+
+/// These flags indicate various properties of a GtkTreeModel.
+pub mod tree_model_flags {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum TreeModelFlags {
+        /// iterators survive all signals emitted by the tree
+        ItersPersist,
+        /// the model is a list only, and never has children
+        ListOnly,
     }
 }

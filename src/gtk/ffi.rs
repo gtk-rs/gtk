@@ -216,6 +216,8 @@ pub struct C_GtkCellRenderer;
 pub struct C_GtkTreeModel;
 #[repr(C)]
 pub struct C_GtkTreePath;
+#[repr(C)]
+pub struct C_GtkTreeIter;
 
 #[repr(C)]
 pub struct C_GtkToolItem;
@@ -663,6 +665,18 @@ extern "C" {
     //=========================================================================
     //pub type GtkTreeModelForeachFunc = Option<extern "C" fn(model: *mut C_GtkTreeModel, path: *mut C_GtkTreePath, iter: *mut C_GtkIter,
     //    data: gpointer) -> Gboolean>;
+    pub fn gtk_tree_model_get_flags(tree_model: *mut C_GtkTreeModel) -> gtk::TreeModelFlags;
+    pub fn gtk_tree_model_get_n_columns(tree_model: *mut C_GtkTreeModel) -> c_int;
+    pub fn gtk_tree_model_get_column_type(tree_model: *mut C_GtkTreeModel, index_: c_int) -> GType;
+    //pub fn gtk_tree_model_get_iter(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter, path: *mut C_GtkTreePath) -> Gboolean;
+    //pub fn gtk_tree_model_get_iter_from_string(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter, path_string: *const c_char) -> Gboolean;
+    //pub fn gtk_tree_model_get_iter_first(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter) -> Gboolean;
+
+    //=========================================================================
+    // GtkTreeIter                                                       NOT OK
+    //=========================================================================
+    pub fn gtk_tree_iter_copy(iter: *mut C_GtkTreeIter) -> *mut C_GtkTreeIter;
+    pub fn gtk_tree_iter_free(iter: *mut C_GtkTreeIter);
 
     //=========================================================================
     // GtkCellRenderer                                                   NOT OK
