@@ -235,6 +235,9 @@ pub struct C_GtkColorChooser;
 #[repr(C)]
 pub struct C_GtkEditable;
 
+#[repr(C)]
+pub struct C_GtkRadioButton;
+
 // not useful to implement for the moment
 #[repr(C)]
 pub struct C_GtkBuilder;
@@ -2154,6 +2157,15 @@ extern "C" {
     pub fn gtk_scrolled_window_set_policy   (scrolled_window: *mut C_GtkScrolledWindow, h_scrollbar_policy: gtk::PolicyType, v_scrollbar_policy: gtk::PolicyType);
 
     //=========================================================================
+    // GtkRadioButton                                                        OK
+    //=========================================================================
+    pub fn gtk_radio_button_new              (group: *mut c_void) -> *mut C_GtkWidget;
+    pub fn gtk_radio_button_new_with_label   (group: *mut c_void, label: *const c_char) -> *mut C_GtkWidget;
+    pub fn gtk_radio_button_new_with_mnemonic (group: *mut c_void, label: *const c_char) -> *mut C_GtkWidget;
+    pub fn gtk_radio_button_join_group       (radio_button: *mut C_GtkRadioButton, group_source: *mut C_GtkRadioButton);
+
+
+    //=========================================================================
     // Glue fixe code
     //=========================================================================
     pub fn glue_signal_connect(g_object: *mut C_GtkWidget,
@@ -2292,4 +2304,5 @@ extern "C" {
     pub fn cast_GtkTextBuffer(widget: *mut C_GtkWidget) -> *mut C_GtkTextBuffer;
     pub fn cast_GtkTextTagTable(widget: *mut C_GtkWidget) -> *mut C_GtkTextTagTable;
     pub fn cast_GtkScrolledWindow(widget: *mut C_GtkWidget) -> *mut C_GtkScrolledWindow;
+    pub fn cast_GtkRadioButton(widget: *mut C_GtkWidget) -> *mut C_GtkRadioButton;
 }

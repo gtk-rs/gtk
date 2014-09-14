@@ -114,6 +114,7 @@ pub use self::textview::TextView;
 pub use self::textbuffer::TextBuffer;
 pub use self::texttagtable::TextTagTable;
 pub use self::scrolledwindow::ScrolledWindow;
+pub use self::radiobutton::RadioButton;
 
 mod window;
 mod label;
@@ -216,3 +217,4 @@ mod textview;
 mod textbuffer;
 mod texttagtable;
 mod scrolledwindow;
+mod radiobutton;
