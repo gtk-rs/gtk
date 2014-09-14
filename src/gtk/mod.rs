@@ -132,7 +132,6 @@ pub use self::widgets::{
     RadioButton,
     TreeView,
     TreeViewColumn,
-    RadioButton,
     TreePath,
     TreeIter,
     TreeModel
@@ -318,14 +317,10 @@ pub use self::enums::{
     WidgetHelpType,
     TextWindowType,
     WrapMode,
-<<<<<<< HEAD
     TreeViewGridLines,
     TreeViewColumnSizing,
-    CellRendererState
-=======
     CellRendererState,
     TreeModelFlags
->>>>>>> 4e5c95b... New type : TreeIter
 };
 
 /// GTK various struct
