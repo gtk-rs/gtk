@@ -17,12 +17,10 @@
 
 use gtk::ffi;
 use std::c_str::CString;
-use std::c_vec::CVec;
 use std::string::raw::from_buf;
 
 pub struct TreePath {
-    pointer:   *mut ffi::C_GtkTreePath,
-    container: CVec<i32>
+    pointer:   *mut ffi::C_GtkTreePath
 }
 
 impl TreePath {
@@ -32,12 +30,9 @@ impl TreePath {
         if tmp.is_null() {
             None
         } else {
-            unsafe {
-                Some(TreePath {
-                    pointer: tmp,
-                    container: CVec::new(::std::ptr::mut_null(), 0)
-                })
-            }
+            Some(TreePath {
+                pointer: tmp
+            })
         }
     }
 
@@ -51,12 +46,9 @@ impl TreePath {
         if tmp.is_null() {
             None
         } else {
-            unsafe {
-                Some(TreePath {
-                    pointer: tmp,
-                    container: CVec::new(::std::ptr::mut_null(), 0)
-                })
-            }
+            Some(TreePath {
+                pointer: tmp
+            })
         }
     }
 
@@ -66,12 +58,9 @@ impl TreePath {
         if tmp.is_null() {
             None
         } else {
-            unsafe {
-                Some(TreePath {
-                    pointer: tmp,
-                    container: CVec::new(::std::ptr::mut_null(), 0)
-                })
-            }
+            Some(TreePath {
+                pointer: tmp
+            })
         }
     }
 
@@ -81,12 +70,9 @@ impl TreePath {
         if tmp.is_null() {
             None
         } else {
-            unsafe {
-                Some(TreePath {
-                    pointer: tmp,
-                    container: CVec::new(::std::ptr::mut_null(), 0)
-                })
-            }
+            Some(TreePath {
+                pointer: tmp
+            })
         }
     }
 
@@ -118,13 +104,12 @@ impl TreePath {
         unsafe { ffi::gtk_tree_path_get_depth(self.pointer) }
     }
 
-    pub fn get_indices<'r>(&'r mut self) -> &'r [i32] {
+    pub fn get_indices(&self) -> Vec<i32> {
         let tmp = unsafe { ffi::gtk_tree_path_get_indices(self.pointer) };
         let depth = self.get_depth();
 
         unsafe {
-            self.container = CVec::new(tmp, depth as uint);
-            self.container.as_slice()
+            ::std::vec::raw::from_buf(tmp as *const i32, depth as uint)
         }
     }
 
@@ -134,12 +119,9 @@ impl TreePath {
         if tmp.is_null() {
             None
         } else {
-            unsafe {
-                Some(TreePath {
-                    pointer: tmp,
-                    container: CVec::new(::std::ptr::mut_null(), 0)
-                })
-            }
+            Some(TreePath {
+                pointer: tmp
+            })
         }
     }
 
@@ -192,11 +174,8 @@ impl TreePath {
 
     #[doc(hidden)]
     pub fn wrap_pointer(c_treepath: *mut ffi::C_GtkTreePath) -> TreePath {
-        unsafe {
-            TreePath {
-                pointer: c_treepath,
-                container: CVec::new(::std::ptr::mut_null(), 0)
-            }
+        TreePath {
+            pointer: c_treepath
         }
     }
 }
