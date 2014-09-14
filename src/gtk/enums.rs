@@ -97,6 +97,7 @@ pub use self::recent_filter_flags::RecentFilterFlags;
 pub use self::widget_help_type::WidgetHelpType;
 pub use self::text_window_type::TextWindowType;
 pub use self::wrap_mode::WrapMode;
+pub use self::tree_view_grid_lines::TreeViewGridLines;
 
 pub mod window_type{
     #[repr(C)]
@@ -1387,3 +1388,21 @@ pub mod wrap_mode {
         WordChar
     }
 }
+
+/// Used to indicate which grid lines to draw in a tree view.
+pub mod tree_view_grid_lines{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum TreeViewGridLines {
+        /// No grid lines.
+        None,
+        /// Horizontal grid lines.
+        Horizontal,
+        /// Vertical grid lines.
+        Vertical,
+        /// Horizontal and vertical grid lines.
+        Both
+    }
+}
+
+

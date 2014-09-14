@@ -129,7 +129,8 @@ pub use self::widgets::{
     TextBuffer,
     TextTagTable,
     ScrolledWindow,
-    RadioButton
+    RadioButton,
+    TreeView
 };
 
 #[cfg(GTK_3_6)]
@@ -233,7 +234,8 @@ pub use self::enums::{
     page_set,
     recent_sort_type,
     recent_filter_flags,
-    widget_help_type
+    widget_help_type,
+    tree_view_grid_lines
 };
 
 
@@ -309,6 +311,7 @@ pub use self::enums::{
     WidgetHelpType,
     TextWindowType,
     WrapMode,
+    TreeViewGridLines
 };
 
 /// GTK various struct
