@@ -120,6 +120,8 @@ pub use self::scrolledwindow::ScrolledWindow;
 pub use self::radiobutton::RadioButton;
 pub use self::treeview::TreeView;
 pub use self::treeview_column::TreeViewColumn;
+pub use self::menuitem::MenuItem;
+pub use self::separator_menuitem::SeparatorMenuItem;
 
 mod window;
 mod label;
@@ -225,6 +227,11 @@ mod scrolledwindow;
 mod radiobutton;
 mod treeview;
 mod treeview_column;
+<<<<<<< HEAD
 mod treepath;
 mod treeiter;
 mod treemodel;
+=======
+mod menuitem;
+mod separator_menuitem;
+>>>>>>> 0574f16... add gtk::SeparatorMenuItem

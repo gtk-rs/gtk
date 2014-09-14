@@ -2450,6 +2450,33 @@ extern "C" {
     // pub fn gtk_menu_shell_bind_model   (menu_shell: *mut C_GtkMenuShell, model: *mut C_GMenuModel, action_namespace: *mut c_char, with_separators: Gboolean);
 
     //=========================================================================
+    // GtkMenuItem
+    //=========================================================================
+    pub fn gtk_menu_item_new                  () -> *mut C_GtkWidget;
+    pub fn gtk_menu_item_new_with_label       (label: *const c_char) -> *mut C_GtkWidget;
+    pub fn gtk_menu_item_new_with_mnemonic    (label: *const c_char) -> *mut C_GtkWidget;
+    pub fn gtk_menu_item_set_submenu          (menu_item: *mut C_GtkMenuItem, submenu: *mut C_GtkWidget);
+    pub fn gtk_menu_item_get_submenu          (menu_item: *mut C_GtkMenuItem) -> *mut C_GtkWidget;
+    pub fn gtk_menu_item_select               (menu_item: *mut C_GtkMenuItem);
+    pub fn gtk_menu_item_deselect             (menu_item: *mut C_GtkMenuItem);
+    pub fn gtk_menu_item_activate             (menu_item: *mut C_GtkMenuItem);
+    pub fn gtk_menu_item_toggle_size_request  (menu_item: *mut C_GtkMenuItem, requisition: *mut c_int);
+    pub fn gtk_menu_item_toggle_size_allocate (menu_item: *mut C_GtkMenuItem, allocation: c_int);
+    pub fn gtk_menu_item_set_accel_path    (menu_item: *mut C_GtkMenuItem, accel_path: *const c_char);
+    pub fn gtk_menu_item_get_accel_path    (menu_item: *mut C_GtkMenuItem) -> *const c_char;
+    pub fn gtk_menu_item_set_label         (menu_item: *mut C_GtkMenuItem, label: *const c_char);
+    pub fn gtk_menu_item_get_label         (menu_item: *mut C_GtkMenuItem) -> *const c_char;
+    pub fn gtk_menu_item_set_use_underline    (menu_item: *mut C_GtkMenuItem, setting: Gboolean);
+    pub fn gtk_menu_item_get_use_underline    (menu_item: *mut C_GtkMenuItem) -> Gboolean;
+    pub fn gtk_menu_item_set_reserve_indicator (Gmenu_item: *mut C_GtkMenuItem, reserve: Gboolean);
+    pub fn gtk_menu_item_get_reserve_indicator (menu_item: *mut C_GtkMenuItem) -> Gboolean;
+
+    //=========================================================================
+    // GtkSeparatorMenuItem
+    //=========================================================================
+    pub fn gtk_separator_menu_item_new() -> *mut C_GtkWidget;
+
+    //=========================================================================
     // Glue fixe code
     //=========================================================================
     pub fn glue_signal_connect(g_object: *mut C_GtkWidget,
