@@ -128,7 +128,8 @@ pub use self::widgets::{
     TextView,
     TextBuffer,
     TextTagTable,
-    ScrolledWindow
+    ScrolledWindow,
+    RadioButton
 };
 
 #[cfg(GTK_3_6)]

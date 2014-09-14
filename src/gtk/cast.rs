@@ -353,3 +353,7 @@ pub fn GTK_TEXT_TAG_TABLE(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkTextT
 pub fn GTK_SCROLLED_WINDOW(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkScrolledWindow {
     unsafe{ ffi::cast_GtkScrolledWindow(widget) }
 }
+
+pub fn GTK_RADIOBUTTON(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkRadioButton {
+    unsafe{ ffi::cast_GtkRadioButton(widget) }
+}
