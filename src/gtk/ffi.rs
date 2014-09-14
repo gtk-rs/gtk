@@ -280,6 +280,9 @@ pub struct C_GtkTreeView;
 #[repr(C)]
 pub struct C_GtkTreeViewColumn;
 
+#[repr(C)]
+pub struct C_GtkMenuShell;
+
 pub fn to_gboolean(b: bool) -> Gboolean {
     match b {
         true => Gtrue,
@@ -2428,6 +2431,25 @@ extern "C" {
 
 
     //=========================================================================
+    // GtkMenuShell
+    //=========================================================================
+    pub fn gtk_menu_shell_append         (menu_shell: *mut C_GtkMenuShell, child: *mut C_GtkWidget);
+    pub fn gtk_menu_shell_prepend        (menu_shell: *mut C_GtkMenuShell, child: *mut C_GtkWidget);
+    pub fn gtk_menu_shell_insert         (menu_shell: *mut C_GtkMenuShell, child: *mut C_GtkWidget, position: c_int);
+    pub fn gtk_menu_shell_deactivate     (menu_shell: *mut C_GtkMenuShell);
+    pub fn gtk_menu_shell_select_item    (menu_shell: *mut C_GtkMenuShell, menu_item: *mut C_GtkWidget);
+    pub fn gtk_menu_shell_deselect       (menu_shell: *mut C_GtkMenuShell);
+    pub fn gtk_menu_shell_activate_item  (menu_shell: *mut C_GtkMenuShell, menu_item: *mut C_GtkWidget, force_deactivate: Gboolean);
+    pub fn gtk_menu_shell_select_first   (menu_shell: *mut C_GtkMenuShell, search_sensitive: Gboolean);
+    pub fn gtk_menu_shell_cancel         (menu_shell: *mut C_GtkMenuShell);
+    pub fn gtk_menu_shell_get_take_focus (menu_shell: *mut C_GtkMenuShell) -> Gboolean;
+    pub fn gtk_menu_shell_set_take_focus (menu_shell: *mut C_GtkMenuShell, take_focus: Gboolean);
+    pub fn gtk_menu_shell_get_selected_item (menu_shell: *mut C_GtkMenuShell) -> *mut C_GtkWidget;
+    pub fn gtk_menu_shell_get_parent_shell  (menu_shell: *mut C_GtkMenuShell) -> *mut C_GtkWidget;
+    // GDK_AVAILABLE_IN_3_6
+    // pub fn gtk_menu_shell_bind_model   (menu_shell: *mut C_GtkMenuShell, model: *mut C_GMenuModel, action_namespace: *mut c_char, with_separators: Gboolean);
+
+    //=========================================================================
     // Glue fixe code
     //=========================================================================
     pub fn glue_signal_connect(g_object: *mut C_GtkWidget,
@@ -2569,4 +2591,5 @@ extern "C" {
     pub fn cast_GtkRadioButton(widget: *mut C_GtkWidget) -> *mut C_GtkRadioButton;
     pub fn cast_GtkTreeView(widget: *mut C_GtkWidget) -> *mut C_GtkTreeView;
     pub fn cast_GtkCellRenderer(widget: *mut C_GtkWidget) -> *mut C_GtkCellRenderer;
+    pub fn cast_GtkMenuShell(widget: *mut C_GtkWidget) -> *mut C_GtkMenuShell;
 }

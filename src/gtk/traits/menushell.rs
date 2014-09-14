@@ -1,0 +1,110 @@
+// This file is part of rgtk.
+//
+// rgtk is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// rgtk is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
+
+//! A base class for menu objects
+
+use gtk::{ffi, traits};
+use gtk::cast::GTK_MENU_SHELL;
+
+/// A base class for menu objects
+pub trait MenuShell: traits::Widget + traits::Container {
+    fn append(&mut self, widget: &traits::Widget) {
+        unsafe {
+            ffi::gtk_menu_shell_append(GTK_MENU_SHELL(self.get_widget()), widget.get_widget())
+        }
+    }
+
+    fn prepend(&mut self, widget: &traits::Widget) {
+        unsafe {
+            ffi::gtk_menu_shell_prepend(GTK_MENU_SHELL(self.get_widget()), widget.get_widget())
+        }
+    }
+
+    fn insert(&mut self, widget: &traits::Widget, position: i32) {
+        unsafe {
+            ffi::gtk_menu_shell_insert(GTK_MENU_SHELL(self.get_widget()),
+                                       widget.get_widget(),
+                                       position)
+        }
+    }
+
+    fn deactivate(&mut self) {
+        unsafe {
+            ffi::gtk_menu_shell_deactivate(GTK_MENU_SHELL(self.get_widget()))
+        }
+    }
+
+
+    // FIXME(jeremyletang): uncomment when gtk::MenuItem will be bind
+    // fn select_item(&mut self, menu_item: gtk::MenuItem) {
+    //     unsafe {
+    //         ffi::gtk_menu_shell_select_item(GTK_MENU_SHELL(self.get_widget()),
+    //                                         menu_item.get_widget())
+    //     }
+    // }
+
+    fn deselect(&mut self) {
+        unsafe {
+            ffi::gtk_menu_shell_deselect(GTK_MENU_SHELL(self.get_widget()))
+        }
+    }
+
+    // FIXME(jeremyletang): uncomment when gtk::MenuItem will be bind
+    // fn activate_item(&mut self, menu_item: &gtk::MenuItem, force_deactivate: bool) {
+    //     unsafe {
+    //         ffi::gtk_menu_shell_activate_item(GTK_MENU_SHELL(self.get_widget()),
+    //                                           menu_item.get_widget(),
+    //                                           ffi::to_gboolean(force_deactivate))
+    //     }
+    // }
+
+    fn select_first(&mut self, search_sensitive: bool) {
+        unsafe {
+            ffi::gtk_menu_shell_select_first(GTK_MENU_SHELL(self.get_widget()),
+                                             ffi::to_gboolean(search_sensitive))
+        }
+    }
+
+    fn cancel(&mut self) {
+        unsafe {
+            ffi::gtk_menu_shell_cancel(GTK_MENU_SHELL(self.get_widget()))
+        }
+    }
+
+    fn get_take_focus(&self) -> bool {
+        unsafe {
+            ffi::to_bool(ffi::gtk_menu_shell_get_take_focus(GTK_MENU_SHELL(self.get_widget())))
+        }
+    }
+
+    fn set_take_focus(&mut self, take_focus: bool) {
+        unsafe {
+            ffi::gtk_menu_shell_set_take_focus(GTK_MENU_SHELL(self.get_widget()),
+                                               ffi::to_gboolean(take_focus))
+        }
+    }
+
+    fn get_selected_item<T: traits::Widget>(&self) -> T {
+        unsafe {
+            ffi::FFIWidget::wrap(ffi::gtk_menu_shell_get_selected_item(GTK_MENU_SHELL(self.get_widget())))
+        }
+    }
+
+    fn get_parent_shell<T: MenuShell>(&self) -> T {
+        unsafe {
+            ffi::FFIWidget::wrap(ffi::gtk_menu_shell_get_parent_shell(GTK_MENU_SHELL(self.get_widget())))
+        }
+    }
+}
