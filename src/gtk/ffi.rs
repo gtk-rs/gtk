@@ -283,6 +283,12 @@ pub struct C_GtkTreeViewColumn;
 #[repr(C)]
 pub struct C_GtkMenuShell;
 
+#[repr(C)]
+pub struct C_GtkMenuItem;
+
+#[repr(C)]
+pub struct C_GtkCheckMenuItem;
+
 pub fn to_gboolean(b: bool) -> Gboolean {
     match b {
         true => Gtrue,
@@ -2477,6 +2483,20 @@ extern "C" {
     pub fn gtk_separator_menu_item_new() -> *mut C_GtkWidget;
 
     //=========================================================================
+    // GtkSeparatorMenuItem
+    //=========================================================================
+    pub fn gtk_check_menu_item_new               () -> *mut C_GtkWidget;
+    pub fn gtk_check_menu_item_new_with_label    (label: *const c_char) -> *mut C_GtkWidget;
+    pub fn gtk_check_menu_item_new_with_mnemonic (label: *const c_char) -> *mut C_GtkWidget;
+    pub fn gtk_check_menu_item_set_active        (check_menu_item: *mut C_GtkCheckMenuItem, is_active: Gboolean);
+    pub fn gtk_check_menu_item_get_active        (check_menu_item: *mut C_GtkCheckMenuItem) -> Gboolean;
+    pub fn gtk_check_menu_item_toggled           (check_menu_item: *mut C_GtkCheckMenuItem);
+    pub fn gtk_check_menu_item_set_inconsistent  (check_menu_item: *mut C_GtkCheckMenuItem, setting: Gboolean);
+    pub fn gtk_check_menu_item_get_inconsistent  (check_menu_item: *mut C_GtkCheckMenuItem) -> Gboolean;
+    pub fn gtk_check_menu_item_set_draw_as_radio (check_menu_item: *mut C_GtkCheckMenuItem, draw_as_radio: Gboolean);
+    pub fn gtk_check_menu_item_get_draw_as_radio (check_menu_item: *mut C_GtkCheckMenuItem) -> Gboolean;
+
+    //=========================================================================
     // Glue fixe code
     //=========================================================================
     pub fn glue_signal_connect(g_object: *mut C_GtkWidget,
@@ -2619,4 +2639,6 @@ extern "C" {
     pub fn cast_GtkTreeView(widget: *mut C_GtkWidget) -> *mut C_GtkTreeView;
     pub fn cast_GtkCellRenderer(widget: *mut C_GtkWidget) -> *mut C_GtkCellRenderer;
     pub fn cast_GtkMenuShell(widget: *mut C_GtkWidget) -> *mut C_GtkMenuShell;
+    pub fn cast_GtkMenuItem(widget: *mut C_GtkWidget) -> *mut C_GtkMenuItem;
+    pub fn cast_GtkCheckMenuItem(widget: *mut C_GtkWidget) -> *mut C_GtkCheckMenuItem;
 }

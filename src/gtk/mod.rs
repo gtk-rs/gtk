@@ -136,7 +136,8 @@ pub use self::widgets::{
     TreeIter,
     TreeModel,
     MenuItem,
-    SeparatorMenuItem
+    SeparatorMenuItem,
+    CheckMenuItem
 };
 
 #[cfg(GTK_3_6)]
