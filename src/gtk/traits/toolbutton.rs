@@ -36,9 +36,9 @@ pub trait ToolButton: Widget + Container + Bin + ToolItem {
         }
     }
 
-    fn set_icone_name(&mut self, icone_name: &str) -> () {
+    fn set_icon_name(&mut self, icon_name: &str) -> () {
         unsafe {
-            icone_name.with_c_str(|c_str| {
+            icon_name.with_c_str(|c_str| {
                 ffi::gtk_tool_button_set_icon_name(GTK_TOOLBUTTON(self.get_widget()), c_str)
             });
         }

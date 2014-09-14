@@ -95,6 +95,8 @@ pub use self::page_set::PageSet;
 pub use self::recent_sort_type::RecentSortType;
 pub use self::recent_filter_flags::RecentFilterFlags;
 pub use self::widget_help_type::WidgetHelpType;
+pub use self::text_window_type::TextWindowType;
+pub use self::wrap_mode::WrapMode;
 
 pub mod window_type{
     #[repr(C)]
@@ -509,10 +511,10 @@ pub mod path_type{
 }
 
 /// Determines when a scroll bar will be visible.
-pub mod policy_type{
+pub mod policy_type {
     #[repr(C)]
     #[deriving(Clone, PartialEq, PartialOrd, Show)]
-    pub enum PolicyType{
+    pub enum PolicyType {
         /// The scrollbar is always visible.
         Always,
         /// The scrollbar will appear and disappear as necessary. For example, when all of a CList can not be seen.
@@ -716,18 +718,25 @@ pub mod region_flags{
     }
 }
 
-/// Icon Sizes : temporary
-pub mod icon_size{
+/// Built-in stock icon sizes
+pub mod icon_size {
     #[repr(C)]
     #[deriving(Clone, PartialEq, PartialOrd, Show)]
-    pub enum IconSize{
+    pub enum IconSize {
+        // Invalid size
         Invalid,
-        Memu,
+        // Size appropriate for menus (16px)
+        Menu,
+        // Size appropriate for small toolbars (16px)
         SmallToolbar,
+        // Size appropriate for large toolbars (24px)
         LargeToolbar,
+        // Size appropriate for buttons (16px)
         Button,
+        // Size appropriate for drag and drop (32px)
         Dnd,
-        Disalog
+        // Size appropriate for dialogs (48px)
+        Dialog
     }
 }
 
@@ -985,7 +994,7 @@ pub mod license {
 /// All predefined values are negative, GTK+ leaves positive values for application-defined response ids.
 pub mod response_type {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show, FromPrimitive)]
     pub enum ResponseType {
         /// Returned if an action widget has no response id, or if the dialog gets programmatically hidden or destroyed
         None        = -1,
@@ -1340,5 +1349,41 @@ pub mod widget_help_type {
         WidgetHelpTooltip,
         /// What’s this
         WidgetHelpWhatsThis
+    }
+}
+
+/// Used to reference the parts of GtkTextView.
+pub mod text_window_type {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum TextWindowType {
+        /// Window that floats over scrolling areas.
+        Widget,
+        /// Scrollable text window.
+        Text,
+        /// Left side border window.
+        Left,
+        /// Right side border window.
+        Right,
+        /// Top border window.
+        Top,
+        // Bottom border window.
+        Bottom
+    }
+}
+
+/// Describes a type of line wrapping.
+pub mod wrap_mode {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum WrapMode {
+        /// do not wrap lines; just make the text area wider
+        None,
+        /// wrap text, breaking lines anywhere the cursor can appear (between characters, usually - if you want to be technical, between graphemes, see pango_get_log_attrs())
+        Char,
+        /// wrap text, breaking lines in between words
+        Word,
+        /// wrap text, breaking lines in between words, or if that is not enough, also between graphemes
+        WordChar
     }
 }

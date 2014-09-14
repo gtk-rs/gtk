@@ -39,6 +39,9 @@ pub use self::fontchooser::FontChooser;
 pub use self::recentchooser::RecentChooser;
 pub use self::range::Range;
 pub use self::editable::Editable;
+pub use self::textview::TextView;
+pub use self::textbuffer::TextBuffer;
+pub use self::scrolledwindow::ScrolledWindow;
 
 pub mod widget;
 pub mod container;
@@ -66,3 +69,6 @@ pub mod fontchooser;
 pub mod recentchooser;
 pub mod range;
 pub mod editable;
+pub mod textview;
+pub mod textbuffer;
+pub mod scrolledwindow;

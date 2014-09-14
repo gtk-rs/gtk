@@ -13,38 +13,30 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-//! A widget displaying an image
-
 use gtk;
+use gtk::TextBuffer;
+use gtk::traits::Widget;
+use gtk::cast::{GTK_TEXT_VIEW, GTK_TEXT_BUFFER};
 use gtk::ffi;
-use gtk::traits;
-
-/// Image — A widget displaying an image
-struct_Widget!(Image)
+use gtk::ffi::FFIWidget;
 
 
-impl Image {
-    pub fn new_from_file(filename: &str) -> Option<Image> {
+pub trait TextView: Widget {
+    fn set_buffer(&mut self, buffer: gtk::TextBuffer) -> () {
+        unsafe {
+            ffi::gtk_text_view_set_buffer(GTK_TEXT_VIEW(self.get_widget()), GTK_TEXT_BUFFER(buffer.get_widget()));
+        }
+    }
+
+    fn get_buffer(&self) -> Option<gtk::TextBuffer> {
         let tmp_pointer = unsafe {
-            filename.with_c_str(|c_str| {
-                ffi::gtk_image_new_from_file(c_str)
-            })
+            ffi::gtk_text_view_get_buffer(GTK_TEXT_VIEW(self.get_widget()))
         };
-        check_pointer!(tmp_pointer, Image)
-    }
 
-    pub fn new_from_icon_name(icon_name: &str, size: gtk::IconSize) -> Option<Image> {
-    	let tmp_pointer = unsafe {
-            icon_name.with_c_str(|c_str| {
-                ffi::gtk_image_new_from_icon_name(c_str, size)
-            })
-        };
-        check_pointer!(tmp_pointer, Image)
+        if tmp_pointer.is_null() {
+            None
+        } else {
+            Some(ffi::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+        }
     }
-
 }
-
-impl_drop!(Image)
-impl_TraitWidget!(Image)
-
-impl traits::Misc for Image {}
