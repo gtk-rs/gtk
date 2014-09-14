@@ -46,14 +46,12 @@ pub trait MenuShell: traits::Widget + traits::Container {
         }
     }
 
-
-    // FIXME(jeremyletang): uncomment when gtk::MenuItem will be bind
-    // fn select_item(&mut self, menu_item: gtk::MenuItem) {
-    //     unsafe {
-    //         ffi::gtk_menu_shell_select_item(GTK_MENU_SHELL(self.get_widget()),
-    //                                         menu_item.get_widget())
-    //     }
-    // }
+    fn select_item(&mut self, menu_item: &traits::MenuItem) {
+        unsafe {
+            ffi::gtk_menu_shell_select_item(GTK_MENU_SHELL(self.get_widget()),
+                                            menu_item.get_widget())
+        }
+    }
 
     fn deselect(&mut self) {
         unsafe {
@@ -61,14 +59,13 @@ pub trait MenuShell: traits::Widget + traits::Container {
         }
     }
 
-    // FIXME(jeremyletang): uncomment when gtk::MenuItem will be bind
-    // fn activate_item(&mut self, menu_item: &gtk::MenuItem, force_deactivate: bool) {
-    //     unsafe {
-    //         ffi::gtk_menu_shell_activate_item(GTK_MENU_SHELL(self.get_widget()),
-    //                                           menu_item.get_widget(),
-    //                                           ffi::to_gboolean(force_deactivate))
-    //     }
-    // }
+    fn activate_item(&mut self, menu_item: &traits::MenuItem, force_deactivate: bool) {
+        unsafe {
+            ffi::gtk_menu_shell_activate_item(GTK_MENU_SHELL(self.get_widget()),
+                                              menu_item.get_widget(),
+                                              ffi::to_gboolean(force_deactivate))
+        }
+    }
 
     fn select_first(&mut self, search_sensitive: bool) {
         unsafe {
