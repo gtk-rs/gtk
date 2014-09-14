@@ -16,7 +16,7 @@
 #![allow(non_camel_case_types)]
 #![allow(dead_code)]
 
-use libc::{c_int, c_char, c_float, c_uint, c_double, c_long, c_short, c_void};
+use libc::{c_int, c_char, c_float, c_uint, c_double, c_long, c_short, c_void, c_ulong};
 
 use gdk;
 use gtk;
@@ -208,6 +208,16 @@ pub struct C_GtkRecentManager;
 pub struct C_GtkRecentChooser;
 #[repr(C)]
 pub struct C_GtkRecentChooserDialog;
+#[repr(C)]
+pub struct C_GtkCellRendererClass;
+#[repr(C)]
+pub struct C_GtkCellRenderer;
+#[repr(C)]
+pub struct C_GtkTreeModel;
+#[repr(C)]
+pub struct C_GtkTreePath;
+#[repr(C)]
+pub struct C_GtkTreeIter;
 
 #[repr(C)]
 pub struct C_GtkToolItem;
@@ -557,7 +567,7 @@ extern "C" {
     //pub fn C_GtkTickCallback                     (widget: *mut C_GtkWidget, frame_clock: *mut C_GdkFrameClock, user_data: gpointer) -> Gboolean;
 
     //=========================================================================
-    // GtkLabel
+    // GtkLabel                                                          NOT OK
     //=========================================================================
     pub fn gtk_label_new                       (text: *const c_char) -> *mut C_GtkWidget;
     pub fn gtk_label_set_label                 (label: *mut C_GtkLabel, text: *const c_char);
@@ -607,7 +617,7 @@ extern "C" {
     pub fn gtk_label_get_track_visited_links   (label: *mut C_GtkLabel) -> Gboolean;
 
     //=========================================================================
-    // GtkContainer
+    // GtkContainer                                                          OK
     //=========================================================================
     pub fn gtk_container_add                   (container: *mut C_GtkContainer, widget: *mut C_GtkWidget);
     pub fn gtk_container_remove                (container: *mut C_GtkContainer, widget: *mut C_GtkWidget) -> ();
@@ -617,7 +627,6 @@ extern "C" {
     pub fn gtk_container_get_border_width      (container: *mut C_GtkContainer) -> c_uint;
     pub fn gtk_container_set_border_width      (container: *mut C_GtkContainer, border_width: c_uint) -> ();
 
-
     //=========================================================================
     // GtkMisc                                                               OK
     //=========================================================================
@@ -625,6 +634,107 @@ extern "C" {
     pub fn gtk_misc_set_padding                (misc: *mut C_GtkMisc, xpad: c_int, ypad: c_int) -> ();
     pub fn gtk_misc_get_alignment              (misc: *mut C_GtkMisc, xalign: *const c_float, yalign: *const c_float) -> ();
     pub fn gtk_misc_get_padding                (misc: *mut C_GtkMisc, xpad: *const c_int, ypad: *const c_int) -> ();
+
+    //=========================================================================
+    // GtkTreePath                                                       NOT OK
+    //=========================================================================
+    pub fn gtk_tree_path_new                   () -> *mut C_GtkTreePath;
+    pub fn gtk_tree_path_new_from_string       (path: *const c_char) -> *mut C_GtkTreePath;
+    //pub fn gtk_tree_path_new_from_indices      (first_index: c_int, ...) -> *mut C_GtkTreePath;
+    pub fn gtk_tree_path_new_from_indicesv     (indices: *mut c_int, length: c_ulong) -> *mut C_GtkTreePath;
+    pub fn gtk_tree_path_to_string             (path: *mut C_GtkTreePath) -> *mut c_char;
+    pub fn gtk_tree_path_new_first             () -> *mut C_GtkTreePath;
+    pub fn gtk_tree_path_append_index          (path: *mut C_GtkTreePath, index_: c_int);
+    pub fn gtk_tree_path_prepend_index         (path: *mut C_GtkTreePath, index_: c_int);
+    pub fn gtk_tree_path_get_depth             (path: *mut C_GtkTreePath) -> c_int;
+    pub fn gtk_tree_path_get_indices           (path: *mut C_GtkTreePath) -> *mut c_int;
+    pub fn gtk_tree_path_get_indices_with_depth(path: *mut C_GtkTreePath, depth: *mut c_int) -> *mut c_int;
+    pub fn gtk_tree_path_free                  (path: *mut C_GtkTreePath);
+    pub fn gtk_tree_path_copy                  (path: *mut C_GtkTreePath) -> *mut C_GtkTreePath;
+    pub fn gtk_tree_path_compare               (a: *const C_GtkTreePath, b: *const C_GtkTreePath) -> i32;
+    pub fn gtk_tree_path_next                  (path: *mut C_GtkTreePath);
+    pub fn gtk_tree_path_prev                  (path: *mut C_GtkTreePath);
+    pub fn gtk_tree_path_up                    (path: *mut C_GtkTreePath) -> Gboolean;
+    pub fn gtk_tree_path_down                  (path: *mut C_GtkTreePath);
+    pub fn gtk_tree_path_is_ancestor           (path: *mut C_GtkTreePath, descendant: *mut C_GtkTreePath) -> Gboolean;
+    pub fn gtk_tree_path_is_descendant         (path: *mut C_GtkTreePath, ancestor: *mut C_GtkTreePath) -> Gboolean;
+
+    //=========================================================================
+    // GtkTreeModel                                                      NOT OK
+    //=========================================================================
+    //pub type GtkTreeModelForeachFunc = Option<extern "C" fn(model: *mut C_GtkTreeModel, path: *mut C_GtkTreePath, iter: *mut C_GtkIter,
+    //    data: gpointer) -> Gboolean>;
+    pub fn gtk_tree_model_get_flags(tree_model: *mut C_GtkTreeModel) -> gtk::TreeModelFlags;
+    pub fn gtk_tree_model_get_n_columns(tree_model: *mut C_GtkTreeModel) -> c_int;
+    pub fn gtk_tree_model_get_column_type(tree_model: *mut C_GtkTreeModel, index_: c_int) -> GType;
+    pub fn gtk_tree_model_get_iter(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter, path: *mut C_GtkTreePath) -> Gboolean;
+    pub fn gtk_tree_model_get_iter_from_string(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter, path_string: *const c_char) -> Gboolean;
+    pub fn gtk_tree_model_get_iter_first(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter) -> Gboolean;
+    pub fn gtk_tree_model_get_path(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter) -> *mut C_GtkTreePath;
+    //pub fn gtk_tree_model_get_value(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter, column: c_int, value: *mut GValue) -> ();
+    pub fn gtk_tree_model_iter_next(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter) -> Gboolean;
+    pub fn gtk_tree_model_iter_previous(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter) -> Gboolean;
+    pub fn gtk_tree_model_iter_children(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter, parent: *mut C_GtkTreeIter) -> Gboolean;
+    pub fn gtk_tree_model_iter_has_child(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter) -> Gboolean;
+    pub fn gtk_tree_model_iter_n_children(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter) -> c_int;
+    pub fn gtk_tree_model_iter_nth_child(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter, parent: *mut C_GtkTreeIter,
+        n: c_int) -> Gboolean;
+    pub fn gtk_tree_model_iter_parent(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter, child: *mut C_GtkTreeIter) -> Gboolean;
+    pub fn gtk_tree_model_get_string_from_iter(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter) -> *mut c_char;
+    pub fn gtk_tree_model_ref_node(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter) -> ();
+    pub fn gtk_tree_model_unref_node(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter) -> ();
+    //pub fn gtk_tree_model_get(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter, ...) -> ();
+    //pub fn gtk_tree_model_get_valist(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter, va_list: var_args) -> ();
+    //pub fn gtk_tree_model_foreach(tree_model: *mut C_GtkTreeModel, func: GtkTreeModelForeachFunc, user_data: gpointer) -> ();
+    pub fn gtk_tree_model_row_changed(tree_model: *mut C_GtkTreeModel, path: *mut C_GtkTreePath, iter: *mut C_GtkTreeIter) -> ();
+    pub fn gtk_tree_model_row_inserted(tree_model: *mut C_GtkTreeModel, path: *mut C_GtkTreePath, iter: *mut C_GtkTreeIter) -> ();
+    pub fn gtk_tree_model_row_has_child_toggled(tree_model: *mut C_GtkTreeModel, path: *mut C_GtkTreePath, iter: *mut C_GtkTreeIter) -> ();
+    pub fn gtk_tree_model_row_deleted(tree_model: *mut C_GtkTreeModel, path: *mut C_GtkTreePath) -> ();
+    pub fn gtk_tree_model_rows_reordered(tree_model: *mut C_GtkTreeModel, path: *mut C_GtkTreePath, iter: *mut C_GtkTreeIter,
+        new_order: *mut c_int) -> ();
+
+    //=========================================================================
+    // GtkTreeIter                                                       NOT OK
+    //=========================================================================
+    pub fn gtk_tree_iter_copy(iter: *mut C_GtkTreeIter) -> *mut C_GtkTreeIter;
+    pub fn gtk_tree_iter_free(iter: *mut C_GtkTreeIter);
+
+    //=========================================================================
+    // GtkCellRenderer                                                   NOT OK
+    //=========================================================================
+    //pub fn gtk_cell_renderer_class_set_accessible_type(renderer_class: *mut C_GtkCellRendererClass, _type: GType);
+    //pub fn gtk_cell_renderer_get_aligned_area  (cell: *mut C_GtkCellRenderer, widget: *mut C_GtkWidget, flags: gtk::CellRendererState,
+    //    cell_area: *const GdkRectangle, aligned_area: *mut GdkRectangle);
+    //pub fn gtk_cell_renderer_render            (cell: *mut C_GtkCellRenderer, cr: *mut cairo_t, widget: *mut C_GtkWidget,
+    //    background_area: *const GdkRectangle, cell_area: *const GdkRectangle, flags: gtk::CellRendererState);
+    //pub fn gtk_cell_renderer_activate          (cell: *mut C_GtkCellRenderer, event: *mut GdkEvent, widget: *mut C_GtkWidget, path: *const c_char,
+    //    background_area: *const GdkRectangle, cell_area: *const GdkRectangle, flags: gtk::CellRendererState) -> Gboolean;
+    //pub fn gtk_cell_renderer_start_editing     (cell: *mut C_GtkCellRenderer, event: *mut GdkEvent, widget: *mut C_GtkWidget, path: *const c_char,
+    //    background_area: *const GdkRectangle, cell_area: *const GdkRectangle, flags: gtk::CellRendererState) -> *mut C_GtkCellEditable;
+    pub fn gtk_cell_renderer_stop_editing      (cell: *mut C_GtkCellRenderer, canceled: Gboolean) -> ();
+    pub fn gtk_cell_renderer_get_fixed_size    (cell: *mut C_GtkCellRenderer, width: *mut c_int, height: *mut c_int) -> ();
+    pub fn gtk_cell_renderer_set_fixed_size    (cell: *mut C_GtkCellRenderer, width: c_int, height: c_int) -> ();
+    pub fn gtk_cell_renderer_get_visible       (cell: *mut C_GtkCellRenderer) -> Gboolean;
+    pub fn gtk_cell_renderer_set_visible       (cell: *mut C_GtkCellRenderer, visible: Gboolean) -> ();
+    pub fn gtk_cell_renderer_get_sensitive     (cell: *mut C_GtkCellRenderer) -> Gboolean;
+    pub fn gtk_cell_renderer_set_sensitive     (cell: *mut C_GtkCellRenderer, sensitive: Gboolean) -> ();
+    pub fn gtk_cell_renderer_get_alignment     (cell: *mut C_GtkCellRenderer, xalign: *mut c_float, yalign: *mut c_float) -> ();
+    pub fn gtk_cell_renderer_set_alignment     (cell: *mut C_GtkCellRenderer, xalign: c_float, yalign: c_float) -> ();
+    pub fn gtk_cell_renderer_get_padding       (cell: *mut C_GtkCellRenderer, xpad: *mut c_int, ypad: *mut c_int) -> ();
+    pub fn gtk_cell_renderer_set_padding       (cell: *mut C_GtkCellRenderer, xpad: c_int, ypad: c_int) -> ();
+    pub fn gtk_cell_renderer_get_state         (cell: *mut C_GtkCellRenderer, widget: *mut C_GtkWidget, cell_state: gtk::CellRendererState) -> gtk::StateFlags;
+    pub fn gtk_cell_renderer_is_activatable    (cell: *mut C_GtkCellRenderer) -> Gboolean;
+    pub fn gtk_cell_renderer_get_preferred_height(cell: *mut C_GtkCellRenderer, widget: *mut C_GtkWidget, minimum_size: *mut c_int,
+        natural_size: *mut c_int) -> ();
+    pub fn gtk_cell_renderer_get_preferred_height_for_width(cell: *mut C_GtkCellRenderer, widget: *mut C_GtkWidget, width: c_int,
+        minimum_size: *mut c_int, natural_size: *mut c_int) -> ();
+    //pub fn gtk_cell_renderer_get_preferred_size(cell: *mut C_GtkCellRenderer, widget: *mut C_GtkWidget, minimum_size: *mut C_GtkRequisition,
+    //    natural_size: *mut C_GtkRequisition) -> ();
+    pub fn gtk_cell_renderer_get_preferred_width(cell: *mut C_GtkCellRenderer, widget: *mut C_GtkWidget, minimum_size: *mut c_int,
+        natural_size: *mut c_int) -> ();
+    pub fn gtk_cell_renderer_get_preferred_width_for_height(cell: *mut C_GtkCellRenderer, widget: *mut C_GtkWidget, height: c_int,
+        minimum_size: *mut c_int, natural_size: *mut c_int) -> ();
+    pub fn gtk_cell_renderer_get_request_mode(cell: *mut C_GtkCellRenderer) -> gtk::SizeRequestMode;
 
     //=========================================================================
     // GtkButton                                                         NOT OK
@@ -2458,4 +2568,5 @@ extern "C" {
     pub fn cast_GtkScrolledWindow(widget: *mut C_GtkWidget) -> *mut C_GtkScrolledWindow;
     pub fn cast_GtkRadioButton(widget: *mut C_GtkWidget) -> *mut C_GtkRadioButton;
     pub fn cast_GtkTreeView(widget: *mut C_GtkWidget) -> *mut C_GtkTreeView;
+    pub fn cast_GtkCellRenderer(widget: *mut C_GtkWidget) -> *mut C_GtkCellRenderer;
 }

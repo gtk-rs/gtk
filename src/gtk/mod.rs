@@ -131,7 +131,10 @@ pub use self::widgets::{
     ScrolledWindow,
     RadioButton,
     TreeView,
-    TreeViewColumn
+    TreeViewColumn,
+    TreePath,
+    TreeIter,
+    TreeModel
 };
 
 #[cfg(GTK_3_6)]
@@ -237,7 +240,9 @@ pub use self::enums::{
     recent_filter_flags,
     widget_help_type,
     tree_view_grid_lines,
-    tree_view_column_sizing
+    tree_view_column_sizing,
+    cell_renderer_state,
+    tree_model_flags
 };
 
 /// GTK Enum types
@@ -313,7 +318,9 @@ pub use self::enums::{
     TextWindowType,
     WrapMode,
     TreeViewGridLines,
-    TreeViewColumnSizing
+    TreeViewColumnSizing,
+    CellRendererState,
+    TreeModelFlags
 };
 
 /// GTK various struct

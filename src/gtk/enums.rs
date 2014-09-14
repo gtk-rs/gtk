@@ -99,6 +99,8 @@ pub use self::text_window_type::TextWindowType;
 pub use self::wrap_mode::WrapMode;
 pub use self::tree_view_grid_lines::TreeViewGridLines;
 pub use self::tree_view_column_sizing::TreeViewColumnSizing;
+pub use self::cell_renderer_state::CellRendererState;
+pub use self::tree_model_flags::TreeModelFlags;
 
 pub mod window_type{
     #[repr(C)]
@@ -260,10 +262,10 @@ pub mod sort_type{
 
 /// Describes a widget state. Widget states are used to match the widget against CSS pseudo-classes.
 /// Note that GTK extends the regular CSS classes and sometimes uses different names.
-pub mod state_flags{
+pub mod state_flags {
     #[repr(C)]
     #[deriving(Clone, PartialEq, PartialOrd, Show)]
-    pub enum StateFlags{
+    pub enum StateFlags {
         /// State during normal operation.
         Normal       = 0,
         /// Widget is active.
@@ -1423,4 +1425,36 @@ pub mod tree_view_column_sizing {
     }
 }
 
+/// Tells how a cell is to be rendered.
+pub mod cell_renderer_state {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum CellRendererState {
+        /// The cell is currently selected, and probably has a selection colored background to render to.
+        Selected,
+        /// The mouse is hovering over the cell.
+        Prelit,
+        /// The cell is drawn in an insensitive manner.
+        Insensitive,
+        /// The cell is in a sorted row.
+        Sorted,
+        /// The cell is in the focus row.
+        Focused,
+        /// The cell is in a row that can be expanded.
+        Expandable,
+        /// The cell is in a row that is expanded.
+        Expanded
+    }
+}
 
+/// These flags indicate various properties of a GtkTreeModel.
+pub mod tree_model_flags {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum TreeModelFlags {
+        /// iterators survive all signals emitted by the tree
+        ItersPersist,
+        /// the model is a list only, and never has children
+        ListOnly,
+    }
+}
