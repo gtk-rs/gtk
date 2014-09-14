@@ -134,7 +134,8 @@ pub use self::widgets::{
     TreeViewColumn,
     RadioButton,
     TreePath,
-    TreeIter
+    TreeIter,
+    TreeModel
 };
 
 #[cfg(GTK_3_6)]

@@ -627,7 +627,6 @@ extern "C" {
     pub fn gtk_container_get_border_width      (container: *mut C_GtkContainer) -> c_uint;
     pub fn gtk_container_set_border_width      (container: *mut C_GtkContainer, border_width: c_uint) -> ();
 
-
     //=========================================================================
     // GtkMisc                                                               OK
     //=========================================================================
@@ -668,9 +667,31 @@ extern "C" {
     pub fn gtk_tree_model_get_flags(tree_model: *mut C_GtkTreeModel) -> gtk::TreeModelFlags;
     pub fn gtk_tree_model_get_n_columns(tree_model: *mut C_GtkTreeModel) -> c_int;
     pub fn gtk_tree_model_get_column_type(tree_model: *mut C_GtkTreeModel, index_: c_int) -> GType;
-    //pub fn gtk_tree_model_get_iter(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter, path: *mut C_GtkTreePath) -> Gboolean;
-    //pub fn gtk_tree_model_get_iter_from_string(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter, path_string: *const c_char) -> Gboolean;
-    //pub fn gtk_tree_model_get_iter_first(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter) -> Gboolean;
+    pub fn gtk_tree_model_get_iter(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter, path: *mut C_GtkTreePath) -> Gboolean;
+    pub fn gtk_tree_model_get_iter_from_string(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter, path_string: *const c_char) -> Gboolean;
+    pub fn gtk_tree_model_get_iter_first(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter) -> Gboolean;
+    pub fn gtk_tree_model_get_path(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter) -> *mut C_GtkTreePath;
+    //pub fn gtk_tree_model_get_value(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter, column: c_int, value: *mut GValue) -> ();
+    pub fn gtk_tree_model_iter_next(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter) -> Gboolean;
+    pub fn gtk_tree_model_iter_previous(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter) -> Gboolean;
+    pub fn gtk_tree_model_iter_children(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter, parent: *mut C_GtkTreeIter) -> Gboolean;
+    pub fn gtk_tree_model_iter_has_child(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter) -> Gboolean;
+    pub fn gtk_tree_model_iter_n_children(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter) -> c_int;
+    pub fn gtk_tree_model_iter_nth_child(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter, parent: *mut C_GtkTreeIter,
+        n: c_int) -> Gboolean;
+    pub fn gtk_tree_model_iter_parent(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter, child: *mut C_GtkTreeIter) -> Gboolean;
+    pub fn gtk_tree_model_get_string_from_iter(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter) -> *mut c_char;
+    pub fn gtk_tree_model_ref_node(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter) -> ();
+    pub fn gtk_tree_model_unref_node(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter) -> ();
+    //pub fn gtk_tree_model_get(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter, ...) -> ();
+    //pub fn gtk_tree_model_get_valist(tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter, va_list: var_args) -> ();
+    //pub fn gtk_tree_model_foreach(tree_model: *mut C_GtkTreeModel, func: GtkTreeModelForeachFunc, user_data: gpointer) -> ();
+    pub fn gtk_tree_model_row_changed(tree_model: *mut C_GtkTreeModel, path: *mut C_GtkTreePath, iter: *mut C_GtkTreeIter) -> ();
+    pub fn gtk_tree_model_row_inserted(tree_model: *mut C_GtkTreeModel, path: *mut C_GtkTreePath, iter: *mut C_GtkTreeIter) -> ();
+    pub fn gtk_tree_model_row_has_child_toggled(tree_model: *mut C_GtkTreeModel, path: *mut C_GtkTreePath, iter: *mut C_GtkTreeIter) -> ();
+    pub fn gtk_tree_model_row_deleted(tree_model: *mut C_GtkTreeModel, path: *mut C_GtkTreePath) -> ();
+    pub fn gtk_tree_model_rows_reordered(tree_model: *mut C_GtkTreeModel, path: *mut C_GtkTreePath, iter: *mut C_GtkTreeIter,
+        new_order: *mut c_int) -> ();
 
     //=========================================================================
     // GtkTreeIter                                                       NOT OK
