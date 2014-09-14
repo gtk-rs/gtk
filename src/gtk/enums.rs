@@ -97,6 +97,8 @@ pub use self::recent_filter_flags::RecentFilterFlags;
 pub use self::widget_help_type::WidgetHelpType;
 pub use self::text_window_type::TextWindowType;
 pub use self::wrap_mode::WrapMode;
+pub use self::tree_view_grid_lines::TreeViewGridLines;
+pub use self::tree_view_column_sizing::TreeViewColumnSizing;
 
 pub mod window_type{
     #[repr(C)]
@@ -1387,3 +1389,38 @@ pub mod wrap_mode {
         WordChar
     }
 }
+
+/// Used to indicate which grid lines to draw in a tree view.
+pub mod tree_view_grid_lines{
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum TreeViewGridLines {
+        /// No grid lines.
+        None,
+        /// Horizontal grid lines.
+        Horizontal,
+        /// Vertical grid lines.
+        Vertical,
+        /// Horizontal and vertical grid lines.
+        Both
+    }
+}
+
+/// The sizing method the column uses to determine its width.
+/// Please note that AutoSize are inefficient for large views,
+/// and can make columns appear choppy.
+pub mod tree_view_column_sizing {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum TreeViewColumnSizing {
+        /// Columns only get bigger in reaction to changes in the model
+        GrowOnly,
+        /// Columns resize to be the optimal size everytime the model changes.
+        AutoSize,
+        /// Columns are a fixed numbers of pixels wide.
+        Fixed
+
+    }
+}
+
+
