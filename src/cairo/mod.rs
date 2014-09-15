@@ -63,6 +63,5 @@ pub mod ffi;
 mod fonts;
 mod context;
 mod paths;
-mod transformations;
 mod patterns;
 mod matrices;
