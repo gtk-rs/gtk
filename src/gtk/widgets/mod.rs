@@ -123,6 +123,7 @@ pub use self::treeview_column::TreeViewColumn;
 pub use self::menuitem::MenuItem;
 pub use self::separator_menuitem::SeparatorMenuItem;
 pub use self::checkmenuitem::CheckMenuItem;
+pub use self::scrollbar::ScrollBar;
 
 mod window;
 mod label;
@@ -234,3 +235,4 @@ mod treemodel;
 mod menuitem;
 mod separator_menuitem;
 mod checkmenuitem;
+mod scrollbar;

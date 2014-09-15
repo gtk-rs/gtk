@@ -137,7 +137,8 @@ pub use self::widgets::{
     TreeModel,
     MenuItem,
     SeparatorMenuItem,
-    CheckMenuItem
+    CheckMenuItem,
+    ScrollBar
 };
 
 #[cfg(GTK_3_6)]

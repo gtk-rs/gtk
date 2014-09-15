@@ -2496,6 +2496,12 @@ extern "C" {
     pub fn gtk_check_menu_item_set_draw_as_radio (check_menu_item: *mut C_GtkCheckMenuItem, draw_as_radio: Gboolean);
     pub fn gtk_check_menu_item_get_draw_as_radio (check_menu_item: *mut C_GtkCheckMenuItem) -> Gboolean;
 
+
+    //=========================================================================
+    // GtkSeparatorMenuItem
+    //=========================================================================
+    pub fn gtk_scrollbar_new      (orientation: gtk::Orientation, adjustment: *mut C_GtkAdjustment) -> *mut C_GtkWidget;
+
     //=========================================================================
     // Glue fixe code
     //=========================================================================
