@@ -124,6 +124,7 @@ pub use self::menuitem::MenuItem;
 pub use self::separator_menuitem::SeparatorMenuItem;
 pub use self::checkmenuitem::CheckMenuItem;
 pub use self::scrollbar::ScrollBar;
+pub use self::viewport::Viewport;
 
 mod window;
 mod label;
@@ -236,3 +237,4 @@ mod menuitem;
 mod separator_menuitem;
 mod checkmenuitem;
 mod scrollbar;
+mod viewport;

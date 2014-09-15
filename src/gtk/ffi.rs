@@ -289,6 +289,9 @@ pub struct C_GtkMenuItem;
 #[repr(C)]
 pub struct C_GtkCheckMenuItem;
 
+#[repr(C)]
+pub struct C_GtkViewport;
+
 pub fn to_gboolean(b: bool) -> Gboolean {
     match b {
         true => Gtrue,
@@ -2503,6 +2506,15 @@ extern "C" {
     pub fn gtk_scrollbar_new      (orientation: gtk::Orientation, adjustment: *mut C_GtkAdjustment) -> *mut C_GtkWidget;
 
     //=========================================================================
+    // GtkViewport
+    //=========================================================================
+    pub fn gtk_viewport_new             (hadjustment: *mut C_GtkAdjustment, vadjustment: *mut C_GtkAdjustment) -> *mut C_GtkWidget;
+    pub fn gtk_viewport_set_shadow_type (viewport: *mut C_GtkViewport, ty: gtk::ShadowType);
+    pub fn gtk_viewport_get_shadow_type (viewport: *mut C_GtkViewport) -> gtk::ShadowType;
+    // pub fn gtk_viewport_get_bin_window  (GtkViewport   *viewport) -> *C_GdkWindow;
+    // pub fn gtk_viewport_get_view_window (GtkViewport   *viewport) -> *C_GdkWindow;
+
+    //=========================================================================
     // Glue fixe code
     //=========================================================================
     pub fn glue_signal_connect(g_object: *mut C_GtkWidget,
@@ -2647,4 +2659,5 @@ extern "C" {
     pub fn cast_GtkMenuShell(widget: *mut C_GtkWidget) -> *mut C_GtkMenuShell;
     pub fn cast_GtkMenuItem(widget: *mut C_GtkWidget) -> *mut C_GtkMenuItem;
     pub fn cast_GtkCheckMenuItem(widget: *mut C_GtkWidget) -> *mut C_GtkCheckMenuItem;
+    pub fn cast_GtkViewport(widget: *mut C_GtkWidget) -> *mut C_GtkViewport;
 }
