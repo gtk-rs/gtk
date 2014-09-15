@@ -139,7 +139,8 @@ pub use self::widgets::{
     SeparatorMenuItem,
     CheckMenuItem,
     ScrollBar,
-    Viewport
+    Viewport,
+    StatusBar
 };
 
 #[cfg(GTK_3_6)]

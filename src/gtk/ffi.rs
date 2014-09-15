@@ -292,6 +292,9 @@ pub struct C_GtkCheckMenuItem;
 #[repr(C)]
 pub struct C_GtkViewport;
 
+#[repr(C)]
+pub struct C_GtkStatusbar;
+
 pub fn to_gboolean(b: bool) -> Gboolean {
     match b {
         true => Gtrue,
@@ -2514,6 +2517,18 @@ extern "C" {
     // pub fn gtk_viewport_get_bin_window  (GtkViewport   *viewport) -> *C_GdkWindow;
     // pub fn gtk_viewport_get_view_window (GtkViewport   *viewport) -> *C_GdkWindow;
 
+
+    //=========================================================================
+    // GtkStatusBar
+    //=========================================================================
+    pub fn gtk_statusbar_new            () -> *mut C_GtkWidget;
+    pub fn gtk_statusbar_get_context_id (statusbar: *mut C_GtkStatusbar, context_description: *const c_char) -> c_uint;
+    pub fn gtk_statusbar_push           (statusbar: *mut C_GtkStatusbar, context_id: c_uint, text: *const c_char) -> c_uint;
+    pub fn gtk_statusbar_pop            (statusbar: *mut C_GtkStatusbar, context_id: c_uint);
+    pub fn gtk_statusbar_remove         (statusbar: *mut C_GtkStatusbar, context_id: c_uint, message_id: c_uint);
+    pub fn gtk_statusbar_remove_all     (statusbar: *mut C_GtkStatusbar, context_id: c_uint);
+    pub fn gtk_statusbar_get_message_area  (statusbar: *mut C_GtkStatusbar) -> *mut C_GtkWidget;
+
     //=========================================================================
     // Glue fixe code
     //=========================================================================
@@ -2641,7 +2656,7 @@ extern "C" {
     pub fn cast_GtkFontChooser(widget: *mut C_GtkWidget) -> *mut C_GtkFontChooser;
     pub fn cast_GtkPaperSize(widget: *mut C_GtkWidget) -> *mut C_GtkPaperSize;
     pub fn cast_GtkPageSetup(widget: *mut C_GtkWidget) -> *mut C_GtkPageSetup;
-    //pub fn cast_PageSetupUnixDialog(widget: *mut C_GtkWidget) -> *mut C_GtkPageSetupUnixDialog;
+    // pub fn cast_PageSetupUnixDialog(widget: *mut C_GtkWidget) -> *mut C_GtkPageSetupUnixDialog;
     pub fn cast_GtkPrintSettings(widget: *mut C_GtkWidget) -> *mut C_GtkPrintSettings;
     pub fn cast_GtkRecentChooserDialog(widget: *mut C_GtkWidget) -> *mut C_GtkRecentChooserDialog;
     pub fn cast_GtkRecentManager(widget: *mut C_GtkWidget) -> *mut C_GtkRecentManager;
@@ -2660,4 +2675,5 @@ extern "C" {
     pub fn cast_GtkMenuItem(widget: *mut C_GtkWidget) -> *mut C_GtkMenuItem;
     pub fn cast_GtkCheckMenuItem(widget: *mut C_GtkWidget) -> *mut C_GtkCheckMenuItem;
     pub fn cast_GtkViewport(widget: *mut C_GtkWidget) -> *mut C_GtkViewport;
+    pub fn cast_GtkStatusbar(widget: *mut C_GtkWidget) -> *mut C_GtkStatusbar;
 }

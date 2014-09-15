@@ -15,12 +15,12 @@
 
 //! A Scrollbar
 
-use gtk::{mod, traits};
+use gtk::{mod, traits, ffi};
 
 /// GtkScrollBar — A Scrollbar
 struct_Widget!(ScrollBar)
 
-impl Scrollbar {
+impl ScrollBar {
     pub fn new(orientation: gtk::Orientation, adjustment: &gtk::Adjustment) -> Option<ScrollBar> {
         let tmp_pointer = unsafe { ffi::gtk_scrollbar_new(orientation, adjustment.get_pointer()) };
         check_pointer!(tmp_pointer, ScrollBar)
@@ -28,7 +28,7 @@ impl Scrollbar {
 }
 
 impl_drop!(ScrollBar)
-impl_TraitWidget!(Scrollbar)
+impl_TraitWidget!(ScrollBar)
 
-impl traits::Range for Scrollbar {}
-impl traits::Orientable for Scrollbar {}
+impl traits::Range for ScrollBar {}
+impl traits::Orientable for ScrollBar {}

@@ -17,8 +17,7 @@
 
 use gtk::enums::ShadowType;
 use gtk::cast::GTK_VIEWPORT;
-use gtk::ffi;
-use gtk::traits;
+use gtk::{mod, ffi, traits};
 
 /// GtkViewport — An adapter which makes widgets scrollable
 struct_Widget!(Viewport)
