@@ -4,7 +4,6 @@ use std::cmp::PartialEq;
 use std::ops::Drop;
 use std::c_str::CString;
 
-use cairo;
 use cairo::enums::{
     Antialias,
     SubpixelOrder,
@@ -14,7 +13,6 @@ use cairo::enums::{
     FontType,
     FontWeight,
     FontSlant,
-    TextClusterFlags,
 };
 use cairo::matrices::Matrix;
 use cairo::ffi;
@@ -195,7 +193,7 @@ impl Drop for FontOptions{
 
 
 
-pub struct FontFace(*mut cairo_font_face_t);
+pub struct FontFace(pub *mut cairo_font_face_t);
 
 impl FontFace{
     pub fn get_ptr(&self) -> *mut cairo_font_face_t{
@@ -269,7 +267,7 @@ impl Drop for FontFace{
 
 
 
-pub struct ScaledFont(*mut cairo_scaled_font_t);
+pub struct ScaledFont(pub *mut cairo_scaled_font_t);
 
 impl ScaledFont{
     pub fn get_ptr(&self) -> *mut cairo_scaled_font_t{
@@ -336,167 +334,5 @@ impl Drop for ScaledFont{
         unsafe{
             ffi::cairo_scaled_font_destroy(self.get_ptr())
         }
-    }
-}
-
-impl cairo::Context{
-    pub fn select_font_face<S: ToCStr>(&self, family: S, slant: FontSlant, weight: FontWeight){
-        unsafe{
-            family.with_c_str(|family|{
-                ffi::cairo_select_font_face(self.get_ptr(), family, slant, weight)
-            })
-        }
-    }
-
-    pub fn set_font_size(&self, size: f64){
-        unsafe{
-            ffi::cairo_set_font_size(self.get_ptr(), size)
-        }
-    }
-
-    //FIXME probably needs a heap allocation
-    pub fn set_font_matrix(&self, matrix: Matrix){
-        unsafe{
-            ffi::cairo_set_font_matrix(self.get_ptr(), &matrix)
-        }
-    }
-
-    pub fn get_font_matrix(&self) -> Matrix{
-        let mut matrix = Matrix::null();
-        unsafe{
-            ffi::cairo_get_font_matrix(self.get_ptr(), &mut matrix);
-        }
-        matrix
-    }
-
-    pub fn set_font_options(&self, options: FontOptions){
-        unsafe{
-            ffi::cairo_set_font_options(self.get_ptr(), options.get_ptr())
-        }
-    }
-
-    pub fn get_font_options(&self) -> FontOptions{
-        let out = FontOptions::new();
-        unsafe{
-            ffi::cairo_get_font_options(self.get_ptr(), out.get_ptr());
-        }
-        out
-    }
-
-    pub fn set_font_face(&self, font_face: FontFace){
-        unsafe{
-            ffi::cairo_set_font_face(self.get_ptr(), font_face.get_ptr())
-        }
-    }
-
-    pub fn get_font_face(&self) -> FontFace{
-        unsafe{
-            FontFace(ffi::cairo_get_font_face(self.get_ptr()))
-        }
-    }
-
-    pub fn set_scaled_font(&self, scaled_font: ScaledFont){
-        unsafe{
-            ffi::cairo_set_scaled_font(self.get_ptr(), scaled_font.get_ptr())
-        }
-    }
-
-    pub fn get_scaled_font(&self) -> ScaledFont{
-        unsafe{
-            ScaledFont(ffi::cairo_get_scaled_font(self.get_ptr()))
-        }
-    }
-
-    pub fn show_text<S: ToCStr>(&self, text: S){
-        unsafe{
-            text.with_c_str(|text|{
-                ffi::cairo_show_text(self.get_ptr(), text)
-            })
-        }
-    }
-
-    pub fn show_glyphs<V: Slice<Glyph>>(&self, vec: V){
-        unsafe{
-            let slice: &[Glyph] = vec.as_slice();
-            ffi::cairo_show_glyphs(self.get_ptr(), slice.as_ptr(), slice.len() as c_int)
-        }
-    }
-
-    pub fn show_text_glyphs<S: ToCStr,
-                            V: Slice<Glyph>,
-                            W: Slice<TextCluster>>(&self,
-                                       text: S,
-                                       glyph_vec: V,
-                                       cluster_vec: W,
-                                       cluster_flags: TextClusterFlags){
-        unsafe{
-            let glyphs: &[Glyph] = glyph_vec.as_slice();
-            let clusters: &[TextCluster] = cluster_vec.as_slice();
-
-            text.with_c_str(|text| {
-                ffi::cairo_show_text_glyphs(self.get_ptr(),
-                                       text,
-                                       -1 as c_int, //NUL terminated
-                                       glyphs.as_ptr(),
-                                       glyphs.len() as c_int,
-                                       clusters.as_ptr(),
-                                       clusters.len() as c_int,
-                                       cluster_flags)
-            })
-        }
-    }
-
-    pub fn font_extents(&self) -> FontExtents{
-        let mut extents = FontExtents{
-            ascent: 0.0,
-            descent: 0.0,
-            height: 0.0,
-            max_x_advance: 0.0,
-            max_y_advance: 0.0,
-        };
-
-        unsafe{
-            ffi::cairo_font_extents(self.get_ptr(), &mut extents);
-        }
-
-        extents
-    }
-
-    pub fn text_extents<S: ToCStr>(&self, text: S) -> TextExtents{
-        let mut extents = TextExtents{
-            x_bearing: 0.0,
-            y_bearing: 0.0,
-            width: 0.0,
-            height: 0.0,
-            x_advance: 0.0,
-            y_advance: 0.0,
-        };
-
-        text.with_c_str(|text|{
-            unsafe{
-                ffi::cairo_text_extents(self.get_ptr(), text, &mut extents)
-            }
-        });
-
-        extents
-    }
-
-    pub fn glyph_extents<G: Slice<Glyph>>(&self, glyph_vec: G) -> TextExtents{
-        let mut extents = TextExtents{
-            x_bearing: 0.0,
-            y_bearing: 0.0,
-            width: 0.0,
-            height: 0.0,
-            x_advance: 0.0,
-            y_advance: 0.0,
-        };
-
-        let glyphs = glyph_vec.as_slice();
-
-        unsafe{
-            ffi::cairo_glyph_extents(self.get_ptr(), glyphs.as_ptr(), glyphs.len() as c_int, &mut extents);
-        }
-
-        extents
     }
 }
