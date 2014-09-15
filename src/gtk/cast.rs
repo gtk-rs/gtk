@@ -377,3 +377,11 @@ pub fn GTK_MENU_ITEM(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkMenuItem {
 pub fn GTK_CHECK_MENU_ITEM(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkCheckMenuItem {
     unsafe { ffi::cast_GtkCheckMenuItem(widget) }
 }
+
+pub fn GTK_VIEWPORT(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkViewport {
+    unsafe { ffi::cast_GtkViewport(widget) }
+}
+
+pub fn GTK_STATUSBAR(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkStatusbar {
+    unsafe { ffi::cast_GtkStatusbar(widget) }
+}
