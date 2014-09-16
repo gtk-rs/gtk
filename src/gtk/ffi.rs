@@ -218,6 +218,10 @@ pub struct C_GtkTreeModel;
 pub struct C_GtkTreePath;
 #[repr(C)]
 pub struct C_GtkTreeIter;
+#[repr(C)]
+pub struct C_GtkCellEditable;
+#[repr(C)]
+pub struct C_GtkCellRendererText;
 
 #[repr(C)]
 pub struct C_GtkToolItem;
@@ -651,6 +655,19 @@ extern "C" {
     pub fn gtk_misc_get_padding                (misc: *mut C_GtkMisc, xpad: *const c_int, ypad: *const c_int) -> ();
 
     //=========================================================================
+    // GtkCellEditable                                                   NOT OK
+    //=========================================================================
+    //pub fn gtk_cell_editable_start_editing     (cell_editable: *mut C_GtkCellEditable, event: *mut GdkEvent) -> ();
+    pub fn gtk_cell_editable_editing_done      (cell_editable: *mut C_GtkCellEditable);
+    pub fn gtk_cell_editable_remove_widget     (cell_editable: *mut C_GtkCellEditable);
+
+    //=========================================================================
+    // GtkCellRendererText                                               NOT OK
+    //=========================================================================
+    pub fn gtk_cell_renderer_text_new          () -> *mut C_GtkCellRenderer;
+    pub fn gtk_cell_renderer_text_set_fixed_height_from_font(renderer: *mut C_GtkCellRendererText, number_of_rows: c_int) -> ();
+
+    //=========================================================================
     // GtkTreePath                                                       NOT OK
     //=========================================================================
     pub fn gtk_tree_path_new                   () -> *mut C_GtkTreePath;
@@ -709,7 +726,7 @@ extern "C" {
         new_order: *mut c_int) -> ();
 
     //=========================================================================
-    // GtkTreeIter                                                       NOT OK
+    // GtkTreeIter                                                           OK
     //=========================================================================
     pub fn gtk_tree_iter_copy(iter: *mut C_GtkTreeIter) -> *mut C_GtkTreeIter;
     pub fn gtk_tree_iter_free(iter: *mut C_GtkTreeIter);
@@ -2676,4 +2693,6 @@ extern "C" {
     pub fn cast_GtkCheckMenuItem(widget: *mut C_GtkWidget) -> *mut C_GtkCheckMenuItem;
     pub fn cast_GtkViewport(widget: *mut C_GtkWidget) -> *mut C_GtkViewport;
     pub fn cast_GtkStatusbar(widget: *mut C_GtkWidget) -> *mut C_GtkStatusbar;
+    pub fn cast_GtkCellEditable(widget: *mut C_GtkWidget) -> *mut C_GtkCellEditable;
+    pub fn cast_GtkCellRendererText(widget: *mut C_GtkWidget) -> *mut C_GtkCellRendererText;
 }

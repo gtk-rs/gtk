@@ -126,6 +126,7 @@ pub use self::checkmenuitem::CheckMenuItem;
 pub use self::scrollbar::ScrollBar;
 pub use self::viewport::Viewport;
 pub use self::statusbar::StatusBar;
+pub use self::cellrenderertext::CellRendererText;
 
 mod window;
 mod label;
@@ -240,3 +241,4 @@ mod checkmenuitem;
 mod scrollbar;
 mod viewport;
 mod statusbar;
+mod cellrenderertext;
