@@ -16,6 +16,7 @@
 use gtk::ffi;
 use gtk::ffi::FFIWidget;
 use gtk::traits;
+use gtk::enums::response_type;
 use gtk::cast::{GTK_WINDOW, GTK_RECENT_MANAGER};
 use gtk;
 
@@ -29,7 +30,10 @@ impl RecentChooserDialog {
                     ffi::gtk_recent_chooser_dialog_new(c_str, match parent {
                         Some(ref p) => GTK_WINDOW(p.get_widget()),
                         None => ::std::ptr::mut_null()
-                    }, c_str2, c_str3)
+                    },
+                    c_str2, response_type::Ok,
+                    c_str3, response_type::Cancel,
+                    ::std::ptr::null::<::libc::c_void>())
                 })
             })
         })};
@@ -48,7 +52,10 @@ impl RecentChooserDialog {
                     ffi::gtk_recent_chooser_dialog_new_for_manager(c_str, match parent {
                         Some(ref p) => GTK_WINDOW(p.get_widget()),
                         None => ::std::ptr::mut_null()
-                    }, GTK_RECENT_MANAGER(manager.get_widget()), c_str2, c_str3)
+                    }, GTK_RECENT_MANAGER(manager.get_widget()),
+                    c_str2, response_type::Ok,
+                    c_str3, response_type::Cancel,
+                    ::std::ptr::null::<::libc::c_void>())
                 })
             })
         })};
