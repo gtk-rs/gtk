@@ -28,7 +28,7 @@ impl AppChooserDialog {
             content_type.with_c_str(|c_str|{
                 ffi::gtk_app_chooser_dialog_new_for_content_type(match parent {
                     Some(ref p) => GTK_WINDOW(p.get_widget()),
-                    None => ::std::ptr::mut_null()
+                    None => ::std::ptr::null_mut()
                 }, flags, c_str)
             })
         };

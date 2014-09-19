@@ -12,34 +12,29 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
-use std::ptr;
 
-use gtk;
+//! Renders text in a cell
+
 use gtk::ffi;
-use gtk::ffi::FFIWidget;
 use gtk::traits;
-use gtk::cast::GTK_TEXT_TAG_TABLE;
+use gtk::cast::GTK_CELL_RENDERER_TEXT;
 
-/// GtkTextBuffer — Stores attributed text for display in a GtkTextView
+struct_Widget!(CellRendererText)
 
-struct_Widget!(TextBuffer)
+impl CellRendererText {
+    // FIXME : should return CellRenderer
+    fn new() -> Option<CellRendererText> {
+    	let tmp_pointer = unsafe { ffi::gtk_cell_renderer_text_new() as *mut ffi::C_GtkWidget };
 
-impl TextBuffer {
-    pub fn new(text_tag_table: Option<gtk::TextTagTable>) -> Option<TextBuffer> {
-        let tmp_pointer = unsafe {
-            match text_tag_table {
-                Some(ttl) => ffi::gtk_text_buffer_new(GTK_TEXT_TAG_TABLE(ttl.get_widget())),
-                None      => ffi::gtk_text_buffer_new(ptr::null_mut())
-            }
-        };
+        check_pointer!(tmp_pointer, CellRendererText)
+    }
 
-        check_pointer!(tmp_pointer, TextBuffer)
+    fn set_fixed_height_from_font(&self, number_of_rows: i32) {
+        unsafe { ffi::gtk_cell_renderer_text_set_fixed_height_from_font(GTK_CELL_RENDERER_TEXT(self.pointer), number_of_rows) }
     }
 }
 
-impl_drop!(TextBuffer)
-impl_TraitWidget!(TextBuffer)
+impl_drop!(CellRendererText)
+impl_TraitWidget!(CellRendererText)
 
-impl traits::TextBuffer for TextBuffer {}
-
-
+impl traits::CellRenderer for CellRendererText {}

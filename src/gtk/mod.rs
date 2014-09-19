@@ -140,7 +140,8 @@ pub use self::widgets::{
     CheckMenuItem,
     ScrollBar,
     Viewport,
-    StatusBar
+    StatusBar,
+    CellRendererText
 };
 
 #[cfg(GTK_3_6)]

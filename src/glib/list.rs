@@ -36,17 +36,17 @@ pub struct RevElem<'a, T> {
 impl<T> List<T> {
     pub fn new() -> List<T> {
         List {
-            pointer: ::std::ptr::mut_null()
+            pointer: ::std::ptr::null_mut()
         }
     }
 
     pub fn from_vec(values: Vec<T>) -> List<T> {
-        FromIterator::from_iter(values.move_iter())
+        FromIterator::from_iter(values.into_iter())
     }
 
     pub fn from_slice<T: Clone>(values: &[T]) -> List<T> {
         let v: Vec<T> = values.iter().map(|x| (*x).clone()).collect();
-        FromIterator::from_iter(v.move_iter())
+        FromIterator::from_iter(v.into_iter())
     }
 
     pub fn append(&mut self, data: T) {

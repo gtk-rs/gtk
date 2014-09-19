@@ -27,7 +27,7 @@ impl FontChooserDialog {
             title.with_c_str(|c_str| {
                 ffi::gtk_font_chooser_dialog_new(c_str, match parent {
                     Some(ref p) => GTK_WINDOW(p.get_widget()),
-                    None => GTK_WINDOW(::std::ptr::mut_null())})
+                    None => GTK_WINDOW(::std::ptr::null_mut())})
                 })
         };
 

@@ -12,34 +12,19 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
-use std::ptr;
 
-use gtk;
+//! Interface for widgets which can are used for editing cells
+
 use gtk::ffi;
-use gtk::ffi::FFIWidget;
 use gtk::traits;
-use gtk::cast::GTK_TEXT_TAG_TABLE;
+use gtk::cast::GTK_CELL_EDITABLE;
 
-/// GtkTextBuffer — Stores attributed text for display in a GtkTextView
+pub trait CellEditable : traits::Widget {
+    fn editing_done(&self) {
+        unsafe { ffi::gtk_cell_editable_editing_done(GTK_CELL_EDITABLE(self.get_widget())) }
+    }
 
-struct_Widget!(TextBuffer)
-
-impl TextBuffer {
-    pub fn new(text_tag_table: Option<gtk::TextTagTable>) -> Option<TextBuffer> {
-        let tmp_pointer = unsafe {
-            match text_tag_table {
-                Some(ttl) => ffi::gtk_text_buffer_new(GTK_TEXT_TAG_TABLE(ttl.get_widget())),
-                None      => ffi::gtk_text_buffer_new(ptr::null_mut())
-            }
-        };
-
-        check_pointer!(tmp_pointer, TextBuffer)
+    fn remove_widget(&self) {
+        unsafe { ffi::gtk_cell_editable_remove_widget(GTK_CELL_EDITABLE(self.get_widget())) }
     }
 }
-
-impl_drop!(TextBuffer)
-impl_TraitWidget!(TextBuffer)
-
-impl traits::TextBuffer for TextBuffer {}
-
-

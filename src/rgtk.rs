@@ -75,6 +75,8 @@ pub use gtk::traits::Editable         as GtkEditableTrait;
 pub use gtk::traits::MenuShell        as GtkMenuShellTrait;
 pub use gtk::traits::MenuItem         as GtkMenuItemTrait;
 pub use gtk::traits::CheckMenuItem    as GtkCheckMenuItemTrait;
+pub use gtk::traits::CellEditable     as GtkCellEditable;
+pub use gtk::traits::CellRenderer     as GtkCellRenderer;
 
 #[doc(hidden)]
 #[cfg(target_os="macos")]

@@ -91,7 +91,7 @@ macro_rules! get_widget(
     ($w:ident) => (
         match $w {
             Some(ref _w) => _w.get_widget(),
-            None => ::std::ptr::mut_null()
+            None => ::std::ptr::null_mut()
         };
     );
 )

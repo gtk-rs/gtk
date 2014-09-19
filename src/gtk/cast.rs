@@ -385,3 +385,11 @@ pub fn GTK_VIEWPORT(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkViewport {
 pub fn GTK_STATUSBAR(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkStatusbar {
     unsafe { ffi::cast_GtkStatusbar(widget) }
 }
+
+pub fn GTK_CELL_EDITABLE(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkCellEditable {
+    unsafe { ffi::cast_GtkCellEditable(widget) }
+}
+
+pub fn GTK_CELL_RENDERER_TEXT(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkCellRendererText {
+    unsafe { ffi::cast_GtkCellRendererText(widget) }
+}

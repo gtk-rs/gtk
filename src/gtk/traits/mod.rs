@@ -46,6 +46,7 @@ pub use self::cellrenderer::CellRenderer;
 pub use self::menushell::MenuShell;
 pub use self::menuitem::MenuItem;
 pub use self::checkmenuitem::CheckMenuItem;
+pub use self::celleditable::CellEditable;
 
 pub mod widget;
 pub mod container;
@@ -80,3 +81,4 @@ pub mod cellrenderer;
 pub mod menushell;
 pub mod menuitem;
 pub mod checkmenuitem;
+pub mod celleditable;

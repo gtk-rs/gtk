@@ -31,8 +31,8 @@ impl FileChooserDialog {
                     cancel.with_c_str(|c_cancel|{
                         ffi::gtk_file_chooser_dialog_new(c_str, match parent {
                             Some(ref p) => GTK_WINDOW(p.get_widget()),
-                            None => GTK_WINDOW(::std::ptr::mut_null())
-                        }, action, c_cancel, gtk::response_type::Cancel, c_ok, gtk::response_type::Accept, ::std::ptr::mut_null())
+                            None => GTK_WINDOW(::std::ptr::null_mut())
+                        }, action, c_cancel, gtk::response_type::Cancel, c_ok, gtk::response_type::Accept, ::std::ptr::null_mut())
                     })
                 })
             })

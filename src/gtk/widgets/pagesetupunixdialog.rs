@@ -28,7 +28,7 @@ impl PageSetupUnixDialog {
             title.with_c_str(|c_str|{
                 ffi::gtk_page_setup_unix_dialog_new(match parent {
                     Some(ref p) => GTK_WINDOW(p.get_widget()),
-                    None => ::std::ptr::mut_null()
+                    None => ::std::ptr::null_mut()
                 })
             })
         };
