@@ -164,7 +164,7 @@ impl TreePath {
 
     pub fn drop(&mut self) {
         unsafe { ffi::gtk_tree_path_free(self.pointer) }
-        self.pointer = ::std::ptr::mut_null();
+        self.pointer = ::std::ptr::null_mut();
     }
 
     #[doc(hidden)]

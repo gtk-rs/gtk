@@ -95,7 +95,7 @@ impl RecentInfo {
     }
 
     pub fn set_name(&self, app_name: &str) -> (bool, String, u32, i64) {
-        let app_exec = ::std::ptr::mut_null();
+        let app_exec = ::std::ptr::null_mut();
         let mut count = 0u32;
         let mut time_ = 0i64;
 

@@ -29,7 +29,7 @@ impl TextBuffer {
         let tmp_pointer = unsafe {
             match text_tag_table {
                 Some(ttl) => ffi::gtk_text_buffer_new(GTK_TEXT_TAG_TABLE(ttl.get_widget())),
-                None      => ffi::gtk_text_buffer_new(ptr::mut_null())
+                None      => ffi::gtk_text_buffer_new(ptr::null_mut())
             }
         };
 

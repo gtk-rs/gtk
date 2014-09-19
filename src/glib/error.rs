@@ -40,7 +40,7 @@ impl Error {
     pub fn release(&mut self) -> () {
         if self.pointer.is_not_null() {
             unsafe { ffi::g_error_free(self.pointer) };
-            self.pointer = ::std::ptr::mut_null();
+            self.pointer = ::std::ptr::null_mut();
         }
     }
 
@@ -69,7 +69,7 @@ impl Clone for Error {
 
         if tmp_pointer.is_null() {
             Error {
-                pointer: ::std::ptr::mut_null()
+                pointer: ::std::ptr::null_mut()
             }
         } else {
             glib::GlibContainer::wrap(tmp_pointer)
