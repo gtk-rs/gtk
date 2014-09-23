@@ -119,6 +119,10 @@ GtkTextView* cast_GtkTextView(GtkWidget* widget) {
     return GTK_TEXT_VIEW(widget);
 }
 
+GtkTextTagTable* cast_GtkTextTagTable(GtkWidget* widget) {
+    return GTK_TEXT_TAG_TABLE(widget);
+}
+
 GtkTextBuffer* cast_GtkTextBuffer(void* widget) {
     return GTK_TEXT_BUFFER(widget);
 }
