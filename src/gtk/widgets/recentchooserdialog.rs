@@ -29,7 +29,7 @@ impl RecentChooserDialog {
                 "Cancel".with_c_str(|c_str3| {
                     ffi::gtk_recent_chooser_dialog_new(c_str, match parent {
                         Some(ref p) => GTK_WINDOW(p.get_widget()),
-                        None => ::std::ptr::mut_null()
+                        None => ::std::ptr::null_mut()
                     },
                     c_str2, response_type::Ok,
                     c_str3, response_type::Cancel,
@@ -51,7 +51,7 @@ impl RecentChooserDialog {
                 "Cancel".with_c_str(|c_str3| {
                     ffi::gtk_recent_chooser_dialog_new_for_manager(c_str, match parent {
                         Some(ref p) => GTK_WINDOW(p.get_widget()),
-                        None => ::std::ptr::mut_null()
+                        None => ::std::ptr::null_mut()
                     }, GTK_RECENT_MANAGER(manager.get_widget()),
                     c_str2, response_type::Ok,
                     c_str3, response_type::Cancel,

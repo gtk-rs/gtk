@@ -15,9 +15,6 @@
 
 //! Adjustment — A representation of an adjustable bounded value
 
-
-#![allow(visible_private_types)]
-
 use libc::c_double;
 use gtk::ffi;
 /**

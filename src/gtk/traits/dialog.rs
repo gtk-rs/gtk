@@ -63,7 +63,6 @@ pub trait Dialog: traits::Widget + traits::Container + traits::Bin + traits::Win
         unsafe { ffi::gtk_dialog_set_default_response(GTK_DIALOG(self.get_widget()), response_id) }
     }
 
-    #[allow(visible_private_types)]
     fn set_response_sensitive(&self, response_id: i32, setting: ffi::Gboolean) -> () {
         unsafe { ffi::gtk_dialog_set_response_sensitive(GTK_DIALOG(self.get_widget()), response_id, setting) }
     }

@@ -13,8 +13,6 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-#![allow(visible_private_types)]
-
 use libc::{c_int, c_char};
 use gtk::ffi;
 use gtk::signals::Signal;
