@@ -13,8 +13,6 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-#![allow(visible_private_types)]
-
 use gtk::ffi;
 use std::c_str::CString;
 use std::string::raw::from_buf;
@@ -53,7 +51,7 @@ impl TreePath {
     }
 
     pub fn new_from_indicesv(indices: &mut [i32]) -> Option<TreePath> {
-        let tmp = unsafe { ffi::gtk_tree_path_new_from_indicesv(indices.as_mut_ptr(), indices.len() as u32) };
+        let tmp = unsafe { ffi::gtk_tree_path_new_from_indicesv(indices.as_mut_ptr(), indices.len() as u64) };
 
         if tmp.is_null() {
             None
