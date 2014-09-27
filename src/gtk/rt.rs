@@ -57,6 +57,13 @@ pub fn main_iteration_do(blocking: bool) -> bool {
     }
 }
 
+pub fn events_pending() -> bool {
+    unsafe {
+        ffi::to_bool(ffi::gtk_events_pending())
+    }
+}
+
+
 pub fn get_major_version() -> u32 {
     unsafe {
         ffi::gtk_get_major_version() as u32

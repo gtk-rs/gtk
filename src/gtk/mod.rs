@@ -57,7 +57,8 @@ pub use self::rt::{
     get_micro_version,
     get_binary_age,
     get_interface_age,
-    check_version
+    check_version,
+    events_pending
 };
 
 

@@ -326,6 +326,7 @@ extern "C" {
     pub fn gtk_main_level                      () -> c_uint;
     pub fn gtk_main_iteration                  () -> Gboolean;
     pub fn gtk_main_iteration_do               (blocking: Gboolean) -> Gboolean;
+    pub fn gtk_events_pending                  () -> Gboolean;
 
     //=========================================================================
     // GtkWindow
