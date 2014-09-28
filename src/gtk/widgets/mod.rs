@@ -127,6 +127,7 @@ pub use self::scrollbar::ScrollBar;
 pub use self::viewport::Viewport;
 pub use self::statusbar::StatusBar;
 pub use self::cellrenderertext::CellRendererText;
+pub use self::lockbutton::LockButton;
 
 mod window;
 mod label;
@@ -242,3 +243,4 @@ mod scrollbar;
 mod viewport;
 mod statusbar;
 mod cellrenderertext;
+mod lockbutton;

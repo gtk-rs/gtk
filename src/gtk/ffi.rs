@@ -299,6 +299,9 @@ pub struct C_GtkViewport;
 #[repr(C)]
 pub struct C_GtkStatusbar;
 
+#[repr(C)]
+pub struct C_GtkLockButton;
+
 pub fn to_gboolean(b: bool) -> Gboolean {
     match b {
         true => Gtrue,
@@ -2548,6 +2551,13 @@ extern "C" {
     pub fn gtk_statusbar_get_message_area  (statusbar: *mut C_GtkStatusbar) -> *mut C_GtkWidget;
 
     //=========================================================================
+    // GtkLockButton                                                         OK
+    //=========================================================================
+    pub fn gtk_lock_button_new          (permission: *mut glib::ffi::C_GPermission) -> *mut C_GtkWidget;
+    pub fn gtk_lock_button_get_permission(button: *mut C_GtkLockButton) -> *mut glib::ffi::C_GPermission;
+    pub fn gtk_lock_button_set_permission(button: *mut C_GtkLockButton, permission: *mut glib::ffi::C_GPermission);
+
+    //=========================================================================
     // Glue fixe code
     //=========================================================================
     pub fn glue_signal_connect(g_object: *mut C_GtkWidget,
@@ -2696,4 +2706,5 @@ extern "C" {
     pub fn cast_GtkStatusbar(widget: *mut C_GtkWidget) -> *mut C_GtkStatusbar;
     pub fn cast_GtkCellEditable(widget: *mut C_GtkWidget) -> *mut C_GtkCellEditable;
     pub fn cast_GtkCellRendererText(widget: *mut C_GtkWidget) -> *mut C_GtkCellRendererText;
+    pub fn cast_GtkLockButton(widget: *mut C_GtkWidget) -> *mut C_GtkLockButton;
 }

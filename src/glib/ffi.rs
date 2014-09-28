@@ -44,6 +44,9 @@ pub struct C_GError {
 }
 
 #[repr(C)]
+pub struct C_GPermission;
+
+#[repr(C)]
 pub struct C_GObject;
 
 extern "C" {
@@ -120,6 +123,28 @@ extern "C" {
     pub fn g_clear_error                  (err: *mut *mut C_GError) -> ();
     //pub fn g_prefix_error                 (err: **C_GError, format: *c_char, ...) -> ();
     //pub fn g_propagate_prefixed_error     (dest: **C_GError, src: *C_GError, format: *c_char, ...) -> ();
+
+    //=========================================================================
+    // GPermission                                                       NOT OK
+    //=========================================================================
+    pub fn g_permission_get_allowed     (permission: *mut C_GPermission) -> Gboolean;
+    pub fn g_permission_get_can_acquire (permission: *mut C_GPermission) -> Gboolean;
+    pub fn g_permission_get_can_release (permission: *mut C_GPermission) -> Gboolean;
+    //pub fn g_permission_acquire         (permission: *mut C_GPermission, cancellable: *mut C_GCancellable,
+    //    error: *mut *mut C_GError) -> Gboolean;
+    //pub fn g_permission_acquire_async   (permission: *mut C_GPermission, cancellable: *mut C_GCancellable,
+    //    callback: GAsyncReadyCallback, user_data: gpointer);
+    //pub fn g_permission_acquire_finish  (permission: *mut C_GPermission, result: *mut C_GAsyncResult,
+    //    error: *mut *mut C_GError) -> Gboolean;
+    //pub fn g_permission_release         (permission: *mut C_GPermission, cancellable: *mut C_GCancellable,
+    //    error: *mut *mut C_GError) -> Gboolean;
+    //pub fn g_permission_release_async   (permission: *mut C_GPermission, cancellable: *mut C_GCancellable,
+    //    callback: GAsyncReadyCallback, user_data: gpointer);
+    //pub fn g_permission_release_finish  (permission: *mut C_GPermission, cancellable: *mut C_GCancellable,
+    //    error: *mut *mut C_GError) -> Gboolean;
+    pub fn g_permission_impl_update     (permission: *mut C_GPermission, allowed: Gboolean, can_acquire: Gboolean, can_release: Gboolean);
+
+    //pub type GAsyncReadyCallback = Option<extern "C" fn(source_object: *mut C_GObject, res: *mut C_GAsyncResult, user_data: gpointer)>;
 
     //=========================================================================
     // GObject

@@ -392,3 +392,7 @@ pub fn GTK_CELL_EDITABLE(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkCellEd
 pub fn GTK_CELL_RENDERER_TEXT(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkCellRendererText {
     unsafe { ffi::cast_GtkCellRendererText(widget) }
 }
+
+pub fn GTK_LOCKBUTTON(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkLockButton {
+    unsafe { ffi::cast_GtkLockButton(widget) }
+}
