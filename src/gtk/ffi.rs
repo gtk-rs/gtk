@@ -2554,7 +2554,7 @@ extern "C" {
     pub fn gtk_statusbar_get_message_area(statusbar: *mut C_GtkStatusbar) -> *mut C_GtkWidget;
 
     //=========================================================================
-    // GtkLockButton                                                     NOT OK
+    // GtkLockButton                                                         OK
     //=========================================================================
     pub fn gtk_lock_button_new          (permission: *mut glib::ffi::C_GPermission) -> *mut C_GtkWidget;
     pub fn gtk_lock_button_get_permission(button: *mut C_GtkLockButton) -> *mut glib::ffi::C_GPermission;
