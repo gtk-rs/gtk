@@ -26,14 +26,14 @@ pub trait Actionable: traits::Widget {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(unsafe { ::std::str::from_buf(tmp_pointer as *const u8) })
+            Some(unsafe { ::std::string::raw::from_buf(tmp_pointer as *const u8) })
         }
     }
 
     fn set_action_name(&self, action_name: &str) {
         unsafe {
             action_name.with_c_str(|c_str| {
-                ffi::gtk_actionable_set_action_name(GTK_ACTIONABLE(self.get_widget(), c_str))
+                ffi::gtk_actionable_set_action_name(GTK_ACTIONABLE(self.get_widget()), c_str)
             })
         }
     }
@@ -41,7 +41,7 @@ pub trait Actionable: traits::Widget {
     fn set_detailed_action_name(&self, detailed_action_name: &str) {
         unsafe {
             detailed_action_name.with_c_str(|c_str| {
-                ffi::gtk_actionable_set_detailed_action_name(GTK_ACTIONABLE(self.get_widget(), c_str))
+                ffi::gtk_actionable_set_detailed_action_name(GTK_ACTIONABLE(self.get_widget()), c_str)
             })
         }
     }

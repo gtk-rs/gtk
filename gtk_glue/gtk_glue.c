@@ -486,7 +486,7 @@ GtkLockButton *cast_GtkLockButton(GtkWidget* widget) {
     return GTK_LOCK_BUTTON(widget);
 }
 
-GtActionable *cast_GtkActionable(GtkWidget* widget) {
+GtkActionable *cast_GtkActionable(GtkWidget* widget) {
     return GTK_ACTIONABLE(widget);
 }
 

@@ -95,6 +95,12 @@ fn main() {
         dialog.run();
     }));
 
+    window.connect(signals::KeyPressEvent::new(|key|{
+        unsafe { println!("key pressed: {}", (*key).keyval) };
+        println!("text: {}", entry.get_text().unwrap());
+        false
+    }));
+
     window.connect(signals::DeleteEvent::new(|_|{
         gtk::main_quit();
         true
