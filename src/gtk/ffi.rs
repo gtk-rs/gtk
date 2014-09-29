@@ -302,6 +302,9 @@ pub struct C_GtkStatusbar;
 #[repr(C)]
 pub struct C_GtkLockButton;
 
+#[repr(C)]
+pub struct C_GtkActionable;
+
 pub fn to_gboolean(b: bool) -> Gboolean {
     match b {
         true => Gtrue,
@@ -2548,7 +2551,7 @@ extern "C" {
     pub fn gtk_statusbar_pop            (statusbar: *mut C_GtkStatusbar, context_id: c_uint);
     pub fn gtk_statusbar_remove         (statusbar: *mut C_GtkStatusbar, context_id: c_uint, message_id: c_uint);
     pub fn gtk_statusbar_remove_all     (statusbar: *mut C_GtkStatusbar, context_id: c_uint);
-    pub fn gtk_statusbar_get_message_area  (statusbar: *mut C_GtkStatusbar) -> *mut C_GtkWidget;
+    pub fn gtk_statusbar_get_message_area(statusbar: *mut C_GtkStatusbar) -> *mut C_GtkWidget;
 
     //=========================================================================
     // GtkLockButton                                                         OK
@@ -2556,6 +2559,16 @@ extern "C" {
     pub fn gtk_lock_button_new          (permission: *mut glib::ffi::C_GPermission) -> *mut C_GtkWidget;
     pub fn gtk_lock_button_get_permission(button: *mut C_GtkLockButton) -> *mut glib::ffi::C_GPermission;
     pub fn gtk_lock_button_set_permission(button: *mut C_GtkLockButton, permission: *mut glib::ffi::C_GPermission);
+
+    //=========================================================================
+    // GtkActionable                                                     NOT OK
+    //=========================================================================
+    pub fn gtk_actionable_get_action_name(actionable: *mut C_GtkActionable) -> *const c_char;
+    pub fn gtk_actionable_set_action_name(actionable: *mut C_GtkActionable, action_name: *const c_char);
+    //pub fn gtk_actionable_get_action_target_value(actionable: *mut C_GtkActionable) -> *mut glib::ffi::C_GVariant;
+    //pub fn gtk_actionable_set_action_target_value(actionable: *mut C_GtkActionable, target_value: *mut glib::ffi::C_GVariant);
+    //pub fn gtk_actionable_set_action_target(actionable: *mut C_GtkActionable, format_string: *const c_char, ...);
+    pub fn gtk_actionable_set_detailed_action_name(actionable: *mut C_GtkActionable, detailed_action_name: *const c_char);
 
     //=========================================================================
     // Glue fixe code
@@ -2707,4 +2720,5 @@ extern "C" {
     pub fn cast_GtkCellEditable(widget: *mut C_GtkWidget) -> *mut C_GtkCellEditable;
     pub fn cast_GtkCellRendererText(widget: *mut C_GtkWidget) -> *mut C_GtkCellRendererText;
     pub fn cast_GtkLockButton(widget: *mut C_GtkWidget) -> *mut C_GtkLockButton;
+    pub fn cast_GtkActionable(widget: *mut C_GtkWidget) -> *mut C_GtkActionable;
 }

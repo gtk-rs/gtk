@@ -50,4 +50,4 @@ impl_TraitWidget!(LockButton)
 
 impl traits::Container for LockButton {}
 impl traits::Button for LockButton {}
-// missing impl of GtkActionable and GtkActivable
+impl traits::Actionable for LockButton {}
