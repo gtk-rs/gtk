@@ -142,7 +142,8 @@ pub use self::widgets::{
     ScrollBar,
     Viewport,
     StatusBar,
-    CellRendererText
+    CellRendererText,
+    LockButton,
 };
 
 #[cfg(GTK_3_6)]

@@ -396,3 +396,7 @@ pub fn GTK_CELL_RENDERER_TEXT(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkC
 pub fn GTK_LOCKBUTTON(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkLockButton {
     unsafe { ffi::cast_GtkLockButton(widget) }
 }
+
+pub fn GTK_ACTIONABLE(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkActionable {
+    unsafe { ffi::cast_GtkActionable(widget) }
+}
