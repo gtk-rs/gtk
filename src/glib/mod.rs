@@ -23,12 +23,14 @@ pub use self::list::{List, Elem, RevElem};
 pub use self::slist::{SList, SElem};
 pub use self::glib_container::GlibContainer;
 pub use self::error::{Error};
+pub use self::permission::Permission;
 
 mod list;
 mod slist;
 pub mod ffi;
 mod glib_container;
 mod error;
+mod permission;
 
 // An opaque structure used as the base of all interface types.
 pub struct TypeInterface;
