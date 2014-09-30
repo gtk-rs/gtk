@@ -96,7 +96,7 @@ fn main() {
     }));
 
     window.connect(signals::KeyPressEvent::new(|key|{
-        unsafe { println!("key pressed: {}", (*key).keyval) };
+        unsafe { println!("key pressed: {} / {}", (*key).keyval, (*key)._type) };
         println!("text: {}", entry.get_text().unwrap());
         false
     }));

@@ -28,6 +28,8 @@ pub use self::scroll_direction::ScrollDirection;
 pub use self::visibility_state::VisibilityState;
 
 pub mod event_type {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
     pub enum EventType {
         Nothing           = -1,
         Delete            = 0,
@@ -91,14 +93,14 @@ pub struct EventAny {
 
 impl Event for EventAny {}
 
-pub struct EventExpose{
+pub struct EventExpose {
     pub _type : gdk::EventType,
     pub window : *mut gdk::Window,
     send_event : i8,
 
     pub area : gdk::Rectangle,
     pub region : *mut c_void, //TODO cairo_region_t
-    pub count : int /* If non-zero, how many more events follow. */
+    pub count : i8 /* If non-zero, how many more events follow. */
 }
 
 impl Event for EventExpose {}
@@ -113,7 +115,7 @@ pub struct EventVisibility{
 
 impl Event for EventVisibility {}
 
-pub struct EventMotion{
+pub struct EventMotion {
     pub _type : gdk::EventType,
     pub window : *mut gdk::Window,
     send_event : i8,
@@ -122,7 +124,7 @@ pub struct EventMotion{
     x : f64,
     y : f64,
     axes : *mut f64,
-    state : uint,
+    state : u32,
     is_hint : i16,
     device : *mut gdk::Device,
     x_root : f64,
@@ -131,7 +133,7 @@ pub struct EventMotion{
 
 impl Event for EventMotion {}
 
-pub struct EventButton{
+pub struct EventButton {
     pub _type : gdk::EventType,
     pub window : *mut gdk::Window,
     send_event : i8,
@@ -140,8 +142,8 @@ pub struct EventButton{
     x : f64,
     y : f64,
     axes : *mut f64,
-    state : uint,
-    button : uint,
+    state : u32,
+    button : u32,
     device : *mut gdk::Device,
     x_root : f64,
     y_root : f64
@@ -149,7 +151,7 @@ pub struct EventButton{
 
 impl Event for EventButton {}
 
-pub struct EventTouch{
+pub struct EventTouch {
     pub _type : gdk::EventType,
     pub window : *mut gdk::Window,
     send_event : i8,
@@ -158,9 +160,9 @@ pub struct EventTouch{
     pub x : f64,
     pub y : f64,
     pub axes : *mut f64,
-    pub state : uint,
+    pub state : u32,
     pub sequence : *mut c_void, //gdk::EventSequence
-    pub emulating_pointer : bool,
+    pub emulating_pointer : i32, // boolean
     pub device : *mut gdk::Device,
     pub x_root : f64,
     pub y_root : f64
@@ -168,7 +170,7 @@ pub struct EventTouch{
 
 impl Event for EventTouch {}
 
-pub struct EventScroll{
+pub struct EventScroll {
     pub _type : gdk::EventType,
     pub window : *mut gdk::Window,
     send_event : i8,
@@ -176,7 +178,7 @@ pub struct EventScroll{
     pub time : u32,
     pub x : f64,
     pub y : f64,
-    pub state : uint,
+    pub state : u32,
     pub direction : gdk::ScrollDirection,
     pub device : *mut gdk::Device,
     pub x_root : f64,
@@ -187,24 +189,24 @@ pub struct EventScroll{
 
 impl Event for EventScroll {}
 
-pub struct EventKey{
+pub struct EventKey {
     pub _type : gdk::EventType,
     pub window : *mut gdk::Window,
     send_event : i8,
 
     pub time : u32,
-    pub state : uint,
-    pub keyval : uint,
-    pub length : int,
+    pub state : u32,
+    pub keyval : u32,
+    pub length : i32,
     pub string : *mut char,
     pub hardware_keycode : u16,
     pub group : u8,
-    pub is_modified: uint
+    pub is_modified: u32
 }
 
 impl Event for EventKey {}
 
-pub struct EventCrossing{
+pub struct EventCrossing {
     pub _type : gdk::EventType,
     pub window : *mut gdk::Window,
     send_event : i8,
@@ -217,13 +219,13 @@ pub struct EventCrossing{
     pub y_root : f64,
     pub mode : gdk::CrossingMode,
     pub detail : gdk::NotifyType,
-    pub focus : bool,
-    pub state : uint //FIXME
+    pub focus : i32, // boolean
+    pub state : u32 //FIXME
 }
 
 impl Event for EventCrossing {}
 
-pub struct EventFocus{
+pub struct EventFocus {
     pub _type : gdk::EventType,
     pub window : *mut gdk::Window,
     send_event : i8,
@@ -238,27 +240,27 @@ pub struct EventConfigure{
     pub window : *mut gdk::Window,
     send_event : i8,
 
-    pub x : int,
-    pub y : int,
-    pub width : int,
-    pub height : int
+    pub x : i32,
+    pub y : i32,
+    pub width : i32,
+    pub height : i32
 }
 
 impl Event for EventConfigure {}
 
-pub struct EventProperty{
+pub struct EventProperty {
     pub _type : gdk::EventType,
     pub window : *mut gdk::Window,
     send_event : i8,
 
     atom : gdk::Atom,
     time : u32,
-    state : uint //FIXME
+    state : u32 //FIXME
 }
 
 impl Event for EventProperty {}
 
-pub struct EventSelection{
+pub struct EventSelection {
     pub _type : gdk::EventType,
     pub window : *mut gdk::Window,
     send_event : i8,
@@ -272,7 +274,7 @@ pub struct EventSelection{
 
 impl Event for EventSelection {}
 
-pub struct EventOwnerChange{
+pub struct EventOwnerChange {
     pub _type : gdk::EventType,
     pub window : *mut gdk::Window,
     send_event : i8,
@@ -286,7 +288,7 @@ pub struct EventOwnerChange{
 
 impl Event for EventOwnerChange {}
 
-pub struct EventProximity{
+pub struct EventProximity {
     pub _type : gdk::EventType,
     pub window : *mut gdk::Window,
     send_event : i8,
@@ -297,7 +299,7 @@ pub struct EventProximity{
 
 impl Event for EventProximity {}
 
-pub struct EventSetting{
+pub struct EventSetting {
     pub _type : gdk::EventType,
     pub window : *mut gdk::Window,
     send_event : i8,
@@ -308,7 +310,7 @@ pub struct EventSetting{
 
 impl Event for EventSetting {}
 
-pub struct EventWindowState{
+pub struct EventWindowState {
     pub _type : gdk::EventType,
     pub window : *mut gdk::Window,
     send_event : i8,
@@ -324,8 +326,8 @@ pub struct EventGrabBroken {
     pub window : *mut gdk::Window,
     send_event : i8,
 
-    pub keyboard : bool,
-    pub implicit : bool,
+    pub keyboard : i32, // boolean
+    pub implicit : i32, // boolean
     pub grab_window : *mut gdk::Window
 }
 
@@ -348,6 +350,8 @@ impl Event for EventDND  {}
 //Supporting types
 
 pub mod visibility_state {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
     pub enum VisibilityState{
         VisibilityUnobscured,
         VisibilityPartial,
@@ -356,6 +360,8 @@ pub mod visibility_state {
 }
 
 pub mod scroll_direction {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
     pub enum ScrollDirection{
         ScrollUp,
         ScrollDown,
@@ -366,6 +372,8 @@ pub mod scroll_direction {
 }
 
 pub mod notify_type {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
     pub enum NotifyType{
         NotifyAncestor   = 0,
         NotifyVirtual    = 1,
@@ -377,6 +385,8 @@ pub mod notify_type {
 }
 
 pub mod crossing_mode {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
     pub enum CrossingMode{
         CrossingNormal,
         CrossingGrab,
@@ -391,6 +401,8 @@ pub mod crossing_mode {
 }
 
 pub mod property_state {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
     pub enum PropertyState{
         PropertyNewValue,
         PropertyDelete
@@ -398,6 +410,8 @@ pub mod property_state {
 }
 
 pub mod window_state {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
     pub enum WindowState{
         WindowStateWithdrawn  = 1 << 0,
         WindowStateIconified  = 1 << 1,
@@ -412,6 +426,8 @@ pub mod window_state {
 }
 
 pub mod setting_action {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
     pub enum SettingAction{
         SettingActionNew,
         SettingActionChanged,
@@ -420,6 +436,8 @@ pub mod setting_action {
 }
 
 pub mod owner_change {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
     pub enum OwnerChange{
         OwnerChangeNewOwner,
         OwnerChangeDestroy,
