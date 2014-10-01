@@ -139,7 +139,8 @@ fn main() {
     _box.add(&arrow);
     _box.add(&calendar);
     _box.set_orientation(gtk::orientation::Vertical);
-
+    // window.set_decorated(false);
+    window.set_decorated(true);
     window.show_all();
     gtk::main();
 }

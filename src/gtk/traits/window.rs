@@ -14,6 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::ffi;
+use gtk::ffi::to_gboolean;
 use gtk::traits::Widget;
 use gtk::cast::GTK_WINDOW;
 use gtk::enums::WindowPosition;
@@ -26,6 +27,12 @@ pub trait Window : Widget {
             title.with_c_str(|c_str| {
                 ffi::gtk_window_set_title(GTK_WINDOW(self.get_widget()), c_str)
             });
+        }
+    }
+
+    fn set_decorated(&mut self, setting: bool) -> () {
+        unsafe {
+            ffi::gtk_window_set_decorated(GTK_WINDOW(self.get_widget()), to_gboolean(setting));
         }
     }
 

@@ -342,6 +342,7 @@ extern "C" {
     pub fn gtk_window_get_title                (window: *mut C_GtkWindow) -> *const c_char;
     pub fn gtk_window_set_default_size         (widget: *mut C_GtkWidget, width: c_int, height: c_int);
     pub fn gtk_window_set_position             (window: *mut C_GtkWindow, position: gtk::WindowPosition) -> ();
+    pub fn gtk_window_set_decorated            (window: *mut C_GtkWindow, setting: Gboolean) -> ();
 
     // pub fn gtk_window_set_role(window: *const const C_GtkWindow, role: *const c_char) -> ();
     // pub fn gtk_window_set_startup_id(window: *const const C_GtkWindow, startup_id: *const c_char) -> ();
