@@ -128,6 +128,7 @@ pub use self::viewport::Viewport;
 pub use self::statusbar::StatusBar;
 pub use self::cellrenderertext::CellRendererText;
 pub use self::lockbutton::LockButton;
+pub use self::entrycompletion::EntryCompletion;
 
 mod window;
 mod label;
@@ -244,3 +245,4 @@ mod viewport;
 mod statusbar;
 mod cellrenderertext;
 mod lockbutton;
+mod entrycompletion;

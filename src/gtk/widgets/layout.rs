@@ -41,7 +41,8 @@ impl Layout {
         }
     }
 
-    pub fn move<T: traits::Widget>(&mut self, child: &T, x: i32, y: i32) {
+    // FIXME: search a new name
+    pub fn move_<T: traits::Widget>(&mut self, child: &T, x: i32, y: i32) {
         unsafe {
             ffi::gtk_layout_move(GTK_LAYOUT(self.pointer),
                                  child.get_widget(),

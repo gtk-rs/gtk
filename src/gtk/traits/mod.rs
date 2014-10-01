@@ -48,6 +48,7 @@ pub use self::menuitem::MenuItem;
 pub use self::checkmenuitem::CheckMenuItem;
 pub use self::celleditable::CellEditable;
 pub use self::actionable::Actionable;
+pub use self::celllayout::CellLayout;
 
 pub mod widget;
 pub mod container;
@@ -84,3 +85,4 @@ pub mod menuitem;
 pub mod checkmenuitem;
 pub mod celleditable;
 pub mod actionable;
+pub mod celllayout;

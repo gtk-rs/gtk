@@ -144,6 +144,7 @@ pub use self::widgets::{
     StatusBar,
     CellRendererText,
     LockButton,
+    EntryCompletion
 };
 
 #[cfg(GTK_3_6)]
