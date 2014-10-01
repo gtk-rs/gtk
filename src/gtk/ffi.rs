@@ -307,6 +307,9 @@ pub struct C_GtkLockButton;
 #[repr(C)]
 pub struct C_GtkActionable;
 
+#[repr(C)]
+pub struct C_GtkEntryCompletion;
+
 pub fn to_gboolean(b: bool) -> Gboolean {
     match b {
         true => Gtrue,
@@ -644,6 +647,41 @@ extern "C" {
     pub fn gtk_label_get_current_uri           (label: *mut C_GtkLabel) -> *const c_char;
     pub fn gtk_label_set_track_visited_links   (label: *mut C_GtkLabel, track_links: Gboolean) -> ();
     pub fn gtk_label_get_track_visited_links   (label: *mut C_GtkLabel) -> Gboolean;
+
+    //=========================================================================
+    // GtkEntryCompletion                                                NOT OK
+    //=========================================================================
+    pub fn gtk_entry_completion_new            () -> *mut C_GtkEntryCompletion;
+    //pub fn gtk_entry_completion_new_with_area  (area: *mut C_GtkCellArea) -> *mut C_GtkEntryCompletion;
+    pub fn gtk_entry_completion_get_entry      (completion: *mut C_GtkEntryCompletion) -> *mut C_GtkWidget;
+    pub fn gtk_entry_completion_set_model      (completion: *mut C_GtkEntryCompletion, model: *mut C_GtkTreeModel);
+    pub fn gtk_entry_completion_get_model      (completion: *mut C_GtkEntryCompletion) -> *mut C_GtkTreeModel;
+    //pub fn gtk_entry_completion_set_match_func (completion: *mut C_GtkEntryCompletion, func: GtkEntryCompletionMatchFunc,
+    //    func_data: gpointer, func_notifiy: GDestroyNotify);
+    pub fn gtk_entry_completion_set_minimum_key_length(completion: *mut C_GtkEntryCompletion, length: c_int);
+    pub fn gtk_entry_completion_get_minimum_key_length(completion: *mut C_GtkEntryCompletion) -> c_int;
+    pub fn gtk_entry_completion_compute_prefix (completion: *mut C_GtkEntryCompletion, key: *const c_char) -> *mut c_char;
+    pub fn gtk_entry_completion_complete       (completion: *mut C_GtkEntryCompletion);
+    pub fn gtk_entry_completion_get_completion_prefix(completion: *mut C_GtkEntryCompletion) -> *const c_char;
+    pub fn gtk_entry_completion_insert_prefix  (completion: *mut C_GtkEntryCompletion);
+    pub fn gtk_entry_completion_insert_action_text(completion: *mut C_GtkEntryCompletion, index_: c_int, text: *const c_char);
+    pub fn gtk_entry_completion_insert_action_markup(completion: *mut C_GtkEntryCompletion, index_: c_int, markup: *const c_char);
+    pub fn gtk_entry_completion_delete_action  (completion: *mut C_GtkEntryCompletion, index_: c_int);
+    pub fn gtk_entry_completion_set_text_column(completion: *mut C_GtkEntryCompletion, column: c_int);
+    pub fn gtk_entry_completion_get_text_column(completion: *mut C_GtkEntryCompletion) -> c_int;
+    pub fn gtk_entry_completion_set_inline_completion(completion: *mut C_GtkEntryCompletion, inline_completion: Gboolean);
+    pub fn gtk_entry_completion_get_inline_completion(completion: *mut C_GtkEntryCompletion) -> Gboolean;
+    pub fn gtk_entry_completion_set_inline_selection(completion: *mut C_GtkEntryCompletion, inline_selection: Gboolean);
+    pub fn gtk_entry_completion_get_inline_selection(completion: *mut C_GtkEntryCompletion) -> Gboolean;
+    pub fn gtk_entry_completion_set_popup_completion(completion: *mut C_GtkEntryCompletion, popup_completion: Gboolean);
+    pub fn gtk_entry_completion_get_popup_completion(completion: *mut C_GtkEntryCompletion) -> Gboolean;
+    pub fn gtk_entry_completion_set_popup_set_width(completion: *mut C_GtkEntryCompletion, popup_set_width: Gboolean);
+    pub fn gtk_entry_completion_get_popup_set_width(completion: *mut C_GtkEntryCompletion) -> Gboolean;
+    pub fn gtk_entry_completion_set_popup_single_match(completion: *mut C_GtkEntryCompletion, popup_single_match: Gboolean);
+    pub fn gtk_entry_completion_get_popup_single_match(completion: *mut C_GtkEntryCompletion) -> Gboolean;
+
+    //pub type GtkEntryCompletionMatchFunc = Option<extern "C" fn(completion: *mut C_GtkEntryCompletion, key: *const c_char,
+    //    iter: *mut C_GtkTreeIter, user_data: gpointer) -> Gboolean>;
 
     //=========================================================================
     // GtkContainer                                                          OK
@@ -2743,4 +2781,5 @@ extern "C" {
     pub fn cast_GtkLockButton(widget: *mut C_GtkWidget) -> *mut C_GtkLockButton;
     pub fn cast_GtkActionable(widget: *mut C_GtkWidget) -> *mut C_GtkActionable;
     pub fn cast_GtkCellLayout(widget: *mut C_GtkWidget) -> *mut C_GtkCellLayout;
+    pub fn cast_GtkEntryCompletion(widget: *mut C_GtkWidget) -> *mut C_GtkEntryCompletion;
 }

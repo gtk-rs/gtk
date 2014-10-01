@@ -16,7 +16,6 @@
 use gtk::ffi;
 use gtk::traits;
 use gtk::cast::{GTK_CELL_LAYOUT, GTK_CELL_RENDERER};
-use gtk;
 use glib;
 
 pub trait CellLayout: traits::Widget {
@@ -48,19 +47,15 @@ pub trait CellLayout: traits::Widget {
         }
     }*/
 
-    fn get_cells(&self) -> glib::List<Box<traits::CellRenderer>> {
+    fn get_cells<T: traits::CellRenderer>(&self) -> glib::List<T> {
         let tmp = unsafe { ffi::gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(self.get_widget())) };
-
+        
         if tmp.is_null() {
             glib::List::new()
         } else {
-            let old_list : glib::List<*mut ffi::C_GtkWidget> = glib::GlibContainer::wrap(tmp);
-            let mut tmp_vec : glib::List<Box<traits::CellRenderer>> = glib::List::new();
-
-            for it in old_list.iter() {
-                tmp_vec.append(box ffi::FFIWidget::wrap(*it));
-            }
-            tmp_vec
+            let list: glib::List<*mut ffi::C_GtkWidget> = glib::GlibContainer::wrap(tmp);
+        
+            list.iter().map(|it| ffi::FFIWidget::wrap(*it)).collect()
         }
     }
 
