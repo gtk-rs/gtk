@@ -38,7 +38,7 @@ pub trait CellLayout: traits::Widget {
         }
     }
 
-    fn get_area(&self) -> Option<gtk::CellArea> {
+    /*fn get_area(&self) -> Option<gtk::CellArea> {
         let tmp = unsafe { ffi::gtk_cell_layout_get_area(GTK_CELL_LAYOUT(self.get_widget())) };
         
         if tmp.is_null() {
@@ -46,7 +46,7 @@ pub trait CellLayout: traits::Widget {
         } else {
             Some(ffi::FFIWidget::wrap(tmp_pointer))
         }
-    }
+    }*/
 
     fn get_cells(&self) -> glib::List<Box<traits::CellRenderer>> {
         let tmp = unsafe { ffi::gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(self.get_widget())) };
@@ -82,6 +82,6 @@ pub trait CellLayout: traits::Widget {
     }
 
     fn clear_attributes(&self, cell: &traits::CellRenderer) {
-        unsafe { ffi::gtk_cell_layout_reorder(GTK_CELL_LAYOUT(self.get_widget()), GTK_CELL_RENDERER(cell.get_widget())) }
+        unsafe { ffi::gtk_cell_layout_clear_attributes(GTK_CELL_LAYOUT(self.get_widget()), GTK_CELL_RENDERER(cell.get_widget())) }
     }
 }

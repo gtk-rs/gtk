@@ -40,7 +40,8 @@ impl Fixed {
         }
     }
 
-    pub fn move<T: traits::Widget>(&mut self,
+    // FIXME: search a new name
+    pub fn move_<T: traits::Widget>(&mut self,
                               widget: &T,
                               x: i32,
                               y: i32) -> () {
