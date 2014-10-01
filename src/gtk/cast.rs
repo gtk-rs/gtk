@@ -400,3 +400,7 @@ pub fn GTK_LOCKBUTTON(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkLockButto
 pub fn GTK_ACTIONABLE(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkActionable {
     unsafe { ffi::cast_GtkActionable(widget) }
 }
+
+pub fn GTK_CELL_LAYOUT(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkCellLayout {
+    unsafe { ffi::cast_GtkCellLayout(widget) }
+}

@@ -213,6 +213,8 @@ pub struct C_GtkCellRendererClass;
 #[repr(C)]
 pub struct C_GtkCellRenderer;
 #[repr(C)]
+pub struct C_GtkCellLayout;
+#[repr(C)]
 pub struct C_GtkTreeModel;
 #[repr(C)]
 pub struct C_GtkTreePath;
@@ -775,6 +777,24 @@ extern "C" {
     pub fn gtk_cell_renderer_get_preferred_width_for_height(cell: *mut C_GtkCellRenderer, widget: *mut C_GtkWidget, height: c_int,
         minimum_size: *mut c_int, natural_size: *mut c_int) -> ();
     pub fn gtk_cell_renderer_get_request_mode(cell: *mut C_GtkCellRenderer) -> gtk::SizeRequestMode;
+
+    //=========================================================================
+    // GtkCelllayout                                                     NOT OK
+    //=========================================================================
+    pub fn gtk_cell_layout_pack_start          (cell_layout: *mut C_GtkCellLayout, cell: *mut C_GtkCellRenderer, expand: Gboolean);
+    pub fn gtk_cell_layout_pack_end            (cell_layout: *mut C_GtkCellLayout, cell: *mut C_GtkCellRenderer, expand: Gboolean);
+    pub fn gtk_cell_layout_get_area            (cell_layout: *mut C_GtkCellLayout) -> *mut C_GtkCellArea;
+    pub fn gtk_cell_layout_get_cells           (cell_layout: *mut C_GtkCellLayout) -> *mut glib::ffi::C_GList;
+    pub fn gtk_cell_layout_reorder             (cell_layout: *mut C_GtkCellLayout, cell: *mut C_GtkCellRenderer, position: c_int);
+    pub fn gtk_cell_layout_clear               (cell_layout: *mut C_GtkCellLayout);
+    //pub fn gtk_cell_layout_set_attributes      (cell_layout: *mut C_GtkCellLayout, cell: *mut C_GtkCellRenderer, ...);
+    pub fn gtk_cell_layout_add_attribute       (cell_layout: *mut C_GtkCellLayout, cell: *mut C_GtkCellRenderer, attribute: *const c_char,
+        column: c_int);
+    //pub fn gtk_cell_layout_set_cell_data_func  (cell_layout: *mut C_GtkCellLayout, cell: *mut C_GtkCellRenderer,
+    //    func: GtkCellLayoutDataFunc, func_data: gpointer, destroy: GDestroyNotify);
+    pub fn gtk_cell_layout_clear_attributes    (cell_layout: *mut C_GtkCellLayout, cell: *mut C_GtkCellRenderer);
+    //pub type GtkCellLayoutDataFunc = Option<extern "C" fn(cell_layout: *mut C_GtkCellLayout, cell: *mut C_GtkCellRenderer,
+    //    tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter, data: gpointer)>;
 
     //=========================================================================
     // GtkButton                                                         NOT OK
@@ -2722,4 +2742,5 @@ extern "C" {
     pub fn cast_GtkCellRendererText(widget: *mut C_GtkWidget) -> *mut C_GtkCellRendererText;
     pub fn cast_GtkLockButton(widget: *mut C_GtkWidget) -> *mut C_GtkLockButton;
     pub fn cast_GtkActionable(widget: *mut C_GtkWidget) -> *mut C_GtkActionable;
+    pub fn cast_GtkCellLayout(widget: *mut C_GtkWidget) -> *mut C_GtkCellLayout;
 }
