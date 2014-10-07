@@ -66,28 +66,28 @@ impl ProgressBar {
 
     pub fn set_inverted(&mut self, inverted: bool) -> () {
         match inverted {
-            true    => unsafe { ffi::gtk_progress_bar_set_inverted(GTK_PROGRESSBAR(self.pointer), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_progress_bar_set_inverted(GTK_PROGRESSBAR(self.pointer), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_progress_bar_set_inverted(GTK_PROGRESSBAR(self.pointer), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_progress_bar_set_inverted(GTK_PROGRESSBAR(self.pointer), ffi::GFALSE) }
         }
     }
 
     pub fn get_inverted(&self) -> bool {
         match unsafe { ffi::gtk_progress_bar_get_inverted(GTK_PROGRESSBAR(self.pointer)) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }
 
     pub fn set_show_text(&mut self, show_text: bool) -> () {
         match show_text {
-            true    => unsafe { ffi::gtk_progress_bar_set_show_text(GTK_PROGRESSBAR(self.pointer), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_progress_bar_set_show_text(GTK_PROGRESSBAR(self.pointer), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_progress_bar_set_show_text(GTK_PROGRESSBAR(self.pointer), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_progress_bar_set_show_text(GTK_PROGRESSBAR(self.pointer), ffi::GFALSE) }
         }
     }
 
     pub fn get_show_text(&self) -> bool {
         match unsafe { ffi::gtk_progress_bar_get_show_text(GTK_PROGRESSBAR(self.pointer)) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }

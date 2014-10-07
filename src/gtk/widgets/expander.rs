@@ -50,70 +50,70 @@ impl Expander {
 
     pub fn set_expanded(&mut self, expanded: bool) -> () {
         match expanded {
-            true    => unsafe { ffi::gtk_expander_set_expanded(GTK_EXPANDER(self.pointer), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_expander_set_expanded(GTK_EXPANDER(self.pointer), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_expander_set_expanded(GTK_EXPANDER(self.pointer), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_expander_set_expanded(GTK_EXPANDER(self.pointer), ffi::GFALSE) }
         }
     }
 
     pub fn get_expanded(&self) -> bool {
         match unsafe { ffi::gtk_expander_get_expanded(GTK_EXPANDER(self.pointer)) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }
 
     pub fn set_use_underline(&mut self, use_underline: bool) -> () {
         match use_underline {
-            true    => unsafe { ffi::gtk_expander_set_use_underline(GTK_EXPANDER(self.pointer), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_expander_set_use_underline(GTK_EXPANDER(self.pointer), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_expander_set_use_underline(GTK_EXPANDER(self.pointer), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_expander_set_use_underline(GTK_EXPANDER(self.pointer), ffi::GFALSE) }
         }
     }
 
     pub fn get_use_underline(&self) -> bool {
         match unsafe { ffi::gtk_expander_get_use_underline(GTK_EXPANDER(self.pointer)) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }
 
     pub fn set_use_markup(&mut self, use_markup: bool) -> () {
         match use_markup {
-            true    => unsafe { ffi::gtk_expander_set_use_markup(GTK_EXPANDER(self.pointer), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_expander_set_use_markup(GTK_EXPANDER(self.pointer), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_expander_set_use_markup(GTK_EXPANDER(self.pointer), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_expander_set_use_markup(GTK_EXPANDER(self.pointer), ffi::GFALSE) }
         }
     }
 
     pub fn get_use_markup(&self) -> bool {
         match unsafe { ffi::gtk_expander_get_use_markup(GTK_EXPANDER(self.pointer)) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }
 
     pub fn set_label_fill(&mut self, label_fill: bool) -> () {
         match label_fill {
-            true    => unsafe { ffi::gtk_expander_set_label_fill(GTK_EXPANDER(self.pointer), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_expander_set_label_fill(GTK_EXPANDER(self.pointer), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_expander_set_label_fill(GTK_EXPANDER(self.pointer), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_expander_set_label_fill(GTK_EXPANDER(self.pointer), ffi::GFALSE) }
         }
     }
 
     pub fn get_label_fill(&self) -> bool {
         match unsafe { ffi::gtk_expander_get_label_fill(GTK_EXPANDER(self.pointer)) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }
 
     pub fn set_resize_toplevel(&mut self, resize_toplevel: bool) -> () {
         match resize_toplevel {
-            true    => unsafe { ffi::gtk_expander_set_resize_toplevel(GTK_EXPANDER(self.pointer), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_expander_set_resize_toplevel(GTK_EXPANDER(self.pointer), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_expander_set_resize_toplevel(GTK_EXPANDER(self.pointer), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_expander_set_resize_toplevel(GTK_EXPANDER(self.pointer), ffi::GFALSE) }
         }
     }
 
     pub fn get_resize_toplevel(&self) -> bool {
         match unsafe { ffi::gtk_expander_get_resize_toplevel(GTK_EXPANDER(self.pointer)) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }

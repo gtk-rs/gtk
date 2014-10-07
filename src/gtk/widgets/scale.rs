@@ -54,28 +54,28 @@ impl Scale {
 
     pub fn set_draw_value(&mut self, draw_value: bool) -> () {
         match draw_value {
-            true    => unsafe { ffi::gtk_scale_set_draw_value(GTK_SCALE(self.pointer), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_scale_set_draw_value(GTK_SCALE(self.pointer), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_scale_set_draw_value(GTK_SCALE(self.pointer), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_scale_set_draw_value(GTK_SCALE(self.pointer), ffi::GFALSE) }
         }
     }
 
     pub fn get_draw_value(&self) -> bool {
         match unsafe { ffi::gtk_scale_get_draw_value(GTK_SCALE(self.pointer)) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }
 
     pub fn set_has_origin(&mut self, has_origin: bool) -> () {
         match has_origin {
-            true    => unsafe { ffi::gtk_scale_set_has_origin(GTK_SCALE(self.pointer), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_scale_set_has_origin(GTK_SCALE(self.pointer), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_scale_set_has_origin(GTK_SCALE(self.pointer), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_scale_set_has_origin(GTK_SCALE(self.pointer), ffi::GFALSE) }
         }
     }
 
     pub fn get_has_origin(&self) -> bool {
         match unsafe { ffi::gtk_scale_get_has_origin(GTK_SCALE(self.pointer)) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }

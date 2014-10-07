@@ -49,8 +49,8 @@ impl InfoBar {
 
     pub fn set_response_sensitive(&mut self, response_id: i32, setting: bool) -> () {
         match setting {
-            true    => unsafe { ffi::gtk_info_bar_set_response_sensitive(GTK_INFOBAR(self.pointer), response_id as c_int, ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_info_bar_set_response_sensitive(GTK_INFOBAR(self.pointer), response_id as c_int, ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_info_bar_set_response_sensitive(GTK_INFOBAR(self.pointer), response_id as c_int, ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_info_bar_set_response_sensitive(GTK_INFOBAR(self.pointer), response_id as c_int, ffi::GFALSE) }
         }
     }
 
@@ -81,15 +81,15 @@ impl InfoBar {
     #[cfg(any(GTK_3_10, GTK_3_12))]
     pub fn show_close_button(&mut self, show: bool) -> () {
          match show {
-            true    => unsafe { ffi::gtk_info_bar_set_show_close_button(GTK_INFOBAR(self.pointer), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_info_bar_set_show_close_button(GTK_INFOBAR(self.pointer), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_info_bar_set_show_close_button(GTK_INFOBAR(self.pointer), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_info_bar_set_show_close_button(GTK_INFOBAR(self.pointer), ffi::GFALSE) }
         }
     }
 
     #[cfg(any(GTK_3_10, GTK_3_12))]
     pub fn get_show_close_button(&self) -> bool {
         match unsafe { ffi::gtk_info_bar_get_show_close_button(GTK_INFOBAR(self.pointer)) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }

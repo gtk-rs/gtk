@@ -55,16 +55,16 @@ impl Paned {
     }
 
     pub fn pack1<T: traits::Widget>(&mut self, child: &T, resize: bool, schrink: bool) -> () {
-        let r = if resize { ffi::Gtrue } else { ffi::Gfalse };
-        let s = if schrink { ffi::Gtrue } else { ffi::Gfalse };
+        let r = if resize { ffi::GTRUE } else { ffi::GFALSE };
+        let s = if schrink { ffi::GTRUE } else { ffi::GFALSE };
         unsafe {
             ffi::gtk_paned_pack1(GTK_PANED(self.pointer), child.get_widget(), r, s);
         }
     }
 
     pub fn pack2<T: traits::Widget>(&mut self, child: &T, resize: bool, schrink: bool) -> () {
-        let r = if resize { ffi::Gtrue } else { ffi::Gfalse };
-        let s = if schrink { ffi::Gtrue } else { ffi::Gfalse };
+        let r = if resize { ffi::GTRUE } else { ffi::GFALSE };
+        let s = if schrink { ffi::GTRUE } else { ffi::GFALSE };
         unsafe {
             ffi::gtk_paned_pack2(GTK_PANED(self.pointer), child.get_widget(), r, s);
         }

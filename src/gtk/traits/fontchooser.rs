@@ -63,15 +63,15 @@ pub trait FontChooser: traits::Widget {
 
     fn get_show_preview_entry(&self) -> bool {
         match unsafe { ffi::gtk_font_chooser_get_show_preview_entry(GTK_FONT_CHOOSER(self.get_widget())) } {
-            ffi::Gtrue => true,
+            ffi::GTRUE => true,
             _ => false
         }
     }
 
     fn set_show_preview_entry(&self, show_preview_entry: bool) {
         unsafe { ffi::gtk_font_chooser_set_show_preview_entry(GTK_FONT_CHOOSER(self.get_widget()), match show_preview_entry {
-            true => ffi::Gtrue,
-            false => ffi::Gfalse
+            true => ffi::GTRUE,
+            false => ffi::GFALSE
         }) }
     }
 }
