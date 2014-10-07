@@ -25,10 +25,8 @@ use glib;
 pub type Gboolean = c_int;
 //pub type C_GtkAllocation = C_GdkRectangle;
 pub type GType = c_int;
-#[allow(non_uppercase_statics)]
-pub static Gfalse:  c_int = 0;
-#[allow(non_uppercase_statics)]
-pub static Gtrue:   c_int = !Gfalse;
+pub static GFALSE:  c_int = 0;
+pub static GTRUE:   c_int = !GFALSE;
 
 pub type gpointer = *const c_void;
 pub type time_t = i64;
@@ -317,13 +315,13 @@ pub struct C_GtkIconView;
 
 pub fn to_gboolean(b: bool) -> Gboolean {
     match b {
-        true => Gtrue,
-        false => Gfalse
+        true => GTRUE,
+        false => GFALSE
     }
 }
 
 pub fn to_bool(b: Gboolean) -> bool {
-    b == Gtrue
+    b == GTRUE
 }
 
 pub trait FFIWidget {

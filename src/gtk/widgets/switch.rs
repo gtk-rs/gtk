@@ -33,14 +33,14 @@ impl Switch {
 
     pub fn set_active(&mut self, is_active: bool) -> () {
         match is_active {
-            true    => unsafe { ffi::gtk_switch_set_active(GTK_SWITCH(self.pointer), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_switch_set_active(GTK_SWITCH(self.pointer), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_switch_set_active(GTK_SWITCH(self.pointer), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_switch_set_active(GTK_SWITCH(self.pointer), ffi::GFALSE) }
         }
     }
 
     pub fn get_active(&self) -> bool {
         match unsafe { ffi::gtk_switch_get_active(GTK_SWITCH(self.pointer)) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }

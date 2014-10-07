@@ -92,15 +92,15 @@ impl LevelBar {
     #[cfg(any(GTK_3_8, GTK_3_10, GTK_3_12))]
     pub fn set_inverted(&mut self, inverted: bool) -> () {
         match inverted {
-            true    => unsafe { ffi::gtk_level_bar_set_inverted(GTK_LEVELBAR(self.pointer), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_level_bar_set_inverted(GTK_LEVELBAR(self.pointer), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_level_bar_set_inverted(GTK_LEVELBAR(self.pointer), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_level_bar_set_inverted(GTK_LEVELBAR(self.pointer), ffi::GFALSE) }
         }
     }
 
     #[cfg(any(GTK_3_8, GTK_3_10, GTK_3_12))]
     pub fn get_inverted(&self) -> bool {
         match unsafe { ffi::gtk_level_bar_get_inverted(GTK_LEVELBAR(self.pointer)) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }
@@ -124,7 +124,7 @@ impl LevelBar {
     pub fn get_offset_value(&self, name: &str) -> Option<f64> {
         let value = 0.;
         match unsafe { name.with_c_str(|c_str| { ffi::gtk_level_bar_get_offset_value(GTK_LEVELBAR(self.pointer), c_str, &value) }) } {
-            ffi::Gfalse     => None,
+            ffi::GFALSE     => None,
             _               => Some(value)
         }
     }

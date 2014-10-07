@@ -46,7 +46,7 @@ impl PrintSettings {
         match unsafe { key.with_c_str(|c_str| {
             ffi::gtk_print_settings_has_key(GTK_PRINT_SETTINGS(self.get_widget()), c_str)
         }) } {
-            ffi::Gtrue => true,
+            ffi::GTRUE => true,
             _ => false
         }
     }
@@ -81,7 +81,7 @@ impl PrintSettings {
         match unsafe { key.with_c_str(|c_str| {
             ffi::gtk_print_settings_get_bool(GTK_PRINT_SETTINGS(self.get_widget()), c_str)
         })} {
-            ffi::Gtrue => true,
+            ffi::GTRUE => true,
             _ => false
         }
     }
@@ -89,8 +89,8 @@ impl PrintSettings {
     pub fn set_bool(&self, key: &str, value: bool) {
         unsafe { key.with_c_str(|c_str| {
             ffi::gtk_print_settings_set_bool(GTK_PRINT_SETTINGS(self.get_widget()), c_str, match value {
-                true => ffi::Gtrue,
-                false => ffi::Gfalse
+                true => ffi::GTRUE,
+                false => ffi::GFALSE
             })
         })}
     }
@@ -199,43 +199,43 @@ impl PrintSettings {
 
     pub fn get_use_color(&self) -> bool {
         match unsafe { ffi::gtk_print_settings_get_use_color(GTK_PRINT_SETTINGS(self.get_widget())) } {
-            ffi::Gtrue => true,
+            ffi::GTRUE => true,
             _ => false
         }
     }
 
     pub fn set_use_color(&self, use_color: bool) {
         unsafe { ffi::gtk_print_settings_set_use_color(GTK_PRINT_SETTINGS(self.get_widget()), match use_color {
-            true => ffi::Gtrue,
-            false => ffi::Gfalse
+            true => ffi::GTRUE,
+            false => ffi::GFALSE
         }) }
     }
 
     pub fn get_collate(&self) -> bool {
         match unsafe { ffi::gtk_print_settings_get_collate(GTK_PRINT_SETTINGS(self.get_widget())) } {
-            ffi::Gtrue => true,
+            ffi::GTRUE => true,
             _ => false
         }
     }
 
     pub fn set_collate(&self, collate: bool) {
         unsafe { ffi::gtk_print_settings_set_collate(GTK_PRINT_SETTINGS(self.get_widget()), match collate {
-            true => ffi::Gtrue,
-            false => ffi::Gfalse
+            true => ffi::GTRUE,
+            false => ffi::GFALSE
         }) }
     }
 
     pub fn get_reverse(&self) -> bool {
         match unsafe { ffi::gtk_print_settings_get_reverse(GTK_PRINT_SETTINGS(self.get_widget())) } {
-            ffi::Gtrue => true,
+            ffi::GTRUE => true,
             _ => false
         }
     }
 
     pub fn set_reverse(&self, reverse: bool) {
         unsafe { ffi::gtk_print_settings_set_reverse(GTK_PRINT_SETTINGS(self.get_widget()), match reverse {
-            true => ffi::Gtrue,
-            false => ffi::Gfalse
+            true => ffi::GTRUE,
+            false => ffi::GFALSE
         }) }
     }
 

@@ -24,70 +24,70 @@ use std::string;
 pub trait RecentChooser: traits::Widget {
     fn set_show_private(&self, show_private: bool) {
         unsafe { ffi::gtk_recent_chooser_set_show_private(GTK_RECENT_CHOOSER(self.get_widget()), match show_private {
-            true => ffi::Gtrue,
-            false => ffi::Gtrue
+            true => ffi::GTRUE,
+            false => ffi::GTRUE
         }) }
     }
 
     fn get_show_private(&self) -> bool {
         match unsafe { ffi::gtk_recent_chooser_get_show_private(GTK_RECENT_CHOOSER(self.get_widget())) } {
-            ffi::Gtrue => true,
+            ffi::GTRUE => true,
             _ => false
         }
     }
 
     fn set_show_not_found(&self, show_not_found: bool) {
         unsafe { ffi::gtk_recent_chooser_set_show_not_found(GTK_RECENT_CHOOSER(self.get_widget()), match show_not_found {
-            true => ffi::Gtrue,
-            false => ffi::Gtrue
+            true => ffi::GTRUE,
+            false => ffi::GTRUE
         }) }
     }
 
     fn get_show_not_found(&self) -> bool {
         match unsafe { ffi::gtk_recent_chooser_get_show_not_found(GTK_RECENT_CHOOSER(self.get_widget())) } {
-            ffi::Gtrue => true,
+            ffi::GTRUE => true,
             _ => false
         }
     }
 
     fn set_show_icons(&self, show_icons: bool) {
         unsafe { ffi::gtk_recent_chooser_set_show_icons(GTK_RECENT_CHOOSER(self.get_widget()), match show_icons {
-            true => ffi::Gtrue,
-            false => ffi::Gtrue
+            true => ffi::GTRUE,
+            false => ffi::GTRUE
         }) }
     }
 
     fn get_show_icons(&self) -> bool {
         match unsafe { ffi::gtk_recent_chooser_get_show_icons(GTK_RECENT_CHOOSER(self.get_widget())) } {
-            ffi::Gtrue => true,
+            ffi::GTRUE => true,
             _ => false
         }
     }
 
     fn set_select_multiple(&self, select_multiple: bool) {
         unsafe { ffi::gtk_recent_chooser_set_select_multiple(GTK_RECENT_CHOOSER(self.get_widget()), match select_multiple {
-            true => ffi::Gtrue,
-            false => ffi::Gtrue
+            true => ffi::GTRUE,
+            false => ffi::GTRUE
         }) }
     }
 
     fn get_select_multiple(&self) -> bool {
         match unsafe { ffi::gtk_recent_chooser_get_select_multiple(GTK_RECENT_CHOOSER(self.get_widget())) } {
-            ffi::Gtrue => true,
+            ffi::GTRUE => true,
             _ => false
         }
     }
 
     fn set_local_only(&self, local_only: bool) {
         unsafe { ffi::gtk_recent_chooser_set_local_only(GTK_RECENT_CHOOSER(self.get_widget()), match local_only {
-            true => ffi::Gtrue,
-            false => ffi::Gtrue
+            true => ffi::GTRUE,
+            false => ffi::GTRUE
         }) }
     }
 
     fn get_local_only(&self) -> bool {
         match unsafe { ffi::gtk_recent_chooser_get_local_only(GTK_RECENT_CHOOSER(self.get_widget())) } {
-            ffi::Gtrue => true,
+            ffi::GTRUE => true,
             _ => false
         }
     }
@@ -102,14 +102,14 @@ pub trait RecentChooser: traits::Widget {
 
     fn set_show_tips(&self, show_tips: bool) {
         unsafe { ffi::gtk_recent_chooser_set_show_tips(GTK_RECENT_CHOOSER(self.get_widget()), match show_tips {
-            true => ffi::Gtrue,
-            false => ffi::Gtrue
+            true => ffi::GTRUE,
+            false => ffi::GTRUE
         }) }
     }
 
     fn get_show_tips(&self) -> bool {
         match unsafe { ffi::gtk_recent_chooser_get_show_tips(GTK_RECENT_CHOOSER(self.get_widget())) } {
-            ffi::Gtrue => true,
+            ffi::GTRUE => true,
             _ => false
         }
     }
@@ -146,7 +146,7 @@ pub trait RecentChooser: traits::Widget {
         match unsafe { uri.with_c_str(|c_str| {
             ffi::gtk_recent_chooser_unselect_uri(GTK_RECENT_CHOOSER(self.get_widget()), c_str)
         })} {
-            ffi::Gtrue => true,
+            ffi::GTRUE => true,
             _ => false
         }
     }

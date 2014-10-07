@@ -61,8 +61,8 @@ pub trait Entry: Widget {
 
     fn set_visibility(&mut self, visible: bool) -> () {
         match visible {
-            true    => unsafe { ffi::gtk_entry_set_visibility(GTK_ENTRY(self.get_widget()), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_entry_set_visibility(GTK_ENTRY(self.get_widget()), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_entry_set_visibility(GTK_ENTRY(self.get_widget()), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_entry_set_visibility(GTK_ENTRY(self.get_widget()), ffi::GFALSE) }
         }
     }
 
@@ -86,14 +86,14 @@ pub trait Entry: Widget {
 
     fn get_activates_default(&self) -> bool {
         match unsafe { ffi::gtk_entry_get_activates_default(GTK_ENTRY(self.get_widget())) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }
 
     fn get_has_frame(&self) -> bool {
         match unsafe { ffi::gtk_entry_get_has_frame(GTK_ENTRY(self.get_widget())) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }
@@ -106,15 +106,15 @@ pub trait Entry: Widget {
 
     fn set_activates_default(&mut self, setting: bool) {
         match setting {
-            true    => unsafe { ffi::gtk_entry_set_activates_default(GTK_ENTRY(self.get_widget()), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_entry_set_activates_default(GTK_ENTRY(self.get_widget()), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_entry_set_activates_default(GTK_ENTRY(self.get_widget()), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_entry_set_activates_default(GTK_ENTRY(self.get_widget()), ffi::GFALSE) }
         }
     }
 
     fn set_has_frame(&mut self, setting: bool) {
         match setting {
-            true    => unsafe { ffi::gtk_entry_set_has_frame(GTK_ENTRY(self.get_widget()), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_entry_set_has_frame(GTK_ENTRY(self.get_widget()), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_entry_set_has_frame(GTK_ENTRY(self.get_widget()), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_entry_set_has_frame(GTK_ENTRY(self.get_widget()), ffi::GFALSE) }
         }
     }
 
@@ -159,15 +159,15 @@ pub trait Entry: Widget {
 
     fn get_overwrite_mode(&self) -> bool {
         match unsafe { ffi::gtk_entry_get_overwrite_mode(GTK_ENTRY(self.get_widget())) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }
 
     fn set_overwrite_mode(&mut self, overwrite: bool) {
         match overwrite {
-            true    => unsafe { ffi::gtk_entry_set_overwrite_mode(GTK_ENTRY(self.get_widget()), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_entry_set_overwrite_mode(GTK_ENTRY(self.get_widget()), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_entry_set_overwrite_mode(GTK_ENTRY(self.get_widget()), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_entry_set_overwrite_mode(GTK_ENTRY(self.get_widget()), ffi::GFALSE) }
         }
     }
 
@@ -200,7 +200,7 @@ pub trait Entry: Widget {
 
     fn get_visibility(&self) -> bool {
         match unsafe { ffi::gtk_entry_get_visibility(GTK_ENTRY(self.get_widget())) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }
@@ -289,29 +289,29 @@ pub trait Entry: Widget {
 
     fn get_icon_activatable(&self, icon_pos: EntryIconPosition) -> bool {
         match unsafe { ffi::gtk_entry_get_icon_activatable(GTK_ENTRY(self.get_widget()), icon_pos) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }
 
     fn set_icon_activatable(&mut self, icon_pos: EntryIconPosition, activatable: bool) {
         match activatable {
-            true    => unsafe { ffi::gtk_entry_set_icon_activatable(GTK_ENTRY(self.get_widget()), icon_pos, ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_entry_set_icon_activatable(GTK_ENTRY(self.get_widget()), icon_pos, ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_entry_set_icon_activatable(GTK_ENTRY(self.get_widget()), icon_pos, ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_entry_set_icon_activatable(GTK_ENTRY(self.get_widget()), icon_pos, ffi::GFALSE) }
         }
     }
 
     fn get_icon_sensitive(&self, icon_pos: EntryIconPosition) -> bool {
         match unsafe { ffi::gtk_entry_get_icon_sensitive(GTK_ENTRY(self.get_widget()), icon_pos) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }
 
     fn set_icon_sensitive(&mut self, icon_pos: EntryIconPosition, sensitive: bool) {
         match sensitive {
-            true    => unsafe { ffi::gtk_entry_set_icon_sensitive(GTK_ENTRY(self.get_widget()), icon_pos, ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_entry_set_icon_sensitive(GTK_ENTRY(self.get_widget()), icon_pos, ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_entry_set_icon_sensitive(GTK_ENTRY(self.get_widget()), icon_pos, ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_entry_set_icon_sensitive(GTK_ENTRY(self.get_widget()), icon_pos, ffi::GFALSE) }
         }
     }
 

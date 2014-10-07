@@ -85,8 +85,8 @@ impl Toolbar {
 
     pub fn set_show_arrow(&mut self, show_arrow: bool) -> () {
         match show_arrow {
-            true    => unsafe { ffi::gtk_toolbar_set_show_arrow(GTK_TOOLBAR(self.pointer), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_toolbar_set_show_arrow(GTK_TOOLBAR(self.pointer), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_toolbar_set_show_arrow(GTK_TOOLBAR(self.pointer), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_toolbar_set_show_arrow(GTK_TOOLBAR(self.pointer), ffi::GFALSE) }
         }
     }
 
@@ -98,7 +98,7 @@ impl Toolbar {
 
     pub fn get_show_arrow(&self) -> bool {
         match unsafe { ffi::gtk_toolbar_get_show_arrow(GTK_TOOLBAR(self.pointer)) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }

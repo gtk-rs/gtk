@@ -21,15 +21,15 @@ pub trait ToggleToolButton: Widget + Container + Bin + ToolItem + ToolButton {
 
     fn get_active(&self) -> bool {
         match unsafe { ffi::gtk_toggle_tool_button_get_active(GTK_TOGGLETOOLBUTTON(self.get_widget())) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }
 
     fn set_active(&mut self, set_underline: bool) -> () {
          match set_underline {
-            true    => unsafe { ffi::gtk_toggle_tool_button_set_active(GTK_TOGGLETOOLBUTTON(self.get_widget()), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_toggle_tool_button_set_active(GTK_TOGGLETOOLBUTTON(self.get_widget()), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_toggle_tool_button_set_active(GTK_TOGGLETOOLBUTTON(self.get_widget()), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_toggle_tool_button_set_active(GTK_TOGGLETOOLBUTTON(self.get_widget()), ffi::GFALSE) }
         }
     }
 }

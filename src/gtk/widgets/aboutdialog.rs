@@ -125,15 +125,15 @@ impl AboutDialog {
 
     pub fn get_wrap_license(&self) -> bool {
         match unsafe { ffi::gtk_about_dialog_get_wrap_license(GTK_ABOUT_DIALOG(self.get_widget())) } {
-            ffi::Gfalse => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }
 
     pub fn set_wrap_license(&self, wrap_license: bool) -> () {
         unsafe { ffi::gtk_about_dialog_set_wrap_license(GTK_ABOUT_DIALOG(self.get_widget()), match wrap_license {
-            true => ffi::Gtrue,
-            _ => ffi::Gfalse
+            true => ffi::GTRUE,
+            _ => ffi::GFALSE
         }) }
     }
 

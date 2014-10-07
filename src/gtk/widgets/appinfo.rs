@@ -46,7 +46,7 @@ impl AppInfo {/*
 
     pub fn equals(&self, other: &AppInfo) -> bool {
         match unsafe { ffi::g_app_info_equal(GTK_APP_INFO(self.get_widget()), GTK_APP_INFO(other.get_widget())) } {
-            ffi::Gtrue => true,
+            ffi::GTRUE => true,
             _ => false
         }
     }
@@ -116,21 +116,21 @@ impl AppInfo {/*
             files.unwrap(),
             GTK_APP_LAUNCH_CONTEXT(launch_context.get_widget()),
             &mut error.unwrap()) } {
-            ffi::Gtrue => true,
+            ffi::GTRUE => true,
             _ => false
         }
     }
 
     pub fn supports_files(&self) -> bool {
         match unsafe { ffi::g_app_info_supports_files(GTK_APP_INFO(self.get_widget())) } {
-            ffi::Gtrue => true,
+            ffi::GTRUE => true,
             _ => false
         }
     }
 
     pub fn supports_uris(&self) -> bool {
         match unsafe { ffi::g_app_info_supports_uris(GTK_APP_INFO(self.get_widget())) } {
-            ffi::Gtrue => true,
+            ffi::GTRUE => true,
             _ => false
         }
     }
@@ -140,28 +140,28 @@ impl AppInfo {/*
             uris.unwrap(),
             GTK_APP_LAUNCH_CONTEXT(launch_context.get_widget()),
             &mut error.unwrap()) } {
-            ffi::Gtrue => true,
+            ffi::GTRUE => true,
             _ => false
         }
     }
 
     pub fn should_show(&self) -> bool {
         match unsafe { ffi::g_app_info_should_show(GTK_APP_INFO(self.get_widget())) } {
-            ffi::Gtrue => true,
+            ffi::GTRUE => true,
             _ => false
         }
     }
 
     pub fn can_delete(&self) -> bool {
         match unsafe { ffi::g_app_info_can_delete(GTK_APP_INFO(self.get_widget())) } {
-            ffi::Gtrue => true,
+            ffi::GTRUE => true,
             _ => false
         }
     }
 
     pub fn delete(&self) -> bool {
         match unsafe { ffi::g_app_info_delete(GTK_APP_INFO(self.get_widget())) } {
-            ffi::Gtrue => true,
+            ffi::GTRUE => true,
             _ => false
         }
     }
@@ -180,7 +180,7 @@ impl AppInfo {/*
                 ffi::g_app_info_set_as_default_for_type(GTK_APP_INFO(self.get_widget()), c_str, &mut error.unwrap())
             })
         } {
-            ffi::Gtrue => true,
+            ffi::GTRUE => true,
             _ => false
         }
     }
@@ -191,7 +191,7 @@ impl AppInfo {/*
                 ffi::g_app_info_set_as_default_for_extension(GTK_APP_INFO(self.get_widget()), c_str, &mut error.unwrap())
             })
         } {
-            ffi::Gtrue => true,
+            ffi::GTRUE => true,
             _ => false
         }
     }
@@ -202,7 +202,7 @@ impl AppInfo {/*
                 ffi::g_app_info_set_as_last_used_for_type(GTK_APP_INFO(self.get_widget()), c_str, &mut error.unwrap())
             })
         } {
-            ffi::Gtrue => true,
+            ffi::GTRUE => true,
             _ => false
         }
     }
@@ -213,14 +213,14 @@ impl AppInfo {/*
                 ffi::g_app_info_add_supports_type(GTK_APP_INFO(self.get_widget()), c_str, &mut error.unwrap())
             })
         } {
-            ffi::Gtrue => true,
+            ffi::GTRUE => true,
             _ => false
         }
     }
 
     pub fn can_remove_supports_type(&self) -> bool {
         match unsafe { ffi::g_app_info_can_remove_supports_type(GTK_APP_INFO(self.get_widget())) } {
-            ffi::Gtrue => true,
+            ffi::GTRUE => true,
             _ => false
         }
     }
@@ -231,7 +231,7 @@ impl AppInfo {/*
                 ffi::g_app_info_remove_supports_type(GTK_APP_INFO(self.get_widget()), c_str, &mut error.unwrap())
             })
         } {
-            ffi::Gtrue => true,
+            ffi::GTRUE => true,
             _ => false
         }
     }
@@ -282,8 +282,8 @@ impl AppInfo {/*
         let tmp_pointer = unsafe {
             content_type.with_c_str(|c_str| {
                 ffi::g_app_info_get_default_for_type(c_str, match must_support_uris {
-                    true => ffi::Gtrue,
-                    false => ffi::Gfalse
+                    true => ffi::GTRUE,
+                    false => ffi::GFALSE
                 }) })
         };
 
@@ -342,7 +342,7 @@ impl AppInfo {/*
                 ffi::g_app_info_launch_default_for_uri(c_str, GTK_APP_LAUNCH_CONTEXT(launch_context.get_widget()), &mut error.unwrap())
             })
         } {
-            ffi::Gtrue => true,
+            ffi::GTRUE => true,
             _ => false
         }
     }*/

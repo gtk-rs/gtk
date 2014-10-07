@@ -30,14 +30,14 @@ impl SeparatorToolItem {
 
     pub fn set_draw(&mut self, draw: bool) -> () {
         match draw {
-            true    => unsafe { ffi::gtk_separator_tool_item_set_draw(GTK_SEPARATORTOOLITEM(self.pointer), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_separator_tool_item_set_draw(GTK_SEPARATORTOOLITEM(self.pointer), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_separator_tool_item_set_draw(GTK_SEPARATORTOOLITEM(self.pointer), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_separator_tool_item_set_draw(GTK_SEPARATORTOOLITEM(self.pointer), ffi::GFALSE) }
         }
     }
 
     pub fn get_draw(&self) -> bool {
         match unsafe { ffi::gtk_separator_tool_item_get_draw(GTK_SEPARATORTOOLITEM(self.pointer)) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }
