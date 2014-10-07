@@ -74,18 +74,14 @@ impl TreeView {
         }
     }
 
-    #[cfg(GTK_3_8)]
-    #[cfg(GTK_3_10)]
-    #[cfg(GTK_3_12)]
+    #[cfg(any(GTK_3_8, GTK_3_10, GTK_3_12))]
     pub fn activate_on_single_click(&self) -> bool {
         unsafe {
             ffi::to_bool(ffi::gtk_tree_view_get_activate_on_single_click(GTK_TREE_VIEW(self.pointer)))
         }
     }
 
-    #[cfg(GTK_3_8)]
-    #[cfg(GTK_3_10)]
-    #[cfg(GTK_3_12)]
+    #[cfg(any(GTK_3_8, GTK_3_10, GTK_3_12))]
     pub fn set_activate_on_single_click(&mut self, setting: bool) {
         unsafe {
             ffi::gtk_tree_view_set_activate_on_single_click(GTK_TREE_VIEW(self.pointer),
@@ -93,11 +89,7 @@ impl TreeView {
         }
     }
 
-    #[cfg(GTK_3_4)]
-    #[cfg(GTK_3_6)]
-    #[cfg(GTK_3_8)]
-    #[cfg(GTK_3_10)]
-    #[cfg(GTK_3_12)]
+    #[cfg(any(GTK_3_4, GTK_3_6, GTK_3_8, GTK_3_10, GTK_3_12))]
     pub fn get_n_columns(&self) -> uint {
         unsafe {
             ffi::gtk_tree_view_get_n_columns(GTK_TREE_VIEW(self.pointer)) as uint
