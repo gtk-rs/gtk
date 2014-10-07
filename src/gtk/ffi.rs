@@ -217,6 +217,8 @@ pub struct C_GtkCellLayout;
 #[repr(C)]
 pub struct C_GtkTreeModel;
 #[repr(C)]
+pub struct C_GtkTreeStore;
+#[repr(C)]
 pub struct C_GtkTreePath;
 #[repr(C)]
 pub struct C_GtkTreeIter;
@@ -772,6 +774,12 @@ extern "C" {
     pub fn gtk_tree_model_row_deleted(tree_model: *mut C_GtkTreeModel, path: *mut C_GtkTreePath) -> ();
     pub fn gtk_tree_model_rows_reordered(tree_model: *mut C_GtkTreeModel, path: *mut C_GtkTreePath, iter: *mut C_GtkTreeIter,
         new_order: *mut c_int) -> ();
+
+    //=========================================================================
+    // GtkTreeStore                                                      NOT OK
+    //=========================================================================
+
+    pub fn gtk_tree_store_newv(n_columns: c_int, column_types: &[c_ulong]) -> *mut C_GtkTreeStore;
 
     //=========================================================================
     // GtkTreeIter                                                           OK
@@ -2433,9 +2441,9 @@ extern "C" {
     pub fn gtk_tree_view_get_level_indentation  (tree_view: *mut C_GtkTreeView) -> c_int;
     pub fn gtk_tree_view_set_tooltip_column (tree_view: *mut C_GtkTreeView, column: c_int);
     pub fn gtk_tree_view_get_tooltip_column (tree_view: *mut C_GtkTreeView) -> c_int;
-    // pub fn gtk_tree_view_new_with_model                (model: *mut C_GtkTreeModel) -> *mut C_GtkWidget;
-    // pub fn gtk_tree_view_get_model                     (tree_view: *mut C_GtkTreeView) -> *mut C_GtkTreeModel;
-    // pub fn gtk_tree_view_set_model                     (tree_view: *mut C_GtkTreeView, model: *mut C_GtkTreeModel);
+    pub fn gtk_tree_view_new_with_model                (model: *mut C_GtkTreeModel) -> *mut C_GtkWidget;
+    pub fn gtk_tree_view_get_model                     (tree_view: *mut C_GtkTreeView) -> *mut C_GtkTreeModel;
+    pub fn gtk_tree_view_set_model                     (tree_view: *mut C_GtkTreeView, model: *mut C_GtkTreeModel);
     // pub fn gtk_tree_view_get_selection                 (tree_view: *mut C_GtkTreeView) -> *mut C_GtkTreeSelection;
     // pub fn gtk_tree_view_set_tooltip_row    (tree_view: *C_GtkTreeView, GtkTooltip        *tooltip, GtkTreePath       *path);
     // pub fn gtk_tree_view_set_tooltip_cell   (tree_view: *C_GtkTreeView, GtkTooltip        *tooltip, GtkTreePath       *path, GtkTreeViewColumn *column, GtkCellRenderer   *cell);
@@ -2782,4 +2790,5 @@ extern "C" {
     pub fn cast_GtkActionable(widget: *mut C_GtkWidget) -> *mut C_GtkActionable;
     pub fn cast_GtkCellLayout(widget: *mut C_GtkWidget) -> *mut C_GtkCellLayout;
     pub fn cast_GtkEntryCompletion(widget: *mut C_GtkWidget) -> *mut C_GtkEntryCompletion;
+    pub fn cast_GtkTreeModelFromTreeStore(store: *mut C_GtkTreeStore) -> *mut C_GtkTreeModel;
 }

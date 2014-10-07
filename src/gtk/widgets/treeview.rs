@@ -18,7 +18,7 @@
 use gtk;
 use gtk::ffi::{mod, FFIWidget};
 use gtk::traits;
-use gtk::cast::GTK_TREE_VIEW;
+use gtk::cast::{GTK_TREE_VIEW, GTK_TREE_MODEL_FROM_TREE_STORE};
 
 /// TreeView — A widget for displaying both trees and lists
 struct_Widget!(TreeView)
@@ -26,6 +26,11 @@ struct_Widget!(TreeView)
 impl TreeView {
     pub fn new() -> Option<TreeView> {
         let tmp_pointer = unsafe { ffi::gtk_tree_view_new() };
+        check_pointer!(tmp_pointer, TreeView)
+    }
+
+    pub fn new_with_model(model: &gtk::TreeModel) -> Option<TreeView> {
+        let tmp_pointer = unsafe { ffi::gtk_tree_view_new_with_model(model.get_pointer()) };
         check_pointer!(tmp_pointer, TreeView)
     }
 
@@ -365,6 +370,23 @@ impl TreeView {
         unsafe {
             ffi::gtk_tree_view_set_tooltip_column(GTK_TREE_VIEW(self.pointer),
                                                   column)
+        }
+    }
+
+    pub fn model(&self) -> Option<gtk::TreeModel> {
+        let tmp_pointer = unsafe { ffi::gtk_tree_view_get_model(GTK_TREE_VIEW(self.pointer)) };
+
+        if tmp_pointer.is_null() {
+            None
+        } else {
+            Some(gtk::TreeModel::wrap_pointer(tmp_pointer))
+        }
+    }
+
+    pub fn set_model(&mut self, store: &gtk::TreeStore) {
+        unsafe {
+            ffi::gtk_tree_view_set_model(GTK_TREE_VIEW(self.pointer),
+                                         GTK_TREE_MODEL_FROM_TREE_STORE(store.get_pointer()))
         }
     }
 }

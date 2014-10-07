@@ -17,7 +17,7 @@
 Bindings and wrappers for __GLib__
 */
 
-use libc::c_char;
+use libc::{c_char, c_ulong};
 
 pub use self::list::{List, Elem, RevElem};
 pub use self::slist::{SList, SElem};
@@ -56,7 +56,7 @@ pub enum ParamFlags{
     Deprecated
 }
 
-pub type GType = uint; //FIXME: this is probably wrong
+pub type GType = c_ulong;
 
 pub struct ParamSpec {
     g_type_instance: TypeInstance,

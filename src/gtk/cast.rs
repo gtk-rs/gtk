@@ -408,3 +408,7 @@ pub fn GTK_CELL_LAYOUT(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkCellLayo
 pub fn GTK_ENTRY_COMPLETION(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkEntryCompletion {
     unsafe { ffi::cast_GtkEntryCompletion(widget) }
 }
+
+pub fn GTK_TREE_MODEL_FROM_TREE_STORE(store: *mut ffi::C_GtkTreeStore) -> *mut ffi::C_GtkTreeModel {
+    unsafe { ffi::cast_GtkTreeModelFromTreeStore(store) }
+}
