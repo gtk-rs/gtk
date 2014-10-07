@@ -252,7 +252,8 @@ pub use self::enums::{
     tree_view_grid_lines,
     tree_view_column_sizing,
     cell_renderer_state,
-    tree_model_flags
+    tree_model_flags,
+    icon_view_drop_position
 };
 
 /// GTK Enum types
@@ -330,7 +331,8 @@ pub use self::enums::{
     TreeViewGridLines,
     TreeViewColumnSizing,
     CellRendererState,
-    TreeModelFlags
+    TreeModelFlags,
+    IconViewDropPosition
 };
 
 /// GTK various struct
