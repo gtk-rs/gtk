@@ -956,7 +956,7 @@ extern "C" {
     // GtkIconView                                                       NOT OK
     //=========================================================================
     pub fn gtk_icon_view_new                   () -> *mut C_GtkWidget;
-    pub fn gtk_icon_view_new_with_area         (area: *mut C_GtkCellArea) -> *mut C_GtkWidget;
+    //pub fn gtk_icon_view_new_with_area         (area: *mut C_GtkCellArea) -> *mut C_GtkWidget;
     pub fn gtk_icon_view_new_with_model        (model: *mut C_GtkTreeModel) -> *mut C_GtkWidget;
     pub fn gtk_icon_view_set_model             (icon_view: *mut C_GtkIconView, model: *mut C_GtkTreeModel);
     pub fn gtk_icon_view_get_model             (icon_view: *mut C_GtkIconView) -> *mut C_GtkTreeModel;
@@ -976,10 +976,10 @@ extern "C" {
     pub fn gtk_icon_view_get_cursor            (icon_view: *mut C_GtkIconView, path: *mut *mut C_GtkTreePath,
         cell: *mut *mut C_GtkCellRenderer) -> Gboolean;
     //pub fn gtk_icon_view_selected_foreach      (icon_view: *mut C_GtkIconView, func: GtkIconViewForeachFunc, data: gpointer);
-    pub fn gtk_icon_view_set_selection_mode    (icon_view: *mut C_GtkIconView, mode: enums::SelectionMode);
-    pub fn gtk_icon_view_get_selection_mode    (icon_view: *mut C_GtkIconView) -> enums::SelectionMode;
-    pub fn gtk_icon_view_set_item_orientation  (icon_view: *mut C_GtkIconView, orientation: enums::Orientation);
-    pub fn gtk_icon_view_get_item_orientation  (icon_view: *mut C_GtkIconView) -> enums::Orientation;
+    pub fn gtk_icon_view_set_selection_mode    (icon_view: *mut C_GtkIconView, mode: gtk::SelectionMode);
+    pub fn gtk_icon_view_get_selection_mode    (icon_view: *mut C_GtkIconView) -> gtk::SelectionMode;
+    pub fn gtk_icon_view_set_item_orientation  (icon_view: *mut C_GtkIconView, orientation: gtk::Orientation);
+    pub fn gtk_icon_view_get_item_orientation  (icon_view: *mut C_GtkIconView) -> gtk::Orientation;
     pub fn gtk_icon_view_set_columns           (icon_view: *mut C_GtkIconView, column: c_int);
     pub fn gtk_icon_view_get_columns           (icon_view: *mut C_GtkIconView) -> c_int;
     pub fn gtk_icon_view_set_item_width        (icon_view: *mut C_GtkIconView, item_width: c_int);
@@ -996,16 +996,16 @@ extern "C" {
     pub fn gtk_icon_view_get_item_padding      (icon_view: *mut C_GtkIconView) -> c_int;
     pub fn gtk_icon_view_set_activate_on_single_click(icon_view: *mut C_GtkIconView, single: Gboolean);
     pub fn gtk_icon_view_get_activate_on_single_click(icon_view: *mut C_GtkIconView) -> Gboolean;
-    pub fn gtk_icon_view_get_cell_rect         (icon_view: *mut C_GtkIconView, path: *mut C_GtkTreePath, cell: *mut C_GtkCellRenderer,
-        rect: *mut GdkRectangle) -> Gboolean;
+    //pub fn gtk_icon_view_get_cell_rect         (icon_view: *mut C_GtkIconView, path: *mut C_GtkTreePath, cell: *mut C_GtkCellRenderer,
+    //    rect: *mut GdkRectangle) -> Gboolean;
     pub fn gtk_icon_view_select_path           (icon_view: *mut C_GtkIconView, path: *mut C_GtkTreePath);
     pub fn gtk_icon_view_unselect_path         (icon_view: *mut C_GtkIconView, path: *mut C_GtkTreePath);
     pub fn gtk_icon_view_path_is_selected      (icon_view: *mut C_GtkIconView, path: *mut C_GtkTreePath) -> Gboolean;
-    pub fn gtk_icon_view_get_selected_items    (icon_view: *mut C_GtkIconView) -> *mut GList;
+    //pub fn gtk_icon_view_get_selected_items    (icon_view: *mut C_GtkIconView) -> *mut GList;
     pub fn gtk_icon_view_select_all            (icon_view: *mut C_GtkIconView);
     pub fn gtk_icon_view_unselect_all          (icon_view: *mut C_GtkIconView);
     pub fn gtk_icon_view_item_activated        (icon_view: *mut C_GtkIconView, path: *mut C_GtkTreePath);
-    pub fn gtk_icon_view_item_activated        (icon_view: *mut C_GtkIconView, path: *mut C_GtkTreePath, use_align: Gboolean,
+    pub fn gtk_icon_view_scroll_to_path        (icon_view: *mut C_GtkIconView, path: *mut C_GtkTreePath, use_align: Gboolean,
         row_align: c_float, col_align: c_float);
     pub fn gtk_icon_view_get_visible_range     (icon_view: *mut C_GtkIconView, start_path: *mut *mut C_GtkTreePath,
         end_path: *mut *mut C_GtkTreePath) -> Gboolean;
@@ -1026,11 +1026,11 @@ extern "C" {
     pub fn gtk_icon_view_unset_model_drag_dest (icon_view: *mut C_GtkIconView);
     pub fn gtk_icon_view_set_reorderable       (icon_view: *mut C_GtkIconView, reorderable: Gboolean);
     pub fn gtk_icon_view_get_reorderable       (icon_view: *mut C_GtkIconView) -> Gboolean;
-    pub fn gtk_icon_view_set_drag_dest_item    (icon_view: *mut C_GtkIconView, path: *mut C_GtkTreePath, pos: enums::IconViewDropPosition);
+    pub fn gtk_icon_view_set_drag_dest_item    (icon_view: *mut C_GtkIconView, path: *mut C_GtkTreePath, pos: gtk::IconViewDropPosition);
     pub fn gtk_icon_view_get_drag_dest_item    (icon_view: *mut C_GtkIconView, path: *mut *mut C_GtkTreePath,
-        pos: *mut enums::IconViewDropPosition);
+        pos: *mut gtk::IconViewDropPosition);
     pub fn gtk_icon_view_get_dest_item_at_pos  (icon_view: *mut C_GtkIconView, drag_x: c_int, drag_y: c_int, path: *mut *mut C_GtkTreePath,
-        pos: *mut enums::IconViewDropPosition);
+        pos: *mut gtk::IconViewDropPosition);
     //pub fn gtk_icon_view_create_drag_icon      (icon_view: *mut C_GtkIconView, path: *mut C_GtkTreePath) -> *mut cairo_surface_t;
 
     //pub type GtkIconViewForeachFunc = fn(icon_view: *mut C_GtkIconView, path: *mut C_GtkTreePath, data: gpointer);
