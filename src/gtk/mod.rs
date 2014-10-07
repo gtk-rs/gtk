@@ -147,18 +147,14 @@ pub use self::widgets::{
     EntryCompletion
 };
 
-#[cfg(GTK_3_6)]
-#[cfg(GTK_3_8)]
-#[cfg(GTK_3_10)]
-#[cfg(GTK_3_12)]
+#[cfg(any(GTK_3_6, GTK_3_8, GTK_3_10, GTK_3_12))]
 /// GTK Widgets for versions since GTK 3.6
 pub use self::widgets::{
     MenuButton,
     LevelBar,
 };
 
-#[cfg(GTK_3_10)]
-#[cfg(GTK_3_12)]
+#[cfg(any(GTK_3_10, GTK_3_12))]
 /// GTK Widgets for versions since GTK 3.10
 pub use self::widgets::{
     SearchEntry,

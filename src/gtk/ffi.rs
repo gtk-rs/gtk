@@ -25,7 +25,9 @@ use glib;
 pub type Gboolean = c_int;
 //pub type C_GtkAllocation = C_GdkRectangle;
 pub type GType = c_int;
+#[allow(non_uppercase_statics)]
 pub static Gfalse:  c_int = 0;
+#[allow(non_uppercase_statics)]
 pub static Gtrue:   c_int = !Gfalse;
 
 pub type gpointer = *const c_void;
