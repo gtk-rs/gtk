@@ -75,6 +75,17 @@ You can also access a daily build of the docs via the internet:
 
 http://rust-ci.org/jeremyletang/rgtk/doc/rgtk/
 
+Including rgtk as a cargo dependency
+====================================
+
+To include rgtk as a cargo dependency you have to add it to your Cargo.toml and specify the GTK version you want using Cargo features
+```Toml
+[dependencies.rgtk]
+git = "https://github.com/jeremyletang/rgtk.git"
+features = ["GTK_3_12"]
+```
+Currently available GTK versions are 3.12, 3.10, 3.8 and 3.6
+
 Use __rgtk__
 ============
 
