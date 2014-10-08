@@ -55,7 +55,7 @@ impl TreeStore {
 
     // TODO: clear
 
-    // TODO: is_valid
+    // TODO: iter_is_valid
 
     // TODO: reorder
 
