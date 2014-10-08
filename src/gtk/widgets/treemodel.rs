@@ -31,7 +31,7 @@ impl TreeModel {
         unsafe { ffi::gtk_tree_model_get_n_columns(self.pointer) }
     }
 
-    pub fn get_column_type(&self, index_: i32) -> i32 {
+    pub fn get_column_type(&self, index_: i32) -> u64 {
         unsafe { ffi::gtk_tree_model_get_column_type(self.pointer, index_) }
     }
 

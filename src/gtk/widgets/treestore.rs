@@ -25,6 +25,46 @@ impl TreeStore {
         check_pointer!(tmp_pointer, TreeStore)
     }
 
+    pub fn set_column_types(&self, column_types: Vec<u64>) {
+        unsafe { ffi::gtk_tree_store_set_column_types(self.pointer, column_types.len().to_i32().unwrap(), column_types.as_slice()) }
+    }
+
+    // TODO: set_value
+
+    // TODO: set
+
+    // TODO: set_values
+
+    // TODO: remove
+
+    // TODO: insert
+
+    // TODO: insert_before
+
+    // TODO: insert_after
+
+    // TODO: insert_with_values
+
+    // TODO: prepend
+
+    // TODO: append
+
+    // TODO: is_ancestor
+
+    // TODO: iter_depth
+
+    // TODO: clear
+
+    // TODO: is_valid
+
+    // TODO: reorder
+
+    // TODO: swap
+
+    // TODO: move_before
+
+    // TODO: move_after
+
     #[doc(hidden)]
     pub fn get_pointer(&self) -> *mut ffi::C_GtkTreeStore {
         self.pointer

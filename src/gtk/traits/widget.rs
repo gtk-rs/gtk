@@ -136,7 +136,7 @@ pub trait Widget: ffi::FFIWidget {
         }
     }
 
-    fn get_ancestor(&self, widget_type: i32) -> Option<Self> {
+    fn get_ancestor(&self, widget_type: u64) -> Option<Self> {
         let tmp = unsafe { ffi::gtk_widget_get_ancestor(self.get_widget(), widget_type) };
 
         if tmp.is_null() {
