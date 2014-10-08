@@ -55,7 +55,7 @@ impl RecentData {
                     app_exec: string::raw::from_buf((*ptr).app_exec as *const u8),
                     groups: tmp_groups,
                     is_private: match (*ptr).is_private {
-                    	ffi::Gtrue => true,
+                    	ffi::GTRUE => true,
                     	_ => false
                     }
                 }
@@ -83,8 +83,8 @@ impl RecentData {
 		                        app_exec: c_app_exec as *mut c_char,
 		                        groups: t_groups.as_mut_ptr(),
 		                        is_private: match self.is_private {
-		                        	true => ffi::Gtrue,
-		                        	false => ffi::Gfalse
+		                        	true => ffi::GTRUE,
+		                        	false => ffi::GFALSE
 		                        }
 		                    }
                 		})

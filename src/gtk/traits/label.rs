@@ -90,28 +90,26 @@ pub trait Label : Widget {
 
     fn set_line_wrap(&mut self, wrap: bool) -> () {
         match wrap {
-            true    => unsafe { ffi::gtk_label_set_line_wrap(GTK_LABEL(self.get_widget()), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_label_set_line_wrap(GTK_LABEL(self.get_widget()), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_label_set_line_wrap(GTK_LABEL(self.get_widget()), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_label_set_line_wrap(GTK_LABEL(self.get_widget()), ffi::GFALSE) }
         }
     }
 
     fn get_line_wrap(&self) -> bool {
         match unsafe { ffi::gtk_label_get_line_wrap(GTK_LABEL(self.get_widget())) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }
 
-    #[cfg(GTK_3_10)]
-    #[cfg(GTK_3_12)]
+    #[cfg(any(GTK_3_10, GTK_3_12))]
     fn set_lines(&mut self, lines: i32) -> () {
         unsafe {
             ffi::gtk_label_set_lines(GTK_LABEL(self.get_widget()), lines as c_int);
         }
     }
 
-    #[cfg(GTK_3_10)]
-    #[cfg(GTK_3_12)]
+    #[cfg(any(GTK_3_10, GTK_3_12))]
     fn get_lines(&self) -> i32 {
         unsafe {
             ffi::gtk_label_get_lines(GTK_LABEL(self.get_widget())) as c_int
@@ -135,70 +133,70 @@ pub trait Label : Widget {
 
     fn set_selectable(&mut self, selectable: bool) -> () {
         match selectable {
-            true    => unsafe { ffi::gtk_label_set_selectable(GTK_LABEL(self.get_widget()), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_label_set_selectable(GTK_LABEL(self.get_widget()), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_label_set_selectable(GTK_LABEL(self.get_widget()), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_label_set_selectable(GTK_LABEL(self.get_widget()), ffi::GFALSE) }
         }
     }
 
     fn get_selectable(&self) -> bool {
         match unsafe { ffi::gtk_label_get_selectable(GTK_LABEL(self.get_widget())) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }
 
     fn set_use_markup(&mut self, use_markup: bool) -> () {
         match use_markup {
-            true    => unsafe { ffi::gtk_label_set_use_markup(GTK_LABEL(self.get_widget()), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_label_set_use_markup(GTK_LABEL(self.get_widget()), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_label_set_use_markup(GTK_LABEL(self.get_widget()), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_label_set_use_markup(GTK_LABEL(self.get_widget()), ffi::GFALSE) }
         }
     }
 
     fn get_use_markup(&self) -> bool {
         match unsafe { ffi::gtk_label_get_use_markup(GTK_LABEL(self.get_widget())) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }
 
     fn set_use_underline(&mut self, use_underline: bool) -> () {
         match use_underline {
-            true    => unsafe { ffi::gtk_label_set_use_underline(GTK_LABEL(self.get_widget()), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_label_set_use_underline(GTK_LABEL(self.get_widget()), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_label_set_use_underline(GTK_LABEL(self.get_widget()), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_label_set_use_underline(GTK_LABEL(self.get_widget()), ffi::GFALSE) }
         }
     }
 
     fn get_use_underline(&self) -> bool {
         match unsafe { ffi::gtk_label_get_use_underline(GTK_LABEL(self.get_widget())) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }
 
     fn set_single_line_mode(&mut self, single_line_mode: bool) -> () {
         match single_line_mode {
-            true    => unsafe { ffi::gtk_label_set_single_line_mode(GTK_LABEL(self.get_widget()), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_label_set_single_line_mode(GTK_LABEL(self.get_widget()), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_label_set_single_line_mode(GTK_LABEL(self.get_widget()), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_label_set_single_line_mode(GTK_LABEL(self.get_widget()), ffi::GFALSE) }
         }
     }
 
     fn get_single_line_mode(&self) -> bool {
         match unsafe { ffi::gtk_label_get_single_line_mode(GTK_LABEL(self.get_widget())) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }
 
     fn set_track_visited_links(&mut self, track_visited_links: bool) -> () {
         match track_visited_links {
-            true    => unsafe { ffi::gtk_label_set_track_visited_links(GTK_LABEL(self.get_widget()), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_label_set_track_visited_links(GTK_LABEL(self.get_widget()), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_label_set_track_visited_links(GTK_LABEL(self.get_widget()), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_label_set_track_visited_links(GTK_LABEL(self.get_widget()), ffi::GFALSE) }
         }
     }
 
     fn get_track_visited_links(&self) -> bool {
         match unsafe { ffi::gtk_label_get_track_visited_links(GTK_LABEL(self.get_widget())) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }

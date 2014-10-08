@@ -77,16 +77,14 @@ impl Grid {
         }
     }
 
-    #[cfg(GTK_3_10)]
-    #[cfg(GTK_3_12)]
+    #[cfg(any(GTK_3_10, GTK_3_12))]
      pub fn remove_row(&mut self, position: i32) -> () {
         unsafe {
             ffi::gtk_grid_remove_row(GTK_GRID(self.pointer), position as c_int);
         }
     }
 
-    #[cfg(GTK_3_10)]
-    #[cfg(GTK_3_12)]
+    #[cfg(any(GTK_3_10, GTK_3_12))]
      pub fn remove_column(&mut self, position: i32) -> () {
         unsafe {
             ffi::gtk_grid_remove_column(GTK_GRID(self.pointer), position as c_int);
@@ -101,14 +99,14 @@ impl Grid {
 
     pub fn set_row_homogeneous(&mut self, homogeneous: bool) -> () {
         match homogeneous {
-            true    => unsafe { ffi::gtk_grid_set_row_homogeneous(GTK_GRID(self.pointer), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_grid_set_row_homogeneous(GTK_GRID(self.pointer), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_grid_set_row_homogeneous(GTK_GRID(self.pointer), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_grid_set_row_homogeneous(GTK_GRID(self.pointer), ffi::GFALSE) }
         }
     }
 
     pub fn get_row_homogeneous(&self) -> bool {
         match unsafe { ffi::gtk_grid_get_row_homogeneous(GTK_GRID(self.pointer)) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }
@@ -127,14 +125,14 @@ impl Grid {
 
     pub fn set_column_homogeneous(&mut self, homogeneous: bool) -> () {
         match homogeneous {
-            true    => unsafe { ffi::gtk_grid_set_column_homogeneous(GTK_GRID(self.pointer), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_grid_set_column_homogeneous(GTK_GRID(self.pointer), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_grid_set_column_homogeneous(GTK_GRID(self.pointer), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_grid_set_column_homogeneous(GTK_GRID(self.pointer), ffi::GFALSE) }
         }
     }
 
     pub fn get_column_homogeneous(&self) -> bool {
         match unsafe { ffi::gtk_grid_get_column_homogeneous(GTK_GRID(self.pointer)) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }
@@ -151,16 +149,14 @@ impl Grid {
         }
     }
 
-    #[cfg(GTK_3_10)]
-    #[cfg(GTK_3_12)]
+    #[cfg(any(GTK_3_10, GTK_3_12))]
     pub fn get_baseline_row(&self) -> i32 {
         unsafe {
             ffi::gtk_grid_get_baseline_row(GTK_GRID(self.pointer)) as i32
         }
     }
 
-    #[cfg(GTK_3_10)]
-    #[cfg(GTK_3_12)]
+    #[cfg(any(GTK_3_10, GTK_3_12))]
     pub fn set_baseline_row(&mut self, row: i32) -> () {
         unsafe {
             ffi::gtk_grid_set_baseline_row(GTK_GRID(self.pointer), row as c_int);

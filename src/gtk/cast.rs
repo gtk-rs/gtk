@@ -409,6 +409,10 @@ pub fn GTK_ENTRY_COMPLETION(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkEnt
     unsafe { ffi::cast_GtkEntryCompletion(widget) }
 }
 
+pub fn GTK_ICON_VIEW(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkIconView {
+    unsafe { ffi::cast_GtkIconView(widget) }
+}
+
 pub fn GTK_TREE_MODEL_FROM_TREE_STORE(store: *mut ffi::C_GtkTreeStore) -> *mut ffi::C_GtkTreeModel {
     unsafe { ffi::cast_GtkTreeModelFromTreeStore(store) }
 }

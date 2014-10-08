@@ -41,28 +41,28 @@ impl SearchBar {
 
     pub fn set_search_mode(&mut self, search_mode: bool) -> () {
         match search_mode {
-            true    => unsafe { ffi::gtk_search_bar_set_search_mode(GTK_SEARCHBAR(self.pointer), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_search_bar_set_search_mode(GTK_SEARCHBAR(self.pointer), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_search_bar_set_search_mode(GTK_SEARCHBAR(self.pointer), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_search_bar_set_search_mode(GTK_SEARCHBAR(self.pointer), ffi::GFALSE) }
         }
     }
 
     pub fn get_search_mode(&self) -> bool {
         match unsafe { ffi::gtk_search_bar_get_search_mode(GTK_SEARCHBAR(self.pointer)) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }
 
     pub fn set_show_close_button(&mut self, visible: bool) -> () {
         match visible {
-            true    => unsafe { ffi::gtk_search_bar_set_show_close_button(GTK_SEARCHBAR(self.pointer), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_search_bar_set_show_close_button(GTK_SEARCHBAR(self.pointer), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_search_bar_set_show_close_button(GTK_SEARCHBAR(self.pointer), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_search_bar_set_show_close_button(GTK_SEARCHBAR(self.pointer), ffi::GFALSE) }
         }
     }
 
     pub fn get_show_close_button(&self) -> bool {
         match unsafe { ffi::gtk_search_bar_get_show_close_button(GTK_SEARCHBAR(self.pointer)) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }

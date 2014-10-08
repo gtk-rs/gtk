@@ -65,14 +65,14 @@ impl LinkButton {
 
     pub fn set_visited(&mut self, visited: bool) -> () {
         match visited {
-            true    => unsafe { ffi::gtk_link_button_set_visited(GTK_LINKBUTTON(self.pointer), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_link_button_set_visited(GTK_LINKBUTTON(self.pointer), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_link_button_set_visited(GTK_LINKBUTTON(self.pointer), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_link_button_set_visited(GTK_LINKBUTTON(self.pointer), ffi::GFALSE) }
         }
     }
 
     pub fn get_visited(&self) -> bool {
         match unsafe { ffi::gtk_link_button_get_visited(GTK_LINKBUTTON(self.pointer)) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }

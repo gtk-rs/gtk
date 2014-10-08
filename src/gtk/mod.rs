@@ -148,18 +148,14 @@ pub use self::widgets::{
     EntryCompletion
 };
 
-#[cfg(GTK_3_6)]
-#[cfg(GTK_3_8)]
-#[cfg(GTK_3_10)]
-#[cfg(GTK_3_12)]
+#[cfg(any(GTK_3_6, GTK_3_8, GTK_3_10, GTK_3_12))]
 /// GTK Widgets for versions since GTK 3.6
 pub use self::widgets::{
     MenuButton,
     LevelBar,
 };
 
-#[cfg(GTK_3_10)]
-#[cfg(GTK_3_12)]
+#[cfg(any(GTK_3_10, GTK_3_12))]
 /// GTK Widgets for versions since GTK 3.10
 pub use self::widgets::{
     SearchEntry,
@@ -253,7 +249,8 @@ pub use self::enums::{
     tree_view_grid_lines,
     tree_view_column_sizing,
     cell_renderer_state,
-    tree_model_flags
+    tree_model_flags,
+    icon_view_drop_position
 };
 
 /// GTK Enum types
@@ -331,7 +328,8 @@ pub use self::enums::{
     TreeViewGridLines,
     TreeViewColumnSizing,
     CellRendererState,
-    TreeModelFlags
+    TreeModelFlags,
+    IconViewDropPosition
 };
 
 /// GTK various struct

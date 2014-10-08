@@ -46,7 +46,7 @@ impl RecentManager {
         match unsafe { uri.with_c_str(|c_str| {
             ffi::gtk_recent_manager_add_item(GTK_RECENT_MANAGER(self.get_widget()), c_str)
         })} {
-            ffi::Gtrue => true,
+            ffi::GTRUE => true,
             _ => false
         }
     }
@@ -55,7 +55,7 @@ impl RecentManager {
         match unsafe { uri.with_c_str(|c_str| {
             ffi::gtk_recent_manager_add_full(GTK_RECENT_MANAGER(self.get_widget()), c_str, &recent_data.get_ffi())
         })} {
-            ffi::Gtrue => true,
+            ffi::GTRUE => true,
             _ => false
         }
     }
@@ -64,7 +64,7 @@ impl RecentManager {
         match unsafe { uri.with_c_str(|c_str| {
             ffi::gtk_recent_manager_has_item(GTK_RECENT_MANAGER(self.get_widget()), c_str)
         })} {
-            ffi::Gtrue => true,
+            ffi::GTRUE => true,
             _ => false
         }
     }

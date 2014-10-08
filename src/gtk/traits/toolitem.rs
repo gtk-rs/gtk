@@ -21,84 +21,84 @@ use gtk::{IconSize, Orientation, ReliefStyle, ToolbarStyle};
 pub trait ToolItem: Widget + Container + Bin {
     fn set_homogeneous(&mut self, homogeneous: bool) -> () {
          match homogeneous {
-            true    => unsafe { ffi::gtk_tool_item_set_homogeneous(GTK_TOOLITEM(self.get_widget()), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_tool_item_set_homogeneous(GTK_TOOLITEM(self.get_widget()), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_tool_item_set_homogeneous(GTK_TOOLITEM(self.get_widget()), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_tool_item_set_homogeneous(GTK_TOOLITEM(self.get_widget()), ffi::GFALSE) }
         }
     }
 
     fn get_homogeneous(&self) -> bool {
         match unsafe { ffi::gtk_tool_item_get_homogeneous(GTK_TOOLITEM(self.get_widget())) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }
 
     fn set_expand(&mut self, expand: bool) -> () {
          match expand {
-            true    => unsafe { ffi::gtk_tool_item_set_expand(GTK_TOOLITEM(self.get_widget()), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_tool_item_set_expand(GTK_TOOLITEM(self.get_widget()), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_tool_item_set_expand(GTK_TOOLITEM(self.get_widget()), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_tool_item_set_expand(GTK_TOOLITEM(self.get_widget()), ffi::GFALSE) }
         }
     }
 
     fn get_expand(&self) -> bool {
         match unsafe { ffi::gtk_tool_item_get_expand(GTK_TOOLITEM(self.get_widget())) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }
 
     fn set_use_drag_window(&mut self, use_drag_window: bool) -> () {
          match use_drag_window {
-            true    => unsafe { ffi::gtk_tool_item_set_use_drag_window(GTK_TOOLITEM(self.get_widget()), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_tool_item_set_use_drag_window(GTK_TOOLITEM(self.get_widget()), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_tool_item_set_use_drag_window(GTK_TOOLITEM(self.get_widget()), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_tool_item_set_use_drag_window(GTK_TOOLITEM(self.get_widget()), ffi::GFALSE) }
         }
     }
 
     fn get_use_drag_window(&self) -> bool {
         match unsafe { ffi::gtk_tool_item_get_use_drag_window(GTK_TOOLITEM(self.get_widget())) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }
 
     fn set_visible_horizontal(&mut self, visible_horizontal: bool) -> () {
          match visible_horizontal {
-            true    => unsafe { ffi::gtk_tool_item_set_visible_horizontal(GTK_TOOLITEM(self.get_widget()), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_tool_item_set_visible_horizontal(GTK_TOOLITEM(self.get_widget()), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_tool_item_set_visible_horizontal(GTK_TOOLITEM(self.get_widget()), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_tool_item_set_visible_horizontal(GTK_TOOLITEM(self.get_widget()), ffi::GFALSE) }
         }
     }
 
     fn get_visible_horizontal(&self) -> bool {
         match unsafe { ffi::gtk_tool_item_get_visible_horizontal(GTK_TOOLITEM(self.get_widget())) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }
 
     fn set_visible_vertical(&mut self, visible_vertical: bool) -> () {
          match visible_vertical {
-            true    => unsafe { ffi::gtk_tool_item_set_visible_vertical(GTK_TOOLITEM(self.get_widget()), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_tool_item_set_visible_vertical(GTK_TOOLITEM(self.get_widget()), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_tool_item_set_visible_vertical(GTK_TOOLITEM(self.get_widget()), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_tool_item_set_visible_vertical(GTK_TOOLITEM(self.get_widget()), ffi::GFALSE) }
         }
     }
 
     fn get_visible_vertical(&self) -> bool {
         match unsafe { ffi::gtk_tool_item_get_visible_vertical(GTK_TOOLITEM(self.get_widget())) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }
 
     fn set_is_important(&mut self, is_important: bool) -> () {
          match is_important {
-            true    => unsafe { ffi::gtk_tool_item_set_is_important(GTK_TOOLITEM(self.get_widget()), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_tool_item_set_is_important(GTK_TOOLITEM(self.get_widget()), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_tool_item_set_is_important(GTK_TOOLITEM(self.get_widget()), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_tool_item_set_is_important(GTK_TOOLITEM(self.get_widget()), ffi::GFALSE) }
         }
     }
 
     fn get_is_important(&self) -> bool {
         match unsafe { ffi::gtk_tool_item_get_is_important(GTK_TOOLITEM(self.get_widget())) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }

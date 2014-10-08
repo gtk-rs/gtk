@@ -81,15 +81,15 @@ impl PaperSize {
 
     pub fn is_equal(&self, other: &PaperSize) -> bool {
         match unsafe { ffi::gtk_paper_size_is_equal(GTK_PAPER_SIZE(self.get_widget()), GTK_PAPER_SIZE(other.get_widget())) } {
-            ffi::Gtrue => true,
+            ffi::GTRUE => true,
             _ => false
         }
     }
 
     pub fn get_paper_sizes(include_custom: bool) -> glib::List<Box<PaperSize>> {
         let tmp = unsafe { ffi::gtk_paper_size_get_paper_sizes(match include_custom {
-            true => ffi::Gtrue,
-            false => ffi::Gfalse
+            true => ffi::GTRUE,
+            false => ffi::GFALSE
         }) };
 
         if tmp.is_null() {
@@ -145,7 +145,7 @@ impl PaperSize {
 
     pub fn is_custom(&self) -> bool {
         match unsafe { ffi::gtk_paper_size_is_custom(GTK_PAPER_SIZE(self.get_widget())) } {
-            ffi::Gtrue => true,
+            ffi::GTRUE => true,
             _ => false
         }
     }

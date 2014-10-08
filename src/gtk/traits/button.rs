@@ -85,42 +85,42 @@ pub trait Button: Widget + Container {
 
     fn get_use_stock(&self) -> bool {
         match unsafe { ffi::gtk_button_get_use_stock(GTK_BUTTON(self.get_widget())) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }
 
     fn set_use_stock(&mut self, use_stock: bool) -> () {
         match use_stock {
-            true    => unsafe { ffi::gtk_button_set_use_stock(GTK_BUTTON(self.get_widget()), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_button_set_use_stock(GTK_BUTTON(self.get_widget()), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_button_set_use_stock(GTK_BUTTON(self.get_widget()), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_button_set_use_stock(GTK_BUTTON(self.get_widget()), ffi::GFALSE) }
         }
     }
 
     fn get_use_underline(&self) -> bool {
         match unsafe { ffi::gtk_button_get_use_underline(GTK_BUTTON(self.get_widget())) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }
 
     fn set_use_underline(&mut self, use_underline: bool) -> () {
         match use_underline {
-            true    => unsafe { ffi::gtk_button_set_use_underline(GTK_BUTTON(self.get_widget()), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_button_set_use_underline(GTK_BUTTON(self.get_widget()), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_button_set_use_underline(GTK_BUTTON(self.get_widget()), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_button_set_use_underline(GTK_BUTTON(self.get_widget()), ffi::GFALSE) }
         }
     }
 
     fn set_focus_on_click(&mut self, focus_on_click: bool) -> () {
         match focus_on_click {
-            true    => unsafe { ffi::gtk_button_set_focus_on_click(GTK_BUTTON(self.get_widget()), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_button_set_focus_on_click(GTK_BUTTON(self.get_widget()), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_button_set_focus_on_click(GTK_BUTTON(self.get_widget()), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_button_set_focus_on_click(GTK_BUTTON(self.get_widget()), ffi::GFALSE) }
         }
     }
 
     fn get_focus_on_click(&self) -> bool {
         match unsafe { ffi::gtk_button_get_focus_on_click(GTK_BUTTON(self.get_widget())) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }
@@ -158,24 +158,18 @@ pub trait Button: Widget + Container {
         }
     }
 
-    #[cfg(GTK_3_6)]
-    #[cfg(GTK_3_8)]
-    #[cfg(GTK_3_10)]
-    #[cfg(GTK_3_12)]
+    #[cfg(any(GTK_3_6, GTK_3_8, GTK_3_10, GTK_3_12))]
     fn set_always_show_image(&mut self, always_show: bool) -> () {
         match always_show {
-            true    => unsafe { ffi::gtk_button_set_always_show_image(GTK_BUTTON(self.get_widget()), ffi::Gtrue) },
-            false   => unsafe { ffi::gtk_button_set_always_show_image(GTK_BUTTON(self.get_widget()), ffi::Gfalse) }
+            true    => unsafe { ffi::gtk_button_set_always_show_image(GTK_BUTTON(self.get_widget()), ffi::GTRUE) },
+            false   => unsafe { ffi::gtk_button_set_always_show_image(GTK_BUTTON(self.get_widget()), ffi::GFALSE) }
         }
     }
 
-    #[cfg(GTK_3_6)]
-    #[cfg(GTK_3_8)]
-    #[cfg(GTK_3_10)]
-    #[cfg(GTK_3_12)]
+    #[cfg(any(GTK_3_6, GTK_3_8, GTK_3_10, GTK_3_12))]
     fn get_always_show_image(&self) -> bool {
         match unsafe { ffi::gtk_button_get_always_show_image(GTK_BUTTON(self.get_widget())) } {
-            ffi::Gfalse     => false,
+            ffi::GFALSE     => false,
             _               => true
         }
     }

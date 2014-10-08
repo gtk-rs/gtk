@@ -37,15 +37,15 @@ pub trait ColorChooser: traits::Widget {
 
     fn get_use_alpha(&self) -> bool {
         match unsafe { ffi::gtk_color_chooser_get_use_alpha(GTK_COLOR_CHOOSER(self.get_widget())) } {
-            ffi::Gfalse => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }
 
     fn set_use_alpha(&self, use_alpha: bool) -> () {
         unsafe { ffi::gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(self.get_widget()), match use_alpha {
-            false => ffi::Gfalse,
-            _ => ffi::Gtrue
+            false => ffi::GFALSE,
+            _ => ffi::GTRUE
         }) }
     }
 

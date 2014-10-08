@@ -101,6 +101,7 @@ pub use self::tree_view_grid_lines::TreeViewGridLines;
 pub use self::tree_view_column_sizing::TreeViewColumnSizing;
 pub use self::cell_renderer_state::CellRendererState;
 pub use self::tree_model_flags::TreeModelFlags;
+pub use self::icon_view_drop_position::IconViewDropPosition;
 
 pub mod window_type{
     #[repr(C)]
@@ -1456,5 +1457,25 @@ pub mod tree_model_flags {
         ItersPersist,
         /// the model is a list only, and never has children
         ListOnly,
+    }
+}
+
+/// An enum for determining where a dropped item goes.
+pub mod icon_view_drop_position {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum IconViewDropPosition {
+        /// no drop possible
+        NoDrop,
+        /// dropped item replaces the item
+        DropInto,
+        /// droppped item is inserted to the left
+        DropLeft,
+        /// dropped item is inserted to the right
+        DropRight,
+        /// dropped item is inserted above
+        DropAbove,
+        /// dropped item is inserted below
+        DropBelow
     }
 }

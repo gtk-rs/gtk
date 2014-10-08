@@ -44,15 +44,15 @@ pub fn main_level() -> u32 {
 
 pub fn main_iteration() -> bool {
     match unsafe { ffi::gtk_main_iteration() } {
-        ffi::Gfalse => false,
+        ffi::GFALSE => false,
         _           => true
     }
 }
 
 pub fn main_iteration_do(blocking: bool) -> bool {
-    let c_blocking = if blocking { ffi::Gtrue } else { ffi::Gfalse };
+    let c_blocking = if blocking { ffi::GTRUE } else { ffi::GFALSE };
     match unsafe { ffi::gtk_main_iteration_do(c_blocking) } {
-        ffi::Gfalse => false,
+        ffi::GFALSE => false,
         _           => true
     }
 }
