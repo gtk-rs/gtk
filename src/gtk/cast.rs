@@ -416,3 +416,7 @@ pub fn GTK_ICON_VIEW(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkIconView {
 pub fn GTK_TREE_SELECTION(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkTreeSelection {
     unsafe { ffi::cast_GtkTreeSelection(widget) }
 }
+
+pub fn GTK_IMAGE(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkImage {
+    unsafe { ffi::cast_GtkImage(widget) }
+}

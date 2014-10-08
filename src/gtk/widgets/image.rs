@@ -16,12 +16,13 @@
 //! A widget displaying an image
 
 use gtk;
+use gtk::cast::GTK_IMAGE;
 use gtk::ffi;
+use gtk::ffi::FFIWidget;
 use gtk::traits;
 
 /// Image — A widget displaying an image
 struct_Widget!(Image)
-
 
 impl Image {
     pub fn new_from_file(filename: &str) -> Option<Image> {
@@ -34,7 +35,7 @@ impl Image {
     }
 
     pub fn new_from_icon_name(icon_name: &str, size: gtk::IconSize) -> Option<Image> {
-    	let tmp_pointer = unsafe {
+        let tmp_pointer = unsafe {
             icon_name.with_c_str(|c_str| {
                 ffi::gtk_image_new_from_icon_name(c_str, size)
             })
@@ -42,6 +43,21 @@ impl Image {
         check_pointer!(tmp_pointer, Image)
     }
 
+    pub fn set_from_file(&self, filename: &str) {
+        unsafe {
+            filename.with_c_str(|c_str| {
+                ffi::gtk_image_set_from_file(GTK_IMAGE(self.get_widget()), c_str);
+            })
+        };
+    }
+
+    pub fn set_from_icon_name(&self, icon_name: &str, size: gtk::IconSize) {
+        unsafe {
+            icon_name.with_c_str(|c_str| {
+                ffi::gtk_image_set_from_icon_name(GTK_IMAGE(self.get_widget()), c_str, size)
+            })
+        };
+    }
 }
 
 impl_drop!(Image)
