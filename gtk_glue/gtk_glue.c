@@ -222,8 +222,16 @@ GtkTreeModel* cast_GtkTreeModelFromListStore(GtkListStore* list_store) {
     return GTK_TREE_MODEL(list_store);
 }
 
+GtkListStore* cast_GtkListStoreFromTreeModel(GtkTreeModel* tree_model) {
+    return GTK_LIST_STORE(tree_model);
+}
+
 GtkTreeModel* cast_GtkTreeModelFromTreeStore(GtkTreeStore* tree_store) {
     return GTK_TREE_MODEL(tree_store);
+}
+
+GtkTreeStore* cast_GtkTreeStoreFromTreeModel(GtkTreeModel* tree_model) {
+    return GTK_TREE_STORE(tree_model);
 }
 
 GtkImage* cast_GtkImage(GtkWidget* widget) {

@@ -18,7 +18,7 @@
 use gtk;
 use gtk::ffi::{mod, FFIWidget};
 use gtk::traits;
-use gtk::cast::{GTK_TREE_VIEW, GTK_TREE_MODEL_FROM_TREE_STORE};
+use gtk::cast::GTK_TREE_VIEW;
 
 /// TreeView — A widget for displaying both trees and lists
 struct_Widget!(TreeView)
@@ -375,10 +375,10 @@ impl TreeView {
         }
     }
 
-    pub fn set_model(&mut self, store: &gtk::TreeStore) {
+    pub fn set_model(&mut self, model: &gtk::TreeModel) {
         unsafe {
             ffi::gtk_tree_view_set_model(GTK_TREE_VIEW(self.pointer),
-                                         GTK_TREE_MODEL_FROM_TREE_STORE(store.get_pointer()))
+                                         model.get_pointer())
         }
     }
 }

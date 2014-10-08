@@ -413,6 +413,18 @@ pub fn GTK_ICON_VIEW(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkIconView {
     unsafe { ffi::cast_GtkIconView(widget) }
 }
 
+pub fn GTK_TREE_MODEL_FROM_LIST_STORE(store: *mut ffi::C_GtkListStore) -> *mut ffi::C_GtkTreeModel {
+    unsafe { ffi::cast_GtkTreeModelFromListStore(store) }
+}
+
+pub fn GTK_LIST_STORE_FROM_TREE_MODEL(model: *mut ffi::C_GtkTreeModel) -> *mut ffi::C_GtkListStore {
+    unsafe { ffi::cast_GtkListStoreFromTreeModel(model) }
+}
+
 pub fn GTK_TREE_MODEL_FROM_TREE_STORE(store: *mut ffi::C_GtkTreeStore) -> *mut ffi::C_GtkTreeModel {
     unsafe { ffi::cast_GtkTreeModelFromTreeStore(store) }
+}
+
+pub fn GTK_TREE_STORE_FROM_TREE_MODEL(model: *mut ffi::C_GtkTreeModel) -> *mut ffi::C_GtkTreeStore {
+    unsafe { ffi::cast_GtkTreeStoreFromTreeModel(model) }
 }

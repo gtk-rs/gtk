@@ -217,6 +217,8 @@ pub struct C_GtkCellLayout;
 #[repr(C)]
 pub struct C_GtkTreeModel;
 #[repr(C)]
+pub struct C_GtkListStore;
+#[repr(C)]
 pub struct C_GtkTreeStore;
 #[repr(C)]
 pub struct C_GtkTreePath;
@@ -777,6 +779,29 @@ extern "C" {
     pub fn gtk_tree_model_row_deleted(tree_model: *mut C_GtkTreeModel, path: *mut C_GtkTreePath) -> ();
     pub fn gtk_tree_model_rows_reordered(tree_model: *mut C_GtkTreeModel, path: *mut C_GtkTreePath, iter: *mut C_GtkTreeIter,
         new_order: *mut c_int) -> ();
+
+    //=========================================================================
+    // GtkListStore                                                      NOT OK
+    //=========================================================================
+
+    pub fn gtk_list_store_newv(n_columns: c_int, column_types: &[GType]) -> *mut C_GtkListStore;
+    pub fn gtk_list_store_set_column_types(list_store: *mut C_GtkListStore, n_columns: c_int, column_types: &[GType]);
+    //pub fn gtk_list_store_set_value(list_store: *mut C_GtkListStore, iter: *mut C_GtkTreeIter, column: c_int, value: *mut GValue);
+    //pub fn gtk_list_store_set_valist(list_store: *mut C_GtkListStore, iter: *mut C_GtkTreeIter, var_args: va_list);
+    //pub fn gtk_list_store_set_valuesv(list_store: *mut C_GtkListStore, iter: *mut C_GtkTreeIter, columns: *mut c_int, values: *mut GValue, n_values: c_int);
+    //pub fn gtk_list_store_remove(list_store: *mut C_GtkListStore, iter: *mut C_GtkTreeIter) -> bool;
+    //pub fn gtk_list_store_insert(list_store: *mut C_GtkListStore, iter: *mut C_GtkTreeIter, position: c_int);
+    //pub fn gtk_list_store_insert_before(list_store: *mut C_GtkListStore, iter: *mut C_GtkTreeIter, sibling: *mut C_GtkTreeIter);
+    //pub fn gtk_list_store_insert_after(list_store: *mut C_GtkListStore, iter: *mut C_GtkTreeIter, sibling: *mut C_GtkTreeIter);
+    //pub fn gtk_list_store_insert_with_valuesv(list_store: *mut C_GtkListStore, iter: *mut C_GtkTreeIter, position: c_int, columns: *mut c_int, values: *mut GValue, n_values: c_int);
+    //pub fn gtk_list_store_prepend(list_store: *mut C_GtkListStore, iter: *mut C_GtkTreeIter);
+    //pub fn gtk_list_store_append(list_store: *mut C_GtkListStore, iter: *mut C_GtkTreeIter);
+    //pub fn gtk_list_store_clear(list_store: *mut C_GtkListStore);
+    //pub fn gtk_list_store_iter_is_valid(list_store: *mut C_GtkListStore, iter: *mut C_GtkTreeIter) -> bool;
+    //pub fn gtk_list_store_reorder(list_store: *mut C_GtkListStore, new_order: *mut c_int);
+    //pub fn gtk_list_store_swap(list_store: *mut C_GtkListStore, a: *mut C_GtkTreeIter, b: *mut C_GtkTreeIter);
+    //pub fn gtk_list_store_move_before(list_store: *mut C_GtkListStore, iter: *mut C_GtkTreeIter, position: *mut C_GtkTreeIter);
+    //pub fn gtk_list_store_move_after(list_store: *mut C_GtkListStore, iter: *mut C_GtkTreeIter, position: *mut C_GtkTreeIter);
 
     //=========================================================================
     // GtkTreeStore                                                      NOT OK
@@ -2896,5 +2921,8 @@ extern "C" {
     pub fn cast_GtkCellLayout(widget: *mut C_GtkWidget) -> *mut C_GtkCellLayout;
     pub fn cast_GtkEntryCompletion(widget: *mut C_GtkWidget) -> *mut C_GtkEntryCompletion;
     pub fn cast_GtkIconView(widget: *mut C_GtkWidget) -> *mut C_GtkIconView;
+    pub fn cast_GtkTreeModelFromListStore(store: *mut C_GtkListStore) -> *mut C_GtkTreeModel;
+    pub fn cast_GtkListStoreFromTreeModel(store: *mut C_GtkTreeModel) -> *mut C_GtkListStore;
     pub fn cast_GtkTreeModelFromTreeStore(store: *mut C_GtkTreeStore) -> *mut C_GtkTreeModel;
+    pub fn cast_GtkTreeStoreFromTreeModel(store: *mut C_GtkTreeModel) -> *mut C_GtkTreeStore;
 }
