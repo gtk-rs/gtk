@@ -13,6 +13,8 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
+use gtk;
+use gtk::cast;
 use gtk::ffi;
 
 pub struct TreeStore {
@@ -64,6 +66,14 @@ impl TreeStore {
     // TODO: move_before
 
     // TODO: move_after
+
+    pub fn get_model(&self) -> Option<gtk::TreeModel> {
+        if self.pointer.is_null() {
+            None
+        } else {
+            Some(gtk::TreeModel::wrap_pointer(gtk::cast::GTK_TREE_MODEL_FROM_TREE_STORE(self.pointer)))
+        }
+    }
 
     #[doc(hidden)]
     pub fn get_pointer(&self) -> *mut ffi::C_GtkTreeStore {
