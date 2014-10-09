@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use glib;
+use glib::ffi::GType;
 use gtk;
 use gtk::cast;
 use gtk::ffi;
@@ -23,12 +23,12 @@ pub struct TreeStore {
 }
 
 impl TreeStore {
-    pub fn new(column_types: Vec<glib::ffi::GType>) -> Option<TreeStore> {
+    pub fn new(column_types: Vec<GType>) -> Option<TreeStore> {
         let tmp_pointer = unsafe { ffi::gtk_tree_store_newv(column_types.len().to_i32().unwrap(), column_types.as_slice()) };
         check_pointer!(tmp_pointer, TreeStore)
     }
 
-    pub fn set_column_types(&self, column_types: Vec<glib::ffi::GType>) {
+    pub fn set_column_types(&self, column_types: Vec<GType>) {
         unsafe { ffi::gtk_tree_store_set_column_types(self.pointer, column_types.len().to_i32().unwrap(), column_types.as_slice()) }
     }
 

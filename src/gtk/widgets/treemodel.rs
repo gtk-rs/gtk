@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use glib;
+use glib::ffi::GType;
 use gtk::ffi;
 use gtk;
 use std::c_str::CString;
@@ -32,7 +32,7 @@ impl TreeModel {
         unsafe { ffi::gtk_tree_model_get_n_columns(self.pointer) }
     }
 
-    pub fn get_column_type(&self, index_: i32) -> glib::ffi::GType {
+    pub fn get_column_type(&self, index_: i32) -> GType {
         unsafe { ffi::gtk_tree_model_get_column_type(self.pointer, index_) }
     }
 
