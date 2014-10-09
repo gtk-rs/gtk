@@ -17,13 +17,14 @@
 Bindings and wrappers for __GLib__
 */
 
-use libc::{c_char, c_ulong};
+use libc::c_char;
 
 pub use self::list::{List, Elem, RevElem};
 pub use self::slist::{SList, SElem};
 pub use self::glib_container::GlibContainer;
 pub use self::error::{Error};
 pub use self::permission::Permission;
+pub use self::ffi::GType;
 
 mod list;
 mod slist;
@@ -55,8 +56,6 @@ pub enum ParamFlags{
     StaticBlurb,
     Deprecated
 }
-
-pub type GType = c_ulong;
 
 pub struct ParamSpec {
     g_type_instance: TypeInstance,
