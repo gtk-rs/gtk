@@ -34,16 +34,16 @@ impl TreeView {
         check_pointer!(tmp_pointer, TreeView)
     }
 
-    pub fn headers_visibles(&self) -> bool {
+    pub fn get_headers_visible(&self) -> bool {
         unsafe {
             ffi::to_bool(ffi::gtk_tree_view_get_headers_visible(GTK_TREE_VIEW(self.pointer)))
         }
     }
 
-    pub fn set_header_visibles(&mut self, visibles: bool) {
+    pub fn set_headers_visible(&mut self, visible: bool) {
         unsafe {
             ffi::gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(self.pointer),
-                                                   ffi::to_gboolean(visibles))
+                                                   ffi::to_gboolean(visible))
         }
     }
 
@@ -53,7 +53,7 @@ impl TreeView {
         }
     }
 
-    pub fn headers_clickable(&self) -> bool {
+    pub fn get_headers_clickable(&self) -> bool {
         unsafe {
             ffi::to_bool(ffi::gtk_tree_view_get_headers_clickable(GTK_TREE_VIEW(self.pointer)))
         }
@@ -66,7 +66,7 @@ impl TreeView {
         }
     }
 
-    pub fn rules_hint(&self) -> bool {
+    pub fn get_rules_hint(&self) -> bool {
         unsafe {
             ffi::to_bool(ffi::gtk_tree_view_get_rules_hint(GTK_TREE_VIEW(self.pointer)))
         }
@@ -80,7 +80,7 @@ impl TreeView {
     }
 
     #[cfg(any(GTK_3_8, GTK_3_10, GTK_3_12))]
-    pub fn activate_on_single_click(&self) -> bool {
+    pub fn get_activate_on_single_click(&self) -> bool {
         unsafe {
             ffi::to_bool(ffi::gtk_tree_view_get_activate_on_single_click(GTK_TREE_VIEW(self.pointer)))
         }
@@ -119,7 +119,7 @@ impl TreeView {
         }
     }
 
-    pub fn reorderable(&self) -> bool {
+    pub fn get_reorderable(&self) -> bool {
         unsafe {
             ffi::to_bool(ffi::gtk_tree_view_get_reorderable(GTK_TREE_VIEW(self.pointer)))
         }
@@ -144,7 +144,7 @@ impl TreeView {
         }
     }
 
-    pub fn enable_search(&self) -> bool {
+    pub fn get_enable_search(&self) -> bool {
         unsafe {
             ffi::to_bool(ffi::gtk_tree_view_get_enable_search(GTK_TREE_VIEW(self.pointer)))
         }
@@ -157,7 +157,7 @@ impl TreeView {
         }
     }
 
-    pub fn search_column(&self) -> i32 {
+    pub fn get_search_column(&self) -> i32 {
         unsafe {
             ffi::gtk_tree_view_get_search_column(GTK_TREE_VIEW(self.pointer))
         }
@@ -169,7 +169,7 @@ impl TreeView {
         }
     }
 
-    pub fn search_entry(&self) -> gtk::Entry {
+    pub fn get_search_entry(&self) -> gtk::Entry {
         unsafe {
             ffi::FFIWidget::wrap(ffi::gtk_tree_view_get_search_entry(GTK_TREE_VIEW(self.pointer))
                                  as *mut ffi::C_GtkWidget)
@@ -243,7 +243,7 @@ impl TreeView {
         (tx, ty)
     }
 
-    pub fn fixed_height_mode(&self) -> bool {
+    pub fn get_fixed_height_mode(&self) -> bool {
         unsafe {
             ffi::to_bool(ffi::gtk_tree_view_get_fixed_height_mode(GTK_TREE_VIEW(self.pointer)))
         }
@@ -256,7 +256,7 @@ impl TreeView {
         }
     }
 
-    pub fn hover_selection(&self) -> bool {
+    pub fn get_hover_selection(&self) -> bool {
         unsafe {
             ffi::to_bool(ffi::gtk_tree_view_get_hover_selection(GTK_TREE_VIEW(self.pointer)))
         }
@@ -269,7 +269,7 @@ impl TreeView {
         }
     }
 
-    pub fn hover_expand(&self) -> bool {
+    pub fn get_hover_expand(&self) -> bool {
         unsafe {
             ffi::to_bool(ffi::gtk_tree_view_get_hover_expand(GTK_TREE_VIEW(self.pointer)))
         }
@@ -282,7 +282,7 @@ impl TreeView {
         }
     }
 
-    pub fn rubber_banding(&self) -> bool {
+    pub fn get_rubber_banding(&self) -> bool {
         unsafe {
             ffi::to_bool(ffi::gtk_tree_view_get_rubber_banding(GTK_TREE_VIEW(self.pointer)))
         }
@@ -301,7 +301,7 @@ impl TreeView {
         }
     }
 
-    pub fn grid_lines(&self) -> gtk::TreeViewGridLines {
+    pub fn get_grid_lines(&self) -> gtk::TreeViewGridLines {
         unsafe {
             ffi::gtk_tree_view_get_grid_lines(GTK_TREE_VIEW(self.pointer))
         }
@@ -313,7 +313,7 @@ impl TreeView {
         }
     }
 
-    pub fn enable_tree_lines(&self) -> bool {
+    pub fn get_enable_tree_lines(&self) -> bool {
         unsafe {
             ffi::to_bool(ffi::gtk_tree_view_get_enable_tree_lines(GTK_TREE_VIEW(self.pointer)))
         }
@@ -326,7 +326,7 @@ impl TreeView {
         }
     }
 
-    pub fn show_expanders(&self) -> bool {
+    pub fn get_show_expanders(&self) -> bool {
         unsafe {
             ffi::to_bool(ffi::gtk_tree_view_get_show_expanders(GTK_TREE_VIEW(self.pointer)))
         }
@@ -339,7 +339,7 @@ impl TreeView {
         }
     }
 
-    pub fn level_indentation(&self) -> i32 {
+    pub fn get_level_indentation(&self) -> i32 {
         unsafe {
             ffi::gtk_tree_view_get_level_indentation(GTK_TREE_VIEW(self.pointer))
         }
@@ -352,7 +352,7 @@ impl TreeView {
         }
     }
 
-    pub fn tooltip_column(&self) -> i32 {
+    pub fn get_tooltip_column(&self) -> i32 {
         unsafe {
             ffi::gtk_tree_view_get_tooltip_column(GTK_TREE_VIEW(self.pointer))
         }
@@ -365,7 +365,7 @@ impl TreeView {
         }
     }
 
-    pub fn model(&self) -> Option<gtk::TreeModel> {
+    pub fn get_model(&self) -> Option<gtk::TreeModel> {
         let tmp_pointer = unsafe { ffi::gtk_tree_view_get_model(GTK_TREE_VIEW(self.pointer)) };
 
         if tmp_pointer.is_null() {
