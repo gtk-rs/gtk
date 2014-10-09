@@ -21,10 +21,10 @@ use libc::{c_int, c_char, c_float, c_uint, c_double, c_long, c_short, c_void, c_
 use gdk;
 use gtk;
 use glib;
+use glib::GType;
 
 pub type Gboolean = c_int;
 //pub type C_GtkAllocation = C_GdkRectangle;
-pub type GType = c_ulong;
 pub static GFALSE:  c_int = 0;
 pub static GTRUE:   c_int = !GFALSE;
 
