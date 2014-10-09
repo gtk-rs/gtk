@@ -28,7 +28,7 @@ impl Viewport {
         check_pointer!(tmp_pointer, Viewport)
     }
 
-    pub fn shadow_type(&self) -> gtk::ShadowType {
+    pub fn get_shadow_type(&self) -> gtk::ShadowType {
         unsafe {
             ffi::gtk_viewport_get_shadow_type(GTK_VIEWPORT(self.pointer))
         }

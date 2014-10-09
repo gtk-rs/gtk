@@ -39,7 +39,7 @@ impl TreeViewColumn {
         }
     }
 
-    pub fn spacing(&self) -> i32 {
+    pub fn get_spacing(&self) -> i32 {
         unsafe {
             ffi::gtk_tree_view_column_get_spacing(self.pointer)
         }
@@ -51,7 +51,7 @@ impl TreeViewColumn {
         }
     }
 
-    pub fn visible(&self) -> bool {
+    pub fn get_visible(&self) -> bool {
         unsafe {
             ffi::to_bool(ffi::gtk_tree_view_column_get_visible(self.pointer))
         }
@@ -63,7 +63,7 @@ impl TreeViewColumn {
         }
     }
 
-    pub fn resizable(&self) -> bool {
+    pub fn get_resizable(&self) -> bool {
         unsafe {
             ffi::to_bool(ffi::gtk_tree_view_column_get_resizable(self.pointer))
         }
@@ -75,25 +75,25 @@ impl TreeViewColumn {
         }
     }
 
-    pub fn sizing(&self) -> gtk::TreeViewColumnSizing {
+    pub fn get_sizing(&self) -> gtk::TreeViewColumnSizing {
         unsafe {
             ffi::gtk_tree_view_column_get_sizing(self.pointer)
         }
     }
 
-    pub fn x_offset(&self) -> i32 {
+    pub fn get_x_offset(&self) -> i32 {
         unsafe {
             ffi::gtk_tree_view_column_get_x_offset(self.pointer)
         }
     }
 
-    pub fn width(&self) -> i32 {
+    pub fn get_width(&self) -> i32 {
         unsafe {
             ffi::gtk_tree_view_column_get_width(self.pointer)
         }
     }
 
-    pub fn fixed_width(&self) -> i32 {
+    pub fn get_fixed_width(&self) -> i32 {
         unsafe {
             ffi::gtk_tree_view_column_get_fixed_width(self.pointer)
         }
@@ -117,13 +117,13 @@ impl TreeViewColumn {
         }
     }
 
-    pub fn min_width(&self) -> i32 {
+    pub fn get_min_width(&self) -> i32 {
         unsafe {
             ffi::gtk_tree_view_column_get_min_width(self.pointer)
         }
     }
 
-    pub fn max_width(&self) -> i32 {
+    pub fn get_max_width(&self) -> i32 {
         unsafe {
             ffi::gtk_tree_view_column_get_max_width(self.pointer)
         }
@@ -143,7 +143,7 @@ impl TreeViewColumn {
         }
     }
 
-    pub fn title(&self) -> String {
+    pub fn get_title(&self) -> String {
         unsafe {
             ::std::string::raw::from_buf(ffi::gtk_tree_view_column_get_title(self.pointer) as *const u8)
         }
@@ -155,7 +155,7 @@ impl TreeViewColumn {
         }
     }
 
-    pub fn expand(&self) -> bool {
+    pub fn get_expand(&self) -> bool {
         unsafe {
             ffi::to_bool(ffi::gtk_tree_view_column_get_expand(self.pointer))
         }
@@ -167,7 +167,7 @@ impl TreeViewColumn {
         }
     }
 
-    pub fn clickable(&self) -> bool {
+    pub fn get_clickable(&self) -> bool {
         unsafe {
             ffi::to_bool(ffi::gtk_tree_view_column_get_clickable(self.pointer))
         }
@@ -191,7 +191,7 @@ impl TreeViewColumn {
         }
     }
 
-    pub fn alignment(&self) -> f32 {
+    pub fn get_alignment(&self) -> f32 {
         unsafe {
             ffi::gtk_tree_view_column_get_alignment(self.pointer)
         }
@@ -203,13 +203,13 @@ impl TreeViewColumn {
         }
     }
 
-    pub fn reorderable(&self) -> bool {
+    pub fn get_reorderable(&self) -> bool {
         unsafe {
             ffi::to_bool(ffi::gtk_tree_view_column_get_reorderable(self.pointer))
         }
     }
 
-    pub fn sort_column_id(&self) -> i32 {
+    pub fn get_sort_column_id(&self) -> i32 {
         unsafe {
             ffi::gtk_tree_view_column_get_sort_column_id(self.pointer)
         }
@@ -227,7 +227,7 @@ impl TreeViewColumn {
         }
     }
 
-    pub fn sort_indicator(&self) -> bool {
+    pub fn get_sort_indicator(&self) -> bool {
         unsafe {
             ffi::to_bool(ffi::gtk_tree_view_column_get_sort_indicator(self.pointer))
         }
@@ -239,7 +239,7 @@ impl TreeViewColumn {
         }
     }
 
-    pub fn sort_order(&self) -> gtk::SortType {
+    pub fn get_sort_order(&self) -> gtk::SortType {
         unsafe {
             ffi::gtk_tree_view_column_get_sort_order(self.pointer)
         }
@@ -269,17 +269,19 @@ impl TreeViewColumn {
         }
     }
 
-    fn get(&self) -> *mut ffi::C_GtkTreeViewColumn {
+    #[doc(hidden)]
+    pub fn get_pointer(&self) -> *mut ffi::C_GtkTreeViewColumn {
         self.pointer
     }
 
-    fn wrap(treeview_colum: *mut ffi::C_GtkTreeViewColumn) -> TreeViewColumn {
+    #[doc(hidden)]
+    pub fn wrap_pointer(treeview_column: *mut ffi::C_GtkTreeViewColumn) -> TreeViewColumn {
         unsafe{
-            ::glib::ffi::g_object_ref(treeview_colum as *mut ::glib::ffi::C_GObject);
+            ::glib::ffi::g_object_ref(treeview_column as *mut ::glib::ffi::C_GObject);
         }
 
         TreeViewColumn {
-            pointer: treeview_colum
+            pointer: treeview_column
         }
     }
 }
