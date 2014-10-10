@@ -412,3 +412,7 @@ pub fn GTK_ENTRY_COMPLETION(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkEnt
 pub fn GTK_ICON_VIEW(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkIconView {
     unsafe { ffi::cast_GtkIconView(widget) }
 }
+
+pub fn GTK_TREE_SELECTION(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkTreeSelection {
+    unsafe { ffi::cast_GtkTreeSelection(widget) }
+}
