@@ -25,8 +25,8 @@ use glib;
 pub type Gboolean = c_int;
 //pub type C_GtkAllocation = C_GdkRectangle;
 pub type GType = c_int;
-pub static GFALSE: c_int = 0;
-pub static GTRUE: c_int = 1;
+pub const GFALSE: c_int = 0;
+pub const GTRUE: c_int = 1;
 
 pub type gpointer = *const c_void;
 pub type time_t = i64;
