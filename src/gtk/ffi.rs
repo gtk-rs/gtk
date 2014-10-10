@@ -2559,7 +2559,7 @@ extern "C" {
     // pub fn gtk_tree_view_new_with_model                (model: *mut C_GtkTreeModel) -> *mut C_GtkWidget;
     // pub fn gtk_tree_view_get_model                     (tree_view: *mut C_GtkTreeView) -> *mut C_GtkTreeModel;
     // pub fn gtk_tree_view_set_model                     (tree_view: *mut C_GtkTreeView, model: *mut C_GtkTreeModel);
-    // pub fn gtk_tree_view_get_selection                 (tree_view: *mut C_GtkTreeView) -> *mut C_GtkTreeSelection;
+    pub fn gtk_tree_view_get_selection                 (tree_view: *mut C_GtkTreeView) -> *mut C_GtkTreeSelection;
     // pub fn gtk_tree_view_set_tooltip_row    (tree_view: *C_GtkTreeView, GtkTooltip        *tooltip, GtkTreePath       *path);
     // pub fn gtk_tree_view_set_tooltip_cell   (tree_view: *C_GtkTreeView, GtkTooltip        *tooltip, GtkTreePath       *path, GtkTreeViewColumn *column, GtkCellRenderer   *cell);
     // pub fn gtk_tree_view_get_tooltip_context(tree_view: *C_GtkTreeView, gint              *x, gint              *y, gboolean           keyboard_tip, GtkTreeModel     **model, GtkTreePath      **path, GtkTreeIter       *iter) -> Gboolean;
