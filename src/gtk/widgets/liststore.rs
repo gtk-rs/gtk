@@ -44,11 +44,11 @@ impl ListStore {
         unsafe { ffi::gtk_list_store_insert(self.pointer, iter, position) }
     }
 
-    pub fn insert_before(&self, iter: &mut ffi::C_GtkTreeIter, sibling: &mut ffi::C_GtkTreeIter) {
+    pub fn insert_before(&self, iter: &mut ffi::C_GtkTreeIter, sibling: *mut ffi::C_GtkTreeIter) {
         unsafe { ffi::gtk_list_store_insert_before(self.pointer, iter, sibling) }
     }
 
-    pub fn insert_after(&self, iter: &mut ffi::C_GtkTreeIter, sibling: &mut ffi::C_GtkTreeIter) {
+    pub fn insert_after(&self, iter: &mut ffi::C_GtkTreeIter, sibling: *mut ffi::C_GtkTreeIter) {
         unsafe { ffi::gtk_list_store_insert_after(self.pointer, iter, sibling) }
     }
 
@@ -76,11 +76,11 @@ impl ListStore {
         unsafe { ffi::gtk_list_store_swap(self.pointer, a, b) }
     }
 
-    pub fn move_before(&self, iter: &mut ffi::C_GtkTreeIter, position: &mut ffi::C_GtkTreeIter) {
+    pub fn move_before(&self, iter: &mut ffi::C_GtkTreeIter, position: *mut ffi::C_GtkTreeIter) {
         unsafe { ffi::gtk_list_store_move_before(self.pointer, iter, position) }
     }
 
-    pub fn move_after(&self, iter: &mut ffi::C_GtkTreeIter, position: &mut ffi::C_GtkTreeIter) {
+    pub fn move_after(&self, iter: &mut ffi::C_GtkTreeIter, position: *mut ffi::C_GtkTreeIter) {
         unsafe { ffi::gtk_list_store_move_before(self.pointer, iter, position) }
     }
 

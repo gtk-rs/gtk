@@ -40,23 +40,23 @@ impl TreeStore {
         unsafe { ffi::gtk_tree_store_remove(self.pointer, iter) }
     }
 
-    pub fn insert(&self, iter: &mut ffi::C_GtkTreeIter, parent: &mut ffi::C_GtkTreeIter, position: i32) {
+    pub fn insert(&self, iter: &mut ffi::C_GtkTreeIter, parent: *mut ffi::C_GtkTreeIter, position: i32) {
         unsafe { ffi::gtk_tree_store_insert(self.pointer, iter, parent, position) }
     }
 
-    pub fn insert_before(&self, iter: &mut ffi::C_GtkTreeIter, parent: &mut ffi::C_GtkTreeIter, sibling: &mut ffi::C_GtkTreeIter) {
+    pub fn insert_before(&self, iter: &mut ffi::C_GtkTreeIter, parent: *mut ffi::C_GtkTreeIter, sibling: &mut ffi::C_GtkTreeIter) {
         unsafe { ffi::gtk_tree_store_insert_before(self.pointer, iter, parent, sibling) }
     }
 
-    pub fn insert_after(&self, iter: &mut ffi::C_GtkTreeIter, parent: &mut ffi::C_GtkTreeIter, sibling: &mut ffi::C_GtkTreeIter) {
+    pub fn insert_after(&self, iter: &mut ffi::C_GtkTreeIter, parent: *mut ffi::C_GtkTreeIter, sibling: &mut ffi::C_GtkTreeIter) {
         unsafe { ffi::gtk_tree_store_insert_after(self.pointer, iter, parent, sibling) }
     }
 
-    pub fn prepend(&self, iter: &mut ffi::C_GtkTreeIter, parent: &mut ffi::C_GtkTreeIter) {
+    pub fn prepend(&self, iter: &mut ffi::C_GtkTreeIter, parent: *mut ffi::C_GtkTreeIter) {
         unsafe { ffi::gtk_tree_store_prepend(self.pointer, iter, parent) }
     }
 
-    pub fn append(&self, iter: &mut ffi::C_GtkTreeIter, parent: &mut ffi::C_GtkTreeIter) {
+    pub fn append(&self, iter: &mut ffi::C_GtkTreeIter, parent: *mut ffi::C_GtkTreeIter) {
         unsafe { ffi::gtk_tree_store_append(self.pointer, iter, parent) }
     }
 
@@ -84,11 +84,11 @@ impl TreeStore {
         unsafe { ffi::gtk_tree_store_swap(self.pointer, a, b) }
     }
 
-    pub fn move_before(&self, iter: &mut ffi::C_GtkTreeIter, position: &mut ffi::C_GtkTreeIter) {
+    pub fn move_before(&self, iter: &mut ffi::C_GtkTreeIter, position: *mut ffi::C_GtkTreeIter) {
         unsafe { ffi::gtk_tree_store_move_before(self.pointer, iter, position) }
     }
 
-    pub fn move_after(&self, iter: &mut ffi::C_GtkTreeIter, position: &mut ffi::C_GtkTreeIter) {
+    pub fn move_after(&self, iter: &mut ffi::C_GtkTreeIter, position: *mut ffi::C_GtkTreeIter) {
         unsafe { ffi::gtk_tree_store_move_before(self.pointer, iter, position) }
     }
 
