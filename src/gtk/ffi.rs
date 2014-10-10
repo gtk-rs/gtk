@@ -2603,8 +2603,8 @@ extern "C" {
     // pub fn gtk_tree_view_row_activated                 (tree_view: *mut C_GtkTreeView, path: *mut C_GtkTreePath, column: *mut C_GtkTreeViewColumn);
     // pub fn gtk_tree_view_get_column                    (tree_view: *mut C_GtkTreeView, n: c_int) -> *mut C_GtkTreeViewColumn;
     // pub fn gtk_tree_view_get_columns                   (tree_view: *mut C_GtkTreeView) -> *mut C_GList;
-    // pub fn gtk_tree_view_move_column_after             (tree_view: *mut C_GtkTreeView, colum: *mut C_GtkTreeViewColumn, base_column: *mut GtkTreeViewColumn);
-    // pub fn gtk_tree_view_set_expander_column           (tree_view: *mut C_GtkTreeView, colum: *mut C_GtkTreeViewColumn);
+    // pub fn gtk_tree_view_move_column_after             (tree_view: *mut C_GtkTreeView, column: *mut C_GtkTreeViewColumn, base_column: *mut GtkTreeViewColumn);
+    // pub fn gtk_tree_view_set_expander_column           (tree_view: *mut C_GtkTreeView, column: *mut C_GtkTreeViewColumn);
     // pub fn gtk_tree_view_get_expander_column           (tree_view: *mut C_GtkTreeView) -> *mut C_GtkTreeViewColumn;
     pub fn gtk_tree_view_append_column                 (tree_view: *mut C_GtkTreeView, column: *mut C_GtkTreeViewColumn) -> c_int;
     // pub fn gtk_tree_view_remove_column                 (tree_view: *mut C_GtkTreeView, column: *mut C_GtkTreeViewColumn) -> c_int;
