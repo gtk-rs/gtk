@@ -44,11 +44,11 @@ impl TreeStore {
         unsafe { ffi::gtk_tree_store_insert(self.pointer, iter, parent, position) }
     }
 
-    pub fn insert_before(&self, iter: &mut ffi::C_GtkTreeIter, parent: *mut ffi::C_GtkTreeIter, sibling: &mut ffi::C_GtkTreeIter) {
+    pub fn insert_before(&self, iter: &mut ffi::C_GtkTreeIter, parent: *mut ffi::C_GtkTreeIter, sibling: *mut ffi::C_GtkTreeIter) {
         unsafe { ffi::gtk_tree_store_insert_before(self.pointer, iter, parent, sibling) }
     }
 
-    pub fn insert_after(&self, iter: &mut ffi::C_GtkTreeIter, parent: *mut ffi::C_GtkTreeIter, sibling: &mut ffi::C_GtkTreeIter) {
+    pub fn insert_after(&self, iter: &mut ffi::C_GtkTreeIter, parent: *mut ffi::C_GtkTreeIter, sibling: *mut ffi::C_GtkTreeIter) {
         unsafe { ffi::gtk_tree_store_insert_after(self.pointer, iter, parent, sibling) }
     }
 
