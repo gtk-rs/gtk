@@ -781,7 +781,7 @@ extern "C" {
         new_order: *mut c_int) -> ();
 
     //=========================================================================
-    // GtkListStore                                                      NOT OK
+    // GtkListStore                                                          OK
     //=========================================================================
 
     pub fn gtk_list_store_newv(n_columns: c_int, column_types: &[GType]) -> *mut C_GtkListStore;
@@ -805,30 +805,30 @@ extern "C" {
     pub fn gtk_list_store_move_after(list_store: *mut C_GtkListStore, iter: *mut C_GtkTreeIter, position: *mut C_GtkTreeIter);
 
     //=========================================================================
-    // GtkTreeStore                                                      NOT OK
+    // GtkTreeStore                                                          OK
     //=========================================================================
 
     pub fn gtk_tree_store_newv(n_columns: c_int, column_types: &[GType]) -> *mut C_GtkTreeStore;
     pub fn gtk_tree_store_set_column_types(tree_store: *mut C_GtkTreeStore, n_columns: c_int, column_types: &[GType]);
     //pub fn gtk_tree_store_set_value(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, column: c_int, value: *mut GValue);
-    //pub fn gtk_tree_store_set(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, ...);
+    pub fn gtk_tree_store_set(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, ...);
     //pub fn gtk_tree_store_set_valist(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, var_args: va_list);
     //pub fn gtk_tree_store_set_valuesv(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, columns: *mut c_int, values: *mut GValue, n_values: c_int);
-    //pub fn gtk_tree_store_remove(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter) -> bool;
-    //pub fn gtk_tree_store_insert(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, parent: *mut C_GtkTreeIter, position: c_int);
-    //pub fn gtk_tree_store_insert_before(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, parent: *mut C_GtkTreeIter, sibling: *mut C_GtkTreeIter);
-    //pub fn gtk_tree_store_insert_after(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, parent: *mut C_GtkTreeIter, sibling: *mut C_GtkTreeIter);
+    pub fn gtk_tree_store_remove(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter) -> bool;
+    pub fn gtk_tree_store_insert(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, parent: *mut C_GtkTreeIter, position: c_int);
+    pub fn gtk_tree_store_insert_before(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, parent: *mut C_GtkTreeIter, sibling: *mut C_GtkTreeIter);
+    pub fn gtk_tree_store_insert_after(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, parent: *mut C_GtkTreeIter, sibling: *mut C_GtkTreeIter);
     //pub fn gtk_tree_store_insert_with_valuesv(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, parent: *mut C_GtkTreeIter, position: c_int, columns: *mut c_int, values: *mut GValue, n_values: c_int);
-    //pub fn gtk_tree_store_prepend(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, parent: *mut C_GtkTreeIter);
-    //pub fn gtk_tree_store_append(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, parent: *mut C_GtkTreeIter);
-    //pub fn gtk_tree_store_is_ancestor(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, descendent: *mut C_GtkTreeIter) -> bool;
-    //pub fn gtk_tree_store_iter_depth(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter) -> c_int;
-    //pub fn gtk_tree_store_clear(tree_store: *mut C_GtkTreeStore);
-    //pub fn gtk_tree_store_iter_is_valid(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter) -> bool;
-    //pub fn gtk_tree_store_reorder(tree_store: *mut C_GtkTreeStore, parent: *mut C_GtkTreeIter, new_order: *mut c_int);
-    //pub fn gtk_tree_store_swap(tree_store: *mut C_GtkTreeStore, a: *mut C_GtkTreeIter, b: *mut C_GtkTreeIter);
-    //pub fn gtk_tree_store_move_before(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, position: *mut C_GtkTreeIter);
-    //pub fn gtk_tree_store_move_after(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, position: *mut C_GtkTreeIter);
+    pub fn gtk_tree_store_prepend(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, parent: *mut C_GtkTreeIter);
+    pub fn gtk_tree_store_append(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, parent: *mut C_GtkTreeIter);
+    pub fn gtk_tree_store_is_ancestor(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, descendent: *mut C_GtkTreeIter) -> bool;
+    pub fn gtk_tree_store_iter_depth(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter) -> c_int;
+    pub fn gtk_tree_store_clear(tree_store: *mut C_GtkTreeStore);
+    pub fn gtk_tree_store_iter_is_valid(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter) -> bool;
+    pub fn gtk_tree_store_reorder(tree_store: *mut C_GtkTreeStore, parent: *mut C_GtkTreeIter, new_order: *mut c_int);
+    pub fn gtk_tree_store_swap(tree_store: *mut C_GtkTreeStore, a: *mut C_GtkTreeIter, b: *mut C_GtkTreeIter);
+    pub fn gtk_tree_store_move_before(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, position: *mut C_GtkTreeIter);
+    pub fn gtk_tree_store_move_after(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, position: *mut C_GtkTreeIter);
 
     //=========================================================================
     // GtkTreeIter                                                           OK

@@ -31,35 +31,66 @@ impl TreeStore {
         unsafe { ffi::gtk_tree_store_set_column_types(self.pointer, column_types.len().to_i32().unwrap(), column_types.as_slice()) }
     }
 
-    // TODO: set
+    pub fn set_column_text(&self, iter: &mut ffi::C_GtkTreeIter, column: i32, text: &str) {
+        let text_c = text.to_c_str();
+        unsafe { ffi::gtk_tree_store_set(self.pointer, iter, column, text_c.as_ptr(), -1i) }
+    }
 
-    // TODO: remove
+    pub fn remove(&self, iter: &mut ffi::C_GtkTreeIter) -> bool {
+        unsafe { ffi::gtk_tree_store_remove(self.pointer, iter) }
+    }
 
-    // TODO: insert
+    pub fn insert(&self, iter: &mut ffi::C_GtkTreeIter, parent: &mut ffi::C_GtkTreeIter, position: i32) {
+        unsafe { ffi::gtk_tree_store_insert(self.pointer, iter, parent, position) }
+    }
 
-    // TODO: insert_before
+    pub fn insert_before(&self, iter: &mut ffi::C_GtkTreeIter, parent: &mut ffi::C_GtkTreeIter, sibling: &mut ffi::C_GtkTreeIter) {
+        unsafe { ffi::gtk_tree_store_insert_before(self.pointer, iter, parent, sibling) }
+    }
 
-    // TODO: insert_after
+    pub fn insert_after(&self, iter: &mut ffi::C_GtkTreeIter, parent: &mut ffi::C_GtkTreeIter, sibling: &mut ffi::C_GtkTreeIter) {
+        unsafe { ffi::gtk_tree_store_insert_after(self.pointer, iter, parent, sibling) }
+    }
 
-    // TODO: prepend
+    pub fn prepend(&self, iter: &mut ffi::C_GtkTreeIter, parent: &mut ffi::C_GtkTreeIter) {
+        unsafe { ffi::gtk_tree_store_prepend(self.pointer, iter, parent) }
+    }
 
-    // TODO: append
+    pub fn append(&self, iter: &mut ffi::C_GtkTreeIter, parent: &mut ffi::C_GtkTreeIter) {
+        unsafe { ffi::gtk_tree_store_append(self.pointer, iter, parent) }
+    }
 
-    // TODO: is_ancestor
+    pub fn is_ancestor(&self, iter: &mut ffi::C_GtkTreeIter, descendent: &mut ffi::C_GtkTreeIter) -> bool {
+        unsafe { ffi::gtk_tree_store_is_ancestor(self.pointer, iter, descendent) }
+    }
 
-    // TODO: iter_depth
+    pub fn iter_depth(&self, iter: &mut ffi::C_GtkTreeIter) -> i32 {
+        unsafe { ffi::gtk_tree_store_iter_depth(self.pointer, iter) }
+    }
 
-    // TODO: clear
+    pub fn clear(&self) {
+        unsafe { ffi::gtk_tree_store_clear(self.pointer) }
+    }
 
-    // TODO: iter_is_valid
+    pub fn iter_is_valid(&self, iter: &mut ffi::C_GtkTreeIter) -> bool {
+        unsafe { ffi::gtk_tree_store_iter_is_valid(self.pointer, iter) }
+    }
 
-    // TODO: reorder
+    pub fn reorder(&self, parent: &mut ffi::C_GtkTreeIter, new_order: *mut i32) {
+        unsafe { ffi::gtk_tree_store_reorder(self.pointer, parent, new_order) }
+    }
 
-    // TODO: swap
+    pub fn swap(&self, a: &mut ffi::C_GtkTreeIter, b: &mut ffi::C_GtkTreeIter) {
+        unsafe { ffi::gtk_tree_store_swap(self.pointer, a, b) }
+    }
 
-    // TODO: move_before
+    pub fn move_before(&self, iter: &mut ffi::C_GtkTreeIter, position: &mut ffi::C_GtkTreeIter) {
+        unsafe { ffi::gtk_tree_store_move_before(self.pointer, iter, position) }
+    }
 
-    // TODO: move_after
+    pub fn move_after(&self, iter: &mut ffi::C_GtkTreeIter, position: &mut ffi::C_GtkTreeIter) {
+        unsafe { ffi::gtk_tree_store_move_before(self.pointer, iter, position) }
+    }
 
     pub fn get_model(&self) -> Option<gtk::TreeModel> {
         if self.pointer.is_null() {
