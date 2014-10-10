@@ -31,7 +31,7 @@ impl TreeStore {
         unsafe { ffi::gtk_tree_store_set_column_types(self.pointer, column_types.len().to_i32().unwrap(), column_types.as_slice()) }
     }
 
-    pub fn set_text(&self, iter: &mut ffi::C_GtkTreeIter, column: i32, text: &str) {
+    pub fn set_string(&self, iter: &mut ffi::C_GtkTreeIter, column: i32, text: &str) {
         let text_c = text.to_c_str();
         unsafe { ffi::gtk_tree_store_set(self.pointer, iter, column, text_c.as_ptr(), -1i) }
     }

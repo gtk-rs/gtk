@@ -45,7 +45,7 @@ fn main() {
     left_model.get_iter_first(&mut iter);
     for _ in range(0i, 10i) {
         left_store.append(&mut iter);
-        left_store.set_text(&mut iter, 0, "I'm in a list");
+        left_store.set_string(&mut iter, 0, "I'm in a list");
     }
 
     // right pane
@@ -62,11 +62,11 @@ fn main() {
     right_model.get_iter_first(&mut iter);
     for _ in range(0i, 10i) {
         right_store.append(&mut iter, ptr::null_mut());
-        right_store.set_text(&mut iter, 0, "I'm in a tree");
+        right_store.set_string(&mut iter, 0, "I'm in a tree");
 
         let mut child = gtk::ffi::C_GtkTreeIter;
         right_store.append(&mut child, &mut iter);
-        right_store.set_text(&mut child, 0, "I'm a child node");
+        right_store.set_string(&mut child, 0, "I'm a child node");
     }
 
     // display the panes
