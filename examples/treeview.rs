@@ -76,7 +76,7 @@ fn main() {
     split_pane.add(&left_tree);
     split_pane.add(&right_tree);
 
-	window.add(&split_pane);
+    window.add(&split_pane);
     window.show_all();
     gtk::main();
 }
