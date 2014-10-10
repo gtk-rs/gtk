@@ -134,7 +134,6 @@ pub use self::widgets::{
     TreeView,
     TreeViewColumn,
     TreePath,
-    TreeIter,
     TreeModel,
     ListStore,
     TreeStore,

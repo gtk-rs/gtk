@@ -31,38 +31,58 @@ impl ListStore {
         unsafe { ffi::gtk_list_store_set_column_types(self.pointer, column_types.len().to_i32().unwrap(), column_types.as_slice()) }
     }
 
-    pub fn set_column_text(&self, iter: &gtk::TreeIter, column: i32, text: &str) {
+    pub fn set_column_text(&self, iter: &mut ffi::C_GtkTreeIter, column: i32, text: &str) {
         let text_c = text.to_c_str();
-        unsafe { ffi::gtk_list_store_set(self.pointer, iter.get_pointer(), column, text_c.as_ptr(), -1i) }
+        unsafe { ffi::gtk_list_store_set(self.pointer, iter, column, text_c.as_ptr(), -1i) }
     }
 
-    // TODO: remove
-
-    pub fn insert(&self, iter: &gtk::TreeIter, position: i32) {
-        unsafe { ffi::gtk_list_store_insert(self.pointer, iter.get_pointer(), position) }
+    pub fn remove(&self, iter: &mut ffi::C_GtkTreeIter) -> bool {
+        unsafe { ffi::gtk_list_store_remove(self.pointer, iter) }
     }
 
-    // TODO: insert_before
-
-    // TODO: insert_after
-
-    // TODO: prepend
-
-    pub fn append(&self, iter: &gtk::TreeIter) {
-        unsafe { ffi::gtk_list_store_append(self.pointer, iter.get_pointer()) }
+    pub fn insert(&self, iter: &mut ffi::C_GtkTreeIter, position: i32) {
+        unsafe { ffi::gtk_list_store_insert(self.pointer, iter, position) }
     }
 
-    // TODO: clear
+    pub fn insert_before(&self, iter: &mut ffi::C_GtkTreeIter, sibling: &mut ffi::C_GtkTreeIter) {
+        unsafe { ffi::gtk_list_store_insert_before(self.pointer, iter, sibling) }
+    }
 
-    // TODO: iter_is_valid
+    pub fn insert_after(&self, iter: &mut ffi::C_GtkTreeIter, sibling: &mut ffi::C_GtkTreeIter) {
+        unsafe { ffi::gtk_list_store_insert_after(self.pointer, iter, sibling) }
+    }
 
-    // TODO: reorder
+    pub fn prepend(&self, iter: &mut ffi::C_GtkTreeIter) {
+        unsafe { ffi::gtk_list_store_prepend(self.pointer, iter) }
+    }
 
-    // TODO: swap
+    pub fn append(&self, iter: &mut ffi::C_GtkTreeIter) {
+        unsafe { ffi::gtk_list_store_append(self.pointer, iter) }
+    }
 
-    // TODO: move_before
+    pub fn clear(&self) {
+        unsafe { ffi::gtk_list_store_clear(self.pointer) }
+    }
 
-    // TODO: move_after
+    pub fn iter_is_valid(&self, iter: &mut ffi::C_GtkTreeIter) -> bool {
+        unsafe { ffi::gtk_list_store_iter_is_valid(self.pointer, iter) }
+    }
+
+    pub fn reorder(&self, new_order: *mut i32) {
+        unsafe { ffi::gtk_list_store_reorder(self.pointer, new_order) }
+    }
+
+    pub fn swap(&self, a: &mut ffi::C_GtkTreeIter, b: &mut ffi::C_GtkTreeIter) {
+        unsafe { ffi::gtk_list_store_swap(self.pointer, a, b) }
+    }
+
+    pub fn move_before(&self, iter: &mut ffi::C_GtkTreeIter, position: &mut ffi::C_GtkTreeIter) {
+        unsafe { ffi::gtk_list_store_move_before(self.pointer, iter, position) }
+    }
+
+    pub fn move_after(&self, iter: &mut ffi::C_GtkTreeIter, position: &mut ffi::C_GtkTreeIter) {
+        unsafe { ffi::gtk_list_store_move_before(self.pointer, iter, position) }
+    }
 
     pub fn get_model(&self) -> Option<gtk::TreeModel> {
         if self.pointer.is_null() {
