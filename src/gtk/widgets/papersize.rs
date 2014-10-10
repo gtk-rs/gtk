@@ -81,8 +81,8 @@ impl PaperSize {
 
     pub fn is_equal(&self, other: &PaperSize) -> bool {
         match unsafe { ffi::gtk_paper_size_is_equal(GTK_PAPER_SIZE(self.get_widget()), GTK_PAPER_SIZE(other.get_widget())) } {
-            ffi::GTRUE => true,
-            _ => false
+            0i32 => false,
+            _ => true
         }
     }
 
@@ -145,8 +145,8 @@ impl PaperSize {
 
     pub fn is_custom(&self) -> bool {
         match unsafe { ffi::gtk_paper_size_is_custom(GTK_PAPER_SIZE(self.get_widget())) } {
-            ffi::GTRUE => true,
-            _ => false
+            0i32 => false,
+            _ => true
         }
     }
 

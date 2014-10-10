@@ -55,8 +55,8 @@ impl RecentData {
                     app_exec: string::raw::from_buf((*ptr).app_exec as *const u8),
                     groups: tmp_groups,
                     is_private: match (*ptr).is_private {
-                    	ffi::GTRUE => true,
-                    	_ => false
+                    	0i32 => false,
+                        _ => true
                     }
                 }
             }

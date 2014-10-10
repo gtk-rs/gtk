@@ -27,8 +27,8 @@ pub trait ToggleButton: Widget + Container + Button {
 
     fn get_mode(&self) -> bool {
         match unsafe { ffi::gtk_toggle_button_get_mode(GTK_TOGGLEBUTTON(self.get_widget())) } {
-            ffi::GFALSE     => false,
-            _               => true
+            0i32 => false,
+            _ => true
         }
     }
 
@@ -47,8 +47,8 @@ pub trait ToggleButton: Widget + Container + Button {
 
     fn get_active(&self) -> bool {
         match unsafe { ffi::gtk_toggle_button_get_active(GTK_TOGGLEBUTTON(self.get_widget())) } {
-            ffi::GFALSE     => false,
-            _               => true
+            0i32 => false,
+            _ => true
         }
     }
 
@@ -61,8 +61,8 @@ pub trait ToggleButton: Widget + Container + Button {
 
     fn get_inconsistent(&self) -> bool {
         match unsafe { ffi::gtk_toggle_button_get_inconsistent(GTK_TOGGLEBUTTON(self.get_widget())) } {
-            ffi::GFALSE     => false,
-            _               => true
+            0i32 => false,
+            _ => true
         }
     }
 }

@@ -73,8 +73,8 @@ impl ProgressBar {
 
     pub fn get_inverted(&self) -> bool {
         match unsafe { ffi::gtk_progress_bar_get_inverted(GTK_PROGRESSBAR(self.pointer)) } {
-            ffi::GFALSE     => false,
-            _               => true
+            0i32 => false,
+            _ => true
         }
     }
 
@@ -87,8 +87,8 @@ impl ProgressBar {
 
     pub fn get_show_text(&self) -> bool {
         match unsafe { ffi::gtk_progress_bar_get_show_text(GTK_PROGRESSBAR(self.pointer)) } {
-            ffi::GFALSE     => false,
-            _               => true
+            0i32 => false,
+            _ => true
         }
     }
 

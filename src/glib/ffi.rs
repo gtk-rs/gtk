@@ -21,7 +21,7 @@ pub type GQuark = u32;
 
 pub type Gboolean = c_int;
 pub static GFALSE:  c_int = 0;
-pub static GTRUE:   c_int = !GFALSE;
+pub static GTRUE:   c_int = 1;
 
 #[repr(C)]
 pub struct C_GList {

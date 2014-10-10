@@ -63,8 +63,8 @@ pub trait FontChooser: traits::Widget {
 
     fn get_show_preview_entry(&self) -> bool {
         match unsafe { ffi::gtk_font_chooser_get_show_preview_entry(GTK_FONT_CHOOSER(self.get_widget())) } {
-            ffi::GTRUE => true,
-            _ => false
+            0i32 => false,
+            _ => true
         }
     }
 

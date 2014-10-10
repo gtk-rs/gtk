@@ -362,8 +362,13 @@ impl TreeView {
     }
 
     pub fn get_selection(&self) -> Option<TreeSelection> {
-        let tmp_pointer = unsafe { ffi::gtk_tree_view_get_selection(GTK_TREE_VIEW(self.pointer)) };
-        check_pointer!(tmp_pointer, TreeSelection)
+        let tmp_pointer = unsafe { ffi::gtk_tree_view_get_selection(GTK_TREE_VIEW(self.pointer)) } as *mut ffi::C_GtkWidget;
+        
+        if tmp_pointer.is_null() {
+            None
+        } else {
+            Some(ffi::FFIWidget::wrap(tmp_pointer))
+        }
     }
 }
 

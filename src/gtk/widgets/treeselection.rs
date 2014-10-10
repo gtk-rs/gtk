@@ -18,8 +18,6 @@
 use gtk;
 use gtk::cast::{GTK_TREE_SELECTION};
 use gtk::ffi;
-use gtk::traits::Widget;
-use gtk::traits;
 use gtk::{TreeView, TreePath, TreeIter};
 
 struct_Widget!(TreeSelection)
@@ -38,8 +36,13 @@ impl TreeSelection {
     }
 
     pub fn get_tree_view(&self) -> Option<TreeView> {
-        let tmp_pointer = unsafe { ffi::gtk_tree_selection_get_tree_view(GTK_TREE_SELECTION(self.pointer)) };
-        check_pointer!(tmp_pointer, TreeView)
+        let tmp_pointer = unsafe { ffi::gtk_tree_selection_get_tree_view(GTK_TREE_SELECTION(self.pointer)) } as *mut ffi::C_GtkWidget;
+
+        if tmp_pointer.is_null() {
+            None
+        } else {
+            Some(ffi::FFIWidget::wrap(tmp_pointer))
+        }
     }
 
     pub fn get_selected(&self, model: &gtk::TreeModel, iter: &gtk::TreeIter) -> bool {
@@ -54,11 +57,11 @@ impl TreeSelection {
         unsafe { ffi::gtk_tree_selection_count_selected_rows(GTK_TREE_SELECTION(self.pointer)) }
     }
 
-    pub fn select_path(&self, path: &TreePath) -> bool {
+    pub fn select_path(&self, path: &TreePath) {
         unsafe { ffi::gtk_tree_selection_select_path(GTK_TREE_SELECTION(self.pointer), path.get_pointer()) }
     }
 
-    pub fn unselect_path(&self, path: &TreePath) -> bool {
+    pub fn unselect_path(&self, path: &TreePath) {
         unsafe { ffi::gtk_tree_selection_unselect_path(GTK_TREE_SELECTION(self.pointer), path.get_pointer()) }
     }
 
@@ -69,11 +72,11 @@ impl TreeSelection {
         }
     }
 
-    pub fn select_iter(&self, iter: &TreeIter) -> bool {
+    pub fn select_iter(&self, iter: &TreeIter) {
         unsafe { ffi::gtk_tree_selection_select_iter(GTK_TREE_SELECTION(self.pointer), iter.get_pointer()) }
     }
 
-    pub fn unselect_iter(&self, iter: &TreeIter) -> bool {
+    pub fn unselect_iter(&self, iter: &TreeIter) {
         unsafe { ffi::gtk_tree_selection_unselect_iter(GTK_TREE_SELECTION(self.pointer), iter.get_pointer()) }
     }
 

@@ -67,7 +67,7 @@ impl Calendar {
 
     pub fn get_day_is_marked(&self, day: u32) -> bool {
         match unsafe { ffi::gtk_calendar_get_day_is_marked(GTK_CALENDAR(self.pointer), day as c_uint) } {
-            ffi::GFALSE => false,
+            0i32 => false,
             _           => true
         }
     }

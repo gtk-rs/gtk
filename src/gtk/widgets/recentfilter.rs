@@ -57,8 +57,8 @@ impl RecentFilter {
 
     pub fn filter(&self, filter_info: &gtk::RecentFilterInfo) -> bool {
         match unsafe { ffi::gtk_recent_filter_filter(GTK_RECENT_FILTER(self.get_widget()), &filter_info.get_ffi()) } {
-            ffi::GTRUE => true,
-            _ => false
+            0i32 => false,
+            _ => true
         }
     }
 }

@@ -13,12 +13,10 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk;
-use gtk::TextBuffer;
 use gtk::ffi;
 use gtk::traits;
 use gtk::traits::CellRenderer;
-use gtk::cast::GTK_ICON_VIEW;
+use gtk::cast::{GTK_ICON_VIEW, GTK_CELL_RENDERER};
 use gtk::{TreeModel, TreePath};
 use gtk::enums;
 
@@ -48,7 +46,12 @@ impl IconView {
 
     pub fn get_model(&self) -> Option<TreeModel> {
         let tmp_pointer = unsafe { ffi::gtk_icon_view_get_model(GTK_ICON_VIEW(self.pointer)) };
-        check_pointer!(tmp_pointer, TreeModel)
+
+        if tmp_pointer.is_null() {
+            None
+        } else {
+            Some(TreeModel::wrap_pointer(tmp_pointer))
+        }
     }
 
     pub fn set_text_column(&self, column: i32) {
@@ -77,12 +80,17 @@ impl IconView {
 
     pub fn get_path_at_pos(&self, x: i32, y: i32) -> Option<TreePath> {
         let tmp_pointer = unsafe { ffi::gtk_icon_view_get_path_at_pos(GTK_ICON_VIEW(self.pointer), x, y) };
-        check_pointer!(tmp_pointer, TreePath)
+        
+        if tmp_pointer.is_null() {
+            None
+        } else {
+            Some(TreePath::wrap_pointer(tmp_pointer))
+        }
     }
 
     pub fn get_item_at_pos(&self, x: i32, y: i32, path: &TreePath, cell: &CellRenderer) -> bool {
         match unsafe { ffi::gtk_icon_view_get_item_at_pos(GTK_ICON_VIEW(self.pointer), x, y, &mut path.get_pointer(),
-            &mut cell.get_pointer()) } {
+            &mut GTK_CELL_RENDERER(cell.get_widget())) } {
             0 => false,
             _ => true
         }
@@ -93,7 +101,7 @@ impl IconView {
     }
 
     pub fn set_cursor(&self, path: &TreePath, cell: &CellRenderer, start_edition: bool) {
-        unsafe { ffi::gtk_icon_view_set_cursor(GTK_ICON_VIEW(self.pointer), path.get_pointer(), cell.get_pointer(),
+        unsafe { ffi::gtk_icon_view_set_cursor(GTK_ICON_VIEW(self.pointer), path.get_pointer(), GTK_CELL_RENDERER(cell.get_widget()),
             match start_edition {
                 true => 1,
                 false => 0
@@ -101,7 +109,8 @@ impl IconView {
     }
 
     pub fn get_cursor(&self, path: &TreePath, cell: &CellRenderer) -> bool {
-        match unsafe { ffi::gtk_icon_view_get_cursor(GTK_ICON_VIEW(self.pointer), path.get_pointer(), cell.get_pointer()) } {
+        match unsafe { ffi::gtk_icon_view_get_cursor(GTK_ICON_VIEW(self.pointer), &mut path.get_pointer(),
+            &mut GTK_CELL_RENDERER(cell.get_widget())) } {
             0 => false,
             _ => true
         }
@@ -190,11 +199,11 @@ impl IconView {
         }
     }
 
-    pub fn select_path(&self, path: &TreePath) -> bool {
+    pub fn select_path(&self, path: &TreePath) {
         unsafe { ffi::gtk_icon_view_select_path(GTK_ICON_VIEW(self.pointer), path.get_pointer()) }
     }
 
-    pub fn unselect_path(&self, path: &TreePath) -> bool {
+    pub fn unselect_path(&self, path: &TreePath) {
         unsafe { ffi::gtk_icon_view_unselect_path(GTK_ICON_VIEW(self.pointer), path.get_pointer()) }
     }
 
@@ -229,14 +238,14 @@ impl IconView {
         unsafe { ffi::gtk_icon_view_item_activated(GTK_ICON_VIEW(self.pointer), path.get_pointer()) }
     }
 
-    pub fn scroll_to_path(&self, path: &TreePath, use_align: bool, row_align: f64, col_align: f32) {
+    pub fn scroll_to_path(&self, path: &TreePath, use_align: bool, row_align: f32, col_align: f32) {
         unsafe { ffi::gtk_icon_view_scroll_to_path(GTK_ICON_VIEW(self.pointer), path.get_pointer(),
             if use_align {1} else {0}, row_align, col_align) }
     }
 
     pub fn get_visible_range(&self, start_path: &TreePath, end_path: &TreePath) -> bool {
-        match unsafe { ffi::gtk_icon_view_get_visible_range(GTK_ICON_VIEW(self.pointer), start_path.get_pointer(),
-            end_path.get_pointer()) } {
+        match unsafe { ffi::gtk_icon_view_get_visible_range(GTK_ICON_VIEW(self.pointer), &mut start_path.get_pointer(),
+            &mut end_path.get_pointer()) } {
             0 => false,
             _ => true
         }
@@ -281,12 +290,12 @@ impl IconView {
         unsafe { ffi::gtk_icon_view_set_drag_dest_item(GTK_ICON_VIEW(self.pointer), path.get_pointer(), pos) }
     }
 
-    pub fn get_drag_dest_item(&self, path: &TreePath, pos: enums::IconViewDropPosition) {
-        unsafe { ffi::gtk_icon_view_get_drag_dest_item(GTK_ICON_VIEW(self.pointer), &mut path.get_pointer(), &mut pos) }
+    pub fn get_drag_dest_item(&self, path: &TreePath, pos: &mut enums::IconViewDropPosition) {
+        unsafe { ffi::gtk_icon_view_get_drag_dest_item(GTK_ICON_VIEW(self.pointer), &mut path.get_pointer(), pos) }
     }
 
-    pub fn get_dest_item_at_pos(&self, drag_x: i32, drag_y: i32, path: &TreePath, pos: enums::IconViewDropPosition) -> bool {
-        unsafe { ffi::gtk_icon_view_get_dest_item_at_pos(GTK_ICON_VIEW(self.pointer), &mut path.get_pointer(), &mut pos) }
+    pub fn get_dest_item_at_pos(&self, drag_x: i32, drag_y: i32, path: &TreePath, pos: &mut enums::IconViewDropPosition) {
+        unsafe { ffi::gtk_icon_view_get_dest_item_at_pos(GTK_ICON_VIEW(self.pointer), drag_x, drag_y, &mut path.get_pointer(), pos) }
     }
 }
 

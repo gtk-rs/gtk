@@ -72,8 +72,8 @@ impl LinkButton {
 
     pub fn get_visited(&self) -> bool {
         match unsafe { ffi::gtk_link_button_get_visited(GTK_LINKBUTTON(self.pointer)) } {
-            ffi::GFALSE     => false,
-            _               => true
+            0i32 => false,
+            _ => true
         }
     }
 }

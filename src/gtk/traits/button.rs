@@ -85,8 +85,8 @@ pub trait Button: Widget + Container {
 
     fn get_use_stock(&self) -> bool {
         match unsafe { ffi::gtk_button_get_use_stock(GTK_BUTTON(self.get_widget())) } {
-            ffi::GFALSE     => false,
-            _               => true
+            0i32 => false,
+            _ => true
         }
     }
 
@@ -99,8 +99,8 @@ pub trait Button: Widget + Container {
 
     fn get_use_underline(&self) -> bool {
         match unsafe { ffi::gtk_button_get_use_underline(GTK_BUTTON(self.get_widget())) } {
-            ffi::GFALSE     => false,
-            _               => true
+            0i32 => false,
+            _ => true
         }
     }
 
@@ -120,8 +120,8 @@ pub trait Button: Widget + Container {
 
     fn get_focus_on_click(&self) -> bool {
         match unsafe { ffi::gtk_button_get_focus_on_click(GTK_BUTTON(self.get_widget())) } {
-            ffi::GFALSE     => false,
-            _               => true
+            0i32 => false,
+            _ => true
         }
     }
 
@@ -169,8 +169,8 @@ pub trait Button: Widget + Container {
     #[cfg(any(GTK_3_6, GTK_3_8, GTK_3_10, GTK_3_12))]
     fn get_always_show_image(&self) -> bool {
         match unsafe { ffi::gtk_button_get_always_show_image(GTK_BUTTON(self.get_widget())) } {
-            ffi::GFALSE     => false,
-            _               => true
+            0i32 => false,
+            _ => true
         }
     }
 

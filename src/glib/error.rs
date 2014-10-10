@@ -46,7 +46,7 @@ impl Error {
 
     pub fn matches(&self, domain: GQuark, code: i32) -> bool {
         match unsafe { ffi::g_error_matches(self.pointer, domain, code) } {
-            ffi::GFALSE => false,
+            0i32 => false,
             _ => true
         }
     }
