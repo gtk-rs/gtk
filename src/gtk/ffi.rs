@@ -787,15 +787,16 @@ extern "C" {
     pub fn gtk_list_store_newv(n_columns: c_int, column_types: &[GType]) -> *mut C_GtkListStore;
     pub fn gtk_list_store_set_column_types(list_store: *mut C_GtkListStore, n_columns: c_int, column_types: &[GType]);
     //pub fn gtk_list_store_set_value(list_store: *mut C_GtkListStore, iter: *mut C_GtkTreeIter, column: c_int, value: *mut GValue);
+    pub fn gtk_list_store_set(list_store: *mut C_GtkListStore, iter: *mut C_GtkTreeIter, ...);
     //pub fn gtk_list_store_set_valist(list_store: *mut C_GtkListStore, iter: *mut C_GtkTreeIter, var_args: va_list);
     //pub fn gtk_list_store_set_valuesv(list_store: *mut C_GtkListStore, iter: *mut C_GtkTreeIter, columns: *mut c_int, values: *mut GValue, n_values: c_int);
     //pub fn gtk_list_store_remove(list_store: *mut C_GtkListStore, iter: *mut C_GtkTreeIter) -> bool;
-    //pub fn gtk_list_store_insert(list_store: *mut C_GtkListStore, iter: *mut C_GtkTreeIter, position: c_int);
+    pub fn gtk_list_store_insert(list_store: *mut C_GtkListStore, iter: *mut C_GtkTreeIter, position: c_int);
     //pub fn gtk_list_store_insert_before(list_store: *mut C_GtkListStore, iter: *mut C_GtkTreeIter, sibling: *mut C_GtkTreeIter);
     //pub fn gtk_list_store_insert_after(list_store: *mut C_GtkListStore, iter: *mut C_GtkTreeIter, sibling: *mut C_GtkTreeIter);
-    //pub fn gtk_list_store_insert_with_valuesv(list_store: *mut C_GtkListStore, iter: *mut C_GtkTreeIter, position: c_int, columns: *mut c_int, values: *mut GValue, n_values: c_int);
+    //pub fn gtk_list_store_insert_with_valuesv(list_store: *mut C_GtkListStore, iter: *mut C_GtkTreeIter, position: c_int, columns: *mut c_int, values: *mut C_GtkGValue, n_values: c_int);
     //pub fn gtk_list_store_prepend(list_store: *mut C_GtkListStore, iter: *mut C_GtkTreeIter);
-    //pub fn gtk_list_store_append(list_store: *mut C_GtkListStore, iter: *mut C_GtkTreeIter);
+    pub fn gtk_list_store_append(list_store: *mut C_GtkListStore, iter: *mut C_GtkTreeIter);
     //pub fn gtk_list_store_clear(list_store: *mut C_GtkListStore);
     //pub fn gtk_list_store_iter_is_valid(list_store: *mut C_GtkListStore, iter: *mut C_GtkTreeIter) -> bool;
     //pub fn gtk_list_store_reorder(list_store: *mut C_GtkListStore, new_order: *mut c_int);
@@ -810,6 +811,7 @@ extern "C" {
     pub fn gtk_tree_store_newv(n_columns: c_int, column_types: &[GType]) -> *mut C_GtkTreeStore;
     pub fn gtk_tree_store_set_column_types(tree_store: *mut C_GtkTreeStore, n_columns: c_int, column_types: &[GType]);
     //pub fn gtk_tree_store_set_value(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, column: c_int, value: *mut GValue);
+    //pub fn gtk_tree_store_set(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, ...);
     //pub fn gtk_tree_store_set_valist(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, var_args: va_list);
     //pub fn gtk_tree_store_set_valuesv(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, columns: *mut c_int, values: *mut GValue, n_values: c_int);
     //pub fn gtk_tree_store_remove(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter) -> bool;
@@ -2604,9 +2606,9 @@ extern "C" {
     // pub fn gtk_tree_view_move_column_after             (tree_view: *mut C_GtkTreeView, colum: *mut C_GtkTreeViewColumn, base_column: *mut GtkTreeViewColumn);
     // pub fn gtk_tree_view_set_expander_column           (tree_view: *mut C_GtkTreeView, colum: *mut C_GtkTreeViewColumn);
     // pub fn gtk_tree_view_get_expander_column           (tree_view: *mut C_GtkTreeView) -> *mut C_GtkTreeViewColumn;
-    // pub fn gtk_tree_view_append_column                 (tree_view: *mut C_GtkTreeView, colum: *mut C_GtkTreeViewColumn) -> c_int;
-    // pub fn gtk_tree_view_remove_column                 (tree_view: *mut C_GtkTreeView, colum: *mut C_GtkTreeViewColumn) -> c_int;
-    // pub fn gtk_tree_view_insert_column                 (tree_view: *mut C_GtkTreeView, colum: *mut C_GtkTreeViewColumn, position: c_int) -> c_int;
+    pub fn gtk_tree_view_append_column                 (tree_view: *mut C_GtkTreeView, column: *mut C_GtkTreeViewColumn) -> c_int;
+    // pub fn gtk_tree_view_remove_column                 (tree_view: *mut C_GtkTreeView, column: *mut C_GtkTreeViewColumn) -> c_int;
+    // pub fn gtk_tree_view_insert_column                 (tree_view: *mut C_GtkTreeView, column: *mut C_GtkTreeViewColumn, position: c_int) -> c_int;
 
     //=========================================================================
     // GtkTreeViewColumn
@@ -2653,13 +2655,13 @@ extern "C" {
     pub fn gtk_tree_view_column_get_tree_view       (tree_column: *mut C_GtkTreeViewColumn) -> *mut C_GtkWidget;
     pub fn gtk_tree_view_column_get_button          (tree_column: *mut C_GtkTreeViewColumn) -> *mut C_GtkWidget;
     // pub fn gtk_tree_view_column_cell_get_size       (tree_column: *mut C_GtkTreeViewColumn, cell_area: *const C_GdkRectangle, x_offset: *mut c_int, y_offset: *mut c_int, width: *mut c_int, height: *mut c_int);
-    // pub fn gtk_tree_view_column_add_attribute       (tree_column: *mut C_GtkTreeViewColumn, cell: *mut C_GtkCellRenderer, attribute: *const c_char, column: c_int);
-    // pub fn gtk_tree_view_column_clear_attributes    (tree_column: *mut C_GtkTreeViewColumn, cell: *mut C_GtkCellRenderer);
+    pub fn gtk_tree_view_column_add_attribute       (tree_column: *mut C_GtkTreeViewColumn, cell: *mut C_GtkCellRenderer, attribute: *const c_char, column: c_int);
+    pub fn gtk_tree_view_column_clear_attributes    (tree_column: *mut C_GtkTreeViewColumn, cell: *mut C_GtkCellRenderer);
     // pub fn gtk_tree_view_column_cell_get_position   (tree_column: *mut C_GtkTreeViewColumn, cell_renderer: *mut C_GtkCellRenderer, x_offset: *mut c_int, width: *mut c_int) -> Gboolean;
     // pub fn gtk_tree_view_column_focus_cell          (tree_column: *mut C_GtkTreeViewColumn, cell: *mut C_GtkCellRenderer);
     // pub fn gtk_tree_view_column_new_with_area       (area: *mut C_GtkCellArea) -> *mut C_GtkTreeViewColumn;
-    // pub fn gtk_tree_view_column_pack_start          (tree_column: *mut C_GtkTreeViewColumn, cell: *mut C_GtkCellRenderer, expand: Gboolean);
-    // pub fn gtk_tree_view_column_pack_end            (tree_column: *mut C_GtkTreeViewColumn, cell: *mut C_GtkCellRenderer, expand: Gboolean);
+    pub fn gtk_tree_view_column_pack_start          (tree_column: *mut C_GtkTreeViewColumn, cell: *mut C_GtkCellRenderer, expand: Gboolean);
+    pub fn gtk_tree_view_column_pack_end            (tree_column: *mut C_GtkTreeViewColumn, cell: *mut C_GtkCellRenderer, expand: Gboolean);
     // pub fn gtk_tree_view_column_cell_set_cell_data  (tree_column: *mut C_GtkTreeViewColumn, tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter, is_expander: Gboolean, is_expanded: Gboolean);
 
 

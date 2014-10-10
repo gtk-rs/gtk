@@ -15,7 +15,6 @@
 
 use glib::ffi::GType;
 use gtk;
-use gtk::cast;
 use gtk::ffi;
 
 pub struct TreeStore {
@@ -32,11 +31,7 @@ impl TreeStore {
         unsafe { ffi::gtk_tree_store_set_column_types(self.pointer, column_types.len().to_i32().unwrap(), column_types.as_slice()) }
     }
 
-    // TODO: set_value
-
     // TODO: set
-
-    // TODO: set_values
 
     // TODO: remove
 
@@ -45,8 +40,6 @@ impl TreeStore {
     // TODO: insert_before
 
     // TODO: insert_after
-
-    // TODO: insert_with_values
 
     // TODO: prepend
 

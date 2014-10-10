@@ -381,6 +381,11 @@ impl TreeView {
                                          model.get_pointer())
         }
     }
+
+    pub fn append_column(&mut self, column: &gtk::TreeViewColumn) -> i32 {
+        unsafe { ffi::gtk_tree_view_append_column(GTK_TREE_VIEW(self.pointer),
+                                                  column.get_pointer()) }
+    }
 }
 
 impl_drop!(TreeView)

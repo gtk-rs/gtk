@@ -15,7 +15,7 @@
 
 //! A widget that emits a signal when clicked on
 
-use gtk::{mod, ffi, traits};
+use gtk::{mod, ffi, traits, cast};
 
 pub struct TreeViewColumn {
     pointer: *mut ffi::C_GtkTreeViewColumn
@@ -269,17 +269,44 @@ impl TreeViewColumn {
         }
     }
 
-    fn get(&self) -> *mut ffi::C_GtkTreeViewColumn {
+    pub fn add_attribute<T: ffi::FFIWidget + traits::CellRenderer>(&self, cell: &T, attribute: &str, column: i32) {
+        let attribute_c = attribute.to_c_str();
+        unsafe { ffi::gtk_tree_view_column_add_attribute(self.pointer,
+                                                         cast::GTK_CELL_RENDERER(cell.get_widget()),
+                                                         attribute_c.as_ptr(),
+                                                         column) }
+    }
+
+    pub fn clear_attributes<T: ffi::FFIWidget + traits::CellRenderer>(&self, cell: &T) {
+        unsafe { ffi::gtk_tree_view_column_clear_attributes(self.pointer,
+                                                            cast::GTK_CELL_RENDERER(cell.get_widget())) }
+    }
+
+    pub fn pack_start<T: ffi::FFIWidget + traits::CellRenderer>(&self, cell: &T, expand: bool) {
+        unsafe { ffi::gtk_tree_view_column_pack_start(self.pointer,
+                                                      cast::GTK_CELL_RENDERER(cell.get_widget()),
+                                                      ffi::to_gboolean(expand)) }
+    }
+
+    pub fn pack_end<T: ffi::FFIWidget + traits::CellRenderer>(&self, cell: &T, expand: bool) {
+        unsafe { ffi::gtk_tree_view_column_pack_end(self.pointer,
+                                                    cast::GTK_CELL_RENDERER(cell.get_widget()),
+                                                    ffi::to_gboolean(expand)) }
+    }
+
+    #[doc(hidden)]
+    pub fn get_pointer(&self) -> *mut ffi::C_GtkTreeViewColumn {
         self.pointer
     }
 
-    fn wrap(treeview_colum: *mut ffi::C_GtkTreeViewColumn) -> TreeViewColumn {
+    #[doc(hidden)]
+    pub fn wrap_pointer(treeview_column: *mut ffi::C_GtkTreeViewColumn) -> TreeViewColumn {
         unsafe{
-            ::glib::ffi::g_object_ref(treeview_colum as *mut ::glib::ffi::C_GObject);
+            ::glib::ffi::g_object_ref(treeview_column as *mut ::glib::ffi::C_GObject);
         }
 
         TreeViewColumn {
-            pointer: treeview_colum
+            pointer: treeview_column
         }
     }
 }

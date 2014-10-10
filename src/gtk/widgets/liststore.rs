@@ -15,7 +15,6 @@
 
 use glib::ffi::GType;
 use gtk;
-use gtk::cast;
 use gtk::ffi;
 
 pub struct ListStore {
@@ -32,25 +31,26 @@ impl ListStore {
         unsafe { ffi::gtk_list_store_set_column_types(self.pointer, column_types.len().to_i32().unwrap(), column_types.as_slice()) }
     }
 
-    // TODO: set_value
-
-    // TODO: set
-
-    // TODO: set_values
+    pub fn set_column_text(&self, iter: &gtk::TreeIter, column: i32, text: &str) {
+        let text_c = text.to_c_str();
+        unsafe { ffi::gtk_list_store_set(self.pointer, iter.get_pointer(), column, text_c.as_ptr(), -1i) }
+    }
 
     // TODO: remove
 
-    // TODO: insert
+    pub fn insert(&self, iter: &gtk::TreeIter, position: i32) {
+        unsafe { ffi::gtk_list_store_insert(self.pointer, iter.get_pointer(), position) }
+    }
 
     // TODO: insert_before
 
     // TODO: insert_after
 
-    // TODO: insert_with_values
-
     // TODO: prepend
 
-    // TODO: append
+    pub fn append(&self, iter: &gtk::TreeIter) {
+        unsafe { ffi::gtk_list_store_append(self.pointer, iter.get_pointer()) }
+    }
 
     // TODO: clear
 

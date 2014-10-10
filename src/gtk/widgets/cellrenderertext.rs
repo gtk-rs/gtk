@@ -22,8 +22,7 @@ use gtk::cast::GTK_CELL_RENDERER_TEXT;
 struct_Widget!(CellRendererText)
 
 impl CellRendererText {
-    // FIXME : should return CellRenderer
-    fn new() -> Option<CellRendererText> {
+    pub fn new() -> Option<CellRendererText> {
     	let tmp_pointer = unsafe { ffi::gtk_cell_renderer_text_new() as *mut ffi::C_GtkWidget };
 
         check_pointer!(tmp_pointer, CellRendererText)
