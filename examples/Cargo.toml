@@ -20,3 +20,6 @@ name = "sync_widgets"
 
 [[bin]]
 name = "text_viewer"
+
+[[bin]]
+name = "treeview"
