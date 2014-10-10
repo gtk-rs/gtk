@@ -386,6 +386,13 @@ impl TreeView {
         unsafe { ffi::gtk_tree_view_append_column(GTK_TREE_VIEW(self.pointer),
                                                   column.get_pointer()) }
     }
+
+    pub fn append_text_column(&mut self, column: &gtk::TreeViewColumn) -> i32 {
+        let cell = gtk::CellRendererText::new().unwrap();
+        column.pack_start(&cell, true);
+        column.add_attribute(&cell, "text", 0);
+        self.append_column(column)
+    }
 }
 
 impl_drop!(TreeView)
