@@ -39,7 +39,7 @@ pub trait Box: Widget {
 
     fn get_homogeneous(&self) -> bool {
         match unsafe { ffi::gtk_box_get_homogeneous(GTK_BOX(self.get_widget())) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _           => true
         }
     }

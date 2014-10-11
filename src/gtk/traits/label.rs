@@ -97,7 +97,7 @@ pub trait Label : Widget {
 
     fn get_line_wrap(&self) -> bool {
         match unsafe { ffi::gtk_label_get_line_wrap(GTK_LABEL(self.get_widget())) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }
@@ -140,7 +140,7 @@ pub trait Label : Widget {
 
     fn get_selectable(&self) -> bool {
         match unsafe { ffi::gtk_label_get_selectable(GTK_LABEL(self.get_widget())) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }
@@ -154,7 +154,7 @@ pub trait Label : Widget {
 
     fn get_use_markup(&self) -> bool {
         match unsafe { ffi::gtk_label_get_use_markup(GTK_LABEL(self.get_widget())) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }
@@ -168,7 +168,7 @@ pub trait Label : Widget {
 
     fn get_use_underline(&self) -> bool {
         match unsafe { ffi::gtk_label_get_use_underline(GTK_LABEL(self.get_widget())) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }
@@ -182,7 +182,7 @@ pub trait Label : Widget {
 
     fn get_single_line_mode(&self) -> bool {
         match unsafe { ffi::gtk_label_get_single_line_mode(GTK_LABEL(self.get_widget())) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }
@@ -196,7 +196,7 @@ pub trait Label : Widget {
 
     fn get_track_visited_links(&self) -> bool {
         match unsafe { ffi::gtk_label_get_track_visited_links(GTK_LABEL(self.get_widget())) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }

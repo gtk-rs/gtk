@@ -86,14 +86,14 @@ pub trait Entry: Widget {
 
     fn get_activates_default(&self) -> bool {
         match unsafe { ffi::gtk_entry_get_activates_default(GTK_ENTRY(self.get_widget())) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }
 
     fn get_has_frame(&self) -> bool {
         match unsafe { ffi::gtk_entry_get_has_frame(GTK_ENTRY(self.get_widget())) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }
@@ -159,7 +159,7 @@ pub trait Entry: Widget {
 
     fn get_overwrite_mode(&self) -> bool {
         match unsafe { ffi::gtk_entry_get_overwrite_mode(GTK_ENTRY(self.get_widget())) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }
@@ -200,7 +200,7 @@ pub trait Entry: Widget {
 
     fn get_visibility(&self) -> bool {
         match unsafe { ffi::gtk_entry_get_visibility(GTK_ENTRY(self.get_widget())) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }
@@ -289,7 +289,7 @@ pub trait Entry: Widget {
 
     fn get_icon_activatable(&self, icon_pos: EntryIconPosition) -> bool {
         match unsafe { ffi::gtk_entry_get_icon_activatable(GTK_ENTRY(self.get_widget()), icon_pos) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }
@@ -303,7 +303,7 @@ pub trait Entry: Widget {
 
     fn get_icon_sensitive(&self, icon_pos: EntryIconPosition) -> bool {
         match unsafe { ffi::gtk_entry_get_icon_sensitive(GTK_ENTRY(self.get_widget()), icon_pos) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }

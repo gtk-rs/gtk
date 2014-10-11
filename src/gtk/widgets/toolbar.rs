@@ -98,7 +98,7 @@ impl Toolbar {
 
     pub fn get_show_arrow(&self) -> bool {
         match unsafe { ffi::gtk_toolbar_get_show_arrow(GTK_TOOLBAR(self.pointer)) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }

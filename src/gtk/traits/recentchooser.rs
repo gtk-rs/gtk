@@ -31,7 +31,7 @@ pub trait RecentChooser: traits::Widget {
 
     fn get_show_private(&self) -> bool {
         match unsafe { ffi::gtk_recent_chooser_get_show_private(GTK_RECENT_CHOOSER(self.get_widget())) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }
@@ -45,7 +45,7 @@ pub trait RecentChooser: traits::Widget {
 
     fn get_show_not_found(&self) -> bool {
         match unsafe { ffi::gtk_recent_chooser_get_show_not_found(GTK_RECENT_CHOOSER(self.get_widget())) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }
@@ -59,7 +59,7 @@ pub trait RecentChooser: traits::Widget {
 
     fn get_show_icons(&self) -> bool {
         match unsafe { ffi::gtk_recent_chooser_get_show_icons(GTK_RECENT_CHOOSER(self.get_widget())) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }
@@ -73,7 +73,7 @@ pub trait RecentChooser: traits::Widget {
 
     fn get_select_multiple(&self) -> bool {
         match unsafe { ffi::gtk_recent_chooser_get_select_multiple(GTK_RECENT_CHOOSER(self.get_widget())) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }
@@ -87,7 +87,7 @@ pub trait RecentChooser: traits::Widget {
 
     fn get_local_only(&self) -> bool {
         match unsafe { ffi::gtk_recent_chooser_get_local_only(GTK_RECENT_CHOOSER(self.get_widget())) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }
@@ -109,7 +109,7 @@ pub trait RecentChooser: traits::Widget {
 
     fn get_show_tips(&self) -> bool {
         match unsafe { ffi::gtk_recent_chooser_get_show_tips(GTK_RECENT_CHOOSER(self.get_widget())) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }
@@ -146,7 +146,7 @@ pub trait RecentChooser: traits::Widget {
         match unsafe { uri.with_c_str(|c_str| {
             ffi::gtk_recent_chooser_unselect_uri(GTK_RECENT_CHOOSER(self.get_widget()), c_str)
         })} {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }

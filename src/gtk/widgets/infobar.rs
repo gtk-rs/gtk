@@ -89,7 +89,7 @@ impl InfoBar {
     #[cfg(any(GTK_3_10, GTK_3_12))]
     pub fn get_show_close_button(&self) -> bool {
         match unsafe { ffi::gtk_info_bar_get_show_close_button(GTK_INFOBAR(self.pointer)) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }

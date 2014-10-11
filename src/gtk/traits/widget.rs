@@ -192,7 +192,7 @@ pub trait Widget: ffi::FFIWidget {
         let mut dest_y = 0i32;
 
         match unsafe { ffi::gtk_widget_translate_coordinates(self.get_widget(), dest_widget.get_widget(), src_x, src_y, &mut dest_x, &mut dest_y) } {
-            0i32 => None,
+            ffi::GFALSE => None,
             _ => Some((dest_x, dest_y))
         }
     }

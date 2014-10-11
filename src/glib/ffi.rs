@@ -20,8 +20,8 @@ use libc::{c_int, c_void, c_uint, c_char};
 pub type GQuark = u32;
 
 pub type Gboolean = c_int;
-pub static GFALSE:  c_int = 0;
-pub static GTRUE:   c_int = 1;
+pub const GFALSE:  c_int = 0;
+pub const GTRUE:   c_int = 1;
 
 #[repr(C)]
 pub struct C_GList {

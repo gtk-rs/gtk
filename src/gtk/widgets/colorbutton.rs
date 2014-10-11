@@ -95,7 +95,7 @@ impl ColorButton {
 
     pub fn get_use_alpha(&self) -> bool {
         match unsafe { ffi::gtk_color_button_get_use_alpha(GTK_COLORBUTTON(self.pointer)) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }

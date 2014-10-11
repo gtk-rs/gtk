@@ -46,7 +46,7 @@ impl PrintSettings {
         match unsafe { key.with_c_str(|c_str| {
             ffi::gtk_print_settings_has_key(GTK_PRINT_SETTINGS(self.get_widget()), c_str)
         }) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }
@@ -81,7 +81,7 @@ impl PrintSettings {
         match unsafe { key.with_c_str(|c_str| {
             ffi::gtk_print_settings_get_bool(GTK_PRINT_SETTINGS(self.get_widget()), c_str)
         })} {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }
@@ -199,7 +199,7 @@ impl PrintSettings {
 
     pub fn get_use_color(&self) -> bool {
         match unsafe { ffi::gtk_print_settings_get_use_color(GTK_PRINT_SETTINGS(self.get_widget())) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }
@@ -213,7 +213,7 @@ impl PrintSettings {
 
     pub fn get_collate(&self) -> bool {
         match unsafe { ffi::gtk_print_settings_get_collate(GTK_PRINT_SETTINGS(self.get_widget())) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }
@@ -227,7 +227,7 @@ impl PrintSettings {
 
     pub fn get_reverse(&self) -> bool {
         match unsafe { ffi::gtk_print_settings_get_reverse(GTK_PRINT_SETTINGS(self.get_widget())) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }

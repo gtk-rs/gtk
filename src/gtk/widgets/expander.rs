@@ -57,7 +57,7 @@ impl Expander {
 
     pub fn get_expanded(&self) -> bool {
         match unsafe { ffi::gtk_expander_get_expanded(GTK_EXPANDER(self.pointer)) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }
@@ -71,7 +71,7 @@ impl Expander {
 
     pub fn get_use_underline(&self) -> bool {
         match unsafe { ffi::gtk_expander_get_use_underline(GTK_EXPANDER(self.pointer)) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }
@@ -85,7 +85,7 @@ impl Expander {
 
     pub fn get_use_markup(&self) -> bool {
         match unsafe { ffi::gtk_expander_get_use_markup(GTK_EXPANDER(self.pointer)) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }
@@ -99,7 +99,7 @@ impl Expander {
 
     pub fn get_label_fill(&self) -> bool {
         match unsafe { ffi::gtk_expander_get_label_fill(GTK_EXPANDER(self.pointer)) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }
@@ -113,7 +113,7 @@ impl Expander {
 
     pub fn get_resize_toplevel(&self) -> bool {
         match unsafe { ffi::gtk_expander_get_resize_toplevel(GTK_EXPANDER(self.pointer)) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }

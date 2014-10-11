@@ -28,7 +28,7 @@ pub trait ToolItem: Widget + Container + Bin {
 
     fn get_homogeneous(&self) -> bool {
         match unsafe { ffi::gtk_tool_item_get_homogeneous(GTK_TOOLITEM(self.get_widget())) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }
@@ -42,7 +42,7 @@ pub trait ToolItem: Widget + Container + Bin {
 
     fn get_expand(&self) -> bool {
         match unsafe { ffi::gtk_tool_item_get_expand(GTK_TOOLITEM(self.get_widget())) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }
@@ -56,7 +56,7 @@ pub trait ToolItem: Widget + Container + Bin {
 
     fn get_use_drag_window(&self) -> bool {
         match unsafe { ffi::gtk_tool_item_get_use_drag_window(GTK_TOOLITEM(self.get_widget())) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }
@@ -70,7 +70,7 @@ pub trait ToolItem: Widget + Container + Bin {
 
     fn get_visible_horizontal(&self) -> bool {
         match unsafe { ffi::gtk_tool_item_get_visible_horizontal(GTK_TOOLITEM(self.get_widget())) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }
@@ -84,7 +84,7 @@ pub trait ToolItem: Widget + Container + Bin {
 
     fn get_visible_vertical(&self) -> bool {
         match unsafe { ffi::gtk_tool_item_get_visible_vertical(GTK_TOOLITEM(self.get_widget())) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }
@@ -98,7 +98,7 @@ pub trait ToolItem: Widget + Container + Bin {
 
     fn get_is_important(&self) -> bool {
         match unsafe { ffi::gtk_tool_item_get_is_important(GTK_TOOLITEM(self.get_widget())) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }

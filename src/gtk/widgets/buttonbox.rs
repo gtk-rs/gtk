@@ -37,14 +37,14 @@ impl ButtonBox {
 
     pub fn get_child_secondary<T: traits::Widget + traits::Button>(&self, child: &T) -> bool {
         match unsafe { ffi::gtk_button_box_get_child_secondary(GTK_BUTTONBOX(self.pointer), child.get_widget()) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _           => true
         }
     }
 
     pub fn get_child_non_homogeneous<T: traits::Widget + traits::Button>(&self, child: &T) -> bool {
         match unsafe { ffi::gtk_button_box_get_child_non_homogeneous(GTK_BUTTONBOX(self.pointer), child.get_widget()) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _           => true
         }
     }

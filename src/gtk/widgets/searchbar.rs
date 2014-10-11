@@ -45,7 +45,7 @@ impl SearchBar {
 
     pub fn get_search_mode(&self) -> bool {
         match unsafe { ffi::gtk_search_bar_get_search_mode(GTK_SEARCHBAR(self.pointer)) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }
@@ -59,7 +59,7 @@ impl SearchBar {
 
     pub fn get_show_close_button(&self) -> bool {
         match unsafe { ffi::gtk_search_bar_get_show_close_button(GTK_SEARCHBAR(self.pointer)) } {
-            0i32 => false,
+            ffi::GFALSE => false,
             _ => true
         }
     }
