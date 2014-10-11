@@ -41,9 +41,8 @@ fn main() {
     left_tree.set_headers_visible(false);
     append_text_column(&mut left_tree);
 
-    let mut iter = gtk::ffi::C_GtkTreeIter;
-    left_model.get_iter_first(&mut iter);
     for _ in range(0i, 10i) {
+        let mut iter = gtk::ffi::C_GtkTreeIter;
         left_store.append(&mut iter);
         left_store.set_string(&mut iter, 0, "I'm in a list");
     }
@@ -58,9 +57,8 @@ fn main() {
     right_tree.set_headers_visible(false);
     append_text_column(&mut right_tree);
 
-    let mut iter = gtk::ffi::C_GtkTreeIter;
-    right_model.get_iter_first(&mut iter);
     for _ in range(0i, 10i) {
+        let mut iter = gtk::ffi::C_GtkTreeIter;
         right_store.append(&mut iter, ptr::null_mut());
         right_store.set_string(&mut iter, 0, "I'm in a tree");
 
