@@ -1947,6 +1947,8 @@ extern "C" {
     //=========================================================================
     pub fn gtk_image_new_from_file              (filename: *const c_char) -> *mut C_GtkWidget;
     pub fn gtk_image_new_from_icon_name         (icon_name: *const c_char, size: gtk::IconSize) -> *mut C_GtkWidget;
+    pub fn gtk_image_set_from_file              (image: *mut C_GtkImage, filename: *const c_char);
+    pub fn gtk_image_set_from_icon_name         (image: *mut C_GtkImage, icon_name: *const c_char, size: gtk::IconSize);
 
     //=========================================================================
     // GtkProgressBar
@@ -2907,4 +2909,5 @@ extern "C" {
     pub fn cast_GtkEntryCompletion(widget: *mut C_GtkWidget) -> *mut C_GtkEntryCompletion;
     pub fn cast_GtkIconView(widget: *mut C_GtkWidget) -> *mut C_GtkIconView;
     pub fn cast_GtkTreeSelection(widget: *mut C_GtkWidget) -> *mut C_GtkTreeSelection;
+    pub fn cast_GtkImage(widget: *mut C_GtkWidget) -> *mut C_GtkImage;
 }
