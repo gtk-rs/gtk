@@ -54,13 +54,13 @@ impl Toolbar {
         }
     }
 
-    pub fn n_items(&self) -> i32 {
+    pub fn get_n_items(&self) -> i32 {
         unsafe {
             ffi::gtk_toolbar_get_n_items(GTK_TOOLBAR(self.pointer)) as i32
         }
     }
 
-    pub fn nth_item(&self, n: i32) -> Option<gtk::ToolItem> {
+    pub fn get_nth_item(&self, n: i32) -> Option<gtk::ToolItem> {
         unsafe {
             let tmp_pointer = ffi::gtk_toolbar_get_nth_item(GTK_TOOLBAR(self.pointer), n as c_int) as *mut ffi::C_GtkWidget;
             if tmp_pointer.is_null() {
@@ -98,8 +98,8 @@ impl Toolbar {
 
     pub fn get_show_arrow(&self) -> bool {
         match unsafe { ffi::gtk_toolbar_get_show_arrow(GTK_TOOLBAR(self.pointer)) } {
-            ffi::GFALSE     => false,
-            _               => true
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 

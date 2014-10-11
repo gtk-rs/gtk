@@ -61,8 +61,8 @@ impl Scale {
 
     pub fn get_draw_value(&self) -> bool {
         match unsafe { ffi::gtk_scale_get_draw_value(GTK_SCALE(self.pointer)) } {
-            ffi::GFALSE     => false,
-            _               => true
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 
@@ -75,8 +75,8 @@ impl Scale {
 
     pub fn get_has_origin(&self) -> bool {
         match unsafe { ffi::gtk_scale_get_has_origin(GTK_SCALE(self.pointer)) } {
-            ffi::GFALSE     => false,
-            _               => true
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 

@@ -1,3 +1,17 @@
+// This file is part of rgtk.
+//
+// rgtk is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// rgtk is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use std::c_vec::CVec;
 use std::mem::transmute;
@@ -583,19 +597,17 @@ impl Context{
         }
     }
 
-    pub fn show_glyphs<V: Slice<Glyph>>(&self, vec: V){
+    pub fn show_glyphs(&self, vec: &[Glyph]){
         unsafe{
             let slice: &[Glyph] = vec.as_slice();
             ffi::cairo_show_glyphs(self.get_ptr(), slice.as_ptr(), slice.len() as c_int)
         }
     }
 
-    pub fn show_text_glyphs<S: ToCStr,
-                            V: Slice<Glyph>,
-                            W: Slice<TextCluster>>(&self,
+    pub fn show_text_glyphs<S: ToCStr>(&self,
                                        text: S,
-                                       glyph_vec: V,
-                                       cluster_vec: W,
+                                       glyph_vec: &[Glyph],
+                                       cluster_vec: &[TextCluster],
                                        cluster_flags: TextClusterFlags){
         unsafe{
             let glyphs: &[Glyph] = glyph_vec.as_slice();
@@ -649,7 +661,7 @@ impl Context{
         extents
     }
 
-    pub fn glyph_extents<G: Slice<Glyph>>(&self, glyph_vec: G) -> TextExtents{
+    pub fn glyph_extents(&self, glyph_vec: &[Glyph]) -> TextExtents{
         let mut extents = TextExtents{
             x_bearing: 0.0,
             y_bearing: 0.0,

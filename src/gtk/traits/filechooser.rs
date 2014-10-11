@@ -41,8 +41,8 @@ pub trait FileChooser: traits::Widget {
 
     fn get_local_only(&self) -> bool {
         match unsafe { ffi::gtk_file_chooser_get_local_only(GTK_FILE_CHOOSER(self.get_widget())) } {
-            ffi::GTRUE => true,
-            _ => false
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 
@@ -55,8 +55,8 @@ pub trait FileChooser: traits::Widget {
 
     fn get_select_multiple(&self) -> bool {
         match unsafe { ffi::gtk_file_chooser_get_select_multiple(GTK_FILE_CHOOSER(self.get_widget())) } {
-            ffi::GTRUE => true,
-            _ => false
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 
@@ -69,8 +69,8 @@ pub trait FileChooser: traits::Widget {
 
     fn get_show_hidden(&self) -> bool {
         match unsafe { ffi::gtk_file_chooser_get_show_hidden(GTK_FILE_CHOOSER(self.get_widget())) } {
-            ffi::GTRUE => true,
-            _ => false
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 
@@ -83,8 +83,8 @@ pub trait FileChooser: traits::Widget {
 
     fn get_do_overwrite_confirmation(&self) -> bool {
         match unsafe { ffi::gtk_file_chooser_get_do_overwrite_confirmation(GTK_FILE_CHOOSER(self.get_widget())) } {
-            ffi::GTRUE => true,
-            _ => false
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 
@@ -97,8 +97,8 @@ pub trait FileChooser: traits::Widget {
 
     fn get_create_folders(&self) -> bool {
         match unsafe { ffi::gtk_file_chooser_get_create_folders(GTK_FILE_CHOOSER(self.get_widget())) } {
-            ffi::GTRUE => true,
-            _ => false
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 
@@ -126,8 +126,8 @@ pub trait FileChooser: traits::Widget {
                 ffi::gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(self.get_widget()), c_str)
             })
         } {
-            ffi::GTRUE => true,
-            _ => false
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 
@@ -147,8 +147,8 @@ pub trait FileChooser: traits::Widget {
                 ffi::gtk_file_chooser_select_filename(GTK_FILE_CHOOSER(self.get_widget()), c_str)
             })
         } {
-            ffi::GTRUE => true,
-            _ => false
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 
@@ -192,8 +192,8 @@ pub trait FileChooser: traits::Widget {
                 ffi::gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(self.get_widget()), c_str)
             })
         } {
-            ffi::GTRUE => true,
-            _ => false
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 
@@ -213,8 +213,8 @@ pub trait FileChooser: traits::Widget {
                 ffi::gtk_file_chooser_set_uri(GTK_FILE_CHOOSER(self.get_widget()), c_str)
             })
         } {
-            ffi::GTRUE => true,
-            _ => false
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 
@@ -234,8 +234,8 @@ pub trait FileChooser: traits::Widget {
                 ffi::gtk_file_chooser_select_uri(GTK_FILE_CHOOSER(self.get_widget()), c_str)
             })
         } {
-            ffi::GTRUE => true,
-            _ => false
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 
@@ -271,8 +271,8 @@ pub trait FileChooser: traits::Widget {
                 ffi::gtk_file_chooser_set_current_folder_uri(GTK_FILE_CHOOSER(self.get_widget()), c_str)
             })
         } {
-            ffi::GTRUE => true,
-            _ => false
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 
@@ -309,8 +309,8 @@ pub trait FileChooser: traits::Widget {
 
     fn get_preview_widget_active(&self) -> bool {
         match unsafe { ffi::gtk_file_chooser_get_preview_widget_active(GTK_FILE_CHOOSER(self.get_widget())) } {
-            ffi::GTRUE => true,
-            _ => false
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 
@@ -323,8 +323,8 @@ pub trait FileChooser: traits::Widget {
 
     fn get_use_preview_label(&self) -> bool {
         match unsafe { ffi::gtk_file_chooser_get_use_preview_label(GTK_FILE_CHOOSER(self.get_widget())) } {
-            ffi::GTRUE => true,
-            _ => false
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 
@@ -390,8 +390,8 @@ pub trait FileChooser: traits::Widget {
                 ffi::gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(self.get_widget()), c_str, &mut error.unwrap())
             })
         } {
-            ffi::GTRUE => true,
-            _ => false
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 
@@ -401,8 +401,8 @@ pub trait FileChooser: traits::Widget {
                 ffi::gtk_file_chooser_remove_shortcut_folder(GTK_FILE_CHOOSER(self.get_widget()), c_str, &mut error.unwrap())
             })
         } {
-            ffi::GTRUE => true,
-            _ => false
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 
@@ -412,8 +412,8 @@ pub trait FileChooser: traits::Widget {
                 ffi::gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(self.get_widget()), c_str, &mut error.unwrap())
             })
         } {
-            ffi::GTRUE => true,
-            _ => false
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 
@@ -423,8 +423,8 @@ pub trait FileChooser: traits::Widget {
                 ffi::gtk_file_chooser_remove_shortcut_folder(GTK_FILE_CHOOSER(self.get_widget()), c_str, &mut error.unwrap())
             })
         } {
-            ffi::GTRUE => true,
-            _ => false
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 }

@@ -506,6 +506,10 @@ GtkEntryCompletion *cast_GtkEntryCompletion(GtkWidget* widget) {
     return GTK_ENTRY_COMPLETION(widget);
 }
 
+GtkTreeSelection *cast_GtkTreeSelection(GtkWidget* widget) {
+    return GTK_TREE_SELECTION(widget);
+}
+
 // GType constants
 
 const GType g_type_invalid = G_TYPE_INVALID;

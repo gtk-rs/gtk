@@ -112,8 +112,8 @@ impl SpinButton {
 
     pub fn get_numeric(&self) -> bool {
         match unsafe { ffi::gtk_spin_button_get_numeric(GTK_SPINBUTTON(self.pointer)) } {
-            ffi::GFALSE     => false,
-            _               => true
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 
@@ -126,8 +126,8 @@ impl SpinButton {
 
     pub fn get_wrap(&self) -> bool {
         match unsafe { ffi::gtk_spin_button_get_wrap(GTK_SPINBUTTON(self.pointer)) } {
-            ffi::GFALSE     => false,
-            _               => true
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 
@@ -140,8 +140,8 @@ impl SpinButton {
 
     pub fn get_snap_to_ticks(&self) -> bool {
         match unsafe { ffi::gtk_spin_button_get_snap_to_ticks(GTK_SPINBUTTON(self.pointer)) } {
-            ffi::GFALSE     => false,
-            _               => true
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 

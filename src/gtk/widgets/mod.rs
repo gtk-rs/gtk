@@ -118,6 +118,8 @@ pub use self::statusbar::StatusBar;
 pub use self::cellrenderertext::CellRendererText;
 pub use self::lockbutton::LockButton;
 pub use self::entrycompletion::EntryCompletion;
+pub use self::iconview::IconView;
+pub use self::treeselection::TreeSelection;
 
 mod window;
 mod label;
@@ -224,3 +226,5 @@ mod statusbar;
 mod cellrenderertext;
 mod lockbutton;
 mod entrycompletion;
+mod iconview;
+mod treeselection;
