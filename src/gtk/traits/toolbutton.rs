@@ -79,8 +79,8 @@ pub trait ToolButton: Widget + Container + Bin + ToolItem {
 
     fn get_use_underline(&self) -> bool {
         match unsafe { ffi::gtk_tool_button_get_use_underline(GTK_TOOLBUTTON(self.get_widget())) } {
-            ffi::GFALSE     => false,
-            _               => true
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 

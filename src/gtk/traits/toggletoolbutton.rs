@@ -21,8 +21,8 @@ pub trait ToggleToolButton: Widget + Container + Bin + ToolItem + ToolButton {
 
     fn get_active(&self) -> bool {
         match unsafe { ffi::gtk_toggle_tool_button_get_active(GTK_TOGGLETOOLBUTTON(self.get_widget())) } {
-            ffi::GFALSE     => false,
-            _               => true
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 

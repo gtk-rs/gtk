@@ -106,8 +106,8 @@ impl Grid {
 
     pub fn get_row_homogeneous(&self) -> bool {
         match unsafe { ffi::gtk_grid_get_row_homogeneous(GTK_GRID(self.pointer)) } {
-            ffi::GFALSE     => false,
-            _               => true
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 
@@ -132,8 +132,8 @@ impl Grid {
 
     pub fn get_column_homogeneous(&self) -> bool {
         match unsafe { ffi::gtk_grid_get_column_homogeneous(GTK_GRID(self.pointer)) } {
-            ffi::GFALSE     => false,
-            _               => true
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 

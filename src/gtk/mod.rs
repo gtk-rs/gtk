@@ -144,7 +144,9 @@ pub use self::widgets::{
     StatusBar,
     CellRendererText,
     LockButton,
-    EntryCompletion
+    EntryCompletion,
+    IconView,
+    TreeSelection
 };
 
 #[cfg(any(GTK_3_6, GTK_3_8, GTK_3_10, GTK_3_12))]
