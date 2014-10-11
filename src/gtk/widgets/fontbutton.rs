@@ -46,8 +46,8 @@ impl FontButton {
 
     pub fn set_font_name(&mut self, font_name: &str) -> bool {
         match unsafe { font_name.with_c_str(|c_str| { ffi::gtk_font_button_set_font_name(GTK_FONTBUTTON(self.pointer), c_str) }) } {
-            ffi::GFALSE     => false,
-            _               => true
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 
@@ -65,8 +65,8 @@ impl FontButton {
 
     pub fn get_show_style(&self) -> bool {
         match unsafe { ffi::gtk_font_button_get_show_style(GTK_FONTBUTTON(self.pointer)) } {
-            ffi::GFALSE     => false,
-            _               => true
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 
@@ -79,8 +79,8 @@ impl FontButton {
 
     pub fn get_show_size(&self) -> bool {
         match unsafe { ffi::gtk_font_button_get_show_size(GTK_FONTBUTTON(self.pointer)) } {
-            ffi::GFALSE     => false,
-            _               => true
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 
@@ -93,8 +93,8 @@ impl FontButton {
 
     pub fn get_use_font(&self) -> bool {
         match unsafe { ffi::gtk_font_button_get_use_font(GTK_FONTBUTTON(self.pointer)) } {
-            ffi::GFALSE     => false,
-            _               => true
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 
@@ -107,8 +107,8 @@ impl FontButton {
 
     pub fn get_use_size(&self) -> bool {
         match unsafe { ffi::gtk_font_button_get_use_size(GTK_FONTBUTTON(self.pointer)) } {
-            ffi::GFALSE     => false,
-            _               => true
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 

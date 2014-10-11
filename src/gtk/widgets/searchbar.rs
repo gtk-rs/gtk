@@ -15,9 +15,6 @@
 
 //! A container box
 
-
-
-
 use gtk;
 use gtk::cast::{GTK_SEARCHBAR, GTK_ENTRY};
 use gtk::ffi;
@@ -48,8 +45,8 @@ impl SearchBar {
 
     pub fn get_search_mode(&self) -> bool {
         match unsafe { ffi::gtk_search_bar_get_search_mode(GTK_SEARCHBAR(self.pointer)) } {
-            ffi::GFALSE     => false,
-            _               => true
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 
@@ -62,8 +59,8 @@ impl SearchBar {
 
     pub fn get_show_close_button(&self) -> bool {
         match unsafe { ffi::gtk_search_bar_get_show_close_button(GTK_SEARCHBAR(self.pointer)) } {
-            ffi::GFALSE     => false,
-            _               => true
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 }

@@ -89,8 +89,8 @@ impl RecentInfo {
 
     pub fn get_private_hint(&self) -> bool {
         match unsafe { ffi::gtk_recent_info_get_private_hint(GTK_RECENT_INFO(self.get_widget())) } {
-            ffi::GTRUE => true,
-            _ => false
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 
@@ -104,8 +104,8 @@ impl RecentInfo {
                 ffi::gtk_recent_info_get_application_info(GTK_RECENT_INFO(self.get_widget()), c_str, &app_exec, &mut count, &mut time_)
             })
         } {
-            ffi::GTRUE => true,
-            _ => false
+            ffi::GFALSE => false,
+            _ => true
         };
         if app_exec.is_null() {
             (ret, String::new(), count, time_)
@@ -144,8 +144,8 @@ impl RecentInfo {
         match unsafe { app_name.with_c_str(|c_str| {
             ffi::gtk_recent_info_has_application(GTK_RECENT_INFO(self.get_widget()), c_str)
         })} {
-            ffi::GTRUE => true,
-            _ => false
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 
@@ -169,8 +169,8 @@ impl RecentInfo {
         match unsafe { group_name.with_c_str(|c_str| {
             ffi::gtk_recent_info_has_group(GTK_RECENT_INFO(self.get_widget()), c_str)
         })} {
-            ffi::GTRUE => true,
-            _ => false
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 
@@ -200,22 +200,22 @@ impl RecentInfo {
 
     pub fn is_local(&self) -> bool {
         match unsafe { ffi::gtk_recent_info_is_local(GTK_RECENT_INFO(self.get_widget())) } {
-            ffi::GTRUE => true,
-            _ => false
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 
     pub fn exists(&self) -> bool {
         match unsafe { ffi::gtk_recent_info_exists(GTK_RECENT_INFO(self.get_widget())) } {
-            ffi::GTRUE => true,
-            _ => false
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 
     pub fn _match(&self, other: &RecentInfo) -> bool {
         match unsafe { ffi::gtk_recent_info_match(GTK_RECENT_INFO(self.get_widget()), GTK_RECENT_INFO(other.get_widget())) } {
-            ffi::GTRUE => true,
-            _ => false
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 }

@@ -40,8 +40,8 @@ impl Switch {
 
     pub fn get_active(&self) -> bool {
         match unsafe { ffi::gtk_switch_get_active(GTK_SWITCH(self.pointer)) } {
-            ffi::GFALSE     => false,
-            _               => true
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 }

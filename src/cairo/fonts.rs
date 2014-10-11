@@ -30,7 +30,7 @@ pub struct TextCluster {
 }
 
 #[repr(C)]
-pub struct Glyph{
+pub struct Glyph {
     index: c_ulong,
     x: c_double,
     y: c_double

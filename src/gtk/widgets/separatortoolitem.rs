@@ -37,8 +37,8 @@ impl SeparatorToolItem {
 
     pub fn get_draw(&self) -> bool {
         match unsafe { ffi::gtk_separator_tool_item_get_draw(GTK_SEPARATORTOOLITEM(self.pointer)) } {
-            ffi::GFALSE     => false,
-            _               => true
+            ffi::GFALSE => false,
+            _ => true
         }
     }
 }
