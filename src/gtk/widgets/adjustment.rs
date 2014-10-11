@@ -139,7 +139,7 @@ impl Adjustment {
         }
     }
 
-    pub fn value_changer(&mut self) -> () {
+    pub fn value_changed(&mut self) -> () {
         unsafe {
             ffi::gtk_adjustment_value_changed(self.pointer)
         }

@@ -55,7 +55,7 @@ impl StatusBar {
         }
     }
 
-    pub fn get_message_ara<T: traits::Widget + traits::Box>(&self) -> T {
+    pub fn get_message_area<T: traits::Widget + traits::Box>(&self) -> T {
         unsafe {
             ffi::FFIWidget::wrap(ffi::gtk_statusbar_get_message_area(GTK_STATUSBAR(self.pointer)))
         }
