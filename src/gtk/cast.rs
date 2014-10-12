@@ -420,3 +420,7 @@ pub fn GTK_TREE_SELECTION(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkTreeS
 pub fn GTK_IMAGE(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkImage {
     unsafe { ffi::cast_GtkImage(widget) }
 }
+
+pub fn GTK_RECENT_CHOOSER_WIDGET(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkRecentChooserWidget {
+    unsafe { ffi::cast_GtkRecentChooserWidget(widget) }
+}
