@@ -9,7 +9,6 @@ extern crate rgtk;
 
 use rgtk::*;
 use rgtk::gtk::signals;
-use std::ptr;
 
 fn append_text_column(tree: &mut gtk::TreeView) {
     let column = gtk::TreeViewColumn::new().unwrap();
@@ -42,9 +41,10 @@ fn main() {
     append_text_column(&mut left_tree);
 
     for _ in range(0i, 10i) {
-        let mut iter = gtk::ffi::C_GtkTreeIter;
-        left_store.append(&mut iter);
-        left_store.set_string(&mut iter, 0, "I'm in a list");
+        let mut iter_raw = gtk::ffi::C_GtkTreeIter;
+        let iter = gtk::TreeIter::wrap_pointer(&mut iter_raw);
+        left_store.append(&iter);
+        left_store.set_string(&iter, 0, "I'm in a list");
     }
 
     // right pane
@@ -58,13 +58,15 @@ fn main() {
     append_text_column(&mut right_tree);
 
     for _ in range(0i, 10i) {
-        let mut iter = gtk::ffi::C_GtkTreeIter;
-        right_store.append(&mut iter, ptr::null_mut());
-        right_store.set_string(&mut iter, 0, "I'm in a tree");
+        let mut iter_raw = gtk::ffi::C_GtkTreeIter;
+        let iter = gtk::TreeIter::wrap_pointer(&mut iter_raw);
+        right_store.append(&iter, None);
+        right_store.set_string(&iter, 0, "I'm in a tree");
 
-        let mut child = gtk::ffi::C_GtkTreeIter;
-        right_store.append(&mut child, &mut iter);
-        right_store.set_string(&mut child, 0, "I'm a child node");
+        let mut child_raw = gtk::ffi::C_GtkTreeIter;
+        let child = gtk::TreeIter::wrap_pointer(&mut child_raw);
+        right_store.append(&child, Some(&iter));
+        right_store.set_string(&child, 0, "I'm a child node");
     }
 
     // display the panes
