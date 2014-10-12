@@ -15,7 +15,7 @@
 
 use glib::ffi::GType;
 use gtk;
-use gtk::TreeIter;
+use gtk::{TreeIter, TreePath};
 use gtk::ffi;
 use std::c_str::CString;
 use std::string::raw::from_buf;
@@ -37,7 +37,7 @@ impl TreeModel {
         unsafe { ffi::gtk_tree_model_get_column_type(self.pointer, index_) }
     }
 
-    pub fn get_iter(&self, iter: &TreeIter, path: &gtk::TreePath) -> bool {
+    pub fn get_iter(&self, iter: &TreeIter, path: &TreePath) -> bool {
         match unsafe { ffi::gtk_tree_model_get_iter(self.pointer, iter.get_pointer(), path.get_pointer()) } {
             0 => false,
             _ => true
@@ -60,13 +60,13 @@ impl TreeModel {
         }
     }
 
-    pub fn get_path(&self, iter: &TreeIter) -> Option<gtk::TreePath> {
+    pub fn get_path(&self, iter: &TreeIter) -> Option<TreePath> {
         let tmp_pointer = unsafe { ffi::gtk_tree_model_get_path(self.pointer, iter.get_pointer()) };
 
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::TreePath::wrap_pointer(tmp_pointer))
+            Some(TreePath::wrap_pointer(tmp_pointer))
         }
     }
 
@@ -132,23 +132,23 @@ impl TreeModel {
         }
     }
 
-    pub fn row_changed(&self, path: &gtk::TreePath, iter: &TreeIter) {
+    pub fn row_changed(&self, path: &TreePath, iter: &TreeIter) {
         unsafe { ffi::gtk_tree_model_row_changed(self.pointer, path.get_pointer(), iter.get_pointer()) }
     }
 
-    pub fn row_inserted(&self, path: &gtk::TreePath, iter: &TreeIter) {
+    pub fn row_inserted(&self, path: &TreePath, iter: &TreeIter) {
         unsafe { ffi::gtk_tree_model_row_inserted(self.pointer, path.get_pointer(), iter.get_pointer()) }
     }
 
-    pub fn row_has_child_toggled(&self, path: &gtk::TreePath, iter: &TreeIter) {
+    pub fn row_has_child_toggled(&self, path: &TreePath, iter: &TreeIter) {
         unsafe { ffi::gtk_tree_model_row_has_child_toggled(self.pointer, path.get_pointer(), iter.get_pointer()) }
     }
 
-    pub fn row_deleted(&self, path: &gtk::TreePath) {
+    pub fn row_deleted(&self, path: &TreePath) {
         unsafe { ffi::gtk_tree_model_row_deleted(self.pointer, path.get_pointer()) }
     }
 
-    pub fn rows_reordered(&self, path: &gtk::TreePath, iter: &TreeIter, new_order: &mut [i32]) {
+    pub fn rows_reordered(&self, path: &TreePath, iter: &TreeIter, new_order: &mut [i32]) {
         unsafe { ffi::gtk_tree_model_rows_reordered(self.pointer, path.get_pointer(), iter.get_pointer(), new_order.as_mut_ptr()) }
     }
 
