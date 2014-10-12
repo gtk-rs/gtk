@@ -316,6 +316,9 @@ pub struct C_GtkIconView;
 #[repr(C)]
 pub struct C_GtkTreeSelection;
 
+#[repr(C)]
+pub struct C_GtkRecentChooserWidget;
+
 pub fn to_gboolean(b: bool) -> Gboolean {
     match b {
         true => GTRUE,
@@ -720,6 +723,12 @@ extern "C" {
     //=========================================================================
     pub fn gtk_cell_renderer_text_new          () -> *mut C_GtkCellRenderer;
     pub fn gtk_cell_renderer_text_set_fixed_height_from_font(renderer: *mut C_GtkCellRendererText, number_of_rows: c_int) -> ();
+
+    //=========================================================================
+    // GtkRecentChooserWidget                                                OK
+    //=========================================================================
+    pub fn gtk_recent_chooser_widget_new       () -> *mut C_GtkWidget;
+    pub fn gtk_recent_chooser_widget_new_for_manager(manager: *mut C_GtkRecentManager) -> *mut C_GtkWidget;
 
     //=========================================================================
     // GtkTreePath                                                       NOT OK
@@ -2910,4 +2919,5 @@ extern "C" {
     pub fn cast_GtkIconView(widget: *mut C_GtkWidget) -> *mut C_GtkIconView;
     pub fn cast_GtkTreeSelection(widget: *mut C_GtkWidget) -> *mut C_GtkTreeSelection;
     pub fn cast_GtkImage(widget: *mut C_GtkWidget) -> *mut C_GtkImage;
+    pub fn cast_GtkRecentChooserWidget(widget: *mut C_GtkWidget) -> *mut C_GtkRecentChooserWidget;
 }
