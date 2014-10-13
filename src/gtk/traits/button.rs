@@ -158,7 +158,7 @@ pub trait Button: Widget + Container {
         }
     }
 
-    #[cfg(any(GTK_3_6, GTK_3_8, GTK_3_10, GTK_3_12))]
+    #[cfg(any(feature = "GTK_3_6", feature = "GTK_3_8", feature = "GTK_3_10", feature = "GTK_3_12"))]
     fn set_always_show_image(&mut self, always_show: bool) -> () {
         match always_show {
             true    => unsafe { ffi::gtk_button_set_always_show_image(GTK_BUTTON(self.get_widget()), ffi::GTRUE) },
@@ -166,7 +166,7 @@ pub trait Button: Widget + Container {
         }
     }
 
-    #[cfg(any(GTK_3_6, GTK_3_8, GTK_3_10, GTK_3_12))]
+    #[cfg(any(feature = "GTK_3_6", feature = "GTK_3_8", feature = "GTK_3_10", feature = "GTK_3_12"))]
     fn get_always_show_image(&self) -> bool {
         match unsafe { ffi::gtk_button_get_always_show_image(GTK_BUTTON(self.get_widget())) } {
             ffi::GFALSE => false,

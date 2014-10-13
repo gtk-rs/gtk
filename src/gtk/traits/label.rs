@@ -102,14 +102,14 @@ pub trait Label : Widget {
         }
     }
 
-    #[cfg(any(GTK_3_10, GTK_3_12))]
+    #[cfg(any(feature = "GTK_3_10",feature = "GTK_3_12"))]
     fn set_lines(&mut self, lines: i32) -> () {
         unsafe {
             ffi::gtk_label_set_lines(GTK_LABEL(self.get_widget()), lines as c_int);
         }
     }
 
-    #[cfg(any(GTK_3_10, GTK_3_12))]
+    #[cfg(any(feature = "GTK_3_10",feature = "GTK_3_12"))]
     fn get_lines(&self) -> i32 {
         unsafe {
             ffi::gtk_label_get_lines(GTK_LABEL(self.get_widget())) as c_int
