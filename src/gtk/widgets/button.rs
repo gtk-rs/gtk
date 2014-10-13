@@ -19,6 +19,7 @@
 
 use gtk::ffi;
 use gtk::traits;
+#[cfg(any(feature = "GTK_3_10",feature = "GTK_3_12"))]
 use gtk::IconSize;
 
 /**
