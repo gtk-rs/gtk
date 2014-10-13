@@ -5,9 +5,11 @@ authors = []
 
 [dependencies.rgtk]
 path = "../"
+features = ["GTK_3_12"]
 
 [[bin]]
 name = "gtktest"
+
 
 [[bin]]
 name = "cairotest"
