@@ -1,0 +1,10 @@
+[package]
+name = "rgtk-examples"
+version = "0.0.1"
+authors = []
+
+[dependencies.rgtk]
+path = "../../"
+
+[[bin]]
+name = "cairotest"
