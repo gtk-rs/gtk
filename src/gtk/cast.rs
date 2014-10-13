@@ -421,6 +421,10 @@ pub fn GTK_IMAGE(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkImage {
     unsafe { ffi::cast_GtkImage(widget) }
 }
 
+pub fn GTK_RECENT_CHOOSER_WIDGET(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkRecentChooserWidget {
+    unsafe { ffi::cast_GtkRecentChooserWidget(widget) }
+}
+
 pub fn GTK_TREE_MODEL_FROM_LIST_STORE(store: *mut ffi::C_GtkListStore) -> *mut ffi::C_GtkTreeModel {
     unsafe { ffi::cast_GtkTreeModelFromListStore(store) }
 }

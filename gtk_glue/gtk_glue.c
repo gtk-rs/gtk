@@ -510,6 +510,10 @@ GtkTreeSelection *cast_GtkTreeSelection(GtkWidget* widget) {
     return GTK_TREE_SELECTION(widget);
 }
 
+GtkRecentChooserWidget *cast_GtkRecentChooserWidget(GtkWidget* widget) {
+    return GTK_RECENT_CHOOSER_WIDGET(widget);
+}
+
 // GType constants
 
 const GType g_type_invalid = G_TYPE_INVALID;

@@ -120,6 +120,7 @@ pub use self::lockbutton::LockButton;
 pub use self::entrycompletion::EntryCompletion;
 pub use self::iconview::IconView;
 pub use self::treeselection::TreeSelection;
+pub use self::recentchooserwidget::RecentChooserWidget;
 
 mod window;
 mod label;
@@ -228,3 +229,4 @@ mod lockbutton;
 mod entrycompletion;
 mod iconview;
 mod treeselection;
+mod recentchooserwidget;

@@ -148,7 +148,8 @@ pub use self::widgets::{
     LockButton,
     EntryCompletion,
     IconView,
-    TreeSelection
+    TreeSelection,
+    RecentChooserWidget
 };
 
 #[cfg(any(GTK_3_6, GTK_3_8, GTK_3_10, GTK_3_12))]
