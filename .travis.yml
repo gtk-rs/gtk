@@ -11,7 +11,10 @@ install:
 script:
   - rustc --version
   - GTK_VERSION=GTK_3_6 cargo build --features GTK_3_6
-# Travis won't build GTK3.12 but gtktest needs 3.12...
-#  - cd examples && cargo build
+  - cd examples
+  - cd basic && cargo build
+  - cd ../cairotest && cargo build
+  - cd ../sync_widgets && cargo build
+  - cd ../text_viewer && cargo build
 after_script:
   - curl http://www.rust-ci.org/artifacts/put?t=$RUSTCI_TOKEN | sh
