@@ -36,11 +36,11 @@ __rgtk__ targets __GTK+__ 3.12 but can also compile older versions 3.6, 3.8 and 
 
 We are currently targetting rust master compiler to build __rgtk__, make sure you have the latest version before submitting any bugs.
 
-Then you can build __rgtk__ by generating the make file and then running `make`.
+Then you can build __rgtk__ by generating the make file and then running `cargo run`.
 
 ```Shell
 > ./configure
-> make
+> cargo build
 ```
 
 On OSX build may fail by not finding `GTK`, just add this var to your env:
@@ -51,11 +51,11 @@ export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/opt/X11/lib/pkgconfig
 In src/bin you can find some tests showing of some functionality, these can be build and run as follows:
 
 ```Shell
-> make gtktest
-> ./target/gtktest
+> cd examples/gtktest
+> cargo run
 
-> make cairotest
-> ./target/cairotest
+> cd examples/cairotest
+> cargo run
 ```
 
 __rgtk__ should build and work on both OSX and GNU/Linux. We plan on adding windows support in the future.
