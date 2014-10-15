@@ -61,10 +61,9 @@ fn main() {
         right_store.append(&iter, None);
         right_store.set_string(&iter, 0, "I'm in a tree");
 
-        let mut child_raw = gtk::ffi::C_GtkTreeIter;
-        let child = gtk::TreeIter::wrap_pointer(&mut child_raw);
-        right_store.append(&child, Some(&iter));
-        right_store.set_string(&child, 0, "I'm a child node");
+        let child_iter = gtk::TreeIter::new().unwrap();
+        right_store.append(&child_iter, Some(&iter));
+        right_store.set_string(&child_iter, 0, "I'm a child node");
     }
 
     // display the panes
