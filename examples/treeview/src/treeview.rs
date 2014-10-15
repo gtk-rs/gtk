@@ -33,7 +33,7 @@ fn main() {
     // left pane
 
     let mut left_tree = gtk::TreeView::new().unwrap();
-    let column_types = vec![glib::ffi::g_type_string];
+    let column_types = [glib::ffi::g_type_string];
     let left_store = gtk::ListStore::new(column_types).unwrap();
     let left_model = left_store.get_model().unwrap();
     left_tree.set_model(&left_model);
@@ -49,7 +49,7 @@ fn main() {
     // right pane
 
     let mut right_tree = gtk::TreeView::new().unwrap();
-    let column_types = vec![glib::ffi::g_type_string];
+    let column_types = [glib::ffi::g_type_string];
     let right_store = gtk::TreeStore::new(column_types).unwrap();
     let right_model = right_store.get_model().unwrap();
     right_tree.set_model(&right_model);

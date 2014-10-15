@@ -23,13 +23,13 @@ pub struct ListStore {
 }
 
 impl ListStore {
-    pub fn new(column_types: Vec<GType>) -> Option<ListStore> {
-        let tmp_pointer = unsafe { ffi::gtk_list_store_newv(column_types.len().to_i32().unwrap(), column_types.as_slice()) };
+    pub fn new(column_types: &[GType]) -> Option<ListStore> {
+        let tmp_pointer = unsafe { ffi::gtk_list_store_newv(column_types.len().to_i32().unwrap(), column_types) };
         check_pointer!(tmp_pointer, ListStore)
     }
 
-    pub fn set_column_types(&self, column_types: Vec<GType>) {
-        unsafe { ffi::gtk_list_store_set_column_types(self.pointer, column_types.len().to_i32().unwrap(), column_types.as_slice()) }
+    pub fn set_column_types(&self, column_types: &[GType]) {
+        unsafe { ffi::gtk_list_store_set_column_types(self.pointer, column_types.len().to_i32().unwrap(), column_types) }
     }
 
     pub fn set_string(&self, iter: &TreeIter, column: i32, text: &str) {
