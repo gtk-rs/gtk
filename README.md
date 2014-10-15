@@ -64,12 +64,12 @@ __rgtk__ should build and work on both OSX and GNU/Linux. We plan on adding wind
 Finally build documentation using:
 
 ```Shell
-> make doc
+> cargo doc
 ```
 
 Your local copy can be accessed using your browser at
 
-file:///{rgtk_location}/doc/rgtk/index.html
+file:///{rgtk_location}/target/doc/rgtk/index.html
 
 You can also access a daily build of the docs via the internet:
 
