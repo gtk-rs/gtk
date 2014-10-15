@@ -149,7 +149,8 @@ pub use self::widgets::{
     EntryCompletion,
     IconView,
     TreeSelection,
-    RecentChooserWidget
+    RecentChooserWidget,
+    ComboBox
 };
 
 #[cfg(any(feature = "GTK_3_6", feature = "GTK_3_8", feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
@@ -254,7 +255,8 @@ pub use self::enums::{
     tree_view_column_sizing,
     cell_renderer_state,
     tree_model_flags,
-    icon_view_drop_position
+    icon_view_drop_position,
+    sensitivity_type
 };
 
 /// GTK Enum types
@@ -333,7 +335,8 @@ pub use self::enums::{
     TreeViewColumnSizing,
     CellRendererState,
     TreeModelFlags,
-    IconViewDropPosition
+    IconViewDropPosition,
+    SensitivityType
 };
 
 /// GTK various struct
