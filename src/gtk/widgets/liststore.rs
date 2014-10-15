@@ -38,7 +38,7 @@ impl ListStore {
     }
 
     pub fn remove(&self, iter: &TreeIter) -> bool {
-        unsafe { ffi::gtk_list_store_remove(self.pointer, iter.get_pointer()) }
+        unsafe { ffi::to_bool(ffi::gtk_list_store_remove(self.pointer, iter.get_pointer())) }
     }
 
     pub fn insert(&self, iter: &TreeIter, position: i32) {
@@ -68,7 +68,7 @@ impl ListStore {
     }
 
     pub fn iter_is_valid(&self, iter: &TreeIter) -> bool {
-        unsafe { ffi::gtk_list_store_iter_is_valid(self.pointer, iter.get_pointer()) }
+        unsafe { ffi::to_bool(ffi::gtk_list_store_iter_is_valid(self.pointer, iter.get_pointer())) }
     }
 
     pub fn reorder(&self, new_order: *mut i32) {
