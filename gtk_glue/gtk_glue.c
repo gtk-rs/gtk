@@ -410,7 +410,7 @@ GtkRecentInfo* cast_GtkRecentInfo(GtkWidget* widget) {
 
 /* specific versions */
 
-#if defined(GTK_3_6) || defined(GTK_3_10) || defined(GTK_3_12)
+#if defined(GTK_3_6) || defined(GTK_3_10) || defined(GTK_3_12) || defined(GTK_3_14)
 
 GtkMenuButton* cast_GtkMenuButton(GtkWidget* widget) {
     return GTK_MENU_BUTTON(widget);
@@ -418,7 +418,7 @@ GtkMenuButton* cast_GtkMenuButton(GtkWidget* widget) {
 
 #endif
 
-#if defined(GTK_3_10) || defined(GTK_3_12)
+#if defined(GTK_3_10) || defined(GTK_3_12) || defined(GTK_3_14)
 
 GtkSearchBar* cast_GtkSearchBar(GtkWidget* widget) {
     return GTK_SEARCH_BAR(widget);
@@ -450,7 +450,7 @@ GtkListBoxRow* cast_GtkListBoxRow(GtkWidget* widget) {
 
 #endif
 
-#if defined(GTK_3_12)
+#if defined(GTK_3_12) || defined(GTK_3_14)
 
 GtkFlowBox* cast_GtkFlowBox(GtkWidget* widget) {
     return GTK_FLOW_BOX(widget);
