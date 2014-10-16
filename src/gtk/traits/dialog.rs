@@ -107,7 +107,7 @@ pub trait Dialog: traits::Widget + traits::Container + traits::Bin + traits::Win
         }
     }
 
-    #[cfg(feature = "GTK_3_12")]
+    #[cfg(any(feature = "GTK_3_12", feature = "GTK_3_14"))]
     fn get_header_bar<T: traits::Widget>(&self) -> Option<T> {
         let tmp_pointer = unsafe { ffi::gtk_dialog_get_header_bar(GTK_DIALOG(self.get_widget())) };
 

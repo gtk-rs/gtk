@@ -84,7 +84,7 @@ To include rgtk as a cargo dependency you have to add it to your Cargo.toml and 
 git = "https://github.com/jeremyletang/rgtk.git"
 features = ["GTK_3_12"]
 ```
-Currently available GTK versions are 3.12, 3.10, 3.8 and 3.6
+Currently available GTK versions are 3.14, 3.12, 3.10, 3.8 and 3.6
 
 Use __rgtk__
 ============

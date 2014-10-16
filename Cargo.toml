@@ -5,6 +5,7 @@ authors = ["letang.jeremy@gmail.com", "mathijs.henquet@gmail.com", "guillaume1.g
 build = "sh cargobuild.sh"
 
 [features]
+GTK_3_14 = []
 GTK_3_12 = []
 GTK_3_10 = []
 GTK_3_8 = []
