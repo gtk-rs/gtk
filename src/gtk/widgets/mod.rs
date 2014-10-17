@@ -122,6 +122,8 @@ pub use self::iconview::IconView;
 pub use self::treeselection::TreeSelection;
 pub use self::recentchooserwidget::RecentChooserWidget;
 pub use self::combobox::ComboBox;
+#[cfg(any(feature = "GTK_3_12", feature = "GTK_3_14"))]
+pub use self::popover::Popover;
 
 mod window;
 mod label;
@@ -232,3 +234,5 @@ mod iconview;
 mod treeselection;
 mod recentchooserwidget;
 mod combobox;
+#[cfg(any(feature = "GTK_3_12", feature = "GTK_3_14"))]
+mod popover;

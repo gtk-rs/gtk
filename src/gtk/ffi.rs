@@ -326,6 +326,9 @@ pub struct C_GtkRecentChooserWidget;
 #[repr(C)]
 pub struct C_GtkComboBox;
 
+#[repr(C)]
+pub struct C_GtkPopover;
+
 pub fn to_gboolean(b: bool) -> Gboolean {
     match b {
         true => GTRUE,
@@ -736,6 +739,21 @@ extern "C" {
     //=========================================================================
     pub fn gtk_recent_chooser_widget_new       () -> *mut C_GtkWidget;
     pub fn gtk_recent_chooser_widget_new_for_manager(manager: *mut C_GtkRecentManager) -> *mut C_GtkWidget;
+
+    //=========================================================================
+    // GtkPopover                                                        NOT OK
+    //=========================================================================
+    pub fn gtk_popover_new                     (relative_to: *mut C_GtkWidget) -> *mut C_GtkWidget;
+    //pub fn gtk_popover_new_from_model          (relative_to: *mut C_GtkWidget, model: *mut C_GMenuModel) -> *mut C_GtkWidget;
+    //pub fn gtk_popover_bind_model              (popover: *mut C_GtkPopover, model: *mut C_GMenuModel, action_namespace: *const c_char);
+    pub fn gtk_popover_set_relative_to         (popover: *mut C_GtkPopover, relative_to: *mut C_GtkWidget);
+    pub fn gtk_popover_get_relative_to         (popover: *mut C_GtkPopover) -> *mut C_GtkWidget;
+    //pub fn gtk_popover_set_pointing_to         (popover: *mut C_GtkPopover, rect: *mut GdkRectangle);
+    //pub fn gtk_popover_get_pointing_to         (popover: *mut C_GtkPopover) -> *mut GdkRectangle;
+    pub fn gtk_popover_set_position            (popover: *mut C_GtkPopover, position: gtk::PositionType);
+    pub fn gtk_popover_get_position            (popover: *mut C_GtkPopover) -> gtk::PositionType;
+    pub fn gtk_popover_set_modal               (popover: *mut C_GtkPopover, modal: Gboolean);
+    pub fn gtk_popover_get_modal               (popover: *mut C_GtkPopover) -> Gboolean;
 
     //=========================================================================
     // GtkTreePath                                                       NOT OK
@@ -3026,4 +3044,5 @@ extern "C" {
     pub fn cast_GtkTreeModelFromTreeStore(store: *mut C_GtkTreeStore) -> *mut C_GtkTreeModel;
     pub fn cast_GtkTreeStoreFromTreeModel(store: *mut C_GtkTreeModel) -> *mut C_GtkTreeStore;
     pub fn cast_GtkComboBox(widget: *mut C_GtkWidget) -> *mut C_GtkComboBox;
+    pub fn cast_GtkPopover(widget: *mut C_GtkWidget) -> *mut C_GtkPopover;
 }

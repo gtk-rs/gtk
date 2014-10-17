@@ -472,6 +472,10 @@ GtkActionBar* cast_GtkActionBar(GtkWidget* widget) {
     return GTK_ACTION_BAR(widget);
 }
 
+GtkPopover *cast_GtkPopover(GtkWidget* widget) {
+    return GTK_POPOVER(widget);
+}
+
 #endif
 
 GAppInfo* cast_GtkAppInfo(GtkWidget* widget) {

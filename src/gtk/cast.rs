@@ -444,3 +444,7 @@ pub fn GTK_TREE_STORE_FROM_TREE_MODEL(model: *mut ffi::C_GtkTreeModel) -> *mut f
 pub fn GTK_COMBO_BOX(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkComboBox {
     unsafe { ffi::cast_GtkComboBox(widget) }
 }
+
+pub fn GTK_POPOVER(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkPopover {
+    unsafe { ffi::cast_GtkPopover(widget) }
+}

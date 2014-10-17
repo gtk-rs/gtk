@@ -179,6 +179,7 @@ pub use self::widgets::{
     FlowBox,
     FlowBoxChild,
     ActionBar,
+    Popover
 };
 
 /// GTK Enum members, see submodule `enum` for more info
