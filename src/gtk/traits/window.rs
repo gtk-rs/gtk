@@ -55,6 +55,12 @@ pub trait Window : Widget {
         unsafe {
             ffi::gtk_window_set_position(GTK_WINDOW(self.get_widget()), window_position);
         }
+    }
 
+    #[cfg(any(feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
+    fn set_titlebar<T: Widget>(&self, titlebar: &T) {
+        unsafe {
+            ffi::gtk_window_set_titlebar(GTK_WINDOW(self.get_widget()), titlebar.get_widget());
+        }
     }
 }
