@@ -15,9 +15,11 @@
 
 #![allow(non_camel_case_types)]
 
-use libc::{c_int, c_void, c_uint, c_char};
+use libc::{c_int, c_void, c_uint, c_char, c_ulong};
 
 pub type GQuark = u32;
+
+pub type GType = c_ulong;
 
 pub type Gboolean = c_int;
 pub const GFALSE:  c_int = 0;
@@ -151,4 +153,35 @@ extern "C" {
     //=========================================================================
     pub fn g_object_ref(object: *mut C_GObject) -> *mut C_GObject;
     pub fn g_object_unref(object: *mut C_GObject);
+
+    //=========================================================================
+    // GType constants
+    //=========================================================================
+    pub static g_type_invalid: GType;
+    pub static g_type_none: GType;
+    pub static g_type_interface: GType;
+    pub static g_type_char: GType;
+    pub static g_type_uchar: GType;
+    pub static g_type_boolean: GType;
+    pub static g_type_int: GType;
+    pub static g_type_uint: GType;
+    pub static g_type_long: GType;
+    pub static g_type_ulong: GType;
+    pub static g_type_int64: GType;
+    pub static g_type_uint64: GType;
+    pub static g_type_enum: GType;
+    pub static g_type_flags: GType;
+    pub static g_type_float: GType;
+    pub static g_type_double: GType;
+    pub static g_type_string: GType;
+    pub static g_type_pointer: GType;
+    pub static g_type_boxed: GType;
+    pub static g_type_param: GType;
+    pub static g_type_object: GType;
+    pub static g_type_variant: GType;
+    pub static g_type_reserved_glib_first: GType;
+    pub static g_type_reserved_glib_last: GType;
+    pub static g_type_reserved_bse_first: GType;
+    pub static g_type_reserved_bse_last: GType;
+    pub static g_type_reserved_user_first: GType;
 }

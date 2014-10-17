@@ -13,8 +13,10 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::ffi;
+use glib::ffi::GType;
 use gtk;
+use gtk::{TreeIter, TreePath};
+use gtk::ffi;
 use std::c_str::CString;
 use std::string::raw::from_buf;
 
@@ -31,18 +33,18 @@ impl TreeModel {
         unsafe { ffi::gtk_tree_model_get_n_columns(self.pointer) }
     }
 
-    pub fn get_column_type(&self, index_: i32) -> i32 {
+    pub fn get_column_type(&self, index_: i32) -> GType {
         unsafe { ffi::gtk_tree_model_get_column_type(self.pointer, index_) }
     }
 
-    pub fn get_iter(&self, iter: &gtk::TreeIter, path: &gtk::TreePath) -> bool {
+    pub fn get_iter(&self, iter: &TreeIter, path: &TreePath) -> bool {
         match unsafe { ffi::gtk_tree_model_get_iter(self.pointer, iter.get_pointer(), path.get_pointer()) } {
             0 => false,
             _ => true
         }
     }
 
-    pub fn get_iter_from_string(&self, iter: &gtk::TreeIter, path_string: &str) -> bool {
+    pub fn get_iter_from_string(&self, iter: &TreeIter, path_string: &str) -> bool {
         path_string.with_c_str(|c_str| {
             match unsafe { ffi::gtk_tree_model_get_iter_from_string(self.pointer, iter.get_pointer(), c_str) } {
                 0 => false,
@@ -51,63 +53,63 @@ impl TreeModel {
         })
     }
     
-    pub fn get_iter_first(&self, iter: &gtk::TreeIter) -> bool {
+    pub fn get_iter_first(&self, iter: &TreeIter) -> bool {
         match unsafe { ffi::gtk_tree_model_get_iter_first(self.pointer, iter.get_pointer()) } {
             0 => false,
             _ => true
         }
     }
 
-    pub fn get_path(&self, iter: &gtk::TreeIter) -> Option<gtk::TreePath> {
+    pub fn get_path(&self, iter: &TreeIter) -> Option<TreePath> {
         let tmp_pointer = unsafe { ffi::gtk_tree_model_get_path(self.pointer, iter.get_pointer()) };
 
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::TreePath::wrap_pointer(tmp_pointer))
+            Some(TreePath::wrap_pointer(tmp_pointer))
         }
     }
 
-    pub fn iter_next(&self, iter: &gtk::TreeIter) -> bool {
+    pub fn iter_next(&self, iter: &TreeIter) -> bool {
         match unsafe { ffi::gtk_tree_model_iter_next(self.pointer, iter.get_pointer()) } {
             0 => false,
             _ => true
         }
     }
 
-    pub fn iter_previous(&self, iter: &gtk::TreeIter) -> bool {
+    pub fn iter_previous(&self, iter: &TreeIter) -> bool {
         match unsafe { ffi::gtk_tree_model_iter_previous(self.pointer, iter.get_pointer()) } {
             0 => false,
             _ => true
         }
     }
 
-    pub fn iter_children(&self, iter: &gtk::TreeIter, parent: &gtk::TreeIter) -> bool {
+    pub fn iter_children(&self, iter: &TreeIter, parent: &TreeIter) -> bool {
         match unsafe { ffi::gtk_tree_model_iter_children(self.pointer, iter.get_pointer(), parent.get_pointer()) } {
             0 => false,
             _ => true
         }
     }
     
-    pub fn iter_has_child(&self, iter: &gtk::TreeIter) -> bool {
+    pub fn iter_has_child(&self, iter: &TreeIter) -> bool {
         match unsafe { ffi::gtk_tree_model_iter_has_child(self.pointer, iter.get_pointer()) } {
             0 => false,
             _ => true
         }
     }
 
-    pub fn iter_n_children(&self, iter: &gtk::TreeIter) -> i32 {
+    pub fn iter_n_children(&self, iter: &TreeIter) -> i32 {
         unsafe { ffi::gtk_tree_model_iter_n_children(self.pointer, iter.get_pointer()) }
     }
 
-    pub fn iter_nth_child(&self, iter: &gtk::TreeIter, parent: &gtk::TreeIter, n: i32) -> bool {
+    pub fn iter_nth_child(&self, iter: &TreeIter, parent: &TreeIter, n: i32) -> bool {
         match unsafe { ffi::gtk_tree_model_iter_nth_child(self.pointer, iter.get_pointer(), parent.get_pointer(), n) } {
             0 => false,
             _ => true
         }
     }
 
-    pub fn iter_parent(&self, iter: &gtk::TreeIter, child: &gtk::TreeIter) -> bool {
+    pub fn iter_parent(&self, iter: &TreeIter, child: &TreeIter) -> bool {
         match unsafe { ffi::gtk_tree_model_iter_parent(self.pointer, iter.get_pointer(), child.get_pointer()) } {
             0 => false,
             _ => true
@@ -115,7 +117,7 @@ impl TreeModel {
     }
 
     #[allow(unused_variable)]
-    pub fn get_string_from_iter(&self, iter: &gtk::TreeIter) -> String {
+    pub fn get_string_from_iter(&self, iter: &TreeIter) -> String {
         let string = unsafe { ffi::gtk_tree_model_get_string_from_iter(self.pointer, iter.get_pointer()) };
 
         if string.is_null() {
@@ -130,31 +132,31 @@ impl TreeModel {
         }
     }
 
-    pub fn row_changed(&self, path: &gtk::TreePath, iter: &gtk::TreeIter) {
+    pub fn row_changed(&self, path: &TreePath, iter: &TreeIter) {
         unsafe { ffi::gtk_tree_model_row_changed(self.pointer, path.get_pointer(), iter.get_pointer()) }
     }
 
-    pub fn row_inserted(&self, path: &gtk::TreePath, iter: &gtk::TreeIter) {
+    pub fn row_inserted(&self, path: &TreePath, iter: &TreeIter) {
         unsafe { ffi::gtk_tree_model_row_inserted(self.pointer, path.get_pointer(), iter.get_pointer()) }
     }
 
-    pub fn row_has_child_toggled(&self, path: &gtk::TreePath, iter: &gtk::TreeIter) {
+    pub fn row_has_child_toggled(&self, path: &TreePath, iter: &TreeIter) {
         unsafe { ffi::gtk_tree_model_row_has_child_toggled(self.pointer, path.get_pointer(), iter.get_pointer()) }
     }
 
-    pub fn row_deleted(&self, path: &gtk::TreePath) {
+    pub fn row_deleted(&self, path: &TreePath) {
         unsafe { ffi::gtk_tree_model_row_deleted(self.pointer, path.get_pointer()) }
     }
 
-    pub fn rows_reordered(&self, path: &gtk::TreePath, iter: &gtk::TreeIter, new_order: &mut [i32]) {
+    pub fn rows_reordered(&self, path: &TreePath, iter: &TreeIter, new_order: &mut [i32]) {
         unsafe { ffi::gtk_tree_model_rows_reordered(self.pointer, path.get_pointer(), iter.get_pointer(), new_order.as_mut_ptr()) }
     }
 
-    pub fn ref_node(&self, iter: &gtk::TreeIter) {
+    pub fn ref_node(&self, iter: &TreeIter) {
         unsafe { ffi::gtk_tree_model_ref_node(self.pointer, iter.get_pointer()) }
     }
 
-    pub fn unref_node(&self, iter: &gtk::TreeIter) {
+    pub fn unref_node(&self, iter: &TreeIter) {
         unsafe { ffi::gtk_tree_model_unref_node(self.pointer, iter.get_pointer()) }
     }
 

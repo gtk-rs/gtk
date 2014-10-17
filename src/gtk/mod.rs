@@ -136,6 +136,8 @@ pub use self::widgets::{
     TreePath,
     TreeIter,
     TreeModel,
+    ListStore,
+    TreeStore,
     MenuItem,
     SeparatorMenuItem,
     CheckMenuItem,

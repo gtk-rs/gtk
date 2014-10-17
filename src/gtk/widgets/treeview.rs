@@ -30,6 +30,11 @@ impl TreeView {
         check_pointer!(tmp_pointer, TreeView)
     }
 
+    pub fn new_with_model(model: &gtk::TreeModel) -> Option<TreeView> {
+        let tmp_pointer = unsafe { ffi::gtk_tree_view_new_with_model(model.get_pointer()) };
+        check_pointer!(tmp_pointer, TreeView)
+    }
+
     pub fn get_headers_visible(&self) -> bool {
         unsafe {
             ffi::to_bool(ffi::gtk_tree_view_get_headers_visible(GTK_TREE_VIEW(self.pointer)))
@@ -361,6 +366,23 @@ impl TreeView {
         }
     }
 
+    pub fn get_model(&self) -> Option<gtk::TreeModel> {
+        let tmp_pointer = unsafe { ffi::gtk_tree_view_get_model(GTK_TREE_VIEW(self.pointer)) };
+
+        if tmp_pointer.is_null() {
+            None
+        } else {
+            Some(gtk::TreeModel::wrap_pointer(tmp_pointer))
+        }
+    }
+
+    pub fn set_model(&mut self, model: &gtk::TreeModel) {
+        unsafe {
+            ffi::gtk_tree_view_set_model(GTK_TREE_VIEW(self.pointer),
+                                         model.get_pointer())
+        }
+    }
+
     pub fn get_selection(&self) -> Option<TreeSelection> {
         let tmp_pointer = unsafe { ffi::gtk_tree_view_get_selection(GTK_TREE_VIEW(self.pointer)) } as *mut ffi::C_GtkWidget;
 
@@ -369,6 +391,11 @@ impl TreeView {
         } else {
             Some(ffi::FFIWidget::wrap(tmp_pointer))
         }
+    }
+
+    pub fn append_column(&mut self, column: &gtk::TreeViewColumn) -> i32 {
+        unsafe { ffi::gtk_tree_view_append_column(GTK_TREE_VIEW(self.pointer),
+                                                  column.get_pointer()) }
     }
 }
 

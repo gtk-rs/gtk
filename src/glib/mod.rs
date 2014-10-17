@@ -24,6 +24,7 @@ pub use self::slist::{SList, SElem};
 pub use self::glib_container::GlibContainer;
 pub use self::error::{Error};
 pub use self::permission::Permission;
+pub use self::ffi::GType;
 
 mod list;
 mod slist;
@@ -55,8 +56,6 @@ pub enum ParamFlags{
     StaticBlurb,
     Deprecated
 }
-
-pub type GType = uint; //FIXME: this is probably wrong
 
 pub struct ParamSpec {
     g_type_instance: TypeInstance,

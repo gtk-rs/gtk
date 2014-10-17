@@ -1,0 +1,11 @@
+[package]
+name = "rgtk-examples"
+version = "0.0.1"
+authors = []
+
+[dependencies.rgtk]
+path = "../../"
+features = ["GTK_3_6"]
+
+[[bin]]
+name = "treeview"
