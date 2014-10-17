@@ -9,7 +9,7 @@ Installation
 __rgtk__ uses autoconf tools to build, so you should install them on your system.
 
 
-For debian based systems:
+For Debian based systems:
 ```Shell
 > apt-get install autoconf
 ```
@@ -21,15 +21,20 @@ For OSX:
 
 You should also install __GTK+__, __GLib__ and __Cairo__ development files before installing __rgtk__. Optionally, it is recommended to install the debug packages containing helpful debug symbols.
 
-For debian based system:
+For Debian based system:
 ```Shell
 > apt-get install libgtk-3-dev   libglib2.0-dev   libcairo2-dev
 > apt-get install libgtk-3-0-dbg libglib2.0-0-dbg libcairo2-dbg
 ```
 
+For Fedora:
+```Shell
+> yum install gtk3-devel glib2-devel
+```
+
 For OSX:
 ```Shell
-> apt-get install gtk+3
+> brew install gtk+3
 ```
 
 __rgtk__ targets __GTK+__ 3.12 but can also compile older versions 3.6, 3.8 and 3.10. Setting the environment variable `GTK_VERSION` to any of `GTK_3_6`, `GTK_3_8`, `GTK_3_10`, `GTK_3_12` allows pick a version. The default is GTK_3_12.
