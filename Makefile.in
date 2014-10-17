@@ -21,7 +21,7 @@ INC 				= $(shell pkg-config --cflags gtk+-3.0)
 LIBS 				= $(shell pkg-config --libs gtk+-3.0)
 OS 					= $(shell uname)
 
-GTK_VERSION ?= GTK_3_12
+GTK_VERSION ?= $(shell pkg-config --modversion gtk+-3.0 | awk -F. '{print "GTK_3_"$$2}')
 
 .DEFAULT: glue
 

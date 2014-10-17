@@ -19,7 +19,7 @@
 
 use gtk::ffi;
 use gtk::traits;
-#[cfg(any(feature = "GTK_3_10",feature = "GTK_3_12"))]
+#[cfg(any(feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
 use gtk::IconSize;
 
 /**
@@ -60,7 +60,7 @@ impl Button {
         check_pointer!(tmp_pointer, Button)
     }
 
-    #[cfg(any(feature = "GTK_3_10",feature = "GTK_3_12"))]
+    #[cfg(any(feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
     pub fn new_from_icon_name(icon_name: &str, size: IconSize) -> Option<Button> {
         let tmp_pointer = unsafe {
             icon_name.with_c_str(|c_str| {

@@ -26,7 +26,7 @@ pub use self::fontbutton::FontButton;
 pub use self::togglebutton::ToggleButton;
 pub use self::checkbutton::CheckButton;
 pub use self::fontchooserdialog::FontChooserDialog;
-#[cfg(any(feature = "GTK_3_6", feature = "GTK_3_8", feature = "GTK_3_10", feature = "GTK_3_12"))]
+#[cfg(any(feature = "GTK_3_6", feature = "GTK_3_8", feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
 pub use self::menubutton::MenuButton;
 pub use self::colorbutton::ColorButton;
 pub use self::linkbutton::LinkButton;
@@ -36,13 +36,13 @@ pub use self::volumebutton::VolumeButton;
 pub use self::grid::Grid;
 pub use self::entrybuffer::EntryBuffer;
 pub use self::entry::Entry;
-#[cfg(any(feature = "GTK_3_10", feature = "GTK_3_12"))]
+#[cfg(any(feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
 pub use self::searchentry::SearchEntry;
 pub use self::switch::Switch;
 pub use self::scale::Scale;
-#[cfg(any(feature = "GTK_3_6", feature = "GTK_3_8", feature = "GTK_3_10", feature = "GTK_3_12"))]
+#[cfg(any(feature = "GTK_3_6", feature = "GTK_3_8", feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
 pub use self::levelbar::LevelBar;
-#[cfg(any(feature = "GTK_3_10", feature = "GTK_3_12"))]
+#[cfg(any(feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
 pub use self::searchbar::SearchBar;
 pub use self::spinbutton::SpinButton;
 pub use self::spinner::Spinner;
@@ -68,21 +68,21 @@ pub use self::aboutdialog::AboutDialog;
 pub use self::messagedialog::MessageDialog;
 pub use self::colorchooserdialog::ColorChooserDialog;
 pub use self::notebook::NoteBook;
-#[cfg(any(feature = "GTK_3_10", feature = "GTK_3_12"))]
+#[cfg(any(feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
 pub use self::stack::Stack;
-#[cfg(any(feature = "GTK_3_10", feature = "GTK_3_12"))]
+#[cfg(any(feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
 pub use self::stack_switcher::StackSwitcher;
-#[cfg(any(feature = "GTK_3_10", feature = "GTK_3_12"))]
+#[cfg(any(feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
 pub use self::revealer::Revealer;
 pub use self::overlay::Overlay;
 pub use self::layout::Layout;
-#[cfg(any(feature = "GTK_3_10", feature = "GTK_3_12"))]
+#[cfg(any(feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
 pub use self::header_bar::HeaderBar;
-#[cfg(feature = "GTK_3_12")]
+#[cfg(any(feature = "GTK_3_12", feature = "GTK_3_14"))]
 pub use self::flow_box::{FlowBox, FlowBoxChild};
-#[cfg(any(feature = "GTK_3_10", feature = "GTK_3_12"))]
+#[cfg(any(feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
 pub use self::list_box::{ListBox, ListBoxRow};
-#[cfg(feature = "GTK_3_12")]
+#[cfg(any(feature = "GTK_3_12", feature = "GTK_3_14"))]
 pub use self::action_bar::ActionBar;
 pub use self::filefilter::FileFilter;
 pub use self::filechooserdialog::FileChooserDialog;
@@ -132,7 +132,7 @@ mod separator;
 mod fontbutton;
 mod togglebutton;
 mod checkbutton;
-#[cfg(any(feature = "GTK_3_6", feature = "GTK_3_8", feature = "GTK_3_10", feature = "GTK_3_12"))]
+#[cfg(any(feature = "GTK_3_6", feature = "GTK_3_8", feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
 mod menubutton;
 mod colorbutton;
 mod linkbutton;
@@ -142,13 +142,13 @@ mod volumebutton;
 mod grid;
 mod entrybuffer;
 mod entry;
-#[cfg(any(feature = "GTK_3_10", feature = "GTK_3_12"))]
+#[cfg(any(feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
 mod searchentry;
 mod switch;
 mod scale;
-#[cfg(any(feature = "GTK_3_6", feature = "GTK_3_8", feature = "GTK_3_10", feature = "GTK_3_12"))]
+#[cfg(any(feature = "GTK_3_6", feature = "GTK_3_8", feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
 mod levelbar;
-#[cfg(any(feature = "GTK_3_10", feature = "GTK_3_12"))]
+#[cfg(any(feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
 mod searchbar;
 mod spinbutton;
 mod spinner;
@@ -172,21 +172,21 @@ mod colorchooserdialog;
 mod fontchooserdialog;
 mod messagedialog;
 mod notebook;
-#[cfg(any(feature = "GTK_3_10", feature = "GTK_3_12"))]
+#[cfg(any(feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
 mod stack;
-#[cfg(any(feature = "GTK_3_10", feature = "GTK_3_12"))]
+#[cfg(any(feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
 mod stack_switcher;
-#[cfg(any(feature = "GTK_3_10", feature = "GTK_3_12"))]
+#[cfg(any(feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
 mod revealer;
 mod overlay;
 mod layout;
-#[cfg(any(feature = "GTK_3_10", feature = "GTK_3_12"))]
+#[cfg(any(feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
 mod header_bar;
-#[cfg(feature = "GTK_3_12")]
+#[cfg(any(feature = "GTK_3_12", feature = "GTK_3_14"))]
 mod flow_box;
-#[cfg(any(feature = "GTK_3_10", feature = "GTK_3_12"))]
+#[cfg(any(feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
 mod list_box;
-#[cfg(feature = "GTK_3_12")]
+#[cfg(any(feature = "GTK_3_12", feature = "GTK_3_14"))]
 mod action_bar;
 mod filefilter;
 mod filechooserdialog;
