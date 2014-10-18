@@ -323,6 +323,12 @@ pub struct C_GtkTreeSelection;
 #[repr(C)]
 pub struct C_GtkRecentChooserWidget;
 
+#[repr(C)]
+pub struct C_GtkComboBox;
+
+#[repr(C)]
+pub struct C_GtkPopover;
+
 pub fn to_gboolean(b: bool) -> Gboolean {
     match b {
         true => GTRUE,
@@ -331,7 +337,7 @@ pub fn to_gboolean(b: bool) -> Gboolean {
 }
 
 pub fn to_bool(b: Gboolean) -> bool {
-    b == GTRUE
+    b != GFALSE
 }
 
 pub trait FFIWidget {
@@ -733,6 +739,21 @@ extern "C" {
     //=========================================================================
     pub fn gtk_recent_chooser_widget_new       () -> *mut C_GtkWidget;
     pub fn gtk_recent_chooser_widget_new_for_manager(manager: *mut C_GtkRecentManager) -> *mut C_GtkWidget;
+
+    //=========================================================================
+    // GtkPopover                                                        NOT OK
+    //=========================================================================
+    pub fn gtk_popover_new                     (relative_to: *mut C_GtkWidget) -> *mut C_GtkWidget;
+    //pub fn gtk_popover_new_from_model          (relative_to: *mut C_GtkWidget, model: *mut C_GMenuModel) -> *mut C_GtkWidget;
+    //pub fn gtk_popover_bind_model              (popover: *mut C_GtkPopover, model: *mut C_GMenuModel, action_namespace: *const c_char);
+    pub fn gtk_popover_set_relative_to         (popover: *mut C_GtkPopover, relative_to: *mut C_GtkWidget);
+    pub fn gtk_popover_get_relative_to         (popover: *mut C_GtkPopover) -> *mut C_GtkWidget;
+    //pub fn gtk_popover_set_pointing_to         (popover: *mut C_GtkPopover, rect: *mut GdkRectangle);
+    //pub fn gtk_popover_get_pointing_to         (popover: *mut C_GtkPopover) -> *mut GdkRectangle;
+    pub fn gtk_popover_set_position            (popover: *mut C_GtkPopover, position: gtk::PositionType);
+    pub fn gtk_popover_get_position            (popover: *mut C_GtkPopover) -> gtk::PositionType;
+    pub fn gtk_popover_set_modal               (popover: *mut C_GtkPopover, modal: Gboolean);
+    pub fn gtk_popover_get_modal               (popover: *mut C_GtkPopover) -> Gboolean;
 
     //=========================================================================
     // GtkTreePath                                                       NOT OK
@@ -1426,6 +1447,50 @@ extern "C" {
     // GtkColorChooserDialog                                                 OK
     //=========================================================================
     pub fn gtk_color_chooser_dialog_new        (title: *const c_char, parent: *mut C_GtkWindow) -> *mut C_GtkWidget;
+
+    //=========================================================================
+    // GtkComboBox                                                       NOT OK
+    //=========================================================================
+    pub fn gtk_combo_box_new                   () -> *mut C_GtkWidget;
+    pub fn gtk_combo_box_new_with_entry        () -> *mut C_GtkWidget;
+    pub fn gtk_combo_box_new_with_model        (model: *mut C_GtkTreeModel) -> *mut C_GtkWidget;
+    pub fn gtk_combo_box_new_with_model_and_entry(model: *mut C_GtkTreeModel) -> *mut C_GtkWidget;
+    //pub fn gtk_combo_box_new_with_area         (area: *mut C_GtkCellArea) -> *mut C_GtkWidget;
+    //pub fn gtk_combo_box_new_with_area_and_entry(area: *mut C_GtkCellArea) -> *mut C_GtkWidget;
+    pub fn gtk_combo_box_get_wrap_width        (combo_box: *mut C_GtkComboBox) -> c_int;
+    pub fn gtk_combo_box_set_wrap_width        (combo_box: *mut C_GtkComboBox, width: c_int);
+    pub fn gtk_combo_box_get_row_span_column   (combo_box: *mut C_GtkComboBox) -> c_int;
+    pub fn gtk_combo_box_set_row_span_column   (combo_box: *mut C_GtkComboBox, row_span: c_int);
+    pub fn gtk_combo_box_get_column_span_column(combo_box: *mut C_GtkComboBox) -> c_int;
+    pub fn gtk_combo_box_set_column_span_column(combo_box: *mut C_GtkComboBox, column_span: c_int);
+    pub fn gtk_combo_box_get_active            (combo_box: *mut C_GtkComboBox) -> c_int;
+    pub fn gtk_combo_box_set_active            (combo_box: *mut C_GtkComboBox, active: c_int);
+    pub fn gtk_combo_box_get_active_iter       (combo_box: *mut C_GtkComboBox) -> *mut C_GtkTreeIter;
+    pub fn gtk_combo_box_set_active_iter       (combo_box: *mut C_GtkComboBox, iter: *mut C_GtkTreeIter);
+    pub fn gtk_combo_box_get_id_column         (combo_box: *mut C_GtkComboBox) -> c_int;
+    pub fn gtk_combo_box_set_id_column         (combo_box: *mut C_GtkComboBox, id_column: c_int);
+    pub fn gtk_combo_box_get_active_id         (combo_box: *mut C_GtkComboBox) -> *const c_char;
+    pub fn gtk_combo_box_set_active_id         (combo_box: *mut C_GtkComboBox, active_id: *const c_char) -> Gboolean;
+    pub fn gtk_combo_box_get_model             (combo_box: *mut C_GtkComboBox) -> *mut C_GtkTreeModel;
+    pub fn gtk_combo_box_set_model             (combo_box: *mut C_GtkComboBox, model: *mut C_GtkTreeModel);
+    //pub fn gtk_combo_box_popup_for_device      (combo_box: *mut C_GtkComboBox, device: *mut gdk::C_GdkDevice);
+    pub fn gtk_combo_box_popup                 (combo_box: *mut C_GtkComboBox);
+    pub fn gtk_combo_box_popdown               (combo_box: *mut C_GtkComboBox);
+    //pub fn gtk_combo_box_get_popup_accessible  (combo_box: *mut C_GtkComboBox) -> *mut C_AtkObject;
+    //pub fn gtk_combo_box_get_row_separator_func(combo_box: *mut C_GtkComboBox) -> C_GtkTreeViewRowSeparatorFunc;
+    //pub fn gtk_combo_box_set_row_separator_func(combo_box: *mut C_GtkComboBox, func: C_GtkTreeViewRowSeparatorFunc,
+    //    data: gpointer, destroy: GDestroyNotify);
+    pub fn gtk_combo_box_get_focus_on_click    (combo_box: *mut C_GtkComboBox) -> Gboolean;
+    pub fn gtk_combo_box_set_focus_on_click    (combo_box: *mut C_GtkComboBox, focus_on_click: Gboolean);
+    pub fn gtk_combo_box_get_button_sensitivity(combo_box: *mut C_GtkComboBox) -> gtk::SensitivityType;
+    pub fn gtk_combo_box_set_button_sensitivity(combo_box: *mut C_GtkComboBox, sensitivity: gtk::SensitivityType);
+    pub fn gtk_combo_box_get_has_entry         (combo_box: *mut C_GtkComboBox) -> Gboolean;
+    pub fn gtk_combo_box_get_entry_text_column (combo_box: *mut C_GtkComboBox) -> c_int;
+    pub fn gtk_combo_box_set_entry_text_column (combo_box: *mut C_GtkComboBox, text_column: c_int);
+    pub fn gtk_combo_box_get_popup_fixed_width (combo_box: *mut C_GtkComboBox) -> c_int;
+    pub fn gtk_combo_box_set_popup_fixed_width (combo_box: *mut C_GtkComboBox, fixed: c_int);
+
+    //pub type GtkTreeViewRowSeparatorFunc = fn(model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter, data: gpointer) -> Gboolean;
 
     //=========================================================================
     // GtkAppLaunchContext                                               NOT OK
@@ -2978,4 +3043,6 @@ extern "C" {
     pub fn cast_GtkListStoreFromTreeModel(store: *mut C_GtkTreeModel) -> *mut C_GtkListStore;
     pub fn cast_GtkTreeModelFromTreeStore(store: *mut C_GtkTreeStore) -> *mut C_GtkTreeModel;
     pub fn cast_GtkTreeStoreFromTreeModel(store: *mut C_GtkTreeModel) -> *mut C_GtkTreeStore;
+    pub fn cast_GtkComboBox(widget: *mut C_GtkWidget) -> *mut C_GtkComboBox;
+    pub fn cast_GtkPopover(widget: *mut C_GtkWidget) -> *mut C_GtkPopover;
 }

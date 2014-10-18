@@ -102,6 +102,7 @@ pub use self::tree_view_column_sizing::TreeViewColumnSizing;
 pub use self::cell_renderer_state::CellRendererState;
 pub use self::tree_model_flags::TreeModelFlags;
 pub use self::icon_view_drop_position::IconViewDropPosition;
+pub use self::sensitivity_type::SensitivityType;
 
 pub mod window_type{
     #[repr(C)]
@@ -1477,5 +1478,19 @@ pub mod icon_view_drop_position {
         DropAbove,
         /// dropped item is inserted below
         DropBelow
+    }
+}
+
+/// Determines how GTK+ handles the sensitivity of stepper arrows at the end of range widgets.
+pub mod sensitivity_type {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum SensitivityType {
+        /// The arrow is made insensitive if the thumb is at the end
+        Auto,
+        /// The arrow is always sensitive
+        On,
+        /// The arrow is always insensitive
+        Off
     }
 }
