@@ -97,13 +97,13 @@ impl HeaderBar {
         }
     }
 
-    pub fn is_close_button_show(&self) -> bool {
+    pub fn is_show_close_button(&self) -> bool {
         unsafe {
             ffi::to_bool(ffi::gtk_header_bar_get_show_close_button(GTK_HEADER_BAR(self.pointer)))
         }
     }
 
-    pub fn set_close_button_show(&mut self, setting: bool) {
+    pub fn set_show_close_button(&mut self, setting: bool) {
         unsafe {
             ffi::gtk_header_bar_set_show_close_button(GTK_HEADER_BAR(self.pointer),
                                                       ffi::to_gboolean(setting))

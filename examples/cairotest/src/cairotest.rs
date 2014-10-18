@@ -3,7 +3,6 @@
 
 extern crate rgtk;
 extern crate log;
-extern crate debug;
 extern crate collections;
 
 use std::f64::consts::PI_2;
