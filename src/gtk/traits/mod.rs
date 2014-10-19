@@ -49,6 +49,7 @@ pub use self::checkmenuitem::CheckMenuItem;
 pub use self::celleditable::CellEditable;
 pub use self::actionable::Actionable;
 pub use self::celllayout::CellLayout;
+pub use self::combobox::ComboBox;
 
 pub mod widget;
 pub mod container;
@@ -86,3 +87,4 @@ pub mod checkmenuitem;
 pub mod celleditable;
 pub mod actionable;
 pub mod celllayout;
+pub mod combobox;

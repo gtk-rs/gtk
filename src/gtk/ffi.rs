@@ -327,6 +327,9 @@ pub struct C_GtkRecentChooserWidget;
 pub struct C_GtkComboBox;
 
 #[repr(C)]
+pub struct C_GtkComboBoxText;
+
+#[repr(C)]
 pub struct C_GtkPopover;
 
 pub fn to_gboolean(b: bool) -> Gboolean {
@@ -1492,6 +1495,21 @@ extern "C" {
     pub fn gtk_combo_box_set_popup_fixed_width (combo_box: *mut C_GtkComboBox, fixed: c_int);
 
     //pub type GtkTreeViewRowSeparatorFunc = fn(model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter, data: gpointer) -> Gboolean;
+
+    //=========================================================================
+    // GtkComboBoxText                                                   NOT OK
+    //=========================================================================
+    pub fn gtk_combo_box_text_new              () -> *mut C_GtkWidget;
+    pub fn gtk_combo_box_text_new_with_entry   () -> *mut C_GtkWidget;
+    pub fn gtk_combo_box_text_append           (combo_box: *mut C_GtkComboBoxText, id: *const c_char, text: *const c_char);
+    pub fn gtk_combo_box_text_prepend          (combo_box: *mut C_GtkComboBoxText, id: *const c_char, text: *const c_char);
+    pub fn gtk_combo_box_text_insert           (combo_box: *mut C_GtkComboBoxText, position: c_int, id: *const c_char, text: *const c_char);
+    pub fn gtk_combo_box_text_append_text      (combo_box: *mut C_GtkComboBoxText, text: *const c_char);
+    pub fn gtk_combo_box_text_prepend_text     (combo_box: *mut C_GtkComboBoxText, text: *const c_char);
+    pub fn gtk_combo_box_text_insert_text      (combo_box: *mut C_GtkComboBoxText, position: c_int, text: *const c_char);
+    pub fn gtk_combo_box_text_remove           (combo_box: *mut C_GtkComboBoxText, position: c_int);
+    pub fn gtk_combo_box_text_remove_all       (combo_box: *mut C_GtkComboBoxText);
+    pub fn gtk_combo_box_text_get_active_text  (combo_box: *mut C_GtkComboBoxText) -> *mut c_char; // to free
 
     //=========================================================================
     // GtkAppLaunchContext                                               NOT OK
@@ -3046,4 +3064,5 @@ extern "C" {
     pub fn cast_GtkTreeStoreFromTreeModel(store: *mut C_GtkTreeModel) -> *mut C_GtkTreeStore;
     pub fn cast_GtkComboBox(widget: *mut C_GtkWidget) -> *mut C_GtkComboBox;
     pub fn cast_GtkPopover(widget: *mut C_GtkWidget) -> *mut C_GtkPopover;
+    pub fn cast_GtkComboBoxText(widget: *mut C_GtkWidget) -> *mut C_GtkComboBoxText;
 }

@@ -71,6 +71,11 @@ GtkComboBox* cast_GtkComboBox(GtkWidget* widget) {
     return GTK_COMBO_BOX(widget);
 }
 
+GtkComboBoxText* cast_GtkComboBoxText(GtkWidget* widget) {
+    return GTK_COMBO_BOX_TEXT(widget);
+}
+
+
 GtkAccessible* cast_GtkAccessible(void* widget) {
     return GTK_ACCESSIBLE(widget);
 }
