@@ -448,3 +448,7 @@ pub fn GTK_COMBO_BOX(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkComboBox {
 pub fn GTK_POPOVER(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkPopover {
     unsafe { ffi::cast_GtkPopover(widget) }
 }
+
+pub fn GTK_COMBO_BOX_TEXT(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkComboBoxText {
+    unsafe { ffi::cast_GtkComboBoxText(widget) }
+}
