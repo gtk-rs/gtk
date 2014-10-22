@@ -47,6 +47,7 @@ let button = gtk::Button:new(); // trait gtk::traits::Button reexported as GtkBu
 
 extern crate libc;
 
+pub use glib::traits::GObject         as GObjectTrait;
 pub use gtk::traits::Widget           as GtkWidgetTrait;
 pub use gtk::traits::Container        as GtkContainerTrait;
 pub use gtk::traits::Window           as GtkWindowTrait;

@@ -2904,10 +2904,6 @@ extern "C" {
     //=========================================================================
     // Glue fixe code
     //=========================================================================
-    pub fn glue_signal_connect(g_object: *mut C_GtkWidget,
-                               signal: *const c_char,
-                               func: Option<extern "C" fn()>,
-                               user_data: *const c_void);
     pub fn g_signal_connect_data(instance: gpointer,
                                  detailed_signal: *const c_char,
                                  c_hanlder: Option<extern "C" fn()>,
@@ -2956,7 +2952,7 @@ extern "C" {
     //=========================================================================
     // GTK Casts functions
     //=========================================================================
-    pub fn cast_GObject(widget: *mut C_GtkWidget) -> *mut glib::ffi::C_GObject;
+    pub fn cast_GtkObject(widget: *mut C_GtkWidget) -> *mut glib::ffi::C_GObject;
     pub fn cast_GtkWindow(widget: *mut C_GtkWidget) -> *mut C_GtkWindow;
     pub fn cast_GtkBin(widget: *mut C_GtkWidget) -> *mut C_GtkBin;
     pub fn cast_GtkButton(widget: *mut C_GtkWidget) -> *mut C_GtkButton;
