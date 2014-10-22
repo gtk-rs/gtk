@@ -453,14 +453,6 @@ pub fn GTK_TREE_STORE(obj: *mut ::glib::ffi::C_GObject) -> *mut ffi::C_GtkTreeSt
     unsafe { ffi::cast_GtkTreeStore(obj) }
 }
 
-pub fn GTK_TREE_PATH(obj: *mut ::glib::ffi::C_GObject) -> *mut ffi::C_GtkTreePath {
-    unsafe { ffi::cast_GtkTreePath(obj) }
-}
-
-pub fn GTK_TREE_ITER(obj: *mut ::glib::ffi::C_GObject) -> *mut ffi::C_GtkTreeIter {
-    unsafe { ffi::cast_GtkTreeIter(obj) }
-}
-
 pub fn GTK_TREE_MODEL(obj: *mut ::glib::ffi::C_GObject) -> *mut ffi::C_GtkTreeModel {
     unsafe { ffi::cast_GtkTreeModel(obj) }
 }

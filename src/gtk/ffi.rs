@@ -3137,7 +3137,5 @@ extern "C" {
     pub fn cast_GtkPopover(widget: *mut C_GtkWidget) -> *mut C_GtkPopover;
     pub fn cast_GtkComboBoxText(widget: *mut C_GtkWidget) -> *mut C_GtkComboBoxText;
     pub fn cast_GtkTreeStore(obj: *mut ::glib::ffi::C_GObject) -> *mut C_GtkTreeStore;
-    pub fn cast_GtkTreePath(obj: *mut ::glib::ffi::C_GObject) -> *mut C_GtkTreePath;
     pub fn cast_GtkTreeModel(obj: *mut ::glib::ffi::C_GObject) -> *mut C_GtkTreeModel;
-    pub fn cast_GtkTreeIter(obj: *mut ::glib::ffi::C_GObject) -> *mut C_GtkTreeIter;
 }

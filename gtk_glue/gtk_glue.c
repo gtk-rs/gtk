@@ -267,16 +267,8 @@ GtkTreeStore* cast_GtkTreeStore(GObject *object) {
     return GTK_TREE_STORE(object);
 }
 
-GtkTreePath* cast_GtkTreePath(GObject *object) {
-    return GTK_TREE_PATH(object);
-}
-
 GtkTreeModel* cast_GtkTreeModel(GObject *object) {
     return GTK_TREE_MODEL(object);
-}
-
-GtkTreeIter* cast_GtkTreeIter(GObject *object) {
-    return GTK_TREE_ITER(object);
 }
 
 GtkImage* cast_GtkImage(GtkWidget* widget) {
