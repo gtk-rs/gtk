@@ -40,6 +40,7 @@ impl Window {
 
 impl_drop!(Window)
 impl_TraitWidget!(Window)
+impl_connect!(Window -> DeleteEvent, KeyPressEvent)
 
 impl traits::Container for Window {}
 impl traits::Window for Window {}

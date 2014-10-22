@@ -39,7 +39,19 @@ GType get_gtype(int x) {
     return G_TYPE_MAKE_FUNDAMENTAL(x);
 }
 
-GObject* cast_GtkObject(void* object) {
+GObject* cast_GtkObject(GtkWidget* object) {
+    return G_OBJECT(object);
+}
+
+GObject* cast_GtkObjectFromListStore(GtkListStore* object) {
+    return G_OBJECT(object);
+}
+
+GObject* cast_GtkObjectFromTreeStore(GtkTreeStore* object) {
+    return G_OBJECT(object);
+}
+
+GObject* cast_GtkObjectFromTreeViewColumn(GtkTreeViewColumn* object) {
     return G_OBJECT(object);
 }
 

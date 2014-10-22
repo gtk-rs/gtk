@@ -24,7 +24,7 @@ pub struct TreeViewColumn {
 impl TreeViewColumn {
     pub fn new() -> Option<TreeViewColumn> {
         let tmp_pointer = unsafe { ffi::gtk_tree_view_column_new() };
-        check_pointer!(tmp_pointer, TreeViewColumn)
+        check_pointer!(tmp_pointer, TreeViewColumn, G_OBJECT_FROM_TREE_VIEW_COLUMN)
     }
 
     pub fn clear(&mut self) {

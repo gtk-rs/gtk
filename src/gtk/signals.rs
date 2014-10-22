@@ -167,11 +167,11 @@ macro_rules! signal(
         }
 
         impl<'a> $class<'a>{
-            pub fn new (cb : |$($arg_type),* |:'a -> $ret_type) -> Box<Signal<'a>> {
+            pub fn new (cb : |$($arg_type),* |:'a -> $ret_type) -> Box<$class<'a>> {
                 box $class{
                     cb: cb,
                     user_data: None
-                } as Box<Signal<'a>>
+                }
             }
 
             //TODO: Rust lexer bug here, can't parse the middel `,` in `|$($arg_type),* , Box<Any>|`

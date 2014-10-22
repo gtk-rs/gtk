@@ -3024,6 +3024,9 @@ extern "C" {
     // GTK Casts functions
     //=========================================================================
     pub fn cast_GtkObject(widget: *mut C_GtkWidget) -> *mut glib::ffi::C_GObject;
+    pub fn cast_GtkObjectFromListStore(widget: *mut C_GtkListStore) -> *mut glib::ffi::C_GObject;
+    pub fn cast_GtkObjectFromTreeStore(widget: *mut C_GtkTreeStore) -> *mut glib::ffi::C_GObject;
+    pub fn cast_GtkObjectFromTreeViewColumn(widget: *mut C_GtkTreeViewColumn) -> *mut glib::ffi::C_GObject;
     pub fn cast_GtkWidget(widget: *mut glib::ffi::C_GObject) -> *mut C_GtkWidget;
     pub fn cast_GtkWindow(widget: *mut C_GtkWidget) -> *mut C_GtkWindow;
     pub fn cast_GtkBin(widget: *mut C_GtkWidget) -> *mut C_GtkBin;

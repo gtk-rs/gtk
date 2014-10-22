@@ -25,7 +25,7 @@ pub struct ListStore {
 impl ListStore {
     pub fn new(column_types: &[GType]) -> Option<ListStore> {
         let tmp_pointer = unsafe { ffi::gtk_list_store_newv(column_types.len().to_i32().unwrap(), column_types) };
-        check_pointer!(tmp_pointer, ListStore)
+        check_pointer!(tmp_pointer, ListStore, G_OBJECT_FROM_LIST_STORE)
     }
 
     pub fn set_column_types(&self, column_types: &[GType]) {
