@@ -2956,6 +2956,7 @@ extern "C" {
     //=========================================================================
     // GTK Casts functions
     //=========================================================================
+    pub fn cast_GObject(widget: *mut C_GtkWidget) -> *mut glib::ffi::C_GObject;
     pub fn cast_GtkWindow(widget: *mut C_GtkWidget) -> *mut C_GtkWindow;
     pub fn cast_GtkBin(widget: *mut C_GtkWidget) -> *mut C_GtkBin;
     pub fn cast_GtkButton(widget: *mut C_GtkWidget) -> *mut C_GtkButton;
