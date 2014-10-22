@@ -25,6 +25,7 @@ pub use self::glib_container::GlibContainer;
 pub use self::error::{Error};
 pub use self::permission::Permission;
 pub use self::ffi::GType;
+pub use self::traits::{FFIGObject, GObject};
 
 mod list;
 mod slist;
@@ -32,6 +33,7 @@ pub mod ffi;
 mod glib_container;
 mod error;
 mod permission;
+pub mod traits;
 
 // An opaque structure used as the base of all interface types.
 pub struct TypeInterface;
