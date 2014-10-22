@@ -103,6 +103,7 @@ pub use self::cell_renderer_state::CellRendererState;
 pub use self::tree_model_flags::TreeModelFlags;
 pub use self::icon_view_drop_position::IconViewDropPosition;
 pub use self::sensitivity_type::SensitivityType;
+pub use self::g_type::GType;
 
 pub mod window_type{
     #[repr(C)]
@@ -1492,5 +1493,70 @@ pub mod sensitivity_type {
         On,
         /// The arrow is always insensitive
         Off
+    }
+}
+
+pub mod g_type {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum GType {
+        /// An invalid GType used as error return value in some functions which return a GType.
+        Invalid,
+        /// A fundamental type which is used as a replacement for the C void return type.
+        None,
+        /// The fundamental type from which all interfaces are derived.
+        Interface,
+        /// The fundamental type corresponding to gchar. The type designated by G_TYPE_CHAR is unconditionally
+        /// an 8-bit signed integer. This may or may not be the same type a the C type "gchar".
+        Char,
+        /// The fundamental type corresponding to guchar.
+        UChar,
+        /// The fundamental type corresponding to gboolean.
+        Boolean,
+        /// The fundamental type corresponding to gint.
+        Int,
+        /// The fundamental type corresponding to guint.
+        UInt,
+        /// The fundamental type corresponding to glong.
+        Long,
+        /// The fundamental type corresponding to gulong.
+        ULong,
+        /// The fundamental type corresponding to gint64.
+        Int64,
+        /// The fundamental type corresponding to guint64.
+        UInt64,
+        /// The fundamental type from which all enumeration types are derived.
+        Enum,
+        /// The fundamental type from which all flags types are derived.
+        Flags,
+        /// The fundamental type corresponding to gfloat.
+        Float,
+        /// The fundamental type corresponding to gdouble.
+        Double,
+        /// The fundamental type corresponding to nul-terminated C strings.
+        String,
+        /// The fundamental type corresponding to gpointer.
+        Pointer,
+        /// The fundamental type from which all boxed types are derived.
+        Boxed,
+        /// The fundamental type from which all GParamSpec types are derived.
+        Param,
+        /// The fundamental type for GObject.
+        Object,
+        /// The fundamental type corresponding to GVariant.
+        /// All floating GVariant instances passed through the GType system are consumed.
+        /// Note that callbacks in closures, and signal handlers for signals of return type G_TYPE_VARIANT, must never return floating variants.
+        /// Note: GLib 2.24 did include a boxed type with this name. It was replaced with this fundamental type in 2.26.
+        Variant,
+        /// First fundamental type number to create a new fundamental type id with G_TYPE_MAKE_FUNDAMENTAL() reserved for GLib.
+        ReservedGLibFirst,
+        /// Last fundamental type number reserved for GLib.
+        ReservedGLibLast = 31,
+        /// First fundamental type number to create a new fundamental type id with G_TYPE_MAKE_FUNDAMENTAL() reserved for BSE.
+        ReservedGLibBSEFirst = 32,
+        /// Last fundamental type number reserved for BSE.
+        ReservedGLibBSELast = 48,
+        /// First available fundamental type number to create new fundamental type id with G_TYPE_MAKE_FUNDAMENTAL().
+        ReservedUserFirst = 49
     }
 }

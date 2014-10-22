@@ -16,7 +16,7 @@
 #![allow(non_camel_case_types)]
 #![allow(dead_code)]
 
-use libc::{c_int, c_char, c_float, c_uint, c_double, c_long, c_short, c_void, c_ulong};
+use libc::{c_int, c_char, c_uchar, c_float, c_uint, c_double, c_long, c_short, c_void, c_ulong};
 
 use gdk;
 use gtk;
@@ -172,6 +172,8 @@ pub struct C_GtkFontChooserDialog;
 #[repr(C)]
 pub struct C_GtkBuildable;
 //pub struct C_GtkPageSetupUnixDialog;
+#[repr(C)]
+pub struct C_GValue;
 #[repr(C)]
 pub struct C_GtkPrintSettings;
 #[repr(C)]
@@ -385,6 +387,46 @@ extern "C" {
     // pub fn gtk_window_activate_default(window: *const const C_GtkWindow) -> Gboolean;
     // pub fn gtk_window_get_type() -> ();
 
+    //=========================================================================
+    // GValue                                                            NOT OK
+    //=========================================================================
+    pub fn create_gvalue                       () -> *mut C_GValue;
+    pub fn get_gtype                           () -> gtk::GType;
+    pub fn g_value_init                        (value: *mut C_GValue, _type: gtk::GType);
+    pub fn g_value_reset                       (value: *mut C_GValue);
+    pub fn g_value_unset                       (value: *mut C_GValue);
+    pub fn g_strdup_value_contents             (value: *mut C_GValue) -> *mut c_char;
+    pub fn g_value_set_boolean                 (value: *mut C_GValue, b: Gboolean);
+    pub fn g_value_get_boolean                 (value: *mut C_GValue) -> Gboolean;
+    pub fn g_value_set_schar                   (value: *mut C_GValue, b: c_char);
+    pub fn g_value_get_schar                   (value: *mut C_GValue) -> c_char;
+    pub fn g_value_set_uchar                   (value: *mut C_GValue, b: c_uchar);
+    pub fn g_value_get_uchar                   (value: *mut C_GValue) -> c_uchar;
+    pub fn g_value_set_int                     (value: *mut C_GValue, b: c_int);
+    pub fn g_value_get_int                     (value: *mut C_GValue) -> c_int;
+    pub fn g_value_set_uint                    (value: *mut C_GValue, b: c_uint);
+    pub fn g_value_get_uint                    (value: *mut C_GValue) -> c_uint;
+    pub fn g_value_set_long                    (value: *mut C_GValue, b: c_long);
+    pub fn g_value_get_long                    (value: *mut C_GValue) -> c_long;
+    pub fn g_value_set_ulong                   (value: *mut C_GValue, b: c_ulong);
+    pub fn g_value_get_ulong                   (value: *mut C_GValue) -> c_ulong;
+    pub fn g_value_set_int64                   (value: *mut C_GValue, b: i64);
+    pub fn g_value_get_int64                   (value: *mut C_GValue) -> i64;
+    pub fn g_value_set_uint64                  (value: *mut C_GValue, b: u64);
+    pub fn g_value_get_uint64                  (value: *mut C_GValue) -> u64;
+    pub fn g_value_set_float                   (value: *mut C_GValue, b: c_float);
+    pub fn g_value_get_float                   (value: *mut C_GValue) -> c_float;
+    pub fn g_value_set_double                  (value: *mut C_GValue, b: c_double);
+    pub fn g_value_get_double                  (value: *mut C_GValue) -> c_double;
+    pub fn g_value_set_enum                    (value: *mut C_GValue, b: gtk::GType);
+    pub fn g_value_get_enum                    (value: *mut C_GValue) -> gtk::GType;
+    pub fn g_value_set_flags                   (value: *mut C_GValue, b: gtk::GType);
+    pub fn g_value_get_flags                   (value: *mut C_GValue) -> gtk::GType;
+    pub fn g_value_set_string                  (value: *mut C_GValue, b: *const c_char);
+    pub fn g_value_set_static_string           (value: *mut C_GValue, b: *const c_char);
+    pub fn g_value_get_string                  (value: *mut C_GValue) -> *const c_char;
+    pub fn g_value_dup_string                  (value: *mut C_GValue) -> *mut c_char;
+    pub fn g_value_set_boxed                   (value: *mut C_GValue, b: *const c_void);
 
     //=========================================================================
     // GtkWidget                                                         NOT OK

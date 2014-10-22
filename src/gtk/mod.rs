@@ -257,7 +257,8 @@ pub use self::enums::{
     cell_renderer_state,
     tree_model_flags,
     icon_view_drop_position,
-    sensitivity_type
+    sensitivity_type,
+    g_type
 };
 
 /// GTK Enum types
@@ -337,7 +338,8 @@ pub use self::enums::{
     CellRendererState,
     TreeModelFlags,
     IconViewDropPosition,
-    SensitivityType
+    SensitivityType,
+    GType
 };
 
 /// GTK various struct
