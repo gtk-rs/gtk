@@ -113,3 +113,5 @@ impl ListStore {
         }
     }
 }
+
+impl_drop!(ListStore, GTK_LIST_STORE)

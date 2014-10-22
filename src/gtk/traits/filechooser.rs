@@ -13,14 +13,11 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::traits;
-use gtk::cast::{GTK_FILE_CHOOSER, GTK_FILE_FILTER};
-use gtk::ffi;
-use gtk::ffi::FFIWidget;
-use gtk;
-use glib;
+use gtk::{mod, traits};
+use gtk::cast::GTK_FILE_CHOOSER;
+use gtk::ffi::{mod, FFIWidget};
+use glib::{mod, GlibContainer};
 use libc::c_char;
-use glib::GlibContainer;
 use std::string;
 
 pub trait FileChooser: traits::Widget {
@@ -363,25 +360,21 @@ pub trait FileChooser: traits::Widget {
     }
 
     fn add_filter(&self, filter: &gtk::FileFilter) -> () {
-        unsafe { ffi::gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(self.get_widget()), GTK_FILE_FILTER(filter.get_widget())) }
+        unsafe { ffi::gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(self.get_widget()), filter.get_pointer()) }
     }
 
     fn remove_filter(&self, filter: &gtk::FileFilter) -> () {
-        unsafe { ffi::gtk_file_chooser_remove_filter(GTK_FILE_CHOOSER(self.get_widget()), GTK_FILE_FILTER(filter.get_widget())) }
+        unsafe { ffi::gtk_file_chooser_remove_filter(GTK_FILE_CHOOSER(self.get_widget()), filter.get_pointer()) }
     }
 
     fn set_filter(&self, filter: &gtk::FileFilter) -> () {
-        unsafe { ffi::gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(self.get_widget()), GTK_FILE_FILTER(filter.get_widget())) }
+        unsafe { ffi::gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(self.get_widget()), filter.get_pointer()) }
     }
 
     fn get_filter(&self) -> Option<gtk::FileFilter> {
         let tmp = unsafe { ffi::gtk_file_chooser_get_filter(GTK_FILE_CHOOSER(self.get_widget())) };
 
-        if tmp.is_null() {
-            None
-        } else {
-            Some(ffi::FFIWidget::wrap(tmp as *mut ffi::C_GtkWidget))
-        }
+        gtk::FileFilter::wrap(tmp)
     }
 
     fn add_shortcut_folder(&self, folder: &str, error: &mut glib::Error) -> bool {

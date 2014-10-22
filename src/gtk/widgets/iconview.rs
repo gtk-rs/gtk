@@ -80,7 +80,7 @@ impl IconView {
 
     pub fn get_path_at_pos(&self, x: i32, y: i32) -> Option<TreePath> {
         let tmp_pointer = unsafe { ffi::gtk_icon_view_get_path_at_pos(GTK_ICON_VIEW(self.pointer), x, y) };
-        
+
         if tmp_pointer.is_null() {
             None
         } else {
@@ -216,12 +216,12 @@ impl IconView {
 
     /*fn get_selected_items<T: traits::TreeRowReference>(&self) -> glib::List<T> {
         let tmp = unsafe { ffi::gtk_icon_view_get_selected_items(GTK_ICON_VIEW(self.pointer)) };
-        
+
         if tmp.is_null() {
             glib::List::new()
         } else {
             let list: glib::List<*mut ffi::C_GtkWidget> = glib::GlibContainer::wrap(tmp);
-        
+
             list.iter().map(|it| ffi::FFIWidget::wrap(*it)).collect()
         }
     }*/

@@ -17,6 +17,7 @@
 
 use libc::c_double;
 use gtk::ffi;
+
 /**
 * A representation of an adjustable bounded value
 *
@@ -25,8 +26,7 @@ use gtk::ffi;
 * * `value-changed` : No Recursion
 */
 pub struct Adjustment {
-    pointer:   *mut ffi::C_GtkAdjustment,
-    can_drop:  bool
+    pointer:   *mut ffi::C_GtkAdjustment
 }
 
 impl Adjustment {
@@ -43,8 +43,7 @@ impl Adjustment {
             None
         } else {
             Some(Adjustment {
-                pointer:    tmp_pointer,
-                can_drop:   true
+                pointer:    tmp_pointer
             })
         }
     }
@@ -167,8 +166,9 @@ impl Adjustment {
     #[doc(hidden)]
     pub fn wrap_pointer(c_adjustment: *mut ffi::C_GtkAdjustment) -> Adjustment {
         Adjustment {
-            pointer: c_adjustment,
-            can_drop: false
+            pointer: c_adjustment
         }
     }
 }
+
+impl_drop!(Adjustment, GTK_ADJUSTMENT)

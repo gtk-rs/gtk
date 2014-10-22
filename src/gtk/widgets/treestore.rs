@@ -140,3 +140,5 @@ impl TreeStore {
         }
     }
 }
+
+impl_drop!(TreeStore, GTK_TREE_STORE)

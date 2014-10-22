@@ -14,11 +14,11 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::ffi;
-use gtk::ffi::FFIWidget;
-use gtk::cast::GTK_FILE_FILTER;
 use std::string;
 
-struct_Widget!(FileFilter)
+pub struct FileFilter {
+    pointer : *mut ffi::C_GtkFileFilter
+}
 
 impl FileFilter {
     pub fn new() -> Option<FileFilter> {
@@ -27,20 +27,20 @@ impl FileFilter {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(FileFilter { pointer: tmp_pointer })
         }
     }
 
     pub fn set_name(&self, name: &str) -> () {
         unsafe {
             name.with_c_str(|c_str| {
-                ffi::gtk_file_filter_set_name(GTK_FILE_FILTER(self.get_widget()), c_str)
+                ffi::gtk_file_filter_set_name(self.pointer, c_str)
             })
         };
     }
 
     pub fn get_name(&self) -> Option<String> {
-        let name = unsafe { ffi::gtk_file_filter_get_name(GTK_FILE_FILTER(self.get_widget())) };
+        let name = unsafe { ffi::gtk_file_filter_get_name(self.pointer) };
 
         if name.is_null() {
             None
@@ -52,7 +52,7 @@ impl FileFilter {
     pub fn add_mime_type(&self, mime_type: &str) -> () {
         unsafe {
             mime_type.with_c_str(|c_str| {
-                ffi::gtk_file_filter_add_mime_type(GTK_FILE_FILTER(self.get_widget()), c_str)
+                ffi::gtk_file_filter_add_mime_type(self.pointer, c_str)
             })
         };
     }
@@ -60,15 +60,26 @@ impl FileFilter {
     pub fn add_pattern(&self, pattern: &str) -> () {
         unsafe {
             pattern.with_c_str(|c_str| {
-                ffi::gtk_file_filter_add_pattern(GTK_FILE_FILTER(self.get_widget()), c_str)
+                ffi::gtk_file_filter_add_pattern(self.pointer, c_str)
             })
         };
     }
 
     pub fn add_pixbuf_formats(&self) -> () {
-        unsafe { ffi::gtk_file_filter_add_pixbuf_formats(GTK_FILE_FILTER(self.get_widget())) }
+        unsafe { ffi::gtk_file_filter_add_pixbuf_formats(self.pointer) }
+    }
+
+    pub fn get_pointer(&self) -> *mut ffi::C_GtkFileFilter {
+        self.pointer
+    }
+
+    pub fn wrap(pointer: *mut ffi::C_GtkFileFilter) -> Option<FileFilter> {
+        if pointer.is_null() {
+            None
+        } else {
+            Some(FileFilter { pointer: pointer })
+        }
     }
 }
 
-impl_drop!(FileFilter)
-impl_TraitWidget!(FileFilter)
+impl_drop!(FileFilter, GTK_FILE_FILTER)

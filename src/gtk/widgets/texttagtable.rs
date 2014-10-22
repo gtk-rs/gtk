@@ -17,15 +17,23 @@ use gtk::ffi;
 
 /// GtkTextTagTable — Collection of tags that can be used together
 
-struct_Widget!(TextTagTable)
+pub struct TextTagTable {
+    pointer: *mut ffi::C_GtkTextTagTable
+}
 
 impl TextTagTable {
     pub fn new() -> Option<TextTagTable> {
         let tmp_pointer = unsafe { ffi::gtk_text_tag_table_new() };
-        check_pointer!(tmp_pointer, TextTagTable)
+        if tmp_pointer.is_null() {
+            None
+        } else {
+            Some(TextTagTable { pointer: tmp_pointer })
+        }
+    }
+
+    pub fn get_pointer(&self) -> *mut ffi::C_GtkTextTagTable {
+        self.pointer
     }
 }
 
-impl_drop!(TextTagTable)
-impl_TraitWidget!(TextTagTable)
-
+impl_drop!(TextTagTable, GTK_TEXT_TAG_TABLE)

@@ -177,3 +177,6 @@ impl TreePath {
         }
     }
 }
+
+impl_drop!(TreePath, GTK_TREE_PATH)
+

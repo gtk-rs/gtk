@@ -14,11 +14,11 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::ffi;
-use gtk::ffi::FFIWidget;
-use gtk::cast::GTK_RECENT_FILTER;
 use gtk;
 
-struct_Widget!(RecentFilter)
+pub struct RecentFilter {
+    pointer: *mut ffi::C_GtkRecentFilter
+}
 
 impl RecentFilter {
     pub fn new() -> Option<RecentFilter> {
@@ -27,14 +27,14 @@ impl RecentFilter {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(RecentFilter{ pointer: tmp_pointer })
         }
     }
 
     pub fn add_application(&self, application: &str) -> () {
         unsafe {
             application.with_c_str(|c_str| {
-                ffi::gtk_recent_filter_add_application(GTK_RECENT_FILTER(self.get_widget()), c_str)
+                ffi::gtk_recent_filter_add_application(self.pointer, c_str)
             })
         }
     }
@@ -42,26 +42,37 @@ impl RecentFilter {
     pub fn add_group(&self, group: &str) -> () {
         unsafe {
             group.with_c_str(|c_str| {
-                ffi::gtk_recent_filter_add_group(GTK_RECENT_FILTER(self.get_widget()), c_str)
+                ffi::gtk_recent_filter_add_group(self.pointer, c_str)
             })
         }
     }
 
     pub fn add_age(&self, days: i32) -> () {
-        unsafe { ffi::gtk_recent_filter_add_age(GTK_RECENT_FILTER(self.get_widget()), days) }
+        unsafe { ffi::gtk_recent_filter_add_age(self.pointer, days) }
     }
 
     pub fn get_needed(&self) -> gtk::RecentFilterFlags {
-        unsafe { ffi::gtk_recent_filter_get_needed(GTK_RECENT_FILTER(self.get_widget())) }
+        unsafe { ffi::gtk_recent_filter_get_needed(self.pointer) }
     }
 
     pub fn filter(&self, filter_info: &gtk::RecentFilterInfo) -> bool {
-        match unsafe { ffi::gtk_recent_filter_filter(GTK_RECENT_FILTER(self.get_widget()), &filter_info.get_ffi()) } {
+        match unsafe { ffi::gtk_recent_filter_filter(self.pointer, &filter_info.get_ffi()) } {
             ffi::GFALSE => false,
             _ => true
         }
     }
+
+    pub fn wrap(pointer: *mut ffi::C_GtkRecentFilter) -> Option<RecentFilter> {
+        if pointer.is_null() {
+            None
+        } else {
+            Some(RecentFilter{ pointer: pointer })
+        }
+    }
+
+    pub fn get_pointer(&self) -> *mut ffi::C_GtkRecentFilter {
+        self.pointer
+    }
 }
 
-impl_drop!(RecentFilter)
-impl_TraitWidget!(RecentFilter)
+// impl_drop!(RecentFilter, GTK_RECENT_FILTER)

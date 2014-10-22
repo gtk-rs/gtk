@@ -18,7 +18,6 @@ use gtk;
 use gtk::ffi;
 use gtk::ffi::FFIWidget;
 use gtk::traits;
-use gtk::cast::GTK_TEXT_TAG_TABLE;
 
 /// GtkTextBuffer — Stores attributed text for display in a GtkTextView
 
@@ -28,7 +27,7 @@ impl TextBuffer {
     pub fn new(text_tag_table: Option<gtk::TextTagTable>) -> Option<TextBuffer> {
         let tmp_pointer = unsafe {
             match text_tag_table {
-                Some(ttl) => ffi::gtk_text_buffer_new(GTK_TEXT_TAG_TABLE(ttl.get_widget())),
+                Some(ttl) => ffi::gtk_text_buffer_new(ttl.get_pointer()),
                 None      => ffi::gtk_text_buffer_new(ptr::null_mut())
             }
         };

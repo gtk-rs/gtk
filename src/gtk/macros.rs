@@ -73,7 +73,8 @@ macro_rules! impl_TraitWidget(
 )
 
 macro_rules! impl_drop(
-    ($gtk_struct:ident) => (
+    ($gtk_struct:ident) => ( impl_drop!($gtk_struct, GTK_WIDGET) );
+    ($gtk_struct:ident, $cast_func:ident) => (
         impl Drop for $gtk_struct {
             fn drop(&mut self) {
                 unsafe {
@@ -89,7 +90,7 @@ macro_rules! impl_drop(
                 };
 
                 $gtk_struct {
-                    pointer: pointer as *mut ffi::C_GtkWidget
+                    pointer: ::gtk::cast::$cast_func(pointer)
                 }
             }
         }

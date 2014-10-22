@@ -14,14 +14,14 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::traits;
-use gtk::cast::{GTK_RECENT_CHOOSER, GTK_RECENT_FILTER};
+use gtk::cast::{GTK_RECENT_CHOOSER};
 use gtk::ffi;
 use gtk::ffi::FFIWidget;
 use gtk;
 use glib;
 use std::string;
 
-pub trait RecentChooser: traits::Widget {
+pub trait RecentChooser: traits::Widget + FFIWidget {
     fn set_show_private(&self, show_private: bool) {
         unsafe { ffi::gtk_recent_chooser_set_show_private(GTK_RECENT_CHOOSER(self.get_widget()), match show_private {
             true => ffi::GTRUE,
@@ -192,40 +192,39 @@ pub trait RecentChooser: traits::Widget {
     }
 
     fn add_filter(&self, filter: &gtk::RecentFilter) {
-        unsafe { ffi::gtk_recent_chooser_add_filter(GTK_RECENT_CHOOSER(self.get_widget()), GTK_RECENT_FILTER(filter.get_widget())) }
+        unsafe { ffi::gtk_recent_chooser_add_filter(GTK_RECENT_CHOOSER(self.get_widget()), filter.get_pointer()) }
     }
 
     fn remove_filter(&self, filter: &gtk::RecentFilter) {
-        unsafe { ffi::gtk_recent_chooser_remove_filter(GTK_RECENT_CHOOSER(self.get_widget()), GTK_RECENT_FILTER(filter.get_widget())) }
+        unsafe { ffi::gtk_recent_chooser_remove_filter(GTK_RECENT_CHOOSER(self.get_widget()), filter.get_pointer()) }
     }
 
-    fn list_filters(&self) -> glib::SList<Box<gtk::RecentFilter>> {
-        let tmp = unsafe { ffi::gtk_recent_chooser_list_filters(GTK_RECENT_CHOOSER(self.get_widget())) };
+    // fn list_filters(&self) -> glib::SList<Box<gtk::RecentFilter>> {
+    //     let tmp = unsafe { ffi::gtk_recent_chooser_list_filters(self.get_pointer()) };
 
-        if tmp.is_null() {
-            glib::SList::new()
-        } else {
-            let old_list : glib::SList<*mut ffi::C_GtkRecentFilter> = glib::GlibContainer::wrap(tmp);
-            let mut tmp_vec : glib::SList<Box<gtk::RecentFilter>> = glib::SList::new();
+    //     if tmp.is_null() {
+    //         glib::SList::new()
+    //     } else {
+    //         let old_list : glib::SList<*mut ffi::C_GtkRecentFilter> = glib::GlibContainer::wrap(tmp);
+    //         let mut tmp_vec : glib::SList<Box<gtk::RecentFilter>> = glib::SList::new();
 
-            for it in old_list.iter() {
-                tmp_vec.append(box ffi::FFIWidget::wrap(*it as *mut ffi::C_GtkWidget));
-            }
-            tmp_vec
-        }
-    }
+    //         for it in old_list.iter() {
+    //             match gtk::RecentFilter::wrap(*it) {
+    //                 Some(r) => tmp_vec.append(box r),
+    //                 None => {}
+    //             }
+    //         }
+    //         tmp_vec
+    //     }
+    // }
 
     fn set_filter(&self, filter: &gtk::RecentFilter) {
-        unsafe { ffi::gtk_recent_chooser_set_filter(GTK_RECENT_CHOOSER(self.get_widget()), GTK_RECENT_FILTER(filter.get_widget())) }
+        unsafe { ffi::gtk_recent_chooser_set_filter(GTK_RECENT_CHOOSER(self.get_widget()), filter.get_pointer()) }
     }
 
     fn get_filter(&self) -> Option<gtk::RecentFilter> {
         let tmp = unsafe { ffi::gtk_recent_chooser_get_filter(GTK_RECENT_CHOOSER(self.get_widget())) };
 
-        if tmp.is_null() {
-            None
-        } else {
-            Some(ffi::FFIWidget::wrap(tmp as *mut ffi::C_GtkWidget))
-        }
+        gtk::RecentFilter::wrap(tmp)
     }
 }
