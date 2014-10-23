@@ -47,46 +47,6 @@ impl GValue {
         unsafe { ffi::g_value_init(self.pointer, ffi::get_gtype(_type)) }
     }
 
-    // should be moved to GType struct or something like that
-    pub fn name(_type: gtk::GType) -> Option<String> {
-        let tmp_pointer = unsafe { ffi::g_type_name(_type) };
-
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            Some(unsafe { ::std::string::raw::from_buf(tmp_pointer as *const u8) })
-        }
-    }
-
-    // should be moved to GType struct or something like that
-    pub fn from_name(name: &str) -> gtk::GType {
-        unsafe {
-            name.with_c_str(|c_str| {
-                ffi::g_type_from_name(c_str)
-            })
-        }
-    }
-
-    // should be moved to GType struct or something like that
-    pub fn parent(_type: gtk::GType) -> gtk::GType {
-        unsafe { ffi::g_type_parent(_type) }
-    }
-
-    // should be moved to GType struct or something like that
-    pub fn depth(_type: gtk::GType) -> u32 {
-        unsafe { ffi::g_type_depth(_type) }
-    }
-
-    // should be moved to GType struct or something like that
-    pub fn next_base(leaf_type: gtk::GType, root_type: gtk::GType) -> gtk::GType {
-        unsafe { ffi::g_type_next_base(leaf_type, root_type) }
-    }
-
-    // should be moved to GType struct or something like that
-    pub fn is_a(_type: gtk::GType, is_a_type: gtk::GType) -> bool {
-        unsafe { ffi::to_bool(ffi::g_type_is_a(_type, is_a_type)) }
-    }
-
     pub fn reset(&self) {
         unsafe { ffi::g_value_reset(self.pointer) }
     }

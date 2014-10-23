@@ -59,7 +59,7 @@ fn main() {
     append_text_column(&mut right_tree);
     let value = gtk::GValue::new().unwrap();
 
-    value.init(gtk::g_type::String);
+    value.init(gtk::g_type_enum::String);
     value.set(&hello);
 
     println!("gvalue.get example : {}", value.get::<String>());

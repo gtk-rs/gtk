@@ -103,7 +103,7 @@ pub use self::cell_renderer_state::CellRendererState;
 pub use self::tree_model_flags::TreeModelFlags;
 pub use self::icon_view_drop_position::IconViewDropPosition;
 pub use self::sensitivity_type::SensitivityType;
-pub use self::g_type::GType;
+pub use self::g_type_enum::GType;
 
 pub mod window_type{
     #[repr(C)]
@@ -1496,7 +1496,7 @@ pub mod sensitivity_type {
     }
 }
 
-pub mod g_type {
+pub mod g_type_enum {
     #[repr(C)]
     #[deriving(Clone, PartialEq, PartialOrd, Show)]
     pub enum GType {

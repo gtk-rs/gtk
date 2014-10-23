@@ -151,7 +151,8 @@ pub use self::widgets::{
     TreeSelection,
     RecentChooserWidget,
     ComboBox,
-    GValue
+    GValue,
+    g_type
 };
 
 #[cfg(any(feature = "GTK_3_6", feature = "GTK_3_8", feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
@@ -259,7 +260,7 @@ pub use self::enums::{
     tree_model_flags,
     icon_view_drop_position,
     sensitivity_type,
-    g_type
+    g_type_enum
 };
 
 /// GTK Enum types
