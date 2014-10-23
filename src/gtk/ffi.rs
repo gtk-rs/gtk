@@ -391,7 +391,7 @@ extern "C" {
     // GValue                                                            NOT OK
     //=========================================================================
     pub fn create_gvalue                       () -> *mut C_GValue;
-    pub fn get_gtype                           () -> gtk::GType;
+    pub fn get_gtype                           (_type: gtk::GType) -> gtk::GType;
     pub fn g_value_init                        (value: *mut C_GValue, _type: gtk::GType);
     pub fn g_value_reset                       (value: *mut C_GValue);
     pub fn g_value_unset                       (value: *mut C_GValue);
@@ -427,6 +427,15 @@ extern "C" {
     pub fn g_value_get_string                  (value: *mut C_GValue) -> *const c_char;
     pub fn g_value_dup_string                  (value: *mut C_GValue) -> *mut c_char;
     pub fn g_value_set_boxed                   (value: *mut C_GValue, b: *const c_void);
+    pub fn g_value_set_static_boxed            (value: *mut C_GValue, b: *const c_void);
+    pub fn g_value_get_boxed                   (value: *mut C_GValue) -> *const c_void;
+    pub fn g_value_set_pointer                 (value: *mut C_GValue, b: *const c_void);
+    pub fn g_value_get_pointer                 (value: *mut C_GValue) -> *const c_void;
+    pub fn g_value_set_object                  (value: *mut C_GValue, b: *const c_void);
+    pub fn g_value_take_object                 (value: *mut C_GValue, b: *const c_void);
+    pub fn g_value_get_object                  (value: *mut C_GValue) -> *const c_void;
+    pub fn g_value_set_gtype                   (value: *mut C_GValue, b: gtk::GType);
+    pub fn g_value_get_gtype                   (value: *mut C_GValue) -> gtk::GType;
 
     //=========================================================================
     // GtkWidget                                                         NOT OK

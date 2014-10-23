@@ -15,7 +15,8 @@
 
 //! Generic values — A polymorphic type that can hold values of any other type
 
-use ffi;
+use gtk;
+use gtk::ffi;
 
 // Possible improvment : store a function pointer inside the struct and make the struct templated
 pub struct GValue {
@@ -63,7 +64,7 @@ impl GValue {
     }
 
     pub fn get_boolean(&self) -> bool {
-        unsafe { ffi::to_bool(ffi::g_value_get_boolean(self.pointer())) }
+        unsafe { ffi::to_bool(ffi::g_value_get_boolean(self.pointer)) }
     }
 
     pub fn set_schar(&self, v_char: i8) {
@@ -71,7 +72,7 @@ impl GValue {
     }
 
     pub fn get_schar(&self) -> i8 {
-        unsafe { ffi::g_value_get_schar(self.pointer()) }
+        unsafe { ffi::g_value_get_schar(self.pointer) }
     }
 
     pub fn set_uchar(&self, v_uchar: u8) {
@@ -79,7 +80,7 @@ impl GValue {
     }
 
     pub fn get_uchar(&self) -> u8 {
-        unsafe { ffi::g_value_get_uchar(self.pointer()) }
+        unsafe { ffi::g_value_get_uchar(self.pointer) }
     }
 
     pub fn set_int(&self, v_int: i32) {
@@ -87,7 +88,7 @@ impl GValue {
     }
 
     pub fn get_int(&self) -> i32 {
-        unsafe { ffi::g_value_get_int(self.pointer()) }
+        unsafe { ffi::g_value_get_int(self.pointer) }
     }
 
     pub fn set_uint(&self, v_uint: u32) {
@@ -95,23 +96,23 @@ impl GValue {
     }
 
     pub fn get_uint(&self) -> u32 {
-        unsafe { ffi::g_value_get_uint(self.pointer()) }
+        unsafe { ffi::g_value_get_uint(self.pointer) }
     }
 
-    pub fn set_long(&self, v_long: i32) {
+    pub fn set_long(&self, v_long: i64) {
         unsafe { ffi::g_value_set_long(self.pointer, v_long) }
     }
 
-    pub fn get_long(&self) -> i32 {
-        unsafe { ffi::g_value_get_long(self.pointer()) }
+    pub fn get_long(&self) -> i64 {
+        unsafe { ffi::g_value_get_long(self.pointer) }
     }
 
-    pub fn set_ulong(&self, v_ulong: u32) {
+    pub fn set_ulong(&self, v_ulong: u64) {
         unsafe { ffi::g_value_set_ulong(self.pointer, v_ulong) }
     }
 
-    pub fn get_ulong(&self) -> u32 {
-        unsafe { ffi::g_value_get_ulong(self.pointer()) }
+    pub fn get_ulong(&self) -> u64 {
+        unsafe { ffi::g_value_get_ulong(self.pointer) }
     }
 
     pub fn set_int64(&self, v_int64: i64) {
@@ -119,7 +120,7 @@ impl GValue {
     }
 
     pub fn get_int64(&self) -> i64 {
-        unsafe { ffi::g_value_get_int64(self.pointer()) }
+        unsafe { ffi::g_value_get_int64(self.pointer) }
     }
 
     pub fn set_uint64(&self, v_uint64: u64) {
@@ -127,7 +128,7 @@ impl GValue {
     }
 
     pub fn get_uint64(&self) -> u64 {
-        unsafe { ffi::g_value_get_uint64(self.pointer()) }
+        unsafe { ffi::g_value_get_uint64(self.pointer) }
     }
 
     pub fn set_float(&self, v_float: f32) {
@@ -135,7 +136,7 @@ impl GValue {
     }
 
     pub fn get_float(&self) -> f32 {
-        unsafe { ffi::g_value_get_float(self.pointer()) }
+        unsafe { ffi::g_value_get_float(self.pointer) }
     }
 
     pub fn set_double(&self, v_double: f64) {
@@ -143,27 +144,27 @@ impl GValue {
     }
 
     pub fn get_double(&self) -> f64 {
-        unsafe { ffi::g_value_get_double(self.pointer()) }
+        unsafe { ffi::g_value_get_double(self.pointer) }
     }
 
     // FIXME shouldn't be like that
     pub fn set_enum(&self, v_enum: gtk::GType) {
-        unsafe { ffi::g_value_set_enum(self.pointer, v_double) }
+        unsafe { ffi::g_value_set_enum(self.pointer, v_enum) }
     }
 
     // FIXME shouldn't be like that
     pub fn get_enum(&self) -> gtk::GType {
-        unsafe { ffi::g_value_get_enum(self.pointer()) }
+        unsafe { ffi::g_value_get_enum(self.pointer) }
     }
 
     // FIXME shouldn't be like that
     pub fn set_flags(&self, v_flags: gtk::GType) {
-        unsafe { ffi::g_value_set_flags(self.pointer, v_double) }
+        unsafe { ffi::g_value_set_flags(self.pointer, v_flags) }
     }
 
     // FIXME shouldn't be like that
     pub fn get_flags(&self) -> gtk::GType {
-        unsafe { ffi::g_value_get_flags(self.pointer()) }
+        unsafe { ffi::g_value_get_flags(self.pointer) }
     }
 
     pub fn set_string(&self, v_string: &str) {
@@ -245,7 +246,7 @@ impl GValue {
 
     pub fn set_object<T>(&self, v_object: &T) {
         unsafe { ffi::g_value_set_object(self.pointer, ::std::mem::transmute(v_object)) }
-    }Sets the contents of a G_TYPE_OBJECT derived GValue to v_object and takes over the ownership of the callers reference to v_object ; the caller doesn't have to unref it any more (i.e. the reference count of the object is not increased).
+    }
 
     /// Sets the contents of a G_TYPE_OBJECT derived GValue to v_object and takes over the ownership of the callers reference to
     /// v_object ; the caller doesn't have to unref it any more (i.e. the reference count of the object is not increased).
@@ -268,7 +269,7 @@ impl GValue {
 
     // FIXME shouldn't be like that
     pub fn get_gtype(&self) -> gtk::GType {
-        unsafe { ffi::g_value_get_gtype(self.pointer()) }
+        unsafe { ffi::g_value_get_gtype(self.pointer) }
     }
 }
 

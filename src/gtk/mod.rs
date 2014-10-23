@@ -150,7 +150,8 @@ pub use self::widgets::{
     IconView,
     TreeSelection,
     RecentChooserWidget,
-    ComboBox
+    ComboBox,
+    GValue
 };
 
 #[cfg(any(feature = "GTK_3_6", feature = "GTK_3_8", feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
