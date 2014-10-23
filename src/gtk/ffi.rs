@@ -436,6 +436,14 @@ extern "C" {
     pub fn g_value_get_object                  (value: *mut C_GValue) -> *const c_void;
     pub fn g_value_set_gtype                   (value: *mut C_GValue, b: gtk::GType);
     pub fn g_value_get_gtype                   (value: *mut C_GValue) -> gtk::GType;
+    pub fn g_value_type_compatible             (src_type: gtk::GType, dest_type: gtk::GType) -> Gboolean;
+    pub fn g_value_type_transformable          (src_type: gtk::GType, dest_type: gtk::GType) -> Gboolean;
+    pub fn g_type_name                         (_type: gtk::GType) -> *const c_char;
+    pub fn g_type_from_name                    (name: *const c_char) -> gtk::GType;
+    pub fn g_type_parent                       (_type: gtk::GType) -> gtk::GType;
+    pub fn g_type_depth                        (_type: gtk::GType) -> c_uint;
+    pub fn g_type_next_base                    (leaf_type: gtk::GType, root_type: gtk::GType) -> gtk::GType;
+    pub fn g_type_is_a                         (_type: gtk::GType, is_a_type: gtk::GType) -> Gboolean;
 
     //=========================================================================
     // GtkWidget                                                         NOT OK

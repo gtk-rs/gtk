@@ -18,6 +18,13 @@
 use gtk;
 use gtk::ffi;
 
+trait GValuePrivate {
+    type FfiType;
+
+    fn get(gvalue: &GValue) -> <Self as GValuePrivate>::FfiType;
+    fn set(&self, gvalue: &GValue);
+}
+
 // Possible improvment : store a function pointer inside the struct and make the struct templated
 pub struct GValue {
     pointer: *mut ffi::C_GValue
@@ -38,6 +45,46 @@ impl GValue {
 
     pub fn init(&self, _type: gtk::GType) {
         unsafe { ffi::g_value_init(self.pointer, ffi::get_gtype(_type)) }
+    }
+
+    // should be moved to GType struct or something like that
+    pub fn name(_type: gtk::GType) -> Option<String> {
+        let tmp_pointer = unsafe { ffi::g_type_name(_type) };
+
+        if tmp_pointer.is_null() {
+            None
+        } else {
+            Some(unsafe { ::std::string::raw::from_buf(tmp_pointer as *const u8) })
+        }
+    }
+
+    // should be moved to GType struct or something like that
+    pub fn from_name(name: &str) -> gtk::GType {
+        unsafe {
+            name.with_c_str(|c_str| {
+                ffi::g_type_from_name(c_str)
+            })
+        }
+    }
+
+    // should be moved to GType struct or something like that
+    pub fn parent(_type: gtk::GType) -> gtk::GType {
+        unsafe { ffi::g_type_parent(_type) }
+    }
+
+    // should be moved to GType struct or something like that
+    pub fn depth(_type: gtk::GType) -> u32 {
+        unsafe { ffi::g_type_depth(_type) }
+    }
+
+    // should be moved to GType struct or something like that
+    pub fn next_base(leaf_type: gtk::GType, root_type: gtk::GType) -> gtk::GType {
+        unsafe { ffi::g_type_next_base(leaf_type, root_type) }
+    }
+
+    // should be moved to GType struct or something like that
+    pub fn is_a(_type: gtk::GType, is_a_type: gtk::GType) -> bool {
+        unsafe { ffi::to_bool(ffi::g_type_is_a(_type, is_a_type)) }
     }
 
     pub fn reset(&self) {
@@ -272,6 +319,22 @@ impl GValue {
         unsafe { ffi::g_value_get_gtype(self.pointer) }
     }
 
+    pub fn set<T: GValuePrivate>(&self, val: &T) {
+        val.set(self);
+    }
+
+    pub fn get<T: GValuePrivate>(&self) -> T {
+        GValuePrivate::get(self);
+    }
+
+    pub fn compatible(src_type: gtk::GType, dest_type: gtk::GType) -> bool {
+        unsafe { ffi::to_bool(ffi::g_value_type_compatible(src_type, dest_type)) }
+    }
+
+    pub fn transformable(src_type: gtk::GType, dest_type: gtk::GType) -> bool {
+        unsafe { ffi::to_bool(ffi::g_value_type_transformable(src_type, dest_type)) }
+    }
+
     #[doc(hidden)]
     pub fn unwrap_pointer(&self) -> *mut ffi::C_GValue {
         self.pointer
@@ -291,5 +354,137 @@ impl Drop for GValue {
             unsafe { ::libc::funcs::c95::stdlib::free(self.pointer as *mut ::libc::types::common::c95::c_void) };
             self.pointer = ::std::ptr::null_mut();
         }
+    }
+}
+
+impl GValuePrivate for i32 {
+    type FfiType = i32;
+
+    fn get(gvalue: &GValue) -> i32 {
+        gvalue.get_int();
+    }
+
+    fn set(&self, gvalue: &GValue) {
+        gvalue.set_int(*self)
+    }
+}
+
+impl GValuePrivate for u32 {
+    type FfiType = u32;
+
+    fn get(gvalue: &GValue) -> u32 {
+        gvalue.get_uint()
+    }
+
+    fn set(&self, gvalue: &GValue) {
+        gvalue.set_uint(*self)
+    }
+}
+
+impl GValuePrivate for i64 {
+    type FfiType = i64;
+
+    fn get(gvalue: &GValue) -> i64 {
+        gvalue.get_int64()
+    }
+
+    fn set(&self, gvalue: &GValue) {
+        gvalue.set_int64(*self)
+    }
+}
+
+impl GValuePrivate for u64 {
+    type FfiType = u64;
+
+    fn get(gvalue: &GValue) -> u64 {
+        gvalue.get_uint64()
+    }
+
+    fn set(&self, gvalue: &GValue) {
+        gvalue.set_uint64(*self)
+    }
+}
+
+impl GValuePrivate for bool {
+    type FfiType = bool;
+
+    fn get(gvalue: &GValue) -> bool {
+        gvalue.get_boolean()
+    }
+
+    fn set(&self, gvalue: &GValue) {
+        gvalue.set_boolean(*self)
+    }
+}
+
+impl GValuePrivate for i8 {
+    type FfiType = i8;
+
+    fn get(gvalue: &GValue) -> i8 {
+        gvalue.get_schar()
+    }
+
+    fn set(&self, gvalue: &GValue) {
+        gvalue.set_schar(*self)
+    }
+}
+
+impl GValuePrivate for u8 {
+    type FfiType = u8;
+
+    fn get(gvalue: &GValue) -> u8 {
+        gvalue.get_uchar()
+    }
+
+    fn set(&self, gvalue: &GValue) {
+        gvalue.set_uchar(*self)
+    }
+}
+
+impl GValuePrivate for f32 {
+    type FfiType = f32;
+
+    fn get(gvalue: &GValue) -> f32 {
+        gvalue.get_float()
+    }
+
+    fn set(&self, gvalue: &GValue) {
+        gvalue.set_float(*self)
+    }
+}
+
+impl GValuePrivate for f64 {
+    type FfiType = f64;
+
+    fn get(gvalue: &GValue) -> f64 {
+        gvalue.get_double()
+    }
+
+    fn set(&self, gvalue: &GValue) {
+        gvalue.set_double(*self)
+    }
+}
+
+impl GValuePrivate for gtk::GType {
+    type FfiType = gtk::GType;
+
+    fn get(gvalue: &GValue) -> gtk::GType {
+        gvalue.get_gtype()
+    }
+
+    fn set(&self, gvalue: &GValue) {
+        gvalue.set_gtype(*self)
+    }
+}
+
+impl GValuePrivate for String {
+    type FfiType = Option<String>;
+
+    fn get(gvalue: &GValue) -> Option<String> {
+        gvalue.get_string()
+    }
+
+    fn set(&self, gvalue: &GValue) {
+        gvalue.set_string(self.as_slice())
     }
 }
