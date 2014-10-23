@@ -107,19 +107,19 @@ impl GValue {
     }
 
     pub fn set_long(&self, v_long: i64) {
-        unsafe { ffi::g_value_set_long(self.pointer, v_long) }
+        unsafe { ffi::g_value_set_long(self.pointer, v_long as ::libc::c_long) }
     }
 
     pub fn get_long(&self) -> i64 {
-        unsafe { ffi::g_value_get_long(self.pointer) }
+        unsafe { ffi::g_value_get_long(self.pointer) as i64 }
     }
 
     pub fn set_ulong(&self, v_ulong: u64) {
-        unsafe { ffi::g_value_set_ulong(self.pointer, v_ulong) }
+        unsafe { ffi::g_value_set_ulong(self.pointer, v_ulong as ::libc::c_ulong) }
     }
 
     pub fn get_ulong(&self) -> u64 {
-        unsafe { ffi::g_value_get_ulong(self.pointer) }
+        unsafe { ffi::g_value_get_ulong(self.pointer) as u64 }
     }
 
     fn set_int64(&self, v_int64: i64) {
