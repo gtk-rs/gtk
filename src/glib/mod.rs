@@ -30,7 +30,7 @@ pub use self::traits::{FFIGObject, GObject};
 mod list;
 mod slist;
 pub mod ffi;
-mod glib_container;
+pub mod glib_container;
 mod error;
 mod permission;
 pub mod traits;

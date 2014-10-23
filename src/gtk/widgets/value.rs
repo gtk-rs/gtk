@@ -271,6 +271,18 @@ impl GValue {
     pub fn get_gtype(&self) -> gtk::GType {
         unsafe { ffi::g_value_get_gtype(self.pointer) }
     }
+
+    #[doc(hidden)]
+    pub fn unwrap_pointer(&self) -> *mut ffi::C_GValue {
+        self.pointer
+    }
+
+    #[doc(hidden)]
+    pub fn wrap_pointer(c_value: *mut ffi::C_GValue) -> GValue {
+        GValue {
+            pointer: c_value
+        }
+    }
 }
 
 impl Drop for GValue {

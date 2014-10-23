@@ -932,7 +932,7 @@ extern "C" {
 
     pub fn gtk_tree_store_newv(n_columns: c_int, column_types: &[GType]) -> *mut C_GtkTreeStore;
     pub fn gtk_tree_store_set_column_types(tree_store: *mut C_GtkTreeStore, n_columns: c_int, column_types: &[GType]);
-    //pub fn gtk_tree_store_set_value(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, column: c_int, value: *mut GValue);
+    pub fn gtk_tree_store_set_value(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, column: c_int, value: *mut C_GValue);
     pub fn gtk_tree_store_set(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, ...);
     //pub fn gtk_tree_store_set_valist(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, var_args: va_list);
     //pub fn gtk_tree_store_set_valuesv(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, columns: *mut c_int, values: *mut GValue, n_values: c_int);
