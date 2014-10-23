@@ -62,6 +62,8 @@ fn main() {
     value.init(gtk::g_type::String);
     value.set(&hello);
 
+    println!("gvalue.get example : {}", value.get::<String>());
+
     for _ in range(0i, 10i) {
         let iter = gtk::TreeIter::new().unwrap();
         right_store.append(&iter, None);
