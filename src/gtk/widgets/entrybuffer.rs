@@ -31,7 +31,6 @@ use std::string;
 */
 pub struct EntryBuffer {
     pointer: *mut ffi::C_GtkEntryBuffer,
-    can_drop: bool
 }
 
 impl EntryBuffer {
@@ -46,7 +45,6 @@ impl EntryBuffer {
         } else {
             Some(EntryBuffer {
                 pointer: tmp_pointer,
-                can_drop: true
             })
         }
     }
@@ -120,8 +118,9 @@ impl EntryBuffer {
     #[doc(hidden)]
     pub fn wrap_pointer(pointer: *mut ffi::C_GtkEntryBuffer) -> EntryBuffer {
         EntryBuffer {
-            pointer:    pointer,
-            can_drop:   false
+            pointer:    pointer
         }
     }
 }
+
+impl_drop!(EntryBuffer, GTK_ENTRY_BUFFER)

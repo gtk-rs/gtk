@@ -42,3 +42,5 @@ impl traits::Container for RecentChooserWidget {}
 impl traits::Orientable for RecentChooserWidget {}
 impl traits::RecentChooser for RecentChooserWidget {}
 impl traits::Box for RecentChooserWidget {}
+
+impl_widget_events!(RecentChooserWidget)

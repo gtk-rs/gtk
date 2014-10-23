@@ -52,3 +52,4 @@ impl traits::Container for MenuItem {}
 impl traits::Bin for MenuItem {}
 impl traits::MenuItem for MenuItem {}
 
+impl_widget_events!(MenuItem)

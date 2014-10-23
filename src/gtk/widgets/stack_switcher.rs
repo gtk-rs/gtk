@@ -52,3 +52,5 @@ impl_TraitWidget!(StackSwitcher)
 
 impl traits::Container for StackSwitcher {}
 impl traits::Box for StackSwitcher {}
+
+impl_widget_events!(StackSwitcher)

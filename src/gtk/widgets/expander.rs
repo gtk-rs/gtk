@@ -163,3 +163,5 @@ impl_TraitWidget!(Expander)
 
 impl traits::Container for Expander {}
 impl traits::Bin for Expander {}
+
+impl_widget_events!(Expander)

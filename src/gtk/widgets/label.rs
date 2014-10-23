@@ -58,3 +58,5 @@ impl_TraitWidget!(Label)
 
 impl traits::Misc for Label {}
 impl traits::Label for Label {}
+
+impl_widget_events!(Label)

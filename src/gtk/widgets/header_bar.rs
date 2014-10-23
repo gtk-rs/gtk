@@ -115,3 +115,5 @@ impl_drop!(HeaderBar)
 impl_TraitWidget!(HeaderBar)
 
 impl traits::Container for HeaderBar {}
+
+impl_widget_events!(HeaderBar)

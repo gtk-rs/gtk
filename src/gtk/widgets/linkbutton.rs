@@ -83,3 +83,6 @@ impl_TraitWidget!(LinkButton)
 
 impl traits::Container for LinkButton {}
 impl traits::Button for LinkButton {}
+
+impl_widget_events!(LinkButton)
+impl_button_events!(LinkButton)

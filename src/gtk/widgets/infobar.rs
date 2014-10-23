@@ -101,3 +101,6 @@ impl_TraitWidget!(InfoBar)
 impl traits::Container for InfoBar {}
 impl traits::Box for InfoBar {}
 impl traits::Orientable for InfoBar {}
+
+impl_widget_events!(InfoBar)
+

@@ -54,3 +54,5 @@ impl_TraitWidget!(CheckButton)
 impl traits::Container for CheckButton {}
 impl traits::Button for CheckButton {}
 impl traits::ToggleButton for CheckButton {}
+
+impl_widget_events!(CheckButton)

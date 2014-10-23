@@ -78,3 +78,5 @@ impl_TraitWidget!(Revealer)
 
 impl traits::Container for Revealer {}
 impl traits::Bin for Revealer {}
+
+impl_widget_events!(Revealer)

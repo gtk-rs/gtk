@@ -26,7 +26,7 @@ struct_Widget!(EntryCompletion)
 impl EntryCompletion {
     pub fn new() -> Option<EntryCompletion> {
         let tmp_pointer = unsafe { ffi::gtk_entry_completion_new() };
-    
+
         if tmp_pointer.is_null() {
             None
         } else {
@@ -38,7 +38,7 @@ impl EntryCompletion {
 
     pub fn get_entry<T: traits::Widget>(&self) -> Option<T> {
         let tmp_pointer = unsafe { ffi::gtk_entry_completion_get_entry(GTK_ENTRY_COMPLETION(self.pointer)) };
-        
+
         if tmp_pointer.is_null() {
             None
         } else {
@@ -203,4 +203,5 @@ impl_drop!(EntryCompletion)
 impl_TraitWidget!(EntryCompletion)
 
 impl traits::CellLayout for EntryCompletion {}
-//impl traits::Buildable for EntryCompletion {}
+
+impl_widget_events!(EntryCompletion)

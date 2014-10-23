@@ -77,3 +77,6 @@ impl traits::Bin for AppChooserDialog {}
 impl traits::Window for AppChooserDialog {}
 impl traits::Dialog for AppChooserDialog {}
 impl traits::AppChooser for AppChooserDialog {}
+
+impl_widget_events!(AppChooserDialog)
+

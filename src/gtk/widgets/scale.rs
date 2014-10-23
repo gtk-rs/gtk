@@ -127,3 +127,6 @@ impl_TraitWidget!(Scale)
 
 impl traits::Orientable for Scale {}
 impl traits::Range for Scale {}
+
+impl_widget_events!(Scale)
+impl_range_events!(Scale)

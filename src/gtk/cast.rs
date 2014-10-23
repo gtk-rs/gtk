@@ -17,6 +17,26 @@
 
 use gtk::ffi;
 
+pub fn G_OBJECT(widget: *mut ffi::C_GtkWidget) -> *mut ::glib::ffi::C_GObject {
+    unsafe { ffi::cast_GtkObject(widget) }
+}
+
+pub fn G_OBJECT_FROM_TREE_VIEW_COLUMN(widget: *mut ffi::C_GtkTreeViewColumn) -> *mut ::glib::ffi::C_GObject {
+    unsafe { ffi::cast_GtkObjectFromTreeViewColumn(widget) }
+}
+
+pub fn G_OBJECT_FROM_LIST_STORE(widget: *mut ffi::C_GtkListStore) -> *mut ::glib::ffi::C_GObject {
+    unsafe { ffi::cast_GtkObjectFromListStore(widget) }
+}
+
+pub fn G_OBJECT_FROM_TREE_STORE(widget: *mut ffi::C_GtkTreeStore) -> *mut ::glib::ffi::C_GObject {
+    unsafe { ffi::cast_GtkObjectFromTreeStore(widget) }
+}
+
+pub fn GTK_WIDGET(widget: *mut ::glib::ffi::C_GObject) -> *mut ffi::C_GtkWidget {
+    unsafe { ffi::cast_GtkWidget(widget) }
+}
+
 pub fn GTK_WINDOW(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkWindow {
     unsafe { ffi::cast_GtkWindow(widget) }
 }
@@ -189,8 +209,8 @@ pub fn GTK_RADIOTOOLBUTTON(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkRadi
     unsafe { ffi::cast_GtkRadioToolButton(widget) }
 }
 
-pub fn GTK_ADJUSTMENT(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkAdjustment {
-    unsafe { ffi::cast_GtkAdjustment(widget) }
+pub fn GTK_ADJUSTMENT(obj: *mut ::glib::ffi::C_GObject) -> *mut ffi::C_GtkAdjustment {
+    unsafe { ffi::cast_GtkAdjustment(obj) }
 }
 
 pub fn GTK_DIALOG(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkDialog {
@@ -269,8 +289,8 @@ pub fn GTK_FILE_CHOOSER(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkFileCho
     unsafe { ffi::cast_GtkFileChooser(widget) }
 }
 
-pub fn GTK_FILE_FILTER(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkFileFilter {
-    unsafe { ffi::cast_GtkFileFilter(widget) }
+pub fn GTK_FILE_FILTER(obj: *mut ::glib::ffi::C_GObject) -> *mut ffi::C_GtkFileFilter {
+    unsafe { ffi::cast_GtkFileFilter(obj) }
 }
 
 pub fn GTK_APP_CHOOSER(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkAppChooser {
@@ -297,7 +317,7 @@ pub fn GTK_APP_LAUNCH_CONTEXT(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GApp
     unsafe { ffi::cast_GtkAppLaunchContext(widget) }
 }
 
-pub fn GTK_PAGE_SETUP(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkPageSetup {
+pub fn GTK_PAGE_SETUP(widget: *mut ::glib::ffi::C_GObject) -> *mut ffi::C_GtkPageSetup {
     unsafe { ffi::cast_GtkPageSetup(widget) }
 }
 
@@ -345,7 +365,7 @@ pub fn GTK_TEXT_BUFFER(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkTextBuff
     unsafe { ffi::cast_GtkTextBuffer(widget) }
 }
 
-pub fn GTK_TEXT_TAG_TABLE(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkTextTagTable{
+pub fn GTK_TEXT_TAG_TABLE(widget: *mut ::glib::ffi::C_GObject) -> *mut ffi::C_GtkTextTagTable {
     unsafe { ffi::cast_GtkTextTagTable(widget) }
 }
 
@@ -413,7 +433,7 @@ pub fn GTK_ICON_VIEW(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkIconView {
     unsafe { ffi::cast_GtkIconView(widget) }
 }
 
-pub fn GTK_TREE_SELECTION(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkTreeSelection {
+pub fn GTK_TREE_SELECTION(widget: *mut ::glib::ffi::C_GObject) -> *mut ffi::C_GtkTreeSelection {
     unsafe { ffi::cast_GtkTreeSelection(widget) }
 }
 
@@ -433,12 +453,24 @@ pub fn GTK_LIST_STORE_FROM_TREE_MODEL(model: *mut ffi::C_GtkTreeModel) -> *mut f
     unsafe { ffi::cast_GtkListStoreFromTreeModel(model) }
 }
 
+pub fn GTK_LIST_STORE(model: *mut ::glib::ffi::C_GObject) -> *mut ffi::C_GtkListStore {
+    unsafe { ffi::cast_GtkListStore(model) }
+}
+
 pub fn GTK_TREE_MODEL_FROM_TREE_STORE(store: *mut ffi::C_GtkTreeStore) -> *mut ffi::C_GtkTreeModel {
     unsafe { ffi::cast_GtkTreeModelFromTreeStore(store) }
 }
 
 pub fn GTK_TREE_STORE_FROM_TREE_MODEL(model: *mut ffi::C_GtkTreeModel) -> *mut ffi::C_GtkTreeStore {
     unsafe { ffi::cast_GtkTreeStoreFromTreeModel(model) }
+}
+
+pub fn GTK_TREE_STORE(obj: *mut ::glib::ffi::C_GObject) -> *mut ffi::C_GtkTreeStore {
+    unsafe { ffi::cast_GtkTreeStore(obj) }
+}
+
+pub fn GTK_TREE_MODEL(obj: *mut ::glib::ffi::C_GObject) -> *mut ffi::C_GtkTreeModel {
+    unsafe { ffi::cast_GtkTreeModel(obj) }
 }
 
 pub fn GTK_COMBO_BOX(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkComboBox {
@@ -451,4 +483,8 @@ pub fn GTK_POPOVER(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkPopover {
 
 pub fn GTK_COMBO_BOX_TEXT(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkComboBoxText {
     unsafe { ffi::cast_GtkComboBoxText(widget) }
+}
+
+pub fn GTK_ENTRY_BUFFER(obj: *mut ::glib::ffi::C_GObject) -> *mut ffi::C_GtkEntryBuffer {
+    unsafe { ffi::cast_GtkEntryBuffer(obj) }
 }

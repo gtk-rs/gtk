@@ -134,3 +134,6 @@ impl_drop!(LevelBar)
 impl_TraitWidget!(LevelBar)
 
 impl traits::Orientable for LevelBar {}
+
+impl_widget_events!(LevelBar)
+

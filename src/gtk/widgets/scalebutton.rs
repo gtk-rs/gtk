@@ -47,3 +47,6 @@ impl traits::Container for ScaleButton {}
 impl traits::Button for ScaleButton {}
 impl traits::ScaleButton for ScaleButton {}
 impl traits::Orientable for ScaleButton {}
+
+impl_widget_events!(ScaleButton)
+impl_button_events!(ScaleButton)

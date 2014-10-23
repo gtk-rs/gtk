@@ -35,3 +35,5 @@ impl traits::Container for VolumeButton {}
 impl traits::Button for VolumeButton {}
 impl traits::ScaleButton for VolumeButton {}
 impl traits::Orientable for VolumeButton {}
+
+impl_widget_events!(VolumeButton)

@@ -41,3 +41,5 @@ impl_drop!(Arrow)
 impl_TraitWidget!(Arrow)
 
 impl traits::Misc for Arrow {}
+
+impl_widget_events!(Arrow)

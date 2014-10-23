@@ -55,3 +55,6 @@ impl_drop!(Fixed)
 impl_TraitWidget!(Fixed)
 
 impl traits::Container for Fixed {}
+
+impl_widget_events!(Fixed)
+

@@ -39,7 +39,19 @@ GType get_gtype(int x) {
     return G_TYPE_MAKE_FUNDAMENTAL(x);
 }
 
-GObject* cast_GtkObject(void* object) {
+GObject* cast_GtkObject(GtkWidget* object) {
+    return G_OBJECT(object);
+}
+
+GObject* cast_GtkObjectFromListStore(GtkListStore* object) {
+    return G_OBJECT(object);
+}
+
+GObject* cast_GtkObjectFromTreeStore(GtkTreeStore* object) {
+    return G_OBJECT(object);
+}
+
+GObject* cast_GtkObjectFromTreeViewColumn(GtkTreeViewColumn* object) {
     return G_OBJECT(object);
 }
 
@@ -144,7 +156,7 @@ GtkTextView* cast_GtkTextView(GtkWidget* widget) {
     return GTK_TEXT_VIEW(widget);
 }
 
-GtkTextTagTable* cast_GtkTextTagTable(GtkWidget* widget) {
+GtkTextTagTable* cast_GtkTextTagTable(void* widget) {
     return GTK_TEXT_TAG_TABLE(widget);
 }
 
@@ -251,12 +263,24 @@ GtkListStore* cast_GtkListStoreFromTreeModel(GtkTreeModel* tree_model) {
     return GTK_LIST_STORE(tree_model);
 }
 
+GtkListStore* cast_GtkListStore(GObject* obj) {
+    return GTK_LIST_STORE(obj);
+}
+
 GtkTreeModel* cast_GtkTreeModelFromTreeStore(GtkTreeStore* tree_store) {
     return GTK_TREE_MODEL(tree_store);
 }
 
 GtkTreeStore* cast_GtkTreeStoreFromTreeModel(GtkTreeModel* tree_model) {
     return GTK_TREE_STORE(tree_model);
+}
+
+GtkTreeStore* cast_GtkTreeStore(GObject *object) {
+    return GTK_TREE_STORE(object);
+}
+
+GtkTreeModel* cast_GtkTreeModel(GObject *object) {
+    return GTK_TREE_MODEL(object);
 }
 
 GtkImage* cast_GtkImage(GtkWidget* widget) {
@@ -303,7 +327,7 @@ GtkRadioMenuItem* cast_GtkRadioMenuItem(GtkWidget* widget) {
     return GTK_RADIO_MENU_ITEM(widget);
 }
 
-GtkFileFilter* cast_GtkFileFilter(gpointer pointer) {
+GtkFileFilter* cast_GtkFileFilter(GObject *pointer) {
     return GTK_FILE_FILTER(pointer);
 }
 
@@ -370,8 +394,8 @@ GtkColorChooser* cast_GtkColorChooser(GtkWidget* widget) {
     return GTK_COLOR_CHOOSER(widget);
 }
 
-GtkAdjustment* cast_GtkAdjustment(GtkWidget* widget) {
-    return GTK_ADJUSTMENT(widget);
+GtkAdjustment* cast_GtkAdjustment(GObject* obj) {
+    return GTK_ADJUSTMENT(obj);
 }
 
 GtkOverlay* cast_GtkOverlay(GtkWidget* widget) {
@@ -402,8 +426,8 @@ GtkFontChooser* cast_GtkFontChooser(GtkWidget* widget) {
     return GTK_FONT_CHOOSER(widget);
 }
 
-GtkPageSetup* cast_GtkPageSetup(GtkWidget* widget) {
-    return GTK_PAGE_SETUP(widget);
+GtkPageSetup* cast_GtkPageSetup(GObject* obj) {
+    return GTK_PAGE_SETUP(obj);
 }
 
 // need to fix this later
@@ -533,6 +557,10 @@ GtkCellLayout *cast_GtkCellLayout(GtkWidget* widget) {
 
 GtkEntryCompletion *cast_GtkEntryCompletion(GtkWidget* widget) {
     return GTK_ENTRY_COMPLETION(widget);
+}
+
+GtkEntryBuffer *cast_GtkEntryBuffer(GObject* obj) {
+    return GTK_ENTRY_BUFFER(obj);
 }
 
 GtkTreeSelection *cast_GtkTreeSelection(GtkWidget* widget) {

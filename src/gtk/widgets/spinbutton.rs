@@ -203,3 +203,6 @@ impl_TraitWidget!(SpinButton)
 impl traits::Entry for SpinButton {}
 impl traits::Editable for SpinButton {}
 impl traits::Orientable for SpinButton {}
+
+impl_widget_events!(SpinButton)
+impl_connect!(SpinButton -> ChangedValue, ValueChanged, Wrapped) // Input, Output

@@ -8,7 +8,7 @@ extern crate collections;
 use std::f64::consts::PI_2;
 
 use rgtk::*;
-use rgtk::gtk::signals;
+use rgtk::gtk::signals::{DeleteEvent, Draw};
 use rgtk::gtk::DrawingArea;
 
 use rgtk::cairo::enums::{
@@ -92,15 +92,15 @@ fn main() {
     gtk::main();
 }
 
-pub fn drawable(width: i32, height: i32, draw_fn: |cairo::Context|){
+pub fn drawable(width: i32, height: i32, draw_fn: |cairo::Context|) {
     let mut window = gtk::Window::new(gtk::window_type::TopLevel).unwrap();
     let drawing_area = box DrawingArea::new().unwrap();
 
-    drawing_area.connect(signals::Draw::new(draw_fn));
+    Connect::connect(&*drawing_area, Draw::new(draw_fn));
 
     window.set_default_size(width, height);
 
-    window.connect(signals::DeleteEvent::new(|_|{
+    Connect::connect(&window, DeleteEvent::new(|_|{
         gtk::main_quit();
         true
     }));

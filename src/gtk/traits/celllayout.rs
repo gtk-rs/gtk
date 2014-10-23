@@ -39,7 +39,7 @@ pub trait CellLayout: traits::Widget {
 
     /*fn get_area(&self) -> Option<gtk::CellArea> {
         let tmp = unsafe { ffi::gtk_cell_layout_get_area(GTK_CELL_LAYOUT(self.get_widget())) };
-        
+
         if tmp.is_null() {
             None
         } else {
@@ -49,12 +49,12 @@ pub trait CellLayout: traits::Widget {
 
     fn get_cells<T: traits::CellRenderer>(&self) -> glib::List<T> {
         let tmp = unsafe { ffi::gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(self.get_widget())) };
-        
+
         if tmp.is_null() {
             glib::List::new()
         } else {
             let list: glib::List<*mut ffi::C_GtkWidget> = glib::GlibContainer::wrap(tmp);
-        
+
             list.iter().map(|it| ffi::FFIWidget::wrap(*it)).collect()
         }
     }

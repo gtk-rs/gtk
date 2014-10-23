@@ -18,7 +18,7 @@
 use gtk::ffi;
 use gtk::traits;
 use gtk::cast::GTK_POPOVER;
-use std::string;
+// use std::string;
 use gtk;
 
 struct_Widget!(Popover)
@@ -52,11 +52,11 @@ impl Popover {
     }
 
     pub fn set_modal(&self, modal: bool) {
-        unsafe { ffi::gtk_popover_set_position(GTK_POPOVER(self.pointer), ffi::to_gboolean(modal)) }
+        unsafe { ffi::gtk_popover_set_modal(GTK_POPOVER(self.pointer), ffi::to_gboolean(modal)) }
     }
 
     pub fn get_modal(&self) -> bool {
-        unsafe { ffi::to_bool(ffi::gtk_popover_get_position(GTK_POPOVER(self.pointer))) }
+        unsafe { ffi::to_bool(ffi::gtk_popover_get_modal(GTK_POPOVER(self.pointer))) }
     }
 }
 
@@ -65,3 +65,5 @@ impl_TraitWidget!(Popover)
 
 impl traits::Container for Popover {}
 impl traits::Bin for Popover {}
+
+impl_widget_events!(Popover)

@@ -50,3 +50,5 @@ impl traits::Container for Dialog {}
 impl traits::Bin for Dialog {}
 impl traits::Window for Dialog {}
 impl traits::Dialog for Dialog {}
+
+impl_widget_events!(Dialog)

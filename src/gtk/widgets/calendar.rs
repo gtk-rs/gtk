@@ -128,3 +128,6 @@ impl Calendar {
 
 impl_drop!(Calendar)
 impl_TraitWidget!(Calendar)
+
+impl_widget_events!(Calendar)
+

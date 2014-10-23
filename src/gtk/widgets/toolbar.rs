@@ -146,3 +146,6 @@ impl_TraitWidget!(Toolbar)
 impl traits::Container for Toolbar {}
 impl traits::ToolShell for Toolbar {}
 impl traits::Orientable for Toolbar {}
+
+impl_widget_events!(Toolbar)
+

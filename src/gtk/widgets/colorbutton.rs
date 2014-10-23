@@ -119,3 +119,7 @@ impl_TraitWidget!(ColorButton)
 
 impl traits::Container for ColorButton {}
 impl traits::Button for ColorButton {}
+
+impl_widget_events!(ColorButton)
+impl_button_events!(ColorButton)
+

@@ -131,3 +131,6 @@ impl_TraitWidget!(FontButton)
 
 impl traits::Container for FontButton {}
 impl traits::Button for FontButton {}
+
+impl_widget_events!(FontButton)
+impl_button_events!(FontButton)

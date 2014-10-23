@@ -53,4 +53,5 @@ impl traits::Bin for CheckMenuItem {}
 impl traits::MenuItem for CheckMenuItem {}
 impl traits::CheckMenuItem for CheckMenuItem {}
 
+impl_widget_events!(CheckMenuItem)
 

@@ -20,6 +20,8 @@ use gtk;
 use glib;
 use std::string;
 
+
+// FIXME: PaperSize is not a widget nor a GObject -> GBoxed
 struct_Widget!(PaperSize)
 
 impl PaperSize {
@@ -203,3 +205,5 @@ impl Clone for PaperSize {
 }
 
 impl_TraitWidget!(PaperSize)
+
+impl_widget_events!(PaperSize)

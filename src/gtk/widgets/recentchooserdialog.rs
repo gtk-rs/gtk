@@ -76,3 +76,5 @@ impl traits::Bin for RecentChooserDialog {}
 impl traits::Window for RecentChooserDialog {}
 impl traits::Dialog for RecentChooserDialog {}
 impl traits::RecentChooser for RecentChooserDialog {}
+
+impl_widget_events!(RecentChooserDialog)

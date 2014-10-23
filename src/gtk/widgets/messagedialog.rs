@@ -73,3 +73,5 @@ impl traits::Container for MessageDialog {}
 impl traits::Bin for MessageDialog {}
 impl traits::Window for MessageDialog {}
 impl traits::Dialog for MessageDialog {}
+
+impl_widget_events!(MessageDialog)

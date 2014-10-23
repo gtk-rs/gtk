@@ -64,3 +64,5 @@ impl_drop!(Image)
 impl_TraitWidget!(Image)
 
 impl traits::Misc for Image {}
+
+impl_widget_events!(Image)

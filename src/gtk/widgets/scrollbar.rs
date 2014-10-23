@@ -32,3 +32,6 @@ impl_TraitWidget!(ScrollBar)
 
 impl traits::Range for ScrollBar {}
 impl traits::Orientable for ScrollBar {}
+
+impl_widget_events!(ScrollBar)
+impl_range_events!(ScrollBar)

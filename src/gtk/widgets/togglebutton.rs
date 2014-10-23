@@ -58,3 +58,7 @@ impl_TraitWidget!(ToggleButton)
 impl traits::Container for ToggleButton {}
 impl traits::Button for ToggleButton {}
 impl traits::ToggleButton for ToggleButton {}
+
+impl_widget_events!(ToggleButton)
+impl_button_events!(ToggleButton)
+

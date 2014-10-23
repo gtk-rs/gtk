@@ -2705,7 +2705,7 @@ extern "C" {
     //=========================================================================
     // GtkTextTagTable                                                   NOT OK
     //=========================================================================
-    pub fn gtk_text_tag_table_new   () -> *mut C_GtkWidget;
+    pub fn gtk_text_tag_table_new   () -> *mut C_GtkTextTagTable;
 
     //=========================================================================
     // GtkScrolledWindow                                                 NOT OK
@@ -3024,6 +3024,10 @@ extern "C" {
     // GTK Casts functions
     //=========================================================================
     pub fn cast_GtkObject(widget: *mut C_GtkWidget) -> *mut glib::ffi::C_GObject;
+    pub fn cast_GtkObjectFromListStore(widget: *mut C_GtkListStore) -> *mut glib::ffi::C_GObject;
+    pub fn cast_GtkObjectFromTreeStore(widget: *mut C_GtkTreeStore) -> *mut glib::ffi::C_GObject;
+    pub fn cast_GtkObjectFromTreeViewColumn(widget: *mut C_GtkTreeViewColumn) -> *mut glib::ffi::C_GObject;
+    pub fn cast_GtkWidget(widget: *mut glib::ffi::C_GObject) -> *mut C_GtkWidget;
     pub fn cast_GtkWindow(widget: *mut C_GtkWidget) -> *mut C_GtkWindow;
     pub fn cast_GtkBin(widget: *mut C_GtkWidget) -> *mut C_GtkBin;
     pub fn cast_GtkButton(widget: *mut C_GtkWidget) -> *mut C_GtkButton;
@@ -3072,7 +3076,7 @@ extern "C" {
     pub fn cast_GtkMessageDialog(widget: *mut C_GtkWidget) -> *mut C_GtkMessageDialog;
     pub fn cast_GtkColorChooserDialog(widget: *mut C_GtkWidget) -> *mut C_GtkColorChooserDialog;
     pub fn cast_GtkColorChooser(widget: *mut C_GtkWidget) -> *mut C_GtkColorChooser;
-    pub fn cast_GtkAdjustment(widget: *mut C_GtkWidget) -> *mut C_GtkAdjustment;
+    pub fn cast_GtkAdjustment(widget: *mut ::glib::ffi::C_GObject) -> *mut C_GtkAdjustment;
     pub fn cast_GtkNotebook(widget: *mut C_GtkWidget) -> *mut C_GtkNotebook;
     pub fn cast_GtkStack(widget: *mut C_GtkWidget) -> *mut C_GtkStack;
     pub fn cast_GtkStackSwitcher(widget: *mut C_GtkWidget) -> *mut C_GtkStackSwitcher;
@@ -3086,7 +3090,7 @@ extern "C" {
     pub fn cast_GtkListBox(widget: *mut C_GtkWidget) -> *mut C_GtkListBox;
     pub fn cast_GtkListBoxRow(widget: *mut C_GtkWidget) -> *mut C_GtkListBoxRow;
     pub fn cast_GtkActionBar(widget: *mut C_GtkWidget) -> *mut C_GtkActionBar;
-    pub fn cast_GtkFileFilter(widget: *mut C_GtkWidget) -> *mut C_GtkFileFilter;
+    pub fn cast_GtkFileFilter(widget: *mut ::glib::ffi::C_GObject) -> *mut C_GtkFileFilter;
     pub fn cast_GtkFileChooser(widget: *mut C_GtkWidget) -> *mut C_GtkFileChooser;
     pub fn cast_GtkAppChooser(widget: *mut C_GtkWidget) -> *mut C_GtkAppChooser;
     pub fn cast_GtkAppChooserDialog(widget: *mut C_GtkWidget) -> *mut C_GtkAppChooserDialog;
@@ -3095,7 +3099,7 @@ extern "C" {
     pub fn cast_GtkFontChooserDialog(widget: *mut C_GtkWidget) -> *mut C_GtkFontChooserDialog;
     pub fn cast_GtkFontChooser(widget: *mut C_GtkWidget) -> *mut C_GtkFontChooser;
     pub fn cast_GtkPaperSize(widget: *mut C_GtkWidget) -> *mut C_GtkPaperSize;
-    pub fn cast_GtkPageSetup(widget: *mut C_GtkWidget) -> *mut C_GtkPageSetup;
+    pub fn cast_GtkPageSetup(widget: *mut ::glib::ffi::C_GObject) -> *mut C_GtkPageSetup;
     // pub fn cast_PageSetupUnixDialog(widget: *mut C_GtkWidget) -> *mut C_GtkPageSetupUnixDialog;
     pub fn cast_GtkPrintSettings(widget: *mut C_GtkWidget) -> *mut C_GtkPrintSettings;
     pub fn cast_GtkRecentChooserDialog(widget: *mut C_GtkWidget) -> *mut C_GtkRecentChooserDialog;
@@ -3106,7 +3110,7 @@ extern "C" {
     pub fn cast_GtkEditable(widget: *mut C_GtkWidget) -> *mut C_GtkEditable;
     pub fn cast_GtkTextView(widget: *mut C_GtkWidget) -> *mut C_GtkTextView;
     pub fn cast_GtkTextBuffer(widget: *mut C_GtkWidget) -> *mut C_GtkTextBuffer;
-    pub fn cast_GtkTextTagTable(widget: *mut C_GtkWidget) -> *mut C_GtkTextTagTable;
+    pub fn cast_GtkTextTagTable(widget: *mut ::glib::ffi::C_GObject) -> *mut C_GtkTextTagTable;
     pub fn cast_GtkScrolledWindow(widget: *mut C_GtkWidget) -> *mut C_GtkScrolledWindow;
     pub fn cast_GtkRadioButton(widget: *mut C_GtkWidget) -> *mut C_GtkRadioButton;
     pub fn cast_GtkTreeView(widget: *mut C_GtkWidget) -> *mut C_GtkTreeView;
@@ -3122,15 +3126,19 @@ extern "C" {
     pub fn cast_GtkActionable(widget: *mut C_GtkWidget) -> *mut C_GtkActionable;
     pub fn cast_GtkCellLayout(widget: *mut C_GtkWidget) -> *mut C_GtkCellLayout;
     pub fn cast_GtkEntryCompletion(widget: *mut C_GtkWidget) -> *mut C_GtkEntryCompletion;
+    pub fn cast_GtkEntryBuffer(obj: *mut ::glib::ffi::C_GObject) -> *mut C_GtkEntryBuffer;
     pub fn cast_GtkIconView(widget: *mut C_GtkWidget) -> *mut C_GtkIconView;
-    pub fn cast_GtkTreeSelection(widget: *mut C_GtkWidget) -> *mut C_GtkTreeSelection;
+    pub fn cast_GtkTreeSelection(widget: *mut glib::ffi::C_GObject) -> *mut C_GtkTreeSelection;
     pub fn cast_GtkImage(widget: *mut C_GtkWidget) -> *mut C_GtkImage;
     pub fn cast_GtkRecentChooserWidget(widget: *mut C_GtkWidget) -> *mut C_GtkRecentChooserWidget;
     pub fn cast_GtkTreeModelFromListStore(store: *mut C_GtkListStore) -> *mut C_GtkTreeModel;
     pub fn cast_GtkListStoreFromTreeModel(store: *mut C_GtkTreeModel) -> *mut C_GtkListStore;
+    pub fn cast_GtkListStore(store: *mut ::glib::ffi::C_GObject) -> *mut C_GtkListStore;
     pub fn cast_GtkTreeModelFromTreeStore(store: *mut C_GtkTreeStore) -> *mut C_GtkTreeModel;
     pub fn cast_GtkTreeStoreFromTreeModel(store: *mut C_GtkTreeModel) -> *mut C_GtkTreeStore;
     pub fn cast_GtkComboBox(widget: *mut C_GtkWidget) -> *mut C_GtkComboBox;
     pub fn cast_GtkPopover(widget: *mut C_GtkWidget) -> *mut C_GtkPopover;
     pub fn cast_GtkComboBoxText(widget: *mut C_GtkWidget) -> *mut C_GtkComboBoxText;
+    pub fn cast_GtkTreeStore(obj: *mut ::glib::ffi::C_GObject) -> *mut C_GtkTreeStore;
+    pub fn cast_GtkTreeModel(obj: *mut ::glib::ffi::C_GObject) -> *mut C_GtkTreeModel;
 }

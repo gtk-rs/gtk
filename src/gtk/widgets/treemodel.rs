@@ -52,7 +52,7 @@ impl TreeModel {
             }
         })
     }
-    
+
     pub fn get_iter_first(&self, iter: &TreeIter) -> bool {
         match unsafe { ffi::gtk_tree_model_get_iter_first(self.pointer, iter.get_pointer()) } {
             0 => false,
@@ -90,7 +90,7 @@ impl TreeModel {
             _ => true
         }
     }
-    
+
     pub fn iter_has_child(&self, iter: &TreeIter) -> bool {
         match unsafe { ffi::gtk_tree_model_iter_has_child(self.pointer, iter.get_pointer()) } {
             0 => false,
@@ -173,22 +173,5 @@ impl TreeModel {
     }
 }
 
-impl Drop for TreeModel {
-    fn drop(&mut self) {
-        unsafe {
-            ::glib::ffi::g_object_unref(self.pointer as *mut ::glib::ffi::C_GObject);
-        }
-    }
-}
+impl_drop!(TreeModel, GTK_TREE_MODEL)
 
-impl Clone for TreeModel {
-    fn clone(&self) -> TreeModel {
-        let pointer = unsafe {
-            ::glib::ffi::g_object_ref(self.pointer as *mut ::glib::ffi::C_GObject)
-        };
-
-        TreeModel {
-            pointer: pointer as *mut ffi::C_GtkTreeModel
-        }
-    }
-}

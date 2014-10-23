@@ -80,3 +80,5 @@ impl traits::Bin for MenuToolButton {}
 impl traits::ToolItem for MenuToolButton {}
 impl traits::ToolButton for MenuToolButton {}
 
+impl_widget_events!(MenuToolButton)
+

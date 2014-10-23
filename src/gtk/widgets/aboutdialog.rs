@@ -349,3 +349,6 @@ impl traits::Container for AboutDialog {}
 impl traits::Bin for AboutDialog {}
 impl traits::Window for AboutDialog {}
 impl traits::Dialog for AboutDialog {}
+
+impl_widget_events!(AboutDialog)
+

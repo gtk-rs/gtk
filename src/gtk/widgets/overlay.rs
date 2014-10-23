@@ -40,3 +40,5 @@ impl_TraitWidget!(Overlay)
 
 impl traits::Container for Overlay {}
 impl traits::Bin for Overlay {}
+
+impl_widget_events!(Overlay)

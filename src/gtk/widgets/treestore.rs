@@ -25,7 +25,7 @@ pub struct TreeStore {
 impl TreeStore {
     pub fn new(column_types: &[GType]) -> Option<TreeStore> {
         let tmp_pointer = unsafe { ffi::gtk_tree_store_newv(column_types.len().to_i32().unwrap(), column_types) };
-        check_pointer!(tmp_pointer, TreeStore)
+        check_pointer!(tmp_pointer, TreeStore, G_OBJECT_FROM_TREE_STORE)
     }
 
     pub fn set_column_types(&self, column_types: &[GType]) {
@@ -140,3 +140,5 @@ impl TreeStore {
         }
     }
 }
+
+impl_drop!(TreeStore, GTK_TREE_STORE)

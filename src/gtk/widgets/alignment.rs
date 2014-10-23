@@ -20,6 +20,7 @@ use libc::{c_float, c_uint};
 use gtk::cast::GTK_ALIGNMENT;
 use gtk::ffi;
 use gtk::traits;
+
 /// Alignment — A widget which controls the alignment and size of its child
 struct_Widget!(Alignment)
 
@@ -70,3 +71,6 @@ impl_TraitWidget!(Alignment)
 
 impl traits::Container for Alignment {}
 impl traits::Bin for Alignment {}
+
+impl_widget_events!(Alignment)
+

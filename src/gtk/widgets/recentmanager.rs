@@ -88,3 +88,5 @@ impl RecentManager {
 
 impl_drop!(RecentManager)
 impl_TraitWidget!(RecentManager)
+
+impl_widget_events!(RecentManager)

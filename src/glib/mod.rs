@@ -25,7 +25,7 @@ pub use self::glib_container::GlibContainer;
 pub use self::error::{Error};
 pub use self::permission::Permission;
 pub use self::ffi::GType;
-pub use self::traits::{FFIGObject, GObject};
+pub use self::traits::{FFIGObject, Connect};
 
 mod list;
 mod slist;

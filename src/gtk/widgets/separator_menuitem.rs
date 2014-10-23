@@ -34,4 +34,4 @@ impl traits::Container for SeparatorMenuItem {}
 impl traits::Bin for SeparatorMenuItem {}
 impl traits::MenuItem for SeparatorMenuItem {}
 
-
+impl_widget_events!(SeparatorMenuItem)

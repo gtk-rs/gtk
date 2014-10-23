@@ -4,7 +4,7 @@
 extern crate rgtk;
 
 use rgtk::*;
-use rgtk::gtk::signals;
+use rgtk::gtk::signals::{Clicked, KeyPressEvent, DeleteEvent};
 
 fn main() {
     gtk::init();
@@ -65,43 +65,43 @@ fn main() {
     window.set_window_position(gtk::window_position::Center);
     window.add(&frame);
 
-    button.connect(signals::Clicked::new(||{
+    Connect::connect(&button, Clicked::new(||{
         //entry.set_text("Clicked!".to_string());
         let dialog = gtk::MessageDialog::new_with_markup(None, gtk::dialog_flags::Modal, gtk::message_type::Info,
             gtk::buttons_type::OkCancel, "This is a trap !").unwrap();
 
         dialog.run();
     }));
-    button_font.connect(signals::Clicked::new(||{
+    Connect::connect(&button_font, Clicked::new(||{
         let dialog = gtk::FontChooserDialog::new("Font chooser test", None).unwrap();
 
         dialog.run();
     }));
-    button_recent.connect(signals::Clicked::new(||{
+    Connect::connect(&button_recent, Clicked::new(||{
         let dialog = gtk::RecentChooserDialog::new("Recent chooser test", None).unwrap();
 
         dialog.run();
     }));
-    file_button.connect(signals::Clicked::new(||{
+    Connect::connect(&file_button, Clicked::new(||{
         //entry.set_text("Clicked!".to_string());
         let dialog2 = gtk::FileChooserDialog::new("Choose a file", None, gtk::file_chooser_action::Open).unwrap();
 
         dialog2.run();
     }));
-    app_button.connect(signals::Clicked::new(||{
+    Connect::connect(&app_button, Clicked::new(||{
         //entry.set_text("Clicked!".to_string());
         let dialog = gtk::AppChooserDialog::new_for_content_type(None, gtk::dialog_flags::Modal, "sh").unwrap();
 
         dialog.run();
     }));
 
-    window.connect(signals::KeyPressEvent::new(|key|{
+    Connect::connect(&window, KeyPressEvent::new(|key|{
         unsafe { println!("key pressed: {} / {}", (*key).keyval, (*key)._type) };
         println!("text: {}", entry.get_text().unwrap());
         false
     }));
 
-    window.connect(signals::DeleteEvent::new(|_|{
+    Connect::connect(&window, DeleteEvent::new(|_|{
         gtk::main_quit();
         true
     }));

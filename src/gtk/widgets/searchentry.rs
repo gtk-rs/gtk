@@ -38,3 +38,5 @@ impl_TraitWidget!(SearchEntry)
 
 impl traits::Entry for SearchEntry {}
 impl traits::Editable for SearchEntry {}
+
+impl_widget_events!(SearchEntry)

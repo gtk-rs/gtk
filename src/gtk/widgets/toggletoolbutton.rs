@@ -43,3 +43,5 @@ impl traits::Bin for ToggleToolButton {}
 impl traits::ToolItem for ToggleToolButton {}
 impl traits::ToolButton for ToggleToolButton {}
 impl traits::ToggleToolButton for ToggleToolButton {}
+
+impl_widget_events!(ToggleToolButton)

@@ -71,3 +71,5 @@ impl_TraitWidget!(Layout)
 
 impl traits::Container for Layout {}
 impl traits::Scrollable for Layout {}
+
+impl_widget_events!(Layout)

@@ -59,3 +59,6 @@ impl_TraitWidget!(ComboBox)
 impl traits::Container for ComboBox {}
 impl traits::Bin for ComboBox {}
 impl traits::ComboBox for ComboBox {}
+
+impl_widget_events!(ComboBox)
+
