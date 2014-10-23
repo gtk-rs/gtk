@@ -18,10 +18,8 @@
 use gtk;
 use gtk::ffi;
 
-trait GValuePrivate {
-    type FfiType;
-
-    fn get(gvalue: &GValue) -> <Self as GValuePrivate>::FfiType;
+trait GValuePrivate<T> {
+    fn get(gvalue: &GValue) -> Self;
     fn set(&self, gvalue: &GValue);
 }
 
@@ -214,7 +212,7 @@ impl GValue {
         unsafe { ffi::g_value_get_flags(self.pointer) }
     }
 
-    pub fn set_string(&self, v_string: &str) {
+    fn set_string(&self, v_string: &str) {
         unsafe {
             v_string.with_c_str(|c_str| {
                 ffi::g_value_set_string(self.pointer, c_str)
@@ -240,7 +238,7 @@ impl GValue {
         }
     }*/
 
-    pub fn get_string(&self) -> Option<String> {
+    fn get_string(&self) -> Option<String> {
         let tmp_pointer = unsafe { ffi::g_value_get_string(self.pointer) };
 
         if tmp_pointer.is_null() {
@@ -319,12 +317,12 @@ impl GValue {
         unsafe { ffi::g_value_get_gtype(self.pointer) }
     }
 
-    pub fn set<T: GValuePrivate>(&self, val: &T) {
+    pub fn set<T: GValuePrivate<T>>(&self, val: &T) {
         val.set(self);
     }
 
-    pub fn get<T: GValuePrivate>(&self) -> T {
-        GValuePrivate::get(self);
+    pub fn get<T: GValuePrivate<T>>(&self) -> T {
+        GValuePrivate::get(self)
     }
 
     pub fn compatible(src_type: gtk::GType, dest_type: gtk::GType) -> bool {
@@ -357,9 +355,7 @@ impl Drop for GValue {
     }
 }
 
-impl GValuePrivate for i32 {
-    type FfiType = i32;
-
+impl GValuePrivate<i32> for i32 {
     fn get(gvalue: &GValue) -> i32 {
         gvalue.get_int();
     }
@@ -369,9 +365,7 @@ impl GValuePrivate for i32 {
     }
 }
 
-impl GValuePrivate for u32 {
-    type FfiType = u32;
-
+impl GValuePrivate<u32> for u32 {
     fn get(gvalue: &GValue) -> u32 {
         gvalue.get_uint()
     }
@@ -381,9 +375,7 @@ impl GValuePrivate for u32 {
     }
 }
 
-impl GValuePrivate for i64 {
-    type FfiType = i64;
-
+impl GValuePrivate<i64> for i64 {
     fn get(gvalue: &GValue) -> i64 {
         gvalue.get_int64()
     }
@@ -393,9 +385,7 @@ impl GValuePrivate for i64 {
     }
 }
 
-impl GValuePrivate for u64 {
-    type FfiType = u64;
-
+impl GValuePrivate<u64> for u64 {
     fn get(gvalue: &GValue) -> u64 {
         gvalue.get_uint64()
     }
@@ -405,9 +395,7 @@ impl GValuePrivate for u64 {
     }
 }
 
-impl GValuePrivate for bool {
-    type FfiType = bool;
-
+impl GValuePrivate<bool> for bool {
     fn get(gvalue: &GValue) -> bool {
         gvalue.get_boolean()
     }
@@ -417,9 +405,7 @@ impl GValuePrivate for bool {
     }
 }
 
-impl GValuePrivate for i8 {
-    type FfiType = i8;
-
+impl GValuePrivate<i8> for i8 {
     fn get(gvalue: &GValue) -> i8 {
         gvalue.get_schar()
     }
@@ -429,9 +415,7 @@ impl GValuePrivate for i8 {
     }
 }
 
-impl GValuePrivate for u8 {
-    type FfiType = u8;
-
+impl GValuePrivate<u8> for u8 {
     fn get(gvalue: &GValue) -> u8 {
         gvalue.get_uchar()
     }
@@ -441,9 +425,7 @@ impl GValuePrivate for u8 {
     }
 }
 
-impl GValuePrivate for f32 {
-    type FfiType = f32;
-
+impl GValuePrivate<f32> for f32 {
     fn get(gvalue: &GValue) -> f32 {
         gvalue.get_float()
     }
@@ -453,9 +435,7 @@ impl GValuePrivate for f32 {
     }
 }
 
-impl GValuePrivate for f64 {
-    type FfiType = f64;
-
+impl GValuePrivate<f64> for f64 {
     fn get(gvalue: &GValue) -> f64 {
         gvalue.get_double()
     }
@@ -465,9 +445,7 @@ impl GValuePrivate for f64 {
     }
 }
 
-impl GValuePrivate for gtk::GType {
-    type FfiType = gtk::GType;
-
+impl GValuePrivate<gtk::GType> for gtk::GType {
     fn get(gvalue: &GValue) -> gtk::GType {
         gvalue.get_gtype()
     }
@@ -477,11 +455,12 @@ impl GValuePrivate for gtk::GType {
     }
 }
 
-impl GValuePrivate for String {
-    type FfiType = Option<String>;
-
-    fn get(gvalue: &GValue) -> Option<String> {
-        gvalue.get_string()
+impl GValuePrivate<String> for String {
+    fn get(gvalue: &GValue) -> String {
+        match gvalue.get_string() {
+            Some(s) => s,
+            None => String::new()
+        }
     }
 
     fn set(&self, gvalue: &GValue) {
