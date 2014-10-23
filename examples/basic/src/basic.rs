@@ -8,7 +8,7 @@
 extern crate rgtk;
 
 use rgtk::*;
-use rgtk::gtk::signals;
+use rgtk::gtk::signals::{DeleteEvent};
 
 fn main() {
     gtk::init();
@@ -19,14 +19,14 @@ fn main() {
     window.set_window_position(gtk::window_position::Center);
     window.set_default_size(350, 70);
 
-    window.connect(signals::DeleteEvent::new(|_| {
+   Connect::connect(&window, DeleteEvent::new(|_| {
         gtk::main_quit();
         true
     }));
 
     let button = gtk::Button::new_with_label("Click me!").unwrap();
 
-	window.add(&button);
+    window.add(&button);
 
     window.show_all();
     gtk::main();

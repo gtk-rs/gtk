@@ -323,10 +323,23 @@ signal!(check_resize,       CheckResize() -> ())
 //GtkButton
 signal!(activate,           Activate() -> ())
 signal!(clicked,            Clicked() -> ())
-
+signal!(enter, Enter() -> ())
+signal!(leave, Leave() -> ())
+signal!(pressed, Pressed() -> ())
+signal!(released, Released() -> ())
 //GtkDialog
 signal!(response,           Response(response_id : int) -> ())
 
 //GtkAdjustment
 //https://developer.gnome.org/gtk3/stable/GtkAdjustment.html#GtkAdjustment.signals
 signal!(value_changed,      ValueChanged() -> ())
+
+// SpinButton
+signal!(changed_value, ChangedValue() -> ())
+signal!(wrapped, Wrapped() -> ())
+//gint    input   Run Last
+//gboolean    output  Run Last
+
+// Range
+signal!(adjust_bounds, AdjustBounds() -> ())
+signal!(move_slider, MoveSlider() -> ())

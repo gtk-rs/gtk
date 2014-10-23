@@ -76,7 +76,7 @@ impl PrintSettings {
             ffi::gtk_print_settings_unset(GTK_PRINT_SETTINGS(self.get_widget()), c_str)
         }) }
     }
-    
+
     pub fn get_bool(&self, key: &str) -> bool {
         match unsafe { key.with_c_str(|c_str| {
             ffi::gtk_print_settings_get_bool(GTK_PRINT_SETTINGS(self.get_widget()), c_str)
@@ -112,7 +112,7 @@ impl PrintSettings {
             ffi::gtk_print_settings_get_double_with_default(GTK_PRINT_SETTINGS(self.get_widget()), c_str, def)
         })}
     }
-    
+
     pub fn get_length(&self, key: &str, unit: gtk::Unit) -> f64 {
         unsafe { key.with_c_str(|c_str| {
             ffi::gtk_print_settings_get_length(GTK_PRINT_SETTINGS(self.get_widget()), c_str, unit)
@@ -124,7 +124,7 @@ impl PrintSettings {
             ffi::gtk_print_settings_set_length(GTK_PRINT_SETTINGS(self.get_widget()), c_str, value, unit)
         })}
     }
-    
+
     pub fn get_int(&self, key: &str) -> i32 {
         unsafe { key.with_c_str(|c_str| {
             ffi::gtk_print_settings_get_int(GTK_PRINT_SETTINGS(self.get_widget()), c_str)
@@ -173,7 +173,7 @@ impl PrintSettings {
         if tmp.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp as *mut ffi::C_GtkWidget))   
+            Some(ffi::FFIWidget::wrap(tmp as *mut ffi::C_GtkWidget))
         }
     }
 
@@ -298,7 +298,7 @@ impl PrintSettings {
     pub fn set_print_pages(&self, pages: gtk::PrintPages) {
         unsafe { ffi::gtk_print_settings_set_print_pages(GTK_PRINT_SETTINGS(self.get_widget()), pages) }
     }
-    
+
     pub fn get_page_set(&self) -> gtk::PageSet {
         unsafe { ffi::gtk_print_settings_get_page_set(GTK_PRINT_SETTINGS(self.get_widget())) }
     }
@@ -390,3 +390,5 @@ impl PrintSettings {
 
 impl_drop!(PrintSettings)
 impl_TraitWidget!(PrintSettings)
+
+impl_widget_events!(PrintSettings)

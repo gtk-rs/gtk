@@ -384,3 +384,5 @@ impl_drop!(NoteBook)
 impl_TraitWidget!(NoteBook)
 
 impl traits::Container for NoteBook {}
+
+impl_widget_events!(NoteBook)

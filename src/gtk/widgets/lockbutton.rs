@@ -51,3 +51,6 @@ impl_TraitWidget!(LockButton)
 impl traits::Container for LockButton {}
 impl traits::Button for LockButton {}
 impl traits::Actionable for LockButton {}
+
+impl_widget_events!(LockButton)
+impl_button_events!(LockButton)

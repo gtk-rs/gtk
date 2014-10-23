@@ -93,3 +93,5 @@ impl_drop!(Paned)
 impl_TraitWidget!(Paned)
 
 impl traits::Container for Paned {}
+
+impl_widget_events!(Paned)

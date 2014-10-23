@@ -208,3 +208,5 @@ impl_TraitWidget!(ListBoxRow)
 
 impl traits::Container for ListBoxRow {}
 impl traits::Bin for ListBoxRow {}
+
+impl_widget_events!(ListBox)

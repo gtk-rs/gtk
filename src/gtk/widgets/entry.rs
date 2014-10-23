@@ -58,3 +58,5 @@ impl_TraitWidget!(Entry)
 
 impl traits::Entry for Entry {}
 impl traits::Editable for Entry {}
+
+impl_widget_events!(Entry)

@@ -63,3 +63,6 @@ impl traits::Container for RadioButton {}
 impl traits::Button for RadioButton {}
 impl traits::Bin for RadioButton {}
 impl traits::ToggleButton for RadioButton {}
+
+impl_widget_events!(RadioButton)
+

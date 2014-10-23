@@ -61,3 +61,6 @@ impl traits::Container for ToolButton {}
 impl traits::Bin for ToolButton {}
 impl traits::ToolItem for ToolButton {}
 impl traits::ToolButton for ToolButton {}
+
+impl_widget_events!(ToolButton)
+impl_button_events!(ToolButton)

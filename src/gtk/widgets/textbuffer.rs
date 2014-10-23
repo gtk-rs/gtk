@@ -41,4 +41,4 @@ impl_TraitWidget!(TextBuffer)
 
 impl traits::TextBuffer for TextBuffer {}
 
-
+impl_widget_events!(TextBuffer)

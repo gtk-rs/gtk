@@ -49,3 +49,5 @@ impl_TraitWidget!(SeparatorToolItem)
 impl traits::Container for SeparatorToolItem {}
 impl traits::Bin for SeparatorToolItem {}
 impl traits::ToolItem for SeparatorToolItem {}
+
+impl_widget_events!(SeparatorToolItem)

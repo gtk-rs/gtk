@@ -11,7 +11,7 @@ use std::io::{BufferedReader, File};
 use std::num::FromPrimitive;
 
 use rgtk::*;
-use rgtk::gtk::signals;
+use rgtk::gtk::signals::{Clicked, DeleteEvent};
 use rgtk::gtk::traits::*;
 
 fn main() {
@@ -29,7 +29,7 @@ fn main() {
 
     let mut open_button = gtk::ToolButton::new::<gtk::Image>(Some(&open_icon), Some("Open")).unwrap();
     open_button.set_is_important(true);
-    open_button.connect(signals::Clicked::new(|| {
+    Connect::connect(&open_button, Clicked::new(|| {
         // TODO move this to a impl?
         let file_chooser = gtk::FileChooserDialog::new("Open File", None, gtk::file_chooser_action::Open).unwrap();
         let response: Option<gtk::ResponseType> = FromPrimitive::from_i32(file_chooser.run());
@@ -63,7 +63,7 @@ fn main() {
 
     window.add(&vbox);
 
-    window.connect(signals::DeleteEvent::new(|_| {
+    Connect::connect(&window, DeleteEvent::new(|_| {
         gtk::main_quit();
         true
     }));

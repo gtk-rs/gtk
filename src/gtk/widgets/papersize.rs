@@ -205,3 +205,5 @@ impl Clone for PaperSize {
 }
 
 impl_TraitWidget!(PaperSize)
+
+impl_widget_events!(PaperSize)

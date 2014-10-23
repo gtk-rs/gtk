@@ -48,3 +48,5 @@ impl traits::Bin for ColorChooserDialog {}
 impl traits::Window for ColorChooserDialog {}
 impl traits::Dialog for ColorChooserDialog {}
 impl traits::ColorChooser for ColorChooserDialog {}
+
+impl_widget_events!(ColorChooserDialog)

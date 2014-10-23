@@ -400,3 +400,5 @@ impl_TraitWidget!(TreeView)
 
 impl traits::Container for TreeView {}
 impl traits::Scrollable for TreeView {}
+
+impl_widget_events!(TreeView)

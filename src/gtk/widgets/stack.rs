@@ -140,3 +140,5 @@ impl_drop!(Stack)
 impl_TraitWidget!(Stack)
 
 impl traits::Container for Stack {}
+
+impl_widget_events!(Stack)

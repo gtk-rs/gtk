@@ -63,3 +63,4 @@ impl traits::Container for MenuButton {}
 impl traits::Button for MenuButton {}
 impl traits::ToggleButton for MenuButton {}
 
+impl_widget_events!(MenuButton)

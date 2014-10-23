@@ -121,3 +121,41 @@ macro_rules! get_widget(
         };
     );
 )
+
+macro_rules! impl_widget_events(
+    ($gtk_struct:ident) => (
+        impl_connect!($gtk_struct -> ButtonPressEvent, ButtonReleaseEvent, CanActivateAccel,
+                                     ChildNotify, CompositedChanged, ConfigureEvent, DamageEvent,
+                                     DeleteEvent, DestroyEvent, DirectionChanged, Draw, EnterNotifyEvent,
+                                     Event, EventAfter, Focus, FocusInEvent, FocusOutEvent, GrabBrokenEvent,
+                                     GrabFocus, GrabNotify, Hide, KeyPressEvent,
+                                     KeyReleaseEvent, KeynavFailed, LeaveNotifyEvent, Map, MapEvent,
+                                     MnemonicActivate, MotionNotifyEvent, MoveFocus,
+                                     PropertyNotifyEvent, ProximityInEvent, ProximityOutEvent,
+                                     QueryTooltip, Realize, ScreenChanged, ScrollEvent,
+                                     Show, SizeAllocate,
+                                     StateFlagsChanged, StyleUpdated,
+                                     TouchEvent, WindowStateEvent)
+
+
+        // not implemented:
+        // DragBegin, DragDataDelete, DragDataGet, DragDataReceived, DragDrop
+        // DragEnd, DragFailed, DragLeave, DragMotion, HierarchyChanged, ParentSet, PopuMenu,
+        // UnRealize, VisibilityNotifyEvent, UnMap, UnMapEvent, StyleSet, StateChanged, SelectionRequestEvent,
+        // SelectionReceived, SelectionClearEvent, SelectionGet, SelectionNotifyEvent,
+    )
+)
+
+macro_rules! impl_button_events(
+    ($gtk_struct:ident) => (
+        impl_connect!($gtk_struct -> Activate, Clicked, Enter, Leave, Pressed, Released)
+    )
+)
+
+macro_rules! impl_range_events(
+    ($gtk_struct:ident) => (
+        impl_connect!($gtk_struct -> AdjustBounds, MoveSlider, ValueChanged)
+
+    // ChangeValue
+    )
+)

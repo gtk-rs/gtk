@@ -34,3 +34,5 @@ impl_TraitWidget!(ToolItem)
 impl traits::Container for ToolItem {}
 impl traits::Bin for ToolItem {}
 impl traits::ToolItem for ToolItem {}
+
+impl_widget_events!(ToolItem)

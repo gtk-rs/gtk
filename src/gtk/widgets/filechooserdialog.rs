@@ -54,3 +54,5 @@ impl traits::Bin for FileChooserDialog {}
 impl traits::Window for FileChooserDialog {}
 impl traits::Dialog for FileChooserDialog {}
 impl traits::FileChooser for FileChooserDialog {}
+
+impl_widget_events!(FileChooserDialog)

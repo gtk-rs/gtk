@@ -181,6 +181,8 @@ impl_TraitWidget!(FlowBox)
 
 impl traits::Container for FlowBox {}
 
+impl_widget_events!(FlowBox)
+
 struct_Widget!(FlowBoxChild)
 
 impl FlowBoxChild {
@@ -213,3 +215,5 @@ impl_TraitWidget!(FlowBoxChild)
 
 impl traits::Container for FlowBoxChild {}
 impl traits::Bin for FlowBoxChild {}
+
+impl_widget_events!(FlowBoxChild)

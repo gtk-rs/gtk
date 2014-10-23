@@ -70,3 +70,5 @@ impl_TraitWidget!(SearchBar)
 
 impl traits::Container for SearchBar {}
 impl traits::Bin for SearchBar {}
+
+impl_widget_events!(SearchBar)

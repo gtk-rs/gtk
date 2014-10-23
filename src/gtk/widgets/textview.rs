@@ -42,3 +42,5 @@ impl_drop!(TextView)
 impl_TraitWidget!(TextView)
 impl traits::TextView for TextView {}
 impl traits::Scrollable for TextView {}
+
+impl_widget_events!(TextView)

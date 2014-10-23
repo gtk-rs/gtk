@@ -34,3 +34,5 @@ impl_drop!(Separator)
 impl_TraitWidget!(Separator)
 
 impl traits::Orientable for Separator {}
+
+impl_widget_events!(Separator)

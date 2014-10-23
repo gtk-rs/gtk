@@ -304,3 +304,6 @@ impl_TraitWidget!(IconView)
 
 impl traits::Scrollable for IconView {}
 impl traits::CellLayout for IconView {}
+
+impl_widget_events!(IconView)
+

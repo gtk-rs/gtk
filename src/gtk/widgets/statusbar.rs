@@ -69,3 +69,4 @@ impl traits::Container for StatusBar {}
 impl traits::Box for StatusBar {}
 impl traits::Orientable for StatusBar {}
 
+impl_widget_events!(StatusBar)

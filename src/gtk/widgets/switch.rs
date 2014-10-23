@@ -48,3 +48,5 @@ impl Switch {
 
 impl_drop!(Switch)
 impl_TraitWidget!(Switch)
+
+impl_widget_events!(Switch)

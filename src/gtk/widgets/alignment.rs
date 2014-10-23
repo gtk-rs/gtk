@@ -71,3 +71,6 @@ impl_TraitWidget!(Alignment)
 
 impl traits::Container for Alignment {}
 impl traits::Bin for Alignment {}
+
+impl_widget_events!(Alignment)
+

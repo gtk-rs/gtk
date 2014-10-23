@@ -51,7 +51,7 @@ impl TreePath {
     }
 
     pub fn new_from_indicesv(indices: &mut [i32]) -> Option<TreePath> {
-        let tmp = unsafe { ffi::gtk_tree_path_new_from_indicesv(indices.as_mut_ptr(), indices.len() as u64) };
+        let tmp = unsafe { ffi::gtk_tree_path_new_from_indicesv(indices.as_mut_ptr(), indices.len() as ::libc::c_ulong) };
 
         if tmp.is_null() {
             None

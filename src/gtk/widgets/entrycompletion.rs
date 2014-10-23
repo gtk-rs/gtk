@@ -203,3 +203,5 @@ impl_drop!(EntryCompletion)
 impl_TraitWidget!(EntryCompletion)
 
 impl traits::CellLayout for EntryCompletion {}
+
+impl_widget_events!(EntryCompletion)

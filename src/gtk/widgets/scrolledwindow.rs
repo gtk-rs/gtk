@@ -42,3 +42,5 @@ impl_TraitWidget!(ScrolledWindow)
 
 impl traits::ScrolledWindow for ScrolledWindow {}
 impl traits::Container for ScrolledWindow {}
+
+impl_widget_events!(ScrolledWindow)

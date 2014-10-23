@@ -47,3 +47,5 @@ impl traits::Bin for FontChooserDialog {}
 impl traits::Window for FontChooserDialog {}
 impl traits::Dialog for FontChooserDialog {}
 impl traits::FontChooser for FontChooserDialog {}
+
+impl_widget_events!(FontChooserDialog)

@@ -57,3 +57,6 @@ impl_TraitWidget!(AspectFrame)
 
 impl traits::Frame for AspectFrame {}
 impl traits::Container for AspectFrame {}
+
+impl_widget_events!(AspectFrame)
+

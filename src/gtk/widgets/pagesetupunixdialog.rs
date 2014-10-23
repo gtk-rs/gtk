@@ -76,3 +76,6 @@ impl traits::Container for PageSetupUnixDialog {}
 impl traits::Bin for PageSetupUnixDialog {}
 impl traits::Window for PageSetupUnixDialog {}
 impl traits::Dialog for PageSetupUnixDialog {}
+
+impl_widget_events!(PageSetupUnixDialog)
+

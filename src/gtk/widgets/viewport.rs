@@ -47,3 +47,5 @@ impl_TraitWidget!(Viewport)
 impl traits::Container for Viewport {}
 impl traits::Bin for Viewport {}
 impl traits::Scrollable for Viewport {}
+
+impl_widget_events!(Viewport)

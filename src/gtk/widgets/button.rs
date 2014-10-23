@@ -86,3 +86,6 @@ impl_TraitWidget!(Button)
 impl traits::Container for Button {}
 impl traits::Button for Button {}
 impl traits::Bin for Button {}
+
+impl_widget_events!(Button)
+impl_button_events!(Button)

@@ -40,3 +40,5 @@ impl_TraitWidget!(Frame)
 impl traits::Frame for Frame {}
 impl traits::Container for Frame {}
 impl traits::Bin for Frame {}
+
+impl_widget_events!(Frame)

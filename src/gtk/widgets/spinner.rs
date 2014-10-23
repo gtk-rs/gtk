@@ -43,3 +43,5 @@ impl Spinner {
 
 impl_drop!(Spinner)
 impl_TraitWidget!(Spinner)
+
+impl_widget_events!(Spinner)

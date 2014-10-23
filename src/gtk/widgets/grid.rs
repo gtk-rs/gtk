@@ -169,3 +169,6 @@ impl_TraitWidget!(Grid)
 
 impl traits::Container for Grid {}
 impl traits::Orientable for Grid {}
+
+impl_widget_events!(Grid)
+

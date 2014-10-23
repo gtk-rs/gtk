@@ -55,7 +55,7 @@ impl RecentData {
                     app_exec: string::raw::from_buf((*ptr).app_exec as *const u8),
                     groups: tmp_groups,
                     is_private: match (*ptr).is_private {
-                    	ffi::GFALSE => false,
+                        ffi::GFALSE => false,
                         _ => true
                     }
                 }
@@ -73,22 +73,22 @@ impl RecentData {
         self.display_name.with_c_str(|c_display_name| {
             self.description.with_c_str(|c_description| {
                 self.mime_type.with_c_str(|c_mime_type| {
-                	self.app_name.with_c_str(|c_app_name| {
-                		self.app_exec.with_c_str(|c_app_exec| {
-                			ffi::C_GtkRecentData {
-		                        display_name: c_display_name as *mut c_char,
-		                        description: c_description as *mut c_char,
-		                        mime_type: c_mime_type as *mut c_char,
-		                        app_name: c_app_name as *mut c_char,
-		                        app_exec: c_app_exec as *mut c_char,
-		                        groups: t_groups.as_mut_ptr(),
-		                        is_private: match self.is_private {
-		                        	true => ffi::GTRUE,
-		                        	false => ffi::GFALSE
-		                        }
-		                    }
-                		})
-                	})
+                    self.app_name.with_c_str(|c_app_name| {
+                        self.app_exec.with_c_str(|c_app_exec| {
+                            ffi::C_GtkRecentData {
+                                display_name: c_display_name as *mut c_char,
+                                description: c_description as *mut c_char,
+                                mime_type: c_mime_type as *mut c_char,
+                                app_name: c_app_name as *mut c_char,
+                                app_exec: c_app_exec as *mut c_char,
+                                groups: t_groups.as_mut_ptr(),
+                                is_private: match self.is_private {
+                                    true => ffi::GTRUE,
+                                    false => ffi::GFALSE
+                                }
+                            }
+                        })
+                    })
                 })
             })
         })

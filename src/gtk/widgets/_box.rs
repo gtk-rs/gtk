@@ -40,3 +40,5 @@ impl_TraitWidget!(Box)
 impl traits::Container for Box {}
 impl traits::Box for Box {}
 impl traits::Orientable for Box {}
+
+impl_widget_events!(Box)
