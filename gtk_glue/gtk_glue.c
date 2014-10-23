@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <glib-object.h>
 #include <string.h>
+#include <stdio.h>
 
 void glue_signal_connect(void *g_object, char *signal, void (*func)(void*, void*), void *user_param) {
     g_signal_connect(G_OBJECT(g_object), signal, G_CALLBACK(func), user_param);
@@ -24,15 +25,17 @@ void glue_signal_connect(void *g_object, char *signal, void (*func)(void*, void*
 
 GValue *create_gvalue() {
     GValue *a;
+    GValue tmp = G_VALUE_INIT;
 
     if (!(a = malloc(sizeof(*a)))) {
         return a;
     }
-    memset(a, sizeof(*a), 1);
+    *a = tmp;
     return a;
 }
 
 GType get_gtype(int x) {
+    printf("value : %d\n", x);
     return G_TYPE_MAKE_FUNDAMENTAL(x);
 }
 

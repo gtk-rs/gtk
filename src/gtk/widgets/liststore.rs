@@ -97,6 +97,10 @@ impl ListStore {
         }
     }
 
+    pub fn set_value(&self, iter: &TreeIter, column: i32, value: &gtk::GValue) {
+        unsafe { ffi::gtk_list_store_set_value(self.pointer, iter.get_pointer(), column, value.unwrap_pointer()) }
+    }
+
     #[doc(hidden)]
     pub fn get_pointer(&self) -> *mut ffi::C_GtkListStore {
         self.pointer

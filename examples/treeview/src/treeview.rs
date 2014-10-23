@@ -30,6 +30,8 @@ fn main() {
         true
     }));
 
+    let hello = "Hello world !";
+
     // left pane
 
     let mut left_tree = gtk::TreeView::new().unwrap();
@@ -58,7 +60,7 @@ fn main() {
     let value = gtk::GValue::new().unwrap();
 
     value.init(gtk::g_type::String);
-    value.set_static_string("Hello world !");
+    value.set_string(hello);
 
     for _ in range(0i, 10i) {
         let iter = gtk::TreeIter::new().unwrap();
