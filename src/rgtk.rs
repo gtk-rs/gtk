@@ -22,7 +22,7 @@ The various parts of __rgtk__ can be found in the submodules __gtk__, __gdk__, _
 Trait reexports
 ===============
 
-For you're conveniance the various traits of `rgtk` are reexported in the `rgtk::*`
+For your conveniance the various traits of `rgtk` are reexported in the `rgtk::*`
 namespace as `{Gtk/Gdk/Glib/Cairo}{trait_name}Trait` so you can just use...
 
 ```Rust
@@ -34,7 +34,7 @@ use rgtk::*;
 
 ```Rust
 let button = gtk::Button:new(); // trait gtk::traits::Button reexported as GtkButtonTrait,
-                                // it's trait methods can be accessed here.
+                                // its trait methods can be accessed here.
 ```
 */
 
@@ -44,6 +44,7 @@ let button = gtk::Button:new(); // trait gtk::traits::Button reexported as GtkBu
 #![feature(macro_rules)]
 #![allow(dead_code)] // TODO: drop this
 #![feature(unsafe_destructor)]
+#![feature(associated_types)]
 
 extern crate libc;
 
@@ -80,6 +81,7 @@ pub use gtk::traits::CellEditable     as GtkCellEditableTrait;
 pub use gtk::traits::CellRenderer     as GtkCellRendererTrait;
 pub use gtk::traits::Actionable       as GtkActionableTrait;
 pub use gtk::traits::ComboBox         as GtkComboBoxTrait;
+pub use gtk::widgets::GValuePublic    as GtkValuePublic;
 
 #[doc(hidden)]
 #[cfg(target_os="macos")]

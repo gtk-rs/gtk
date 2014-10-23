@@ -16,7 +16,7 @@
 #![allow(non_camel_case_types)]
 #![allow(dead_code)]
 
-use libc::{c_int, c_char, c_float, c_uint, c_double, c_long, c_short, c_void, c_ulong};
+use libc::{c_int, c_char, c_uchar, c_float, c_uint, c_double, c_long, c_short, c_void, c_ulong};
 
 use gdk;
 use gtk;
@@ -172,6 +172,8 @@ pub struct C_GtkFontChooserDialog;
 #[repr(C)]
 pub struct C_GtkBuildable;
 //pub struct C_GtkPageSetupUnixDialog;
+#[repr(C)]
+pub struct C_GValue;
 #[repr(C)]
 pub struct C_GtkPrintSettings;
 #[repr(C)]
@@ -385,6 +387,75 @@ extern "C" {
     // pub fn gtk_window_activate_default(window: *const const C_GtkWindow) -> Gboolean;
     // pub fn gtk_window_get_type() -> ();
 
+    //=========================================================================
+    // GValue                                                            NOT OK
+    //=========================================================================
+    pub fn create_gvalue                       () -> *mut C_GValue;
+    pub fn get_gtype                           (_type: gtk::GType) -> gtk::GType;
+    pub fn g_value_init                        (value: *mut C_GValue, _type: gtk::GType);
+    pub fn g_value_reset                       (value: *mut C_GValue);
+    pub fn g_value_unset                       (value: *mut C_GValue);
+    pub fn g_strdup_value_contents             (value: *mut C_GValue) -> *mut c_char;
+    pub fn g_value_set_boolean                 (value: *mut C_GValue, b: Gboolean);
+    pub fn g_value_get_boolean                 (value: *mut C_GValue) -> Gboolean;
+    pub fn g_value_set_schar                   (value: *mut C_GValue, b: c_char);
+    pub fn g_value_get_schar                   (value: *mut C_GValue) -> c_char;
+    pub fn g_value_set_uchar                   (value: *mut C_GValue, b: c_uchar);
+    pub fn g_value_get_uchar                   (value: *mut C_GValue) -> c_uchar;
+    pub fn g_value_set_int                     (value: *mut C_GValue, b: c_int);
+    pub fn g_value_get_int                     (value: *mut C_GValue) -> c_int;
+    pub fn g_value_set_uint                    (value: *mut C_GValue, b: c_uint);
+    pub fn g_value_get_uint                    (value: *mut C_GValue) -> c_uint;
+    pub fn g_value_set_long                    (value: *mut C_GValue, b: c_long);
+    pub fn g_value_get_long                    (value: *mut C_GValue) -> c_long;
+    pub fn g_value_set_ulong                   (value: *mut C_GValue, b: c_ulong);
+    pub fn g_value_get_ulong                   (value: *mut C_GValue) -> c_ulong;
+    pub fn g_value_set_int64                   (value: *mut C_GValue, b: i64);
+    pub fn g_value_get_int64                   (value: *mut C_GValue) -> i64;
+    pub fn g_value_set_uint64                  (value: *mut C_GValue, b: u64);
+    pub fn g_value_get_uint64                  (value: *mut C_GValue) -> u64;
+    pub fn g_value_set_float                   (value: *mut C_GValue, b: c_float);
+    pub fn g_value_get_float                   (value: *mut C_GValue) -> c_float;
+    pub fn g_value_set_double                  (value: *mut C_GValue, b: c_double);
+    pub fn g_value_get_double                  (value: *mut C_GValue) -> c_double;
+    pub fn g_value_set_enum                    (value: *mut C_GValue, b: gtk::GType);
+    pub fn g_value_get_enum                    (value: *mut C_GValue) -> gtk::GType;
+    pub fn g_value_set_flags                   (value: *mut C_GValue, b: gtk::GType);
+    pub fn g_value_get_flags                   (value: *mut C_GValue) -> gtk::GType;
+    pub fn g_value_set_string                  (value: *mut C_GValue, b: *const c_char);
+    pub fn g_value_set_static_string           (value: *mut C_GValue, b: *const c_char);
+    pub fn g_value_get_string                  (value: *mut C_GValue) -> *const c_char;
+    pub fn g_value_dup_string                  (value: *mut C_GValue) -> *mut c_char;
+    pub fn g_value_set_boxed                   (value: *mut C_GValue, b: *const c_void);
+    pub fn g_value_set_static_boxed            (value: *mut C_GValue, b: *const c_void);
+    pub fn g_value_get_boxed                   (value: *mut C_GValue) -> *const c_void;
+    pub fn g_value_set_pointer                 (value: *mut C_GValue, b: *const c_void);
+    pub fn g_value_get_pointer                 (value: *mut C_GValue) -> *const c_void;
+    pub fn g_value_set_object                  (value: *mut C_GValue, b: *const c_void);
+    pub fn g_value_take_object                 (value: *mut C_GValue, b: *const c_void);
+    pub fn g_value_get_object                  (value: *mut C_GValue) -> *const c_void;
+    pub fn g_value_set_gtype                   (value: *mut C_GValue, b: gtk::GType);
+    pub fn g_value_get_gtype                   (value: *mut C_GValue) -> gtk::GType;
+    pub fn g_value_type_compatible             (src_type: gtk::GType, dest_type: gtk::GType) -> Gboolean;
+    pub fn g_value_type_transformable          (src_type: gtk::GType, dest_type: gtk::GType) -> Gboolean;
+
+    //=========================================================================
+    // GType                                                             NOT OK
+    //=========================================================================
+    pub fn g_type_name                         (_type: gtk::GType) -> *const c_char;
+    pub fn g_type_from_name                    (name: *const c_char) -> gtk::GType;
+    pub fn g_type_parent                       (_type: gtk::GType) -> gtk::GType;
+    pub fn g_type_depth                        (_type: gtk::GType) -> c_uint;
+    pub fn g_type_next_base                    (leaf_type: gtk::GType, root_type: gtk::GType) -> gtk::GType;
+    pub fn g_type_is_a                         (_type: gtk::GType, is_a_type: gtk::GType) -> Gboolean;
+    pub fn g_type_children                     (_type: gtk::GType, n_children: *mut c_uint) -> *mut gtk::GType;
+    pub fn g_type_interfaces                   (_type: gtk::GType, n_interfaces: *mut c_uint) -> *mut gtk::GType;
+    pub fn g_type_interface_prerequisites      (interface_type: gtk::GType, n_prerequisites: *mut c_uint) -> *mut gtk::GType;
+    pub fn g_type_interface_add_prerequisite   (interface_type: gtk::GType, prerequisite_type: gtk::GType);
+    pub fn g_type_fundamental_next             () -> gtk::GType;
+    pub fn g_type_fundamental                  (type_id: gtk::GType) -> gtk::GType;
+    pub fn g_type_ensure                       (_type: gtk::GType);
+    pub fn g_type_get_type_registration_serial () -> c_uint;
 
     //=========================================================================
     // GtkWidget                                                         NOT OK
@@ -857,7 +928,7 @@ extern "C" {
 
     pub fn gtk_list_store_newv(n_columns: c_int, column_types: &[GType]) -> *mut C_GtkListStore;
     pub fn gtk_list_store_set_column_types(list_store: *mut C_GtkListStore, n_columns: c_int, column_types: &[GType]);
-    //pub fn gtk_list_store_set_value(list_store: *mut C_GtkListStore, iter: *mut C_GtkTreeIter, column: c_int, value: *mut GValue);
+    pub fn gtk_list_store_set_value(list_store: *mut C_GtkListStore, iter: *mut C_GtkTreeIter, column: c_int, value: *mut C_GValue);
     pub fn gtk_list_store_set(list_store: *mut C_GtkListStore, iter: *mut C_GtkTreeIter, ...);
     //pub fn gtk_list_store_set_valist(list_store: *mut C_GtkListStore, iter: *mut C_GtkTreeIter, var_args: va_list);
     //pub fn gtk_list_store_set_valuesv(list_store: *mut C_GtkListStore, iter: *mut C_GtkTreeIter, columns: *mut c_int, values: *mut GValue, n_values: c_int);
@@ -881,7 +952,7 @@ extern "C" {
 
     pub fn gtk_tree_store_newv(n_columns: c_int, column_types: &[GType]) -> *mut C_GtkTreeStore;
     pub fn gtk_tree_store_set_column_types(tree_store: *mut C_GtkTreeStore, n_columns: c_int, column_types: &[GType]);
-    //pub fn gtk_tree_store_set_value(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, column: c_int, value: *mut GValue);
+    pub fn gtk_tree_store_set_value(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, column: c_int, value: *mut C_GValue);
     pub fn gtk_tree_store_set(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, ...);
     //pub fn gtk_tree_store_set_valist(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, var_args: va_list);
     //pub fn gtk_tree_store_set_valuesv(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, columns: *mut c_int, values: *mut GValue, n_values: c_int);

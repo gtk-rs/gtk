@@ -114,6 +114,20 @@ impl TreeStore {
         }
     }
 
+    pub fn set_value(&self, iter: &TreeIter, column: i32, value: &gtk::GValue) {
+        unsafe { ffi::gtk_tree_store_set_value(self.pointer, iter.get_pointer(), column, value.unwrap_pointer()) }
+    }
+
+    /*pub fn set_valuesv<T: gtk::traits::GValuePrivate>(&self, iter: &gtk::TreeIter, columns: &[i32], values: &[T]) {
+        let mut tmp_values = Vec::with_capacity(values.len());
+
+        for value in values {
+            tmp_values.push(value.get_gvalue());
+        }
+        unsafe { ffi::gtk_tree_store_set_valuesv(gtk::cast::GTK_TREE_MODEL_FROM_TREE_STORE(self.pointer), iter.get_pointer(),
+            columns.as_ptr(), tmp_values.as_slice().as_ptr()) }
+    }*/
+
     #[doc(hidden)]
     pub fn get_pointer(&self) -> *mut ffi::C_GtkTreeStore {
         self.pointer
