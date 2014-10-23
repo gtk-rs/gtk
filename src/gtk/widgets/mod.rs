@@ -125,7 +125,7 @@ pub use self::combobox::ComboBox;
 #[cfg(any(feature = "GTK_3_12", feature = "GTK_3_14"))]
 pub use self::popover::Popover;
 pub use self::comboboxtext::ComboBoxText;
-pub use self::value::GValue;
+pub use self::value::{GValue, GValuePublic};
 
 mod window;
 mod label;

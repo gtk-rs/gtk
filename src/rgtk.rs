@@ -81,6 +81,7 @@ pub use gtk::traits::CellEditable     as GtkCellEditableTrait;
 pub use gtk::traits::CellRenderer     as GtkCellRendererTrait;
 pub use gtk::traits::Actionable       as GtkActionableTrait;
 pub use gtk::traits::ComboBox         as GtkComboBoxTrait;
+pub use gtk::widgets::GValuePublic    as GtkValuePublic;
 
 #[doc(hidden)]
 #[cfg(target_os="macos")]
