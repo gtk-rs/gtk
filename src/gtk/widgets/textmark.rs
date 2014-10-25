@@ -16,7 +16,6 @@
 //! GtkTextMark — A position in the buffer preserved across buffer modifications
 
 use gtk::ffi;
-use gtk::ffi::FFIWidget;
 use gtk;
 
 pub struct TextMark {
@@ -76,7 +75,16 @@ impl TextMark {
         unsafe { ffi::to_bool(ffi::gtk_text_mark_get_left_gravity(self.pointer)) }
     }
 
-    impl_GObjectFunctions!(TextMark, C_GtkTextMark)
+    //impl_GObjectFunctions!(TextMark, C_GtkTextMark)
+    pub fn get_pointer(&self) -> *mut ffi::C_GtkTextMark {
+        self.pointer
+    }
+
+    pub fn wrap_pointer(pointer: *mut ffi::C_GtkTextMark) -> TextMark {
+        TextMark {
+            pointer: pointer
+        }
+    }
 }
 
 impl_drop!(TextMark, GTK_TEXT_MARK)

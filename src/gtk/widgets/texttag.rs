@@ -44,5 +44,14 @@ impl TextTag {
         unsafe { ffi::gtk_text_tag_set_priority(self.pointer, priority as ::libc::c_int) }
     }
 
-    pub impl_GObjectFunctions!(TextTag, C_GtkTextTag)
+    //impl_GObjectFunctions!(TextTag, C_GtkTextTag)
+    pub fn get_pointer(&self) -> *mut ffi::C_GtkTextTag {
+        self.pointer
+    }
+
+    pub fn wrap_pointer(pointer: *mut ffi::C_GtkTextTag) -> TextTag {
+        TextTag {
+            pointer: pointer
+        }
+    }
 }

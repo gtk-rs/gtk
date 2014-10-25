@@ -60,5 +60,14 @@ impl TextAttributes {
         }
     }
 
-    impl_GObjectFunctions!(TextAttributes, C_GtkTextAttributes)
+    //impl_GObjectFunctions!(TextAttributes, C_GtkTextAttributes)
+    pub fn get_pointer(&self) -> *mut ffi::C_GtkTextAttributes {
+        self.pointer
+    }
+
+    pub fn wrap_pointer(pointer: *mut ffi::C_GtkTextAttributes) -> TextAttributes {
+        TextAttributes {
+            pointer: pointer
+        }
+    }
 }

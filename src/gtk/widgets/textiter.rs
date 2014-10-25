@@ -197,7 +197,7 @@ impl TextIter {
     }
 
     pub fn get_attributes(&self, values: &gtk::TextAttributes) -> bool {
-        unsafe { ffi::to_bool(ffi::gtk_text_iter_is_cursor_position(self.pointer as *const ffi::C_GtkTextIter, values.get_pointer())) }
+        unsafe { ffi::to_bool(ffi::gtk_text_iter_get_attributes(self.pointer as *const ffi::C_GtkTextIter, values.get_pointer())) }
     }
 
     pub fn is_end(&self) -> bool {
@@ -399,5 +399,14 @@ impl TextIter {
         self.pointer = ::std::ptr::null_mut();
     }
 
-    impl_GObjectFunctions!(TextIter, C_GtkTextIter)
+    //impl_GObjectFunctions!(TextIter, C_GtkTextIter)
+    pub fn get_pointer(&self) -> *mut ffi::C_GtkTextIter {
+        self.pointer
+    }
+
+    pub fn wrap_pointer(pointer: *mut ffi::C_GtkTextIter) -> TextIter {
+        TextIter {
+            pointer: pointer
+        }
+    }
 }
