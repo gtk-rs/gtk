@@ -82,7 +82,22 @@ macro_rules! impl_TraitWidget(
 macro_rules! impl_connect(
     ($gtk_struct:ident -> $($signal_name:ident),*) => (
         $(impl<'a> ::glib::traits::Connect<'a, ::gtk::signals::$signal_name<'a>> for $gtk_struct {})*
+    )
+)
 
+macro_rules! impl_TraitGObject(
+    ($gtk_struct:ident, $ffi_type:ident) => (
+        impl ::gtk::ffi::FFIWidget for $gtk_struct {
+            fn get_pointer(&self) -> *mut ffi::$ffi_type {
+                self.pointer
+            }
+
+            pub fn wrap_pointer(pointer: *mut ffi::$ffi_type) -> $gtk_struct {
+                $gtk_struct {
+                    pointer: pointer
+                }
+            }
+        }
     )
 )
 

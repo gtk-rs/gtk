@@ -265,6 +265,10 @@ pub struct C_GtkRadioButton;
 pub struct C_GtkBuilder;
 
 #[repr(C)]
+pub struct C_GtkTextTag;
+#[repr(C)]
+pub struct C_GtkTextAttributes;
+#[repr(C)]
 pub struct C_GtkTextView;
 #[repr(C)]
 pub struct C_GtkTextBuffer;
@@ -2623,6 +2627,35 @@ extern "C" {
     pub fn gtk_editable_get_editable         (editable: *mut C_GtkEditable) -> Gboolean;
 
     //=========================================================================
+    // GtkTextMark                                                           OK
+    //=========================================================================
+    pub fn gtk_text_mark_new                 (name: *const c_char, left_gravity: Gboolean) -> *mut C_GtkTextMark;
+    pub fn gtk_text_mark_set_visible         (mark: *mut C_GtkTextMark, setting: Gboolean);
+    pub fn gtk_text_mark_get_visible         (mark: *mut C_GtkTextMark) -> Gboolean;
+    pub fn gtk_text_mark_get_deleted         (mark: *mut C_GtkTextMark) -> Gboolean;
+    pub fn gtk_text_mark_get_name            (mark: *mut C_GtkTextMark) -> *const c_char;
+    pub fn gtk_text_mark_get_buffer          (mark: *mut C_GtkTextMark) -> *mut C_GtkTextBuffer;
+    pub fn gtk_text_mark_get_left_gravity    (mark: *mut C_GtkTextMark) -> Gboolean;
+
+    //=========================================================================
+    // GtkTextAttributes                                                 NOT OK
+    //=========================================================================
+    pub fn gtk_text_attributes_new           () -> *mut C_GtkTextAttributes;
+    pub fn gtk_text_attributes_copy          (src: *mut C_GtkTextAttributes) -> *mut C_GtkTextAttributes;
+    pub fn gtk_text_attributes_copy_values   (src: *mut C_GtkTextAttributes, dest: *mut C_GtkTextAttributes);
+    pub fn gtk_text_attributes_unref         (src: *mut C_GtkTextAttributes);
+    pub fn gtk_text_attributes_ref           (src: *mut C_GtkTextAttributes) -> *mut C_GtkTextAttributes;
+
+    //=========================================================================
+    // GtkTextTag                                                        NOT OK
+    //=========================================================================
+    pub fn gtk_text_tag_new                  (name: *const c_char) -> *mut C_GtkTextTag;
+    pub fn gtk_text_tag_get_priority         (tag: *mut C_GtkTextTag) -> c_int;
+    pub fn gtk_text_tag_set_priority         (tag: *mut C_GtkTextTag, priority: c_int);
+    //pub fn gtk_text_tag_event                (tag: *mut C_GtkTextTag, event_object: *mut C_GObject, event: *mut GdkEvent,
+    //    iter: *const C_GtkTextIter);
+
+    //=========================================================================
     // GtkTextView                                                       NOT OK
     //=========================================================================
     pub fn gtk_text_view_new                            () -> *mut C_GtkWidget;
@@ -3141,4 +3174,5 @@ extern "C" {
     pub fn cast_GtkComboBoxText(widget: *mut C_GtkWidget) -> *mut C_GtkComboBoxText;
     pub fn cast_GtkTreeStore(obj: *mut ::glib::ffi::C_GObject) -> *mut C_GtkTreeStore;
     pub fn cast_GtkTreeModel(obj: *mut ::glib::ffi::C_GObject) -> *mut C_GtkTreeModel;
+    pub fn cast_GtkTextMark(widget: *mut ::glib::ffi::C_GObject) -> *mut C_GtkTextMark;
 }

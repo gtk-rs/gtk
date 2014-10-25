@@ -127,6 +127,9 @@ pub use self::popover::Popover;
 pub use self::comboboxtext::ComboBoxText;
 pub use self::value::{GValue, GValuePublic};
 pub use self::gtype::g_type;
+pub use self::textmark::TextMark;
+pub use self::texttag::TextTag;
+pub use self::textattributes::TextAttributes;
 
 mod window;
 mod label;
@@ -242,3 +245,6 @@ mod popover;
 mod comboboxtext;
 mod value;
 mod gtype;
+mod textmark;
+mod texttag;
+mod textattributes;

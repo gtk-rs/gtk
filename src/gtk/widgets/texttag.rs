@@ -13,30 +13,36 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk;
-use gtk::TextBuffer;
-use gtk::traits::Widget;
-use gtk::cast::{GTK_TEXT_VIEW, GTK_TEXT_BUFFER};
+//! GtkTextTag — A tag that can be applied to text in a GtkTextBuffer
+
 use gtk::ffi;
-use gtk::ffi::FFIWidget;
 
+pub struct TextTag {
+    pointer: *mut ffi::C_GtkTextTag
+}
 
-pub trait TextView: Widget {
-    fn set_buffer(&mut self, buffer: gtk::TextBuffer) -> () {
-        unsafe {
-            ffi::gtk_text_view_set_buffer(GTK_TEXT_VIEW(self.get_widget()), GTK_TEXT_BUFFER(buffer.get_widget()));
-        }
-    }
-
-    fn get_buffer(&self) -> Option<gtk::TextBuffer> {
+impl TextTag {
+    pub fn new(name: &str) -> Option<TextTag> {
         let tmp_pointer = unsafe {
-            ffi::gtk_text_view_get_buffer(GTK_TEXT_VIEW(self.get_widget()))
+            name.with_c_str(|c_str| {
+                ffi::gtk_text_tag_new(c_str)
+            })
         };
 
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(TextTag { pointer : tmp_pointer })
         }
     }
+
+    pub fn get_priority(&self) -> i32 {
+        unsafe { ffi::gtk_text_tag_get_priority(self.pointer) }
+    }
+
+    pub fn set_priority(&self, priority: i32) {
+        unsafe { ffi::gtk_text_tag_set_priority(self.pointer, priority as ::libc::c_int) }
+    }
 }
+
+impl_TraitGObject!(TextTag, C_GtkTextTag)
