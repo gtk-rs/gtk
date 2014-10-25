@@ -130,6 +130,7 @@ pub use self::gtype::g_type;
 pub use self::textmark::TextMark;
 pub use self::texttag::TextTag;
 pub use self::textattributes::TextAttributes;
+pub use self::textiter::TextIter;
 
 mod window;
 mod label;
@@ -248,3 +249,4 @@ mod gtype;
 mod textmark;
 mod texttag;
 mod textattributes;
+mod textiter;

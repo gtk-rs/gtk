@@ -43,6 +43,6 @@ impl TextTag {
     pub fn set_priority(&self, priority: i32) {
         unsafe { ffi::gtk_text_tag_set_priority(self.pointer, priority as ::libc::c_int) }
     }
-}
 
-impl_TraitGObject!(TextTag, C_GtkTextTag)
+    pub impl_GObjectFunctions!(TextTag, C_GtkTextTag)
+}

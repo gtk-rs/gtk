@@ -354,6 +354,11 @@ pub trait FFIWidget {
     fn wrap(widget: *mut C_GtkWidget) -> Self;
 }
 
+pub trait FFIObject<T> {
+    fn get_pointer(&self) -> *mut T;
+    fn wrap_pointer(object: *mut T) -> Self;
+}
+
 extern "C" {
 
     //=========================================================================
@@ -2654,6 +2659,98 @@ extern "C" {
     pub fn gtk_text_tag_set_priority         (tag: *mut C_GtkTextTag, priority: c_int);
     //pub fn gtk_text_tag_event                (tag: *mut C_GtkTextTag, event_object: *mut C_GObject, event: *mut GdkEvent,
     //    iter: *const C_GtkTextIter);
+
+    //=========================================================================
+    // GtkTextIter                                                       NOT OK
+    //=========================================================================
+    pub fn gtk_text_iter_get_buffer                     (iter: *const C_GtkTextIter) -> *mut C_GtkTextBuffer;
+    pub fn gtk_text_iter_copy                           (iter: *const C_GtkTextIter) -> *mut C_GtkTextIter;
+    pub fn gtk_text_iter_assign                         (iter: *mut C_GtkTextIter, other: *const C_GtkTextIter);
+    pub fn gtk_text_iter_free                           (iter: *mut C_GtkTextIter);
+    pub fn gtk_text_iter_get_offset                     (iter: *const C_GtkTextIter) -> c_int;
+    pub fn gtk_text_iter_get_line                       (iter: *const C_GtkTextIter) -> c_int;
+    pub fn gtk_text_iter_get_line_offset                (iter: *const C_GtkTextIter) -> c_int;
+    pub fn gtk_text_iter_get_line_index                 (iter: *const C_GtkTextIter) -> c_int;
+    pub fn gtk_text_iter_get_visible_line_index         (iter: *const C_GtkTextIter) -> c_int;
+    pub fn gtk_text_iter_get_visible_line_offset        (iter: *const C_GtkTextIter) -> c_int;
+    pub fn gtk_text_iter_get_char                       (iter: *const C_GtkTextIter) -> c_uint;
+    pub fn gtk_text_iter_get_slice                      (start: *const C_GtkTextIter, end: *const C_GtkTextIter) -> *mut c_char;
+    pub fn gtk_text_iter_get_text                       (start: *const C_GtkTextIter, end: *const C_GtkTextIter) -> *mut c_char;
+    pub fn gtk_text_iter_get_visible_slice              (start: *const C_GtkTextIter, end: *const C_GtkTextIter) -> *mut c_char;
+    pub fn gtk_text_iter_get_visible_text               (start: *const C_GtkTextIter, end: *const C_GtkTextIter) -> *mut c_char;
+    //pub fn gtk_text_iter_get_pixbuf                     (iter: *const C_GtkTextIter) -> *mut GdkPixbuf;
+    //pub fn gtk_text_iter_get_marks                      (iter: *const C_GtkTextIter) -> *mut GSList;
+    //pub fn gtk_text_iter_get_toggled_tags               (iter: *const C_GtkTextIter, toggled_on: Gboolean) -> *mut GSList;
+    //pub fn gtk_text_iter_get_child_anchor               (iter: *const C_GtkTextIter) -> *mut C_GtkTextChildAnchor;
+    pub fn gtk_text_iter_begins_tag                     (iter: *const C_GtkTextIter, tag: *mut C_GtkTextTag) -> Gboolean;
+    pub fn gtk_text_iter_ends_tag                       (iter: *const C_GtkTextIter, tag: *mut C_GtkTextTag) -> Gboolean;
+    pub fn gtk_text_iter_toggles_tag                    (iter: *const C_GtkTextIter, tag: *mut C_GtkTextTag) -> Gboolean;
+    pub fn gtk_text_iter_has_tag                        (iter: *const C_GtkTextIter, tag: *mut C_GtkTextTag) -> Gboolean;
+    //pub fn gtk_text_iter_get_tags                       (iter: *const C_GtkTextIter) -> *mut GSList;
+    pub fn gtk_text_iter_editable                       (iter: *const C_GtkTextIter, default_setting: Gboolean) -> Gboolean;
+    pub fn gtk_text_iter_can_insert                     (iter: *const C_GtkTextIter, default_setting: Gboolean) -> Gboolean;
+    pub fn gtk_text_iter_starts_word                    (iter: *const C_GtkTextIter) -> Gboolean;
+    pub fn gtk_text_iter_ends_word                      (iter: *const C_GtkTextIter) -> Gboolean;
+    pub fn gtk_text_iter_inside_word                    (iter: *const C_GtkTextIter) -> Gboolean;
+    pub fn gtk_text_iter_starts_line                    (iter: *const C_GtkTextIter) -> Gboolean;
+    pub fn gtk_text_iter_ends_line                      (iter: *const C_GtkTextIter) -> Gboolean;
+    pub fn gtk_text_iter_starts_sentence                (iter: *const C_GtkTextIter) -> Gboolean;
+    pub fn gtk_text_iter_ends_sentence                  (iter: *const C_GtkTextIter) -> Gboolean;
+    pub fn gtk_text_iter_inside_sentence                (iter: *const C_GtkTextIter) -> Gboolean;
+    pub fn gtk_text_iter_is_cursor_position             (iter: *const C_GtkTextIter) -> Gboolean;
+    pub fn gtk_text_iter_get_chars_in_line              (iter: *const C_GtkTextIter) -> c_int;
+    pub fn gtk_text_iter_get_bytes_in_line              (iter: *const C_GtkTextIter) -> c_int;
+    pub fn gtk_text_iter_get_attributes                 (iter: *const C_GtkTextIter, values: *mut C_GtkTextAttributes) -> Gboolean;
+    //pub fn gtk_text_iter_get_language                   (iter: *const C_GtkTextIter) -> *mut PangoLanguage;
+    pub fn gtk_text_iter_is_end                         (iter: *const C_GtkTextIter) -> Gboolean;
+    pub fn gtk_text_iter_is_start                       (iter: *const C_GtkTextIter) -> Gboolean;
+    pub fn gtk_text_iter_forward_char                   (iter: *mut C_GtkTextIter) -> Gboolean;
+    pub fn gtk_text_iter_backward_char                  (iter: *mut C_GtkTextIter) -> Gboolean;
+    pub fn gtk_text_iter_forward_chars                  (iter: *mut C_GtkTextIter, count: c_int) -> Gboolean;
+    pub fn gtk_text_iter_backward_chars                 (iter: *mut C_GtkTextIter, count: c_int) -> Gboolean;
+    pub fn gtk_text_iter_forward_line                   (iter: *mut C_GtkTextIter) -> Gboolean;
+    pub fn gtk_text_iter_backward_line                  (iter: *mut C_GtkTextIter) -> Gboolean;
+    pub fn gtk_text_iter_forward_lines                  (iter: *mut C_GtkTextIter, count: c_int) -> Gboolean;
+    pub fn gtk_text_iter_backward_lines                 (iter: *mut C_GtkTextIter, count: c_int) -> Gboolean;
+    pub fn gtk_text_iter_forward_word_ends              (iter: *mut C_GtkTextIter, count: c_int) -> Gboolean;
+    pub fn gtk_text_iter_backward_word_starts           (iter: *mut C_GtkTextIter, count: c_int) -> Gboolean;
+    pub fn gtk_text_iter_forward_word_end               (iter: *mut C_GtkTextIter) -> Gboolean;
+    pub fn gtk_text_iter_backward_word_start            (iter: *mut C_GtkTextIter) -> Gboolean;
+    pub fn gtk_text_iter_forward_cursor_position        (iter: *mut C_GtkTextIter) -> Gboolean;
+    pub fn gtk_text_iter_backward_cursor_position       (iter: *mut C_GtkTextIter) -> Gboolean;
+    pub fn gtk_text_iter_forward_cursor_positions       (iter: *mut C_GtkTextIter, count: c_int) -> Gboolean;
+    pub fn gtk_text_iter_backward_cursor_positions      (iter: *mut C_GtkTextIter, count: c_int) -> Gboolean;
+    pub fn gtk_text_iter_backward_sentence_start        (iter: *mut C_GtkTextIter) -> Gboolean;
+    pub fn gtk_text_iter_backward_sentence_starts       (iter: *mut C_GtkTextIter, count: c_int) -> Gboolean;
+    pub fn gtk_text_iter_forward_sentence_end           (iter: *mut C_GtkTextIter) -> Gboolean;
+    pub fn gtk_text_iter_forward_sentence_ends          (iter: *mut C_GtkTextIter, count: c_int) -> Gboolean;
+    pub fn gtk_text_iter_forward_visible_word_ends      (iter: *mut C_GtkTextIter, count: c_int) -> Gboolean;
+    pub fn gtk_text_iter_backward_visible_word_starts   (iter: *mut C_GtkTextIter, count: c_int) -> Gboolean;
+    pub fn gtk_text_iter_forward_visible_word_end       (iter: *mut C_GtkTextIter) -> Gboolean;
+    pub fn gtk_text_iter_backward_visible_word_start    (iter: *mut C_GtkTextIter) -> Gboolean;
+    pub fn gtk_text_iter_forward_visible_cursor_position(iter: *mut C_GtkTextIter) -> Gboolean;
+    pub fn gtk_text_iter_backward_visible_cursor_position(iter: *mut C_GtkTextIter) -> Gboolean;
+    pub fn gtk_text_iter_forward_visible_cursor_positions(iter: *mut C_GtkTextIter, count: c_int) -> Gboolean;
+    pub fn gtk_text_iter_backward_visible_cursor_positions(iter: *mut C_GtkTextIter, count: c_int) -> Gboolean;
+    pub fn gtk_text_iter_forward_visible_line           (iter: *mut C_GtkTextIter) -> Gboolean;
+    pub fn gtk_text_iter_backward_visible_line          (iter: *mut C_GtkTextIter) -> Gboolean;
+    pub fn gtk_text_iter_forward_visible_lines          (iter: *mut C_GtkTextIter, count: c_int) -> Gboolean;
+    pub fn gtk_text_iter_backward_visible_lines         (iter: *mut C_GtkTextIter, count: c_int) -> Gboolean;
+    pub fn gtk_text_iter_set_offset                     (iter: *mut C_GtkTextIter, char_offset: c_int);
+    pub fn gtk_text_iter_set_line                       (iter: *mut C_GtkTextIter, line_number: c_int);
+    pub fn gtk_text_iter_set_line_offset                (iter: *mut C_GtkTextIter, char_on_line: c_int);
+    pub fn gtk_text_iter_set_line_index                 (iter: *mut C_GtkTextIter, byte_on_line: c_int);
+    pub fn gtk_text_iter_set_visible_line_index         (iter: *mut C_GtkTextIter, byte_on_line: c_int);
+    pub fn gtk_text_iter_set_visible_line_offset        (iter: *mut C_GtkTextIter, char_on_line: c_int);
+    pub fn gtk_text_iter_forward_to_end                 (iter: *mut C_GtkTextIter);
+    pub fn gtk_text_iter_forward_to_line_end            (iter: *mut C_GtkTextIter) -> Gboolean;
+    pub fn gtk_text_iter_forward_to_tag_toggle          (iter: *mut C_GtkTextIter, tag: *mut C_GtkTextTag) -> Gboolean;
+    pub fn gtk_text_iter_backward_to_tag_toggle         (iter: *mut C_GtkTextIter, tag: *mut C_GtkTextTag) -> Gboolean;
+    pub fn gtk_text_iter_equal                          (iter: *const C_GtkTextIter, other: *const C_GtkTextIter) -> Gboolean;
+    pub fn gtk_text_iter_compare                        (iter: *const C_GtkTextIter, other: *const C_GtkTextIter) -> c_int;
+    pub fn gtk_text_iter_in_range                       (iter: *const C_GtkTextIter, start: *const C_GtkTextIter,
+        end: *const C_GtkTextIter) -> Gboolean;
+    pub fn gtk_text_iter_order                          (first: *mut C_GtkTextIter, second: *mut C_GtkTextIter);
 
     //=========================================================================
     // GtkTextView                                                       NOT OK

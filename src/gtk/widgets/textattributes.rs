@@ -21,7 +21,7 @@ pub struct TextAttributes {
     pointer: *mut ffi::C_GtkTextAttributes
 }
 
-impl TextTag {
+impl TextAttributes {
     pub fn new() -> Option<TextAttributes> {
         let tmp_pointer = unsafe { ffi::gtk_text_attributes_new() };
 
@@ -50,7 +50,7 @@ impl TextTag {
         unsafe { ffi::gtk_text_attributes_unref(self.pointer) }
     }
 
-    pub fn ref(&self) -> Option<TextAttributes> {
+    pub fn _ref(&self) -> Option<TextAttributes> {
         let tmp_pointer = unsafe { ffi::gtk_text_attributes_ref(self.pointer) };
 
         if tmp_pointer.is_null() {
@@ -59,6 +59,6 @@ impl TextTag {
             Some(TextAttributes { pointer : tmp_pointer })
         }
     }
-}
 
-impl_TraitGObject!(TextAttributes, C_GtkTextAttributes)
+    impl_GObjectFunctions!(TextAttributes, C_GtkTextAttributes)
+}

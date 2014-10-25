@@ -34,7 +34,7 @@ impl TextMark {
         if tmp_pointer.is_null() {
             None
         } else {
-            TextMark { pointer: tmp_pointer }
+            Some(TextMark { pointer: tmp_pointer })
         }
     }
 
@@ -75,7 +75,8 @@ impl TextMark {
     pub fn get_left_gravity(&self) -> bool {
         unsafe { ffi::to_bool(ffi::gtk_text_mark_get_left_gravity(self.pointer)) }
     }
+
+    impl_GObjectFunctions!(TextMark, C_GtkTextMark)
 }
 
 impl_drop!(TextMark, GTK_TEXT_MARK)
-impl_TraitGObject!(TextMark, C_GtkTreeModel)

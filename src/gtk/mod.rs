@@ -156,7 +156,8 @@ pub use self::widgets::{
     ComboBoxText,
     TextMark,
     TextTag,
-    TextAttributes
+    TextAttributes,
+    TextIter
 };
 
 #[cfg(any(feature = "GTK_3_6", feature = "GTK_3_8", feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
@@ -264,7 +265,8 @@ pub use self::enums::{
     tree_model_flags,
     icon_view_drop_position,
     sensitivity_type,
-    g_type_enum
+    g_type_enum,
+    text_search_flags
 };
 
 /// GTK Enum types
@@ -345,7 +347,8 @@ pub use self::enums::{
     TreeModelFlags,
     IconViewDropPosition,
     SensitivityType,
-    GType
+    GType,
+    TextSearchFlags
 };
 
 /// GTK various struct
