@@ -157,7 +157,8 @@ pub use self::widgets::{
     TextMark,
     TextTag,
     TextAttributes,
-    TextIter
+    TextIter,
+    TextChildAnchor
 };
 
 #[cfg(any(feature = "GTK_3_6", feature = "GTK_3_8", feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]

@@ -2661,6 +2661,13 @@ extern "C" {
     //    iter: *const C_GtkTextIter);
 
     //=========================================================================
+    // GtkTextChildAnchor                                                NOT OK
+    //=========================================================================
+    pub fn gtk_text_child_anchor_new         () -> *mut C_GtkTextChildAnchor;
+    //pub fn gtk_text_child_anchor_get_widgets () -> *mut GList;
+    pub fn gtk_text_child_anchor_get_deleted (anchor: *mut C_GtkTextChildAnchor) -> Gboolean;
+
+    //=========================================================================
     // GtkTextIter                                                       NOT OK
     //=========================================================================
     pub fn gtk_text_iter_get_buffer                     (iter: *const C_GtkTextIter) -> *mut C_GtkTextBuffer;
@@ -2681,7 +2688,7 @@ extern "C" {
     //pub fn gtk_text_iter_get_pixbuf                     (iter: *const C_GtkTextIter) -> *mut GdkPixbuf;
     //pub fn gtk_text_iter_get_marks                      (iter: *const C_GtkTextIter) -> *mut GSList;
     //pub fn gtk_text_iter_get_toggled_tags               (iter: *const C_GtkTextIter, toggled_on: Gboolean) -> *mut GSList;
-    //pub fn gtk_text_iter_get_child_anchor               (iter: *const C_GtkTextIter) -> *mut C_GtkTextChildAnchor;
+    pub fn gtk_text_iter_get_child_anchor               (iter: *const C_GtkTextIter) -> *mut C_GtkTextChildAnchor;
     pub fn gtk_text_iter_begins_tag                     (iter: *const C_GtkTextIter, tag: *mut C_GtkTextTag) -> Gboolean;
     pub fn gtk_text_iter_ends_tag                       (iter: *const C_GtkTextIter, tag: *mut C_GtkTextTag) -> Gboolean;
     pub fn gtk_text_iter_toggles_tag                    (iter: *const C_GtkTextIter, tag: *mut C_GtkTextTag) -> Gboolean;
@@ -2759,11 +2766,6 @@ extern "C" {
     pub fn gtk_text_view_new_with_buffer                (buffer: *mut C_GtkTextBuffer) -> *mut C_GtkWidget;
     pub fn gtk_text_view_set_buffer                     (text_view: *mut C_GtkTextView, buffer: *mut C_GtkTextBuffer);
     pub fn gtk_text_view_get_buffer                     (text_view: *mut C_GtkTextView) -> *mut C_GtkWidget;
-
-    // TODO: deprecate in safe interface
-    pub fn gtk_text_view_get_hadjustment                (text_view: *mut C_GtkTextView) -> *mut C_GtkAdjustment;
-    pub fn gtk_text_view_get_vadjustment                (text_view: *mut C_GtkTextView) -> *mut C_GtkAdjustment;
-
     pub fn gtk_text_view_scroll_to_mark                 (text_view: *mut C_GtkTextView, mark: *mut C_GtkTextMark, within_margin: c_double, use_align: Gboolean, x_align: c_double, y_align: c_double);
     pub fn gtk_text_view_scroll_to_iter                 (text_view: *mut C_GtkTextView, iter: *mut C_GtkTextIter, within_margin: c_double, use_align: Gboolean, x_align: c_double, y_align: c_double) -> Gboolean;
     pub fn gtk_text_view_scroll_mark_onscreen           (text_view: *mut C_GtkTextView, mark: *mut C_GtkTextMark);
@@ -2789,15 +2791,14 @@ extern "C" {
     pub fn gtk_text_view_starts_display_line            (text_view: *mut C_GtkTextView, iter: *mut C_GtkTextIter) -> Gboolean;
     pub fn gtk_text_view_move_visually                  (text_view: *mut C_GtkTextView, iter: *mut C_GtkTextIter, count: c_int) -> Gboolean;
     pub fn gtk_text_view_add_child_at_anchor            (text_view: *mut C_GtkTextView, child: *mut C_GtkWidget, anchor: *mut C_GtkTextChildAnchor);
-    pub fn gtk_text_child_anchor_new                    () -> *mut C_GtkTextChildAnchor;
-    pub fn gtk_text_child_anchor_get_widgets            (anchor: *mut C_GtkTextChildAnchor) -> *mut glib::ffi::C_GList;
-    pub fn gtk_text_child_anchor_get_deleted            (anchor: *mut C_GtkTextChildAnchor) -> Gboolean;
     pub fn gtk_text_view_add_child_in_window            (text_view: *mut C_GtkTextView, child: *mut C_GtkWidget, which_window: gtk::TextWindowType, x_pos: c_int, y_pos: c_int);
     pub fn gtk_text_view_move_child                     (text_view: *mut C_GtkTextView, child: *mut C_GtkWidget, x_pos: c_int, y_pos: c_int);
     pub fn gtk_text_view_set_wrap_mode                  (text_view: *mut C_GtkTextView, warp_mode: gtk::WrapMode);
     pub fn gtk_text_view_get_wrap_mode                  (text_view: *mut C_GtkTextView) -> gtk::WrapMode;
     pub fn gtk_text_view_set_editable                   (text_view: *mut C_GtkTextView, setting: Gboolean);
     pub fn gtk_text_view_get_editable                   (text_view: *mut C_GtkTextView) -> Gboolean;
+    pub fn gtk_text_view_set_overwrite                  (text_view: *mut C_GtkTextView, overwrite: Gboolean);
+    pub fn gtk_text_view_get_overwrite                  (text_view: *mut C_GtkTextView) -> Gboolean;
     pub fn gtk_text_view_set_cursor_visible             (text_view: *mut C_GtkTextView, setting: Gboolean);
     pub fn gtk_text_view_get_cursor_visible             (text_view: *mut C_GtkTextView) -> Gboolean;
     pub fn gtk_text_view_set_pixels_above_lines         (text_view: *mut C_GtkTextView, pixels_above_lines: c_int);
@@ -2818,9 +2819,9 @@ extern "C" {
     // pub fn gtk_text_view_get_tabs () -> PangoTabArray
     pub fn gtk_text_view_set_accepts_tab                (text_view: *mut C_GtkTextView, accepts_tab: Gboolean);
     pub fn gtk_text_view_get_accepts_tab                (text_view: *mut C_GtkTextView) -> Gboolean;
-    // pub fn gtk_text_view_get_default_attributes () -> *mut C_GtkTextAttributes
-    // pub fn gtk_text_view_im_context_filter_keypress () -> Gboolean;
-    // pub fn gtk_text_view_reset_im_context ();
+    pub fn gtk_text_view_get_default_attributes         (text_view: *mut C_GtkTextView) -> *mut C_GtkTextAttributes;
+    //pub fn gtk_text_view_im_context_filter_keypress     (text_view: *mut C_GtkTextView, event: *mut GdkEvent) -> Gboolean;
+    pub fn gtk_text_view_reset_im_context               (text_view: *mut C_GtkTextView);
     pub fn gtk_text_view_set_input_purpose              (text_view: *mut C_GtkTextView, purpose: gtk::InputPurpose);
     pub fn gtk_text_view_get_input_purpose              (text_view: *mut C_GtkTextView) -> gtk::InputPurpose;
     pub fn gtk_text_view_set_input_hints                (text_view: *mut C_GtkTextView, hints: gtk::InputHints);

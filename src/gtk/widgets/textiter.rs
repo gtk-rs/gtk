@@ -128,6 +128,16 @@ impl TextIter {
         }
     }
 
+    pub fn get_child_anchor(&self) -> Option<gtk::TextChildAnchor> {
+        let tmp_pointer = unsafe { ffi::gtk_text_iter_get_child_anchor(self.pointer as *const ffi::C_GtkTextIter) };
+
+        if tmp_pointer.is_null() {
+            None
+        } else {
+            Some(gtk::TextChildAnchor::wrap_pointer(tmp_pointer))
+        }
+    }
+
     pub fn begins_tag(&self, tag: &gtk::TextTag) -> bool {
         unsafe { ffi::to_bool(ffi::gtk_text_iter_begins_tag(self.pointer as *const ffi::C_GtkTextIter, tag.get_pointer())) }
     }

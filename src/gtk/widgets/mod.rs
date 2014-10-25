@@ -131,6 +131,7 @@ pub use self::textmark::TextMark;
 pub use self::texttag::TextTag;
 pub use self::textattributes::TextAttributes;
 pub use self::textiter::TextIter;
+pub use self::textchildanchor::TextChildAnchor;
 
 mod window;
 mod label;
@@ -250,3 +251,4 @@ mod textmark;
 mod texttag;
 mod textattributes;
 mod textiter;
+mod textchildanchor;
