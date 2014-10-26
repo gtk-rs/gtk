@@ -571,6 +571,10 @@ GtkRecentChooserWidget *cast_GtkRecentChooserWidget(GtkWidget* widget) {
     return GTK_RECENT_CHOOSER_WIDGET(widget);
 }
 
+GtkTextMark* cast_GtkTextMark(GObject* obj) {
+    return GTK_TEXT_MARK(obj);
+}
+
 // GType constants
 
 const GType g_type_invalid = G_TYPE_INVALID;

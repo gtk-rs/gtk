@@ -104,6 +104,7 @@ pub use self::tree_model_flags::TreeModelFlags;
 pub use self::icon_view_drop_position::IconViewDropPosition;
 pub use self::sensitivity_type::SensitivityType;
 pub use self::g_type_enum::GType;
+pub use self::text_search_flags::TextSearchFlags;
 
 pub mod window_type{
     #[repr(C)]
@@ -1558,5 +1559,19 @@ pub mod g_type_enum {
         ReservedGLibBSELast = 48,
         /// First available fundamental type number to create new fundamental type id with G_TYPE_MAKE_FUNDAMENTAL().
         ReservedUserFirst = 49
+    }
+}
+
+/// Flags affecting how a search is done.
+pub mod text_search_flags {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum TextSearchFlags {
+        /// Search only visible data. A search match may have invisible text interspersed.
+        VisibleOnly,
+        /// Search only text. A match may have pixbufs or child widgets mixed inside the matched range.
+        TextOnly,
+        /// The text will be matched regardless of what case it is in.
+        CaseInsensitive
     }
 }
