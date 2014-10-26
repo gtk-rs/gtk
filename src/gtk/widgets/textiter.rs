@@ -408,15 +408,6 @@ impl TextIter {
         unsafe { ffi::gtk_text_iter_free(self.pointer) };
         self.pointer = ::std::ptr::null_mut();
     }
-
-    //impl_GObjectFunctions!(TextIter, C_GtkTextIter)
-    pub fn get_pointer(&self) -> *mut ffi::C_GtkTextIter {
-        self.pointer
-    }
-
-    pub fn wrap_pointer(pointer: *mut ffi::C_GtkTextIter) -> TextIter {
-        TextIter {
-            pointer: pointer
-        }
-    }
 }
+
+impl_GObjectFunctions!(TextIter, C_GtkTextIter)

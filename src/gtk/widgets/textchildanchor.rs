@@ -33,15 +33,6 @@ impl TextChildAnchor {
     pub fn get_deleted(&self) -> bool {
         unsafe { ffi::to_bool(ffi::gtk_text_child_anchor_get_deleted(self.pointer)) }
     }
-
-    //impl_GObjectFunctions!(TextChildAnchor, C_GtkTextChildAnchor)
-    pub fn get_pointer(&self) -> *mut ffi::C_GtkTextChildAnchor {
-        self.pointer
-    }
-
-    pub fn wrap_pointer(pointer: *mut ffi::C_GtkTextChildAnchor) -> TextChildAnchor {
-        TextChildAnchor {
-            pointer: pointer
-        }
-    }
 }
+
+impl_GObjectFunctions!(TextChildAnchor, C_GtkTextChildAnchor)

@@ -85,19 +85,21 @@ macro_rules! impl_connect(
     )
 )
 
-/*macro_rules! impl_GObjectFunctions(
+macro_rules! impl_GObjectFunctions(
     ($gtk_struct:ident, $ffi_type:ident) => (
-        fn get_pointer(&self) -> *mut ffi::$ffi_type {
-            self.pointer
-        }
+        impl $gtk_struct {
+            pub fn get_pointer(&self) -> *mut ffi::$ffi_type {
+                self.pointer
+            }
 
-        fn wrap_pointer(pointer: *mut ffi::$ffi_type) -> $gtk_struct {
-            $gtk_struct {
-                pointer: pointer
+            pub fn wrap_pointer(pointer: *mut ffi::$ffi_type) -> $gtk_struct {
+                $gtk_struct {
+                    pointer: pointer
+                }
             }
         }
     )
-)*/
+)
 
 macro_rules! impl_drop(
     ($gtk_struct:ident) => ( impl_drop!($gtk_struct, GTK_WIDGET) );
