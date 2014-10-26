@@ -230,6 +230,8 @@ pub struct C_GtkTreeIter;
 pub struct C_GtkCellEditable;
 #[repr(C)]
 pub struct C_GtkCellRendererText;
+#[repr(C)]
+pub struct C_GtkCellRendererToggle;
 
 #[repr(C)]
 pub struct C_GtkToolItem;
@@ -817,6 +819,15 @@ extern "C" {
     //=========================================================================
     pub fn gtk_cell_renderer_text_new          () -> *mut C_GtkCellRenderer;
     pub fn gtk_cell_renderer_text_set_fixed_height_from_font(renderer: *mut C_GtkCellRendererText, number_of_rows: c_int) -> ();
+
+    //=========================================================================
+    // GtkCellRendererToggle                                             NOT OK
+    //=========================================================================
+    pub fn gtk_cell_renderer_toggle_new        () -> *mut C_GtkCellRenderer;
+    pub fn gtk_cell_renderer_toggle_get_radio  (renderer: *mut C_GtkCellRendererToggle) -> Gboolean;
+    pub fn gtk_cell_renderer_toggle_set_radio  (renderer: *mut C_GtkCellRendererToggle, radio: Gboolean) -> ();
+    pub fn gtk_cell_renderer_toggle_get_active (renderer: *mut C_GtkCellRendererToggle) -> Gboolean;
+    pub fn gtk_cell_renderer_toggle_set_active (renderer: *mut C_GtkCellRendererToggle, active: Gboolean) -> ();
 
     //=========================================================================
     // GtkRecentChooserWidget                                                OK

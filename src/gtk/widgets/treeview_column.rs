@@ -15,6 +15,7 @@
 
 //! A widget that emits a signal when clicked on
 
+use glib;
 use gtk::{mod, ffi, traits, cast};
 
 pub struct TreeViewColumn {
@@ -310,6 +311,14 @@ impl TreeViewColumn {
         }
     }
 }
+
+impl glib::traits::FFIGObject for TreeViewColumn {
+    fn get_gobject(&self) -> *mut glib::ffi::C_GObject {
+        gtk::cast::G_OBJECT_FROM_TREE_VIEW_COLUMN(self.pointer)
+    }
+}
+
+impl_connect!(TreeViewColumn -> Clicked)
 
 impl Drop for TreeViewColumn {
     fn drop(&mut self) {

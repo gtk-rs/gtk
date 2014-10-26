@@ -145,6 +145,7 @@ pub use self::widgets::{
     Viewport,
     StatusBar,
     CellRendererText,
+    CellRendererToggle,
     LockButton,
     EntryCompletion,
     IconView,
