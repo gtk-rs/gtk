@@ -356,11 +356,6 @@ pub trait FFIWidget {
     fn wrap(widget: *mut C_GtkWidget) -> Self;
 }
 
-pub trait FFIObject<T> {
-    fn get_pointer(&self) -> *mut T;
-    fn wrap_pointer(object: *mut T) -> Self;
-}
-
 extern "C" {
 
     //=========================================================================
