@@ -62,7 +62,7 @@ impl Show for Status{
 impl Status{
     pub fn ensure_valid(&self){
         if *self != StatusSuccess {
-            fail!("Cairo error {}", *self)
+            panic!("Cairo error {}", *self)
         }
     }
 }

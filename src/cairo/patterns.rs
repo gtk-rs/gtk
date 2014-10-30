@@ -35,7 +35,7 @@ pub fn wrap_pattern<'a>(ptr: *mut cairo_pattern_t) -> Box<Pattern + 'a>{
         PatternTypeLinearGradient   => box LinearGradient::wrap(ptr) as Box<Pattern>,
         PatternTypeRadialGradient   => box RadialGradient::wrap(ptr) as Box<Pattern>,
         PatternTypeMesh             => box Mesh::wrap(ptr)           as Box<Pattern>,
-        PatternTypeRasterSource     => fail!("Not implemented")
+        PatternTypeRasterSource     => panic!("Not implemented")
     }
 }
 
