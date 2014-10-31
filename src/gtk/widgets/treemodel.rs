@@ -116,7 +116,7 @@ impl TreeModel {
         }
     }
 
-    #[allow(unused_variable)]
+    #[allow(unused_variables)]
     pub fn get_string_from_iter(&self, iter: &TreeIter) -> String {
         let string = unsafe { ffi::gtk_tree_model_get_string_from_iter(self.pointer, iter.get_pointer()) };
 

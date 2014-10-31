@@ -17,7 +17,7 @@
 //#![macro_escape]
 
 #![allow(unused_imports)]
-#![allow(unused_variable)]
+#![allow(unused_variables)]
 
 use std::mem::transmute;
 use libc::c_void;
@@ -116,7 +116,7 @@ macro_rules! signal(
 
         mod $signal{
             #[allow(unused_imports)]
-            #[allow(unused_variable)]
+            #[allow(unused_variables)]
 
             use std::mem::transmute;
             use libc::c_void;
