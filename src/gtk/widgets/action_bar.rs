@@ -69,4 +69,3 @@ impl traits::Container for ActionBar {}
 impl traits::Bin for ActionBar {}
 
 impl_widget_events!(ActionBar)
-

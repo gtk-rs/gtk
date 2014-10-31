@@ -105,6 +105,7 @@ pub use self::icon_view_drop_position::IconViewDropPosition;
 pub use self::sensitivity_type::SensitivityType;
 pub use self::g_type_enum::GType;
 pub use self::text_search_flags::TextSearchFlags;
+pub use self::places_open_flags::PlacesOpenFlags;
 
 pub mod window_type{
     #[repr(C)]
@@ -1573,5 +1574,31 @@ pub mod text_search_flags {
         TextOnly,
         /// The text will be matched regardless of what case it is in.
         CaseInsensitive
+    }
+}
+
+/// These flags serve two purposes. First, the application can call gtk_places_sidebar_set_open_flags() using these flags as a bitmask. This
+/// tells the sidebar that the application is able to open folders selected from the sidebar in various ways, for example, in new tabs or in
+/// new windows in addition to the normal mode.
+/// 
+/// Second, when one of these values gets passed back to the application in the “open-location” signal, it means that the application should
+/// open the selected location in the normal way, in a new tab, or in a new window. The sidebar takes care of determining the desired way to
+/// open the location, based on the modifier keys that the user is pressing at the time the selection is made.
+/// 
+/// If the application never calls gtk_places_sidebar_set_open_flags(), then the sidebar will only use Normal in the
+/// “open-location” signal. This is the default mode of operation.
+pub mod places_open_flags {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum PlacesOpenFlags {
+        /// This is the default mode that GtkPlacesSidebar uses if no other flags are specified. It indicates that the calling application
+        /// should open the selected location in the normal way, for example, in the folder view beside the sidebar.
+        Normal,
+        /// When passed to gtk_places_sidebar_set_open_flags(), this indicates that the application can open folders selected from the
+        /// sidebar in new tabs. This value will be passed to the “open-location” signal when the user selects that a location be opened
+        /// in a new tab instead of in the standard fashion.
+        NewTab,
+        /// Similar to NewTab , but indicates that the application can open folders in new windows.
+        NewWindow
     }
 }

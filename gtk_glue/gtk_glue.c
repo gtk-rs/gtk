@@ -575,6 +575,10 @@ GtkTextMark* cast_GtkTextMark(GObject* obj) {
     return GTK_TEXT_MARK(obj);
 }
 
+GtkPlacesSidebar *cast_GtkPlacesSidebar(GtkWidget* widget) {
+    return GTK_PLACES_SIDEBAR(widget);
+}
+
 // GType constants
 
 const GType g_type_invalid = G_TYPE_INVALID;
