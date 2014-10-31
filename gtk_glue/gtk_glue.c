@@ -505,6 +505,10 @@ GtkListBoxRow* cast_GtkListBoxRow(GtkWidget* widget) {
     return GTK_LIST_BOX_ROW(widget);
 }
 
+GtkPlacesSidebar *cast_GtkPlacesSidebar(GtkWidget* widget) {
+    return GTK_PLACES_SIDEBAR(widget);
+}
+
 #endif
 
 #if defined(GTK_3_12) || defined(GTK_3_14)
@@ -573,10 +577,6 @@ GtkRecentChooserWidget *cast_GtkRecentChooserWidget(GtkWidget* widget) {
 
 GtkTextMark* cast_GtkTextMark(GObject* obj) {
     return GTK_TEXT_MARK(obj);
-}
-
-GtkPlacesSidebar *cast_GtkPlacesSidebar(GtkWidget* widget) {
-    return GTK_PLACES_SIDEBAR(widget);
 }
 
 // GType constants

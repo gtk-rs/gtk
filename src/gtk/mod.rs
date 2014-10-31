@@ -160,7 +160,6 @@ pub use self::widgets::{
     TextAttributes,
     TextIter,
     TextChildAnchor,
-    PlacesSidebar,
     ToolPalette
 };
 
@@ -182,6 +181,7 @@ pub use self::widgets::{
     HeaderBar,
     ListBox,
     ListBoxRow,
+    PlacesSidebar
 };
 
 #[cfg(any(feature = "GTK_3_12", feature = "GTK_3_14"))]
