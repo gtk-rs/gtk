@@ -134,6 +134,7 @@ pub use self::textattributes::TextAttributes;
 pub use self::textiter::TextIter;
 pub use self::textchildanchor::TextChildAnchor;
 pub use self::placessidebar::PlacesSidebar;
+pub use self::toolpalette::ToolPalette;
 
 mod window;
 mod label;
@@ -256,3 +257,4 @@ mod textattributes;
 mod textiter;
 mod textchildanchor;
 mod placessidebar;
+mod toolpalette;

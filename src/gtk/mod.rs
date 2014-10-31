@@ -160,7 +160,8 @@ pub use self::widgets::{
     TextAttributes,
     TextIter,
     TextChildAnchor,
-    PlacesSidebar
+    PlacesSidebar,
+    ToolPalette
 };
 
 #[cfg(any(feature = "GTK_3_6", feature = "GTK_3_8", feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
@@ -270,7 +271,9 @@ pub use self::enums::{
     sensitivity_type,
     g_type_enum,
     text_search_flags,
-    places_open_flags
+    places_open_flags,
+    tool_palette_drag_targets,
+    dest_defaults
 };
 
 /// GTK Enum types
@@ -353,7 +356,9 @@ pub use self::enums::{
     SensitivityType,
     GType,
     TextSearchFlags,
-    PlacesOpenFlags
+    PlacesOpenFlags,
+    ToolPaletteDragTargets,
+    DestDefaults
 };
 
 /// GTK various struct
