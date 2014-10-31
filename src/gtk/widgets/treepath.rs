@@ -74,7 +74,7 @@ impl TreePath {
         }
     }
 
-    #[allow(unused_variable)]
+    #[allow(unused_variables)]
     pub fn to_string(&self) -> String {
         let string = unsafe { ffi::gtk_tree_path_to_string(self.pointer) };
 
