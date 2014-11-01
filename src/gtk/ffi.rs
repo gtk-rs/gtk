@@ -236,6 +236,8 @@ pub struct C_GtkCellRendererToggle;
 #[repr(C)]
 pub struct C_GtkToolItem;
 #[repr(C)]
+pub struct C_GtkToolPalette;
+#[repr(C)]
 pub struct C_GtkToolButton;
 #[repr(C)]
 pub struct C_GtkMenuToolButton;
@@ -279,6 +281,9 @@ pub struct C_GtkTextTagTable;
 
 #[repr(C)]
 pub struct C_GtkScrolledWindow;
+
+#[repr(C)]
+pub struct C_GtkPlacesSidebar;
 
 #[repr(C)]
 pub struct C_GtkIconSize;
@@ -2354,6 +2359,31 @@ extern "C" {
     // pub fn gtk_tool_item_get_text_size_group   (tool_item: *const const C_GtkToolItem) -> *GtkSizeGroup;
 
     //=========================================================================
+    // GtkToolPalette                                                    NOT OK
+    //=========================================================================
+    pub fn gtk_tool_palette_new                () -> *mut C_GtkWidget;
+    //pub fn gtk_tool_palette_get_exclusive      (palette: *mut C_GtkToolPalette, group: *mut C_GtkToolItemGroup) -> Gboolean;
+    //pub fn gtk_tool_palette_set_exclusive      (palette: *mut C_GtkToolPalette, group: *mut C_GtkToolItemGroup, exclusive: Gboolean);
+    //pub fn gtk_tool_palette_get_expand         (palette: *mut C_GtkToolPalette, group: *mut C_GtkToolItemGroup) -> Gboolean;
+    //pub fn gtk_tool_palette_set_expand         (palette: *mut C_GtkToolPalette, group: *mut C_GtkToolItemGroup, expand: Gboolean);
+    //pub fn gtk_tool_palette_get_group_position (palette: *mut C_GtkToolPalette, group: *mut C_GtkToolItemGroup) -> c_int;
+    //pub fn gtk_tool_palette_set_group_position (palette: *mut C_GtkToolPalette, group: *mut C_GtkToolItemGroup, position: c_int);
+    pub fn gtk_tool_palette_get_icon_size      (palette: *mut C_GtkToolPalette) -> gtk::IconSize;
+    pub fn gtk_tool_palette_set_icon_size      (palette: *mut C_GtkToolPalette, icon_size: gtk::IconSize);
+    pub fn gtk_tool_palette_unset_icon_size    (palette: *mut C_GtkToolPalette);
+    pub fn gtk_tool_palette_get_style          (palette: *mut C_GtkToolPalette) -> gtk::ToolbarStyle;
+    pub fn gtk_tool_palette_set_style          (palette: *mut C_GtkToolPalette, style: gtk::ToolbarStyle);
+    pub fn gtk_tool_palette_unset_style        (palette: *mut C_GtkToolPalette);
+    //pub fn gtk_tool_palette_add_drag_dest      (palette: *mut C_GtkToolPalette, widget: *mut C_GtkWidget, flags: gtk::DestDefaults,
+    //    targets: gtk::ToolPaletteDragTargets, actions: GdkDragAction);
+    //pub fn gtk_tool_palette_get_drag_item      (palette: *mut C_GtkToolPalette, selection: *const C_GtkSelectionData) -> *mut C_GtkWidget;
+    //pub fn gtk_tool_palette_get_drag_target_group() -> *const C_GtkTargetEntry;
+    //pub fn gtk_tool_palette_get_drag_target_item() -> *const C_GtkTargetEntry;
+    //pub fn gtk_tool_palette_get_drop_group     (palette: *mut C_GtkToolPalette, x: c_int, y: c_int) -> *mut C_GtkToolItemGroup;
+    pub fn gtk_tool_palette_get_drop_item      (palette: *mut C_GtkToolPalette, x: c_int, y: c_int) -> *mut C_GtkToolItem;
+    pub fn gtk_tool_palette_set_drag_source    (palette: *mut C_GtkToolPalette, targets: gtk::ToolPaletteDragTargets);
+
+    //=========================================================================
     // GtkSeparatorToolItem
     //=========================================================================
     pub fn gtk_separator_tool_item_new         () -> *mut C_GtkWidget;
@@ -2851,6 +2881,27 @@ extern "C" {
     pub fn gtk_scrolled_window_set_policy   (scrolled_window: *mut C_GtkScrolledWindow, h_scrollbar_policy: gtk::PolicyType, v_scrollbar_policy: gtk::PolicyType);
 
     //=========================================================================
+    // GtkPlacesSidebar                                                  NOT OK
+    //=========================================================================
+    pub fn gtk_places_sidebar_new              () -> *mut C_GtkWidget;
+    pub fn gtk_places_sidebar_set_open_flags   (sidebar: *mut C_GtkPlacesSidebar, flags: gtk::PlacesOpenFlags);
+    pub fn gtk_places_sidebar_get_open_flags   (sidebar: *mut C_GtkPlacesSidebar) -> gtk::PlacesOpenFlags;
+    //pub fn gtk_places_sidebar_set_location     (sidebar: *mut C_GtkPlacesSidebar, location: *mut glib::File);
+    //pub fn gtk_places_sidebar_get_location     (sidebar: *mut C_GtkPlacesSidebar) -> *mut glib::File;
+    pub fn gtk_places_sidebar_set_show_desktop (sidebar: *mut C_GtkPlacesSidebar, show_desktop: Gboolean);
+    pub fn gtk_places_sidebar_get_show_desktop (sidebar: *mut C_GtkPlacesSidebar) -> Gboolean;
+    //pub fn gtk_places_sidebar_add_shortcut     (sidebar: *mut C_GtkPlacesSidebar, location: *mut glib::File);
+    //pub fn gtk_places_sidebar_remove_shortcut  (sidebar: *mut C_GtkPlacesSidebar) -> *mut glib::File;
+    //pub fn gtk_places_sidebar_list_shortcuts   (sidebar: *mut C_GtkPlacesSidebar) -> *mut GSList;
+    //pub fn gtk_places_sidebar_get_nth_bookmark (sidebar: *mut C_GtkPlacesSidebar, n: c_int) -> *mut glib::File;
+    pub fn gtk_places_sidebar_get_show_connect_to_server(sidebar: *mut C_GtkPlacesSidebar) -> Gboolean;
+    pub fn gtk_places_sidebar_set_show_connect_to_server(sidebar: *mut C_GtkPlacesSidebar, show_connect_to_server: Gboolean);
+    pub fn gtk_places_sidebar_get_local_only   (sidebar: *mut C_GtkPlacesSidebar) -> Gboolean;
+    pub fn gtk_places_sidebar_set_local_only   (sidebar: *mut C_GtkPlacesSidebar, local_only: Gboolean);
+    pub fn gtk_places_sidebar_get_show_enter_location(sidebar: *mut C_GtkPlacesSidebar) -> Gboolean;
+    pub fn gtk_places_sidebar_set_show_enter_location(sidebar: *mut C_GtkPlacesSidebar, show_enter_location: Gboolean);
+
+    //=========================================================================
     // GtkRadioButton                                                        OK
     //=========================================================================
     pub fn gtk_radio_button_new              (group: *mut c_void) -> *mut C_GtkWidget;
@@ -3279,4 +3330,6 @@ extern "C" {
     pub fn cast_GtkTreeStore(obj: *mut ::glib::ffi::C_GObject) -> *mut C_GtkTreeStore;
     pub fn cast_GtkTreeModel(obj: *mut ::glib::ffi::C_GObject) -> *mut C_GtkTreeModel;
     pub fn cast_GtkTextMark(widget: *mut ::glib::ffi::C_GObject) -> *mut C_GtkTextMark;
+    pub fn cast_GtkPlacesSidebar(widget: *mut C_GtkWidget) -> *mut C_GtkPlacesSidebar;
+    pub fn cast_GtkToolPalette(widget: *mut C_GtkWidget) -> *mut C_GtkToolPalette;
 }

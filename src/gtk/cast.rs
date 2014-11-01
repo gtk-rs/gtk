@@ -492,3 +492,11 @@ pub fn GTK_ENTRY_BUFFER(obj: *mut ::glib::ffi::C_GObject) -> *mut ffi::C_GtkEntr
 pub fn GTK_TEXT_MARK(widget: *mut ::glib::ffi::C_GObject) -> *mut ffi::C_GtkTextMark {
     unsafe { ffi::cast_GtkTextMark(widget) }
 }
+
+pub fn GTK_PLACES_SIDEBAR(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkPlacesSidebar {
+    unsafe { ffi::cast_GtkPlacesSidebar(widget) }
+}
+
+pub fn GTK_TOOL_PALETTE(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkToolPalette {
+    unsafe { ffi::cast_GtkToolPalette(widget) }
+}

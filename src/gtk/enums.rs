@@ -105,6 +105,9 @@ pub use self::icon_view_drop_position::IconViewDropPosition;
 pub use self::sensitivity_type::SensitivityType;
 pub use self::g_type_enum::GType;
 pub use self::text_search_flags::TextSearchFlags;
+pub use self::places_open_flags::PlacesOpenFlags;
+pub use self::tool_palette_drag_targets::ToolPaletteDragTargets;
+pub use self::dest_defaults::DestDefaults;
 
 pub mod window_type{
     #[repr(C)]
@@ -665,10 +668,10 @@ pub mod state_type{
 ///
 /// Note that setting the toolbar style overrides the user's preferences for the default toolbar style.
 /// Note that if the button has only a label set and GTK_TOOLBAR_ICONS is used, the label will be visible, and vice versa.
-pub mod toolbar_style{
+pub mod toolbar_style {
     #[repr(C)]
     #[deriving(Clone, PartialEq, PartialOrd, Show)]
-    pub enum ToolbarStyle{
+    pub enum ToolbarStyle {
         /// Buttons display only icons in the toolbar.
         Icons,
         /// Buttons display only text labels in the toolbar.
@@ -681,10 +684,10 @@ pub mod toolbar_style{
 }
 
 /// Describes how a rendered element connects to adjacent elements.
-pub mod junction_sides{
+pub mod junction_sides {
     #[repr(C)]
     #[deriving(Clone, PartialEq, PartialOrd, Show)]
-    pub enum JunctionSides{
+    pub enum JunctionSides {
         /// No junctions.
         None               = 0,
         /// Element connects on the top-left corner.
@@ -1573,5 +1576,64 @@ pub mod text_search_flags {
         TextOnly,
         /// The text will be matched regardless of what case it is in.
         CaseInsensitive
+    }
+}
+
+/// These flags serve two purposes. First, the application can call gtk_places_sidebar_set_open_flags() using these flags as a bitmask. This
+/// tells the sidebar that the application is able to open folders selected from the sidebar in various ways, for example, in new tabs or in
+/// new windows in addition to the normal mode.
+/// 
+/// Second, when one of these values gets passed back to the application in the “open-location” signal, it means that the application should
+/// open the selected location in the normal way, in a new tab, or in a new window. The sidebar takes care of determining the desired way to
+/// open the location, based on the modifier keys that the user is pressing at the time the selection is made.
+/// 
+/// If the application never calls gtk_places_sidebar_set_open_flags(), then the sidebar will only use Normal in the
+/// “open-location” signal. This is the default mode of operation.
+pub mod places_open_flags {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum PlacesOpenFlags {
+        /// This is the default mode that GtkPlacesSidebar uses if no other flags are specified. It indicates that the calling application
+        /// should open the selected location in the normal way, for example, in the folder view beside the sidebar.
+        Normal,
+        /// When passed to gtk_places_sidebar_set_open_flags(), this indicates that the application can open folders selected from the
+        /// sidebar in new tabs. This value will be passed to the “open-location” signal when the user selects that a location be opened
+        /// in a new tab instead of in the standard fashion.
+        NewTab,
+        /// Similar to NewTab , but indicates that the application can open folders in new windows.
+        NewWindow
+    }
+}
+
+/// Flags used to specify the supported drag targets.
+pub mod tool_palette_drag_targets {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum ToolPaletteDragTargets {
+        /// Support drag of items.
+        Items,
+        /// Support drag of groups.
+        Groups
+    }
+}
+
+/// The GtkDestDefaults enumeration specifies the various types of action that will be taken on behalf of the user for a drag destination site.
+pub mod dest_defaults {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum DestDefaults {
+        /// If set for a widget, GTK+, during a drag over this widget will check if the drag matches this widget’s list of possible targets
+        /// and actions. GTK+ will then call gdk_drag_status() as appropriate.
+        Motion,
+        /// If set for a widget, GTK+ will draw a highlight on this widget as long as a drag is over this widget and the widget drag format
+        /// and action are acceptable.
+        Highlight,
+        /// If set for a widget, when a drop occurs, GTK+ will will check if the drag matches this widget’s list of possible targets and
+        /// actions. If so, GTK+ will call gtk_drag_get_data() on behalf of the widget. Whether or not the drop is successful, GTK+ will
+        /// call gtk_drag_finish(). If the action was a move, then if the drag was successful, then TRUE will be passed for the delete
+        /// parameter to gtk_drag_finish().
+        Drop,
+        /// If set, specifies that all default actions should be taken.
+        All
     }
 }

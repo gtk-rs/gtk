@@ -133,6 +133,9 @@ pub use self::texttag::TextTag;
 pub use self::textattributes::TextAttributes;
 pub use self::textiter::TextIter;
 pub use self::textchildanchor::TextChildAnchor;
+#[cfg(any(feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
+pub use self::placessidebar::PlacesSidebar;
+pub use self::toolpalette::ToolPalette;
 
 mod window;
 mod label;
@@ -254,3 +257,6 @@ mod texttag;
 mod textattributes;
 mod textiter;
 mod textchildanchor;
+#[cfg(any(feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
+mod placessidebar;
+mod toolpalette;
