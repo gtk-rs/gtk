@@ -500,3 +500,11 @@ pub fn GTK_PLACES_SIDEBAR(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkPlace
 pub fn GTK_TOOL_PALETTE(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkToolPalette {
     unsafe { ffi::cast_GtkToolPalette(widget) }
 }
+
+pub fn GTK_TOOL_ITEM(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkToolItem {
+    unsafe { ffi::cast_GtkToolItem(widget) }
+}
+
+pub fn GTK_TOOL_ITEM_GROUP(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkToolItemGroup {
+    unsafe { ffi::cast_GtkToolItemGroup(widget) }
+}

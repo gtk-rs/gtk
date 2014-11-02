@@ -136,6 +136,7 @@ pub use self::textchildanchor::TextChildAnchor;
 #[cfg(any(feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
 pub use self::placessidebar::PlacesSidebar;
 pub use self::toolpalette::ToolPalette;
+pub use self::toolitemgroup::ToolItemGroup;
 
 mod window;
 mod label;
@@ -260,3 +261,4 @@ mod textchildanchor;
 #[cfg(any(feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
 mod placessidebar;
 mod toolpalette;
+mod toolitemgroup;

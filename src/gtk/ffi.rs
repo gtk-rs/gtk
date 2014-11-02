@@ -236,6 +236,8 @@ pub struct C_GtkCellRendererToggle;
 #[repr(C)]
 pub struct C_GtkToolItem;
 #[repr(C)]
+pub struct C_GtkToolItemGroup;
+#[repr(C)]
 pub struct C_GtkToolPalette;
 #[repr(C)]
 pub struct C_GtkToolButton;
@@ -2359,6 +2361,27 @@ extern "C" {
     // pub fn gtk_tool_item_get_text_size_group   (tool_item: *const const C_GtkToolItem) -> *GtkSizeGroup;
 
     //=========================================================================
+    // GtkToolItemGroup                                                  NOT OK
+    //=========================================================================
+    pub fn gtk_tool_item_group_new              (label: *const c_char) -> *mut C_GtkWidget;
+    pub fn gtk_tool_item_group_get_collapsed    (group: *mut C_GtkToolItemGroup) -> Gboolean;
+    pub fn gtk_tool_item_group_get_drop_item    (group: *mut C_GtkToolItemGroup, x: c_int, y: c_int) -> *mut C_GtkToolItem;
+    //pub fn gtk_tool_item_group_get_ellipsize    (group: *mut C_GtkToolItemGroup) -> PangoEllipsizeMode;
+    pub fn gtk_tool_item_group_get_item_position(group: *mut C_GtkToolItemGroup, item: *mut C_GtkToolItem) -> c_int;
+    pub fn gtk_tool_item_group_get_n_items      (group: *mut C_GtkToolItemGroup) -> c_uint;
+    pub fn gtk_tool_item_group_get_label        (group: *mut C_GtkToolItemGroup) -> *const c_char;
+    pub fn gtk_tool_item_group_get_label_widget (group: *mut C_GtkToolItemGroup) -> *mut C_GtkWidget;
+    pub fn gtk_tool_item_group_get_nth_item     (group: *mut C_GtkToolItemGroup, index: c_uint) -> *mut C_GtkToolItem;
+    pub fn gtk_tool_item_group_get_header_relief(group: *mut C_GtkToolItemGroup) -> gtk::ReliefStyle;
+    pub fn gtk_tool_item_group_insert           (group: *mut C_GtkToolItemGroup, item: *mut C_GtkToolItem, position: c_int);
+    pub fn gtk_tool_item_group_set_collapsed    (group: *mut C_GtkToolItemGroup, collapsed: Gboolean);
+    //pub fn gtk_tool_item_group_set_ellipsize    (group: *mut C_GtkToolItemGroup, ellipsize: PangoEllipsizeMode);
+    pub fn gtk_tool_item_group_set_item_position(group: *mut C_GtkToolItemGroup, item: *mut C_GtkToolItem, position: c_int);
+    pub fn gtk_tool_item_group_set_label        (group: *mut C_GtkToolItemGroup, label: *const c_char);
+    pub fn gtk_tool_item_group_set_label_widget (group: *mut C_GtkToolItemGroup, label_widget: *mut C_GtkWidget);
+    pub fn gtk_tool_item_group_set_header_relief(group: *mut C_GtkToolItemGroup, style: gtk::ReliefStyle);
+
+    //=========================================================================
     // GtkToolPalette                                                    NOT OK
     //=========================================================================
     pub fn gtk_tool_palette_new                () -> *mut C_GtkWidget;
@@ -3332,4 +3355,5 @@ extern "C" {
     pub fn cast_GtkTextMark(widget: *mut ::glib::ffi::C_GObject) -> *mut C_GtkTextMark;
     pub fn cast_GtkPlacesSidebar(widget: *mut C_GtkWidget) -> *mut C_GtkPlacesSidebar;
     pub fn cast_GtkToolPalette(widget: *mut C_GtkWidget) -> *mut C_GtkToolPalette;
+    pub fn cast_GtkToolItemGroup(widget: *mut C_GtkWidget) -> *mut C_GtkToolItemGroup;
 }
