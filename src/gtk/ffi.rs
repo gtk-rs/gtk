@@ -2385,12 +2385,12 @@ extern "C" {
     // GtkToolPalette                                                    NOT OK
     //=========================================================================
     pub fn gtk_tool_palette_new                () -> *mut C_GtkWidget;
-    //pub fn gtk_tool_palette_get_exclusive      (palette: *mut C_GtkToolPalette, group: *mut C_GtkToolItemGroup) -> Gboolean;
-    //pub fn gtk_tool_palette_set_exclusive      (palette: *mut C_GtkToolPalette, group: *mut C_GtkToolItemGroup, exclusive: Gboolean);
-    //pub fn gtk_tool_palette_get_expand         (palette: *mut C_GtkToolPalette, group: *mut C_GtkToolItemGroup) -> Gboolean;
-    //pub fn gtk_tool_palette_set_expand         (palette: *mut C_GtkToolPalette, group: *mut C_GtkToolItemGroup, expand: Gboolean);
-    //pub fn gtk_tool_palette_get_group_position (palette: *mut C_GtkToolPalette, group: *mut C_GtkToolItemGroup) -> c_int;
-    //pub fn gtk_tool_palette_set_group_position (palette: *mut C_GtkToolPalette, group: *mut C_GtkToolItemGroup, position: c_int);
+    pub fn gtk_tool_palette_get_exclusive      (palette: *mut C_GtkToolPalette, group: *mut C_GtkToolItemGroup) -> Gboolean;
+    pub fn gtk_tool_palette_set_exclusive      (palette: *mut C_GtkToolPalette, group: *mut C_GtkToolItemGroup, exclusive: Gboolean);
+    pub fn gtk_tool_palette_get_expand         (palette: *mut C_GtkToolPalette, group: *mut C_GtkToolItemGroup) -> Gboolean;
+    pub fn gtk_tool_palette_set_expand         (palette: *mut C_GtkToolPalette, group: *mut C_GtkToolItemGroup, expand: Gboolean);
+    pub fn gtk_tool_palette_get_group_position (palette: *mut C_GtkToolPalette, group: *mut C_GtkToolItemGroup) -> c_int;
+    pub fn gtk_tool_palette_set_group_position (palette: *mut C_GtkToolPalette, group: *mut C_GtkToolItemGroup, position: c_int);
     pub fn gtk_tool_palette_get_icon_size      (palette: *mut C_GtkToolPalette) -> gtk::IconSize;
     pub fn gtk_tool_palette_set_icon_size      (palette: *mut C_GtkToolPalette, icon_size: gtk::IconSize);
     pub fn gtk_tool_palette_unset_icon_size    (palette: *mut C_GtkToolPalette);
@@ -2402,7 +2402,7 @@ extern "C" {
     //pub fn gtk_tool_palette_get_drag_item      (palette: *mut C_GtkToolPalette, selection: *const C_GtkSelectionData) -> *mut C_GtkWidget;
     //pub fn gtk_tool_palette_get_drag_target_group() -> *const C_GtkTargetEntry;
     //pub fn gtk_tool_palette_get_drag_target_item() -> *const C_GtkTargetEntry;
-    //pub fn gtk_tool_palette_get_drop_group     (palette: *mut C_GtkToolPalette, x: c_int, y: c_int) -> *mut C_GtkToolItemGroup;
+    pub fn gtk_tool_palette_get_drop_group     (palette: *mut C_GtkToolPalette, x: c_int, y: c_int) -> *mut C_GtkToolItemGroup;
     pub fn gtk_tool_palette_get_drop_item      (palette: *mut C_GtkToolPalette, x: c_int, y: c_int) -> *mut C_GtkToolItem;
     pub fn gtk_tool_palette_set_drag_source    (palette: *mut C_GtkToolPalette, targets: gtk::ToolPaletteDragTargets);
 
