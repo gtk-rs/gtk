@@ -106,16 +106,12 @@ impl<T> List<T> {
             pointer: unsafe { ffi::g_list_last(self.pointer) }
         }
     }
-}
 
-impl<T> Collection for List<T> {
-    fn len(&self) -> uint {
+    pub fn len(&self) -> uint {
         unsafe { ffi::g_list_length(self.pointer) as uint }
     }
-}
 
-impl<T> Mutable for List<T> {
-    fn clear(&mut self) {
+    pub fn clear(&mut self) {
         unsafe {
             ffi::g_list_free(self.pointer)
         }
