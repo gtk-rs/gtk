@@ -91,10 +91,12 @@ impl<T> SList<T> {
             pointer: self.pointer
         }
     }
-}
 
-impl<T> Mutable for SList<T> {
-    fn clear(&mut self) {
+    pub fn len(&self) -> uint {
+        unsafe { ffi::g_slist_length(self.pointer) as uint }
+    }
+
+    pub fn clear(&mut self) {
         unsafe {
             ffi::g_slist_free(self.pointer)
         }
@@ -116,12 +118,6 @@ impl<'a, T> Iterator<&'a T> for SElem<'a, T> {
             unsafe { self.pointer = (*self.pointer).next; }
             Some(ret)
         }
-    }
-}
-
-impl<T> Collection for SList<T> {
-    fn len(&self) -> uint {
-        unsafe { ffi::g_slist_length(self.pointer) as uint }
     }
 }
 
