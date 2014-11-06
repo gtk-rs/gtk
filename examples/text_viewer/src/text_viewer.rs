@@ -12,7 +12,6 @@ use std::num::FromPrimitive;
 
 use rgtk::*;
 use rgtk::gtk::signals::{Clicked, DeleteEvent};
-use rgtk::gtk::traits::*;
 
 fn main() {
     gtk::init();
