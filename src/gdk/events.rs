@@ -201,7 +201,7 @@ pub struct EventKey {
     pub string : *mut char,
     pub hardware_keycode : u16,
     pub group : u8,
-    pub is_modified: u32
+    pub is_modifier: u32
 }
 
 impl Event for EventKey {}
