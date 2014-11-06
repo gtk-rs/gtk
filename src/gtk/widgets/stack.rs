@@ -17,11 +17,8 @@
 
 // FIXME: add missing methods (3.12)
 
-use gtk;
+use gtk::{mod, ffi};
 use gtk::cast::GTK_STACK;
-use gtk::ffi;
-use gtk::traits::Widget;
-use gtk::traits;
 use std::string;
 
 /// GtkStack — A stacking container
@@ -33,7 +30,7 @@ impl Stack {
         check_pointer!(tmp_pointer, Stack)
     }
 
-    pub fn add_named<T: traits::Widget>(&mut self, child: &T, name: &str) {
+    pub fn add_named<T: gtk::WidgetTrait>(&mut self, child: &T, name: &str) {
         unsafe {
             name.with_c_str(|c_str| {
                 ffi::gtk_stack_add_named(GTK_STACK(self.pointer),
@@ -43,7 +40,7 @@ impl Stack {
         }
     }
 
-    pub fn add_titled<T: traits::Widget>(&mut self, child: &T, name: &str, title: &str) {
+    pub fn add_titled<T: gtk::WidgetTrait>(&mut self, child: &T, name: &str, title: &str) {
         unsafe {
             name.with_c_str(|c_name| {
                 title.with_c_str(|c_title| {
@@ -56,14 +53,14 @@ impl Stack {
         }
     }
 
-    pub fn set_visible_child<T: traits::Widget>(&mut self, child: &T) {
+    pub fn set_visible_child<T: gtk::WidgetTrait>(&mut self, child: &T) {
         unsafe {
             ffi::gtk_stack_set_visible_child(GTK_STACK(self.pointer),
                                              child.get_widget())
         }
     }
 
-    pub fn get_visible_child<T: traits::Widget>(&self) -> Option<T> {
+    pub fn get_visible_child<T: gtk::WidgetTrait>(&self) -> Option<T> {
         let tmp_pointer = unsafe { ffi::gtk_stack_get_visible_child(GTK_STACK(self.pointer)) };
         if tmp_pointer.is_null() {
             None
@@ -139,6 +136,6 @@ impl Stack {
 impl_drop!(Stack)
 impl_TraitWidget!(Stack)
 
-impl traits::Container for Stack {}
+impl gtk::ContainerTrait for Stack {}
 
 impl_widget_events!(Stack)

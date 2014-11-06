@@ -14,9 +14,9 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use glib::ffi::GType;
-use gtk;
+use gtk::{mod, ffi};
 use gtk::TreeIter;
-use gtk::ffi;
+
 
 pub struct ListStore {
     pointer: *mut ffi::C_GtkListStore

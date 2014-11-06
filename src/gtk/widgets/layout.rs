@@ -15,10 +15,8 @@
 
 //! Infinite scrollable area containing child widgets and/or custom drawing
 
-use gtk;
+use gtk::{mod, ffi};
 use gtk::cast::{GTK_LAYOUT};
-use gtk::ffi;
-use gtk::traits;
 
 /// GtkLayout — Infinite scrollable area containing child widgets and/or custom drawing
 struct_Widget!(Layout)
@@ -32,7 +30,7 @@ impl Layout {
         check_pointer!(tmp_pointer, Layout)
     }
 
-    pub fn put<T: traits::Widget>(&mut self, child: &T, x: i32, y: i32) {
+    pub fn put<T: gtk::WidgetTrait>(&mut self, child: &T, x: i32, y: i32) {
         unsafe {
             ffi::gtk_layout_put(GTK_LAYOUT(self.pointer),
                                 child.get_widget(),
@@ -42,7 +40,7 @@ impl Layout {
     }
 
     // FIXME: search a new name
-    pub fn move_<T: traits::Widget>(&mut self, child: &T, x: i32, y: i32) {
+    pub fn move_<T: gtk::WidgetTrait>(&mut self, child: &T, x: i32, y: i32) {
         unsafe {
             ffi::gtk_layout_move(GTK_LAYOUT(self.pointer),
                                  child.get_widget(),
@@ -69,7 +67,7 @@ impl Layout {
 impl_drop!(Layout)
 impl_TraitWidget!(Layout)
 
-impl traits::Container for Layout {}
-impl traits::Scrollable for Layout {}
+impl gtk::ContainerTrait for Layout {}
+impl gtk::ScrollableTrait for Layout {}
 
 impl_widget_events!(Layout)

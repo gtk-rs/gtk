@@ -13,12 +13,11 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::traits;
 use gtk::cast::GTK_DIALOG;
 use gtk::ffi;
 use gtk;
 
-pub trait Dialog: traits::Widget + traits::Container + traits::Bin + traits::Window {
+pub trait DialogTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait + gtk::WindowTrait {
     fn run(&self) -> i32 {
         unsafe { ffi::gtk_dialog_run(GTK_DIALOG(self.get_widget())) }
     }
@@ -54,7 +53,7 @@ pub trait Dialog: traits::Widget + traits::Container + traits::Bin + traits::Win
         ret
     }
 
-    fn add_action_widget(&self, child: &traits::Widget, response_id: i32) -> () {
+    fn add_action_widget(&self, child: &gtk::WidgetTrait, response_id: i32) -> () {
         unsafe { ffi::gtk_dialog_add_action_widget(GTK_DIALOG(self.get_widget()), child.get_widget(), response_id) }
     }
 
@@ -66,7 +65,7 @@ pub trait Dialog: traits::Widget + traits::Container + traits::Bin + traits::Win
         unsafe { ffi::gtk_dialog_set_response_sensitive(GTK_DIALOG(self.get_widget()), response_id, setting) }
     }
 
-    fn get_response_for_widget(&self, widget: &traits::Widget) -> Result<i32, gtk::ResponseType> {
+    fn get_response_for_widget(&self, widget: &gtk::WidgetTrait) -> Result<i32, gtk::ResponseType> {
         let tmp = unsafe { ffi::gtk_dialog_get_response_for_widget(GTK_DIALOG(self.get_widget()), widget.get_widget()) };
 
         if tmp < 0 {
@@ -76,7 +75,7 @@ pub trait Dialog: traits::Widget + traits::Container + traits::Bin + traits::Win
         }
     }
 
-    fn get_widget_for_reponse<T: traits::Widget>(&self, response_id: i32) -> Option<T> {
+    fn get_widget_for_reponse<T: gtk::WidgetTrait>(&self, response_id: i32) -> Option<T> {
         let tmp_pointer = unsafe { ffi::gtk_dialog_get_widget_for_response(GTK_DIALOG(self.get_widget()), response_id) };
 
         if tmp_pointer.is_null() {
@@ -86,7 +85,7 @@ pub trait Dialog: traits::Widget + traits::Container + traits::Bin + traits::Win
         }
     }
 
-    fn get_action_area<T: traits::Widget>(&self) -> Option<T> {
+    fn get_action_area<T: gtk::WidgetTrait>(&self) -> Option<T> {
         let tmp_pointer = unsafe { ffi::gtk_dialog_get_action_area(GTK_DIALOG(self.get_widget())) };
 
         if tmp_pointer.is_null() {
@@ -96,7 +95,7 @@ pub trait Dialog: traits::Widget + traits::Container + traits::Bin + traits::Win
         }
     }
 
-    fn get_content_area<T: traits::Widget>(&self) -> Option<T> {
+    fn get_content_area<T: gtk::WidgetTrait>(&self) -> Option<T> {
         let tmp_pointer = unsafe { ffi::gtk_dialog_get_content_area(GTK_DIALOG(self.get_widget())) };
 
         if tmp_pointer.is_null() {
@@ -107,7 +106,7 @@ pub trait Dialog: traits::Widget + traits::Container + traits::Bin + traits::Win
     }
 
     #[cfg(any(feature = "GTK_3_12", feature = "GTK_3_14"))]
-    fn get_header_bar<T: traits::Widget>(&self) -> Option<T> {
+    fn get_header_bar<T: gtk::WidgetTrait>(&self) -> Option<T> {
         let tmp_pointer = unsafe { ffi::gtk_dialog_get_header_bar(GTK_DIALOG(self.get_widget())) };
 
         if tmp_pointer.is_null() {

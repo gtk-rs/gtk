@@ -13,13 +13,11 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::ffi;
-use gtk::traits;
+use gtk::{mod, ffi};
 use gtk::cast::GTK_COMBO_BOX;
-use gtk;
 use std::string;
 
-pub trait ComboBox: traits::Widget + traits::Container + traits::Bin {
+pub trait ComboBoxTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait {
     fn get_wrap_width(&self) -> i32 {
         unsafe { ffi::gtk_combo_box_get_wrap_width(GTK_COMBO_BOX(self.get_widget())) }
     }
@@ -127,7 +125,7 @@ pub trait ComboBox: traits::Widget + traits::Container + traits::Bin {
     fn set_focus_on_click(&self, focus_on_click: bool) {
         unsafe { ffi::gtk_combo_box_set_focus_on_click(GTK_COMBO_BOX(self.get_widget()), if focus_on_click {ffi::GTRUE} else {ffi::GFALSE}) }
     }
-    
+
     fn get_button_sensitivity(&self) -> gtk::SensitivityType {
         unsafe { ffi::gtk_combo_box_get_button_sensitivity(GTK_COMBO_BOX(self.get_widget())) }
     }

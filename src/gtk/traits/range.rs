@@ -13,12 +13,10 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk;
-use gtk::traits::Widget;
 use gtk::cast::GTK_RANGE;
-use gtk::ffi;
+use gtk::{mod, ffi};
 
-pub trait Range: Widget {
+pub trait RangeTrait: gtk::WidgetTrait {
     fn set_adjustment(&mut self, adjustment: &gtk::Adjustment) -> () {
         unsafe {
             ffi::gtk_range_set_adjustment(GTK_RANGE(self.get_widget()), adjustment.get_pointer());

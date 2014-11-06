@@ -57,6 +57,7 @@ pub use gtk::AppChooserTrait as GtkAppChooserTrait;
 pub use gtk::BinTrait as GtkBinTrait;
 pub use gtk::ButtonTrait as GtkButtonTrait;
 pub use gtk::CellEditableTrait as GtkCellEditableTrait;
+pub use gtk::CellLayoutTrait as GtkCellLayoutTrait;
 pub use gtk::CellRendererTrait as GtkCellRendererTrait;
 pub use gtk::CheckMenuItemTrait as GtkCheckMenuItemTrait;
 pub use gtk::ColorChooserTrait as GtkColorChooserTrait;

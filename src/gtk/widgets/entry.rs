@@ -15,11 +15,7 @@
 
 //! A single line text entry field
 
-
-
-use gtk;
-use gtk::ffi;
-use gtk::traits;
+use gtk::{mod, ffi};
 
 /**
 * Entry — A single line text entry field
@@ -56,7 +52,7 @@ impl Entry {
 impl_drop!(Entry)
 impl_TraitWidget!(Entry)
 
-impl traits::Entry for Entry {}
-impl traits::Editable for Entry {}
+impl gtk::EntryTrait for Entry {}
+impl gtk::EditableTrait for Entry {}
 
 impl_widget_events!(Entry)

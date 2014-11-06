@@ -18,8 +18,7 @@
 // FIXME: add missing methods (3.12)
 
 use gtk::cast::{GTK_HEADER_BAR};
-use gtk::ffi;
-use gtk::traits;
+use gtk::{mod, ffi};
 use std::string;
 
 /// GtkHeaderBar — A box with a centered child
@@ -65,14 +64,14 @@ impl HeaderBar {
         }
     }
 
-    pub fn set_custom_title<T: traits::Widget>(&mut self, title_widget: Option<&T>) {
+    pub fn set_custom_title<T: gtk::WidgetTrait>(&mut self, title_widget: Option<&T>) {
         unsafe {
             ffi::gtk_header_bar_set_custom_title(GTK_HEADER_BAR(self.pointer),
                                                  get_widget!(title_widget))
         }
     }
 
-    pub fn get_custom_title<T: traits::Widget>(&self) -> Option<T> {
+    pub fn get_custom_title<T: gtk::WidgetTrait>(&self) -> Option<T> {
         let tmp_pointer = unsafe {
             ffi::gtk_header_bar_get_custom_title(GTK_HEADER_BAR(self.pointer))
         };
@@ -83,14 +82,14 @@ impl HeaderBar {
         }
     }
 
-    pub fn pack_start<T: traits::Widget>(&mut self, child: &T) {
+    pub fn pack_start<T: gtk::WidgetTrait>(&mut self, child: &T) {
         unsafe {
             ffi::gtk_header_bar_pack_start(GTK_HEADER_BAR(self.pointer),
                                            child.get_widget())
         }
     }
 
-    pub fn pack_end<T: traits::Widget>(&mut self, child: &T) {
+    pub fn pack_end<T: gtk::WidgetTrait>(&mut self, child: &T) {
         unsafe {
             ffi::gtk_header_bar_pack_end(GTK_HEADER_BAR(self.pointer),
                                          child.get_widget())
@@ -114,6 +113,6 @@ impl HeaderBar {
 impl_drop!(HeaderBar)
 impl_TraitWidget!(HeaderBar)
 
-impl traits::Container for HeaderBar {}
+impl gtk::ContainerTrait for HeaderBar {}
 
 impl_widget_events!(HeaderBar)

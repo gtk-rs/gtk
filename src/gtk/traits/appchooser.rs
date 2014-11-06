@@ -13,13 +13,11 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::ffi;
-use gtk::traits;
+use gtk::{mod, ffi};
 use gtk::cast::GTK_APP_CHOOSER;
-use gtk;
 use std::string;
 
-pub trait AppChooser: traits::Widget {
+pub trait AppChooserTrait: gtk::WidgetTrait {
     fn get_app_info(&self) -> Option<gtk::AppInfo> {
         let tmp_pointer = unsafe { ffi::gtk_app_chooser_get_app_info(GTK_APP_CHOOSER(self.get_widget())) };
 

@@ -15,8 +15,7 @@
 
 //! Renders text in a cell
 
-use gtk::ffi;
-use gtk::traits;
+use gtk::{mod, ffi};
 use gtk::cast::GTK_CELL_RENDERER_TEXT;
 
 struct_Widget!(CellRendererText)
@@ -36,6 +35,6 @@ impl CellRendererText {
 impl_drop!(CellRendererText)
 impl_TraitWidget!(CellRendererText)
 
-impl traits::CellRenderer for CellRendererText {}
+impl gtk::CellRendererTrait for CellRendererText {}
 
 impl_widget_events!(CellRendererText)

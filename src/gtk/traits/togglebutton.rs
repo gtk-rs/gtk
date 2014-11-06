@@ -13,11 +13,10 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::traits::{Widget, Container, Button};
 use gtk::cast::GTK_TOGGLEBUTTON;
-use gtk::ffi;
+use gtk::{mod, ffi};
 
-pub trait ToggleButton: Widget + Container + Button {
+pub trait ToggleButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::ButtonTrait {
     fn set_mode(&mut self, draw_indicate: bool) {
         match draw_indicate {
             true    => unsafe { ffi::gtk_toggle_button_set_mode(GTK_TOGGLEBUTTON(self.get_widget()), ffi::GTRUE) },

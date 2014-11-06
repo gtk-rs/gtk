@@ -15,10 +15,9 @@
 
 //! GtkToolItemGroup — A sub container used in a tool palette
 
-use gtk::{ffi, traits, ToolItem};
+use gtk::{mod, ffi, ToolItem};
 use gtk::ffi::FFIWidget;
 use gtk::cast::{GTK_TOOL_ITEM_GROUP, GTK_TOOL_ITEM};
-use gtk;
 
 struct_Widget!(ToolItemGroup)
 
@@ -81,7 +80,7 @@ impl ToolItemGroup {
         }
     }
 
-    pub fn get_label_widget<T: traits::Widget>(&self) -> Option<T> {
+    pub fn get_label_widget<T: gtk::WidgetTrait>(&self) -> Option<T> {
         let tmp_pointer = unsafe { ffi::gtk_tool_item_group_get_label_widget(GTK_TOOL_ITEM_GROUP(self.get_widget())) };
 
         if tmp_pointer.is_null() {
@@ -114,7 +113,7 @@ impl ToolItemGroup {
             position as ::libc::c_int) }
     }
 
-    pub fn set_label_widget<T: traits::Widget>(&self, label_widget: &T) {
+    pub fn set_label_widget<T: gtk::WidgetTrait>(&self, label_widget: &T) {
         unsafe { ffi::gtk_tool_item_group_set_label_widget(GTK_TOOL_ITEM_GROUP(self.get_widget()), label_widget.get_widget()) }
     }
 }
@@ -122,7 +121,7 @@ impl ToolItemGroup {
 impl_drop!(ToolItemGroup)
 impl_TraitWidget!(ToolItemGroup)
 
-impl traits::Container for ToolItemGroup {}
-impl traits::Bin for ToolItemGroup {}
+impl gtk::ContainerTrait for ToolItemGroup {}
+impl gtk::BinTrait for ToolItemGroup {}
 
 impl_widget_events!(ToolItemGroup)

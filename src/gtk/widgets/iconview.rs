@@ -13,9 +13,8 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::traits::CellRenderer;
 use gtk::cast::{GTK_ICON_VIEW, GTK_CELL_RENDERER};
-use gtk::{mod, ffi, traits, TreeModel, TreePath};
+use gtk::{mod, ffi, TreeModel, TreePath};
 
 /// GtkIconView — A widget which displays a list of icons in a grid
 
@@ -85,7 +84,7 @@ impl IconView {
         }
     }
 
-    pub fn get_item_at_pos(&self, x: i32, y: i32, path: &TreePath, cell: &CellRenderer) -> bool {
+    pub fn get_item_at_pos(&self, x: i32, y: i32, path: &TreePath, cell: &gtk::CellRendererTrait) -> bool {
         match unsafe { ffi::gtk_icon_view_get_item_at_pos(GTK_ICON_VIEW(self.pointer), x, y, &mut path.get_pointer(),
             &mut GTK_CELL_RENDERER(cell.get_widget())) } {
             0 => false,
@@ -97,7 +96,7 @@ impl IconView {
         unsafe { ffi::gtk_icon_view_convert_widget_to_bin_window_coords(GTK_ICON_VIEW(self.pointer), wx, wy, bx, by) }
     }
 
-    pub fn set_cursor(&self, path: &TreePath, cell: &CellRenderer, start_edition: bool) {
+    pub fn set_cursor(&self, path: &TreePath, cell: &gtk::CellRendererTrait, start_edition: bool) {
         unsafe { ffi::gtk_icon_view_set_cursor(GTK_ICON_VIEW(self.pointer), path.get_pointer(), GTK_CELL_RENDERER(cell.get_widget()),
             match start_edition {
                 true => 1,
@@ -105,7 +104,7 @@ impl IconView {
             }) }
     }
 
-    pub fn get_cursor(&self, path: &TreePath, cell: &CellRenderer) -> bool {
+    pub fn get_cursor(&self, path: &TreePath, cell: &gtk::CellRendererTrait) -> bool {
         match unsafe { ffi::gtk_icon_view_get_cursor(GTK_ICON_VIEW(self.pointer), &mut path.get_pointer(),
             &mut GTK_CELL_RENDERER(cell.get_widget())) } {
             0 => false,
@@ -299,8 +298,8 @@ impl IconView {
 impl_drop!(IconView)
 impl_TraitWidget!(IconView)
 
-impl traits::Scrollable for IconView {}
-impl traits::CellLayout for IconView {}
+impl gtk::ScrollableTrait for IconView {}
+impl gtk::CellLayoutTrait for IconView {}
 
 impl_widget_events!(IconView)
 

@@ -13,14 +13,12 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::traits::Widget;
 use gtk::cast::GTK_SCROLLED_WINDOW;
-use gtk::ffi;
+use gtk::{mod, ffi};
 use gtk::ffi::FFIWidget;
-use gtk::PolicyType;
 
-pub trait ScrolledWindow: Widget {
-    fn set_policy(&self, h_scrollbar_policy: PolicyType, v_scrollbar_policy: PolicyType) {
+pub trait ScrolledWindowTrait: gtk::WidgetTrait {
+    fn set_policy(&self, h_scrollbar_policy: gtk::PolicyType, v_scrollbar_policy: gtk::PolicyType) {
         unsafe {
             ffi::gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(self.get_widget()), h_scrollbar_policy, v_scrollbar_policy);
         }

@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::{mod, ffi, traits};
+use gtk::{mod, ffi};
 use gtk::ffi::FFIWidget;
 use gtk::cast::GTK_ABOUT_DIALOG;
 use std::string;
@@ -343,10 +343,10 @@ impl AboutDialog {
 impl_drop!(AboutDialog)
 impl_TraitWidget!(AboutDialog)
 
-impl traits::Container for AboutDialog {}
-impl traits::Bin for AboutDialog {}
-impl traits::Window for AboutDialog {}
-impl traits::Dialog for AboutDialog {}
+impl gtk::ContainerTrait for AboutDialog {}
+impl gtk::BinTrait for AboutDialog {}
+impl gtk::WindowTrait for AboutDialog {}
+impl gtk::DialogTrait for AboutDialog {}
 
 impl_widget_events!(AboutDialog)
 

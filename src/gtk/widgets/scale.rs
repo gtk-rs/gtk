@@ -19,9 +19,8 @@ use libc::{c_double, c_int};
 
 use gtk::{Orientation, PositionType};
 use gtk::cast::GTK_SCALE;
-use gtk;
-use gtk::ffi;
-use gtk::traits;
+use gtk::{mod, ffi};
+
 
 /**
 * Scale — A slider widget for selecting a value from a range
@@ -125,8 +124,8 @@ impl Scale {
 impl_drop!(Scale)
 impl_TraitWidget!(Scale)
 
-impl traits::Orientable for Scale {}
-impl traits::Range for Scale {}
+impl gtk::OrientableTrait for Scale {}
+impl gtk::RangeTrait for Scale {}
 
 impl_widget_events!(Scale)
 impl_range_events!(Scale)

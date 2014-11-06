@@ -15,25 +15,23 @@
 
 //! GtkPopover — Context dependent bubbles
 
-use gtk::ffi;
-use gtk::traits;
+use gtk::{mod, ffi};
 use gtk::cast::GTK_POPOVER;
 // use std::string;
-use gtk;
 
 struct_Widget!(Popover)
 
 impl Popover {
-    pub fn new<T: traits::Widget>(relative_to: &T) -> Option<Popover> {
+    pub fn new<T: gtk::WidgetTrait>(relative_to: &T) -> Option<Popover> {
         let tmp_pointer = unsafe { ffi::gtk_popover_new(relative_to.get_widget()) };
         check_pointer!(tmp_pointer, Popover)
     }
 
-    pub fn set_relative_to<T: traits::Widget>(&self, relative_to: &T) {
+    pub fn set_relative_to<T: gtk::WidgetTrait>(&self, relative_to: &T) {
         unsafe { ffi::gtk_popover_set_relative_to(GTK_POPOVER(self.pointer), relative_to.get_widget()) }
     }
 
-    pub fn get_relative_to<T: traits::Widget>(&self) -> Option<T> {
+    pub fn get_relative_to<T: gtk::WidgetTrait>(&self) -> Option<T> {
         let tmp_pointer = unsafe { ffi::gtk_popover_get_relative_to(GTK_POPOVER(self.pointer)) };
 
         if tmp_pointer.is_null() {
@@ -63,7 +61,7 @@ impl Popover {
 impl_drop!(Popover)
 impl_TraitWidget!(Popover)
 
-impl traits::Container for Popover {}
-impl traits::Bin for Popover {}
+impl gtk::ContainerTrait for Popover {}
+impl gtk::BinTrait for Popover {}
 
 impl_widget_events!(Popover)

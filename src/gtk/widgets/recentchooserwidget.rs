@@ -16,8 +16,7 @@
 //! GtkRecentChooserWidget — Displays recently used files
 
 use gtk::cast::GTK_RECENT_MANAGER;
-use gtk::ffi;
-use gtk::traits;
+use gtk::{mod, ffi};
 use gtk::ffi::FFIWidget;
 use gtk::RecentManager;
 
@@ -38,9 +37,9 @@ impl RecentChooserWidget {
 impl_drop!(RecentChooserWidget)
 impl_TraitWidget!(RecentChooserWidget)
 
-impl traits::Container for RecentChooserWidget {}
-impl traits::Orientable for RecentChooserWidget {}
-impl traits::RecentChooser for RecentChooserWidget {}
-impl traits::Box for RecentChooserWidget {}
+impl gtk::ContainerTrait for RecentChooserWidget {}
+impl gtk::OrientableTrait for RecentChooserWidget {}
+impl gtk::RecentChooserTrait for RecentChooserWidget {}
+impl gtk::BoxTrait for RecentChooserWidget {}
 
 impl_widget_events!(RecentChooserWidget)

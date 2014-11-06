@@ -15,9 +15,8 @@
 
 //! GtkEntryCompletion — Completion functionality for GtkEntry
 
-use gtk::ffi;
+use gtk::{mod, ffi};
 use gtk::TreeModel;
-use gtk::traits;
 use gtk::cast::GTK_ENTRY_COMPLETION;
 use std::string;
 
@@ -36,7 +35,7 @@ impl EntryCompletion {
         }
     }
 
-    pub fn get_entry<T: traits::Widget>(&self) -> Option<T> {
+    pub fn get_entry<T: gtk::WidgetTrait>(&self) -> Option<T> {
         let tmp_pointer = unsafe { ffi::gtk_entry_completion_get_entry(GTK_ENTRY_COMPLETION(self.pointer)) };
 
         if tmp_pointer.is_null() {
@@ -202,6 +201,6 @@ impl EntryCompletion {
 impl_drop!(EntryCompletion)
 impl_TraitWidget!(EntryCompletion)
 
-impl traits::CellLayout for EntryCompletion {}
+impl gtk::CellLayoutTrait for EntryCompletion {}
 
 impl_widget_events!(EntryCompletion)

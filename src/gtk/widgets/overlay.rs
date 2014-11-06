@@ -16,8 +16,7 @@
 //! A container which overlays widgets on top of each other
 
 use gtk::cast::{GTK_OVERLAY};
-use gtk::ffi;
-use gtk::traits;
+use gtk::{mod, ffi};
 
 /// GtkOverlay — A container which overlays widgets on top of each other
 struct_Widget!(Overlay)
@@ -28,7 +27,7 @@ impl Overlay {
         check_pointer!(tmp_pointer, Overlay)
     }
 
-    pub fn add_overlay<T: traits::Widget>(&mut self, widget: &T) {
+    pub fn add_overlay<T: gtk::WidgetTrait>(&mut self, widget: &T) {
         unsafe {
             ffi::gtk_overlay_add_overlay(GTK_OVERLAY(self.pointer), widget.get_widget())
         }
@@ -38,7 +37,7 @@ impl Overlay {
 impl_drop!(Overlay)
 impl_TraitWidget!(Overlay)
 
-impl traits::Container for Overlay {}
-impl traits::Bin for Overlay {}
+impl gtk::ContainerTrait for Overlay {}
+impl gtk::BinTrait for Overlay {}
 
 impl_widget_events!(Overlay)

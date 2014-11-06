@@ -13,11 +13,9 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::ffi;
+use gtk::{mod, ffi};
 use gtk::ffi::FFIWidget;
-use gtk::traits;
 use gtk::cast::{GTK_WINDOW, GTK_APP_CHOOSER_DIALOG};
-use gtk;
 use std::string;
 
 struct_Widget!(AppChooserDialog)
@@ -40,7 +38,7 @@ impl AppChooserDialog {
         }
     }
 
-    pub fn widget<T: traits::Widget>(&self) -> Option<T> {
+    pub fn widget<T: gtk::WidgetTrait>(&self) -> Option<T> {
         let tmp_pointer = unsafe { ffi::gtk_app_chooser_dialog_get_widget(GTK_APP_CHOOSER_DIALOG(self.get_widget())) };
 
         if tmp_pointer.is_null() {
@@ -72,11 +70,11 @@ impl AppChooserDialog {
 impl_drop!(AppChooserDialog)
 impl_TraitWidget!(AppChooserDialog)
 
-impl traits::Container for AppChooserDialog {}
-impl traits::Bin for AppChooserDialog {}
-impl traits::Window for AppChooserDialog {}
-impl traits::Dialog for AppChooserDialog {}
-impl traits::AppChooser for AppChooserDialog {}
+impl gtk::ContainerTrait for AppChooserDialog {}
+impl gtk::BinTrait for AppChooserDialog {}
+impl gtk::WindowTrait for AppChooserDialog {}
+impl gtk::DialogTrait for AppChooserDialog {}
+impl gtk::AppChooserTrait for AppChooserDialog {}
 
 impl_widget_events!(AppChooserDialog)
 

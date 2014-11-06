@@ -15,9 +15,7 @@
 
 //! GtkComboBox — A widget used to choose from a list of items
 
-use gtk::ffi;
-use gtk::traits;
-use gtk;
+use gtk::{mod, ffi};
 
 struct_Widget!(ComboBox)
 
@@ -56,9 +54,9 @@ impl ComboBox {
 impl_drop!(ComboBox)
 impl_TraitWidget!(ComboBox)
 
-impl traits::Container for ComboBox {}
-impl traits::Bin for ComboBox {}
-impl traits::ComboBox for ComboBox {}
+impl gtk::ContainerTrait for ComboBox {}
+impl gtk::BinTrait for ComboBox {}
+impl gtk::ComboBoxTrait for ComboBox {}
 
 impl_widget_events!(ComboBox)
 

@@ -13,11 +13,14 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::traits::{Widget, Container, Bin, ToolItem, ToolButton};
 use gtk::cast::GTK_TOGGLETOOLBUTTON;
-use gtk::ffi;
+use gtk::{mod, ffi};
 
-pub trait ToggleToolButton: Widget + Container + Bin + ToolItem + ToolButton {
+pub trait ToggleToolButtonTrait: gtk::WidgetTrait +
+                                 gtk::ContainerTrait +
+                                 gtk::BinTrait +
+                                 gtk::ToolItemTrait +
+                                 gtk::ToolButtonTrait {
 
     fn get_active(&self) -> bool {
         match unsafe { ffi::gtk_toggle_tool_button_get_active(GTK_TOGGLETOOLBUTTON(self.get_widget())) } {

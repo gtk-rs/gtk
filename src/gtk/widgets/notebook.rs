@@ -15,12 +15,9 @@
 
 //! A tabbed notebook container
 
-use gtk;
+use gtk::{mod, ffi};
 use gtk::cast::GTK_NOTEBOOK;
-use gtk::ffi;
 use gtk::ffi::FFIWidget;
-use gtk::traits::Widget;
-use gtk::traits;
 use std::string;
 
 /// GtkNotebook — A tabbed notebook container
@@ -32,7 +29,7 @@ impl NoteBook {
         check_pointer!(tmp_pointer, NoteBook)
     }
 
-    pub fn append_page<T: traits::Widget>(&mut self,
+    pub fn append_page<T: gtk::WidgetTrait>(&mut self,
                                           child: &T,
                                           tab_label: Option<&gtk::Label>)
                                           -> i32 {
@@ -43,7 +40,7 @@ impl NoteBook {
         }
     }
 
-    pub fn append_page_menu<T: traits::Widget>(&mut self,
+    pub fn append_page_menu<T: gtk::WidgetTrait>(&mut self,
                                                child: &T,
                                                tab_label: Option<&gtk::Label>,
                                                menu_label: Option<&gtk::Label>)
@@ -56,7 +53,7 @@ impl NoteBook {
         }
     }
 
-    pub fn prepend_page<T: traits::Widget>(&mut self,
+    pub fn prepend_page<T: gtk::WidgetTrait>(&mut self,
                                            child: &T,
                                            tab_label: Option<&gtk::Label>)
                                            -> i32 {
@@ -67,7 +64,7 @@ impl NoteBook {
         }
     }
 
-    pub fn prepend_page_menu<T: traits::Widget>(&mut self,
+    pub fn prepend_page_menu<T: gtk::WidgetTrait>(&mut self,
                                                child: &T,
                                                tab_label: Option<&gtk::Label>,
                                                menu_label: Option<&gtk::Label>)
@@ -80,7 +77,7 @@ impl NoteBook {
         }
     }
 
-    pub fn insert_page<T: traits::Widget>(&mut self,
+    pub fn insert_page<T: gtk::WidgetTrait>(&mut self,
                                            child: &T,
                                            tab_label: Option<&gtk::Label>,
                                            position: i32)
@@ -93,7 +90,7 @@ impl NoteBook {
         }
     }
 
-    pub fn insert_page_menu<T: traits::Widget>(&mut self,
+    pub fn insert_page_menu<T: gtk::WidgetTrait>(&mut self,
                                                child: &T,
                                                tab_label: Option<&gtk::Label>,
                                                menu_label: Option<&gtk::Label>,
@@ -133,7 +130,7 @@ impl NoteBook {
         }
     }
 
-    pub fn get_nth_page<T: traits::Widget>(&self, page_num: i32) -> Option<T> {
+    pub fn get_nth_page<T: gtk::WidgetTrait>(&self, page_num: i32) -> Option<T> {
         let tmp_pointer = unsafe { ffi::gtk_notebook_get_nth_page(GTK_NOTEBOOK(self.pointer), page_num) };
         if tmp_pointer.is_null() {
             None
@@ -148,7 +145,7 @@ impl NoteBook {
         }
     }
 
-    pub fn page_num<T: Widget>(&self, child: &T) -> i32 {
+    pub fn page_num<T: gtk::WidgetTrait>(&self, child: &T) -> i32 {
         unsafe {
             ffi::gtk_notebook_page_num(GTK_NOTEBOOK(self.pointer), child.get_widget())
         }
@@ -247,7 +244,7 @@ impl NoteBook {
         }
     }
 
-    pub fn get_tab_label<T: traits::Widget>(&self, child: &T) -> Option<gtk::Label> {
+    pub fn get_tab_label<T: gtk::WidgetTrait>(&self, child: &T) -> Option<gtk::Label> {
         let tmp_pointer = unsafe {
             ffi::gtk_notebook_get_tab_label(GTK_NOTEBOOK(self.pointer),
                                             child.get_widget())
@@ -259,7 +256,7 @@ impl NoteBook {
         }
     }
 
-    pub fn set_tab_label<T: traits::Widget>(&mut self, child: &T, tab_label: Option<&gtk::Label>) {
+    pub fn set_tab_label<T: gtk::WidgetTrait>(&mut self, child: &T, tab_label: Option<&gtk::Label>) {
         unsafe {
             ffi::gtk_notebook_set_tab_label(GTK_NOTEBOOK(self.pointer),
                                             child.get_widget(),
@@ -267,7 +264,7 @@ impl NoteBook {
         }
     }
 
-    pub fn set_tab_label_text<T: traits::Widget>(&mut self, child: &T, tab_text: &str) {
+    pub fn set_tab_label_text<T: gtk::WidgetTrait>(&mut self, child: &T, tab_text: &str) {
         unsafe {
             tab_text.with_c_str(|c_str| {
                 ffi::gtk_notebook_set_tab_label_text(GTK_NOTEBOOK(self.pointer),
@@ -277,7 +274,7 @@ impl NoteBook {
         }
     }
 
-    pub fn get_tab_label_text<T: traits::Widget>(&mut self, child: &T) -> String{
+    pub fn get_tab_label_text<T: gtk::WidgetTrait>(&mut self, child: &T) -> String{
         unsafe {
             let c_str = ffi::gtk_notebook_get_tab_label_text(GTK_NOTEBOOK(self.pointer),
                                                              child.get_widget());
@@ -285,7 +282,7 @@ impl NoteBook {
         }
     }
 
-    pub fn get_menu_label<T: traits::Widget>(&self, child: &T) -> Option<gtk::Label> {
+    pub fn get_menu_label<T: gtk::WidgetTrait>(&self, child: &T) -> Option<gtk::Label> {
         let tmp_pointer = unsafe {
             ffi::gtk_notebook_get_menu_label(GTK_NOTEBOOK(self.pointer),
                                              child.get_widget())
@@ -297,7 +294,7 @@ impl NoteBook {
         }
     }
 
-    pub fn set_menu_label<T: traits::Widget>(&mut self, child: &T, tab_label: Option<&gtk::Label>) {
+    pub fn set_menu_label<T: gtk::WidgetTrait>(&mut self, child: &T, tab_label: Option<&gtk::Label>) {
         unsafe {
             ffi::gtk_notebook_set_menu_label(GTK_NOTEBOOK(self.pointer),
                                              child.get_widget(),
@@ -305,7 +302,7 @@ impl NoteBook {
         }
     }
 
-    pub fn set_menu_label_text<T: traits::Widget>(&mut self, child: &T, tab_text: &str) {
+    pub fn set_menu_label_text<T: gtk::WidgetTrait>(&mut self, child: &T, tab_text: &str) {
         unsafe {
             tab_text.with_c_str(|c_str| {
                 ffi::gtk_notebook_set_menu_label_text(GTK_NOTEBOOK(self.pointer),
@@ -315,7 +312,7 @@ impl NoteBook {
         }
     }
 
-    pub fn get_menu_label_text<T: traits::Widget>(&mut self, child: &T) -> String {
+    pub fn get_menu_label_text<T: gtk::WidgetTrait>(&mut self, child: &T) -> String {
         unsafe {
             let c_str = ffi::gtk_notebook_get_menu_label_text(GTK_NOTEBOOK(self.pointer),
                                                               child.get_widget());
@@ -323,7 +320,7 @@ impl NoteBook {
         }
     }
 
-    pub fn reorder_child<T: traits::Widget>(&mut self, child: &T, position: i32) {
+    pub fn reorder_child<T: gtk::WidgetTrait>(&mut self, child: &T, position: i32) {
         unsafe {
             ffi::gtk_notebook_reorder_child(GTK_NOTEBOOK(self.pointer),
                                             child.get_widget(),
@@ -331,14 +328,14 @@ impl NoteBook {
         }
     }
 
-    pub fn is_tab_reorderable<T: traits::Widget>(&self, child: &T) -> bool {
+    pub fn is_tab_reorderable<T: gtk::WidgetTrait>(&self, child: &T) -> bool {
         unsafe {
             ffi::to_bool(ffi::gtk_notebook_get_tab_reorderable(GTK_NOTEBOOK(self.pointer),
                                                                child.get_widget()))
         }
     }
 
-    pub fn set_tab_reorderable<T: traits::Widget>(&mut self, child: &T, reorderable: bool) {
+    pub fn set_tab_reorderable<T: gtk::WidgetTrait>(&mut self, child: &T, reorderable: bool) {
         unsafe {
             ffi::gtk_notebook_set_tab_reorderable(GTK_NOTEBOOK(self.pointer),
                                                  child.get_widget(),
@@ -346,14 +343,14 @@ impl NoteBook {
         }
     }
 
-    pub fn is_tab_detachable<T: traits::Widget>(&self, child: &T) -> bool {
+    pub fn is_tab_detachable<T: gtk::WidgetTrait>(&self, child: &T) -> bool {
         unsafe {
             ffi::to_bool(ffi::gtk_notebook_get_tab_detachable(GTK_NOTEBOOK(self.pointer),
                                                               child.get_widget()))
         }
     }
 
-    pub fn set_tab_detachable<T: traits::Widget>(&mut self, child: &T, detachable: bool) {
+    pub fn set_tab_detachable<T: gtk::WidgetTrait>(&mut self, child: &T, detachable: bool) {
         unsafe {
             ffi::gtk_notebook_set_tab_detachable(GTK_NOTEBOOK(self.pointer),
                                                 child.get_widget(),
@@ -361,7 +358,7 @@ impl NoteBook {
         }
     }
 
-    pub fn get_action_widget<T: traits::Widget>(&self, pack_type: gtk::PackType) -> Option<T> {
+    pub fn get_action_widget<T: gtk::WidgetTrait>(&self, pack_type: gtk::PackType) -> Option<T> {
         let tmp_pointer = unsafe { ffi::gtk_notebook_get_action_widget(GTK_NOTEBOOK(self.pointer),
                                                                        pack_type) };
         if tmp_pointer.is_null() {
@@ -371,7 +368,7 @@ impl NoteBook {
         }
     }
 
-    pub fn set_action_widget<T: traits::Widget>(&mut self, child: &T, pack_type: gtk::PackType) {
+    pub fn set_action_widget<T: gtk::WidgetTrait>(&mut self, child: &T, pack_type: gtk::PackType) {
         unsafe {
             ffi::gtk_notebook_set_action_widget(GTK_NOTEBOOK(self.pointer),
                                                 child.get_widget(),
@@ -383,6 +380,6 @@ impl NoteBook {
 impl_drop!(NoteBook)
 impl_TraitWidget!(NoteBook)
 
-impl traits::Container for NoteBook {}
+impl gtk::ContainerTrait for NoteBook {}
 
 impl_widget_events!(NoteBook)

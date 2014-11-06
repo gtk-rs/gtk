@@ -13,11 +13,9 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::ffi;
+use gtk::{mod, ffi};
 use gtk::ffi::FFIWidget;
-use gtk::traits;
 use gtk::cast::{GTK_WINDOW, GTK_PAGE_SETUP_UNIX_DIALOG, GTK_PAGE_SETUP, GTK_PRINT_SETTINGS};
-use gtk;
 use std::str;
 
 struct_Widget!(PageSetupUnixDialog)
@@ -72,10 +70,10 @@ impl PageSetupUnixDialog {
 impl_drop!(PageSetupUnixDialog)
 impl_TraitWidget!(PageSetupUnixDialog)
 
-impl traits::Container for PageSetupUnixDialog {}
-impl traits::Bin for PageSetupUnixDialog {}
-impl traits::Window for PageSetupUnixDialog {}
-impl traits::Dialog for PageSetupUnixDialog {}
+impl gtk::ContainerTrait for PageSetupUnixDialog {}
+impl gtk::BinTrait for PageSetupUnixDialog {}
+impl gtk::WindowTrait for PageSetupUnixDialog {}
+impl gtk::DialogTrait for PageSetupUnixDialog {}
 
 impl_widget_events!(PageSetupUnixDialog)
 

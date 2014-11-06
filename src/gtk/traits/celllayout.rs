@@ -13,13 +13,12 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::ffi;
-use gtk::traits;
+use gtk::{mod, ffi};
 use gtk::cast::{GTK_CELL_LAYOUT, GTK_CELL_RENDERER};
 use glib;
 
-pub trait CellLayout: traits::Widget {
-    fn pack_start(&self, cell: &traits::CellRenderer, expand: bool) {
+pub trait CellLayoutTrait: gtk::WidgetTrait {
+    fn pack_start(&self, cell: &gtk::CellRendererTrait, expand: bool) {
         unsafe {
             ffi::gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(self.get_widget()), GTK_CELL_RENDERER(cell.get_widget()), match expand {
                 true => 1,
@@ -28,7 +27,7 @@ pub trait CellLayout: traits::Widget {
         }
     }
 
-    fn pack_end(&self, cell: &traits::CellRenderer, expand: bool) {
+    fn pack_end(&self, cell: &gtk::CellRendererTrait, expand: bool) {
         unsafe {
             ffi::gtk_cell_layout_pack_end(GTK_CELL_LAYOUT(self.get_widget()), GTK_CELL_RENDERER(cell.get_widget()), match expand {
                 true => 1,
@@ -47,7 +46,7 @@ pub trait CellLayout: traits::Widget {
         }
     }*/
 
-    fn get_cells<T: traits::CellRenderer>(&self) -> glib::List<T> {
+    fn get_cells<T: gtk::CellRendererTrait>(&self) -> glib::List<T> {
         let tmp = unsafe { ffi::gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(self.get_widget())) };
 
         if tmp.is_null() {
@@ -59,7 +58,7 @@ pub trait CellLayout: traits::Widget {
         }
     }
 
-    fn reorder(&self, cell: &traits::CellRenderer, position: i32) {
+    fn reorder(&self, cell: &gtk::CellRendererTrait, position: i32) {
         unsafe { ffi::gtk_cell_layout_reorder(GTK_CELL_LAYOUT(self.get_widget()), GTK_CELL_RENDERER(cell.get_widget()), position) }
     }
 
@@ -67,7 +66,7 @@ pub trait CellLayout: traits::Widget {
         unsafe { ffi::gtk_cell_layout_clear(GTK_CELL_LAYOUT(self.get_widget())) }
     }
 
-    fn add_attribute(&self, cell: &traits::CellRenderer, attribute: &str, column: i32) {
+    fn add_attribute(&self, cell: &gtk::CellRendererTrait, attribute: &str, column: i32) {
         attribute.with_c_str(|c_str| {
             unsafe {
                 ffi::gtk_cell_layout_add_attribute(GTK_CELL_LAYOUT(self.get_widget()), GTK_CELL_RENDERER(cell.get_widget()),
@@ -76,7 +75,7 @@ pub trait CellLayout: traits::Widget {
         })
     }
 
-    fn clear_attributes(&self, cell: &traits::CellRenderer) {
+    fn clear_attributes(&self, cell: &gtk::CellRendererTrait) {
         unsafe { ffi::gtk_cell_layout_clear_attributes(GTK_CELL_LAYOUT(self.get_widget()), GTK_CELL_RENDERER(cell.get_widget())) }
     }
 }

@@ -16,10 +16,8 @@
 #![allow(unused_imports)]
 
 use gtk::ffi;
-use gtk::traits;
 use gtk::cast::{GTK_APP_INFO, GTK_APP_LAUNCH_CONTEXT};
 use gtk;
-use gtk::traits::Widget;
 use glib;
 use glib::GlibContainer;
 use std::str;

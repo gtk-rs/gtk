@@ -15,10 +15,7 @@
 
 //! A widget that shows a menu when clicked on
 
-
-
-use gtk::ffi;
-use gtk::traits;
+use gtk::{mod, ffi};
 use gtk::cast::GTK_MENUBUTTON;
 use gtk::ArrowType;
 
@@ -31,7 +28,7 @@ impl MenuButton {
         check_pointer!(tmp_pointer, MenuButton)
     }
 
-    pub fn set_popup<T: traits::Widget>(&mut self, popup: &T) -> () {
+    pub fn set_popup<T: gtk::WidgetTrait>(&mut self, popup: &T) -> () {
         unsafe {
             ffi::gtk_menu_button_set_popup(GTK_MENUBUTTON(self.pointer), popup.get_widget());
         }
@@ -49,7 +46,7 @@ impl MenuButton {
         }
     }
 
-    pub fn set_align_widget<T: traits::Widget>(&mut self, align_widget: &T) -> () {
+    pub fn set_align_widget<T: gtk::WidgetTrait>(&mut self, align_widget: &T) -> () {
         unsafe {
             ffi::gtk_menu_button_set_align_widget(GTK_MENUBUTTON(self.pointer), align_widget.get_widget())
         }
@@ -59,8 +56,8 @@ impl MenuButton {
 impl_drop!(MenuButton)
 impl_TraitWidget!(MenuButton)
 
-impl traits::Container for MenuButton {}
-impl traits::Button for MenuButton {}
-impl traits::ToggleButton for MenuButton {}
+impl gtk::ContainerTrait for MenuButton {}
+impl gtk::ButtonTrait for MenuButton {}
+impl gtk::ToggleButtonTrait for MenuButton {}
 
 impl_widget_events!(MenuButton)

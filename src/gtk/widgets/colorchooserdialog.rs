@@ -13,11 +13,9 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::ffi;
+use gtk::{mod, ffi};
 use gtk::ffi::FFIWidget;
-use gtk::traits;
 use gtk::cast::{GTK_WINDOW};
-use gtk;
 
 struct_Widget!(ColorChooserDialog)
 
@@ -43,10 +41,10 @@ impl ColorChooserDialog {
 impl_drop!(ColorChooserDialog)
 impl_TraitWidget!(ColorChooserDialog)
 
-impl traits::Container for ColorChooserDialog {}
-impl traits::Bin for ColorChooserDialog {}
-impl traits::Window for ColorChooserDialog {}
-impl traits::Dialog for ColorChooserDialog {}
-impl traits::ColorChooser for ColorChooserDialog {}
+impl gtk::ContainerTrait for ColorChooserDialog {}
+impl gtk::BinTrait for ColorChooserDialog {}
+impl gtk::WindowTrait for ColorChooserDialog {}
+impl gtk::DialogTrait for ColorChooserDialog {}
+impl gtk::ColorChooserTrait for ColorChooserDialog {}
 
 impl_widget_events!(ColorChooserDialog)

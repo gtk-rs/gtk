@@ -19,9 +19,7 @@ use libc::c_int;
 
 use gtk::MessageType;
 use gtk::cast::GTK_INFOBAR;
-use gtk;
-use gtk::ffi;
-use gtk::traits;
+use gtk::{mod, ffi};
 
 /// InfoBar — Report important messages to the user
 struct_Widget!(InfoBar)
@@ -32,7 +30,7 @@ impl InfoBar {
         check_pointer!(tmp_pointer, InfoBar)
     }
 
-    pub fn add_action_widget<T: traits::Widget>(&mut self, child: &T, response_id: i32) -> () {
+    pub fn add_action_widget<T: gtk::WidgetTrait>(&mut self, child: &T, response_id: i32) -> () {
         unsafe {
             ffi::gtk_info_bar_add_action_widget(GTK_INFOBAR(self.pointer), child.get_widget(), response_id as c_int)
         }
@@ -98,9 +96,9 @@ impl InfoBar {
 impl_drop!(InfoBar)
 impl_TraitWidget!(InfoBar)
 
-impl traits::Container for InfoBar {}
-impl traits::Box for InfoBar {}
-impl traits::Orientable for InfoBar {}
+impl gtk::ContainerTrait for InfoBar {}
+impl gtk::BoxTrait for InfoBar {}
+impl gtk::OrientableTrait for InfoBar {}
 
 impl_widget_events!(InfoBar)
 

@@ -13,14 +13,14 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::{mod, traits};
+use gtk;
 use gtk::cast::GTK_FILE_CHOOSER;
 use gtk::ffi::{mod, FFIWidget};
 use glib::{mod, GlibContainer};
 use libc::c_char;
 use std::string;
 
-pub trait FileChooser: traits::Widget {
+pub trait FileChooserTrait: gtk::WidgetTrait {
     fn set_action(&self, action: gtk::FileChooserAction) -> () {
         unsafe { ffi::gtk_file_chooser_set_action(GTK_FILE_CHOOSER(self.get_widget()), action) }
     }
@@ -283,11 +283,11 @@ pub trait FileChooser: traits::Widget {
         }
     }
 
-    fn set_preview_widget(&self, preview_widget: &traits::Widget) -> () {
+    fn set_preview_widget(&self, preview_widget: &gtk::WidgetTrait) -> () {
         unsafe { ffi::gtk_file_chooser_set_preview_widget(GTK_FILE_CHOOSER(self.get_widget()), preview_widget.get_widget()) }
     }
 
-    fn get_preview_widget<T: traits::Widget>(&self) -> Option<T> {
+    fn get_preview_widget<T: gtk::WidgetTrait>(&self) -> Option<T> {
         let tmp_pointer = unsafe { ffi::gtk_file_chooser_get_preview_widget(GTK_FILE_CHOOSER(self.get_widget())) };
 
         if tmp_pointer.is_null() {
@@ -345,11 +345,11 @@ pub trait FileChooser: traits::Widget {
         }
     }
 
-    fn set_extra_widget(&self, extra_widget: &traits::Widget) -> () {
+    fn set_extra_widget(&self, extra_widget: &gtk::WidgetTrait) -> () {
         unsafe { ffi::gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(self.get_widget()), extra_widget.get_widget()) }
     }
 
-    fn get_extra_widget<T: traits::Widget>(&self) -> Option<T> {
+    fn get_extra_widget<T: gtk::WidgetTrait>(&self) -> Option<T> {
         let tmp = unsafe { ffi::gtk_file_chooser_get_extra_widget(GTK_FILE_CHOOSER(self.get_widget())) };
 
         if tmp.is_null() {

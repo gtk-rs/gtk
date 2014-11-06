@@ -280,10 +280,11 @@ pub use self::enums::dest_defaults::DestDefaults;
 /// Gtk Traits
 pub use self::traits::BoxTrait;
 pub use self::traits::ActionableTrait;
-pub use self::traits::AppChooser;
+pub use self::traits::AppChooserTrait;
 pub use self::traits::BinTrait;
 pub use self::traits::ButtonTrait;
 pub use self::traits::CellEditableTrait;
+pub use self::traits::CellLayoutTrait;
 pub use self::traits::CellRendererTrait;
 pub use self::traits::CheckMenuItemTrait;
 pub use self::traits::ColorChooserTrait;

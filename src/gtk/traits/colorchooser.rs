@@ -13,11 +13,11 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::{mod, ffi, traits};
+use gtk::{mod, ffi};
 use gtk::cast::GTK_COLOR_CHOOSER;
 use gdk;
 
-pub trait ColorChooser: traits::Widget {
+pub trait ColorChooserTrait: gtk::WidgetTrait {
     fn get_rgba(&self) -> gdk::RGBA {
         let color = gdk::RGBA {
             red: 0f64,

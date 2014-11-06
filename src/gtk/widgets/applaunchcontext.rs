@@ -15,11 +15,8 @@
 
 #![allow(unused_imports)]
 
-use gtk::ffi;
-use gtk::traits;
-use gtk::traits::Widget;
+use gtk::{mod, ffi};
 use gtk::cast::{GTK_APP_LAUNCH_CONTEXT};
-use gtk;
 use std::str;
 use std::string;
 

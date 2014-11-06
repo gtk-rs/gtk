@@ -15,13 +15,11 @@
 
 //! An interface for scrollable widgets
 
-use gtk;
 use gtk::cast::GTK_SCROLLABLE;
-use gtk::ffi;
-use gtk::traits;
+use gtk::{mod, ffi};
 
 /// GtkScrollable — An interface for scrollable widgets
-pub trait Scrollable : traits::Widget {
+pub trait ScrollableTrait: gtk::WidgetTrait {
     fn get_hadjustment(&self) -> gtk::Adjustment {
         unsafe {
             gtk::Adjustment::wrap_pointer(ffi::gtk_scrollable_get_hadjustment(GTK_SCROLLABLE(self.get_widget())))

@@ -15,7 +15,7 @@
 
 //! The widget used for item in menus
 
-use gtk::{ffi, traits};
+use gtk::{mod, ffi};
 
 /// CheckMenuItem — The widget used for item in menus
 struct_Widget!(CheckMenuItem)
@@ -48,10 +48,10 @@ impl CheckMenuItem {
 impl_drop!(CheckMenuItem)
 impl_TraitWidget!(CheckMenuItem)
 
-impl traits::Container for CheckMenuItem {}
-impl traits::Bin for CheckMenuItem {}
-impl traits::MenuItem for CheckMenuItem {}
-impl traits::CheckMenuItem for CheckMenuItem {}
+impl gtk::ContainerTrait for CheckMenuItem {}
+impl gtk::BinTrait for CheckMenuItem {}
+impl gtk::MenuItemTrait for CheckMenuItem {}
+impl gtk::CheckMenuItemTrait for CheckMenuItem {}
 
 impl_widget_events!(CheckMenuItem)
 

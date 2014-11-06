@@ -18,8 +18,7 @@
 use libc::c_int;
 
 use gtk::cast::GTK_FIXED;
-use gtk::ffi;
-use gtk::traits;
+use gtk::{mod, ffi};
 
 /// Fixed — A container which allows you to position widgets at fixed coordinates
 struct_Widget!(Fixed)
@@ -31,7 +30,7 @@ impl Fixed {
         check_pointer!(tmp_pointer, Fixed)
     }
 
-    pub fn put<T: traits::Widget>(&mut self,
+    pub fn put<T: gtk::WidgetTrait>(&mut self,
                              widget: &T,
                              x: i32,
                              y: i32) -> () {
@@ -41,7 +40,7 @@ impl Fixed {
     }
 
     // FIXME: search a new name
-    pub fn move_<T: traits::Widget>(&mut self,
+    pub fn move_<T: gtk::WidgetTrait>(&mut self,
                               widget: &T,
                               x: i32,
                               y: i32) -> () {
@@ -54,7 +53,7 @@ impl Fixed {
 impl_drop!(Fixed)
 impl_TraitWidget!(Fixed)
 
-impl traits::Container for Fixed {}
+impl gtk::ContainerTrait for Fixed {}
 
 impl_widget_events!(Fixed)
 

@@ -15,8 +15,7 @@
 
 //! Generic values — A polymorphic type that can hold values of any other type
 
-use gtk;
-use gtk::ffi;
+use gtk::{mod, ffi};
 
 trait GValuePrivate {
     fn get(gvalue: &GValue) -> Self;

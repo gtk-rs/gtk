@@ -15,10 +15,7 @@
 
 //! A widget that emits a signal when clicked on
 
-
-
-use gtk::ffi;
-use gtk::traits;
+use gtk::{mod, ffi};
 #[cfg(any(feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
 use gtk::IconSize;
 
@@ -83,9 +80,9 @@ impl Button {
 impl_drop!(Button)
 impl_TraitWidget!(Button)
 
-impl traits::Container for Button {}
-impl traits::Button for Button {}
-impl traits::Bin for Button {}
+impl gtk::ContainerTrait for Button {}
+impl gtk::ButtonTrait for Button {}
+impl gtk::BinTrait for Button {}
 
 impl_widget_events!(Button)
 impl_button_events!(Button)

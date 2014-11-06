@@ -89,7 +89,7 @@ pub trait ToolButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrai
         }
     }
 
-    fn set_label_widget<T: Label>(&mut self, label: &T) -> () {
+    fn set_label_widget<T: gtk::LabelTrait>(&mut self, label: &T) -> () {
         unsafe {
             ffi::gtk_tool_button_set_label_widget(GTK_TOOLBUTTON(self.get_widget()), label.get_widget())
         }

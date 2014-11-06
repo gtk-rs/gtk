@@ -18,8 +18,7 @@
 use libc::c_double;
 use std::ptr;
 
-use gtk::ffi;
-use gtk::traits;
+use gtk::{mod, ffi};
 use gtk::IconSize;
 
 /**
@@ -43,10 +42,10 @@ impl ScaleButton {
 impl_drop!(ScaleButton)
 impl_TraitWidget!(ScaleButton)
 
-impl traits::Container for ScaleButton {}
-impl traits::Button for ScaleButton {}
-impl traits::ScaleButton for ScaleButton {}
-impl traits::Orientable for ScaleButton {}
+impl gtk::ContainerTrait for ScaleButton {}
+impl gtk::ButtonTrait for ScaleButton {}
+impl gtk::ScaleButtonTrait for ScaleButton {}
+impl gtk::OrientableTrait for ScaleButton {}
 
 impl_widget_events!(ScaleButton)
 impl_button_events!(ScaleButton)

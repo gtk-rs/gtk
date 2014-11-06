@@ -14,11 +14,10 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::cast::GTK_BIN;
-use gtk::traits;
-use gtk::ffi;
+use gtk::{mod, ffi};
 
-pub trait Bin: traits::Widget + traits::Container {
-    fn get_child<T: traits::Widget>(&self) ->  Option<T> {
+pub trait BinTrait: gtk::WidgetTrait + gtk::ContainerTrait {
+    fn get_child<T: gtk::WidgetTrait>(&self) ->  Option<T> {
         let tmp_pointer = unsafe {
             ffi::gtk_bin_get_child(GTK_BIN(self.get_widget()))
         };

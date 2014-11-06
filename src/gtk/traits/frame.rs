@@ -16,13 +16,12 @@
 use std::ptr;
 use libc::c_float;
 
-use gtk::traits::{Widget, Container};
 use gtk::ShadowType;
 use gtk::cast::GTK_FRAME;
-use gtk::ffi;
+use gtk::{mod, ffi};
 use std::string;
 
-pub trait Frame: Widget + Container {
+pub trait FrameTrait: gtk::WidgetTrait + gtk::ContainerTrait {
     fn set_label(&mut self, label: Option<&str>) -> () {
         match label {
             Some(l) => unsafe { l.with_c_str(|c_str| {ffi::gtk_frame_set_label(GTK_FRAME(self.get_widget()), c_str) }) },
@@ -30,7 +29,7 @@ pub trait Frame: Widget + Container {
         };
     }
 
-    fn set_label_widget<T: Widget>(&mut self, label_widget: &T) -> () {
+    fn set_label_widget<T: gtk::WidgetTrait>(&mut self, label_widget: &T) -> () {
         unsafe {
             ffi::gtk_frame_set_label_widget(GTK_FRAME(self.get_widget()), label_widget.get_widget());
         }

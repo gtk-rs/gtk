@@ -17,14 +17,13 @@
 
 use std::ptr;
 
-use gtk::ffi;
-use gtk::traits;
+use gtk::{mod, ffi};
 
 /// ToolButton — A ToolItem subclass that displays buttons
 struct_Widget!(ToolButton)
 
 impl ToolButton {
-    pub fn new<T: traits::Widget>(icon_widget: Option<&T>, label: Option<&str>) -> Option<ToolButton> {
+    pub fn new<T: gtk::WidgetTrait>(icon_widget: Option<&T>, label: Option<&str>) -> Option<ToolButton> {
         let tmp_pointer = unsafe {
             match label {
                 Some(l) => {
@@ -57,10 +56,10 @@ impl ToolButton {
 impl_drop!(ToolButton)
 impl_TraitWidget!(ToolButton)
 
-impl traits::Container for ToolButton {}
-impl traits::Bin for ToolButton {}
-impl traits::ToolItem for ToolButton {}
-impl traits::ToolButton for ToolButton {}
+impl gtk::ContainerTrait for ToolButton {}
+impl gtk::BinTrait for ToolButton {}
+impl gtk::ToolItemTrait for ToolButton {}
+impl gtk::ToolButtonTrait for ToolButton {}
 
 impl_widget_events!(ToolButton)
 impl_button_events!(ToolButton)

@@ -15,8 +15,7 @@
 
 //! An entry which shows a search icon
 
-use gtk::ffi;
-use gtk::traits;
+use gtk::{mod, ffi};
 
 /**
 * SearchEntry — An entry which shows a search icon
@@ -36,7 +35,7 @@ impl SearchEntry {
 impl_drop!(SearchEntry)
 impl_TraitWidget!(SearchEntry)
 
-impl traits::Entry for SearchEntry {}
-impl traits::Editable for SearchEntry {}
+impl gtk::EntryTrait for SearchEntry {}
+impl gtk::EditableTrait for SearchEntry {}
 
 impl_widget_events!(SearchEntry)

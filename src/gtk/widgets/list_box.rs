@@ -15,11 +15,9 @@
 
 //! A container that allows reflowing its children
 
-use gtk;
+use gtk::{mod, ffi};
 use gtk::cast::{GTK_LIST_BOX_ROW, GTK_LIST_BOX};
-use gtk::ffi;
 use gtk::ffi::FFIWidget;
-use gtk::traits;
 
 /// GtkFlowBox — A container that allows reflowing its children
 struct_Widget!(ListBox)
@@ -30,14 +28,14 @@ impl ListBox {
         check_pointer!(tmp_pointer, ListBox)
     }
 
-    pub fn prepend<T: traits::Widget>(&mut self, child: &T) {
+    pub fn prepend<T: gtk::WidgetTrait>(&mut self, child: &T) {
         unsafe {
             ffi::gtk_list_box_prepend(GTK_LIST_BOX(self.pointer),
                                       child.get_widget())
         }
     }
 
-    pub fn insert<T: traits::Widget>(&mut self, child: &T, position: i32) {
+    pub fn insert<T: gtk::WidgetTrait>(&mut self, child: &T, position: i32) {
         unsafe {
             ffi::gtk_list_box_insert(GTK_LIST_BOX(self.pointer),
                                      child.get_widget(),
@@ -85,7 +83,7 @@ impl ListBox {
         }
     }
 
-    pub fn set_placeholder<T: traits::Widget>(&mut self, placeholder: &T) {
+    pub fn set_placeholder<T: gtk::WidgetTrait>(&mut self, placeholder: &T) {
         unsafe {
             ffi::gtk_list_box_set_placeholder(GTK_LIST_BOX(self.pointer),
                                               placeholder.get_widget())
@@ -162,7 +160,7 @@ impl ListBox {
 impl_drop!(ListBox)
 impl_TraitWidget!(ListBox)
 
-impl traits::Container for ListBox {}
+impl gtk::ContainerTrait for ListBox {}
 
 struct_Widget!(ListBoxRow)
 
@@ -178,7 +176,7 @@ impl ListBoxRow {
         }
     }
 
-    pub fn get_header<T: traits::Widget>(&self) -> Option<T> {
+    pub fn get_header<T: gtk::WidgetTrait>(&self) -> Option<T> {
         let tmp_pointer = unsafe {
             ffi::gtk_list_box_row_get_header(GTK_LIST_BOX_ROW(self.pointer))
         };
@@ -189,7 +187,7 @@ impl ListBoxRow {
         }
     }
 
-    pub fn set_header<T: traits::Widget>(&mut self, header: &T) {
+    pub fn set_header<T: gtk::WidgetTrait>(&mut self, header: &T) {
         unsafe {
             ffi::gtk_list_box_row_set_header(GTK_LIST_BOX_ROW(self.pointer),
                                              header.get_widget())
@@ -206,7 +204,7 @@ impl ListBoxRow {
 impl_drop!(ListBoxRow)
 impl_TraitWidget!(ListBoxRow)
 
-impl traits::Container for ListBoxRow {}
-impl traits::Bin for ListBoxRow {}
+impl gtk::ContainerTrait for ListBoxRow {}
+impl gtk::BinTrait for ListBoxRow {}
 
 impl_widget_events!(ListBox)
