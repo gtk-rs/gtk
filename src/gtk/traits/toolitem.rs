@@ -13,12 +13,11 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::ffi;
-use gtk::traits::{Widget, Container, Bin};
+use gtk::{mod, ffi};
 use gtk::cast::GTK_TOOLITEM;
 use gtk::{IconSize, Orientation, ReliefStyle, ToolbarStyle};
 
-pub trait ToolItem: Widget + Container + Bin {
+pub trait ToolItemTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait {
     fn set_homogeneous(&mut self, homogeneous: bool) -> () {
          match homogeneous {
             true    => unsafe { ffi::gtk_tool_item_set_homogeneous(GTK_TOOLITEM(self.get_widget()), ffi::GTRUE) },

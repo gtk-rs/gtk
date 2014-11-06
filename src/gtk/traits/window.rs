@@ -13,15 +13,14 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::ffi;
+use gtk::{mod, ffi};
 use gtk::ffi::to_gboolean;
-use gtk::traits::Widget;
 use gtk::cast::GTK_WINDOW;
 use gtk::WindowPosition;
 
 use std::string;
 
-pub trait Window : Widget {
+pub trait WindowTrait : gtk::WidgetTrait {
     fn set_title(&mut self, title: &str) -> () {
         unsafe {
             title.with_c_str(|c_str| {

@@ -21,7 +21,7 @@ use glib;
 use glib::ffi::GType;
 use std::string;
 
-pub trait Widget: ffi::FFIWidget {
+pub trait WidgetTrait: ffi::FFIWidget {
     fn show_all(&mut self) -> () {
         unsafe {
             ffi::gtk_widget_show_all(self.get_widget());

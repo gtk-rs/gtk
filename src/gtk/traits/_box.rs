@@ -15,13 +15,12 @@
 
 use libc::{c_int, c_uint};
 
-use gtk::traits::Widget;
-use gtk::PackType;
+use gtk::{mod, PackType};
 use gtk::cast::GTK_BOX;
 use gtk::ffi;
 
-pub trait Box: Widget {
-    fn pack_start<'r, T: Widget>(&'r mut self, child: &'r T, expand: bool, fill: bool, padding: u32) -> () {
+pub trait BoxTrait: gtk::WidgetTrait {
+    fn pack_start<'r, T: gtk::WidgetTrait>(&'r mut self, child: &'r T, expand: bool, fill: bool, padding: u32) -> () {
         let c_expand = if expand { ffi::GTRUE } else { ffi::GFALSE };
         let c_fill = if fill { ffi::GTRUE } else { ffi::GFALSE };
         unsafe {
@@ -29,7 +28,7 @@ pub trait Box: Widget {
         }
     }
 
-    fn pack_end<'r, T: Widget>(&'r mut self, child: &'r T, expand: bool, fill: bool, padding: u32) -> () {
+    fn pack_end<'r, T: gtk::WidgetTrait>(&'r mut self, child: &'r T, expand: bool, fill: bool, padding: u32) -> () {
         let c_expand = if expand { ffi::GTRUE } else { ffi::GFALSE };
         let c_fill = if fill { ffi::GTRUE } else { ffi::GFALSE };
         unsafe {
@@ -63,13 +62,13 @@ pub trait Box: Widget {
         }
     }
 
-    fn reorder_child<'r, T: Widget>(&'r mut self, child: &'r T, position: i32) -> () {
+    fn reorder_child<'r, T: gtk::WidgetTrait>(&'r mut self, child: &'r T, position: i32) -> () {
         unsafe {
             ffi::gtk_box_reorder_child(GTK_BOX(self.get_widget()), child.get_widget(), position as c_int);
         }
     }
 
-    fn query_child_packing<'r, T: Widget>(&self, child: &'r T) -> (bool, bool, u32, PackType) {
+    fn query_child_packing<'r, T: gtk::WidgetTrait>(&self, child: &'r T) -> (bool, bool, u32, PackType) {
         let mut c_expand = 0;
         let mut c_padding = 0;
         let mut c_fill = 0;
@@ -87,12 +86,12 @@ pub trait Box: Widget {
         (expand, fill, c_padding as u32, pack_type)
     }
 
-    fn set_child_packing<'r, T: Widget>(&mut self,
-                                        child: &'r T,
-                                        expand: bool,
-                                        fill: bool,
-                                        padding: u32,
-                                        pack_type: PackType) {
+    fn set_child_packing<'r, T: gtk::WidgetTrait>(&mut self,
+                                                  child: &'r T,
+                                                  expand: bool,
+                                                  fill: bool,
+                                                  padding: u32,
+                                                  pack_type: PackType) {
         let c_expand = if expand { ffi::GTRUE } else { ffi::GFALSE };
         let c_fill = if fill { ffi::GTRUE } else { ffi::GFALSE };
         unsafe {

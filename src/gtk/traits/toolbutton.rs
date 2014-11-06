@@ -13,13 +13,11 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::traits::{Widget, Container, Bin, ToolItem, Label};
-use gtk;
 use gtk::cast::GTK_TOOLBUTTON;
-use gtk::ffi;
+use gtk::{mod, ffi};
 use std::string;
 
-pub trait ToolButton: Widget + Container + Bin + ToolItem {
+pub trait ToolButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait + gtk::ToolItemTrait {
     fn set_label(&mut self, label: &str) -> () {
         unsafe {
             label.with_c_str(|c_str| {
