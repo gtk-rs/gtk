@@ -17,7 +17,7 @@ use gtk::ffi;
 use gtk::ffi::to_gboolean;
 use gtk::traits::Widget;
 use gtk::cast::GTK_WINDOW;
-use gtk::enums::WindowPosition;
+use gtk::WindowPosition;
 
 use std::string;
 

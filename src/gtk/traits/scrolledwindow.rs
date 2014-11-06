@@ -17,7 +17,7 @@ use gtk::traits::Widget;
 use gtk::cast::GTK_SCROLLED_WINDOW;
 use gtk::ffi;
 use gtk::ffi::FFIWidget;
-use gtk::enums::PolicyType;
+use gtk::PolicyType;
 
 pub trait ScrolledWindow: Widget {
     fn set_policy(&self, h_scrollbar_policy: PolicyType, v_scrollbar_policy: PolicyType) {

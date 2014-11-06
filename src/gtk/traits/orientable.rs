@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::enums::Orientation;
+use gtk::Orientation;
 use gtk::traits::Widget;
 use gtk::cast::GTK_ORIENTABLE;
 use gtk::ffi;

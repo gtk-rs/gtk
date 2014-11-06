@@ -29,11 +29,11 @@ impl ToolPalette {
         check_pointer!(tmp_pointer, ToolPalette)
     }
 
-    pub fn get_icon_size(&self) -> gtk::enums::IconSize {
+    pub fn get_icon_size(&self) -> gtk::IconSize {
         unsafe { ffi::gtk_tool_palette_get_icon_size(GTK_TOOL_PALETTE(self.get_widget())) }
     }
 
-    pub fn set_icon_size(&self, icon_size: gtk::enums::IconSize) {
+    pub fn set_icon_size(&self, icon_size: gtk::IconSize) {
         unsafe { ffi::gtk_tool_palette_set_icon_size(GTK_TOOL_PALETTE(self.get_widget()), icon_size) }
     }
 
@@ -41,11 +41,11 @@ impl ToolPalette {
         unsafe { ffi::gtk_tool_palette_unset_icon_size(GTK_TOOL_PALETTE(self.get_widget())) }
     }
 
-    pub fn get_style(&self) -> gtk::enums::ToolbarStyle {
+    pub fn get_style(&self) -> gtk::ToolbarStyle {
         unsafe { ffi::gtk_tool_palette_get_style(GTK_TOOL_PALETTE(self.get_widget())) }
     }
 
-    pub fn set_style(&self, style: gtk::enums::ToolbarStyle) {
+    pub fn set_style(&self, style: gtk::ToolbarStyle) {
         unsafe { ffi::gtk_tool_palette_set_style(GTK_TOOL_PALETTE(self.get_widget()), style) }
     }
 
@@ -56,7 +56,7 @@ impl ToolPalette {
     pub fn get_drop_item(&self, x: i32, y: i32) -> Option<ToolItem> {
         let tmp_pointer = unsafe { ffi::gtk_tool_palette_get_drop_item(GTK_TOOL_PALETTE(self.get_widget()),
             x as ::libc::c_int, y as ::libc::c_int) };
-        
+
         if tmp_pointer.is_null() {
             None
         } else {
@@ -64,7 +64,7 @@ impl ToolPalette {
         }
     }
 
-    pub fn set_drag_source(&self, targets: gtk::enums::ToolPaletteDragTargets) {
+    pub fn set_drag_source(&self, targets: gtk::ToolPaletteDragTargets) {
         unsafe { ffi::gtk_tool_palette_set_drag_source(GTK_TOOL_PALETTE(self.get_widget()), targets) }
     }
 

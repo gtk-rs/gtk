@@ -15,7 +15,7 @@
 
 //! A container for arranging buttons
 
-use gtk::enums::{Orientation, ButtonBoxStyle};
+use gtk::{Orientation, ButtonBoxStyle};
 use gtk::cast::GTK_BUTTONBOX;
 use gtk::ffi;
 use gtk::traits;

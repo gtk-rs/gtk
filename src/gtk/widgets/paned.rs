@@ -17,7 +17,7 @@
 
 use libc::c_int;
 
-use gtk::enums::Orientation;
+use gtk::Orientation;
 use gtk::cast::GTK_PANED;
 use gtk::ffi;
 use gtk::traits;

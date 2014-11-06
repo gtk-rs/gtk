@@ -17,7 +17,7 @@ use std::mem;
 use libc::c_float;
 
 use gtk::traits::{Widget, Container};
-use gtk::enums::{ReliefStyle, PositionType};
+use gtk::{ReliefStyle, PositionType};
 use gtk::cast::GTK_BUTTON;
 use gtk::ffi;
 use gtk;

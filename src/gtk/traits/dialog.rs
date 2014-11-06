@@ -17,7 +17,6 @@ use gtk::traits;
 use gtk::cast::GTK_DIALOG;
 use gtk::ffi;
 use gtk;
-use gtk::enums;
 
 pub trait Dialog: traits::Widget + traits::Container + traits::Bin + traits::Window {
     fn run(&self) -> i32 {
@@ -67,7 +66,7 @@ pub trait Dialog: traits::Widget + traits::Container + traits::Bin + traits::Win
         unsafe { ffi::gtk_dialog_set_response_sensitive(GTK_DIALOG(self.get_widget()), response_id, setting) }
     }
 
-    fn get_response_for_widget(&self, widget: &traits::Widget) -> Result<i32, enums::ResponseType> {
+    fn get_response_for_widget(&self, widget: &traits::Widget) -> Result<i32, gtk::ResponseType> {
         let tmp = unsafe { ffi::gtk_dialog_get_response_for_widget(GTK_DIALOG(self.get_widget()), widget.get_widget()) };
 
         if tmp < 0 {

@@ -16,7 +16,7 @@
 use libc::{c_int, c_uint};
 
 use gtk::traits::Widget;
-use gtk::{PackType, pack_type};
+use gtk::PackType;
 use gtk::cast::GTK_BOX;
 use gtk::ffi;
 
@@ -73,7 +73,7 @@ pub trait Box: Widget {
         let mut c_expand = 0;
         let mut c_padding = 0;
         let mut c_fill = 0;
-        let mut pack_type: PackType = pack_type::Start;
+        let mut pack_type: PackType = PackType::Start;
         unsafe {
             ffi::gtk_box_query_child_packing(GTK_BOX(self.get_widget()),
                                              child.get_widget(),

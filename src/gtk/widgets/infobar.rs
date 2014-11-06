@@ -17,7 +17,7 @@
 
 use libc::c_int;
 
-use gtk::enums::MessageType;
+use gtk::MessageType;
 use gtk::cast::GTK_INFOBAR;
 use gtk;
 use gtk::ffi;

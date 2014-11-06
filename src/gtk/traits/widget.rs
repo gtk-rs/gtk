@@ -15,7 +15,6 @@
 
 use libc::{c_int, c_char};
 use gtk::ffi;
-use gtk::enums;
 use gdk;
 use gtk;
 use glib;
@@ -160,19 +159,19 @@ pub trait Widget: ffi::FFIWidget {
         }
     }
 
-    fn set_direction(&self, dir: enums::TextDirection) {
+    fn set_direction(&self, dir: gtk::TextDirection) {
         unsafe { ffi::gtk_widget_set_direction(self.get_widget(), dir) }
     }
 
-    fn get_direction(&self) -> enums::TextDirection {
+    fn get_direction(&self) -> gtk::TextDirection {
         unsafe { ffi::gtk_widget_get_direction(self.get_widget()) }
     }
 
-    fn set_default_direction(dir: enums::TextDirection) {
+    fn set_default_direction(dir: gtk::TextDirection) {
         unsafe { ffi::gtk_widget_set_default_direction(dir) }
     }
 
-    fn get_default_direction() -> enums::TextDirection {
+    fn get_default_direction() -> gtk::TextDirection {
         unsafe { ffi::gtk_widget_get_default_direction() }
     }
 

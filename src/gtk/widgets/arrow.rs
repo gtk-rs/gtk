@@ -17,7 +17,7 @@
 
 
 
-use gtk::enums::{ShadowType, ArrowType};
+use gtk::{ShadowType, ArrowType};
 use gtk::cast::GTK_ARROW;
 use gtk::ffi;
 use gtk::traits;

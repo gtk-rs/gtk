@@ -13,11 +13,9 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::ffi;
+use gtk::{mod, ffi, traits};
 use gtk::ffi::FFIWidget;
-use gtk::traits;
 use gtk::cast::GTK_ABOUT_DIALOG;
-use gtk::enums;
 use std::string;
 
 struct_Widget!(AboutDialog)
@@ -137,11 +135,11 @@ impl AboutDialog {
         }) }
     }
 
-    pub fn get_license_type(&self) -> enums::License {
+    pub fn get_license_type(&self) -> gtk::License {
         unsafe { ffi::gtk_about_dialog_get_license_type(GTK_ABOUT_DIALOG(self.get_widget())) }
     }
 
-    pub fn set_license_type(&self, license_type: enums::License) -> () {
+    pub fn set_license_type(&self, license_type: gtk::License) -> () {
         unsafe { ffi::gtk_about_dialog_set_license_type(GTK_ABOUT_DIALOG(self.get_widget()), license_type) }
     }
 

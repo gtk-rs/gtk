@@ -17,7 +17,7 @@
 
 use libc::{c_double, c_int};
 
-use gtk::enums::{Orientation, PositionType};
+use gtk::{Orientation, PositionType};
 use gtk::cast::GTK_SCALE;
 use gtk;
 use gtk::ffi;

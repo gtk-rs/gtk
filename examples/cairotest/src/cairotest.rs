@@ -93,7 +93,7 @@ fn main() {
 }
 
 pub fn drawable(width: i32, height: i32, draw_fn: |cairo::Context|) {
-    let mut window = gtk::Window::new(gtk::window_type::TopLevel).unwrap();
+    let mut window = gtk::Window::new(gtk::WindowType::TopLevel).unwrap();
     let drawing_area = box DrawingArea::new().unwrap();
 
     Connect::connect(&*drawing_area, Draw::new(draw_fn));

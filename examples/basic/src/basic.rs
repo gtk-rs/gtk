@@ -13,10 +13,10 @@ use rgtk::gtk::signals::{DeleteEvent};
 fn main() {
     gtk::init();
 
-    let mut window = gtk::Window::new(gtk::window_type::TopLevel).unwrap();
+    let mut window = gtk::Window::new(gtk::WindowType::TopLevel).unwrap();
     window.set_title("First GTK+ Program");
     window.set_border_width(10);
-    window.set_window_position(gtk::window_position::Center);
+    window.set_window_position(gtk::WindowPosition::Center);
     window.set_default_size(350, 70);
 
    Connect::connect(&window, DeleteEvent::new(|_| {

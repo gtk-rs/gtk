@@ -16,7 +16,7 @@
 use libc::c_uint;
 
 use gtk::cast::GTK_CONTAINER;
-use gtk::enums::ResizeMode;
+use gtk::ResizeMode;
 use gtk::ffi;
 use gtk::traits;
 

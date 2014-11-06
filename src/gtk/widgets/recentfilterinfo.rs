@@ -103,7 +103,7 @@ impl RecentFilterInfo {
 impl Default for RecentFilterInfo {
     fn default() -> RecentFilterInfo {
         RecentFilterInfo {
-            contains: gtk::recent_filter_flags::URI,
+            contains: gtk::RecentFilterFlags::URI,
             uri: String::new(),
             display_name: String::new(),
             mime_type: String::new(),

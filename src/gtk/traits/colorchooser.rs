@@ -13,11 +13,9 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::ffi;
-use gtk::enums;
-use gtk::traits;
-use gdk;
+use gtk::{mod, ffi, traits};
 use gtk::cast::GTK_COLOR_CHOOSER;
+use gdk;
 
 pub trait ColorChooser: traits::Widget {
     fn get_rgba(&self) -> gdk::RGBA {
@@ -49,7 +47,7 @@ pub trait ColorChooser: traits::Widget {
         }) }
     }
 
-    fn add_palette(&self, orientation: enums::Orientation, colors_per_line: i32, colors: Vec<gdk::RGBA>) -> () {
+    fn add_palette(&self, orientation: gtk::Orientation, colors_per_line: i32, colors: Vec<gdk::RGBA>) -> () {
         unsafe { ffi::gtk_color_chooser_add_palette(GTK_COLOR_CHOOSER(self.get_widget()), orientation, colors_per_line, colors.len() as i32, colors.as_slice().as_ptr()) }
     }
 }

@@ -21,9 +21,9 @@ fn append_text_column(tree: &mut gtk::TreeView) {
 fn main() {
     gtk::init();
 
-    let mut window = gtk::Window::new(gtk::window_type::TopLevel).unwrap();
+    let mut window = gtk::Window::new(gtk::WindowType::TopLevel).unwrap();
     window.set_title("TreeView Sample");
-    window.set_window_position(gtk::window_position::Center);
+    window.set_window_position(gtk::WindowPosition::Center);
 
     Connect::connect(&window, DeleteEvent::new(|_| {
         gtk::main_quit();
@@ -59,7 +59,7 @@ fn main() {
     append_text_column(&mut right_tree);
     let value = gtk::GValue::new().unwrap();
 
-    value.init(gtk::g_type_enum::String);
+    value.init(gtk::GType::String);
     value.set(&hello);
 
     println!("gvalue.get example : {}", value.get::<String>());
@@ -76,7 +76,7 @@ fn main() {
 
     // display the panes
 
-    let mut split_pane = gtk::Box::new(gtk::orientation::Horizontal, 10).unwrap();
+    let mut split_pane = gtk::Box::new(gtk::Orientation::Horizontal, 10).unwrap();
     split_pane.set_size_request(-1, -1);
     split_pane.add(&left_tree);
     split_pane.add(&right_tree);
