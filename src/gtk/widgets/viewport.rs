@@ -15,7 +15,7 @@
 
 //! An adapter which makes widgets scrollable
 
-use gtk::enums::ShadowType;
+use gtk::ShadowType;
 use gtk::cast::GTK_VIEWPORT;
 use gtk::{mod, ffi, traits};
 

@@ -194,173 +194,88 @@ pub use self::widgets::{
     Popover
 };
 
-/// GTK Enum members, see submodule `enum` for more info
-pub use self::enums::{
-    window_type,
-    text_direction,
-    window_position,
-    button_box_style,
-    orientation,
-    direction_type,
-    corner_type,
-    resize_mode,
-    border_style,
-    sort_type,
-    state_flags,
-    drag_result,
-    accel_flags,
-    arrow_placement,
-    arrow_type,
-    attach_options,
-    delete_type,
-    expander_style,
-    im_preedit_style,
-    im_status_style,
-    justification,
-    movement_step,
-    pack_type,
-    path_priority_type,
-    path_type,
-    policy_type,
-    position_type,
-    relief_style,
-    scroll_step,
-    scroll_type,
-    selection_mode,
-    shadow_type,
-    state_type,
-    toolbar_style,
-    junction_sides,
-    region_flags,
-    icon_size,
-    entry_icon_position,
-    input_hints,
-    input_purpose,
-    image_type,
-    spin_type,
-    spin_button_update_policy,
-    level_bar_mode,
-    calendar_display_options,
-    message_type,
-    license,
-    response_type,
-    dialog_flags,
-    file_chooser_action,
-    buttons_type,
-    stack_transition_type,
-    revealer_transition_type,
-    scrollable_policy,
-    file_filter_flags,
-    app_info_create_flags,
-    size_request_mode,
-    align,
-    g_connect_flags,
-    builder_error,
-    page_orientation,
-    unit,
-    number_up_layout,
-    print_pages,
-    page_set,
-    recent_sort_type,
-    recent_filter_flags,
-    widget_help_type,
-    tree_view_grid_lines,
-    tree_view_column_sizing,
-    cell_renderer_state,
-    tree_model_flags,
-    icon_view_drop_position,
-    sensitivity_type,
-    g_type_enum,
-    text_search_flags,
-    places_open_flags,
-    tool_palette_drag_targets,
-    dest_defaults
-};
-
 /// GTK Enum types
-pub use self::enums::{
-    WindowType,
-    TextDirection,
-    WindowPosition,
-    ButtonBoxStyle,
-    Orientation,
-    DirectionType,
-    CornerType,
-    ResizeMode,
-    BorderStyle,
-    SortType,
-    StateFlags,
-    DragResult,
-    AccelFlags,
-    ArrowPlacement,
-    ArrowType,
-    AttachOptions,
-    DeleteType,
-    ExpanderStyle,
-    IMPreeditStyle,
-    IMStatusStyle,
-    Justification,
-    MovementStep,
-    PackType,
-    PathPriorityType,
-    PathType,
-    PolicyType,
-    PositionType,
-    ReliefStyle,
-    ScrollStep,
-    ScrollType,
-    SelectionMode,
-    ShadowType,
-    StateType,
-    ToolbarStyle,
-    JunctionSides,
-    RegionFlags,
-    IconSize,
-    EntryIconPosition,
-    InputHints,
-    InputPurpose,
-    ImageType,
-    SpinType,
-    SpinButtonUpdatePolicy,
-    LevelBarMode,
-    CalendarDisplayOptions,
-    MessageType,
-    License,
-    ResponseType,
-    DialogFlags,
-    FileChooserAction,
-    ButtonsType,
-    StackTransitionType,
-    RevealerTransitionType,
-    ScrollablePolicy,
-    FileFilterFlags,
-    AppInfoCreateFlags,
-    SizeRequestMode,
-    Align,
-    GConnectFlags,
-    BuilderError,
-    PageOrientation,
-    Unit,
-    NumberUpLayout,
-    PrintPages,
-    PageSet,
-    RecentSortType,
-    RecentFilterFlags,
-    WidgetHelpType,
-    TextWindowType,
-    WrapMode,
-    TreeViewGridLines,
-    TreeViewColumnSizing,
-    CellRendererState,
-    TreeModelFlags,
-    IconViewDropPosition,
-    SensitivityType,
-    GType,
-    TextSearchFlags,
-    PlacesOpenFlags,
-    ToolPaletteDragTargets,
-    DestDefaults
-};
+pub use self::enums::window_type::WindowType;
+pub use self::enums::text_direction::TextDirection;
+pub use self::enums::window_position::WindowPosition;
+pub use self::enums::button_box_style::ButtonBoxStyle;
+pub use self::enums::orientation::Orientation;
+pub use self::enums::direction_type::DirectionType;
+pub use self::enums::corner_type::CornerType;
+pub use self::enums::resize_mode::ResizeMode;
+pub use self::enums::border_style::BorderStyle;
+pub use self::enums::sort_type::SortType;
+pub use self::enums::state_flags::StateFlags;
+pub use self::enums::drag_result::DragResult;
+pub use self::enums::accel_flags::AccelFlags;
+pub use self::enums::arrow_placement::ArrowPlacement;
+pub use self::enums::arrow_type::ArrowType;
+pub use self::enums::attach_options::AttachOptions;
+pub use self::enums::delete_type::DeleteType;
+pub use self::enums::expander_style::ExpanderStyle;
+pub use self::enums::im_preedit_style::IMPreeditStyle;
+pub use self::enums::im_status_style::IMStatusStyle;
+pub use self::enums::justification::Justification;
+pub use self::enums::movement_step::MovementStep;
+pub use self::enums::pack_type::PackType;
+pub use self::enums::path_priority_type::PathPriorityType;
+pub use self::enums::path_type::PathType;
+pub use self::enums::policy_type::PolicyType;
+pub use self::enums::position_type::PositionType;
+pub use self::enums::relief_style::ReliefStyle;
+pub use self::enums::scroll_step::ScrollStep;
+pub use self::enums::scroll_type::ScrollType;
+pub use self::enums::selection_mode::SelectionMode;
+pub use self::enums::shadow_type::ShadowType;
+pub use self::enums::state_type::StateType;
+pub use self::enums::toolbar_style::ToolbarStyle;
+pub use self::enums::junction_sides::JunctionSides;
+pub use self::enums::region_flags::RegionFlags;
+pub use self::enums::icon_size::IconSize;
+pub use self::enums::entry_icon_position::EntryIconPosition;
+pub use self::enums::input_hints::InputHints;
+pub use self::enums::input_purpose::InputPurpose;
+pub use self::enums::image_type::ImageType;
+pub use self::enums::spin_type::SpinType;
+pub use self::enums::spin_button_update_policy::SpinButtonUpdatePolicy;
+pub use self::enums::level_bar_mode::LevelBarMode;
+pub use self::enums::calendar_display_options::CalendarDisplayOptions;
+pub use self::enums::message_type::MessageType;
+pub use self::enums::license::License;
+pub use self::enums::response_type::ResponseType;
+pub use self::enums::dialog_flags::DialogFlags;
+pub use self::enums::file_chooser_action::FileChooserAction;
+pub use self::enums::buttons_type::ButtonsType;
+pub use self::enums::stack_transition_type::StackTransitionType;
+pub use self::enums::revealer_transition_type::RevealerTransitionType;
+pub use self::enums::scrollable_policy::ScrollablePolicy;
+pub use self::enums::file_filter_flags::FileFilterFlags;
+pub use self::enums::app_info_create_flags::AppInfoCreateFlags;
+pub use self::enums::size_request_mode::SizeRequestMode;
+pub use self::enums::align::Align;
+pub use self::enums::g_connect_flags::GConnectFlags;
+pub use self::enums::builder_error::BuilderError;
+pub use self::enums::page_orientation::PageOrientation;
+pub use self::enums::unit::Unit;
+pub use self::enums::number_up_layout::NumberUpLayout;
+pub use self::enums::print_pages::PrintPages;
+pub use self::enums::page_set::PageSet;
+pub use self::enums::recent_sort_type::RecentSortType;
+pub use self::enums::recent_filter_flags::RecentFilterFlags;
+pub use self::enums::widget_help_type::WidgetHelpType;
+pub use self::enums::text_window_type::TextWindowType;
+pub use self::enums::wrap_mode::WrapMode;
+pub use self::enums::tree_view_grid_lines::TreeViewGridLines;
+pub use self::enums::tree_view_column_sizing::TreeViewColumnSizing;
+pub use self::enums::cell_renderer_state::CellRendererState;
+pub use self::enums::tree_model_flags::TreeModelFlags;
+pub use self::enums::icon_view_drop_position::IconViewDropPosition;
+pub use self::enums::sensitivity_type::SensitivityType;
+pub use self::enums::g_type_enum::GType;
+pub use self::enums::text_search_flags::TextSearchFlags;
+pub use self::enums::places_open_flags::PlacesOpenFlags;
+pub use self::enums::tool_palette_drag_targets::ToolPaletteDragTargets;
+pub use self::enums::dest_defaults::DestDefaults;
 
 /// GTK various struct
 pub use self::types::{
@@ -371,10 +286,10 @@ mod macros;
 mod cast;
 mod rt;
 
+mod enums;
 pub mod traits;
 pub mod signals;
 pub mod widgets;
-pub mod enums;
 pub mod types;
 
 #[doc(hidden)]

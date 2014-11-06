@@ -16,7 +16,7 @@
 use libc::{c_int, c_float, c_double};
 
 use gtk::traits::Widget;
-use gtk::enums::{EntryIconPosition, ImageType, InputPurpose, InputHints};
+use gtk::{EntryIconPosition, ImageType, InputPurpose, InputHints};
 use gtk::cast::GTK_ENTRY;
 use gtk;
 use gtk::ffi;

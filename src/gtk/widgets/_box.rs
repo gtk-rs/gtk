@@ -19,7 +19,7 @@
 use libc::c_int;
 use std::prelude::{Option, Some, None, RawPtr};
 
-use gtk::enums::Orientation;
+use gtk::Orientation;
 use gtk::ffi;
 use gtk::traits;
 use std::clone::Clone;

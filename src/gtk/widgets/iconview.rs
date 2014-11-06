@@ -13,12 +13,9 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::ffi;
-use gtk::traits;
 use gtk::traits::CellRenderer;
 use gtk::cast::{GTK_ICON_VIEW, GTK_CELL_RENDERER};
-use gtk::{TreeModel, TreePath};
-use gtk::enums;
+use gtk::{mod, ffi, traits, TreeModel, TreePath};
 
 /// GtkIconView — A widget which displays a list of icons in a grid
 
@@ -116,19 +113,19 @@ impl IconView {
         }
     }
 
-    pub fn set_selection_mode(&self, mode: enums::SelectionMode) {
+    pub fn set_selection_mode(&self, mode: gtk::SelectionMode) {
         unsafe { ffi::gtk_icon_view_set_selection_mode(GTK_ICON_VIEW(self.pointer), mode) }
     }
 
-    pub fn get_selection_mode(&self) -> enums::SelectionMode {
+    pub fn get_selection_mode(&self) -> gtk::SelectionMode {
         unsafe { ffi::gtk_icon_view_get_selection_mode(GTK_ICON_VIEW(self.pointer)) }
     }
 
-    pub fn set_item_orientation(&self, orientation: enums::Orientation) {
+    pub fn set_item_orientation(&self, orientation: gtk::Orientation) {
         unsafe { ffi::gtk_icon_view_set_item_orientation(GTK_ICON_VIEW(self.pointer), orientation) }
     }
 
-    pub fn get_item_orientation(&self) -> enums::Orientation {
+    pub fn get_item_orientation(&self) -> gtk::Orientation {
         unsafe { ffi::gtk_icon_view_get_item_orientation(GTK_ICON_VIEW(self.pointer)) }
     }
 
@@ -286,15 +283,15 @@ impl IconView {
         }
     }
 
-    pub fn set_drag_dest_item(&self, path: &TreePath, pos: enums::IconViewDropPosition) {
+    pub fn set_drag_dest_item(&self, path: &TreePath, pos: gtk::IconViewDropPosition) {
         unsafe { ffi::gtk_icon_view_set_drag_dest_item(GTK_ICON_VIEW(self.pointer), path.get_pointer(), pos) }
     }
 
-    pub fn get_drag_dest_item(&self, path: &TreePath, pos: &mut enums::IconViewDropPosition) {
+    pub fn get_drag_dest_item(&self, path: &TreePath, pos: &mut gtk::IconViewDropPosition) {
         unsafe { ffi::gtk_icon_view_get_drag_dest_item(GTK_ICON_VIEW(self.pointer), &mut path.get_pointer(), pos) }
     }
 
-    pub fn get_dest_item_at_pos(&self, drag_x: i32, drag_y: i32, path: &TreePath, pos: &mut enums::IconViewDropPosition) {
+    pub fn get_dest_item_at_pos(&self, drag_x: i32, drag_y: i32, path: &TreePath, pos: &mut gtk::IconViewDropPosition) {
         unsafe { ffi::gtk_icon_view_get_dest_item_at_pos(GTK_ICON_VIEW(self.pointer), drag_x, drag_y, &mut path.get_pointer(), pos) }
     }
 }

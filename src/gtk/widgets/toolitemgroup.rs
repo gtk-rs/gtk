@@ -93,7 +93,7 @@ impl ToolItemGroup {
 
     pub fn get_nth_item(&self, index: u32) -> Option<ToolItem> {
         let tmp_pointer = unsafe { ffi::gtk_tool_item_group_get_nth_item(GTK_TOOL_ITEM_GROUP(self.get_widget()), index) } as *mut ffi::C_GtkWidget;
-        
+
         if tmp_pointer.is_null() {
             None
         } else {
@@ -105,7 +105,7 @@ impl ToolItemGroup {
         unsafe { ffi::gtk_tool_item_group_get_header_relief(GTK_TOOL_ITEM_GROUP(self.get_widget())) }
     }
 
-    pub fn set_header_relief(&self, style: gtk::enums::ReliefStyle) {
+    pub fn set_header_relief(&self, style: gtk::ReliefStyle) {
         unsafe { ffi::gtk_tool_item_group_set_header_relief(GTK_TOOL_ITEM_GROUP(self.get_widget()), style) }
     }
 

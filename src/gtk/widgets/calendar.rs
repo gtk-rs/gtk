@@ -17,7 +17,7 @@
 
 use libc::{c_uint, c_int};
 
-use gtk::enums::CalendarDisplayOptions;
+use gtk::CalendarDisplayOptions;
 use gtk::cast::GTK_CALENDAR;
 use gtk::ffi;
 

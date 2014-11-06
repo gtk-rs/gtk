@@ -13,13 +13,13 @@ use rgtk::gtk::signals::{ValueChanged, DeleteEvent};
 fn main() {
     gtk::init();
 
-    let mut window = gtk::Window::new(gtk::window_type::TopLevel).unwrap();
+    let mut window = gtk::Window::new(gtk::WindowType::TopLevel).unwrap();
     window.set_title("Enter your age");
-    window.set_window_position(gtk::window_position::Center);
+    window.set_window_position(gtk::WindowPosition::Center);
     window.set_default_size(300, 20);
 
     let mut spin_button = gtk::SpinButton::new_with_range(0.0, 130.0, 1.0).unwrap();
-    let slider = gtk::Scale::new_with_range(gtk::orientation::Horizontal, 0.0, 130.0, 1.0).unwrap();
+    let slider = gtk::Scale::new_with_range(gtk::Orientation::Horizontal, 0.0, 130.0, 1.0).unwrap();
 
     Connect::connect(&spin_button, ValueChanged::new(|| {
         let mut adjustment = slider.get_adjustment();
@@ -31,7 +31,7 @@ fn main() {
         spin_button.set_value(adjustment.get_value());
     }));
 
-    let mut hbox = gtk::Box::new(gtk::orientation::Horizontal, 5).unwrap();
+    let mut hbox = gtk::Box::new(gtk::Orientation::Horizontal, 5).unwrap();
     hbox.set_homogeneouse(true);
     hbox.add(&spin_button);
     hbox.add(&slider);

@@ -19,7 +19,7 @@
 
 use libc::{c_int, c_uint};
 
-use gtk::enums::{PositionType};
+use gtk::{PositionType};
 use gtk::cast::GTK_GRID;
 use gtk::ffi;
 use gtk::traits;

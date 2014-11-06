@@ -16,7 +16,7 @@
 use gtk::ffi;
 use gtk::traits::Widget;
 use gtk::cast::GTK_TOOLSHELL;
-use gtk::enums::{IconSize, Orientation, ReliefStyle, ToolbarStyle};
+use gtk::{IconSize, Orientation, ReliefStyle, ToolbarStyle};
 
 pub trait ToolShell: Widget {
     fn get_icon_size(&self) -> IconSize {

@@ -17,7 +17,7 @@ use std::ptr;
 use libc::c_float;
 
 use gtk::traits::{Widget, Container};
-use gtk::enums::ShadowType;
+use gtk::ShadowType;
 use gtk::cast::GTK_FRAME;
 use gtk::ffi;
 use std::string;

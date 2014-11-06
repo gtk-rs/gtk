@@ -32,7 +32,7 @@ impl FileChooserDialog {
                         ffi::gtk_file_chooser_dialog_new(c_str, match parent {
                             Some(ref p) => GTK_WINDOW(p.get_widget()),
                             None => GTK_WINDOW(::std::ptr::null_mut())
-                        }, action, c_cancel, gtk::response_type::Cancel, c_ok, gtk::response_type::Accept, ::std::ptr::null_mut())
+                        }, action, c_cancel, gtk::ResponseType::Cancel, c_ok, gtk::ResponseType::Accept, ::std::ptr::null_mut())
                     })
                 })
             })

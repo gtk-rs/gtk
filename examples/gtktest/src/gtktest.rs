@@ -9,11 +9,11 @@ use rgtk::gtk::signals::{Clicked, KeyPressEvent, DeleteEvent};
 fn main() {
     gtk::init();
     println!("Major: {}, Minor: {}", gtk::get_major_version(), gtk::get_minor_version());
-    let mut window = gtk::Window::new(gtk::window_type::TopLevel).unwrap();
+    let mut window = gtk::Window::new(gtk::WindowType::TopLevel).unwrap();
     let mut frame = gtk::Frame::new(Some("Yep a frame")).unwrap();
-    let mut _box = gtk::Box::new(gtk::orientation::Horizontal, 10).unwrap();
-    let mut v_box = gtk::Box::new(gtk::orientation::Horizontal, 10).unwrap();
-    let mut button_box = gtk::ButtonBox::new(gtk::orientation::Horizontal).unwrap();
+    let mut _box = gtk::Box::new(gtk::Orientation::Horizontal, 10).unwrap();
+    let mut v_box = gtk::Box::new(gtk::Orientation::Horizontal, 10).unwrap();
+    let mut button_box = gtk::ButtonBox::new(gtk::Orientation::Horizontal).unwrap();
     let mut label = gtk::Label::new("Yeah a wonderful label too !").unwrap();
     let button = gtk::Button::new_with_label("Whattttt a button !").unwrap();
     let button_recent = gtk::Button::new_with_label("Choose a recent one !").unwrap();
@@ -29,20 +29,20 @@ fn main() {
     let mut volume_button = gtk::VolumeButton::new().unwrap();
     let mut entry = gtk::Entry::new().unwrap();
     let search_entry = gtk::SearchEntry::new().unwrap();
-    let separator = gtk::Separator::new(gtk::orientation::Horizontal).unwrap();
-    let separator2 = gtk::Separator::new(gtk::orientation::Horizontal).unwrap();
+    let separator = gtk::Separator::new(gtk::Orientation::Horizontal).unwrap();
+    let separator2 = gtk::Separator::new(gtk::Orientation::Horizontal).unwrap();
     let switch = gtk::Switch::new().unwrap();
     let mut switch2 = gtk::Switch::new().unwrap();
-    let scale = gtk::Scale::new_with_range(gtk::orientation::Horizontal, 0., 100., 1.).unwrap();
+    let scale = gtk::Scale::new_with_range(gtk::Orientation::Horizontal, 0., 100., 1.).unwrap();
     let mut level_bar = gtk::LevelBar::new_for_interval(0., 100.).unwrap();
     let spin_button = gtk::SpinButton::new_with_range(0., 100., 1.).unwrap();
     let mut spinner = gtk::Spinner::new().unwrap();
     let image = gtk::Image::new_from_file("./test/resources/gtk.jpg").unwrap();
     let mut progress_bar = gtk::ProgressBar::new().unwrap();
-    let arrow = gtk::Arrow::new(gtk::arrow_type::Right, gtk::shadow_type::EtchedOut).unwrap();
+    let arrow = gtk::Arrow::new(gtk::ArrowType::Right, gtk::ShadowType::EtchedOut).unwrap();
     let calendar = gtk::Calendar::new().unwrap();
     let mut info_bar = gtk::InfoBar::new().unwrap();
-    let tmp_button = gtk::Button::new_from_icon_name("edit-clear", gtk::icon_size::Button).unwrap();
+    let tmp_button = gtk::Button::new_from_icon_name("edit-clear", gtk::IconSize::Button).unwrap();
 
     println!("test");
 
@@ -59,16 +59,16 @@ fn main() {
     frame.set_border_width(10);
     _box.set_border_width(5);
     entry.set_placeholder("An Entry with a placeholder !");
-    volume_button.set_orientation(gtk::orientation::Horizontal);
-    label.set_justify(gtk::justification::Left);
+    volume_button.set_orientation(gtk::Orientation::Horizontal);
+    label.set_justify(gtk::Justification::Left);
     window.set_title("Yeah a beautiful window with rgtk !");
-    window.set_window_position(gtk::window_position::Center);
+    window.set_window_position(gtk::WindowPosition::Center);
     window.add(&frame);
 
     Connect::connect(&button, Clicked::new(||{
         //entry.set_text("Clicked!".to_string());
-        let dialog = gtk::MessageDialog::new_with_markup(None, gtk::dialog_flags::Modal, gtk::message_type::Info,
-            gtk::buttons_type::OkCancel, "This is a trap !").unwrap();
+        let dialog = gtk::MessageDialog::new_with_markup(None, gtk::DialogFlags::Modal, gtk::MessageType::Info,
+            gtk::ButtonsType::OkCancel, "This is a trap !").unwrap();
 
         dialog.run();
     }));
@@ -84,13 +84,13 @@ fn main() {
     }));
     Connect::connect(&file_button, Clicked::new(||{
         //entry.set_text("Clicked!".to_string());
-        let dialog2 = gtk::FileChooserDialog::new("Choose a file", None, gtk::file_chooser_action::Open).unwrap();
+        let dialog2 = gtk::FileChooserDialog::new("Choose a file", None, gtk::FileChooserAction::Open).unwrap();
 
         dialog2.run();
     }));
     Connect::connect(&app_button, Clicked::new(||{
         //entry.set_text("Clicked!".to_string());
-        let dialog = gtk::AppChooserDialog::new_for_content_type(None, gtk::dialog_flags::Modal, "sh").unwrap();
+        let dialog = gtk::AppChooserDialog::new_for_content_type(None, gtk::DialogFlags::Modal, "sh").unwrap();
 
         dialog.run();
     }));
@@ -138,7 +138,7 @@ fn main() {
     _box.add(&image);
     _box.add(&arrow);
     _box.add(&calendar);
-    _box.set_orientation(gtk::orientation::Vertical);
+    _box.set_orientation(gtk::Orientation::Vertical);
     // window.set_decorated(false);
     window.set_decorated(true);
     window.show_all();

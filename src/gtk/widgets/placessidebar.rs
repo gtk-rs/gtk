@@ -29,11 +29,11 @@ impl PlacesSidebar {
         check_pointer!(tmp_pointer, PlacesSidebar)
     }
 
-    pub fn set_open_flags(&self, flags: gtk::enums::PlacesOpenFlags) {
+    pub fn set_open_flags(&self, flags: gtk::PlacesOpenFlags) {
         unsafe { ffi::gtk_places_sidebar_set_open_flags(GTK_PLACES_SIDEBAR(self.get_widget()), flags) }
     }
 
-    pub fn get_open_flags(&self) -> gtk::enums::PlacesOpenFlags {
+    pub fn get_open_flags(&self) -> gtk::PlacesOpenFlags {
         unsafe { ffi::gtk_places_sidebar_get_open_flags(GTK_PLACES_SIDEBAR(self.get_widget())) }
     }
 
