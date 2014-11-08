@@ -13,11 +13,9 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::ffi;
+use gtk::{mod, ffi};
 use gtk::ffi::FFIWidget;
-use gtk::traits;
 use gtk::cast::{GTK_WINDOW};
-use gtk;
 
 struct_Widget!(FontChooserDialog)
 
@@ -42,10 +40,10 @@ impl FontChooserDialog {
 impl_drop!(FontChooserDialog)
 impl_TraitWidget!(FontChooserDialog)
 
-impl traits::Container for FontChooserDialog {}
-impl traits::Bin for FontChooserDialog {}
-impl traits::Window for FontChooserDialog {}
-impl traits::Dialog for FontChooserDialog {}
-impl traits::FontChooser for FontChooserDialog {}
+impl gtk::ContainerTrait for FontChooserDialog {}
+impl gtk::BinTrait for FontChooserDialog {}
+impl gtk::WindowTrait for FontChooserDialog {}
+impl gtk::DialogTrait for FontChooserDialog {}
+impl gtk::FontChooserTrait for FontChooserDialog {}
 
 impl_widget_events!(FontChooserDialog)

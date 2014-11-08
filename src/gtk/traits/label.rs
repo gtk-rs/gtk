@@ -15,13 +15,12 @@
 
 use libc::{c_int, c_double};
 
-use gtk::ffi;
-use gtk::traits::Widget;
+use gtk::{mod, ffi};
 use gtk::Justification;
 use gtk::cast::GTK_LABEL;
 use std::string;
 
-pub trait Label : Widget {
+pub trait LabelTrait: gtk::WidgetTrait {
     fn set_label(&mut self, text: &str) -> () {
         unsafe {
             text.with_c_str(|c_str| {

@@ -18,6 +18,7 @@
 use libc::{c_int, c_uint};
 use gtk::ffi;
 use std::string;
+
 // TODO:
 // Implements custom signal : inserted-text + deleted-text
 

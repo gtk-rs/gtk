@@ -15,10 +15,8 @@
 
 //! A container box
 
-use gtk;
+use gtk::{mod, ffi};
 use gtk::cast::{GTK_SEARCHBAR, GTK_ENTRY};
-use gtk::ffi;
-use gtk::traits;
 use gtk::ffi::FFIWidget;
 
 /// Box — A container box
@@ -68,7 +66,7 @@ impl SearchBar {
 impl_drop!(SearchBar)
 impl_TraitWidget!(SearchBar)
 
-impl traits::Container for SearchBar {}
-impl traits::Bin for SearchBar {}
+impl gtk::ContainerTrait for SearchBar {}
+impl gtk::BinTrait for SearchBar {}
 
 impl_widget_events!(SearchBar)

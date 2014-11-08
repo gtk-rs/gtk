@@ -15,7 +15,7 @@
 
 //! A Scrollbar
 
-use gtk::{mod, traits, ffi};
+use gtk::{mod, ffi};
 
 /// GtkScrollBar — A Scrollbar
 struct_Widget!(ScrollBar)
@@ -30,8 +30,8 @@ impl ScrollBar {
 impl_drop!(ScrollBar)
 impl_TraitWidget!(ScrollBar)
 
-impl traits::Range for ScrollBar {}
-impl traits::Orientable for ScrollBar {}
+impl gtk::RangeTrait for ScrollBar {}
+impl gtk::OrientableTrait for ScrollBar {}
 
 impl_widget_events!(ScrollBar)
 impl_range_events!(ScrollBar)

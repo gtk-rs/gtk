@@ -15,11 +15,9 @@
 
 //! A controller for GtkStack
 
-use gtk;
+use gtk::{mod, ffi};
 use gtk::cast::{GTK_STACK_SWITCHER, GTK_STACK};
-use gtk::ffi;
 use gtk::ffi::FFIWidget;
-use gtk::traits;
 
 /// GtkStackSwitcher — A controller for GtkStack
 struct_Widget!(StackSwitcher)
@@ -50,7 +48,7 @@ impl StackSwitcher {
 impl_drop!(StackSwitcher)
 impl_TraitWidget!(StackSwitcher)
 
-impl traits::Container for StackSwitcher {}
-impl traits::Box for StackSwitcher {}
+impl gtk::ContainerTrait for StackSwitcher {}
+impl gtk::BoxTrait for StackSwitcher {}
 
 impl_widget_events!(StackSwitcher)

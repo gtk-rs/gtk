@@ -17,11 +17,9 @@
 
 use libc::{c_double, c_uint};
 
+use gtk::{mod, ffi};
 use gtk::{SpinType, SpinButtonUpdatePolicy};
-use gtk;
 use gtk::cast::{GTK_SPINBUTTON};
-use gtk::ffi;
-use gtk::traits;
 
 /**
 * SpinButton — Retrieve an integer or floating-point number from the user
@@ -200,9 +198,9 @@ impl SpinButton {
 impl_drop!(SpinButton)
 impl_TraitWidget!(SpinButton)
 
-impl traits::Entry for SpinButton {}
-impl traits::Editable for SpinButton {}
-impl traits::Orientable for SpinButton {}
+impl gtk::EntryTrait for SpinButton {}
+impl gtk::EditableTrait for SpinButton {}
+impl gtk::OrientableTrait for SpinButton {}
 
 impl_widget_events!(SpinButton)
 impl_connect!(SpinButton -> ChangedValue, ValueChanged, Wrapped) // Input, Output

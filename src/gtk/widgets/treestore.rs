@@ -13,10 +13,9 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
+use gtk::{mod, ffi};
 use glib::ffi::GType;
-use gtk;
 use gtk::TreeIter;
-use gtk::ffi;
 
 pub struct TreeStore {
     pointer: *mut ffi::C_GtkTreeStore

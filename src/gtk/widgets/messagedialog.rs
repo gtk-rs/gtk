@@ -13,11 +13,9 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::ffi;
+use gtk::{mod, ffi};
 use gtk::ffi::FFIWidget;
-use gtk::traits;
 use gtk::cast::{GTK_MESSAGE_DIALOG, GTK_WINDOW};
-use gtk;
 
 struct_Widget!(MessageDialog)
 
@@ -55,7 +53,7 @@ impl MessageDialog {
         }
     }
 
-    pub fn get_message_area<T: traits::Widget>(&self) -> Option<T> {
+    pub fn get_message_area<T: gtk::WidgetTrait>(&self) -> Option<T> {
         let tmp_pointer = unsafe { ffi::gtk_message_dialog_get_message_area(GTK_MESSAGE_DIALOG(self.get_widget())) };
 
         if tmp_pointer.is_null() {
@@ -69,9 +67,9 @@ impl MessageDialog {
 impl_drop!(MessageDialog)
 impl_TraitWidget!(MessageDialog)
 
-impl traits::Container for MessageDialog {}
-impl traits::Bin for MessageDialog {}
-impl traits::Window for MessageDialog {}
-impl traits::Dialog for MessageDialog {}
+impl gtk::ContainerTrait for MessageDialog {}
+impl gtk::BinTrait for MessageDialog {}
+impl gtk::WindowTrait for MessageDialog {}
+impl gtk::DialogTrait for MessageDialog {}
 
 impl_widget_events!(MessageDialog)

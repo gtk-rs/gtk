@@ -16,14 +16,12 @@
 use std::mem;
 use libc::c_float;
 
-use gtk::traits::{Widget, Container};
 use gtk::{ReliefStyle, PositionType};
 use gtk::cast::GTK_BUTTON;
-use gtk::ffi;
-use gtk;
+use gtk::{mod, ffi};
 use std::string;
 
-pub trait Button: Widget + Container {
+pub trait ButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait {
     fn pressed(&self) -> () {
         unsafe {
             ffi::gtk_button_pressed(GTK_BUTTON(self.get_widget()));
@@ -140,7 +138,7 @@ pub trait Button: Widget + Container {
         (x_align as f32, y_align as f32)
     }
 
-    fn set_image<T: Widget>(&mut self, image: &T) -> () {
+    fn set_image<T: gtk::WidgetTrait>(&mut self, image: &T) -> () {
         unsafe {
             ffi::gtk_button_set_image(GTK_BUTTON(self.get_widget()), image.get_widget());
         }

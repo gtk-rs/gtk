@@ -20,10 +20,10 @@ use libc::c_int;
 use std::prelude::{Option, Some, None, RawPtr};
 
 use gtk::Orientation;
-use gtk::ffi;
-use gtk::traits;
+use gtk::{mod, ffi};
 use std::clone::Clone;
 use std::ops::Drop;
+
 /// Box — A container box
 struct_Widget!(Box)
 
@@ -37,8 +37,8 @@ impl Box {
 impl_drop!(Box)
 impl_TraitWidget!(Box)
 
-impl traits::Container for Box {}
-impl traits::Box for Box {}
-impl traits::Orientable for Box {}
+impl gtk::ContainerTrait for Box {}
+impl gtk::BoxTrait for Box {}
+impl gtk::OrientableTrait for Box {}
 
 impl_widget_events!(Box)

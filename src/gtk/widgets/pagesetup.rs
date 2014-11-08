@@ -13,10 +13,9 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::ffi;
+use gtk::{mod, ffi};
 use gtk::ffi::FFIWidget;
 use gtk::cast::GTK_PAPER_SIZE;
-use gtk;
 
 pub struct PageSetup {
     pointer: *mut ffi::C_GtkPageSetup

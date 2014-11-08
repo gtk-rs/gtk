@@ -15,14 +15,12 @@
 
 use libc::{c_int, c_float, c_double};
 
-use gtk::traits::Widget;
 use gtk::{EntryIconPosition, ImageType, InputPurpose, InputHints};
 use gtk::cast::GTK_ENTRY;
-use gtk;
-use gtk::ffi;
+use gtk::{mod, ffi};
 use std::string;
 
-pub trait Entry: Widget {
+pub trait EntryTrait: gtk::WidgetTrait {
     fn get_buffer(&self) -> gtk::EntryBuffer {
         let tmp_pointer = unsafe { ffi::gtk_entry_get_buffer(GTK_ENTRY(self.get_widget())) };
         gtk::EntryBuffer::wrap_pointer(tmp_pointer)

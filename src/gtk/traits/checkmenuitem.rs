@@ -15,14 +15,14 @@
 
 //! The widget used for item in menus
 
-use gtk::{ffi, traits};
+use gtk::{mod, ffi};
 use gtk::cast::GTK_CHECK_MENU_ITEM;
 
 /// The widget used for item in menus
-pub trait CheckMenuItem: traits::Widget +
-                         traits::Container +
-                         traits::Bin +
-                         traits::MenuItem {
+pub trait CheckMenuItemTrait: gtk::WidgetTrait +
+                              gtk::ContainerTrait +
+                              gtk::BinTrait +
+                              gtk::MenuItemTrait {
 
     fn set_active(&mut self, is_active: bool) {
         unsafe {

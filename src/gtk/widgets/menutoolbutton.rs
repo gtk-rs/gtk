@@ -18,15 +18,14 @@
 use std::ptr;
 
 use gtk::cast::GTK_MENUTOOLBUTTON;
-use gtk::ffi;
-use gtk::traits;
+use gtk::{mod, ffi};
 
 /// MenuToolButton — A ToolItem containing a button with an additional dropdown menu
 struct_Widget!(MenuToolButton)
 
 
 impl MenuToolButton {
-    pub fn new<T: traits::Widget>(icon_widget: Option<&T>, label: Option<&str>) -> Option<MenuToolButton> {
+    pub fn new<T: gtk::WidgetTrait>(icon_widget: Option<&T>, label: Option<&str>) -> Option<MenuToolButton> {
         let tmp_pointer = unsafe {
             match label {
                 Some(l) => {
@@ -75,10 +74,10 @@ impl MenuToolButton {
 impl_drop!(MenuToolButton)
 impl_TraitWidget!(MenuToolButton)
 
-impl traits::Container for MenuToolButton {}
-impl traits::Bin for MenuToolButton {}
-impl traits::ToolItem for MenuToolButton {}
-impl traits::ToolButton for MenuToolButton {}
+impl gtk::ContainerTrait for MenuToolButton {}
+impl gtk::BinTrait for MenuToolButton {}
+impl gtk::ToolItemTrait for MenuToolButton {}
+impl gtk::ToolButtonTrait for MenuToolButton {}
 
 impl_widget_events!(MenuToolButton)
 

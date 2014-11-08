@@ -13,8 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::ffi;
-use gtk::traits;
+use gtk::{mod, ffi};
 
 struct_Widget!(Dialog)
 
@@ -46,9 +45,9 @@ impl Dialog {
 impl_drop!(Dialog)
 impl_TraitWidget!(Dialog)
 
-impl traits::Container for Dialog {}
-impl traits::Bin for Dialog {}
-impl traits::Window for Dialog {}
-impl traits::Dialog for Dialog {}
+impl gtk::ContainerTrait for Dialog {}
+impl gtk::BinTrait for Dialog {}
+impl gtk::WindowTrait for Dialog {}
+impl gtk::DialogTrait for Dialog {}
 
 impl_widget_events!(Dialog)

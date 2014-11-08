@@ -16,7 +16,7 @@
 //! A widget that emits a signal when clicked on
 
 use glib;
-use gtk::{mod, ffi, traits, cast};
+use gtk::{mod, ffi, cast};
 
 pub struct TreeViewColumn {
     pointer: *mut ffi::C_GtkTreeViewColumn
@@ -174,13 +174,13 @@ impl TreeViewColumn {
         }
     }
 
-    pub fn set_widget(&mut self, widget: &traits::Widget) {
+    pub fn set_widget(&mut self, widget: &gtk::WidgetTrait) {
         unsafe {
             ffi::gtk_tree_view_column_set_widget(self.pointer, widget.get_widget())
         }
     }
 
-    pub fn get_widget<T: traits::Widget>(&self) -> T {
+    pub fn get_widget<T: gtk::WidgetTrait>(&self) -> T {
         unsafe {
             ffi::FFIWidget::wrap(ffi::gtk_tree_view_column_get_widget(self.pointer))
         }
@@ -264,13 +264,13 @@ impl TreeViewColumn {
         }
     }
 
-    pub fn get_button<T: traits::Widget + traits::Button>(&self) -> T {
+    pub fn get_button<T: gtk::WidgetTrait + gtk::ButtonTrait>(&self) -> T {
         unsafe {
             ffi::FFIWidget::wrap(ffi::gtk_tree_view_column_get_button(self.pointer))
         }
     }
 
-    pub fn add_attribute<T: ffi::FFIWidget + traits::CellRenderer>(&self, cell: &T, attribute: &str, column: i32) {
+    pub fn add_attribute<T: ffi::FFIWidget + gtk::CellRendererTrait>(&self, cell: &T, attribute: &str, column: i32) {
         let attribute_c = attribute.to_c_str();
         unsafe { ffi::gtk_tree_view_column_add_attribute(self.pointer,
                                                          cast::GTK_CELL_RENDERER(cell.get_widget()),
@@ -278,18 +278,18 @@ impl TreeViewColumn {
                                                          column) }
     }
 
-    pub fn clear_attributes<T: ffi::FFIWidget + traits::CellRenderer>(&self, cell: &T) {
+    pub fn clear_attributes<T: ffi::FFIWidget + gtk::CellRendererTrait>(&self, cell: &T) {
         unsafe { ffi::gtk_tree_view_column_clear_attributes(self.pointer,
                                                             cast::GTK_CELL_RENDERER(cell.get_widget())) }
     }
 
-    pub fn pack_start<T: ffi::FFIWidget + traits::CellRenderer>(&self, cell: &T, expand: bool) {
+    pub fn pack_start<T: ffi::FFIWidget + gtk::CellRendererTrait>(&self, cell: &T, expand: bool) {
         unsafe { ffi::gtk_tree_view_column_pack_start(self.pointer,
                                                       cast::GTK_CELL_RENDERER(cell.get_widget()),
                                                       ffi::to_gboolean(expand)) }
     }
 
-    pub fn pack_end<T: ffi::FFIWidget + traits::CellRenderer>(&self, cell: &T, expand: bool) {
+    pub fn pack_end<T: ffi::FFIWidget + gtk::CellRendererTrait>(&self, cell: &T, expand: bool) {
         unsafe { ffi::gtk_tree_view_column_pack_end(self.pointer,
                                                     cast::GTK_CELL_RENDERER(cell.get_widget()),
                                                     ffi::to_gboolean(expand)) }

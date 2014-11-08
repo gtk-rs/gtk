@@ -21,8 +21,7 @@ use libc::{c_int, c_uint};
 
 use gtk::{PositionType};
 use gtk::cast::GTK_GRID;
-use gtk::ffi;
-use gtk::traits;
+use gtk::{mod, ffi};
 
 /// Grid — Pack widgets in a rows and columns
 struct_Widget!(Grid)
@@ -33,7 +32,7 @@ impl Grid {
         check_pointer!(tmp_pointer, Grid)
     }
 
-    pub fn attach<T: traits::Widget>(&mut self,
+    pub fn attach<T: gtk::WidgetTrait>(&mut self,
                                 child: &T,
                                 left: i32,
                                 top: i32,
@@ -49,7 +48,7 @@ impl Grid {
         }
     }
 
-    pub fn attach_next_to<T: traits::Widget>(&mut self,
+    pub fn attach_next_to<T: gtk::WidgetTrait>(&mut self,
                                         child: &T,
                                         sibling: &T,
                                         side: PositionType,
@@ -91,7 +90,7 @@ impl Grid {
         }
     }
 
-    pub fn insert_next_to<T: traits::Widget>(&mut self, sibling: &T, side: PositionType) -> () {
+    pub fn insert_next_to<T: gtk::WidgetTrait>(&mut self, sibling: &T, side: PositionType) -> () {
         unsafe {
             ffi::gtk_grid_insert_next_to(GTK_GRID(self.pointer), sibling.get_widget(), side);
         }
@@ -167,8 +166,8 @@ impl Grid {
 impl_drop!(Grid)
 impl_TraitWidget!(Grid)
 
-impl traits::Container for Grid {}
-impl traits::Orientable for Grid {}
+impl gtk::ContainerTrait for Grid {}
+impl gtk::OrientableTrait for Grid {}
 
 impl_widget_events!(Grid)
 

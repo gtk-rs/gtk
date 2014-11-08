@@ -13,12 +13,11 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::ffi;
-use gtk::traits::Widget;
+use gtk::{mod, ffi};
 use gtk::cast::GTK_TOOLSHELL;
 use gtk::{IconSize, Orientation, ReliefStyle, ToolbarStyle};
 
-pub trait ToolShell: Widget {
+pub trait ToolShellTrait: gtk::WidgetTrait {
     fn get_icon_size(&self) -> IconSize {
         unsafe {
             ffi::gtk_tool_shell_get_icon_size(GTK_TOOLSHELL(self.get_widget()))

@@ -16,8 +16,7 @@
 //! A button to launch a color selection dialog
 
 use gtk::cast::GTK_COLORBUTTON;
-use gtk::ffi;
-use gtk::traits;
+use gtk::{mod, ffi};
 use gdk;
 use std::string;
 
@@ -117,8 +116,8 @@ impl ColorButton {
 impl_drop!(ColorButton)
 impl_TraitWidget!(ColorButton)
 
-impl traits::Container for ColorButton {}
-impl traits::Button for ColorButton {}
+impl gtk::ContainerTrait for ColorButton {}
+impl gtk::ButtonTrait for ColorButton {}
 
 impl_widget_events!(ColorButton)
 impl_button_events!(ColorButton)

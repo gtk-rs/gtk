@@ -15,8 +15,7 @@
 
 //! GtkTextIter — Text buffer iterator
 
-use gtk;
-use gtk::ffi;
+use gtk::{mod, ffi};
 
 pub struct TextIter {
     pointer: *mut ffi::C_GtkTextIter

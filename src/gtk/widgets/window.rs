@@ -15,9 +15,7 @@
 
 //! Toplevel which can contain other widgets
 
-
-use gtk::ffi;
-use gtk::traits;
+use gtk::{mod, ffi};
 use gtk::WindowType;
 
 /**
@@ -41,8 +39,8 @@ impl Window {
 impl_drop!(Window)
 impl_TraitWidget!(Window)
 
-impl traits::Container for Window {}
-impl traits::Window for Window {}
-impl traits::Bin for Window {}
+impl gtk::ContainerTrait for Window {}
+impl gtk::WindowTrait for Window {}
+impl gtk::BinTrait for Window {}
 
 impl_widget_events!(Window)

@@ -15,11 +15,9 @@
 
 //! GtkPlacesSidebar — Sidebar that displays frequently-used places in the file system
 
-use gtk::ffi;
+use gtk::{mod, ffi};
 use gtk::ffi::FFIWidget;
-use gtk::traits;
 use gtk::cast::GTK_PLACES_SIDEBAR;
-use gtk;
 
 struct_Widget!(PlacesSidebar)
 
@@ -75,8 +73,8 @@ impl PlacesSidebar {
 impl_drop!(PlacesSidebar)
 impl_TraitWidget!(PlacesSidebar)
 
-impl traits::Container for PlacesSidebar {}
-impl traits::Bin for PlacesSidebar {}
-impl traits::ScrolledWindow for PlacesSidebar {}
+impl gtk::ContainerTrait for PlacesSidebar {}
+impl gtk::BinTrait for PlacesSidebar {}
+impl gtk::ScrolledWindowTrait for PlacesSidebar {}
 
 impl_widget_events!(PlacesSidebar)

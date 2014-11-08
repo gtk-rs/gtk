@@ -13,15 +13,13 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::traits;
 use gtk::cast::{GTK_RECENT_CHOOSER};
-use gtk::ffi;
+use gtk::{mod, ffi};
 use gtk::ffi::FFIWidget;
-use gtk;
 use glib;
 use std::string;
 
-pub trait RecentChooser: traits::Widget + FFIWidget {
+pub trait RecentChooserTrait: gtk::WidgetTrait + FFIWidget {
     fn set_show_private(&self, show_private: bool) {
         unsafe { ffi::gtk_recent_chooser_set_show_private(GTK_RECENT_CHOOSER(self.get_widget()), match show_private {
             true => ffi::GTRUE,

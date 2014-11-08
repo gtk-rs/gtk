@@ -15,7 +15,7 @@
 
 //! The widget used for item in menus
 
-use gtk::{ffi, traits};
+use gtk::{mod, ffi};
 
 /// MenuItem — The widget used for item in menus
 struct_Widget!(MenuItem)
@@ -48,8 +48,8 @@ impl MenuItem {
 impl_drop!(MenuItem)
 impl_TraitWidget!(MenuItem)
 
-impl traits::Container for MenuItem {}
-impl traits::Bin for MenuItem {}
-impl traits::MenuItem for MenuItem {}
+impl gtk::ContainerTrait for MenuItem {}
+impl gtk::BinTrait for MenuItem {}
+impl gtk::MenuItemTrait for MenuItem {}
 
 impl_widget_events!(MenuItem)

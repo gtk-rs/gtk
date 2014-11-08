@@ -15,8 +15,7 @@
 
 //! Renders a toggle button in a cell
 
-use gtk::ffi;
-use gtk::traits;
+use gtk::{mod, ffi};
 
 struct_Widget!(CellRendererToggle)
 
@@ -59,6 +58,6 @@ impl CellRendererToggle {
 impl_drop!(CellRendererToggle)
 impl_TraitWidget!(CellRendererToggle)
 
-impl traits::CellRenderer for CellRendererToggle {}
+impl gtk::CellRendererTrait for CellRendererToggle {}
 
 impl_widget_events!(CellRendererToggle)

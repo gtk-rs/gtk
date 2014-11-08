@@ -15,11 +15,9 @@
 
 //! A bin with a decorative frame and optional label
 
-
 use std::ptr;
 
-use gtk::ffi;
-use gtk::traits;
+use gtk::{mod, ffi};
 
 /// Frame — A bin with a decorative frame and optional label
 struct_Widget!(Frame)
@@ -37,8 +35,8 @@ impl Frame {
 impl_drop!(Frame)
 impl_TraitWidget!(Frame)
 
-impl traits::Frame for Frame {}
-impl traits::Container for Frame {}
-impl traits::Bin for Frame {}
+impl gtk::FrameTrait for Frame {}
+impl gtk::ContainerTrait for Frame {}
+impl gtk::BinTrait for Frame {}
 
 impl_widget_events!(Frame)

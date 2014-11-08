@@ -16,8 +16,7 @@
 //! A container for arranging buttons
 
 use gtk::cast::GTK_LOCKBUTTON;
-use gtk::ffi;
-use gtk::traits;
+use gtk::{mod, ffi};
 use glib::Permission;
 use glib::GlibContainer;
 
@@ -48,9 +47,9 @@ impl LockButton {
 impl_drop!(LockButton)
 impl_TraitWidget!(LockButton)
 
-impl traits::Container for LockButton {}
-impl traits::Button for LockButton {}
-impl traits::Actionable for LockButton {}
+impl gtk::ContainerTrait for LockButton {}
+impl gtk::ButtonTrait for LockButton {}
+impl gtk::ActionableTrait for LockButton {}
 
 impl_widget_events!(LockButton)
 impl_button_events!(LockButton)

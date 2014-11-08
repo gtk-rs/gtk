@@ -15,7 +15,7 @@
 
 //! The widget used for item in menus
 
-use gtk::{ffi, traits};
+use gtk::{mod, ffi};
 
 /// MenuItem — The widget used for item in menus
 struct_Widget!(SeparatorMenuItem)
@@ -30,8 +30,8 @@ impl SeparatorMenuItem {
 impl_drop!(SeparatorMenuItem)
 impl_TraitWidget!(SeparatorMenuItem)
 
-impl traits::Container for SeparatorMenuItem {}
-impl traits::Bin for SeparatorMenuItem {}
-impl traits::MenuItem for SeparatorMenuItem {}
+impl gtk::ContainerTrait for SeparatorMenuItem {}
+impl gtk::BinTrait for SeparatorMenuItem {}
+impl gtk::MenuItemTrait for SeparatorMenuItem {}
 
 impl_widget_events!(SeparatorMenuItem)

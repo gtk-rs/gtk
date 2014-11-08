@@ -17,8 +17,7 @@
 
 use gtk::{Orientation, ButtonBoxStyle};
 use gtk::cast::GTK_BUTTONBOX;
-use gtk::ffi;
-use gtk::traits;
+use gtk::{mod, ffi};
 
 /// ButtonBox — A container for arranging buttons
 struct_Widget!(ButtonBox)
@@ -35,14 +34,14 @@ impl ButtonBox {
         }
     }
 
-    pub fn get_child_secondary<T: traits::Widget + traits::Button>(&self, child: &T) -> bool {
+    pub fn get_child_secondary<T: gtk::WidgetTrait + gtk::ButtonTrait>(&self, child: &T) -> bool {
         match unsafe { ffi::gtk_button_box_get_child_secondary(GTK_BUTTONBOX(self.pointer), child.get_widget()) } {
             ffi::GFALSE => false,
             _           => true
         }
     }
 
-    pub fn get_child_non_homogeneous<T: traits::Widget + traits::Button>(&self, child: &T) -> bool {
+    pub fn get_child_non_homogeneous<T: gtk::WidgetTrait + gtk::ButtonTrait>(&self, child: &T) -> bool {
         match unsafe { ffi::gtk_button_box_get_child_non_homogeneous(GTK_BUTTONBOX(self.pointer), child.get_widget()) } {
             ffi::GFALSE => false,
             _           => true
@@ -55,14 +54,14 @@ impl ButtonBox {
         }
     }
 
-    pub fn set_child_secondary<T: traits::Widget + traits::Button>(&mut self, child: &T, is_secondary: bool) -> () {
+    pub fn set_child_secondary<T: gtk::WidgetTrait + gtk::ButtonTrait>(&mut self, child: &T, is_secondary: bool) -> () {
         match is_secondary {
             false   => unsafe { ffi::gtk_button_box_set_child_secondary(GTK_BUTTONBOX(self.pointer), child.get_widget(), ffi::GFALSE) },
             true    => unsafe { ffi::gtk_button_box_set_child_secondary(GTK_BUTTONBOX(self.pointer), child.get_widget(), ffi::GTRUE) }
         }
     }
 
-    pub fn set_child_non_homogeneous<T: traits::Widget + traits::Button>(&mut self, child: &T, non_homogeneous: bool) -> () {
+    pub fn set_child_non_homogeneous<T: gtk::WidgetTrait + gtk::ButtonTrait>(&mut self, child: &T, non_homogeneous: bool) -> () {
         match non_homogeneous {
             false   => unsafe { ffi::gtk_button_box_set_child_non_homogeneous(GTK_BUTTONBOX(self.pointer), child.get_widget(), ffi::GFALSE) },
             true    => unsafe { ffi::gtk_button_box_set_child_non_homogeneous(GTK_BUTTONBOX(self.pointer), child.get_widget(), ffi::GTRUE) }
@@ -73,8 +72,8 @@ impl ButtonBox {
 impl_drop!(ButtonBox)
 impl_TraitWidget!(ButtonBox)
 
-impl traits::Container for ButtonBox {}
-impl traits::Box for ButtonBox {}
-impl traits::Orientable for ButtonBox {}
+impl gtk::ContainerTrait for ButtonBox {}
+impl gtk::BoxTrait for ButtonBox {}
+impl gtk::OrientableTrait for ButtonBox {}
 
 impl_widget_events!(ButtonBox)

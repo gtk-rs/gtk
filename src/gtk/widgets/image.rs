@@ -15,11 +15,9 @@
 
 //! A widget displaying an image
 
-use gtk;
+use gtk::{mod, ffi};
 use gtk::cast::GTK_IMAGE;
-use gtk::ffi;
 use gtk::ffi::FFIWidget;
-use gtk::traits;
 
 /// Image — A widget displaying an image
 struct_Widget!(Image)
@@ -63,6 +61,6 @@ impl Image {
 impl_drop!(Image)
 impl_TraitWidget!(Image)
 
-impl traits::Misc for Image {}
+impl gtk::MiscTrait for Image {}
 
 impl_widget_events!(Image)

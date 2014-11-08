@@ -17,8 +17,7 @@
 
 // https://developer.gnome.org/gobject/unstable/gobject-Type-Information.html#GType
 pub mod g_type {
-    use gtk;
-    use gtk::ffi;
+    use gtk::{mod, ffi};
 
     pub fn name(_type: gtk::GType) -> Option<String> {
         let tmp_pointer = unsafe { ffi::g_type_name(_type) };

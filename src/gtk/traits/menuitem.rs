@@ -15,19 +15,19 @@
 
 //! The widget used for item in menus
 
-use gtk::{ffi, traits};
+use gtk::{mod, ffi};
 use gtk::cast::GTK_MENU_ITEM;
 
 /// The widget used for item in menus
-pub trait MenuItem: traits::Widget + traits::Container + traits::Bin {
-    fn set_submenu(&mut self, widget: &mut traits::Widget) {
+pub trait MenuItemTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait {
+    fn set_submenu(&mut self, widget: &mut gtk::WidgetTrait) {
         unsafe {
             ffi::gtk_menu_item_set_submenu(GTK_MENU_ITEM(self.get_widget()),
                                            widget.get_widget())
         }
     }
 
-    fn get_submenu<T: traits::Widget>(&self) -> T {
+    fn get_submenu<T: gtk::WidgetTrait>(&self) -> T {
         unsafe {
             ffi::FFIWidget::wrap(ffi::gtk_menu_item_get_submenu(GTK_MENU_ITEM(self.get_widget())))
         }

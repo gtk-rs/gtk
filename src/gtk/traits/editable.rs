@@ -13,11 +13,10 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::traits::Widget;
 use gtk::cast::GTK_EDITABLE;
-use gtk::ffi;
+use gtk::{mod, ffi};
 
-pub trait Editable: Widget {
+pub trait EditableTrait: gtk::WidgetTrait {
     fn select_region(&mut self, start_pos: i32, end_pos: i32) {
         unsafe {
             ffi::gtk_editable_select_region(GTK_EDITABLE(self.get_widget()), start_pos, end_pos)

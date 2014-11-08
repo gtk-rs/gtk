@@ -13,15 +13,14 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::ffi;
+use gtk::{mod, ffi};
 use gtk::ffi::to_gboolean;
-use gtk::traits::Widget;
 use gtk::cast::GTK_WINDOW;
 use gtk::WindowPosition;
 
 use std::string;
 
-pub trait Window : Widget {
+pub trait WindowTrait : gtk::WidgetTrait {
     fn set_title(&mut self, title: &str) -> () {
         unsafe {
             title.with_c_str(|c_str| {
@@ -58,7 +57,7 @@ pub trait Window : Widget {
     }
 
     #[cfg(any(feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
-    fn set_titlebar<T: Widget>(&self, titlebar: &T) {
+    fn set_titlebar<T: gtk::WidgetTrait>(&self, titlebar: &T) {
         unsafe {
             ffi::gtk_window_set_titlebar(GTK_WINDOW(self.get_widget()), titlebar.get_widget());
         }

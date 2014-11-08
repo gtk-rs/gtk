@@ -16,7 +16,7 @@
 //! An adapter which makes widgets scrollable
 
 use gtk::cast::GTK_STATUSBAR;
-use gtk::{ffi, traits};
+use gtk::{mod, ffi};
 
 /// GtkViewport — An adapter which makes widgets scrollable
 struct_Widget!(StatusBar)
@@ -55,7 +55,7 @@ impl StatusBar {
         }
     }
 
-    pub fn get_message_area<T: traits::Widget + traits::Box>(&self) -> T {
+    pub fn get_message_area<T: gtk::WidgetTrait + gtk::BoxTrait>(&self) -> T {
         unsafe {
             ffi::FFIWidget::wrap(ffi::gtk_statusbar_get_message_area(GTK_STATUSBAR(self.pointer)))
         }
@@ -65,8 +65,8 @@ impl StatusBar {
 impl_drop!(StatusBar)
 impl_TraitWidget!(StatusBar)
 
-impl traits::Container for StatusBar {}
-impl traits::Box for StatusBar {}
-impl traits::Orientable for StatusBar {}
+impl gtk::ContainerTrait for StatusBar {}
+impl gtk::BoxTrait for StatusBar {}
+impl gtk::OrientableTrait for StatusBar {}
 
 impl_widget_events!(StatusBar)

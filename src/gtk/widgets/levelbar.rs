@@ -17,10 +17,9 @@
 
 use libc::c_double;
 
+use gtk::{mod, ffi};
 use gtk::{LevelBarMode};
 use gtk::cast::GTK_LEVELBAR;
-use gtk::ffi;
-use gtk::traits;
 
 /**
 * LevelBar — A bar that can used as a level indicator
@@ -133,7 +132,7 @@ impl LevelBar {
 impl_drop!(LevelBar)
 impl_TraitWidget!(LevelBar)
 
-impl traits::Orientable for LevelBar {}
+impl gtk::OrientableTrait for LevelBar {}
 
 impl_widget_events!(LevelBar)
 

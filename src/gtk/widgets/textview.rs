@@ -15,11 +15,9 @@
 
 //! GtkTextView — Widget that displays a GtkTextBuffer
 
-use gtk;
+use gtk::{mod, ffi};
 use gtk::TextBuffer;
-use gtk::ffi;
 use gtk::ffi::FFIWidget;
-use gtk::traits;
 use gtk::cast::{GTK_TEXT_VIEW, GTK_TEXT_BUFFER};
 
 struct_Widget!(TextView)
@@ -130,16 +128,16 @@ impl TextView {
             count as ::libc::c_int)) }
     }
 
-    pub fn add_child_at_anchor<T: gtk::traits::Widget>(&self, child: &T, anchor: &gtk::TextChildAnchor) {
+    pub fn add_child_at_anchor<T: gtk::WidgetTrait>(&self, child: &T, anchor: &gtk::TextChildAnchor) {
         unsafe { ffi::gtk_text_view_add_child_at_anchor(GTK_TEXT_VIEW(self.get_widget()), child.get_widget(), anchor.get_pointer()) }
     }
 
-    pub fn add_child_in_window<T: gtk::traits::Widget>(&self, child: &T, which_window: gtk::TextWindowType, xpos: i32, ypos: i32) {
+    pub fn add_child_in_window<T: gtk::WidgetTrait>(&self, child: &T, which_window: gtk::TextWindowType, xpos: i32, ypos: i32) {
         unsafe { ffi::gtk_text_view_add_child_in_window(GTK_TEXT_VIEW(self.get_widget()), child.get_widget(), which_window,
             xpos as ::libc::c_int, ypos as ::libc::c_int) }
     }
 
-    pub fn move_child<T: gtk::traits::Widget>(&self, child: &T, xpos: i32, ypos: i32) {
+    pub fn move_child<T: gtk::WidgetTrait>(&self, child: &T, xpos: i32, ypos: i32) {
         unsafe { ffi::gtk_text_view_move_child(GTK_TEXT_VIEW(self.get_widget()), child.get_widget(), xpos as ::libc::c_int,
             ypos as ::libc::c_int) }
     }
@@ -274,6 +272,6 @@ impl TextView {
 impl_drop!(TextView)
 impl_TraitWidget!(TextView)
 
-impl traits::Scrollable for TextView {}
+impl gtk::ScrollableTrait for TextView {}
 
 impl_widget_events!(TextView)

@@ -58,7 +58,7 @@ macro_rules! impl_TraitWidget(
             }
         }
 
-        impl ::gtk::traits::Widget for $gtk_struct {}
+        impl ::gtk::WidgetTrait for $gtk_struct {}
 
         impl ::glib::traits::FFIGObject for $gtk_struct {
             fn get_gobject(&self) -> *mut ::glib::ffi::C_GObject {

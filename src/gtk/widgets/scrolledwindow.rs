@@ -15,9 +15,7 @@
 
 use std::ptr;
 
-use gtk;
-use gtk::ffi;
-use gtk::traits;
+use gtk::{mod, ffi};
 
 /// GtkScrolledWindow — Adds scrollbars to its child widget
 
@@ -40,7 +38,7 @@ impl ScrolledWindow {
 impl_drop!(ScrolledWindow)
 impl_TraitWidget!(ScrolledWindow)
 
-impl traits::ScrolledWindow for ScrolledWindow {}
-impl traits::Container for ScrolledWindow {}
+impl gtk::ScrolledWindowTrait for ScrolledWindow {}
+impl gtk::ContainerTrait for ScrolledWindow {}
 
 impl_widget_events!(ScrolledWindow)

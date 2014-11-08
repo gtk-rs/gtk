@@ -15,24 +15,24 @@
 
 //! A base class for menu objects
 
-use gtk::{ffi, traits};
+use gtk::{mod, ffi};
 use gtk::cast::GTK_MENU_SHELL;
 
 /// A base class for menu objects
-pub trait MenuShell: traits::Widget + traits::Container {
-    fn append(&mut self, widget: &traits::Widget) {
+pub trait MenuShellTrait: gtk::WidgetTrait + gtk::ContainerTrait {
+    fn append(&mut self, widget: &gtk::WidgetTrait) {
         unsafe {
             ffi::gtk_menu_shell_append(GTK_MENU_SHELL(self.get_widget()), widget.get_widget())
         }
     }
 
-    fn prepend(&mut self, widget: &traits::Widget) {
+    fn prepend(&mut self, widget: &gtk::WidgetTrait) {
         unsafe {
             ffi::gtk_menu_shell_prepend(GTK_MENU_SHELL(self.get_widget()), widget.get_widget())
         }
     }
 
-    fn insert(&mut self, widget: &traits::Widget, position: i32) {
+    fn insert(&mut self, widget: &gtk::WidgetTrait, position: i32) {
         unsafe {
             ffi::gtk_menu_shell_insert(GTK_MENU_SHELL(self.get_widget()),
                                        widget.get_widget(),
@@ -46,7 +46,7 @@ pub trait MenuShell: traits::Widget + traits::Container {
         }
     }
 
-    fn select_item(&mut self, menu_item: &traits::MenuItem) {
+    fn select_item(&mut self, menu_item: &gtk::MenuItemTrait) {
         unsafe {
             ffi::gtk_menu_shell_select_item(GTK_MENU_SHELL(self.get_widget()),
                                             menu_item.get_widget())
@@ -59,7 +59,7 @@ pub trait MenuShell: traits::Widget + traits::Container {
         }
     }
 
-    fn activate_item(&mut self, menu_item: &traits::MenuItem, force_deactivate: bool) {
+    fn activate_item(&mut self, menu_item: &gtk::MenuItemTrait, force_deactivate: bool) {
         unsafe {
             ffi::gtk_menu_shell_activate_item(GTK_MENU_SHELL(self.get_widget()),
                                               menu_item.get_widget(),
@@ -93,13 +93,13 @@ pub trait MenuShell: traits::Widget + traits::Container {
         }
     }
 
-    fn get_selected_item<T: traits::Widget>(&self) -> T {
+    fn get_selected_item<T: gtk::WidgetTrait>(&self) -> T {
         unsafe {
             ffi::FFIWidget::wrap(ffi::gtk_menu_shell_get_selected_item(GTK_MENU_SHELL(self.get_widget())))
         }
     }
 
-    fn get_parent_shell<T: MenuShell>(&self) -> T {
+    fn get_parent_shell<T: gtk::MenuShellTrait>(&self) -> T {
         unsafe {
             ffi::FFIWidget::wrap(ffi::gtk_menu_shell_get_parent_shell(GTK_MENU_SHELL(self.get_widget())))
         }

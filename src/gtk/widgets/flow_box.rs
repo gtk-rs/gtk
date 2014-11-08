@@ -15,11 +15,9 @@
 
 //! A container that allows reflowing its children
 
-use gtk;
 use gtk::cast::{GTK_FLOW_BOX_CHILD, GTK_FLOW_BOX};
-use gtk::ffi;
+use gtk::{mod, ffi};
 use gtk::ffi::FFIWidget;
-use gtk::traits;
 
 /// GtkFlowBox — A container that allows reflowing its children
 struct_Widget!(FlowBox)
@@ -104,7 +102,7 @@ impl FlowBox {
         }
     }
 
-    pub fn insert<T: traits::Widget>(&mut self, widget: &T, position: i32) {
+    pub fn insert<T: gtk::WidgetTrait>(&mut self, widget: &T, position: i32) {
         unsafe {
             ffi::gtk_flow_box_insert(GTK_FLOW_BOX(self.pointer),
                                      widget.get_widget(),
@@ -179,7 +177,7 @@ impl FlowBox {
 impl_drop!(FlowBox)
 impl_TraitWidget!(FlowBox)
 
-impl traits::Container for FlowBox {}
+impl gtk::ContainerTrait for FlowBox {}
 
 impl_widget_events!(FlowBox)
 
@@ -213,7 +211,7 @@ impl FlowBoxChild {
 impl_drop!(FlowBoxChild)
 impl_TraitWidget!(FlowBoxChild)
 
-impl traits::Container for FlowBoxChild {}
-impl traits::Bin for FlowBoxChild {}
+impl gtk::ContainerTrait for FlowBoxChild {}
+impl gtk::BinTrait for FlowBoxChild {}
 
 impl_widget_events!(FlowBoxChild)

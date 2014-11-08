@@ -17,11 +17,9 @@
 
 use libc::c_int;
 
-use gtk;
 use gtk::cast::GTK_EXPANDER;
-use gtk::ffi;
+use gtk::{mod, ffi};
 use gtk::ffi::FFIWidget;
-use gtk::traits;
 use std::string;
 
 /// Expander — A container which can hide its child
@@ -161,7 +159,7 @@ impl Expander {
 impl_drop!(Expander)
 impl_TraitWidget!(Expander)
 
-impl traits::Container for Expander {}
-impl traits::Bin for Expander {}
+impl gtk::ContainerTrait for Expander {}
+impl gtk::BinTrait for Expander {}
 
 impl_widget_events!(Expander)

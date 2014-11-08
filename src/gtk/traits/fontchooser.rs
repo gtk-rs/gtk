@@ -13,14 +13,13 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::traits;
 use gtk::cast::{GTK_FONT_CHOOSER};
-use gtk::ffi;
+use gtk::{mod, ffi};
 use gtk::ffi::FFIWidget;
 use libc::c_char;
 use std::string;
 
-pub trait FontChooser: traits::Widget {
+pub trait FontChooserTrait: gtk::WidgetTrait {
     fn get_font_size(&self) -> i32 {
         unsafe { ffi::gtk_font_chooser_get_font_size(GTK_FONT_CHOOSER(self.get_widget())) }
     }

@@ -15,11 +15,9 @@
 
 //! GtkToolPalette — A tool palette with categories
 
-use gtk::{ffi, ToolItem};
+use gtk::{mod, ffi, ToolItem};
 use gtk::ffi::FFIWidget;
-use gtk::traits;
 use gtk::cast::{GTK_TOOL_PALETTE, GTK_TOOL_ITEM_GROUP};
-use gtk;
 
 struct_Widget!(ToolPalette)
 
@@ -113,6 +111,6 @@ impl ToolPalette {
 impl_drop!(ToolPalette)
 impl_TraitWidget!(ToolPalette)
 
-impl traits::Container for ToolPalette {}
+impl gtk::ContainerTrait for ToolPalette {}
 
 impl_widget_events!(ToolPalette)

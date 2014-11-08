@@ -16,8 +16,7 @@
 //! Create buttons bound to a URL
 
 use gtk::cast::GTK_LINKBUTTON;
-use gtk::ffi;
-use gtk::traits;
+use gtk::{mod, ffi};
 use std::string;
 
 /**
@@ -81,8 +80,8 @@ impl LinkButton {
 impl_drop!(LinkButton)
 impl_TraitWidget!(LinkButton)
 
-impl traits::Container for LinkButton {}
-impl traits::Button for LinkButton {}
+impl gtk::ContainerTrait for LinkButton {}
+impl gtk::ButtonTrait for LinkButton {}
 
 impl_widget_events!(LinkButton)
 impl_button_events!(LinkButton)

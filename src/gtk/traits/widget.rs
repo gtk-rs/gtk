@@ -21,7 +21,7 @@ use glib;
 use glib::ffi::GType;
 use std::string;
 
-pub trait Widget: ffi::FFIWidget {
+pub trait WidgetTrait: ffi::FFIWidget {
     fn show_all(&mut self) -> () {
         unsafe {
             ffi::gtk_widget_show_all(self.get_widget());
@@ -75,7 +75,7 @@ pub trait Widget: ffi::FFIWidget {
         }
     }
 
-    fn reparent(&self, new_parent: &Widget) {
+    fn reparent(&self, new_parent: &WidgetTrait) {
         unsafe { ffi::gtk_widget_reparent(self.get_widget(), new_parent.get_widget()) }
     }
 
@@ -117,7 +117,7 @@ pub trait Widget: ffi::FFIWidget {
         }) }
     }
 
-    fn set_parent(&self, parent: &Widget) {
+    fn set_parent(&self, parent: &WidgetTrait) {
         unsafe { ffi::gtk_widget_set_parent(self.get_widget(), parent.get_widget()) }
     }
 
@@ -145,7 +145,7 @@ pub trait Widget: ffi::FFIWidget {
         }
     }
 
-    fn is_ancestor(&self, ancestor: &Widget) -> bool {
+    fn is_ancestor(&self, ancestor: &WidgetTrait) -> bool {
         match unsafe { ffi::gtk_widget_is_ancestor(self.get_widget(), ancestor.get_widget()) } {
             ffi::GFALSE => false,
             _ => true
@@ -186,7 +186,7 @@ pub trait Widget: ffi::FFIWidget {
         unsafe { ffi::gtk_widget_unparent(self.get_widget()) }
     }
 
-    fn translate_coordinates(&self, dest_widget: &Widget, src_x: i32, src_y: i32) -> Option<(i32, i32)> {
+    fn translate_coordinates(&self, dest_widget: &WidgetTrait, src_x: i32, src_y: i32) -> Option<(i32, i32)> {
         let mut dest_x = 0i32;
         let mut dest_y = 0i32;
 
@@ -340,11 +340,11 @@ pub trait Widget: ffi::FFIWidget {
         }
     }
 
-    fn add_mnemonic_label(&self, label: &Widget) {
+    fn add_mnemonic_label(&self, label: &WidgetTrait) {
         unsafe { ffi::gtk_widget_add_mnemonic_label(self.get_widget(), label.get_widget()) }
     }
 
-    fn remove_mnemonic_label(&self, label: &Widget) {
+    fn remove_mnemonic_label(&self, label: &WidgetTrait) {
         unsafe { ffi::gtk_widget_remove_mnemonic_label(self.get_widget(), label.get_widget()) }
     }
 

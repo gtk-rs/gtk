@@ -17,8 +17,7 @@
 
 use std::ptr;
 
-use gtk::ffi;
-use gtk::traits;
+use gtk::{mod, ffi};
 use gtk::cast::GTK_RADIOBUTTON;
 
 /// A choice from multiple check buttons
@@ -59,10 +58,10 @@ impl RadioButton {
 impl_drop!(RadioButton)
 impl_TraitWidget!(RadioButton)
 
-impl traits::Container for RadioButton {}
-impl traits::Button for RadioButton {}
-impl traits::Bin for RadioButton {}
-impl traits::ToggleButton for RadioButton {}
+impl gtk::ContainerTrait for RadioButton {}
+impl gtk::ButtonTrait for RadioButton {}
+impl gtk::BinTrait for RadioButton {}
+impl gtk::ToggleButtonTrait for RadioButton {}
 
 impl_widget_events!(RadioButton)
 

@@ -16,9 +16,7 @@
 //! Hide and show with animation
 
 use gtk::cast::{GTK_ACTION_BAR};
-use gtk::ffi;
-use gtk::traits::Widget;
-use gtk::traits;
+use gtk::{mod, ffi};
 
 /// GtkRevealer — Hide and show with animation
 struct_Widget!(ActionBar)
@@ -29,7 +27,7 @@ impl ActionBar {
         check_pointer!(tmp_pointer, ActionBar)
     }
 
-    pub fn get_center_widget<T: traits::Widget>(&self) -> Option<T> {
+    pub fn get_center_widget<T: gtk::WidgetTrait>(&self) -> Option<T> {
         let tmp_pointer = unsafe {
             ffi::gtk_action_bar_get_center_widget(GTK_ACTION_BAR(self.pointer))
         };
@@ -40,21 +38,21 @@ impl ActionBar {
         }
     }
 
-    pub fn set_center_widget<T: traits::Widget>(&mut self, center_widget: &T) {
+    pub fn set_center_widget<T: gtk::WidgetTrait>(&mut self, center_widget: &T) {
         unsafe {
             ffi::gtk_action_bar_set_center_widget(GTK_ACTION_BAR(self.pointer),
                                                   center_widget.get_widget())
         }
     }
 
-    pub fn pack_start<T: traits::Widget>(&mut self, child: &T) {
+    pub fn pack_start<T: gtk::WidgetTrait>(&mut self, child: &T) {
         unsafe {
             ffi::gtk_action_bar_pack_start(GTK_ACTION_BAR(self.pointer),
                                            child.get_widget())
         }
     }
 
-    pub fn pack_end<T: traits::Widget>(&mut self, child: &T) {
+    pub fn pack_end<T: gtk::WidgetTrait>(&mut self, child: &T) {
         unsafe {
             ffi::gtk_action_bar_pack_end(GTK_ACTION_BAR(self.pointer),
                                          child.get_widget())
@@ -65,7 +63,7 @@ impl ActionBar {
 impl_drop!(ActionBar)
 impl_TraitWidget!(ActionBar)
 
-impl traits::Container for ActionBar {}
-impl traits::Bin for ActionBar {}
+impl gtk::ContainerTrait for ActionBar {}
+impl gtk::BinTrait for ActionBar {}
 
 impl_widget_events!(ActionBar)

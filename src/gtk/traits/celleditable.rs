@@ -15,11 +15,10 @@
 
 //! Interface for widgets which can are used for editing cells
 
-use gtk::ffi;
-use gtk::traits;
+use gtk::{mod, ffi};
 use gtk::cast::GTK_CELL_EDITABLE;
 
-pub trait CellEditable : traits::Widget {
+pub trait CellEditableTrait : gtk::WidgetTrait {
     fn editing_done(&self) {
         unsafe { ffi::gtk_cell_editable_editing_done(GTK_CELL_EDITABLE(self.get_widget())) }
     }

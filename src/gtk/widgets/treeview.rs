@@ -17,7 +17,6 @@
 
 use gtk;
 use gtk::ffi::{mod, FFIWidget};
-use gtk::traits;
 use gtk::cast::GTK_TREE_VIEW;
 use gtk::widgets::TreeSelection;
 
@@ -398,7 +397,7 @@ impl TreeView {
 impl_drop!(TreeView)
 impl_TraitWidget!(TreeView)
 
-impl traits::Container for TreeView {}
-impl traits::Scrollable for TreeView {}
+impl gtk::ContainerTrait for TreeView {}
+impl gtk::ScrollableTrait for TreeView {}
 
 impl_widget_events!(TreeView)

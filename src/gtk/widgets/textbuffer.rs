@@ -12,12 +12,11 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
+
 use std::ptr;
 
-use gtk;
-use gtk::ffi;
+use gtk::{mod, ffi};
 use gtk::ffi::FFIWidget;
-use gtk::traits;
 
 /// GtkTextBuffer — Stores attributed text for display in a GtkTextView
 
@@ -39,6 +38,6 @@ impl TextBuffer {
 impl_drop!(TextBuffer)
 impl_TraitWidget!(TextBuffer)
 
-impl traits::TextBuffer for TextBuffer {}
+impl gtk::TextBufferTrait for TextBuffer {}
 
 impl_widget_events!(TextBuffer)

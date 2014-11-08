@@ -13,11 +13,9 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::ffi;
+use gtk::{mod, ffi};
 use gtk::ffi::FFIWidget;
-use gtk::traits;
 use gtk::cast::{GTK_WINDOW};
-use gtk;
 
 struct_Widget!(FileChooserDialog)
 
@@ -49,10 +47,10 @@ impl FileChooserDialog {
 impl_drop!(FileChooserDialog)
 impl_TraitWidget!(FileChooserDialog)
 
-impl traits::Container for FileChooserDialog {}
-impl traits::Bin for FileChooserDialog {}
-impl traits::Window for FileChooserDialog {}
-impl traits::Dialog for FileChooserDialog {}
-impl traits::FileChooser for FileChooserDialog {}
+impl gtk::ContainerTrait for FileChooserDialog {}
+impl gtk::BinTrait for FileChooserDialog {}
+impl gtk::WindowTrait for FileChooserDialog {}
+impl gtk::DialogTrait for FileChooserDialog {}
+impl gtk::FileChooserTrait for FileChooserDialog {}
 
 impl_widget_events!(FileChooserDialog)

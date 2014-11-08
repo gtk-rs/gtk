@@ -17,7 +17,7 @@
 
 use gtk::ShadowType;
 use gtk::cast::GTK_VIEWPORT;
-use gtk::{mod, ffi, traits};
+use gtk::{mod, ffi};
 
 /// GtkViewport — An adapter which makes widgets scrollable
 struct_Widget!(Viewport)
@@ -44,8 +44,8 @@ impl Viewport {
 impl_drop!(Viewport)
 impl_TraitWidget!(Viewport)
 
-impl traits::Container for Viewport {}
-impl traits::Bin for Viewport {}
-impl traits::Scrollable for Viewport {}
+impl gtk::ContainerTrait for Viewport {}
+impl gtk::BinTrait for Viewport {}
+impl gtk::ScrollableTrait for Viewport {}
 
 impl_widget_events!(Viewport)

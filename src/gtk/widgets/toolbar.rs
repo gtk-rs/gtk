@@ -17,10 +17,8 @@
 
 use libc::c_int;
 
-use gtk::ffi;
-use gtk::traits;
+use gtk::{mod, ffi};
 use gtk::cast::{GTK_TOOLBAR, GTK_TOOLITEM};
-use gtk;
 use gtk::{IconSize, ReliefStyle, ToolbarStyle};
 
 /**
@@ -40,7 +38,7 @@ impl Toolbar {
         check_pointer!(tmp_pointer, Toolbar)
     }
 
-    pub fn insert<T: traits::ToolItem>(&mut self,
+    pub fn insert<T: gtk::ToolItemTrait>(&mut self,
                                   item: &T,
                                   pos: i32) -> () {
         unsafe {
@@ -48,7 +46,7 @@ impl Toolbar {
         }
     }
 
-    pub fn item_index<T: traits::ToolItem>(&mut self, item: &T) -> i32 {
+    pub fn item_index<T: gtk::ToolItemTrait>(&mut self, item: &T) -> i32 {
         unsafe {
             ffi::gtk_toolbar_get_item_index(GTK_TOOLBAR(self.pointer), GTK_TOOLITEM(item.get_widget())) as i32
         }
@@ -77,7 +75,7 @@ impl Toolbar {
         }
     }
 
-    pub fn set_drop_highlight_item<T: traits::ToolItem>(&mut self, item: &T, index: i32) -> () {
+    pub fn set_drop_highlight_item<T: gtk::ToolItemTrait>(&mut self, item: &T, index: i32) -> () {
         unsafe {
             ffi::gtk_toolbar_set_drop_highlight_item(GTK_TOOLBAR(self.pointer), GTK_TOOLITEM(item.get_widget()), index as c_int);
         }
@@ -143,9 +141,9 @@ impl Toolbar {
 impl_drop!(Toolbar)
 impl_TraitWidget!(Toolbar)
 
-impl traits::Container for Toolbar {}
-impl traits::ToolShell for Toolbar {}
-impl traits::Orientable for Toolbar {}
+impl gtk::ContainerTrait for Toolbar {}
+impl gtk::ToolShellTrait for Toolbar {}
+impl gtk::OrientableTrait for Toolbar {}
 
 impl_widget_events!(Toolbar)
 

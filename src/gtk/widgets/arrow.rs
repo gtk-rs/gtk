@@ -15,12 +15,10 @@
 
 //! Displays an arrow
 
-
-
 use gtk::{ShadowType, ArrowType};
 use gtk::cast::GTK_ARROW;
-use gtk::ffi;
-use gtk::traits;
+use gtk::{mod, ffi};
+
 /// Arrow — Displays an arrow
 struct_Widget!(Arrow)
 
@@ -40,6 +38,6 @@ impl Arrow {
 impl_drop!(Arrow)
 impl_TraitWidget!(Arrow)
 
-impl traits::Misc for Arrow {}
+impl gtk::MiscTrait for Arrow {}
 
 impl_widget_events!(Arrow)
