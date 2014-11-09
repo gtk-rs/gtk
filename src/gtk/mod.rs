@@ -161,7 +161,8 @@ pub use self::widgets::{
     TextIter,
     TextChildAnchor,
     ToolPalette,
-    ToolItemGroup
+    ToolItemGroup,
+    SizeGroup
 };
 
 #[cfg(any(feature = "GTK_3_6", feature = "GTK_3_8", feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
@@ -276,6 +277,7 @@ pub use self::enums::text_search_flags::TextSearchFlags;
 pub use self::enums::places_open_flags::PlacesOpenFlags;
 pub use self::enums::tool_palette_drag_targets::ToolPaletteDragTargets;
 pub use self::enums::dest_defaults::DestDefaults;
+pub use self::enums::size_group_mode::SizeGroupMode;
 
 /// Gtk Traits
 pub use self::traits::BoxTrait;

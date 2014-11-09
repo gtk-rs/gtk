@@ -116,6 +116,12 @@ impl<T> List<T> {
             ffi::g_list_free(self.pointer)
         }
     }
+
+    pub fn extend<It: Iterator<T>>(&mut self, mut it: It) {
+        for elem in it {
+            self.append(elem);
+        }
+    }
 }
 
 impl<T> Index<uint, T> for List<T> {
@@ -153,14 +159,6 @@ impl<T> FromIterator<T> for List<T> {
         let mut new_list = List::new();
         new_list.extend(it);
         new_list
-    }
-}
-
-impl<T> Extendable<T> for List<T> {
-    fn extend<It: Iterator<T>>(&mut self, mut it: It) {
-        for elem in it {
-            self.append(elem);
-        }
     }
 }
 

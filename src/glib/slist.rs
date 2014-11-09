@@ -101,6 +101,12 @@ impl<T> SList<T> {
             ffi::g_slist_free(self.pointer)
         }
     }
+
+    pub fn extend<It: Iterator<T>>(&mut self, mut it: It) {
+        for elem in it {
+            self.append(elem);
+        }
+    }
 }
 
 impl<T> Index<uint, T> for SList<T> {
@@ -126,14 +132,6 @@ impl<T> FromIterator<T> for SList<T> {
         let mut new_list = SList::new();
         new_list.extend(it);
         new_list
-    }
-}
-
-impl<T> Extendable<T> for SList<T> {
-    fn extend<It: Iterator<T>>(&mut self, mut it: It) {
-        for elem in it {
-            self.append(elem);
-        }
     }
 }
 
