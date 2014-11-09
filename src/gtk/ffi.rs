@@ -347,6 +347,9 @@ pub struct C_GtkComboBoxText;
 #[repr(C)]
 pub struct C_GtkPopover;
 
+#[repr(C)]
+pub struct C_GtkSizeGroup;
+
 pub fn to_gboolean(b: bool) -> Gboolean {
     match b {
         true => GTRUE,
@@ -3182,6 +3185,18 @@ extern "C" {
     //pub fn gtk_actionable_set_action_target_value(actionable: *mut C_GtkActionable, target_value: *mut glib::ffi::C_GVariant);
     //pub fn gtk_actionable_set_action_target(actionable: *mut C_GtkActionable, format_string: *const c_char, ...);
     pub fn gtk_actionable_set_detailed_action_name(actionable: *mut C_GtkActionable, detailed_action_name: *const c_char);
+
+    //=========================================================================
+    // GtkSizeGroup                                                      NOT OK
+    //=========================================================================
+    pub fn gtk_size_group_new              (mode: gtk::SizeGroupMode) -> *mut C_GtkSizeGroup;
+    pub fn gtk_size_group_set_mode         (size_group: *mut C_GtkSizeGroup, mode: gtk::SizeGroupMode);
+    pub fn gtk_size_group_get_mode         (size_group: *mut C_GtkSizeGroup) -> gtk::SizeGroupMode;
+    pub fn gtk_size_group_set_ignore_hidden(size_group: *mut C_GtkSizeGroup, ignore_hidden: Gboolean);
+    pub fn gtk_size_group_get_ignore_hidden(size_group: *mut C_GtkSizeGroup) -> Gboolean;
+    pub fn gtk_size_group_add_widget       (size_group: *mut C_GtkSizeGroup, widget: *mut C_GtkWidget);
+    pub fn gtk_size_group_remove_widget    (size_group: *mut C_GtkSizeGroup, widget: *mut C_GtkWidget);
+    //pub fn gtk_size_group_get_widgets      (size_group: *mut C_GtkSizeGroup) -> *mut C_GSList;
 
     //=========================================================================
     // Glue fixe code

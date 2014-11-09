@@ -1555,3 +1555,19 @@ pub mod dest_defaults {
         All
     }
 }
+
+/// The mode of the size group determines the directions in which the size group affects the requested sizes of its component widgets.
+pub mod size_group_mode {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum SizeGroupMode {
+        /// group has no effect
+        None,
+        /// group affects horizontal requisition
+        Horizontal,
+        /// group affects vertical requisition
+        Vertical,
+        /// group affects both horizontal and vertical requisition
+        Both
+    }
+}

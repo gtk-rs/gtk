@@ -137,6 +137,7 @@ pub use self::textchildanchor::TextChildAnchor;
 pub use self::placessidebar::PlacesSidebar;
 pub use self::toolpalette::ToolPalette;
 pub use self::toolitemgroup::ToolItemGroup;
+pub use self::sizegroup::SizeGroup;
 
 mod window;
 mod label;
@@ -262,3 +263,4 @@ mod textchildanchor;
 mod placessidebar;
 mod toolpalette;
 mod toolitemgroup;
+mod sizegroup;
