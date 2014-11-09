@@ -15,7 +15,7 @@
 
 //! GtkSizeGroup — Grouping widgets so they request the same size
 
-use gtk::{mod, ffi, traits};
+use gtk::{mod, ffi};
 
 pub struct SizeGroup {
     pointer: *mut ffi::C_GtkSizeGroup
@@ -50,11 +50,11 @@ impl SizeGroup {
         unsafe { ffi::to_bool(ffi::gtk_size_group_get_ignore_hidden(self.pointer)) }
     }
 
-    pub fn add_widget<T: traits::WidgetTrait>(&self, widget: &T) {
+    pub fn add_widget<T: gtk::WidgetTrait>(&self, widget: &T) {
         unsafe { ffi::gtk_size_group_add_widget(self.pointer, widget.get_widget()) }
     }
 
-    pub fn remove_widget<T: traits::WidgetTrait>(&self, widget: &T) {
+    pub fn remove_widget<T: gtk::WidgetTrait>(&self, widget: &T) {
         unsafe { ffi::gtk_size_group_remove_widget(self.pointer, widget.get_widget()) }
     }
 }
