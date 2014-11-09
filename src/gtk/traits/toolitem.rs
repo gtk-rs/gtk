@@ -165,5 +165,15 @@ pub trait ToolItemTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait 
             ffi::gtk_tool_item_toolbar_reconfigured(GTK_TOOLITEM(self.get_widget()))
         }
     }
+
+    fn get_text_size_group(&self) -> Option<gtk::SizeGroup> {
+        let tmp_pointer = unsafe { ffi::gtk_tool_item_get_text_size_group(GTK_TOOLITEM(self.get_widget()) as *const ffi::C_GtkToolItem) };
+
+        if tmp_pointer.is_null() {
+            None
+        } else {
+            Some(gtk::SizeGroup::wrap_pointer(tmp_pointer))
+        }
+    }
 }
 

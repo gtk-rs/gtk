@@ -59,4 +59,14 @@ pub trait ToolShellTrait: gtk::WidgetTrait {
             ffi::gtk_tool_shell_rebuild_menu(GTK_TOOLSHELL(self.get_widget()))
         }
     }
+
+    fn get_text_size_group(&self) -> Option<gtk::SizeGroup> {
+        let tmp_pointer = unsafe { ffi::gtk_tool_shell_get_text_size_group(GTK_TOOLSHELL(self.get_widget()) as *const ffi::C_GtkToolShell) };
+
+        if tmp_pointer.is_null() {
+            None
+        } else {
+            Some(gtk::SizeGroup::wrap_pointer(tmp_pointer))
+        }
+    }
 }

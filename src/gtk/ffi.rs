@@ -2309,7 +2309,7 @@ extern "C" {
     pub fn gtk_tool_shell_get_text_alignment   (shell: *mut C_GtkToolShell) -> c_float;
     pub fn gtk_tool_shell_get_text_orientation (shell: *mut C_GtkToolShell) -> gtk::Orientation;
     pub fn gtk_tool_shell_rebuild_menu         (shell: *mut C_GtkToolShell) -> ();
-    // pub fn gtk_tool_shell_get_text_size_group  (shell: *const const C_GtkToolShell) -> *GtkSizeGroup;
+    pub fn gtk_tool_shell_get_text_size_group  (shell: *const C_GtkToolShell) -> *mut C_GtkSizeGroup;
 
     //=========================================================================
     // GtkToolBar
@@ -2361,7 +2361,7 @@ extern "C" {
     // pub fn gtk_tool_item_set_proxy_menu_item   (tool_item: *const const C_GtkToolItem, menu_item_id: *const c_char, menu_item: *const const C_GtkWidget) -> ();
     pub fn gtk_tool_item_rebuild_menu          (tool_item: *mut C_GtkToolItem) -> ();
     pub fn gtk_tool_item_toolbar_reconfigured  (tool_item: *mut C_GtkToolItem) -> ();
-    // pub fn gtk_tool_item_get_text_size_group   (tool_item: *const const C_GtkToolItem) -> *GtkSizeGroup;
+    pub fn gtk_tool_item_get_text_size_group   (tool_item: *const C_GtkToolItem) -> *mut C_GtkSizeGroup;
 
     //=========================================================================
     // GtkToolItemGroup                                                  NOT OK
