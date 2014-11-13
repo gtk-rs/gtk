@@ -56,8 +56,10 @@ pub use self::enums::{
     modifier_intent,
     ModifierIntent,
     modifier_type,
-    ModifierType
+    ModifierType,
 };
+
+pub use self::enums::key::*;
 
 pub use self::device::{Device};
 pub use self::window::{Window};
