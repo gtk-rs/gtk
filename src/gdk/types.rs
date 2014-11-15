@@ -9,6 +9,7 @@ pub struct Rectangle { //FIXME should be just an alias to cairo_rectangle_int_t
 }
 
 pub type Atom = *mut c_void;
+pub type Key = u32;
 
 #[repr(C)]
 pub struct Screen;
