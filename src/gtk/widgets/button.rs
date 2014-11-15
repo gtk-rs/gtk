@@ -48,7 +48,7 @@ impl Button {
         check_pointer!(tmp_pointer, Button)
     }
 
-    pub fn new_with_menmonic(mnemonic: &str) -> Option<Button> {
+    pub fn new_with_mnemonic(mnemonic: &str) -> Option<Button> {
         let tmp_pointer = unsafe {
             mnemonic.with_c_str(|c_str| {
                 ffi::gtk_button_new_with_mnemonic(c_str)

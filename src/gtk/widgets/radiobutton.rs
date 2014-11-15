@@ -38,7 +38,7 @@ impl RadioButton {
         check_pointer!(tmp_pointer, RadioButton)
     }
 
-    pub fn new_with_menmonic(mnemonic: &str) -> Option<RadioButton> {
+    pub fn new_with_mnemonic(mnemonic: &str) -> Option<RadioButton> {
         let tmp_pointer = unsafe {
             mnemonic.with_c_str(|c_str| {
                 ffi::gtk_radio_button_new_with_mnemonic(ptr::null_mut(), c_str)
