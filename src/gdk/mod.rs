@@ -52,17 +52,13 @@ pub use self::events::{
     OwnerChange
 };
 
-pub use self::enums::{
-    modifier_intent,
-    ModifierIntent,
-    modifier_type,
-    ModifierType,
-    key
-};
-
 pub use self::device::{Device};
 pub use self::window::{Window};
 pub use self::types::{Atom, Screen, Rectangle};
+
+pub use self::enums::modifier_intent::ModifierIntent;
+pub use self::enums::modifier_type::ModifierType;
+pub use self::enums::key;
 
 mod color;
 mod events;

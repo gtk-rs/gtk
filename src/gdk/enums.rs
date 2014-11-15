@@ -15,9 +15,6 @@
 
 //! Enumeration used with gdk types
 
-pub use self::modifier_intent::ModifierIntent;
-pub use self::modifier_type::ModifierType;
-
 pub mod modifier_intent {
     #[repr(C)]
     #[deriving(Clone, PartialEq, PartialOrd, Show)]
