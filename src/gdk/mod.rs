@@ -54,7 +54,7 @@ pub use self::events::{
 
 pub use self::device::{Device};
 pub use self::window::{Window};
-pub use self::types::{Atom, Screen, Rectangle};
+pub use self::types::{Atom, Screen, Rectangle, Key};
 
 pub use self::enums::modifier_intent::ModifierIntent;
 pub use self::enums::modifier_type::ModifierType;
