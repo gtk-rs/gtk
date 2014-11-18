@@ -15,7 +15,7 @@
 
 use gtk::{mod, ffi};
 use gtk::ffi::FFIWidget;
-use gtk::enums::response_type;
+use gtk::enums::response_type::ResponseType;
 use gtk::cast::{GTK_WINDOW, GTK_RECENT_MANAGER};
 
 struct_Widget!(RecentChooserDialog)
@@ -29,8 +29,8 @@ impl RecentChooserDialog {
                         Some(ref p) => GTK_WINDOW(p.get_widget()),
                         None => ::std::ptr::null_mut()
                     },
-                    c_str2, response_type::Ok,
-                    c_str3, response_type::Cancel,
+                    c_str2, ResponseType::Ok,
+                    c_str3, ResponseType::Cancel,
                     ::std::ptr::null::<::libc::c_void>())
                 })
             })
@@ -51,8 +51,8 @@ impl RecentChooserDialog {
                         Some(ref p) => GTK_WINDOW(p.get_widget()),
                         None => ::std::ptr::null_mut()
                     }, GTK_RECENT_MANAGER(manager.get_widget()),
-                    c_str2, response_type::Ok,
-                    c_str3, response_type::Cancel,
+                    c_str2, ResponseType::Ok,
+                    c_str3, ResponseType::Cancel,
                     ::std::ptr::null::<::libc::c_void>())
                 })
             })

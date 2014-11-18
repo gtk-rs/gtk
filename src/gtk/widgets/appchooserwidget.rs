@@ -24,7 +24,7 @@ impl AppChooserWidget {
     pub fn new(content_type: &str) -> Option<AppChooserWidget> {
         let tmp_pointer = unsafe { 
             content_type.with_c_str(|c_str| {
-                ffi::gtk_app_chooser_widget_new(orientation)
+                ffi::gtk_app_chooser_widget_new(c_str)
             })
         };
         check_pointer!(tmp_pointer, AppChooserWidget)
@@ -36,7 +36,7 @@ impl AppChooserWidget {
 
     pub fn get_show_default(&mut self) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_app_chooser_widget_set_show_default(GTK_APP_CHOOSER_WIDGET(self.pointer)))
+            ffi::to_bool(ffi::gtk_app_chooser_widget_get_show_default(GTK_APP_CHOOSER_WIDGET(self.pointer)))
         }
     }
 
@@ -83,7 +83,7 @@ impl AppChooserWidget {
     pub fn set_default_text(&self, text: &str) {
         unsafe {
             text.with_c_str(|c_str| {
-                ffi::gtk_app_chooser_widget_set_default_text(GTK_APP_CHOOSER_WIDGET(self.pointer), ffi::to_gboolean(setting))
+                ffi::gtk_app_chooser_widget_set_default_text(GTK_APP_CHOOSER_WIDGET(self.pointer), c_str)
             })
         }
     }
@@ -94,7 +94,7 @@ impl AppChooserWidget {
         if tmp_pointer.is_null() {
             None
         } else {
-            unsafe { Some(::std::string::raw::from_buf(tmp_pointer)) }
+            unsafe { Some(::std::string::raw::from_buf(tmp_pointer as *const u8)) }
         }
     }
 }

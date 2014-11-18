@@ -3,12 +3,6 @@ use std::mem::transmute;
 use std::iter::Iterator;
 use std::c_vec::CVec;
 use cairo::enums::PathDataType;
-/*{
-    PathMoveTo,
-    PathLineTo,
-    PathCurveTo,
-    PathClosePath
-};*/
 use cairo::ffi::{
     cairo_path_t,
     cairo_path_data_header
@@ -90,10 +84,10 @@ impl<'a> Iterator<PathSegment> for PathSegments<'a> {
         let ref data = self.data;
 
         Some(match data_type {
-            PathMoveTo => MoveTo(*data.get(i+1).unwrap()),
-            PathLineTo => LineTo(*data.get(i+1).unwrap()),
-            PathCurveTo => CurveTo(*data.get(i+1).unwrap(), *data.get(i+2).unwrap(), *data.get(i+3).unwrap()),
-            PathClosePath => ClosePath
+            PathDataType::PathMoveTo => PathSegment::MoveTo(*data.get(i+1).unwrap()),
+            PathDataType::PathLineTo => PathSegment::LineTo(*data.get(i+1).unwrap()),
+            PathDataType::PathCurveTo => PathSegment::CurveTo(*data.get(i+1).unwrap(), *data.get(i+2).unwrap(), *data.get(i+3).unwrap()),
+            PathDataType::PathClosePath => PathSegment::ClosePath
         })
     }
 }
