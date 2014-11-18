@@ -410,6 +410,10 @@ GtkAppChooser* cast_GtkAppChooser(GtkWidget* widget) {
     return GTK_APP_CHOOSER(widget);
 }
 
+GtkAppChooserWidget* cast_GtkAppChooserWidget(GtkWidget* widget) {
+    return GTK_APP_CHOOSER_WIDGET(widget);
+}
+
 GtkAppChooserDialog* cast_GtkAppChooserDialog(GtkWidget* widget) {
     return GTK_APP_CHOOSER_DIALOG(widget);
 }

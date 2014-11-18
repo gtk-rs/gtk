@@ -297,6 +297,10 @@ pub fn GTK_APP_CHOOSER(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkAppChoos
     unsafe { ffi::cast_GtkAppChooser(widget) }
 }
 
+pub fn GTK_APP_CHOOSER_WIDGET(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkAppChooserWidget {
+    unsafe { ffi::cast_GtkAppChooserWidget(widget) }
+}
+
 pub fn GTK_APP_CHOOSER_DIALOG(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkAppChooserDialog {
     unsafe { ffi::cast_GtkAppChooserDialog(widget) }
 }

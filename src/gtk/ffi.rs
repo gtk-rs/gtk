@@ -348,6 +348,9 @@ pub struct C_GtkComboBoxText;
 pub struct C_GtkPopover;
 
 #[repr(C)]
+pub struct C_GtkAppChooserWidget;
+
+#[repr(C)]
 pub struct C_GtkSizeGroup;
 
 pub fn to_gboolean(b: bool) -> Gboolean {
@@ -3199,6 +3202,23 @@ extern "C" {
     //pub fn gtk_size_group_get_widgets      (size_group: *mut C_GtkSizeGroup) -> *mut C_GSList;
 
     //=========================================================================
+    // GtkAppChooserWidget                                               NOT OK
+    //=========================================================================
+    pub fn gtk_app_chooser_widget_new      (content_type: *const c_char) -> *mut C_GtkWidget;
+    pub fn gtk_app_chooser_widget_set_show_default(_self: *mut C_GtkAppChooserWidget, setting: Gboolean);
+    pub fn gtk_app_chooser_widget_get_show_default(_self: *mut C_GtkAppChooserWidget) -> Gboolean;
+    pub fn gtk_app_chooser_widget_set_show_recommended(_self: *mut C_GtkAppChooserWidget, setting: Gboolean);
+    pub fn gtk_app_chooser_widget_get_show_recommended(_self: *mut C_GtkAppChooserWidget) -> Gboolean;
+    pub fn gtk_app_chooser_widget_set_show_fallback(_self: *mut C_GtkAppChooserWidget, setting: Gboolean);
+    pub fn gtk_app_chooser_widget_get_show_fallback(_self: *mut C_GtkAppChooserWidget) -> Gboolean;
+    pub fn gtk_app_chooser_widget_set_show_other(_self: *mut C_GtkAppChooserWidget, setting: Gboolean);
+    pub fn gtk_app_chooser_widget_get_show_other(_self: *mut C_GtkAppChooserWidget) -> Gboolean;
+    pub fn gtk_app_chooser_widget_set_show_all(_self: *mut C_GtkAppChooserWidget, setting: Gboolean);
+    pub fn gtk_app_chooser_widget_get_show_all(_self: *mut C_GtkAppChooserWidget) -> Gboolean;
+    pub fn gtk_app_chooser_widget_set_default_text(_self: *mut C_GtkAppChooserWidget, text: *const c_char);
+    pub fn gtk_app_chooser_widget_get_default_text(_self: *mut C_GtkAppChooserWidget) -> *const c_char;
+
+    //=========================================================================
     // Glue fixe code
     //=========================================================================
     pub fn g_signal_connect_data(instance: gpointer,
@@ -3371,4 +3391,5 @@ extern "C" {
     pub fn cast_GtkPlacesSidebar(widget: *mut C_GtkWidget) -> *mut C_GtkPlacesSidebar;
     pub fn cast_GtkToolPalette(widget: *mut C_GtkWidget) -> *mut C_GtkToolPalette;
     pub fn cast_GtkToolItemGroup(widget: *mut C_GtkWidget) -> *mut C_GtkToolItemGroup;
+    pub fn cast_GtkAppChooserWidget(widget: *mut C_GtkWidget) -> *mut C_GtkAppChooserWidget;
 }
