@@ -49,9 +49,9 @@ pub enum Status {
     StatusLastStatus
 }
 
-impl Show for Status{
-    fn fmt(&self, formatter: &mut ::std::fmt::Formatter) -> Result<(), FormatError>{
-        let c_str = unsafe{
+impl Show for Status {
+    fn fmt(&self, formatter: &mut ::std::fmt::Formatter) -> Result<(), FormatError> {
+        let c_str = unsafe {
             let char_ptr = ffi::cairo_status_to_string(*self);
             CString::new(char_ptr, false) //FIXME I'm not sure if we actually own the str send in by cairo
         };
@@ -59,9 +59,9 @@ impl Show for Status{
     }
 }
 
-impl Status{
-    pub fn ensure_valid(&self){
-        if *self != StatusSuccess {
+impl Status {
+    pub fn ensure_valid(&self) {
+        if *self != Status::StatusSuccess {
             panic!("Cairo error {}", *self)
         }
     }
@@ -140,7 +140,7 @@ pub enum Operator {
 }
 
 #[repr(C)]
-pub enum PathDataType{
+pub enum PathDataType {
     PathMoveTo,
     PathLineTo,
     PathCurveTo,
@@ -148,14 +148,14 @@ pub enum PathDataType{
 }
 
 #[repr(C)]
-pub enum Content{
+pub enum Content {
     ContentColor      = 0x1000,
     ContentAlpha      = 0x2000,
     ContentColorAlpha = 0x3000
 }
 
 #[repr(C)]
-pub enum Extend{
+pub enum Extend {
     ExtendNone,
     ExtendRepeat,
     ExtendReflect,
@@ -163,7 +163,7 @@ pub enum Extend{
 }
 
 #[repr(C)]
-pub enum Filter{
+pub enum Filter {
     FilterFast,
     FilterGood,
     FilterBest,
@@ -173,7 +173,7 @@ pub enum Filter{
 }
 
 #[repr(C)]
-pub enum PatternType{
+pub enum PatternType {
     PatternTypeSolid,
     PatternTypeSurface,
     PatternTypeLinearGradient,
