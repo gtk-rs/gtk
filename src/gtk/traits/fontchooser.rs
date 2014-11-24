@@ -17,7 +17,6 @@ use gtk::cast::{GTK_FONT_CHOOSER};
 use gtk::{mod, ffi};
 use gtk::ffi::FFIWidget;
 use libc::c_char;
-use std::string;
 
 pub trait FontChooserTrait: gtk::WidgetTrait {
     fn get_font_size(&self) -> i32 {
@@ -30,7 +29,7 @@ pub trait FontChooserTrait: gtk::WidgetTrait {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { string::raw::from_buf(tmp as *const u8) })
+            Some(unsafe { String::from_raw_buf(tmp as *const u8) })
         }
     }
 
@@ -48,7 +47,7 @@ pub trait FontChooserTrait: gtk::WidgetTrait {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { string::raw::from_buf(tmp as *const u8) })
+            Some(unsafe { String::from_raw_buf(tmp as *const u8) })
         }
     }
 

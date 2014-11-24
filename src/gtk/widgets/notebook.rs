@@ -18,7 +18,6 @@
 use gtk::{mod, ffi};
 use gtk::cast::GTK_NOTEBOOK;
 use gtk::ffi::FFIWidget;
-use std::string;
 
 /// GtkNotebook — A tabbed notebook container
 struct_Widget!(NoteBook)
@@ -121,7 +120,7 @@ impl NoteBook {
 
     pub fn get_group_name(&mut self) -> String {
         let c_str = unsafe { ffi::gtk_notebook_get_group_name(GTK_NOTEBOOK(self.pointer)) };
-        unsafe { string::raw::from_buf(c_str as *const u8) }
+        unsafe { String::from_raw_buf(c_str as *const u8) }
     }
 
     pub fn get_current_page(&self) -> i32 {
@@ -278,7 +277,7 @@ impl NoteBook {
         unsafe {
             let c_str = ffi::gtk_notebook_get_tab_label_text(GTK_NOTEBOOK(self.pointer),
                                                              child.get_widget());
-            string::raw::from_buf(c_str as *const u8)
+            String::from_raw_buf(c_str as *const u8)
         }
     }
 
@@ -316,7 +315,7 @@ impl NoteBook {
         unsafe {
             let c_str = ffi::gtk_notebook_get_menu_label_text(GTK_NOTEBOOK(self.pointer),
                                                               child.get_widget());
-            string::raw::from_buf(c_str as *const u8)
+            String::from_raw_buf(c_str as *const u8)
         }
     }
 

@@ -25,7 +25,7 @@ pub mod g_type {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(unsafe { ::std::string::raw::from_buf(tmp_pointer as *const u8) })
+            Some(unsafe { String::from_raw_buf(tmp_pointer as *const u8) })
         }
     }
 
@@ -60,7 +60,7 @@ pub mod g_type {
         if n_children == 0u32 || tmp_vec.is_null() {
             Vec::new()
         } else {
-            unsafe { ::std::vec::raw::from_buf(tmp_vec as *const gtk::GType, n_children as uint) }
+            unsafe { Vec::from_raw_buf(tmp_vec as *const gtk::GType, n_children as uint) }
         }
     }
 
@@ -71,7 +71,7 @@ pub mod g_type {
         if n_interfaces == 0u32 || tmp_vec.is_null() {
             Vec::new()
         } else {
-            unsafe { ::std::vec::raw::from_buf(tmp_vec as *const gtk::GType, n_interfaces as uint) }
+            unsafe { Vec::from_raw_buf(tmp_vec as *const gtk::GType, n_interfaces as uint) }
         }
     }
 
@@ -82,7 +82,7 @@ pub mod g_type {
         if n_prerequisites == 0u32 || tmp_vec.is_null() {
             Vec::new()
         } else {
-            unsafe { ::std::vec::raw::from_buf(tmp_vec as *const gtk::GType, n_prerequisites as uint) }
+            unsafe { Vec::from_raw_buf(tmp_vec as *const gtk::GType, n_prerequisites as uint) }
         }
     }
 

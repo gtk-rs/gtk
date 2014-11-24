@@ -15,7 +15,6 @@
 
 use gtk::ffi;
 use std::c_str::CString;
-use std::string::raw::from_buf;
 
 pub struct TreePath {
     pointer:   *mut ffi::C_GtkTreePath
@@ -85,7 +84,7 @@ impl TreePath {
                 // used to free the returned string
                 let container = CString::new(string as *const i8, true);
 
-                from_buf(string as *const u8)
+                String::from_raw_buf(string as *const u8)
             }
         }
     }
@@ -107,7 +106,7 @@ impl TreePath {
         let depth = self.get_depth();
 
         unsafe {
-            ::std::vec::raw::from_buf(tmp as *const i32, depth as uint)
+            Vec::from_raw_buf(tmp as *const i32, depth as uint)
         }
     }
 

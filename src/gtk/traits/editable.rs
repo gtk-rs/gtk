@@ -57,7 +57,7 @@ pub trait EditableTrait: gtk::WidgetTrait {
         let chars = unsafe {
             ffi::gtk_editable_get_chars(GTK_EDITABLE(self.get_widget()), start_pos, end_pos)
         };
-        unsafe { ::std::string::raw::from_buf(chars as *const u8) }
+        unsafe { String::from_raw_buf(chars as *const u8) }
     }
 
     fn cut_clipboard(&mut self) {

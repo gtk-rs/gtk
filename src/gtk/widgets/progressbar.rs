@@ -19,7 +19,6 @@ use libc::c_double;
 
 use gtk::{mod, ffi};
 use gtk::cast::GTK_PROGRESSBAR;
-use std::string;
 
 /// ProgressBar — A widget which indicates progress visually
 struct_Widget!(ProgressBar)
@@ -60,7 +59,7 @@ impl ProgressBar {
     pub fn get_text(&self) -> String {
         unsafe {
             let c_str = ffi::gtk_progress_bar_get_text(GTK_PROGRESSBAR(self.pointer));
-            string::raw::from_buf(c_str as *const u8)
+            String::from_raw_buf(c_str as *const u8)
         }
     }
 

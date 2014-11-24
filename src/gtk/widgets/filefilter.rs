@@ -14,7 +14,6 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::ffi;
-use std::string;
 
 pub struct FileFilter {
     pointer : *mut ffi::C_GtkFileFilter
@@ -45,7 +44,7 @@ impl FileFilter {
         if name.is_null() {
             None
         } else {
-            Some(unsafe { string::raw::from_buf(name as *const u8) })
+            Some(unsafe { String::from_raw_buf(name as *const u8) })
         }
     }
 

@@ -18,8 +18,6 @@ use gtk::ffi::to_gboolean;
 use gtk::cast::GTK_WINDOW;
 use gtk::WindowPosition;
 
-use std::string;
-
 pub trait WindowTrait : gtk::WidgetTrait {
     fn set_title(&mut self, title: &str) -> () {
         unsafe {
@@ -40,7 +38,7 @@ pub trait WindowTrait : gtk::WidgetTrait {
         if c_title.is_null() {
             None
         } else {
-            Some(unsafe { string::raw::from_buf(c_title as *const u8) })
+            Some(unsafe { String::from_raw_buf(c_title as *const u8) })
         }
     }
 

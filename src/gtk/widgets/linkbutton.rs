@@ -17,7 +17,6 @@
 
 use gtk::cast::GTK_LINKBUTTON;
 use gtk::{mod, ffi};
-use std::string;
 
 /**
 * LinkButton — Create buttons bound to a URL
@@ -51,7 +50,7 @@ impl LinkButton {
 
     pub fn get_uri(&self) -> String {
         let c_str = unsafe { ffi::gtk_link_button_get_uri(GTK_LINKBUTTON(self.pointer)) };
-        unsafe { string::raw::from_buf(c_str as *const u8) }
+        unsafe { String::from_raw_buf(c_str as *const u8) }
     }
 
     pub fn set_uri(&mut self, uri: &str) -> () {

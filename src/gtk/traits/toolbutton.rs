@@ -15,7 +15,6 @@
 
 use gtk::cast::GTK_TOOLBUTTON;
 use gtk::{mod, ffi};
-use std::string;
 
 pub trait ToolButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait + gtk::ToolItemTrait {
     fn set_label(&mut self, label: &str) -> () {
@@ -48,7 +47,7 @@ pub trait ToolButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrai
             if c_str.is_null() {
                 None
             } else {
-                Some(string::raw::from_buf(c_str as *const u8))
+                Some(String::from_raw_buf(c_str as *const u8))
             }
         }
     }
@@ -59,7 +58,7 @@ pub trait ToolButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrai
             if c_str.is_null() {
                 None
             } else {
-                Some(string::raw::from_buf(c_str as *const u8))
+                Some(String::from_raw_buf(c_str as *const u8))
             }
         }
     }
@@ -70,7 +69,7 @@ pub trait ToolButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrai
             if c_str.is_null() {
                 None
             } else {
-                Some(string::raw::from_buf(c_str as *const u8))
+                Some(String::from_raw_buf(c_str as *const u8))
             }
         }
     }

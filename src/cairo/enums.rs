@@ -1,5 +1,19 @@
+// This file is part of rgtk.
+//
+// rgtk is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// rgtk is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::fmt::{Show, FormatError};
+use std::fmt::{Show, Error};
 use cairo::ffi;
 use std::c_str::CString;
 
@@ -50,7 +64,7 @@ pub enum Status {
 }
 
 impl Show for Status {
-    fn fmt(&self, formatter: &mut ::std::fmt::Formatter) -> Result<(), FormatError> {
+    fn fmt(&self, formatter: &mut ::std::fmt::Formatter) -> Result<(), Error> {
         let c_str = unsafe {
             let char_ptr = ffi::cairo_status_to_string(*self);
             CString::new(char_ptr, false) //FIXME I'm not sure if we actually own the str send in by cairo

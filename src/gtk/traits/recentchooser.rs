@@ -17,7 +17,6 @@ use gtk::cast::{GTK_RECENT_CHOOSER};
 use gtk::{mod, ffi};
 use gtk::ffi::FFIWidget;
 use glib;
-use std::string;
 
 pub trait RecentChooserTrait: gtk::WidgetTrait + FFIWidget {
     fn set_show_private(&self, show_private: bool) {
@@ -126,7 +125,7 @@ pub trait RecentChooserTrait: gtk::WidgetTrait + FFIWidget {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { string::raw::from_buf(tmp as *const u8) })
+            Some(unsafe { String::from_raw_buf(tmp as *const u8) })
         }
     }
 
@@ -183,7 +182,7 @@ pub trait RecentChooserTrait: gtk::WidgetTrait + FFIWidget {
             let mut ret = Vec::with_capacity(length as uint);
 
             for count in range(0, length) {
-                ret.push(unsafe { string::raw::from_buf(*tmp.offset(count as int) as *const u8) });
+                ret.push(unsafe { String::from_raw_buf(*tmp.offset(count as int) as *const u8) });
             }
             Some(ret)
         }
