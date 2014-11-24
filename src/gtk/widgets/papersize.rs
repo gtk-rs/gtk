@@ -17,8 +17,6 @@ use gtk::{mod, ffi};
 use gtk::ffi::FFIWidget;
 use gtk::cast::{GTK_PAPER_SIZE};
 use glib;
-use std::string;
-
 
 // FIXME: PaperSize is not a widget nor a GObject -> GBoxed
 struct_Widget!(PaperSize)
@@ -112,7 +110,7 @@ impl PaperSize {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { string::raw::from_buf(tmp as *const u8) })
+            Some(unsafe { String::from_raw_buf(tmp as *const u8) })
         }
     }
 
@@ -122,7 +120,7 @@ impl PaperSize {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { string::raw::from_buf(tmp as *const u8) })
+            Some(unsafe { String::from_raw_buf(tmp as *const u8) })
         }
     }
 
@@ -132,7 +130,7 @@ impl PaperSize {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { string::raw::from_buf(tmp as *const u8) })
+            Some(unsafe { String::from_raw_buf(tmp as *const u8) })
         }
     }
 
@@ -177,7 +175,7 @@ impl PaperSize {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { string::raw::from_buf(tmp as *const u8) })
+            Some(unsafe { String::from_raw_buf(tmp as *const u8) })
         }
     }
 }

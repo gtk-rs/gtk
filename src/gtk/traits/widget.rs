@@ -19,7 +19,6 @@ use gdk;
 use gtk;
 use glib;
 use glib::ffi::GType;
-use std::string;
 
 pub trait WidgetTrait: ffi::FFIWidget {
     fn show_all(&mut self) -> () {
@@ -106,7 +105,7 @@ pub trait WidgetTrait: ffi::FFIWidget {
         if tmp.is_null() {
             None
         } else {
-            unsafe { Some(string::raw::from_buf(tmp as *const u8)) }
+            unsafe { Some(String::from_raw_buf(tmp as *const u8)) }
         }
     }
 
@@ -372,7 +371,7 @@ pub trait WidgetTrait: ffi::FFIWidget {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { string::raw::from_buf(tmp as *const u8) })
+            Some(unsafe { String::from_raw_buf(tmp as *const u8) })
         }
     }
 
@@ -391,7 +390,7 @@ pub trait WidgetTrait: ffi::FFIWidget {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { string::raw::from_buf(tmp as *const u8) })
+            Some(unsafe { String::from_raw_buf(tmp as *const u8) })
         }
     }
 

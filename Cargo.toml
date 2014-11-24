@@ -1,8 +1,8 @@
 [package]
 name = "rgtk"
 version = "0.0.1"
-authors = ["letang.jeremy@gmail.com", "mathijs.henquet@gmail.com", "guillaume1.gomez@gmail.com", "bpgarman@fastmail.fm", "me@bstr.eu", "zsoakes@gmail.com"]
-build = "sh cargobuild.sh"
+authors = ["letang.jeremy@gmail.com", "guillaume1.gomez@gmail.com", "mathijs.henquet@gmail.com", "bpgarman@fastmail.fm", "me@bstr.eu", "zsoakes@gmail.com"]
+build = "build.rs"
 
 [features]
 GTK_3_14 = []

@@ -18,7 +18,6 @@
 use gtk::{mod, ffi};
 use gtk::TreeModel;
 use gtk::cast::GTK_ENTRY_COMPLETION;
-use std::string;
 
 struct_Widget!(EntryCompletion)
 
@@ -77,7 +76,7 @@ impl EntryCompletion {
         if tmp_pointer.is_null() {
             None
         } else {
-            unsafe { Some(string::raw::from_buf(tmp_pointer as *const u8)) }
+            unsafe { Some(String::from_raw_buf(tmp_pointer as *const u8)) }
         }
     }
 
@@ -91,7 +90,7 @@ impl EntryCompletion {
         if tmp_pointer.is_null() {
             None
         } else {
-            unsafe { Some(string::raw::from_buf(tmp_pointer as *const u8)) }
+            unsafe { Some(String::from_raw_buf(tmp_pointer as *const u8)) }
         }
     }
 

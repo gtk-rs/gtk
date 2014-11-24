@@ -16,7 +16,6 @@
 use gtk::{mod, ffi};
 use gtk::ffi::FFIWidget;
 use gtk::cast::{GTK_WINDOW, GTK_APP_CHOOSER_DIALOG};
-use std::string;
 
 struct_Widget!(AppChooserDialog)
 
@@ -62,7 +61,7 @@ impl AppChooserDialog {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(unsafe { string::raw::from_buf(tmp_pointer as *const u8) })
+            Some(unsafe { String::from_raw_buf(tmp_pointer as *const u8) })
         }
     }
 }

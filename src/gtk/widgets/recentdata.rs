@@ -16,7 +16,6 @@
 use gtk::ffi;
 use std::default::Default;
 use libc::c_char;
-use std::string;
 
 pub struct RecentData {
     display_name: String,
@@ -45,14 +44,14 @@ impl RecentData {
                         break;
                     }
                     count = count + 1;
-                    tmp_groups.push(string::raw::from_buf(*tmp as *const u8));
+                    tmp_groups.push(String::from_raw_buf(*tmp as *const u8));
                 }
                 RecentData {
-                    display_name: string::raw::from_buf((*ptr).display_name as *const u8),
-                    description: string::raw::from_buf((*ptr).description as *const u8),
-                    mime_type: string::raw::from_buf((*ptr).mime_type as *const u8),
-                    app_name: string::raw::from_buf((*ptr).app_name as *const u8),
-                    app_exec: string::raw::from_buf((*ptr).app_exec as *const u8),
+                    display_name: String::from_raw_buf((*ptr).display_name as *const u8),
+                    description: String::from_raw_buf((*ptr).description as *const u8),
+                    mime_type: String::from_raw_buf((*ptr).mime_type as *const u8),
+                    app_name: String::from_raw_buf((*ptr).app_name as *const u8),
+                    app_exec: String::from_raw_buf((*ptr).app_exec as *const u8),
                     groups: tmp_groups,
                     is_private: match (*ptr).is_private {
                         ffi::GFALSE => false,

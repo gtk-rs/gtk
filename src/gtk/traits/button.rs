@@ -19,7 +19,6 @@ use libc::c_float;
 use gtk::{ReliefStyle, PositionType};
 use gtk::cast::GTK_BUTTON;
 use gtk::{mod, ffi};
-use std::string;
 
 pub trait ButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait {
     fn pressed(&self) -> () {
@@ -69,7 +68,7 @@ pub trait ButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait {
         if c_str.is_null() {
             None
         } else {
-            Some(unsafe { string::raw::from_buf(c_str as *const u8) })
+            Some(unsafe { String::from_raw_buf(c_str as *const u8) })
         }
     }
 

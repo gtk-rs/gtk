@@ -18,7 +18,6 @@ use gtk::cast::GTK_FILE_CHOOSER;
 use gtk::ffi::{mod, FFIWidget};
 use glib::{mod, GlibContainer};
 use libc::c_char;
-use std::string;
 
 pub trait FileChooserTrait: gtk::WidgetTrait {
     fn set_action(&self, action: gtk::FileChooserAction) -> () {
@@ -113,7 +112,7 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
         if name.is_null() {
             None
         } else {
-            Some(unsafe { string::raw::from_buf(name as *const u8) })
+            Some(unsafe { String::from_raw_buf(name as *const u8) })
         }
     }
 
@@ -134,7 +133,7 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
         if filename.is_null() {
             None
         } else {
-            Some(unsafe { string::raw::from_buf(filename as *const u8) })
+            Some(unsafe { String::from_raw_buf(filename as *const u8) })
         }
     }
 
@@ -176,7 +175,7 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
 
             for it in old_list.iter() {
                 unsafe {
-                    tmp_vec.append(string::raw::from_buf(*it as *const u8));
+                    tmp_vec.append(String::from_raw_buf(*it as *const u8));
                 }
             }
             tmp_vec
@@ -200,7 +199,7 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
         if filename.is_null() {
             None
         } else {
-            Some(unsafe { string::raw::from_buf(filename as *const u8) })
+            Some(unsafe { String::from_raw_buf(filename as *const u8) })
         }
     }
 
@@ -221,7 +220,7 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
         if uri.is_null() {
             None
         } else {
-            Some(unsafe { string::raw::from_buf(uri as *const u8) })
+            Some(unsafe { String::from_raw_buf(uri as *const u8) })
         }
     }
 
@@ -255,7 +254,7 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
 
             for it in old_list.iter() {
                 unsafe {
-                    tmp_vec.append(string::raw::from_buf(*it as *const u8));
+                    tmp_vec.append(String::from_raw_buf(*it as *const u8));
                 }
             }
             tmp_vec
@@ -279,7 +278,7 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
         if uri.is_null() {
             None
         } else {
-            Some(unsafe { string::raw::from_buf(uri as *const u8) })
+            Some(unsafe { String::from_raw_buf(uri as *const u8) })
         }
     }
 
@@ -331,7 +330,7 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
         if filename.is_null() {
             None
         } else {
-            Some(unsafe { string::raw::from_buf(filename as *const u8) })
+            Some(unsafe { String::from_raw_buf(filename as *const u8) })
         }
     }
 
@@ -341,7 +340,7 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
         if uri.is_null() {
             None
         } else {
-            Some(unsafe { string::raw::from_buf(uri as *const u8) })
+            Some(unsafe { String::from_raw_buf(uri as *const u8) })
         }
     }
 

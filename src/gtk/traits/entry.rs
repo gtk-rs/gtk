@@ -18,7 +18,6 @@ use libc::{c_int, c_float, c_double};
 use gtk::{EntryIconPosition, ImageType, InputPurpose, InputHints};
 use gtk::cast::GTK_ENTRY;
 use gtk::{mod, ffi};
-use std::string;
 
 pub trait EntryTrait: gtk::WidgetTrait {
     fn get_buffer(&self) -> gtk::EntryBuffer {
@@ -46,7 +45,7 @@ pub trait EntryTrait: gtk::WidgetTrait {
             if c_str.is_null() {
                 None
             } else {
-                Some(string::raw::from_buf(c_str as *const u8))
+                Some(String::from_raw_buf(c_str as *const u8))
             }
         }
     }
@@ -151,7 +150,7 @@ pub trait EntryTrait: gtk::WidgetTrait {
     fn placeholder(&self) -> String {
         unsafe {
             let c_str = ffi::gtk_entry_get_placeholder_text(GTK_ENTRY(self.get_widget()));
-            string::raw::from_buf(c_str as *const u8)
+            String::from_raw_buf(c_str as *const u8)
         }
     }
 
@@ -274,14 +273,14 @@ pub trait EntryTrait: gtk::WidgetTrait {
     fn get_icon_stock(&self, icon_pos: EntryIconPosition) -> String {
         unsafe {
             let c_str = ffi::gtk_entry_get_icon_stock(GTK_ENTRY(self.get_widget()), icon_pos);
-            string::raw::from_buf(c_str as *const u8)
+            String::from_raw_buf(c_str as *const u8)
         }
     }
 
     fn get_icon_name(&self, icon_pos: EntryIconPosition) -> String {
         unsafe {
             let c_str = ffi::gtk_entry_get_icon_name(GTK_ENTRY(self.get_widget()), icon_pos);
-            string::raw::from_buf(c_str as *const u8)
+            String::from_raw_buf(c_str as *const u8)
         }
     }
 
@@ -330,7 +329,7 @@ pub trait EntryTrait: gtk::WidgetTrait {
     fn get_icon_tooltip_text(&self, icon_pos: EntryIconPosition) -> String {
         unsafe {
             let c_str = ffi::gtk_entry_get_icon_tooltip_text(GTK_ENTRY(self.get_widget()), icon_pos);
-            string::raw::from_buf(c_str as *const u8)
+            String::from_raw_buf(c_str as *const u8)
         }
     }
 
@@ -343,7 +342,7 @@ pub trait EntryTrait: gtk::WidgetTrait {
     fn get_icon_tooltip_markup(&self, icon_pos: EntryIconPosition) -> String {
         unsafe {
             let c_str = ffi::gtk_entry_get_icon_tooltip_markup(GTK_ENTRY(self.get_widget()), icon_pos);
-            string::raw::from_buf(c_str as *const u8)
+            String::from_raw_buf(c_str as *const u8)
         }
     }
 

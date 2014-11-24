@@ -17,7 +17,6 @@
 
 use gtk::{mod, ffi};
 use gtk::cast::GTK_FONTBUTTON;
-use std::string;
 
 /**
 * FontButton — A button to launch a font chooser dialog
@@ -52,7 +51,7 @@ impl FontButton {
 
     pub fn get_font_name(&self) -> String {
         let c_str = unsafe { ffi::gtk_font_button_get_font_name(GTK_FONTBUTTON(self.pointer)) };
-        unsafe { string::raw::from_buf(c_str as *const u8) }
+        unsafe { String::from_raw_buf(c_str as *const u8) }
     }
 
     pub fn set_show_style(&mut self, show_style: bool) -> () {
@@ -121,7 +120,7 @@ impl FontButton {
 
     pub fn get_title(&self) -> String {
         let c_str = unsafe { ffi::gtk_font_button_get_title(GTK_FONTBUTTON(self.pointer)) };
-        unsafe { string::raw::from_buf(c_str as *const u8) }
+        unsafe { String::from_raw_buf(c_str as *const u8) }
     }
 }
 

@@ -16,7 +16,6 @@
 use libc::c_uint;
 use std::ptr;
 use gtk::ffi;
-use std::string;
 
 pub fn init() {
     unsafe {
@@ -102,6 +101,6 @@ pub fn check_version(required_major: u32,
     if c_str.is_null() {
         None
     } else {
-        Some(unsafe {string::raw::from_buf(c_str as *const u8) })
+        Some(unsafe { String::from_raw_buf(c_str as *const u8) })
     }
  }
