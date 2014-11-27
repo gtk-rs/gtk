@@ -40,6 +40,8 @@ fn main() {
         Ok(_) => {}
         Err(e) => panic!(e)
     }
+    let current = os::getcwd().unwrap();
+    println!("cargo:rustc-flags=-l rgtk_glue:static -L {}{}", current.display(), "/target/deps");
 }
 
 fn envify(name: &str) -> String {

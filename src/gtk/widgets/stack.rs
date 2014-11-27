@@ -19,7 +19,6 @@
 
 use gtk::{mod, ffi};
 use gtk::cast::GTK_STACK;
-use std::string;
 
 /// GtkStack — A stacking container
 struct_Widget!(Stack)

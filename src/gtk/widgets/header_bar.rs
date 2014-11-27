@@ -19,7 +19,6 @@
 
 use gtk::cast::{GTK_HEADER_BAR};
 use gtk::{mod, ffi};
-use std::string;
 
 /// GtkHeaderBar — A box with a centered child
 struct_Widget!(HeaderBar)
