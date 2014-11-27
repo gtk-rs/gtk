@@ -88,7 +88,7 @@ impl EntryBuffer {
 
     pub fn insert_text(&mut self, position: u32, text: &str) -> () {
         unsafe {
-            ffi::gtk_entry_buffer_insert_text(self.pointer, position as c_uint, text.to_c_str().unwrap(), text.len() as c_int);
+            ffi::gtk_entry_buffer_insert_text(self.pointer, position as c_uint, text.to_c_str().into_inner(), text.len() as c_int);
         }
     }
 
@@ -106,7 +106,7 @@ impl EntryBuffer {
 
     pub fn emit_inserted_text(&mut self, position: u32, text: &str) -> () {
         unsafe {
-            ffi::gtk_entry_buffer_emit_inserted_text(self.pointer, position as c_uint, text.to_c_str().unwrap(), text.len() as c_int);
+            ffi::gtk_entry_buffer_emit_inserted_text(self.pointer, position as c_uint, text.to_c_str().into_inner(), text.len() as c_int);
         }
     }
 
