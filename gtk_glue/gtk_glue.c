@@ -591,6 +591,10 @@ GtkColorChooserWidget* cast_GtkColorChooserWidget(GtkWidget* widget) {
     return GTK_COLOR_CHOOSER_WIDGET(widget);
 }
 
+GtkFontChooserWidget* cast_GtkFontChooserWidget(GtkWidget* widget) {
+    return GTK_FONT_CHOOSER_WIDGET(widget);
+}
+
 // GType constants
 
 const GType g_type_invalid = G_TYPE_INVALID;

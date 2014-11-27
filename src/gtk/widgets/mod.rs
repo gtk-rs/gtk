@@ -141,6 +141,7 @@ pub use self::sizegroup::SizeGroup;
 pub use self::appchooserwidget::AppChooserWidget;
 pub use self::filechooserwidget::FileChooserWidget;
 pub use self::colorchooserwidget::ColorChooserWidget;
+pub use self::fontchooserwidget::FontChooserWidget;
 
 mod window;
 mod label;
@@ -270,3 +271,4 @@ mod sizegroup;
 mod appchooserwidget;
 mod filechooserwidget;
 mod colorchooserwidget;
+mod fontchooserwidget;

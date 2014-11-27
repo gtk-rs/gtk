@@ -13,15 +13,15 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-//! GtkColorChooserWidget — A widget for choosing colors
+//! GtkFontChooserWidget — A widget for selecting fonts
 
 use gtk::{mod, ffi};
 use gtk::ffi::FFIWidget;
 
-struct_Widget!(ColorChooserWidget)
+struct_Widget!(FontChooserWidget)
 
-impl ColorChooserWidget {
-    pub fn new() -> Option<ColorChooserWidget> {
+impl FontChooserWidget {
+    pub fn new() -> Option<FontChooserWidget> {
         let tmp_pointer = unsafe { ffi::gtk_color_chooser_widget_new() };
 
         if tmp_pointer.is_null() {
@@ -32,10 +32,10 @@ impl ColorChooserWidget {
     }
 }
 
-impl_drop!(ColorChooserWidget)
-impl_TraitWidget!(ColorChooserWidget)
+impl_drop!(FontChooserWidget)
+impl_TraitWidget!(FontChooserWidget)
 
-impl gtk::ContainerTrait for ColorChooserWidget {}
-impl gtk::BoxTrait for ColorChooserWidget {}
+impl gtk::ContainerTrait for FontChooserWidget {}
+impl gtk::BoxTrait for FontChooserWidget {}
 
-impl_widget_events!(ColorChooserWidget)
+impl_widget_events!(FontChooserWidget)

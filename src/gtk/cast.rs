@@ -520,3 +520,7 @@ pub fn GTK_FILE_CHOOSER_WIDGET(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_Gtk
 pub fn GTK_COLOR_CHOOSER_WIDGET(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkColorChooserWidget {
     unsafe { ffi::cast_GtkColorChooserWidget(widget) }
 }
+
+pub fn GTK_FONT_CHOOSER_WIDGET(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkFontChooserWidget {
+    unsafe { ffi::cast_GtkFontChooserWidget(widget) }
+}
