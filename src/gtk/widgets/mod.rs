@@ -140,6 +140,7 @@ pub use self::toolitemgroup::ToolItemGroup;
 pub use self::sizegroup::SizeGroup;
 pub use self::appchooserwidget::AppChooserWidget;
 pub use self::filechooserwidget::FileChooserWidget;
+pub use self::colorchooserwidget::ColorChooserWidget;
 
 mod window;
 mod label;
@@ -268,3 +269,4 @@ mod toolitemgroup;
 mod sizegroup;
 mod appchooserwidget;
 mod filechooserwidget;
+mod colorchooserwidget;

@@ -583,6 +583,14 @@ GtkTextMark* cast_GtkTextMark(GObject* obj) {
     return GTK_TEXT_MARK(obj);
 }
 
+GtkFileChooserWidget* cast_GtkFileChooserWidget(GtkWidget* widget) {
+    return GTK_FILE_CHOOSER_WIDGET(widget);
+}
+
+GtkColorChooserWidget* cast_GtkColorChooserWidget(GtkWidget* widget) {
+    return GTK_COLOR_CHOOSER_WIDGET(widget);
+}
+
 // GType constants
 
 const GType g_type_invalid = G_TYPE_INVALID;
