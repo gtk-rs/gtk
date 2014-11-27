@@ -353,6 +353,9 @@ pub struct C_GtkAppChooserWidget;
 #[repr(C)]
 pub struct C_GtkSizeGroup;
 
+#[repr(C)]
+pub struct C_FileChooserWidget;
+
 pub fn to_gboolean(b: bool) -> Gboolean {
     match b {
         true => GTRUE,
@@ -3217,6 +3220,11 @@ extern "C" {
     pub fn gtk_app_chooser_widget_get_show_all(_self: *mut C_GtkAppChooserWidget) -> Gboolean;
     pub fn gtk_app_chooser_widget_set_default_text(_self: *mut C_GtkAppChooserWidget, text: *const c_char);
     pub fn gtk_app_chooser_widget_get_default_text(_self: *mut C_GtkAppChooserWidget) -> *const c_char;
+
+    //=========================================================================
+    // GtkFileChooserWidget                                              NOT OK
+    //=========================================================================
+    pub fn gtk_file_chooser_widget_new     (action: gtk::FileChooserAction) -> *mut C_GtkWidget;
 
     //=========================================================================
     // Glue fixe code

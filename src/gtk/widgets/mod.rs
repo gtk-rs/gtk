@@ -139,6 +139,7 @@ pub use self::toolpalette::ToolPalette;
 pub use self::toolitemgroup::ToolItemGroup;
 pub use self::sizegroup::SizeGroup;
 pub use self::appchooserwidget::AppChooserWidget;
+pub use self::filechooserwidget::FileChooserWidget;
 
 mod window;
 mod label;
@@ -266,3 +267,4 @@ mod toolpalette;
 mod toolitemgroup;
 mod sizegroup;
 mod appchooserwidget;
+mod filechooserwidget;
