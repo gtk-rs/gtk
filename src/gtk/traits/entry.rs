@@ -252,7 +252,7 @@ pub trait EntryTrait: gtk::WidgetTrait {
 
     fn set_icon_from_stock(&mut self, icon_pos: EntryIconPosition, stock_id: &str) -> () {
         unsafe {
-            ffi::gtk_entry_set_icon_from_stock(GTK_ENTRY(self.get_widget()), icon_pos, stock_id.to_c_str().unwrap());
+            ffi::gtk_entry_set_icon_from_stock(GTK_ENTRY(self.get_widget()), icon_pos, stock_id.to_c_str().into_inner());
         }
     }
 
@@ -335,7 +335,7 @@ pub trait EntryTrait: gtk::WidgetTrait {
 
     fn set_icon_tooltip_markup(&mut self, icon_pos: EntryIconPosition, tooltip: &str) -> () {
         unsafe {
-            ffi::gtk_entry_set_icon_tooltip_markup(GTK_ENTRY(self.get_widget()), icon_pos, tooltip.to_c_str().unwrap())
+            ffi::gtk_entry_set_icon_tooltip_markup(GTK_ENTRY(self.get_widget()), icon_pos, tooltip.to_c_str().into_inner())
         }
     }
 
