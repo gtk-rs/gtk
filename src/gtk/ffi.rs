@@ -353,6 +353,15 @@ pub struct C_GtkAppChooserWidget;
 #[repr(C)]
 pub struct C_GtkSizeGroup;
 
+#[repr(C)]
+pub struct C_GtkFileChooserWidget;
+
+#[repr(C)]
+pub struct C_GtkColorChooserWidget;
+
+#[repr(C)]
+pub struct C_GtkFontChooserWidget;
+
 pub fn to_gboolean(b: bool) -> Gboolean {
     match b {
         true => GTRUE,
@@ -3219,6 +3228,21 @@ extern "C" {
     pub fn gtk_app_chooser_widget_get_default_text(_self: *mut C_GtkAppChooserWidget) -> *const c_char;
 
     //=========================================================================
+    // GtkFileChooserWidget                                                  OK
+    //=========================================================================
+    pub fn gtk_file_chooser_widget_new     (action: gtk::FileChooserAction) -> *mut C_GtkWidget;
+
+    //=========================================================================
+    // GtkColorChooserWidget                                                 OK
+    //=========================================================================
+    pub fn gtk_color_chooser_widget_new    () -> *mut C_GtkWidget;
+
+    //=========================================================================
+    // GtkFontChooserWidget                                                 OK
+    //=========================================================================
+    pub fn gtk_font_chooser_widget_new    () -> *mut C_GtkWidget;
+
+    //=========================================================================
     // Glue fixe code
     //=========================================================================
     pub fn g_signal_connect_data(instance: gpointer,
@@ -3392,4 +3416,7 @@ extern "C" {
     pub fn cast_GtkToolPalette(widget: *mut C_GtkWidget) -> *mut C_GtkToolPalette;
     pub fn cast_GtkToolItemGroup(widget: *mut C_GtkWidget) -> *mut C_GtkToolItemGroup;
     pub fn cast_GtkAppChooserWidget(widget: *mut C_GtkWidget) -> *mut C_GtkAppChooserWidget;
+    pub fn cast_GtkFileChooserWidget(widget: *mut C_GtkWidget) -> *mut C_GtkFileChooserWidget;
+    pub fn cast_GtkColorChooserWidget(widget: *mut C_GtkWidget) -> *mut C_GtkColorChooserWidget;
+    pub fn cast_GtkFontChooserWidget(widget: *mut C_GtkWidget) -> *mut C_GtkFontChooserWidget;
 }

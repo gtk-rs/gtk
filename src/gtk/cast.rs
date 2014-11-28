@@ -512,3 +512,15 @@ pub fn GTK_TOOL_ITEM(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkToolItem {
 pub fn GTK_TOOL_ITEM_GROUP(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkToolItemGroup {
     unsafe { ffi::cast_GtkToolItemGroup(widget) }
 }
+
+pub fn GTK_FILE_CHOOSER_WIDGET(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkFileChooserWidget {
+    unsafe { ffi::cast_GtkFileChooserWidget(widget) }
+}
+
+pub fn GTK_COLOR_CHOOSER_WIDGET(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkColorChooserWidget {
+    unsafe { ffi::cast_GtkColorChooserWidget(widget) }
+}
+
+pub fn GTK_FONT_CHOOSER_WIDGET(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkFontChooserWidget {
+    unsafe { ffi::cast_GtkFontChooserWidget(widget) }
+}
