@@ -15,3 +15,9 @@ GTK_3_6 = []
 name = "rgtk"
 crate_type = ["rlib"]
 path = "src/rgtk.rs"
+
+[build-dependencies.pkg-config]
+pkg-config = "~0.0.1"
+
+[build-dependencies.gcc]
+gcc = "~0.0.2"
