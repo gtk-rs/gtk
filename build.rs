@@ -13,38 +13,64 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::io::Command;
+#![feature(slicing_syntax)]
+
+extern crate gcc;
+extern crate "pkg-config" as pkg_config;
+
+use std::io::process::Command;
+use std::path::Path;
 use std::os;
-use std::str;
+use gcc::Config;
 
-fn main() {
-    Command::new("./configure").status().unwrap();
-    if os::getenv(format!("{}_NO_PKG_CONFIG", envify("gtk+-3.0")).as_slice()).is_some() {
-        panic!(format!("pkg-config requested to be aborted for {}", "gtk+-3.0"))
-    }
-    let mut cmd = Command::new("pkg-config");
-    
-    cmd.arg("--modversion").arg("gtk+-3.0");
-
-    let out = match cmd.output() {
-        Ok(s) => s,
-        Err(e) => panic!(e)
-    };
-
-    let stdout : Vec<&str> = str::from_utf8(out.output.as_slice()).unwrap().split_str(".").collect();
-
-    let gtk_version = format!("GTK_{}_{}", stdout[0], stdout[1]);
-    os::setenv("GTK_VERSION", gtk_version);
-
-    match Command::new("make").arg("glue").spawn() {
-        Ok(_) => {}
-        Err(e) => panic!(e)
-    }
-    let current = os::getcwd().unwrap();
-    println!("cargo:rustc-flags=-l rgtk_glue:static -L {}{}", current.display(), "/target/deps");
+// specific os x path, we need to tell to pkgconfig were are pkg config files
+#[cfg(target_os="macos")]
+fn configure_env() {
+    let mut paths = os::getenv_as_bytes("PKG_CONFIG_PATH").map_or(Vec::new(), os::split_paths);
+    paths.push(Path::new("/opt/X11/lib/pkgconfig"));
+    os::setenv("PKG_CONFIG_PATH", os::join_paths(paths.as_slice()).unwrap());
 }
 
-fn envify(name: &str) -> String {
-    name.chars().map(|c| c.to_uppercase()).map(|c| if c == '-' {'_'} else {c})
-        .collect()
+// nothing to do here for now
+#[cfg(any(target_os="win32", target_os="linux"))]
+fn configure_env() {}
+
+fn main() {
+    let out_dir = os::getenv("OUT_DIR").unwrap();
+
+    // export some stuff in the env if its needed
+    configure_env();
+
+    // try to find gtk+-3.0 library
+    match pkg_config::find_library("gtk+-3.0") {
+        Ok(_) => {},
+        Err(e) => println!("{}", e)
+    };
+
+    // call native pkg-config, there is no way to do this with pkg-config for now
+    let cmd = match Command::new("pkg-config").arg("--cflags").arg("gtk+-3.0").output() {
+        Ok(r) => r,
+        Err(e) => panic!("{}", e)
+    };
+
+    // make the vector of path to set to gcc::Config
+    let output: String = unsafe { String::from_utf8_unchecked(cmd.output) };
+    let res: Vec<&str> = output.split(|c: char| c  == ' ').collect();
+    let paths: Vec<Path> = res.iter().filter_map(|s| {
+        if s.len() > 1 && s.char_at(1) == 'I' { Some(Path::new(s[2..])) }
+        else { None }
+    }).collect();
+
+    // build include path
+    let gcc_conf = Config {
+        include_directories: paths,
+        definitions: vec!(),
+        objects: vec!()
+    };
+
+    // build library
+    gcc::compile_library("librgtk_glue.a", &gcc_conf, &["./gtk_glue/gtk_glue.c"]);
+
+    // say to cargo where it is
+    println!("cargo:rustc-flags=-L {} -l rgtk_glue:static", out_dir);
 }
