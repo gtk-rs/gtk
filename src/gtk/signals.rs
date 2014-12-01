@@ -238,7 +238,7 @@ signal!(screen_changed,         ScreenChanged(previous_screen : *mut gdk::Screen
 signal!(show,                   Show() -> ())
 signal!(show_help,              ShowHelp(help_type : gtk::WidgetHelpType) -> bool)
 signal!(size_allocate,          SizeAllocate(allocation : *mut gdk::Rectangle) -> ())
-signal!(state_chagned,          StateChagned(state : gtk::StateType) -> ())
+signal!(state_changed,          StateChanged(state : gtk::StateType) -> ())
 signal!(state_flags_changed,    StateFlagsChanged(flags : gtk::StateFlags) -> ())
 signal!(style_updated,          StyleUpdated() -> ())
 signal!(unmap,                  Unmap() -> ())
@@ -314,6 +314,9 @@ signal!(selection_request_event,SelectionRequestEvent(event : *mut gdk::EventSel
 signal!(selection_notify_event, SelectionNotifyEvent(event : *mut gdk::EventSelection) -> bool)
 */
 
+//GtkTreeSelection
+signal!(changed,            Changed() -> ())
+
 //GtkContainer
 //signal!(add,                Add(widget: *gtk::Widget) -> ())
 signal!(check_resize,       CheckResize() -> ())
@@ -323,10 +326,10 @@ signal!(check_resize,       CheckResize() -> ())
 //GtkButton
 signal!(activate,           Activate() -> ())
 signal!(clicked,            Clicked() -> ())
-signal!(enter, Enter() -> ())
-signal!(leave, Leave() -> ())
-signal!(pressed, Pressed() -> ())
-signal!(released, Released() -> ())
+signal!(enter,              Enter() -> ())
+signal!(leave,              Leave() -> ())
+signal!(pressed,            Pressed() -> ())
+signal!(released,           Released() -> ())
 //GtkDialog
 signal!(response,           Response(response_id : int) -> ())
 

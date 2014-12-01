@@ -199,7 +199,7 @@ impl GValue {
         }
     }*/
 
-    fn get_string(&self) -> Option<String> {
+    pub fn get_string(&self) -> Option<String> {
         let tmp_pointer = unsafe { ffi::g_value_get_string(self.pointer) };
 
         if tmp_pointer.is_null() {

@@ -18,7 +18,7 @@
 use gtk;
 use gtk::ffi::{mod, FFIWidget};
 use gtk::cast::GTK_TREE_VIEW;
-use gtk::widgets::TreeSelection;
+use gtk::widgets::{TreePath, TreeSelection, TreeViewColumn};
 
 /// TreeView — A widget for displaying both trees and lists
 struct_Widget!(TreeView)
@@ -386,6 +386,15 @@ impl TreeView {
         let tmp_pointer = unsafe { ffi::gtk_tree_view_get_selection(GTK_TREE_VIEW(self.pointer)) };
 
         TreeSelection::wrap(tmp_pointer)
+    }
+
+    pub fn set_cursor(&mut self, path: &TreePath, focus_column: Option<&TreeViewColumn>, start_editing: bool) {
+        unsafe {
+            ffi::gtk_tree_view_set_cursor(GTK_TREE_VIEW(self.pointer),
+                                          path.get_pointer(),
+                                          if focus_column.is_none() { ::std::ptr::null_mut() } else { focus_column.unwrap().get_pointer() },
+                                          ffi::to_gboolean(start_editing))
+        };
     }
 
     pub fn append_column(&mut self, column: &gtk::TreeViewColumn) -> i32 {

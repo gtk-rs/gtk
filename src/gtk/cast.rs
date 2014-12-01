@@ -21,16 +21,20 @@ pub fn G_OBJECT(widget: *mut ffi::C_GtkWidget) -> *mut ::glib::ffi::C_GObject {
     unsafe { ffi::cast_GtkObject(widget) }
 }
 
-pub fn G_OBJECT_FROM_TREE_VIEW_COLUMN(widget: *mut ffi::C_GtkTreeViewColumn) -> *mut ::glib::ffi::C_GObject {
-    unsafe { ffi::cast_GtkObjectFromTreeViewColumn(widget) }
-}
-
 pub fn G_OBJECT_FROM_LIST_STORE(widget: *mut ffi::C_GtkListStore) -> *mut ::glib::ffi::C_GObject {
     unsafe { ffi::cast_GtkObjectFromListStore(widget) }
 }
 
 pub fn G_OBJECT_FROM_TREE_STORE(widget: *mut ffi::C_GtkTreeStore) -> *mut ::glib::ffi::C_GObject {
     unsafe { ffi::cast_GtkObjectFromTreeStore(widget) }
+}
+
+pub fn G_OBJECT_FROM_TREE_VIEW_COLUMN(widget: *mut ffi::C_GtkTreeViewColumn) -> *mut ::glib::ffi::C_GObject {
+    unsafe { ffi::cast_GtkObjectFromTreeViewColumn(widget) }
+}
+
+pub fn G_OBJECT_FROM_TREE_SELECTION(widget: *mut ffi::C_GtkTreeSelection) -> *mut ::glib::ffi::C_GObject {
+    unsafe { ffi::cast_GtkObjectFromTreeSelection(widget) }
 }
 
 pub fn GTK_WIDGET(widget: *mut ::glib::ffi::C_GObject) -> *mut ffi::C_GtkWidget {

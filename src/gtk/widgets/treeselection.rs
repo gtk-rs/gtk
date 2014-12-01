@@ -15,6 +15,7 @@
 
 //! GtkTreeSelection — The selection object for GtkTreeView
 
+use glib;
 use gtk::{mod, ffi};
 use gtk::{TreeView, TreePath, TreeIter};
 
@@ -45,7 +46,7 @@ impl TreeSelection {
         }
     }
 
-    pub fn get_selected(&self, model: &gtk::TreeModel, iter: &gtk::TreeIter) -> bool {
+    pub fn get_selected(&self, model: &gtk::TreeModel, iter: &mut gtk::TreeIter) -> bool {
         match unsafe { ffi::gtk_tree_selection_get_selected(self.pointer, &mut model.get_pointer(),
             iter.get_pointer()) } {
             0 => false,
@@ -113,5 +114,13 @@ impl TreeSelection {
         }
     }
 }
+
+impl glib::traits::FFIGObject for TreeSelection {
+    fn get_gobject(&self) -> *mut glib::ffi::C_GObject {
+        gtk::cast::G_OBJECT_FROM_TREE_SELECTION(self.pointer)
+    }
+}
+
+impl_connect!(TreeSelection -> Changed)
 
 impl_drop!(TreeSelection, GTK_TREE_SELECTION)
