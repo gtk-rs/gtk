@@ -18,7 +18,7 @@
 use gtk;
 use gtk::ffi::{mod, FFIWidget};
 use gtk::cast::GTK_TREE_VIEW;
-use gtk::widgets::TreeSelection;
+use gtk::widgets::{TreePath, TreeSelection, TreeViewColumn};
 
 /// TreeView — A widget for displaying both trees and lists
 struct_Widget!(TreeView)
@@ -388,6 +388,27 @@ impl TreeView {
         TreeSelection::wrap(tmp_pointer)
     }
 
+    pub fn set_cursor(&mut self, path: &TreePath, focus_column: Option<&TreeViewColumn>, start_editing: bool) {
+        unsafe {
+            ffi::gtk_tree_view_set_cursor(GTK_TREE_VIEW(self.pointer),
+                                          path.get_pointer(),
+                                          if focus_column.is_none() { ::std::ptr::null_mut() } else { focus_column.unwrap().get_pointer() },
+                                          ffi::to_gboolean(start_editing))
+        };
+    }
+
+    pub fn expand_row(&mut self, path: &TreePath, open_all: bool) -> bool {
+        unsafe {
+            ffi::to_bool(ffi::gtk_tree_view_expand_row(GTK_TREE_VIEW(self.pointer), path.get_pointer(), ffi::to_gboolean(open_all)))
+        }
+    }
+
+    pub fn collapse_row(&mut self, path: &TreePath) -> bool {
+        unsafe {
+            ffi::to_bool(ffi::gtk_tree_view_collapse_row(GTK_TREE_VIEW(self.pointer), path.get_pointer()))
+        }
+    }
+
     pub fn append_column(&mut self, column: &gtk::TreeViewColumn) -> i32 {
         unsafe { ffi::gtk_tree_view_append_column(GTK_TREE_VIEW(self.pointer),
                                                   column.get_pointer()) }
@@ -401,3 +422,4 @@ impl gtk::ContainerTrait for TreeView {}
 impl gtk::ScrollableTrait for TreeView {}
 
 impl_widget_events!(TreeView)
+impl_tree_view_events!(TreeView)

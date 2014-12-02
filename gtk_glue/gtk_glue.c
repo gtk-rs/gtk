@@ -55,6 +55,10 @@ GObject* cast_GtkObjectFromTreeViewColumn(GtkTreeViewColumn* object) {
     return G_OBJECT(object);
 }
 
+GObject* cast_GtkObjectFromTreeSelection(GtkTreeSelection* object) {
+    return G_OBJECT(object);
+}
+
 GValue* cast_GtkGValue(void* value) {
     return (GValue*)value;
 }

@@ -362,6 +362,9 @@ pub struct C_GtkColorChooserWidget;
 #[repr(C)]
 pub struct C_GtkFontChooserWidget;
 
+#[repr(C)]
+pub struct C_GtkMovementStep;
+
 pub fn to_gboolean(b: bool) -> Gboolean {
     match b {
         true => GTRUE,
@@ -937,7 +940,7 @@ extern "C" {
     pub fn gtk_tree_model_get_iter_from_string (tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter, path_string: *const c_char) -> Gboolean;
     pub fn gtk_tree_model_get_iter_first       (tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter) -> Gboolean;
     pub fn gtk_tree_model_get_path             (tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter) -> *mut C_GtkTreePath;
-    //pub fn gtk_tree_model_get_value            (tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter, column: c_int, value: *mut GValue) -> ();
+    pub fn gtk_tree_model_get_value            (tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter, column: c_int, value: *mut C_GValue);
     pub fn gtk_tree_model_iter_next            (tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter) -> Gboolean;
     pub fn gtk_tree_model_iter_previous        (tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter) -> Gboolean;
     pub fn gtk_tree_model_iter_children        (tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter, parent: *mut C_GtkTreeIter) -> Gboolean;
@@ -3012,7 +3015,7 @@ extern "C" {
     // pub fn gtk_tree_view_set_drag_dest_row             (tree_view: *C_GtkTreeView, GtkTreePath *path, GtkTreeViewDropPosition  pos);
     // pub fn gtk_tree_view_get_drag_dest_row             (tree_view: *C_GtkTreeView, GtkTreePath **path, GtkTreeViewDropPosition *pos);
     // pub fn gtk_tree_view_get_dest_row_at_pos           (tree_view: *C_GtkTreeView, gint drag_x, gint drag_y, GtkTreePath **path, GtkTreeViewDropPosition *pos) -> Gboolean;
-    // pub fn gtk_tree_view_set_cursor                    (tree_view: *mut C_GtkTreeView, path: *mut C_GtkTreePath, focus_column: *mut GtkTreeViewColumn, start_editing: Gboolean);
+    pub fn gtk_tree_view_set_cursor                    (tree_view: *mut C_GtkTreeView, path: *mut C_GtkTreePath, focus_column: *mut C_GtkTreeViewColumn, start_editing: Gboolean);
     // pub fn gtk_tree_view_set_cursor_on_cell            (tree_view: *mut C_GtkTreeView, path: *mut C_GtkTreePath, focus_column: *mut GtkTreeViewColumn, focus_cell: *mut C_GtkCellRenderer, start_editing: Gboolean);
     // pub fn gtk_tree_view_get_cursor                    (tree_view: *mut C_GtkTreeView, path: *mut *mut C_GtkTreePath, focus_column: *mut *mut GtkTreeViewColumn);
     // pub fn gtk_tree_view_get_bin_window                (tree_view: *mut C_GtkTreeView) -> *mut C_GdkWindow;
@@ -3025,8 +3028,8 @@ extern "C" {
     // pub fn gtk_tree_view_enable_model_drag_source      (tree_view: *C_GtkTreeView, GdkModifierType  start_button_mask, const GtkTargetEntry *targets, gint n_targets, GdkDragAction actions);
     // pub fn gtk_tree_view_enable_model_drag_dest        (tree_view: *C_GtkTreeView, const GtkTargetEntry *targets, gint n_targets, GdkDragAction actions);
     // pub fn gtk_tree_view_expand_to_path                (tree_view: *mut C_GtkTreeView, path: *mut C_GtkTreePath);
-    // pub fn gtk_tree_view_expand_row                    (tree_view: *mut C_GtkTreeView, path: *mut C_GtkTreePath, open_all: gboolean) -> Gboolean;
-    // pub fn gtk_tree_view_collapse_row                  (tree_view: *mut C_GtkTreeView, path: *mut C_GtkTreePath) -> Gboolean;
+    pub fn gtk_tree_view_expand_row                    (tree_view: *mut C_GtkTreeView, path: *mut C_GtkTreePath, open_all: Gboolean) -> Gboolean;
+    pub fn gtk_tree_view_collapse_row                  (tree_view: *mut C_GtkTreeView, path: *mut C_GtkTreePath) -> Gboolean;
     // pub fn gtk_tree_view_row_expanded                  (tree_view: *mut C_GtkTreeView, path: *mut C_GtkTreePath) -> Gboolean;
     // pub fn gtk_tree_view_scroll_to_cell                (tree_view: *mut C_GtkTreeView, path: *mut C_GtkTreePath, column: *mut C_GtkTreeViewColumn, use_align: Gboolean, row_align: c_float, col_align: c_float);
     // pub fn gtk_tree_view_row_activated                 (tree_view: *mut C_GtkTreeView, path: *mut C_GtkTreePath, column: *mut C_GtkTreeViewColumn);
@@ -3297,6 +3300,7 @@ extern "C" {
     pub fn cast_GtkObjectFromListStore(widget: *mut C_GtkListStore) -> *mut glib::ffi::C_GObject;
     pub fn cast_GtkObjectFromTreeStore(widget: *mut C_GtkTreeStore) -> *mut glib::ffi::C_GObject;
     pub fn cast_GtkObjectFromTreeViewColumn(widget: *mut C_GtkTreeViewColumn) -> *mut glib::ffi::C_GObject;
+    pub fn cast_GtkObjectFromTreeSelection(widget: *mut C_GtkTreeSelection) -> *mut glib::ffi::C_GObject;
     pub fn cast_GtkWidget(widget: *mut glib::ffi::C_GObject) -> *mut C_GtkWidget;
     pub fn cast_GtkWindow(widget: *mut C_GtkWidget) -> *mut C_GtkWindow;
     pub fn cast_GtkBin(widget: *mut C_GtkWidget) -> *mut C_GtkBin;
