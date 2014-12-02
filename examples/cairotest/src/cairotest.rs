@@ -11,10 +11,8 @@ use rgtk::*;
 use rgtk::gtk::signals::{DeleteEvent, Draw};
 use rgtk::gtk::DrawingArea;
 
-use rgtk::cairo::enums::{
-    FontSlantNormal,
-    FontWeightNormal
-};
+use rgtk::cairo::enums::FontSlant::FontSlantNormal;
+use rgtk::cairo::enums::FontWeight::FontWeightNormal;
 
 fn main() {
     gtk::init();
@@ -67,9 +65,7 @@ fn main() {
     drawable(500, 500, |cr| {
         cr.scale(500.0, 500.0);
 
-        cr.select_font_face("Sans",
-                              cairo::enums::FontSlantNormal,
-                              cairo::enums::FontWeightNormal);
+        cr.select_font_face("Sans", FontSlantNormal, FontWeightNormal);
         cr.set_font_size(0.35);
 
         cr.move_to(0.04, 0.53);
