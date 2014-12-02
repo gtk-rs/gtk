@@ -362,6 +362,9 @@ pub struct C_GtkColorChooserWidget;
 #[repr(C)]
 pub struct C_GtkFontChooserWidget;
 
+#[repr(C)]
+pub struct C_GtkMovementStep;
+
 pub fn to_gboolean(b: bool) -> Gboolean {
     match b {
         true => GTRUE,
@@ -3025,8 +3028,8 @@ extern "C" {
     // pub fn gtk_tree_view_enable_model_drag_source      (tree_view: *C_GtkTreeView, GdkModifierType  start_button_mask, const GtkTargetEntry *targets, gint n_targets, GdkDragAction actions);
     // pub fn gtk_tree_view_enable_model_drag_dest        (tree_view: *C_GtkTreeView, const GtkTargetEntry *targets, gint n_targets, GdkDragAction actions);
     // pub fn gtk_tree_view_expand_to_path                (tree_view: *mut C_GtkTreeView, path: *mut C_GtkTreePath);
-    // pub fn gtk_tree_view_expand_row                    (tree_view: *mut C_GtkTreeView, path: *mut C_GtkTreePath, open_all: gboolean) -> Gboolean;
-    // pub fn gtk_tree_view_collapse_row                  (tree_view: *mut C_GtkTreeView, path: *mut C_GtkTreePath) -> Gboolean;
+    pub fn gtk_tree_view_expand_row                    (tree_view: *mut C_GtkTreeView, path: *mut C_GtkTreePath, open_all: Gboolean) -> Gboolean;
+    pub fn gtk_tree_view_collapse_row                  (tree_view: *mut C_GtkTreeView, path: *mut C_GtkTreePath) -> Gboolean;
     // pub fn gtk_tree_view_row_expanded                  (tree_view: *mut C_GtkTreeView, path: *mut C_GtkTreePath) -> Gboolean;
     // pub fn gtk_tree_view_scroll_to_cell                (tree_view: *mut C_GtkTreeView, path: *mut C_GtkTreePath, column: *mut C_GtkTreeViewColumn, use_align: Gboolean, row_align: c_float, col_align: c_float);
     // pub fn gtk_tree_view_row_activated                 (tree_view: *mut C_GtkTreeView, path: *mut C_GtkTreePath, column: *mut C_GtkTreeViewColumn);

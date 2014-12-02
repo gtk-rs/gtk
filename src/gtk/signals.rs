@@ -317,6 +317,23 @@ signal!(selection_notify_event, SelectionNotifyEvent(event : *mut gdk::EventSele
 //GtkTreeSelection
 signal!(changed,            Changed() -> ())
 
+//GtkTreeView
+signal!(columns_changed,            ColumnsChanged() -> ())
+signal!(cursor_changed,             CursorChanged() -> ())
+signal!(expand_collapse_cursor_row, ExpandCollapseCursorRow(arg1: ffi::Gboolean, arg2: ffi::Gboolean, arg3: ffi::Gboolean) -> ffi::Gboolean)
+signal!(move_cursor,                MoveCursor(step: ffi::C_GtkMovementStep, direction: i32) -> ffi::Gboolean)
+signal!(row_activated,              RowActivated(path: *mut ffi::C_GtkTreePath, column: *mut ffi::C_GtkTreeViewColumn) -> ())
+signal!(row_collapsed,              RowCollapsed(iter: *mut ffi::C_GtkTreeIter, path: *mut ffi::C_GtkTreePath) -> ())
+signal!(row_expanded,               RowExpanded(iter: *mut ffi::C_GtkTreeIter, path: *mut ffi::C_GtkTreePath) -> ())
+signal!(select_all,                 SelectAll() -> ffi::Gboolean)
+signal!(select_cursor_parent,       SelectCursorParent() -> ffi::Gboolean)
+signal!(select_cursor_row,          SelectCursorRow(arg1: ffi::Gboolean) -> ffi::Gboolean)
+signal!(start_interactive_search,   StartInteractiveSearch() -> ffi::Gboolean)
+signal!(test_collapse_row,          TestCollapseRow(iter: *mut ffi::C_GtkTreeIter, path: *mut ffi::C_GtkTreePath) -> ffi::Gboolean)
+signal!(test_expand_row,            TestExpandRow(iter: *mut ffi::C_GtkTreeIter, path: *mut ffi::C_GtkTreePath) -> ffi::Gboolean)
+signal!(toggle_cursor_row,          ToggleCursorRow() -> ffi::Gboolean)
+signal!(unselect_all,               UnselectAll() -> ffi::Gboolean)
+
 //GtkContainer
 //signal!(add,                Add(widget: *gtk::Widget) -> ())
 signal!(check_resize,       CheckResize() -> ())

@@ -397,6 +397,18 @@ impl TreeView {
         };
     }
 
+    pub fn expand_row(&mut self, path: &TreePath, open_all: bool) -> bool {
+        unsafe {
+            ffi::to_bool(ffi::gtk_tree_view_expand_row(GTK_TREE_VIEW(self.pointer), path.get_pointer(), ffi::to_gboolean(open_all)))
+        }
+    }
+
+    pub fn collapse_row(&mut self, path: &TreePath) -> bool {
+        unsafe {
+            ffi::to_bool(ffi::gtk_tree_view_collapse_row(GTK_TREE_VIEW(self.pointer), path.get_pointer()))
+        }
+    }
+
     pub fn append_column(&mut self, column: &gtk::TreeViewColumn) -> i32 {
         unsafe { ffi::gtk_tree_view_append_column(GTK_TREE_VIEW(self.pointer),
                                                   column.get_pointer()) }
@@ -410,3 +422,4 @@ impl gtk::ContainerTrait for TreeView {}
 impl gtk::ScrollableTrait for TreeView {}
 
 impl_widget_events!(TreeView)
+impl_tree_view_events!(TreeView)

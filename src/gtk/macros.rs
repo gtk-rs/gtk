@@ -161,6 +161,16 @@ macro_rules! impl_widget_events(
     )
 )
 
+macro_rules! impl_tree_view_events(
+    ($gtk_struct:ident) => (
+        impl_connect!($gtk_struct -> ColumnsChanged, CursorChanged, ExpandCollapseCursorRow,
+                                     MoveCursor, RowActivated, RowCollapsed, RowExpanded,
+                                     SelectAll, SelectCursorParent, SelectCursorRow,
+                                     StartInteractiveSearch, TestCollapseRow, TestExpandRow,
+                                     ToggleCursorRow, UnselectAll)
+    )
+)
+
 macro_rules! impl_button_events(
     ($gtk_struct:ident) => (
         impl_connect!($gtk_struct -> Activate, Clicked, Enter, Leave, Pressed, Released)
