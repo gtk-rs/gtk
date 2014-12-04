@@ -18,7 +18,6 @@
 use gtk::cast::{GTK_ACTION_BAR};
 use gtk::{mod, ffi};
 
-/// GtkRevealer — Hide and show with animation
 struct_Widget!(ActionBar)
 
 impl ActionBar {

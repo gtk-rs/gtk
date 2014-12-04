@@ -604,6 +604,10 @@ GtkSocket* cast_GtkSocket(GtkWidget* widget) {
     return GTK_SOCKET(widget);
 }
 
+GtkEventBox* cast_GtkEventBox(GtkWidget* widget) {
+    return GTK_EVENT_BOX(widget);
+}
+
 // GType constants
 
 const GType g_type_invalid = G_TYPE_INVALID;

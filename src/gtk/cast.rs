@@ -532,3 +532,7 @@ pub fn GTK_FONT_CHOOSER_WIDGET(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_Gtk
 pub fn GTK_SOCKET(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkSocket {
     unsafe { ffi::cast_GtkSocket(widget) }
 }
+
+pub fn GTK_EVENT_BOX(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkEventBox {
+    unsafe { ffi::cast_GtkEventBox(widget) }
+}

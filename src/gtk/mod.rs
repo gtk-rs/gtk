@@ -167,7 +167,8 @@ pub use self::widgets::{
     FileChooserWidget,
     ColorChooserWidget,
     FontChooserWidget,
-    Socket
+    Socket,
+    EventBox
 };
 
 #[cfg(any(feature = "GTK_3_6", feature = "GTK_3_8", feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
