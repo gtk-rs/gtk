@@ -365,6 +365,9 @@ pub struct C_GtkFontChooserWidget;
 #[repr(C)]
 pub struct C_GtkMovementStep;
 
+#[repr(C)]
+pub struct C_GtkSocket;
+
 pub fn to_gboolean(b: bool) -> Gboolean {
     match b {
         true => GTRUE,
@@ -3243,7 +3246,15 @@ extern "C" {
     //=========================================================================
     // GtkFontChooserWidget                                                 OK
     //=========================================================================
-    pub fn gtk_font_chooser_widget_new    () -> *mut C_GtkWidget;
+    pub fn gtk_font_chooser_widget_new     () -> *mut C_GtkWidget;
+
+    //=========================================================================
+    // GtkSocket                                                         NOT OK
+    //=========================================================================
+    pub fn gtk_socket_new                  () -> *mut C_GtkWidget;
+    //pub fn gtk_socket_add_id               (socket: *mut C_GtkSocket, Window window);
+    //pub fn gtk_socket_get_id               (socket: *mut C_GtkSocket) -> Window;
+    //pub fn gtk_socket_get_plug_window      (socket: *mut C_GtkSocket) -> *mut C_GdkWindow;
 
     //=========================================================================
     // Glue fixe code
@@ -3423,4 +3434,5 @@ extern "C" {
     pub fn cast_GtkFileChooserWidget(widget: *mut C_GtkWidget) -> *mut C_GtkFileChooserWidget;
     pub fn cast_GtkColorChooserWidget(widget: *mut C_GtkWidget) -> *mut C_GtkColorChooserWidget;
     pub fn cast_GtkFontChooserWidget(widget: *mut C_GtkWidget) -> *mut C_GtkFontChooserWidget;
+    pub fn cast_GtkSocket(widget: *mut C_GtkWidget) -> *mut C_GtkSocket;
 }

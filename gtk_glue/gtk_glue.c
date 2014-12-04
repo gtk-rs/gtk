@@ -18,6 +18,7 @@
 #include <glib-object.h>
 #include <string.h>
 #include <stdio.h>
+#include <gtk/gtkx.h>
 
 void glue_signal_connect(void *g_object, char *signal, void (*func)(void*, void*), void *user_param) {
     g_signal_connect(G_OBJECT(g_object), signal, G_CALLBACK(func), user_param);
@@ -597,6 +598,10 @@ GtkColorChooserWidget* cast_GtkColorChooserWidget(GtkWidget* widget) {
 
 GtkFontChooserWidget* cast_GtkFontChooserWidget(GtkWidget* widget) {
     return GTK_FONT_CHOOSER_WIDGET(widget);
+}
+
+GtkSocket* cast_GtkSocket(GtkWidget* widget) {
+    return GTK_SOCKET(widget);
 }
 
 // GType constants

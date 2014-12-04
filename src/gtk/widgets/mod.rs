@@ -142,6 +142,7 @@ pub use self::app_chooser_widget::AppChooserWidget;
 pub use self::file_chooser_widget::FileChooserWidget;
 pub use self::color_chooser_widget::ColorChooserWidget;
 pub use self::font_chooser_widget::FontChooserWidget;
+pub use self::socket::Socket;
 
 mod window;
 mod label;
@@ -272,3 +273,4 @@ mod app_chooser_widget;
 mod file_chooser_widget;
 mod color_chooser_widget;
 mod font_chooser_widget;
+mod socket;
