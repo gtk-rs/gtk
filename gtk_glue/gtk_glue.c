@@ -604,10 +604,6 @@ GtkFontChooserWidget* cast_GtkFontChooserWidget(GtkWidget* widget) {
 GtkSocket* cast_GtkSocket(GtkWidget* widget) {
     return GTK_SOCKET(widget);
 }
-#else
-GtkWidget* cast_GtkSocket(GtkWidget* widget) {
-    return widget;
-}
 #endif
 
 GtkEventBox* cast_GtkEventBox(GtkWidget* widget) {
