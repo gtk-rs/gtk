@@ -195,7 +195,7 @@ pub struct EventKey {
     send_event : i8,
 
     pub time : u32,
-    pub state : u32,
+    pub state : gdk::enums::modifier_type::ModifierType,
     pub keyval : u32,
     pub length : i32,
     pub string : *mut char,

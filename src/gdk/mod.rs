@@ -65,4 +65,4 @@ mod events;
 mod device;
 mod window;
 mod types;
-mod enums;
+pub mod enums;
