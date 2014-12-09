@@ -167,9 +167,11 @@ pub use self::widgets::{
     FileChooserWidget,
     ColorChooserWidget,
     FontChooserWidget,
-    Socket,
     EventBox
 };
+
+#[cfg(target_os = "linux")]
+pub use self::widgets::{Socket};
 
 #[cfg(any(feature = "GTK_3_6", feature = "GTK_3_8", feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
 /// GTK Widgets for versions since GTK 3.6

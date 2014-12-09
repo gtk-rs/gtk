@@ -600,13 +600,13 @@ GtkFontChooserWidget* cast_GtkFontChooserWidget(GtkWidget* widget) {
     return GTK_FONT_CHOOSER_WIDGET(widget);
 }
 
-#ifdef __APPLE__ // GtkSocket doesn't exist in the Quartz backend
-GtkWidget* cast_GtkSocket(GtkWidget* widget) {
-    return widget;
-}
-#else
+#ifdef __linux // GtkSocket only works with X11
 GtkSocket* cast_GtkSocket(GtkWidget* widget) {
     return GTK_SOCKET(widget);
+}
+#else
+GtkWidget* cast_GtkSocket(GtkWidget* widget) {
+    return widget;
 }
 #endif
 
