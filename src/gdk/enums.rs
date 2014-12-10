@@ -107,7 +107,7 @@ pub mod modifier_type {
         /// not used in GDK itself. GTK+ uses it to differentiate between (keyval, modifiers) pairs from key press and release events.,
         const ReleaseMask               = 1 << 30,
         /// a mask covering all modifier types.,
-        const ModifierMask               = 1 << 31,
+        const ModifierMask               = 0x5c001fff,
     }
 }
 
