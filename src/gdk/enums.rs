@@ -17,22 +17,27 @@
 
 
 pub mod modifier_intent {
+    #![allow(non_upper_case_globals)]
+
+    bitflags! {
+    #[deriving(Show)]
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show)]
-    pub enum ModifierIntent {
+    flags ModifierIntent: u32 {
         /// the primary modifier used to invoke menu accelerators.,
-        PrimaryAccelerator,
+        const PrimaryAccelerator = 1 << 0,
         /// the modifier used to invoke context menus. Note that mouse button _3 always triggers context menus. When this modifier is not 0, it additionally triggers context menus when used with mouse button 1.,
-        ContextMenu,
+        const ContextMenu = 1 << 1,
         /// the modifier used to extend selections using modifier-click or modifier-cursor-key,
-        ExtendSelection,
+        const ExtendSelection = 1 << 2,
         /// the modifier used to modify selections, which in most cases means toggling the clicked item into or out of the selection.,
-        ModifySelection,
+        const ModifySelection = 1 << 3,
         /// when any of these modifiers is pressed, the key event cannot produce a symbol directly. This is meant to be used for input methods, and for use cases like typeahead search.,
-        NoTextInput,
+        const NoTextInput = 1 << 4,
         /// the modifier that switches between keyboard groups (AltGr on X11/Windows and Option/Alt on OS X).,
-        ShiftGroup
+        const ShiftGroup = 1 << 5
     }
+    }
+
 }
 
 
