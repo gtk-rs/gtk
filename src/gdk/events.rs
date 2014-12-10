@@ -124,7 +124,7 @@ pub struct EventMotion {
     x : f64,
     y : f64,
     axes : *mut f64,
-    state : u32,
+    state : gdk::enums::modifier_type::ModifierType,
     is_hint : i16,
     device : *mut gdk::Device,
     x_root : f64,
@@ -142,7 +142,7 @@ pub struct EventButton {
     x : f64,
     y : f64,
     axes : *mut f64,
-    state : u32,
+    state : gdk::enums::modifier_type::ModifierType,
     button : u32,
     device : *mut gdk::Device,
     x_root : f64,
@@ -160,7 +160,7 @@ pub struct EventTouch {
     pub x : f64,
     pub y : f64,
     pub axes : *mut f64,
-    pub state : u32,
+    pub state : gdk::enums::modifier_type::ModifierType,
     pub sequence : *mut c_void, //gdk::EventSequence
     pub emulating_pointer : i32, // boolean
     pub device : *mut gdk::Device,
@@ -178,7 +178,7 @@ pub struct EventScroll {
     pub time : u32,
     pub x : f64,
     pub y : f64,
-    pub state : u32,
+    pub state : gdk::enums::modifier_type::ModifierType,
     pub direction : gdk::ScrollDirection,
     pub device : *mut gdk::Device,
     pub x_root : f64,
@@ -195,7 +195,7 @@ pub struct EventKey {
     send_event : i8,
 
     pub time : u32,
-    pub state : u32,
+    pub state : gdk::enums::modifier_type::ModifierType,
     pub keyval : u32,
     pub length : i32,
     pub string : *mut char,
@@ -220,7 +220,7 @@ pub struct EventCrossing {
     pub mode : gdk::CrossingMode,
     pub detail : gdk::NotifyType,
     pub focus : i32, // boolean
-    pub state : u32 //FIXME
+    pub state : gdk::enums::modifier_type::ModifierType
 }
 
 impl Event for EventCrossing {}

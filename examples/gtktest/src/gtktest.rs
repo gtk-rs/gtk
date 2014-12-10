@@ -5,6 +5,7 @@ extern crate rgtk;
 
 use rgtk::*;
 use rgtk::gtk::signals::{Clicked, KeyPressEvent, DeleteEvent};
+use rgtk::gdk::enums::modifier_type;
 
 fn main() {
     gtk::init();
@@ -96,8 +97,14 @@ fn main() {
     }));
 
     Connect::connect(&window, KeyPressEvent::new(|key|{
-        unsafe { println!("key pressed: {} / {}", (*key).keyval, (*key)._type) };
+        let keyval = unsafe { (*key).keyval };
+        let keystate = unsafe { (*key).state };
+        println!("key pressed: {} / {}", keyval, keystate);
         println!("text: {}", entry.get_text().unwrap());
+
+        if keystate.intersects(modifier_type::ControlMask) {
+            println!("You pressed Ctrl!");
+        }
         false
     }));
 
