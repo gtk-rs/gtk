@@ -23,28 +23,15 @@ use std::path::Path;
 use std::os;
 use gcc::Config;
 
-// specific os x path, we need to tell to pkgconfig were are pkg config files
-#[cfg(target_os="macos")]
-fn configure_env() {
-    let mut paths = os::getenv_as_bytes("PKG_CONFIG_PATH").map_or(Vec::new(), os::split_paths);
-    paths.push(Path::new("/opt/X11/lib/pkgconfig"));
-    os::setenv("PKG_CONFIG_PATH", os::join_paths(paths.as_slice()).unwrap());
-}
-
-// nothing to do here for now
-#[cfg(any(target_os="win32", target_os="linux"))]
-fn configure_env() {}
-
 fn main() {
     let out_dir = os::getenv("OUT_DIR").unwrap();
 
-    // export some stuff in the env if its needed
-    configure_env();
+    os::setenv("PKG_CONFIG_ALLOW_CROSS", "1");
 
     // try to find gtk+-3.0 library
     match pkg_config::find_library("gtk+-3.0") {
         Ok(_) => {},
-        Err(e) => println!("{}", e)
+        Err(e) => panic!("{}", e)
     };
 
     // call native pkg-config, there is no way to do this with pkg-config for now

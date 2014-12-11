@@ -142,6 +142,7 @@ pub use self::app_chooser_widget::AppChooserWidget;
 pub use self::file_chooser_widget::FileChooserWidget;
 pub use self::color_chooser_widget::ColorChooserWidget;
 pub use self::font_chooser_widget::FontChooserWidget;
+#[cfg(target_os = "linux")]
 pub use self::socket::Socket;
 pub use self::event_box::EventBox;
 
@@ -274,5 +275,6 @@ mod app_chooser_widget;
 mod file_chooser_widget;
 mod color_chooser_widget;
 mod font_chooser_widget;
+#[cfg(target_os = "linux")]
 mod socket;
 mod event_box;

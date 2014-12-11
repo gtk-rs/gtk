@@ -600,9 +600,11 @@ GtkFontChooserWidget* cast_GtkFontChooserWidget(GtkWidget* widget) {
     return GTK_FONT_CHOOSER_WIDGET(widget);
 }
 
+#ifdef __linux // GtkSocket only works with X11
 GtkSocket* cast_GtkSocket(GtkWidget* widget) {
     return GTK_SOCKET(widget);
 }
+#endif
 
 GtkEventBox* cast_GtkEventBox(GtkWidget* widget) {
     return GTK_EVENT_BOX(widget);
