@@ -40,7 +40,273 @@ pub mod modifier_intent {
 
 }
 
+/// Describes the kind of window.
+pub mod window_type {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum WindowType {
+        /// root window; this window has no parent, covers the entire screen, and is created by the window system
+        Root,
+        /// toplevel window (used to implement GtkWindow)
+        TopLevel,
+        /// child window (used to implement e.g. GtkEntry)
+        Child,
+        /// override redirect temporary window (used to implement GtkMenu)
+        Temp,
+        /// foreign window (see gdk_window_foreign_new())
+        Foreign,
+        /// offscreen window (see Offscreen Windows).
+        Offscreen,
+        /// subsurface-based window; This window is visually tied to a toplevel, and is moved/stacked with it.
+        /// Currently this window type is only implemented in Wayland.
+        SubSurface
+    }
+}
 
+/// Specifies the state of a toplevel window.
+pub mod window_state {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum WindowState {
+        /// the window is not shown.
+        WindowStateWithdrawn  = 1 << 0,
+        /// the window is minimized.
+        WindowStateIconified  = 1 << 1,
+        /// the window is maximized.
+        WindowStateMaximized  = 1 << 2,
+        /// the window is sticky.
+        WindowStateSticky     = 1 << 3,
+        /// the window is maximized without decorations.
+        WindowStateFullscreen = 1 << 4,
+        /// the window is kept above other windows.
+        WindowStateAbove      = 1 << 5,
+        /// the window is kept below other windows.
+        WindowStateBelow      = 1 << 6,
+        /// the window is presented as focused (with active decorations).
+        WindowStateFocused    = 1 << 7,
+        /// the window is in a tiled state
+        WindowStateTiled      = 1 << 8
+    }
+}
+
+/// Indicates which monitor (in a multi-head setup) a window should span over when in fullscreen mode.
+pub mod fullscreen_mode {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum FullscreenMode {
+        /// Fullscreen on current monitor only.
+        OnCurrentMonitor,
+        /// Span across all monitors when fullscreen.
+        OnAllMonitors
+    }
+}
+
+/// Determines a window edge or corner.
+pub mod window_edge {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum WindowEdge {
+        /// the top left corner.
+        NorthWest,
+        /// the top edge.
+        North,
+        /// the top right corner.
+        NorthEast,
+        /// the left edge.
+        West,
+        /// the right edge.
+        East,
+        /// the lower left corner.
+        SouthWest,
+        /// the lower edge.
+        South,
+        /// the lower right corner.
+        SouthEast
+    }
+}
+
+/// Used to indicate which fields of a GdkGeometry struct should be paid attention to. Also, the presence/absence of GDK_HINT_POS,
+/// GDK_HINT_USER_POS , and GDK_HINT_USER_SIZE is significant, though they don't directly refer to GdkGeometry fields. GDK_HINT_USER_POS
+/// will be set automatically by GtkWindow if you call gtk_window_move(). GDK_HINT_USER_POS and GDK_HINT_USER_SIZE should be set if the
+/// user specified a size/position using a --geometry command-line argument; gtk_window_parse_geometry() automatically sets these flags.
+pub mod window_hints {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum WindowHints {
+        /// indicates that the program has positioned the window
+        Pos,
+        /// min size fields are set
+        MinSize,
+        /// max size fields are set
+        MaxSize,
+        /// base size fields are set
+        BaseSize,
+        /// aspect ratio fields are set
+        Aspect,
+        /// resize increment fields are set
+        ResizeInc,
+        /// window gravity field is set
+        WinGravity,
+        /// indicates that the window’s position was explicitly set by the user
+        UserPos,
+        /// indicates that the window’s size was explicitly set by the user
+        UserSize
+    }
+}
+
+/// These are hints for the window manager that indicate what type of function the window has. The window manager can use this when
+/// determining decoration and behaviour of the window. The hint must be set before mapping the window.
+/// 
+/// See the [Extended Window Manager Hints](http://www.freedesktop.org/wiki/Standards/wm-spec/) specification for more details about
+/// window types.
+pub mod window_type_hint {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum WindowTypeHint {
+        /// Normal toplevel window.
+        Normal,
+        /// Dialog window.
+        Dialog,
+        /// Window used to implement a menu; GTK+ uses this hint only for torn-off menus, see [GtkTearoffMenuItem](https://developer.gnome.org/gtk2/GtkTearoffMenuItem.html).
+        Menu,
+        /// Window used to implement toolbars.
+        Toolbar,
+        /// Window used to display a splash screen during application startup.
+        SplashScreen,
+        /// Utility windows which are not detached toolbars or dialogs.
+        Utility,
+        /// Used for creating dock or panel windows.
+        Dock,
+        /// Used for creating the desktop background window.
+        Desktop,
+        /// A menu that belongs to a menubar.
+        DropdownMenu,
+        /// A menu that does not belong to a menubar, e.g. a context menu.
+        PopupMenu,
+        /// A tooltip.
+        ToolTip,
+        /// A notification - typically a “bubble” that belongs to a status icon.
+        Notification,
+        /// A popup from a combo box.
+        Combo,
+        /// A window that is used to implement a DND cursor.
+        DND
+    }
+}
+
+/// A set of bit-flags to indicate which events a window is to receive. Most of these masks map onto one or more of the GdkEventType
+/// event types above.
+/// 
+/// GDK_POINTER_MOTION_HINT_MASK is deprecated. It is a special mask to reduce the number of GDK_MOTION_NOTIFY events received. When
+/// using GDK_POINTER_MOTION_HINT_MASK, fewer GDK_MOTION_NOTIFY events will be sent, some of which are marked as a hint (the is_hint
+/// member is TRUE). To receive more motion events after a motion hint event, the application needs to asks for more, by calling
+/// gdk_event_request_motions().
+/// 
+/// Since GTK 3.8, motion events are already compressed by default, independent of this mechanism. This compression can be disabled with
+/// gdk_window_set_event_compression(). See the documentation of that function for details.
+/// 
+/// If GDK_TOUCH_MASK is enabled, the window will receive touch events from touch-enabled devices. Those will come as sequences of
+/// GdkEventTouch with type GDK_TOUCH_UPDATE, enclosed by two events with type GDK_TOUCH_BEGIN and GDK_TOUCH_END (or GDK_TOUCH_CANCEL).
+/// gdk_event_get_event_sequence() returns the event sequence for these events, so different sequences may be distinguished.
+pub mod event_mask {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum EventMask {
+        /// receive expose events
+        ExposureMask,
+        /// receive all pointer motion events
+        PointerMotionMask,
+        /// deprecated. see the explanation above
+        PointerMotionHintMask,
+        /// receive pointer motion events while any button is pressed
+        ButtonMotionMask,
+        /// receive pointer motion events while 1 button is pressed
+        Button1MotionMask,
+        /// receive pointer motion events while 2 button is pressed
+        Button2MotionMask,
+        /// receive pointer motion events while 3 button is pressed
+        Button3MotionMask,
+        /// receive button press events
+        ButtonPressMask,
+        /// receive button release events
+        ButtonReleaseMask,
+        /// receive key press events
+        KeyPressMask,
+        /// receive key release events
+        KeyReleaseMask,
+        /// receive window enter events
+        EnterNotifyMask,
+        /// receive window leave events
+        LeaveNotifyMask,
+        /// receive focus change events
+        FocusChangeMask,
+        /// receive events about window configuration change
+        StructureMask,
+        /// receive property change events
+        PropertyChangeMask,
+        /// receive visibility change events
+        VisibilityNotifyMask,
+        /// receive proximity in events
+        ProximityInMask,
+        /// receive proximity out events
+        ProximityOutMask,
+        /// receive events about window configuration changes of child windows
+        SubstructureMask,
+        /// receive scroll events
+        ScrollMask,
+        /// receive touch events. Since 3.4
+        TouchMask,
+        /// receive smooth scrolling events. Since 3.4
+        SmoothScrollMask,
+        /// the combination of all the above event masks.
+        AllEventsMask
+    }
+}
+
+/// These are hints originally defined by the Motif toolkit. The window manager can use them when determining how to decorate the
+/// window. The hint must be set before mapping the window.
+pub mod wm_decoration {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum WMDecoration {
+        /// all decorations should be applied.
+        All,
+        /// a frame should be drawn around the window.
+        Border,
+        /// the frame should have resize handles.
+        ResizeH,
+        /// a titlebar should be placed above the window.
+        Title,
+        /// a button for opening a menu should be included.
+        Menu,
+        /// a minimize button should be included.
+        Minimize,
+        /// a maximize button should be included.
+        Maximize
+    }
+}
+
+/// An enumeration describing the type of an input device in general terms.
+pub mod input_source {
+    #[repr(C)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    pub enum InputSource {
+        /// the device is a mouse. (This will be reported for the core pointer, even if it is something else, such as a trackball.)
+        Mouse,
+        /// the device is a stylus of a graphics tablet or similar device.
+        Pen,
+        /// the device is an eraser. Typically, this would be the other end of a stylus on a graphics tablet
+        Eraser,
+        /// the device is a graphics tablet “puck” or similar device.
+        Cursor,
+        /// the device is a keyboard.
+        Keyboard,
+        /// the device is a direct-input touch device, such as a touchscreen or tablet. This device type has been added in 3.4.
+        TouchScreen,
+        /// the device is an indirect touch device, such as a touchpad. This device type has been added in 3.4.
+        TouchPad
+    }
+}
 
 pub mod modifier_type {
     #![allow(non_upper_case_globals)]

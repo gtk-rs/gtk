@@ -20,7 +20,6 @@ use std::mem;
 pub use self::event_type::EventType;
 pub use self::owner_change::OwnerChange;
 pub use self::setting_action::SettingAction;
-pub use self::window_state::WindowState;
 pub use self::property_state::PropertyState;
 pub use self::crossing_mode::CrossingMode;
 pub use self::notify_type::NotifyType;
@@ -406,22 +405,6 @@ pub mod property_state {
     pub enum PropertyState{
         PropertyNewValue,
         PropertyDelete
-    }
-}
-
-pub mod window_state {
-    #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show)]
-    pub enum WindowState{
-        WindowStateWithdrawn  = 1 << 0,
-        WindowStateIconified  = 1 << 1,
-        WindowStateMaximized  = 1 << 2,
-        WindowStateSticky     = 1 << 3,
-        WindowStateFullscreen = 1 << 4,
-        WindowStateAbove      = 1 << 5,
-        WindowStateBelow      = 1 << 6,
-        WindowStateFocused    = 1 << 7,
-        WindowStateTiled      = 1 << 8
     }
 }
 

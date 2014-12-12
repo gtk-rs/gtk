@@ -27,10 +27,10 @@
 /// or tooltips that you normally don't think of as windows per se. Nearly all windows should be WindowTopLevel.
 /// In particular, do not use WindowPopUp just to turn off the window borders; use gtk_window_set_decorated() for that.
 
-pub mod window_type{
+pub mod window_type {
     #[repr(C)]
     #[deriving(Clone, PartialEq, PartialOrd, Show)]
-    pub enum WindowType{
+    pub enum WindowType {
         /// A regular window, such as a dialog.
         TopLevel,
         /// A special window such as a tooltip.
@@ -39,10 +39,10 @@ pub mod window_type{
 }
 
 /// Reading directions for text
-pub mod text_direction{
+pub mod text_direction {
     #[repr(C)]
     #[deriving(Clone, PartialEq, PartialOrd, Show)]
-    pub enum TextDirection{
+    pub enum TextDirection {
         None,
         Ltr,
         Rtl
@@ -52,10 +52,10 @@ pub mod text_direction{
 /// Window placement can be influenced using this enumeration.
 /// Note that using WinPosCenterAlways is almost always a bad idea.
 /// It won't necessarily work well with all window managers or on all windowing systems.
-pub mod window_position{
+pub mod window_position {
     #[repr(C)]
     #[deriving(Clone, PartialEq, PartialOrd, Show)]
-    pub enum WindowPosition{
+    pub enum WindowPosition {
         /// No influence is made on placement.
         None,
         /// Windows should be placed in the center of the screen.
@@ -70,10 +70,10 @@ pub mod window_position{
 }
 
 /// Used to dictate the style that a gtk::ButtonBox uses to layout the buttons it contains.
-pub mod button_box_style{
+pub mod button_box_style {
     #[repr(C)]
     #[deriving(Clone, PartialEq, PartialOrd, Show)]
-    pub enum ButtonBoxStyle{
+    pub enum ButtonBoxStyle {
         /// Buttons are evenly spread across the box.
         Spread = 1,
         /// Buttons are placed at the edges of the box.
@@ -89,10 +89,10 @@ pub mod button_box_style{
 
 /// Represents the orientation of widgets which can be switched between
 /// horizontal and vertical orientation on the fly, like gtk::Toolbar.
-pub mod orientation{
+pub mod orientation {
     #[repr(C)]
     #[deriving(Clone, PartialEq, PartialOrd, Show)]
-    pub enum Orientation{
+    pub enum Orientation {
         /// The widget is in horizontal orientation.
         Horizontal,
         /// The widget is in vertical orientation.
@@ -101,10 +101,10 @@ pub mod orientation{
 }
 
 /// Availables direction types
-pub mod direction_type{
+pub mod direction_type {
     #[repr(C)]
     #[deriving(Clone, PartialEq, PartialOrd, Show)]
-    pub enum DirectionType{
+    pub enum DirectionType {
         TabForward,
         TabBackward,
         Up,
@@ -116,10 +116,10 @@ pub mod direction_type{
 
 /// Specifies which corner a child widget should be placed in when packed into a gtk::ScrolledWindow.
 /// This is effectively the opposite of where the scroll bars are placed.
-pub mod corner_type{
+pub mod corner_type {
     #[repr(C)]
     #[deriving(Clone, PartialEq, PartialOrd, Show)]
-    pub enum CornerType{
+    pub enum CornerType {
         /// Place the scrollbars on the right and bottom of the widget (default behaviour).
         TopLeft,
         /// Place the scrollbars on the top and right of the widget.
