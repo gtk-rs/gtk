@@ -16,7 +16,7 @@
 #![allow(non_camel_case_types)]
 #![allow(dead_code)]
 
-use libc::{c_int, c_char, c_double, c_void};
+use libc::{c_int, c_char, c_double, c_void, c_uint};
 use gtk::ffi::{Gboolean};
 use gdk;
 
@@ -56,6 +56,12 @@ pub struct C_GdkGeometry;
 #[repr(C)]
 #[derive(Copy)]
 pub struct C_GdkDevice;
+#[repr(C)]
+#[deriving(Copy)]
+pub struct C_GdkTimeCoord;
+#[repr(C)]
+#[deriving(Copy)]
+pub struct C_GdkAtom;
 
 extern "C" {
     //=========================================================================
@@ -224,4 +230,44 @@ extern "C" {
     //let GdkWindowInvalidateHandlerFunc = fn(window: *mut C_GdkWindow, region: *const cairo_region_t);
     //let GdkWindowChildFunc = fn(window: *mut C_GdkWindow, user_data: *mut c_void);
     //let GdkFilterFunc = fn(xevent: *mut C_GdkXEvent, event: *mut C_GdkEvent, data: *mut c_void) -> GdkFilterReturn;
+
+    //=========================================================================
+    // GdkDevice                                                         NOT OK
+    //=========================================================================
+    pub fn gdk_device_get_name             (device: *mut C_GdkDevice) -> *const c_char;
+    pub fn gdk_device_get_source           (device: *mut C_GdkDevice) -> gdk::InputSource;
+    pub fn gdk_device_set_mode             (device: *mut C_GdkDevice, mode: gdk::InputMode);
+    pub fn gdk_device_get_mode             (device: *mut C_GdkDevice) -> gdk::InputMode;
+    pub fn gdk_device_set_key              (device: *mut C_GdkDevice, index_: c_uint, keyval: c_uint, modifiers: gdk::ModifierType);
+    pub fn gdk_device_get_key              (device: *mut C_GdkDevice, index_: c_uint, keyval: *mut c_uint,
+        modifiers: gdk::ModifierType) -> Gboolean;
+    pub fn gdk_device_set_axis_use         (device: *mut C_GdkDevice, index_: c_uint, use_: gdk::AxisUse);
+    pub fn gdk_device_get_axis_use         (device: *mut C_GdkDevice, index_: c_uint) -> gdk::AxisUse;
+    pub fn gdk_device_get_associated_device(device: *mut C_GdkDevice) -> *mut C_GdkDevice;
+    //pub fn gdk_device_list_slave_devices   (device: *mut C_GdkDevice) -> *mut GList;
+    pub fn gdk_device_get_device_type      (device: *mut C_GdkDevice) -> gdk::DeviceType;
+    pub fn gdk_device_get_display          (device: *mut C_GdkDevice) -> *mut C_GdkDisplay;
+    pub fn gdk_device_get_has_cursor       (device: *mut C_GdkDevice) -> Gboolean;
+    pub fn gdk_device_get_n_axes           (device: *mut C_GdkDevice) -> c_int;
+    pub fn gdk_device_get_n_keys           (device: *mut C_GdkDevice) -> c_int;
+    pub fn gdk_device_warp                 (device: *mut C_GdkDevice, screen: *mut C_GdkScreen, x: c_int, y: c_int);
+    pub fn gdk_device_grab                 (device: *mut C_GdkDevice, window: *mut C_GdkWindow, grab_ownership: gdk::GrabOwnership,
+        owner_events: Gboolean, event_mask: gdk::EventMask, cursor: *mut C_GdkCursor, time_: u32) -> gdk::GrabStatus;
+    pub fn gdk_device_ungrab               (device: *mut C_GdkDevice, time_: u32);
+    pub fn gdk_device_get_state            (device: *mut C_GdkDevice, window: *mut C_GdkWindow, axes: *mut c_double,
+        mask: *mut gdk::ModifierType);
+    pub fn gdk_device_get_position         (device: *mut C_GdkDevice, screen: *mut *mut C_GdkScreen, x: *mut c_int, y: *mut c_int);
+    pub fn gdk_device_get_position_double  (device: *mut C_GdkDevice, screen: *mut *mut C_GdkScreen, x: *mut c_double, y: *mut c_double);
+    pub fn gdk_device_get_window_at_position(device: *mut C_GdkDevice, win_x: *mut c_int, win_y: *mut c_int) -> *mut C_GdkWindow;
+    pub fn gdk_device_get_window_at_position_double(device: *mut C_GdkDevice, win_x: *mut c_double,
+        win_y: *mut c_double) -> *mut C_GdkWindow;
+    pub fn gdk_device_get_history          (device: *mut C_GdkDevice, window: *mut C_GdkWindow, start: u32, stop: u32,
+        events: *mut *mut *mut C_GdkTimeCoord, n_events: *mut c_int);
+    pub fn gdk_device_free_history         (events: *mut *mut C_GdkTimeCoord, n_events: c_int);
+    pub fn gdk_device_get_axis             (device: *mut C_GdkDevice, axes: *mut c_double, use_: gdk::AxisUse,
+        value: *mut c_double) -> Gboolean;
+    //pub fn gdk_device_list_axes            (device: *mut C_GdkDevice) -> *mut GList;
+    pub fn gdk_device_get_axis_value       (device: *mut C_GdkDevice, axes: *mut c_double, use_: C_GdkAtom,
+        value: *mut c_double) -> Gboolean;
+    pub fn gdk_device_get_last_event_window(device: *mut C_GdkDevice) -> *mut C_GdkWindow;
 }
