@@ -17,6 +17,7 @@
 
 use gtk::{mod, ffi};
 
+#[deriving(Copy)]
 pub struct TextIter {
     pointer: *mut ffi::C_GtkTextIter
 }

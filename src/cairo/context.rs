@@ -34,7 +34,8 @@ use cairo::enums::{Status, Antialias, LineCap, LineJoin, FillRule};
 use cairo::patterns::{wrap_pattern, Pattern};
 
 #[repr(C)]
-pub struct Rectangle{
+#[deriving(Copy)]
+pub struct Rectangle {
     x: f64,
     y: f64,
     width: f64,
@@ -44,15 +45,15 @@ pub struct Rectangle{
 #[repr(C)]
 pub struct Context(*mut cairo_t);
 
-impl Drop for Context{
-    fn drop(&mut self){
+impl Drop for Context {
+    fn drop(&mut self) {
         unsafe{
             ffi::cairo_destroy(self.get_ptr())
         }
     }
 }
 
-impl Context{
+impl Context {
     pub fn get_ptr(&self) -> *mut cairo_t{
         let Context(ptr) = *self;
         ptr

@@ -17,6 +17,7 @@
 
 use gtk::ffi;
 
+#[deriving(Copy)]
 pub struct TextTag {
     pointer: *mut ffi::C_GtkTextTag
 }

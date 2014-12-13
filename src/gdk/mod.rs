@@ -47,7 +47,6 @@ pub use self::events::{
     NotifyType,
     CrossingMode,
     PropertyState,
-    WindowState,
     SettingAction,
     OwnerChange
 };
@@ -58,6 +57,15 @@ pub use self::types::{Atom, Screen, Rectangle, Key};
 
 pub use self::enums::modifier_intent::ModifierIntent;
 pub use self::enums::modifier_type::ModifierType;
+pub use self::enums::window_type::WindowType;
+pub use self::enums::window_state::WindowState;
+pub use self::enums::window_edge::WindowEdge;
+pub use self::enums::window_hints::WindowHints;
+pub use self::enums::window_type_hint::WindowTypeHint;
+pub use self::enums::fullscreen_mode::FullscreenMode;
+pub use self::enums::wm_decoration::WMDecoration;
+pub use self::enums::event_mask::EventMask;
+pub use self::enums::input_source::InputSource;
 pub use self::enums::key;
 
 mod color;
@@ -66,3 +74,6 @@ mod device;
 mod window;
 mod types;
 pub mod enums;
+
+#[doc(hidden)]
+pub mod ffi;

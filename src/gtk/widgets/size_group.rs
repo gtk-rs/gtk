@@ -17,6 +17,7 @@
 
 use gtk::{mod, ffi};
 
+#[deriving(Copy)]
 pub struct SizeGroup {
     pointer: *mut ffi::C_GtkSizeGroup
 }

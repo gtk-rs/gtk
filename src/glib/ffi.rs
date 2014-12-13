@@ -26,6 +26,7 @@ pub const GFALSE:  c_int = 0;
 pub const GTRUE:   c_int = 1;
 
 #[repr(C)]
+#[deriving(Copy)]
 pub struct C_GList {
   pub data: *mut c_void,
   pub next: *mut C_GList,
@@ -33,12 +34,14 @@ pub struct C_GList {
 }
 
 #[repr(C)]
+#[deriving(Copy)]
 pub struct C_GSList {
   pub data: *mut c_void,
   pub next: *mut C_GSList
 }
 
 #[repr(C)]
+#[deriving(Copy)]
 pub struct C_GError {
     pub domain : GQuark,
     pub code   : i32,
@@ -46,9 +49,11 @@ pub struct C_GError {
 }
 
 #[repr(C)]
+#[deriving(Copy)]
 pub struct C_GPermission;
 
 #[repr(C)]
+#[deriving(Copy)]
 pub struct C_GObject;
 
 extern "C" {

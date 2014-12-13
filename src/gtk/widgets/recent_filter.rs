@@ -15,6 +15,7 @@
 
 use gtk::{mod, ffi};
 
+#[deriving(Copy)]
 pub struct RecentFilter {
     pointer: *mut ffi::C_GtkRecentFilter
 }
