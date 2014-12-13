@@ -14,4 +14,5 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 #[repr(C)]
+#[deriving(Copy)]
 pub struct Device; //STUB

@@ -16,6 +16,7 @@
 use gtk::ffi;
 use std::c_str::CString;
 
+#[deriving(Copy)]
 pub struct TreePath {
     pointer:   *mut ffi::C_GtkTreePath
 }

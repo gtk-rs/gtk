@@ -15,6 +15,7 @@
 
 use gtk::ffi;
 
+#[deriving(Copy)]
 pub struct TextChildAnchor {
     pointer: *mut ffi::C_GtkTextChildAnchor
 }

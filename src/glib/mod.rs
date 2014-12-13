@@ -36,15 +36,19 @@ mod permission;
 pub mod traits;
 
 // An opaque structure used as the base of all interface types.
+#[deriving(Copy)]
 pub struct TypeInterface;
 
 // An opaque structure used as the base of all type instances.
+#[deriving(Copy)]
 pub struct TypeInstance;
 
 // An opaque structure used as the base of all classes.
+#[deriving(Copy)]
 pub struct TypeClass;
 
 //FIXME: Check if this is actually correct (maybe not since ParamFlags is deprecated)
+#[deriving(Copy)]
 pub enum ParamFlags{
     Readable,
     Writable,
@@ -59,6 +63,7 @@ pub enum ParamFlags{
     Deprecated
 }
 
+#[deriving(Copy)]
 pub struct ParamSpec {
     g_type_instance: TypeInstance,
     name: *mut c_char,

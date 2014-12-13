@@ -18,7 +18,7 @@ use cairo::ffi;
 use std::c_str::CString;
 
 #[repr(C)]
-#[deriving(PartialEq)]
+#[deriving(Clone, PartialEq, PartialOrd, Copy)]
 pub enum Status {
     StatusSuccess = 0,
 
@@ -82,6 +82,7 @@ impl Status {
 }
 
 #[repr(C)]
+#[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
 pub enum Antialias {
     AntialiasDefault,
 
@@ -97,12 +98,14 @@ pub enum Antialias {
 }
 
 #[repr(C)]
+#[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
 pub enum FillRule {
     FillRuleWinding,
     FillRuleEvenOdd
 }
 
 #[repr(C)]
+#[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
 pub enum LineCap {
     LineCapButt,
     LineCapRound,
@@ -110,6 +113,7 @@ pub enum LineCap {
 }
 
 #[repr(C)]
+#[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
 pub enum LineJoin {
     LineJoinMiter,
     LineJoinRound,
@@ -117,6 +121,7 @@ pub enum LineJoin {
 }
 
 #[repr(C)]
+#[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
 pub enum Operator {
     OperatorClear,
 
@@ -154,6 +159,7 @@ pub enum Operator {
 }
 
 #[repr(C)]
+#[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
 pub enum PathDataType {
     PathMoveTo,
     PathLineTo,
@@ -162,6 +168,7 @@ pub enum PathDataType {
 }
 
 #[repr(C)]
+#[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
 pub enum Content {
     ContentColor      = 0x1000,
     ContentAlpha      = 0x2000,
@@ -169,6 +176,7 @@ pub enum Content {
 }
 
 #[repr(C)]
+#[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
 pub enum Extend {
     ExtendNone,
     ExtendRepeat,
@@ -177,6 +185,7 @@ pub enum Extend {
 }
 
 #[repr(C)]
+#[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
 pub enum Filter {
     FilterFast,
     FilterGood,
@@ -187,6 +196,7 @@ pub enum Filter {
 }
 
 #[repr(C)]
+#[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
 pub enum PatternType {
     PatternTypeSolid,
     PatternTypeSurface,
@@ -197,6 +207,7 @@ pub enum PatternType {
 }
 
 #[repr(C)]
+#[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
 pub enum FontSlant {
     FontSlantNormal,
     FontSlantItalic,
@@ -204,18 +215,21 @@ pub enum FontSlant {
 }
 
 #[repr(C)]
+#[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
 pub enum FontWeight {
     FontWeightNormal,
     FontWeightBold
 }
 
 #[repr(C)]
+#[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
 pub enum TextClusterFlags {
     TextClusterFlagNone     = 0x00000000,
     TextClusterFlagBackward = 0x00000001
 }
 
 #[repr(C)]
+#[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
 pub enum FontType {
     FontTypeToy,
     FontTypeFt,
@@ -225,6 +239,7 @@ pub enum FontType {
 }
 
 #[repr(C)]
+#[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
 pub enum SubpixelOrder {
     SubpixelOrderDefault,
     SubpixelOrderRgb,
@@ -234,6 +249,7 @@ pub enum SubpixelOrder {
 }
 
 #[repr(C)]
+#[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
 pub enum HintStyle {
     HintStyleDefault,
     HintStyleNone,
@@ -243,6 +259,7 @@ pub enum HintStyle {
 }
 
 #[repr(C)]
+#[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
 pub enum HintMetrics {
     HintMetricsDefault,
     HintMetricsOff,

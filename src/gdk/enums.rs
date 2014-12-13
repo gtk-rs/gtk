@@ -20,7 +20,7 @@ pub mod modifier_intent {
     #![allow(non_upper_case_globals)]
 
     bitflags! {
-    #[deriving(Show)]
+    #[deriving(Show, Copy)]
     #[repr(C)]
     flags ModifierIntent: u32 {
         /// the primary modifier used to invoke menu accelerators.,
@@ -43,7 +43,7 @@ pub mod modifier_intent {
 /// Describes the kind of window.
 pub mod window_type {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum WindowType {
         /// root window; this window has no parent, covers the entire screen, and is created by the window system
         Root,
@@ -66,7 +66,7 @@ pub mod window_type {
 /// Specifies the state of a toplevel window.
 pub mod window_state {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum WindowState {
         /// the window is not shown.
         WindowStateWithdrawn  = 1 << 0,
@@ -92,7 +92,7 @@ pub mod window_state {
 /// Indicates which monitor (in a multi-head setup) a window should span over when in fullscreen mode.
 pub mod fullscreen_mode {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum FullscreenMode {
         /// Fullscreen on current monitor only.
         OnCurrentMonitor,
@@ -104,7 +104,7 @@ pub mod fullscreen_mode {
 /// Determines a window edge or corner.
 pub mod window_edge {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum WindowEdge {
         /// the top left corner.
         NorthWest,
@@ -131,7 +131,7 @@ pub mod window_edge {
 /// user specified a size/position using a --geometry command-line argument; gtk_window_parse_geometry() automatically sets these flags.
 pub mod window_hints {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum WindowHints {
         /// indicates that the program has positioned the window
         Pos,
@@ -161,7 +161,7 @@ pub mod window_hints {
 /// window types.
 pub mod window_type_hint {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum WindowTypeHint {
         /// Normal toplevel window.
         Normal,
@@ -210,7 +210,7 @@ pub mod window_type_hint {
 /// gdk_event_get_event_sequence() returns the event sequence for these events, so different sequences may be distinguished.
 pub mod event_mask {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum EventMask {
         /// receive expose events
         ExposureMask,
@@ -267,7 +267,7 @@ pub mod event_mask {
 /// window. The hint must be set before mapping the window.
 pub mod wm_decoration {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum WMDecoration {
         /// all decorations should be applied.
         All,
@@ -289,7 +289,7 @@ pub mod wm_decoration {
 /// An enumeration describing the type of an input device in general terms.
 pub mod input_source {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show)]
+    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum InputSource {
         /// the device is a mouse. (This will be reported for the core pointer, even if it is something else, such as a trackball.)
         Mouse,
@@ -312,8 +312,8 @@ pub mod modifier_type {
     #![allow(non_upper_case_globals)]
 
     bitflags! {
-    #[deriving(Show)]
     #[repr(C)]
+    #[deriving(Show, Copy)]
     flags ModifierType: u32 {
         /// the Shift key.,
         const ShiftMask              = 1 << 0,
