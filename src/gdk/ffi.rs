@@ -240,7 +240,7 @@ extern "C" {
     pub fn gdk_device_get_mode             (device: *mut C_GdkDevice) -> gdk::InputMode;
     pub fn gdk_device_set_key              (device: *mut C_GdkDevice, index_: c_uint, keyval: c_uint, modifiers: gdk::ModifierType);
     pub fn gdk_device_get_key              (device: *mut C_GdkDevice, index_: c_uint, keyval: *mut c_uint,
-        modifiers: gdk::ModifierType) -> Gboolean;
+        modifiers: *mut gdk::ModifierType) -> Gboolean;
     pub fn gdk_device_set_axis_use         (device: *mut C_GdkDevice, index_: c_uint, use_: gdk::AxisUse);
     pub fn gdk_device_get_axis_use         (device: *mut C_GdkDevice, index_: c_uint) -> gdk::AxisUse;
     pub fn gdk_device_get_associated_device(device: *mut C_GdkDevice) -> *mut C_GdkDevice;

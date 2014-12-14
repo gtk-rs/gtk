@@ -43,6 +43,7 @@ GtkButtonBox is a sub-class of GtkBox, the struct `gtk::ButtonBox` implements al
 Finally all the gtk widgets implement the trait self::traits::Widget.
 */
 
+#![macro_escape]
 
 // These are/should be inlined
 pub use self::rt::{

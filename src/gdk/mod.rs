@@ -57,21 +57,23 @@ pub use self::types::{Atom, Screen, Rectangle, Key};
 
 pub use self::enums::modifier_intent::ModifierIntent;
 pub use self::enums::modifier_type::ModifierType;
-pub use self::enums::WindowType;
-pub use self::enums::WindowState;
-pub use self::enums::WindowEdge;
-pub use self::enums::WindowHints;
-pub use self::enums::WindowTypeHint;
-pub use self::enums::FullscreenMode;
-pub use self::enums::WMDecoration;
-pub use self::enums::EventMask;
-pub use self::enums::InputSource;
-pub use self::enums::InputMode;
-pub use self::enums::AxisUse;
-pub use self::enums::DeviceType;
-pub use self::enums::GrabOwnership;
-pub use self::enums::GrabStatus;
-pub use self::enums::key;
+pub use self::enums::{
+    WindowType,
+    WindowState,
+    WindowEdge,
+    WindowHints,
+    WindowTypeHint,
+    FullscreenMode,
+    WMDecoration,
+    EventMask,
+    InputSource,
+    InputMode,
+    AxisUse,
+    DeviceType,
+    GrabOwnership,
+    GrabStatus,
+    key
+};
 
 mod color;
 mod events;
