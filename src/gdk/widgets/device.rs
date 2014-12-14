@@ -64,7 +64,7 @@ impl Device {
         unsafe { ffi::gdk_device_get_axis_use(self.pointer, index_ as c_uint) }
     }
 
-    /*pub fn get_associated_device(&self) -> Option<Device> {
+    pub fn get_associated_device(&self) -> Option<Device> {
         let tmp = unsafe { ffi::gdk_device_get_associated_device(self.pointer) };
 
         if tmp.is_null() {
@@ -74,7 +74,7 @@ impl Device {
                 pointer: tmp
             })
         }
-    }*/
+    }
 
     pub fn get_device_type(&self) -> gdk::DeviceType {
         unsafe { ffi::gdk_device_get_device_type(self.pointer) }

@@ -62,6 +62,12 @@ pub struct C_GdkTimeCoord;
 #[repr(C)]
 #[deriving(Copy)]
 pub struct C_GdkAtom;
+#[repr(C)]
+#[deriving(Copy)]
+pub struct C_GdkDeviceManager;
+#[repr(C)]
+#[deriving(Copy)]
+pub struct C_GdkAppLaunchContext;
 
 extern "C" {
     //=========================================================================
@@ -270,4 +276,41 @@ extern "C" {
     pub fn gdk_device_get_axis_value       (device: *mut C_GdkDevice, axes: *mut c_double, use_: C_GdkAtom,
         value: *mut c_double) -> Gboolean;
     pub fn gdk_device_get_last_event_window(device: *mut C_GdkDevice) -> *mut C_GdkWindow;
+
+    //=========================================================================
+    // GdkDisplay                                                        NOT OK
+    //=========================================================================
+    pub fn gdk_display_open                (display_name: *const c_char) -> *mut C_GdkDisplay;
+    pub fn gdk_display_get_default         () -> *mut C_GdkDisplay;
+    pub fn gdk_display_get_name            (display: *mut C_GdkDisplay) -> *const c_char;
+    pub fn gdk_display_get_screen          (display: *mut C_GdkDisplay, screen_num: c_int) -> *mut C_GdkScreen;
+    pub fn gdk_display_get_default_screen  (display: *mut C_GdkDisplay) -> *mut C_GdkScreen;
+    pub fn gdk_display_get_device_manager  (display: *mut C_GdkDisplay) -> *mut C_GdkDeviceManager;
+    pub fn gdk_display_device_is_grabbed   (display: *mut C_GdkDisplay, device: *mut C_GdkDevice) -> Gboolean;
+    pub fn gdk_display_beep                (display: *mut C_GdkDisplay);
+    pub fn gdk_display_sync                (display: *mut C_GdkDisplay);
+    pub fn gdk_display_flush               (display: *mut C_GdkDisplay);
+    pub fn gdk_display_close               (display: *mut C_GdkDisplay);
+    pub fn gdk_display_is_closed           (display: *mut C_GdkDisplay) -> Gboolean;
+    pub fn gdk_display_get_event           (display: *mut C_GdkDisplay) -> *mut C_GdkEvent;
+    pub fn gdk_display_peek_event          (display: *mut C_GdkDisplay) -> *mut C_GdkEvent;
+    pub fn gdk_display_put_event           (display: *mut C_GdkDisplay, event: *const C_GdkEvent);
+    pub fn gdk_display_has_pending         (display: *mut C_GdkDisplay) -> Gboolean;
+    pub fn gdk_display_set_double_click_time(display: *mut C_GdkDisplay, msec: c_uint);
+    pub fn gdk_display_set_double_click_distance(display: *mut C_GdkDisplay, distance: c_uint);
+    pub fn gdk_display_supports_cursor_color(display: *mut C_GdkDisplay) -> Gboolean;
+    pub fn gdk_display_supports_cursor_alpha(display: *mut C_GdkDisplay) -> Gboolean;
+    pub fn gdk_display_get_default_cursor_size(display: *mut C_GdkDisplay) -> c_uint;
+    pub fn gdk_display_get_maximal_cursor_size(display: *mut C_GdkDisplay, width: *mut c_uint, height: *mut c_uint);
+    pub fn gdk_display_get_default_group   (display: *mut C_GdkDisplay) -> *mut C_GdkWindow;
+    pub fn gdk_display_supports_selection_notification(display: *mut C_GdkDisplay) -> Gboolean;
+    pub fn gdk_display_request_selection_notification(display: *mut C_GdkDisplay, selection: C_GdkAtom) -> Gboolean;
+    pub fn gdk_display_supports_clipboard_persistence(display: *mut C_GdkDisplay) -> Gboolean;
+    pub fn gdk_display_store_clipboard     (display: *mut C_GdkDisplay, clipboard_window: *mut C_GdkWindow, time_: u32,
+        targets: *const C_GdkAtom, n_targets: c_int) -> Gboolean;
+    pub fn gdk_display_supports_shapes     (display: *mut C_GdkDisplay) -> Gboolean;
+    pub fn gdk_display_supports_input_shapes(display: *mut C_GdkDisplay) -> Gboolean;
+    pub fn gdk_display_supports_composite  (display: *mut C_GdkDisplay) -> Gboolean;
+    pub fn gdk_display_get_app_launch_context(display: *mut C_GdkDisplay) -> *mut C_GdkAppLaunchContext;
+    pub fn gdk_display_notify_startup_complete(display: *mut C_GdkDisplay, startup_id: *const c_char);
 }

@@ -445,7 +445,7 @@ pub mod modifier_type {
 /// Corresponding values to keys
 #[allow(non_upper_case_globals)]
 pub mod key {
-    use gdk::types::Key;
+    use gdk::Key;
 
     pub const VoidSymbol : Key = 0xffffff;
     pub const BackSpace : Key = 0xff08;
