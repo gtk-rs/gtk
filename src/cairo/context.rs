@@ -327,7 +327,7 @@ impl Context {
 
             (*rectangle_list).status.ensure_valid();
 
-            CVec::new_with_dtor((*rectangle_list).rectangles, (*rectangle_list).num_rectangles as uint, proc(){
+            CVec::new_with_dtor((*rectangle_list).rectangles, (*rectangle_list).num_rectangles as uint, move || {
                 ffi::cairo_rectangle_list_destroy(rectangle_list)
             })
         }

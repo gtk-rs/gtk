@@ -35,7 +35,7 @@ pub trait Signal<'a>{
 
     fn fetch_cb(&self) -> *mut ||;
 
-    fn get_user_data<'b>(&'b self) -> &'b Option<Box<Any + 'a>>;
+    fn get_user_data(&'a self) -> &'a Option<Box<Any>>;
 }
 
 // The defintion of the signal macro is split in a argumentless and
@@ -163,7 +163,7 @@ macro_rules! signal(
     ($signal:ident, $class:ident [ $(($arg_name:ident : $arg_type:ty)),* ] -> $ret_type:ty) => (
         pub struct $class<'a>{
             pub cb: |$($arg_type),*|:'a -> $ret_type,
-            pub user_data: Option<Box<Any + 'a>>
+            pub user_data: Option<Box<Any>>
         }
 
         impl<'a> $class<'a>{
@@ -200,7 +200,7 @@ macro_rules! signal(
                 }
             }
 
-            fn get_user_data<'b>(&'b self) -> &'b Option<Box<Any + 'a>>{
+            fn get_user_data(&'a self) -> &'a Option<Box<Any>>{
                 &self.user_data
             }
         }

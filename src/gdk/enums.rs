@@ -20,7 +20,7 @@ pub mod modifier_intent {
     #![allow(non_upper_case_globals)]
 
     bitflags! {
-    #[deriving(Show, Copy)]
+    #[deriving(Show)]
     #[repr(C)]
     flags ModifierIntent: u32 {
         /// the primary modifier used to invoke menu accelerators.,
@@ -313,7 +313,7 @@ pub mod modifier_type {
 
     bitflags! {
     #[repr(C)]
-    #[deriving(Show, Copy)]
+    #[deriving(Show)]
     flags ModifierType: u32 {
         /// the Shift key.,
         const ShiftMask              = 1 << 0,
