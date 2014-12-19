@@ -17,7 +17,7 @@ use gtk::{mod, ffi};
 use gtk::ffi::FFIWidget;
 use gtk::cast::{GTK_WINDOW};
 
-struct_Widget!(ColorChooserDialog)
+struct_Widget!(ColorChooserDialog);
 
 impl ColorChooserDialog {
     pub fn new(title: &str, parent: Option<gtk::Window>) -> Option<ColorChooserDialog> {
@@ -38,8 +38,8 @@ impl ColorChooserDialog {
     }
 }
 
-impl_drop!(ColorChooserDialog)
-impl_TraitWidget!(ColorChooserDialog)
+impl_drop!(ColorChooserDialog);
+impl_TraitWidget!(ColorChooserDialog);
 
 impl gtk::ContainerTrait for ColorChooserDialog {}
 impl gtk::BinTrait for ColorChooserDialog {}
@@ -47,4 +47,4 @@ impl gtk::WindowTrait for ColorChooserDialog {}
 impl gtk::DialogTrait for ColorChooserDialog {}
 impl gtk::ColorChooserTrait for ColorChooserDialog {}
 
-impl_widget_events!(ColorChooserDialog)
+impl_widget_events!(ColorChooserDialog);

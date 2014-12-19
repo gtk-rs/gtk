@@ -20,7 +20,7 @@ use gtk::cast::{GTK_LIST_BOX_ROW, GTK_LIST_BOX};
 use gtk::ffi::FFIWidget;
 
 /// GtkFlowBox — A container that allows reflowing its children
-struct_Widget!(ListBox)
+struct_Widget!(ListBox);
 
 impl ListBox {
     pub fn new() -> Option<ListBox> {
@@ -157,12 +157,12 @@ impl ListBox {
 // pub fn gtk_list_box_drag_unhighlight_row         (list_box: *C_GtkListBox);
 // pub fn gtk_list_box_drag_highlight_row           (list_box: *C_GtkListBox, row: *C_GtkListBoxRow);
 
-impl_drop!(ListBox)
-impl_TraitWidget!(ListBox)
+impl_drop!(ListBox);
+impl_TraitWidget!(ListBox);
 
 impl gtk::ContainerTrait for ListBox {}
 
-struct_Widget!(ListBoxRow)
+struct_Widget!(ListBoxRow);
 
 impl ListBoxRow {
     pub fn new() -> Option<ListBoxRow> {
@@ -201,10 +201,10 @@ impl ListBoxRow {
     }
 }
 
-impl_drop!(ListBoxRow)
-impl_TraitWidget!(ListBoxRow)
+impl_drop!(ListBoxRow);
+impl_TraitWidget!(ListBoxRow);
 
 impl gtk::ContainerTrait for ListBoxRow {}
 impl gtk::BinTrait for ListBoxRow {}
 
-impl_widget_events!(ListBox)
+impl_widget_events!(ListBox);

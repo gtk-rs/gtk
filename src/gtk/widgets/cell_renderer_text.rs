@@ -18,7 +18,7 @@
 use gtk::{mod, ffi};
 use gtk::cast::GTK_CELL_RENDERER_TEXT;
 
-struct_Widget!(CellRendererText)
+struct_Widget!(CellRendererText);
 
 impl CellRendererText {
     pub fn new() -> Option<CellRendererText> {
@@ -32,9 +32,9 @@ impl CellRendererText {
     }
 }
 
-impl_drop!(CellRendererText)
-impl_TraitWidget!(CellRendererText)
+impl_drop!(CellRendererText);
+impl_TraitWidget!(CellRendererText);
 
 impl gtk::CellRendererTrait for CellRendererText {}
 
-impl_widget_events!(CellRendererText)
+impl_widget_events!(CellRendererText);

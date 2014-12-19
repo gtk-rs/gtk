@@ -21,9 +21,8 @@ use gtk::ffi;
 // TODO:
 // Implements custom signal : inserted-text + deleted-text
 
-/**
-* EntryBuffer — Text buffer for gtk::Entry
-*
+/// EntryBuffer — Text buffer for gtk::Entry
+/*
 * # Signals available:
 * * `deleted-text` : Run First
 * * `inserted-text` : Run First
@@ -123,4 +122,4 @@ impl EntryBuffer {
     }
 }
 
-impl_drop!(EntryBuffer, GTK_ENTRY_BUFFER)
+impl_drop!(EntryBuffer, GTK_ENTRY_BUFFER);

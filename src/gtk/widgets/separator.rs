@@ -19,8 +19,7 @@ use gtk::{mod, ffi};
 use gtk::Orientation;
 
 /// Separator — A separator widget
-struct_Widget!(Separator)
-
+struct_Widget!(Separator);
 
 impl Separator {
     pub fn new(orientation: Orientation) -> Option<Separator> {
@@ -29,9 +28,9 @@ impl Separator {
     }
 }
 
-impl_drop!(Separator)
-impl_TraitWidget!(Separator)
+impl_drop!(Separator);
+impl_TraitWidget!(Separator);
 
 impl gtk::OrientableTrait for Separator {}
 
-impl_widget_events!(Separator)
+impl_widget_events!(Separator);

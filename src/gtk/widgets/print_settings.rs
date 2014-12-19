@@ -17,7 +17,7 @@ use gtk::{mod, ffi};
 use gtk::ffi::FFIWidget;
 use gtk::cast::{GTK_PRINT_SETTINGS, GTK_PAPER_SIZE};
 
-struct_Widget!(PrintSettings)
+struct_Widget!(PrintSettings);
 
 impl PrintSettings {
     pub fn new() -> Option<PrintSettings> {
@@ -386,7 +386,7 @@ impl PrintSettings {
     }
 }
 
-impl_drop!(PrintSettings)
-impl_TraitWidget!(PrintSettings)
+impl_drop!(PrintSettings);
+impl_TraitWidget!(PrintSettings);
 
-impl_widget_events!(PrintSettings)
+impl_widget_events!(PrintSettings);

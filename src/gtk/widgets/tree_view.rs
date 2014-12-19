@@ -21,7 +21,7 @@ use gtk::cast::GTK_TREE_VIEW;
 use gtk::widgets::{TreePath, TreeSelection, TreeViewColumn};
 
 /// TreeView — A widget for displaying both trees and lists
-struct_Widget!(TreeView)
+struct_Widget!(TreeView);
 
 impl TreeView {
     pub fn new() -> Option<TreeView> {
@@ -415,11 +415,11 @@ impl TreeView {
     }
 }
 
-impl_drop!(TreeView)
-impl_TraitWidget!(TreeView)
+impl_drop!(TreeView);
+impl_TraitWidget!(TreeView);
 
 impl gtk::ContainerTrait for TreeView {}
 impl gtk::ScrollableTrait for TreeView {}
 
-impl_widget_events!(TreeView)
-impl_tree_view_events!(TreeView)
+impl_widget_events!(TreeView);
+impl_tree_view_events!(TreeView);

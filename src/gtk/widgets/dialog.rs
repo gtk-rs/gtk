@@ -15,7 +15,7 @@
 
 use gtk::{mod, ffi};
 
-struct_Widget!(Dialog)
+struct_Widget!(Dialog);
 
 impl Dialog {
     fn new() -> Option<Dialog> {
@@ -42,12 +42,12 @@ impl Dialog {
     }*/
 }
 
-impl_drop!(Dialog)
-impl_TraitWidget!(Dialog)
+impl_drop!(Dialog);
+impl_TraitWidget!(Dialog);
 
 impl gtk::ContainerTrait for Dialog {}
 impl gtk::BinTrait for Dialog {}
 impl gtk::WindowTrait for Dialog {}
 impl gtk::DialogTrait for Dialog {}
 
-impl_widget_events!(Dialog)
+impl_widget_events!(Dialog);

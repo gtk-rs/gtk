@@ -21,7 +21,7 @@ use gtk::cast::{GTK_HEADER_BAR};
 use gtk::{mod, ffi};
 
 /// GtkHeaderBar — A box with a centered child
-struct_Widget!(HeaderBar)
+struct_Widget!(HeaderBar);
 
 impl HeaderBar {
     pub fn new() -> Option<HeaderBar> {
@@ -109,9 +109,9 @@ impl HeaderBar {
     }
 }
 
-impl_drop!(HeaderBar)
-impl_TraitWidget!(HeaderBar)
+impl_drop!(HeaderBar);
+impl_TraitWidget!(HeaderBar);
 
 impl gtk::ContainerTrait for HeaderBar {}
 
-impl_widget_events!(HeaderBar)
+impl_widget_events!(HeaderBar);

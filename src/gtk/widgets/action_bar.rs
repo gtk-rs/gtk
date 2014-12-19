@@ -18,7 +18,7 @@
 use gtk::cast::{GTK_ACTION_BAR};
 use gtk::{mod, ffi};
 
-struct_Widget!(ActionBar)
+struct_Widget!(ActionBar);
 
 impl ActionBar {
     pub fn new() -> Option<ActionBar> {
@@ -59,10 +59,10 @@ impl ActionBar {
     }
 }
 
-impl_drop!(ActionBar)
-impl_TraitWidget!(ActionBar)
+impl_drop!(ActionBar);
+impl_TraitWidget!(ActionBar);
 
 impl gtk::ContainerTrait for ActionBar {}
 impl gtk::BinTrait for ActionBar {}
 
-impl_widget_events!(ActionBar)
+impl_widget_events!(ActionBar);

@@ -19,7 +19,7 @@ use gtk::cast::GTK_STATUSBAR;
 use gtk::{mod, ffi};
 
 /// GtkViewport — An adapter which makes widgets scrollable
-struct_Widget!(StatusBar)
+struct_Widget!(StatusBar);
 
 impl StatusBar {
     pub fn new() -> Option<StatusBar> {
@@ -62,11 +62,11 @@ impl StatusBar {
     }
 }
 
-impl_drop!(StatusBar)
-impl_TraitWidget!(StatusBar)
+impl_drop!(StatusBar);
+impl_TraitWidget!(StatusBar);
 
 impl gtk::ContainerTrait for StatusBar {}
 impl gtk::BoxTrait for StatusBar {}
 impl gtk::OrientableTrait for StatusBar {}
 
-impl_widget_events!(StatusBar)
+impl_widget_events!(StatusBar);

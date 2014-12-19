@@ -18,14 +18,12 @@
 use gtk::cast::GTK_LINKBUTTON;
 use gtk::{mod, ffi};
 
-/**
-* LinkButton — Create buttons bound to a URL
-*
+/// LinkButton — Create buttons bound to a URL
+/*
 * # Availables signals :
 * * `activate-link` : Run Last
 */
-struct_Widget!(LinkButton)
-
+struct_Widget!(LinkButton);
 
 impl LinkButton {
     pub fn new(uri: &str) -> Option<LinkButton> {
@@ -76,11 +74,11 @@ impl LinkButton {
     }
 }
 
-impl_drop!(LinkButton)
-impl_TraitWidget!(LinkButton)
+impl_drop!(LinkButton);
+impl_TraitWidget!(LinkButton);
 
 impl gtk::ContainerTrait for LinkButton {}
 impl gtk::ButtonTrait for LinkButton {}
 
-impl_widget_events!(LinkButton)
-impl_button_events!(LinkButton)
+impl_widget_events!(LinkButton);
+impl_button_events!(LinkButton);

@@ -25,8 +25,7 @@ use gdk;
 * # Availables signals :
 * * `color-set` : Run First
 */
-struct_Widget!(ColorButton)
-
+struct_Widget!(ColorButton);
 
 impl ColorButton {
     pub fn new() -> Option<ColorButton> {
@@ -112,12 +111,12 @@ impl ColorButton {
     }
 }
 
-impl_drop!(ColorButton)
-impl_TraitWidget!(ColorButton)
+impl_drop!(ColorButton);
+impl_TraitWidget!(ColorButton);
 
 impl gtk::ContainerTrait for ColorButton {}
 impl gtk::ButtonTrait for ColorButton {}
 
-impl_widget_events!(ColorButton)
-impl_button_events!(ColorButton)
+impl_widget_events!(ColorButton);
+impl_button_events!(ColorButton);
 

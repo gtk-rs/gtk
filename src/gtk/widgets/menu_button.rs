@@ -20,7 +20,7 @@ use gtk::cast::GTK_MENUBUTTON;
 use gtk::ArrowType;
 
 /// MenuButton — A widget that shows a menu when clicked on
-struct_Widget!(MenuButton)
+struct_Widget!(MenuButton);
 
 impl MenuButton {
     pub fn new() -> Option<MenuButton> {
@@ -53,11 +53,11 @@ impl MenuButton {
     }
 }
 
-impl_drop!(MenuButton)
-impl_TraitWidget!(MenuButton)
+impl_drop!(MenuButton);
+impl_TraitWidget!(MenuButton);
 
 impl gtk::ContainerTrait for MenuButton {}
 impl gtk::ButtonTrait for MenuButton {}
 impl gtk::ToggleButtonTrait for MenuButton {}
 
-impl_widget_events!(MenuButton)
+impl_widget_events!(MenuButton);

@@ -21,8 +21,7 @@ use gtk::cast::GTK_FIXED;
 use gtk::{mod, ffi};
 
 /// Fixed — A container which allows you to position widgets at fixed coordinates
-struct_Widget!(Fixed)
-
+struct_Widget!(Fixed);
 
 impl Fixed {
     pub fn new() -> Option<Fixed> {
@@ -50,10 +49,9 @@ impl Fixed {
     }
 }
 
-impl_drop!(Fixed)
-impl_TraitWidget!(Fixed)
+impl_drop!(Fixed);
+impl_TraitWidget!(Fixed);
 
 impl gtk::ContainerTrait for Fixed {}
 
-impl_widget_events!(Fixed)
-
+impl_widget_events!(Fixed);

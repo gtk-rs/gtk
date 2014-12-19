@@ -21,7 +21,7 @@ use gtk::{mod, ffi};
 use gtk::cast::GTK_RADIOBUTTON;
 
 /// A choice from multiple check buttons
-struct_Widget!(RadioButton)
+struct_Widget!(RadioButton);
 
 impl RadioButton {
     pub fn new() -> Option<RadioButton> {
@@ -55,13 +55,12 @@ impl RadioButton {
     }
 }
 
-impl_drop!(RadioButton)
-impl_TraitWidget!(RadioButton)
+impl_drop!(RadioButton);
+impl_TraitWidget!(RadioButton);
 
 impl gtk::ContainerTrait for RadioButton {}
 impl gtk::ButtonTrait for RadioButton {}
 impl gtk::BinTrait for RadioButton {}
 impl gtk::ToggleButtonTrait for RadioButton {}
 
-impl_widget_events!(RadioButton)
-
+impl_widget_events!(RadioButton);

@@ -60,4 +60,4 @@ impl SizeGroup {
     }
 }
 
-impl_GObjectFunctions!(SizeGroup, C_GtkSizeGroup)
+impl_GObjectFunctions!(SizeGroup, C_GtkSizeGroup);

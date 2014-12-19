@@ -17,7 +17,7 @@ use gtk::{mod, ffi};
 use gtk::ffi::FFIWidget;
 use gtk::cast::GTK_ABOUT_DIALOG;
 
-struct_Widget!(AboutDialog)
+struct_Widget!(AboutDialog);
 
 impl AboutDialog {
     pub fn new() -> Option<AboutDialog> {
@@ -339,13 +339,12 @@ impl AboutDialog {
     }*/
 }
 
-impl_drop!(AboutDialog)
-impl_TraitWidget!(AboutDialog)
+impl_drop!(AboutDialog);
+impl_TraitWidget!(AboutDialog);
 
 impl gtk::ContainerTrait for AboutDialog {}
 impl gtk::BinTrait for AboutDialog {}
 impl gtk::WindowTrait for AboutDialog {}
 impl gtk::DialogTrait for AboutDialog {}
 
-impl_widget_events!(AboutDialog)
-
+impl_widget_events!(AboutDialog);

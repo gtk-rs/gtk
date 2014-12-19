@@ -17,9 +17,8 @@
 
 use gtk::{mod, ffi};
 
-/**
-* Label — A widget that displays a small to medium amount of text
-*
+/// Label — A widget that displays a small to medium amount of text
+/*
 * # Available signals:
 * * `activate-current-link` : Action
 * * `activate-link` : Run Last
@@ -27,8 +26,7 @@ use gtk::{mod, ffi};
 * * `move-cursor` : Action
 * * `populate-popup` : Run Last
 */
-struct_Widget!(Label)
-
+struct_Widget!(Label);
 
 impl Label {
     pub fn new(text: &str) -> Option<Label> {
@@ -50,10 +48,10 @@ impl Label {
     }
 }
 
-impl_drop!(Label)
-impl_TraitWidget!(Label)
+impl_drop!(Label);
+impl_TraitWidget!(Label);
 
 impl gtk::MiscTrait for Label {}
 impl gtk::LabelTrait for Label {}
 
-impl_widget_events!(Label)
+impl_widget_events!(Label);

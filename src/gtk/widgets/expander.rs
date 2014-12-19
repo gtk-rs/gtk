@@ -22,8 +22,7 @@ use gtk::{mod, ffi};
 use gtk::ffi::FFIWidget;
 
 /// Expander — A container which can hide its child
-struct_Widget!(Expander)
-
+struct_Widget!(Expander);
 
 impl Expander {
     pub fn new(label: &str) -> Option<Expander> {
@@ -155,10 +154,10 @@ impl Expander {
     }
 }
 
-impl_drop!(Expander)
-impl_TraitWidget!(Expander)
+impl_drop!(Expander);
+impl_TraitWidget!(Expander);
 
 impl gtk::ContainerTrait for Expander {}
 impl gtk::BinTrait for Expander {}
 
-impl_widget_events!(Expander)
+impl_widget_events!(Expander);

@@ -18,7 +18,7 @@
 use gtk::{mod, ffi};
 
 /// MenuItem — The widget used for item in menus
-struct_Widget!(MenuItem)
+struct_Widget!(MenuItem);
 
 impl MenuItem {
     pub fn new() -> Option<MenuItem> {
@@ -45,11 +45,11 @@ impl MenuItem {
     }
 }
 
-impl_drop!(MenuItem)
-impl_TraitWidget!(MenuItem)
+impl_drop!(MenuItem);
+impl_TraitWidget!(MenuItem);
 
 impl gtk::ContainerTrait for MenuItem {}
 impl gtk::BinTrait for MenuItem {}
 impl gtk::MenuItemTrait for MenuItem {}
 
-impl_widget_events!(MenuItem)
+impl_widget_events!(MenuItem);

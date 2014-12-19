@@ -20,7 +20,7 @@ use gtk::TextBuffer;
 use gtk::ffi::FFIWidget;
 use gtk::cast::{GTK_TEXT_VIEW, GTK_TEXT_BUFFER};
 
-struct_Widget!(TextView)
+struct_Widget!(TextView);
 
 impl TextView {
     pub fn new() -> Option<TextView> {
@@ -269,9 +269,9 @@ impl TextView {
     }
 }
 
-impl_drop!(TextView)
-impl_TraitWidget!(TextView)
+impl_drop!(TextView);
+impl_TraitWidget!(TextView);
 
 impl gtk::ScrollableTrait for TextView {}
 
-impl_widget_events!(TextView)
+impl_widget_events!(TextView);

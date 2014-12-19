@@ -20,7 +20,7 @@ use gtk::cast::GTK_BUTTONBOX;
 use gtk::{mod, ffi};
 
 /// ButtonBox — A container for arranging buttons
-struct_Widget!(ButtonBox)
+struct_Widget!(ButtonBox);
 
 impl ButtonBox {
     pub fn new(orientation: Orientation) -> Option<ButtonBox> {
@@ -69,11 +69,11 @@ impl ButtonBox {
     }
 }
 
-impl_drop!(ButtonBox)
-impl_TraitWidget!(ButtonBox)
+impl_drop!(ButtonBox);
+impl_TraitWidget!(ButtonBox);
 
 impl gtk::ContainerTrait for ButtonBox {}
 impl gtk::BoxTrait for ButtonBox {}
 impl gtk::OrientableTrait for ButtonBox {}
 
-impl_widget_events!(ButtonBox)
+impl_widget_events!(ButtonBox);

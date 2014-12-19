@@ -21,13 +21,12 @@ use gtk::{mod, ffi};
 use gtk::{LevelBarMode};
 use gtk::cast::GTK_LEVELBAR;
 
-/**
-* LevelBar — A bar that can used as a level indicator
-*
+/// LevelBar — A bar that can used as a level indicator
+/*
 * # Signal availables:
 * * `offset-changed` : Has Details
 */
-struct_Widget!(LevelBar)
+struct_Widget!(LevelBar);
 
 impl LevelBar {
     pub fn new() -> Option<LevelBar> {
@@ -129,10 +128,9 @@ impl LevelBar {
     }
 }
 
-impl_drop!(LevelBar)
-impl_TraitWidget!(LevelBar)
+impl_drop!(LevelBar);
+impl_TraitWidget!(LevelBar);
 
 impl gtk::OrientableTrait for LevelBar {}
 
-impl_widget_events!(LevelBar)
-
+impl_widget_events!(LevelBar);

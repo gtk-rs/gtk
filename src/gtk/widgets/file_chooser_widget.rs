@@ -18,7 +18,7 @@
 use gtk::{mod, ffi};
 use gtk::ffi::FFIWidget;
 
-struct_Widget!(FileChooserWidget)
+struct_Widget!(FileChooserWidget);
 
 impl FileChooserWidget {
     pub fn new(action: gtk::FileChooserAction) -> Option<FileChooserWidget> {
@@ -32,10 +32,10 @@ impl FileChooserWidget {
     }
 }
 
-impl_drop!(FileChooserWidget)
-impl_TraitWidget!(FileChooserWidget)
+impl_drop!(FileChooserWidget);
+impl_TraitWidget!(FileChooserWidget);
 
 impl gtk::ContainerTrait for FileChooserWidget {}
 impl gtk::BoxTrait for FileChooserWidget {}
 
-impl_widget_events!(FileChooserWidget)
+impl_widget_events!(FileChooserWidget);

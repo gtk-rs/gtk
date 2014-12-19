@@ -18,7 +18,7 @@
 use gtk::{mod, ffi};
 
 /// CheckMenuItem — The widget used for item in menus
-struct_Widget!(CheckMenuItem)
+struct_Widget!(CheckMenuItem);
 
 impl CheckMenuItem {
     pub fn new() -> Option<CheckMenuItem> {
@@ -45,13 +45,13 @@ impl CheckMenuItem {
     }
 }
 
-impl_drop!(CheckMenuItem)
-impl_TraitWidget!(CheckMenuItem)
+impl_drop!(CheckMenuItem);
+impl_TraitWidget!(CheckMenuItem);
 
 impl gtk::ContainerTrait for CheckMenuItem {}
 impl gtk::BinTrait for CheckMenuItem {}
 impl gtk::MenuItemTrait for CheckMenuItem {}
 impl gtk::CheckMenuItemTrait for CheckMenuItem {}
 
-impl_widget_events!(CheckMenuItem)
+impl_widget_events!(CheckMenuItem);
 

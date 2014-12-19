@@ -19,7 +19,7 @@ use gtk::{mod, ffi};
 use gtk::ffi::FFIWidget;
 use gtk::cast::GTK_PLACES_SIDEBAR;
 
-struct_Widget!(PlacesSidebar)
+struct_Widget!(PlacesSidebar);
 
 impl PlacesSidebar {
     pub fn new() -> Option<PlacesSidebar> {
@@ -70,11 +70,11 @@ impl PlacesSidebar {
     }
 }
 
-impl_drop!(PlacesSidebar)
-impl_TraitWidget!(PlacesSidebar)
+impl_drop!(PlacesSidebar);
+impl_TraitWidget!(PlacesSidebar);
 
 impl gtk::ContainerTrait for PlacesSidebar {}
 impl gtk::BinTrait for PlacesSidebar {}
 impl gtk::ScrolledWindowTrait for PlacesSidebar {}
 
-impl_widget_events!(PlacesSidebar)
+impl_widget_events!(PlacesSidebar);

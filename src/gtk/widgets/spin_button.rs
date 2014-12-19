@@ -21,9 +21,8 @@ use gtk::{mod, ffi};
 use gtk::{SpinType, SpinButtonUpdatePolicy};
 use gtk::cast::{GTK_SPINBUTTON};
 
-/**
-* SpinButton — Retrieve an integer or floating-point number from the user
-*
+/// SpinButton — Retrieve an integer or floating-point number from the user
+/*
 * # Available signals:
 * * `change-value` : Action
 * * `input` : Run Last
@@ -32,7 +31,7 @@ use gtk::cast::{GTK_SPINBUTTON};
 * * `wrapped` : Run Last
 *
 */
-struct_Widget!(SpinButton)
+struct_Widget!(SpinButton);
 
 impl SpinButton {
     pub fn new(adjustment: &gtk::Adjustment,
@@ -195,12 +194,12 @@ impl SpinButton {
 // pub fn gtk_spin_button_get_update_policy   (spin_button: *C_GtkSpinButton) -> SpinButtonUpdatePolicy;
 // pub fn gtk_spin_button_get_value           (spin_button: *C_GtkSpinButton) -> c_double;
 
-impl_drop!(SpinButton)
-impl_TraitWidget!(SpinButton)
+impl_drop!(SpinButton);
+impl_TraitWidget!(SpinButton);
 
 impl gtk::EntryTrait for SpinButton {}
 impl gtk::EditableTrait for SpinButton {}
 impl gtk::OrientableTrait for SpinButton {}
 
-impl_widget_events!(SpinButton)
-impl_connect!(SpinButton -> ChangedValue, ValueChanged, Wrapped) // Input, Output
+impl_widget_events!(SpinButton);
+impl_connect!(SpinButton -> ChangedValue, ValueChanged, Wrapped); // Input, Output

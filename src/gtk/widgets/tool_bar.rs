@@ -21,16 +21,15 @@ use gtk::{mod, ffi};
 use gtk::cast::{GTK_TOOLBAR, GTK_TOOLITEM};
 use gtk::{IconSize, ReliefStyle, ToolbarStyle};
 
-/**
-* Toolbar — Create bars of buttons and other widgets
-*
+/// Toolbar — Create bars of buttons and other widgets
+/*
 * # Availables signals :
 * * `focus-home-or-end` : Action
 * * `orientation-changed` : Run First
 * * `popup-context-menu` : Run Last
 * * `style-changed` : Run First
 */
-struct_Widget!(Toolbar)
+struct_Widget!(Toolbar);
 
 impl Toolbar {
     pub fn new() -> Option<Toolbar> {
@@ -138,12 +137,11 @@ impl Toolbar {
     }
 }
 
-impl_drop!(Toolbar)
-impl_TraitWidget!(Toolbar)
+impl_drop!(Toolbar);
+impl_TraitWidget!(Toolbar);
 
 impl gtk::ContainerTrait for Toolbar {}
 impl gtk::ToolShellTrait for Toolbar {}
 impl gtk::OrientableTrait for Toolbar {}
 
-impl_widget_events!(Toolbar)
-
+impl_widget_events!(Toolbar);

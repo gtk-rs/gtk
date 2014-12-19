@@ -20,7 +20,7 @@ use gtk::cast::{GTK_STACK_SWITCHER, GTK_STACK};
 use gtk::ffi::FFIWidget;
 
 /// GtkStackSwitcher — A controller for GtkStack
-struct_Widget!(StackSwitcher)
+struct_Widget!(StackSwitcher);
 
 impl StackSwitcher {
     pub fn new() -> Option<StackSwitcher> {
@@ -45,10 +45,10 @@ impl StackSwitcher {
     }
 }
 
-impl_drop!(StackSwitcher)
-impl_TraitWidget!(StackSwitcher)
+impl_drop!(StackSwitcher);
+impl_TraitWidget!(StackSwitcher);
 
 impl gtk::ContainerTrait for StackSwitcher {}
 impl gtk::BoxTrait for StackSwitcher {}
 
-impl_widget_events!(StackSwitcher)
+impl_widget_events!(StackSwitcher);

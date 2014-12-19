@@ -20,7 +20,7 @@ use std::ptr;
 use gtk::{mod, ffi};
 
 /// ToolButton — A ToolItem subclass that displays buttons
-struct_Widget!(ToolButton)
+struct_Widget!(ToolButton);
 
 impl ToolButton {
     pub fn new<T: gtk::WidgetTrait>(icon_widget: Option<&T>, label: Option<&str>) -> Option<ToolButton> {
@@ -53,13 +53,13 @@ impl ToolButton {
     }
 }
 
-impl_drop!(ToolButton)
-impl_TraitWidget!(ToolButton)
+impl_drop!(ToolButton);
+impl_TraitWidget!(ToolButton);
 
 impl gtk::ContainerTrait for ToolButton {}
 impl gtk::BinTrait for ToolButton {}
 impl gtk::ToolItemTrait for ToolButton {}
 impl gtk::ToolButtonTrait for ToolButton {}
 
-impl_widget_events!(ToolButton)
-impl_button_events!(ToolButton)
+impl_widget_events!(ToolButton);
+impl_button_events!(ToolButton);

@@ -18,7 +18,7 @@
 use gtk::{mod, ffi};
 use gtk::ffi::FFIWidget;
 
-struct_Widget!(ColorChooserWidget)
+struct_Widget!(ColorChooserWidget);
 
 impl ColorChooserWidget {
     pub fn new() -> Option<ColorChooserWidget> {
@@ -32,10 +32,10 @@ impl ColorChooserWidget {
     }
 }
 
-impl_drop!(ColorChooserWidget)
-impl_TraitWidget!(ColorChooserWidget)
+impl_drop!(ColorChooserWidget);
+impl_TraitWidget!(ColorChooserWidget);
 
 impl gtk::ContainerTrait for ColorChooserWidget {}
 impl gtk::BoxTrait for ColorChooserWidget {}
 
-impl_widget_events!(ColorChooserWidget)
+impl_widget_events!(ColorChooserWidget);

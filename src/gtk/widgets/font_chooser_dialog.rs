@@ -17,7 +17,7 @@ use gtk::{mod, ffi};
 use gtk::ffi::FFIWidget;
 use gtk::cast::{GTK_WINDOW};
 
-struct_Widget!(FontChooserDialog)
+struct_Widget!(FontChooserDialog);
 
 impl FontChooserDialog {
     pub fn new(title: &str, parent: Option<gtk::Window>) -> Option<FontChooserDialog> {
@@ -37,8 +37,8 @@ impl FontChooserDialog {
     }
 }
 
-impl_drop!(FontChooserDialog)
-impl_TraitWidget!(FontChooserDialog)
+impl_drop!(FontChooserDialog);
+impl_TraitWidget!(FontChooserDialog);
 
 impl gtk::ContainerTrait for FontChooserDialog {}
 impl gtk::BinTrait for FontChooserDialog {}
@@ -46,4 +46,4 @@ impl gtk::WindowTrait for FontChooserDialog {}
 impl gtk::DialogTrait for FontChooserDialog {}
 impl gtk::FontChooserTrait for FontChooserDialog {}
 
-impl_widget_events!(FontChooserDialog)
+impl_widget_events!(FontChooserDialog);

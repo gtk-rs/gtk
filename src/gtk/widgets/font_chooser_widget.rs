@@ -18,7 +18,7 @@
 use gtk::{mod, ffi};
 use gtk::ffi::FFIWidget;
 
-struct_Widget!(FontChooserWidget)
+struct_Widget!(FontChooserWidget);
 
 impl FontChooserWidget {
     pub fn new() -> Option<FontChooserWidget> {
@@ -32,10 +32,10 @@ impl FontChooserWidget {
     }
 }
 
-impl_drop!(FontChooserWidget)
-impl_TraitWidget!(FontChooserWidget)
+impl_drop!(FontChooserWidget);
+impl_TraitWidget!(FontChooserWidget);
 
 impl gtk::ContainerTrait for FontChooserWidget {}
 impl gtk::BoxTrait for FontChooserWidget {}
 
-impl_widget_events!(FontChooserWidget)
+impl_widget_events!(FontChooserWidget);

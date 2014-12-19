@@ -17,7 +17,7 @@
 
 use gtk::{mod, ffi};
 
-struct_Widget!(CellRendererToggle)
+struct_Widget!(CellRendererToggle);
 
 impl CellRendererToggle {
     pub fn new() -> Option<CellRendererToggle> {
@@ -55,9 +55,9 @@ impl CellRendererToggle {
     }
 }
 
-impl_drop!(CellRendererToggle)
-impl_TraitWidget!(CellRendererToggle)
+impl_drop!(CellRendererToggle);
+impl_TraitWidget!(CellRendererToggle);
 
 impl gtk::CellRendererTrait for CellRendererToggle {}
 
-impl_widget_events!(CellRendererToggle)
+impl_widget_events!(CellRendererToggle);

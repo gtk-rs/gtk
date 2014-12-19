@@ -17,7 +17,6 @@ use glib::ffi::GType;
 use gtk::{mod, ffi};
 use gtk::TreeIter;
 
-
 pub struct ListStore {
     pointer: *mut ffi::C_GtkListStore
 }
@@ -114,4 +113,4 @@ impl ListStore {
     }
 }
 
-impl_drop!(ListStore, GTK_LIST_STORE)
+impl_drop!(ListStore, GTK_LIST_STORE);

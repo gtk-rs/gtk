@@ -20,7 +20,7 @@ use gtk::cast::GTK_IMAGE;
 use gtk::ffi::FFIWidget;
 
 /// Image — A widget displaying an image
-struct_Widget!(Image)
+struct_Widget!(Image);
 
 impl Image {
     pub fn new_from_file(filename: &str) -> Option<Image> {
@@ -58,9 +58,9 @@ impl Image {
     }
 }
 
-impl_drop!(Image)
-impl_TraitWidget!(Image)
+impl_drop!(Image);
+impl_TraitWidget!(Image);
 
 impl gtk::MiscTrait for Image {}
 
-impl_widget_events!(Image)
+impl_widget_events!(Image);

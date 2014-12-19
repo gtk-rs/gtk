@@ -21,15 +21,14 @@ use std::ptr;
 use gtk::{mod, ffi};
 use gtk::IconSize;
 
-/**
-* ScaleButton — A button which pops up a scale
-*
+/// ScaleButton — A button which pops up a scale
+/*
 * # Availables signals :
 * * `popdown` : Action
 * * `popup` : Action
 * * `value-changed` : Run Last
 */
-struct_Widget!(ScaleButton)
+struct_Widget!(ScaleButton);
 
 impl ScaleButton {
     // FIXME: icons -> last parameter
@@ -39,13 +38,13 @@ impl ScaleButton {
     }
 }
 
-impl_drop!(ScaleButton)
-impl_TraitWidget!(ScaleButton)
+impl_drop!(ScaleButton);
+impl_TraitWidget!(ScaleButton);
 
 impl gtk::ContainerTrait for ScaleButton {}
 impl gtk::ButtonTrait for ScaleButton {}
 impl gtk::ScaleButtonTrait for ScaleButton {}
 impl gtk::OrientableTrait for ScaleButton {}
 
-impl_widget_events!(ScaleButton)
-impl_button_events!(ScaleButton)
+impl_widget_events!(ScaleButton);
+impl_button_events!(ScaleButton);

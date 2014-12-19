@@ -18,7 +18,7 @@
 use gtk::cast::{GTK_EVENT_BOX};
 use gtk::{mod, ffi};
 
-struct_Widget!(EventBox)
+struct_Widget!(EventBox);
 
 impl EventBox {
     pub fn new() -> Option<EventBox> {
@@ -47,10 +47,10 @@ impl EventBox {
     }
 }
 
-impl_drop!(EventBox)
-impl_TraitWidget!(EventBox)
+impl_drop!(EventBox);
+impl_TraitWidget!(EventBox);
 
 impl gtk::ContainerTrait for EventBox {}
 impl gtk::BinTrait for EventBox {}
 
-impl_widget_events!(EventBox)
+impl_widget_events!(EventBox);

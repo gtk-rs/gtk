@@ -27,7 +27,7 @@ use gtk::WindowType;
 * * `keys-changed` : Run First
 * * `set-focus` : Run Last
 */
-struct_Widget!(Window)
+struct_Widget!(Window);
 
 impl Window {
     pub fn new(window_type: WindowType) -> Option<Window> {
@@ -36,11 +36,11 @@ impl Window {
     }
 }
 
-impl_drop!(Window)
-impl_TraitWidget!(Window)
+impl_drop!(Window);
+impl_TraitWidget!(Window);
 
 impl gtk::ContainerTrait for Window {}
 impl gtk::WindowTrait for Window {}
 impl gtk::BinTrait for Window {}
 
-impl_widget_events!(Window)
+impl_widget_events!(Window);

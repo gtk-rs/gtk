@@ -18,8 +18,7 @@ use std::ptr;
 use gtk::{mod, ffi};
 
 /// GtkScrolledWindow — Adds scrollbars to its child widget
-
-struct_Widget!(ScrolledWindow)
+struct_Widget!(ScrolledWindow);
 
 impl ScrolledWindow {
     pub fn new(h_adjustment: Option<gtk::Adjustment>, v_adjustment: Option<gtk::Adjustment>) -> Option<ScrolledWindow> {
@@ -35,10 +34,10 @@ impl ScrolledWindow {
     }
 }
 
-impl_drop!(ScrolledWindow)
-impl_TraitWidget!(ScrolledWindow)
+impl_drop!(ScrolledWindow);
+impl_TraitWidget!(ScrolledWindow);
 
 impl gtk::ScrolledWindowTrait for ScrolledWindow {}
 impl gtk::ContainerTrait for ScrolledWindow {}
 
-impl_widget_events!(ScrolledWindow)
+impl_widget_events!(ScrolledWindow);

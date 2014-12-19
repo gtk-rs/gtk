@@ -171,4 +171,4 @@ impl Adjustment {
     }
 }
 
-impl_drop!(Adjustment, GTK_ADJUSTMENT)
+impl_drop!(Adjustment, GTK_ADJUSTMENT);

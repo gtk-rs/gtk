@@ -19,7 +19,7 @@ use gtk::{mod, ffi};
 use gtk::ffi::FFIWidget;
 //use gtk::cast::GTK_SOCKET;
 
-struct_Widget!(Socket)
+struct_Widget!(Socket);
 
 impl Socket {
     pub fn new() -> Option<Socket> {
@@ -43,10 +43,9 @@ impl Socket {
     }*/
 }
 
-impl_drop!(Socket)
-impl_TraitWidget!(Socket)
+impl_drop!(Socket);
+impl_TraitWidget!(Socket);
 
 impl gtk::ContainerTrait for Socket {}
 
-impl_widget_events!(Socket)
-
+impl_widget_events!(Socket);

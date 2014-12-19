@@ -21,7 +21,7 @@ use gtk::{mod, ffi};
 use gtk::cast::GTK_STACK;
 
 /// GtkStack — A stacking container
-struct_Widget!(Stack)
+struct_Widget!(Stack);
 
 impl Stack {
     pub fn new() -> Option<Stack> {
@@ -132,9 +132,9 @@ impl Stack {
     }
 }
 
-impl_drop!(Stack)
-impl_TraitWidget!(Stack)
+impl_drop!(Stack);
+impl_TraitWidget!(Stack);
 
 impl gtk::ContainerTrait for Stack {}
 
-impl_widget_events!(Stack)
+impl_widget_events!(Stack);

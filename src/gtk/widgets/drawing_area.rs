@@ -15,10 +15,8 @@
 
 use gtk::ffi;
 
-/**
-* GtkDrawingArea — A widget for custom user interface elements
-*/
-struct_Widget!(DrawingArea)
+/// GtkDrawingArea — A widget for custom user interface elements
+struct_Widget!(DrawingArea);
 
 impl DrawingArea {
     pub fn new() -> Option<DrawingArea> {
@@ -27,6 +25,6 @@ impl DrawingArea {
     }
 }
 
-impl_TraitWidget!(DrawingArea)
+impl_TraitWidget!(DrawingArea);
 
-impl_widget_events!(DrawingArea)
+impl_widget_events!(DrawingArea);

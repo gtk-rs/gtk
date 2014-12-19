@@ -20,7 +20,7 @@ use gtk::cast::{GTK_SEARCHBAR, GTK_ENTRY};
 use gtk::ffi::FFIWidget;
 
 /// Box — A container box
-struct_Widget!(SearchBar)
+struct_Widget!(SearchBar);
 
 impl SearchBar {
     pub fn new() -> Option<SearchBar> {
@@ -63,10 +63,10 @@ impl SearchBar {
     }
 }
 
-impl_drop!(SearchBar)
-impl_TraitWidget!(SearchBar)
+impl_drop!(SearchBar);
+impl_TraitWidget!(SearchBar);
 
 impl gtk::ContainerTrait for SearchBar {}
 impl gtk::BinTrait for SearchBar {}
 
-impl_widget_events!(SearchBar)
+impl_widget_events!(SearchBar);

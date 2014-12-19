@@ -133,10 +133,9 @@ macro_rules! pattern_type(
             }
         }
     );
-)
+);
 
-
-pattern_type!(SolidPattern)
+pattern_type!(SolidPattern);
 
 impl SolidPattern {
     pub fn from_rgb(red: f64, green: f64, blue: f64) -> SolidPattern {
@@ -206,9 +205,7 @@ pub trait Gradient : Pattern {
     }
 }
 
-
-
-pattern_type!(LinearGradient)
+pattern_type!(LinearGradient);
 
 impl LinearGradient {
     pub fn new(x0: f64, y0: f64, x1: f64, y1: f64) -> LinearGradient {
@@ -235,8 +232,7 @@ impl LinearGradient {
 impl Gradient for LinearGradient{}
 
 
-
-pattern_type!(RadialGradient)
+pattern_type!(RadialGradient);
 
 impl RadialGradient {
     pub fn new(x0: f64, y0: f64, r0: f64, x1: f64, y1: f64, r1: f64) -> RadialGradient {
@@ -262,8 +258,7 @@ impl RadialGradient {
 }
 
 
-
-pattern_type!(SurfacePattern)
+pattern_type!(SurfacePattern);
 
 impl SurfacePattern {
     //pub fn cairo_pattern_create_for_surface(surface: *mut cairo_surface_t) -> *mut cairo_pattern_t;
@@ -279,7 +274,7 @@ pub enum MeshCorner {
     MeshCorner3
 }
 
-pattern_type!(Mesh)
+pattern_type!(Mesh);
 
 impl Mesh {
     pub fn new() -> Mesh {

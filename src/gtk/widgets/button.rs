@@ -30,7 +30,7 @@ use gtk::IconSize;
 * * `pressed` : Run First
 * * `released` : Run First
 */
-struct_Widget!(Button)
+struct_Widget!(Button);
 
 
 impl Button {
@@ -77,12 +77,12 @@ impl Button {
     }
 }
 
-impl_drop!(Button)
-impl_TraitWidget!(Button)
+impl_drop!(Button);
+impl_TraitWidget!(Button);
 
 impl gtk::ContainerTrait for Button {}
 impl gtk::ButtonTrait for Button {}
 impl gtk::BinTrait for Button {}
 
-impl_widget_events!(Button)
-impl_button_events!(Button)
+impl_widget_events!(Button);
+impl_button_events!(Button);

@@ -21,8 +21,7 @@ use gtk::cast::GTK_MENUTOOLBUTTON;
 use gtk::{mod, ffi};
 
 /// MenuToolButton — A ToolItem containing a button with an additional dropdown menu
-struct_Widget!(MenuToolButton)
-
+struct_Widget!(MenuToolButton);
 
 impl MenuToolButton {
     pub fn new<T: gtk::WidgetTrait>(icon_widget: Option<&T>, label: Option<&str>) -> Option<MenuToolButton> {
@@ -71,13 +70,12 @@ impl MenuToolButton {
     }
 }
 
-impl_drop!(MenuToolButton)
-impl_TraitWidget!(MenuToolButton)
+impl_drop!(MenuToolButton);
+impl_TraitWidget!(MenuToolButton);
 
 impl gtk::ContainerTrait for MenuToolButton {}
 impl gtk::BinTrait for MenuToolButton {}
 impl gtk::ToolItemTrait for MenuToolButton {}
 impl gtk::ToolButtonTrait for MenuToolButton {}
 
-impl_widget_events!(MenuToolButton)
-
+impl_widget_events!(MenuToolButton);

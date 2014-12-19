@@ -19,7 +19,7 @@ use gtk::{mod, ffi};
 use gtk::cast::GTK_POPOVER;
 // use std::string;
 
-struct_Widget!(Popover)
+struct_Widget!(Popover);
 
 impl Popover {
     pub fn new<T: gtk::WidgetTrait>(relative_to: &T) -> Option<Popover> {
@@ -58,10 +58,10 @@ impl Popover {
     }
 }
 
-impl_drop!(Popover)
-impl_TraitWidget!(Popover)
+impl_drop!(Popover);
+impl_TraitWidget!(Popover);
 
 impl gtk::ContainerTrait for Popover {}
 impl gtk::BinTrait for Popover {}
 
-impl_widget_events!(Popover)
+impl_widget_events!(Popover);

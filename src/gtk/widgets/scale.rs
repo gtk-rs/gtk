@@ -21,14 +21,12 @@ use gtk::{Orientation, PositionType};
 use gtk::cast::GTK_SCALE;
 use gtk::{mod, ffi};
 
-
-/**
-* Scale — A slider widget for selecting a value from a range
-*
+/// Scale — A slider widget for selecting a value from a range
+/*
 * # Signal availables:
 * * `format-value` : Run Last
 */
-struct_Widget!(Scale)
+struct_Widget!(Scale);
 
 impl Scale {
     pub fn new(orientation: Orientation,
@@ -121,11 +119,11 @@ impl Scale {
     }
 }
 
-impl_drop!(Scale)
-impl_TraitWidget!(Scale)
+impl_drop!(Scale);
+impl_TraitWidget!(Scale);
 
 impl gtk::OrientableTrait for Scale {}
 impl gtk::RangeTrait for Scale {}
 
-impl_widget_events!(Scale)
-impl_range_events!(Scale)
+impl_widget_events!(Scale);
+impl_range_events!(Scale);

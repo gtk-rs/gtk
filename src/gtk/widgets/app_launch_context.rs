@@ -20,7 +20,7 @@ use gtk::cast::{GTK_APP_LAUNCH_CONTEXT};
 use std::str;
 use std::string;
 
-struct_Widget!(AppLaunchContext)
+struct_Widget!(AppLaunchContext);
 
 impl AppLaunchContext {/*
     pub fn new() -> Option<AppLaunchContext> {
@@ -102,5 +102,5 @@ impl AppLaunchContext {/*
     }*/
 }
 
-impl_drop!(AppLaunchContext)
-impl_TraitWidget!(AppLaunchContext)
+impl_drop!(AppLaunchContext);
+impl_TraitWidget!(AppLaunchContext);

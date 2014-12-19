@@ -19,7 +19,7 @@ use gtk::{mod, ffi};
 use gtk::TreeModel;
 use gtk::cast::GTK_ENTRY_COMPLETION;
 
-struct_Widget!(EntryCompletion)
+struct_Widget!(EntryCompletion);
 
 impl EntryCompletion {
     pub fn new() -> Option<EntryCompletion> {
@@ -197,9 +197,9 @@ impl EntryCompletion {
     }
 }
 
-impl_drop!(EntryCompletion)
-impl_TraitWidget!(EntryCompletion)
+impl_drop!(EntryCompletion);
+impl_TraitWidget!(EntryCompletion);
 
 impl gtk::CellLayoutTrait for EntryCompletion {}
 
-impl_widget_events!(EntryCompletion)
+impl_widget_events!(EntryCompletion);

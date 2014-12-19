@@ -18,7 +18,7 @@
 use gtk::{mod, ffi};
 
 /// ToolItem — The base class of widgets that can be added to ToolShe
-struct_Widget!(ToolItem)
+struct_Widget!(ToolItem);
 
 impl ToolItem {
     pub fn new() -> Option<ToolItem> {
@@ -27,11 +27,11 @@ impl ToolItem {
     }
 }
 
-impl_drop!(ToolItem)
-impl_TraitWidget!(ToolItem)
+impl_drop!(ToolItem);
+impl_TraitWidget!(ToolItem);
 
 impl gtk::ContainerTrait for ToolItem {}
 impl gtk::BinTrait for ToolItem {}
 impl gtk::ToolItemTrait for ToolItem {}
 
-impl_widget_events!(ToolItem)
+impl_widget_events!(ToolItem);

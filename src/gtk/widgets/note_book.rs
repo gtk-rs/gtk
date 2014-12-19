@@ -20,7 +20,7 @@ use gtk::cast::GTK_NOTEBOOK;
 use gtk::ffi::FFIWidget;
 
 /// GtkNotebook — A tabbed notebook container
-struct_Widget!(NoteBook)
+struct_Widget!(NoteBook);
 
 impl NoteBook {
     pub fn new() -> Option<NoteBook> {
@@ -376,9 +376,9 @@ impl NoteBook {
     }
 }
 
-impl_drop!(NoteBook)
-impl_TraitWidget!(NoteBook)
+impl_drop!(NoteBook);
+impl_TraitWidget!(NoteBook);
 
 impl gtk::ContainerTrait for NoteBook {}
 
-impl_widget_events!(NoteBook)
+impl_widget_events!(NoteBook);

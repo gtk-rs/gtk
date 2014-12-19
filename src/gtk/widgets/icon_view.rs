@@ -18,7 +18,7 @@ use gtk::{mod, ffi, TreeModel, TreePath};
 
 /// GtkIconView — A widget which displays a list of icons in a grid
 
-struct_Widget!(IconView)
+struct_Widget!(IconView);
 
 impl IconView {
     pub fn new() -> Option<IconView> {
@@ -295,11 +295,10 @@ impl IconView {
     }
 }
 
-impl_drop!(IconView)
-impl_TraitWidget!(IconView)
+impl_drop!(IconView);
+impl_TraitWidget!(IconView);
 
 impl gtk::ScrollableTrait for IconView {}
 impl gtk::CellLayoutTrait for IconView {}
 
-impl_widget_events!(IconView)
-
+impl_widget_events!(IconView);

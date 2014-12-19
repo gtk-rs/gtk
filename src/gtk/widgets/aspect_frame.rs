@@ -22,7 +22,7 @@ use gtk::cast::GTK_ASPECTFRAME;
 use gtk::{mod, ffi};
 
 /// AspectFrame — A frame that constrains its child to a particular aspect ratio
-struct_Widget!(AspectFrame)
+struct_Widget!(AspectFrame);
 
 impl AspectFrame {
     pub fn new(label: Option<&str>,
@@ -51,11 +51,10 @@ impl AspectFrame {
     }
 }
 
-impl_drop!(AspectFrame)
-impl_TraitWidget!(AspectFrame)
+impl_drop!(AspectFrame);
+impl_TraitWidget!(AspectFrame);
 
 impl gtk::FrameTrait for AspectFrame {}
 impl gtk::ContainerTrait for AspectFrame {}
 
-impl_widget_events!(AspectFrame)
-
+impl_widget_events!(AspectFrame);
