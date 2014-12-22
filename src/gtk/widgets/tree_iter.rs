@@ -40,11 +40,6 @@ impl TreeIter {
         }
     }
 
-    pub fn drop(&mut self) {
-        unsafe { ffi::gtk_tree_iter_free(self.pointer) };
-        self.pointer = ::std::ptr::null_mut();
-    }
-
     #[doc(hidden)]
     pub fn get_pointer(&self) -> *mut ffi::C_GtkTreeIter {
         self.pointer
@@ -58,3 +53,10 @@ impl TreeIter {
     }
 }
 
+impl Drop for TreeIter {
+    fn drop(&mut self) {
+        if self.pointer.is_not_null() {
+            unsafe { ffi::gtk_tree_iter_free(self.pointer) };
+        }
+    }
+}

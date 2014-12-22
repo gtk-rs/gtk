@@ -30,7 +30,13 @@ fn main() {
         true
     }));
 
+    // test GValue
+
     let hello = String::from_str("Hello world !");
+    let value = gtk::GValue::new().unwrap();
+    value.init(gtk::GType::String);
+    value.set(&hello);
+    println!("gvalue.get example : {}", value.get::<String>());
 
     // left pane
 
@@ -43,8 +49,8 @@ fn main() {
     append_text_column(&mut left_tree);
 
     for _ in range(0i, 10i) {
-        let iter = gtk::TreeIter::new().unwrap();
-        left_store.append(&iter);
+        let mut iter = gtk::TreeIter::new().unwrap();
+        left_store.append(&mut iter);
         left_store.set_string(&iter, 0, "I'm in a list");
     }
 
@@ -57,20 +63,14 @@ fn main() {
     right_tree.set_model(&right_model);
     right_tree.set_headers_visible(false);
     append_text_column(&mut right_tree);
-    let value = gtk::GValue::new().unwrap();
-
-    value.init(gtk::GType::String);
-    value.set(&hello);
-
-    println!("gvalue.get example : {}", value.get::<String>());
 
     for _ in range(0i, 10i) {
-        let iter = gtk::TreeIter::new().unwrap();
-        right_store.append(&iter, None);
+        let mut iter = gtk::TreeIter::new().unwrap();
+        right_store.append(&mut iter, None);
         right_store.set_value(&iter, 0, &value);
 
-        let child_iter = gtk::TreeIter::new().unwrap();
-        right_store.append(&child_iter, Some(&iter));
+        let mut child_iter = gtk::TreeIter::new().unwrap();
+        right_store.append(&mut child_iter, Some(&iter));
         right_store.set_string(&child_iter, 0, "I'm a child node");
     }
 
