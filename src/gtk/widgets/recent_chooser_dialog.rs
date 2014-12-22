@@ -18,7 +18,7 @@ use gtk::ffi::FFIWidget;
 use gtk::enums::response_type::ResponseType;
 use gtk::cast::{GTK_WINDOW, GTK_RECENT_MANAGER};
 
-struct_Widget!(RecentChooserDialog)
+struct_Widget!(RecentChooserDialog);
 
 impl RecentChooserDialog {
     pub fn new(title: &str, parent: Option<gtk::Window>) -> Option<RecentChooserDialog> {
@@ -66,8 +66,8 @@ impl RecentChooserDialog {
     }
 }
 
-impl_drop!(RecentChooserDialog)
-impl_TraitWidget!(RecentChooserDialog)
+impl_drop!(RecentChooserDialog);
+impl_TraitWidget!(RecentChooserDialog);
 
 impl gtk::ContainerTrait for RecentChooserDialog {}
 impl gtk::BinTrait for RecentChooserDialog {}
@@ -75,4 +75,4 @@ impl gtk::WindowTrait for RecentChooserDialog {}
 impl gtk::DialogTrait for RecentChooserDialog {}
 impl gtk::RecentChooserTrait for RecentChooserDialog {}
 
-impl_widget_events!(RecentChooserDialog)
+impl_widget_events!(RecentChooserDialog);

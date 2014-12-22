@@ -28,14 +28,14 @@ use gtk;
 use cairo;
 use std::any::Any;
 
-pub trait Signal<'a>{
+pub trait Signal<'a> {
     fn get_signal_name(&self) -> &str;
 
     fn get_trampoline(&self) -> extern "C" fn();
 
     fn fetch_cb(&self) -> *mut ||;
 
-    fn get_user_data<'b>(&'b self) -> &'b Option<Box<Any + 'a>>;
+    fn get_user_data(&'a self) -> &'a Option<Box<Any>>;
 }
 
 // The defintion of the signal macro is split in a argumentless and
@@ -46,9 +46,9 @@ macro_rules! signal(
     ($signal:ident, $class:ident () -> $ret_type:ty) => (
 
         //General case (see below)
-        signal!($signal, $class [] -> $ret_type)
+        signal!($signal, $class [] -> $ret_type);
 
-        mod $signal{
+        mod $signal {
             use std::mem::transmute;
             use libc::c_void;
             use gtk::ffi;
@@ -58,9 +58,11 @@ macro_rules! signal(
             use cairo;
             use std::any::Any;
 
-            pub extern fn trampoline(widget : *mut ffi::C_GtkWidget, signal: *mut Box<super::Signal>) -> $ret_type{
-                unsafe{
-                    match (*signal).get_user_data(){
+            pub extern fn trampoline<'a>(widget : *mut ffi::C_GtkWidget, signal: *mut Box<super::Signal>) -> $ret_type {
+                unsafe {
+                    let t : &'a Box<super::Signal> = ::std::mem::transmute(signal);
+
+                    match t.get_user_data() {
                         &Some(ref user_data) => {
                             let cb : *mut |*const c_void| -> $ret_type = transmute((*signal).fetch_cb());
                             (*cb)(::std::mem::transmute(user_data))
@@ -78,9 +80,10 @@ macro_rules! signal(
     //Signals with arguments
     ($signal:ident, $class:ident ( $($arg_name:ident : $arg_type:ty),* ) -> $ret_type:ty) => (
         //General case (see below)
-        signal!($signal, $class [$(($arg_name : $arg_type)),*] -> $ret_type)
+        signal!($signal, $class [$(($arg_name : $arg_type)),*] -> $ret_type);
 
-        mod $signal{
+        mod $signal {
+            use std::ops::Deref;
             use std::mem::transmute;
             use libc::c_void;
             use gtk::ffi;
@@ -90,9 +93,11 @@ macro_rules! signal(
             use cairo;
             use std::any::Any;
 
-            pub extern fn trampoline(widget : *mut ffi::C_GtkWidget, $($arg_name : $arg_type),* , signal: *mut Box<super::Signal>) -> $ret_type{
-                unsafe{
-                    match (*signal).get_user_data(){
+            pub extern fn trampoline<'a>(widget : *mut ffi::C_GtkWidget, $($arg_name : $arg_type),* , signal: *mut Box<super::Signal>) -> $ret_type {
+                unsafe {
+                    let t : &'a Box<super::Signal> = ::std::mem::transmute(signal);
+
+                    match t.get_user_data() {
                         &Some(ref user_data) => {
                             let cb : *mut |$($arg_type),*, *const c_void| -> $ret_type = transmute((*signal).fetch_cb());
                             (*cb)($($arg_name),*, ::std::mem::transmute(user_data))
@@ -112,7 +117,7 @@ macro_rules! signal(
                     trampoline   ( $($t_arg_nm:ident : $t_arg_ty:ty),* ) -> $t_ret_ty:ty $t_blck:expr) => (
 
         //General case (see below)
-        signal!($signal, $class [$(($arg_name : $arg_type)),*] -> $ret_type)
+        signal!($signal, $class [$(($arg_name : $arg_type)),*] -> $ret_type);
 
         mod $signal{
             #[allow(unused_imports)]
@@ -128,9 +133,11 @@ macro_rules! signal(
             use std::any::Any;
 
 
-            pub extern fn trampoline(widget: *mut ffi::C_GtkWidget, $($t_arg_nm : $t_arg_ty),* , signal: *mut Box<super::Signal>) -> $t_ret_ty{
-                unsafe{
-                    match (*signal).get_user_data(){
+            pub extern fn trampoline<'a>(widget: *mut ffi::C_GtkWidget, $($t_arg_nm : $t_arg_ty),* , signal: *mut Box<super::Signal>) -> $t_ret_ty {
+                unsafe {
+                    let t : &'a Box<super::Signal> = ::std::mem::transmute(signal);
+
+                    match t.get_user_data() {
                         &Some(ref user_data) => {
                             let cb: *mut |$($arg_type),*, *const c_void| -> $ret_type = transmute((*signal).fetch_cb());
 
@@ -161,88 +168,88 @@ macro_rules! signal(
 
     //General case
     ($signal:ident, $class:ident [ $(($arg_name:ident : $arg_type:ty)),* ] -> $ret_type:ty) => (
-        pub struct $class<'a>{
+        pub struct $class<'a> {
             pub cb: |$($arg_type),*|:'a -> $ret_type,
-            pub user_data: Option<Box<Any + 'a>>
+            pub user_data: Option<Box<Any>>
         }
 
-        impl<'a> $class<'a>{
-            pub fn new (cb : |$($arg_type),* |:'a -> $ret_type) -> Box<$class<'a>> {
-                box $class{
+        impl<'a> $class<'a> {
+            pub fn new (cb : |$($arg_type),* |:'a -> $ret_type) -> Box<$class> {
+                box $class {
                     cb: cb,
                     user_data: None
                 }
             }
 
             //TODO: Rust lexer bug here, can't parse the middel `,` in `|$($arg_type),* , Box<Any>|`
-            /*pub fn new_with_data (user_data: Box<Any>, cb: |$($arg_type),*, Box<Any>|:'a -> $ret_type) -> Box<Signal<'a>> {
+            /*pub fn new_with_data (user_data: Box<Any>, cb: |$($arg_type),*, Box<Any>|:'a -> $ret_type) -> Box<Signal> {
                 box $class{
                     cb: cb,
                     user_data: user_data
-                } as Box<Signal<'a>>
+                } as Box<Signal>
             }*/
         }
 
-        impl<'a> Signal<'a> for $class<'a>{
+        impl<'a> Signal<'a> for $class<'a> {
             fn get_signal_name(&self) -> &str {
                 stringify!($signal)
             }
 
-            fn get_trampoline(&self) -> extern "C" fn(){
-                unsafe{
+            fn get_trampoline(&self) -> extern "C" fn() {
+                unsafe {
                     transmute(self::$signal::trampoline)
                 }
             }
 
-            fn fetch_cb(&self) -> *mut ||{
-                unsafe{
+            fn fetch_cb(&self) -> *mut || {
+                unsafe {
                     transmute(&self.cb)
                 }
             }
 
-            fn get_user_data<'b>(&'b self) -> &'b Option<Box<Any + 'a>>{
+            fn get_user_data(&'a self) -> &'a Option<Box<Any>> {
                 &self.user_data
             }
         }
     );
-)
+);
 
 //GObject
 //https://developer.gnome.org/gobject/unstable/gobject-The-Base-Object-Type.html#gobject-The-Base-Object-Type.signals
-signal!(notify, Notify(g_param_spec:c_void) -> ())
+signal!(notify, Notify(g_param_spec:c_void) -> ());
 
 //GtkWidget
 //https://developer.gnome.org/gtk3/stable/GtkWidget.html#GtkWidget.signals
 
-signal!(accel_closures_changed, AccelClosuresChanged(spec : glib::ParamSpec) -> ())
-signal!(can_activate_accel,     CanActivateAccel(signal_id:uint) -> bool)
-signal!(child_notify,           ChildNotify(spec : glib::ParamSpec) -> ())
-signal!(composited_changed,     CompositedChanged() -> ())
-signal!(destroy,                Destroy() -> ())
-signal!(direction_changed,      DirectionChanged(previous_direction: gtk::TextDirection) -> ())
+signal!(accel_closures_changed, AccelClosuresChanged(spec : glib::ParamSpec) -> ());
+signal!(can_activate_accel,     CanActivateAccel(signal_id:uint) -> bool);
+signal!(child_notify,           ChildNotify(spec : glib::ParamSpec) -> ());
+signal!(composited_changed,     CompositedChanged() -> ());
+signal!(destroy,                Destroy() -> ());
+signal!(direction_changed,      DirectionChanged(previous_direction: gtk::TextDirection) -> ());
 signal!(draw,                   Draw(ctx: cairo::Context) -> (), trampoline(ctx_raw: *mut cairo::ffi::cairo_t) -> () |cb: |cairo::Context|| {
     cb(cairo::Context::wrap(ctx_raw))
-})
-signal!(focus,                  Focus(direction : gtk::DirectionType) -> bool)
-signal!(grab_focus,             GrabFocus() -> ())
-signal!(grab_notify,            GrabNotify(was_grabbed : bool) -> ())
-signal!(hide,                   Hide() -> ())
-signal!(keynav_failed,          KeynavFailed(direction : gtk::DirectionType) -> bool)
-signal!(map,                    Map() -> ())
-signal!(mnemonic_activate,      MnemonicActivate(arg : bool) -> bool)
-signal!(move_focus,             MoveFocus(direction : gtk::DirectionType) -> ())
-signal!(popup_menu,             PopupMenu() -> bool)
-signal!(query_tooltip,          QueryTooltip(x:int, y:int, keyboard_mode:bool, tooltip : *mut gtk::Tooltip) -> bool)
-signal!(realize,                Realize() -> ())
-signal!(screen_changed,         ScreenChanged(previous_screen : *mut gdk::Screen) -> ())
-signal!(show,                   Show() -> ())
-signal!(show_help,              ShowHelp(help_type : gtk::WidgetHelpType) -> bool)
-signal!(size_allocate,          SizeAllocate(allocation : *mut gdk::Rectangle) -> ())
-signal!(state_changed,          StateChanged(state : gtk::StateType) -> ())
-signal!(state_flags_changed,    StateFlagsChanged(flags : gtk::StateFlags) -> ())
-signal!(style_updated,          StyleUpdated() -> ())
-signal!(unmap,                  Unmap() -> ())
-signal!(unrealize,              Unrealize() -> ())
+});
+signal!(focus,                  Focus(direction : gtk::DirectionType) -> bool);
+signal!(grab_focus,             GrabFocus() -> ());
+signal!(grab_notify,            GrabNotify(was_grabbed : bool) -> ());
+signal!(hide,                   Hide() -> ());
+signal!(keynav_failed,          KeynavFailed(direction : gtk::DirectionType) -> bool);
+signal!(map,                    Map() -> ());
+signal!(mnemonic_activate,      MnemonicActivate(arg : bool) -> bool);
+signal!(move_focus,             MoveFocus(direction : gtk::DirectionType) -> ());
+signal!(popup_menu,             PopupMenu() -> bool);
+signal!(query_tooltip,          QueryTooltip(x:int, y:int, keyboard_mode:bool, tooltip : *mut gtk::Tooltip) -> bool);
+signal!(realize,                Realize() -> ());
+signal!(screen_changed,         ScreenChanged(previous_screen : *mut gdk::Screen) -> ());
+signal!(show,                   Show() -> ());
+signal!(show_help,              ShowHelp(help_type : gtk::WidgetHelpType) -> bool);
+signal!(size_allocate,          SizeAllocate(allocation : *mut gdk::Rectangle) -> ());
+signal!(state_changed,          StateChanged(state : gtk::StateType) -> ());
+signal!(state_flags_changed,    StateFlagsChanged(flags : gtk::StateFlags) -> ());
+signal!(style_updated,          StyleUpdated() -> ());
+signal!(unmap,                  Unmap() -> ());
+signal!(unrealize,              Unrealize() -> ());
 
 /*
 signal!(hierarchy_changed, HierarchyChanged(previous_toplevel : *gtk::Widget) -> (),
@@ -254,30 +261,30 @@ signal!(parent_set,    ParentSet(old_parent : *gtk::Widget) -> ())
 */
 
 //GtkWidget: GDK events
-signal!(button_press_event,     ButtonPressEvent(event : *mut gdk::EventButton) -> bool)
-signal!(button_release_event,   ButtonReleaseEvent(event : *mut gdk::EventButton) -> bool)
-signal!(configure_event,        ConfigureEvent(event : *mut gdk::EventConfigure) -> bool)
-signal!(damage_event,           DamageEvent(event : *mut gdk::EventExpose) -> bool)
-signal!(delete_event,           DeleteEvent(event : *mut gdk::EventAny) -> bool)
-signal!(destroy_event,          DestroyEvent(event : *mut gdk::EventAny) -> bool)
-signal!(enter_notify_event,     EnterNotifyEvent(event : *mut gdk::EventCrossing) -> bool)
-signal!(leave_notify_event,     LeaveNotifyEvent(event : *mut gdk::EventCrossing) -> bool)
-signal!(event,                  Event(event : *mut gdk::EventAny) -> bool)
-signal!(event_after,            EventAfter(event : *mut gdk::EventAny) -> bool)
-signal!(focus_in_event,         FocusInEvent(event : *mut gdk::EventFocus) -> bool)
-signal!(focus_out_event,        FocusOutEvent(event : *mut gdk::EventFocus) -> bool)
-signal!(grab_broken_event,      GrabBrokenEvent(event : *mut gdk::EventGrabBroken) -> bool)
-signal!(key_press_event,        KeyPressEvent(event : *mut gdk::EventKey) -> bool)
-signal!(key_release_event,      KeyReleaseEvent(event : *mut gdk::EventKey) -> bool)
-signal!(map_event,              MapEvent(event : *mut gdk::EventAny) -> bool)
-signal!(motion_notify_event,    MotionNotifyEvent(event : *mut gdk::EventMotion) -> bool)
-signal!(property_notify_event,  PropertyNotifyEvent(event : *mut gdk::EventProperty) -> bool)
-signal!(proximity_in_event,     ProximityInEvent(event : *mut gdk::EventProximity) -> bool)
-signal!(proximity_out_event,    ProximityOutEvent(event : *mut gdk::EventProximity) -> bool)
-signal!(scroll_event,           ScrollEvent(event : *mut gdk::EventScroll) -> bool)
-signal!(touch_event,            TouchEvent(event : *mut gdk::EventTouch) -> bool)
-signal!(unmap_event,            UnmapEvent(event : *mut gdk::EventAny) -> bool)
-signal!(window_state_event,     WindowStateEvent(event : *mut gdk::EventWindowState) -> bool)
+signal!(button_press_event,     ButtonPressEvent(event : *mut gdk::EventButton) -> bool);
+signal!(button_release_event,   ButtonReleaseEvent(event : *mut gdk::EventButton) -> bool);
+signal!(configure_event,        ConfigureEvent(event : *mut gdk::EventConfigure) -> bool);
+signal!(damage_event,           DamageEvent(event : *mut gdk::EventExpose) -> bool);
+signal!(delete_event,           DeleteEvent(event : *mut gdk::EventAny) -> bool);
+signal!(destroy_event,          DestroyEvent(event : *mut gdk::EventAny) -> bool);
+signal!(enter_notify_event,     EnterNotifyEvent(event : *mut gdk::EventCrossing) -> bool);
+signal!(leave_notify_event,     LeaveNotifyEvent(event : *mut gdk::EventCrossing) -> bool);
+signal!(event,                  Event(event : *mut gdk::EventAny) -> bool);
+signal!(event_after,            EventAfter(event : *mut gdk::EventAny) -> bool);
+signal!(focus_in_event,         FocusInEvent(event : *mut gdk::EventFocus) -> bool);
+signal!(focus_out_event,        FocusOutEvent(event : *mut gdk::EventFocus) -> bool);
+signal!(grab_broken_event,      GrabBrokenEvent(event : *mut gdk::EventGrabBroken) -> bool);
+signal!(key_press_event,        KeyPressEvent(event : *mut gdk::EventKey) -> bool);
+signal!(key_release_event,      KeyReleaseEvent(event : *mut gdk::EventKey) -> bool);
+signal!(map_event,              MapEvent(event : *mut gdk::EventAny) -> bool);
+signal!(motion_notify_event,    MotionNotifyEvent(event : *mut gdk::EventMotion) -> bool);
+signal!(property_notify_event,  PropertyNotifyEvent(event : *mut gdk::EventProperty) -> bool);
+signal!(proximity_in_event,     ProximityInEvent(event : *mut gdk::EventProximity) -> bool);
+signal!(proximity_out_event,    ProximityOutEvent(event : *mut gdk::EventProximity) -> bool);
+signal!(scroll_event,           ScrollEvent(event : *mut gdk::EventScroll) -> bool);
+signal!(touch_event,            TouchEvent(event : *mut gdk::EventTouch) -> bool);
+signal!(unmap_event,            UnmapEvent(event : *mut gdk::EventAny) -> bool);
+signal!(window_state_event,     WindowStateEvent(event : *mut gdk::EventWindowState) -> bool);
 
 //GtkWidget: Drag-drop
 /*
@@ -315,51 +322,51 @@ signal!(selection_notify_event, SelectionNotifyEvent(event : *mut gdk::EventSele
 */
 
 //GtkTreeSelection
-signal!(changed,            Changed() -> ())
+signal!(changed,            Changed() -> ());
 
 //GtkTreeView
-signal!(columns_changed,            ColumnsChanged() -> ())
-signal!(cursor_changed,             CursorChanged() -> ())
-signal!(expand_collapse_cursor_row, ExpandCollapseCursorRow(arg1: ffi::Gboolean, arg2: ffi::Gboolean, arg3: ffi::Gboolean) -> ffi::Gboolean)
-signal!(move_cursor,                MoveCursor(step: ffi::C_GtkMovementStep, direction: i32) -> ffi::Gboolean)
-signal!(row_activated,              RowActivated(path: *mut ffi::C_GtkTreePath, column: *mut ffi::C_GtkTreeViewColumn) -> ())
-signal!(row_collapsed,              RowCollapsed(iter: *mut ffi::C_GtkTreeIter, path: *mut ffi::C_GtkTreePath) -> ())
-signal!(row_expanded,               RowExpanded(iter: *mut ffi::C_GtkTreeIter, path: *mut ffi::C_GtkTreePath) -> ())
-signal!(select_all,                 SelectAll() -> ffi::Gboolean)
-signal!(select_cursor_parent,       SelectCursorParent() -> ffi::Gboolean)
-signal!(select_cursor_row,          SelectCursorRow(arg1: ffi::Gboolean) -> ffi::Gboolean)
-signal!(start_interactive_search,   StartInteractiveSearch() -> ffi::Gboolean)
-signal!(test_collapse_row,          TestCollapseRow(iter: *mut ffi::C_GtkTreeIter, path: *mut ffi::C_GtkTreePath) -> ffi::Gboolean)
-signal!(test_expand_row,            TestExpandRow(iter: *mut ffi::C_GtkTreeIter, path: *mut ffi::C_GtkTreePath) -> ffi::Gboolean)
-signal!(toggle_cursor_row,          ToggleCursorRow() -> ffi::Gboolean)
-signal!(unselect_all,               UnselectAll() -> ffi::Gboolean)
+signal!(columns_changed,            ColumnsChanged() -> ());
+signal!(cursor_changed,             CursorChanged() -> ());
+signal!(expand_collapse_cursor_row, ExpandCollapseCursorRow(arg1: ffi::Gboolean, arg2: ffi::Gboolean, arg3: ffi::Gboolean) -> ffi::Gboolean);
+signal!(move_cursor,                MoveCursor(step: ffi::C_GtkMovementStep, direction: i32) -> ffi::Gboolean);
+signal!(row_activated,              RowActivated(path: *mut ffi::C_GtkTreePath, column: *mut ffi::C_GtkTreeViewColumn) -> ());
+signal!(row_collapsed,              RowCollapsed(iter: *mut ffi::C_GtkTreeIter, path: *mut ffi::C_GtkTreePath) -> ());
+signal!(row_expanded,               RowExpanded(iter: *mut ffi::C_GtkTreeIter, path: *mut ffi::C_GtkTreePath) -> ());
+signal!(select_all,                 SelectAll() -> ffi::Gboolean);
+signal!(select_cursor_parent,       SelectCursorParent() -> ffi::Gboolean);
+signal!(select_cursor_row,          SelectCursorRow(arg1: ffi::Gboolean) -> ffi::Gboolean);
+signal!(start_interactive_search,   StartInteractiveSearch() -> ffi::Gboolean);
+signal!(test_collapse_row,          TestCollapseRow(iter: *mut ffi::C_GtkTreeIter, path: *mut ffi::C_GtkTreePath) -> ffi::Gboolean);
+signal!(test_expand_row,            TestExpandRow(iter: *mut ffi::C_GtkTreeIter, path: *mut ffi::C_GtkTreePath) -> ffi::Gboolean);
+signal!(toggle_cursor_row,          ToggleCursorRow() -> ffi::Gboolean);
+signal!(unselect_all,               UnselectAll() -> ffi::Gboolean);
 
 //GtkContainer
 //signal!(add,                Add(widget: *gtk::Widget) -> ())
-signal!(check_resize,       CheckResize() -> ())
+signal!(check_resize,       CheckResize() -> ());
 //signal!(remove,             Remove(widget: *gtk::Widget) -> ())
 //signal!(set_focus_child,    SetFocusChild(widget: *gtk::Widget) -> ())
 
 //GtkButton
-signal!(activate,           Activate() -> ())
-signal!(clicked,            Clicked() -> ())
-signal!(enter,              Enter() -> ())
-signal!(leave,              Leave() -> ())
-signal!(pressed,            Pressed() -> ())
-signal!(released,           Released() -> ())
+signal!(activate,           Activate() -> ());
+signal!(clicked,            Clicked() -> ());
+signal!(enter,              Enter() -> ());
+signal!(leave,              Leave() -> ());
+signal!(pressed,            Pressed() -> ());
+signal!(released,           Released() -> ());
 //GtkDialog
-signal!(response,           Response(response_id : int) -> ())
+signal!(response,           Response(response_id : int) -> ());
 
 //GtkAdjustment
 //https://developer.gnome.org/gtk3/stable/GtkAdjustment.html#GtkAdjustment.signals
-signal!(value_changed,      ValueChanged() -> ())
+signal!(value_changed,      ValueChanged() -> ());
 
 // SpinButton
-signal!(changed_value, ChangedValue() -> ())
-signal!(wrapped, Wrapped() -> ())
+signal!(changed_value, ChangedValue() -> ());
+signal!(wrapped, Wrapped() -> ());
 //gint    input   Run Last
 //gboolean    output  Run Last
 
 // Range
-signal!(adjust_bounds, AdjustBounds() -> ())
-signal!(move_slider, MoveSlider() -> ())
+signal!(adjust_bounds, AdjustBounds() -> ());
+signal!(move_slider, MoveSlider() -> ());

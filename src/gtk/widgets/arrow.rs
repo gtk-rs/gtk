@@ -20,7 +20,7 @@ use gtk::cast::GTK_ARROW;
 use gtk::{mod, ffi};
 
 /// Arrow — Displays an arrow
-struct_Widget!(Arrow)
+struct_Widget!(Arrow);
 
 impl Arrow {
     pub fn new(arrow_type: ArrowType, shadow_type: ShadowType) -> Option<Arrow> {
@@ -35,9 +35,9 @@ impl Arrow {
     }
 }
 
-impl_drop!(Arrow)
-impl_TraitWidget!(Arrow)
+impl_drop!(Arrow);
+impl_TraitWidget!(Arrow);
 
 impl gtk::MiscTrait for Arrow {}
 
-impl_widget_events!(Arrow)
+impl_widget_events!(Arrow);

@@ -30,7 +30,7 @@ macro_rules! check_pointer(
             })
         }
     );
-)
+);
 
 macro_rules! struct_Widget(
     ($gtk_struct:ident) => (
@@ -39,7 +39,7 @@ macro_rules! struct_Widget(
             pointer: *mut ffi::C_GtkWidget
         }
     );
-)
+);
 
 macro_rules! impl_TraitWidget(
     ($gtk_struct:ident) => (
@@ -71,7 +71,7 @@ macro_rules! impl_TraitWidget(
         // impl ::glib::traits::Connect for $gtk_struct {}
 
     );
-)
+);
 
 // macro_rules! impl_connect(
 //     ($gtk_struct:ident -> $($signal_name:ident),*) => (
@@ -84,7 +84,7 @@ macro_rules! impl_connect(
     ($gtk_struct:ident -> $($signal_name:ident),*) => (
         $(impl<'a> ::glib::traits::Connect<'a, ::gtk::signals::$signal_name<'a>> for $gtk_struct {})*
     )
-)
+);
 
 macro_rules! impl_GObjectFunctions(
     ($gtk_struct:ident, $ffi_type:ident) => (
@@ -100,10 +100,10 @@ macro_rules! impl_GObjectFunctions(
             }
         }
     )
-)
+);
 
 macro_rules! impl_drop(
-    ($gtk_struct:ident) => ( impl_drop!($gtk_struct, GTK_WIDGET) );
+    ($gtk_struct:ident) => ( impl_drop!($gtk_struct, GTK_WIDGET); );
     ($gtk_struct:ident, $cast_func:ident) => (
         impl Drop for $gtk_struct {
             fn drop(&mut self) {
@@ -125,7 +125,7 @@ macro_rules! impl_drop(
             }
         }
     );
-)
+);
 
 // Useful for function wich take a valid widget or NULL for a default widget
 // takes an option<&trait::Widget> and return the c widget pointer or ptr::null()
@@ -136,7 +136,7 @@ macro_rules! get_widget(
             None => ::std::ptr::null_mut()
         };
     );
-)
+);
 
 macro_rules! impl_widget_events(
     ($gtk_struct:ident) => (
@@ -151,7 +151,7 @@ macro_rules! impl_widget_events(
                                      QueryTooltip, Realize, ScreenChanged, ScrollEvent,
                                      Show, SizeAllocate,
                                      StateFlagsChanged, StyleUpdated,
-                                     TouchEvent, WindowStateEvent)
+                                     TouchEvent, WindowStateEvent);
 
 
         // not implemented:
@@ -160,7 +160,7 @@ macro_rules! impl_widget_events(
         // UnRealize, VisibilityNotifyEvent, UnMap, UnMapEvent, StyleSet, StateChanged, SelectionRequestEvent,
         // SelectionReceived, SelectionClearEvent, SelectionGet, SelectionNotifyEvent,
     )
-)
+);
 
 macro_rules! impl_tree_view_events(
     ($gtk_struct:ident) => (
@@ -168,20 +168,20 @@ macro_rules! impl_tree_view_events(
                                      MoveCursor, RowActivated, RowCollapsed, RowExpanded,
                                      SelectAll, SelectCursorParent, SelectCursorRow,
                                      StartInteractiveSearch, TestCollapseRow, TestExpandRow,
-                                     ToggleCursorRow, UnselectAll)
+                                     ToggleCursorRow, UnselectAll);
     )
-)
+);
 
 macro_rules! impl_button_events(
     ($gtk_struct:ident) => (
-        impl_connect!($gtk_struct -> Activate, Clicked, Enter, Leave, Pressed, Released)
+        impl_connect!($gtk_struct -> Activate, Clicked, Enter, Leave, Pressed, Released);
     )
-)
+);
 
 macro_rules! impl_range_events(
     ($gtk_struct:ident) => (
-        impl_connect!($gtk_struct -> AdjustBounds, MoveSlider, ValueChanged)
+        impl_connect!($gtk_struct -> AdjustBounds, MoveSlider, ValueChanged);
 
     // ChangeValue
     )
-)
+);

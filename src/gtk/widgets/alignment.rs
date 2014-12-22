@@ -21,8 +21,7 @@ use gtk::cast::GTK_ALIGNMENT;
 use gtk::{mod, ffi};
 
 /// Alignment — A widget which controls the alignment and size of its child
-struct_Widget!(Alignment)
-
+struct_Widget!(Alignment);
 
 impl Alignment {
     pub fn new(x_align: f32,
@@ -65,11 +64,10 @@ impl Alignment {
     }
 }
 
-impl_drop!(Alignment)
-impl_TraitWidget!(Alignment)
+impl_drop!(Alignment);
+impl_TraitWidget!(Alignment);
 
 impl gtk::ContainerTrait for Alignment {}
 impl gtk::BinTrait for Alignment {}
 
-impl_widget_events!(Alignment)
-
+impl_widget_events!(Alignment);

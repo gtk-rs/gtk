@@ -46,4 +46,4 @@ impl TextTag {
     }
 }
 
-impl_GObjectFunctions!(TextTag, C_GtkTextTag)
+impl_GObjectFunctions!(TextTag, C_GtkTextTag);

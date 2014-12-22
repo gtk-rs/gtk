@@ -20,7 +20,7 @@ use std::ptr;
 use gtk::{mod, ffi};
 
 /// Frame — A bin with a decorative frame and optional label
-struct_Widget!(Frame)
+struct_Widget!(Frame);
 
 impl Frame {
     pub fn new(label: Option<&str>) -> Option<Frame> {
@@ -32,11 +32,11 @@ impl Frame {
     }
 }
 
-impl_drop!(Frame)
-impl_TraitWidget!(Frame)
+impl_drop!(Frame);
+impl_TraitWidget!(Frame);
 
 impl gtk::FrameTrait for Frame {}
 impl gtk::ContainerTrait for Frame {}
 impl gtk::BinTrait for Frame {}
 
-impl_widget_events!(Frame)
+impl_widget_events!(Frame);

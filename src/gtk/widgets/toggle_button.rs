@@ -17,13 +17,12 @@
 
 use gtk::{mod, ffi};
 
-/**
-* ToggleButton — A button to launch a font chooser dialog
-*
+/// ToggleButton — A button to launch a font chooser dialog
+/*
 * # Availables signals :
 * * `toggled` : Run First
 */
-struct_Widget!(ToggleButton)
+struct_Widget!(ToggleButton);
 
 impl ToggleButton {
     pub fn new() -> Option<ToggleButton> {
@@ -51,13 +50,12 @@ impl ToggleButton {
 
 }
 
-impl_drop!(ToggleButton)
-impl_TraitWidget!(ToggleButton)
+impl_drop!(ToggleButton);
+impl_TraitWidget!(ToggleButton);
 
 impl gtk::ContainerTrait for ToggleButton {}
 impl gtk::ButtonTrait for ToggleButton {}
 impl gtk::ToggleButtonTrait for ToggleButton {}
 
-impl_widget_events!(ToggleButton)
-impl_button_events!(ToggleButton)
-
+impl_widget_events!(ToggleButton);
+impl_button_events!(ToggleButton);

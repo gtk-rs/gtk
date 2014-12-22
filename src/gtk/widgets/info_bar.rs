@@ -22,7 +22,7 @@ use gtk::cast::GTK_INFOBAR;
 use gtk::{mod, ffi};
 
 /// InfoBar — Report important messages to the user
-struct_Widget!(InfoBar)
+struct_Widget!(InfoBar);
 
 impl InfoBar {
     pub fn new() -> Option<InfoBar> {
@@ -93,12 +93,11 @@ impl InfoBar {
     }
 }
 
-impl_drop!(InfoBar)
-impl_TraitWidget!(InfoBar)
+impl_drop!(InfoBar);
+impl_TraitWidget!(InfoBar);
 
 impl gtk::ContainerTrait for InfoBar {}
 impl gtk::BoxTrait for InfoBar {}
 impl gtk::OrientableTrait for InfoBar {}
 
-impl_widget_events!(InfoBar)
-
+impl_widget_events!(InfoBar);

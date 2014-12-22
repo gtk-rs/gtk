@@ -36,4 +36,4 @@ impl TextTagTable {
     }
 }
 
-impl_drop!(TextTagTable, GTK_TEXT_TAG_TABLE)
+impl_drop!(TextTagTable, GTK_TEXT_TAG_TABLE);

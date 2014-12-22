@@ -18,7 +18,7 @@
 use gtk::cast::GTK_APP_CHOOSER_WIDGET;
 use gtk::{mod, ffi};
 
-struct_Widget!(AppChooserWidget)
+struct_Widget!(AppChooserWidget);
 
 impl AppChooserWidget {
     pub fn new(content_type: &str) -> Option<AppChooserWidget> {
@@ -99,10 +99,10 @@ impl AppChooserWidget {
     }
 }
 
-impl_drop!(AppChooserWidget)
-impl_TraitWidget!(AppChooserWidget)
+impl_drop!(AppChooserWidget);
+impl_TraitWidget!(AppChooserWidget);
 
 impl gtk::ContainerTrait for AppChooserWidget {}
 impl gtk::BoxTrait for AppChooserWidget {}
 
-impl_widget_events!(AppChooserWidget)
+impl_widget_events!(AppChooserWidget);

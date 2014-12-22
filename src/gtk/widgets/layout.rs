@@ -19,7 +19,7 @@ use gtk::{mod, ffi};
 use gtk::cast::{GTK_LAYOUT};
 
 /// GtkLayout — Infinite scrollable area containing child widgets and/or custom drawing
-struct_Widget!(Layout)
+struct_Widget!(Layout);
 
 impl Layout {
     pub fn new(hadjustment: &gtk::Adjustment, vadjustment: &gtk::Adjustment) -> Option<Layout> {
@@ -64,10 +64,10 @@ impl Layout {
     }
 }
 
-impl_drop!(Layout)
-impl_TraitWidget!(Layout)
+impl_drop!(Layout);
+impl_TraitWidget!(Layout);
 
 impl gtk::ContainerTrait for Layout {}
 impl gtk::ScrollableTrait for Layout {}
 
-impl_widget_events!(Layout)
+impl_widget_events!(Layout);

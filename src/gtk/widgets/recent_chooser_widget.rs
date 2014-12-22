@@ -20,7 +20,7 @@ use gtk::{mod, ffi};
 use gtk::ffi::FFIWidget;
 use gtk::RecentManager;
 
-struct_Widget!(RecentChooserWidget)
+struct_Widget!(RecentChooserWidget);
 
 impl RecentChooserWidget {
     pub fn new() -> Option<RecentChooserWidget> {
@@ -34,12 +34,12 @@ impl RecentChooserWidget {
     }
 }
 
-impl_drop!(RecentChooserWidget)
-impl_TraitWidget!(RecentChooserWidget)
+impl_drop!(RecentChooserWidget);
+impl_TraitWidget!(RecentChooserWidget);
 
 impl gtk::ContainerTrait for RecentChooserWidget {}
 impl gtk::OrientableTrait for RecentChooserWidget {}
 impl gtk::RecentChooserTrait for RecentChooserWidget {}
 impl gtk::BoxTrait for RecentChooserWidget {}
 
-impl_widget_events!(RecentChooserWidget)
+impl_widget_events!(RecentChooserWidget);

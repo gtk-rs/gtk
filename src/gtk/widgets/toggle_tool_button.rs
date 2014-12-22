@@ -18,7 +18,7 @@
 use gtk::{mod, ffi};
 
 /// ToggleToolButton — A ToolItem containing a toggle button
-struct_Widget!(ToggleToolButton)
+struct_Widget!(ToggleToolButton);
 
 impl ToggleToolButton {
     pub fn new() -> Option<ToggleToolButton> {
@@ -34,8 +34,8 @@ impl ToggleToolButton {
     }
 }
 
-impl_drop!(ToggleToolButton)
-impl_TraitWidget!(ToggleToolButton)
+impl_drop!(ToggleToolButton);
+impl_TraitWidget!(ToggleToolButton);
 
 impl gtk::ContainerTrait for ToggleToolButton {}
 impl gtk::BinTrait for ToggleToolButton {}
@@ -43,4 +43,4 @@ impl gtk::ToolItemTrait for ToggleToolButton {}
 impl gtk::ToolButtonTrait for ToggleToolButton {}
 impl gtk::ToggleToolButtonTrait for ToggleToolButton {}
 
-impl_widget_events!(ToggleToolButton)
+impl_widget_events!(ToggleToolButton);

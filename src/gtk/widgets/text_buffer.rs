@@ -20,7 +20,7 @@ use gtk::ffi::FFIWidget;
 
 /// GtkTextBuffer — Stores attributed text for display in a GtkTextView
 
-struct_Widget!(TextBuffer)
+struct_Widget!(TextBuffer);
 
 impl TextBuffer {
     pub fn new(text_tag_table: Option<gtk::TextTagTable>) -> Option<TextBuffer> {
@@ -35,9 +35,9 @@ impl TextBuffer {
     }
 }
 
-impl_drop!(TextBuffer)
-impl_TraitWidget!(TextBuffer)
+impl_drop!(TextBuffer);
+impl_TraitWidget!(TextBuffer);
 
 impl gtk::TextBufferTrait for TextBuffer {}
 
-impl_widget_events!(TextBuffer)
+impl_widget_events!(TextBuffer);

@@ -24,7 +24,7 @@ use gtk::cast::GTK_GRID;
 use gtk::{mod, ffi};
 
 /// Grid — Pack widgets in a rows and columns
-struct_Widget!(Grid)
+struct_Widget!(Grid);
 
 impl Grid {
     pub fn new() -> Option<Grid> {
@@ -163,11 +163,10 @@ impl Grid {
     }
 }
 
-impl_drop!(Grid)
-impl_TraitWidget!(Grid)
+impl_drop!(Grid);
+impl_TraitWidget!(Grid);
 
 impl gtk::ContainerTrait for Grid {}
 impl gtk::OrientableTrait for Grid {}
 
-impl_widget_events!(Grid)
-
+impl_widget_events!(Grid);

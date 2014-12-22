@@ -42,7 +42,7 @@ fn main() {
 
     // make the vector of path to set to gcc::Config
     let output: String = unsafe { String::from_utf8_unchecked(cmd.output) };
-    let res: Vec<&str> = output.split(|c: char| c  == ' ').collect();
+    let res: Vec<&str> = output.split(' ').collect();
     let paths: Vec<Path> = res.iter().filter_map(|s| {
         if s.len() > 1 && s.char_at(1) == 'I' { Some(Path::new(s[2..])) }
         else { None }
@@ -52,7 +52,8 @@ fn main() {
     let gcc_conf = Config {
         include_directories: paths,
         definitions: vec!(),
-        objects: vec!()
+        objects: vec!(),
+	flags: vec!()
     };
 
     // build library

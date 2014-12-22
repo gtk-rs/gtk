@@ -81,4 +81,4 @@ impl FileFilter {
     }
 }
 
-impl_drop!(FileFilter, GTK_FILE_FILTER)
+impl_drop!(FileFilter, GTK_FILE_FILTER);

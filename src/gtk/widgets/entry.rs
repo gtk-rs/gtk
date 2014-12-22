@@ -17,9 +17,8 @@
 
 use gtk::{mod, ffi};
 
-/**
-* Entry — A single line text entry field
-*
+/// Entry — A single line text entry field
+/*
 * # Availables signals :
 * * `activate` : Action
 * * `backspace` : Action
@@ -35,7 +34,7 @@ use gtk::{mod, ffi};
 * * `preedit-changed` : Action
 * * `toggle-overwrite` : Action
 */
-struct_Widget!(Entry)
+struct_Widget!(Entry);
 
 impl Entry {
     pub fn new() -> Option<Entry> {
@@ -49,10 +48,10 @@ impl Entry {
     }
 }
 
-impl_drop!(Entry)
-impl_TraitWidget!(Entry)
+impl_drop!(Entry);
+impl_TraitWidget!(Entry);
 
 impl gtk::EntryTrait for Entry {}
 impl gtk::EditableTrait for Entry {}
 
-impl_widget_events!(Entry)
+impl_widget_events!(Entry);

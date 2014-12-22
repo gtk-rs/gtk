@@ -18,14 +18,12 @@
 use gtk::{mod, ffi};
 use gtk::cast::GTK_FONTBUTTON;
 
-/**
-* FontButton — A button to launch a font chooser dialog
-*
+/// FontButton — A button to launch a font chooser dialog
+/*
 * # Availables signals :
 * * `font-set` : Run First
 */
-struct_Widget!(FontButton)
-
+struct_Widget!(FontButton);
 
 impl FontButton {
     pub fn new() -> Option<FontButton> {
@@ -124,11 +122,11 @@ impl FontButton {
     }
 }
 
-impl_drop!(FontButton)
-impl_TraitWidget!(FontButton)
+impl_drop!(FontButton);
+impl_TraitWidget!(FontButton);
 
 impl gtk::ContainerTrait for FontButton {}
 impl gtk::ButtonTrait for FontButton {}
 
-impl_widget_events!(FontButton)
-impl_button_events!(FontButton)
+impl_widget_events!(FontButton);
+impl_button_events!(FontButton);

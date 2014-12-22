@@ -17,7 +17,7 @@ use gtk::{mod, ffi};
 use gtk::ffi::FFIWidget;
 use gtk::cast::{GTK_MESSAGE_DIALOG, GTK_WINDOW};
 
-struct_Widget!(MessageDialog)
+struct_Widget!(MessageDialog);
 
 impl MessageDialog {
     pub fn new(parent: Option<gtk::Window>, flags: gtk::DialogFlags, _type: gtk::MessageType, buttons: gtk::ButtonsType) -> Option<MessageDialog> {
@@ -64,12 +64,12 @@ impl MessageDialog {
     }
 }
 
-impl_drop!(MessageDialog)
-impl_TraitWidget!(MessageDialog)
+impl_drop!(MessageDialog);
+impl_TraitWidget!(MessageDialog);
 
 impl gtk::ContainerTrait for MessageDialog {}
 impl gtk::BinTrait for MessageDialog {}
 impl gtk::WindowTrait for MessageDialog {}
 impl gtk::DialogTrait for MessageDialog {}
 
-impl_widget_events!(MessageDialog)
+impl_widget_events!(MessageDialog);

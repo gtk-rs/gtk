@@ -18,7 +18,7 @@ use gtk::ffi::FFIWidget;
 use gtk::cast::GTK_RECENT_MANAGER;
 use glib;
 
-struct_Widget!(RecentManager)
+struct_Widget!(RecentManager);
 
 impl RecentManager {
     pub fn new() -> Option<RecentManager> {
@@ -85,7 +85,7 @@ impl RecentManager {
     }
 }
 
-impl_drop!(RecentManager)
-impl_TraitWidget!(RecentManager)
+impl_drop!(RecentManager);
+impl_TraitWidget!(RecentManager);
 
-impl_widget_events!(RecentManager)
+impl_widget_events!(RecentManager);

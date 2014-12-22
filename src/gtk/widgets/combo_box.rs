@@ -17,7 +17,7 @@
 
 use gtk::{mod, ffi};
 
-struct_Widget!(ComboBox)
+struct_Widget!(ComboBox);
 
 impl ComboBox {
     pub fn new() -> Option<ComboBox> {
@@ -51,12 +51,12 @@ impl ComboBox {
     }*/
 }
 
-impl_drop!(ComboBox)
-impl_TraitWidget!(ComboBox)
+impl_drop!(ComboBox);
+impl_TraitWidget!(ComboBox);
 
 impl gtk::ContainerTrait for ComboBox {}
 impl gtk::BinTrait for ComboBox {}
 impl gtk::ComboBoxTrait for ComboBox {}
 
-impl_widget_events!(ComboBox)
+impl_widget_events!(ComboBox);
 

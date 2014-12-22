@@ -19,7 +19,7 @@ use gtk::{mod, ffi, ToolItem};
 use gtk::ffi::FFIWidget;
 use gtk::cast::{GTK_TOOL_ITEM_GROUP, GTK_TOOL_ITEM};
 
-struct_Widget!(ToolItemGroup)
+struct_Widget!(ToolItemGroup);
 
 impl ToolItemGroup {
     pub fn new(label: &str) -> Option<ToolItemGroup> {
@@ -118,10 +118,10 @@ impl ToolItemGroup {
     }
 }
 
-impl_drop!(ToolItemGroup)
-impl_TraitWidget!(ToolItemGroup)
+impl_drop!(ToolItemGroup);
+impl_TraitWidget!(ToolItemGroup);
 
 impl gtk::ContainerTrait for ToolItemGroup {}
 impl gtk::BinTrait for ToolItemGroup {}
 
-impl_widget_events!(ToolItemGroup)
+impl_widget_events!(ToolItemGroup);

@@ -117,4 +117,4 @@ impl PageSetup {
     }
 }
 
-impl_drop!(PageSetup, GTK_PAGE_SETUP)
+impl_drop!(PageSetup, GTK_PAGE_SETUP);

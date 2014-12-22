@@ -62,4 +62,4 @@ impl TextAttributes {
     }
 }
 
-impl_GObjectFunctions!(TextAttributes, C_GtkTextAttributes)
+impl_GObjectFunctions!(TextAttributes, C_GtkTextAttributes);

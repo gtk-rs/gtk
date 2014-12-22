@@ -23,7 +23,7 @@ use glib::GlibContainer;
 use std::str;
 use std::string;
 
-struct_Widget!(AppInfo)
+struct_Widget!(AppInfo);
 
 impl AppInfo {/*
     pub fn create_from_commandline(commande_line: &str, application_name: &str, flag: gtk::AppInfoCreateFlags, error: &mut glib::Error) -> Option<AppInfo> {
@@ -364,5 +364,5 @@ impl PartialEq for AppInfo {
     }
 }*/
 
-impl_drop!(AppInfo)
-impl_TraitWidget!(AppInfo)
+impl_drop!(AppInfo);
+impl_TraitWidget!(AppInfo);

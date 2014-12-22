@@ -17,7 +17,7 @@ use gtk::{mod, ffi};
 use gtk::ffi::FFIWidget;
 use gtk::cast::{GTK_WINDOW};
 
-struct_Widget!(FileChooserDialog)
+struct_Widget!(FileChooserDialog);
 
 impl FileChooserDialog {
     pub fn new(title: &str, parent: Option<gtk::Window>, action: gtk::FileChooserAction) -> Option<FileChooserDialog> {
@@ -44,8 +44,8 @@ impl FileChooserDialog {
     }
 }
 
-impl_drop!(FileChooserDialog)
-impl_TraitWidget!(FileChooserDialog)
+impl_drop!(FileChooserDialog);
+impl_TraitWidget!(FileChooserDialog);
 
 impl gtk::ContainerTrait for FileChooserDialog {}
 impl gtk::BinTrait for FileChooserDialog {}
@@ -53,4 +53,4 @@ impl gtk::WindowTrait for FileChooserDialog {}
 impl gtk::DialogTrait for FileChooserDialog {}
 impl gtk::FileChooserTrait for FileChooserDialog {}
 
-impl_widget_events!(FileChooserDialog)
+impl_widget_events!(FileChooserDialog);

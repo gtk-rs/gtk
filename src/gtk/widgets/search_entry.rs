@@ -17,13 +17,12 @@
 
 use gtk::{mod, ffi};
 
-/**
-* SearchEntry — An entry which shows a search icon
-*
+/// SearchEntry — An entry which shows a search icon
+/*
 * # Signal availables:
 * * `search-changed` : Run Last
 */
-struct_Widget!(SearchEntry)
+struct_Widget!(SearchEntry);
 
 impl SearchEntry {
     pub fn new() -> Option<SearchEntry> {
@@ -32,10 +31,10 @@ impl SearchEntry {
     }
 }
 
-impl_drop!(SearchEntry)
-impl_TraitWidget!(SearchEntry)
+impl_drop!(SearchEntry);
+impl_TraitWidget!(SearchEntry);
 
 impl gtk::EntryTrait for SearchEntry {}
 impl gtk::EditableTrait for SearchEntry {}
 
-impl_widget_events!(SearchEntry)
+impl_widget_events!(SearchEntry);

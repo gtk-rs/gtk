@@ -19,7 +19,7 @@ use gtk::{mod, ffi};
 use gtk::cast::GTK_SEPARATORTOOLITEM;
 
 /// ToolItem — The base class of widgets that can be added to ToolShe
-struct_Widget!(SeparatorToolItem)
+struct_Widget!(SeparatorToolItem);
 
 impl SeparatorToolItem {
     pub fn new() -> Option<SeparatorToolItem> {
@@ -42,11 +42,11 @@ impl SeparatorToolItem {
     }
 }
 
-impl_drop!(SeparatorToolItem)
-impl_TraitWidget!(SeparatorToolItem)
+impl_drop!(SeparatorToolItem);
+impl_TraitWidget!(SeparatorToolItem);
 
 impl gtk::ContainerTrait for SeparatorToolItem {}
 impl gtk::BinTrait for SeparatorToolItem {}
 impl gtk::ToolItemTrait for SeparatorToolItem {}
 
-impl_widget_events!(SeparatorToolItem)
+impl_widget_events!(SeparatorToolItem);

@@ -19,7 +19,7 @@ use gtk::cast::{GTK_OVERLAY};
 use gtk::{mod, ffi};
 
 /// GtkOverlay — A container which overlays widgets on top of each other
-struct_Widget!(Overlay)
+struct_Widget!(Overlay);
 
 impl Overlay {
     pub fn new() -> Option<Overlay> {
@@ -34,10 +34,10 @@ impl Overlay {
     }
 }
 
-impl_drop!(Overlay)
-impl_TraitWidget!(Overlay)
+impl_drop!(Overlay);
+impl_TraitWidget!(Overlay);
 
 impl gtk::ContainerTrait for Overlay {}
 impl gtk::BinTrait for Overlay {}
 
-impl_widget_events!(Overlay)
+impl_widget_events!(Overlay);

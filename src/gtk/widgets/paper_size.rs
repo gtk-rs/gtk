@@ -19,7 +19,7 @@ use gtk::cast::{GTK_PAPER_SIZE};
 use glib;
 
 // FIXME: PaperSize is not a widget nor a GObject -> GBoxed
-struct_Widget!(PaperSize)
+struct_Widget!(PaperSize);
 
 impl PaperSize {
     pub fn new(name: &str) -> Option<PaperSize> {
@@ -201,6 +201,6 @@ impl Clone for PaperSize {
     }
 }
 
-impl_TraitWidget!(PaperSize)
+impl_TraitWidget!(PaperSize);
 
-impl_widget_events!(PaperSize)
+impl_widget_events!(PaperSize);

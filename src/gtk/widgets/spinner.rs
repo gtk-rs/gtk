@@ -19,7 +19,7 @@ use gtk::cast::GTK_SPINNER;
 use gtk::ffi;
 
 /// Spinner — Show a spinner animation
-struct_Widget!(Spinner)
+struct_Widget!(Spinner);
 
 impl Spinner {
     pub fn new() -> Option<Spinner> {
@@ -41,7 +41,7 @@ impl Spinner {
 
 }
 
-impl_drop!(Spinner)
-impl_TraitWidget!(Spinner)
+impl_drop!(Spinner);
+impl_TraitWidget!(Spinner);
 
-impl_widget_events!(Spinner)
+impl_widget_events!(Spinner);

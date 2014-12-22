@@ -17,13 +17,13 @@
 
 use gtk::cast::GTK_SWITCH;
 use gtk::ffi;
+
+/// Switch — A "light switch" style toggle
 /*
-* Switch — A "light switch" style toggle
-*
 * # Availables signals:
 * * `activate` : Action
 */
-struct_Widget!(Switch)
+struct_Widget!(Switch);
 
 impl Switch {
     pub fn new() -> Option<Switch> {
@@ -46,7 +46,7 @@ impl Switch {
     }
 }
 
-impl_drop!(Switch)
-impl_TraitWidget!(Switch)
+impl_drop!(Switch);
+impl_TraitWidget!(Switch);
 
-impl_widget_events!(Switch)
+impl_widget_events!(Switch);

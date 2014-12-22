@@ -17,7 +17,7 @@ use gtk::{mod, ffi};
 use gtk::ffi::FFIWidget;
 use gtk::cast::{GTK_WINDOW, GTK_APP_CHOOSER_DIALOG};
 
-struct_Widget!(AppChooserDialog)
+struct_Widget!(AppChooserDialog);
 
 impl AppChooserDialog {
     pub fn new_for_content_type(parent: Option<gtk::Window>, flags: gtk::DialogFlags, content_type: &str) -> Option<AppChooserDialog> {
@@ -66,8 +66,8 @@ impl AppChooserDialog {
     }
 }
 
-impl_drop!(AppChooserDialog)
-impl_TraitWidget!(AppChooserDialog)
+impl_drop!(AppChooserDialog);
+impl_TraitWidget!(AppChooserDialog);
 
 impl gtk::ContainerTrait for AppChooserDialog {}
 impl gtk::BinTrait for AppChooserDialog {}
@@ -75,5 +75,4 @@ impl gtk::WindowTrait for AppChooserDialog {}
 impl gtk::DialogTrait for AppChooserDialog {}
 impl gtk::AppChooserTrait for AppChooserDialog {}
 
-impl_widget_events!(AppChooserDialog)
-
+impl_widget_events!(AppChooserDialog);

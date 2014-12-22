@@ -18,7 +18,7 @@ use gtk::ffi::FFIWidget;
 use gtk::cast::{GTK_WINDOW, GTK_PAGE_SETUP_UNIX_DIALOG, GTK_PAGE_SETUP, GTK_PRINT_SETTINGS};
 use std::str;
 
-struct_Widget!(PageSetupUnixDialog)
+struct_Widget!(PageSetupUnixDialog);
 
 impl PageSetupUnixDialog {
     pub fn new(title: &str, parent: Option<gtk::Window>) -> Option<PageSetupUnixDialog> {
@@ -67,13 +67,12 @@ impl PageSetupUnixDialog {
     }
 }
 
-impl_drop!(PageSetupUnixDialog)
-impl_TraitWidget!(PageSetupUnixDialog)
+impl_drop!(PageSetupUnixDialog);
+impl_TraitWidget!(PageSetupUnixDialog);
 
 impl gtk::ContainerTrait for PageSetupUnixDialog {}
 impl gtk::BinTrait for PageSetupUnixDialog {}
 impl gtk::WindowTrait for PageSetupUnixDialog {}
 impl gtk::DialogTrait for PageSetupUnixDialog {}
 
-impl_widget_events!(PageSetupUnixDialog)
-
+impl_widget_events!(PageSetupUnixDialog);

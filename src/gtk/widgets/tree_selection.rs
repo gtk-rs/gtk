@@ -121,6 +121,6 @@ impl glib::traits::FFIGObject for TreeSelection {
     }
 }
 
-impl_connect!(TreeSelection -> Changed)
+impl_connect!(TreeSelection -> Changed);
 
-impl_drop!(TreeSelection, GTK_TREE_SELECTION)
+impl_drop!(TreeSelection, GTK_TREE_SELECTION);

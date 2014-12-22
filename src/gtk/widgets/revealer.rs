@@ -19,7 +19,7 @@ use gtk::{mod, ffi};
 use gtk::cast::{GTK_REVEALER};
 
 /// GtkRevealer — Hide and show with animation
-struct_Widget!(Revealer)
+struct_Widget!(Revealer);
 
 impl Revealer {
     pub fn new() -> Option<Revealer> {
@@ -71,10 +71,10 @@ impl Revealer {
     }
 }
 
-impl_drop!(Revealer)
-impl_TraitWidget!(Revealer)
+impl_drop!(Revealer);
+impl_TraitWidget!(Revealer);
 
 impl gtk::ContainerTrait for Revealer {}
 impl gtk::BinTrait for Revealer {}
 
-impl_widget_events!(Revealer)
+impl_widget_events!(Revealer);

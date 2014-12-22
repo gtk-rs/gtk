@@ -20,7 +20,7 @@ use gtk::cast::GTK_VIEWPORT;
 use gtk::{mod, ffi};
 
 /// GtkViewport — An adapter which makes widgets scrollable
-struct_Widget!(Viewport)
+struct_Widget!(Viewport);
 
 impl Viewport {
     pub fn new(hadjustment: &gtk::Adjustment, vadjustment: &gtk::Adjustment) -> Option<Viewport> {
@@ -41,11 +41,11 @@ impl Viewport {
     }
 }
 
-impl_drop!(Viewport)
-impl_TraitWidget!(Viewport)
+impl_drop!(Viewport);
+impl_TraitWidget!(Viewport);
 
 impl gtk::ContainerTrait for Viewport {}
 impl gtk::BinTrait for Viewport {}
 impl gtk::ScrollableTrait for Viewport {}
 
-impl_widget_events!(Viewport)
+impl_widget_events!(Viewport);

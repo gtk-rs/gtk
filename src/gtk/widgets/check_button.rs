@@ -18,8 +18,7 @@
 use gtk::{mod, ffi};
 
 /// CheckButton — Create widgets with a discrete toggle button
-struct_Widget!(CheckButton)
-
+struct_Widget!(CheckButton);
 
 impl CheckButton {
     pub fn new() -> Option<CheckButton> {
@@ -47,11 +46,11 @@ impl CheckButton {
 
 }
 
-impl_drop!(CheckButton)
-impl_TraitWidget!(CheckButton)
+impl_drop!(CheckButton);
+impl_TraitWidget!(CheckButton);
 
 impl gtk::ContainerTrait for CheckButton {}
 impl gtk::ButtonTrait for CheckButton {}
 impl gtk::ToggleButtonTrait for CheckButton {}
 
-impl_widget_events!(CheckButton)
+impl_widget_events!(CheckButton);

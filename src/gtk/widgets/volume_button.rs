@@ -18,7 +18,7 @@
 use gtk::{mod, ffi};
 
 /// VolumeButton — A button which pops up a volume control
-struct_Widget!(VolumeButton)
+struct_Widget!(VolumeButton);
 
 impl VolumeButton {
     pub fn new() -> Option<VolumeButton> {
@@ -27,12 +27,12 @@ impl VolumeButton {
     }
 }
 
-impl_drop!(VolumeButton)
-impl_TraitWidget!(VolumeButton)
+impl_drop!(VolumeButton);
+impl_TraitWidget!(VolumeButton);
 
 impl gtk::ContainerTrait for VolumeButton {}
 impl gtk::ButtonTrait for VolumeButton {}
 impl gtk::ScaleButtonTrait for VolumeButton {}
 impl gtk::OrientableTrait for VolumeButton {}
 
-impl_widget_events!(VolumeButton)
+impl_widget_events!(VolumeButton);

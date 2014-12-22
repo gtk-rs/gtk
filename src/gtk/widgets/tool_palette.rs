@@ -19,7 +19,7 @@ use gtk::{mod, ffi, ToolItem};
 use gtk::ffi::FFIWidget;
 use gtk::cast::{GTK_TOOL_PALETTE, GTK_TOOL_ITEM_GROUP};
 
-struct_Widget!(ToolPalette)
+struct_Widget!(ToolPalette);
 
 impl ToolPalette {
     pub fn new() -> Option<ToolPalette> {
@@ -108,9 +108,9 @@ impl ToolPalette {
     }
 }
 
-impl_drop!(ToolPalette)
-impl_TraitWidget!(ToolPalette)
+impl_drop!(ToolPalette);
+impl_TraitWidget!(ToolPalette);
 
 impl gtk::ContainerTrait for ToolPalette {}
 
-impl_widget_events!(ToolPalette)
+impl_widget_events!(ToolPalette);

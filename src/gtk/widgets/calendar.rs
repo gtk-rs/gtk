@@ -33,7 +33,7 @@ use gtk::ffi;
 * * `prev-month` : Run First
 * * `prev-year` : Run First
 */
-struct_Widget!(Calendar)
+struct_Widget!(Calendar);
 
 impl Calendar {
     pub fn new() -> Option<Calendar> {
@@ -126,8 +126,7 @@ impl Calendar {
 
 }
 
-impl_drop!(Calendar)
-impl_TraitWidget!(Calendar)
+impl_drop!(Calendar);
+impl_TraitWidget!(Calendar);
 
-impl_widget_events!(Calendar)
-
+impl_widget_events!(Calendar);

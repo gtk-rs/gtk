@@ -21,8 +21,7 @@ use gtk::{mod, ffi};
 use gtk::cast::GTK_PROGRESSBAR;
 
 /// ProgressBar — A widget which indicates progress visually
-struct_Widget!(ProgressBar)
-
+struct_Widget!(ProgressBar);
 
 impl ProgressBar {
     pub fn new() -> Option<ProgressBar> {
@@ -104,10 +103,9 @@ impl ProgressBar {
     }
 }
 
-impl_drop!(ProgressBar)
-impl_TraitWidget!(ProgressBar)
+impl_drop!(ProgressBar);
+impl_TraitWidget!(ProgressBar);
 
 impl gtk::OrientableTrait for ProgressBar {}
 
-impl_widget_events!(ProgressBar)
-
+impl_widget_events!(ProgressBar);

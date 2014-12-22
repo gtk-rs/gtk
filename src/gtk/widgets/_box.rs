@@ -25,7 +25,7 @@ use std::clone::Clone;
 use std::ops::Drop;
 
 /// Box — A container box
-struct_Widget!(Box)
+struct_Widget!(Box);
 
 impl Box {
     pub fn new(orientation: Orientation, spacing: i32) -> Option<Box> {
@@ -34,11 +34,11 @@ impl Box {
     }
 }
 
-impl_drop!(Box)
-impl_TraitWidget!(Box)
+impl_drop!(Box);
+impl_TraitWidget!(Box);
 
 impl gtk::ContainerTrait for Box {}
 impl gtk::BoxTrait for Box {}
 impl gtk::OrientableTrait for Box {}
 
-impl_widget_events!(Box)
+impl_widget_events!(Box);

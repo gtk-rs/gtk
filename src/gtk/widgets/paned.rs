@@ -21,9 +21,8 @@ use gtk::Orientation;
 use gtk::cast::GTK_PANED;
 use gtk::{mod, ffi};
 
-/**
-* Paned — A widget with two adjustable panes
-*
+/// Paned — A widget with two adjustable panes
+/*
 * # Available signals:
 * * `accept-position` : Action
 * * `cancel-position` : Action
@@ -32,7 +31,7 @@ use gtk::{mod, ffi};
 * * `move-handle` : Action
 * * `toggle-handle-focus` : Action
 */
-struct_Widget!(Paned)
+struct_Widget!(Paned);
 
 impl Paned {
     pub fn new(orientation: Orientation) -> Option<Paned> {
@@ -87,9 +86,9 @@ impl Paned {
     }
 }
 
-impl_drop!(Paned)
-impl_TraitWidget!(Paned)
+impl_drop!(Paned);
+impl_TraitWidget!(Paned);
 
 impl gtk::ContainerTrait for Paned {}
 
-impl_widget_events!(Paned)
+impl_widget_events!(Paned);

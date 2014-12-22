@@ -20,7 +20,7 @@ use gtk::{mod, ffi};
 use gtk::ffi::FFIWidget;
 
 /// GtkFlowBox — A container that allows reflowing its children
-struct_Widget!(FlowBox)
+struct_Widget!(FlowBox);
 
 impl FlowBox {
     pub fn new() -> Option<FlowBox> {
@@ -174,14 +174,14 @@ impl FlowBox {
     }
 }
 
-impl_drop!(FlowBox)
-impl_TraitWidget!(FlowBox)
+impl_drop!(FlowBox);
+impl_TraitWidget!(FlowBox);
 
 impl gtk::ContainerTrait for FlowBox {}
 
-impl_widget_events!(FlowBox)
+impl_widget_events!(FlowBox);
 
-struct_Widget!(FlowBoxChild)
+struct_Widget!(FlowBoxChild);
 
 impl FlowBoxChild {
     pub fn new() -> Option<FlowBoxChild> {
@@ -208,10 +208,10 @@ impl FlowBoxChild {
     }
 }
 
-impl_drop!(FlowBoxChild)
-impl_TraitWidget!(FlowBoxChild)
+impl_drop!(FlowBoxChild);
+impl_TraitWidget!(FlowBoxChild);
 
 impl gtk::ContainerTrait for FlowBoxChild {}
 impl gtk::BinTrait for FlowBoxChild {}
 
-impl_widget_events!(FlowBoxChild)
+impl_widget_events!(FlowBoxChild);

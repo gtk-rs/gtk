@@ -191,5 +191,4 @@ impl TreeModel {
     }
 }
 
-impl_drop!(TreeModel, GTK_TREE_MODEL)
-
+impl_drop!(TreeModel, GTK_TREE_MODEL);

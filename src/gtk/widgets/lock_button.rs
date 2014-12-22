@@ -21,7 +21,7 @@ use glib::Permission;
 use glib::GlibContainer;
 
 /// GtkLockButton — A widget to unlock or lock privileged operations
-struct_Widget!(LockButton)
+struct_Widget!(LockButton);
 
 impl LockButton {
     pub fn new(permission: &Permission) -> Option<LockButton> {
@@ -44,12 +44,12 @@ impl LockButton {
     }
 }
 
-impl_drop!(LockButton)
-impl_TraitWidget!(LockButton)
+impl_drop!(LockButton);
+impl_TraitWidget!(LockButton);
 
 impl gtk::ContainerTrait for LockButton {}
 impl gtk::ButtonTrait for LockButton {}
 impl gtk::ActionableTrait for LockButton {}
 
-impl_widget_events!(LockButton)
-impl_button_events!(LockButton)
+impl_widget_events!(LockButton);
+impl_button_events!(LockButton);

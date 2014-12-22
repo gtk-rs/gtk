@@ -17,7 +17,7 @@ use gtk::ffi;
 use gtk::ffi::FFIWidget;
 use gtk::cast::GTK_RECENT_INFO;
 
-struct_Widget!(RecentInfo)
+struct_Widget!(RecentInfo);
 
 impl RecentInfo {
     pub fn _ref(&self) -> Option<RecentInfo> {
@@ -219,7 +219,7 @@ impl RecentInfo {
     }
 }
 
-impl_drop!(RecentInfo)
-impl_TraitWidget!(RecentInfo)
+impl_drop!(RecentInfo);
+impl_TraitWidget!(RecentInfo);
 
-impl_widget_events!(RecentInfo)
+impl_widget_events!(RecentInfo);
