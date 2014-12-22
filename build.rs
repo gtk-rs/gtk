@@ -52,7 +52,8 @@ fn main() {
     let gcc_conf = Config {
         include_directories: paths,
         definitions: vec!(),
-        objects: vec!()
+        objects: vec!(),
+	flags: vec!()
     };
 
     // build library

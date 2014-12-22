@@ -28,14 +28,14 @@ use gtk;
 use cairo;
 use std::any::Any;
 
-pub trait Signal<'a>{
+pub trait Signal<'a> {
     fn get_signal_name(&self) -> &str;
 
     fn get_trampoline(&self) -> extern "C" fn();
 
     fn fetch_cb(&self) -> *mut ||;
 
-    fn get_user_data(&'a self) -> &'a Option<Box<Any + 'a>>;
+    fn get_user_data<'b>(&'a self) -> &'b Option<Box<Any + 'a>>;
 }
 
 // The defintion of the signal macro is split in a argumentless and
@@ -163,7 +163,7 @@ macro_rules! signal(
     ($signal:ident, $class:ident [ $(($arg_name:ident : $arg_type:ty)),* ] -> $ret_type:ty) => (
         pub struct $class<'a>{
             pub cb: |$($arg_type),*|:'a -> $ret_type,
-            pub user_data: &'a Option<Box<Any + 'a>>
+            pub user_data: Option<Box<Any + 'a>>
         }
 
         impl<'a> $class<'a>{
@@ -200,7 +200,7 @@ macro_rules! signal(
                 }
             }
 
-            fn get_user_data(&'a self) -> &'a Option<Box<Any + 'a>>{
+            fn get_user_data<'b>(&'a self) -> &'b Option<Box<Any + 'a>>{
                 &self.user_data
             }
         }
