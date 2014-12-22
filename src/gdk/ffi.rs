@@ -313,4 +313,39 @@ extern "C" {
     pub fn gdk_display_supports_composite  (display: *mut C_GdkDisplay) -> Gboolean;
     pub fn gdk_display_get_app_launch_context(display: *mut C_GdkDisplay) -> *mut C_GdkAppLaunchContext;
     pub fn gdk_display_notify_startup_complete(display: *mut C_GdkDisplay, startup_id: *const c_char);
+
+    //=========================================================================
+    // GdkScreen                                                         NOT OK
+    //=========================================================================
+    pub fn gdk_screen_get_default             () -> *mut C_GdkScreen;
+    pub fn gdk_screen_get_system_visual       (screen: *mut C_GdkScreen) -> *mut C_GdkVisual;
+    pub fn gdk_screen_get_rgba_visual         (screen: *mut C_GdkScreen) -> *mut C_GdkVisual;
+    pub fn gdk_screen_is_composited           (screen: *mut C_GdkScreen) -> Gboolean;
+    pub fn gdk_screen_get_root_window         (screen: *mut C_GdkScreen) -> *mut C_GdkWindow;
+    pub fn gdk_screen_get_display             (screen: *mut C_GdkScreen) -> *mut C_GdkDisplay;
+    pub fn gdk_screen_get_number              (screen: *mut C_GdkScreen) -> c_int;
+    pub fn gdk_screen_get_width               (screen: *mut C_GdkScreen) -> c_int;
+    pub fn gdk_screen_get_height              (screen: *mut C_GdkScreen) -> c_int;
+    pub fn gdk_screen_get_width_mm            (screen: *mut C_GdkScreen) -> c_int;
+    pub fn gdk_screen_get_height_mm           (screen: *mut C_GdkScreen) -> c_int;
+    //pub fn gdk_screen_list_visuals            (screen: *mut C_GdkScreen) -> *mut GList;
+    //pub fn gdk_screen_get_toplevel_windows    (screen: *mut C_GdkScreen) -> *mut GList;
+    pub fn gdk_screen_make_display_name       (screen: *mut C_GdkScreen) -> *mut c_char;
+    pub fn gdk_screen_get_n_monitors          (screen: *mut C_GdkScreen) -> c_int;
+    pub fn gdk_screen_get_primary_monitor     (screen: *mut C_GdkScreen) -> c_int;
+    pub fn gdk_screen_get_monitor_geometry    (screen: *mut C_GdkScreen, monitor_num: c_int, dest: *mut C_GdkRectangle);
+    pub fn gdk_screen_get_monitor_workarea    (screen: *mut C_GdkScreen, monitor_num: c_int, dest: *mut C_GdkRectangle);
+    pub fn gdk_screen_get_monitor_at_point    (screen: *mut C_GdkScreen, x: c_int, y: c_int) -> c_int;
+    pub fn gdk_screen_get_monitor_at_window   (screen: *mut C_GdkScreen, window: *mut C_GdkWindow) -> c_int;
+    pub fn gdk_screen_get_monitor_height_mm   (screen: *mut C_GdkScreen, monitor_num: c_int) -> c_int;
+    pub fn gdk_screen_get_monitor_width_mm    (screen: *mut C_GdkScreen, monitor_num: c_int) -> c_int;
+    pub fn gdk_screen_get_monitor_plug_name   (screen: *mut C_GdkScreen, monitor_num: c_int) -> *mut c_char;
+    pub fn gdk_screen_get_monitor_scale_factor(screen: *mut C_GdkScreen, monitor_num: c_int) -> c_int;
+    //pub fn gdk_screen_get_setting             (screen: *mut C_GdkScreen, name: *const c_char, value: *mut GValue) -> Gboolean;
+    //pub fn gdk_screen_get_font_options        (screen: *mut C_GdkScreen) -> *const cairo_font_options_t;
+    //pub fn gdk_screen_set_font_options        (screen: *mut C_GdkScreen, options: *const cairo_font_options_t);
+    pub fn gdk_screen_get_resolution          (screen: *mut C_GdkScreen) -> c_double;
+    pub fn gdk_screen_set_resolution          (screen: *mut C_GdkScreen, dpi: c_double);
+    pub fn gdk_screen_get_active_window       (screen: *mut C_GdkScreen) -> *mut C_GdkWindow;
+    //pub fn gdk_screen_get_window_stack        (screen: *mut C_GdkScreen) -> *mut GList;
 }

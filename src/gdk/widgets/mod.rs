@@ -16,11 +16,13 @@
 pub use self::color::{Color, RGBA};
 pub use self::device::Device;
 pub use self::display::Display;
-pub use self::types::{Atom, Screen, Rectangle, Key};
+pub use self::screen::Screen;
+pub use self::types::{Atom, Rectangle, Key};
 pub use self::window::Window;
 
 mod color;
 mod device;
 mod display;
+mod screen;
 mod types;
 mod window;

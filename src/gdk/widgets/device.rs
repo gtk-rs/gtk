@@ -208,4 +208,4 @@ impl Device {
     }*/
 }
 
-impl_GObjectFunctions!(Device, C_GdkDevice)
+impl_GObjectFunctions!(Device, C_GdkDevice);

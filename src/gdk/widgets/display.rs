@@ -228,4 +228,4 @@ impl Display {
     }
 }
 
-impl_GObjectFunctions!(Display, C_GdkDisplay)
+impl_GObjectFunctions!(Display, C_GdkDisplay);
