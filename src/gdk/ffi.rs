@@ -348,4 +348,27 @@ extern "C" {
     pub fn gdk_screen_set_resolution          (screen: *mut C_GdkScreen, dpi: c_double);
     pub fn gdk_screen_get_active_window       (screen: *mut C_GdkScreen) -> *mut C_GdkWindow;
     //pub fn gdk_screen_get_window_stack        (screen: *mut C_GdkScreen) -> *mut GList;
+
+    //=========================================================================
+    // GdkVisual                                                         NOT OK
+    //=========================================================================
+    pub fn gdk_query_depths                   (depths: *mut *mut c_int, count: *mut c_int);
+    //pub fn gdk_query_visual_types             (visual_types: *mut *mut GdkVisualType, count: *mut c_int);
+    //pub fn gdk_list_visuals                   () -> *mut GList;
+    pub fn gdk_visual_get_bits_per_rgb        (visual: *mut C_GdkVisual) -> c_int;
+    pub fn gdk_visual_get_blue_pixel_details  (visual: *mut C_GdkVisual, mask: *mut u32, shift: *mut c_int, precision: *mut c_int);
+    //pub fn gdk_visual_get_byte_order          (visual: *mut C_GdkVisual) -> GdkByteOrder;
+    pub fn gdk_visual_get_colormap_size       (visual: *mut C_GdkVisual) -> c_int;
+    pub fn gdk_visual_get_depth               (visual: *mut C_GdkVisual) -> c_int;
+    pub fn gdk_visual_get_green_pixel_details (visual: *mut C_GdkVisual, mask: *mut u32, shift: *mut c_int, precision: *mut c_int);
+    pub fn gdk_visual_get_red_pixel_details   (visual: *mut C_GdkVisual, mask: *mut u32, shift: *mut c_int, precision: *mut c_int);
+    //pub fn gdk_visual_get_visual_type         (visual: *mut C_GdkVisual) -> GdkVisualType;
+    pub fn gdk_visual_get_best_depth          () -> c_int;
+    //pub fn gdk_visual_get_best_type           () -> GdkVisualType;
+    pub fn gdk_visual_get_system              () -> *mut C_GdkVisual;
+    pub fn gdk_visual_get_best                () -> *mut C_GdkVisual;
+    pub fn gdk_visual_get_best_with_depth     (depth: c_int) -> *mut C_GdkVisual;
+    //pub fn gdk_visual_get_best_with_type      (visual_type: GdkVisualType) -> *mut C_GdkVisual;
+    //pub fn gdk_visual_get_best_with_both      (depth: c_int, visual_type: GdkVisualType) -> *mut C_GdkVisual;
+    pub fn gdk_visual_get_screen              (visual: *mut C_GdkVisual) -> *mut C_GdkScreen;
 }

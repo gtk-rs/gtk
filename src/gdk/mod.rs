@@ -79,7 +79,8 @@ pub use self::widgets::{
     Screen,
     Rectangle,
     Key,
-    Window
+    Window,
+    Visual
 };
 
 mod events;
