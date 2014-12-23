@@ -68,7 +68,10 @@ pub use self::enums::{
     GrabOwnership,
     GrabStatus,
     key,
-    CursorType
+    CursorType,
+    PixbufAlphaMode,
+    PixbufError,
+    ColorSpace
 };
 
 pub use self::widgets::{
@@ -83,7 +86,8 @@ pub use self::widgets::{
     Window,
     Visual,
     DeviceManager,
-    Cursor
+    Cursor,
+    Pixbuf
 };
 
 mod events;

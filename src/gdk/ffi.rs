@@ -16,7 +16,7 @@
 #![allow(non_camel_case_types)]
 #![allow(dead_code)]
 
-use libc::{c_int, c_char, c_double, c_void, c_uint};
+use libc::{c_int, c_char, c_double, c_void, c_uint, c_uchar, c_ulong};
 use gtk::ffi::{Gboolean};
 use gdk;
 
@@ -396,4 +396,19 @@ extern "C" {
     pub fn gdk_cursor_get_image               (cursor: *mut C_GdkCursor) -> *mut C_GdkPixbuf;
     //pub fn gdk_cursor_get_surface             (cursor: *mut C_GdkCursor, x_hot: *mut c_double, y_hot: *mut c_double) -> *mut cairo_surface_t;
     pub fn gdk_cursor_get_cursor_type         (cursor: *mut C_GdkCursor) -> gdk::CursorType;
+
+    //=========================================================================
+    // GdkPixbuf                                                         NOT OK
+    //=========================================================================
+    pub fn gdk_pixbuf_get_colorspace          (pixbuf: *const C_GdkPixbuf) -> gdk::ColorSpace;
+    pub fn gdk_pixbuf_get_n_channels          (pixbuf: *const C_GdkPixbuf) -> c_int;
+    pub fn gdk_pixbuf_get_has_alpha           (pixbuf: *const C_GdkPixbuf) -> Gboolean;
+    pub fn gdk_pixbuf_get_bits_per_sample     (pixbuf: *const C_GdkPixbuf) -> c_int;
+    //pub fn gdk_pixbuf_get_pixels              (pixbuf: *const C_GdkPixbuf) -> *mut c_uchar;
+    pub fn gdk_pixbuf_get_pixels_with_length  (pixbuf: *const C_GdkPixbuf, length: *mut c_uint) -> *mut c_uchar;
+    pub fn gdk_pixbuf_get_width               (pixbuf: *const C_GdkPixbuf) -> c_int;
+    pub fn gdk_pixbuf_get_height              (pixbuf: *const C_GdkPixbuf) -> c_int;
+    pub fn gdk_pixbuf_get_rowstride           (pixbuf: *const C_GdkPixbuf) -> c_int;
+    pub fn gdk_pixbuf_get_byte_length         (pixbuf: *const C_GdkPixbuf) -> c_ulong;
+    pub fn gdk_pixbuf_get_option              (pixbuf: *const C_GdkPixbuf, key: *const c_char) -> *const c_char;
 }

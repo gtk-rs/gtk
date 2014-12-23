@@ -453,6 +453,47 @@ pub enum CursorType {
     CursorIsPixmap
 }
 
+#[repr(C)]
+#[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+/// This enumeration defines the color spaces that are supported by the &gdk-pixbuf; library. Currently only RGB is supported.
+pub enum ColorSpace {
+    RGB,
+    /// doesn't exist in gtk+, don't use it !
+    Unused
+}
+
+#[repr(C)]
+#[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+/// An error code in the GDK_PIXBUF_ERROR domain. Many &gdk-pixbuf; operations can cause errors in this domain, or in the G_FILE_ERROR domain.
+pub enum PixbufError {
+    /// An image file was broken somehow.
+    CorruptImage,
+    /// Not enough memory.
+    InsufficientMemory,
+    /// A bad option was passed to a pixbuf save module.
+    BadOption,
+    /// Unknown image type.
+    UnknownType,
+    /// Don't know how to perform the given operation on the type of image at hand.
+    UnsupportedOperation,
+    /// Generic failure code, something went wrong.
+    Failed
+}
+
+#[repr(C)]
+#[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+/// These values can be passed to gdk_pixbuf_render_to_drawable_alpha() to control how the alpha channel of an image should be handled.
+/// This function can create a bilevel clipping mask (black and white) and use it while painting the image. In the future, when the X
+/// Window System gets an alpha channel extension, it will be possible to do full alpha compositing onto arbitrary drawables. For now
+/// both cases fall back to a bilevel clipping mask.
+pub enum PixbufAlphaMode {
+    /// A bilevel clipping mask (black and white) will be created and used to draw the image. Pixels below 0.5 opacity will be considered
+    /// fully transparent, and all others will be considered fully opaque.
+    AlphaBiLevel,
+    /// For now falls back to GDK_PIXBUF_ALPHA_BILEVEL. In the future it will do full alpha compositing.
+    AlphaFull
+}
+
 pub mod modifier_type {
     #![allow(non_upper_case_globals)]
 
