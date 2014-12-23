@@ -14,6 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 pub use self::color::{Color, RGBA};
+pub use self::cursor::Cursor;
 pub use self::device::Device;
 pub use self::device_manager::DeviceManager;
 pub use self::display::Display;
@@ -23,6 +24,7 @@ pub use self::visual::Visual;
 pub use self::window::Window;
 
 mod color;
+mod cursor;
 mod device;
 mod device_manager;
 mod display;

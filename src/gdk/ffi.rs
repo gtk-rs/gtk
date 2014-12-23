@@ -68,6 +68,9 @@ pub struct C_GdkDeviceManager;
 #[repr(C)]
 #[deriving(Copy)]
 pub struct C_GdkAppLaunchContext;
+#[repr(C)]
+#[deriving(Copy)]
+pub struct C_GdkPixbuf;
 
 extern "C" {
     //=========================================================================
@@ -379,4 +382,18 @@ extern "C" {
     //pub fn gdk_visual_get_best_with_type      (visual_type: GdkVisualType) -> *mut C_GdkVisual;
     //pub fn gdk_visual_get_best_with_both      (depth: c_int, visual_type: GdkVisualType) -> *mut C_GdkVisual;
     pub fn gdk_visual_get_screen              (visual: *mut C_GdkVisual) -> *mut C_GdkScreen;
+
+    //=========================================================================
+    // GdkCursor                                                         NOT OK
+    //=========================================================================
+    pub fn gdk_cursor_new                     (cursor_type: gdk::CursorType) -> *mut C_GdkCursor;
+    pub fn gdk_cursor_new_from_pixbuf         (display: *mut C_GdkDisplay, pixbuf: *mut C_GdkPixbuf, x: c_int, y: c_int) -> *mut C_GdkCursor;
+    //pub fn gdk_cursor_new_from_surface        (display: *mut C_GdkDisplay, surface: *mut cairo_surface_t, x: c_double,
+    //    y: c_double) -> *mut C_GdkCursor;
+    pub fn gdk_cursor_new_from_name           (display: *mut C_GdkDisplay, name: *const c_char) -> *mut C_GdkCursor;
+    pub fn gdk_cursor_new_for_display         (display: *mut C_GdkDisplay, cursor_type: gdk::CursorType) -> *mut C_GdkCursor;
+    pub fn gdk_cursor_get_display             (cursor: *mut C_GdkCursor) -> *mut C_GdkDisplay;
+    pub fn gdk_cursor_get_image               (cursor: *mut C_GdkCursor) -> *mut C_GdkPixbuf;
+    //pub fn gdk_cursor_get_surface             (cursor: *mut C_GdkCursor, x_hot: *mut c_double, y_hot: *mut c_double) -> *mut cairo_surface_t;
+    pub fn gdk_cursor_get_cursor_type         (cursor: *mut C_GdkCursor) -> gdk::CursorType;
 }

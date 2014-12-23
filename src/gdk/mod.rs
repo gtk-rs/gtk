@@ -67,7 +67,8 @@ pub use self::enums::{
     DeviceType,
     GrabOwnership,
     GrabStatus,
-    key
+    key,
+    CursorType
 };
 
 pub use self::widgets::{
@@ -81,7 +82,8 @@ pub use self::widgets::{
     Key,
     Window,
     Visual,
-    DeviceManager
+    DeviceManager,
+    Cursor
 };
 
 mod events;
