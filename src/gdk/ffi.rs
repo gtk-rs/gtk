@@ -278,6 +278,14 @@ extern "C" {
     pub fn gdk_device_get_last_event_window(device: *mut C_GdkDevice) -> *mut C_GdkWindow;
 
     //=========================================================================
+    // GdkDeviceManager                                                  NOT OK
+    //=========================================================================
+    pub fn gdk_disable_multidevice         ();
+    pub fn gdk_device_manager_get_display  (device_manager: *mut C_GdkDeviceManager) -> *mut C_GdkDisplay;
+    //pub fn gdk_device_manager_list_devices (device_manager: *mut C_GdkDeviceManager, type_: gdk::DeviceType) -> *mut GList;
+    pub fn gdk_device_manager_get_client_pointer(device_manager: *mut C_GdkDeviceManager) -> *mut C_GdkDevice;
+
+    //=========================================================================
     // GdkDisplay                                                        NOT OK
     //=========================================================================
     pub fn gdk_display_open                (display_name: *const c_char) -> *mut C_GdkDisplay;

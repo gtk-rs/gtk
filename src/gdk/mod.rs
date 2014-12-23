@@ -80,7 +80,8 @@ pub use self::widgets::{
     Rectangle,
     Key,
     Window,
-    Visual
+    Visual,
+    DeviceManager
 };
 
 mod events;

@@ -86,7 +86,7 @@ impl Device {
         if tmp.is_null() {
             None
         } else {
-            Some(gdk::Display::wrap(tmp))
+            Some(gdk::Display::wrap_pointer(tmp))
         }
     }*/
 
@@ -129,7 +129,7 @@ impl Device {
         if ptr.is_null() {
             None
         } else {
-            Some(gdk::Screen::wrap(ptr))
+            Some(gdk::Screen::wrap_pointer(ptr))
         }
     }
 
@@ -140,7 +140,7 @@ impl Device {
         if ptr.is_null() {
             None
         } else {
-            Some(gdk::Screen::wrap(ptr))
+            Some(gdk::Screen::wrap_pointer(ptr))
         }
     }
 
@@ -151,7 +151,7 @@ impl Device {
         if ptr.is_null() {
             None
         } else {
-            Some(gdk::Window::wrap(ptr))
+            Some(gdk::Window::wrap_pointer(ptr))
         }
     }
 
@@ -162,7 +162,7 @@ impl Device {
         if ptr.is_null() {
             None
         } else {
-            Some(gdk::Window::wrap(ptr))
+            Some(gdk::Window::wrap_pointer(ptr))
         }
     }
 
@@ -175,7 +175,7 @@ impl Device {
         let mut ret = Vec::with_capacity(n_events as uint);
         
         for i in range(0, n_events) {
-            ret.push(gdk::TimeCoord::wrap(::std::ptr::read(ptr.offset(i))));
+            ret.push(gdk::TimeCoord::wrap_pointer(::std::ptr::read(ptr.offset(i))));
         }
         ret
     }
@@ -203,7 +203,7 @@ impl Device {
         if ptr.is_null() {
             None
         } else {
-            Some(gdk::Window::wrap(ptr))
+            Some(gdk::Window::wrap_pointer(ptr))
         }
     }*/
 }

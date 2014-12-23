@@ -15,6 +15,7 @@
 
 pub use self::color::{Color, RGBA};
 pub use self::device::Device;
+pub use self::device_manager::DeviceManager;
 pub use self::display::Display;
 pub use self::screen::Screen;
 pub use self::types::{Atom, Rectangle, Key};
@@ -23,6 +24,7 @@ pub use self::window::Window;
 
 mod color;
 mod device;
+mod device_manager;
 mod display;
 mod screen;
 mod types;
