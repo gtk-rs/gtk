@@ -40,33 +40,33 @@ impl TreeStore {
         unsafe { ffi::to_bool(ffi::gtk_tree_store_remove(self.pointer, iter.get_pointer())) }
     }
 
-    pub fn insert(&self, iter: &TreeIter, parent: Option<&TreeIter>, position: i32) {
+    pub fn insert(&self, iter: &mut TreeIter, parent: Option<&TreeIter>, position: i32) {
         unsafe { ffi::gtk_tree_store_insert(self.pointer,
                                             iter.get_pointer(),
                                             if parent.is_none() { ::std::ptr::null_mut() } else { parent.unwrap().get_pointer() },
                                             position) }
     }
 
-    pub fn insert_before(&self, iter: &TreeIter, parent: Option<&TreeIter>, sibling: Option<&TreeIter>) {
+    pub fn insert_before(&self, iter: &mut TreeIter, parent: Option<&TreeIter>, sibling: Option<&TreeIter>) {
         unsafe { ffi::gtk_tree_store_insert_before(self.pointer,
                                                    iter.get_pointer(),
                                                    if parent.is_none() { ::std::ptr::null_mut() } else { parent.unwrap().get_pointer() },
                                                    if sibling.is_none() { ::std::ptr::null_mut() } else { sibling.unwrap().get_pointer() }) }
     }
 
-    pub fn insert_after(&self, iter: &TreeIter, parent: Option<&TreeIter>, sibling: Option<&TreeIter>) {
+    pub fn insert_after(&self, iter: &mut TreeIter, parent: Option<&TreeIter>, sibling: Option<&TreeIter>) {
         unsafe { ffi::gtk_tree_store_insert_after(self.pointer,
                                                   iter.get_pointer(),
                                                   if parent.is_none() { ::std::ptr::null_mut() } else { parent.unwrap().get_pointer() },
                                                   if sibling.is_none() { ::std::ptr::null_mut() } else { sibling.unwrap().get_pointer() }) }
     }
 
-    pub fn prepend(&self, iter: &TreeIter, parent: Option<&TreeIter>) {
+    pub fn prepend(&self, iter: &mut TreeIter, parent: Option<&TreeIter>) {
         unsafe { ffi::gtk_tree_store_prepend(self.pointer, iter.get_pointer(),
                                              if parent.is_none() { ::std::ptr::null_mut() } else { parent.unwrap().get_pointer() }) }
     }
 
-    pub fn append(&self, iter: &TreeIter, parent: Option<&TreeIter>) {
+    pub fn append(&self, iter: &mut TreeIter, parent: Option<&TreeIter>) {
         unsafe { ffi::gtk_tree_store_append(self.pointer, iter.get_pointer(),
                                             if parent.is_none() { ::std::ptr::null_mut() } else { parent.unwrap().get_pointer() }) }
     }

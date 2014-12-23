@@ -49,11 +49,6 @@ Then you can build __rgtk__ by generating the make file and then running `cargo 
 > cargo build
 ```
 
-On OSX build may fail by not finding `GTK`, just add this var to your env:
-```Shell
-export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/opt/X11/lib/pkgconfig
-```
-
 In src/bin you can find some tests showing of some functionality, these can be build and run as follows:
 
 ```Shell
