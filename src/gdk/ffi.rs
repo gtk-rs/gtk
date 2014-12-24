@@ -195,7 +195,7 @@ extern "C" {
     pub fn gdk_window_merge_child_input_shapes(window: *mut C_GdkWindow);
     pub fn gdk_window_set_static_gravities(window: *mut C_GdkWindow, use_static: Gboolean) -> Gboolean;
     pub fn gdk_window_set_title          (window: *mut C_GdkWindow, title: *const c_char);
-    pub fn gdk_window_set_background_rgba(window: *mut C_GdkWindow, rgba: *const C_GdkRGBA);
+    pub fn gdk_window_set_background_rgba(window: *mut C_GdkWindow, rgba: *const gdk::RGBA);
     //pub fn gdk_window_set_background_pattern(window: *mut C_GdkWindow, pattern: *const cairo_pattern_t);
     //pub fn gdk_window_get_background_pattern(window: *mut C_GdkWindow) -> *const cairo_pattern_t;
     pub fn gdk_window_set_cursor         (window: *mut C_GdkWindow, cursor: *mut C_GdkCursor);
@@ -453,4 +453,14 @@ extern "C" {
     pub fn gdk_rectangle_intersect            (src1: *const gdk::Rectangle, src2: *const gdk::Rectangle,
         dest: *mut gdk::Rectangle) -> Gboolean;
     pub fn gdk_rectangle_union                (src1: *const gdk::Rectangle, src2: *const gdk::Rectangle, dest: *mut gdk::Rectangle);
+
+    //=========================================================================
+    // GdkRGBA                                                           NOT OK
+    //=========================================================================
+    //pub fn gdk_rgba_copy                      (rgba: *const gdk::RGBA) -> *mut gdk::RGBA;
+    //pub fn gdk_rgba_free                      (rgba: *mut gdk::RGBA);
+    pub fn gdk_rgba_parse                       (rgba: *mut gdk::RGBA, spec: *const c_char) -> Gboolean;
+    pub fn gdk_rgba_equal                       (p1: *const gdk::RGBA, p2: *const gdk::RGBA) -> Gboolean;
+    pub fn gdk_rgba_hash                        (p: *const gdk::RGBA) -> c_uint;
+    pub fn gdk_rgba_to_string                   (rgba: *const gdk::RGBA) -> *mut c_char;
 }

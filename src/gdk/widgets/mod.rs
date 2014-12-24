@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-pub use self::color::{Color, RGBA};
+pub use self::color::Color;
 pub use self::cursor::Cursor;
 pub use self::device::Device;
 pub use self::device_manager::DeviceManager;
@@ -22,6 +22,7 @@ pub use self::display_manager::DisplayManager;
 pub use self::pixbuf::Pixbuf;
 pub use self::point::Point;
 pub use self::rectangle::Rectangle;
+pub use self::rgba::RGBA;
 pub use self::screen::Screen;
 pub use self::types::{Atom, Key};
 pub use self::visual::Visual;
@@ -36,6 +37,7 @@ mod display_manager;
 mod pixbuf;
 mod point;
 mod rectangle;
+mod rgba;
 mod screen;
 mod types;
 mod visual;
