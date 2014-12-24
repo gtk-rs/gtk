@@ -91,7 +91,10 @@ pub use self::enums::{
     PixbufAlphaMode,
     PixbufError,
     ColorSpace,
-    FrameClockPhase
+    FrameClockPhase,
+    WindowWindowClass,
+    Gravity,
+    WMFunction
 };
 
 pub use self::widgets::{
@@ -111,7 +114,9 @@ pub use self::widgets::{
     Point,
     DisplayManager,
     FrameClock,
-    FrameTimings
+    FrameTimings,
+    WindowAttr,
+    Geometry
 };
 
 mod events;

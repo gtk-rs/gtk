@@ -77,6 +77,24 @@ pub struct C_GdkPixbuf;
 #[repr(C)]
 #[deriving(Copy)]
 pub struct C_GdkFrameTimings;
+#[repr(C)]
+#[deriving(Copy)]
+pub struct C_GdkWindowAttr {
+    pub title: *mut c_char,
+    pub event_mask: c_int,
+    pub x: c_int,
+    pub y: c_int,
+    pub width: c_int,
+    pub height: c_int,
+    pub wclass: gdk::WindowWindowClass,
+    pub visual: *mut C_GdkVisual,
+    pub window_type: gdk::WindowType,
+    pub cursor: *mut C_GdkCursor,
+    pub wmclass_name: *mut c_char,
+    pub wmclass_class: *mut c_char,
+    pub override_redirect: Gboolean,
+    pub type_hint: gdk::WindowTypeHint
+}
 
 extern "C" {
     //=========================================================================
@@ -164,12 +182,12 @@ extern "C" {
     pub fn gdk_window_get_scale_factor   (window: *mut C_GdkWindow) -> c_int;
     //pub fn gdk_window_set_opaque_region  (window: *mut C_GdkWindow, region: *mut cairo_region_t);
     //pub fn gdk_window_get_clip_region    (window: *mut C_GdkWindow) -> *mut cairo_region_t;
-    pub fn gdk_window_begin_paint_rect   (window: *mut C_GdkWindow, rectangle: *const C_GdkRectangle);
+    pub fn gdk_window_begin_paint_rect   (window: *mut C_GdkWindow, rectangle: *const gdk::Rectangle);
     //pub fn gdk_window_begin_paint_region (window: *mut C_GdkWindow, region: *const cairo_region_t);
     pub fn gdk_window_end_paint          (window: *mut C_GdkWindow);
     //pub fn gdk_window_get_visible_region (window: *mut C_GdkWindow) -> *mut cairo_region_t;
     //pub fn gdk_window_set_invalidate_handler(window: *mut C_GdkWindow, handler: GdkWindowInvalidateHandlerFunc);
-    pub fn gdk_window_invalidate_rect    (window: *mut C_GdkWindow, rectangle: *const C_GdkRectangle, invalidate_children: Gboolean);
+    pub fn gdk_window_invalidate_rect    (window: *mut C_GdkWindow, rectangle: *const gdk::Rectangle, invalidate_children: Gboolean);
     //pub fn gdk_window_invalidate_region  (window: *mut C_GdkWindow, region: *const cairo_region_t, invalidate_children: Gboolean);
     //pub fn gdk_window_invalidate_maybe_recurse(window: *mut C_GdkWindow, region: *const cairo_region_t, child_func: GdkWindowChildFunc,
     //    user_data: *mut c_void);
@@ -203,9 +221,9 @@ extern "C" {
     //pub fn gdk_window_get_background_pattern(window: *mut C_GdkWindow) -> *const cairo_pattern_t;
     pub fn gdk_window_set_cursor         (window: *mut C_GdkWindow, cursor: *mut C_GdkCursor);
     pub fn gdk_window_get_cursor         (window: *mut C_GdkWindow) -> *mut C_GdkCursor;
-    pub fn gdk_window_get_user_data      (window: *mut C_GdkWindow, data: *mut c_void);
+    pub fn gdk_window_get_user_data      (window: *mut C_GdkWindow, data: *mut *mut c_void);
     pub fn gdk_window_get_geometry       (window: *mut C_GdkWindow, x: *mut c_int, y: *mut c_int, width: *mut c_int, height: *mut c_int);
-    pub fn gdk_window_set_geometry_hints (window: *mut C_GdkWindow, geometry: *const C_GdkGeometry, geom_mask: gdk::WindowHints);
+    pub fn gdk_window_set_geometry_hints (window: *mut C_GdkWindow, geometry: *const gdk::Geometry, geom_mask: gdk::WindowHints);
     pub fn gdk_window_get_width          (window: *mut C_GdkWindow) -> c_int;
     pub fn gdk_window_get_height         (window: *mut C_GdkWindow) -> c_int;
     //pub fn gdk_window_set_icon_list      (window: *mut C_GdkWindow, pixbufs: *mut GList);
@@ -219,7 +237,7 @@ extern "C" {
     pub fn gdk_window_set_urgency_hint   (window: *mut C_GdkWindow, urgent: Gboolean);
     pub fn gdk_window_get_position       (window: *mut C_GdkWindow, x: *mut c_int, y: *mut c_int);
     pub fn gdk_window_get_root_origin    (window: *mut C_GdkWindow, x: *mut c_int, y: *mut c_int);
-    pub fn gdk_window_get_frame_extents  (window: *mut C_GdkWindow, rect: *mut C_GdkRectangle);
+    pub fn gdk_window_get_frame_extents  (window: *mut C_GdkWindow, rect: *mut gdk::Rectangle);
     pub fn gdk_window_get_origin         (window: *mut C_GdkWindow, x: *mut c_int, y: *mut c_int);
     pub fn gdk_window_get_root_coords    (window: *mut C_GdkWindow, x: c_int, y: c_int, root_x: *mut c_int, root_y: *mut c_int);
     pub fn gdk_window_get_device_position(window: *mut C_GdkWindow, device: *mut C_GdkDevice, x: *mut c_int, y: *mut c_int,
@@ -241,7 +259,7 @@ extern "C" {
     pub fn gdk_window_get_group          (window: *mut C_GdkWindow) -> *mut C_GdkWindow;
     pub fn gdk_window_set_decorations    (window: *mut C_GdkWindow, decorations: gdk::WMDecoration);
     pub fn gdk_window_get_decorations    (window: *mut C_GdkWindow, decorations: *mut gdk::WMDecoration) -> Gboolean;
-    pub fn gdk_window_set_functions      (window: *mut C_GdkWindow, functions: gdk::WMDecoration);
+    pub fn gdk_window_set_functions      (window: *mut C_GdkWindow, functions: gdk::WMFunction);
     pub fn gdk_get_default_root_window   () -> *mut C_GdkWindow;
     pub fn gdk_window_get_support_multidevice(window: *mut C_GdkWindow) -> Gboolean;
     pub fn gdk_window_set_support_multidevice(window: *mut C_GdkWindow, support_multidevice: Gboolean);
@@ -259,8 +277,8 @@ extern "C" {
     pub fn gdk_window_geometry_changed   (window: *mut C_GdkWindow);
     pub fn gdk_window_coords_from_parent (window: *mut C_GdkWindow, parent_x: c_double, parent_y: c_double, x: *mut c_double,
         y: *mut c_double);
-    pub fn gdk_window_coords_to_parent   (window: *mut C_GdkWindow, x: *mut c_double, y: *mut c_double, parent_x: c_double,
-        parent_y: c_double);
+    pub fn gdk_window_coords_to_parent   (window: *mut C_GdkWindow, x: c_double, y: c_double, parent_x: *mut c_double,
+        parent_y: *mut c_double);
     pub fn gdk_window_get_effective_parent(window: *mut C_GdkWindow) -> *mut C_GdkWindow;
     pub fn gdk_window_get_effective_toplevel(window: *mut C_GdkWindow) -> *mut C_GdkWindow;
 
@@ -382,8 +400,8 @@ extern "C" {
     pub fn gdk_screen_make_display_name       (screen: *mut C_GdkScreen) -> *mut c_char;
     pub fn gdk_screen_get_n_monitors          (screen: *mut C_GdkScreen) -> c_int;
     pub fn gdk_screen_get_primary_monitor     (screen: *mut C_GdkScreen) -> c_int;
-    pub fn gdk_screen_get_monitor_geometry    (screen: *mut C_GdkScreen, monitor_num: c_int, dest: *mut C_GdkRectangle);
-    pub fn gdk_screen_get_monitor_workarea    (screen: *mut C_GdkScreen, monitor_num: c_int, dest: *mut C_GdkRectangle);
+    pub fn gdk_screen_get_monitor_geometry    (screen: *mut C_GdkScreen, monitor_num: c_int, dest: *mut gdk::Rectangle);
+    pub fn gdk_screen_get_monitor_workarea    (screen: *mut C_GdkScreen, monitor_num: c_int, dest: *mut gdk::Rectangle);
     pub fn gdk_screen_get_monitor_at_point    (screen: *mut C_GdkScreen, x: c_int, y: c_int) -> c_int;
     pub fn gdk_screen_get_monitor_at_window   (screen: *mut C_GdkScreen, window: *mut C_GdkWindow) -> c_int;
     pub fn gdk_screen_get_monitor_height_mm   (screen: *mut C_GdkScreen, monitor_num: c_int) -> c_int;

@@ -271,6 +271,25 @@ pub enum WMDecoration {
 
 #[repr(C)]
 #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+/// These are hints originally defined by the Motif toolkit. The window manager can use them when determining the functions to offer
+/// for the window. The hint must be set before mapping the window.
+pub enum WMFunction {
+    /// all functions should be offered.
+    All,
+    /// the window should be resizable.
+    Resize,
+    /// the window should be movable.
+    Move,
+    /// the window should be minimizable.
+    Minimize,
+    /// the window should be maximizable.
+    Maximize,
+    /// the window should be closable.
+    Close
+}
+
+#[repr(C)]
+#[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
 /// An enumeration describing the type of an input device in general terms.
 pub enum InputSource {
     /// the device is a mouse. (This will be reported for the core pointer, even if it is something else, such as a trackball.)
@@ -364,6 +383,33 @@ pub enum GrabStatus {
     NotViewable,
     /// the resource is frozen by an active grab of another client.
     Frozen
+}
+
+#[repr(C)]
+#[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+/// Defines the reference point of a window and the meaning of coordinates passed to gtk_window_move(). See gtk_window_move() and the
+/// "implementation notes" section of the Extended Window Manager Hints specification for more details.
+pub enum Gravity {
+    /// the reference point is at the top left corner.
+    NorthWest,
+    /// the reference point is in the middle of the top edge.
+    North,
+    /// the reference point is at the top right corner.
+    NorthEast,
+    /// the reference point is at the middle of the left edge.
+    West,
+    /// the reference point is at the center of the window.
+    Center,
+    /// the reference point is at the middle of the right edge.
+    East,
+    /// the reference point is at the lower left corner.
+    SouthWest,
+    /// the reference point is at the middle of the lower edge.
+    South,
+    /// the reference point is at the lower right corner.
+    SouthEast,
+    /// the reference point is at the top left corner of the window itself, ignoring window manager decorations.
+    Static
 }
 
 #[repr(C)]
@@ -517,6 +563,18 @@ pub enum FrameClockPhase {
     ResumeEvents,
     /// corresponds to GdkFrameClock::after-paint. Should not be handled by applications.
     AfterPaint
+}
+
+#[repr(C)]
+#[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+/// GDK_INPUT_OUTPUT windows are the standard kind of window you might expect. Such windows receive events and are also displayed on
+/// screen. GDK_INPUT_ONLY windows are invisible; they are usually placed above other windows in order to trap or filter the events.
+/// You can’t draw on GDK_INPUT_ONLY windows.
+pub enum WindowWindowClass {
+    /// window for graphics and events
+    InputOutput,
+    /// window for events only
+    InputOnly
 }
 
 pub mod modifier_type {
