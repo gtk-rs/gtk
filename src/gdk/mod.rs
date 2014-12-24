@@ -19,6 +19,25 @@ Bindings and wrappers for __GDK__
 
 */
 
+pub use self::rt::{
+    init,
+    get_display_arg_name,
+    notify_startup_complete,
+    notify_startup_complete_with_id,
+    set_allowed_backends,
+    get_program_class,
+    set_program_class,
+    flush,
+    screen_width,
+    screen_height,
+    screen_width_mm,
+    screen_height_mm,
+    beep,
+    error_trap_push,
+    error_trap_pop,
+    error_trap_pop_ignored
+};
+
 pub use self::events::{
     EventType,
     Event,
@@ -92,6 +111,7 @@ pub use self::widgets::{
 };
 
 mod events;
+mod rt;
 pub mod enums;
 pub mod widgets;
 

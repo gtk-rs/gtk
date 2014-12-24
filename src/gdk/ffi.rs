@@ -74,6 +74,29 @@ pub struct C_GdkPixbuf;
 
 extern "C" {
     //=========================================================================
+    // General                                                           NOT OK
+    //=========================================================================
+    pub fn gdk_init                      (argc: *mut c_int, argv: *mut *mut *mut c_char);
+    pub fn gdk_init_check                (argc: *mut c_int, argv: *mut *mut *mut c_char) -> Gboolean;
+    pub fn gdk_parse_args                (argc: *mut c_int, argv: *mut *mut *mut c_char);
+    pub fn gdk_get_display_arg_name      () -> *const c_char;
+    pub fn gdk_notify_startup_complete   ();
+    pub fn gdk_notify_startup_complete_with_id(startup_id: *const c_char);
+    pub fn gdk_set_allowed_backends      (backends: *const c_char);
+    pub fn gdk_get_program_class         () -> *const c_char;
+    pub fn gdk_set_program_class         (program_class: *const c_char);
+    pub fn gdk_flush                     ();
+    pub fn gdk_screen_width              () -> c_int;
+    pub fn gdk_screen_height             () -> c_int;
+    pub fn gdk_screen_width_mm           () -> c_int;
+    pub fn gdk_screen_height_mm          () -> c_int;
+    pub fn gdk_set_double_click_time     (msec: c_uint);
+    pub fn gdk_beep                      ();
+    pub fn gdk_error_trap_push           ();
+    pub fn gdk_error_trap_pop            ();
+    pub fn gdk_error_trap_pop_ignored    ();
+
+    //=========================================================================
     // GdkWindow                                                         NOT OK
     //=========================================================================
     pub fn gdk_window_new                (parent: *mut C_GdkWindow, attributes: *mut C_GdkWindowAttr,
