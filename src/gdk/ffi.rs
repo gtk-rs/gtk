@@ -480,4 +480,23 @@ extern "C" {
     pub fn gdk_frame_clock_get_current_timings  (frame_clock: *mut C_GdkFrameClock) -> *mut C_GdkFrameTimings;
     pub fn gdk_frame_clock_get_refresh_info     (frame_clock: *mut C_GdkFrameClock, base_time: i64, refresh_interval_return: *mut i64,
         presentation_time_return: *mut i64);
+
+    //=========================================================================
+    // GdkFrameTimings                                                   NOT OK
+    //=========================================================================
+    // Since 3.8
+    pub fn gdk_frame_timings_ref                  (timings: *mut C_GdkFrameTimings) -> *mut C_GdkFrameTimings;
+    // Since 3.8
+    pub fn gdk_frame_timings_unref                (timings: *mut C_GdkFrameTimings);
+    // Since 3.8
+    pub fn gdk_frame_timings_get_frame_counter    (timings: *mut C_GdkFrameTimings) -> i64;
+    // Since 3.8
+    pub fn gdk_frame_timings_get_complete         (timings: *mut C_GdkFrameTimings) -> Gboolean;
+    pub fn gdk_frame_timings_get_frame_time       (timings: *mut C_GdkFrameTimings) -> i64;
+    // Since 3.8
+    pub fn gdk_frame_timings_get_presentation_time(timings: *mut C_GdkFrameTimings) -> i64;
+    // Since 3.8
+    pub fn gdk_frame_timings_get_refresh_interval (timings: *mut C_GdkFrameTimings) -> i64;
+    // Since 3.8
+    pub fn gdk_frame_timings_get_predicted_presentation_time(timings: *mut C_GdkFrameTimings) -> i64;
 }

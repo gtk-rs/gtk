@@ -110,7 +110,8 @@ pub use self::widgets::{
     Pixbuf,
     Point,
     DisplayManager,
-    FrameClock
+    FrameClock,
+    FrameTimings
 };
 
 mod events;

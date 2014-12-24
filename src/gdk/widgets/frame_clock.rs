@@ -48,7 +48,7 @@ impl FrameClock {
         unsafe { ffi::gdk_frame_clock_get_history_start(self.pointer) }
     }
 
-    /*pub fn get_timings(&self, frame_counter: i64) -> Option<gdk::FrameTimings> {
+    pub fn get_timings(&self, frame_counter: i64) -> Option<gdk::FrameTimings> {
         let tmp = unsafe { ffi::gdk_frame_clock_get_timings(self.pointer, frame_counter) };
 
         if tmp.is_null() {
@@ -66,7 +66,7 @@ impl FrameClock {
         } else {
             Some(gdk::FrameTimings::wrap_pointer(tmp))
         }
-    }*/
+    }
 
     pub fn get_refresh_info(&self, base_time: i64, refresh_interval_return: &mut i64, presentation_time_return: &mut i64) {
         unsafe { ffi::gdk_frame_clock_get_refresh_info(self.pointer, base_time, refresh_interval_return, presentation_time_return) }
