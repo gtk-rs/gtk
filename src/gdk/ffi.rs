@@ -31,6 +31,9 @@ pub struct C_GdkWindowAttr;
 pub struct C_GdkDisplay;
 #[repr(C)]
 #[derive(Copy)]
+pub struct C_GdkDisplayManager;
+#[repr(C)]
+#[derive(Copy)]
 pub struct C_GdkScreen;
 #[repr(C)]
 #[derive(Copy)]
@@ -57,19 +60,19 @@ pub struct C_GdkGeometry;
 #[derive(Copy)]
 pub struct C_GdkDevice;
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct C_GdkTimeCoord;
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct C_GdkAtom;
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct C_GdkDeviceManager;
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct C_GdkAppLaunchContext;
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct C_GdkPixbuf;
 
 extern "C" {
@@ -347,6 +350,15 @@ extern "C" {
     pub fn gdk_display_supports_composite  (display: *mut C_GdkDisplay) -> Gboolean;
     pub fn gdk_display_get_app_launch_context(display: *mut C_GdkDisplay) -> *mut C_GdkAppLaunchContext;
     pub fn gdk_display_notify_startup_complete(display: *mut C_GdkDisplay, startup_id: *const c_char);
+
+    //=========================================================================
+    // GdkDisplayManager                                                 NOT OK
+    //=========================================================================
+    pub fn gdk_display_manager_get                () -> *mut C_GdkDisplayManager;
+    pub fn gdk_display_manager_get_default_display(manager: *mut C_GdkDisplayManager) -> *mut C_GdkDisplay;
+    pub fn gdk_display_manager_set_default_display(manager: *mut C_GdkDisplayManager, display: *mut C_GdkDisplay);
+    //pub fn gdk_display_manager_list_displays      (manager: *mut C_GdkDisplayManager) -> *mut GSList;
+    pub fn gdk_display_manager_open_display       (manager: *mut C_GdkDisplayManager, name: *const c_char) -> *mut C_GdkDisplay;
 
     //=========================================================================
     // GdkScreen                                                         NOT OK

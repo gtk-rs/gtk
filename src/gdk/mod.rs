@@ -107,7 +107,8 @@ pub use self::widgets::{
     DeviceManager,
     Cursor,
     Pixbuf,
-    Point
+    Point,
+    DisplayManager
 };
 
 mod events;
