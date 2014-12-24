@@ -411,4 +411,11 @@ extern "C" {
     pub fn gdk_pixbuf_get_rowstride           (pixbuf: *const C_GdkPixbuf) -> c_int;
     pub fn gdk_pixbuf_get_byte_length         (pixbuf: *const C_GdkPixbuf) -> c_ulong;
     pub fn gdk_pixbuf_get_option              (pixbuf: *const C_GdkPixbuf, key: *const c_char) -> *const c_char;
+
+    //=========================================================================
+    // GdkRectangle                                                      NOT OK
+    //=========================================================================
+    pub fn gdk_rectangle_intersect            (src1: *const gdk::Rectangle, src2: *const gdk::Rectangle,
+        dest: *mut gdk::Rectangle) -> Gboolean;
+    pub fn gdk_rectangle_union                (src1: *const gdk::Rectangle, src2: *const gdk::Rectangle, dest: *mut gdk::Rectangle);
 }

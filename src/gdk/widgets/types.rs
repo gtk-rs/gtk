@@ -15,14 +15,5 @@
 
 use libc::{c_void};
 
-#[repr(C)]
-#[derive(Copy)]
-pub struct Rectangle { //FIXME should be just an alias to cairo_rectangle_int_t
-    x: isize,
-    y: isize,
-    width: isize,
-    height: isize
-}
-
 pub type Atom = *mut c_void;
 pub type Key = u32;

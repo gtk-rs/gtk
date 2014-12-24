@@ -87,7 +87,8 @@ pub use self::widgets::{
     Visual,
     DeviceManager,
     Cursor,
-    Pixbuf
+    Pixbuf,
+    Point
 };
 
 mod events;
