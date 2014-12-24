@@ -90,7 +90,8 @@ pub use self::enums::{
     CursorType,
     PixbufAlphaMode,
     PixbufError,
-    ColorSpace
+    ColorSpace,
+    FrameClockPhase
 };
 
 pub use self::widgets::{
@@ -108,7 +109,8 @@ pub use self::widgets::{
     Cursor,
     Pixbuf,
     Point,
-    DisplayManager
+    DisplayManager,
+    FrameClock
 };
 
 mod events;

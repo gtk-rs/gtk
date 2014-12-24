@@ -74,6 +74,9 @@ pub struct C_GdkAppLaunchContext;
 #[repr(C)]
 #[derive(Copy)]
 pub struct C_GdkPixbuf;
+#[repr(C)]
+#[deriving(Copy)]
+pub struct C_GdkFrameTimings;
 
 extern "C" {
     //=========================================================================
@@ -463,4 +466,18 @@ extern "C" {
     pub fn gdk_rgba_equal                       (p1: *const gdk::RGBA, p2: *const gdk::RGBA) -> Gboolean;
     pub fn gdk_rgba_hash                        (p: *const gdk::RGBA) -> c_uint;
     pub fn gdk_rgba_to_string                   (rgba: *const gdk::RGBA) -> *mut c_char;
+
+    //=========================================================================
+    // GdkFrameClock                                                     NOT OK
+    //=========================================================================
+    pub fn gdk_frame_clock_get_frame_time       (frame_clock: *mut C_GdkFrameClock) -> i64;
+    pub fn gdk_frame_clock_request_phase        (frame_clock: *mut C_GdkFrameClock, phase: gdk::FrameClockPhase);
+    pub fn gdk_frame_clock_begin_updating       (frame_clock: *mut C_GdkFrameClock);
+    pub fn gdk_frame_clock_end_updating         (frame_clock: *mut C_GdkFrameClock);
+    pub fn gdk_frame_clock_get_frame_counter    (frame_clock: *mut C_GdkFrameClock) -> i64;
+    pub fn gdk_frame_clock_get_history_start    (frame_clock: *mut C_GdkFrameClock) -> i64;
+    pub fn gdk_frame_clock_get_timings          (frame_clock: *mut C_GdkFrameClock, frame_counter: i64) -> *mut C_GdkFrameTimings;
+    pub fn gdk_frame_clock_get_current_timings  (frame_clock: *mut C_GdkFrameClock) -> *mut C_GdkFrameTimings;
+    pub fn gdk_frame_clock_get_refresh_info     (frame_clock: *mut C_GdkFrameClock, base_time: i64, refresh_interval_return: *mut i64,
+        presentation_time_return: *mut i64);
 }

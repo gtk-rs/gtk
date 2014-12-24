@@ -494,6 +494,31 @@ pub enum PixbufAlphaMode {
     AlphaFull
 }
 
+#[repr(C)]
+#[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+/// GdkFrameClockPhase is used to represent the different paint clock phases that can be requested. The elements of the enumeration
+/// correspond to the signals of GdkFrameClock.
+/// 
+/// !!! SINCE 3.8 !!!
+pub enum FrameClockPhase {
+    /// no phase
+    None,
+    /// corresponds to GdkFrameClock::flush-events. Should not be handled by applications.
+    FlushEvents,
+    /// corresponds to GdkFrameClock::before-paint. Should not be handled by applications.
+    BeforePaint,
+    /// corresponds to GdkFrameClock::update.
+    Update,
+    /// corresponds to GdkFrameClock::layout.
+    Layout,
+    /// corresponds to GdkFrameClock::paint.
+    Paint,
+    /// corresponds to GdkFrameClock::resume-events. Should not be handled by applications.
+    ResumeEvents,
+    /// corresponds to GdkFrameClock::after-paint. Should not be handled by applications.
+    AfterPaint
+}
+
 pub mod modifier_type {
     #![allow(non_upper_case_globals)]
 
