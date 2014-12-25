@@ -62,9 +62,7 @@ pub struct C_GdkDevice;
 #[repr(C)]
 #[derive(Copy)]
 pub struct C_GdkTimeCoord;
-#[repr(C)]
-#[derive(Copy)]
-pub struct C_GdkAtom;
+pub type C_GdkAtom = *mut c_void;
 #[repr(C)]
 #[derive(Copy)]
 pub struct C_GdkDeviceManager;
@@ -95,6 +93,9 @@ pub struct C_GdkWindowAttr {
     pub override_redirect: Gboolean,
     pub type_hint: gdk::WindowTypeHint
 }
+#[repr(C)]
+#[deriving(Copy)]
+pub struct C_GdkDragContext;
 
 extern "C" {
     //=========================================================================
@@ -517,4 +518,49 @@ extern "C" {
     pub fn gdk_frame_timings_get_refresh_interval (timings: *mut C_GdkFrameTimings) -> i64;
     // Since 3.8
     pub fn gdk_frame_timings_get_predicted_presentation_time(timings: *mut C_GdkFrameTimings) -> i64;
+
+    //=========================================================================
+    // GdkAtom                                                           NOT OK
+    //=========================================================================
+    //pub fn gdk_text_property_to_utf8_list_for_display(display: *mut C_GdkDisplay, encoding: C_GdkAtom, format: c_int,
+    //    text: *const c_uchar, length: c_int, list: *mut *mut *mut c_char) -> c_int;
+    pub fn gdk_utf8_to_string_target               (str: *const c_char) -> *mut c_char;
+    pub fn gdk_atom_intern                         (atom_name: *const c_char, only_if_exists: Gboolean) -> C_GdkAtom;
+    pub fn gdk_atom_intern_static_string           (atom_name: *const c_char) -> C_GdkAtom;
+    pub fn gdk_atom_name                           (atom: C_GdkAtom) -> *mut c_char;
+    //pub fn gdk_property_get                        (window: *mut C_GdkWindow, atom: C_GdkAtom, type_: C_GdkAtom, offset: c_ulong,
+    //    length: c_ulong, pdelete: c_int, actual_property_type: *mut C_GdkAtom, actual_format: *mut c_int, actual_length: *mut c_int,
+    //    data: *mut *mut c_uchar) -> Gboolean;
+    //pub fn gdk_property_change                     (window: *mut C_GdkWindow, property: C_GdkAtom, type_: C_GdkAtom, format: c_int,
+    //    mode: gdk::PropMode, data: *const c_uchar, nelements: c_int);
+    //pub fn gdk_property_delete                     (window: *mut C_GdkWindow, property: C_GdkAtom);
+
+    //=========================================================================
+    // GdkDragContext                                                    NOT OK
+    //=========================================================================
+    pub fn gdk_drag_get_selection                  (context: *mut C_GdkDragContext) -> C_GdkAtom;
+    pub fn gdk_drag_abort                          (context: *mut C_GdkDragContext, time_: u32);
+    pub fn gdk_drop_reply                          (context: *mut C_GdkDragContext, accepted: Gboolean, time_: u32);
+    pub fn gdk_drag_drop                           (context: *mut C_GdkDragContext, time_: u32);
+    pub fn gdk_drag_find_window_for_screen         (context: *mut C_GdkDragContext, drag_window: *mut C_GdkWindow, screen: *mut C_GdkScreen,
+        x_root: c_int, y_root: c_int, dest_window: *mut *mut C_GdkWindow, protocol: *mut gdk::DragProtocol);
+    //pub fn gdk_drag_begin                          (window: *mut C_GdkWindow, targets: *mut GList) -> *mut C_GdkDragContext;
+    //pub fn gdk_drag_begin_for_device               (window: *mut C_GdkWindow, device: *mut C_GdkDevice,
+    //    targets: *mut GList) -> *mut C_GdkDragContext;
+    pub fn gdk_drag_motion                         (context: *mut C_GdkDragContext, dest_window: *mut C_GdkWindow, protocol: gdk::DragProtocol,
+        x_root: c_int, y_root: c_int, suggested_action: gdk::DragAction, possible_actions: gdk::DragAction,
+        time_: u32) -> Gboolean;
+    pub fn gdk_drop_finish                         (context: *mut C_GdkDragContext, success: Gboolean, time_: u32);
+    pub fn gdk_drag_status                         (context: *mut C_GdkDragContext, action: gdk::DragAction, time_: u32);
+    pub fn gdk_drag_drop_succeeded                 (context: *mut C_GdkDragContext) -> Gboolean;
+    pub fn gdk_window_get_drag_protocol            (window: *mut C_GdkWindow, target: *mut *mut C_GdkWindow) -> gdk::DragProtocol;
+    pub fn gdk_drag_context_get_actions            (context: *mut C_GdkDragContext) -> gdk::DragAction;
+    pub fn gdk_drag_context_get_suggested_action   (context: *mut C_GdkDragContext) -> gdk::DragAction;
+    pub fn gdk_drag_context_get_selected_action    (context: *mut C_GdkDragContext) -> gdk::DragAction;
+    //pub fn gdk_drag_context_list_targets           (context: *mut C_GdkDragContext) -> *mut GList;
+    pub fn gdk_drag_context_get_device             (context: *mut C_GdkDragContext) -> *mut C_GdkDevice;
+    pub fn gdk_drag_context_set_device             (context: *mut C_GdkDragContext, device: *mut C_GdkDevice);
+    pub fn gdk_drag_context_get_source_window      (context: *mut C_GdkDragContext) -> *mut C_GdkWindow;
+    pub fn gdk_drag_context_get_dest_window        (context: *mut C_GdkDragContext) -> *mut C_GdkWindow;
+    pub fn gdk_drag_context_get_protocol           (context: *mut C_GdkDragContext) -> gdk::DragProtocol;
 }

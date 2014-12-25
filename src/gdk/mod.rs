@@ -94,7 +94,9 @@ pub use self::enums::{
     FrameClockPhase,
     WindowWindowClass,
     Gravity,
-    WMFunction
+    WMFunction,
+    DragAction,
+    DragProtocol
 };
 
 pub use self::widgets::{
@@ -116,7 +118,8 @@ pub use self::widgets::{
     FrameClock,
     FrameTimings,
     WindowAttr,
-    Geometry
+    Geometry,
+    DragContext
 };
 
 mod events;

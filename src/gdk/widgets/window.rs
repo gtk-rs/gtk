@@ -735,6 +735,10 @@ impl Window {
             })
         }
     }
+
+    pub fn get_drag_protocol(&self, target: &mut Window) -> gdk::DragProtocol {
+        unsafe { ffi::gdk_window_get_drag_protocol(self.pointer, &mut target.pointer) }
+    }
 }
 
 impl Drop for Window {

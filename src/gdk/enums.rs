@@ -577,6 +577,46 @@ pub enum WindowWindowClass {
     InputOnly
 }
 
+#[repr(C)]
+#[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+/// Used in GdkDragContext to indicate the protocol according to which DND is done.
+pub enum DragProtocol {
+    /// no protocol.
+    None,
+    /// The Motif DND protocol. No longer supported
+    Motif,
+    /// The Xdnd protocol.
+    Xdnd,
+    /// An extension to the Xdnd protocol for unclaimed root window drops.
+    RootWin,
+    /// The simple WM_DROPFILES protocol.
+    Win32DropFiles,
+    /// The complex OLE2 DND protocol (not implemented).
+    OLE2,
+    /// Intra-application DND.
+    Local,
+    /// Wayland DND protocol.
+    Wayland
+}
+
+#[repr(C)]
+#[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+/// Used in GdkDragContext to indicate what the destination should do with the dropped data.
+pub enum DragAction {
+    /// Means nothing, and should not be used.
+    Default,
+    /// Copy the data.
+    Copy,
+    /// Move the data, i.e. first copy it, then delete it from the source using the DELETE target of the X selection protocol.
+    Move,
+    /// Add a link to the data. Note that this is only useful if source and destination agree on what it means.
+    Link,
+    /// Special action which tells the source that the destination will do something that the source doesn’t understand.
+    Private,
+    /// Ask the user what to do with the data.
+    Ask
+}
+
 pub mod modifier_type {
     #![allow(non_upper_case_globals)]
 

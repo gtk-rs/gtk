@@ -13,12 +13,14 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
+pub use self::atom::Atom;
 pub use self::color::Color;
 pub use self::cursor::Cursor;
 pub use self::device::Device;
 pub use self::device_manager::DeviceManager;
 pub use self::display::Display;
 pub use self::display_manager::DisplayManager;
+pub use self::drag_context::DragContext;
 pub use self::frame_clock::FrameClock;
 pub use self::frame_timings::FrameTimings;
 pub use self::geometry::Geometry;
@@ -27,16 +29,18 @@ pub use self::point::Point;
 pub use self::rectangle::Rectangle;
 pub use self::rgba::RGBA;
 pub use self::screen::Screen;
-pub use self::types::{Atom, Key};
+pub use self::types::Key;
 pub use self::visual::Visual;
 pub use self::window::{WindowAttr, Window};
 
+mod atom;
 mod color;
 mod cursor;
 mod device;
 mod device_manager;
 mod display;
 mod display_manager;
+mod drag_context;
 mod frame_clock;
 mod frame_timings;
 mod geometry;
