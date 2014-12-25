@@ -179,7 +179,7 @@ pub trait ButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait {
                     cstr,
                     Some(mem::transmute(widget_destroy_callback)),
                     data,
-                    Some(drop_widget_destroy_handler),
+                    Some(drop_widget_destroy_handler as extern "C" fn(ffi::gpointer, *const ffi::C_GClosure)),
                     0);
             }
         });
