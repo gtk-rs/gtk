@@ -22,10 +22,15 @@ pub struct TreeIter {
 
 impl TreeIter {
     pub fn new() -> Option<TreeIter> {
-        let iter = TreeIter {
-            pointer: unsafe { ::std::mem::uninitialized() }
-        };
-        iter.copy()
+        let tmp_pointer = unsafe { ffi::gtk_tree_iter_copy(::std::mem::uninitialized()) };
+
+        if tmp_pointer.is_null() {
+            None
+        } else {
+            Some(TreeIter {
+                pointer: tmp_pointer
+            })
+        }
     }
 
     pub fn copy(&self) -> Option<TreeIter> {
