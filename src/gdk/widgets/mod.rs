@@ -13,6 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
+pub use self::app_launch_context::AppLaunchContext;
 pub use self::atom::Atom;
 pub use self::color::Color;
 pub use self::cursor::Cursor;
@@ -33,6 +34,7 @@ pub use self::types::Key;
 pub use self::visual::Visual;
 pub use self::window::{WindowAttr, Window};
 
+mod app_launch_context;
 mod atom;
 mod color;
 mod cursor;

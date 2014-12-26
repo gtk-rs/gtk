@@ -119,7 +119,8 @@ pub use self::widgets::{
     FrameTimings,
     WindowAttr,
     Geometry,
-    DragContext
+    DragContext,
+    AppLaunchContext
 };
 
 mod events;

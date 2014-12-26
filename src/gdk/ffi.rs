@@ -563,4 +563,13 @@ extern "C" {
     pub fn gdk_drag_context_get_source_window      (context: *mut C_GdkDragContext) -> *mut C_GdkWindow;
     pub fn gdk_drag_context_get_dest_window        (context: *mut C_GdkDragContext) -> *mut C_GdkWindow;
     pub fn gdk_drag_context_get_protocol           (context: *mut C_GdkDragContext) -> gdk::DragProtocol;
+
+    //=========================================================================
+    // GdkAppLaunchContext                                               NOT OK
+    //=========================================================================
+    pub fn gdk_app_launch_context_set_screen       (context: *mut C_GdkAppLaunchContext, screen: *mut C_GdkScreen);
+    pub fn gdk_app_launch_context_set_desktop      (context: *mut C_GdkAppLaunchContext, desktop: c_int);
+    pub fn gdk_app_launch_context_set_timestamp    (context: *mut C_GdkAppLaunchContext, timestamp: u32);
+    //pub fn gdk_app_launch_context_set_icon         (context: *mut C_GdkAppLaunchContext, icon: *mut C_GIcon);
+    pub fn gdk_app_launch_context_set_icon_name    (context: *mut C_GdkAppLaunchContext, icon_name: *const c_char);
 }
