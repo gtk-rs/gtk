@@ -110,3 +110,4 @@ pub mod ffi {
         pub use glib_ffi::*;
     }
 }
+pub mod pango;
