@@ -15,6 +15,7 @@
 
 #![allow(non_camel_case_types)]
 
+use std::kinds::Send;
 use cairo::context::Rectangle;
 use libc::{c_int, c_uint, c_char, c_double, c_ulong};
 use cairo::enums::{
@@ -73,11 +74,12 @@ pub struct cairo_line_cap_t;
 pub struct cairo_operator_t;
 #[repr(C)]
 #[deriving(Copy)]
-pub struct cairo_rectangle_list_t{
+pub struct cairo_rectangle_list_t {
     pub status: Status,
     pub rectangles: *mut Rectangle,
     pub num_rectangles: c_int
 }
+unsafe impl Send for *mut cairo_rectangle_list_t {}
 #[repr(C)]
 #[deriving(Copy)]
 pub struct cairo_rectangle_int_t;
