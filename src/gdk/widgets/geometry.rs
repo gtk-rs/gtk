@@ -35,7 +35,7 @@ use libc::c_int;
 use gdk;
 
 #[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
 pub struct Geometry {
     /// minimum width of window (or -1 to use requisition, with GtkWindow only)
     pub min_width: c_int,

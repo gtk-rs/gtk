@@ -15,7 +15,7 @@
 
 //! GdkDevice — Object representing an input device
 
-use gdk::{mod, ffi};
+use gdk::{self, ffi};
 use libc::{c_uint};
 use gtk;
 

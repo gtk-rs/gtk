@@ -15,11 +15,12 @@
 
 //! Cursors — Standard and pixmap cursors
 
-use gdk::{mod, ffi};
+use gdk::{self, ffi};
+use std::c_str::ToCStr;
 //use libc::{c_int};
 
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct Cursor {
     pointer: *mut ffi::C_GdkCursor
 }

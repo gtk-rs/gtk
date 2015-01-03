@@ -15,8 +15,9 @@
 
 use gdk::ffi;
 use gtk;
+use std::c_str::ToCStr;
 
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct Atom {
     pointer: ffi::C_GdkAtom
 }

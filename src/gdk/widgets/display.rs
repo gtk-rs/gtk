@@ -15,12 +15,13 @@
 
 //! GdkDisplay — Controls a set of GdkScreens and their associated input devices
 
-use gdk::{mod, ffi};
+use gdk::{self, ffi};
 use libc::{c_uint};
+use std::c_str::ToCStr;
 use gtk;
 
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct Display {
     pointer: *mut ffi::C_GdkDisplay
 }

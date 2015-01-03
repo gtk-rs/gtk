@@ -15,10 +15,11 @@
 
 //! GdkDisplayManager — Maintains a list of all open GdkDisplays
 
-use gdk::{mod, ffi};
+use gdk::{self, ffi};
+use std::c_str::ToCStr;
 
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct DisplayManager {
     pointer: *mut ffi::C_GdkDisplayManager
 }

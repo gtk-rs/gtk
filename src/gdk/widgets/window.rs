@@ -15,9 +15,10 @@
 
 //! Windows — Onscreen display areas in the target window system
 
-use gdk::{mod, ffi};
+use gdk::{self, ffi};
 use gtk;
 use libc::{c_int};
+use std::c_str::ToCStr;
 
 /// Attributes to use for a newly-created window.
 pub struct WindowAttr {
@@ -74,7 +75,7 @@ impl WindowAttr {
 }
 
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct Window {
     pointer: *mut ffi::C_GdkWindow
 }
@@ -743,7 +744,7 @@ impl Window {
 
 impl Drop for Window {
     fn drop(&mut self) {
-        if self.pointer.is_not_null() {
+        if !self.pointer.is_null() {
             unsafe { ffi::gdk_window_destroy(self.pointer) };
             self.pointer = ::std::ptr::null_mut();
         }
@@ -751,4 +752,3 @@ impl Drop for Window {
 }
 
 impl_GObjectFunctions!(Window, C_GdkWindow);
->>>>>>> 8762888... Add Window functions and a new gdk widget : Geometry

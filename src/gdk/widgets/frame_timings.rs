@@ -19,7 +19,7 @@ use gdk::ffi;
 use gtk;
 
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct FrameTimings {
     pointer: *mut ffi::C_GdkFrameTimings
 }

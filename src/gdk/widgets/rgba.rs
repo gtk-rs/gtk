@@ -17,10 +17,11 @@
 
 use gdk::ffi;
 use gtk;
+use std::c_str::ToCStr;
 
 /// The GdkRGBA structure is used to represent a (possibly translucent) color, in a way that is compatible with cairos notion of color.
 #[repr(C)]
-#[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
 pub struct RGBA {
     /// The intensity of the red channel from 0.0 to 1.0 inclusive
     pub red: f64,

@@ -17,6 +17,7 @@
 
 use std::ptr;
 use gdk::ffi;
+use std::c_str::ToCStr;
 
 pub fn init() {
     unsafe { ffi::gdk_init(ptr::null_mut(), ptr::null_mut()) }

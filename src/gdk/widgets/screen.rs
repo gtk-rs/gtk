@@ -15,12 +15,12 @@
 
 //! GdkScreen — Object representing a physical screen
 
-use gdk::{mod, ffi};
+use gdk::{self, ffi};
 use libc::{c_int};
 use gtk;
 
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct Screen {
     pointer: *mut ffi::C_GdkScreen
 }

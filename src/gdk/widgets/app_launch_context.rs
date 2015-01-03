@@ -15,12 +15,13 @@
 
 //! Application launching — Startup notification for applications
 
-use gdk::{mod, ffi};
+use gdk::{self, ffi};
 use libc::c_int;
+use std::c_str::ToCStr;
 
 // FIXME: should inherit from GAppLaunchContext
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct AppLaunchContext {
     pointer: *mut ffi::C_GdkAppLaunchContext
 }

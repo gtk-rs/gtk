@@ -15,10 +15,10 @@
 
 //! GdkDeviceManager — Functions for handling input devices
 
-use gdk::{mod, ffi};
+use gdk::{self, ffi};
 
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct DeviceManager {
     pointer: *mut ffi::C_GdkDeviceManager
 }

@@ -15,12 +15,12 @@
 
 //! Drag And Drop — Functions for controlling drag and drop handling
 
-use gdk::{mod, ffi};
+use gdk::{self, ffi};
 use gtk;
 use libc::c_int;
 
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct DragContext {
     pointer: *mut ffi::C_GdkDragContext
 }

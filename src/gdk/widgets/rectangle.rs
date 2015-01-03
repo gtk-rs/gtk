@@ -20,7 +20,7 @@ use libc::{c_int};
 use gtk;
 
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct Rectangle { // FIXME should be just an alias to cairo_rectangle_int_t
     pub x: c_int,
     pub y: c_int,

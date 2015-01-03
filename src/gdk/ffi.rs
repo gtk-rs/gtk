@@ -25,9 +25,6 @@ use gdk;
 pub struct C_GdkWindow;
 #[repr(C)]
 #[derive(Copy)]
-pub struct C_GdkWindowAttr;
-#[repr(C)]
-#[derive(Copy)]
 pub struct C_GdkDisplay;
 #[repr(C)]
 #[derive(Copy)]
@@ -73,10 +70,10 @@ pub struct C_GdkAppLaunchContext;
 #[derive(Copy)]
 pub struct C_GdkPixbuf;
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct C_GdkFrameTimings;
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct C_GdkWindowAttr {
     pub title: *mut c_char,
     pub event_mask: c_int,
@@ -94,7 +91,7 @@ pub struct C_GdkWindowAttr {
     pub type_hint: gdk::WindowTypeHint
 }
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct C_GdkDragContext;
 
 extern "C" {

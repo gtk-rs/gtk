@@ -15,11 +15,11 @@
 
 //! Visuals — Low-level display hardware information
 
-use gdk::{mod, ffi};
+use gdk::{self, ffi};
 use libc::{c_int};
 
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct Visual {
     pointer: *mut ffi::C_GdkVisual
 }
