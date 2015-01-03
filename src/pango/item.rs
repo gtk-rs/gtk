@@ -18,7 +18,7 @@ use libc::c_int;
 
 /// The PangoItem structure stores information about a segment of text.
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct Item {
     pointer: *mut ffi::C_PangoItem
 }
@@ -63,7 +63,7 @@ impl Item {
 
 impl Drop for Item {
     fn drop(&mut self) {
-        if self.pointer.is_not_null() {
+        if !self.pointer.is_null() {
             unsafe { ffi::pango_item_free(self.pointer) };
             self.pointer = ::std::ptr::null_mut();
         }
