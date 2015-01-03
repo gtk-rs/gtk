@@ -15,7 +15,7 @@
 
 use std::ptr;
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 
 /// GtkScrolledWindow — Adds scrollbars to its child widget
 struct_Widget!(ScrolledWindow);

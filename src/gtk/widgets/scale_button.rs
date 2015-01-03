@@ -18,7 +18,7 @@
 use libc::c_double;
 use std::ptr;
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::IconSize;
 
 /// ScaleButton — A button which pops up a scale

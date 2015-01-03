@@ -15,7 +15,7 @@
 
 //! Hide and show with animation
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::cast::{GTK_REVEALER};
 
 /// GtkRevealer — Hide and show with animation

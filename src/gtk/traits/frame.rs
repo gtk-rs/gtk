@@ -15,10 +15,11 @@
 
 use std::ptr;
 use libc::c_float;
+use std::c_str::ToCStr;
 
 use gtk::ShadowType;
 use gtk::cast::GTK_FRAME;
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 
 pub trait FrameTrait: gtk::WidgetTrait + gtk::ContainerTrait {
     fn set_label(&mut self, label: Option<&str>) -> () {

@@ -18,14 +18,14 @@
 macro_rules! check_pointer(
     ($tmp_pointer:ident, $gtk_struct:ident) => ( check_pointer!($tmp_pointer, $gtk_struct, G_OBJECT) );
     ($tmp_pointer:ident, $gtk_struct:ident, $cast_fn:ident) => (
-        if $tmp_pointer.is_null() {
-            None
+        if $tmp_pointer == ::std::ptr::null_mut() {
+            ::std::option::Option::None
         } else {
-            unsafe{
+            unsafe {
                 ::glib::ffi::g_object_ref(::gtk::cast::$cast_fn($tmp_pointer));
             }
 
-            Some($gtk_struct {
+            ::std::option::Option::Some($gtk_struct {
                 pointer: $tmp_pointer
             })
         }
@@ -34,7 +34,7 @@ macro_rules! check_pointer(
 
 macro_rules! struct_Widget(
     ($gtk_struct:ident) => (
-        #[deriving(Copy)]
+        #[derive(Copy)]
         pub struct $gtk_struct {
             pointer: *mut ffi::C_GtkWidget
         }

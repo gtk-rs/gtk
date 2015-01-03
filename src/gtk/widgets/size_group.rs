@@ -15,9 +15,9 @@
 
 //! GtkSizeGroup — Grouping widgets so they request the same size
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct SizeGroup {
     pointer: *mut ffi::C_GtkSizeGroup
 }

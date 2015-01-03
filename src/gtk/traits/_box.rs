@@ -15,7 +15,7 @@
 
 use libc::{c_int, c_uint};
 
-use gtk::{mod, PackType};
+use gtk::{self, PackType};
 use gtk::cast::GTK_BOX;
 use gtk::ffi;
 

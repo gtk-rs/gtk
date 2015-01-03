@@ -266,7 +266,7 @@ impl SurfacePattern {
     //pub fn cairo_pattern_get_surface(pattern: *mut cairo_pattern_t, surface: **mut cairo_surface_t) -> Status;
 }
 
-#[deriving(Clone, PartialEq, PartialOrd, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Copy)]
 pub enum MeshCorner {
     MeshCorner0,
     MeshCorner1,

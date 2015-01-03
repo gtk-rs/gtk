@@ -15,10 +15,11 @@
 
 use std::mem;
 use libc::c_float;
+use std::c_str::ToCStr;
 
 use gtk::{ReliefStyle, PositionType};
 use gtk::cast::GTK_BUTTON;
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 
 pub trait ButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait {
     fn pressed(&self) -> () {

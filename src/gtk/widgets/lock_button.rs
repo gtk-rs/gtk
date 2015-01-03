@@ -16,7 +16,7 @@
 //! A container for arranging buttons
 
 use gtk::cast::GTK_LOCKBUTTON;
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use glib::Permission;
 use glib::GlibContainer;
 

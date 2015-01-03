@@ -16,9 +16,10 @@
 //! A container which can hide its child
 
 use libc::c_int;
+use std::c_str::ToCStr;
 
 use gtk::cast::GTK_EXPANDER;
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::ffi::FFIWidget;
 
 /// Expander — A container which can hide its child

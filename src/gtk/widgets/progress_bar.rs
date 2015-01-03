@@ -16,8 +16,9 @@
 //! A widget which indicates progress visually
 
 use libc::c_double;
+use std::c_str::ToCStr;
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::cast::GTK_PROGRESSBAR;
 
 /// ProgressBar — A widget which indicates progress visually

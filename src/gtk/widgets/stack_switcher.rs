@@ -15,7 +15,7 @@
 
 //! A controller for GtkStack
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::cast::{GTK_STACK_SWITCHER, GTK_STACK};
 use gtk::ffi::FFIWidget;
 

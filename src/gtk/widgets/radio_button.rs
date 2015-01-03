@@ -16,8 +16,9 @@
 //! A choice from multiple check buttons
 
 use std::ptr;
+use std::c_str::ToCStr;
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::cast::GTK_RADIOBUTTON;
 
 /// A choice from multiple check buttons

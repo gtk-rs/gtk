@@ -15,7 +15,8 @@
 
 //! Generic values — A polymorphic type that can hold values of any other type
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
+use std::c_str::ToCStr;
 
 trait GValuePrivate {
     fn get(gvalue: &GValue) -> Self;
@@ -309,7 +310,7 @@ impl GValue {
 
 impl Drop for GValue {
     fn drop(&mut self) {
-        if self.pointer.is_not_null() {
+        if !self.pointer.is_null() {
             unsafe { ::libc::funcs::c95::stdlib::free(self.pointer as *mut ::libc::types::common::c95::c_void) };
             self.pointer = ::std::ptr::null_mut();
         }

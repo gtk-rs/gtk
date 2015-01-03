@@ -21,40 +21,40 @@ use gtk::ffi::{Gboolean};
 use gdk;
 
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct C_GdkWindow;
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct C_GdkWindowAttr;
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct C_GdkDisplay;
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct C_GdkScreen;
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct C_GdkVisual;
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct C_GdkEvent;
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct C_GdkRectangle;
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct C_GdkFrameClock;
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct C_GdkRGBA;
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct C_GdkCursor;
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct C_GdkGeometry;
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct C_GdkDevice;
 
 extern "C" {

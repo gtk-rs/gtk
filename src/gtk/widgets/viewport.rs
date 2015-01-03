@@ -17,7 +17,7 @@
 
 use gtk::ShadowType;
 use gtk::cast::GTK_VIEWPORT;
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 
 /// GtkViewport — An adapter which makes widgets scrollable
 struct_Widget!(Viewport);

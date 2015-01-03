@@ -17,7 +17,7 @@
 
 use gtk::{ShadowType, ArrowType};
 use gtk::cast::GTK_ARROW;
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 
 /// Arrow — Displays an arrow
 struct_Widget!(Arrow);

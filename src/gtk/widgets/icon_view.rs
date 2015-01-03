@@ -14,7 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::cast::{GTK_ICON_VIEW, GTK_CELL_RENDERER};
-use gtk::{mod, ffi, TreeModel, TreePath};
+use gtk::{self, ffi, TreeModel, TreePath};
 
 /// GtkIconView — A widget which displays a list of icons in a grid
 

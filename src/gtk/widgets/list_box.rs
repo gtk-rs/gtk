@@ -15,7 +15,7 @@
 
 //! A container that allows reflowing its children
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::cast::{GTK_LIST_BOX_ROW, GTK_LIST_BOX};
 use gtk::ffi::FFIWidget;
 

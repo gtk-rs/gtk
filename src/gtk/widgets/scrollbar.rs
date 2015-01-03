@@ -15,7 +15,7 @@
 
 //! A Scrollbar
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 
 /// GtkScrollBar — A Scrollbar
 struct_Widget!(ScrollBar);

@@ -15,7 +15,7 @@
 
 use gtk::ffi;
 
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct TreeIter {
     pointer: *mut ffi::C_GtkTreeIter
 }
@@ -60,8 +60,9 @@ impl TreeIter {
 
 impl Drop for TreeIter {
     fn drop(&mut self) {
-        if self.pointer.is_not_null() {
+        if !self.pointer.is_null() {
             unsafe { ffi::gtk_tree_iter_free(self.pointer) };
+            self.pointer = ::std::ptr::null_mut();
         }
     }
 }

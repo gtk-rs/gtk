@@ -15,7 +15,8 @@
 
 //! A button to launch a font chooser dialog
 
-use gtk::{mod, ffi};
+use std::c_str::ToCStr;
+use gtk::{self, ffi};
 
 /// ToggleButton — A button to launch a font chooser dialog
 /*

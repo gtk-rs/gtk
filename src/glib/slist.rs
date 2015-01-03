@@ -17,6 +17,8 @@
 
 use std::mem;
 use libc::c_void;
+use std::iter::FromIterator;
+use std::ops::Index;
 
 use glib::ffi;
 use glib::GlibContainer;

@@ -16,7 +16,7 @@
 //! GtkRecentChooserWidget — Displays recently used files
 
 use gtk::cast::GTK_RECENT_MANAGER;
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::ffi::FFIWidget;
 use gtk::RecentManager;
 

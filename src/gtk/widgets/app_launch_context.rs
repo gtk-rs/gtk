@@ -15,7 +15,7 @@
 
 #![allow(unused_imports)]
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::cast::{GTK_APP_LAUNCH_CONTEXT};
 use std::str;
 use std::string;

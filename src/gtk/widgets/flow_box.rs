@@ -16,7 +16,7 @@
 //! A container that allows reflowing its children
 
 use gtk::cast::{GTK_FLOW_BOX_CHILD, GTK_FLOW_BOX};
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::ffi::FFIWidget;
 
 /// GtkFlowBox — A container that allows reflowing its children

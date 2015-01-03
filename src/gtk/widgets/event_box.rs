@@ -16,7 +16,7 @@
 //! GtkEventBox — A widget used to catch events for widgets which do not have their own window
 
 use gtk::cast::{GTK_EVENT_BOX};
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 
 struct_Widget!(EventBox);
 

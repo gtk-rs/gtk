@@ -18,7 +18,7 @@
 use glib::ffi;
 use glib::GlibContainer;
 
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct Permission {
     pointer: *mut ffi::C_GPermission
 }

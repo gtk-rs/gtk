@@ -15,7 +15,7 @@
 
 //! A button which pops up a volume control
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 
 /// VolumeButton — A button which pops up a volume control
 struct_Widget!(VolumeButton);

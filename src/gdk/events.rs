@@ -28,7 +28,7 @@ pub use self::visibility_state::VisibilityState;
 
 pub mod event_type {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum EventType {
         Nothing           = -1,
         Delete            = 0,
@@ -74,7 +74,7 @@ pub mod event_type {
     }
 }
 
-pub trait Event {
+pub trait Event: Sized {
     fn get_send_event(&self) -> bool {
         unsafe {
             let event_any : &EventAny = mem::transmute(self);
@@ -84,7 +84,7 @@ pub trait Event {
 }
 
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct EventAny {
     pub _type : gdk::EventType,
     pub window : *mut gdk::Window,
@@ -93,7 +93,7 @@ pub struct EventAny {
 
 impl Event for EventAny {}
 
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct EventExpose {
     pub _type : gdk::EventType,
     pub window : *mut gdk::Window,
@@ -106,7 +106,7 @@ pub struct EventExpose {
 
 impl Event for EventExpose {}
 
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct EventVisibility{
     pub _type : gdk::EventType,
     pub window : *mut gdk::Window,
@@ -117,7 +117,7 @@ pub struct EventVisibility{
 
 impl Event for EventVisibility {}
 
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct EventMotion {
     pub _type : gdk::EventType,
     pub window : *mut gdk::Window,
@@ -136,7 +136,7 @@ pub struct EventMotion {
 
 impl Event for EventMotion {}
 
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct EventButton {
     pub _type : gdk::EventType,
     pub window : *mut gdk::Window,
@@ -155,7 +155,7 @@ pub struct EventButton {
 
 impl Event for EventButton {}
 
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct EventTouch {
     pub _type : gdk::EventType,
     pub window : *mut gdk::Window,
@@ -175,7 +175,7 @@ pub struct EventTouch {
 
 impl Event for EventTouch {}
 
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct EventScroll {
     pub _type : gdk::EventType,
     pub window : *mut gdk::Window,
@@ -195,7 +195,7 @@ pub struct EventScroll {
 
 impl Event for EventScroll {}
 
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct EventKey {
     pub _type : gdk::EventType,
     pub window : *mut gdk::Window,
@@ -213,7 +213,7 @@ pub struct EventKey {
 
 impl Event for EventKey {}
 
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct EventCrossing {
     pub _type : gdk::EventType,
     pub window : *mut gdk::Window,
@@ -233,7 +233,7 @@ pub struct EventCrossing {
 
 impl Event for EventCrossing {}
 
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct EventFocus {
     pub _type : gdk::EventType,
     pub window : *mut gdk::Window,
@@ -244,7 +244,7 @@ pub struct EventFocus {
 
 impl Event for EventFocus {}
 
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct EventConfigure {
     pub _type : gdk::EventType,
     pub window : *mut gdk::Window,
@@ -258,7 +258,7 @@ pub struct EventConfigure {
 
 impl Event for EventConfigure {}
 
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct EventProperty {
     pub _type : gdk::EventType,
     pub window : *mut gdk::Window,
@@ -271,7 +271,7 @@ pub struct EventProperty {
 
 impl Event for EventProperty {}
 
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct EventSelection {
     pub _type : gdk::EventType,
     pub window : *mut gdk::Window,
@@ -286,7 +286,7 @@ pub struct EventSelection {
 
 impl Event for EventSelection {}
 
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct EventOwnerChange {
     pub _type : gdk::EventType,
     pub window : *mut gdk::Window,
@@ -301,7 +301,7 @@ pub struct EventOwnerChange {
 
 impl Event for EventOwnerChange {}
 
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct EventProximity {
     pub _type : gdk::EventType,
     pub window : *mut gdk::Window,
@@ -313,7 +313,7 @@ pub struct EventProximity {
 
 impl Event for EventProximity {}
 
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct EventSetting {
     pub _type : gdk::EventType,
     pub window : *mut gdk::Window,
@@ -325,7 +325,7 @@ pub struct EventSetting {
 
 impl Event for EventSetting {}
 
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct EventWindowState {
     pub _type : gdk::EventType,
     pub window : *mut gdk::Window,
@@ -337,7 +337,7 @@ pub struct EventWindowState {
 
 impl Event for EventWindowState {}
 
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct EventGrabBroken {
     pub _type : gdk::EventType,
     pub window : *mut gdk::Window,
@@ -350,7 +350,7 @@ pub struct EventGrabBroken {
 
 impl Event for EventGrabBroken  {}
 
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct EventDND {
     pub _type : gdk::EventType,
     pub window : *mut gdk::Window,
@@ -369,7 +369,7 @@ impl Event for EventDND  {}
 
 pub mod visibility_state {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum VisibilityState{
         VisibilityUnobscured,
         VisibilityPartial,
@@ -379,7 +379,7 @@ pub mod visibility_state {
 
 pub mod scroll_direction {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum ScrollDirection{
         ScrollUp,
         ScrollDown,
@@ -391,7 +391,7 @@ pub mod scroll_direction {
 
 pub mod notify_type {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum NotifyType{
         NotifyAncestor   = 0,
         NotifyVirtual    = 1,
@@ -404,7 +404,7 @@ pub mod notify_type {
 
 pub mod crossing_mode {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum CrossingMode{
         CrossingNormal,
         CrossingGrab,
@@ -420,7 +420,7 @@ pub mod crossing_mode {
 
 pub mod property_state {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum PropertyState{
         PropertyNewValue,
         PropertyDelete
@@ -429,7 +429,7 @@ pub mod property_state {
 
 pub mod setting_action {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum SettingAction{
         SettingActionNew,
         SettingActionChanged,
@@ -439,7 +439,7 @@ pub mod setting_action {
 
 pub mod owner_change {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum OwnerChange{
         OwnerChangeNewOwner,
         OwnerChangeDestroy,

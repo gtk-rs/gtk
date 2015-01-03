@@ -13,8 +13,9 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
+use std::c_str::ToCStr;
 use gtk::cast::GTK_EDITABLE;
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 
 pub trait EditableTrait: gtk::WidgetTrait {
     fn select_region(&mut self, start_pos: i32, end_pos: i32) {

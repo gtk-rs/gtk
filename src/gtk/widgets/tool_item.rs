@@ -15,7 +15,7 @@
 
 //! The base class of widgets that can be added to ToolShe
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 
 /// ToolItem — The base class of widgets that can be added to ToolShe
 struct_Widget!(ToolItem);

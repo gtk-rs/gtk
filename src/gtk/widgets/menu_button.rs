@@ -15,7 +15,7 @@
 
 //! A widget that shows a menu when clicked on
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::cast::GTK_MENUBUTTON;
 use gtk::ArrowType;
 

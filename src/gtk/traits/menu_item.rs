@@ -15,7 +15,8 @@
 
 //! The widget used for item in menus
 
-use gtk::{mod, ffi};
+use std::c_str::ToCStr;
+use gtk::{self, ffi};
 use gtk::cast::GTK_MENU_ITEM;
 
 /// The widget used for item in menus

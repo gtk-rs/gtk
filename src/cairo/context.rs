@@ -13,6 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
+use std::c_str::ToCStr;
 use std::c_vec::CVec;
 use std::mem::transmute;
 use libc::{c_double, c_int};
@@ -34,7 +35,7 @@ use cairo::enums::{Status, Antialias, LineCap, LineJoin, FillRule};
 use cairo::patterns::{wrap_pattern, Pattern};
 
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct Rectangle {
     x: f64,
     y: f64,

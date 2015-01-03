@@ -16,7 +16,7 @@
 //! GtkTreeSelection — The selection object for GtkTreeView
 
 use glib;
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::{TreeView, TreePath, TreeIter};
 
 pub struct TreeSelection {

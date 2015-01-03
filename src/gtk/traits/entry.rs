@@ -14,10 +14,11 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use libc::{c_int, c_float, c_double};
+use std::c_str::ToCStr;
 
 use gtk::{EntryIconPosition, ImageType, InputPurpose, InputHints};
 use gtk::cast::GTK_ENTRY;
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 
 pub trait EntryTrait: gtk::WidgetTrait {
     fn get_buffer(&self) -> gtk::EntryBuffer {

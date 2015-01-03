@@ -16,10 +16,11 @@
 //! A slider widget for selecting a value from a range
 
 use libc::{c_double, c_int};
+use std::c_str::ToCStr;
 
 use gtk::{Orientation, PositionType};
 use gtk::cast::GTK_SCALE;
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 
 /// Scale — A slider widget for selecting a value from a range
 /*

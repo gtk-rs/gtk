@@ -15,9 +15,10 @@
 
 //! GtkEntryCompletion — Completion functionality for GtkEntry
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::TreeModel;
 use gtk::cast::GTK_ENTRY_COMPLETION;
+use std::c_str::ToCStr;
 
 struct_Widget!(EntryCompletion);
 

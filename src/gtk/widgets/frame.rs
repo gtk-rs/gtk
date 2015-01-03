@@ -16,8 +16,9 @@
 //! A bin with a decorative frame and optional label
 
 use std::ptr;
+use std::c_str::ToCStr;
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 
 /// Frame — A bin with a decorative frame and optional label
 struct_Widget!(Frame);

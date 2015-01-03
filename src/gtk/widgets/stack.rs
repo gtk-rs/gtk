@@ -17,7 +17,7 @@
 
 // FIXME: add missing methods (3.12)
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::cast::GTK_STACK;
 
 /// GtkStack — A stacking container

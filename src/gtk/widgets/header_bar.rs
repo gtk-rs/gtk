@@ -18,7 +18,7 @@
 // FIXME: add missing methods (3.12)
 
 use gtk::cast::{GTK_HEADER_BAR};
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 
 /// GtkHeaderBar — A box with a centered child
 struct_Widget!(HeaderBar);

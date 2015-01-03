@@ -15,7 +15,7 @@
 
 //! Infinite scrollable area containing child widgets and/or custom drawing
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::cast::{GTK_LAYOUT};
 
 /// GtkLayout — Infinite scrollable area containing child widgets and/or custom drawing

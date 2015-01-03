@@ -15,8 +15,9 @@
 
 //! GtkActionable — An interface for widgets that can be associated with actions
 
+use std::c_str::ToCStr;
 use gtk::cast::GTK_ACTIONABLE;
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 
 pub trait ActionableTrait: gtk::WidgetTrait {
     fn get_action_name(&self) -> Option<String> {

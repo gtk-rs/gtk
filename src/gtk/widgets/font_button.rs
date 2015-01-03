@@ -15,7 +15,8 @@
 
 //! A button to launch a font chooser dialog
 
-use gtk::{mod, ffi};
+use std::c_str::ToCStr;
+use gtk::{self, ffi};
 use gtk::cast::GTK_FONTBUTTON;
 
 /// FontButton — A button to launch a font chooser dialog

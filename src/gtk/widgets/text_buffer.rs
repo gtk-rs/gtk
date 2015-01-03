@@ -15,7 +15,7 @@
 
 use std::ptr;
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::ffi::FFIWidget;
 
 /// GtkTextBuffer — Stores attributed text for display in a GtkTextView

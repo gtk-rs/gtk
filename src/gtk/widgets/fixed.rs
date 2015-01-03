@@ -18,7 +18,7 @@
 use libc::c_int;
 
 use gtk::cast::GTK_FIXED;
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 
 /// Fixed — A container which allows you to position widgets at fixed coordinates
 struct_Widget!(Fixed);

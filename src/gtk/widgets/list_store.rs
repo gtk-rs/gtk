@@ -14,8 +14,10 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use glib::ffi::GType;
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::TreeIter;
+use std::c_str::ToCStr;
+use std::num::ToPrimitive;
 
 pub struct ListStore {
     pointer: *mut ffi::C_GtkListStore

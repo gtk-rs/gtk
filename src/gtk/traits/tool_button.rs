@@ -13,8 +13,9 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
+use std::c_str::ToCStr;
 use gtk::cast::GTK_TOOLBUTTON;
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 
 pub trait ToolButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait + gtk::ToolItemTrait {
     fn set_label(&mut self, label: &str) -> () {

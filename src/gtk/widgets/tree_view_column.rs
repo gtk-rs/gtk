@@ -16,7 +16,8 @@
 //! A widget that emits a signal when clicked on
 
 use glib;
-use gtk::{mod, ffi, cast};
+use gtk::{self, ffi, cast};
+use std::c_str::ToCStr;
 
 pub struct TreeViewColumn {
     pointer: *mut ffi::C_GtkTreeViewColumn

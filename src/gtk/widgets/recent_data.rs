@@ -16,6 +16,7 @@
 use gtk::ffi;
 use std::default::Default;
 use libc::c_char;
+use std::c_str::ToCStr;
 
 pub struct RecentData {
     display_name: String,

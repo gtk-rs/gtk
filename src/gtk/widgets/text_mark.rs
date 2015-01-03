@@ -15,7 +15,8 @@
 
 //! GtkTextMark — A position in the buffer preserved across buffer modifications
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
+use std::c_str::ToCStr;
 
 pub struct TextMark {
     pointer: *mut ffi::C_GtkTextMark

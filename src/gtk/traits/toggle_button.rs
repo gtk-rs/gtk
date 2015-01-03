@@ -14,7 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::cast::GTK_TOGGLEBUTTON;
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 
 pub trait ToggleButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::ButtonTrait {
     fn set_mode(&mut self, draw_indicate: bool) {

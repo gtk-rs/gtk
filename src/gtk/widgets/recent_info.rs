@@ -16,6 +16,7 @@
 use gtk::ffi;
 use gtk::ffi::FFIWidget;
 use gtk::cast::GTK_RECENT_INFO;
+use std::c_str::ToCStr;
 
 struct_Widget!(RecentInfo);
 

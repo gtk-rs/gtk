@@ -17,7 +17,7 @@
 
 use libc::c_double;
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::{LevelBarMode};
 use gtk::cast::GTK_LEVELBAR;
 

@@ -19,7 +19,7 @@ use libc::c_int;
 
 use gtk::Orientation;
 use gtk::cast::GTK_PANED;
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 
 /// Paned — A widget with two adjustable panes
 /*

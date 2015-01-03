@@ -16,7 +16,7 @@
 //! An interface for scrollable widgets
 
 use gtk::cast::GTK_SCROLLABLE;
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 
 /// GtkScrollable — An interface for scrollable widgets
 pub trait ScrollableTrait: gtk::WidgetTrait {

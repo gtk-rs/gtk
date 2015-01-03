@@ -15,7 +15,7 @@
 
 //! A single line text entry field
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 
 /// Entry — A single line text entry field
 /*

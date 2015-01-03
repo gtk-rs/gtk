@@ -15,7 +15,7 @@
 
 //! GtkSocket — Container for widgets from other processes
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::ffi::FFIWidget;
 //use gtk::cast::GTK_SOCKET;
 
