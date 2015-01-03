@@ -16,7 +16,7 @@
 //! A widget for displaying both trees and lists
 
 use gtk;
-use gtk::ffi::{mod, FFIWidget};
+use gtk::ffi::{self, FFIWidget};
 use gtk::cast::GTK_TREE_VIEW;
 use gtk::widgets::{TreePath, TreeSelection, TreeViewColumn};
 

@@ -15,7 +15,7 @@
 
 use libc::{c_float, c_int};
 use gtk::cast::GTK_MISC;
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 
 pub trait MiscTrait: gtk::WidgetTrait {
     fn set_alignment(&mut self, x_align: f32, y_align: f32) -> () {

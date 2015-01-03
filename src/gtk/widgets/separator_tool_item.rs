@@ -15,7 +15,7 @@
 
 //! The base class of widgets that can be added to ToolShe
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::cast::GTK_SEPARATORTOOLITEM;
 
 /// ToolItem — The base class of widgets that can be added to ToolShe

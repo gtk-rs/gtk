@@ -16,6 +16,7 @@
 //! Text buffer for gtk::Entry
 
 use libc::{c_int, c_uint};
+use std::c_str::ToCStr;
 use gtk::ffi;
 
 // TODO:

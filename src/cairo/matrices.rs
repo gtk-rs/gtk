@@ -18,7 +18,7 @@ use libc::{c_double};
 use cairo::ffi;
 
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct Matrix {
     xx: c_double,
     yx: c_double,

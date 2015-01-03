@@ -16,7 +16,8 @@
 //! Application chooser widget that can be embedded in other widgets
 
 use gtk::cast::GTK_APP_CHOOSER_WIDGET;
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
+use std::c_str::ToCStr;
 
 struct_Widget!(AppChooserWidget);
 

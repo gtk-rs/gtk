@@ -17,10 +17,11 @@
 
 //! A container box
 use libc::c_int;
-use std::prelude::{Option, Some, None, RawPtr};
+//use std::prelude::{Option, Some, None, RawPtr};
+use std::option::Option;
 
 use gtk::Orientation;
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use std::clone::Clone;
 use std::ops::Drop;
 

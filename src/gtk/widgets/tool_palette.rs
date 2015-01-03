@@ -15,7 +15,7 @@
 
 //! GtkToolPalette — A tool palette with categories
 
-use gtk::{mod, ffi, ToolItem};
+use gtk::{self, ffi, ToolItem};
 use gtk::ffi::FFIWidget;
 use gtk::cast::{GTK_TOOL_PALETTE, GTK_TOOL_ITEM_GROUP};
 

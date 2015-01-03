@@ -16,10 +16,11 @@
 //! Report important messages to the user
 
 use libc::c_int;
+use std::c_str::ToCStr;
 
 use gtk::MessageType;
 use gtk::cast::GTK_INFOBAR;
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 
 /// InfoBar — Report important messages to the user
 struct_Widget!(InfoBar);

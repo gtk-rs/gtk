@@ -15,7 +15,7 @@
 
 //! GtkTextView — Widget that displays a GtkTextBuffer
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::TextBuffer;
 use gtk::ffi::FFIWidget;
 use gtk::cast::{GTK_TEXT_VIEW, GTK_TEXT_BUFFER};

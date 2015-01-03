@@ -15,7 +15,7 @@
 
 //! An entry which shows a search icon
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 
 /// SearchEntry — An entry which shows a search icon
 /*

@@ -15,7 +15,7 @@
 
 //! GtkFontChooserWidget — A widget for selecting fonts
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::ffi::FFIWidget;
 
 struct_Widget!(FontChooserWidget);

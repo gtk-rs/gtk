@@ -15,9 +15,10 @@
 
 //! GtkToolItemGroup — A sub container used in a tool palette
 
-use gtk::{mod, ffi, ToolItem};
+use gtk::{self, ffi, ToolItem};
 use gtk::ffi::FFIWidget;
 use gtk::cast::{GTK_TOOL_ITEM_GROUP, GTK_TOOL_ITEM};
+use std::c_str::ToCStr;
 
 struct_Widget!(ToolItemGroup);
 

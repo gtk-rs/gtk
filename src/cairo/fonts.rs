@@ -13,6 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
+use std::c_str::ToCStr;
 use libc::{c_ulong, c_int, c_double};
 use std::clone::Clone;
 use std::cmp::PartialEq;
@@ -39,14 +40,14 @@ use cairo::ffi::{
 
 
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct TextCluster {
     num_bytes: c_int,
     num_glyphs: c_int
 }
 
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct Glyph {
     index: c_ulong,
     x: c_double,
@@ -80,7 +81,7 @@ impl TextCluster{
 */
 
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct FontExtents{
     pub ascent: c_double,
     pub descent: c_double,
@@ -90,7 +91,7 @@ pub struct FontExtents{
 }
 
 #[repr(C)]
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct TextExtents {
     pub x_bearing: c_double,
     pub y_bearing: c_double,

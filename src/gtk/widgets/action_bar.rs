@@ -16,7 +16,7 @@
 //! Hide and show with animation
 
 use gtk::cast::{GTK_ACTION_BAR};
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 
 struct_Widget!(ActionBar);
 

@@ -17,7 +17,7 @@ use libc::c_uint;
 
 use gtk::cast::GTK_CONTAINER;
 use gtk::ResizeMode;
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 
 pub trait ContainerTrait: gtk::WidgetTrait {
     fn add<'r, T: gtk::WidgetTrait>(&'r mut self, widget: &'r T) {

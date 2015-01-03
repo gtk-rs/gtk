@@ -15,7 +15,7 @@
 
 //! GtkComboBox — A widget used to choose from a list of items
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 
 struct_Widget!(ComboBox);
 

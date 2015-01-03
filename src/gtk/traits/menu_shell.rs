@@ -15,7 +15,7 @@
 
 //! A base class for menu objects
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::cast::GTK_MENU_SHELL;
 
 /// A base class for menu objects

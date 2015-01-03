@@ -29,7 +29,7 @@
 
 pub mod window_type {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum WindowType {
         /// A regular window, such as a dialog.
         TopLevel,
@@ -41,7 +41,7 @@ pub mod window_type {
 /// Reading directions for text
 pub mod text_direction {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum TextDirection {
         None,
         Ltr,
@@ -54,7 +54,7 @@ pub mod text_direction {
 /// It won't necessarily work well with all window managers or on all windowing systems.
 pub mod window_position {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum WindowPosition {
         /// No influence is made on placement.
         None,
@@ -72,7 +72,7 @@ pub mod window_position {
 /// Used to dictate the style that a gtk::ButtonBox uses to layout the buttons it contains.
 pub mod button_box_style {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum ButtonBoxStyle {
         /// Buttons are evenly spread across the box.
         Spread = 1,
@@ -91,7 +91,7 @@ pub mod button_box_style {
 /// horizontal and vertical orientation on the fly, like gtk::Toolbar.
 pub mod orientation {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum Orientation {
         /// The widget is in horizontal orientation.
         Horizontal,
@@ -103,7 +103,7 @@ pub mod orientation {
 /// Availables direction types
 pub mod direction_type {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum DirectionType {
         TabForward,
         TabBackward,
@@ -118,7 +118,7 @@ pub mod direction_type {
 /// This is effectively the opposite of where the scroll bars are placed.
 pub mod corner_type {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum CornerType {
         /// Place the scrollbars on the right and bottom of the widget (default behaviour).
         TopLeft,
@@ -134,7 +134,7 @@ pub mod corner_type {
 /// Availables resize modes
 pub mod resize_mode{
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum ResizeMode{
         /// Pass resize request to the parent
         Parent,
@@ -148,7 +148,7 @@ pub mod resize_mode{
 /// Describes how the border of a UI element should be rendered.
 pub mod border_style{
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum BorderStyle{
         /// No visible border
         None,
@@ -176,7 +176,7 @@ pub mod border_style{
 /// Determines the direction of a sort.
 pub mod sort_type{
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum SortType{
         /// Sorting is in ascending order
         Ascending,
@@ -189,7 +189,7 @@ pub mod sort_type{
 /// Note that GTK extends the regular CSS classes and sometimes uses different names.
 pub mod state_flags {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum StateFlags {
         /// State during normal operation.
         Normal       = 0,
@@ -218,7 +218,7 @@ pub mod state_flags {
 /// The value can by obtained by connecting to the "drag-failed" signal.
 pub mod drag_result{
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum DragResult{
         /// The drag operation was successful.
         Success,
@@ -238,7 +238,7 @@ pub mod drag_result{
 /// Availables accel flags
 pub mod accel_flags{
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum AccelFlags{
         /// display in AccelLabel?
         Visible        = 1 << 0,
@@ -252,7 +252,7 @@ pub mod accel_flags{
 /// Used to specify the placement of scroll arrows in scrolling menus.
 pub mod arrow_placement{
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum ArrowPlacement{
         /// Place one arrow on each end of the menu.
         Both,
@@ -266,7 +266,7 @@ pub mod arrow_placement{
 /// Used to indicate the direction in which a Arrow should point.
 pub mod arrow_type{
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum ArrowType{
         /// Represents an upward pointing arrow.
         Up,
@@ -284,7 +284,7 @@ pub mod arrow_type{
 /// Denotes the expansion properties that a widget will have when it (or its parent) is resized.
 pub mod attach_options{
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum AttachOptions{
         /// the widget should expand to take up any extra space in its container that has been allocated.
         Expand = 1 << 0,
@@ -298,7 +298,7 @@ pub mod attach_options{
 /// Deleting modes
 pub mod delete_type{
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum DeleteType{
         /// delete chars
         Chars,
@@ -322,7 +322,7 @@ pub mod delete_type{
 /// Used to specify the style of the expanders drawn by a TreeView.
 pub mod expander_style{
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum ExpanderStyle{
         /// The style used for a collapsed subtree.
         Collapsed,
@@ -338,7 +338,7 @@ pub mod expander_style{
 /// preedit style
 pub mod im_preedit_style{
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum IMPreeditStyle{
         Nothing,
         Callback,
@@ -349,7 +349,7 @@ pub mod im_preedit_style{
 /// Status styles
 pub mod im_status_style{
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum IMStatusStyle{
         Nothing,
         Callback,
@@ -360,7 +360,7 @@ pub mod im_status_style{
 /// Used for justifying the text inside a Label widget. (See also Alignment).
 pub mod justification{
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum Justification{
         /// The text is placed at the left edge of the label.
         Left,
@@ -376,7 +376,7 @@ pub mod justification{
 /// Availables movement steps
 pub mod movement_step{
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum MovementStep{
         /// Move forward or back by graphemes
         LogicalPosition,
@@ -404,7 +404,7 @@ pub mod movement_step{
 /// Represents the packing location Box children. (See: VBox, HBox, and ButtonBox).
 pub mod pack_type{
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum PackType{
         /// The child is packed into the start of the box
         Start,
@@ -417,7 +417,7 @@ pub mod pack_type{
 /// Availables Gtk path priority
 pub mod path_priority_type{
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum PathPriorityType{
         Lowest       = 0,
         Gtk          = 4,
@@ -431,7 +431,7 @@ pub mod path_priority_type{
 /// Availables Gtk path types
 pub mod path_type{
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum PathType{
         Widget,
         WidgetClass,
@@ -442,7 +442,7 @@ pub mod path_type{
 /// Determines when a scroll bar will be visible.
 pub mod policy_type {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum PolicyType {
         /// The scrollbar is always visible.
         Always,
@@ -457,7 +457,7 @@ pub mod policy_type {
 /// the handle of a HandleBox or the label of a Scale.
 pub mod position_type{
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum PositionType{
         /// The feature is at the left edge.
         Left,
@@ -473,7 +473,7 @@ pub mod position_type{
 /// Indicated the relief to be drawn around a Button.
 pub mod relief_style{
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum ReliefStyle{
         /// Draw a normal relief.
         Normal,
@@ -487,7 +487,7 @@ pub mod relief_style{
 /// Available scroll steps
 pub mod scroll_step{
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum ScrollStep{
         Steps,
         Pages,
@@ -501,7 +501,7 @@ pub mod scroll_step{
 /// Available scroll types
 pub mod scroll_type{
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum ScrollType{
         None,
         Jump,
@@ -525,7 +525,7 @@ pub mod scroll_type{
 /// Used to control what selections users are allowed to make.
 pub mod selection_mode{
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum SelectionMode{
         /// No selection is possible.
         None,
@@ -541,7 +541,7 @@ pub mod selection_mode{
 /// Used to change the appearance of an outline typically provided by a Frame
 pub mod shadow_type{
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum ShadowType{
         /// No outline.
         None,
@@ -562,7 +562,7 @@ pub mod shadow_type{
 /// so states can be used for subparts of a widget as well as entire widgets.
 pub mod state_type{
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum StateType{
         /// State during normal operation.
         Normal,
@@ -588,7 +588,7 @@ pub mod state_type{
 /// Note that if the button has only a label set and GTK_TOOLBAR_ICONS is used, the label will be visible, and vice versa.
 pub mod toolbar_style {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum ToolbarStyle {
         /// Buttons display only icons in the toolbar.
         Icons,
@@ -604,7 +604,7 @@ pub mod toolbar_style {
 /// Describes how a rendered element connects to adjacent elements.
 pub mod junction_sides {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum JunctionSides {
         /// No junctions.
         None               = 0,
@@ -630,7 +630,7 @@ pub mod junction_sides {
 /// Describes a region within a widget.
 pub mod region_flags{
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum RegionFlags{
         /// Region has an even number within a set.
         Even    = 1 << 0,
@@ -650,7 +650,7 @@ pub mod region_flags{
 /// Built-in stock icon sizes
 pub mod icon_size {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum IconSize {
         // Invalid size
         Invalid,
@@ -672,7 +672,7 @@ pub mod icon_size {
 /// Specifies the side of the entry at which an icon is placed.
 pub mod entry_icon_position{
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum EntryIconPosition{
         /// At the beginning of the entry (depending on the text direction).
         Primary,
@@ -685,7 +685,7 @@ pub mod entry_icon_position{
 /// Note that input methods may already tailor their behaviour according to the InputPurpose of the entry.
 pub mod input_hints{
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum InputHints{
         /// No special behaviour suggested
         None                = 0,
@@ -713,7 +713,7 @@ pub mod input_hints{
 /// and similar input methods to decide which keys should be presented to the user.
 pub mod input_purpose{
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum InputPurpose{
         /// Allow any character
         FreeForm,
@@ -741,7 +741,7 @@ pub mod input_purpose{
 /// Describes the image data representation used by a Image.
 pub mod image_type{
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum ImageType{
         /// there is no image displayed by the widget
         Empty,
@@ -766,7 +766,7 @@ pub mod image_type{
 /// to specify the change to make in gtk::SpinButton::spin().
 pub mod spin_type{
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum SpinType{
         /// Increment by the adjustments step increment.
         StepForward,
@@ -789,7 +789,7 @@ pub mod spin_type{
 /// even if they are outside the bounds of its adjustment. See gtk::SpinButton::set_update_policy().
 pub mod spin_button_update_policy{
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum SpinButtonUpdatePolicy{
         /// When refreshing your Gtk::SpinButton, the value is always displayed
         Always,
@@ -803,7 +803,7 @@ pub mod spin_button_update_policy{
 /// Note that this enumeration could be extended with additional modes in the future.
 pub mod level_bar_mode{
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum LevelBarMode{
         /// the bar has a continuous mode
         Continuous,
@@ -815,7 +815,7 @@ pub mod level_bar_mode{
 /// These options can be used to influence the display and behaviour of a gtk::Calendar.
 pub mod calendar_display_options{
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum CalendarDisplayOptions{
         /// Specifies that the month and year should be displayed.
         ShowHeading        = 1 << 0,
@@ -833,7 +833,7 @@ pub mod calendar_display_options{
 /// The type of message being displayed in the dialog.
 pub mod message_type {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum MessageType {
         /// Informational message
         Info,
@@ -852,7 +852,7 @@ pub mod message_type {
 /// If none of these choices are appropriate, simply use GTK_BUTTONS_NONE then call gtk_dialog_add_buttons().
 pub mod buttons_type {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum ButtonsType {
         /// no buttons at all
         None,
@@ -872,7 +872,7 @@ pub mod buttons_type {
 /// Flags used to influence dialog construction.
 pub mod dialog_flags {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum DialogFlags {
         /// Make the constructed dialog modal, see gtk_window_set_modal()
         Modal,
@@ -888,7 +888,7 @@ pub mod dialog_flags {
 #[allow(non_camel_case_types)]
 pub mod license {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum License {
         /// No license specified
         Unknown,
@@ -923,7 +923,7 @@ pub mod license {
 /// All predefined values are negative, GTK+ leaves positive values for application-defined response ids.
 pub mod response_type {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, FromPrimitive, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, FromPrimitive, Copy)]
     pub enum ResponseType {
         /// Returned if an action widget has no response id, or if the dialog gets programmatically hidden or destroyed
         None        = -1,
@@ -953,7 +953,7 @@ pub mod response_type {
 /// Describes whether a GtkFileChooser is being used to open existing files or to save to a possibly new file.
 pub mod file_chooser_action {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum FileChooserAction {
         /// Indicates open mode. The file chooser will only let the user pick an existing file.
         Open,
@@ -969,7 +969,7 @@ pub mod file_chooser_action {
 /// These flags indicate what parts of a GtkFileFilterInfo struct are filled or need to be filled.
 pub mod file_filter_flags {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum FileFilterFlags {
         /// the filename of the file being tested
         Filename,
@@ -985,7 +985,7 @@ pub mod file_filter_flags {
 /// Describe the possible transitions between pages in a GtkStack widget.
 pub mod stack_transition_type {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum StackTransitionType {
         /// No transition
         None,
@@ -1027,7 +1027,7 @@ pub mod stack_transition_type {
 /// Describe the possible transitions when the child of a GtkRevealer widget is shown or hidden.
 pub mod revealer_transition_type {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum RevealerTransitionType {
         /// No transition
         None,
@@ -1048,7 +1048,7 @@ pub mod revealer_transition_type {
 /// a given orientation.
 pub mod scrollable_policy {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum ScrollablePolicy {
         /// Scrollable adjustments are based on the minimum size
         Minimum,
@@ -1060,7 +1060,7 @@ pub mod scrollable_policy {
 /// Flags used when creating a GAppInfo.
 pub mod app_info_create_flags {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum AppInfoCreateFlags {
         /// No flags.
         None,
@@ -1076,7 +1076,7 @@ pub mod app_info_create_flags {
 /// Specifies a preference for height-for-width or width-for-height geometry management.
 pub mod size_request_mode {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum SizeRequestMode {
         /// Prefer height-for-width geometry management
         HeightForWidth,
@@ -1090,7 +1090,7 @@ pub mod size_request_mode {
 /// Controls how a widget deals with extra space in a single (x or y) dimension.
 pub mod align {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum Align {
         /// stretch to fill all space if possible, center if no meaningful way to stretch
         Fill,
@@ -1108,7 +1108,7 @@ pub mod align {
 /// The connection flags are used to specify the behaviour of a signal's connection.
 pub mod g_connect_flags {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum GConnectFlags {
         /// whether the handler should be called before or after the default handler of the signal.
         After,
@@ -1120,7 +1120,7 @@ pub mod g_connect_flags {
 /// Error codes that identify various errors that can occur while using GtkBuilder.
 pub mod builder_error {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum BuilderError {
         /// A type-func attribute didn’t name a function that returns a GType.
         InvalidTypeFunction,
@@ -1150,7 +1150,7 @@ pub mod builder_error {
 /// Orientation of a page
 pub mod page_orientation {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum PageOrientation {
         /// Portrait mode.
         Portrait,
@@ -1166,7 +1166,7 @@ pub mod page_orientation {
 /// Unit systems
 pub mod unit {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum Unit {
         /// No units.
         None,
@@ -1182,7 +1182,7 @@ pub mod unit {
 /// Used to determine the layout of pages on a sheet when printing multiple pages per sheet.
 pub mod number_up_layout {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum NumberUpLayout {
         /// 1 2 3 4
         LeftToRight_TopToBottom,
@@ -1206,7 +1206,7 @@ pub mod number_up_layout {
 /// Used to know which quantity you want to print
 pub mod print_pages {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum PrintPages {
         /// All pages.
         All,
@@ -1222,7 +1222,7 @@ pub mod print_pages {
 /// Different types of page to set
 pub mod page_set {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum PageSet {
         /// All pages.
         All,
@@ -1236,7 +1236,7 @@ pub mod page_set {
 /// Used to specify the sorting method to be applyed to the recently used resource list.
 pub mod recent_sort_type {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum RecentSortType {
         /// Do not sort the returned list of recently used resources.
         None,
@@ -1252,7 +1252,7 @@ pub mod recent_sort_type {
 /// These flags indicate what parts of a GtkRecentFilterInfo struct are filled or need to be filled.
 pub mod recent_filter_flags {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum RecentFilterFlags {
         /// the URI of the file being tested
         URI,
@@ -1272,7 +1272,7 @@ pub mod recent_filter_flags {
 /// Kinds of widget-specific help. Used by the ::show-help signal.
 pub mod widget_help_type {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum WidgetHelpType {
         /// Tooltip
         WidgetHelpTooltip,
@@ -1284,7 +1284,7 @@ pub mod widget_help_type {
 /// Used to reference the parts of GtkTextView.
 pub mod text_window_type {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum TextWindowType {
         /// Window that floats over scrolling areas.
         Widget,
@@ -1304,7 +1304,7 @@ pub mod text_window_type {
 /// Describes a type of line wrapping.
 pub mod wrap_mode {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum WrapMode {
         /// do not wrap lines; just make the text area wider
         None,
@@ -1320,7 +1320,7 @@ pub mod wrap_mode {
 /// Used to indicate which grid lines to draw in a tree view.
 pub mod tree_view_grid_lines{
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum TreeViewGridLines {
         /// No grid lines.
         None,
@@ -1338,7 +1338,7 @@ pub mod tree_view_grid_lines{
 /// and can make columns appear choppy.
 pub mod tree_view_column_sizing {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum TreeViewColumnSizing {
         /// Columns only get bigger in reaction to changes in the model
         GrowOnly,
@@ -1353,7 +1353,7 @@ pub mod tree_view_column_sizing {
 /// Tells how a cell is to be rendered.
 pub mod cell_renderer_state {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum CellRendererState {
         /// The cell is currently selected, and probably has a selection colored background to render to.
         Selected,
@@ -1375,7 +1375,7 @@ pub mod cell_renderer_state {
 /// These flags indicate various properties of a GtkTreeModel.
 pub mod tree_model_flags {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum TreeModelFlags {
         /// iterators survive all signals emitted by the tree
         ItersPersist,
@@ -1387,7 +1387,7 @@ pub mod tree_model_flags {
 /// An enum for determining where a dropped item goes.
 pub mod icon_view_drop_position {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum IconViewDropPosition {
         /// no drop possible
         NoDrop,
@@ -1407,7 +1407,7 @@ pub mod icon_view_drop_position {
 /// Determines how GTK+ handles the sensitivity of stepper arrows at the end of range widgets.
 pub mod sensitivity_type {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum SensitivityType {
         /// The arrow is made insensitive if the thumb is at the end
         Auto,
@@ -1420,7 +1420,7 @@ pub mod sensitivity_type {
 
 pub mod g_type_enum {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum GType {
         /// An invalid GType used as error return value in some functions which return a GType.
         Invalid,
@@ -1486,7 +1486,7 @@ pub mod g_type_enum {
 /// Flags affecting how a search is done.
 pub mod text_search_flags {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum TextSearchFlags {
         /// Search only visible data. A search match may have invisible text interspersed.
         VisibleOnly,
@@ -1509,7 +1509,7 @@ pub mod text_search_flags {
 /// “open-location” signal. This is the default mode of operation.
 pub mod places_open_flags {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum PlacesOpenFlags {
         /// This is the default mode that GtkPlacesSidebar uses if no other flags are specified. It indicates that the calling application
         /// should open the selected location in the normal way, for example, in the folder view beside the sidebar.
@@ -1526,7 +1526,7 @@ pub mod places_open_flags {
 /// Flags used to specify the supported drag targets.
 pub mod tool_palette_drag_targets {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum ToolPaletteDragTargets {
         /// Support drag of items.
         Items,
@@ -1538,7 +1538,7 @@ pub mod tool_palette_drag_targets {
 /// The GtkDestDefaults enumeration specifies the various types of action that will be taken on behalf of the user for a drag destination site.
 pub mod dest_defaults {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum DestDefaults {
         /// If set for a widget, GTK+, during a drag over this widget will check if the drag matches this widget’s list of possible targets
         /// and actions. GTK+ will then call gdk_drag_status() as appropriate.
@@ -1559,7 +1559,7 @@ pub mod dest_defaults {
 /// The mode of the size group determines the directions in which the size group affects the requested sizes of its component widgets.
 pub mod size_group_mode {
     #[repr(C)]
-    #[deriving(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
     pub enum SizeGroupMode {
         /// group has no effect
         None,

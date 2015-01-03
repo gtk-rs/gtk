@@ -15,7 +15,7 @@
 
 //! GtkColorChooserWidget — A widget for choosing colors
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::ffi::FFIWidget;
 
 struct_Widget!(ColorChooserWidget);

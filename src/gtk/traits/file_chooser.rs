@@ -13,10 +13,11 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
+use std::c_str::ToCStr;
 use gtk;
 use gtk::cast::GTK_FILE_CHOOSER;
-use gtk::ffi::{mod, FFIWidget};
-use glib::{mod, GlibContainer};
+use gtk::ffi::{self, FFIWidget};
+use glib::{self, GlibContainer};
 use libc::c_char;
 
 pub trait FileChooserTrait: gtk::WidgetTrait {

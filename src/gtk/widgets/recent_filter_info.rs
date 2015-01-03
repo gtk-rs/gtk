@@ -13,8 +13,9 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use std::default::Default;
+use std::c_str::ToCStr;
 
 pub struct RecentFilterInfo {
     contains: gtk::RecentFilterFlags,

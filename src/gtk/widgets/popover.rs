@@ -15,7 +15,7 @@
 
 //! GtkPopover — Context dependent bubbles
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::cast::GTK_POPOVER;
 // use std::string;
 

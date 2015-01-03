@@ -15,8 +15,9 @@
 
 //! A button to launch a color selection dialog
 
+use std::c_str::ToCStr;
 use gtk::cast::GTK_COLORBUTTON;
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gdk;
 
 /**

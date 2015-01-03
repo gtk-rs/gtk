@@ -15,7 +15,7 @@
 
 //! Interface for widgets which can are used for editing cells
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::cast::GTK_CELL_EDITABLE;
 
 pub trait CellEditableTrait : gtk::WidgetTrait {

@@ -1,4 +1,4 @@
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct Tooltip;
 /*{
   GObject parent_instance;

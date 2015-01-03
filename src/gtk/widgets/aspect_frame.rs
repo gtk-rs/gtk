@@ -17,9 +17,10 @@
 
 use libc::c_float;
 use std::ptr;
+use std::c_str::ToCStr;
 
 use gtk::cast::GTK_ASPECTFRAME;
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 
 /// AspectFrame — A frame that constrains its child to a particular aspect ratio
 struct_Widget!(AspectFrame);

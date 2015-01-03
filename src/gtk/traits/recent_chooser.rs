@@ -13,8 +13,9 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
+use std::c_str::ToCStr;
 use gtk::cast::{GTK_RECENT_CHOOSER};
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::ffi::FFIWidget;
 use glib;
 

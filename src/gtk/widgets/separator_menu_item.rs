@@ -15,7 +15,7 @@
 
 //! The widget used for item in menus
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 
 /// MenuItem — The widget used for item in menus
 struct_Widget!(SeparatorMenuItem);

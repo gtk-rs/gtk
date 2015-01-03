@@ -15,7 +15,7 @@
 
 //! A separator widget
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::Orientation;
 
 /// Separator — A separator widget

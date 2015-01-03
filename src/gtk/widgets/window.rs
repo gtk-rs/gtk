@@ -15,7 +15,7 @@
 
 //! Toplevel which can contain other widgets
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::WindowType;
 
 /**

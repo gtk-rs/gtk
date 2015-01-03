@@ -15,7 +15,7 @@
 
 //! Renders text in a cell
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::cast::GTK_CELL_RENDERER_TEXT;
 
 struct_Widget!(CellRendererText);

@@ -15,7 +15,7 @@
 
 //! Renders a toggle button in a cell
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 
 struct_Widget!(CellRendererToggle);
 

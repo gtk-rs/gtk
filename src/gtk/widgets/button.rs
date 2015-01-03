@@ -15,7 +15,8 @@
 
 //! A widget that emits a signal when clicked on
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
+use std::c_str::ToCStr;
 #[cfg(any(feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
 use gtk::IconSize;
 

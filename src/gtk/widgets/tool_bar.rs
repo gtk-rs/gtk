@@ -17,7 +17,7 @@
 
 use libc::c_int;
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::cast::{GTK_TOOLBAR, GTK_TOOLITEM};
 use gtk::{IconSize, ReliefStyle, ToolbarStyle};
 

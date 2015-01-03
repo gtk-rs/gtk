@@ -13,9 +13,10 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
+use std::c_str::ToCStr;
 
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct RecentFilter {
     pointer: *mut ffi::C_GtkRecentFilter
 }

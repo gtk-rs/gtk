@@ -14,7 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::cast::GTK_RANGE;
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 
 pub trait RangeTrait: gtk::WidgetTrait {
     fn set_adjustment(&mut self, adjustment: &gtk::Adjustment) -> () {

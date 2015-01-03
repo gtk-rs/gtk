@@ -15,7 +15,8 @@
 
 //! Create widgets with a discrete toggle button
 
-use gtk::{mod, ffi};
+use std::c_str::ToCStr;
+use gtk::{self, ffi};
 
 /// CheckButton — Create widgets with a discrete toggle button
 struct_Widget!(CheckButton);

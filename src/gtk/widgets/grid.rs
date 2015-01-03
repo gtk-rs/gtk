@@ -21,7 +21,7 @@ use libc::{c_int, c_uint};
 
 use gtk::{PositionType};
 use gtk::cast::GTK_GRID;
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 
 /// Grid — Pack widgets in a rows and columns
 struct_Widget!(Grid);

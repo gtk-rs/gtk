@@ -15,8 +15,9 @@
 
 //! Create buttons bound to a URL
 
+use std::c_str::ToCStr;
 use gtk::cast::GTK_LINKBUTTON;
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 
 /// LinkButton — Create buttons bound to a URL
 /*

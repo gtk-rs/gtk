@@ -15,7 +15,7 @@
 
 //! A container box
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::cast::{GTK_SEARCHBAR, GTK_ENTRY};
 use gtk::ffi::FFIWidget;
 

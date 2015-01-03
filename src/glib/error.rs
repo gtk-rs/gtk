@@ -17,6 +17,7 @@ use glib::ffi;
 use glib::ffi::{GQuark};
 use glib::GlibContainer;
 use glib;
+use std::c_str::ToCStr;
 
 pub struct Error {
     pointer: *mut ffi::C_GError
@@ -38,7 +39,7 @@ impl Error {
     }
 
     pub fn release(&mut self) -> () {
-        if self.pointer.is_not_null() {
+        if !self.pointer.is_null() {
             unsafe { ffi::g_error_free(self.pointer) };
             self.pointer = ::std::ptr::null_mut();
         }

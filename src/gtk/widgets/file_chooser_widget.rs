@@ -15,7 +15,7 @@
 
 //! GtkFileChooserWidget — A file chooser widget
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::ffi::FFIWidget;
 
 struct_Widget!(FileChooserWidget);

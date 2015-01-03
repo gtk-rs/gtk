@@ -16,7 +16,7 @@
 //! A container which overlays widgets on top of each other
 
 use gtk::cast::{GTK_OVERLAY};
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 
 /// GtkOverlay — A container which overlays widgets on top of each other
 struct_Widget!(Overlay);

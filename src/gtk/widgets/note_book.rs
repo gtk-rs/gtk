@@ -15,9 +15,10 @@
 
 //! A tabbed notebook container
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::cast::GTK_NOTEBOOK;
 use gtk::ffi::FFIWidget;
+use std::c_str::ToCStr;
 
 /// GtkNotebook — A tabbed notebook container
 struct_Widget!(NoteBook);

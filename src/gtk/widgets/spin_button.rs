@@ -17,7 +17,7 @@
 
 use libc::{c_double, c_uint};
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::{SpinType, SpinButtonUpdatePolicy};
 use gtk::cast::{GTK_SPINBUTTON};
 

@@ -14,7 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::cast::GTK_TOGGLETOOLBUTTON;
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 
 pub trait ToggleToolButtonTrait: gtk::WidgetTrait +
                                  gtk::ContainerTrait +

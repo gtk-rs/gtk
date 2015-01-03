@@ -15,7 +15,7 @@
 
 //! GtkPlacesSidebar — Sidebar that displays frequently-used places in the file system
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::ffi::FFIWidget;
 use gtk::cast::GTK_PLACES_SIDEBAR;
 

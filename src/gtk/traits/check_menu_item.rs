@@ -15,7 +15,7 @@
 
 //! The widget used for item in menus
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::cast::GTK_CHECK_MENU_ITEM;
 
 /// The widget used for item in menus

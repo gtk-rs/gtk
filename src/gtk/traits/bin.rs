@@ -14,7 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::cast::GTK_BIN;
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 
 pub trait BinTrait: gtk::WidgetTrait + gtk::ContainerTrait {
     fn get_child<T: gtk::WidgetTrait>(&self) ->  Option<T> {

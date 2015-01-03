@@ -15,9 +15,10 @@
 
 //! A widget displaying an image
 
-use gtk::{mod, ffi};
+use gtk::{self, ffi};
 use gtk::cast::GTK_IMAGE;
 use gtk::ffi::FFIWidget;
+use std::c_str::ToCStr;
 
 /// Image — A widget displaying an image
 struct_Widget!(Image);
