@@ -105,6 +105,45 @@ extern "C" {
     pub fn pango_context_list_families    (context: *mut C_PangoContext, families: *mut *mut *mut C_PangoFontFamily, n_families: *mut c_int);
 
     //=========================================================================
+    // PangoFontDescription                                              NOT OK
+    //=========================================================================
+    pub fn pango_font_description_new     () -> *mut C_PangoFontDescription;
+    pub fn pango_font_description_copy    (desc: *const C_PangoFontDescription) -> *mut C_PangoFontDescription;
+    //pub fn pango_font_description_copy_static(desc: *const C_PangoFontDescription) -> *mut C_PangoFontDescription;
+    pub fn pango_font_description_hash    (desc: *const C_PangoFontDescription) -> c_uint;
+    pub fn pango_font_description_equal   (desc1: *const C_PangoFontDescription, desc2: *const C_PangoFontDescription) -> Gboolean;
+    pub fn pango_font_description_free    (desc: *mut C_PangoFontDescription);
+    pub fn pango_font_descriptions_free   (desc: *mut *mut C_PangoFontDescription, n_descs: c_int);
+    pub fn pango_font_description_set_family(desc: *mut C_PangoFontDescription, family: *const c_char);
+    //pub fn pango_font_description_set_family_static(desc: *mut C_PangoFontDescription, family: *const c_char);
+    pub fn pango_font_description_get_family(desc: *const C_PangoFontDescription) -> *const c_char;
+    pub fn pango_font_description_set_style(desc: *mut C_PangoFontDescription, style: pango::Style);
+    pub fn pango_font_description_get_style(desc: *const C_PangoFontDescription) -> pango::Style;
+    pub fn pango_font_description_set_variant(desc: *mut C_PangoFontDescription, variant: pango::Variant);
+    pub fn pango_font_description_get_variant(desc: *const C_PangoFontDescription) -> pango::Variant;
+    pub fn pango_font_description_set_weight(desc: *mut C_PangoFontDescription, weight: pango::Weight);
+    pub fn pango_font_description_get_weight(desc: *const C_PangoFontDescription) -> pango::Weight;
+    pub fn pango_font_description_set_stretch(desc: *mut C_PangoFontDescription, stretch: pango::Stretch);
+    pub fn pango_font_description_get_stretch(desc: *const C_PangoFontDescription) -> pango::Stretch;
+    pub fn pango_font_description_set_size(desc: *mut C_PangoFontDescription, size: c_int);
+    pub fn pango_font_description_get_size(desc: *const C_PangoFontDescription) -> c_int;
+    pub fn pango_font_description_set_absolute_size(desc: *mut C_PangoFontDescription, size: c_double);
+    pub fn pango_font_description_get_size_is_absolute(desc: *const C_PangoFontDescription) -> Gboolean;
+    pub fn pango_font_description_set_gravity(desc: *mut C_PangoFontDescription, gravity: pango::Gravity);
+    pub fn pango_font_description_get_gravity(desc: *const C_PangoFontDescription) -> pango::Gravity;
+    pub fn pango_font_description_get_set_fields(desc: *const C_PangoFontDescription) -> pango::FontMask;
+    pub fn pango_font_description_unset_fields(desc: *mut C_PangoFontDescription, to_unset: pango::FontMask);
+    pub fn pango_font_description_merge   (desc: *mut C_PangoFontDescription, desc_to_merge: *const C_PangoFontDescription,
+        replace_existing: Gboolean);
+    //pub fn pango_font_description_merge_static(desc: *mut C_PangoFontDescription, desc_to_merge: *const C_PangoFontDescription,
+    //    replace_existing: Gboolean);
+    pub fn pango_font_description_better_match(desc: *const C_PangoFontDescription, old_match: *const C_PangoFontDescription,
+        new_match: *const C_PangoFontDescription) -> Gboolean;
+    pub fn pango_font_description_from_string(str_: *const c_char) -> *mut C_PangoFontDescription;
+    pub fn pango_font_description_to_string(desc: *const C_PangoFontDescription) -> *mut c_char;
+    pub fn pango_font_description_to_filename(desc: *const C_PangoFontDescription) -> *mut c_char;
+
+    //=========================================================================
     // PangoMatrix                                                       NOT OK
     //=========================================================================
     pub fn pango_gravity_get_for_matrix   (matrix: *const C_PangoMatrix) -> pango::Gravity;
@@ -112,7 +151,7 @@ extern "C" {
     //=========================================================================
     // PangoScript                                                       NOT OK
     //=========================================================================
-    pub fn pango_gravity_get_for_script     (script: pango::Script, base_gravity: pango::Gravity, hint: pango::GravityHint) -> pango::Gravity;
+    pub fn pango_gravity_get_for_script    (script: pango::Script, base_gravity: pango::Gravity, hint: pango::GravityHint) -> pango::Gravity;
     pub fn pango_gravity_get_for_script_and_width(script: pango::Script, wide: Gboolean, base_gravity: pango::Gravity,
         hint: pango::GravityHint) -> pango::Gravity;
 

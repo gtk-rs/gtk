@@ -13,31 +13,6 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-/*!
+pub use self::item::Item;
 
-Bindings and wrappers for __PANGO__
-
-*/
-
-pub use self::widgets::{
-    Item
-};
-
-pub use self::enums::{
-    Gravity,
-    GravityHint,
-    Script,
-    Direction,
-    BidiType,
-    Style,
-    Weight,
-    Variant,
-    Stretch,
-    FontMask
-};
-
-pub mod widgets;
-pub mod enums;
-
-#[doc(hidden)]
-pub mod ffi;
+mod item;

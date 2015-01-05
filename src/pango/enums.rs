@@ -261,7 +261,8 @@ pub enum Direction {
     Neutral
 }
 
-/// The PangoBidiType type represents the bidirectional character type of a Unicode character as specified by the [Unicode bidirectional algorithm](http://www.unicode.org/reports/tr9/).
+/// The PangoBidiType type represents the bidirectional character type of a Unicode character as specified by the
+/// [Unicode bidirectional algorithm](http://www.unicode.org/reports/tr9/).
 #[repr(C)]
 #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
 pub enum BidiType {
@@ -303,4 +304,101 @@ pub enum BidiType {
     Whitespace,
     /// Other Neutrals
     OtherNeutrals
+}
+
+/// An enumeration specifying the various slant styles possible for a font.
+#[repr(C)]
+#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+pub enum Style {
+    /// the font is upright.
+    Normal,
+    /// the font is slanted, but in a roman style.
+    Oblique,
+    /// the font is slanted in an italic style.
+    Italic
+}
+
+/// An enumeration specifying the weight (boldness) of a font. This is a numerical value ranging from 100 to 1000, but there are some
+/// predefined values:
+#[repr(C)]
+#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+pub enum Weight {
+    /// the thin weight (= 100; Since: 1.24)
+    Thin,
+    /// the ultralight weight (= 200)
+    UltraLight,
+    /// the light weight (= 300)
+    Light,
+    /// the semilight weight (= 350; Since: 1.36.7)
+    Semilight,
+    /// the book weight (= 380; Since: 1.24)
+    Book,
+    /// the default weight (= 400)
+    Normal,
+    /// the normal weight (= 500; Since: 1.24)
+    Medium,
+    /// the semibold weight (= 600)
+    Semibold,
+    /// the bold weight (= 700)
+    Bold,
+    /// the ultrabold weight (= 800)
+    Ultrabold,
+    /// the heavy weight (= 900)
+    Heavy,
+    /// the ultraheavy weight (= 1000; Since: 1.24)
+    Ultraheavy
+}
+
+/// An enumeration specifying capitalization variant of the font.
+#[repr(C)]
+#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+pub enum Variant {
+    /// A normal font.
+    Normal,
+    /// A font with the lower case characters replaced by smaller variants of the capital characters.
+    SmallCaps
+}
+
+/// An enumeration specifying the width of the font relative to other designs within a family.
+#[repr(C)]
+#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+pub enum Stretch {
+    /// ultra condensed width
+    Condensed,
+    /// extra condensed width
+    ExtraCondensed,
+    /// condensed width
+    StretchCondensed,
+    /// semi condensed width
+    SemiCondensed,
+    /// the normal width
+    Normal,
+    /// semi expanded width
+    SemiExpanded,
+    /// expanded width
+    StretchExpanded,
+    /// extra expanded width
+    ExtraExpanded,
+    /// ultra expanded width
+    UltraExpanded
+}
+
+/// The bits in a PangoFontMask correspond to fields in a PangoFontDescription that have been set.
+#[repr(C)]
+#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+pub enum FontMask {
+    /// the font family is specified.
+    Family,
+    /// the font style is specified.
+    Style,
+    /// the font variant is specified.
+    Variant,
+    /// the font weight is specified.
+    Weight,
+    /// the font stretch is specified.
+    Stretch,
+    /// the font size is specified.
+    Size,
+    /// the font gravity is specified (Since: 1.16.)
+    Gravity
 }
