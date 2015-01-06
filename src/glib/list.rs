@@ -119,20 +119,24 @@ impl<T> List<T> {
         }
     }
 
-    pub fn extend<It: Iterator<T>>(&mut self, mut it: It) {
+    pub fn extend<It: Iterator<Item=T>>(&mut self, mut it: It) {
         for elem in it {
             self.append(elem);
         }
     }
 }
 
-impl<T> Index<uint, T> for List<T> {
+impl<T> Index<uint> for List<T> {
+    type Output = T;
+
     fn index<'a>(&'a self, _rhs: &uint) -> &'a T {
         self.nth(*_rhs as u32)
     }
 }
 
-impl<'a, T> Iterator<&'a T> for Elem<'a, T> {
+impl<'a, T> Iterator for Elem<'a, T> {
+    type Item = &'a T;
+
     fn next(&mut self) -> Option<&'a T> {
         if self.pointer.is_null() {
             None
@@ -144,7 +148,9 @@ impl<'a, T> Iterator<&'a T> for Elem<'a, T> {
     }
 }
 
-impl<'a, T> Iterator<&'a T> for RevElem<'a, T> {
+impl<'a, T> Iterator for RevElem<'a, T> {
+    type Item = &'a T;
+
     fn next(&mut self) -> Option<&'a T> {
         if self.pointer.is_null() {
             None
@@ -157,7 +163,7 @@ impl<'a, T> Iterator<&'a T> for RevElem<'a, T> {
 }
 
 impl<T> FromIterator<T> for List<T> {
-    fn from_iter<It: Iterator<T>>(it: It) -> List<T> {
+    fn from_iter<It: Iterator<Item=T>>(it: It) -> List<T> {
         let mut new_list = List::new();
         new_list.extend(it);
         new_list

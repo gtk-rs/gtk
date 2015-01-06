@@ -24,9 +24,9 @@ struct_Widget!(PaperSize);
 
 impl PaperSize {
     pub fn new(name: &str) -> Option<PaperSize> {
-        let tmp_pointer = unsafe { 
+        let tmp_pointer = unsafe {
             name.with_c_str(|c_str| {
-                ffi::gtk_paper_size_new(c_str) 
+                ffi::gtk_paper_size_new(c_str)
             })
         };
 
@@ -38,7 +38,7 @@ impl PaperSize {
     }
 
     pub fn new_from_ppd(ppd_name: &str, ppd_display_name: &str, width: f64, height: f64) -> Option<PaperSize> {
-        let tmp_pointer = unsafe { 
+        let tmp_pointer = unsafe {
             ppd_name.with_c_str(|c_str| {
                 ppd_display_name.with_c_str(|c_str2| {
                     ffi::gtk_paper_size_new_from_ppd(c_str, c_str2, width, height)
@@ -54,7 +54,7 @@ impl PaperSize {
     }
 
     pub fn new_custom(name: &str, display_name: &str, width: f64, height: f64, unit: gtk::Unit) -> Option<PaperSize> {
-        let tmp_pointer = unsafe { 
+        let tmp_pointer = unsafe {
             name.with_c_str(|c_str| {
                 display_name.with_c_str(|c_str2| {
                     ffi::gtk_paper_size_new_custom(c_str, c_str2, width, height, unit)
