@@ -67,6 +67,8 @@ macro_rules! impl_TraitWidget(
             }
         }
 
+        impl ::gtk::GObjectTrait for $gtk_struct {}
+
         // impl ::glib::traits::Connect for $gtk_struct {}
 
     );
@@ -98,6 +100,8 @@ macro_rules! impl_GObjectFunctions(
                 }
             }
         }
+
+        impl ::gtk::GObjectTrait for $gtk_struct {}
     )
 );
 

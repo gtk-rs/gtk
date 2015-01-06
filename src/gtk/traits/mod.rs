@@ -49,6 +49,7 @@ pub use self::cell_editable::CellEditableTrait;
 pub use self::actionable::ActionableTrait;
 pub use self::cell_layout::CellLayoutTrait;
 pub use self::combo_box::ComboBoxTrait;
+pub use self::gobject::GObjectTrait;
 
 pub mod widget;
 pub mod container;
@@ -86,3 +87,4 @@ pub mod cell_editable;
 pub mod actionable;
 pub mod cell_layout;
 pub mod combo_box;
+pub mod gobject;

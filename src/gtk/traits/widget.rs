@@ -21,7 +21,7 @@ use gtk;
 use glib;
 use glib::ffi::GType;
 
-pub trait WidgetTrait: ffi::FFIWidget {
+pub trait WidgetTrait: ffi::FFIWidget + gtk::GObjectTrait {
     fn show_all(&mut self) -> () {
         unsafe {
             ffi::gtk_widget_show_all(self.get_widget());

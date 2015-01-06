@@ -76,6 +76,7 @@ pub use gtk::EntryTrait as GtkEntryTrait;
 pub use gtk::FileChooserTrait as GtkFileChooserTrait;
 pub use gtk::FontChooserTrait as GtkFontChooserTrait;
 pub use gtk::FrameTrait as GtkFrameTrait;
+pub use gtk::GObjectTrait as GObjectTrait;
 pub use gtk::LabelTrait as GtkLabelTrait;
 pub use gtk::MenuItemTrait as GtkMenuItemTrait;
 pub use gtk::MenuShellTrait as GtkMenuShellTrait;
