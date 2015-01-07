@@ -33,7 +33,7 @@ pub trait Signal<'a> {
 
     fn get_trampoline(&self) -> extern "C" fn();
 
-    fn fetch_cb(&self) -> *mut ||;
+    fn fetch_cb(&self) -> *mut FnMut();
 
     fn get_user_data(&'a self) -> &'a Option<Box<Any>>;
 }
@@ -64,11 +64,11 @@ macro_rules! signal(
 
                     match t.get_user_data() {
                         &Some(ref user_data) => {
-                            let cb : *mut |*const c_void| -> $ret_type = transmute((*signal).fetch_cb());
+                            let cb : *mut FnMut(*const c_void) -> $ret_type = transmute((*signal).fetch_cb());
                             (*cb)(::std::mem::transmute(user_data))
                         },
                         &None => {
-                            let cb : *mut || -> $ret_type = transmute((*signal).fetch_cb());
+                            let cb : *mut FnMut() -> $ret_type = transmute((*signal).fetch_cb());
                             (*cb)()
                         },
                     }
@@ -99,11 +99,11 @@ macro_rules! signal(
 
                     match t.get_user_data() {
                         &Some(ref user_data) => {
-                            let cb : *mut |$($arg_type),*, *const c_void| -> $ret_type = transmute((*signal).fetch_cb());
+                            let cb : *mut FnMut($($arg_type),*, *const c_void) -> $ret_type = transmute((*signal).fetch_cb());
                             (*cb)($($arg_name),*, ::std::mem::transmute(user_data))
                         },
                         &None => {
-                            let cb : *mut |$($arg_type),*| -> $ret_type = transmute((*signal).fetch_cb());
+                            let cb : *mut FnMut($($arg_type),*) -> $ret_type = transmute((*signal).fetch_cb());
                             (*cb)($($arg_name),*)
                         },
                     }
@@ -139,7 +139,7 @@ macro_rules! signal(
 
                     match t.get_user_data() {
                         &Some(ref user_data) => {
-                            let cb: *mut |$($arg_type),*, *const c_void| -> $ret_type = transmute((*signal).fetch_cb());
+                            let cb: *mut FnMut($($arg_type),*, *const c_void) -> $ret_type = transmute((*signal).fetch_cb());
 
                             let cont = |$($arg_name: $arg_type),*| {
                                 (*cb)($($arg_name),* , ::std::mem::transmute(user_data))
@@ -150,7 +150,7 @@ macro_rules! signal(
                             custom_trampoline(cont)
                         },
                         &None => {
-                            let cb : *mut |$($arg_type),*| -> $ret_type = transmute((*signal).fetch_cb());
+                            let cb : *mut FnMut($($arg_type),*) -> $ret_type = transmute((*signal).fetch_cb());
 
                             let cont = |$($arg_name: $arg_type),*| {
                                 (*cb)($($arg_name),*)
@@ -169,12 +169,12 @@ macro_rules! signal(
     //General case
     ($signal:ident, $class:ident [ $(($arg_name:ident : $arg_type:ty)),* ] -> $ret_type:ty) => (
         pub struct $class<'a> {
-            pub cb: |$($arg_type),*|:'a -> $ret_type,
+            pub cb: FnMut($($arg_type),*) -> $ret_type + 'a,
             pub user_data: Option<Box<Any>>
         }
 
         impl<'a> $class<'a> {
-            pub fn new (cb : |$($arg_type),* |:'a -> $ret_type) -> Box<$class> {
+            pub fn new (cb : FnMut($($arg_type),*) -> $ret_type + 'a) -> Box<$class<'a>> {
                 box $class {
                     cb: cb,
                     user_data: None
@@ -201,7 +201,7 @@ macro_rules! signal(
                 }
             }
 
-            fn fetch_cb(&self) -> *mut || {
+            fn fetch_cb(&self) -> *mut FnMut() {
                 unsafe {
                     transmute(&self.cb)
                 }
@@ -227,7 +227,7 @@ signal!(child_notify,           ChildNotify(spec : glib::ParamSpec) -> ());
 signal!(composited_changed,     CompositedChanged() -> ());
 signal!(destroy,                Destroy() -> ());
 signal!(direction_changed,      DirectionChanged(previous_direction: gtk::TextDirection) -> ());
-signal!(draw,                   Draw(ctx: cairo::Context) -> (), trampoline(ctx_raw: *mut cairo::ffi::cairo_t) -> () |cb: |cairo::Context|| {
+signal!(draw,                   Draw(ctx: cairo::Context) -> (), trampoline(ctx_raw: *mut cairo::ffi::cairo_t) -> () |cb| {
     cb(cairo::Context::wrap(ctx_raw))
 });
 signal!(focus,                  Focus(direction : gtk::DirectionType) -> bool);
