@@ -3,6 +3,7 @@ name = "rgtk"
 version = "0.0.1"
 authors = ["letang.jeremy@gmail.com", "guillaume1.gomez@gmail.com", "mathijs.henquet@gmail.com", "bpgarman@fastmail.fm", "me@bstr.eu", "zsoakes@gmail.com"]
 build = "build.rs"
+license = "LGPL-3.0+"
 
 [features]
 GTK_3_14 = []
