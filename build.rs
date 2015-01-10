@@ -44,7 +44,7 @@ fn main() {
     let output: String = unsafe { String::from_utf8_unchecked(cmd.output) };
     let res: Vec<&str> = output.split(' ').collect();
     let paths: Vec<Path> = res.iter().filter_map(|s| {
-        if s.len() > 1 && s.char_at(1) == 'I' { Some(Path::new(s[2..])) }
+        if s.len() > 1 && s.char_at(1) == 'I' { Some(Path::new(&s[2..])) }
         else { None }
     }).collect();
 
