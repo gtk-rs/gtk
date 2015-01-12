@@ -22,3 +22,6 @@ pkg-config = "~0.0.1"
 
 [build-dependencies.gcc]
 gcc = "~0.0.2"
+
+[dependencies]
+c_vec = "^1.0.0"

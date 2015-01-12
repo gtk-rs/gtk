@@ -13,8 +13,10 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
+extern crate c_vec;
+
 use std::ffi::CString;
-use std::c_vec::CVec;
+use self::c_vec::CVec;
 use std::mem::transmute;
 use libc::{c_double, c_int};
 use cairo::paths::Path;

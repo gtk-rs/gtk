@@ -16,6 +16,7 @@
 use libc::c_uint;
 use std::ptr;
 use gtk::ffi;
+use std::ffi::c_str_to_bytes;
 
 pub fn init() {
     unsafe {
@@ -101,6 +102,6 @@ pub fn check_version(required_major: u32,
     if c_str.is_null() {
         None
     } else {
-        Some(unsafe { String::from_raw_buf(c_str as *const u8) })
+        Some(unsafe { String::from_utf8(c_str_to_bytes(c_str)) }) // as const *u8?
     }
  }
