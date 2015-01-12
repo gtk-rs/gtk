@@ -15,7 +15,7 @@
 
 use std::fmt::{Show, Error};
 use cairo::ffi;
-use std::ffi::CString;
+use std::ffi::{CString, c_str_to_bytes};
 
 #[repr(C)]
 #[derive(Clone, PartialEq, PartialOrd, Copy)]
@@ -66,8 +66,7 @@ pub enum Status {
 impl Show for Status {
     fn fmt(&self, formatter: &mut ::std::fmt::Formatter) -> Result<(), Error> {
         let c_str = unsafe {
-            let char_ptr = ffi::cairo_status_to_string(*self);
-            CString::new(char_ptr, false) //FIXME I'm not sure if we actually own the str send in by cairo
+            String::from_utf8(c_str_to_bytes(ffi::cairo_status_to_string(*self)))
         };
         c_str.as_str().unwrap().fmt(formatter)
     }

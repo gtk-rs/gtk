@@ -45,7 +45,7 @@ impl FileFilter {
         if name.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(name as *const u8) })
+            Some(unsafe { String::from_utf8(name as *const u8) })
         }
     }
 

@@ -55,7 +55,7 @@ impl AppInfo {/*
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(unsafe {String::from_raw_buf(tmp_pointer) })
+            Some(unsafe {String::from_utf8(tmp_pointer) })
         }
     }
 
@@ -65,7 +65,7 @@ impl AppInfo {/*
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(tmp_pointer) })
+            Some(unsafe { String::from_utf8(tmp_pointer) })
         }
     }
 
@@ -75,7 +75,7 @@ impl AppInfo {/*
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(tmp_pointer) })
+            Some(unsafe { String::from_utf8(tmp_pointer) })
         }
     }
 
@@ -85,7 +85,7 @@ impl AppInfo {/*
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(tmp_pointer) })
+            Some(unsafe { String::from_utf8(tmp_pointer) })
         }
     }
 
@@ -95,7 +95,7 @@ impl AppInfo {/*
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(tmp_pointer) })
+            Some(unsafe { String::from_utf8(tmp_pointer) })
         }
     }
 
@@ -105,7 +105,7 @@ impl AppInfo {/*
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(tmp_pointer) })
+            Some(unsafe { String::from_utf8(tmp_pointer) })
         }
     }
 
@@ -248,7 +248,7 @@ impl AppInfo {/*
                     if tmp.is_null() {
                         break;
                     }
-                    ret.push(String::from_raw_buf(*tmp));
+                    ret.push(String::from_utf8(*tmp));
                     it += 1;
                 }
             }

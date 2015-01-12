@@ -59,7 +59,7 @@ impl ProgressBar {
     pub fn get_text(&self) -> String {
         unsafe {
             let c_str = ffi::gtk_progress_bar_get_text(GTK_PROGRESSBAR(self.pointer));
-            String::from_raw_buf(c_str as *const u8)
+            String::from_utf8(c_str as *const u8)
         }
     }
 

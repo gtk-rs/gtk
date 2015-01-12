@@ -30,7 +30,7 @@ pub trait FontChooserTrait: gtk::WidgetTrait {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(tmp as *const u8) })
+            Some(unsafe { String::from_utf8(tmp as *const u8) })
         }
     }
 
@@ -48,7 +48,7 @@ pub trait FontChooserTrait: gtk::WidgetTrait {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(tmp as *const u8) })
+            Some(unsafe { String::from_utf8(tmp as *const u8) })
         }
     }
 

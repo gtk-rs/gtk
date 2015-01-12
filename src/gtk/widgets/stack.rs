@@ -81,7 +81,7 @@ impl Stack {
         if c_name.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(c_name as *const u8) })
+            Some(unsafe { String::from_utf8(c_name as *const u8) })
         }
     }
 

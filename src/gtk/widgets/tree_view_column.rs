@@ -146,7 +146,7 @@ impl TreeViewColumn {
 
     pub fn get_title(&self) -> String {
         unsafe {
-            String::from_raw_buf(ffi::gtk_tree_view_column_get_title(self.pointer) as *const u8)
+            String::from_utf8(ffi::gtk_tree_view_column_get_title(self.pointer) as *const u8)
         }
     }
 

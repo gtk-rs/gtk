@@ -14,7 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use libc::{c_int, c_char};
-use std::ffi::CString;
+use std::ffi::{CString, c_str_to_bytes};
 use gtk::ffi;
 use gdk;
 use gtk;
@@ -106,7 +106,7 @@ pub trait WidgetTrait: ffi::FFIWidget {
         if tmp.is_null() {
             None
         } else {
-            unsafe { Some(String::from_raw_buf(tmp as *const u8)) }
+            unsafe { Some(String::from_utf8(c_str_to_bytes(tmp))) }
         }
     }
 
@@ -372,7 +372,7 @@ pub trait WidgetTrait: ffi::FFIWidget {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(tmp as *const u8) })
+            Some(unsafe { String::from_utf8(c_str_to_bytes(tmp)) })
         }
     }
 
@@ -391,7 +391,7 @@ pub trait WidgetTrait: ffi::FFIWidget {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(tmp as *const u8) })
+            Some(unsafe { String::from_utf8(tmp as *const u8) })
         }
     }
 

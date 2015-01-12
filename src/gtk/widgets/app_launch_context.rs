@@ -65,7 +65,7 @@ impl AppLaunchContext {/*
                     if tmp.is_null() {
                         break;
                     }
-                    ret.push(String::from_raw_buf(*tmp));
+                    ret.push(String::from_utf8(*tmp));
                     it += 1;
                 }
             }
@@ -79,7 +79,7 @@ impl AppLaunchContext {/*
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(String::from_raw_buf(tmp_pointer))
+            Some(String::from_utf8(tmp_pointer))
         }
     }
 
@@ -89,7 +89,7 @@ impl AppLaunchContext {/*
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(String::from_raw_buf(tmp_pointer))
+            Some(String::from_utf8(tmp_pointer))
         }
     }
 

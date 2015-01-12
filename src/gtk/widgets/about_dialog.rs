@@ -37,7 +37,7 @@ impl AboutDialog {
         if name.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(name as *const u8) })
+            Some(unsafe { String::from_utf8(name as *const u8) })
         }
     }
 
@@ -55,7 +55,7 @@ impl AboutDialog {
         if version.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(version as *const u8) })
+            Some(unsafe { String::from_utf8(version as *const u8) })
         }
     }
 
@@ -73,7 +73,7 @@ impl AboutDialog {
         if copyright.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(copyright as *const u8) })
+            Some(unsafe { String::from_utf8(copyright as *const u8) })
         }
     }
 
@@ -91,7 +91,7 @@ impl AboutDialog {
         if comments.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(comments as *const u8) })
+            Some(unsafe { String::from_utf8(comments as *const u8) })
         }
     }
 
@@ -109,7 +109,7 @@ impl AboutDialog {
         if license.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(license as *const u8) })
+            Some(unsafe { String::from_utf8(license as *const u8) })
         }
     }
 
@@ -149,7 +149,7 @@ impl AboutDialog {
         if website.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(website as *const u8) })
+            Some(unsafe { String::from_utf8(website as *const u8) })
         }
     }
 
@@ -167,7 +167,7 @@ impl AboutDialog {
         if website_label.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(website_label as *const u8) })
+            Some(unsafe { String::from_utf8(website_label as *const u8) })
         }
     }
 
@@ -193,7 +193,7 @@ impl AboutDialog {
                     if tmp.is_null() {
                         break;
                     }
-                    ret.push(String::from_raw_buf(*tmp as *const u8));
+                    ret.push(String::from_utf8(*tmp as *const u8));
                     it += 1;
                 }
             }
@@ -224,7 +224,7 @@ impl AboutDialog {
                     if tmp.is_null() {
                         break;
                     }
-                    ret.push(String::from_raw_buf(*tmp as *const u8));
+                    ret.push(String::from_utf8(*tmp as *const u8));
                     it += 1;
                 }
             }
@@ -255,7 +255,7 @@ impl AboutDialog {
                     if tmp.is_null() {
                         break;
                     }
-                    ret.push(String::from_raw_buf(*tmp as *const u8));
+                    ret.push(String::from_utf8(*tmp as *const u8));
                     it += 1;
                 }
             }
@@ -278,7 +278,7 @@ impl AboutDialog {
         if translator_credits.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(translator_credits as *const u8) })
+            Some(unsafe { String::from_utf8(translator_credits as *const u8) })
         }
     }
 
@@ -310,7 +310,7 @@ impl AboutDialog {
         if logo_icon_name.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(logo_icon_name as *const u8) })
+            Some(unsafe { String::from_utf8(logo_icon_name as *const u8) })
         }
     }
 

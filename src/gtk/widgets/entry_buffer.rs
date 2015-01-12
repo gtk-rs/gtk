@@ -51,7 +51,7 @@ impl EntryBuffer {
 
     pub fn get_text(&self) -> String {
         let c_str = unsafe { ffi::gtk_entry_buffer_get_text(self.pointer) };
-        unsafe {String::from_raw_buf(c_str as *const u8) }
+        unsafe {String::from_utf8(c_str as *const u8) }
     }
 
     pub fn set_text(&mut self, text: &str) -> () {

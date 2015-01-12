@@ -69,7 +69,7 @@ pub trait ButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait {
         if c_str.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(c_str as *const u8) })
+            Some(unsafe { String::from_utf8(c_str as *const u8) })
         }
     }
 

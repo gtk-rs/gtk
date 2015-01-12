@@ -227,7 +227,7 @@ signal!(child_notify,           ChildNotify(spec : glib::ParamSpec) -> ());
 signal!(composited_changed,     CompositedChanged() -> ());
 signal!(destroy,                Destroy() -> ());
 signal!(direction_changed,      DirectionChanged(previous_direction: gtk::TextDirection) -> ());
-//signal!(draw,                   Draw(ctx: cairo::Context) -> (), trampoline(ctx_raw: *mut cairo::ffi::cairo_t) -> () |cb| {
+signal!(draw,                   Draw(ctx: cairo::Context) -> ());//, trampoline(ctx_raw: *mut cairo::ffi::cairo_t) -> () |cb| {
 //    cb(cairo::Context::wrap(ctx_raw))
 //});
 signal!(focus,                  Focus(direction : gtk::DirectionType) -> bool);

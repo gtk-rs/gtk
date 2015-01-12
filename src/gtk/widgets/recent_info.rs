@@ -41,7 +41,7 @@ impl RecentInfo {
         if uri.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(uri as *const u8) })
+            Some(unsafe { String::from_utf8(uri as *const u8) })
         }
     }
 
@@ -51,7 +51,7 @@ impl RecentInfo {
         if display_name.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(display_name as *const u8) })
+            Some(unsafe { String::from_utf8(display_name as *const u8) })
         }
     }
 
@@ -61,7 +61,7 @@ impl RecentInfo {
         if description.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(description as *const u8) })
+            Some(unsafe { String::from_utf8(description as *const u8) })
         }
     }
 
@@ -71,7 +71,7 @@ impl RecentInfo {
         if mime_type.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(mime_type as *const u8) })
+            Some(unsafe { String::from_utf8(mime_type as *const u8) })
         }
     }
 
@@ -110,7 +110,7 @@ impl RecentInfo {
         if app_exec.is_null() {
             (ret, String::new(), count, time_)
         } else {
-            (ret, unsafe { String::from_raw_buf(app_exec as *const u8)}, count, time_)
+            (ret, unsafe { String::from_utf8(app_exec as *const u8)}, count, time_)
         }
     }
 
@@ -124,7 +124,7 @@ impl RecentInfo {
             let mut ret = Vec::with_capacity(length as usize);
 
             for count in range(0, length) {
-                ret.push(unsafe { String::from_raw_buf(*tmp.offset(count as isize) as *const u8) });
+                ret.push(unsafe { String::from_utf8(*tmp.offset(count as isize) as *const u8) });
             }
             Some(ret)
         }
@@ -136,7 +136,7 @@ impl RecentInfo {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(tmp as *const u8) })
+            Some(unsafe { String::from_utf8(tmp as *const u8) })
         }
     }
 
@@ -159,7 +159,7 @@ impl RecentInfo {
             let mut ret = Vec::with_capacity(length as usize);
 
             for count in range(0, length) {
-                ret.push(unsafe { String::from_raw_buf(*tmp.offset(count as isize) as *const u8) });
+                ret.push(unsafe { String::from_utf8(*tmp.offset(count as isize) as *const u8) });
             }
             Some(ret)
         }
@@ -180,7 +180,7 @@ impl RecentInfo {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(tmp as *const u8) })
+            Some(unsafe { String::from_utf8(tmp as *const u8) })
         }
     }
 
@@ -190,7 +190,7 @@ impl RecentInfo {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(tmp as *const u8) })
+            Some(unsafe { String::from_utf8(tmp as *const u8) })
         }
     }
 

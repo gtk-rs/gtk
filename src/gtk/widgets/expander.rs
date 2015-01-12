@@ -118,7 +118,7 @@ impl Expander {
     pub fn get_label(&self) -> String {
         unsafe {
             let c_str = ffi::gtk_expander_get_label(GTK_EXPANDER(self.pointer));
-            String::from_raw_buf(c_str as *const u8)
+            String::from_utf8(c_str as *const u8)
         }
     }
 

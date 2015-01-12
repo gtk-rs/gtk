@@ -13,8 +13,11 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
+extern crate libc;
+
 use gtk::ffi;
 use std::ffi::CString;
+use libc::free;
 
 #[derive(Copy)]
 pub struct TreePath {
@@ -82,10 +85,9 @@ impl TreePath {
             String::new()
         } else {
             unsafe {
-                // used to free the returned string
-                let container = CString::new(string as *const i8, true);
-
-                String::from_raw_buf(string as *const u8)
+                let res = String::from_utf8(string as *const u8);
+                libc::free(string);
+                res
             }
         }
     }
