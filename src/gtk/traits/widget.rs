@@ -334,7 +334,7 @@ pub trait WidgetTrait: ffi::FFIWidget {
             let mut tmp_vec : glib::List<Box<Self>> = glib::List::new();
 
             for it in old_list.iter() {
-                tmp_vec.append(box ffi::FFIWidget::wrap(*it));
+                tmp_vec.append(Box::new(ffi::FFIWidget::wrap)(*it));
             }
             tmp_vec
         }

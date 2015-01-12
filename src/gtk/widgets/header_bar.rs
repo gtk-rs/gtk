@@ -13,14 +13,14 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-//! A box with a centered child
+//! A Box::new(with) a centered child
 
 // FIXME: add missing methods (3.12)
 
 use gtk::cast::{GTK_HEADER_BAR};
 use gtk::{self, ffi};
 
-/// GtkHeaderBar — A box with a centered child
+/// GtkHeaderBar — A Box::new(with) a centered child
 struct_Widget!(HeaderBar);
 
 impl HeaderBar {

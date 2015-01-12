@@ -468,8 +468,8 @@ impl Context {
 
     pub fn user_to_device(&self, x: f64, y: f64) -> (f64, f64) {
         unsafe{
-            let x_ptr: *mut c_double = transmute(box x);
-            let y_ptr: *mut c_double = transmute(box y);
+            let x_ptr: *mut c_double = transmute(Box::new(x));
+            let y_ptr: *mut c_double = transmute(Box::new(y));
 
             ffi::cairo_user_to_device(self.get_ptr(), x_ptr, y_ptr);
 
@@ -482,8 +482,8 @@ impl Context {
 
     pub fn user_to_device_distance(&self, dx: f64, dy: f64) -> (f64, f64) {
         unsafe{
-            let dx_ptr: *mut c_double = transmute(box dx);
-            let dy_ptr: *mut c_double = transmute(box dy);
+            let dx_ptr: *mut c_double = transmute(Box::new(dx));
+            let dy_ptr: *mut c_double = transmute(Box::new(dy));
 
             ffi::cairo_user_to_device_distance(self.get_ptr(), dx_ptr, dy_ptr);
 
@@ -496,8 +496,8 @@ impl Context {
 
     pub fn device_to_user(&self, x: f64, y: f64) -> (f64, f64) {
         unsafe{
-            let x_ptr: *mut c_double = transmute(box x);
-            let y_ptr: *mut c_double = transmute(box y);
+            let x_ptr: *mut c_double = transmute(Box::new(x));
+            let y_ptr: *mut c_double = transmute(Box::new(y));
 
             ffi::cairo_device_to_user(self.get_ptr(), x_ptr, y_ptr);
 
@@ -510,8 +510,8 @@ impl Context {
 
     pub fn device_to_user_distance(&self, dx: f64, dy: f64) -> (f64, f64) {
         unsafe{
-            let dx_ptr: *mut c_double = transmute(box dx);
-            let dy_ptr: *mut c_double = transmute(box dy);
+            let dx_ptr: *mut c_double = transmute(Box::new(dx));
+            let dy_ptr: *mut c_double = transmute(Box::new(dy));
 
             ffi::cairo_device_to_user_distance(self.get_ptr(), dx_ptr, dy_ptr);
 
@@ -710,8 +710,8 @@ impl Context {
 
     pub fn get_current_point(&self) -> (f64, f64) {
         unsafe{
-            let x = transmute(box 0.0f64);
-            let y = transmute(box 0.0f64);
+            let x = transmute(Box::new(0.0f64));
+            let y = transmute(Box::new(0.0f64));
             ffi::cairo_get_current_point(self.get_ptr(), x, y);
             (*x, *y)
         }

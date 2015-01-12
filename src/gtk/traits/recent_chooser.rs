@@ -167,7 +167,7 @@ pub trait RecentChooserTrait: gtk::WidgetTrait + FFIWidget {
             let mut tmp_vec : glib::List<Box<gtk::RecentInfo>> = glib::List::new();
 
             for it in old_list.iter() {
-                tmp_vec.append(box ffi::FFIWidget::wrap(*it as *mut gtk::ffi::C_GtkWidget));
+                tmp_vec.append(Box::new(ffi::FFIWidget::wrap)(*it as *mut gtk::ffi::C_GtkWidget));
             }
             tmp_vec
         }
@@ -208,7 +208,7 @@ pub trait RecentChooserTrait: gtk::WidgetTrait + FFIWidget {
 
     //         for it in old_list.iter() {
     //             match gtk::RecentFilter::wrap(*it) {
-    //                 Some(r) => tmp_vec.append(box r),
+    //                 Some(r) => tmp_vec.append(Box::new(r)),
     //                 None => {}
     //             }
     //         }

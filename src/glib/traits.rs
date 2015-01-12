@@ -29,7 +29,7 @@ pub trait FFIGObject {
 //             let signal_name     = signal.get_signal_name().to_string();
 //             let trampoline      = signal.get_trampoline();
 
-//             let user_data_ptr   = transmute(box signal);
+//             let user_data_ptr   = transmute(Box::new(signal));
 
 //             signal_name.replace("_", "-").with_c_str(|signal_name| {
 //                 ffi::glue_signal_connect(
@@ -53,7 +53,7 @@ pub trait Connect<'a, T: Signal<'a>>: FFIGObject {
             let signal_name     = signal.get_signal_name().to_string();
             let trampoline      = signal.get_trampoline();
 
-            let user_data_ptr   = transmute(box signal);
+            let user_data_ptr   = transmute(Box::new(signal));
 
             signal_name.replace("_", "-").with_c_str(|signal_name| {
                 ffi::glue_signal_connect(

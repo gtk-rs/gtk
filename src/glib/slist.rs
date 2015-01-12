@@ -49,13 +49,13 @@ impl<T> SList<T> {
 
     pub fn append(&mut self, data: T) {
         unsafe {
-            self.pointer = ffi::g_slist_append(self.pointer, mem::transmute(box data));
+            self.pointer = ffi::g_slist_append(self.pointer, mem::transmute(Box::new(data)));
         }
     }
 
     pub fn prepend(&mut self, data: T) {
         unsafe {
-            self.pointer = ffi::g_slist_prepend(self.pointer, mem::transmute(box data));
+            self.pointer = ffi::g_slist_prepend(self.pointer, mem::transmute(Box::new(data)));
         }
     }
 
@@ -72,7 +72,7 @@ impl<T> SList<T> {
 
     pub fn insert(&mut self, data: T, position: i32) {
         unsafe {
-            self.pointer = ffi::g_slist_insert(self.pointer, mem::transmute(box data), position);
+            self.pointer = ffi::g_slist_insert(self.pointer, mem::transmute(Box::new(data)), position);
         }
     }
 

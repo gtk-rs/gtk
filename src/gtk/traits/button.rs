@@ -173,7 +173,7 @@ pub trait ButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait {
     }
 
     fn connect_clicked_signal(&self, handler: Box<ButtonClickedHandler>) {
-        let data = unsafe { mem::transmute::<Box<Box<ButtonClickedHandler>>, ffi::gpointer>(box handler) };
+        let data = unsafe { mem::transmute::<Box<Box<ButtonClickedHandler>>, ffi::gpointer>(Box::new(handler)) };
         "clicked".with_c_str(|cstr| {
             unsafe {
                 ffi::g_signal_connect_data(self.get_widget() as ffi::gpointer,
