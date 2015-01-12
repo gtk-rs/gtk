@@ -35,7 +35,7 @@ impl TreeStore {
 
     pub fn set_string(&self, iter: &TreeIter, column: i32, text: &str) {
         let text_c = text.to_c_str();
-        unsafe { ffi::gtk_tree_store_set(self.pointer, iter.get_pointer(), column, text_c.as_ptr(), -1i) }
+        unsafe { ffi::gtk_tree_store_set(self.pointer, iter.get_pointer(), column, text_c.as_ptr(), -1is) }
     }
 
     pub fn remove(&self, iter: &TreeIter) -> bool {
