@@ -16,7 +16,7 @@
 //! A container which can hide its child
 
 use libc::c_int;
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 use gtk::cast::GTK_EXPANDER;
 use gtk::{self, ffi};

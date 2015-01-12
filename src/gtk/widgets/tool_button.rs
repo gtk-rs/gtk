@@ -16,7 +16,7 @@
 //! A ToolItem subclass that displays buttons
 
 use std::ptr;
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 use gtk::{self, ffi};
 

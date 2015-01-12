@@ -19,7 +19,7 @@ use std::ptr;
 
 use gtk::cast::GTK_MENUTOOLBUTTON;
 use gtk::{self, ffi};
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 /// MenuToolButton — A ToolItem containing a button with an additional dropdown menu
 struct_Widget!(MenuToolButton);

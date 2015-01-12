@@ -18,7 +18,7 @@
 use gtk::{self, ffi};
 use gtk::cast::GTK_IMAGE;
 use gtk::ffi::FFIWidget;
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 /// Image — A widget displaying an image
 struct_Widget!(Image);

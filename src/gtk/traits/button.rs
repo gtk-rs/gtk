@@ -15,7 +15,7 @@
 
 use std::mem;
 use libc::c_float;
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 use gtk::{ReliefStyle, PositionType};
 use gtk::cast::GTK_BUTTON;

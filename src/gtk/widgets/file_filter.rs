@@ -14,7 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::ffi;
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 pub struct FileFilter {
     pointer : *mut ffi::C_GtkFileFilter

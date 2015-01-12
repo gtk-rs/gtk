@@ -16,7 +16,7 @@
 //! The widget used for item in menus
 
 use gtk::{self, ffi};
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 /// MenuItem — The widget used for item in menus
 struct_Widget!(MenuItem);

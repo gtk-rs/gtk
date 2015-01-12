@@ -17,7 +17,7 @@
 
 use glib;
 use gtk::{self, ffi, cast};
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 pub struct TreeViewColumn {
     pointer: *mut ffi::C_GtkTreeViewColumn
@@ -139,9 +139,8 @@ impl TreeViewColumn {
 
     pub fn set_title(&mut self, title: &str) {
         unsafe {
-            title.with_c_str(|c_str| {
-                ffi::gtk_tree_view_column_set_title(self.pointer, c_str)
-            });
+            ffi::gtk_tree_view_column_set_title(self.pointer,
+                                                CString::from_slice(title.as_bytes()))
         }
     }
 

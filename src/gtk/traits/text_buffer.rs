@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::c_str::ToCStr;
+use std::ffi::CString;
 use gtk::{self, ffi};
 use gtk::cast::GTK_TEXT_BUFFER;
 

@@ -15,7 +15,7 @@
 
 use glib::ffi;
 use gtk::signals::Signal;
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 pub trait FFIGObject {
     fn get_gobject(&self) -> *mut ffi::C_GObject;

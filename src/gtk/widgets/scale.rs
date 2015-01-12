@@ -16,7 +16,7 @@
 //! A slider widget for selecting a value from a range
 
 use libc::{c_double, c_int};
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 use gtk::{Orientation, PositionType};
 use gtk::cast::GTK_SCALE;

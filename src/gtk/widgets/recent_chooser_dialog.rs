@@ -17,7 +17,7 @@ use gtk::{self, ffi};
 use gtk::ffi::FFIWidget;
 use gtk::enums::response_type::ResponseType;
 use gtk::cast::{GTK_WINDOW, GTK_RECENT_MANAGER};
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 struct_Widget!(RecentChooserDialog);
 

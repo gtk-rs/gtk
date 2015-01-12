@@ -16,7 +16,7 @@
 //! A ToolItem containing a toggle button
 
 use gtk::{self, ffi};
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 /// ToggleToolButton — A ToolItem containing a toggle button
 struct_Widget!(ToggleToolButton);

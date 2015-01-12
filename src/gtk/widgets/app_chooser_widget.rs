@@ -17,7 +17,7 @@
 
 use gtk::cast::GTK_APP_CHOOSER_WIDGET;
 use gtk::{self, ffi};
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 struct_Widget!(AppChooserWidget);
 

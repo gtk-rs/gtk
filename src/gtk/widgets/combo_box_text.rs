@@ -17,7 +17,7 @@
 
 use gtk::{self, ffi};
 use gtk::cast::GTK_COMBO_BOX_TEXT;
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 struct_Widget!(ComboBoxText);
 

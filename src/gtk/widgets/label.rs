@@ -15,7 +15,7 @@
 
 //! A widget that displays a small to medium amount of text
 
-use std::c_str::ToCStr;
+use std::ffi::CString;
 use gtk::{self, ffi};
 
 /// Label — A widget that displays a small to medium amount of text

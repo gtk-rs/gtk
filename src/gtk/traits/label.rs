@@ -14,7 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use libc::{c_int, c_double};
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 use gtk::{self, ffi};
 use gtk::Justification;

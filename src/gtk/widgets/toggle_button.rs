@@ -15,7 +15,7 @@
 
 //! A button to launch a font chooser dialog
 
-use std::c_str::ToCStr;
+use std::ffi::CString;
 use gtk::{self, ffi};
 
 /// ToggleButton — A button to launch a font chooser dialog

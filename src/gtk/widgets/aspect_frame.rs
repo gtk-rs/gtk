@@ -17,7 +17,7 @@
 
 use libc::c_float;
 use std::ptr;
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 use gtk::cast::GTK_ASPECTFRAME;
 use gtk::{self, ffi};

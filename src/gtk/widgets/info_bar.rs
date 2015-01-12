@@ -16,7 +16,7 @@
 //! Report important messages to the user
 
 use libc::c_int;
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 use gtk::MessageType;
 use gtk::cast::GTK_INFOBAR;

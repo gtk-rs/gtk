@@ -17,7 +17,7 @@ use gtk::{self, ffi};
 use gtk::ffi::FFIWidget;
 use gtk::cast::GTK_RECENT_MANAGER;
 use glib;
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 struct_Widget!(RecentManager);
 

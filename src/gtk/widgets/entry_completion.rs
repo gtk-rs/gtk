@@ -18,7 +18,7 @@
 use gtk::{self, ffi};
 use gtk::TreeModel;
 use gtk::cast::GTK_ENTRY_COMPLETION;
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 struct_Widget!(EntryCompletion);
 

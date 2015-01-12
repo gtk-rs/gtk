@@ -15,7 +15,7 @@
 
 use gtk::{self, ffi};
 use std::default::Default;
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 pub struct RecentFilterInfo {
     contains: gtk::RecentFilterFlags,

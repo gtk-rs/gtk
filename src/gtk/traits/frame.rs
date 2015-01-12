@@ -15,7 +15,7 @@
 
 use std::ptr;
 use libc::c_float;
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 use gtk::ShadowType;
 use gtk::cast::GTK_FRAME;

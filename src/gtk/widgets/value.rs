@@ -16,7 +16,7 @@
 //! Generic values — A polymorphic type that can hold values of any other type
 
 use gtk::{self, ffi};
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 trait GValuePrivate {
     fn get(gvalue: &GValue) -> Self;

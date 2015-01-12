@@ -18,7 +18,7 @@
 use gtk::{self, ffi};
 use gtk::cast::GTK_NOTEBOOK;
 use gtk::ffi::FFIWidget;
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 /// GtkNotebook — A tabbed notebook container
 struct_Widget!(NoteBook);

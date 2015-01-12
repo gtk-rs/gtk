@@ -14,7 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use libc::{c_int, c_float, c_double};
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 use gtk::{EntryIconPosition, ImageType, InputPurpose, InputHints};
 use gtk::cast::GTK_ENTRY;

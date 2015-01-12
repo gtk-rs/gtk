@@ -15,7 +15,7 @@
 
 //! GtkActionable — An interface for widgets that can be associated with actions
 
-use std::c_str::ToCStr;
+use std::ffi::CString;
 use gtk::cast::GTK_ACTIONABLE;
 use gtk::{self, ffi};
 

@@ -16,7 +16,7 @@
 //! A bar that can used as a level indicator
 
 use libc::c_double;
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 use gtk::{self, ffi};
 use gtk::{LevelBarMode};

@@ -16,7 +16,7 @@
 //! A bin with a decorative frame and optional label
 
 use std::ptr;
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 use gtk::{self, ffi};
 

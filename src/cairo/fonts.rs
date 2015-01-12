@@ -13,12 +13,11 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::c_str::ToCStr;
+use std::ffi::CString;
 use libc::{c_ulong, c_int, c_double};
 use std::clone::Clone;
 use std::cmp::PartialEq;
 use std::ops::Drop;
-use std::c_str::CString;
 
 use cairo::enums::{
     Antialias,

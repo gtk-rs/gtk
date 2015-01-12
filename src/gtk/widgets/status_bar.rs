@@ -17,7 +17,7 @@
 
 use gtk::cast::GTK_STATUSBAR;
 use gtk::{self, ffi};
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 /// GtkViewport — An adapter which makes widgets scrollable
 struct_Widget!(StatusBar);

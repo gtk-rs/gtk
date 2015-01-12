@@ -16,7 +16,7 @@
 use gtk::{self, ffi};
 use gtk::ffi::FFIWidget;
 use gtk::cast::{GTK_MESSAGE_DIALOG, GTK_WINDOW};
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 struct_Widget!(MessageDialog);
 

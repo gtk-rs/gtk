@@ -17,7 +17,7 @@ use gtk::{self, ffi};
 use gtk::ffi::FFIWidget;
 use gtk::cast::{GTK_PAPER_SIZE};
 use glib;
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 // FIXME: PaperSize is not a widget nor a GObject -> GBoxed
 struct_Widget!(PaperSize);

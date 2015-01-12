@@ -16,7 +16,7 @@
 //! GtkTextTag — A tag that can be applied to text in a GtkTextBuffer
 
 use gtk::ffi;
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 #[derive(Copy)]
 pub struct TextTag {

@@ -18,7 +18,7 @@
 use gtk::{self, ffi, ToolItem};
 use gtk::ffi::FFIWidget;
 use gtk::cast::{GTK_TOOL_ITEM_GROUP, GTK_TOOL_ITEM};
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 struct_Widget!(ToolItemGroup);
 

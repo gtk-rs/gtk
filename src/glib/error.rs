@@ -17,7 +17,7 @@ use glib::ffi;
 use glib::ffi::{GQuark};
 use glib::GlibContainer;
 use glib;
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 pub struct Error {
     pointer: *mut ffi::C_GError

@@ -16,7 +16,7 @@
 use gtk::{self, ffi};
 use glib::ffi::GType;
 use gtk::TreeIter;
-use std::c_str::ToCStr;
+use std::ffi::CString;
 use std::num::ToPrimitive;
 
 pub struct TreeStore {

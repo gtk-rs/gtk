@@ -15,7 +15,7 @@
 
 use std::fmt::{Show, Error};
 use cairo::ffi;
-use std::c_str::CString;
+use std::ffi::CString;
 
 #[repr(C)]
 #[derive(Clone, PartialEq, PartialOrd, Copy)]

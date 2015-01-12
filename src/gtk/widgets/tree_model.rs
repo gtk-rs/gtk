@@ -13,11 +13,9 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::{self, ffi};
 use glib::ffi::GType;
-use gtk::{GValue, TreeIter, TreePath};
-use std::c_str::CString;
-use std::c_str::ToCStr;
+use gtk::{self, ffi, GValue, TreeIter, TreePath};
+use std::ffi::CString;
 
 pub struct TreeModel {
     pointer: *mut ffi::C_GtkTreeModel
