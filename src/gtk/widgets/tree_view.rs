@@ -95,9 +95,9 @@ impl TreeView {
     }
 
     #[cfg(any(feature = "GTK_3_4", feature = "GTK_3_6", feature = "GTK_3_8", feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
-    pub fn get_n_columns(&self) -> uint {
+    pub fn get_n_columns(&self) -> usize {
         unsafe {
-            ffi::gtk_tree_view_get_n_columns(GTK_TREE_VIEW(self.pointer)) as uint
+            ffi::gtk_tree_view_get_n_columns(GTK_TREE_VIEW(self.pointer)) as usize
         }
     }
 

@@ -109,8 +109,8 @@ impl<T> List<T> {
         }
     }
 
-    pub fn len(&self) -> uint {
-        unsafe { ffi::g_list_length(self.pointer) as uint }
+    pub fn len(&self) -> usize {
+        unsafe { ffi::g_list_length(self.pointer) as usize }
     }
 
     pub fn clear(&mut self) {
@@ -126,10 +126,10 @@ impl<T> List<T> {
     }
 }
 
-impl<T> Index<uint> for List<T> {
+impl<T> Index<usize> for List<T> {
     type Output = T;
 
-    fn index<'a>(&'a self, _rhs: &uint) -> &'a T {
+    fn index<'a>(&'a self, _rhs: &usize) -> &'a T {
         self.nth(*_rhs as u32)
     }
 }

@@ -61,7 +61,7 @@ pub mod g_type {
         if n_children == 0u32 || tmp_vec.is_null() {
             Vec::new()
         } else {
-            unsafe { Vec::from_raw_buf(tmp_vec as *const gtk::GType, n_children as uint) }
+            unsafe { Vec::from_raw_buf(tmp_vec as *const gtk::GType, n_children as usize) }
         }
     }
 
@@ -72,7 +72,7 @@ pub mod g_type {
         if n_interfaces == 0u32 || tmp_vec.is_null() {
             Vec::new()
         } else {
-            unsafe { Vec::from_raw_buf(tmp_vec as *const gtk::GType, n_interfaces as uint) }
+            unsafe { Vec::from_raw_buf(tmp_vec as *const gtk::GType, n_interfaces as usize) }
         }
     }
 
@@ -83,7 +83,7 @@ pub mod g_type {
         if n_prerequisites == 0u32 || tmp_vec.is_null() {
             Vec::new()
         } else {
-            unsafe { Vec::from_raw_buf(tmp_vec as *const gtk::GType, n_prerequisites as uint) }
+            unsafe { Vec::from_raw_buf(tmp_vec as *const gtk::GType, n_prerequisites as usize) }
         }
     }
 

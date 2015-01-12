@@ -46,7 +46,7 @@ impl Path {
     pub fn iter(&self) -> PathSegments {
         unsafe {
             let ptr: *mut cairo_path_t = self.get_ptr();
-            let length = (*ptr).num_data as uint;
+            let length = (*ptr).num_data as usize;
             let data_ptr = (*ptr).data;
 
             PathSegments {
@@ -76,8 +76,8 @@ pub enum PathSegment {
 
 pub struct PathSegments<'a> {
     data: CVec<(f64, f64)>,
-    i: uint,
-    num_data: uint
+    i: usize,
+    num_data: usize
 }
 
 impl<'a> Iterator for PathSegments<'a> {
@@ -95,7 +95,7 @@ impl<'a> Iterator for PathSegments<'a> {
             (data_header.data_type, data_header.length)
         };
 
-        self.i += length as uint;
+        self.i += length as usize;
 
         let ref data = self.data;
 

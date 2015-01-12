@@ -180,10 +180,10 @@ pub trait RecentChooserTrait: gtk::WidgetTrait + FFIWidget {
         if tmp.is_null() {
             None
         } else {
-            let mut ret = Vec::with_capacity(length as uint);
+            let mut ret = Vec::with_capacity(length as usize);
 
             for count in range(0, length) {
-                ret.push(unsafe { String::from_raw_buf(*tmp.offset(count as int) as *const u8) });
+                ret.push(unsafe { String::from_raw_buf(*tmp.offset(count as isize) as *const u8) });
             }
             Some(ret)
         }

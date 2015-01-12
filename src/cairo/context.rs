@@ -185,7 +185,7 @@ impl Context {
     }
 
     pub fn get_dash(&self) -> (Vec<f64>, f64){
-        let dash_count = self.get_dash_count() as uint;
+        let dash_count = self.get_dash_count() as usize;
         let mut dashes: Vec<f64> = Vec::with_capacity(dash_count);
         let mut offset: f64 = 0.0;
 
@@ -328,7 +328,7 @@ impl Context {
 
             (*rectangle_list).status.ensure_valid();
 
-            CVec::new_with_dtor((*rectangle_list).rectangles, (*rectangle_list).num_rectangles as uint, move || {
+            CVec::new_with_dtor((*rectangle_list).rectangles, (*rectangle_list).num_rectangles as usize, move || {
                 ffi::cairo_rectangle_list_destroy(rectangle_list)
             })
         }
@@ -779,7 +779,7 @@ impl Context {
         }
     }
 
-    //fn ffi::cairo_glyph_path(cr: *mut cairo_t, glyphs: *mut cairo_glyph_t, num_glyphs: int);
+    //fn ffi::cairo_glyph_path(cr: *mut cairo_t, glyphs: *mut cairo_glyph_t, num_glyphs: isize);
 
     pub fn rel_curve_to(&self, dx1: f64, dy1: f64, dx2: f64, dy2: f64, dx3: f64, dy3: f64){
         unsafe{

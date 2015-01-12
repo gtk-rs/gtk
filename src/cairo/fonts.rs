@@ -264,9 +264,9 @@ impl FontFace{
         }
     }
 
-    pub fn get_reference_count(&self) -> uint{
+    pub fn get_reference_count(&self) -> usize{
         unsafe{
-            ffi::cairo_font_face_get_reference_count(self.get_ptr()) as uint
+            ffi::cairo_font_face_get_reference_count(self.get_ptr()) as usize
         }
     }
 
@@ -316,9 +316,9 @@ impl ScaledFont{
         }
     }
 
-    pub fn get_reference_count(&self) -> uint{
+    pub fn get_reference_count(&self) -> usize{
         unsafe{
-            ffi::cairo_scaled_font_get_reference_count(self.get_ptr()) as uint
+            ffi::cairo_scaled_font_get_reference_count(self.get_ptr()) as usize
         }
     }
 

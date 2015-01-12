@@ -60,9 +60,9 @@ pub trait Pattern {
         }
     }
 
-    fn get_reference_count(&self) -> int {
+    fn get_reference_count(&self) -> isize {
         unsafe {
-            ffi::cairo_pattern_get_reference_count(self.get_ptr()) as int
+            ffi::cairo_pattern_get_reference_count(self.get_ptr()) as isize
         }
     }
 
@@ -179,18 +179,18 @@ pub trait Gradient : Pattern {
         }
     }
 
-    fn get_color_stop_count(&self) -> int {
+    fn get_color_stop_count(&self) -> isize {
         unsafe {
             let count : *mut c_int = transmute(box 0i32);
             let result = ffi::cairo_pattern_get_color_stop_count(self.get_ptr(), count);
 
             result.ensure_valid(); // Not sure if these are needed
 
-            count as int
+            count as isize
         }
     }
 
-    fn get_color_stop_rgba(&self, index: int) -> (f64,f64,f64,f64,f64) {
+    fn get_color_stop_rgba(&self, index: isize) -> (f64,f64,f64,f64,f64) {
         unsafe {
             let offset: *mut c_double = transmute(box 0.0f64);
             let red   : *mut c_double = transmute(box 0.0f64);
@@ -325,7 +325,7 @@ impl Mesh {
         self.ensure_status();
     }
 
-    pub fn get_control_point(&self, patch_num: uint, corner: MeshCorner) -> (f64, f64) {
+    pub fn get_control_point(&self, patch_num: usize, corner: MeshCorner) -> (f64, f64) {
         let mut x: c_double = 0.0;
         let mut y: c_double = 0.0;
 
@@ -351,7 +351,7 @@ impl Mesh {
         self.ensure_status();
     }
 
-    pub fn get_corner_color_rgba(&self, patch_num: uint, corner: MeshCorner) -> (f64, f64, f64, f64) {
+    pub fn get_corner_color_rgba(&self, patch_num: usize, corner: MeshCorner) -> (f64, f64, f64, f64) {
         let mut red: c_double = 0.0;
         let mut green: c_double = 0.0;
         let mut blue: c_double = 0.0;
@@ -365,15 +365,15 @@ impl Mesh {
         (red, green, blue, alpha)
     }
 
-    pub fn get_patch_count(&self) -> uint {
+    pub fn get_patch_count(&self) -> usize {
         let mut count: c_uint = 0;
         unsafe {
             ffi::cairo_mesh_pattern_get_patch_count(self.pointer, &mut count).ensure_valid();
         }
-        count as uint
+        count as usize
     }
 
-    pub fn get_path(&self, patch_num: uint) -> Path {
+    pub fn get_path(&self, patch_num: usize) -> Path {
         let path: Path = Path::wrap(unsafe {
             ffi::cairo_mesh_pattern_get_path(self.pointer, patch_num as c_uint)
         });

@@ -108,7 +108,7 @@ impl TreePath {
         let depth = self.get_depth();
 
         unsafe {
-            Vec::from_raw_buf(tmp as *const i32, depth as uint)
+            Vec::from_raw_buf(tmp as *const i32, depth as usize)
         }
     }
 
