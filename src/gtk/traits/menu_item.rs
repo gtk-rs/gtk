@@ -54,9 +54,8 @@ pub trait MenuItemTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait 
 
     fn set_accel_path(&mut self, accel_path: &str) {
         unsafe {
-            accel_path.with_c_str(|c_str| {
-                ffi::gtk_menu_item_set_accel_path(GTK_MENU_ITEM(self.get_widget()), c_str)
-            })
+            let c_str = CString::from_slice(accel_path.as_bytes());
+            ffi::gtk_menu_item_set_accel_path(GTK_MENU_ITEM(self.get_widget()), c_str)
         }
     }
 
@@ -68,10 +67,9 @@ pub trait MenuItemTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait 
     }
 
     fn set_label(&mut self, label: &str) {
+        let c_str = CString::from_slice(label.as_bytes());
         unsafe {
-            label.with_c_str(|c_str| {
-                ffi::gtk_menu_item_set_label(GTK_MENU_ITEM(self.get_widget()), c_str)
-            })
+            ffi::gtk_menu_item_set_label(GTK_MENU_ITEM(self.get_widget()), c_str)
         }
     }
 

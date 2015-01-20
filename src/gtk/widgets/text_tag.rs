@@ -26,9 +26,8 @@ pub struct TextTag {
 impl TextTag {
     pub fn new(name: &str) -> Option<TextTag> {
         let tmp_pointer = unsafe {
-            name.with_c_str(|c_str| {
-                ffi::gtk_text_tag_new(c_str)
-            })
+            let c_str = CString::from_slice(name.as_bytes());
+            ffi::gtk_text_tag_new(c_str)
         };
 
         if tmp_pointer.is_null() {

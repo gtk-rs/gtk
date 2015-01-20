@@ -102,6 +102,6 @@ pub fn check_version(required_major: u32,
     if c_str.is_null() {
         None
     } else {
-        Some(unsafe { String::from_utf8(c_str_to_bytes(c_str)) }) // as const *u8?
+        Some(unsafe { String::from_utf8(c_str_to_bytes(&c_str).to_vec()).unwrap() }) // as const *u8?
     }
  }

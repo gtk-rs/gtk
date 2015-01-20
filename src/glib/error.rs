@@ -25,10 +25,9 @@ pub struct Error {
 
 impl Error {
     pub fn new_literal(domain: GQuark, code: i32, message: &str) -> Option<Error> {
+        let c_str = CString::from_slice(message.as_bytes());
         let tmp_pointer = unsafe {
-            message.with_c_str(|c_str| {
-                ffi::g_error_new_literal(domain, code, c_str)
-            })
+            ffi::g_error_new_literal(domain, code, c_str)
         };
 
         if tmp_pointer.is_null() {
@@ -53,9 +52,9 @@ impl Error {
     }
 
     pub fn set(&mut self, domain: GQuark, code: i32, message: &str) -> () {
-        unsafe { message.with_c_str(|c_str| {
-                ffi::g_set_error_literal(&mut self.pointer, domain, code, c_str)
-            })
+        let c_str = CString::from_slice(message.as_bytes());
+        unsafe {
+            ffi::g_set_error_literal(&mut self.pointer, domain, code, c_str)
         }
     }
 

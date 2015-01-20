@@ -141,9 +141,8 @@ pub trait RecentChooserTrait: gtk::WidgetTrait + FFIWidget {
     }
 
     fn unselect_uri(&self, uri: &str) -> bool {
-        match unsafe { uri.with_c_str(|c_str| {
-            ffi::gtk_recent_chooser_unselect_uri(GTK_RECENT_CHOOSER(self.get_widget()), c_str)
-        })} {
+        match unsafe { let c_str = CString::from_slice(uri.as_bytes());
+        ffi::gtk_recent_chooser_unselect_uri(GTK_RECENT_CHOOSER(self.get_widget()), c_str)} {
             ffi::GFALSE => false,
             _ => true
         }

@@ -34,9 +34,8 @@ pub trait EntryTrait: gtk::WidgetTrait {
 
     fn set_text(&mut self, text: String) -> () {
         unsafe {
-            text.with_c_str(|c_str| {
-                ffi::gtk_entry_set_text(GTK_ENTRY(self.get_widget()), c_str)
-            });
+            let c_str = CString::from_slice(text.as_bytes());
+            ffi::gtk_entry_set_text(GTK_ENTRY(self.get_widget()), c_str)
         }
     }
 
@@ -321,9 +320,8 @@ pub trait EntryTrait: gtk::WidgetTrait {
 
     fn set_icon_tooltip_text(&mut self, icon_pos: EntryIconPosition, tooltip: &str) -> () {
         unsafe {
-            tooltip.with_c_str(|c_str| {
-                ffi::gtk_entry_set_icon_tooltip_text(GTK_ENTRY(self.get_widget()), icon_pos, c_str)
-            })
+            let c_str = CString::from_slice(tooltip);
+            ffi::gtk_entry_set_icon_tooltip_text(GTK_ENTRY(self.get_widget()), icon_pos, c_str)
         }
     }
 

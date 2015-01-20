@@ -30,10 +30,9 @@ impl HeaderBar {
     }
 
     pub fn set_title(&mut self, title: &str) {
+        let c_str = CString::from_slice(title.as_bytes());
         unsafe {
-            title.with_c_str(|c_str| {
-                ffi::gtk_header_bar_set_title(GTK_HEADER_BAR(self.pointer), c_str)
-            })
+            ffi::gtk_header_bar_set_title(GTK_HEADER_BAR(self.pointer), c_str)
         }
     }
 
@@ -47,10 +46,9 @@ impl HeaderBar {
     }
 
     pub fn set_subtitle(&mut self, subtitle: &str) {
+        let c_str = CString::from_slice(subtitle.as_bytes());
         unsafe {
-            subtitle.with_c_str(|c_str| {
-                ffi::gtk_header_bar_set_subtitle(GTK_HEADER_BAR(self.pointer), c_str)
-            })
+            ffi::gtk_header_bar_set_subtitle(GTK_HEADER_BAR(self.pointer), c_str)
         }
     }
 

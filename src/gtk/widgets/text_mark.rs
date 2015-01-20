@@ -25,9 +25,8 @@ pub struct TextMark {
 impl TextMark {
     pub fn new(name: &str, left_gravity: bool) -> Option<TextMark> {
         let tmp_pointer = unsafe {
-            name.with_c_str(|c_str| {
-                ffi::gtk_text_mark_new(c_str, ffi::to_gboolean(left_gravity))
-            })
+            let c_str = CString::from_slice(name.as_bytes());
+            ffi::gtk_text_mark_new(c_str, ffi::to_gboolean(left_gravity))
         };
 
         if tmp_pointer.is_null() {

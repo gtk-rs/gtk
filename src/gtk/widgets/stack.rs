@@ -30,25 +30,22 @@ impl Stack {
     }
 
     pub fn add_named<T: gtk::WidgetTrait>(&mut self, child: &T, name: &str) {
+        let c_str = CString::from_slice(name.as_bytes());
         unsafe {
-            name.with_c_str(|c_str| {
-                ffi::gtk_stack_add_named(GTK_STACK(self.pointer),
-                                         child.get_widget(),
-                                         c_str)
-            })
+            ffi::gtk_stack_add_named(GTK_STACK(self.pointer),
+                                     child.get_widget(),
+                                     c_str)
         }
     }
 
     pub fn add_titled<T: gtk::WidgetTrait>(&mut self, child: &T, name: &str, title: &str) {
+        let c_str = CString::from_slice(name.as_bytes());
+        let c_str = CString::from_slice(title.as_bytes());
         unsafe {
-            name.with_c_str(|c_name| {
-                title.with_c_str(|c_title| {
-                    ffi::gtk_stack_add_titled(GTK_STACK(self.pointer),
-                                              child.get_widget(),
-                                              c_name,
-                                              c_title)
-                })
-            })
+            ffi::gtk_stack_add_titled(GTK_STACK(self.pointer),
+                                      child.get_widget(),
+                                      c_name,
+                                      c_title)
         }
     }
 
@@ -69,10 +66,9 @@ impl Stack {
     }
 
     pub fn set_visible_child_name(&mut self, name: &str) {
+        let c_str = CString::from_slice(name.as_bytes());
         unsafe {
-            name.with_c_str(|c_str| {
-                ffi::gtk_stack_set_visible_child_name(GTK_STACK(self.pointer), c_str)
-            })
+            ffi::gtk_stack_set_visible_child_name(GTK_STACK(self.pointer), c_str)
         }
     }
 
@@ -86,12 +82,11 @@ impl Stack {
     }
 
     pub fn set_visible_child_full(&mut self, name: &str, transition: gtk::StackTransitionType) {
+        let c_str = CString::from_slice(name.as_bytes());
         unsafe {
-            name.with_c_str(|c_str| {
-                ffi::gtk_stack_set_visible_child_full(GTK_STACK(self.pointer),
-                                                      c_str,
-                                                      transition)
-            })
+            ffi::gtk_stack_set_visible_child_full(GTK_STACK(self.pointer),
+                                                  c_str,
+                                                  transition)
         }
     }
 

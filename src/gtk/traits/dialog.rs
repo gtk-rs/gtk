@@ -29,9 +29,8 @@ pub trait DialogTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait + 
 
     fn add_button(&self, button_text: &str, response_id: i32) -> Option<gtk::Button> {
         let tmp_pointer = unsafe {
-            button_text.with_c_str(|c_str| {
-                ffi::gtk_dialog_add_button(GTK_DIALOG(self.get_widget()), c_str, response_id)
-            })
+            let c_str = CString::from_slice(button_text.as_bytes());
+            ffi::gtk_dialog_add_button(GTK_DIALOG(self.get_widget()), c_str, response_id)
         };
 
         if tmp_pointer.is_null() {

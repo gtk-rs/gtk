@@ -29,18 +29,16 @@ impl CheckMenuItem {
 
     pub fn new_with_label(label: &str) -> Option<CheckMenuItem> {
         let tmp_pointer = unsafe {
-            label.with_c_str(|c_str| {
-                ffi::gtk_check_menu_item_new_with_label(c_str)
-            })
+            let c_str = CString::from_slice(label.as_bytes());
+            ffi::gtk_check_menu_item_new_with_label(c_str)
         };
         check_pointer!(tmp_pointer, CheckMenuItem)
     }
 
     pub fn new_with_mnemonic(mnemonic: &str) -> Option<CheckMenuItem> {
+        let c_str = CString::from_slice(mnemonic.as_bytes());
         let tmp_pointer = unsafe {
-            mnemonic.with_c_str(|c_str| {
-                ffi::gtk_check_menu_item_new_with_mnemonic(c_str)
-            })
+            ffi::gtk_check_menu_item_new_with_mnemonic(c_str)
         };
         check_pointer!(tmp_pointer, CheckMenuItem)
     }
@@ -55,4 +53,3 @@ impl gtk::MenuItemTrait for CheckMenuItem {}
 impl gtk::CheckMenuItemTrait for CheckMenuItem {}
 
 impl_widget_events!(CheckMenuItem);
-

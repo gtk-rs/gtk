@@ -22,9 +22,8 @@ use gtk::WindowPosition;
 pub trait WindowTrait : gtk::WidgetTrait {
     fn set_title(&mut self, title: &str) -> () {
         unsafe {
-            title.with_c_str(|c_str| {
-                ffi::gtk_window_set_title(GTK_WINDOW(self.get_widget()), c_str)
-            });
+            let c_str = CString::from_slice(title.as_bytes());
+            ffi::gtk_window_set_title(GTK_WINDOW(self.get_widget()), c_str);
         }
     }
 

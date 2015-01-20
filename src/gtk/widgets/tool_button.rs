@@ -28,14 +28,13 @@ impl ToolButton {
         let tmp_pointer = unsafe {
             match label {
                 Some(l) => {
-                    l.with_c_str(|c_str| {
-                        match icon_widget {
-                            Some(i) => ffi::gtk_tool_button_new(i.get_widget(), c_str),
-                            None    => ffi::gtk_tool_button_new(ptr::null_mut(), c_str)
-                        }
-                    })
+                    let c_str = CString::from_slice(l.as_bytes());
+                    match icon_widget {
+                        Some(i) => ffi::gtk_tool_button_new(i.get_widget(), c_str),
+                        None    => ffi::gtk_tool_button_new(ptr::null_mut(), c_str)
+                    }
                 },
-                None    => {
+                None => {
                     match icon_widget {
                         Some(i) => ffi::gtk_tool_button_new(i.get_widget(), ptr::null()),
                         None    => ffi::gtk_tool_button_new(ptr::null_mut(), ptr::null())
@@ -47,9 +46,10 @@ impl ToolButton {
     }
 
     pub fn new_from_stock(stock_id: &str) -> Option<ToolButton> {
-        let tmp_pointer = stock_id.with_c_str(|c_str| {
-            unsafe { ffi::gtk_tool_button_new_from_stock(c_str) }
-        });
+        let c_str = CString::from_slice(stock_id.as_bytes());
+        let tmp_pointer = unsafe {
+            ffi::gtk_tool_button_new_from_stock(c_str)
+        };
         check_pointer!(tmp_pointer, ToolButton)
     }
 }

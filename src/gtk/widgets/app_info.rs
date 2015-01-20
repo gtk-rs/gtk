@@ -166,8 +166,8 @@ impl AppInfo {/*
 
     pub fn reset_type_associations(&self, content_type: &str) -> () {
         unsafe {
-            content_type.with_c_str(|c_str| {
-                ffi::g_app_info_reset_type_associations(c_str)
+            let c_str = CString::from_slice(content_type.as_bytes());
+            ffi::g_app_info_reset_type_associations(c_str)
             })
         }
     }
@@ -338,7 +338,6 @@ impl AppInfo {/*
         match unsafe {
             uri.with_c_str(|c_str| {
                 ffi::g_app_info_launch_default_for_uri(c_str, GTK_APP_LAUNCH_CONTEXT(launch_context.get_widget()), &mut error.unwrap())
-            })
         } {
             ffi::GTRUE => true,
             _ => false

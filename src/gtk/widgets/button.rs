@@ -42,37 +42,33 @@ impl Button {
 
     pub fn new_with_label(label: &str) -> Option<Button> {
         let tmp_pointer = unsafe {
-            label.with_c_str(|c_str| {
-                ffi::gtk_button_new_with_label(c_str)
-            })
+            let c_str = CString::from_slice(label.as_bytes());
+            ffi::gtk_button_new_with_label(c_str)
         };
         check_pointer!(tmp_pointer, Button)
     }
 
     pub fn new_with_mnemonic(mnemonic: &str) -> Option<Button> {
+        let c_str = CString::from_slice(mnemonic.as_bytes());
         let tmp_pointer = unsafe {
-            mnemonic.with_c_str(|c_str| {
                 ffi::gtk_button_new_with_mnemonic(c_str)
-            })
         };
         check_pointer!(tmp_pointer, Button)
     }
 
     #[cfg(any(feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
     pub fn new_from_icon_name(icon_name: &str, size: IconSize) -> Option<Button> {
+        let c_str = CString::from_slice(icon_name.as_bytes());
         let tmp_pointer = unsafe {
-            icon_name.with_c_str(|c_str| {
-                ffi::gtk_button_new_from_icon_name(c_str, size)
-            })
+            ffi::gtk_button_new_from_icon_name(c_str, size)
         };
         check_pointer!(tmp_pointer, Button)
     }
 
     pub fn new_from_stock(stock_id: &str) -> Option<Button> {
+        let c_str = CString::from_slice(stock_id.as_bytes());
         let tmp_pointer = unsafe {
-            stock_id.with_c_str(|c_str| {
-                ffi::gtk_button_new_from_stock(c_str)
-            })
+            ffi::gtk_button_new_from_stock(c_str)
         };
         check_pointer!(tmp_pointer, Button)
     }

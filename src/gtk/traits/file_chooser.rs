@@ -101,9 +101,8 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
 
     fn set_current_name(&self, name: &str) -> () {
         unsafe {
-            name.with_c_str(|c_str| {
-                ffi::gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(self.get_widget()), c_str)
-            })
+            let c_str = CString::from_slice(name.as_bytes());
+            ffi::gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(self.get_widget()), c_str)
         }
     }
 
@@ -412,9 +411,8 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
 
     fn remove_shortcut_folder_uri(&self, uri: &str, error: &mut glib::Error) -> bool {
         match unsafe {
-            uri.with_c_str(|c_str| {
-                ffi::gtk_file_chooser_remove_shortcut_folder(GTK_FILE_CHOOSER(self.get_widget()), c_str, &mut error.unwrap())
-            })
+            let c_str = CString::from_slice(uri.as_bytes());
+            ffi::gtk_file_chooser_remove_shortcut_folder(GTK_FILE_CHOOSER(self.get_widget()), c_str, &mut error.unwrap())
         } {
             ffi::GFALSE => false,
             _ => true

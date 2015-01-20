@@ -36,9 +36,8 @@ pub trait FontChooserTrait: gtk::WidgetTrait {
 
     fn set_font(&self, font_name: &str) {
         unsafe {
-            font_name.with_c_str(|c_str| {
-                ffi::gtk_font_chooser_set_font(GTK_FONT_CHOOSER(self.get_widget()), c_str as *mut c_char)
-            })
+            let c_str = CString::from_slice(font_name.as_bytes());
+            ffi::gtk_font_chooser_set_font(GTK_FONT_CHOOSER(self.get_widget()), c_str as *mut c_char)
         }
     }
 
@@ -68,9 +67,11 @@ pub trait FontChooserTrait: gtk::WidgetTrait {
     }
 
     fn set_show_preview_entry(&self, show_preview_entry: bool) {
-        unsafe { ffi::gtk_font_chooser_set_show_preview_entry(GTK_FONT_CHOOSER(self.get_widget()), match show_preview_entry {
-            true => ffi::GTRUE,
-            false => ffi::GFALSE
-        }) }
+        unsafe { ffi::gtk_font_chooser_set_show_preview_entry(GTK_FONT_CHOOSER(self.get_widget()),
+                                                              match show_preview_entry {
+                                                                  true => ffi::GTRUE,
+                                                                  false => ffi::GFALSE
+                                                              });
+        }
     }
 }

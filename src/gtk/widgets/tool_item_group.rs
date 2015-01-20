@@ -25,9 +25,8 @@ struct_Widget!(ToolItemGroup);
 impl ToolItemGroup {
     pub fn new(label: &str) -> Option<ToolItemGroup> {
         let tmp_pointer = unsafe {
-            label.with_c_str(|c_str| {
-                ffi::gtk_tool_item_group_new(c_str)
-            })
+            let c_str = CString::from_slice(label.as_bytes());
+            ffi::gtk_tool_item_group_new(c_str)
         };
         check_pointer!(tmp_pointer, ToolItemGroup)
     }
@@ -74,10 +73,9 @@ impl ToolItemGroup {
     }
 
     pub fn set_label(&self, label: &str) {
+        let c_str = CString::from_slice(label.as_bytes());
         unsafe {
-            label.with_c_str(|c_str| {
-                ffi::gtk_tool_item_group_set_label(GTK_TOOL_ITEM_GROUP(self.get_widget()), c_str)
-            })
+            ffi::gtk_tool_item_group_set_label(GTK_TOOL_ITEM_GROUP(self.get_widget()), c_str)
         }
     }
 

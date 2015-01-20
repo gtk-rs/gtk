@@ -31,18 +31,16 @@ pub trait ActionableTrait: gtk::WidgetTrait {
     }
 
     fn set_action_name(&self, action_name: &str) {
+        let c_str = CString::from_slice(action_name.as_bytes());
         unsafe {
-            action_name.with_c_str(|c_str| {
-                ffi::gtk_actionable_set_action_name(GTK_ACTIONABLE(self.get_widget()), c_str)
-            })
+            ffi::gtk_actionable_set_action_name(GTK_ACTIONABLE(self.get_widget()), c_str)
         }
     }
 
     fn set_detailed_action_name(&self, detailed_action_name: &str) {
+        let c_str = CString::from_slice(detailed_action_name.as_bytes());
         unsafe {
-            detailed_action_name.with_c_str(|c_str| {
-                ffi::gtk_actionable_set_detailed_action_name(GTK_ACTIONABLE(self.get_widget()), c_str)
-            })
+            ffi::gtk_actionable_set_detailed_action_name(GTK_ACTIONABLE(self.get_widget()), c_str)
         }
     }
 }

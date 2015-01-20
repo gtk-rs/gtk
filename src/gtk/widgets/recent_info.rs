@@ -99,10 +99,9 @@ impl RecentInfo {
         let mut count = 0u32;
         let mut time_ = 0i64;
 
+        let c_str = CString::from_slice(app_name.as_bytes());
         let ret = match unsafe {
-            app_name.with_c_str(|c_str| {
-                ffi::gtk_recent_info_get_application_info(GTK_RECENT_INFO(self.get_widget()), c_str, &app_exec, &mut count, &mut time_)
-            })
+            ffi::gtk_recent_info_get_application_info(GTK_RECENT_INFO(self.get_widget()), c_str, &app_exec, &mut count, &mut time_)
         } {
             ffi::GFALSE => false,
             _ => true
@@ -166,9 +165,9 @@ impl RecentInfo {
     }
 
     pub fn has_group(&self, group_name: &str) -> bool {
-        match unsafe { group_name.with_c_str(|c_str| {
-            ffi::gtk_recent_info_has_group(GTK_RECENT_INFO(self.get_widget()), c_str)
-        })} {
+        let c_str = CString::from_slice(group_name.as_bytes());
+        match unsafe {
+            ffi::gtk_recent_info_has_group(GTK_RECENT_INFO(self.get_widget()), c_str)} {
             ffi::GFALSE => false,
             _ => true
         }

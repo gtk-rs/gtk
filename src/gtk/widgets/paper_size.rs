@@ -24,10 +24,9 @@ struct_Widget!(PaperSize);
 
 impl PaperSize {
     pub fn new(name: &str) -> Option<PaperSize> {
+        let c_str = CString::from_slice(name.as_bytes());
         let tmp_pointer = unsafe {
-            name.with_c_str(|c_str| {
-                ffi::gtk_paper_size_new(c_str)
-            })
+            ffi::gtk_paper_size_new(c_str)
         };
 
         if tmp_pointer.is_null() {
@@ -38,12 +37,10 @@ impl PaperSize {
     }
 
     pub fn new_from_ppd(ppd_name: &str, ppd_display_name: &str, width: f64, height: f64) -> Option<PaperSize> {
+        let c_str = CString::from_slice(ppd_name.as_bytes());
+        let c_str2 = CString::from_slice(ppd_display_name.as_bytes());
         let tmp_pointer = unsafe {
-            ppd_name.with_c_str(|c_str| {
-                ppd_display_name.with_c_str(|c_str2| {
-                    ffi::gtk_paper_size_new_from_ppd(c_str, c_str2, width, height)
-                })
-            })
+            ffi::gtk_paper_size_new_from_ppd(c_str, c_str2, width, height)
         };
 
         if tmp_pointer.is_null() {
@@ -54,12 +51,10 @@ impl PaperSize {
     }
 
     pub fn new_custom(name: &str, display_name: &str, width: f64, height: f64, unit: gtk::Unit) -> Option<PaperSize> {
+        let c_str = CString::from_slice(name.as_bytes());
+        let c_str2 = CString::from_slice(display_name.as_bytes());
         let tmp_pointer = unsafe {
-            name.with_c_str(|c_str| {
-                display_name.with_c_str(|c_str2| {
-                    ffi::gtk_paper_size_new_custom(c_str, c_str2, width, height, unit)
-                })
-            })
+            ffi::gtk_paper_size_new_custom(c_str, c_str2, width, height, unit)
         };
 
         if tmp_pointer.is_null() {
@@ -89,8 +84,8 @@ impl PaperSize {
     pub fn get_paper_sizes(include_custom: bool) -> glib::List<Box<PaperSize>> {
         let tmp = unsafe { ffi::gtk_paper_size_get_paper_sizes(match include_custom {
             true => ffi::GTRUE,
-            false => ffi::GFALSE
-        }) };
+            false => ffi::GFALSE });
+        };
 
         if tmp.is_null() {
             glib::List::new()

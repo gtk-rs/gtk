@@ -75,9 +75,8 @@ pub trait ButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait {
 
     fn set_label(&mut self, label: &str) -> () {
         unsafe {
-            label.with_c_str(|c_str| {
-                ffi::gtk_button_set_label(GTK_BUTTON(self.get_widget()), c_str)
-            });
+            let c_str = CString::from_slice(label.as_bytes());
+            ffi::gtk_button_set_label(GTK_BUTTON(self.get_widget()), c_str)
         }
     }
 
@@ -174,16 +173,15 @@ pub trait ButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait {
 
     fn connect_clicked_signal(&self, handler: Box<ButtonClickedHandler>) {
         let data = unsafe { mem::transmute::<Box<Box<ButtonClickedHandler>>, ffi::gpointer>(Box::new(handler)) };
-        "clicked".with_c_str(|cstr| {
-            unsafe {
-                ffi::g_signal_connect_data(self.get_widget() as ffi::gpointer,
-                    cstr,
-                    Some(mem::transmute(widget_destroy_callback)),
-                    data,
-                    Some(drop_widget_destroy_handler as extern "C" fn(ffi::gpointer, *const ffi::C_GClosure)),
-                    0);
-            }
-        });
+        let c_str = CString::from_slice("clicked");
+        unsafe {
+            ffi::g_signal_connect_data(self.get_widget() as ffi::gpointer,
+                                       c_str,
+                                       Some(mem::transmute(widget_destroy_callback)),
+                                       data,
+                                       Some(drop_widget_destroy_handler as extern "C" fn(ffi::gpointer, *const ffi::C_GClosure)),
+                                       0);
+        };
     }
 }
 

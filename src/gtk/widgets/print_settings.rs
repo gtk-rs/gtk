@@ -42,9 +42,10 @@ impl PrintSettings {
     }
 
     pub fn has_key(&self, key: &str) -> bool {
-        match unsafe { key.with_c_str(|c_str| {
+        let c_str = CString::from_slice(key.as_bytes());
+        match unsafe {
             ffi::gtk_print_settings_has_key(GTK_PRINT_SETTINGS(self.get_widget()), c_str)
-        }) } {
+        } {
             ffi::GFALSE => false,
             _ => true
         }
@@ -232,10 +233,12 @@ impl PrintSettings {
     }
 
     pub fn set_reverse(&self, reverse: bool) {
-        unsafe { ffi::gtk_print_settings_set_reverse(GTK_PRINT_SETTINGS(self.get_widget()), match reverse {
-            true => ffi::GTRUE,
-            false => ffi::GFALSE
-        }) }
+        unsafe { ffi::gtk_print_settings_set_reverse(GTK_PRINT_SETTINGS(self.get_widget()),
+                                                     match reverse {
+                                                         true => ffi::GTRUE,
+                                                         false => ffi::GFALSE
+                                                     })
+        }
     }
 
     pub fn get_n_copies(&self) -> i32 {

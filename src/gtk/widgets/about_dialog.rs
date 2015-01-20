@@ -43,9 +43,8 @@ impl AboutDialog {
 
     pub fn set_program_name(&self, name: &str) -> () {
         unsafe {
-            name.with_c_str(|c_str| {
-                ffi::gtk_about_dialog_set_program_name(GTK_ABOUT_DIALOG(self.get_widget()), c_str)
-            })
+            let c_str = CString::from_slice(name.as_bytes());
+            ffi::gtk_about_dialog_set_program_name(GTK_ABOUT_DIALOG(self.get_widget()), c_str)
         };
     }
 
@@ -329,9 +328,8 @@ impl AboutDialog {
             tmp.as_slice().with_c_str(|c_str|{tmp_vec.push(c_str)});
         }
         unsafe {
-            section_name.with_c_str(|c_str| {
-                ffi::gtk_about_dialog_add_credit_section(GTK_ABOUT_DIALOG(self.get_widget()), c_str, tmp_vec.as_slice().as_ptr())
-            })
+            let c_str = CString::from_slice(section_name.as_bytes());
+            ffi::gtk_about_dialog_add_credit_section(GTK_ABOUT_DIALOG(self.get_widget()), c_str, tmp_vec.as_slice().as_ptr())
         }
     }
 

@@ -100,9 +100,8 @@ impl ColorButton {
 
     pub fn set_title(&mut self, title: &str) -> () {
         unsafe {
-            title.with_c_str(|c_str| {
-                ffi::gtk_color_button_set_title(GTK_COLORBUTTON(self.pointer), c_str)
-            });
+            let c_str = CString::from_slice(title.as_bytes());
+            ffi::gtk_color_button_set_title(GTK_COLORBUTTON(self.pointer), c_str);
         }
     }
 

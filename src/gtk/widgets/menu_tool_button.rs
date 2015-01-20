@@ -29,12 +29,11 @@ impl MenuToolButton {
         let tmp_pointer = unsafe {
             match label {
                 Some(l) => {
-                    l.with_c_str(|c_str| {
-                        match icon_widget {
-                            Some(i) => ffi::gtk_menu_tool_button_new(i.get_widget(), c_str),
-                            None    => ffi::gtk_menu_tool_button_new(ptr::null_mut(), c_str)
-                        }
-                    })
+                    let c_str = CString::from_slice(l.as_bytes());
+                    match icon_widget {
+                        Some(i) => ffi::gtk_menu_tool_button_new(i.get_widget(), c_str),
+                        None    => ffi::gtk_menu_tool_button_new(ptr::null_mut(), c_str)
+                    }
                 },
                 None    => {
                     match icon_widget {
@@ -63,11 +62,10 @@ impl MenuToolButton {
     }
 
     pub fn set_arrow_tooltip_markup(&mut self, markup: &str) -> () {
-        markup.with_c_str(|c_str| {
-            unsafe {
-                ffi::gtk_menu_tool_button_set_arrow_tooltip_markup(GTK_MENUTOOLBUTTON(self.pointer), c_str)
-            }
-        })
+        let c_str = CString::from_slice(markup.as_bytes());
+        unsafe {
+            ffi::gtk_menu_tool_button_set_arrow_tooltip_markup(GTK_MENUTOOLBUTTON(self.pointer), c_str)
+        }
     }
 }
 

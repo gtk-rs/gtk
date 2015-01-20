@@ -38,14 +38,13 @@ pub trait EditableTrait: gtk::WidgetTrait {
     }
 
     fn insert_text(&mut self, new_text: &str, new_text_length: i32, position: i32) {
-        new_text.with_c_str(|c_str| {
-            unsafe {
+        let c_str = CString::from_slice(new_text.as_bytes());
+        unsafe {
                 ffi::gtk_editable_insert_text(GTK_EDITABLE(self.get_widget()),
                                               c_str,
                                               new_text_length,
                                               position)
             }
-        })
     }
 
     fn delete_text(&mut self, start_pos: i32, end_pos: i32) {

@@ -32,18 +32,16 @@ impl RadioButton {
 
     pub fn new_with_label(label: &str) -> Option<RadioButton> {
         let tmp_pointer = unsafe {
-            label.with_c_str(|c_str| {
-                ffi::gtk_radio_button_new_with_label(ptr::null_mut(), c_str)
-            })
+            let c_str = CString::from_slice(label.as_bytes());
+            ffi::gtk_radio_button_new_with_label(ptr::null_mut(), c_str)
         };
         check_pointer!(tmp_pointer, RadioButton)
     }
 
     pub fn new_with_mnemonic(mnemonic: &str) -> Option<RadioButton> {
+        let c_str = CString::from_slice(mnemonic.as_bytes());
         let tmp_pointer = unsafe {
-            mnemonic.with_c_str(|c_str| {
-                ffi::gtk_radio_button_new_with_mnemonic(ptr::null_mut(), c_str)
-            })
+            ffi::gtk_radio_button_new_with_mnemonic(ptr::null_mut(), c_str)
         };
         check_pointer!(tmp_pointer, RadioButton)
     }

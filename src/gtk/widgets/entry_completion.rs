@@ -69,9 +69,8 @@ impl EntryCompletion {
 
     pub fn compute_prefix(&self, key: &str) -> Option<String> {
         let tmp_pointer = unsafe {
-            key.with_c_str(|c_str| {
-                ffi::gtk_entry_completion_compute_prefix(GTK_ENTRY_COMPLETION(self.pointer), c_str)
-            })
+            let c_str = CString::from_slice(key.as_bytes());
+            ffi::gtk_entry_completion_compute_prefix(GTK_ENTRY_COMPLETION(self.pointer), c_str)
         };
 
         if tmp_pointer.is_null() {
@@ -184,10 +183,12 @@ impl EntryCompletion {
     }
 
     pub fn set_popup_single_match(&self, inline_completion: bool) {
-        unsafe { ffi::gtk_entry_completion_set_popup_single_match(GTK_ENTRY_COMPLETION(self.pointer), match inline_completion {
-            true => 1,
-            false => 0
-        }) }
+        unsafe { ffi::gtk_entry_completion_set_popup_single_match(GTK_ENTRY_COMPLETION(self.pointer),
+                                                                  match inline_completion {
+                                                                      true => 1,
+                                                                      false => 0
+                                                                  })
+        }
     }
 
     pub fn get_popup_single_match(&self) -> bool {

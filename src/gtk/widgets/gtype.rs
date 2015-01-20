@@ -18,6 +18,7 @@
 // https://developer.gnome.org/gobject/unstable/gobject-Type-Information.html#GType
 pub mod g_type {
     use gtk::{self, ffi};
+    use std::ffi::CString;
 
     pub fn name(_type: gtk::GType) -> Option<String> {
         let tmp_pointer = unsafe { ffi::g_type_name(_type) };
@@ -30,10 +31,9 @@ pub mod g_type {
     }
 
     pub fn from_name(name: &str) -> gtk::GType {
+        let c_str = CString::from_slice(name.as_bytes());
         unsafe {
-            name.with_c_str(|c_str| {
-                ffi::g_type_from_name(c_str)
-            })
+            ffi::g_type_from_name(c_str)
         }
     }
 

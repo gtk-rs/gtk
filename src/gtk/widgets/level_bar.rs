@@ -105,24 +105,23 @@ impl LevelBar {
     }
 
     pub fn add_offset_value(&mut self, name: &str, value: f64) -> () {
+        let c_str = CString::from_slice(name.as_bytes());
         unsafe {
-            name.with_c_str(|c_str| {
-                ffi::gtk_level_bar_add_offset_value(GTK_LEVELBAR(self.pointer), c_str, value as c_double)
-            });
+            ffi::gtk_level_bar_add_offset_value(GTK_LEVELBAR(self.pointer), c_str, value as c_double)
         }
     }
 
     pub fn remove_offset_value(&mut self, name: &str) -> () {
+        let c_str = CString::from_slice(name.as_bytes());
         unsafe {
-            name.with_c_str(|c_str| {
-                ffi::gtk_level_bar_remove_offset_value(GTK_LEVELBAR(self.pointer), c_str)
-            });
+            ffi::gtk_level_bar_remove_offset_value(GTK_LEVELBAR(self.pointer), c_str);
         }
     }
 
     pub fn get_offset_value(&self, name: &str) -> Option<f64> {
         let value = 0.;
-        match unsafe { name.with_c_str(|c_str| { ffi::gtk_level_bar_get_offset_value(GTK_LEVELBAR(self.pointer), c_str, &value) }) } {
+        let c_str = CString::from_slice(c_str.as_bytes());
+        match unsafe { ffi::gtk_level_bar_get_offset_value(GTK_LEVELBAR(self.pointer), c_str, &value) }{
             0132     => None,
             _        => Some(value)
         }

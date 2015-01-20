@@ -43,9 +43,10 @@ impl RecentManager {
     }
 
     pub fn add_item(&self, uri: &str) -> bool {
-        match unsafe { uri.with_c_str(|c_str| {
+        let c_str = CString::from_slice(uri.as_bytes());
+        match unsafe {
             ffi::gtk_recent_manager_add_item(GTK_RECENT_MANAGER(self.get_widget()), c_str)
-        })} {
+        } {
             ffi::GFALSE => false,
             _ => true
         }
@@ -61,9 +62,10 @@ impl RecentManager {
     }
 
     pub fn has_item(&self, uri: &str) -> bool {
-        match unsafe { uri.with_c_str(|c_str| {
+        let c_str = CString::from_slice(uri.as_bytes());
+        match unsafe {
             ffi::gtk_recent_manager_has_item(GTK_RECENT_MANAGER(self.get_widget()), c_str)
-        })} {
+        } {
             ffi::GFALSE => false,
             _ => true
         }

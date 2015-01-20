@@ -23,9 +23,8 @@ use gtk::cast::GTK_LABEL;
 pub trait LabelTrait: gtk::WidgetTrait {
     fn set_label(&mut self, text: &str) -> () {
         unsafe {
-            text.with_c_str(|c_str| {
-                ffi::gtk_label_set_label(GTK_LABEL(self.get_widget()), c_str)
-            });
+            let c_str = CString::from_slice(text.as_bytes());
+            ffi::gtk_label_set_label(GTK_LABEL(self.get_widget()), c_str)
         }
     }
 
@@ -68,10 +67,9 @@ pub trait LabelTrait: gtk::WidgetTrait {
     }
 
     fn set_text_with_mnemonic(&mut self, text: &str) -> () {
+        let c_str = CString::from_slice(text);
         unsafe {
-            text.with_c_str(|c_str| {
-                ffi::gtk_label_set_text_with_mnemonic(GTK_LABEL(self.get_widget()), c_str)
-            });
+            ffi::gtk_label_set_text_with_mnemonic(GTK_LABEL(self.get_widget()), c_str);
         }
     }
 
@@ -278,4 +276,3 @@ pub trait LabelTrait: gtk::WidgetTrait {
         }
     }
 }
-

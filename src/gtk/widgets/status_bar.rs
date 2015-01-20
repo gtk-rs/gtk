@@ -30,11 +30,10 @@ impl StatusBar {
 
     pub fn push(&mut self, context_id: u32, text: &str) -> u32 {
         unsafe {
-            text.with_c_str(|c_str| {
-                ffi::gtk_statusbar_push(GTK_STATUSBAR(self.pointer),
+            let c_str = CString::from_slice(text.as_bytes());
+            ffi::gtk_statusbar_push(GTK_STATUSBAR(self.pointer),
                                         context_id,
                                         c_str)
-            })
         }
     }
 

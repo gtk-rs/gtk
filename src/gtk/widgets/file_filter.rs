@@ -32,10 +32,9 @@ impl FileFilter {
     }
 
     pub fn set_name(&self, name: &str) -> () {
+        let c_str = CString::from_slice(name.as_bytes());
         unsafe {
-            name.with_c_str(|c_str| {
-                ffi::gtk_file_filter_set_name(self.pointer, c_str)
-            })
+            ffi::gtk_file_filter_set_name(self.pointer, c_str)
         };
     }
 
@@ -58,10 +57,9 @@ impl FileFilter {
     }
 
     pub fn add_pattern(&self, pattern: &str) -> () {
+        let c_str = CString::from_slice(pattern.as_bytes());
         unsafe {
-            pattern.with_c_str(|c_str| {
-                ffi::gtk_file_filter_add_pattern(self.pointer, c_str)
-            })
+            ffi::gtk_file_filter_add_pattern(self.pointer, c_str)
         };
     }
 
