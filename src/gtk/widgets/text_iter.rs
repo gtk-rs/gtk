@@ -16,6 +16,7 @@
 //! GtkTextIter — Text buffer iterator
 
 use gtk::{self, ffi};
+use c_str::FromCStr;
 
 #[derive(Copy)]
 pub struct TextIter {
@@ -91,7 +92,7 @@ impl TextIter {
         if tmp_pointer.is_null() {
             None
         } else {
-            unsafe { Some(String::from_utf8(tmp_pointer as *const u8)) }
+            unsafe { Some(FromCStr::from_raw_buf(tmp_pointer as *const u8)) }
         }
     }
 
@@ -102,7 +103,7 @@ impl TextIter {
         if tmp_pointer.is_null() {
             None
         } else {
-            unsafe { Some(String::from_utf8(tmp_pointer as *const u8)) }
+            unsafe { Some(FromCStr::from_raw_buf(tmp_pointer as *const u8)) }
         }
     }
 
@@ -113,7 +114,7 @@ impl TextIter {
         if tmp_pointer.is_null() {
             None
         } else {
-            unsafe { Some(String::from_utf8(tmp_pointer as *const u8)) }
+            unsafe { Some(FromCStr::from_raw_buf(tmp_pointer as *const u8)) }
         }
     }
 
@@ -124,7 +125,7 @@ impl TextIter {
         if tmp_pointer.is_null() {
             None
         } else {
-            unsafe { Some(String::from_utf8(tmp_pointer as *const u8)) }
+            unsafe { Some(FromCStr::from_raw_buf(tmp_pointer as *const u8)) }
         }
     }
 

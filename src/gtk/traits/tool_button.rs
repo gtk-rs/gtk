@@ -16,6 +16,7 @@
 use std::ffi::CString;
 use gtk::cast::GTK_TOOLBUTTON;
 use gtk::{self, ffi};
+use c_str::FromCStr;
 
 pub trait ToolButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait + gtk::ToolItemTrait {
     fn set_label(&mut self, label: &str) -> () {
@@ -46,7 +47,7 @@ pub trait ToolButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrai
             if c_str.is_null() {
                 None
             } else {
-                Some(String::from_utf8(c_str as *const u8))
+                Some(FromCStr::from_raw_buf(c_str as *const u8))
             }
         }
     }
@@ -57,7 +58,7 @@ pub trait ToolButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrai
             if c_str.is_null() {
                 None
             } else {
-                Some(String::from_utf8(c_str as *const u8))
+                Some(FromCStr::from_raw_buf(c_str as *const u8))
             }
         }
     }
@@ -68,7 +69,7 @@ pub trait ToolButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrai
             if c_str.is_null() {
                 None
             } else {
-                Some(String::from_utf8(c_str as *const u8))
+                Some(FromCStr::from_raw_buf(c_str as *const u8))
             }
         }
     }

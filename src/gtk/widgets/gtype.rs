@@ -19,6 +19,7 @@
 pub mod g_type {
     use gtk::{self, ffi};
     use std::ffi::CString;
+    use c_str::{FromCStr, ToCStr};
 
     pub fn name(_type: gtk::GType) -> Option<String> {
         let tmp_pointer = unsafe { ffi::g_type_name(_type) };
@@ -26,14 +27,15 @@ pub mod g_type {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(unsafe { String::from_utf8(tmp_pointer as *const u8) })
+            Some(unsafe { FromCStr::from_raw_buf(tmp_pointer as *const u8) })
         }
     }
 
     pub fn from_name(name: &str) -> gtk::GType {
-        let c_str = CString::from_slice(name.as_bytes());
         unsafe {
-            ffi::g_type_from_name(c_str)
+            name.with_c_str(|c_str| {
+                ffi::g_type_from_name(c_str)
+            })
         }
     }
 

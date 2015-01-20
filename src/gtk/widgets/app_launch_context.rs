@@ -19,6 +19,7 @@ use gtk::{self, ffi};
 use gtk::cast::{GTK_APP_LAUNCH_CONTEXT};
 use std::str;
 use std::string;
+use c_str::FromCStr;
 
 struct_Widget!(AppLaunchContext);
 
@@ -65,7 +66,7 @@ impl AppLaunchContext {/*
                     if tmp.is_null() {
                         break;
                     }
-                    ret.push(String::from_utf8(*tmp));
+                    ret.push(FromCStr::from_raw_buf(*tmp));
                     it += 1;
                 }
             }
@@ -79,7 +80,7 @@ impl AppLaunchContext {/*
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(String::from_utf8(tmp_pointer))
+            Some(FromCStr::from_raw_buf(tmp_pointer))
         }
     }
 
@@ -89,7 +90,7 @@ impl AppLaunchContext {/*
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(String::from_utf8(tmp_pointer))
+            Some(FromCStr::from_raw_buf(tmp_pointer))
         }
     }
 

@@ -18,6 +18,7 @@
 use std::ffi::CString;
 use gtk::{self, ffi};
 use gtk::cast::GTK_MENU_ITEM;
+use c_str::{FromCStr, ToCStr};
 
 /// The widget used for item in menus
 pub trait MenuItemTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait {
@@ -61,7 +62,7 @@ pub trait MenuItemTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait 
 
     fn get_accel_path(&self) -> String {
         unsafe {
-            String::from_utf8(ffi::gtk_menu_item_get_accel_path(GTK_MENU_ITEM(self.get_widget()))
+            FromCStr::from_raw_buf(ffi::gtk_menu_item_get_accel_path(GTK_MENU_ITEM(self.get_widget()))
                                          as *const u8)
         }
     }
@@ -75,7 +76,7 @@ pub trait MenuItemTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait 
 
     fn get_label(&self) -> String {
         unsafe {
-            String::from_utf8(ffi::gtk_menu_item_get_label(GTK_MENU_ITEM(self.get_widget()))
+            FromCStr::from_raw_buf(ffi::gtk_menu_item_get_label(GTK_MENU_ITEM(self.get_widget()))
                                          as *const u8)
         }
     }

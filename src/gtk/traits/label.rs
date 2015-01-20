@@ -19,7 +19,7 @@ use std::ffi::CString;
 use gtk::{self, ffi};
 use gtk::Justification;
 use gtk::cast::GTK_LABEL;
-use c_str::ToCStr;
+use c_str::{FromCStr, ToCStr};
 
 pub trait LabelTrait: gtk::WidgetTrait {
     fn set_label(&mut self, text: &str) -> () {
@@ -205,7 +205,7 @@ pub trait LabelTrait: gtk::WidgetTrait {
             if c_str.is_null() {
                 None
             } else {
-                Some(String::from_utf8(c_str as *const u8))
+                Some(FromCStr::from_raw_buf(c_str as *const u8))
             }
         }
     }
@@ -216,7 +216,7 @@ pub trait LabelTrait: gtk::WidgetTrait {
             if c_str.is_null() {
                 None
             } else {
-                Some(String::from_utf8(c_str as *const u8))
+                Some(FromCStr::from_raw_buf(c_str as *const u8))
             }
         }
     }
@@ -227,7 +227,7 @@ pub trait LabelTrait: gtk::WidgetTrait {
             if c_str.is_null() {
                 None
             } else {
-                Some(String::from_utf8(c_str as *const u8))
+                Some(FromCStr::from_raw_buf(c_str as *const u8))
             }
         }
     }

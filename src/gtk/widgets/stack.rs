@@ -19,6 +19,7 @@
 
 use gtk::{self, ffi};
 use gtk::cast::GTK_STACK;
+use c_str::FromCStr;
 
 /// GtkStack — A stacking container
 struct_Widget!(Stack);
@@ -77,7 +78,7 @@ impl Stack {
         if c_name.is_null() {
             None
         } else {
-            Some(unsafe { String::from_utf8(c_name as *const u8) })
+            Some(unsafe { FromCStr::from_raw_buf(c_name as *const u8) })
         }
     }
 

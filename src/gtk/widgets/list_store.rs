@@ -18,6 +18,7 @@ use gtk::{self, ffi};
 use gtk::TreeIter;
 use std::ffi::CString;
 use std::num::ToPrimitive;
+use c_str::{FromCStr, ToCStr};
 
 pub struct ListStore {
     pointer: *mut ffi::C_GtkListStore

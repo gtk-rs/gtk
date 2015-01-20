@@ -19,6 +19,7 @@
 
 use gtk::cast::{GTK_HEADER_BAR};
 use gtk::{self, ffi};
+use c_str::FromCStr;
 
 /// GtkHeaderBar — A Box::new(with) a centered child
 struct_Widget!(HeaderBar);
@@ -41,7 +42,7 @@ impl HeaderBar {
         if c_title.is_null() {
             None
         } else {
-            Some(unsafe { String::from_utf8(c_title as *const u8) })
+            Some(unsafe { FromCStr::from_raw_buf(c_title as *const u8) })
         }
     }
 
@@ -57,7 +58,7 @@ impl HeaderBar {
         if c_subtitle.is_null() {
             None
         } else {
-            Some(unsafe { String::from_utf8(c_subtitle as *const u8) })
+            Some(unsafe { FromCStr::from_raw_buf(c_subtitle as *const u8) })
         }
     }
 

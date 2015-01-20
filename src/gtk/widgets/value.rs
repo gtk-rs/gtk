@@ -17,6 +17,7 @@
 
 use gtk::{self, ffi};
 use std::ffi::CString;
+use c_str::{FromCStr, ToCStr};
 
 trait GValuePrivate {
     fn get(gvalue: &GValue) -> Self;
@@ -62,7 +63,7 @@ impl GValue {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(unsafe { String::from_utf8(tmp_pointer as *const u8) })
+            Some(unsafe { FromCStr::from_raw_buf(tmp_pointer as *const u8) })
         }
     }
 
@@ -204,7 +205,7 @@ impl GValue {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(unsafe { String::from_utf8(tmp_pointer as *const u8) })
+            Some(unsafe { FromCStr::from_raw_buf(tmp_pointer as *const u8) })
         }
     }
 
@@ -215,7 +216,7 @@ impl GValue {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(unsafe { String::from_utf8(tmp_pointer as *const u8) })
+            Some(unsafe { FromCStr::from_raw_buf(tmp_pointer as *const u8) })
         }
     }
 

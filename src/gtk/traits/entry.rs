@@ -46,7 +46,7 @@ pub trait EntryTrait: gtk::WidgetTrait {
             if c_str.is_null() {
                 None
             } else {
-                Some(String::from_utf8(c_str as *const u8))
+                Some(FromCStr::from_raw_buf(c_str as *const u8))
             }
         }
     }
@@ -151,7 +151,7 @@ pub trait EntryTrait: gtk::WidgetTrait {
     fn placeholder(&self) -> String {
         unsafe {
             let c_str = ffi::gtk_entry_get_placeholder_text(GTK_ENTRY(self.get_widget()));
-            String::from_utf8(c_str as *const u8)
+            FromCStr::from_raw_buf(c_str as *const u8)
         }
     }
 
@@ -274,14 +274,14 @@ pub trait EntryTrait: gtk::WidgetTrait {
     fn get_icon_stock(&self, icon_pos: EntryIconPosition) -> String {
         unsafe {
             let c_str = ffi::gtk_entry_get_icon_stock(GTK_ENTRY(self.get_widget()), icon_pos);
-            String::from_utf8(c_str as *const u8)
+            FromCStr::from_raw_buf(c_str as *const u8)
         }
     }
 
     fn get_icon_name(&self, icon_pos: EntryIconPosition) -> String {
         unsafe {
             let c_str = ffi::gtk_entry_get_icon_name(GTK_ENTRY(self.get_widget()), icon_pos);
-            String::from_utf8(c_str as *const u8)
+            FromCStr::from_raw_buf(c_str as *const u8)
         }
     }
 

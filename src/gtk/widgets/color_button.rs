@@ -19,6 +19,7 @@ use std::ffi::CString;
 use gtk::cast::GTK_COLORBUTTON;
 use gtk::{self, ffi};
 use gdk;
+use c_str::FromCStr;
 
 /**
 * ColorButton — A button to launch a color selection dialog
@@ -107,7 +108,7 @@ impl ColorButton {
 
     pub fn get_title(&self) -> String {
         let c_str = unsafe { ffi::gtk_color_button_get_title(GTK_COLORBUTTON(self.pointer)) };
-        unsafe { String::from_utf8(c_str as *const u8) }
+        unsafe { FromCStr::from_raw_buf(c_str as *const u8) }
     }
 }
 

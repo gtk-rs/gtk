@@ -22,6 +22,7 @@ use glib;
 use glib::GlibContainer;
 use std::str;
 use std::string;
+use c_str::FromCStr;
 
 struct_Widget!(AppInfo);
 
@@ -55,7 +56,7 @@ impl AppInfo {/*
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(unsafe {String::from_utf8(tmp_pointer) })
+            Some(unsafe {FromCStr::from_raw_buf(tmp_pointer) })
         }
     }
 
@@ -65,7 +66,7 @@ impl AppInfo {/*
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(unsafe { String::from_utf8(tmp_pointer) })
+            Some(unsafe { FromCStr::from_raw_buf(tmp_pointer) })
         }
     }
 
@@ -75,7 +76,7 @@ impl AppInfo {/*
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(unsafe { String::from_utf8(tmp_pointer) })
+            Some(unsafe { FromCStr::from_raw_buf(tmp_pointer) })
         }
     }
 
@@ -85,7 +86,7 @@ impl AppInfo {/*
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(unsafe { String::from_utf8(tmp_pointer) })
+            Some(unsafe { FromCStr::from_raw_buf(tmp_pointer) })
         }
     }
 
@@ -95,7 +96,7 @@ impl AppInfo {/*
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(unsafe { String::from_utf8(tmp_pointer) })
+            Some(unsafe { FromCStr::from_raw_buf(tmp_pointer) })
         }
     }
 
@@ -105,7 +106,7 @@ impl AppInfo {/*
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(unsafe { String::from_utf8(tmp_pointer) })
+            Some(unsafe { FromCStr::from_raw_buf(tmp_pointer) })
         }
     }
 
@@ -248,7 +249,7 @@ impl AppInfo {/*
                     if tmp.is_null() {
                         break;
                     }
-                    ret.push(String::from_utf8(*tmp));
+                    ret.push(FromCStr::from_raw_buf(*tmp));
                     it += 1;
                 }
             }

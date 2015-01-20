@@ -20,6 +20,7 @@ use gdk;
 use gtk;
 use glib;
 use glib::ffi::GType;
+use c_str::{FromCStr, ToCStr};
 
 pub trait WidgetTrait: ffi::FFIWidget {
     fn show_all(&mut self) -> () {
@@ -105,7 +106,7 @@ pub trait WidgetTrait: ffi::FFIWidget {
         if tmp.is_null() {
             None
         } else {
-            unsafe { Some(String::from_utf8(c_str_to_bytes(&tmp).to_vec()).unwrap()) }
+            unsafe { Some(FromCStr::from_raw_buf(c_str_to_bytes(&tmp).to_vec()).unwrap()) }
         }
     }
 
@@ -370,7 +371,7 @@ pub trait WidgetTrait: ffi::FFIWidget {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { String::from_utf8(c_str_to_bytes(&(tmp as *const c_char)).to_vec()).unwrap() })
+            Some(unsafe { FromCStr::from_raw_buf(c_str_to_bytes(&(tmp as *const c_char)).to_vec()).unwrap() })
         }
     }
 
@@ -388,7 +389,7 @@ pub trait WidgetTrait: ffi::FFIWidget {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { String::from_utf8(c_str_to_bytes(&(tmp as *const c_char)).to_vec()).unwrap() })
+            Some(unsafe { FromCStr::from_raw_buf(c_str_to_bytes(&(tmp as *const c_char)).to_vec()).unwrap() })
         }
     }
 

@@ -81,7 +81,7 @@ impl RecentManager {
             let mut tmp_vec : glib::List<Box<gtk::RecentInfo>> = glib::List::new();
 
             for it in old_list.iter() {
-                tmp_vec.append(Box::new(ffi::FFIWidget::wrap)(*it as *mut ffi::C_GtkWidget));
+                tmp_vec.append(Box::new(ffi::FFIWidget::wrap(*it as *mut ffi::C_GtkWidget)));
             }
             tmp_vec
         }

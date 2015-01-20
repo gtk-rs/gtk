@@ -18,6 +18,7 @@
 use glib;
 use gtk::{self, ffi, cast};
 use std::ffi::CString;
+use c_str::{FromCStr, ToCStr};
 
 pub struct TreeViewColumn {
     pointer: *mut ffi::C_GtkTreeViewColumn
@@ -146,7 +147,7 @@ impl TreeViewColumn {
 
     pub fn get_title(&self) -> String {
         unsafe {
-            String::from_utf8(ffi::gtk_tree_view_column_get_title(self.pointer) as *const u8)
+            FromCStr::from_raw_buf(ffi::gtk_tree_view_column_get_title(self.pointer) as *const u8)
         }
     }
 

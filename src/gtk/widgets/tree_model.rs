@@ -17,6 +17,7 @@ use glib::ffi::GType;
 use gtk::{self, ffi, GValue, TreeIter, TreePath};
 use std::ffi::CString;
 use libc;
+use c_str::FromCStr;
 
 pub struct TreeModel {
     pointer: *mut ffi::C_GtkTreeModel
@@ -136,7 +137,7 @@ impl TreeModel {
             String::new()
         } else {
             unsafe {
-                let res = String::from_utf8(string as *const u8);
+                let res = FromCStr::from_raw_buf(string as *const u8);
                 libc::free(string);
                 res
             }

@@ -14,6 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::ffi;
+use c_str::FromCStr;
 use std::ffi::CString;
 
 pub struct FileFilter {
@@ -44,7 +45,7 @@ impl FileFilter {
         if name.is_null() {
             None
         } else {
-            Some(unsafe { String::from_utf8(name as *const u8) })
+            Some(unsafe { FromCStr::from_raw_buf(name as *const u8) })
         }
     }
 

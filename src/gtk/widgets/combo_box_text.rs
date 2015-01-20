@@ -18,6 +18,7 @@
 use gtk::{self, ffi};
 use gtk::cast::GTK_COMBO_BOX_TEXT;
 use std::ffi::CString;
+use c_str::{FromCStr, ToCStr};
 
 struct_Widget!(ComboBoxText);
 
@@ -100,7 +101,7 @@ impl ComboBoxText {
         if tmp.is_null() {
             None
         } else {
-            unsafe { Some(String::from_utf8(tmp as *const u8)) }
+            unsafe { Some(FromCStr::from_raw_buf(tmp as *const u8)) }
         }
     }
 }

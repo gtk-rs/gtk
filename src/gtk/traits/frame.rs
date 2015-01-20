@@ -20,6 +20,7 @@ use std::ffi::CString;
 use gtk::ShadowType;
 use gtk::cast::GTK_FRAME;
 use gtk::{self, ffi};
+use c_str::{FromCStr, ToCStr};
 
 pub trait FrameTrait: gtk::WidgetTrait + gtk::ContainerTrait {
     fn set_label(&mut self, label: Option<&str>) -> () {
@@ -61,7 +62,7 @@ pub trait FrameTrait: gtk::WidgetTrait + gtk::ContainerTrait {
         if c_str.is_null() {
             None
         } else {
-            Some(unsafe {String::from_utf8(c_str as *const u8)})
+            Some(unsafe {FromCStr::from_raw_buf(c_str as *const u8)})
         }
     }
 

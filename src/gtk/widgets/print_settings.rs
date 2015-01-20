@@ -17,6 +17,7 @@ use gtk::{self, ffi};
 use gtk::ffi::FFIWidget;
 use gtk::cast::{GTK_PRINT_SETTINGS, GTK_PAPER_SIZE};
 use std::ffi::CString;
+use c_str::FromCStr;
 
 struct_Widget!(PrintSettings);
 
@@ -59,7 +60,7 @@ impl PrintSettings {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { String::from_utf8(tmp as *const u8) })
+            Some(unsafe { FromCStr::from_raw_buf(tmp as *const u8) })
         }
     }
 
@@ -149,7 +150,7 @@ impl PrintSettings {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { String::from_utf8(tmp as *const u8) })
+            Some(unsafe { FromCStr::from_raw_buf(tmp as *const u8) })
         }
     }
 
@@ -315,7 +316,7 @@ impl PrintSettings {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { String::from_utf8(tmp as *const u8) })
+            Some(unsafe { FromCStr::from_raw_buf(tmp as *const u8) })
         }
     }
 
@@ -331,7 +332,7 @@ impl PrintSettings {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { String::from_utf8(tmp as *const u8) })
+            Some(unsafe { FromCStr::from_raw_buf(tmp as *const u8) })
         }
     }
 
@@ -347,7 +348,7 @@ impl PrintSettings {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { String::from_utf8(tmp as *const u8) })
+            Some(unsafe { FromCStr::from_raw_buf(tmp as *const u8) })
         }
     }
 
@@ -363,7 +364,7 @@ impl PrintSettings {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { String::from_utf8(tmp as *const u8) })
+            Some(unsafe { FromCStr::from_raw_buf(tmp as *const u8) })
         }
     }
 
@@ -379,7 +380,7 @@ impl PrintSettings {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { String::from_utf8(tmp as *const u8) })
+            Some(unsafe { FromCStr::from_raw_buf(tmp as *const u8) })
         }
     }
 
