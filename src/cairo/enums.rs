@@ -16,6 +16,7 @@
 use std::fmt::{Show, Error};
 use cairo::ffi;
 use std::ffi::{CString, c_str_to_bytes};
+use c_str::{FromCStr, ToCStr};
 
 #[repr(C)]
 #[derive(Clone, PartialEq, PartialOrd, Copy)]
@@ -65,17 +66,19 @@ pub enum Status {
 
 impl Show for Status {
     fn fmt(&self, formatter: &mut ::std::fmt::Formatter) -> Result<(), Error> {
-        let c_str = unsafe {
-            String::from_utf8(c_str_to_bytes(ffi::cairo_status_to_string(*self)))
+        unsafe {
+            let char_ptr = ffi::cairo_status_to_string(*self);
+            let tmp : String = FromCStr::from_raw_buf(char_ptr as *const u8);
+
+            tmp.fmt(formatter)
         };
-        c_str.as_str().unwrap().fmt(formatter)
     }
 }
 
 impl Status {
     pub fn ensure_valid(&self) {
         if *self != Status::StatusSuccess {
-            panic!("Cairo error {}", *self)
+            panic!("Cairo error {:?}", *self)
         }
     }
 }

@@ -15,6 +15,7 @@
 
 use gtk::{self, ffi};
 use gtk::cast::GTK_APP_CHOOSER;
+use c_str::{FromCStr, ToCStr};
 
 pub trait AppChooserTrait: gtk::WidgetTrait {
     fn get_app_info(&self) -> Option<gtk::AppInfo> {
@@ -33,7 +34,7 @@ pub trait AppChooserTrait: gtk::WidgetTrait {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(unsafe { String::from_utf8(tmp_pointer as *const u8) })
+            Some(unsafe { FromCStr::from_raw_buf(tmp_pointer as *const u8) })
         }
     }
 

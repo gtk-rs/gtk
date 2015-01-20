@@ -19,6 +19,7 @@ use std::ffi::CString;
 use gtk::{self, ffi};
 use gtk::Justification;
 use gtk::cast::GTK_LABEL;
+use c_str::ToCStr;
 
 pub trait LabelTrait: gtk::WidgetTrait {
     fn set_label(&mut self, text: &str) -> () {

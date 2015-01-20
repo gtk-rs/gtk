@@ -16,6 +16,7 @@
 use std::ffi::CString;
 use gtk::{self, ffi};
 use gtk::cast::GTK_COMBO_BOX;
+use c_str::{FromCStr, ToCStr};
 
 pub trait ComboBoxTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait {
     fn get_wrap_width(&self) -> i32 {
@@ -78,7 +79,7 @@ pub trait ComboBoxTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait 
         if tmp.is_null() {
             None
         } else {
-            unsafe { Some(String::from_utf8(tmp as *const u8)) }
+            unsafe { Some(FromCStr::from_raw_buf(tmp as *const u8)) }
         }
     }
 

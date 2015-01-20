@@ -19,6 +19,7 @@ use std::ffi::CString;
 use gtk::{EntryIconPosition, ImageType, InputPurpose, InputHints};
 use gtk::cast::GTK_ENTRY;
 use gtk::{self, ffi};
+use c_str::{ToCStr, FromCStr};
 
 pub trait EntryTrait: gtk::WidgetTrait {
     fn get_buffer(&self) -> gtk::EntryBuffer {
@@ -328,7 +329,10 @@ pub trait EntryTrait: gtk::WidgetTrait {
     fn get_icon_tooltip_text(&self, icon_pos: EntryIconPosition) -> String {
         unsafe {
             let c_str = ffi::gtk_entry_get_icon_tooltip_text(GTK_ENTRY(self.get_widget()), icon_pos);
-            String::from_utf8(c_str as *const u8)
+            let ret = FromCStr::from_raw_buf(c_str as *const u8);
+
+            ::libc::funcs::c95::stdlib::free(c_str);
+            ret
         }
     }
 
@@ -341,7 +345,10 @@ pub trait EntryTrait: gtk::WidgetTrait {
     fn get_icon_tooltip_markup(&self, icon_pos: EntryIconPosition) -> String {
         unsafe {
             let c_str = ffi::gtk_entry_get_icon_tooltip_markup(GTK_ENTRY(self.get_widget()), icon_pos);
-            String::from_utf8(c_str as *const u8)
+            let ret = FromCStr::from_raw_buf(c_str as *const u8);
+
+            ::libc::funcs::c95::stdlib::free(c_str);
+            ret
         }
     }
 

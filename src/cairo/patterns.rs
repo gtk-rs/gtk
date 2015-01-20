@@ -38,11 +38,11 @@ pub fn wrap_pattern<'a>(ptr: *mut cairo_pattern_t) -> Box<Pattern + 'a> {
     let pattern_type = unsafe{ ffi::cairo_pattern_get_type(ptr) };
 
     match pattern_type {
-        PatternType::PatternTypeSolid            => Box::new(SolidPattern::wrap)(ptr)   as Box<Pattern>,
-        PatternType::PatternTypeSurface          => Box::new(SurfacePattern::wrap)(ptr) as Box<Pattern>,
-        PatternType::PatternTypeLinearGradient   => Box::new(LinearGradient::wrap)(ptr) as Box<Pattern>,
-        PatternType::PatternTypeRadialGradient   => Box::new(RadialGradient::wrap)(ptr) as Box<Pattern>,
-        PatternType::PatternTypeMesh             => Box::new(Mesh::wrap)(ptr)           as Box<Pattern>,
+        PatternType::PatternTypeSolid            => Box::new(SolidPattern::wrap(ptr))   as Box<Pattern>,
+        PatternType::PatternTypeSurface          => Box::new(SurfacePattern::wrap(ptr)) as Box<Pattern>,
+        PatternType::PatternTypeLinearGradient   => Box::new(LinearGradient::wrap(ptr)) as Box<Pattern>,
+        PatternType::PatternTypeRadialGradient   => Box::new(RadialGradient::wrap(ptr)) as Box<Pattern>,
+        PatternType::PatternTypeMesh             => Box::new(Mesh::wrap(ptr))           as Box<Pattern>,
         PatternType::PatternTypeRasterSource     => panic!("Not implemented")
     }
 }

@@ -16,6 +16,7 @@
 use std::ffi::CString;
 use gtk::cast::GTK_EDITABLE;
 use gtk::{self, ffi};
+use c_str::{FromCStr, ToCStr};
 
 pub trait EditableTrait: gtk::WidgetTrait {
     fn select_region(&mut self, start_pos: i32, end_pos: i32) {
@@ -38,13 +39,14 @@ pub trait EditableTrait: gtk::WidgetTrait {
     }
 
     fn insert_text(&mut self, new_text: &str, new_text_length: i32, position: i32) {
-        let c_str = CString::from_slice(new_text.as_bytes());
         unsafe {
+            new_text.with_c_str(|c_str| {
                 ffi::gtk_editable_insert_text(GTK_EDITABLE(self.get_widget()),
                                               c_str,
                                               new_text_length,
                                               position)
-            }
+            })
+        }
     }
 
     fn delete_text(&mut self, start_pos: i32, end_pos: i32) {
@@ -57,7 +59,7 @@ pub trait EditableTrait: gtk::WidgetTrait {
         let chars = unsafe {
             ffi::gtk_editable_get_chars(GTK_EDITABLE(self.get_widget()), start_pos, end_pos)
         };
-        unsafe { String::from_utf8(chars as *const u8) }
+        unsafe { FromCStr::from_raw_buf(chars as *const u8) }
     }
 
     fn cut_clipboard(&mut self) {
