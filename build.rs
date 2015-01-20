@@ -14,6 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 #![feature(slicing_syntax)]
+#![allow(unstable)]
 
 extern crate gcc;
 extern crate "pkg-config" as pkg_config;
