@@ -111,7 +111,7 @@ pub trait ToolItemTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait 
     }
 
     fn set_tooltip_markup(&mut self, markup: &str) -> () {
-        let c_str = CString::from_slice(markup);
+        let c_str = CString::from_slice(markup.as_bytes());
         ffi::gtk_tool_item_set_tooltip_markup(GTK_TOOLITEM(self.get_widget()), c_str)
     }
 

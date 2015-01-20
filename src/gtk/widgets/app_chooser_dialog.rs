@@ -51,7 +51,7 @@ impl AppChooserDialog {
     pub fn set_heading(&self, heading: &str) -> () {
         unsafe {
             let c_str = CString::from_slice(heading.as_bytes());
-            ffi::gtk_app_chooser_dialog_set_heading(GTK_APP_CHOOSER_DIALOG(self.get_widget()), c_str)
+            ffi::gtk_app_chooser_dialog_set_heading(GTK_APP_CHOOSER_DIALOG(self.get_widget()), c_str.as_ptr())
         }
     }
 

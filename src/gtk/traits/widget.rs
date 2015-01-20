@@ -96,7 +96,7 @@ pub trait WidgetTrait: ffi::FFIWidget {
 
     fn set_name(&self, name: &str) {
         let c_str = CString::from_slice(name.as_bytes());
-        unsafe { ffi::gtk_widget_set_name(self.get_widget(), c_str) }
+        unsafe { ffi::gtk_widget_set_name(self.get_widget(), c_str.as_ptr()) }
     }
 
     fn get_name(&self) -> Option<String> {
@@ -205,7 +205,7 @@ pub trait WidgetTrait: ffi::FFIWidget {
 
     fn override_symbolic_color(&self, name: &str, color: &gdk::RGBA) {
         let c_str = CString::from_slice(name.as_bytes());
-        unsafe { ffi::gtk_widget_override_symbolic_color(self.get_widget(), c_str, color); }
+        unsafe { ffi::gtk_widget_override_symbolic_color(self.get_widget(), c_str.as_ptr(), color); }
     }
 
     fn override_cursor(&self, cursor: &gdk::RGBA, secondary_cursor: &gdk::RGBA) {
@@ -370,14 +370,14 @@ pub trait WidgetTrait: ffi::FFIWidget {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { String::from_utf8(c_str_to_bytes(&tmp).to_vec()).unwrap() })
+            Some(unsafe { String::from_utf8(c_str_to_bytes(&(tmp as *const c_char)).to_vec()).unwrap() })
         }
     }
 
     fn set_tooltip_markup(&self, markup: &str) {
         unsafe {
             let c_str = CString::from_slice(markup.as_bytes());
-            ffi::gtk_widget_set_tooltip_markup(self.get_widget(), c_str as *mut c_char);
+            ffi::gtk_widget_set_tooltip_markup(self.get_widget(), c_str.as_ptr() as *mut c_char);
         }
     }
 
@@ -388,14 +388,14 @@ pub trait WidgetTrait: ffi::FFIWidget {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { String::from_utf8(tmp as *const u8) })
+            Some(unsafe { String::from_utf8(c_str_to_bytes(&(tmp as *const c_char)).to_vec()).unwrap() })
         }
     }
 
     fn set_tooltip_text(&self, text: &str) {
         unsafe {
             let c_str = CString::from_slice(text.as_bytes());
-            ffi::gtk_widget_set_tooltip_text(self.get_widget(), c_str as *mut c_char);
+            ffi::gtk_widget_set_tooltip_text(self.get_widget(), c_str.as_ptr() as *mut c_char);
         }
     }
 
@@ -843,7 +843,7 @@ pub trait WidgetTrait: ffi::FFIWidget {
     fn child_notify(&self, child_property: &str) {
         unsafe {
             let c_str = CString::from_slice(child_property.as_bytes());
-            ffi::gtk_widget_child_notify(self.get_widget(), c_str)
+            ffi::gtk_widget_child_notify(self.get_widget(), c_str.as_ptr())
         }
     }
 

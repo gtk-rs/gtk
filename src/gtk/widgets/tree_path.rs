@@ -40,7 +40,7 @@ impl TreePath {
     pub fn new_from_string(path: &str) -> Option<TreePath> {
         let c_str = CString::from_slice(path.as_bytes());
         let tmp = unsafe {
-            ffi::gtk_tree_path_new_from_string(c_str)
+            ffi::gtk_tree_path_new_from_string(c_str.as_ptr())
         };
 
         if tmp.is_null() {

@@ -43,7 +43,7 @@ impl Button {
     pub fn new_with_label(label: &str) -> Option<Button> {
         let tmp_pointer = unsafe {
             let c_str = CString::from_slice(label.as_bytes());
-            ffi::gtk_button_new_with_label(c_str)
+            ffi::gtk_button_new_with_label(c_str.as_ptr())
         };
         check_pointer!(tmp_pointer, Button)
     }
@@ -51,7 +51,7 @@ impl Button {
     pub fn new_with_mnemonic(mnemonic: &str) -> Option<Button> {
         let c_str = CString::from_slice(mnemonic.as_bytes());
         let tmp_pointer = unsafe {
-                ffi::gtk_button_new_with_mnemonic(c_str)
+                ffi::gtk_button_new_with_mnemonic(c_str.as_ptr())
         };
         check_pointer!(tmp_pointer, Button)
     }
@@ -68,7 +68,7 @@ impl Button {
     pub fn new_from_stock(stock_id: &str) -> Option<Button> {
         let c_str = CString::from_slice(stock_id.as_bytes());
         let tmp_pointer = unsafe {
-            ffi::gtk_button_new_from_stock(c_str)
+            ffi::gtk_button_new_from_stock(c_str.as_ptr())
         };
         check_pointer!(tmp_pointer, Button)
     }

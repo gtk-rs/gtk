@@ -138,9 +138,9 @@ impl TreeViewColumn {
     }
 
     pub fn set_title(&mut self, title: &str) {
+        let c_str = CString::from_slice(title.as_bytes());
         unsafe {
-            ffi::gtk_tree_view_column_set_title(self.pointer,
-                                                CString::from_slice(title.as_bytes()))
+            ffi::gtk_tree_view_column_set_title(self.pointer, c_str.as_ptr())
         }
     }
 

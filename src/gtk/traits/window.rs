@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::ffi::CString;
+use std::ffi::{CString, c_str_to_bytes};
 use gtk::{self, ffi};
 use gtk::ffi::to_gboolean;
 use gtk::cast::GTK_WINDOW;
@@ -23,7 +23,7 @@ pub trait WindowTrait : gtk::WidgetTrait {
     fn set_title(&mut self, title: &str) -> () {
         unsafe {
             let c_str = CString::from_slice(title.as_bytes());
-            ffi::gtk_window_set_title(GTK_WINDOW(self.get_widget()), c_str);
+            ffi::gtk_window_set_title(GTK_WINDOW(self.get_widget()), c_str.as_ptr());
         }
     }
 
@@ -38,7 +38,7 @@ pub trait WindowTrait : gtk::WidgetTrait {
         if c_title.is_null() {
             None
         } else {
-            Some(unsafe { String::from_utf8(c_title as *const u8) })
+            Some(unsafe { String::from_utf8(c_str_to_bytes(&(c_title as *const i8)).to_vec()).unwrap() })
         }
     }
 

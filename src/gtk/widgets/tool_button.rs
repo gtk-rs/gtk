@@ -48,7 +48,7 @@ impl ToolButton {
     pub fn new_from_stock(stock_id: &str) -> Option<ToolButton> {
         let c_str = CString::from_slice(stock_id.as_bytes());
         let tmp_pointer = unsafe {
-            ffi::gtk_tool_button_new_from_stock(c_str)
+            ffi::gtk_tool_button_new_from_stock(c_str.as_ptr())
         };
         check_pointer!(tmp_pointer, ToolButton)
     }

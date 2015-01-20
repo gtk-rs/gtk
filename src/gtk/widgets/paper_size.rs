@@ -26,7 +26,7 @@ impl PaperSize {
     pub fn new(name: &str) -> Option<PaperSize> {
         let c_str = CString::from_slice(name.as_bytes());
         let tmp_pointer = unsafe {
-            ffi::gtk_paper_size_new(c_str)
+            ffi::gtk_paper_size_new(c_str.as_ptr())
         };
 
         if tmp_pointer.is_null() {
@@ -40,7 +40,7 @@ impl PaperSize {
         let c_str = CString::from_slice(ppd_name.as_bytes());
         let c_str2 = CString::from_slice(ppd_display_name.as_bytes());
         let tmp_pointer = unsafe {
-            ffi::gtk_paper_size_new_from_ppd(c_str, c_str2, width, height)
+            ffi::gtk_paper_size_new_from_ppd(c_str.as_ptr(), c_str2.as_ptr(), width, height)
         };
 
         if tmp_pointer.is_null() {
@@ -54,7 +54,7 @@ impl PaperSize {
         let c_str = CString::from_slice(name.as_bytes());
         let c_str2 = CString::from_slice(display_name.as_bytes());
         let tmp_pointer = unsafe {
-            ffi::gtk_paper_size_new_custom(c_str, c_str2, width, height, unit)
+            ffi::gtk_paper_size_new_custom(c_str.as_ptr(), c_str2.as_ptr(), width, height, unit)
         };
 
         if tmp_pointer.is_null() {

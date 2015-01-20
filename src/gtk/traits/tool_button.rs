@@ -34,7 +34,7 @@ pub trait ToolButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrai
     }
 
     fn set_icon_name(&mut self, icon_name: &str) -> () {
-        let c_str = CString::from_slice(icon_name);
+        let c_str = CString::from_slice(icon_name.as_bytes());
         unsafe {
             ffi::gtk_tool_button_set_icon_name(GTK_TOOLBUTTON(self.get_widget()), c_str);
         }

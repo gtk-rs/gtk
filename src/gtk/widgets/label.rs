@@ -33,7 +33,7 @@ impl Label {
     pub fn new(text: &str) -> Option<Label> {
         let tmp_pointer = unsafe {
             let c_str = CString::from_slice(text.as_bytes());
-            ffi::gtk_label_new(c_str)
+            ffi::gtk_label_new(c_str.as_ptr())
         };
         check_pointer!(tmp_pointer, Label)
     }
@@ -41,7 +41,7 @@ impl Label {
     pub fn new_with_mnemonic(text: &str) -> Option<Label> {
         let c_str = CString::from_slice(text.as_bytes());
         let tmp_pointer = unsafe {
-            ffi::gtk_label_new_with_mnemonic(c_str)
+            ffi::gtk_label_new_with_mnemonic(c_str.as_ptr())
         };
         check_pointer!(tmp_pointer, Label)
     }

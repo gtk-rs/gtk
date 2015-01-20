@@ -31,8 +31,8 @@ impl MenuToolButton {
                 Some(l) => {
                     let c_str = CString::from_slice(l.as_bytes());
                     match icon_widget {
-                        Some(i) => ffi::gtk_menu_tool_button_new(i.get_widget(), c_str),
-                        None    => ffi::gtk_menu_tool_button_new(ptr::null_mut(), c_str)
+                        Some(i) => ffi::gtk_menu_tool_button_new(i.get_widget(), c_str.as_ptr()),
+                        None    => ffi::gtk_menu_tool_button_new(ptr::null_mut(), c_str.as_ptr())
                     }
                 },
                 None    => {
@@ -48,7 +48,7 @@ impl MenuToolButton {
 
     pub fn new_from_stock(stock_id: &str) -> Option<MenuToolButton> {
         let tmp_pointer = stock_id.with_c_str(|c_str| {
-            unsafe { ffi::gtk_menu_tool_button_new_from_stock(c_str) }
+            unsafe { ffi::gtk_menu_tool_button_new_from_stock(c_str.as_ptr()) }
         });
         check_pointer!(tmp_pointer, MenuToolButton)
     }
@@ -56,7 +56,7 @@ impl MenuToolButton {
     pub fn set_arrow_tooltip_text(&mut self, text: &str) -> () {
         text.with_c_str(|c_str| {
             unsafe {
-                ffi::gtk_menu_tool_button_set_arrow_tooltip_text(GTK_MENUTOOLBUTTON(self.pointer), c_str)
+                ffi::gtk_menu_tool_button_set_arrow_tooltip_text(GTK_MENUTOOLBUTTON(self.pointer), c_str.as_ptr())
             }
         })
     }
@@ -64,7 +64,7 @@ impl MenuToolButton {
     pub fn set_arrow_tooltip_markup(&mut self, markup: &str) -> () {
         let c_str = CString::from_slice(markup.as_bytes());
         unsafe {
-            ffi::gtk_menu_tool_button_set_arrow_tooltip_markup(GTK_MENUTOOLBUTTON(self.pointer), c_str)
+            ffi::gtk_menu_tool_button_set_arrow_tooltip_markup(GTK_MENUTOOLBUTTON(self.pointer), c_str.as_ptr())
         }
     }
 }

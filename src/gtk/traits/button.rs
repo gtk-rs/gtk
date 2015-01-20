@@ -15,7 +15,7 @@
 
 use std::mem;
 use libc::c_float;
-use std::ffi::CString;
+use std::ffi::{CString, c_str_to_bytes};
 
 use gtk::{ReliefStyle, PositionType};
 use gtk::cast::GTK_BUTTON;
@@ -69,14 +69,14 @@ pub trait ButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait {
         if c_str.is_null() {
             None
         } else {
-            Some(unsafe { String::from_utf8(c_str as *const u8) })
+            Some(unsafe { String::from_utf8(c_str_to_bytes(&(c_str as *const i8)).to_vec()).unwrap() })
         }
     }
 
     fn set_label(&mut self, label: &str) -> () {
         unsafe {
             let c_str = CString::from_slice(label.as_bytes());
-            ffi::gtk_button_set_label(GTK_BUTTON(self.get_widget()), c_str)
+            ffi::gtk_button_set_label(GTK_BUTTON(self.get_widget()), c_str.as_ptr())
         }
     }
 
@@ -173,10 +173,10 @@ pub trait ButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait {
 
     fn connect_clicked_signal(&self, handler: Box<ButtonClickedHandler>) {
         let data = unsafe { mem::transmute::<Box<Box<ButtonClickedHandler>>, ffi::gpointer>(Box::new(handler)) };
-        let c_str = CString::from_slice("clicked");
+        let c_str = CString::from_slice("clicked".as_bytes());
         unsafe {
             ffi::g_signal_connect_data(self.get_widget() as ffi::gpointer,
-                                       c_str,
+                                       c_str.as_ptr(),
                                        Some(mem::transmute(widget_destroy_callback)),
                                        data,
                                        Some(drop_widget_destroy_handler as extern "C" fn(ffi::gpointer, *const ffi::C_GClosure)),

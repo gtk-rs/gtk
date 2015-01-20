@@ -44,7 +44,7 @@ impl TreeModel {
 
     pub fn get_iter_from_string(&self, iter: &mut TreeIter, path_string: &str) -> bool {
         let c_str = CString::from_slice(path_string.as_bytes());
-        match unsafe { ffi::gtk_tree_model_get_iter_from_string(self.pointer, iter.get_pointer(), c_str) } {
+        match unsafe { ffi::gtk_tree_model_get_iter_from_string(self.pointer, iter.get_pointer(), c_str.as_ptr()) } {
                 0 => false,
                 _ => true
             }
