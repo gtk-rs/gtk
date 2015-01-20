@@ -34,7 +34,6 @@ macro_rules! check_pointer(
 
 macro_rules! struct_Widget(
     ($gtk_struct:ident) => (
-        #[derive(Copy)]
         pub struct $gtk_struct {
             pointer: *mut ffi::C_GtkWidget
         }

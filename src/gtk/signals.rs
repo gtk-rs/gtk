@@ -169,12 +169,12 @@ macro_rules! signal(
     //General case
     ($signal:ident, $class:ident [ $(($arg_name:ident : $arg_type:ty)),* ] -> $ret_type:ty) => (
         pub struct $class<'a> {
-            pub cb: FnMut($($arg_type),*) -> $ret_type + 'a,
+            pub cb: &'a mut (FnMut($($arg_type),*) -> $ret_type + 'a),
             pub user_data: Option<Box<Any>>
         }
 
         impl<'a> $class<'a> {
-            pub fn new (cb : FnMut($($arg_type),*) -> $ret_type + 'a) -> Box<$class<'a>> {
+            pub fn new (cb : &'a (FnMut($($arg_type),*) -> $ret_type + 'a)) -> Box<$class<'a>> {
                 box $class {
                     cb: cb,
                     user_data: None

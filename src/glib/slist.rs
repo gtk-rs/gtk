@@ -42,7 +42,7 @@ impl<T> SList<T> {
         FromIterator::from_iter(values.into_iter())
     }
 
-    pub fn from_slice<T: Clone>(values: &[T]) -> SList<T> {
+    pub fn from_slice(values: &[T]) -> SList<T> where T: Clone {
         let v: Vec<T> = values.iter().map(|x| (*x).clone()).collect();
         FromIterator::from_iter(v.into_iter())
     }
