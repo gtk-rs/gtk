@@ -6,7 +6,7 @@ build = "build.rs"
 
 description = "A rust binding for the GTK+ library"
 repository = "https://github.com/jeremyletang/rgtk"
-license = "LGPL"
+license = "LGPL-3.0+"
 
 [features]
 GTK_3_14 = []
