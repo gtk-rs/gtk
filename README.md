@@ -42,10 +42,9 @@ __rgtk__ targets __GTK+__ 3.12 but can also compile older versions 3.6, 3.8 and 
 
 We are currently targetting rust master compiler to build __rgtk__, make sure you have the latest version before submitting any bugs.
 
-Then you can build __rgtk__ by generating the make file and then running `cargo run`.
+Then you can build __rgtk__ by running `cargo run`.
 
 ```Shell
-> ./configure
 > cargo build
 ```
 
