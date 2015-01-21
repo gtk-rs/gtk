@@ -25,16 +25,15 @@ impl FileChooserDialog {
         let ok = "Ok";
         let cancel = "Cancel";
         let tmp_pointer = unsafe {
-            title.with_c_str(|c_str|{
-                ok.with_c_str(|c_ok|{
-                    cancel.with_c_str(|c_cancel|{
-                        ffi::gtk_file_chooser_dialog_new(c_str, match parent {
-                            Some(ref p) => GTK_WINDOW(p.get_widget()),
-                            None => GTK_WINDOW(::std::ptr::null_mut())
-                        }, action, c_cancel, gtk::ResponseType::Cancel, c_ok, gtk::ResponseType::Accept, ::std::ptr::null_mut())
-                    })
-                })
-            })
+            let c_str = CString::from_slice(title.as_bytes());
+            let c_ok = CString::from_slice(ok.as_bytes());
+            let c_cancel = CString::from_slice(cancel.as_bytes());
+
+            ffi::gtk_file_chooser_dialog_new(c_str.as_ptr(),
+                match parent {
+                    Some(ref p) => GTK_WINDOW(p.get_widget()),
+                    None => GTK_WINDOW(::std::ptr::null_mut())
+                }, action, c_cancel.as_ptr(), gtk::ResponseType::Cancel, c_ok.as_ptr(), gtk::ResponseType::Accept, ::std::ptr::null_mut())
         };
 
         if tmp_pointer.is_null() {

@@ -24,9 +24,13 @@ impl FontChooserDialog {
     pub fn new(title: &str, parent: Option<gtk::Window>) -> Option<FontChooserDialog> {
         let tmp = unsafe {
             let c_str = CString::from_slice(title.as_bytes());
-            ffi::gtk_font_chooser_dialog_new(c_str, match parent {
+
+            ffi::gtk_font_chooser_dialog_new(c_str.as_ptr(),
+                match parent {
                     Some(ref p) => GTK_WINDOW(p.get_widget()),
-                    None => GTK_WINDOW(::std::ptr::null_mut())})
+                    None => GTK_WINDOW(::std::ptr::null_mut())
+                }
+            )
         };
 
         if tmp.is_null() {

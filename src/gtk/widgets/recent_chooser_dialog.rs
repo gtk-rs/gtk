@@ -27,7 +27,7 @@ impl RecentChooserDialog {
         let ok_str = CString::from_slice("Ok".as_bytes());
         let cancel_str = CString::from_slice("Cancel".as_bytes());
         let tmp_pointer = unsafe {
-            ffi::gtk_recent_chooser_dialog_new(c_str.ptr(), match parent {
+            ffi::gtk_recent_chooser_dialog_new(c_str.as_ptr(), match parent {
                 Some(ref p) => GTK_WINDOW(p.get_widget()),
                 None => ::std::ptr::null_mut()
             }, ok_str.as_ptr(), ResponseType::Ok,

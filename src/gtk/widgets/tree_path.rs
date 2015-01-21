@@ -19,6 +19,7 @@ use gtk::ffi;
 use std::ffi::CString;
 use libc::free;
 use c_str::FromCStr;
+use libc::c_void;
 
 #[derive(Copy)]
 pub struct TreePath {
@@ -86,7 +87,7 @@ impl TreePath {
         } else {
             unsafe {
                 let res = FromCStr::from_raw_buf(string as *const u8);
-                libc::free(string);
+                libc::free(string as *mut c_void);
                 res
             }
         }
@@ -163,7 +164,7 @@ impl TreePath {
     }
 
     pub fn drop(&mut self) {
-        unsafe { ffi::gtk_tree_path_free(self.pointer) }
+        unsafe { ffi::gtk_tree_path_free(self.pointer as *mut ffi::C_GtkTreePath) }
         self.pointer = ::std::ptr::null_mut();
     }
 

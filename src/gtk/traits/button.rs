@@ -16,7 +16,6 @@
 use std::mem;
 use libc::c_float;
 use std::ffi::{CString};
-use c_str::{FromCStr, ToCStr};
 
 use gtk::{ReliefStyle, PositionType};
 use gtk::cast::GTK_BUTTON;
@@ -71,7 +70,7 @@ pub trait ButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait {
         if c_str.is_null() {
             None
         } else {
-            Some(unsafe { FromCStr::from_raw_buf(c_str) })
+            Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(c_str)))
         }
     }
 
@@ -177,6 +176,7 @@ pub trait ButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait {
     fn connect_clicked_signal(&self, handler: Box<ButtonClickedHandler>) {
         let data = unsafe { mem::transmute::<Box<Box<ButtonClickedHandler>>, ffi::gpointer>(Box::new(handler)) };
         let c_str = CString::from_slice("clicked".as_bytes());
+
         unsafe {
             ffi::g_signal_connect_data(self.get_widget() as ffi::gpointer,
                                        c_str.as_ptr(),

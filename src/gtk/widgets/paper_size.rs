@@ -26,6 +26,7 @@ struct_Widget!(PaperSize);
 impl PaperSize {
     pub fn new(name: &str) -> Option<PaperSize> {
         let c_str = CString::from_slice(name.as_bytes());
+
         let tmp_pointer = unsafe {
             ffi::gtk_paper_size_new(c_str.as_ptr())
         };
@@ -84,8 +85,9 @@ impl PaperSize {
 
     pub fn get_paper_sizes(include_custom: bool) -> glib::List<Box<PaperSize>> {
         let tmp = unsafe { ffi::gtk_paper_size_get_paper_sizes(match include_custom {
-            true => ffi::GTRUE,
-            false => ffi::GFALSE });
+                true => ffi::GTRUE,
+                false => ffi::GFALSE
+            })
         };
 
         if tmp.is_null() {
@@ -95,7 +97,7 @@ impl PaperSize {
             let mut tmp_vec : glib::List<Box<PaperSize>> = glib::List::new();
 
             for it in old_list.iter() {
-                tmp_vec.append(Box::new(ffi::FFIWidget::wrap)(*it));
+                tmp_vec.append(Box::new(ffi::FFIWidget::wrap(*it)));
             }
             tmp_vec
         }

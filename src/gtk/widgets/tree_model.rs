@@ -138,7 +138,7 @@ impl TreeModel {
         } else {
             unsafe {
                 let res = FromCStr::from_raw_buf(string as *const u8);
-                libc::free(string);
+                libc::free(string as *mut libc::c_void);
                 res
             }
         }

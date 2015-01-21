@@ -49,7 +49,8 @@ impl MessageDialog {
     pub fn set_markup(&self, markup: &str) -> () {
         unsafe {
             let c_str = CString::from_slice(markup.as_bytes());
-            ffi::gtk_message_dialog_set_markup(GTK_MESSAGE_DIALOG(self.get_widget()), c_str)
+
+            ffi::gtk_message_dialog_set_markup(GTK_MESSAGE_DIALOG(self.get_widget()), c_str.as_ptr())
         }
     }
 

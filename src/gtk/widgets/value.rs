@@ -178,7 +178,7 @@ impl GValue {
     fn set_string(&self, v_string: &str) {
         let c_str = CString::from_slice(v_string.as_bytes());
         unsafe {
-            ffi::g_value_set_string(self.pointer, c_str)
+            ffi::g_value_set_string(self.pointer, c_str.as_ptr())
         }
     }
 

@@ -34,8 +34,9 @@ impl FileFilter {
 
     pub fn set_name(&self, name: &str) -> () {
         let c_str = CString::from_slice(name.as_bytes());
+
         unsafe {
-            ffi::gtk_file_filter_set_name(self.pointer, c_str)
+            ffi::gtk_file_filter_set_name(self.pointer, c_str.as_ptr())
         };
     }
 
@@ -45,22 +46,23 @@ impl FileFilter {
         if name.is_null() {
             None
         } else {
-            Some(unsafe { FromCStr::from_raw_buf(name as *const u8) })
+            Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&name)).to_string())
         }
     }
 
     pub fn add_mime_type(&self, mime_type: &str) -> () {
         unsafe {
-            mime_type.with_c_str(|c_str| {
-                ffi::gtk_file_filter_add_mime_type(self.pointer, c_str)
-            })
+            let c_str = CString::from_slice(mime_type.as_bytes());
+
+            ffi::gtk_file_filter_add_mime_type(self.pointer, c_str.as_ptr())
         };
     }
 
     pub fn add_pattern(&self, pattern: &str) -> () {
         let c_str = CString::from_slice(pattern.as_bytes());
+
         unsafe {
-            ffi::gtk_file_filter_add_pattern(self.pointer, c_str)
+            ffi::gtk_file_filter_add_pattern(self.pointer, c_str.as_ptr())
         };
     }
 

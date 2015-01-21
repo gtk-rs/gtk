@@ -18,6 +18,7 @@ use gtk::ffi::FFIWidget;
 use gtk::cast::GTK_RECENT_MANAGER;
 use glib;
 use std::ffi::CString;
+use c_str::{FromCStr, ToCStr};
 
 struct_Widget!(RecentManager);
 
@@ -44,8 +45,9 @@ impl RecentManager {
 
     pub fn add_item(&self, uri: &str) -> bool {
         let c_str = CString::from_slice(uri.as_bytes());
+
         match unsafe {
-            ffi::gtk_recent_manager_add_item(GTK_RECENT_MANAGER(self.get_widget()), c_str)
+            ffi::gtk_recent_manager_add_item(GTK_RECENT_MANAGER(self.get_widget()), c_str.as_ptr())
         } {
             ffi::GFALSE => false,
             _ => true
@@ -63,8 +65,9 @@ impl RecentManager {
 
     pub fn has_item(&self, uri: &str) -> bool {
         let c_str = CString::from_slice(uri.as_bytes());
+
         match unsafe {
-            ffi::gtk_recent_manager_has_item(GTK_RECENT_MANAGER(self.get_widget()), c_str)
+            ffi::gtk_recent_manager_has_item(GTK_RECENT_MANAGER(self.get_widget()), c_str.as_ptr())
         } {
             ffi::GFALSE => false,
             _ => true

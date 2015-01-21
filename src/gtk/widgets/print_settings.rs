@@ -17,7 +17,7 @@ use gtk::{self, ffi};
 use gtk::ffi::FFIWidget;
 use gtk::cast::{GTK_PRINT_SETTINGS, GTK_PAPER_SIZE};
 use std::ffi::CString;
-use c_str::FromCStr;
+use c_str::{FromCStr, ToCStr};
 
 struct_Widget!(PrintSettings);
 
@@ -44,8 +44,9 @@ impl PrintSettings {
 
     pub fn has_key(&self, key: &str) -> bool {
         let c_str = CString::from_slice(key.as_bytes());
+
         match unsafe {
-            ffi::gtk_print_settings_has_key(GTK_PRINT_SETTINGS(self.get_widget()), c_str)
+            ffi::gtk_print_settings_has_key(GTK_PRINT_SETTINGS(self.get_widget()), c_str.as_ptr())
         } {
             ffi::GFALSE => false,
             _ => true

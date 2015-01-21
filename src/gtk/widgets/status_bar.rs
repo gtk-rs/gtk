@@ -25,15 +25,17 @@ struct_Widget!(StatusBar);
 impl StatusBar {
     pub fn new() -> Option<StatusBar> {
         let tmp_pointer = unsafe { ffi::gtk_statusbar_new() };
+
         check_pointer!(tmp_pointer, StatusBar)
     }
 
     pub fn push(&mut self, context_id: u32, text: &str) -> u32 {
         unsafe {
             let c_str = CString::from_slice(text.as_bytes());
+
             ffi::gtk_statusbar_push(GTK_STATUSBAR(self.pointer),
                                         context_id,
-                                        c_str)
+                                        c_str.as_ptr())
         }
     }
 

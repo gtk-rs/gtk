@@ -16,38 +16,40 @@
 use std::ffi::CString;
 use gtk::cast::GTK_TOOLBUTTON;
 use gtk::{self, ffi};
-use c_str::FromCStr;
 
 pub trait ToolButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait + gtk::ToolItemTrait {
     fn set_label(&mut self, label: &str) -> () {
         unsafe {
             let c_str = CString::from_slice(label.as_bytes());
-            ffi::gtk_tool_button_set_label(GTK_TOOLBUTTON(self.get_widget()), c_str)
+
+            ffi::gtk_tool_button_set_label(GTK_TOOLBUTTON(self.get_widget()), c_str.as_ptr())
         }
     }
 
     fn set_stock_id(&mut self, stock_id: &str) -> () {
         unsafe {
-            stock_id.with_c_str(|c_str| {
-                ffi::gtk_tool_button_set_stock_id(GTK_TOOLBUTTON(self.get_widget()), c_str)
-            });
+            let c_str = CString::from_slice(stock_id.as_bytes());
+
+            ffi::gtk_tool_button_set_stock_id(GTK_TOOLBUTTON(self.get_widget()), c_str.as_ptr())
         }
     }
 
     fn set_icon_name(&mut self, icon_name: &str) -> () {
         let c_str = CString::from_slice(icon_name.as_bytes());
+
         unsafe {
-            ffi::gtk_tool_button_set_icon_name(GTK_TOOLBUTTON(self.get_widget()), c_str);
+            ffi::gtk_tool_button_set_icon_name(GTK_TOOLBUTTON(self.get_widget()), c_str.as_ptr());
         }
     }
 
     fn get_label(&self) -> Option<String> {
         unsafe {
             let c_str = ffi::gtk_tool_button_get_label(GTK_TOOLBUTTON(self.get_widget()));
+
             if c_str.is_null() {
                 None
             } else {
-                Some(FromCStr::from_raw_buf(c_str as *const u8))
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(c_str)).into_string())
             }
         }
     }
@@ -55,10 +57,11 @@ pub trait ToolButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrai
     fn get_stock_id(&self) -> Option<String> {
         unsafe {
             let c_str = ffi::gtk_tool_button_get_stock_id(GTK_TOOLBUTTON(self.get_widget()));
+
             if c_str.is_null() {
                 None
             } else {
-                Some(FromCStr::from_raw_buf(c_str as *const u8))
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(c_str)).into_string())
             }
         }
     }
@@ -69,7 +72,7 @@ pub trait ToolButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrai
             if c_str.is_null() {
                 None
             } else {
-                Some(FromCStr::from_raw_buf(c_str as *const u8))
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(c_str)).into_string())
             }
         }
     }

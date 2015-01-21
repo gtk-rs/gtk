@@ -226,7 +226,7 @@ impl FontFace {
             unsafe {
                 family.with_c_str(|c_str| {
                     ffi::cairo_toy_font_face_create(c_str, slant, weight)
-                });
+                })
             }
         );
         font_face.ensure_status();

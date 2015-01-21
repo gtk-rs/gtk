@@ -71,7 +71,8 @@ impl EntryCompletion {
     pub fn compute_prefix(&self, key: &str) -> Option<String> {
         let tmp_pointer = unsafe {
             let c_str = CString::from_slice(key.as_bytes());
-            ffi::gtk_entry_completion_compute_prefix(GTK_ENTRY_COMPLETION(self.pointer), c_str)
+
+            ffi::gtk_entry_completion_compute_prefix(GTK_ENTRY_COMPLETION(self.pointer), c_str.as_ptr())
         };
 
         if tmp_pointer.is_null() {

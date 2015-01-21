@@ -15,6 +15,7 @@
 
 use gtk::{self, ffi};
 use std::ffi::CString;
+use c_str::{FromCStr, ToCStr};
 
 #[derive(Copy)]
 pub struct RecentFilter {

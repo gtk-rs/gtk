@@ -17,7 +17,7 @@ use gtk::ffi;
 use gtk::ffi::FFIWidget;
 use gtk::cast::GTK_RECENT_INFO;
 use std::ffi::CString;
-use c_str::FromCStr;
+use c_str::{FromCStr, ToCStr};
 
 struct_Widget!(RecentInfo);
 
@@ -99,10 +99,10 @@ impl RecentInfo {
         let app_exec = ::std::ptr::null_mut();
         let mut count = 0u32;
         let mut time_ = 0i64;
-
         let c_str = CString::from_slice(app_name.as_bytes());
+
         let ret = match unsafe {
-            ffi::gtk_recent_info_get_application_info(GTK_RECENT_INFO(self.get_widget()), c_str, &app_exec, &mut count, &mut time_)
+            ffi::gtk_recent_info_get_application_info(GTK_RECENT_INFO(self.get_widget()), c_str.as_ptr(), &app_exec, &mut count, &mut time_)
         } {
             ffi::GFALSE => false,
             _ => true
@@ -167,10 +167,14 @@ impl RecentInfo {
 
     pub fn has_group(&self, group_name: &str) -> bool {
         let c_str = CString::from_slice(group_name.as_bytes());
-        match unsafe {
-            ffi::gtk_recent_info_has_group(GTK_RECENT_INFO(self.get_widget()), c_str)} {
-            ffi::GFALSE => false,
-            _ => true
+
+        unsafe {
+            match {
+                ffi::gtk_recent_info_has_group(GTK_RECENT_INFO(self.get_widget()), c_str.as_ptr())
+            } {
+                ffi::GFALSE => false,
+                _ => true
+            }
         }
     }
 

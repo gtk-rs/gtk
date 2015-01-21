@@ -19,7 +19,6 @@ use gtk::cast::GTK_FILE_CHOOSER;
 use gtk::ffi::{self, FFIWidget};
 use glib::{self, GlibContainer};
 use libc::c_char;
-use c_str::{FromCStr, ToCStr};
 
 pub trait FileChooserTrait: gtk::WidgetTrait {
     fn set_action(&self, action: gtk::FileChooserAction) -> () {
@@ -103,7 +102,8 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
     fn set_current_name(&self, name: &str) -> () {
         unsafe {
             let c_str = CString::from_slice(name.as_bytes());
-            ffi::gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(self.get_widget()), c_str)
+
+            ffi::gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(self.get_widget()), c_str.as_ptr())
         }
     }
 
@@ -113,18 +113,20 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
         if name.is_null() {
             None
         } else {
-            Some(unsafe { FromCStr::from_raw_buf(name as *const u8) })
+            Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(name)))
         }
     }
 
     fn set_filename(&self, filename: &str) -> bool {
-        match unsafe {
-            filename.with_c_str(|c_str| {
-                ffi::gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(self.get_widget()), c_str)
-            })
-        } {
-            ffi::GFALSE => false,
-            _ => true
+        unsafe {
+            match {
+                let c_str = CString::from_slice(filename.as_bytes());
+
+                ffi::gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(self.get_widget()), c_str.as_ptr())
+            } {
+                ffi::GFALSE => false,
+                _ => true
+            }
         }
     }
 
@@ -134,26 +136,28 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
         if filename.is_null() {
             None
         } else {
-            Some(unsafe { FromCStr::from_raw_buf(filename as *const u8) })
+            Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(filename)))
         }
     }
 
     fn select_filename(&self, filename: &str) -> bool {
-        match unsafe {
-            filename.with_c_str(|c_str| {
-                ffi::gtk_file_chooser_select_filename(GTK_FILE_CHOOSER(self.get_widget()), c_str)
-            })
-        } {
-            ffi::GFALSE => false,
-            _ => true
+        unsafe {
+            match {
+                let c_str = CString::from_slice(filename.as_bytes());
+
+                ffi::gtk_file_chooser_select_filename(GTK_FILE_CHOOSER(self.get_widget()), c_str.as_ptr())
+            } {
+                ffi::GFALSE => false,
+                _ => true
+            }
         }
     }
 
     fn unselect_filename(&self, filename: &str) -> () {
         unsafe {
-            filename.with_c_str(|c_str| {
-                ffi::gtk_file_chooser_unselect_filename(GTK_FILE_CHOOSER(self.get_widget()), c_str)
-            })
+            let c_str = CString::from_slice(filename.as_bytes());
+
+            ffi::gtk_file_chooser_unselect_filename(GTK_FILE_CHOOSER(self.get_widget()), c_str.as_ptr())
         }
     }
 
@@ -176,7 +180,7 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
 
             for it in old_list.iter() {
                 unsafe {
-                    tmp_vec.append(FromCStr::from_raw_buf(*it as *const u8));
+                    tmp_vec.append(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(*it)))
                 }
             }
             tmp_vec
@@ -184,13 +188,15 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
     }
 
     fn set_current_folder(&self, filename: &str) -> bool {
-        match unsafe {
-            filename.with_c_str(|c_str| {
-                ffi::gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(self.get_widget()), c_str)
-            })
-        } {
-            ffi::GFALSE => false,
-            _ => true
+        unsafe {
+            match {
+                let c_str = CString::from_slice(filename.as_bytes());
+
+                ffi::gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(self.get_widget()), c_str.as_ptr())
+            } {
+                ffi::GFALSE => false,
+                _ => true
+            }
         }
     }
 
@@ -200,18 +206,20 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
         if filename.is_null() {
             None
         } else {
-            Some(unsafe { FromCStr::from_raw_buf(filename as *const u8) })
+            Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(filename)))
         }
     }
 
     fn set_uri(&self, uri: &str) -> bool {
-        match unsafe {
-            uri.with_c_str(|c_str| {
-                ffi::gtk_file_chooser_set_uri(GTK_FILE_CHOOSER(self.get_widget()), c_str)
-            })
-        } {
-            ffi::GFALSE => false,
-            _ => true
+        unsafe {
+            match {
+                let c_str = CString::from_slice(uri.as_bytes());
+
+                ffi::gtk_file_chooser_set_uri(GTK_FILE_CHOOSER(self.get_widget()), c_str.as_ptr())
+            } {
+                ffi::GFALSE => false,
+                _ => true
+            }
         }
     }
 
@@ -221,26 +229,28 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
         if uri.is_null() {
             None
         } else {
-            Some(unsafe { FromCStr::from_raw_buf(uri as *const u8) })
+            Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(uri)))
         }
     }
 
     fn select_uri(&self, uri: &str) -> bool {
-        match unsafe {
-            uri.with_c_str(|c_str| {
-                ffi::gtk_file_chooser_select_uri(GTK_FILE_CHOOSER(self.get_widget()), c_str)
-            })
-        } {
-            ffi::GFALSE => false,
-            _ => true
+        unsafe {
+            match {
+                let c_str = CString::from_slice(uri.as_bytes());
+
+                ffi::gtk_file_chooser_select_uri(GTK_FILE_CHOOSER(self.get_widget()), c_str.as_ptr())
+            } {
+                ffi::GFALSE => false,
+                _ => true
+            }
         }
     }
 
     fn unselect_uri(&self, uri: &str) -> () {
         unsafe {
-            uri.with_c_str(|c_str| {
-                ffi::gtk_file_chooser_unselect_uri(GTK_FILE_CHOOSER(self.get_widget()), c_str)
-            })
+            let c_str = CString::from_slice(uri.as_bytes());
+
+            ffi::gtk_file_chooser_unselect_uri(GTK_FILE_CHOOSER(self.get_widget()), c_str.as_ptr())
         }
     }
 
@@ -255,7 +265,7 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
 
             for it in old_list.iter() {
                 unsafe {
-                    tmp_vec.append(FromCStr::from_raw_buf(*it as *const u8));
+                    tmp_vec.append(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(*it)))
                 }
             }
             tmp_vec
@@ -264,9 +274,9 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
 
     fn set_current_folder_uri(&self, uri: &str) -> bool {
         match unsafe {
-            uri.with_c_str(|c_str| {
-                ffi::gtk_file_chooser_set_current_folder_uri(GTK_FILE_CHOOSER(self.get_widget()), c_str)
-            })
+            let c_str = CString::from_slice(uri.as_bytes());
+
+            ffi::gtk_file_chooser_set_current_folder_uri(GTK_FILE_CHOOSER(self.get_widget()), c_str.as_ptr())
         } {
             ffi::GFALSE => false,
             _ => true
@@ -279,7 +289,7 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
         if uri.is_null() {
             None
         } else {
-            Some(unsafe { FromCStr::from_raw_buf(uri as *const u8) })
+            Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(uri)))
         }
     }
 
@@ -331,7 +341,7 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
         if filename.is_null() {
             None
         } else {
-            Some(unsafe { FromCStr::from_raw_buf(filename as *const u8) })
+            Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(filename)))
         }
     }
 
@@ -341,7 +351,7 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
         if uri.is_null() {
             None
         } else {
-            Some(unsafe { FromCStr::from_raw_buf(uri as *const u8) })
+            Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(uri)))
         }
     }
 
@@ -378,45 +388,54 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
     }
 
     fn add_shortcut_folder(&self, folder: &str, error: &mut glib::Error) -> bool {
-        match unsafe {
-            folder.with_c_str(|c_str| {
-                ffi::gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(self.get_widget()), c_str, &mut error.unwrap())
-            })
-        } {
-            ffi::GFALSE => false,
-            _ => true
+        unsafe {
+            match {
+                let c_str = CString::from_slice(folder.as_bytes());
+
+                ffi::gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(self.get_widget()), c_str.as_ptr(), &mut error.unwrap())
+            } {
+                ffi::GFALSE => false,
+                _ => true
+            }
         }
     }
 
     fn remove_shortcut_folder(&self, folder: &str, error: &mut glib::Error) -> bool {
-        match unsafe {
-            folder.with_c_str(|c_str| {
-                ffi::gtk_file_chooser_remove_shortcut_folder(GTK_FILE_CHOOSER(self.get_widget()), c_str, &mut error.unwrap())
-            })
-        } {
-            ffi::GFALSE => false,
-            _ => true
+        unsafe {
+            match {
+                let c_str = CString::from_slice(folder.as_bytes());
+
+                ffi::gtk_file_chooser_remove_shortcut_folder(GTK_FILE_CHOOSER(self.get_widget()), c_str.as_ptr(), &mut error.unwrap())
+            } {
+                ffi::GFALSE => false,
+                _ => true
+            }
         }
     }
 
     fn add_shortcut_folder_uri(&self, uri: &str, error: &mut glib::Error) -> bool {
-        match unsafe {
-            uri.with_c_str(|c_str| {
-                ffi::gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(self.get_widget()), c_str, &mut error.unwrap())
-            })
-        } {
-            ffi::GFALSE => false,
-            _ => true
+        unsafe {
+            match {
+                let c_str = CString::from_slice(uri.as_bytes());
+
+                ffi::gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(self.get_widget()), c_str.as_ptr(), &mut error.unwrap())
+            } {
+                ffi::GFALSE => false,
+                _ => true
+            }
         }
     }
 
     fn remove_shortcut_folder_uri(&self, uri: &str, error: &mut glib::Error) -> bool {
-        match unsafe {
-            let c_str = CString::from_slice(uri.as_bytes());
-            ffi::gtk_file_chooser_remove_shortcut_folder(GTK_FILE_CHOOSER(self.get_widget()), c_str, &mut error.unwrap())
-        } {
-            ffi::GFALSE => false,
-            _ => true
+        unsafe {
+            match {
+                let c_str = CString::from_slice(uri.as_bytes());
+
+                ffi::gtk_file_chooser_remove_shortcut_folder(GTK_FILE_CHOOSER(self.get_widget()), c_str, &mut error.unwrap())
+            } {
+                ffi::GFALSE => false,
+                _ => true
+            }
         }
     }
 }
