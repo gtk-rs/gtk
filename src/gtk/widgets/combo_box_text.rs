@@ -18,7 +18,7 @@
 use gtk::{self, ffi};
 use gtk::cast::GTK_COMBO_BOX_TEXT;
 use std::ffi::CString;
-use c_str::{FromCStr, ToCStr};
+use libc::c_char;
 
 struct_Widget!(ComboBoxText);
 
@@ -35,55 +35,52 @@ impl ComboBoxText {
 
     pub fn append(&self, id: &str, text: &str) {
         unsafe {
-            id.with_c_str(|c_id| {
-                text.with_c_str(|c_text| {
-                    ffi::gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(self.pointer), c_id, c_text)
-                })
-            })
+            let c_id = CString::from_slice(id.as_bytes());
+            let c_text = CString::from_slice(text.as_bytes());
+
+            ffi::gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(self.pointer), c_id.as_ptr(), c_text.as_ptr())
         }
     }
 
     pub fn prepend(&self, id: &str, text: &str) {
         unsafe {
-            id.with_c_str(|c_id| {
-                text.with_c_str(|c_text| {
-                    ffi::gtk_combo_box_text_prepend(GTK_COMBO_BOX_TEXT(self.pointer), c_id, c_text)
-                })
-            })
+            let c_id = CString::from_slice(id.as_bytes());
+            let c_text = CString::from_slice(text.as_bytes());
+
+            ffi::gtk_combo_box_text_prepend(GTK_COMBO_BOX_TEXT(self.pointer), c_id.as_ptr(), c_text.as_ptr())
         }
     }
 
     pub fn insert(&self, position: i32, id: &str, text: &str) {
         unsafe {
-            id.with_c_str(|c_id| {
-                text.with_c_str(|c_text| {
-                    ffi::gtk_combo_box_text_insert(GTK_COMBO_BOX_TEXT(self.pointer), position, c_id, c_text)
-                })
-            })
+            let c_id = CString::from_slice(id.as_bytes());
+            let c_text = CString::from_slice(text.as_bytes());
+
+            ffi::gtk_combo_box_text_insert(GTK_COMBO_BOX_TEXT(self.pointer), position, c_id.as_ptr(), c_text.as_ptr())
         }
     }
 
     pub fn append_text(&self, text: &str) {
         unsafe {
-            text.with_c_str(|c_text| {
-                ffi::gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self.pointer), c_text)
-            })
+            let c_str = CString::from_slice(text.as_bytes());
+
+            ffi::gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self.pointer), c_str.as_ptr())
         }
     }
 
     pub fn prepend_text(&self, text: &str) {
         unsafe {
-            text.with_c_str(|c_text| {
-                ffi::gtk_combo_box_text_prepend_text(GTK_COMBO_BOX_TEXT(self.pointer), c_text)
-            })
+            let c_str = CString::from_slice(text.as_bytes());
+
+            ffi::gtk_combo_box_text_prepend_text(GTK_COMBO_BOX_TEXT(self.pointer), c_str.as_ptr())
         }
     }
 
     pub fn insert_text(&self, position: i32, text: &str) {
         unsafe {
-            text.with_c_str(|c_text| {
-                ffi::gtk_combo_box_text_insert_text(GTK_COMBO_BOX_TEXT(self.pointer), position, c_text)
-            })
+            let c_str = CString::from_slice(text.as_bytes());
+
+            ffi::gtk_combo_box_text_insert_text(GTK_COMBO_BOX_TEXT(self.pointer), position, c_str.as_ptr())
         }
     }
 
@@ -96,12 +93,12 @@ impl ComboBoxText {
     }
 
     pub fn get_active_text(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self.pointer)) };
+        let tmp = unsafe { ffi::gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self.pointer)) as *const c_char };
 
         if tmp.is_null() {
             None
         } else {
-            unsafe { Some(FromCStr::from_raw_buf(tmp as *const u8)) }
+            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
         }
     }
 }

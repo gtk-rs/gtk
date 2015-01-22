@@ -19,7 +19,6 @@
 
 use gtk::cast::{GTK_HEADER_BAR};
 use gtk::{self, ffi};
-use c_str::FromCStr;
 
 /// GtkHeaderBar — A Box::new(with) a centered child
 struct_Widget!(HeaderBar);
@@ -32,33 +31,37 @@ impl HeaderBar {
 
     pub fn set_title(&mut self, title: &str) {
         let c_str = CString::from_slice(title.as_bytes());
+
         unsafe {
-            ffi::gtk_header_bar_set_title(GTK_HEADER_BAR(self.pointer), c_str)
+            ffi::gtk_header_bar_set_title(GTK_HEADER_BAR(self.pointer), c_str.as_ptr())
         }
     }
 
     pub fn get_title(&self) -> Option<String> {
         let c_title = unsafe { ffi::gtk_header_bar_get_title(GTK_HEADER_BAR(self.pointer)) };
+
         if c_title.is_null() {
             None
         } else {
-            Some(unsafe { FromCStr::from_raw_buf(c_title as *const u8) })
+            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_title)).to_string()) }
         }
     }
 
     pub fn set_subtitle(&mut self, subtitle: &str) {
         let c_str = CString::from_slice(subtitle.as_bytes());
+
         unsafe {
-            ffi::gtk_header_bar_set_subtitle(GTK_HEADER_BAR(self.pointer), c_str)
+            ffi::gtk_header_bar_set_subtitle(GTK_HEADER_BAR(self.pointer), c_str.as_ptr())
         }
     }
 
     pub fn get_subtitle(&self) -> Option<String> {
         let c_subtitle = unsafe { ffi::gtk_header_bar_get_title(GTK_HEADER_BAR(self.pointer)) };
+
         if c_subtitle.is_null() {
             None
         } else {
-            Some(unsafe { FromCStr::from_raw_buf(c_subtitle as *const u8) })
+            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_subtitle)).to_string()) }
         }
     }
 
@@ -73,6 +76,7 @@ impl HeaderBar {
         let tmp_pointer = unsafe {
             ffi::gtk_header_bar_get_custom_title(GTK_HEADER_BAR(self.pointer))
         };
+
         if tmp_pointer.is_null() {
             None
         } else {

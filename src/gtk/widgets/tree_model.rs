@@ -16,8 +16,7 @@
 use glib::ffi::GType;
 use gtk::{self, ffi, GValue, TreeIter, TreePath};
 use std::ffi::CString;
-use libc;
-use c_str::FromCStr;
+use libc::{self, c_char};
 
 pub struct TreeModel {
     pointer: *mut ffi::C_GtkTreeModel
@@ -45,6 +44,7 @@ impl TreeModel {
 
     pub fn get_iter_from_string(&self, iter: &mut TreeIter, path_string: &str) -> bool {
         let c_str = CString::from_slice(path_string.as_bytes());
+
         match unsafe { ffi::gtk_tree_model_get_iter_from_string(self.pointer, iter.get_pointer(), c_str.as_ptr()) } {
                 0 => false,
                 _ => true
@@ -70,6 +70,7 @@ impl TreeModel {
 
     pub fn get_value(&self, iter: &TreeIter, column: i32) -> GValue {
         let value = GValue::new().unwrap();
+
         unsafe { ffi::gtk_tree_model_get_value(self.pointer, iter.get_pointer(), column, value.unwrap_pointer()) };
         value
     }
@@ -130,16 +131,17 @@ impl TreeModel {
     }
 
     #[allow(unused_variables)]
-    pub fn get_string_from_iter(&self, iter: &TreeIter) -> String {
-        let string = unsafe { ffi::gtk_tree_model_get_string_from_iter(self.pointer, iter.get_pointer()) };
+    pub fn get_string_from_iter(&self, iter: &TreeIter) -> Option<String> {
+        let string = unsafe { ffi::gtk_tree_model_get_string_from_iter(self.pointer, iter.get_pointer()) as *const c_char };
 
         if string.is_null() {
-            String::new()
+            None
         } else {
             unsafe {
-                let res = FromCStr::from_raw_buf(string as *const u8);
+                let res = String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&string)).to_string();
+
                 libc::free(string as *mut libc::c_void);
-                res
+                Some(res)
             }
         }
     }

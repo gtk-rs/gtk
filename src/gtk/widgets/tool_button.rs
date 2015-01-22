@@ -29,11 +29,12 @@ impl ToolButton {
             match label {
                 Some(l) => {
                     let c_str = CString::from_slice(l.as_bytes());
+
                     match icon_widget {
-                        Some(i) => ffi::gtk_tool_button_new(i.get_widget(), c_str),
-                        None    => ffi::gtk_tool_button_new(ptr::null_mut(), c_str)
+                        Some(i) => ffi::gtk_tool_button_new(i.get_widget(), c_str.as_ptr()),
+                        None    => ffi::gtk_tool_button_new(ptr::null_mut(), c_str.as_ptr())
                     }
-                },
+                }
                 None => {
                     match icon_widget {
                         Some(i) => ffi::gtk_tool_button_new(i.get_widget(), ptr::null()),

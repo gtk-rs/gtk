@@ -18,32 +18,33 @@
 use std::ffi::CString;
 use gtk::cast::GTK_ACTIONABLE;
 use gtk::{self, ffi};
-use c_str::{FromCStr, ToCStr};
 
 pub trait ActionableTrait: gtk::WidgetTrait {
     fn get_action_name(&self) -> Option<String> {
-        let tmp_pointer = unsafe { ffi::gtk_actionable_get_action_name(GTK_ACTIONABLE(self.get_widget())) };
+        unsafe {
+            let tmp_pointer = ffi::gtk_actionable_get_action_name(GTK_ACTIONABLE(self.get_widget()));
 
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            Some(unsafe { FromCStr::from_c_str(tmp_pointer as *const u8) })
+            if tmp_pointer.is_null() {
+                None
+            } else {
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp_pointer)).to_string())
+            }
         }
     }
 
     fn set_action_name(&self, action_name: &str) {
         unsafe {
-            action_name.with_c_str(|c_str| {
-                ffi::gtk_actionable_set_action_name(GTK_ACTIONABLE(self.get_widget()), c_str)
-            })
+            let c_str = CString::from_slice(action_name.as_bytes());
+
+            ffi::gtk_actionable_set_action_name(GTK_ACTIONABLE(self.get_widget()), c_str.as_ptr())
         }
     }
 
     fn set_detailed_action_name(&self, detailed_action_name: &str) {
         unsafe {
-            detailed_action_name.with_c_str(|c_str| {
-                ffi::gtk_actionable_set_detailed_action_name(GTK_ACTIONABLE(self.get_widget()), c_str)
-            })
+            let c_str = CString::from_slice(detailed_action_name.as_bytes());
+
+            ffi::gtk_actionable_set_detailed_action_name(GTK_ACTIONABLE(self.get_widget()), c_str.as_ptr())
         }
     }
 }

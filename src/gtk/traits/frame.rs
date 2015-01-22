@@ -20,12 +20,15 @@ use std::ffi::CString;
 use gtk::ShadowType;
 use gtk::cast::GTK_FRAME;
 use gtk::{self, ffi};
-use c_str::{FromCStr, ToCStr};
 
 pub trait FrameTrait: gtk::WidgetTrait + gtk::ContainerTrait {
     fn set_label(&mut self, label: Option<&str>) -> () {
         match label {
-            Some(l) => unsafe { l.with_c_str(|c_str| {ffi::gtk_frame_set_label(GTK_FRAME(self.get_widget()), c_str) }) },
+            Some(l) => unsafe {
+                let c_str = CString::from_slice(l.as_bytes());
+
+                ffi::gtk_frame_set_label(GTK_FRAME(self.get_widget()), c_str.as_ptr())
+            },
             None    => unsafe { ffi::gtk_frame_set_label(GTK_FRAME(self.get_widget()), ptr::null()) }
         };
     }
@@ -59,10 +62,11 @@ pub trait FrameTrait: gtk::WidgetTrait + gtk::ContainerTrait {
 
     fn get_label(&self) -> Option<String> {
         let c_str = unsafe { ffi::gtk_frame_get_label(GTK_FRAME(self.get_widget())) };
+        
         if c_str.is_null() {
             None
         } else {
-            Some(unsafe {FromCStr::from_raw_buf(c_str as *const u8)})
+            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string()) }
         }
     }
 

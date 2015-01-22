@@ -22,7 +22,6 @@ use glib;
 use glib::GlibContainer;
 use std::str;
 use std::string;
-use c_str::FromCStr;
 
 struct_Widget!(AppInfo);
 

@@ -27,7 +27,6 @@ use cairo::enums::{
     FontWeight,
     TextClusterFlags
 };
-use c_str::{FromCStr, ToCStr};
 
 use cairo::ffi;
 use cairo::ffi::{
@@ -529,9 +528,9 @@ impl Context {
 
     pub fn select_font_face(&self, family: &str, slant: FontSlant, weight: FontWeight){
         unsafe {
-            family.with_c_str(|c_str| {
-                ffi::cairo_select_font_face(self.get_ptr(), c_str, slant, weight)
-            })
+            let c_str = CString::from_slice(family.as_bytes());
+
+            ffi::cairo_select_font_face(self.get_ptr(), c_str.as_ptr(), slant, weight)
         }
     }
 
@@ -596,9 +595,9 @@ impl Context {
 
     pub fn show_text(&self, text: &str){
         unsafe {
-            text.with_c_str(|c_str| {
-                ffi::cairo_show_text(self.get_ptr(), c_str)
-            })
+            let c_str = CString::from_slice(text.as_bytes());
+
+            ffi::cairo_show_text(self.get_ptr(), c_str.as_ptr())
         }
     }
 
@@ -617,17 +616,16 @@ impl Context {
         unsafe {
             let glyphs: &[Glyph] = glyph_vec.as_slice();
             let clusters: &[TextCluster] = cluster_vec.as_slice();
+            let c_str = CString::from_slice(text.as_bytes());
 
-            text.with_c_str(|c_str| {
                 ffi::cairo_show_text_glyphs(self.get_ptr(),
-                                            c_str,
+                                            c_str.as_ptr(),
                                             -1 as c_int, //NUL terminated
                                             glyphs.as_ptr(),
                                             glyphs.len() as c_int,
                                             clusters.as_ptr(),
                                             clusters.len() as c_int,
                                             cluster_flags)
-                })
         }
     }
 
@@ -657,10 +655,11 @@ impl Context {
             y_advance: 0.0,
         };
 
-        text.with_c_str(|c_str| {
-            ffi::cairo_text_extents(self.get_ptr(), c_str, &mut extents);
-        });
+        unsafe {
+            let c_str = CString::from_slice(text.as_bytes());
 
+            ffi::cairo_text_extents(self.get_ptr(), c_str.as_ptr(), &mut extents);
+        }
         extents
     }
 
@@ -772,11 +771,11 @@ impl Context {
         }
     }
 
-    pub fn text_path(&self, str : &str){
+    pub fn text_path(&self, str_: &str){
         unsafe {
-            str.with_c_str(|c_str| {
-                ffi::cairo_text_path(self.get_ptr(), c_str)
-            })
+            let c_str = CString::from_slice(str_.as_bytes());
+
+            ffi::cairo_text_path(self.get_ptr(), c_str.as_ptr())
         }
     }
 

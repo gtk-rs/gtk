@@ -18,7 +18,6 @@ use gtk::ffi::FFIWidget;
 use gtk::cast::{GTK_PAPER_SIZE};
 use glib;
 use std::ffi::CString;
-use c_str::FromCStr;
 
 // FIXME: PaperSize is not a widget nor a GObject -> GBoxed
 struct_Widget!(PaperSize);
@@ -109,7 +108,7 @@ impl PaperSize {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { FromCStr::from_raw_buf(tmp as *const u8) })
+            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
         }
     }
 
@@ -119,7 +118,7 @@ impl PaperSize {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { FromCStr::from_raw_buf(tmp as *const u8) })
+            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
         }
     }
 
@@ -129,7 +128,7 @@ impl PaperSize {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { FromCStr::from_raw_buf(tmp as *const u8) })
+            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
         }
     }
 
@@ -174,7 +173,7 @@ impl PaperSize {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { FromCStr::from_raw_buf(tmp as *const u8) })
+            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
         }
     }
 }

@@ -69,7 +69,7 @@ pub trait LabelTrait: gtk::WidgetTrait {
 
     fn set_text_with_mnemonic(&mut self, text: &str) -> () {
         unsafe {
-            let c_str = CString::from_slice(text);
+            let c_str = CString::from_slice(text.as_bytes());
 
             ffi::gtk_label_set_text_with_mnemonic(GTK_LABEL(self.get_widget()), c_str.as_ptr());
         }
@@ -203,10 +203,11 @@ pub trait LabelTrait: gtk::WidgetTrait {
     fn get_text(&self) -> Option<String> {
         unsafe {
             let c_str = ffi::gtk_label_get_text(GTK_LABEL(self.get_widget()));
+
             if c_str.is_null() {
                 None
             } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(c_str)))
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
             }
         }
     }
@@ -217,7 +218,7 @@ pub trait LabelTrait: gtk::WidgetTrait {
             if c_str.is_null() {
                 None
             } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(c_str)))
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
             }
         }
     }
@@ -228,7 +229,7 @@ pub trait LabelTrait: gtk::WidgetTrait {
             if c_str.is_null() {
                 None
             } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(c_str)))
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
             }
         }
     }

@@ -19,7 +19,7 @@ use gtk::{self, ffi};
 use gtk::TreeModel;
 use gtk::cast::GTK_ENTRY_COMPLETION;
 use std::ffi::CString;
-use c_str::{FromCStr, ToCStr};
+use libc::c_char;
 
 struct_Widget!(EntryCompletion);
 
@@ -72,13 +72,13 @@ impl EntryCompletion {
         let tmp_pointer = unsafe {
             let c_str = CString::from_slice(key.as_bytes());
 
-            ffi::gtk_entry_completion_compute_prefix(GTK_ENTRY_COMPLETION(self.pointer), c_str.as_ptr())
+            ffi::gtk_entry_completion_compute_prefix(GTK_ENTRY_COMPLETION(self.pointer), c_str.as_ptr()) as *const c_char
         };
 
         if tmp_pointer.is_null() {
             None
         } else {
-            unsafe { Some(FromCStr::from_raw_buf(tmp_pointer as *const u8)) }
+            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp_pointer)).to_string()) }
         }
     }
 
@@ -92,7 +92,7 @@ impl EntryCompletion {
         if tmp_pointer.is_null() {
             None
         } else {
-            unsafe { Some(FromCStr::from_raw_buf(tmp_pointer as *const u8)) }
+            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp_pointer)).to_string()) }
         }
     }
 
@@ -102,17 +102,17 @@ impl EntryCompletion {
 
     pub fn insert_action_text(&self, index_: i32, text: &str) {
         unsafe {
-            text.with_c_str(|c_str| {
-                ffi::gtk_entry_completion_insert_action_text(GTK_ENTRY_COMPLETION(self.pointer), index_, c_str)
-            })
+            let c_str = CString::from_slice(text.as_bytes());
+
+            ffi::gtk_entry_completion_insert_action_text(GTK_ENTRY_COMPLETION(self.pointer), index_, c_str.as_ptr())
         }
     }
 
     pub fn insert_action_markup(&self, index_: i32, markup: &str) {
         unsafe {
-            markup.with_c_str(|c_str| {
-                ffi::gtk_entry_completion_insert_action_markup(GTK_ENTRY_COMPLETION(self.pointer), index_, c_str)
-            })
+            let c_str = CString::from_slice(markup.as_bytes());
+
+            ffi::gtk_entry_completion_insert_action_markup(GTK_ENTRY_COMPLETION(self.pointer), index_, c_str.as_ptr())
         }
     }
 

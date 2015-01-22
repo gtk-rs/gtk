@@ -15,7 +15,6 @@
 
 use gtk::{self, ffi};
 use std::ffi::CString;
-use c_str::{FromCStr, ToCStr};
 
 #[derive(Copy)]
 pub struct RecentFilter {
@@ -36,13 +35,15 @@ impl RecentFilter {
     pub fn add_application(&self, application: &str) -> () {
         unsafe {
             let c_str = CString::from_slice(application.as_bytes());
+
             ffi::gtk_recent_filter_add_application(self.pointer, c_str.as_ptr())
         }
     }
 
     pub fn add_group(&self, group: &str) -> () {
-        let c_str = CString::from_slice(group.as_bytes());
         unsafe {
+            let c_str = CString::from_slice(group.as_bytes());
+
             ffi::gtk_recent_filter_add_group(self.pointer, c_str.as_ptr())
         }
     }

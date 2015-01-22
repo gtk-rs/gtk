@@ -51,7 +51,7 @@ impl MenuToolButton {
         let tmp_pointer = unsafe {
             let c_str = CString::from_slice(stock_id.as_bytes());
 
-            unsafe { ffi::gtk_menu_tool_button_new_from_stock(c_str.as_ptr()) }
+            ffi::gtk_menu_tool_button_new_from_stock(c_str.as_ptr())
         };
         check_pointer!(tmp_pointer, MenuToolButton)
     }

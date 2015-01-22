@@ -57,12 +57,14 @@ impl AppChooserDialog {
     }
 
     pub fn get_heading(&self) -> Option<String> {
-        let tmp_pointer = unsafe { ffi::gtk_app_chooser_dialog_get_heading(GTK_APP_CHOOSER_DIALOG(self.get_widget())) };
+        unsafe {
+            let tmp_pointer = ffi::gtk_app_chooser_dialog_get_heading(GTK_APP_CHOOSER_DIALOG(self.get_widget()));
 
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp_pointer)).to_string())
+            if tmp_pointer.is_null() {
+                None
+            } else {
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp_pointer)).to_string())
+            }
         }
     }
 }

@@ -17,7 +17,6 @@
 
 use libc::c_double;
 use std::ffi::CString;
-use c_str::FromCStr;
 
 use gtk::{self, ffi};
 use gtk::cast::GTK_PROGRESSBAR;
@@ -52,14 +51,20 @@ impl ProgressBar {
     pub fn set_text(&mut self, text: &str) -> () {
         unsafe {
             let c_str = CString::from_slice(text.as_bytes());
-            ffi::gtk_progress_bar_set_text(GTK_PROGRESSBAR(self.pointer), c_str);
+
+            ffi::gtk_progress_bar_set_text(GTK_PROGRESSBAR(self.pointer), c_str.as_ptr());
         }
     }
 
-    pub fn get_text(&self) -> String {
+    pub fn get_text(&self) -> Option<String> {
         unsafe {
             let c_str = ffi::gtk_progress_bar_get_text(GTK_PROGRESSBAR(self.pointer));
-            FromCStr::from_raw_buf(c_str as *const u8)
+
+            if c_str.is_null() {
+                None
+            } else {
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
+            }
         }
     }
 

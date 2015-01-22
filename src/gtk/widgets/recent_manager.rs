@@ -18,7 +18,6 @@ use gtk::ffi::FFIWidget;
 use gtk::cast::GTK_RECENT_MANAGER;
 use glib;
 use std::ffi::CString;
-use c_str::{FromCStr, ToCStr};
 
 struct_Widget!(RecentManager);
 
@@ -55,9 +54,11 @@ impl RecentManager {
     }
 
     pub fn add_full(&self, uri: &str, recent_data: &gtk::RecentData) -> bool {
-        match unsafe { uri.with_c_str(|c_str| {
-            ffi::gtk_recent_manager_add_full(GTK_RECENT_MANAGER(self.get_widget()), c_str, &recent_data.get_ffi())
-        })} {
+        match unsafe {
+            let c_str = CString::from_slice(uri.as_bytes());
+
+            ffi::gtk_recent_manager_add_full(GTK_RECENT_MANAGER(self.get_widget()), c_str.as_ptr(), &recent_data.get_ffi())
+        } {
             ffi::GFALSE => false,
             _ => true
         }

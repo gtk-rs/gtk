@@ -34,15 +34,17 @@ impl ToggleButton {
     pub fn new_with_label(label: &str) -> Option<ToggleButton> {
         let tmp_pointer = unsafe {
             let c_str = CString::from_slice(label.as_bytes());
-            ffi::gtk_toggle_button_new_with_label(c_str)
+
+            ffi::gtk_toggle_button_new_with_label(c_str.as_ptr())
         };
         check_pointer!(tmp_pointer, ToggleButton)
     }
 
     pub fn new_with_mnemonic(mnemonic: &str) -> Option<ToggleButton> {
         let c_str = CString::from_slice(mnemonic.as_bytes());
+
         let tmp_pointer = unsafe {
-            ffi::gtk_toggle_button_new_with_mnemonic(c_str)
+            ffi::gtk_toggle_button_new_with_mnemonic(c_str.as_ptr())
         };
         check_pointer!(tmp_pointer, ToggleButton)
     }

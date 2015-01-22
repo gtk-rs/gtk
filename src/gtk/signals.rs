@@ -174,7 +174,7 @@ macro_rules! signal(
         }
 
         impl<'a> $class<'a> {
-            pub fn new (cb : &'a (FnMut($($arg_type),*) -> $ret_type + 'a)) -> Box<$class<'a>> {
+            pub fn new (cb : &'a mut (FnMut($($arg_type),*) -> $ret_type + 'a)) -> Box<$class<'a>> {
                 box $class {
                     cb: cb,
                     user_data: None
@@ -203,7 +203,7 @@ macro_rules! signal(
 
             fn fetch_cb(&self) -> *mut FnMut() {
                 unsafe {
-                    transmute(&self.cb)
+                    transmute(&(*self.cb))
                 }
             }
 

@@ -49,7 +49,7 @@ pub trait ToolButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrai
             if c_str.is_null() {
                 None
             } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(c_str)).into_string())
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
             }
         }
     }
@@ -61,7 +61,7 @@ pub trait ToolButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrai
             if c_str.is_null() {
                 None
             } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(c_str)).into_string())
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
             }
         }
     }
@@ -69,10 +69,11 @@ pub trait ToolButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrai
     fn get_icon_name(&self) -> Option<String> {
         unsafe {
             let c_str = ffi::gtk_tool_button_get_icon_name(GTK_TOOLBUTTON(self.get_widget()));
+
             if c_str.is_null() {
                 None
             } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(c_str)).into_string())
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
             }
         }
     }

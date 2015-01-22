@@ -19,16 +19,15 @@ use gtk::{self, ffi, ToolItem};
 use gtk::ffi::FFIWidget;
 use gtk::cast::{GTK_TOOL_ITEM_GROUP, GTK_TOOL_ITEM};
 use std::ffi::CString;
-use c_str::{FromCStr, ToCStr};
 
 struct_Widget!(ToolItemGroup);
 
 impl ToolItemGroup {
     pub fn new(label: &str) -> Option<ToolItemGroup> {
         let tmp_pointer = unsafe {
-            label.with_c_str(|c_str| {
-                ffi::gtk_tool_item_group_new(c_str)
-            })
+            let c_str = CString::from_slice(label.as_bytes());
+
+            ffi::gtk_tool_item_group_new(c_str.as_ptr())
         };
         check_pointer!(tmp_pointer, ToolItemGroup)
     }
@@ -44,6 +43,7 @@ impl ToolItemGroup {
     pub fn get_drop_item(&self, x: i32, y: i32) -> Option<ToolItem> {
         let tmp_pointer = unsafe { ffi::gtk_tool_item_group_get_drop_item(GTK_TOOL_ITEM_GROUP(self.get_widget()),
             x as ::libc::c_int, y as ::libc::c_int) } as *mut ffi::C_GtkWidget;
+
         if tmp_pointer.is_null() {
             None
         } else {
@@ -70,15 +70,15 @@ impl ToolItemGroup {
         if tmp_pointer.is_null() {
             None
         } else {
-            unsafe { Some(FromCStr::from_raw_buf(tmp_pointer as *const u8)) }
+            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp_pointer)).to_string()) }
         }
     }
 
     pub fn set_label(&self, label: &str) {
         unsafe {
-            label.with_c_str(|c_str| {
-                ffi::gtk_tool_item_group_set_label(GTK_TOOL_ITEM_GROUP(self.get_widget()), c_str)
-            })
+            let c_str = CString::from_slice(label.as_bytes());
+
+            ffi::gtk_tool_item_group_set_label(GTK_TOOL_ITEM_GROUP(self.get_widget()), c_str.as_ptr())
         }
     }
 

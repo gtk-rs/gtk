@@ -17,7 +17,6 @@
 
 use gtk::{self, ffi};
 use std::ffi::CString;
-use c_str::{FromCStr, ToCStr};
 
 pub struct TextMark {
     pointer: *mut ffi::C_GtkTextMark
@@ -26,9 +25,9 @@ pub struct TextMark {
 impl TextMark {
     pub fn new(name: &str, left_gravity: bool) -> Option<TextMark> {
         let tmp_pointer = unsafe {
-            name.with_c_str(|c_str| {
-                ffi::gtk_text_mark_new(c_str, ffi::to_gboolean(left_gravity))
-            })
+            let c_str = CString::from_slice(name.as_bytes());
+
+            ffi::gtk_text_mark_new(c_str.as_ptr(), ffi::to_gboolean(left_gravity))
         };
 
         if tmp_pointer.is_null() {
@@ -56,7 +55,7 @@ impl TextMark {
         if tmp_pointer.is_null() {
             None
         } else {
-            unsafe { Some(FromCStr::from_raw_buf(tmp_pointer as *const u8)) }
+            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp_pointer)).to_string()) }
         }
     }
 

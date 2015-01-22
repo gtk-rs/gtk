@@ -13,12 +13,11 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::ffi::{CString, c_str_to_bytes};
+use std::ffi::CString;
 use libc::{c_ulong, c_int, c_double};
 use std::clone::Clone;
 use std::cmp::PartialEq;
 use std::ops::Drop;
-use c_str::{FromCStr, ToCStr};
 
 use cairo::enums::{
     Antialias,
@@ -224,20 +223,24 @@ impl FontFace {
     pub fn toy_create(family: &str, slant: FontSlant, weight: FontWeight) -> FontFace {
         let font_face = FontFace(
             unsafe {
-                family.with_c_str(|c_str| {
-                    ffi::cairo_toy_font_face_create(c_str, slant, weight)
-                })
+                let c_str = CString::from_slice(family.as_bytes());
+
+                ffi::cairo_toy_font_face_create(c_str.as_ptr(), slant, weight)
             }
         );
         font_face.ensure_status();
         font_face
     }
 
-    pub fn toy_get_family(&self) -> String {
+    pub fn toy_get_family(&self) -> Option<String> {
         unsafe {
             let ptr = ffi::cairo_toy_font_face_get_family(self.get_ptr());
 
-            FromCStr::from_raw_buf(ptr as *const u8)
+            if ptr.is_null() {
+                None
+            } else {
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&ptr)).to_string())
+            }
         }
     }
 

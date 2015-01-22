@@ -16,7 +16,6 @@
 use std::ffi::CString;
 use gtk::{self, ffi};
 use gtk::cast::GTK_COMBO_BOX;
-use c_str::{FromCStr, ToCStr};
 
 pub trait ComboBoxTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait {
     fn get_wrap_width(&self) -> i32 {
@@ -79,15 +78,15 @@ pub trait ComboBoxTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait 
         if tmp.is_null() {
             None
         } else {
-            unsafe { Some(FromCStr::from_raw_buf(tmp as *const u8)) }
+            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
         }
     }
 
     fn set_active_id(&self, active_id: &str) -> bool {
         match unsafe {
-            active_id.with_c_str(|c_str|{
-                ffi::gtk_combo_box_set_active_id(GTK_COMBO_BOX(self.get_widget()), c_str)
-            })
+            let c_str = CString::from_slice(active_id.as_bytes());
+
+            ffi::gtk_combo_box_set_active_id(GTK_COMBO_BOX(self.get_widget()), c_str.as_ptr())
         } {
             ffi::GFALSE => false,
             _ => true

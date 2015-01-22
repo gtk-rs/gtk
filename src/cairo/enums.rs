@@ -15,8 +15,6 @@
 
 use std::fmt::{Show, Error};
 use cairo::ffi;
-use std::ffi::{CString, c_str_to_bytes};
-use c_str::{FromCStr, ToCStr};
 
 #[repr(C)]
 #[derive(Clone, PartialEq, PartialOrd, Copy)]
@@ -68,10 +66,10 @@ impl Show for Status {
     fn fmt(&self, formatter: &mut ::std::fmt::Formatter) -> Result<(), Error> {
         unsafe {
             let char_ptr = ffi::cairo_status_to_string(*self);
-            let tmp : String = FromCStr::from_raw_buf(char_ptr as *const u8);
+            let tmp = String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&char_ptr)).to_string();
 
             tmp.fmt(formatter)
-        };
+        }
     }
 }
 

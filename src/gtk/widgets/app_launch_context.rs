@@ -19,7 +19,6 @@ use gtk::{self, ffi};
 use gtk::cast::{GTK_APP_LAUNCH_CONTEXT};
 use std::str;
 use std::string;
-use c_str::FromCStr;
 
 struct_Widget!(AppLaunchContext);
 

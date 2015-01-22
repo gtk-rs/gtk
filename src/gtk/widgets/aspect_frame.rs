@@ -26,16 +26,15 @@ use gtk::{self, ffi};
 struct_Widget!(AspectFrame);
 
 impl AspectFrame {
-    pub fn new(label: Option<&str>,
-               x_align: f32,
-               y_align: f32,
-               ratio: f32,
-               obey_child: bool)
-               -> Option<AspectFrame> {
+    pub fn new(label: Option<&str>, x_align: f32, y_align: f32, ratio: f32, obey_child: bool) -> Option<AspectFrame> {
         let c_obey_child = if obey_child { ffi::GTRUE } else { ffi::GFALSE };
         let tmp_pointer = match label {
-            Some(l) => unsafe { l.with_c_str(|c_str| { ffi::gtk_aspect_frame_new(c_str, x_align as c_float, y_align as c_float, ratio as c_float, c_obey_child) }) },
-            None    => unsafe { ffi::gtk_aspect_frame_new(ptr::null(), x_align as c_float, y_align as c_float, ratio as c_float, c_obey_child) }
+            Some(l) => unsafe {
+                let c_str = CString::from_slice(l.as_bytes());
+
+                ffi::gtk_aspect_frame_new(c_str.as_ptr(), x_align as c_float, y_align as c_float, ratio as c_float, c_obey_child)
+            },
+            None => unsafe { ffi::gtk_aspect_frame_new(ptr::null(), x_align as c_float, y_align as c_float, ratio as c_float, c_obey_child) }
         };
         check_pointer!(tmp_pointer, AspectFrame)
     }
@@ -46,6 +45,7 @@ impl AspectFrame {
                ratio: f32,
                obey_child: bool) -> () {
         let c_obey_child = if obey_child { ffi::GTRUE } else { ffi::GFALSE };
+
         unsafe {
             ffi::gtk_aspect_frame_set(GTK_ASPECTFRAME(self.pointer), x_align as c_float, y_align as c_float, ratio as c_float, c_obey_child);
         }

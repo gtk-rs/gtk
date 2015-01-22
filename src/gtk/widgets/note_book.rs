@@ -120,12 +120,14 @@ impl NoteBook {
     }
 
     pub fn get_group_name(&mut self) -> Option<String> {
-        let c_str = unsafe { ffi::gtk_notebook_get_group_name(GTK_NOTEBOOK(self.pointer)) };
+        unsafe {
+            let c_str = ffi::gtk_notebook_get_group_name(GTK_NOTEBOOK(self.pointer));
 
-        if c_str.is_null() {
-            None
-        } else {
-            Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
+            if c_str.is_null() {
+                None
+            } else {
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
+            }
         }
     }
 

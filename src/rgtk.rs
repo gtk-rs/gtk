@@ -42,12 +42,11 @@ let button = gtk::Button:new(); // trait gtk::Button reexported as GtkButtonTrai
 #![crate_type = "lib"]
 #![crate_type = "rlib"]
 #![allow(dead_code)] // TODO: drop this
-#![allow(raw_pointer_deriving)]
+#![allow(raw_pointer_derive)]
+#![allow(unstable)]
 #![feature(unsafe_destructor)]
 
 extern crate libc;
-extern crate c_str;
-extern crate c_vec;
 #[macro_use] extern crate rustc_bitflags;
 
 pub use glib::traits::Connect;

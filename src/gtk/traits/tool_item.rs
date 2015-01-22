@@ -105,14 +105,18 @@ pub trait ToolItemTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait 
 
     fn set_tooltip_text(&mut self, text: &str) -> () {
         let c_str = CString::from_slice(text.as_bytes());
+
         unsafe {
-            ffi::gtk_tool_item_set_tooltip_text(GTK_TOOLITEM(self.get_widget()), c_str)
+            ffi::gtk_tool_item_set_tooltip_text(GTK_TOOLITEM(self.get_widget()), c_str.as_ptr())
         }
     }
 
     fn set_tooltip_markup(&mut self, markup: &str) -> () {
-        let c_str = CString::from_slice(markup.as_bytes());
-        ffi::gtk_tool_item_set_tooltip_markup(GTK_TOOLITEM(self.get_widget()), c_str)
+        unsafe {
+            let c_str = CString::from_slice(markup.as_bytes());
+
+            ffi::gtk_tool_item_set_tooltip_markup(GTK_TOOLITEM(self.get_widget()), c_str.as_ptr())
+        }
     }
 
     fn get_icon_size(&self) -> IconSize {

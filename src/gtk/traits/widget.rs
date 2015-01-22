@@ -13,14 +13,13 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use libc::{c_int, c_char};
-use std::ffi::{CString, c_str_to_bytes};
+use libc::{c_int, c_char, self};
+use std::ffi::CString;
 use gtk::ffi;
 use gdk;
 use gtk;
 use glib;
 use glib::ffi::GType;
-use c_str::{FromCStr, ToCStr};
 
 pub trait WidgetTrait: ffi::FFIWidget {
     fn show_all(&mut self) -> () {
@@ -97,16 +96,19 @@ pub trait WidgetTrait: ffi::FFIWidget {
 
     fn set_name(&self, name: &str) {
         let c_str = CString::from_slice(name.as_bytes());
+
         unsafe { ffi::gtk_widget_set_name(self.get_widget(), c_str.as_ptr()) }
     }
 
     fn get_name(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_widget_get_name(self.get_widget()) };
+        unsafe {
+            let tmp = ffi::gtk_widget_get_name(self.get_widget());
 
-        if tmp.is_null() {
-            None
-        } else {
-            unsafe { Some(FromCStr::from_raw_buf(c_str_to_bytes(&tmp).to_vec()).unwrap()) }
+            if tmp.is_null() {
+                None
+            } else {
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string())
+            }
         }
     }
 
@@ -206,6 +208,7 @@ pub trait WidgetTrait: ffi::FFIWidget {
 
     fn override_symbolic_color(&self, name: &str, color: &gdk::RGBA) {
         let c_str = CString::from_slice(name.as_bytes());
+
         unsafe { ffi::gtk_widget_override_symbolic_color(self.get_widget(), c_str.as_ptr(), color); }
     }
 
@@ -333,7 +336,7 @@ pub trait WidgetTrait: ffi::FFIWidget {
             let mut tmp_vec : glib::List<Box<Self>> = glib::List::new();
 
             for it in old_list.iter() {
-                tmp_vec.append(Box::new(ffi::FFIWidget::wrap)(*it));
+                tmp_vec.append(Box::new(ffi::FFIWidget::wrap(*it)));
             }
             tmp_vec
         }
@@ -366,30 +369,41 @@ pub trait WidgetTrait: ffi::FFIWidget {
     }
 
     fn get_tooltip_markup(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_widget_get_tooltip_markup(self.get_widget()) };
+        unsafe {
+            let tmp = ffi::gtk_widget_get_tooltip_markup(self.get_widget());
 
-        if tmp.is_null() {
-            None
-        } else {
-            Some(unsafe { FromCStr::from_raw_buf(c_str_to_bytes(&(tmp as *const c_char)).to_vec()).unwrap() })
+            if tmp.is_null() {
+                None
+            } else {
+                let ret = String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&(tmp as *const i8))).to_string();
+
+                libc::funcs::c95::stdlib::free(tmp as *mut libc::c_void);
+                Some(ret)
+            }
         }
     }
 
     fn set_tooltip_markup(&self, markup: &str) {
         unsafe {
             let c_str = CString::from_slice(markup.as_bytes());
+
             ffi::gtk_widget_set_tooltip_markup(self.get_widget(), c_str.as_ptr() as *mut c_char);
         }
     }
 
 
     fn get_tooltip_text(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_widget_get_tooltip_text(self.get_widget()) };
+        unsafe {
+            let tmp = ffi::gtk_widget_get_tooltip_text(self.get_widget());
 
-        if tmp.is_null() {
-            None
-        } else {
-            Some(unsafe { FromCStr::from_raw_buf(c_str_to_bytes(&(tmp as *const c_char)).to_vec()).unwrap() })
+            if tmp.is_null() {
+                None
+            } else {
+                let ret = String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&(tmp as *const i8))).to_string();
+
+                libc::funcs::c95::stdlib::free(tmp as *mut libc::c_void);
+                Some(ret)
+            }
         }
     }
 
@@ -844,6 +858,7 @@ pub trait WidgetTrait: ffi::FFIWidget {
     fn child_notify(&self, child_property: &str) {
         unsafe {
             let c_str = CString::from_slice(child_property.as_bytes());
+
             ffi::gtk_widget_child_notify(self.get_widget(), c_str.as_ptr())
         }
     }

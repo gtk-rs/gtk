@@ -17,7 +17,6 @@
 
 use gtk::ffi;
 use std::ffi::CString;
-use c_str::{FromCStr, ToCStr};
 
 #[derive(Copy)]
 pub struct TextTag {
@@ -27,9 +26,9 @@ pub struct TextTag {
 impl TextTag {
     pub fn new(name: &str) -> Option<TextTag> {
         let tmp_pointer = unsafe {
-            name.with_c_str(|c_str| {
-                ffi::gtk_text_tag_new(c_str)
-            })
+            let c_str = CString::from_slice(name.as_bytes());
+
+            ffi::gtk_text_tag_new(c_str.as_ptr())
         };
 
         if tmp_pointer.is_null() {

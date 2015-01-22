@@ -14,7 +14,6 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::ffi;
-use c_str::FromCStr;
 use std::ffi::CString;
 
 pub struct FileFilter {
@@ -41,12 +40,14 @@ impl FileFilter {
     }
 
     pub fn get_name(&self) -> Option<String> {
-        let name = unsafe { ffi::gtk_file_filter_get_name(self.pointer) };
+        unsafe {
+            let name = ffi::gtk_file_filter_get_name(self.pointer);
 
-        if name.is_null() {
-            None
-        } else {
-            Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&name)).to_string())
+            if name.is_null() {
+                None
+            } else {
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&name)).to_string())
+            }
         }
     }
 

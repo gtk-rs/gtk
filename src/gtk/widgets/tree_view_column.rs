@@ -18,7 +18,6 @@
 use glib;
 use gtk::{self, ffi, cast};
 use std::ffi::CString;
-use c_str::{FromCStr, ToCStr};
 
 pub struct TreeViewColumn {
     pointer: *mut ffi::C_GtkTreeViewColumn
@@ -140,14 +139,21 @@ impl TreeViewColumn {
 
     pub fn set_title(&mut self, title: &str) {
         let c_str = CString::from_slice(title.as_bytes());
+
         unsafe {
             ffi::gtk_tree_view_column_set_title(self.pointer, c_str.as_ptr())
         }
     }
 
-    pub fn get_title(&self) -> String {
+    pub fn get_title(&self) -> Option<String> {
         unsafe {
-            FromCStr::from_raw_buf(ffi::gtk_tree_view_column_get_title(self.pointer) as *const u8)
+            let tmp = ffi::gtk_tree_view_column_get_title(self.pointer);
+
+            if tmp.is_null() {
+                None
+            } else {
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string())
+            }
         }
     }
 
@@ -272,7 +278,8 @@ impl TreeViewColumn {
     }
 
     pub fn add_attribute<T: ffi::FFIWidget + gtk::CellRendererTrait>(&self, cell: &T, attribute: &str, column: i32) {
-        let attribute_c = attribute.to_c_str();
+        let attribute_c = CString::from_slice(attribute.as_bytes());
+
         unsafe { ffi::gtk_tree_view_column_add_attribute(self.pointer,
                                                          cast::GTK_CELL_RENDERER(cell.get_widget()),
                                                          attribute_c.as_ptr(),

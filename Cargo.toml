@@ -8,16 +8,15 @@ description = "A rust binding for the GTK+ library"
 repository = "https://github.com/jeremyletang/rgtk"
 license = "LGPL-3.0+"
 
+[dependencies]
+c_vec = "^1.0.0"
+
 [features]
 GTK_3_14 = []
 GTK_3_12 = []
 GTK_3_10 = []
 GTK_3_8 = []
 GTK_3_6 = []
-
-[dependencies]
-c_str = "^1.0.0"
-c_vec = "^1.0.0"
 
 [lib]
 name = "rgtk"

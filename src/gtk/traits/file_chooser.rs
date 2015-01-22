@@ -108,12 +108,14 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
     }
 
     fn get_current_name(&self) -> Option<String> {
-        let name = unsafe { ffi::gtk_file_chooser_get_current_name(GTK_FILE_CHOOSER(self.get_widget())) };
+        unsafe {
+            let name = ffi::gtk_file_chooser_get_current_name(GTK_FILE_CHOOSER(self.get_widget()));
 
-        if name.is_null() {
-            None
-        } else {
-            Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(name)))
+            if name.is_null() {
+                None
+            } else {
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&name)).to_string())
+            }
         }
     }
 
@@ -131,12 +133,14 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
     }
 
     fn get_filename(&self) -> Option<String> {
-        let filename = unsafe { ffi::gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(self.get_widget())) };
+        unsafe {
+            let filename = ffi::gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(self.get_widget()));
 
-        if filename.is_null() {
-            None
-        } else {
-            Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(filename)))
+            if filename.is_null() {
+                None
+            } else {
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&filename)).to_string())
+            }
         }
     }
 
@@ -180,7 +184,7 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
 
             for it in old_list.iter() {
                 unsafe {
-                    tmp_vec.append(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(*it)))
+                    tmp_vec.append(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(it)).to_string())
                 }
             }
             tmp_vec
@@ -201,12 +205,14 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
     }
 
     fn get_current_folder(&self) -> Option<String> {
-        let filename = unsafe { ffi::gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(self.get_widget())) };
+        unsafe {
+            let filename = ffi::gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(self.get_widget()));
 
-        if filename.is_null() {
-            None
-        } else {
-            Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(filename)))
+            if filename.is_null() {
+                None
+            } else {
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&filename)).to_string())
+            }
         }
     }
 
@@ -224,12 +230,14 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
     }
 
     fn get_uri(&self) -> Option<String> {
-        let uri = unsafe { ffi::gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(self.get_widget())) };
+        unsafe {
+            let uri = ffi::gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(self.get_widget()));
 
-        if uri.is_null() {
-            None
-        } else {
-            Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(uri)))
+            if uri.is_null() {
+                None
+            } else {
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&uri)).to_string())
+            }
         }
     }
 
@@ -265,7 +273,7 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
 
             for it in old_list.iter() {
                 unsafe {
-                    tmp_vec.append(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(*it)))
+                    tmp_vec.append(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(it)).to_string())
                 }
             }
             tmp_vec
@@ -284,12 +292,14 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
     }
 
     fn get_current_folder_uri(&self) -> Option<String> {
-        let uri = unsafe { ffi::gtk_file_chooser_get_current_folder_uri(GTK_FILE_CHOOSER(self.get_widget())) };
+        unsafe {
+            let uri = ffi::gtk_file_chooser_get_current_folder_uri(GTK_FILE_CHOOSER(self.get_widget()));
 
-        if uri.is_null() {
-            None
-        } else {
-            Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(uri)))
+            if uri.is_null() {
+                None
+            } else {
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&uri)).to_string())
+            }
         }
     }
 
@@ -298,12 +308,14 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
     }
 
     fn get_preview_widget<T: gtk::WidgetTrait>(&self) -> Option<T> {
-        let tmp_pointer = unsafe { ffi::gtk_file_chooser_get_preview_widget(GTK_FILE_CHOOSER(self.get_widget())) };
+        unsafe {
+            let tmp_pointer = ffi::gtk_file_chooser_get_preview_widget(GTK_FILE_CHOOSER(self.get_widget()));
 
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            Some(ffi::FFIWidget::wrap(tmp_pointer))
+            if tmp_pointer.is_null() {
+                None
+            } else {
+                Some(ffi::FFIWidget::wrap(tmp_pointer))
+            }
         }
     }
 
@@ -336,22 +348,26 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
     }
 
     fn get_preview_filename(&self) -> Option<String> {
-        let filename = unsafe { ffi::gtk_file_chooser_get_preview_filename(GTK_FILE_CHOOSER(self.get_widget())) };
+        unsafe {
+            let filename = ffi::gtk_file_chooser_get_preview_filename(GTK_FILE_CHOOSER(self.get_widget()));
 
-        if filename.is_null() {
-            None
-        } else {
-            Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(filename)))
+            if filename.is_null() {
+                None
+            } else {
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&filename)).to_string())
+            }
         }
     }
 
     fn get_preview_uri(&self) -> Option<String> {
-        let uri = unsafe { ffi::gtk_file_chooser_get_preview_uri(GTK_FILE_CHOOSER(self.get_widget())) };
+        unsafe {
+            let uri = ffi::gtk_file_chooser_get_preview_uri(GTK_FILE_CHOOSER(self.get_widget()));
 
-        if uri.is_null() {
-            None
-        } else {
-            Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(uri)))
+            if uri.is_null() {
+                None
+            } else {
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&uri)).to_string())
+            }
         }
     }
 
@@ -360,12 +376,14 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
     }
 
     fn get_extra_widget<T: gtk::WidgetTrait>(&self) -> Option<T> {
-        let tmp = unsafe { ffi::gtk_file_chooser_get_extra_widget(GTK_FILE_CHOOSER(self.get_widget())) };
+        unsafe {
+            let tmp = ffi::gtk_file_chooser_get_extra_widget(GTK_FILE_CHOOSER(self.get_widget()));
 
-        if tmp.is_null() {
-            None
-        } else {
-            Some(ffi::FFIWidget::wrap(tmp))
+            if tmp.is_null() {
+                None
+            } else {
+                Some(ffi::FFIWidget::wrap(tmp))
+            }
         }
     }
 
@@ -431,7 +449,7 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
             match {
                 let c_str = CString::from_slice(uri.as_bytes());
 
-                ffi::gtk_file_chooser_remove_shortcut_folder(GTK_FILE_CHOOSER(self.get_widget()), c_str, &mut error.unwrap())
+                ffi::gtk_file_chooser_remove_shortcut_folder(GTK_FILE_CHOOSER(self.get_widget()), c_str.as_ptr(), &mut error.unwrap())
             } {
                 ffi::GFALSE => false,
                 _ => true

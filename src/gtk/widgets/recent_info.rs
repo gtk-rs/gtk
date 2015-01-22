@@ -17,7 +17,7 @@ use gtk::ffi;
 use gtk::ffi::FFIWidget;
 use gtk::cast::GTK_RECENT_INFO;
 use std::ffi::CString;
-use c_str::{FromCStr, ToCStr};
+use libc::c_char;
 
 struct_Widget!(RecentInfo);
 
@@ -42,7 +42,7 @@ impl RecentInfo {
         if uri.is_null() {
             None
         } else {
-            Some(unsafe { FromCStr::from_raw_buf(uri as *const u8) })
+            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&uri)).to_string()) }
         }
     }
 
@@ -52,7 +52,7 @@ impl RecentInfo {
         if display_name.is_null() {
             None
         } else {
-            Some(unsafe { FromCStr::from_raw_buf(display_name as *const u8) })
+            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&display_name)).to_string()) }
         }
     }
 
@@ -62,7 +62,7 @@ impl RecentInfo {
         if description.is_null() {
             None
         } else {
-            Some(unsafe { FromCStr::from_raw_buf(description as *const u8) })
+            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&description)).to_string()) }
         }
     }
 
@@ -72,7 +72,7 @@ impl RecentInfo {
         if mime_type.is_null() {
             None
         } else {
-            Some(unsafe { FromCStr::from_raw_buf(mime_type as *const u8) })
+            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&mime_type)).to_string()) }
         }
     }
 
@@ -107,10 +107,11 @@ impl RecentInfo {
             ffi::GFALSE => false,
             _ => true
         };
+
         if app_exec.is_null() {
             (ret, String::new(), count, time_)
         } else {
-            (ret, unsafe { FromCStr::from_raw_buf(app_exec as *const u8)}, count, time_)
+            (ret, unsafe { String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&(app_exec as *const c_char))).to_string() }, count, time_)
         }
     }
 
@@ -124,26 +125,28 @@ impl RecentInfo {
             let mut ret = Vec::with_capacity(length as usize);
 
             for count in range(0, length) {
-                ret.push(unsafe { FromCStr::from_raw_buf(*tmp.offset(count as isize) as *const u8) });
+                ret.push(unsafe { String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&(*tmp.offset(count as isize) as *const c_char))).to_string() });
             }
             Some(ret)
         }
     }
 
     pub fn last_application(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_recent_info_last_application(GTK_RECENT_INFO(self.get_widget())) };
+        let tmp = unsafe { ffi::gtk_recent_info_last_application(GTK_RECENT_INFO(self.get_widget())) as *const c_char};
 
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { FromCStr::from_raw_buf(tmp as *const u8) })
+            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
         }
     }
 
     pub fn has_application(&self, app_name: &str) -> bool {
-        match unsafe { app_name.with_c_str(|c_str| {
-            ffi::gtk_recent_info_has_application(GTK_RECENT_INFO(self.get_widget()), c_str)
-        })} {
+        match unsafe {
+            let c_str = CString::from_slice(app_name.as_bytes());
+
+            ffi::gtk_recent_info_has_application(GTK_RECENT_INFO(self.get_widget()), c_str.as_ptr())
+        } {
             ffi::GFALSE => false,
             _ => true
         }
@@ -159,7 +162,7 @@ impl RecentInfo {
             let mut ret = Vec::with_capacity(length as usize);
 
             for count in range(0, length) {
-                ret.push(unsafe { FromCStr::from_raw_buf(*tmp.offset(count as isize) as *const u8) });
+                ret.push(unsafe { String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&(*tmp.offset(count as isize) as *const c_char))).to_string() });
             }
             Some(ret)
         }
@@ -179,22 +182,22 @@ impl RecentInfo {
     }
 
     pub fn get_short_name(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_recent_info_get_short_name(GTK_RECENT_INFO(self.get_widget())) };
+        let tmp = unsafe { ffi::gtk_recent_info_get_short_name(GTK_RECENT_INFO(self.get_widget())) as *const c_char };
 
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { FromCStr::from_raw_buf(tmp as *const u8) })
+            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
         }
     }
 
     pub fn get_uri_display(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_recent_info_get_uri_display(GTK_RECENT_INFO(self.get_widget())) };
+        let tmp = unsafe { ffi::gtk_recent_info_get_uri_display(GTK_RECENT_INFO(self.get_widget())) as *const c_char };
 
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { FromCStr::from_raw_buf(tmp as *const u8) })
+            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
         }
     }
 

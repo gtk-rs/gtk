@@ -18,16 +18,15 @@
 use gtk::cast::GTK_APP_CHOOSER_WIDGET;
 use gtk::{self, ffi};
 use std::ffi::CString;
-use c_str::{FromCStr, ToCStr};
 
 struct_Widget!(AppChooserWidget);
 
 impl AppChooserWidget {
     pub fn new(content_type: &str) -> Option<AppChooserWidget> {
         let tmp_pointer = unsafe {
-            content_type.with_c_str(|c_str| {
-                ffi::gtk_app_chooser_widget_new(c_str)
-            })
+            let c_str = CString::from_slice(content_type.as_bytes());
+
+            ffi::gtk_app_chooser_widget_new(c_str.as_ptr())
         };
         check_pointer!(tmp_pointer, AppChooserWidget)
     }
@@ -84,9 +83,9 @@ impl AppChooserWidget {
 
     pub fn set_default_text(&self, text: &str) {
         unsafe {
-            text.with_c_str(|c_str| {
-                ffi::gtk_app_chooser_widget_set_default_text(GTK_APP_CHOOSER_WIDGET(self.pointer), c_str)
-            })
+            let c_str = CString::from_slice(text.as_bytes());
+
+            ffi::gtk_app_chooser_widget_set_default_text(GTK_APP_CHOOSER_WIDGET(self.pointer), c_str.as_ptr())
         }
     }
 
@@ -96,7 +95,7 @@ impl AppChooserWidget {
         if tmp_pointer.is_null() {
             None
         } else {
-            unsafe { Some(FromCStr::from_raw_buf(tmp_pointer as *const u8)) }
+            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp_pointer)).to_string()) }
         }
     }
 }

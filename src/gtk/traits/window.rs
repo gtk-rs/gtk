@@ -18,12 +18,12 @@ use gtk::{self, ffi};
 use gtk::ffi::to_gboolean;
 use gtk::cast::GTK_WINDOW;
 use gtk::WindowPosition;
-use c_str::{FromCStr, ToCStr};
 
 pub trait WindowTrait : gtk::WidgetTrait {
     fn set_title(&mut self, title: &str) -> () {
         unsafe {
             let c_str = CString::from_slice(title.as_bytes());
+
             ffi::gtk_window_set_title(GTK_WINDOW(self.get_widget()), c_str.as_ptr());
         }
     }
@@ -35,12 +35,14 @@ pub trait WindowTrait : gtk::WidgetTrait {
     }
 
     fn get_title(&self) -> Option<String> {
-        let c_title = unsafe { ffi::gtk_window_get_title(GTK_WINDOW(self.get_widget())) };
+        unsafe {
+            let c_title = ffi::gtk_window_get_title(GTK_WINDOW(self.get_widget()));
 
-        if c_title.is_null() {
-            None
-        } else {
-            Some(unsafe { FromCStr::from_raw_buf(c_title as *const i8) })
+            if c_title.is_null() {
+                None
+            } else {
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_title)).to_string())
+            }
         }
     }
 

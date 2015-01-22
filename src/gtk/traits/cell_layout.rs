@@ -69,9 +69,10 @@ pub trait CellLayoutTrait: gtk::WidgetTrait {
 
     fn add_attribute(&self, cell: &gtk::CellRendererTrait, attribute: &str, column: i32) {
         let c_str = CString::from_slice(attribute.as_bytes());
+
         unsafe {
                 ffi::gtk_cell_layout_add_attribute(GTK_CELL_LAYOUT(self.get_widget()), GTK_CELL_RENDERER(cell.get_widget()),
-                    c_str, column)
+                    c_str.as_ptr(), column)
             }
     }
 

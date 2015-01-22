@@ -19,7 +19,6 @@
 
 use gtk::{self, ffi};
 use gtk::cast::GTK_STACK;
-use c_str::FromCStr;
 
 /// GtkStack — A stacking container
 struct_Widget!(Stack);
@@ -32,21 +31,23 @@ impl Stack {
 
     pub fn add_named<T: gtk::WidgetTrait>(&mut self, child: &T, name: &str) {
         let c_str = CString::from_slice(name.as_bytes());
+
         unsafe {
             ffi::gtk_stack_add_named(GTK_STACK(self.pointer),
                                      child.get_widget(),
-                                     c_str)
+                                     c_str.as_ptr())
         }
     }
 
     pub fn add_titled<T: gtk::WidgetTrait>(&mut self, child: &T, name: &str, title: &str) {
         let c_str = CString::from_slice(name.as_bytes());
         let c_str = CString::from_slice(title.as_bytes());
+
         unsafe {
             ffi::gtk_stack_add_titled(GTK_STACK(self.pointer),
                                       child.get_widget(),
-                                      c_name,
-                                      c_title)
+                                      c_name.as_ptr(),
+                                      c_title.as_ptr())
         }
     }
 
@@ -68,25 +69,28 @@ impl Stack {
 
     pub fn set_visible_child_name(&mut self, name: &str) {
         let c_str = CString::from_slice(name.as_bytes());
+
         unsafe {
-            ffi::gtk_stack_set_visible_child_name(GTK_STACK(self.pointer), c_str)
+            ffi::gtk_stack_set_visible_child_name(GTK_STACK(self.pointer), c_str.as_ptr())
         }
     }
 
     pub fn get_visible_child_name(&self) -> Option<String> {
         let c_name = unsafe { ffi::gtk_stack_get_visible_child_name(GTK_STACK(self.pointer)) };
+
         if c_name.is_null() {
             None
         } else {
-            Some(unsafe { FromCStr::from_raw_buf(c_name as *const u8) })
+            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_name)).to_string()) }
         }
     }
 
     pub fn set_visible_child_full(&mut self, name: &str, transition: gtk::StackTransitionType) {
         let c_str = CString::from_slice(name.as_bytes());
+
         unsafe {
             ffi::gtk_stack_set_visible_child_full(GTK_STACK(self.pointer),
-                                                  c_str,
+                                                  c_str.as_ptr(),
                                                   transition)
         }
     }

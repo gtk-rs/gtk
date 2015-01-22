@@ -18,7 +18,7 @@ use gtk::cast::{GTK_RECENT_CHOOSER};
 use gtk::{self, ffi};
 use gtk::ffi::FFIWidget;
 use glib;
-use c_str::{FromCStr, ToCStr};
+use libc::c_char;
 
 pub trait RecentChooserTrait: gtk::WidgetTrait + FFIWidget {
     fn set_show_private(&self, show_private: bool) {
@@ -122,12 +122,14 @@ pub trait RecentChooserTrait: gtk::WidgetTrait + FFIWidget {
     }
 
     fn get_current_uri(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_recent_chooser_get_current_uri(GTK_RECENT_CHOOSER(self.get_widget())) };
+        unsafe {
+            let tmp = ffi::gtk_recent_chooser_get_current_uri(GTK_RECENT_CHOOSER(self.get_widget()));
 
-        if tmp.is_null() {
-            None
-        } else {
-            Some(unsafe { FromCStr::from_raw_buf(tmp as *const u8) })
+            if tmp.is_null() {
+                None
+            } else {
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&(tmp as *const c_char))).to_string())
+            }
         }
     }
 
@@ -142,10 +144,13 @@ pub trait RecentChooserTrait: gtk::WidgetTrait + FFIWidget {
     }
 
     fn unselect_uri(&self, uri: &str) -> bool {
-        match unsafe { let c_str = CString::from_slice(uri.as_bytes());
-        ffi::gtk_recent_chooser_unselect_uri(GTK_RECENT_CHOOSER(self.get_widget()), c_str)} {
-            ffi::GFALSE => false,
-            _ => true
+        unsafe {
+            let c_str = CString::from_slice(uri.as_bytes());
+
+            match ffi::gtk_recent_chooser_unselect_uri(GTK_RECENT_CHOOSER(self.get_widget()), c_str.as_ptr()) {
+                ffi::GFALSE => false,
+                _ => true
+            }
         }
     }
 
@@ -167,7 +172,7 @@ pub trait RecentChooserTrait: gtk::WidgetTrait + FFIWidget {
             let mut tmp_vec : glib::List<Box<gtk::RecentInfo>> = glib::List::new();
 
             for it in old_list.iter() {
-                tmp_vec.append(Box::new(ffi::FFIWidget::wrap)(*it as *mut gtk::ffi::C_GtkWidget));
+                tmp_vec.append(Box::new(ffi::FFIWidget::wrap(*it as *mut gtk::ffi::C_GtkWidget)));
             }
             tmp_vec
         }
@@ -180,12 +185,16 @@ pub trait RecentChooserTrait: gtk::WidgetTrait + FFIWidget {
         if tmp.is_null() {
             None
         } else {
-            let mut ret = Vec::with_capacity(length as usize);
+            unsafe {
+                let mut ret = Vec::with_capacity(length as usize);
 
-            for count in range(0, length) {
-                ret.push(unsafe { FromCStr::from_raw_buf(*tmp.offset(count as isize) as *const u8) });
+                for count in range(0, length) {
+                    let t = tmp.offset(count as isize) as *const c_char;
+
+                    ret.push(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&t)).to_string());
+                }
+                Some(ret)
             }
-            Some(ret)
         }
     }
 

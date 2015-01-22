@@ -17,7 +17,6 @@
 
 use libc::c_int;
 use std::ffi::CString;
-use c_str::FromCStr;
 
 use gtk::cast::GTK_EXPANDER;
 use gtk::{self, ffi};
@@ -114,15 +113,21 @@ impl Expander {
         }
     }
 
-    pub fn get_label(&self) -> String {
+    pub fn get_label(&self) -> Option<String> {
         unsafe {
             let c_str = ffi::gtk_expander_get_label(GTK_EXPANDER(self.pointer));
-            FromCStr::from_raw_buf(c_str as *const u8)
+            
+            if c_str.is_null() {
+                None
+            } else {
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
+            }
         }
     }
 
     pub fn set_label(&mut self, label: &str) -> () {
         let c_str = CString::from_slice(label.as_bytes());
+
         unsafe {
             ffi::gtk_expander_set_label(GTK_EXPANDER(self.pointer), c_str.as_ptr());
         }

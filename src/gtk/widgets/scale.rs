@@ -99,6 +99,7 @@ impl Scale {
     pub fn get_layout_offsets(&self) -> (i32, i32) {
         let x = 0;
         let y = 0;
+
         unsafe {
             ffi::gtk_scale_get_layout_offsets(GTK_SCALE(self.pointer), &x, &y);
         }
@@ -108,7 +109,8 @@ impl Scale {
     pub fn add_mark(&mut self, value: f64, position: PositionType, markup: &str) -> () {
         unsafe {
             let c_str = CString::from_slice(markup.as_bytes());
-            ffi::gtk_scale_add_mark(GTK_SCALE(self.pointer), value as c_double, position, c_str);
+
+            ffi::gtk_scale_add_mark(GTK_SCALE(self.pointer), value as c_double, position, c_str.as_ptr());
         }
     }
 
