@@ -2,8 +2,8 @@
 //!
 //! A simple text file viewer
 
-#![feature(globs)]
 #![crate_type = "bin"]
+#![allow(unstable)]
 
 extern crate rgtk;
 
@@ -28,7 +28,7 @@ fn main() {
 
     let mut open_button = gtk::ToolButton::new::<gtk::Image>(Some(&open_icon), Some("Open")).unwrap();
     open_button.set_is_important(true);
-    Connect::connect(&open_button, Clicked::new(|| {
+    Connect::connect(&open_button, Clicked::new(&mut |&:| {
         // TODO move this to a impl?
         let file_chooser = gtk::FileChooserDialog::new("Open File", None, gtk::FileChooserAction::Open).unwrap();
         let response: Option<gtk::ResponseType> = FromPrimitive::from_i32(file_chooser.run());
@@ -62,7 +62,7 @@ fn main() {
 
     window.add(&vbox);
 
-    Connect::connect(&window, DeleteEvent::new(|_| {
+    Connect::connect(&window, DeleteEvent::new(&mut |&: _| {
         gtk::main_quit();
         true
     }));

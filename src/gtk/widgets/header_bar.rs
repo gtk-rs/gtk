@@ -19,6 +19,7 @@
 
 use gtk::cast::{GTK_HEADER_BAR};
 use gtk::{self, ffi};
+use std::ffi::CString;
 
 /// GtkHeaderBar — A Box::new(with) a centered child
 struct_Widget!(HeaderBar);

@@ -19,6 +19,7 @@
 
 use gtk::{self, ffi};
 use gtk::cast::GTK_STACK;
+use std::ffi::CString;
 
 /// GtkStack — A stacking container
 struct_Widget!(Stack);
@@ -40,8 +41,8 @@ impl Stack {
     }
 
     pub fn add_titled<T: gtk::WidgetTrait>(&mut self, child: &T, name: &str, title: &str) {
-        let c_str = CString::from_slice(name.as_bytes());
-        let c_str = CString::from_slice(title.as_bytes());
+        let c_name = CString::from_slice(name.as_bytes());
+        let c_title = CString::from_slice(title.as_bytes());
 
         unsafe {
             ffi::gtk_stack_add_titled(GTK_STACK(self.pointer),

@@ -1,9 +1,7 @@
-#![feature(globs)]
 #![crate_type = "bin"]
+#![allow(unstable)]
 
 extern crate rgtk;
-extern crate log;
-extern crate collections;
 
 use std::f64::consts::PI_2;
 
@@ -13,12 +11,13 @@ use rgtk::gtk::DrawingArea;
 
 use rgtk::cairo::enums::FontSlant::FontSlantNormal;
 use rgtk::cairo::enums::FontWeight::FontWeightNormal;
+use rgtk::cairo::Context;
 
 fn main() {
     gtk::init();
 
-    drawable(500, 500, |cr| {
-        cr.scale(500.0, 500.0);
+    drawable(500, 500, &mut |cr: Context| {
+        cr.scale(500f64, 500f64);
 
         cr.set_source_rgb(250.0/255.0, 224.0/255.0, 55.0/255.0);
         cr.paint();
@@ -49,7 +48,7 @@ fn main() {
                      0.50 + mouth_dx,        mouth_top + mouth_dy,
                      0.50 + mouth_width/2.0, mouth_top);
 
-        println!("Extents: {}", cr.fill_extents());
+        println!("Extents: {:?}", cr.fill_extents());
 
         cr.stroke();
 
@@ -62,8 +61,8 @@ fn main() {
         cr.fill();
     });
 
-    drawable(500, 500, |cr| {
-        cr.scale(500.0, 500.0);
+    drawable(500, 500, &mut |cr: Context| {
+        cr.scale(500f64, 500f64);
 
         cr.select_font_face("Sans", FontSlantNormal, FontWeightNormal);
         cr.set_font_size(0.35);
@@ -88,18 +87,18 @@ fn main() {
     gtk::main();
 }
 
-pub fn drawable(width: i32, height: i32, draw_fn: |cairo::Context|) {
+pub fn drawable<T>(width: i32, height: i32, draw_fn: &mut T) where T: FnMut(cairo::Context) {
     let mut window = gtk::Window::new(gtk::WindowType::TopLevel).unwrap();
     let drawing_area = Box::new(DrawingArea::new)().unwrap();
 
-    Connect::connect(&*drawing_area, Draw::new(draw_fn));
+    Connect::connect(&drawing_area, Draw::new(draw_fn));
 
     window.set_default_size(width, height);
 
-    Connect::connect(&window, DeleteEvent::new(|_|{
+    Connect::connect(&window, DeleteEvent::new(&mut |&mut:_|{
         gtk::main_quit();
         true
     }));
-    window.add(&*drawing_area);
+    window.add(&drawing_area);
     window.show_all();
 }
