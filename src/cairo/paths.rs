@@ -13,11 +13,9 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-extern crate c_vec;
-
 use std::mem::transmute;
 use std::iter::Iterator;
-use self::c_vec::CVec;
+use cairo::c_vec::CVec;
 use cairo::enums::PathDataType;
 use cairo::ffi::{
     cairo_path_t,
