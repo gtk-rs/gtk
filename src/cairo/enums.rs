@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::fmt::{Show, Error};
+use std::fmt::{Error, Debug};
 use cairo::ffi;
 
 #[repr(C)]
@@ -62,7 +62,7 @@ pub enum Status {
     StatusLastStatus
 }
 
-impl Show for Status {
+impl Debug for Status {
     fn fmt(&self, formatter: &mut ::std::fmt::Formatter) -> Result<(), Error> {
         unsafe {
             let char_ptr = ffi::cairo_status_to_string(*self);
