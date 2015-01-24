@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::c_str::ToCStr;
+use std::ffi::CString;
 use gtk::cast::{GTK_FONT_CHOOSER};
 use gtk::{self, ffi};
 use gtk::ffi::FFIWidget;
@@ -25,38 +25,40 @@ pub trait FontChooserTrait: gtk::WidgetTrait {
     }
 
     fn get_font(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_font_chooser_get_font(GTK_FONT_CHOOSER(self.get_widget())) };
+        let tmp = unsafe { ffi::gtk_font_chooser_get_font(GTK_FONT_CHOOSER(self.get_widget())) as *const c_char };
 
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(tmp as *const u8) })
+            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
         }
     }
 
     fn set_font(&self, font_name: &str) {
         unsafe {
-            font_name.with_c_str(|c_str| {
-                ffi::gtk_font_chooser_set_font(GTK_FONT_CHOOSER(self.get_widget()), c_str as *mut c_char)
-            })
+            let c_str = CString::from_slice(font_name.as_bytes());
+
+            ffi::gtk_font_chooser_set_font(GTK_FONT_CHOOSER(self.get_widget()), c_str.as_ptr() as *mut c_char)
         }
     }
 
     fn get_preview_text(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_font_chooser_get_preview_text(GTK_FONT_CHOOSER(self.get_widget())) };
+        unsafe {
+            let tmp = ffi::gtk_font_chooser_get_preview_text(GTK_FONT_CHOOSER(self.get_widget()));
 
-        if tmp.is_null() {
-            None
-        } else {
-            Some(unsafe { String::from_raw_buf(tmp as *const u8) })
+            if tmp.is_null() {
+                None
+            } else {
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&(tmp as *const c_char))).to_string())
+            }
         }
     }
 
     fn set_preview_text(&self, text: &str) {
         unsafe {
-            text.with_c_str(|c_str| {
-                ffi::gtk_font_chooser_set_preview_text(GTK_FONT_CHOOSER(self.get_widget()), c_str)
-            })
+            let c_str = CString::from_slice(text.as_bytes());
+
+            ffi::gtk_font_chooser_set_preview_text(GTK_FONT_CHOOSER(self.get_widget()), c_str.as_ptr())
         }
     }
 
@@ -68,9 +70,11 @@ pub trait FontChooserTrait: gtk::WidgetTrait {
     }
 
     fn set_show_preview_entry(&self, show_preview_entry: bool) {
-        unsafe { ffi::gtk_font_chooser_set_show_preview_entry(GTK_FONT_CHOOSER(self.get_widget()), match show_preview_entry {
-            true => ffi::GTRUE,
-            false => ffi::GFALSE
-        }) }
+        unsafe { ffi::gtk_font_chooser_set_show_preview_entry(GTK_FONT_CHOOSER(self.get_widget()),
+                                                              match show_preview_entry {
+                                                                  true => ffi::GTRUE,
+                                                                  false => ffi::GFALSE
+                                                              });
+        }
     }
 }

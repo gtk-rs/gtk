@@ -33,7 +33,7 @@ pub trait AppChooserTrait: gtk::WidgetTrait {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(tmp_pointer as *const u8) })
+            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp_pointer)).to_string()) }
         }
     }
 

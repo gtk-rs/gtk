@@ -15,7 +15,7 @@
 
 use gtk::{self, ffi};
 use std::default::Default;
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 pub struct RecentFilterInfo {
     contains: gtk::RecentFilterFlags,
@@ -35,7 +35,7 @@ impl RecentFilterInfo {
         } else {
             let mut tmp_app = Vec::new();
             let mut tmp_groups = Vec::new();
-            let mut count = 0i;
+            let mut count = 0is;
 
             unsafe {
                 loop {
@@ -45,7 +45,7 @@ impl RecentFilterInfo {
                         break;
                     }
                     count = count + 1;
-                    tmp_app.push(String::from_raw_buf(*tmp as *const u8));
+                    tmp_app.push(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&*tmp)).to_string());
                 }
                 count = 0;
                 loop {
@@ -55,13 +55,13 @@ impl RecentFilterInfo {
                         break;
                     }
                     count = count + 1;
-                    tmp_groups.push(String::from_raw_buf(*tmp as *const u8));
+                    tmp_groups.push(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&*tmp)).to_string());
                 }
                 RecentFilterInfo {
                     contains: (*ptr).contains,
-                    uri: String::from_raw_buf((*ptr).uri as *const u8),
-                    display_name: String::from_raw_buf((*ptr).display_name as *const u8),
-                    mime_type: String::from_raw_buf((*ptr).mime_type as *const u8),
+                    uri: String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&(*ptr).uri)).to_string(),
+                    display_name: String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&(*ptr).display_name)).to_string(),
+                    mime_type: String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&(*ptr).mime_type)).to_string(),
                     applications: tmp_app,
                     groups: tmp_groups,
                     age: (*ptr).age
@@ -76,26 +76,28 @@ impl RecentFilterInfo {
         let mut t_groups = Vec::with_capacity(self.groups.len());
 
         for tmp in self.applications.iter() {
-            t_app.push(tmp.with_c_str(|c| {c}));
+            let c = CString::from_slice(tmp.as_bytes());
+
+            t_app.push(c.as_ptr());
         }
         for tmp in self.groups.iter() {
-            t_groups.push(tmp.with_c_str(|c| {c}));
+            let c = CString::from_slice(tmp.as_bytes());
+
+            t_groups.push(c.as_ptr());
         }
-        self.uri.with_c_str(|c_uri| {
-            self.display_name.with_c_str(|c_display_name| {
-                self.mime_type.with_c_str(|c_mime_type| {
-                    ffi::C_GtkRecentFilterInfo {
-                        contains: self.contains,
-                        uri: c_uri,
-                        display_name: c_display_name,
-                        mime_type: c_mime_type,
-                        applications: t_app.as_ptr(),
-                        groups: t_groups.as_ptr(),
-                        age: self.age
-                    }
-                })
-            })
-        })
+        let c_uri = CString::from_slice(self.uri.as_bytes());
+        let c_display_name = CString::from_slice(self.display_name.as_bytes());
+        let c_mime_type = CString::from_slice(self.mime_type.as_bytes());
+
+        ffi::C_GtkRecentFilterInfo {
+            contains: self.contains,
+            uri: c_uri.as_ptr(),
+            display_name: c_display_name.as_ptr(),
+            mime_type: c_mime_type.as_ptr(),
+            applications: t_app.as_ptr(),
+            groups: t_groups.as_ptr(),
+            age: self.age
+        }
     }
 }
 

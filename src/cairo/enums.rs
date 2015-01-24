@@ -13,9 +13,8 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::fmt::{Show, Error};
+use std::fmt::{Error, Debug};
 use cairo::ffi;
-use std::c_str::CString;
 
 #[repr(C)]
 #[derive(Clone, PartialEq, PartialOrd, Copy)]
@@ -63,20 +62,21 @@ pub enum Status {
     StatusLastStatus
 }
 
-impl Show for Status {
+impl Debug for Status {
     fn fmt(&self, formatter: &mut ::std::fmt::Formatter) -> Result<(), Error> {
-        let c_str = unsafe {
+        unsafe {
             let char_ptr = ffi::cairo_status_to_string(*self);
-            CString::new(char_ptr, false) //FIXME I'm not sure if we actually own the str send in by cairo
-        };
-        c_str.as_str().unwrap().fmt(formatter)
+            let tmp = String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&char_ptr)).to_string();
+
+            tmp.fmt(formatter)
+        }
     }
 }
 
 impl Status {
     pub fn ensure_valid(&self) {
         if *self != Status::StatusSuccess {
-            panic!("Cairo error {}", *self)
+            panic!("Cairo error {:?}", *self)
         }
     }
 }

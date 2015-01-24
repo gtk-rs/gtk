@@ -16,7 +16,7 @@
 //! A ToolItem containing a toggle button
 
 use gtk::{self, ffi};
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 /// ToggleToolButton — A ToolItem containing a toggle button
 struct_Widget!(ToggleToolButton);
@@ -28,9 +28,8 @@ impl ToggleToolButton {
     }
 
     pub fn new_from_stock(stock_id: &str) -> Option<ToggleToolButton> {
-        let tmp_pointer = stock_id.with_c_str(|c_str| {
-            unsafe { ffi::gtk_toggle_tool_button_new_from_stock(c_str) }
-        });
+        let c_str = CString::from_slice(stock_id.as_bytes());
+        let tmp_pointer = unsafe { ffi::gtk_toggle_tool_button_new_from_stock(c_str.as_ptr()) };
         check_pointer!(tmp_pointer, ToggleToolButton)
     }
 }

@@ -16,7 +16,7 @@
 use gtk::{self, ffi};
 use glib::ffi::GType;
 use gtk::TreeIter;
-use std::c_str::ToCStr;
+use std::ffi::CString;
 use std::num::ToPrimitive;
 
 pub struct TreeStore {
@@ -34,8 +34,9 @@ impl TreeStore {
     }
 
     pub fn set_string(&self, iter: &TreeIter, column: i32, text: &str) {
-        let text_c = text.to_c_str();
-        unsafe { ffi::gtk_tree_store_set(self.pointer, iter.get_pointer(), column, text_c.as_ptr(), -1i) }
+        let text_c = CString::from_slice(text.as_bytes());
+
+        unsafe { ffi::gtk_tree_store_set(self.pointer, iter.get_pointer(), column, text_c.as_ptr(), -1is) }
     }
 
     pub fn remove(&self, iter: &TreeIter) -> bool {

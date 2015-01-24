@@ -18,6 +18,6 @@ script:
   - cd ../sync_widgets && cargo build
   - cd ../text_viewer && cargo build
   - cd ../..
-  - rustdoc -o doc src/rgtk.rs
+  - cargo doc
 after_script:
   - curl http://www.rust-ci.org/artifacts/put?t=$RUSTCI_TOKEN | sh

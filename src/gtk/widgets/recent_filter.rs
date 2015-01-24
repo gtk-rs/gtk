@@ -14,7 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::{self, ffi};
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 #[derive(Copy)]
 pub struct RecentFilter {
@@ -34,17 +34,17 @@ impl RecentFilter {
 
     pub fn add_application(&self, application: &str) -> () {
         unsafe {
-            application.with_c_str(|c_str| {
-                ffi::gtk_recent_filter_add_application(self.pointer, c_str)
-            })
+            let c_str = CString::from_slice(application.as_bytes());
+
+            ffi::gtk_recent_filter_add_application(self.pointer, c_str.as_ptr())
         }
     }
 
     pub fn add_group(&self, group: &str) -> () {
         unsafe {
-            group.with_c_str(|c_str| {
-                ffi::gtk_recent_filter_add_group(self.pointer, c_str)
-            })
+            let c_str = CString::from_slice(group.as_bytes());
+
+            ffi::gtk_recent_filter_add_group(self.pointer, c_str.as_ptr())
         }
     }
 

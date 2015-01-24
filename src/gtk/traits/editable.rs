@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::c_str::ToCStr;
+use std::ffi::CString;
 use gtk::cast::GTK_EDITABLE;
 use gtk::{self, ffi};
 
@@ -31,6 +31,7 @@ pub trait EditableTrait: gtk::WidgetTrait {
                                                                 &mut i,
                                                                 &mut j))
         };
+
         match res {
             true => Some((i, j)),
             false => None
@@ -38,14 +39,14 @@ pub trait EditableTrait: gtk::WidgetTrait {
     }
 
     fn insert_text(&mut self, new_text: &str, new_text_length: i32, position: i32) {
-        new_text.with_c_str(|c_str| {
-            unsafe {
-                ffi::gtk_editable_insert_text(GTK_EDITABLE(self.get_widget()),
-                                              c_str,
+        unsafe {
+            let c_str = CString::from_slice(new_text.as_bytes());
+
+            ffi::gtk_editable_insert_text(GTK_EDITABLE(self.get_widget()),
+                                              c_str.as_ptr(),
                                               new_text_length,
                                               position)
-            }
-        })
+        }
     }
 
     fn delete_text(&mut self, start_pos: i32, end_pos: i32) {
@@ -54,11 +55,16 @@ pub trait EditableTrait: gtk::WidgetTrait {
         }
     }
 
-    fn get_chars(&self, start_pos: i32, end_pos: i32) -> String {
+    fn get_chars(&self, start_pos: i32, end_pos: i32) -> Option<String> {
         let chars = unsafe {
             ffi::gtk_editable_get_chars(GTK_EDITABLE(self.get_widget()), start_pos, end_pos)
         };
-        unsafe { String::from_raw_buf(chars as *const u8) }
+
+        if chars.is_null() {
+            None
+        } else {
+            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&chars)).to_string()) }
+        }
     }
 
     fn cut_clipboard(&mut self) {

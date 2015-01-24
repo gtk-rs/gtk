@@ -17,17 +17,17 @@ use gtk::{self, ffi};
 use gtk::ffi::FFIWidget;
 use gtk::cast::{GTK_PAPER_SIZE};
 use glib;
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 // FIXME: PaperSize is not a widget nor a GObject -> GBoxed
 struct_Widget!(PaperSize);
 
 impl PaperSize {
     pub fn new(name: &str) -> Option<PaperSize> {
+        let c_str = CString::from_slice(name.as_bytes());
+
         let tmp_pointer = unsafe {
-            name.with_c_str(|c_str| {
-                ffi::gtk_paper_size_new(c_str)
-            })
+            ffi::gtk_paper_size_new(c_str.as_ptr())
         };
 
         if tmp_pointer.is_null() {
@@ -38,12 +38,10 @@ impl PaperSize {
     }
 
     pub fn new_from_ppd(ppd_name: &str, ppd_display_name: &str, width: f64, height: f64) -> Option<PaperSize> {
+        let c_str = CString::from_slice(ppd_name.as_bytes());
+        let c_str2 = CString::from_slice(ppd_display_name.as_bytes());
         let tmp_pointer = unsafe {
-            ppd_name.with_c_str(|c_str| {
-                ppd_display_name.with_c_str(|c_str2| {
-                    ffi::gtk_paper_size_new_from_ppd(c_str, c_str2, width, height)
-                })
-            })
+            ffi::gtk_paper_size_new_from_ppd(c_str.as_ptr(), c_str2.as_ptr(), width, height)
         };
 
         if tmp_pointer.is_null() {
@@ -54,12 +52,10 @@ impl PaperSize {
     }
 
     pub fn new_custom(name: &str, display_name: &str, width: f64, height: f64, unit: gtk::Unit) -> Option<PaperSize> {
+        let c_str = CString::from_slice(name.as_bytes());
+        let c_str2 = CString::from_slice(display_name.as_bytes());
         let tmp_pointer = unsafe {
-            name.with_c_str(|c_str| {
-                display_name.with_c_str(|c_str2| {
-                    ffi::gtk_paper_size_new_custom(c_str, c_str2, width, height, unit)
-                })
-            })
+            ffi::gtk_paper_size_new_custom(c_str.as_ptr(), c_str2.as_ptr(), width, height, unit)
         };
 
         if tmp_pointer.is_null() {
@@ -88,9 +84,10 @@ impl PaperSize {
 
     pub fn get_paper_sizes(include_custom: bool) -> glib::List<Box<PaperSize>> {
         let tmp = unsafe { ffi::gtk_paper_size_get_paper_sizes(match include_custom {
-            true => ffi::GTRUE,
-            false => ffi::GFALSE
-        }) };
+                true => ffi::GTRUE,
+                false => ffi::GFALSE
+            })
+        };
 
         if tmp.is_null() {
             glib::List::new()
@@ -99,7 +96,7 @@ impl PaperSize {
             let mut tmp_vec : glib::List<Box<PaperSize>> = glib::List::new();
 
             for it in old_list.iter() {
-                tmp_vec.append(box ffi::FFIWidget::wrap(*it));
+                tmp_vec.append(Box::new(ffi::FFIWidget::wrap(*it)));
             }
             tmp_vec
         }
@@ -111,7 +108,7 @@ impl PaperSize {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(tmp as *const u8) })
+            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
         }
     }
 
@@ -121,7 +118,7 @@ impl PaperSize {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(tmp as *const u8) })
+            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
         }
     }
 
@@ -131,7 +128,7 @@ impl PaperSize {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(tmp as *const u8) })
+            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
         }
     }
 
@@ -176,7 +173,7 @@ impl PaperSize {
         if tmp.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(tmp as *const u8) })
+            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
         }
     }
 }

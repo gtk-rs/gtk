@@ -17,7 +17,7 @@ use gtk::{self, ffi};
 use gtk::ffi::FFIWidget;
 use gtk::cast::GTK_RECENT_MANAGER;
 use glib;
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 struct_Widget!(RecentManager);
 
@@ -43,27 +43,33 @@ impl RecentManager {
     }
 
     pub fn add_item(&self, uri: &str) -> bool {
-        match unsafe { uri.with_c_str(|c_str| {
-            ffi::gtk_recent_manager_add_item(GTK_RECENT_MANAGER(self.get_widget()), c_str)
-        })} {
+        let c_str = CString::from_slice(uri.as_bytes());
+
+        match unsafe {
+            ffi::gtk_recent_manager_add_item(GTK_RECENT_MANAGER(self.get_widget()), c_str.as_ptr())
+        } {
             ffi::GFALSE => false,
             _ => true
         }
     }
 
     pub fn add_full(&self, uri: &str, recent_data: &gtk::RecentData) -> bool {
-        match unsafe { uri.with_c_str(|c_str| {
-            ffi::gtk_recent_manager_add_full(GTK_RECENT_MANAGER(self.get_widget()), c_str, &recent_data.get_ffi())
-        })} {
+        match unsafe {
+            let c_str = CString::from_slice(uri.as_bytes());
+
+            ffi::gtk_recent_manager_add_full(GTK_RECENT_MANAGER(self.get_widget()), c_str.as_ptr(), &recent_data.get_ffi())
+        } {
             ffi::GFALSE => false,
             _ => true
         }
     }
 
     pub fn has_item(&self, uri: &str) -> bool {
-        match unsafe { uri.with_c_str(|c_str| {
-            ffi::gtk_recent_manager_has_item(GTK_RECENT_MANAGER(self.get_widget()), c_str)
-        })} {
+        let c_str = CString::from_slice(uri.as_bytes());
+
+        match unsafe {
+            ffi::gtk_recent_manager_has_item(GTK_RECENT_MANAGER(self.get_widget()), c_str.as_ptr())
+        } {
             ffi::GFALSE => false,
             _ => true
         }
@@ -79,7 +85,7 @@ impl RecentManager {
             let mut tmp_vec : glib::List<Box<gtk::RecentInfo>> = glib::List::new();
 
             for it in old_list.iter() {
-                tmp_vec.append(box ffi::FFIWidget::wrap(*it as *mut ffi::C_GtkWidget));
+                tmp_vec.append(Box::new(ffi::FFIWidget::wrap(*it as *mut ffi::C_GtkWidget)));
             }
             tmp_vec
         }

@@ -15,7 +15,7 @@
 
 use glib::ffi;
 use gtk::signals::Signal;
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 pub trait FFIGObject {
     fn get_gobject(&self) -> *mut ffi::C_GObject;
@@ -29,7 +29,7 @@ pub trait FFIGObject {
 //             let signal_name     = signal.get_signal_name().to_string();
 //             let trampoline      = signal.get_trampoline();
 
-//             let user_data_ptr   = transmute(box signal);
+//             let user_data_ptr   = transmute(Box::new(signal));
 
 //             signal_name.replace("_", "-").with_c_str(|signal_name| {
 //                 ffi::glue_signal_connect(
@@ -53,16 +53,16 @@ pub trait Connect<'a, T: Signal<'a>>: FFIGObject {
             let signal_name     = signal.get_signal_name().to_string();
             let trampoline      = signal.get_trampoline();
 
-            let user_data_ptr   = transmute(box signal);
+            let user_data_ptr   = transmute(Box::new(signal));
 
-            signal_name.replace("_", "-").with_c_str(|signal_name| {
-                ffi::glue_signal_connect(
-                    self.get_gobject(),
-                    signal_name,
-                    Some(trampoline),
-                    user_data_ptr
-                )
-            });
+            let c_str = CString::from_slice(signal_name.replace("_", "-").as_bytes());
+            
+            ffi::glue_signal_connect(
+                self.get_gobject(),
+                c_str.as_ptr(),
+                Some(trampoline),
+                user_data_ptr
+            );
         }
     }
 }

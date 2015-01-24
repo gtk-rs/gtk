@@ -16,19 +16,19 @@
 use gtk::{self, ffi};
 use gtk::ffi::FFIWidget;
 use gtk::cast::{GTK_WINDOW, GTK_APP_CHOOSER_DIALOG};
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 struct_Widget!(AppChooserDialog);
 
 impl AppChooserDialog {
     pub fn new_for_content_type(parent: Option<gtk::Window>, flags: gtk::DialogFlags, content_type: &str) -> Option<AppChooserDialog> {
         let tmp_pointer = unsafe {
-            content_type.with_c_str(|c_str|{
-                ffi::gtk_app_chooser_dialog_new_for_content_type(match parent {
-                    Some(ref p) => GTK_WINDOW(p.get_widget()),
-                    None => ::std::ptr::null_mut()
-                }, flags, c_str)
-            })
+            let c_str = CString::from_slice(content_type.as_bytes());
+
+            ffi::gtk_app_chooser_dialog_new_for_content_type(match parent {
+                Some(ref p) => GTK_WINDOW(p.get_widget()),
+                None => ::std::ptr::null_mut()
+            }, flags, c_str.as_ptr())
         };
 
         if tmp_pointer.is_null() {
@@ -50,19 +50,21 @@ impl AppChooserDialog {
 
     pub fn set_heading(&self, heading: &str) -> () {
         unsafe {
-            heading.with_c_str(|c_str| {
-                ffi::gtk_app_chooser_dialog_set_heading(GTK_APP_CHOOSER_DIALOG(self.get_widget()), c_str)
-            })
+            let c_str = CString::from_slice(heading.as_bytes());
+
+            ffi::gtk_app_chooser_dialog_set_heading(GTK_APP_CHOOSER_DIALOG(self.get_widget()), c_str.as_ptr())
         }
     }
 
     pub fn get_heading(&self) -> Option<String> {
-        let tmp_pointer = unsafe { ffi::gtk_app_chooser_dialog_get_heading(GTK_APP_CHOOSER_DIALOG(self.get_widget())) };
+        unsafe {
+            let tmp_pointer = ffi::gtk_app_chooser_dialog_get_heading(GTK_APP_CHOOSER_DIALOG(self.get_widget()));
 
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            Some(unsafe { String::from_raw_buf(tmp_pointer as *const u8) })
+            if tmp_pointer.is_null() {
+                None
+            } else {
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp_pointer)).to_string())
+            }
         }
     }
 }

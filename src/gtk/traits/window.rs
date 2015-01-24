@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::c_str::ToCStr;
+use std::ffi::{CString};
 use gtk::{self, ffi};
 use gtk::ffi::to_gboolean;
 use gtk::cast::GTK_WINDOW;
@@ -22,9 +22,9 @@ use gtk::WindowPosition;
 pub trait WindowTrait : gtk::WidgetTrait {
     fn set_title(&mut self, title: &str) -> () {
         unsafe {
-            title.with_c_str(|c_str| {
-                ffi::gtk_window_set_title(GTK_WINDOW(self.get_widget()), c_str)
-            });
+            let c_str = CString::from_slice(title.as_bytes());
+
+            ffi::gtk_window_set_title(GTK_WINDOW(self.get_widget()), c_str.as_ptr());
         }
     }
 
@@ -35,11 +35,14 @@ pub trait WindowTrait : gtk::WidgetTrait {
     }
 
     fn get_title(&self) -> Option<String> {
-        let c_title = unsafe { ffi::gtk_window_get_title(GTK_WINDOW(self.get_widget())) };
-        if c_title.is_null() {
-            None
-        } else {
-            Some(unsafe { String::from_raw_buf(c_title as *const u8) })
+        unsafe {
+            let c_title = ffi::gtk_window_get_title(GTK_WINDOW(self.get_widget()));
+
+            if c_title.is_null() {
+                None
+            } else {
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_title)).to_string())
+            }
         }
     }
 

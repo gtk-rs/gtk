@@ -16,7 +16,8 @@
 //! Generic values — A polymorphic type that can hold values of any other type
 
 use gtk::{self, ffi};
-use std::c_str::ToCStr;
+use std::ffi::CString;
+use libc::{self, c_char, c_void};
 
 trait GValuePrivate {
     fn get(gvalue: &GValue) -> Self;
@@ -57,12 +58,12 @@ impl GValue {
 
     // to free !
     pub fn strdup_value_contents(&self) -> Option<String> {
-        let tmp_pointer = unsafe { ffi::g_strdup_value_contents(self.pointer) };
+        let tmp_pointer = unsafe { ffi::g_strdup_value_contents(self.pointer) as *const c_char };
 
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(tmp_pointer as *const u8) })
+            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp_pointer)).to_string()) }
         }
     }
 
@@ -175,10 +176,10 @@ impl GValue {
     }
 
     fn set_string(&self, v_string: &str) {
+        let c_str = CString::from_slice(v_string.as_bytes());
+
         unsafe {
-            v_string.with_c_str(|c_str| {
-                ffi::g_value_set_string(self.pointer, c_str)
-            })
+            ffi::g_value_set_string(self.pointer, c_str.as_ptr())
         }
     }
 
@@ -186,9 +187,9 @@ impl GValue {
     /// when setting the GValue.
     pub fn set_static_string(&self, v_string: &str) {
         unsafe {
-            v_string.with_c_str(|c_str| {
-                ffi::g_value_set_static_string(self.pointer, c_str)
-            })
+            let c_str = CString::from_slice(v_string.as_bytes());
+
+            ffi::g_value_set_static_string(self.pointer, c_str.as_ptr())
         }
     }
 
@@ -196,7 +197,6 @@ impl GValue {
         unsafe {
             v_string.with_c_str(|c_str| {
                 ffi::g_value_take_string(self.pointer, c_str)
-            })
         }
     }*/
 
@@ -206,18 +206,22 @@ impl GValue {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(tmp_pointer as *const u8) })
+            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp_pointer)).to_string()) }
         }
     }
 
-    // to free !!
     pub fn dup_string(&self) -> Option<String> {
         let tmp_pointer = unsafe { ffi::g_value_dup_string(self.pointer) };
 
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(tmp_pointer as *const u8) })
+            unsafe {
+                let ret = Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&(tmp_pointer as *const c_char))).to_string());
+
+                libc::funcs::c95::stdlib::free(tmp_pointer as *mut c_void);
+                ret
+            }
         }
     }
 

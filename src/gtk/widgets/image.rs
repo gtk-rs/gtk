@@ -18,7 +18,7 @@
 use gtk::{self, ffi};
 use gtk::cast::GTK_IMAGE;
 use gtk::ffi::FFIWidget;
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 /// Image — A widget displaying an image
 struct_Widget!(Image);
@@ -26,35 +26,35 @@ struct_Widget!(Image);
 impl Image {
     pub fn new_from_file(filename: &str) -> Option<Image> {
         let tmp_pointer = unsafe {
-            filename.with_c_str(|c_str| {
-                ffi::gtk_image_new_from_file(c_str)
-            })
+            let c_str = CString::from_slice(filename.as_bytes());
+
+            ffi::gtk_image_new_from_file(c_str.as_ptr())
         };
         check_pointer!(tmp_pointer, Image)
     }
 
     pub fn new_from_icon_name(icon_name: &str, size: gtk::IconSize) -> Option<Image> {
+        let c_str = CString::from_slice(icon_name.as_bytes());
+
         let tmp_pointer = unsafe {
-            icon_name.with_c_str(|c_str| {
-                ffi::gtk_image_new_from_icon_name(c_str, size)
-            })
+            ffi::gtk_image_new_from_icon_name(c_str.as_ptr(), size)
         };
         check_pointer!(tmp_pointer, Image)
     }
 
     pub fn set_from_file(&self, filename: &str) {
+        let c_str = CString::from_slice(filename.as_bytes());
+
         unsafe {
-            filename.with_c_str(|c_str| {
-                ffi::gtk_image_set_from_file(GTK_IMAGE(self.get_widget()), c_str);
-            })
+            ffi::gtk_image_set_from_file(GTK_IMAGE(self.get_widget()), c_str.as_ptr());
         };
     }
 
     pub fn set_from_icon_name(&self, icon_name: &str, size: gtk::IconSize) {
+        let c_str = CString::from_slice(icon_name.as_bytes());
+
         unsafe {
-            icon_name.with_c_str(|c_str| {
-                ffi::gtk_image_set_from_icon_name(GTK_IMAGE(self.get_widget()), c_str, size)
-            })
+            ffi::gtk_image_set_from_icon_name(GTK_IMAGE(self.get_widget()), c_str.as_ptr(), size)
         };
     }
 }

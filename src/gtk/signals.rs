@@ -33,7 +33,7 @@ pub trait Signal<'a> {
 
     fn get_trampoline(&self) -> extern "C" fn();
 
-    fn fetch_cb(&self) -> *mut ||;
+    fn fetch_cb(&self) -> *mut FnMut();
 
     fn get_user_data(&'a self) -> &'a Option<Box<Any>>;
 }
@@ -64,11 +64,11 @@ macro_rules! signal(
 
                     match t.get_user_data() {
                         &Some(ref user_data) => {
-                            let cb : *mut |*const c_void| -> $ret_type = transmute((*signal).fetch_cb());
+                            let cb : *mut FnMut(*const c_void) -> $ret_type = transmute((*signal).fetch_cb());
                             (*cb)(::std::mem::transmute(user_data))
                         },
                         &None => {
-                            let cb : *mut || -> $ret_type = transmute((*signal).fetch_cb());
+                            let cb : *mut FnMut() -> $ret_type = transmute((*signal).fetch_cb());
                             (*cb)()
                         },
                     }
@@ -99,11 +99,11 @@ macro_rules! signal(
 
                     match t.get_user_data() {
                         &Some(ref user_data) => {
-                            let cb : *mut |$($arg_type),*, *const c_void| -> $ret_type = transmute((*signal).fetch_cb());
+                            let cb : *mut FnMut($($arg_type),*, *const c_void) -> $ret_type = transmute((*signal).fetch_cb());
                             (*cb)($($arg_name),*, ::std::mem::transmute(user_data))
                         },
                         &None => {
-                            let cb : *mut |$($arg_type),*| -> $ret_type = transmute((*signal).fetch_cb());
+                            let cb : *mut FnMut($($arg_type),*) -> $ret_type = transmute((*signal).fetch_cb());
                             (*cb)($($arg_name),*)
                         },
                     }
@@ -113,7 +113,7 @@ macro_rules! signal(
     );
 
     //TODO custom trampoline
-    ($signal:ident, $class:ident ( $($arg_name:ident : $arg_type:ty),* ) -> $ret_type:ty,
+    /*($signal:ident, $class:ident ( $($arg_name:ident : $arg_type:ty),* ) -> $ret_type:ty,
                     trampoline   ( $($t_arg_nm:ident : $t_arg_ty:ty),* ) -> $t_ret_ty:ty $t_blck:expr) => (
 
         //General case (see below)
@@ -139,7 +139,7 @@ macro_rules! signal(
 
                     match t.get_user_data() {
                         &Some(ref user_data) => {
-                            let cb: *mut |$($arg_type),*, *const c_void| -> $ret_type = transmute((*signal).fetch_cb());
+                            let cb: *mut FnMut($($arg_type),*, *const c_void) -> $ret_type = transmute((*signal).fetch_cb());
 
                             let cont = |$($arg_name: $arg_type),*| {
                                 (*cb)($($arg_name),* , ::std::mem::transmute(user_data))
@@ -150,7 +150,7 @@ macro_rules! signal(
                             custom_trampoline(cont)
                         },
                         &None => {
-                            let cb : *mut |$($arg_type),*| -> $ret_type = transmute((*signal).fetch_cb());
+                            let cb : *mut FnMut($($arg_type),*) -> $ret_type = transmute((*signal).fetch_cb());
 
                             let cont = |$($arg_name: $arg_type),*| {
                                 (*cb)($($arg_name),*)
@@ -164,17 +164,17 @@ macro_rules! signal(
                 }
             }
         }
-    );
+    );*/
 
     //General case
     ($signal:ident, $class:ident [ $(($arg_name:ident : $arg_type:ty)),* ] -> $ret_type:ty) => (
         pub struct $class<'a> {
-            pub cb: |$($arg_type),*|:'a -> $ret_type,
+            pub cb: &'a mut (FnMut($($arg_type),*) -> $ret_type + 'a),
             pub user_data: Option<Box<Any>>
         }
 
         impl<'a> $class<'a> {
-            pub fn new (cb : |$($arg_type),* |:'a -> $ret_type) -> Box<$class> {
+            pub fn new (cb : &'a mut (FnMut($($arg_type),*) -> $ret_type + 'a)) -> Box<$class<'a>> {
                 box $class {
                     cb: cb,
                     user_data: None
@@ -201,9 +201,9 @@ macro_rules! signal(
                 }
             }
 
-            fn fetch_cb(&self) -> *mut || {
+            fn fetch_cb(&self) -> *mut FnMut() {
                 unsafe {
-                    transmute(&self.cb)
+                    transmute(&(*self.cb))
                 }
             }
 
@@ -222,14 +222,14 @@ signal!(notify, Notify(g_param_spec:c_void) -> ());
 //https://developer.gnome.org/gtk3/stable/GtkWidget.html#GtkWidget.signals
 
 signal!(accel_closures_changed, AccelClosuresChanged(spec : glib::ParamSpec) -> ());
-signal!(can_activate_accel,     CanActivateAccel(signal_id:uint) -> bool);
+signal!(can_activate_accel,     CanActivateAccel(signal_id:usize) -> bool);
 signal!(child_notify,           ChildNotify(spec : glib::ParamSpec) -> ());
 signal!(composited_changed,     CompositedChanged() -> ());
 signal!(destroy,                Destroy() -> ());
 signal!(direction_changed,      DirectionChanged(previous_direction: gtk::TextDirection) -> ());
-signal!(draw,                   Draw(ctx: cairo::Context) -> (), trampoline(ctx_raw: *mut cairo::ffi::cairo_t) -> () |cb: |cairo::Context|| {
-    cb(cairo::Context::wrap(ctx_raw))
-});
+signal!(draw,                   Draw(ctx: cairo::Context) -> ());//, trampoline(ctx_raw: *mut cairo::ffi::cairo_t) -> () |cb| {
+//    cb(cairo::Context::wrap(ctx_raw))
+//});
 signal!(focus,                  Focus(direction : gtk::DirectionType) -> bool);
 signal!(grab_focus,             GrabFocus() -> ());
 signal!(grab_notify,            GrabNotify(was_grabbed : bool) -> ());
@@ -239,7 +239,7 @@ signal!(map,                    Map() -> ());
 signal!(mnemonic_activate,      MnemonicActivate(arg : bool) -> bool);
 signal!(move_focus,             MoveFocus(direction : gtk::DirectionType) -> ());
 signal!(popup_menu,             PopupMenu() -> bool);
-signal!(query_tooltip,          QueryTooltip(x:int, y:int, keyboard_mode:bool, tooltip : *mut gtk::Tooltip) -> bool);
+signal!(query_tooltip,          QueryTooltip(x:isize, y:isize, keyboard_mode:bool, tooltip : *mut gtk::Tooltip) -> bool);
 signal!(realize,                Realize() -> ());
 signal!(screen_changed,         ScreenChanged(previous_screen : *mut gdk::Screen) -> ());
 signal!(show,                   Show() -> ());
@@ -292,29 +292,29 @@ signal!(drag_begin,         DragBegin(context : *mut gdk::DragContext) -> ())
 signal!(drag_data_delete,   DragDataDelete(context : *mut gdk::DragContext) -> ())
 signal!(drag_data_get,      DragDataGet(context : *mut gdk::DragContext,
                                         data : *gtk::SelectionData,
-                                        info: uint,
-                                        time: uint) -> ())
+                                        info: usize,
+                                        time: usize) -> ())
 signal!(drag_data_received, DragDataReceived(context : *mut gdk::DragContext,
-                                             x: int,
-                                             y: int,
+                                             x: isize,
+                                             y: isize,
                                              data: *gtk::SelectionData,
-                                             info: uint,
-                                             time: uint) -> ())
+                                             info: usize,
+                                             time: usize) -> ())
 signal!(drag_drop,          DragDrop(context : *mut gdk::DragContext,
-                                     x: int,
-                                     y: int,
-                                     time: uint) -> ())
+                                     x: isize,
+                                     y: isize,
+                                     time: usize) -> ())
 signal!(drag_end,           DragEnd(context : *mut gdk::DragContext) -> ())
 signal!(drag_failed,        DragFailed(context : *mut gdk::DragContext, result: gtk::DragResult) -> ())
-signal!(drag_leave,         DragLeave(context : *mut gdk::DragContext, time : uint) -> ())
+signal!(drag_leave,         DragLeave(context : *mut gdk::DragContext, time : usize) -> ())
 signal!(drag_motion,        DragMotion(context : *mut gdk::DragContext,
-                                       x : int,
-                                       y : int,
-                                       time : uint) -> bool)
+                                       x : isize,
+                                       y : isize,
+                                       time : usize) -> bool)
 
 //GtkWidget: Selection
-signal!(selection_get,          SelectionGet(data : *gtk::SelectionData, info: uint, time: uint) -> ())
-signal!(selection_received,     SelectionReceived(data : *gtk::SelectionData, time: uint) -> ())
+signal!(selection_get,          SelectionGet(data : *gtk::SelectionData, info: usize, time: usize) -> ())
+signal!(selection_received,     SelectionReceived(data : *gtk::SelectionData, time: usize) -> ())
 
 signal!(selection_clear_event,  SelectionClearEvent(event : *mut gdk::EventSelection) -> bool)
 signal!(selection_request_event,SelectionRequestEvent(event : *mut gdk::EventSelection) -> bool)
@@ -355,7 +355,7 @@ signal!(leave,              Leave() -> ());
 signal!(pressed,            Pressed() -> ());
 signal!(released,           Released() -> ());
 //GtkDialog
-signal!(response,           Response(response_id : int) -> ());
+signal!(response,           Response(response_id : isize) -> ());
 
 //GtkAdjustment
 //https://developer.gnome.org/gtk3/stable/GtkAdjustment.html#GtkAdjustment.signals

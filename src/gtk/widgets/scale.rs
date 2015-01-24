@@ -16,7 +16,7 @@
 //! A slider widget for selecting a value from a range
 
 use libc::{c_double, c_int};
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 use gtk::{Orientation, PositionType};
 use gtk::cast::GTK_SCALE;
@@ -99,6 +99,7 @@ impl Scale {
     pub fn get_layout_offsets(&self) -> (i32, i32) {
         let x = 0;
         let y = 0;
+
         unsafe {
             ffi::gtk_scale_get_layout_offsets(GTK_SCALE(self.pointer), &x, &y);
         }
@@ -107,9 +108,9 @@ impl Scale {
 
     pub fn add_mark(&mut self, value: f64, position: PositionType, markup: &str) -> () {
         unsafe {
-            markup.with_c_str(|c_str| {
-                ffi::gtk_scale_add_mark(GTK_SCALE(self.pointer), value as c_double, position, c_str)
-            });
+            let c_str = CString::from_slice(markup.as_bytes());
+
+            ffi::gtk_scale_add_mark(GTK_SCALE(self.pointer), value as c_double, position, c_str.as_ptr());
         }
     }
 

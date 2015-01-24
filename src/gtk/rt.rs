@@ -50,6 +50,7 @@ pub fn main_iteration() -> bool {
 
 pub fn main_iteration_do(blocking: bool) -> bool {
     let c_blocking = if blocking { ffi::GTRUE } else { ffi::GFALSE };
+
     match unsafe { ffi::gtk_main_iteration_do(c_blocking) } {
         ffi::GFALSE => false,
         _           => true
@@ -93,14 +94,13 @@ pub fn get_interface_age() -> u32 {
     }
 }
 
-pub fn check_version(required_major: u32,
-                     required_minor: u32,
-                     required_micro: u32)
-                     -> Option<String> {
+pub fn check_version(required_major: u32, required_minor: u32, required_micro: u32) -> Option<String> {
     let c_str = unsafe { ffi::gtk_check_version(required_major as c_uint, required_minor as c_uint, required_micro as c_uint) };
+
+    
     if c_str.is_null() {
         None
     } else {
-        Some(unsafe { String::from_raw_buf(c_str as *const u8) })
+        unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string()) }
     }
  }

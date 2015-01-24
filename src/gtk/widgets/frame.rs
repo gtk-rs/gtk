@@ -16,7 +16,7 @@
 //! A bin with a decorative frame and optional label
 
 use std::ptr;
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 use gtk::{self, ffi};
 
@@ -26,8 +26,12 @@ struct_Widget!(Frame);
 impl Frame {
     pub fn new(label: Option<&str>) -> Option<Frame> {
         let tmp_pointer = match label {
-            Some(l) => unsafe { l.with_c_str(|c_str| { ffi::gtk_frame_new(c_str) }) },
-            None    => unsafe { ffi::gtk_frame_new(ptr::null()) }
+            Some(l) => unsafe {
+            	let c_str = CString::from_slice(l.as_bytes());
+
+            	ffi::gtk_frame_new(c_str.as_ptr())
+            },
+            None => unsafe { ffi::gtk_frame_new(ptr::null()) }
         };
         check_pointer!(tmp_pointer, Frame)
     }

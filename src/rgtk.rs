@@ -41,13 +41,13 @@ let button = gtk::Button:new(); // trait gtk::Button reexported as GtkButtonTrai
 #![crate_name = "rgtk"]
 #![crate_type = "lib"]
 #![crate_type = "rlib"]
-#![feature(macro_rules)]
 #![allow(dead_code)] // TODO: drop this
-#![allow(raw_pointer_deriving)]
+#![allow(raw_pointer_derive)]
+#![allow(unstable)]
 #![feature(unsafe_destructor)]
-#![feature(associated_types)]
 
 extern crate libc;
+#[macro_use] extern crate rustc_bitflags;
 
 pub use glib::traits::Connect;
 pub use gtk::widgets::GValuePublic;

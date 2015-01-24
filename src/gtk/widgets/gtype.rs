@@ -18,7 +18,7 @@
 // https://developer.gnome.org/gobject/unstable/gobject-Type-Information.html#GType
 pub mod g_type {
     use gtk::{self, ffi};
-    use std::c_str::ToCStr;
+    use std::ffi::CString;
 
     pub fn name(_type: gtk::GType) -> Option<String> {
         let tmp_pointer = unsafe { ffi::g_type_name(_type) };
@@ -26,15 +26,15 @@ pub mod g_type {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(unsafe { String::from_raw_buf(tmp_pointer as *const u8) })
+            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp_pointer)).to_string()) }
         }
     }
 
     pub fn from_name(name: &str) -> gtk::GType {
         unsafe {
-            name.with_c_str(|c_str| {
-                ffi::g_type_from_name(c_str)
-            })
+            let c_str = CString::from_slice(name.as_bytes());
+
+            ffi::g_type_from_name(c_str.as_ptr())
         }
     }
 
@@ -61,7 +61,7 @@ pub mod g_type {
         if n_children == 0u32 || tmp_vec.is_null() {
             Vec::new()
         } else {
-            unsafe { Vec::from_raw_buf(tmp_vec as *const gtk::GType, n_children as uint) }
+            unsafe { Vec::from_raw_buf(tmp_vec as *const gtk::GType, n_children as usize) }
         }
     }
 
@@ -72,7 +72,7 @@ pub mod g_type {
         if n_interfaces == 0u32 || tmp_vec.is_null() {
             Vec::new()
         } else {
-            unsafe { Vec::from_raw_buf(tmp_vec as *const gtk::GType, n_interfaces as uint) }
+            unsafe { Vec::from_raw_buf(tmp_vec as *const gtk::GType, n_interfaces as usize) }
         }
     }
 
@@ -83,7 +83,7 @@ pub mod g_type {
         if n_prerequisites == 0u32 || tmp_vec.is_null() {
             Vec::new()
         } else {
-            unsafe { Vec::from_raw_buf(tmp_vec as *const gtk::GType, n_prerequisites as uint) }
+            unsafe { Vec::from_raw_buf(tmp_vec as *const gtk::GType, n_prerequisites as usize) }
         }
     }
 

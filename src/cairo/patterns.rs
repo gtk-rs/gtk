@@ -38,11 +38,11 @@ pub fn wrap_pattern<'a>(ptr: *mut cairo_pattern_t) -> Box<Pattern + 'a> {
     let pattern_type = unsafe{ ffi::cairo_pattern_get_type(ptr) };
 
     match pattern_type {
-        PatternType::PatternTypeSolid            => box SolidPattern::wrap(ptr)   as Box<Pattern>,
-        PatternType::PatternTypeSurface          => box SurfacePattern::wrap(ptr) as Box<Pattern>,
-        PatternType::PatternTypeLinearGradient   => box LinearGradient::wrap(ptr) as Box<Pattern>,
-        PatternType::PatternTypeRadialGradient   => box RadialGradient::wrap(ptr) as Box<Pattern>,
-        PatternType::PatternTypeMesh             => box Mesh::wrap(ptr)           as Box<Pattern>,
+        PatternType::PatternTypeSolid            => Box::new(SolidPattern::wrap(ptr))   as Box<Pattern>,
+        PatternType::PatternTypeSurface          => Box::new(SurfacePattern::wrap(ptr)) as Box<Pattern>,
+        PatternType::PatternTypeLinearGradient   => Box::new(LinearGradient::wrap(ptr)) as Box<Pattern>,
+        PatternType::PatternTypeRadialGradient   => Box::new(RadialGradient::wrap(ptr)) as Box<Pattern>,
+        PatternType::PatternTypeMesh             => Box::new(Mesh::wrap(ptr))           as Box<Pattern>,
         PatternType::PatternTypeRasterSource     => panic!("Not implemented")
     }
 }
@@ -60,9 +60,9 @@ pub trait Pattern {
         }
     }
 
-    fn get_reference_count(&self) -> int {
+    fn get_reference_count(&self) -> isize {
         unsafe {
-            ffi::cairo_pattern_get_reference_count(self.get_ptr()) as int
+            ffi::cairo_pattern_get_reference_count(self.get_ptr()) as isize
         }
     }
 
@@ -152,10 +152,10 @@ impl SolidPattern {
 
     pub fn get_rgba(&self) -> (f64,f64,f64,f64) {
         unsafe {
-            let red  : *mut c_double = transmute(box 0.0f64);
-            let green: *mut c_double = transmute(box 0.0f64);
-            let blue : *mut c_double = transmute(box 0.0f64);
-            let alpha: *mut c_double = transmute(box 0.0f64);
+            let red  : *mut c_double = transmute(Box::new(0.0f64));
+            let green: *mut c_double = transmute(Box::new(0.0f64));
+            let blue : *mut c_double = transmute(Box::new(0.0f64));
+            let alpha: *mut c_double = transmute(Box::new(0.0f64));
 
             ffi::cairo_pattern_get_rgba(self.pointer, red, green, blue, alpha).ensure_valid();
 
@@ -179,24 +179,24 @@ pub trait Gradient : Pattern {
         }
     }
 
-    fn get_color_stop_count(&self) -> int {
+    fn get_color_stop_count(&self) -> isize {
         unsafe {
-            let count : *mut c_int = transmute(box 0i32);
+            let count : *mut c_int = transmute(Box::new(0i32));
             let result = ffi::cairo_pattern_get_color_stop_count(self.get_ptr(), count);
 
             result.ensure_valid(); // Not sure if these are needed
 
-            count as int
+            count as isize
         }
     }
 
-    fn get_color_stop_rgba(&self, index: int) -> (f64,f64,f64,f64,f64) {
+    fn get_color_stop_rgba(&self, index: isize) -> (f64,f64,f64,f64,f64) {
         unsafe {
-            let offset: *mut c_double = transmute(box 0.0f64);
-            let red   : *mut c_double = transmute(box 0.0f64);
-            let green : *mut c_double = transmute(box 0.0f64);
-            let blue  : *mut c_double = transmute(box 0.0f64);
-            let alpha : *mut c_double = transmute(box 0.0f64);
+            let offset: *mut c_double = transmute(Box::new(0.0f64));
+            let red   : *mut c_double = transmute(Box::new(0.0f64));
+            let green : *mut c_double = transmute(Box::new(0.0f64));
+            let blue  : *mut c_double = transmute(Box::new(0.0f64));
+            let alpha : *mut c_double = transmute(Box::new(0.0f64));
 
             ffi::cairo_pattern_get_color_stop_rgba(self.get_ptr(), index as c_int, offset, red, green, blue, alpha).ensure_valid();
 
@@ -216,10 +216,10 @@ impl LinearGradient {
 
     pub fn get_linear_points(&self) -> (f64,f64,f64,f64) {
         unsafe {
-            let x0 : *mut c_double = transmute(box 0.0f64);
-            let y0 : *mut c_double = transmute(box 0.0f64);
-            let x1 : *mut c_double = transmute(box 0.0f64);
-            let y1 : *mut c_double = transmute(box 0.0f64);
+            let x0 : *mut c_double = transmute(Box::new(0.0f64));
+            let y0 : *mut c_double = transmute(Box::new(0.0f64));
+            let x1 : *mut c_double = transmute(Box::new(0.0f64));
+            let y1 : *mut c_double = transmute(Box::new(0.0f64));
 
             ffi::cairo_pattern_get_linear_points(self.pointer, x0, y0, x1, y1).ensure_valid();
 
@@ -243,12 +243,12 @@ impl RadialGradient {
 
     pub fn get_radial_circles(&self) -> (f64,f64,f64,f64) {
         unsafe{
-            let x0 : *mut c_double = transmute(box 0.0f64);
-            let y0 : *mut c_double = transmute(box 0.0f64);
-            let r0 : *mut c_double = transmute(box 0.0f64);
-            let x1 : *mut c_double = transmute(box 0.0f64);
-            let y1 : *mut c_double = transmute(box 0.0f64);
-            let r1 : *mut c_double = transmute(box 0.0f64);
+            let x0 : *mut c_double = transmute(Box::new(0.0f64));
+            let y0 : *mut c_double = transmute(Box::new(0.0f64));
+            let r0 : *mut c_double = transmute(Box::new(0.0f64));
+            let x1 : *mut c_double = transmute(Box::new(0.0f64));
+            let y1 : *mut c_double = transmute(Box::new(0.0f64));
+            let r1 : *mut c_double = transmute(Box::new(0.0f64));
 
             ffi::cairo_pattern_get_radial_circles(self.pointer, x0, y0, r0, x1, y1, r1).ensure_valid();
 
@@ -325,7 +325,7 @@ impl Mesh {
         self.ensure_status();
     }
 
-    pub fn get_control_point(&self, patch_num: uint, corner: MeshCorner) -> (f64, f64) {
+    pub fn get_control_point(&self, patch_num: usize, corner: MeshCorner) -> (f64, f64) {
         let mut x: c_double = 0.0;
         let mut y: c_double = 0.0;
 
@@ -351,7 +351,7 @@ impl Mesh {
         self.ensure_status();
     }
 
-    pub fn get_corner_color_rgba(&self, patch_num: uint, corner: MeshCorner) -> (f64, f64, f64, f64) {
+    pub fn get_corner_color_rgba(&self, patch_num: usize, corner: MeshCorner) -> (f64, f64, f64, f64) {
         let mut red: c_double = 0.0;
         let mut green: c_double = 0.0;
         let mut blue: c_double = 0.0;
@@ -365,15 +365,15 @@ impl Mesh {
         (red, green, blue, alpha)
     }
 
-    pub fn get_patch_count(&self) -> uint {
+    pub fn get_patch_count(&self) -> usize {
         let mut count: c_uint = 0;
         unsafe {
             ffi::cairo_mesh_pattern_get_patch_count(self.pointer, &mut count).ensure_valid();
         }
-        count as uint
+        count as usize
     }
 
-    pub fn get_path(&self, patch_num: uint) -> Path {
+    pub fn get_path(&self, patch_num: usize) -> Path {
         let path: Path = Path::wrap(unsafe {
             ffi::cairo_mesh_pattern_get_path(self.pointer, patch_num as c_uint)
         });

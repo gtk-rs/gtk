@@ -16,7 +16,7 @@
 //! A widget which indicates progress visually
 
 use libc::c_double;
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 use gtk::{self, ffi};
 use gtk::cast::GTK_PROGRESSBAR;
@@ -50,16 +50,21 @@ impl ProgressBar {
 
     pub fn set_text(&mut self, text: &str) -> () {
         unsafe {
-            text.with_c_str(|c_str| {
-                ffi::gtk_progress_bar_set_text(GTK_PROGRESSBAR(self.pointer), c_str)
-            });
+            let c_str = CString::from_slice(text.as_bytes());
+
+            ffi::gtk_progress_bar_set_text(GTK_PROGRESSBAR(self.pointer), c_str.as_ptr());
         }
     }
 
-    pub fn get_text(&self) -> String {
+    pub fn get_text(&self) -> Option<String> {
         unsafe {
             let c_str = ffi::gtk_progress_bar_get_text(GTK_PROGRESSBAR(self.pointer));
-            String::from_raw_buf(c_str as *const u8)
+
+            if c_str.is_null() {
+                None
+            } else {
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
+            }
         }
     }
 

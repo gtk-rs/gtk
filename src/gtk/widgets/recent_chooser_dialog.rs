@@ -17,25 +17,23 @@ use gtk::{self, ffi};
 use gtk::ffi::FFIWidget;
 use gtk::enums::response_type::ResponseType;
 use gtk::cast::{GTK_WINDOW, GTK_RECENT_MANAGER};
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 struct_Widget!(RecentChooserDialog);
 
 impl RecentChooserDialog {
     pub fn new(title: &str, parent: Option<gtk::Window>) -> Option<RecentChooserDialog> {
-        let tmp_pointer = unsafe { title.with_c_str(|c_str| {
-            "Ok".with_c_str(|c_str2| {
-                "Cancel".with_c_str(|c_str3| {
-                    ffi::gtk_recent_chooser_dialog_new(c_str, match parent {
-                        Some(ref p) => GTK_WINDOW(p.get_widget()),
-                        None => ::std::ptr::null_mut()
-                    },
-                    c_str2, ResponseType::Ok,
-                    c_str3, ResponseType::Cancel,
-                    ::std::ptr::null::<::libc::c_void>())
-                })
-            })
-        })};
+        let c_str = CString::from_slice(title.as_bytes());
+        let ok_str = CString::from_slice("Ok".as_bytes());
+        let cancel_str = CString::from_slice("Cancel".as_bytes());
+        let tmp_pointer = unsafe {
+            ffi::gtk_recent_chooser_dialog_new(c_str.as_ptr(), match parent {
+                Some(ref p) => GTK_WINDOW(p.get_widget()),
+                None => ::std::ptr::null_mut()
+            }, ok_str.as_ptr(), ResponseType::Ok,
+               cancel_str.as_ptr(), ResponseType::Cancel,
+               ::std::ptr::null::<::libc::c_void>())
+        };
 
         if tmp_pointer.is_null() {
             None
@@ -45,19 +43,19 @@ impl RecentChooserDialog {
     }
 
     pub fn new_for_manager(title: &str, parent: Option<gtk::Window>, manager: &gtk::RecentManager) -> Option<RecentChooserDialog> {
-        let tmp_pointer = unsafe { title.with_c_str(|c_str| {
-            "Ok".with_c_str(|c_str2| {
-                "Cancel".with_c_str(|c_str3| {
-                    ffi::gtk_recent_chooser_dialog_new_for_manager(c_str, match parent {
-                        Some(ref p) => GTK_WINDOW(p.get_widget()),
-                        None => ::std::ptr::null_mut()
-                    }, GTK_RECENT_MANAGER(manager.get_widget()),
-                    c_str2, ResponseType::Ok,
-                    c_str3, ResponseType::Cancel,
-                    ::std::ptr::null::<::libc::c_void>())
-                })
-            })
-        })};
+        let c_str = CString::from_slice(title.as_bytes());
+        let ok_str = CString::from_slice("Ok".as_bytes());
+        let cancel_str = CString::from_slice("Cancel".as_bytes());
+
+        let tmp_pointer = unsafe {
+            ffi::gtk_recent_chooser_dialog_new_for_manager(c_str.as_ptr(), match parent {
+                Some(ref p) => GTK_WINDOW(p.get_widget()),
+                None => ::std::ptr::null_mut()
+            }, GTK_RECENT_MANAGER(manager.get_widget()),
+               ok_str.as_ptr(), ResponseType::Ok,
+               cancel_str.as_ptr(), ResponseType::Cancel,
+               ::std::ptr::null::<::libc::c_void>())
+        };
 
         if tmp_pointer.is_null() {
             None

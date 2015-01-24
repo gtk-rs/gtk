@@ -16,7 +16,7 @@
 use gtk::ffi;
 use std::default::Default;
 use libc::c_char;
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 pub struct RecentData {
     display_name: String,
@@ -35,24 +35,24 @@ impl RecentData {
             Default::default()
         } else {
             let mut tmp_groups = Vec::new();
-            let mut count = 0i;
+            let mut count = 0is;
 
             unsafe {
                 loop {
-                    let tmp = (*ptr).groups.offset(count);
+                    let tmp = (*ptr).groups.offset(count) as *const c_char;
 
                     if tmp.is_null() {
                         break;
                     }
                     count = count + 1;
-                    tmp_groups.push(String::from_raw_buf(*tmp as *const u8));
+                    tmp_groups.push(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string());
                 }
                 RecentData {
-                    display_name: String::from_raw_buf((*ptr).display_name as *const u8),
-                    description: String::from_raw_buf((*ptr).description as *const u8),
-                    mime_type: String::from_raw_buf((*ptr).mime_type as *const u8),
-                    app_name: String::from_raw_buf((*ptr).app_name as *const u8),
-                    app_exec: String::from_raw_buf((*ptr).app_exec as *const u8),
+                    display_name: String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&((*ptr).display_name as *const c_char))).to_string(),
+                    description: String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&((*ptr).description as *const c_char))).to_string(),
+                    mime_type: String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&((*ptr).mime_type as *const c_char))).to_string(),
+                    app_name: String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&((*ptr).app_name as *const c_char))).to_string(),
+                    app_exec: String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&((*ptr).app_exec as *const c_char))).to_string(),
                     groups: tmp_groups,
                     is_private: match (*ptr).is_private {
                         ffi::GFALSE => false,
@@ -68,30 +68,28 @@ impl RecentData {
         let mut t_groups = Vec::with_capacity(self.groups.len());
 
         for tmp in self.groups.iter() {
-            t_groups.push(tmp.with_c_str(|c| {c as *mut c_char}));
+            let c = CString::from_slice(tmp.as_bytes());
+
+            t_groups.push(c.as_ptr());
         }
-        self.display_name.with_c_str(|c_display_name| {
-            self.description.with_c_str(|c_description| {
-                self.mime_type.with_c_str(|c_mime_type| {
-                    self.app_name.with_c_str(|c_app_name| {
-                        self.app_exec.with_c_str(|c_app_exec| {
-                            ffi::C_GtkRecentData {
-                                display_name: c_display_name as *mut c_char,
-                                description: c_description as *mut c_char,
-                                mime_type: c_mime_type as *mut c_char,
-                                app_name: c_app_name as *mut c_char,
-                                app_exec: c_app_exec as *mut c_char,
-                                groups: t_groups.as_mut_ptr(),
-                                is_private: match self.is_private {
-                                    true => ffi::GTRUE,
-                                    false => ffi::GFALSE
-                                }
-                            }
-                        })
-                    })
-                })
-            })
-        })
+        let c_display_name = CString::from_slice(self.display_name.as_bytes());
+        let c_description = CString::from_slice(self.description.as_bytes());
+        let c_mime_type = CString::from_slice(self.mime_type.as_bytes());
+        let c_app_name = CString::from_slice(self.app_name.as_bytes());
+        let c_app_exec = CString::from_slice(self.app_exec.as_bytes());
+
+        ffi::C_GtkRecentData {
+            display_name: c_display_name.as_ptr() as *mut c_char,
+            description: c_description.as_ptr() as *mut c_char,
+            mime_type: c_mime_type.as_ptr() as *mut c_char,
+            app_name: c_app_name.as_ptr() as *mut c_char,
+            app_exec: c_app_exec.as_ptr() as *mut c_char,
+            groups: t_groups.as_ptr() as *mut *mut c_char,
+            is_private: match self.is_private {
+                true => ffi::GTRUE,
+                false => ffi::GFALSE
+            }
+        }
     }
 }
 

@@ -13,9 +13,12 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
+extern crate libc;
+
 use gtk::ffi;
-use std::c_str::CString;
-use std::c_str::ToCStr;
+use std::ffi::CString;
+use libc::free;
+use libc::{c_void, c_char};
 
 #[derive(Copy)]
 pub struct TreePath {
@@ -36,10 +39,9 @@ impl TreePath {
     }
 
     pub fn new_from_string(path: &str) -> Option<TreePath> {
+        let c_str = CString::from_slice(path.as_bytes());
         let tmp = unsafe {
-            path.with_c_str(|c_str| {
-                ffi::gtk_tree_path_new_from_string(c_str)
-            })
+            ffi::gtk_tree_path_new_from_string(c_str.as_ptr())
         };
 
         if tmp.is_null() {
@@ -76,17 +78,17 @@ impl TreePath {
     }
 
     #[allow(unused_variables)]
-    pub fn to_string(&self) -> String {
-        let string = unsafe { ffi::gtk_tree_path_to_string(self.pointer) };
+    pub fn to_string(&self) -> Option<String> {
+        let string = unsafe { ffi::gtk_tree_path_to_string(self.pointer) as *const c_char };
 
         if string.is_null() {
-            String::new()
+            None
         } else {
             unsafe {
-                // used to free the returned string
-                let container = CString::new(string as *const i8, true);
+                let res = String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&string)).to_string();
 
-                String::from_raw_buf(string as *const u8)
+                libc::free(string as *mut c_void);
+                Some(res)
             }
         }
     }
@@ -108,7 +110,7 @@ impl TreePath {
         let depth = self.get_depth();
 
         unsafe {
-            Vec::from_raw_buf(tmp as *const i32, depth as uint)
+            Vec::from_raw_buf(tmp as *const i32, depth as usize)
         }
     }
 
@@ -162,7 +164,7 @@ impl TreePath {
     }
 
     pub fn drop(&mut self) {
-        unsafe { ffi::gtk_tree_path_free(self.pointer) }
+        unsafe { ffi::gtk_tree_path_free(self.pointer as *mut ffi::C_GtkTreePath) }
         self.pointer = ::std::ptr::null_mut();
     }
 

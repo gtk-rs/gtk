@@ -15,7 +15,7 @@
 
 //! A widget that displays a small to medium amount of text
 
-use std::c_str::ToCStr;
+use std::ffi::CString;
 use gtk::{self, ffi};
 
 /// Label — A widget that displays a small to medium amount of text
@@ -32,18 +32,16 @@ struct_Widget!(Label);
 impl Label {
     pub fn new(text: &str) -> Option<Label> {
         let tmp_pointer = unsafe {
-            text.with_c_str(|c_str| {
-                ffi::gtk_label_new(c_str)
-            })
+            let c_str = CString::from_slice(text.as_bytes());
+            ffi::gtk_label_new(c_str.as_ptr())
         };
         check_pointer!(tmp_pointer, Label)
     }
 
     pub fn new_with_mnemonic(text: &str) -> Option<Label> {
+        let c_str = CString::from_slice(text.as_bytes());
         let tmp_pointer = unsafe {
-            text.with_c_str(|c_str| {
-                ffi::gtk_label_new_with_mnemonic(c_str)
-            })
+            ffi::gtk_label_new_with_mnemonic(c_str.as_ptr())
         };
         check_pointer!(tmp_pointer, Label)
     }

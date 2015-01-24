@@ -16,7 +16,7 @@
 //! Text buffer for gtk::Entry
 
 use libc::{c_int, c_uint};
-use std::c_str::ToCStr;
+use std::ffi::CString;
 use gtk::ffi;
 
 // TODO:
@@ -36,9 +36,9 @@ pub struct EntryBuffer {
 impl EntryBuffer {
     pub fn new(initial_chars: &str) -> Option<EntryBuffer> {
         let tmp_pointer = unsafe {
-            initial_chars.with_c_str(|c_str| {
-                ffi::gtk_entry_buffer_new(c_str, initial_chars.len() as c_int)
-            })
+            let c_str = CString::from_slice(initial_chars.as_bytes());
+
+            ffi::gtk_entry_buffer_new(c_str.as_ptr(), initial_chars.len() as c_int)
         };
         if tmp_pointer.is_null() {
             None
@@ -49,16 +49,23 @@ impl EntryBuffer {
         }
     }
 
-    pub fn get_text(&self) -> String {
-        let c_str = unsafe { ffi::gtk_entry_buffer_get_text(self.pointer) };
-        unsafe {String::from_raw_buf(c_str as *const u8) }
+    pub fn get_text(&self) -> Option<String> {
+        unsafe {
+            let c_str = ffi::gtk_entry_buffer_get_text(self.pointer);
+
+            if c_str.is_null() {
+                None
+            } else {
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
+            }
+        }
     }
 
     pub fn set_text(&mut self, text: &str) -> () {
+        let c_str = CString::from_slice(text.as_bytes());
+
         unsafe {
-            text.with_c_str(|c_str| {
-                ffi::gtk_entry_buffer_set_text(self.pointer, c_str, text.len() as c_int)
-            });
+            ffi::gtk_entry_buffer_set_text(self.pointer, c_str.as_ptr(), text.len() as c_int);
         }
     }
 
@@ -88,7 +95,9 @@ impl EntryBuffer {
 
     pub fn insert_text(&mut self, position: u32, text: &str) -> () {
         unsafe {
-            ffi::gtk_entry_buffer_insert_text(self.pointer, position as c_uint, text.to_c_str().into_inner(), text.len() as c_int);
+            let c_str = CString::from_slice(text.as_bytes());
+
+            ffi::gtk_entry_buffer_insert_text(self.pointer, position as c_uint, c_str.as_ptr(), text.len() as c_int);
         }
     }
 
@@ -106,7 +115,9 @@ impl EntryBuffer {
 
     pub fn emit_inserted_text(&mut self, position: u32, text: &str) -> () {
         unsafe {
-            ffi::gtk_entry_buffer_emit_inserted_text(self.pointer, position as c_uint, text.to_c_str().into_inner(), text.len() as c_int);
+            let c_str = CString::from_slice(text.as_bytes());
+
+            ffi::gtk_entry_buffer_emit_inserted_text(self.pointer, position as c_uint, c_str.as_ptr(), text.len() as c_int);
         }
     }
 

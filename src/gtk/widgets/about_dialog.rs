@@ -16,7 +16,7 @@
 use gtk::{self, ffi};
 use gtk::ffi::FFIWidget;
 use gtk::cast::GTK_ABOUT_DIALOG;
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 struct_Widget!(AboutDialog);
 
@@ -32,92 +32,102 @@ impl AboutDialog {
     }
 
     pub fn get_program_name(&self) -> Option<String> {
-        let name = unsafe { ffi::gtk_about_dialog_get_program_name(GTK_ABOUT_DIALOG(self.get_widget())) };
+        unsafe {
+            let name = ffi::gtk_about_dialog_get_program_name(GTK_ABOUT_DIALOG(self.get_widget()));
 
-        if name.is_null() {
-            None
-        } else {
-            Some(unsafe { String::from_raw_buf(name as *const u8) })
+            if name.is_null() {
+                None
+            } else {
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&name)).to_string())
+            }
         }
     }
 
     pub fn set_program_name(&self, name: &str) -> () {
         unsafe {
-            name.with_c_str(|c_str| {
-                ffi::gtk_about_dialog_set_program_name(GTK_ABOUT_DIALOG(self.get_widget()), c_str)
-            })
+            let c_str = CString::from_slice(name.as_bytes());
+
+            ffi::gtk_about_dialog_set_program_name(GTK_ABOUT_DIALOG(self.get_widget()), c_str.as_ptr())
         };
     }
 
     pub fn get_version(&self) -> Option<String> {
-        let version = unsafe { ffi::gtk_about_dialog_get_version(GTK_ABOUT_DIALOG(self.get_widget())) };
+        unsafe {
+            let version = ffi::gtk_about_dialog_get_version(GTK_ABOUT_DIALOG(self.get_widget()));
 
-        if version.is_null() {
-            None
-        } else {
-            Some(unsafe { String::from_raw_buf(version as *const u8) })
+            if version.is_null() {
+                None
+            } else {
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&version)).to_string())
+            }
         }
     }
 
     pub fn set_version(&self, version: &str) -> () {
         unsafe {
-            version.with_c_str(|c_str| {
-                ffi::gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(self.get_widget()), c_str)
-            })
+            let c_str = CString::from_slice(version.as_bytes());
+
+            ffi::gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(self.get_widget()), c_str.as_ptr())
         };
     }
 
     pub fn get_copyright(&self) -> Option<String> {
-        let copyright = unsafe { ffi::gtk_about_dialog_get_copyright(GTK_ABOUT_DIALOG(self.get_widget())) };
+        unsafe {
+            let copyright = ffi::gtk_about_dialog_get_copyright(GTK_ABOUT_DIALOG(self.get_widget()));
 
-        if copyright.is_null() {
-            None
-        } else {
-            Some(unsafe { String::from_raw_buf(copyright as *const u8) })
+            if copyright.is_null() {
+                None
+            } else {
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&copyright)).to_string())
+            }
         }
     }
 
     pub fn set_copyright(&self, copyright: &str) -> () {
         unsafe {
-            copyright.with_c_str(|c_str| {
-                ffi::gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(self.get_widget()), c_str)
-            })
+            let c_str = CString::from_slice(copyright.as_bytes());
+
+            ffi::gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(self.get_widget()), c_str.as_ptr())
         };
     }
 
     pub fn get_comments(&self) -> Option<String> {
-        let comments = unsafe { ffi::gtk_about_dialog_get_comments(GTK_ABOUT_DIALOG(self.get_widget())) };
+        unsafe {
+            let comments = ffi::gtk_about_dialog_get_comments(GTK_ABOUT_DIALOG(self.get_widget()));
 
-        if comments.is_null() {
-            None
-        } else {
-            Some(unsafe { String::from_raw_buf(comments as *const u8) })
+            if comments.is_null() {
+                None
+            } else {
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&comments)).to_string())
+            }
         }
     }
 
     pub fn set_comments(&self, comments: &str) -> () {
         unsafe {
-            comments.with_c_str(|c_str| {
-                ffi::gtk_about_dialog_set_comments(GTK_ABOUT_DIALOG(self.get_widget()), c_str)
-            })
+            let c_str = CString::from_slice(comments.as_bytes());
+
+            ffi::gtk_about_dialog_set_comments(GTK_ABOUT_DIALOG(self.get_widget()), c_str.as_ptr())
         };
     }
 
     pub fn get_license(&self) -> Option<String> {
-        let license = unsafe { ffi::gtk_about_dialog_get_license(GTK_ABOUT_DIALOG(self.get_widget())) };
+        unsafe {
+            let license = ffi::gtk_about_dialog_get_license(GTK_ABOUT_DIALOG(self.get_widget()));
 
-        if license.is_null() {
-            None
-        } else {
-            Some(unsafe { String::from_raw_buf(license as *const u8) })
+            if license.is_null() {
+                None
+            } else {
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&license)).to_string())
+            }
         }
     }
 
     pub fn set_license(&self, license: &str) -> () {
         unsafe {
-            license.with_c_str(|c_str| {
-                ffi::gtk_about_dialog_set_license(GTK_ABOUT_DIALOG(self.get_widget()), c_str)
-            })
+            let c_str = CString::from_slice(license.as_bytes());
+
+            ffi::gtk_about_dialog_set_license(GTK_ABOUT_DIALOG(self.get_widget()), c_str.as_ptr())
         };
     }
 
@@ -144,38 +154,42 @@ impl AboutDialog {
     }
 
     pub fn get_website(&self) -> Option<String> {
-        let website = unsafe { ffi::gtk_about_dialog_get_website(GTK_ABOUT_DIALOG(self.get_widget())) };
+        unsafe {
+            let website = ffi::gtk_about_dialog_get_website(GTK_ABOUT_DIALOG(self.get_widget()));
 
-        if website.is_null() {
-            None
-        } else {
-            Some(unsafe { String::from_raw_buf(website as *const u8) })
+            if website.is_null() {
+                None
+            } else {
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&website)).to_string())
+            }
         }
     }
 
     pub fn set_website(&self, website: &str) -> () {
         unsafe {
-            website.with_c_str(|c_str| {
-                ffi::gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(self.get_widget()), c_str)
-            })
+            let c_str = CString::from_slice(website.as_bytes());
+
+            ffi::gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(self.get_widget()), c_str.as_ptr())
         };
     }
 
     pub fn get_website_label(&self) -> Option<String> {
-        let website_label = unsafe { ffi::gtk_about_dialog_get_website_label(GTK_ABOUT_DIALOG(self.get_widget())) };
+        unsafe {
+            let website_label = ffi::gtk_about_dialog_get_website_label(GTK_ABOUT_DIALOG(self.get_widget()));
 
-        if website_label.is_null() {
-            None
-        } else {
-            Some(unsafe { String::from_raw_buf(website_label as *const u8) })
+            if website_label.is_null() {
+                None
+            } else {
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&website_label)).to_string())
+            }
         }
     }
 
     pub fn set_website_label(&self, website_label: &str) -> () {
         unsafe {
-            website_label.with_c_str(|c_str| {
-                ffi::gtk_about_dialog_set_website_label(GTK_ABOUT_DIALOG(self.get_widget()), c_str)
-            })
+            let c_str = CString::from_slice(website_label.as_bytes());
+
+            ffi::gtk_about_dialog_set_website_label(GTK_ABOUT_DIALOG(self.get_widget()), c_str.as_ptr())
         };
     }
 
@@ -193,7 +207,7 @@ impl AboutDialog {
                     if tmp.is_null() {
                         break;
                     }
-                    ret.push(String::from_raw_buf(*tmp as *const u8));
+                    ret.push(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&*tmp)).to_string());
                     it += 1;
                 }
             }
@@ -205,7 +219,9 @@ impl AboutDialog {
         let mut tmp_vec = Vec::new();
 
         for tmp in authors.iter() {
-            tmp.as_slice().with_c_str(|c_str|{tmp_vec.push(c_str)});
+            let c_str = CString::from_slice(tmp.as_bytes());
+
+            tmp_vec.push(c_str.as_ptr());
         }
         unsafe { ffi::gtk_about_dialog_set_authors(GTK_ABOUT_DIALOG(self.get_widget()), tmp_vec.as_slice().as_ptr()) }
     }
@@ -224,7 +240,7 @@ impl AboutDialog {
                     if tmp.is_null() {
                         break;
                     }
-                    ret.push(String::from_raw_buf(*tmp as *const u8));
+                    ret.push(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&*tmp)).to_string());
                     it += 1;
                 }
             }
@@ -236,7 +252,9 @@ impl AboutDialog {
         let mut tmp_vec = Vec::new();
 
         for tmp in artists.iter() {
-            tmp.as_slice().with_c_str(|c_str|{tmp_vec.push(c_str)});
+            let c_str = CString::from_slice(tmp.as_bytes());
+
+            tmp_vec.push(c_str.as_ptr());
         }
         unsafe { ffi::gtk_about_dialog_set_artists(GTK_ABOUT_DIALOG(self.get_widget()), tmp_vec.as_slice().as_ptr()) }
     }
@@ -255,7 +273,7 @@ impl AboutDialog {
                     if tmp.is_null() {
                         break;
                     }
-                    ret.push(String::from_raw_buf(*tmp as *const u8));
+                    ret.push(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&*tmp)).to_string());
                     it += 1;
                 }
             }
@@ -267,26 +285,30 @@ impl AboutDialog {
         let mut tmp_vec = Vec::new();
 
         for tmp in documenters.iter() {
-            tmp.as_slice().with_c_str(|c_str|{tmp_vec.push(c_str)});
+            let c_str = CString::from_slice(tmp.as_bytes());
+            
+            tmp_vec.push(c_str.as_ptr());
         }
         unsafe { ffi::gtk_about_dialog_set_documenters(GTK_ABOUT_DIALOG(self.get_widget()), tmp_vec.as_slice().as_ptr()) }
     }
 
     pub fn get_translator_credits(&self) -> Option<String> {
-        let translator_credits = unsafe { ffi::gtk_about_dialog_get_translator_credits(GTK_ABOUT_DIALOG(self.get_widget())) };
+        unsafe {
+            let translator_credits = ffi::gtk_about_dialog_get_translator_credits(GTK_ABOUT_DIALOG(self.get_widget()));
 
-        if translator_credits.is_null() {
-            None
-        } else {
-            Some(unsafe { String::from_raw_buf(translator_credits as *const u8) })
+            if translator_credits.is_null() {
+                None
+            } else {
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&translator_credits)).to_string())
+            }
         }
     }
 
     pub fn set_translator_credits(&self, translator_credits: &str) -> () {
         unsafe {
-            translator_credits.with_c_str(|c_str| {
-                ffi::gtk_about_dialog_set_translator_credits(GTK_ABOUT_DIALOG(self.get_widget()), c_str)
-            })
+            let c_str = CString::from_slice(translator_credits.as_bytes());
+
+            ffi::gtk_about_dialog_set_translator_credits(GTK_ABOUT_DIALOG(self.get_widget()), c_str.as_ptr())
         };
     }
 
@@ -305,20 +327,22 @@ impl AboutDialog {
     }*/
 
     pub fn get_logo_icon_name(&self) -> Option<String> {
-        let logo_icon_name = unsafe { ffi::gtk_about_dialog_get_logo_icon_name(GTK_ABOUT_DIALOG(self.get_widget())) };
+        unsafe {
+            let logo_icon_name = ffi::gtk_about_dialog_get_logo_icon_name(GTK_ABOUT_DIALOG(self.get_widget()));
 
-        if logo_icon_name.is_null() {
-            None
-        } else {
-            Some(unsafe { String::from_raw_buf(logo_icon_name as *const u8) })
+            if logo_icon_name.is_null() {
+                None
+            } else {
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&logo_icon_name)).to_string())
+            }
         }
     }
 
     pub fn set_logo_icon_name(&self, logo_icon_name: &str) -> () {
         unsafe {
-            logo_icon_name.with_c_str(|c_str| {
-                ffi::gtk_about_dialog_set_logo_icon_name(GTK_ABOUT_DIALOG(self.get_widget()), c_str)
-            })
+            let c_str = CString::from_slice(logo_icon_name.as_bytes());
+
+            ffi::gtk_about_dialog_set_logo_icon_name(GTK_ABOUT_DIALOG(self.get_widget()), c_str.as_ptr())
         };
     }
 
@@ -326,12 +350,14 @@ impl AboutDialog {
         let mut tmp_vec = Vec::new();
 
         for tmp in people.iter() {
-            tmp.as_slice().with_c_str(|c_str|{tmp_vec.push(c_str)});
+            let c_str = CString::from_slice(tmp.as_bytes());
+
+            tmp_vec.push(c_str.as_ptr());
         }
         unsafe {
-            section_name.with_c_str(|c_str| {
-                ffi::gtk_about_dialog_add_credit_section(GTK_ABOUT_DIALOG(self.get_widget()), c_str, tmp_vec.as_slice().as_ptr())
-            })
+            let c_str = CString::from_slice(section_name.as_bytes());
+
+            ffi::gtk_about_dialog_add_credit_section(GTK_ABOUT_DIALOG(self.get_widget()), c_str.as_ptr(), tmp_vec.as_slice().as_ptr())
         }
     }
 

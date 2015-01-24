@@ -16,7 +16,7 @@
 //! A container which can hide its child
 
 use libc::c_int;
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 use gtk::cast::GTK_EXPANDER;
 use gtk::{self, ffi};
@@ -27,19 +27,17 @@ struct_Widget!(Expander);
 
 impl Expander {
     pub fn new(label: &str) -> Option<Expander> {
+        let c_str = CString::from_slice(label.as_bytes());
         let tmp_pointer = unsafe {
-            label.with_c_str(|c_str| {
-                ffi::gtk_expander_new(c_str)
-            })
+            ffi::gtk_expander_new(c_str.as_ptr())
         };
         check_pointer!(tmp_pointer, Expander)
     }
 
     pub fn new_with_mnemonic(mnemonic: &str) -> Option<Expander> {
+        let c_str = CString::from_slice(mnemonic.as_bytes());
         let tmp_pointer = unsafe {
-            mnemonic.with_c_str(|c_str| {
-                ffi::gtk_expander_new_with_mnemonic(c_str)
-            })
+            ffi::gtk_expander_new_with_mnemonic(c_str.as_ptr())
         };
         check_pointer!(tmp_pointer, Expander)
     }
@@ -115,18 +113,23 @@ impl Expander {
         }
     }
 
-    pub fn get_label(&self) -> String {
+    pub fn get_label(&self) -> Option<String> {
         unsafe {
             let c_str = ffi::gtk_expander_get_label(GTK_EXPANDER(self.pointer));
-            String::from_raw_buf(c_str as *const u8)
+            
+            if c_str.is_null() {
+                None
+            } else {
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
+            }
         }
     }
 
     pub fn set_label(&mut self, label: &str) -> () {
+        let c_str = CString::from_slice(label.as_bytes());
+
         unsafe {
-            label.with_c_str(|c_str| {
-                ffi::gtk_expander_set_label(GTK_EXPANDER(self.pointer), c_str)
-            });
+            ffi::gtk_expander_set_label(GTK_EXPANDER(self.pointer), c_str.as_ptr());
         }
     }
 

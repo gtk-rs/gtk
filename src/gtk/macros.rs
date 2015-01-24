@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-#![macro_escape]
+#![macro_use]
 
 macro_rules! check_pointer(
     ($tmp_pointer:ident, $gtk_struct:ident) => ( check_pointer!($tmp_pointer, $gtk_struct, G_OBJECT) );
@@ -34,7 +34,6 @@ macro_rules! check_pointer(
 
 macro_rules! struct_Widget(
     ($gtk_struct:ident) => (
-        #[derive(Copy)]
         pub struct $gtk_struct {
             pointer: *mut ffi::C_GtkWidget
         }

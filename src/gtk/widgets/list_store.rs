@@ -16,7 +16,7 @@
 use glib::ffi::GType;
 use gtk::{self, ffi};
 use gtk::TreeIter;
-use std::c_str::ToCStr;
+use std::ffi::CString;
 use std::num::ToPrimitive;
 
 pub struct ListStore {
@@ -34,8 +34,11 @@ impl ListStore {
     }
 
     pub fn set_string(&self, iter: &TreeIter, column: i32, text: &str) {
-        let text_c = text.to_c_str();
-        unsafe { ffi::gtk_list_store_set(self.pointer, iter.get_pointer(), column, text_c.as_ptr(), -1i) }
+        unsafe {
+            let text_c = CString::from_slice(text.as_bytes());
+
+            ffi::gtk_list_store_set(self.pointer, iter.get_pointer(), column, text_c.as_ptr(), -1is)
+        }
     }
 
     pub fn remove(&self, iter: &TreeIter) -> bool {

@@ -15,7 +15,7 @@
 
 //! A button to launch a font chooser dialog
 
-use std::c_str::ToCStr;
+use std::ffi::CString;
 use gtk::{self, ffi};
 use gtk::cast::GTK_FONTBUTTON;
 
@@ -34,23 +34,32 @@ impl FontButton {
 
     pub fn new_with_font(font_name: &str) -> Option<FontButton> {
         let tmp_pointer = unsafe {
-            font_name.with_c_str(|c_str| {
-                ffi::gtk_font_button_new_with_font(c_str)
-            })
+            let c_str = CString::from_slice(font_name.as_bytes());
+
+            ffi::gtk_font_button_new_with_font(c_str.as_ptr())
         };
         check_pointer!(tmp_pointer, FontButton)
     }
 
     pub fn set_font_name(&mut self, font_name: &str) -> bool {
-        match unsafe { font_name.with_c_str(|c_str| { ffi::gtk_font_button_set_font_name(GTK_FONTBUTTON(self.pointer), c_str) }) } {
+        let c_str = CString::from_slice(font_name.as_bytes());
+
+        match unsafe { ffi::gtk_font_button_set_font_name(GTK_FONTBUTTON(self.pointer), c_str.as_ptr()) } {
             ffi::GFALSE => false,
             _ => true
         }
     }
 
-    pub fn get_font_name(&self) -> String {
-        let c_str = unsafe { ffi::gtk_font_button_get_font_name(GTK_FONTBUTTON(self.pointer)) };
-        unsafe { String::from_raw_buf(c_str as *const u8) }
+    pub fn get_font_name(&self) -> Option<String> {
+        unsafe {
+            let c_str = ffi::gtk_font_button_get_font_name(GTK_FONTBUTTON(self.pointer));
+
+            if c_str.is_null() {
+                None
+            } else {
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
+            }
+        }
     }
 
     pub fn set_show_style(&mut self, show_style: bool) -> () {
@@ -110,16 +119,23 @@ impl FontButton {
     }
 
     pub fn set_title(&mut self, title: &str) -> () {
+        let c_str = CString::from_slice(title.as_bytes());
+
         unsafe {
-            title.with_c_str(|c_str| {
-                ffi::gtk_font_button_set_title(GTK_FONTBUTTON(self.pointer), c_str)
-            });
+            ffi::gtk_font_button_set_title(GTK_FONTBUTTON(self.pointer), c_str.as_ptr());
         }
     }
 
-    pub fn get_title(&self) -> String {
-        let c_str = unsafe { ffi::gtk_font_button_get_title(GTK_FONTBUTTON(self.pointer)) };
-        unsafe { String::from_raw_buf(c_str as *const u8) }
+    pub fn get_title(&self) -> Option<String> {
+        unsafe {
+            let c_str = ffi::gtk_font_button_get_title(GTK_FONTBUTTON(self.pointer));
+            
+            if c_str.is_null() {
+                None
+            } else {
+                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
+            }
+        }
     }
 }
 

@@ -42,20 +42,20 @@ impl<T> SList<T> {
         FromIterator::from_iter(values.into_iter())
     }
 
-    pub fn from_slice<T: Clone>(values: &[T]) -> SList<T> {
+    pub fn from_slice(values: &[T]) -> SList<T> where T: Clone {
         let v: Vec<T> = values.iter().map(|x| (*x).clone()).collect();
         FromIterator::from_iter(v.into_iter())
     }
 
     pub fn append(&mut self, data: T) {
         unsafe {
-            self.pointer = ffi::g_slist_append(self.pointer, mem::transmute(box data));
+            self.pointer = ffi::g_slist_append(self.pointer, mem::transmute(Box::new(data)));
         }
     }
 
     pub fn prepend(&mut self, data: T) {
         unsafe {
-            self.pointer = ffi::g_slist_prepend(self.pointer, mem::transmute(box data));
+            self.pointer = ffi::g_slist_prepend(self.pointer, mem::transmute(Box::new(data)));
         }
     }
 
@@ -72,7 +72,7 @@ impl<T> SList<T> {
 
     pub fn insert(&mut self, data: T, position: i32) {
         unsafe {
-            self.pointer = ffi::g_slist_insert(self.pointer, mem::transmute(box data), position);
+            self.pointer = ffi::g_slist_insert(self.pointer, mem::transmute(Box::new(data)), position);
         }
     }
 
@@ -94,8 +94,8 @@ impl<T> SList<T> {
         }
     }
 
-    pub fn len(&self) -> uint {
-        unsafe { ffi::g_slist_length(self.pointer) as uint }
+    pub fn len(&self) -> usize {
+        unsafe { ffi::g_slist_length(self.pointer) as usize }
     }
 
     pub fn clear(&mut self) {
@@ -111,10 +111,10 @@ impl<T> SList<T> {
     }
 }
 
-impl<T> Index<uint> for SList<T> {
+impl<T> Index<usize> for SList<T> {
     type Output = T;
 
-    fn index<'a>(&'a self, _rhs: &uint) -> &'a T {
+    fn index<'a>(&'a self, _rhs: &usize) -> &'a T {
         self.nth(*_rhs as u32)
     }
 }
