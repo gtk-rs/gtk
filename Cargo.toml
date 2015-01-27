@@ -24,7 +24,7 @@ crate_type = ["rlib"]
 path = "src/rgtk.rs"
 
 [build-dependencies.pkg-config]
-pkg-config = "^0.0.0"
+pkg-config = "~0.0.0"
 
 [build-dependencies.gcc]
-gcc = "^0.0.0"
+gcc = "~0.0.0"
