@@ -14,12 +14,15 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 #![feature(slicing_syntax)]
-#![allow(unstable)]
+#![feature(path)]
+#![feature(os)]
+#![feature(io)]
+#![feature(collections)]
 
 extern crate gcc;
 extern crate "pkg-config" as pkg_config;
 
-use std::io::process::Command;
+use std::old_io::process::Command;
 use std::path::Path;
 use std::os;
 use gcc::Config;
