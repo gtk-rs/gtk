@@ -4,7 +4,8 @@
 
 #![crate_type = "bin"]
 
-#![allow(unstable)]
+#![feature(collections)]
+#![feature(core)]
 
 extern crate rgtk;
 
