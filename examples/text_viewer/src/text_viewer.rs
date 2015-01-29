@@ -3,11 +3,13 @@
 //! A simple text file viewer
 
 #![crate_type = "bin"]
-#![allow(unstable)]
+#![feature(core)]
+#![feature(path)]
+#![feature(io)]
 
 extern crate rgtk;
 
-use std::io::{BufferedReader, File};
+use std::old_io::{BufferedReader, File};
 use std::num::FromPrimitive;
 
 use rgtk::*;
