@@ -16,7 +16,7 @@
 //! Cursors — Standard and pixmap cursors
 
 use gdk::{self, ffi};
-use std::c_str::ToCStr;
+use std::ffi::CString;
 //use libc::{c_int};
 
 #[repr(C)]
@@ -52,9 +52,9 @@ impl Cursor {
 
     pub fn new_from_name(display: &gdk::Display, name: &str) -> Option<Cursor> {
         let tmp = unsafe {
-            ffi::gdk_cursor_new_from_name(display.get_pointer(), name.with_c_str(|c_str| {
-                c_str
-            }))
+            let c_str = CString::from_slice(name.as_bytes());
+
+            ffi::gdk_cursor_new_from_name(display.get_pointer(), c_str.as_ptr())
         };
 
         if tmp.is_null() {

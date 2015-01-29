@@ -17,7 +17,7 @@
 
 use std::ptr;
 use gdk::ffi;
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 pub fn init() {
     unsafe { ffi::gdk_init(ptr::null_mut(), ptr::null_mut()) }
@@ -37,7 +37,7 @@ pub fn get_display_arg_name() -> Option<String> {
     if tmp.is_null() {
         None
     } else {
-        unsafe { Some(String::from_raw_buf(tmp as *const u8)) }
+        unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
     }
 }
 
@@ -47,17 +47,17 @@ pub fn notify_startup_complete() {
 
 pub fn notify_startup_complete_with_id(startup_id: &str) {
     unsafe {
-        ffi::gdk_notify_startup_complete_with_id(startup_id.with_c_str(|c_str| {
-            c_str
-        }))
+        let c_str = CString::from_slice(startup_id.as_bytes());
+
+        ffi::gdk_notify_startup_complete_with_id(c_str.as_ptr())
     }
 }
 
 pub fn set_allowed_backends(backends: &str) {
     unsafe {
-        ffi::gdk_set_allowed_backends(backends.with_c_str(|c_str| {
-            c_str
-        }))
+        let c_str = CString::from_slice(backends.as_bytes());
+
+        ffi::gdk_set_allowed_backends(c_str.as_ptr())
     }
 }
 
@@ -67,15 +67,15 @@ pub fn get_program_class() -> Option<String> {
     if tmp.is_null() {
         None
     } else {
-        unsafe { Some(String::from_raw_buf(tmp as *const u8)) }
+        unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
     }
 }
 
 pub fn set_program_class(program_class: &str) {
     unsafe {
-        ffi::gdk_set_program_class(program_class.with_c_str(|c_str| {
-            c_str
-        }))
+        let c_str = CString::from_slice(program_class.as_bytes());
+
+        ffi::gdk_set_program_class(c_str.as_ptr())
     }
 }
 

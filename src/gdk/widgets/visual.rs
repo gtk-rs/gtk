@@ -31,7 +31,7 @@ impl Visual {
 
         unsafe {
             ffi::gdk_query_depths(&mut tmp, &mut count);
-            Vec::from_raw_buf(tmp, count as uint)
+            Vec::from_raw_buf(tmp, count as usize)
         }
     }
 

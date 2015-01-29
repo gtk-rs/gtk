@@ -17,8 +17,8 @@
 
 use gdk::{self, ffi};
 use gtk;
-use libc::{c_int};
-use std::c_str::ToCStr;
+use libc::{c_int, c_char};
+use std::ffi::CString;
 
 /// Attributes to use for a newly-created window.
 pub struct WindowAttr {
@@ -55,8 +55,12 @@ pub struct WindowAttr {
 impl WindowAttr {
     #[doc(hidden)]
     pub fn to_c_type(&self) -> ffi::C_GdkWindowAttr {
+        let c_title = CString::from_slice(self.title.as_bytes());
+        let c_wmclass_name = CString::from_slice(self.wmclass_name.as_bytes());
+        let c_wmclass_class = CString::from_slice(self.wmclass_class.as_bytes());
+
         ffi::C_GdkWindowAttr {
-            title: self.title.to_c_str().as_mut_ptr(),
+            title: c_title.as_ptr() as *mut c_char,
             event_mask: self.event_mask,
             x: self.x,
             y: self.y,
@@ -66,8 +70,8 @@ impl WindowAttr {
             visual: self.visual.get_pointer(),
             window_type: self.window_type,
             cursor: self.cursor.get_pointer(),
-            wmclass_name: self.wmclass_name.to_c_str().as_mut_ptr(),
-            wmclass_class: self.wmclass_class.to_c_str().as_mut_ptr(),
+            wmclass_name: c_wmclass_name.as_ptr() as *mut c_char,
+            wmclass_class: c_wmclass_class.as_ptr() as *mut c_char,
             override_redirect: gtk::ffi::to_gboolean(self.override_redirect),
             type_hint: self.type_hint
         }
@@ -75,7 +79,6 @@ impl WindowAttr {
 }
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct Window {
     pointer: *mut ffi::C_GdkWindow
 }
@@ -409,9 +412,9 @@ impl Window {
 
     pub fn set_title(&self, title: &str) {
         unsafe {
-            ffi::gdk_window_set_title(self.pointer, title.with_c_str(|c_str| {
-                c_str
-            }))
+            let c_str = CString::from_slice(title.as_bytes());
+
+            ffi::gdk_window_set_title(self.pointer, c_str.as_ptr())
         }
     }
 
@@ -573,9 +576,9 @@ impl Window {
 
     pub fn set_icon_name(&self, name: &str) {
         unsafe {
-            ffi::gdk_window_set_icon_name(self.pointer, name.with_c_str(|c_str| {
-                c_str
-            }))
+            let c_str = CString::from_slice(name.as_bytes());
+
+            ffi::gdk_window_set_icon_name(self.pointer, c_str.as_ptr())
         }
     }
 
@@ -585,17 +588,17 @@ impl Window {
 
     pub fn set_role(&self, role: &str) {
         unsafe {
-            ffi::gdk_window_set_role(self.pointer, role.with_c_str(|c_str| {
-                c_str
-            }))
+            let c_str = CString::from_slice(role.as_bytes());
+
+            ffi::gdk_window_set_role(self.pointer, c_str.as_ptr())
         }
     }
 
     pub fn set_startup_id(&self, startup_id: &str) {
         unsafe {
-            ffi::gdk_window_set_startup_id(self.pointer, startup_id.with_c_str(|c_str| {
-                c_str
-            }))
+            let c_str = CString::from_slice(startup_id.as_bytes());
+
+            ffi::gdk_window_set_startup_id(self.pointer, c_str.as_ptr())
         }
     }
 

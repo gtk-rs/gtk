@@ -17,7 +17,7 @@
 
 use gdk::{self, ffi};
 use libc::{c_uint};
-use std::c_str::ToCStr;
+use std::ffi::CString;
 use gtk;
 
 #[repr(C)]
@@ -29,9 +29,9 @@ pub struct Display {
 impl Display {
     pub fn open(display_name: &str) -> Option<Display> {
         let tmp = unsafe {
-            ffi::gdk_display_open(display_name.with_c_str(|c_str| {
-                c_str
-            }))
+            let c_str = CString::from_slice(display_name.as_bytes());
+
+            ffi::gdk_display_open(c_str.as_ptr())
         };
 
         if tmp.is_null() {
@@ -61,7 +61,7 @@ impl Display {
         if tmp.is_null() {
             None
         } else {
-            unsafe { Some(String::from_raw_buf(tmp as *const u8)) }
+            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
         }
     }
 
@@ -222,9 +222,9 @@ impl Display {
 
     pub fn notify_startup_complete(&self, startup_id: &str) {
         unsafe {
-            ffi::gdk_display_notify_startup_complete(self.pointer, startup_id.with_c_str(|c_str| {
-                c_str
-            }))
+            let c_str = CString::from_slice(startup_id.as_bytes());
+
+            ffi::gdk_display_notify_startup_complete(self.pointer, c_str.as_ptr())
         }
     }
 }

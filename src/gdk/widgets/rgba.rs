@@ -17,7 +17,8 @@
 
 use gdk::ffi;
 use gtk;
-use std::c_str::ToCStr;
+use std::ffi::CString;
+use libc::{c_char, c_void};
 
 /// The GdkRGBA structure is used to represent a (possibly translucent) color, in a way that is compatible with cairos notion of color.
 #[repr(C)]
@@ -90,9 +91,9 @@ impl RGBA {
 
     pub fn parse(&mut self, spec: &str) -> bool {
         unsafe {
-            gtk::ffi::to_bool(ffi::gdk_rgba_parse(self, spec.with_c_str(|c_str| {
-                c_str
-            })))
+            let c_str = CString::from_slice(spec.as_bytes());
+
+            gtk::ffi::to_bool(ffi::gdk_rgba_parse(self, c_str.as_ptr()))
         }
     }
 
@@ -105,12 +106,17 @@ impl RGBA {
     }
 
     pub fn to_string(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gdk_rgba_to_string(self) };
+        let tmp = unsafe { ffi::gdk_rgba_to_string(self) as *const c_char };
 
         if tmp.is_null() {
             None
         } else {
-            unsafe { Some(String::from_raw_buf(tmp as *const u8)) }
+            unsafe { 
+                let ret = Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string());
+
+                ::libc::funcs::c95::stdlib::free(tmp as *mut c_void);
+                ret
+            }
         }
     }
 }

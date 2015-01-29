@@ -17,8 +17,8 @@
 
 use gdk::{self, ffi};
 use gtk;
-use std::c_vec::CVec;
-use std::c_str::ToCStr;
+use gdk::c_vec::CVec;
+use std::ffi::CString;
 
 #[repr(C)]
 #[derive(Copy)]
@@ -53,7 +53,7 @@ impl Pixbuf {
             if tmp.is_null() {
                 CVec::new(1 as *mut u8, 0)
             } else {
-                CVec::new(tmp, *length as uint)
+                CVec::new(tmp, *length as usize)
             }
         }
     }
@@ -76,15 +76,15 @@ impl Pixbuf {
 
     pub fn get_option(&self, key: &str) -> Option<String> {
         let tmp = unsafe {
-            ffi::gdk_pixbuf_get_option(self.pointer as *const ffi::C_GdkPixbuf, key.with_c_str(|c_str| {
-                c_str
-            }))
+            let c_str = CString::from_slice(key.as_bytes());
+
+            ffi::gdk_pixbuf_get_option(self.pointer as *const ffi::C_GdkPixbuf, c_str.as_ptr())
         };
 
         if tmp.is_null() {
             None
         } else {
-            unsafe { Some(String::from_raw_buf(tmp as *const u8)) }
+            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
         }
     }
 
@@ -97,7 +97,7 @@ impl Pixbuf {
         let mut length = 0u32;
         let mut pixels = self.get_pixels_with_length(&mut length);
         let s_pixels = pixels.as_mut_slice();
-        let pos = (y * rowstride + x * n_channels) as uint;
+        let pos = (y * rowstride + x * n_channels) as usize;
 
         s_pixels[pos] = red;
         s_pixels[pos + 1] = green;

@@ -213,7 +213,6 @@ pub struct EventKey {
 
 impl Event for EventKey {}
 
-#[derive(Copy)]
 pub struct EventCrossing {
     pub _type : gdk::EventType,
     pub window : *mut gdk::Window,

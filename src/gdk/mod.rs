@@ -19,6 +19,8 @@ Bindings and wrappers for __GDK__
 
 */
 
+extern crate c_vec;
+
 pub use self::rt::{
     init,
     get_display_arg_name,

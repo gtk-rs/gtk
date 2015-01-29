@@ -17,7 +17,7 @@
 
 use gdk::{self, ffi};
 use libc::c_int;
-use std::c_str::ToCStr;
+use std::ffi::CString;
 
 // FIXME: should inherit from GAppLaunchContext
 #[repr(C)]
@@ -45,9 +45,9 @@ impl AppLaunchContext {
 
     pub fn set_icon_name(&self, icon_name: &str) {
         unsafe {
-            ffi::gdk_app_launch_context_set_icon_name(self.pointer, icon_name.with_c_str(|c_str| {
-                c_str
-            }))
+            let c_str = CString::from_slice(icon_name.as_bytes());
+
+            ffi::gdk_app_launch_context_set_icon_name(self.pointer, c_str.as_ptr())
         }
     }
 }
