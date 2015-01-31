@@ -16,7 +16,8 @@
 use gtk::ffi;
 
 pub struct TreeIter {
-    pointer: *mut ffi::C_GtkTreeIter
+    pointer: *mut ffi::C_GtkTreeIter,
+    is_owned: bool,
 }
 
 impl TreeIter {
@@ -27,7 +28,8 @@ impl TreeIter {
             None
         } else {
             Some(TreeIter {
-                pointer: tmp_pointer
+                pointer: tmp_pointer,
+                is_owned: true,
             })
         }
     }
@@ -39,7 +41,8 @@ impl TreeIter {
             None
         } else {
             Some(TreeIter {
-                pointer: tmp_pointer
+                pointer: tmp_pointer,
+                is_owned: true,
             })
         }
     }
@@ -52,14 +55,15 @@ impl TreeIter {
     #[doc(hidden)]
     pub fn wrap_pointer(c_treeiter: *mut ffi::C_GtkTreeIter) -> TreeIter {
         TreeIter {
-            pointer: c_treeiter
+            pointer: c_treeiter,
+            is_owned: false,
         }
     }
 }
 
 impl Drop for TreeIter {
     fn drop(&mut self) {
-        if !self.pointer.is_null() {
+        if !self.pointer.is_null() && self.is_owned {
             unsafe { ffi::gtk_tree_iter_free(self.pointer) };
             self.pointer = ::std::ptr::null_mut();
         }
