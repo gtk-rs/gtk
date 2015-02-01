@@ -13,6 +13,27 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
+//! Rectangles — Simple graphical data type
+
+use gdk::ffi;
+use libc::{c_int};
+use gtk;
+
 #[repr(C)]
 #[derive(Copy)]
-pub struct Device; //STUB
+pub struct Rectangle { // FIXME should be just an alias to cairo_rectangle_int_t
+    pub x: c_int,
+    pub y: c_int,
+    pub width: c_int,
+    pub height: c_int
+}
+
+impl Rectangle {
+    pub fn intersect(&self, other: &Rectangle, dest: &mut Rectangle) -> bool {
+        unsafe { gtk::ffi::to_bool(ffi::gdk_rectangle_intersect(self, other, dest)) }
+    }
+
+    pub fn union(&self, other: &Rectangle, dest: &mut Rectangle) {
+        unsafe { ffi::gdk_rectangle_union(self, other, dest) }
+    }
+}

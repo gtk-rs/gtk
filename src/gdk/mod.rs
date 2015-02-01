@@ -19,7 +19,27 @@ Bindings and wrappers for __GDK__
 
 */
 
-pub use self::color::{Color, RGBA};
+extern crate c_vec;
+
+pub use self::rt::{
+    init,
+    get_display_arg_name,
+    notify_startup_complete,
+    notify_startup_complete_with_id,
+    set_allowed_backends,
+    get_program_class,
+    set_program_class,
+    flush,
+    screen_width,
+    screen_height,
+    screen_width_mm,
+    screen_height_mm,
+    beep,
+    error_trap_push,
+    error_trap_pop,
+    error_trap_pop_ignored
+};
+
 pub use self::events::{
     EventType,
     Event,
@@ -51,29 +71,64 @@ pub use self::events::{
     OwnerChange
 };
 
-pub use self::device::{Device};
-pub use self::window::{Window};
-pub use self::types::{Atom, Screen, Rectangle, Key};
-
 pub use self::enums::modifier_intent::ModifierIntent;
 pub use self::enums::modifier_type::ModifierType;
-pub use self::enums::window_type::WindowType;
-pub use self::enums::window_state::WindowState;
-pub use self::enums::window_edge::WindowEdge;
-pub use self::enums::window_hints::WindowHints;
-pub use self::enums::window_type_hint::WindowTypeHint;
-pub use self::enums::fullscreen_mode::FullscreenMode;
-pub use self::enums::wm_decoration::WMDecoration;
-pub use self::enums::event_mask::EventMask;
-pub use self::enums::input_source::InputSource;
-pub use self::enums::key;
+pub use self::enums::{
+    WindowType,
+    WindowState,
+    WindowEdge,
+    WindowHints,
+    WindowTypeHint,
+    FullscreenMode,
+    WMDecoration,
+    EventMask,
+    InputSource,
+    InputMode,
+    AxisUse,
+    DeviceType,
+    GrabOwnership,
+    GrabStatus,
+    key,
+    CursorType,
+    PixbufAlphaMode,
+    PixbufError,
+    ColorSpace,
+    FrameClockPhase,
+    WindowWindowClass,
+    Gravity,
+    WMFunction,
+    DragAction,
+    DragProtocol
+};
 
-mod color;
+pub use self::widgets::{
+    Color,
+    RGBA,
+    Device,
+    Display,
+    Atom,
+    Screen,
+    Rectangle,
+    Key,
+    Window,
+    Visual,
+    DeviceManager,
+    Cursor,
+    Pixbuf,
+    Point,
+    DisplayManager,
+    FrameClock,
+    FrameTimings,
+    WindowAttr,
+    Geometry,
+    DragContext,
+    AppLaunchContext
+};
+
 mod events;
-mod device;
-mod window;
-mod types;
+mod rt;
 pub mod enums;
+pub mod widgets;
 
 #[doc(hidden)]
 pub mod ffi;

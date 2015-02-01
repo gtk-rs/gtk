@@ -13,20 +13,13 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use libc::{c_void};
+//! Points — Simple graphical data type
+
+use libc::{c_int};
 
 #[repr(C)]
 #[derive(Copy)]
-pub struct Rectangle { //FIXME should be just an alias to cairo_rectangle_int_t
-    x: isize,
-    y: isize,
-    width: isize,
-    height: isize
+pub struct Point {
+    pub x: c_int,
+    pub y: c_int
 }
-
-pub type Atom = *mut c_void;
-pub type Key = u32;
-
-#[repr(C)]
-#[derive(Copy)]
-pub struct Screen;
