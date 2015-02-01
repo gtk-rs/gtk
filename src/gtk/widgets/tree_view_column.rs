@@ -324,6 +324,10 @@ impl glib::traits::FFIGObject for TreeViewColumn {
     fn get_gobject(&self) -> *mut glib::ffi::C_GObject {
         gtk::cast::G_OBJECT_FROM_TREE_VIEW_COLUMN(self.pointer)
     }
+
+    fn wrap_object(object: *mut glib::ffi::C_GObject) -> TreeViewColumn {
+        TreeViewColumn { pointer: object as *mut ffi::C_GtkTreeViewColumn }
+    }
 }
 
 impl_connect!(TreeViewColumn -> Clicked);

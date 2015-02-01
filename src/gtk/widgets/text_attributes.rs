@@ -63,3 +63,4 @@ impl TextAttributes {
 }
 
 impl_GObjectFunctions!(TextAttributes, C_GtkTextAttributes);
+impl_TraitObject!(TextAttributes, C_GtkTextAttributes);

@@ -37,3 +37,4 @@ impl TextChildAnchor {
 }
 
 impl_GObjectFunctions!(TextChildAnchor, C_GtkTextChildAnchor);
+impl_TraitObject!(TextChildAnchor, C_GtkTextChildAnchor);

@@ -77,4 +77,5 @@ impl TextMark {
 }
 
 impl_GObjectFunctions!(TextMark, C_GtkTextMark);
+impl_TraitObject!(TextMark, C_GtkTextMark);
 impl_drop!(TextMark, GTK_TEXT_MARK);

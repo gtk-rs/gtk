@@ -13,4 +13,4 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-pub trait GObjectTrait {}
+pub trait GObjectTrait: ::glib::traits::FFIGObject {}
