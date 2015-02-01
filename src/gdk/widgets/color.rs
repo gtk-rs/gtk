@@ -17,7 +17,7 @@
 
 /// The Color structure is used to describe a color, similar to the XColor struct used in the X11 drawing API.
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 pub struct Color {
     /// For allocated colors, the pixel value used to draw this color on the screen. Not used anymore.
     pub pixel:  u32,
@@ -31,7 +31,7 @@ pub struct Color {
 
 /// The GdkRGBA structure is used to represent a (possibly translucent) color, in a way that is compatible with cairos notion of color.
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 pub struct RGBA {
     /// The intensity of the red channel from 0.0 to 1.0 inclusive
     pub red: f64,

@@ -66,7 +66,7 @@ impl Drop for Path {
     }
 }
 
-#[derive(Show, Copy)]
+#[derive(Debug, Copy)]
 pub enum PathSegment {
     MoveTo((f64,f64)),
     LineTo((f64,f64)),

@@ -19,28 +19,28 @@ pub mod modifier_intent {
     #![allow(non_upper_case_globals)]
 
     bitflags! {
-    #[derive(Show)]
-    #[repr(C)]
-    flags ModifierIntent: u32 {
-        /// the primary modifier used to invoke menu accelerators.,
-        const PrimaryAccelerator = 1 << 0,
-        /// the modifier used to invoke context menus. Note that mouse button _3 always triggers context menus. When this modifier is not 0, it additionally triggers context menus when used with mouse button 1.,
-        const ContextMenu = 1 << 1,
-        /// the modifier used to extend selections using modifier-click or modifier-cursor-key,
-        const ExtendSelection = 1 << 2,
-        /// the modifier used to modify selections, which in most cases means toggling the clicked item into or out of the selection.,
-        const ModifySelection = 1 << 3,
-        /// when any of these modifiers is pressed, the key event cannot produce a symbol directly. This is meant to be used for input methods, and for use cases like typeahead search.,
-        const NoTextInput = 1 << 4,
-        /// the modifier that switches between keyboard groups (AltGr on X11/Windows and Option/Alt on OS X).,
-        const ShiftGroup = 1 << 5
-    }
+        #[derive(Debug)]
+        #[repr(C)]
+        flags ModifierIntent: u32 {
+            /// the primary modifier used to invoke menu accelerators.,
+            const PrimaryAccelerator = 1 << 0,
+            /// the modifier used to invoke context menus. Note that mouse button _3 always triggers context menus. When this modifier is not 0, it additionally triggers context menus when used with mouse button 1.,
+            const ContextMenu = 1 << 1,
+            /// the modifier used to extend selections using modifier-click or modifier-cursor-key,
+            const ExtendSelection = 1 << 2,
+            /// the modifier used to modify selections, which in most cases means toggling the clicked item into or out of the selection.,
+            const ModifySelection = 1 << 3,
+            /// when any of these modifiers is pressed, the key event cannot produce a symbol directly. This is meant to be used for input methods, and for use cases like typeahead search.,
+            const NoTextInput = 1 << 4,
+            /// the modifier that switches between keyboard groups (AltGr on X11/Windows and Option/Alt on OS X).,
+            const ShiftGroup = 1 << 5
+        }
     }
 
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 /// Describes the kind of window.
 pub enum WindowType {
     /// root window; this window has no parent, covers the entire screen, and is created by the window system
@@ -61,7 +61,7 @@ pub enum WindowType {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 /// Specifies the state of a toplevel window.
 pub enum WindowState {
     /// the window is not shown.
@@ -85,7 +85,7 @@ pub enum WindowState {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 /// Indicates which monitor (in a multi-head setup) a window should span over when in fullscreen mode.
 pub enum FullscreenMode {
     /// Fullscreen on current monitor only.
@@ -95,7 +95,7 @@ pub enum FullscreenMode {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 /// Determines a window edge or corner.
 pub enum WindowEdge {
     /// the top left corner.
@@ -117,7 +117,7 @@ pub enum WindowEdge {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 /// Used to indicate which fields of a GdkGeometry struct should be paid attention to. Also, the presence/absence of GDK_HINT_POS,
 /// GDK_HINT_USER_POS , and GDK_HINT_USER_SIZE is significant, though they don't directly refer to GdkGeometry fields. GDK_HINT_USER_POS
 /// will be set automatically by GtkWindow if you call gtk_window_move(). GDK_HINT_USER_POS and GDK_HINT_USER_SIZE should be set if the
@@ -144,7 +144,7 @@ pub enum WindowHints {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 /// These are hints for the window manager that indicate what type of function the window has. The window manager can use this when
 /// determining decoration and behaviour of the window. The hint must be set before mapping the window.
 /// 
@@ -182,7 +182,7 @@ pub enum WindowTypeHint {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 /// A set of bit-flags to indicate which events a window is to receive. Most of these masks map onto one or more of the GdkEventType
 /// event types above.
 /// 
@@ -249,7 +249,7 @@ pub enum EventMask {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 /// These are hints originally defined by the Motif toolkit. The window manager can use them when determining how to decorate the
 /// window. The hint must be set before mapping the window.
 pub enum WMDecoration {
@@ -270,7 +270,7 @@ pub enum WMDecoration {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 /// These are hints originally defined by the Motif toolkit. The window manager can use them when determining the functions to offer
 /// for the window. The hint must be set before mapping the window.
 pub enum WMFunction {
@@ -289,7 +289,7 @@ pub enum WMFunction {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 /// An enumeration describing the type of an input device in general terms.
 pub enum InputSource {
     /// the device is a mouse. (This will be reported for the core pointer, even if it is something else, such as a trackball.)
@@ -309,7 +309,7 @@ pub enum InputSource {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 /// An enumeration that describes the mode of an input device.
 pub enum InputMode {
     /// the device is disabled and will not report any events.
@@ -322,7 +322,7 @@ pub enum InputMode {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 /// An enumeration describing the way in which a device axis (valuator) maps onto the predefined valuator types that GTK+ understands.
 pub enum AxisUse {
     /// the axis is ignored.
@@ -344,7 +344,7 @@ pub enum AxisUse {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 /// Indicates the device type. See [above](https://developer.gnome.org/gdk3/stable/GdkDeviceManager.html#GdkDeviceManager.description)
 /// for more information about the meaning of these device types.
 pub enum DeviceType {
@@ -357,7 +357,7 @@ pub enum DeviceType {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 /// Defines how device grabs interact with other devices.
 pub enum GrabOwnership {
     /// All other devices’ events are allowed.
@@ -369,7 +369,7 @@ pub enum GrabOwnership {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 /// Returned by gdk_device_grab(), gdk_pointer_grab() and gdk_keyboard_grab() to indicate success or the reason for the failure of
 /// the grab attempt.
 pub enum GrabStatus {
@@ -386,7 +386,7 @@ pub enum GrabStatus {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 /// Defines the reference point of a window and the meaning of coordinates passed to gtk_window_move(). See gtk_window_move() and the
 /// "implementation notes" section of the Extended Window Manager Hints specification for more details.
 pub enum Gravity {
@@ -413,7 +413,7 @@ pub enum Gravity {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 /// The standard cursors available.
 /// For more information, please go [here](https://developer.gnome.org/gdk3/stable/gdk3-Cursors.html#GdkCursorType).
 pub enum CursorType {
@@ -500,7 +500,7 @@ pub enum CursorType {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 /// This enumeration defines the color spaces that are supported by the &gdk-pixbuf; library. Currently only RGB is supported.
 pub enum ColorSpace {
     RGB,
@@ -509,7 +509,7 @@ pub enum ColorSpace {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 /// An error code in the GDK_PIXBUF_ERROR domain. Many &gdk-pixbuf; operations can cause errors in this domain, or in the G_FILE_ERROR domain.
 pub enum PixbufError {
     /// An image file was broken somehow.
@@ -527,7 +527,7 @@ pub enum PixbufError {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 /// These values can be passed to gdk_pixbuf_render_to_drawable_alpha() to control how the alpha channel of an image should be handled.
 /// This function can create a bilevel clipping mask (black and white) and use it while painting the image. In the future, when the X
 /// Window System gets an alpha channel extension, it will be possible to do full alpha compositing onto arbitrary drawables. For now
@@ -541,7 +541,7 @@ pub enum PixbufAlphaMode {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 /// GdkFrameClockPhase is used to represent the different paint clock phases that can be requested. The elements of the enumeration
 /// correspond to the signals of GdkFrameClock.
 /// 
@@ -566,7 +566,7 @@ pub enum FrameClockPhase {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 /// GDK_INPUT_OUTPUT windows are the standard kind of window you might expect. Such windows receive events and are also displayed on
 /// screen. GDK_INPUT_ONLY windows are invisible; they are usually placed above other windows in order to trap or filter the events.
 /// You can’t draw on GDK_INPUT_ONLY windows.
@@ -578,7 +578,7 @@ pub enum WindowWindowClass {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 /// Used in GdkDragContext to indicate the protocol according to which DND is done.
 pub enum DragProtocol {
     /// no protocol.
@@ -600,7 +600,7 @@ pub enum DragProtocol {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 /// Used in GdkDragContext to indicate what the destination should do with the dropped data.
 pub enum DragAction {
     /// Means nothing, and should not be used.
@@ -622,7 +622,7 @@ pub mod modifier_type {
 
     bitflags! {
     #[repr(C)]
-    #[derive(Show)]
+    #[derive(Debug)]
     flags ModifierType: u32 {
         /// the Shift key.,
         const ShiftMask              = 1 << 0,
