@@ -28,7 +28,7 @@ pub use self::visibility_state::VisibilityState;
 
 pub mod event_type {
     #[repr(C)]
-    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
     pub enum EventType {
         Nothing           = -1,
         Delete            = 0,
@@ -368,7 +368,7 @@ impl Event for EventDND  {}
 
 pub mod visibility_state {
     #[repr(C)]
-    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
     pub enum VisibilityState{
         VisibilityUnobscured,
         VisibilityPartial,
@@ -378,7 +378,7 @@ pub mod visibility_state {
 
 pub mod scroll_direction {
     #[repr(C)]
-    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
     pub enum ScrollDirection{
         ScrollUp,
         ScrollDown,
@@ -390,7 +390,7 @@ pub mod scroll_direction {
 
 pub mod notify_type {
     #[repr(C)]
-    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
     pub enum NotifyType{
         NotifyAncestor   = 0,
         NotifyVirtual    = 1,
@@ -403,7 +403,7 @@ pub mod notify_type {
 
 pub mod crossing_mode {
     #[repr(C)]
-    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
     pub enum CrossingMode{
         CrossingNormal,
         CrossingGrab,
@@ -419,7 +419,7 @@ pub mod crossing_mode {
 
 pub mod property_state {
     #[repr(C)]
-    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
     pub enum PropertyState{
         PropertyNewValue,
         PropertyDelete
@@ -428,7 +428,7 @@ pub mod property_state {
 
 pub mod setting_action {
     #[repr(C)]
-    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
     pub enum SettingAction{
         SettingActionNew,
         SettingActionChanged,
@@ -438,7 +438,7 @@ pub mod setting_action {
 
 pub mod owner_change {
     #[repr(C)]
-    #[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+    #[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
     pub enum OwnerChange{
         OwnerChangeNewOwner,
         OwnerChangeDestroy,

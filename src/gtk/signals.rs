@@ -242,7 +242,7 @@ signal!(popup_menu,             PopupMenu() -> bool);
 signal!(query_tooltip,          QueryTooltip(x:isize, y:isize, keyboard_mode:bool, tooltip : *mut gtk::Tooltip) -> bool);
 signal!(realize,                Realize() -> ());
 signal!(screen_changed,         ScreenChanged(previous_screen : *mut gdk::Screen) -> ());
-signal!(show,                   Show() -> ());
+signal!(Debug,                   Show() -> ());
 signal!(show_help,              ShowHelp(help_type : gtk::WidgetHelpType) -> bool);
 signal!(size_allocate,          SizeAllocate(allocation : *mut gdk::Rectangle) -> ());
 signal!(state_changed,          StateChanged(state : gtk::StateType) -> ());

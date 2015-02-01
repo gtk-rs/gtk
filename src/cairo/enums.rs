@@ -82,7 +82,7 @@ impl Status {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 pub enum Antialias {
     AntialiasDefault,
 
@@ -98,14 +98,14 @@ pub enum Antialias {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 pub enum FillRule {
     FillRuleWinding,
     FillRuleEvenOdd
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 pub enum LineCap {
     LineCapButt,
     LineCapRound,
@@ -113,7 +113,7 @@ pub enum LineCap {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 pub enum LineJoin {
     LineJoinMiter,
     LineJoinRound,
@@ -121,7 +121,7 @@ pub enum LineJoin {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 pub enum Operator {
     OperatorClear,
 
@@ -159,7 +159,7 @@ pub enum Operator {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 pub enum PathDataType {
     PathMoveTo,
     PathLineTo,
@@ -168,7 +168,7 @@ pub enum PathDataType {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 pub enum Content {
     ContentColor      = 0x1000,
     ContentAlpha      = 0x2000,
@@ -176,7 +176,7 @@ pub enum Content {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 pub enum Extend {
     ExtendNone,
     ExtendRepeat,
@@ -185,7 +185,7 @@ pub enum Extend {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 pub enum Filter {
     FilterFast,
     FilterGood,
@@ -196,7 +196,7 @@ pub enum Filter {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 pub enum PatternType {
     PatternTypeSolid,
     PatternTypeSurface,
@@ -207,7 +207,7 @@ pub enum PatternType {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 pub enum FontSlant {
     FontSlantNormal,
     FontSlantItalic,
@@ -215,21 +215,21 @@ pub enum FontSlant {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 pub enum FontWeight {
     FontWeightNormal,
     FontWeightBold
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 pub enum TextClusterFlags {
     TextClusterFlagNone     = 0x00000000,
     TextClusterFlagBackward = 0x00000001
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 pub enum FontType {
     FontTypeToy,
     FontTypeFt,
@@ -239,7 +239,7 @@ pub enum FontType {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 pub enum SubpixelOrder {
     SubpixelOrderDefault,
     SubpixelOrderRgb,
@@ -249,7 +249,7 @@ pub enum SubpixelOrder {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 pub enum HintStyle {
     HintStyleDefault,
     HintStyleNone,
@@ -259,7 +259,7 @@ pub enum HintStyle {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 pub enum HintMetrics {
     HintMetricsDefault,
     HintMetricsOff,
