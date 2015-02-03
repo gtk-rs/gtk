@@ -3426,10 +3426,10 @@ extern "C" {
     //=========================================================================
     // GtkBuilder                                                        NOT OK
     //=========================================================================
-    //pub fn gtk_builder_new                     () -> *mut C_GtkBuilder;
-    //pub fn gtk_builder_new_from_file           (file_name: *const c_char) -> *mut C_GtkBuilder;
-    //pub fn gtk_builder_new_from_resource       (resource_path: *const c_char) -> *mut C_GtkBuilder;
-    //pub fn gtk_builder_new_from_string         (string: *const c_char, length: c_long) -> *mut C_GtkBuilder;
+    pub fn gtk_builder_new                     () -> *mut C_GtkBuilder;
+    pub fn gtk_builder_new_from_file           (file_name: *const c_char) -> *mut C_GtkBuilder;
+    pub fn gtk_builder_new_from_resource       (resource_path: *const c_char) -> *mut C_GtkBuilder;
+    pub fn gtk_builder_new_from_string         (string: *const c_char, length: c_long) -> *mut C_GtkBuilder;
     //pub fn gtk_builder_add_callback_symbol     (builder: *mut C_GtkBuilder, callback_name: *const c_char, callback_symbol: GCallback);
     //pub fn gtk_builder_add_callback_symbols    (builder: *mut C_GtkBuilder, callback_name: *const c_char, first_callback_symbol: GCallback, ...);
     //pub fn gtk_builder_lookup_callback_symbol  (builder: *mut C_GtkBuilder, callback_name: *const c_char) -> GCallback;
@@ -3439,7 +3439,7 @@ extern "C" {
     //pub fn gtk_builder_add_objects_from_file   (builder: *mut C_GtkBuilder, file_name: *const c_char, object_ids: *mut *mut c_char, error: *mut *mut C_GError) -> c_uint;
     //pub fn gtk_builder_add_objects_from_string (builder: *mut C_GtkBuilder, buffer: *const c_char, length: c_long, object_ids: *mut *mut c_char, error: *mut *mut C_GError) -> c_uint;
     //pub fn gtk_builder_add_objects_from_resource(builder: *mut C_GtkBuilder, resource_name: *const c_char, object_ids: *mut *mut c_char, error: *mut *mut C_GError) -> c_uint;
-    //pub fn gtk_builder_get_object              (builder: *mut C_GtkBuilder, name: *const c_char) -> *mut C_GObject;
+    pub fn gtk_builder_get_object              (builder: *mut C_GtkBuilder, name: *const c_char) -> *mut glib::ffi::C_GObject;
     //pub fn gtk_builder_get_objects             (builder: *mut C_GtkBuilder) -> *mut GSList;
     //pub fn gtk_builder_expose_object           (builder: *mut C_GtkBuilder, name: *const c_char, object: *mut C_GObject);
     //pub fn gtk_builder_connect_signals         (builder: *mut C_GtkBuilder, user_data: *mut c_void);

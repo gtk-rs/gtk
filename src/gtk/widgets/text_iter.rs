@@ -412,3 +412,4 @@ impl TextIter {
 }
 
 impl_GObjectFunctions!(TextIter, C_GtkTextIter);
+impl_TraitObject!(TextIter, C_GtkTextIter);

@@ -13,28 +13,4 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gtk::ffi;
-
-#[derive(Copy)]
-pub struct TextChildAnchor {
-    pointer: *mut ffi::C_GtkTextChildAnchor
-}
-
-impl TextChildAnchor {
-    pub fn new() -> Option<TextChildAnchor> {
-        let tmp_pointer = unsafe { ffi::gtk_text_child_anchor_new() };
-
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            Some(TextChildAnchor { pointer: tmp_pointer })
-        }
-    }
-
-    pub fn get_deleted(&self) -> bool {
-        unsafe { ffi::to_bool(ffi::gtk_text_child_anchor_get_deleted(self.pointer)) }
-    }
-}
-
-impl_GObjectFunctions!(TextChildAnchor, C_GtkTextChildAnchor);
-impl_TraitObject!(TextChildAnchor, C_GtkTextChildAnchor);
+pub trait GObjectTrait: ::glib::traits::FFIGObject {}

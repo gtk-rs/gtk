@@ -19,6 +19,7 @@ use std::ffi::CString;
 
 pub trait FFIGObject {
     fn get_gobject(&self) -> *mut ffi::C_GObject;
+    fn wrap_object(object: *mut ffi::C_GObject) -> Self;
 }
 
 // pub trait Connect<T>: FFIGObject {

@@ -180,6 +180,7 @@ impl ListBoxRow {
         let tmp_pointer = unsafe {
             ffi::gtk_list_box_row_get_header(GTK_LIST_BOX_ROW(self.pointer))
         };
+
         if tmp_pointer.is_null() {
             None
         } else {

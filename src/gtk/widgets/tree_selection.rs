@@ -119,6 +119,10 @@ impl glib::traits::FFIGObject for TreeSelection {
     fn get_gobject(&self) -> *mut glib::ffi::C_GObject {
         gtk::cast::G_OBJECT_FROM_TREE_SELECTION(self.pointer)
     }
+
+    fn wrap_object(object: *mut glib::ffi::C_GObject) -> TreeSelection {
+        TreeSelection { pointer: object as *mut ffi::C_GtkTreeSelection }
+    }
 }
 
 impl_connect!(TreeSelection -> Changed);

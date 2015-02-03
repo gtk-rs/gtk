@@ -287,6 +287,7 @@ pub use self::enums::places_open_flags::PlacesOpenFlags;
 pub use self::enums::tool_palette_drag_targets::ToolPaletteDragTargets;
 pub use self::enums::dest_defaults::DestDefaults;
 pub use self::enums::size_group_mode::SizeGroupMode;
+pub use self::traits::GObjectTrait;
 
 /// Gtk Traits
 pub use self::traits::BoxTrait;

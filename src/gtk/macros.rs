@@ -40,6 +40,28 @@ macro_rules! struct_Widget(
     );
 );
 
+macro_rules! impl_TraitObject(
+    ($gtk_struct:ident, $ffi_type:ident) => (
+        impl ::glib::traits::FFIGObject for $gtk_struct {
+            fn get_gobject(&self) -> *mut ::glib::ffi::C_GObject {
+                self.pointer as *mut ::glib::ffi::C_GObject
+            }
+
+            fn wrap_object(object: *mut ::glib::ffi::C_GObject) -> $gtk_struct {
+                unsafe{
+                    ::glib::ffi::g_object_ref(object);
+                }
+
+                $gtk_struct {
+                    pointer: object as *mut ffi::$ffi_type
+                }
+            }
+        }
+
+        impl ::gtk::GObjectTrait for $gtk_struct {}
+    );
+);
+
 macro_rules! impl_TraitWidget(
     ($gtk_struct:ident) => (
         impl ::gtk::ffi::FFIWidget for $gtk_struct {
@@ -65,7 +87,19 @@ macro_rules! impl_TraitWidget(
                 use gtk::ffi::FFIWidget;
                 ::gtk::cast::G_OBJECT(self.get_widget())
             }
+
+            fn wrap_object(object: *mut ::glib::ffi::C_GObject) -> $gtk_struct {
+                unsafe{
+                    ::glib::ffi::g_object_ref(object);
+                }
+
+                $gtk_struct {
+                    pointer: object as *mut ffi::C_GtkWidget
+                }
+            }
         }
+
+        impl ::gtk::GObjectTrait for $gtk_struct {}
 
         // impl ::glib::traits::Connect for $gtk_struct {}
 
