@@ -171,9 +171,9 @@ impl Context {
         }
     }
 
-    pub fn set_dash(&self, dashes: &[f64], num_dashes: i32, offset: f64){
+    pub fn set_dash(&self, dashes: &[f64], offset: f64){
         unsafe {
-            ffi::cairo_set_dash(self.get_ptr(), dashes.as_ptr(), num_dashes, offset)
+            ffi::cairo_set_dash(self.get_ptr(), dashes.as_ptr(), dashes.len() as i32, offset)
         }
         self.ensure_status(); //Possible invalid dashes value
     }
