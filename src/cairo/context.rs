@@ -191,6 +191,7 @@ impl Context {
 
         unsafe {
             ffi::cairo_get_dash(self.get_ptr(), dashes.as_mut_ptr(), &mut offset);
+            dashes.set_len(dash_count);
             (dashes, offset)
         }
     }
