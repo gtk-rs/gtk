@@ -19,6 +19,7 @@ use libc::c_double;
 use std::ffi::CString;
 
 use gtk::{self, ffi};
+use gtk::ffi::{to_bool, to_gboolean};
 use gtk::{LevelBarMode};
 use gtk::cast::GTK_LEVELBAR;
 
@@ -90,18 +91,12 @@ impl LevelBar {
 
     #[cfg(any(feature = "GTK_3_8", feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
     pub fn set_inverted(&mut self, inverted: bool) -> () {
-        match inverted {
-            true    => unsafe { ffi::gtk_level_bar_set_inverted(GTK_LEVELBAR(self.pointer), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_level_bar_set_inverted(GTK_LEVELBAR(self.pointer), ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_level_bar_set_inverted(GTK_LEVELBAR(self.pointer), to_gboolean(inverted)); }
     }
 
     #[cfg(any(feature = "GTK_3_8", feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
     pub fn get_inverted(&self) -> bool {
-        match unsafe { ffi::gtk_level_bar_get_inverted(GTK_LEVELBAR(self.pointer)) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_level_bar_get_inverted(GTK_LEVELBAR(self.pointer))) }
     }
 
     pub fn add_offset_value(&mut self, name: &str, value: f64) -> () {

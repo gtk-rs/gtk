@@ -14,6 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::{self, ffi};
+use gtk::ffi::{to_bool, to_gboolean};
 use gtk::ffi::FFIWidget;
 use gtk::cast::{GTK_PRINT_SETTINGS, GTK_PAPER_SIZE};
 use std::ffi::CString;
@@ -44,11 +45,8 @@ impl PrintSettings {
     pub fn has_key(&self, key: &str) -> bool {
         let c_str = CString::from_slice(key.as_bytes());
 
-        match unsafe {
-            ffi::gtk_print_settings_has_key(GTK_PRINT_SETTINGS(self.get_widget()), c_str.as_ptr())
-        } {
-            ffi::GFALSE => false,
-            _ => true
+        unsafe {
+            to_bool(ffi::gtk_print_settings_has_key(GTK_PRINT_SETTINGS(self.get_widget()), c_str.as_ptr()))
         }
     }
 
@@ -84,13 +82,10 @@ impl PrintSettings {
     }
 
     pub fn get_bool(&self, key: &str) -> bool {
-        match unsafe {
+        unsafe {
             let c_str = CString::from_slice(key.as_bytes());
 
-            ffi::gtk_print_settings_get_bool(GTK_PRINT_SETTINGS(self.get_widget()), c_str.as_ptr())
-        } {
-            ffi::GFALSE => false,
-            _ => true
+            to_bool(ffi::gtk_print_settings_get_bool(GTK_PRINT_SETTINGS(self.get_widget()), c_str.as_ptr()))
         }
     }
 
@@ -98,10 +93,7 @@ impl PrintSettings {
         unsafe {
             let c_str = CString::from_slice(key.as_bytes());
 
-            ffi::gtk_print_settings_set_bool(GTK_PRINT_SETTINGS(self.get_widget()), c_str.as_ptr(), match value {
-                true => ffi::GTRUE,
-                false => ffi::GFALSE
-            })
+            ffi::gtk_print_settings_set_bool(GTK_PRINT_SETTINGS(self.get_widget()), c_str.as_ptr(), to_gboolean(value))
         }
     }
 
@@ -226,46 +218,28 @@ impl PrintSettings {
     }
 
     pub fn get_use_color(&self) -> bool {
-        match unsafe { ffi::gtk_print_settings_get_use_color(GTK_PRINT_SETTINGS(self.get_widget())) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_print_settings_get_use_color(GTK_PRINT_SETTINGS(self.get_widget()))) }
     }
 
     pub fn set_use_color(&self, use_color: bool) {
-        unsafe { ffi::gtk_print_settings_set_use_color(GTK_PRINT_SETTINGS(self.get_widget()), match use_color {
-            true => ffi::GTRUE,
-            false => ffi::GFALSE
-        }) }
+        unsafe { ffi::gtk_print_settings_set_use_color(GTK_PRINT_SETTINGS(self.get_widget()), to_gboolean(use_color)) }
     }
 
     pub fn get_collate(&self) -> bool {
-        match unsafe { ffi::gtk_print_settings_get_collate(GTK_PRINT_SETTINGS(self.get_widget())) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_print_settings_get_collate(GTK_PRINT_SETTINGS(self.get_widget()))) }
     }
 
     pub fn set_collate(&self, collate: bool) {
-        unsafe { ffi::gtk_print_settings_set_collate(GTK_PRINT_SETTINGS(self.get_widget()), match collate {
-            true => ffi::GTRUE,
-            false => ffi::GFALSE
-        }) }
+        unsafe { ffi::gtk_print_settings_set_collate(GTK_PRINT_SETTINGS(self.get_widget()), to_gboolean(collate)) }
     }
 
     pub fn get_reverse(&self) -> bool {
-        match unsafe { ffi::gtk_print_settings_get_reverse(GTK_PRINT_SETTINGS(self.get_widget())) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_print_settings_get_reverse(GTK_PRINT_SETTINGS(self.get_widget()))) }
     }
 
     pub fn set_reverse(&self, reverse: bool) {
         unsafe { ffi::gtk_print_settings_set_reverse(GTK_PRINT_SETTINGS(self.get_widget()),
-                                                     match reverse {
-                                                         true => ffi::GTRUE,
-                                                         false => ffi::GFALSE
-                                                     })
+                                                     to_gboolean(reverse))
         }
     }
 

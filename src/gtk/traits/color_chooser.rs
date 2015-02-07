@@ -14,6 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::{self, ffi};
+use gtk::ffi::{to_bool, to_gboolean};
 use gtk::cast::GTK_COLOR_CHOOSER;
 use gdk;
 
@@ -34,17 +35,11 @@ pub trait ColorChooserTrait: gtk::WidgetTrait {
     }
 
     fn get_use_alpha(&self) -> bool {
-        match unsafe { ffi::gtk_color_chooser_get_use_alpha(GTK_COLOR_CHOOSER(self.get_widget())) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_color_chooser_get_use_alpha(GTK_COLOR_CHOOSER(self.get_widget()))) }
     }
 
     fn set_use_alpha(&self, use_alpha: bool) -> () {
-        unsafe { ffi::gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(self.get_widget()), match use_alpha {
-            false => ffi::GFALSE,
-            _ => ffi::GTRUE
-        }) }
+        unsafe { ffi::gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(self.get_widget()), to_gboolean(use_alpha)) }
     }
 
     fn add_palette(&self, orientation: gtk::Orientation, colors_per_line: i32, colors: Vec<gdk::RGBA>) -> () {

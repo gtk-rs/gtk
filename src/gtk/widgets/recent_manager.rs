@@ -14,6 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::{self, ffi};
+use gtk::ffi::to_bool;
 use gtk::ffi::FFIWidget;
 use gtk::cast::GTK_RECENT_MANAGER;
 use glib;
@@ -45,33 +46,24 @@ impl RecentManager {
     pub fn add_item(&self, uri: &str) -> bool {
         let c_str = CString::from_slice(uri.as_bytes());
 
-        match unsafe {
-            ffi::gtk_recent_manager_add_item(GTK_RECENT_MANAGER(self.get_widget()), c_str.as_ptr())
-        } {
-            ffi::GFALSE => false,
-            _ => true
+        unsafe {
+            to_bool(ffi::gtk_recent_manager_add_item(GTK_RECENT_MANAGER(self.get_widget()), c_str.as_ptr()))
         }
     }
 
     pub fn add_full(&self, uri: &str, recent_data: &gtk::RecentData) -> bool {
-        match unsafe {
+        unsafe {
             let c_str = CString::from_slice(uri.as_bytes());
 
-            ffi::gtk_recent_manager_add_full(GTK_RECENT_MANAGER(self.get_widget()), c_str.as_ptr(), &recent_data.get_ffi())
-        } {
-            ffi::GFALSE => false,
-            _ => true
+            to_bool(ffi::gtk_recent_manager_add_full(GTK_RECENT_MANAGER(self.get_widget()), c_str.as_ptr(), &recent_data.get_ffi()))
         }
     }
 
     pub fn has_item(&self, uri: &str) -> bool {
         let c_str = CString::from_slice(uri.as_bytes());
 
-        match unsafe {
-            ffi::gtk_recent_manager_has_item(GTK_RECENT_MANAGER(self.get_widget()), c_str.as_ptr())
-        } {
-            ffi::GFALSE => false,
-            _ => true
+        unsafe {
+            to_bool(ffi::gtk_recent_manager_has_item(GTK_RECENT_MANAGER(self.get_widget()), c_str.as_ptr()))
         }
     }
 

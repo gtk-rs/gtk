@@ -14,6 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::{self, ffi};
+use gtk::ffi::{to_bool, to_gboolean};
 use gtk::ffi::FFIWidget;
 use gtk::cast::GTK_ABOUT_DIALOG;
 use std::ffi::CString;
@@ -132,17 +133,11 @@ impl AboutDialog {
     }
 
     pub fn get_wrap_license(&self) -> bool {
-        match unsafe { ffi::gtk_about_dialog_get_wrap_license(GTK_ABOUT_DIALOG(self.get_widget())) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_about_dialog_get_wrap_license(GTK_ABOUT_DIALOG(self.get_widget()))) }
     }
 
     pub fn set_wrap_license(&self, wrap_license: bool) -> () {
-        unsafe { ffi::gtk_about_dialog_set_wrap_license(GTK_ABOUT_DIALOG(self.get_widget()), match wrap_license {
-            true => ffi::GTRUE,
-            _ => ffi::GFALSE
-        }) }
+        unsafe { ffi::gtk_about_dialog_set_wrap_license(GTK_ABOUT_DIALOG(self.get_widget()), to_gboolean(wrap_license)) }
     }
 
     pub fn get_license_type(&self) -> gtk::License {

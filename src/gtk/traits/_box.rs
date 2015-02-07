@@ -18,36 +18,31 @@ use libc::{c_int, c_uint};
 use gtk::{self, PackType};
 use gtk::cast::GTK_BOX;
 use gtk::ffi;
+use gtk::ffi::{to_bool, to_gboolean};
 
 pub trait BoxTrait: gtk::WidgetTrait {
     fn pack_start<'r, T: gtk::WidgetTrait>(&'r mut self, child: &'r T, expand: bool, fill: bool, padding: u32) -> () {
-        let c_expand = if expand { ffi::GTRUE } else { ffi::GFALSE };
-        let c_fill = if fill { ffi::GTRUE } else { ffi::GFALSE };
         unsafe {
-            ffi::gtk_box_pack_start(GTK_BOX(self.get_widget()), child.get_widget(), c_expand, c_fill, padding as c_uint);
+            ffi::gtk_box_pack_start(GTK_BOX(self.get_widget()), child.get_widget(),
+                                    to_gboolean(expand), to_gboolean(fill),
+                                    padding as c_uint);
         }
     }
 
     fn pack_end<'r, T: gtk::WidgetTrait>(&'r mut self, child: &'r T, expand: bool, fill: bool, padding: u32) -> () {
-        let c_expand = if expand { ffi::GTRUE } else { ffi::GFALSE };
-        let c_fill = if fill { ffi::GTRUE } else { ffi::GFALSE };
         unsafe {
-            ffi::gtk_box_pack_end(GTK_BOX(self.get_widget()), child.get_widget(), c_expand, c_fill, padding as c_uint);
+            ffi::gtk_box_pack_end(GTK_BOX(self.get_widget()), child.get_widget(),
+                                  to_gboolean(expand), to_gboolean(fill),
+                                  padding as c_uint);
         }
     }
 
     fn get_homogeneous(&self) -> bool {
-        match unsafe { ffi::gtk_box_get_homogeneous(GTK_BOX(self.get_widget())) } {
-            ffi::GFALSE => false,
-            _           => true
-        }
+        unsafe { to_bool(ffi::gtk_box_get_homogeneous(GTK_BOX(self.get_widget()))) }
     }
 
     fn set_homogeneouse(&mut self, homogeneous: bool) -> () {
-        match homogeneous {
-            true    => unsafe { ffi::gtk_box_set_homogeneous(GTK_BOX(self.get_widget()), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_box_set_homogeneous(GTK_BOX(self.get_widget()), ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_box_set_homogeneous(GTK_BOX(self.get_widget()), to_gboolean(homogeneous)); }
     }
 
     fn get_spacing(&self) -> i32 {
@@ -81,9 +76,7 @@ pub trait BoxTrait: gtk::WidgetTrait {
                                              &mut c_padding,
                                              &mut pack_type);
         }
-        let expand = if c_expand == ffi::GFALSE { false } else { true };
-        let fill = if c_fill == ffi::GFALSE { false } else { true };
-        (expand, fill, c_padding as u32, pack_type)
+        (to_bool(c_expand), to_bool(c_fill), c_padding as u32, pack_type)
     }
 
     fn set_child_packing<'r, T: gtk::WidgetTrait>(&mut self,
@@ -92,13 +85,11 @@ pub trait BoxTrait: gtk::WidgetTrait {
                                                   fill: bool,
                                                   padding: u32,
                                                   pack_type: PackType) {
-        let c_expand = if expand { ffi::GTRUE } else { ffi::GFALSE };
-        let c_fill = if fill { ffi::GTRUE } else { ffi::GFALSE };
         unsafe {
             ffi::gtk_box_set_child_packing(GTK_BOX(self.get_widget()),
                                            child.get_widget(),
-                                           c_expand,
-                                           c_fill,
+                                           to_gboolean(expand),
+                                           to_gboolean(fill),
                                            padding as c_uint,
                                            pack_type);
         }

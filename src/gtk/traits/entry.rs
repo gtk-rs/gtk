@@ -20,6 +20,7 @@ use libc;
 use gtk::{EntryIconPosition, ImageType, InputPurpose, InputHints};
 use gtk::cast::GTK_ENTRY;
 use gtk::{self, ffi};
+use gtk::ffi::{to_bool, to_gboolean};
 
 pub trait EntryTrait: gtk::WidgetTrait {
     fn get_buffer(&self) -> gtk::EntryBuffer {
@@ -61,10 +62,7 @@ pub trait EntryTrait: gtk::WidgetTrait {
     }
 
     fn set_visibility(&mut self, visible: bool) -> () {
-        match visible {
-            true    => unsafe { ffi::gtk_entry_set_visibility(GTK_ENTRY(self.get_widget()), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_entry_set_visibility(GTK_ENTRY(self.get_widget()), ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_entry_set_visibility(GTK_ENTRY(self.get_widget()), to_gboolean(visible)); }
     }
 
     fn set_invisible_char(&mut self, ch: i32) -> () {
@@ -86,17 +84,11 @@ pub trait EntryTrait: gtk::WidgetTrait {
     }
 
     fn get_activates_default(&self) -> bool {
-        match unsafe { ffi::gtk_entry_get_activates_default(GTK_ENTRY(self.get_widget())) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_entry_get_activates_default(GTK_ENTRY(self.get_widget()))) }
     }
 
     fn get_has_frame(&self) -> bool {
-        match unsafe { ffi::gtk_entry_get_has_frame(GTK_ENTRY(self.get_widget())) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_entry_get_has_frame(GTK_ENTRY(self.get_widget()))) }
     }
 
     fn get_width_chars(&self) -> i32 {
@@ -106,17 +98,11 @@ pub trait EntryTrait: gtk::WidgetTrait {
     }
 
     fn set_activates_default(&mut self, setting: bool) {
-        match setting {
-            true    => unsafe { ffi::gtk_entry_set_activates_default(GTK_ENTRY(self.get_widget()), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_entry_set_activates_default(GTK_ENTRY(self.get_widget()), ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_entry_set_activates_default(GTK_ENTRY(self.get_widget()), to_gboolean(setting)); }
     }
 
     fn set_has_frame(&mut self, setting: bool) {
-        match setting {
-            true    => unsafe { ffi::gtk_entry_set_has_frame(GTK_ENTRY(self.get_widget()), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_entry_set_has_frame(GTK_ENTRY(self.get_widget()), ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_entry_set_has_frame(GTK_ENTRY(self.get_widget()), to_gboolean(setting)); }
     }
 
     fn set_width_chars(&mut self, n_chars: i32) -> () {
@@ -164,17 +150,11 @@ pub trait EntryTrait: gtk::WidgetTrait {
     }
 
     fn get_overwrite_mode(&self) -> bool {
-        match unsafe { ffi::gtk_entry_get_overwrite_mode(GTK_ENTRY(self.get_widget())) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_entry_get_overwrite_mode(GTK_ENTRY(self.get_widget()))) }
     }
 
     fn set_overwrite_mode(&mut self, overwrite: bool) {
-        match overwrite {
-            true    => unsafe { ffi::gtk_entry_set_overwrite_mode(GTK_ENTRY(self.get_widget()), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_entry_set_overwrite_mode(GTK_ENTRY(self.get_widget()), ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_entry_set_overwrite_mode(GTK_ENTRY(self.get_widget()), to_gboolean(overwrite)); }
     }
 
     fn get_layout_offsets(&self) -> (i32, i32) {
@@ -206,10 +186,7 @@ pub trait EntryTrait: gtk::WidgetTrait {
     }
 
     fn get_visibility(&self) -> bool {
-        match unsafe { ffi::gtk_entry_get_visibility(GTK_ENTRY(self.get_widget())) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_entry_get_visibility(GTK_ENTRY(self.get_widget()))) }
     }
 
     fn set_cursor_hadjustment(&mut self, adjustment: &gtk::Adjustment) -> () {
@@ -307,31 +284,19 @@ pub trait EntryTrait: gtk::WidgetTrait {
     }
 
     fn get_icon_activatable(&self, icon_pos: EntryIconPosition) -> bool {
-        match unsafe { ffi::gtk_entry_get_icon_activatable(GTK_ENTRY(self.get_widget()), icon_pos) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_entry_get_icon_activatable(GTK_ENTRY(self.get_widget()), icon_pos)) }
     }
 
     fn set_icon_activatable(&mut self, icon_pos: EntryIconPosition, activatable: bool) {
-        match activatable {
-            true    => unsafe { ffi::gtk_entry_set_icon_activatable(GTK_ENTRY(self.get_widget()), icon_pos, ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_entry_set_icon_activatable(GTK_ENTRY(self.get_widget()), icon_pos, ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_entry_set_icon_activatable(GTK_ENTRY(self.get_widget()), icon_pos, to_gboolean(activatable)); }
     }
 
     fn get_icon_sensitive(&self, icon_pos: EntryIconPosition) -> bool {
-        match unsafe { ffi::gtk_entry_get_icon_sensitive(GTK_ENTRY(self.get_widget()), icon_pos) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_entry_get_icon_sensitive(GTK_ENTRY(self.get_widget()), icon_pos)) }
     }
 
     fn set_icon_sensitive(&mut self, icon_pos: EntryIconPosition, sensitive: bool) {
-        match sensitive {
-            true    => unsafe { ffi::gtk_entry_set_icon_sensitive(GTK_ENTRY(self.get_widget()), icon_pos, ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_entry_set_icon_sensitive(GTK_ENTRY(self.get_widget()), icon_pos, ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_entry_set_icon_sensitive(GTK_ENTRY(self.get_widget()), icon_pos, to_gboolean(sensitive)); }
     }
 
     fn get_icon_at_pos(&self, x: i32, y: i32) -> i32 {

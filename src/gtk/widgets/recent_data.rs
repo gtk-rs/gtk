@@ -14,6 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::ffi;
+use gtk::ffi::{to_bool, to_gboolean};
 use std::default::Default;
 use libc::c_char;
 use std::ffi::CString;
@@ -54,10 +55,7 @@ impl RecentData {
                     app_name: String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&((*ptr).app_name as *const c_char))).to_string(),
                     app_exec: String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&((*ptr).app_exec as *const c_char))).to_string(),
                     groups: tmp_groups,
-                    is_private: match (*ptr).is_private {
-                        ffi::GFALSE => false,
-                        _ => true
-                    }
+                    is_private: to_bool((*ptr).is_private),
                 }
             }
         }
@@ -85,10 +83,7 @@ impl RecentData {
             app_name: c_app_name.as_ptr() as *mut c_char,
             app_exec: c_app_exec.as_ptr() as *mut c_char,
             groups: t_groups.as_ptr() as *mut *mut c_char,
-            is_private: match self.is_private {
-                true => ffi::GTRUE,
-                false => ffi::GFALSE
-            }
+            is_private: to_gboolean(self.is_private)
         }
     }
 }

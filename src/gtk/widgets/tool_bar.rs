@@ -18,6 +18,7 @@
 use libc::c_int;
 
 use gtk::{self, ffi};
+use gtk::ffi::{to_bool, to_gboolean};
 use gtk::cast::{GTK_TOOLBAR, GTK_TOOLITEM};
 use gtk::{IconSize, ReliefStyle, ToolbarStyle};
 
@@ -81,10 +82,7 @@ impl Toolbar {
     }
 
     pub fn set_show_arrow(&mut self, show_arrow: bool) -> () {
-        match show_arrow {
-            true    => unsafe { ffi::gtk_toolbar_set_show_arrow(GTK_TOOLBAR(self.pointer), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_toolbar_set_show_arrow(GTK_TOOLBAR(self.pointer), ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_toolbar_set_show_arrow(GTK_TOOLBAR(self.pointer), to_gboolean(show_arrow)); }
     }
 
     pub fn unset_icon_size(&mut self) -> () {
@@ -94,10 +92,7 @@ impl Toolbar {
     }
 
     pub fn get_show_arrow(&self) -> bool {
-        match unsafe { ffi::gtk_toolbar_get_show_arrow(GTK_TOOLBAR(self.pointer)) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_toolbar_get_show_arrow(GTK_TOOLBAR(self.pointer))) }
     }
 
     pub fn get_style(&self) -> ToolbarStyle {

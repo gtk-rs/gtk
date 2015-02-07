@@ -16,6 +16,7 @@
 use libc::{c_int, c_char, self};
 use std::ffi::CString;
 use gtk::ffi;
+use gtk::ffi::{to_bool, to_gboolean};
 use gdk;
 use gtk;
 use glib;
@@ -69,10 +70,7 @@ pub trait WidgetTrait: ffi::FFIWidget + gtk::GObjectTrait {
     }
 
     fn activate(&self) -> bool {
-        match unsafe { ffi::gtk_widget_activate(self.get_widget()) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_widget_activate(self.get_widget())) }
     }
 
     fn reparent(&self, new_parent: &WidgetTrait) {
@@ -80,10 +78,7 @@ pub trait WidgetTrait: ffi::FFIWidget + gtk::GObjectTrait {
     }
 
     fn is_focus(&self) -> bool {
-        match unsafe { ffi::gtk_widget_is_focus(self.get_widget()) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_widget_is_focus(self.get_widget())) }
     }
 
     fn grab_focus(&self) {
@@ -113,10 +108,7 @@ pub trait WidgetTrait: ffi::FFIWidget + gtk::GObjectTrait {
     }
 
     fn set_sensitive(&self, sensitive: bool) {
-        unsafe { ffi::gtk_widget_set_sensitive(self.get_widget(), match sensitive {
-            true => ffi::GTRUE,
-            false => ffi::GFALSE
-        }) }
+        unsafe { ffi::gtk_widget_set_sensitive(self.get_widget(), to_gboolean(sensitive)) }
     }
 
     fn set_parent(&self, parent: &WidgetTrait) {
@@ -148,17 +140,11 @@ pub trait WidgetTrait: ffi::FFIWidget + gtk::GObjectTrait {
     }
 
     fn is_ancestor(&self, ancestor: &WidgetTrait) -> bool {
-        match unsafe { ffi::gtk_widget_is_ancestor(self.get_widget(), ancestor.get_widget()) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_widget_is_ancestor(self.get_widget(), ancestor.get_widget())) }
     }
 
     fn hide_on_delete(&self) -> bool {
-        match unsafe { ffi::gtk_widget_hide_on_delete(self.get_widget()) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_widget_hide_on_delete(self.get_widget())) }
     }
 
     fn set_direction(&self, dir: gtk::TextDirection) {
@@ -178,10 +164,7 @@ pub trait WidgetTrait: ffi::FFIWidget + gtk::GObjectTrait {
     }
 
     fn in_destruction(&self) -> bool {
-        match unsafe { ffi::gtk_widget_in_destruction(self.get_widget()) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_widget_in_destruction(self.get_widget())) }
     }
 
     fn unparent(&self) {
@@ -192,9 +175,12 @@ pub trait WidgetTrait: ffi::FFIWidget + gtk::GObjectTrait {
         let mut dest_x = 0i32;
         let mut dest_y = 0i32;
 
-        match unsafe { ffi::gtk_widget_translate_coordinates(self.get_widget(), dest_widget.get_widget(), src_x, src_y, &mut dest_x, &mut dest_y) } {
-            ffi::GFALSE => None,
-            _ => Some((dest_x, dest_y))
+        let r = to_bool(unsafe { ffi::gtk_widget_translate_coordinates(self.get_widget(), dest_widget.get_widget(), src_x, src_y, &mut dest_x, &mut dest_y) });
+        if r {
+            Some((dest_x, dest_y))
+        }
+        else {
+            None
         }
     }
 
@@ -221,34 +207,19 @@ pub trait WidgetTrait: ffi::FFIWidget + gtk::GObjectTrait {
     }
 
     fn set_app_paintable(&self, app_paintable: bool) {
-        unsafe { ffi::gtk_widget_set_app_paintable(self.get_widget(), match app_paintable {
-                true => ffi::GTRUE,
-                false => ffi::GFALSE
-            }) }
+        unsafe { ffi::gtk_widget_set_app_paintable(self.get_widget(), to_gboolean(app_paintable)) }
     }
 
     fn set_double_buffered(&self, double_buffered: bool) {
-        unsafe { ffi::gtk_widget_set_double_buffered(self.get_widget(), match double_buffered {
-                true => ffi::GTRUE,
-                false => ffi::GFALSE
-            }) }
+        unsafe { ffi::gtk_widget_set_double_buffered(self.get_widget(), to_gboolean(double_buffered)) }
     }
 
     fn set_redraw_on_allocate(&self, redraw_on_allocate: bool) {
-        unsafe { ffi::gtk_widget_set_redraw_on_allocate(self.get_widget(), match redraw_on_allocate {
-                true => ffi::GTRUE,
-                false => ffi::GFALSE
-            }) }
+        unsafe { ffi::gtk_widget_set_redraw_on_allocate(self.get_widget(), to_gboolean(redraw_on_allocate)) }
     }
 
     fn mnemonic_activate(&self, group_cycling: bool) -> bool {
-        match unsafe { ffi::gtk_widget_mnemonic_activate(self.get_widget(), match group_cycling {
-                true => ffi::GTRUE,
-                false => ffi::GFALSE
-            }) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_widget_mnemonic_activate(self.get_widget(), to_gboolean(group_cycling))) }
     }
 
     /*fn send_expose(&self, event: &mut gdk::Event) -> i32 {
@@ -256,24 +227,15 @@ pub trait WidgetTrait: ffi::FFIWidget + gtk::GObjectTrait {
     }
 
     fn send_focus_change(&self, event: &mut gdk::Event) -> bool {
-        match unsafe { ffi::gtk_widget_send_expose(self.get_widget(), event) } {
-            GTRUE => true,
-            _ => false
-        }
+        unsafe { to_bool(ffi::gtk_widget_send_expose(self.get_widget(), event)) }
     }*/
 
     fn child_focus(&self, direction: gtk::DirectionType) -> bool {
-        match unsafe { ffi::gtk_widget_child_focus(self.get_widget(), direction) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_widget_child_focus(self.get_widget(), direction)) }
     }
 
     fn get_child_visible(&self) -> bool {
-        match unsafe { ffi::gtk_widget_get_child_visible(self.get_widget()) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_widget_get_child_visible(self.get_widget())) }
     }
 
     fn get_parent(&self) -> Option<Self> {
@@ -287,10 +249,7 @@ pub trait WidgetTrait: ffi::FFIWidget + gtk::GObjectTrait {
     }
 
     fn has_screen(&self) -> bool {
-        match unsafe { ffi::gtk_widget_has_screen(self.get_widget()) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_widget_has_screen(self.get_widget())) }
     }
 
     fn get_size_request(&self) -> (i32, i32) {
@@ -302,10 +261,7 @@ pub trait WidgetTrait: ffi::FFIWidget + gtk::GObjectTrait {
     }
 
     fn set_child_visible(&self, is_visible: bool) {
-        unsafe { ffi::gtk_widget_set_child_visible(self.get_widget(), match is_visible {
-                true => ffi::GTRUE,
-                false => ffi::GFALSE
-            }) }
+        unsafe { ffi::gtk_widget_set_child_visible(self.get_widget(), to_gboolean(is_visible)) }
     }
 
     fn set_size_request(&self, width: i32, height: i32) {
@@ -313,17 +269,11 @@ pub trait WidgetTrait: ffi::FFIWidget + gtk::GObjectTrait {
     }
 
     fn set_no_show_all(&self, no_show_all: bool) {
-        unsafe { ffi::gtk_widget_set_no_show_all(self.get_widget(), match no_show_all {
-                true => ffi::GTRUE,
-                false => ffi::GFALSE
-            }) }
+        unsafe { ffi::gtk_widget_set_no_show_all(self.get_widget(), to_gboolean(no_show_all)) }
     }
 
     fn get_no_show_all(&self) -> bool {
-        match unsafe { ffi::gtk_widget_get_no_show_all(self.get_widget()) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_widget_get_no_show_all(self.get_widget())) }
     }
 
     fn list_mnemonic_labels(&self) -> glib::List<Box<Self>> {
@@ -351,10 +301,7 @@ pub trait WidgetTrait: ffi::FFIWidget + gtk::GObjectTrait {
     }
 
     fn is_composited(&self) -> bool {
-        match unsafe { ffi::gtk_widget_is_composited(self.get_widget()) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_widget_is_composited(self.get_widget())) }
     }
 
     fn error_bell(&self) {
@@ -362,10 +309,7 @@ pub trait WidgetTrait: ffi::FFIWidget + gtk::GObjectTrait {
     }
 
     fn keynav_failed(&self, direction: gtk::DirectionType) -> bool {
-        match unsafe { ffi::gtk_widget_keynav_failed(self.get_widget(), direction) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_widget_keynav_failed(self.get_widget(), direction)) }
     }
 
     fn get_tooltip_markup(&self) -> Option<String> {
@@ -415,17 +359,11 @@ pub trait WidgetTrait: ffi::FFIWidget + gtk::GObjectTrait {
     }
 
     fn get_has_tooltip(&self) -> bool {
-        match unsafe { ffi::gtk_widget_get_has_tooltip(self.get_widget()) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_widget_get_has_tooltip(self.get_widget())) }
     }
 
     fn set_has_tooltip(&self, has_tooltip: bool) {
-        unsafe { ffi::gtk_widget_set_has_tooltip(self.get_widget(), match has_tooltip {
-            true => ffi::GTRUE,
-            false => ffi::GFALSE
-        }) }
+        unsafe { ffi::gtk_widget_set_has_tooltip(self.get_widget(), to_gboolean(has_tooltip)) }
     }
 
     fn trigger_tooltip_query(&self) {
@@ -437,101 +375,59 @@ pub trait WidgetTrait: ffi::FFIWidget + gtk::GObjectTrait {
     }
 
     fn get_app_paintable(&self) -> bool {
-        match unsafe { ffi::gtk_widget_get_app_paintable(self.get_widget()) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_widget_get_app_paintable(self.get_widget())) }
     }
 
     fn get_can_default(&self) -> bool {
-        match unsafe { ffi::gtk_widget_get_can_default(self.get_widget()) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_widget_get_can_default(self.get_widget())) }
     }
 
     fn set_can_default(&self, can_default: bool) {
-        unsafe { ffi::gtk_widget_set_can_default(self.get_widget(), match can_default {
-            true => ffi::GTRUE,
-            false => ffi::GFALSE
-        }) }
+        unsafe { ffi::gtk_widget_set_can_default(self.get_widget(), to_gboolean(can_default)) }
     }
 
     fn get_can_focus(&self) -> bool {
-        match unsafe { ffi::gtk_widget_get_can_focus(self.get_widget()) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_widget_get_can_focus(self.get_widget())) }
     }
 
     fn set_can_focus(&self, can_focus: bool) {
-        unsafe { ffi::gtk_widget_set_can_focus(self.get_widget(), match can_focus {
-            true => ffi::GTRUE,
-            false => ffi::GFALSE
-        }) }
+        unsafe { ffi::gtk_widget_set_can_focus(self.get_widget(), to_gboolean(can_focus)) }
     }
 
     fn get_double_buffered(&self) -> bool {
-        match unsafe { ffi::gtk_widget_get_double_buffered(self.get_widget()) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_widget_get_double_buffered(self.get_widget())) }
     }
 
     fn get_has_window(&self) -> bool {
-        match unsafe { ffi::gtk_widget_get_has_window(self.get_widget()) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_widget_get_has_window(self.get_widget())) }
     }
 
     fn set_has_window(&self, has_window: bool) {
-        unsafe { ffi::gtk_widget_set_has_window(self.get_widget(), match has_window {
-            true => ffi::GTRUE,
-            false => ffi::GFALSE
-        }) }
+        unsafe { ffi::gtk_widget_set_has_window(self.get_widget(), to_gboolean(has_window)) }
     }
 
     fn get_sensitive(&self) -> bool {
-        match unsafe { ffi::gtk_widget_get_sensitive(self.get_widget()) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_widget_get_sensitive(self.get_widget())) }
     }
 
     fn is_sensitive(&self) -> bool {
-        match unsafe { ffi::gtk_widget_is_sensitive(self.get_widget()) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_widget_is_sensitive(self.get_widget())) }
     }
 
     fn get_visible(&self) -> bool {
-        match unsafe { ffi::gtk_widget_get_visible(self.get_widget()) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_widget_get_visible(self.get_widget())) }
     }
 
     fn is_visible(&self) -> bool {
-        match unsafe { ffi::gtk_widget_is_visible(self.get_widget()) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_widget_is_visible(self.get_widget())) }
     }
 
     fn set_visible(&self, visible: bool) {
-        unsafe { ffi::gtk_widget_set_visible(self.get_widget(), match visible {
-            true => ffi::GTRUE,
-            false => ffi::GFALSE
-        }) }
+        unsafe { ffi::gtk_widget_set_visible(self.get_widget(), to_gboolean(visible)) }
     }
 
     fn set_state_flags(&self, flags: gtk::StateFlags, clear: bool) {
-        unsafe { ffi::gtk_widget_set_state_flags(self.get_widget(), flags, match clear {
-            true => ffi::GTRUE,
-            false => ffi::GFALSE
-        }) }
+        unsafe { ffi::gtk_widget_set_state_flags(self.get_widget(), flags, to_gboolean(clear)) }
     }
 
     fn unset_state_flags(&self, flags: gtk::StateFlags) {
@@ -543,101 +439,59 @@ pub trait WidgetTrait: ffi::FFIWidget + gtk::GObjectTrait {
     }
 
     fn has_default(&self) -> bool {
-        match unsafe { ffi::gtk_widget_has_default(self.get_widget()) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_widget_has_default(self.get_widget())) }
     }
 
     fn has_focus(&self) -> bool {
-        match unsafe { ffi::gtk_widget_has_focus(self.get_widget()) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_widget_has_focus(self.get_widget())) }
     }
 
     fn has_visible_focus(&self) -> bool {
-        match unsafe { ffi::gtk_widget_has_visible_focus(self.get_widget()) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_widget_has_visible_focus(self.get_widget())) }
     }
 
     fn has_grab(&self) -> bool {
-        match unsafe { ffi::gtk_widget_has_grab(self.get_widget()) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_widget_has_grab(self.get_widget())) }
     }
 
     fn is_drawable(&self) -> bool {
-        match unsafe { ffi::gtk_widget_is_drawable(self.get_widget()) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_widget_is_drawable(self.get_widget())) }
     }
 
     fn is_toplevel(&self) -> bool {
-        match unsafe { ffi::gtk_widget_is_toplevel(self.get_widget()) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_widget_is_toplevel(self.get_widget())) }
     }
 
     fn set_receives_default(&self, receives_default: bool) {
-        unsafe { ffi::gtk_widget_set_receives_default(self.get_widget(), match receives_default {
-            true => ffi::GTRUE,
-            false => ffi::GFALSE
-        }) }
+        unsafe { ffi::gtk_widget_set_receives_default(self.get_widget(), to_gboolean(receives_default)) }
     }
 
     fn get_receives_default(&self) -> bool {
-        match unsafe { ffi::gtk_widget_get_receives_default(self.get_widget()) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_widget_get_receives_default(self.get_widget())) }
     }
 
     fn set_support_multidevice(&self, support_multidevice: bool) {
-        unsafe { ffi::gtk_widget_set_support_multidevice(self.get_widget(), match support_multidevice {
-            true => ffi::GTRUE,
-            false => ffi::GFALSE
-        }) }
+        unsafe { ffi::gtk_widget_set_support_multidevice(self.get_widget(), to_gboolean(support_multidevice)) }
     }
 
     fn get_support_multidevice(&self) -> bool {
-        match unsafe { ffi::gtk_widget_get_support_multidevice(self.get_widget()) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_widget_get_support_multidevice(self.get_widget())) }
     }
 
     fn set_realized(&self, realized: bool) {
-        unsafe { ffi::gtk_widget_set_realized(self.get_widget(), match realized {
-            true => ffi::GTRUE,
-            false => ffi::GFALSE
-        }) }
+        unsafe { ffi::gtk_widget_set_realized(self.get_widget(), to_gboolean(realized)) }
     }
 
     fn get_realized(&self) -> bool {
-        match unsafe { ffi::gtk_widget_get_realized(self.get_widget()) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_widget_get_realized(self.get_widget())) }
     }
 
     fn set_mapped(&self, mapped: bool) {
-        unsafe { ffi::gtk_widget_set_mapped(self.get_widget(), match mapped {
-            true => ffi::GTRUE,
-            false => ffi::GFALSE
-        }) }
+        unsafe { ffi::gtk_widget_set_mapped(self.get_widget(), to_gboolean(mapped)) }
     }
 
     fn get_mapped(&self) -> bool {
-        match unsafe { ffi::gtk_widget_get_mapped(self.get_widget()) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_widget_get_mapped(self.get_widget())) }
     }
 
     fn get_modifier_mask(&self, intent: gdk::ModifierIntent) -> gdk::ModifierType {
@@ -777,59 +631,35 @@ pub trait WidgetTrait: ffi::FFIWidget + gtk::GObjectTrait {
     }
 
     fn get_hexpand(&self) -> bool {
-        match unsafe { ffi::gtk_widget_get_hexpand(self.get_widget()) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_widget_get_hexpand(self.get_widget())) }
     }
 
     fn set_hexpand(&self, expand: bool) {
-        unsafe { ffi::gtk_widget_set_hexpand(self.get_widget(), match expand {
-            true => ffi::GTRUE,
-            false => ffi::GFALSE
-        }) }
+        unsafe { ffi::gtk_widget_set_hexpand(self.get_widget(), to_gboolean(expand)) }
     }
 
     fn get_hexpand_set(&self) -> bool {
-        match unsafe { ffi::gtk_widget_get_hexpand_set(self.get_widget()) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_widget_get_hexpand_set(self.get_widget())) }
     }
 
     fn set_hexpand_set(&self, expand: bool) {
-        unsafe { ffi::gtk_widget_set_hexpand_set(self.get_widget(), match expand {
-            true => ffi::GTRUE,
-            false => ffi::GFALSE
-        }) }
+        unsafe { ffi::gtk_widget_set_hexpand_set(self.get_widget(), to_gboolean(expand)) }
     }
 
     fn get_vexpand(&self) -> bool {
-        match unsafe { ffi::gtk_widget_get_vexpand(self.get_widget()) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_widget_get_vexpand(self.get_widget())) }
     }
 
     fn set_vexpand(&self, expand: bool) {
-        unsafe { ffi::gtk_widget_set_vexpand(self.get_widget(), match expand {
-            true => ffi::GTRUE,
-            false => ffi::GFALSE
-        }) }
+        unsafe { ffi::gtk_widget_set_vexpand(self.get_widget(), to_gboolean(expand)) }
     }
 
     fn get_vexpand_set(&self) -> bool {
-        match unsafe { ffi::gtk_widget_get_vexpand_set(self.get_widget()) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_widget_get_vexpand_set(self.get_widget())) }
     }
 
     fn set_vexpand_set(&self, expand: bool) {
-        unsafe { ffi::gtk_widget_set_vexpand_set(self.get_widget(), match expand {
-            true => ffi::GTRUE,
-            false => ffi::GFALSE
-        }) }
+        unsafe { ffi::gtk_widget_set_vexpand_set(self.get_widget(), to_gboolean(expand)) }
     }
 
     fn queue_compute_expand(&self) {
@@ -837,10 +667,7 @@ pub trait WidgetTrait: ffi::FFIWidget + gtk::GObjectTrait {
     }
 
     fn compute_expand(&self, orientation: gtk::Orientation) -> bool {
-        match unsafe { ffi::gtk_widget_compute_expand(self.get_widget(), orientation) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_widget_compute_expand(self.get_widget(), orientation)) }
     }
 
     fn init_template(&self) {

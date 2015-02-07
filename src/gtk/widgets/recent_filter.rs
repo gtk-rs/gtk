@@ -14,6 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::{self, ffi};
+use gtk::ffi::to_bool;
 use std::ffi::CString;
 
 #[derive(Copy)]
@@ -57,10 +58,7 @@ impl RecentFilter {
     }
 
     pub fn filter(&self, filter_info: &gtk::RecentFilterInfo) -> bool {
-        match unsafe { ffi::gtk_recent_filter_filter(self.pointer, &filter_info.get_ffi()) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_recent_filter_filter(self.pointer, &filter_info.get_ffi())) }
     }
 
     pub fn wrap(pointer: *mut ffi::C_GtkRecentFilter) -> Option<RecentFilter> {

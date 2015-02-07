@@ -20,6 +20,7 @@ use libc::c_int;
 use gtk::Orientation;
 use gtk::cast::GTK_PANED;
 use gtk::{self, ffi};
+use gtk::ffi::to_gboolean;
 
 /// Paned — A widget with two adjustable panes
 /*
@@ -52,18 +53,16 @@ impl Paned {
     }
 
     pub fn pack1<T: gtk::WidgetTrait>(&mut self, child: &T, resize: bool, schrink: bool) -> () {
-        let r = if resize { ffi::GTRUE } else { ffi::GFALSE };
-        let s = if schrink { ffi::GTRUE } else { ffi::GFALSE };
         unsafe {
-            ffi::gtk_paned_pack1(GTK_PANED(self.pointer), child.get_widget(), r, s);
+            ffi::gtk_paned_pack1(GTK_PANED(self.pointer), child.get_widget(),
+                                 to_gboolean(resize), to_gboolean(schrink));
         }
     }
 
     pub fn pack2<T: gtk::WidgetTrait>(&mut self, child: &T, resize: bool, schrink: bool) -> () {
-        let r = if resize { ffi::GTRUE } else { ffi::GFALSE };
-        let s = if schrink { ffi::GTRUE } else { ffi::GFALSE };
         unsafe {
-            ffi::gtk_paned_pack2(GTK_PANED(self.pointer), child.get_widget(), r, s);
+            ffi::gtk_paned_pack2(GTK_PANED(self.pointer), child.get_widget(),
+                                 to_gboolean(resize), to_gboolean(schrink));
         }
     }
 

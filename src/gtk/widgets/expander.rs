@@ -20,6 +20,7 @@ use std::ffi::CString;
 
 use gtk::cast::GTK_EXPANDER;
 use gtk::{self, ffi};
+use gtk::ffi::{to_bool, to_gboolean};
 use gtk::ffi::FFIWidget;
 
 /// Expander — A container which can hide its child
@@ -44,73 +45,43 @@ impl Expander {
 
 
     pub fn set_expanded(&mut self, expanded: bool) -> () {
-        match expanded {
-            true    => unsafe { ffi::gtk_expander_set_expanded(GTK_EXPANDER(self.pointer), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_expander_set_expanded(GTK_EXPANDER(self.pointer), ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_expander_set_expanded(GTK_EXPANDER(self.pointer), to_gboolean(expanded)); }
     }
 
     pub fn get_expanded(&self) -> bool {
-        match unsafe { ffi::gtk_expander_get_expanded(GTK_EXPANDER(self.pointer)) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_expander_get_expanded(GTK_EXPANDER(self.pointer))) }
     }
 
     pub fn set_use_underline(&mut self, use_underline: bool) -> () {
-        match use_underline {
-            true    => unsafe { ffi::gtk_expander_set_use_underline(GTK_EXPANDER(self.pointer), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_expander_set_use_underline(GTK_EXPANDER(self.pointer), ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_expander_set_use_underline(GTK_EXPANDER(self.pointer), to_gboolean(use_underline)); }
     }
 
     pub fn get_use_underline(&self) -> bool {
-        match unsafe { ffi::gtk_expander_get_use_underline(GTK_EXPANDER(self.pointer)) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_expander_get_use_underline(GTK_EXPANDER(self.pointer))) }
     }
 
     pub fn set_use_markup(&mut self, use_markup: bool) -> () {
-        match use_markup {
-            true    => unsafe { ffi::gtk_expander_set_use_markup(GTK_EXPANDER(self.pointer), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_expander_set_use_markup(GTK_EXPANDER(self.pointer), ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_expander_set_use_markup(GTK_EXPANDER(self.pointer), to_gboolean(use_markup)); }
     }
 
     pub fn get_use_markup(&self) -> bool {
-        match unsafe { ffi::gtk_expander_get_use_markup(GTK_EXPANDER(self.pointer)) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_expander_get_use_markup(GTK_EXPANDER(self.pointer))) }
     }
 
     pub fn set_label_fill(&mut self, label_fill: bool) -> () {
-        match label_fill {
-            true    => unsafe { ffi::gtk_expander_set_label_fill(GTK_EXPANDER(self.pointer), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_expander_set_label_fill(GTK_EXPANDER(self.pointer), ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_expander_set_label_fill(GTK_EXPANDER(self.pointer), to_gboolean(label_fill)); }
     }
 
     pub fn get_label_fill(&self) -> bool {
-        match unsafe { ffi::gtk_expander_get_label_fill(GTK_EXPANDER(self.pointer)) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_expander_get_label_fill(GTK_EXPANDER(self.pointer))) }
     }
 
     pub fn set_resize_toplevel(&mut self, resize_toplevel: bool) -> () {
-        match resize_toplevel {
-            true    => unsafe { ffi::gtk_expander_set_resize_toplevel(GTK_EXPANDER(self.pointer), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_expander_set_resize_toplevel(GTK_EXPANDER(self.pointer), ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_expander_set_resize_toplevel(GTK_EXPANDER(self.pointer), to_gboolean(resize_toplevel)); }
     }
 
     pub fn get_resize_toplevel(&self) -> bool {
-        match unsafe { ffi::gtk_expander_get_resize_toplevel(GTK_EXPANDER(self.pointer)) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_expander_get_resize_toplevel(GTK_EXPANDER(self.pointer))) }
     }
 
     pub fn get_label(&self) -> Option<String> {

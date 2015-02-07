@@ -16,6 +16,7 @@
 //! The base class of widgets that can be added to ToolShe
 
 use gtk::{self, ffi};
+use gtk::ffi::{to_bool, to_gboolean};
 use gtk::cast::GTK_SEPARATORTOOLITEM;
 
 /// ToolItem — The base class of widgets that can be added to ToolShe
@@ -28,17 +29,11 @@ impl SeparatorToolItem {
     }
 
     pub fn set_draw(&mut self, draw: bool) -> () {
-        match draw {
-            true    => unsafe { ffi::gtk_separator_tool_item_set_draw(GTK_SEPARATORTOOLITEM(self.pointer), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_separator_tool_item_set_draw(GTK_SEPARATORTOOLITEM(self.pointer), ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_separator_tool_item_set_draw(GTK_SEPARATORTOOLITEM(self.pointer), to_gboolean(draw)); }
     }
 
     pub fn get_draw(&self) -> bool {
-        match unsafe { ffi::gtk_separator_tool_item_get_draw(GTK_SEPARATORTOOLITEM(self.pointer)) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_separator_tool_item_get_draw(GTK_SEPARATORTOOLITEM(self.pointer))) }
     }
 }
 
