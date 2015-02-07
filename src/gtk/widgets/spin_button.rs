@@ -18,6 +18,7 @@
 use libc::{c_double, c_uint};
 
 use gtk::{self, ffi};
+use gtk::ffi::{to_bool, to_gboolean};
 use gtk::{SpinType, SpinButtonUpdatePolicy};
 use gtk::cast::{GTK_SPINBUTTON};
 
@@ -101,45 +102,27 @@ impl SpinButton {
     }
 
     pub fn set_numeric(&mut self, numeric: bool) -> () {
-        match numeric {
-            true    => unsafe { ffi::gtk_spin_button_set_numeric(GTK_SPINBUTTON(self.pointer), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_spin_button_set_numeric(GTK_SPINBUTTON(self.pointer), ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_spin_button_set_numeric(GTK_SPINBUTTON(self.pointer), to_gboolean(numeric)); }
     }
 
     pub fn get_numeric(&self) -> bool {
-        match unsafe { ffi::gtk_spin_button_get_numeric(GTK_SPINBUTTON(self.pointer)) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_spin_button_get_numeric(GTK_SPINBUTTON(self.pointer))) }
     }
 
     pub fn set_wrap(&mut self, wrap: bool) -> () {
-        match wrap {
-            true    => unsafe { ffi::gtk_spin_button_set_wrap(GTK_SPINBUTTON(self.pointer), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_spin_button_set_wrap(GTK_SPINBUTTON(self.pointer), ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_spin_button_set_wrap(GTK_SPINBUTTON(self.pointer), to_gboolean(wrap)); }
     }
 
     pub fn get_wrap(&self) -> bool {
-        match unsafe { ffi::gtk_spin_button_get_wrap(GTK_SPINBUTTON(self.pointer)) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_spin_button_get_wrap(GTK_SPINBUTTON(self.pointer))) }
     }
 
     pub fn set_snap_to_ticks(&mut self, snap_to_ticks: bool) -> () {
-        match snap_to_ticks {
-            true    => unsafe { ffi::gtk_spin_button_set_snap_to_ticks(GTK_SPINBUTTON(self.pointer), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_spin_button_set_snap_to_ticks(GTK_SPINBUTTON(self.pointer), ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_spin_button_set_snap_to_ticks(GTK_SPINBUTTON(self.pointer), to_gboolean(snap_to_ticks)); }
     }
 
     pub fn get_snap_to_ticks(&self) -> bool {
-        match unsafe { ffi::gtk_spin_button_get_snap_to_ticks(GTK_SPINBUTTON(self.pointer)) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_spin_button_get_snap_to_ticks(GTK_SPINBUTTON(self.pointer))) }
     }
 
     pub fn spin(&mut self, direction: SpinType, increment: f64) -> () {

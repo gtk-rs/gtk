@@ -18,6 +18,7 @@
 use std::ffi::CString;
 use gtk::cast::GTK_COLORBUTTON;
 use gtk::{self, ffi};
+use gtk::ffi::{to_bool, to_gboolean};
 use gdk;
 
 /**
@@ -85,17 +86,11 @@ impl ColorButton {
     }
 
     pub fn set_use_alpha(&mut self, use_alpha: bool) -> () {
-        match use_alpha {
-            true    => unsafe { ffi::gtk_color_button_set_use_alpha(GTK_COLORBUTTON(self.pointer), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_color_button_set_use_alpha(GTK_COLORBUTTON(self.pointer), ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_color_button_set_use_alpha(GTK_COLORBUTTON(self.pointer), to_gboolean(use_alpha)); }
     }
 
     pub fn get_use_alpha(&self) -> bool {
-        match unsafe { ffi::gtk_color_button_get_use_alpha(GTK_COLORBUTTON(self.pointer)) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_color_button_get_use_alpha(GTK_COLORBUTTON(self.pointer))) }
     }
 
     pub fn set_title(&mut self, title: &str) -> () {

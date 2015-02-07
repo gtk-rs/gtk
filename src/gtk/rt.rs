@@ -16,6 +16,7 @@
 use libc::c_uint;
 use std::ptr;
 use gtk::ffi;
+use gtk::ffi::{to_bool, to_gboolean};
 
 pub fn init() {
     unsafe {
@@ -42,19 +43,11 @@ pub fn main_level() -> u32 {
 }
 
 pub fn main_iteration() -> bool {
-    match unsafe { ffi::gtk_main_iteration() } {
-        ffi::GFALSE => false,
-        _           => true
-    }
+    unsafe { to_bool(ffi::gtk_main_iteration()) }
 }
 
 pub fn main_iteration_do(blocking: bool) -> bool {
-    let c_blocking = if blocking { ffi::GTRUE } else { ffi::GFALSE };
-
-    match unsafe { ffi::gtk_main_iteration_do(c_blocking) } {
-        ffi::GFALSE => false,
-        _           => true
-    }
+    unsafe { to_bool(ffi::gtk_main_iteration_do(to_gboolean(blocking))) }
 }
 
 pub fn events_pending() -> bool {

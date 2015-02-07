@@ -15,6 +15,7 @@
 
 use gtk::cast::GTK_TOGGLETOOLBUTTON;
 use gtk::{self, ffi};
+use gtk::ffi::{to_bool, to_gboolean};
 
 pub trait ToggleToolButtonTrait: gtk::WidgetTrait +
                                  gtk::ContainerTrait +
@@ -23,16 +24,10 @@ pub trait ToggleToolButtonTrait: gtk::WidgetTrait +
                                  gtk::ToolButtonTrait {
 
     fn get_active(&self) -> bool {
-        match unsafe { ffi::gtk_toggle_tool_button_get_active(GTK_TOGGLETOOLBUTTON(self.get_widget())) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_toggle_tool_button_get_active(GTK_TOGGLETOOLBUTTON(self.get_widget()))) }
     }
 
     fn set_active(&mut self, set_underline: bool) -> () {
-         match set_underline {
-            true    => unsafe { ffi::gtk_toggle_tool_button_set_active(GTK_TOGGLETOOLBUTTON(self.get_widget()), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_toggle_tool_button_set_active(GTK_TOGGLETOOLBUTTON(self.get_widget()), ffi::GFALSE) }
-        }
+         unsafe { ffi::gtk_toggle_tool_button_set_active(GTK_TOGGLETOOLBUTTON(self.get_widget()), to_gboolean(set_underline)); }
     }
 }

@@ -15,6 +15,7 @@
 
 use std::ffi::CString;
 use gtk::{self, ffi};
+use gtk::ffi::{to_bool, to_gboolean};
 use gtk::cast::GTK_COMBO_BOX;
 
 pub trait ComboBoxTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait {
@@ -83,13 +84,10 @@ pub trait ComboBoxTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait 
     }
 
     fn set_active_id(&self, active_id: &str) -> bool {
-        match unsafe {
+        unsafe {
             let c_str = CString::from_slice(active_id.as_bytes());
 
-            ffi::gtk_combo_box_set_active_id(GTK_COMBO_BOX(self.get_widget()), c_str.as_ptr())
-        } {
-            ffi::GFALSE => false,
-            _ => true
+            to_bool(ffi::gtk_combo_box_set_active_id(GTK_COMBO_BOX(self.get_widget()), c_str.as_ptr()))
         }
     }
 
@@ -116,14 +114,11 @@ pub trait ComboBoxTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait 
     }
 
     fn get_focus_on_click(&self) -> bool {
-        match unsafe { ffi::gtk_combo_box_get_focus_on_click(GTK_COMBO_BOX(self.get_widget())) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_combo_box_get_focus_on_click(GTK_COMBO_BOX(self.get_widget()))) }
     }
 
     fn set_focus_on_click(&self, focus_on_click: bool) {
-        unsafe { ffi::gtk_combo_box_set_focus_on_click(GTK_COMBO_BOX(self.get_widget()), if focus_on_click {ffi::GTRUE} else {ffi::GFALSE}) }
+        unsafe { ffi::gtk_combo_box_set_focus_on_click(GTK_COMBO_BOX(self.get_widget()), to_gboolean(focus_on_click)) }
     }
 
     fn get_button_sensitivity(&self) -> gtk::SensitivityType {
@@ -135,10 +130,7 @@ pub trait ComboBoxTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait 
     }
 
     fn get_has_entry(&self) -> bool {
-        match unsafe { ffi::gtk_combo_box_get_has_entry(GTK_COMBO_BOX(self.get_widget())) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_combo_box_get_has_entry(GTK_COMBO_BOX(self.get_widget()))) }
     }
 
     fn set_entry_text_column(&self, text_column: i32) {
@@ -150,13 +142,10 @@ pub trait ComboBoxTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait 
     }
 
     fn set_popup_fixed_width(&self, fixed: bool) {
-        unsafe { ffi::gtk_combo_box_set_popup_fixed_width(GTK_COMBO_BOX(self.get_widget()), if fixed {ffi::GTRUE} else {ffi::GFALSE}) }
+        unsafe { ffi::gtk_combo_box_set_popup_fixed_width(GTK_COMBO_BOX(self.get_widget()), to_gboolean(fixed)) }
     }
 
     fn get_popup_fixed_width(&self) -> bool {
-        match unsafe { ffi::gtk_combo_box_get_popup_fixed_width(GTK_COMBO_BOX(self.get_widget())) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_combo_box_get_popup_fixed_width(GTK_COMBO_BOX(self.get_widget()))) }
     }
 }

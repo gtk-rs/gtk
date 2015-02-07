@@ -17,6 +17,7 @@
 
 use gtk::cast::GTK_SWITCH;
 use gtk::ffi;
+use gtk::ffi::{to_bool, to_gboolean};
 
 /// Switch — A "light switch" style toggle
 /*
@@ -32,17 +33,11 @@ impl Switch {
     }
 
     pub fn set_active(&mut self, is_active: bool) -> () {
-        match is_active {
-            true    => unsafe { ffi::gtk_switch_set_active(GTK_SWITCH(self.pointer), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_switch_set_active(GTK_SWITCH(self.pointer), ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_switch_set_active(GTK_SWITCH(self.pointer), to_gboolean(is_active)); }
     }
 
     pub fn get_active(&self) -> bool {
-        match unsafe { ffi::gtk_switch_get_active(GTK_SWITCH(self.pointer)) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_switch_get_active(GTK_SWITCH(self.pointer))) }
     }
 }
 

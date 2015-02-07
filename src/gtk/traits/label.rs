@@ -17,6 +17,7 @@ use libc::{c_int, c_double};
 use std::ffi::CString;
 
 use gtk::{self, ffi};
+use gtk::ffi::{to_bool, to_gboolean};
 use gtk::Justification;
 use gtk::cast::GTK_LABEL;
 
@@ -88,17 +89,11 @@ pub trait LabelTrait: gtk::WidgetTrait {
     }
 
     fn set_line_wrap(&mut self, wrap: bool) -> () {
-        match wrap {
-            true    => unsafe { ffi::gtk_label_set_line_wrap(GTK_LABEL(self.get_widget()), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_label_set_line_wrap(GTK_LABEL(self.get_widget()), ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_label_set_line_wrap(GTK_LABEL(self.get_widget()), to_gboolean(wrap)); }
     }
 
     fn get_line_wrap(&self) -> bool {
-        match unsafe { ffi::gtk_label_get_line_wrap(GTK_LABEL(self.get_widget())) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_label_get_line_wrap(GTK_LABEL(self.get_widget()))) }
     }
 
     #[cfg(any(feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
@@ -131,73 +126,43 @@ pub trait LabelTrait: gtk::WidgetTrait {
     }
 
     fn set_selectable(&mut self, selectable: bool) -> () {
-        match selectable {
-            true    => unsafe { ffi::gtk_label_set_selectable(GTK_LABEL(self.get_widget()), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_label_set_selectable(GTK_LABEL(self.get_widget()), ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_label_set_selectable(GTK_LABEL(self.get_widget()), to_gboolean(selectable)); }
     }
 
     fn get_selectable(&self) -> bool {
-        match unsafe { ffi::gtk_label_get_selectable(GTK_LABEL(self.get_widget())) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_label_get_selectable(GTK_LABEL(self.get_widget()))) }
     }
 
     fn set_use_markup(&mut self, use_markup: bool) -> () {
-        match use_markup {
-            true    => unsafe { ffi::gtk_label_set_use_markup(GTK_LABEL(self.get_widget()), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_label_set_use_markup(GTK_LABEL(self.get_widget()), ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_label_set_use_markup(GTK_LABEL(self.get_widget()), to_gboolean(use_markup)); }
     }
 
     fn get_use_markup(&self) -> bool {
-        match unsafe { ffi::gtk_label_get_use_markup(GTK_LABEL(self.get_widget())) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_label_get_use_markup(GTK_LABEL(self.get_widget()))) }
     }
 
     fn set_use_underline(&mut self, use_underline: bool) -> () {
-        match use_underline {
-            true    => unsafe { ffi::gtk_label_set_use_underline(GTK_LABEL(self.get_widget()), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_label_set_use_underline(GTK_LABEL(self.get_widget()), ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_label_set_use_underline(GTK_LABEL(self.get_widget()), to_gboolean(use_underline)); }
     }
 
     fn get_use_underline(&self) -> bool {
-        match unsafe { ffi::gtk_label_get_use_underline(GTK_LABEL(self.get_widget())) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_label_get_use_underline(GTK_LABEL(self.get_widget()))) }
     }
 
     fn set_single_line_mode(&mut self, single_line_mode: bool) -> () {
-        match single_line_mode {
-            true    => unsafe { ffi::gtk_label_set_single_line_mode(GTK_LABEL(self.get_widget()), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_label_set_single_line_mode(GTK_LABEL(self.get_widget()), ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_label_set_single_line_mode(GTK_LABEL(self.get_widget()), to_gboolean(single_line_mode)); }
     }
 
     fn get_single_line_mode(&self) -> bool {
-        match unsafe { ffi::gtk_label_get_single_line_mode(GTK_LABEL(self.get_widget())) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_label_get_single_line_mode(GTK_LABEL(self.get_widget()))) }
     }
 
     fn set_track_visited_links(&mut self, track_visited_links: bool) -> () {
-        match track_visited_links {
-            true    => unsafe { ffi::gtk_label_set_track_visited_links(GTK_LABEL(self.get_widget()), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_label_set_track_visited_links(GTK_LABEL(self.get_widget()), ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_label_set_track_visited_links(GTK_LABEL(self.get_widget()), to_gboolean(track_visited_links)); }
     }
 
     fn get_track_visited_links(&self) -> bool {
-        match unsafe { ffi::gtk_label_get_track_visited_links(GTK_LABEL(self.get_widget())) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_label_get_track_visited_links(GTK_LABEL(self.get_widget()))) }
     }
 
     fn get_text(&self) -> Option<String> {

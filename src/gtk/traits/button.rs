@@ -20,6 +20,7 @@ use std::ffi::{CString};
 use gtk::{ReliefStyle, PositionType};
 use gtk::cast::GTK_BUTTON;
 use gtk::{self, ffi};
+use gtk::ffi::{to_bool, to_gboolean};
 
 pub trait ButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait {
     fn pressed(&self) -> () {
@@ -85,45 +86,27 @@ pub trait ButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait {
     }
 
     fn get_use_stock(&self) -> bool {
-        match unsafe { ffi::gtk_button_get_use_stock(GTK_BUTTON(self.get_widget())) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_button_get_use_stock(GTK_BUTTON(self.get_widget()))) }
     }
 
     fn set_use_stock(&mut self, use_stock: bool) -> () {
-        match use_stock {
-            true    => unsafe { ffi::gtk_button_set_use_stock(GTK_BUTTON(self.get_widget()), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_button_set_use_stock(GTK_BUTTON(self.get_widget()), ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_button_set_use_stock(GTK_BUTTON(self.get_widget()), to_gboolean(use_stock)); }
     }
 
     fn get_use_underline(&self) -> bool {
-        match unsafe { ffi::gtk_button_get_use_underline(GTK_BUTTON(self.get_widget())) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_button_get_use_underline(GTK_BUTTON(self.get_widget()))) }
     }
 
     fn set_use_underline(&mut self, use_underline: bool) -> () {
-        match use_underline {
-            true    => unsafe { ffi::gtk_button_set_use_underline(GTK_BUTTON(self.get_widget()), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_button_set_use_underline(GTK_BUTTON(self.get_widget()), ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_button_set_use_underline(GTK_BUTTON(self.get_widget()), to_gboolean(use_underline)); }
     }
 
     fn set_focus_on_click(&mut self, focus_on_click: bool) -> () {
-        match focus_on_click {
-            true    => unsafe { ffi::gtk_button_set_focus_on_click(GTK_BUTTON(self.get_widget()), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_button_set_focus_on_click(GTK_BUTTON(self.get_widget()), ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_button_set_focus_on_click(GTK_BUTTON(self.get_widget()), to_gboolean(focus_on_click)); }
     }
 
     fn get_focus_on_click(&self) -> bool {
-        match unsafe { ffi::gtk_button_get_focus_on_click(GTK_BUTTON(self.get_widget())) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_button_get_focus_on_click(GTK_BUTTON(self.get_widget()))) }
     }
 
     fn set_alignment(&mut self, x_align: f32, y_align: f32) -> () {
@@ -161,18 +144,12 @@ pub trait ButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait {
 
     #[cfg(any(feature = "GTK_3_6", feature = "GTK_3_8", feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
     fn set_always_show_image(&mut self, always_show: bool) -> () {
-        match always_show {
-            true    => unsafe { ffi::gtk_button_set_always_show_image(GTK_BUTTON(self.get_widget()), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_button_set_always_show_image(GTK_BUTTON(self.get_widget()), ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_button_set_always_show_image(GTK_BUTTON(self.get_widget()), to_gboolean(always_show)); }
     }
 
     #[cfg(any(feature = "GTK_3_6", feature = "GTK_3_8", feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
     fn get_always_show_image(&self) -> bool {
-        match unsafe { ffi::gtk_button_get_always_show_image(GTK_BUTTON(self.get_widget())) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_button_get_always_show_image(GTK_BUTTON(self.get_widget()))) }
     }
 
     fn connect_clicked_signal(&self, handler: Box<ButtonClickedHandler>) {

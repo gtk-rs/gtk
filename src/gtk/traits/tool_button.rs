@@ -16,6 +16,7 @@
 use std::ffi::CString;
 use gtk::cast::GTK_TOOLBUTTON;
 use gtk::{self, ffi};
+use gtk::ffi::{to_bool, to_gboolean};
 
 pub trait ToolButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait + gtk::ToolItemTrait {
     fn set_label(&mut self, label: &str) -> () {
@@ -79,17 +80,11 @@ pub trait ToolButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrai
     }
 
     fn get_use_underline(&self) -> bool {
-        match unsafe { ffi::gtk_tool_button_get_use_underline(GTK_TOOLBUTTON(self.get_widget())) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_tool_button_get_use_underline(GTK_TOOLBUTTON(self.get_widget()))) }
     }
 
     fn set_use_underline(&mut self, set_underline: bool) -> () {
-         match set_underline {
-            true    => unsafe { ffi::gtk_tool_button_set_use_underline(GTK_TOOLBUTTON(self.get_widget()), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_tool_button_set_use_underline(GTK_TOOLBUTTON(self.get_widget()), ffi::GFALSE) }
-        }
+         unsafe { ffi::gtk_tool_button_set_use_underline(GTK_TOOLBUTTON(self.get_widget()), to_gboolean(set_underline)); }
     }
 
     fn set_label_widget<T: gtk::LabelTrait>(&mut self, label: &T) -> () {

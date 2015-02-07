@@ -22,6 +22,7 @@ use libc::{c_int, c_uint};
 use gtk::{PositionType};
 use gtk::cast::GTK_GRID;
 use gtk::{self, ffi};
+use gtk::ffi::{to_bool, to_gboolean};
 
 /// Grid — Pack widgets in a rows and columns
 struct_Widget!(Grid);
@@ -97,17 +98,11 @@ impl Grid {
     }
 
     pub fn set_row_homogeneous(&mut self, homogeneous: bool) -> () {
-        match homogeneous {
-            true    => unsafe { ffi::gtk_grid_set_row_homogeneous(GTK_GRID(self.pointer), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_grid_set_row_homogeneous(GTK_GRID(self.pointer), ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_grid_set_row_homogeneous(GTK_GRID(self.pointer), to_gboolean(homogeneous)); }
     }
 
     pub fn get_row_homogeneous(&self) -> bool {
-        match unsafe { ffi::gtk_grid_get_row_homogeneous(GTK_GRID(self.pointer)) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_grid_get_row_homogeneous(GTK_GRID(self.pointer))) }
     }
 
     pub fn set_row_spacing(&mut self, spacing: u32) -> () {
@@ -123,17 +118,11 @@ impl Grid {
     }
 
     pub fn set_column_homogeneous(&mut self, homogeneous: bool) -> () {
-        match homogeneous {
-            true    => unsafe { ffi::gtk_grid_set_column_homogeneous(GTK_GRID(self.pointer), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_grid_set_column_homogeneous(GTK_GRID(self.pointer), ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_grid_set_column_homogeneous(GTK_GRID(self.pointer), to_gboolean(homogeneous)); }
     }
 
     pub fn get_column_homogeneous(&self) -> bool {
-        match unsafe { ffi::gtk_grid_get_column_homogeneous(GTK_GRID(self.pointer)) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_grid_get_column_homogeneous(GTK_GRID(self.pointer))) }
     }
 
     pub fn set_column_spacing(&mut self, spacing: u32) -> () {

@@ -18,6 +18,7 @@
 use std::ffi::CString;
 use gtk::cast::GTK_LINKBUTTON;
 use gtk::{self, ffi};
+use gtk::ffi::{to_bool, to_gboolean};
 
 /// LinkButton — Create buttons bound to a URL
 /*
@@ -67,17 +68,11 @@ impl LinkButton {
     }
 
     pub fn set_visited(&mut self, visited: bool) -> () {
-        match visited {
-            true    => unsafe { ffi::gtk_link_button_set_visited(GTK_LINKBUTTON(self.pointer), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_link_button_set_visited(GTK_LINKBUTTON(self.pointer), ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_link_button_set_visited(GTK_LINKBUTTON(self.pointer), to_gboolean(visited)); }
     }
 
     pub fn get_visited(&self) -> bool {
-        match unsafe { ffi::gtk_link_button_get_visited(GTK_LINKBUTTON(self.pointer)) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_link_button_get_visited(GTK_LINKBUTTON(self.pointer))) }
     }
 }
 

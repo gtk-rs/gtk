@@ -21,6 +21,7 @@ use std::ffi::CString;
 use gtk::MessageType;
 use gtk::cast::GTK_INFOBAR;
 use gtk::{self, ffi};
+use gtk::ffi::to_gboolean;
 
 /// InfoBar — Report important messages to the user
 struct_Widget!(InfoBar);
@@ -46,10 +47,7 @@ impl InfoBar {
     }
 
     pub fn set_response_sensitive(&mut self, response_id: i32, setting: bool) -> () {
-        match setting {
-            true    => unsafe { ffi::gtk_info_bar_set_response_sensitive(GTK_INFOBAR(self.pointer), response_id as c_int, ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_info_bar_set_response_sensitive(GTK_INFOBAR(self.pointer), response_id as c_int, ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_info_bar_set_response_sensitive(GTK_INFOBAR(self.pointer), response_id as c_int, to_gboolean(setting)); }
     }
 
     pub fn set_default_response(&mut self, response_id: i32) -> () {
@@ -78,18 +76,12 @@ impl InfoBar {
 
     #[cfg(any(feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
     pub fn show_close_button(&mut self, show: bool) -> () {
-         match show {
-            true    => unsafe { ffi::gtk_info_bar_set_show_close_button(GTK_INFOBAR(self.pointer), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_info_bar_set_show_close_button(GTK_INFOBAR(self.pointer), ffi::GFALSE) }
-        }
+         unsafe { ffi::gtk_info_bar_set_show_close_button(GTK_INFOBAR(self.pointer), to_gboolean(show)); }
     }
 
     #[cfg(any(feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
     pub fn get_show_close_button(&self) -> bool {
-        match unsafe { ffi::gtk_info_bar_get_show_close_button(GTK_INFOBAR(self.pointer)) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_info_bar_get_show_close_button(GTK_INFOBAR(self.pointer))) }
     }
 }
 

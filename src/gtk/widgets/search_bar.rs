@@ -16,6 +16,7 @@
 //! A container box
 
 use gtk::{self, ffi};
+use gtk::ffi::{to_bool, to_gboolean};
 use gtk::cast::{GTK_SEARCHBAR, GTK_ENTRY};
 use gtk::ffi::FFIWidget;
 
@@ -35,31 +36,19 @@ impl SearchBar {
     }
 
     pub fn set_search_mode(&mut self, search_mode: bool) -> () {
-        match search_mode {
-            true    => unsafe { ffi::gtk_search_bar_set_search_mode(GTK_SEARCHBAR(self.pointer), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_search_bar_set_search_mode(GTK_SEARCHBAR(self.pointer), ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_search_bar_set_search_mode(GTK_SEARCHBAR(self.pointer), to_gboolean(search_mode)); }
     }
 
     pub fn get_search_mode(&self) -> bool {
-        match unsafe { ffi::gtk_search_bar_get_search_mode(GTK_SEARCHBAR(self.pointer)) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_search_bar_get_search_mode(GTK_SEARCHBAR(self.pointer))) }
     }
 
     pub fn set_show_close_button(&mut self, visible: bool) -> () {
-        match visible {
-            true    => unsafe { ffi::gtk_search_bar_set_show_close_button(GTK_SEARCHBAR(self.pointer), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_search_bar_set_show_close_button(GTK_SEARCHBAR(self.pointer), ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_search_bar_set_show_close_button(GTK_SEARCHBAR(self.pointer), to_gboolean(visible)); }
     }
 
     pub fn get_show_close_button(&self) -> bool {
-        match unsafe { ffi::gtk_search_bar_get_show_close_button(GTK_SEARCHBAR(self.pointer)) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_search_bar_get_show_close_button(GTK_SEARCHBAR(self.pointer))) }
     }
 }
 

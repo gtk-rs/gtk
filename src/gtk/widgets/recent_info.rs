@@ -14,6 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::ffi;
+use gtk::ffi::to_bool;
 use gtk::ffi::FFIWidget;
 use gtk::cast::GTK_RECENT_INFO;
 use std::ffi::CString;
@@ -89,10 +90,7 @@ impl RecentInfo {
     }
 
     pub fn get_private_hint(&self) -> bool {
-        match unsafe { ffi::gtk_recent_info_get_private_hint(GTK_RECENT_INFO(self.get_widget())) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_recent_info_get_private_hint(GTK_RECENT_INFO(self.get_widget()))) }
     }
 
     pub fn set_name(&self, app_name: &str) -> (bool, String, u32, i64) {
@@ -101,11 +99,8 @@ impl RecentInfo {
         let mut time_ = 0i64;
         let c_str = CString::from_slice(app_name.as_bytes());
 
-        let ret = match unsafe {
-            ffi::gtk_recent_info_get_application_info(GTK_RECENT_INFO(self.get_widget()), c_str.as_ptr(), &app_exec, &mut count, &mut time_)
-        } {
-            ffi::GFALSE => false,
-            _ => true
+        let ret = unsafe {
+            to_bool(ffi::gtk_recent_info_get_application_info(GTK_RECENT_INFO(self.get_widget()), c_str.as_ptr(), &app_exec, &mut count, &mut time_))
         };
 
         if app_exec.is_null() {
@@ -142,13 +137,10 @@ impl RecentInfo {
     }
 
     pub fn has_application(&self, app_name: &str) -> bool {
-        match unsafe {
+        unsafe {
             let c_str = CString::from_slice(app_name.as_bytes());
 
-            ffi::gtk_recent_info_has_application(GTK_RECENT_INFO(self.get_widget()), c_str.as_ptr())
-        } {
-            ffi::GFALSE => false,
-            _ => true
+            to_bool(ffi::gtk_recent_info_has_application(GTK_RECENT_INFO(self.get_widget()), c_str.as_ptr()))
         }
     }
 
@@ -172,12 +164,7 @@ impl RecentInfo {
         let c_str = CString::from_slice(group_name.as_bytes());
 
         unsafe {
-            match {
-                ffi::gtk_recent_info_has_group(GTK_RECENT_INFO(self.get_widget()), c_str.as_ptr())
-            } {
-                ffi::GFALSE => false,
-                _ => true
-            }
+            to_bool(ffi::gtk_recent_info_has_group(GTK_RECENT_INFO(self.get_widget()), c_str.as_ptr()))
         }
     }
 
@@ -206,24 +193,15 @@ impl RecentInfo {
     }
 
     pub fn is_local(&self) -> bool {
-        match unsafe { ffi::gtk_recent_info_is_local(GTK_RECENT_INFO(self.get_widget())) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_recent_info_is_local(GTK_RECENT_INFO(self.get_widget()))) }
     }
 
     pub fn exists(&self) -> bool {
-        match unsafe { ffi::gtk_recent_info_exists(GTK_RECENT_INFO(self.get_widget())) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_recent_info_exists(GTK_RECENT_INFO(self.get_widget()))) }
     }
 
     pub fn _match(&self, other: &RecentInfo) -> bool {
-        match unsafe { ffi::gtk_recent_info_match(GTK_RECENT_INFO(self.get_widget()), GTK_RECENT_INFO(other.get_widget())) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_recent_info_match(GTK_RECENT_INFO(self.get_widget()), GTK_RECENT_INFO(other.get_widget()))) }
     }
 }
 

@@ -21,6 +21,7 @@ use std::ffi::CString;
 use gtk::{Orientation, PositionType};
 use gtk::cast::GTK_SCALE;
 use gtk::{self, ffi};
+use gtk::ffi::{to_bool, to_gboolean};
 
 /// Scale — A slider widget for selecting a value from a range
 /*
@@ -51,31 +52,19 @@ impl Scale {
     }
 
     pub fn set_draw_value(&mut self, draw_value: bool) -> () {
-        match draw_value {
-            true    => unsafe { ffi::gtk_scale_set_draw_value(GTK_SCALE(self.pointer), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_scale_set_draw_value(GTK_SCALE(self.pointer), ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_scale_set_draw_value(GTK_SCALE(self.pointer), to_gboolean(draw_value)); }
     }
 
     pub fn get_draw_value(&self) -> bool {
-        match unsafe { ffi::gtk_scale_get_draw_value(GTK_SCALE(self.pointer)) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_scale_get_draw_value(GTK_SCALE(self.pointer))) }
     }
 
     pub fn set_has_origin(&mut self, has_origin: bool) -> () {
-        match has_origin {
-            true    => unsafe { ffi::gtk_scale_set_has_origin(GTK_SCALE(self.pointer), ffi::GTRUE) },
-            false   => unsafe { ffi::gtk_scale_set_has_origin(GTK_SCALE(self.pointer), ffi::GFALSE) }
-        }
+        unsafe { ffi::gtk_scale_set_has_origin(GTK_SCALE(self.pointer), to_gboolean(has_origin)); }
     }
 
     pub fn get_has_origin(&self) -> bool {
-        match unsafe { ffi::gtk_scale_get_has_origin(GTK_SCALE(self.pointer)) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_scale_get_has_origin(GTK_SCALE(self.pointer))) }
     }
 
     pub fn set_value_pos(&mut self, position: PositionType) -> () {

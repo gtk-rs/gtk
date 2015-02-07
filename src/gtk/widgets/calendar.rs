@@ -20,6 +20,7 @@ use libc::{c_uint, c_int};
 use gtk::CalendarDisplayOptions;
 use gtk::cast::GTK_CALENDAR;
 use gtk::ffi;
+use gtk::ffi::to_bool;
 
 /**
 * Calendar — Displays a calendar and allows the user to select a date
@@ -66,10 +67,7 @@ impl Calendar {
     }
 
     pub fn get_day_is_marked(&self, day: u32) -> bool {
-        match unsafe { ffi::gtk_calendar_get_day_is_marked(GTK_CALENDAR(self.pointer), day as c_uint) } {
-            ffi::GFALSE => false,
-            _           => true
-        }
+        unsafe { to_bool(ffi::gtk_calendar_get_day_is_marked(GTK_CALENDAR(self.pointer), day as c_uint)) }
     }
 
     pub fn clear_marks(&mut self) -> () {

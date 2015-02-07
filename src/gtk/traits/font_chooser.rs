@@ -16,6 +16,7 @@
 use std::ffi::CString;
 use gtk::cast::{GTK_FONT_CHOOSER};
 use gtk::{self, ffi};
+use gtk::ffi::{to_bool, to_gboolean};
 use gtk::ffi::FFIWidget;
 use libc::c_char;
 
@@ -63,18 +64,12 @@ pub trait FontChooserTrait: gtk::WidgetTrait {
     }
 
     fn get_show_preview_entry(&self) -> bool {
-        match unsafe { ffi::gtk_font_chooser_get_show_preview_entry(GTK_FONT_CHOOSER(self.get_widget())) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_font_chooser_get_show_preview_entry(GTK_FONT_CHOOSER(self.get_widget()))) }
     }
 
     fn set_show_preview_entry(&self, show_preview_entry: bool) {
         unsafe { ffi::gtk_font_chooser_set_show_preview_entry(GTK_FONT_CHOOSER(self.get_widget()),
-                                                              match show_preview_entry {
-                                                                  true => ffi::GTRUE,
-                                                                  false => ffi::GFALSE
-                                                              });
+                                                              to_gboolean(show_preview_entry));
         }
     }
 }

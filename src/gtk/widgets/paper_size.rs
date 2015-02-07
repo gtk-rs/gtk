@@ -14,6 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::{self, ffi};
+use gtk::ffi::{to_bool, to_gboolean};
 use gtk::ffi::FFIWidget;
 use gtk::cast::{GTK_PAPER_SIZE};
 use glib;
@@ -76,17 +77,11 @@ impl PaperSize {
     }
 
     pub fn is_equal(&self, other: &PaperSize) -> bool {
-        match unsafe { ffi::gtk_paper_size_is_equal(GTK_PAPER_SIZE(self.get_widget()), GTK_PAPER_SIZE(other.get_widget())) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_paper_size_is_equal(GTK_PAPER_SIZE(self.get_widget()), GTK_PAPER_SIZE(other.get_widget()))) }
     }
 
     pub fn get_paper_sizes(include_custom: bool) -> glib::List<Box<PaperSize>> {
-        let tmp = unsafe { ffi::gtk_paper_size_get_paper_sizes(match include_custom {
-                true => ffi::GTRUE,
-                false => ffi::GFALSE
-            })
+        let tmp = unsafe { ffi::gtk_paper_size_get_paper_sizes(to_gboolean(include_custom))
         };
 
         if tmp.is_null() {
@@ -141,10 +136,7 @@ impl PaperSize {
     }
 
     pub fn is_custom(&self) -> bool {
-        match unsafe { ffi::gtk_paper_size_is_custom(GTK_PAPER_SIZE(self.get_widget())) } {
-            ffi::GFALSE => false,
-            _ => true
-        }
+        unsafe { to_bool(ffi::gtk_paper_size_is_custom(GTK_PAPER_SIZE(self.get_widget()))) }
     }
 
     pub fn set_size(&self, width: f64, height: f64, unit: gtk::Unit) {
