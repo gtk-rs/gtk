@@ -13,24 +13,19 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-#![feature(slicing_syntax)]
-#![feature(path)]
-#![feature(os)]
-#![feature(io)]
-#![feature(collections)]
+#![feature(slicing_syntax, env, path, io, collections)]
 
 extern crate gcc;
 extern crate "pkg-config" as pkg_config;
 
 use std::old_io::process::Command;
-use std::path::Path;
-use std::os;
 use gcc::Config;
+use std::env;
 
 fn main() {
-    let out_dir = os::getenv("OUT_DIR").unwrap();
+    let out_dir = env::var("OUT_DIR").unwrap();
 
-    os::setenv("PKG_CONFIG_ALLOW_CROSS", "1");
+    env::set_var("PKG_CONFIG_ALLOW_CROSS", "1");
 
     // try to find gtk+-3.0 library
     match pkg_config::find_library("gtk+-3.0") {
@@ -64,5 +59,5 @@ fn main() {
     gcc::compile_library("librgtk_glue.a", &gcc_conf, &["./gtk_glue/gtk_glue.c"]);
 
     // say to cargo where it is
-    println!("cargo:rustc-flags=-L {} -l rgtk_glue:static", out_dir);
+    println!("cargo:rustc-flags=-L {:?} -l rgtk_glue:static", out_dir);
 }
