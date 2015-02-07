@@ -27,7 +27,7 @@ fn main() {
         adjustment.set_value(spin_button.get_value());
     }));
 
-    Connect::connect(&slider, ValueChanged::new(&mut |&mut:| {
+    Connect::connect(&slider, ValueChanged::new(&mut |_| {
         let adjustment = slider.get_adjustment();
 
         spin_button.set_value(adjustment.get_value());
@@ -39,7 +39,7 @@ fn main() {
     hbox.add(&spin_button);
     hbox.add(&slider);
 
-    Connect::connect(&window, DeleteEvent::new(&mut |&mut: _| {
+    Connect::connect(&window, DeleteEvent::new(&mut |_| {
         gtk::main_quit();
         true
     }));

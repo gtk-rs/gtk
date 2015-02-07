@@ -19,7 +19,7 @@ fn main() {
     window.set_window_position(gtk::WindowPosition::Center);
     window.set_default_size(350, 70);
 
-    Connect::connect(&window, DeleteEvent::new(&mut |&mut: _| {
+    Connect::connect(&window, DeleteEvent::new(&mut |_| {
         gtk::main_quit();
         true
     }));
