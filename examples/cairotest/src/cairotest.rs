@@ -98,7 +98,7 @@ pub fn drawable<T>(width: i32, height: i32, draw_fn: &mut T) where T: FnMut(cair
 
     window.set_default_size(width, height);
 
-    Connect::connect(&window, DeleteEvent::new(&mut |&mut:_|{
+    Connect::connect(&window, DeleteEvent::new(&mut |_|{
         gtk::main_quit();
         true
     }));
