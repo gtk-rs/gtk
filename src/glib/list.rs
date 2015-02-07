@@ -119,7 +119,7 @@ impl<T> List<T> {
         }
     }
 
-    pub fn extend<It: Iterator<Item=T>>(&mut self, mut it: It) {
+    pub fn extend<It: Iterator<Item=T>>(&mut self, it: It) {
         for elem in it {
             self.append(elem);
         }
