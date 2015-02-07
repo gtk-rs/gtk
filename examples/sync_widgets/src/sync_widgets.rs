@@ -27,7 +27,7 @@ fn main() {
         adjustment.set_value(spin_button.get_value());
     }));
 
-    Connect::connect(&slider, ValueChanged::new(&mut |_| {
+    Connect::connect(&slider, ValueChanged::new(&mut |&:| {
         let adjustment = slider.get_adjustment();
 
         spin_button.set_value(adjustment.get_value());
