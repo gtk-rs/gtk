@@ -21,7 +21,7 @@ use std::ffi::CString;
 use gtk::MessageType;
 use gtk::cast::GTK_INFOBAR;
 use gtk::{self, ffi};
-use gtk::ffi::to_gboolean;
+use gtk::ffi::{to_bool, to_gboolean};
 
 /// InfoBar — Report important messages to the user
 struct_Widget!(InfoBar);
