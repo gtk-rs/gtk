@@ -48,15 +48,14 @@ fn main() {
     }).collect();
 
     // build include path
-    let gcc_conf = Config {
-        include_directories: paths,
-        definitions: vec!(),
-        objects: vec!(),
-	flags: vec!()
-    };
+    let mut gcc_conf = Config::new();
+    for path in paths {
+        gcc_conf.include(path);
+    }
+    gcc_conf.file("./gtk_glue/gtk_glue.c");
 
     // build library
-    gcc::compile_library("librgtk_glue.a", &gcc_conf, &["./gtk_glue/gtk_glue.c"]);
+    gcc_conf.compile("librgtk_glue.a");
 
     // say to cargo where it is
     println!("cargo:rustc-flags=-L {:?} -l rgtk_glue:static", out_dir);
