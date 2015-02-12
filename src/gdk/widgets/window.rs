@@ -324,7 +324,7 @@ impl Window {
         unsafe { ffi::gdk_window_get_scale_factor(self.pointer) }
     }
 
-    pub fn begin_paint_rect(&self, rect: &gdk::Rectangle) {
+    pub fn begin_paint_rect(&self, rect: &ffi::C_GdkRectangle) {
         unsafe { ffi::gdk_window_begin_paint_rect(self.pointer, rect) }
     }
 
@@ -332,7 +332,7 @@ impl Window {
         unsafe { ffi::gdk_window_end_paint(self.pointer) }
     }
 
-    pub fn invalidate_rect(&self, rect: &gdk::Rectangle, invalidate_children: bool) {
+    pub fn invalidate_rect(&self, rect: &ffi::C_GdkRectangle, invalidate_children: bool) {
         unsafe { ffi::gdk_window_invalidate_rect(self.pointer, rect, gtk::ffi::to_gboolean(invalidate_children)) }
     }
 
@@ -418,7 +418,7 @@ impl Window {
         }
     }
 
-    pub fn set_background_rgba(&self, rgba: &gdk::RGBA) {
+    pub fn set_background_rgba(&self, rgba: &ffi::C_GdkRGBA) {
         unsafe { ffi::gdk_window_set_background_rgba(self.pointer, rgba) }
     }
 
@@ -450,7 +450,7 @@ impl Window {
             height as *mut c_int) }
     }
 
-    pub fn set_geometry_hints(&self, geometry: &gdk::Geometry, geom_mask: gdk::WindowHints) {
+    pub fn set_geometry_hints(&self, geometry: &ffi::C_GdkGeometry, geom_mask: gdk::WindowHints) {
         unsafe { ffi::gdk_window_set_geometry_hints(self.pointer, geometry, geom_mask) }
     }
 
@@ -503,7 +503,7 @@ impl Window {
         unsafe { ffi::gdk_window_get_root_origin(self.pointer, x as *mut c_int, y as *mut c_int) }
     }
 
-    pub fn get_frame_extents(&self, rect: &mut gdk::Rectangle) {
+    pub fn get_frame_extents(&self, rect: &mut ffi::C_GdkRectangle) {
         unsafe { ffi::gdk_window_get_frame_extents(self.pointer, rect) }
     }
 

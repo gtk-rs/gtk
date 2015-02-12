@@ -15,28 +15,28 @@
 
 //! RGBA Colors — RGBA colors
 
-use gdk::ffi;
+use gdk_ffi as ffi;
+use gdk_ffi::C_GdkRGBA;
 use gtk;
 use std::ffi::CString;
 use libc::{c_char, c_void};
 
-/// The GdkRGBA structure is used to represent a (possibly translucent) color, in a way that is compatible with cairos notion of color.
-#[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
-pub struct RGBA {
-    /// The intensity of the red channel from 0.0 to 1.0 inclusive
-    pub red: f64,
-    /// The intensity of the green channel from 0.0 to 1.0 inclusive
-    pub green: f64,
-    /// The intensity of the blue channel from 0.0 to 1.0 inclusive
-    pub blue: f64,
-    /// The opacity of the color from 0.0 for completely translucent to 1.0 for opaque
-    pub alpha: f64
+pub trait RGBA {
+    fn white() -> C_GdkRGBA;
+    fn blue() -> C_GdkRGBA;
+    fn green() -> C_GdkRGBA;
+    fn red() -> C_GdkRGBA;
+    fn black() -> C_GdkRGBA;
+    fn copy(&self) -> C_GdkRGBA;
+    fn parse(&mut self, spec: &str) -> bool;
+    fn equal(&self, other: &C_GdkRGBA) -> bool;
+    fn hash(&self) -> u32;
+    fn to_string(&self) -> Option<String>;
 }
 
-impl RGBA {
-    pub fn white() -> RGBA {
-        RGBA {
+impl RGBA for C_GdkRGBA {
+    fn white() -> C_GdkRGBA {
+        C_GdkRGBA {
             red: 1f64,
             green: 1f64,
             blue: 1f64,
@@ -44,8 +44,8 @@ impl RGBA {
         }
     }
 
-    pub fn blue() -> RGBA {
-        RGBA {
+    fn blue() -> C_GdkRGBA {
+        C_GdkRGBA {
             red: 0f64,
             green: 0f64,
             blue: 1f64,
@@ -53,8 +53,8 @@ impl RGBA {
         }
     }
 
-    pub fn green() -> RGBA {
-        RGBA {
+    fn green() -> C_GdkRGBA {
+        C_GdkRGBA {
             red: 0f64,
             green: 1f64,
             blue: 0f64,
@@ -62,8 +62,8 @@ impl RGBA {
         }
     }
 
-    pub fn red() -> RGBA {
-        RGBA {
+    fn red() -> C_GdkRGBA {
+        C_GdkRGBA {
             red: 1f64,
             green: 0f64,
             blue: 0f64,
@@ -71,8 +71,8 @@ impl RGBA {
         }
     }
 
-    pub fn black() -> RGBA {
-        RGBA {
+    fn black() -> C_GdkRGBA {
+        C_GdkRGBA {
             red: 0f64,
             green: 0f64,
             blue: 0f64,
@@ -80,8 +80,8 @@ impl RGBA {
         }
     }
 
-    pub fn copy(&self) -> RGBA {
-        RGBA {
+    fn copy(&self) -> C_GdkRGBA {
+        C_GdkRGBA {
             red: self.red,
             green: self.green,
             blue: self.blue,
@@ -89,7 +89,7 @@ impl RGBA {
         }
     }
 
-    pub fn parse(&mut self, spec: &str) -> bool {
+    fn parse(&mut self, spec: &str) -> bool {
         unsafe {
             let c_str = CString::from_slice(spec.as_bytes());
 
@@ -97,15 +97,15 @@ impl RGBA {
         }
     }
 
-    pub fn equal(&self, other: &RGBA) -> bool {
+    fn equal(&self, other: &C_GdkRGBA) -> bool {
         unsafe { gtk::ffi::to_bool(ffi::gdk_rgba_equal(self, other)) }
     }
 
-    pub fn hash(&self) -> u32 {
+    fn hash(&self) -> u32 {
         unsafe { ffi::gdk_rgba_hash(self) }
     }
 
-    pub fn to_string(&self) -> Option<String> {
+    fn to_string(&self) -> Option<String> {
         let tmp = unsafe { ffi::gdk_rgba_to_string(self) as *const c_char };
 
         if tmp.is_null() {

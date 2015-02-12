@@ -17,6 +17,7 @@ use gdk;
 use libc::c_void;
 use std::mem;
 
+use gdk_ffi as ffi;
 pub use self::event_type::EventType;
 pub use self::owner_change::OwnerChange;
 pub use self::setting_action::SettingAction;
@@ -99,7 +100,7 @@ pub struct EventExpose {
     pub window : *mut gdk::Window,
     send_event : i8,
 
-    pub area : gdk::Rectangle,
+    pub area : ffi::C_GdkRectangle,
     pub region : *mut c_void, //TODO cairo_region_t
     pub count : i8 /* If non-zero, how many more events follow. */
 }

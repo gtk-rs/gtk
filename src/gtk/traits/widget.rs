@@ -18,6 +18,7 @@ use std::ffi::CString;
 use gtk::ffi;
 use gtk::ffi::{to_bool, to_gboolean};
 use gdk;
+use gdk_ffi;
 use gtk;
 use glib;
 use glib::ffi::GType;
@@ -184,21 +185,21 @@ pub trait WidgetTrait: ffi::FFIWidget + gtk::GObjectTrait {
         }
     }
 
-    fn override_background_color(&self, state: gtk::StateFlags, color: &gdk::RGBA) {
+    fn override_background_color(&self, state: gtk::StateFlags, color: &gdk_ffi::C_GdkRGBA) {
         unsafe { ffi::gtk_widget_override_background_color(self.get_widget(), state, color) }
     }
 
-    fn override_color(&self, state: gtk::StateFlags, color: &gdk::RGBA) {
+    fn override_color(&self, state: gtk::StateFlags, color: &gdk_ffi::C_GdkRGBA) {
         unsafe { ffi::gtk_widget_override_color(self.get_widget(), state, color) }
     }
 
-    fn override_symbolic_color(&self, name: &str, color: &gdk::RGBA) {
+    fn override_symbolic_color(&self, name: &str, color: &gdk_ffi::C_GdkRGBA) {
         let c_str = CString::from_slice(name.as_bytes());
 
         unsafe { ffi::gtk_widget_override_symbolic_color(self.get_widget(), c_str.as_ptr(), color); }
     }
 
-    fn override_cursor(&self, cursor: &gdk::RGBA, secondary_cursor: &gdk::RGBA) {
+    fn override_cursor(&self, cursor: &gdk_ffi::C_GdkRGBA, secondary_cursor: &gdk_ffi::C_GdkRGBA) {
         unsafe { ffi::gtk_widget_override_cursor(self.get_widget(), cursor, secondary_cursor) }
     }
 

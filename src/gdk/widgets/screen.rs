@@ -125,11 +125,11 @@ impl Screen {
         unsafe { ffi::gdk_screen_get_primary_monitor(self.pointer) }
     }
 
-    pub fn get_monitor_geometry(&self, monitor_num: i32, dest: &mut gdk::Rectangle) {
+    pub fn get_monitor_geometry(&self, monitor_num: i32, dest: &mut ffi::C_GdkRectangle) {
         unsafe { ffi::gdk_screen_get_monitor_geometry(self.pointer, monitor_num as c_int, dest) }
     }
 
-    pub fn get_monitor_workarea(&self, monitor_num: i32, dest: &mut gdk::Rectangle) {
+    pub fn get_monitor_workarea(&self, monitor_num: i32, dest: &mut ffi::C_GdkRectangle) {
         unsafe { ffi::gdk_screen_get_monitor_workarea(self.pointer, monitor_num as c_int, dest) }
     }
 

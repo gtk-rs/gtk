@@ -16,9 +16,18 @@
 #![allow(non_camel_case_types)]
 #![allow(dead_code)]
 
+#![feature(libc)]
+#![feature(hash)]
+#![feature(rustc_private)]
+
+extern crate libc;
+#[macro_use] extern crate rustc_bitflags;
+extern crate "glib-sys" as glib_ffi;
+
+pub mod enums;
+
 use libc::{c_int, c_char, c_double, c_void, c_uint, c_uchar, c_ulong};
-use gtk::ffi::{Gboolean};
-use gdk;
+use glib_ffi::Gboolean;
 
 #[repr(C)]
 #[derive(Copy)]
@@ -40,19 +49,70 @@ pub struct C_GdkVisual;
 pub struct C_GdkEvent;
 #[repr(C)]
 #[derive(Copy)]
-pub struct C_GdkRectangle;
+pub struct C_GdkRectangle { // FIXME should be just an alias to cairo_rectangle_int_t
+    pub x: c_int,
+    pub y: c_int,
+    pub width: c_int,
+    pub height: c_int
+}
 #[repr(C)]
 #[derive(Copy)]
 pub struct C_GdkFrameClock;
+/// The Color structure is used to describe a color, similar to the XColor struct used in the X11 drawing API.
+#[repr(C)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
+pub struct C_GdkColor {
+    /// For allocated colors, the pixel value used to draw this color on the screen. Not used anymore.
+    pub pixel:  u32,
+    /// The red component of the color. This is a value between 0 and 65535, with 65535 indicating full intensity
+    pub red:    u16,
+    /// The green component of the color
+    pub green:  u16,
+    /// The blue component of the color
+    pub blue:   u16
+}
+/// The GdkRGBA structure is used to represent a (possibly translucent) color, in a way that is compatible with cairos notion of color.
 #[repr(C)]
 #[derive(Copy)]
-pub struct C_GdkRGBA;
+pub struct C_GdkRGBA {
+    /// The intensity of the red channel from 0.0 to 1.0 inclusive
+    pub red: f64,
+    /// The intensity of the green channel from 0.0 to 1.0 inclusive
+    pub green: f64,
+    /// The intensity of the blue channel from 0.0 to 1.0 inclusive
+    pub blue: f64,
+    /// The opacity of the color from 0.0 for completely translucent to 1.0 for opaque
+    pub alpha: f64
+}
 #[repr(C)]
 #[derive(Copy)]
 pub struct C_GdkCursor;
 #[repr(C)]
 #[derive(Copy)]
-pub struct C_GdkGeometry;
+pub struct C_GdkGeometry {
+    /// minimum width of window (or -1 to use requisition, with GtkWindow only)
+    pub min_width: c_int,
+    /// minimum height of window (or -1 to use requisition, with GtkWindow only)
+    pub min_height: c_int,
+    /// maximum width of window (or -1 to use requisition, with GtkWindow only)
+    pub max_width: c_int,
+    /// maximum height of window (or -1 to use requisition, with GtkWindow only)
+    pub max_height: c_int,
+    /// allowed window widths are base_width + width_inc * N where N is any integer (-1 allowed with GtkWindow)
+    pub base_width: c_int,
+    /// allowed window widths are base_height + height_inc * N where N is any integer (-1 allowed with GtkWindow)
+    pub base_height: c_int,
+    /// width resize increment
+    pub width_inc: c_int,
+    /// height resize increment
+    pub height_inc: c_int,
+    /// minimum width/height ratio
+    pub min_aspect: f64,
+    /// maximum width/height ratio
+    pub max_aspect: f64,
+    /// window gravity, see gtk_window_set_gravity()
+    pub win_gravity: enums::Gravity,
+}
 #[repr(C)]
 #[derive(Copy)]
 pub struct C_GdkDevice;
@@ -81,14 +141,14 @@ pub struct C_GdkWindowAttr {
     pub y: c_int,
     pub width: c_int,
     pub height: c_int,
-    pub wclass: gdk::WindowWindowClass,
+    pub wclass: enums::WindowWindowClass,
     pub visual: *mut C_GdkVisual,
-    pub window_type: gdk::WindowType,
+    pub window_type: enums::WindowType,
     pub cursor: *mut C_GdkCursor,
     pub wmclass_name: *mut c_char,
     pub wmclass_class: *mut c_char,
     pub override_redirect: Gboolean,
-    pub type_hint: gdk::WindowTypeHint
+    pub type_hint: enums::WindowTypeHint
 }
 #[repr(C)]
 #[derive(Copy)]
@@ -124,7 +184,7 @@ extern "C" {
     pub fn gdk_window_new                (parent: *mut C_GdkWindow, attributes: *mut C_GdkWindowAttr,
         attributes_mask: c_int) -> *mut C_GdkWindow;
     pub fn gdk_window_destroy            (window: *mut C_GdkWindow);
-    pub fn gdk_window_get_window_type    (window: *mut C_GdkWindow) -> gdk::WindowType;
+    pub fn gdk_window_get_window_type    (window: *mut C_GdkWindow) -> enums::WindowType;
     pub fn gdk_window_get_display        (window: *mut C_GdkWindow) -> *mut C_GdkDisplay;
     pub fn gdk_window_get_screen         (window: *mut C_GdkWindow) -> *mut C_GdkScreen;
     pub fn gdk_window_get_visual         (window: *mut C_GdkWindow) -> *mut C_GdkVisual;
@@ -136,7 +196,7 @@ extern "C" {
     pub fn gdk_window_is_viewable        (window: *mut C_GdkWindow) -> Gboolean;
     pub fn gdk_window_is_input_only      (window: *mut C_GdkWindow) -> Gboolean;
     pub fn gdk_window_is_shaped          (window: *mut C_GdkWindow) -> Gboolean;
-    pub fn gdk_window_get_state          (window: *mut C_GdkWindow) -> gdk::WindowState;
+    pub fn gdk_window_get_state          (window: *mut C_GdkWindow) -> enums::WindowState;
     pub fn gdk_window_withdraw           (window: *mut C_GdkWindow);
     pub fn gdk_window_iconify            (window: *mut C_GdkWindow);
     pub fn gdk_window_deiconify          (window: *mut C_GdkWindow);
@@ -146,8 +206,8 @@ extern "C" {
     pub fn gdk_window_unmaximize         (window: *mut C_GdkWindow);
     pub fn gdk_window_fullscreen         (window: *mut C_GdkWindow);
     pub fn gdk_window_unfullscreen       (window: *mut C_GdkWindow);
-    pub fn gdk_window_get_fullscreen_mode(window: *mut C_GdkWindow) -> gdk::FullscreenMode;
-    pub fn gdk_window_set_fullscreen_mode(window: *mut C_GdkWindow, mode: gdk::FullscreenMode);
+    pub fn gdk_window_get_fullscreen_mode(window: *mut C_GdkWindow) -> enums::FullscreenMode;
+    pub fn gdk_window_set_fullscreen_mode(window: *mut C_GdkWindow, mode: enums::FullscreenMode);
     pub fn gdk_window_set_keep_above     (window: *mut C_GdkWindow, setting: Gboolean);
     pub fn gdk_window_set_keep_below     (window: *mut C_GdkWindow, setting: Gboolean);
     pub fn gdk_window_set_opacity        (window: *mut C_GdkWindow, opacity: c_double);
@@ -166,26 +226,26 @@ extern "C" {
     pub fn gdk_window_restack            (window: *mut C_GdkWindow, sibling: *mut C_GdkWindow, above: Gboolean);
     pub fn gdk_window_focus              (window: *mut C_GdkWindow, timestamp: u32);
     pub fn gdk_window_register_dnd       (window: *mut C_GdkWindow);
-    pub fn gdk_window_begin_resize_drag  (window: *mut C_GdkWindow, edge: gdk::WindowEdge, button: c_int, root_x: c_int, root_y: c_int,
+    pub fn gdk_window_begin_resize_drag  (window: *mut C_GdkWindow, edge: enums::WindowEdge, button: c_int, root_x: c_int, root_y: c_int,
         timestamp: u32);
-    pub fn gdk_window_begin_resize_drag_for_device(window: *mut C_GdkWindow, edge: gdk::WindowEdge, device: *mut C_GdkDevice,
+    pub fn gdk_window_begin_resize_drag_for_device(window: *mut C_GdkWindow, edge: enums::WindowEdge, device: *mut C_GdkDevice,
         button: c_int, root_x: c_int, root_y: c_int, timestamp: u32);
     pub fn gdk_window_begin_move_drag    (window: *mut C_GdkWindow, button: c_int, root_x: c_int, root_y: c_int, timestamp: u32);
     pub fn gdk_window_begin_move_drag_for_device(window: *mut C_GdkWindow, device: *mut C_GdkDevice, button: c_int, root_x: c_int,
         root_y: c_int, timestamp: u32);
     pub fn gdk_window_show_window_menu   (window: *mut C_GdkWindow, event: *mut C_GdkEvent);
-    pub fn gdk_window_constrain_size     (window: *mut C_GdkWindow, flags: gdk::WindowHints, width: c_int, height: c_int,
+    pub fn gdk_window_constrain_size     (window: *mut C_GdkWindow, flags: enums::WindowHints, width: c_int, height: c_int,
         new_width: *mut c_int, new_height: *mut c_int);
     pub fn gdk_window_beep               (window: *mut C_GdkWindow);
     pub fn gdk_window_get_scale_factor   (window: *mut C_GdkWindow) -> c_int;
     //pub fn gdk_window_set_opaque_region  (window: *mut C_GdkWindow, region: *mut cairo_region_t);
     //pub fn gdk_window_get_clip_region    (window: *mut C_GdkWindow) -> *mut cairo_region_t;
-    pub fn gdk_window_begin_paint_rect   (window: *mut C_GdkWindow, rectangle: *const gdk::Rectangle);
+    pub fn gdk_window_begin_paint_rect   (window: *mut C_GdkWindow, rectangle: *const C_GdkRectangle);
     //pub fn gdk_window_begin_paint_region (window: *mut C_GdkWindow, region: *const cairo_region_t);
     pub fn gdk_window_end_paint          (window: *mut C_GdkWindow);
     //pub fn gdk_window_get_visible_region (window: *mut C_GdkWindow) -> *mut cairo_region_t;
     //pub fn gdk_window_set_invalidate_handler(window: *mut C_GdkWindow, handler: GdkWindowInvalidateHandlerFunc);
-    pub fn gdk_window_invalidate_rect    (window: *mut C_GdkWindow, rectangle: *const gdk::Rectangle, invalidate_children: Gboolean);
+    pub fn gdk_window_invalidate_rect    (window: *mut C_GdkWindow, rectangle: *const C_GdkRectangle, invalidate_children: Gboolean);
     //pub fn gdk_window_invalidate_region  (window: *mut C_GdkWindow, region: *const cairo_region_t, invalidate_children: Gboolean);
     //pub fn gdk_window_invalidate_maybe_recurse(window: *mut C_GdkWindow, region: *const cairo_region_t, child_func: GdkWindowChildFunc,
     //    user_data: *mut c_void);
@@ -214,59 +274,59 @@ extern "C" {
     pub fn gdk_window_merge_child_input_shapes(window: *mut C_GdkWindow);
     pub fn gdk_window_set_static_gravities(window: *mut C_GdkWindow, use_static: Gboolean) -> Gboolean;
     pub fn gdk_window_set_title          (window: *mut C_GdkWindow, title: *const c_char);
-    pub fn gdk_window_set_background_rgba(window: *mut C_GdkWindow, rgba: *const gdk::RGBA);
+    pub fn gdk_window_set_background_rgba(window: *mut C_GdkWindow, rgba: *const C_GdkRGBA);
     //pub fn gdk_window_set_background_pattern(window: *mut C_GdkWindow, pattern: *const cairo_pattern_t);
     //pub fn gdk_window_get_background_pattern(window: *mut C_GdkWindow) -> *const cairo_pattern_t;
     pub fn gdk_window_set_cursor         (window: *mut C_GdkWindow, cursor: *mut C_GdkCursor);
     pub fn gdk_window_get_cursor         (window: *mut C_GdkWindow) -> *mut C_GdkCursor;
     pub fn gdk_window_get_user_data      (window: *mut C_GdkWindow, data: *mut *mut c_void);
     pub fn gdk_window_get_geometry       (window: *mut C_GdkWindow, x: *mut c_int, y: *mut c_int, width: *mut c_int, height: *mut c_int);
-    pub fn gdk_window_set_geometry_hints (window: *mut C_GdkWindow, geometry: *const gdk::Geometry, geom_mask: gdk::WindowHints);
+    pub fn gdk_window_set_geometry_hints (window: *mut C_GdkWindow, geometry: *const C_GdkGeometry, geom_mask: enums::WindowHints);
     pub fn gdk_window_get_width          (window: *mut C_GdkWindow) -> c_int;
     pub fn gdk_window_get_height         (window: *mut C_GdkWindow) -> c_int;
     //pub fn gdk_window_set_icon_list      (window: *mut C_GdkWindow, pixbufs: *mut GList);
     pub fn gdk_window_set_modal_hint     (window: *mut C_GdkWindow, modal: Gboolean);
     pub fn gdk_window_get_modal_hint     (window: *mut C_GdkWindow) -> Gboolean;
-    pub fn gdk_window_set_type_hint      (window: *mut C_GdkWindow, hint: gdk::WindowTypeHint);
-    pub fn gdk_window_get_type_hint      (window: *mut C_GdkWindow) -> gdk::WindowTypeHint;
+    pub fn gdk_window_set_type_hint      (window: *mut C_GdkWindow, hint: enums::WindowTypeHint);
+    pub fn gdk_window_get_type_hint      (window: *mut C_GdkWindow) -> enums::WindowTypeHint;
     pub fn gdk_window_set_shadow_width   (window: *mut C_GdkWindow, left: c_int, right: c_int, top: c_int, bottom: c_int);
     pub fn gdk_window_set_skip_taskbar_hint(window: *mut C_GdkWindow, skips_taskbar: Gboolean);
     pub fn gdk_window_set_skip_pager_hint(window: *mut C_GdkWindow, skips_pager: Gboolean);
     pub fn gdk_window_set_urgency_hint   (window: *mut C_GdkWindow, urgent: Gboolean);
     pub fn gdk_window_get_position       (window: *mut C_GdkWindow, x: *mut c_int, y: *mut c_int);
     pub fn gdk_window_get_root_origin    (window: *mut C_GdkWindow, x: *mut c_int, y: *mut c_int);
-    pub fn gdk_window_get_frame_extents  (window: *mut C_GdkWindow, rect: *mut gdk::Rectangle);
+    pub fn gdk_window_get_frame_extents  (window: *mut C_GdkWindow, rect: *mut C_GdkRectangle);
     pub fn gdk_window_get_origin         (window: *mut C_GdkWindow, x: *mut c_int, y: *mut c_int);
     pub fn gdk_window_get_root_coords    (window: *mut C_GdkWindow, x: c_int, y: c_int, root_x: *mut c_int, root_y: *mut c_int);
     pub fn gdk_window_get_device_position(window: *mut C_GdkWindow, device: *mut C_GdkDevice, x: *mut c_int, y: *mut c_int,
-        mask: *mut gdk::ModifierType) -> *mut C_GdkWindow;
+        mask: *mut enums::modifier_type::ModifierType) -> *mut C_GdkWindow;
     pub fn gdk_window_get_device_position_double(window: *mut C_GdkWindow, device: *mut C_GdkDevice, x: *mut c_double, y: *mut c_double,
-        mask: *mut gdk::ModifierType) -> *mut C_GdkWindow;
+        mask: *mut enums::modifier_type::ModifierType) -> *mut C_GdkWindow;
     pub fn gdk_window_get_parent         (window: *mut C_GdkWindow) -> *mut C_GdkWindow;
     pub fn gdk_window_get_toplevel       (window: *mut C_GdkWindow) -> *mut C_GdkWindow;
     //pub fn gdk_window_get_children       (window: *mut C_GdkWindow) -> *mut GList;
     //pub fn gdk_window_get_children_with_user_data(window: *mut C_GdkWindow, user_data: *mut c_void) -> *mut GList;
     //pub fn gdk_window_peek_children      (window: *mut C_GdkWindow) -> *mut GList;
-    pub fn gdk_window_get_events         (window: *mut C_GdkWindow) -> gdk::EventMask;
-    pub fn gdk_window_set_events         (window: *mut C_GdkWindow, event_mask: gdk::EventMask);
+    pub fn gdk_window_get_events         (window: *mut C_GdkWindow) -> enums::EventMask;
+    pub fn gdk_window_set_events         (window: *mut C_GdkWindow, event_mask: enums::EventMask);
     pub fn gdk_window_set_icon_name      (window: *mut C_GdkWindow, name: *const c_char);
     pub fn gdk_window_set_transient_for  (window: *mut C_GdkWindow, parent: *mut C_GdkWindow);
     pub fn gdk_window_set_role           (window: *mut C_GdkWindow, role: *const c_char);
     pub fn gdk_window_set_startup_id     (window: *mut C_GdkWindow, startup_id: *const c_char);
     pub fn gdk_window_set_group          (window: *mut C_GdkWindow, leader: *mut C_GdkWindow);
     pub fn gdk_window_get_group          (window: *mut C_GdkWindow) -> *mut C_GdkWindow;
-    pub fn gdk_window_set_decorations    (window: *mut C_GdkWindow, decorations: gdk::WMDecoration);
-    pub fn gdk_window_get_decorations    (window: *mut C_GdkWindow, decorations: *mut gdk::WMDecoration) -> Gboolean;
-    pub fn gdk_window_set_functions      (window: *mut C_GdkWindow, functions: gdk::WMFunction);
+    pub fn gdk_window_set_decorations    (window: *mut C_GdkWindow, decorations: enums::WMDecoration);
+    pub fn gdk_window_get_decorations    (window: *mut C_GdkWindow, decorations: *mut enums::WMDecoration) -> Gboolean;
+    pub fn gdk_window_set_functions      (window: *mut C_GdkWindow, functions: enums::WMFunction);
     pub fn gdk_get_default_root_window   () -> *mut C_GdkWindow;
     pub fn gdk_window_get_support_multidevice(window: *mut C_GdkWindow) -> Gboolean;
     pub fn gdk_window_set_support_multidevice(window: *mut C_GdkWindow, support_multidevice: Gboolean);
     pub fn gdk_window_get_device_cursor  (window: *mut C_GdkWindow, device: *mut C_GdkDevice) -> *mut C_GdkCursor;
     pub fn gdk_window_set_device_cursor  (window: *mut C_GdkWindow, device: *mut C_GdkDevice, cursor: *mut C_GdkCursor);
-    pub fn gdk_window_get_device_events  (window: *mut C_GdkWindow, device: *mut C_GdkDevice) -> gdk::EventMask;
-    pub fn gdk_window_set_device_events  (window: *mut C_GdkWindow, device: *mut C_GdkDevice, event_mask: gdk::EventMask);
-    pub fn gdk_window_get_source_events  (window: *mut C_GdkWindow, source: gdk::InputSource) -> gdk::EventMask;
-    pub fn gdk_window_set_source_events  (window: *mut C_GdkWindow, source: gdk::InputSource, event_mask: gdk::EventMask);
+    pub fn gdk_window_get_device_events  (window: *mut C_GdkWindow, device: *mut C_GdkDevice) -> enums::EventMask;
+    pub fn gdk_window_set_device_events  (window: *mut C_GdkWindow, device: *mut C_GdkDevice, event_mask: enums::EventMask);
+    pub fn gdk_window_get_source_events  (window: *mut C_GdkWindow, source: enums::InputSource) -> enums::EventMask;
+    pub fn gdk_window_set_source_events  (window: *mut C_GdkWindow, source: enums::InputSource, event_mask: enums::EventMask);
     pub fn gdk_window_get_event_compression(window: *mut C_GdkWindow) -> Gboolean;
     pub fn gdk_window_set_event_compression(window: *mut C_GdkWindow, event_compression: Gboolean);
     //pub fn gdk_offscreen_window_get_surface(window: *mut C_GdkWindow) -> *mut cairo_surface_t;
@@ -289,27 +349,27 @@ extern "C" {
     // GdkDevice                                                         NOT OK
     //=========================================================================
     pub fn gdk_device_get_name             (device: *mut C_GdkDevice) -> *const c_char;
-    pub fn gdk_device_get_source           (device: *mut C_GdkDevice) -> gdk::InputSource;
-    pub fn gdk_device_set_mode             (device: *mut C_GdkDevice, mode: gdk::InputMode);
-    pub fn gdk_device_get_mode             (device: *mut C_GdkDevice) -> gdk::InputMode;
-    pub fn gdk_device_set_key              (device: *mut C_GdkDevice, index_: c_uint, keyval: c_uint, modifiers: gdk::ModifierType);
+    pub fn gdk_device_get_source           (device: *mut C_GdkDevice) -> enums::InputSource;
+    pub fn gdk_device_set_mode             (device: *mut C_GdkDevice, mode: enums::InputMode);
+    pub fn gdk_device_get_mode             (device: *mut C_GdkDevice) -> enums::InputMode;
+    pub fn gdk_device_set_key              (device: *mut C_GdkDevice, index_: c_uint, keyval: c_uint, modifiers: enums::modifier_type::ModifierType);
     pub fn gdk_device_get_key              (device: *mut C_GdkDevice, index_: c_uint, keyval: *mut c_uint,
-        modifiers: *mut gdk::ModifierType) -> Gboolean;
-    pub fn gdk_device_set_axis_use         (device: *mut C_GdkDevice, index_: c_uint, use_: gdk::AxisUse);
-    pub fn gdk_device_get_axis_use         (device: *mut C_GdkDevice, index_: c_uint) -> gdk::AxisUse;
+        modifiers: *mut enums::modifier_type::ModifierType) -> Gboolean;
+    pub fn gdk_device_set_axis_use         (device: *mut C_GdkDevice, index_: c_uint, use_: enums::AxisUse);
+    pub fn gdk_device_get_axis_use         (device: *mut C_GdkDevice, index_: c_uint) -> enums::AxisUse;
     pub fn gdk_device_get_associated_device(device: *mut C_GdkDevice) -> *mut C_GdkDevice;
     //pub fn gdk_device_list_slave_devices   (device: *mut C_GdkDevice) -> *mut GList;
-    pub fn gdk_device_get_device_type      (device: *mut C_GdkDevice) -> gdk::DeviceType;
+    pub fn gdk_device_get_device_type      (device: *mut C_GdkDevice) -> enums::DeviceType;
     pub fn gdk_device_get_display          (device: *mut C_GdkDevice) -> *mut C_GdkDisplay;
     pub fn gdk_device_get_has_cursor       (device: *mut C_GdkDevice) -> Gboolean;
     pub fn gdk_device_get_n_axes           (device: *mut C_GdkDevice) -> c_int;
     pub fn gdk_device_get_n_keys           (device: *mut C_GdkDevice) -> c_int;
     pub fn gdk_device_warp                 (device: *mut C_GdkDevice, screen: *mut C_GdkScreen, x: c_int, y: c_int);
-    pub fn gdk_device_grab                 (device: *mut C_GdkDevice, window: *mut C_GdkWindow, grab_ownership: gdk::GrabOwnership,
-        owner_events: Gboolean, event_mask: gdk::EventMask, cursor: *mut C_GdkCursor, time_: u32) -> gdk::GrabStatus;
+    pub fn gdk_device_grab                 (device: *mut C_GdkDevice, window: *mut C_GdkWindow, grab_ownership: enums::GrabOwnership,
+        owner_events: Gboolean, event_mask: enums::EventMask, cursor: *mut C_GdkCursor, time_: u32) -> enums::GrabStatus;
     pub fn gdk_device_ungrab               (device: *mut C_GdkDevice, time_: u32);
     pub fn gdk_device_get_state            (device: *mut C_GdkDevice, window: *mut C_GdkWindow, axes: *mut c_double,
-        mask: *mut gdk::ModifierType);
+        mask: *mut enums::modifier_type::ModifierType);
     pub fn gdk_device_get_position         (device: *mut C_GdkDevice, screen: *mut *mut C_GdkScreen, x: *mut c_int, y: *mut c_int);
     pub fn gdk_device_get_position_double  (device: *mut C_GdkDevice, screen: *mut *mut C_GdkScreen, x: *mut c_double, y: *mut c_double);
     pub fn gdk_device_get_window_at_position(device: *mut C_GdkDevice, win_x: *mut c_int, win_y: *mut c_int) -> *mut C_GdkWindow;
@@ -318,7 +378,7 @@ extern "C" {
     pub fn gdk_device_get_history          (device: *mut C_GdkDevice, window: *mut C_GdkWindow, start: u32, stop: u32,
         events: *mut *mut *mut C_GdkTimeCoord, n_events: *mut c_int);
     pub fn gdk_device_free_history         (events: *mut *mut C_GdkTimeCoord, n_events: c_int);
-    pub fn gdk_device_get_axis             (device: *mut C_GdkDevice, axes: *mut c_double, use_: gdk::AxisUse,
+    pub fn gdk_device_get_axis             (device: *mut C_GdkDevice, axes: *mut c_double, use_: enums::AxisUse,
         value: *mut c_double) -> Gboolean;
     //pub fn gdk_device_list_axes            (device: *mut C_GdkDevice) -> *mut GList;
     pub fn gdk_device_get_axis_value       (device: *mut C_GdkDevice, axes: *mut c_double, use_: C_GdkAtom,
@@ -330,7 +390,7 @@ extern "C" {
     //=========================================================================
     pub fn gdk_disable_multidevice         ();
     pub fn gdk_device_manager_get_display  (device_manager: *mut C_GdkDeviceManager) -> *mut C_GdkDisplay;
-    //pub fn gdk_device_manager_list_devices (device_manager: *mut C_GdkDeviceManager, type_: gdk::DeviceType) -> *mut GList;
+    //pub fn gdk_device_manager_list_devices (device_manager: *mut C_GdkDeviceManager, type_: enums::DeviceType) -> *mut GList;
     pub fn gdk_device_manager_get_client_pointer(device_manager: *mut C_GdkDeviceManager) -> *mut C_GdkDevice;
 
     //=========================================================================
@@ -398,8 +458,8 @@ extern "C" {
     pub fn gdk_screen_make_display_name       (screen: *mut C_GdkScreen) -> *mut c_char;
     pub fn gdk_screen_get_n_monitors          (screen: *mut C_GdkScreen) -> c_int;
     pub fn gdk_screen_get_primary_monitor     (screen: *mut C_GdkScreen) -> c_int;
-    pub fn gdk_screen_get_monitor_geometry    (screen: *mut C_GdkScreen, monitor_num: c_int, dest: *mut gdk::Rectangle);
-    pub fn gdk_screen_get_monitor_workarea    (screen: *mut C_GdkScreen, monitor_num: c_int, dest: *mut gdk::Rectangle);
+    pub fn gdk_screen_get_monitor_geometry    (screen: *mut C_GdkScreen, monitor_num: c_int, dest: *mut C_GdkRectangle);
+    pub fn gdk_screen_get_monitor_workarea    (screen: *mut C_GdkScreen, monitor_num: c_int, dest: *mut C_GdkRectangle);
     pub fn gdk_screen_get_monitor_at_point    (screen: *mut C_GdkScreen, x: c_int, y: c_int) -> c_int;
     pub fn gdk_screen_get_monitor_at_window   (screen: *mut C_GdkScreen, window: *mut C_GdkWindow) -> c_int;
     pub fn gdk_screen_get_monitor_height_mm   (screen: *mut C_GdkScreen, monitor_num: c_int) -> c_int;
@@ -440,21 +500,21 @@ extern "C" {
     //=========================================================================
     // GdkCursor                                                         NOT OK
     //=========================================================================
-    pub fn gdk_cursor_new                     (cursor_type: gdk::CursorType) -> *mut C_GdkCursor;
+    pub fn gdk_cursor_new                     (cursor_type: enums::CursorType) -> *mut C_GdkCursor;
     pub fn gdk_cursor_new_from_pixbuf         (display: *mut C_GdkDisplay, pixbuf: *mut C_GdkPixbuf, x: c_int, y: c_int) -> *mut C_GdkCursor;
     //pub fn gdk_cursor_new_from_surface        (display: *mut C_GdkDisplay, surface: *mut cairo_surface_t, x: c_double,
     //    y: c_double) -> *mut C_GdkCursor;
     pub fn gdk_cursor_new_from_name           (display: *mut C_GdkDisplay, name: *const c_char) -> *mut C_GdkCursor;
-    pub fn gdk_cursor_new_for_display         (display: *mut C_GdkDisplay, cursor_type: gdk::CursorType) -> *mut C_GdkCursor;
+    pub fn gdk_cursor_new_for_display         (display: *mut C_GdkDisplay, cursor_type: enums::CursorType) -> *mut C_GdkCursor;
     pub fn gdk_cursor_get_display             (cursor: *mut C_GdkCursor) -> *mut C_GdkDisplay;
     pub fn gdk_cursor_get_image               (cursor: *mut C_GdkCursor) -> *mut C_GdkPixbuf;
     //pub fn gdk_cursor_get_surface             (cursor: *mut C_GdkCursor, x_hot: *mut c_double, y_hot: *mut c_double) -> *mut cairo_surface_t;
-    pub fn gdk_cursor_get_cursor_type         (cursor: *mut C_GdkCursor) -> gdk::CursorType;
+    pub fn gdk_cursor_get_cursor_type         (cursor: *mut C_GdkCursor) -> enums::CursorType;
 
     //=========================================================================
     // GdkPixbuf                                                         NOT OK
     //=========================================================================
-    pub fn gdk_pixbuf_get_colorspace          (pixbuf: *const C_GdkPixbuf) -> gdk::ColorSpace;
+    pub fn gdk_pixbuf_get_colorspace          (pixbuf: *const C_GdkPixbuf) -> enums::ColorSpace;
     pub fn gdk_pixbuf_get_n_channels          (pixbuf: *const C_GdkPixbuf) -> c_int;
     pub fn gdk_pixbuf_get_has_alpha           (pixbuf: *const C_GdkPixbuf) -> Gboolean;
     pub fn gdk_pixbuf_get_bits_per_sample     (pixbuf: *const C_GdkPixbuf) -> c_int;
@@ -469,25 +529,25 @@ extern "C" {
     //=========================================================================
     // GdkRectangle                                                      NOT OK
     //=========================================================================
-    pub fn gdk_rectangle_intersect            (src1: *const gdk::Rectangle, src2: *const gdk::Rectangle,
-        dest: *mut gdk::Rectangle) -> Gboolean;
-    pub fn gdk_rectangle_union                (src1: *const gdk::Rectangle, src2: *const gdk::Rectangle, dest: *mut gdk::Rectangle);
+    pub fn gdk_rectangle_intersect            (src1: *const C_GdkRectangle, src2: *const C_GdkRectangle,
+        dest: *mut C_GdkRectangle) -> Gboolean;
+    pub fn gdk_rectangle_union                (src1: *const C_GdkRectangle, src2: *const C_GdkRectangle, dest: *mut C_GdkRectangle);
 
     //=========================================================================
     // GdkRGBA                                                           NOT OK
     //=========================================================================
-    //pub fn gdk_rgba_copy                      (rgba: *const gdk::RGBA) -> *mut gdk::RGBA;
-    //pub fn gdk_rgba_free                      (rgba: *mut gdk::RGBA);
-    pub fn gdk_rgba_parse                       (rgba: *mut gdk::RGBA, spec: *const c_char) -> Gboolean;
-    pub fn gdk_rgba_equal                       (p1: *const gdk::RGBA, p2: *const gdk::RGBA) -> Gboolean;
-    pub fn gdk_rgba_hash                        (p: *const gdk::RGBA) -> c_uint;
-    pub fn gdk_rgba_to_string                   (rgba: *const gdk::RGBA) -> *mut c_char;
+    //pub fn gdk_rgba_copy                      (rgba: *const C_GdkRGBA) -> *mut C_GdkRGBA;
+    //pub fn gdk_rgba_free                      (rgba: *mut C_GdkRGBA);
+    pub fn gdk_rgba_parse                       (rgba: *mut C_GdkRGBA, spec: *const c_char) -> Gboolean;
+    pub fn gdk_rgba_equal                       (p1: *const C_GdkRGBA, p2: *const C_GdkRGBA) -> Gboolean;
+    pub fn gdk_rgba_hash                        (p: *const C_GdkRGBA) -> c_uint;
+    pub fn gdk_rgba_to_string                   (rgba: *const C_GdkRGBA) -> *mut c_char;
 
     //=========================================================================
     // GdkFrameClock                                                     NOT OK
     //=========================================================================
     pub fn gdk_frame_clock_get_frame_time       (frame_clock: *mut C_GdkFrameClock) -> i64;
-    pub fn gdk_frame_clock_request_phase        (frame_clock: *mut C_GdkFrameClock, phase: gdk::FrameClockPhase);
+    pub fn gdk_frame_clock_request_phase        (frame_clock: *mut C_GdkFrameClock, phase: enums::FrameClockPhase);
     pub fn gdk_frame_clock_begin_updating       (frame_clock: *mut C_GdkFrameClock);
     pub fn gdk_frame_clock_end_updating         (frame_clock: *mut C_GdkFrameClock);
     pub fn gdk_frame_clock_get_frame_counter    (frame_clock: *mut C_GdkFrameClock) -> i64;
@@ -529,7 +589,7 @@ extern "C" {
     //    length: c_ulong, pdelete: c_int, actual_property_type: *mut C_GdkAtom, actual_format: *mut c_int, actual_length: *mut c_int,
     //    data: *mut *mut c_uchar) -> Gboolean;
     //pub fn gdk_property_change                     (window: *mut C_GdkWindow, property: C_GdkAtom, type_: C_GdkAtom, format: c_int,
-    //    mode: gdk::PropMode, data: *const c_uchar, nelements: c_int);
+    //    mode: enums::PropMode, data: *const c_uchar, nelements: c_int);
     //pub fn gdk_property_delete                     (window: *mut C_GdkWindow, property: C_GdkAtom);
 
     //=========================================================================
@@ -540,26 +600,26 @@ extern "C" {
     pub fn gdk_drop_reply                          (context: *mut C_GdkDragContext, accepted: Gboolean, time_: u32);
     pub fn gdk_drag_drop                           (context: *mut C_GdkDragContext, time_: u32);
     pub fn gdk_drag_find_window_for_screen         (context: *mut C_GdkDragContext, drag_window: *mut C_GdkWindow, screen: *mut C_GdkScreen,
-        x_root: c_int, y_root: c_int, dest_window: *mut *mut C_GdkWindow, protocol: *mut gdk::DragProtocol);
+        x_root: c_int, y_root: c_int, dest_window: *mut *mut C_GdkWindow, protocol: *mut enums::DragProtocol);
     //pub fn gdk_drag_begin                          (window: *mut C_GdkWindow, targets: *mut GList) -> *mut C_GdkDragContext;
     //pub fn gdk_drag_begin_for_device               (window: *mut C_GdkWindow, device: *mut C_GdkDevice,
     //    targets: *mut GList) -> *mut C_GdkDragContext;
-    pub fn gdk_drag_motion                         (context: *mut C_GdkDragContext, dest_window: *mut C_GdkWindow, protocol: gdk::DragProtocol,
-        x_root: c_int, y_root: c_int, suggested_action: gdk::DragAction, possible_actions: gdk::DragAction,
+    pub fn gdk_drag_motion                         (context: *mut C_GdkDragContext, dest_window: *mut C_GdkWindow, protocol: enums::DragProtocol,
+        x_root: c_int, y_root: c_int, suggested_action: enums::DragAction, possible_actions: enums::DragAction,
         time_: u32) -> Gboolean;
     pub fn gdk_drop_finish                         (context: *mut C_GdkDragContext, success: Gboolean, time_: u32);
-    pub fn gdk_drag_status                         (context: *mut C_GdkDragContext, action: gdk::DragAction, time_: u32);
+    pub fn gdk_drag_status                         (context: *mut C_GdkDragContext, action: enums::DragAction, time_: u32);
     pub fn gdk_drag_drop_succeeded                 (context: *mut C_GdkDragContext) -> Gboolean;
-    pub fn gdk_window_get_drag_protocol            (window: *mut C_GdkWindow, target: *mut *mut C_GdkWindow) -> gdk::DragProtocol;
-    pub fn gdk_drag_context_get_actions            (context: *mut C_GdkDragContext) -> gdk::DragAction;
-    pub fn gdk_drag_context_get_suggested_action   (context: *mut C_GdkDragContext) -> gdk::DragAction;
-    pub fn gdk_drag_context_get_selected_action    (context: *mut C_GdkDragContext) -> gdk::DragAction;
+    pub fn gdk_window_get_drag_protocol            (window: *mut C_GdkWindow, target: *mut *mut C_GdkWindow) -> enums::DragProtocol;
+    pub fn gdk_drag_context_get_actions            (context: *mut C_GdkDragContext) -> enums::DragAction;
+    pub fn gdk_drag_context_get_suggested_action   (context: *mut C_GdkDragContext) -> enums::DragAction;
+    pub fn gdk_drag_context_get_selected_action    (context: *mut C_GdkDragContext) -> enums::DragAction;
     //pub fn gdk_drag_context_list_targets           (context: *mut C_GdkDragContext) -> *mut GList;
     pub fn gdk_drag_context_get_device             (context: *mut C_GdkDragContext) -> *mut C_GdkDevice;
     pub fn gdk_drag_context_set_device             (context: *mut C_GdkDragContext, device: *mut C_GdkDevice);
     pub fn gdk_drag_context_get_source_window      (context: *mut C_GdkDragContext) -> *mut C_GdkWindow;
     pub fn gdk_drag_context_get_dest_window        (context: *mut C_GdkDragContext) -> *mut C_GdkWindow;
-    pub fn gdk_drag_context_get_protocol           (context: *mut C_GdkDragContext) -> gdk::DragProtocol;
+    pub fn gdk_drag_context_get_protocol           (context: *mut C_GdkDragContext) -> enums::DragProtocol;
 
     //=========================================================================
     // GdkAppLaunchContext                                               NOT OK

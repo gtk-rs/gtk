@@ -23,6 +23,7 @@ use gdk;
 use gtk;
 use glib;
 use glib::GType;
+use gdk_ffi;
 
 pub type Gboolean = c_int;
 //pub type C_GtkAllocation = C_GdkRectangle;
@@ -703,11 +704,11 @@ extern "C" {
     pub fn gtk_widget_get_default_direction    () -> gtk::TextDirection;
     //pub fn gtk_widget_shape_combine_region     (widget: *mut C_GtkWidget, region: *mut cairo_region_t);
     //pub fn gtk_widget_input_shape_combine_region(widget: *mut C_GtkWidget, region: *mut cairo_region_t);
-    pub fn gtk_widget_override_background_color(widget: *mut C_GtkWidget, state: gtk::StateFlags, color: *const gdk::RGBA);
-    pub fn gtk_widget_override_color           (widget: *mut C_GtkWidget, state: gtk::StateFlags, color: *const gdk::RGBA);
+    pub fn gtk_widget_override_background_color(widget: *mut C_GtkWidget, state: gtk::StateFlags, color: *const gdk_ffi::C_GdkRGBA);
+    pub fn gtk_widget_override_color           (widget: *mut C_GtkWidget, state: gtk::StateFlags, color: *const gdk_ffi::C_GdkRGBA);
     //pub fn gtk_widget_override_font            (widget: *mut C_GtkWidget, font_desc: *const PangoFontDescription);
-    pub fn gtk_widget_override_symbolic_color  (widget: *mut C_GtkWidget, name: *const c_char, color: *const gdk::RGBA);
-    pub fn gtk_widget_override_cursor          (widget: *mut C_GtkWidget, cursor: *const gdk::RGBA, secondary_cursor: *const gdk::RGBA);
+    pub fn gtk_widget_override_symbolic_color  (widget: *mut C_GtkWidget, name: *const c_char, color: *const gdk_ffi::C_GdkRGBA);
+    pub fn gtk_widget_override_cursor          (widget: *mut C_GtkWidget, cursor: *const gdk_ffi::C_GdkRGBA, secondary_cursor: *const gdk_ffi::C_GdkRGBA);
     //pub fn gtk_widget_create_pango_context     (widget: *mut C_GtkWidget) -> *mut PangoContext;
     //pub fn gtk_widget_get_pango_context        (widget: *mut C_GtkWidget) -> *mut PangoContext;
     //pub fn gtk_widget_create_pango_layout      (widget: *mut C_GtkWidget, name: *const c_char) -> *mut PangoLayout;
@@ -1701,11 +1702,11 @@ extern "C" {
     //=========================================================================
     // GtkColorChooser                                                       OK
     //=========================================================================
-    pub fn gtk_color_chooser_get_rgba          (chooser: *mut C_GtkColorChooser, color: *const gdk::RGBA) -> ();
-    pub fn gtk_color_chooser_set_rgba          (chooser: *mut C_GtkColorChooser, color: *const gdk::RGBA) -> ();
+    pub fn gtk_color_chooser_get_rgba          (chooser: *mut C_GtkColorChooser, color: *const gdk_ffi::C_GdkRGBA) -> ();
+    pub fn gtk_color_chooser_set_rgba          (chooser: *mut C_GtkColorChooser, color: *const gdk_ffi::C_GdkRGBA) -> ();
     pub fn gtk_color_chooser_get_use_alpha     (chooser: *mut C_GtkColorChooser) -> Gboolean;
     pub fn gtk_color_chooser_set_use_alpha     (chooser: *mut C_GtkColorChooser, use_alpha: Gboolean) -> ();
-    pub fn gtk_color_chooser_add_palette       (chooser: *mut C_GtkColorChooser, orientation: gtk::Orientation, colors_per_line: i32, n_colors: i32, colors: *const gdk::RGBA) -> ();
+    pub fn gtk_color_chooser_add_palette       (chooser: *mut C_GtkColorChooser, orientation: gtk::Orientation, colors_per_line: i32, n_colors: i32, colors: *const gdk_ffi::C_GdkRGBA) -> ();
 
     //=========================================================================
     // GtkColorChooserDialog                                                 OK
@@ -1990,13 +1991,13 @@ extern "C" {
     //=========================================================================
     pub fn gtk_color_button_new                () -> *mut C_GtkWidget;
     pub fn gtk_color_button_new_with_color     (color: *const gdk::Color) -> *mut C_GtkWidget;
-    pub fn gtk_color_button_new_with_rgba      (rgba: *const gdk::RGBA) -> *mut C_GtkWidget;
+    pub fn gtk_color_button_new_with_rgba      (rgba: *const gdk_ffi::C_GdkRGBA) -> *mut C_GtkWidget;
     pub fn gtk_color_button_set_color          (button: *mut C_GtkColorButton, color: *const gdk::Color) -> ();
     pub fn gtk_color_button_get_color          (button: *mut C_GtkColorButton, color: *const gdk::Color) -> ();
     pub fn gtk_color_button_set_alpha          (button: *mut C_GtkColorButton, alpha: u16) -> ();
     pub fn gtk_color_button_get_alpha          (button: *mut C_GtkColorButton) -> u16;
-    pub fn gtk_color_button_set_rgba           (button: *mut C_GtkColorButton, rgba: *const gdk::RGBA) -> ();
-    pub fn gtk_color_button_get_rgba           (button: *mut C_GtkColorButton, rgba: *const gdk::RGBA) -> ();
+    pub fn gtk_color_button_set_rgba           (button: *mut C_GtkColorButton, rgba: *const gdk_ffi::C_GdkRGBA) -> ();
+    pub fn gtk_color_button_get_rgba           (button: *mut C_GtkColorButton, rgba: *const gdk_ffi::C_GdkRGBA) -> ();
     pub fn gtk_color_button_set_use_alpha      (button: *mut C_GtkColorButton, use_alpha: Gboolean) -> ();
     pub fn gtk_color_button_get_use_alpha      (button: *mut C_GtkColorButton) -> Gboolean;
     pub fn gtk_color_button_set_title          (button: *mut C_GtkColorButton, title: *const c_char) -> ();

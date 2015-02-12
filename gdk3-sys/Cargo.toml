@@ -1,0 +1,17 @@
+[package]
+name = "gdk3-sys"
+version = "0.1.0"
+authors = ["letang.jeremy@gmail.com", "guillaume1.gomez@gmail.com", "mathijs.henquet@gmail.com", "bpgarman@fastmail.fm", "me@bstr.eu", "zsoakes@gmail.com"]
+build = "build.rs"
+links = "gdk"
+
+description = "FFI bindings to GDK 3"
+repository = "https://github.com/jeremyletang/rgtk"
+license = "LGPL-3.0+"
+
+[dependencies.glib-sys]
+path = "../glib-sys"
+version = "0.1.0"
+
+[build-dependencies]
+pkg-config = "0.2"

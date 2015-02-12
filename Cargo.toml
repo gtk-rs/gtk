@@ -27,6 +27,10 @@ path = "src/rgtk.rs"
 path = "glib-sys"
 version = "0.1.0"
 
+[dependencies.gdk3-sys]
+path = "gdk3-sys"
+version = "0.1.0"
+
 [build-dependencies.pkg-config]
 pkg-config = "~0.0.0"
 
