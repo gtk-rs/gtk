@@ -55,6 +55,8 @@ let button = gtk::Button:new(); // trait gtk::Button reexported as GtkButtonTrai
 extern crate libc;
 #[macro_use] extern crate rustc_bitflags;
 
+extern crate "glib-sys" as glib_ffi;
+
 pub use glib::traits::Connect;
 pub use gtk::widgets::GValuePublic;
 

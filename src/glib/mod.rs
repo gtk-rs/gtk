@@ -24,12 +24,12 @@ pub use self::slist::{SList, SElem};
 pub use self::glib_container::GlibContainer;
 pub use self::error::{Error};
 pub use self::permission::Permission;
-pub use self::ffi::GType;
 pub use self::traits::{FFIGObject, Connect};
+pub use glib_ffi as ffi;
+pub use glib_ffi::GType;
 
 mod list;
 mod slist;
-pub mod ffi;
 pub mod glib_container;
 mod error;
 mod permission;

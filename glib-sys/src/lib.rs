@@ -14,6 +14,9 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 #![allow(non_camel_case_types)]
+#![feature(libc)]
+
+extern crate libc;
 
 use libc::{c_int, c_void, c_uint, c_char, c_ulong};
 
