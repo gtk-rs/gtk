@@ -96,42 +96,6 @@ pub use gtk::ToolShellTrait as GtkToolShellTrait;
 pub use gtk::WidgetTrait as GtkWidgetTrait;
 pub use gtk::WindowTrait as GtkWindowTrait;
 
-#[doc(hidden)]
-#[cfg(target_os="macos")]
-mod platform {
-    #[link(name = "glib-2.0")]
-    #[link(name = "gtk-3.0")]
-    #[link(name = "gio-2.0")]
-    #[link(name = "gobject-2.0")]
-    #[link(name = "gdk-3.0")]
-    #[link(name = "rgtk_glue", kind = "static")]
-    extern{}
-}
-
-#[doc(hidden)]
-#[cfg(target_os="linux")]
-mod platform {
-    #[link(name = "glib-2.0")]
-    #[link(name = "gtk-3")]
-    #[link(name = "gio-2.0")]
-    #[link(name = "gobject-2.0")]
-    #[link(name = "gdk-3")]
-    #[link(name = "rgtk_glue", kind = "static")]
-    extern{}
-}
-
-#[doc(hidden)]
-#[cfg(target_os="windows")]
-mod platform {
-    #[link(name = "glib-2.0")]
-    #[link(name = "gtk-3")]
-    #[link(name = "gio-2.0")]
-    #[link(name = "gobject-2.0")]
-    #[link(name = "gdk-3")]
-    #[link(name = "rgtk_glue", kind = "static")]
-    extern{}
-}
-
 pub mod gtk;
 pub mod cairo;
 pub mod gdk;
