@@ -351,6 +351,7 @@ impl GValuePrivate for i64 {
     }
 }
 
+/*
 impl GValuePrivate for u64 {
     fn get(gvalue: &GValue) -> u64 {
         gvalue.get_uint64()
@@ -360,6 +361,7 @@ impl GValuePrivate for u64 {
         gvalue.set_uint64(*self)
     }
 }
+*/
 
 impl GValuePrivate for bool {
     fn get(gvalue: &GValue) -> bool {
@@ -437,7 +439,7 @@ impl GValuePrivate for String {
 impl GValuePublic for i32 {}
 impl GValuePublic for u32 {}
 impl GValuePublic for i64 {}
-impl GValuePublic for u64 {}
+//impl GValuePublic for u64 {}
 impl GValuePublic for i8 {}
 impl GValuePublic for u8 {}
 impl GValuePublic for gtk::GType {}

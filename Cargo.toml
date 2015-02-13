@@ -2,7 +2,6 @@
 name = "rgtk"
 version = "0.0.1"
 authors = ["letang.jeremy@gmail.com", "guillaume1.gomez@gmail.com", "mathijs.henquet@gmail.com", "bpgarman@fastmail.fm", "me@bstr.eu", "zsoakes@gmail.com"]
-build = "build.rs"
 
 description = "A rust binding for the GTK+ library"
 repository = "https://github.com/jeremyletang/rgtk"
@@ -12,11 +11,11 @@ license = "LGPL-3.0+"
 c_vec = "^1.0.0"
 
 [features]
-GTK_3_14 = []
-GTK_3_12 = []
-GTK_3_10 = []
-GTK_3_8 = []
-GTK_3_6 = []
+GTK_3_14 = ["gtk3-sys/GTK_3_14"]
+GTK_3_12 = ["gtk3-sys/GTK_3_12"]
+GTK_3_10 = ["gtk3-sys/GTK_3_10"]
+GTK_3_8 = ["gtk3-sys/GTK_3_8"]
+GTK_3_6 = ["gtk3-sys/GTK_3_6"]
 
 [lib]
 name = "rgtk"
@@ -31,8 +30,6 @@ version = "0.1.0"
 path = "gdk3-sys"
 version = "0.1.0"
 
-[build-dependencies.pkg-config]
-pkg-config = "~0.0.0"
-
-[build-dependencies.gcc]
-gcc = "~0.0.0"
+[dependencies.gtk3-sys]
+path = "gtk3-sys"
+version = "0.1.0"

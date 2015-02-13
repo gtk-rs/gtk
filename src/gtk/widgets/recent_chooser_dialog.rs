@@ -15,7 +15,7 @@
 
 use gtk::{self, ffi};
 use gtk::ffi::FFIWidget;
-use gtk::enums::response_type::ResponseType;
+use gtk::ResponseType;
 use gtk::cast::{GTK_WINDOW, GTK_RECENT_MANAGER};
 use std::ffi::CString;
 

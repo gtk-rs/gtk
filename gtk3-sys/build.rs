@@ -50,7 +50,7 @@ fn main() {
     for path in paths {
         gcc_conf.include(&path);
     }
-    gcc_conf.file("./gtk_glue/gtk_glue.c");
+    gcc_conf.file("src/gtk_glue.c");
 
     // build library
     gcc_conf.compile("librgtk_glue.a");
