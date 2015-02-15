@@ -23,8 +23,6 @@ use gcc::Config;
 use std::env;
 
 fn main() {
-    let out_dir = env::var("OUT_DIR").unwrap();
-
     env::set_var("PKG_CONFIG_ALLOW_CROSS", "1");
 
     // try to find gtk+-3.0 library
@@ -56,7 +54,4 @@ fn main() {
 
     // build library
     gcc_conf.compile("librgtk_glue.a");
-
-    // say to cargo where it is
-    println!("cargo:rustc-flags=-L {:?} -l rgtk_glue:static", out_dir);
 }
