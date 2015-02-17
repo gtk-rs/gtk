@@ -21,7 +21,7 @@ use gtk::cast::GTK_MENU_ITEM;
 
 /// The widget used for item in menus
 pub trait MenuItemTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait {
-    fn set_submenu(&mut self, widget: &mut gtk::WidgetTrait) {
+    fn set_submenu<T: gtk::WidgetTrait>(&mut self, widget: &mut T) {
         unsafe {
             ffi::gtk_menu_item_set_submenu(GTK_MENU_ITEM(self.get_widget()),
                                            widget.get_widget())

@@ -73,7 +73,7 @@ pub trait WidgetTrait: ffi::FFIWidget + gtk::GObjectTrait {
         unsafe { to_bool(ffi::gtk_widget_activate(self.get_widget())) }
     }
 
-    fn reparent(&self, new_parent: &WidgetTrait) {
+    fn reparent<T: WidgetTrait>(&self, new_parent: &T) {
         unsafe { ffi::gtk_widget_reparent(self.get_widget(), new_parent.get_widget()) }
     }
 
@@ -111,7 +111,7 @@ pub trait WidgetTrait: ffi::FFIWidget + gtk::GObjectTrait {
         unsafe { ffi::gtk_widget_set_sensitive(self.get_widget(), to_gboolean(sensitive)) }
     }
 
-    fn set_parent(&self, parent: &WidgetTrait) {
+    fn set_parent<T: WidgetTrait>(&self, parent: &T) {
         unsafe { ffi::gtk_widget_set_parent(self.get_widget(), parent.get_widget()) }
     }
 
@@ -139,7 +139,7 @@ pub trait WidgetTrait: ffi::FFIWidget + gtk::GObjectTrait {
         }
     }
 
-    fn is_ancestor(&self, ancestor: &WidgetTrait) -> bool {
+    fn is_ancestor<T: WidgetTrait>(&self, ancestor: &T) -> bool {
         unsafe { to_bool(ffi::gtk_widget_is_ancestor(self.get_widget(), ancestor.get_widget())) }
     }
 
@@ -171,7 +171,7 @@ pub trait WidgetTrait: ffi::FFIWidget + gtk::GObjectTrait {
         unsafe { ffi::gtk_widget_unparent(self.get_widget()) }
     }
 
-    fn translate_coordinates(&self, dest_widget: &WidgetTrait, src_x: i32, src_y: i32) -> Option<(i32, i32)> {
+    fn translate_coordinates<T: WidgetTrait>(&self, dest_widget: &T, src_x: i32, src_y: i32) -> Option<(i32, i32)> {
         let mut dest_x = 0i32;
         let mut dest_y = 0i32;
 
@@ -292,11 +292,11 @@ pub trait WidgetTrait: ffi::FFIWidget + gtk::GObjectTrait {
         }
     }
 
-    fn add_mnemonic_label(&self, label: &WidgetTrait) {
+    fn add_mnemonic_label<T: WidgetTrait>(&self, label: &T) {
         unsafe { ffi::gtk_widget_add_mnemonic_label(self.get_widget(), label.get_widget()) }
     }
 
-    fn remove_mnemonic_label(&self, label: &WidgetTrait) {
+    fn remove_mnemonic_label<T: WidgetTrait>(&self, label: &T) {
         unsafe { ffi::gtk_widget_remove_mnemonic_label(self.get_widget(), label.get_widget()) }
     }
 

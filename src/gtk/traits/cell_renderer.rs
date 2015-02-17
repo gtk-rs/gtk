@@ -82,7 +82,7 @@ pub trait CellRendererTrait: gtk::WidgetTrait {
         unsafe { ffi::gtk_cell_renderer_set_padding(GTK_CELL_RENDERER(self.get_widget()), xpad, ypad) }
     }
 
-    fn get_state(&self, widget: &gtk::WidgetTrait, cell_state: gtk::CellRendererState) -> gtk::StateFlags {
+    fn get_state<T: gtk::WidgetTrait>(&self, widget: &T, cell_state: gtk::CellRendererState) -> gtk::StateFlags {
         unsafe { ffi::gtk_cell_renderer_get_state(GTK_CELL_RENDERER(self.get_widget()), widget.get_widget(), cell_state) }
     }
 
@@ -93,22 +93,22 @@ pub trait CellRendererTrait: gtk::WidgetTrait {
         }
     }
 
-    fn get_preferred_height(&self, widget: &gtk::WidgetTrait, minimum_size: &mut i32, natural_size: &mut i32) {
+    fn get_preferred_height<T: gtk::WidgetTrait>(&self, widget: &T, minimum_size: &mut i32, natural_size: &mut i32) {
         unsafe { ffi::gtk_cell_renderer_get_preferred_height(GTK_CELL_RENDERER(self.get_widget()), widget.get_widget(), minimum_size,
             natural_size) }
     }
 
-    fn get_preferred_height_for_width(&self, widget: &gtk::WidgetTrait, width: i32, minimum_size: &mut i32, natural_size: &mut i32) {
+    fn get_preferred_height_for_width<T: gtk::WidgetTrait>(&self, widget: &T, width: i32, minimum_size: &mut i32, natural_size: &mut i32) {
         unsafe { ffi::gtk_cell_renderer_get_preferred_height_for_width(GTK_CELL_RENDERER(self.get_widget()), widget.get_widget(), width,
             minimum_size, natural_size) }
     }
 
-    fn get_preferred_width(&self, widget: &gtk::WidgetTrait, minimum_size: &mut i32, natural_size: &mut i32) {
+    fn get_preferred_width<T: gtk::WidgetTrait>(&self, widget: &T, minimum_size: &mut i32, natural_size: &mut i32) {
         unsafe { ffi::gtk_cell_renderer_get_preferred_width(GTK_CELL_RENDERER(self.get_widget()), widget.get_widget(), minimum_size,
             natural_size) }
     }
 
-    fn get_preferred_width_for_height(&self, widget: &gtk::WidgetTrait, height: i32, minimum_size: &mut i32, natural_size: &mut i32) {
+    fn get_preferred_width_for_height<T: gtk::WidgetTrait>(&self, widget: &T, height: i32, minimum_size: &mut i32, natural_size: &mut i32) {
         unsafe { ffi::gtk_cell_renderer_get_preferred_width_for_height(GTK_CELL_RENDERER(self.get_widget()), widget.get_widget(), height,
             minimum_size, natural_size) }
     }

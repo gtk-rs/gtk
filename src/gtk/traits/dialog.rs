@@ -54,7 +54,7 @@ pub trait DialogTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait + 
         ret
     }
 
-    fn add_action_widget(&self, child: &gtk::WidgetTrait, response_id: i32) -> () {
+    fn add_action_widget<T: gtk::WidgetTrait>(&self, child: &T, response_id: i32) -> () {
         unsafe { ffi::gtk_dialog_add_action_widget(GTK_DIALOG(self.get_widget()), child.get_widget(), response_id) }
     }
 
@@ -66,7 +66,7 @@ pub trait DialogTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait + 
         unsafe { ffi::gtk_dialog_set_response_sensitive(GTK_DIALOG(self.get_widget()), response_id, setting) }
     }
 
-    fn get_response_for_widget(&self, widget: &gtk::WidgetTrait) -> Result<i32, gtk::ResponseType> {
+    fn get_response_for_widget<T: gtk::WidgetTrait>(&self, widget: &T) -> Result<i32, gtk::ResponseType> {
         let tmp = unsafe { ffi::gtk_dialog_get_response_for_widget(GTK_DIALOG(self.get_widget()), widget.get_widget()) };
 
         if tmp < 0 {

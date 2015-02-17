@@ -19,7 +19,7 @@ use gtk::cast::{GTK_CELL_LAYOUT, GTK_CELL_RENDERER};
 use glib;
 
 pub trait CellLayoutTrait: gtk::WidgetTrait {
-    fn pack_start(&self, cell: &gtk::CellRendererTrait, expand: bool) {
+    fn pack_start<T: gtk::CellRendererTrait>(&self, cell: &T, expand: bool) {
         unsafe {
             ffi::gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(self.get_widget()), GTK_CELL_RENDERER(cell.get_widget()), match expand {
                 true => 1,
@@ -28,7 +28,7 @@ pub trait CellLayoutTrait: gtk::WidgetTrait {
         }
     }
 
-    fn pack_end(&self, cell: &gtk::CellRendererTrait, expand: bool) {
+    fn pack_end<T: gtk::CellRendererTrait>(&self, cell: &T, expand: bool) {
         unsafe {
             ffi::gtk_cell_layout_pack_end(GTK_CELL_LAYOUT(self.get_widget()), GTK_CELL_RENDERER(cell.get_widget()), match expand {
                 true => 1,
@@ -59,7 +59,7 @@ pub trait CellLayoutTrait: gtk::WidgetTrait {
         }
     }
 
-    fn reorder(&self, cell: &gtk::CellRendererTrait, position: i32) {
+    fn reorder<T: gtk::CellRendererTrait>(&self, cell: &T, position: i32) {
         unsafe { ffi::gtk_cell_layout_reorder(GTK_CELL_LAYOUT(self.get_widget()), GTK_CELL_RENDERER(cell.get_widget()), position) }
     }
 
@@ -67,7 +67,7 @@ pub trait CellLayoutTrait: gtk::WidgetTrait {
         unsafe { ffi::gtk_cell_layout_clear(GTK_CELL_LAYOUT(self.get_widget())) }
     }
 
-    fn add_attribute(&self, cell: &gtk::CellRendererTrait, attribute: &str, column: i32) {
+    fn add_attribute<T: gtk::CellRendererTrait>(&self, cell: &T, attribute: &str, column: i32) {
         let c_str = CString::from_slice(attribute.as_bytes());
 
         unsafe {
@@ -76,7 +76,7 @@ pub trait CellLayoutTrait: gtk::WidgetTrait {
             }
     }
 
-    fn clear_attributes(&self, cell: &gtk::CellRendererTrait) {
+    fn clear_attributes<T: gtk::CellRendererTrait>(&self, cell: &T) {
         unsafe { ffi::gtk_cell_layout_clear_attributes(GTK_CELL_LAYOUT(self.get_widget()), GTK_CELL_RENDERER(cell.get_widget())) }
     }
 }
