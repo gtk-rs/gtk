@@ -16,7 +16,6 @@
 //! Frame timings — Object holding timing information for a single frame
 
 use gdk::ffi;
-use gtk;
 
 #[repr(C)]
 #[derive(Copy)]
@@ -52,7 +51,7 @@ impl FrameTimings {
 
     // Since 3.8
     pub fn get_complete(&self) -> bool {
-        unsafe { gtk::ffi::to_bool(ffi::gdk_frame_timings_get_complete(self.pointer)) }
+        unsafe { ::glib::ffi::to_bool(ffi::gdk_frame_timings_get_complete(self.pointer)) }
     }
 
     pub fn get_frame_time(&self) -> i64 {

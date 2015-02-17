@@ -17,7 +17,6 @@
 
 use gdk_ffi as ffi;
 use gdk_ffi::C_GdkRGBA;
-use gtk;
 use std::ffi::CString;
 use libc::{c_char, c_void};
 
@@ -93,12 +92,12 @@ impl RGBA for C_GdkRGBA {
         unsafe {
             let c_str = CString::from_slice(spec.as_bytes());
 
-            gtk::ffi::to_bool(ffi::gdk_rgba_parse(self, c_str.as_ptr()))
+            ::glib::ffi::to_bool(ffi::gdk_rgba_parse(self, c_str.as_ptr()))
         }
     }
 
     fn equal(&self, other: &C_GdkRGBA) -> bool {
-        unsafe { gtk::ffi::to_bool(ffi::gdk_rgba_equal(self, other)) }
+        unsafe { ::glib::ffi::to_bool(ffi::gdk_rgba_equal(self, other)) }
     }
 
     fn hash(&self) -> u32 {

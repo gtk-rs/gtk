@@ -17,7 +17,6 @@
 
 use gdk::{self, ffi};
 use libc::{c_int, c_char, c_void};
-use gtk;
 
 #[repr(C)]
 #[derive(Copy)]
@@ -59,7 +58,7 @@ impl Screen {
     }
 
     pub fn is_composited(&self) -> bool {
-        unsafe { gtk::ffi::to_bool(ffi::gdk_screen_is_composited(self.pointer)) }
+        unsafe { ::glib::ffi::to_bool(ffi::gdk_screen_is_composited(self.pointer)) }
     }
 
     pub fn get_root_window(&self) -> Option<gdk::Window> {

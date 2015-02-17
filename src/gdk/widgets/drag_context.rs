@@ -16,7 +16,7 @@
 //! Drag And Drop — Functions for controlling drag and drop handling
 
 use gdk::{self, ffi};
-use gtk;
+use glib_ffi::{to_bool, to_gboolean};
 use libc::c_int;
 
 #[repr(C)]
@@ -41,7 +41,7 @@ impl DragContext {
     }
 
     pub fn drop_reply(&self, accepted: bool, time_: u32) {
-        unsafe { ffi::gdk_drop_reply(self.pointer, gtk::ffi::to_gboolean(accepted), time_) }
+        unsafe { ffi::gdk_drop_reply(self.pointer, to_gboolean(accepted), time_) }
     }
 
     pub fn drop(&self, time_: u32) {
@@ -56,12 +56,12 @@ impl DragContext {
 
     pub fn drag_motion(&self, dest_window: &gdk::Window, protocol: gdk::DragProtocol, x_root: i32, y_root: i32,
         suggested_action: gdk::DragAction, possible_actions: gdk::DragAction, time_: u32) -> bool {
-        unsafe { gtk::ffi::to_bool(ffi::gdk_drag_motion(self.pointer, dest_window.get_pointer(), protocol, x_root as c_int,
+        unsafe { to_bool(ffi::gdk_drag_motion(self.pointer, dest_window.get_pointer(), protocol, x_root as c_int,
             y_root as c_int, suggested_action, possible_actions, time_)) }
     }
 
     pub fn drop_finish(&self, success: bool, time_: u32) {
-        unsafe { ffi::gdk_drop_finish(self.pointer, gtk::ffi::to_gboolean(success), time_) }
+        unsafe { ffi::gdk_drop_finish(self.pointer, to_gboolean(success), time_) }
     }
 
     pub fn drag_status(&self, action: gdk::DragAction, time_: u32) {
@@ -69,7 +69,7 @@ impl DragContext {
     }
 
     pub fn drag_drop_succeeded(&self) -> bool {
-        unsafe { gtk::ffi::to_bool(ffi::gdk_drag_drop_succeeded(self.pointer)) }
+        unsafe { to_bool(ffi::gdk_drag_drop_succeeded(self.pointer)) }
     }
 
     pub fn get_actions(&self) -> gdk::DragAction {

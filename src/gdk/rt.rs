@@ -24,7 +24,7 @@ pub fn init() {
 }
 
 /*pub fn init_check(argc: *mut c_int, argv: *mut *mut *mut c_char) -> bool {
-    unsafe { gtk::ffi::to_bool(ffi::gdk_init_check(argc, argv)) }
+    unsafe { ::glib::ffi::to_bool(ffi::gdk_init_check(argc, argv)) }
 }
 
 pub fn parse_args(argc: *mut c_int, argv: *mut *mut *mut c_char) {

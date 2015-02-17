@@ -18,7 +18,7 @@
 use gdk::{self, ffi};
 use libc::{c_uint};
 use std::ffi::CString;
-use gtk;
+use glib_ffi::to_bool;
 
 #[repr(C)]
 #[derive(Copy)]
@@ -96,7 +96,7 @@ impl Display {
     }*/
 
     pub fn device_is_grabbed(&self, device: &gdk::Device) -> bool {
-        unsafe { gtk::ffi::to_bool(ffi::gdk_display_device_is_grabbed(self.pointer, device.get_pointer())) }
+        unsafe { to_bool(ffi::gdk_display_device_is_grabbed(self.pointer, device.get_pointer())) }
     }
 
     pub fn beep(&self) {
@@ -116,7 +116,7 @@ impl Display {
     }
 
     pub fn is_closed(&self) -> bool {
-        unsafe { gtk::ffi::to_bool(ffi::gdk_display_is_closed(self.pointer)) }
+        unsafe { to_bool(ffi::gdk_display_is_closed(self.pointer)) }
     }
 
     /*pub fn get_event(&self) -> Option<gdk::Event> {
@@ -144,7 +144,7 @@ impl Display {
     }*/
 
     pub fn has_pending(&self) -> bool {
-        unsafe { gtk::ffi::to_bool(ffi::gdk_display_has_pending(self.pointer)) }
+        unsafe { to_bool(ffi::gdk_display_has_pending(self.pointer)) }
     }
 
     pub fn set_double_click_time(&self, msec: u32) {
@@ -156,11 +156,11 @@ impl Display {
     }
 
     pub fn supports_cursor_color(&self) -> bool {
-        unsafe { gtk::ffi::to_bool(ffi::gdk_display_supports_cursor_color(self.pointer)) }
+        unsafe { to_bool(ffi::gdk_display_supports_cursor_color(self.pointer)) }
     }
 
     pub fn supports_cursor_alpha(&self) -> bool {
-        unsafe { gtk::ffi::to_bool(ffi::gdk_display_supports_cursor_alpha(self.pointer)) }
+        unsafe { to_bool(ffi::gdk_display_supports_cursor_alpha(self.pointer)) }
     }
 
     pub fn get_default_cursor_size(&self) -> u32 {
@@ -182,15 +182,15 @@ impl Display {
     }*/
 
     pub fn supports_selection_notification(&self) -> bool {
-        unsafe { gtk::ffi::to_bool(ffi::gdk_display_supports_selection_notification(self.pointer)) }
+        unsafe { to_bool(ffi::gdk_display_supports_selection_notification(self.pointer)) }
     }
 
     /*pub fn request_selection_notification(&self, selection: &gdk::Atom) -> bool {
-        unsafe { gtk::ffi::to_bool(ffi::gdk_display_request_selection_notification(self.pointer, selection.get_pointer())) }
+        unsafe { to_bool(ffi::gdk_display_request_selection_notification(self.pointer, selection.get_pointer())) }
     }*/
 
     pub fn supports_clipboard_persistence(&self) -> bool {
-        unsafe { gtk::ffi::to_bool(ffi::gdk_display_supports_clipboard_persistence(self.pointer)) }
+        unsafe { to_bool(ffi::gdk_display_supports_clipboard_persistence(self.pointer)) }
     }
 
     /*pub fn store_clipboard(&self, clipboard_window: &gdk::Window, time_: u32, targets: Vec<gdk::Atom>) {
@@ -199,15 +199,15 @@ impl Display {
     }*/
 
     pub fn supports_shapes(&self) -> bool {
-        unsafe { gtk::ffi::to_bool(ffi::gdk_display_supports_shapes(self.pointer)) }
+        unsafe { to_bool(ffi::gdk_display_supports_shapes(self.pointer)) }
     }
 
     pub fn supports_input_shapes(&self) -> bool {
-        unsafe { gtk::ffi::to_bool(ffi::gdk_display_supports_input_shapes(self.pointer)) }
+        unsafe { to_bool(ffi::gdk_display_supports_input_shapes(self.pointer)) }
     }
 
     pub fn supports_composite(&self) -> bool {
-        unsafe { gtk::ffi::to_bool(ffi::gdk_display_supports_composite(self.pointer)) }
+        unsafe { to_bool(ffi::gdk_display_supports_composite(self.pointer)) }
     }
 
     /*pub fn get_app_launch_context(&self) -> Option<gdk::AppLaunchContext> {

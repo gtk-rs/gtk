@@ -17,7 +17,7 @@
 
 use gdk::{self, ffi};
 use libc::{c_uint};
-use gtk;
+use glib_ffi::to_bool;
 
 #[repr(C)]
 #[derive(Copy)]
@@ -53,7 +53,7 @@ impl Device {
     }
 
     pub fn get_key(&self, index_: u32, keyval: &mut u32, modifiers: &mut gdk::ModifierType) -> bool {
-        unsafe { gtk::ffi::to_bool(ffi::gdk_device_get_key(self.pointer, index_ as c_uint, keyval as *mut c_uint, modifiers)) }
+        unsafe { to_bool(ffi::gdk_device_get_key(self.pointer, index_ as c_uint, keyval as *mut c_uint, modifiers)) }
     }
 
     pub fn set_axis_use(&self, index_: u32, use_: gdk::AxisUse) {
@@ -91,7 +91,7 @@ impl Device {
     }*/
 
     pub fn get_has_cursor(&self) -> bool {
-        unsafe { gtk::ffi::to_bool(ffi::gdk_device_get_has_cursor(self.pointer)) }
+        unsafe { to_bool(ffi::gdk_device_get_has_cursor(self.pointer)) }
     }
 
     pub fn get_n_axes(&self) -> i32 {
@@ -109,7 +109,7 @@ impl Device {
     pub fn grab(&self, window: &gdk::Window, grab_ownership: gdk::GrabOwnership, owner_events: bool, event_mask: gdk::EventMask,
         cursor: &mut gdk::Cursor, time_: u32) -> gdk::GrabStatus {
         unsafe {
-            ffi::gdk_device_grab(self.pointer, window.get_pointer(), grab_ownership, gtk::ffi::to_gboolean(owner_events),
+            ffi::gdk_device_grab(self.pointer, window.get_pointer(), grab_ownership, to_gboolean(owner_events),
                 event_mask, cursor.get_pointer(), time_)
         }
     }*/
@@ -190,11 +190,11 @@ impl Device {
     }*/
 
     pub fn get_axis(&self, axes: &mut [f64], use_: gdk::AxisUse, value: &mut f64) -> bool {
-        unsafe { gtk::ffi::to_bool(ffi::gdk_device_get_axis(self.pointer, axes.as_mut_ptr(), use_, value)) }
+        unsafe { to_bool(ffi::gdk_device_get_axis(self.pointer, axes.as_mut_ptr(), use_, value)) }
     }
 
     /*pub fn get_axis_value(&self, axes: &mut [f64], label: &mut gdk::Atom, value: &mut f64) -> bool {
-        unsafe { gtk::ffi::to_bool(ffi::gdk_device_get_axis_value(self.pointer, axes.as_mut_ptr(), label.get_pointer(), value)) }
+        unsafe { to_bool(ffi::gdk_device_get_axis_value(self.pointer, axes.as_mut_ptr(), label.get_pointer(), value)) }
     }*/
 
     /*pub fn get_last_event_window(&self) -> Option<gdk::Window> {

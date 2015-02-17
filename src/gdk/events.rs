@@ -13,11 +13,10 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gdk;
+use gdk::{self, ffi};
 use libc::c_void;
 use std::mem;
 
-use gdk_ffi as ffi;
 pub use self::event_type::EventType;
 pub use self::owner_change::OwnerChange;
 pub use self::setting_action::SettingAction;

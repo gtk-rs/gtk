@@ -15,9 +15,9 @@
 
 //! Rectangles — Simple graphical data type
 
-use gdk_ffi as ffi;
+use gdk::ffi;
 use gdk_ffi::C_GdkRectangle;
-use gtk;
+use glib_ffi::to_bool;
 
 pub trait Rectangle {
     fn intersect(&self, other: &C_GdkRectangle, dest: &mut C_GdkRectangle) -> bool;
@@ -26,7 +26,7 @@ pub trait Rectangle {
 
 impl Rectangle for C_GdkRectangle {
     fn intersect(&self, other: &C_GdkRectangle, dest: &mut C_GdkRectangle) -> bool {
-        unsafe { gtk::ffi::to_bool(ffi::gdk_rectangle_intersect(self, other, dest)) }
+        unsafe { to_bool(ffi::gdk_rectangle_intersect(self, other, dest)) }
     }
 
     fn union(&self, other: &C_GdkRectangle, dest: &mut C_GdkRectangle) {

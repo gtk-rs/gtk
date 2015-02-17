@@ -21,6 +21,8 @@ Bindings and wrappers for __GDK__
 
 extern crate c_vec;
 
+pub use gdk_ffi as ffi;
+
 pub use self::rt::{
     init,
     get_display_arg_name,
@@ -71,7 +73,6 @@ pub use self::events::{
     OwnerChange
 };
 
-pub use gdk_ffi as ffi;
 pub use gdk_ffi::enums::modifier_intent::ModifierIntent;
 pub use gdk_ffi::enums::modifier_type::ModifierType;
 pub use gdk_ffi::enums::{
