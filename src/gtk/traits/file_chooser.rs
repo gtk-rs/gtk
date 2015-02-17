@@ -246,7 +246,7 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
         }
     }
 
-    fn set_preview_widget(&self, preview_widget: &gtk::WidgetTrait) -> () {
+    fn set_preview_widget<T: gtk::WidgetTrait>(&self, preview_widget: &T) -> () {
         unsafe { ffi::gtk_file_chooser_set_preview_widget(GTK_FILE_CHOOSER(self.get_widget()), preview_widget.get_widget()) }
     }
 
@@ -302,7 +302,7 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
         }
     }
 
-    fn set_extra_widget(&self, extra_widget: &gtk::WidgetTrait) -> () {
+    fn set_extra_widget<T: gtk::WidgetTrait>(&self, extra_widget: &T) -> () {
         unsafe { ffi::gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(self.get_widget()), extra_widget.get_widget()) }
     }
 

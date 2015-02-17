@@ -181,7 +181,7 @@ impl TreeViewColumn {
         }
     }
 
-    pub fn set_widget(&mut self, widget: &gtk::WidgetTrait) {
+    pub fn set_widget<T: gtk::WidgetTrait>(&mut self, widget: &T) {
         unsafe {
             ffi::gtk_tree_view_column_set_widget(self.pointer, widget.get_widget())
         }
