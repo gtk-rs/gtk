@@ -15,7 +15,7 @@
 
 use gtk::{self, ffi};
 use glib::{to_bool, to_gboolean};
-use gtk::ffi::FFIWidget;
+use gtk::FFIWidget;
 use gtk::cast::GTK_ABOUT_DIALOG;
 use std::ffi::CString;
 
@@ -28,7 +28,7 @@ impl AboutDialog {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap(tmp_pointer))
         }
     }
 
@@ -313,7 +313,7 @@ impl AboutDialog {
         if logo.is_null() {
             None
         } else {
-            Some(unsafe { ffi::FFIWidget::wrap(logo) })
+            Some(unsafe { gtk::FFIWidget::wrap(logo) })
         }
     }
 

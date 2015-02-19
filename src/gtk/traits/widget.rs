@@ -23,7 +23,7 @@ use gtk;
 use glib;
 use glib::ffi::GType;
 
-pub trait WidgetTrait: ffi::FFIWidget + gtk::GObjectTrait {
+pub trait WidgetTrait: gtk::FFIWidget + gtk::GObjectTrait {
     fn show_all(&mut self) -> () {
         unsafe {
             ffi::gtk_widget_show_all(self.get_widget());
@@ -126,7 +126,7 @@ pub trait WidgetTrait: ffi::FFIWidget + gtk::GObjectTrait {
         if tmp.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp))
+            Some(gtk::FFIWidget::wrap(tmp))
         }
     }
 
@@ -136,7 +136,7 @@ pub trait WidgetTrait: ffi::FFIWidget + gtk::GObjectTrait {
         if tmp.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp))
+            Some(gtk::FFIWidget::wrap(tmp))
         }
     }
 
@@ -245,7 +245,7 @@ pub trait WidgetTrait: ffi::FFIWidget + gtk::GObjectTrait {
         if tmp.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp))
+            Some(gtk::FFIWidget::wrap(tmp))
         }
     }
 
@@ -287,7 +287,7 @@ pub trait WidgetTrait: ffi::FFIWidget + gtk::GObjectTrait {
             let mut tmp_vec : glib::List<Box<Self>> = glib::List::new();
 
             for it in old_list.iter() {
-                tmp_vec.append(Box::new(ffi::FFIWidget::wrap(*it)));
+                tmp_vec.append(Box::new(gtk::FFIWidget::wrap(*it)));
             }
             tmp_vec
         }

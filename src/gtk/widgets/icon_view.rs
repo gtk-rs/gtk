@@ -27,7 +27,7 @@ impl IconView {
     }
 
     /*pub fn new_with_area(area: &::CellArea) -> Option<IconView> {
-        let tmp_pointer = unsafe { ffi::gtk_icon_view_new_with_area(ffi::FFIWidget::unwrap(area)) };
+        let tmp_pointer = unsafe { ffi::gtk_icon_view_new_with_area(gtk::FFIWidget::unwrap(area)) };
         check_pointer!(tmp_pointer, IconView)
     }*/
 
@@ -218,7 +218,7 @@ impl IconView {
         } else {
             let list: glib::List<*mut ffi::C_GtkWidget> = glib::GlibContainer::wrap(tmp);
 
-            list.iter().map(|it| ffi::FFIWidget::wrap(*it)).collect()
+            list.iter().map(|it| gtk::FFIWidget::wrap(*it)).collect()
         }
     }*/
 

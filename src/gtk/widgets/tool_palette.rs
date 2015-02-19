@@ -16,7 +16,7 @@
 //! GtkToolPalette — A tool palette with categories
 
 use gtk::{self, ffi, ToolItem};
-use gtk::ffi::FFIWidget;
+use gtk::FFIWidget;
 use gtk::cast::{GTK_TOOL_PALETTE, GTK_TOOL_ITEM_GROUP};
 use glib::{to_bool, to_gboolean};
 
@@ -59,7 +59,7 @@ impl ToolPalette {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 
@@ -104,7 +104,7 @@ impl ToolPalette {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 }

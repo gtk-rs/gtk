@@ -14,7 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::{self, ffi};
-use gtk::ffi::FFIWidget;
+use gtk::FFIWidget;
 use gtk::cast::GTK_PAPER_SIZE;
 
 pub struct PageSetup {
@@ -56,7 +56,7 @@ impl PageSetup {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 

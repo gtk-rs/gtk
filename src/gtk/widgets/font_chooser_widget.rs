@@ -16,7 +16,7 @@
 //! GtkFontChooserWidget — A widget for selecting fonts
 
 use gtk::{self, ffi};
-use gtk::ffi::FFIWidget;
+use gtk::FFIWidget;
 
 struct_Widget!(FontChooserWidget);
 
@@ -27,7 +27,7 @@ impl FontChooserWidget {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap(tmp_pointer))
         }
     }
 }

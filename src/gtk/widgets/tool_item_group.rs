@@ -16,7 +16,7 @@
 //! GtkToolItemGroup — A sub container used in a tool palette
 
 use gtk::{self, ffi, ToolItem};
-use gtk::ffi::FFIWidget;
+use gtk::FFIWidget;
 use gtk::cast::{GTK_TOOL_ITEM_GROUP, GTK_TOOL_ITEM};
 use std::ffi::CString;
 use glib::{to_bool, to_gboolean};
@@ -89,7 +89,7 @@ impl ToolItemGroup {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap(tmp_pointer))
         }
     }
 

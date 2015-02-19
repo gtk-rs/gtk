@@ -14,9 +14,9 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use std::ffi::CString;
-use gtk;
+use gtk::{self, FFIWidget};
 use gtk::cast::GTK_FILE_CHOOSER;
-use gtk::ffi::{self, FFIWidget};
+use gtk::ffi;
 use glib::{to_bool, to_gboolean};
 use glib::{self, GlibContainer};
 use libc::c_char;
@@ -257,7 +257,7 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
             if tmp_pointer.is_null() {
                 None
             } else {
-                Some(ffi::FFIWidget::wrap(tmp_pointer))
+                Some(gtk::FFIWidget::wrap(tmp_pointer))
             }
         }
     }
@@ -313,7 +313,7 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
             if tmp.is_null() {
                 None
             } else {
-                Some(ffi::FFIWidget::wrap(tmp))
+                Some(gtk::FFIWidget::wrap(tmp))
             }
         }
     }

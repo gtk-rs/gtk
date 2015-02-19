@@ -14,7 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::{self, ffi};
-use gtk::ffi::FFIWidget;
+use gtk::FFIWidget;
 use gtk::cast::{GTK_WINDOW};
 use std::ffi::CString;
 
@@ -36,7 +36,7 @@ impl FontChooserDialog {
         if tmp.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp))
+            Some(gtk::FFIWidget::wrap(tmp))
         }
     }
 }

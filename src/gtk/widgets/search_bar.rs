@@ -18,7 +18,7 @@
 use gtk::{self, ffi};
 use glib::{to_bool, to_gboolean};
 use gtk::cast::{GTK_SEARCHBAR, GTK_ENTRY};
-use gtk::ffi::FFIWidget;
+use gtk::FFIWidget;
 
 /// Box — A container box
 struct_Widget!(SearchBar);

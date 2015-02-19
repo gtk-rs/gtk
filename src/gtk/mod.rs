@@ -48,6 +48,11 @@ Finally all the gtk widgets implement the trait self::traits::Widget.
 pub use gtk_ffi as ffi;
 pub use gtk_ffi::enums;
 
+pub trait FFIWidget: Sized {
+    fn get_widget(&self) -> *mut ffi::C_GtkWidget;
+    fn wrap(widget: *mut ffi::C_GtkWidget) -> Self;
+}
+
 // These are/should be inlined
 pub use self::rt::{
     init,

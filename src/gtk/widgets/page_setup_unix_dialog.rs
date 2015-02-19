@@ -14,7 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::{self, ffi};
-use gtk::ffi::FFIWidget;
+use gtk::FFIWidget;
 use gtk::cast::{GTK_WINDOW, GTK_PAGE_SETUP_UNIX_DIALOG, GTK_PAGE_SETUP, GTK_PRINT_SETTINGS};
 use std::str;
 
@@ -34,7 +34,7 @@ impl PageSetupUnixDialog {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap(tmp_pointer))
         }
     }
 
@@ -48,7 +48,7 @@ impl PageSetupUnixDialog {
         if tmp.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap(tmp_pointer))
         }
     }
 
@@ -62,7 +62,7 @@ impl PageSetupUnixDialog {
         if tmp.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap(tmp_pointer))
         }
     }
 }

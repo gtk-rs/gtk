@@ -17,7 +17,7 @@
 
 use gtk::{self, ffi};
 use gtk::cast::GTK_NOTEBOOK;
-use gtk::ffi::FFIWidget;
+use gtk::FFIWidget;
 use std::ffi::CString;
 use glib::{to_bool, to_gboolean};
 
@@ -144,7 +144,7 @@ impl NoteBook {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap(tmp_pointer))
         }
     }
 
@@ -261,7 +261,7 @@ impl NoteBook {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap(tmp_pointer))
         }
     }
 
@@ -304,7 +304,7 @@ impl NoteBook {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap(tmp_pointer))
         }
     }
 
@@ -383,7 +383,7 @@ impl NoteBook {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap(tmp_pointer))
         }
     }
 

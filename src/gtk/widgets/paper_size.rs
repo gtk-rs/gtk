@@ -15,7 +15,7 @@
 
 use gtk::{self, ffi};
 use glib::{to_bool, to_gboolean};
-use gtk::ffi::FFIWidget;
+use gtk::FFIWidget;
 use gtk::cast::{GTK_PAPER_SIZE};
 use glib;
 use std::ffi::CString;
@@ -34,7 +34,7 @@ impl PaperSize {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 
@@ -48,7 +48,7 @@ impl PaperSize {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 
@@ -62,7 +62,7 @@ impl PaperSize {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 
@@ -72,7 +72,7 @@ impl PaperSize {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 
@@ -91,7 +91,7 @@ impl PaperSize {
             let mut tmp_vec : glib::List<Box<PaperSize>> = glib::List::new();
 
             for it in old_list.iter() {
-                tmp_vec.append(Box::new(ffi::FFIWidget::wrap(*it)));
+                tmp_vec.append(Box::new(gtk::FFIWidget::wrap(*it)));
             }
             tmp_vec
         }

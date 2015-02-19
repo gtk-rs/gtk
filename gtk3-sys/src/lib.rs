@@ -25,7 +25,6 @@ extern crate "gdk3-sys" as gdk_ffi;
 pub mod enums;
 
 use libc::{c_int, c_char, c_uchar, c_float, c_uint, c_double, c_long, c_short, c_void, c_ulong, time_t};
-use std::marker::Sized;
 
 pub use glib_ffi::{
     Gboolean, GFALSE, GTRUE, gpointer, GType, C_GObject, C_GPermission,
@@ -514,11 +513,6 @@ pub struct C_GtkSocket;
 #[repr(C)]
 #[derive(Copy)]
 pub struct C_GtkEventBox;
-
-pub trait FFIWidget: Sized {
-    fn get_widget(&self) -> *mut C_GtkWidget;
-    fn wrap(widget: *mut C_GtkWidget) -> Self;
-}
 
 extern "C" {
 

@@ -99,7 +99,7 @@ pub trait ToolButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrai
             if tmp_pointer.is_null() {
                 None
             } else {
-                Some(ffi::FFIWidget::wrap(tmp_pointer))
+                Some(gtk::FFIWidget::wrap(tmp_pointer))
             }
         }
     }

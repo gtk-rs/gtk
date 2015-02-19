@@ -43,7 +43,7 @@ pub trait CellLayoutTrait: gtk::WidgetTrait {
         if tmp.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap(tmp_pointer))
         }
     }*/
 
@@ -55,7 +55,7 @@ pub trait CellLayoutTrait: gtk::WidgetTrait {
         } else {
             let list: glib::List<*mut ffi::C_GtkWidget> = glib::GlibContainer::wrap(tmp);
 
-            list.iter().map(|it| ffi::FFIWidget::wrap(*it)).collect()
+            list.iter().map(|it| gtk::FFIWidget::wrap(*it)).collect()
         }
     }
 

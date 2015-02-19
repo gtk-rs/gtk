@@ -17,7 +17,7 @@
 
 use gtk::cast::{GTK_FLOW_BOX_CHILD, GTK_FLOW_BOX};
 use gtk::{self, ffi};
-use gtk::ffi::FFIWidget;
+use gtk::FFIWidget;
 use glib::{to_bool, to_gboolean};
 
 /// GtkFlowBox — A container that allows reflowing its children
@@ -118,7 +118,7 @@ impl FlowBox {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 

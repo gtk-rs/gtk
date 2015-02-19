@@ -17,7 +17,7 @@
 
 use gtk::{self, ffi};
 use gtk::TextBuffer;
-use gtk::ffi::FFIWidget;
+use gtk::FFIWidget;
 use gtk::cast::{GTK_TEXT_VIEW, GTK_TEXT_BUFFER};
 use glib::{to_bool, to_gboolean};
 
@@ -50,7 +50,7 @@ impl TextView {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 

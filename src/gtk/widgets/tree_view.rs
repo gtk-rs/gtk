@@ -15,8 +15,8 @@
 
 //! A widget for displaying both trees and lists
 
-use gtk;
-use gtk::ffi::{self, FFIWidget};
+use gtk::{self, FFIWidget};
+use gtk::ffi;
 use gtk::cast::GTK_TREE_VIEW;
 use gtk::widgets::{TreePath, TreeSelection, TreeViewColumn};
 use glib::{to_bool, to_gboolean};
@@ -172,7 +172,7 @@ impl TreeView {
 
     pub fn get_search_entry(&self) -> gtk::Entry {
         unsafe {
-            ffi::FFIWidget::wrap(ffi::gtk_tree_view_get_search_entry(GTK_TREE_VIEW(self.pointer))
+            gtk::FFIWidget::wrap(ffi::gtk_tree_view_get_search_entry(GTK_TREE_VIEW(self.pointer))
                                  as *mut ffi::C_GtkWidget)
         }
     }

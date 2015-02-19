@@ -64,7 +64,7 @@ macro_rules! impl_TraitObject(
 
 macro_rules! impl_TraitWidget(
     ($gtk_struct:ident) => (
-        impl ::gtk::ffi::FFIWidget for $gtk_struct {
+        impl ::gtk::FFIWidget for $gtk_struct {
             fn get_widget(&self) -> *mut ffi::C_GtkWidget {
                 self.pointer
             }
@@ -84,7 +84,7 @@ macro_rules! impl_TraitWidget(
 
         impl ::glib::traits::FFIGObject for $gtk_struct {
             fn get_gobject(&self) -> *mut ::glib::ffi::C_GObject {
-                use gtk::ffi::FFIWidget;
+                use gtk::FFIWidget;
                 ::gtk::cast::G_OBJECT(self.get_widget())
             }
 

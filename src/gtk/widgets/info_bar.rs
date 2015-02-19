@@ -43,7 +43,7 @@ impl InfoBar {
             let c_str = CString::from_slice(button_text.as_bytes());
             ffi::gtk_info_bar_add_button(GTK_INFOBAR(self.pointer), c_str.as_ptr(), response_id as c_int)
         };
-        ffi::FFIWidget::wrap(button)
+        gtk::FFIWidget::wrap(button)
     }
 
     pub fn set_response_sensitive(&mut self, response_id: i32, setting: bool) -> () {

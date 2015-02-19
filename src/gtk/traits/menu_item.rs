@@ -31,7 +31,7 @@ pub trait MenuItemTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait 
 
     fn get_submenu<T: gtk::WidgetTrait>(&self) -> T {
         unsafe {
-            ffi::FFIWidget::wrap(ffi::gtk_menu_item_get_submenu(GTK_MENU_ITEM(self.get_widget())))
+            gtk::FFIWidget::wrap(ffi::gtk_menu_item_get_submenu(GTK_MENU_ITEM(self.get_widget())))
         }
     }
 

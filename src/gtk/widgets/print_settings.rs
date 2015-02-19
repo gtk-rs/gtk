@@ -15,7 +15,7 @@
 
 use gtk::{self, ffi};
 use glib::{to_bool, to_gboolean};
-use gtk::ffi::FFIWidget;
+use gtk::FFIWidget;
 use gtk::cast::{GTK_PRINT_SETTINGS, GTK_PAPER_SIZE};
 use std::ffi::CString;
 
@@ -28,7 +28,7 @@ impl PrintSettings {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 
@@ -38,7 +38,7 @@ impl PrintSettings {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 
@@ -193,7 +193,7 @@ impl PrintSettings {
         if tmp.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp as *mut ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap(tmp as *mut ffi::C_GtkWidget))
         }
     }
 

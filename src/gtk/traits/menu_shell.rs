@@ -96,13 +96,13 @@ pub trait MenuShellTrait: gtk::WidgetTrait + gtk::ContainerTrait {
 
     fn get_selected_item<T: gtk::WidgetTrait>(&self) -> T {
         unsafe {
-            ffi::FFIWidget::wrap(ffi::gtk_menu_shell_get_selected_item(GTK_MENU_SHELL(self.get_widget())))
+            gtk::FFIWidget::wrap(ffi::gtk_menu_shell_get_selected_item(GTK_MENU_SHELL(self.get_widget())))
         }
     }
 
     fn get_parent_shell<T: gtk::MenuShellTrait>(&self) -> T {
         unsafe {
-            ffi::FFIWidget::wrap(ffi::gtk_menu_shell_get_parent_shell(GTK_MENU_SHELL(self.get_widget())))
+            gtk::FFIWidget::wrap(ffi::gtk_menu_shell_get_parent_shell(GTK_MENU_SHELL(self.get_widget())))
         }
     }
 }

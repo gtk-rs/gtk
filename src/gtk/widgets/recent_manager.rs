@@ -15,7 +15,7 @@
 
 use gtk::{self, ffi};
 use glib::to_bool;
-use gtk::ffi::FFIWidget;
+use gtk::FFIWidget;
 use gtk::cast::GTK_RECENT_MANAGER;
 use glib;
 use std::ffi::CString;
@@ -29,7 +29,7 @@ impl RecentManager {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 
@@ -39,7 +39,7 @@ impl RecentManager {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 
@@ -77,7 +77,7 @@ impl RecentManager {
             let mut tmp_vec : glib::List<Box<gtk::RecentInfo>> = glib::List::new();
 
             for it in old_list.iter() {
-                tmp_vec.append(Box::new(ffi::FFIWidget::wrap(*it as *mut ffi::C_GtkWidget)));
+                tmp_vec.append(Box::new(gtk::FFIWidget::wrap(*it as *mut ffi::C_GtkWidget)));
             }
             tmp_vec
         }
