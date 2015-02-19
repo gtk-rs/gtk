@@ -13,10 +13,10 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use glib::ffi;
-use gtk::signals::Signal;
 use std::ffi::CString;
 use std::marker::PhantomFn;
+use ffi;
+use std::any::Any;
 
 pub trait FFIGObject {
     fn get_gobject(&self) -> *mut ffi::C_GObject;
@@ -44,6 +44,16 @@ pub trait FFIGObject {
 //         }
 //     }
 // }
+
+pub trait Signal<'a> {
+    fn get_signal_name(&self) -> &str;
+
+    fn get_trampoline(&self) -> extern "C" fn();
+
+    fn fetch_cb(&self) -> *mut FnMut();
+
+    fn get_user_data(&'a self) -> &'a Option<Box<Any>>;
+}
 
 pub trait Connect<'a, T: Signal<'a>>: FFIGObject + PhantomFn<&'a T> {
     fn connect(&self, signal: Box<T>) -> () {

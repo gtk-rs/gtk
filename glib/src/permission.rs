@@ -15,8 +15,8 @@
 
 //! GPermission — An object representing the permission to perform a certain action
 
-use glib::ffi;
-use glib::GlibContainer;
+use glib_container::GlibContainer;
+use ffi;
 
 #[derive(Copy)]
 pub struct Permission {
