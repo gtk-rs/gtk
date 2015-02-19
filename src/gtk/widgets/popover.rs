@@ -17,6 +17,7 @@
 
 use gtk::{self, ffi};
 use gtk::cast::GTK_POPOVER;
+use glib::{to_bool, to_gboolean};
 // use std::string;
 
 struct_Widget!(Popover);
@@ -50,11 +51,11 @@ impl Popover {
     }
 
     pub fn set_modal(&self, modal: bool) {
-        unsafe { ffi::gtk_popover_set_modal(GTK_POPOVER(self.pointer), ffi::to_gboolean(modal)) }
+        unsafe { ffi::gtk_popover_set_modal(GTK_POPOVER(self.pointer), to_gboolean(modal)) }
     }
 
     pub fn get_modal(&self) -> bool {
-        unsafe { ffi::to_bool(ffi::gtk_popover_get_modal(GTK_POPOVER(self.pointer))) }
+        unsafe { to_bool(ffi::gtk_popover_get_modal(GTK_POPOVER(self.pointer))) }
     }
 }
 

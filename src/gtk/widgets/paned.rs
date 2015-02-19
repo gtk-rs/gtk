@@ -20,7 +20,7 @@ use libc::c_int;
 use gtk::Orientation;
 use gtk::cast::GTK_PANED;
 use gtk::{self, ffi};
-use gtk::ffi::to_gboolean;
+use glib::to_gboolean;
 
 /// Paned — A widget with two adjustable panes
 /*

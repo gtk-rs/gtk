@@ -35,6 +35,17 @@ mod error;
 mod permission;
 pub mod traits;
 
+pub fn to_gboolean(b: bool) -> ffi::Gboolean {
+    match b {
+        true => ffi::GTRUE,
+        false => ffi::GFALSE
+    }
+}
+
+pub fn to_bool(b: ffi::Gboolean) -> bool {
+    b != ffi::GFALSE
+}
+
 // An opaque structure used as the base of all interface types.
 #[derive(Copy)]
 pub struct TypeInterface;

@@ -20,7 +20,7 @@ use std::ffi::{CString};
 use gtk::{ReliefStyle, PositionType};
 use gtk::cast::GTK_BUTTON;
 use gtk::{self, ffi};
-use gtk::ffi::{to_bool, to_gboolean};
+use glib::{to_bool, to_gboolean};
 
 pub trait ButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait {
     fn pressed(&self) -> () {

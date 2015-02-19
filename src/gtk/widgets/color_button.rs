@@ -18,7 +18,7 @@
 use std::ffi::CString;
 use gtk::cast::GTK_COLORBUTTON;
 use gtk::{self, ffi};
-use gtk::ffi::{to_bool, to_gboolean};
+use glib::{to_bool, to_gboolean};
 use gdk;
 use gdk_ffi;
 

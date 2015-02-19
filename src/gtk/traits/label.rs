@@ -17,7 +17,7 @@ use libc::{c_int, c_double};
 use std::ffi::CString;
 
 use gtk::{self, ffi};
-use gtk::ffi::{to_bool, to_gboolean};
+use glib::{to_bool, to_gboolean};
 use gtk::Justification;
 use gtk::cast::GTK_LABEL;
 

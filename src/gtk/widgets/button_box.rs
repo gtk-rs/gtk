@@ -18,7 +18,7 @@
 use gtk::{Orientation, ButtonBoxStyle};
 use gtk::cast::GTK_BUTTONBOX;
 use gtk::{self, ffi};
-use gtk::ffi::{to_bool, to_gboolean};
+use glib::{to_bool, to_gboolean};
 
 /// ButtonBox — A container for arranging buttons
 struct_Widget!(ButtonBox);

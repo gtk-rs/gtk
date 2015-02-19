@@ -16,7 +16,7 @@
 use std::ffi::CString;
 use gtk::cast::GTK_TOOLBUTTON;
 use gtk::{self, ffi};
-use gtk::ffi::{to_bool, to_gboolean};
+use glib::{to_bool, to_gboolean};
 
 pub trait ToolButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait + gtk::ToolItemTrait {
     fn set_label(&mut self, label: &str) -> () {

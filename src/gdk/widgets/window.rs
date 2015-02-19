@@ -18,7 +18,7 @@
 use gdk::{self, ffi};
 use libc::{c_int, c_char};
 use std::ffi::CString;
-use glib_ffi::{to_bool, to_gboolean};
+use glib::{to_bool, to_gboolean};
 
 /// Attributes to use for a newly-created window.
 pub struct WindowAttr {

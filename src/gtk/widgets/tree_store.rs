@@ -18,6 +18,7 @@ use glib::ffi::GType;
 use gtk::TreeIter;
 use std::ffi::CString;
 use std::num::ToPrimitive;
+use glib::to_bool;
 
 pub struct TreeStore {
     pointer: *mut ffi::C_GtkTreeStore
@@ -40,7 +41,7 @@ impl TreeStore {
     }
 
     pub fn remove(&self, iter: &TreeIter) -> bool {
-        unsafe { ffi::to_bool(ffi::gtk_tree_store_remove(self.pointer, iter.get_pointer())) }
+        unsafe { to_bool(ffi::gtk_tree_store_remove(self.pointer, iter.get_pointer())) }
     }
 
     pub fn insert(&self, iter: &mut TreeIter, parent: Option<&TreeIter>, position: i32) {
@@ -75,7 +76,7 @@ impl TreeStore {
     }
 
     pub fn is_ancestor(&self, iter: &TreeIter, descendent: &TreeIter) -> bool {
-        unsafe { ffi::to_bool(ffi::gtk_tree_store_is_ancestor(self.pointer, iter.get_pointer(), descendent.get_pointer())) }
+        unsafe { to_bool(ffi::gtk_tree_store_is_ancestor(self.pointer, iter.get_pointer(), descendent.get_pointer())) }
     }
 
     pub fn iter_depth(&self, iter: &TreeIter) -> i32 {
@@ -87,7 +88,7 @@ impl TreeStore {
     }
 
     pub fn iter_is_valid(&self, iter: &TreeIter) -> bool {
-        unsafe { ffi::to_bool(ffi::gtk_tree_store_iter_is_valid(self.pointer, iter.get_pointer())) }
+        unsafe { to_bool(ffi::gtk_tree_store_iter_is_valid(self.pointer, iter.get_pointer())) }
     }
 
     pub fn reorder(&self, parent: &TreeIter, new_order: *mut i32) {

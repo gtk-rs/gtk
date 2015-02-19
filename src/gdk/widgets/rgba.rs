@@ -92,12 +92,12 @@ impl RGBA for C_GdkRGBA {
         unsafe {
             let c_str = CString::from_slice(spec.as_bytes());
 
-            ::glib::ffi::to_bool(ffi::gdk_rgba_parse(self, c_str.as_ptr()))
+            ::glib::to_bool(ffi::gdk_rgba_parse(self, c_str.as_ptr()))
         }
     }
 
     fn equal(&self, other: &C_GdkRGBA) -> bool {
-        unsafe { ::glib::ffi::to_bool(ffi::gdk_rgba_equal(self, other)) }
+        unsafe { ::glib::to_bool(ffi::gdk_rgba_equal(self, other)) }
     }
 
     fn hash(&self) -> u32 {

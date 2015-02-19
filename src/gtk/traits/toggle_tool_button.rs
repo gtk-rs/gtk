@@ -15,7 +15,7 @@
 
 use gtk::cast::GTK_TOGGLETOOLBUTTON;
 use gtk::{self, ffi};
-use gtk::ffi::{to_bool, to_gboolean};
+use glib::{to_bool, to_gboolean};
 
 pub trait ToggleToolButtonTrait: gtk::WidgetTrait +
                                  gtk::ContainerTrait +

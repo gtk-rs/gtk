@@ -20,7 +20,7 @@ use std::ffi::CString;
 
 use gtk::cast::GTK_EXPANDER;
 use gtk::{self, ffi};
-use gtk::ffi::{to_bool, to_gboolean};
+use glib::{to_bool, to_gboolean};
 use gtk::ffi::FFIWidget;
 
 /// Expander — A container which can hide its child

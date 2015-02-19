@@ -51,7 +51,7 @@ pub mod g_type {
     }
 
     pub fn is_a(_type: gtk::GType, is_a_type: gtk::GType) -> bool {
-        unsafe { ffi::to_bool(ffi::g_type_is_a(_type, is_a_type)) }
+        unsafe { to_bool(ffi::g_type_is_a(_type, is_a_type)) }
     }
 
     pub fn children(_type: gtk::GType) -> Vec<gtk::GType> {

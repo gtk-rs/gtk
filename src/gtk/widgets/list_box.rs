@@ -18,6 +18,7 @@
 use gtk::{self, ffi};
 use gtk::cast::{GTK_LIST_BOX_ROW, GTK_LIST_BOX};
 use gtk::ffi::FFIWidget;
+use glib::{to_bool, to_gboolean};
 
 /// GtkFlowBox — A container that allows reflowing its children
 struct_Widget!(ListBox);
@@ -129,13 +130,13 @@ impl ListBox {
     pub fn set_activate_on_single_click(&mut self, single: bool) {
         unsafe {
             ffi::gtk_list_box_set_activate_on_single_click(GTK_LIST_BOX(self.pointer),
-                                                           ffi::to_gboolean(single))
+                                                           to_gboolean(single))
         }
     }
 
     pub fn is_activate_on_single_click(&self) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_list_box_get_activate_on_single_click(GTK_LIST_BOX(self.pointer)))
+            to_bool(ffi::gtk_list_box_get_activate_on_single_click(GTK_LIST_BOX(self.pointer)))
         }
     }
 

@@ -18,6 +18,7 @@
 use std::ffi::CString;
 use gtk::{self, ffi};
 use gtk::cast::GTK_MENU_ITEM;
+use glib::{to_bool, to_gboolean};
 
 /// The widget used for item in menus
 pub trait MenuItemTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait {
@@ -95,26 +96,26 @@ pub trait MenuItemTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait 
     fn set_use_underline(&mut self, setting: bool) {
         unsafe {
             ffi::gtk_menu_item_set_use_underline(GTK_MENU_ITEM(self.get_widget()),
-                                                 ffi::to_gboolean(setting))
+                                                 to_gboolean(setting))
         }
     }
 
     fn get_use_underline(&self) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_menu_item_get_use_underline(GTK_MENU_ITEM(self.get_widget())))
+            to_bool(ffi::gtk_menu_item_get_use_underline(GTK_MENU_ITEM(self.get_widget())))
         }
     }
 
     fn set_reserve_indicator(&mut self, setting: bool) {
         unsafe {
             ffi::gtk_menu_item_set_reserve_indicator(GTK_MENU_ITEM(self.get_widget()),
-                                                     ffi::to_gboolean(setting))
+                                                     to_gboolean(setting))
         }
     }
 
     fn get_reserve_indicator(&self) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_menu_item_get_reserve_indicator(GTK_MENU_ITEM(self.get_widget())))
+            to_bool(ffi::gtk_menu_item_get_reserve_indicator(GTK_MENU_ITEM(self.get_widget())))
         }
     }
 }

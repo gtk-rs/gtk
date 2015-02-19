@@ -14,7 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::{self, ffi};
-use gtk::ffi::{to_bool, to_gboolean};
+use glib::{to_bool, to_gboolean};
 use gtk::cast::GTK_COLOR_CHOOSER;
 use gdk_ffi;
 

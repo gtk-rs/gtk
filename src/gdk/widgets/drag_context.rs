@@ -16,7 +16,7 @@
 //! Drag And Drop — Functions for controlling drag and drop handling
 
 use gdk::{self, ffi};
-use glib_ffi::{to_bool, to_gboolean};
+use glib::{to_bool, to_gboolean};
 use libc::c_int;
 
 #[repr(C)]

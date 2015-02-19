@@ -19,6 +19,7 @@ use gtk;
 use gtk::ffi::{self, FFIWidget};
 use gtk::cast::GTK_TREE_VIEW;
 use gtk::widgets::{TreePath, TreeSelection, TreeViewColumn};
+use glib::{to_bool, to_gboolean};
 
 /// TreeView — A widget for displaying both trees and lists
 struct_Widget!(TreeView);
@@ -36,14 +37,14 @@ impl TreeView {
 
     pub fn get_headers_visible(&self) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_tree_view_get_headers_visible(GTK_TREE_VIEW(self.pointer)))
+            to_bool(ffi::gtk_tree_view_get_headers_visible(GTK_TREE_VIEW(self.pointer)))
         }
     }
 
     pub fn set_headers_visible(&mut self, visible: bool) {
         unsafe {
             ffi::gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(self.pointer),
-                                                   ffi::to_gboolean(visible))
+                                                   to_gboolean(visible))
         }
     }
 
@@ -55,34 +56,34 @@ impl TreeView {
 
     pub fn get_headers_clickable(&self) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_tree_view_get_headers_clickable(GTK_TREE_VIEW(self.pointer)))
+            to_bool(ffi::gtk_tree_view_get_headers_clickable(GTK_TREE_VIEW(self.pointer)))
         }
     }
 
     pub fn set_headers_clickable(&mut self, setting: bool) {
         unsafe {
             ffi::gtk_tree_view_set_headers_clickable(GTK_TREE_VIEW(self.pointer),
-                                                     ffi::to_gboolean(setting))
+                                                     to_gboolean(setting))
         }
     }
 
     pub fn get_rules_hint(&self) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_tree_view_get_rules_hint(GTK_TREE_VIEW(self.pointer)))
+            to_bool(ffi::gtk_tree_view_get_rules_hint(GTK_TREE_VIEW(self.pointer)))
         }
     }
 
     pub fn set_rules_hint(&mut self, setting: bool) {
         unsafe {
             ffi::gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(self.pointer),
-                                              ffi::to_gboolean(setting))
+                                              to_gboolean(setting))
         }
     }
 
     #[cfg(any(feature = "GTK_3_8", feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
     pub fn get_activate_on_single_click(&self) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_tree_view_get_activate_on_single_click(GTK_TREE_VIEW(self.pointer)))
+            to_bool(ffi::gtk_tree_view_get_activate_on_single_click(GTK_TREE_VIEW(self.pointer)))
         }
     }
 
@@ -90,7 +91,7 @@ impl TreeView {
     pub fn set_activate_on_single_click(&mut self, setting: bool) {
         unsafe {
             ffi::gtk_tree_view_set_activate_on_single_click(GTK_TREE_VIEW(self.pointer),
-                                                            ffi::to_gboolean(setting))
+                                                            to_gboolean(setting))
         }
     }
 
@@ -121,14 +122,14 @@ impl TreeView {
 
     pub fn get_reorderable(&self) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_tree_view_get_reorderable(GTK_TREE_VIEW(self.pointer)))
+            to_bool(ffi::gtk_tree_view_get_reorderable(GTK_TREE_VIEW(self.pointer)))
         }
     }
 
     pub fn set_reorderable(&mut self, reorderable: bool) {
         unsafe {
             ffi::gtk_tree_view_set_reorderable(GTK_TREE_VIEW(self.pointer),
-                                               ffi::to_gboolean(reorderable))
+                                               to_gboolean(reorderable))
         }
     }
 
@@ -146,14 +147,14 @@ impl TreeView {
 
     pub fn get_enable_search(&self) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_tree_view_get_enable_search(GTK_TREE_VIEW(self.pointer)))
+            to_bool(ffi::gtk_tree_view_get_enable_search(GTK_TREE_VIEW(self.pointer)))
         }
     }
 
     pub fn set_enable_search(&mut self, enable_search: bool) {
         unsafe {
             ffi::gtk_tree_view_set_enable_search(GTK_TREE_VIEW(self.pointer),
-                                                 ffi::to_gboolean(enable_search))
+                                                 to_gboolean(enable_search))
         }
     }
 
@@ -245,59 +246,59 @@ impl TreeView {
 
     pub fn get_fixed_height_mode(&self) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_tree_view_get_fixed_height_mode(GTK_TREE_VIEW(self.pointer)))
+            to_bool(ffi::gtk_tree_view_get_fixed_height_mode(GTK_TREE_VIEW(self.pointer)))
         }
     }
 
     pub fn set_fixed_height_mode(&mut self, enable: bool) {
         unsafe {
             ffi::gtk_tree_view_set_fixed_height_mode(GTK_TREE_VIEW(self.pointer),
-                                                     ffi::to_gboolean(enable))
+                                                     to_gboolean(enable))
         }
     }
 
     pub fn get_hover_selection(&self) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_tree_view_get_hover_selection(GTK_TREE_VIEW(self.pointer)))
+            to_bool(ffi::gtk_tree_view_get_hover_selection(GTK_TREE_VIEW(self.pointer)))
         }
     }
 
     pub fn set_hover_selection(&mut self, hover: bool) {
         unsafe {
             ffi::gtk_tree_view_set_hover_selection(GTK_TREE_VIEW(self.pointer),
-                                                   ffi::to_gboolean(hover))
+                                                   to_gboolean(hover))
         }
     }
 
     pub fn get_hover_expand(&self) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_tree_view_get_hover_expand(GTK_TREE_VIEW(self.pointer)))
+            to_bool(ffi::gtk_tree_view_get_hover_expand(GTK_TREE_VIEW(self.pointer)))
         }
     }
 
     pub fn set_hover_expand(&mut self, expand: bool) {
         unsafe {
             ffi::gtk_tree_view_set_hover_expand(GTK_TREE_VIEW(self.pointer),
-                                                ffi::to_gboolean(expand))
+                                                to_gboolean(expand))
         }
     }
 
     pub fn get_rubber_banding(&self) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_tree_view_get_rubber_banding(GTK_TREE_VIEW(self.pointer)))
+            to_bool(ffi::gtk_tree_view_get_rubber_banding(GTK_TREE_VIEW(self.pointer)))
         }
     }
 
     pub fn set_rubber_banding(&mut self, enable: bool) {
         unsafe {
             ffi::gtk_tree_view_set_rubber_banding(GTK_TREE_VIEW(self.pointer),
-                                                  ffi::to_gboolean(enable))
+                                                  to_gboolean(enable))
         }
     }
 
     pub fn is_rubber_banding_active(&self) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_tree_view_is_rubber_banding_active(GTK_TREE_VIEW(self.pointer)))
+            to_bool(ffi::gtk_tree_view_is_rubber_banding_active(GTK_TREE_VIEW(self.pointer)))
         }
     }
 
@@ -315,27 +316,27 @@ impl TreeView {
 
     pub fn get_enable_tree_lines(&self) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_tree_view_get_enable_tree_lines(GTK_TREE_VIEW(self.pointer)))
+            to_bool(ffi::gtk_tree_view_get_enable_tree_lines(GTK_TREE_VIEW(self.pointer)))
         }
     }
 
     pub fn set_enable_tree_lines(&mut self, enable: bool) {
         unsafe {
             ffi::gtk_tree_view_set_enable_tree_lines(GTK_TREE_VIEW(self.pointer),
-                                                     ffi::to_gboolean(enable))
+                                                     to_gboolean(enable))
         }
     }
 
     pub fn get_show_expanders(&self) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_tree_view_get_show_expanders(GTK_TREE_VIEW(self.pointer)))
+            to_bool(ffi::gtk_tree_view_get_show_expanders(GTK_TREE_VIEW(self.pointer)))
         }
     }
 
     pub fn set_show_expanders(&mut self, enable: bool) {
         unsafe {
             ffi::gtk_tree_view_set_show_expanders(GTK_TREE_VIEW(self.pointer),
-                                                  ffi::to_gboolean(enable))
+                                                  to_gboolean(enable))
         }
     }
 
@@ -393,19 +394,19 @@ impl TreeView {
             ffi::gtk_tree_view_set_cursor(GTK_TREE_VIEW(self.pointer),
                                           path.get_pointer(),
                                           if focus_column.is_none() { ::std::ptr::null_mut() } else { focus_column.unwrap().get_pointer() },
-                                          ffi::to_gboolean(start_editing))
+                                          to_gboolean(start_editing))
         };
     }
 
     pub fn expand_row(&mut self, path: &TreePath, open_all: bool) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_tree_view_expand_row(GTK_TREE_VIEW(self.pointer), path.get_pointer(), ffi::to_gboolean(open_all)))
+            to_bool(ffi::gtk_tree_view_expand_row(GTK_TREE_VIEW(self.pointer), path.get_pointer(), to_gboolean(open_all)))
         }
     }
 
     pub fn collapse_row(&mut self, path: &TreePath) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_tree_view_collapse_row(GTK_TREE_VIEW(self.pointer), path.get_pointer()))
+            to_bool(ffi::gtk_tree_view_collapse_row(GTK_TREE_VIEW(self.pointer), path.get_pointer()))
         }
     }
 

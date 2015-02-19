@@ -15,7 +15,7 @@
 
 use std::ffi::CString;
 use gtk::{self, ffi};
-use gtk::ffi::{to_bool, to_gboolean};
+use glib::{to_bool, to_gboolean};
 use gtk::cast::GTK_COMBO_BOX;
 
 pub trait ComboBoxTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait {

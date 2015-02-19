@@ -16,7 +16,7 @@
 //! A container box
 
 use gtk::{self, ffi};
-use gtk::ffi::{to_bool, to_gboolean};
+use glib::{to_bool, to_gboolean};
 use gtk::cast::{GTK_SEARCHBAR, GTK_ENTRY};
 use gtk::ffi::FFIWidget;
 

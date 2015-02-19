@@ -17,6 +17,7 @@
 
 use gtk::{self, ffi};
 use std::ffi::CString;
+use glib::{to_bool, to_gboolean};
 
 pub struct TextMark {
     pointer: *mut ffi::C_GtkTextMark
@@ -27,7 +28,7 @@ impl TextMark {
         let tmp_pointer = unsafe {
             let c_str = CString::from_slice(name.as_bytes());
 
-            ffi::gtk_text_mark_new(c_str.as_ptr(), ffi::to_gboolean(left_gravity))
+            ffi::gtk_text_mark_new(c_str.as_ptr(), to_gboolean(left_gravity))
         };
 
         if tmp_pointer.is_null() {
@@ -38,15 +39,15 @@ impl TextMark {
     }
 
     pub fn set_visible(&self, setting: bool) {
-        unsafe { ffi::gtk_text_mark_set_visible(self.pointer, ffi::to_gboolean(setting)) }
+        unsafe { ffi::gtk_text_mark_set_visible(self.pointer, to_gboolean(setting)) }
     }
 
     pub fn get_visible(&self) -> bool {
-        unsafe { ffi::to_bool(ffi::gtk_text_mark_get_visible(self.pointer)) }
+        unsafe { to_bool(ffi::gtk_text_mark_get_visible(self.pointer)) }
     }
 
     pub fn get_deleted(&self) -> bool {
-        unsafe { ffi::to_bool(ffi::gtk_text_mark_get_deleted(self.pointer)) }
+        unsafe { to_bool(ffi::gtk_text_mark_get_deleted(self.pointer)) }
     }
 
     pub fn get_name(&self) -> Option<String> {
@@ -72,7 +73,7 @@ impl TextMark {
     }
 
     pub fn get_left_gravity(&self) -> bool {
-        unsafe { ffi::to_bool(ffi::gtk_text_mark_get_left_gravity(self.pointer)) }
+        unsafe { to_bool(ffi::gtk_text_mark_get_left_gravity(self.pointer)) }
     }
 }
 

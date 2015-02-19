@@ -17,7 +17,7 @@
 
 use gdk::ffi;
 use gdk_ffi::C_GdkRectangle;
-use glib_ffi::to_bool;
+use glib::to_bool;
 
 pub trait Rectangle {
     fn intersect(&self, other: &C_GdkRectangle, dest: &mut C_GdkRectangle) -> bool;

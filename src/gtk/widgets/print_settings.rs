@@ -14,7 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::{self, ffi};
-use gtk::ffi::{to_bool, to_gboolean};
+use glib::{to_bool, to_gboolean};
 use gtk::ffi::FFIWidget;
 use gtk::cast::{GTK_PRINT_SETTINGS, GTK_PAPER_SIZE};
 use std::ffi::CString;

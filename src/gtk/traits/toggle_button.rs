@@ -15,7 +15,7 @@
 
 use gtk::cast::GTK_TOGGLEBUTTON;
 use gtk::{self, ffi};
-use gtk::ffi::{to_bool, to_gboolean};
+use glib::{to_bool, to_gboolean};
 
 pub trait ToggleButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::ButtonTrait {
     fn set_mode(&mut self, draw_indicate: bool) {

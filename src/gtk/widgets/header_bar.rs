@@ -20,6 +20,7 @@
 use gtk::cast::{GTK_HEADER_BAR};
 use gtk::{self, ffi};
 use std::ffi::CString;
+use glib::{to_bool, to_gboolean};
 
 /// GtkHeaderBar — A Box::new(with) a centered child
 struct_Widget!(HeaderBar);
@@ -101,14 +102,14 @@ impl HeaderBar {
 
     pub fn is_show_close_button(&self) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_header_bar_get_show_close_button(GTK_HEADER_BAR(self.pointer)))
+            to_bool(ffi::gtk_header_bar_get_show_close_button(GTK_HEADER_BAR(self.pointer)))
         }
     }
 
     pub fn set_show_close_button(&mut self, setting: bool) {
         unsafe {
             ffi::gtk_header_bar_set_show_close_button(GTK_HEADER_BAR(self.pointer),
-                                                      ffi::to_gboolean(setting))
+                                                      to_gboolean(setting))
         }
     }
 }

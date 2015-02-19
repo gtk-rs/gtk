@@ -18,6 +18,7 @@
 use gtk::cast::GTK_APP_CHOOSER_WIDGET;
 use gtk::{self, ffi};
 use std::ffi::CString;
+use glib::{to_bool, to_gboolean};
 
 struct_Widget!(AppChooserWidget);
 
@@ -32,52 +33,52 @@ impl AppChooserWidget {
     }
 
     pub fn set_show_default(&self, setting: bool) {
-        unsafe { ffi::gtk_app_chooser_widget_set_show_default(GTK_APP_CHOOSER_WIDGET(self.pointer), ffi::to_gboolean(setting)) }
+        unsafe { ffi::gtk_app_chooser_widget_set_show_default(GTK_APP_CHOOSER_WIDGET(self.pointer), to_gboolean(setting)) }
     }
 
     pub fn get_show_default(&mut self) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_app_chooser_widget_get_show_default(GTK_APP_CHOOSER_WIDGET(self.pointer)))
+            to_bool(ffi::gtk_app_chooser_widget_get_show_default(GTK_APP_CHOOSER_WIDGET(self.pointer)))
         }
     }
 
     pub fn set_show_recommended(&self, setting: bool) {
-        unsafe { ffi::gtk_app_chooser_widget_set_show_recommended(GTK_APP_CHOOSER_WIDGET(self.pointer), ffi::to_gboolean(setting)) }
+        unsafe { ffi::gtk_app_chooser_widget_set_show_recommended(GTK_APP_CHOOSER_WIDGET(self.pointer), to_gboolean(setting)) }
     }
 
     pub fn get_show_recommended(&mut self) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_app_chooser_widget_get_show_recommended(GTK_APP_CHOOSER_WIDGET(self.pointer)))
+            to_bool(ffi::gtk_app_chooser_widget_get_show_recommended(GTK_APP_CHOOSER_WIDGET(self.pointer)))
         }
     }
 
     pub fn set_show_fallback(&self, setting: bool) {
-        unsafe { ffi::gtk_app_chooser_widget_set_show_fallback(GTK_APP_CHOOSER_WIDGET(self.pointer), ffi::to_gboolean(setting)) }
+        unsafe { ffi::gtk_app_chooser_widget_set_show_fallback(GTK_APP_CHOOSER_WIDGET(self.pointer), to_gboolean(setting)) }
     }
 
     pub fn get_show_fallback(&mut self) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_app_chooser_widget_get_show_fallback(GTK_APP_CHOOSER_WIDGET(self.pointer)))
+            to_bool(ffi::gtk_app_chooser_widget_get_show_fallback(GTK_APP_CHOOSER_WIDGET(self.pointer)))
         }
     }
 
     pub fn set_show_other(&self, setting: bool) {
-        unsafe { ffi::gtk_app_chooser_widget_set_show_other(GTK_APP_CHOOSER_WIDGET(self.pointer), ffi::to_gboolean(setting)) }
+        unsafe { ffi::gtk_app_chooser_widget_set_show_other(GTK_APP_CHOOSER_WIDGET(self.pointer), to_gboolean(setting)) }
     }
 
     pub fn get_show_other(&mut self) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_app_chooser_widget_get_show_other(GTK_APP_CHOOSER_WIDGET(self.pointer)))
+            to_bool(ffi::gtk_app_chooser_widget_get_show_other(GTK_APP_CHOOSER_WIDGET(self.pointer)))
         }
     }
 
     pub fn set_show_all(&self, setting: bool) {
-        unsafe { ffi::gtk_app_chooser_widget_set_show_all(GTK_APP_CHOOSER_WIDGET(self.pointer), ffi::to_gboolean(setting)) }
+        unsafe { ffi::gtk_app_chooser_widget_set_show_all(GTK_APP_CHOOSER_WIDGET(self.pointer), to_gboolean(setting)) }
     }
 
     pub fn get_show_all(&mut self) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_app_chooser_widget_get_show_all(GTK_APP_CHOOSER_WIDGET(self.pointer)))
+            to_bool(ffi::gtk_app_chooser_widget_get_show_all(GTK_APP_CHOOSER_WIDGET(self.pointer)))
         }
     }
 

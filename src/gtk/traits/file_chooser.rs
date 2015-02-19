@@ -17,7 +17,7 @@ use std::ffi::CString;
 use gtk;
 use gtk::cast::GTK_FILE_CHOOSER;
 use gtk::ffi::{self, FFIWidget};
-use gtk::ffi::{to_bool, to_gboolean};
+use glib::{to_bool, to_gboolean};
 use glib::{self, GlibContainer};
 use libc::c_char;
 

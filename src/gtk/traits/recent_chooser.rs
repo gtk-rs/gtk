@@ -16,7 +16,7 @@
 use std::ffi::CString;
 use gtk::cast::{GTK_RECENT_CHOOSER};
 use gtk::{self, ffi};
-use gtk::ffi::{to_bool, to_gboolean};
+use glib::{to_bool, to_gboolean};
 use gtk::ffi::FFIWidget;
 use glib;
 use libc::c_char;

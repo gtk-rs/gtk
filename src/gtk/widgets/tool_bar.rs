@@ -18,7 +18,7 @@
 use libc::c_int;
 
 use gtk::{self, ffi};
-use gtk::ffi::{to_bool, to_gboolean};
+use glib::{to_bool, to_gboolean};
 use gtk::cast::{GTK_TOOLBAR, GTK_TOOLITEM};
 use gtk::{IconSize, ReliefStyle, ToolbarStyle};
 

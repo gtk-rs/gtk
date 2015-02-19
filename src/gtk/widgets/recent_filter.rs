@@ -14,7 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::{self, ffi};
-use gtk::ffi::to_bool;
+use glib::to_bool;
 use std::ffi::CString;
 
 #[derive(Copy)]

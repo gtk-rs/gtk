@@ -520,8 +520,6 @@ pub trait FFIWidget: Sized {
     fn wrap(widget: *mut C_GtkWidget) -> Self;
 }
 
-pub use glib_ffi::{to_bool, to_gboolean};
-
 extern "C" {
 
     //=========================================================================

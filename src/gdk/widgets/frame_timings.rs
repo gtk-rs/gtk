@@ -51,7 +51,7 @@ impl FrameTimings {
 
     // Since 3.8
     pub fn get_complete(&self) -> bool {
-        unsafe { ::glib::ffi::to_bool(ffi::gdk_frame_timings_get_complete(self.pointer)) }
+        unsafe { ::glib::to_bool(ffi::gdk_frame_timings_get_complete(self.pointer)) }
     }
 
     pub fn get_frame_time(&self) -> i64 {

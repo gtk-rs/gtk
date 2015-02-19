@@ -14,7 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::ffi;
-use gtk::ffi::to_bool;
+use glib::to_bool;
 use gtk::ffi::FFIWidget;
 use gtk::cast::GTK_RECENT_INFO;
 use std::ffi::CString;

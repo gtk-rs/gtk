@@ -33,7 +33,7 @@ impl Atom {
         let tmp = unsafe {
             let c_str = CString::from_slice(atom_name.as_bytes());
 
-            ffi::gdk_atom_intern(c_str.as_ptr(), ::glib::ffi::to_gboolean(only_if_exists))
+            ffi::gdk_atom_intern(c_str.as_ptr(), ::glib::to_gboolean(only_if_exists))
         };
 
         if tmp.is_null() {

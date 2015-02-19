@@ -18,6 +18,7 @@
 use gtk::{self, ffi, ToolItem};
 use gtk::ffi::FFIWidget;
 use gtk::cast::{GTK_TOOL_PALETTE, GTK_TOOL_ITEM_GROUP};
+use glib::{to_bool, to_gboolean};
 
 struct_Widget!(ToolPalette);
 
@@ -67,23 +68,23 @@ impl ToolPalette {
     }
 
     pub fn get_exclusive(&self, group: &gtk::ToolItemGroup) -> bool {
-        unsafe { ffi::to_bool(ffi::gtk_tool_palette_get_exclusive(GTK_TOOL_PALETTE(self.get_widget()),
+        unsafe { to_bool(ffi::gtk_tool_palette_get_exclusive(GTK_TOOL_PALETTE(self.get_widget()),
             GTK_TOOL_ITEM_GROUP(group.get_widget()))) }
     }
 
     pub fn set_exclusive(&self, group: &gtk::ToolItemGroup, exclusive: bool) {
         unsafe { ffi::gtk_tool_palette_set_exclusive(GTK_TOOL_PALETTE(self.get_widget()),
-            GTK_TOOL_ITEM_GROUP(group.get_widget()), ffi::to_gboolean(exclusive)) }
+            GTK_TOOL_ITEM_GROUP(group.get_widget()), to_gboolean(exclusive)) }
     }
 
     pub fn get_expand(&self, group: &gtk::ToolItemGroup) -> bool {
-        unsafe { ffi::to_bool(ffi::gtk_tool_palette_get_expand(GTK_TOOL_PALETTE(self.get_widget()),
+        unsafe { to_bool(ffi::gtk_tool_palette_get_expand(GTK_TOOL_PALETTE(self.get_widget()),
             GTK_TOOL_ITEM_GROUP(group.get_widget()))) }
     }
 
     pub fn set_expand(&self, group: &gtk::ToolItemGroup, expand: bool) {
         unsafe { ffi::gtk_tool_palette_set_expand(GTK_TOOL_PALETTE(self.get_widget()),
-            GTK_TOOL_ITEM_GROUP(group.get_widget()), ffi::to_gboolean(expand)) }
+            GTK_TOOL_ITEM_GROUP(group.get_widget()), to_gboolean(expand)) }
     }
 
     pub fn get_group_position(&self, group: &gtk::ToolItemGroup) -> i32 {

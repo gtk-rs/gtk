@@ -16,6 +16,7 @@
 //! GtkSizeGroup — Grouping widgets so they request the same size
 
 use gtk::{self, ffi};
+use glib::{to_bool, to_gboolean};
 
 #[derive(Copy)]
 pub struct SizeGroup {
@@ -44,11 +45,11 @@ impl SizeGroup {
     }
 
     pub fn set_ignore_hidden(&self, ignore_hidden: bool) {
-        unsafe { ffi::gtk_size_group_set_ignore_hidden(self.pointer, ffi::to_gboolean(ignore_hidden)) }
+        unsafe { ffi::gtk_size_group_set_ignore_hidden(self.pointer, to_gboolean(ignore_hidden)) }
     }
 
     pub fn get_ignore_hidden(&self) -> bool {
-        unsafe { ffi::to_bool(ffi::gtk_size_group_get_ignore_hidden(self.pointer)) }
+        unsafe { to_bool(ffi::gtk_size_group_get_ignore_hidden(self.pointer)) }
     }
 
     pub fn add_widget<T: gtk::WidgetTrait>(&self, widget: &T) {

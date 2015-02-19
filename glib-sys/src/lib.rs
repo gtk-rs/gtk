@@ -28,17 +28,6 @@ pub type Gboolean = c_int;
 pub const GFALSE:  c_int = 0;
 pub const GTRUE:   c_int = 1;
 
-pub fn to_gboolean(b: bool) -> Gboolean {
-    match b {
-        true => GTRUE,
-        false => GFALSE
-    }
-}
-
-pub fn to_bool(b: Gboolean) -> bool {
-    b != GFALSE
-}
-
 pub type gpointer = *const c_void;
 
 #[repr(C)]

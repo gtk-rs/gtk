@@ -16,7 +16,7 @@
 use libc::{c_int, c_char, self};
 use std::ffi::CString;
 use gtk::ffi;
-use gtk::ffi::{to_bool, to_gboolean};
+use glib::{to_bool, to_gboolean};
 use gdk;
 use gdk_ffi;
 use gtk;

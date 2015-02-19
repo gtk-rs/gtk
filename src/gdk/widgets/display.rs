@@ -18,7 +18,7 @@
 use gdk::{self, ffi};
 use libc::{c_uint};
 use std::ffi::CString;
-use glib_ffi::to_bool;
+use glib::to_bool;
 
 #[repr(C)]
 #[derive(Copy)]

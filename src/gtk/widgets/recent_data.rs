@@ -14,7 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::ffi;
-use gtk::ffi::{to_bool, to_gboolean};
+use glib::{to_bool, to_gboolean};
 use std::default::Default;
 use libc::c_char;
 use std::ffi::CString;
