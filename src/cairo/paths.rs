@@ -75,7 +75,7 @@ pub enum PathSegment {
 }
 
 pub struct PathSegments<'a> {
-    data: CVec<(f64, f64)>,
+    data: CVec<'a, (f64, f64)>,
     i: usize,
     num_data: usize
 }

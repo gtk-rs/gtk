@@ -17,24 +17,28 @@
 
 use std::mem;
 use libc::c_void;
-use std::iter::FromIterator;
+use std::iter::{FromIterator, IntoIterator};
 use std::ops::Index;
+use std::marker::PhantomData;
 
 use glib::ffi;
 use glib::GlibContainer;
 
 pub struct SList<T> {
-    pointer: *mut ffi::C_GSList
+    pointer: *mut ffi::C_GSList,
+    _marker: PhantomData<T>
 }
 
-pub struct SElem<'a, T> {
-    pointer: *mut ffi::C_GSList
+pub struct SElem<'a, T: 'a> {
+    pointer: *mut ffi::C_GSList,
+    _marker: PhantomData<&'a T>
 }
 
 impl<T> SList<T> {
     pub fn new() -> SList<T> {
         SList {
-            pointer: ::std::ptr::null_mut()
+            pointer: ::std::ptr::null_mut(),
+            _marker: PhantomData
         }
     }
 
@@ -90,7 +94,8 @@ impl<T> SList<T> {
 
     pub fn iter(&self) -> SElem<T> {
         SElem {
-            pointer: self.pointer
+            pointer: self.pointer,
+            _marker: PhantomData
         }
     }
 
@@ -104,7 +109,7 @@ impl<T> SList<T> {
         }
     }
 
-    pub fn extend<It: Iterator<Item=T>>(&mut self, it: It) {
+    pub fn extend<It: IntoIterator<Item=T>>(&mut self, it: It) {
         for elem in it {
             self.append(elem);
         }
@@ -134,7 +139,7 @@ impl<'a, T> Iterator for SElem<'a, T> {
 }
 
 impl<T> FromIterator<T> for SList<T> {
-    fn from_iter<It: Iterator<Item=T>>(it: It) -> SList<T> {
+    fn from_iter<It: IntoIterator<Item=T>>(it: It) -> SList<T> {
         let mut new_list = SList::new();
         new_list.extend(it);
         new_list
@@ -159,7 +164,8 @@ impl<T> Drop for SList<T> {
 impl<T> GlibContainer<*mut ffi::C_GSList> for SList<T> {
     fn wrap(pointer: *mut ffi::C_GSList) -> SList<T> {
         SList {
-            pointer: pointer
+            pointer: pointer,
+            _marker: PhantomData
         }
     }
 
