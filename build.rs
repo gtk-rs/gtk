@@ -48,7 +48,7 @@ fn main() {
     // build include path
     let mut gcc_conf = Config::new();
     for path in paths {
-        gcc_conf.include(path);
+        gcc_conf.include(&path);
     }
     gcc_conf.file("./gtk_glue/gtk_glue.c");
 
