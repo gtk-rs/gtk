@@ -18,27 +18,32 @@
 use libc::c_void;
 use std::mem;
 use std::ops::Index;
-use std::iter::FromIterator;
+use std::iter::{FromIterator, IntoIterator};
+use std::marker::PhantomData;
 
 use glib::ffi;
 use glib::GlibContainer;
 
 pub struct List<T> {
-    pointer: *mut ffi::C_GList
+    pointer: *mut ffi::C_GList,
+    _marker: PhantomData<T>
 }
 
-pub struct Elem<'a, T> {
-    pointer: *mut ffi::C_GList
+pub struct Elem<'a, T: 'a> {
+    pointer: *mut ffi::C_GList,
+    _marker: PhantomData<&'a T>
 }
 
-pub struct RevElem<'a, T> {
-    pointer: *mut ffi::C_GList
+pub struct RevElem<'a, T: 'a> {
+    pointer: *mut ffi::C_GList,
+    _marker: PhantomData<&'a T>
 }
 
 impl<T> List<T> {
     pub fn new() -> List<T> {
         List {
-            pointer: ::std::ptr::null_mut()
+            pointer: ::std::ptr::null_mut(),
+            _marker: PhantomData
         }
     }
 
@@ -99,13 +104,15 @@ impl<T> List<T> {
 
     pub fn iter(&self) -> Elem<T> {
         Elem {
-            pointer: unsafe { ffi::g_list_first(self.pointer) }
+            pointer: unsafe { ffi::g_list_first(self.pointer) },
+            _marker: PhantomData
         }
     }
 
     pub fn rev_iter(&self) -> RevElem<T> {
         RevElem {
-            pointer: unsafe { ffi::g_list_last(self.pointer) }
+            pointer: unsafe { ffi::g_list_last(self.pointer) },
+            _marker: PhantomData
         }
     }
 
@@ -119,7 +126,7 @@ impl<T> List<T> {
         }
     }
 
-    pub fn extend<It: Iterator<Item=T>>(&mut self, it: It) {
+    pub fn extend<It: IntoIterator<Item=T>>(&mut self, it: It) {
         for elem in it {
             self.append(elem);
         }
@@ -163,7 +170,7 @@ impl<'a, T> Iterator for RevElem<'a, T> {
 }
 
 impl<T> FromIterator<T> for List<T> {
-    fn from_iter<It: Iterator<Item=T>>(it: It) -> List<T> {
+    fn from_iter<It: IntoIterator<Item=T>>(it: It) -> List<T> {
         let mut new_list = List::new();
         new_list.extend(it);
         new_list
@@ -188,7 +195,8 @@ impl<T> Drop for List<T> {
 impl<T> GlibContainer<*mut ffi::C_GList> for List<T> {
     fn wrap(pointer: *mut ffi::C_GList) -> List<T> {
         List {
-            pointer: pointer
+            pointer: pointer,
+            _marker: PhantomData
         }
     }
 

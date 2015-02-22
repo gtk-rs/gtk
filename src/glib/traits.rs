@@ -16,6 +16,7 @@
 use glib::ffi;
 use gtk::signals::Signal;
 use std::ffi::CString;
+use std::marker::PhantomFn;
 
 pub trait FFIGObject {
     fn get_gobject(&self) -> *mut ffi::C_GObject;
@@ -44,7 +45,7 @@ pub trait FFIGObject {
 //     }
 // }
 
-pub trait Connect<'a, T: Signal<'a>>: FFIGObject {
+pub trait Connect<'a, T: Signal<'a>>: FFIGObject + PhantomFn<&'a T> {
     fn connect(&self, signal: Box<T>) -> () {
         use std::mem::transmute;
 
