@@ -14,4 +14,4 @@ path = "../glib-sys"
 version = "0.1.0"
 
 [build-dependencies]
-pkg-config = "0.2"
+pkg-config = "0.3"

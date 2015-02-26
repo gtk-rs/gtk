@@ -10,4 +10,4 @@ repository = "https://github.com/jeremyletang/rgtk"
 license = "LGPL-3.0+"
 
 [build-dependencies]
-pkg-config = "0.2"
+pkg-config = "0.3"
