@@ -15,10 +15,16 @@
 
 #![allow(non_camel_case_types)]
 
-use std::marker::Send;
-use cairo::context::Rectangle;
+#![feature(libc)]
+#![feature(std_misc)]
+
+extern crate libc;
+
 use libc::{c_int, c_uint, c_char, c_double, c_ulong};
-use cairo::enums::{
+
+pub mod enums;
+
+use enums::{
     Status,
     Antialias,
     LineCap,
@@ -36,14 +42,6 @@ use cairo::enums::{
     PathDataType,
     PatternType
 };
-use cairo::fonts::{
-    FontExtents,
-    Glyph,
-    TextCluster,
-    TextExtents
-};
-use cairo::matrices::Matrix;
-use cairo;
 
 #[repr(C)]
 #[derive(Copy)]
@@ -88,7 +86,7 @@ pub struct cairo_content_t;
 #[repr(C)]
 #[derive(Copy)]
 pub struct cairo_path_t{
-    pub status: cairo::Status,
+    pub status: Status,
     pub data: *mut (c_double, c_double),
     pub num_data: c_int
 }
@@ -135,7 +133,64 @@ pub struct cairo_filter_t;
 #[derive(Copy)]
 pub struct cairo_region_overlap_t;
 
-#[link(name = "cairo")]
+#[repr(C)]
+#[derive(Copy)]
+pub struct FontExtents {
+    pub ascent: c_double,
+    pub descent: c_double,
+    pub height: c_double,
+    pub max_x_advance: c_double,
+    pub max_y_advance: c_double,
+}
+
+#[repr(C)]
+#[derive(Copy)]
+pub struct Glyph {
+    pub index: c_ulong,
+    pub x: c_double,
+    pub y: c_double,
+}
+
+#[repr(C)]
+#[derive(Copy)]
+pub struct TextCluster {
+    pub num_bytes: c_int,
+    pub num_glyphs: c_int,
+}
+
+#[repr(C)]
+#[derive(Copy)]
+pub struct TextExtents {
+    pub x_bearing: c_double,
+    pub y_bearing: c_double,
+    pub width: c_double,
+    pub height: c_double,
+    pub x_advance: c_double,
+    pub y_advance: c_double,
+}
+
+#[repr(C)]
+#[derive(Copy)]
+pub struct Matrix {
+    pub xx: c_double,
+    pub yx: c_double,
+
+    pub xy: c_double,
+    pub yy: c_double,
+
+    pub x0: c_double,
+    pub y0: c_double,
+}
+
+#[repr(C)]
+#[derive(Copy)]
+pub struct Rectangle {
+    x: f64,
+    y: f64,
+    width: f64,
+    height: f64,
+}
+
 extern "C" {
 
     //CAIRO CONTEXT

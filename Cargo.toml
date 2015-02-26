@@ -33,3 +33,7 @@ version = "0.1.0"
 [dependencies.gtk3-sys]
 path = "gtk3-sys"
 version = "0.1.0"
+
+[dependencies.cairo-sys]
+path = "cairo-sys"
+version = "0.1.0"

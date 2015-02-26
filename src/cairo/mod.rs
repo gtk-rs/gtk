@@ -19,6 +19,9 @@ Bindings and wrappers for __Cairo__
 
 extern crate c_vec;
 
+pub use cairo_ffi as ffi;
+pub use cairo_ffi::enums;
+
 pub use self::context::{
     Context,
     Rectangle,
@@ -68,10 +71,10 @@ pub use self::fonts::{
     TextCluster,
 };
 
-pub use self::matrices::Matrix;
-
-pub mod enums;
-pub mod ffi;
+pub use self::matrices::{
+    Matrix,
+    MatrixTrait,
+};
 
 mod fonts;
 mod context;

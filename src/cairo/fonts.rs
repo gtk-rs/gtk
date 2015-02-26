@@ -37,21 +37,12 @@ use cairo::ffi::{
     cairo_scaled_font_t
 };
 
-
-#[repr(C)]
-#[derive(Copy)]
-pub struct TextCluster {
-    num_bytes: c_int,
-    num_glyphs: c_int
-}
-
-#[repr(C)]
-#[derive(Copy)]
-pub struct Glyph {
-    index: c_ulong,
-    x: c_double,
-    y: c_double
-}
+pub use cairo::ffi::{
+    FontExtents,
+    Glyph,
+    TextCluster,
+    TextExtents
+};
 
 /* TODO
  Allocates an array of cairo_glyph_t's. This function is only useful in
@@ -78,27 +69,6 @@ impl TextCluster {
     //pub fn cairo_text_cluster_free(clusters: *TextCluster);
 }
 */
-
-#[repr(C)]
-#[derive(Copy)]
-pub struct FontExtents {
-    pub ascent: c_double,
-    pub descent: c_double,
-    pub height: c_double,
-    pub max_x_advance: c_double,
-    pub max_y_advance: c_double,
-}
-
-#[repr(C)]
-#[derive(Copy)]
-pub struct TextExtents {
-    pub x_bearing: c_double,
-    pub y_bearing: c_double,
-    pub width: c_double,
-    pub height: c_double,
-    pub x_advance: c_double,
-    pub y_advance: c_double,
-}
 
 
 pub struct FontOptions(*mut cairo_font_options_t);
