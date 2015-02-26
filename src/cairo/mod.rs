@@ -21,7 +21,8 @@ extern crate c_vec;
 
 pub use self::context::{
     Context,
-    Rectangle
+    Rectangle,
+    RectangleVec,
 };
 
 pub use self::paths::{

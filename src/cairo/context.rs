@@ -29,7 +29,8 @@ use cairo::enums::{
 use cairo::ffi;
 use cairo::ffi::{
     cairo_t,
-    cairo_surface_t
+    cairo_surface_t,
+    cairo_rectangle_list_t,
 };
 use cairo::enums::{Status, Antialias, LineCap, LineJoin, FillRule};
 use cairo::patterns::{wrap_pattern, Pattern};
@@ -41,6 +42,19 @@ pub struct Rectangle {
     y: f64,
     width: f64,
     height: f64,
+}
+
+pub struct RectangleVec {
+    ptr: *mut cairo_rectangle_list_t,
+    pub rectangles: CVec<'static, Rectangle>,
+}
+
+impl Drop for RectangleVec {
+    fn drop(&mut self) {
+        unsafe {
+            ffi::cairo_rectangle_list_destroy(self.ptr);
+        }
+    }
 }
 
 #[repr(C)]
@@ -323,15 +337,17 @@ impl Context {
         self.ensure_status()
     }
 
-    pub fn copy_clip_rectangle_list(&self) -> CVec<Rectangle>{
+    pub fn copy_clip_rectangle_list(&self) -> RectangleVec {
         unsafe {
             let rectangle_list = ffi::cairo_copy_clip_rectangle_list(self.get_ptr());
 
             (*rectangle_list).status.ensure_valid();
 
-            CVec::new_with_dtor((*rectangle_list).rectangles, (*rectangle_list).num_rectangles as usize, move || {
-                ffi::cairo_rectangle_list_destroy(rectangle_list)
-            })
+            RectangleVec {
+                ptr: rectangle_list,
+                rectangles: CVec::new((*rectangle_list).rectangles,
+                                      (*rectangle_list).num_rectangles as usize),
+            }
         }
     }
 

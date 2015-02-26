@@ -79,7 +79,6 @@ pub struct cairo_rectangle_list_t {
     pub rectangles: *mut Rectangle,
     pub num_rectangles: c_int
 }
-unsafe impl Send for *mut cairo_rectangle_list_t {}
 #[repr(C)]
 #[derive(Copy)]
 pub struct cairo_rectangle_int_t;
