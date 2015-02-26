@@ -15,7 +15,6 @@
 
 #![allow(non_camel_case_types)]
 
-#![feature(libc)]
 #![feature(std_misc)]
 
 extern crate libc;

@@ -16,11 +16,8 @@
 #![allow(non_camel_case_types)]
 #![allow(dead_code)]
 
-#![feature(libc)]
-#![feature(rustc_private)]
-
 extern crate libc;
-#[macro_use] extern crate rustc_bitflags;
+#[macro_use] extern crate bitflags;
 extern crate "glib-sys" as glib_ffi;
 
 pub mod enums;

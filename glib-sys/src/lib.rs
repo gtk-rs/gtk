@@ -14,7 +14,6 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 #![allow(non_camel_case_types)]
-#![feature(libc)]
 
 extern crate libc;
 

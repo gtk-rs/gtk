@@ -48,7 +48,6 @@ let button = gtk::Button:new(); // trait gtk::Button reexported as GtkButtonTrai
 #![feature(core)]
 #![feature(collections)]
 #![feature(std_misc)]
-#![feature(libc)]
 
 extern crate libc;
 

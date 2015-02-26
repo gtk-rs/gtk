@@ -16,6 +16,9 @@ GTK_3_10 = []
 GTK_3_8 = []
 GTK_3_6 = []
 
+[dependencies]
+libc = "0.1"
+
 [dependencies.glib-sys]
 path = "../glib-sys"
 version = "0.1.0"
