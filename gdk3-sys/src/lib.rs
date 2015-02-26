@@ -17,7 +17,6 @@
 #![allow(dead_code)]
 
 #![feature(libc)]
-#![feature(hash)]
 #![feature(rustc_private)]
 
 extern crate libc;
