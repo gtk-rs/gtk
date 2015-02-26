@@ -14,7 +14,6 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gdk::ffi;
-use gtk;
 use std::ffi::CString;
 use libc::{c_char, c_void};
 
@@ -34,7 +33,7 @@ impl Atom {
         let tmp = unsafe {
             let c_str = CString::from_slice(atom_name.as_bytes());
 
-            ffi::gdk_atom_intern(c_str.as_ptr(), gtk::ffi::to_gboolean(only_if_exists))
+            ffi::gdk_atom_intern(c_str.as_ptr(), ::glib::to_gboolean(only_if_exists))
         };
 
         if tmp.is_null() {

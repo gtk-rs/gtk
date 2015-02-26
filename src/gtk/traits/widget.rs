@@ -16,13 +16,14 @@
 use libc::{c_int, c_char, self};
 use std::ffi::CString;
 use gtk::ffi;
-use gtk::ffi::{to_bool, to_gboolean};
+use glib::{to_bool, to_gboolean};
 use gdk;
+use gdk_ffi;
 use gtk;
 use glib;
 use glib::ffi::GType;
 
-pub trait WidgetTrait: ffi::FFIWidget + gtk::GObjectTrait {
+pub trait WidgetTrait: gtk::FFIWidget + gtk::GObjectTrait {
     fn show_all(&mut self) -> () {
         unsafe {
             ffi::gtk_widget_show_all(self.get_widget());
@@ -125,7 +126,7 @@ pub trait WidgetTrait: ffi::FFIWidget + gtk::GObjectTrait {
         if tmp.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp))
+            Some(gtk::FFIWidget::wrap(tmp))
         }
     }
 
@@ -135,7 +136,7 @@ pub trait WidgetTrait: ffi::FFIWidget + gtk::GObjectTrait {
         if tmp.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp))
+            Some(gtk::FFIWidget::wrap(tmp))
         }
     }
 
@@ -184,21 +185,21 @@ pub trait WidgetTrait: ffi::FFIWidget + gtk::GObjectTrait {
         }
     }
 
-    fn override_background_color(&self, state: gtk::StateFlags, color: &gdk::RGBA) {
+    fn override_background_color(&self, state: gtk::StateFlags, color: &gdk_ffi::C_GdkRGBA) {
         unsafe { ffi::gtk_widget_override_background_color(self.get_widget(), state, color) }
     }
 
-    fn override_color(&self, state: gtk::StateFlags, color: &gdk::RGBA) {
+    fn override_color(&self, state: gtk::StateFlags, color: &gdk_ffi::C_GdkRGBA) {
         unsafe { ffi::gtk_widget_override_color(self.get_widget(), state, color) }
     }
 
-    fn override_symbolic_color(&self, name: &str, color: &gdk::RGBA) {
+    fn override_symbolic_color(&self, name: &str, color: &gdk_ffi::C_GdkRGBA) {
         let c_str = CString::from_slice(name.as_bytes());
 
         unsafe { ffi::gtk_widget_override_symbolic_color(self.get_widget(), c_str.as_ptr(), color); }
     }
 
-    fn override_cursor(&self, cursor: &gdk::RGBA, secondary_cursor: &gdk::RGBA) {
+    fn override_cursor(&self, cursor: &gdk_ffi::C_GdkRGBA, secondary_cursor: &gdk_ffi::C_GdkRGBA) {
         unsafe { ffi::gtk_widget_override_cursor(self.get_widget(), cursor, secondary_cursor) }
     }
 
@@ -244,7 +245,7 @@ pub trait WidgetTrait: ffi::FFIWidget + gtk::GObjectTrait {
         if tmp.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp))
+            Some(gtk::FFIWidget::wrap(tmp))
         }
     }
 
@@ -286,7 +287,7 @@ pub trait WidgetTrait: ffi::FFIWidget + gtk::GObjectTrait {
             let mut tmp_vec : glib::List<Box<Self>> = glib::List::new();
 
             for it in old_list.iter() {
-                tmp_vec.append(Box::new(ffi::FFIWidget::wrap(*it)));
+                tmp_vec.append(Box::new(gtk::FFIWidget::wrap(*it)));
             }
             tmp_vec
         }

@@ -20,7 +20,7 @@ use std::ffi::{CString};
 use gtk::{ReliefStyle, PositionType};
 use gtk::cast::GTK_BUTTON;
 use gtk::{self, ffi};
-use gtk::ffi::{to_bool, to_gboolean};
+use glib::{to_bool, to_gboolean};
 
 pub trait ButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait {
     fn pressed(&self) -> () {
@@ -177,7 +177,7 @@ extern "C" fn widget_destroy_callback(object: *mut ffi::C_GtkWidget, user_data: 
 
     // let mut window = check_pointer!(object, Window).unwrap();
     // window.can_drop = false;
-    let mut button: gtk::Button = ffi::FFIWidget::wrap(object);
+    let mut button: gtk::Button = gtk::FFIWidget::wrap(object);
     handler.callback(&mut button);
 
     unsafe {

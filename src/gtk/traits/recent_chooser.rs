@@ -16,8 +16,8 @@
 use std::ffi::CString;
 use gtk::cast::{GTK_RECENT_CHOOSER};
 use gtk::{self, ffi};
-use gtk::ffi::{to_bool, to_gboolean};
-use gtk::ffi::FFIWidget;
+use glib::{to_bool, to_gboolean};
+use gtk::FFIWidget;
 use glib;
 use libc::c_char;
 
@@ -104,7 +104,7 @@ pub trait RecentChooserTrait: gtk::WidgetTrait + FFIWidget {
         if tmp.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp as *mut ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap(tmp as *mut ffi::C_GtkWidget))
         }
     }
 
@@ -134,7 +134,7 @@ pub trait RecentChooserTrait: gtk::WidgetTrait + FFIWidget {
             let mut tmp_vec : glib::List<Box<gtk::RecentInfo>> = glib::List::new();
 
             for it in old_list.iter() {
-                tmp_vec.append(Box::new(ffi::FFIWidget::wrap(*it as *mut gtk::ffi::C_GtkWidget)));
+                tmp_vec.append(Box::new(gtk::FFIWidget::wrap(*it as *mut gtk::ffi::C_GtkWidget)));
             }
             tmp_vec
         }

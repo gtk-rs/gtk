@@ -59,7 +59,7 @@ impl StatusBar {
 
     pub fn get_message_area<T: gtk::WidgetTrait + gtk::BoxTrait>(&self) -> T {
         unsafe {
-            ffi::FFIWidget::wrap(ffi::gtk_statusbar_get_message_area(GTK_STATUSBAR(self.pointer)))
+            gtk::FFIWidget::wrap(ffi::gtk_statusbar_get_message_area(GTK_STATUSBAR(self.pointer)))
         }
     }
 }

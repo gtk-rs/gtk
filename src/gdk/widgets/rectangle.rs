@@ -16,24 +16,20 @@
 //! Rectangles — Simple graphical data type
 
 use gdk::ffi;
-use libc::{c_int};
-use gtk;
+use gdk_ffi::C_GdkRectangle;
+use glib::to_bool;
 
-#[repr(C)]
-#[derive(Copy)]
-pub struct Rectangle { // FIXME should be just an alias to cairo_rectangle_int_t
-    pub x: c_int,
-    pub y: c_int,
-    pub width: c_int,
-    pub height: c_int
+pub trait Rectangle {
+    fn intersect(&self, other: &C_GdkRectangle, dest: &mut C_GdkRectangle) -> bool;
+    fn union(&self, other: &C_GdkRectangle, dest: &mut C_GdkRectangle);
 }
 
-impl Rectangle {
-    pub fn intersect(&self, other: &Rectangle, dest: &mut Rectangle) -> bool {
-        unsafe { gtk::ffi::to_bool(ffi::gdk_rectangle_intersect(self, other, dest)) }
+impl Rectangle for C_GdkRectangle {
+    fn intersect(&self, other: &C_GdkRectangle, dest: &mut C_GdkRectangle) -> bool {
+        unsafe { to_bool(ffi::gdk_rectangle_intersect(self, other, dest)) }
     }
 
-    pub fn union(&self, other: &Rectangle, dest: &mut Rectangle) {
+    fn union(&self, other: &C_GdkRectangle, dest: &mut C_GdkRectangle) {
         unsafe { ffi::gdk_rectangle_union(self, other, dest) }
     }
 }

@@ -16,8 +16,9 @@
 //! GtkPlacesSidebar — Sidebar that displays frequently-used places in the file system
 
 use gtk::{self, ffi};
-use gtk::ffi::FFIWidget;
+use gtk::FFIWidget;
 use gtk::cast::GTK_PLACES_SIDEBAR;
+use glib::{to_bool, to_gboolean};
 
 struct_Widget!(PlacesSidebar);
 
@@ -36,37 +37,37 @@ impl PlacesSidebar {
     }
 
     pub fn set_show_desktop(&self, show_desktop: bool) {
-        unsafe { ffi::gtk_places_sidebar_set_show_desktop(GTK_PLACES_SIDEBAR(self.get_widget()), ffi::to_gboolean(show_desktop)) }
+        unsafe { ffi::gtk_places_sidebar_set_show_desktop(GTK_PLACES_SIDEBAR(self.get_widget()), to_gboolean(show_desktop)) }
     }
 
     pub fn get_show_desktop(&self) -> bool {
-        unsafe { ffi::to_bool(ffi::gtk_places_sidebar_get_show_desktop(GTK_PLACES_SIDEBAR(self.get_widget()))) }
+        unsafe { to_bool(ffi::gtk_places_sidebar_get_show_desktop(GTK_PLACES_SIDEBAR(self.get_widget()))) }
     }
 
     pub fn set_show_connect_to_server(&self, show_connect_to_server: bool) {
         unsafe { ffi::gtk_places_sidebar_set_show_connect_to_server(GTK_PLACES_SIDEBAR(self.get_widget()),
-            ffi::to_gboolean(show_connect_to_server)) }
+            to_gboolean(show_connect_to_server)) }
     }
 
     pub fn get_show_connect_to_server(&self) -> bool {
-        unsafe { ffi::to_bool(ffi::gtk_places_sidebar_get_show_connect_to_server(GTK_PLACES_SIDEBAR(self.get_widget()))) }
+        unsafe { to_bool(ffi::gtk_places_sidebar_get_show_connect_to_server(GTK_PLACES_SIDEBAR(self.get_widget()))) }
     }
 
     pub fn set_local_only(&self, local_only: bool) {
-        unsafe { ffi::gtk_places_sidebar_set_local_only(GTK_PLACES_SIDEBAR(self.get_widget()), ffi::to_gboolean(local_only)) }
+        unsafe { ffi::gtk_places_sidebar_set_local_only(GTK_PLACES_SIDEBAR(self.get_widget()), to_gboolean(local_only)) }
     }
 
     pub fn get_local_only(&self) -> bool {
-        unsafe { ffi::to_bool(ffi::gtk_places_sidebar_get_local_only(GTK_PLACES_SIDEBAR(self.get_widget()))) }
+        unsafe { to_bool(ffi::gtk_places_sidebar_get_local_only(GTK_PLACES_SIDEBAR(self.get_widget()))) }
     }
 
     pub fn set_show_enter_location(&self, show_enter_location: bool) {
         unsafe { ffi::gtk_places_sidebar_set_show_enter_location(GTK_PLACES_SIDEBAR(self.get_widget()),
-            ffi::to_gboolean(show_enter_location)) }
+            to_gboolean(show_enter_location)) }
     }
 
     pub fn get_show_enter_location(&self) -> bool {
-        unsafe { ffi::to_bool(ffi::gtk_places_sidebar_get_show_enter_location(GTK_PLACES_SIDEBAR(self.get_widget()))) }
+        unsafe { to_bool(ffi::gtk_places_sidebar_get_show_enter_location(GTK_PLACES_SIDEBAR(self.get_widget()))) }
     }
 }
 

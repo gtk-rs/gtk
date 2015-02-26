@@ -18,6 +18,7 @@
 use gtk::{self, ffi};
 use std::ffi::CString;
 use libc::{self, c_char, c_void};
+use glib::{to_bool, to_gboolean};
 
 trait GValuePrivate {
     fn get(gvalue: &GValue) -> Self;
@@ -68,11 +69,11 @@ impl GValue {
     }
 
     fn set_boolean(&self, v_boolean: bool) {
-        unsafe { ffi::g_value_set_boolean(self.pointer, ffi::to_gboolean(v_boolean)) }
+        unsafe { ffi::g_value_set_boolean(self.pointer, to_gboolean(v_boolean)) }
     }
 
     fn get_boolean(&self) -> bool {
-        unsafe { ffi::to_bool(ffi::g_value_get_boolean(self.pointer)) }
+        unsafe { to_bool(ffi::g_value_get_boolean(self.pointer)) }
     }
 
     fn set_schar(&self, v_char: i8) {
@@ -292,11 +293,11 @@ impl GValue {
     }
 
     pub fn compatible(src_type: gtk::GType, dest_type: gtk::GType) -> bool {
-        unsafe { ffi::to_bool(ffi::g_value_type_compatible(src_type, dest_type)) }
+        unsafe { to_bool(ffi::g_value_type_compatible(src_type, dest_type)) }
     }
 
     pub fn transformable(src_type: gtk::GType, dest_type: gtk::GType) -> bool {
-        unsafe { ffi::to_bool(ffi::g_value_type_transformable(src_type, dest_type)) }
+        unsafe { to_bool(ffi::g_value_type_transformable(src_type, dest_type)) }
     }
 
     #[doc(hidden)]
@@ -351,6 +352,7 @@ impl GValuePrivate for i64 {
     }
 }
 
+/*
 impl GValuePrivate for u64 {
     fn get(gvalue: &GValue) -> u64 {
         gvalue.get_uint64()
@@ -360,6 +362,7 @@ impl GValuePrivate for u64 {
         gvalue.set_uint64(*self)
     }
 }
+*/
 
 impl GValuePrivate for bool {
     fn get(gvalue: &GValue) -> bool {
@@ -437,7 +440,7 @@ impl GValuePrivate for String {
 impl GValuePublic for i32 {}
 impl GValuePublic for u32 {}
 impl GValuePublic for i64 {}
-impl GValuePublic for u64 {}
+//impl GValuePublic for u64 {}
 impl GValuePublic for i8 {}
 impl GValuePublic for u8 {}
 impl GValuePublic for gtk::GType {}

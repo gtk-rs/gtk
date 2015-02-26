@@ -17,7 +17,8 @@
 
 use gtk::cast::{GTK_FLOW_BOX_CHILD, GTK_FLOW_BOX};
 use gtk::{self, ffi};
-use gtk::ffi::FFIWidget;
+use gtk::FFIWidget;
+use glib::{to_bool, to_gboolean};
 
 /// GtkFlowBox — A container that allows reflowing its children
 struct_Widget!(FlowBox);
@@ -31,13 +32,13 @@ impl FlowBox {
     pub fn set_homogeneous(&mut self, homogeneous: bool) {
         unsafe {
             ffi::gtk_flow_box_set_homogeneous(GTK_FLOW_BOX(self.pointer),
-                                              ffi::to_gboolean(homogeneous))
+                                              to_gboolean(homogeneous))
         }
     }
 
     pub fn is_homogeneous(&self) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_flow_box_get_homogeneous(GTK_FLOW_BOX(self.pointer)))
+            to_bool(ffi::gtk_flow_box_get_homogeneous(GTK_FLOW_BOX(self.pointer)))
         }
     }
 
@@ -92,13 +93,13 @@ impl FlowBox {
     pub fn set_activate_on_single_click(&mut self, single: bool) {
         unsafe {
             ffi::gtk_flow_box_set_activate_on_single_click(GTK_FLOW_BOX(self.pointer),
-                                                           ffi::to_gboolean(single))
+                                                           to_gboolean(single))
         }
     }
 
     pub fn is_activate_on_single_click(&self) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_flow_box_get_activate_on_single_click(GTK_FLOW_BOX(self.pointer)))
+            to_bool(ffi::gtk_flow_box_get_activate_on_single_click(GTK_FLOW_BOX(self.pointer)))
         }
     }
 
@@ -117,7 +118,7 @@ impl FlowBox {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 
@@ -197,7 +198,7 @@ impl FlowBoxChild {
 
     pub fn is_selected(&self) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_flow_box_child_is_selected(GTK_FLOW_BOX_CHILD(self.pointer)))
+            to_bool(ffi::gtk_flow_box_child_is_selected(GTK_FLOW_BOX_CHILD(self.pointer)))
         }
     }
 

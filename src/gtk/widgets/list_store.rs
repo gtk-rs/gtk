@@ -18,6 +18,7 @@ use gtk::{self, ffi};
 use gtk::TreeIter;
 use std::ffi::CString;
 use std::num::ToPrimitive;
+use glib::to_bool;
 
 pub struct ListStore {
     pointer: *mut ffi::C_GtkListStore
@@ -42,7 +43,7 @@ impl ListStore {
     }
 
     pub fn remove(&self, iter: &TreeIter) -> bool {
-        unsafe { ffi::to_bool(ffi::gtk_list_store_remove(self.pointer, iter.get_pointer())) }
+        unsafe { to_bool(ffi::gtk_list_store_remove(self.pointer, iter.get_pointer())) }
     }
 
     pub fn insert(&self, iter: &mut TreeIter, position: i32) {
@@ -72,7 +73,7 @@ impl ListStore {
     }
 
     pub fn iter_is_valid(&self, iter: &TreeIter) -> bool {
-        unsafe { ffi::to_bool(ffi::gtk_list_store_iter_is_valid(self.pointer, iter.get_pointer())) }
+        unsafe { to_bool(ffi::gtk_list_store_iter_is_valid(self.pointer, iter.get_pointer())) }
     }
 
     pub fn reorder(&self, new_order: *mut i32) {

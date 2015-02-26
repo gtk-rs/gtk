@@ -17,7 +17,7 @@
 
 use gtk::{self, ffi};
 use gtk::cast::GTK_IMAGE;
-use gtk::ffi::FFIWidget;
+use gtk::FFIWidget;
 use std::ffi::CString;
 
 /// Image — A widget displaying an image

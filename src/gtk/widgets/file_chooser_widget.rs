@@ -16,7 +16,7 @@
 //! GtkFileChooserWidget — A file chooser widget
 
 use gtk::{self, ffi};
-use gtk::ffi::FFIWidget;
+use gtk::FFIWidget;
 
 struct_Widget!(FileChooserWidget);
 
@@ -27,7 +27,7 @@ impl FileChooserWidget {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap(tmp_pointer))
         }
     }
 }

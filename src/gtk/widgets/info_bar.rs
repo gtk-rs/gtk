@@ -21,7 +21,7 @@ use std::ffi::CString;
 use gtk::MessageType;
 use gtk::cast::GTK_INFOBAR;
 use gtk::{self, ffi};
-use gtk::ffi::{to_bool, to_gboolean};
+use glib::{to_bool, to_gboolean};
 
 /// InfoBar — Report important messages to the user
 struct_Widget!(InfoBar);
@@ -43,7 +43,7 @@ impl InfoBar {
             let c_str = CString::from_slice(button_text.as_bytes());
             ffi::gtk_info_bar_add_button(GTK_INFOBAR(self.pointer), c_str.as_ptr(), response_id as c_int)
         };
-        ffi::FFIWidget::wrap(button)
+        gtk::FFIWidget::wrap(button)
     }
 
     pub fn set_response_sensitive(&mut self, response_id: i32, setting: bool) -> () {

@@ -17,7 +17,7 @@
 
 use gtk::cast::GTK_RECENT_MANAGER;
 use gtk::{self, ffi};
-use gtk::ffi::FFIWidget;
+use gtk::FFIWidget;
 use gtk::RecentManager;
 
 struct_Widget!(RecentChooserWidget);

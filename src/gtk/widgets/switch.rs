@@ -17,7 +17,7 @@
 
 use gtk::cast::GTK_SWITCH;
 use gtk::ffi;
-use gtk::ffi::{to_bool, to_gboolean};
+use glib::{to_bool, to_gboolean};
 
 /// Switch — A "light switch" style toggle
 /*

@@ -14,13 +14,13 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::{self, ffi};
-use gtk::ffi::{to_bool, to_gboolean};
+use glib::{to_bool, to_gboolean};
 use gtk::cast::GTK_COLOR_CHOOSER;
-use gdk;
+use gdk_ffi;
 
 pub trait ColorChooserTrait: gtk::WidgetTrait {
-    fn get_rgba(&self) -> gdk::RGBA {
-        let color = gdk::RGBA {
+    fn get_rgba(&self) -> gdk_ffi::C_GdkRGBA {
+        let color = gdk_ffi::C_GdkRGBA {
             red: 0f64,
             green: 0f64,
             blue: 0f64,
@@ -30,7 +30,7 @@ pub trait ColorChooserTrait: gtk::WidgetTrait {
         color
     }
 
-    fn set_rgba(&self, color: gdk::RGBA) -> () {
+    fn set_rgba(&self, color: gdk_ffi::C_GdkRGBA) -> () {
         unsafe { ffi::gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(self.get_widget()), &color) };
     }
 
@@ -42,7 +42,7 @@ pub trait ColorChooserTrait: gtk::WidgetTrait {
         unsafe { ffi::gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(self.get_widget()), to_gboolean(use_alpha)) }
     }
 
-    fn add_palette(&self, orientation: gtk::Orientation, colors_per_line: i32, colors: Vec<gdk::RGBA>) -> () {
+    fn add_palette(&self, orientation: gtk::Orientation, colors_per_line: i32, colors: Vec<gdk_ffi::C_GdkRGBA>) -> () {
         unsafe { ffi::gtk_color_chooser_add_palette(GTK_COLOR_CHOOSER(self.get_widget()), orientation, colors_per_line, colors.len() as i32, colors.as_slice().as_ptr()) }
     }
 }

@@ -45,6 +45,14 @@ Finally all the gtk widgets implement the trait self::traits::Widget.
 
 #![macro_use]
 
+pub use gtk_ffi as ffi;
+pub use gtk_ffi::enums;
+
+pub trait FFIWidget: Sized {
+    fn get_widget(&self) -> *mut ffi::C_GtkWidget;
+    fn wrap(widget: *mut ffi::C_GtkWidget) -> Self;
+}
+
 // These are/should be inlined
 pub use self::rt::{
     init,
@@ -154,7 +162,7 @@ pub use self::widgets::{
     RecentChooserWidget,
     ComboBox,
     GValue,
-    g_type,
+    //g_type,
     ComboBoxText,
     TextMark,
     TextTag,
@@ -205,88 +213,88 @@ pub use self::widgets::{
 };
 
 /// GTK Enum types
-pub use self::enums::window_type::WindowType;
-pub use self::enums::text_direction::TextDirection;
-pub use self::enums::window_position::WindowPosition;
-pub use self::enums::button_box_style::ButtonBoxStyle;
-pub use self::enums::orientation::Orientation;
-pub use self::enums::direction_type::DirectionType;
-pub use self::enums::corner_type::CornerType;
-pub use self::enums::resize_mode::ResizeMode;
-pub use self::enums::border_style::BorderStyle;
-pub use self::enums::sort_type::SortType;
-pub use self::enums::state_flags::StateFlags;
-pub use self::enums::drag_result::DragResult;
-pub use self::enums::accel_flags::AccelFlags;
-pub use self::enums::arrow_placement::ArrowPlacement;
-pub use self::enums::arrow_type::ArrowType;
-pub use self::enums::attach_options::AttachOptions;
-pub use self::enums::delete_type::DeleteType;
-pub use self::enums::expander_style::ExpanderStyle;
-pub use self::enums::im_preedit_style::IMPreeditStyle;
-pub use self::enums::im_status_style::IMStatusStyle;
-pub use self::enums::justification::Justification;
-pub use self::enums::movement_step::MovementStep;
-pub use self::enums::pack_type::PackType;
-pub use self::enums::path_priority_type::PathPriorityType;
-pub use self::enums::path_type::PathType;
-pub use self::enums::policy_type::PolicyType;
-pub use self::enums::position_type::PositionType;
-pub use self::enums::relief_style::ReliefStyle;
-pub use self::enums::scroll_step::ScrollStep;
-pub use self::enums::scroll_type::ScrollType;
-pub use self::enums::selection_mode::SelectionMode;
-pub use self::enums::shadow_type::ShadowType;
-pub use self::enums::state_type::StateType;
-pub use self::enums::toolbar_style::ToolbarStyle;
-pub use self::enums::junction_sides::JunctionSides;
-pub use self::enums::region_flags::RegionFlags;
-pub use self::enums::icon_size::IconSize;
-pub use self::enums::entry_icon_position::EntryIconPosition;
-pub use self::enums::input_hints::InputHints;
-pub use self::enums::input_purpose::InputPurpose;
-pub use self::enums::image_type::ImageType;
-pub use self::enums::spin_type::SpinType;
-pub use self::enums::spin_button_update_policy::SpinButtonUpdatePolicy;
-pub use self::enums::level_bar_mode::LevelBarMode;
-pub use self::enums::calendar_display_options::CalendarDisplayOptions;
-pub use self::enums::message_type::MessageType;
-pub use self::enums::license::License;
-pub use self::enums::response_type::ResponseType;
-pub use self::enums::dialog_flags::DialogFlags;
-pub use self::enums::file_chooser_action::FileChooserAction;
-pub use self::enums::buttons_type::ButtonsType;
-pub use self::enums::stack_transition_type::StackTransitionType;
-pub use self::enums::revealer_transition_type::RevealerTransitionType;
-pub use self::enums::scrollable_policy::ScrollablePolicy;
-pub use self::enums::file_filter_flags::FileFilterFlags;
-pub use self::enums::app_info_create_flags::AppInfoCreateFlags;
-pub use self::enums::size_request_mode::SizeRequestMode;
-pub use self::enums::align::Align;
-pub use self::enums::g_connect_flags::GConnectFlags;
-pub use self::enums::builder_error::BuilderError;
-pub use self::enums::page_orientation::PageOrientation;
-pub use self::enums::unit::Unit;
-pub use self::enums::number_up_layout::NumberUpLayout;
-pub use self::enums::print_pages::PrintPages;
-pub use self::enums::page_set::PageSet;
-pub use self::enums::recent_sort_type::RecentSortType;
-pub use self::enums::recent_filter_flags::RecentFilterFlags;
-pub use self::enums::widget_help_type::WidgetHelpType;
-pub use self::enums::text_window_type::TextWindowType;
-pub use self::enums::wrap_mode::WrapMode;
-pub use self::enums::tree_view_grid_lines::TreeViewGridLines;
-pub use self::enums::tree_view_column_sizing::TreeViewColumnSizing;
-pub use self::enums::cell_renderer_state::CellRendererState;
-pub use self::enums::tree_model_flags::TreeModelFlags;
-pub use self::enums::icon_view_drop_position::IconViewDropPosition;
-pub use self::enums::sensitivity_type::SensitivityType;
-pub use self::enums::g_type_enum::GType;
-pub use self::enums::text_search_flags::TextSearchFlags;
-pub use self::enums::places_open_flags::PlacesOpenFlags;
-pub use self::enums::tool_palette_drag_targets::ToolPaletteDragTargets;
-pub use self::enums::dest_defaults::DestDefaults;
-pub use self::enums::size_group_mode::SizeGroupMode;
+pub use gtk_ffi::enums::WindowType;
+pub use gtk_ffi::enums::TextDirection;
+pub use gtk_ffi::enums::WindowPosition;
+pub use gtk_ffi::enums::ButtonBoxStyle;
+pub use gtk_ffi::enums::Orientation;
+pub use gtk_ffi::enums::DirectionType;
+pub use gtk_ffi::enums::CornerType;
+pub use gtk_ffi::enums::ResizeMode;
+pub use gtk_ffi::enums::BorderStyle;
+pub use gtk_ffi::enums::SortType;
+pub use gtk_ffi::enums::StateFlags;
+pub use gtk_ffi::enums::DragResult;
+pub use gtk_ffi::enums::AccelFlags;
+pub use gtk_ffi::enums::ArrowPlacement;
+pub use gtk_ffi::enums::ArrowType;
+pub use gtk_ffi::enums::AttachOptions;
+pub use gtk_ffi::enums::DeleteType;
+pub use gtk_ffi::enums::ExpanderStyle;
+pub use gtk_ffi::enums::IMPreeditStyle;
+pub use gtk_ffi::enums::IMStatusStyle;
+pub use gtk_ffi::enums::Justification;
+pub use gtk_ffi::enums::MovementStep;
+pub use gtk_ffi::enums::PackType;
+pub use gtk_ffi::enums::PathPriorityType;
+pub use gtk_ffi::enums::PathType;
+pub use gtk_ffi::enums::PolicyType;
+pub use gtk_ffi::enums::PositionType;
+pub use gtk_ffi::enums::ReliefStyle;
+pub use gtk_ffi::enums::ScrollStep;
+pub use gtk_ffi::enums::ScrollType;
+pub use gtk_ffi::enums::SelectionMode;
+pub use gtk_ffi::enums::ShadowType;
+pub use gtk_ffi::enums::StateType;
+pub use gtk_ffi::enums::ToolbarStyle;
+pub use gtk_ffi::enums::JunctionSides;
+pub use gtk_ffi::enums::RegionFlags;
+pub use gtk_ffi::enums::IconSize;
+pub use gtk_ffi::enums::EntryIconPosition;
+pub use gtk_ffi::enums::InputHints;
+pub use gtk_ffi::enums::InputPurpose;
+pub use gtk_ffi::enums::ImageType;
+pub use gtk_ffi::enums::SpinType;
+pub use gtk_ffi::enums::SpinButtonUpdatePolicy;
+pub use gtk_ffi::enums::LevelBarMode;
+pub use gtk_ffi::enums::CalendarDisplayOptions;
+pub use gtk_ffi::enums::MessageType;
+pub use gtk_ffi::enums::License;
+pub use gtk_ffi::enums::ResponseType;
+pub use gtk_ffi::enums::DialogFlags;
+pub use gtk_ffi::enums::FileChooserAction;
+pub use gtk_ffi::enums::ButtonsType;
+pub use gtk_ffi::enums::StackTransitionType;
+pub use gtk_ffi::enums::RevealerTransitionType;
+pub use gtk_ffi::enums::ScrollablePolicy;
+pub use gtk_ffi::enums::FileFilterFlags;
+pub use gtk_ffi::enums::AppInfoCreateFlags;
+pub use gtk_ffi::enums::SizeRequestMode;
+pub use gtk_ffi::enums::Align;
+pub use gtk_ffi::enums::GConnectFlags;
+pub use gtk_ffi::enums::BuilderError;
+pub use gtk_ffi::enums::PageOrientation;
+pub use gtk_ffi::enums::Unit;
+pub use gtk_ffi::enums::NumberUpLayout;
+pub use gtk_ffi::enums::PrintPages;
+pub use gtk_ffi::enums::PageSet;
+pub use gtk_ffi::enums::RecentSortType;
+pub use gtk_ffi::enums::RecentFilterFlags;
+pub use gtk_ffi::enums::WidgetHelpType;
+pub use gtk_ffi::enums::TextWindowType;
+pub use gtk_ffi::enums::WrapMode;
+pub use gtk_ffi::enums::TreeViewGridLines;
+pub use gtk_ffi::enums::TreeViewColumnSizing;
+pub use gtk_ffi::enums::CellRendererState;
+pub use gtk_ffi::enums::TreeModelFlags;
+pub use gtk_ffi::enums::IconViewDropPosition;
+pub use gtk_ffi::enums::SensitivityType;
+pub use gtk_ffi::GType;
+pub use gtk_ffi::enums::TextSearchFlags;
+pub use gtk_ffi::enums::PlacesOpenFlags;
+pub use gtk_ffi::enums::ToolPaletteDragTargets;
+pub use gtk_ffi::enums::DestDefaults;
+pub use gtk_ffi::enums::SizeGroupMode;
 pub use self::traits::GObjectTrait;
 
 /// Gtk Traits
@@ -336,11 +344,8 @@ mod macros;
 mod cast;
 mod rt;
 
-mod enums;
 mod traits;
 pub mod signals;
 pub mod widgets;
 pub mod types;
 
-#[doc(hidden)]
-pub mod ffi;

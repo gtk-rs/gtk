@@ -20,6 +20,7 @@
 use gtk::{self, ffi};
 use gtk::cast::GTK_STACK;
 use std::ffi::CString;
+use glib::{to_bool, to_gboolean};
 
 /// GtkStack — A stacking container
 struct_Widget!(Stack);
@@ -64,7 +65,7 @@ impl Stack {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap(tmp_pointer))
         }
     }
 
@@ -98,13 +99,13 @@ impl Stack {
 
     pub fn set_homogeneous(&mut self, homogeneous: bool) {
         unsafe {
-            ffi::gtk_stack_set_homogeneous(GTK_STACK(self.pointer), ffi::to_gboolean(homogeneous))
+            ffi::gtk_stack_set_homogeneous(GTK_STACK(self.pointer), to_gboolean(homogeneous))
         }
     }
 
     pub fn is_homogeneous(&self) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_stack_get_homogeneous(GTK_STACK(self.pointer)))
+            to_bool(ffi::gtk_stack_get_homogeneous(GTK_STACK(self.pointer)))
         }
     }
 

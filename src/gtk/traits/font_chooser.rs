@@ -16,8 +16,8 @@
 use std::ffi::CString;
 use gtk::cast::{GTK_FONT_CHOOSER};
 use gtk::{self, ffi};
-use gtk::ffi::{to_bool, to_gboolean};
-use gtk::ffi::FFIWidget;
+use glib::{to_bool, to_gboolean};
+use gtk::FFIWidget;
 use libc::c_char;
 
 pub trait FontChooserTrait: gtk::WidgetTrait {

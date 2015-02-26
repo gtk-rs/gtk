@@ -17,6 +17,7 @@
 
 use gtk::{self, ffi};
 use gtk::cast::GTK_CHECK_MENU_ITEM;
+use glib::{to_bool, to_gboolean};
 
 /// The widget used for item in menus
 pub trait CheckMenuItemTrait: gtk::WidgetTrait +
@@ -27,13 +28,13 @@ pub trait CheckMenuItemTrait: gtk::WidgetTrait +
     fn set_active(&mut self, is_active: bool) {
         unsafe {
             ffi::gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(self.get_widget()),
-                                                ffi::to_gboolean(is_active))
+                                                to_gboolean(is_active))
         }
     }
 
     fn active(&self) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(self.get_widget())))
+            to_bool(ffi::gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(self.get_widget())))
         }
     }
 
@@ -46,26 +47,26 @@ pub trait CheckMenuItemTrait: gtk::WidgetTrait +
     fn set_inconsistent(&mut self, setting: bool) {
         unsafe {
             ffi::gtk_check_menu_item_set_inconsistent(GTK_CHECK_MENU_ITEM(self.get_widget()),
-                                                      ffi::to_gboolean(setting))
+                                                      to_gboolean(setting))
         }
     }
 
     fn inconsistent(&self) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_check_menu_item_get_inconsistent(GTK_CHECK_MENU_ITEM(self.get_widget())))
+            to_bool(ffi::gtk_check_menu_item_get_inconsistent(GTK_CHECK_MENU_ITEM(self.get_widget())))
         }
     }
 
     fn set_draw_as_radio(&mut self, setting: bool) {
         unsafe {
             ffi::gtk_check_menu_item_set_draw_as_radio(GTK_CHECK_MENU_ITEM(self.get_widget()),
-                                                       ffi::to_gboolean(setting))
+                                                       to_gboolean(setting))
         }
     }
 
     fn draw_as_radio(&self) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_check_menu_item_get_draw_as_radio(GTK_CHECK_MENU_ITEM(self.get_widget())))
+            to_bool(ffi::gtk_check_menu_item_get_draw_as_radio(GTK_CHECK_MENU_ITEM(self.get_widget())))
         }
     }
 }

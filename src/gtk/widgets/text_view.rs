@@ -17,8 +17,9 @@
 
 use gtk::{self, ffi};
 use gtk::TextBuffer;
-use gtk::ffi::FFIWidget;
+use gtk::FFIWidget;
 use gtk::cast::{GTK_TEXT_VIEW, GTK_TEXT_BUFFER};
+use glib::{to_bool, to_gboolean};
 
 struct_Widget!(TextView);
 
@@ -49,18 +50,18 @@ impl TextView {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 
     pub fn scroll_to_mark(&self, mark: &gtk::TextMark, within_margin: f64, use_align: bool, xalign: f64, yalign: f64) {
         unsafe { ffi::gtk_text_view_scroll_to_mark(GTK_TEXT_VIEW(self.get_widget()), mark.get_pointer(), within_margin,
-            ffi::to_gboolean(use_align), xalign, yalign) }
+            to_gboolean(use_align), xalign, yalign) }
     }
 
     pub fn scroll_to_iter(&self, iter: &gtk::TextIter, within_margin: f64, use_align: bool, xalign: f64, yalign: f64) -> bool {
-        unsafe { ffi::to_bool(ffi::gtk_text_view_scroll_to_iter(GTK_TEXT_VIEW(self.get_widget()), iter.get_pointer(), within_margin,
-            ffi::to_gboolean(use_align), xalign, yalign)) }
+        unsafe { to_bool(ffi::gtk_text_view_scroll_to_iter(GTK_TEXT_VIEW(self.get_widget()), iter.get_pointer(), within_margin,
+            to_gboolean(use_align), xalign, yalign)) }
     }
 
     pub fn scroll_mark_onscreen(&self, mark: &gtk::TextMark) {
@@ -68,11 +69,11 @@ impl TextView {
     }
 
     pub fn move_mark_onscreen(&self, mark: &gtk::TextMark) -> bool {
-        unsafe { ffi::to_bool(ffi::gtk_text_view_move_mark_onscreen(GTK_TEXT_VIEW(self.get_widget()), mark.get_pointer())) }
+        unsafe { to_bool(ffi::gtk_text_view_move_mark_onscreen(GTK_TEXT_VIEW(self.get_widget()), mark.get_pointer())) }
     }
 
     pub fn place_cursor_onscreen(&self) -> bool {
-        unsafe { ffi::to_bool(ffi::gtk_text_view_place_cursor_onscreen(GTK_TEXT_VIEW(self.get_widget()))) }
+        unsafe { to_bool(ffi::gtk_text_view_place_cursor_onscreen(GTK_TEXT_VIEW(self.get_widget()))) }
     }
 
     pub fn get_line_at_y(&self, target_iter: &gtk::TextIter, y: i32, line_top: &mut i32) {
@@ -103,28 +104,28 @@ impl TextView {
     }
 
     pub fn forward_display_line(&self, iter: &gtk::TextIter) -> bool {
-        unsafe { ffi::to_bool(ffi::gtk_text_view_forward_display_line(GTK_TEXT_VIEW(self.get_widget()), iter.get_pointer())) }
+        unsafe { to_bool(ffi::gtk_text_view_forward_display_line(GTK_TEXT_VIEW(self.get_widget()), iter.get_pointer())) }
     }
 
     pub fn backward_display_line(&self, iter: &gtk::TextIter) -> bool {
-        unsafe { ffi::to_bool(ffi::gtk_text_view_forward_display_line(GTK_TEXT_VIEW(self.get_widget()), iter.get_pointer())) }
+        unsafe { to_bool(ffi::gtk_text_view_forward_display_line(GTK_TEXT_VIEW(self.get_widget()), iter.get_pointer())) }
     }
 
     pub fn forward_display_line_end(&self, iter: &gtk::TextIter) -> bool {
-        unsafe { ffi::to_bool(ffi::gtk_text_view_forward_display_line_end(GTK_TEXT_VIEW(self.get_widget()), iter.get_pointer())) }
+        unsafe { to_bool(ffi::gtk_text_view_forward_display_line_end(GTK_TEXT_VIEW(self.get_widget()), iter.get_pointer())) }
     }
 
     pub fn backward_display_line_start(&self, iter: &gtk::TextIter) -> bool {
-        unsafe { ffi::to_bool(ffi::gtk_text_view_backward_display_line_start(GTK_TEXT_VIEW(self.get_widget()), iter.get_pointer())) }
+        unsafe { to_bool(ffi::gtk_text_view_backward_display_line_start(GTK_TEXT_VIEW(self.get_widget()), iter.get_pointer())) }
     }
 
     pub fn starts_display_line(&self, iter: &gtk::TextIter) -> bool {
-        unsafe { ffi::to_bool(ffi::gtk_text_view_starts_display_line(GTK_TEXT_VIEW(self.get_widget()),
+        unsafe { to_bool(ffi::gtk_text_view_starts_display_line(GTK_TEXT_VIEW(self.get_widget()),
             iter.get_pointer())) }
     }
 
     pub fn move_visually(&self, iter: &gtk::TextIter, count: i32) -> bool {
-        unsafe { ffi::to_bool(ffi::gtk_text_view_move_visually(GTK_TEXT_VIEW(self.get_widget()), iter.get_pointer(),
+        unsafe { to_bool(ffi::gtk_text_view_move_visually(GTK_TEXT_VIEW(self.get_widget()), iter.get_pointer(),
             count as ::libc::c_int)) }
     }
 
@@ -151,27 +152,27 @@ impl TextView {
     }
 
     pub fn set_editable(&self, setting: bool) {
-        unsafe { ffi::gtk_text_view_set_editable(GTK_TEXT_VIEW(self.get_widget()), ffi::to_gboolean(setting)) }
+        unsafe { ffi::gtk_text_view_set_editable(GTK_TEXT_VIEW(self.get_widget()), to_gboolean(setting)) }
     }
 
     pub fn get_editable(&self) -> bool {
-        unsafe { ffi::to_bool(ffi::gtk_text_view_get_editable(GTK_TEXT_VIEW(self.get_widget()))) }
+        unsafe { to_bool(ffi::gtk_text_view_get_editable(GTK_TEXT_VIEW(self.get_widget()))) }
     }
 
     pub fn set_cursor_visible(&self, setting: bool) {
-        unsafe { ffi::gtk_text_view_set_cursor_visible(GTK_TEXT_VIEW(self.get_widget()), ffi::to_gboolean(setting)) }
+        unsafe { ffi::gtk_text_view_set_cursor_visible(GTK_TEXT_VIEW(self.get_widget()), to_gboolean(setting)) }
     }
 
     pub fn get_cursor_visible(&self) -> bool {
-        unsafe { ffi::to_bool(ffi::gtk_text_view_get_cursor_visible(GTK_TEXT_VIEW(self.get_widget()))) }
+        unsafe { to_bool(ffi::gtk_text_view_get_cursor_visible(GTK_TEXT_VIEW(self.get_widget()))) }
     }
 
     pub fn set_overwrite(&self, overwrite: bool) {
-        unsafe { ffi::gtk_text_view_set_overwrite(GTK_TEXT_VIEW(self.get_widget()), ffi::to_gboolean(overwrite)) }
+        unsafe { ffi::gtk_text_view_set_overwrite(GTK_TEXT_VIEW(self.get_widget()), to_gboolean(overwrite)) }
     }
 
     pub fn get_overwrite(&self) -> bool {
-        unsafe { ffi::to_bool(ffi::gtk_text_view_get_overwrite(GTK_TEXT_VIEW(self.get_widget()))) }
+        unsafe { to_bool(ffi::gtk_text_view_get_overwrite(GTK_TEXT_VIEW(self.get_widget()))) }
     }
 
     pub fn set_pixels_above_lines(&self, pixels_above_lines: i32) {
@@ -231,11 +232,11 @@ impl TextView {
     }
 
     pub fn set_accepts_tab(&self, accepts_tab: bool) {
-        unsafe { ffi::gtk_text_view_set_accepts_tab(GTK_TEXT_VIEW(self.get_widget()), ffi::to_gboolean(accepts_tab)) }
+        unsafe { ffi::gtk_text_view_set_accepts_tab(GTK_TEXT_VIEW(self.get_widget()), to_gboolean(accepts_tab)) }
     }
 
     pub fn get_accepts_tab(&self) -> bool {
-        unsafe { ffi::to_bool(ffi::gtk_text_view_get_accepts_tab(GTK_TEXT_VIEW(self.get_widget()))) }
+        unsafe { to_bool(ffi::gtk_text_view_get_accepts_tab(GTK_TEXT_VIEW(self.get_widget()))) }
     }
 
     pub fn get_default_attributes(&self) -> Option<gtk::TextAttributes> {

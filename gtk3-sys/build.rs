@@ -13,14 +13,15 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-#![feature(slicing_syntax, env, path, io, collections)]
+#![feature(env, path, process, collections)]
 
 extern crate gcc;
 extern crate "pkg-config" as pkg_config;
 
-use std::old_io::process::Command;
+use std::process::Command;
 use gcc::Config;
 use std::env;
+use std::path::PathBuf;
 
 fn main() {
     env::set_var("PKG_CONFIG_ALLOW_CROSS", "1");
@@ -32,16 +33,17 @@ fn main() {
     };
 
     // call native pkg-config, there is no way to do this with pkg-config for now
-    let cmd = match Command::new("pkg-config").arg("--cflags").arg("gtk+-3.0").output() {
-        Ok(r) => r,
-        Err(e) => panic!("{}", e)
-    };
+    let cmd = Command::new("pkg-config").arg("--cflags").arg("gtk+-3.0")
+                .output().unwrap();
+    if !cmd.status.success() {
+        panic!("{}", String::from_utf8_lossy(&cmd.stderr));
+    }
 
     // make the vector of path to set to gcc::Config
-    let output: String = unsafe { String::from_utf8_unchecked(cmd.output) };
+    let output = String::from_utf8(cmd.stdout).unwrap();
     let res: Vec<&str> = output.split(' ').collect();
-    let paths: Vec<Path> = res.iter().filter_map(|s| {
-        if s.len() > 1 && s.char_at(1) == 'I' { Some(Path::new(&s[2..])) }
+    let paths: Vec<PathBuf> = res.iter().filter_map(|s| {
+        if s.len() > 1 && s.char_at(1) == 'I' { Some(PathBuf::new(&s[2..])) }
         else { None }
     }).collect();
 
@@ -50,7 +52,7 @@ fn main() {
     for path in paths {
         gcc_conf.include(&path);
     }
-    gcc_conf.file("./gtk_glue/gtk_glue.c");
+    gcc_conf.file("src/gtk_glue.c");
 
     // build library
     gcc_conf.compile("librgtk_glue.a");

@@ -16,6 +16,7 @@
 use std::ffi::CString;
 use gtk::cast::GTK_EDITABLE;
 use gtk::{self, ffi};
+use glib::{to_bool, to_gboolean};
 
 pub trait EditableTrait: gtk::WidgetTrait {
     fn select_region(&mut self, start_pos: i32, end_pos: i32) {
@@ -27,7 +28,7 @@ pub trait EditableTrait: gtk::WidgetTrait {
         let mut i: i32 = 0;
         let mut j: i32 = 0;
         let res = unsafe {
-            ffi::to_bool(ffi::gtk_editable_get_selection_bounds(GTK_EDITABLE(self.get_widget()),
+            to_bool(ffi::gtk_editable_get_selection_bounds(GTK_EDITABLE(self.get_widget()),
                                                                 &mut i,
                                                                 &mut j))
         };
@@ -105,13 +106,13 @@ pub trait EditableTrait: gtk::WidgetTrait {
 
     fn set_editable(&mut self, editable: bool) {
         unsafe {
-            ffi::gtk_editable_set_editable(GTK_EDITABLE(self.get_widget()), ffi::to_gboolean(editable))
+            ffi::gtk_editable_set_editable(GTK_EDITABLE(self.get_widget()), to_gboolean(editable))
         }
     }
 
     fn is_editable(&self) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_editable_get_editable(GTK_EDITABLE(self.get_widget())))
+            to_bool(ffi::gtk_editable_get_editable(GTK_EDITABLE(self.get_widget())))
         }
     }
 }

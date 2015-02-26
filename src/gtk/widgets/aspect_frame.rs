@@ -21,7 +21,7 @@ use std::ffi::CString;
 
 use gtk::cast::GTK_ASPECTFRAME;
 use gtk::{self, ffi};
-use gtk::ffi::to_gboolean;
+use glib::to_gboolean;
 
 /// AspectFrame — A frame that constrains its child to a particular aspect ratio
 struct_Widget!(AspectFrame);

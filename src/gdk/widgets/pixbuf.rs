@@ -16,7 +16,6 @@
 /// The GdkPixbuf structure contains information that describes an image in memory.
 
 use gdk::{self, ffi};
-use gtk;
 use gdk::c_vec::CVec;
 use std::ffi::CString;
 
@@ -39,7 +38,7 @@ impl Pixbuf {
     }
 
     pub fn get_has_alpha(&self) -> bool {
-        unsafe { gtk::ffi::to_bool(ffi::gdk_pixbuf_get_has_alpha(self.pointer as *const ffi::C_GdkPixbuf)) }
+        unsafe { ::glib::to_bool(ffi::gdk_pixbuf_get_has_alpha(self.pointer as *const ffi::C_GdkPixbuf)) }
     }
 
     pub fn get_bits_per_sample(&self) -> i32 {

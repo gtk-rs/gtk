@@ -16,6 +16,7 @@
 //! Renders a toggle button in a cell
 
 use gtk::{self, ffi};
+use glib::{to_bool, to_gboolean};
 
 struct_Widget!(CellRendererToggle);
 
@@ -28,7 +29,7 @@ impl CellRendererToggle {
 
     pub fn get_radio(&mut self) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_cell_renderer_toggle_get_radio(
+            to_bool(ffi::gtk_cell_renderer_toggle_get_radio(
                     self.pointer as *mut ffi::C_GtkCellRendererToggle))
         }
     }
@@ -36,13 +37,13 @@ impl CellRendererToggle {
     pub fn set_radio(&mut self, radio: bool) -> () {
         unsafe {
             ffi::gtk_cell_renderer_toggle_set_radio(
-                self.pointer as *mut ffi::C_GtkCellRendererToggle, ffi::to_gboolean(radio));
+                self.pointer as *mut ffi::C_GtkCellRendererToggle, to_gboolean(radio));
         }
     }
 
     pub fn get_active(&mut self) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_cell_renderer_toggle_get_active(
+            to_bool(ffi::gtk_cell_renderer_toggle_get_active(
                 self.pointer as *mut ffi::C_GtkCellRendererToggle))
         }
     }
@@ -50,7 +51,7 @@ impl CellRendererToggle {
     pub fn set_active(&mut self, active: bool) -> () {
         unsafe {
             ffi::gtk_cell_renderer_toggle_set_active(
-                self.pointer as *mut ffi::C_GtkCellRendererToggle, ffi::to_gboolean(active));
+                self.pointer as *mut ffi::C_GtkCellRendererToggle, to_gboolean(active));
         }
     }
 }

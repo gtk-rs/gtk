@@ -125,7 +125,6 @@ macro_rules! signal(
 
             use std::mem::transmute;
             use libc::c_void;
-            use gtk::ffi;
             use gdk;
             use glib;
             use gtk;

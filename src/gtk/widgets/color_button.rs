@@ -18,8 +18,9 @@
 use std::ffi::CString;
 use gtk::cast::GTK_COLORBUTTON;
 use gtk::{self, ffi};
-use gtk::ffi::{to_bool, to_gboolean};
+use glib::{to_bool, to_gboolean};
 use gdk;
+use gdk_ffi;
 
 /**
 * ColorButton — A button to launch a color selection dialog
@@ -40,7 +41,7 @@ impl ColorButton {
         check_pointer!(tmp_pointer, ColorButton)
     }
 
-    pub fn new_with_rgba(rgba: &gdk::RGBA) -> Option<ColorButton> {
+    pub fn new_with_rgba(rgba: &gdk_ffi::C_GdkRGBA) -> Option<ColorButton> {
         let tmp_pointer = unsafe { ffi::gtk_color_button_new_with_rgba(rgba) };
         check_pointer!(tmp_pointer, ColorButton)
     }
@@ -71,14 +72,14 @@ impl ColorButton {
         }
     }
 
-    pub fn set_rgba(&mut self, rgba: &gdk::RGBA) -> () {
+    pub fn set_rgba(&mut self, rgba: &gdk_ffi::C_GdkRGBA) -> () {
         unsafe {
             ffi::gtk_color_button_set_rgba(GTK_COLORBUTTON(self.pointer), rgba)
         }
     }
 
-    pub fn get_rgba(&self) -> gdk::RGBA {
-        let rgba = gdk::RGBA { red: 0., green: 0., blue: 0., alpha: 0. };
+    pub fn get_rgba(&self) -> gdk_ffi::C_GdkRGBA {
+        let rgba = gdk_ffi::C_GdkRGBA { red: 0., green: 0., blue: 0., alpha: 0. };
         unsafe {
             ffi::gtk_color_button_get_rgba(GTK_COLORBUTTON(self.pointer), &rgba);
         }

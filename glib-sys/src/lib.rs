@@ -15,6 +15,8 @@
 
 #![allow(non_camel_case_types)]
 
+extern crate libc;
+
 use libc::{c_int, c_void, c_uint, c_char, c_ulong};
 
 pub type GQuark = u32;
@@ -24,6 +26,8 @@ pub type GType = c_ulong;
 pub type Gboolean = c_int;
 pub const GFALSE:  c_int = 0;
 pub const GTRUE:   c_int = 1;
+
+pub type gpointer = *const c_void;
 
 #[repr(C)]
 #[derive(Copy)]

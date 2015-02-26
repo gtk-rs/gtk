@@ -17,8 +17,9 @@
 
 use gtk::{self, ffi};
 use gtk::cast::GTK_NOTEBOOK;
-use gtk::ffi::FFIWidget;
+use gtk::FFIWidget;
 use std::ffi::CString;
+use glib::{to_bool, to_gboolean};
 
 /// GtkNotebook — A tabbed notebook container
 struct_Widget!(NoteBook);
@@ -143,7 +144,7 @@ impl NoteBook {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap(tmp_pointer))
         }
     }
 
@@ -180,26 +181,26 @@ impl NoteBook {
     pub fn set_show_border(&mut self, show_border: bool) {
         unsafe {
             ffi::gtk_notebook_set_show_border(GTK_NOTEBOOK(self.pointer),
-                                              ffi::to_gboolean(show_border))
+                                              to_gboolean(show_border))
         }
     }
 
     pub fn get_show_border(&self) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_notebook_get_show_border(GTK_NOTEBOOK(self.pointer)))
+            to_bool(ffi::gtk_notebook_get_show_border(GTK_NOTEBOOK(self.pointer)))
         }
     }
 
     pub fn set_show_tabs(&mut self, show_tabs: bool) {
         unsafe {
             ffi::gtk_notebook_set_show_tabs(GTK_NOTEBOOK(self.pointer),
-                                            ffi::to_gboolean(show_tabs))
+                                            to_gboolean(show_tabs))
         }
     }
 
     pub fn get_show_tabs(&self) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_notebook_get_show_tabs(GTK_NOTEBOOK(self.pointer)))
+            to_bool(ffi::gtk_notebook_get_show_tabs(GTK_NOTEBOOK(self.pointer)))
         }
     }
 
@@ -218,13 +219,13 @@ impl NoteBook {
     pub fn set_scrollable(&mut self, scrollable: bool) {
         unsafe {
             ffi::gtk_notebook_set_scrollable(GTK_NOTEBOOK(self.pointer),
-                                             ffi::to_gboolean(scrollable))
+                                             to_gboolean(scrollable))
         }
     }
 
     pub fn is_scrollable(&self) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_notebook_get_scrollable(GTK_NOTEBOOK(self.pointer)))
+            to_bool(ffi::gtk_notebook_get_scrollable(GTK_NOTEBOOK(self.pointer)))
         }
     }
 
@@ -260,7 +261,7 @@ impl NoteBook {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap(tmp_pointer))
         }
     }
 
@@ -303,7 +304,7 @@ impl NoteBook {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap(tmp_pointer))
         }
     }
 
@@ -348,7 +349,7 @@ impl NoteBook {
 
     pub fn is_tab_reorderable<T: gtk::WidgetTrait>(&self, child: &T) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_notebook_get_tab_reorderable(GTK_NOTEBOOK(self.pointer),
+            to_bool(ffi::gtk_notebook_get_tab_reorderable(GTK_NOTEBOOK(self.pointer),
                                                                child.get_widget()))
         }
     }
@@ -357,13 +358,13 @@ impl NoteBook {
         unsafe {
             ffi::gtk_notebook_set_tab_reorderable(GTK_NOTEBOOK(self.pointer),
                                                  child.get_widget(),
-                                                 ffi::to_gboolean(reorderable))
+                                                 to_gboolean(reorderable))
         }
     }
 
     pub fn is_tab_detachable<T: gtk::WidgetTrait>(&self, child: &T) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_notebook_get_tab_detachable(GTK_NOTEBOOK(self.pointer),
+            to_bool(ffi::gtk_notebook_get_tab_detachable(GTK_NOTEBOOK(self.pointer),
                                                               child.get_widget()))
         }
     }
@@ -372,7 +373,7 @@ impl NoteBook {
         unsafe {
             ffi::gtk_notebook_set_tab_detachable(GTK_NOTEBOOK(self.pointer),
                                                 child.get_widget(),
-                                                ffi::to_gboolean(detachable))
+                                                to_gboolean(detachable))
         }
     }
 
@@ -382,7 +383,7 @@ impl NoteBook {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(ffi::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap(tmp_pointer))
         }
     }
 

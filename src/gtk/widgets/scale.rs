@@ -21,7 +21,7 @@ use std::ffi::CString;
 use gtk::{Orientation, PositionType};
 use gtk::cast::GTK_SCALE;
 use gtk::{self, ffi};
-use gtk::ffi::{to_bool, to_gboolean};
+use glib::{to_bool, to_gboolean};
 
 /// Scale — A slider widget for selecting a value from a range
 /*

@@ -19,7 +19,7 @@ use libc::c_double;
 use std::ffi::CString;
 
 use gtk::{self, ffi};
-use gtk::ffi::{to_bool, to_gboolean};
+use glib::{to_bool, to_gboolean};
 use gtk::cast::GTK_PROGRESSBAR;
 
 /// ProgressBar — A widget which indicates progress visually

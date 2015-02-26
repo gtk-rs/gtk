@@ -19,7 +19,7 @@ use std::mem::transmute;
 use libc::{c_double, c_int};
 use cairo::paths::Path;
 use cairo::fonts::{TextExtents, TextCluster, FontExtents, ScaledFont, FontOptions, FontFace, Glyph};
-use cairo::matrices::Matrix;
+use cairo::matrices::{Matrix, MatrixTrait};
 use cairo::enums::{
     FontSlant,
     FontWeight,
@@ -35,14 +35,7 @@ use cairo::ffi::{
 use cairo::enums::{Status, Antialias, LineCap, LineJoin, FillRule};
 use cairo::patterns::{wrap_pattern, Pattern};
 
-#[repr(C)]
-#[derive(Copy)]
-pub struct Rectangle {
-    x: f64,
-    y: f64,
-    width: f64,
-    height: f64,
-}
+pub use cairo::ffi::Rectangle;
 
 pub struct RectangleVec {
     ptr: *mut cairo_rectangle_list_t,
@@ -563,7 +556,7 @@ impl Context {
     }
 
     pub fn get_font_matrix(&self) -> Matrix {
-        let mut matrix = Matrix::null();
+        let mut matrix = <Matrix as MatrixTrait>::null();
         unsafe {
             ffi::cairo_get_font_matrix(self.get_ptr(), &mut matrix);
         }

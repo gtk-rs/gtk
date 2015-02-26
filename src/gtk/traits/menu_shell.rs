@@ -17,6 +17,7 @@
 
 use gtk::{self, ffi};
 use gtk::cast::GTK_MENU_SHELL;
+use glib::{to_bool, to_gboolean};
 
 /// A base class for menu objects
 pub trait MenuShellTrait: gtk::WidgetTrait + gtk::ContainerTrait {
@@ -63,14 +64,14 @@ pub trait MenuShellTrait: gtk::WidgetTrait + gtk::ContainerTrait {
         unsafe {
             ffi::gtk_menu_shell_activate_item(GTK_MENU_SHELL(self.get_widget()),
                                               menu_item.get_widget(),
-                                              ffi::to_gboolean(force_deactivate))
+                                              to_gboolean(force_deactivate))
         }
     }
 
     fn select_first(&mut self, search_sensitive: bool) {
         unsafe {
             ffi::gtk_menu_shell_select_first(GTK_MENU_SHELL(self.get_widget()),
-                                             ffi::to_gboolean(search_sensitive))
+                                             to_gboolean(search_sensitive))
         }
     }
 
@@ -82,26 +83,26 @@ pub trait MenuShellTrait: gtk::WidgetTrait + gtk::ContainerTrait {
 
     fn get_take_focus(&self) -> bool {
         unsafe {
-            ffi::to_bool(ffi::gtk_menu_shell_get_take_focus(GTK_MENU_SHELL(self.get_widget())))
+            to_bool(ffi::gtk_menu_shell_get_take_focus(GTK_MENU_SHELL(self.get_widget())))
         }
     }
 
     fn set_take_focus(&mut self, take_focus: bool) {
         unsafe {
             ffi::gtk_menu_shell_set_take_focus(GTK_MENU_SHELL(self.get_widget()),
-                                               ffi::to_gboolean(take_focus))
+                                               to_gboolean(take_focus))
         }
     }
 
     fn get_selected_item<T: gtk::WidgetTrait>(&self) -> T {
         unsafe {
-            ffi::FFIWidget::wrap(ffi::gtk_menu_shell_get_selected_item(GTK_MENU_SHELL(self.get_widget())))
+            gtk::FFIWidget::wrap(ffi::gtk_menu_shell_get_selected_item(GTK_MENU_SHELL(self.get_widget())))
         }
     }
 
     fn get_parent_shell<T: gtk::MenuShellTrait>(&self) -> T {
         unsafe {
-            ffi::FFIWidget::wrap(ffi::gtk_menu_shell_get_parent_shell(GTK_MENU_SHELL(self.get_widget())))
+            gtk::FFIWidget::wrap(ffi::gtk_menu_shell_get_parent_shell(GTK_MENU_SHELL(self.get_widget())))
         }
     }
 }

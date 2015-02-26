@@ -15,7 +15,7 @@
 
 use gtk::cast::GTK_SCROLLED_WINDOW;
 use gtk::{self, ffi};
-use gtk::ffi::FFIWidget;
+use gtk::FFIWidget;
 
 pub trait ScrolledWindowTrait: gtk::WidgetTrait {
     fn set_policy(&self, h_scrollbar_policy: gtk::PolicyType, v_scrollbar_policy: gtk::PolicyType) {

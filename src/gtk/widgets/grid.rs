@@ -22,7 +22,7 @@ use libc::{c_int, c_uint};
 use gtk::{PositionType};
 use gtk::cast::GTK_GRID;
 use gtk::{self, ffi};
-use gtk::ffi::{to_bool, to_gboolean};
+use glib::{to_bool, to_gboolean};
 
 /// Grid — Pack widgets in a rows and columns
 struct_Widget!(Grid);

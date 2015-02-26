@@ -14,6 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::ffi;
+use glib::to_bool;
 
 #[derive(Copy)]
 pub struct TextChildAnchor {
@@ -32,7 +33,7 @@ impl TextChildAnchor {
     }
 
     pub fn get_deleted(&self) -> bool {
-        unsafe { ffi::to_bool(ffi::gtk_text_child_anchor_get_deleted(self.pointer)) }
+        unsafe { to_bool(ffi::gtk_text_child_anchor_get_deleted(self.pointer)) }
     }
 }
 

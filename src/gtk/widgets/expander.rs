@@ -20,8 +20,8 @@ use std::ffi::CString;
 
 use gtk::cast::GTK_EXPANDER;
 use gtk::{self, ffi};
-use gtk::ffi::{to_bool, to_gboolean};
-use gtk::ffi::FFIWidget;
+use glib::{to_bool, to_gboolean};
+use gtk::FFIWidget;
 
 /// Expander — A container which can hide its child
 struct_Widget!(Expander);
@@ -124,7 +124,7 @@ impl Expander {
 
     pub fn get_label_widget(&mut self) -> gtk::Label {
         unsafe {
-            ffi::FFIWidget::wrap(ffi::gtk_expander_get_label_widget(GTK_EXPANDER(self.pointer)))
+            gtk::FFIWidget::wrap(ffi::gtk_expander_get_label_widget(GTK_EXPANDER(self.pointer)))
         }
     }
 }

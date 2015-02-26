@@ -21,6 +21,8 @@ Bindings and wrappers for __GDK__
 
 extern crate c_vec;
 
+pub use gdk_ffi as ffi;
+
 pub use self::rt::{
     init,
     get_display_arg_name,
@@ -71,9 +73,10 @@ pub use self::events::{
     OwnerChange
 };
 
-pub use self::enums::modifier_intent::ModifierIntent;
-pub use self::enums::modifier_type::ModifierType;
-pub use self::enums::{
+pub use gdk_ffi::enums::modifier_intent::ModifierIntent;
+pub use gdk_ffi::enums::modifier_type::ModifierType;
+pub use gdk_ffi::enums::{
+    self,
     WindowType,
     WindowState,
     WindowEdge,
@@ -109,7 +112,6 @@ pub use self::widgets::{
     Atom,
     Screen,
     Rectangle,
-    Key,
     Window,
     Visual,
     DeviceManager,
@@ -120,15 +122,11 @@ pub use self::widgets::{
     FrameClock,
     FrameTimings,
     WindowAttr,
-    Geometry,
     DragContext,
     AppLaunchContext
 };
 
 mod events;
 mod rt;
-pub mod enums;
 pub mod widgets;
 
-#[doc(hidden)]
-pub mod ffi;

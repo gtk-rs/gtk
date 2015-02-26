@@ -17,6 +17,7 @@
 
 use gtk::cast::{GTK_EVENT_BOX};
 use gtk::{self, ffi};
+use glib::{to_bool, to_gboolean};
 
 struct_Widget!(EventBox);
 
@@ -28,22 +29,22 @@ impl EventBox {
 
     pub fn set_above_child(&mut self, above_child: bool) {
         unsafe {
-            ffi::gtk_event_box_set_above_child(GTK_EVENT_BOX(self.pointer), ffi::to_gboolean(above_child))
+            ffi::gtk_event_box_set_above_child(GTK_EVENT_BOX(self.pointer), to_gboolean(above_child))
         }
     }
 
     pub fn get_above_child(&mut self) -> bool {
-        unsafe { ffi::to_bool(ffi::gtk_event_box_get_above_child(GTK_EVENT_BOX(self.pointer))) }
+        unsafe { to_bool(ffi::gtk_event_box_get_above_child(GTK_EVENT_BOX(self.pointer))) }
     }
 
     pub fn set_visible_window(&mut self, visible_window: bool) {
         unsafe {
-            ffi::gtk_event_box_set_visible_window(GTK_EVENT_BOX(self.pointer), ffi::to_gboolean(visible_window))
+            ffi::gtk_event_box_set_visible_window(GTK_EVENT_BOX(self.pointer), to_gboolean(visible_window))
         }
     }
 
     pub fn get_visible_window(&mut self) -> bool {
-        unsafe { ffi::to_bool(ffi::gtk_event_box_get_visible_window(GTK_EVENT_BOX(self.pointer))) }
+        unsafe { to_bool(ffi::gtk_event_box_get_visible_window(GTK_EVENT_BOX(self.pointer))) }
     }
 }
 

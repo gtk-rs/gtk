@@ -1,0 +1,32 @@
+[package]
+name = "gtk3-sys"
+version = "0.1.0"
+authors = ["letang.jeremy@gmail.com", "guillaume1.gomez@gmail.com", "mathijs.henquet@gmail.com", "bpgarman@fastmail.fm", "me@bstr.eu", "zsoakes@gmail.com"]
+build = "build.rs"
+links = "gtk"
+
+description = "FFI bindings to GTK+ 3"
+repository = "https://github.com/jeremyletang/rgtk"
+license = "LGPL-3.0+"
+
+[features]
+GTK_3_14 = []
+GTK_3_12 = []
+GTK_3_10 = []
+GTK_3_8 = []
+GTK_3_6 = []
+
+[dependencies]
+libc = "0.1"
+
+[dependencies.glib-sys]
+path = "../glib-sys"
+version = "0.1.0"
+
+[dependencies.gdk3-sys]
+path = "../gdk3-sys"
+version = "0.1.0"
+
+[build-dependencies]
+pkg-config = "0.3"
+gcc = "0.3"

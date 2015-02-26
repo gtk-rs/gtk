@@ -18,7 +18,7 @@
 use libc::{c_double, c_uint};
 
 use gtk::{self, ffi};
-use gtk::ffi::{to_bool, to_gboolean};
+use glib::{to_bool, to_gboolean};
 use gtk::{SpinType, SpinButtonUpdatePolicy};
 use gtk::cast::{GTK_SPINBUTTON};
 

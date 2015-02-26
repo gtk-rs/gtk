@@ -18,7 +18,7 @@ use libc::{c_int, c_uint};
 use gtk::{self, PackType};
 use gtk::cast::GTK_BOX;
 use gtk::ffi;
-use gtk::ffi::{to_bool, to_gboolean};
+use glib::{to_bool, to_gboolean};
 
 pub trait BoxTrait: gtk::WidgetTrait {
     fn pack_start<'r, T: gtk::WidgetTrait>(&'r mut self, child: &'r T, expand: bool, fill: bool, padding: u32) -> () {

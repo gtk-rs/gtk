@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use gdk;
+use gdk::{self, ffi};
 use libc::c_void;
 use std::mem;
 
@@ -99,7 +99,7 @@ pub struct EventExpose {
     pub window : *mut gdk::Window,
     send_event : i8,
 
-    pub area : gdk::Rectangle,
+    pub area : ffi::C_GdkRectangle,
     pub region : *mut c_void, //TODO cairo_region_t
     pub count : i8 /* If non-zero, how many more events follow. */
 }
