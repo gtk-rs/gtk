@@ -20,13 +20,13 @@ use gtk::{self, ffi};
 pub trait OrientableTrait: gtk::WidgetTrait {
     fn get_orientation(&self) -> Orientation {
         unsafe {
-            ffi::gtk_orientable_get_orientation(GTK_ORIENTABLE(self.get_widget()))
+            ffi::gtk_orientable_get_orientation(GTK_ORIENTABLE(self.unwrap_widget()))
         }
     }
 
     fn set_orientation(&mut self, orientation: Orientation) -> () {
         unsafe {
-            ffi::gtk_orientable_set_orientation(GTK_ORIENTABLE(self.get_widget()), orientation)
+            ffi::gtk_orientable_set_orientation(GTK_ORIENTABLE(self.unwrap_widget()), orientation)
         }
     }
 }

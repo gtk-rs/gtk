@@ -31,7 +31,7 @@ impl TextTagTable {
         }
     }
 
-    pub fn get_pointer(&self) -> *mut ffi::C_GtkTextTagTable {
+    pub fn unwrap_pointer(&self) -> *mut ffi::C_GtkTextTagTable {
         self.pointer
     }
 }

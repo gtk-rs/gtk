@@ -25,8 +25,8 @@ impl ScrolledWindow {
 
         let tmp_pointer = unsafe {
             ffi::gtk_scrolled_window_new(
-                h_adjustment.map_or(ptr::null_mut(), |p| { p.get_pointer() }),
-                v_adjustment.map_or(ptr::null_mut(), |p| { p.get_pointer() })
+                h_adjustment.map_or(ptr::null_mut(), |p| { p.unwrap_pointer() }),
+                v_adjustment.map_or(ptr::null_mut(), |p| { p.unwrap_pointer() })
             )
         };
 

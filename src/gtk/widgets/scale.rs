@@ -33,7 +33,7 @@ struct_Widget!(Scale);
 impl Scale {
     pub fn new(orientation: Orientation,
                adjustment: &gtk::Adjustment) -> Option<Scale> {
-        let tmp_pointer = unsafe { ffi::gtk_scale_new(orientation, adjustment.get_pointer()) };
+        let tmp_pointer = unsafe { ffi::gtk_scale_new(orientation, adjustment.unwrap_pointer()) };
         check_pointer!(tmp_pointer, Scale)
     }
 

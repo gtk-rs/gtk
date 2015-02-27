@@ -28,7 +28,7 @@ impl RecentChooserDialog {
         let cancel_str = CString::from_slice("Cancel".as_bytes());
         let tmp_pointer = unsafe {
             ffi::gtk_recent_chooser_dialog_new(c_str.as_ptr(), match parent {
-                Some(ref p) => GTK_WINDOW(p.get_widget()),
+                Some(ref p) => GTK_WINDOW(p.unwrap_widget()),
                 None => ::std::ptr::null_mut()
             }, ok_str.as_ptr(), ResponseType::Ok,
                cancel_str.as_ptr(), ResponseType::Cancel,
@@ -38,7 +38,7 @@ impl RecentChooserDialog {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer))
         }
     }
 
@@ -49,9 +49,9 @@ impl RecentChooserDialog {
 
         let tmp_pointer = unsafe {
             ffi::gtk_recent_chooser_dialog_new_for_manager(c_str.as_ptr(), match parent {
-                Some(ref p) => GTK_WINDOW(p.get_widget()),
+                Some(ref p) => GTK_WINDOW(p.unwrap_widget()),
                 None => ::std::ptr::null_mut()
-            }, GTK_RECENT_MANAGER(manager.get_widget()),
+            }, GTK_RECENT_MANAGER(manager.unwrap_widget()),
                ok_str.as_ptr(), ResponseType::Ok,
                cancel_str.as_ptr(), ResponseType::Cancel,
                ::std::ptr::null::<::libc::c_void>())
@@ -60,7 +60,7 @@ impl RecentChooserDialog {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer))
         }
     }
 }

@@ -38,7 +38,7 @@ impl TextIter {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 
@@ -141,19 +141,19 @@ impl TextIter {
     }
 
     pub fn begins_tag(&self, tag: &gtk::TextTag) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_begins_tag(self.pointer as *const ffi::C_GtkTextIter, tag.get_pointer())) }
+        unsafe { to_bool(ffi::gtk_text_iter_begins_tag(self.pointer as *const ffi::C_GtkTextIter, tag.unwrap_pointer())) }
     }
 
     pub fn ends_tag(&self, tag: &gtk::TextTag) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_ends_tag(self.pointer as *const ffi::C_GtkTextIter, tag.get_pointer())) }
+        unsafe { to_bool(ffi::gtk_text_iter_ends_tag(self.pointer as *const ffi::C_GtkTextIter, tag.unwrap_pointer())) }
     }
 
     pub fn toggles_tag(&self, tag: &gtk::TextTag) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_ends_tag(self.pointer as *const ffi::C_GtkTextIter, tag.get_pointer())) }
+        unsafe { to_bool(ffi::gtk_text_iter_ends_tag(self.pointer as *const ffi::C_GtkTextIter, tag.unwrap_pointer())) }
     }
 
     pub fn has_tag(&self, tag: &gtk::TextTag) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_ends_tag(self.pointer as *const ffi::C_GtkTextIter, tag.get_pointer())) }
+        unsafe { to_bool(ffi::gtk_text_iter_ends_tag(self.pointer as *const ffi::C_GtkTextIter, tag.unwrap_pointer())) }
     }
 
     pub fn editable(&self, default_setting: bool) -> bool {
@@ -209,7 +209,7 @@ impl TextIter {
     }
 
     pub fn get_attributes(&self, values: &gtk::TextAttributes) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_get_attributes(self.pointer as *const ffi::C_GtkTextIter, values.get_pointer())) }
+        unsafe { to_bool(ffi::gtk_text_iter_get_attributes(self.pointer as *const ffi::C_GtkTextIter, values.unwrap_pointer())) }
     }
 
     pub fn is_end(&self) -> bool {
@@ -381,11 +381,11 @@ impl TextIter {
     }
 
     pub fn forward_to_tag_toggle(&self, tag: &gtk::TextTag) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_forward_to_tag_toggle(self.pointer, tag.get_pointer())) }
+        unsafe { to_bool(ffi::gtk_text_iter_forward_to_tag_toggle(self.pointer, tag.unwrap_pointer())) }
     }
 
     pub fn backward_to_tag_toggle(&self, tag: &gtk::TextTag) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_backward_to_tag_toggle(self.pointer, tag.get_pointer())) }
+        unsafe { to_bool(ffi::gtk_text_iter_backward_to_tag_toggle(self.pointer, tag.unwrap_pointer())) }
     }
 
     pub fn is_equal_to(&self, other: &TextIter) -> bool {

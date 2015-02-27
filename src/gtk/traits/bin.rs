@@ -19,12 +19,12 @@ use gtk::{self, ffi};
 pub trait BinTrait: gtk::WidgetTrait + gtk::ContainerTrait {
     fn get_child<T: gtk::WidgetTrait>(&self) ->  Option<T> {
         let tmp_pointer = unsafe {
-            ffi::gtk_bin_get_child(GTK_BIN(self.get_widget()))
+            ffi::gtk_bin_get_child(GTK_BIN(self.unwrap_widget()))
         };
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer))
         }
     }
 }

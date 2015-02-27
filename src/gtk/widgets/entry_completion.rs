@@ -42,12 +42,12 @@ impl EntryCompletion {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer))
         }
     }
 
     pub fn set_model(&self, model: &TreeModel) {
-        unsafe { ffi::gtk_entry_completion_set_model(GTK_ENTRY_COMPLETION(self.pointer), model.get_pointer()) }
+        unsafe { ffi::gtk_entry_completion_set_model(GTK_ENTRY_COMPLETION(self.pointer), model.unwrap_pointer()) }
     }
 
     pub fn get_model(&self) -> Option<TreeModel> {

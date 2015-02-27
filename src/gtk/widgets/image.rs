@@ -46,7 +46,7 @@ impl Image {
         let c_str = CString::from_slice(filename.as_bytes());
 
         unsafe {
-            ffi::gtk_image_set_from_file(GTK_IMAGE(self.get_widget()), c_str.as_ptr());
+            ffi::gtk_image_set_from_file(GTK_IMAGE(self.unwrap_widget()), c_str.as_ptr());
         };
     }
 
@@ -54,7 +54,7 @@ impl Image {
         let c_str = CString::from_slice(icon_name.as_bytes());
 
         unsafe {
-            ffi::gtk_image_set_from_icon_name(GTK_IMAGE(self.get_widget()), c_str.as_ptr(), size)
+            ffi::gtk_image_set_from_icon_name(GTK_IMAGE(self.unwrap_widget()), c_str.as_ptr(), size)
         };
     }
 }

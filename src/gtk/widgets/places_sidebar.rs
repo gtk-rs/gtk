@@ -29,45 +29,45 @@ impl PlacesSidebar {
     }
 
     pub fn set_open_flags(&self, flags: gtk::PlacesOpenFlags) {
-        unsafe { ffi::gtk_places_sidebar_set_open_flags(GTK_PLACES_SIDEBAR(self.get_widget()), flags) }
+        unsafe { ffi::gtk_places_sidebar_set_open_flags(GTK_PLACES_SIDEBAR(self.unwrap_widget()), flags) }
     }
 
     pub fn get_open_flags(&self) -> gtk::PlacesOpenFlags {
-        unsafe { ffi::gtk_places_sidebar_get_open_flags(GTK_PLACES_SIDEBAR(self.get_widget())) }
+        unsafe { ffi::gtk_places_sidebar_get_open_flags(GTK_PLACES_SIDEBAR(self.unwrap_widget())) }
     }
 
     pub fn set_show_desktop(&self, show_desktop: bool) {
-        unsafe { ffi::gtk_places_sidebar_set_show_desktop(GTK_PLACES_SIDEBAR(self.get_widget()), to_gboolean(show_desktop)) }
+        unsafe { ffi::gtk_places_sidebar_set_show_desktop(GTK_PLACES_SIDEBAR(self.unwrap_widget()), to_gboolean(show_desktop)) }
     }
 
     pub fn get_show_desktop(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_places_sidebar_get_show_desktop(GTK_PLACES_SIDEBAR(self.get_widget()))) }
+        unsafe { to_bool(ffi::gtk_places_sidebar_get_show_desktop(GTK_PLACES_SIDEBAR(self.unwrap_widget()))) }
     }
 
     pub fn set_show_connect_to_server(&self, show_connect_to_server: bool) {
-        unsafe { ffi::gtk_places_sidebar_set_show_connect_to_server(GTK_PLACES_SIDEBAR(self.get_widget()),
+        unsafe { ffi::gtk_places_sidebar_set_show_connect_to_server(GTK_PLACES_SIDEBAR(self.unwrap_widget()),
             to_gboolean(show_connect_to_server)) }
     }
 
     pub fn get_show_connect_to_server(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_places_sidebar_get_show_connect_to_server(GTK_PLACES_SIDEBAR(self.get_widget()))) }
+        unsafe { to_bool(ffi::gtk_places_sidebar_get_show_connect_to_server(GTK_PLACES_SIDEBAR(self.unwrap_widget()))) }
     }
 
     pub fn set_local_only(&self, local_only: bool) {
-        unsafe { ffi::gtk_places_sidebar_set_local_only(GTK_PLACES_SIDEBAR(self.get_widget()), to_gboolean(local_only)) }
+        unsafe { ffi::gtk_places_sidebar_set_local_only(GTK_PLACES_SIDEBAR(self.unwrap_widget()), to_gboolean(local_only)) }
     }
 
     pub fn get_local_only(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_places_sidebar_get_local_only(GTK_PLACES_SIDEBAR(self.get_widget()))) }
+        unsafe { to_bool(ffi::gtk_places_sidebar_get_local_only(GTK_PLACES_SIDEBAR(self.unwrap_widget()))) }
     }
 
     pub fn set_show_enter_location(&self, show_enter_location: bool) {
-        unsafe { ffi::gtk_places_sidebar_set_show_enter_location(GTK_PLACES_SIDEBAR(self.get_widget()),
+        unsafe { ffi::gtk_places_sidebar_set_show_enter_location(GTK_PLACES_SIDEBAR(self.unwrap_widget()),
             to_gboolean(show_enter_location)) }
     }
 
     pub fn get_show_enter_location(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_places_sidebar_get_show_enter_location(GTK_PLACES_SIDEBAR(self.get_widget()))) }
+        unsafe { to_bool(ffi::gtk_places_sidebar_get_show_enter_location(GTK_PLACES_SIDEBAR(self.unwrap_widget()))) }
     }
 }
 

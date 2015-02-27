@@ -24,32 +24,32 @@ use glib::{to_bool, to_gboolean};
 pub trait MenuItemTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait {
     fn set_submenu<T: gtk::WidgetTrait>(&mut self, widget: &mut T) {
         unsafe {
-            ffi::gtk_menu_item_set_submenu(GTK_MENU_ITEM(self.get_widget()),
-                                           widget.get_widget())
+            ffi::gtk_menu_item_set_submenu(GTK_MENU_ITEM(self.unwrap_widget()),
+                                           widget.unwrap_widget())
         }
     }
 
     fn get_submenu<T: gtk::WidgetTrait>(&self) -> T {
         unsafe {
-            gtk::FFIWidget::wrap(ffi::gtk_menu_item_get_submenu(GTK_MENU_ITEM(self.get_widget())))
+            gtk::FFIWidget::wrap_widget(ffi::gtk_menu_item_get_submenu(GTK_MENU_ITEM(self.unwrap_widget())))
         }
     }
 
     fn select(&mut self) {
         unsafe {
-            ffi::gtk_menu_item_select(GTK_MENU_ITEM(self.get_widget()))
+            ffi::gtk_menu_item_select(GTK_MENU_ITEM(self.unwrap_widget()))
         }
     }
 
     fn deselect(&mut self) {
         unsafe {
-            ffi::gtk_menu_item_deselect(GTK_MENU_ITEM(self.get_widget()))
+            ffi::gtk_menu_item_deselect(GTK_MENU_ITEM(self.unwrap_widget()))
         }
     }
 
     fn activate(&mut self) {
         unsafe {
-            ffi::gtk_menu_item_activate(GTK_MENU_ITEM(self.get_widget()))
+            ffi::gtk_menu_item_activate(GTK_MENU_ITEM(self.unwrap_widget()))
         }
     }
 
@@ -57,13 +57,13 @@ pub trait MenuItemTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait 
         unsafe {
             let c_str = CString::from_slice(accel_path.as_bytes());
 
-            ffi::gtk_menu_item_set_accel_path(GTK_MENU_ITEM(self.get_widget()), c_str.as_ptr())
+            ffi::gtk_menu_item_set_accel_path(GTK_MENU_ITEM(self.unwrap_widget()), c_str.as_ptr())
         }
     }
 
     fn get_accel_path(&self) -> Option<String> {
         unsafe {
-            let c_str = ffi::gtk_menu_item_get_accel_path(GTK_MENU_ITEM(self.get_widget()));
+            let c_str = ffi::gtk_menu_item_get_accel_path(GTK_MENU_ITEM(self.unwrap_widget()));
 
             if c_str.is_null() {
                 None
@@ -77,13 +77,13 @@ pub trait MenuItemTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait 
         let c_str = CString::from_slice(label.as_bytes());
 
         unsafe {
-            ffi::gtk_menu_item_set_label(GTK_MENU_ITEM(self.get_widget()), c_str.as_ptr())
+            ffi::gtk_menu_item_set_label(GTK_MENU_ITEM(self.unwrap_widget()), c_str.as_ptr())
         }
     }
 
     fn get_label(&self) -> Option<String> {
         unsafe {
-            let c_str = ffi::gtk_menu_item_get_label(GTK_MENU_ITEM(self.get_widget()));
+            let c_str = ffi::gtk_menu_item_get_label(GTK_MENU_ITEM(self.unwrap_widget()));
 
             if c_str.is_null() {
                 None
@@ -95,27 +95,27 @@ pub trait MenuItemTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait 
 
     fn set_use_underline(&mut self, setting: bool) {
         unsafe {
-            ffi::gtk_menu_item_set_use_underline(GTK_MENU_ITEM(self.get_widget()),
+            ffi::gtk_menu_item_set_use_underline(GTK_MENU_ITEM(self.unwrap_widget()),
                                                  to_gboolean(setting))
         }
     }
 
     fn get_use_underline(&self) -> bool {
         unsafe {
-            to_bool(ffi::gtk_menu_item_get_use_underline(GTK_MENU_ITEM(self.get_widget())))
+            to_bool(ffi::gtk_menu_item_get_use_underline(GTK_MENU_ITEM(self.unwrap_widget())))
         }
     }
 
     fn set_reserve_indicator(&mut self, setting: bool) {
         unsafe {
-            ffi::gtk_menu_item_set_reserve_indicator(GTK_MENU_ITEM(self.get_widget()),
+            ffi::gtk_menu_item_set_reserve_indicator(GTK_MENU_ITEM(self.unwrap_widget()),
                                                      to_gboolean(setting))
         }
     }
 
     fn get_reserve_indicator(&self) -> bool {
         unsafe {
-            to_bool(ffi::gtk_menu_item_get_reserve_indicator(GTK_MENU_ITEM(self.get_widget())))
+            to_bool(ffi::gtk_menu_item_get_reserve_indicator(GTK_MENU_ITEM(self.unwrap_widget())))
         }
     }
 }

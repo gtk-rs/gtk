@@ -84,7 +84,7 @@ impl Atom {
         }
     }
 
-    pub fn get_pointer(&self) -> ffi::C_GdkAtom {
+    pub fn unwrap_pointer(&self) -> ffi::C_GdkAtom {
         self.pointer
     }
 }

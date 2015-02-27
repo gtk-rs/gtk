@@ -48,7 +48,7 @@ impl TreeIter {
     }
 
     #[doc(hidden)]
-    pub fn get_pointer(&self) -> *mut ffi::C_GtkTreeIter {
+    pub fn unwrap_pointer(&self) -> *mut ffi::C_GtkTreeIter {
         self.pointer
     }
 

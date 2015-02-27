@@ -34,7 +34,7 @@ impl Fixed {
                              x: i32,
                              y: i32) -> () {
         unsafe {
-            ffi::gtk_fixed_put(GTK_FIXED(self.pointer), widget.get_widget(), x as c_int, y as c_int);
+            ffi::gtk_fixed_put(GTK_FIXED(self.pointer), widget.unwrap_widget(), x as c_int, y as c_int);
         }
     }
 
@@ -44,7 +44,7 @@ impl Fixed {
                               x: i32,
                               y: i32) -> () {
         unsafe {
-            ffi::gtk_fixed_move(GTK_FIXED(self.pointer), widget.get_widget(), x as c_int, y as c_int);
+            ffi::gtk_fixed_move(GTK_FIXED(self.pointer), widget.unwrap_widget(), x as c_int, y as c_int);
         }
     }
 }

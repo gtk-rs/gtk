@@ -49,8 +49,8 @@ pub use gtk_ffi as ffi;
 pub use gtk_ffi::enums;
 
 pub trait FFIWidget: Sized {
-    fn get_widget(&self) -> *mut ffi::C_GtkWidget;
-    fn wrap(widget: *mut ffi::C_GtkWidget) -> Self;
+    fn unwrap_widget(&self) -> *mut ffi::C_GtkWidget;
+    fn wrap_widget(widget: *mut ffi::C_GtkWidget) -> Self;
 }
 
 // These are/should be inlined

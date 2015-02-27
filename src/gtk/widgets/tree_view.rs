@@ -31,7 +31,7 @@ impl TreeView {
     }
 
     pub fn new_with_model(model: &gtk::TreeModel) -> Option<TreeView> {
-        let tmp_pointer = unsafe { ffi::gtk_tree_view_new_with_model(model.get_pointer()) };
+        let tmp_pointer = unsafe { ffi::gtk_tree_view_new_with_model(model.unwrap_pointer()) };
         check_pointer!(tmp_pointer, TreeView)
     }
 
@@ -172,7 +172,7 @@ impl TreeView {
 
     pub fn get_search_entry(&self) -> gtk::Entry {
         unsafe {
-            gtk::FFIWidget::wrap(ffi::gtk_tree_view_get_search_entry(GTK_TREE_VIEW(self.pointer))
+            gtk::FFIWidget::wrap_widget(ffi::gtk_tree_view_get_search_entry(GTK_TREE_VIEW(self.pointer))
                                  as *mut ffi::C_GtkWidget)
         }
     }
@@ -180,7 +180,7 @@ impl TreeView {
     pub fn set_search_entry(&mut self, entry: &mut gtk::Entry) {
         unsafe {
             ffi::gtk_tree_view_set_search_entry(GTK_TREE_VIEW(self.pointer),
-                                                entry.get_widget() as *mut ffi::C_GtkEntry)
+                                                entry.unwrap_widget() as *mut ffi::C_GtkEntry)
         }
     }
 
@@ -379,7 +379,7 @@ impl TreeView {
     pub fn set_model(&mut self, model: &gtk::TreeModel) {
         unsafe {
             ffi::gtk_tree_view_set_model(GTK_TREE_VIEW(self.pointer),
-                                         model.get_pointer())
+                                         model.unwrap_pointer())
         }
     }
 
@@ -392,27 +392,27 @@ impl TreeView {
     pub fn set_cursor(&mut self, path: &TreePath, focus_column: Option<&TreeViewColumn>, start_editing: bool) {
         unsafe {
             ffi::gtk_tree_view_set_cursor(GTK_TREE_VIEW(self.pointer),
-                                          path.get_pointer(),
-                                          if focus_column.is_none() { ::std::ptr::null_mut() } else { focus_column.unwrap().get_pointer() },
+                                          path.unwrap_pointer(),
+                                          if focus_column.is_none() { ::std::ptr::null_mut() } else { focus_column.unwrap().unwrap_pointer() },
                                           to_gboolean(start_editing))
         };
     }
 
     pub fn expand_row(&mut self, path: &TreePath, open_all: bool) -> bool {
         unsafe {
-            to_bool(ffi::gtk_tree_view_expand_row(GTK_TREE_VIEW(self.pointer), path.get_pointer(), to_gboolean(open_all)))
+            to_bool(ffi::gtk_tree_view_expand_row(GTK_TREE_VIEW(self.pointer), path.unwrap_pointer(), to_gboolean(open_all)))
         }
     }
 
     pub fn collapse_row(&mut self, path: &TreePath) -> bool {
         unsafe {
-            to_bool(ffi::gtk_tree_view_collapse_row(GTK_TREE_VIEW(self.pointer), path.get_pointer()))
+            to_bool(ffi::gtk_tree_view_collapse_row(GTK_TREE_VIEW(self.pointer), path.unwrap_pointer()))
         }
     }
 
     pub fn append_column(&mut self, column: &gtk::TreeViewColumn) -> i32 {
         unsafe { ffi::gtk_tree_view_append_column(GTK_TREE_VIEW(self.pointer),
-                                                  column.get_pointer()) }
+                                                  column.unwrap_pointer()) }
     }
 }
 

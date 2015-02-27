@@ -41,7 +41,7 @@ impl Grid {
                                 height: i32) -> () {
         unsafe {
             ffi::gtk_grid_attach(GTK_GRID(self.pointer),
-                                 child.get_widget(),
+                                 child.unwrap_widget(),
                                  left as c_int,
                                  top as c_int,
                                  width as c_int,
@@ -57,8 +57,8 @@ impl Grid {
                                         height: i32) -> () {
         unsafe {
             ffi::gtk_grid_attach_next_to(GTK_GRID(self.pointer),
-                                         child.get_widget(),
-                                         sibling.get_widget(),
+                                         child.unwrap_widget(),
+                                         sibling.unwrap_widget(),
                                          side,
                                          width as c_int,
                                          height as c_int);
@@ -93,7 +93,7 @@ impl Grid {
 
     pub fn insert_next_to<T: gtk::WidgetTrait>(&mut self, sibling: &T, side: PositionType) -> () {
         unsafe {
-            ffi::gtk_grid_insert_next_to(GTK_GRID(self.pointer), sibling.get_widget(), side);
+            ffi::gtk_grid_insert_next_to(GTK_GRID(self.pointer), sibling.unwrap_widget(), side);
         }
     }
 

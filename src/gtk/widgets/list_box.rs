@@ -32,14 +32,14 @@ impl ListBox {
     pub fn prepend<T: gtk::WidgetTrait>(&mut self, child: &T) {
         unsafe {
             ffi::gtk_list_box_prepend(GTK_LIST_BOX(self.pointer),
-                                      child.get_widget())
+                                      child.unwrap_widget())
         }
     }
 
     pub fn insert<T: gtk::WidgetTrait>(&mut self, child: &T, position: i32) {
         unsafe {
             ffi::gtk_list_box_insert(GTK_LIST_BOX(self.pointer),
-                                     child.get_widget(),
+                                     child.unwrap_widget(),
                                      position)
         }
     }
@@ -51,7 +51,7 @@ impl ListBox {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 
@@ -62,7 +62,7 @@ impl ListBox {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 
@@ -73,28 +73,28 @@ impl ListBox {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 
     pub fn select_row(&mut self, row: &ListBoxRow) {
         unsafe {
             ffi::gtk_list_box_select_row(GTK_LIST_BOX(self.pointer),
-                                         GTK_LIST_BOX_ROW(row.get_widget()))
+                                         GTK_LIST_BOX_ROW(row.unwrap_widget()))
         }
     }
 
     pub fn set_placeholder<T: gtk::WidgetTrait>(&mut self, placeholder: &T) {
         unsafe {
             ffi::gtk_list_box_set_placeholder(GTK_LIST_BOX(self.pointer),
-                                              placeholder.get_widget())
+                                              placeholder.unwrap_widget())
         }
     }
 
     pub fn set_adjustment(&mut self, adjustment: &gtk::Adjustment) {
         unsafe {
             ffi::gtk_list_box_set_adjustment(GTK_LIST_BOX(self.pointer),
-                                             adjustment.get_pointer())
+                                             adjustment.unwrap_pointer())
         }
     }
 
@@ -149,7 +149,7 @@ impl ListBox {
     pub fn drag_highlight_row(&mut self, row: &ListBoxRow) {
         unsafe {
             ffi::gtk_list_box_drag_highlight_row(GTK_LIST_BOX(self.pointer),
-                                                 row.get_widget() as *mut ffi::C_GtkListBoxRow)
+                                                 row.unwrap_widget() as *mut ffi::C_GtkListBoxRow)
         }
     }
 }
@@ -185,14 +185,14 @@ impl ListBoxRow {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer))
         }
     }
 
     pub fn set_header<T: gtk::WidgetTrait>(&mut self, header: &T) {
         unsafe {
             ffi::gtk_list_box_row_set_header(GTK_LIST_BOX_ROW(self.pointer),
-                                             header.get_widget())
+                                             header.unwrap_widget())
         }
     }
 

@@ -24,12 +24,12 @@ struct_Widget!(Popover);
 
 impl Popover {
     pub fn new<T: gtk::WidgetTrait>(relative_to: &T) -> Option<Popover> {
-        let tmp_pointer = unsafe { ffi::gtk_popover_new(relative_to.get_widget()) };
+        let tmp_pointer = unsafe { ffi::gtk_popover_new(relative_to.unwrap_widget()) };
         check_pointer!(tmp_pointer, Popover)
     }
 
     pub fn set_relative_to<T: gtk::WidgetTrait>(&self, relative_to: &T) {
-        unsafe { ffi::gtk_popover_set_relative_to(GTK_POPOVER(self.pointer), relative_to.get_widget()) }
+        unsafe { ffi::gtk_popover_set_relative_to(GTK_POPOVER(self.pointer), relative_to.unwrap_widget()) }
     }
 
     pub fn get_relative_to<T: gtk::WidgetTrait>(&self) -> Option<T> {
@@ -38,7 +38,7 @@ impl Popover {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer))
         }
     }
 

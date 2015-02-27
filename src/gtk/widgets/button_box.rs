@@ -36,11 +36,11 @@ impl ButtonBox {
     }
 
     pub fn get_child_secondary<T: gtk::WidgetTrait + gtk::ButtonTrait>(&self, child: &T) -> bool {
-        unsafe { to_bool(ffi::gtk_button_box_get_child_secondary(GTK_BUTTONBOX(self.pointer), child.get_widget())) }
+        unsafe { to_bool(ffi::gtk_button_box_get_child_secondary(GTK_BUTTONBOX(self.pointer), child.unwrap_widget())) }
     }
 
     pub fn get_child_non_homogeneous<T: gtk::WidgetTrait + gtk::ButtonTrait>(&self, child: &T) -> bool {
-        unsafe { to_bool(ffi::gtk_button_box_get_child_non_homogeneous(GTK_BUTTONBOX(self.pointer), child.get_widget())) }
+        unsafe { to_bool(ffi::gtk_button_box_get_child_non_homogeneous(GTK_BUTTONBOX(self.pointer), child.unwrap_widget())) }
     }
 
     pub fn set_layout(&mut self, layout_style: ButtonBoxStyle) -> () {
@@ -50,11 +50,11 @@ impl ButtonBox {
     }
 
     pub fn set_child_secondary<T: gtk::WidgetTrait + gtk::ButtonTrait>(&mut self, child: &T, is_secondary: bool) -> () {
-        unsafe { ffi::gtk_button_box_set_child_secondary(GTK_BUTTONBOX(self.pointer), child.get_widget(), to_gboolean(is_secondary)); }
+        unsafe { ffi::gtk_button_box_set_child_secondary(GTK_BUTTONBOX(self.pointer), child.unwrap_widget(), to_gboolean(is_secondary)); }
     }
 
     pub fn set_child_non_homogeneous<T: gtk::WidgetTrait + gtk::ButtonTrait>(&mut self, child: &T, non_homogeneous: bool) -> () {
-        unsafe { ffi::gtk_button_box_set_child_non_homogeneous(GTK_BUTTONBOX(self.pointer), child.get_widget(), to_gboolean(non_homogeneous)); }
+        unsafe { ffi::gtk_button_box_set_child_non_homogeneous(GTK_BUTTONBOX(self.pointer), child.unwrap_widget(), to_gboolean(non_homogeneous)); }
     }
 }
 

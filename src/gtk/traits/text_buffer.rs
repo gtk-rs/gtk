@@ -22,7 +22,7 @@ pub trait TextBufferTrait: gtk::WidgetTrait {
         unsafe {
         	let c_str = CString::from_slice(text.as_bytes());
 
-            ffi::gtk_text_buffer_set_text(GTK_TEXT_BUFFER(self.get_widget()), c_str.as_ptr(), text.len() as i32)
+            ffi::gtk_text_buffer_set_text(GTK_TEXT_BUFFER(self.unwrap_widget()), c_str.as_ptr(), text.len() as i32)
         }
     }
 

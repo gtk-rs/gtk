@@ -31,7 +31,7 @@ impl StackSwitcher {
     pub fn set_stack(&mut self, stack: gtk::Stack) {
         unsafe {
             ffi::gtk_stack_switcher_set_stack(GTK_STACK_SWITCHER(self.pointer),
-                                              GTK_STACK(stack.get_widget()))
+                                              GTK_STACK(stack.unwrap_widget()))
         }
     }
 
@@ -40,7 +40,7 @@ impl StackSwitcher {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer))
         }
     }
 }

@@ -38,7 +38,7 @@ impl SpinButton {
     pub fn new(adjustment: &gtk::Adjustment,
                climb_rate: f64,
                digits: u32) -> Option<SpinButton> {
-        let tmp_pointer = unsafe { ffi::gtk_spin_button_new(adjustment.get_pointer(), climb_rate as c_double, digits as c_uint) };
+        let tmp_pointer = unsafe { ffi::gtk_spin_button_new(adjustment.unwrap_pointer(), climb_rate as c_double, digits as c_uint) };
         check_pointer!(tmp_pointer, SpinButton)
     }
 
@@ -49,13 +49,13 @@ impl SpinButton {
 
     pub fn configure(&mut self, adjustment: &gtk::Adjustment, climb_rate: f64, digits: u32) -> () {
         unsafe {
-            ffi::gtk_spin_button_configure(GTK_SPINBUTTON(self.pointer), adjustment.get_pointer(), climb_rate as c_double, digits as c_uint);
+            ffi::gtk_spin_button_configure(GTK_SPINBUTTON(self.pointer), adjustment.unwrap_pointer(), climb_rate as c_double, digits as c_uint);
         }
     }
 
     pub fn set_adjustment(&mut self, adjustment: &gtk::Adjustment) -> () {
         unsafe {
-            ffi:: gtk_spin_button_set_adjustment(GTK_SPINBUTTON(self.pointer), adjustment.get_pointer());
+            ffi:: gtk_spin_button_set_adjustment(GTK_SPINBUTTON(self.pointer), adjustment.unwrap_pointer());
         }
     }
 

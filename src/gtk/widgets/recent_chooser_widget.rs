@@ -29,7 +29,7 @@ impl RecentChooserWidget {
     }
 
     pub fn new_for_manager(manager: &RecentManager) -> Option<RecentChooserWidget> {
-        let tmp_pointer = unsafe { ffi::gtk_recent_chooser_widget_new_for_manager(GTK_RECENT_MANAGER(manager.get_widget())) };
+        let tmp_pointer = unsafe { ffi::gtk_recent_chooser_widget_new_for_manager(GTK_RECENT_MANAGER(manager.unwrap_widget())) };
         check_pointer!(tmp_pointer, RecentChooserWidget)
     }
 }

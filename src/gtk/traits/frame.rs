@@ -27,21 +27,21 @@ pub trait FrameTrait: gtk::WidgetTrait + gtk::ContainerTrait {
             Some(l) => unsafe {
                 let c_str = CString::from_slice(l.as_bytes());
 
-                ffi::gtk_frame_set_label(GTK_FRAME(self.get_widget()), c_str.as_ptr())
+                ffi::gtk_frame_set_label(GTK_FRAME(self.unwrap_widget()), c_str.as_ptr())
             },
-            None    => unsafe { ffi::gtk_frame_set_label(GTK_FRAME(self.get_widget()), ptr::null()) }
+            None    => unsafe { ffi::gtk_frame_set_label(GTK_FRAME(self.unwrap_widget()), ptr::null()) }
         };
     }
 
     fn set_label_widget<T: gtk::WidgetTrait>(&mut self, label_widget: &T) -> () {
         unsafe {
-            ffi::gtk_frame_set_label_widget(GTK_FRAME(self.get_widget()), label_widget.get_widget());
+            ffi::gtk_frame_set_label_widget(GTK_FRAME(self.unwrap_widget()), label_widget.unwrap_widget());
         }
     }
 
     fn set_label_align(&mut self, x_align: f32, y_align: f32) -> () {
         unsafe {
-            ffi::gtk_frame_set_label_align(GTK_FRAME(self.get_widget()), x_align as c_float, y_align as c_float);
+            ffi::gtk_frame_set_label_align(GTK_FRAME(self.unwrap_widget()), x_align as c_float, y_align as c_float);
         }
     }
 
@@ -49,19 +49,19 @@ pub trait FrameTrait: gtk::WidgetTrait + gtk::ContainerTrait {
         let mut x_align = 0.;
         let mut y_align = 0.;
         unsafe {
-            ffi::gtk_frame_get_label_align(GTK_FRAME(self.get_widget()), &mut x_align, &mut y_align);
+            ffi::gtk_frame_get_label_align(GTK_FRAME(self.unwrap_widget()), &mut x_align, &mut y_align);
         }
         (x_align as f32, y_align as f32)
     }
 
     fn set_shadow_type(&mut self, st_type: ShadowType) -> () {
         unsafe {
-            ffi::gtk_frame_set_shadow_type(GTK_FRAME(self.get_widget()), st_type);
+            ffi::gtk_frame_set_shadow_type(GTK_FRAME(self.unwrap_widget()), st_type);
         }
     }
 
     fn get_label(&self) -> Option<String> {
-        let c_str = unsafe { ffi::gtk_frame_get_label(GTK_FRAME(self.get_widget())) };
+        let c_str = unsafe { ffi::gtk_frame_get_label(GTK_FRAME(self.unwrap_widget())) };
         
         if c_str.is_null() {
             None
@@ -72,7 +72,7 @@ pub trait FrameTrait: gtk::WidgetTrait + gtk::ContainerTrait {
 
     fn gtk_frame_get_shadow_type(&self) -> ShadowType {
         unsafe {
-            ffi::gtk_frame_get_shadow_type(GTK_FRAME(self.get_widget()))
+            ffi::gtk_frame_get_shadow_type(GTK_FRAME(self.unwrap_widget()))
         }
     }
 }

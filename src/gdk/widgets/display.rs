@@ -96,7 +96,7 @@ impl Display {
     }*/
 
     pub fn device_is_grabbed(&self, device: &gdk::Device) -> bool {
-        unsafe { to_bool(ffi::gdk_display_device_is_grabbed(self.pointer, device.get_pointer())) }
+        unsafe { to_bool(ffi::gdk_display_device_is_grabbed(self.pointer, device.unwrap_pointer())) }
     }
 
     pub fn beep(&self) {
@@ -140,7 +140,7 @@ impl Display {
     }
 
     pub fn put_event(&self, event: &gdk::Event) {
-        unsafe { ffi::gdk_display_put_event(self.pointer, event.get_pointer() as *const ffi::C_GdkEvent) }
+        unsafe { ffi::gdk_display_put_event(self.pointer, event.unwrap_pointer() as *const ffi::C_GdkEvent) }
     }*/
 
     pub fn has_pending(&self) -> bool {
@@ -186,7 +186,7 @@ impl Display {
     }
 
     /*pub fn request_selection_notification(&self, selection: &gdk::Atom) -> bool {
-        unsafe { to_bool(ffi::gdk_display_request_selection_notification(self.pointer, selection.get_pointer())) }
+        unsafe { to_bool(ffi::gdk_display_request_selection_notification(self.pointer, selection.unwrap_pointer())) }
     }*/
 
     pub fn supports_clipboard_persistence(&self) -> bool {
@@ -194,7 +194,7 @@ impl Display {
     }
 
     /*pub fn store_clipboard(&self, clipboard_window: &gdk::Window, time_: u32, targets: Vec<gdk::Atom>) {
-        unsafe { ffi::gdk_display_store_clipboard(self.pointer, clipboard_window.get_pointer(), time_, targets.as_mut_pointer(),
+        unsafe { ffi::gdk_display_store_clipboard(self.pointer, clipboard_window.unwrap_pointer(), time_, targets.as_mut_pointer(),
             targets.len() as c_int) }
     }*/
 

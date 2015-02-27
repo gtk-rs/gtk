@@ -70,7 +70,7 @@ impl HeaderBar {
     pub fn set_custom_title<T: gtk::WidgetTrait>(&mut self, title_widget: Option<&T>) {
         unsafe {
             ffi::gtk_header_bar_set_custom_title(GTK_HEADER_BAR(self.pointer),
-                                                 get_widget!(title_widget))
+                                                 unwrap_widget!(title_widget))
         }
     }
 
@@ -82,21 +82,21 @@ impl HeaderBar {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer))
         }
     }
 
     pub fn pack_start<T: gtk::WidgetTrait>(&mut self, child: &T) {
         unsafe {
             ffi::gtk_header_bar_pack_start(GTK_HEADER_BAR(self.pointer),
-                                           child.get_widget())
+                                           child.unwrap_widget())
         }
     }
 
     pub fn pack_end<T: gtk::WidgetTrait>(&mut self, child: &T) {
         unsafe {
             ffi::gtk_header_bar_pack_end(GTK_HEADER_BAR(self.pointer),
-                                         child.get_widget())
+                                         child.unwrap_widget())
         }
     }
 

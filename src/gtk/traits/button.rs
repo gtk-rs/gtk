@@ -25,49 +25,49 @@ use glib::{to_bool, to_gboolean};
 pub trait ButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait {
     fn pressed(&self) -> () {
         unsafe {
-            ffi::gtk_button_pressed(GTK_BUTTON(self.get_widget()));
+            ffi::gtk_button_pressed(GTK_BUTTON(self.unwrap_widget()));
         }
     }
 
     fn released(&self) -> () {
         unsafe {
-            ffi::gtk_button_released(GTK_BUTTON(self.get_widget()));
+            ffi::gtk_button_released(GTK_BUTTON(self.unwrap_widget()));
         }
     }
 
     fn clicked(&self) -> () {
         unsafe {
-            ffi::gtk_button_clicked(GTK_BUTTON(self.get_widget()));
+            ffi::gtk_button_clicked(GTK_BUTTON(self.unwrap_widget()));
         }
     }
 
     fn enter(&self) -> () {
         unsafe {
-            ffi::gtk_button_enter(GTK_BUTTON(self.get_widget()));
+            ffi::gtk_button_enter(GTK_BUTTON(self.unwrap_widget()));
         }
     }
 
     fn leave(&self) -> () {
         unsafe {
-            ffi::gtk_button_leave(GTK_BUTTON(self.get_widget()));
+            ffi::gtk_button_leave(GTK_BUTTON(self.unwrap_widget()));
         }
     }
 
     fn set_relief(&mut self, new_style: ReliefStyle) -> () {
         unsafe {
-            ffi::gtk_button_set_relief(GTK_BUTTON(self.get_widget()), new_style);
+            ffi::gtk_button_set_relief(GTK_BUTTON(self.unwrap_widget()), new_style);
         }
     }
 
     fn get_relief(&self) -> ReliefStyle {
         unsafe {
-            ffi::gtk_button_get_relief(GTK_BUTTON(self.get_widget()))
+            ffi::gtk_button_get_relief(GTK_BUTTON(self.unwrap_widget()))
         }
     }
 
     fn get_label(&self) -> Option<String> {
         unsafe {
-            let c_str = ffi::gtk_button_get_label(GTK_BUTTON(self.get_widget()));
+            let c_str = ffi::gtk_button_get_label(GTK_BUTTON(self.unwrap_widget()));
 
             if c_str.is_null() {
                 None
@@ -81,37 +81,37 @@ pub trait ButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait {
         unsafe {
             let c_str = CString::from_slice(label.as_bytes());
 
-            ffi::gtk_button_set_label(GTK_BUTTON(self.get_widget()), c_str.as_ptr())
+            ffi::gtk_button_set_label(GTK_BUTTON(self.unwrap_widget()), c_str.as_ptr())
         }
     }
 
     fn get_use_stock(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_button_get_use_stock(GTK_BUTTON(self.get_widget()))) }
+        unsafe { to_bool(ffi::gtk_button_get_use_stock(GTK_BUTTON(self.unwrap_widget()))) }
     }
 
     fn set_use_stock(&mut self, use_stock: bool) -> () {
-        unsafe { ffi::gtk_button_set_use_stock(GTK_BUTTON(self.get_widget()), to_gboolean(use_stock)); }
+        unsafe { ffi::gtk_button_set_use_stock(GTK_BUTTON(self.unwrap_widget()), to_gboolean(use_stock)); }
     }
 
     fn get_use_underline(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_button_get_use_underline(GTK_BUTTON(self.get_widget()))) }
+        unsafe { to_bool(ffi::gtk_button_get_use_underline(GTK_BUTTON(self.unwrap_widget()))) }
     }
 
     fn set_use_underline(&mut self, use_underline: bool) -> () {
-        unsafe { ffi::gtk_button_set_use_underline(GTK_BUTTON(self.get_widget()), to_gboolean(use_underline)); }
+        unsafe { ffi::gtk_button_set_use_underline(GTK_BUTTON(self.unwrap_widget()), to_gboolean(use_underline)); }
     }
 
     fn set_focus_on_click(&mut self, focus_on_click: bool) -> () {
-        unsafe { ffi::gtk_button_set_focus_on_click(GTK_BUTTON(self.get_widget()), to_gboolean(focus_on_click)); }
+        unsafe { ffi::gtk_button_set_focus_on_click(GTK_BUTTON(self.unwrap_widget()), to_gboolean(focus_on_click)); }
     }
 
     fn get_focus_on_click(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_button_get_focus_on_click(GTK_BUTTON(self.get_widget()))) }
+        unsafe { to_bool(ffi::gtk_button_get_focus_on_click(GTK_BUTTON(self.unwrap_widget()))) }
     }
 
     fn set_alignment(&mut self, x_align: f32, y_align: f32) -> () {
         unsafe {
-            ffi::gtk_button_set_alignment(GTK_BUTTON(self.get_widget()), x_align as c_float, y_align as c_float)
+            ffi::gtk_button_set_alignment(GTK_BUTTON(self.unwrap_widget()), x_align as c_float, y_align as c_float)
         }
     }
 
@@ -119,37 +119,37 @@ pub trait ButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait {
         let mut x_align = 0.1;
         let mut y_align = 0.1;
         unsafe {
-            ffi::gtk_button_get_alignment(GTK_BUTTON(self.get_widget()), &mut x_align, &mut y_align);
+            ffi::gtk_button_get_alignment(GTK_BUTTON(self.unwrap_widget()), &mut x_align, &mut y_align);
         }
         (x_align as f32, y_align as f32)
     }
 
     fn set_image<T: gtk::WidgetTrait>(&mut self, image: &T) -> () {
         unsafe {
-            ffi::gtk_button_set_image(GTK_BUTTON(self.get_widget()), image.get_widget());
+            ffi::gtk_button_set_image(GTK_BUTTON(self.unwrap_widget()), image.unwrap_widget());
         }
     }
 
     fn set_image_position(&mut self, position: PositionType) -> () {
         unsafe {
-            ffi::gtk_button_set_image_position(GTK_BUTTON(self.get_widget()), position);
+            ffi::gtk_button_set_image_position(GTK_BUTTON(self.unwrap_widget()), position);
         }
     }
 
     fn get_image_position(&self) -> PositionType {
         unsafe {
-            ffi::gtk_button_get_image_position(GTK_BUTTON(self.get_widget()))
+            ffi::gtk_button_get_image_position(GTK_BUTTON(self.unwrap_widget()))
         }
     }
 
     #[cfg(any(feature = "GTK_3_6", feature = "GTK_3_8", feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
     fn set_always_show_image(&mut self, always_show: bool) -> () {
-        unsafe { ffi::gtk_button_set_always_show_image(GTK_BUTTON(self.get_widget()), to_gboolean(always_show)); }
+        unsafe { ffi::gtk_button_set_always_show_image(GTK_BUTTON(self.unwrap_widget()), to_gboolean(always_show)); }
     }
 
     #[cfg(any(feature = "GTK_3_6", feature = "GTK_3_8", feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
     fn get_always_show_image(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_button_get_always_show_image(GTK_BUTTON(self.get_widget()))) }
+        unsafe { to_bool(ffi::gtk_button_get_always_show_image(GTK_BUTTON(self.unwrap_widget()))) }
     }
 
     fn connect_clicked_signal(&self, handler: Box<ButtonClickedHandler>) {
@@ -157,7 +157,7 @@ pub trait ButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait {
         let c_str = CString::from_slice("clicked".as_bytes());
 
         unsafe {
-            ffi::g_signal_connect_data(self.get_widget() as ffi::gpointer,
+            ffi::g_signal_connect_data(self.unwrap_widget() as ffi::gpointer,
                                        c_str.as_ptr(),
                                        Some(mem::transmute(widget_destroy_callback)),
                                        data,
@@ -177,7 +177,7 @@ extern "C" fn widget_destroy_callback(object: *mut ffi::C_GtkWidget, user_data: 
 
     // let mut window = check_pointer!(object, Window).unwrap();
     // window.can_drop = false;
-    let mut button: gtk::Button = gtk::FFIWidget::wrap(object);
+    let mut button: gtk::Button = gtk::FFIWidget::wrap_widget(object);
     handler.callback(&mut button);
 
     unsafe {

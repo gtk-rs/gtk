@@ -24,19 +24,19 @@ pub trait WindowTrait : gtk::WidgetTrait {
         unsafe {
             let c_str = CString::from_slice(title.as_bytes());
 
-            ffi::gtk_window_set_title(GTK_WINDOW(self.get_widget()), c_str.as_ptr());
+            ffi::gtk_window_set_title(GTK_WINDOW(self.unwrap_widget()), c_str.as_ptr());
         }
     }
 
     fn set_decorated(&mut self, setting: bool) -> () {
         unsafe {
-            ffi::gtk_window_set_decorated(GTK_WINDOW(self.get_widget()), to_gboolean(setting));
+            ffi::gtk_window_set_decorated(GTK_WINDOW(self.unwrap_widget()), to_gboolean(setting));
         }
     }
 
     fn get_title(&self) -> Option<String> {
         unsafe {
-            let c_title = ffi::gtk_window_get_title(GTK_WINDOW(self.get_widget()));
+            let c_title = ffi::gtk_window_get_title(GTK_WINDOW(self.unwrap_widget()));
 
             if c_title.is_null() {
                 None
@@ -48,20 +48,20 @@ pub trait WindowTrait : gtk::WidgetTrait {
 
     fn set_default_size(&self, width: i32, height: i32){
         unsafe {
-            ffi::gtk_window_set_default_size(self.get_widget(), width, height)
+            ffi::gtk_window_set_default_size(self.unwrap_widget(), width, height)
         }
     }
 
     fn set_window_position(&self, window_position: WindowPosition) {
         unsafe {
-            ffi::gtk_window_set_position(GTK_WINDOW(self.get_widget()), window_position);
+            ffi::gtk_window_set_position(GTK_WINDOW(self.unwrap_widget()), window_position);
         }
     }
 
     #[cfg(any(feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
     fn set_titlebar<T: gtk::WidgetTrait>(&self, titlebar: &T) {
         unsafe {
-            ffi::gtk_window_set_titlebar(GTK_WINDOW(self.get_widget()), titlebar.get_widget());
+            ffi::gtk_window_set_titlebar(GTK_WINDOW(self.unwrap_widget()), titlebar.unwrap_widget());
         }
     }
 }

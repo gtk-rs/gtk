@@ -36,7 +36,7 @@ impl Stack {
 
         unsafe {
             ffi::gtk_stack_add_named(GTK_STACK(self.pointer),
-                                     child.get_widget(),
+                                     child.unwrap_widget(),
                                      c_str.as_ptr())
         }
     }
@@ -47,7 +47,7 @@ impl Stack {
 
         unsafe {
             ffi::gtk_stack_add_titled(GTK_STACK(self.pointer),
-                                      child.get_widget(),
+                                      child.unwrap_widget(),
                                       c_name.as_ptr(),
                                       c_title.as_ptr())
         }
@@ -56,7 +56,7 @@ impl Stack {
     pub fn set_visible_child<T: gtk::WidgetTrait>(&mut self, child: &T) {
         unsafe {
             ffi::gtk_stack_set_visible_child(GTK_STACK(self.pointer),
-                                             child.get_widget())
+                                             child.unwrap_widget())
         }
     }
 
@@ -65,7 +65,7 @@ impl Stack {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer))
         }
     }
 

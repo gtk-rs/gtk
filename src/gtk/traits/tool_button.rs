@@ -23,7 +23,7 @@ pub trait ToolButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrai
         unsafe {
             let c_str = CString::from_slice(label.as_bytes());
 
-            ffi::gtk_tool_button_set_label(GTK_TOOLBUTTON(self.get_widget()), c_str.as_ptr())
+            ffi::gtk_tool_button_set_label(GTK_TOOLBUTTON(self.unwrap_widget()), c_str.as_ptr())
         }
     }
 
@@ -31,7 +31,7 @@ pub trait ToolButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrai
         unsafe {
             let c_str = CString::from_slice(stock_id.as_bytes());
 
-            ffi::gtk_tool_button_set_stock_id(GTK_TOOLBUTTON(self.get_widget()), c_str.as_ptr())
+            ffi::gtk_tool_button_set_stock_id(GTK_TOOLBUTTON(self.unwrap_widget()), c_str.as_ptr())
         }
     }
 
@@ -39,13 +39,13 @@ pub trait ToolButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrai
         let c_str = CString::from_slice(icon_name.as_bytes());
 
         unsafe {
-            ffi::gtk_tool_button_set_icon_name(GTK_TOOLBUTTON(self.get_widget()), c_str.as_ptr());
+            ffi::gtk_tool_button_set_icon_name(GTK_TOOLBUTTON(self.unwrap_widget()), c_str.as_ptr());
         }
     }
 
     fn get_label(&self) -> Option<String> {
         unsafe {
-            let c_str = ffi::gtk_tool_button_get_label(GTK_TOOLBUTTON(self.get_widget()));
+            let c_str = ffi::gtk_tool_button_get_label(GTK_TOOLBUTTON(self.unwrap_widget()));
 
             if c_str.is_null() {
                 None
@@ -57,7 +57,7 @@ pub trait ToolButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrai
 
     fn get_stock_id(&self) -> Option<String> {
         unsafe {
-            let c_str = ffi::gtk_tool_button_get_stock_id(GTK_TOOLBUTTON(self.get_widget()));
+            let c_str = ffi::gtk_tool_button_get_stock_id(GTK_TOOLBUTTON(self.unwrap_widget()));
 
             if c_str.is_null() {
                 None
@@ -69,7 +69,7 @@ pub trait ToolButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrai
 
     fn get_icon_name(&self) -> Option<String> {
         unsafe {
-            let c_str = ffi::gtk_tool_button_get_icon_name(GTK_TOOLBUTTON(self.get_widget()));
+            let c_str = ffi::gtk_tool_button_get_icon_name(GTK_TOOLBUTTON(self.unwrap_widget()));
 
             if c_str.is_null() {
                 None
@@ -80,26 +80,26 @@ pub trait ToolButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrai
     }
 
     fn get_use_underline(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_tool_button_get_use_underline(GTK_TOOLBUTTON(self.get_widget()))) }
+        unsafe { to_bool(ffi::gtk_tool_button_get_use_underline(GTK_TOOLBUTTON(self.unwrap_widget()))) }
     }
 
     fn set_use_underline(&mut self, set_underline: bool) -> () {
-         unsafe { ffi::gtk_tool_button_set_use_underline(GTK_TOOLBUTTON(self.get_widget()), to_gboolean(set_underline)); }
+         unsafe { ffi::gtk_tool_button_set_use_underline(GTK_TOOLBUTTON(self.unwrap_widget()), to_gboolean(set_underline)); }
     }
 
     fn set_label_widget<T: gtk::LabelTrait>(&mut self, label: &T) -> () {
         unsafe {
-            ffi::gtk_tool_button_set_label_widget(GTK_TOOLBUTTON(self.get_widget()), label.get_widget())
+            ffi::gtk_tool_button_set_label_widget(GTK_TOOLBUTTON(self.unwrap_widget()), label.unwrap_widget())
         }
     }
 
     fn get_label_widget(&self) -> Option<gtk::Label> {
         unsafe {
-            let tmp_pointer = ffi::gtk_tool_button_get_label_widget(GTK_TOOLBUTTON(self.get_widget()));
+            let tmp_pointer = ffi::gtk_tool_button_get_label_widget(GTK_TOOLBUTTON(self.unwrap_widget()));
             if tmp_pointer.is_null() {
                 None
             } else {
-                Some(gtk::FFIWidget::wrap(tmp_pointer))
+                Some(gtk::FFIWidget::wrap_widget(tmp_pointer))
             }
         }
     }

@@ -19,13 +19,13 @@ use gtk::{self, ffi};
 pub trait RangeTrait: gtk::WidgetTrait {
     fn set_adjustment(&mut self, adjustment: &gtk::Adjustment) -> () {
         unsafe {
-            ffi::gtk_range_set_adjustment(GTK_RANGE(self.get_widget()), adjustment.get_pointer());
+            ffi::gtk_range_set_adjustment(GTK_RANGE(self.unwrap_widget()), adjustment.unwrap_pointer());
         }
     }
 
     fn get_adjustment(&self) -> gtk::Adjustment {
         unsafe {
-            gtk::Adjustment::wrap_pointer(ffi::gtk_range_get_adjustment(GTK_RANGE(self.get_widget())))
+            gtk::Adjustment::wrap_pointer(ffi::gtk_range_get_adjustment(GTK_RANGE(self.unwrap_widget())))
         }
     }
 }

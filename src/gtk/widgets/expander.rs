@@ -118,13 +118,13 @@ impl Expander {
 
     pub fn set_label_widget(&mut self, label: &gtk::Label) -> () {
         unsafe {
-            ffi::gtk_expander_set_label_widget(GTK_EXPANDER(self.pointer), label.get_widget());
+            ffi::gtk_expander_set_label_widget(GTK_EXPANDER(self.pointer), label.unwrap_widget());
         }
     }
 
     pub fn get_label_widget(&mut self) -> gtk::Label {
         unsafe {
-            gtk::FFIWidget::wrap(ffi::gtk_expander_get_label_widget(GTK_EXPANDER(self.pointer)))
+            gtk::FFIWidget::wrap_widget(ffi::gtk_expander_get_label_widget(GTK_EXPANDER(self.pointer)))
         }
     }
 }

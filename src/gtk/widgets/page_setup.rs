@@ -56,12 +56,12 @@ impl PageSetup {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 
     pub fn set_paper_size(&self, size: &gtk::PaperSize) {
-        unsafe { ffi::gtk_page_setup_set_paper_size(self.pointer, GTK_PAPER_SIZE(size.get_widget())) }
+        unsafe { ffi::gtk_page_setup_set_paper_size(self.pointer, GTK_PAPER_SIZE(size.unwrap_widget())) }
     }
 
     pub fn get_top_margin(&self, unit: gtk::Unit) -> f64 {
@@ -97,7 +97,7 @@ impl PageSetup {
     }
 
     pub fn set_paper_size_and_default_margins(&self, size: &gtk::PaperSize) {
-        unsafe { ffi::gtk_page_setup_set_paper_size_and_default_margins(self.pointer, GTK_PAPER_SIZE(size.get_widget())) }
+        unsafe { ffi::gtk_page_setup_set_paper_size_and_default_margins(self.pointer, GTK_PAPER_SIZE(size.unwrap_widget())) }
     }
 
     pub fn get_paper_width(&self, unit: gtk::Unit) -> f64 {

@@ -27,7 +27,7 @@ impl FontChooserDialog {
 
             ffi::gtk_font_chooser_dialog_new(c_str.as_ptr(),
                 match parent {
-                    Some(ref p) => GTK_WINDOW(p.get_widget()),
+                    Some(ref p) => GTK_WINDOW(p.unwrap_widget()),
                     None => GTK_WINDOW(::std::ptr::null_mut())
                 }
             )
@@ -36,7 +36,7 @@ impl FontChooserDialog {
         if tmp.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp))
+            Some(gtk::FFIWidget::wrap_widget(tmp))
         }
     }
 }

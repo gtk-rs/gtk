@@ -31,7 +31,7 @@ impl SearchBar {
 
     pub fn connect_entry(&mut self, entry: &gtk::Entry) -> () {
         unsafe {
-            ffi::gtk_search_bar_connect_entry(GTK_SEARCHBAR(self.pointer), GTK_ENTRY(entry.get_widget()));
+            ffi::gtk_search_bar_connect_entry(GTK_SEARCHBAR(self.pointer), GTK_ENTRY(entry.unwrap_widget()));
         }
     }
 

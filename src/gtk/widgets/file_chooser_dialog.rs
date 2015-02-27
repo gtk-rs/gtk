@@ -31,7 +31,7 @@ impl FileChooserDialog {
 
             ffi::gtk_file_chooser_dialog_new(c_str.as_ptr(),
                 match parent {
-                    Some(ref p) => GTK_WINDOW(p.get_widget()),
+                    Some(ref p) => GTK_WINDOW(p.unwrap_widget()),
                     None => GTK_WINDOW(::std::ptr::null_mut())
                 }, action, c_cancel.as_ptr(), gtk::ResponseType::Cancel, c_ok.as_ptr(), gtk::ResponseType::Accept, ::std::ptr::null_mut())
         };
@@ -39,7 +39,7 @@ impl FileChooserDialog {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer))
         }
     }
 }

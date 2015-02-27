@@ -159,7 +159,7 @@ impl Adjustment {
     }
 
     #[doc(hidden)]
-    pub fn get_pointer(&self) -> *mut ffi::C_GtkAdjustment {
+    pub fn unwrap_pointer(&self) -> *mut ffi::C_GtkAdjustment {
         self.pointer
     }
 

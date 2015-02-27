@@ -21,14 +21,14 @@ use glib::{to_bool, to_gboolean};
 pub trait EditableTrait: gtk::WidgetTrait {
     fn select_region(&mut self, start_pos: i32, end_pos: i32) {
         unsafe {
-            ffi::gtk_editable_select_region(GTK_EDITABLE(self.get_widget()), start_pos, end_pos)
+            ffi::gtk_editable_select_region(GTK_EDITABLE(self.unwrap_widget()), start_pos, end_pos)
         }
     }
     fn get_selection_bounds (&self) -> Option<(i32, i32)> {
         let mut i: i32 = 0;
         let mut j: i32 = 0;
         let res = unsafe {
-            to_bool(ffi::gtk_editable_get_selection_bounds(GTK_EDITABLE(self.get_widget()),
+            to_bool(ffi::gtk_editable_get_selection_bounds(GTK_EDITABLE(self.unwrap_widget()),
                                                                 &mut i,
                                                                 &mut j))
         };
@@ -43,7 +43,7 @@ pub trait EditableTrait: gtk::WidgetTrait {
         unsafe {
             let c_str = CString::from_slice(new_text.as_bytes());
 
-            ffi::gtk_editable_insert_text(GTK_EDITABLE(self.get_widget()),
+            ffi::gtk_editable_insert_text(GTK_EDITABLE(self.unwrap_widget()),
                                               c_str.as_ptr(),
                                               new_text_length,
                                               position)
@@ -52,13 +52,13 @@ pub trait EditableTrait: gtk::WidgetTrait {
 
     fn delete_text(&mut self, start_pos: i32, end_pos: i32) {
         unsafe {
-            ffi::gtk_editable_delete_text(GTK_EDITABLE(self.get_widget()), start_pos, end_pos)
+            ffi::gtk_editable_delete_text(GTK_EDITABLE(self.unwrap_widget()), start_pos, end_pos)
         }
     }
 
     fn get_chars(&self, start_pos: i32, end_pos: i32) -> Option<String> {
         let chars = unsafe {
-            ffi::gtk_editable_get_chars(GTK_EDITABLE(self.get_widget()), start_pos, end_pos)
+            ffi::gtk_editable_get_chars(GTK_EDITABLE(self.unwrap_widget()), start_pos, end_pos)
         };
 
         if chars.is_null() {
@@ -70,49 +70,49 @@ pub trait EditableTrait: gtk::WidgetTrait {
 
     fn cut_clipboard(&mut self) {
         unsafe {
-            ffi::gtk_editable_cut_clipboard(GTK_EDITABLE(self.get_widget()))
+            ffi::gtk_editable_cut_clipboard(GTK_EDITABLE(self.unwrap_widget()))
         }
     }
 
     fn copy_clipboard(&mut self) {
         unsafe {
-            ffi::gtk_editable_copy_clipboard(GTK_EDITABLE(self.get_widget()))
+            ffi::gtk_editable_copy_clipboard(GTK_EDITABLE(self.unwrap_widget()))
         }
     }
 
     fn paste_clipboard(&mut self) {
         unsafe {
-            ffi::gtk_editable_paste_clipboard(GTK_EDITABLE(self.get_widget()))
+            ffi::gtk_editable_paste_clipboard(GTK_EDITABLE(self.unwrap_widget()))
         }
     }
 
     fn delete_selection(&mut self) {
         unsafe {
-            ffi::gtk_editable_delete_selection(GTK_EDITABLE(self.get_widget()))
+            ffi::gtk_editable_delete_selection(GTK_EDITABLE(self.unwrap_widget()))
         }
     }
 
     fn set_position(&mut self, position: i32) {
         unsafe {
-            ffi::gtk_editable_set_editable(GTK_EDITABLE(self.get_widget()), position)
+            ffi::gtk_editable_set_editable(GTK_EDITABLE(self.unwrap_widget()), position)
         }
     }
 
     fn get_position(&self) -> i32 {
         unsafe {
-            ffi::gtk_editable_get_position(GTK_EDITABLE(self.get_widget()))
+            ffi::gtk_editable_get_position(GTK_EDITABLE(self.unwrap_widget()))
         }
     }
 
     fn set_editable(&mut self, editable: bool) {
         unsafe {
-            ffi::gtk_editable_set_editable(GTK_EDITABLE(self.get_widget()), to_gboolean(editable))
+            ffi::gtk_editable_set_editable(GTK_EDITABLE(self.unwrap_widget()), to_gboolean(editable))
         }
     }
 
     fn is_editable(&self) -> bool {
         unsafe {
-            to_bool(ffi::gtk_editable_get_editable(GTK_EDITABLE(self.get_widget())))
+            to_bool(ffi::gtk_editable_get_editable(GTK_EDITABLE(self.unwrap_widget())))
         }
     }
 }

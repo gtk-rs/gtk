@@ -122,7 +122,7 @@ impl EntryBuffer {
     }
 
     #[doc(hidden)]
-    pub fn get_pointer(&self) -> *mut ffi::C_GtkEntryBuffer {
+    pub fn unwrap_pointer(&self) -> *mut ffi::C_GtkEntryBuffer {
         self.pointer
     }
 
