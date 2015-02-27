@@ -625,4 +625,9 @@ extern "C" {
     pub fn gdk_app_launch_context_set_timestamp    (context: *mut C_GdkAppLaunchContext, timestamp: u32);
     //pub fn gdk_app_launch_context_set_icon         (context: *mut C_GdkAppLaunchContext, icon: *mut C_GIcon);
     pub fn gdk_app_launch_context_set_icon_name    (context: *mut C_GdkAppLaunchContext, icon_name: *const c_char);
+
+    //=========================================================================
+    // Gdk Key Handling                                                  NOT OK
+    //=========================================================================
+    pub fn gdk_keyval_name                         (keyval:c_uint) -> *mut c_char;
 }
