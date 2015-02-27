@@ -17,7 +17,7 @@
 
 use std::ptr;
 use gdk::ffi;
-use std::ffi::CString;
+use std::ffi::CStr;
 use libc::{c_uint, c_void, c_char};
 
 pub fn keyval_name(keyval: u32) -> Option<String> {
@@ -27,9 +27,7 @@ pub fn keyval_name(keyval: u32) -> Option<String> {
         None
     } else {
         unsafe {
-            let ret = Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string());
-
-            ret
+            return Some(String::from_utf8_lossy(CStr::from_ptr(tmp).to_bytes()).into_owned());
         }
     }
 }
