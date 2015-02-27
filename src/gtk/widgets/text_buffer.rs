@@ -26,7 +26,7 @@ impl TextBuffer {
     pub fn new(text_tag_table: Option<gtk::TextTagTable>) -> Option<TextBuffer> {
         let tmp_pointer = unsafe {
             match text_tag_table {
-                Some(ttl) => ffi::gtk_text_buffer_new(ttl.get_pointer()),
+                Some(ttl) => ffi::gtk_text_buffer_new(ttl.unwrap_pointer()),
                 None      => ffi::gtk_text_buffer_new(ptr::null_mut())
             }
         };

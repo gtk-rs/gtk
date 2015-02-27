@@ -22,37 +22,37 @@ use gtk::{self, ffi};
 pub trait ContainerTrait: gtk::WidgetTrait {
     fn add<'r, T: gtk::WidgetTrait>(&'r mut self, widget: &'r T) {
         unsafe {
-            ffi::gtk_container_add(GTK_CONTAINER(self.get_widget()), widget.get_widget());
+            ffi::gtk_container_add(GTK_CONTAINER(self.unwrap_widget()), widget.unwrap_widget());
         }
     }
 
     fn remove<'r, T: gtk::WidgetTrait>(&'r mut self, widget: &'r T) {
         unsafe {
-            ffi::gtk_container_remove(GTK_CONTAINER(self.get_widget()), widget.get_widget());
+            ffi::gtk_container_remove(GTK_CONTAINER(self.unwrap_widget()), widget.unwrap_widget());
         }
     }
 
     fn get_resize_mode(&self) -> ResizeMode {
         unsafe {
-            ffi::gtk_container_get_resize_mode(GTK_CONTAINER(self.get_widget()))
+            ffi::gtk_container_get_resize_mode(GTK_CONTAINER(self.unwrap_widget()))
         }
     }
 
     fn set_resize_mode(&mut self, resize_mode: ResizeMode) -> () {
         unsafe {
-            ffi::gtk_container_set_resize_mode(GTK_CONTAINER(self.get_widget()), resize_mode);
+            ffi::gtk_container_set_resize_mode(GTK_CONTAINER(self.unwrap_widget()), resize_mode);
         }
     }
 
     fn get_border_width(&self) -> u32 {
         unsafe {
-            ffi::gtk_container_get_border_width(GTK_CONTAINER(self.get_widget())) as u32
+            ffi::gtk_container_get_border_width(GTK_CONTAINER(self.unwrap_widget())) as u32
         }
     }
 
     fn set_border_width(&self, border_width: u32) -> () {
         unsafe {
-            ffi::gtk_container_set_border_width(GTK_CONTAINER(self.get_widget()), border_width as c_uint);
+            ffi::gtk_container_set_border_width(GTK_CONTAINER(self.unwrap_widget()), border_width as c_uint);
         }
     }
 }

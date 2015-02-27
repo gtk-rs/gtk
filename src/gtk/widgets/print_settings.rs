@@ -28,17 +28,17 @@ impl PrintSettings {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 
     pub fn copy(&self) -> Option<PrintSettings> {
-        let tmp_pointer = unsafe { ffi::gtk_print_settings_copy(GTK_PRINT_SETTINGS(self.get_widget())) };
+        let tmp_pointer = unsafe { ffi::gtk_print_settings_copy(GTK_PRINT_SETTINGS(self.unwrap_widget())) };
 
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 
@@ -46,7 +46,7 @@ impl PrintSettings {
         let c_str = CString::from_slice(key.as_bytes());
 
         unsafe {
-            to_bool(ffi::gtk_print_settings_has_key(GTK_PRINT_SETTINGS(self.get_widget()), c_str.as_ptr()))
+            to_bool(ffi::gtk_print_settings_has_key(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr()))
         }
     }
 
@@ -54,7 +54,7 @@ impl PrintSettings {
         unsafe {
             let c_str = CString::from_slice(key.as_bytes());
 
-            let tmp = ffi::gtk_print_settings_get(GTK_PRINT_SETTINGS(self.get_widget()), c_str.as_ptr());
+            let tmp = ffi::gtk_print_settings_get(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr());
 
             if tmp.is_null() {
                 None
@@ -69,7 +69,7 @@ impl PrintSettings {
             let c_str = CString::from_slice(key.as_bytes());
             let c_str2 = CString::from_slice(value.as_bytes());
 
-            ffi::gtk_print_settings_set(GTK_PRINT_SETTINGS(self.get_widget()), c_str.as_ptr(), c_str2.as_ptr())
+            ffi::gtk_print_settings_set(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr(), c_str2.as_ptr())
         }
     }
 
@@ -77,7 +77,7 @@ impl PrintSettings {
         unsafe {
             let c_str = CString::from_slice(key.as_bytes());
 
-            ffi::gtk_print_settings_unset(GTK_PRINT_SETTINGS(self.get_widget()), c_str.as_ptr())
+            ffi::gtk_print_settings_unset(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr())
         }
     }
 
@@ -85,7 +85,7 @@ impl PrintSettings {
         unsafe {
             let c_str = CString::from_slice(key.as_bytes());
 
-            to_bool(ffi::gtk_print_settings_get_bool(GTK_PRINT_SETTINGS(self.get_widget()), c_str.as_ptr()))
+            to_bool(ffi::gtk_print_settings_get_bool(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr()))
         }
     }
 
@@ -93,7 +93,7 @@ impl PrintSettings {
         unsafe {
             let c_str = CString::from_slice(key.as_bytes());
 
-            ffi::gtk_print_settings_set_bool(GTK_PRINT_SETTINGS(self.get_widget()), c_str.as_ptr(), to_gboolean(value))
+            ffi::gtk_print_settings_set_bool(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr(), to_gboolean(value))
         }
     }
 
@@ -101,7 +101,7 @@ impl PrintSettings {
         unsafe {
             let c_str = CString::from_slice(key.as_bytes());
 
-            ffi::gtk_print_settings_get_double(GTK_PRINT_SETTINGS(self.get_widget()), c_str.as_ptr())
+            ffi::gtk_print_settings_get_double(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr())
         }
     }
 
@@ -109,7 +109,7 @@ impl PrintSettings {
         unsafe {
             let c_str = CString::from_slice(key.as_bytes());
 
-            ffi::gtk_print_settings_set_double(GTK_PRINT_SETTINGS(self.get_widget()), c_str.as_ptr(), value)
+            ffi::gtk_print_settings_set_double(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr(), value)
         }
     }
 
@@ -117,7 +117,7 @@ impl PrintSettings {
         unsafe {
             let c_str = CString::from_slice(key.as_bytes());
 
-            ffi::gtk_print_settings_get_double_with_default(GTK_PRINT_SETTINGS(self.get_widget()), c_str.as_ptr(), def)
+            ffi::gtk_print_settings_get_double_with_default(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr(), def)
         }
     }
 
@@ -125,7 +125,7 @@ impl PrintSettings {
         unsafe {
             let c_str = CString::from_slice(key.as_bytes());
 
-            ffi::gtk_print_settings_get_length(GTK_PRINT_SETTINGS(self.get_widget()), c_str.as_ptr(), unit)
+            ffi::gtk_print_settings_get_length(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr(), unit)
         }
     }
 
@@ -133,7 +133,7 @@ impl PrintSettings {
         unsafe {
             let c_str = CString::from_slice(key.as_bytes());
 
-            ffi::gtk_print_settings_set_length(GTK_PRINT_SETTINGS(self.get_widget()), c_str.as_ptr(), value, unit)
+            ffi::gtk_print_settings_set_length(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr(), value, unit)
         }
     }
 
@@ -141,7 +141,7 @@ impl PrintSettings {
         unsafe {
             let c_str = CString::from_slice(key.as_bytes());
 
-            ffi::gtk_print_settings_get_int(GTK_PRINT_SETTINGS(self.get_widget()), c_str.as_ptr())
+            ffi::gtk_print_settings_get_int(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr())
         }
     }
 
@@ -149,7 +149,7 @@ impl PrintSettings {
         unsafe {
             let c_str = CString::from_slice(key.as_bytes());
 
-            ffi::gtk_print_settings_set_int(GTK_PRINT_SETTINGS(self.get_widget()), c_str.as_ptr(), value)
+            ffi::gtk_print_settings_set_int(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr(), value)
         }
     }
 
@@ -157,12 +157,12 @@ impl PrintSettings {
         unsafe {
             let c_str = CString::from_slice(key.as_bytes());
 
-            ffi::gtk_print_settings_get_int_with_default(GTK_PRINT_SETTINGS(self.get_widget()), c_str.as_ptr(), def)
+            ffi::gtk_print_settings_get_int_with_default(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr(), def)
         }
     }
 
     pub fn get_printer(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_print_settings_get_printer(GTK_PRINT_SETTINGS(self.get_widget())) };
+        let tmp = unsafe { ffi::gtk_print_settings_get_printer(GTK_PRINT_SETTINGS(self.unwrap_widget())) };
 
         if tmp.is_null() {
             None
@@ -175,144 +175,144 @@ impl PrintSettings {
         unsafe {
             let c_str = CString::from_slice(printer.as_bytes());
 
-            ffi::gtk_print_settings_set_printer(GTK_PRINT_SETTINGS(self.get_widget()), c_str.as_ptr())
+            ffi::gtk_print_settings_set_printer(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr())
         }
     }
 
     pub fn get_orientation(&self) -> gtk::PageOrientation {
-        unsafe { ffi::gtk_print_settings_get_orientation(GTK_PRINT_SETTINGS(self.get_widget())) }
+        unsafe { ffi::gtk_print_settings_get_orientation(GTK_PRINT_SETTINGS(self.unwrap_widget())) }
     }
 
     pub fn set_orientation(&self, orientation: gtk::PageOrientation) {
-        unsafe { ffi::gtk_print_settings_set_orientation(GTK_PRINT_SETTINGS(self.get_widget()), orientation) }
+        unsafe { ffi::gtk_print_settings_set_orientation(GTK_PRINT_SETTINGS(self.unwrap_widget()), orientation) }
     }
 
     pub fn get_paper_size(&self) -> Option<gtk::PaperSize> {
-        let tmp = unsafe { ffi::gtk_print_settings_get_paper_size(GTK_PRINT_SETTINGS(self.get_widget())) };
+        let tmp = unsafe { ffi::gtk_print_settings_get_paper_size(GTK_PRINT_SETTINGS(self.unwrap_widget())) };
 
         if tmp.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp as *mut ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap_widget(tmp as *mut ffi::C_GtkWidget))
         }
     }
 
     pub fn set_paper_size(&self, paper_size: &gtk::PaperSize) {
-        unsafe { ffi::gtk_print_settings_set_paper_size(GTK_PRINT_SETTINGS(self.get_widget()), GTK_PAPER_SIZE(paper_size.get_widget())) }
+        unsafe { ffi::gtk_print_settings_set_paper_size(GTK_PRINT_SETTINGS(self.unwrap_widget()), GTK_PAPER_SIZE(paper_size.unwrap_widget())) }
     }
 
     pub fn get_paper_width(&self, unit: gtk::Unit) -> f64 {
-        unsafe { ffi::gtk_print_settings_get_paper_width(GTK_PRINT_SETTINGS(self.get_widget()), unit) }
+        unsafe { ffi::gtk_print_settings_get_paper_width(GTK_PRINT_SETTINGS(self.unwrap_widget()), unit) }
     }
 
     pub fn set_paper_width(&self, width: f64, unit: gtk::Unit) {
-        unsafe { ffi::gtk_print_settings_set_paper_width(GTK_PRINT_SETTINGS(self.get_widget()), width, unit) }
+        unsafe { ffi::gtk_print_settings_set_paper_width(GTK_PRINT_SETTINGS(self.unwrap_widget()), width, unit) }
     }
 
     pub fn get_paper_height(&self, unit: gtk::Unit) -> f64 {
-        unsafe { ffi::gtk_print_settings_get_paper_height(GTK_PRINT_SETTINGS(self.get_widget()), unit) }
+        unsafe { ffi::gtk_print_settings_get_paper_height(GTK_PRINT_SETTINGS(self.unwrap_widget()), unit) }
     }
 
     pub fn set_paper_height(&self, height: f64, unit: gtk::Unit) {
-        unsafe { ffi::gtk_print_settings_set_paper_height(GTK_PRINT_SETTINGS(self.get_widget()), height, unit) }
+        unsafe { ffi::gtk_print_settings_set_paper_height(GTK_PRINT_SETTINGS(self.unwrap_widget()), height, unit) }
     }
 
     pub fn get_use_color(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_print_settings_get_use_color(GTK_PRINT_SETTINGS(self.get_widget()))) }
+        unsafe { to_bool(ffi::gtk_print_settings_get_use_color(GTK_PRINT_SETTINGS(self.unwrap_widget()))) }
     }
 
     pub fn set_use_color(&self, use_color: bool) {
-        unsafe { ffi::gtk_print_settings_set_use_color(GTK_PRINT_SETTINGS(self.get_widget()), to_gboolean(use_color)) }
+        unsafe { ffi::gtk_print_settings_set_use_color(GTK_PRINT_SETTINGS(self.unwrap_widget()), to_gboolean(use_color)) }
     }
 
     pub fn get_collate(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_print_settings_get_collate(GTK_PRINT_SETTINGS(self.get_widget()))) }
+        unsafe { to_bool(ffi::gtk_print_settings_get_collate(GTK_PRINT_SETTINGS(self.unwrap_widget()))) }
     }
 
     pub fn set_collate(&self, collate: bool) {
-        unsafe { ffi::gtk_print_settings_set_collate(GTK_PRINT_SETTINGS(self.get_widget()), to_gboolean(collate)) }
+        unsafe { ffi::gtk_print_settings_set_collate(GTK_PRINT_SETTINGS(self.unwrap_widget()), to_gboolean(collate)) }
     }
 
     pub fn get_reverse(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_print_settings_get_reverse(GTK_PRINT_SETTINGS(self.get_widget()))) }
+        unsafe { to_bool(ffi::gtk_print_settings_get_reverse(GTK_PRINT_SETTINGS(self.unwrap_widget()))) }
     }
 
     pub fn set_reverse(&self, reverse: bool) {
-        unsafe { ffi::gtk_print_settings_set_reverse(GTK_PRINT_SETTINGS(self.get_widget()),
+        unsafe { ffi::gtk_print_settings_set_reverse(GTK_PRINT_SETTINGS(self.unwrap_widget()),
                                                      to_gboolean(reverse))
         }
     }
 
     pub fn get_n_copies(&self) -> i32 {
-        unsafe { ffi::gtk_print_settings_get_n_copies(GTK_PRINT_SETTINGS(self.get_widget())) }
+        unsafe { ffi::gtk_print_settings_get_n_copies(GTK_PRINT_SETTINGS(self.unwrap_widget())) }
     }
 
     pub fn set_n_copies(&self, num_copies: i32) {
-        unsafe { ffi::gtk_print_settings_set_n_copies(GTK_PRINT_SETTINGS(self.get_widget()), num_copies) }
+        unsafe { ffi::gtk_print_settings_set_n_copies(GTK_PRINT_SETTINGS(self.unwrap_widget()), num_copies) }
     }
 
     pub fn get_number_up(&self) -> gtk::NumberUpLayout {
-        unsafe { ffi::gtk_print_settings_get_number_up(GTK_PRINT_SETTINGS(self.get_widget())) }
+        unsafe { ffi::gtk_print_settings_get_number_up(GTK_PRINT_SETTINGS(self.unwrap_widget())) }
     }
 
     pub fn set_number_up(&self, number_up: gtk::NumberUpLayout) {
-        unsafe { ffi::gtk_print_settings_set_number_up(GTK_PRINT_SETTINGS(self.get_widget()), number_up) }
+        unsafe { ffi::gtk_print_settings_set_number_up(GTK_PRINT_SETTINGS(self.unwrap_widget()), number_up) }
     }
 
     pub fn get_resolution(&self) -> i32 {
-        unsafe { ffi::gtk_print_settings_get_resolution(GTK_PRINT_SETTINGS(self.get_widget())) }
+        unsafe { ffi::gtk_print_settings_get_resolution(GTK_PRINT_SETTINGS(self.unwrap_widget())) }
     }
 
     pub fn set_resolution(&self, resolution: i32) {
-        unsafe { ffi::gtk_print_settings_set_resolution(GTK_PRINT_SETTINGS(self.get_widget()), resolution) }
+        unsafe { ffi::gtk_print_settings_set_resolution(GTK_PRINT_SETTINGS(self.unwrap_widget()), resolution) }
     }
 
     pub fn set_resolution_xy(&self, resolution_x: i32, resolution_y: i32) {
-        unsafe { ffi::gtk_print_settings_set_resolution_xy(GTK_PRINT_SETTINGS(self.get_widget()), resolution_x, resolution_y) }
+        unsafe { ffi::gtk_print_settings_set_resolution_xy(GTK_PRINT_SETTINGS(self.unwrap_widget()), resolution_x, resolution_y) }
     }
 
     pub fn get_resolution_x(&self) -> i32 {
-        unsafe { ffi::gtk_print_settings_get_resolution_x(GTK_PRINT_SETTINGS(self.get_widget())) }
+        unsafe { ffi::gtk_print_settings_get_resolution_x(GTK_PRINT_SETTINGS(self.unwrap_widget())) }
     }
 
     pub fn get_resolution_y(&self) -> i32 {
-        unsafe { ffi::gtk_print_settings_get_resolution_y(GTK_PRINT_SETTINGS(self.get_widget())) }
+        unsafe { ffi::gtk_print_settings_get_resolution_y(GTK_PRINT_SETTINGS(self.unwrap_widget())) }
     }
 
     pub fn get_printer_lpi(&self) -> f64 {
-        unsafe { ffi::gtk_print_settings_get_printer_lpi(GTK_PRINT_SETTINGS(self.get_widget())) }
+        unsafe { ffi::gtk_print_settings_get_printer_lpi(GTK_PRINT_SETTINGS(self.unwrap_widget())) }
     }
 
     pub fn set_printer_lpi(&self, lpi: f64) {
-        unsafe { ffi::gtk_print_settings_set_printer_lpi(GTK_PRINT_SETTINGS(self.get_widget()), lpi) }
+        unsafe { ffi::gtk_print_settings_set_printer_lpi(GTK_PRINT_SETTINGS(self.unwrap_widget()), lpi) }
     }
 
     pub fn get_scale(&self) -> f64 {
-        unsafe { ffi::gtk_print_settings_get_scale(GTK_PRINT_SETTINGS(self.get_widget())) }
+        unsafe { ffi::gtk_print_settings_get_scale(GTK_PRINT_SETTINGS(self.unwrap_widget())) }
     }
 
     pub fn set_scale(&self, scale: f64) {
-        unsafe { ffi::gtk_print_settings_set_scale(GTK_PRINT_SETTINGS(self.get_widget()), scale) }
+        unsafe { ffi::gtk_print_settings_set_scale(GTK_PRINT_SETTINGS(self.unwrap_widget()), scale) }
     }
 
     pub fn get_print_pages(&self) -> gtk::PrintPages {
-        unsafe { ffi::gtk_print_settings_get_print_pages(GTK_PRINT_SETTINGS(self.get_widget())) }
+        unsafe { ffi::gtk_print_settings_get_print_pages(GTK_PRINT_SETTINGS(self.unwrap_widget())) }
     }
 
     pub fn set_print_pages(&self, pages: gtk::PrintPages) {
-        unsafe { ffi::gtk_print_settings_set_print_pages(GTK_PRINT_SETTINGS(self.get_widget()), pages) }
+        unsafe { ffi::gtk_print_settings_set_print_pages(GTK_PRINT_SETTINGS(self.unwrap_widget()), pages) }
     }
 
     pub fn get_page_set(&self) -> gtk::PageSet {
-        unsafe { ffi::gtk_print_settings_get_page_set(GTK_PRINT_SETTINGS(self.get_widget())) }
+        unsafe { ffi::gtk_print_settings_get_page_set(GTK_PRINT_SETTINGS(self.unwrap_widget())) }
     }
 
     pub fn set_page_set(&self, page_set: gtk::PageSet) {
-        unsafe { ffi::gtk_print_settings_set_page_set(GTK_PRINT_SETTINGS(self.get_widget()), page_set) }
+        unsafe { ffi::gtk_print_settings_set_page_set(GTK_PRINT_SETTINGS(self.unwrap_widget()), page_set) }
     }
 
     pub fn get_default_source(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_print_settings_get_default_source(GTK_PRINT_SETTINGS(self.get_widget())) };
+        let tmp = unsafe { ffi::gtk_print_settings_get_default_source(GTK_PRINT_SETTINGS(self.unwrap_widget())) };
 
         if tmp.is_null() {
             None
@@ -325,12 +325,12 @@ impl PrintSettings {
         unsafe {
             let c_str = CString::from_slice(default_source.as_bytes());
 
-            ffi::gtk_print_settings_set_default_source(GTK_PRINT_SETTINGS(self.get_widget()), c_str.as_ptr())
+            ffi::gtk_print_settings_set_default_source(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr())
         }
     }
 
     pub fn get_media_type(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_print_settings_get_media_type(GTK_PRINT_SETTINGS(self.get_widget())) };
+        let tmp = unsafe { ffi::gtk_print_settings_get_media_type(GTK_PRINT_SETTINGS(self.unwrap_widget())) };
 
         if tmp.is_null() {
             None
@@ -343,12 +343,12 @@ impl PrintSettings {
         unsafe {
             let c_str = CString::from_slice(media_type.as_bytes());
 
-            ffi::gtk_print_settings_set_media_type(GTK_PRINT_SETTINGS(self.get_widget()), c_str.as_ptr())
+            ffi::gtk_print_settings_set_media_type(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr())
         }
     }
 
     pub fn get_dither(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_print_settings_get_dither(GTK_PRINT_SETTINGS(self.get_widget())) };
+        let tmp = unsafe { ffi::gtk_print_settings_get_dither(GTK_PRINT_SETTINGS(self.unwrap_widget())) };
 
         if tmp.is_null() {
             None
@@ -361,12 +361,12 @@ impl PrintSettings {
         unsafe {
             let c_str = CString::from_slice(dither.as_bytes());
 
-            ffi::gtk_print_settings_set_dither(GTK_PRINT_SETTINGS(self.get_widget()), c_str.as_ptr())
+            ffi::gtk_print_settings_set_dither(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr())
         }
     }
 
     pub fn get_finishings(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_print_settings_get_finishings(GTK_PRINT_SETTINGS(self.get_widget())) };
+        let tmp = unsafe { ffi::gtk_print_settings_get_finishings(GTK_PRINT_SETTINGS(self.unwrap_widget())) };
 
         if tmp.is_null() {
             None
@@ -379,12 +379,12 @@ impl PrintSettings {
         unsafe {
             let c_str = CString::from_slice(finishings.as_bytes());
 
-            ffi::gtk_print_settings_set_finishings(GTK_PRINT_SETTINGS(self.get_widget()), c_str.as_ptr())
+            ffi::gtk_print_settings_set_finishings(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr())
         }
     }
 
     pub fn get_output_bin(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_print_settings_get_output_bin(GTK_PRINT_SETTINGS(self.get_widget())) };
+        let tmp = unsafe { ffi::gtk_print_settings_get_output_bin(GTK_PRINT_SETTINGS(self.unwrap_widget())) };
 
         if tmp.is_null() {
             None
@@ -397,7 +397,7 @@ impl PrintSettings {
         unsafe {
             let c_str = CString::from_slice(output_bin.as_bytes());
 
-            ffi::gtk_print_settings_set_output_bin(GTK_PRINT_SETTINGS(self.get_widget()), c_str.as_ptr())
+            ffi::gtk_print_settings_set_output_bin(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr())
         }
     }
 }

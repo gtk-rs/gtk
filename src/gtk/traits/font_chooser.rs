@@ -22,11 +22,11 @@ use libc::c_char;
 
 pub trait FontChooserTrait: gtk::WidgetTrait {
     fn get_font_size(&self) -> i32 {
-        unsafe { ffi::gtk_font_chooser_get_font_size(GTK_FONT_CHOOSER(self.get_widget())) }
+        unsafe { ffi::gtk_font_chooser_get_font_size(GTK_FONT_CHOOSER(self.unwrap_widget())) }
     }
 
     fn get_font(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_font_chooser_get_font(GTK_FONT_CHOOSER(self.get_widget())) as *const c_char };
+        let tmp = unsafe { ffi::gtk_font_chooser_get_font(GTK_FONT_CHOOSER(self.unwrap_widget())) as *const c_char };
 
         if tmp.is_null() {
             None
@@ -39,13 +39,13 @@ pub trait FontChooserTrait: gtk::WidgetTrait {
         unsafe {
             let c_str = CString::from_slice(font_name.as_bytes());
 
-            ffi::gtk_font_chooser_set_font(GTK_FONT_CHOOSER(self.get_widget()), c_str.as_ptr() as *mut c_char)
+            ffi::gtk_font_chooser_set_font(GTK_FONT_CHOOSER(self.unwrap_widget()), c_str.as_ptr() as *mut c_char)
         }
     }
 
     fn get_preview_text(&self) -> Option<String> {
         unsafe {
-            let tmp = ffi::gtk_font_chooser_get_preview_text(GTK_FONT_CHOOSER(self.get_widget()));
+            let tmp = ffi::gtk_font_chooser_get_preview_text(GTK_FONT_CHOOSER(self.unwrap_widget()));
 
             if tmp.is_null() {
                 None
@@ -59,16 +59,16 @@ pub trait FontChooserTrait: gtk::WidgetTrait {
         unsafe {
             let c_str = CString::from_slice(text.as_bytes());
 
-            ffi::gtk_font_chooser_set_preview_text(GTK_FONT_CHOOSER(self.get_widget()), c_str.as_ptr())
+            ffi::gtk_font_chooser_set_preview_text(GTK_FONT_CHOOSER(self.unwrap_widget()), c_str.as_ptr())
         }
     }
 
     fn get_show_preview_entry(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_font_chooser_get_show_preview_entry(GTK_FONT_CHOOSER(self.get_widget()))) }
+        unsafe { to_bool(ffi::gtk_font_chooser_get_show_preview_entry(GTK_FONT_CHOOSER(self.unwrap_widget()))) }
     }
 
     fn set_show_preview_entry(&self, show_preview_entry: bool) {
-        unsafe { ffi::gtk_font_chooser_set_show_preview_entry(GTK_FONT_CHOOSER(self.get_widget()),
+        unsafe { ffi::gtk_font_chooser_set_show_preview_entry(GTK_FONT_CHOOSER(self.unwrap_widget()),
                                                               to_gboolean(show_preview_entry));
         }
     }

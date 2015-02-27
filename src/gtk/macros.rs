@@ -43,7 +43,7 @@ macro_rules! struct_Widget(
 macro_rules! impl_TraitObject(
     ($gtk_struct:ident, $ffi_type:ident) => (
         impl ::glib::traits::FFIGObject for $gtk_struct {
-            fn get_gobject(&self) -> *mut ::glib::ffi::C_GObject {
+            fn unwrap_gobject(&self) -> *mut ::glib::ffi::C_GObject {
                 self.pointer as *mut ::glib::ffi::C_GObject
             }
 
@@ -65,11 +65,11 @@ macro_rules! impl_TraitObject(
 macro_rules! impl_TraitWidget(
     ($gtk_struct:ident) => (
         impl ::gtk::FFIWidget for $gtk_struct {
-            fn get_widget(&self) -> *mut ffi::C_GtkWidget {
+            fn unwrap_widget(&self) -> *mut ffi::C_GtkWidget {
                 self.pointer
             }
 
-            fn wrap(widget: *mut ffi::C_GtkWidget) -> $gtk_struct {
+            fn wrap_widget(widget: *mut ffi::C_GtkWidget) -> $gtk_struct {
                 unsafe{
                     ::glib::ffi::g_object_ref(::gtk::ffi::cast_GtkObject(widget));
                 }
@@ -83,9 +83,9 @@ macro_rules! impl_TraitWidget(
         impl ::gtk::WidgetTrait for $gtk_struct {}
 
         impl ::glib::traits::FFIGObject for $gtk_struct {
-            fn get_gobject(&self) -> *mut ::glib::ffi::C_GObject {
+            fn unwrap_gobject(&self) -> *mut ::glib::ffi::C_GObject {
                 use gtk::FFIWidget;
-                ::gtk::cast::G_OBJECT(self.get_widget())
+                ::gtk::cast::G_OBJECT(self.unwrap_widget())
             }
 
             fn wrap_object(object: *mut ::glib::ffi::C_GObject) -> $gtk_struct {
@@ -122,7 +122,7 @@ macro_rules! impl_connect(
 macro_rules! impl_GObjectFunctions(
     ($gtk_struct:ident, $ffi_type:ident) => (
         impl $gtk_struct {
-            pub fn get_pointer(&self) -> *mut ffi::$ffi_type {
+            pub fn unwrap_pointer(&self) -> *mut ffi::$ffi_type {
                 self.pointer
             }
 
@@ -162,10 +162,10 @@ macro_rules! impl_drop(
 
 // Useful for function wich take a valid widget or NULL for a default widget
 // takes an option<&trait::Widget> and return the c widget pointer or ptr::null()
-macro_rules! get_widget(
+macro_rules! unwrap_widget(
     ($w:ident) => (
         match $w {
-            Some(ref _w) => _w.get_widget(),
+            Some(ref _w) => _w.unwrap_widget(),
             None => ::std::ptr::null_mut()
         };
     );

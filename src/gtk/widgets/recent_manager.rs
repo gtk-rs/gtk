@@ -29,7 +29,7 @@ impl RecentManager {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 
@@ -39,7 +39,7 @@ impl RecentManager {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 
@@ -47,7 +47,7 @@ impl RecentManager {
         let c_str = CString::from_slice(uri.as_bytes());
 
         unsafe {
-            to_bool(ffi::gtk_recent_manager_add_item(GTK_RECENT_MANAGER(self.get_widget()), c_str.as_ptr()))
+            to_bool(ffi::gtk_recent_manager_add_item(GTK_RECENT_MANAGER(self.unwrap_widget()), c_str.as_ptr()))
         }
     }
 
@@ -55,7 +55,7 @@ impl RecentManager {
         unsafe {
             let c_str = CString::from_slice(uri.as_bytes());
 
-            to_bool(ffi::gtk_recent_manager_add_full(GTK_RECENT_MANAGER(self.get_widget()), c_str.as_ptr(), &recent_data.get_ffi()))
+            to_bool(ffi::gtk_recent_manager_add_full(GTK_RECENT_MANAGER(self.unwrap_widget()), c_str.as_ptr(), &recent_data.get_ffi()))
         }
     }
 
@@ -63,12 +63,12 @@ impl RecentManager {
         let c_str = CString::from_slice(uri.as_bytes());
 
         unsafe {
-            to_bool(ffi::gtk_recent_manager_has_item(GTK_RECENT_MANAGER(self.get_widget()), c_str.as_ptr()))
+            to_bool(ffi::gtk_recent_manager_has_item(GTK_RECENT_MANAGER(self.unwrap_widget()), c_str.as_ptr()))
         }
     }
 
     pub fn get_items(&self) -> glib::List<Box<gtk::RecentInfo>> {
-        let tmp = unsafe { ffi::gtk_recent_manager_get_items(GTK_RECENT_MANAGER(self.get_widget())) };
+        let tmp = unsafe { ffi::gtk_recent_manager_get_items(GTK_RECENT_MANAGER(self.unwrap_widget())) };
 
         if tmp.is_null() {
             glib::List::new()
@@ -77,7 +77,7 @@ impl RecentManager {
             let mut tmp_vec : glib::List<Box<gtk::RecentInfo>> = glib::List::new();
 
             for it in old_list.iter() {
-                tmp_vec.append(Box::new(gtk::FFIWidget::wrap(*it as *mut ffi::C_GtkWidget)));
+                tmp_vec.append(Box::new(gtk::FFIWidget::wrap_widget(*it as *mut ffi::C_GtkWidget)));
             }
             tmp_vec
         }

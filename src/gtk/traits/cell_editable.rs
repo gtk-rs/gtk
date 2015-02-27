@@ -20,10 +20,10 @@ use gtk::cast::GTK_CELL_EDITABLE;
 
 pub trait CellEditableTrait : gtk::WidgetTrait {
     fn editing_done(&self) {
-        unsafe { ffi::gtk_cell_editable_editing_done(GTK_CELL_EDITABLE(self.get_widget())) }
+        unsafe { ffi::gtk_cell_editable_editing_done(GTK_CELL_EDITABLE(self.unwrap_widget())) }
     }
 
     fn remove_widget(&self) {
-        unsafe { ffi::gtk_cell_editable_remove_widget(GTK_CELL_EDITABLE(self.get_widget())) }
+        unsafe { ffi::gtk_cell_editable_remove_widget(GTK_CELL_EDITABLE(self.unwrap_widget())) }
     }
 }

@@ -29,7 +29,7 @@ impl Overlay {
 
     pub fn add_overlay<T: gtk::WidgetTrait>(&mut self, widget: &T) {
         unsafe {
-            ffi::gtk_overlay_add_overlay(GTK_OVERLAY(self.pointer), widget.get_widget())
+            ffi::gtk_overlay_add_overlay(GTK_OVERLAY(self.pointer), widget.unwrap_widget())
         }
     }
 }

@@ -29,82 +29,82 @@ impl ToolPalette {
     }
 
     pub fn get_icon_size(&self) -> gtk::IconSize {
-        unsafe { ffi::gtk_tool_palette_get_icon_size(GTK_TOOL_PALETTE(self.get_widget())) }
+        unsafe { ffi::gtk_tool_palette_get_icon_size(GTK_TOOL_PALETTE(self.unwrap_widget())) }
     }
 
     pub fn set_icon_size(&self, icon_size: gtk::IconSize) {
-        unsafe { ffi::gtk_tool_palette_set_icon_size(GTK_TOOL_PALETTE(self.get_widget()), icon_size) }
+        unsafe { ffi::gtk_tool_palette_set_icon_size(GTK_TOOL_PALETTE(self.unwrap_widget()), icon_size) }
     }
 
     pub fn unset_icon_size(&self) {
-        unsafe { ffi::gtk_tool_palette_unset_icon_size(GTK_TOOL_PALETTE(self.get_widget())) }
+        unsafe { ffi::gtk_tool_palette_unset_icon_size(GTK_TOOL_PALETTE(self.unwrap_widget())) }
     }
 
     pub fn get_style(&self) -> gtk::ToolbarStyle {
-        unsafe { ffi::gtk_tool_palette_get_style(GTK_TOOL_PALETTE(self.get_widget())) }
+        unsafe { ffi::gtk_tool_palette_get_style(GTK_TOOL_PALETTE(self.unwrap_widget())) }
     }
 
     pub fn set_style(&self, style: gtk::ToolbarStyle) {
-        unsafe { ffi::gtk_tool_palette_set_style(GTK_TOOL_PALETTE(self.get_widget()), style) }
+        unsafe { ffi::gtk_tool_palette_set_style(GTK_TOOL_PALETTE(self.unwrap_widget()), style) }
     }
 
     pub fn unset_style(&self) {
-        unsafe { ffi::gtk_tool_palette_unset_style(GTK_TOOL_PALETTE(self.get_widget())) }
+        unsafe { ffi::gtk_tool_palette_unset_style(GTK_TOOL_PALETTE(self.unwrap_widget())) }
     }
 
     pub fn get_drop_item(&self, x: i32, y: i32) -> Option<ToolItem> {
-        let tmp_pointer = unsafe { ffi::gtk_tool_palette_get_drop_item(GTK_TOOL_PALETTE(self.get_widget()),
+        let tmp_pointer = unsafe { ffi::gtk_tool_palette_get_drop_item(GTK_TOOL_PALETTE(self.unwrap_widget()),
             x as ::libc::c_int, y as ::libc::c_int) };
 
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 
     pub fn set_drag_source(&self, targets: gtk::ToolPaletteDragTargets) {
-        unsafe { ffi::gtk_tool_palette_set_drag_source(GTK_TOOL_PALETTE(self.get_widget()), targets) }
+        unsafe { ffi::gtk_tool_palette_set_drag_source(GTK_TOOL_PALETTE(self.unwrap_widget()), targets) }
     }
 
     pub fn get_exclusive(&self, group: &gtk::ToolItemGroup) -> bool {
-        unsafe { to_bool(ffi::gtk_tool_palette_get_exclusive(GTK_TOOL_PALETTE(self.get_widget()),
-            GTK_TOOL_ITEM_GROUP(group.get_widget()))) }
+        unsafe { to_bool(ffi::gtk_tool_palette_get_exclusive(GTK_TOOL_PALETTE(self.unwrap_widget()),
+            GTK_TOOL_ITEM_GROUP(group.unwrap_widget()))) }
     }
 
     pub fn set_exclusive(&self, group: &gtk::ToolItemGroup, exclusive: bool) {
-        unsafe { ffi::gtk_tool_palette_set_exclusive(GTK_TOOL_PALETTE(self.get_widget()),
-            GTK_TOOL_ITEM_GROUP(group.get_widget()), to_gboolean(exclusive)) }
+        unsafe { ffi::gtk_tool_palette_set_exclusive(GTK_TOOL_PALETTE(self.unwrap_widget()),
+            GTK_TOOL_ITEM_GROUP(group.unwrap_widget()), to_gboolean(exclusive)) }
     }
 
     pub fn get_expand(&self, group: &gtk::ToolItemGroup) -> bool {
-        unsafe { to_bool(ffi::gtk_tool_palette_get_expand(GTK_TOOL_PALETTE(self.get_widget()),
-            GTK_TOOL_ITEM_GROUP(group.get_widget()))) }
+        unsafe { to_bool(ffi::gtk_tool_palette_get_expand(GTK_TOOL_PALETTE(self.unwrap_widget()),
+            GTK_TOOL_ITEM_GROUP(group.unwrap_widget()))) }
     }
 
     pub fn set_expand(&self, group: &gtk::ToolItemGroup, expand: bool) {
-        unsafe { ffi::gtk_tool_palette_set_expand(GTK_TOOL_PALETTE(self.get_widget()),
-            GTK_TOOL_ITEM_GROUP(group.get_widget()), to_gboolean(expand)) }
+        unsafe { ffi::gtk_tool_palette_set_expand(GTK_TOOL_PALETTE(self.unwrap_widget()),
+            GTK_TOOL_ITEM_GROUP(group.unwrap_widget()), to_gboolean(expand)) }
     }
 
     pub fn get_group_position(&self, group: &gtk::ToolItemGroup) -> i32 {
-        unsafe { ffi::gtk_tool_palette_get_group_position(GTK_TOOL_PALETTE(self.get_widget()),
-            GTK_TOOL_ITEM_GROUP(group.get_widget())) }
+        unsafe { ffi::gtk_tool_palette_get_group_position(GTK_TOOL_PALETTE(self.unwrap_widget()),
+            GTK_TOOL_ITEM_GROUP(group.unwrap_widget())) }
     }
 
     pub fn set_group_position(&self, group: &gtk::ToolItemGroup, expand: i32) {
-        unsafe { ffi::gtk_tool_palette_set_group_position(GTK_TOOL_PALETTE(self.get_widget()),
-            GTK_TOOL_ITEM_GROUP(group.get_widget()), expand as ::libc::c_int) }
+        unsafe { ffi::gtk_tool_palette_set_group_position(GTK_TOOL_PALETTE(self.unwrap_widget()),
+            GTK_TOOL_ITEM_GROUP(group.unwrap_widget()), expand as ::libc::c_int) }
     }
 
     pub fn get_drop_group(&self, x: i32, y: i32) -> Option<gtk::ToolItemGroup> {
-        let tmp_pointer = unsafe { ffi::gtk_tool_palette_get_drop_group(GTK_TOOL_PALETTE(self.get_widget()),
+        let tmp_pointer = unsafe { ffi::gtk_tool_palette_get_drop_group(GTK_TOOL_PALETTE(self.unwrap_widget()),
             x as ::libc::c_int, y as ::libc::c_int) };
 
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 }

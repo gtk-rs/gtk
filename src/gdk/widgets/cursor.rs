@@ -39,7 +39,7 @@ impl Cursor {
     }
 
     /*pub fn new_from_pixbuf(display: &gdk::Display, pixbuf: &gdk::Pixbuf, x: i32, y: i32) -> Option<Cursor> {
-        let tmp = unsafe { ffi::gdk_cursor_new_from_pixbuf(display.get_pointer(), pixbuf.get_pointer(), x as c_int, y as c_int) };
+        let tmp = unsafe { ffi::gdk_cursor_new_from_pixbuf(display.unwrap_pointer(), pixbuf.unwrap_pointer(), x as c_int, y as c_int) };
 
         if tmp.is_null() {
             None
@@ -54,7 +54,7 @@ impl Cursor {
         let tmp = unsafe {
             let c_str = CString::from_slice(name.as_bytes());
 
-            ffi::gdk_cursor_new_from_name(display.get_pointer(), c_str.as_ptr())
+            ffi::gdk_cursor_new_from_name(display.unwrap_pointer(), c_str.as_ptr())
         };
 
         if tmp.is_null() {
@@ -67,7 +67,7 @@ impl Cursor {
     }
 
     pub fn new_for_display(display: &gdk::Display, cursor_type: gdk::CursorType) -> Option<Cursor> {
-        let tmp = unsafe { ffi::gdk_cursor_new_for_display(display.get_pointer(), cursor_type) };
+        let tmp = unsafe { ffi::gdk_cursor_new_for_display(display.unwrap_pointer(), cursor_type) };
 
         if tmp.is_null() {
             None

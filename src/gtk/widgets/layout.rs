@@ -24,8 +24,8 @@ struct_Widget!(Layout);
 impl Layout {
     pub fn new(hadjustment: &gtk::Adjustment, vadjustment: &gtk::Adjustment) -> Option<Layout> {
         let tmp_pointer = unsafe {
-            ffi::gtk_layout_new(hadjustment.get_pointer(),
-                                vadjustment.get_pointer())
+            ffi::gtk_layout_new(hadjustment.unwrap_pointer(),
+                                vadjustment.unwrap_pointer())
         };
         check_pointer!(tmp_pointer, Layout)
     }
@@ -33,7 +33,7 @@ impl Layout {
     pub fn put<T: gtk::WidgetTrait>(&mut self, child: &T, x: i32, y: i32) {
         unsafe {
             ffi::gtk_layout_put(GTK_LAYOUT(self.pointer),
-                                child.get_widget(),
+                                child.unwrap_widget(),
                                 x,
                                 y)
         }
@@ -43,7 +43,7 @@ impl Layout {
     pub fn move_<T: gtk::WidgetTrait>(&mut self, child: &T, x: i32, y: i32) {
         unsafe {
             ffi::gtk_layout_move(GTK_LAYOUT(self.pointer),
-                                 child.get_widget(),
+                                 child.unwrap_widget(),
                                  x,
                                  y)
         }

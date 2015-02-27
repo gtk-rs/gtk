@@ -24,21 +24,21 @@ struct_Widget!(RecentInfo);
 
 impl RecentInfo {
     pub fn _ref(&self) -> Option<RecentInfo> {
-        let tmp_pointer = unsafe { ffi::gtk_recent_info_ref(GTK_RECENT_INFO(self.get_widget())) };
+        let tmp_pointer = unsafe { ffi::gtk_recent_info_ref(GTK_RECENT_INFO(self.unwrap_widget())) };
 
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 
     pub fn unref(&self) {
-        unsafe { ffi::gtk_recent_info_unref(GTK_RECENT_INFO(self.get_widget())) }
+        unsafe { ffi::gtk_recent_info_unref(GTK_RECENT_INFO(self.unwrap_widget())) }
     }
 
     pub fn get_uri(&self) -> Option<String> {
-        let uri = unsafe { ffi::gtk_recent_info_get_uri(GTK_RECENT_INFO(self.get_widget())) };
+        let uri = unsafe { ffi::gtk_recent_info_get_uri(GTK_RECENT_INFO(self.unwrap_widget())) };
 
         if uri.is_null() {
             None
@@ -48,7 +48,7 @@ impl RecentInfo {
     }
 
     pub fn get_display_name(&self) -> Option<String> {
-        let display_name = unsafe { ffi::gtk_recent_info_get_display_name(GTK_RECENT_INFO(self.get_widget())) };
+        let display_name = unsafe { ffi::gtk_recent_info_get_display_name(GTK_RECENT_INFO(self.unwrap_widget())) };
 
         if display_name.is_null() {
             None
@@ -58,7 +58,7 @@ impl RecentInfo {
     }
 
     pub fn get_description(&self) -> Option<String> {
-        let description = unsafe { ffi::gtk_recent_info_get_description(GTK_RECENT_INFO(self.get_widget())) };
+        let description = unsafe { ffi::gtk_recent_info_get_description(GTK_RECENT_INFO(self.unwrap_widget())) };
 
         if description.is_null() {
             None
@@ -68,7 +68,7 @@ impl RecentInfo {
     }
 
     pub fn get_mime_type(&self) -> Option<String> {
-        let mime_type = unsafe { ffi::gtk_recent_info_get_mime_type(GTK_RECENT_INFO(self.get_widget())) };
+        let mime_type = unsafe { ffi::gtk_recent_info_get_mime_type(GTK_RECENT_INFO(self.unwrap_widget())) };
 
         if mime_type.is_null() {
             None
@@ -78,19 +78,19 @@ impl RecentInfo {
     }
 
     pub fn get_added(&self) -> i64 {
-        unsafe { ffi::gtk_recent_info_get_added(GTK_RECENT_INFO(self.get_widget())) }
+        unsafe { ffi::gtk_recent_info_get_added(GTK_RECENT_INFO(self.unwrap_widget())) }
     }
 
     pub fn get_modified(&self) -> i64 {
-        unsafe { ffi::gtk_recent_info_get_modified(GTK_RECENT_INFO(self.get_widget())) }
+        unsafe { ffi::gtk_recent_info_get_modified(GTK_RECENT_INFO(self.unwrap_widget())) }
     }
 
     pub fn get_visited(&self) -> i64 {
-        unsafe { ffi::gtk_recent_info_get_visited(GTK_RECENT_INFO(self.get_widget())) }
+        unsafe { ffi::gtk_recent_info_get_visited(GTK_RECENT_INFO(self.unwrap_widget())) }
     }
 
     pub fn get_private_hint(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_recent_info_get_private_hint(GTK_RECENT_INFO(self.get_widget()))) }
+        unsafe { to_bool(ffi::gtk_recent_info_get_private_hint(GTK_RECENT_INFO(self.unwrap_widget()))) }
     }
 
     pub fn set_name(&self, app_name: &str) -> (bool, String, u32, i64) {
@@ -100,7 +100,7 @@ impl RecentInfo {
         let c_str = CString::from_slice(app_name.as_bytes());
 
         let ret = unsafe {
-            to_bool(ffi::gtk_recent_info_get_application_info(GTK_RECENT_INFO(self.get_widget()), c_str.as_ptr(), &app_exec, &mut count, &mut time_))
+            to_bool(ffi::gtk_recent_info_get_application_info(GTK_RECENT_INFO(self.unwrap_widget()), c_str.as_ptr(), &app_exec, &mut count, &mut time_))
         };
 
         if app_exec.is_null() {
@@ -112,7 +112,7 @@ impl RecentInfo {
 
     pub fn get_applications(&self) -> Option<Vec<String>> {
         let mut length = 0;
-        let tmp = unsafe { ffi::gtk_recent_info_get_applications(GTK_RECENT_INFO(self.get_widget()), &mut length) };
+        let tmp = unsafe { ffi::gtk_recent_info_get_applications(GTK_RECENT_INFO(self.unwrap_widget()), &mut length) };
 
         if tmp.is_null() {
             None
@@ -127,7 +127,7 @@ impl RecentInfo {
     }
 
     pub fn last_application(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_recent_info_last_application(GTK_RECENT_INFO(self.get_widget())) as *const c_char};
+        let tmp = unsafe { ffi::gtk_recent_info_last_application(GTK_RECENT_INFO(self.unwrap_widget())) as *const c_char};
 
         if tmp.is_null() {
             None
@@ -140,13 +140,13 @@ impl RecentInfo {
         unsafe {
             let c_str = CString::from_slice(app_name.as_bytes());
 
-            to_bool(ffi::gtk_recent_info_has_application(GTK_RECENT_INFO(self.get_widget()), c_str.as_ptr()))
+            to_bool(ffi::gtk_recent_info_has_application(GTK_RECENT_INFO(self.unwrap_widget()), c_str.as_ptr()))
         }
     }
 
     pub fn get_groups(&self) -> Option<Vec<String>> {
         let mut length = 0;
-        let tmp = unsafe { ffi::gtk_recent_info_get_groups(GTK_RECENT_INFO(self.get_widget()), &mut length) };
+        let tmp = unsafe { ffi::gtk_recent_info_get_groups(GTK_RECENT_INFO(self.unwrap_widget()), &mut length) };
 
         if tmp.is_null() {
             None
@@ -164,12 +164,12 @@ impl RecentInfo {
         let c_str = CString::from_slice(group_name.as_bytes());
 
         unsafe {
-            to_bool(ffi::gtk_recent_info_has_group(GTK_RECENT_INFO(self.get_widget()), c_str.as_ptr()))
+            to_bool(ffi::gtk_recent_info_has_group(GTK_RECENT_INFO(self.unwrap_widget()), c_str.as_ptr()))
         }
     }
 
     pub fn get_short_name(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_recent_info_get_short_name(GTK_RECENT_INFO(self.get_widget())) as *const c_char };
+        let tmp = unsafe { ffi::gtk_recent_info_get_short_name(GTK_RECENT_INFO(self.unwrap_widget())) as *const c_char };
 
         if tmp.is_null() {
             None
@@ -179,7 +179,7 @@ impl RecentInfo {
     }
 
     pub fn get_uri_display(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_recent_info_get_uri_display(GTK_RECENT_INFO(self.get_widget())) as *const c_char };
+        let tmp = unsafe { ffi::gtk_recent_info_get_uri_display(GTK_RECENT_INFO(self.unwrap_widget())) as *const c_char };
 
         if tmp.is_null() {
             None
@@ -189,19 +189,19 @@ impl RecentInfo {
     }
 
     pub fn get_age(&self) -> i32 {
-        unsafe { ffi::gtk_recent_info_get_age(GTK_RECENT_INFO(self.get_widget())) }
+        unsafe { ffi::gtk_recent_info_get_age(GTK_RECENT_INFO(self.unwrap_widget())) }
     }
 
     pub fn is_local(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_recent_info_is_local(GTK_RECENT_INFO(self.get_widget()))) }
+        unsafe { to_bool(ffi::gtk_recent_info_is_local(GTK_RECENT_INFO(self.unwrap_widget()))) }
     }
 
     pub fn exists(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_recent_info_exists(GTK_RECENT_INFO(self.get_widget()))) }
+        unsafe { to_bool(ffi::gtk_recent_info_exists(GTK_RECENT_INFO(self.unwrap_widget()))) }
     }
 
     pub fn _match(&self, other: &RecentInfo) -> bool {
-        unsafe { to_bool(ffi::gtk_recent_info_match(GTK_RECENT_INFO(self.get_widget()), GTK_RECENT_INFO(other.get_widget()))) }
+        unsafe { to_bool(ffi::gtk_recent_info_match(GTK_RECENT_INFO(self.unwrap_widget()), GTK_RECENT_INFO(other.unwrap_widget()))) }
     }
 }
 

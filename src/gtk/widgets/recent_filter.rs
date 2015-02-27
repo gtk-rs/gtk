@@ -69,7 +69,7 @@ impl RecentFilter {
         }
     }
 
-    pub fn get_pointer(&self) -> *mut ffi::C_GtkRecentFilter {
+    pub fn unwrap_pointer(&self) -> *mut ffi::C_GtkRecentFilter {
         self.pointer
     }
 }

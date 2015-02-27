@@ -42,13 +42,13 @@ impl TreeSelection {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer))
         }
     }
 
     pub fn get_selected(&self, model: &gtk::TreeModel, iter: &mut gtk::TreeIter) -> bool {
-        match unsafe { ffi::gtk_tree_selection_get_selected(self.pointer, &mut model.get_pointer(),
-            iter.get_pointer()) } {
+        match unsafe { ffi::gtk_tree_selection_get_selected(self.pointer, &mut model.unwrap_pointer(),
+            iter.unwrap_pointer()) } {
             0 => false,
             _ => true
         }
@@ -59,30 +59,30 @@ impl TreeSelection {
     }
 
     pub fn select_path(&self, path: &TreePath) {
-        unsafe { ffi::gtk_tree_selection_select_path(self.pointer, path.get_pointer()) }
+        unsafe { ffi::gtk_tree_selection_select_path(self.pointer, path.unwrap_pointer()) }
     }
 
     pub fn unselect_path(&self, path: &TreePath) {
-        unsafe { ffi::gtk_tree_selection_unselect_path(self.pointer, path.get_pointer()) }
+        unsafe { ffi::gtk_tree_selection_unselect_path(self.pointer, path.unwrap_pointer()) }
     }
 
     pub fn path_is_selected(&self, path: &TreePath) -> bool {
-        match unsafe { ffi::gtk_tree_selection_path_is_selected(self.pointer, path.get_pointer()) } {
+        match unsafe { ffi::gtk_tree_selection_path_is_selected(self.pointer, path.unwrap_pointer()) } {
             0 => false,
             _ => true
         }
     }
 
     pub fn select_iter(&self, iter: &TreeIter) {
-        unsafe { ffi::gtk_tree_selection_select_iter(self.pointer, iter.get_pointer()) }
+        unsafe { ffi::gtk_tree_selection_select_iter(self.pointer, iter.unwrap_pointer()) }
     }
 
     pub fn unselect_iter(&self, iter: &TreeIter) {
-        unsafe { ffi::gtk_tree_selection_unselect_iter(self.pointer, iter.get_pointer()) }
+        unsafe { ffi::gtk_tree_selection_unselect_iter(self.pointer, iter.unwrap_pointer()) }
     }
 
     pub fn iter_is_selected(&self, iter: &TreeIter) -> bool {
-        match unsafe { ffi::gtk_tree_selection_iter_is_selected(self.pointer, iter.get_pointer()) } {
+        match unsafe { ffi::gtk_tree_selection_iter_is_selected(self.pointer, iter.unwrap_pointer()) } {
             0 => false,
             _ => true
         }
@@ -97,13 +97,13 @@ impl TreeSelection {
     }
 
     pub fn select_range(&self, start_path: &TreePath, end_path: &TreePath) {
-        unsafe { ffi::gtk_tree_selection_select_range(self.pointer, start_path.get_pointer(),
-            end_path.get_pointer()) }
+        unsafe { ffi::gtk_tree_selection_select_range(self.pointer, start_path.unwrap_pointer(),
+            end_path.unwrap_pointer()) }
     }
 
     pub fn unselect_range(&self, start_path: &TreePath, end_path: &TreePath) {
-        unsafe { ffi::gtk_tree_selection_unselect_range(self.pointer, start_path.get_pointer(),
-            end_path.get_pointer()) }
+        unsafe { ffi::gtk_tree_selection_unselect_range(self.pointer, start_path.unwrap_pointer(),
+            end_path.unwrap_pointer()) }
     }
 
     pub fn wrap(pointer: *mut ffi::C_GtkTreeSelection) -> Option<TreeSelection> {
@@ -116,7 +116,7 @@ impl TreeSelection {
 }
 
 impl glib::traits::FFIGObject for TreeSelection {
-    fn get_gobject(&self) -> *mut glib::ffi::C_GObject {
+    fn unwrap_gobject(&self) -> *mut glib::ffi::C_GObject {
         gtk::cast::G_OBJECT_FROM_TREE_SELECTION(self.pointer)
     }
 

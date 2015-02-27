@@ -184,13 +184,13 @@ impl TreeViewColumn {
 
     pub fn set_widget<T: gtk::WidgetTrait>(&mut self, widget: &T) {
         unsafe {
-            ffi::gtk_tree_view_column_set_widget(self.pointer, widget.get_widget())
+            ffi::gtk_tree_view_column_set_widget(self.pointer, widget.unwrap_widget())
         }
     }
 
     pub fn get_widget<T: gtk::WidgetTrait>(&self) -> T {
         unsafe {
-            gtk::FFIWidget::wrap(ffi::gtk_tree_view_column_get_widget(self.pointer))
+            gtk::FFIWidget::wrap_widget(ffi::gtk_tree_view_column_get_widget(self.pointer))
         }
     }
 
@@ -268,13 +268,13 @@ impl TreeViewColumn {
 
     pub fn get_tree_view(&self) -> gtk::TreeView {
         unsafe {
-            gtk::FFIWidget::wrap(ffi::gtk_tree_view_column_get_tree_view(self.pointer))
+            gtk::FFIWidget::wrap_widget(ffi::gtk_tree_view_column_get_tree_view(self.pointer))
         }
     }
 
     pub fn get_button<T: gtk::WidgetTrait + gtk::ButtonTrait>(&self) -> T {
         unsafe {
-            gtk::FFIWidget::wrap(ffi::gtk_tree_view_column_get_button(self.pointer))
+            gtk::FFIWidget::wrap_widget(ffi::gtk_tree_view_column_get_button(self.pointer))
         }
     }
 
@@ -282,30 +282,30 @@ impl TreeViewColumn {
         let attribute_c = CString::from_slice(attribute.as_bytes());
 
         unsafe { ffi::gtk_tree_view_column_add_attribute(self.pointer,
-                                                         cast::GTK_CELL_RENDERER(cell.get_widget()),
+                                                         cast::GTK_CELL_RENDERER(cell.unwrap_widget()),
                                                          attribute_c.as_ptr(),
                                                          column) }
     }
 
     pub fn clear_attributes<T: gtk::FFIWidget + gtk::CellRendererTrait>(&self, cell: &T) {
         unsafe { ffi::gtk_tree_view_column_clear_attributes(self.pointer,
-                                                            cast::GTK_CELL_RENDERER(cell.get_widget())) }
+                                                            cast::GTK_CELL_RENDERER(cell.unwrap_widget())) }
     }
 
     pub fn pack_start<T: gtk::FFIWidget + gtk::CellRendererTrait>(&self, cell: &T, expand: bool) {
         unsafe { ffi::gtk_tree_view_column_pack_start(self.pointer,
-                                                      cast::GTK_CELL_RENDERER(cell.get_widget()),
+                                                      cast::GTK_CELL_RENDERER(cell.unwrap_widget()),
                                                       to_gboolean(expand)) }
     }
 
     pub fn pack_end<T: gtk::FFIWidget + gtk::CellRendererTrait>(&self, cell: &T, expand: bool) {
         unsafe { ffi::gtk_tree_view_column_pack_end(self.pointer,
-                                                    cast::GTK_CELL_RENDERER(cell.get_widget()),
+                                                    cast::GTK_CELL_RENDERER(cell.unwrap_widget()),
                                                     to_gboolean(expand)) }
     }
 
     #[doc(hidden)]
-    pub fn get_pointer(&self) -> *mut ffi::C_GtkTreeViewColumn {
+    pub fn unwrap_pointer(&self) -> *mut ffi::C_GtkTreeViewColumn {
         self.pointer
     }
 
@@ -322,7 +322,7 @@ impl TreeViewColumn {
 }
 
 impl glib::traits::FFIGObject for TreeViewColumn {
-    fn get_gobject(&self) -> *mut glib::ffi::C_GObject {
+    fn unwrap_gobject(&self) -> *mut glib::ffi::C_GObject {
         gtk::cast::G_OBJECT_FROM_TREE_VIEW_COLUMN(self.pointer)
     }
 

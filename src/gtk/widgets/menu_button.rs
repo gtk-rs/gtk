@@ -30,7 +30,7 @@ impl MenuButton {
 
     pub fn set_popup<T: gtk::WidgetTrait>(&mut self, popup: &T) -> () {
         unsafe {
-            ffi::gtk_menu_button_set_popup(GTK_MENUBUTTON(self.pointer), popup.get_widget());
+            ffi::gtk_menu_button_set_popup(GTK_MENUBUTTON(self.pointer), popup.unwrap_widget());
         }
     }
 
@@ -48,7 +48,7 @@ impl MenuButton {
 
     pub fn set_align_widget<T: gtk::WidgetTrait>(&mut self, align_widget: &T) -> () {
         unsafe {
-            ffi::gtk_menu_button_set_align_widget(GTK_MENUBUTTON(self.pointer), align_widget.get_widget())
+            ffi::gtk_menu_button_set_align_widget(GTK_MENUBUTTON(self.pointer), align_widget.unwrap_widget())
         }
     }
 }

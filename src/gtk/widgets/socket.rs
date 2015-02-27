@@ -29,15 +29,15 @@ impl Socket {
     }
 
     /*pub fn add_id(&self, window: Window) {
-        unsafe { ffi::gtk_socket_add_id(GTK_SOCKET(self.get_widget()), window) };
+        unsafe { ffi::gtk_socket_add_id(GTK_SOCKET(self.unwrap_widget()), window) };
     }
 
     pub fn get_id(&self) -> Window {
-        unsafe { ffi::gtk_socket_get_id(GTK_SOCKET(self.get_widget())) };
+        unsafe { ffi::gtk_socket_get_id(GTK_SOCKET(self.unwrap_widget())) };
     }
 
     pub fn get_plug_window(&self) -> GdkWindow {
-        let tmp_pointer = unsafe { ffi::gtk_socket_get_plug_window(GTK_SOCKET(self.get_widget())) };
+        let tmp_pointer = unsafe { ffi::gtk_socket_get_plug_window(GTK_SOCKET(self.unwrap_widget())) };
 
         // add end of code
     }*/

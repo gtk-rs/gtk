@@ -23,7 +23,7 @@ use glib::{to_bool, to_gboolean};
 pub trait BoxTrait: gtk::WidgetTrait {
     fn pack_start<'r, T: gtk::WidgetTrait>(&'r mut self, child: &'r T, expand: bool, fill: bool, padding: u32) -> () {
         unsafe {
-            ffi::gtk_box_pack_start(GTK_BOX(self.get_widget()), child.get_widget(),
+            ffi::gtk_box_pack_start(GTK_BOX(self.unwrap_widget()), child.unwrap_widget(),
                                     to_gboolean(expand), to_gboolean(fill),
                                     padding as c_uint);
         }
@@ -31,35 +31,35 @@ pub trait BoxTrait: gtk::WidgetTrait {
 
     fn pack_end<'r, T: gtk::WidgetTrait>(&'r mut self, child: &'r T, expand: bool, fill: bool, padding: u32) -> () {
         unsafe {
-            ffi::gtk_box_pack_end(GTK_BOX(self.get_widget()), child.get_widget(),
+            ffi::gtk_box_pack_end(GTK_BOX(self.unwrap_widget()), child.unwrap_widget(),
                                   to_gboolean(expand), to_gboolean(fill),
                                   padding as c_uint);
         }
     }
 
     fn get_homogeneous(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_box_get_homogeneous(GTK_BOX(self.get_widget()))) }
+        unsafe { to_bool(ffi::gtk_box_get_homogeneous(GTK_BOX(self.unwrap_widget()))) }
     }
 
     fn set_homogeneouse(&mut self, homogeneous: bool) -> () {
-        unsafe { ffi::gtk_box_set_homogeneous(GTK_BOX(self.get_widget()), to_gboolean(homogeneous)); }
+        unsafe { ffi::gtk_box_set_homogeneous(GTK_BOX(self.unwrap_widget()), to_gboolean(homogeneous)); }
     }
 
     fn get_spacing(&self) -> i32 {
         unsafe {
-            ffi::gtk_box_get_spacing(GTK_BOX(self.get_widget())) as i32
+            ffi::gtk_box_get_spacing(GTK_BOX(self.unwrap_widget())) as i32
         }
     }
 
     fn set_spacing(&mut self, spacing: i32) -> () {
         unsafe {
-            ffi::gtk_box_set_spacing(GTK_BOX(self.get_widget()), spacing as c_int);
+            ffi::gtk_box_set_spacing(GTK_BOX(self.unwrap_widget()), spacing as c_int);
         }
     }
 
     fn reorder_child<'r, T: gtk::WidgetTrait>(&'r mut self, child: &'r T, position: i32) -> () {
         unsafe {
-            ffi::gtk_box_reorder_child(GTK_BOX(self.get_widget()), child.get_widget(), position as c_int);
+            ffi::gtk_box_reorder_child(GTK_BOX(self.unwrap_widget()), child.unwrap_widget(), position as c_int);
         }
     }
 
@@ -69,8 +69,8 @@ pub trait BoxTrait: gtk::WidgetTrait {
         let mut c_fill = 0;
         let mut pack_type: PackType = PackType::Start;
         unsafe {
-            ffi::gtk_box_query_child_packing(GTK_BOX(self.get_widget()),
-                                             child.get_widget(),
+            ffi::gtk_box_query_child_packing(GTK_BOX(self.unwrap_widget()),
+                                             child.unwrap_widget(),
                                              &mut c_expand,
                                              &mut c_fill,
                                              &mut c_padding,
@@ -86,8 +86,8 @@ pub trait BoxTrait: gtk::WidgetTrait {
                                                   padding: u32,
                                                   pack_type: PackType) {
         unsafe {
-            ffi::gtk_box_set_child_packing(GTK_BOX(self.get_widget()),
-                                           child.get_widget(),
+            ffi::gtk_box_set_child_packing(GTK_BOX(self.unwrap_widget()),
+                                           child.unwrap_widget(),
                                            to_gboolean(expand),
                                            to_gboolean(fill),
                                            padding as c_uint,

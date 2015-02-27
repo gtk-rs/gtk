@@ -106,7 +106,7 @@ impl FlowBox {
     pub fn insert<T: gtk::WidgetTrait>(&mut self, widget: &T, position: i32) {
         unsafe {
             ffi::gtk_flow_box_insert(GTK_FLOW_BOX(self.pointer),
-                                     widget.get_widget(),
+                                     widget.unwrap_widget(),
                                      position)
         }
     }
@@ -118,21 +118,21 @@ impl FlowBox {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 
     pub fn select_child(&mut self, child: &FlowBoxChild) {
         unsafe {
             ffi::gtk_flow_box_select_child(GTK_FLOW_BOX(self.pointer),
-                                           GTK_FLOW_BOX_CHILD(child.get_widget()))
+                                           GTK_FLOW_BOX_CHILD(child.unwrap_widget()))
         }
     }
 
     pub fn unselect_child(&mut self, child: &FlowBoxChild) {
         unsafe {
             ffi::gtk_flow_box_unselect_child(GTK_FLOW_BOX(self.pointer),
-                                             GTK_FLOW_BOX_CHILD(child.get_widget()))
+                                             GTK_FLOW_BOX_CHILD(child.unwrap_widget()))
         }
     }
 
@@ -163,14 +163,14 @@ impl FlowBox {
     pub fn set_hadjustment(&mut self, adjustment: gtk::Adjustment) {
         unsafe {
             ffi::gtk_flow_box_set_hadjustment(GTK_FLOW_BOX(self.pointer),
-                                              adjustment.get_pointer())
+                                              adjustment.unwrap_pointer())
         }
     }
 
     pub fn set_vadjustment(&mut self, adjustment: gtk::Adjustment) {
         unsafe {
             ffi::gtk_flow_box_set_vadjustment(GTK_FLOW_BOX(self.pointer),
-                                              adjustment.get_pointer())
+                                              adjustment.unwrap_pointer())
         }
     }
 }

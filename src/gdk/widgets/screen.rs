@@ -137,7 +137,7 @@ impl Screen {
     }
 
     pub fn get_monitor_at_window(&self, window: &mut gdk::Window) -> i32 {
-        unsafe { ffi::gdk_screen_get_monitor_at_window(self.pointer, window.get_pointer()) }
+        unsafe { ffi::gdk_screen_get_monitor_at_window(self.pointer, window.unwrap_pointer()) }
     }
 
     pub fn get_monitor_width_mm(&self, monitor_num: i32) -> i32 {

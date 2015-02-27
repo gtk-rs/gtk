@@ -20,7 +20,7 @@ use gtk::FFIWidget;
 pub trait ScrolledWindowTrait: gtk::WidgetTrait {
     fn set_policy(&self, h_scrollbar_policy: gtk::PolicyType, v_scrollbar_policy: gtk::PolicyType) {
         unsafe {
-            ffi::gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(self.get_widget()), h_scrollbar_policy, v_scrollbar_policy);
+            ffi::gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(self.unwrap_widget()), h_scrollbar_policy, v_scrollbar_policy);
         }
     }
 }

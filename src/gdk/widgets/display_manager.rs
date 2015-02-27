@@ -48,7 +48,7 @@ impl DisplayManager {
     }
 
     pub fn set_default_display(&self, display: &gdk::Display) {
-        unsafe { ffi::gdk_display_manager_set_default_display(self.pointer, display.get_pointer()) }
+        unsafe { ffi::gdk_display_manager_set_default_display(self.pointer, display.unwrap_pointer()) }
     }
 
     pub fn open_display(&self, name: &str) -> Option<gdk::Display> {

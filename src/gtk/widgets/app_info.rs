@@ -38,16 +38,16 @@ impl AppInfo {/*
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer as *mut gtk::ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer as *mut gtk::ffi::C_GtkWidget))
         }
     }
 
     pub fn equals(&self, other: &AppInfo) -> bool {
-        unsafe { to_bool(ffi::g_app_info_equal(GTK_APP_INFO(self.get_widget()), GTK_APP_INFO(other.get_widget()))) }
+        unsafe { to_bool(ffi::g_app_info_equal(GTK_APP_INFO(self.unwrap_widget()), GTK_APP_INFO(other.unwrap_widget()))) }
     }
 
     pub fn get_id(&self) -> Option<String> {
-        let tmp_pointer = unsafe { ffi::g_app_info_get_id(GTK_APP_INFO(self.get_widget())) };
+        let tmp_pointer = unsafe { ffi::g_app_info_get_id(GTK_APP_INFO(self.unwrap_widget())) };
 
         if tmp_pointer.is_null() {
             None
@@ -57,7 +57,7 @@ impl AppInfo {/*
     }
 
     pub fn get_name(&self) -> Option<String> {
-        let tmp_pointer = unsafe { ffi::g_app_info_get_name(GTK_APP_INFO(self.get_widget())) };
+        let tmp_pointer = unsafe { ffi::g_app_info_get_name(GTK_APP_INFO(self.unwrap_widget())) };
 
         if tmp_pointer.is_null() {
             None
@@ -67,7 +67,7 @@ impl AppInfo {/*
     }
 
     pub fn get_display_name(&self) -> Option<String> {
-        let tmp_pointer = unsafe { ffi::g_app_info_get_display_name(GTK_APP_INFO(self.get_widget())) };
+        let tmp_pointer = unsafe { ffi::g_app_info_get_display_name(GTK_APP_INFO(self.unwrap_widget())) };
 
         if tmp_pointer.is_null() {
             None
@@ -77,7 +77,7 @@ impl AppInfo {/*
     }
 
     pub fn get_description(&self) -> Option<String> {
-        let tmp_pointer = unsafe { ffi::g_app_info_get_description(GTK_APP_INFO(self.get_widget())) };
+        let tmp_pointer = unsafe { ffi::g_app_info_get_description(GTK_APP_INFO(self.unwrap_widget())) };
 
         if tmp_pointer.is_null() {
             None
@@ -87,7 +87,7 @@ impl AppInfo {/*
     }
 
     pub fn get_executable(&self) -> Option<String> {
-        let tmp_pointer = unsafe { ffi::g_app_info_get_executable(GTK_APP_INFO(self.get_widget())) };
+        let tmp_pointer = unsafe { ffi::g_app_info_get_executable(GTK_APP_INFO(self.unwrap_widget())) };
 
         if tmp_pointer.is_null() {
             None
@@ -97,7 +97,7 @@ impl AppInfo {/*
     }
 
     pub fn get_commandline(&self) -> Option<String> {
-        let tmp_pointer = unsafe { ffi::g_app_info_get_commandline(GTK_APP_INFO(self.get_widget())) };
+        let tmp_pointer = unsafe { ffi::g_app_info_get_commandline(GTK_APP_INFO(self.unwrap_widget())) };
 
         if tmp_pointer.is_null() {
             None
@@ -107,37 +107,37 @@ impl AppInfo {/*
     }
 
     pub fn launch(&self, files: &mut glib::List, launch_context: &mut gtk::AppLaunchContext, error: &mut glib::Error) -> bool {
-        unsafe { to_bool({ ffi::g_app_info_launch(GTK_APP_INFO(self.get_widget()),
+        unsafe { to_bool({ ffi::g_app_info_launch(GTK_APP_INFO(self.unwrap_widget()),
             files.unwrap(),
-            GTK_APP_LAUNCH_CONTEXT(launch_context.get_widget()),
+            GTK_APP_LAUNCH_CONTEXT(launch_context.unwrap_widget()),
             &mut error.unwrap()) }) }
     }
 
     pub fn supports_files(&self) -> bool {
-        unsafe { to_bool(ffi::g_app_info_supports_files(GTK_APP_INFO(self.get_widget()))) }
+        unsafe { to_bool(ffi::g_app_info_supports_files(GTK_APP_INFO(self.unwrap_widget()))) }
     }
 
     pub fn supports_uris(&self) -> bool {
-        unsafe { to_bool(ffi::g_app_info_supports_uris(GTK_APP_INFO(self.get_widget()))) }
+        unsafe { to_bool(ffi::g_app_info_supports_uris(GTK_APP_INFO(self.unwrap_widget()))) }
     }
 
     pub fn launch_uris(&self, uris: &mut glib::List, launch_context: &mut gtk::AppLaunchContext, error: &mut glib::Error) -> bool {
-        unsafe { to_bool({ ffi::g_app_info_launch_uris(GTK_APP_INFO(self.get_widget()),
+        unsafe { to_bool({ ffi::g_app_info_launch_uris(GTK_APP_INFO(self.unwrap_widget()),
             uris.unwrap(),
-            GTK_APP_LAUNCH_CONTEXT(launch_context.get_widget()),
+            GTK_APP_LAUNCH_CONTEXT(launch_context.unwrap_widget()),
             &mut error.unwrap()) }) }
     }
 
     pub fn should_show(&self) -> bool {
-        unsafe { to_bool(ffi::g_app_info_should_show(GTK_APP_INFO(self.get_widget()))) }
+        unsafe { to_bool(ffi::g_app_info_should_show(GTK_APP_INFO(self.unwrap_widget()))) }
     }
 
     pub fn can_delete(&self) -> bool {
-        unsafe { to_bool(ffi::g_app_info_can_delete(GTK_APP_INFO(self.get_widget()))) }
+        unsafe { to_bool(ffi::g_app_info_can_delete(GTK_APP_INFO(self.unwrap_widget()))) }
     }
 
     pub fn delete(&self) -> bool {
-        unsafe { to_bool(ffi::g_app_info_delete(GTK_APP_INFO(self.get_widget()))) }
+        unsafe { to_bool(ffi::g_app_info_delete(GTK_APP_INFO(self.unwrap_widget()))) }
     }
 
     pub fn reset_type_associations(&self, content_type: &str) -> () {
@@ -151,7 +151,7 @@ impl AppInfo {/*
     pub fn set_as_default_for_type(&self, content_type: &str, error: &mut glib::Error) -> bool {
         unsafe { to_bool({
             content_type.with_c_str(|c_str| {
-                ffi::g_app_info_set_as_default_for_type(GTK_APP_INFO(self.get_widget()), c_str, &mut error.unwrap())
+                ffi::g_app_info_set_as_default_for_type(GTK_APP_INFO(self.unwrap_widget()), c_str, &mut error.unwrap())
             })
         }) }
     }
@@ -159,7 +159,7 @@ impl AppInfo {/*
     pub fn set_as_default_for_extension(&self, extension: &str, error: &mut glib::Error) -> bool {
         unsafe { to_bool({
             extension.with_c_str(|c_str| {
-                ffi::g_app_info_set_as_default_for_extension(GTK_APP_INFO(self.get_widget()), c_str, &mut error.unwrap())
+                ffi::g_app_info_set_as_default_for_extension(GTK_APP_INFO(self.unwrap_widget()), c_str, &mut error.unwrap())
             })
         }) }
     }
@@ -167,7 +167,7 @@ impl AppInfo {/*
     pub fn set_as_last_used_for_type(&self, content_type: &str, error: &mut glib::Error) -> bool {
         unsafe { to_bool({
             content_type.with_c_str(|c_str| {
-                ffi::g_app_info_set_as_last_used_for_type(GTK_APP_INFO(self.get_widget()), c_str, &mut error.unwrap())
+                ffi::g_app_info_set_as_last_used_for_type(GTK_APP_INFO(self.unwrap_widget()), c_str, &mut error.unwrap())
             })
         }) }
     }
@@ -175,25 +175,25 @@ impl AppInfo {/*
     pub fn add_supports_type(&self, content_type: &str, error: &mut glib::Error) -> bool {
         unsafe { to_bool({
             content_type.with_c_str(|c_str| {
-                ffi::g_app_info_add_supports_type(GTK_APP_INFO(self.get_widget()), c_str, &mut error.unwrap())
+                ffi::g_app_info_add_supports_type(GTK_APP_INFO(self.unwrap_widget()), c_str, &mut error.unwrap())
             })
         }) }
     }
 
     pub fn can_remove_supports_type(&self) -> bool {
-        unsafe { to_bool(ffi::g_app_info_can_remove_supports_type(GTK_APP_INFO(self.get_widget()))) }
+        unsafe { to_bool(ffi::g_app_info_can_remove_supports_type(GTK_APP_INFO(self.unwrap_widget()))) }
     }
 
     pub fn remove_supports_type(&self, content_type: &str, error: &mut glib::Error) -> bool {
         unsafe { to_bool({
             content_type.with_c_str(|c_str| {
-                ffi::g_app_info_remove_supports_type(GTK_APP_INFO(self.get_widget()), c_str, &mut error.unwrap())
+                ffi::g_app_info_remove_supports_type(GTK_APP_INFO(self.unwrap_widget()), c_str, &mut error.unwrap())
             })
         }) }
     }
 
     pub fn get_supported_types(&self) -> Vec<String> {
-        let types = unsafe { ffi::g_app_info_get_supported_types(GTK_APP_INFO(self.get_widget())) };
+        let types = unsafe { ffi::g_app_info_get_supported_types(GTK_APP_INFO(self.unwrap_widget())) };
         let mut ret = Vec::new();
 
         if types.is_not_null() {
@@ -243,7 +243,7 @@ impl AppInfo {/*
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer as *mut gtk::ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer as *mut gtk::ffi::C_GtkWidget))
         }
     }
 
@@ -257,7 +257,7 @@ impl AppInfo {/*
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer as *mut gtk::ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer as *mut gtk::ffi::C_GtkWidget))
         }
     }
 
@@ -292,16 +292,16 @@ impl AppInfo {/*
     pub fn launch_default_for_uri(uri: &str, launch_context: &gtk::AppLaunchContext, error: &glib::Error) -> bool {
         unsafe { to_bool({
             uri.with_c_str(|c_str| {
-                ffi::g_app_info_launch_default_for_uri(c_str, GTK_APP_LAUNCH_CONTEXT(launch_context.get_widget()), &mut error.unwrap())
+                ffi::g_app_info_launch_default_for_uri(c_str, GTK_APP_LAUNCH_CONTEXT(launch_context.unwrap_widget()), &mut error.unwrap())
         }) }
     }*/
 }
 
 /*impl Clone for AppInfo {
     fn clone(&self) -> AppInfo {
-        let tmp_pointer = unsafe { ffi::g_app_info_dup(GTK_APP_INFO(self.get_widget())) };
+        let tmp_pointer = unsafe { ffi::g_app_info_dup(GTK_APP_INFO(self.unwrap_widget())) };
 
-        gtk::FFIWidget::wrap(tmp_pointer as *mut gtk::ffi::C_GtkWidget)
+        gtk::FFIWidget::wrap_widget(tmp_pointer as *mut gtk::ffi::C_GtkWidget)
     }
 }
 

@@ -36,8 +36,8 @@ impl NoteBook {
                                           -> i32 {
         unsafe {
             ffi::gtk_notebook_append_page(GTK_NOTEBOOK(self.pointer),
-                                          child.get_widget(),
-                                          get_widget!(tab_label))
+                                          child.unwrap_widget(),
+                                          unwrap_widget!(tab_label))
         }
     }
 
@@ -48,9 +48,9 @@ impl NoteBook {
                                                -> i32 {
         unsafe {
             ffi::gtk_notebook_append_page_menu(GTK_NOTEBOOK(self.pointer),
-                                               child.get_widget(),
-                                               get_widget!(tab_label),
-                                               get_widget!(menu_label))
+                                               child.unwrap_widget(),
+                                               unwrap_widget!(tab_label),
+                                               unwrap_widget!(menu_label))
         }
     }
 
@@ -60,8 +60,8 @@ impl NoteBook {
                                            -> i32 {
         unsafe {
             ffi::gtk_notebook_prepend_page(GTK_NOTEBOOK(self.pointer),
-                                           child.get_widget(),
-                                           get_widget!(tab_label))
+                                           child.unwrap_widget(),
+                                           unwrap_widget!(tab_label))
         }
     }
 
@@ -72,9 +72,9 @@ impl NoteBook {
                                                -> i32 {
         unsafe {
             ffi::gtk_notebook_prepend_page_menu(GTK_NOTEBOOK(self.pointer),
-                                                child.get_widget(),
-                                                get_widget!(tab_label),
-                                                get_widget!(menu_label))
+                                                child.unwrap_widget(),
+                                                unwrap_widget!(tab_label),
+                                                unwrap_widget!(menu_label))
         }
     }
 
@@ -85,8 +85,8 @@ impl NoteBook {
                                            -> i32 {
         unsafe {
             ffi::gtk_notebook_insert_page(GTK_NOTEBOOK(self.pointer),
-                                          child.get_widget(),
-                                          get_widget!(tab_label),
+                                          child.unwrap_widget(),
+                                          unwrap_widget!(tab_label),
                                           position)
         }
     }
@@ -99,9 +99,9 @@ impl NoteBook {
                                                -> i32 {
         unsafe {
             ffi::gtk_notebook_insert_page_menu(GTK_NOTEBOOK(self.pointer),
-                                               child.get_widget(),
-                                               get_widget!(tab_label),
-                                               get_widget!(menu_label),
+                                               child.unwrap_widget(),
+                                               unwrap_widget!(tab_label),
+                                               unwrap_widget!(menu_label),
                                                position)
         }
     }
@@ -144,7 +144,7 @@ impl NoteBook {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer))
         }
     }
 
@@ -156,7 +156,7 @@ impl NoteBook {
 
     pub fn page_num<T: gtk::WidgetTrait>(&self, child: &T) -> i32 {
         unsafe {
-            ffi::gtk_notebook_page_num(GTK_NOTEBOOK(self.pointer), child.get_widget())
+            ffi::gtk_notebook_page_num(GTK_NOTEBOOK(self.pointer), child.unwrap_widget())
         }
     }
 
@@ -256,20 +256,20 @@ impl NoteBook {
     pub fn get_tab_label<T: gtk::WidgetTrait>(&self, child: &T) -> Option<gtk::Label> {
         let tmp_pointer = unsafe {
             ffi::gtk_notebook_get_tab_label(GTK_NOTEBOOK(self.pointer),
-                                            child.get_widget())
+                                            child.unwrap_widget())
         };
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer))
         }
     }
 
     pub fn set_tab_label<T: gtk::WidgetTrait>(&mut self, child: &T, tab_label: Option<&gtk::Label>) {
         unsafe {
             ffi::gtk_notebook_set_tab_label(GTK_NOTEBOOK(self.pointer),
-                                            child.get_widget(),
-                                            get_widget!(tab_label))
+                                            child.unwrap_widget(),
+                                            unwrap_widget!(tab_label))
         }
     }
 
@@ -278,7 +278,7 @@ impl NoteBook {
 
         unsafe {
             ffi::gtk_notebook_set_tab_label_text(GTK_NOTEBOOK(self.pointer),
-                                                 child.get_widget(),
+                                                 child.unwrap_widget(),
                                                  c_str.as_ptr())
         }
     }
@@ -286,7 +286,7 @@ impl NoteBook {
     pub fn get_tab_label_text<T: gtk::WidgetTrait>(&mut self, child: &T) -> Option<String> {
         unsafe {
             let c_str = ffi::gtk_notebook_get_tab_label_text(GTK_NOTEBOOK(self.pointer),
-                                                             child.get_widget());
+                                                             child.unwrap_widget());
             
             if c_str.is_null() {
                 None
@@ -299,20 +299,20 @@ impl NoteBook {
     pub fn get_menu_label<T: gtk::WidgetTrait>(&self, child: &T) -> Option<gtk::Label> {
         let tmp_pointer = unsafe {
             ffi::gtk_notebook_get_menu_label(GTK_NOTEBOOK(self.pointer),
-                                             child.get_widget())
+                                             child.unwrap_widget())
         };
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer))
         }
     }
 
     pub fn set_menu_label<T: gtk::WidgetTrait>(&mut self, child: &T, tab_label: Option<&gtk::Label>) {
         unsafe {
             ffi::gtk_notebook_set_menu_label(GTK_NOTEBOOK(self.pointer),
-                                             child.get_widget(),
-                                             get_widget!(tab_label))
+                                             child.unwrap_widget(),
+                                             unwrap_widget!(tab_label))
         }
     }
 
@@ -321,7 +321,7 @@ impl NoteBook {
 
         unsafe {
             ffi::gtk_notebook_set_menu_label_text(GTK_NOTEBOOK(self.pointer),
-                                                  child.get_widget(),
+                                                  child.unwrap_widget(),
                                                   c_str.as_ptr())
         }
     }
@@ -329,7 +329,7 @@ impl NoteBook {
     pub fn get_menu_label_text<T: gtk::WidgetTrait>(&mut self, child: &T) -> Option<String> {
         unsafe {
             let c_str = ffi::gtk_notebook_get_menu_label_text(GTK_NOTEBOOK(self.pointer),
-                                                              child.get_widget());
+                                                              child.unwrap_widget());
 
             if c_str.is_null() {
                 None
@@ -342,7 +342,7 @@ impl NoteBook {
     pub fn reorder_child<T: gtk::WidgetTrait>(&mut self, child: &T, position: i32) {
         unsafe {
             ffi::gtk_notebook_reorder_child(GTK_NOTEBOOK(self.pointer),
-                                            child.get_widget(),
+                                            child.unwrap_widget(),
                                             position)
         }
     }
@@ -350,14 +350,14 @@ impl NoteBook {
     pub fn is_tab_reorderable<T: gtk::WidgetTrait>(&self, child: &T) -> bool {
         unsafe {
             to_bool(ffi::gtk_notebook_get_tab_reorderable(GTK_NOTEBOOK(self.pointer),
-                                                               child.get_widget()))
+                                                               child.unwrap_widget()))
         }
     }
 
     pub fn set_tab_reorderable<T: gtk::WidgetTrait>(&mut self, child: &T, reorderable: bool) {
         unsafe {
             ffi::gtk_notebook_set_tab_reorderable(GTK_NOTEBOOK(self.pointer),
-                                                 child.get_widget(),
+                                                 child.unwrap_widget(),
                                                  to_gboolean(reorderable))
         }
     }
@@ -365,14 +365,14 @@ impl NoteBook {
     pub fn is_tab_detachable<T: gtk::WidgetTrait>(&self, child: &T) -> bool {
         unsafe {
             to_bool(ffi::gtk_notebook_get_tab_detachable(GTK_NOTEBOOK(self.pointer),
-                                                              child.get_widget()))
+                                                              child.unwrap_widget()))
         }
     }
 
     pub fn set_tab_detachable<T: gtk::WidgetTrait>(&mut self, child: &T, detachable: bool) {
         unsafe {
             ffi::gtk_notebook_set_tab_detachable(GTK_NOTEBOOK(self.pointer),
-                                                child.get_widget(),
+                                                child.unwrap_widget(),
                                                 to_gboolean(detachable))
         }
     }
@@ -383,14 +383,14 @@ impl NoteBook {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer))
         }
     }
 
     pub fn set_action_widget<T: gtk::WidgetTrait>(&mut self, child: &T, pack_type: gtk::PackType) {
         unsafe {
             ffi::gtk_notebook_set_action_widget(GTK_NOTEBOOK(self.pointer),
-                                                child.get_widget(),
+                                                child.unwrap_widget(),
                                                 pack_type)
         }
     }

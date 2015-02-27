@@ -28,7 +28,7 @@ pub struct AppLaunchContext {
 
 impl AppLaunchContext {
     pub fn set_screen(&self, screen: &gdk::Screen) {
-        unsafe { ffi::gdk_app_launch_context_set_screen(self.pointer, screen.get_pointer()) }
+        unsafe { ffi::gdk_app_launch_context_set_screen(self.pointer, screen.unwrap_pointer()) }
     }
 
     pub fn set_desktop(&self, desktop: i32) {
@@ -40,7 +40,7 @@ impl AppLaunchContext {
     }
 
     /*pub fn set_icon(&self, icon: GIO::Icon) {
-        unsafe { ffi::gdk_app_launch_context_set_timestamp(self.pointer, icon.get_pointer()) }
+        unsafe { ffi::gdk_app_launch_context_set_timestamp(self.pointer, icon.unwrap_pointer()) }
     }*/
 
     pub fn set_icon_name(&self, icon_name: &str) {

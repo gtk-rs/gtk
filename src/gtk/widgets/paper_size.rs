@@ -34,7 +34,7 @@ impl PaperSize {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 
@@ -48,7 +48,7 @@ impl PaperSize {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 
@@ -62,22 +62,22 @@ impl PaperSize {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 
     pub fn copy(&self) -> Option<PaperSize> {
-        let tmp_pointer = unsafe { ffi::gtk_paper_size_copy(GTK_PAPER_SIZE(self.get_widget())) };
+        let tmp_pointer = unsafe { ffi::gtk_paper_size_copy(GTK_PAPER_SIZE(self.unwrap_widget())) };
 
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 
     pub fn is_equal(&self, other: &PaperSize) -> bool {
-        unsafe { to_bool(ffi::gtk_paper_size_is_equal(GTK_PAPER_SIZE(self.get_widget()), GTK_PAPER_SIZE(other.get_widget()))) }
+        unsafe { to_bool(ffi::gtk_paper_size_is_equal(GTK_PAPER_SIZE(self.unwrap_widget()), GTK_PAPER_SIZE(other.unwrap_widget()))) }
     }
 
     pub fn get_paper_sizes(include_custom: bool) -> glib::List<Box<PaperSize>> {
@@ -91,14 +91,14 @@ impl PaperSize {
             let mut tmp_vec : glib::List<Box<PaperSize>> = glib::List::new();
 
             for it in old_list.iter() {
-                tmp_vec.append(Box::new(gtk::FFIWidget::wrap(*it)));
+                tmp_vec.append(Box::new(gtk::FFIWidget::wrap_widget(*it)));
             }
             tmp_vec
         }
     }
 
     pub fn get_name(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_paper_size_get_name(GTK_PAPER_SIZE(self.get_widget())) };
+        let tmp = unsafe { ffi::gtk_paper_size_get_name(GTK_PAPER_SIZE(self.unwrap_widget())) };
 
         if tmp.is_null() {
             None
@@ -108,7 +108,7 @@ impl PaperSize {
     }
 
     pub fn get_display_name_name(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_paper_size_get_display_name(GTK_PAPER_SIZE(self.get_widget())) };
+        let tmp = unsafe { ffi::gtk_paper_size_get_display_name(GTK_PAPER_SIZE(self.unwrap_widget())) };
 
         if tmp.is_null() {
             None
@@ -118,7 +118,7 @@ impl PaperSize {
     }
 
     pub fn get_ppd_name(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_paper_size_get_ppd_name(GTK_PAPER_SIZE(self.get_widget())) };
+        let tmp = unsafe { ffi::gtk_paper_size_get_ppd_name(GTK_PAPER_SIZE(self.unwrap_widget())) };
 
         if tmp.is_null() {
             None
@@ -128,35 +128,35 @@ impl PaperSize {
     }
 
     pub fn get_width(&self, unit: gtk::Unit) -> f64 {
-        unsafe { ffi::gtk_paper_size_get_width(GTK_PAPER_SIZE(self.get_widget()), unit) }
+        unsafe { ffi::gtk_paper_size_get_width(GTK_PAPER_SIZE(self.unwrap_widget()), unit) }
     }
 
     pub fn get_height(&self, unit: gtk::Unit) -> f64 {
-        unsafe { ffi::gtk_paper_size_get_height(GTK_PAPER_SIZE(self.get_widget()), unit) }
+        unsafe { ffi::gtk_paper_size_get_height(GTK_PAPER_SIZE(self.unwrap_widget()), unit) }
     }
 
     pub fn is_custom(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_paper_size_is_custom(GTK_PAPER_SIZE(self.get_widget()))) }
+        unsafe { to_bool(ffi::gtk_paper_size_is_custom(GTK_PAPER_SIZE(self.unwrap_widget()))) }
     }
 
     pub fn set_size(&self, width: f64, height: f64, unit: gtk::Unit) {
-        unsafe { ffi::gtk_paper_size_set_size(GTK_PAPER_SIZE(self.get_widget()), width, height, unit) }
+        unsafe { ffi::gtk_paper_size_set_size(GTK_PAPER_SIZE(self.unwrap_widget()), width, height, unit) }
     }
 
     pub fn get_default_top_margin(&self, unit: gtk::Unit) -> f64 {
-        unsafe { ffi::gtk_paper_size_get_default_top_margin(GTK_PAPER_SIZE(self.get_widget()), unit) }
+        unsafe { ffi::gtk_paper_size_get_default_top_margin(GTK_PAPER_SIZE(self.unwrap_widget()), unit) }
     }
 
     pub fn get_default_bottom_margin(&self, unit: gtk::Unit) -> f64 {
-        unsafe { ffi::gtk_paper_size_get_default_bottom_margin(GTK_PAPER_SIZE(self.get_widget()), unit) }
+        unsafe { ffi::gtk_paper_size_get_default_bottom_margin(GTK_PAPER_SIZE(self.unwrap_widget()), unit) }
     }
 
     pub fn get_default_left_margin(&self, unit: gtk::Unit) -> f64 {
-        unsafe { ffi::gtk_paper_size_get_default_left_margin(GTK_PAPER_SIZE(self.get_widget()), unit) }
+        unsafe { ffi::gtk_paper_size_get_default_left_margin(GTK_PAPER_SIZE(self.unwrap_widget()), unit) }
     }
 
     pub fn get_default_right_margin(&self, unit: gtk::Unit) -> f64 {
-        unsafe { ffi::gtk_paper_size_get_default_left_margin(GTK_PAPER_SIZE(self.get_widget()), unit) }
+        unsafe { ffi::gtk_paper_size_get_default_left_margin(GTK_PAPER_SIZE(self.unwrap_widget()), unit) }
     }
 
     pub fn get_default() -> Option<String> {
@@ -173,7 +173,7 @@ impl PaperSize {
 impl Drop for PaperSize {
     fn drop(&mut self) {
         unsafe {
-            ffi::gtk_paper_size_free(GTK_PAPER_SIZE(self.get_widget()));
+            ffi::gtk_paper_size_free(GTK_PAPER_SIZE(self.unwrap_widget()));
             ::glib::ffi::g_object_unref(self.pointer as *mut ::glib::ffi::C_GObject);
         }
     }

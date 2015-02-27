@@ -22,7 +22,7 @@ use gtk::{self, ffi};
 pub trait ActionableTrait: gtk::WidgetTrait {
     fn get_action_name(&self) -> Option<String> {
         unsafe {
-            let tmp_pointer = ffi::gtk_actionable_get_action_name(GTK_ACTIONABLE(self.get_widget()));
+            let tmp_pointer = ffi::gtk_actionable_get_action_name(GTK_ACTIONABLE(self.unwrap_widget()));
 
             if tmp_pointer.is_null() {
                 None
@@ -36,7 +36,7 @@ pub trait ActionableTrait: gtk::WidgetTrait {
         unsafe {
             let c_str = CString::from_slice(action_name.as_bytes());
 
-            ffi::gtk_actionable_set_action_name(GTK_ACTIONABLE(self.get_widget()), c_str.as_ptr())
+            ffi::gtk_actionable_set_action_name(GTK_ACTIONABLE(self.unwrap_widget()), c_str.as_ptr())
         }
     }
 
@@ -44,7 +44,7 @@ pub trait ActionableTrait: gtk::WidgetTrait {
         unsafe {
             let c_str = CString::from_slice(detailed_action_name.as_bytes());
 
-            ffi::gtk_actionable_set_detailed_action_name(GTK_ACTIONABLE(self.get_widget()), c_str.as_ptr())
+            ffi::gtk_actionable_set_detailed_action_name(GTK_ACTIONABLE(self.unwrap_widget()), c_str.as_ptr())
         }
     }
 }

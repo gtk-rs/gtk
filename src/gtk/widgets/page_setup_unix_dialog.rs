@@ -25,7 +25,7 @@ impl PageSetupUnixDialog {
         let tmp_pointer = unsafe {
             title.with_c_str(|c_str|{
                 ffi::gtk_page_setup_unix_dialog_new(match parent {
-                    Some(ref p) => GTK_WINDOW(p.get_widget()),
+                    Some(ref p) => GTK_WINDOW(p.unwrap_widget()),
                     None => ::std::ptr::null_mut()
                 })
             })
@@ -34,35 +34,35 @@ impl PageSetupUnixDialog {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer))
         }
     }
 
     pub fn set_page_setup(&self, page_setup: &gtk::PageSetup) {
-        unsafe { ffi::gtk_page_setup_unix_dialog_set_page_setup(GTK_PAGE_SETUP_UNIX_DIALOG(self.get_widget()), GTK_PAGE_SETUP(page_setup.get_widget())) }
+        unsafe { ffi::gtk_page_setup_unix_dialog_set_page_setup(GTK_PAGE_SETUP_UNIX_DIALOG(self.unwrap_widget()), GTK_PAGE_SETUP(page_setup.unwrap_widget())) }
     }
 
     pub fn get_page_setup(&self) -> Option<PageSetup> {
-        let tmp = unsafe { ffi::gtk_page_setup_unix_dialog_get_page_setup(GTK_PAGE_SETUP_UNIX_DIALOG(self.get_widget())) };
+        let tmp = unsafe { ffi::gtk_page_setup_unix_dialog_get_page_setup(GTK_PAGE_SETUP_UNIX_DIALOG(self.unwrap_widget())) };
 
         if tmp.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer))
         }
     }
 
     pub fn set_print_settings(&self, print_settings: &gtk::PrintSettings) {
-        unsafe { ffi::gtk_page_setup_unix_dialog_set_print_settings(GTK_PAGE_SETUP_UNIX_DIALOG(self.get_widget()), GTK_PRINT_SETTINGS(print_settings.get_widget())) }
+        unsafe { ffi::gtk_page_setup_unix_dialog_set_print_settings(GTK_PAGE_SETUP_UNIX_DIALOG(self.unwrap_widget()), GTK_PRINT_SETTINGS(print_settings.unwrap_widget())) }
     }
 
     pub fn get_print_settings(&self) -> Option<PrintSettings> {
-        let tmp = unsafe { ffi::gtk_page_setup_unix_dialog_get_print_settings(GTK_PAGE_SETUP_UNIX_DIALOG(self.get_widget())) };
+        let tmp = unsafe { ffi::gtk_page_setup_unix_dialog_get_print_settings(GTK_PAGE_SETUP_UNIX_DIALOG(self.unwrap_widget())) };
 
         if tmp.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer))
         }
     }
 }

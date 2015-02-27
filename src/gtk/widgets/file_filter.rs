@@ -71,7 +71,7 @@ impl FileFilter {
         unsafe { ffi::gtk_file_filter_add_pixbuf_formats(self.pointer) }
     }
 
-    pub fn get_pointer(&self) -> *mut ffi::C_GtkFileFilter {
+    pub fn unwrap_pointer(&self) -> *mut ffi::C_GtkFileFilter {
         self.pointer
     }
 

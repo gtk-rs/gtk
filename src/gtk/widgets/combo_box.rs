@@ -31,22 +31,22 @@ impl ComboBox {
     }
 
     pub fn new_with_model(model: &gtk::TreeModel) -> Option<ComboBox> {
-        let tmp_pointer = unsafe { ffi::gtk_combo_box_new_with_model(model.get_pointer()) };
+        let tmp_pointer = unsafe { ffi::gtk_combo_box_new_with_model(model.unwrap_pointer()) };
         check_pointer!(tmp_pointer, ComboBox)
     }
 
     pub fn new_with_model_and_entry(model: &gtk::TreeModel) -> Option<ComboBox> {
-        let tmp_pointer = unsafe { ffi::gtk_combo_box_new_with_model_and_entry(model.get_pointer()) };
+        let tmp_pointer = unsafe { ffi::gtk_combo_box_new_with_model_and_entry(model.unwrap_pointer()) };
         check_pointer!(tmp_pointer, ComboBox)
     }
 
     /*pub fn new_with_area(area: &gtk::CellArea) -> Option<ComboBox> {
-        let tmp_pointer = unsafe { ffi::gtk_combo_box_new_with_area(area.get_pointer()) };
+        let tmp_pointer = unsafe { ffi::gtk_combo_box_new_with_area(area.unwrap_pointer()) };
         check_pointer!(tmp_pointer, ComboBox)
     }
 
     pub fn new_with_area_and_entry(area: &gtk::CellArea) -> Option<ComboBox> {
-        let tmp_pointer = unsafe { ffi::gtk_combo_box_new_with_area_and_entry(area.get_pointer()) };
+        let tmp_pointer = unsafe { ffi::gtk_combo_box_new_with_area_and_entry(area.unwrap_pointer()) };
         check_pointer!(tmp_pointer, ComboBox)
     }*/
 }

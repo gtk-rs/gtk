@@ -22,52 +22,52 @@ use gtk::{self, ffi};
 pub trait ScrollableTrait: gtk::WidgetTrait {
     fn get_hadjustment(&self) -> gtk::Adjustment {
         unsafe {
-            gtk::Adjustment::wrap_pointer(ffi::gtk_scrollable_get_hadjustment(GTK_SCROLLABLE(self.get_widget())))
+            gtk::Adjustment::wrap_pointer(ffi::gtk_scrollable_get_hadjustment(GTK_SCROLLABLE(self.unwrap_widget())))
         }
     }
 
     fn set_hadjustment(&mut self, hadjustment: gtk::Adjustment) {
         unsafe {
-            ffi::gtk_scrollable_set_hadjustment(GTK_SCROLLABLE(self.get_widget()),
-                                                hadjustment.get_pointer())
+            ffi::gtk_scrollable_set_hadjustment(GTK_SCROLLABLE(self.unwrap_widget()),
+                                                hadjustment.unwrap_pointer())
         }
     }
 
     fn get_vadjustment(&self) -> gtk::Adjustment {
         unsafe {
-            gtk::Adjustment::wrap_pointer(ffi::gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(self.get_widget())))
+            gtk::Adjustment::wrap_pointer(ffi::gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(self.unwrap_widget())))
         }
     }
 
     fn set_vadjustment(&mut self, vadjustment: gtk::Adjustment) {
         unsafe {
-            ffi::gtk_scrollable_set_vadjustment(GTK_SCROLLABLE(self.get_widget()),
-                                                vadjustment.get_pointer())
+            ffi::gtk_scrollable_set_vadjustment(GTK_SCROLLABLE(self.unwrap_widget()),
+                                                vadjustment.unwrap_pointer())
         }
     }
 
     fn get_hscroll_policy(&self) -> gtk::ScrollablePolicy {
         unsafe {
-            ffi::gtk_scrollable_get_hscroll_policy(GTK_SCROLLABLE(self.get_widget()))
+            ffi::gtk_scrollable_get_hscroll_policy(GTK_SCROLLABLE(self.unwrap_widget()))
         }
     }
 
     fn set_hscroll_policy(&mut self, policy: gtk::ScrollablePolicy) {
         unsafe {
-            ffi::gtk_scrollable_set_hscroll_policy(GTK_SCROLLABLE(self.get_widget()),
+            ffi::gtk_scrollable_set_hscroll_policy(GTK_SCROLLABLE(self.unwrap_widget()),
                                                    policy)
         }
     }
 
     fn get_vscroll_policy(&self) -> gtk::ScrollablePolicy {
         unsafe {
-            ffi::gtk_scrollable_get_vscroll_policy(GTK_SCROLLABLE(self.get_widget()))
+            ffi::gtk_scrollable_get_vscroll_policy(GTK_SCROLLABLE(self.unwrap_widget()))
         }
     }
 
     fn set_vscroll_policy(&mut self, policy: gtk::ScrollablePolicy) {
         unsafe {
-            ffi::gtk_scrollable_set_vscroll_policy(GTK_SCROLLABLE(self.get_widget()),
+            ffi::gtk_scrollable_set_vscroll_policy(GTK_SCROLLABLE(self.unwrap_widget()),
                                                    policy)
         }
     }

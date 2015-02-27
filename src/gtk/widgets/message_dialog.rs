@@ -23,7 +23,7 @@ struct_Widget!(MessageDialog);
 impl MessageDialog {
     pub fn new(parent: Option<gtk::Window>, flags: gtk::DialogFlags, _type: gtk::MessageType, buttons: gtk::ButtonsType) -> Option<MessageDialog> {
         let tmp_pointer = unsafe { ffi::gtk_message_dialog_new(match parent {
-                Some(ref p) => GTK_WINDOW(p.get_widget()),
+                Some(ref p) => GTK_WINDOW(p.unwrap_widget()),
                 None => ::std::ptr::null_mut()
             }, flags, _type, buttons, ::std::ptr::null())
         };
@@ -31,7 +31,7 @@ impl MessageDialog {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer))
         }
     }
 
@@ -50,17 +50,17 @@ impl MessageDialog {
         unsafe {
             let c_str = CString::from_slice(markup.as_bytes());
 
-            ffi::gtk_message_dialog_set_markup(GTK_MESSAGE_DIALOG(self.get_widget()), c_str.as_ptr())
+            ffi::gtk_message_dialog_set_markup(GTK_MESSAGE_DIALOG(self.unwrap_widget()), c_str.as_ptr())
         }
     }
 
     pub fn get_message_area<T: gtk::WidgetTrait>(&self) -> Option<T> {
-        let tmp_pointer = unsafe { ffi::gtk_message_dialog_get_message_area(GTK_MESSAGE_DIALOG(self.get_widget())) };
+        let tmp_pointer = unsafe { ffi::gtk_message_dialog_get_message_area(GTK_MESSAGE_DIALOG(self.unwrap_widget())) };
 
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer))
         }
     }
 }

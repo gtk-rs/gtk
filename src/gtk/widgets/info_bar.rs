@@ -34,7 +34,7 @@ impl InfoBar {
 
     pub fn add_action_widget<T: gtk::WidgetTrait>(&mut self, child: &T, response_id: i32) -> () {
         unsafe {
-            ffi::gtk_info_bar_add_action_widget(GTK_INFOBAR(self.pointer), child.get_widget(), response_id as c_int)
+            ffi::gtk_info_bar_add_action_widget(GTK_INFOBAR(self.pointer), child.unwrap_widget(), response_id as c_int)
         }
     }
 
@@ -43,7 +43,7 @@ impl InfoBar {
             let c_str = CString::from_slice(button_text.as_bytes());
             ffi::gtk_info_bar_add_button(GTK_INFOBAR(self.pointer), c_str.as_ptr(), response_id as c_int)
         };
-        gtk::FFIWidget::wrap(button)
+        gtk::FFIWidget::wrap_widget(button)
     }
 
     pub fn set_response_sensitive(&mut self, response_id: i32, setting: bool) -> () {

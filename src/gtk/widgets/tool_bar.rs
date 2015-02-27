@@ -42,13 +42,13 @@ impl Toolbar {
                                   item: &T,
                                   pos: i32) -> () {
         unsafe {
-            ffi::gtk_toolbar_insert(GTK_TOOLBAR(self.pointer), GTK_TOOLITEM(item.get_widget()), pos as c_int)
+            ffi::gtk_toolbar_insert(GTK_TOOLBAR(self.pointer), GTK_TOOLITEM(item.unwrap_widget()), pos as c_int)
         }
     }
 
     pub fn item_index<T: gtk::ToolItemTrait>(&mut self, item: &T) -> i32 {
         unsafe {
-            ffi::gtk_toolbar_get_item_index(GTK_TOOLBAR(self.pointer), GTK_TOOLITEM(item.get_widget())) as i32
+            ffi::gtk_toolbar_get_item_index(GTK_TOOLBAR(self.pointer), GTK_TOOLITEM(item.unwrap_widget())) as i32
         }
     }
 
@@ -64,7 +64,7 @@ impl Toolbar {
             if tmp_pointer.is_null() {
                 None
             } else {
-                Some(gtk::FFIWidget::wrap(tmp_pointer))
+                Some(gtk::FFIWidget::wrap_widget(tmp_pointer))
             }
         }
     }
@@ -77,7 +77,7 @@ impl Toolbar {
 
     pub fn set_drop_highlight_item<T: gtk::ToolItemTrait>(&mut self, item: &T, index: i32) -> () {
         unsafe {
-            ffi::gtk_toolbar_set_drop_highlight_item(GTK_TOOLBAR(self.pointer), GTK_TOOLITEM(item.get_widget()), index as c_int);
+            ffi::gtk_toolbar_set_drop_highlight_item(GTK_TOOLBAR(self.pointer), GTK_TOOLITEM(item.unwrap_widget()), index as c_int);
         }
     }
 

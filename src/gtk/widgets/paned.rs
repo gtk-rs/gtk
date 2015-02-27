@@ -42,26 +42,26 @@ impl Paned {
 
     pub fn add1<T: gtk::WidgetTrait>(&mut self, child: &T) -> () {
         unsafe {
-            ffi::gtk_paned_add1(GTK_PANED(self.pointer), child.get_widget())
+            ffi::gtk_paned_add1(GTK_PANED(self.pointer), child.unwrap_widget())
         }
     }
 
     pub fn add2<T: gtk::WidgetTrait>(&mut self, child: &T) -> () {
         unsafe {
-            ffi::gtk_paned_add2(GTK_PANED(self.pointer), child.get_widget())
+            ffi::gtk_paned_add2(GTK_PANED(self.pointer), child.unwrap_widget())
         }
     }
 
     pub fn pack1<T: gtk::WidgetTrait>(&mut self, child: &T, resize: bool, schrink: bool) -> () {
         unsafe {
-            ffi::gtk_paned_pack1(GTK_PANED(self.pointer), child.get_widget(),
+            ffi::gtk_paned_pack1(GTK_PANED(self.pointer), child.unwrap_widget(),
                                  to_gboolean(resize), to_gboolean(schrink));
         }
     }
 
     pub fn pack2<T: gtk::WidgetTrait>(&mut self, child: &T, resize: bool, schrink: bool) -> () {
         unsafe {
-            ffi::gtk_paned_pack2(GTK_PANED(self.pointer), child.get_widget(),
+            ffi::gtk_paned_pack2(GTK_PANED(self.pointer), child.unwrap_widget(),
                                  to_gboolean(resize), to_gboolean(schrink));
         }
     }
@@ -80,7 +80,7 @@ impl Paned {
 
     pub fn get_handle_window(&self) -> gtk::Window {
         unsafe {
-            gtk::FFIWidget::wrap(ffi::gtk_paned_get_handle_window(GTK_PANED(self.pointer)))
+            gtk::FFIWidget::wrap_widget(ffi::gtk_paned_get_handle_window(GTK_PANED(self.pointer)))
         }
     }
 }

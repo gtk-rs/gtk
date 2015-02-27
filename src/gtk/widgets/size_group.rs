@@ -53,11 +53,11 @@ impl SizeGroup {
     }
 
     pub fn add_widget<T: gtk::WidgetTrait>(&self, widget: &T) {
-        unsafe { ffi::gtk_size_group_add_widget(self.pointer, widget.get_widget()) }
+        unsafe { ffi::gtk_size_group_add_widget(self.pointer, widget.unwrap_widget()) }
     }
 
     pub fn remove_widget<T: gtk::WidgetTrait>(&self, widget: &T) {
-        unsafe { ffi::gtk_size_group_remove_widget(self.pointer, widget.get_widget()) }
+        unsafe { ffi::gtk_size_group_remove_widget(self.pointer, widget.unwrap_widget()) }
     }
 }
 

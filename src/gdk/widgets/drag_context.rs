@@ -50,13 +50,13 @@ impl DragContext {
 
     pub fn drag_find_window_for_screen(&self, drag_window: &gdk::Window, screen: &gdk::Screen, x_root: i32, y_root: i32,
         dest_window: &mut gdk::Window, protocol: &mut gdk::DragProtocol) {
-        unsafe { ffi::gdk_drag_find_window_for_screen(self.pointer, drag_window.get_pointer(), screen.get_pointer(), x_root as c_int,
-            y_root as c_int, &mut dest_window.get_pointer(), protocol) }
+        unsafe { ffi::gdk_drag_find_window_for_screen(self.pointer, drag_window.unwrap_pointer(), screen.unwrap_pointer(), x_root as c_int,
+            y_root as c_int, &mut dest_window.unwrap_pointer(), protocol) }
     }
 
     pub fn drag_motion(&self, dest_window: &gdk::Window, protocol: gdk::DragProtocol, x_root: i32, y_root: i32,
         suggested_action: gdk::DragAction, possible_actions: gdk::DragAction, time_: u32) -> bool {
-        unsafe { to_bool(ffi::gdk_drag_motion(self.pointer, dest_window.get_pointer(), protocol, x_root as c_int,
+        unsafe { to_bool(ffi::gdk_drag_motion(self.pointer, dest_window.unwrap_pointer(), protocol, x_root as c_int,
             y_root as c_int, suggested_action, possible_actions, time_)) }
     }
 
@@ -95,7 +95,7 @@ impl DragContext {
     }
 
     pub fn set_device(&self, device: &gdk::Device) {
-        unsafe { ffi::gdk_drag_context_set_device(self.pointer, device.get_pointer()) }
+        unsafe { ffi::gdk_drag_context_set_device(self.pointer, device.unwrap_pointer()) }
     }
 
     pub fn get_source_window(&self) -> Option<gdk::Window> {

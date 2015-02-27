@@ -33,28 +33,28 @@ impl ActionBar {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer))
         }
     }
 
     pub fn set_center_widget<T: gtk::WidgetTrait>(&mut self, center_widget: &T) {
         unsafe {
             ffi::gtk_action_bar_set_center_widget(GTK_ACTION_BAR(self.pointer),
-                                                  center_widget.get_widget())
+                                                  center_widget.unwrap_widget())
         }
     }
 
     pub fn pack_start<T: gtk::WidgetTrait>(&mut self, child: &T) {
         unsafe {
             ffi::gtk_action_bar_pack_start(GTK_ACTION_BAR(self.pointer),
-                                           child.get_widget())
+                                           child.unwrap_widget())
         }
     }
 
     pub fn pack_end<T: gtk::WidgetTrait>(&mut self, child: &T) {
         unsafe {
             ffi::gtk_action_bar_pack_end(GTK_ACTION_BAR(self.pointer),
-                                         child.get_widget())
+                                         child.unwrap_widget())
         }
     }
 }

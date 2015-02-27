@@ -19,7 +19,7 @@ use ffi;
 use std::any::Any;
 
 pub trait FFIGObject {
-    fn get_gobject(&self) -> *mut ffi::C_GObject;
+    fn unwrap_gobject(&self) -> *mut ffi::C_GObject;
     fn wrap_object(object: *mut ffi::C_GObject) -> Self;
 }
 
@@ -35,7 +35,7 @@ pub trait FFIGObject {
 
 //             signal_name.replace("_", "-").with_c_str(|signal_name| {
 //                 ffi::glue_signal_connect(
-//                     self.get_gobject(),
+//                     self.unwrap_gobject(),
 //                     signal_name,
 //                     Some(trampoline),
 //                     user_data_ptr
@@ -70,7 +70,7 @@ pub trait Connect<'a, T: Signal<'a>>: FFIGObject + PhantomFn<&'a T> {
             let c_str = CString::from_slice(signal_name.replace("_", "-").as_bytes());
             
             ffi::glue_signal_connect(
-                self.get_gobject(),
+                self.unwrap_gobject(),
                 c_str.as_ptr(),
                 Some(trampoline),
                 user_data_ptr

@@ -18,17 +18,17 @@ use gtk::cast::GTK_APP_CHOOSER;
 
 pub trait AppChooserTrait: gtk::WidgetTrait {
     fn get_app_info(&self) -> Option<gtk::AppInfo> {
-        let tmp_pointer = unsafe { ffi::gtk_app_chooser_get_app_info(GTK_APP_CHOOSER(self.get_widget())) };
+        let tmp_pointer = unsafe { ffi::gtk_app_chooser_get_app_info(GTK_APP_CHOOSER(self.unwrap_widget())) };
 
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(gtk::FFIWidget::wrap(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(gtk::FFIWidget::wrap_widget(tmp_pointer as *mut ffi::C_GtkWidget))
         }
     }
 
     fn get_content_info(&self) -> Option<String> {
-        let tmp_pointer = unsafe { ffi::gtk_app_chooser_get_content_type(GTK_APP_CHOOSER(self.get_widget())) };
+        let tmp_pointer = unsafe { ffi::gtk_app_chooser_get_content_type(GTK_APP_CHOOSER(self.unwrap_widget())) };
 
         if tmp_pointer.is_null() {
             None
@@ -38,6 +38,6 @@ pub trait AppChooserTrait: gtk::WidgetTrait {
     }
 
     fn refresh(&self) -> () {
-        unsafe { ffi::gtk_app_chooser_refresh(GTK_APP_CHOOSER(self.get_widget())) }
+        unsafe { ffi::gtk_app_chooser_refresh(GTK_APP_CHOOSER(self.unwrap_widget())) }
     }
 }

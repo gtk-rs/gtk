@@ -20,48 +20,48 @@ use gtk::{IconSize, Orientation, ReliefStyle, ToolbarStyle};
 pub trait ToolShellTrait: gtk::WidgetTrait {
     fn get_icon_size(&self) -> IconSize {
         unsafe {
-            ffi::gtk_tool_shell_get_icon_size(GTK_TOOLSHELL(self.get_widget()))
+            ffi::gtk_tool_shell_get_icon_size(GTK_TOOLSHELL(self.unwrap_widget()))
         }
     }
 
     fn get_orientation(&self) -> Orientation {
         unsafe {
-            ffi::gtk_tool_shell_get_orientation(GTK_TOOLSHELL(self.get_widget()))
+            ffi::gtk_tool_shell_get_orientation(GTK_TOOLSHELL(self.unwrap_widget()))
         }
     }
 
     fn get_relief_style(&self) -> ReliefStyle {
         unsafe {
-            ffi::gtk_tool_shell_get_relief_style(GTK_TOOLSHELL(self.get_widget()))
+            ffi::gtk_tool_shell_get_relief_style(GTK_TOOLSHELL(self.unwrap_widget()))
         }
     }
 
     fn get_style(&self) -> ToolbarStyle {
         unsafe {
-            ffi::gtk_tool_shell_get_style(GTK_TOOLSHELL(self.get_widget()))
+            ffi::gtk_tool_shell_get_style(GTK_TOOLSHELL(self.unwrap_widget()))
         }
     }
 
     fn get_text_alignment(&self) -> f32 {
         unsafe {
-            ffi::gtk_tool_shell_get_text_alignment(GTK_TOOLSHELL(self.get_widget()))
+            ffi::gtk_tool_shell_get_text_alignment(GTK_TOOLSHELL(self.unwrap_widget()))
         }
     }
 
     fn get_text_orientation(&self) -> Orientation {
         unsafe {
-            ffi::gtk_tool_shell_get_text_orientation(GTK_TOOLSHELL(self.get_widget()))
+            ffi::gtk_tool_shell_get_text_orientation(GTK_TOOLSHELL(self.unwrap_widget()))
         }
     }
 
     fn rebuild_menu(&mut self) -> () {
         unsafe {
-            ffi::gtk_tool_shell_rebuild_menu(GTK_TOOLSHELL(self.get_widget()))
+            ffi::gtk_tool_shell_rebuild_menu(GTK_TOOLSHELL(self.unwrap_widget()))
         }
     }
 
     fn get_text_size_group(&self) -> Option<gtk::SizeGroup> {
-        let tmp_pointer = unsafe { ffi::gtk_tool_shell_get_text_size_group(GTK_TOOLSHELL(self.get_widget()) as *const ffi::C_GtkToolShell) };
+        let tmp_pointer = unsafe { ffi::gtk_tool_shell_get_text_size_group(GTK_TOOLSHELL(self.unwrap_widget()) as *const ffi::C_GtkToolShell) };
 
         if tmp_pointer.is_null() {
             None

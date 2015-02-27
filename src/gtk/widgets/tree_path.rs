@@ -169,7 +169,7 @@ impl TreePath {
     }
 
     #[doc(hidden)]
-    pub fn get_pointer(&self) -> *mut ffi::C_GtkTreePath {
+    pub fn unwrap_pointer(&self) -> *mut ffi::C_GtkTreePath {
         self.pointer
     }
 
