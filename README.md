@@ -6,20 +6,7 @@ __Rust__ bindings and wrappers for __GTK+__, __GLib__ and __Cairo__.
 Installation
 ============
 
-__rgtk__ uses autoconf tools to build, so you should install them on your system.
-
-
-For Debian based systems:
-```Shell
-> apt-get install autoconf
-```
-
-For OSX:
-```Shell
-> brew install autoconf
-```
-
-You should also install __GTK+__, __GLib__ and __Cairo__ development files before installing __rgtk__. Optionally, it is recommended to install the debug packages containing helpful debug symbols.
+__rgtk__ expects __GTK+__, __GLib__ and __Cairo__ development files to be installed on your system. Optionally, it is recommended to install the debug packages containing helpful debug symbols.
 
 For Debian based system:
 ```Shell
