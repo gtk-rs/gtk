@@ -28,15 +28,7 @@ use gtk;
 use cairo;
 use std::any::Any;
 
-pub trait Signal<'a> {
-    fn get_signal_name(&self) -> &str;
-
-    fn get_trampoline(&self) -> extern "C" fn();
-
-    fn fetch_cb(&self) -> *mut FnMut();
-
-    fn get_user_data(&'a self) -> &'a Option<Box<Any>>;
-}
+pub use glib::traits::Signal;
 
 // The defintion of the signal macro is split in a argumentless and
 // one-with-arguments case because of a limitation in the rust macro

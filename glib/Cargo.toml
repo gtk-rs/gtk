@@ -1,0 +1,16 @@
+[package]
+name = "glib"
+version = "0.1.0"
+authors = ["letang.jeremy@gmail.com", "guillaume1.gomez@gmail.com", "mathijs.henquet@gmail.com", "bpgarman@fastmail.fm", "me@bstr.eu", "zsoakes@gmail.com"]
+
+description = "A rust binding for the GLib library"
+repository = "https://github.com/jeremyletang/rgtk"
+license = "LGPL-3.0+"
+
+[dependencies]
+libc = "0.1"
+
+[dependencies.glib-sys]
+path = "../glib-sys"
+version = "0.1.0"
+

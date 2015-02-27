@@ -20,9 +20,9 @@ use std::mem;
 use std::ops::Index;
 use std::iter::{FromIterator, IntoIterator};
 use std::marker::PhantomData;
+use ffi;
 
-use glib::ffi;
-use glib::GlibContainer;
+use glib_container::GlibContainer;
 
 pub struct List<T> {
     pointer: *mut ffi::C_GList,

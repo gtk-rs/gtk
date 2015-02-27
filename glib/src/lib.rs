@@ -17,6 +17,14 @@
 Bindings and wrappers for __GLib__
 */
 
+#![feature(unsafe_destructor)]
+#![feature(std_misc)]
+
+extern crate libc;
+extern crate "glib-sys" as glib_ffi;
+
+pub use glib_ffi as ffi;
+
 use libc::c_char;
 
 pub use self::list::{List, Elem, RevElem};
@@ -25,8 +33,7 @@ pub use self::glib_container::GlibContainer;
 pub use self::error::{Error};
 pub use self::permission::Permission;
 pub use self::traits::{FFIGObject, Connect};
-pub use glib_ffi as ffi;
-pub use glib_ffi::GType;
+pub use ffi::GType;
 
 mod list;
 mod slist;
@@ -75,6 +82,7 @@ pub enum ParamFlags{
 }
 
 #[derive(Copy)]
+#[repr(C)]
 pub struct ParamSpec {
     g_type_instance: TypeInstance,
     name: *mut c_char,

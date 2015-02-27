@@ -56,6 +56,8 @@ extern crate "gdk3-sys" as gdk_ffi;
 extern crate "gtk3-sys" as gtk_ffi;
 extern crate "cairo-sys" as cairo_ffi;
 
+extern crate glib;
+
 pub use glib::traits::Connect;
 pub use gtk::widgets::GValuePublic;
 
@@ -100,4 +102,3 @@ pub use gtk::WindowTrait as GtkWindowTrait;
 pub mod gtk;
 pub mod cairo;
 pub mod gdk;
-pub mod glib;

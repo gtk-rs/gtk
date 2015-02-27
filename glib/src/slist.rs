@@ -21,8 +21,8 @@ use std::iter::{FromIterator, IntoIterator};
 use std::ops::Index;
 use std::marker::PhantomData;
 
-use glib::ffi;
-use glib::GlibContainer;
+use glib_container::GlibContainer;
+use ffi;
 
 pub struct SList<T> {
     pointer: *mut ffi::C_GSList,

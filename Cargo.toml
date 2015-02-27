@@ -38,3 +38,7 @@ version = "0.1.0"
 [dependencies.cairo-sys]
 path = "cairo-sys"
 version = "0.1.0"
+
+[dependencies.glib]
+path = "glib"
+version = "0.1.0"

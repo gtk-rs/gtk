@@ -13,10 +13,8 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use glib::ffi;
-use glib::ffi::{GQuark};
-use glib::GlibContainer;
-use glib;
+use ffi::{self, GQuark};
+use glib_container::GlibContainer;
 use std::ffi::CString;
 
 pub struct Error {
@@ -74,7 +72,7 @@ impl Clone for Error {
                 pointer: ::std::ptr::null_mut()
             }
         } else {
-            glib::GlibContainer::wrap(tmp_pointer)
+            GlibContainer::wrap(tmp_pointer)
         }
     }
 }
