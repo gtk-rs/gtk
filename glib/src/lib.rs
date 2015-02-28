@@ -41,6 +41,7 @@ pub mod glib_container;
 mod error;
 mod permission;
 pub mod traits;
+pub mod translate;
 
 pub fn to_gboolean(b: bool) -> ffi::Gboolean {
     match b {
