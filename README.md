@@ -32,10 +32,10 @@ For Fedora:
 > yum install gtk3-devel glib2-devel
 ```
 
-For OSX:
+For OSX, install [XQuartz](http://xquartz.macosforge.org/landing/), then:
 ```Shell
-> brew tap TingPing/gnome
-> brew install TingPing/gnome/gtk+3
+> brew install gtk+3 --without-x11
+> export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/opt/X11/lib/pkgconfig
 ```
 
 __rgtk__ targets __GTK+__ 3.12 but can also compile older versions 3.6, 3.8 and 3.10. Setting the environment variable `GTK_VERSION` to any of `GTK_3_6`, `GTK_3_8`, `GTK_3_10`, `GTK_3_12` allows pick a version. The default is GTK_3_12.
