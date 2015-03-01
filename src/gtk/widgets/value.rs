@@ -19,6 +19,7 @@ use gtk::{self, ffi};
 use std::ffi::CString;
 use libc::{self, c_char, c_void};
 use glib::{to_bool, to_gboolean};
+use glib_ffi::{self};
 
 trait GValuePrivate {
     fn get(gvalue: &GValue) -> Self;
@@ -45,8 +46,8 @@ impl GValue {
         }
     }
 
-    pub fn init(&self, _type: gtk::GType) {
-        unsafe { ffi::g_value_init(self.pointer, ffi::get_gtype(_type)) }
+    pub fn init(&self, _type: glib_ffi::GType) {
+        unsafe { ffi::g_value_init(self.pointer, _type) }
     }
 
     pub fn reset(&self) {
@@ -157,22 +158,22 @@ impl GValue {
     }
 
     // FIXME shouldn't be like that
-    pub fn set_enum(&self, v_enum: gtk::GType) {
+    pub fn set_enum(&self, v_enum: glib_ffi::GType) {
         unsafe { ffi::g_value_set_enum(self.pointer, v_enum) }
     }
 
     // FIXME shouldn't be like that
-    pub fn get_enum(&self) -> gtk::GType {
+    pub fn get_enum(&self) -> glib_ffi::GType {
         unsafe { ffi::g_value_get_enum(self.pointer) }
     }
 
     // FIXME shouldn't be like that
-    pub fn set_flags(&self, v_flags: gtk::GType) {
+    pub fn set_flags(&self, v_flags: glib_ffi::GType) {
         unsafe { ffi::g_value_set_flags(self.pointer, v_flags) }
     }
 
     // FIXME shouldn't be like that
-    pub fn get_flags(&self) -> gtk::GType {
+    pub fn get_flags(&self) -> glib_ffi::GType {
         unsafe { ffi::g_value_get_flags(self.pointer) }
     }
 
@@ -275,12 +276,12 @@ impl GValue {
     }*/
 
     // FIXME shouldn't be like that
-    fn set_gtype(&self, v_gtype: gtk::GType) {
+    fn set_gtype(&self, v_gtype: glib_ffi::GType) {
         unsafe { ffi::g_value_set_gtype(self.pointer, v_gtype) }
     }
 
     // FIXME shouldn't be like that
-    fn get_gtype(&self) -> gtk::GType {
+    fn get_gtype(&self) -> glib_ffi::GType {
         unsafe { ffi::g_value_get_gtype(self.pointer) }
     }
 
@@ -292,11 +293,11 @@ impl GValue {
         GValuePrivate::get(self)
     }
 
-    pub fn compatible(src_type: gtk::GType, dest_type: gtk::GType) -> bool {
+    pub fn compatible(src_type: glib_ffi::GType, dest_type: glib_ffi::GType) -> bool {
         unsafe { to_bool(ffi::g_value_type_compatible(src_type, dest_type)) }
     }
 
-    pub fn transformable(src_type: gtk::GType, dest_type: gtk::GType) -> bool {
+    pub fn transformable(src_type: glib_ffi::GType, dest_type: glib_ffi::GType) -> bool {
         unsafe { to_bool(ffi::g_value_type_transformable(src_type, dest_type)) }
     }
 
@@ -414,8 +415,8 @@ impl GValuePrivate for f64 {
     }
 }
 
-impl GValuePrivate for gtk::GType {
-    fn get(gvalue: &GValue) -> gtk::GType {
+impl GValuePrivate for glib_ffi::GType {
+    fn get(gvalue: &GValue) -> glib_ffi::GType {
         gvalue.get_gtype()
     }
 
@@ -443,7 +444,7 @@ impl GValuePublic for i64 {}
 //impl GValuePublic for u64 {}
 impl GValuePublic for i8 {}
 impl GValuePublic for u8 {}
-impl GValuePublic for gtk::GType {}
+impl GValuePublic for glib_ffi::GType {}
 impl GValuePublic for String {}
 impl GValuePublic for f32 {}
 impl GValuePublic for f64 {}
