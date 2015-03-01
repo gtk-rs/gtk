@@ -17,10 +17,11 @@
 
 // https://developer.gnome.org/gobject/unstable/gobject-Type-Information.html#GType
 pub mod g_type {
-    use gtk::{self, ffi};
+    use gtk::ffi;
     use std::ffi::CString;
+    use glib_ffi::{self};
 
-    pub fn name(_type: gtk::GType) -> Option<String> {
+    pub fn name(_type: glib_ffi::GType) -> Option<String> {
         let tmp_pointer = unsafe { ffi::g_type_name(_type) };
 
         if tmp_pointer.is_null() {
@@ -30,7 +31,7 @@ pub mod g_type {
         }
     }
 
-    pub fn from_name(name: &str) -> gtk::GType {
+    pub fn from_name(name: &str) -> glib_ffi::GType {
         unsafe {
             let c_str = CString::from_slice(name.as_bytes());
 
@@ -38,68 +39,68 @@ pub mod g_type {
         }
     }
 
-    pub fn parent(_type: gtk::GType) -> gtk::GType {
+    pub fn parent(_type: glib_ffi::GType) -> glib_ffi::GType {
         unsafe { ffi::g_type_parent(_type) }
     }
 
-    pub fn depth(_type: gtk::GType) -> u32 {
+    pub fn depth(_type: glib_ffi::GType) -> u32 {
         unsafe { ffi::g_type_depth(_type) }
     }
 
-    pub fn next_base(leaf_type: gtk::GType, root_type: gtk::GType) -> gtk::GType {
+    pub fn next_base(leaf_type: glib_ffi::GType, root_type: glib_ffi::GType) -> glib_ffi::GType {
         unsafe { ffi::g_type_next_base(leaf_type, root_type) }
     }
 
-    pub fn is_a(_type: gtk::GType, is_a_type: gtk::GType) -> bool {
+    pub fn is_a(_type: glib_ffi::GType, is_a_type: glib_ffi::GType) -> bool {
         unsafe { to_bool(ffi::g_type_is_a(_type, is_a_type)) }
     }
 
-    pub fn children(_type: gtk::GType) -> Vec<gtk::GType> {
+    pub fn children(_type: glib_ffi::GType) -> Vec<glib_ffi::GType> {
         let mut n_children = 0u32;
         let tmp_vec = unsafe { ffi::g_type_children(_type, &mut n_children) };
 
         if n_children == 0u32 || tmp_vec.is_null() {
             Vec::new()
         } else {
-            unsafe { Vec::from_raw_buf(tmp_vec as *const gtk::GType, n_children as usize) }
+            unsafe { Vec::from_raw_buf(tmp_vec as *const glib_ffi::GType, n_children as usize) }
         }
     }
 
-    pub fn interfaces(_type: gtk::GType) -> Vec<gtk::GType> {
+    pub fn interfaces(_type: glib_ffi::GType) -> Vec<glib_ffi::GType> {
         let mut n_interfaces = 0u32;
         let tmp_vec = unsafe { ffi::g_type_interfaces(_type, &mut n_interfaces) };
 
         if n_interfaces == 0u32 || tmp_vec.is_null() {
             Vec::new()
         } else {
-            unsafe { Vec::from_raw_buf(tmp_vec as *const gtk::GType, n_interfaces as usize) }
+            unsafe { Vec::from_raw_buf(tmp_vec as *const glib_ffi::GType, n_interfaces as usize) }
         }
     }
 
-    pub fn interface_prerequisites(interface_type: gtk::GType) -> Vec<gtk::GType> {
+    pub fn interface_prerequisites(interface_type: glib_ffi::GType) -> Vec<glib_ffi::GType> {
         let mut n_prerequisites = 0u32;
         let tmp_vec = unsafe { ffi::g_type_interface_prerequisites(interface_type, &mut n_prerequisites) };
 
         if n_prerequisites == 0u32 || tmp_vec.is_null() {
             Vec::new()
         } else {
-            unsafe { Vec::from_raw_buf(tmp_vec as *const gtk::GType, n_prerequisites as usize) }
+            unsafe { Vec::from_raw_buf(tmp_vec as *const glib_ffi::GType, n_prerequisites as usize) }
         }
     }
 
-    pub fn interface_add_prerequisite(interface_type: gtk::GType, prerequisite_type: gtk::GType) {
+    pub fn interface_add_prerequisite(interface_type: glib_ffi::GType, prerequisite_type: glib_ffi::GType) {
         unsafe { ffi::g_type_interface_add_prerequisite(interface_type, prerequisite_type) }
     }
 
-    pub fn fundamental_next() -> gtk::GType {
+    pub fn fundamental_next() -> glib_ffi::GType {
         unsafe { ffi::g_type_fundamental_next() }
     }
 
-    pub fn fundamental(type_id: gtk::GType) -> gtk::GType {
+    pub fn fundamental(type_id: glib_ffi::GType) -> glib_ffi::GType {
         unsafe { ffi::g_type_fundamental(type_id) }
     }
 
-    pub fn ensure(_type: gtk::GType) {
+    pub fn ensure(_type: glib_ffi::GType) {
         unsafe { ffi::g_type_ensure(_type) }
     }
 

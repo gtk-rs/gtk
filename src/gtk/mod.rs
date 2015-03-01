@@ -289,7 +289,7 @@ pub use gtk_ffi::enums::CellRendererState;
 pub use gtk_ffi::enums::TreeModelFlags;
 pub use gtk_ffi::enums::IconViewDropPosition;
 pub use gtk_ffi::enums::SensitivityType;
-pub use gtk_ffi::GType;
+pub use gtk_ffi::enums::GType;
 pub use gtk_ffi::enums::TextSearchFlags;
 pub use gtk_ffi::enums::PlacesOpenFlags;
 pub use gtk_ffi::enums::ToolPaletteDragTargets;

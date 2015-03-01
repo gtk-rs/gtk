@@ -65,30 +65,30 @@ fn main() {
     window.set_window_position(gtk::WindowPosition::Center);
     window.add(&frame);
 
-    Connect::connect(&button, Clicked::new(&mut |&:|{
+    Connect::connect(&button, Clicked::new(&mut ||{
         //entry.set_text("Clicked!".to_string());
         let dialog = gtk::MessageDialog::new_with_markup(None, gtk::DialogFlags::Modal, gtk::MessageType::Info,
             gtk::ButtonsType::OkCancel, "This is a trap !").unwrap();
 
         dialog.run();
     }));
-    Connect::connect(&button_font, Clicked::new(&mut |&:|{
+    Connect::connect(&button_font, Clicked::new(&mut ||{
         let dialog = gtk::FontChooserDialog::new("Font chooser test", None).unwrap();
 
         dialog.run();
     }));
-    Connect::connect(&button_recent, Clicked::new(&mut |&:|{
+    Connect::connect(&button_recent, Clicked::new(&mut ||{
         let dialog = gtk::RecentChooserDialog::new("Recent chooser test", None).unwrap();
 
         dialog.run();
     }));
-    Connect::connect(&file_button, Clicked::new(&mut |&:|{
+    Connect::connect(&file_button, Clicked::new(&mut ||{
         //entry.set_text("Clicked!".to_string());
         let dialog2 = gtk::FileChooserDialog::new("Choose a file", None, gtk::FileChooserAction::Open).unwrap();
 
         dialog2.run();
     }));
-    Connect::connect(&app_button, Clicked::new(&mut |&:|{
+    Connect::connect(&app_button, Clicked::new(&mut ||{
         //entry.set_text("Clicked!".to_string());
         let dialog = gtk::AppChooserDialog::new_for_content_type(None, gtk::DialogFlags::Modal, "sh").unwrap();
 
@@ -108,7 +108,7 @@ fn main() {
         false
     }));
 
-    Connect::connect(&window, DeleteEvent::new(&mut |&mut: _|{
+    Connect::connect(&window, DeleteEvent::new(&mut |_|{
         gtk::main_quit();
         true
     }));
