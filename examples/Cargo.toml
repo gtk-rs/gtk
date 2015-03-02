@@ -1,0 +1,26 @@
+[package]
+name = "rgtk-examples"
+version = "0.0.1"
+authors = []
+
+[dependencies.rgtk]
+path = "../"
+features = ["GTK_3_6"]
+
+[[bin]]
+name = "basic"
+
+[[bin]]
+name = "cairotest"
+
+[[bin]]
+name = "gtktest"
+
+[[bin]]
+name = "sync_widgets"
+
+[[bin]]
+name = "text_viewer"
+
+[[bin]]
+name = "treeview"
