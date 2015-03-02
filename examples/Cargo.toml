@@ -4,8 +4,14 @@ version = "0.0.1"
 authors = []
 
 [dependencies.rgtk]
-path = "../"
-features = ["GTK_3_6"]
+path = ".."
+
+[features]
+GTK_3_14 = ["rgtk/GTK_3_14"]
+GTK_3_12 = ["rgtk/GTK_3_12"]
+GTK_3_10 = ["rgtk/GTK_3_10"]
+GTK_3_8 = ["rgtk/GTK_3_8"]
+GTK_3_6 = ["rgtk/GTK_3_6"]
 
 [[bin]]
 name = "basic"
