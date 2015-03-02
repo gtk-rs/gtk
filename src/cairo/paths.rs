@@ -15,7 +15,8 @@
 
 use std::mem::transmute;
 use std::iter::Iterator;
-use cairo::c_vec::CVec;
+use std::ptr::Unique;
+use c_vec::CVec;
 use cairo::enums::PathDataType;
 use cairo::ffi::{
     cairo_path_t,
@@ -47,7 +48,7 @@ impl Path {
         unsafe {
             let ptr: *mut cairo_path_t = self.get_ptr();
             let length = (*ptr).num_data as usize;
-            let data_ptr = (*ptr).data;
+            let data_ptr = Unique::new((*ptr).data);
 
             PathSegments {
                 data: CVec::new(data_ptr, length),
@@ -74,13 +75,13 @@ pub enum PathSegment {
     ClosePath
 }
 
-pub struct PathSegments<'a> {
-    data: CVec<'a, (f64, f64)>,
+pub struct PathSegments {
+    data: CVec<(f64, f64)>,
     i: usize,
     num_data: usize
 }
 
-impl<'a> Iterator for PathSegments<'a> {
+impl Iterator for PathSegments {
     type Item = PathSegment;
 
     fn next(&mut self) -> Option<PathSegment> {
