@@ -11,14 +11,9 @@ install:
   - sudo apt-get install gtk+3.0 libgtk-3-dev
 script:
   - rustc --version
-  - GTK_VERSION=GTK_3_6; export GTK_VERSION
-  - cargo build --features GTK_3_6
   - cd examples
-  - cd basic && cargo build
-  - cd ../cairotest && cargo build
-  - cd ../sync_widgets && cargo build
-  - cd ../text_viewer && cargo build
-  - cd ../..
+  - cargo build --features GTK_3_6
+  - cd ..
   - cargo doc
 after_script:
   - curl http://www.rust-ci.org/artifacts/put?t=$RUSTCI_TOKEN | sh
