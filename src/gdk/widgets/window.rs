@@ -16,20 +16,21 @@
 //! Windows — Onscreen display areas in the target window system
 
 use gdk::{self, ffi};
-use libc::{c_int, c_char};
+use libc::{c_int};
 use std::ffi::CString;
-use glib::{to_bool, to_gboolean};
+use std::ptr;
+use glib::translate::{StackBox, ToGlib, ToGlibPtr, ToTemp, from_glib};
 
 /// Attributes to use for a newly-created window.
 pub struct WindowAttr {
     /// title of the window (for toplevel windows)
-    pub title: String,
+    pub title: Option<String>,
     /// event mask (see [gdk_window_set_events()](https://developer.gnome.org/gdk3/3.14/gdk3-Windows.html#gdk-window-set-events))
     pub event_mask: i32,
     /// X coordinate relative to parent window
-    pub x: i32,
+    pub x: Option<i32>,
     /// Y coordinate relative to parent window
-    pub y: i32,
+    pub y: Option<i32>,
     /// width of window
     pub width: i32,
     /// height of window
@@ -37,44 +38,57 @@ pub struct WindowAttr {
     /// GDK_INPUT_OUTPUT (normal window) or GDK_INPUT_ONLY (invisible window that receives events)
     pub wclass: gdk::WindowWindowClass,
     /// GdkVisual for window
-    pub visual: gdk::Visual,
+    pub visual: Option<gdk::Visual>,
     /// type of window
     pub window_type: gdk::WindowType,
     /// cursor for the window
-    pub cursor: gdk::Cursor,
-    /// don’t use
-    pub wmclass_name: String,
-    /// don’t use
-    pub wmclass_class: String,
+    pub cursor: Option<gdk::Cursor>,
     /// TRUE to bypass the window manager
     pub override_redirect: bool,
     /// a hint of the function of the window
-    pub type_hint: gdk::WindowTypeHint
+    pub type_hint: Option<gdk::WindowTypeHint>,
 }
 
 impl WindowAttr {
-    #[doc(hidden)]
-    pub fn to_c_type(&self) -> ffi::C_GdkWindowAttr {
-        let c_title = CString::from_slice(self.title.as_bytes());
-        let c_wmclass_name = CString::from_slice(self.wmclass_name.as_bytes());
-        let c_wmclass_class = CString::from_slice(self.wmclass_class.as_bytes());
+    fn get_mask(&self) -> i32 {
+        let mut mask = 0;
+        if self.title.is_some() { mask |= ffi::GDK_WA_TITLE; }
+        if self.x.is_some() { mask |= ffi::GDK_WA_X; }
+        if self.y.is_some() { mask |= ffi::GDK_WA_Y; }
+        if self.cursor.is_some() { mask |= ffi::GDK_WA_CURSOR; }
+        if self.visual.is_some() { mask |= ffi::GDK_WA_VISUAL; }
+        if self.override_redirect { mask |= ffi::GDK_WA_NOREDIR; }
+        if self.type_hint.is_some() { mask |= ffi::GDK_WA_TYPE_HINT; }
+        mask
+    }
+}
 
-        ffi::C_GdkWindowAttr {
-            title: c_title.as_ptr() as *mut c_char,
+type WindowAttrBox = StackBox<ffi::C_GdkWindowAttr, Option<CString>>;
+
+impl <'a> ToTemp for &'a WindowAttr {
+    type Temp = WindowAttrBox;
+
+    fn to_temp_for_borrow(self) -> WindowAttrBox {
+        let mut title = self.title.to_temp_for_borrow();
+
+        let attrs = ffi::C_GdkWindowAttr {
+            title: title.to_glib(),
             event_mask: self.event_mask,
-            x: self.x,
-            y: self.y,
+            x: self.x.unwrap_or(0),
+            y: self.y.unwrap_or(0),
             width: self.width,
             height: self.height,
             wclass: self.wclass,
-            visual: self.visual.unwrap_pointer(),
+            visual: match self.visual { Some(s) => s.unwrap_pointer(), None => ptr::null_mut() },
             window_type: self.window_type,
-            cursor: self.cursor.unwrap_pointer(),
-            wmclass_name: c_wmclass_name.as_ptr() as *mut c_char,
-            wmclass_class: c_wmclass_class.as_ptr() as *mut c_char,
-            override_redirect: to_gboolean(self.override_redirect),
-            type_hint: self.type_hint
-        }
+            cursor: match self.cursor { Some(s) => s.unwrap_pointer(), None => ptr::null_mut() },
+            wmclass_name: ptr::null(),
+            wmclass_class: ptr::null(),
+            override_redirect: self.override_redirect.to_glib(),
+            type_hint: self.type_hint.unwrap_or(gdk::WindowTypeHint::Normal),
+        };
+
+        StackBox(attrs, title)
     }
 }
 
@@ -84,13 +98,13 @@ pub struct Window {
 }
 
 impl Window {
-    pub fn new(parent: Option<&Window>, attributes: &gdk::WindowAttr, attributes_mask: i32) -> Option<Window> {
+    pub fn new(parent: Option<&Window>, attributes: &WindowAttr) -> Option<Window> {
         let t_parent = match parent {
             Some(s) => s.unwrap_pointer(),
             None => ::std::ptr::null_mut()
         };
-        let mut c_attributes = attributes.to_c_type();
-        let tmp = unsafe { ffi::gdk_window_new(t_parent, &mut c_attributes, attributes_mask) };
+        let mut attrs = attributes.to_temp_for_borrow();
+        let tmp = unsafe { ffi::gdk_window_new(t_parent, attrs.to_glib(), attributes.get_mask()) };
 
         if tmp.is_null() {
             None
@@ -148,23 +162,23 @@ impl Window {
     }
 
     pub fn is_destroyed(&self) -> bool {
-        unsafe { to_bool(ffi::gdk_window_is_destroyed(self.pointer)) }
+        unsafe { from_glib(ffi::gdk_window_is_destroyed(self.pointer)) }
     }
 
     pub fn is_visible(&self) -> bool {
-        unsafe { to_bool(ffi::gdk_window_is_visible(self.pointer)) }
+        unsafe { from_glib(ffi::gdk_window_is_visible(self.pointer)) }
     }
 
     pub fn is_viewable(&self) -> bool {
-        unsafe { to_bool(ffi::gdk_window_is_viewable(self.pointer)) }
+        unsafe { from_glib(ffi::gdk_window_is_viewable(self.pointer)) }
     }
 
     pub fn is_input_only(&self) -> bool {
-        unsafe { to_bool(ffi::gdk_window_is_input_only(self.pointer)) }
+        unsafe { from_glib(ffi::gdk_window_is_input_only(self.pointer)) }
     }
 
     pub fn is_shaped(&self) -> bool {
-        unsafe { to_bool(ffi::gdk_window_is_shaped(self.pointer)) }
+        unsafe { from_glib(ffi::gdk_window_is_shaped(self.pointer)) }
     }
 
     pub fn get_state(&self) -> gdk::WindowState {
@@ -216,11 +230,11 @@ impl Window {
     }
 
     pub fn set_keep_above(&self, setting: bool) {
-        unsafe { ffi::gdk_window_set_keep_above(self.pointer, to_gboolean(setting)) }
+        unsafe { ffi::gdk_window_set_keep_above(self.pointer, setting.to_glib()) }
     }
 
     pub fn set_keep_below(&self, setting: bool) {
-        unsafe { ffi::gdk_window_set_keep_below(self.pointer, to_gboolean(setting)) }
+        unsafe { ffi::gdk_window_set_keep_below(self.pointer, setting.to_glib()) }
     }
 
     pub fn set_opacity(&self, opacity: f64) {
@@ -228,11 +242,11 @@ impl Window {
     }
 
     pub fn set_composited(&self, composited: bool) {
-        unsafe { ffi::gdk_window_set_composited(self.pointer, to_gboolean(composited)) }
+        unsafe { ffi::gdk_window_set_composited(self.pointer, composited.to_glib()) }
     }
 
     pub fn get_composited(&self) -> bool {
-        unsafe { to_bool(ffi::gdk_window_get_composited(self.pointer)) }
+        unsafe { from_glib(ffi::gdk_window_get_composited(self.pointer)) }
     }
 
     pub fn _move(&self, x: i32, y: i32) {
@@ -252,11 +266,11 @@ impl Window {
     }
 
     pub fn has_native(&self) -> bool {
-        unsafe { to_bool(ffi::gdk_window_has_native(self.pointer)) }
+        unsafe { from_glib(ffi::gdk_window_has_native(self.pointer)) }
     }
 
     pub fn ensure_native(&self) -> bool {
-        unsafe { to_bool(ffi::gdk_window_ensure_native(self.pointer)) }
+        unsafe { from_glib(ffi::gdk_window_ensure_native(self.pointer)) }
     }
 
     pub fn reparent(&self, new_parent: &Window, x: i32, y: i32) {
@@ -272,7 +286,7 @@ impl Window {
     }
 
     pub fn restack(&self, sibling: &Window, above: bool) {
-        unsafe { ffi::gdk_window_restack(self.pointer, sibling.pointer, to_gboolean(above)) }
+        unsafe { ffi::gdk_window_restack(self.pointer, sibling.pointer, above.to_glib()) }
     }
 
     pub fn focus(&self, timestamp: u32) {
@@ -333,7 +347,7 @@ impl Window {
     }
 
     pub fn invalidate_rect(&self, rect: &ffi::C_GdkRectangle, invalidate_children: bool) {
-        unsafe { ffi::gdk_window_invalidate_rect(self.pointer, rect, to_gboolean(invalidate_children)) }
+        unsafe { ffi::gdk_window_invalidate_rect(self.pointer, rect, invalidate_children.to_glib()) }
     }
 
     pub fn freeze_updates(&self) {
@@ -349,11 +363,11 @@ impl Window {
     }
 
     pub fn process_updates(&self, update_children: bool) {
-        unsafe { ffi::gdk_window_process_updates(self.pointer, to_gboolean(update_children)) }
+        unsafe { ffi::gdk_window_process_updates(self.pointer, update_children.to_glib()) }
     }
 
     pub fn set_debug_updates(setting: bool) {
-        unsafe { ffi::gdk_window_set_debug_updates(to_gboolean(setting)) }
+        unsafe { ffi::gdk_window_set_debug_updates(setting.to_glib()) }
     }
 
     pub fn get_frame_clock(&self) -> Option<gdk::FrameClock> {
@@ -371,23 +385,23 @@ impl Window {
     }
 
     pub fn set_override_redirect(&self, override_redirect: bool) {
-        unsafe { ffi::gdk_window_set_override_redirect(self.pointer, to_gboolean(override_redirect)) }
+        unsafe { ffi::gdk_window_set_override_redirect(self.pointer, override_redirect.to_glib()) }
     }
 
     pub fn set_accept_focus(&self, accept_focus: bool) {
-        unsafe { ffi::gdk_window_set_accept_focus(self.pointer, to_gboolean(accept_focus)) }
+        unsafe { ffi::gdk_window_set_accept_focus(self.pointer, accept_focus.to_glib()) }
     }
 
     pub fn get_accept_focus(&self) -> bool {
-        unsafe { to_bool(ffi::gdk_window_get_accept_focus(self.pointer)) }
+        unsafe { from_glib(ffi::gdk_window_get_accept_focus(self.pointer)) }
     }
 
     pub fn set_focus_on_map(&self, focus_on_map: bool) {
-        unsafe { ffi::gdk_window_set_focus_on_map(self.pointer, to_gboolean(focus_on_map)) }
+        unsafe { ffi::gdk_window_set_focus_on_map(self.pointer, focus_on_map.to_glib()) }
     }
 
     pub fn get_focus_on_map(&self) -> bool {
-        unsafe { to_bool(ffi::gdk_window_get_focus_on_map(self.pointer)) }
+        unsafe { from_glib(ffi::gdk_window_get_focus_on_map(self.pointer)) }
     }
 
     pub fn set_child_shapes(&self) {
@@ -407,14 +421,13 @@ impl Window {
     }
 
     pub fn set_static_gravities(&self, use_static: bool) -> bool {
-        unsafe { to_bool(ffi::gdk_window_set_static_gravities(self.pointer, to_gboolean(use_static))) }
+        unsafe { from_glib(ffi::gdk_window_set_static_gravities(self.pointer, use_static.to_glib())) }
     }
 
     pub fn set_title(&self, title: &str) {
         unsafe {
-            let c_str = CString::from_slice(title.as_bytes());
-
-            ffi::gdk_window_set_title(self.pointer, c_str.as_ptr())
+            let mut title = title.to_temp_for_borrow();
+            ffi::gdk_window_set_title(self.pointer, title.to_glib())
         }
     }
 
@@ -463,11 +476,11 @@ impl Window {
     }
 
     pub fn set_modal_hint(&self, modal: bool) {
-        unsafe { ffi::gdk_window_set_modal_hint(self.pointer, to_gboolean(modal)) }
+        unsafe { ffi::gdk_window_set_modal_hint(self.pointer, modal.to_glib()) }
     }
 
     pub fn get_modal_hint(&self) -> bool {
-        unsafe { to_bool(ffi::gdk_window_get_modal_hint(self.pointer)) }
+        unsafe { from_glib(ffi::gdk_window_get_modal_hint(self.pointer)) }
     }
 
     pub fn set_type_hint(&self, hint: gdk::WindowTypeHint) {
@@ -484,15 +497,15 @@ impl Window {
     }
 
     pub fn set_skip_taskbar_hint(&self, skips_taskbar: bool) {
-        unsafe { ffi::gdk_window_set_skip_taskbar_hint(self.pointer, to_gboolean(skips_taskbar)) }
+        unsafe { ffi::gdk_window_set_skip_taskbar_hint(self.pointer, skips_taskbar.to_glib()) }
     }
 
     pub fn set_skip_pager_hint(&self, skips_pager: bool) {
-        unsafe { ffi::gdk_window_set_skip_pager_hint(self.pointer, to_gboolean(skips_pager)) }
+        unsafe { ffi::gdk_window_set_skip_pager_hint(self.pointer, skips_pager.to_glib()) }
     }
 
     pub fn set_urgency_hint(&self, urgent: bool) {
-        unsafe { ffi::gdk_window_set_urgency_hint(self.pointer, to_gboolean(urgent)) }
+        unsafe { ffi::gdk_window_set_urgency_hint(self.pointer, urgent.to_glib()) }
     }
 
     pub fn get_position(&self, x: &mut i32, y: &mut i32) {
@@ -576,9 +589,8 @@ impl Window {
 
     pub fn set_icon_name(&self, name: &str) {
         unsafe {
-            let c_str = CString::from_slice(name.as_bytes());
-
-            ffi::gdk_window_set_icon_name(self.pointer, c_str.as_ptr())
+            let mut name = name.to_temp_for_borrow();
+            ffi::gdk_window_set_icon_name(self.pointer, name.to_glib())
         }
     }
 
@@ -588,17 +600,15 @@ impl Window {
 
     pub fn set_role(&self, role: &str) {
         unsafe {
-            let c_str = CString::from_slice(role.as_bytes());
-
-            ffi::gdk_window_set_role(self.pointer, c_str.as_ptr())
+            let mut role = role.to_temp_for_borrow();
+            ffi::gdk_window_set_role(self.pointer, role.to_glib())
         }
     }
 
     pub fn set_startup_id(&self, startup_id: &str) {
         unsafe {
-            let c_str = CString::from_slice(startup_id.as_bytes());
-
-            ffi::gdk_window_set_startup_id(self.pointer, c_str.as_ptr())
+            let mut startup_id = startup_id.to_temp_for_borrow();
+            ffi::gdk_window_set_startup_id(self.pointer, startup_id.to_glib())
         }
     }
 
@@ -623,7 +633,7 @@ impl Window {
     }
 
     pub fn get_decorations(&self, decorations: &mut gdk::WMDecoration) -> bool {
-        unsafe { to_bool(ffi::gdk_window_get_decorations(self.pointer, decorations)) }
+        unsafe { from_glib(ffi::gdk_window_get_decorations(self.pointer, decorations)) }
     }
 
     pub fn set_functions(&self, functions: gdk::WMFunction) {
@@ -643,11 +653,11 @@ impl Window {
     }
 
     pub fn get_support_multidevice(&self) -> bool {
-        unsafe { to_bool(ffi::gdk_window_get_support_multidevice(self.pointer)) }
+        unsafe { from_glib(ffi::gdk_window_get_support_multidevice(self.pointer)) }
     }
 
     pub fn set_support_multidevice(&self, support_multidevice: bool) {
-        unsafe { ffi::gdk_window_set_support_multidevice(self.pointer, to_gboolean(support_multidevice)) }
+        unsafe { ffi::gdk_window_set_support_multidevice(self.pointer, support_multidevice.to_glib()) }
     }
 
     pub fn get_device_cursor(&self, device: &gdk::Device) -> Option<gdk::Cursor> {
@@ -681,11 +691,11 @@ impl Window {
     }
 
     pub fn get_event_compression(&self) -> bool {
-        unsafe { to_bool(ffi::gdk_window_get_event_compression(self.pointer)) }
+        unsafe { from_glib(ffi::gdk_window_get_event_compression(self.pointer)) }
     }
 
     pub fn set_event_compression(&self, event_compression: bool) {
-        unsafe { ffi::gdk_window_set_event_compression(self.pointer, to_gboolean(event_compression)) }
+        unsafe { ffi::gdk_window_set_event_compression(self.pointer, event_compression.to_glib()) }
     }
 
     pub fn offscreen_window_set_embedder(&self, embedder: &Window) {

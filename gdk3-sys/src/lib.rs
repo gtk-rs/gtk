@@ -131,7 +131,7 @@ pub struct C_GdkFrameTimings;
 #[repr(C)]
 #[derive(Copy)]
 pub struct C_GdkWindowAttr {
-    pub title: *mut c_char,
+    pub title: *const c_char,
     pub event_mask: c_int,
     pub x: c_int,
     pub y: c_int,
@@ -141,14 +141,32 @@ pub struct C_GdkWindowAttr {
     pub visual: *mut C_GdkVisual,
     pub window_type: enums::WindowType,
     pub cursor: *mut C_GdkCursor,
-    pub wmclass_name: *mut c_char,
-    pub wmclass_class: *mut c_char,
+    pub wmclass_name: *const c_char,
+    pub wmclass_class: *const c_char,
     pub override_redirect: Gboolean,
     pub type_hint: enums::WindowTypeHint
 }
 #[repr(C)]
 #[derive(Copy)]
 pub struct C_GdkDragContext;
+
+// GdkWindowAttributesTypes
+/// Honor the title field
+pub const GDK_WA_TITLE: i32 = 1 << 1;
+/// Honor the X coordinate field
+pub const GDK_WA_X: i32 = 1 << 2;
+/// Honor the Y coordinate field
+pub const GDK_WA_Y: i32 = 1 << 3;
+/// Honor the cursor field
+pub const GDK_WA_CURSOR: i32 = 1 << 4;
+/// Honor the visual field
+pub const GDK_WA_VISUAL: i32 = 1 << 5;
+// Deprecated
+//const GDK_WA_WMCLASS: i32 = 1 << 6;
+/// Honor the override_redirect field
+pub const GDK_WA_NOREDIR: i32 = 1 << 7;
+/// Honor the type_hint field
+pub const GDK_WA_TYPE_HINT: i32 = 1 << 8;
 
 extern "C" {
     //=========================================================================
