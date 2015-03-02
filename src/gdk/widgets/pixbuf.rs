@@ -16,7 +16,8 @@
 /// The GdkPixbuf structure contains information that describes an image in memory.
 
 use gdk::{self, ffi};
-use gdk::c_vec::CVec;
+use c_vec::CVec;
+use std::ptr::Unique;
 use std::ffi::CString;
 
 #[repr(C)]
@@ -45,14 +46,14 @@ impl Pixbuf {
         unsafe { ffi::gdk_pixbuf_get_bits_per_sample(self.pointer as *const ffi::C_GdkPixbuf) }
     }
 
-    pub fn get_pixels_with_length(&self, length: &mut u32) -> CVec<u8> {
+    pub fn get_pixels_with_length(&self, length: &mut u32) -> Option<CVec<u8>> {
         let tmp = unsafe { ffi::gdk_pixbuf_get_pixels_with_length(self.pointer as *const ffi::C_GdkPixbuf, length) };
 
         unsafe {
             if tmp.is_null() {
-                CVec::new(1 as *mut u8, 0)
+                None
             } else {
-                CVec::new(tmp, *length as usize)
+                Some(CVec::new(Unique::new(tmp), *length as usize))
             }
         }
     }
@@ -94,7 +95,11 @@ impl Pixbuf {
         let n_channels = self.get_n_channels();
         let rowstride = self.get_rowstride();
         let mut length = 0u32;
-        let mut pixels = self.get_pixels_with_length(&mut length);
+        let pixels = self.get_pixels_with_length(&mut length);
+        if pixels.is_none() {
+            return;
+        }
+        let mut pixels = pixels.unwrap();
         let s_pixels = pixels.as_mut_slice();
         let pos = (y * rowstride + x * n_channels) as usize;
 

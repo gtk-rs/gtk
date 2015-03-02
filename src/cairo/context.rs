@@ -14,7 +14,8 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use std::ffi::CString;
-use cairo::c_vec::CVec;
+use c_vec::CVec;
+use std::ptr::Unique;
 use std::mem::transmute;
 use libc::{c_double, c_int};
 use cairo::paths::Path;
@@ -39,7 +40,7 @@ pub use cairo::ffi::Rectangle;
 
 pub struct RectangleVec {
     ptr: *mut cairo_rectangle_list_t,
-    pub rectangles: CVec<'static, Rectangle>,
+    pub rectangles: CVec<Rectangle>,
 }
 
 impl Drop for RectangleVec {
@@ -338,7 +339,7 @@ impl Context {
 
             RectangleVec {
                 ptr: rectangle_list,
-                rectangles: CVec::new((*rectangle_list).rectangles,
+                rectangles: CVec::new(Unique::new((*rectangle_list).rectangles),
                                       (*rectangle_list).num_rectangles as usize),
             }
         }

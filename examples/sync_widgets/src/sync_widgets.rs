@@ -21,13 +21,13 @@ fn main() {
     let mut spin_button = gtk::SpinButton::new_with_range(0.0, 130.0, 1.0).unwrap();
     let slider = gtk::Scale::new_with_range(gtk::Orientation::Horizontal, 0.0, 130.0, 1.0).unwrap();
 
-    Connect::connect(&spin_button, ValueChanged::new(&mut |&:| {
+    Connect::connect(&spin_button, ValueChanged::new(&mut || {
         let mut adjustment = slider.get_adjustment();
 
         adjustment.set_value(spin_button.get_value());
     }));
 
-    Connect::connect(&slider, ValueChanged::new(&mut |&:| {
+    Connect::connect(&slider, ValueChanged::new(&mut || {
         let adjustment = slider.get_adjustment();
 
         spin_button.set_value(adjustment.get_value());
