@@ -5,7 +5,6 @@
 #![crate_type = "bin"]
 
 #![feature(collections)]
-#![feature(core)]
 
 extern crate rgtk;
 
@@ -54,7 +53,7 @@ fn main() {
     left_tree.set_headers_visible(false);
     append_text_column(&mut left_tree);
 
-    for _ in range(0is, 10is) {
+    for _ in 0..10 {
         let mut iter = gtk::TreeIter::new().unwrap();
         left_store.append(&mut iter);
         left_store.set_string(&iter, 0, "I'm in a list");
@@ -71,7 +70,7 @@ fn main() {
     right_tree.set_headers_visible(false);
     append_text_column(&mut right_tree);
 
-    for _ in range(0is, 10is) {
+    for _ in 0..10 {
         let mut iter = gtk::TreeIter::new().unwrap();
 
         right_store.append(&mut iter, None);
