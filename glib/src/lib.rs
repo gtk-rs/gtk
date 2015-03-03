@@ -17,6 +17,7 @@
 Bindings and wrappers for __GLib__
 */
 
+#![feature(core)]
 #![feature(unsafe_destructor)]
 #![feature(std_misc)]
 
