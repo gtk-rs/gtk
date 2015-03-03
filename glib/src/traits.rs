@@ -13,10 +13,10 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::ffi::CString;
 use std::marker::PhantomFn;
 use ffi;
 use std::any::Any;
+use translate::{ToGlibPtr, ToTmp};
 
 pub trait FFIGObject {
     fn unwrap_gobject(&self) -> *mut ffi::C_GObject;
@@ -62,16 +62,14 @@ pub trait Connect<'a, T: Signal<'a>>: FFIGObject + PhantomFn<&'a T> {
         let signal = signal as Box<Signal<'a>>;
 
         unsafe {
-            let signal_name     = signal.get_signal_name().to_string();
             let trampoline      = signal.get_trampoline();
-
+            let mut tmp_signal_name = signal.get_signal_name().replace("_", "-")
+                                        .to_tmp_for_borrow();
             let user_data_ptr   = transmute(Box::new(signal));
-
-            let c_str = CString::from_slice(signal_name.replace("_", "-").as_bytes());
             
             ffi::glue_signal_connect(
                 self.unwrap_gobject(),
-                c_str.as_ptr(),
+                tmp_signal_name.to_glib(),
                 Some(trampoline),
                 user_data_ptr
             );
