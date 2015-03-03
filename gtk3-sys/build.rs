@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-#![feature(env, path, process, collections)]
+#![feature(path, process, collections)]
 
 extern crate gcc;
 extern crate "pkg-config" as pkg_config;
@@ -53,6 +53,18 @@ fn main() {
         gcc_conf.include(&path);
     }
     gcc_conf.file("src/gtk_glue.c");
+
+    // pass the GTK feature flags
+    for (key, _) in env::vars() {
+        if key.starts_with("CARGO_FEATURE_") {
+            let feature = key.trim_left_matches("CARGO_FEATURE_");
+            if feature.starts_with("GTK_") {
+                let mut flag = String::from_str("-D");
+                flag.push_str(feature);
+                gcc_conf.flag(&flag);
+            }
+        }
+    }
 
     // build library
     gcc_conf.compile("librgtk_glue.a");
