@@ -126,7 +126,12 @@ pub use self::widgets::{
     AppLaunchContext
 };
 
+pub use self::keys::{
+    keyval_name
+};
+
 mod events;
 mod rt;
+mod keys;
 pub mod widgets;
 
