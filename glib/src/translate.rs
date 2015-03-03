@@ -30,13 +30,13 @@
 //!
 //! Letting the foreign library borrow pointers from the Rust side often
 //! requires having a temporary variable of an intermediate type (e.g. `CString`).
-//! In such cases `ToTemp` is used. See also `StackBox`.
+//! In such cases `ToTmp` is used. See also `StackBox`.
 //!
 //! ```ignore
 //!     pub fn set_icon_name(&self, name: &str) {
 //!         unsafe {
-//!             let mut name = name.to_temp_for_borrow();
-//!             ffi::gdk_window_set_icon_name(self.pointer, name.to_glib())
+//!             let mut tmp_name = name.to_tmp_for_borrow();
+//!             ffi::gdk_window_set_icon_name(self.pointer, tmp_name.to_glib())
 //!         }
 //!     }
 //! ```
@@ -61,7 +61,7 @@ use ffi;
 /// type WindowAttrBox = StackBox<ffi::C_GdkWindowAttr, Option<CString>>;
 /// ```
 ///
-/// The `ToTemp` implementation can then use `WindowAttrBox` as its output type
+/// The `ToTmp` implementation can then use `WindowAttrBox` as its output type
 /// and `impl ToGlibPtr for WindowAttrBox` is provided by this module.
 pub struct StackBox<T: Sized, T2: Sized = ()> (pub T, pub T2);
 
@@ -115,24 +115,24 @@ impl <T, T2> ToGlibPtr for StackBox<T, T2> {
 }
 
 /// Translate to a temporary intermediate variable
-pub trait ToTemp {
-    type Temp;
+pub trait ToTmp {
+    type Tmp;
 
-    fn to_temp_for_borrow(self) -> Self::Temp;
+    fn to_tmp_for_borrow(self) -> Self::Tmp;
 }
 
-impl <'a> ToTemp for &'a str {
-    type Temp = CString;
+impl <'a> ToTmp for &'a str {
+    type Tmp = CString;
 
-    fn to_temp_for_borrow(self) -> CString {
+    fn to_tmp_for_borrow(self) -> CString {
         CString::new(self).unwrap()
     }
 }
 
-impl <'a> ToTemp for &'a Option<String> {
-    type Temp = Option<CString>;
+impl <'a> ToTmp for &'a Option<String> {
+    type Tmp = Option<CString>;
 
-    fn to_temp_for_borrow(self) -> Option<CString> {
+    fn to_tmp_for_borrow(self) -> Option<CString> {
         match self {
             &Some(ref s) => Some(CString::new(&s[..]).unwrap()),
             &None => None,
