@@ -63,12 +63,10 @@ impl WindowAttr {
     }
 }
 
-type WindowAttrBox = StackBox<ffi::C_GdkWindowAttr, Option<CString>>;
-
 impl <'a> ToTemp for &'a WindowAttr {
-    type Temp = WindowAttrBox;
+    type Temp = StackBox<ffi::C_GdkWindowAttr, Option<CString>>;
 
-    fn to_temp_for_borrow(self) -> WindowAttrBox {
+    fn to_temp_for_borrow(self) -> StackBox<ffi::C_GdkWindowAttr, Option<CString>> {
         let mut title = self.title.to_temp_for_borrow();
 
         let attrs = ffi::C_GdkWindowAttr {

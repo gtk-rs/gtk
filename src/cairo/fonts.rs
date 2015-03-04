@@ -14,7 +14,6 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use std::ffi::CString;
-use libc::{c_ulong, c_int, c_double};
 use std::clone::Clone;
 use std::cmp::PartialEq;
 use std::ops::Drop;

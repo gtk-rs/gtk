@@ -36,7 +36,7 @@ impl RecentData {
             Default::default()
         } else {
             let mut tmp_groups = Vec::new();
-            let mut count = 0is;
+            let mut count = 0;
 
             unsafe {
                 loop {

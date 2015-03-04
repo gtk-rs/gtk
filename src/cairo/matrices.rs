@@ -13,8 +13,6 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use libc::{c_double};
-
 use cairo::ffi;
 
 pub use cairo::ffi::Matrix;

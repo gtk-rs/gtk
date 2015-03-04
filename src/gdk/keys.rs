@@ -15,10 +15,9 @@
 
 //! Keyboard Handling Functions
 
-use std::ptr;
 use gdk::ffi;
 use std::ffi::CStr;
-use libc::{c_uint, c_void, c_char};
+use libc::{c_uint, c_char};
 
 pub fn keyval_name(keyval: u32) -> Option<String> {
     let tmp = unsafe { ffi::gdk_keyval_name(keyval as c_uint) as *const c_char };

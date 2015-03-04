@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-#![feature(path, process, collections)]
+#![feature(path, collections)]
 
 extern crate gcc;
 extern crate "pkg-config" as pkg_config;

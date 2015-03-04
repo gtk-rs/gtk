@@ -38,7 +38,7 @@ impl ListStore {
         unsafe {
             let text_c = CString::from_slice(text.as_bytes());
 
-            ffi::gtk_list_store_set(self.pointer, iter.unwrap_pointer(), column, text_c.as_ptr(), -1is)
+            ffi::gtk_list_store_set(self.pointer, iter.unwrap_pointer(), column, text_c.as_ptr(), -1)
         }
     }
 

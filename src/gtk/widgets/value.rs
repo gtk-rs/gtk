@@ -15,7 +15,7 @@
 
 //! Generic values — A polymorphic type that can hold values of any other type
 
-use gtk::{self, ffi};
+use gtk::ffi;
 use std::ffi::CString;
 use libc::{self, c_char, c_void};
 use glib::{to_bool, to_gboolean};

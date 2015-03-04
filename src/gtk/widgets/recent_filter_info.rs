@@ -35,7 +35,7 @@ impl RecentFilterInfo {
         } else {
             let mut tmp_app = Vec::new();
             let mut tmp_groups = Vec::new();
-            let mut count = 0is;
+            let mut count = 0;
 
             unsafe {
                 loop {
