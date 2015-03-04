@@ -18,6 +18,7 @@
 use glib;
 use gtk::{self, ffi, cast};
 use std::ffi::CString;
+use glib::translate::{FromGlibPtr};
 use glib::{to_bool, to_gboolean};
 
 pub struct TreeViewColumn {
@@ -148,13 +149,8 @@ impl TreeViewColumn {
 
     pub fn get_title(&self) -> Option<String> {
         unsafe {
-            let tmp = ffi::gtk_tree_view_column_get_title(self.pointer);
-
-            if tmp.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_tree_view_column_get_title(self.pointer))
         }
     }
 

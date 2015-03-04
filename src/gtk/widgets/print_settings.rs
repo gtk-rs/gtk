@@ -18,7 +18,7 @@ use glib::{to_bool, to_gboolean};
 use gtk::FFIWidget;
 use gtk::cast::{GTK_PRINT_SETTINGS, GTK_PAPER_SIZE};
 use std::ffi::CString;
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 
 struct_Widget!(PrintSettings);
 
@@ -54,13 +54,8 @@ impl PrintSettings {
     pub fn get(&self, key: &str) -> Option<String> {
         unsafe {
             let mut tmp_key = key.to_tmp_for_borrow();
-            let tmp = ffi::gtk_print_settings_get(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_key.to_glib_ptr());
-
-            if tmp.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_print_settings_get(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_key.to_glib_ptr()))
         }
     }
 
@@ -150,12 +145,9 @@ impl PrintSettings {
     }
 
     pub fn get_printer(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_print_settings_get_printer(GTK_PRINT_SETTINGS(self.unwrap_widget())) };
-
-        if tmp.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_print_settings_get_printer(GTK_PRINT_SETTINGS(self.unwrap_widget())))
         }
     }
 
@@ -299,12 +291,9 @@ impl PrintSettings {
     }
 
     pub fn get_default_source(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_print_settings_get_default_source(GTK_PRINT_SETTINGS(self.unwrap_widget())) };
-
-        if tmp.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_print_settings_get_default_source(GTK_PRINT_SETTINGS(self.unwrap_widget())))
         }
     }
 
@@ -316,12 +305,9 @@ impl PrintSettings {
     }
 
     pub fn get_media_type(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_print_settings_get_media_type(GTK_PRINT_SETTINGS(self.unwrap_widget())) };
-
-        if tmp.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_print_settings_get_media_type(GTK_PRINT_SETTINGS(self.unwrap_widget())))
         }
     }
 
@@ -333,12 +319,9 @@ impl PrintSettings {
     }
 
     pub fn get_dither(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_print_settings_get_dither(GTK_PRINT_SETTINGS(self.unwrap_widget())) };
-
-        if tmp.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_print_settings_get_dither(GTK_PRINT_SETTINGS(self.unwrap_widget())))
         }
     }
 
@@ -350,12 +333,9 @@ impl PrintSettings {
     }
 
     pub fn get_finishings(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_print_settings_get_finishings(GTK_PRINT_SETTINGS(self.unwrap_widget())) };
-
-        if tmp.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_print_settings_get_finishings(GTK_PRINT_SETTINGS(self.unwrap_widget())))
         }
     }
 
@@ -367,12 +347,9 @@ impl PrintSettings {
     }
 
     pub fn get_output_bin(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_print_settings_get_output_bin(GTK_PRINT_SETTINGS(self.unwrap_widget())) };
-
-        if tmp.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_print_settings_get_output_bin(GTK_PRINT_SETTINGS(self.unwrap_widget())))
         }
     }
 

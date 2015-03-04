@@ -18,6 +18,7 @@
 use libc::c_int;
 use std::ffi::CString;
 
+use glib::translate::{FromGlibPtr};
 use gtk::cast::GTK_EXPANDER;
 use gtk::{self, ffi};
 use glib::{to_bool, to_gboolean};
@@ -86,13 +87,8 @@ impl Expander {
 
     pub fn get_label(&self) -> Option<String> {
         unsafe {
-            let c_str = ffi::gtk_expander_get_label(GTK_EXPANDER(self.pointer));
-            
-            if c_str.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_expander_get_label(GTK_EXPANDER(self.pointer)))
         }
     }
 

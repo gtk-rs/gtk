@@ -20,6 +20,7 @@
 use gtk::{self, ffi};
 use gtk::cast::GTK_STACK;
 use std::ffi::CString;
+use glib::translate::{FromGlibPtr};
 use glib::{to_bool, to_gboolean};
 
 /// GtkStack — A stacking container
@@ -78,12 +79,9 @@ impl Stack {
     }
 
     pub fn get_visible_child_name(&self) -> Option<String> {
-        let c_name = unsafe { ffi::gtk_stack_get_visible_child_name(GTK_STACK(self.pointer)) };
-
-        if c_name.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_name)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_stack_get_visible_child_name(GTK_STACK(self.pointer)))
         }
     }
 

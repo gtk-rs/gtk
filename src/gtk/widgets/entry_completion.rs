@@ -18,7 +18,7 @@
 use gtk::{self, ffi};
 use gtk::TreeModel;
 use gtk::cast::GTK_ENTRY_COMPLETION;
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 use libc::c_char;
 
 struct_Widget!(EntryCompletion);
@@ -86,12 +86,9 @@ impl EntryCompletion {
     }
 
     pub fn get_completion_prefix(&self) -> Option<String> {
-        let tmp_pointer = unsafe { ffi::gtk_entry_completion_get_completion_prefix(GTK_ENTRY_COMPLETION(self.pointer)) };
-
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp_pointer)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_entry_completion_get_completion_prefix(GTK_ENTRY_COMPLETION(self.pointer)))
         }
     }
 

@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 use gtk::{self, ffi};
 use glib::to_gboolean;
 use gtk::cast::GTK_WINDOW;
@@ -35,13 +35,8 @@ pub trait WindowTrait : gtk::WidgetTrait {
 
     fn get_title(&self) -> Option<String> {
         unsafe {
-            let c_title = ffi::gtk_window_get_title(GTK_WINDOW(self.unwrap_widget()));
-
-            if c_title.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_title)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_window_get_title(GTK_WINDOW(self.unwrap_widget())))
         }
     }
 

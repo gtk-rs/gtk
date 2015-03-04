@@ -14,7 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use std::ffi::CString;
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 use gtk::cast::GTK_TOOLBUTTON;
 use gtk::{self, ffi};
 use glib::{to_bool, to_gboolean};
@@ -44,37 +44,22 @@ pub trait ToolButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrai
 
     fn get_label(&self) -> Option<String> {
         unsafe {
-            let c_str = ffi::gtk_tool_button_get_label(GTK_TOOLBUTTON(self.unwrap_widget()));
-
-            if c_str.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_tool_button_get_label(GTK_TOOLBUTTON(self.unwrap_widget())))
         }
     }
 
     fn get_stock_id(&self) -> Option<String> {
         unsafe {
-            let c_str = ffi::gtk_tool_button_get_stock_id(GTK_TOOLBUTTON(self.unwrap_widget()));
-
-            if c_str.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_tool_button_get_stock_id(GTK_TOOLBUTTON(self.unwrap_widget())))
         }
     }
 
     fn get_icon_name(&self) -> Option<String> {
         unsafe {
-            let c_str = ffi::gtk_tool_button_get_icon_name(GTK_TOOLBUTTON(self.unwrap_widget()));
-
-            if c_str.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_tool_button_get_icon_name(GTK_TOOLBUTTON(self.unwrap_widget())))
         }
     }
 

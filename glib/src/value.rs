@@ -58,12 +58,9 @@ impl Value {
 
     // to free !
     pub fn strdup_value_contents(&self) -> Option<String> {
-        let tmp_pointer = unsafe { ffi::g_strdup_value_contents(self.pointer) as *const c_char };
-
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp_pointer)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::g_strdup_value_contents(self.pointer) as *const c_char)
         }
     }
 
@@ -200,12 +197,9 @@ impl Value {
     }*/
 
     pub fn get_string(&self) -> Option<String> {
-        let tmp_pointer = unsafe { ffi::g_value_get_string(self.pointer) };
-
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp_pointer)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::g_value_get_string(self.pointer))
         }
     }
 

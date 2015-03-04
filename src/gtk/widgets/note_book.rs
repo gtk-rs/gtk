@@ -19,6 +19,7 @@ use gtk::{self, ffi};
 use gtk::cast::GTK_NOTEBOOK;
 use gtk::FFIWidget;
 use std::ffi::CString;
+use glib::translate::{FromGlibPtr};
 use glib::{to_bool, to_gboolean};
 
 /// GtkNotebook — A tabbed notebook container
@@ -122,13 +123,8 @@ impl NoteBook {
 
     pub fn get_group_name(&mut self) -> Option<String> {
         unsafe {
-            let c_str = ffi::gtk_notebook_get_group_name(GTK_NOTEBOOK(self.pointer));
-
-            if c_str.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_notebook_get_group_name(GTK_NOTEBOOK(self.pointer)))
         }
     }
 

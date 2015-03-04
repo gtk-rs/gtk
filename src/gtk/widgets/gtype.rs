@@ -19,16 +19,13 @@
 pub mod g_type {
     use gtk::ffi;
     use std::ffi::CString;
-use glib::translate::{ToGlibPtr, ToTmp};
+    use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
     use glib_ffi::{self};
 
     pub fn name(_type: glib_ffi::GType) -> Option<String> {
-        let tmp_pointer = unsafe { ffi::g_type_name(_type) };
-
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp_pointer)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::g_type_name(_type))
         }
     }
 

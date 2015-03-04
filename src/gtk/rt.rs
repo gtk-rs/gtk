@@ -16,6 +16,7 @@
 use libc::c_uint;
 use std::ptr;
 use gtk::ffi;
+use glib::translate::{FromGlibPtr};
 use glib::{to_bool, to_gboolean};
 
 pub fn init() {
@@ -88,12 +89,8 @@ pub fn get_interface_age() -> u32 {
 }
 
 pub fn check_version(required_major: u32, required_minor: u32, required_micro: u32) -> Option<String> {
-    let c_str = unsafe { ffi::gtk_check_version(required_major as c_uint, required_minor as c_uint, required_micro as c_uint) };
-
-    
-    if c_str.is_null() {
-        None
-    } else {
-        unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string()) }
+    unsafe {
+        FromGlibPtr::borrow(
+            ffi::gtk_check_version(required_major as c_uint, required_minor as c_uint, required_micro as c_uint))
     }
  }

@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 use gtk::{self, FFIWidget};
 use gtk::cast::GTK_FILE_CHOOSER;
 use gtk::ffi;
@@ -79,13 +79,8 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
 
     fn get_current_name(&self) -> Option<String> {
         unsafe {
-            let name = ffi::gtk_file_chooser_get_current_name(GTK_FILE_CHOOSER(self.unwrap_widget()));
-
-            if name.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&name)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_file_chooser_get_current_name(GTK_FILE_CHOOSER(self.unwrap_widget())))
         }
     }
 
@@ -98,13 +93,8 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
 
     fn get_filename(&self) -> Option<String> {
         unsafe {
-            let filename = ffi::gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(self.unwrap_widget()));
-
-            if filename.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&filename)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(self.unwrap_widget())))
         }
     }
 
@@ -157,13 +147,8 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
 
     fn get_current_folder(&self) -> Option<String> {
         unsafe {
-            let filename = ffi::gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(self.unwrap_widget()));
-
-            if filename.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&filename)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(self.unwrap_widget())))
         }
     }
 
@@ -176,13 +161,8 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
 
     fn get_uri(&self) -> Option<String> {
         unsafe {
-            let uri = ffi::gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(self.unwrap_widget()));
-
-            if uri.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&uri)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(self.unwrap_widget())))
         }
     }
 
@@ -227,13 +207,8 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
 
     fn get_current_folder_uri(&self) -> Option<String> {
         unsafe {
-            let uri = ffi::gtk_file_chooser_get_current_folder_uri(GTK_FILE_CHOOSER(self.unwrap_widget()));
-
-            if uri.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&uri)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_file_chooser_get_current_folder_uri(GTK_FILE_CHOOSER(self.unwrap_widget())))
         }
     }
 
@@ -271,25 +246,15 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
 
     fn get_preview_filename(&self) -> Option<String> {
         unsafe {
-            let filename = ffi::gtk_file_chooser_get_preview_filename(GTK_FILE_CHOOSER(self.unwrap_widget()));
-
-            if filename.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&filename)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_file_chooser_get_preview_filename(GTK_FILE_CHOOSER(self.unwrap_widget())))
         }
     }
 
     fn get_preview_uri(&self) -> Option<String> {
         unsafe {
-            let uri = ffi::gtk_file_chooser_get_preview_uri(GTK_FILE_CHOOSER(self.unwrap_widget()));
-
-            if uri.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&uri)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_file_chooser_get_preview_uri(GTK_FILE_CHOOSER(self.unwrap_widget())))
         }
     }
 

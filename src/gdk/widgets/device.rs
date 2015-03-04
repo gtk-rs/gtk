@@ -18,6 +18,7 @@
 use gdk::{self, ffi};
 use libc::{c_uint};
 use glib::to_bool;
+use glib::translate::{FromGlibPtr};
 
 #[repr(C)]
 #[derive(Copy)]
@@ -27,12 +28,9 @@ pub struct Device {
 
 impl Device {
     pub fn get_name(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gdk_device_get_name(self.pointer) };
-
-        if tmp.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gdk_device_get_name(self.pointer))
         }
     }
 

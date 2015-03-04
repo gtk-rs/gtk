@@ -14,6 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::{self, ffi};
+use glib::translate::{FromGlibPtr};
 use glib::{to_bool, to_gboolean};
 use gtk::FFIWidget;
 use gtk::cast::{GTK_PAPER_SIZE};
@@ -98,32 +99,23 @@ impl PaperSize {
     }
 
     pub fn get_name(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_paper_size_get_name(GTK_PAPER_SIZE(self.unwrap_widget())) };
-
-        if tmp.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_paper_size_get_name(GTK_PAPER_SIZE(self.unwrap_widget())))
         }
     }
 
     pub fn get_display_name_name(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_paper_size_get_display_name(GTK_PAPER_SIZE(self.unwrap_widget())) };
-
-        if tmp.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_paper_size_get_display_name(GTK_PAPER_SIZE(self.unwrap_widget())))
         }
     }
 
     pub fn get_ppd_name(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_paper_size_get_ppd_name(GTK_PAPER_SIZE(self.unwrap_widget())) };
-
-        if tmp.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_paper_size_get_ppd_name(GTK_PAPER_SIZE(self.unwrap_widget())))
         }
     }
 
@@ -160,12 +152,9 @@ impl PaperSize {
     }
 
     pub fn get_default() -> Option<String> {
-        let tmp = unsafe { ffi::gtk_paper_size_get_default() };
-
-        if tmp.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_paper_size_get_default())
         }
     }
 }

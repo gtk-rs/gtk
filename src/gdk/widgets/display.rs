@@ -17,7 +17,7 @@
 
 use gdk::{self, ffi};
 use libc::{c_uint};
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 use glib::to_bool;
 
 #[repr(C)]
@@ -55,12 +55,9 @@ impl Display {
     }
 
     pub fn get_name(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gdk_display_get_name(self.pointer) };
-
-        if tmp.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gdk_display_get_name(self.pointer))
         }
     }
 

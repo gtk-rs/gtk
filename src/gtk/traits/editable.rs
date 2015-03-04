@@ -16,6 +16,7 @@
 use std::ffi::CString;
 use gtk::cast::GTK_EDITABLE;
 use gtk::{self, ffi};
+use glib::translate::{FromGlibPtr};
 use glib::{to_bool, to_gboolean};
 
 pub trait EditableTrait: gtk::WidgetTrait {
@@ -57,14 +58,9 @@ pub trait EditableTrait: gtk::WidgetTrait {
     }
 
     fn get_chars(&self, start_pos: i32, end_pos: i32) -> Option<String> {
-        let chars = unsafe {
-            ffi::gtk_editable_get_chars(GTK_EDITABLE(self.unwrap_widget()), start_pos, end_pos)
-        };
-
-        if chars.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&chars)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_editable_get_chars(GTK_EDITABLE(self.unwrap_widget()), start_pos, end_pos))
         }
     }
 

@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 use std::clone::Clone;
 use std::cmp::PartialEq;
 use std::ops::Drop;
@@ -202,13 +202,8 @@ impl FontFace {
 
     pub fn toy_get_family(&self) -> Option<String> {
         unsafe {
-            let ptr = ffi::cairo_toy_font_face_get_family(self.get_ptr());
-
-            if ptr.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&ptr)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::cairo_toy_font_face_get_family(self.get_ptr()))
         }
     }
 

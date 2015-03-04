@@ -17,7 +17,7 @@
 
 use gtk::{self, ffi};
 use gtk::cast::GTK_COMBO_BOX_TEXT;
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 use libc::c_char;
 
 struct_Widget!(ComboBoxText);
@@ -94,12 +94,9 @@ impl ComboBoxText {
     }
 
     pub fn get_active_text(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self.pointer)) as *const c_char };
-
-        if tmp.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(self.pointer)) as *const c_char)
         }
     }
 }

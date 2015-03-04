@@ -57,12 +57,9 @@ pub fn set_allowed_backends(backends: &str) {
 }
 
 pub fn get_program_class() -> Option<String> {
-    let tmp = unsafe { ffi::gdk_get_program_class() };
-
-    if tmp.is_null() {
-        None
-    } else {
-        unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
+    unsafe {
+        FromGlibPtr::borrow(
+            ffi::gdk_get_program_class())
     }
 }
 

@@ -17,7 +17,7 @@ use gtk::{self, ffi};
 use gtk::FFIWidget;
 use gtk::cast::{GTK_WINDOW, GTK_APP_CHOOSER_DIALOG};
 use std::ffi::CString;
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 
 struct_Widget!(AppChooserDialog);
 
@@ -58,13 +58,8 @@ impl AppChooserDialog {
 
     pub fn get_heading(&self) -> Option<String> {
         unsafe {
-            let tmp_pointer = ffi::gtk_app_chooser_dialog_get_heading(GTK_APP_CHOOSER_DIALOG(self.unwrap_widget()));
-
-            if tmp_pointer.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp_pointer)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_app_chooser_dialog_get_heading(GTK_APP_CHOOSER_DIALOG(self.unwrap_widget())))
         }
     }
 }

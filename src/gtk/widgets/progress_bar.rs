@@ -16,7 +16,7 @@
 //! A widget which indicates progress visually
 
 use libc::c_double;
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 
 use gtk::{self, ffi};
 use glib::{to_bool, to_gboolean};
@@ -58,13 +58,8 @@ impl ProgressBar {
 
     pub fn get_text(&self) -> Option<String> {
         unsafe {
-            let c_str = ffi::gtk_progress_bar_get_text(GTK_PROGRESSBAR(self.pointer));
-
-            if c_str.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_progress_bar_get_text(GTK_PROGRESSBAR(self.pointer)))
         }
     }
 

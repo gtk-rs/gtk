@@ -16,7 +16,7 @@
 use std::mem;
 use libc::c_float;
 use std::ffi::CString;
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 
 use gtk::{ReliefStyle, PositionType};
 use gtk::cast::GTK_BUTTON;
@@ -68,13 +68,8 @@ pub trait ButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait {
 
     fn get_label(&self) -> Option<String> {
         unsafe {
-            let c_str = ffi::gtk_button_get_label(GTK_BUTTON(self.unwrap_widget()));
-
-            if c_str.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_button_get_label(GTK_BUTTON(self.unwrap_widget())))
         }
     }
 

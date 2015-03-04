@@ -13,6 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
+use glib::translate::{FromGlibPtr};
 use gtk::{self, ffi};
 use gtk::cast::GTK_APP_CHOOSER;
 
@@ -28,12 +29,9 @@ pub trait AppChooserTrait: gtk::WidgetTrait {
     }
 
     fn get_content_info(&self) -> Option<String> {
-        let tmp_pointer = unsafe { ffi::gtk_app_chooser_get_content_type(GTK_APP_CHOOSER(self.unwrap_widget())) };
-
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp_pointer)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_app_chooser_get_content_type(GTK_APP_CHOOSER(self.unwrap_widget())))
         }
     }
 

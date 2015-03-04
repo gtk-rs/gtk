@@ -17,6 +17,7 @@ use std::ptr;
 use libc::c_float;
 use std::ffi::CString;
 
+use glib::translate::{FromGlibPtr};
 use gtk::ShadowType;
 use gtk::cast::GTK_FRAME;
 use gtk::{self, ffi};
@@ -61,12 +62,9 @@ pub trait FrameTrait: gtk::WidgetTrait + gtk::ContainerTrait {
     }
 
     fn get_label(&self) -> Option<String> {
-        let c_str = unsafe { ffi::gtk_frame_get_label(GTK_FRAME(self.unwrap_widget())) };
-        
-        if c_str.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_frame_get_label(GTK_FRAME(self.unwrap_widget())))
         }
     }
 

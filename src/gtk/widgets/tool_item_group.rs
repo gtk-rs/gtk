@@ -18,7 +18,7 @@
 use gtk::{self, ffi, ToolItem};
 use gtk::FFIWidget;
 use gtk::cast::{GTK_TOOL_ITEM_GROUP, GTK_TOOL_ITEM};
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 use glib::{to_bool, to_gboolean};
 
 struct_Widget!(ToolItemGroup);
@@ -65,12 +65,9 @@ impl ToolItemGroup {
     }
 
     pub fn get_label(&self) -> Option<String> {
-        let tmp_pointer = unsafe { ffi::gtk_tool_item_group_get_label(GTK_TOOL_ITEM_GROUP(self.unwrap_widget())) };
-
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp_pointer)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_tool_item_group_get_label(GTK_TOOL_ITEM_GROUP(self.unwrap_widget())))
         }
     }
 

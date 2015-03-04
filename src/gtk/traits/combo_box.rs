@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 use gtk::{self, ffi};
 use glib::{to_bool, to_gboolean};
 use gtk::cast::GTK_COMBO_BOX;
@@ -74,12 +74,9 @@ pub trait ComboBoxTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait 
     }
 
     fn get_active_id(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_combo_box_get_active_id(GTK_COMBO_BOX(self.unwrap_widget())) };
-
-        if tmp.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_combo_box_get_active_id(GTK_COMBO_BOX(self.unwrap_widget())))
         }
     }
 

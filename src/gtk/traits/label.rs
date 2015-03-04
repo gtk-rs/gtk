@@ -14,7 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use libc::{c_int, c_double};
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 
 use gtk::{self, ffi};
 use glib::{to_bool, to_gboolean};
@@ -161,35 +161,22 @@ pub trait LabelTrait: gtk::WidgetTrait {
 
     fn get_text(&self) -> Option<String> {
         unsafe {
-            let c_str = ffi::gtk_label_get_text(GTK_LABEL(self.unwrap_widget()));
-
-            if c_str.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_label_get_text(GTK_LABEL(self.unwrap_widget())))
         }
     }
 
     fn get_label(&self) -> Option<String> {
         unsafe {
-            let c_str = ffi::gtk_label_get_label(GTK_LABEL(self.unwrap_widget()));
-            if c_str.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_label_get_label(GTK_LABEL(self.unwrap_widget())))
         }
     }
 
     fn get_current_uri(&self) -> Option<String> {
         unsafe {
-            let c_str = ffi::gtk_label_get_current_uri(GTK_LABEL(self.unwrap_widget()));
-            if c_str.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_label_get_current_uri(GTK_LABEL(self.unwrap_widget())))
         }
     }
 

@@ -17,7 +17,7 @@
 
 use gtk::cast::GTK_APP_CHOOSER_WIDGET;
 use gtk::{self, ffi};
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 use glib::{to_bool, to_gboolean};
 
 struct_Widget!(AppChooserWidget);
@@ -89,12 +89,9 @@ impl AppChooserWidget {
     }
 
     pub fn get_default_text(&mut self) -> Option<String> {
-        let tmp_pointer = unsafe { ffi::gtk_app_chooser_widget_get_default_text(GTK_APP_CHOOSER_WIDGET(self.pointer)) };
-
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp_pointer)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_app_chooser_widget_get_default_text(GTK_APP_CHOOSER_WIDGET(self.pointer)))
         }
     }
 }

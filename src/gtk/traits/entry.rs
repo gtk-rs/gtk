@@ -14,7 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use libc::{c_int, c_float, c_double};
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 use libc;
 
 use gtk::{EntryIconPosition, ImageType, InputPurpose, InputHints};
@@ -44,13 +44,8 @@ pub trait EntryTrait: gtk::WidgetTrait {
 
     fn get_text(&self) -> Option<String> {
         unsafe {
-            let c_str = ffi::gtk_entry_get_text(GTK_ENTRY(self.unwrap_widget()));
-
-            if c_str.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_entry_get_text(GTK_ENTRY(self.unwrap_widget())))
         }
     }
 
@@ -137,13 +132,8 @@ pub trait EntryTrait: gtk::WidgetTrait {
 
     fn placeholder(&self) -> Option<String> {
         unsafe {
-            let c_str = ffi::gtk_entry_get_placeholder_text(GTK_ENTRY(self.unwrap_widget()));
-
-            if c_str.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_entry_get_placeholder_text(GTK_ENTRY(self.unwrap_widget())))
         }
     }
 
@@ -257,25 +247,15 @@ pub trait EntryTrait: gtk::WidgetTrait {
 
     fn get_icon_stock(&self, icon_pos: EntryIconPosition) -> Option<String> {
         unsafe {
-            let c_str = ffi::gtk_entry_get_icon_stock(GTK_ENTRY(self.unwrap_widget()), icon_pos);
-
-            if c_str.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_entry_get_icon_stock(GTK_ENTRY(self.unwrap_widget()), icon_pos))
         }
     }
 
     fn get_icon_name(&self, icon_pos: EntryIconPosition) -> Option<String> {
         unsafe {
-            let c_str = ffi::gtk_entry_get_icon_name(GTK_ENTRY(self.unwrap_widget()), icon_pos);
-            
-            if c_str.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_entry_get_icon_name(GTK_ENTRY(self.unwrap_widget()), icon_pos))
         }
     }
 

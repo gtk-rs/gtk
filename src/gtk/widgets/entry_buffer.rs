@@ -17,6 +17,7 @@
 
 use libc::{c_int, c_uint};
 use std::ffi::CString;
+use glib::translate::{FromGlibPtr};
 use gtk::ffi;
 
 // TODO:
@@ -51,13 +52,8 @@ impl EntryBuffer {
 
     pub fn get_text(&self) -> Option<String> {
         unsafe {
-            let c_str = ffi::gtk_entry_buffer_get_text(self.pointer);
-
-            if c_str.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_entry_buffer_get_text(self.pointer))
         }
     }
 

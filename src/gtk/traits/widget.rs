@@ -14,7 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use libc::{c_int, c_char, self};
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 use gtk::ffi;
 use glib::{to_bool, to_gboolean};
 use gdk;
@@ -97,13 +97,8 @@ pub trait WidgetTrait: gtk::FFIWidget + gtk::GObjectTrait {
 
     fn get_name(&self) -> Option<String> {
         unsafe {
-            let tmp = ffi::gtk_widget_get_name(self.unwrap_widget());
-
-            if tmp.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_widget_get_name(self.unwrap_widget()))
         }
     }
 
@@ -313,16 +308,9 @@ pub trait WidgetTrait: gtk::FFIWidget + gtk::GObjectTrait {
 
     fn get_tooltip_markup(&self) -> Option<String> {
         unsafe {
-            let tmp = ffi::gtk_widget_get_tooltip_markup(self.unwrap_widget());
-
-            if tmp.is_null() {
-                None
-            } else {
-                let ret = String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&(tmp as *const i8))).to_string();
-
-                libc::funcs::c95::stdlib::free(tmp as *mut libc::c_void);
-                Some(ret)
-            }
+            FromGlibPtr::take(
+                ffi::gtk_widget_get_tooltip_markup(self.unwrap_widget())
+                    as *const c_char)
         }
     }
 
@@ -336,16 +324,9 @@ pub trait WidgetTrait: gtk::FFIWidget + gtk::GObjectTrait {
 
     fn get_tooltip_text(&self) -> Option<String> {
         unsafe {
-            let tmp = ffi::gtk_widget_get_tooltip_text(self.unwrap_widget());
-
-            if tmp.is_null() {
-                None
-            } else {
-                let ret = String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&(tmp as *const i8))).to_string();
-
-                libc::funcs::c95::stdlib::free(tmp as *mut libc::c_void);
-                Some(ret)
-            }
+            FromGlibPtr::take(
+                ffi::gtk_widget_get_tooltip_text(self.unwrap_widget())
+                    as *const c_char)
         }
     }
 

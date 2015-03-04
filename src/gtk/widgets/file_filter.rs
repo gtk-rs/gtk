@@ -15,7 +15,7 @@
 
 use gtk::ffi;
 use std::ffi::CString;
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 
 pub struct FileFilter {
     pointer : *mut ffi::C_GtkFileFilter
@@ -42,13 +42,8 @@ impl FileFilter {
 
     pub fn get_name(&self) -> Option<String> {
         unsafe {
-            let name = ffi::gtk_file_filter_get_name(self.pointer);
-
-            if name.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&name)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_file_filter_get_name(self.pointer))
         }
     }
 
