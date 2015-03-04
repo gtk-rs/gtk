@@ -18,6 +18,7 @@ use glib::to_bool;
 use gtk::FFIWidget;
 use gtk::cast::GTK_RECENT_INFO;
 use std::ffi::CString;
+use glib::translate::{ToGlibPtr, ToTmp};
 use libc::c_char;
 
 struct_Widget!(RecentInfo);
@@ -138,9 +139,8 @@ impl RecentInfo {
 
     pub fn has_application(&self, app_name: &str) -> bool {
         unsafe {
-            let c_str = CString::from_slice(app_name.as_bytes());
-
-            to_bool(ffi::gtk_recent_info_has_application(GTK_RECENT_INFO(self.unwrap_widget()), c_str.as_ptr()))
+            let mut tmp_app_name = app_name.to_tmp_for_borrow();
+            to_bool(ffi::gtk_recent_info_has_application(GTK_RECENT_INFO(self.unwrap_widget()), tmp_app_name.to_glib_ptr()))
         }
     }
 

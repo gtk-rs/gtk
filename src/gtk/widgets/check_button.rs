@@ -16,6 +16,7 @@
 //! Create widgets with a discrete toggle button
 
 use std::ffi::CString;
+use glib::translate::{ToGlibPtr, ToTmp};
 use gtk::{self, ffi};
 
 /// CheckButton — Create widgets with a discrete toggle button
@@ -29,9 +30,8 @@ impl CheckButton {
 
     pub fn new_with_label(label: &str) -> Option<CheckButton> {
         let tmp_pointer = unsafe {
-            let c_str = CString::from_slice(label.as_bytes());
-
-            ffi::gtk_check_button_new_with_label(c_str.as_ptr())
+            let mut tmp_label = label.to_tmp_for_borrow();
+            ffi::gtk_check_button_new_with_label(tmp_label.to_glib_ptr())
         };
         check_pointer!(tmp_pointer, CheckButton)
     }

@@ -14,7 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use libc::{c_int, c_char, self};
-use std::ffi::CString;
+use glib::translate::{ToGlibPtr, ToTmp};
 use gtk::ffi;
 use glib::{to_bool, to_gboolean};
 use gdk;
@@ -91,9 +91,8 @@ pub trait WidgetTrait: gtk::FFIWidget + gtk::GObjectTrait {
     }
 
     fn set_name(&self, name: &str) {
-        let c_str = CString::from_slice(name.as_bytes());
-
-        unsafe { ffi::gtk_widget_set_name(self.unwrap_widget(), c_str.as_ptr()) }
+        let mut tmp_name = name.to_tmp_for_borrow();
+        unsafe { ffi::gtk_widget_set_name(self.unwrap_widget(), tmp_name.to_glib_ptr()) }
     }
 
     fn get_name(&self) -> Option<String> {
@@ -194,9 +193,8 @@ pub trait WidgetTrait: gtk::FFIWidget + gtk::GObjectTrait {
     }
 
     fn override_symbolic_color(&self, name: &str, color: &gdk_ffi::C_GdkRGBA) {
-        let c_str = CString::from_slice(name.as_bytes());
-
-        unsafe { ffi::gtk_widget_override_symbolic_color(self.unwrap_widget(), c_str.as_ptr(), color); }
+        let mut tmp_name = name.to_tmp_for_borrow();
+        unsafe { ffi::gtk_widget_override_symbolic_color(self.unwrap_widget(), tmp_name.to_glib_ptr(), color); }
     }
 
     fn override_cursor(&self, cursor: &gdk_ffi::C_GdkRGBA, secondary_cursor: &gdk_ffi::C_GdkRGBA) {
@@ -330,9 +328,8 @@ pub trait WidgetTrait: gtk::FFIWidget + gtk::GObjectTrait {
 
     fn set_tooltip_markup(&self, markup: &str) {
         unsafe {
-            let c_str = CString::from_slice(markup.as_bytes());
-
-            ffi::gtk_widget_set_tooltip_markup(self.unwrap_widget(), c_str.as_ptr() as *mut c_char);
+            let mut tmp_markup = markup.to_tmp_for_borrow();
+            ffi::gtk_widget_set_tooltip_markup(self.unwrap_widget(), tmp_markup.to_glib_ptr() as *mut c_char);
         }
     }
 
@@ -354,8 +351,8 @@ pub trait WidgetTrait: gtk::FFIWidget + gtk::GObjectTrait {
 
     fn set_tooltip_text(&self, text: &str) {
         unsafe {
-            let c_str = CString::from_slice(text.as_bytes());
-            ffi::gtk_widget_set_tooltip_text(self.unwrap_widget(), c_str.as_ptr() as *mut c_char);
+            let mut tmp_text = text.to_tmp_for_borrow();
+            ffi::gtk_widget_set_tooltip_text(self.unwrap_widget(), tmp_text.to_glib_ptr() as *mut c_char);
         }
     }
 
@@ -685,9 +682,8 @@ pub trait WidgetTrait: gtk::FFIWidget + gtk::GObjectTrait {
 
     fn child_notify(&self, child_property: &str) {
         unsafe {
-            let c_str = CString::from_slice(child_property.as_bytes());
-
-            ffi::gtk_widget_child_notify(self.unwrap_widget(), c_str.as_ptr())
+            let mut tmp_child_property = child_property.to_tmp_for_borrow();
+            ffi::gtk_widget_child_notify(self.unwrap_widget(), tmp_child_property.to_glib_ptr())
         }
     }
 

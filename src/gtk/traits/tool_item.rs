@@ -14,6 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use std::ffi::CString;
+use glib::translate::{ToGlibPtr, ToTmp};
 use gtk::{self, ffi};
 use glib::{to_bool, to_gboolean};
 use gtk::cast::GTK_TOOLITEM;
@@ -78,9 +79,8 @@ pub trait ToolItemTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait 
 
     fn set_tooltip_markup(&mut self, markup: &str) -> () {
         unsafe {
-            let c_str = CString::from_slice(markup.as_bytes());
-
-            ffi::gtk_tool_item_set_tooltip_markup(GTK_TOOLITEM(self.unwrap_widget()), c_str.as_ptr())
+            let mut tmp_markup = markup.to_tmp_for_borrow();
+            ffi::gtk_tool_item_set_tooltip_markup(GTK_TOOLITEM(self.unwrap_widget()), tmp_markup.to_glib_ptr())
         }
     }
 

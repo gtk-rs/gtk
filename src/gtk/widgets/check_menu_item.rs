@@ -17,6 +17,7 @@
 
 use gtk::{self, ffi};
 use std::ffi::CString;
+use glib::translate::{ToGlibPtr, ToTmp};
 
 /// CheckMenuItem — The widget used for item in menus
 struct_Widget!(CheckMenuItem);
@@ -29,9 +30,8 @@ impl CheckMenuItem {
 
     pub fn new_with_label(label: &str) -> Option<CheckMenuItem> {
         let tmp_pointer = unsafe {
-            let c_str = CString::from_slice(label.as_bytes());
-
-            ffi::gtk_check_menu_item_new_with_label(c_str.as_ptr())
+            let mut tmp_label = label.to_tmp_for_borrow();
+            ffi::gtk_check_menu_item_new_with_label(tmp_label.to_glib_ptr())
         };
         check_pointer!(tmp_pointer, CheckMenuItem)
     }

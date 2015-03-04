@@ -17,6 +17,7 @@ use gtk::ffi::{self, C_GtkBuilder};
 use libc::c_long;
 use gtk::traits::GObjectTrait;
 use std::ffi::CString;
+use glib::translate::{ToGlibPtr, ToTmp};
 
 #[repr(C)]
 #[derive(Copy)]
@@ -39,9 +40,8 @@ impl Builder {
 
     pub fn new_from_file(file_name: &str) -> Option<Builder> {
         let tmp = unsafe {
-            let c_str = CString::from_slice(file_name.as_bytes());
-
-            ffi::gtk_builder_new_from_file(c_str.as_ptr())
+            let mut tmp_file_name = file_name.to_tmp_for_borrow();
+            ffi::gtk_builder_new_from_file(tmp_file_name.to_glib_ptr())
         };
 
         if tmp.is_null() {
@@ -55,9 +55,8 @@ impl Builder {
 
     pub fn new_from_resource(resource_path: &str) -> Option<Builder> {
         let tmp = unsafe {
-            let c_str = CString::from_slice(resource_path.as_bytes());
-
-            ffi::gtk_builder_new_from_resource(c_str.as_ptr())
+            let mut tmp_resource_path = resource_path.to_tmp_for_borrow();
+            ffi::gtk_builder_new_from_resource(tmp_resource_path.to_glib_ptr())
         };
 
         if tmp.is_null() {

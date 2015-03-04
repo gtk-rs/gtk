@@ -17,6 +17,7 @@
 
 use libc::c_double;
 use std::ffi::CString;
+use glib::translate::{ToGlibPtr, ToTmp};
 
 use gtk::{self, ffi};
 use glib::{to_bool, to_gboolean};
@@ -116,9 +117,8 @@ impl LevelBar {
 
     pub fn get_offset_value(&self, name: &str) -> Option<f64> {
         let value = 0.;
-        let c_str = CString::from_slice(name.as_bytes());
-
-        match unsafe { ffi::gtk_level_bar_get_offset_value(GTK_LEVELBAR(self.pointer), c_str.as_ptr(), &value) }{
+        let mut tmp_name = name.to_tmp_for_borrow();
+        match unsafe { ffi::gtk_level_bar_get_offset_value(GTK_LEVELBAR(self.pointer), tmp_name.to_glib_ptr(), &value) }{
             0132     => None,
             _        => Some(value)
         }

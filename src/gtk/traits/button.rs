@@ -15,7 +15,8 @@
 
 use std::mem;
 use libc::c_float;
-use std::ffi::{CString};
+use std::ffi::CString;
+use glib::translate::{ToGlibPtr, ToTmp};
 
 use gtk::{ReliefStyle, PositionType};
 use gtk::cast::GTK_BUTTON;
@@ -79,9 +80,8 @@ pub trait ButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait {
 
     fn set_label(&mut self, label: &str) -> () {
         unsafe {
-            let c_str = CString::from_slice(label.as_bytes());
-
-            ffi::gtk_button_set_label(GTK_BUTTON(self.unwrap_widget()), c_str.as_ptr())
+            let mut tmp_label = label.to_tmp_for_borrow();
+            ffi::gtk_button_set_label(GTK_BUTTON(self.unwrap_widget()), tmp_label.to_glib_ptr())
         }
     }
 

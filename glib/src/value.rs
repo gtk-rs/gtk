@@ -15,11 +15,11 @@
 
 //! Generic values — A polymorphic type that can hold values of any other type
 
-use ffi::{self};
+use ffi;
 use libc::{self, c_char, c_void};
 use std::ffi::CString;
 use super::{to_bool, to_gboolean, Type};
-use super::translate::{ToGlib, from_glib};
+use translate::{ToGlib, ToGlibPtr, ToTmp, from_glib};
 
 pub trait ValuePublic {
     fn get(gvalue: &Value) -> Self;
@@ -187,9 +187,8 @@ impl Value {
     /// when setting the Value.
     pub fn set_static_string(&self, v_string: &str) {
         unsafe {
-            let c_str = CString::from_slice(v_string.as_bytes());
-
-            ffi::g_value_set_static_string(self.pointer, c_str.as_ptr())
+            let mut tmp_v_string = v_string.to_tmp_for_borrow();
+            ffi::g_value_set_static_string(self.pointer, tmp_v_string.to_glib_ptr())
         }
     }
 

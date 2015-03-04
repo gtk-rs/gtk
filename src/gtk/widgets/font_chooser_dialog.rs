@@ -16,16 +16,15 @@
 use gtk::{self, ffi};
 use gtk::FFIWidget;
 use gtk::cast::{GTK_WINDOW};
-use std::ffi::CString;
+use glib::translate::{ToGlibPtr, ToTmp};
 
 struct_Widget!(FontChooserDialog);
 
 impl FontChooserDialog {
     pub fn new(title: &str, parent: Option<gtk::Window>) -> Option<FontChooserDialog> {
         let tmp = unsafe {
-            let c_str = CString::from_slice(title.as_bytes());
-
-            ffi::gtk_font_chooser_dialog_new(c_str.as_ptr(),
+            let mut tmp_title = title.to_tmp_for_borrow();
+            ffi::gtk_font_chooser_dialog_new(tmp_title.to_glib_ptr(),
                 match parent {
                     Some(ref p) => GTK_WINDOW(p.unwrap_widget()),
                     None => GTK_WINDOW(::std::ptr::null_mut())

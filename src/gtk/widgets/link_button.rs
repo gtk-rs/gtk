@@ -16,6 +16,7 @@
 //! Create buttons bound to a URL
 
 use std::ffi::CString;
+use glib::translate::{ToGlibPtr, ToTmp};
 use gtk::cast::GTK_LINKBUTTON;
 use gtk::{self, ffi};
 use glib::{to_bool, to_gboolean};
@@ -30,9 +31,8 @@ struct_Widget!(LinkButton);
 impl LinkButton {
     pub fn new(uri: &str) -> Option<LinkButton> {
         let tmp_pointer = unsafe {
-            let c_str = CString::from_slice(uri.as_bytes());
-
-            ffi::gtk_link_button_new(c_str.as_ptr())
+            let mut tmp_uri = uri.to_tmp_for_borrow();
+            ffi::gtk_link_button_new(tmp_uri.to_glib_ptr())
         };
         check_pointer!(tmp_pointer, LinkButton)
     }

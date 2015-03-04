@@ -15,6 +15,7 @@
 
 use gtk::ffi;
 use std::ffi::CString;
+use glib::translate::{ToGlibPtr, ToTmp};
 
 pub struct FileFilter {
     pointer : *mut ffi::C_GtkFileFilter
@@ -53,9 +54,8 @@ impl FileFilter {
 
     pub fn add_mime_type(&self, mime_type: &str) -> () {
         unsafe {
-            let c_str = CString::from_slice(mime_type.as_bytes());
-
-            ffi::gtk_file_filter_add_mime_type(self.pointer, c_str.as_ptr())
+            let mut tmp_mime_type = mime_type.to_tmp_for_borrow();
+            ffi::gtk_file_filter_add_mime_type(self.pointer, tmp_mime_type.to_glib_ptr())
         };
     }
 

@@ -16,6 +16,7 @@
 //! The widget used for item in menus
 
 use std::ffi::CString;
+use glib::translate::{ToGlibPtr, ToTmp};
 use gtk::{self, ffi};
 use gtk::cast::GTK_MENU_ITEM;
 use glib::{to_bool, to_gboolean};
@@ -55,9 +56,8 @@ pub trait MenuItemTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait 
 
     fn set_accel_path(&mut self, accel_path: &str) {
         unsafe {
-            let c_str = CString::from_slice(accel_path.as_bytes());
-
-            ffi::gtk_menu_item_set_accel_path(GTK_MENU_ITEM(self.unwrap_widget()), c_str.as_ptr())
+            let mut tmp_accel_path = accel_path.to_tmp_for_borrow();
+            ffi::gtk_menu_item_set_accel_path(GTK_MENU_ITEM(self.unwrap_widget()), tmp_accel_path.to_glib_ptr())
         }
     }
 

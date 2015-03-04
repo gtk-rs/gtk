@@ -18,6 +18,7 @@ use glib::{to_bool, to_gboolean};
 use gtk::FFIWidget;
 use gtk::cast::GTK_ABOUT_DIALOG;
 use std::ffi::CString;
+use glib::translate::{ToGlibPtr, ToTmp};
 
 struct_Widget!(AboutDialog);
 
@@ -46,9 +47,8 @@ impl AboutDialog {
 
     pub fn set_program_name(&self, name: &str) -> () {
         unsafe {
-            let c_str = CString::from_slice(name.as_bytes());
-
-            ffi::gtk_about_dialog_set_program_name(GTK_ABOUT_DIALOG(self.unwrap_widget()), c_str.as_ptr())
+            let mut tmp_name = name.to_tmp_for_borrow();
+            ffi::gtk_about_dialog_set_program_name(GTK_ABOUT_DIALOG(self.unwrap_widget()), tmp_name.to_glib_ptr())
         };
     }
 
@@ -66,9 +66,8 @@ impl AboutDialog {
 
     pub fn set_version(&self, version: &str) -> () {
         unsafe {
-            let c_str = CString::from_slice(version.as_bytes());
-
-            ffi::gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(self.unwrap_widget()), c_str.as_ptr())
+            let mut tmp_version = version.to_tmp_for_borrow();
+            ffi::gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(self.unwrap_widget()), tmp_version.to_glib_ptr())
         };
     }
 
@@ -86,9 +85,8 @@ impl AboutDialog {
 
     pub fn set_copyright(&self, copyright: &str) -> () {
         unsafe {
-            let c_str = CString::from_slice(copyright.as_bytes());
-
-            ffi::gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(self.unwrap_widget()), c_str.as_ptr())
+            let mut tmp_copyright = copyright.to_tmp_for_borrow();
+            ffi::gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(self.unwrap_widget()), tmp_copyright.to_glib_ptr())
         };
     }
 
@@ -106,9 +104,8 @@ impl AboutDialog {
 
     pub fn set_comments(&self, comments: &str) -> () {
         unsafe {
-            let c_str = CString::from_slice(comments.as_bytes());
-
-            ffi::gtk_about_dialog_set_comments(GTK_ABOUT_DIALOG(self.unwrap_widget()), c_str.as_ptr())
+            let mut tmp_comments = comments.to_tmp_for_borrow();
+            ffi::gtk_about_dialog_set_comments(GTK_ABOUT_DIALOG(self.unwrap_widget()), tmp_comments.to_glib_ptr())
         };
     }
 
@@ -126,9 +123,8 @@ impl AboutDialog {
 
     pub fn set_license(&self, license: &str) -> () {
         unsafe {
-            let c_str = CString::from_slice(license.as_bytes());
-
-            ffi::gtk_about_dialog_set_license(GTK_ABOUT_DIALOG(self.unwrap_widget()), c_str.as_ptr())
+            let mut tmp_license = license.to_tmp_for_borrow();
+            ffi::gtk_about_dialog_set_license(GTK_ABOUT_DIALOG(self.unwrap_widget()), tmp_license.to_glib_ptr())
         };
     }
 
@@ -162,9 +158,8 @@ impl AboutDialog {
 
     pub fn set_website(&self, website: &str) -> () {
         unsafe {
-            let c_str = CString::from_slice(website.as_bytes());
-
-            ffi::gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(self.unwrap_widget()), c_str.as_ptr())
+            let mut tmp_website = website.to_tmp_for_borrow();
+            ffi::gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(self.unwrap_widget()), tmp_website.to_glib_ptr())
         };
     }
 
@@ -182,9 +177,8 @@ impl AboutDialog {
 
     pub fn set_website_label(&self, website_label: &str) -> () {
         unsafe {
-            let c_str = CString::from_slice(website_label.as_bytes());
-
-            ffi::gtk_about_dialog_set_website_label(GTK_ABOUT_DIALOG(self.unwrap_widget()), c_str.as_ptr())
+            let mut tmp_website_label = website_label.to_tmp_for_borrow();
+            ffi::gtk_about_dialog_set_website_label(GTK_ABOUT_DIALOG(self.unwrap_widget()), tmp_website_label.to_glib_ptr())
         };
     }
 

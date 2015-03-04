@@ -13,16 +13,15 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::ffi::CString;
+use glib::translate::{ToGlibPtr, ToTmp};
 use gtk::{self, ffi};
 use gtk::cast::GTK_TEXT_BUFFER;
 
 pub trait TextBufferTrait: gtk::WidgetTrait {
     fn set_text(&self, text: String) {
         unsafe {
-        	let c_str = CString::from_slice(text.as_bytes());
-
-            ffi::gtk_text_buffer_set_text(GTK_TEXT_BUFFER(self.unwrap_widget()), c_str.as_ptr(), text.len() as i32)
+            let mut tmp_text = text.to_tmp_for_borrow();
+            ffi::gtk_text_buffer_set_text(GTK_TEXT_BUFFER(self.unwrap_widget()), tmp_text.to_glib_ptr(), text.len() as i32)
         }
     }
 

@@ -15,7 +15,7 @@
 
 //! GtkActionable — An interface for widgets that can be associated with actions
 
-use std::ffi::CString;
+use glib::translate::{ToGlibPtr, ToTmp};
 use gtk::cast::GTK_ACTIONABLE;
 use gtk::{self, ffi};
 
@@ -34,17 +34,15 @@ pub trait ActionableTrait: gtk::WidgetTrait {
 
     fn set_action_name(&self, action_name: &str) {
         unsafe {
-            let c_str = CString::from_slice(action_name.as_bytes());
-
-            ffi::gtk_actionable_set_action_name(GTK_ACTIONABLE(self.unwrap_widget()), c_str.as_ptr())
+            let mut tmp_action_name = action_name.to_tmp_for_borrow();
+            ffi::gtk_actionable_set_action_name(GTK_ACTIONABLE(self.unwrap_widget()), tmp_action_name.to_glib_ptr())
         }
     }
 
     fn set_detailed_action_name(&self, detailed_action_name: &str) {
         unsafe {
-            let c_str = CString::from_slice(detailed_action_name.as_bytes());
-
-            ffi::gtk_actionable_set_detailed_action_name(GTK_ACTIONABLE(self.unwrap_widget()), c_str.as_ptr())
+            let mut tmp_detailed_action_name = detailed_action_name.to_tmp_for_borrow();
+            ffi::gtk_actionable_set_detailed_action_name(GTK_ACTIONABLE(self.unwrap_widget()), tmp_detailed_action_name.to_glib_ptr())
         }
     }
 }

@@ -16,7 +16,7 @@
 //! Report important messages to the user
 
 use libc::c_int;
-use std::ffi::CString;
+use glib::translate::{ToGlibPtr, ToTmp};
 
 use gtk::MessageType;
 use gtk::cast::GTK_INFOBAR;
@@ -40,8 +40,8 @@ impl InfoBar {
 
     pub fn add_button(&mut self, button_text: &str, response_id: i32) -> gtk::Button {
         let button = unsafe {
-            let c_str = CString::from_slice(button_text.as_bytes());
-            ffi::gtk_info_bar_add_button(GTK_INFOBAR(self.pointer), c_str.as_ptr(), response_id as c_int)
+            let mut tmp_button_text = button_text.to_tmp_for_borrow();
+            ffi::gtk_info_bar_add_button(GTK_INFOBAR(self.pointer), tmp_button_text.to_glib_ptr(), response_id as c_int)
         };
         gtk::FFIWidget::wrap_widget(button)
     }

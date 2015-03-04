@@ -14,7 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use glib::{Value, Type};
-use glib::translate::from_glib;
+use glib::translate::{ToGlibPtr, ToTmp, from_glib};
 use gtk::{self, ffi, TreeIter, TreePath};
 use libc::{self, c_char};
 use std::ffi::CString;
@@ -44,9 +44,8 @@ impl TreeModel {
     }
 
     pub fn get_iter_from_string(&self, iter: &mut TreeIter, path_string: &str) -> bool {
-        let c_str = CString::from_slice(path_string.as_bytes());
-
-        match unsafe { ffi::gtk_tree_model_get_iter_from_string(self.pointer, iter.unwrap_pointer(), c_str.as_ptr()) } {
+        let mut tmp_path_string = path_string.to_tmp_for_borrow();
+        match unsafe { ffi::gtk_tree_model_get_iter_from_string(self.pointer, iter.unwrap_pointer(), tmp_path_string.to_glib_ptr()) } {
                 0 => false,
                 _ => true
             }

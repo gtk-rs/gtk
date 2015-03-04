@@ -19,6 +19,7 @@
 pub mod g_type {
     use gtk::ffi;
     use std::ffi::CString;
+use glib::translate::{ToGlibPtr, ToTmp};
     use glib_ffi::{self};
 
     pub fn name(_type: glib_ffi::GType) -> Option<String> {
@@ -33,9 +34,8 @@ pub mod g_type {
 
     pub fn from_name(name: &str) -> glib_ffi::GType {
         unsafe {
-            let c_str = CString::from_slice(name.as_bytes());
-
-            ffi::g_type_from_name(c_str.as_ptr())
+            let mut tmp_name = name.to_tmp_for_borrow();
+            ffi::g_type_from_name(tmp_name.to_glib_ptr())
         }
     }
 

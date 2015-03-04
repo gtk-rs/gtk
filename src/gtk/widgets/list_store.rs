@@ -17,7 +17,7 @@ use glib::{to_bool, Value, Type};
 use glib::translate::ToGlib;
 use gtk::{self, ffi};
 use gtk::TreeIter;
-use std::ffi::CString;
+use glib::translate::{ToGlibPtr, ToTmp};
 use std::num::ToPrimitive;
 
 pub struct ListStore {
@@ -38,9 +38,8 @@ impl ListStore {
 
     pub fn set_string(&self, iter: &TreeIter, column: i32, text: &str) {
         unsafe {
-            let text_c = CString::from_slice(text.as_bytes());
-
-            ffi::gtk_list_store_set(self.pointer, iter.unwrap_pointer(), column, text_c.as_ptr(), -1)
+            let mut tmp_text = text.to_tmp_for_borrow();
+            ffi::gtk_list_store_set(self.pointer, iter.unwrap_pointer(), column, tmp_text.to_glib_ptr(), -1)
         }
     }
 

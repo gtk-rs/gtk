@@ -17,6 +17,7 @@
 
 use gtk::{self, ffi};
 use std::ffi::CString;
+use glib::translate::{ToGlibPtr, ToTmp};
 #[cfg(any(feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
 use gtk::IconSize;
 
@@ -42,9 +43,8 @@ impl Button {
 
     pub fn new_with_label(label: &str) -> Option<Button> {
         let tmp_pointer = unsafe {
-            let c_str = CString::from_slice(label.as_bytes());
-
-            ffi::gtk_button_new_with_label(c_str.as_ptr())
+            let mut tmp_label = label.to_tmp_for_borrow();
+            ffi::gtk_button_new_with_label(tmp_label.to_glib_ptr())
         };
         check_pointer!(tmp_pointer, Button)
     }
