@@ -54,13 +54,15 @@ impl Drop for RectangleVec {
 #[repr(C)]
 pub struct Context(*mut cairo_t);
 
-impl Drop for Context {
-    fn drop(&mut self) {
-        unsafe {
-            ffi::cairo_destroy(self.get_ptr())
-        }
-    }
-}
+// Temporarily fix issue #210
+// For more info, see discussion at https://github.com/jeremyletang/rgtk/issues/210
+// impl Drop for Context {
+//     fn drop(&mut self) {
+//         unsafe {
+//             ffi::cairo_destroy(self.get_ptr())
+//         }
+//     }
+// }
 
 impl Context {
     pub fn get_ptr(&self) -> *mut cairo_t {
