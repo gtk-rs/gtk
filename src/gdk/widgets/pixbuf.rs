@@ -15,10 +15,10 @@
 
 /// The GdkPixbuf structure contains information that describes an image in memory.
 
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 use gdk::{self, ffi};
 use c_vec::CVec;
 use std::ptr::Unique;
-use std::ffi::CString;
 
 #[repr(C)]
 #[derive(Copy)]
@@ -75,16 +75,11 @@ impl Pixbuf {
     }
 
     pub fn get_option(&self, key: &str) -> Option<String> {
-        let tmp = unsafe {
-            let c_str = CString::from_slice(key.as_bytes());
-
-            ffi::gdk_pixbuf_get_option(self.pointer as *const ffi::C_GdkPixbuf, c_str.as_ptr())
-        };
-
-        if tmp.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
+        unsafe {
+            let mut tmp_key = key.to_tmp_for_borrow();
+            FromGlibPtr::borrow(
+                ffi::gdk_pixbuf_get_option(self.pointer as *const ffi::C_GdkPixbuf,
+                                           tmp_key.to_glib_ptr()))
         }
     }
 

@@ -16,8 +16,8 @@
 //! General — Library initialization and miscellaneous functions
 
 use std::ptr;
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 use gdk::ffi;
-use std::ffi::CString;
 
 pub fn init() {
     unsafe { ffi::gdk_init(ptr::null_mut(), ptr::null_mut()) }
@@ -32,12 +32,9 @@ pub fn parse_args(argc: *mut c_int, argv: *mut *mut *mut c_char) {
 }*/
 
 pub fn get_display_arg_name() -> Option<String> {
-    let tmp = unsafe { ffi::gdk_get_display_arg_name() };
-
-    if tmp.is_null() {
-        None
-    } else {
-        unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
+    unsafe {
+        FromGlibPtr::borrow(
+            ffi::gdk_get_display_arg_name())
     }
 }
 
@@ -47,17 +44,15 @@ pub fn notify_startup_complete() {
 
 pub fn notify_startup_complete_with_id(startup_id: &str) {
     unsafe {
-        let c_str = CString::from_slice(startup_id.as_bytes());
-
-        ffi::gdk_notify_startup_complete_with_id(c_str.as_ptr())
+        let mut tmp_startup_id = startup_id.to_tmp_for_borrow();
+        ffi::gdk_notify_startup_complete_with_id(tmp_startup_id.to_glib_ptr());
     }
 }
 
 pub fn set_allowed_backends(backends: &str) {
     unsafe {
-        let c_str = CString::from_slice(backends.as_bytes());
-
-        ffi::gdk_set_allowed_backends(c_str.as_ptr())
+        let mut tmp_backends = backends.to_tmp_for_borrow();
+        ffi::gdk_set_allowed_backends(tmp_backends.to_glib_ptr())
     }
 }
 
@@ -73,9 +68,8 @@ pub fn get_program_class() -> Option<String> {
 
 pub fn set_program_class(program_class: &str) {
     unsafe {
-        let c_str = CString::from_slice(program_class.as_bytes());
-
-        ffi::gdk_set_program_class(c_str.as_ptr())
+        let mut tmp_program_class = program_class.to_tmp_for_borrow();
+        ffi::gdk_set_program_class(tmp_program_class.to_glib_ptr())
     }
 }
 

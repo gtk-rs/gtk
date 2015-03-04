@@ -17,7 +17,7 @@
 
 use gdk::{self, ffi};
 use libc::{c_uint};
-use std::ffi::CString;
+use glib::translate::{ToGlibPtr, ToTmp};
 use glib::to_bool;
 
 #[repr(C)]
@@ -29,9 +29,8 @@ pub struct Display {
 impl Display {
     pub fn open(display_name: &str) -> Option<Display> {
         let tmp = unsafe {
-            let c_str = CString::from_slice(display_name.as_bytes());
-
-            ffi::gdk_display_open(c_str.as_ptr())
+            let mut tmp_display_name = display_name.to_tmp_for_borrow();
+            ffi::gdk_display_open(tmp_display_name.to_glib_ptr())
         };
 
         if tmp.is_null() {
@@ -222,9 +221,8 @@ impl Display {
 
     pub fn notify_startup_complete(&self, startup_id: &str) {
         unsafe {
-            let c_str = CString::from_slice(startup_id.as_bytes());
-
-            ffi::gdk_display_notify_startup_complete(self.pointer, c_str.as_ptr())
+            let mut tmp_startup_id = startup_id.to_tmp_for_borrow();
+            ffi::gdk_display_notify_startup_complete(self.pointer, tmp_startup_id.to_glib_ptr())
         }
     }
 }

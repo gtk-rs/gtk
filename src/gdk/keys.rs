@@ -15,18 +15,14 @@
 
 //! Keyboard Handling Functions
 
+use glib::translate::FromGlibPtr;
 use gdk::ffi;
-use std::ffi::CStr;
 use libc::{c_uint, c_char};
 
 pub fn keyval_name(keyval: u32) -> Option<String> {
-    let tmp = unsafe { ffi::gdk_keyval_name(keyval as c_uint) as *const c_char };
-
-    if tmp.is_null() {
-        None
-    } else {
-        unsafe {
-            return Some(String::from_utf8_lossy(CStr::from_ptr(tmp).to_bytes()).into_owned());
-        }
+    unsafe {
+        FromGlibPtr::borrow(
+            ffi::gdk_keyval_name(keyval as c_uint) as *const c_char
+        )
     }
 }

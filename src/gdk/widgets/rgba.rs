@@ -15,10 +15,10 @@
 
 //! RGBA Colors — RGBA colors
 
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 use gdk_ffi as ffi;
 use gdk_ffi::C_GdkRGBA;
-use std::ffi::CString;
-use libc::{c_char, c_void};
+use libc::{c_char};
 
 pub trait RGBA {
     fn white() -> C_GdkRGBA;
@@ -90,9 +90,8 @@ impl RGBA for C_GdkRGBA {
 
     fn parse(&mut self, spec: &str) -> bool {
         unsafe {
-            let c_str = CString::from_slice(spec.as_bytes());
-
-            ::glib::to_bool(ffi::gdk_rgba_parse(self, c_str.as_ptr()))
+            let mut tmp_spec = spec.to_tmp_for_borrow();
+            ::glib::to_bool(ffi::gdk_rgba_parse(self, tmp_spec.to_glib_ptr()))
         }
     }
 
@@ -105,17 +104,9 @@ impl RGBA for C_GdkRGBA {
     }
 
     fn to_string(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gdk_rgba_to_string(self) as *const c_char };
-
-        if tmp.is_null() {
-            None
-        } else {
-            unsafe { 
-                let ret = Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string());
-
-                ::libc::funcs::c95::stdlib::free(tmp as *mut c_void);
-                ret
-            }
+        unsafe {
+            FromGlibPtr::take(
+                ffi::gdk_rgba_to_string(self) as *const c_char)
         }
     }
 }
