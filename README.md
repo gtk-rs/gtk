@@ -1,25 +1,12 @@
 rgtk [![Build Status](https://travis-ci.org/jeremyletang/rgtk.svg?branch=master)](https://travis-ci.org/jeremyletang/rgtk) [![Gitter chat](https://badges.gitter.im/jeremyletang/rgtk.png)](https://gitter.im/jeremyletang/rgtk)
 ====
 
-__Rust__ bindings and wrappers for __GTK+__, __GLib__ and __Cairo__.
+__Rust__ bindings and wrappers for __GLib__, __GDK 3__, __GTK+ 3__  and __Cairo__.
 
 Installation
 ============
 
-__rgtk__ uses autoconf tools to build, so you should install them on your system.
-
-
-For Debian based systems:
-```Shell
-> apt-get install autoconf
-```
-
-For OSX:
-```Shell
-> brew install autoconf
-```
-
-You should also install __GTK+__, __GLib__ and __Cairo__ development files before installing __rgtk__. Optionally, it is recommended to install the debug packages containing helpful debug symbols.
+__rgtk__ expects __GTK+__, __GLib__ and __Cairo__ development files to be installed on your system. Optionally, it is recommended to install the debug packages containing helpful debug symbols.
 
 For Debian based system:
 ```Shell
@@ -38,17 +25,14 @@ For OSX, install [XQuartz](http://xquartz.macosforge.org/landing/), then:
 > export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/opt/X11/lib/pkgconfig
 ```
 
-__rgtk__ targets __GTK+__ 3.12 but can also compile older versions 3.6, 3.8 and 3.10. Setting the environment variable `GTK_VERSION` to any of `GTK_3_6`, `GTK_3_8`, `GTK_3_10`, `GTK_3_12` allows pick a version. The default is GTK_3_12.
+__rgtk__ targets __GTK+__ 3.6 by default, newer verions support up to 3.14 is enabled by requesting a corresponding feature e.g.
+```Shell
+> cargo build --features GTK_3_10
+```
 
 We are currently targetting rust master compiler to build __rgtk__, make sure you have the latest version before submitting any bugs.
 
-Then you can build __rgtk__ by running `cargo build`.
-
-```Shell
-> cargo build
-```
-
-In src/bin you can find some tests showing of some functionality, these can be build and run as follows:
+In `examples` you can find some tests showing off the functionality, these can be built and run as follows:
 
 ```Shell
 > cd examples/gtktest
@@ -61,10 +45,10 @@ In src/bin you can find some tests showing of some functionality, these can be b
 __rgtk__ should build and work on both OSX and GNU/Linux. We plan on adding windows support in the future.
 
 
-Finally build documentation using:
+When building documentation don't forget to specify the feature set you're using:
 
 ```Shell
-> cargo doc
+> cargo doc --feature GTK_3_12
 ```
 
 Your local copy can be accessed using your browser at
