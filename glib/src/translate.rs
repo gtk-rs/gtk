@@ -36,7 +36,7 @@
 //!     pub fn set_icon_name(&self, name: &str) {
 //!         unsafe {
 //!             let mut tmp_name = name.to_tmp_for_borrow();
-//!             ffi::gdk_window_set_icon_name(self.pointer, tmp_name.to_glib())
+//!             ffi::gdk_window_set_icon_name(self.pointer, tmp_name.to_glib_ptr())
 //!         }
 //!     }
 //! ```
@@ -76,7 +76,7 @@ pub trait ToGlib {
 pub trait ToGlibPtr {
     type GlibType;
 
-    fn to_glib(&mut self) -> Self::GlibType;
+    fn to_glib_ptr(&mut self) -> Self::GlibType;
 }
 
 impl ToGlib for bool {
@@ -90,7 +90,7 @@ impl ToGlib for bool {
 impl ToGlibPtr for CString {
     type GlibType = *const c_char;
 
-    fn to_glib(&mut self) -> *const c_char {
+    fn to_glib_ptr(&mut self) -> *const c_char {
         self.as_ptr()
     }
 }
@@ -98,7 +98,7 @@ impl ToGlibPtr for CString {
 impl ToGlibPtr for Option<CString> {
     type GlibType = *const c_char;
 
-    fn to_glib(&mut self) -> *const c_char {
+    fn to_glib_ptr(&mut self) -> *const c_char {
         match self {
             &mut Some(ref s) => s.as_ptr(),
             &mut None => ptr::null(),
@@ -109,7 +109,7 @@ impl ToGlibPtr for Option<CString> {
 impl <T, T2> ToGlibPtr for StackBox<T, T2> {
     type GlibType = *mut T;
 
-    fn to_glib(&mut self) -> *mut T {
+    fn to_glib_ptr(&mut self) -> *mut T {
         &mut (*self).0 as  *mut _
     }
 }

@@ -25,7 +25,7 @@ impl Error {
     pub fn new_literal(domain: GQuark, code: i32, message: &str) -> Option<Error> {
         let tmp_pointer = unsafe {
             let mut tmp_message = message.to_tmp_for_borrow();
-            ffi::g_error_new_literal(domain, code, tmp_message.to_glib())
+            ffi::g_error_new_literal(domain, code, tmp_message.to_glib_ptr())
         };
 
         if tmp_pointer.is_null() {
@@ -52,7 +52,7 @@ impl Error {
     pub fn set(&mut self, domain: GQuark, code: i32, message: &str) -> () {
         unsafe {
             let mut tmp_message = message.to_tmp_for_borrow();
-            ffi::g_set_error_literal(&mut self.pointer, domain, code, tmp_message.to_glib())
+            ffi::g_set_error_literal(&mut self.pointer, domain, code, tmp_message.to_glib_ptr())
         }
     }
 

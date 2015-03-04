@@ -70,7 +70,7 @@ impl <'a> ToTmp for &'a WindowAttr {
         let mut tmp_title = self.title.to_tmp_for_borrow();
 
         let attrs = ffi::C_GdkWindowAttr {
-            title: tmp_title.to_glib(),
+            title: tmp_title.to_glib_ptr(),
             event_mask: self.event_mask,
             x: self.x.unwrap_or(0),
             y: self.y.unwrap_or(0),
@@ -102,7 +102,7 @@ impl Window {
             None => ::std::ptr::null_mut()
         };
         let mut tmp_attributes = attributes.to_tmp_for_borrow();
-        let tmp = unsafe { ffi::gdk_window_new(t_parent, tmp_attributes.to_glib(), attributes.get_mask()) };
+        let tmp = unsafe { ffi::gdk_window_new(t_parent, tmp_attributes.to_glib_ptr(), attributes.get_mask()) };
 
         if tmp.is_null() {
             None
@@ -425,7 +425,7 @@ impl Window {
     pub fn set_title(&self, title: &str) {
         unsafe {
             let mut tmp_title = title.to_tmp_for_borrow();
-            ffi::gdk_window_set_title(self.pointer, tmp_title.to_glib())
+            ffi::gdk_window_set_title(self.pointer, tmp_title.to_glib_ptr())
         }
     }
 
@@ -588,7 +588,7 @@ impl Window {
     pub fn set_icon_name(&self, name: &str) {
         unsafe {
             let mut tmp_name = name.to_tmp_for_borrow();
-            ffi::gdk_window_set_icon_name(self.pointer, tmp_name.to_glib())
+            ffi::gdk_window_set_icon_name(self.pointer, tmp_name.to_glib_ptr())
         }
     }
 
@@ -599,14 +599,14 @@ impl Window {
     pub fn set_role(&self, role: &str) {
         unsafe {
             let mut tmp_role = role.to_tmp_for_borrow();
-            ffi::gdk_window_set_role(self.pointer, tmp_role.to_glib())
+            ffi::gdk_window_set_role(self.pointer, tmp_role.to_glib_ptr())
         }
     }
 
     pub fn set_startup_id(&self, startup_id: &str) {
         unsafe {
             let mut tmp_startup_id = startup_id.to_tmp_for_borrow();
-            ffi::gdk_window_set_startup_id(self.pointer, tmp_startup_id.to_glib())
+            ffi::gdk_window_set_startup_id(self.pointer, tmp_startup_id.to_glib_ptr())
         }
     }
 

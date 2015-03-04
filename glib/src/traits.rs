@@ -69,7 +69,7 @@ pub trait Connect<'a, T: Signal<'a>>: FFIGObject + PhantomFn<&'a T> {
             
             ffi::glue_signal_connect(
                 self.unwrap_gobject(),
-                tmp_signal_name.to_glib(),
+                tmp_signal_name.to_glib_ptr(),
                 Some(trampoline),
                 user_data_ptr
             );
