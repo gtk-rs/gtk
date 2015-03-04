@@ -4,12 +4,14 @@
 
 #![crate_type = "bin"]
 #![feature(core)]
-#![feature(path)]
+#![feature(fs)]
 #![feature(io)]
 
 extern crate rgtk;
 
-use std::old_io::{BufferedReader, File};
+use std::io::prelude::*;
+use std::io::BufReader;
+use std::fs::File;
 use std::num::FromPrimitive;
 
 use rgtk::*;
@@ -38,10 +40,11 @@ fn main() {
         match response {
             Some(gtk::ResponseType::Accept) => {
                 let filename = file_chooser.get_filename().unwrap();
-                let file = File::open(&Path::new(filename));
+                let file = File::open(&filename).unwrap();
 
-                let mut reader = BufferedReader::new(file);
-                let contents = reader.read_to_string().unwrap();
+                let mut reader = BufReader::new(file);
+                let mut contents = String::new();
+                let _ = reader.read_to_string(&mut contents);
 
                 text_view.get_buffer().unwrap().set_text(contents);
 

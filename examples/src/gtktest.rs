@@ -6,6 +6,30 @@ use rgtk::*;
 use rgtk::gtk::signals::{Clicked, KeyPressEvent, DeleteEvent};
 use rgtk::gdk::enums::modifier_type;
 
+/// Expands to its argument if GTK+ 3.10 support is configured and to `()` otherwise
+#[macro_export]
+#[cfg(not(any(feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14")))]
+macro_rules! with_gtk_3_10 {
+    ($ex:expr) => (
+        ()
+    );
+    ($bl:block) => {
+        ()
+    }
+}
+
+/// Expands to its argument if GTK+ 3.10 support is configured and to `()` otherwise
+#[macro_export]
+#[cfg(any(feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
+macro_rules! with_gtk_3_10 {
+    ($ex:expr) => (
+        $ex
+    );
+    ($bl:block) => {
+        $bl
+    }
+}
+
 fn main() {
     gtk::init();
     println!("Major: {}, Minor: {}", gtk::get_major_version(), gtk::get_minor_version());
@@ -24,17 +48,23 @@ fn main() {
     let toggle_button = gtk::ToggleButton::new_with_label("Toggle Me !").unwrap();
     let check_button = gtk::CheckButton::new_with_label("Labeled check button").unwrap();
     let color_button = gtk::ColorButton::new().unwrap();
-    let menu_button = gtk::MenuButton::new().unwrap();
+    let menu_button = with_gtk_3_10!(
+        gtk::MenuButton::new().unwrap()
+    );
     let link_button = gtk::LinkButton::new("www.rust-lang.org").unwrap();
     let mut volume_button = gtk::VolumeButton::new().unwrap();
     let mut entry = gtk::Entry::new().unwrap();
-    let search_entry = gtk::SearchEntry::new().unwrap();
+    let search_entry = with_gtk_3_10!(
+        gtk::SearchEntry::new().unwrap()
+    );
     let separator = gtk::Separator::new(gtk::Orientation::Horizontal).unwrap();
     let separator2 = gtk::Separator::new(gtk::Orientation::Horizontal).unwrap();
     let switch = gtk::Switch::new().unwrap();
     let mut switch2 = gtk::Switch::new().unwrap();
     let scale = gtk::Scale::new_with_range(gtk::Orientation::Horizontal, 0., 100., 1.).unwrap();
-    let mut level_bar = gtk::LevelBar::new_for_interval(0., 100.).unwrap();
+    let mut level_bar = with_gtk_3_10!(
+        gtk::LevelBar::new_for_interval(0., 100.).unwrap()
+    );
     let spin_button = gtk::SpinButton::new_with_range(0., 100., 1.).unwrap();
     let mut spinner = gtk::Spinner::new().unwrap();
     let image = gtk::Image::new_from_file("./test/resources/gtk.jpg").unwrap();
@@ -42,11 +72,15 @@ fn main() {
     let arrow = gtk::Arrow::new(gtk::ArrowType::Right, gtk::ShadowType::EtchedOut).unwrap();
     let calendar = gtk::Calendar::new().unwrap();
     let mut info_bar = gtk::InfoBar::new().unwrap();
-    let tmp_button = gtk::Button::new_from_icon_name("edit-clear", gtk::IconSize::Button).unwrap();
+    let tmp_button = with_gtk_3_10!(
+        gtk::Button::new_from_icon_name("edit-clear", gtk::IconSize::Button).unwrap()
+    );
 
     println!("test");
 
-    info_bar.show_close_button(true);
+    with_gtk_3_10! {{
+        info_bar.show_close_button(true);
+    }}
 
     /*info_bar.connect(signals::Response::new(|response_id| {
         info_bar.hide()
@@ -54,7 +88,9 @@ fn main() {
 
     progress_bar.set_fraction(0.7);
     spinner.start();
-    level_bar.set_value(37.);
+    with_gtk_3_10! {{
+        level_bar.set_value(37.);
+    }}
     switch2.set_active(true);
     frame.set_border_width(10);
     _box.set_border_width(5);
@@ -114,7 +150,9 @@ fn main() {
     }));
 
     frame.add(&_box);
-    button_box.add(&tmp_button);
+    with_gtk_3_10! {{
+        button_box.add(&tmp_button)
+    }};
     button_box.add(&button);
     button_box.add(&button_font);
     button_box.add(&button_recent);
@@ -125,7 +163,9 @@ fn main() {
     button_box.add(&color_button);
     button_box.add(&volume_button);
     v_box.add(&switch);
-    v_box.add(&menu_button);
+    with_gtk_3_10! {{
+        v_box.add(&menu_button);
+    }}
     v_box.add(&switch2);
     v_box.add(&check_button);
     v_box.add(&link_button);
@@ -133,14 +173,18 @@ fn main() {
     _box.add(&info_bar);
     _box.add(&v_box);
     _box.add(&scale);
-    _box.add(&level_bar);
+    with_gtk_3_10! {{
+        _box.add(&level_bar);
+    }}
     _box.add(&button_box);
     _box.add(&progress_bar);
     _box.add(&separator);
     _box.add(&label);
     _box.add(&entry);
     _box.add(&separator2);
-    _box.add(&search_entry);
+    with_gtk_3_10! {{
+        _box.add(&search_entry);
+    }}
     _box.add(&spinner);
     _box.add(&image);
     _box.add(&arrow);
