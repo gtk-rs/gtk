@@ -218,6 +218,7 @@ impl AboutDialog {
 
             tmp_vec.push(c_str.as_ptr());
         }
+        tmp_vec.push(::std::ptr::null_mut());
         unsafe { ffi::gtk_about_dialog_set_authors(GTK_ABOUT_DIALOG(self.unwrap_widget()), tmp_vec.as_slice().as_ptr()) }
     }
 
@@ -251,6 +252,7 @@ impl AboutDialog {
 
             tmp_vec.push(c_str.as_ptr());
         }
+        tmp_vec.push(::std::ptr::null_mut());
         unsafe { ffi::gtk_about_dialog_set_artists(GTK_ABOUT_DIALOG(self.unwrap_widget()), tmp_vec.as_slice().as_ptr()) }
     }
 
@@ -284,6 +286,7 @@ impl AboutDialog {
             
             tmp_vec.push(c_str.as_ptr());
         }
+        tmp_vec.push(::std::ptr::null_mut());
         unsafe { ffi::gtk_about_dialog_set_documenters(GTK_ABOUT_DIALOG(self.unwrap_widget()), tmp_vec.as_slice().as_ptr()) }
     }
 
@@ -349,6 +352,7 @@ impl AboutDialog {
 
             tmp_vec.push(c_str.as_ptr());
         }
+        tmp_vec.push(::std::ptr::null_mut());
         unsafe {
             let c_str = CString::from_slice(section_name.as_bytes());
 
