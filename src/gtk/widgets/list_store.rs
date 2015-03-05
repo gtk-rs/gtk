@@ -13,8 +13,9 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
+use glib::ffi::GType;
 use gtk::{self, ffi};
-use gtk::{GType, TreeIter};
+use gtk::TreeIter;
 use std::ffi::CString;
 use std::num::ToPrimitive;
 use glib::to_bool;
@@ -25,18 +26,12 @@ pub struct ListStore {
 
 impl ListStore {
     pub fn new(column_types: &[GType]) -> Option<ListStore> {
-        let column_types_u64 : Vec<u64> = column_types.iter().map(|n| *n as u64).collect();
-        let tmp_pointer = unsafe {
-            ffi::gtk_list_store_newv(column_types.len().to_i32().unwrap(), column_types_u64.as_slice())
-        };
+        let tmp_pointer = unsafe { ffi::gtk_list_store_newv(column_types.len().to_i32().unwrap(), column_types) };
         check_pointer!(tmp_pointer, ListStore, G_OBJECT_FROM_LIST_STORE)
     }
 
     pub fn set_column_types(&self, column_types: &[GType]) {
-        let column_types_u64 : Vec<u64> = column_types.iter().map(|n| *n as u64).collect();
-        unsafe {
-            ffi::gtk_list_store_set_column_types(self.pointer, column_types.len().to_i32().unwrap(), column_types_u64.as_slice())
-        }
+        unsafe { ffi::gtk_list_store_set_column_types(self.pointer, column_types.len().to_i32().unwrap(), column_types) }
     }
 
     pub fn set_string(&self, iter: &TreeIter, column: i32, text: &str) {

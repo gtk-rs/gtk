@@ -610,6 +610,36 @@ GtkEventBox* cast_GtkEventBox(GtkWidget* widget) {
     return GTK_EVENT_BOX(widget);
 }
 
+// GType constants
+
+const GType g_type_invalid = G_TYPE_INVALID;
+const GType g_type_none = G_TYPE_NONE;
+const GType g_type_interface = G_TYPE_INTERFACE;
+const GType g_type_char = G_TYPE_CHAR;
+const GType g_type_uchar = G_TYPE_UCHAR;
+const GType g_type_boolean = G_TYPE_BOOLEAN;
+const GType g_type_int = G_TYPE_INT;
+const GType g_type_uint = G_TYPE_UINT;
+const GType g_type_long = G_TYPE_LONG;
+const GType g_type_ulong = G_TYPE_ULONG;
+const GType g_type_int64 = G_TYPE_INT64;
+const GType g_type_uint64 = G_TYPE_UINT64;
+const GType g_type_enum = G_TYPE_ENUM;
+const GType g_type_flags = G_TYPE_FLAGS;
+const GType g_type_float = G_TYPE_FLOAT;
+const GType g_type_double = G_TYPE_DOUBLE;
+const GType g_type_string = G_TYPE_STRING;
+const GType g_type_pointer = G_TYPE_POINTER;
+const GType g_type_boxed = G_TYPE_BOXED;
+const GType g_type_param = G_TYPE_PARAM;
+const GType g_type_object = G_TYPE_OBJECT;
+const GType g_type_variant = G_TYPE_VARIANT;
+const GType g_type_reserved_glib_first = G_TYPE_RESERVED_GLIB_FIRST;
+const GType g_type_reserved_glib_last = G_TYPE_RESERVED_GLIB_LAST;
+const GType g_type_reserved_bse_first = G_TYPE_RESERVED_BSE_FIRST;
+const GType g_type_reserved_bse_last = G_TYPE_RESERVED_BSE_LAST;
+const GType g_type_reserved_user_first = G_TYPE_RESERVED_USER_FIRST;
+
 /* MAC OS dylib
 gcc -I/usr/local/include/gtk-3.0 -I/usr/local/include/glib-2.0 -I/usr/local/include/gobject-introspection-1.0 -I/usr/local/Cellar/glib/2.38.1/lib/glib-2.0/include/ -I/usr/local/Cellar/pango/1.36.0/include/pango-1.0/ -I/usr/local/Cellar/cairo/1.12.16/include/cairo/ -I/usr/local/Cellar/gdk-pixbuf/2.30.0/include/gdk-pixbuf-2.0/ -I/usr/local/Cellar/atk/2.10.0/include/atk-1.0/ -lglib-2.0 -lgtk-3.0 -lgobject-2.0 -dynamiclib -o libgtk_glue.dylib -dy gtk_glue.c
 */

@@ -168,4 +168,35 @@ extern "C" {
                                signal: *const c_char,
                                func: Option<extern "C" fn()>,
                                user_data: *const c_void);
+
+    //=========================================================================
+    // GType constants
+    //=========================================================================
+    pub static g_type_invalid: GType;
+    pub static g_type_none: GType;
+    pub static g_type_interface: GType;
+    pub static g_type_char: GType;
+    pub static g_type_uchar: GType;
+    pub static g_type_boolean: GType;
+    pub static g_type_int: GType;
+    pub static g_type_uint: GType;
+    pub static g_type_long: GType;
+    pub static g_type_ulong: GType;
+    pub static g_type_int64: GType;
+    pub static g_type_uint64: GType;
+    pub static g_type_enum: GType;
+    pub static g_type_flags: GType;
+    pub static g_type_float: GType;
+    pub static g_type_double: GType;
+    pub static g_type_string: GType;
+    pub static g_type_pointer: GType;
+    pub static g_type_boxed: GType;
+    pub static g_type_param: GType;
+    pub static g_type_object: GType;
+    pub static g_type_variant: GType;
+    pub static g_type_reserved_glib_first: GType;
+    pub static g_type_reserved_glib_last: GType;
+    pub static g_type_reserved_bse_first: GType;
+    pub static g_type_reserved_bse_last: GType;
+    pub static g_type_reserved_user_first: GType;
 }

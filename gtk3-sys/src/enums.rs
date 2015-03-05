@@ -1267,59 +1267,58 @@ pub enum SensitivityType {
 }
 
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Debug, FromPrimitive, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 pub enum GType {
     /// An invalid GType used as error return value in some functions which return a GType.
-    Invalid = 0 << 2,
+    Invalid,
     /// A fundamental type which is used as a replacement for the C void return type.
-    None = 1 << 2,
+    None,
     /// The fundamental type from which all interfaces are derived.
-    Interface = 2 << 2,
+    Interface,
     /// The fundamental type corresponding to gchar. The type designated by G_TYPE_CHAR is unconditionally
     /// an 8-bit signed integer. This may or may not be the same type a the C type "gchar".
-    Char = 3 << 2,
+    Char,
     /// The fundamental type corresponding to guchar.
-    UChar = 4 << 2,
+    UChar,
     /// The fundamental type corresponding to gboolean.
-    Boolean = 5 << 2,
+    Boolean,
     /// The fundamental type corresponding to gint.
-    Int = 6 << 2,
+    Int,
     /// The fundamental type corresponding to guint.
-    UInt = 7 << 2,
+    UInt,
     /// The fundamental type corresponding to glong.
-    Long = 8 << 2,
+    Long,
     /// The fundamental type corresponding to gulong.
-    ULong = 9 << 2,
+    ULong,
     /// The fundamental type corresponding to gint64.
-    Int64 = 10 << 2,
+    Int64,
     /// The fundamental type corresponding to guint64.
-    UInt64 = 11 << 2,
+    UInt64,
     /// The fundamental type from which all enumeration types are derived.
-    Enum = 12 << 2,
+    Enum,
     /// The fundamental type from which all flags types are derived.
-    Flags = 13 << 2,
+    Flags,
     /// The fundamental type corresponding to gfloat.
-    Float = 14 << 2,
+    Float,
     /// The fundamental type corresponding to gdouble.
-    Double = 15 << 2,
+    Double,
     /// The fundamental type corresponding to nul-terminated C strings.
-    String = 16 << 2,
+    String,
     /// The fundamental type corresponding to gpointer.
-    Pointer = 17 << 2,
+    Pointer,
     /// The fundamental type from which all boxed types are derived.
-    Boxed = 18 << 2,
+    Boxed,
     /// The fundamental type from which all GParamSpec types are derived.
-    Param = 19 << 2,
+    Param,
     /// The fundamental type for GObject.
-    Object = 20 << 2,
+    Object,
     /// The fundamental type corresponding to GVariant.
     /// All floating GVariant instances passed through the GType system are consumed.
     /// Note that callbacks in closures, and signal handlers for signals of return type G_TYPE_VARIANT, must never return floating variants.
     /// Note: GLib 2.24 did include a boxed type with this name. It was replaced with this fundamental type in 2.26.
-    Variant = 21 << 2,
-/*
+    Variant,
     /// First fundamental type number to create a new fundamental type id with G_TYPE_MAKE_FUNDAMENTAL() reserved for GLib.
-    ReservedGLibFirst = 22,
+    ReservedGLibFirst,
     /// Last fundamental type number reserved for GLib.
     ReservedGLibLast = 31,
     /// First fundamental type number to create a new fundamental type id with G_TYPE_MAKE_FUNDAMENTAL() reserved for BSE.
@@ -1328,7 +1327,6 @@ pub enum GType {
     ReservedGLibBSELast = 48,
     /// First available fundamental type number to create new fundamental type id with G_TYPE_MAKE_FUNDAMENTAL().
     ReservedUserFirst = 49
-*/
 }
 
 /// Flags affecting how a search is done.
