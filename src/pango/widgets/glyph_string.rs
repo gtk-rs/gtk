@@ -56,7 +56,7 @@ impl GlyphString {
 
 impl Drop for GlyphString {
     fn drop(&mut self) {
-        if pointer.is_null() {
+        if self.pointer.is_null() {
             return;
         }
         unsafe { ffi::pango_glyph_string_free(self.pointer); }
