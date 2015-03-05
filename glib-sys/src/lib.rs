@@ -60,6 +60,34 @@ pub struct C_GPermission;
 #[derive(Copy)]
 pub struct C_GObject;
 
+//=========================================================================
+// GType constants
+//=========================================================================
+
+pub const G_TYPE_FUNDAMENTAL_SHIFT: u8 = 2;
+pub const G_TYPE_INVALID: GType = 0 << G_TYPE_FUNDAMENTAL_SHIFT;
+pub const G_TYPE_NONE: GType = 1 << G_TYPE_FUNDAMENTAL_SHIFT;
+pub const G_TYPE_INTERFACE: GType = 2 << G_TYPE_FUNDAMENTAL_SHIFT;
+pub const G_TYPE_CHAR: GType = 3 << G_TYPE_FUNDAMENTAL_SHIFT;
+pub const G_TYPE_UCHAR: GType = 4 << G_TYPE_FUNDAMENTAL_SHIFT;
+pub const G_TYPE_BOOLEAN: GType = 5 << G_TYPE_FUNDAMENTAL_SHIFT;
+pub const G_TYPE_INT: GType = 6 << G_TYPE_FUNDAMENTAL_SHIFT;
+pub const G_TYPE_UINT: GType = 7 << G_TYPE_FUNDAMENTAL_SHIFT;
+pub const G_TYPE_LONG: GType = 8 << G_TYPE_FUNDAMENTAL_SHIFT;
+pub const G_TYPE_ULONG: GType = 9 << G_TYPE_FUNDAMENTAL_SHIFT;
+pub const G_TYPE_INT64: GType = 10 << G_TYPE_FUNDAMENTAL_SHIFT;
+pub const G_TYPE_UINT64: GType = 11 << G_TYPE_FUNDAMENTAL_SHIFT;
+pub const G_TYPE_ENUM: GType = 12 << G_TYPE_FUNDAMENTAL_SHIFT;
+pub const G_TYPE_FLAGS: GType = 13 << G_TYPE_FUNDAMENTAL_SHIFT;
+pub const G_TYPE_FLOAT: GType = 14 << G_TYPE_FUNDAMENTAL_SHIFT;
+pub const G_TYPE_DOUBLE: GType = 15 << G_TYPE_FUNDAMENTAL_SHIFT;
+pub const G_TYPE_STRING: GType = 16 << G_TYPE_FUNDAMENTAL_SHIFT;
+pub const G_TYPE_POINTER: GType = 17 << G_TYPE_FUNDAMENTAL_SHIFT;
+pub const G_TYPE_BOXED: GType = 18 << G_TYPE_FUNDAMENTAL_SHIFT;
+pub const G_TYPE_PARAM: GType = 19 << G_TYPE_FUNDAMENTAL_SHIFT;
+pub const G_TYPE_OBJECT: GType = 20 << G_TYPE_FUNDAMENTAL_SHIFT;
+pub const G_TYPE_VARIANT: GType = 21 << G_TYPE_FUNDAMENTAL_SHIFT;
+
 extern "C" {
 
     pub fn g_free                          (ptr: gpointer);
@@ -168,35 +196,4 @@ extern "C" {
                                signal: *const c_char,
                                func: Option<extern "C" fn()>,
                                user_data: *const c_void);
-
-    //=========================================================================
-    // GType constants
-    //=========================================================================
-    pub static g_type_invalid: GType;
-    pub static g_type_none: GType;
-    pub static g_type_interface: GType;
-    pub static g_type_char: GType;
-    pub static g_type_uchar: GType;
-    pub static g_type_boolean: GType;
-    pub static g_type_int: GType;
-    pub static g_type_uint: GType;
-    pub static g_type_long: GType;
-    pub static g_type_ulong: GType;
-    pub static g_type_int64: GType;
-    pub static g_type_uint64: GType;
-    pub static g_type_enum: GType;
-    pub static g_type_flags: GType;
-    pub static g_type_float: GType;
-    pub static g_type_double: GType;
-    pub static g_type_string: GType;
-    pub static g_type_pointer: GType;
-    pub static g_type_boxed: GType;
-    pub static g_type_param: GType;
-    pub static g_type_object: GType;
-    pub static g_type_variant: GType;
-    pub static g_type_reserved_glib_first: GType;
-    pub static g_type_reserved_glib_last: GType;
-    pub static g_type_reserved_bse_first: GType;
-    pub static g_type_reserved_bse_last: GType;
-    pub static g_type_reserved_user_first: GType;
 }

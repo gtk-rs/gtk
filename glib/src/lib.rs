@@ -34,7 +34,7 @@ pub use self::glib_container::GlibContainer;
 pub use self::error::{Error};
 pub use self::permission::Permission;
 pub use self::traits::{FFIGObject, Connect};
-pub use ffi::GType;
+pub use type_::Type;
 
 mod list;
 mod slist;
@@ -43,6 +43,7 @@ mod error;
 mod permission;
 pub mod traits;
 pub mod translate;
+pub mod type_;
 
 pub fn to_gboolean(b: bool) -> ffi::Gboolean {
     match b {
@@ -89,6 +90,6 @@ pub struct ParamSpec {
     g_type_instance: TypeInstance,
     name: *mut c_char,
     flags: ParamFlags,
-    value_type: GType,
-    owner_type: GType
+    value_type: ffi::GType,
+    owner_type: ffi::GType,
 }
