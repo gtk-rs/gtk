@@ -20,7 +20,10 @@ Bindings and wrappers for __PANGO__
 */
 
 pub use self::widgets::{
-    Item
+    Item,
+    Rectangle,
+    Matrix,
+    GlyphString
 };
 
 pub use self::enums::{

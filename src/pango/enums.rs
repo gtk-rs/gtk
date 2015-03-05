@@ -20,7 +20,7 @@
 /// using PangoGravity. Not every value in this enumeration makes sense for every usage of PangoGravity; for example, PANGO_GRAVITY_AUTO
 /// only can be passed to pango_context_set_base_gravity() and can only be returned by pango_context_get_base_gravity().
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 pub enum Gravity {
     /// Glyphs stand upright (default)
     South,
@@ -37,7 +37,7 @@ pub enum Gravity {
 /// The PangoGravityHint defines how horizontal scripts should behave in a vertical context. That is, English excerpt in a
 /// vertical paragraph for example.
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 pub enum GravityHint {
     /// scripts will take their natural gravity based on the base gravity and the script. This is the default.
     Natural,
@@ -53,7 +53,7 @@ pub enum GravityHint {
 /// Applications should be ready to handle unknown values. This enumeration is interchangeable with GUnicodeScript. See Unicode Standard Annex
 /// 24: Script names.
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 pub enum Script {
     /// a value never returned from pango_script_for_unichar()
     InvalidCode,
@@ -243,7 +243,7 @@ pub enum Script {
 /// The PANGO_DIRECTION_TTB_LTR, PANGO_DIRECTION_TTB_RTL values come from an earlier interpretation of this enumeration as the writing direction of
 /// a block of text and are no longer used; See PangoGravity for how vertical text is handled in Pango.
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 pub enum Direction {
     /// A strong left-to-right direction
     StrongLeftToRight,
@@ -264,7 +264,7 @@ pub enum Direction {
 /// The PangoBidiType type represents the bidirectional character type of a Unicode character as specified by the
 /// [Unicode bidirectional algorithm](http://www.unicode.org/reports/tr9/).
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 pub enum BidiType {
     /// Left-to-Right
     LeftToRight,
@@ -308,7 +308,7 @@ pub enum BidiType {
 
 /// An enumeration specifying the various slant styles possible for a font.
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 pub enum Style {
     /// the font is upright.
     Normal,
@@ -321,7 +321,7 @@ pub enum Style {
 /// An enumeration specifying the weight (boldness) of a font. This is a numerical value ranging from 100 to 1000, but there are some
 /// predefined values:
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 pub enum Weight {
     /// the thin weight (= 100; Since: 1.24)
     Thin,
@@ -351,7 +351,7 @@ pub enum Weight {
 
 /// An enumeration specifying capitalization variant of the font.
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 pub enum Variant {
     /// A normal font.
     Normal,
@@ -361,7 +361,7 @@ pub enum Variant {
 
 /// An enumeration specifying the width of the font relative to other designs within a family.
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 pub enum Stretch {
     /// ultra condensed width
     Condensed,
@@ -385,7 +385,7 @@ pub enum Stretch {
 
 /// The bits in a PangoFontMask correspond to fields in a PangoFontDescription that have been set.
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Show, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 pub enum FontMask {
     /// the font family is specified.
     Family,

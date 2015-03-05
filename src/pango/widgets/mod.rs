@@ -14,5 +14,11 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 pub use self::item::Item;
+pub use self::rectangle::Rectangle;
+pub use self::matrix::Matrix;
+pub use self::glyph_string::GlyphString;
 
 mod item;
+mod rectangle;
+mod matrix;
+mod glyph_string;

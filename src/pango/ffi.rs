@@ -43,7 +43,14 @@ pub struct C_PangoFontDescription;
 pub struct C_PangoLanguage;
 #[repr(C)]
 #[derive(Copy)]
-pub struct C_PangoMatrix;
+pub struct PangoMatrix {
+    pub xx: c_double,
+    pub xy: c_double,
+    pub yx: c_double,
+    pub yy: c_double,
+    pub x0: c_double,
+    pub y0: c_double
+}
 #[repr(C)]
 #[derive(Copy)]
 pub struct C_PangoFont;
@@ -68,6 +75,14 @@ pub struct C_PangoGlyphString;
 #[repr(C)]
 #[derive(Copy)]
 pub struct C_PangoScript;
+#[repr(C)]
+#[derive(Copy)]
+pub struct PangoRectangle {
+    pub x: c_int,
+    pub y: c_int,
+    pub width: c_int,
+    pub height: c_int
+}
 
 extern "C" {
     //=========================================================================
@@ -97,8 +112,8 @@ extern "C" {
     pub fn pango_context_get_gravity      (context: *mut C_PangoContext) -> pango::Gravity;
     pub fn pango_context_get_gravity_hint (context: *mut C_PangoContext) -> pango::GravityHint;
     pub fn pango_context_set_gravity_hint (context: *mut C_PangoContext, hint: pango::GravityHint);
-    pub fn pango_context_get_matrix       (context: *mut C_PangoContext) -> *const C_PangoMatrix;
-    pub fn pango_context_set_matrix       (context: *mut C_PangoContext, matrix: *const C_PangoMatrix);
+    pub fn pango_context_get_matrix       (context: *mut C_PangoContext) -> *const PangoMatrix;
+    pub fn pango_context_set_matrix       (context: *mut C_PangoContext, matrix: *const PangoMatrix);
     pub fn pango_context_load_font        (context: *mut C_PangoContext, desc: *const C_PangoFontDescription) -> *mut C_PangoFont;
     pub fn pango_context_load_fontset     (context: *mut C_PangoContext, desc: *const C_PangoFontDescription, language: *mut C_PangoLanguage) -> *mut C_PangoFontset;
     pub fn pango_context_get_metrics      (context: *mut C_PangoContext, desc: *const C_PangoFontDescription, language: *mut C_PangoLanguage) -> *mut C_PangoFontMetrics;
@@ -146,7 +161,37 @@ extern "C" {
     //=========================================================================
     // PangoMatrix                                                       NOT OK
     //=========================================================================
-    pub fn pango_gravity_get_for_matrix   (matrix: *const C_PangoMatrix) -> pango::Gravity;
+    pub fn pango_gravity_get_for_matrix    (matrix: *const PangoMatrix) -> pango::Gravity;
+    //pub fn pango_matrix_copy               (matrix: *const PangoMatrix) -> *mut PangoMatrix;
+    //pub fn pango_matrix_free               (matrix: *mut PangoMatrix);
+    pub fn pango_matrix_translate          (matrix: *mut PangoMatrix, t_x: c_double, t_y: c_double);
+    pub fn pango_matrix_scale              (matrix: *mut PangoMatrix, scale_x: c_double, scale_y: c_double);
+    pub fn pango_matrix_rotate             (matrix: *mut PangoMatrix, degrees: c_double);
+    pub fn pango_matrix_concat             (matrix: *mut PangoMatrix, new_matrix: *const PangoMatrix);
+    pub fn pango_matrix_transform_point    (matrix: *const PangoMatrix, x: *mut c_double, y: *mut c_double);
+    pub fn pango_matrix_transform_distance (matrix: *const PangoMatrix, dx: *mut c_double, dy: *mut c_double);
+    pub fn pango_matrix_transform_rectangle(matrix: *const PangoMatrix, rect: *mut PangoRectangle);
+    pub fn pango_matrix_transform_pixel_rectangle(matrix: *const PangoMatrix, rect: *mut PangoRectangle);
+    pub fn pango_matrix_get_font_scale_factor(matrix: *mut PangoMatrix) -> c_double;
+
+    //=========================================================================
+    // PangoGlyphString                                                  NOT OK
+    //=========================================================================
+    pub fn pango_glyph_string_new          () -> *mut C_PangoGlyphString;
+    pub fn pango_glyph_string_copy         (string: *mut C_PangoGlyphString) -> *mut C_PangoGlyphString;
+    pub fn pango_glyph_string_set_size     (string: *mut C_PangoGlyphString, new_len: c_int);
+    pub fn pango_glyph_string_free         (string: *mut C_PangoGlyphString);
+    pub fn pango_glyph_string_extents      (string: *mut C_PangoGlyphString, font: *mut C_PangoFont, ink_rect: *mut PangoRectangle,
+        logical_rect: *mut PangoRectangle);
+    pub fn pango_glyph_string_extents_range(string: *mut C_PangoGlyphString, start: c_int, end: c_int, font: *mut C_PangoFont,
+        ink_rect: *mut PangoRectangle, logical_rect: *mut PangoRectangle);
+    pub fn pango_glyph_string_get_width    (string: *mut C_PangoGlyphString) -> c_int;
+    pub fn pango_glyph_string_index_to_x   (string: *mut C_PangoGlyphString, text: *mut c_char, length: c_int, analysis: *mut C_PangoAnalysis,
+        index_: c_int, trailing: Gboolean, x_pos: *mut c_int);
+    pub fn pango_glyph_string_x_to_index   (string: *mut C_PangoGlyphString, text: *mut c_char, length: c_int, analysis: *mut C_PangoAnalysis,
+        x_pos: c_int, index_: *mut c_int, trailing: *mut c_int);
+    pub fn pango_glyph_string_get_logical_widths(glyphs: *mut C_PangoGlyphString, text: *mut c_char, length: c_int, embedding_level: c_int,
+        logical_widths: *mut c_int);
 
     //=========================================================================
     // PangoScript                                                       NOT OK
