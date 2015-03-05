@@ -104,9 +104,3 @@ pub use gtk::WindowTrait as GtkWindowTrait;
 pub mod gtk;
 pub mod cairo;
 pub mod gdk;
-
-pub mod ffi {
-    pub mod glib {
-        pub use glib_ffi::*;
-    }
-}
