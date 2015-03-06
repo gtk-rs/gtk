@@ -129,6 +129,17 @@ impl <'a> ToTmp for &'a str {
     }
 }
 
+impl <'a> ToTmp for &'a Option<&'a str> {
+    type Tmp = Option<CString>;
+
+    fn to_tmp_for_borrow(self) -> Option<CString> {
+        match self {
+            &Some(ref s) => Some(CString::new(&s[..]).unwrap()),
+            &None => None,
+        }
+    }
+}
+
 impl <'a> ToTmp for &'a Option<String> {
     type Tmp = Option<CString>;
 
