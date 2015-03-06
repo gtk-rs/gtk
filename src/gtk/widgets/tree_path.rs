@@ -16,9 +16,8 @@
 extern crate libc;
 
 use gtk::ffi;
-use std::ffi::CString;
-use libc::free;
-use libc::{c_void, c_char};
+use libc::{c_char};
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 
 #[derive(Copy)]
 pub struct TreePath {
@@ -39,9 +38,9 @@ impl TreePath {
     }
 
     pub fn new_from_string(path: &str) -> Option<TreePath> {
-        let c_str = CString::from_slice(path.as_bytes());
+        let mut tmp_path = path.to_tmp_for_borrow();
         let tmp = unsafe {
-            ffi::gtk_tree_path_new_from_string(c_str.as_ptr())
+            ffi::gtk_tree_path_new_from_string(tmp_path.to_glib_ptr())
         };
 
         if tmp.is_null() {
@@ -79,17 +78,10 @@ impl TreePath {
 
     #[allow(unused_variables)]
     pub fn to_string(&self) -> Option<String> {
-        let string = unsafe { ffi::gtk_tree_path_to_string(self.pointer) as *const c_char };
-
-        if string.is_null() {
-            None
-        } else {
-            unsafe {
-                let res = String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&string)).to_string();
-
-                libc::free(string as *mut c_void);
-                Some(res)
-            }
+        unsafe {
+            FromGlibPtr::take(
+                ffi::gtk_tree_path_to_string(self.pointer)
+                    as *const c_char)
         }
     }
 

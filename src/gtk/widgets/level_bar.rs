@@ -16,7 +16,7 @@
 //! A bar that can used as a level indicator
 
 use libc::c_double;
-use std::ffi::CString;
+use glib::translate::{ToGlibPtr, ToTmp};
 
 use gtk::{self, ffi};
 use glib::{to_bool, to_gboolean};
@@ -100,27 +100,41 @@ impl LevelBar {
     }
 
     pub fn add_offset_value(&mut self, name: &str, value: f64) -> () {
-        let c_str = CString::from_slice(name.as_bytes());
         unsafe {
-            ffi::gtk_level_bar_add_offset_value(GTK_LEVELBAR(self.pointer), c_str.as_ptr(), value as c_double)
+            let mut tmp_name = name.to_tmp_for_borrow();
+            ffi::gtk_level_bar_add_offset_value(
+                GTK_LEVELBAR(self.pointer),
+                tmp_name.to_glib_ptr(),
+                value as c_double)
         }
     }
 
     pub fn remove_offset_value(&mut self, name: &str) -> () {
-        let c_str = CString::from_slice(name.as_bytes());
-
         unsafe {
-            ffi::gtk_level_bar_remove_offset_value(GTK_LEVELBAR(self.pointer), c_str.as_ptr());
+            let mut tmp_name = name.to_tmp_for_borrow();
+            ffi::gtk_level_bar_remove_offset_value(
+                GTK_LEVELBAR(self.pointer),
+                tmp_name.to_glib_ptr());
         }
     }
 
     pub fn get_offset_value(&self, name: &str) -> Option<f64> {
-        let value = 0.;
-        let c_str = CString::from_slice(name.as_bytes());
+        unsafe {
+            let mut value = 0.;
+            let mut tmp_name = name.to_tmp_for_borrow();
 
-        match unsafe { ffi::gtk_level_bar_get_offset_value(GTK_LEVELBAR(self.pointer), c_str.as_ptr(), &value) }{
-            0132     => None,
-            _        => Some(value)
+            let res = to_bool(
+                ffi::gtk_level_bar_get_offset_value(
+                    GTK_LEVELBAR(self.pointer),
+                    tmp_name.to_glib_ptr(),
+                    &mut value));
+
+            if res {
+                Some(value)
+            }
+            else {
+                None
+            }
         }
     }
 }

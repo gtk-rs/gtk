@@ -18,7 +18,7 @@
 use gtk::{self, ffi};
 use gtk::cast::GTK_IMAGE;
 use gtk::FFIWidget;
-use std::ffi::CString;
+use glib::translate::{ToGlibPtr, ToTmp};
 
 /// Image — A widget displaying an image
 struct_Widget!(Image);
@@ -26,35 +26,33 @@ struct_Widget!(Image);
 impl Image {
     pub fn new_from_file(filename: &str) -> Option<Image> {
         let tmp_pointer = unsafe {
-            let c_str = CString::from_slice(filename.as_bytes());
-
-            ffi::gtk_image_new_from_file(c_str.as_ptr())
+            let mut tmp_filename = filename.to_tmp_for_borrow();
+            ffi::gtk_image_new_from_file(tmp_filename.to_glib_ptr())
         };
         check_pointer!(tmp_pointer, Image)
     }
 
     pub fn new_from_icon_name(icon_name: &str, size: gtk::IconSize) -> Option<Image> {
-        let c_str = CString::from_slice(icon_name.as_bytes());
-
         let tmp_pointer = unsafe {
-            ffi::gtk_image_new_from_icon_name(c_str.as_ptr(), size)
+            let mut tmp_icon_name = icon_name.to_tmp_for_borrow();
+            ffi::gtk_image_new_from_icon_name(tmp_icon_name.to_glib_ptr(), size)
         };
         check_pointer!(tmp_pointer, Image)
     }
 
     pub fn set_from_file(&self, filename: &str) {
-        let c_str = CString::from_slice(filename.as_bytes());
-
         unsafe {
-            ffi::gtk_image_set_from_file(GTK_IMAGE(self.unwrap_widget()), c_str.as_ptr());
+            let mut tmp_filename = filename.to_tmp_for_borrow();
+            ffi::gtk_image_set_from_file(GTK_IMAGE(self.unwrap_widget()),
+                                         tmp_filename.to_glib_ptr());
         };
     }
 
     pub fn set_from_icon_name(&self, icon_name: &str, size: gtk::IconSize) {
-        let c_str = CString::from_slice(icon_name.as_bytes());
-
         unsafe {
-            ffi::gtk_image_set_from_icon_name(GTK_IMAGE(self.unwrap_widget()), c_str.as_ptr(), size)
+            let mut tmp_icon_name = icon_name.to_tmp_for_borrow();
+            ffi::gtk_image_set_from_icon_name(GTK_IMAGE(self.unwrap_widget()),
+                                              tmp_icon_name.to_glib_ptr(), size)
         };
     }
 }

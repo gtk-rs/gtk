@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::ffi::CString;
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 use gtk::{self, ffi};
 use glib::{to_bool, to_gboolean};
 use gtk::cast::GTK_COMBO_BOX;
@@ -74,20 +74,16 @@ pub trait ComboBoxTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait 
     }
 
     fn get_active_id(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_combo_box_get_active_id(GTK_COMBO_BOX(self.unwrap_widget())) };
-
-        if tmp.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_combo_box_get_active_id(GTK_COMBO_BOX(self.unwrap_widget())))
         }
     }
 
     fn set_active_id(&self, active_id: &str) -> bool {
         unsafe {
-            let c_str = CString::from_slice(active_id.as_bytes());
-
-            to_bool(ffi::gtk_combo_box_set_active_id(GTK_COMBO_BOX(self.unwrap_widget()), c_str.as_ptr()))
+            let mut tmp_active_id = active_id.to_tmp_for_borrow();
+            to_bool(ffi::gtk_combo_box_set_active_id(GTK_COMBO_BOX(self.unwrap_widget()), tmp_active_id.to_glib_ptr()))
         }
     }
 

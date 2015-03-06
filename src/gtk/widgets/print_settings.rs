@@ -17,7 +17,7 @@ use gtk::{self, ffi};
 use glib::{to_bool, to_gboolean};
 use gtk::FFIWidget;
 use gtk::cast::{GTK_PRINT_SETTINGS, GTK_PAPER_SIZE};
-use std::ffi::CString;
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 
 struct_Widget!(PrintSettings);
 
@@ -43,139 +43,121 @@ impl PrintSettings {
     }
 
     pub fn has_key(&self, key: &str) -> bool {
-        let c_str = CString::from_slice(key.as_bytes());
-
         unsafe {
-            to_bool(ffi::gtk_print_settings_has_key(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr()))
+            let mut tmp_key = key.to_tmp_for_borrow();
+            to_bool(
+                ffi::gtk_print_settings_has_key(GTK_PRINT_SETTINGS(self.unwrap_widget()),
+                                                tmp_key.to_glib_ptr()))
         }
     }
 
     pub fn get(&self, key: &str) -> Option<String> {
         unsafe {
-            let c_str = CString::from_slice(key.as_bytes());
-
-            let tmp = ffi::gtk_print_settings_get(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr());
-
-            if tmp.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string())
-            }
+            let mut tmp_key = key.to_tmp_for_borrow();
+            FromGlibPtr::borrow(
+                ffi::gtk_print_settings_get(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_key.to_glib_ptr()))
         }
     }
 
     pub fn set(&self, key: &str, value: &str) {
         unsafe {
-            let c_str = CString::from_slice(key.as_bytes());
-            let c_str2 = CString::from_slice(value.as_bytes());
-
-            ffi::gtk_print_settings_set(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr(), c_str2.as_ptr())
+            let mut tmp_key = key.to_tmp_for_borrow();
+            let mut tmp_value = value.to_tmp_for_borrow();
+            ffi::gtk_print_settings_set(GTK_PRINT_SETTINGS(
+                self.unwrap_widget()),
+                tmp_key.to_glib_ptr(),
+                tmp_value.to_glib_ptr())
         }
     }
 
     pub fn unset(&self, key: &str) {
         unsafe {
-            let c_str = CString::from_slice(key.as_bytes());
-
-            ffi::gtk_print_settings_unset(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr())
+            let mut tmp_key = key.to_tmp_for_borrow();
+            ffi::gtk_print_settings_unset(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_key.to_glib_ptr())
         }
     }
 
     pub fn get_bool(&self, key: &str) -> bool {
         unsafe {
-            let c_str = CString::from_slice(key.as_bytes());
-
-            to_bool(ffi::gtk_print_settings_get_bool(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr()))
+            let mut tmp_key = key.to_tmp_for_borrow();
+            to_bool(ffi::gtk_print_settings_get_bool(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_key.to_glib_ptr()))
         }
     }
 
     pub fn set_bool(&self, key: &str, value: bool) {
         unsafe {
-            let c_str = CString::from_slice(key.as_bytes());
-
-            ffi::gtk_print_settings_set_bool(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr(), to_gboolean(value))
+            let mut tmp_key = key.to_tmp_for_borrow();
+            ffi::gtk_print_settings_set_bool(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_key.to_glib_ptr(), to_gboolean(value))
         }
     }
 
     pub fn get_double(&self, key: &str) -> f64 {
         unsafe {
-            let c_str = CString::from_slice(key.as_bytes());
-
-            ffi::gtk_print_settings_get_double(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr())
+            let mut tmp_key = key.to_tmp_for_borrow();
+            ffi::gtk_print_settings_get_double(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_key.to_glib_ptr())
         }
     }
 
     pub fn set_double(&self, key: &str, value: f64) {
         unsafe {
-            let c_str = CString::from_slice(key.as_bytes());
-
-            ffi::gtk_print_settings_set_double(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr(), value)
+            let mut tmp_key = key.to_tmp_for_borrow();
+            ffi::gtk_print_settings_set_double(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_key.to_glib_ptr(), value)
         }
     }
 
     pub fn get_double_with_default(&self, key: &str, def: f64) -> f64 {
         unsafe {
-            let c_str = CString::from_slice(key.as_bytes());
-
-            ffi::gtk_print_settings_get_double_with_default(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr(), def)
+            let mut tmp_key = key.to_tmp_for_borrow();
+            ffi::gtk_print_settings_get_double_with_default(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_key.to_glib_ptr(), def)
         }
     }
 
     pub fn get_length(&self, key: &str, unit: gtk::Unit) -> f64 {
         unsafe {
-            let c_str = CString::from_slice(key.as_bytes());
-
-            ffi::gtk_print_settings_get_length(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr(), unit)
+            let mut tmp_key = key.to_tmp_for_borrow();
+            ffi::gtk_print_settings_get_length(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_key.to_glib_ptr(), unit)
         }
     }
 
     pub fn set_length(&self, key: &str, value: f64, unit: gtk::Unit) {
         unsafe {
-            let c_str = CString::from_slice(key.as_bytes());
-
-            ffi::gtk_print_settings_set_length(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr(), value, unit)
+            let mut tmp_key = key.to_tmp_for_borrow();
+            ffi::gtk_print_settings_set_length(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_key.to_glib_ptr(), value, unit)
         }
     }
 
     pub fn get_int(&self, key: &str) -> i32 {
         unsafe {
-            let c_str = CString::from_slice(key.as_bytes());
-
-            ffi::gtk_print_settings_get_int(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr())
+            let mut tmp_key = key.to_tmp_for_borrow();
+            ffi::gtk_print_settings_get_int(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_key.to_glib_ptr())
         }
     }
 
     pub fn set_int(&self, key: &str, value: i32) {
         unsafe {
-            let c_str = CString::from_slice(key.as_bytes());
-
-            ffi::gtk_print_settings_set_int(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr(), value)
+            let mut tmp_key = key.to_tmp_for_borrow();
+            ffi::gtk_print_settings_set_int(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_key.to_glib_ptr(), value)
         }
     }
 
     pub fn get_int_with_default(&self, key: &str, def: i32) -> i32 {
         unsafe {
-            let c_str = CString::from_slice(key.as_bytes());
-
-            ffi::gtk_print_settings_get_int_with_default(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr(), def)
+            let mut tmp_key = key.to_tmp_for_borrow();
+            ffi::gtk_print_settings_get_int_with_default(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_key.to_glib_ptr(), def)
         }
     }
 
     pub fn get_printer(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_print_settings_get_printer(GTK_PRINT_SETTINGS(self.unwrap_widget())) };
-
-        if tmp.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_print_settings_get_printer(GTK_PRINT_SETTINGS(self.unwrap_widget())))
         }
     }
 
     pub fn set_printer(&self, printer: &str) {
         unsafe {
-            let c_str = CString::from_slice(printer.as_bytes());
-
-            ffi::gtk_print_settings_set_printer(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr())
+            let mut tmp_printer = printer.to_tmp_for_borrow();
+            ffi::gtk_print_settings_set_printer(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_printer.to_glib_ptr())
         }
     }
 
@@ -312,92 +294,72 @@ impl PrintSettings {
     }
 
     pub fn get_default_source(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_print_settings_get_default_source(GTK_PRINT_SETTINGS(self.unwrap_widget())) };
-
-        if tmp.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_print_settings_get_default_source(GTK_PRINT_SETTINGS(self.unwrap_widget())))
         }
     }
 
     pub fn set_default_source(&self, default_source: &str) {
         unsafe {
-            let c_str = CString::from_slice(default_source.as_bytes());
-
-            ffi::gtk_print_settings_set_default_source(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr())
+            let mut tmp_default_source = default_source.to_tmp_for_borrow();
+            ffi::gtk_print_settings_set_default_source(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_default_source.to_glib_ptr())
         }
     }
 
     pub fn get_media_type(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_print_settings_get_media_type(GTK_PRINT_SETTINGS(self.unwrap_widget())) };
-
-        if tmp.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_print_settings_get_media_type(GTK_PRINT_SETTINGS(self.unwrap_widget())))
         }
     }
 
     pub fn set_media_type(&self, media_type: &str) {
         unsafe {
-            let c_str = CString::from_slice(media_type.as_bytes());
-
-            ffi::gtk_print_settings_set_media_type(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr())
+            let mut tmp_media_type = media_type.to_tmp_for_borrow();
+            ffi::gtk_print_settings_set_media_type(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_media_type.to_glib_ptr())
         }
     }
 
     pub fn get_dither(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_print_settings_get_dither(GTK_PRINT_SETTINGS(self.unwrap_widget())) };
-
-        if tmp.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_print_settings_get_dither(GTK_PRINT_SETTINGS(self.unwrap_widget())))
         }
     }
 
     pub fn set_dither(&self, dither: &str) {
         unsafe {
-            let c_str = CString::from_slice(dither.as_bytes());
-
-            ffi::gtk_print_settings_set_dither(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr())
+            let mut tmp_dither = dither.to_tmp_for_borrow();
+            ffi::gtk_print_settings_set_dither(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_dither.to_glib_ptr())
         }
     }
 
     pub fn get_finishings(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_print_settings_get_finishings(GTK_PRINT_SETTINGS(self.unwrap_widget())) };
-
-        if tmp.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_print_settings_get_finishings(GTK_PRINT_SETTINGS(self.unwrap_widget())))
         }
     }
 
     pub fn set_finishings(&self, finishings: &str) {
         unsafe {
-            let c_str = CString::from_slice(finishings.as_bytes());
-
-            ffi::gtk_print_settings_set_finishings(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr())
+            let mut tmp_finishings = finishings.to_tmp_for_borrow();
+            ffi::gtk_print_settings_set_finishings(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_finishings.to_glib_ptr())
         }
     }
 
     pub fn get_output_bin(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_print_settings_get_output_bin(GTK_PRINT_SETTINGS(self.unwrap_widget())) };
-
-        if tmp.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_print_settings_get_output_bin(GTK_PRINT_SETTINGS(self.unwrap_widget())))
         }
     }
 
     pub fn set_output_bin(&self, output_bin: &str) {
         unsafe {
-            let c_str = CString::from_slice(output_bin.as_bytes());
-
-            ffi::gtk_print_settings_set_output_bin(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr())
+            let mut tmp_output_bin = output_bin.to_tmp_for_borrow();
+            ffi::gtk_print_settings_set_output_bin(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_output_bin.to_glib_ptr())
         }
     }
 }

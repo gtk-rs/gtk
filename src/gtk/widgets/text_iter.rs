@@ -18,6 +18,7 @@
 use gtk::{self, ffi};
 use libc::c_char;
 use glib::{to_bool, to_gboolean};
+use glib::translate::{FromGlibPtr};
 
 #[derive(Copy)]
 pub struct TextIter {
@@ -87,46 +88,42 @@ impl TextIter {
     }
 
     pub fn get_slice(&self, end: &TextIter) -> Option<String> {
-        let tmp_pointer = unsafe { ffi::gtk_text_iter_get_slice(self.pointer as *const ffi::C_GtkTextIter,
-            end.pointer as *const ffi::C_GtkTextIter) as *const c_char };
-
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp_pointer)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_text_iter_get_slice(
+                    self.pointer as *const ffi::C_GtkTextIter,
+                    end.pointer as *const ffi::C_GtkTextIter)
+                as *const c_char)
         }
     }
 
     pub fn get_text(&self, end: &TextIter) -> Option<String> {
-        let tmp_pointer = unsafe { ffi::gtk_text_iter_get_text(self.pointer as *const ffi::C_GtkTextIter,
-            end.pointer as *const ffi::C_GtkTextIter) as *const c_char };
-
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp_pointer)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_text_iter_get_text(
+                    self.pointer as *const ffi::C_GtkTextIter,
+                    end.pointer as *const ffi::C_GtkTextIter)
+                as *const c_char)
         }
     }
 
     pub fn get_visible_slice(&self, end: &TextIter) -> Option<String> {
-        let tmp_pointer = unsafe { ffi::gtk_text_iter_get_visible_slice(self.pointer as *const ffi::C_GtkTextIter,
-            end.pointer as *const ffi::C_GtkTextIter) as *const c_char };
-
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp_pointer)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_text_iter_get_visible_slice(
+                    self.pointer as *const ffi::C_GtkTextIter,
+                    end.pointer as *const ffi::C_GtkTextIter)
+                as *const c_char)
         }
     }
 
     pub fn get_visible_text(&self, end: &TextIter) -> Option<String> {
-        let tmp_pointer = unsafe { ffi::gtk_text_iter_get_visible_text(self.pointer as *const ffi::C_GtkTextIter,
-            end.pointer as *const ffi::C_GtkTextIter) as *const c_char };
-
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp_pointer)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_text_iter_get_visible_text(
+                    self.pointer as *const ffi::C_GtkTextIter,
+                    end.pointer as *const ffi::C_GtkTextIter)
+                as *const c_char)
         }
     }
 

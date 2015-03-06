@@ -15,9 +15,9 @@
 
 //! An adapter which makes widgets scrollable
 
+use glib::translate::{ToGlibPtr, ToTmp};
 use gtk::cast::GTK_STATUSBAR;
 use gtk::{self, ffi};
-use std::ffi::CString;
 
 /// GtkViewport — An adapter which makes widgets scrollable
 struct_Widget!(StatusBar);
@@ -31,11 +31,10 @@ impl StatusBar {
 
     pub fn push(&mut self, context_id: u32, text: &str) -> u32 {
         unsafe {
-            let c_str = CString::from_slice(text.as_bytes());
-
+            let mut tmp_text = text.to_tmp_for_borrow();
             ffi::gtk_statusbar_push(GTK_STATUSBAR(self.pointer),
-                                        context_id,
-                                        c_str.as_ptr())
+                                    context_id,
+                                    tmp_text.to_glib_ptr())
         }
     }
 

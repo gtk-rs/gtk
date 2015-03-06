@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::ffi::CString;
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 use gtk::cast::{GTK_FONT_CHOOSER};
 use gtk::{self, ffi};
 use glib::{to_bool, to_gboolean};
@@ -26,40 +26,31 @@ pub trait FontChooserTrait: gtk::WidgetTrait {
     }
 
     fn get_font(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_font_chooser_get_font(GTK_FONT_CHOOSER(self.unwrap_widget())) as *const c_char };
-
-        if tmp.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_font_chooser_get_font(GTK_FONT_CHOOSER(self.unwrap_widget())) as *const c_char)
         }
     }
 
     fn set_font(&self, font_name: &str) {
         unsafe {
-            let c_str = CString::from_slice(font_name.as_bytes());
-
-            ffi::gtk_font_chooser_set_font(GTK_FONT_CHOOSER(self.unwrap_widget()), c_str.as_ptr() as *mut c_char)
+            let mut tmp_font_name = font_name.to_tmp_for_borrow();
+            ffi::gtk_font_chooser_set_font(GTK_FONT_CHOOSER(self.unwrap_widget()), tmp_font_name.to_glib_ptr() as *mut c_char)
         }
     }
 
     fn get_preview_text(&self) -> Option<String> {
         unsafe {
-            let tmp = ffi::gtk_font_chooser_get_preview_text(GTK_FONT_CHOOSER(self.unwrap_widget()));
-
-            if tmp.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&(tmp as *const c_char))).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_font_chooser_get_preview_text(GTK_FONT_CHOOSER(self.unwrap_widget()))
+                    as *const c_char)
         }
     }
 
     fn set_preview_text(&self, text: &str) {
         unsafe {
-            let c_str = CString::from_slice(text.as_bytes());
-
-            ffi::gtk_font_chooser_set_preview_text(GTK_FONT_CHOOSER(self.unwrap_widget()), c_str.as_ptr())
+            let mut tmp_text = text.to_tmp_for_borrow();
+            ffi::gtk_font_chooser_set_preview_text(GTK_FONT_CHOOSER(self.unwrap_widget()), tmp_text.to_glib_ptr())
         }
     }
 

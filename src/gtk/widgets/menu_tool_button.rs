@@ -19,7 +19,7 @@ use std::ptr;
 
 use gtk::cast::GTK_MENUTOOLBUTTON;
 use gtk::{self, ffi};
-use std::ffi::CString;
+use glib::translate::{ToGlibPtr, ToTmp};
 
 /// MenuToolButton — A ToolItem containing a button with an additional dropdown menu
 struct_Widget!(MenuToolButton);
@@ -27,48 +27,38 @@ struct_Widget!(MenuToolButton);
 impl MenuToolButton {
     pub fn new<T: gtk::WidgetTrait>(icon_widget: Option<&T>, label: Option<&str>) -> Option<MenuToolButton> {
         let tmp_pointer = unsafe {
-            match label {
-                Some(l) => {
-                    let c_str = CString::from_slice(l.as_bytes());
+            let mut tmp_label = label.to_tmp_for_borrow();
+            let icon_widget_ptr = match icon_widget {
+                Some(i) => i.unwrap_widget(),
+                None    => ptr::null_mut(),
+            };
 
-                    match icon_widget {
-                        Some(i) => ffi::gtk_menu_tool_button_new(i.unwrap_widget(), c_str.as_ptr()),
-                        None    => ffi::gtk_menu_tool_button_new(ptr::null_mut(), c_str.as_ptr())
-                    }
-                },
-                None    => {
-                    match icon_widget {
-                        Some(i) => ffi::gtk_menu_tool_button_new(i.unwrap_widget(), ptr::null()),
-                        None    => ffi::gtk_menu_tool_button_new(ptr::null_mut(), ptr::null())
-                    }
-                }
-            }
+            ffi::gtk_menu_tool_button_new(icon_widget_ptr, tmp_label.to_glib_ptr())
         };
         check_pointer!(tmp_pointer, MenuToolButton)
     }
 
     pub fn new_from_stock(stock_id: &str) -> Option<MenuToolButton> {
         let tmp_pointer = unsafe {
-            let c_str = CString::from_slice(stock_id.as_bytes());
-
-            ffi::gtk_menu_tool_button_new_from_stock(c_str.as_ptr())
+            let mut tmp_stock_id = stock_id.to_tmp_for_borrow();
+            ffi::gtk_menu_tool_button_new_from_stock(tmp_stock_id.to_glib_ptr())
         };
         check_pointer!(tmp_pointer, MenuToolButton)
     }
 
     pub fn set_arrow_tooltip_text(&mut self, text: &str) -> () {
         unsafe {
-            let c_str = CString::from_slice(text.as_bytes());
-
-            ffi::gtk_menu_tool_button_set_arrow_tooltip_text(GTK_MENUTOOLBUTTON(self.pointer), c_str.as_ptr())
+            let mut tmp_text = text.to_tmp_for_borrow();
+            ffi::gtk_menu_tool_button_set_arrow_tooltip_text(GTK_MENUTOOLBUTTON(self.pointer), tmp_text.to_glib_ptr())
         }
     }
 
     pub fn set_arrow_tooltip_markup(&mut self, markup: &str) -> () {
-        let c_str = CString::from_slice(markup.as_bytes());
-
         unsafe {
-            ffi::gtk_menu_tool_button_set_arrow_tooltip_markup(GTK_MENUTOOLBUTTON(self.pointer), c_str.as_ptr())
+            let mut tmp_markup = markup.to_tmp_for_borrow();
+            ffi::gtk_menu_tool_button_set_arrow_tooltip_markup(
+                GTK_MENUTOOLBUTTON(self.pointer),
+                tmp_markup.to_glib_ptr())
         }
     }
 }

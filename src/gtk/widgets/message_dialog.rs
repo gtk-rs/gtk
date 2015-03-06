@@ -16,7 +16,7 @@
 use gtk::{self, ffi};
 use gtk::FFIWidget;
 use gtk::cast::{GTK_MESSAGE_DIALOG, GTK_WINDOW};
-use std::ffi::CString;
+use glib::translate::{ToGlibPtr, ToTmp};
 
 struct_Widget!(MessageDialog);
 
@@ -48,9 +48,8 @@ impl MessageDialog {
 
     pub fn set_markup(&self, markup: &str) -> () {
         unsafe {
-            let c_str = CString::from_slice(markup.as_bytes());
-
-            ffi::gtk_message_dialog_set_markup(GTK_MESSAGE_DIALOG(self.unwrap_widget()), c_str.as_ptr())
+            let mut tmp_markup = markup.to_tmp_for_borrow();
+            ffi::gtk_message_dialog_set_markup(GTK_MESSAGE_DIALOG(self.unwrap_widget()), tmp_markup.to_glib_ptr())
         }
     }
 

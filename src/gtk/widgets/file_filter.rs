@@ -14,7 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::ffi;
-use std::ffi::CString;
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 
 pub struct FileFilter {
     pointer : *mut ffi::C_GtkFileFilter
@@ -32,38 +32,30 @@ impl FileFilter {
     }
 
     pub fn set_name(&self, name: &str) -> () {
-        let c_str = CString::from_slice(name.as_bytes());
-
         unsafe {
-            ffi::gtk_file_filter_set_name(self.pointer, c_str.as_ptr())
+            let mut tmp_name = name.to_tmp_for_borrow();
+            ffi::gtk_file_filter_set_name(self.pointer, tmp_name.to_glib_ptr())
         };
     }
 
     pub fn get_name(&self) -> Option<String> {
         unsafe {
-            let name = ffi::gtk_file_filter_get_name(self.pointer);
-
-            if name.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&name)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_file_filter_get_name(self.pointer))
         }
     }
 
     pub fn add_mime_type(&self, mime_type: &str) -> () {
         unsafe {
-            let c_str = CString::from_slice(mime_type.as_bytes());
-
-            ffi::gtk_file_filter_add_mime_type(self.pointer, c_str.as_ptr())
+            let mut tmp_mime_type = mime_type.to_tmp_for_borrow();
+            ffi::gtk_file_filter_add_mime_type(self.pointer, tmp_mime_type.to_glib_ptr())
         };
     }
 
     pub fn add_pattern(&self, pattern: &str) -> () {
-        let c_str = CString::from_slice(pattern.as_bytes());
-
         unsafe {
-            ffi::gtk_file_filter_add_pattern(self.pointer, c_str.as_ptr())
+            let mut tmp_pattern = pattern.to_tmp_for_borrow();
+            ffi::gtk_file_filter_add_pattern(self.pointer, tmp_pattern.to_glib_ptr())
         };
     }
 

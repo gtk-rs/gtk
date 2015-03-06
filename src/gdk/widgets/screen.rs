@@ -15,8 +15,9 @@
 
 //! GdkScreen — Object representing a physical screen
 
+use glib::translate::{FromGlibPtr};
 use gdk::{self, ffi};
-use libc::{c_int, c_char, c_void};
+use libc::{c_int, c_char};
 
 #[repr(C)]
 #[derive(Copy)]
@@ -102,17 +103,9 @@ impl Screen {
     }
 
     pub fn make_display_name(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gdk_screen_make_display_name(self.pointer) as *const c_char };
-
-        if tmp.is_null() {
-            None
-        } else {
-            unsafe {
-                let ret = Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string());
-
-                ::libc::funcs::c95::stdlib::free(tmp as *mut c_void);
-                ret
-            }
+        unsafe {
+            FromGlibPtr::take(
+                ffi::gdk_screen_make_display_name(self.pointer) as *const c_char)
         }
     }
 
@@ -149,17 +142,10 @@ impl Screen {
     }
 
     pub fn get_monitor_plug_name(&self, monitor_num: i32) -> Option<String> {
-        let tmp = unsafe { ffi::gdk_screen_get_monitor_plug_name(self.pointer, monitor_num as c_int) as *const c_char };
-
-        if tmp.is_null() {
-            None
-        } else {
-            unsafe {
-                let ret = Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string());
-
-                ::libc::funcs::c95::stdlib::free(tmp as *mut c_void);
-                ret
-            }
+        unsafe {
+            FromGlibPtr::take(
+                ffi::gdk_screen_get_monitor_plug_name(self.pointer,
+                                                      monitor_num as c_int) as *const c_char)
         }
     }
 

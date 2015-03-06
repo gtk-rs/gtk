@@ -17,7 +17,7 @@
 
 use glib;
 use gtk::{self, ffi, cast};
-use std::ffi::CString;
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 use glib::{to_bool, to_gboolean};
 
 pub struct TreeViewColumn {
@@ -139,22 +139,17 @@ impl TreeViewColumn {
     }
 
     pub fn set_title(&mut self, title: &str) {
-        let c_str = CString::from_slice(title.as_bytes());
-
         unsafe {
-            ffi::gtk_tree_view_column_set_title(self.pointer, c_str.as_ptr())
+            let mut tmp_title = title.to_tmp_for_borrow();
+            ffi::gtk_tree_view_column_set_title(self.pointer,
+                                                tmp_title.to_glib_ptr());
         }
     }
 
     pub fn get_title(&self) -> Option<String> {
         unsafe {
-            let tmp = ffi::gtk_tree_view_column_get_title(self.pointer);
-
-            if tmp.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_tree_view_column_get_title(self.pointer))
         }
     }
 
@@ -279,13 +274,15 @@ impl TreeViewColumn {
     }
 
     pub fn add_attribute<T: gtk::FFIWidget + gtk::CellRendererTrait>(&self, cell: &T, attribute: &str, column: i32) {
-        let attribute_c = CString::from_slice(attribute.as_bytes());
-
-        unsafe { ffi::gtk_tree_view_column_add_attribute(self.pointer,
-                                                         cast::GTK_CELL_RENDERER(cell.unwrap_widget()),
-                                                         attribute_c.as_ptr(),
-                                                         column) }
-    }
+        unsafe {
+            let mut tmp_attribute = attribute.to_tmp_for_borrow();
+            ffi::gtk_tree_view_column_add_attribute(
+                self.pointer,
+                cast::GTK_CELL_RENDERER(cell.unwrap_widget()),
+                tmp_attribute.to_glib_ptr(),
+                column)
+        }
+}
 
     pub fn clear_attributes<T: gtk::FFIWidget + gtk::CellRendererTrait>(&self, cell: &T) {
         unsafe { ffi::gtk_tree_view_column_clear_attributes(self.pointer,

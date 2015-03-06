@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::ffi::CString;
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 use gtk::cast::GTK_TOOLBUTTON;
 use gtk::{self, ffi};
 use glib::{to_bool, to_gboolean};
@@ -21,61 +21,44 @@ use glib::{to_bool, to_gboolean};
 pub trait ToolButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait + gtk::ToolItemTrait {
     fn set_label(&mut self, label: &str) -> () {
         unsafe {
-            let c_str = CString::from_slice(label.as_bytes());
-
-            ffi::gtk_tool_button_set_label(GTK_TOOLBUTTON(self.unwrap_widget()), c_str.as_ptr())
+            let mut tmp_label = label.to_tmp_for_borrow();
+            ffi::gtk_tool_button_set_label(GTK_TOOLBUTTON(self.unwrap_widget()), tmp_label.to_glib_ptr())
         }
     }
 
     fn set_stock_id(&mut self, stock_id: &str) -> () {
         unsafe {
-            let c_str = CString::from_slice(stock_id.as_bytes());
-
-            ffi::gtk_tool_button_set_stock_id(GTK_TOOLBUTTON(self.unwrap_widget()), c_str.as_ptr())
+            let mut tmp_stock_id = stock_id.to_tmp_for_borrow();
+            ffi::gtk_tool_button_set_stock_id(GTK_TOOLBUTTON(self.unwrap_widget()), tmp_stock_id.to_glib_ptr())
         }
     }
 
     fn set_icon_name(&mut self, icon_name: &str) -> () {
-        let c_str = CString::from_slice(icon_name.as_bytes());
-
         unsafe {
-            ffi::gtk_tool_button_set_icon_name(GTK_TOOLBUTTON(self.unwrap_widget()), c_str.as_ptr());
+            let mut tmp_icon_name = icon_name.to_tmp_for_borrow();
+            ffi::gtk_tool_button_set_icon_name(GTK_TOOLBUTTON(self.unwrap_widget()),
+                                               tmp_icon_name.to_glib_ptr());
         }
     }
 
     fn get_label(&self) -> Option<String> {
         unsafe {
-            let c_str = ffi::gtk_tool_button_get_label(GTK_TOOLBUTTON(self.unwrap_widget()));
-
-            if c_str.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_tool_button_get_label(GTK_TOOLBUTTON(self.unwrap_widget())))
         }
     }
 
     fn get_stock_id(&self) -> Option<String> {
         unsafe {
-            let c_str = ffi::gtk_tool_button_get_stock_id(GTK_TOOLBUTTON(self.unwrap_widget()));
-
-            if c_str.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_tool_button_get_stock_id(GTK_TOOLBUTTON(self.unwrap_widget())))
         }
     }
 
     fn get_icon_name(&self) -> Option<String> {
         unsafe {
-            let c_str = ffi::gtk_tool_button_get_icon_name(GTK_TOOLBUTTON(self.unwrap_widget()));
-
-            if c_str.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_tool_button_get_icon_name(GTK_TOOLBUTTON(self.unwrap_widget())))
         }
     }
 

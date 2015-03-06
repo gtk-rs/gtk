@@ -19,7 +19,7 @@ use gdk::{self, ffi};
 use libc::{c_int};
 use std::ffi::CString;
 use std::ptr;
-use glib::translate::{StackBox, ToGlib, ToGlibPtr, ToTemp, from_glib};
+use glib::translate::{StackBox, ToGlib, ToGlibPtr, ToTmp, from_glib};
 
 /// Attributes to use for a newly-created window.
 pub struct WindowAttr {
@@ -63,14 +63,14 @@ impl WindowAttr {
     }
 }
 
-impl <'a> ToTemp for &'a WindowAttr {
-    type Temp = StackBox<ffi::C_GdkWindowAttr, Option<CString>>;
+impl <'a> ToTmp for &'a WindowAttr {
+    type Tmp = StackBox<ffi::C_GdkWindowAttr, Option<CString>>;
 
-    fn to_temp_for_borrow(self) -> StackBox<ffi::C_GdkWindowAttr, Option<CString>> {
-        let mut title = self.title.to_temp_for_borrow();
+    fn to_tmp_for_borrow(self) -> StackBox<ffi::C_GdkWindowAttr, Option<CString>> {
+        let mut tmp_title = self.title.to_tmp_for_borrow();
 
         let attrs = ffi::C_GdkWindowAttr {
-            title: title.to_glib(),
+            title: tmp_title.to_glib_ptr(),
             event_mask: self.event_mask,
             x: self.x.unwrap_or(0),
             y: self.y.unwrap_or(0),
@@ -86,7 +86,7 @@ impl <'a> ToTemp for &'a WindowAttr {
             type_hint: self.type_hint.unwrap_or(gdk::WindowTypeHint::Normal),
         };
 
-        StackBox(attrs, title)
+        StackBox(attrs, tmp_title)
     }
 }
 
@@ -101,8 +101,8 @@ impl Window {
             Some(s) => s.unwrap_pointer(),
             None => ::std::ptr::null_mut()
         };
-        let mut attrs = attributes.to_temp_for_borrow();
-        let tmp = unsafe { ffi::gdk_window_new(t_parent, attrs.to_glib(), attributes.get_mask()) };
+        let mut tmp_attributes = attributes.to_tmp_for_borrow();
+        let tmp = unsafe { ffi::gdk_window_new(t_parent, tmp_attributes.to_glib_ptr(), attributes.get_mask()) };
 
         if tmp.is_null() {
             None
@@ -424,8 +424,8 @@ impl Window {
 
     pub fn set_title(&self, title: &str) {
         unsafe {
-            let mut title = title.to_temp_for_borrow();
-            ffi::gdk_window_set_title(self.pointer, title.to_glib())
+            let mut tmp_title = title.to_tmp_for_borrow();
+            ffi::gdk_window_set_title(self.pointer, tmp_title.to_glib_ptr())
         }
     }
 
@@ -587,8 +587,8 @@ impl Window {
 
     pub fn set_icon_name(&self, name: &str) {
         unsafe {
-            let mut name = name.to_temp_for_borrow();
-            ffi::gdk_window_set_icon_name(self.pointer, name.to_glib())
+            let mut tmp_name = name.to_tmp_for_borrow();
+            ffi::gdk_window_set_icon_name(self.pointer, tmp_name.to_glib_ptr())
         }
     }
 
@@ -598,15 +598,15 @@ impl Window {
 
     pub fn set_role(&self, role: &str) {
         unsafe {
-            let mut role = role.to_temp_for_borrow();
-            ffi::gdk_window_set_role(self.pointer, role.to_glib())
+            let mut tmp_role = role.to_tmp_for_borrow();
+            ffi::gdk_window_set_role(self.pointer, tmp_role.to_glib_ptr())
         }
     }
 
     pub fn set_startup_id(&self, startup_id: &str) {
         unsafe {
-            let mut startup_id = startup_id.to_temp_for_borrow();
-            ffi::gdk_window_set_startup_id(self.pointer, startup_id.to_glib())
+            let mut tmp_startup_id = startup_id.to_tmp_for_borrow();
+            ffi::gdk_window_set_startup_id(self.pointer, tmp_startup_id.to_glib_ptr())
         }
     }
 

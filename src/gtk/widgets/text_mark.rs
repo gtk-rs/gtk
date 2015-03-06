@@ -16,7 +16,7 @@
 //! GtkTextMark — A position in the buffer preserved across buffer modifications
 
 use gtk::{self, ffi};
-use std::ffi::CString;
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 use glib::{to_bool, to_gboolean};
 
 pub struct TextMark {
@@ -26,9 +26,8 @@ pub struct TextMark {
 impl TextMark {
     pub fn new(name: &str, left_gravity: bool) -> Option<TextMark> {
         let tmp_pointer = unsafe {
-            let c_str = CString::from_slice(name.as_bytes());
-
-            ffi::gtk_text_mark_new(c_str.as_ptr(), to_gboolean(left_gravity))
+            let mut tmp_name = name.to_tmp_for_borrow();
+            ffi::gtk_text_mark_new(tmp_name.to_glib_ptr(), to_gboolean(left_gravity))
         };
 
         if tmp_pointer.is_null() {
@@ -51,12 +50,9 @@ impl TextMark {
     }
 
     pub fn get_name(&self) -> Option<String> {
-        let tmp_pointer = unsafe { ffi::gtk_text_mark_get_name(self.pointer) };
-
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp_pointer)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_text_mark_get_name(self.pointer))
         }
     }
 

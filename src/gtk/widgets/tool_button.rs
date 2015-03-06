@@ -16,8 +16,8 @@
 //! A ToolItem subclass that displays buttons
 
 use std::ptr;
-use std::ffi::CString;
 
+use glib::translate::{ToGlibPtr, ToTmp};
 use gtk::{self, ffi};
 
 /// ToolButton — A ToolItem subclass that displays buttons
@@ -26,30 +26,20 @@ struct_Widget!(ToolButton);
 impl ToolButton {
     pub fn new<T: gtk::WidgetTrait>(icon_widget: Option<&T>, label: Option<&str>) -> Option<ToolButton> {
         let tmp_pointer = unsafe {
-            match label {
-                Some(l) => {
-                    let c_str = CString::from_slice(l.as_bytes());
-
-                    match icon_widget {
-                        Some(i) => ffi::gtk_tool_button_new(i.unwrap_widget(), c_str.as_ptr()),
-                        None    => ffi::gtk_tool_button_new(ptr::null_mut(), c_str.as_ptr())
-                    }
-                }
-                None => {
-                    match icon_widget {
-                        Some(i) => ffi::gtk_tool_button_new(i.unwrap_widget(), ptr::null()),
-                        None    => ffi::gtk_tool_button_new(ptr::null_mut(), ptr::null())
-                    }
-                }
-            }
+            let mut tmp_label = label.to_tmp_for_borrow();
+            let icon_widget_ptr = match icon_widget {
+                Some(i) => i.unwrap_widget(),
+                None    => ptr::null_mut(),
+            };
+            ffi::gtk_tool_button_new(icon_widget_ptr, tmp_label.to_glib_ptr())
         };
         check_pointer!(tmp_pointer, ToolButton)
     }
 
     pub fn new_from_stock(stock_id: &str) -> Option<ToolButton> {
-        let c_str = CString::from_slice(stock_id.as_bytes());
         let tmp_pointer = unsafe {
-            ffi::gtk_tool_button_new_from_stock(c_str.as_ptr())
+            let mut tmp_stock_id = stock_id.to_tmp_for_borrow();
+            ffi::gtk_tool_button_new_from_stock(tmp_stock_id.to_glib_ptr())
         };
         check_pointer!(tmp_pointer, ToolButton)
     }

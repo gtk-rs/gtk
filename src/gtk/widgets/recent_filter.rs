@@ -15,7 +15,7 @@
 
 use gtk::{self, ffi};
 use glib::to_bool;
-use std::ffi::CString;
+use glib::translate::{ToGlibPtr, ToTmp};
 
 #[derive(Copy)]
 pub struct RecentFilter {
@@ -35,17 +35,15 @@ impl RecentFilter {
 
     pub fn add_application(&self, application: &str) -> () {
         unsafe {
-            let c_str = CString::from_slice(application.as_bytes());
-
-            ffi::gtk_recent_filter_add_application(self.pointer, c_str.as_ptr())
+            let mut tmp_application = application.to_tmp_for_borrow();
+            ffi::gtk_recent_filter_add_application(self.pointer, tmp_application.to_glib_ptr())
         }
     }
 
     pub fn add_group(&self, group: &str) -> () {
         unsafe {
-            let c_str = CString::from_slice(group.as_bytes());
-
-            ffi::gtk_recent_filter_add_group(self.pointer, c_str.as_ptr())
+            let mut tmp_group = group.to_tmp_for_borrow();
+            ffi::gtk_recent_filter_add_group(self.pointer, tmp_group.to_glib_ptr())
         }
     }
 

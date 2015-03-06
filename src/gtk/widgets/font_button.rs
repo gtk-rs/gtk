@@ -15,7 +15,7 @@
 
 //! A button to launch a font chooser dialog
 
-use std::ffi::CString;
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 use gtk::{self, ffi};
 use glib::{to_bool, to_gboolean};
 use gtk::cast::GTK_FONTBUTTON;
@@ -35,28 +35,21 @@ impl FontButton {
 
     pub fn new_with_font(font_name: &str) -> Option<FontButton> {
         let tmp_pointer = unsafe {
-            let c_str = CString::from_slice(font_name.as_bytes());
-
-            ffi::gtk_font_button_new_with_font(c_str.as_ptr())
+            let mut tmp_font_name = font_name.to_tmp_for_borrow();
+            ffi::gtk_font_button_new_with_font(tmp_font_name.to_glib_ptr())
         };
         check_pointer!(tmp_pointer, FontButton)
     }
 
     pub fn set_font_name(&mut self, font_name: &str) -> bool {
-        let c_str = CString::from_slice(font_name.as_bytes());
-
-        unsafe { to_bool(ffi::gtk_font_button_set_font_name(GTK_FONTBUTTON(self.pointer), c_str.as_ptr())) }
+        let mut tmp_font_name = font_name.to_tmp_for_borrow();
+        unsafe { to_bool(ffi::gtk_font_button_set_font_name(GTK_FONTBUTTON(self.pointer), tmp_font_name.to_glib_ptr())) }
     }
 
     pub fn get_font_name(&self) -> Option<String> {
         unsafe {
-            let c_str = ffi::gtk_font_button_get_font_name(GTK_FONTBUTTON(self.pointer));
-
-            if c_str.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_font_button_get_font_name(GTK_FONTBUTTON(self.pointer)))
         }
     }
 
@@ -93,22 +86,16 @@ impl FontButton {
     }
 
     pub fn set_title(&mut self, title: &str) -> () {
-        let c_str = CString::from_slice(title.as_bytes());
-
         unsafe {
-            ffi::gtk_font_button_set_title(GTK_FONTBUTTON(self.pointer), c_str.as_ptr());
+            let mut tmp_title = title.to_tmp_for_borrow();
+            ffi::gtk_font_button_set_title(GTK_FONTBUTTON(self.pointer), tmp_title.to_glib_ptr());
         }
     }
 
     pub fn get_title(&self) -> Option<String> {
         unsafe {
-            let c_str = ffi::gtk_font_button_get_title(GTK_FONTBUTTON(self.pointer));
-            
-            if c_str.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_font_button_get_title(GTK_FONTBUTTON(self.pointer)))
         }
     }
 }

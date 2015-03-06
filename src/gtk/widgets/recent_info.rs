@@ -17,7 +17,8 @@ use gtk::{self, ffi};
 use glib::to_bool;
 use gtk::FFIWidget;
 use gtk::cast::GTK_RECENT_INFO;
-use std::ffi::CString;
+use std::ptr;
+use glib::translate::{FromGlibPtr, FromGlibPtrNotNull, ToGlibPtr, ToTmp};
 use libc::c_char;
 
 struct_Widget!(RecentInfo);
@@ -38,42 +39,30 @@ impl RecentInfo {
     }
 
     pub fn get_uri(&self) -> Option<String> {
-        let uri = unsafe { ffi::gtk_recent_info_get_uri(GTK_RECENT_INFO(self.unwrap_widget())) };
-
-        if uri.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&uri)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_recent_info_get_uri(GTK_RECENT_INFO(self.unwrap_widget())))
         }
     }
 
     pub fn get_display_name(&self) -> Option<String> {
-        let display_name = unsafe { ffi::gtk_recent_info_get_display_name(GTK_RECENT_INFO(self.unwrap_widget())) };
-
-        if display_name.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&display_name)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_recent_info_get_display_name(GTK_RECENT_INFO(self.unwrap_widget())))
         }
     }
 
     pub fn get_description(&self) -> Option<String> {
-        let description = unsafe { ffi::gtk_recent_info_get_description(GTK_RECENT_INFO(self.unwrap_widget())) };
-
-        if description.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&description)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_recent_info_get_description(GTK_RECENT_INFO(self.unwrap_widget())))
         }
     }
 
     pub fn get_mime_type(&self) -> Option<String> {
-        let mime_type = unsafe { ffi::gtk_recent_info_get_mime_type(GTK_RECENT_INFO(self.unwrap_widget())) };
-
-        if mime_type.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&mime_type)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_recent_info_get_mime_type(GTK_RECENT_INFO(self.unwrap_widget())))
         }
     }
 
@@ -93,20 +82,28 @@ impl RecentInfo {
         unsafe { to_bool(ffi::gtk_recent_info_get_private_hint(GTK_RECENT_INFO(self.unwrap_widget()))) }
     }
 
-    pub fn set_name(&self, app_name: &str) -> (bool, String, u32, i64) {
-        let app_exec = ::std::ptr::null_mut();
-        let mut count = 0u32;
-        let mut time_ = 0i64;
-        let c_str = CString::from_slice(app_name.as_bytes());
+    pub fn get_application_info(&self, app_name: &str) -> Option<(String, u32, i64)> {
+        unsafe {
+            let mut app_exec = ptr::null();
+            let mut count = 0u32;
+            let mut time_ = 0i64;
+            let mut tmp_app_name = app_name.to_tmp_for_borrow();
 
-        let ret = unsafe {
-            to_bool(ffi::gtk_recent_info_get_application_info(GTK_RECENT_INFO(self.unwrap_widget()), c_str.as_ptr(), &app_exec, &mut count, &mut time_))
-        };
+            let ret = to_bool(
+                ffi::gtk_recent_info_get_application_info(
+                    GTK_RECENT_INFO(self.unwrap_widget()),
+                    tmp_app_name.to_glib_ptr(),
+                    &mut app_exec,
+                    &mut count,
+                    &mut time_));
 
-        if app_exec.is_null() {
-            (ret, String::new(), count, time_)
-        } else {
-            (ret, unsafe { String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&(app_exec as *const c_char))).to_string() }, count, time_)
+            if ret {
+                let app_exec = FromGlibPtrNotNull::borrow(app_exec);
+                Some((app_exec, count, time_))
+            }
+            else {
+                None
+            }
         }
     }
 
@@ -127,20 +124,16 @@ impl RecentInfo {
     }
 
     pub fn last_application(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_recent_info_last_application(GTK_RECENT_INFO(self.unwrap_widget())) as *const c_char};
-
-        if tmp.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_recent_info_last_application(GTK_RECENT_INFO(self.unwrap_widget())) as *const c_char)
         }
     }
 
     pub fn has_application(&self, app_name: &str) -> bool {
         unsafe {
-            let c_str = CString::from_slice(app_name.as_bytes());
-
-            to_bool(ffi::gtk_recent_info_has_application(GTK_RECENT_INFO(self.unwrap_widget()), c_str.as_ptr()))
+            let mut tmp_app_name = app_name.to_tmp_for_borrow();
+            to_bool(ffi::gtk_recent_info_has_application(GTK_RECENT_INFO(self.unwrap_widget()), tmp_app_name.to_glib_ptr()))
         }
     }
 
@@ -161,30 +154,25 @@ impl RecentInfo {
     }
 
     pub fn has_group(&self, group_name: &str) -> bool {
-        let c_str = CString::from_slice(group_name.as_bytes());
-
         unsafe {
-            to_bool(ffi::gtk_recent_info_has_group(GTK_RECENT_INFO(self.unwrap_widget()), c_str.as_ptr()))
+            let mut tmp_group_name = group_name.to_tmp_for_borrow();
+            to_bool(
+                ffi::gtk_recent_info_has_group(GTK_RECENT_INFO(self.unwrap_widget()),
+                                               tmp_group_name.to_glib_ptr()))
         }
     }
 
     pub fn get_short_name(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_recent_info_get_short_name(GTK_RECENT_INFO(self.unwrap_widget())) as *const c_char };
-
-        if tmp.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_recent_info_get_short_name(GTK_RECENT_INFO(self.unwrap_widget())) as *const c_char)
         }
     }
 
     pub fn get_uri_display(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gtk_recent_info_get_uri_display(GTK_RECENT_INFO(self.unwrap_widget())) as *const c_char };
-
-        if tmp.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_recent_info_get_uri_display(GTK_RECENT_INFO(self.unwrap_widget())) as *const c_char)
         }
     }
 

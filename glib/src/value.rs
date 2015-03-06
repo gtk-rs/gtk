@@ -15,11 +15,11 @@
 
 //! Generic values — A polymorphic type that can hold values of any other type
 
-use ffi::{self};
-use libc::{self, c_char, c_void};
-use std::ffi::CString;
-use super::{to_bool, to_gboolean, Type};
-use super::translate::{ToGlib, from_glib};
+use libc::c_char;
+use ffi;
+use super::{to_bool, to_gboolean};
+use type_::Type;
+use translate::{FromGlibPtr, ToGlib, ToGlibPtr, ToTmp, from_glib};
 
 pub trait ValuePublic {
     fn get(gvalue: &Value) -> Self;
@@ -56,14 +56,10 @@ impl Value {
         unsafe { ffi::g_value_unset(self.pointer) }
     }
 
-    // to free !
     pub fn strdup_value_contents(&self) -> Option<String> {
-        let tmp_pointer = unsafe { ffi::g_strdup_value_contents(self.pointer) as *const c_char };
-
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp_pointer)).to_string()) }
+        unsafe {
+            FromGlibPtr::take(
+                ffi::g_strdup_value_contents(self.pointer) as *const c_char)
         }
     }
 
@@ -176,20 +172,9 @@ impl Value {
     }
 
     fn set_string(&self, v_string: &str) {
-        let c_str = CString::from_slice(v_string.as_bytes());
-
         unsafe {
-            ffi::g_value_set_string(self.pointer, c_str.as_ptr())
-        }
-    }
-
-    /// Set the contents of a G_TYPE_STRING Value to v_string . The string is assumed to be static, and is thus not duplicated
-    /// when setting the Value.
-    pub fn set_static_string(&self, v_string: &str) {
-        unsafe {
-            let c_str = CString::from_slice(v_string.as_bytes());
-
-            ffi::g_value_set_static_string(self.pointer, c_str.as_ptr())
+            let mut tmp_v_string = v_string.to_tmp_for_borrow();
+            ffi::g_value_set_string(self.pointer, tmp_v_string.to_glib_ptr());
         }
     }
 
@@ -201,38 +186,14 @@ impl Value {
     }*/
 
     pub fn get_string(&self) -> Option<String> {
-        let tmp_pointer = unsafe { ffi::g_value_get_string(self.pointer) };
-
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp_pointer)).to_string()) }
-        }
-    }
-
-    pub fn dup_string(&self) -> Option<String> {
-        let tmp_pointer = unsafe { ffi::g_value_dup_string(self.pointer) };
-
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            unsafe {
-                let ret = Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&(tmp_pointer as *const c_char))).to_string());
-
-                libc::funcs::c95::stdlib::free(tmp_pointer as *mut c_void);
-                ret
-            }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::g_value_get_string(self.pointer))
         }
     }
 
     pub fn set_boxed<T>(&self, v_box: &T) {
         unsafe { ffi::g_value_set_boxed(self.pointer, ::std::mem::transmute(v_box)) }
-    }
-
-    /// Set the contents of a G_TYPE_BOXED derived Value to v_boxed . The boxed value is assumed to be static, and is thus not duplicated
-    /// when setting the Value.
-    pub fn set_static_boxed<T>(&self, v_box: &T) {
-        unsafe { ffi::g_value_set_static_boxed(self.pointer, ::std::mem::transmute(v_box)) }
     }
 
     /*pub fn take_boxed<T>(&self, v_box: &T) {

@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::ffi::CString;
+use glib::translate::{ToGlibPtr, ToTmp};
 use c_vec::CVec;
 use std::ptr::Unique;
 use std::mem::transmute;
@@ -539,9 +539,8 @@ impl Context {
 
     pub fn select_font_face(&self, family: &str, slant: FontSlant, weight: FontWeight){
         unsafe {
-            let c_str = CString::from_slice(family.as_bytes());
-
-            ffi::cairo_select_font_face(self.get_ptr(), c_str.as_ptr(), slant, weight)
+            let mut tmp_family = family.to_tmp_for_borrow();
+            ffi::cairo_select_font_face(self.get_ptr(), tmp_family.to_glib_ptr(), slant, weight)
         }
     }
 
@@ -606,9 +605,8 @@ impl Context {
 
     pub fn show_text(&self, text: &str){
         unsafe {
-            let c_str = CString::from_slice(text.as_bytes());
-
-            ffi::cairo_show_text(self.get_ptr(), c_str.as_ptr())
+            let mut tmp_text = text.to_tmp_for_borrow();
+            ffi::cairo_show_text(self.get_ptr(), tmp_text.to_glib_ptr())
         }
     }
 
@@ -627,10 +625,10 @@ impl Context {
         unsafe {
             let glyphs: &[Glyph] = glyph_vec.as_slice();
             let clusters: &[TextCluster] = cluster_vec.as_slice();
-            let c_str = CString::from_slice(text.as_bytes());
+            let mut tmp_text = text.to_tmp_for_borrow();
 
                 ffi::cairo_show_text_glyphs(self.get_ptr(),
-                                            c_str.as_ptr(),
+                                            tmp_text.to_glib_ptr(),
                                             -1 as c_int, //NUL terminated
                                             glyphs.as_ptr(),
                                             glyphs.len() as c_int,
@@ -667,9 +665,8 @@ impl Context {
         };
 
         unsafe {
-            let c_str = CString::from_slice(text.as_bytes());
-
-            ffi::cairo_text_extents(self.get_ptr(), c_str.as_ptr(), &mut extents);
+            let mut tmp_text = text.to_tmp_for_borrow();
+            ffi::cairo_text_extents(self.get_ptr(), tmp_text.to_glib_ptr(), &mut extents);
         }
         extents
     }
@@ -784,9 +781,8 @@ impl Context {
 
     pub fn text_path(&self, str_: &str){
         unsafe {
-            let c_str = CString::from_slice(str_.as_bytes());
-
-            ffi::cairo_text_path(self.get_ptr(), c_str.as_ptr())
+            let mut tmp_str_ = str_.to_tmp_for_borrow();
+            ffi::cairo_text_path(self.get_ptr(), tmp_str_.to_glib_ptr())
         }
     }
 

@@ -14,7 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use libc::{c_int, c_double};
-use std::ffi::CString;
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 
 use gtk::{self, ffi};
 use glib::{to_bool, to_gboolean};
@@ -24,17 +24,15 @@ use gtk::cast::GTK_LABEL;
 pub trait LabelTrait: gtk::WidgetTrait {
     fn set_label(&mut self, text: &str) -> () {
         unsafe {
-            let c_str = CString::from_slice(text.as_bytes());
-
-            ffi::gtk_label_set_label(GTK_LABEL(self.unwrap_widget()), c_str.as_ptr())
+            let mut tmp_text = text.to_tmp_for_borrow();
+            ffi::gtk_label_set_label(GTK_LABEL(self.unwrap_widget()), tmp_text.to_glib_ptr())
         }
     }
 
     fn set_text(&mut self, text: &str) -> () {
         unsafe {
-            let c_str = CString::from_slice(text.as_bytes());
-
-	    ffi::gtk_label_set_text(GTK_LABEL(self.unwrap_widget()), c_str.as_ptr())
+            let mut tmp_text = text.to_tmp_for_borrow();
+	    ffi::gtk_label_set_text(GTK_LABEL(self.unwrap_widget()), tmp_text.to_glib_ptr())
         }
     }
 
@@ -46,33 +44,29 @@ pub trait LabelTrait: gtk::WidgetTrait {
 
     fn set_markup(&mut self, text: &str) -> () {
         unsafe {
-            let c_str = CString::from_slice(text.as_bytes());
-
-            ffi::gtk_label_set_markup(GTK_LABEL(self.unwrap_widget()), c_str.as_ptr())
+            let mut tmp_text = text.to_tmp_for_borrow();
+            ffi::gtk_label_set_markup(GTK_LABEL(self.unwrap_widget()), tmp_text.to_glib_ptr())
         }
     }
 
     fn set_markup_with_mnemonic(&mut self, text: &str) -> () {
         unsafe {
-            let c_str = CString::from_slice(text.as_bytes());
-
-            ffi::gtk_label_set_markup_with_mnemonic(GTK_LABEL(self.unwrap_widget()), c_str.as_ptr())
+            let mut tmp_text = text.to_tmp_for_borrow();
+            ffi::gtk_label_set_markup_with_mnemonic(GTK_LABEL(self.unwrap_widget()), tmp_text.to_glib_ptr())
         }
     }
 
     fn set_pattern(&mut self, text: &str) -> () {
         unsafe {
-            let c_str = CString::from_slice(text.as_bytes());
-
-            ffi::gtk_label_set_pattern(GTK_LABEL(self.unwrap_widget()), c_str.as_ptr())
+            let mut tmp_text = text.to_tmp_for_borrow();
+            ffi::gtk_label_set_pattern(GTK_LABEL(self.unwrap_widget()), tmp_text.to_glib_ptr())
         }
     }
 
     fn set_text_with_mnemonic(&mut self, text: &str) -> () {
         unsafe {
-            let c_str = CString::from_slice(text.as_bytes());
-
-            ffi::gtk_label_set_text_with_mnemonic(GTK_LABEL(self.unwrap_widget()), c_str.as_ptr());
+            let mut tmp_text = text.to_tmp_for_borrow();
+            ffi::gtk_label_set_text_with_mnemonic(GTK_LABEL(self.unwrap_widget()), tmp_text.to_glib_ptr());
         }
     }
 
@@ -167,35 +161,22 @@ pub trait LabelTrait: gtk::WidgetTrait {
 
     fn get_text(&self) -> Option<String> {
         unsafe {
-            let c_str = ffi::gtk_label_get_text(GTK_LABEL(self.unwrap_widget()));
-
-            if c_str.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_label_get_text(GTK_LABEL(self.unwrap_widget())))
         }
     }
 
     fn get_label(&self) -> Option<String> {
         unsafe {
-            let c_str = ffi::gtk_label_get_label(GTK_LABEL(self.unwrap_widget()));
-            if c_str.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_label_get_label(GTK_LABEL(self.unwrap_widget())))
         }
     }
 
     fn get_current_uri(&self) -> Option<String> {
         unsafe {
-            let c_str = ffi::gtk_label_get_current_uri(GTK_LABEL(self.unwrap_widget()));
-            if c_str.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_label_get_current_uri(GTK_LABEL(self.unwrap_widget())))
         }
     }
 

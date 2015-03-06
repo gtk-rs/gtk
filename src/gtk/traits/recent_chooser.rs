@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::ffi::CString;
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 use gtk::cast::{GTK_RECENT_CHOOSER};
 use gtk::{self, ffi};
 use glib::{to_bool, to_gboolean};
@@ -88,13 +88,9 @@ pub trait RecentChooserTrait: gtk::WidgetTrait + FFIWidget {
 
     fn get_current_uri(&self) -> Option<String> {
         unsafe {
-            let tmp = ffi::gtk_recent_chooser_get_current_uri(GTK_RECENT_CHOOSER(self.unwrap_widget()));
-
-            if tmp.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&(tmp as *const c_char))).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_recent_chooser_get_current_uri(GTK_RECENT_CHOOSER(self.unwrap_widget()))
+                    as *const c_char)
         }
     }
 
@@ -110,9 +106,8 @@ pub trait RecentChooserTrait: gtk::WidgetTrait + FFIWidget {
 
     fn unselect_uri(&self, uri: &str) -> bool {
         unsafe {
-            let c_str = CString::from_slice(uri.as_bytes());
-
-            to_bool(ffi::gtk_recent_chooser_unselect_uri(GTK_RECENT_CHOOSER(self.unwrap_widget()), c_str.as_ptr()))
+            let mut tmp_uri = uri.to_tmp_for_borrow();
+            to_bool(ffi::gtk_recent_chooser_unselect_uri(GTK_RECENT_CHOOSER(self.unwrap_widget()), tmp_uri.to_glib_ptr()))
         }
     }
 

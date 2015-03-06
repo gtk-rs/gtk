@@ -13,9 +13,10 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::ffi::CString;
+use libc::{c_char, c_int};
 use gtk::cast::GTK_EDITABLE;
 use gtk::{self, ffi};
+use glib::translate::{FromGlibPtr};
 use glib::{to_bool, to_gboolean};
 
 pub trait EditableTrait: gtk::WidgetTrait {
@@ -39,13 +40,12 @@ pub trait EditableTrait: gtk::WidgetTrait {
         }
     }
 
-    fn insert_text(&mut self, new_text: &str, new_text_length: i32, position: i32) {
+    fn insert_text(&mut self, new_text: &str, position: &mut i32) {
         unsafe {
-            let c_str = CString::from_slice(new_text.as_bytes());
-
+            // Don't need a null-terminated string here
             ffi::gtk_editable_insert_text(GTK_EDITABLE(self.unwrap_widget()),
-                                              c_str.as_ptr(),
-                                              new_text_length,
+                                              new_text.as_ptr() as *const c_char,
+                                              new_text.len() as c_int,
                                               position)
         }
     }
@@ -57,14 +57,9 @@ pub trait EditableTrait: gtk::WidgetTrait {
     }
 
     fn get_chars(&self, start_pos: i32, end_pos: i32) -> Option<String> {
-        let chars = unsafe {
-            ffi::gtk_editable_get_chars(GTK_EDITABLE(self.unwrap_widget()), start_pos, end_pos)
-        };
-
-        if chars.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&chars)).to_string()) }
+        unsafe {
+            FromGlibPtr::borrow(
+                ffi::gtk_editable_get_chars(GTK_EDITABLE(self.unwrap_widget()), start_pos, end_pos))
         }
     }
 

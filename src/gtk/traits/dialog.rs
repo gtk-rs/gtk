@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::ffi::CString;
+use glib::translate::{ToGlibPtr, ToTmp};
 use gtk::cast::GTK_DIALOG;
 use gtk::ffi;
 use gtk;
@@ -29,9 +29,8 @@ pub trait DialogTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait + 
 
     fn add_button(&self, button_text: &str, response_id: i32) -> Option<gtk::Button> {
         let tmp_pointer = unsafe {
-            let c_str = CString::from_slice(button_text.as_bytes());
-
-            ffi::gtk_dialog_add_button(GTK_DIALOG(self.unwrap_widget()), c_str.as_ptr(), response_id)
+            let mut tmp_button_text = button_text.to_tmp_for_borrow();
+            ffi::gtk_dialog_add_button(GTK_DIALOG(self.unwrap_widget()), tmp_button_text.to_glib_ptr(), response_id)
         };
 
         if tmp_pointer.is_null() {

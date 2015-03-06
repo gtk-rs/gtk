@@ -13,27 +13,31 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
+use std::ptr;
+use glib::translate::{ToGlibPtr, ToTmp};
 use gtk::{self, ffi};
 use gtk::FFIWidget;
 use gtk::cast::{GTK_WINDOW};
-use std::ffi::CString;
 
 struct_Widget!(FileChooserDialog);
 
 impl FileChooserDialog {
     pub fn new(title: &str, parent: Option<gtk::Window>, action: gtk::FileChooserAction) -> Option<FileChooserDialog> {
-        let ok = "Ok";
-        let cancel = "Cancel";
         let tmp_pointer = unsafe {
-            let c_str = CString::from_slice(title.as_bytes());
-            let c_ok = CString::from_slice(ok.as_bytes());
-            let c_cancel = CString::from_slice(cancel.as_bytes());
+            let parent = match parent {
+                Some(ref p) => GTK_WINDOW(p.unwrap_widget()),
+                None => GTK_WINDOW(::std::ptr::null_mut())
+            };
+            let mut tmp_title = title.to_tmp_for_borrow();
+            let mut tmp_ok = "Ok".to_tmp_for_borrow();
+            let mut tmp_cancel = "Cancel".to_tmp_for_borrow();
 
-            ffi::gtk_file_chooser_dialog_new(c_str.as_ptr(),
-                match parent {
-                    Some(ref p) => GTK_WINDOW(p.unwrap_widget()),
-                    None => GTK_WINDOW(::std::ptr::null_mut())
-                }, action, c_cancel.as_ptr(), gtk::ResponseType::Cancel, c_ok.as_ptr(), gtk::ResponseType::Accept, ::std::ptr::null_mut())
+            ffi::gtk_file_chooser_dialog_new(
+                tmp_title.to_glib_ptr(),
+                parent, action,
+                tmp_cancel.to_glib_ptr(), gtk::ResponseType::Cancel,
+                tmp_ok.to_glib_ptr(), gtk::ResponseType::Accept,
+                ptr::null_mut())
         };
 
         if tmp_pointer.is_null() {

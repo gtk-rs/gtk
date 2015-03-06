@@ -30,13 +30,13 @@
 //!
 //! Letting the foreign library borrow pointers from the Rust side often
 //! requires having a temporary variable of an intermediate type (e.g. `CString`).
-//! In such cases `ToTemp` is used. See also `StackBox`.
+//! In such cases `ToTmp` is used. See also `StackBox`.
 //!
 //! ```ignore
 //!     pub fn set_icon_name(&self, name: &str) {
 //!         unsafe {
-//!             let mut name = name.to_temp_for_borrow();
-//!             ffi::gdk_window_set_icon_name(self.pointer, name.to_glib())
+//!             let mut tmp_name = name.to_tmp_for_borrow();
+//!             ffi::gdk_window_set_icon_name(self.pointer, tmp_name.to_glib_ptr())
 //!         }
 //!     }
 //! ```
@@ -61,7 +61,7 @@ use ffi;
 /// type WindowAttrBox = StackBox<ffi::C_GdkWindowAttr, Option<CString>>;
 /// ```
 ///
-/// The `ToTemp` implementation can then use `WindowAttrBox` as its output type
+/// The `ToTmp` implementation can then use `WindowAttrBox` as its output type
 /// and `impl ToGlibPtr for WindowAttrBox` is provided by this module.
 pub struct StackBox<T: Sized, T2: Sized = ()> (pub T, pub T2);
 
@@ -76,7 +76,7 @@ pub trait ToGlib {
 pub trait ToGlibPtr {
     type GlibType;
 
-    fn to_glib(&mut self) -> Self::GlibType;
+    fn to_glib_ptr(&mut self) -> Self::GlibType;
 }
 
 impl ToGlib for bool {
@@ -90,7 +90,7 @@ impl ToGlib for bool {
 impl ToGlibPtr for CString {
     type GlibType = *const c_char;
 
-    fn to_glib(&mut self) -> *const c_char {
+    fn to_glib_ptr(&mut self) -> *const c_char {
         self.as_ptr()
     }
 }
@@ -98,7 +98,7 @@ impl ToGlibPtr for CString {
 impl ToGlibPtr for Option<CString> {
     type GlibType = *const c_char;
 
-    fn to_glib(&mut self) -> *const c_char {
+    fn to_glib_ptr(&mut self) -> *const c_char {
         match self {
             &mut Some(ref s) => s.as_ptr(),
             &mut None => ptr::null(),
@@ -109,30 +109,41 @@ impl ToGlibPtr for Option<CString> {
 impl <T, T2> ToGlibPtr for StackBox<T, T2> {
     type GlibType = *mut T;
 
-    fn to_glib(&mut self) -> *mut T {
+    fn to_glib_ptr(&mut self) -> *mut T {
         &mut (*self).0 as  *mut _
     }
 }
 
 /// Translate to a temporary intermediate variable
-pub trait ToTemp {
-    type Temp;
+pub trait ToTmp {
+    type Tmp;
 
-    fn to_temp_for_borrow(self) -> Self::Temp;
+    fn to_tmp_for_borrow(self) -> Self::Tmp;
 }
 
-impl <'a> ToTemp for &'a str {
-    type Temp = CString;
+impl <'a> ToTmp for &'a str {
+    type Tmp = CString;
 
-    fn to_temp_for_borrow(self) -> CString {
+    fn to_tmp_for_borrow(self) -> CString {
         CString::new(self).unwrap()
     }
 }
 
-impl <'a> ToTemp for &'a Option<String> {
-    type Temp = Option<CString>;
+impl <'a> ToTmp for &'a Option<&'a str> {
+    type Tmp = Option<CString>;
 
-    fn to_temp_for_borrow(self) -> Option<CString> {
+    fn to_tmp_for_borrow(self) -> Option<CString> {
+        match self {
+            &Some(ref s) => Some(CString::new(&s[..]).unwrap()),
+            &None => None,
+        }
+    }
+}
+
+impl <'a> ToTmp for &'a Option<String> {
+    type Tmp = Option<CString>;
+
+    fn to_tmp_for_borrow(self) -> Option<CString> {
         match self {
             &Some(ref s) => Some(CString::new(&s[..]).unwrap()),
             &None => None,

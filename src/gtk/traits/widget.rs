@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use libc::{c_int, c_char, self};
-use std::ffi::CString;
+use libc::{c_int, c_char};
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 use gtk::ffi;
 use glib::{to_bool, to_gboolean};
 use gdk;
@@ -91,20 +91,14 @@ pub trait WidgetTrait: gtk::FFIWidget + gtk::GObjectTrait {
     }
 
     fn set_name(&self, name: &str) {
-        let c_str = CString::from_slice(name.as_bytes());
-
-        unsafe { ffi::gtk_widget_set_name(self.unwrap_widget(), c_str.as_ptr()) }
+        let mut tmp_name = name.to_tmp_for_borrow();
+        unsafe { ffi::gtk_widget_set_name(self.unwrap_widget(), tmp_name.to_glib_ptr()) }
     }
 
     fn get_name(&self) -> Option<String> {
         unsafe {
-            let tmp = ffi::gtk_widget_get_name(self.unwrap_widget());
-
-            if tmp.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_widget_get_name(self.unwrap_widget()))
         }
     }
 
@@ -194,9 +188,8 @@ pub trait WidgetTrait: gtk::FFIWidget + gtk::GObjectTrait {
     }
 
     fn override_symbolic_color(&self, name: &str, color: &gdk_ffi::C_GdkRGBA) {
-        let c_str = CString::from_slice(name.as_bytes());
-
-        unsafe { ffi::gtk_widget_override_symbolic_color(self.unwrap_widget(), c_str.as_ptr(), color); }
+        let mut tmp_name = name.to_tmp_for_borrow();
+        unsafe { ffi::gtk_widget_override_symbolic_color(self.unwrap_widget(), tmp_name.to_glib_ptr(), color); }
     }
 
     fn override_cursor(&self, cursor: &gdk_ffi::C_GdkRGBA, secondary_cursor: &gdk_ffi::C_GdkRGBA) {
@@ -315,47 +308,32 @@ pub trait WidgetTrait: gtk::FFIWidget + gtk::GObjectTrait {
 
     fn get_tooltip_markup(&self) -> Option<String> {
         unsafe {
-            let tmp = ffi::gtk_widget_get_tooltip_markup(self.unwrap_widget());
-
-            if tmp.is_null() {
-                None
-            } else {
-                let ret = String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&(tmp as *const i8))).to_string();
-
-                libc::funcs::c95::stdlib::free(tmp as *mut libc::c_void);
-                Some(ret)
-            }
+            FromGlibPtr::take(
+                ffi::gtk_widget_get_tooltip_markup(self.unwrap_widget())
+                    as *const c_char)
         }
     }
 
     fn set_tooltip_markup(&self, markup: &str) {
         unsafe {
-            let c_str = CString::from_slice(markup.as_bytes());
-
-            ffi::gtk_widget_set_tooltip_markup(self.unwrap_widget(), c_str.as_ptr() as *mut c_char);
+            let mut tmp_markup = markup.to_tmp_for_borrow();
+            ffi::gtk_widget_set_tooltip_markup(self.unwrap_widget(), tmp_markup.to_glib_ptr() as *mut c_char);
         }
     }
 
 
     fn get_tooltip_text(&self) -> Option<String> {
         unsafe {
-            let tmp = ffi::gtk_widget_get_tooltip_text(self.unwrap_widget());
-
-            if tmp.is_null() {
-                None
-            } else {
-                let ret = String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&(tmp as *const i8))).to_string();
-
-                libc::funcs::c95::stdlib::free(tmp as *mut libc::c_void);
-                Some(ret)
-            }
+            FromGlibPtr::take(
+                ffi::gtk_widget_get_tooltip_text(self.unwrap_widget())
+                    as *const c_char)
         }
     }
 
     fn set_tooltip_text(&self, text: &str) {
         unsafe {
-            let c_str = CString::from_slice(text.as_bytes());
-            ffi::gtk_widget_set_tooltip_text(self.unwrap_widget(), c_str.as_ptr() as *mut c_char);
+            let mut tmp_text = text.to_tmp_for_borrow();
+            ffi::gtk_widget_set_tooltip_text(self.unwrap_widget(), tmp_text.to_glib_ptr() as *mut c_char);
         }
     }
 
@@ -685,9 +663,8 @@ pub trait WidgetTrait: gtk::FFIWidget + gtk::GObjectTrait {
 
     fn child_notify(&self, child_property: &str) {
         unsafe {
-            let c_str = CString::from_slice(child_property.as_bytes());
-
-            ffi::gtk_widget_child_notify(self.unwrap_widget(), c_str.as_ptr())
+            let mut tmp_child_property = child_property.to_tmp_for_borrow();
+            ffi::gtk_widget_child_notify(self.unwrap_widget(), tmp_child_property.to_glib_ptr())
         }
     }
 

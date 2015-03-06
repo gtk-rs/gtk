@@ -16,7 +16,7 @@
 //! The widget used for item in menus
 
 use gtk::{self, ffi};
-use std::ffi::CString;
+use glib::translate::{ToGlibPtr, ToTmp};
 
 /// MenuItem — The widget used for item in menus
 struct_Widget!(MenuItem);
@@ -29,18 +29,16 @@ impl MenuItem {
 
     pub fn new_with_label(label: &str) -> Option<MenuItem> {
         let tmp_pointer = unsafe {
-            let c_str = CString::from_slice(label.as_bytes());
-
-            ffi::gtk_menu_item_new_with_label(c_str.as_ptr())
+            let mut tmp_label = label.to_tmp_for_borrow();
+            ffi::gtk_menu_item_new_with_label(tmp_label.to_glib_ptr())
         };
         check_pointer!(tmp_pointer, MenuItem)
     }
 
     pub fn new_with_mnemonic(mnemonic: &str) -> Option<MenuItem> {
-        let c_str = CString::from_slice(mnemonic.as_bytes());
-
         let tmp_pointer = unsafe {
-            ffi::gtk_menu_item_new_with_mnemonic(c_str.as_ptr())
+            let mut tmp_mnemonic = mnemonic.to_tmp_for_borrow();
+            ffi::gtk_menu_item_new_with_mnemonic(tmp_mnemonic.to_glib_ptr())
         };
         check_pointer!(tmp_pointer, MenuItem)
     }

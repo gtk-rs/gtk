@@ -16,9 +16,8 @@
 //! A frame that constrains its child to a particular aspect ratio
 
 use libc::c_float;
-use std::ptr;
-use std::ffi::CString;
 
+use glib::translate::{ToGlibPtr, ToTmp};
 use gtk::cast::GTK_ASPECTFRAME;
 use gtk::{self, ffi};
 use glib::to_gboolean;
@@ -28,13 +27,11 @@ struct_Widget!(AspectFrame);
 
 impl AspectFrame {
     pub fn new(label: Option<&str>, x_align: f32, y_align: f32, ratio: f32, obey_child: bool) -> Option<AspectFrame> {
-        let tmp_pointer = match label {
-            Some(l) => unsafe {
-                let c_str = CString::from_slice(l.as_bytes());
-
-                ffi::gtk_aspect_frame_new(c_str.as_ptr(), x_align as c_float, y_align as c_float, ratio as c_float, to_gboolean(obey_child))
-            },
-            None => unsafe { ffi::gtk_aspect_frame_new(ptr::null(), x_align as c_float, y_align as c_float, ratio as c_float, to_gboolean(obey_child)) }
+        let tmp_pointer = unsafe {
+            let mut tmp_label = label.to_tmp_for_borrow();
+            ffi::gtk_aspect_frame_new(tmp_label.to_glib_ptr(),
+                                      x_align as c_float, y_align as c_float,
+                                      ratio as c_float, to_gboolean(obey_child))
         };
         check_pointer!(tmp_pointer, AspectFrame)
     }

@@ -15,7 +15,7 @@
 
 //! The widget used for item in menus
 
-use std::ffi::CString;
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 use gtk::{self, ffi};
 use gtk::cast::GTK_MENU_ITEM;
 use glib::{to_bool, to_gboolean};
@@ -55,41 +55,30 @@ pub trait MenuItemTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait 
 
     fn set_accel_path(&mut self, accel_path: &str) {
         unsafe {
-            let c_str = CString::from_slice(accel_path.as_bytes());
-
-            ffi::gtk_menu_item_set_accel_path(GTK_MENU_ITEM(self.unwrap_widget()), c_str.as_ptr())
+            let mut tmp_accel_path = accel_path.to_tmp_for_borrow();
+            ffi::gtk_menu_item_set_accel_path(GTK_MENU_ITEM(self.unwrap_widget()), tmp_accel_path.to_glib_ptr())
         }
     }
 
     fn get_accel_path(&self) -> Option<String> {
         unsafe {
-            let c_str = ffi::gtk_menu_item_get_accel_path(GTK_MENU_ITEM(self.unwrap_widget()));
-
-            if c_str.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_menu_item_get_accel_path(GTK_MENU_ITEM(self.unwrap_widget())))
         }
     }
 
     fn set_label(&mut self, label: &str) {
-        let c_str = CString::from_slice(label.as_bytes());
-
         unsafe {
-            ffi::gtk_menu_item_set_label(GTK_MENU_ITEM(self.unwrap_widget()), c_str.as_ptr())
+            let mut tmp_label = label.to_tmp_for_borrow();
+            ffi::gtk_menu_item_set_label(GTK_MENU_ITEM(self.unwrap_widget()),
+                                         tmp_label.to_glib_ptr())
         }
     }
 
     fn get_label(&self) -> Option<String> {
         unsafe {
-            let c_str = ffi::gtk_menu_item_get_label(GTK_MENU_ITEM(self.unwrap_widget()));
-
-            if c_str.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_menu_item_get_label(GTK_MENU_ITEM(self.unwrap_widget())))
         }
     }
 
