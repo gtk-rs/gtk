@@ -2232,7 +2232,7 @@ extern "C" {
     pub fn gtk_level_bar_get_inverted          (bar: *mut C_GtkLevelBar) -> Gboolean;
     pub fn gtk_level_bar_add_offset_value      (bar: *mut C_GtkLevelBar, name: *const c_char, value: c_double) -> ();
     pub fn gtk_level_bar_remove_offset_value   (bar: *mut C_GtkLevelBar, name: *const c_char) -> ();
-    pub fn gtk_level_bar_get_offset_value      (bar: *mut C_GtkLevelBar, name: *const c_char, value: *const c_double) -> Gboolean;
+    pub fn gtk_level_bar_get_offset_value      (bar: *mut C_GtkLevelBar, name: *const c_char, value: *mut c_double) -> Gboolean;
 
     //=========================================================================
     // GtkSearchBar
@@ -2776,7 +2776,7 @@ extern "C" {
     //=========================================================================
     pub fn gtk_editable_select_region        (editable: *mut C_GtkEditable, start_pos: c_int, end_pos: c_int);
     pub fn gtk_editable_get_selection_bounds (editable: *mut C_GtkEditable, start_pos: *mut c_int, end_pos: *mut c_int) -> Gboolean;
-    pub fn gtk_editable_insert_text          (editable: *mut C_GtkEditable, new_text: *const c_char, new_text_length: c_int, position: c_int);
+    pub fn gtk_editable_insert_text          (editable: *mut C_GtkEditable, new_text: *const c_char, new_text_length: c_int, position: *mut c_int);
     pub fn gtk_editable_delete_text          (editable: *mut C_GtkEditable, start_pos: c_int, end_pos: c_int);
     pub fn gtk_editable_get_chars            (editable: *mut C_GtkEditable, start_pos: c_int, end_pos: c_int) -> *const c_char;
     pub fn gtk_editable_cut_clipboard        (editable: *mut C_GtkEditable);
