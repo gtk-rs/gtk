@@ -33,10 +33,10 @@ fn main() {
         true
     }));
 
-    // test GValue
+    // test Value
 
     let hello = String::from_str("Hello world !");
-    let value = glib::GValue::new().unwrap();
+    let value = glib::Value::new().unwrap();
 
     value.init(glib::Type::String);
     value.set(&hello);

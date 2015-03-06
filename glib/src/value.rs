@@ -21,24 +21,24 @@ use std::ffi::CString;
 use super::{to_bool, to_gboolean, Type};
 use super::translate::{ToGlib, from_glib};
 
-pub trait GValuePublic {
-    fn get(gvalue: &GValue) -> Self;
-    fn set(&self, gvalue: &GValue);
+pub trait ValuePublic {
+    fn get(gvalue: &Value) -> Self;
+    fn set(&self, gvalue: &Value);
 }
 
 // Possible improvment : store a function pointer inside the struct and make the struct templated
-pub struct GValue {
+pub struct Value {
     pointer: *mut ffi::C_GValue
 }
 
-impl GValue {
-    pub fn new() -> Option<GValue> {
+impl Value {
+    pub fn new() -> Option<Value> {
         let tmp_pointer = unsafe { ffi::create_gvalue() };
 
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(GValue {
+            Some(Value {
                 pointer: tmp_pointer
             })
         }
@@ -183,8 +183,8 @@ impl GValue {
         }
     }
 
-    /// Set the contents of a G_TYPE_STRING GValue to v_string . The string is assumed to be static, and is thus not duplicated
-    /// when setting the GValue.
+    /// Set the contents of a G_TYPE_STRING Value to v_string . The string is assumed to be static, and is thus not duplicated
+    /// when setting the Value.
     pub fn set_static_string(&self, v_string: &str) {
         unsafe {
             let c_str = CString::from_slice(v_string.as_bytes());
@@ -229,8 +229,8 @@ impl GValue {
         unsafe { ffi::g_value_set_boxed(self.pointer, ::std::mem::transmute(v_box)) }
     }
 
-    /// Set the contents of a G_TYPE_BOXED derived GValue to v_boxed . The boxed value is assumed to be static, and is thus not duplicated
-    /// when setting the GValue.
+    /// Set the contents of a G_TYPE_BOXED derived Value to v_boxed . The boxed value is assumed to be static, and is thus not duplicated
+    /// when setting the Value.
     pub fn set_static_boxed<T>(&self, v_box: &T) {
         unsafe { ffi::g_value_set_static_boxed(self.pointer, ::std::mem::transmute(v_box)) }
     }
@@ -259,7 +259,7 @@ impl GValue {
         unsafe { ffi::g_value_set_object(self.pointer, ::std::mem::transmute(v_object)) }
     }
 
-    /// Sets the contents of a G_TYPE_OBJECT derived GValue to v_object and takes over the ownership of the callers reference to
+    /// Sets the contents of a G_TYPE_OBJECT derived Value to v_object and takes over the ownership of the callers reference to
     /// v_object ; the caller doesn't have to unref it any more (i.e. the reference count of the object is not increased).
     pub fn take_object<T>(&self, v_object: &T) {
         unsafe { ffi::g_value_take_object(self.pointer, ::std::mem::transmute(v_object)) }
@@ -283,12 +283,12 @@ impl GValue {
         unsafe { from_glib(ffi::g_value_get_gtype(self.pointer)) }
     }
 
-    pub fn set<T: GValuePublic>(&self, val: &T) {
+    pub fn set<T: ValuePublic>(&self, val: &T) {
         val.set(self);
     }
 
-    pub fn get<T: GValuePublic>(&self) -> T {
-        GValuePublic::get(self)
+    pub fn get<T: ValuePublic>(&self) -> T {
+        ValuePublic::get(self)
     }
 
     pub fn compatible(src_type: Type, dest_type: Type) -> bool {
@@ -305,14 +305,14 @@ impl GValue {
     }
 
     #[doc(hidden)]
-    pub fn wrap_pointer(c_value: *mut ffi::C_GValue) -> GValue {
-        GValue {
+    pub fn wrap_pointer(c_value: *mut ffi::C_GValue) -> Value {
+        Value {
             pointer: c_value
         }
     }
 }
 
-impl Drop for GValue {
+impl Drop for Value {
     fn drop(&mut self) {
         if !self.pointer.is_null() {
             unsafe { ::libc::funcs::c95::stdlib::free(self.pointer as *mut ::libc::types::common::c95::c_void) };
@@ -321,115 +321,115 @@ impl Drop for GValue {
     }
 }
 
-impl GValuePublic for i32 {
-    fn get(gvalue: &GValue) -> i32 {
+impl ValuePublic for i32 {
+    fn get(gvalue: &Value) -> i32 {
         gvalue.get_int()
     }
 
-    fn set(&self, gvalue: &GValue) {
+    fn set(&self, gvalue: &Value) {
         gvalue.set_int(*self)
     }
 }
 
-impl GValuePublic for u32 {
-    fn get(gvalue: &GValue) -> u32 {
+impl ValuePublic for u32 {
+    fn get(gvalue: &Value) -> u32 {
         gvalue.get_uint()
     }
 
-    fn set(&self, gvalue: &GValue) {
+    fn set(&self, gvalue: &Value) {
         gvalue.set_uint(*self)
     }
 }
 
-impl GValuePublic for i64 {
-    fn get(gvalue: &GValue) -> i64 {
+impl ValuePublic for i64 {
+    fn get(gvalue: &Value) -> i64 {
         gvalue.get_int64()
     }
 
-    fn set(&self, gvalue: &GValue) {
+    fn set(&self, gvalue: &Value) {
         gvalue.set_int64(*self)
     }
 }
 
-impl GValuePublic for u64 {
-    fn get(gvalue: &GValue) -> u64 {
+impl ValuePublic for u64 {
+    fn get(gvalue: &Value) -> u64 {
         gvalue.get_uint64()
     }
 
-    fn set(&self, gvalue: &GValue) {
+    fn set(&self, gvalue: &Value) {
         gvalue.set_uint64(*self)
     }
 }
 
-impl GValuePublic for bool {
-    fn get(gvalue: &GValue) -> bool {
+impl ValuePublic for bool {
+    fn get(gvalue: &Value) -> bool {
         gvalue.get_boolean()
     }
 
-    fn set(&self, gvalue: &GValue) {
+    fn set(&self, gvalue: &Value) {
         gvalue.set_boolean(*self)
     }
 }
 
-impl GValuePublic for i8 {
-    fn get(gvalue: &GValue) -> i8 {
+impl ValuePublic for i8 {
+    fn get(gvalue: &Value) -> i8 {
         gvalue.get_schar()
     }
 
-    fn set(&self, gvalue: &GValue) {
+    fn set(&self, gvalue: &Value) {
         gvalue.set_schar(*self)
     }
 }
 
-impl GValuePublic for u8 {
-    fn get(gvalue: &GValue) -> u8 {
+impl ValuePublic for u8 {
+    fn get(gvalue: &Value) -> u8 {
         gvalue.get_uchar()
     }
 
-    fn set(&self, gvalue: &GValue) {
+    fn set(&self, gvalue: &Value) {
         gvalue.set_uchar(*self)
     }
 }
 
-impl GValuePublic for f32 {
-    fn get(gvalue: &GValue) -> f32 {
+impl ValuePublic for f32 {
+    fn get(gvalue: &Value) -> f32 {
         gvalue.get_float()
     }
 
-    fn set(&self, gvalue: &GValue) {
+    fn set(&self, gvalue: &Value) {
         gvalue.set_float(*self)
     }
 }
 
-impl GValuePublic for f64 {
-    fn get(gvalue: &GValue) -> f64 {
+impl ValuePublic for f64 {
+    fn get(gvalue: &Value) -> f64 {
         gvalue.get_double()
     }
 
-    fn set(&self, gvalue: &GValue) {
+    fn set(&self, gvalue: &Value) {
         gvalue.set_double(*self)
     }
 }
 
-impl GValuePublic for Type {
-    fn get(gvalue: &GValue) -> Type {
+impl ValuePublic for Type {
+    fn get(gvalue: &Value) -> Type {
         gvalue.get_gtype()
     }
 
-    fn set(&self, gvalue: &GValue) {
+    fn set(&self, gvalue: &Value) {
         gvalue.set_gtype(*self)
     }
 }
 
-impl GValuePublic for String {
-    fn get(gvalue: &GValue) -> String {
+impl ValuePublic for String {
+    fn get(gvalue: &Value) -> String {
         match gvalue.get_string() {
             Some(s) => s,
             None => String::new()
         }
     }
 
-    fn set(&self, gvalue: &GValue) {
+    fn set(&self, gvalue: &Value) {
         gvalue.set_string(self.as_slice())
     }
 }

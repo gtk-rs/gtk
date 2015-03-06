@@ -34,7 +34,7 @@ pub use self::glib_container::GlibContainer;
 pub use self::error::{Error};
 pub use self::permission::Permission;
 pub use self::traits::{FFIGObject, Connect};
-pub use self::gvalue::{GValue, GValuePublic};
+pub use self::value::{Value, ValuePublic};
 pub use type_::Type;
 
 mod list;
@@ -44,7 +44,7 @@ mod error;
 mod permission;
 pub mod traits;
 pub mod translate;
-mod gvalue;
+mod value;
 pub mod type_;
 
 pub fn to_gboolean(b: bool) -> ffi::Gboolean {

@@ -60,7 +60,7 @@ extern crate "cairo-sys" as cairo_ffi;
 extern crate "glib" as glib_main;
 
 pub use glib_main as glib;
-pub use glib_main::GValuePublic;
+pub use glib_main::ValuePublic;
 pub use glib_main::traits::Connect;
 
 pub use gtk::BoxTrait as GtkBoxTrait;

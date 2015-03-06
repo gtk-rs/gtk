@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use glib::{to_bool, GValue, Type};
+use glib::{to_bool, Value, Type};
 use glib::translate::ToGlib;
 use gtk::{self, ffi};
 use gtk::TreeIter;
@@ -119,7 +119,7 @@ impl TreeStore {
         }
     }
 
-    pub fn set_value(&self, iter: &TreeIter, column: i32, value: &GValue) {
+    pub fn set_value(&self, iter: &TreeIter, column: i32, value: &Value) {
         unsafe { ffi::gtk_tree_store_set_value(self.pointer, iter.unwrap_pointer(), column, value.unwrap_pointer()) }
     }
 

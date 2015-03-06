@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use glib::{GValue, Type};
+use glib::{Value, Type};
 use glib::translate::from_glib;
 use gtk::{self, ffi, TreeIter, TreePath};
 use libc::{self, c_char};
@@ -69,8 +69,8 @@ impl TreeModel {
         }
     }
 
-    pub fn get_value(&self, iter: &TreeIter, column: i32) -> GValue {
-        let value = GValue::new().unwrap();
+    pub fn get_value(&self, iter: &TreeIter, column: i32) -> Value {
+        let value = Value::new().unwrap();
 
         unsafe { ffi::gtk_tree_model_get_value(self.pointer, iter.unwrap_pointer(), column, value.unwrap_pointer()) };
         value
