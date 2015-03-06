@@ -15,7 +15,6 @@
 
 use libc::{c_int, c_float, c_double};
 use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
-use libc;
 
 use gtk::{EntryIconPosition, ImageType, InputPurpose, InputHints};
 use gtk::cast::GTK_ENTRY;
@@ -290,15 +289,9 @@ pub trait EntryTrait: gtk::WidgetTrait {
 
     fn get_icon_tooltip_text(&self, icon_pos: EntryIconPosition) -> Option<String> {
         unsafe {
-            let c_str = ffi::gtk_entry_get_icon_tooltip_text(GTK_ENTRY(self.unwrap_widget()), icon_pos);
-            let ret = if c_str.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
-            };
-
-            ::libc::funcs::c95::stdlib::free(c_str as *mut libc::c_void);
-            ret
+            FromGlibPtr::take(
+                ffi::gtk_entry_get_icon_tooltip_text(GTK_ENTRY(self.unwrap_widget()),
+                                                     icon_pos))
         }
     }
 
@@ -311,15 +304,9 @@ pub trait EntryTrait: gtk::WidgetTrait {
 
     fn get_icon_tooltip_markup(&self, icon_pos: EntryIconPosition) -> Option<String> {
         unsafe {
-            let c_str = ffi::gtk_entry_get_icon_tooltip_markup(GTK_ENTRY(self.unwrap_widget()), icon_pos);
-            let ret = if c_str.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
-            };
-
-            ::libc::funcs::c95::stdlib::free(c_str as *mut libc::c_void);
-            ret
+            FromGlibPtr::take(
+                ffi::gtk_entry_get_icon_tooltip_markup(GTK_ENTRY(self.unwrap_widget()),
+                                                       icon_pos))
         }
     }
 

@@ -13,7 +13,6 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::ffi::CString;
 use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 use gtk::cast::GTK_TOOLBUTTON;
 use gtk::{self, ffi};
@@ -35,10 +34,10 @@ pub trait ToolButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrai
     }
 
     fn set_icon_name(&mut self, icon_name: &str) -> () {
-        let c_str = CString::from_slice(icon_name.as_bytes());
-
         unsafe {
-            ffi::gtk_tool_button_set_icon_name(GTK_TOOLBUTTON(self.unwrap_widget()), c_str.as_ptr());
+            let mut tmp_icon_name = icon_name.to_tmp_for_borrow();
+            ffi::gtk_tool_button_set_icon_name(GTK_TOOLBUTTON(self.unwrap_widget()),
+                                               tmp_icon_name.to_glib_ptr());
         }
     }
 

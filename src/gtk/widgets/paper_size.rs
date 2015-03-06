@@ -14,22 +14,20 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::{self, ffi};
-use glib::translate::{FromGlibPtr};
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 use glib::{to_bool, to_gboolean};
 use gtk::FFIWidget;
 use gtk::cast::{GTK_PAPER_SIZE};
 use glib;
-use std::ffi::CString;
 
 // FIXME: PaperSize is not a widget nor a GObject -> GBoxed
 struct_Widget!(PaperSize);
 
 impl PaperSize {
     pub fn new(name: &str) -> Option<PaperSize> {
-        let c_str = CString::from_slice(name.as_bytes());
-
         let tmp_pointer = unsafe {
-            ffi::gtk_paper_size_new(c_str.as_ptr())
+            let mut tmp_name = name.to_tmp_for_borrow();
+            ffi::gtk_paper_size_new(tmp_name.to_glib_ptr())
         };
 
         if tmp_pointer.is_null() {
@@ -40,10 +38,12 @@ impl PaperSize {
     }
 
     pub fn new_from_ppd(ppd_name: &str, ppd_display_name: &str, width: f64, height: f64) -> Option<PaperSize> {
-        let c_str = CString::from_slice(ppd_name.as_bytes());
-        let c_str2 = CString::from_slice(ppd_display_name.as_bytes());
         let tmp_pointer = unsafe {
-            ffi::gtk_paper_size_new_from_ppd(c_str.as_ptr(), c_str2.as_ptr(), width, height)
+            let mut tmp_ppd_name = ppd_name.to_tmp_for_borrow();
+            let mut tmp_ppd_display_name = ppd_display_name.to_tmp_for_borrow();
+            ffi::gtk_paper_size_new_from_ppd(tmp_ppd_name.to_glib_ptr(),
+                                             tmp_ppd_display_name.to_glib_ptr(),
+                                             width, height)
         };
 
         if tmp_pointer.is_null() {
@@ -54,10 +54,12 @@ impl PaperSize {
     }
 
     pub fn new_custom(name: &str, display_name: &str, width: f64, height: f64, unit: gtk::Unit) -> Option<PaperSize> {
-        let c_str = CString::from_slice(name.as_bytes());
-        let c_str2 = CString::from_slice(display_name.as_bytes());
         let tmp_pointer = unsafe {
-            ffi::gtk_paper_size_new_custom(c_str.as_ptr(), c_str2.as_ptr(), width, height, unit)
+            let mut tmp_name = name.to_tmp_for_borrow();
+            let mut tmp_display_name = display_name.to_tmp_for_borrow();
+            ffi::gtk_paper_size_new_custom(tmp_name.to_glib_ptr(),
+                                           tmp_display_name.to_glib_ptr(),
+                                           width, height, unit)
         };
 
         if tmp_pointer.is_null() {

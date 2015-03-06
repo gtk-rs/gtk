@@ -14,7 +14,6 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::ffi;
-use std::ffi::CString;
 use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 
 pub struct FileFilter {
@@ -33,10 +32,9 @@ impl FileFilter {
     }
 
     pub fn set_name(&self, name: &str) -> () {
-        let c_str = CString::from_slice(name.as_bytes());
-
         unsafe {
-            ffi::gtk_file_filter_set_name(self.pointer, c_str.as_ptr())
+            let mut tmp_name = name.to_tmp_for_borrow();
+            ffi::gtk_file_filter_set_name(self.pointer, tmp_name.to_glib_ptr())
         };
     }
 
@@ -55,10 +53,9 @@ impl FileFilter {
     }
 
     pub fn add_pattern(&self, pattern: &str) -> () {
-        let c_str = CString::from_slice(pattern.as_bytes());
-
         unsafe {
-            ffi::gtk_file_filter_add_pattern(self.pointer, c_str.as_ptr())
+            let mut tmp_pattern = pattern.to_tmp_for_borrow();
+            ffi::gtk_file_filter_add_pattern(self.pointer, tmp_pattern.to_glib_ptr())
         };
     }
 

@@ -69,15 +69,13 @@ impl EntryCompletion {
     }
 
     pub fn compute_prefix(&self, key: &str) -> Option<String> {
-        let tmp_pointer = unsafe {
+        unsafe {
             let mut tmp_key = key.to_tmp_for_borrow();
-            ffi::gtk_entry_completion_compute_prefix(GTK_ENTRY_COMPLETION(self.pointer), tmp_key.to_glib_ptr()) as *const c_char
-        };
-
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            unsafe { Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp_pointer)).to_string()) }
+            FromGlibPtr::borrow(
+                ffi::gtk_entry_completion_compute_prefix(
+                    GTK_ENTRY_COMPLETION(self.pointer),
+                    tmp_key.to_glib_ptr())
+                as *const c_char)
         }
     }
 

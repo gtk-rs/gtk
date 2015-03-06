@@ -16,9 +16,8 @@
 //! A container which can hide its child
 
 use libc::c_int;
-use std::ffi::CString;
 
-use glib::translate::{FromGlibPtr};
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 use gtk::cast::GTK_EXPANDER;
 use gtk::{self, ffi};
 use glib::{to_bool, to_gboolean};
@@ -29,17 +28,17 @@ struct_Widget!(Expander);
 
 impl Expander {
     pub fn new(label: &str) -> Option<Expander> {
-        let c_str = CString::from_slice(label.as_bytes());
         let tmp_pointer = unsafe {
-            ffi::gtk_expander_new(c_str.as_ptr())
+            let mut tmp_label = label.to_tmp_for_borrow();
+            ffi::gtk_expander_new(tmp_label.to_glib_ptr())
         };
         check_pointer!(tmp_pointer, Expander)
     }
 
     pub fn new_with_mnemonic(mnemonic: &str) -> Option<Expander> {
-        let c_str = CString::from_slice(mnemonic.as_bytes());
         let tmp_pointer = unsafe {
-            ffi::gtk_expander_new_with_mnemonic(c_str.as_ptr())
+            let mut tmp_mnemonic = mnemonic.to_tmp_for_borrow();
+            ffi::gtk_expander_new_with_mnemonic(tmp_mnemonic.to_glib_ptr())
         };
         check_pointer!(tmp_pointer, Expander)
     }
@@ -93,10 +92,9 @@ impl Expander {
     }
 
     pub fn set_label(&mut self, label: &str) -> () {
-        let c_str = CString::from_slice(label.as_bytes());
-
         unsafe {
-            ffi::gtk_expander_set_label(GTK_EXPANDER(self.pointer), c_str.as_ptr());
+            let mut tmp_label = label.to_tmp_for_borrow();
+            ffi::gtk_expander_set_label(GTK_EXPANDER(self.pointer), tmp_label.to_glib_ptr());
         }
     }
 

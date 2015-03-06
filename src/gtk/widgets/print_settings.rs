@@ -17,7 +17,6 @@ use gtk::{self, ffi};
 use glib::{to_bool, to_gboolean};
 use gtk::FFIWidget;
 use gtk::cast::{GTK_PRINT_SETTINGS, GTK_PAPER_SIZE};
-use std::ffi::CString;
 use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 
 struct_Widget!(PrintSettings);
@@ -44,10 +43,11 @@ impl PrintSettings {
     }
 
     pub fn has_key(&self, key: &str) -> bool {
-        let c_str = CString::from_slice(key.as_bytes());
-
         unsafe {
-            to_bool(ffi::gtk_print_settings_has_key(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr()))
+            let mut tmp_key = key.to_tmp_for_borrow();
+            to_bool(
+                ffi::gtk_print_settings_has_key(GTK_PRINT_SETTINGS(self.unwrap_widget()),
+                                                tmp_key.to_glib_ptr()))
         }
     }
 
@@ -61,9 +61,12 @@ impl PrintSettings {
 
     pub fn set(&self, key: &str, value: &str) {
         unsafe {
-            let c_str = CString::from_slice(key.as_bytes());
+            let mut tmp_key = key.to_tmp_for_borrow();
             let mut tmp_value = value.to_tmp_for_borrow();
-            ffi::gtk_print_settings_set(GTK_PRINT_SETTINGS(self.unwrap_widget()), c_str.as_ptr(), tmp_value.to_glib_ptr())
+            ffi::gtk_print_settings_set(GTK_PRINT_SETTINGS(
+                self.unwrap_widget()),
+                tmp_key.to_glib_ptr(),
+                tmp_value.to_glib_ptr())
         }
     }
 

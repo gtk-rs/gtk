@@ -14,9 +14,8 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::ffi::{self, C_GtkBuilder};
-use libc::c_long;
+use libc::{c_char, c_long};
 use gtk::traits::GObjectTrait;
-use std::ffi::CString;
 use glib::translate::{ToGlibPtr, ToTmp};
 
 #[repr(C)]
@@ -70,9 +69,9 @@ impl Builder {
 
     pub fn new_from_string(string: &str) -> Option<Builder> {
         let tmp = unsafe {
-            let c_str = CString::from_slice(string.as_bytes());
-
-            ffi::gtk_builder_new_from_string(c_str.as_ptr(), string.len() as c_long)
+            // Don't need a null-terminated string here
+            ffi::gtk_builder_new_from_string(string.as_ptr() as *const c_char,
+                                             string.len() as c_long)
         };
 
         if tmp.is_null() {
@@ -86,9 +85,8 @@ impl Builder {
 
     pub fn get_object<T: GObjectTrait>(&self, name: &str) -> Option<T> {
         let tmp = unsafe {
-            let c_str = CString::from_slice(name.as_bytes());
-
-            ffi::gtk_builder_get_object(self.pointer, c_str.as_ptr())
+            let mut tmp_name = name.to_tmp_for_borrow();
+            ffi::gtk_builder_get_object(self.pointer, tmp_name.to_glib_ptr())
         };
 
         if tmp.is_null() {

@@ -16,8 +16,8 @@
 //! A choice from multiple check buttons
 
 use std::ptr;
-use std::ffi::CString;
 
+use glib::translate::{ToGlibPtr, ToTmp};
 use gtk::{self, ffi};
 use gtk::cast::GTK_RADIOBUTTON;
 
@@ -31,17 +31,19 @@ impl RadioButton {
     }
 
     pub fn new_with_label(label: &str) -> Option<RadioButton> {
-        let c_str = CString::from_slice(label.as_bytes());
         let tmp_pointer = unsafe {
-            ffi::gtk_radio_button_new_with_label(ptr::null_mut(), c_str.as_ptr())
+            let mut tmp_label = label.to_tmp_for_borrow();
+            ffi::gtk_radio_button_new_with_label(ptr::null_mut(),
+                                                 tmp_label.to_glib_ptr())
         };
         check_pointer!(tmp_pointer, RadioButton)
     }
 
     pub fn new_with_mnemonic(mnemonic: &str) -> Option<RadioButton> {
-        let c_str = CString::from_slice(mnemonic.as_bytes());
         let tmp_pointer = unsafe {
-            ffi::gtk_radio_button_new_with_mnemonic(ptr::null_mut(), c_str.as_ptr())
+            let mut tmp_mnemonic = mnemonic.to_tmp_for_borrow();
+            ffi::gtk_radio_button_new_with_mnemonic(ptr::null_mut(),
+                                                    tmp_mnemonic.to_glib_ptr())
         };
         check_pointer!(tmp_pointer, RadioButton)
     }

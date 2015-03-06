@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use libc::{c_int, c_char, self};
+use libc::{c_int, c_char};
 use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 use gtk::ffi;
 use glib::{to_bool, to_gboolean};

@@ -13,7 +13,6 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::ffi::CString;
 use glib::translate::{ToGlibPtr, ToTmp};
 use gtk::{self, ffi};
 use glib::{to_bool, to_gboolean};
@@ -70,10 +69,10 @@ pub trait ToolItemTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait 
     }
 
     fn set_tooltip_text(&mut self, text: &str) -> () {
-        let c_str = CString::from_slice(text.as_bytes());
-
         unsafe {
-            ffi::gtk_tool_item_set_tooltip_text(GTK_TOOLITEM(self.unwrap_widget()), c_str.as_ptr())
+            let mut tmp_text = text.to_tmp_for_borrow();
+            ffi::gtk_tool_item_set_tooltip_text(GTK_TOOLITEM(self.unwrap_widget()),
+                                                tmp_text.to_glib_ptr())
         }
     }
 

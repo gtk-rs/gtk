@@ -15,7 +15,6 @@
 
 //! A button to launch a font chooser dialog
 
-use std::ffi::CString;
 use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 use gtk::{self, ffi};
 use glib::{to_bool, to_gboolean};
@@ -87,10 +86,9 @@ impl FontButton {
     }
 
     pub fn set_title(&mut self, title: &str) -> () {
-        let c_str = CString::from_slice(title.as_bytes());
-
         unsafe {
-            ffi::gtk_font_button_set_title(GTK_FONTBUTTON(self.pointer), c_str.as_ptr());
+            let mut tmp_title = title.to_tmp_for_borrow();
+            ffi::gtk_font_button_set_title(GTK_FONTBUTTON(self.pointer), tmp_title.to_glib_ptr());
         }
     }
 

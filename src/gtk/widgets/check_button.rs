@@ -15,7 +15,6 @@
 
 //! Create widgets with a discrete toggle button
 
-use std::ffi::CString;
 use glib::translate::{ToGlibPtr, ToTmp};
 use gtk::{self, ffi};
 
@@ -37,10 +36,9 @@ impl CheckButton {
     }
 
     pub fn new_with_mnemonic(mnemonic: &str) -> Option<CheckButton> {
-        let c_str = CString::from_slice(mnemonic.as_bytes());
-
         let tmp_pointer = unsafe {
-            ffi::gtk_check_button_new_with_mnemonic(c_str.as_ptr())
+            let mut tmp_mnemonic = mnemonic.to_tmp_for_borrow();
+            ffi::gtk_check_button_new_with_mnemonic(tmp_mnemonic.to_glib_ptr())
         };
         check_pointer!(tmp_pointer, CheckButton)
     }

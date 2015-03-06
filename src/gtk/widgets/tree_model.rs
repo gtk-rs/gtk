@@ -13,11 +13,10 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
+use libc::c_char;
 use glib::{Value, Type};
-use glib::translate::{ToGlibPtr, ToTmp, from_glib};
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp, from_glib};
 use gtk::{self, ffi, TreeIter, TreePath};
-use libc::{self, c_char};
-use std::ffi::CString;
 
 pub struct TreeModel {
     pointer: *mut ffi::C_GtkTreeModel
@@ -130,19 +129,12 @@ impl TreeModel {
         }
     }
 
-    #[allow(unused_variables)]
     pub fn get_string_from_iter(&self, iter: &TreeIter) -> Option<String> {
-        let string = unsafe { ffi::gtk_tree_model_get_string_from_iter(self.pointer, iter.unwrap_pointer()) as *const c_char };
-
-        if string.is_null() {
-            None
-        } else {
-            unsafe {
-                let res = String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&string)).to_string();
-
-                libc::free(string as *mut libc::c_void);
-                Some(res)
-            }
+        unsafe {
+            FromGlibPtr::take(
+                ffi::gtk_tree_model_get_string_from_iter(self.pointer,
+                                                         iter.unwrap_pointer())
+                    as *const c_char)
         }
     }
 

@@ -16,7 +16,6 @@
 use gtk::{self, ffi};
 use gtk::FFIWidget;
 use gtk::cast::{GTK_WINDOW, GTK_APP_CHOOSER_DIALOG};
-use std::ffi::CString;
 use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 
 struct_Widget!(AppChooserDialog);
@@ -24,12 +23,14 @@ struct_Widget!(AppChooserDialog);
 impl AppChooserDialog {
     pub fn new_for_content_type(parent: Option<gtk::Window>, flags: gtk::DialogFlags, content_type: &str) -> Option<AppChooserDialog> {
         let tmp_pointer = unsafe {
-            let c_str = CString::from_slice(content_type.as_bytes());
-
-            ffi::gtk_app_chooser_dialog_new_for_content_type(match parent {
+            let parent = match parent {
                 Some(ref p) => GTK_WINDOW(p.unwrap_widget()),
                 None => ::std::ptr::null_mut()
-            }, flags, c_str.as_ptr())
+            };
+            let mut tmp_content_type = content_type.to_tmp_for_borrow();
+
+            ffi::gtk_app_chooser_dialog_new_for_content_type(parent, flags,
+                                                             tmp_content_type.to_glib_ptr())
         };
 
         if tmp_pointer.is_null() {

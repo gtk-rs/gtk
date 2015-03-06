@@ -16,7 +16,6 @@
 //! The widget used for item in menus
 
 use gtk::{self, ffi};
-use std::ffi::CString;
 use glib::translate::{ToGlibPtr, ToTmp};
 
 /// CheckMenuItem — The widget used for item in menus
@@ -37,10 +36,10 @@ impl CheckMenuItem {
     }
 
     pub fn new_with_mnemonic(mnemonic: &str) -> Option<CheckMenuItem> {
-        let c_str = CString::from_slice(mnemonic.as_bytes());
-
         let tmp_pointer = unsafe {
-            ffi::gtk_check_menu_item_new_with_mnemonic(c_str.as_ptr())
+            let mut tmp_mnemonic = mnemonic.to_tmp_for_borrow();
+            ffi::gtk_check_menu_item_new_with_mnemonic(
+                    tmp_mnemonic.to_glib_ptr())
         };
         check_pointer!(tmp_pointer, CheckMenuItem)
     }

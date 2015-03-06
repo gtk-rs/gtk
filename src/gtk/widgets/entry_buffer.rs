@@ -16,8 +16,7 @@
 //! Text buffer for gtk::Entry
 
 use libc::{c_int, c_uint};
-use std::ffi::CString;
-use glib::translate::{FromGlibPtr};
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 use gtk::ffi;
 
 // TODO:
@@ -35,11 +34,10 @@ pub struct EntryBuffer {
 }
 
 impl EntryBuffer {
-    pub fn new(initial_chars: &str) -> Option<EntryBuffer> {
+    pub fn new(initial_chars: Option<&str>) -> Option<EntryBuffer> {
         let tmp_pointer = unsafe {
-            let c_str = CString::from_slice(initial_chars.as_bytes());
-
-            ffi::gtk_entry_buffer_new(c_str.as_ptr(), initial_chars.len() as c_int)
+            let mut tmp_initial_chars = initial_chars.to_tmp_for_borrow();
+            ffi::gtk_entry_buffer_new(tmp_initial_chars.to_glib_ptr(), -1)
         };
         if tmp_pointer.is_null() {
             None
@@ -58,10 +56,9 @@ impl EntryBuffer {
     }
 
     pub fn set_text(&mut self, text: &str) -> () {
-        let c_str = CString::from_slice(text.as_bytes());
-
         unsafe {
-            ffi::gtk_entry_buffer_set_text(self.pointer, c_str.as_ptr(), text.len() as c_int);
+            let mut tmp_text = text.to_tmp_for_borrow();
+            ffi::gtk_entry_buffer_set_text(self.pointer, tmp_text.to_glib_ptr(), -1);
         }
     }
 
@@ -91,9 +88,9 @@ impl EntryBuffer {
 
     pub fn insert_text(&mut self, position: u32, text: &str) -> () {
         unsafe {
-            let c_str = CString::from_slice(text.as_bytes());
-
-            ffi::gtk_entry_buffer_insert_text(self.pointer, position as c_uint, c_str.as_ptr(), text.len() as c_int);
+            let mut tmp_text = text.to_tmp_for_borrow();
+            ffi::gtk_entry_buffer_insert_text(self.pointer, position as c_uint,
+                                              tmp_text.to_glib_ptr(), -1);
         }
     }
 
@@ -111,9 +108,9 @@ impl EntryBuffer {
 
     pub fn emit_inserted_text(&mut self, position: u32, text: &str) -> () {
         unsafe {
-            let c_str = CString::from_slice(text.as_bytes());
-
-            ffi::gtk_entry_buffer_emit_inserted_text(self.pointer, position as c_uint, c_str.as_ptr(), text.len() as c_int);
+            let mut tmp_text = text.to_tmp_for_borrow();
+            ffi::gtk_entry_buffer_emit_inserted_text(self.pointer, position as c_uint,
+                                                     tmp_text.to_glib_ptr(), -1);
         }
     }
 

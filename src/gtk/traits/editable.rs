@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::ffi::CString;
+use libc::{c_char, c_int};
 use gtk::cast::GTK_EDITABLE;
 use gtk::{self, ffi};
 use glib::translate::{FromGlibPtr};
@@ -40,13 +40,12 @@ pub trait EditableTrait: gtk::WidgetTrait {
         }
     }
 
-    fn insert_text(&mut self, new_text: &str, new_text_length: i32, position: i32) {
+    fn insert_text(&mut self, new_text: &str, position: &mut i32) {
         unsafe {
-            let c_str = CString::from_slice(new_text.as_bytes());
-
+            // Don't need a null-terminated string here
             ffi::gtk_editable_insert_text(GTK_EDITABLE(self.unwrap_widget()),
-                                              c_str.as_ptr(),
-                                              new_text_length,
+                                              new_text.as_ptr() as *const c_char,
+                                              new_text.len() as c_int,
                                               position)
         }
     }

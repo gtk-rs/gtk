@@ -15,7 +15,6 @@
 
 //! The widget used for item in menus
 
-use std::ffi::CString;
 use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 use gtk::{self, ffi};
 use gtk::cast::GTK_MENU_ITEM;
@@ -69,10 +68,10 @@ pub trait MenuItemTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait 
     }
 
     fn set_label(&mut self, label: &str) {
-        let c_str = CString::from_slice(label.as_bytes());
-
         unsafe {
-            ffi::gtk_menu_item_set_label(GTK_MENU_ITEM(self.unwrap_widget()), c_str.as_ptr())
+            let mut tmp_label = label.to_tmp_for_borrow();
+            ffi::gtk_menu_item_set_label(GTK_MENU_ITEM(self.unwrap_widget()),
+                                         tmp_label.to_glib_ptr())
         }
     }
 

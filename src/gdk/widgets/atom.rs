@@ -14,8 +14,8 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gdk::ffi;
-use glib::translate::{ToGlibPtr, ToTmp};
-use libc::{c_char, c_void};
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
+use libc::{c_char};
 
 #[derive(Copy)]
 pub struct Atom {
@@ -59,19 +59,10 @@ impl Atom {
         }
     }
 
-    // FIXME : tmp pointer should be freed
     pub fn name(&self) -> Option<String> {
-        let tmp = unsafe { ffi::gdk_atom_name(self.pointer) as *const c_char };
-
-        if tmp.is_null() {
-            None
-        } else {
-            unsafe {
-                let ret = Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&tmp)).to_string());
-
-                ::libc::funcs::c95::stdlib::free(tmp as *mut c_void);
-                ret
-            }
+        unsafe {
+            FromGlibPtr::take(
+                ffi::gdk_atom_name(self.pointer) as *const c_char)
         }
     }
 

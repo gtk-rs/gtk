@@ -18,8 +18,7 @@
 use gtk::{self, ffi};
 use gtk::cast::GTK_NOTEBOOK;
 use gtk::FFIWidget;
-use std::ffi::CString;
-use glib::translate::{FromGlibPtr};
+use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 use glib::{to_bool, to_gboolean};
 
 /// GtkNotebook — A tabbed notebook container
@@ -114,10 +113,10 @@ impl NoteBook {
     }
 
     pub fn set_group_name(&mut self, group_name: &str) {
-        let c_str = CString::from_slice(group_name.as_bytes());
-
         unsafe {
-            ffi::gtk_notebook_set_group_name(GTK_NOTEBOOK(self.pointer), c_str.as_ptr())
+            let mut tmp_group_name = group_name.to_tmp_for_borrow();
+            ffi::gtk_notebook_set_group_name(GTK_NOTEBOOK(self.pointer),
+                                             tmp_group_name.to_glib_ptr())
         }
     }
 
@@ -270,25 +269,19 @@ impl NoteBook {
     }
 
     pub fn set_tab_label_text<T: gtk::WidgetTrait>(&mut self, child: &T, tab_text: &str) {
-        let c_str = CString::from_slice(tab_text.as_bytes());
-
         unsafe {
+            let mut tmp_tab_text = tab_text.to_tmp_for_borrow();
             ffi::gtk_notebook_set_tab_label_text(GTK_NOTEBOOK(self.pointer),
                                                  child.unwrap_widget(),
-                                                 c_str.as_ptr())
+                                                 tmp_tab_text.to_glib_ptr())
         }
     }
 
     pub fn get_tab_label_text<T: gtk::WidgetTrait>(&mut self, child: &T) -> Option<String> {
         unsafe {
-            let c_str = ffi::gtk_notebook_get_tab_label_text(GTK_NOTEBOOK(self.pointer),
-                                                             child.unwrap_widget());
-            
-            if c_str.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_notebook_get_tab_label_text(GTK_NOTEBOOK(self.pointer),
+                                                     child.unwrap_widget()))
         }
     }
 
@@ -313,25 +306,19 @@ impl NoteBook {
     }
 
     pub fn set_menu_label_text<T: gtk::WidgetTrait>(&mut self, child: &T, tab_text: &str) {
-        let c_str = CString::from_slice(tab_text.as_bytes());
-
         unsafe {
+            let mut tmp_tab_text = tab_text.to_tmp_for_borrow();
             ffi::gtk_notebook_set_menu_label_text(GTK_NOTEBOOK(self.pointer),
                                                   child.unwrap_widget(),
-                                                  c_str.as_ptr())
+                                                  tmp_tab_text.to_glib_ptr())
         }
     }
 
     pub fn get_menu_label_text<T: gtk::WidgetTrait>(&mut self, child: &T) -> Option<String> {
         unsafe {
-            let c_str = ffi::gtk_notebook_get_menu_label_text(GTK_NOTEBOOK(self.pointer),
-                                                              child.unwrap_widget());
-
-            if c_str.is_null() {
-                None
-            } else {
-                Some(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&c_str)).to_string())
-            }
+            FromGlibPtr::borrow(
+                ffi::gtk_notebook_get_menu_label_text(GTK_NOTEBOOK(self.pointer),
+                                                              child.unwrap_widget()))
         }
     }
 

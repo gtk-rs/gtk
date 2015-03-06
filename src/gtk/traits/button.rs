@@ -15,7 +15,6 @@
 
 use std::mem;
 use libc::c_float;
-use std::ffi::CString;
 use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
 
 use gtk::{ReliefStyle, PositionType};
@@ -149,11 +148,11 @@ pub trait ButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait {
 
     fn connect_clicked_signal(&self, handler: Box<ButtonClickedHandler>) {
         let data = unsafe { mem::transmute::<Box<Box<ButtonClickedHandler>>, ffi::gpointer>(Box::new(handler)) };
-        let c_str = CString::from_slice("clicked".as_bytes());
+        let mut tmp_name = "clicked".to_tmp_for_borrow();
 
         unsafe {
             ffi::g_signal_connect_data(self.unwrap_widget() as ffi::gpointer,
-                                       c_str.as_ptr(),
+                                       tmp_name.to_glib_ptr(),
                                        Some(mem::transmute(widget_destroy_callback)),
                                        data,
                                        Some(drop_widget_destroy_handler as extern "C" fn(ffi::gpointer, *const ffi::C_GClosure)),

@@ -13,26 +13,31 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
+use std::ptr;
+use glib::translate::{ToGlibPtr, ToTmp};
 use gtk::{self, ffi};
 use gtk::FFIWidget;
 use gtk::ResponseType;
 use gtk::cast::{GTK_WINDOW, GTK_RECENT_MANAGER};
-use std::ffi::CString;
 
 struct_Widget!(RecentChooserDialog);
 
 impl RecentChooserDialog {
     pub fn new(title: &str, parent: Option<gtk::Window>) -> Option<RecentChooserDialog> {
-        let c_str = CString::from_slice(title.as_bytes());
-        let ok_str = CString::from_slice("Ok".as_bytes());
-        let cancel_str = CString::from_slice("Cancel".as_bytes());
+        let mut tmp_title = title.to_tmp_for_borrow();
+        let mut tmp_ok = "Ok".to_tmp_for_borrow();
+        let mut tmp_cancel = "Cancel".to_tmp_for_borrow();
+        let parent = match parent {
+            Some(ref p) => GTK_WINDOW(p.unwrap_widget()),
+            None => ptr::null_mut()
+        };
+
         let tmp_pointer = unsafe {
-            ffi::gtk_recent_chooser_dialog_new(c_str.as_ptr(), match parent {
-                Some(ref p) => GTK_WINDOW(p.unwrap_widget()),
-                None => ::std::ptr::null_mut()
-            }, ok_str.as_ptr(), ResponseType::Ok,
-               cancel_str.as_ptr(), ResponseType::Cancel,
-               ::std::ptr::null::<::libc::c_void>())
+            ffi::gtk_recent_chooser_dialog_new(
+                tmp_title.to_glib_ptr(), parent,
+                tmp_ok.to_glib_ptr(), ResponseType::Ok,
+                tmp_cancel.to_glib_ptr(), ResponseType::Cancel,
+                ptr::null::<()>())
         };
 
         if tmp_pointer.is_null() {
@@ -43,18 +48,21 @@ impl RecentChooserDialog {
     }
 
     pub fn new_for_manager(title: &str, parent: Option<gtk::Window>, manager: &gtk::RecentManager) -> Option<RecentChooserDialog> {
-        let c_str = CString::from_slice(title.as_bytes());
-        let ok_str = CString::from_slice("Ok".as_bytes());
-        let cancel_str = CString::from_slice("Cancel".as_bytes());
+        let mut tmp_title = title.to_tmp_for_borrow();
+        let mut tmp_ok = "Ok".to_tmp_for_borrow();
+        let mut tmp_cancel = "Cancel".to_tmp_for_borrow();
+        let parent = match parent {
+            Some(ref p) => GTK_WINDOW(p.unwrap_widget()),
+            None => ptr::null_mut()
+        };
 
         let tmp_pointer = unsafe {
-            ffi::gtk_recent_chooser_dialog_new_for_manager(c_str.as_ptr(), match parent {
-                Some(ref p) => GTK_WINDOW(p.unwrap_widget()),
-                None => ::std::ptr::null_mut()
-            }, GTK_RECENT_MANAGER(manager.unwrap_widget()),
-               ok_str.as_ptr(), ResponseType::Ok,
-               cancel_str.as_ptr(), ResponseType::Cancel,
-               ::std::ptr::null::<::libc::c_void>())
+            ffi::gtk_recent_chooser_dialog_new_for_manager(
+                tmp_title.to_glib_ptr(), parent,
+                GTK_RECENT_MANAGER(manager.unwrap_widget()),
+                tmp_ok.to_glib_ptr(), ResponseType::Ok,
+                tmp_cancel.to_glib_ptr(), ResponseType::Cancel,
+                ptr::null::<()>())
         };
 
         if tmp_pointer.is_null() {

@@ -258,9 +258,10 @@ impl AboutDialog {
 
     pub fn set_translator_credits(&self, translator_credits: &str) -> () {
         unsafe {
-            let c_str = CString::from_slice(translator_credits.as_bytes());
-
-            ffi::gtk_about_dialog_set_translator_credits(GTK_ABOUT_DIALOG(self.unwrap_widget()), c_str.as_ptr())
+            let mut tmp_translator_credits = translator_credits.to_tmp_for_borrow();
+            ffi::gtk_about_dialog_set_translator_credits(
+                GTK_ABOUT_DIALOG(self.unwrap_widget()),
+                tmp_translator_credits.to_glib_ptr())
         };
     }
 
@@ -287,9 +288,10 @@ impl AboutDialog {
 
     pub fn set_logo_icon_name(&self, logo_icon_name: &str) -> () {
         unsafe {
-            let c_str = CString::from_slice(logo_icon_name.as_bytes());
-
-            ffi::gtk_about_dialog_set_logo_icon_name(GTK_ABOUT_DIALOG(self.unwrap_widget()), c_str.as_ptr())
+            let mut tmp_logo_icon_name = logo_icon_name.to_tmp_for_borrow();
+            ffi::gtk_about_dialog_set_logo_icon_name(
+                GTK_ABOUT_DIALOG(self.unwrap_widget()),
+                tmp_logo_icon_name.to_glib_ptr())
         };
     }
 
@@ -303,9 +305,11 @@ impl AboutDialog {
         }
         tmp_vec.push(::std::ptr::null_mut());
         unsafe {
-            let c_str = CString::from_slice(section_name.as_bytes());
-
-            ffi::gtk_about_dialog_add_credit_section(GTK_ABOUT_DIALOG(self.unwrap_widget()), c_str.as_ptr(), tmp_vec.as_slice().as_ptr())
+            let mut tmp_section_name = section_name.to_tmp_for_borrow();
+            ffi::gtk_about_dialog_add_credit_section(
+                GTK_ABOUT_DIALOG(self.unwrap_widget()),
+                tmp_section_name.to_glib_ptr(),
+                tmp_vec.as_slice().as_ptr())
         }
     }
 
