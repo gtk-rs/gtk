@@ -161,7 +161,6 @@ pub use self::widgets::{
     TreeSelection,
     RecentChooserWidget,
     ComboBox,
-    GValue,
     //g_type,
     ComboBoxText,
     TextMark,

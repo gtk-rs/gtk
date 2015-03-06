@@ -127,7 +127,6 @@ pub use self::combo_box::ComboBox;
 #[cfg(any(feature = "GTK_3_12", feature = "GTK_3_14"))]
 pub use self::popover::Popover;
 pub use self::combo_box_text::ComboBoxText;
-pub use self::value::{GValue, GValuePublic};
 //pub use self::gtype::g_type;
 pub use self::text_mark::TextMark;
 pub use self::text_tag::TextTag;
@@ -261,7 +260,6 @@ mod combo_box;
 #[cfg(any(feature = "GTK_3_12", feature = "GTK_3_14"))]
 mod popover;
 mod combo_box_text;
-mod value;
 //mod gtype;
 mod text_mark;
 mod text_tag;

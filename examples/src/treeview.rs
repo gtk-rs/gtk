@@ -36,16 +36,16 @@ fn main() {
     // test GValue
 
     let hello = String::from_str("Hello world !");
-    let value = gtk::GValue::new().unwrap();
+    let value = glib::GValue::new().unwrap();
 
-    value.init(ffi::glib::G_TYPE_STRING);
+    value.init(glib::Type::String);
     value.set(&hello);
     println!("gvalue.get example : {}", value.get::<String>());
 
     // left pane
 
     let mut left_tree = gtk::TreeView::new().unwrap();
-    let column_types = [ffi::glib::G_TYPE_STRING];
+    let column_types = [glib::Type::String];
     let left_store = gtk::ListStore::new(&column_types).unwrap();
     let left_model = left_store.get_model().unwrap();
 
@@ -62,7 +62,7 @@ fn main() {
     // right pane
 
     let mut right_tree = gtk::TreeView::new().unwrap();
-    let column_types = [ffi::glib::G_TYPE_STRING];
+    let column_types = [glib::Type::String];
     let right_store = gtk::TreeStore::new(&column_types).unwrap();
     let right_model = right_store.get_model().unwrap();
 
