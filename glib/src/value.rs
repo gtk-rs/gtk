@@ -56,10 +56,9 @@ impl Value {
         unsafe { ffi::g_value_unset(self.pointer) }
     }
 
-    // to free !
     pub fn strdup_value_contents(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
+            FromGlibPtr::take(
                 ffi::g_strdup_value_contents(self.pointer) as *const c_char)
         }
     }
@@ -179,10 +178,6 @@ impl Value {
         }
     }
 
-    pub fn set_static_string(&self, _: &str) {
-        panic!("Not possible");
-    }
-
     /*pub fn take_string(&self, v_string: &str) {
         unsafe {
             v_string.with_c_str(|c_str| {
@@ -197,18 +192,8 @@ impl Value {
         }
     }
 
-    pub fn dup_string(&self) -> Option<String> {
-        self.get_string()
-    }
-
     pub fn set_boxed<T>(&self, v_box: &T) {
         unsafe { ffi::g_value_set_boxed(self.pointer, ::std::mem::transmute(v_box)) }
-    }
-
-    /// Set the contents of a G_TYPE_BOXED derived Value to v_boxed . The boxed value is assumed to be static, and is thus not duplicated
-    /// when setting the Value.
-    pub fn set_static_boxed<T>(&self, v_box: &T) {
-        unsafe { ffi::g_value_set_static_boxed(self.pointer, ::std::mem::transmute(v_box)) }
     }
 
     /*pub fn take_boxed<T>(&self, v_box: &T) {
