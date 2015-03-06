@@ -1584,8 +1584,11 @@ extern "C" {
     pub fn gtk_recent_info_get_modified        (info: *mut C_GtkRecentInfo) -> time_t;
     pub fn gtk_recent_info_get_visited         (info: *mut C_GtkRecentInfo) -> time_t;
     pub fn gtk_recent_info_get_private_hint    (info: *mut C_GtkRecentInfo) -> Gboolean;
-    pub fn gtk_recent_info_get_application_info(info: *mut C_GtkRecentInfo, app_name: *const c_char, app_exec: *const *mut c_char,
-        count: *mut c_uint, time_: *mut time_t) -> Gboolean;
+    pub fn gtk_recent_info_get_application_info(info: *mut C_GtkRecentInfo,
+                                                app_name: *const c_char,
+                                                app_exec: *mut *const c_char,
+                                                count: *mut c_uint,
+                                                time_: *mut time_t) -> Gboolean;
     pub fn gtk_recent_info_get_applications    (info: *mut C_GtkRecentInfo, length: *mut c_long) -> *mut *mut c_char;
     pub fn gtk_recent_info_last_application    (info: *mut C_GtkRecentInfo) -> *mut c_char;
     pub fn gtk_recent_info_has_application     (info: *mut C_GtkRecentInfo, app_name: *const c_char) -> Gboolean;

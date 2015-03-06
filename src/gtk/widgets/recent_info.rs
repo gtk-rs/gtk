@@ -17,8 +17,9 @@ use gtk::{self, ffi};
 use glib::to_bool;
 use gtk::FFIWidget;
 use gtk::cast::GTK_RECENT_INFO;
+use std::ptr;
 use std::ffi::CString;
-use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, FromGlibPtrNotNull, ToGlibPtr, ToTmp};
 use libc::c_char;
 
 struct_Widget!(RecentInfo);
@@ -82,20 +83,28 @@ impl RecentInfo {
         unsafe { to_bool(ffi::gtk_recent_info_get_private_hint(GTK_RECENT_INFO(self.unwrap_widget()))) }
     }
 
-    pub fn set_name(&self, app_name: &str) -> (bool, String, u32, i64) {
-        let app_exec = ::std::ptr::null_mut();
-        let mut count = 0u32;
-        let mut time_ = 0i64;
-        let c_str = CString::from_slice(app_name.as_bytes());
+    pub fn get_application_info(&self, app_name: &str) -> Option<(String, u32, i64)> {
+        unsafe {
+            let mut app_exec = ptr::null();
+            let mut count = 0u32;
+            let mut time_ = 0i64;
+            let mut tmp_app_name = app_name.to_tmp_for_borrow();
 
-        let ret = unsafe {
-            to_bool(ffi::gtk_recent_info_get_application_info(GTK_RECENT_INFO(self.unwrap_widget()), c_str.as_ptr(), &app_exec, &mut count, &mut time_))
-        };
+            let ret = to_bool(
+                ffi::gtk_recent_info_get_application_info(
+                    GTK_RECENT_INFO(self.unwrap_widget()),
+                    tmp_app_name.to_glib_ptr(),
+                    &mut app_exec,
+                    &mut count,
+                    &mut time_));
 
-        if app_exec.is_null() {
-            (ret, String::new(), count, time_)
-        } else {
-            (ret, unsafe { String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&(app_exec as *const c_char))).to_string() }, count, time_)
+            if ret {
+                let app_exec = FromGlibPtrNotNull::borrow(app_exec);
+                Some((app_exec, count, time_))
+            }
+            else {
+                None
+            }
         }
     }
 
