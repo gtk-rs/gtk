@@ -57,11 +57,11 @@ extern crate "glib-sys" as glib_ffi;
 extern crate "gdk3-sys" as gdk_ffi;
 extern crate "gtk3-sys" as gtk_ffi;
 extern crate "cairo-sys" as cairo_ffi;
+extern crate "glib" as glib_main;
 
-extern crate glib;
-
-pub use glib::traits::Connect;
-pub use gtk::widgets::GValuePublic;
+pub use glib_main as glib;
+pub use glib_main::ValuePublic;
+pub use glib_main::traits::Connect;
 
 pub use gtk::BoxTrait as GtkBoxTrait;
 pub use gtk::ActionableTrait as GtkActionableTrait;
@@ -104,10 +104,4 @@ pub use gtk::WindowTrait as GtkWindowTrait;
 pub mod gtk;
 pub mod cairo;
 pub mod gdk;
-
-pub mod ffi {
-    pub mod glib {
-        pub use glib_ffi::*;
-    }
-}
 pub mod pango;

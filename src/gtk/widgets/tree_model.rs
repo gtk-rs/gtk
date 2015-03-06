@@ -13,10 +13,11 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use glib::ffi::GType;
-use gtk::{self, ffi, GValue, TreeIter, TreePath};
-use std::ffi::CString;
+use glib::{Value, Type};
+use glib::translate::from_glib;
+use gtk::{self, ffi, TreeIter, TreePath};
 use libc::{self, c_char};
+use std::ffi::CString;
 
 pub struct TreeModel {
     pointer: *mut ffi::C_GtkTreeModel
@@ -31,8 +32,8 @@ impl TreeModel {
         unsafe { ffi::gtk_tree_model_get_n_columns(self.pointer) }
     }
 
-    pub fn get_column_type(&self, index_: i32) -> GType {
-        unsafe { ffi::gtk_tree_model_get_column_type(self.pointer, index_) }
+    pub fn get_column_type(&self, index_: i32) -> Type {
+        unsafe { from_glib(ffi::gtk_tree_model_get_column_type(self.pointer, index_)) }
     }
 
     pub fn get_iter(&self, iter: &mut TreeIter, path: &TreePath) -> bool {
@@ -68,8 +69,8 @@ impl TreeModel {
         }
     }
 
-    pub fn get_value(&self, iter: &TreeIter, column: i32) -> GValue {
-        let value = GValue::new().unwrap();
+    pub fn get_value(&self, iter: &TreeIter, column: i32) -> Value {
+        let value = Value::new().unwrap();
 
         unsafe { ffi::gtk_tree_model_get_value(self.pointer, iter.unwrap_pointer(), column, value.unwrap_pointer()) };
         value
