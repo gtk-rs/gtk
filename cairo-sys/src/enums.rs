@@ -14,6 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use std::fmt::{Error, Debug};
+use std::ffi::CStr;
 
 #[repr(C)]
 #[derive(Clone, PartialEq, PartialOrd, Copy)]
@@ -65,7 +66,7 @@ impl Debug for Status {
     fn fmt(&self, formatter: &mut ::std::fmt::Formatter) -> Result<(), Error> {
         unsafe {
             let char_ptr = super::cairo_status_to_string(*self);
-            let tmp = String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&char_ptr)).to_string();
+            let tmp = String::from_utf8_lossy(CStr::from_ptr(char_ptr).to_bytes()).into_owned();
 
             tmp.fmt(formatter)
         }
