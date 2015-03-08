@@ -4,7 +4,6 @@
 
 #![crate_type = "bin"]
 #![feature(core)]
-#![feature(fs)]
 #![feature(io)]
 
 extern crate rgtk;
