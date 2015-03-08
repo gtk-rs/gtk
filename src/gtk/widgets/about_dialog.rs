@@ -154,8 +154,8 @@ impl AboutDialog {
         }
     }
 
-    pub fn set_authors<S, I>(&self, authors: I)
-    where S: Str, I: IntoIterator<Item = S> {
+    pub fn set_authors<'a, S, I>(&self, authors: I)
+    where S: Str, I: IntoIterator<Item = &'a S> {
         unsafe {
             let mut tmp_authors = authors.to_array_for_borrow();
             ffi::gtk_about_dialog_set_authors(
@@ -171,8 +171,8 @@ impl AboutDialog {
         }
     }
 
-    pub fn set_artists<S, I>(&self, artists: I)
-    where S: Str, I: IntoIterator<Item = S> {
+    pub fn set_artists<'a, S, I>(&self, artists: I)
+    where S: Str, I: IntoIterator<Item = &'a S> {
         unsafe {
             let mut tmp_artists = artists.to_array_for_borrow();
             ffi::gtk_about_dialog_set_artists(
@@ -188,8 +188,8 @@ impl AboutDialog {
         }
     }
 
-    pub fn set_documenters<S, I>(&self, documenters: I)
-    where S: Str, I: IntoIterator<Item = S> {
+    pub fn set_documenters<'a, S, I>(&self, documenters: I)
+    where S: Str, I: IntoIterator<Item = &'a S> {
         unsafe {
             let mut tmp_documenters = documenters.to_array_for_borrow();
             ffi::gtk_about_dialog_set_documenters(
@@ -244,8 +244,8 @@ impl AboutDialog {
         };
     }
 
-    pub fn add_credit_section<S, I>(&self, section_name: &str, people: I)
-    where S: Str, I: IntoIterator<Item = S> {
+    pub fn add_credit_section<'a, S, I>(&self, section_name: &str, people: I)
+    where S: Str, I: IntoIterator<Item = &'a S> {
         unsafe {
             let mut tmp_section_name = section_name.to_tmp_for_borrow();
             let mut tmp_people = people.to_array_for_borrow();
