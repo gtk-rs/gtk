@@ -41,9 +41,11 @@
 //!     }
 //! ```
 
+use std::iter::IntoIterator;
 use std::ffi::{CString, CStr};
-use std::ptr::{self, PtrExt};
-use libc::{c_char};
+use std::mem;
+use std::ptr;
+use libc::{c_void, c_char};
 use ffi;
 
 /// A wrapper that sidesteps coherence checking when implementing the traits
@@ -118,36 +120,70 @@ impl <T, T2> ToGlibPtr for StackBox<T, T2> {
 pub trait ToTmp {
     type Tmp;
 
-    fn to_tmp_for_borrow(self) -> Self::Tmp;
+    fn to_tmp_for_borrow(&self) -> Self::Tmp;
 }
 
-impl <'a> ToTmp for &'a str {
+impl <S: Str> ToTmp for S {
     type Tmp = CString;
 
-    fn to_tmp_for_borrow(self) -> CString {
-        CString::new(self).unwrap()
+    fn to_tmp_for_borrow(&self) -> CString {
+        CString::new(self.as_slice()).unwrap()
     }
 }
 
-impl <'a> ToTmp for &'a Option<&'a str> {
+impl <S: Str> ToTmp for Option<S> {
     type Tmp = Option<CString>;
 
-    fn to_tmp_for_borrow(self) -> Option<CString> {
+    fn to_tmp_for_borrow(&self) -> Option<CString> {
         match self {
-            &Some(ref s) => Some(CString::new(&s[..]).unwrap()),
+            &Some(ref s) => Some(CString::new(s.as_slice()).unwrap()),
             &None => None,
         }
     }
 }
 
-impl <'a> ToTmp for &'a Option<String> {
-    type Tmp = Option<CString>;
+/// Translate to an intermediate variable for passing an array
+pub trait ToArray {
+    type Tmp;
 
-    fn to_tmp_for_borrow(self) -> Option<CString> {
-        match self {
-            &Some(ref s) => Some(CString::new(&s[..]).unwrap()),
-            &None => None,
+    fn to_array_for_borrow(self) -> Self::Tmp;
+}
+
+impl <T, I> ToArray for I
+where T: ToTmp, <T as ToTmp>::Tmp: ToGlibPtr, I: IntoIterator<Item = T> {
+    type Tmp = PtrArray<T>;
+
+    fn to_array_for_borrow(self) -> PtrArray<T> {
+        let mut tmp_vec: Vec<_> =
+            self.into_iter().map(|v| v.to_tmp_for_borrow()).collect();
+        let mut ptr_vec: Vec<_> =
+            tmp_vec.iter_mut().map(|v| v.to_glib_ptr()).collect();
+        unsafe {
+            let zero = mem::zeroed();
+            ptr_vec.push(zero);
         }
+        PtrArray(ptr_vec, tmp_vec)
+    }
+}
+
+/// Temporary storage for passing array of pointers
+pub struct PtrArray<T> (Vec<<<T as ToTmp>::Tmp as ToGlibPtr>::GlibType>,
+                      Vec<<T as ToTmp>::Tmp>)
+    where T: ToTmp, <T as ToTmp>::Tmp: ToGlibPtr;
+
+impl <T> PtrArray<T>
+    where T: ToTmp, <T as ToTmp>::Tmp: ToGlibPtr {
+    pub fn len(&self) -> usize {
+        self.1.len()
+    }
+}
+
+impl <T> ToGlibPtr for PtrArray<T>
+    where T: ToTmp, <T as ToTmp>::Tmp: ToGlibPtr {
+    type GlibType = *mut <<T as ToTmp>::Tmp as ToGlibPtr>::GlibType;
+
+    fn to_glib_ptr(&mut self) -> *mut <<T as ToTmp>::Tmp as ToGlibPtr>::GlibType {
+        self.0.as_mut_ptr()
     }
 }
 
@@ -175,14 +211,13 @@ impl FromGlib for bool {
 pub trait FromGlibPtr: Sized {
     type GlibType: PtrExt + Copy;
 
-    unsafe fn borrow(_ptr: Self::GlibType) -> Self {
-        panic!("Invalid operation for this type");
-    }
+    /// Borrow the reference
+    unsafe fn borrow(ptr: Self::GlibType) -> Self;
 
-    unsafe fn take(_ptr: Self::GlibType) -> Self {
-        panic!("Invalid operation for this type");
-    }
+    /// Take ownership of the reference
+    unsafe fn take(ptr: Self::GlibType) -> Self;
 
+    /// Take ownership of the floating reference
     unsafe fn sink(_ptr: Self::GlibType) -> Self {
         panic!("Invalid operation for this type");
     }
@@ -192,14 +227,13 @@ pub trait FromGlibPtr: Sized {
 pub trait FromGlibPtrNotNull: Sized {
     type GlibType: PtrExt + Copy;
 
-    unsafe fn borrow(_ptr: Self::GlibType) -> Self {
-        panic!("Invalid operation for this type");
-    }
+    /// Borrow the reference
+    unsafe fn borrow(ptr: Self::GlibType) -> Self;
 
-    unsafe fn take(_ptr: Self::GlibType) -> Self {
-        panic!("Invalid operation for this type");
-    }
+    /// Take ownership of the reference
+    unsafe fn take(ptr: Self::GlibType) -> Self;
 
+    /// Take ownership of the floating reference
     unsafe fn sink(_ptr: Self::GlibType) -> Self {
         panic!("Invalid operation for this type");
     }
@@ -228,9 +262,242 @@ impl FromGlibPtrNotNull for String {
     }
 
     unsafe fn take(ptr: *const c_char) -> Self {
-        debug_assert!(!ptr.is_null());
-        let res = String::from_utf8_lossy(CStr::from_ptr(ptr).to_bytes()).into_owned();
+        let res = FromGlibPtrNotNull::borrow(ptr);
         ffi::g_free(ptr as *mut _);
+        res
+    }
+}
+
+/// Translate from a container of pointers
+pub trait FromGlibPtrContainer<GT: PtrExt + Copy>: Sized {
+    /// Borrow the references
+    unsafe fn borrow(ptr: GT) -> Self;
+
+    /// Borrow the references with an advised expected number
+    unsafe fn borrow_num(ptr: GT, _num: usize) -> Self;
+
+    /// Take ownership of the container but borrow its contents
+    unsafe fn take_outer(ptr: GT) -> Self;
+
+    /// Take ownership of the container but borrow its contents with an advised expected number
+    unsafe fn take_outer_num(ptr: GT, _num: usize) -> Self;
+
+    /// Take ownership of the references
+    unsafe fn take(ptr: GT) -> Self;
+
+    /// Take ownership of the references with an advised expected number
+    unsafe fn take_num(ptr: GT, _num: usize) -> Self;
+}
+
+unsafe fn c_array_len<P: PtrExt + Copy>(mut ptr: *const P) -> usize {
+    if ptr.is_null() {
+        return 0;
+    }
+    let mut len = 0;
+    while !(*ptr).is_null() {
+        len += 1;
+        ptr = ptr.offset(1);
+    }
+    len
+}
+
+impl <T: FromGlibPtrNotNull>
+FromGlibPtrContainer<*const <T as FromGlibPtrNotNull>::GlibType>
+for Vec<T> {
+    unsafe fn borrow(ptr: *const <T as FromGlibPtrNotNull>::GlibType) -> Vec<T> {
+        let num = c_array_len(ptr);
+        FromGlibPtrContainer::borrow_num(ptr, num)
+    }
+
+    unsafe fn borrow_num(mut ptr: *const <T as FromGlibPtrNotNull>::GlibType,
+                         num: usize) -> Vec<T> {
+        if num == 0 || ptr.is_null() {
+            return Vec::new()
+        }
+        let mut res = Vec::with_capacity(num);
+        while !(*ptr).is_null() {
+            res.push(FromGlibPtrNotNull::borrow(*ptr));
+            ptr = ptr.offset(1);
+        }
+        res
+    }
+
+    unsafe fn take_outer(ptr: *const <T as FromGlibPtrNotNull>::GlibType) -> Vec<T> {
+        let num = c_array_len(ptr);
+        FromGlibPtrContainer::take_outer_num(ptr, num)
+    }
+
+    unsafe fn take_outer_num(ptr: *const <T as FromGlibPtrNotNull>::GlibType,
+                             num: usize) -> Vec<T> {
+        let res = FromGlibPtrContainer::borrow_num(ptr, num);
+        ffi::g_free(ptr as *mut _);
+        res
+    }
+
+    unsafe fn take(ptr: *const <T as FromGlibPtrNotNull>::GlibType) -> Vec<T> {
+        let num = c_array_len(ptr);
+        FromGlibPtrContainer::take_num(ptr, num)
+    }
+
+    unsafe fn take_num(mut ptr: *const <T as FromGlibPtrNotNull>::GlibType,
+                       num: usize) -> Vec<T> {
+        if num == 0 || ptr.is_null() {
+            return Vec::new()
+        }
+        let mut res = Vec::with_capacity(num);
+        while !(*ptr).is_null() {
+            res.push(FromGlibPtrNotNull::take(*ptr));
+            ptr = ptr.offset(1);
+        }
+        ffi::g_free(ptr as *mut _);
+        res
+    }
+}
+
+unsafe fn slist_len(mut ptr: *mut ffi::C_GSList) -> usize {
+    let mut len = 0;
+    while !ptr.is_null() {
+        ptr = (*ptr).next;
+        len += 1;
+    }
+    len
+}
+
+impl <T: FromGlibPtrNotNull> FromGlibPtrContainer<*mut ffi::C_GSList> for Vec<T> {
+    unsafe fn borrow(ptr: *mut ffi::C_GSList) -> Vec<T> {
+        let num = slist_len(ptr);
+        FromGlibPtrContainer::borrow_num(ptr, num)
+    }
+
+    unsafe fn borrow_num(mut ptr: *mut ffi::C_GSList, num: usize) -> Vec<T> {
+        if num == 0 || ptr.is_null() {
+            return Vec::new()
+        }
+        let mut res = Vec::with_capacity(num);
+        while !ptr.is_null() {
+            let mut item_ptr: <T as FromGlibPtrNotNull>::GlibType = mem::uninitialized();
+            // item_ptr is a pointer but the compiler doesn't know
+            let hack: *mut *mut c_void = mem::transmute(&mut item_ptr);
+            *hack = (*ptr).data;
+            if !item_ptr.is_null() {
+                res.push(FromGlibPtrNotNull::borrow(item_ptr));
+            }
+            ptr = (*ptr).next;
+        }
+        res
+    }
+
+    unsafe fn take_outer(ptr: *mut ffi::C_GSList) -> Vec<T> {
+        let num = slist_len(ptr);
+        FromGlibPtrContainer::take_outer_num(ptr, num)
+    }
+
+    unsafe fn take_outer_num(ptr: *mut ffi::C_GSList, num: usize) -> Vec<T> {
+        let res = FromGlibPtrContainer::borrow_num(ptr, num);
+        if !ptr.is_null() {
+            ffi::g_slist_free(ptr as *mut _);
+        }
+        res
+    }
+
+    unsafe fn take(ptr: *mut ffi::C_GSList) -> Vec<T> {
+        let num = slist_len(ptr);
+        FromGlibPtrContainer::take_outer_num(ptr, num)
+    }
+
+    unsafe fn take_num(mut ptr: *mut ffi::C_GSList, num: usize) -> Vec<T> {
+        if num == 0 || ptr.is_null() {
+            return Vec::new()
+        }
+        let orig_ptr = ptr;
+        let mut res = Vec::with_capacity(num);
+        while !ptr.is_null() {
+            let mut item_ptr: <T as FromGlibPtrNotNull>::GlibType = mem::uninitialized();
+            // item_ptr is a pointer but the compiler doesn't know
+            let hack: *mut *mut c_void = mem::transmute(&mut item_ptr);
+            *hack = (*ptr).data;
+            if !item_ptr.is_null() {
+                res.push(FromGlibPtrNotNull::take(item_ptr));
+            }
+            ptr = (*ptr).next;
+        }
+        if !orig_ptr.is_null() {
+            ffi::g_slist_free(orig_ptr as *mut _);
+        }
+        res
+    }
+}
+
+unsafe fn list_len(mut ptr: *mut ffi::C_GList) -> usize {
+    let mut len = 0;
+    while !ptr.is_null() {
+        ptr = (*ptr).next;
+        len += 1;
+    }
+    len
+}
+
+impl <T: FromGlibPtrNotNull> FromGlibPtrContainer<*mut ffi::C_GList> for Vec<T> {
+    unsafe fn borrow(ptr: *mut ffi::C_GList) -> Vec<T> {
+        let num = list_len(ptr);
+        FromGlibPtrContainer::borrow_num(ptr, num)
+    }
+
+    unsafe fn borrow_num(mut ptr: *mut ffi::C_GList, num: usize) -> Vec<T> {
+        if num == 0 || ptr.is_null() {
+            return Vec::new()
+        }
+        let mut res = Vec::with_capacity(num);
+        while !ptr.is_null() {
+            let mut item_ptr: <T as FromGlibPtrNotNull>::GlibType = mem::uninitialized();
+            // item_ptr is a pointer but the compiler doesn't know
+            let hack: *mut *mut c_void = mem::transmute(&mut item_ptr);
+            *hack = (*ptr).data;
+            if !item_ptr.is_null() {
+                res.push(FromGlibPtrNotNull::borrow(item_ptr));
+            }
+            ptr = (*ptr).next;
+        }
+        res
+    }
+
+    unsafe fn take_outer(ptr: *mut ffi::C_GList) -> Vec<T> {
+        let num = list_len(ptr);
+        FromGlibPtrContainer::take_outer_num(ptr, num)
+    }
+
+    unsafe fn take_outer_num(ptr: *mut ffi::C_GList, num: usize) -> Vec<T> {
+        let res = FromGlibPtrContainer::borrow_num(ptr, num);
+        if !ptr.is_null() {
+            ffi::g_list_free(ptr as *mut _);
+        }
+        res
+    }
+
+    unsafe fn take(ptr: *mut ffi::C_GList) -> Vec<T> {
+        let num = list_len(ptr);
+        FromGlibPtrContainer::take_outer_num(ptr, num)
+    }
+
+    unsafe fn take_num(mut ptr: *mut ffi::C_GList, num: usize) -> Vec<T> {
+        if num == 0 || ptr.is_null() {
+            return Vec::new()
+        }
+        let orig_ptr = ptr;
+        let mut res = Vec::with_capacity(num);
+        while !ptr.is_null() {
+            let mut item_ptr: <T as FromGlibPtrNotNull>::GlibType = mem::uninitialized();
+            // item_ptr is a pointer but the compiler doesn't know
+            let hack: *mut *mut c_void = mem::transmute(&mut item_ptr);
+            *hack = (*ptr).data;
+            if !item_ptr.is_null() {
+                res.push(FromGlibPtrNotNull::take(item_ptr));
+            }
+            ptr = (*ptr).next;
+        }
+        if !orig_ptr.is_null() {
+            ffi::g_list_free(orig_ptr as *mut _);
+        }
         res
     }
 }

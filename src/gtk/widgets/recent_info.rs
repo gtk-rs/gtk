@@ -18,7 +18,7 @@ use glib::to_bool;
 use gtk::FFIWidget;
 use gtk::cast::GTK_RECENT_INFO;
 use std::ptr;
-use glib::translate::{FromGlibPtr, FromGlibPtrNotNull, ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, FromGlibPtrNotNull, FromGlibPtrContainer, ToGlibPtr, ToTmp};
 use libc::c_char;
 
 struct_Widget!(RecentInfo);
@@ -107,19 +107,13 @@ impl RecentInfo {
         }
     }
 
-    pub fn get_applications(&self) -> Option<Vec<String>> {
-        let mut length = 0;
-        let tmp = unsafe { ffi::gtk_recent_info_get_applications(GTK_RECENT_INFO(self.unwrap_widget()), &mut length) };
-
-        if tmp.is_null() {
-            None
-        } else {
-            let mut ret = Vec::with_capacity(length as usize);
-
-            for count in range(0, length) {
-                ret.push(unsafe { String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&(*tmp.offset(count as isize) as *const c_char))).to_string() });
-            }
-            Some(ret)
+    pub fn get_applications(&self) -> Vec<String> {
+        unsafe {
+            let mut length = 0;
+            let ptr = ffi::gtk_recent_info_get_applications(
+                GTK_RECENT_INFO(self.unwrap_widget()),
+                &mut length) as *const *const c_char;
+            FromGlibPtrContainer::take_num(ptr, length as usize)
         }
     }
 
@@ -137,19 +131,13 @@ impl RecentInfo {
         }
     }
 
-    pub fn get_groups(&self) -> Option<Vec<String>> {
-        let mut length = 0;
-        let tmp = unsafe { ffi::gtk_recent_info_get_groups(GTK_RECENT_INFO(self.unwrap_widget()), &mut length) };
-
-        if tmp.is_null() {
-            None
-        } else {
-            let mut ret = Vec::with_capacity(length as usize);
-
-            for count in range(0, length) {
-                ret.push(unsafe { String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&(*tmp.offset(count as isize) as *const c_char))).to_string() });
-            }
-            Some(ret)
+    pub fn get_groups(&self) -> Vec<String> {
+        unsafe {
+            let mut length = 0;
+            let ptr = ffi::gtk_recent_info_get_groups(
+                GTK_RECENT_INFO(self.unwrap_widget()),
+                &mut length) as *const *const c_char;
+            FromGlibPtrContainer::take_num(ptr, length as usize)
         }
     }
 

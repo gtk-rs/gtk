@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, FromGlibPtrContainer, ToGlibPtr, ToTmp};
 use gtk::cast::{GTK_RECENT_CHOOSER};
 use gtk::{self, ffi};
 use glib::{to_bool, to_gboolean};
@@ -135,23 +135,13 @@ pub trait RecentChooserTrait: gtk::WidgetTrait + FFIWidget {
         }
     }
 
-    fn get_uris(&self) -> Option<Vec<String>> {
-        let mut length = 0;
-        let tmp = unsafe { ffi::gtk_recent_chooser_get_uris(GTK_RECENT_CHOOSER(self.unwrap_widget()), &mut length) };
-
-        if tmp.is_null() {
-            None
-        } else {
-            unsafe {
-                let mut ret = Vec::with_capacity(length as usize);
-
-                for count in range(0, length) {
-                    let t = tmp.offset(count as isize) as *const c_char;
-
-                    ret.push(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&t)).to_string());
-                }
-                Some(ret)
-            }
+    fn get_uris(&self) -> Vec<String> {
+        unsafe {
+            let mut length = 0;
+            let ptr = ffi::gtk_recent_chooser_get_uris(
+                GTK_RECENT_CHOOSER(self.unwrap_widget()),
+                &mut length) as *const *const c_char;
+            FromGlibPtrContainer::borrow_num(ptr, length as usize)
         }
     }
 

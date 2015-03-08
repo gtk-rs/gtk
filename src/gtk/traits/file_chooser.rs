@@ -13,13 +13,12 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, FromGlibPtrContainer, ToGlibPtr, ToTmp};
 use gtk::{self, FFIWidget};
 use gtk::cast::GTK_FILE_CHOOSER;
 use gtk::ffi;
 use glib::{to_bool, to_gboolean};
 use glib::{self, GlibContainer};
-use libc::c_char;
 
 pub trait FileChooserTrait: gtk::WidgetTrait {
     fn set_action(&self, action: gtk::FileChooserAction) -> () {
@@ -120,21 +119,10 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
         unsafe { ffi::gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(self.unwrap_widget())) }
     }
 
-    fn get_filenames(&self) -> glib::SList<String> {
-        let tmp_pointer = unsafe { ffi::gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(self.unwrap_widget())) };
-
-        if tmp_pointer.is_null() {
-            glib::SList::new()
-        } else {
-            let old_list : glib::SList<*const c_char> = glib::GlibContainer::wrap(tmp_pointer);
-            let mut tmp_vec = glib::SList::new();
-
-            for it in old_list.iter() {
-                unsafe {
-                    tmp_vec.append(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(it)).to_string())
-                }
-            }
-            tmp_vec
+    fn get_filenames(&self) -> Vec<String> {
+        unsafe {
+            FromGlibPtrContainer::take(
+                ffi::gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(self.unwrap_widget())))
         }
     }
 
@@ -180,21 +168,10 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
         }
     }
 
-    fn get_uris(&self) -> glib::SList<String> {
-        let tmp_pointer = unsafe { ffi::gtk_file_chooser_get_uris(GTK_FILE_CHOOSER(self.unwrap_widget())) };
-
-        if tmp_pointer.is_null() {
-            glib::SList::new()
-        } else {
-            let old_list : glib::SList<*const c_char> = glib::GlibContainer::wrap(tmp_pointer);
-            let mut tmp_vec = glib::SList::new();
-
-            for it in old_list.iter() {
-                unsafe {
-                    tmp_vec.append(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(it)).to_string())
-                }
-            }
-            tmp_vec
+    fn get_uris(&self) -> Vec<String> {
+        unsafe {
+            FromGlibPtrContainer::take(
+                ffi::gtk_file_chooser_get_uris(GTK_FILE_CHOOSER(self.unwrap_widget())))
         }
     }
 
