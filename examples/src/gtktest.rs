@@ -102,11 +102,25 @@ fn main() {
     window.add(&frame);
 
     Connect::connect(&button, Clicked::new(&mut ||{
-        //entry.set_text("Clicked!".to_string());
-        let dialog = gtk::MessageDialog::new_with_markup(None, gtk::DialogFlags::Modal, gtk::MessageType::Info,
-            gtk::ButtonsType::OkCancel, "This is a trap !").unwrap();
+        entry.set_text("Clicked!".to_string());
+
+        let dialog = gtk::AboutDialog::new().unwrap();
+
+        let crew = [
+            "James T. Kirk",
+            "Spock",
+            "Leonard McCoy",
+        ];
+
+        dialog.set_authors(&crew);
+        dialog.set_artists(&crew[1..]);
+
+        println!("Authors: {:?}", dialog.get_authors());
+        println!("Artists: {:?}", dialog.get_artists());
+        println!("Documenters: {:?}", dialog.get_documenters());
 
         dialog.run();
+        dialog.destroy();
     }));
     Connect::connect(&button_font, Clicked::new(&mut ||{
         let dialog = gtk::FontChooserDialog::new("Font chooser test", None).unwrap();
@@ -120,9 +134,17 @@ fn main() {
     }));
     Connect::connect(&file_button, Clicked::new(&mut ||{
         //entry.set_text("Clicked!".to_string());
-        let dialog2 = gtk::FileChooserDialog::new("Choose a file", None, gtk::FileChooserAction::Open).unwrap();
+        let dialog = gtk::FileChooserDialog::new("Choose a file", None, gtk::FileChooserAction::Open).unwrap();
 
-        dialog2.run();
+        dialog.set_select_multiple(true);
+
+        dialog.run();
+
+        let files = dialog.get_filenames();
+
+        dialog.destroy();
+
+        println!("Files: {:?}", files);
     }));
     Connect::connect(&app_button, Clicked::new(&mut ||{
         //entry.set_text("Clicked!".to_string());
