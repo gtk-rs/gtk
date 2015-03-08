@@ -19,7 +19,6 @@ Bindings and wrappers for __GLib__
 
 #![feature(core)]
 #![feature(unsafe_destructor)]
-#![feature(std_misc)]
 
 extern crate libc;
 extern crate "glib-sys" as glib_ffi;

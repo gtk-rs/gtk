@@ -40,7 +40,7 @@ impl LinkButton {
         let tmp_pointer = unsafe {
             let mut tmp_uri = uri.to_tmp_for_borrow();
             let mut tmp_label = label.to_tmp_for_borrow();
-            ffi::gtk_link_button_new_with_label(tmp_uri.as_ptr(), tmp_label.as_ptr())
+            ffi::gtk_link_button_new_with_label(tmp_uri.to_glib_ptr(), tmp_label.to_glib_ptr())
         };
         check_pointer!(tmp_pointer, LinkButton)
     }
@@ -55,7 +55,7 @@ impl LinkButton {
     pub fn set_uri(&mut self, uri: &str) -> () {
         unsafe {
             let mut tmp_uri = uri.to_tmp_for_borrow();
-            ffi::gtk_link_button_set_uri(GTK_LINKBUTTON(self.pointer), tmp_uri.as_ptr())
+            ffi::gtk_link_button_set_uri(GTK_LINKBUTTON(self.pointer), tmp_uri.to_glib_ptr())
         }
     }
 

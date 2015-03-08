@@ -14,7 +14,6 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use pango::{ffi, Rectangle};
-use libc::c_int;
 use std::default::Default;
 
 /// A structure specifying a transformation between user-space coordinates and device coordinates.

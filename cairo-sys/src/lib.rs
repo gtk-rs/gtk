@@ -15,8 +15,6 @@
 
 #![allow(non_camel_case_types)]
 
-#![feature(std_misc)]
-
 extern crate libc;
 
 use libc::{c_int, c_uint, c_char, c_double, c_ulong};
