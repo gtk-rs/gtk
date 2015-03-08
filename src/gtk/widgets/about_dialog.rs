@@ -13,12 +13,12 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
+use std::iter::IntoIterator;
 use gtk::{self, ffi};
 use glib::{to_bool, to_gboolean};
 use gtk::FFIWidget;
 use gtk::cast::GTK_ABOUT_DIALOG;
-use std::ffi::CString;
-use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, FromGlibPtrContainer, ToGlibPtr, ToTmp, ToArray};
 
 struct_Widget!(AboutDialog);
 
@@ -148,105 +148,54 @@ impl AboutDialog {
     }
 
     pub fn get_authors(&self) -> Vec<String> {
-        let authors = unsafe { ffi::gtk_about_dialog_get_authors(GTK_ABOUT_DIALOG(self.unwrap_widget())) };
-        let mut ret = Vec::new();
-
-        if !authors.is_null() {
-            let mut it = 0;
-
-            unsafe {
-                loop {
-                    let tmp = authors.offset(it);
-
-                    if tmp.is_null() {
-                        break;
-                    }
-                    ret.push(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&*tmp)).to_string());
-                    it += 1;
-                }
-            }
+        unsafe {
+            FromGlibPtrContainer::borrow(
+                ffi::gtk_about_dialog_get_authors(GTK_ABOUT_DIALOG(self.unwrap_widget())))
         }
-        ret
     }
 
-    pub fn set_authors(&self, authors: &Vec<String>) -> () {
-        let mut tmp_vec = Vec::new();
-
-        for tmp in authors.iter() {
-            let c_str = CString::from_slice(tmp.as_bytes());
-
-            tmp_vec.push(c_str.as_ptr());
+    pub fn set_authors<S, I>(&self, authors: I)
+    where S: Str, I: IntoIterator<Item = S> {
+        unsafe {
+            let mut tmp_authors = authors.to_array_for_borrow();
+            ffi::gtk_about_dialog_set_authors(
+                GTK_ABOUT_DIALOG(self.unwrap_widget()),
+                tmp_authors.to_glib_ptr());
         }
-        tmp_vec.push(::std::ptr::null_mut());
-        unsafe { ffi::gtk_about_dialog_set_authors(GTK_ABOUT_DIALOG(self.unwrap_widget()), tmp_vec.as_slice().as_ptr()) }
     }
 
     pub fn get_artists(&self) -> Vec<String> {
-        let artists = unsafe { ffi::gtk_about_dialog_get_artists(GTK_ABOUT_DIALOG(self.unwrap_widget())) };
-        let mut ret = Vec::new();
-
-        if !artists.is_null() {
-            let mut it = 0;
-
-            unsafe {
-                loop {
-                    let tmp = artists.offset(it);
-
-                    if tmp.is_null() {
-                        break;
-                    }
-                    ret.push(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&*tmp)).to_string());
-                    it += 1;
-                }
-            }
+        unsafe {
+            FromGlibPtrContainer::borrow(
+                ffi::gtk_about_dialog_get_artists(GTK_ABOUT_DIALOG(self.unwrap_widget())))
         }
-        ret
     }
 
-    pub fn set_artists(&self, artists: &Vec<String>) -> () {
-        let mut tmp_vec = Vec::new();
-
-        for tmp in artists.iter() {
-            let c_str = CString::from_slice(tmp.as_bytes());
-
-            tmp_vec.push(c_str.as_ptr());
+    pub fn set_artists<S, I>(&self, artists: I)
+    where S: Str, I: IntoIterator<Item = S> {
+        unsafe {
+            let mut tmp_artists = artists.to_array_for_borrow();
+            ffi::gtk_about_dialog_set_artists(
+                GTK_ABOUT_DIALOG(self.unwrap_widget()),
+                tmp_artists.to_glib_ptr());
         }
-        tmp_vec.push(::std::ptr::null_mut());
-        unsafe { ffi::gtk_about_dialog_set_artists(GTK_ABOUT_DIALOG(self.unwrap_widget()), tmp_vec.as_slice().as_ptr()) }
     }
 
     pub fn get_documenters(&self) -> Vec<String> {
-        let documenters = unsafe { ffi::gtk_about_dialog_get_documenters(GTK_ABOUT_DIALOG(self.unwrap_widget())) };
-        let mut ret = Vec::new();
-
-        if !documenters.is_null() {
-            let mut it = 0;
-
-            unsafe {
-                loop {
-                    let tmp = documenters.offset(it);
-
-                    if tmp.is_null() {
-                        break;
-                    }
-                    ret.push(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&*tmp)).to_string());
-                    it += 1;
-                }
-            }
+        unsafe {
+            FromGlibPtrContainer::borrow(
+                ffi::gtk_about_dialog_get_documenters(GTK_ABOUT_DIALOG(self.unwrap_widget())))
         }
-        ret
     }
 
-    pub fn set_documenters(&self, documenters: &Vec<String>) -> () {
-        let mut tmp_vec = Vec::new();
-
-        for tmp in documenters.iter() {
-            let c_str = CString::from_slice(tmp.as_bytes());
-            
-            tmp_vec.push(c_str.as_ptr());
+    pub fn set_documenters<S, I>(&self, documenters: I)
+    where S: Str, I: IntoIterator<Item = S> {
+        unsafe {
+            let mut tmp_documenters = documenters.to_array_for_borrow();
+            ffi::gtk_about_dialog_set_documenters(
+                GTK_ABOUT_DIALOG(self.unwrap_widget()),
+                tmp_documenters.to_glib_ptr());
         }
-        tmp_vec.push(::std::ptr::null_mut());
-        unsafe { ffi::gtk_about_dialog_set_documenters(GTK_ABOUT_DIALOG(self.unwrap_widget()), tmp_vec.as_slice().as_ptr()) }
     }
 
     pub fn get_translator_credits(&self) -> Option<String> {
@@ -295,21 +244,16 @@ impl AboutDialog {
         };
     }
 
-    pub fn add_credit_section(&self, section_name: &str, people: &Vec<String>) -> () {
-        let mut tmp_vec = Vec::new();
-
-        for tmp in people.iter() {
-            let c_str = CString::from_slice(tmp.as_bytes());
-
-            tmp_vec.push(c_str.as_ptr());
-        }
-        tmp_vec.push(::std::ptr::null_mut());
+    pub fn add_credit_section<S, I>(&self, section_name: &str, people: I)
+    where S: Str, I: IntoIterator<Item = S> {
         unsafe {
             let mut tmp_section_name = section_name.to_tmp_for_borrow();
+            let mut tmp_people = people.to_array_for_borrow();
+
             ffi::gtk_about_dialog_add_credit_section(
                 GTK_ABOUT_DIALOG(self.unwrap_widget()),
                 tmp_section_name.to_glib_ptr(),
-                tmp_vec.as_slice().as_ptr())
+                tmp_people.to_glib_ptr())
         }
     }
 
