@@ -63,10 +63,10 @@ impl WindowAttr {
     }
 }
 
-impl <'a> ToTmp for &'a WindowAttr {
+impl ToTmp for WindowAttr {
     type Tmp = StackBox<ffi::C_GdkWindowAttr, Option<CString>>;
 
-    fn to_tmp_for_borrow(self) -> StackBox<ffi::C_GdkWindowAttr, Option<CString>> {
+    fn to_tmp_for_borrow(&self) -> StackBox<ffi::C_GdkWindowAttr, Option<CString>> {
         let mut tmp_title = self.title.to_tmp_for_borrow();
 
         let attrs = ffi::C_GdkWindowAttr {
