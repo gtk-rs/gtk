@@ -13,33 +13,38 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
+use std::ptr;
+use glib::translate::{ToGlibPtr, ToTmp};
 use gtk::{self, ffi};
+use gtk::cast::GTK_WINDOW;
+use gtk::FFIWidget;
+use gtk::DialogButtons;
 
 struct_Widget!(Dialog);
 
 impl Dialog {
-    fn new() -> Option<Dialog> {
-        let tmp_pointer = unsafe {
-            ffi::gtk_dialog_new()
-        };
-
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            Some(gtk::FFIWidget::wrap_widget(tmp_pointer))
+    pub fn new() -> Dialog {
+        unsafe {
+            gtk::FFIWidget::wrap_widget(
+                ffi::gtk_dialog_new())
         }
     }
 
-    /*fn new_width_buttons(title: &str, parent: Window, DialogFlags: flags, first_button_text: &str, ...) -> Option<Dialog> {
-        let tmp_pointer = unsafe {
-            ffi::gtk_dialog_new_with_buttons();
-        };
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            Some(gtk::FFIWidget::wrap_widget(tmp_pointer))
+    pub fn with_buttons<T: DialogButtons>(title: &str, parent: Option<gtk::Window>,
+                                          flags: gtk::DialogFlags, buttons: T) -> Dialog {
+        unsafe {
+            let mut tmp_title = title.to_tmp_for_borrow();
+            let parent = match parent {
+                Some(w) => GTK_WINDOW(w.unwrap_widget()),
+                None => ptr::null_mut(),
+            };
+            gtk::FFIWidget::wrap_widget(
+                buttons.invoke3(ffi::gtk_dialog_new_with_buttons,
+                                tmp_title.to_glib_ptr(),
+                                parent,
+                                flags))
         }
-    }*/
+    }
 }
 
 impl_drop!(Dialog);

@@ -13,10 +13,114 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
+use std::ptr;
+use std::ffi::CString;
+use libc::c_void;
 use glib::translate::{ToGlibPtr, ToTmp};
 use gtk::cast::GTK_DIALOG;
 use gtk::ffi;
 use gtk;
+
+/// Pseudo-variadic array of buttons
+///
+/// It's implemented for fixed-sized arrays `[(&str, i32); N]`
+/// and `[(&str, gtk::ResponseType); N]` (`N <= 16`) to allow passing variable
+/// numbers of buttons to some dialog methods.
+///
+/// ```ignore
+/// Dialog::with_buttons(title, parent, flags,
+///                      [("Ok", ResponseType::Accept), ("Cancel", ResponseType::Cancel)]);
+/// ```
+pub trait DialogButtons {
+    unsafe fn invoke1<A0, R>(&self, f: unsafe extern "C" fn(A0, ...) -> R,
+                             a0: A0) -> R;
+    unsafe fn invoke2<A0, A1, R>(&self, f: unsafe extern "C" fn(A0, A1, ...) -> R,
+                                 a0: A0, a1: A1) -> R;
+    unsafe fn invoke3<A0, A1, A2, R>(&self, f: unsafe extern "C" fn(A0, A1, A2, ...) -> R,
+                                     a0: A0, a1: A1, a2: A2) -> R;
+}
+
+/// Predefined popular button combinations
+pub mod buttons {
+    use gtk::ResponseType;
+    use gtk::ResponseType::*;
+
+    pub const OK: [(&'static str, ResponseType); 1] = [("Ok", Ok)];
+    pub const OK_CANCEL: [(&'static str, ResponseType); 2] =[
+        ("Ok", Ok),
+        ("Cancel", Cancel)
+    ];
+    pub const YES_NO: [(&'static str, ResponseType); 2] = [
+        ("Yes", Yes),
+        ("No", No)
+    ];
+}
+
+macro_rules! impl_dialog_buttons {
+    () => ();
+    ($nn:expr, $($n:expr,)*) => (
+        impl <'a> DialogButtons for [(&'a str, i32); $nn] {
+            #![allow(unused_variables)]
+            #![allow(unused_mut)]
+
+            unsafe fn invoke1<A0, R>(&self, f: unsafe extern "C" fn(A0, ...) -> R,
+                                      a0: A0) -> R {
+                let mut tmp_0: [CString; $nn] = [$(self[$n].0.to_tmp_for_borrow()),*];
+                // reverse the order
+                let tmp_1: [i32; $nn] = [$(self[$n].1),*];
+                f(a0, $(tmp_0[$n].to_glib_ptr(), tmp_1[$n],)* ptr::null::<c_void>())
+            }
+
+            unsafe fn invoke2<A0, A1, R>(&self, f: unsafe extern "C" fn(A0, A1, ...) -> R,
+                                      a0: A0, a1: A1) -> R {
+                let mut tmp_0: [CString; $nn] = [$(self[$n].0.to_tmp_for_borrow()),*];
+                let tmp_1: [i32; $nn] = [$(self[$n].1),*];
+                f(a0, a1, $(tmp_0[$n].to_glib_ptr(), tmp_1[$n],)* ptr::null::<c_void>())
+            }
+
+            unsafe fn invoke3<A0, A1, A2, R>(&self, f: unsafe extern "C" fn(A0, A1, A2, ...) -> R,
+                                      a0: A0, a1: A1, a2: A2) -> R {
+                let mut tmp_0: [CString; $nn] = [$(self[$n].0.to_tmp_for_borrow()),*];
+                let tmp_1: [i32; $nn] = [$(self[$n].1),*];
+                f(a0, a1, a2, $(tmp_0[$n].to_glib_ptr(), tmp_1[$n],)* ptr::null::<c_void>())
+            }
+
+        }
+
+        impl <'a> DialogButtons for [(&'a str, gtk::ResponseType); $nn] {
+            #![allow(unused_variables)]
+            #![allow(unused_mut)]
+
+            unsafe fn invoke1<A0, R>(&self, f: unsafe extern "C" fn(A0, ...) -> R,
+                                      a0: A0) -> R {
+                let mut tmp_0: [CString; $nn] = [$(self[$n].0.to_tmp_for_borrow()),*];
+                // reverse the order
+                let tmp_1: [i32; $nn] = [$(self[$n].1 as i32),*];
+                f(a0, $(tmp_0[$n].to_glib_ptr(), tmp_1[$n],)* ptr::null::<c_void>())
+            }
+
+            unsafe fn invoke2<A0, A1, R>(&self, f: unsafe extern "C" fn(A0, A1, ...) -> R,
+                                      a0: A0, a1: A1) -> R {
+                let mut tmp_0: [CString; $nn] = [$(self[$n].0.to_tmp_for_borrow()),*];
+                let tmp_1: [i32; $nn] = [$(self[$n].1 as i32),*];
+                f(a0, a1, $(tmp_0[$n].to_glib_ptr(), tmp_1[$n],)* ptr::null::<c_void>())
+            }
+
+            unsafe fn invoke3<A0, A1, A2, R>(&self, f: unsafe extern "C" fn(A0, A1, A2, ...) -> R,
+                                      a0: A0, a1: A1, a2: A2) -> R {
+                let mut tmp_0: [CString; $nn] = [$(self[$n].0.to_tmp_for_borrow()),*];
+                let tmp_1: [i32; $nn] = [$(self[$n].1 as i32),*];
+                f(a0, a1, a2, $(tmp_0[$n].to_glib_ptr(), tmp_1[$n],)* ptr::null::<c_void>())
+            }
+
+        }
+
+
+        impl_dialog_buttons!($($n,)*);
+    )
+}
+
+impl_dialog_buttons!(16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0,);
 
 pub trait DialogTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait + gtk::WindowTrait {
     fn run(&self) -> i32 {
@@ -40,17 +144,12 @@ pub trait DialogTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait + 
         }
     }
 
-    fn add_buttons(&self, buttons: Vec<(&str, i32)>) -> Vec<gtk::Button> {
-        //unsafe { ffi::gtk_dialog_add_buttons(GTK_DIALOG(self.unwrap_widget()), ...) }
-        let mut ret = Vec::new();
-
-        for &(button_text, response_id) in buttons.iter() {
-            match self.add_button(button_text, response_id) {
-                Some(b) => ret.push(b),
-                None => {}
-            }
+    fn add_buttons<T: DialogButtons>(&self, buttons: T) {
+        unsafe {
+            buttons.invoke1(
+                ffi::gtk_dialog_add_buttons,
+                GTK_DIALOG(self.unwrap_widget()))
         }
-        ret
     }
 
     fn add_action_widget<T: gtk::WidgetTrait>(&self, child: &T, response_id: i32) -> () {

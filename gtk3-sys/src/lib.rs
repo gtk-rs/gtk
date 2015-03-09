@@ -1262,8 +1262,10 @@ extern "C" {
     // GtkFileChooserDialog                                              NOT OK
     //=========================================================================
     //pub fn gtk_file_chooser_dialog_new         (title: *const c_char, parent: *const const C_GtkWindow, action: enums::FileChooserAction, first_button_text: *const c_char, ...) -> *const const C_GtkWidget;
-    pub fn gtk_file_chooser_dialog_new         (title: *const c_char, parent: *mut C_GtkWindow, action: enums::FileChooserAction, button_text1: *const c_char,
-        type1: enums::ResponseType, button_text2: *const c_char, type2: enums::ResponseType, end: *mut c_void) -> *mut C_GtkWidget;
+    pub fn gtk_file_chooser_dialog_new         (title: *const c_char,
+                                                parent: *mut C_GtkWindow,
+                                                action: enums::FileChooserAction,
+                                                ...) -> *mut C_GtkWidget;
 
     //=========================================================================
     // GtkIconView                                                       NOT OK
@@ -1800,11 +1802,14 @@ extern "C" {
     // GtkDialog                                                         NOT OK
     //=========================================================================
     pub fn gtk_dialog_new                      () -> *mut C_GtkWidget;
-    //pub fn gtk_dialog_new_with_buttons         (title: *const c_char, parent: *const const C_GtkWindow, flags: DialogFlags, first_button_text: *const c_char, ...) -> *const const C_GtkWidget;
+    pub fn gtk_dialog_new_with_buttons         (title: *const c_char,
+                                                parent: *mut C_GtkWindow,
+                                                flags: enums::DialogFlags,
+                                                ...) -> *mut C_GtkWidget;
     pub fn gtk_dialog_run                      (dialog: *mut C_GtkDialog) -> i32;
     pub fn gtk_dialog_response                 (dialog: *mut C_GtkDialog, response_id: i32) -> ();
     pub fn gtk_dialog_add_button               (dialog: *mut C_GtkDialog, button_text: *const c_char, response_id: i32) -> *mut C_GtkWidget;
-    //pub fn gtk_dialog_add_buttons              (dialog: *const const C_GtkDialog, first_button_text: *const c_char, ...) -> ();
+    pub fn gtk_dialog_add_buttons              (dialog: *mut C_GtkDialog, ...);
     pub fn gtk_dialog_add_action_widget        (dialog: *mut C_GtkDialog, child: *mut C_GtkWidget, response_id: i32) -> ();
     pub fn gtk_dialog_set_default_response     (dialog: *mut C_GtkDialog, response_id: i32) -> ();
     pub fn gtk_dialog_set_response_sensitive   (dialog: *mut C_GtkDialog, response_id: i32, setting: Gboolean) -> ();

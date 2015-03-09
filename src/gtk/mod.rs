@@ -309,6 +309,7 @@ pub use self::traits::CheckMenuItemTrait;
 pub use self::traits::ColorChooserTrait;
 pub use self::traits::ComboBoxTrait;
 pub use self::traits::ContainerTrait;
+pub use self::traits::DialogButtons;
 pub use self::traits::DialogTrait;
 pub use self::traits::EditableTrait;
 pub use self::traits::EntryTrait;
