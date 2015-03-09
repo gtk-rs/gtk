@@ -33,11 +33,13 @@ fn main() {
     open_button.set_is_important(true);
     Connect::connect(&open_button, Clicked::new(&mut || {
         // TODO move this to a impl?
-        let file_chooser = gtk::FileChooserDialog::new("Open File", None, gtk::FileChooserAction::Open).unwrap();
+        let file_chooser = gtk::FileChooserDialog::new(
+            "Open File", None, gtk::FileChooserAction::Open,
+            [("Open", gtk::ResponseType::Ok), ("Cancel", gtk::ResponseType::Cancel)]);
         let response: Option<gtk::ResponseType> = FromPrimitive::from_i32(file_chooser.run());
 
         match response {
-            Some(gtk::ResponseType::Accept) => {
+            Some(gtk::ResponseType::Ok) => {
                 let filename = file_chooser.get_filename().unwrap();
                 let file = File::open(&filename).unwrap();
 

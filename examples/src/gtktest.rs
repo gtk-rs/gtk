@@ -40,6 +40,7 @@ fn main() {
     let mut button_box = gtk::ButtonBox::new(gtk::Orientation::Horizontal).unwrap();
     let mut label = gtk::Label::new("Yeah a wonderful label too !").unwrap();
     let button = gtk::Button::new_with_label("Whattttt a button !").unwrap();
+    let button_about = gtk::Button::new_with_label("About?").unwrap();
     let button_recent = gtk::Button::new_with_label("Choose a recent one !").unwrap();
     let button_font = gtk::Button::new_with_label("Choose a font !").unwrap();
     let app_button = gtk::Button::new_with_label("App ?").unwrap();
@@ -101,8 +102,20 @@ fn main() {
     window.set_window_position(gtk::WindowPosition::Center);
     window.add(&frame);
 
-    Connect::connect(&button, Clicked::new(&mut ||{
-        entry.set_text("Clicked!".to_string());
+    Connect::connect(&button, Clicked::new(&mut || {
+
+        let dialog = gtk::Dialog::with_buttons(
+            "Hello!", None, gtk::DialogFlags::Modal,
+            [("No", 0), ("Yes", 1), ("Yes!", 2)]);
+
+        let ret = dialog.run();
+
+        dialog.destroy();
+
+        entry.set_text(format!("Clicked {}", ret));
+    }));
+
+    Connect::connect(&button_about, Clicked::new(&mut ||{
 
         let dialog = gtk::AboutDialog::new().unwrap();
 
@@ -134,7 +147,9 @@ fn main() {
     }));
     Connect::connect(&file_button, Clicked::new(&mut ||{
         //entry.set_text("Clicked!".to_string());
-        let dialog = gtk::FileChooserDialog::new("Choose a file", None, gtk::FileChooserAction::Open).unwrap();
+        let dialog = gtk::FileChooserDialog::new(
+            "Choose a file", None, gtk::FileChooserAction::Open,
+            [("Open", gtk::ResponseType::Ok), ("Cancel", gtk::ResponseType::Cancel)]);
 
         dialog.set_select_multiple(true);
 
@@ -176,6 +191,7 @@ fn main() {
         button_box.add(&tmp_button)
     }};
     button_box.add(&button);
+    button_box.add(&button_about);
     button_box.add(&button_font);
     button_box.add(&button_recent);
     button_box.add(&file_button);
