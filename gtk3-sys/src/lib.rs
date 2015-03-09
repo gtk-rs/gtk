@@ -15,7 +15,6 @@
 
 #![allow(non_camel_case_types)]
 #![allow(dead_code)]
-#![feature(core)]
 
 extern crate libc;
 extern crate "glib-sys" as glib_ffi;
