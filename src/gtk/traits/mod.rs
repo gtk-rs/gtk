@@ -30,6 +30,7 @@ pub use self::tool_shell::ToolShellTrait;
 pub use self::tool_item::ToolItemTrait;
 pub use self::tool_button::ToolButtonTrait;
 pub use self::toggle_tool_button::ToggleToolButtonTrait;
+pub use self::dialog::DialogButtons;
 pub use self::dialog::DialogTrait;
 pub use self::color_chooser::ColorChooserTrait;
 pub use self::scrollable::ScrollableTrait;
