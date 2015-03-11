@@ -149,8 +149,8 @@ pub trait ToArray {
     fn to_array_for_borrow(self) -> Self::Tmp;
 }
 
-impl <T, I> ToArray for I
-where T: ToTmp, <T as ToTmp>::Tmp: ToGlibPtr, I: IntoIterator<Item = T> {
+impl <'a, T, I> ToArray for I
+where T: ToTmp, <T as ToTmp>::Tmp: ToGlibPtr, I: IntoIterator<Item = &'a T> {
     type Tmp = PtrArray<T>;
 
     fn to_array_for_borrow(self) -> PtrArray<T> {
