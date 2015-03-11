@@ -38,7 +38,7 @@ impl ToTmp for RecentData {
         let mut tmp_mime_type = self.mime_type.to_tmp_for_borrow();
         let mut tmp_app_name = self.app_name.to_tmp_for_borrow();
         let mut tmp_app_exec = self.app_exec.to_tmp_for_borrow();
-        let mut tmp_groups = (*self.groups).to_array_for_borrow();
+        let mut tmp_groups = self.groups.to_array_for_borrow();
 
         let data = ffi::C_GtkRecentData {
             display_name: tmp_display_name.to_glib_ptr() as *mut c_char,

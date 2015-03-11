@@ -143,17 +143,17 @@ impl <S: Str> ToTmp for Option<S> {
 }
 
 /// Translate to an intermediate variable for passing an array
-pub trait ToArray {
+pub trait ToArray<'a> {
     type Tmp;
 
-    fn to_array_for_borrow(self) -> Self::Tmp;
+    fn to_array_for_borrow(&'a self) -> Self::Tmp;
 }
 
-impl <'a, T, I> ToArray for I
-where T: ToTmp, <T as ToTmp>::Tmp: ToGlibPtr, I: IntoIterator<Item = &'a T> {
+impl <'a, T, I: ?Sized> ToArray<'a> for I
+where T: ToTmp, <T as ToTmp>::Tmp: ToGlibPtr, &'a I: IntoIterator<Item = &'a T> {
     type Tmp = PtrArray<T>;
 
-    fn to_array_for_borrow(self) -> PtrArray<T> {
+    fn to_array_for_borrow(&'a self) -> PtrArray<T> {
         let mut tmp_vec: Vec<_> =
             self.into_iter().map(|v| v.to_tmp_for_borrow()).collect();
         let mut ptr_vec: Vec<_> =
