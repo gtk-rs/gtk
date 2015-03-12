@@ -15,8 +15,7 @@
 
 use gtk::ffi;
 use libc::c_char;
-use std::ffi::CString;
-use glib::translate::{ToGlib, ToGlibPtr, ToTmp, ToArray, StackBox, PtrArray};
+use glib::translate::{ToGlib, ToGlibPtr, Stash};
 
 pub struct RecentData {
     display_name: String,
@@ -28,29 +27,31 @@ pub struct RecentData {
     is_private: bool
 }
 
-impl ToTmp for RecentData {
-    type Tmp = StackBox<ffi::C_GtkRecentData, ([CString; 5], PtrArray<String>)>;
+impl <'a> ToGlibPtr<'a, *mut ffi::C_GtkRecentData> for RecentData {
+    type Storage = (Box<ffi::C_GtkRecentData>,
+                    [Stash<'a, *mut c_char, String>; 5],
+                    Stash<'a, *mut *mut c_char, Vec<String>>);
 
-    fn to_tmp_for_borrow(&self)
-        -> StackBox<ffi::C_GtkRecentData, ([CString; 5], PtrArray<String>)> {
-        let mut tmp_display_name = self.display_name.to_tmp_for_borrow();
-        let mut tmp_description = self.description.to_tmp_for_borrow();
-        let mut tmp_mime_type = self.mime_type.to_tmp_for_borrow();
-        let mut tmp_app_name = self.app_name.to_tmp_for_borrow();
-        let mut tmp_app_exec = self.app_exec.to_tmp_for_borrow();
-        let mut tmp_groups = (*self.groups).to_array_for_borrow();
+    fn borrow_to_glib(&'a self)
+        -> Stash<*mut ffi::C_GtkRecentData, RecentData> {
+        let display_name = self.display_name.borrow_to_glib();
+        let description = self.description.borrow_to_glib();
+        let mime_type = self.mime_type.borrow_to_glib();
+        let app_name = self.app_name.borrow_to_glib();
+        let app_exec = self.app_exec.borrow_to_glib();
+        let groups = self.groups.borrow_to_glib();
 
-        let data = ffi::C_GtkRecentData {
-            display_name: tmp_display_name.to_glib_ptr() as *mut c_char,
-            description: tmp_description.to_glib_ptr() as *mut c_char,
-            mime_type: tmp_mime_type.to_glib_ptr() as *mut c_char,
-            app_name: tmp_app_name.to_glib_ptr() as *mut c_char,
-            app_exec: tmp_app_exec.to_glib_ptr() as *mut c_char,
-            groups: tmp_groups.to_glib_ptr() as *mut *mut c_char,
+        let mut data = Box::new(ffi::C_GtkRecentData {
+            display_name: display_name.0,
+            description: description.0,
+            mime_type: mime_type.0,
+            app_name: app_name.0,
+            app_exec: app_exec.0,
+            groups: groups.0,
             is_private: self.is_private.to_glib(),
-        };
+        });
 
-        StackBox(data, ([tmp_display_name, tmp_description, tmp_mime_type,
-                         tmp_app_name, tmp_app_exec], tmp_groups))
+        Stash(&mut *data, (data, [display_name, description, mime_type,
+                                            app_name, app_exec], groups))
     }
 }

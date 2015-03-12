@@ -17,7 +17,7 @@ use glib::{to_bool, Value, Type};
 use glib::translate::ToGlib;
 use gtk::{self, ffi};
 use gtk::TreeIter;
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::ToGlibPtr;
 use std::num::ToPrimitive;
 
 pub struct TreeStore {
@@ -37,8 +37,7 @@ impl TreeStore {
     }
 
     pub fn set_string(&self, iter: &TreeIter, column: i32, text: &str) {
-        let mut tmp_text = text.to_tmp_for_borrow();
-        unsafe { ffi::gtk_tree_store_set(self.pointer, iter.unwrap_pointer(), column, tmp_text.to_glib_ptr(), -1) }
+        unsafe { ffi::gtk_tree_store_set(self.pointer, iter.unwrap_pointer(), column, text.borrow_to_glib().0, -1) }
     }
 
     pub fn remove(&self, iter: &TreeIter) -> bool {

@@ -15,7 +15,7 @@
 
 //! The widget used for item in menus
 
-use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr};
 use gtk::{self, ffi};
 use gtk::cast::GTK_MENU_ITEM;
 use glib::{to_bool, to_gboolean};
@@ -55,8 +55,7 @@ pub trait MenuItemTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait 
 
     fn set_accel_path(&mut self, accel_path: &str) {
         unsafe {
-            let mut tmp_accel_path = accel_path.to_tmp_for_borrow();
-            ffi::gtk_menu_item_set_accel_path(GTK_MENU_ITEM(self.unwrap_widget()), tmp_accel_path.to_glib_ptr())
+            ffi::gtk_menu_item_set_accel_path(GTK_MENU_ITEM(self.unwrap_widget()), accel_path.borrow_to_glib().0)
         }
     }
 
@@ -69,9 +68,8 @@ pub trait MenuItemTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait 
 
     fn set_label(&mut self, label: &str) {
         unsafe {
-            let mut tmp_label = label.to_tmp_for_borrow();
             ffi::gtk_menu_item_set_label(GTK_MENU_ITEM(self.unwrap_widget()),
-                                         tmp_label.to_glib_ptr())
+                                         label.borrow_to_glib().0)
         }
     }
 

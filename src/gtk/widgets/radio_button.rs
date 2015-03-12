@@ -17,7 +17,7 @@
 
 use std::ptr;
 
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::ToGlibPtr;
 use gtk::{self, ffi};
 use gtk::cast::GTK_RADIOBUTTON;
 
@@ -32,18 +32,16 @@ impl RadioButton {
 
     pub fn new_with_label(label: &str) -> Option<RadioButton> {
         let tmp_pointer = unsafe {
-            let mut tmp_label = label.to_tmp_for_borrow();
             ffi::gtk_radio_button_new_with_label(ptr::null_mut(),
-                                                 tmp_label.to_glib_ptr())
+                                                 label.borrow_to_glib().0)
         };
         check_pointer!(tmp_pointer, RadioButton)
     }
 
     pub fn new_with_mnemonic(mnemonic: &str) -> Option<RadioButton> {
         let tmp_pointer = unsafe {
-            let mut tmp_mnemonic = mnemonic.to_tmp_for_borrow();
             ffi::gtk_radio_button_new_with_mnemonic(ptr::null_mut(),
-                                                    tmp_mnemonic.to_glib_ptr())
+                                                    mnemonic.borrow_to_glib().0)
         };
         check_pointer!(tmp_pointer, RadioButton)
     }

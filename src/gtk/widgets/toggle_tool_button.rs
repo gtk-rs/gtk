@@ -16,7 +16,7 @@
 //! A ToolItem containing a toggle button
 
 use gtk::{self, ffi};
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::ToGlibPtr;
 
 /// ToggleToolButton — A ToolItem containing a toggle button
 struct_Widget!(ToggleToolButton);
@@ -28,8 +28,7 @@ impl ToggleToolButton {
     }
 
     pub fn new_from_stock(stock_id: &str) -> Option<ToggleToolButton> {
-        let mut tmp_stock_id = stock_id.to_tmp_for_borrow();
-        let tmp_pointer = unsafe { ffi::gtk_toggle_tool_button_new_from_stock(tmp_stock_id.to_glib_ptr()) };
+        let tmp_pointer = unsafe { ffi::gtk_toggle_tool_button_new_from_stock(stock_id.borrow_to_glib().0) };
         check_pointer!(tmp_pointer, ToggleToolButton)
     }
 }

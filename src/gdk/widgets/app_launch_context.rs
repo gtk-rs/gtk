@@ -17,7 +17,7 @@
 
 use gdk::{self, ffi};
 use libc::c_int;
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::ToGlibPtr;
 
 // FIXME: should inherit from GAppLaunchContext
 #[repr(C)]
@@ -45,8 +45,7 @@ impl AppLaunchContext {
 
     pub fn set_icon_name(&self, icon_name: &str) {
         unsafe {
-            let mut tmp_icon_name = icon_name.to_tmp_for_borrow();
-            ffi::gdk_app_launch_context_set_icon_name(self.pointer, tmp_icon_name.to_glib_ptr())
+            ffi::gdk_app_launch_context_set_icon_name(self.pointer, icon_name.borrow_to_glib().0)
         }
     }
 }

@@ -18,7 +18,7 @@ use glib::to_bool;
 use gtk::FFIWidget;
 use gtk::cast::GTK_RECENT_MANAGER;
 use glib;
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::ToGlibPtr;
 
 struct_Widget!(RecentManager);
 
@@ -45,33 +45,29 @@ impl RecentManager {
 
     pub fn add_item(&self, uri: &str) -> bool {
         unsafe {
-            let mut tmp_uri = uri.to_tmp_for_borrow();
             to_bool(
                 ffi::gtk_recent_manager_add_item(
                     GTK_RECENT_MANAGER(self.unwrap_widget()),
-                    tmp_uri.to_glib_ptr()))
+                    uri.borrow_to_glib().0))
         }
     }
 
     pub fn add_full(&self, uri: &str, recent_data: &gtk::RecentData) -> bool {
         unsafe {
-            let mut tmp_uri = uri.to_tmp_for_borrow();
-            let mut tmp_recent_data = recent_data.to_tmp_for_borrow();
             to_bool(
                 ffi::gtk_recent_manager_add_full(
                     GTK_RECENT_MANAGER(self.unwrap_widget()),
-                    tmp_uri.to_glib_ptr(),
-                    tmp_recent_data.to_glib_ptr()))
+                    uri.borrow_to_glib().0,
+                    recent_data.borrow_to_glib().0))
         }
     }
 
     pub fn has_item(&self, uri: &str) -> bool {
         unsafe {
-            let mut tmp_uri = uri.to_tmp_for_borrow();
             to_bool(
                 ffi::gtk_recent_manager_has_item(
                     GTK_RECENT_MANAGER(self.unwrap_widget()),
-                    tmp_uri.to_glib_ptr()))
+                    uri.borrow_to_glib().0))
         }
     }
 

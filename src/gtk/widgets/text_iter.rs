@@ -16,7 +16,6 @@
 //! GtkTextIter — Text buffer iterator
 
 use gtk::{self, ffi};
-use libc::c_char;
 use glib::{to_bool, to_gboolean};
 use glib::translate::{FromGlibPtr};
 
@@ -92,8 +91,7 @@ impl TextIter {
             FromGlibPtr::borrow(
                 ffi::gtk_text_iter_get_slice(
                     self.pointer as *const ffi::C_GtkTextIter,
-                    end.pointer as *const ffi::C_GtkTextIter)
-                as *const c_char)
+                    end.pointer as *const ffi::C_GtkTextIter))
         }
     }
 
@@ -102,8 +100,7 @@ impl TextIter {
             FromGlibPtr::borrow(
                 ffi::gtk_text_iter_get_text(
                     self.pointer as *const ffi::C_GtkTextIter,
-                    end.pointer as *const ffi::C_GtkTextIter)
-                as *const c_char)
+                    end.pointer as *const ffi::C_GtkTextIter))
         }
     }
 
@@ -112,8 +109,7 @@ impl TextIter {
             FromGlibPtr::borrow(
                 ffi::gtk_text_iter_get_visible_slice(
                     self.pointer as *const ffi::C_GtkTextIter,
-                    end.pointer as *const ffi::C_GtkTextIter)
-                as *const c_char)
+                    end.pointer as *const ffi::C_GtkTextIter))
         }
     }
 
@@ -122,8 +118,7 @@ impl TextIter {
             FromGlibPtr::borrow(
                 ffi::gtk_text_iter_get_visible_text(
                     self.pointer as *const ffi::C_GtkTextIter,
-                    end.pointer as *const ffi::C_GtkTextIter)
-                as *const c_char)
+                    end.pointer as *const ffi::C_GtkTextIter))
         }
     }
 

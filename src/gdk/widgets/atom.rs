@@ -14,8 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gdk::ffi;
-use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
-use libc::{c_char};
+use glib::translate::{FromGlibPtr, ToGlibPtr};
 
 #[derive(Copy)]
 pub struct Atom {
@@ -31,8 +30,7 @@ impl Atom {
 
     pub fn intern(atom_name: &str, only_if_exists: bool) -> Option<Atom> {
         let tmp = unsafe {
-            let mut tmp_atom_name = atom_name.to_tmp_for_borrow();
-            ffi::gdk_atom_intern(tmp_atom_name.to_glib_ptr(), ::glib::to_gboolean(only_if_exists))
+            ffi::gdk_atom_intern(atom_name.borrow_to_glib().0, ::glib::to_gboolean(only_if_exists))
         };
 
         if tmp.is_null() {
@@ -46,8 +44,7 @@ impl Atom {
 
     pub fn intern_static_string(atom_name: &str) -> Option<Atom> {
         let tmp = unsafe {
-            let mut tmp_atom_name = atom_name.to_tmp_for_borrow();
-            ffi::gdk_atom_intern_static_string(tmp_atom_name.to_glib_ptr())
+            ffi::gdk_atom_intern_static_string(atom_name.borrow_to_glib().0)
         };
 
         if tmp.is_null() {
@@ -62,7 +59,7 @@ impl Atom {
     pub fn name(&self) -> Option<String> {
         unsafe {
             FromGlibPtr::take(
-                ffi::gdk_atom_name(self.pointer) as *const c_char)
+                ffi::gdk_atom_name(self.pointer))
         }
     }
 

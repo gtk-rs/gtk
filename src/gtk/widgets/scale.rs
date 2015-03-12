@@ -16,7 +16,7 @@
 //! A slider widget for selecting a value from a range
 
 use libc::{c_double, c_int};
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::ToGlibPtr;
 
 use gtk::{Orientation, PositionType};
 use gtk::cast::GTK_SCALE;
@@ -97,8 +97,7 @@ impl Scale {
 
     pub fn add_mark(&mut self, value: f64, position: PositionType, markup: &str) -> () {
         unsafe {
-            let mut tmp_markup = markup.to_tmp_for_borrow();
-            ffi::gtk_scale_add_mark(GTK_SCALE(self.pointer), value as c_double, position, tmp_markup.to_glib_ptr());
+            ffi::gtk_scale_add_mark(GTK_SCALE(self.pointer), value as c_double, position, markup.borrow_to_glib().0);
         }
     }
 

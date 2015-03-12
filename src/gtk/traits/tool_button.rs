@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr};
 use gtk::cast::GTK_TOOLBUTTON;
 use gtk::{self, ffi};
 use glib::{to_bool, to_gboolean};
@@ -21,23 +21,20 @@ use glib::{to_bool, to_gboolean};
 pub trait ToolButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait + gtk::ToolItemTrait {
     fn set_label(&mut self, label: &str) -> () {
         unsafe {
-            let mut tmp_label = label.to_tmp_for_borrow();
-            ffi::gtk_tool_button_set_label(GTK_TOOLBUTTON(self.unwrap_widget()), tmp_label.to_glib_ptr())
+            ffi::gtk_tool_button_set_label(GTK_TOOLBUTTON(self.unwrap_widget()), label.borrow_to_glib().0)
         }
     }
 
     fn set_stock_id(&mut self, stock_id: &str) -> () {
         unsafe {
-            let mut tmp_stock_id = stock_id.to_tmp_for_borrow();
-            ffi::gtk_tool_button_set_stock_id(GTK_TOOLBUTTON(self.unwrap_widget()), tmp_stock_id.to_glib_ptr())
+            ffi::gtk_tool_button_set_stock_id(GTK_TOOLBUTTON(self.unwrap_widget()), stock_id.borrow_to_glib().0)
         }
     }
 
     fn set_icon_name(&mut self, icon_name: &str) -> () {
         unsafe {
-            let mut tmp_icon_name = icon_name.to_tmp_for_borrow();
             ffi::gtk_tool_button_set_icon_name(GTK_TOOLBUTTON(self.unwrap_widget()),
-                                               tmp_icon_name.to_glib_ptr());
+                                               icon_name.borrow_to_glib().0);
         }
     }
 

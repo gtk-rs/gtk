@@ -14,7 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use std::ptr;
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::ToGlibPtr;
 use gtk::{self, ffi};
 use gtk::cast::GTK_WINDOW;
 use gtk::FFIWidget;
@@ -33,14 +33,13 @@ impl Dialog {
     pub fn with_buttons<T: DialogButtons>(title: &str, parent: Option<gtk::Window>,
                                           flags: gtk::DialogFlags, buttons: T) -> Dialog {
         unsafe {
-            let mut tmp_title = title.to_tmp_for_borrow();
             let parent = match parent {
                 Some(w) => GTK_WINDOW(w.unwrap_widget()),
                 None => ptr::null_mut(),
             };
             gtk::FFIWidget::wrap_widget(
                 buttons.invoke3(ffi::gtk_dialog_new_with_buttons,
-                                tmp_title.to_glib_ptr(),
+                                title.borrow_to_glib().0,
                                 parent,
                                 flags))
         }

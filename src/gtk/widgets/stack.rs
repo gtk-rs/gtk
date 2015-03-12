@@ -19,7 +19,7 @@
 
 use gtk::{self, ffi};
 use gtk::cast::GTK_STACK;
-use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr};
 use glib::{to_bool, to_gboolean};
 
 /// GtkStack — A stacking container
@@ -33,21 +33,18 @@ impl Stack {
 
     pub fn add_named<T: gtk::WidgetTrait>(&mut self, child: &T, name: &str) {
         unsafe {
-            let mut tmp_name = name.to_tmp_for_borrow();
             ffi::gtk_stack_add_named(GTK_STACK(self.pointer),
                                      child.unwrap_widget(),
-                                     tmp_name.to_glib_ptr())
+                                     name.borrow_to_glib().0)
         }
     }
 
     pub fn add_titled<T: gtk::WidgetTrait>(&mut self, child: &T, name: &str, title: &str) {
         unsafe {
-            let mut tmp_name = name.to_tmp_for_borrow();
-            let mut tmp_title = title.to_tmp_for_borrow();
             ffi::gtk_stack_add_titled(GTK_STACK(self.pointer),
                                       child.unwrap_widget(),
-                                      tmp_name.to_glib_ptr(),
-                                      tmp_title.to_glib_ptr())
+                                      name.borrow_to_glib().0,
+                                      title.borrow_to_glib().0)
         }
     }
 
@@ -69,9 +66,8 @@ impl Stack {
 
     pub fn set_visible_child_name(&mut self, name: &str) {
         unsafe {
-            let mut tmp_name = name.to_tmp_for_borrow();
             ffi::gtk_stack_set_visible_child_name(GTK_STACK(self.pointer),
-                                                  tmp_name.to_glib_ptr())
+                                                  name.borrow_to_glib().0)
         }
     }
 
@@ -84,9 +80,8 @@ impl Stack {
 
     pub fn set_visible_child_full(&mut self, name: &str, transition: gtk::StackTransitionType) {
         unsafe {
-            let mut tmp_name = name.to_tmp_for_borrow();
             ffi::gtk_stack_set_visible_child_full(GTK_STACK(self.pointer),
-                                                  tmp_name.to_glib_ptr(),
+                                                  name.borrow_to_glib().0,
                                                   transition)
         }
     }

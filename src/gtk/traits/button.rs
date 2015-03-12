@@ -15,7 +15,7 @@
 
 use std::mem;
 use libc::c_float;
-use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr};
 
 use gtk::{ReliefStyle, PositionType};
 use gtk::cast::GTK_BUTTON;
@@ -74,8 +74,7 @@ pub trait ButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait {
 
     fn set_label(&mut self, label: &str) -> () {
         unsafe {
-            let mut tmp_label = label.to_tmp_for_borrow();
-            ffi::gtk_button_set_label(GTK_BUTTON(self.unwrap_widget()), tmp_label.to_glib_ptr())
+            ffi::gtk_button_set_label(GTK_BUTTON(self.unwrap_widget()), label.borrow_to_glib().0)
         }
     }
 
@@ -148,11 +147,10 @@ pub trait ButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait {
 
     fn connect_clicked_signal(&self, handler: Box<ButtonClickedHandler>) {
         let data = unsafe { mem::transmute::<Box<Box<ButtonClickedHandler>>, ffi::gpointer>(Box::new(handler)) };
-        let mut tmp_name = "clicked".to_tmp_for_borrow();
 
         unsafe {
             ffi::g_signal_connect_data(self.unwrap_widget() as ffi::gpointer,
-                                       tmp_name.to_glib_ptr(),
+                                       "clicked".borrow_to_glib().0,
                                        Some(mem::transmute(widget_destroy_callback)),
                                        data,
                                        Some(drop_widget_destroy_handler as extern "C" fn(ffi::gpointer, *const ffi::C_GClosure)),

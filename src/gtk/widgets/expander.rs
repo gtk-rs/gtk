@@ -17,7 +17,7 @@
 
 use libc::c_int;
 
-use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr};
 use gtk::cast::GTK_EXPANDER;
 use gtk::{self, ffi};
 use glib::{to_bool, to_gboolean};
@@ -29,16 +29,14 @@ struct_Widget!(Expander);
 impl Expander {
     pub fn new(label: &str) -> Option<Expander> {
         let tmp_pointer = unsafe {
-            let mut tmp_label = label.to_tmp_for_borrow();
-            ffi::gtk_expander_new(tmp_label.to_glib_ptr())
+            ffi::gtk_expander_new(label.borrow_to_glib().0)
         };
         check_pointer!(tmp_pointer, Expander)
     }
 
     pub fn new_with_mnemonic(mnemonic: &str) -> Option<Expander> {
         let tmp_pointer = unsafe {
-            let mut tmp_mnemonic = mnemonic.to_tmp_for_borrow();
-            ffi::gtk_expander_new_with_mnemonic(tmp_mnemonic.to_glib_ptr())
+            ffi::gtk_expander_new_with_mnemonic(mnemonic.borrow_to_glib().0)
         };
         check_pointer!(tmp_pointer, Expander)
     }
@@ -93,8 +91,7 @@ impl Expander {
 
     pub fn set_label(&mut self, label: &str) -> () {
         unsafe {
-            let mut tmp_label = label.to_tmp_for_borrow();
-            ffi::gtk_expander_set_label(GTK_EXPANDER(self.pointer), tmp_label.to_glib_ptr());
+            ffi::gtk_expander_set_label(GTK_EXPANDER(self.pointer), label.borrow_to_glib().0);
         }
     }
 

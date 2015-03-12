@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::ToGlibPtr;
 use gtk::{self, ffi};
 use gtk::FFIWidget;
 use gtk::cast::{GTK_WINDOW};
@@ -25,7 +25,6 @@ impl FileChooserDialog {
     pub fn new<T: DialogButtons>(title: &str, parent: Option<gtk::Window>,
                                  action: gtk::FileChooserAction, buttons: T) -> FileChooserDialog {
         unsafe {
-            let mut tmp_title = title.to_tmp_for_borrow();
             let parent = match parent {
                 Some(ref p) => GTK_WINDOW(p.unwrap_widget()),
                 None => GTK_WINDOW(::std::ptr::null_mut())
@@ -34,7 +33,7 @@ impl FileChooserDialog {
             gtk::FFIWidget::wrap_widget(
                 buttons.invoke3(
                     ffi::gtk_file_chooser_dialog_new,
-                    tmp_title.to_glib_ptr(),
+                    title.borrow_to_glib().0,
                     parent,
                     action))
 

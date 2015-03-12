@@ -16,7 +16,7 @@
 //! A bar that can used as a level indicator
 
 use libc::c_double;
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::ToGlibPtr;
 
 use gtk::{self, ffi};
 use glib::{to_bool, to_gboolean};
@@ -101,32 +101,29 @@ impl LevelBar {
 
     pub fn add_offset_value(&mut self, name: &str, value: f64) -> () {
         unsafe {
-            let mut tmp_name = name.to_tmp_for_borrow();
             ffi::gtk_level_bar_add_offset_value(
                 GTK_LEVELBAR(self.pointer),
-                tmp_name.to_glib_ptr(),
+                name.borrow_to_glib().0,
                 value as c_double)
         }
     }
 
     pub fn remove_offset_value(&mut self, name: &str) -> () {
         unsafe {
-            let mut tmp_name = name.to_tmp_for_borrow();
             ffi::gtk_level_bar_remove_offset_value(
                 GTK_LEVELBAR(self.pointer),
-                tmp_name.to_glib_ptr());
+                name.borrow_to_glib().0);
         }
     }
 
     pub fn get_offset_value(&self, name: &str) -> Option<f64> {
         unsafe {
             let mut value = 0.;
-            let mut tmp_name = name.to_tmp_for_borrow();
 
             let res = to_bool(
                 ffi::gtk_level_bar_get_offset_value(
                     GTK_LEVELBAR(self.pointer),
-                    tmp_name.to_glib_ptr(),
+                    name.borrow_to_glib().0,
                     &mut value));
 
             if res {

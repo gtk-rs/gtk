@@ -15,7 +15,7 @@
 
 /// The GdkPixbuf structure contains information that describes an image in memory.
 
-use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr};
 use gdk::{self, ffi};
 use c_vec::CVec;
 use std::ptr::Unique;
@@ -76,10 +76,9 @@ impl Pixbuf {
 
     pub fn get_option(&self, key: &str) -> Option<String> {
         unsafe {
-            let mut tmp_key = key.to_tmp_for_borrow();
             FromGlibPtr::borrow(
                 ffi::gdk_pixbuf_get_option(self.pointer as *const ffi::C_GdkPixbuf,
-                                           tmp_key.to_glib_ptr()))
+                                           key.borrow_to_glib().0))
         }
     }
 

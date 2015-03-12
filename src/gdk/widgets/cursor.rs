@@ -16,7 +16,7 @@
 //! Cursors — Standard and pixmap cursors
 
 use gdk::{self, ffi};
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::ToGlibPtr;
 //use libc::{c_int};
 
 #[repr(C)]
@@ -52,8 +52,7 @@ impl Cursor {
 
     pub fn new_from_name(display: &gdk::Display, name: &str) -> Option<Cursor> {
         let tmp = unsafe {
-            let mut tmp_name = name.to_tmp_for_borrow();
-            ffi::gdk_cursor_new_from_name(display.unwrap_pointer(), tmp_name.to_glib_ptr())
+            ffi::gdk_cursor_new_from_name(display.unwrap_pointer(), name.borrow_to_glib().0)
         };
 
         if tmp.is_null() {

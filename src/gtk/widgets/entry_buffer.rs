@@ -16,7 +16,7 @@
 //! Text buffer for gtk::Entry
 
 use libc::{c_int, c_uint};
-use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr};
 use gtk::ffi;
 
 // TODO:
@@ -36,8 +36,7 @@ pub struct EntryBuffer {
 impl EntryBuffer {
     pub fn new(initial_chars: Option<&str>) -> Option<EntryBuffer> {
         let tmp_pointer = unsafe {
-            let mut tmp_initial_chars = initial_chars.to_tmp_for_borrow();
-            ffi::gtk_entry_buffer_new(tmp_initial_chars.to_glib_ptr(), -1)
+            ffi::gtk_entry_buffer_new(initial_chars.borrow_to_glib().0, -1)
         };
         if tmp_pointer.is_null() {
             None
@@ -57,8 +56,7 @@ impl EntryBuffer {
 
     pub fn set_text(&mut self, text: &str) -> () {
         unsafe {
-            let mut tmp_text = text.to_tmp_for_borrow();
-            ffi::gtk_entry_buffer_set_text(self.pointer, tmp_text.to_glib_ptr(), -1);
+            ffi::gtk_entry_buffer_set_text(self.pointer, text.borrow_to_glib().0, -1);
         }
     }
 
@@ -88,9 +86,8 @@ impl EntryBuffer {
 
     pub fn insert_text(&mut self, position: u32, text: &str) -> () {
         unsafe {
-            let mut tmp_text = text.to_tmp_for_borrow();
             ffi::gtk_entry_buffer_insert_text(self.pointer, position as c_uint,
-                                              tmp_text.to_glib_ptr(), -1);
+                                              text.borrow_to_glib().0, -1);
         }
     }
 
@@ -108,9 +105,8 @@ impl EntryBuffer {
 
     pub fn emit_inserted_text(&mut self, position: u32, text: &str) -> () {
         unsafe {
-            let mut tmp_text = text.to_tmp_for_borrow();
             ffi::gtk_entry_buffer_emit_inserted_text(self.pointer, position as c_uint,
-                                                     tmp_text.to_glib_ptr(), -1);
+                                                     text.borrow_to_glib().0, -1);
         }
     }
 

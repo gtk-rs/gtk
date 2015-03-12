@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use libc::{c_int, c_char};
-use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
+use libc::c_int;
+use glib::translate::{FromGlibPtr, ToGlibPtr};
 use gtk::ffi;
 use glib::{to_bool, to_gboolean};
 use gdk;
@@ -91,8 +91,7 @@ pub trait WidgetTrait: gtk::FFIWidget + gtk::GObjectTrait {
     }
 
     fn set_name(&self, name: &str) {
-        let mut tmp_name = name.to_tmp_for_borrow();
-        unsafe { ffi::gtk_widget_set_name(self.unwrap_widget(), tmp_name.to_glib_ptr()) }
+        unsafe { ffi::gtk_widget_set_name(self.unwrap_widget(), name.borrow_to_glib().0) }
     }
 
     fn get_name(&self) -> Option<String> {
@@ -188,8 +187,7 @@ pub trait WidgetTrait: gtk::FFIWidget + gtk::GObjectTrait {
     }
 
     fn override_symbolic_color(&self, name: &str, color: &gdk_ffi::C_GdkRGBA) {
-        let mut tmp_name = name.to_tmp_for_borrow();
-        unsafe { ffi::gtk_widget_override_symbolic_color(self.unwrap_widget(), tmp_name.to_glib_ptr(), color); }
+        unsafe { ffi::gtk_widget_override_symbolic_color(self.unwrap_widget(), name.borrow_to_glib().0, color); }
     }
 
     fn override_cursor(&self, cursor: &gdk_ffi::C_GdkRGBA, secondary_cursor: &gdk_ffi::C_GdkRGBA) {
@@ -309,15 +307,13 @@ pub trait WidgetTrait: gtk::FFIWidget + gtk::GObjectTrait {
     fn get_tooltip_markup(&self) -> Option<String> {
         unsafe {
             FromGlibPtr::take(
-                ffi::gtk_widget_get_tooltip_markup(self.unwrap_widget())
-                    as *const c_char)
+                ffi::gtk_widget_get_tooltip_markup(self.unwrap_widget()))
         }
     }
 
     fn set_tooltip_markup(&self, markup: &str) {
         unsafe {
-            let mut tmp_markup = markup.to_tmp_for_borrow();
-            ffi::gtk_widget_set_tooltip_markup(self.unwrap_widget(), tmp_markup.to_glib_ptr() as *mut c_char);
+            ffi::gtk_widget_set_tooltip_markup(self.unwrap_widget(), markup.borrow_to_glib().0);
         }
     }
 
@@ -325,15 +321,13 @@ pub trait WidgetTrait: gtk::FFIWidget + gtk::GObjectTrait {
     fn get_tooltip_text(&self) -> Option<String> {
         unsafe {
             FromGlibPtr::take(
-                ffi::gtk_widget_get_tooltip_text(self.unwrap_widget())
-                    as *const c_char)
+                ffi::gtk_widget_get_tooltip_text(self.unwrap_widget()))
         }
     }
 
     fn set_tooltip_text(&self, text: &str) {
         unsafe {
-            let mut tmp_text = text.to_tmp_for_borrow();
-            ffi::gtk_widget_set_tooltip_text(self.unwrap_widget(), tmp_text.to_glib_ptr() as *mut c_char);
+            ffi::gtk_widget_set_tooltip_text(self.unwrap_widget(), text.borrow_to_glib().0);
         }
     }
 
@@ -663,8 +657,7 @@ pub trait WidgetTrait: gtk::FFIWidget + gtk::GObjectTrait {
 
     fn child_notify(&self, child_property: &str) {
         unsafe {
-            let mut tmp_child_property = child_property.to_tmp_for_borrow();
-            ffi::gtk_widget_child_notify(self.unwrap_widget(), tmp_child_property.to_glib_ptr())
+            ffi::gtk_widget_child_notify(self.unwrap_widget(), child_property.borrow_to_glib().0)
         }
     }
 

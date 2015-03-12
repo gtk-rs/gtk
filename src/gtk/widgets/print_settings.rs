@@ -17,7 +17,7 @@ use gtk::{self, ffi};
 use glib::{to_bool, to_gboolean};
 use gtk::FFIWidget;
 use gtk::cast::{GTK_PRINT_SETTINGS, GTK_PAPER_SIZE};
-use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr};
 
 struct_Widget!(PrintSettings);
 
@@ -44,106 +44,91 @@ impl PrintSettings {
 
     pub fn has_key(&self, key: &str) -> bool {
         unsafe {
-            let mut tmp_key = key.to_tmp_for_borrow();
             to_bool(
                 ffi::gtk_print_settings_has_key(GTK_PRINT_SETTINGS(self.unwrap_widget()),
-                                                tmp_key.to_glib_ptr()))
+                                                key.borrow_to_glib().0))
         }
     }
 
     pub fn get(&self, key: &str) -> Option<String> {
         unsafe {
-            let mut tmp_key = key.to_tmp_for_borrow();
             FromGlibPtr::borrow(
-                ffi::gtk_print_settings_get(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_key.to_glib_ptr()))
+                ffi::gtk_print_settings_get(GTK_PRINT_SETTINGS(self.unwrap_widget()), key.borrow_to_glib().0))
         }
     }
 
     pub fn set(&self, key: &str, value: &str) {
         unsafe {
-            let mut tmp_key = key.to_tmp_for_borrow();
-            let mut tmp_value = value.to_tmp_for_borrow();
             ffi::gtk_print_settings_set(GTK_PRINT_SETTINGS(
                 self.unwrap_widget()),
-                tmp_key.to_glib_ptr(),
-                tmp_value.to_glib_ptr())
+                key.borrow_to_glib().0,
+                value.borrow_to_glib().0)
         }
     }
 
     pub fn unset(&self, key: &str) {
         unsafe {
-            let mut tmp_key = key.to_tmp_for_borrow();
-            ffi::gtk_print_settings_unset(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_key.to_glib_ptr())
+            ffi::gtk_print_settings_unset(GTK_PRINT_SETTINGS(self.unwrap_widget()), key.borrow_to_glib().0)
         }
     }
 
     pub fn get_bool(&self, key: &str) -> bool {
         unsafe {
-            let mut tmp_key = key.to_tmp_for_borrow();
-            to_bool(ffi::gtk_print_settings_get_bool(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_key.to_glib_ptr()))
+            to_bool(ffi::gtk_print_settings_get_bool(GTK_PRINT_SETTINGS(self.unwrap_widget()), key.borrow_to_glib().0))
         }
     }
 
     pub fn set_bool(&self, key: &str, value: bool) {
         unsafe {
-            let mut tmp_key = key.to_tmp_for_borrow();
-            ffi::gtk_print_settings_set_bool(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_key.to_glib_ptr(), to_gboolean(value))
+            ffi::gtk_print_settings_set_bool(GTK_PRINT_SETTINGS(self.unwrap_widget()), key.borrow_to_glib().0, to_gboolean(value))
         }
     }
 
     pub fn get_double(&self, key: &str) -> f64 {
         unsafe {
-            let mut tmp_key = key.to_tmp_for_borrow();
-            ffi::gtk_print_settings_get_double(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_key.to_glib_ptr())
+            ffi::gtk_print_settings_get_double(GTK_PRINT_SETTINGS(self.unwrap_widget()), key.borrow_to_glib().0)
         }
     }
 
     pub fn set_double(&self, key: &str, value: f64) {
         unsafe {
-            let mut tmp_key = key.to_tmp_for_borrow();
-            ffi::gtk_print_settings_set_double(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_key.to_glib_ptr(), value)
+            ffi::gtk_print_settings_set_double(GTK_PRINT_SETTINGS(self.unwrap_widget()), key.borrow_to_glib().0, value)
         }
     }
 
     pub fn get_double_with_default(&self, key: &str, def: f64) -> f64 {
         unsafe {
-            let mut tmp_key = key.to_tmp_for_borrow();
-            ffi::gtk_print_settings_get_double_with_default(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_key.to_glib_ptr(), def)
+            ffi::gtk_print_settings_get_double_with_default(GTK_PRINT_SETTINGS(self.unwrap_widget()), key.borrow_to_glib().0, def)
         }
     }
 
     pub fn get_length(&self, key: &str, unit: gtk::Unit) -> f64 {
         unsafe {
-            let mut tmp_key = key.to_tmp_for_borrow();
-            ffi::gtk_print_settings_get_length(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_key.to_glib_ptr(), unit)
+            ffi::gtk_print_settings_get_length(GTK_PRINT_SETTINGS(self.unwrap_widget()), key.borrow_to_glib().0, unit)
         }
     }
 
     pub fn set_length(&self, key: &str, value: f64, unit: gtk::Unit) {
         unsafe {
-            let mut tmp_key = key.to_tmp_for_borrow();
-            ffi::gtk_print_settings_set_length(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_key.to_glib_ptr(), value, unit)
+            ffi::gtk_print_settings_set_length(GTK_PRINT_SETTINGS(self.unwrap_widget()), key.borrow_to_glib().0, value, unit)
         }
     }
 
     pub fn get_int(&self, key: &str) -> i32 {
         unsafe {
-            let mut tmp_key = key.to_tmp_for_borrow();
-            ffi::gtk_print_settings_get_int(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_key.to_glib_ptr())
+            ffi::gtk_print_settings_get_int(GTK_PRINT_SETTINGS(self.unwrap_widget()), key.borrow_to_glib().0)
         }
     }
 
     pub fn set_int(&self, key: &str, value: i32) {
         unsafe {
-            let mut tmp_key = key.to_tmp_for_borrow();
-            ffi::gtk_print_settings_set_int(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_key.to_glib_ptr(), value)
+            ffi::gtk_print_settings_set_int(GTK_PRINT_SETTINGS(self.unwrap_widget()), key.borrow_to_glib().0, value)
         }
     }
 
     pub fn get_int_with_default(&self, key: &str, def: i32) -> i32 {
         unsafe {
-            let mut tmp_key = key.to_tmp_for_borrow();
-            ffi::gtk_print_settings_get_int_with_default(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_key.to_glib_ptr(), def)
+            ffi::gtk_print_settings_get_int_with_default(GTK_PRINT_SETTINGS(self.unwrap_widget()), key.borrow_to_glib().0, def)
         }
     }
 
@@ -156,8 +141,7 @@ impl PrintSettings {
 
     pub fn set_printer(&self, printer: &str) {
         unsafe {
-            let mut tmp_printer = printer.to_tmp_for_borrow();
-            ffi::gtk_print_settings_set_printer(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_printer.to_glib_ptr())
+            ffi::gtk_print_settings_set_printer(GTK_PRINT_SETTINGS(self.unwrap_widget()), printer.borrow_to_glib().0)
         }
     }
 
@@ -302,8 +286,7 @@ impl PrintSettings {
 
     pub fn set_default_source(&self, default_source: &str) {
         unsafe {
-            let mut tmp_default_source = default_source.to_tmp_for_borrow();
-            ffi::gtk_print_settings_set_default_source(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_default_source.to_glib_ptr())
+            ffi::gtk_print_settings_set_default_source(GTK_PRINT_SETTINGS(self.unwrap_widget()), default_source.borrow_to_glib().0)
         }
     }
 
@@ -316,8 +299,7 @@ impl PrintSettings {
 
     pub fn set_media_type(&self, media_type: &str) {
         unsafe {
-            let mut tmp_media_type = media_type.to_tmp_for_borrow();
-            ffi::gtk_print_settings_set_media_type(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_media_type.to_glib_ptr())
+            ffi::gtk_print_settings_set_media_type(GTK_PRINT_SETTINGS(self.unwrap_widget()), media_type.borrow_to_glib().0)
         }
     }
 
@@ -330,8 +312,7 @@ impl PrintSettings {
 
     pub fn set_dither(&self, dither: &str) {
         unsafe {
-            let mut tmp_dither = dither.to_tmp_for_borrow();
-            ffi::gtk_print_settings_set_dither(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_dither.to_glib_ptr())
+            ffi::gtk_print_settings_set_dither(GTK_PRINT_SETTINGS(self.unwrap_widget()), dither.borrow_to_glib().0)
         }
     }
 
@@ -344,8 +325,7 @@ impl PrintSettings {
 
     pub fn set_finishings(&self, finishings: &str) {
         unsafe {
-            let mut tmp_finishings = finishings.to_tmp_for_borrow();
-            ffi::gtk_print_settings_set_finishings(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_finishings.to_glib_ptr())
+            ffi::gtk_print_settings_set_finishings(GTK_PRINT_SETTINGS(self.unwrap_widget()), finishings.borrow_to_glib().0)
         }
     }
 
@@ -358,8 +338,7 @@ impl PrintSettings {
 
     pub fn set_output_bin(&self, output_bin: &str) {
         unsafe {
-            let mut tmp_output_bin = output_bin.to_tmp_for_borrow();
-            ffi::gtk_print_settings_set_output_bin(GTK_PRINT_SETTINGS(self.unwrap_widget()), tmp_output_bin.to_glib_ptr())
+            ffi::gtk_print_settings_set_output_bin(GTK_PRINT_SETTINGS(self.unwrap_widget()), output_bin.borrow_to_glib().0)
         }
     }
 }

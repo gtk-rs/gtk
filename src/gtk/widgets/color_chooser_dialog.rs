@@ -16,15 +16,14 @@
 use gtk::{self, ffi};
 use gtk::FFIWidget;
 use gtk::cast::{GTK_WINDOW};
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::ToGlibPtr;
 
 struct_Widget!(ColorChooserDialog);
 
 impl ColorChooserDialog {
     pub fn new(title: &str, parent: Option<gtk::Window>) -> Option<ColorChooserDialog> {
         let tmp_pointer = unsafe {
-            let mut tmp_title = title.to_tmp_for_borrow();
-            ffi::gtk_color_chooser_dialog_new(tmp_title.to_glib_ptr(),
+            ffi::gtk_color_chooser_dialog_new(title.borrow_to_glib().0,
                 match parent {
                     Some(ref p) => GTK_WINDOW(p.unwrap_widget()),
                     None => ::std::ptr::null_mut()

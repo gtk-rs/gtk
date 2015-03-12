@@ -60,7 +60,7 @@ pub trait GetType: PhantomFn<Self> {
 impl FromGlib for Type {
     type GlibType = ffi::GType;
 
-    fn conv(val: ffi::GType) -> Type {
+    fn from_glib(val: ffi::GType) -> Type {
         use self::Type::*;
         match val {
             ffi::G_TYPE_INVALID => Invalid,

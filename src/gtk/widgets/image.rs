@@ -18,7 +18,7 @@
 use gtk::{self, ffi};
 use gtk::cast::GTK_IMAGE;
 use gtk::FFIWidget;
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::ToGlibPtr;
 
 /// Image — A widget displaying an image
 struct_Widget!(Image);
@@ -26,33 +26,29 @@ struct_Widget!(Image);
 impl Image {
     pub fn new_from_file(filename: &str) -> Option<Image> {
         let tmp_pointer = unsafe {
-            let mut tmp_filename = filename.to_tmp_for_borrow();
-            ffi::gtk_image_new_from_file(tmp_filename.to_glib_ptr())
+            ffi::gtk_image_new_from_file(filename.borrow_to_glib().0)
         };
         check_pointer!(tmp_pointer, Image)
     }
 
     pub fn new_from_icon_name(icon_name: &str, size: gtk::IconSize) -> Option<Image> {
         let tmp_pointer = unsafe {
-            let mut tmp_icon_name = icon_name.to_tmp_for_borrow();
-            ffi::gtk_image_new_from_icon_name(tmp_icon_name.to_glib_ptr(), size)
+            ffi::gtk_image_new_from_icon_name(icon_name.borrow_to_glib().0, size)
         };
         check_pointer!(tmp_pointer, Image)
     }
 
     pub fn set_from_file(&self, filename: &str) {
         unsafe {
-            let mut tmp_filename = filename.to_tmp_for_borrow();
             ffi::gtk_image_set_from_file(GTK_IMAGE(self.unwrap_widget()),
-                                         tmp_filename.to_glib_ptr());
+                                         filename.borrow_to_glib().0);
         };
     }
 
     pub fn set_from_icon_name(&self, icon_name: &str, size: gtk::IconSize) {
         unsafe {
-            let mut tmp_icon_name = icon_name.to_tmp_for_borrow();
             ffi::gtk_image_set_from_icon_name(GTK_IMAGE(self.unwrap_widget()),
-                                              tmp_icon_name.to_glib_ptr(), size)
+                                              icon_name.borrow_to_glib().0, size)
         };
     }
 }

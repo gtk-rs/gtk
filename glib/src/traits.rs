@@ -16,7 +16,7 @@
 use std::marker::PhantomFn;
 use ffi;
 use std::any::Any;
-use translate::{ToGlibPtr, ToTmp};
+use translate::ToGlibPtr;
 
 pub trait FFIGObject {
     fn unwrap_gobject(&self) -> *mut ffi::C_GObject;
@@ -63,13 +63,12 @@ pub trait Connect<'a, T: Signal<'a>>: FFIGObject + PhantomFn<&'a T> {
 
         unsafe {
             let trampoline      = signal.get_trampoline();
-            let mut tmp_signal_name = signal.get_signal_name().replace("_", "-")
-                                        .to_tmp_for_borrow();
+            let signal_name = signal.get_signal_name().replace("_", "-");
             let user_data_ptr   = transmute(Box::new(signal));
             
             ffi::glue_signal_connect(
                 self.unwrap_gobject(),
-                tmp_signal_name.to_glib_ptr(),
+                signal_name.borrow_to_glib().0,
                 Some(trampoline),
                 user_data_ptr
             );

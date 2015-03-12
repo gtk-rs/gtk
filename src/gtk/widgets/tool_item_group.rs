@@ -18,7 +18,7 @@
 use gtk::{self, ffi, ToolItem};
 use gtk::FFIWidget;
 use gtk::cast::{GTK_TOOL_ITEM_GROUP, GTK_TOOL_ITEM};
-use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr};
 use glib::{to_bool, to_gboolean};
 
 struct_Widget!(ToolItemGroup);
@@ -26,8 +26,7 @@ struct_Widget!(ToolItemGroup);
 impl ToolItemGroup {
     pub fn new(label: &str) -> Option<ToolItemGroup> {
         let tmp_pointer = unsafe {
-            let mut tmp_label = label.to_tmp_for_borrow();
-            ffi::gtk_tool_item_group_new(tmp_label.to_glib_ptr())
+            ffi::gtk_tool_item_group_new(label.borrow_to_glib().0)
         };
         check_pointer!(tmp_pointer, ToolItemGroup)
     }
@@ -73,8 +72,7 @@ impl ToolItemGroup {
 
     pub fn set_label(&self, label: &str) {
         unsafe {
-            let mut tmp_label = label.to_tmp_for_borrow();
-            ffi::gtk_tool_item_group_set_label(GTK_TOOL_ITEM_GROUP(self.unwrap_widget()), tmp_label.to_glib_ptr())
+            ffi::gtk_tool_item_group_set_label(GTK_TOOL_ITEM_GROUP(self.unwrap_widget()), label.borrow_to_glib().0)
         }
     }
 

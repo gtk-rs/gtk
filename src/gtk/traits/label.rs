@@ -14,7 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use libc::{c_int, c_double};
-use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr};
 
 use gtk::{self, ffi};
 use glib::{to_bool, to_gboolean};
@@ -24,15 +24,13 @@ use gtk::cast::GTK_LABEL;
 pub trait LabelTrait: gtk::WidgetTrait {
     fn set_label(&mut self, text: &str) -> () {
         unsafe {
-            let mut tmp_text = text.to_tmp_for_borrow();
-            ffi::gtk_label_set_label(GTK_LABEL(self.unwrap_widget()), tmp_text.to_glib_ptr())
+            ffi::gtk_label_set_label(GTK_LABEL(self.unwrap_widget()), text.borrow_to_glib().0)
         }
     }
 
     fn set_text(&mut self, text: &str) -> () {
         unsafe {
-            let mut tmp_text = text.to_tmp_for_borrow();
-	    ffi::gtk_label_set_text(GTK_LABEL(self.unwrap_widget()), tmp_text.to_glib_ptr())
+	    ffi::gtk_label_set_text(GTK_LABEL(self.unwrap_widget()), text.borrow_to_glib().0)
         }
     }
 
@@ -44,29 +42,25 @@ pub trait LabelTrait: gtk::WidgetTrait {
 
     fn set_markup(&mut self, text: &str) -> () {
         unsafe {
-            let mut tmp_text = text.to_tmp_for_borrow();
-            ffi::gtk_label_set_markup(GTK_LABEL(self.unwrap_widget()), tmp_text.to_glib_ptr())
+            ffi::gtk_label_set_markup(GTK_LABEL(self.unwrap_widget()), text.borrow_to_glib().0)
         }
     }
 
     fn set_markup_with_mnemonic(&mut self, text: &str) -> () {
         unsafe {
-            let mut tmp_text = text.to_tmp_for_borrow();
-            ffi::gtk_label_set_markup_with_mnemonic(GTK_LABEL(self.unwrap_widget()), tmp_text.to_glib_ptr())
+            ffi::gtk_label_set_markup_with_mnemonic(GTK_LABEL(self.unwrap_widget()), text.borrow_to_glib().0)
         }
     }
 
     fn set_pattern(&mut self, text: &str) -> () {
         unsafe {
-            let mut tmp_text = text.to_tmp_for_borrow();
-            ffi::gtk_label_set_pattern(GTK_LABEL(self.unwrap_widget()), tmp_text.to_glib_ptr())
+            ffi::gtk_label_set_pattern(GTK_LABEL(self.unwrap_widget()), text.borrow_to_glib().0)
         }
     }
 
     fn set_text_with_mnemonic(&mut self, text: &str) -> () {
         unsafe {
-            let mut tmp_text = text.to_tmp_for_borrow();
-            ffi::gtk_label_set_text_with_mnemonic(GTK_LABEL(self.unwrap_widget()), tmp_text.to_glib_ptr());
+            ffi::gtk_label_set_text_with_mnemonic(GTK_LABEL(self.unwrap_widget()), text.borrow_to_glib().0);
         }
     }
 

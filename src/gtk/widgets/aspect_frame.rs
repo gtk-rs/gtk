@@ -17,7 +17,7 @@
 
 use libc::c_float;
 
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::ToGlibPtr;
 use gtk::cast::GTK_ASPECTFRAME;
 use gtk::{self, ffi};
 use glib::to_gboolean;
@@ -28,8 +28,7 @@ struct_Widget!(AspectFrame);
 impl AspectFrame {
     pub fn new(label: Option<&str>, x_align: f32, y_align: f32, ratio: f32, obey_child: bool) -> Option<AspectFrame> {
         let tmp_pointer = unsafe {
-            let mut tmp_label = label.to_tmp_for_borrow();
-            ffi::gtk_aspect_frame_new(tmp_label.to_glib_ptr(),
+            ffi::gtk_aspect_frame_new(label.borrow_to_glib().0,
                                       x_align as c_float, y_align as c_float,
                                       ratio as c_float, to_gboolean(obey_child))
         };

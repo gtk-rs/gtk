@@ -15,7 +15,7 @@
 
 use gtk::{self, ffi};
 use glib::to_bool;
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::ToGlibPtr;
 
 #[derive(Copy)]
 pub struct RecentFilter {
@@ -35,15 +35,13 @@ impl RecentFilter {
 
     pub fn add_application(&self, application: &str) -> () {
         unsafe {
-            let mut tmp_application = application.to_tmp_for_borrow();
-            ffi::gtk_recent_filter_add_application(self.pointer, tmp_application.to_glib_ptr())
+            ffi::gtk_recent_filter_add_application(self.pointer, application.borrow_to_glib().0)
         }
     }
 
     pub fn add_group(&self, group: &str) -> () {
         unsafe {
-            let mut tmp_group = group.to_tmp_for_borrow();
-            ffi::gtk_recent_filter_add_group(self.pointer, tmp_group.to_glib_ptr())
+            ffi::gtk_recent_filter_add_group(self.pointer, group.borrow_to_glib().0)
         }
     }
 
