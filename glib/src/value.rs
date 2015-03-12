@@ -19,7 +19,7 @@ use libc::c_char;
 use ffi;
 use super::{to_bool, to_gboolean};
 use type_::Type;
-use translate::{FromGlibPtr, ToGlib, ToGlibPtr, ToTmp, from_glib};
+use translate::{FromGlibPtr, ToGlib, ToGlibPtr, from_glib};
 
 pub trait ValuePublic {
     fn get(gvalue: &Value) -> Self;
@@ -173,8 +173,7 @@ impl Value {
 
     fn set_string(&self, v_string: &str) {
         unsafe {
-            let mut tmp_v_string = v_string.to_tmp_for_borrow();
-            ffi::g_value_set_string(self.pointer, tmp_v_string.to_glib_ptr());
+            ffi::g_value_set_string(self.pointer, v_string.borrow_to_glib().0);
         }
     }
 

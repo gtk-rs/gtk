@@ -23,20 +23,22 @@
 //!     fn get_title(&self) -> Option<String> {
 //!         unsafe {
 //!             let title = ffi::gtk_window_get_title(self.pointer);
-//!             FromNativePtr::borrow(title)
+//!             FromGlibPtr::borrow(title)
 //!         }
 //!     }
 //! ```
 //!
 //! Letting the foreign library borrow pointers from the Rust side often
 //! requires having a temporary variable of an intermediate type (e.g. `CString`).
-//! In such cases `ToTmp` is used. See also `StackBox`.
+//! A `Stash` contains the temporary storage and a pointer into it that
+//! is valid for the lifetime of the `Stash`. As the lifetime of the `Stash` returned
+//! from `borrow_to_glib` is at least the enclosing statement, you can avoid explicitly
+//! binding the stash in most cases and just take the pointer out of it:
 //!
 //! ```ignore
 //!     pub fn set_icon_name(&self, name: &str) {
 //!         unsafe {
-//!             let mut tmp_name = name.to_tmp_for_borrow();
-//!             ffi::gdk_window_set_icon_name(self.pointer, tmp_name.to_glib_ptr())
+//!             ffi::gdk_window_set_icon_name(self.pointer, name.borrow_to_glib().0)
 //!         }
 //!     }
 //! ```
@@ -48,37 +50,41 @@ use std::ptr;
 use libc::{c_void, c_char};
 use ffi;
 
-/// A wrapper that sidesteps coherence checking when implementing the traits
-/// for FFI types
+/// Helper type that stores temporary values used for translation
 ///
-/// `T` is any type that's passed by pointer.
+/// `P` is the foreign type pointer and the first element of the tuple.
 ///
-/// `T2` is an optional storage for inner temporary variables of complex types.
+/// `T` is the Rust type that is translated.
 ///
-/// Say you want to pass a `*mut C_GdkWindowAttr` to a function. The `StackBox`
-/// will own the `C_GdkWindowAttr` and a `CString` that owns
-/// `C_GdkWindowAttr::title` for the duration of its lifetime.
+/// The second element of the tuple is the temporary storage defined
+/// by the implementation of `ToGlibPtr<P> for T`
+///
+/// Say you want to pass a `*mut C_GdkWindowAttr` to a foreign function. The `Stash`
+/// will own a `C_GdkWindowAttr` and a `CString` that `C_GdkWindowAttr::title` points into.
 ///
 /// ```ignore
-/// type WindowAttrBox = StackBox<ffi::C_GdkWindowAttr, Option<CString>>;
-/// ```
+/// impl <'a> ToGlibPtr<'a, *mut ffi::C_GdkWindowAttr> for WindowAttr {
+///     type Storage = (Box<ffi::C_GdkWindowAttr>, Stash<'a, *const c_char, Option<String>>);
 ///
-/// The `ToTmp` implementation can then use `WindowAttrBox` as its output type
-/// and `impl ToGlibPtr for WindowAttrBox` is provided by this module.
-pub struct StackBox<T: Sized, T2: Sized = ()> (pub T, pub T2);
+///     fn borrow_to_glib(&'a self) -> Stash<*mut ffi::C_GdkWindowAttr, WindowAttr> {
+///         let title = self.title.borrow_to_glib();
+///
+///         let mut attrs = Box::new(ffi::C_GdkWindowAttr {
+///             title: title.0,
+///             // ....
+///         });
+///
+///         Stash(&mut *attrs, (attrs, title))
+///     }
+/// }
+/// ```
+pub struct Stash<'a, P: Copy, T: ?Sized + ToGlibPtr<'a, P>> (pub P, pub <T as ToGlibPtr<'a, P>>::Storage);
 
 /// Translate a simple type
 pub trait ToGlib {
     type GlibType;
 
     fn to_glib(&self) -> Self::GlibType;
-}
-
-/// Translate a pointer type
-pub trait ToGlibPtr {
-    type GlibType;
-
-    fn to_glib_ptr(&mut self) -> Self::GlibType;
 }
 
 impl ToGlib for bool {
@@ -89,101 +95,93 @@ impl ToGlib for bool {
     }
 }
 
-impl ToGlibPtr for CString {
-    type GlibType = *const c_char;
+/// Translate to a pointer
+pub trait ToGlibPtr<'a, P: Copy> {
+    type Storage;
 
-    fn to_glib_ptr(&mut self) -> *const c_char {
-        self.as_ptr()
+    /// Let the foreign library borrow the pointer
+    ///
+    /// The pointer in the `Stash` is only valid for the lifetime of the `Stash`.
+    fn borrow_to_glib(&'a self) -> Stash<P, Self>;
+}
+
+impl <'a, S: Str> ToGlibPtr<'a, *const c_char> for S {
+    type Storage = CString;
+
+    fn borrow_to_glib(&'a self) -> Stash<*const c_char, S> {
+        let tmp = CString::new(self.as_slice()).unwrap();
+        Stash(tmp.as_ptr(), tmp)
     }
 }
 
-impl ToGlibPtr for Option<CString> {
-    type GlibType = *const c_char;
+impl <'a> ToGlibPtr<'a, *mut c_char> for str {
+    type Storage = CString;
 
-    fn to_glib_ptr(&mut self) -> *const c_char {
-        match self {
-            &mut Some(ref s) => s.as_ptr(),
-            &mut None => ptr::null(),
-        }
+    fn borrow_to_glib(&'a self) -> Stash<*mut c_char, str> {
+        let tmp = CString::new(self.as_slice()).unwrap();
+        Stash(tmp.as_ptr() as *mut _, tmp)
     }
 }
 
-impl <T, T2> ToGlibPtr for StackBox<T, T2> {
-    type GlibType = *mut T;
+impl <'a> ToGlibPtr<'a, *mut c_char> for String {
+    type Storage = CString;
 
-    fn to_glib_ptr(&mut self) -> *mut T {
-        &mut (*self).0 as  *mut _
+    fn borrow_to_glib(&'a self) -> Stash<*mut c_char, String> {
+        let tmp = CString::new(self.as_slice()).unwrap();
+        Stash(tmp.as_ptr() as *mut _, tmp)
     }
 }
 
-/// Translate to a temporary intermediate variable
-pub trait ToTmp {
-    type Tmp;
+impl <'a, S: Str> ToGlibPtr<'a, *const c_char> for Option<S> {
+    type Storage = Option<CString>;
 
-    fn to_tmp_for_borrow(&self) -> Self::Tmp;
-}
-
-impl <S: Str> ToTmp for S {
-    type Tmp = CString;
-
-    fn to_tmp_for_borrow(&self) -> CString {
-        CString::new(self.as_slice()).unwrap()
-    }
-}
-
-impl <S: Str> ToTmp for Option<S> {
-    type Tmp = Option<CString>;
-
-    fn to_tmp_for_borrow(&self) -> Option<CString> {
-        match self {
+    fn borrow_to_glib(&'a self) -> Stash<*const c_char, Option<S>> {
+        let tmp = match self {
             &Some(ref s) => Some(CString::new(s.as_slice()).unwrap()),
             &None => None,
-        }
+        };
+        let ptr = tmp.as_ref().map_or(ptr::null(), |s| s.as_ptr());
+        Stash(ptr, tmp)
     }
 }
 
-/// Translate to an intermediate variable for passing an array
-pub trait ToArray<'a> {
-    type Tmp;
+impl <'a, S: Str> ToGlibPtr<'a, *mut c_char> for Option<S> {
+    type Storage = Option<CString>;
 
-    fn to_array_for_borrow(&'a self) -> Self::Tmp;
+    fn borrow_to_glib(&'a self) -> Stash<*mut c_char, Option<S>> {
+        let tmp = match self {
+            &Some(ref s) => Some(CString::new(s.as_slice()).unwrap()),
+            &None => None,
+        };
+        let ptr = tmp.as_ref().map_or(ptr::null(), |s| s.as_ptr());
+        Stash(ptr as *mut _, tmp)
+    }
 }
 
-impl <'a, T, I: ?Sized> ToArray<'a> for I
-where T: ToTmp, <T as ToTmp>::Tmp: ToGlibPtr, &'a I: IntoIterator<Item = &'a T> {
-    type Tmp = PtrArray<T>;
+impl <'a, P: Copy, T, I: ?Sized> ToGlibPtr<'a, *mut P> for I
+where T: ToGlibPtr<'a, P>, &'a I: IntoIterator<Item = &'a T> {
+    type Storage = PtrArray<'a, P, T>;
 
-    fn to_array_for_borrow(&'a self) -> PtrArray<T> {
+    fn borrow_to_glib(&'a self) -> Stash<*mut P, I> {
         let mut tmp_vec: Vec<_> =
-            self.into_iter().map(|v| v.to_tmp_for_borrow()).collect();
+            self.into_iter().map(|v| v.borrow_to_glib()).collect();
         let mut ptr_vec: Vec<_> =
-            tmp_vec.iter_mut().map(|v| v.to_glib_ptr()).collect();
+            tmp_vec.iter_mut().map(|v| v.0).collect();
         unsafe {
             let zero = mem::zeroed();
             ptr_vec.push(zero);
         }
-        PtrArray(ptr_vec, tmp_vec)
+        Stash(ptr_vec.as_mut_ptr(), PtrArray(ptr_vec, tmp_vec))
     }
 }
 
-/// Temporary storage for passing array of pointers
-pub struct PtrArray<T> (Vec<<<T as ToTmp>::Tmp as ToGlibPtr>::GlibType>,
-                      Vec<<T as ToTmp>::Tmp>)
-    where T: ToTmp, <T as ToTmp>::Tmp: ToGlibPtr;
+/// Temporary storage for passing a `NULL` terminated array of pointers
+pub struct PtrArray<'a, P: Copy, T: ToGlibPtr<'a, P>> (Vec<P>, Vec<Stash<'a, P, T>>);
 
-impl <T> PtrArray<T>
-    where T: ToTmp, <T as ToTmp>::Tmp: ToGlibPtr {
+impl <'a, P: Copy, T: ToGlibPtr<'a, P>> PtrArray<'a, P, T> {
+    /// Returns the length of the array not counting the `NULL` terminator
     pub fn len(&self) -> usize {
         self.1.len()
-    }
-}
-
-impl <T> ToGlibPtr for PtrArray<T>
-    where T: ToTmp, <T as ToTmp>::Tmp: ToGlibPtr {
-    type GlibType = *mut <<T as ToTmp>::Tmp as ToGlibPtr>::GlibType;
-
-    fn to_glib_ptr(&mut self) -> *mut <<T as ToTmp>::Tmp as ToGlibPtr>::GlibType {
-        self.0.as_mut_ptr()
     }
 }
 
