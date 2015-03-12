@@ -18,7 +18,6 @@ use gtk::cast::{GTK_FONT_CHOOSER};
 use gtk::{self, ffi};
 use glib::{to_bool, to_gboolean};
 use gtk::FFIWidget;
-use libc::c_char;
 
 pub trait FontChooserTrait: gtk::WidgetTrait {
     fn get_font_size(&self) -> i32 {
@@ -28,7 +27,7 @@ pub trait FontChooserTrait: gtk::WidgetTrait {
     fn get_font(&self) -> Option<String> {
         unsafe {
             FromGlibPtr::borrow(
-                ffi::gtk_font_chooser_get_font(GTK_FONT_CHOOSER(self.unwrap_widget())) as *const c_char)
+                ffi::gtk_font_chooser_get_font(GTK_FONT_CHOOSER(self.unwrap_widget())))
         }
     }
 
@@ -41,8 +40,7 @@ pub trait FontChooserTrait: gtk::WidgetTrait {
     fn get_preview_text(&self) -> Option<String> {
         unsafe {
             FromGlibPtr::borrow(
-                ffi::gtk_font_chooser_get_preview_text(GTK_FONT_CHOOSER(self.unwrap_widget()))
-                    as *const c_char)
+                ffi::gtk_font_chooser_get_preview_text(GTK_FONT_CHOOSER(self.unwrap_widget())))
         }
     }
 

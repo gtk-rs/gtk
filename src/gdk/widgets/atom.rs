@@ -15,7 +15,6 @@
 
 use gdk::ffi;
 use glib::translate::{FromGlibPtr, ToGlibPtr};
-use libc::{c_char};
 
 #[derive(Copy)]
 pub struct Atom {
@@ -60,7 +59,7 @@ impl Atom {
     pub fn name(&self) -> Option<String> {
         unsafe {
             FromGlibPtr::take(
-                ffi::gdk_atom_name(self.pointer) as *const c_char)
+                ffi::gdk_atom_name(self.pointer))
         }
     }
 

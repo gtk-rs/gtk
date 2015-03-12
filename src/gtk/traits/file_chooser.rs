@@ -13,6 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
+use libc::c_char;
 use glib::translate::{FromGlibPtr, FromGlibPtrContainer, ToGlibPtr};
 use gtk::{self, FFIWidget};
 use gtk::cast::GTK_FILE_CHOOSER;
@@ -117,7 +118,7 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
 
     fn get_filenames(&self) -> Vec<String> {
         unsafe {
-            FromGlibPtrContainer::take(
+            FromGlibPtrContainer::<*const c_char, _>::take(
                 ffi::gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(self.unwrap_widget())))
         }
     }
@@ -162,7 +163,7 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
 
     fn get_uris(&self) -> Vec<String> {
         unsafe {
-            FromGlibPtrContainer::take(
+            FromGlibPtrContainer::<*const c_char, _>::take(
                 ffi::gtk_file_chooser_get_uris(GTK_FILE_CHOOSER(self.unwrap_widget())))
         }
     }

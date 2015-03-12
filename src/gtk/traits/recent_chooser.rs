@@ -89,8 +89,7 @@ pub trait RecentChooserTrait: gtk::WidgetTrait + FFIWidget {
     fn get_current_uri(&self) -> Option<String> {
         unsafe {
             FromGlibPtr::borrow(
-                ffi::gtk_recent_chooser_get_current_uri(GTK_RECENT_CHOOSER(self.unwrap_widget()))
-                    as *const c_char)
+                ffi::gtk_recent_chooser_get_current_uri(GTK_RECENT_CHOOSER(self.unwrap_widget())))
         }
     }
 

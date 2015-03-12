@@ -18,7 +18,6 @@
 use glib::translate::{FromGlibPtr, ToGlibPtr};
 use gdk_ffi as ffi;
 use gdk_ffi::C_GdkRGBA;
-use libc::{c_char};
 
 pub trait RGBA {
     fn white() -> C_GdkRGBA;
@@ -105,7 +104,7 @@ impl RGBA for C_GdkRGBA {
     fn to_string(&self) -> Option<String> {
         unsafe {
             FromGlibPtr::take(
-                ffi::gdk_rgba_to_string(self) as *const c_char)
+                ffi::gdk_rgba_to_string(self))
         }
     }
 }

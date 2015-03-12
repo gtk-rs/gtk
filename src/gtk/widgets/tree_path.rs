@@ -16,7 +16,6 @@
 extern crate libc;
 
 use gtk::ffi;
-use libc::{c_char};
 use glib::translate::{FromGlibPtr, ToGlibPtr};
 
 #[derive(Copy)]
@@ -79,8 +78,7 @@ impl TreePath {
     pub fn to_string(&self) -> Option<String> {
         unsafe {
             FromGlibPtr::take(
-                ffi::gtk_tree_path_to_string(self.pointer)
-                    as *const c_char)
+                ffi::gtk_tree_path_to_string(self.pointer))
         }
     }
 

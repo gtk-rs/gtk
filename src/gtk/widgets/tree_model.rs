@@ -13,7 +13,6 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use libc::c_char;
 use glib::{Value, Type};
 use glib::translate::{FromGlibPtr, ToGlibPtr, from_glib};
 use gtk::{self, ffi, TreeIter, TreePath};
@@ -132,8 +131,7 @@ impl TreeModel {
         unsafe {
             FromGlibPtr::take(
                 ffi::gtk_tree_model_get_string_from_iter(self.pointer,
-                                                         iter.unwrap_pointer())
-                    as *const c_char)
+                                                         iter.unwrap_pointer()))
         }
     }
 

@@ -17,12 +17,11 @@
 
 use glib::translate::FromGlibPtr;
 use gdk::ffi;
-use libc::{c_uint, c_char};
+use libc::c_uint;
 
 pub fn keyval_name(keyval: u32) -> Option<String> {
     unsafe {
         FromGlibPtr::borrow(
-            ffi::gdk_keyval_name(keyval as c_uint) as *const c_char
-        )
+            ffi::gdk_keyval_name(keyval as c_uint))
     }
 }

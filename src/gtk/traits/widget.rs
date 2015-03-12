@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use libc::{c_int, c_char};
+use libc::c_int;
 use glib::translate::{FromGlibPtr, ToGlibPtr};
 use gtk::ffi;
 use glib::{to_bool, to_gboolean};
@@ -307,8 +307,7 @@ pub trait WidgetTrait: gtk::FFIWidget + gtk::GObjectTrait {
     fn get_tooltip_markup(&self) -> Option<String> {
         unsafe {
             FromGlibPtr::take(
-                ffi::gtk_widget_get_tooltip_markup(self.unwrap_widget())
-                    as *const c_char)
+                ffi::gtk_widget_get_tooltip_markup(self.unwrap_widget()))
         }
     }
 
@@ -322,8 +321,7 @@ pub trait WidgetTrait: gtk::FFIWidget + gtk::GObjectTrait {
     fn get_tooltip_text(&self) -> Option<String> {
         unsafe {
             FromGlibPtr::take(
-                ffi::gtk_widget_get_tooltip_text(self.unwrap_widget())
-                    as *const c_char)
+                ffi::gtk_widget_get_tooltip_text(self.unwrap_widget()))
         }
     }
 

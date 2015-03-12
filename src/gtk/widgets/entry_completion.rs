@@ -19,7 +19,6 @@ use gtk::{self, ffi};
 use gtk::TreeModel;
 use gtk::cast::GTK_ENTRY_COMPLETION;
 use glib::translate::{FromGlibPtr, ToGlibPtr};
-use libc::c_char;
 
 struct_Widget!(EntryCompletion);
 
@@ -73,8 +72,7 @@ impl EntryCompletion {
             FromGlibPtr::borrow(
                 ffi::gtk_entry_completion_compute_prefix(
                     GTK_ENTRY_COMPLETION(self.pointer),
-                    key.borrow_to_glib().0)
-                as *const c_char)
+                    key.borrow_to_glib().0))
         }
     }
 

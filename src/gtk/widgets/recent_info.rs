@@ -119,7 +119,7 @@ impl RecentInfo {
     pub fn last_application(&self) -> Option<String> {
         unsafe {
             FromGlibPtr::borrow(
-                ffi::gtk_recent_info_last_application(GTK_RECENT_INFO(self.unwrap_widget())) as *const c_char)
+                ffi::gtk_recent_info_last_application(GTK_RECENT_INFO(self.unwrap_widget())))
         }
     }
 
@@ -150,14 +150,14 @@ impl RecentInfo {
     pub fn get_short_name(&self) -> Option<String> {
         unsafe {
             FromGlibPtr::borrow(
-                ffi::gtk_recent_info_get_short_name(GTK_RECENT_INFO(self.unwrap_widget())) as *const c_char)
+                ffi::gtk_recent_info_get_short_name(GTK_RECENT_INFO(self.unwrap_widget())))
         }
     }
 
     pub fn get_uri_display(&self) -> Option<String> {
         unsafe {
             FromGlibPtr::borrow(
-                ffi::gtk_recent_info_get_uri_display(GTK_RECENT_INFO(self.unwrap_widget())) as *const c_char)
+                ffi::gtk_recent_info_get_uri_display(GTK_RECENT_INFO(self.unwrap_widget())))
         }
     }
 

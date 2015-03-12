@@ -17,7 +17,7 @@
 
 use glib::translate::{FromGlibPtr};
 use gdk::{self, ffi};
-use libc::{c_int, c_char};
+use libc::c_int;
 
 #[repr(C)]
 #[derive(Copy)]
@@ -105,7 +105,7 @@ impl Screen {
     pub fn make_display_name(&self) -> Option<String> {
         unsafe {
             FromGlibPtr::take(
-                ffi::gdk_screen_make_display_name(self.pointer) as *const c_char)
+                ffi::gdk_screen_make_display_name(self.pointer))
         }
     }
 
@@ -145,7 +145,7 @@ impl Screen {
         unsafe {
             FromGlibPtr::take(
                 ffi::gdk_screen_get_monitor_plug_name(self.pointer,
-                                                      monitor_num as c_int) as *const c_char)
+                                                      monitor_num as c_int))
         }
     }
 
