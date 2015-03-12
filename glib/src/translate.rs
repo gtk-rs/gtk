@@ -47,6 +47,7 @@ use std::iter::IntoIterator;
 use std::ffi::{CString, CStr};
 use std::mem;
 use std::ptr;
+use std::marker::PhantomFn;
 use libc::{c_void, c_char};
 use ffi;
 
@@ -206,40 +207,34 @@ impl FromGlib for bool {
 }
 
 /// Translate from a pointer type that can be `NULL`
-pub trait FromGlibPtr: Sized {
-    type GlibType: PtrExt + Copy;
-
+pub trait FromGlibPtr<P: PtrExt + Copy>: Sized {
     /// Borrow the reference
-    unsafe fn borrow(ptr: Self::GlibType) -> Self;
+    unsafe fn borrow(ptr: P) -> Self;
 
     /// Take ownership of the reference
-    unsafe fn take(ptr: Self::GlibType) -> Self;
+    unsafe fn take(ptr: P) -> Self;
 
     /// Take ownership of the floating reference
-    unsafe fn sink(_ptr: Self::GlibType) -> Self {
+    unsafe fn sink(_ptr: P) -> Self {
         panic!("Invalid operation for this type");
     }
 }
 
 /// Translate from a pointer type guaranteed to never be `NULL`
-pub trait FromGlibPtrNotNull: Sized {
-    type GlibType: PtrExt + Copy;
-
+pub trait FromGlibPtrNotNull<P: PtrExt + Copy>: Sized {
     /// Borrow the reference
-    unsafe fn borrow(ptr: Self::GlibType) -> Self;
+    unsafe fn borrow(ptr: P) -> Self;
 
     /// Take ownership of the reference
-    unsafe fn take(ptr: Self::GlibType) -> Self;
+    unsafe fn take(ptr: P) -> Self;
 
     /// Take ownership of the floating reference
-    unsafe fn sink(_ptr: Self::GlibType) -> Self {
+    unsafe fn sink(_ptr: P) -> Self {
         panic!("Invalid operation for this type");
     }
 }
 
-impl FromGlibPtr for Option<String> {
-    type GlibType = *const c_char;
-
+impl FromGlibPtr<*const c_char> for Option<String> {
     unsafe fn borrow(ptr: *const c_char) -> Option<String> {
         if ptr.is_null() { None }
         else { Some(FromGlibPtrNotNull::borrow(ptr)) }
@@ -251,9 +246,19 @@ impl FromGlibPtr for Option<String> {
     }
 }
 
-impl FromGlibPtrNotNull for String {
-    type GlibType = *const c_char;
+impl FromGlibPtr<*mut c_char> for Option<String> {
+    unsafe fn borrow(ptr: *mut c_char) -> Option<String> {
+        if ptr.is_null() { None }
+        else { Some(FromGlibPtrNotNull::borrow(ptr)) }
+    }
 
+    unsafe fn take(ptr: *mut c_char) -> Option<String> {
+        if ptr.is_null() { None }
+        else { Some(FromGlibPtrNotNull::take(ptr)) }
+    }
+}
+
+impl FromGlibPtrNotNull<*const c_char> for String {
     unsafe fn borrow(ptr: *const c_char) -> Self {
         debug_assert!(!ptr.is_null());
         String::from_utf8_lossy(CStr::from_ptr(ptr).to_bytes()).into_owned()
@@ -266,25 +271,38 @@ impl FromGlibPtrNotNull for String {
     }
 }
 
+impl FromGlibPtrNotNull<*mut c_char> for String {
+    unsafe fn borrow(ptr: *mut c_char) -> Self {
+        debug_assert!(!ptr.is_null());
+        String::from_utf8_lossy(CStr::from_ptr(ptr).to_bytes()).into_owned()
+    }
+
+    unsafe fn take(ptr: *mut c_char) -> Self {
+        let res = FromGlibPtrNotNull::borrow(ptr);
+        ffi::g_free(ptr as *mut _);
+        res
+    }
+}
+
 /// Translate from a container of pointers
-pub trait FromGlibPtrContainer<GT: PtrExt + Copy>: Sized {
+pub trait FromGlibPtrContainer<P: PtrExt + Copy, PP: PtrExt + Copy>: Sized + PhantomFn<P> {
     /// Borrow the references
-    unsafe fn borrow(ptr: GT) -> Self;
+    unsafe fn borrow(ptr: PP) -> Self;
 
     /// Borrow the references with an advised expected number
-    unsafe fn borrow_num(ptr: GT, _num: usize) -> Self;
+    unsafe fn borrow_num(ptr: PP, _num: usize) -> Self;
 
     /// Take ownership of the container but borrow its contents
-    unsafe fn take_outer(ptr: GT) -> Self;
+    unsafe fn take_outer(ptr: PP) -> Self;
 
     /// Take ownership of the container but borrow its contents with an advised expected number
-    unsafe fn take_outer_num(ptr: GT, _num: usize) -> Self;
+    unsafe fn take_outer_num(ptr: PP, _num: usize) -> Self;
 
     /// Take ownership of the references
-    unsafe fn take(ptr: GT) -> Self;
+    unsafe fn take(ptr: PP) -> Self;
 
     /// Take ownership of the references with an advised expected number
-    unsafe fn take_num(ptr: GT, _num: usize) -> Self;
+    unsafe fn take_num(ptr: PP, _num: usize) -> Self;
 }
 
 unsafe fn c_array_len<P: PtrExt + Copy>(mut ptr: *const P) -> usize {
@@ -299,15 +317,15 @@ unsafe fn c_array_len<P: PtrExt + Copy>(mut ptr: *const P) -> usize {
     len
 }
 
-impl <T: FromGlibPtrNotNull>
-FromGlibPtrContainer<*const <T as FromGlibPtrNotNull>::GlibType>
+impl <P: PtrExt + Copy, T: FromGlibPtrNotNull<P>>
+FromGlibPtrContainer<P, *const P>
 for Vec<T> {
-    unsafe fn borrow(ptr: *const <T as FromGlibPtrNotNull>::GlibType) -> Vec<T> {
+    unsafe fn borrow(ptr: *const P) -> Vec<T> {
         let num = c_array_len(ptr);
         FromGlibPtrContainer::borrow_num(ptr, num)
     }
 
-    unsafe fn borrow_num(mut ptr: *const <T as FromGlibPtrNotNull>::GlibType,
+    unsafe fn borrow_num(mut ptr: *const P,
                          num: usize) -> Vec<T> {
         if num == 0 || ptr.is_null() {
             return Vec::new()
@@ -320,24 +338,24 @@ for Vec<T> {
         res
     }
 
-    unsafe fn take_outer(ptr: *const <T as FromGlibPtrNotNull>::GlibType) -> Vec<T> {
+    unsafe fn take_outer(ptr: *const P) -> Vec<T> {
         let num = c_array_len(ptr);
         FromGlibPtrContainer::take_outer_num(ptr, num)
     }
 
-    unsafe fn take_outer_num(ptr: *const <T as FromGlibPtrNotNull>::GlibType,
+    unsafe fn take_outer_num(ptr: *const P,
                              num: usize) -> Vec<T> {
         let res = FromGlibPtrContainer::borrow_num(ptr, num);
         ffi::g_free(ptr as *mut _);
         res
     }
 
-    unsafe fn take(ptr: *const <T as FromGlibPtrNotNull>::GlibType) -> Vec<T> {
+    unsafe fn take(ptr: *const P) -> Vec<T> {
         let num = c_array_len(ptr);
         FromGlibPtrContainer::take_num(ptr, num)
     }
 
-    unsafe fn take_num(mut ptr: *const <T as FromGlibPtrNotNull>::GlibType,
+    unsafe fn take_num(mut ptr: *const P,
                        num: usize) -> Vec<T> {
         if num == 0 || ptr.is_null() {
             return Vec::new()
@@ -361,7 +379,7 @@ unsafe fn slist_len(mut ptr: *mut ffi::C_GSList) -> usize {
     len
 }
 
-impl <T: FromGlibPtrNotNull> FromGlibPtrContainer<*mut ffi::C_GSList> for Vec<T> {
+impl <P: PtrExt + Copy, T: FromGlibPtrNotNull<P>> FromGlibPtrContainer<P, *mut ffi::C_GSList> for Vec<T> {
     unsafe fn borrow(ptr: *mut ffi::C_GSList) -> Vec<T> {
         let num = slist_len(ptr);
         FromGlibPtrContainer::borrow_num(ptr, num)
@@ -373,7 +391,7 @@ impl <T: FromGlibPtrNotNull> FromGlibPtrContainer<*mut ffi::C_GSList> for Vec<T>
         }
         let mut res = Vec::with_capacity(num);
         while !ptr.is_null() {
-            let mut item_ptr: <T as FromGlibPtrNotNull>::GlibType = mem::uninitialized();
+            let mut item_ptr: P = mem::uninitialized();
             // item_ptr is a pointer but the compiler doesn't know
             let hack: *mut *mut c_void = mem::transmute(&mut item_ptr);
             *hack = (*ptr).data;
@@ -410,7 +428,7 @@ impl <T: FromGlibPtrNotNull> FromGlibPtrContainer<*mut ffi::C_GSList> for Vec<T>
         let orig_ptr = ptr;
         let mut res = Vec::with_capacity(num);
         while !ptr.is_null() {
-            let mut item_ptr: <T as FromGlibPtrNotNull>::GlibType = mem::uninitialized();
+            let mut item_ptr: P = mem::uninitialized();
             // item_ptr is a pointer but the compiler doesn't know
             let hack: *mut *mut c_void = mem::transmute(&mut item_ptr);
             *hack = (*ptr).data;
@@ -435,7 +453,7 @@ unsafe fn list_len(mut ptr: *mut ffi::C_GList) -> usize {
     len
 }
 
-impl <T: FromGlibPtrNotNull> FromGlibPtrContainer<*mut ffi::C_GList> for Vec<T> {
+impl <P: PtrExt + Copy, T: FromGlibPtrNotNull<P>> FromGlibPtrContainer<P, *mut ffi::C_GList> for Vec<T> {
     unsafe fn borrow(ptr: *mut ffi::C_GList) -> Vec<T> {
         let num = list_len(ptr);
         FromGlibPtrContainer::borrow_num(ptr, num)
@@ -447,7 +465,7 @@ impl <T: FromGlibPtrNotNull> FromGlibPtrContainer<*mut ffi::C_GList> for Vec<T> 
         }
         let mut res = Vec::with_capacity(num);
         while !ptr.is_null() {
-            let mut item_ptr: <T as FromGlibPtrNotNull>::GlibType = mem::uninitialized();
+            let mut item_ptr: P = mem::uninitialized();
             // item_ptr is a pointer but the compiler doesn't know
             let hack: *mut *mut c_void = mem::transmute(&mut item_ptr);
             *hack = (*ptr).data;
@@ -484,7 +502,7 @@ impl <T: FromGlibPtrNotNull> FromGlibPtrContainer<*mut ffi::C_GList> for Vec<T> 
         let orig_ptr = ptr;
         let mut res = Vec::with_capacity(num);
         while !ptr.is_null() {
-            let mut item_ptr: <T as FromGlibPtrNotNull>::GlibType = mem::uninitialized();
+            let mut item_ptr: P = mem::uninitialized();
             // item_ptr is a pointer but the compiler doesn't know
             let hack: *mut *mut c_void = mem::transmute(&mut item_ptr);
             *hack = (*ptr).data;
