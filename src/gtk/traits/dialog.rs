@@ -14,9 +14,8 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use std::ptr;
-use std::ffi::CString;
-use libc::c_void;
-use glib::translate::{ToGlibPtr, ToTmp};
+use libc::c_char;
+use glib::translate::ToGlibPtr;
 use gtk::cast::GTK_DIALOG;
 use gtk::ffi;
 use gtk;
@@ -32,12 +31,18 @@ use gtk;
 ///                      [("Ok", ResponseType::Accept), ("Cancel", ResponseType::Cancel)]);
 /// ```
 pub trait DialogButtons {
-    unsafe fn invoke1<A0, R>(&self, f: unsafe extern "C" fn(A0, ...) -> R,
-                             a0: A0) -> R;
-    unsafe fn invoke2<A0, A1, R>(&self, f: unsafe extern "C" fn(A0, A1, ...) -> R,
-                                 a0: A0, a1: A1) -> R;
-    unsafe fn invoke3<A0, A1, A2, R>(&self, f: unsafe extern "C" fn(A0, A1, A2, ...) -> R,
-                                     a0: A0, a1: A1, a2: A2) -> R;
+    unsafe fn invoke1<A0, R>(
+        &self,
+        f: unsafe extern "C" fn(A0, *const c_char, ...) -> R,
+        a0: A0) -> R;
+    unsafe fn invoke2<A0, A1, R>(
+        &self,
+        f: unsafe extern "C" fn(A0, A1, *const c_char, ...) -> R,
+        a0: A0, a1: A1) -> R;
+    unsafe fn invoke3<A0, A1, A2, R>(
+        &self,
+        f: unsafe extern "C" fn(A0, A1, A2, *const c_char, ...) -> R,
+        a0: A0, a1: A1, a2: A2) -> R;
 }
 
 /// Predefined popular button combinations
@@ -57,66 +62,116 @@ pub mod buttons {
 }
 
 macro_rules! impl_dialog_buttons {
-    () => ();
-    ($nn:expr, $($n:expr,)*) => (
+    // Work around Rust bug #22897
+    ($n:expr,) => (
+        impl <'a> DialogButtons for [(&'a str, i32); 0] {
+            unsafe fn invoke1<A0, R>(
+                    &self,
+                    f: unsafe extern "C" fn(A0, *const c_char, ...) -> R,
+                    a0: A0) -> R {
+                f(a0, ptr::null())
+            }
+
+            unsafe fn invoke2<A0, A1, R>(
+                    &self,
+                    f: unsafe extern "C" fn(A0, A1, *const c_char, ...) -> R,
+                    a0: A0, a1: A1) -> R {
+                f(a0, a1, ptr::null())
+            }
+
+            unsafe fn invoke3<A0, A1, A2, R>(
+                    &self,
+                    f: unsafe extern "C" fn(A0, A1, A2, *const c_char, ...) -> R,
+                    a0: A0, a1: A1, a2: A2) -> R {
+                f(a0, a1, a2, ptr::null())
+            }
+        }
+
+        impl <'a> DialogButtons for [(&'a str, gtk::ResponseType); 0] {
+            unsafe fn invoke1<A0, R>(
+                    &self,
+                    f: unsafe extern "C" fn(A0, *const c_char, ...) -> R,
+                    a0: A0) -> R {
+                f(a0, ptr::null())
+            }
+
+            unsafe fn invoke2<A0, A1, R>(
+                        &self,
+                        f: unsafe extern "C" fn(A0, A1, *const c_char, ...) -> R,
+                        a0: A0, a1: A1) -> R {
+                f(a0, a1, ptr::null())
+            }
+
+            unsafe fn invoke3<A0, A1, A2, R>(
+                    &self,
+                    f: unsafe extern "C" fn(A0, A1, A2, *const c_char, ...) -> R,
+                    a0: A0, a1: A1, a2: A2) -> R {
+                f(a0, a1, a2, ptr::null())
+            }
+        }
+    );
+
+    ($nn:expr, $($n:expr,)+) => (
+        impl_dialog_buttons!($($n,)+);
+
         impl <'a> DialogButtons for [(&'a str, i32); $nn] {
-            #![allow(unused_variables)]
-            #![allow(unused_mut)]
-
-            unsafe fn invoke1<A0, R>(&self, f: unsafe extern "C" fn(A0, ...) -> R,
-                                      a0: A0) -> R {
-                let mut tmp_0: [CString; $nn] = [$(self[$n].0.to_tmp_for_borrow()),*];
+            unsafe fn invoke1<A0, R>(
+                    &self,
+                    f: unsafe extern "C" fn(A0, *const c_char, ...) -> R,
+                    a0: A0) -> R {
                 // reverse the order
-                let tmp_1: [i32; $nn] = [$(self[$n].1),*];
-                f(a0, $(tmp_0[$n].to_glib_ptr(), tmp_1[$n],)* ptr::null::<c_void>())
+                let tmp_0 = [$(self[$n].0.borrow_to_glib()),+];
+                let tmp_1 = [$(self[$n].1),+];
+                f(a0, $(tmp_0[$n].0, tmp_1[$n],)+ ptr::null::<c_char>())
             }
 
-            unsafe fn invoke2<A0, A1, R>(&self, f: unsafe extern "C" fn(A0, A1, ...) -> R,
-                                      a0: A0, a1: A1) -> R {
-                let mut tmp_0: [CString; $nn] = [$(self[$n].0.to_tmp_for_borrow()),*];
-                let tmp_1: [i32; $nn] = [$(self[$n].1),*];
-                f(a0, a1, $(tmp_0[$n].to_glib_ptr(), tmp_1[$n],)* ptr::null::<c_void>())
+            unsafe fn invoke2<A0, A1, R>(
+                    &self,
+                    f: unsafe extern "C" fn(A0, A1, *const c_char, ...) -> R,
+                    a0: A0, a1: A1) -> R {
+                let tmp_0 = [$(self[$n].0.borrow_to_glib()),+];
+                let tmp_1 = [$(self[$n].1),+];
+                f(a0, a1, $(tmp_0[$n].0, tmp_1[$n],)+ ptr::null::<c_char>())
             }
 
-            unsafe fn invoke3<A0, A1, A2, R>(&self, f: unsafe extern "C" fn(A0, A1, A2, ...) -> R,
-                                      a0: A0, a1: A1, a2: A2) -> R {
-                let mut tmp_0: [CString; $nn] = [$(self[$n].0.to_tmp_for_borrow()),*];
-                let tmp_1: [i32; $nn] = [$(self[$n].1),*];
-                f(a0, a1, a2, $(tmp_0[$n].to_glib_ptr(), tmp_1[$n],)* ptr::null::<c_void>())
+            unsafe fn invoke3<A0, A1, A2, R>(
+                    &self,
+                    f: unsafe extern "C" fn(A0, A1, A2, *const c_char, ...) -> R,
+                    a0: A0, a1: A1, a2: A2) -> R {
+                let tmp_0 = [$(self[$n].0.borrow_to_glib()),+];
+                let tmp_1 = [$(self[$n].1),+];
+                f(a0, a1, a2, $(tmp_0[$n].0, tmp_1[$n],)+ ptr::null::<c_char>())
             }
-
         }
 
         impl <'a> DialogButtons for [(&'a str, gtk::ResponseType); $nn] {
-            #![allow(unused_variables)]
-            #![allow(unused_mut)]
-
-            unsafe fn invoke1<A0, R>(&self, f: unsafe extern "C" fn(A0, ...) -> R,
-                                      a0: A0) -> R {
-                let mut tmp_0: [CString; $nn] = [$(self[$n].0.to_tmp_for_borrow()),*];
-                // reverse the order
-                let tmp_1: [i32; $nn] = [$(self[$n].1 as i32),*];
-                f(a0, $(tmp_0[$n].to_glib_ptr(), tmp_1[$n],)* ptr::null::<c_void>())
+            unsafe fn invoke1<A0, R>(
+                    &self,
+                    f: unsafe extern "C" fn(A0, *const c_char, ...) -> R,
+                    a0: A0) -> R {
+                let tmp_0 = [$(self[$n].0.borrow_to_glib()),+];
+                let tmp_1 = [$(self[$n].1 as i32),+];
+                f(a0, $(tmp_0[$n].0, tmp_1[$n],)+ ptr::null::<c_char>())
             }
 
-            unsafe fn invoke2<A0, A1, R>(&self, f: unsafe extern "C" fn(A0, A1, ...) -> R,
-                                      a0: A0, a1: A1) -> R {
-                let mut tmp_0: [CString; $nn] = [$(self[$n].0.to_tmp_for_borrow()),*];
-                let tmp_1: [i32; $nn] = [$(self[$n].1 as i32),*];
-                f(a0, a1, $(tmp_0[$n].to_glib_ptr(), tmp_1[$n],)* ptr::null::<c_void>())
+            unsafe fn invoke2<A0, A1, R>(
+                    &self,
+                    f: unsafe extern "C" fn(A0, A1, *const c_char, ...) -> R,
+                    a0: A0, a1: A1) -> R {
+                let tmp_0 = [$(self[$n].0.borrow_to_glib()),+];
+                let tmp_1 = [$(self[$n].1 as i32),+];
+                f(a0, a1, $(tmp_0[$n].0, tmp_1[$n],)+ ptr::null::<c_char>())
             }
 
-            unsafe fn invoke3<A0, A1, A2, R>(&self, f: unsafe extern "C" fn(A0, A1, A2, ...) -> R,
-                                      a0: A0, a1: A1, a2: A2) -> R {
-                let mut tmp_0: [CString; $nn] = [$(self[$n].0.to_tmp_for_borrow()),*];
-                let tmp_1: [i32; $nn] = [$(self[$n].1 as i32),*];
-                f(a0, a1, a2, $(tmp_0[$n].to_glib_ptr(), tmp_1[$n],)* ptr::null::<c_void>())
+            unsafe fn invoke3<A0, A1, A2, R>(
+                    &self,
+                    f: unsafe extern "C" fn(A0, A1, A2, *const c_char, ...) -> R,
+                    a0: A0, a1: A1, a2: A2) -> R {
+                let tmp_0 = [$(self[$n].0.borrow_to_glib()),+];
+                let tmp_1 = [$(self[$n].1 as i32),+];
+                f(a0, a1, a2, $(tmp_0[$n].0, tmp_1[$n],)+ ptr::null::<c_char>())
             }
-
         }
-
-
-        impl_dialog_buttons!($($n,)*);
     )
 }
 

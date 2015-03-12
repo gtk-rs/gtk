@@ -1264,6 +1264,7 @@ extern "C" {
     pub fn gtk_file_chooser_dialog_new         (title: *const c_char,
                                                 parent: *mut C_GtkWindow,
                                                 action: enums::FileChooserAction,
+                                                first_button_text: *const c_char,
                                                 ...) -> *mut C_GtkWidget;
 
     //=========================================================================
@@ -1804,11 +1805,14 @@ extern "C" {
     pub fn gtk_dialog_new_with_buttons         (title: *const c_char,
                                                 parent: *mut C_GtkWindow,
                                                 flags: enums::DialogFlags,
+                                                first_button_text: *const c_char,
                                                 ...) -> *mut C_GtkWidget;
     pub fn gtk_dialog_run                      (dialog: *mut C_GtkDialog) -> i32;
     pub fn gtk_dialog_response                 (dialog: *mut C_GtkDialog, response_id: i32) -> ();
     pub fn gtk_dialog_add_button               (dialog: *mut C_GtkDialog, button_text: *const c_char, response_id: i32) -> *mut C_GtkWidget;
-    pub fn gtk_dialog_add_buttons              (dialog: *mut C_GtkDialog, ...);
+    pub fn gtk_dialog_add_buttons              (dialog: *mut C_GtkDialog,
+                                                first_button_text: *const c_char,
+                                                ...);
     pub fn gtk_dialog_add_action_widget        (dialog: *mut C_GtkDialog, child: *mut C_GtkWidget, response_id: i32) -> ();
     pub fn gtk_dialog_set_default_response     (dialog: *mut C_GtkDialog, response_id: i32) -> ();
     pub fn gtk_dialog_set_response_sensitive   (dialog: *mut C_GtkDialog, response_id: i32, setting: Gboolean) -> ();
