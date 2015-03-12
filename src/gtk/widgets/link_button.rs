@@ -15,7 +15,7 @@
 
 //! Create buttons bound to a URL
 
-use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr};
 use gtk::cast::GTK_LINKBUTTON;
 use gtk::{self, ffi};
 use glib::{to_bool, to_gboolean};
@@ -30,17 +30,14 @@ struct_Widget!(LinkButton);
 impl LinkButton {
     pub fn new(uri: &str) -> Option<LinkButton> {
         let tmp_pointer = unsafe {
-            let mut tmp_uri = uri.to_tmp_for_borrow();
-            ffi::gtk_link_button_new(tmp_uri.to_glib_ptr())
+            ffi::gtk_link_button_new(uri.borrow_to_glib().0)
         };
         check_pointer!(tmp_pointer, LinkButton)
     }
 
     pub fn new_with_label(uri: &str, label: &str) -> Option<LinkButton> {
         let tmp_pointer = unsafe {
-            let mut tmp_uri = uri.to_tmp_for_borrow();
-            let mut tmp_label = label.to_tmp_for_borrow();
-            ffi::gtk_link_button_new_with_label(tmp_uri.to_glib_ptr(), tmp_label.to_glib_ptr())
+            ffi::gtk_link_button_new_with_label(uri.borrow_to_glib().0, label.borrow_to_glib().0)
         };
         check_pointer!(tmp_pointer, LinkButton)
     }
@@ -54,8 +51,7 @@ impl LinkButton {
 
     pub fn set_uri(&mut self, uri: &str) -> () {
         unsafe {
-            let mut tmp_uri = uri.to_tmp_for_borrow();
-            ffi::gtk_link_button_set_uri(GTK_LINKBUTTON(self.pointer), tmp_uri.to_glib_ptr())
+            ffi::gtk_link_button_set_uri(GTK_LINKBUTTON(self.pointer), uri.borrow_to_glib().0)
         }
     }
 

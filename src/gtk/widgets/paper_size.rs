@@ -14,7 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::{self, ffi};
-use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr};
 use glib::{to_bool, to_gboolean};
 use gtk::FFIWidget;
 use gtk::cast::{GTK_PAPER_SIZE};
@@ -26,8 +26,7 @@ struct_Widget!(PaperSize);
 impl PaperSize {
     pub fn new(name: &str) -> Option<PaperSize> {
         let tmp_pointer = unsafe {
-            let mut tmp_name = name.to_tmp_for_borrow();
-            ffi::gtk_paper_size_new(tmp_name.to_glib_ptr())
+            ffi::gtk_paper_size_new(name.borrow_to_glib().0)
         };
 
         if tmp_pointer.is_null() {
@@ -39,10 +38,8 @@ impl PaperSize {
 
     pub fn new_from_ppd(ppd_name: &str, ppd_display_name: &str, width: f64, height: f64) -> Option<PaperSize> {
         let tmp_pointer = unsafe {
-            let mut tmp_ppd_name = ppd_name.to_tmp_for_borrow();
-            let mut tmp_ppd_display_name = ppd_display_name.to_tmp_for_borrow();
-            ffi::gtk_paper_size_new_from_ppd(tmp_ppd_name.to_glib_ptr(),
-                                             tmp_ppd_display_name.to_glib_ptr(),
+            ffi::gtk_paper_size_new_from_ppd(ppd_name.borrow_to_glib().0,
+                                             ppd_display_name.borrow_to_glib().0,
                                              width, height)
         };
 
@@ -55,10 +52,8 @@ impl PaperSize {
 
     pub fn new_custom(name: &str, display_name: &str, width: f64, height: f64, unit: gtk::Unit) -> Option<PaperSize> {
         let tmp_pointer = unsafe {
-            let mut tmp_name = name.to_tmp_for_borrow();
-            let mut tmp_display_name = display_name.to_tmp_for_borrow();
-            ffi::gtk_paper_size_new_custom(tmp_name.to_glib_ptr(),
-                                           tmp_display_name.to_glib_ptr(),
+            ffi::gtk_paper_size_new_custom(name.borrow_to_glib().0,
+                                           display_name.borrow_to_glib().0,
                                            width, height, unit)
         };
 

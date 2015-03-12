@@ -15,7 +15,7 @@
 
 use libc::c_float;
 
-use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr};
 use gtk::ShadowType;
 use gtk::cast::GTK_FRAME;
 use gtk::{self, ffi};
@@ -23,9 +23,8 @@ use gtk::{self, ffi};
 pub trait FrameTrait: gtk::WidgetTrait + gtk::ContainerTrait {
     fn set_label(&mut self, label: Option<&str>) -> () {
         unsafe {
-            let mut tmp_label = label.to_tmp_for_borrow();
             ffi::gtk_frame_set_label(GTK_FRAME(self.unwrap_widget()),
-                                     tmp_label.to_glib_ptr());
+                                     label.borrow_to_glib().0);
         }
     }
 

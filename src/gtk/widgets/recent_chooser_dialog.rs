@@ -14,7 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use std::ptr;
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::ToGlibPtr;
 use gtk::{self, ffi};
 use gtk::FFIWidget;
 use gtk::ResponseType;
@@ -24,9 +24,6 @@ struct_Widget!(RecentChooserDialog);
 
 impl RecentChooserDialog {
     pub fn new(title: &str, parent: Option<gtk::Window>) -> Option<RecentChooserDialog> {
-        let mut tmp_title = title.to_tmp_for_borrow();
-        let mut tmp_ok = "Ok".to_tmp_for_borrow();
-        let mut tmp_cancel = "Cancel".to_tmp_for_borrow();
         let parent = match parent {
             Some(ref p) => GTK_WINDOW(p.unwrap_widget()),
             None => ptr::null_mut()
@@ -34,9 +31,9 @@ impl RecentChooserDialog {
 
         let tmp_pointer = unsafe {
             ffi::gtk_recent_chooser_dialog_new(
-                tmp_title.to_glib_ptr(), parent,
-                tmp_ok.to_glib_ptr(), ResponseType::Ok,
-                tmp_cancel.to_glib_ptr(), ResponseType::Cancel,
+                title.borrow_to_glib().0, parent,
+                "Ok".borrow_to_glib().0, ResponseType::Ok,
+                "Cancel".borrow_to_glib().0, ResponseType::Cancel,
                 ptr::null::<()>())
         };
 
@@ -48,9 +45,6 @@ impl RecentChooserDialog {
     }
 
     pub fn new_for_manager(title: &str, parent: Option<gtk::Window>, manager: &gtk::RecentManager) -> Option<RecentChooserDialog> {
-        let mut tmp_title = title.to_tmp_for_borrow();
-        let mut tmp_ok = "Ok".to_tmp_for_borrow();
-        let mut tmp_cancel = "Cancel".to_tmp_for_borrow();
         let parent = match parent {
             Some(ref p) => GTK_WINDOW(p.unwrap_widget()),
             None => ptr::null_mut()
@@ -58,10 +52,10 @@ impl RecentChooserDialog {
 
         let tmp_pointer = unsafe {
             ffi::gtk_recent_chooser_dialog_new_for_manager(
-                tmp_title.to_glib_ptr(), parent,
+                title.borrow_to_glib().0, parent,
                 GTK_RECENT_MANAGER(manager.unwrap_widget()),
-                tmp_ok.to_glib_ptr(), ResponseType::Ok,
-                tmp_cancel.to_glib_ptr(), ResponseType::Cancel,
+                "Ok".borrow_to_glib().0, ResponseType::Ok,
+                "Cancel".borrow_to_glib().0, ResponseType::Cancel,
                 ptr::null::<()>())
         };
 

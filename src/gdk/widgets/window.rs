@@ -16,10 +16,9 @@
 //! Windows — Onscreen display areas in the target window system
 
 use gdk::{self, ffi};
-use libc::{c_int};
-use std::ffi::CString;
+use libc::{c_int, c_char};
 use std::ptr;
-use glib::translate::{StackBox, ToGlib, ToGlibPtr, ToTmp, from_glib};
+use glib::translate::{Stash, ToGlib, ToGlibPtr, from_glib};
 
 /// Attributes to use for a newly-created window.
 pub struct WindowAttr {
@@ -63,14 +62,14 @@ impl WindowAttr {
     }
 }
 
-impl ToTmp for WindowAttr {
-    type Tmp = StackBox<ffi::C_GdkWindowAttr, Option<CString>>;
+impl <'a> ToGlibPtr<'a, *mut ffi::C_GdkWindowAttr> for WindowAttr {
+    type Storage = (Box<ffi::C_GdkWindowAttr>, Stash<'a, *const c_char, Option<String>>);
 
-    fn to_tmp_for_borrow(&self) -> StackBox<ffi::C_GdkWindowAttr, Option<CString>> {
-        let mut tmp_title = self.title.to_tmp_for_borrow();
+    fn borrow_to_glib(&'a self) -> Stash<*mut ffi::C_GdkWindowAttr, WindowAttr> {
+        let title = self.title.borrow_to_glib();
 
-        let attrs = ffi::C_GdkWindowAttr {
-            title: tmp_title.to_glib_ptr(),
+        let mut attrs = Box::new(ffi::C_GdkWindowAttr {
+            title: title.0,
             event_mask: self.event_mask,
             x: self.x.unwrap_or(0),
             y: self.y.unwrap_or(0),
@@ -84,9 +83,9 @@ impl ToTmp for WindowAttr {
             wmclass_class: ptr::null(),
             override_redirect: self.override_redirect.to_glib(),
             type_hint: self.type_hint.unwrap_or(gdk::WindowTypeHint::Normal),
-        };
+        });
 
-        StackBox(attrs, tmp_title)
+        Stash(&mut *attrs, (attrs, title))
     }
 }
 
@@ -101,8 +100,7 @@ impl Window {
             Some(s) => s.unwrap_pointer(),
             None => ::std::ptr::null_mut()
         };
-        let mut tmp_attributes = attributes.to_tmp_for_borrow();
-        let tmp = unsafe { ffi::gdk_window_new(t_parent, tmp_attributes.to_glib_ptr(), attributes.get_mask()) };
+        let tmp = unsafe { ffi::gdk_window_new(t_parent, attributes.borrow_to_glib().0, attributes.get_mask()) };
 
         if tmp.is_null() {
             None
@@ -424,8 +422,7 @@ impl Window {
 
     pub fn set_title(&self, title: &str) {
         unsafe {
-            let mut tmp_title = title.to_tmp_for_borrow();
-            ffi::gdk_window_set_title(self.pointer, tmp_title.to_glib_ptr())
+            ffi::gdk_window_set_title(self.pointer, title.borrow_to_glib().0)
         }
     }
 
@@ -587,8 +584,7 @@ impl Window {
 
     pub fn set_icon_name(&self, name: &str) {
         unsafe {
-            let mut tmp_name = name.to_tmp_for_borrow();
-            ffi::gdk_window_set_icon_name(self.pointer, tmp_name.to_glib_ptr())
+            ffi::gdk_window_set_icon_name(self.pointer, name.borrow_to_glib().0)
         }
     }
 
@@ -598,15 +594,13 @@ impl Window {
 
     pub fn set_role(&self, role: &str) {
         unsafe {
-            let mut tmp_role = role.to_tmp_for_borrow();
-            ffi::gdk_window_set_role(self.pointer, tmp_role.to_glib_ptr())
+            ffi::gdk_window_set_role(self.pointer, role.borrow_to_glib().0)
         }
     }
 
     pub fn set_startup_id(&self, startup_id: &str) {
         unsafe {
-            let mut tmp_startup_id = startup_id.to_tmp_for_borrow();
-            ffi::gdk_window_set_startup_id(self.pointer, tmp_startup_id.to_glib_ptr())
+            ffi::gdk_window_set_startup_id(self.pointer, startup_id.borrow_to_glib().0)
         }
     }
 

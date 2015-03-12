@@ -16,7 +16,7 @@
 use gtk::ffi::{self, C_GtkBuilder};
 use libc::{c_char, c_long};
 use gtk::traits::GObjectTrait;
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::ToGlibPtr;
 
 #[repr(C)]
 #[derive(Copy)]
@@ -39,8 +39,7 @@ impl Builder {
 
     pub fn new_from_file(file_name: &str) -> Option<Builder> {
         let tmp = unsafe {
-            let mut tmp_file_name = file_name.to_tmp_for_borrow();
-            ffi::gtk_builder_new_from_file(tmp_file_name.to_glib_ptr())
+            ffi::gtk_builder_new_from_file(file_name.borrow_to_glib().0)
         };
 
         if tmp.is_null() {
@@ -54,8 +53,7 @@ impl Builder {
 
     pub fn new_from_resource(resource_path: &str) -> Option<Builder> {
         let tmp = unsafe {
-            let mut tmp_resource_path = resource_path.to_tmp_for_borrow();
-            ffi::gtk_builder_new_from_resource(tmp_resource_path.to_glib_ptr())
+            ffi::gtk_builder_new_from_resource(resource_path.borrow_to_glib().0)
         };
 
         if tmp.is_null() {
@@ -85,8 +83,7 @@ impl Builder {
 
     pub fn get_object<T: GObjectTrait>(&self, name: &str) -> Option<T> {
         let tmp = unsafe {
-            let mut tmp_name = name.to_tmp_for_borrow();
-            ffi::gtk_builder_get_object(self.pointer, tmp_name.to_glib_ptr())
+            ffi::gtk_builder_get_object(self.pointer, name.borrow_to_glib().0)
         };
 
         if tmp.is_null() {

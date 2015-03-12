@@ -17,7 +17,7 @@ extern crate libc;
 
 use gtk::ffi;
 use libc::{c_char};
-use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr};
 
 #[derive(Copy)]
 pub struct TreePath {
@@ -38,9 +38,8 @@ impl TreePath {
     }
 
     pub fn new_from_string(path: &str) -> Option<TreePath> {
-        let mut tmp_path = path.to_tmp_for_borrow();
         let tmp = unsafe {
-            ffi::gtk_tree_path_new_from_string(tmp_path.to_glib_ptr())
+            ffi::gtk_tree_path_new_from_string(path.borrow_to_glib().0)
         };
 
         if tmp.is_null() {

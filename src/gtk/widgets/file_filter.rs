@@ -14,7 +14,7 @@
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
 use gtk::ffi;
-use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr};
 
 pub struct FileFilter {
     pointer : *mut ffi::C_GtkFileFilter
@@ -33,8 +33,7 @@ impl FileFilter {
 
     pub fn set_name(&self, name: &str) -> () {
         unsafe {
-            let mut tmp_name = name.to_tmp_for_borrow();
-            ffi::gtk_file_filter_set_name(self.pointer, tmp_name.to_glib_ptr())
+            ffi::gtk_file_filter_set_name(self.pointer, name.borrow_to_glib().0)
         };
     }
 
@@ -47,15 +46,13 @@ impl FileFilter {
 
     pub fn add_mime_type(&self, mime_type: &str) -> () {
         unsafe {
-            let mut tmp_mime_type = mime_type.to_tmp_for_borrow();
-            ffi::gtk_file_filter_add_mime_type(self.pointer, tmp_mime_type.to_glib_ptr())
+            ffi::gtk_file_filter_add_mime_type(self.pointer, mime_type.borrow_to_glib().0)
         };
     }
 
     pub fn add_pattern(&self, pattern: &str) -> () {
         unsafe {
-            let mut tmp_pattern = pattern.to_tmp_for_borrow();
-            ffi::gtk_file_filter_add_pattern(self.pointer, tmp_pattern.to_glib_ptr())
+            ffi::gtk_file_filter_add_pattern(self.pointer, pattern.borrow_to_glib().0)
         };
     }
 

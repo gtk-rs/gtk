@@ -17,7 +17,7 @@
 
 use gdk::{self, ffi};
 use libc::{c_uint};
-use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr};
 use glib::to_bool;
 
 #[repr(C)]
@@ -29,8 +29,7 @@ pub struct Display {
 impl Display {
     pub fn open(display_name: &str) -> Option<Display> {
         let tmp = unsafe {
-            let mut tmp_display_name = display_name.to_tmp_for_borrow();
-            ffi::gdk_display_open(tmp_display_name.to_glib_ptr())
+            ffi::gdk_display_open(display_name.borrow_to_glib().0)
         };
 
         if tmp.is_null() {
@@ -218,8 +217,7 @@ impl Display {
 
     pub fn notify_startup_complete(&self, startup_id: &str) {
         unsafe {
-            let mut tmp_startup_id = startup_id.to_tmp_for_borrow();
-            ffi::gdk_display_notify_startup_complete(self.pointer, tmp_startup_id.to_glib_ptr())
+            ffi::gdk_display_notify_startup_complete(self.pointer, startup_id.borrow_to_glib().0)
         }
     }
 }

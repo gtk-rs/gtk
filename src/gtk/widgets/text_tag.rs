@@ -16,7 +16,7 @@
 //! GtkTextTag — A tag that can be applied to text in a GtkTextBuffer
 
 use gtk::ffi;
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::ToGlibPtr;
 
 #[derive(Copy)]
 pub struct TextTag {
@@ -26,8 +26,7 @@ pub struct TextTag {
 impl TextTag {
     pub fn new(name: &str) -> Option<TextTag> {
         let tmp_pointer = unsafe {
-            let mut tmp_name = name.to_tmp_for_borrow();
-            ffi::gtk_text_tag_new(tmp_name.to_glib_ptr())
+            ffi::gtk_text_tag_new(name.borrow_to_glib().0)
         };
 
         if tmp_pointer.is_null() {

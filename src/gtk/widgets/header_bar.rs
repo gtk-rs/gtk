@@ -19,7 +19,7 @@
 
 use gtk::cast::{GTK_HEADER_BAR};
 use gtk::{self, ffi};
-use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr};
 use glib::{to_bool, to_gboolean};
 
 /// GtkHeaderBar — A Box::new(with) a centered child
@@ -33,9 +33,8 @@ impl HeaderBar {
 
     pub fn set_title(&mut self, title: &str) {
         unsafe {
-            let mut tmp_title = title.to_tmp_for_borrow();
             ffi::gtk_header_bar_set_title(GTK_HEADER_BAR(self.pointer),
-                                          tmp_title.to_glib_ptr())
+                                          title.borrow_to_glib().0)
         }
     }
 
@@ -48,9 +47,8 @@ impl HeaderBar {
 
     pub fn set_subtitle(&mut self, subtitle: &str) {
         unsafe {
-            let mut tmp_subtitle = subtitle.to_tmp_for_borrow();
             ffi::gtk_header_bar_set_subtitle(GTK_HEADER_BAR(self.pointer),
-                                             tmp_subtitle.to_glib_ptr())
+                                             subtitle.borrow_to_glib().0)
         }
     }
 

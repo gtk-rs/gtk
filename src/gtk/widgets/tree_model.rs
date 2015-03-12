@@ -15,7 +15,7 @@
 
 use libc::c_char;
 use glib::{Value, Type};
-use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp, from_glib};
+use glib::translate::{FromGlibPtr, ToGlibPtr, from_glib};
 use gtk::{self, ffi, TreeIter, TreePath};
 
 pub struct TreeModel {
@@ -43,8 +43,7 @@ impl TreeModel {
     }
 
     pub fn get_iter_from_string(&self, iter: &mut TreeIter, path_string: &str) -> bool {
-        let mut tmp_path_string = path_string.to_tmp_for_borrow();
-        match unsafe { ffi::gtk_tree_model_get_iter_from_string(self.pointer, iter.unwrap_pointer(), tmp_path_string.to_glib_ptr()) } {
+        match unsafe { ffi::gtk_tree_model_get_iter_from_string(self.pointer, iter.unwrap_pointer(), path_string.borrow_to_glib().0) } {
                 0 => false,
                 _ => true
             }

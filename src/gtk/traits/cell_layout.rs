@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::ToGlibPtr;
 use gtk::{self, ffi};
 use gtk::cast::{GTK_CELL_LAYOUT, GTK_CELL_RENDERER};
 use glib;
@@ -69,11 +69,10 @@ pub trait CellLayoutTrait: gtk::WidgetTrait {
 
     fn add_attribute<T: gtk::CellRendererTrait>(&self, cell: &T, attribute: &str, column: i32) {
         unsafe {
-            let mut tmp_attribute = attribute.to_tmp_for_borrow();
             ffi::gtk_cell_layout_add_attribute(
                 GTK_CELL_LAYOUT(self.unwrap_widget()),
                 GTK_CELL_RENDERER(cell.unwrap_widget()),
-                tmp_attribute.to_glib_ptr(),
+                attribute.borrow_to_glib().0,
                 column)
             }
     }

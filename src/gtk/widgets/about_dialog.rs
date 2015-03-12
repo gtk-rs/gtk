@@ -18,7 +18,7 @@ use gtk::{self, ffi};
 use glib::{to_bool, to_gboolean};
 use gtk::FFIWidget;
 use gtk::cast::GTK_ABOUT_DIALOG;
-use glib::translate::{FromGlibPtr, FromGlibPtrContainer, ToGlibPtr, ToTmp, ToArray};
+use glib::translate::{FromGlibPtr, FromGlibPtrContainer, ToGlibPtr};
 
 struct_Widget!(AboutDialog);
 
@@ -42,8 +42,7 @@ impl AboutDialog {
 
     pub fn set_program_name(&self, name: &str) -> () {
         unsafe {
-            let mut tmp_name = name.to_tmp_for_borrow();
-            ffi::gtk_about_dialog_set_program_name(GTK_ABOUT_DIALOG(self.unwrap_widget()), tmp_name.to_glib_ptr())
+            ffi::gtk_about_dialog_set_program_name(GTK_ABOUT_DIALOG(self.unwrap_widget()), name.borrow_to_glib().0)
         };
     }
 
@@ -56,8 +55,7 @@ impl AboutDialog {
 
     pub fn set_version(&self, version: &str) -> () {
         unsafe {
-            let mut tmp_version = version.to_tmp_for_borrow();
-            ffi::gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(self.unwrap_widget()), tmp_version.to_glib_ptr())
+            ffi::gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(self.unwrap_widget()), version.borrow_to_glib().0)
         };
     }
 
@@ -70,8 +68,7 @@ impl AboutDialog {
 
     pub fn set_copyright(&self, copyright: &str) -> () {
         unsafe {
-            let mut tmp_copyright = copyright.to_tmp_for_borrow();
-            ffi::gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(self.unwrap_widget()), tmp_copyright.to_glib_ptr())
+            ffi::gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(self.unwrap_widget()), copyright.borrow_to_glib().0)
         };
     }
 
@@ -84,8 +81,7 @@ impl AboutDialog {
 
     pub fn set_comments(&self, comments: &str) -> () {
         unsafe {
-            let mut tmp_comments = comments.to_tmp_for_borrow();
-            ffi::gtk_about_dialog_set_comments(GTK_ABOUT_DIALOG(self.unwrap_widget()), tmp_comments.to_glib_ptr())
+            ffi::gtk_about_dialog_set_comments(GTK_ABOUT_DIALOG(self.unwrap_widget()), comments.borrow_to_glib().0)
         };
     }
 
@@ -98,8 +94,7 @@ impl AboutDialog {
 
     pub fn set_license(&self, license: &str) -> () {
         unsafe {
-            let mut tmp_license = license.to_tmp_for_borrow();
-            ffi::gtk_about_dialog_set_license(GTK_ABOUT_DIALOG(self.unwrap_widget()), tmp_license.to_glib_ptr())
+            ffi::gtk_about_dialog_set_license(GTK_ABOUT_DIALOG(self.unwrap_widget()), license.borrow_to_glib().0)
         };
     }
 
@@ -128,8 +123,7 @@ impl AboutDialog {
 
     pub fn set_website(&self, website: &str) -> () {
         unsafe {
-            let mut tmp_website = website.to_tmp_for_borrow();
-            ffi::gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(self.unwrap_widget()), tmp_website.to_glib_ptr())
+            ffi::gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(self.unwrap_widget()), website.borrow_to_glib().0)
         };
     }
 
@@ -142,8 +136,7 @@ impl AboutDialog {
 
     pub fn set_website_label(&self, website_label: &str) -> () {
         unsafe {
-            let mut tmp_website_label = website_label.to_tmp_for_borrow();
-            ffi::gtk_about_dialog_set_website_label(GTK_ABOUT_DIALOG(self.unwrap_widget()), tmp_website_label.to_glib_ptr())
+            ffi::gtk_about_dialog_set_website_label(GTK_ABOUT_DIALOG(self.unwrap_widget()), website_label.borrow_to_glib().0)
         };
     }
 
@@ -157,10 +150,9 @@ impl AboutDialog {
     pub fn set_authors<'a, S, I: ?Sized>(&self, authors: &'a I)
     where S: Str, &'a I: IntoIterator<Item = &'a S> {
         unsafe {
-            let mut tmp_authors = authors.to_array_for_borrow();
             ffi::gtk_about_dialog_set_authors(
                 GTK_ABOUT_DIALOG(self.unwrap_widget()),
-                tmp_authors.to_glib_ptr());
+                authors.borrow_to_glib().0);
         }
     }
 
@@ -174,10 +166,9 @@ impl AboutDialog {
     pub fn set_artists<'a, S, I: ?Sized>(&self, artists: &'a I)
     where S: Str, &'a I: IntoIterator<Item = &'a S> {
         unsafe {
-            let mut tmp_artists = artists.to_array_for_borrow();
             ffi::gtk_about_dialog_set_artists(
                 GTK_ABOUT_DIALOG(self.unwrap_widget()),
-                tmp_artists.to_glib_ptr());
+                artists.borrow_to_glib().0);
         }
     }
 
@@ -191,10 +182,9 @@ impl AboutDialog {
     pub fn set_documenters<'a, S, I: ?Sized>(&self, documenters: &'a I)
     where S: Str, &'a I: IntoIterator<Item = &'a S> {
         unsafe {
-            let mut tmp_documenters = documenters.to_array_for_borrow();
             ffi::gtk_about_dialog_set_documenters(
                 GTK_ABOUT_DIALOG(self.unwrap_widget()),
-                tmp_documenters.to_glib_ptr());
+                documenters.borrow_to_glib().0);
         }
     }
 
@@ -207,10 +197,9 @@ impl AboutDialog {
 
     pub fn set_translator_credits(&self, translator_credits: &str) -> () {
         unsafe {
-            let mut tmp_translator_credits = translator_credits.to_tmp_for_borrow();
             ffi::gtk_about_dialog_set_translator_credits(
                 GTK_ABOUT_DIALOG(self.unwrap_widget()),
-                tmp_translator_credits.to_glib_ptr())
+                translator_credits.borrow_to_glib().0)
         };
     }
 
@@ -237,23 +226,19 @@ impl AboutDialog {
 
     pub fn set_logo_icon_name(&self, logo_icon_name: &str) -> () {
         unsafe {
-            let mut tmp_logo_icon_name = logo_icon_name.to_tmp_for_borrow();
             ffi::gtk_about_dialog_set_logo_icon_name(
                 GTK_ABOUT_DIALOG(self.unwrap_widget()),
-                tmp_logo_icon_name.to_glib_ptr())
+                logo_icon_name.borrow_to_glib().0)
         };
     }
 
     pub fn add_credit_section<'a, S, I: ?Sized>(&self, section_name: &str, people: &'a I)
     where S: Str, &'a I: IntoIterator<Item = &'a S> {
         unsafe {
-            let mut tmp_section_name = section_name.to_tmp_for_borrow();
-            let mut tmp_people = people.to_array_for_borrow();
-
             ffi::gtk_about_dialog_add_credit_section(
                 GTK_ABOUT_DIALOG(self.unwrap_widget()),
-                tmp_section_name.to_glib_ptr(),
-                tmp_people.to_glib_ptr())
+                section_name.borrow_to_glib().0,
+                people.borrow_to_glib().0)
         }
     }
 

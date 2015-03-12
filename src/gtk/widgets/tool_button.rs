@@ -17,7 +17,7 @@
 
 use std::ptr;
 
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::ToGlibPtr;
 use gtk::{self, ffi};
 
 /// ToolButton — A ToolItem subclass that displays buttons
@@ -26,20 +26,18 @@ struct_Widget!(ToolButton);
 impl ToolButton {
     pub fn new<T: gtk::WidgetTrait>(icon_widget: Option<&T>, label: Option<&str>) -> Option<ToolButton> {
         let tmp_pointer = unsafe {
-            let mut tmp_label = label.to_tmp_for_borrow();
             let icon_widget_ptr = match icon_widget {
                 Some(i) => i.unwrap_widget(),
                 None    => ptr::null_mut(),
             };
-            ffi::gtk_tool_button_new(icon_widget_ptr, tmp_label.to_glib_ptr())
+            ffi::gtk_tool_button_new(icon_widget_ptr, label.borrow_to_glib().0)
         };
         check_pointer!(tmp_pointer, ToolButton)
     }
 
     pub fn new_from_stock(stock_id: &str) -> Option<ToolButton> {
         let tmp_pointer = unsafe {
-            let mut tmp_stock_id = stock_id.to_tmp_for_borrow();
-            ffi::gtk_tool_button_new_from_stock(tmp_stock_id.to_glib_ptr())
+            ffi::gtk_tool_button_new_from_stock(stock_id.borrow_to_glib().0)
         };
         check_pointer!(tmp_pointer, ToolButton)
     }

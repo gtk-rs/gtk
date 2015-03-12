@@ -16,7 +16,7 @@
 //! A widget that emits a signal when clicked on
 
 use gtk::{self, ffi};
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::ToGlibPtr;
 #[cfg(any(feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
 use gtk::IconSize;
 
@@ -42,16 +42,14 @@ impl Button {
 
     pub fn new_with_label(label: &str) -> Option<Button> {
         let tmp_pointer = unsafe {
-            let mut tmp_label = label.to_tmp_for_borrow();
-            ffi::gtk_button_new_with_label(tmp_label.to_glib_ptr())
+            ffi::gtk_button_new_with_label(label.borrow_to_glib().0)
         };
         check_pointer!(tmp_pointer, Button)
     }
 
     pub fn new_with_mnemonic(mnemonic: &str) -> Option<Button> {
         let tmp_pointer = unsafe {
-            let mut tmp_mnemonic = mnemonic.to_tmp_for_borrow();
-            ffi::gtk_button_new_with_mnemonic(tmp_mnemonic.to_glib_ptr())
+            ffi::gtk_button_new_with_mnemonic(mnemonic.borrow_to_glib().0)
         };
         check_pointer!(tmp_pointer, Button)
     }
@@ -59,16 +57,14 @@ impl Button {
     #[cfg(any(feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
     pub fn new_from_icon_name(icon_name: &str, size: IconSize) -> Option<Button> {
         let tmp_pointer = unsafe {
-            let mut tmp_icon_name = icon_name.to_tmp_for_borrow();
-            ffi::gtk_button_new_from_icon_name(tmp_icon_name.to_glib_ptr(), size)
+            ffi::gtk_button_new_from_icon_name(icon_name.borrow_to_glib().0, size)
         };
         check_pointer!(tmp_pointer, Button)
     }
 
     pub fn new_from_stock(stock_id: &str) -> Option<Button> {
         let tmp_pointer = unsafe {
-            let mut tmp_stock_id = stock_id.to_tmp_for_borrow();
-            ffi::gtk_button_new_from_stock(tmp_stock_id.to_glib_ptr())
+            ffi::gtk_button_new_from_stock(stock_id.borrow_to_glib().0)
         };
         check_pointer!(tmp_pointer, Button)
     }

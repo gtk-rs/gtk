@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr};
 use gtk::{self, ffi};
 use glib::to_gboolean;
 use gtk::cast::GTK_WINDOW;
@@ -22,8 +22,7 @@ use gtk::WindowPosition;
 pub trait WindowTrait : gtk::WidgetTrait {
     fn set_title(&mut self, title: &str) -> () {
         unsafe {
-            let mut tmp_title = title.to_tmp_for_borrow();
-            ffi::gtk_window_set_title(GTK_WINDOW(self.unwrap_widget()), tmp_title.to_glib_ptr());
+            ffi::gtk_window_set_title(GTK_WINDOW(self.unwrap_widget()), title.borrow_to_glib().0);
         }
     }
 

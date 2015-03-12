@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use glib::translate::{FromGlibPtr, FromGlibPtrContainer, ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, FromGlibPtrContainer, ToGlibPtr};
 use gtk::{self, FFIWidget};
 use gtk::cast::GTK_FILE_CHOOSER;
 use gtk::ffi;
@@ -71,8 +71,7 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
 
     fn set_current_name(&self, name: &str) -> () {
         unsafe {
-            let mut tmp_name = name.to_tmp_for_borrow();
-            ffi::gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(self.unwrap_widget()), tmp_name.to_glib_ptr())
+            ffi::gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(self.unwrap_widget()), name.borrow_to_glib().0)
         }
     }
 
@@ -85,8 +84,7 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
 
     fn set_filename(&self, filename: &str) -> bool {
         unsafe {
-            let mut tmp_filename = filename.to_tmp_for_borrow();
-            to_bool(ffi::gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(self.unwrap_widget()), tmp_filename.to_glib_ptr()))
+            to_bool(ffi::gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(self.unwrap_widget()), filename.borrow_to_glib().0))
         }
     }
 
@@ -99,15 +97,13 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
 
     fn select_filename(&self, filename: &str) -> bool {
         unsafe {
-            let mut tmp_filename = filename.to_tmp_for_borrow();
-            to_bool(ffi::gtk_file_chooser_select_filename(GTK_FILE_CHOOSER(self.unwrap_widget()), tmp_filename.to_glib_ptr()))
+            to_bool(ffi::gtk_file_chooser_select_filename(GTK_FILE_CHOOSER(self.unwrap_widget()), filename.borrow_to_glib().0))
         }
     }
 
     fn unselect_filename(&self, filename: &str) -> () {
         unsafe {
-            let mut tmp_filename = filename.to_tmp_for_borrow();
-            ffi::gtk_file_chooser_unselect_filename(GTK_FILE_CHOOSER(self.unwrap_widget()), tmp_filename.to_glib_ptr())
+            ffi::gtk_file_chooser_unselect_filename(GTK_FILE_CHOOSER(self.unwrap_widget()), filename.borrow_to_glib().0)
         }
     }
 
@@ -128,8 +124,7 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
 
     fn set_current_folder(&self, filename: &str) -> bool {
         unsafe {
-            let mut tmp_filename = filename.to_tmp_for_borrow();
-            to_bool(ffi::gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(self.unwrap_widget()), tmp_filename.to_glib_ptr()))
+            to_bool(ffi::gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(self.unwrap_widget()), filename.borrow_to_glib().0))
         }
     }
 
@@ -142,8 +137,7 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
 
     fn set_uri(&self, uri: &str) -> bool {
         unsafe {
-            let mut tmp_uri = uri.to_tmp_for_borrow();
-            to_bool(ffi::gtk_file_chooser_set_uri(GTK_FILE_CHOOSER(self.unwrap_widget()), tmp_uri.to_glib_ptr()))
+            to_bool(ffi::gtk_file_chooser_set_uri(GTK_FILE_CHOOSER(self.unwrap_widget()), uri.borrow_to_glib().0))
         }
     }
 
@@ -156,15 +150,13 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
 
     fn select_uri(&self, uri: &str) -> bool {
         unsafe {
-            let mut tmp_uri = uri.to_tmp_for_borrow();
-            to_bool(ffi::gtk_file_chooser_select_uri(GTK_FILE_CHOOSER(self.unwrap_widget()), tmp_uri.to_glib_ptr()))
+            to_bool(ffi::gtk_file_chooser_select_uri(GTK_FILE_CHOOSER(self.unwrap_widget()), uri.borrow_to_glib().0))
         }
     }
 
     fn unselect_uri(&self, uri: &str) -> () {
         unsafe {
-            let mut tmp_uri = uri.to_tmp_for_borrow();
-            ffi::gtk_file_chooser_unselect_uri(GTK_FILE_CHOOSER(self.unwrap_widget()), tmp_uri.to_glib_ptr())
+            ffi::gtk_file_chooser_unselect_uri(GTK_FILE_CHOOSER(self.unwrap_widget()), uri.borrow_to_glib().0)
         }
     }
 
@@ -177,8 +169,7 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
 
     fn set_current_folder_uri(&self, uri: &str) -> bool {
         unsafe {
-            let mut tmp_uri = uri.to_tmp_for_borrow();
-            to_bool(ffi::gtk_file_chooser_set_current_folder_uri(GTK_FILE_CHOOSER(self.unwrap_widget()), tmp_uri.to_glib_ptr()))
+            to_bool(ffi::gtk_file_chooser_set_current_folder_uri(GTK_FILE_CHOOSER(self.unwrap_widget()), uri.borrow_to_glib().0))
         }
     }
 
@@ -271,29 +262,25 @@ pub trait FileChooserTrait: gtk::WidgetTrait {
 
     fn add_shortcut_folder(&self, folder: &str, error: &mut glib::Error) -> bool {
         unsafe {
-            let mut tmp_folder = folder.to_tmp_for_borrow();
-            to_bool(ffi::gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(self.unwrap_widget()), tmp_folder.to_glib_ptr(), &mut error.unwrap()))
+            to_bool(ffi::gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(self.unwrap_widget()), folder.borrow_to_glib().0, &mut error.unwrap()))
         }
     }
 
     fn remove_shortcut_folder(&self, folder: &str, error: &mut glib::Error) -> bool {
         unsafe {
-            let mut tmp_folder = folder.to_tmp_for_borrow();
-            to_bool(ffi::gtk_file_chooser_remove_shortcut_folder(GTK_FILE_CHOOSER(self.unwrap_widget()), tmp_folder.to_glib_ptr(), &mut error.unwrap()))
+            to_bool(ffi::gtk_file_chooser_remove_shortcut_folder(GTK_FILE_CHOOSER(self.unwrap_widget()), folder.borrow_to_glib().0, &mut error.unwrap()))
         }
     }
 
     fn add_shortcut_folder_uri(&self, uri: &str, error: &mut glib::Error) -> bool {
         unsafe {
-            let mut tmp_uri = uri.to_tmp_for_borrow();
-            to_bool(ffi::gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(self.unwrap_widget()), tmp_uri.to_glib_ptr(), &mut error.unwrap()))
+            to_bool(ffi::gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(self.unwrap_widget()), uri.borrow_to_glib().0, &mut error.unwrap()))
         }
     }
 
     fn remove_shortcut_folder_uri(&self, uri: &str, error: &mut glib::Error) -> bool {
         unsafe {
-            let mut tmp_uri = uri.to_tmp_for_borrow();
-            to_bool(ffi::gtk_file_chooser_remove_shortcut_folder(GTK_FILE_CHOOSER(self.unwrap_widget()), tmp_uri.to_glib_ptr(), &mut error.unwrap()))
+            to_bool(ffi::gtk_file_chooser_remove_shortcut_folder(GTK_FILE_CHOOSER(self.unwrap_widget()), uri.borrow_to_glib().0, &mut error.unwrap()))
         }
     }
 }

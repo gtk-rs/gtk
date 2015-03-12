@@ -15,7 +15,7 @@
 
 //! A widget that displays a small to medium amount of text
 
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::ToGlibPtr;
 use gtk::{self, ffi};
 
 /// Label — A widget that displays a small to medium amount of text
@@ -32,16 +32,14 @@ struct_Widget!(Label);
 impl Label {
     pub fn new(text: &str) -> Option<Label> {
         let tmp_pointer = unsafe {
-            let mut tmp_text = text.to_tmp_for_borrow();
-            ffi::gtk_label_new(tmp_text.to_glib_ptr())
+            ffi::gtk_label_new(text.borrow_to_glib().0)
         };
         check_pointer!(tmp_pointer, Label)
     }
 
     pub fn new_with_mnemonic(text: &str) -> Option<Label> {
         let tmp_pointer = unsafe {
-            let mut tmp_text = text.to_tmp_for_borrow();
-            ffi::gtk_label_new_with_mnemonic(tmp_text.to_glib_ptr())
+            ffi::gtk_label_new_with_mnemonic(text.borrow_to_glib().0)
         };
         check_pointer!(tmp_pointer, Label)
     }

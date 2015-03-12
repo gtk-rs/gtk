@@ -15,7 +15,7 @@
 
 //! A button to launch a color selection dialog
 
-use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr};
 use gtk::cast::GTK_COLORBUTTON;
 use gtk::{self, ffi};
 use glib::{to_bool, to_gboolean};
@@ -96,8 +96,7 @@ impl ColorButton {
 
     pub fn set_title(&mut self, title: &str) -> () {
         unsafe {
-            let mut tmp_title = title.to_tmp_for_borrow();
-            ffi::gtk_color_button_set_title(GTK_COLORBUTTON(self.pointer), tmp_title.to_glib_ptr());
+            ffi::gtk_color_button_set_title(GTK_COLORBUTTON(self.pointer), title.borrow_to_glib().0);
         }
     }
 

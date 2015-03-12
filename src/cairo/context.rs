@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::ToGlibPtr;
 use c_vec::CVec;
 use std::ptr::Unique;
 use std::mem::transmute;
@@ -539,8 +539,7 @@ impl Context {
 
     pub fn select_font_face(&self, family: &str, slant: FontSlant, weight: FontWeight){
         unsafe {
-            let mut tmp_family = family.to_tmp_for_borrow();
-            ffi::cairo_select_font_face(self.get_ptr(), tmp_family.to_glib_ptr(), slant, weight)
+            ffi::cairo_select_font_face(self.get_ptr(), family.borrow_to_glib().0, slant, weight)
         }
     }
 
@@ -605,8 +604,7 @@ impl Context {
 
     pub fn show_text(&self, text: &str){
         unsafe {
-            let mut tmp_text = text.to_tmp_for_borrow();
-            ffi::cairo_show_text(self.get_ptr(), tmp_text.to_glib_ptr())
+            ffi::cairo_show_text(self.get_ptr(), text.borrow_to_glib().0)
         }
     }
 
@@ -625,10 +623,9 @@ impl Context {
         unsafe {
             let glyphs: &[Glyph] = glyph_vec.as_slice();
             let clusters: &[TextCluster] = cluster_vec.as_slice();
-            let mut tmp_text = text.to_tmp_for_borrow();
 
                 ffi::cairo_show_text_glyphs(self.get_ptr(),
-                                            tmp_text.to_glib_ptr(),
+                                            text.borrow_to_glib().0,
                                             -1 as c_int, //NUL terminated
                                             glyphs.as_ptr(),
                                             glyphs.len() as c_int,
@@ -665,8 +662,7 @@ impl Context {
         };
 
         unsafe {
-            let mut tmp_text = text.to_tmp_for_borrow();
-            ffi::cairo_text_extents(self.get_ptr(), tmp_text.to_glib_ptr(), &mut extents);
+            ffi::cairo_text_extents(self.get_ptr(), text.borrow_to_glib().0, &mut extents);
         }
         extents
     }
@@ -781,8 +777,7 @@ impl Context {
 
     pub fn text_path(&self, str_: &str){
         unsafe {
-            let mut tmp_str_ = str_.to_tmp_for_borrow();
-            ffi::cairo_text_path(self.get_ptr(), tmp_str_.to_glib_ptr())
+            ffi::cairo_text_path(self.get_ptr(), str_.borrow_to_glib().0)
         }
     }
 

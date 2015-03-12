@@ -18,7 +18,7 @@
 use gtk::{self, ffi};
 use gtk::TreeModel;
 use gtk::cast::GTK_ENTRY_COMPLETION;
-use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr};
 use libc::c_char;
 
 struct_Widget!(EntryCompletion);
@@ -70,11 +70,10 @@ impl EntryCompletion {
 
     pub fn compute_prefix(&self, key: &str) -> Option<String> {
         unsafe {
-            let mut tmp_key = key.to_tmp_for_borrow();
             FromGlibPtr::borrow(
                 ffi::gtk_entry_completion_compute_prefix(
                     GTK_ENTRY_COMPLETION(self.pointer),
-                    tmp_key.to_glib_ptr())
+                    key.borrow_to_glib().0)
                 as *const c_char)
         }
     }
@@ -96,15 +95,13 @@ impl EntryCompletion {
 
     pub fn insert_action_text(&self, index_: i32, text: &str) {
         unsafe {
-            let mut tmp_text = text.to_tmp_for_borrow();
-            ffi::gtk_entry_completion_insert_action_text(GTK_ENTRY_COMPLETION(self.pointer), index_, tmp_text.to_glib_ptr())
+            ffi::gtk_entry_completion_insert_action_text(GTK_ENTRY_COMPLETION(self.pointer), index_, text.borrow_to_glib().0)
         }
     }
 
     pub fn insert_action_markup(&self, index_: i32, markup: &str) {
         unsafe {
-            let mut tmp_markup = markup.to_tmp_for_borrow();
-            ffi::gtk_entry_completion_insert_action_markup(GTK_ENTRY_COMPLETION(self.pointer), index_, tmp_markup.to_glib_ptr())
+            ffi::gtk_entry_completion_insert_action_markup(GTK_ENTRY_COMPLETION(self.pointer), index_, markup.borrow_to_glib().0)
         }
     }
 

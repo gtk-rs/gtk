@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr};
 use gtk::cast::{GTK_FONT_CHOOSER};
 use gtk::{self, ffi};
 use glib::{to_bool, to_gboolean};
@@ -34,8 +34,7 @@ pub trait FontChooserTrait: gtk::WidgetTrait {
 
     fn set_font(&self, font_name: &str) {
         unsafe {
-            let mut tmp_font_name = font_name.to_tmp_for_borrow();
-            ffi::gtk_font_chooser_set_font(GTK_FONT_CHOOSER(self.unwrap_widget()), tmp_font_name.to_glib_ptr() as *mut c_char)
+            ffi::gtk_font_chooser_set_font(GTK_FONT_CHOOSER(self.unwrap_widget()), font_name.borrow_to_glib().0)
         }
     }
 
@@ -49,8 +48,7 @@ pub trait FontChooserTrait: gtk::WidgetTrait {
 
     fn set_preview_text(&self, text: &str) {
         unsafe {
-            let mut tmp_text = text.to_tmp_for_borrow();
-            ffi::gtk_font_chooser_set_preview_text(GTK_FONT_CHOOSER(self.unwrap_widget()), tmp_text.to_glib_ptr())
+            ffi::gtk_font_chooser_set_preview_text(GTK_FONT_CHOOSER(self.unwrap_widget()), text.borrow_to_glib().0)
         }
     }
 

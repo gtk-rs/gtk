@@ -16,7 +16,7 @@
 //! GdkDisplayManager — Maintains a list of all open GdkDisplays
 
 use gdk::{self, ffi};
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::ToGlibPtr;
 
 #[repr(C)]
 #[derive(Copy)]
@@ -53,8 +53,7 @@ impl DisplayManager {
 
     pub fn open_display(&self, name: &str) -> Option<gdk::Display> {
         let tmp = unsafe {
-            let mut tmp_name = name.to_tmp_for_borrow();
-            ffi::gdk_display_manager_open_display(self.pointer, tmp_name.to_glib_ptr())
+            ffi::gdk_display_manager_open_display(self.pointer, name.borrow_to_glib().0)
         };
 
         if tmp.is_null() {

@@ -16,7 +16,7 @@
 use gtk::{self, ffi};
 use gtk::FFIWidget;
 use gtk::cast::{GTK_WINDOW, GTK_APP_CHOOSER_DIALOG};
-use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr};
 
 struct_Widget!(AppChooserDialog);
 
@@ -27,10 +27,9 @@ impl AppChooserDialog {
                 Some(ref p) => GTK_WINDOW(p.unwrap_widget()),
                 None => ::std::ptr::null_mut()
             };
-            let mut tmp_content_type = content_type.to_tmp_for_borrow();
 
             ffi::gtk_app_chooser_dialog_new_for_content_type(parent, flags,
-                                                             tmp_content_type.to_glib_ptr())
+                                                             content_type.borrow_to_glib().0)
         };
 
         if tmp_pointer.is_null() {
@@ -52,8 +51,7 @@ impl AppChooserDialog {
 
     pub fn set_heading(&self, heading: &str) -> () {
         unsafe {
-            let mut tmp_heading = heading.to_tmp_for_borrow();
-            ffi::gtk_app_chooser_dialog_set_heading(GTK_APP_CHOOSER_DIALOG(self.unwrap_widget()), tmp_heading.to_glib_ptr())
+            ffi::gtk_app_chooser_dialog_set_heading(GTK_APP_CHOOSER_DIALOG(self.unwrap_widget()), heading.borrow_to_glib().0)
         }
     }
 

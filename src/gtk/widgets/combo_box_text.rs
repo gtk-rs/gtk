@@ -17,7 +17,7 @@
 
 use gtk::{self, ffi};
 use gtk::cast::GTK_COMBO_BOX_TEXT;
-use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr};
 use libc::c_char;
 
 struct_Widget!(ComboBoxText);
@@ -35,53 +35,44 @@ impl ComboBoxText {
 
     pub fn append(&self, id: &str, text: &str) {
         unsafe {
-            let mut tmp_id = id.to_tmp_for_borrow();
-            let mut tmp_text = text.to_tmp_for_borrow();
             ffi::gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(self.pointer),
-                                           tmp_id.to_glib_ptr(),
-                                           tmp_text.to_glib_ptr())
+                                           id.borrow_to_glib().0,
+                                           text.borrow_to_glib().0)
         }
     }
 
     pub fn prepend(&self, id: &str, text: &str) {
         unsafe {
-            let mut tmp_id = id.to_tmp_for_borrow();
-            let mut tmp_text = text.to_tmp_for_borrow();
             ffi::gtk_combo_box_text_prepend(GTK_COMBO_BOX_TEXT(self.pointer),
-                                            tmp_id.to_glib_ptr(),
-                                            tmp_text.to_glib_ptr())
+                                            id.borrow_to_glib().0,
+                                            text.borrow_to_glib().0)
         }
     }
 
     pub fn insert(&self, position: i32, id: &str, text: &str) {
         unsafe {
-            let mut tmp_id = id.to_tmp_for_borrow();
-            let mut tmp_text = text.to_tmp_for_borrow();
             ffi::gtk_combo_box_text_insert(GTK_COMBO_BOX_TEXT(self.pointer),
                                            position,
-                                           tmp_id.to_glib_ptr(),
-                                           tmp_text.to_glib_ptr())
+                                           id.borrow_to_glib().0,
+                                           text.borrow_to_glib().0)
         }
     }
 
     pub fn append_text(&self, text: &str) {
         unsafe {
-            let mut tmp_text = text.to_tmp_for_borrow();
-            ffi::gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self.pointer), tmp_text.to_glib_ptr())
+            ffi::gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(self.pointer), text.borrow_to_glib().0)
         }
     }
 
     pub fn prepend_text(&self, text: &str) {
         unsafe {
-            let mut tmp_text = text.to_tmp_for_borrow();
-            ffi::gtk_combo_box_text_prepend_text(GTK_COMBO_BOX_TEXT(self.pointer), tmp_text.to_glib_ptr())
+            ffi::gtk_combo_box_text_prepend_text(GTK_COMBO_BOX_TEXT(self.pointer), text.borrow_to_glib().0)
         }
     }
 
     pub fn insert_text(&self, position: i32, text: &str) {
         unsafe {
-            let mut tmp_text = text.to_tmp_for_borrow();
-            ffi::gtk_combo_box_text_insert_text(GTK_COMBO_BOX_TEXT(self.pointer), position, tmp_text.to_glib_ptr())
+            ffi::gtk_combo_box_text_insert_text(GTK_COMBO_BOX_TEXT(self.pointer), position, text.borrow_to_glib().0)
         }
     }
 

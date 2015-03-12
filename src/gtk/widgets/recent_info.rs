@@ -18,7 +18,7 @@ use glib::to_bool;
 use gtk::FFIWidget;
 use gtk::cast::GTK_RECENT_INFO;
 use std::ptr;
-use glib::translate::{FromGlibPtr, FromGlibPtrNotNull, FromGlibPtrContainer, ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, FromGlibPtrNotNull, FromGlibPtrContainer, ToGlibPtr};
 use libc::c_char;
 
 struct_Widget!(RecentInfo);
@@ -87,12 +87,11 @@ impl RecentInfo {
             let mut app_exec = ptr::null();
             let mut count = 0u32;
             let mut time_ = 0i64;
-            let mut tmp_app_name = app_name.to_tmp_for_borrow();
 
             let ret = to_bool(
                 ffi::gtk_recent_info_get_application_info(
                     GTK_RECENT_INFO(self.unwrap_widget()),
-                    tmp_app_name.to_glib_ptr(),
+                    app_name.borrow_to_glib().0,
                     &mut app_exec,
                     &mut count,
                     &mut time_));
@@ -126,8 +125,7 @@ impl RecentInfo {
 
     pub fn has_application(&self, app_name: &str) -> bool {
         unsafe {
-            let mut tmp_app_name = app_name.to_tmp_for_borrow();
-            to_bool(ffi::gtk_recent_info_has_application(GTK_RECENT_INFO(self.unwrap_widget()), tmp_app_name.to_glib_ptr()))
+            to_bool(ffi::gtk_recent_info_has_application(GTK_RECENT_INFO(self.unwrap_widget()), app_name.borrow_to_glib().0))
         }
     }
 
@@ -143,10 +141,9 @@ impl RecentInfo {
 
     pub fn has_group(&self, group_name: &str) -> bool {
         unsafe {
-            let mut tmp_group_name = group_name.to_tmp_for_borrow();
             to_bool(
                 ffi::gtk_recent_info_has_group(GTK_RECENT_INFO(self.unwrap_widget()),
-                                               tmp_group_name.to_glib_ptr()))
+                                               group_name.borrow_to_glib().0))
         }
     }
 

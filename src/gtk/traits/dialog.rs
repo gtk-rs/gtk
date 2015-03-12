@@ -133,8 +133,7 @@ pub trait DialogTrait: gtk::WidgetTrait + gtk::ContainerTrait + gtk::BinTrait + 
 
     fn add_button(&self, button_text: &str, response_id: i32) -> Option<gtk::Button> {
         let tmp_pointer = unsafe {
-            let mut tmp_button_text = button_text.to_tmp_for_borrow();
-            ffi::gtk_dialog_add_button(GTK_DIALOG(self.unwrap_widget()), tmp_button_text.to_glib_ptr(), response_id)
+            ffi::gtk_dialog_add_button(GTK_DIALOG(self.unwrap_widget()), button_text.borrow_to_glib().0, response_id)
         };
 
         if tmp_pointer.is_null() {

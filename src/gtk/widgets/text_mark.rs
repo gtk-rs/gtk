@@ -16,7 +16,7 @@
 //! GtkTextMark — A position in the buffer preserved across buffer modifications
 
 use gtk::{self, ffi};
-use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr};
 use glib::{to_bool, to_gboolean};
 
 pub struct TextMark {
@@ -26,8 +26,7 @@ pub struct TextMark {
 impl TextMark {
     pub fn new(name: &str, left_gravity: bool) -> Option<TextMark> {
         let tmp_pointer = unsafe {
-            let mut tmp_name = name.to_tmp_for_borrow();
-            ffi::gtk_text_mark_new(tmp_name.to_glib_ptr(), to_gboolean(left_gravity))
+            ffi::gtk_text_mark_new(name.borrow_to_glib().0, to_gboolean(left_gravity))
         };
 
         if tmp_pointer.is_null() {

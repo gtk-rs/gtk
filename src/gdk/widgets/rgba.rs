@@ -15,7 +15,7 @@
 
 //! RGBA Colors — RGBA colors
 
-use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr};
 use gdk_ffi as ffi;
 use gdk_ffi::C_GdkRGBA;
 use libc::{c_char};
@@ -90,8 +90,7 @@ impl RGBA for C_GdkRGBA {
 
     fn parse(&mut self, spec: &str) -> bool {
         unsafe {
-            let mut tmp_spec = spec.to_tmp_for_borrow();
-            ::glib::to_bool(ffi::gdk_rgba_parse(self, tmp_spec.to_glib_ptr()))
+            ::glib::to_bool(ffi::gdk_rgba_parse(self, spec.borrow_to_glib().0))
         }
     }
 

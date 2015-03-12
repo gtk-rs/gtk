@@ -16,7 +16,7 @@
 //! General — Library initialization and miscellaneous functions
 
 use std::ptr;
-use glib::translate::{FromGlibPtr, ToGlibPtr, ToTmp};
+use glib::translate::{FromGlibPtr, ToGlibPtr};
 use gdk::ffi;
 
 pub fn init() {
@@ -44,15 +44,13 @@ pub fn notify_startup_complete() {
 
 pub fn notify_startup_complete_with_id(startup_id: &str) {
     unsafe {
-        let mut tmp_startup_id = startup_id.to_tmp_for_borrow();
-        ffi::gdk_notify_startup_complete_with_id(tmp_startup_id.to_glib_ptr());
+        ffi::gdk_notify_startup_complete_with_id(startup_id.borrow_to_glib().0);
     }
 }
 
 pub fn set_allowed_backends(backends: &str) {
     unsafe {
-        let mut tmp_backends = backends.to_tmp_for_borrow();
-        ffi::gdk_set_allowed_backends(tmp_backends.to_glib_ptr())
+        ffi::gdk_set_allowed_backends(backends.borrow_to_glib().0)
     }
 }
 
@@ -65,8 +63,7 @@ pub fn get_program_class() -> Option<String> {
 
 pub fn set_program_class(program_class: &str) {
     unsafe {
-        let mut tmp_program_class = program_class.to_tmp_for_borrow();
-        ffi::gdk_set_program_class(tmp_program_class.to_glib_ptr())
+        ffi::gdk_set_program_class(program_class.borrow_to_glib().0)
     }
 }
 

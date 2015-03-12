@@ -15,7 +15,7 @@
 
 //! A bin with a decorative frame and optional label
 
-use glib::translate::{ToGlibPtr, ToTmp};
+use glib::translate::ToGlibPtr;
 use gtk::{self, ffi};
 
 /// Frame — A bin with a decorative frame and optional label
@@ -24,8 +24,7 @@ struct_Widget!(Frame);
 impl Frame {
     pub fn new(label: Option<&str>) -> Option<Frame> {
         let tmp_pointer = unsafe {
-            let mut tmp_label = label.to_tmp_for_borrow();
-            ffi::gtk_frame_new(tmp_label.to_glib_ptr())
+            ffi::gtk_frame_new(label.borrow_to_glib().0)
         };
         check_pointer!(tmp_pointer, Frame)
     }
