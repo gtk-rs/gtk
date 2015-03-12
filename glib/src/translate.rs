@@ -189,18 +189,18 @@ impl <'a, P: Copy, T: ToGlibPtr<'a, P>> PtrArray<'a, P, T> {
 pub trait FromGlib: Sized {
     type GlibType: Sized;
 
-    fn conv(val: Self::GlibType) -> Self;
+    fn from_glib(val: Self::GlibType) -> Self;
 }
 
 /// Translate a simple type
 pub fn from_glib<T: FromGlib>(val: <T as FromGlib>::GlibType) -> T {
-    FromGlib::conv(val)
+    FromGlib::from_glib(val)
 }
 
 impl FromGlib for bool {
     type GlibType = ffi::Gboolean;
 
-    fn conv(val: ffi::Gboolean) -> bool {
+    fn from_glib(val: ffi::Gboolean) -> bool {
         !(val == ffi::GFALSE)
     }
 }
