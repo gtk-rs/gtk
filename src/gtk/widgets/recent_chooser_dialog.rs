@@ -18,51 +18,42 @@ use glib::translate::ToGlibPtr;
 use gtk::{self, ffi};
 use gtk::FFIWidget;
 use gtk::ResponseType;
+use gtk::DialogButtons;
 use gtk::cast::{GTK_WINDOW, GTK_RECENT_MANAGER};
 
 struct_Widget!(RecentChooserDialog);
 
 impl RecentChooserDialog {
-    pub fn new(title: &str, parent: Option<gtk::Window>) -> Option<RecentChooserDialog> {
+    pub fn new<T: DialogButtons>(title: &str, parent: Option<gtk::Window>,
+                                 buttons: T) -> RecentChooserDialog {
         let parent = match parent {
             Some(ref p) => GTK_WINDOW(p.unwrap_widget()),
             None => ptr::null_mut()
         };
 
-        let tmp_pointer = unsafe {
-            ffi::gtk_recent_chooser_dialog_new(
-                title.borrow_to_glib().0, parent,
-                "Ok".borrow_to_glib().0, ResponseType::Ok,
-                "Cancel".borrow_to_glib().0, ResponseType::Cancel,
-                ptr::null::<()>())
-        };
-
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            Some(gtk::FFIWidget::wrap_widget(tmp_pointer))
+        unsafe {
+            gtk::FFIWidget::wrap_widget(
+                buttons.invoke2(
+                    ffi::gtk_recent_chooser_dialog_new,
+                    title.borrow_to_glib().0,
+                    parent))
         }
     }
 
-    pub fn new_for_manager(title: &str, parent: Option<gtk::Window>, manager: &gtk::RecentManager) -> Option<RecentChooserDialog> {
+    pub fn new_for_manager<T: DialogButtons>(title: &str, parent: Option<gtk::Window>,
+                                             manager: &gtk::RecentManager, buttons: T) -> RecentChooserDialog {
         let parent = match parent {
             Some(ref p) => GTK_WINDOW(p.unwrap_widget()),
             None => ptr::null_mut()
         };
 
-        let tmp_pointer = unsafe {
-            ffi::gtk_recent_chooser_dialog_new_for_manager(
-                title.borrow_to_glib().0, parent,
-                GTK_RECENT_MANAGER(manager.unwrap_widget()),
-                "Ok".borrow_to_glib().0, ResponseType::Ok,
-                "Cancel".borrow_to_glib().0, ResponseType::Cancel,
-                ptr::null::<()>())
-        };
-
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            Some(gtk::FFIWidget::wrap_widget(tmp_pointer))
+        unsafe {
+            gtk::FFIWidget::wrap_widget(
+                buttons.invoke3(
+                    ffi::gtk_recent_chooser_dialog_new_for_manager,
+                    title.borrow_to_glib().0,
+                    parent,
+                    GTK_RECENT_MANAGER(manager.unwrap_widget())))
         }
     }
 }
