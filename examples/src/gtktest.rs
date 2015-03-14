@@ -139,11 +139,15 @@ fn main() {
         let dialog = gtk::FontChooserDialog::new("Font chooser test", None).unwrap();
 
         dialog.run();
+        dialog.destroy();
     }));
     Connect::connect(&button_recent, Clicked::new(&mut ||{
-        let dialog = gtk::RecentChooserDialog::new("Recent chooser test", None).unwrap();
+        let dialog = gtk::RecentChooserDialog::new(
+            "Recent chooser test", None,
+            [("Ok", gtk::ResponseType::Ok), ("Cancel", gtk::ResponseType::Cancel)]);
 
         dialog.run();
+        dialog.destroy();
     }));
     Connect::connect(&file_button, Clicked::new(&mut ||{
         //entry.set_text("Clicked!".to_string());
@@ -166,6 +170,7 @@ fn main() {
         let dialog = gtk::AppChooserDialog::new_for_content_type(None, gtk::DialogFlags::Modal, "sh").unwrap();
 
         dialog.run();
+        dialog.destroy();
     }));
 
     Connect::connect(&window, KeyPressEvent::new(&mut |key|{
