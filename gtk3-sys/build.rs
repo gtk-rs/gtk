@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-#![feature(collections)]
+#![feature(collections, std_misc)]
 
 extern crate gcc;
 extern crate "pkg-config" as pkg_config;
@@ -21,7 +21,7 @@ extern crate "pkg-config" as pkg_config;
 use std::process::Command;
 use gcc::Config;
 use std::env;
-use std::path::PathBuf;
+use std::path::AsPath;
 
 fn main() {
     env::set_var("PKG_CONFIG_ALLOW_CROSS", "1");
@@ -38,16 +38,13 @@ fn main() {
 
     // make the vector of path to set to gcc::Config
     let output = String::from_utf8(cmd.stdout).unwrap();
-    let res: Vec<&str> = output.split(' ').collect();
-    let paths: Vec<PathBuf> = res.iter().filter_map(|s| {
-        if s.len() > 1 && s.chars().nth(1).unwrap() == 'I' { Some(PathBuf::new(&s[2..])) }
-        else { None }
-    }).collect();
 
     // build include path
     let mut gcc_conf = Config::new();
-    for path in paths {
-        gcc_conf.include(&path);
+    for s in output.split(' ') {
+        if s.starts_with("-I") {
+            gcc_conf.include(s[2..].as_path());
+        }
     }
     gcc_conf.file("src/gtk_glue.c");
 
