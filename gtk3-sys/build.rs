@@ -27,10 +27,7 @@ fn main() {
     env::set_var("PKG_CONFIG_ALLOW_CROSS", "1");
 
     // try to find gtk+-3.0 library
-    match pkg_config::find_library("gtk+-3.0") {
-        Ok(_) => {},
-        Err(e) => panic!("{}", e)
-    };
+    pkg_config::find_library("gtk+-3.0").unwrap();
 
     // call native pkg-config, there is no way to do this with pkg-config for now
     let cmd = Command::new("pkg-config").arg("--cflags").arg("gtk+-3.0")
