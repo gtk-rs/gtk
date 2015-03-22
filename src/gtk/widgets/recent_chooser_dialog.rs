@@ -17,7 +17,6 @@ use std::ptr;
 use glib::translate::ToGlibPtr;
 use gtk::{self, ffi};
 use gtk::FFIWidget;
-use gtk::ResponseType;
 use gtk::DialogButtons;
 use gtk::cast::{GTK_WINDOW, GTK_RECENT_MANAGER};
 

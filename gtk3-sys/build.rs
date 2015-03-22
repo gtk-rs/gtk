@@ -43,7 +43,7 @@ fn main() {
     let output = String::from_utf8(cmd.stdout).unwrap();
     let res: Vec<&str> = output.split(' ').collect();
     let paths: Vec<PathBuf> = res.iter().filter_map(|s| {
-        if s.len() > 1 && s.char_at(1) == 'I' { Some(PathBuf::new(&s[2..])) }
+        if s.len() > 1 && s.chars().nth(1).unwrap() == 'I' { Some(PathBuf::new(&s[2..])) }
         else { None }
     }).collect();
 

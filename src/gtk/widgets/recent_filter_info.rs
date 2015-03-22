@@ -45,7 +45,7 @@ impl RecentFilterInfo {
                         break;
                     }
                     count = count + 1;
-                    tmp_app.push(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&*tmp)).to_string());
+                    tmp_app.push(String::from_utf8_lossy(::std::ffi::CStr::from_ptr(*tmp).to_bytes()).to_string());
                 }
                 count = 0;
                 loop {
@@ -55,13 +55,13 @@ impl RecentFilterInfo {
                         break;
                     }
                     count = count + 1;
-                    tmp_groups.push(String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&*tmp)).to_string());
+                    tmp_groups.push(String::from_utf8_lossy(::std::ffi::CStr::from_ptr(*tmp).to_bytes()).to_string());
                 }
                 RecentFilterInfo {
                     contains: (*ptr).contains,
-                    uri: String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&(*ptr).uri)).to_string(),
-                    display_name: String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&(*ptr).display_name)).to_string(),
-                    mime_type: String::from_utf8_lossy(::std::ffi::c_str_to_bytes(&(*ptr).mime_type)).to_string(),
+                    uri: String::from_utf8_lossy(::std::ffi::CStr::from_ptr((*ptr).uri).to_bytes()).to_string(),
+                    display_name: String::from_utf8_lossy(::std::ffi::CStr::from_ptr((*ptr).display_name).to_bytes()).to_string(),
+                    mime_type: String::from_utf8_lossy(::std::ffi::CStr::from_ptr((*ptr).mime_type).to_bytes()).to_string(),
                     applications: tmp_app,
                     groups: tmp_groups,
                     age: (*ptr).age
@@ -76,18 +76,18 @@ impl RecentFilterInfo {
         let mut t_groups = Vec::with_capacity(self.groups.len());
 
         for tmp in self.applications.iter() {
-            let c = CString::from_slice(tmp.as_bytes());
+            let c = CString::new(tmp.as_bytes()).unwrap();
 
             t_app.push(c.as_ptr());
         }
         for tmp in self.groups.iter() {
-            let c = CString::from_slice(tmp.as_bytes());
+            let c = CString::new(tmp.as_bytes()).unwrap();
 
             t_groups.push(c.as_ptr());
         }
-        let c_uri = CString::from_slice(self.uri.as_bytes());
-        let c_display_name = CString::from_slice(self.display_name.as_bytes());
-        let c_mime_type = CString::from_slice(self.mime_type.as_bytes());
+        let c_uri = CString::new(self.uri.as_bytes()).unwrap();
+        let c_display_name = CString::new(self.display_name.as_bytes()).unwrap();
+        let c_mime_type = CString::new(self.mime_type.as_bytes()).unwrap();
 
         ffi::C_GtkRecentFilterInfo {
             contains: self.contains,

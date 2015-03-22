@@ -21,7 +21,7 @@ use glib::translate::ToGlibPtr;
 use gtk::MessageType;
 use gtk::cast::GTK_INFOBAR;
 use gtk::{self, ffi};
-use glib::{to_bool, to_gboolean};
+use glib::to_gboolean;
 
 /// InfoBar — Report important messages to the user
 struct_Widget!(InfoBar);
