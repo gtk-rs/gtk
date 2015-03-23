@@ -89,6 +89,13 @@ let button = gtk::Button:new(); // You have access to the struct methods of gtk:
                                 // as the trait methods from gtk::traits::Button as GtkButtonTrait.
 ```
 
+Projects using rgtk
+===================
+* [SolidOak](https://github.com/oakes/SolidOak)
+* [rrun](https://github.com/buster/rrun)
+
+If you want yours to be added to this list, please a Pull Request for it!
+
 Contribute
 ==========
 
