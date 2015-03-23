@@ -94,7 +94,7 @@ Projects using rgtk
 * [SolidOak](https://github.com/oakes/SolidOak)
 * [rrun](https://github.com/buster/rrun)
 
-If you want yours to be added to this list, please a Pull Request for it!
+If you want yours to be added to this list, please create a Pull Request for it!
 
 Contribute
 ==========
