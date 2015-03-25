@@ -1042,8 +1042,8 @@ extern "C" {
     // GtkListStore                                                          OK
     //=========================================================================
 
-    pub fn gtk_list_store_newv(n_columns: c_int, column_types: &[GType]) -> *mut C_GtkListStore;
-    pub fn gtk_list_store_set_column_types(list_store: *mut C_GtkListStore, n_columns: c_int, column_types: &[GType]);
+    pub fn gtk_list_store_newv(n_columns: c_int, column_types: *mut GType) -> *mut C_GtkListStore;
+    pub fn gtk_list_store_set_column_types(list_store: *mut C_GtkListStore, n_columns: c_int, column_types: *mut GType);
     pub fn gtk_list_store_set_value(list_store: *mut C_GtkListStore, iter: *mut C_GtkTreeIter, column: c_int, value: *mut C_GValue);
     pub fn gtk_list_store_set(list_store: *mut C_GtkListStore, iter: *mut C_GtkTreeIter, ...);
     //pub fn gtk_list_store_set_valist(list_store: *mut C_GtkListStore, iter: *mut C_GtkTreeIter, var_args: va_list);
@@ -1066,8 +1066,8 @@ extern "C" {
     // GtkTreeStore                                                          OK
     //=========================================================================
 
-    pub fn gtk_tree_store_newv(n_columns: c_int, column_types: &[GType]) -> *mut C_GtkTreeStore;
-    pub fn gtk_tree_store_set_column_types(tree_store: *mut C_GtkTreeStore, n_columns: c_int, column_types: &[GType]);
+    pub fn gtk_tree_store_newv(n_columns: c_int, column_types: *mut GType) -> *mut C_GtkTreeStore;
+    pub fn gtk_tree_store_set_column_types(tree_store: *mut C_GtkTreeStore, n_columns: c_int, column_types: *mut GType);
     pub fn gtk_tree_store_set_value(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, column: c_int, value: *mut C_GValue);
     pub fn gtk_tree_store_set(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, ...);
     //pub fn gtk_tree_store_set_valist(tree_store: *mut C_GtkTreeStore, iter: *mut C_GtkTreeIter, var_args: va_list);
