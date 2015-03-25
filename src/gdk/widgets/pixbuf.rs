@@ -94,7 +94,7 @@ impl Pixbuf {
             return;
         }
         let mut pixels = pixels.unwrap();
-        let s_pixels = pixels.as_mut_slice();
+        let s_pixels = pixels.as_mut();
         let pos = (y * rowstride + x * n_channels) as usize;
 
         s_pixels[pos] = red;

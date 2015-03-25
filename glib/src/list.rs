@@ -136,8 +136,8 @@ impl<T> List<T> {
 impl<T> Index<usize> for List<T> {
     type Output = T;
 
-    fn index<'a>(&'a self, _rhs: &usize) -> &'a T {
-        self.nth(*_rhs as u32)
+    fn index<'a>(&'a self, _rhs: usize) -> &'a T {
+        self.nth(_rhs as u32)
     }
 }
 
