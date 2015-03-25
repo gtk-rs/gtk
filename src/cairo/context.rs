@@ -608,31 +608,27 @@ impl Context {
         }
     }
 
-    pub fn show_glyphs(&self, vec: &[Glyph]){
+    pub fn show_glyphs(&self, glyphs: &[Glyph]){
         unsafe {
-            let slice: &[Glyph] = vec.as_slice();
-            ffi::cairo_show_glyphs(self.get_ptr(), slice.as_ptr(), slice.len() as c_int)
+            ffi::cairo_show_glyphs(self.get_ptr(), glyphs.as_ptr(), glyphs.len() as c_int)
         }
     }
 
     pub fn show_text_glyphs(&self,
                             text: &str,
-                            glyph_vec: &[Glyph],
-                            cluster_vec: &[TextCluster],
+                            glyphs: &[Glyph],
+                            clusters: &[TextCluster],
                             cluster_flags: TextClusterFlags){
         unsafe {
-            let glyphs: &[Glyph] = glyph_vec.as_slice();
-            let clusters: &[TextCluster] = cluster_vec.as_slice();
-
-                ffi::cairo_show_text_glyphs(self.get_ptr(),
-                                            text.borrow_to_glib().0,
-                                            -1 as c_int, //NUL terminated
-                                            glyphs.as_ptr(),
-                                            glyphs.len() as c_int,
-                                            clusters.as_ptr(),
-                                            clusters.len() as c_int,
-                                            cluster_flags)
-        }
+            ffi::cairo_show_text_glyphs(self.get_ptr(),
+                                        text.borrow_to_glib().0,
+                                        -1 as c_int, //NUL terminated
+                                        glyphs.as_ptr(),
+                                        glyphs.len() as c_int,
+                                        clusters.as_ptr(),
+                                        clusters.len() as c_int,
+                                        cluster_flags)
+    }
     }
 
     pub fn font_extents(&self) -> FontExtents {
@@ -667,7 +663,7 @@ impl Context {
         extents
     }
 
-    pub fn glyph_extents(&self, glyph_vec: &[Glyph]) -> TextExtents {
+    pub fn glyph_extents(&self, glyphs: &[Glyph]) -> TextExtents {
         let mut extents = TextExtents {
             x_bearing: 0.0,
             y_bearing: 0.0,
@@ -676,8 +672,6 @@ impl Context {
             x_advance: 0.0,
             y_advance: 0.0,
         };
-
-        let glyphs = glyph_vec.as_slice();
 
         unsafe {
             ffi::cairo_glyph_extents(self.get_ptr(), glyphs.as_ptr(), glyphs.len() as c_int, &mut extents);

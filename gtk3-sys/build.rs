@@ -13,15 +13,15 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-#![feature(collections, std_misc)]
+#![feature(convert)]
 
 extern crate gcc;
-extern crate "pkg-config" as pkg_config;
+extern crate pkg_config;
 
 use std::process::Command;
 use gcc::Config;
 use std::env;
-use std::path::AsPath;
+use std::path::Path;
 
 fn main() {
     env::set_var("PKG_CONFIG_ALLOW_CROSS", "1");
@@ -46,7 +46,8 @@ fn main() {
     let mut gcc_conf = Config::new();
     for s in output.split(' ') {
         if s.starts_with("-I") {
-            gcc_conf.include(s[2..].as_path());
+            let path: &Path = s[2..].as_ref();
+            gcc_conf.include(path);
         }
     }
     gcc_conf.file("src/gtk_glue.c");
@@ -56,7 +57,7 @@ fn main() {
         if key.starts_with("CARGO_FEATURE_") {
             let feature = key.trim_left_matches("CARGO_FEATURE_");
             if feature.starts_with("GTK_") {
-                let mut flag = String::from_str("-D");
+                let mut flag = String::from("-D");
                 flag.push_str(feature);
                 gcc_conf.flag(&flag);
             }

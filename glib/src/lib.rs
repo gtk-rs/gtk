@@ -17,11 +17,11 @@
 Bindings and wrappers for __GLib__
 */
 
-#![feature(core)]
+#![feature(convert)]
 #![feature(unsafe_destructor)]
 
 extern crate libc;
-extern crate "glib-sys" as glib_ffi;
+extern crate glib_sys as glib_ffi;
 
 pub use glib_ffi as ffi;
 

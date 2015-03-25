@@ -18,7 +18,7 @@
 
 extern crate libc;
 #[macro_use] extern crate bitflags;
-extern crate "glib-sys" as glib_ffi;
+extern crate glib_sys as glib_ffi;
 
 pub mod enums;
 

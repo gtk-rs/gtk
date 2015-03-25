@@ -390,6 +390,6 @@ impl ValuePublic for String {
     }
 
     fn set(&self, gvalue: &Value) {
-        gvalue.set_string(self.as_slice())
+        gvalue.set_string(self.as_ref())
     }
 }

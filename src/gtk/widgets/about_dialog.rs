@@ -148,7 +148,7 @@ impl AboutDialog {
     }
 
     pub fn set_authors<'a, S, I: ?Sized>(&self, authors: &'a I)
-    where S: Str, &'a I: IntoIterator<Item = &'a S> {
+    where S: AsRef<str>, &'a I: IntoIterator<Item = &'a S> {
         unsafe {
             ffi::gtk_about_dialog_set_authors(
                 GTK_ABOUT_DIALOG(self.unwrap_widget()),
@@ -164,7 +164,7 @@ impl AboutDialog {
     }
 
     pub fn set_artists<'a, S, I: ?Sized>(&self, artists: &'a I)
-    where S: Str, &'a I: IntoIterator<Item = &'a S> {
+    where S: AsRef<str>, &'a I: IntoIterator<Item = &'a S> {
         unsafe {
             ffi::gtk_about_dialog_set_artists(
                 GTK_ABOUT_DIALOG(self.unwrap_widget()),
@@ -180,7 +180,7 @@ impl AboutDialog {
     }
 
     pub fn set_documenters<'a, S, I: ?Sized>(&self, documenters: &'a I)
-    where S: Str, &'a I: IntoIterator<Item = &'a S> {
+    where S: AsRef<str>, &'a I: IntoIterator<Item = &'a S> {
         unsafe {
             ffi::gtk_about_dialog_set_documenters(
                 GTK_ABOUT_DIALOG(self.unwrap_widget()),
@@ -233,7 +233,7 @@ impl AboutDialog {
     }
 
     pub fn add_credit_section<'a, S, I: ?Sized>(&self, section_name: &str, people: &'a I)
-    where S: Str, &'a I: IntoIterator<Item = &'a S> {
+    where S: AsRef<str>, &'a I: IntoIterator<Item = &'a S> {
         unsafe {
             ffi::gtk_about_dialog_add_credit_section(
                 GTK_ABOUT_DIALOG(self.unwrap_widget()),

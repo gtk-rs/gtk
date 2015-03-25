@@ -43,6 +43,6 @@ pub trait ColorChooserTrait: gtk::WidgetTrait {
     }
 
     fn add_palette(&self, orientation: gtk::Orientation, colors_per_line: i32, colors: Vec<gdk_ffi::C_GdkRGBA>) -> () {
-        unsafe { ffi::gtk_color_chooser_add_palette(GTK_COLOR_CHOOSER(self.unwrap_widget()), orientation, colors_per_line, colors.len() as i32, colors.as_slice().as_ptr()) }
+        unsafe { ffi::gtk_color_chooser_add_palette(GTK_COLOR_CHOOSER(self.unwrap_widget()), orientation, colors_per_line, colors.len() as i32, colors.as_ptr()) }
     }
 }
