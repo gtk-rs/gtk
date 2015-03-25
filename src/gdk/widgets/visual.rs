@@ -15,6 +15,7 @@
 
 //! Visuals — Low-level display hardware information
 
+use std::slice;
 use gdk::{self, ffi};
 use libc::{c_int};
 
@@ -31,7 +32,8 @@ impl Visual {
 
         unsafe {
             ffi::gdk_query_depths(&mut tmp, &mut count);
-            Vec::from_raw_buf(tmp, count as usize)
+            Vec::from(
+                slice::from_raw_parts(tmp as *const i32, count as usize))
         }
     }
 

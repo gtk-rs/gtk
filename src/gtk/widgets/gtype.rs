@@ -19,6 +19,7 @@
 pub mod g_type {
     use gtk::ffi;
     use std::ffi::CString;
+    use std::slice;
     use glib::translate::{FromGlibPtr, ToGlibPtr};
     use glib_ffi::{self};
 
@@ -58,7 +59,12 @@ pub mod g_type {
         if n_children == 0u32 || tmp_vec.is_null() {
             Vec::new()
         } else {
-            unsafe { Vec::from_raw_buf(tmp_vec as *const glib_ffi::GType, n_children as usize) }
+            unsafe {
+                Vec::from(
+                    slice::from_raw_parts(
+                        tmp_vec as *const glib_ffi::GType,
+                        n_children as usize))
+            }
         }
     }
 
@@ -69,7 +75,12 @@ pub mod g_type {
         if n_interfaces == 0u32 || tmp_vec.is_null() {
             Vec::new()
         } else {
-            unsafe { Vec::from_raw_buf(tmp_vec as *const glib_ffi::GType, n_interfaces as usize) }
+            unsafe {
+                Vec::from(
+                    slice::from_raw_parts(
+                        tmp_vec as *const glib_ffi::GType,
+                        n_interfaces as usize))
+            }
         }
     }
 
@@ -80,7 +91,11 @@ pub mod g_type {
         if n_prerequisites == 0u32 || tmp_vec.is_null() {
             Vec::new()
         } else {
-            unsafe { Vec::from_raw_buf(tmp_vec as *const glib_ffi::GType, n_prerequisites as usize) }
+            unsafe {
+                Vec::from(
+                    slice::from_raw_parts(
+                        tmp_vec as *const glib_ffi::GType, n_prerequisites as usize))
+            }
         }
     }
 

@@ -17,8 +17,6 @@
 Bindings and wrappers for __Cairo__
 */
 
-extern crate c_vec;
-
 pub use cairo_ffi as ffi;
 pub use cairo_ffi::enums;
 

@@ -13,8 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-extern crate libc;
-
+use std::slice;
 use gtk::ffi;
 use glib::translate::{FromGlibPtr, ToGlibPtr};
 
@@ -99,7 +98,8 @@ impl TreePath {
         let depth = self.get_depth();
 
         unsafe {
-            Vec::from_raw_buf(tmp as *const i32, depth as usize)
+            Vec::from(
+                slice::from_raw_parts(tmp as *const i32, depth as usize))
         }
     }
 

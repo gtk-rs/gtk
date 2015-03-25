@@ -19,8 +19,6 @@ Bindings and wrappers for __GDK__
 
 */
 
-extern crate c_vec;
-
 pub use gdk_ffi as ffi;
 
 pub use self::rt::{

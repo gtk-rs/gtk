@@ -4,7 +4,7 @@
 
 #![crate_type = "bin"]
 
-#![feature(collections)]
+#![feature(convert)]
 
 extern crate rgtk;
 
@@ -35,7 +35,7 @@ fn main() {
 
     // test Value
 
-    let hello = String::from_str("Hello world !");
+    let hello = String::from("Hello world !");
     let value = glib::Value::new().unwrap();
 
     value.init(glib::Type::String);
