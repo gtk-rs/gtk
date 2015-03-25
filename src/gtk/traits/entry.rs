@@ -34,7 +34,7 @@ pub trait EntryTrait: gtk::WidgetTrait {
         }
     }
 
-    fn set_text(&mut self, text: String) -> () {
+    fn set_text(&mut self, text: &str) {
         unsafe {
             ffi::gtk_entry_set_text(GTK_ENTRY(self.unwrap_widget()), text.borrow_to_glib().0)
         }
