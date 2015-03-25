@@ -16,7 +16,7 @@
 #![feature(collections, std_misc)]
 
 extern crate gcc;
-extern crate "pkg-config" as pkg_config;
+extern crate pkg_config;
 
 use std::process::Command;
 use gcc::Config;

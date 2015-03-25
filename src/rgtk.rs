@@ -52,11 +52,11 @@ let button = gtk::Button:new(); // trait gtk::Button reexported as GtkButtonTrai
 extern crate libc;
 extern crate c_vec;
 
-extern crate "glib-sys" as glib_ffi;
-extern crate "gdk3-sys" as gdk_ffi;
-extern crate "gtk3-sys" as gtk_ffi;
-extern crate "cairo-sys" as cairo_ffi;
-extern crate "glib" as glib_main;
+extern crate glib_sys as glib_ffi;
+extern crate gdk3_sys as gdk_ffi;
+extern crate gtk3_sys as gtk_ffi;
+extern crate cairo_sys as cairo_ffi;
+extern crate glib as glib_main;
 
 pub use glib_main as glib;
 pub use glib_main::ValuePublic;
