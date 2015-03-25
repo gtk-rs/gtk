@@ -17,7 +17,7 @@
 Bindings and wrappers for __GLib__
 */
 
-#![feature(core)]
+#![feature(convert)]
 #![feature(unsafe_destructor)]
 
 extern crate libc;

@@ -132,11 +132,11 @@ pub trait ToGlibPtr<'a, P: Copy> {
     fn borrow_to_glib(&'a self) -> Stash<P, Self>;
 }
 
-impl <'a, S: Str> ToGlibPtr<'a, *const c_char> for S {
+impl <'a, S: AsRef<str>> ToGlibPtr<'a, *const c_char> for S {
     type Storage = CString;
 
     fn borrow_to_glib(&'a self) -> Stash<*const c_char, S> {
-        let tmp = CString::new(self.as_slice()).unwrap();
+        let tmp = CString::new(self.as_ref()).unwrap();
         Stash(tmp.as_ptr(), tmp)
     }
 }
@@ -145,7 +145,7 @@ impl <'a> ToGlibPtr<'a, *mut c_char> for str {
     type Storage = CString;
 
     fn borrow_to_glib(&'a self) -> Stash<*mut c_char, str> {
-        let tmp = CString::new(self.as_slice()).unwrap();
+        let tmp = CString::new(self).unwrap();
         Stash(tmp.as_ptr() as *mut _, tmp)
     }
 }
@@ -154,17 +154,17 @@ impl <'a> ToGlibPtr<'a, *mut c_char> for String {
     type Storage = CString;
 
     fn borrow_to_glib(&'a self) -> Stash<*mut c_char, String> {
-        let tmp = CString::new(self.as_slice()).unwrap();
+        let tmp = CString::new(AsRef::<str>::as_ref(self)).unwrap();
         Stash(tmp.as_ptr() as *mut _, tmp)
     }
 }
 
-impl <'a, S: Str> ToGlibPtr<'a, *const c_char> for Option<S> {
+impl <'a, S: AsRef<str>> ToGlibPtr<'a, *const c_char> for Option<S> {
     type Storage = Option<CString>;
 
     fn borrow_to_glib(&'a self) -> Stash<*const c_char, Option<S>> {
         let tmp = match self {
-            &Some(ref s) => Some(CString::new(s.as_slice()).unwrap()),
+            &Some(ref s) => Some(CString::new(s.as_ref()).unwrap()),
             &None => None,
         };
         let ptr = tmp.as_ref().map_or(ptr::null(), |s| s.as_ptr());
@@ -172,12 +172,12 @@ impl <'a, S: Str> ToGlibPtr<'a, *const c_char> for Option<S> {
     }
 }
 
-impl <'a, S: Str> ToGlibPtr<'a, *mut c_char> for Option<S> {
+impl <'a, S: AsRef<str>> ToGlibPtr<'a, *mut c_char> for Option<S> {
     type Storage = Option<CString>;
 
     fn borrow_to_glib(&'a self) -> Stash<*mut c_char, Option<S>> {
         let tmp = match self {
-            &Some(ref s) => Some(CString::new(s.as_slice()).unwrap()),
+            &Some(ref s) => Some(CString::new(s.as_ref()).unwrap()),
             &None => None,
         };
         let ptr = tmp.as_ref().map_or(ptr::null(), |s| s.as_ptr());
