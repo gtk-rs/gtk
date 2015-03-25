@@ -46,7 +46,7 @@ fn main() {
                 let mut contents = String::new();
                 let _ = reader.read_to_string(&mut contents);
 
-                text_view.get_buffer().unwrap().set_text(contents);
+                text_view.get_buffer().unwrap().set_text(&contents);
 
             },
             _ => {}

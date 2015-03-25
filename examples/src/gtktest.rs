@@ -112,7 +112,7 @@ fn main() {
 
         dialog.destroy();
 
-        entry.set_text(format!("Clicked {}", ret));
+        entry.set_text(&format!("Clicked {}", ret));
     }));
 
     Connect::connect(&button_about, Clicked::new(&mut ||{
@@ -150,7 +150,7 @@ fn main() {
         dialog.destroy();
     }));
     Connect::connect(&file_button, Clicked::new(&mut ||{
-        //entry.set_text("Clicked!".to_string());
+        //entry.set_text("Clicked!");
         let dialog = gtk::FileChooserDialog::new(
             "Choose a file", None, gtk::FileChooserAction::Open,
             [("Open", gtk::ResponseType::Ok), ("Cancel", gtk::ResponseType::Cancel)]);
@@ -166,7 +166,7 @@ fn main() {
         println!("Files: {:?}", files);
     }));
     Connect::connect(&app_button, Clicked::new(&mut ||{
-        //entry.set_text("Clicked!".to_string());
+        //entry.set_text("Clicked!");
         let dialog = gtk::AppChooserDialog::new_for_content_type(None, gtk::DialogFlags::Modal, "sh").unwrap();
 
         dialog.run();
