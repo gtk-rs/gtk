@@ -48,6 +48,7 @@ pub fn notify_startup_complete_with_id(startup_id: &str) {
     }
 }
 
+#[cfg(any(feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
 pub fn set_allowed_backends(backends: &str) {
     unsafe {
         ffi::gdk_set_allowed_backends(backends.borrow_to_glib().0)

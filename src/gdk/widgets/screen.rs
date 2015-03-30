@@ -149,6 +149,7 @@ impl Screen {
         }
     }
 
+    #[cfg(any(feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
     pub fn get_monitor_scale_factor(&self, monitor_num: i32) -> i32 {
         unsafe { ffi::gdk_screen_get_monitor_scale_factor(self.pointer, monitor_num as c_int) }
     }
