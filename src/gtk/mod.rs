@@ -181,14 +181,14 @@ pub use self::widgets::{
 #[cfg(target_os = "linux")]
 pub use self::widgets::{Socket};
 
-#[cfg(any(feature = "GTK_3_6", feature = "GTK_3_8", feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
+#[cfg(feature = "GTK_3_6")]
 /// GTK Widgets for versions since GTK 3.6
 pub use self::widgets::{
     MenuButton,
     LevelBar,
 };
 
-#[cfg(any(feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
+#[cfg(feature = "GTK_3_10")]
 /// GTK Widgets for versions since GTK 3.10
 pub use self::widgets::{
     SearchEntry,
@@ -202,7 +202,7 @@ pub use self::widgets::{
     PlacesSidebar
 };
 
-#[cfg(any(feature = "GTK_3_12", feature = "GTK_3_14"))]
+#[cfg(feature = "GTK_3_12")]
 /// GTK Widgets for versions since GTK 3.12
 pub use self::widgets::{
     FlowBox,

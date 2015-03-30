@@ -25,7 +25,7 @@ For OSX, install [XQuartz](http://xquartz.macosforge.org/landing/), then:
 > export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/opt/X11/lib/pkgconfig
 ```
 
-__rgtk__ targets __GTK+__ 3.6 by default, newer verions support up to 3.14 is enabled by requesting a corresponding feature e.g.
+__rgtk__ targets __GTK+__ 3.6 by default, verions 3.4 to 3.14 support is enabled by requesting a corresponding feature e.g.
 ```Shell
 > cargo build --features GTK_3_10
 ```
@@ -68,7 +68,7 @@ To include rgtk as a cargo dependency you have to add it to your Cargo.toml and 
 git = "https://github.com/jeremyletang/rgtk.git"
 features = ["GTK_3_12"]
 ```
-Currently available GTK versions are 3.14, 3.12, 3.10, 3.8 and 3.6
+Currently available GTK versions are 3.14, 3.12, 3.10, 3.8, 3.6 and 3.4
 
 Use __rgtk__
 ============

@@ -184,12 +184,12 @@ impl IconView {
         unsafe { ffi::gtk_icon_view_get_item_padding(GTK_ICON_VIEW(self.pointer)) }
     }
 
-    #[cfg(any(feature = "GTK_3_8", feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
+    #[cfg(feature = "GTK_3_8")]
     pub fn set_activate_on_single_click(&self, single: bool) {
         unsafe { ffi::gtk_icon_view_set_activate_on_single_click(GTK_ICON_VIEW(self.pointer), if single == false {0} else {1}) }
     }
 
-    #[cfg(any(feature = "GTK_3_8", feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
+    #[cfg(feature = "GTK_3_8")]
     pub fn get_activate_on_single_click(&self) -> bool {
         match unsafe { ffi::gtk_icon_view_get_activate_on_single_click(GTK_ICON_VIEW(self.pointer)) } {
             0 => false,

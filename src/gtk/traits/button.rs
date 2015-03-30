@@ -135,12 +135,12 @@ pub trait ButtonTrait: gtk::WidgetTrait + gtk::ContainerTrait {
         }
     }
 
-    #[cfg(any(feature = "GTK_3_6", feature = "GTK_3_8", feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
+    #[cfg(feature = "GTK_3_6")]
     fn set_always_show_image(&mut self, always_show: bool) -> () {
         unsafe { ffi::gtk_button_set_always_show_image(GTK_BUTTON(self.unwrap_widget()), to_gboolean(always_show)); }
     }
 
-    #[cfg(any(feature = "GTK_3_6", feature = "GTK_3_8", feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
+    #[cfg(feature = "GTK_3_6")]
     fn get_always_show_image(&self) -> bool {
         unsafe { to_bool(ffi::gtk_button_get_always_show_image(GTK_BUTTON(self.unwrap_widget()))) }
     }

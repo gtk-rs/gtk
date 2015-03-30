@@ -84,14 +84,14 @@ pub trait LabelTrait: gtk::WidgetTrait {
         unsafe { to_bool(ffi::gtk_label_get_line_wrap(GTK_LABEL(self.unwrap_widget()))) }
     }
 
-    #[cfg(any(feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
+    #[cfg(feature = "GTK_3_10")]
     fn set_lines(&mut self, lines: i32) -> () {
         unsafe {
             ffi::gtk_label_set_lines(GTK_LABEL(self.unwrap_widget()), lines as c_int);
         }
     }
 
-    #[cfg(any(feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
+    #[cfg(feature = "GTK_3_10")]
     fn get_lines(&self) -> i32 {
         unsafe {
             ffi::gtk_label_get_lines(GTK_LABEL(self.unwrap_widget())) as c_int

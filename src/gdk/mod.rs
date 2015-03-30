@@ -38,7 +38,7 @@ pub use self::rt::{
     error_trap_pop,
     error_trap_pop_ignored
 };
-#[cfg(any(feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
+#[cfg(feature = "GTK_3_10")]
 pub use self::rt::set_allowed_backends;
 
 pub use self::events::{
@@ -122,7 +122,7 @@ pub use self::widgets::{
     DragContext,
     AppLaunchContext
 };
-#[cfg(any(feature = "GTK_3_8", feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
+#[cfg(feature = "GTK_3_8")]
 pub use self::widgets::{
     FrameClock,
     FrameTimings,

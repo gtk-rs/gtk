@@ -8,7 +8,7 @@ use rgtk::gdk::enums::modifier_type;
 
 /// Expands to its argument if GTK+ 3.10 support is configured and to `()` otherwise
 #[macro_export]
-#[cfg(not(any(feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14")))]
+#[cfg(not(feature = "GTK_3_10"))]
 macro_rules! with_gtk_3_10 {
     ($ex:expr) => (
         ()
@@ -20,7 +20,7 @@ macro_rules! with_gtk_3_10 {
 
 /// Expands to its argument if GTK+ 3.10 support is configured and to `()` otherwise
 #[macro_export]
-#[cfg(any(feature = "GTK_3_10", feature = "GTK_3_12", feature = "GTK_3_14"))]
+#[cfg(feature = "GTK_3_10")]
 macro_rules! with_gtk_3_10 {
     ($ex:expr) => (
         $ex
