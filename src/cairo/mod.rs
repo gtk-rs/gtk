@@ -52,9 +52,11 @@ pub use self::patterns::{
     RadialGradient,
     SolidPattern,
     SurfacePattern,
-    Mesh,
+};
 
-    //Enum
+#[cfg(feature = "CAIRO_1_12")]
+pub use self::patterns::{
+    Mesh,
     MeshCorner,
 };
 
