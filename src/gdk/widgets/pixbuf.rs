@@ -70,8 +70,8 @@ impl Pixbuf {
         unsafe { ffi::gdk_pixbuf_get_rowstride(self.pointer as *const ffi::C_GdkPixbuf) }
     }
 
-    pub fn get_byte_length(&self) -> u64 {
-        unsafe { ffi::gdk_pixbuf_get_byte_length(self.pointer as *const ffi::C_GdkPixbuf) }
+    pub fn get_byte_length(&self) -> usize {
+        unsafe { ffi::gdk_pixbuf_get_byte_length(self.pointer as *const ffi::C_GdkPixbuf) as usize }
     }
 
     pub fn get_option(&self, key: &str) -> Option<String> {
