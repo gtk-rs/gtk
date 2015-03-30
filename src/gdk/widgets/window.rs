@@ -217,10 +217,12 @@ impl Window {
         unsafe { ffi::gdk_window_unfullscreen(self.pointer) }
     }
 
+    #[cfg(any(feature = "GTK_3_8", feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
     pub fn get_fullscreen_mode(&self) -> gdk::FullscreenMode {
         unsafe { ffi::gdk_window_get_fullscreen_mode(self.pointer) }
     }
 
+    #[cfg(any(feature = "GTK_3_8", feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
     pub fn set_fullscreen_mode(&self, mode: gdk::FullscreenMode) {
         unsafe { ffi::gdk_window_set_fullscreen_mode(self.pointer, mode) }
     }
@@ -315,7 +317,7 @@ impl Window {
     /* FIXME : I think the Event struct is missing, not just a trait is needed:
     https://developer.gnome.org/gdk3/3.14/gdk3-Event-Structures.html#GdkEvent
 
-    // Since 3.14
+    #[cfg(any(feature = "GTK_3_14"))]
     pub fn show_window_menu(&self, event: &gdk::Event) {
         unsafe { ffi::gdk_window_show_window_menu(self.pointer, event.unwrap_pointer()) }
     }*/
@@ -329,7 +331,7 @@ impl Window {
         unsafe { ffi::gdk_window_beep(self.pointer) }
     }
 
-    // Since 3.10
+    #[cfg(any(feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
     pub fn get_scale_factor(&self) -> i32 {
         unsafe { ffi::gdk_window_get_scale_factor(self.pointer) }
     }
@@ -366,6 +368,7 @@ impl Window {
         unsafe { ffi::gdk_window_set_debug_updates(setting.to_glib()) }
     }
 
+    #[cfg(any(feature = "GTK_3_8", feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
     pub fn get_frame_clock(&self) -> Option<gdk::FrameClock> {
         let tmp = unsafe { ffi::gdk_window_get_frame_clock(self.pointer) };
 
@@ -486,6 +489,7 @@ impl Window {
         unsafe { ffi::gdk_window_get_type_hint(self.pointer) }
     }
 
+    #[cfg(any(feature = "GTK_3_12", feature = "GTK_3_14"))]
     pub fn set_shadow_width(&self, left: i32, right: i32, top: i32, bottom: i32) {
         unsafe { ffi::gdk_window_set_shadow_width(self.pointer, left as c_int, right as c_int, top as c_int,
             bottom as c_int) }
@@ -537,6 +541,7 @@ impl Window {
         }
     }
 
+    #[cfg(any(feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
     pub fn get_device_position_double(&self, device: &gdk::Device, x: &mut f64, y: &mut f64,
         mask: &mut gdk::ModifierType) -> Option<Window> {
         let tmp = unsafe { ffi::gdk_window_get_device_position_double(self.pointer, device.unwrap_pointer(), x, y, mask) };
@@ -682,10 +687,12 @@ impl Window {
         unsafe { ffi::gdk_window_set_source_events(self.pointer, source, event_mask) }
     }
 
+    #[cfg(any(feature = "GTK_3_12", feature = "GTK_3_14"))]
     pub fn get_event_compression(&self) -> bool {
         unsafe { from_glib(ffi::gdk_window_get_event_compression(self.pointer)) }
     }
 
+    #[cfg(any(feature = "GTK_3_12", feature = "GTK_3_14"))]
     pub fn set_event_compression(&self, event_compression: bool) {
         unsafe { ffi::gdk_window_set_event_compression(self.pointer, event_compression.to_glib()) }
     }

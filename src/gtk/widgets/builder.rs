@@ -37,6 +37,7 @@ impl Builder {
         }
     }
 
+    #[cfg(any(feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
     pub fn new_from_file(file_name: &str) -> Option<Builder> {
         let tmp = unsafe {
             ffi::gtk_builder_new_from_file(file_name.borrow_to_glib().0)
@@ -51,6 +52,7 @@ impl Builder {
         }
     }
 
+    #[cfg(any(feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
     pub fn new_from_resource(resource_path: &str) -> Option<Builder> {
         let tmp = unsafe {
             ffi::gtk_builder_new_from_resource(resource_path.borrow_to_glib().0)
@@ -65,6 +67,7 @@ impl Builder {
         }
     }
 
+    #[cfg(any(feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
     pub fn new_from_string(string: &str) -> Option<Builder> {
         let tmp = unsafe {
             // Don't need a null-terminated string here

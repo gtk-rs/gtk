@@ -26,7 +26,6 @@ pub use self::rt::{
     get_display_arg_name,
     notify_startup_complete,
     notify_startup_complete_with_id,
-    set_allowed_backends,
     get_program_class,
     set_program_class,
     flush,
@@ -39,6 +38,8 @@ pub use self::rt::{
     error_trap_pop,
     error_trap_pop_ignored
 };
+#[cfg(any(feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
+pub use self::rt::set_allowed_backends;
 
 pub use self::events::{
     EventType,
@@ -117,11 +118,14 @@ pub use self::widgets::{
     Pixbuf,
     Point,
     DisplayManager,
-    FrameClock,
-    FrameTimings,
     WindowAttr,
     DragContext,
     AppLaunchContext
+};
+#[cfg(any(feature = "GTK_3_8", feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
+pub use self::widgets::{
+    FrameClock,
+    FrameTimings,
 };
 
 pub use self::keys::{

@@ -22,7 +22,9 @@ pub use self::device_manager::DeviceManager;
 pub use self::display::Display;
 pub use self::display_manager::DisplayManager;
 pub use self::drag_context::DragContext;
+#[cfg(any(feature = "GTK_3_8", feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
 pub use self::frame_clock::FrameClock;
+#[cfg(any(feature = "GTK_3_8", feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
 pub use self::frame_timings::FrameTimings;
 pub use self::pixbuf::Pixbuf;
 pub use self::point::Point;
@@ -40,7 +42,9 @@ mod device_manager;
 mod display;
 mod display_manager;
 mod drag_context;
+#[cfg(any(feature = "GTK_3_8", feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
 mod frame_clock;
+#[cfg(any(feature = "GTK_3_8", feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
 mod frame_timings;
 mod pixbuf;
 mod point;
