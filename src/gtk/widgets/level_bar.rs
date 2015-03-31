@@ -15,6 +15,8 @@
 
 //! A bar that can used as a level indicator
 
+#![cfg_attr(not(feature = "GTK_3_8"), allow(unused_imports))]
+
 use libc::c_double;
 use glib::translate::ToGlibPtr;
 
