@@ -202,7 +202,9 @@ pub enum PatternType {
     PatternTypeSurface,
     PatternTypeLinearGradient,
     PatternTypeRadialGradient,
+    #[cfg(feature = "CAIRO_1_12")]
     PatternTypeMesh,
+    #[cfg(feature = "CAIRO_1_12")]
     PatternTypeRasterSource
 }
 

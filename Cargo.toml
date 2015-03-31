@@ -12,13 +12,15 @@ libc = "0.1"
 c_vec = "^1.0.0"
 
 [features]
-default = ["GTK_3_6"]
+default = ["GTK_3_6", "CAIRO_1_10"]
 GTK_3_4 = ["gtk3-sys/GTK_3_4"]
 GTK_3_6 = ["gtk3-sys/GTK_3_6", "GTK_3_4"]
 GTK_3_8 = ["gtk3-sys/GTK_3_8", "GTK_3_6"]
 GTK_3_10 = ["gtk3-sys/GTK_3_10", "GTK_3_8"]
 GTK_3_12 = ["gtk3-sys/GTK_3_12", "GTK_3_10"]
 GTK_3_14 = ["gtk3-sys/GTK_3_14", "GTK_3_12"]
+CAIRO_1_10 = ["cairo-sys/CAIRO_1_10"]
+CAIRO_1_12 = ["cairo-sys/CAIRO_1_12", "CAIRO_1_10"]
 
 [lib]
 name = "rgtk"

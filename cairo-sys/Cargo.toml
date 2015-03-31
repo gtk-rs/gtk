@@ -9,6 +9,11 @@ description = "FFI bindings to Cairo"
 repository = "https://github.com/jeremyletang/rgtk"
 license = "LGPL-3.0+"
 
+[features]
+default = ["CAIRO_1_10"]
+CAIRO_1_10 = []
+CAIRO_1_12 = ["CAIRO_1_10"]
+
 [dependencies]
 libc = "0.1"
 
