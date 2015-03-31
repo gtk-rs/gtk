@@ -1,4 +1,4 @@
-#![crate_type = "bin"]
+#![cfg_attr(not(feature = "GTK_3_10"), allow(unused_variables, unused_mut))]
 
 extern crate rgtk;
 

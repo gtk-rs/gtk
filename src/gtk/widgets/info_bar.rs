@@ -15,6 +15,8 @@
 
 //! Report important messages to the user
 
+#![cfg_attr(not(feature = "GTK_3_10"), allow(unused_imports))]
+
 use libc::c_int;
 use glib::translate::ToGlibPtr;
 

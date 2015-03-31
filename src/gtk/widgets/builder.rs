@@ -13,6 +13,8 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
+#![cfg_attr(not(feature = "GTK_3_10"), allow(unused_imports))]
+
 use gtk::ffi::{self, C_GtkBuilder};
 use libc::{c_char, c_long};
 use gtk::traits::GObjectTrait;
