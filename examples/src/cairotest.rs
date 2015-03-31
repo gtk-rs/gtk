@@ -17,8 +17,8 @@ fn main() {
     gtk::init();
 
     drawable(500, 500, &mut |cr: Context| {
-        cr.set_dash(&[3., 2., 1.], 42.);
-        assert_eq!(cr.get_dash(), (vec![3., 2., 1.], 42.));
+        cr.set_dash(&[3., 2., 1.], 1.);
+        assert_eq!(cr.get_dash(), (vec![3., 2., 1.], 1.));
 
         cr.scale(500f64, 500f64);
 
