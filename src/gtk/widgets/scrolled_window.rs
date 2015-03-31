@@ -16,6 +16,7 @@
 use std::ptr;
 
 use gtk::{self, ffi};
+use gtk::cast::GTK_SCROLLED_WINDOW;
 
 /// GtkScrolledWindow — Adds scrollbars to its child widget
 struct_Widget!(ScrolledWindow);
@@ -31,6 +32,22 @@ impl ScrolledWindow {
         };
 
         check_pointer!(tmp_pointer, ScrolledWindow)
+    }
+
+    pub fn get_min_content_width(&self) -> i32 {
+        unsafe { ffi::gtk_scrolled_window_get_min_content_width(GTK_SCROLLED_WINDOW(self.pointer)) }
+    }
+
+    pub fn set_min_content_width(&self, width: i32) {
+        unsafe { ffi::gtk_scrolled_window_set_min_content_width(GTK_SCROLLED_WINDOW(self.pointer), width) }
+    }
+
+    pub fn get_min_content_height(&self) -> i32 {
+        unsafe { ffi::gtk_scrolled_window_get_min_content_height(GTK_SCROLLED_WINDOW(self.pointer)) }
+    }
+
+    pub fn set_min_content_height(&self, height: i32) {
+        unsafe { ffi::gtk_scrolled_window_set_min_content_height(GTK_SCROLLED_WINDOW(self.pointer), height) }
     }
 }
 

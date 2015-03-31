@@ -3008,6 +3008,10 @@ extern "C" {
     //=========================================================================
     pub fn gtk_scrolled_window_new          (h_adjustment: *mut C_GtkAdjustment, v_adjustment: *mut C_GtkAdjustment) -> *mut C_GtkWidget;
     pub fn gtk_scrolled_window_set_policy   (scrolled_window: *mut C_GtkScrolledWindow, h_scrollbar_policy: enums::PolicyType, v_scrollbar_policy: enums::PolicyType);
+    pub fn gtk_scrolled_window_get_min_content_width(scrolled_window: *mut C_GtkScrolledWindow) -> c_int;
+    pub fn gtk_scrolled_window_set_min_content_width(scrolled_window: *mut C_GtkScrolledWindow, width: c_int);
+    pub fn gtk_scrolled_window_get_min_content_height(scrolled_window: *mut C_GtkScrolledWindow) -> c_int;
+    pub fn gtk_scrolled_window_set_min_content_height(scrolled_window: *mut C_GtkScrolledWindow, height: c_int);
 
     //=========================================================================
     // GtkPlacesSidebar                                                  NOT OK
