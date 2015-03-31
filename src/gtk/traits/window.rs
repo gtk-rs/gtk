@@ -51,7 +51,7 @@ pub trait WindowTrait : gtk::WidgetTrait {
         }
     }
 
-    #[cfg(any(feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
+    #[cfg(feature = "GTK_3_10")]
     fn set_titlebar<T: gtk::WidgetTrait>(&self, titlebar: &T) {
         unsafe {
             ffi::gtk_window_set_titlebar(GTK_WINDOW(self.unwrap_widget()), titlebar.unwrap_widget());

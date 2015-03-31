@@ -17,7 +17,7 @@
 
 use gtk::{self, ffi};
 use glib::translate::ToGlibPtr;
-#[cfg(any(feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
+#[cfg(feature = "GTK_3_10")]
 use gtk::IconSize;
 
 /**
@@ -54,7 +54,7 @@ impl Button {
         check_pointer!(tmp_pointer, Button)
     }
 
-    #[cfg(any(feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
+    #[cfg(feature = "GTK_3_10")]
     pub fn new_from_icon_name(icon_name: &str, size: IconSize) -> Option<Button> {
         let tmp_pointer = unsafe {
             ffi::gtk_button_new_from_icon_name(icon_name.borrow_to_glib().0, size)

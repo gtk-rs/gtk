@@ -12,7 +12,7 @@ install:
 script:
   - rustc --version
   - cd examples
-  - cargo build --features GTK_3_6
+  - cargo build
   - cd ..
   - cargo doc
 after_script:

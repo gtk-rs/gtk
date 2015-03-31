@@ -73,12 +73,12 @@ impl InfoBar {
         }
     }
 
-    #[cfg(any(feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
+    #[cfg(feature = "GTK_3_10")]
     pub fn show_close_button(&mut self, show: bool) -> () {
          unsafe { ffi::gtk_info_bar_set_show_close_button(GTK_INFOBAR(self.pointer), to_gboolean(show)); }
     }
 
-    #[cfg(any(feature = "GTK_3_10",feature = "GTK_3_12", feature = "GTK_3_14"))]
+    #[cfg(feature = "GTK_3_10")]
     pub fn get_show_close_button(&self) -> bool {
         unsafe { to_bool(ffi::gtk_info_bar_get_show_close_button(GTK_INFOBAR(self.pointer))) }
     }
