@@ -36,8 +36,10 @@ path = "gtk3-sys"
 version = "0.1.0"
 
 [dependencies.cairo-sys]
-path = "cairo-sys"
-version = "0.1.0"
+git = "https://github.com/rust-gnome/cairo.git"
+
+[dependencies.cairo]
+git = "https://github.com/rust-gnome/cairo.git"
 
 [dependencies.glib]
 git = "https://github.com/rust-gnome/glib.git"
