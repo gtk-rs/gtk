@@ -4,7 +4,7 @@ version = "0.0.1"
 authors = ["letang.jeremy@gmail.com", "guillaume1.gomez@gmail.com", "mathijs.henquet@gmail.com", "bpgarman@fastmail.fm", "me@bstr.eu", "zsoakes@gmail.com", "Gleb Kozyrev <gleb@gkoz.com>"]
 
 description = "A rust binding for the GTK+ library"
-repository = "https://github.com/jeremyletang/rgtk"
+repository = "https://github.com/rust-gnome/gtk"
 license = "LGPL-3.0+"
 
 [dependencies]
@@ -27,10 +27,6 @@ name = "rgtk"
 crate_type = ["rlib"]
 path = "src/rgtk.rs"
 
-[dependencies.glib-sys]
-path = "glib-sys"
-version = "0.1.0"
-
 [dependencies.gdk3-sys]
 path = "gdk3-sys"
 version = "0.1.0"
@@ -44,5 +40,7 @@ path = "cairo-sys"
 version = "0.1.0"
 
 [dependencies.glib]
-path = "glib"
-version = "0.1.0"
+git = "https://github.com/GuillaumeGomez/glib.git"
+
+[dependencies.glib-sys]
+git = "https://github.com/GuillaumeGomez/glib.git"
