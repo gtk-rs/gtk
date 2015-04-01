@@ -40,7 +40,7 @@ path = "cairo-sys"
 version = "0.1.0"
 
 [dependencies.glib]
-git = "https://github.com/GuillaumeGomez/glib.git"
+git = "https://github.com/rust-gnome/glib.git"
 
 [dependencies.glib-sys]
-git = "https://github.com/GuillaumeGomez/glib.git"
+git = "https://github.com/rust-gnome/glib.git"

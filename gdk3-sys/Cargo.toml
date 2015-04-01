@@ -14,7 +14,7 @@ bitflags = "0.1"
 libc = "0.1"
 
 [dependencies.glib-sys]
-git = "https://github.com/GuillaumeGomez/glib.git"
+git = "https://github.com/rust-gnome/glib.git"
 
 [build-dependencies]
 pkg-config = "0.3"
