@@ -132,4 +132,4 @@ Finally, all the gtk widgets implement the trait gtk::traits::Widget.
 
 ## License
 
-__rgtk__ is available under the same license term as GTK+: the LGPL (Lesser General Public license).
+__rgtk__ is available under the MIT License, please refer to it.
