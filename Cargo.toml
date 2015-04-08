@@ -27,10 +27,6 @@ name = "rgtk"
 crate_type = ["rlib"]
 path = "src/rgtk.rs"
 
-[dependencies.gdk3-sys]
-path = "gdk3-sys"
-version = "0.1.0"
-
 [dependencies.gtk3-sys]
 path = "gtk3-sys"
 version = "0.1.0"
@@ -46,3 +42,9 @@ git = "https://github.com/rust-gnome/glib.git"
 
 [dependencies.glib-sys]
 git = "https://github.com/rust-gnome/glib.git"
+
+[dependencies.gdk3-sys]
+git = "https://github.com/rust-gnome/gdk.git"
+
+[dependencies.gdk]
+git = "https://github.com/rust-gnome/gdk.git"

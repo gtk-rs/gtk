@@ -17,7 +17,6 @@ use std::slice;
 use gtk::ffi;
 use glib::translate::{FromGlibPtr, ToGlibPtr};
 
-#[derive(Copy)]
 pub struct TreePath {
     pointer:   *mut ffi::C_GtkTreePath
 }

@@ -18,7 +18,6 @@
 use gtk::{self, ffi};
 use glib::{to_bool, to_gboolean};
 
-#[derive(Copy)]
 pub struct SizeGroup {
     pointer: *mut ffi::C_GtkSizeGroup
 }

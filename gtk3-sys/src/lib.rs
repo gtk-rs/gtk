@@ -31,227 +31,153 @@ pub use glib_ffi::{
 //pub type C_GtkAllocation = C_GdkRectangle;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkWidget;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkWindow;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkLabel;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkMisc;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkButton;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkBox;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkOrientable;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkRange;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkButtonBox;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkFrame;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkAspectFrame;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkFixed;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkBin;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkContainer;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkFontButton;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkToggleButton;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkCheckButton;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkMenuButton;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkColorButton;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkLinkButton;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkAdjustment;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkScaleButton;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkVolumeButton;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkGrid;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkEntryBuffer;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkEntry;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkSearchEntry;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkSwitch;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkScale;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkLevelBar;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkSearchBar;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkSpinButton;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkSpinner;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkImage;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkProgressBar;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkArrow;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkCalendar;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkAlignment;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkExpander;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkPaned;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkInfoBar;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkToolShell;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkToolbar;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkDialog;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkAboutDialog;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkMessageDialog;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkAppChooserDialog;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkColorChooserDialog;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkFileChooserDialog;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkFileChooser;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkNotebook;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkStack;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkStackSwitcher;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkRevealer;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkOverlay;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkScrollable;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkLayout;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkHeaderBar;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkFlowBox;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkFlowBoxChild;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkListBox;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkListBoxRow;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkActionBar;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkFileFilter;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkAppChooser;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GAppLaunchContext;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GAppInfo;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkFontChooser;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkFontChooserDialog;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkBuildable;
 //pub struct C_GtkPageSetupUnixDialog;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkPrintSettings;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkPageSetup;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkPaperSize;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkRecentData {
     pub display_name: *mut c_char,
     pub description: *mut c_char,
@@ -262,13 +188,10 @@ pub struct C_GtkRecentData {
     pub is_private: Gboolean
 }
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkRecentInfo;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkRecentFilter;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkRecentFilterInfo {
     pub contains: enums::RecentFilterFlags,
     pub uri: *const c_char,
@@ -279,234 +202,170 @@ pub struct C_GtkRecentFilterInfo {
     pub age: c_int
 }
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkRecentManager;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkRecentChooser;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkRecentChooserDialog;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkCellRendererClass;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkCellRenderer;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkCellLayout;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkTreeModel;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkListStore;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkTreeStore;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkTreePath;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkTreeIter;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkCellEditable;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkCellRendererText;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkCellRendererToggle;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkToolItem;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkToolItemGroup;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkToolPalette;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkToolButton;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkMenuToolButton;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkToggleToolButton;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkRadioToolButton;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkSeparatorToolItem;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkMenu;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GMenuModel;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GClosure;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkColorChooser;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkEditable;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkRadioButton;
 
 // not useful to implement for the moment
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkBuilder;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkTextTag;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkTextAttributes;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkTextView;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkTextBuffer;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkTextTagTable;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkScrolledWindow;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkPlacesSidebar;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkIconSize;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkTextMark;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkTextIter;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkTextChildAnchor;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkTreeView;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkTreeViewColumn;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkMenuShell;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkMenuItem;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkCheckMenuItem;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkViewport;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkStatusbar;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkLockButton;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkActionable;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkEntryCompletion;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkIconView;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkTreeSelection;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkRecentChooserWidget;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkComboBox;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkComboBoxText;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkPopover;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkAppChooserWidget;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkSizeGroup;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkFileChooserWidget;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkColorChooserWidget;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkFontChooserWidget;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkMovementStep;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkSocket;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_GtkEventBox;
 
 extern "C" {

@@ -24,8 +24,7 @@ libc = "0.1"
 git = "https://github.com/rust-gnome/glib.git"
 
 [dependencies.gdk3-sys]
-path = "../gdk3-sys"
-version = "0.1.0"
+git = "https://github.com/rust-gnome/gdk.git"
 
 [build-dependencies]
 pkg-config = "0.3"

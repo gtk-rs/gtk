@@ -16,7 +16,6 @@
 use gtk::ffi;
 use glib::to_bool;
 
-#[derive(Copy)]
 pub struct TextChildAnchor {
     pointer: *mut ffi::C_GtkTextChildAnchor
 }

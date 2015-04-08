@@ -18,7 +18,6 @@
 use gtk::ffi;
 use glib::translate::ToGlibPtr;
 
-#[derive(Copy)]
 pub struct TextTag {
     pointer: *mut ffi::C_GtkTextTag
 }

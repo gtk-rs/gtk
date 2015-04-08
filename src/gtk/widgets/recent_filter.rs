@@ -17,7 +17,6 @@ use gtk::{self, ffi};
 use glib::to_bool;
 use glib::translate::ToGlibPtr;
 
-#[derive(Copy)]
 pub struct RecentFilter {
     pointer: *mut ffi::C_GtkRecentFilter
 }

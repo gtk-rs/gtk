@@ -21,28 +21,21 @@ use gtk::ffi::{Gboolean};
 use pango;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_PangoContext;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_PangoAttrList;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_PangoAttrIterator;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_PangoItem;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_PangoFontMap;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_PangoFontDescription;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_PangoLanguage;
 #[repr(C)]
-#[derive(Copy)]
+#[derive(Clone, Copy)]
 pub struct PangoMatrix {
     pub xx: c_double,
     pub xy: c_double,
@@ -52,31 +45,23 @@ pub struct PangoMatrix {
     pub y0: c_double
 }
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_PangoFont;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_PangoFontset;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_PangoFontMetrics;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_PangoFontFamily;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_PangoAnalysis;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_PangoLogAttr;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_PangoGlyphString;
 #[repr(C)]
-#[derive(Copy)]
 pub struct C_PangoScript;
 #[repr(C)]
-#[derive(Copy)]
+#[derive(Clone, Copy)]
 pub struct PangoRectangle {
     pub x: c_int,
     pub y: c_int,

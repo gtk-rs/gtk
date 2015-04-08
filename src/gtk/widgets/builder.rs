@@ -21,7 +21,6 @@ use gtk::traits::GObjectTrait;
 use glib::translate::ToGlibPtr;
 
 #[repr(C)]
-#[derive(Copy)]
 pub struct Builder {
     pointer: *mut C_GtkBuilder
 }

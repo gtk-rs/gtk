@@ -17,7 +17,6 @@
 
 use gtk::ffi;
 
-#[derive(Copy)]
 pub struct TextAttributes {
     pointer: *mut ffi::C_GtkTextAttributes
 }
