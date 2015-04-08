@@ -29,8 +29,8 @@ pub struct RecentData {
 
 impl <'a> ToGlibPtr<'a, *mut ffi::C_GtkRecentData> for RecentData {
     type Storage = (Box<ffi::C_GtkRecentData>,
-                    [Stash<'a, *mut c_char, String>; 5],
-                    Stash<'a, *mut *mut c_char, Vec<String>>);
+                    [Stash<'a, *const c_char, String>; 5],
+                    Stash<'a, *mut *const c_char, Vec<String>>);
 
     fn borrow_to_glib(&'a self)
         -> Stash<*mut ffi::C_GtkRecentData, RecentData> {
@@ -42,12 +42,12 @@ impl <'a> ToGlibPtr<'a, *mut ffi::C_GtkRecentData> for RecentData {
         let groups = self.groups.borrow_to_glib();
 
         let mut data = Box::new(ffi::C_GtkRecentData {
-            display_name: display_name.0,
-            description: description.0,
-            mime_type: mime_type.0,
-            app_name: app_name.0,
-            app_exec: app_exec.0,
-            groups: groups.0,
+            display_name: display_name.0 as *mut c_char,
+            description: description.0 as *mut c_char,
+            mime_type: mime_type.0 as *mut c_char,
+            app_name: app_name.0 as *mut c_char,
+            app_exec: app_exec.0 as *mut c_char,
+            groups: groups.0 as *mut *mut c_char,
             is_private: self.is_private.to_glib(),
         });
 

@@ -13,6 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
+use libc::c_char;
 use glib::translate::{FromGlibPtr, ToGlibPtr};
 use gtk::cast::{GTK_FONT_CHOOSER};
 use gtk::{self, ffi};
@@ -33,7 +34,9 @@ pub trait FontChooserTrait: gtk::WidgetTrait {
 
     fn set_font(&self, font_name: &str) {
         unsafe {
-            ffi::gtk_font_chooser_set_font(GTK_FONT_CHOOSER(self.unwrap_widget()), font_name.borrow_to_glib().0)
+            ffi::gtk_font_chooser_set_font(
+                GTK_FONT_CHOOSER(self.unwrap_widget()),
+                font_name.borrow_to_glib().0 as *mut c_char)
         }
     }
 
