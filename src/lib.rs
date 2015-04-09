@@ -38,9 +38,6 @@ let button = gtk::Button:new(); // trait gtk::Button reexported as GtkButtonTrai
 ```
 */
 
-#![crate_name = "rgtk"]
-#![crate_type = "lib"]
-#![crate_type = "rlib"]
 #![allow(dead_code)] // TODO: drop this
 #![allow(raw_pointer_derive)]
 
@@ -52,8 +49,8 @@ extern crate libc;
 extern crate c_vec;
 
 extern crate glib_sys as glib_ffi;
-extern crate gdk3_sys as gdk_ffi;
-extern crate gtk3_sys as gtk_ffi;
+extern crate gdk_sys as gdk_ffi;
+extern crate gtk_sys as gtk_ffi;
 extern crate cairo_sys as cairo_ffi;
 extern crate pango_sys as pango_ffi;
 extern crate glib as glib_main;

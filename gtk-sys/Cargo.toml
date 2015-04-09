@@ -1,0 +1,34 @@
+[package]
+name = "gtk-sys"
+version = "0.1.0"
+authors = ["The Rust-gnome Project Developers"]
+build = "build.rs"
+links = "gtk"
+
+description = "FFI bindings to GTK+ 3"
+repository = "https://github.com/rust-gnome/gtk"
+license = "MIT"
+
+[lib]
+name = "gtk_sys"
+
+[features]
+GTK_3_4 = []
+GTK_3_6 = []
+GTK_3_8 = []
+GTK_3_10 = []
+GTK_3_12 = []
+GTK_3_14 = []
+
+[dependencies]
+libc = "0.1"
+
+[dependencies.glib-sys]
+git = "https://github.com/rust-gnome/glib"
+
+[dependencies.gdk-sys]
+git = "https://github.com/rust-gnome/gdk"
+
+[build-dependencies]
+pkg-config = "0.3"
+gcc = "0.3"

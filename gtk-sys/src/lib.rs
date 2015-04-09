@@ -18,7 +18,7 @@
 
 extern crate libc;
 extern crate glib_sys as glib_ffi;
-extern crate gdk3_sys as gdk_ffi;
+extern crate gdk_sys as gdk_ffi;
 
 pub mod enums;
 
