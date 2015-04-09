@@ -13,8 +13,6 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-#![feature(convert)]
-
 extern crate gcc;
 extern crate pkg_config;
 
