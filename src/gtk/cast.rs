@@ -141,7 +141,7 @@ pub fn GTK_LEVELBAR(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkLevelBar {
     unsafe { ffi::cast_GtkLevelBar(widget) }
 }
 
-#[cfg(feature = "GTK_3_10")]
+#[cfg(feature = "gtk_3_10")]
 pub fn GTK_SEARCHBAR(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkSearchBar {
     unsafe { ffi::cast_GtkSearchBar(widget) }
 }
@@ -242,17 +242,17 @@ pub fn GTK_NOTEBOOK(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkNotebook {
     unsafe { ffi::cast_GtkNotebook(widget) }
 }
 
-#[cfg(feature = "GTK_3_10")]
+#[cfg(feature = "gtk_3_10")]
 pub fn GTK_STACK(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkStack {
     unsafe { ffi::cast_GtkStack(widget) }
 }
 
-#[cfg(feature = "GTK_3_10")]
+#[cfg(feature = "gtk_3_10")]
 pub fn GTK_STACK_SWITCHER(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkStackSwitcher {
     unsafe { ffi::cast_GtkStackSwitcher(widget) }
 }
 
-#[cfg(feature = "GTK_3_10")]
+#[cfg(feature = "gtk_3_10")]
 pub fn GTK_REVEALER(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkRevealer {
     unsafe { ffi::cast_GtkRevealer(widget) }
 }
@@ -269,32 +269,32 @@ pub fn GTK_LAYOUT(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkLayout {
     unsafe { ffi::cast_GtkLayout(widget) }
 }
 
-#[cfg(feature = "GTK_3_10")]
+#[cfg(feature = "gtk_3_10")]
 pub fn GTK_HEADER_BAR(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkHeaderBar {
     unsafe { ffi::cast_GtkHeaderBar(widget) }
 }
 
-#[cfg(feature = "GTK_3_12")]
+#[cfg(feature = "gtk_3_12")]
 pub fn GTK_FLOW_BOX(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkFlowBox {
     unsafe { ffi::cast_GtkFlowBox(widget) }
 }
 
-#[cfg(feature = "GTK_3_12")]
+#[cfg(feature = "gtk_3_12")]
 pub fn GTK_FLOW_BOX_CHILD(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkFlowBoxChild {
     unsafe { ffi::cast_GtkFlowBoxChild(widget) }
 }
 
-#[cfg(feature = "GTK_3_10")]
+#[cfg(feature = "gtk_3_10")]
 pub fn GTK_LIST_BOX(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkListBox {
     unsafe { ffi::cast_GtkListBox(widget) }
 }
 
-#[cfg(feature = "GTK_3_10")]
+#[cfg(feature = "gtk_3_10")]
 pub fn GTK_LIST_BOX_ROW(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkListBoxRow {
     unsafe { ffi::cast_GtkListBoxRow(widget) }
 }
 
-#[cfg(feature = "GTK_3_12")]
+#[cfg(feature = "gtk_3_12")]
 pub fn GTK_ACTION_BAR(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkActionBar {
     unsafe { ffi::cast_GtkActionBar(widget) }
 }
@@ -495,7 +495,7 @@ pub fn GTK_COMBO_BOX(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkComboBox {
     unsafe { ffi::cast_GtkComboBox(widget) }
 }
 
-#[cfg(feature = "GTK_3_12")]
+#[cfg(feature = "gtk_3_12")]
 pub fn GTK_POPOVER(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkPopover {
     unsafe { ffi::cast_GtkPopover(widget) }
 }
@@ -512,7 +512,7 @@ pub fn GTK_TEXT_MARK(widget: *mut ::glib::ffi::C_GObject) -> *mut ffi::C_GtkText
     unsafe { ffi::cast_GtkTextMark(widget) }
 }
 
-#[cfg(feature = "GTK_3_10")]
+#[cfg(feature = "gtk_3_10")]
 pub fn GTK_PLACES_SIDEBAR(widget: *mut ffi::C_GtkWidget) -> *mut ffi::C_GtkPlacesSidebar {
     unsafe { ffi::cast_GtkPlacesSidebar(widget) }
 }

@@ -48,7 +48,7 @@ impl TreePath {
         }
     }
 
-    #[cfg(feature = "GTK_3_12")]
+    #[cfg(feature = "gtk_3_12")]
     pub fn new_from_indicesv(indices: &mut [i32]) -> Option<TreePath> {
         let tmp = unsafe { ffi::gtk_tree_path_new_from_indicesv(indices.as_mut_ptr(), indices.len() as ::libc::c_ulong) };
 

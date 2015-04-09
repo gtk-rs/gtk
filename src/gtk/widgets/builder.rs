@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
-#![cfg_attr(not(feature = "GTK_3_10"), allow(unused_imports))]
+#![cfg_attr(not(feature = "gtk_3_10"), allow(unused_imports))]
 
 use gtk::ffi::{self, C_GtkBuilder};
 use libc::{c_char, c_long};
@@ -38,7 +38,7 @@ impl Builder {
         }
     }
 
-    #[cfg(feature = "GTK_3_10")]
+    #[cfg(feature = "gtk_3_10")]
     pub fn new_from_file(file_name: &str) -> Option<Builder> {
         let tmp = unsafe {
             ffi::gtk_builder_new_from_file(file_name.borrow_to_glib().0)
@@ -53,7 +53,7 @@ impl Builder {
         }
     }
 
-    #[cfg(feature = "GTK_3_10")]
+    #[cfg(feature = "gtk_3_10")]
     pub fn new_from_resource(resource_path: &str) -> Option<Builder> {
         let tmp = unsafe {
             ffi::gtk_builder_new_from_resource(resource_path.borrow_to_glib().0)
@@ -68,7 +68,7 @@ impl Builder {
         }
     }
 
-    #[cfg(feature = "GTK_3_10")]
+    #[cfg(feature = "gtk_3_10")]
     pub fn new_from_string(string: &str) -> Option<Builder> {
         let tmp = unsafe {
             // Don't need a null-terminated string here

@@ -11,15 +11,15 @@ license = "MIT"
 name = "gtk"
 
 [features]
-default = ["GTK_3_6", "CAIRO_1_10"]
-GTK_3_4 = ["gtk-sys/GTK_3_4", "gdk/gdk_3_4"]
-GTK_3_6 = ["gtk-sys/GTK_3_6", "gdk/gdk_3_6", "GTK_3_4"]
-GTK_3_8 = ["gtk-sys/GTK_3_8", "gdk/gdk_3_8", "GTK_3_6"]
-GTK_3_10 = ["gtk-sys/GTK_3_10", "gdk/gdk_3_10", "GTK_3_8"]
-GTK_3_12 = ["gtk-sys/GTK_3_12", "gdk/gdk_3_12", "GTK_3_10"]
-GTK_3_14 = ["gtk-sys/GTK_3_14", "gdk/gdk_3_14", "GTK_3_12"]
-CAIRO_1_10 = ["cairo-sys/CAIRO_1_10"]
-CAIRO_1_12 = ["cairo-sys/CAIRO_1_12", "CAIRO_1_10"]
+default = ["gtk_3_6", "cairo_1_10"]
+gtk_3_4 = ["gtk-sys/gtk_3_4", "gdk/gdk_3_4"]
+gtk_3_6 = ["gtk-sys/gtk_3_6", "gdk/gdk_3_6", "gtk_3_4"]
+gtk_3_8 = ["gtk-sys/gtk_3_8", "gdk/gdk_3_8", "gtk_3_6"]
+gtk_3_10 = ["gtk-sys/gtk_3_10", "gdk/gdk_3_10", "gtk_3_8"]
+gtk_3_12 = ["gtk-sys/gtk_3_12", "gdk/gdk_3_12", "gtk_3_10"]
+gtk_3_14 = ["gtk-sys/gtk_3_14", "gdk/gdk_3_14", "gtk_3_12"]
+cairo_1_10 = ["cairo/cairo_1_10"]
+cairo_1_12 = ["cairo/cairo_1_12"]
 
 [dependencies]
 libc = "0.1"
@@ -34,6 +34,7 @@ git = "https://github.com/rust-gnome/cairo"
 
 [dependencies.cairo]
 git = "https://github.com/rust-gnome/cairo"
+default-features = false
 
 [dependencies.glib]
 git = "https://github.com/rust-gnome/glib"
