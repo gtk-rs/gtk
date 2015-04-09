@@ -55,13 +55,17 @@ extern crate glib_sys as glib_ffi;
 extern crate gdk3_sys as gdk_ffi;
 extern crate gtk3_sys as gtk_ffi;
 extern crate cairo_sys as cairo_ffi;
+extern crate pango_sys as pango_ffi;
 extern crate glib as glib_main;
 extern crate cairo as cairo_main;
 extern crate gdk as gdk_main;
+extern crate pango as pango_main;
 
 pub use glib_main as glib;
 pub use cairo_main as cairo;
 pub use gdk_main as gdk;
+pub use pango_main as pango;
+
 pub use glib_main::ValuePublic;
 pub use glib_main::traits::Connect;
 
@@ -104,4 +108,3 @@ pub use gtk::WidgetTrait as GtkWidgetTrait;
 pub use gtk::WindowTrait as GtkWindowTrait;
 
 pub mod gtk;
-pub mod pango;
