@@ -48,3 +48,9 @@ git = "https://github.com/rust-gnome/gdk.git"
 
 [dependencies.gdk]
 git = "https://github.com/rust-gnome/gdk.git"
+
+[dependencies.pango-sys]
+git = "https://github.com/rust-gnome/pango.git"
+
+[dependencies.pango]
+git = "https://github.com/rust-gnome/pango.git"
