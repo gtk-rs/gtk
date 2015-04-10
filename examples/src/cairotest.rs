@@ -1,17 +1,18 @@
-#![crate_type = "bin"]
 #![feature(core)]
 
-extern crate rgtk;
+extern crate cairo;
+extern crate gtk;
 
 use std::f64::consts::PI_2;
 
-use rgtk::*;
-use rgtk::gtk::signals::{DeleteEvent, Draw};
-use rgtk::gtk::DrawingArea;
+use gtk::Connect;
+use gtk::traits::*;
+use gtk::signals::{DeleteEvent, Draw};
+use gtk::DrawingArea;
 
-use rgtk::cairo::enums::FontSlant::FontSlantNormal;
-use rgtk::cairo::enums::FontWeight::FontWeightNormal;
-use rgtk::cairo::Context;
+use cairo::enums::FontSlant::FontSlantNormal;
+use cairo::enums::FontWeight::FontWeightNormal;
+use cairo::Context;
 
 fn main() {
     gtk::init();

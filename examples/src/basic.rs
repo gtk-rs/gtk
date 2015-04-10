@@ -4,10 +4,11 @@
 
 #![crate_type = "bin"]
 
-extern crate rgtk;
+extern crate gtk;
 
-use rgtk::*;
-use rgtk::gtk::signals::{DeleteEvent};
+use gtk::Connect;
+use gtk::traits::*;
+use gtk::signals::{DeleteEvent};
 
 fn main() {
     gtk::init();

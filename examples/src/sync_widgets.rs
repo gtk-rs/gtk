@@ -2,12 +2,11 @@
 //!
 //! You can use signals in order to synchronize the values of widgets. In this example a spin button and a horizontal scale will get interlocked.
 
-#![crate_type = "bin"]
+extern crate gtk;
 
-extern crate rgtk;
-
-use rgtk::*;
-use rgtk::gtk::signals::{ValueChanged, DeleteEvent};
+use gtk::Connect;
+use gtk::traits::*;
+use gtk::signals::{ValueChanged, DeleteEvent};
 
 fn main() {
     gtk::init();
