@@ -3,11 +3,20 @@ name = "rgtk-examples"
 version = "0.0.1"
 authors = []
 
-[dependencies.rgtk]
+[dependencies.gtk]
 path = ".."
 
+[dependencies.gdk]
+git = "https://github.com/rust-gnome/gdk"
+
+[dependencies.glib]
+git = "https://github.com/rust-gnome/glib"
+
+[dependencies.cairo]
+git = "https://github.com/rust-gnome/cairo"
+
 [features]
-GTK_3_10 = ["rgtk/GTK_3_10"]
+gtk_3_10 = ["gtk/gtk_3_10"]
 
 [[bin]]
 name = "basic"

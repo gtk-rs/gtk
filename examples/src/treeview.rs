@@ -2,14 +2,12 @@
 //!
 //! This sample demonstrates how to create a TreeView with either a ListStore or TreeStore.
 
-#![crate_type = "bin"]
+extern crate glib;
+extern crate gtk;
 
-#![feature(convert)]
-
-extern crate rgtk;
-
-use rgtk::*;
-use rgtk::gtk::signals::DeleteEvent;
+use gtk::Connect;
+use gtk::traits::*;
+use gtk::signals::DeleteEvent;
 
 fn append_text_column(tree: &mut gtk::TreeView) {
     let column = gtk::TreeViewColumn::new().unwrap();

@@ -2,18 +2,18 @@
 //!
 //! A simple text file viewer
 
-#![crate_type = "bin"]
 #![feature(core)]
 
-extern crate rgtk;
+extern crate gtk;
 
 use std::io::prelude::*;
 use std::io::BufReader;
 use std::fs::File;
 use std::num::FromPrimitive;
 
-use rgtk::*;
-use rgtk::gtk::signals::{Clicked, DeleteEvent};
+use gtk::Connect;
+use gtk::traits::*;
+use gtk::signals::{Clicked, DeleteEvent};
 
 fn main() {
     gtk::init();

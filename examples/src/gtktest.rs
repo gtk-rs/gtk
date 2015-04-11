@@ -1,10 +1,12 @@
 #![cfg_attr(not(feature = "GTK_3_10"), allow(unused_variables, unused_mut))]
 
-extern crate rgtk;
+extern crate gtk;
+extern crate gdk;
 
-use rgtk::*;
-use rgtk::gtk::signals::{Clicked, KeyPressEvent, DeleteEvent};
-use rgtk::gdk::enums::modifier_type;
+use gtk::Connect;
+use gtk::traits::*;
+use gtk::signals::{Clicked, KeyPressEvent, DeleteEvent};
+use gdk::enums::modifier_type;
 
 /// Expands to its argument if GTK+ 3.10 support is configured and to `()` otherwise
 #[macro_export]

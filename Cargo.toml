@@ -1,56 +1,56 @@
 [package]
-name = "rgtk"
+name = "gtk"
 version = "0.0.1"
-authors = ["letang.jeremy@gmail.com", "guillaume1.gomez@gmail.com", "mathijs.henquet@gmail.com", "bpgarman@fastmail.fm", "me@bstr.eu", "zsoakes@gmail.com", "Gleb Kozyrev <gleb@gkoz.com>"]
+authors = ["The Rust-gnome Project Developers"]
 
-description = "A rust binding for the GTK+ library"
+description = "Rust bindings for the GTK+ library"
 repository = "https://github.com/rust-gnome/gtk"
-license = "LGPL-3.0+"
+license = "MIT"
+
+[lib]
+name = "gtk"
+
+[features]
+default = ["gtk_3_6", "cairo_1_10"]
+gtk_3_4 = ["gtk-sys/gtk_3_4", "gdk/gdk_3_4"]
+gtk_3_6 = ["gtk-sys/gtk_3_6", "gdk/gdk_3_6", "gtk_3_4"]
+gtk_3_8 = ["gtk-sys/gtk_3_8", "gdk/gdk_3_8", "gtk_3_6"]
+gtk_3_10 = ["gtk-sys/gtk_3_10", "gdk/gdk_3_10", "gtk_3_8"]
+gtk_3_12 = ["gtk-sys/gtk_3_12", "gdk/gdk_3_12", "gtk_3_10"]
+gtk_3_14 = ["gtk-sys/gtk_3_14", "gdk/gdk_3_14", "gtk_3_12"]
+cairo_1_10 = ["cairo/cairo_1_10"]
+cairo_1_12 = ["cairo/cairo_1_12"]
 
 [dependencies]
 libc = "0.1"
 c_vec = "^1.0.0"
 
-[features]
-default = ["GTK_3_6", "CAIRO_1_10"]
-GTK_3_4 = ["gtk3-sys/GTK_3_4"]
-GTK_3_6 = ["gtk3-sys/GTK_3_6", "GTK_3_4"]
-GTK_3_8 = ["gtk3-sys/GTK_3_8", "GTK_3_6"]
-GTK_3_10 = ["gtk3-sys/GTK_3_10", "GTK_3_8"]
-GTK_3_12 = ["gtk3-sys/GTK_3_12", "GTK_3_10"]
-GTK_3_14 = ["gtk3-sys/GTK_3_14", "GTK_3_12"]
-CAIRO_1_10 = ["cairo-sys/CAIRO_1_10"]
-CAIRO_1_12 = ["cairo-sys/CAIRO_1_12", "CAIRO_1_10"]
-
-[lib]
-name = "rgtk"
-crate_type = ["rlib"]
-path = "src/rgtk.rs"
-
-[dependencies.gtk3-sys]
-path = "gtk3-sys"
+[dependencies.gtk-sys]
+path = "gtk-sys"
 version = "0.1.0"
 
 [dependencies.cairo-sys]
-git = "https://github.com/rust-gnome/cairo.git"
+git = "https://github.com/rust-gnome/cairo"
 
 [dependencies.cairo]
-git = "https://github.com/rust-gnome/cairo.git"
+git = "https://github.com/rust-gnome/cairo"
+default-features = false
 
 [dependencies.glib]
-git = "https://github.com/rust-gnome/glib.git"
+git = "https://github.com/rust-gnome/glib"
 
 [dependencies.glib-sys]
-git = "https://github.com/rust-gnome/glib.git"
+git = "https://github.com/rust-gnome/glib"
 
-[dependencies.gdk3-sys]
-git = "https://github.com/rust-gnome/gdk.git"
+[dependencies.gdk-sys]
+git = "https://github.com/rust-gnome/gdk"
 
 [dependencies.gdk]
-git = "https://github.com/rust-gnome/gdk.git"
+git = "https://github.com/rust-gnome/gdk"
+default-features = false
 
 [dependencies.pango-sys]
-git = "https://github.com/rust-gnome/pango.git"
+git = "https://github.com/rust-gnome/pango"
 
 [dependencies.pango]
-git = "https://github.com/rust-gnome/pango.git"
+git = "https://github.com/rust-gnome/pango"
