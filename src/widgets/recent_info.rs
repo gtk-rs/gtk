@@ -66,42 +66,42 @@ impl RecentInfo {
         }
     }
 
-    pub fn get_added(&self) -> i64 {
-        unsafe { ffi::gtk_recent_info_get_added(GTK_RECENT_INFO(self.unwrap_widget())) }
+    pub fn get_added(&self) -> Option<u64> {
+        match unsafe { ffi::gtk_recent_info_get_added(GTK_RECENT_INFO(self.unwrap_widget())) } {
+            x if x >= 0 => Some(x as u64),
+            _ => None
+        }
     }
 
-    pub fn get_modified(&self) -> i64 {
-        unsafe { ffi::gtk_recent_info_get_modified(GTK_RECENT_INFO(self.unwrap_widget())) }
+    pub fn get_modified(&self) -> Option<u64> {
+        match unsafe { ffi::gtk_recent_info_get_modified(GTK_RECENT_INFO(self.unwrap_widget())) } {
+            x if x >= 0 => Some(x as u64),
+            _ => None
+        }
     }
 
-    pub fn get_visited(&self) -> i64 {
-        unsafe { ffi::gtk_recent_info_get_visited(GTK_RECENT_INFO(self.unwrap_widget())) }
+    pub fn get_visited(&self) -> Option<u64> {
+        match unsafe { ffi::gtk_recent_info_get_visited(GTK_RECENT_INFO(self.unwrap_widget())) } {
+            x if x >= 0 => Some(x as u64),
+            _ => None
+        }
     }
 
     pub fn get_private_hint(&self) -> bool {
         unsafe { to_bool(ffi::gtk_recent_info_get_private_hint(GTK_RECENT_INFO(self.unwrap_widget()))) }
     }
 
-    pub fn get_application_info(&self, app_name: &str) -> Option<(String, u32, i64)> {
+    pub fn get_application_info(&self, app_name: &str) -> Option<(String, u32, u64)> {
         unsafe {
             let mut app_exec = ptr::null();
-            let mut count = 0u32;
-            let mut time_ = 0i64;
+            let mut count = 0;
+            let mut time_ = 0;
 
-            let ret = to_bool(
-                ffi::gtk_recent_info_get_application_info(
-                    GTK_RECENT_INFO(self.unwrap_widget()),
-                    app_name.borrow_to_glib().0,
-                    &mut app_exec,
-                    &mut count,
-                    &mut time_));
-
-            if ret {
-                let app_exec = FromGlibPtrNotNull::borrow(app_exec);
-                Some((app_exec, count, time_))
-            }
-            else {
-                None
+            match to_bool(ffi::gtk_recent_info_get_application_info(
+                    GTK_RECENT_INFO(self.unwrap_widget()), app_name.borrow_to_glib().0,
+                    &mut app_exec, &mut count, &mut time_)) {
+                true => Some((FromGlibPtrNotNull::borrow(app_exec), count, time_ as u64)),
+                _ => None
             }
         }
     }
