@@ -2151,10 +2151,16 @@ extern "C" {
     //=========================================================================
     // GtkImage
     //=========================================================================
-    pub fn gtk_image_new_from_file              (filename: *const c_char) -> *mut C_GtkWidget;
-    pub fn gtk_image_new_from_icon_name         (icon_name: *const c_char, size: enums::IconSize) -> *mut C_GtkWidget;
-    pub fn gtk_image_set_from_file              (image: *mut C_GtkImage, filename: *const c_char);
-    pub fn gtk_image_set_from_icon_name         (image: *mut C_GtkImage, icon_name: *const c_char, size: enums::IconSize);
+    pub fn gtk_image_new() -> *mut C_GtkWidget;
+    pub fn gtk_image_new_from_file(filename: *const c_char) -> *mut C_GtkWidget;
+    pub fn gtk_image_new_from_pixbuf(pixbuf: *mut gdk_ffi::C_GdkPixbuf) -> *mut C_GtkWidget;
+    pub fn gtk_image_new_from_icon_name(icon_name: *const c_char, size: enums::IconSize)
+        -> *mut C_GtkWidget;
+    pub fn gtk_image_set_from_file(image: *mut C_GtkImage, filename: *const c_char);
+    pub fn gtk_image_set_from_pixbuf(image: *mut C_GtkImage, pixbuf: *mut gdk_ffi::C_GdkPixbuf);
+    pub fn gtk_image_set_from_icon_name(image: *mut C_GtkImage, icon_name: *const c_char,
+        size: enums::IconSize);
+    pub fn gtk_image_get_pixbuf(image: *mut C_GtkImage) -> *mut gdk_ffi::C_GdkPixbuf;
 
     //=========================================================================
     // GtkProgressBar

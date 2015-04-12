@@ -19,14 +19,29 @@ use ffi;
 use cast::GTK_IMAGE;
 use FFIWidget;
 use glib::translate::ToGlibPtr;
+use gdk;
 
 /// Image — A widget displaying an image
 struct_Widget!(Image);
 
 impl Image {
+    pub fn new() -> Option<Image> {
+        let tmp_pointer = unsafe {
+            ffi::gtk_image_new()
+        };
+        check_pointer!(tmp_pointer, Image)
+    }
+
     pub fn new_from_file(filename: &str) -> Option<Image> {
         let tmp_pointer = unsafe {
             ffi::gtk_image_new_from_file(filename.borrow_to_glib().0)
+        };
+        check_pointer!(tmp_pointer, Image)
+    }
+
+    pub fn new_from_pixbuf(pixbuf: &gdk::Pixbuf) -> Option<Image> {
+        let tmp_pointer = unsafe {
+            ffi::gtk_image_new_from_pixbuf(pixbuf.unwrap_pointer())
         };
         check_pointer!(tmp_pointer, Image)
     }
@@ -45,11 +60,23 @@ impl Image {
         };
     }
 
+    pub fn set_from_pixbuf(&self, pixbuf: &gdk::Pixbuf) {
+        unsafe {
+            ffi::gtk_image_set_from_pixbuf(GTK_IMAGE(self.unwrap_widget()), pixbuf.unwrap_pointer())
+        };
+    }
+
     pub fn set_from_icon_name(&self, icon_name: &str, size: ::IconSize) {
         unsafe {
             ffi::gtk_image_set_from_icon_name(GTK_IMAGE(self.unwrap_widget()),
                                               icon_name.borrow_to_glib().0, size)
         };
+    }
+
+    pub fn get_pixbuf(&self) -> gdk::Pixbuf {
+        gdk::Pixbuf::wrap_pointer(unsafe {
+            ffi::gtk_image_get_pixbuf(GTK_IMAGE(self.unwrap_widget()))
+        })
     }
 }
 
