@@ -368,6 +368,8 @@ pub struct C_GtkSocket;
 #[repr(C)]
 pub struct C_GtkEventBox;
 
+//pub type GtkTreeModelForeachFunc = fn(model: *mut C_GtkTreeModel, path: *mut C_GtkTreePath, iter: *mut C_GtkTreeIter, data: gpointer) -> Gboolean;
+
 extern "C" {
 
     //=========================================================================
@@ -866,8 +868,6 @@ extern "C" {
     //=========================================================================
     // GtkTreeModel                                                      NOT OK
     //=========================================================================
-    //pub type GtkTreeModelForeachFunc = Option<extern "C" fn(model: *mut C_GtkTreeModel, path: *mut C_GtkTreePath, iter: *mut C_GtkIter,
-    //    data: gpointer) -> Gboolean>;
     pub fn gtk_tree_model_get_flags            (tree_model: *mut C_GtkTreeModel) -> enums::TreeModelFlags;
     pub fn gtk_tree_model_get_n_columns        (tree_model: *mut C_GtkTreeModel) -> c_int;
     pub fn gtk_tree_model_get_column_type      (tree_model: *mut C_GtkTreeModel, index_: c_int) -> GType;
@@ -890,6 +890,7 @@ extern "C" {
     //pub fn gtk_tree_model_get                  (tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter, ...) -> ();
     //pub fn gtk_tree_model_get_valist           (tree_model: *mut C_GtkTreeModel, iter: *mut C_GtkTreeIter, va_list: var_args) -> ();
     //pub fn gtk_tree_model_foreach              (tree_model: *mut C_GtkTreeModel, func: GtkTreeModelForeachFunc, user_data: gpointer) -> ();
+    pub fn gtk_tree_model_foreach              (tree_model: *mut C_GtkTreeModel, func: gpointer, user_data: gpointer) -> ();
     pub fn gtk_tree_model_row_changed          (tree_model: *mut C_GtkTreeModel, path: *mut C_GtkTreePath, iter: *mut C_GtkTreeIter) -> ();
     pub fn gtk_tree_model_row_inserted         (tree_model: *mut C_GtkTreeModel, path: *mut C_GtkTreePath, iter: *mut C_GtkTreeIter) -> ();
     pub fn gtk_tree_model_row_has_child_toggled(tree_model: *mut C_GtkTreeModel, path: *mut C_GtkTreePath, iter: *mut C_GtkTreeIter) -> ();
