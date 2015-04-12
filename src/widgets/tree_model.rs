@@ -17,6 +17,8 @@ use glib::{Value, Type};
 use glib::translate::{FromGlibPtr, ToGlibPtr, from_glib};
 use ffi;
 use {TreeIter, TreePath};
+use libc::c_void;
+use glib;
 
 pub struct TreeModel {
     pointer: *mut ffi::C_GtkTreeModel
@@ -169,6 +171,13 @@ impl TreeModel {
         unsafe { ffi::gtk_tree_model_unref_node(self.pointer, iter.unwrap_pointer()) }
     }
 
+    pub fn foreach<T>(&self, func: fn(&mut TreeModel, &mut TreePath, &mut TreeIter, data: &mut T) -> bool, user_data: &mut T) {
+        let t = &(func, user_data);
+        let ca = t as *const (fn(&mut TreeModel, &mut TreePath, &mut TreeIter, data: &mut T) -> bool, &mut T);
+
+        unsafe { ffi::gtk_tree_model_foreach(self.pointer, my_fn as ffi::gpointer, ca as ffi::gpointer) }
+    }
+
     #[doc(hidden)]
     pub fn unwrap_pointer(&self) -> *mut ffi::C_GtkTreeModel {
         self.pointer
@@ -180,6 +189,11 @@ impl TreeModel {
             pointer: c_treemodel
         }
     }
+}
+
+fn my_fn(model: *mut ffi::C_GtkTreeModel, path: *mut ffi::C_GtkTreePath, iter: *mut ffi::C_GtkTreeIter,
+    data: &mut (fn(&mut TreeModel, &mut TreePath, &mut TreeIter, data: *mut c_void) -> bool, &mut c_void)) -> ffi::Gboolean {
+    glib::to_gboolean(data.0(&mut TreeModel::wrap_pointer(model), &mut TreePath::wrap_pointer(path), &mut TreeIter::wrap_pointer(iter), data.1))
 }
 
 impl_drop!(TreeModel, GTK_TREE_MODEL);
