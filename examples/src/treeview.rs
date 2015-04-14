@@ -34,7 +34,7 @@ fn main() {
     // test Value
 
     let hello = String::from("Hello world !");
-    let value = glib::Value::new().unwrap();
+    let mut value = glib::Value::new();
 
     value.init(glib::Type::String);
     value.set(&hello);
