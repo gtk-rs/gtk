@@ -69,10 +69,12 @@ impl TreeModel {
     }
 
     pub fn get_value(&self, iter: &TreeIter, column: i32) -> Value {
-        let value = Value::new().unwrap();
-
-        unsafe { ffi::gtk_tree_model_get_value(self.pointer, iter.unwrap_pointer(), column, value.unwrap_pointer()) };
-        value
+        unsafe {
+            let mut value = Value::new();
+            ffi::gtk_tree_model_get_value(self.pointer, iter.unwrap_pointer(), column,
+                value.as_mut_ptr());
+            value
+        }
     }
 
     pub fn iter_next(&self, iter: &mut TreeIter) -> bool {

@@ -24,17 +24,6 @@ void glue_signal_connect(void *g_object, char *signal, void (*func)(void*, void*
     g_signal_connect(G_OBJECT(g_object), signal, G_CALLBACK(func), user_param);
 }
 
-GValue *create_gvalue() {
-    GValue *a;
-    GValue tmp = G_VALUE_INIT;
-
-    if (!(a = malloc(sizeof(*a)))) {
-        return a;
-    }
-    *a = tmp;
-    return a;
-}
-
 GType get_gtype(int x) {
     printf("value : %d\n", x);
     return G_TYPE_MAKE_FUNDAMENTAL(x);

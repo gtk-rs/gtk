@@ -118,7 +118,10 @@ impl TreeStore {
     }
 
     pub fn set_value(&self, iter: &TreeIter, column: i32, value: &Value) {
-        unsafe { ffi::gtk_tree_store_set_value(self.pointer, iter.unwrap_pointer(), column, value.unwrap_pointer()) }
+        unsafe {
+            ffi::gtk_tree_store_set_value(self.pointer, iter.unwrap_pointer(),
+                column, value.as_ptr() as *mut _);
+        }
     }
 
     /*pub fn set_valuesv<T: ::traits::GValuePrivate>(&self, iter: &::TreeIter, columns: &[i32], values: &[T]) {
