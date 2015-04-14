@@ -84,6 +84,7 @@ pub use self::rt::{
 
 /// GTK Widgets for all versions
 pub use self::widgets::{
+    Widget,
     Window,
     Label,
     Button,

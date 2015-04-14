@@ -13,6 +13,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with rgtk.  If not, see <http://www.gnu.org/licenses/>.
 
+pub use self::widget::Widget;
 pub use self::builder::Builder;
 pub use self::window::Window;
 pub use self::label::Label;
@@ -146,6 +147,7 @@ pub use self::font_chooser_widget::FontChooserWidget;
 pub use self::socket::Socket;
 pub use self::event_box::EventBox;
 
+mod widget;
 mod builder;
 mod window;
 mod label;
