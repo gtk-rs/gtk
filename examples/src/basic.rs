@@ -6,24 +6,23 @@
 
 extern crate gtk;
 
-use gtk::Connect;
 use gtk::traits::*;
-use gtk::signals::{DeleteEvent};
+use gtk::signal::Inhibit;
 
 fn main() {
     gtk::init();
 
-    let mut window = gtk::Window::new(gtk::WindowType::TopLevel).unwrap();
+    let window = gtk::Window::new(gtk::WindowType::TopLevel).unwrap();
 
     window.set_title("First GTK+ Program");
     window.set_border_width(10);
     window.set_window_position(gtk::WindowPosition::Center);
     window.set_default_size(350, 70);
 
-    Connect::connect(&window, DeleteEvent::new(&mut |_| {
+    window.connect_delete_event(|_, _| {
         gtk::main_quit();
-        true
-    }));
+        Inhibit(true)
+    });
 
     let button = gtk::Button::new_with_label("Click me!").unwrap();
 

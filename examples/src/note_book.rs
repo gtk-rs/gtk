@@ -1,7 +1,7 @@
 extern crate gtk;
 
-use gtk::{Connect, IconSize, Orientation, ReliefStyle};
-use gtk::signals::{DeleteEvent, Clicked};
+use gtk::{IconSize, Orientation, ReliefStyle};
+use gtk::signal::Inhibit;
 use gtk::traits::*;
 
 struct NoteBook {
@@ -20,9 +20,9 @@ impl NoteBook {
     fn create_tab<'a, Widget: gtk::WidgetTrait>(&mut self, title: &'a str, widget: &Widget) ->
             Option<u32> {
         let close_image = gtk::Image::new_from_icon_name("window-close", IconSize::Button).unwrap();
-        let mut button = gtk::Button::new().unwrap();
+        let button = gtk::Button::new().unwrap();
         let label = gtk::Label::new(title).unwrap();
-        let mut tab = gtk::Box::new(Orientation::Horizontal, 0).unwrap();
+        let tab = gtk::Box::new(Orientation::Horizontal, 0).unwrap();
 
         button.set_relief(ReliefStyle::None);
         button.set_focus_on_click(false);
@@ -37,7 +37,8 @@ impl NoteBook {
             _ => return None
         };
 
-        Connect::connect(&button, Clicked::new(&mut || self.notebook.remove_page(index as i32)));
+        let notebook_clone = self.notebook.clone();
+        button.connect_clicked(move |_| notebook_clone.remove_page(index as i32));
 
         self.tabs.push(tab);
 
@@ -48,16 +49,16 @@ impl NoteBook {
 fn main() {
     gtk::init();
 
-    let mut window = gtk::Window::new(gtk::WindowType::TopLevel).unwrap();
+    let window = gtk::Window::new(gtk::WindowType::TopLevel).unwrap();
 
     window.set_title("Notebook");
     window.set_window_position(gtk::WindowPosition::Center);
     window.set_default_size(640, 480);
 
-    Connect::connect(&window, DeleteEvent::new(&mut |_| {
+    window.connect_delete_event(|_, _| {
         gtk::main_quit();
-        true
-    }));
+        Inhibit(true)
+    });
 
     let mut notebook = NoteBook::new();
 

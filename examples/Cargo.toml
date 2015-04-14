@@ -28,6 +28,9 @@ name = "cairotest"
 name = "gtktest"
 
 [[bin]]
+name = "note_book"
+
+[[bin]]
 name = "sync_widgets"
 
 [[bin]]
