@@ -28,7 +28,7 @@ impl StackSwitcher {
         check_pointer!(tmp_pointer, StackSwitcher)
     }
 
-    pub fn set_stack(&mut self, stack: ::Stack) {
+    pub fn set_stack(&self, stack: ::Stack) {
         unsafe {
             ffi::gtk_stack_switcher_set_stack(GTK_STACK_SWITCHER(self.pointer),
                                               GTK_STACK(stack.unwrap_widget()))

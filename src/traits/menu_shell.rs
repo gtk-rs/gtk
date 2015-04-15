@@ -21,19 +21,19 @@ use glib::{to_bool, to_gboolean};
 
 /// A base class for menu objects
 pub trait MenuShellTrait: ::WidgetTrait + ::ContainerTrait {
-    fn append<T: ::WidgetTrait>(&mut self, widget: &T) {
+    fn append<T: ::WidgetTrait>(&self, widget: &T) {
         unsafe {
             ffi::gtk_menu_shell_append(GTK_MENU_SHELL(self.unwrap_widget()), widget.unwrap_widget())
         }
     }
 
-    fn prepend<T: ::WidgetTrait>(&mut self, widget: &T) {
+    fn prepend<T: ::WidgetTrait>(&self, widget: &T) {
         unsafe {
             ffi::gtk_menu_shell_prepend(GTK_MENU_SHELL(self.unwrap_widget()), widget.unwrap_widget())
         }
     }
 
-    fn insert<T: ::WidgetTrait>(&mut self, widget: &T, position: i32) {
+    fn insert<T: ::WidgetTrait>(&self, widget: &T, position: i32) {
         unsafe {
             ffi::gtk_menu_shell_insert(GTK_MENU_SHELL(self.unwrap_widget()),
                                        widget.unwrap_widget(),
@@ -41,26 +41,26 @@ pub trait MenuShellTrait: ::WidgetTrait + ::ContainerTrait {
         }
     }
 
-    fn deactivate(&mut self) {
+    fn deactivate(&self) {
         unsafe {
             ffi::gtk_menu_shell_deactivate(GTK_MENU_SHELL(self.unwrap_widget()))
         }
     }
 
-    fn select_item<T: ::MenuItemTrait>(&mut self, menu_item: &T) {
+    fn select_item<T: ::MenuItemTrait>(&self, menu_item: &T) {
         unsafe {
             ffi::gtk_menu_shell_select_item(GTK_MENU_SHELL(self.unwrap_widget()),
                                             menu_item.unwrap_widget())
         }
     }
 
-    fn deselect(&mut self) {
+    fn deselect(&self) {
         unsafe {
             ffi::gtk_menu_shell_deselect(GTK_MENU_SHELL(self.unwrap_widget()))
         }
     }
 
-    fn activate_item<T: ::MenuItemTrait>(&mut self, menu_item: &T, force_deactivate: bool) {
+    fn activate_item<T: ::MenuItemTrait>(&self, menu_item: &T, force_deactivate: bool) {
         unsafe {
             ffi::gtk_menu_shell_activate_item(GTK_MENU_SHELL(self.unwrap_widget()),
                                               menu_item.unwrap_widget(),
@@ -68,14 +68,14 @@ pub trait MenuShellTrait: ::WidgetTrait + ::ContainerTrait {
         }
     }
 
-    fn select_first(&mut self, search_sensitive: bool) {
+    fn select_first(&self, search_sensitive: bool) {
         unsafe {
             ffi::gtk_menu_shell_select_first(GTK_MENU_SHELL(self.unwrap_widget()),
                                              to_gboolean(search_sensitive))
         }
     }
 
-    fn cancel(&mut self) {
+    fn cancel(&self) {
         unsafe {
             ffi::gtk_menu_shell_cancel(GTK_MENU_SHELL(self.unwrap_widget()))
         }
@@ -87,7 +87,7 @@ pub trait MenuShellTrait: ::WidgetTrait + ::ContainerTrait {
         }
     }
 
-    fn set_take_focus(&mut self, take_focus: bool) {
+    fn set_take_focus(&self, take_focus: bool) {
         unsafe {
             ffi::gtk_menu_shell_set_take_focus(GTK_MENU_SHELL(self.unwrap_widget()),
                                                to_gboolean(take_focus))

@@ -28,7 +28,7 @@ impl Arrow {
         check_pointer!(tmp_pointer, Arrow)
     }
 
-    pub fn set(&mut self, arrow_type: ArrowType, shadow_type: ShadowType) -> () {
+    pub fn set(&self, arrow_type: ArrowType, shadow_type: ShadowType) -> () {
         unsafe {
             ffi::gtk_arrow_set(GTK_ARROW(self.pointer), arrow_type, shadow_type);
         }

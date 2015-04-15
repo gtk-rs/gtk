@@ -42,25 +42,25 @@ impl Calendar {
         check_pointer!(tmp_pointer, Calendar)
     }
 
-    pub fn select_month(&mut self, month: u32, year: u32) -> () {
+    pub fn select_month(&self, month: u32, year: u32) -> () {
         unsafe {
             ffi::gtk_calendar_select_month(GTK_CALENDAR(self.pointer), month as c_uint, year as c_uint)
         }
     }
 
-    pub fn select_day(&mut self, day: u32) -> () {
+    pub fn select_day(&self, day: u32) -> () {
         unsafe {
             ffi::gtk_calendar_select_day(GTK_CALENDAR(self.pointer), day as c_uint)
         }
     }
 
-    pub fn mark_day(&mut self, day: u32) -> () {
+    pub fn mark_day(&self, day: u32) -> () {
         unsafe {
             ffi::gtk_calendar_mark_day(GTK_CALENDAR(self.pointer), day as c_uint)
         }
     }
 
-    pub fn unmark_day(&mut self, day: u32) -> () {
+    pub fn unmark_day(&self, day: u32) -> () {
         unsafe {
             ffi::gtk_calendar_unmark_day(GTK_CALENDAR(self.pointer), day as c_uint)
         }
@@ -70,7 +70,7 @@ impl Calendar {
         unsafe { to_bool(ffi::gtk_calendar_get_day_is_marked(GTK_CALENDAR(self.pointer), day as c_uint)) }
     }
 
-    pub fn clear_marks(&mut self) -> () {
+    pub fn clear_marks(&self) -> () {
         unsafe {
             ffi::gtk_calendar_clear_marks(GTK_CALENDAR(self.pointer));
         }
@@ -82,7 +82,7 @@ impl Calendar {
         }
     }
 
-    pub fn set_display_options(&mut self, flags: CalendarDisplayOptions) -> () {
+    pub fn set_display_options(&self, flags: CalendarDisplayOptions) -> () {
         unsafe {
             ffi::gtk_calendar_set_display_options(GTK_CALENDAR(self.pointer), flags)
         }
@@ -104,7 +104,7 @@ impl Calendar {
         }
     }
 
-    pub fn set_detail_with_chars(&mut self, chars: i32) -> () {
+    pub fn set_detail_with_chars(&self, chars: i32) -> () {
         unsafe {
             ffi::gtk_calendar_set_detail_width_chars(GTK_CALENDAR(self.pointer), chars as c_int)
         }
@@ -116,7 +116,7 @@ impl Calendar {
         }
     }
 
-    pub fn set_detail_heigth_rows(&mut self, rows: i32) -> () {
+    pub fn set_detail_heigth_rows(&self, rows: i32) -> () {
         unsafe {
             ffi::gtk_calendar_set_detail_height_rows(GTK_CALENDAR(self.pointer), rows as c_int)
         }

@@ -27,7 +27,7 @@ impl Overlay {
         check_pointer!(tmp_pointer, Overlay)
     }
 
-    pub fn add_overlay<T: ::WidgetTrait>(&mut self, widget: &T) {
+    pub fn add_overlay<T: ::WidgetTrait>(&self, widget: &T) {
         unsafe {
             ffi::gtk_overlay_add_overlay(GTK_OVERLAY(self.pointer), widget.unwrap_widget())
         }

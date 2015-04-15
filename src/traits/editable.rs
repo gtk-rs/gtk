@@ -20,7 +20,7 @@ use glib::translate::{FromGlibPtr};
 use glib::{to_bool, to_gboolean};
 
 pub trait EditableTrait: ::WidgetTrait {
-    fn select_region(&mut self, start_pos: i32, end_pos: i32) {
+    fn select_region(&self, start_pos: i32, end_pos: i32) {
         unsafe {
             ffi::gtk_editable_select_region(GTK_EDITABLE(self.unwrap_widget()), start_pos, end_pos)
         }
@@ -40,7 +40,7 @@ pub trait EditableTrait: ::WidgetTrait {
         }
     }
 
-    fn insert_text(&mut self, new_text: &str, position: &mut i32) {
+    fn insert_text(&self, new_text: &str, position: &mut i32) {
         unsafe {
             // Don't need a null-terminated string here
             ffi::gtk_editable_insert_text(GTK_EDITABLE(self.unwrap_widget()),
@@ -50,7 +50,7 @@ pub trait EditableTrait: ::WidgetTrait {
         }
     }
 
-    fn delete_text(&mut self, start_pos: i32, end_pos: i32) {
+    fn delete_text(&self, start_pos: i32, end_pos: i32) {
         unsafe {
             ffi::gtk_editable_delete_text(GTK_EDITABLE(self.unwrap_widget()), start_pos, end_pos)
         }
@@ -63,31 +63,31 @@ pub trait EditableTrait: ::WidgetTrait {
         }
     }
 
-    fn cut_clipboard(&mut self) {
+    fn cut_clipboard(&self) {
         unsafe {
             ffi::gtk_editable_cut_clipboard(GTK_EDITABLE(self.unwrap_widget()))
         }
     }
 
-    fn copy_clipboard(&mut self) {
+    fn copy_clipboard(&self) {
         unsafe {
             ffi::gtk_editable_copy_clipboard(GTK_EDITABLE(self.unwrap_widget()))
         }
     }
 
-    fn paste_clipboard(&mut self) {
+    fn paste_clipboard(&self) {
         unsafe {
             ffi::gtk_editable_paste_clipboard(GTK_EDITABLE(self.unwrap_widget()))
         }
     }
 
-    fn delete_selection(&mut self) {
+    fn delete_selection(&self) {
         unsafe {
             ffi::gtk_editable_delete_selection(GTK_EDITABLE(self.unwrap_widget()))
         }
     }
 
-    fn set_position(&mut self, position: i32) {
+    fn set_position(&self, position: i32) {
         unsafe {
             ffi::gtk_editable_set_editable(GTK_EDITABLE(self.unwrap_widget()), position)
         }
@@ -99,7 +99,7 @@ pub trait EditableTrait: ::WidgetTrait {
         }
     }
 
-    fn set_editable(&mut self, editable: bool) {
+    fn set_editable(&self, editable: bool) {
         unsafe {
             ffi::gtk_editable_set_editable(GTK_EDITABLE(self.unwrap_widget()), to_gboolean(editable))
         }

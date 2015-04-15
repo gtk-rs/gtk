@@ -29,13 +29,13 @@ impl SearchBar {
         check_pointer!(tmp_pointer, SearchBar)
     }
 
-    pub fn connect_entry(&mut self, entry: &::Entry) -> () {
+    pub fn connect_entry(&self, entry: &::Entry) -> () {
         unsafe {
             ffi::gtk_search_bar_connect_entry(GTK_SEARCHBAR(self.pointer), GTK_ENTRY(entry.unwrap_widget()));
         }
     }
 
-    pub fn set_search_mode(&mut self, search_mode: bool) -> () {
+    pub fn set_search_mode(&self, search_mode: bool) -> () {
         unsafe { ffi::gtk_search_bar_set_search_mode(GTK_SEARCHBAR(self.pointer), to_gboolean(search_mode)); }
     }
 
@@ -43,7 +43,7 @@ impl SearchBar {
         unsafe { to_bool(ffi::gtk_search_bar_get_search_mode(GTK_SEARCHBAR(self.pointer))) }
     }
 
-    pub fn set_show_close_button(&mut self, visible: bool) -> () {
+    pub fn set_show_close_button(&self, visible: bool) -> () {
         unsafe { ffi::gtk_search_bar_set_show_close_button(GTK_SEARCHBAR(self.pointer), to_gboolean(visible)); }
     }
 

@@ -33,7 +33,7 @@ impl Grid {
         check_pointer!(tmp_pointer, Grid)
     }
 
-    pub fn attach<T: ::WidgetTrait>(&mut self,
+    pub fn attach<T: ::WidgetTrait>(&self,
                                 child: &T,
                                 left: i32,
                                 top: i32,
@@ -49,7 +49,7 @@ impl Grid {
         }
     }
 
-    pub fn attach_next_to<T: ::WidgetTrait>(&mut self,
+    pub fn attach_next_to<T: ::WidgetTrait>(&self,
                                         child: &T,
                                         sibling: &T,
                                         side: PositionType,
@@ -65,39 +65,39 @@ impl Grid {
         }
     }
 
-    pub fn insert_row(&mut self, position: i32) -> () {
+    pub fn insert_row(&self, position: i32) -> () {
         unsafe {
             ffi::gtk_grid_insert_row(GTK_GRID(self.pointer), position as c_int);
         }
     }
 
-     pub fn insert_column(&mut self, position: i32) -> () {
+     pub fn insert_column(&self, position: i32) -> () {
         unsafe {
             ffi::gtk_grid_insert_column(GTK_GRID(self.pointer), position as c_int);
         }
     }
 
     #[cfg(feature = "gtk_3_10")]
-     pub fn remove_row(&mut self, position: i32) -> () {
+     pub fn remove_row(&self, position: i32) -> () {
         unsafe {
             ffi::gtk_grid_remove_row(GTK_GRID(self.pointer), position as c_int);
         }
     }
 
     #[cfg(feature = "gtk_3_10")]
-     pub fn remove_column(&mut self, position: i32) -> () {
+     pub fn remove_column(&self, position: i32) -> () {
         unsafe {
             ffi::gtk_grid_remove_column(GTK_GRID(self.pointer), position as c_int);
         }
     }
 
-    pub fn insert_next_to<T: ::WidgetTrait>(&mut self, sibling: &T, side: PositionType) -> () {
+    pub fn insert_next_to<T: ::WidgetTrait>(&self, sibling: &T, side: PositionType) -> () {
         unsafe {
             ffi::gtk_grid_insert_next_to(GTK_GRID(self.pointer), sibling.unwrap_widget(), side);
         }
     }
 
-    pub fn set_row_homogeneous(&mut self, homogeneous: bool) -> () {
+    pub fn set_row_homogeneous(&self, homogeneous: bool) -> () {
         unsafe { ffi::gtk_grid_set_row_homogeneous(GTK_GRID(self.pointer), to_gboolean(homogeneous)); }
     }
 
@@ -105,7 +105,7 @@ impl Grid {
         unsafe { to_bool(ffi::gtk_grid_get_row_homogeneous(GTK_GRID(self.pointer))) }
     }
 
-    pub fn set_row_spacing(&mut self, spacing: u32) -> () {
+    pub fn set_row_spacing(&self, spacing: u32) -> () {
         unsafe {
             ffi::gtk_grid_set_row_spacing(GTK_GRID(self.pointer), spacing as c_uint);
         }
@@ -117,7 +117,7 @@ impl Grid {
         }
     }
 
-    pub fn set_column_homogeneous(&mut self, homogeneous: bool) -> () {
+    pub fn set_column_homogeneous(&self, homogeneous: bool) -> () {
         unsafe { ffi::gtk_grid_set_column_homogeneous(GTK_GRID(self.pointer), to_gboolean(homogeneous)); }
     }
 
@@ -125,7 +125,7 @@ impl Grid {
         unsafe { to_bool(ffi::gtk_grid_get_column_homogeneous(GTK_GRID(self.pointer))) }
     }
 
-    pub fn set_column_spacing(&mut self, spacing: u32) -> () {
+    pub fn set_column_spacing(&self, spacing: u32) -> () {
         unsafe {
             ffi::gtk_grid_set_column_spacing(GTK_GRID(self.pointer), spacing as c_uint);
         }
@@ -145,7 +145,7 @@ impl Grid {
     }
 
     #[cfg(feature = "gtk_3_10")]
-    pub fn set_baseline_row(&mut self, row: i32) -> () {
+    pub fn set_baseline_row(&self, row: i32) -> () {
         unsafe {
             ffi::gtk_grid_set_baseline_row(GTK_GRID(self.pointer), row as c_int);
         }

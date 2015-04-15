@@ -19,19 +19,19 @@ use ffi;
 use glib::{to_bool, to_gboolean};
 
 pub trait ToolButtonTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait + ::ToolItemTrait {
-    fn set_label(&mut self, label: &str) -> () {
+    fn set_label(&self, label: &str) -> () {
         unsafe {
             ffi::gtk_tool_button_set_label(GTK_TOOLBUTTON(self.unwrap_widget()), label.borrow_to_glib().0)
         }
     }
 
-    fn set_stock_id(&mut self, stock_id: &str) -> () {
+    fn set_stock_id(&self, stock_id: &str) -> () {
         unsafe {
             ffi::gtk_tool_button_set_stock_id(GTK_TOOLBUTTON(self.unwrap_widget()), stock_id.borrow_to_glib().0)
         }
     }
 
-    fn set_icon_name(&mut self, icon_name: &str) -> () {
+    fn set_icon_name(&self, icon_name: &str) -> () {
         unsafe {
             ffi::gtk_tool_button_set_icon_name(GTK_TOOLBUTTON(self.unwrap_widget()),
                                                icon_name.borrow_to_glib().0);
@@ -63,11 +63,11 @@ pub trait ToolButtonTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait + ::Too
         unsafe { to_bool(ffi::gtk_tool_button_get_use_underline(GTK_TOOLBUTTON(self.unwrap_widget()))) }
     }
 
-    fn set_use_underline(&mut self, set_underline: bool) -> () {
+    fn set_use_underline(&self, set_underline: bool) -> () {
          unsafe { ffi::gtk_tool_button_set_use_underline(GTK_TOOLBUTTON(self.unwrap_widget()), to_gboolean(set_underline)); }
     }
 
-    fn set_label_widget<T: ::LabelTrait>(&mut self, label: &T) -> () {
+    fn set_label_widget<T: ::LabelTrait>(&self, label: &T) -> () {
         unsafe {
             ffi::gtk_tool_button_set_label_widget(GTK_TOOLBUTTON(self.unwrap_widget()), label.unwrap_widget())
         }

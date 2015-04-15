@@ -31,7 +31,7 @@ impl HeaderBar {
         check_pointer!(tmp_pointer, HeaderBar)
     }
 
-    pub fn set_title(&mut self, title: &str) {
+    pub fn set_title(&self, title: &str) {
         unsafe {
             ffi::gtk_header_bar_set_title(GTK_HEADER_BAR(self.pointer),
                                           title.borrow_to_glib().0)
@@ -45,7 +45,7 @@ impl HeaderBar {
         }
     }
 
-    pub fn set_subtitle(&mut self, subtitle: &str) {
+    pub fn set_subtitle(&self, subtitle: &str) {
         unsafe {
             ffi::gtk_header_bar_set_subtitle(GTK_HEADER_BAR(self.pointer),
                                              subtitle.borrow_to_glib().0)
@@ -59,7 +59,7 @@ impl HeaderBar {
         }
     }
 
-    pub fn set_custom_title<T: ::WidgetTrait>(&mut self, title_widget: Option<&T>) {
+    pub fn set_custom_title<T: ::WidgetTrait>(&self, title_widget: Option<&T>) {
         unsafe {
             ffi::gtk_header_bar_set_custom_title(GTK_HEADER_BAR(self.pointer),
                                                  unwrap_widget!(title_widget))
@@ -78,14 +78,14 @@ impl HeaderBar {
         }
     }
 
-    pub fn pack_start<T: ::WidgetTrait>(&mut self, child: &T) {
+    pub fn pack_start<T: ::WidgetTrait>(&self, child: &T) {
         unsafe {
             ffi::gtk_header_bar_pack_start(GTK_HEADER_BAR(self.pointer),
                                            child.unwrap_widget())
         }
     }
 
-    pub fn pack_end<T: ::WidgetTrait>(&mut self, child: &T) {
+    pub fn pack_end<T: ::WidgetTrait>(&self, child: &T) {
         unsafe {
             ffi::gtk_header_bar_pack_end(GTK_HEADER_BAR(self.pointer),
                                          child.unwrap_widget())
@@ -98,7 +98,7 @@ impl HeaderBar {
         }
     }
 
-    pub fn set_show_close_button(&mut self, setting: bool) {
+    pub fn set_show_close_button(&self, setting: bool) {
         unsafe {
             ffi::gtk_header_bar_set_show_close_button(GTK_HEADER_BAR(self.pointer),
                                                       to_gboolean(setting))

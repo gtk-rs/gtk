@@ -46,7 +46,7 @@ impl RadioButton {
         check_pointer!(tmp_pointer, RadioButton)
     }
 
-    pub fn join(&mut self, group_source: &mut RadioButton) {
+    pub fn join(&self, group_source: &RadioButton) {
         unsafe {
             ffi::gtk_radio_button_join_group(GTK_RADIOBUTTON(self.pointer),
                                              GTK_RADIOBUTTON(group_source.pointer));

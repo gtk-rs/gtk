@@ -18,13 +18,13 @@ use cast::GTK_MISC;
 use ffi;
 
 pub trait MiscTrait: ::WidgetTrait {
-    fn set_alignment(&mut self, x_align: f32, y_align: f32) -> () {
+    fn set_alignment(&self, x_align: f32, y_align: f32) -> () {
         unsafe {
             ffi::gtk_misc_set_alignment(GTK_MISC(self.unwrap_widget()), x_align as c_float, y_align as c_float);
         }
     }
 
-    fn set_padding(&mut self, x_pad: i32, y_pad: i32) -> () {
+    fn set_padding(&self, x_pad: i32, y_pad: i32) -> () {
         unsafe {
             ffi::gtk_misc_set_padding(GTK_MISC(self.unwrap_widget()), x_pad as c_int, y_pad as c_int);
         }

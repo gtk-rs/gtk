@@ -24,7 +24,7 @@ pub trait OrientableTrait: ::WidgetTrait {
         }
     }
 
-    fn set_orientation(&mut self, orientation: Orientation) -> () {
+    fn set_orientation(&self, orientation: Orientation) -> () {
         unsafe {
             ffi::gtk_orientable_set_orientation(GTK_ORIENTABLE(self.unwrap_widget()), orientation)
         }

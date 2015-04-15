@@ -22,61 +22,61 @@ use Justification;
 use cast::GTK_LABEL;
 
 pub trait LabelTrait: ::WidgetTrait {
-    fn set_label(&mut self, text: &str) -> () {
+    fn set_label(&self, text: &str) -> () {
         unsafe {
             ffi::gtk_label_set_label(GTK_LABEL(self.unwrap_widget()), text.borrow_to_glib().0)
         }
     }
 
-    fn set_text(&mut self, text: &str) -> () {
+    fn set_text(&self, text: &str) -> () {
         unsafe {
 	    ffi::gtk_label_set_text(GTK_LABEL(self.unwrap_widget()), text.borrow_to_glib().0)
         }
     }
 
-    fn set_justify(&mut self, jtype: Justification) -> () {
+    fn set_justify(&self, jtype: Justification) -> () {
         unsafe {
             ffi::gtk_label_set_justify(GTK_LABEL(self.unwrap_widget()), jtype);
         }
     }
 
-    fn set_markup(&mut self, text: &str) -> () {
+    fn set_markup(&self, text: &str) -> () {
         unsafe {
             ffi::gtk_label_set_markup(GTK_LABEL(self.unwrap_widget()), text.borrow_to_glib().0)
         }
     }
 
-    fn set_markup_with_mnemonic(&mut self, text: &str) -> () {
+    fn set_markup_with_mnemonic(&self, text: &str) -> () {
         unsafe {
             ffi::gtk_label_set_markup_with_mnemonic(GTK_LABEL(self.unwrap_widget()), text.borrow_to_glib().0)
         }
     }
 
-    fn set_pattern(&mut self, text: &str) -> () {
+    fn set_pattern(&self, text: &str) -> () {
         unsafe {
             ffi::gtk_label_set_pattern(GTK_LABEL(self.unwrap_widget()), text.borrow_to_glib().0)
         }
     }
 
-    fn set_text_with_mnemonic(&mut self, text: &str) -> () {
+    fn set_text_with_mnemonic(&self, text: &str) -> () {
         unsafe {
             ffi::gtk_label_set_text_with_mnemonic(GTK_LABEL(self.unwrap_widget()), text.borrow_to_glib().0);
         }
     }
 
-    fn set_width_chars(&mut self, n_chars: i32) -> () {
+    fn set_width_chars(&self, n_chars: i32) -> () {
         unsafe {
             ffi::gtk_label_set_width_chars(GTK_LABEL(self.unwrap_widget()), n_chars as c_int);
         }
     }
 
-    fn set_max_width_chars(&mut self, n_chars: i32) -> () {
+    fn set_max_width_chars(&self, n_chars: i32) -> () {
         unsafe {
             ffi::gtk_label_set_max_width_chars(GTK_LABEL(self.unwrap_widget()), n_chars as c_int);
         }
     }
 
-    fn set_line_wrap(&mut self, wrap: bool) -> () {
+    fn set_line_wrap(&self, wrap: bool) -> () {
         unsafe { ffi::gtk_label_set_line_wrap(GTK_LABEL(self.unwrap_widget()), to_gboolean(wrap)); }
     }
 
@@ -85,7 +85,7 @@ pub trait LabelTrait: ::WidgetTrait {
     }
 
     #[cfg(feature = "gtk_3_10")]
-    fn set_lines(&mut self, lines: i32) -> () {
+    fn set_lines(&self, lines: i32) -> () {
         unsafe {
             ffi::gtk_label_set_lines(GTK_LABEL(self.unwrap_widget()), lines as c_int);
         }
@@ -113,7 +113,7 @@ pub trait LabelTrait: ::WidgetTrait {
         }
     }
 
-    fn set_selectable(&mut self, selectable: bool) -> () {
+    fn set_selectable(&self, selectable: bool) -> () {
         unsafe { ffi::gtk_label_set_selectable(GTK_LABEL(self.unwrap_widget()), to_gboolean(selectable)); }
     }
 
@@ -121,7 +121,7 @@ pub trait LabelTrait: ::WidgetTrait {
         unsafe { to_bool(ffi::gtk_label_get_selectable(GTK_LABEL(self.unwrap_widget()))) }
     }
 
-    fn set_use_markup(&mut self, use_markup: bool) -> () {
+    fn set_use_markup(&self, use_markup: bool) -> () {
         unsafe { ffi::gtk_label_set_use_markup(GTK_LABEL(self.unwrap_widget()), to_gboolean(use_markup)); }
     }
 
@@ -129,7 +129,7 @@ pub trait LabelTrait: ::WidgetTrait {
         unsafe { to_bool(ffi::gtk_label_get_use_markup(GTK_LABEL(self.unwrap_widget()))) }
     }
 
-    fn set_use_underline(&mut self, use_underline: bool) -> () {
+    fn set_use_underline(&self, use_underline: bool) -> () {
         unsafe { ffi::gtk_label_set_use_underline(GTK_LABEL(self.unwrap_widget()), to_gboolean(use_underline)); }
     }
 
@@ -137,7 +137,7 @@ pub trait LabelTrait: ::WidgetTrait {
         unsafe { to_bool(ffi::gtk_label_get_use_underline(GTK_LABEL(self.unwrap_widget()))) }
     }
 
-    fn set_single_line_mode(&mut self, single_line_mode: bool) -> () {
+    fn set_single_line_mode(&self, single_line_mode: bool) -> () {
         unsafe { ffi::gtk_label_set_single_line_mode(GTK_LABEL(self.unwrap_widget()), to_gboolean(single_line_mode)); }
     }
 
@@ -145,7 +145,7 @@ pub trait LabelTrait: ::WidgetTrait {
         unsafe { to_bool(ffi::gtk_label_get_single_line_mode(GTK_LABEL(self.unwrap_widget()))) }
     }
 
-    fn set_track_visited_links(&mut self, track_visited_links: bool) -> () {
+    fn set_track_visited_links(&self, track_visited_links: bool) -> () {
         unsafe { ffi::gtk_label_set_track_visited_links(GTK_LABEL(self.unwrap_widget()), to_gboolean(track_visited_links)); }
     }
 
@@ -174,7 +174,7 @@ pub trait LabelTrait: ::WidgetTrait {
         }
     }
 
-    fn select_region(&mut self, start_offset: i32, end_offset: i32) -> () {
+    fn select_region(&self, start_offset: i32, end_offset: i32) -> () {
         unsafe {
             ffi::gtk_label_select_region(GTK_LABEL(self.unwrap_widget()), start_offset as c_int, end_offset as c_int);
         }
@@ -207,7 +207,7 @@ pub trait LabelTrait: ::WidgetTrait {
         (x, y)
     }
 
-    fn set_angle(&mut self, angle: f64) -> () {
+    fn set_angle(&self, angle: f64) -> () {
         unsafe {
             ffi::gtk_label_set_angle(GTK_LABEL(self.unwrap_widget()), angle as c_double);
         }

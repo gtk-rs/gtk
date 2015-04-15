@@ -41,7 +41,7 @@ pub trait BoxTrait: ::WidgetTrait {
         unsafe { to_bool(ffi::gtk_box_get_homogeneous(GTK_BOX(self.unwrap_widget()))) }
     }
 
-    fn set_homogeneouse(&mut self, homogeneous: bool) -> () {
+    fn set_homogeneouse(&self, homogeneous: bool) -> () {
         unsafe { ffi::gtk_box_set_homogeneous(GTK_BOX(self.unwrap_widget()), to_gboolean(homogeneous)); }
     }
 
@@ -51,7 +51,7 @@ pub trait BoxTrait: ::WidgetTrait {
         }
     }
 
-    fn set_spacing(&mut self, spacing: i32) -> () {
+    fn set_spacing(&self, spacing: i32) -> () {
         unsafe {
             ffi::gtk_box_set_spacing(GTK_BOX(self.unwrap_widget()), spacing as c_int);
         }
@@ -79,7 +79,7 @@ pub trait BoxTrait: ::WidgetTrait {
         (to_bool(c_expand), to_bool(c_fill), c_padding as u32, pack_type)
     }
 
-    fn set_child_packing<'r, T: ::WidgetTrait>(&mut self,
+    fn set_child_packing<'r, T: ::WidgetTrait>(&self,
                                                   child: &'r T,
                                                   expand: bool,
                                                   fill: bool,

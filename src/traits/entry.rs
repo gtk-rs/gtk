@@ -28,13 +28,13 @@ pub trait EntryTrait: ::WidgetTrait {
         ::EntryBuffer::wrap_pointer(tmp_pointer)
     }
 
-    fn set_buffer(&mut self, buffer: &::EntryBuffer) -> () {
+    fn set_buffer(&self, buffer: &::EntryBuffer) -> () {
         unsafe {
             ffi::gtk_entry_set_buffer(GTK_ENTRY(self.unwrap_widget()), buffer.unwrap_pointer())
         }
     }
 
-    fn set_text(&mut self, text: &str) {
+    fn set_text(&self, text: &str) {
         unsafe {
             ffi::gtk_entry_set_text(GTK_ENTRY(self.unwrap_widget()), text.borrow_to_glib().0)
         }
@@ -53,23 +53,23 @@ pub trait EntryTrait: ::WidgetTrait {
         }
     }
 
-    fn set_visibility(&mut self, visible: bool) -> () {
+    fn set_visibility(&self, visible: bool) -> () {
         unsafe { ffi::gtk_entry_set_visibility(GTK_ENTRY(self.unwrap_widget()), to_gboolean(visible)); }
     }
 
-    fn set_invisible_char(&mut self, ch: i32) -> () {
+    fn set_invisible_char(&self, ch: i32) -> () {
         unsafe {
             ffi::gtk_entry_set_invisible_char(GTK_ENTRY(self.unwrap_widget()), ch as c_int);
         }
     }
 
-    fn unset_invisible_char(&mut self) -> () {
+    fn unset_invisible_char(&self) -> () {
         unsafe {
             ffi::gtk_entry_unset_invisible_char(GTK_ENTRY(self.unwrap_widget()));
         }
     }
 
-    fn set_max_length(&mut self, max_length: i32) -> () {
+    fn set_max_length(&self, max_length: i32) -> () {
         unsafe {
             ffi::gtk_entry_set_max_length(GTK_ENTRY(self.unwrap_widget()), max_length as c_int);
         }
@@ -89,15 +89,15 @@ pub trait EntryTrait: ::WidgetTrait {
         }
     }
 
-    fn set_activates_default(&mut self, setting: bool) {
+    fn set_activates_default(&self, setting: bool) {
         unsafe { ffi::gtk_entry_set_activates_default(GTK_ENTRY(self.unwrap_widget()), to_gboolean(setting)); }
     }
 
-    fn set_has_frame(&mut self, setting: bool) {
+    fn set_has_frame(&self, setting: bool) {
         unsafe { ffi::gtk_entry_set_has_frame(GTK_ENTRY(self.unwrap_widget()), to_gboolean(setting)); }
     }
 
-    fn set_width_chars(&mut self, n_chars: i32) -> () {
+    fn set_width_chars(&self, n_chars: i32) -> () {
         unsafe {
             ffi::gtk_entry_set_width_chars(GTK_ENTRY(self.unwrap_widget()), n_chars as c_int);
         }
@@ -109,7 +109,7 @@ pub trait EntryTrait: ::WidgetTrait {
         }
     }
 
-    fn set_alignment(&mut self, x_align: f32) -> () {
+    fn set_alignment(&self, x_align: f32) -> () {
         unsafe {
             ffi::gtk_entry_set_alignment(GTK_ENTRY(self.unwrap_widget()), x_align as c_float);
         }
@@ -121,7 +121,7 @@ pub trait EntryTrait: ::WidgetTrait {
         }
     }
 
-    fn set_placeholder(&mut self, text: &str) -> () {
+    fn set_placeholder(&self, text: &str) -> () {
         unsafe {
             ffi::gtk_entry_set_placeholder_text(GTK_ENTRY(self.unwrap_widget()), text.borrow_to_glib().0)
         }
@@ -138,7 +138,7 @@ pub trait EntryTrait: ::WidgetTrait {
         unsafe { to_bool(ffi::gtk_entry_get_overwrite_mode(GTK_ENTRY(self.unwrap_widget()))) }
     }
 
-    fn set_overwrite_mode(&mut self, overwrite: bool) {
+    fn set_overwrite_mode(&self, overwrite: bool) {
         unsafe { ffi::gtk_entry_set_overwrite_mode(GTK_ENTRY(self.unwrap_widget()), to_gboolean(overwrite)); }
     }
 
@@ -174,7 +174,7 @@ pub trait EntryTrait: ::WidgetTrait {
         unsafe { to_bool(ffi::gtk_entry_get_visibility(GTK_ENTRY(self.unwrap_widget()))) }
     }
 
-    fn set_cursor_hadjustment(&mut self, adjustment: &::Adjustment) -> () {
+    fn set_cursor_hadjustment(&self, adjustment: &::Adjustment) -> () {
         unsafe {
             ffi::gtk_entry_set_cursor_hadjustment(GTK_ENTRY(self.unwrap_widget()), adjustment.unwrap_pointer())
         }
@@ -186,49 +186,49 @@ pub trait EntryTrait: ::WidgetTrait {
         }
     }
 
-    fn set_progress_fraction(&mut self, fraction: f64) -> () {
+    fn set_progress_fraction(&self, fraction: f64) -> () {
         unsafe {
             ffi::gtk_entry_set_progress_fraction(GTK_ENTRY(self.unwrap_widget()), fraction as c_double);
         }
     }
 
-    fn get_progress_fraction(&mut self) -> f64 {
+    fn get_progress_fraction(&self) -> f64 {
         unsafe {
             ffi::gtk_entry_get_progress_fraction(GTK_ENTRY(self.unwrap_widget())) as f64
         }
     }
 
-    fn set_progress_pulse_step(&mut self, pulse_step: f64) -> () {
+    fn set_progress_pulse_step(&self, pulse_step: f64) -> () {
         unsafe {
             ffi::gtk_entry_set_progress_pulse_step(GTK_ENTRY(self.unwrap_widget()), pulse_step as c_double);
         }
     }
 
-    fn get_progress_pulse_step(&mut self) -> f64 {
+    fn get_progress_pulse_step(&self) -> f64 {
         unsafe {
             ffi::gtk_entry_get_progress_pulse_step(GTK_ENTRY(self.unwrap_widget())) as f64
         }
     }
 
-    fn progress_pulse(&mut self) -> () {
+    fn progress_pulse(&self) -> () {
         unsafe {
             ffi::gtk_entry_progress_pulse(GTK_ENTRY(self.unwrap_widget()));
         }
     }
 
-    fn reset_im_context(&mut self) -> () {
+    fn reset_im_context(&self) -> () {
         unsafe {
             ffi::gtk_entry_reset_im_context(GTK_ENTRY(self.unwrap_widget()));
         }
     }
 
-    fn set_icon_from_stock(&mut self, icon_pos: EntryIconPosition, stock_id: &str) -> () {
+    fn set_icon_from_stock(&self, icon_pos: EntryIconPosition, stock_id: &str) -> () {
         unsafe {
             ffi::gtk_entry_set_icon_from_stock(GTK_ENTRY(self.unwrap_widget()), icon_pos, stock_id.borrow_to_glib().0);
         }
     }
 
-    fn set_icon_from_icon_name(&mut self, icon_pos: EntryIconPosition, icon_name: &str) -> () {
+    fn set_icon_from_icon_name(&self, icon_pos: EntryIconPosition, icon_name: &str) -> () {
         unsafe {
             ffi::gtk_entry_set_icon_from_icon_name(GTK_ENTRY(self.unwrap_widget()), icon_pos, icon_name.borrow_to_glib().0)
         }
@@ -258,7 +258,7 @@ pub trait EntryTrait: ::WidgetTrait {
         unsafe { to_bool(ffi::gtk_entry_get_icon_activatable(GTK_ENTRY(self.unwrap_widget()), icon_pos)) }
     }
 
-    fn set_icon_activatable(&mut self, icon_pos: EntryIconPosition, activatable: bool) {
+    fn set_icon_activatable(&self, icon_pos: EntryIconPosition, activatable: bool) {
         unsafe { ffi::gtk_entry_set_icon_activatable(GTK_ENTRY(self.unwrap_widget()), icon_pos, to_gboolean(activatable)); }
     }
 
@@ -266,7 +266,7 @@ pub trait EntryTrait: ::WidgetTrait {
         unsafe { to_bool(ffi::gtk_entry_get_icon_sensitive(GTK_ENTRY(self.unwrap_widget()), icon_pos)) }
     }
 
-    fn set_icon_sensitive(&mut self, icon_pos: EntryIconPosition, sensitive: bool) {
+    fn set_icon_sensitive(&self, icon_pos: EntryIconPosition, sensitive: bool) {
         unsafe { ffi::gtk_entry_set_icon_sensitive(GTK_ENTRY(self.unwrap_widget()), icon_pos, to_gboolean(sensitive)); }
     }
 
@@ -276,7 +276,7 @@ pub trait EntryTrait: ::WidgetTrait {
         }
     }
 
-    fn set_icon_tooltip_text(&mut self, icon_pos: EntryIconPosition, tooltip: &str) -> () {
+    fn set_icon_tooltip_text(&self, icon_pos: EntryIconPosition, tooltip: &str) -> () {
         unsafe {
             ffi::gtk_entry_set_icon_tooltip_text(GTK_ENTRY(self.unwrap_widget()), icon_pos, tooltip.borrow_to_glib().0)
         }
@@ -290,7 +290,7 @@ pub trait EntryTrait: ::WidgetTrait {
         }
     }
 
-    fn set_icon_tooltip_markup(&mut self, icon_pos: EntryIconPosition, tooltip: &str) -> () {
+    fn set_icon_tooltip_markup(&self, icon_pos: EntryIconPosition, tooltip: &str) -> () {
         unsafe {
             ffi::gtk_entry_set_icon_tooltip_markup(GTK_ENTRY(self.unwrap_widget()), icon_pos, tooltip.borrow_to_glib().0)
         }
@@ -310,7 +310,7 @@ pub trait EntryTrait: ::WidgetTrait {
         }
     }
 
-    fn set_input_purpose(&mut self, purpose: InputPurpose) -> () {
+    fn set_input_purpose(&self, purpose: InputPurpose) -> () {
         unsafe {
             ffi::gtk_entry_set_input_purpose(GTK_ENTRY(self.unwrap_widget()), purpose)
         }
@@ -322,7 +322,7 @@ pub trait EntryTrait: ::WidgetTrait {
         }
     }
 
-    fn set_input_hints(&mut self, hints: InputHints) -> () {
+    fn set_input_hints(&self, hints: InputHints) -> () {
         unsafe {
             ffi::gtk_entry_set_input_hints(GTK_ENTRY(self.unwrap_widget()), hints)
         }

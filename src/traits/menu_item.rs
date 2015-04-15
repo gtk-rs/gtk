@@ -22,7 +22,7 @@ use glib::{to_bool, to_gboolean};
 
 /// The widget used for item in menus
 pub trait MenuItemTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait {
-    fn set_submenu<T: ::WidgetTrait>(&mut self, widget: &mut T) {
+    fn set_submenu<T: ::WidgetTrait>(&self, widget: &T) {
         unsafe {
             ffi::gtk_menu_item_set_submenu(GTK_MENU_ITEM(self.unwrap_widget()),
                                            widget.unwrap_widget())
@@ -35,25 +35,25 @@ pub trait MenuItemTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait {
         }
     }
 
-    fn select(&mut self) {
+    fn select(&self) {
         unsafe {
             ffi::gtk_menu_item_select(GTK_MENU_ITEM(self.unwrap_widget()))
         }
     }
 
-    fn deselect(&mut self) {
+    fn deselect(&self) {
         unsafe {
             ffi::gtk_menu_item_deselect(GTK_MENU_ITEM(self.unwrap_widget()))
         }
     }
 
-    fn activate(&mut self) {
+    fn activate(&self) {
         unsafe {
             ffi::gtk_menu_item_activate(GTK_MENU_ITEM(self.unwrap_widget()))
         }
     }
 
-    fn set_accel_path(&mut self, accel_path: &str) {
+    fn set_accel_path(&self, accel_path: &str) {
         unsafe {
             ffi::gtk_menu_item_set_accel_path(GTK_MENU_ITEM(self.unwrap_widget()), accel_path.borrow_to_glib().0)
         }
@@ -66,7 +66,7 @@ pub trait MenuItemTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait {
         }
     }
 
-    fn set_label(&mut self, label: &str) {
+    fn set_label(&self, label: &str) {
         unsafe {
             ffi::gtk_menu_item_set_label(GTK_MENU_ITEM(self.unwrap_widget()),
                                          label.borrow_to_glib().0)
@@ -80,7 +80,7 @@ pub trait MenuItemTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait {
         }
     }
 
-    fn set_use_underline(&mut self, setting: bool) {
+    fn set_use_underline(&self, setting: bool) {
         unsafe {
             ffi::gtk_menu_item_set_use_underline(GTK_MENU_ITEM(self.unwrap_widget()),
                                                  to_gboolean(setting))
@@ -93,7 +93,7 @@ pub trait MenuItemTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait {
         }
     }
 
-    fn set_reserve_indicator(&mut self, setting: bool) {
+    fn set_reserve_indicator(&self, setting: bool) {
         unsafe {
             ffi::gtk_menu_item_set_reserve_indicator(GTK_MENU_ITEM(self.unwrap_widget()),
                                                      to_gboolean(setting))

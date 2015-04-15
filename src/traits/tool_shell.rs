@@ -54,7 +54,7 @@ pub trait ToolShellTrait: ::WidgetTrait {
         }
     }
 
-    fn rebuild_menu(&mut self) -> () {
+    fn rebuild_menu(&self) -> () {
         unsafe {
             ffi::gtk_tool_shell_rebuild_menu(GTK_TOOLSHELL(self.unwrap_widget()))
         }

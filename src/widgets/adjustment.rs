@@ -54,7 +54,7 @@ impl Adjustment {
         }
     }
 
-    pub fn set_value(&mut self, value: f64) -> () {
+    pub fn set_value(&self, value: f64) -> () {
         unsafe {
             ffi::gtk_adjustment_set_value(self.pointer, value as c_double)
         }
@@ -66,7 +66,7 @@ impl Adjustment {
         }
     }
 
-    pub fn set_lower(&mut self, lower: f64) -> () {
+    pub fn set_lower(&self, lower: f64) -> () {
         unsafe {
             ffi::gtk_adjustment_set_lower(self.pointer, lower as c_double)
         }
@@ -78,7 +78,7 @@ impl Adjustment {
         }
     }
 
-    pub fn set_page_increment(&mut self, page_increment: f64) -> () {
+    pub fn set_page_increment(&self, page_increment: f64) -> () {
         unsafe {
             ffi::gtk_adjustment_set_page_increment(self.pointer, page_increment as c_double)
         }
@@ -90,7 +90,7 @@ impl Adjustment {
         }
     }
 
-    pub fn set_page_size(&mut self, page_size: f64) -> () {
+    pub fn set_page_size(&self, page_size: f64) -> () {
         unsafe {
             ffi::gtk_adjustment_set_page_size(self.pointer, page_size as c_double)
         }
@@ -102,7 +102,7 @@ impl Adjustment {
         }
     }
 
-    pub fn set_step_increment(&mut self, step_increment: f64) -> () {
+    pub fn set_step_increment(&self, step_increment: f64) -> () {
         unsafe {
             ffi::gtk_adjustment_set_step_increment(self.pointer, step_increment as c_double)
         }
@@ -114,7 +114,7 @@ impl Adjustment {
         }
     }
 
-    pub fn set_upper(&mut self, upper: f64) -> () {
+    pub fn set_upper(&self, upper: f64) -> () {
         unsafe {
             ffi::gtk_adjustment_set_upper(self.pointer, upper as c_double)
         }
@@ -126,25 +126,25 @@ impl Adjustment {
         }
     }
 
-    pub fn clamp_page(&mut self, lower: f64, upper: f64) -> () {
+    pub fn clamp_page(&self, lower: f64, upper: f64) -> () {
         unsafe {
             ffi::gtk_adjustment_clamp_page(self.pointer, lower as c_double, upper as c_double);
         }
     }
 
-    pub fn changed(&mut self) -> () {
+    pub fn changed(&self) -> () {
         unsafe {
             ffi::gtk_adjustment_changed(self.pointer);
         }
     }
 
-    pub fn value_changed(&mut self) -> () {
+    pub fn value_changed(&self) -> () {
         unsafe {
             ffi::gtk_adjustment_value_changed(self.pointer)
         }
     }
 
-    pub fn configure(&mut self,
+    pub fn configure(&self,
                      value: f64,
                      lower: f64,
                      upper: f64,

@@ -40,33 +40,33 @@ impl Paned {
         check_pointer!(tmp_pointer, Paned)
     }
 
-    pub fn add1<T: ::WidgetTrait>(&mut self, child: &T) -> () {
+    pub fn add1<T: ::WidgetTrait>(&self, child: &T) -> () {
         unsafe {
             ffi::gtk_paned_add1(GTK_PANED(self.pointer), child.unwrap_widget())
         }
     }
 
-    pub fn add2<T: ::WidgetTrait>(&mut self, child: &T) -> () {
+    pub fn add2<T: ::WidgetTrait>(&self, child: &T) -> () {
         unsafe {
             ffi::gtk_paned_add2(GTK_PANED(self.pointer), child.unwrap_widget())
         }
     }
 
-    pub fn pack1<T: ::WidgetTrait>(&mut self, child: &T, resize: bool, schrink: bool) -> () {
+    pub fn pack1<T: ::WidgetTrait>(&self, child: &T, resize: bool, schrink: bool) -> () {
         unsafe {
             ffi::gtk_paned_pack1(GTK_PANED(self.pointer), child.unwrap_widget(),
                                  to_gboolean(resize), to_gboolean(schrink));
         }
     }
 
-    pub fn pack2<T: ::WidgetTrait>(&mut self, child: &T, resize: bool, schrink: bool) -> () {
+    pub fn pack2<T: ::WidgetTrait>(&self, child: &T, resize: bool, schrink: bool) -> () {
         unsafe {
             ffi::gtk_paned_pack2(GTK_PANED(self.pointer), child.unwrap_widget(),
                                  to_gboolean(resize), to_gboolean(schrink));
         }
     }
 
-    pub fn set_position(&mut self, position: i32) -> () {
+    pub fn set_position(&self, position: i32) -> () {
         unsafe {
             ffi::gtk_paned_set_position(GTK_PANED(self.pointer), position as c_int);
         }

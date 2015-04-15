@@ -34,49 +34,49 @@ impl InfoBar {
         check_pointer!(tmp_pointer, InfoBar)
     }
 
-    pub fn add_action_widget<T: ::WidgetTrait>(&mut self, child: &T, response_id: i32) -> () {
+    pub fn add_action_widget<T: ::WidgetTrait>(&self, child: &T, response_id: i32) -> () {
         unsafe {
             ffi::gtk_info_bar_add_action_widget(GTK_INFOBAR(self.pointer), child.unwrap_widget(), response_id as c_int)
         }
     }
 
-    pub fn add_button(&mut self, button_text: &str, response_id: i32) -> ::Button {
+    pub fn add_button(&self, button_text: &str, response_id: i32) -> ::Button {
         let button = unsafe {
             ffi::gtk_info_bar_add_button(GTK_INFOBAR(self.pointer), button_text.borrow_to_glib().0, response_id as c_int)
         };
         ::FFIWidget::wrap_widget(button)
     }
 
-    pub fn set_response_sensitive(&mut self, response_id: i32, setting: bool) -> () {
+    pub fn set_response_sensitive(&self, response_id: i32, setting: bool) -> () {
         unsafe { ffi::gtk_info_bar_set_response_sensitive(GTK_INFOBAR(self.pointer), response_id as c_int, to_gboolean(setting)); }
     }
 
-    pub fn set_default_response(&mut self, response_id: i32) -> () {
+    pub fn set_default_response(&self, response_id: i32) -> () {
         unsafe {
             ffi::gtk_info_bar_set_default_response(GTK_INFOBAR(self.pointer), response_id as c_int)
         }
     }
 
-    pub fn response(&mut self, response_id: i32) -> () {
+    pub fn response(&self, response_id: i32) -> () {
         unsafe {
             ffi::gtk_info_bar_response(GTK_INFOBAR(self.pointer), response_id as c_int)
         }
     }
 
-    pub fn set_message_type(&mut self, message_type: MessageType) -> () {
+    pub fn set_message_type(&self, message_type: MessageType) -> () {
         unsafe {
             ffi::gtk_info_bar_set_message_type(GTK_INFOBAR(self.pointer), message_type);
         }
     }
 
-    pub fn get_message_type(&mut self) -> MessageType {
+    pub fn get_message_type(&self) -> MessageType {
         unsafe {
             ffi::gtk_info_bar_get_message_type(GTK_INFOBAR(self.pointer))
         }
     }
 
     #[cfg(feature = "gtk_3_10")]
-    pub fn show_close_button(&mut self, show: bool) -> () {
+    pub fn show_close_button(&self, show: bool) -> () {
          unsafe { ffi::gtk_info_bar_set_show_close_button(GTK_INFOBAR(self.pointer), to_gboolean(show)); }
     }
 

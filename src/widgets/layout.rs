@@ -30,7 +30,7 @@ impl Layout {
         check_pointer!(tmp_pointer, Layout)
     }
 
-    pub fn put<T: ::WidgetTrait>(&mut self, child: &T, x: i32, y: i32) {
+    pub fn put<T: ::WidgetTrait>(&self, child: &T, x: i32, y: i32) {
         unsafe {
             ffi::gtk_layout_put(GTK_LAYOUT(self.pointer),
                                 child.unwrap_widget(),
@@ -40,7 +40,7 @@ impl Layout {
     }
 
     // FIXME: search a new name
-    pub fn move_<T: ::WidgetTrait>(&mut self, child: &T, x: i32, y: i32) {
+    pub fn move_<T: ::WidgetTrait>(&self, child: &T, x: i32, y: i32) {
         unsafe {
             ffi::gtk_layout_move(GTK_LAYOUT(self.pointer),
                                  child.unwrap_widget(),
@@ -49,13 +49,13 @@ impl Layout {
         }
     }
 
-    pub fn set_size(&mut self, width: u32, height: u32) {
+    pub fn set_size(&self, width: u32, height: u32) {
         unsafe {
             ffi::gtk_layout_set_size(GTK_LAYOUT(self.pointer), width, height)
         }
     }
 
-    pub fn get_size(&mut self) -> (u32, u32) {
+    pub fn get_size(&self) -> (u32, u32) {
         let mut width = 0;
         let mut height = 0;
 

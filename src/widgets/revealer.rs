@@ -34,7 +34,7 @@ impl Revealer {
         }
     }
 
-    pub fn set_reveal_child(&mut self, reveal_child: bool) {
+    pub fn set_reveal_child(&self, reveal_child: bool) {
         unsafe {
             ffi::gtk_revealer_set_reveal_child(GTK_REVEALER(self.pointer),
                                                to_gboolean(reveal_child))
@@ -53,13 +53,13 @@ impl Revealer {
         }
     }
 
-    pub fn set_transition_duration(&mut self, duration: u32) {
+    pub fn set_transition_duration(&self, duration: u32) {
         unsafe {
             ffi::gtk_revealer_set_transition_duration(GTK_REVEALER(self.pointer), duration)
         }
     }
 
-    pub fn set_transition_type(&mut self, transition: ::RevealerTransitionType) {
+    pub fn set_transition_type(&self, transition: ::RevealerTransitionType) {
         unsafe {
             ffi::gtk_revealer_set_transition_type(GTK_REVEALER(self.pointer), transition)
         }

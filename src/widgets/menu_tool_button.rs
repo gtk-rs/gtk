@@ -44,13 +44,13 @@ impl MenuToolButton {
         check_pointer!(tmp_pointer, MenuToolButton)
     }
 
-    pub fn set_arrow_tooltip_text(&mut self, text: &str) -> () {
+    pub fn set_arrow_tooltip_text(&self, text: &str) -> () {
         unsafe {
             ffi::gtk_menu_tool_button_set_arrow_tooltip_text(GTK_MENUTOOLBUTTON(self.pointer), text.borrow_to_glib().0)
         }
     }
 
-    pub fn set_arrow_tooltip_markup(&mut self, markup: &str) -> () {
+    pub fn set_arrow_tooltip_markup(&self, markup: &str) -> () {
         unsafe {
             ffi::gtk_menu_tool_button_set_arrow_tooltip_markup(
                 GTK_MENUTOOLBUTTON(self.pointer),

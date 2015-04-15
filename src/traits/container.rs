@@ -38,7 +38,7 @@ pub trait ContainerTrait: ::WidgetTrait {
         }
     }
 
-    fn set_resize_mode(&mut self, resize_mode: ResizeMode) -> () {
+    fn set_resize_mode(&self, resize_mode: ResizeMode) -> () {
         unsafe {
             ffi::gtk_container_set_resize_mode(GTK_CONTAINER(self.unwrap_widget()), resize_mode);
         }

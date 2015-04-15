@@ -27,23 +27,23 @@ impl EventBox {
         check_pointer!(tmp_pointer, EventBox)
     }
 
-    pub fn set_above_child(&mut self, above_child: bool) {
+    pub fn set_above_child(&self, above_child: bool) {
         unsafe {
             ffi::gtk_event_box_set_above_child(GTK_EVENT_BOX(self.pointer), to_gboolean(above_child))
         }
     }
 
-    pub fn get_above_child(&mut self) -> bool {
+    pub fn get_above_child(&self) -> bool {
         unsafe { to_bool(ffi::gtk_event_box_get_above_child(GTK_EVENT_BOX(self.pointer))) }
     }
 
-    pub fn set_visible_window(&mut self, visible_window: bool) {
+    pub fn set_visible_window(&self, visible_window: bool) {
         unsafe {
             ffi::gtk_event_box_set_visible_window(GTK_EVENT_BOX(self.pointer), to_gboolean(visible_window))
         }
     }
 
-    pub fn get_visible_window(&mut self) -> bool {
+    pub fn get_visible_window(&self) -> bool {
         unsafe { to_bool(ffi::gtk_event_box_get_visible_window(GTK_EVENT_BOX(self.pointer))) }
     }
 }

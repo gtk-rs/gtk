@@ -27,7 +27,7 @@ pub trait ToggleToolButtonTrait: ::WidgetTrait +
         unsafe { to_bool(ffi::gtk_toggle_tool_button_get_active(GTK_TOGGLETOOLBUTTON(self.unwrap_widget()))) }
     }
 
-    fn set_active(&mut self, set_underline: bool) -> () {
+    fn set_active(&self, set_underline: bool) -> () {
          unsafe { ffi::gtk_toggle_tool_button_set_active(GTK_TOGGLETOOLBUTTON(self.unwrap_widget()), to_gboolean(set_underline)); }
     }
 }

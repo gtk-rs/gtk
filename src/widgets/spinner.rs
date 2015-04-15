@@ -27,13 +27,13 @@ impl Spinner {
         check_pointer!(tmp_pointer, Spinner)
     }
 
-    pub fn start(&mut self) -> () {
+    pub fn start(&self) -> () {
         unsafe {
             ffi::gtk_spinner_start(GTK_SPINNER(self.pointer))
         }
     }
 
-    pub fn stop(&mut self) -> () {
+    pub fn stop(&self) -> () {
         unsafe {
             ffi::gtk_spinner_stop(GTK_SPINNER(self.pointer))
         }

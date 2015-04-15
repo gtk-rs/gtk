@@ -40,7 +40,7 @@ impl FontButton {
         check_pointer!(tmp_pointer, FontButton)
     }
 
-    pub fn set_font_name(&mut self, font_name: &str) -> bool {
+    pub fn set_font_name(&self, font_name: &str) -> bool {
         unsafe { to_bool(ffi::gtk_font_button_set_font_name(GTK_FONTBUTTON(self.pointer), font_name.borrow_to_glib().0)) }
     }
 
@@ -51,7 +51,7 @@ impl FontButton {
         }
     }
 
-    pub fn set_show_style(&mut self, show_style: bool) -> () {
+    pub fn set_show_style(&self, show_style: bool) -> () {
         unsafe { ffi::gtk_font_button_set_show_style(GTK_FONTBUTTON(self.pointer), to_gboolean(show_style)); }
     }
 
@@ -59,7 +59,7 @@ impl FontButton {
         unsafe { to_bool(ffi::gtk_font_button_get_show_style(GTK_FONTBUTTON(self.pointer))) }
     }
 
-    pub fn set_show_size(&mut self, show_size: bool) -> () {
+    pub fn set_show_size(&self, show_size: bool) -> () {
         unsafe { ffi::gtk_font_button_set_show_size(GTK_FONTBUTTON(self.pointer), to_gboolean(show_size)); }
     }
 
@@ -67,7 +67,7 @@ impl FontButton {
         unsafe { to_bool(ffi::gtk_font_button_get_show_size(GTK_FONTBUTTON(self.pointer))) }
     }
 
-    pub fn set_use_font(&mut self, use_font: bool) -> () {
+    pub fn set_use_font(&self, use_font: bool) -> () {
         unsafe { ffi::gtk_font_button_set_use_font(GTK_FONTBUTTON(self.pointer), to_gboolean(use_font)); }
     }
 
@@ -75,7 +75,7 @@ impl FontButton {
         unsafe { to_bool(ffi::gtk_font_button_get_use_font(GTK_FONTBUTTON(self.pointer))) }
     }
 
-    pub fn set_use_size(&mut self, use_size: bool) -> () {
+    pub fn set_use_size(&self, use_size: bool) -> () {
         unsafe { ffi::gtk_font_button_set_use_size(GTK_FONTBUTTON(self.pointer), to_gboolean(use_size)); }
     }
 
@@ -83,7 +83,7 @@ impl FontButton {
         unsafe { to_bool(ffi::gtk_font_button_get_use_size(GTK_FONTBUTTON(self.pointer))) }
     }
 
-    pub fn set_title(&mut self, title: &str) -> () {
+    pub fn set_title(&self, title: &str) -> () {
         unsafe {
             ffi::gtk_font_button_set_title(GTK_FONTBUTTON(self.pointer), title.borrow_to_glib().0);
         }

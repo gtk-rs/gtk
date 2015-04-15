@@ -53,7 +53,7 @@ pub trait ButtonTrait: ::WidgetTrait + ::ContainerTrait {
         }
     }
 
-    fn set_relief(&mut self, new_style: ReliefStyle) -> () {
+    fn set_relief(&self, new_style: ReliefStyle) -> () {
         unsafe {
             ffi::gtk_button_set_relief(GTK_BUTTON(self.unwrap_widget()), new_style);
         }
@@ -72,7 +72,7 @@ pub trait ButtonTrait: ::WidgetTrait + ::ContainerTrait {
         }
     }
 
-    fn set_label(&mut self, label: &str) -> () {
+    fn set_label(&self, label: &str) -> () {
         unsafe {
             ffi::gtk_button_set_label(GTK_BUTTON(self.unwrap_widget()), label.borrow_to_glib().0)
         }
@@ -82,7 +82,7 @@ pub trait ButtonTrait: ::WidgetTrait + ::ContainerTrait {
         unsafe { to_bool(ffi::gtk_button_get_use_stock(GTK_BUTTON(self.unwrap_widget()))) }
     }
 
-    fn set_use_stock(&mut self, use_stock: bool) -> () {
+    fn set_use_stock(&self, use_stock: bool) -> () {
         unsafe { ffi::gtk_button_set_use_stock(GTK_BUTTON(self.unwrap_widget()), to_gboolean(use_stock)); }
     }
 
@@ -90,11 +90,11 @@ pub trait ButtonTrait: ::WidgetTrait + ::ContainerTrait {
         unsafe { to_bool(ffi::gtk_button_get_use_underline(GTK_BUTTON(self.unwrap_widget()))) }
     }
 
-    fn set_use_underline(&mut self, use_underline: bool) -> () {
+    fn set_use_underline(&self, use_underline: bool) -> () {
         unsafe { ffi::gtk_button_set_use_underline(GTK_BUTTON(self.unwrap_widget()), to_gboolean(use_underline)); }
     }
 
-    fn set_focus_on_click(&mut self, focus_on_click: bool) -> () {
+    fn set_focus_on_click(&self, focus_on_click: bool) -> () {
         unsafe { ffi::gtk_button_set_focus_on_click(GTK_BUTTON(self.unwrap_widget()), to_gboolean(focus_on_click)); }
     }
 
@@ -102,7 +102,7 @@ pub trait ButtonTrait: ::WidgetTrait + ::ContainerTrait {
         unsafe { to_bool(ffi::gtk_button_get_focus_on_click(GTK_BUTTON(self.unwrap_widget()))) }
     }
 
-    fn set_alignment(&mut self, x_align: f32, y_align: f32) -> () {
+    fn set_alignment(&self, x_align: f32, y_align: f32) -> () {
         unsafe {
             ffi::gtk_button_set_alignment(GTK_BUTTON(self.unwrap_widget()), x_align as c_float, y_align as c_float)
         }
@@ -117,13 +117,13 @@ pub trait ButtonTrait: ::WidgetTrait + ::ContainerTrait {
         (x_align as f32, y_align as f32)
     }
 
-    fn set_image<T: ::WidgetTrait>(&mut self, image: &T) -> () {
+    fn set_image<T: ::WidgetTrait>(&self, image: &T) -> () {
         unsafe {
             ffi::gtk_button_set_image(GTK_BUTTON(self.unwrap_widget()), image.unwrap_widget());
         }
     }
 
-    fn set_image_position(&mut self, position: PositionType) -> () {
+    fn set_image_position(&self, position: PositionType) -> () {
         unsafe {
             ffi::gtk_button_set_image_position(GTK_BUTTON(self.unwrap_widget()), position);
         }
@@ -136,7 +136,7 @@ pub trait ButtonTrait: ::WidgetTrait + ::ContainerTrait {
     }
 
     #[cfg(feature = "gtk_3_6")]
-    fn set_always_show_image(&mut self, always_show: bool) -> () {
+    fn set_always_show_image(&self, always_show: bool) -> () {
         unsafe { ffi::gtk_button_set_always_show_image(GTK_BUTTON(self.unwrap_widget()), to_gboolean(always_show)); }
     }
 

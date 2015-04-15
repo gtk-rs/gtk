@@ -47,13 +47,13 @@ impl SpinButton {
         check_pointer!(tmp_pointer, SpinButton)
     }
 
-    pub fn configure(&mut self, adjustment: &::Adjustment, climb_rate: f64, digits: u32) -> () {
+    pub fn configure(&self, adjustment: &::Adjustment, climb_rate: f64, digits: u32) -> () {
         unsafe {
             ffi::gtk_spin_button_configure(GTK_SPINBUTTON(self.pointer), adjustment.unwrap_pointer(), climb_rate as c_double, digits as c_uint);
         }
     }
 
-    pub fn set_adjustment(&mut self, adjustment: &::Adjustment) -> () {
+    pub fn set_adjustment(&self, adjustment: &::Adjustment) -> () {
         unsafe {
             ffi:: gtk_spin_button_set_adjustment(GTK_SPINBUTTON(self.pointer), adjustment.unwrap_pointer());
         }
@@ -65,19 +65,19 @@ impl SpinButton {
         }
     }
 
-    pub fn set_digits(&mut self, digits: u32) -> () {
+    pub fn set_digits(&self, digits: u32) -> () {
         unsafe {
             ffi::gtk_spin_button_set_digits(GTK_SPINBUTTON(self.pointer), digits as c_uint);
         }
     }
 
-    pub fn set_increments(&mut self, step: f64, page: f64) -> () {
+    pub fn set_increments(&self, step: f64, page: f64) -> () {
         unsafe {
             ffi::gtk_spin_button_set_increments(GTK_SPINBUTTON(self.pointer), step as c_double, page as c_double);
         }
     }
 
-    pub fn set_range(&mut self, min: f64, max: f64) -> () {
+    pub fn set_range(&self, min: f64, max: f64) -> () {
         unsafe {
             ffi::gtk_spin_button_set_range(GTK_SPINBUTTON(self.pointer), min as c_double, max as c_double);
         }
@@ -89,19 +89,19 @@ impl SpinButton {
         }
     }
 
-    pub fn set_value(&mut self, value: f64) -> () {
+    pub fn set_value(&self, value: f64) -> () {
         unsafe {
             ffi::gtk_spin_button_set_value(GTK_SPINBUTTON(self.pointer), value as c_double);
         }
     }
 
-    pub fn set_update_policy(&mut self, policy: SpinButtonUpdatePolicy) -> () {
+    pub fn set_update_policy(&self, policy: SpinButtonUpdatePolicy) -> () {
         unsafe {
             ffi::gtk_spin_button_set_update_policy(GTK_SPINBUTTON(self.pointer), policy);
         }
     }
 
-    pub fn set_numeric(&mut self, numeric: bool) -> () {
+    pub fn set_numeric(&self, numeric: bool) -> () {
         unsafe { ffi::gtk_spin_button_set_numeric(GTK_SPINBUTTON(self.pointer), to_gboolean(numeric)); }
     }
 
@@ -109,7 +109,7 @@ impl SpinButton {
         unsafe { to_bool(ffi::gtk_spin_button_get_numeric(GTK_SPINBUTTON(self.pointer))) }
     }
 
-    pub fn set_wrap(&mut self, wrap: bool) -> () {
+    pub fn set_wrap(&self, wrap: bool) -> () {
         unsafe { ffi::gtk_spin_button_set_wrap(GTK_SPINBUTTON(self.pointer), to_gboolean(wrap)); }
     }
 
@@ -117,7 +117,7 @@ impl SpinButton {
         unsafe { to_bool(ffi::gtk_spin_button_get_wrap(GTK_SPINBUTTON(self.pointer))) }
     }
 
-    pub fn set_snap_to_ticks(&mut self, snap_to_ticks: bool) -> () {
+    pub fn set_snap_to_ticks(&self, snap_to_ticks: bool) -> () {
         unsafe { ffi::gtk_spin_button_set_snap_to_ticks(GTK_SPINBUTTON(self.pointer), to_gboolean(snap_to_ticks)); }
     }
 
@@ -125,7 +125,7 @@ impl SpinButton {
         unsafe { to_bool(ffi::gtk_spin_button_get_snap_to_ticks(GTK_SPINBUTTON(self.pointer))) }
     }
 
-    pub fn spin(&mut self, direction: SpinType, increment: f64) -> () {
+    pub fn spin(&self, direction: SpinType, increment: f64) -> () {
         unsafe {
             ffi::gtk_spin_button_spin(GTK_SPINBUTTON(self.pointer), direction, increment as c_double);
         }
