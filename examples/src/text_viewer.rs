@@ -11,26 +11,38 @@ use std::io::BufReader;
 use std::fs::File;
 use std::num::FromPrimitive;
 
-use gtk::Connect;
 use gtk::traits::*;
-use gtk::signals::{Clicked, DeleteEvent};
+use gtk::signal::Inhibit;
 
 fn main() {
     gtk::init();
 
-    let mut window = gtk::Window::new(gtk::WindowType::TopLevel).unwrap();
+    let window = gtk::Window::new(gtk::WindowType::TopLevel).unwrap();
     window.set_title("Text File Viewer");
     window.set_window_position(gtk::WindowPosition::Center);
     window.set_default_size(400, 300);
 
-    let mut toolbar = gtk::Toolbar::new().unwrap();
+    let toolbar = gtk::Toolbar::new().unwrap();
 
     let open_icon = gtk::Image::new_from_icon_name("document-open", gtk::IconSize::SmallToolbar).unwrap();
     let text_view = gtk::TextView::new().unwrap();
 
-    let mut open_button = gtk::ToolButton::new::<gtk::Image>(Some(&open_icon), Some("Open")).unwrap();
+    let open_button = gtk::ToolButton::new::<gtk::Image>(Some(&open_icon), Some("Open")).unwrap();
     open_button.set_is_important(true);
-    Connect::connect(&open_button, Clicked::new(&mut || {
+
+    toolbar.add(&open_button);
+
+    let scroll = gtk::ScrolledWindow::new(None, None).unwrap();
+    scroll.set_policy(gtk::PolicyType::Automatic, gtk::PolicyType::Automatic);
+    scroll.add(&text_view);
+
+    let vbox = gtk::Box::new(gtk::Orientation::Vertical, 0).unwrap();
+    vbox.pack_start(&toolbar, false, true, 0);
+    vbox.pack_start(&scroll, true, true, 0);
+
+    window.add(&vbox);
+
+    open_button.connect_clicked(move |_| {
         // TODO move this to a impl?
         let file_chooser = gtk::FileChooserDialog::new(
             "Open File", None, gtk::FileChooserAction::Open,
@@ -47,30 +59,17 @@ fn main() {
                 let _ = reader.read_to_string(&mut contents);
 
                 text_view.get_buffer().unwrap().set_text(&contents);
-
             },
             _ => {}
         };
 
         file_chooser.destroy();
-    }));
+    });
 
-    toolbar.add(&open_button);
-
-    let mut scroll = gtk::ScrolledWindow::new(None, None).unwrap();
-    scroll.set_policy(gtk::PolicyType::Automatic, gtk::PolicyType::Automatic);
-    scroll.add(&text_view);
-
-    let mut vbox = gtk::Box::new(gtk::Orientation::Vertical, 0).unwrap();
-    vbox.pack_start(&toolbar, false, true, 0);
-    vbox.pack_start(&scroll, true, true, 0);
-
-    window.add(&vbox);
-
-    Connect::connect(&window, DeleteEvent::new(&mut |_| {
+    window.connect_delete_event(|_, _| {
         gtk::main_quit();
-        true
-    }));
+        Inhibit(true)
+    });
 
     window.show_all();
     gtk::main();

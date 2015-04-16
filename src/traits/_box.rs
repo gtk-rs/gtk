@@ -21,7 +21,7 @@ use ffi;
 use glib::{to_bool, to_gboolean};
 
 pub trait BoxTrait: ::WidgetTrait {
-    fn pack_start<'r, T: ::WidgetTrait>(&'r mut self, child: &'r T, expand: bool, fill: bool, padding: u32) -> () {
+    fn pack_start<'r, T: ::WidgetTrait>(&'r self, child: &'r T, expand: bool, fill: bool, padding: u32) -> () {
         unsafe {
             ffi::gtk_box_pack_start(GTK_BOX(self.unwrap_widget()), child.unwrap_widget(),
                                     to_gboolean(expand), to_gboolean(fill),
@@ -29,7 +29,7 @@ pub trait BoxTrait: ::WidgetTrait {
         }
     }
 
-    fn pack_end<'r, T: ::WidgetTrait>(&'r mut self, child: &'r T, expand: bool, fill: bool, padding: u32) -> () {
+    fn pack_end<'r, T: ::WidgetTrait>(&'r self, child: &'r T, expand: bool, fill: bool, padding: u32) -> () {
         unsafe {
             ffi::gtk_box_pack_end(GTK_BOX(self.unwrap_widget()), child.unwrap_widget(),
                                   to_gboolean(expand), to_gboolean(fill),
@@ -57,7 +57,7 @@ pub trait BoxTrait: ::WidgetTrait {
         }
     }
 
-    fn reorder_child<'r, T: ::WidgetTrait>(&'r mut self, child: &'r T, position: i32) -> () {
+    fn reorder_child<'r, T: ::WidgetTrait>(&'r self, child: &'r T, position: i32) -> () {
         unsafe {
             ffi::gtk_box_reorder_child(GTK_BOX(self.unwrap_widget()), child.unwrap_widget(), position as c_int);
         }

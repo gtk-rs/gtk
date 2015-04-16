@@ -45,6 +45,8 @@ Finally all the gtk widgets implement the trait self::traits::Widget.
 
 //#![macro_use]
 
+#![feature(alloc)]
+
 #![allow(dead_code)] // TODO: drop this
 #![allow(raw_pointer_derive)]
 
@@ -84,6 +86,7 @@ pub use self::rt::{
 
 /// GTK Widgets for all versions
 pub use self::widgets::{
+    Widget,
     Window,
     Label,
     Button,
@@ -314,6 +317,7 @@ pub use self::traits::ActionableTrait;
 pub use self::traits::AppChooserTrait;
 pub use self::traits::BinTrait;
 pub use self::traits::ButtonTrait;
+pub use self::traits::ButtonSignals;
 pub use self::traits::CellEditableTrait;
 pub use self::traits::CellLayoutTrait;
 pub use self::traits::CellRendererTrait;
@@ -342,9 +346,11 @@ pub use self::traits::TextBufferTrait;
 pub use self::traits::ToggleButtonTrait;
 pub use self::traits::ToggleToolButtonTrait;
 pub use self::traits::ToolButtonTrait;
+pub use self::traits::ToolButtonSignals;
 pub use self::traits::ToolItemTrait;
 pub use self::traits::ToolShellTrait;
 pub use self::traits::WidgetTrait;
+pub use self::traits::WidgetSignals;
 pub use self::traits::WindowTrait;
 
 /// GTK various struct
@@ -357,6 +363,7 @@ mod cast;
 mod rt;
 
 pub mod traits;
+pub mod signal;
 pub mod signals;
 pub mod widgets;
 pub mod types;

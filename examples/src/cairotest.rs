@@ -5,9 +5,9 @@ extern crate gtk;
 
 use std::f64::consts::PI_2;
 
-use gtk::Connect;
+use gtk::Widget;
 use gtk::traits::*;
-use gtk::signals::{DeleteEvent, Draw};
+use gtk::signal::Inhibit;
 use gtk::DrawingArea;
 
 use cairo::enums::FontSlant::FontSlantNormal;
@@ -17,7 +17,7 @@ use cairo::Context;
 fn main() {
     gtk::init();
 
-    drawable(500, 500, &mut |cr: Context| {
+    drawable(500, 500, |_, cr: Context| {
         cr.set_dash(&[3., 2., 1.], 1.);
         assert_eq!(cr.get_dash(), (vec![3., 2., 1.], 1.));
 
@@ -63,9 +63,11 @@ fn main() {
 
         cr.arc(0.5 + eye_dx, eye_y, 0.05, 0.0, PI_2);
         cr.fill();
+
+        Inhibit(false)
     });
 
-    drawable(500, 500, &mut |cr: Context| {
+    drawable(500, 500, |_, cr: Context| {
         cr.scale(500f64, 500f64);
 
         cr.select_font_face("Sans", FontSlantNormal, FontWeightNormal);
@@ -86,23 +88,26 @@ fn main() {
         cr.arc(0.04, 0.53, 0.02, 0.0, PI_2);
         cr.arc(0.27, 0.65, 0.02, 0.0, PI_2);
         cr.fill();
+
+        Inhibit(false)
     });
 
     gtk::main();
 }
 
-pub fn drawable<T>(width: i32, height: i32, draw_fn: &mut T) where T: FnMut(cairo::Context) {
-    let mut window = gtk::Window::new(gtk::WindowType::TopLevel).unwrap();
+pub fn drawable<F>(width: i32, height: i32, draw_fn: F)
+where F: Fn(Widget, Context) -> Inhibit + 'static {
+    let window = gtk::Window::new(gtk::WindowType::TopLevel).unwrap();
     let drawing_area = Box::new(DrawingArea::new)().unwrap();
 
-    Connect::connect(&drawing_area, Draw::new(draw_fn));
+    drawing_area.connect_draw(draw_fn);
 
     window.set_default_size(width, height);
 
-    Connect::connect(&window, DeleteEvent::new(&mut |_|{
+    window.connect_delete_event(|_, _| {
         gtk::main_quit();
-        true
-    }));
+        Inhibit(true)
+    });
     window.add(&drawing_area);
     window.show_all();
 }

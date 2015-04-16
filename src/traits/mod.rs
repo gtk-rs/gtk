@@ -57,6 +57,12 @@ pub use self::cell_layout::CellLayoutTrait;
 pub use self::combo_box::ComboBoxTrait;
 pub use self::gobject::GObjectTrait;
 
+pub use signal::{
+    WidgetSignals,
+    ButtonSignals,
+    ToolButtonSignals,
+};
+
 pub mod widget;
 pub mod container;
 pub mod window;

@@ -3,9 +3,8 @@
 extern crate gtk;
 extern crate gdk;
 
-use gtk::Connect;
 use gtk::traits::*;
-use gtk::signals::{Clicked, KeyPressEvent, DeleteEvent};
+use gtk::signal::Inhibit;
 use gdk::enums::modifier_type;
 
 /// Expands to its argument if GTK+ 3.10 support is configured and to `()` otherwise
@@ -32,15 +31,35 @@ macro_rules! with_gtk_3_10 {
     }
 }
 
+fn about_clicked(w: gtk::Button) {
+    let dialog = gtk::AboutDialog::new().unwrap();
+
+    let crew = [
+        "James T. Kirk",
+        "Spock",
+        "Leonard McCoy",
+    ];
+
+    dialog.set_authors(&crew);
+    dialog.set_artists(&crew[1..]);
+
+    println!("Authors: {:?}", dialog.get_authors());
+    println!("Artists: {:?}", dialog.get_artists());
+    println!("Documenters: {:?}", dialog.get_documenters());
+
+    dialog.run();
+    dialog.destroy();
+}
+
 fn main() {
     gtk::init();
     println!("Major: {}, Minor: {}", gtk::get_major_version(), gtk::get_minor_version());
-    let mut window = gtk::Window::new(gtk::WindowType::TopLevel).unwrap();
-    let mut frame = gtk::Frame::new(Some("Yep a frame")).unwrap();
-    let mut _box = gtk::Box::new(gtk::Orientation::Horizontal, 10).unwrap();
-    let mut v_box = gtk::Box::new(gtk::Orientation::Horizontal, 10).unwrap();
-    let mut button_box = gtk::ButtonBox::new(gtk::Orientation::Horizontal).unwrap();
-    let mut label = gtk::Label::new("Yeah a wonderful label too !").unwrap();
+    let window = gtk::Window::new(gtk::WindowType::TopLevel).unwrap();
+    let frame = gtk::Frame::new(Some("Yep a frame")).unwrap();
+    let _box = gtk::Box::new(gtk::Orientation::Horizontal, 10).unwrap();
+    let v_box = gtk::Box::new(gtk::Orientation::Horizontal, 10).unwrap();
+    let button_box = gtk::ButtonBox::new(gtk::Orientation::Horizontal).unwrap();
+    let label = gtk::Label::new("Yeah a wonderful label too !").unwrap();
     let button = gtk::Button::new_with_label("Whattttt a button !").unwrap();
     let button_about = gtk::Button::new_with_label("About?").unwrap();
     let button_recent = gtk::Button::new_with_label("Choose a recent one !").unwrap();
@@ -55,26 +74,26 @@ fn main() {
         gtk::MenuButton::new().unwrap()
     );
     let link_button = gtk::LinkButton::new("www.rust-lang.org").unwrap();
-    let mut volume_button = gtk::VolumeButton::new().unwrap();
-    let mut entry = gtk::Entry::new().unwrap();
+    let volume_button = gtk::VolumeButton::new().unwrap();
+    let entry = gtk::Entry::new().unwrap();
     let search_entry = with_gtk_3_10!(
         gtk::SearchEntry::new().unwrap()
     );
     let separator = gtk::Separator::new(gtk::Orientation::Horizontal).unwrap();
     let separator2 = gtk::Separator::new(gtk::Orientation::Horizontal).unwrap();
     let switch = gtk::Switch::new().unwrap();
-    let mut switch2 = gtk::Switch::new().unwrap();
+    let switch2 = gtk::Switch::new().unwrap();
     let scale = gtk::Scale::new_with_range(gtk::Orientation::Horizontal, 0., 100., 1.).unwrap();
-    let mut level_bar = with_gtk_3_10!(
+    let level_bar = with_gtk_3_10!(
         gtk::LevelBar::new_for_interval(0., 100.).unwrap()
     );
     let spin_button = gtk::SpinButton::new_with_range(0., 100., 1.).unwrap();
-    let mut spinner = gtk::Spinner::new().unwrap();
+    let spinner = gtk::Spinner::new().unwrap();
     let image = gtk::Image::new_from_file("./test/resources/gtk.jpg").unwrap();
-    let mut progress_bar = gtk::ProgressBar::new().unwrap();
+    let progress_bar = gtk::ProgressBar::new().unwrap();
     let arrow = gtk::Arrow::new(gtk::ArrowType::Right, gtk::ShadowType::EtchedOut).unwrap();
     let calendar = gtk::Calendar::new().unwrap();
-    let mut info_bar = gtk::InfoBar::new().unwrap();
+    let info_bar = gtk::InfoBar::new().unwrap();
     let tmp_button = with_gtk_3_10!(
         gtk::Button::new_from_icon_name("edit-clear", gtk::IconSize::Button).unwrap()
     );
@@ -104,8 +123,8 @@ fn main() {
     window.set_window_position(gtk::WindowPosition::Center);
     window.add(&frame);
 
-    Connect::connect(&button, Clicked::new(&mut || {
-
+    let entry_clone = entry.clone();
+    button.connect_clicked(move |_| {
         let dialog = gtk::Dialog::with_buttons(
             "Hello!", None, gtk::DialogFlags::Modal,
             [("No", 0), ("Yes", 1), ("Yes!", 2)]);
@@ -114,84 +133,69 @@ fn main() {
 
         dialog.destroy();
 
-        entry.set_text(&format!("Clicked {}", ret));
-    }));
+        entry_clone.set_text(&format!("Clicked {}", ret));
+    });
 
-    Connect::connect(&button_about, Clicked::new(&mut ||{
+    // use a plain function instead of a closure
+    button_about.connect_clicked(about_clicked);
 
-        let dialog = gtk::AboutDialog::new().unwrap();
-
-        let crew = [
-            "James T. Kirk",
-            "Spock",
-            "Leonard McCoy",
-        ];
-
-        dialog.set_authors(&crew);
-        dialog.set_artists(&crew[1..]);
-
-        println!("Authors: {:?}", dialog.get_authors());
-        println!("Artists: {:?}", dialog.get_artists());
-        println!("Documenters: {:?}", dialog.get_documenters());
-
-        dialog.run();
-        dialog.destroy();
-    }));
-    Connect::connect(&button_font, Clicked::new(&mut ||{
+    button_font.connect_clicked(|_| {
         let dialog = gtk::FontChooserDialog::new("Font chooser test", None).unwrap();
 
         dialog.run();
         dialog.destroy();
-    }));
-    Connect::connect(&button_recent, Clicked::new(&mut ||{
+    });
+
+    button_recent.connect_clicked(|_| {
         let dialog = gtk::RecentChooserDialog::new(
             "Recent chooser test", None,
             [("Ok", gtk::ResponseType::Ok), ("Cancel", gtk::ResponseType::Cancel)]);
 
         dialog.run();
         dialog.destroy();
-    }));
-    Connect::connect(&file_button, Clicked::new(&mut ||{
+    });
+
+    file_button.connect_clicked(|_| {
         //entry.set_text("Clicked!");
         let dialog = gtk::FileChooserDialog::new(
             "Choose a file", None, gtk::FileChooserAction::Open,
             [("Open", gtk::ResponseType::Ok), ("Cancel", gtk::ResponseType::Cancel)]);
 
         dialog.set_select_multiple(true);
-
         dialog.run();
-
         let files = dialog.get_filenames();
-
         dialog.destroy();
 
         println!("Files: {:?}", files);
-    }));
-    Connect::connect(&app_button, Clicked::new(&mut ||{
+    });
+
+    app_button.connect_clicked(|_| {
         //entry.set_text("Clicked!");
         let dialog = gtk::AppChooserDialog::new_for_content_type(None, gtk::DialogFlags::Modal, "sh").unwrap();
 
         dialog.run();
         dialog.destroy();
-    }));
+    });
 
-    Connect::connect(&window, KeyPressEvent::new(&mut |key|{
-        let keyval = unsafe { (*key).keyval };
-        let keystate = unsafe { (*key).state };
+    let entry_clone = entry.clone();
+    window.connect_key_press_event(move |_, key| {
+        let keyval = key.keyval;
+        let keystate = key.state;
 
         println!("key pressed: {} / {:?}", keyval, keystate);
-        println!("text: {}", entry.get_text().unwrap());
+        println!("text: {}", entry_clone.get_text().unwrap());
 
         if keystate.intersects(modifier_type::ControlMask) {
             println!("You pressed Ctrl!");
         }
-        false
-    }));
 
-    Connect::connect(&window, DeleteEvent::new(&mut |_|{
+        Inhibit(false)
+    });
+
+    window.connect_delete_event(|_, _| {
         gtk::main_quit();
-        true
-    }));
+        Inhibit(true)
+    });
 
     frame.add(&_box);
     with_gtk_3_10! {{

@@ -5,11 +5,10 @@
 extern crate glib;
 extern crate gtk;
 
-use gtk::Connect;
 use gtk::traits::*;
-use gtk::signals::DeleteEvent;
+use gtk::signal::Inhibit;
 
-fn append_text_column(tree: &mut gtk::TreeView) {
+fn append_text_column(tree: &gtk::TreeView) {
     let column = gtk::TreeViewColumn::new().unwrap();
     let cell = gtk::CellRendererText::new().unwrap();
 
@@ -21,15 +20,15 @@ fn append_text_column(tree: &mut gtk::TreeView) {
 fn main() {
     gtk::init();
 
-    let mut window = gtk::Window::new(gtk::WindowType::TopLevel).unwrap();
+    let window = gtk::Window::new(gtk::WindowType::TopLevel).unwrap();
 
     window.set_title("TreeView Sample");
     window.set_window_position(gtk::WindowPosition::Center);
 
-    Connect::connect(&window, DeleteEvent::new(&mut |_| {
+    window.connect_delete_event(|_, _| {
         gtk::main_quit();
-        true
-    }));
+        Inhibit(true)
+    });
 
     // test Value
 
@@ -42,14 +41,14 @@ fn main() {
 
     // left pane
 
-    let mut left_tree = gtk::TreeView::new().unwrap();
+    let left_tree = gtk::TreeView::new().unwrap();
     let column_types = [glib::Type::String];
     let left_store = gtk::ListStore::new(&column_types).unwrap();
     let left_model = left_store.get_model().unwrap();
 
     left_tree.set_model(&left_model);
     left_tree.set_headers_visible(false);
-    append_text_column(&mut left_tree);
+    append_text_column(&left_tree);
 
     for _ in 0..10 {
         let mut iter = gtk::TreeIter::new().unwrap();
@@ -59,14 +58,14 @@ fn main() {
 
     // right pane
 
-    let mut right_tree = gtk::TreeView::new().unwrap();
+    let right_tree = gtk::TreeView::new().unwrap();
     let column_types = [glib::Type::String];
     let right_store = gtk::TreeStore::new(&column_types).unwrap();
     let right_model = right_store.get_model().unwrap();
 
     right_tree.set_model(&right_model);
     right_tree.set_headers_visible(false);
-    append_text_column(&mut right_tree);
+    append_text_column(&right_tree);
 
     for _ in 0..10 {
         let mut iter = gtk::TreeIter::new().unwrap();
@@ -82,7 +81,7 @@ fn main() {
 
     // display the panes
 
-    let mut split_pane = gtk::Box::new(gtk::Orientation::Horizontal, 10).unwrap();
+    let split_pane = gtk::Box::new(gtk::Orientation::Horizontal, 10).unwrap();
 
     split_pane.set_size_request(-1, -1);
     split_pane.add(&left_tree);
