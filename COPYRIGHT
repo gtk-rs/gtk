@@ -1,28 +1,30 @@
-The Rust-gnome Project is copyright 2015, The Rust-gnome Project Developers:
+The Rust-GNOME Project is copyright 2013-2015, The Rust-GNOME Project Developers:
 
-Guillaume Gomez <guillaume1.gomez@gmail.com>
-Jeremy Letang <letang.jeremy@gmail.com>
-Gleb Kozyrev <gleb@gkoz.com>
-Zach Oakes <zsoakes@gmail.com>
-Mathijs Henquet <mathijs.henquet@gmail.com>
-Gulshan Singh <gsingh2011@gmail.com>
-Boden Garman <>
-Ömer Sinan Ağacan <omeragacan@gmail.com>
-Daniel Zalevskiy <dndanik@gmail.com>
-S.J.R. van Schaik <stephan@synkhronix.com>
-Jakob Gillich <jakob@gillich.me>
-Tobias Bales <tobias.raeder@gmail.com>
-Lukas Diekmann <>
-Simon Sapin <simon.sapin@exyr.org>
-Philipp Brüschweiler <>
-briankropf <>
-kennytm <>
+Boden Garman <bpgarman@fastmail.fm>
+Brian Kropf <brian.kropf@gmail.com>
 Corey Farwell <coreyf@rwell.org>
-Steve Klabnik <steve@steveklabnik.com>
+Daniel Zalevskiy <dndanik@gmail.com>
+Edward Shaw <edwardshaw9+git@gmail.com>
+Gleb Kozyrev <gleb@gkoz.com>
+Guillaume Gomez <guillaume1.gomez@gmail.com>
+Gulshan Singh <gulshan@umich.edu>
+Jakob Gillich <jakob@gillich.me>
+Jeremy Letang <letang.jeremy@gmail.com>
+kennytm <kennytm@gmail.com>
+Lukas Diekmann <lukas.diekmann@gmail.com>
+Mathijs Henquet <mathijs.henquet@gmail.com>
 Nick Herman <gerkola@gmail.com>
-Zach Ploskey <zploskey@gmail.com>
+Ömer Sinan Ağacan <omeragacan@gmail.com>
+Philipp Brüschweiler <blei42@gmail.com>
+S.J.R. van Schaik <stephan@synkhronix.com>
+Sebastian Schulze <me@bstr.eu>
+Simon Sapin <simon.sapin@exyr.org>
+Steve Klabnik <steve@steveklabnik.com>
+Tobias Bales <tobias.raeder@gmail.com>
+Zach Oakes <zsoakes@gmail.com>
+Zach Ploskey <zach@ploskey.com>
 
-The Rust-gnome Project is licensed under the MIT license, see the LICENSE file
+The Rust-GNOME Project is licensed under the MIT license, see the LICENSE file
 or <http://opensource.org/licenses/MIT>.
 
 This project provides interoperability with various GNOME libraries but doesn't

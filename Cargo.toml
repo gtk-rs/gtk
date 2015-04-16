@@ -1,7 +1,7 @@
 [package]
 name = "gtk"
 version = "0.0.1"
-authors = ["The Rust-gnome Project Developers"]
+authors = ["The Rust-GNOME Project Developers"]
 
 description = "Rust bindings for the GTK+ library"
 repository = "https://github.com/rust-gnome/gtk"
