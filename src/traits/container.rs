@@ -20,13 +20,13 @@ use ResizeMode;
 use ffi;
 
 pub trait ContainerTrait: ::WidgetTrait {
-    fn add<'r, T: ::WidgetTrait>(&'r mut self, widget: &'r T) {
+    fn add<'r, T: ::WidgetTrait>(&'r self, widget: &'r T) {
         unsafe {
             ffi::gtk_container_add(GTK_CONTAINER(self.unwrap_widget()), widget.unwrap_widget());
         }
     }
 
-    fn remove<'r, T: ::WidgetTrait>(&'r mut self, widget: &'r T) {
+    fn remove<'r, T: ::WidgetTrait>(&'r self, widget: &'r T) {
         unsafe {
             ffi::gtk_container_remove(GTK_CONTAINER(self.unwrap_widget()), widget.unwrap_widget());
         }
