@@ -26,7 +26,7 @@ pub trait ScrollableTrait: ::WidgetTrait {
         }
     }
 
-    fn set_hadjustment(&mut self, hadjustment: ::Adjustment) {
+    fn set_hadjustment(&self, hadjustment: ::Adjustment) {
         unsafe {
             ffi::gtk_scrollable_set_hadjustment(GTK_SCROLLABLE(self.unwrap_widget()),
                                                 hadjustment.unwrap_pointer())
@@ -39,7 +39,7 @@ pub trait ScrollableTrait: ::WidgetTrait {
         }
     }
 
-    fn set_vadjustment(&mut self, vadjustment: ::Adjustment) {
+    fn set_vadjustment(&self, vadjustment: ::Adjustment) {
         unsafe {
             ffi::gtk_scrollable_set_vadjustment(GTK_SCROLLABLE(self.unwrap_widget()),
                                                 vadjustment.unwrap_pointer())
@@ -52,7 +52,7 @@ pub trait ScrollableTrait: ::WidgetTrait {
         }
     }
 
-    fn set_hscroll_policy(&mut self, policy: ::ScrollablePolicy) {
+    fn set_hscroll_policy(&self, policy: ::ScrollablePolicy) {
         unsafe {
             ffi::gtk_scrollable_set_hscroll_policy(GTK_SCROLLABLE(self.unwrap_widget()),
                                                    policy)
@@ -65,7 +65,7 @@ pub trait ScrollableTrait: ::WidgetTrait {
         }
     }
 
-    fn set_vscroll_policy(&mut self, policy: ::ScrollablePolicy) {
+    fn set_vscroll_policy(&self, policy: ::ScrollablePolicy) {
         unsafe {
             ffi::gtk_scrollable_set_vscroll_policy(GTK_SCROLLABLE(self.unwrap_widget()),
                                                    policy)

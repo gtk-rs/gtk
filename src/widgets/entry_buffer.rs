@@ -54,7 +54,7 @@ impl EntryBuffer {
         }
     }
 
-    pub fn set_text(&mut self, text: &str) -> () {
+    pub fn set_text(&self, text: &str) -> () {
         unsafe {
             ffi::gtk_entry_buffer_set_text(self.pointer, text.borrow_to_glib().0, -1);
         }
@@ -78,32 +78,32 @@ impl EntryBuffer {
         }
     }
 
-    pub fn set_max_length(&mut self, max_length: i32) -> () {
+    pub fn set_max_length(&self, max_length: i32) -> () {
         unsafe {
             ffi::gtk_entry_buffer_set_max_length(self.pointer, max_length as c_int)
         }
     }
 
-    pub fn insert_text(&mut self, position: u32, text: &str) -> () {
+    pub fn insert_text(&self, position: u32, text: &str) -> () {
         unsafe {
             ffi::gtk_entry_buffer_insert_text(self.pointer, position as c_uint,
                                               text.borrow_to_glib().0, -1);
         }
     }
 
-    pub fn delete_text(&mut self, position: u32, n_chars: u32) -> u32 {
+    pub fn delete_text(&self, position: u32, n_chars: u32) -> u32 {
         unsafe {
             ffi::gtk_entry_buffer_delete_text(self.pointer, position as c_uint, n_chars as c_uint) as u32
         }
     }
 
-    pub fn emit_deleted_test(&mut self, position: u32, n_chars: u32) -> () {
+    pub fn emit_deleted_test(&self, position: u32, n_chars: u32) -> () {
         unsafe {
             ffi::gtk_entry_buffer_emit_deleted_text(self.pointer, position as c_uint, n_chars as c_uint)
         }
     }
 
-    pub fn emit_inserted_text(&mut self, position: u32, text: &str) -> () {
+    pub fn emit_inserted_text(&self, position: u32, text: &str) -> () {
         unsafe {
             ffi::gtk_entry_buffer_emit_inserted_text(self.pointer, position as c_uint,
                                                      text.borrow_to_glib().0, -1);

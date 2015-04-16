@@ -43,7 +43,7 @@ impl LevelBar {
         check_pointer!(tmp_pointer, LevelBar)
     }
 
-    pub fn set_value(&mut self, value: f64) -> () {
+    pub fn set_value(&self, value: f64) -> () {
         unsafe {
             ffi::gtk_level_bar_set_value(GTK_LEVELBAR(self.pointer), value as c_double);
         }
@@ -55,7 +55,7 @@ impl LevelBar {
         }
     }
 
-    pub fn set_mode(&mut self, mode: LevelBarMode) -> () {
+    pub fn set_mode(&self, mode: LevelBarMode) -> () {
         unsafe {
             ffi::gtk_level_bar_set_mode(GTK_LEVELBAR(self.pointer), mode);
         }
@@ -67,7 +67,7 @@ impl LevelBar {
         }
     }
 
-    pub fn set_min_value(&mut self, value: f64) -> () {
+    pub fn set_min_value(&self, value: f64) -> () {
         unsafe {
             ffi::gtk_level_bar_set_min_value(GTK_LEVELBAR(self.pointer), value as c_double);
         }
@@ -79,7 +79,7 @@ impl LevelBar {
         }
     }
 
-    pub fn set_max_value(&mut self, value: f64) -> () {
+    pub fn set_max_value(&self, value: f64) -> () {
         unsafe {
             ffi::gtk_level_bar_set_max_value(GTK_LEVELBAR(self.pointer), value as c_double);
         }
@@ -92,7 +92,7 @@ impl LevelBar {
     }
 
     #[cfg(feature = "gtk_3_8")]
-    pub fn set_inverted(&mut self, inverted: bool) -> () {
+    pub fn set_inverted(&self, inverted: bool) -> () {
         unsafe { ffi::gtk_level_bar_set_inverted(GTK_LEVELBAR(self.pointer), to_gboolean(inverted)); }
     }
 
@@ -101,7 +101,7 @@ impl LevelBar {
         unsafe { to_bool(ffi::gtk_level_bar_get_inverted(GTK_LEVELBAR(self.pointer))) }
     }
 
-    pub fn add_offset_value(&mut self, name: &str, value: f64) -> () {
+    pub fn add_offset_value(&self, name: &str, value: f64) -> () {
         unsafe {
             ffi::gtk_level_bar_add_offset_value(
                 GTK_LEVELBAR(self.pointer),
@@ -110,7 +110,7 @@ impl LevelBar {
         }
     }
 
-    pub fn remove_offset_value(&mut self, name: &str) -> () {
+    pub fn remove_offset_value(&self, name: &str) -> () {
         unsafe {
             ffi::gtk_level_bar_remove_offset_value(
                 GTK_LEVELBAR(self.pointer),

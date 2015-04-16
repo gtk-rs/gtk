@@ -46,7 +46,7 @@ impl ColorButton {
         check_pointer!(tmp_pointer, ColorButton)
     }
 
-    pub fn set_color(&mut self, color: &gdk::Color) -> () {
+    pub fn set_color(&self, color: &gdk::Color) -> () {
         unsafe {
             ffi::gtk_color_button_set_color(GTK_COLORBUTTON(self.pointer), color)
         }
@@ -60,7 +60,7 @@ impl ColorButton {
         color
     }
 
-    pub fn set_alpha(&mut self, alpha: u16) -> () {
+    pub fn set_alpha(&self, alpha: u16) -> () {
         unsafe {
             ffi::gtk_color_button_set_alpha(GTK_COLORBUTTON(self.pointer), alpha)
         }
@@ -72,7 +72,7 @@ impl ColorButton {
         }
     }
 
-    pub fn set_rgba(&mut self, rgba: &gdk_ffi::C_GdkRGBA) -> () {
+    pub fn set_rgba(&self, rgba: &gdk_ffi::C_GdkRGBA) -> () {
         unsafe {
             ffi::gtk_color_button_set_rgba(GTK_COLORBUTTON(self.pointer), rgba)
         }
@@ -86,7 +86,7 @@ impl ColorButton {
         rgba
     }
 
-    pub fn set_use_alpha(&mut self, use_alpha: bool) -> () {
+    pub fn set_use_alpha(&self, use_alpha: bool) -> () {
         unsafe { ffi::gtk_color_button_set_use_alpha(GTK_COLORBUTTON(self.pointer), to_gboolean(use_alpha)); }
     }
 
@@ -94,7 +94,7 @@ impl ColorButton {
         unsafe { to_bool(ffi::gtk_color_button_get_use_alpha(GTK_COLORBUTTON(self.pointer))) }
     }
 
-    pub fn set_title(&mut self, title: &str) -> () {
+    pub fn set_title(&self, title: &str) -> () {
         unsafe {
             ffi::gtk_color_button_set_title(GTK_COLORBUTTON(self.pointer), title.borrow_to_glib().0);
         }

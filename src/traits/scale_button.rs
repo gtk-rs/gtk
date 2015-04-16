@@ -19,13 +19,13 @@ use cast::GTK_SCALEBUTTON;
 use ffi;
 
 pub trait ScaleButtonTrait: ::WidgetTrait + ::ContainerTrait + ::ButtonTrait {
-    fn set_adjustment(&mut self, adjustment: &::Adjustment) -> () {
+    fn set_adjustment(&self, adjustment: &::Adjustment) -> () {
         unsafe {
             ffi::gtk_scale_button_set_adjustment(GTK_SCALEBUTTON(self.unwrap_widget()), adjustment.unwrap_pointer());
         }
     }
 
-    fn set_value(&mut self, value: f64) -> () {
+    fn set_value(&self, value: f64) -> () {
         unsafe {
             ffi::gtk_scale_button_set_value(GTK_SCALEBUTTON(self.unwrap_widget()), value as c_double);
         }

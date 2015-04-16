@@ -28,7 +28,7 @@ impl SeparatorToolItem {
         check_pointer!(tmp_pointer, SeparatorToolItem)
     }
 
-    pub fn set_draw(&mut self, draw: bool) -> () {
+    pub fn set_draw(&self, draw: bool) -> () {
         unsafe { ffi::gtk_separator_tool_item_set_draw(GTK_SEPARATORTOOLITEM(self.pointer), to_gboolean(draw)); }
     }
 

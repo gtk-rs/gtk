@@ -31,7 +31,7 @@ impl Stack {
         check_pointer!(tmp_pointer, Stack)
     }
 
-    pub fn add_named<T: ::WidgetTrait>(&mut self, child: &T, name: &str) {
+    pub fn add_named<T: ::WidgetTrait>(&self, child: &T, name: &str) {
         unsafe {
             ffi::gtk_stack_add_named(GTK_STACK(self.pointer),
                                      child.unwrap_widget(),
@@ -39,7 +39,7 @@ impl Stack {
         }
     }
 
-    pub fn add_titled<T: ::WidgetTrait>(&mut self, child: &T, name: &str, title: &str) {
+    pub fn add_titled<T: ::WidgetTrait>(&self, child: &T, name: &str, title: &str) {
         unsafe {
             ffi::gtk_stack_add_titled(GTK_STACK(self.pointer),
                                       child.unwrap_widget(),
@@ -48,7 +48,7 @@ impl Stack {
         }
     }
 
-    pub fn set_visible_child<T: ::WidgetTrait>(&mut self, child: &T) {
+    pub fn set_visible_child<T: ::WidgetTrait>(&self, child: &T) {
         unsafe {
             ffi::gtk_stack_set_visible_child(GTK_STACK(self.pointer),
                                              child.unwrap_widget())
@@ -64,7 +64,7 @@ impl Stack {
         }
     }
 
-    pub fn set_visible_child_name(&mut self, name: &str) {
+    pub fn set_visible_child_name(&self, name: &str) {
         unsafe {
             ffi::gtk_stack_set_visible_child_name(GTK_STACK(self.pointer),
                                                   name.borrow_to_glib().0)
@@ -78,7 +78,7 @@ impl Stack {
         }
     }
 
-    pub fn set_visible_child_full(&mut self, name: &str, transition: ::StackTransitionType) {
+    pub fn set_visible_child_full(&self, name: &str, transition: ::StackTransitionType) {
         unsafe {
             ffi::gtk_stack_set_visible_child_full(GTK_STACK(self.pointer),
                                                   name.borrow_to_glib().0,
@@ -86,7 +86,7 @@ impl Stack {
         }
     }
 
-    pub fn set_homogeneous(&mut self, homogeneous: bool) {
+    pub fn set_homogeneous(&self, homogeneous: bool) {
         unsafe {
             ffi::gtk_stack_set_homogeneous(GTK_STACK(self.pointer), to_gboolean(homogeneous))
         }
@@ -98,7 +98,7 @@ impl Stack {
         }
     }
 
-    pub fn set_transition_duration(&mut self, duration: u32) {
+    pub fn set_transition_duration(&self, duration: u32) {
         unsafe {
             ffi::gtk_stack_set_transition_duration(GTK_STACK(self.pointer), duration)
         }
@@ -110,7 +110,7 @@ impl Stack {
         }
     }
 
-    pub fn set_transition_type(&mut self, transition: ::StackTransitionType) {
+    pub fn set_transition_type(&self, transition: ::StackTransitionType) {
         unsafe {
             ffi::gtk_stack_set_transition_type(GTK_STACK(self.pointer), transition)
         }

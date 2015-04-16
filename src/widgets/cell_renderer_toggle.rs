@@ -27,28 +27,28 @@ impl CellRendererToggle {
         check_pointer!(tmp_pointer, CellRendererToggle)
     }
 
-    pub fn get_radio(&mut self) -> bool {
+    pub fn get_radio(&self) -> bool {
         unsafe {
             to_bool(ffi::gtk_cell_renderer_toggle_get_radio(
                     self.pointer as *mut ffi::C_GtkCellRendererToggle))
         }
     }
 
-    pub fn set_radio(&mut self, radio: bool) -> () {
+    pub fn set_radio(&self, radio: bool) -> () {
         unsafe {
             ffi::gtk_cell_renderer_toggle_set_radio(
                 self.pointer as *mut ffi::C_GtkCellRendererToggle, to_gboolean(radio));
         }
     }
 
-    pub fn get_active(&mut self) -> bool {
+    pub fn get_active(&self) -> bool {
         unsafe {
             to_bool(ffi::gtk_cell_renderer_toggle_get_active(
                 self.pointer as *mut ffi::C_GtkCellRendererToggle))
         }
     }
 
-    pub fn set_active(&mut self, active: bool) -> () {
+    pub fn set_active(&self, active: bool) -> () {
         unsafe {
             ffi::gtk_cell_renderer_toggle_set_active(
                 self.pointer as *mut ffi::C_GtkCellRendererToggle, to_gboolean(active));

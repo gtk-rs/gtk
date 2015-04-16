@@ -25,7 +25,7 @@ pub trait CheckMenuItemTrait: ::WidgetTrait +
                               ::BinTrait +
                               ::MenuItemTrait {
 
-    fn set_active(&mut self, is_active: bool) {
+    fn set_active(&self, is_active: bool) {
         unsafe {
             ffi::gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(self.unwrap_widget()),
                                                 to_gboolean(is_active))
@@ -38,13 +38,13 @@ pub trait CheckMenuItemTrait: ::WidgetTrait +
         }
     }
 
-    fn toggled(&mut self) {
+    fn toggled(&self) {
         unsafe {
             ffi::gtk_check_menu_item_toggled(GTK_CHECK_MENU_ITEM(self.unwrap_widget()))
         }
     }
 
-    fn set_inconsistent(&mut self, setting: bool) {
+    fn set_inconsistent(&self, setting: bool) {
         unsafe {
             ffi::gtk_check_menu_item_set_inconsistent(GTK_CHECK_MENU_ITEM(self.unwrap_widget()),
                                                       to_gboolean(setting))
@@ -57,7 +57,7 @@ pub trait CheckMenuItemTrait: ::WidgetTrait +
         }
     }
 
-    fn set_draw_as_radio(&mut self, setting: bool) {
+    fn set_draw_as_radio(&self, setting: bool) {
         unsafe {
             ffi::gtk_check_menu_item_set_draw_as_radio(GTK_CHECK_MENU_ITEM(self.unwrap_widget()),
                                                        to_gboolean(setting))

@@ -19,13 +19,13 @@ use glib::to_gboolean;
 use cast::GTK_WINDOW;
 
 pub trait WindowTrait : ::WidgetTrait {
-    fn set_title(&mut self, title: &str) -> () {
+    fn set_title(&self, title: &str) -> () {
         unsafe {
             ffi::gtk_window_set_title(GTK_WINDOW(self.unwrap_widget()), title.borrow_to_glib().0);
         }
     }
 
-    fn set_decorated(&mut self, setting: bool) -> () {
+    fn set_decorated(&self, setting: bool) -> () {
         unsafe {
             ffi::gtk_window_set_decorated(GTK_WINDOW(self.unwrap_widget()), to_gboolean(setting));
         }

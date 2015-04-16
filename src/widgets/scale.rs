@@ -45,13 +45,13 @@ impl Scale {
         check_pointer!(tmp_pointer, Scale)
     }
 
-    pub fn set_digits(&mut self, digits: i32) -> () {
+    pub fn set_digits(&self, digits: i32) -> () {
         unsafe {
             ffi::gtk_scale_set_digits(GTK_SCALE(self.pointer), digits as c_int);
         }
     }
 
-    pub fn set_draw_value(&mut self, draw_value: bool) -> () {
+    pub fn set_draw_value(&self, draw_value: bool) -> () {
         unsafe { ffi::gtk_scale_set_draw_value(GTK_SCALE(self.pointer), to_gboolean(draw_value)); }
     }
 
@@ -59,7 +59,7 @@ impl Scale {
         unsafe { to_bool(ffi::gtk_scale_get_draw_value(GTK_SCALE(self.pointer))) }
     }
 
-    pub fn set_has_origin(&mut self, has_origin: bool) -> () {
+    pub fn set_has_origin(&self, has_origin: bool) -> () {
         unsafe { ffi::gtk_scale_set_has_origin(GTK_SCALE(self.pointer), to_gboolean(has_origin)); }
     }
 
@@ -67,7 +67,7 @@ impl Scale {
         unsafe { to_bool(ffi::gtk_scale_get_has_origin(GTK_SCALE(self.pointer))) }
     }
 
-    pub fn set_value_pos(&mut self, position: PositionType) -> () {
+    pub fn set_value_pos(&self, position: PositionType) -> () {
         unsafe {
             ffi::gtk_scale_set_value_pos(GTK_SCALE(self.pointer), position);
         }
@@ -95,13 +95,13 @@ impl Scale {
         (x, y)
     }
 
-    pub fn add_mark(&mut self, value: f64, position: PositionType, markup: &str) -> () {
+    pub fn add_mark(&self, value: f64, position: PositionType, markup: &str) -> () {
         unsafe {
             ffi::gtk_scale_add_mark(GTK_SCALE(self.pointer), value as c_double, position, markup.borrow_to_glib().0);
         }
     }
 
-    pub fn clear_marks(&mut self) -> () {
+    pub fn clear_marks(&self) -> () {
         unsafe {
             ffi::gtk_scale_clear_marks(GTK_SCALE(self.pointer))
         }

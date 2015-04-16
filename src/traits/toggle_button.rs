@@ -18,7 +18,7 @@ use ffi;
 use glib::{to_bool, to_gboolean};
 
 pub trait ToggleButtonTrait: ::WidgetTrait + ::ContainerTrait + ::ButtonTrait {
-    fn set_mode(&mut self, draw_indicate: bool) {
+    fn set_mode(&self, draw_indicate: bool) {
         unsafe { ffi::gtk_toggle_button_set_mode(GTK_TOGGLEBUTTON(self.unwrap_widget()), to_gboolean(draw_indicate)); }
     }
 
@@ -26,13 +26,13 @@ pub trait ToggleButtonTrait: ::WidgetTrait + ::ContainerTrait + ::ButtonTrait {
         unsafe { to_bool(ffi::gtk_toggle_button_get_mode(GTK_TOGGLEBUTTON(self.unwrap_widget()))) }
     }
 
-    fn toggled(&mut self) -> () {
+    fn toggled(&self) -> () {
         unsafe {
             ffi::gtk_toggle_button_toggled(GTK_TOGGLEBUTTON(self.unwrap_widget()))
         }
     }
 
-    fn set_active(&mut self, is_active: bool) {
+    fn set_active(&self, is_active: bool) {
         unsafe { ffi::gtk_toggle_button_set_active(GTK_TOGGLEBUTTON(self.unwrap_widget()), to_gboolean(is_active)); }
     }
 
@@ -40,7 +40,7 @@ pub trait ToggleButtonTrait: ::WidgetTrait + ::ContainerTrait + ::ButtonTrait {
         unsafe { to_bool(ffi::gtk_toggle_button_get_active(GTK_TOGGLEBUTTON(self.unwrap_widget()))) }
     }
 
-    fn set_inconsistent(&mut self, setting: bool) {
+    fn set_inconsistent(&self, setting: bool) {
         unsafe { ffi::gtk_toggle_button_set_inconsistent(GTK_TOGGLEBUTTON(self.unwrap_widget()), to_gboolean(setting)); }
     }
 

@@ -31,13 +31,13 @@ impl ProgressBar {
         check_pointer!(tmp_pointer, ProgressBar)
     }
 
-    pub fn pulse(&mut self) -> () {
+    pub fn pulse(&self) -> () {
         unsafe {
             ffi::gtk_progress_bar_pulse(GTK_PROGRESSBAR(self.pointer))
         }
     }
 
-    pub fn set_fraction(&mut self, fraction: f64) -> () {
+    pub fn set_fraction(&self, fraction: f64) -> () {
         unsafe {
             ffi::gtk_progress_bar_set_fraction(GTK_PROGRESSBAR(self.pointer), fraction as c_double)
         }
@@ -49,7 +49,7 @@ impl ProgressBar {
         }
     }
 
-    pub fn set_text(&mut self, text: &str) -> () {
+    pub fn set_text(&self, text: &str) -> () {
         unsafe {
             ffi::gtk_progress_bar_set_text(GTK_PROGRESSBAR(self.pointer), text.borrow_to_glib().0);
         }
@@ -62,7 +62,7 @@ impl ProgressBar {
         }
     }
 
-    pub fn set_inverted(&mut self, inverted: bool) -> () {
+    pub fn set_inverted(&self, inverted: bool) -> () {
         unsafe { ffi::gtk_progress_bar_set_inverted(GTK_PROGRESSBAR(self.pointer), to_gboolean(inverted)); }
     }
 
@@ -70,7 +70,7 @@ impl ProgressBar {
         unsafe { to_bool(ffi::gtk_progress_bar_get_inverted(GTK_PROGRESSBAR(self.pointer))) }
     }
 
-    pub fn set_show_text(&mut self, show_text: bool) -> () {
+    pub fn set_show_text(&self, show_text: bool) -> () {
         unsafe { ffi::gtk_progress_bar_set_show_text(GTK_PROGRESSBAR(self.pointer), to_gboolean(show_text)); }
     }
 
@@ -78,7 +78,7 @@ impl ProgressBar {
         unsafe { to_bool(ffi::gtk_progress_bar_get_show_text(GTK_PROGRESSBAR(self.pointer))) }
     }
 
-    pub fn set_pulse_step(&mut self, pulse_step: f64) -> () {
+    pub fn set_pulse_step(&self, pulse_step: f64) -> () {
         unsafe {
             ffi::gtk_progress_bar_set_pulse_step(GTK_PROGRESSBAR(self.pointer), pulse_step as c_double)
         }

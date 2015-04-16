@@ -29,7 +29,7 @@ impl Fixed {
         check_pointer!(tmp_pointer, Fixed)
     }
 
-    pub fn put<T: ::WidgetTrait>(&mut self,
+    pub fn put<T: ::WidgetTrait>(&self,
                              widget: &T,
                              x: i32,
                              y: i32) -> () {
@@ -39,7 +39,7 @@ impl Fixed {
     }
 
     // FIXME: search a new name
-    pub fn move_<T: ::WidgetTrait>(&mut self,
+    pub fn move_<T: ::WidgetTrait>(&self,
                               widget: &T,
                               x: i32,
                               y: i32) -> () {

@@ -36,7 +36,7 @@ impl TextView {
         check_pointer!(tmp_pointer, TextView)
     }
 
-    pub fn set_buffer(&mut self, buffer: TextBuffer) -> () {
+    pub fn set_buffer(&self, buffer: TextBuffer) -> () {
         unsafe {
             ffi::gtk_text_view_set_buffer(GTK_TEXT_VIEW(self.unwrap_widget()), GTK_TEXT_BUFFER(buffer.unwrap_widget()));
         }

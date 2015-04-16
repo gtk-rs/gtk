@@ -20,7 +20,7 @@ use cast::GTK_TOOLITEM;
 use {IconSize, Orientation, ReliefStyle, ToolbarStyle};
 
 pub trait ToolItemTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait {
-    fn set_homogeneous(&mut self, homogeneous: bool) -> () {
+    fn set_homogeneous(&self, homogeneous: bool) -> () {
          unsafe { ffi::gtk_tool_item_set_homogeneous(GTK_TOOLITEM(self.unwrap_widget()), to_gboolean(homogeneous)); }
     }
 
@@ -28,7 +28,7 @@ pub trait ToolItemTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait {
         unsafe { to_bool(ffi::gtk_tool_item_get_homogeneous(GTK_TOOLITEM(self.unwrap_widget()))) }
     }
 
-    fn set_expand(&mut self, expand: bool) -> () {
+    fn set_expand(&self, expand: bool) -> () {
          unsafe { ffi::gtk_tool_item_set_expand(GTK_TOOLITEM(self.unwrap_widget()), to_gboolean(expand)); }
     }
 
@@ -36,7 +36,7 @@ pub trait ToolItemTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait {
         unsafe { to_bool(ffi::gtk_tool_item_get_expand(GTK_TOOLITEM(self.unwrap_widget()))) }
     }
 
-    fn set_use_drag_window(&mut self, use_drag_window: bool) -> () {
+    fn set_use_drag_window(&self, use_drag_window: bool) -> () {
          unsafe { ffi::gtk_tool_item_set_use_drag_window(GTK_TOOLITEM(self.unwrap_widget()), to_gboolean(use_drag_window)); }
     }
 
@@ -44,7 +44,7 @@ pub trait ToolItemTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait {
         unsafe { to_bool(ffi::gtk_tool_item_get_use_drag_window(GTK_TOOLITEM(self.unwrap_widget()))) }
     }
 
-    fn set_visible_horizontal(&mut self, visible_horizontal: bool) -> () {
+    fn set_visible_horizontal(&self, visible_horizontal: bool) -> () {
          unsafe { ffi::gtk_tool_item_set_visible_horizontal(GTK_TOOLITEM(self.unwrap_widget()), to_gboolean(visible_horizontal)); }
     }
 
@@ -52,7 +52,7 @@ pub trait ToolItemTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait {
         unsafe { to_bool(ffi::gtk_tool_item_get_visible_horizontal(GTK_TOOLITEM(self.unwrap_widget()))) }
     }
 
-    fn set_visible_vertical(&mut self, visible_vertical: bool) -> () {
+    fn set_visible_vertical(&self, visible_vertical: bool) -> () {
          unsafe { ffi::gtk_tool_item_set_visible_vertical(GTK_TOOLITEM(self.unwrap_widget()), to_gboolean(visible_vertical)); }
     }
 
@@ -60,7 +60,7 @@ pub trait ToolItemTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait {
         unsafe { to_bool(ffi::gtk_tool_item_get_visible_vertical(GTK_TOOLITEM(self.unwrap_widget()))) }
     }
 
-    fn set_is_important(&mut self, is_important: bool) -> () {
+    fn set_is_important(&self, is_important: bool) -> () {
          unsafe { ffi::gtk_tool_item_set_is_important(GTK_TOOLITEM(self.unwrap_widget()), to_gboolean(is_important)); }
     }
 
@@ -68,14 +68,14 @@ pub trait ToolItemTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait {
         unsafe { to_bool(ffi::gtk_tool_item_get_is_important(GTK_TOOLITEM(self.unwrap_widget()))) }
     }
 
-    fn set_tooltip_text(&mut self, text: &str) -> () {
+    fn set_tooltip_text(&self, text: &str) -> () {
         unsafe {
             ffi::gtk_tool_item_set_tooltip_text(GTK_TOOLITEM(self.unwrap_widget()),
                                                 text.borrow_to_glib().0)
         }
     }
 
-    fn set_tooltip_markup(&mut self, markup: &str) -> () {
+    fn set_tooltip_markup(&self, markup: &str) -> () {
         unsafe {
             ffi::gtk_tool_item_set_tooltip_markup(GTK_TOOLITEM(self.unwrap_widget()), markup.borrow_to_glib().0)
         }
@@ -117,13 +117,13 @@ pub trait ToolItemTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait {
         }
     }
 
-    fn rebuild_menu(&mut self) -> () {
+    fn rebuild_menu(&self) -> () {
         unsafe {
             ffi::gtk_tool_item_rebuild_menu(GTK_TOOLITEM(self.unwrap_widget()))
         }
     }
 
-    fn toolbar_reconfigured(&mut self) -> () {
+    fn toolbar_reconfigured(&self) -> () {
         unsafe {
             ffi::gtk_tool_item_toolbar_reconfigured(GTK_TOOLITEM(self.unwrap_widget()))
         }

@@ -32,7 +32,7 @@ impl Alignment {
         check_pointer!(tmp_pointer, Alignment)
     }
 
-    pub fn set(&mut self,
+    pub fn set(&self,
                x_align: f32,
                y_align: f32,
                x_scale: f32,
@@ -42,7 +42,7 @@ impl Alignment {
         }
     }
 
-    pub fn set_padding(&mut self,
+    pub fn set_padding(&self,
                        padding_top: u32,
                        padding_bottom: u32,
                        padding_left: u32,

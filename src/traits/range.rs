@@ -17,7 +17,7 @@ use cast::GTK_RANGE;
 use ffi;
 
 pub trait RangeTrait: ::WidgetTrait {
-    fn set_adjustment(&mut self, adjustment: &::Adjustment) -> () {
+    fn set_adjustment(&self, adjustment: &::Adjustment) -> () {
         unsafe {
             ffi::gtk_range_set_adjustment(GTK_RANGE(self.unwrap_widget()), adjustment.unwrap_pointer());
         }

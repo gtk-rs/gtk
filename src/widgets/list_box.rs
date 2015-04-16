@@ -29,14 +29,14 @@ impl ListBox {
         check_pointer!(tmp_pointer, ListBox)
     }
 
-    pub fn prepend<T: ::WidgetTrait>(&mut self, child: &T) {
+    pub fn prepend<T: ::WidgetTrait>(&self, child: &T) {
         unsafe {
             ffi::gtk_list_box_prepend(GTK_LIST_BOX(self.pointer),
                                       child.unwrap_widget())
         }
     }
 
-    pub fn insert<T: ::WidgetTrait>(&mut self, child: &T, position: i32) {
+    pub fn insert<T: ::WidgetTrait>(&self, child: &T, position: i32) {
         unsafe {
             ffi::gtk_list_box_insert(GTK_LIST_BOX(self.pointer),
                                      child.unwrap_widget(),
@@ -77,21 +77,21 @@ impl ListBox {
         }
     }
 
-    pub fn select_row(&mut self, row: &ListBoxRow) {
+    pub fn select_row(&self, row: &ListBoxRow) {
         unsafe {
             ffi::gtk_list_box_select_row(GTK_LIST_BOX(self.pointer),
                                          GTK_LIST_BOX_ROW(row.unwrap_widget()))
         }
     }
 
-    pub fn set_placeholder<T: ::WidgetTrait>(&mut self, placeholder: &T) {
+    pub fn set_placeholder<T: ::WidgetTrait>(&self, placeholder: &T) {
         unsafe {
             ffi::gtk_list_box_set_placeholder(GTK_LIST_BOX(self.pointer),
                                               placeholder.unwrap_widget())
         }
     }
 
-    pub fn set_adjustment(&mut self, adjustment: &::Adjustment) {
+    pub fn set_adjustment(&self, adjustment: &::Adjustment) {
         unsafe {
             ffi::gtk_list_box_set_adjustment(GTK_LIST_BOX(self.pointer),
                                              adjustment.unwrap_pointer())
@@ -109,7 +109,7 @@ impl ListBox {
         }
     }
 
-    pub fn set_selection_mode(&mut self, mode: ::SelectionMode) {
+    pub fn set_selection_mode(&self, mode: ::SelectionMode) {
         unsafe {
             ffi::gtk_list_box_set_selection_mode(GTK_LIST_BOX(self.pointer), mode)
         }
@@ -121,13 +121,13 @@ impl ListBox {
         }
     }
 
-    pub fn invalidate_header(&mut self) {
+    pub fn invalidate_header(&self) {
         unsafe {
             ffi::gtk_list_box_invalidate_headers(GTK_LIST_BOX(self.pointer))
         }
     }
 
-    pub fn set_activate_on_single_click(&mut self, single: bool) {
+    pub fn set_activate_on_single_click(&self, single: bool) {
         unsafe {
             ffi::gtk_list_box_set_activate_on_single_click(GTK_LIST_BOX(self.pointer),
                                                            to_gboolean(single))
@@ -140,13 +140,13 @@ impl ListBox {
         }
     }
 
-    pub fn drag_unhighlight_row(&mut self) {
+    pub fn drag_unhighlight_row(&self) {
         unsafe {
             ffi::gtk_list_box_drag_unhighlight_row(GTK_LIST_BOX(self.pointer))
         }
     }
 
-    pub fn drag_highlight_row(&mut self, row: &ListBoxRow) {
+    pub fn drag_highlight_row(&self, row: &ListBoxRow) {
         unsafe {
             ffi::gtk_list_box_drag_highlight_row(GTK_LIST_BOX(self.pointer),
                                                  row.unwrap_widget() as *mut ffi::C_GtkListBoxRow)
@@ -171,7 +171,7 @@ impl ListBoxRow {
         check_pointer!(tmp_pointer, ListBoxRow)
     }
 
-    pub fn changed(&mut self) {
+    pub fn changed(&self) {
         unsafe {
             ffi::gtk_list_box_row_changed(GTK_LIST_BOX_ROW(self.pointer))
         }
@@ -189,7 +189,7 @@ impl ListBoxRow {
         }
     }
 
-    pub fn set_header<T: ::WidgetTrait>(&mut self, header: &T) {
+    pub fn set_header<T: ::WidgetTrait>(&self, header: &T) {
         unsafe {
             ffi::gtk_list_box_row_set_header(GTK_LIST_BOX_ROW(self.pointer),
                                              header.unwrap_widget())

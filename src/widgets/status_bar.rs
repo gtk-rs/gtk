@@ -29,7 +29,7 @@ impl StatusBar {
         check_pointer!(tmp_pointer, StatusBar)
     }
 
-    pub fn push(&mut self, context_id: u32, text: &str) -> u32 {
+    pub fn push(&self, context_id: u32, text: &str) -> u32 {
         unsafe {
             ffi::gtk_statusbar_push(GTK_STATUSBAR(self.pointer),
                                     context_id,
@@ -37,19 +37,19 @@ impl StatusBar {
         }
     }
 
-    pub fn pop(&mut self, context_id: u32) {
+    pub fn pop(&self, context_id: u32) {
         unsafe {
             ffi::gtk_statusbar_pop(GTK_STATUSBAR(self.pointer), context_id)
         }
     }
 
-    pub fn remove(&mut self, context_id: u32, message_id: u32) {
+    pub fn remove(&self, context_id: u32, message_id: u32) {
         unsafe {
             ffi::gtk_statusbar_remove(GTK_STATUSBAR(self.pointer), context_id, message_id)
         }
     }
 
-    pub fn remove_all(&mut self, context_id: u32) {
+    pub fn remove_all(&self, context_id: u32) {
         unsafe {
             ffi::gtk_statusbar_remove_all(GTK_STATUSBAR(self.pointer), context_id)
         }

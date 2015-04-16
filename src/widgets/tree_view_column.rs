@@ -31,13 +31,13 @@ impl TreeViewColumn {
         check_pointer!(tmp_pointer, TreeViewColumn, G_OBJECT_FROM_TREE_VIEW_COLUMN)
     }
 
-    pub fn clear(&mut self) {
+    pub fn clear(&self) {
         unsafe {
             ffi::gtk_tree_view_column_clear(self.pointer)
         }
     }
 
-    pub fn set_spacing(&mut self, spacing: i32) {
+    pub fn set_spacing(&self, spacing: i32) {
         unsafe {
             ffi::gtk_tree_view_column_set_spacing(self.pointer, spacing)
         }
@@ -49,7 +49,7 @@ impl TreeViewColumn {
         }
     }
 
-    pub fn set_visible(&mut self, visible: bool) {
+    pub fn set_visible(&self, visible: bool) {
         unsafe {
             ffi::gtk_tree_view_column_set_visible(self.pointer, to_gboolean(visible))
         }
@@ -61,7 +61,7 @@ impl TreeViewColumn {
         }
     }
 
-    pub fn set_resizable(&mut self, resizable: bool) {
+    pub fn set_resizable(&self, resizable: bool) {
         unsafe {
             ffi::gtk_tree_view_column_set_resizable(self.pointer, to_gboolean(resizable))
         }
@@ -73,7 +73,7 @@ impl TreeViewColumn {
         }
     }
 
-    pub fn set_sizing(&mut self, ty: ::TreeViewColumnSizing) {
+    pub fn set_sizing(&self, ty: ::TreeViewColumnSizing) {
         unsafe {
             ffi::gtk_tree_view_column_set_sizing(self.pointer, ty)
         }
@@ -139,7 +139,7 @@ impl TreeViewColumn {
         }
     }
 
-    pub fn set_title(&mut self, title: &str) {
+    pub fn set_title(&self, title: &str) {
         unsafe {
             ffi::gtk_tree_view_column_set_title(self.pointer,
                                                 title.borrow_to_glib().0);
@@ -153,7 +153,7 @@ impl TreeViewColumn {
         }
     }
 
-    pub fn set_expand(&mut self, expand: bool) {
+    pub fn set_expand(&self, expand: bool) {
         unsafe {
             ffi::gtk_tree_view_column_set_expand(self.pointer, to_gboolean(expand))
         }
@@ -165,7 +165,7 @@ impl TreeViewColumn {
         }
     }
 
-    pub fn set_clickable(&mut self, clickable: bool) {
+    pub fn set_clickable(&self, clickable: bool) {
         unsafe {
             ffi::gtk_tree_view_column_set_clickable(self.pointer, to_gboolean(clickable))
         }
@@ -177,7 +177,7 @@ impl TreeViewColumn {
         }
     }
 
-    pub fn set_widget<T: ::WidgetTrait>(&mut self, widget: &T) {
+    pub fn set_widget<T: ::WidgetTrait>(&self, widget: &T) {
         unsafe {
             ffi::gtk_tree_view_column_set_widget(self.pointer, widget.unwrap_widget())
         }
@@ -189,7 +189,7 @@ impl TreeViewColumn {
         }
     }
 
-    pub fn set_alignment(&mut self, x_align: f32) {
+    pub fn set_alignment(&self, x_align: f32) {
         unsafe {
             ffi::gtk_tree_view_column_set_alignment(self.pointer, x_align)
         }
@@ -201,7 +201,7 @@ impl TreeViewColumn {
         }
     }
 
-    pub fn set_reorderable(&mut self, reorderable: bool) {
+    pub fn set_reorderable(&self, reorderable: bool) {
         unsafe {
             ffi::gtk_tree_view_column_set_reorderable(self.pointer, to_gboolean(reorderable))
         }
@@ -219,13 +219,13 @@ impl TreeViewColumn {
         }
     }
 
-    pub fn set_sort_column_id(&mut self, sort_column_id: i32) {
+    pub fn set_sort_column_id(&self, sort_column_id: i32) {
         unsafe {
             ffi::gtk_tree_view_column_set_sort_column_id(self.pointer, sort_column_id)
         }
     }
 
-    pub fn set_sort_indicator(&mut self, setting: bool) {
+    pub fn set_sort_indicator(&self, setting: bool) {
         unsafe {
             ffi::gtk_tree_view_column_set_sort_indicator(self.pointer, to_gboolean(setting))
         }
@@ -237,7 +237,7 @@ impl TreeViewColumn {
         }
     }
 
-    pub fn set_sort_order(&mut self, order: ::SortType) {
+    pub fn set_sort_order(&self, order: ::SortType) {
         unsafe {
             ffi::gtk_tree_view_column_set_sort_order(self.pointer, order)
         }
@@ -255,7 +255,7 @@ impl TreeViewColumn {
         }
     }
 
-    pub fn queue_resize(&mut self) {
+    pub fn queue_resize(&self) {
         unsafe {
             ffi::gtk_tree_view_column_queue_resize(self.pointer)
         }

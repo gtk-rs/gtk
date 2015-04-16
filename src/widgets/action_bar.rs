@@ -37,21 +37,21 @@ impl ActionBar {
         }
     }
 
-    pub fn set_center_widget<T: ::WidgetTrait>(&mut self, center_widget: &T) {
+    pub fn set_center_widget<T: ::WidgetTrait>(&self, center_widget: &T) {
         unsafe {
             ffi::gtk_action_bar_set_center_widget(GTK_ACTION_BAR(self.pointer),
                                                   center_widget.unwrap_widget())
         }
     }
 
-    pub fn pack_start<T: ::WidgetTrait>(&mut self, child: &T) {
+    pub fn pack_start<T: ::WidgetTrait>(&self, child: &T) {
         unsafe {
             ffi::gtk_action_bar_pack_start(GTK_ACTION_BAR(self.pointer),
                                            child.unwrap_widget())
         }
     }
 
-    pub fn pack_end<T: ::WidgetTrait>(&mut self, child: &T) {
+    pub fn pack_end<T: ::WidgetTrait>(&self, child: &T) {
         unsafe {
             ffi::gtk_action_bar_pack_end(GTK_ACTION_BAR(self.pointer),
                                          child.unwrap_widget())

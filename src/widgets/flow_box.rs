@@ -29,7 +29,7 @@ impl FlowBox {
         check_pointer!(tmp_pointer, FlowBox)
     }
 
-    pub fn set_homogeneous(&mut self, homogeneous: bool) {
+    pub fn set_homogeneous(&self, homogeneous: bool) {
         unsafe {
             ffi::gtk_flow_box_set_homogeneous(GTK_FLOW_BOX(self.pointer),
                                               to_gboolean(homogeneous))
@@ -48,13 +48,13 @@ impl FlowBox {
         }
     }
 
-    pub fn set_row_spacing(&mut self, spacing: u32) {
+    pub fn set_row_spacing(&self, spacing: u32) {
         unsafe {
             ffi::gtk_flow_box_set_row_spacing(GTK_FLOW_BOX(self.pointer), spacing)
         }
     }
 
-    pub fn set_colum_spacing(&mut self, spacing: u32) {
+    pub fn set_colum_spacing(&self, spacing: u32) {
         unsafe {
             ffi::gtk_flow_box_set_column_spacing(GTK_FLOW_BOX(self.pointer), spacing)
         }
@@ -66,7 +66,7 @@ impl FlowBox {
         }
     }
 
-    pub fn set_min_children_per_line(&mut self, n_children: u32) {
+    pub fn set_min_children_per_line(&self, n_children: u32) {
         unsafe {
             ffi::gtk_flow_box_set_min_children_per_line(GTK_FLOW_BOX(self.pointer), n_children)
         }
@@ -78,7 +78,7 @@ impl FlowBox {
         }
     }
 
-    pub fn set_max_children_per_line(&mut self, n_children: u32) {
+    pub fn set_max_children_per_line(&self, n_children: u32) {
         unsafe {
             ffi::gtk_flow_box_set_max_children_per_line(GTK_FLOW_BOX(self.pointer), n_children)
         }
@@ -90,7 +90,7 @@ impl FlowBox {
         }
     }
 
-    pub fn set_activate_on_single_click(&mut self, single: bool) {
+    pub fn set_activate_on_single_click(&self, single: bool) {
         unsafe {
             ffi::gtk_flow_box_set_activate_on_single_click(GTK_FLOW_BOX(self.pointer),
                                                            to_gboolean(single))
@@ -103,7 +103,7 @@ impl FlowBox {
         }
     }
 
-    pub fn insert<T: ::WidgetTrait>(&mut self, widget: &T, position: i32) {
+    pub fn insert<T: ::WidgetTrait>(&self, widget: &T, position: i32) {
         unsafe {
             ffi::gtk_flow_box_insert(GTK_FLOW_BOX(self.pointer),
                                      widget.unwrap_widget(),
@@ -122,33 +122,33 @@ impl FlowBox {
         }
     }
 
-    pub fn select_child(&mut self, child: &FlowBoxChild) {
+    pub fn select_child(&self, child: &FlowBoxChild) {
         unsafe {
             ffi::gtk_flow_box_select_child(GTK_FLOW_BOX(self.pointer),
                                            GTK_FLOW_BOX_CHILD(child.unwrap_widget()))
         }
     }
 
-    pub fn unselect_child(&mut self, child: &FlowBoxChild) {
+    pub fn unselect_child(&self, child: &FlowBoxChild) {
         unsafe {
             ffi::gtk_flow_box_unselect_child(GTK_FLOW_BOX(self.pointer),
                                              GTK_FLOW_BOX_CHILD(child.unwrap_widget()))
         }
     }
 
-    pub fn select_all(&mut self) {
+    pub fn select_all(&self) {
         unsafe {
             ffi::gtk_flow_box_select_all(GTK_FLOW_BOX(self.pointer))
         }
     }
 
-    pub fn unselect_all(&mut self) {
+    pub fn unselect_all(&self) {
         unsafe {
             ffi::gtk_flow_box_unselect_all(GTK_FLOW_BOX(self.pointer))
         }
     }
 
-    pub fn set_selection_mode(&mut self, mode: ::SelectionMode) {
+    pub fn set_selection_mode(&self, mode: ::SelectionMode) {
         unsafe {
             ffi::gtk_flow_box_set_selection_mode(GTK_FLOW_BOX(self.pointer), mode)
         }
@@ -160,14 +160,14 @@ impl FlowBox {
         }
     }
 
-    pub fn set_hadjustment(&mut self, adjustment: ::Adjustment) {
+    pub fn set_hadjustment(&self, adjustment: ::Adjustment) {
         unsafe {
             ffi::gtk_flow_box_set_hadjustment(GTK_FLOW_BOX(self.pointer),
                                               adjustment.unwrap_pointer())
         }
     }
 
-    pub fn set_vadjustment(&mut self, adjustment: ::Adjustment) {
+    pub fn set_vadjustment(&self, adjustment: ::Adjustment) {
         unsafe {
             ffi::gtk_flow_box_set_vadjustment(GTK_FLOW_BOX(self.pointer),
                                               adjustment.unwrap_pointer())
@@ -202,7 +202,7 @@ impl FlowBoxChild {
         }
     }
 
-    pub fn changed(&mut self) {
+    pub fn changed(&self) {
         unsafe {
             ffi::gtk_flow_box_child_changed(GTK_FLOW_BOX_CHILD(self.pointer))
         }

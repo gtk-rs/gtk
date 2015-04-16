@@ -34,7 +34,7 @@ impl Viewport {
         }
     }
 
-    pub fn set_shadow_type(&mut self, ty: ShadowType) {
+    pub fn set_shadow_type(&self, ty: ShadowType) {
         unsafe {
             ffi::gtk_viewport_set_shadow_type(GTK_VIEWPORT(self.pointer), ty)
         }

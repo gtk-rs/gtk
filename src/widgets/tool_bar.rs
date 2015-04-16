@@ -38,7 +38,7 @@ impl Toolbar {
         check_pointer!(tmp_pointer, Toolbar)
     }
 
-    pub fn insert<T: ::ToolItemTrait>(&mut self,
+    pub fn insert<T: ::ToolItemTrait>(&self,
                                   item: &T,
                                   pos: i32) -> () {
         unsafe {
@@ -46,7 +46,7 @@ impl Toolbar {
         }
     }
 
-    pub fn item_index<T: ::ToolItemTrait>(&mut self, item: &T) -> i32 {
+    pub fn item_index<T: ::ToolItemTrait>(&self, item: &T) -> i32 {
         unsafe {
             ffi::gtk_toolbar_get_item_index(GTK_TOOLBAR(self.pointer), GTK_TOOLITEM(item.unwrap_widget())) as i32
         }
@@ -75,17 +75,17 @@ impl Toolbar {
         }
     }
 
-    pub fn set_drop_highlight_item<T: ::ToolItemTrait>(&mut self, item: &T, index: i32) -> () {
+    pub fn set_drop_highlight_item<T: ::ToolItemTrait>(&self, item: &T, index: i32) -> () {
         unsafe {
             ffi::gtk_toolbar_set_drop_highlight_item(GTK_TOOLBAR(self.pointer), GTK_TOOLITEM(item.unwrap_widget()), index as c_int);
         }
     }
 
-    pub fn set_show_arrow(&mut self, show_arrow: bool) -> () {
+    pub fn set_show_arrow(&self, show_arrow: bool) -> () {
         unsafe { ffi::gtk_toolbar_set_show_arrow(GTK_TOOLBAR(self.pointer), to_gboolean(show_arrow)); }
     }
 
-    pub fn unset_icon_size(&mut self) -> () {
+    pub fn unset_icon_size(&self) -> () {
         unsafe {
             ffi::gtk_toolbar_unset_icon_size(GTK_TOOLBAR(self.pointer))
         }
@@ -113,19 +113,19 @@ impl Toolbar {
         }
     }
 
-    pub fn set_style(&mut self, style: ToolbarStyle) -> () {
+    pub fn set_style(&self, style: ToolbarStyle) -> () {
         unsafe {
             ffi::gtk_toolbar_set_style(GTK_TOOLBAR(self.pointer), style);
         }
     }
 
-    pub fn set_icon_size(&mut self, icon_size: IconSize) -> () {
+    pub fn set_icon_size(&self, icon_size: IconSize) -> () {
         unsafe {
             ffi::gtk_toolbar_set_icon_size(GTK_TOOLBAR(self.pointer), icon_size);
         }
     }
 
-    pub fn unset_style(&mut self) -> () {
+    pub fn unset_style(&self) -> () {
         unsafe {
             ffi::gtk_toolbar_unset_style(GTK_TOOLBAR(self.pointer));
         }

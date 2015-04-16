@@ -43,17 +43,17 @@ impl ButtonBox {
         unsafe { to_bool(ffi::gtk_button_box_get_child_non_homogeneous(GTK_BUTTONBOX(self.pointer), child.unwrap_widget())) }
     }
 
-    pub fn set_layout(&mut self, layout_style: ButtonBoxStyle) -> () {
+    pub fn set_layout(&self, layout_style: ButtonBoxStyle) -> () {
         unsafe {
             ffi::gtk_button_box_set_layout(GTK_BUTTONBOX(self.pointer), layout_style)
         }
     }
 
-    pub fn set_child_secondary<T: ::WidgetTrait + ::ButtonTrait>(&mut self, child: &T, is_secondary: bool) -> () {
+    pub fn set_child_secondary<T: ::WidgetTrait + ::ButtonTrait>(&self, child: &T, is_secondary: bool) -> () {
         unsafe { ffi::gtk_button_box_set_child_secondary(GTK_BUTTONBOX(self.pointer), child.unwrap_widget(), to_gboolean(is_secondary)); }
     }
 
-    pub fn set_child_non_homogeneous<T: ::WidgetTrait + ::ButtonTrait>(&mut self, child: &T, non_homogeneous: bool) -> () {
+    pub fn set_child_non_homogeneous<T: ::WidgetTrait + ::ButtonTrait>(&self, child: &T, non_homogeneous: bool) -> () {
         unsafe { ffi::gtk_button_box_set_child_non_homogeneous(GTK_BUTTONBOX(self.pointer), child.unwrap_widget(), to_gboolean(non_homogeneous)); }
     }
 }

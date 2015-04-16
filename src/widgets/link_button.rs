@@ -49,13 +49,13 @@ impl LinkButton {
         }
     }
 
-    pub fn set_uri(&mut self, uri: &str) -> () {
+    pub fn set_uri(&self, uri: &str) -> () {
         unsafe {
             ffi::gtk_link_button_set_uri(GTK_LINKBUTTON(self.pointer), uri.borrow_to_glib().0)
         }
     }
 
-    pub fn set_visited(&mut self, visited: bool) -> () {
+    pub fn set_visited(&self, visited: bool) -> () {
         unsafe { ffi::gtk_link_button_set_visited(GTK_LINKBUTTON(self.pointer), to_gboolean(visited)); }
     }
 

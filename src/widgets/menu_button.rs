@@ -28,13 +28,13 @@ impl MenuButton {
         check_pointer!(tmp_pointer, MenuButton)
     }
 
-    pub fn set_popup<T: ::WidgetTrait>(&mut self, popup: &T) -> () {
+    pub fn set_popup<T: ::WidgetTrait>(&self, popup: &T) -> () {
         unsafe {
             ffi::gtk_menu_button_set_popup(GTK_MENUBUTTON(self.pointer), popup.unwrap_widget());
         }
     }
 
-    pub fn set_direction(&mut self, direction: ArrowType) -> () {
+    pub fn set_direction(&self, direction: ArrowType) -> () {
         unsafe {
             ffi::gtk_menu_button_set_direction(GTK_MENUBUTTON(self.pointer), direction);
         }
@@ -46,7 +46,7 @@ impl MenuButton {
         }
     }
 
-    pub fn set_align_widget<T: ::WidgetTrait>(&mut self, align_widget: &T) -> () {
+    pub fn set_align_widget<T: ::WidgetTrait>(&self, align_widget: &T) -> () {
         unsafe {
             ffi::gtk_menu_button_set_align_widget(GTK_MENUBUTTON(self.pointer), align_widget.unwrap_widget())
         }

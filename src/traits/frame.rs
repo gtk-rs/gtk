@@ -21,20 +21,20 @@ use cast::GTK_FRAME;
 use ffi;
 
 pub trait FrameTrait: ::WidgetTrait + ::ContainerTrait {
-    fn set_label(&mut self, label: Option<&str>) -> () {
+    fn set_label(&self, label: Option<&str>) -> () {
         unsafe {
             ffi::gtk_frame_set_label(GTK_FRAME(self.unwrap_widget()),
                                      label.borrow_to_glib().0);
         }
     }
 
-    fn set_label_widget<T: ::WidgetTrait>(&mut self, label_widget: &T) -> () {
+    fn set_label_widget<T: ::WidgetTrait>(&self, label_widget: &T) -> () {
         unsafe {
             ffi::gtk_frame_set_label_widget(GTK_FRAME(self.unwrap_widget()), label_widget.unwrap_widget());
         }
     }
 
-    fn set_label_align(&mut self, x_align: f32, y_align: f32) -> () {
+    fn set_label_align(&self, x_align: f32, y_align: f32) -> () {
         unsafe {
             ffi::gtk_frame_set_label_align(GTK_FRAME(self.unwrap_widget()), x_align as c_float, y_align as c_float);
         }
@@ -49,7 +49,7 @@ pub trait FrameTrait: ::WidgetTrait + ::ContainerTrait {
         (x_align as f32, y_align as f32)
     }
 
-    fn set_shadow_type(&mut self, st_type: ShadowType) -> () {
+    fn set_shadow_type(&self, st_type: ShadowType) -> () {
         unsafe {
             ffi::gtk_frame_set_shadow_type(GTK_FRAME(self.unwrap_widget()), st_type);
         }

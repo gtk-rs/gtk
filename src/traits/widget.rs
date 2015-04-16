@@ -23,7 +23,7 @@ use glib;
 use glib::ffi::GType;
 
 pub trait WidgetTrait: ::FFIWidget + ::GObjectTrait {
-    fn show_all(&mut self) -> () {
+    fn show_all(&self) -> () {
         unsafe {
             ffi::gtk_widget_show_all(self.unwrap_widget());
         }
@@ -482,25 +482,25 @@ pub trait WidgetTrait: ::FFIWidget + ::GObjectTrait {
         unsafe { ffi::gtk_widget_get_opacity(self.unwrap_widget()) }
     }
 
-    fn set_margin_top(&mut self, margin: i32) -> () {
+    fn set_margin_top(&self, margin: i32) -> () {
         unsafe {
             ffi::gtk_widget_set_margin_top(self.unwrap_widget(), margin as c_int)
         }
     }
 
-    fn set_margin_bottom(&mut self, margin: i32) -> () {
+    fn set_margin_bottom(&self, margin: i32) -> () {
         unsafe {
             ffi::gtk_widget_set_margin_bottom(self.unwrap_widget(), margin as c_int)
         }
     }
 
-    fn get_margin_top(&mut self) -> i32 {
+    fn get_margin_top(&self) -> i32 {
         unsafe {
             ffi::gtk_widget_get_margin_top(self.unwrap_widget()) as i32
         }
     }
 
-    fn get_margin_bottom(&mut self) -> i32 {
+    fn get_margin_bottom(&self) -> i32 {
         unsafe {
             ffi::gtk_widget_get_margin_bottom(self.unwrap_widget()) as i32
         }

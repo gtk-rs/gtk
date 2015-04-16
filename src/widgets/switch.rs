@@ -32,7 +32,7 @@ impl Switch {
         check_pointer!(tmp_pointer, Switch)
     }
 
-    pub fn set_active(&mut self, is_active: bool) -> () {
+    pub fn set_active(&self, is_active: bool) -> () {
         unsafe { ffi::gtk_switch_set_active(GTK_SWITCH(self.pointer), to_gboolean(is_active)); }
     }
 

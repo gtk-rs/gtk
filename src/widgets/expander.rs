@@ -42,7 +42,7 @@ impl Expander {
     }
 
 
-    pub fn set_expanded(&mut self, expanded: bool) -> () {
+    pub fn set_expanded(&self, expanded: bool) -> () {
         unsafe { ffi::gtk_expander_set_expanded(GTK_EXPANDER(self.pointer), to_gboolean(expanded)); }
     }
 
@@ -50,7 +50,7 @@ impl Expander {
         unsafe { to_bool(ffi::gtk_expander_get_expanded(GTK_EXPANDER(self.pointer))) }
     }
 
-    pub fn set_use_underline(&mut self, use_underline: bool) -> () {
+    pub fn set_use_underline(&self, use_underline: bool) -> () {
         unsafe { ffi::gtk_expander_set_use_underline(GTK_EXPANDER(self.pointer), to_gboolean(use_underline)); }
     }
 
@@ -58,7 +58,7 @@ impl Expander {
         unsafe { to_bool(ffi::gtk_expander_get_use_underline(GTK_EXPANDER(self.pointer))) }
     }
 
-    pub fn set_use_markup(&mut self, use_markup: bool) -> () {
+    pub fn set_use_markup(&self, use_markup: bool) -> () {
         unsafe { ffi::gtk_expander_set_use_markup(GTK_EXPANDER(self.pointer), to_gboolean(use_markup)); }
     }
 
@@ -66,7 +66,7 @@ impl Expander {
         unsafe { to_bool(ffi::gtk_expander_get_use_markup(GTK_EXPANDER(self.pointer))) }
     }
 
-    pub fn set_label_fill(&mut self, label_fill: bool) -> () {
+    pub fn set_label_fill(&self, label_fill: bool) -> () {
         unsafe { ffi::gtk_expander_set_label_fill(GTK_EXPANDER(self.pointer), to_gboolean(label_fill)); }
     }
 
@@ -74,7 +74,7 @@ impl Expander {
         unsafe { to_bool(ffi::gtk_expander_get_label_fill(GTK_EXPANDER(self.pointer))) }
     }
 
-    pub fn set_resize_toplevel(&mut self, resize_toplevel: bool) -> () {
+    pub fn set_resize_toplevel(&self, resize_toplevel: bool) -> () {
         unsafe { ffi::gtk_expander_set_resize_toplevel(GTK_EXPANDER(self.pointer), to_gboolean(resize_toplevel)); }
     }
 
@@ -89,13 +89,13 @@ impl Expander {
         }
     }
 
-    pub fn set_label(&mut self, label: &str) -> () {
+    pub fn set_label(&self, label: &str) -> () {
         unsafe {
             ffi::gtk_expander_set_label(GTK_EXPANDER(self.pointer), label.borrow_to_glib().0);
         }
     }
 
-    pub fn set_spacing(&mut self, spacing: i32) -> () {
+    pub fn set_spacing(&self, spacing: i32) -> () {
         unsafe {
             ffi::gtk_expander_set_spacing(GTK_EXPANDER(self.pointer), spacing as c_int)
         }
@@ -107,13 +107,13 @@ impl Expander {
         }
     }
 
-    pub fn set_label_widget(&mut self, label: &::Label) -> () {
+    pub fn set_label_widget(&self, label: &::Label) -> () {
         unsafe {
             ffi::gtk_expander_set_label_widget(GTK_EXPANDER(self.pointer), label.unwrap_widget());
         }
     }
 
-    pub fn get_label_widget(&mut self) -> ::Label {
+    pub fn get_label_widget(&self) -> ::Label {
         unsafe {
             ::FFIWidget::wrap_widget(ffi::gtk_expander_get_label_widget(GTK_EXPANDER(self.pointer)))
         }

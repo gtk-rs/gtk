@@ -34,7 +34,7 @@ impl AppChooserWidget {
         unsafe { ffi::gtk_app_chooser_widget_set_show_default(GTK_APP_CHOOSER_WIDGET(self.pointer), to_gboolean(setting)) }
     }
 
-    pub fn get_show_default(&mut self) -> bool {
+    pub fn get_show_default(&self) -> bool {
         unsafe {
             to_bool(ffi::gtk_app_chooser_widget_get_show_default(GTK_APP_CHOOSER_WIDGET(self.pointer)))
         }
@@ -44,7 +44,7 @@ impl AppChooserWidget {
         unsafe { ffi::gtk_app_chooser_widget_set_show_recommended(GTK_APP_CHOOSER_WIDGET(self.pointer), to_gboolean(setting)) }
     }
 
-    pub fn get_show_recommended(&mut self) -> bool {
+    pub fn get_show_recommended(&self) -> bool {
         unsafe {
             to_bool(ffi::gtk_app_chooser_widget_get_show_recommended(GTK_APP_CHOOSER_WIDGET(self.pointer)))
         }
@@ -54,7 +54,7 @@ impl AppChooserWidget {
         unsafe { ffi::gtk_app_chooser_widget_set_show_fallback(GTK_APP_CHOOSER_WIDGET(self.pointer), to_gboolean(setting)) }
     }
 
-    pub fn get_show_fallback(&mut self) -> bool {
+    pub fn get_show_fallback(&self) -> bool {
         unsafe {
             to_bool(ffi::gtk_app_chooser_widget_get_show_fallback(GTK_APP_CHOOSER_WIDGET(self.pointer)))
         }
@@ -64,7 +64,7 @@ impl AppChooserWidget {
         unsafe { ffi::gtk_app_chooser_widget_set_show_other(GTK_APP_CHOOSER_WIDGET(self.pointer), to_gboolean(setting)) }
     }
 
-    pub fn get_show_other(&mut self) -> bool {
+    pub fn get_show_other(&self) -> bool {
         unsafe {
             to_bool(ffi::gtk_app_chooser_widget_get_show_other(GTK_APP_CHOOSER_WIDGET(self.pointer)))
         }
@@ -74,7 +74,7 @@ impl AppChooserWidget {
         unsafe { ffi::gtk_app_chooser_widget_set_show_all(GTK_APP_CHOOSER_WIDGET(self.pointer), to_gboolean(setting)) }
     }
 
-    pub fn get_show_all(&mut self) -> bool {
+    pub fn get_show_all(&self) -> bool {
         unsafe {
             to_bool(ffi::gtk_app_chooser_widget_get_show_all(GTK_APP_CHOOSER_WIDGET(self.pointer)))
         }
@@ -86,7 +86,7 @@ impl AppChooserWidget {
         }
     }
 
-    pub fn get_default_text(&mut self) -> Option<String> {
+    pub fn get_default_text(&self) -> Option<String> {
         unsafe {
             FromGlibPtr::borrow(
                 ffi::gtk_app_chooser_widget_get_default_text(GTK_APP_CHOOSER_WIDGET(self.pointer)))

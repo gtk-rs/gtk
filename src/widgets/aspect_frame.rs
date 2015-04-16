@@ -35,7 +35,7 @@ impl AspectFrame {
         check_pointer!(tmp_pointer, AspectFrame)
     }
 
-    pub fn set(&mut self,
+    pub fn set(&self,
                x_align: f32,
                y_align: f32,
                ratio: f32,
