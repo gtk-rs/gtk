@@ -218,7 +218,6 @@ pub struct C_GtkCellEditable;
 pub struct C_GtkCellRendererText;
 #[repr(C)]
 pub struct C_GtkCellRendererToggle;
-
 #[repr(C)]
 pub struct C_GtkToolItem;
 #[repr(C)]
@@ -235,27 +234,21 @@ pub struct C_GtkToggleToolButton;
 pub struct C_GtkRadioToolButton;
 #[repr(C)]
 pub struct C_GtkSeparatorToolItem;
-
 #[repr(C)]
 pub struct C_GtkMenu;
 #[repr(C)]
 pub struct C_GMenuModel;
-
 #[repr(C)]
 pub struct C_GClosure;
-
 #[repr(C)]
 pub struct C_GtkColorChooser;
 #[repr(C)]
 pub struct C_GtkEditable;
-
 #[repr(C)]
 pub struct C_GtkRadioButton;
-
 // not useful to implement for the moment
 #[repr(C)]
 pub struct C_GtkBuilder;
-
 #[repr(C)]
 pub struct C_GtkTextTag;
 #[repr(C)]
@@ -266,94 +259,64 @@ pub struct C_GtkTextView;
 pub struct C_GtkTextBuffer;
 #[repr(C)]
 pub struct C_GtkTextTagTable;
-
 #[repr(C)]
 pub struct C_GtkScrolledWindow;
-
 #[repr(C)]
 pub struct C_GtkPlacesSidebar;
-
 #[repr(C)]
 pub struct C_GtkIconSize;
-
 #[repr(C)]
 pub struct C_GtkTextMark;
-
 #[repr(C)]
 pub struct C_GtkTextIter;
-
 #[repr(C)]
 pub struct C_GtkTextChildAnchor;
-
 #[repr(C)]
 pub struct C_GtkTreeView;
-
 #[repr(C)]
 pub struct C_GtkTreeViewColumn;
-
 #[repr(C)]
 pub struct C_GtkMenuShell;
-
 #[repr(C)]
 pub struct C_GtkMenuItem;
-
 #[repr(C)]
 pub struct C_GtkCheckMenuItem;
-
 #[repr(C)]
 pub struct C_GtkViewport;
-
 #[repr(C)]
 pub struct C_GtkStatusbar;
-
 #[repr(C)]
 pub struct C_GtkLockButton;
-
 #[repr(C)]
 pub struct C_GtkActionable;
-
 #[repr(C)]
 pub struct C_GtkEntryCompletion;
-
 #[repr(C)]
 pub struct C_GtkIconView;
-
 #[repr(C)]
 pub struct C_GtkTreeSelection;
-
 #[repr(C)]
 pub struct C_GtkRecentChooserWidget;
-
 #[repr(C)]
 pub struct C_GtkComboBox;
-
 #[repr(C)]
 pub struct C_GtkComboBoxText;
-
 #[repr(C)]
 pub struct C_GtkPopover;
-
 #[repr(C)]
 pub struct C_GtkAppChooserWidget;
-
 #[repr(C)]
 pub struct C_GtkSizeGroup;
-
 #[repr(C)]
 pub struct C_GtkFileChooserWidget;
-
 #[repr(C)]
 pub struct C_GtkColorChooserWidget;
-
 #[repr(C)]
 pub struct C_GtkFontChooserWidget;
-
 #[repr(C)]
 pub struct C_GtkMovementStep;
-
 #[repr(C)]
 pub struct C_GtkSocket;
-
 #[repr(C)]
 pub struct C_GtkEventBox;
 
