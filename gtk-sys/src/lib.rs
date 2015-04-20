@@ -319,6 +319,8 @@ pub struct C_GtkMovementStep;
 pub struct C_GtkSocket;
 #[repr(C)]
 pub struct C_GtkEventBox;
+#[repr(C)]
+pub struct C_GtkTooltip;
 
 //pub type GtkTreeModelForeachFunc = fn(model: *mut C_GtkTreeModel, path: *mut C_GtkTreePath, iter: *mut C_GtkTreeIter, data: gpointer) -> Gboolean;
 
