@@ -813,7 +813,7 @@ pub enum License {
 /// Predefined values for use as response ids in gtk_dialog_add_button().
 /// All predefined values are negative, GTK+ leaves positive values for application-defined response ids.
 #[repr(C)]
-#[derive(Clone, PartialEq, PartialOrd, Debug, FromPrimitive, Copy)]
+#[derive(Clone, PartialEq, PartialOrd, Debug, Copy)]
 pub enum ResponseType {
     /// Returned if an action widget has no response id, or if the dialog gets programmatically hidden or destroyed
     None        = -1,
