@@ -103,5 +103,3 @@ impl_drop!(ToolPalette);
 impl_TraitWidget!(ToolPalette);
 
 impl ::ContainerTrait for ToolPalette {}
-
-impl_widget_events!(ToolPalette);

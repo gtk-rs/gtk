@@ -59,5 +59,3 @@ impl ::ContainerTrait for MessageDialog {}
 impl ::BinTrait for MessageDialog {}
 impl ::WindowTrait for MessageDialog {}
 impl ::DialogTrait for MessageDialog {}
-
-impl_widget_events!(MessageDialog);

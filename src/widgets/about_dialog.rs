@@ -243,5 +243,3 @@ impl ::ContainerTrait for AboutDialog {}
 impl ::BinTrait for AboutDialog {}
 impl ::WindowTrait for AboutDialog {}
 impl ::DialogTrait for AboutDialog {}
-
-impl_widget_events!(AboutDialog);

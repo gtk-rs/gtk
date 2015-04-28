@@ -42,6 +42,3 @@ impl_TraitWidget!(ToggleButton);
 impl ::ContainerTrait for ToggleButton {}
 impl ::ButtonTrait for ToggleButton {}
 impl ::ToggleButtonTrait for ToggleButton {}
-
-impl_widget_events!(ToggleButton);
-impl_button_events!(ToggleButton);

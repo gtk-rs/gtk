@@ -48,5 +48,3 @@ impl_TraitWidget!(MenuButton);
 impl ::ContainerTrait for MenuButton {}
 impl ::ButtonTrait for MenuButton {}
 impl ::ToggleButtonTrait for MenuButton {}
-
-impl_widget_events!(MenuButton);

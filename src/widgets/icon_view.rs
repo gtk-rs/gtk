@@ -292,5 +292,3 @@ impl_TraitWidget!(IconView);
 
 impl ::ScrollableTrait for IconView {}
 impl ::CellLayoutTrait for IconView {}
-
-impl_widget_events!(IconView);

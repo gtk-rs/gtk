@@ -39,5 +39,3 @@ impl_TraitWidget!(Label);
 
 impl ::MiscTrait for Label {}
 impl ::LabelTrait for Label {}
-
-impl_widget_events!(Label);

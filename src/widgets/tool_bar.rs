@@ -127,5 +127,3 @@ impl_TraitWidget!(Toolbar);
 impl ::ContainerTrait for Toolbar {}
 impl ::ToolShellTrait for Toolbar {}
 impl ::OrientableTrait for Toolbar {}
-
-impl_widget_events!(Toolbar);

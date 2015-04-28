@@ -23,5 +23,3 @@ impl ::ContainerTrait for VolumeButton {}
 impl ::ButtonTrait for VolumeButton {}
 impl ::ScaleButtonTrait for VolumeButton {}
 impl ::OrientableTrait for VolumeButton {}
-
-impl_widget_events!(VolumeButton);

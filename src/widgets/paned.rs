@@ -78,5 +78,3 @@ impl_drop!(Paned);
 impl_TraitWidget!(Paned);
 
 impl ::ContainerTrait for Paned {}
-
-impl_widget_events!(Paned);

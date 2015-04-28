@@ -355,6 +355,3 @@ impl_drop!(NoteBook);
 impl_TraitWidget!(NoteBook);
 
 impl ::ContainerTrait for NoteBook {}
-
-impl_widget_events!(NoteBook);
-

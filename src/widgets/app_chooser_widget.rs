@@ -88,5 +88,3 @@ impl_TraitWidget!(AppChooserWidget);
 
 impl ::ContainerTrait for AppChooserWidget {}
 impl ::BoxTrait for AppChooserWidget {}
-
-impl_widget_events!(AppChooserWidget);

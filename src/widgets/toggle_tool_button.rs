@@ -30,5 +30,3 @@ impl ::BinTrait for ToggleToolButton {}
 impl ::ToolItemTrait for ToggleToolButton {}
 impl ::ToolButtonTrait for ToggleToolButton {}
 impl ::ToggleToolButtonTrait for ToggleToolButton {}
-
-impl_widget_events!(ToggleToolButton);

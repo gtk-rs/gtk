@@ -131,5 +131,3 @@ impl_drop!(LevelBar);
 impl_TraitWidget!(LevelBar);
 
 impl ::OrientableTrait for LevelBar {}
-
-impl_widget_events!(LevelBar);

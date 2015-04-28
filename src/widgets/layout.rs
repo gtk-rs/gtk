@@ -58,5 +58,3 @@ impl_TraitWidget!(Layout);
 
 impl ::ContainerTrait for Layout {}
 impl ::ScrollableTrait for Layout {}
-
-impl_widget_events!(Layout);

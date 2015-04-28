@@ -114,5 +114,3 @@ impl_TraitWidget!(Expander);
 
 impl ::ContainerTrait for Expander {}
 impl ::BinTrait for Expander {}
-
-impl_widget_events!(Expander);

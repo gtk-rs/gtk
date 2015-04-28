@@ -46,6 +46,3 @@ impl_TraitWidget!(ComboBox);
 impl ::ContainerTrait for ComboBox {}
 impl ::BinTrait for ComboBox {}
 impl ::ComboBoxTrait for ComboBox {}
-
-impl_widget_events!(ComboBox);
-

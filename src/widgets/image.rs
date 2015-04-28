@@ -73,5 +73,3 @@ impl_drop!(Image);
 impl_TraitWidget!(Image);
 
 impl ::MiscTrait for Image {}
-
-impl_widget_events!(Image);

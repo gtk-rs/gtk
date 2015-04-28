@@ -91,6 +91,3 @@ impl_TraitWidget!(FontButton);
 
 impl ::ContainerTrait for FontButton {}
 impl ::ButtonTrait for FontButton {}
-
-impl_widget_events!(FontButton);
-impl_button_events!(FontButton);

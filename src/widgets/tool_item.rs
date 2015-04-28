@@ -22,5 +22,3 @@ impl_TraitWidget!(ToolItem);
 impl ::ContainerTrait for ToolItem {}
 impl ::BinTrait for ToolItem {}
 impl ::ToolItemTrait for ToolItem {}
-
-impl_widget_events!(ToolItem);

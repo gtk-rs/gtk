@@ -38,5 +38,3 @@ impl ::BinTrait for FileChooserDialog {}
 impl ::WindowTrait for FileChooserDialog {}
 impl ::DialogTrait for FileChooserDialog {}
 impl ::FileChooserTrait for FileChooserDialog {}
-
-impl_widget_events!(FileChooserDialog);

@@ -36,5 +36,3 @@ impl_TraitWidget!(Viewport);
 impl ::ContainerTrait for Viewport {}
 impl ::BinTrait for Viewport {}
 impl ::ScrollableTrait for Viewport {}
-
-impl_widget_events!(Viewport);

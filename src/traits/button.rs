@@ -2,7 +2,6 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-use std::mem;
 use libc::c_float;
 use glib::translate::{FromGlibPtr, ToGlibPtr};
 
@@ -132,43 +131,5 @@ pub trait ButtonTrait: ::WidgetTrait + ::ContainerTrait {
     #[cfg(feature = "gtk_3_6")]
     fn get_always_show_image(&self) -> bool {
         unsafe { to_bool(ffi::gtk_button_get_always_show_image(GTK_BUTTON(self.unwrap_widget()))) }
-    }
-
-    fn connect_clicked_signal(&self, handler: Box<ButtonClickedHandler>) {
-        let data = unsafe { mem::transmute::<Box<Box<ButtonClickedHandler>>, ffi::gpointer>(Box::new(handler)) };
-
-        unsafe {
-            ffi::g_signal_connect_data(self.unwrap_widget() as ffi::gpointer,
-                                       "clicked".borrow_to_glib().0,
-                                       Some(mem::transmute(widget_destroy_callback)),
-                                       data,
-                                       Some(drop_widget_destroy_handler as extern "C" fn(ffi::gpointer, *const ffi::C_GClosure)),
-                                       0);
-        };
-    }
-}
-
-
-pub trait ButtonClickedHandler {
-    fn callback(&mut self, button: &mut ::Button);
-}
-
-extern "C" fn widget_destroy_callback(object: *mut ffi::C_GtkWidget, user_data: ffi::gpointer) {
-    let mut handler = unsafe { mem::transmute::<ffi::gpointer, Box<Box<ButtonClickedHandler>>>(user_data) };
-
-    // let mut window = check_pointer!(object, Window).unwrap();
-    // window.can_drop = false;
-    let mut button: ::Button = ::FFIWidget::wrap_widget(object);
-    handler.callback(&mut button);
-
-    unsafe {
-        mem::forget(handler);
-    }
-}
-
-extern "C" fn drop_widget_destroy_handler(data: ffi::gpointer, _closure: *const ffi::C_GClosure) {
-    unsafe {
-        let handler = mem::transmute::<ffi::gpointer, Box<Box<ButtonClickedHandler>>>(data);
-        drop(handler);
     }
 }

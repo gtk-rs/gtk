@@ -45,5 +45,3 @@ impl_TraitWidget!(ScrolledWindow);
 
 impl ::ScrolledWindowTrait for ScrolledWindow {}
 impl ::ContainerTrait for ScrolledWindow {}
-
-impl_widget_events!(ScrolledWindow);

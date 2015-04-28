@@ -58,6 +58,3 @@ impl_TraitWidget!(LinkButton);
 
 impl ::ContainerTrait for LinkButton {}
 impl ::ButtonTrait for LinkButton {}
-
-impl_widget_events!(LinkButton);
-impl_button_events!(LinkButton);

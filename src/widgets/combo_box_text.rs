@@ -86,5 +86,3 @@ impl_TraitWidget!(ComboBoxText);
 impl ::ContainerTrait for ComboBoxText {}
 impl ::BinTrait for ComboBoxText {}
 impl ::ComboBoxTrait for ComboBoxText {}
-
-impl_widget_events!(ComboBoxText);

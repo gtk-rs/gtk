@@ -39,6 +39,3 @@ impl_TraitWidget!(LockButton);
 impl ::ContainerTrait for LockButton {}
 impl ::ButtonTrait for LockButton {}
 impl ::ActionableTrait for LockButton {}
-
-impl_widget_events!(LockButton);
-impl_button_events!(LockButton);

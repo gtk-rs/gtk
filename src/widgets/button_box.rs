@@ -53,5 +53,3 @@ impl_TraitWidget!(ButtonBox);
 impl ::ContainerTrait for ButtonBox {}
 impl ::BoxTrait for ButtonBox {}
 impl ::OrientableTrait for ButtonBox {}
-
-impl_widget_events!(ButtonBox);

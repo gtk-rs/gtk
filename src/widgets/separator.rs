@@ -21,5 +21,3 @@ impl_drop!(Separator);
 impl_TraitWidget!(Separator);
 
 impl ::OrientableTrait for Separator {}
-
-impl_widget_events!(Separator);

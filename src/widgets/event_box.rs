@@ -42,5 +42,3 @@ impl_TraitWidget!(EventBox);
 
 impl ::ContainerTrait for EventBox {}
 impl ::BinTrait for EventBox {}
-
-impl_widget_events!(EventBox);

@@ -37,5 +37,3 @@ impl_TraitWidget!(CheckButton);
 impl ::ContainerTrait for CheckButton {}
 impl ::ButtonTrait for CheckButton {}
 impl ::ToggleButtonTrait for CheckButton {}
-
-impl_widget_events!(CheckButton);

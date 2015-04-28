@@ -65,6 +65,3 @@ impl_TraitWidget!(Button);
 impl ::ContainerTrait for Button {}
 impl ::ButtonTrait for Button {}
 impl ::BinTrait for Button {}
-
-impl_widget_events!(Button);
-impl_button_events!(Button);

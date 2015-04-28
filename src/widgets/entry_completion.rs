@@ -181,5 +181,3 @@ impl_drop!(EntryCompletion);
 impl_TraitWidget!(EntryCompletion);
 
 impl ::CellLayoutTrait for EntryCompletion {}
-
-impl_widget_events!(EntryCompletion);

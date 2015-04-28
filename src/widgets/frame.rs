@@ -25,5 +25,3 @@ impl_TraitWidget!(Frame);
 impl ::FrameTrait for Frame {}
 impl ::ContainerTrait for Frame {}
 impl ::BinTrait for Frame {}
-
-impl_widget_events!(Frame);

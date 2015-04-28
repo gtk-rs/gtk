@@ -21,6 +21,3 @@ impl_TraitWidget!(ScrollBar);
 
 impl ::RangeTrait for ScrollBar {}
 impl ::OrientableTrait for ScrollBar {}
-
-impl_widget_events!(ScrollBar);
-impl_range_events!(ScrollBar);

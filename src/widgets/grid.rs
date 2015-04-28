@@ -146,5 +146,3 @@ impl_TraitWidget!(Grid);
 
 impl ::ContainerTrait for Grid {}
 impl ::OrientableTrait for Grid {}
-
-impl_widget_events!(Grid);

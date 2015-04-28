@@ -169,5 +169,3 @@ impl RecentInfo {
 
 impl_drop!(RecentInfo);
 impl_TraitWidget!(RecentInfo);
-
-impl_widget_events!(RecentInfo);

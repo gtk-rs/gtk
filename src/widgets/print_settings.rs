@@ -334,5 +334,3 @@ impl PrintSettings {
 
 impl_drop!(PrintSettings);
 impl_TraitWidget!(PrintSettings);
-
-impl_widget_events!(PrintSettings);

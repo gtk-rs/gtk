@@ -22,5 +22,3 @@ impl_TraitWidget!(SeparatorMenuItem);
 impl ::ContainerTrait for SeparatorMenuItem {}
 impl ::BinTrait for SeparatorMenuItem {}
 impl ::MenuItemTrait for SeparatorMenuItem {}
-
-impl_widget_events!(SeparatorMenuItem);

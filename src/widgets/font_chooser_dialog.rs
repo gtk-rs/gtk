@@ -36,5 +36,3 @@ impl ::BinTrait for FontChooserDialog {}
 impl ::WindowTrait for FontChooserDialog {}
 impl ::DialogTrait for FontChooserDialog {}
 impl ::FontChooserTrait for FontChooserDialog {}
-
-impl_widget_events!(FontChooserDialog);

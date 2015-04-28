@@ -102,6 +102,3 @@ impl_TraitWidget!(Scale);
 
 impl ::OrientableTrait for Scale {}
 impl ::RangeTrait for Scale {}
-
-impl_widget_events!(Scale);
-impl_range_events!(Scale);

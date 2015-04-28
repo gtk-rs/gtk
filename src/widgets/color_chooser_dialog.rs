@@ -36,5 +36,3 @@ impl ::BinTrait for ColorChooserDialog {}
 impl ::WindowTrait for ColorChooserDialog {}
 impl ::DialogTrait for ColorChooserDialog {}
 impl ::ColorChooserTrait for ColorChooserDialog {}
-
-impl_widget_events!(ColorChooserDialog);

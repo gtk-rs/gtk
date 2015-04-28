@@ -49,5 +49,3 @@ impl_drop!(CellRendererToggle);
 impl_TraitWidget!(CellRendererToggle);
 
 impl ::CellRendererTrait for CellRendererToggle {}
-
-impl_widget_events!(CellRendererToggle);

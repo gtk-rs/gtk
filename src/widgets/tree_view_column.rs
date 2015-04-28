@@ -316,8 +316,6 @@ impl glib::traits::FFIGObject for TreeViewColumn {
     }
 }
 
-impl_connect!(TreeViewColumn -> Clicked);
-
 impl Drop for TreeViewColumn {
     fn drop(&mut self) {
         unsafe {

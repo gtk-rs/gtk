@@ -28,5 +28,3 @@ impl_drop!(TextBuffer);
 impl_TraitWidget!(TextBuffer);
 
 impl ::TextBufferTrait for TextBuffer {}
-
-impl_widget_events!(TextBuffer);

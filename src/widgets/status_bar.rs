@@ -57,5 +57,3 @@ impl_TraitWidget!(StatusBar);
 impl ::ContainerTrait for StatusBar {}
 impl ::BoxTrait for StatusBar {}
 impl ::OrientableTrait for StatusBar {}
-
-impl_widget_events!(StatusBar);

@@ -109,5 +109,3 @@ impl_TraitWidget!(ToolItemGroup);
 
 impl ::ContainerTrait for ToolItemGroup {}
 impl ::BinTrait for ToolItemGroup {}
-
-impl_widget_events!(ToolItemGroup);

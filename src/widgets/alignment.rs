@@ -58,5 +58,3 @@ impl_TraitWidget!(Alignment);
 
 impl ::ContainerTrait for Alignment {}
 impl ::BinTrait for Alignment {}
-
-impl_widget_events!(Alignment);
