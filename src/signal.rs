@@ -7,9 +7,9 @@ use std::mem::transmute;
 
 use glib::signal::connect;
 use glib::translate::*;
-use glib::{ParamSpec};
+use glib::{FFIGObject, ParamSpec};
 
-use ffi::{Gboolean, C_GtkAdjustment};
+use ffi::{Gboolean, C_GtkAdjustment, C_GtkTreeSelection, C_GtkTreeViewColumn};
 use gdk::{
     EventAny, EventButton, EventConfigure, EventCrossing, EventExpose, EventFocus, EventGrabBroken,
     EventKey, EventMotion, EventProperty, EventProximity, EventScroll, EventWindowState,
@@ -19,8 +19,8 @@ use cairo::Context;
 
 use {
     Adjustment, Button, Dialog, DirectionType, Range, ScrollType, SpinButton, StateFlags,
-    TextDirection, ToolButton, Tooltip, TreeIter, TreePath, TreeView, TreeViewColumn, Widget,
-    WidgetHelpType,
+    TextDirection, ToolButton, Tooltip, TreeIter, TreePath, TreeSelection, TreeView,
+    TreeViewColumn, Widget, WidgetHelpType,
 };
 
 /// Whether to propagate the signal to other handlers
@@ -1066,8 +1066,6 @@ mod range {
     }
 }
 
-// Adjustment doesn't implement any traits at all
-
 impl Adjustment {
     pub fn connect_value_changed<F: Fn(Adjustment)>(&self, f: F) -> u64 {
         unsafe {
@@ -1080,4 +1078,34 @@ impl Adjustment {
 
 extern "C" fn adjustment_trampoline(this: *mut C_GtkAdjustment, f: &Box<Fn(Adjustment)>) {
     f(Adjustment::wrap_pointer(this))
+}
+
+impl TreeSelection {
+    pub fn connect_changed<F: Fn(TreeSelection)>(&self, f: F) -> u64 {
+        unsafe {
+            let f: Box<Box<Fn(TreeSelection)>> = Box::new(Box::new(f));
+            connect(self.unwrap_gobject() as *mut _, "changed",
+                transmute(tree_selection_trampoline), into_raw(f) as *mut _)
+        }
+    }
+}
+
+extern "C" fn tree_selection_trampoline(this: *mut C_GtkTreeSelection,
+        f: &Box<Fn(TreeSelection)>) {
+    f(TreeSelection::wrap_object(this as *mut _))
+}
+
+impl TreeViewColumn {
+    pub fn connect_clicked<F: Fn(TreeViewColumn)>(&self, f: F) -> u64 {
+        unsafe {
+            let f: Box<Box<Fn(TreeViewColumn)>> = Box::new(Box::new(f));
+            connect(self.unwrap_pointer() as *mut _, "clicked",
+                transmute(tree_view_column_trampoline), into_raw(f) as *mut _)
+        }
+    }
+}
+
+extern "C" fn tree_view_column_trampoline(this: *mut C_GtkTreeViewColumn,
+        f: &Box<Fn(TreeViewColumn)>) {
+    f(TreeViewColumn::wrap_pointer(this))
 }
