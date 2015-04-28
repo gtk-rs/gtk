@@ -4,7 +4,7 @@ __Rust__ bindings and wrappers for __GLib__, __GDK 3__, __GTK+ 3__  and __Cairo_
 
 ## Building
 
-__rgtk__ expects __GTK+__, __GLib__ and __Cairo__ development files to be installed on your system. Optionally, it is recommended to install the debug packages containing helpful debug symbols.
+__gtk__ expects __GTK+__, __GLib__ and __Cairo__ development files to be installed on your system. Optionally, it is recommended to install the debug packages containing helpful debug symbols.
 
 ### Debian and Ubuntu
 
@@ -41,21 +41,20 @@ It's crucial that GCC from mingw is used by Rust so either make sure that mingw 
 
 ## Versions and features
 
-__rgtk__ targets __GTK+__ 3.6 and __Cairo__ 1.10 by default, other versions support is enabled by requesting a corresponding feature e.g.
+__gtk__ targets __GTK+__ 3.6 and __Cairo__ 1.10 by default, other versions support is enabled by requesting a corresponding feature e.g.
 ```Shell
-> cargo build --features "GTK_3_10 CAIRO_1_12"
+> cargo build --features "gtk_3_10 cairo_1_12"
 ```
 Currently supported versions are __GTK+__ 3.4 to 3.14 and __Cairo__ 1.10 to 1.12.
 
-We are currently targetting rust master compiler to build __rgtk__, make sure you have the latest version before submitting any bugs.
+We are currently targetting rust master compiler to build __gtk__, make sure you have the latest version before submitting any bugs.
 
-In `examples` you can find some tests showing off the functionality, these can be built and run as follows:
+Examples are providing in the [rust-gnome/examples](https://github.com/rust-gnome/examples) repository, you can find some tests showing off the functionality, these can be built and run as follows:
 
 ```Shell
-> cd examples
 > cargo build --release
 # Or, if your system has GTK 3.10 or later
-> cargo build --features GTK_3_10 --release
+> cargo build --features gtk_3_10 --release
 > ./target/release/gtktest
 > ./target/release/cairotest
 ```
@@ -63,35 +62,36 @@ In `examples` you can find some tests showing off the functionality, these can b
 When building documentation don't forget to specify the feature set you're using:
 
 ```Shell
-> cargo doc --feature GTK_3_12
+> cargo doc --feature gtk_3_12
 ```
 
 Your local copy can be accessed using your browser at
 
-`file:///{rgtk_location}/target/doc/rgtk/index.html`
+`file:///{gtk_location}/target/doc/rgtk/index.html`
 
 You can also access a daily build of the docs via the internet:
 
 http://rust-ci.org/jeremyletang/rgtk/doc/rgtk/
 
-## Including rgtk as a cargo dependency
+## Including gtk as a cargo dependency
 
-To include rgtk as a cargo dependency you have to add it to your Cargo.toml and specify the GTK version you want using Cargo features
+To include rgtk as a cargo dependency you have to add it to your Cargo.toml and specify the GTK version you want using Cargo features:
 ```Toml
 [dependencies.rgtk]
-git = "https://github.com/jeremyletang/rgtk.git"
-features = ["GTK_3_12"]
+git = "https://github.com/rust-gnome/gtk.git"
+features = ["gtk_3_12"]
 ```
 
-## Use __rgtk__
+## Use __gtk__
 
-To implement __GTK+__ inheritance in rust, we implemented gtk superclasses as traits located in `rgtk::gtk::traits::*`. The various widgets implement these traits and live in `rgtk::gtk::*`.
+To implement __GTK+__ inheritance in rust, we implemented gtk superclasses as traits located in `gtk::gtk::traits::*`. The various widgets implement these traits and live in `gtk::gtk::*`.
 
-For your convenience the various traits are reexported in the `rgtk::*` namespace as `Gtk{trait_name}Trait` so you can just use...
+For your convenience the various traits are reexported in the `gtk::*` namespace as `Gtk{trait_name}Trait` so you can just use...
 
 ```Rust
-extern mod rgtk;
-use rgtk::*;
+extern mod gtk;
+
+use gtk::*;
 ```
 
 ...to easily access all the gtk widgets and all traits methods:
@@ -113,7 +113,7 @@ Contributor you're welcome!
 
 You probably know but __Gtk+__ uses its own GObject system: inherited class and interface.
 
-To respect this design, I follow a special design on __rgtk__:
+To respect this design, I follow a special design on __gtk__:
 
 * Interface -> Implement them on a trait with only default methods.
 * Class -> Implement the construct on the class impl and other methods on a traits.
@@ -131,4 +131,4 @@ Finally, all the gtk widgets implement the trait gtk::traits::Widget.
 
 ## License
 
-__rgtk__ is available under the MIT License, please refer to it.
+__gtk__ is available under the MIT License, please refer to it.
