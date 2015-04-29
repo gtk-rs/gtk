@@ -50,5 +50,3 @@ impl ::ContainerTrait for RadioButton {}
 impl ::ButtonTrait for RadioButton {}
 impl ::BinTrait for RadioButton {}
 impl ::ToggleButtonTrait for RadioButton {}
-
-impl_widget_events!(RadioButton);

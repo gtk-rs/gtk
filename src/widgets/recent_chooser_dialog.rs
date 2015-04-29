@@ -54,5 +54,3 @@ impl ::BinTrait for RecentChooserDialog {}
 impl ::WindowTrait for RecentChooserDialog {}
 impl ::DialogTrait for RecentChooserDialog {}
 impl ::RecentChooserTrait for RecentChooserDialog {}
-
-impl_widget_events!(RecentChooserDialog);

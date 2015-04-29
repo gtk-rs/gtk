@@ -102,7 +102,3 @@ impl_TraitWidget!(ColorButton);
 
 impl ::ContainerTrait for ColorButton {}
 impl ::ButtonTrait for ColorButton {}
-
-impl_widget_events!(ColorButton);
-impl_button_events!(ColorButton);
-

@@ -66,5 +66,3 @@ impl_TraitWidget!(Revealer);
 
 impl ::ContainerTrait for Revealer {}
 impl ::BinTrait for Revealer {}
-
-impl_widget_events!(Revealer);

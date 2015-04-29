@@ -197,5 +197,3 @@ impl_TraitWidget!(ListBoxRow);
 
 impl ::ContainerTrait for ListBoxRow {}
 impl ::BinTrait for ListBoxRow {}
-
-impl_widget_events!(ListBox);

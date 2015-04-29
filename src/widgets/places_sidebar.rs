@@ -66,5 +66,3 @@ impl_TraitWidget!(PlacesSidebar);
 impl ::ContainerTrait for PlacesSidebar {}
 impl ::BinTrait for PlacesSidebar {}
 impl ::ScrolledWindowTrait for PlacesSidebar {}
-
-impl_widget_events!(PlacesSidebar);

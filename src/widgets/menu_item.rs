@@ -37,5 +37,3 @@ impl_TraitWidget!(MenuItem);
 impl ::ContainerTrait for MenuItem {}
 impl ::BinTrait for MenuItem {}
 impl ::MenuItemTrait for MenuItem {}
-
-impl_widget_events!(MenuItem);

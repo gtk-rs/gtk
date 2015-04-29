@@ -84,5 +84,3 @@ impl_drop!(ProgressBar);
 impl_TraitWidget!(ProgressBar);
 
 impl ::OrientableTrait for ProgressBar {}
-
-impl_widget_events!(ProgressBar);

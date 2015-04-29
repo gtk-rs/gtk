@@ -39,5 +39,3 @@ impl ::ContainerTrait for CheckMenuItem {}
 impl ::BinTrait for CheckMenuItem {}
 impl ::MenuItemTrait for CheckMenuItem {}
 impl ::CheckMenuItemTrait for CheckMenuItem {}
-
-impl_widget_events!(CheckMenuItem);

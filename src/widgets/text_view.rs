@@ -263,5 +263,3 @@ impl_drop!(TextView);
 impl_TraitWidget!(TextView);
 
 impl ::ScrollableTrait for TextView {}
-
-impl_widget_events!(TextView);

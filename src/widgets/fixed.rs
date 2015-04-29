@@ -42,5 +42,3 @@ impl_drop!(Fixed);
 impl_TraitWidget!(Fixed);
 
 impl ::ContainerTrait for Fixed {}
-
-impl_widget_events!(Fixed);

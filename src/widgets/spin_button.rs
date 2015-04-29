@@ -172,6 +172,3 @@ impl_TraitWidget!(SpinButton);
 impl ::EntryTrait for SpinButton {}
 impl ::EditableTrait for SpinButton {}
 impl ::OrientableTrait for SpinButton {}
-
-impl_widget_events!(SpinButton);
-impl_connect!(SpinButton -> ChangedValue, ValueChanged, Wrapped); // Input, Output

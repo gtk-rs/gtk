@@ -99,5 +99,3 @@ impl_drop!(HeaderBar);
 impl_TraitWidget!(HeaderBar);
 
 impl ::ContainerTrait for HeaderBar {}
-
-impl_widget_events!(HeaderBar);

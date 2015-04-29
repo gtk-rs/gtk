@@ -39,6 +39,3 @@ impl ::ContainerTrait for ToolButton {}
 impl ::BinTrait for ToolButton {}
 impl ::ToolItemTrait for ToolButton {}
 impl ::ToolButtonTrait for ToolButton {}
-
-impl_widget_events!(ToolButton);
-impl_button_events!(ToolButton);

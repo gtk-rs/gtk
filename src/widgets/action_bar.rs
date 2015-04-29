@@ -53,5 +53,3 @@ impl_TraitWidget!(ActionBar);
 
 impl ::ContainerTrait for ActionBar {}
 impl ::BinTrait for ActionBar {}
-
-impl_widget_events!(ActionBar);

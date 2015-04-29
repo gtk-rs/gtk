@@ -31,5 +31,3 @@ impl_TraitWidget!(Window);
 impl ::ContainerTrait for Window {}
 impl ::WindowTrait for Window {}
 impl ::BinTrait for Window {}
-
-impl_widget_events!(Window);

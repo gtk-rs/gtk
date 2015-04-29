@@ -32,5 +32,3 @@ impl_TraitWidget!(SeparatorToolItem);
 impl ::ContainerTrait for SeparatorToolItem {}
 impl ::BinTrait for SeparatorToolItem {}
 impl ::ToolItemTrait for SeparatorToolItem {}
-
-impl_widget_events!(SeparatorToolItem);

@@ -28,5 +28,3 @@ impl_TraitWidget!(Overlay);
 
 impl ::ContainerTrait for Overlay {}
 impl ::BinTrait for Overlay {}
-
-impl_widget_events!(Overlay);

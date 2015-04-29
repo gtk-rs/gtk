@@ -169,8 +169,6 @@ impl_TraitWidget!(FlowBox);
 
 impl ::ContainerTrait for FlowBox {}
 
-impl_widget_events!(FlowBox);
-
 struct_Widget!(FlowBoxChild);
 
 impl FlowBoxChild {
@@ -203,5 +201,3 @@ impl_TraitWidget!(FlowBoxChild);
 
 impl ::ContainerTrait for FlowBoxChild {}
 impl ::BinTrait for FlowBoxChild {}
-
-impl_widget_events!(FlowBoxChild);

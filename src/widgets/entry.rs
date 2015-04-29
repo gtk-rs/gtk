@@ -42,5 +42,3 @@ impl_TraitWidget!(Entry);
 
 impl ::EntryTrait for Entry {}
 impl ::EditableTrait for Entry {}
-
-impl_widget_events!(Entry);

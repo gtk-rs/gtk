@@ -26,5 +26,3 @@ impl_TraitWidget!(FileChooserWidget);
 
 impl ::ContainerTrait for FileChooserWidget {}
 impl ::BoxTrait for FileChooserWidget {}
-
-impl_widget_events!(FileChooserWidget);

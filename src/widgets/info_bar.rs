@@ -81,5 +81,3 @@ impl_TraitWidget!(InfoBar);
 impl ::ContainerTrait for InfoBar {}
 impl ::BoxTrait for InfoBar {}
 impl ::OrientableTrait for InfoBar {}
-
-impl_widget_events!(InfoBar);

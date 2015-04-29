@@ -25,5 +25,3 @@ impl_TraitWidget!(SearchEntry);
 
 impl ::EntryTrait for SearchEntry {}
 impl ::EditableTrait for SearchEntry {}
-
-impl_widget_events!(SearchEntry);

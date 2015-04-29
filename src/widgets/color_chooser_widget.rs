@@ -26,5 +26,3 @@ impl_TraitWidget!(ColorChooserWidget);
 
 impl ::ContainerTrait for ColorChooserWidget {}
 impl ::BoxTrait for ColorChooserWidget {}
-
-impl_widget_events!(ColorChooserWidget);

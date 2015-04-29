@@ -409,6 +409,3 @@ impl_TraitWidget!(TreeView);
 
 impl ::ContainerTrait for TreeView {}
 impl ::ScrollableTrait for TreeView {}
-
-impl_widget_events!(TreeView);
-impl_tree_view_events!(TreeView);

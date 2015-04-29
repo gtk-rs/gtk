@@ -36,5 +36,3 @@ impl_drop!(Socket);
 impl_TraitWidget!(Socket);
 
 impl ::ContainerTrait for Socket {}
-
-impl_widget_events!(Socket);

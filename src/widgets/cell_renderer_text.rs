@@ -25,5 +25,3 @@ impl_drop!(CellRendererText);
 impl_TraitWidget!(CellRendererText);
 
 impl ::CellRendererTrait for CellRendererText {}
-
-impl_widget_events!(CellRendererText);

@@ -95,19 +95,6 @@ macro_rules! impl_TraitWidget(
     );
 );
 
-// macro_rules! impl_connect(
-//     ($gtk_struct:ident -> $($signal_name:ident),*) => (
-//         $(impl<'a> ::glib::traits::Connect<::signals::$signal_name<'a>> for $gtk_struct {})*
-
-//     )
-// )
-
-macro_rules! impl_connect(
-    ($gtk_struct:ident -> $($signal_name:ident),*) => (
-        $(impl<'a> ::glib::traits::Connect<'a, ::signals::$signal_name<'a>> for $gtk_struct {})*
-    )
-);
-
 macro_rules! impl_GObjectFunctions(
     ($gtk_struct:ident, $ffi_type:ident) => (
         impl $gtk_struct {
@@ -158,52 +145,4 @@ macro_rules! unwrap_widget(
             None => ::std::ptr::null_mut()
         };
     );
-);
-
-macro_rules! impl_widget_events(
-    ($gtk_struct:ident) => (
-        impl_connect!($gtk_struct -> ButtonPressEvent, ButtonReleaseEvent, CanActivateAccel,
-                                     ChildNotify, CompositedChanged, ConfigureEvent, DamageEvent,
-                                     DeleteEvent, DestroyEvent, DirectionChanged, Draw, EnterNotifyEvent,
-                                     Event, EventAfter, Focus, FocusInEvent, FocusOutEvent, GrabBrokenEvent,
-                                     GrabFocus, GrabNotify, Hide, KeyPressEvent,
-                                     KeyReleaseEvent, KeynavFailed, LeaveNotifyEvent, Map, MapEvent,
-                                     MnemonicActivate, MotionNotifyEvent, MoveFocus,
-                                     PropertyNotifyEvent, ProximityInEvent, ProximityOutEvent,
-                                     QueryTooltip, Realize, ScreenChanged, ScrollEvent,
-                                     Show, SizeAllocate,
-                                     StateFlagsChanged, StyleUpdated,
-                                     TouchEvent, WindowStateEvent);
-
-
-        // not implemented:
-        // DragBegin, DragDataDelete, DragDataGet, DragDataReceived, DragDrop
-        // DragEnd, DragFailed, DragLeave, DragMotion, HierarchyChanged, ParentSet, PopuMenu,
-        // UnRealize, VisibilityNotifyEvent, UnMap, UnMapEvent, StyleSet, StateChanged, SelectionRequestEvent,
-        // SelectionReceived, SelectionClearEvent, SelectionGet, SelectionNotifyEvent,
-    )
-);
-
-macro_rules! impl_tree_view_events(
-    ($gtk_struct:ident) => (
-        impl_connect!($gtk_struct -> ColumnsChanged, CursorChanged, ExpandCollapseCursorRow,
-                                     MoveCursor, RowActivated, RowCollapsed, RowExpanded,
-                                     SelectAll, SelectCursorParent, SelectCursorRow,
-                                     StartInteractiveSearch, TestCollapseRow, TestExpandRow,
-                                     ToggleCursorRow, UnselectAll);
-    )
-);
-
-macro_rules! impl_button_events(
-    ($gtk_struct:ident) => (
-        impl_connect!($gtk_struct -> Activate, Clicked, Enter, Leave, Pressed, Released);
-    )
-);
-
-macro_rules! impl_range_events(
-    ($gtk_struct:ident) => (
-        impl_connect!($gtk_struct -> AdjustBounds, MoveSlider, ValueChanged);
-
-    // ChangeValue
-    )
 );

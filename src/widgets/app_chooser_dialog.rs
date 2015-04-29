@@ -60,5 +60,3 @@ impl ::BinTrait for AppChooserDialog {}
 impl ::WindowTrait for AppChooserDialog {}
 impl ::DialogTrait for AppChooserDialog {}
 impl ::AppChooserTrait for AppChooserDialog {}
-
-impl_widget_events!(AppChooserDialog);

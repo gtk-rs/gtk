@@ -30,5 +30,3 @@ impl_TraitWidget!(Box);
 impl ::ContainerTrait for Box {}
 impl ::BoxTrait for Box {}
 impl ::OrientableTrait for Box {}
-
-impl_widget_events!(Box);

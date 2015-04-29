@@ -15,5 +15,3 @@ impl DrawingArea {
 }
 
 impl_TraitWidget!(DrawingArea);
-
-impl_widget_events!(DrawingArea);

@@ -53,5 +53,3 @@ impl_TraitWidget!(Popover);
 
 impl ::ContainerTrait for Popover {}
 impl ::BinTrait for Popover {}
-
-impl_widget_events!(Popover);

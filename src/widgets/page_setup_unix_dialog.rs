@@ -63,5 +63,3 @@ impl ::ContainerTrait for PageSetupUnixDialog {}
 impl ::BinTrait for PageSetupUnixDialog {}
 impl ::WindowTrait for PageSetupUnixDialog {}
 impl ::DialogTrait for PageSetupUnixDialog {}
-
-impl_widget_events!(PageSetupUnixDialog);

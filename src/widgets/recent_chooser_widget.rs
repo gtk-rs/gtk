@@ -30,5 +30,3 @@ impl ::ContainerTrait for RecentChooserWidget {}
 impl ::OrientableTrait for RecentChooserWidget {}
 impl ::RecentChooserTrait for RecentChooserWidget {}
 impl ::BoxTrait for RecentChooserWidget {}
-
-impl_widget_events!(RecentChooserWidget);

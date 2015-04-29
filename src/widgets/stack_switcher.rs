@@ -39,5 +39,3 @@ impl_TraitWidget!(StackSwitcher);
 
 impl ::ContainerTrait for StackSwitcher {}
 impl ::BoxTrait for StackSwitcher {}
-
-impl_widget_events!(StackSwitcher);

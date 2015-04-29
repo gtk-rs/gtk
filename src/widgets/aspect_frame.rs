@@ -41,5 +41,3 @@ impl_TraitWidget!(AspectFrame);
 
 impl ::FrameTrait for AspectFrame {}
 impl ::ContainerTrait for AspectFrame {}
-
-impl_widget_events!(AspectFrame);

@@ -34,6 +34,3 @@ impl ::ContainerTrait for ScaleButton {}
 impl ::ButtonTrait for ScaleButton {}
 impl ::ScaleButtonTrait for ScaleButton {}
 impl ::OrientableTrait for ScaleButton {}
-
-impl_widget_events!(ScaleButton);
-impl_button_events!(ScaleButton);

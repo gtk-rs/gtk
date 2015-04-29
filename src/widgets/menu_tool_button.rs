@@ -55,5 +55,3 @@ impl ::ContainerTrait for MenuToolButton {}
 impl ::BinTrait for MenuToolButton {}
 impl ::ToolItemTrait for MenuToolButton {}
 impl ::ToolButtonTrait for MenuToolButton {}
-
-impl_widget_events!(MenuToolButton);

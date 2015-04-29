@@ -116,5 +116,3 @@ impl_drop!(Stack);
 impl_TraitWidget!(Stack);
 
 impl ::ContainerTrait for Stack {}
-
-impl_widget_events!(Stack);

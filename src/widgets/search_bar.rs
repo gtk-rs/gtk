@@ -46,5 +46,3 @@ impl_TraitWidget!(SearchBar);
 
 impl ::ContainerTrait for SearchBar {}
 impl ::BinTrait for SearchBar {}
-
-impl_widget_events!(SearchBar);

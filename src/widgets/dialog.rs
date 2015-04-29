@@ -42,5 +42,3 @@ impl ::ContainerTrait for Dialog {}
 impl ::BinTrait for Dialog {}
 impl ::WindowTrait for Dialog {}
 impl ::DialogTrait for Dialog {}
-
-impl_widget_events!(Dialog);

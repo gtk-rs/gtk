@@ -26,5 +26,3 @@ impl_TraitWidget!(FontChooserWidget);
 
 impl ::ContainerTrait for FontChooserWidget {}
 impl ::BoxTrait for FontChooserWidget {}
-
-impl_widget_events!(FontChooserWidget);
