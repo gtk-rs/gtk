@@ -97,6 +97,7 @@ pub use self::widgets::{
     EntryBuffer,
     Entry,
     Switch,
+    Range,
     Scale,
     SpinButton,
     Spinner,

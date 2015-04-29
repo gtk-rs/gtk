@@ -30,6 +30,7 @@ pub use self::entry::Entry;
 #[cfg(feature = "gtk_3_10")]
 pub use self::search_entry::SearchEntry;
 pub use self::switch::Switch;
+pub use self::range::Range;
 pub use self::scale::Scale;
 #[cfg(feature = "gtk_3_6")]
 pub use self::level_bar::LevelBar;
@@ -163,6 +164,7 @@ mod entry;
 #[cfg(feature = "gtk_3_10")]
 mod search_entry;
 mod switch;
+mod range;
 mod scale;
 #[cfg(feature = "gtk_3_6")]
 mod level_bar;
