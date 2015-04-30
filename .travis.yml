@@ -1,14 +1,14 @@
 language: rust
-rust:
--nightly
-sudo: false
+sudo: true
 env:
   global:
     - secure: cRbvQ7JYJzUdxjf1XJIQuCIwrvZbLxNUYkSfKfnRrqnbFKXNWW8cKBFaVQWPwmDrocGBwZVEsYPxra88dZtro0NIRmRuZzZ2jZfbCeatGPveQGGxsst9a5UXX8LYnk7w3M4aOLtIgjG90vD+FgyouhZdPZwCGEodtGYieeLnwrM=
-addons:
-  apt:
-    packages:
-    - libgtk-3-dev
+    - LD_LIBRARY_PATH=/usr/local/lib
+before_install:
+  - yes | sudo add-apt-repository ppa:ricotz/testing
+  - sudo apt-get update
+install:
+  - sudo apt-get install gtk+3.0 libgtk-3-dev
 script:
   - rustc --version
   - cargo build
