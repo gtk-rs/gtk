@@ -40,7 +40,6 @@ Finally all the gtk widgets implement the trait self::traits::Widget.
 #![allow(raw_pointer_derive)]
 
 extern crate libc;
-extern crate c_vec;
 
 extern crate glib_sys as glib_ffi;
 extern crate gdk_sys as gdk_ffi;
