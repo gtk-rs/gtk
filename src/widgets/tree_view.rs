@@ -371,6 +371,13 @@ impl TreeView {
         }
     }
 
+    pub fn remove_model(&self) {
+        unsafe {
+            ffi::gtk_tree_view_set_model(GTK_TREE_VIEW(self.pointer),
+                                         ::std::ptr::null_mut())
+        }
+    }
+
     pub fn get_selection(&self) -> Option<TreeSelection> {
         let tmp_pointer = unsafe { ffi::gtk_tree_view_get_selection(GTK_TREE_VIEW(self.pointer)) };
 
