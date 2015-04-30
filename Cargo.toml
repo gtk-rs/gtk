@@ -23,7 +23,6 @@ cairo_1_12 = ["cairo/cairo_1_12"]
 
 [dependencies]
 libc = "0.1"
-c_vec = "^1.0.0"
 
 [dependencies.gtk-sys]
 path = "gtk-sys"
