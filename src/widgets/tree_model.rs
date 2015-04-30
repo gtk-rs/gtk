@@ -98,16 +98,22 @@ impl TreeModel {
         }
     }
 
-    pub fn iter_n_children(&self, iter: &TreeIter) -> i32 {
-        unsafe { ffi::gtk_tree_model_iter_n_children(self.pointer, iter.unwrap_pointer()) }
+    pub fn iter_n_children(&self, iter: Option<&TreeIter>) -> i32 {
+        unsafe { ffi::gtk_tree_model_iter_n_children(self.pointer, match iter {
+                Some(i) => i.unwrap_pointer(),
+                None => ::std::ptr::null_mut()
+            }) }
     }
 
     pub fn iter_nth_child(&self, iter: &mut TreeIter, parent: Option<&TreeIter>, n: i32) -> bool {
         match unsafe {
             ffi::gtk_tree_model_iter_nth_child(self.pointer,
-                                               iter.unwrap_pointer(),
-                                               if parent.is_none() { ::std::ptr::null_mut() } else { parent.unwrap().unwrap_pointer() },
-                                               n)
+                iter.unwrap_pointer(),
+                match parent {
+                    Some(p) => p.unwrap_pointer(),
+                    None => ::std::ptr::null_mut()
+                },
+                n)
         } {
             0 => false,
             _ => true
