@@ -11,7 +11,7 @@ macro_rules! check_pointer(
             ::std::option::Option::None
         } else {
             unsafe {
-                ::glib::ffi::g_object_ref(::cast::$cast_fn($tmp_pointer));
+                ::glib::ffi::g_object_ref(::cast::$cast_fn($tmp_pointer) as *mut ::libc::c_void);
             }
 
             ::std::option::Option::Some($gtk_struct {
@@ -38,7 +38,7 @@ macro_rules! impl_TraitObject(
 
             fn wrap_object(object: *mut ::glib::ffi::C_GObject) -> $gtk_struct {
                 unsafe{
-                    ::glib::ffi::g_object_ref(object);
+                    ::glib::ffi::g_object_ref(object as *mut ::libc::c_void);
                 }
 
                 $gtk_struct {
@@ -60,7 +60,7 @@ macro_rules! impl_TraitWidget(
 
             fn wrap_widget(widget: *mut ffi::C_GtkWidget) -> $gtk_struct {
                 unsafe{
-                    ::glib::ffi::g_object_ref(::ffi::cast_GtkObject(widget));
+                    ::glib::ffi::g_object_ref(::ffi::cast_GtkObject(widget) as *mut ::libc::c_void);
                 }
 
                 $gtk_struct {
@@ -79,7 +79,7 @@ macro_rules! impl_TraitWidget(
 
             fn wrap_object(object: *mut ::glib::ffi::C_GObject) -> $gtk_struct {
                 unsafe{
-                    ::glib::ffi::g_object_ref(object);
+                    ::glib::ffi::g_object_ref(object as *mut ::libc::c_void);
                 }
 
                 $gtk_struct {
@@ -117,7 +117,7 @@ macro_rules! impl_drop(
         impl Drop for $gtk_struct {
             fn drop(&mut self) {
                 unsafe {
-                    ::glib::ffi::g_object_unref(self.pointer as *mut ::glib::ffi::C_GObject);
+                    ::glib::ffi::g_object_unref(self.pointer as *mut ::libc::c_void);
                 }
             }
         }
@@ -125,11 +125,13 @@ macro_rules! impl_drop(
         impl Clone for $gtk_struct {
             fn clone(&self) -> $gtk_struct {
                 let pointer = unsafe {
-                    ::glib::ffi::g_object_ref(self.pointer as *mut ::glib::ffi::C_GObject)
+                    ::glib::ffi::g_object_ref(self.pointer as *mut ::libc::c_void)
                 };
 
-                $gtk_struct {
-                    pointer: ::cast::$cast_func(pointer)
+                unsafe {
+                    $gtk_struct {
+                        pointer: ::cast::$cast_func(::std::mem::transmute(pointer))
+                    }
                 }
             }
         }
