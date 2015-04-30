@@ -104,6 +104,7 @@ let button = gtk::Button:new(); // You have access to the struct methods of gtk:
 ## Projects using rgtk
 * [SolidOak](https://github.com/oakes/SolidOak)
 * [rrun](https://github.com/buster/rrun)
+* [processus-viewer](https://github.com/GuillaumeGomez/processus-viewer)
 
 If you want yours to be added to this list, please create a Pull Request for it!
 
