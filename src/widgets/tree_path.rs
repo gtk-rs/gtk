@@ -153,10 +153,6 @@ impl TreePath {
 
     #[doc(hidden)]
     pub fn wrap_pointer(c_treepath: *mut ffi::C_GtkTreePath) -> TreePath {
-        unsafe{
-            ::glib::ffi::g_object_ref(c_treepath as *mut ::libc::c_void);
-        }
-
         TreePath {
             pointer: c_treepath
         }
