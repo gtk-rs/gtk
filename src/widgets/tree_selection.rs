@@ -99,6 +99,7 @@ impl TreeSelection {
         if pointer.is_null() {
             None
         } else {
+            unsafe { ::glib_ffi::g_object_ref(pointer as *mut _); }
             Some(TreeSelection { pointer: pointer })
         }
     }
@@ -110,6 +111,7 @@ impl glib::traits::FFIGObject for TreeSelection {
     }
 
     fn wrap_object(object: *mut glib::ffi::C_GObject) -> TreeSelection {
+        unsafe { ::glib_ffi::g_object_ref(object as *mut _); }
         TreeSelection { pointer: object as *mut ffi::C_GtkTreeSelection }
     }
 }
