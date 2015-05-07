@@ -2,7 +2,7 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-use std::boxed::into_raw;
+//use std::boxed::into_raw;
 use std::mem::transmute;
 
 use glib::signal::connect;
@@ -35,6 +35,9 @@ impl ToGlib for Inhibit {
         self.0.to_glib()
     }
 }
+
+// libstd stability workaround
+unsafe fn into_raw<T>(b: Box<T>) -> *mut T { transmute(b) }
 
 pub trait WidgetSignals {
     fn connect_notify<F: Fn(Widget, &ParamSpec)>(&self, f: F) -> u64;
@@ -90,7 +93,7 @@ pub trait WidgetSignals {
 }
 
 mod widget {
-    use std::boxed::into_raw;
+    use super::into_raw;
     use std::mem::transmute;
     use libc::{c_int, c_uint};
     use glib::{ParamSpec};
@@ -670,7 +673,7 @@ pub trait ButtonSignals {
 }
 
 mod button {
-    use std::boxed::into_raw;
+    use super::into_raw;
     use std::mem::transmute;
     use glib::signal::connect;
     use traits::{FFIWidget, ButtonTrait};
@@ -705,7 +708,7 @@ pub trait ToolButtonSignals {
 }
 
 mod tool_button {
-    use std::boxed::into_raw;
+    use super::into_raw;
     use std::mem::transmute;
     use glib::signal::connect;
     use traits::{FFIWidget, ToolButtonTrait};
@@ -733,7 +736,7 @@ pub trait SpinButtonSignals {
 }
 
 mod spin_button {
-    use std::boxed::into_raw;
+    use super::into_raw;
     use std::mem::transmute;
     use glib::signal::connect;
     use traits::FFIWidget;
@@ -769,7 +772,7 @@ pub trait DialogSignals {
 }
 
 mod dialog {
-    use std::boxed::into_raw;
+    use super::into_raw;
     use std::mem::transmute;
     use libc::c_int;
     use glib::signal::connect;
@@ -826,7 +829,7 @@ pub trait TreeViewSignals {
 }
 
 mod tree_view {
-    use std::boxed::into_raw;
+    use super::into_raw;
     use std::mem::transmute;
     use glib::signal::connect;
     use glib::translate::*;
@@ -1001,7 +1004,7 @@ pub trait RangeSignals {
 }
 
 mod range {
-    use std::boxed::into_raw;
+    use super::into_raw;
     use std::mem::transmute;
     use libc::c_double;
     use glib::signal::connect;

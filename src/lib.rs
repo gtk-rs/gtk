@@ -34,8 +34,6 @@ Finally all the gtk widgets implement the trait self::traits::Widget.
 
 //#![macro_use]
 
-#![feature(alloc)]
-
 #![allow(dead_code)] // TODO: drop this
 #![allow(raw_pointer_derive)]
 
