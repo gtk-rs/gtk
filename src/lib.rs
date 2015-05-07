@@ -50,7 +50,6 @@ extern crate cairo;
 extern crate pango;
 
 pub use glib::ValuePublic;
-pub use glib::traits::Connect;
 
 // These are/should be inlined
 pub use self::rt::{
@@ -271,7 +270,6 @@ pub use ffi::enums::FileFilterFlags;
 pub use ffi::enums::AppInfoCreateFlags;
 pub use ffi::enums::SizeRequestMode;
 pub use ffi::enums::Align;
-pub use ffi::enums::GConnectFlags;
 pub use ffi::enums::BuilderError;
 pub use ffi::enums::PageOrientation;
 pub use ffi::enums::Unit;
@@ -351,6 +349,5 @@ mod rt;
 
 pub mod traits;
 pub mod signal;
-pub mod signals;
 pub mod widgets;
 pub mod types;

@@ -89,9 +89,6 @@ macro_rules! impl_TraitWidget(
         }
 
         impl ::GObjectTrait for $gtk_struct {}
-
-        // impl ::glib::traits::Connect for $gtk_struct {}
-
     );
 );
 
