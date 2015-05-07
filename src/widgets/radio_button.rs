@@ -22,7 +22,7 @@ impl RadioButton {
     pub fn new_with_label(label: &str) -> Option<RadioButton> {
         let tmp_pointer = unsafe {
             ffi::gtk_radio_button_new_with_label(ptr::null_mut(),
-                                                 label.borrow_to_glib().0)
+                                                 label.to_glib_none().0)
         };
         check_pointer!(tmp_pointer, RadioButton)
     }
@@ -30,7 +30,7 @@ impl RadioButton {
     pub fn new_with_mnemonic(mnemonic: &str) -> Option<RadioButton> {
         let tmp_pointer = unsafe {
             ffi::gtk_radio_button_new_with_mnemonic(ptr::null_mut(),
-                                                    mnemonic.borrow_to_glib().0)
+                                                    mnemonic.to_glib_none().0)
         };
         check_pointer!(tmp_pointer, RadioButton)
     }

@@ -37,7 +37,7 @@ impl MessageDialog {
 
     pub fn set_markup(&self, markup: &str) -> () {
         unsafe {
-            ffi::gtk_message_dialog_set_markup(GTK_MESSAGE_DIALOG(self.unwrap_widget()), markup.borrow_to_glib().0)
+            ffi::gtk_message_dialog_set_markup(GTK_MESSAGE_DIALOG(self.unwrap_widget()), markup.to_glib_none().0)
         }
     }
 

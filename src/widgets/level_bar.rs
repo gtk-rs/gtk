@@ -94,7 +94,7 @@ impl LevelBar {
         unsafe {
             ffi::gtk_level_bar_add_offset_value(
                 GTK_LEVELBAR(self.pointer),
-                name.borrow_to_glib().0,
+                name.to_glib_none().0,
                 value as c_double)
         }
     }
@@ -103,7 +103,7 @@ impl LevelBar {
         unsafe {
             ffi::gtk_level_bar_remove_offset_value(
                 GTK_LEVELBAR(self.pointer),
-                name.borrow_to_glib().0);
+                name.to_glib_none().0);
         }
     }
 
@@ -114,7 +114,7 @@ impl LevelBar {
             let res = to_bool(
                 ffi::gtk_level_bar_get_offset_value(
                     GTK_LEVELBAR(self.pointer),
-                    name.borrow_to_glib().0,
+                    name.to_glib_none().0,
                     &mut value));
 
             if res {

@@ -18,14 +18,14 @@ impl CheckButton {
 
     pub fn new_with_label(label: &str) -> Option<CheckButton> {
         let tmp_pointer = unsafe {
-            ffi::gtk_check_button_new_with_label(label.borrow_to_glib().0)
+            ffi::gtk_check_button_new_with_label(label.to_glib_none().0)
         };
         check_pointer!(tmp_pointer, CheckButton)
     }
 
     pub fn new_with_mnemonic(mnemonic: &str) -> Option<CheckButton> {
         let tmp_pointer = unsafe {
-            ffi::gtk_check_button_new_with_mnemonic(mnemonic.borrow_to_glib().0)
+            ffi::gtk_check_button_new_with_mnemonic(mnemonic.to_glib_none().0)
         };
         check_pointer!(tmp_pointer, CheckButton)
     }

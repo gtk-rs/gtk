@@ -3,7 +3,7 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 use libc::{c_int, c_float, c_double};
-use glib::translate::{FromGlibPtr, ToGlibPtr};
+use glib::translate::{from_glib_none, from_glib_full, ToGlibPtr};
 
 use {EntryIconPosition, ImageType, InputPurpose, InputHints};
 use cast::GTK_ENTRY;
@@ -25,14 +25,13 @@ pub trait EntryTrait: ::WidgetTrait {
 
     fn set_text(&self, text: &str) {
         unsafe {
-            ffi::gtk_entry_set_text(GTK_ENTRY(self.unwrap_widget()), text.borrow_to_glib().0)
+            ffi::gtk_entry_set_text(GTK_ENTRY(self.unwrap_widget()), text.to_glib_none().0)
         }
     }
 
     fn get_text(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
-                ffi::gtk_entry_get_text(GTK_ENTRY(self.unwrap_widget())))
+            from_glib_none(ffi::gtk_entry_get_text(GTK_ENTRY(self.unwrap_widget())))
         }
     }
 
@@ -112,14 +111,13 @@ pub trait EntryTrait: ::WidgetTrait {
 
     fn set_placeholder(&self, text: &str) -> () {
         unsafe {
-            ffi::gtk_entry_set_placeholder_text(GTK_ENTRY(self.unwrap_widget()), text.borrow_to_glib().0)
+            ffi::gtk_entry_set_placeholder_text(GTK_ENTRY(self.unwrap_widget()), text.to_glib_none().0)
         }
     }
 
     fn placeholder(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
-                ffi::gtk_entry_get_placeholder_text(GTK_ENTRY(self.unwrap_widget())))
+            from_glib_none(ffi::gtk_entry_get_placeholder_text(GTK_ENTRY(self.unwrap_widget())))
         }
     }
 
@@ -213,13 +211,13 @@ pub trait EntryTrait: ::WidgetTrait {
 
     fn set_icon_from_stock(&self, icon_pos: EntryIconPosition, stock_id: &str) -> () {
         unsafe {
-            ffi::gtk_entry_set_icon_from_stock(GTK_ENTRY(self.unwrap_widget()), icon_pos, stock_id.borrow_to_glib().0);
+            ffi::gtk_entry_set_icon_from_stock(GTK_ENTRY(self.unwrap_widget()), icon_pos, stock_id.to_glib_none().0);
         }
     }
 
     fn set_icon_from_icon_name(&self, icon_pos: EntryIconPosition, icon_name: &str) -> () {
         unsafe {
-            ffi::gtk_entry_set_icon_from_icon_name(GTK_ENTRY(self.unwrap_widget()), icon_pos, icon_name.borrow_to_glib().0)
+            ffi::gtk_entry_set_icon_from_icon_name(GTK_ENTRY(self.unwrap_widget()), icon_pos, icon_name.to_glib_none().0)
         }
     }
 
@@ -231,15 +229,13 @@ pub trait EntryTrait: ::WidgetTrait {
 
     fn get_icon_stock(&self, icon_pos: EntryIconPosition) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
-                ffi::gtk_entry_get_icon_stock(GTK_ENTRY(self.unwrap_widget()), icon_pos))
+            from_glib_none(ffi::gtk_entry_get_icon_stock(GTK_ENTRY(self.unwrap_widget()), icon_pos))
         }
     }
 
     fn get_icon_name(&self, icon_pos: EntryIconPosition) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
-                ffi::gtk_entry_get_icon_name(GTK_ENTRY(self.unwrap_widget()), icon_pos))
+            from_glib_none(ffi::gtk_entry_get_icon_name(GTK_ENTRY(self.unwrap_widget()), icon_pos))
         }
     }
 
@@ -267,13 +263,13 @@ pub trait EntryTrait: ::WidgetTrait {
 
     fn set_icon_tooltip_text(&self, icon_pos: EntryIconPosition, tooltip: &str) -> () {
         unsafe {
-            ffi::gtk_entry_set_icon_tooltip_text(GTK_ENTRY(self.unwrap_widget()), icon_pos, tooltip.borrow_to_glib().0)
+            ffi::gtk_entry_set_icon_tooltip_text(GTK_ENTRY(self.unwrap_widget()), icon_pos, tooltip.to_glib_none().0)
         }
     }
 
     fn get_icon_tooltip_text(&self, icon_pos: EntryIconPosition) -> Option<String> {
         unsafe {
-            FromGlibPtr::take(
+            from_glib_full(
                 ffi::gtk_entry_get_icon_tooltip_text(GTK_ENTRY(self.unwrap_widget()),
                                                      icon_pos))
         }
@@ -281,13 +277,13 @@ pub trait EntryTrait: ::WidgetTrait {
 
     fn set_icon_tooltip_markup(&self, icon_pos: EntryIconPosition, tooltip: &str) -> () {
         unsafe {
-            ffi::gtk_entry_set_icon_tooltip_markup(GTK_ENTRY(self.unwrap_widget()), icon_pos, tooltip.borrow_to_glib().0)
+            ffi::gtk_entry_set_icon_tooltip_markup(GTK_ENTRY(self.unwrap_widget()), icon_pos, tooltip.to_glib_none().0)
         }
     }
 
     fn get_icon_tooltip_markup(&self, icon_pos: EntryIconPosition) -> Option<String> {
         unsafe {
-            FromGlibPtr::take(
+            from_glib_full(
                 ffi::gtk_entry_get_icon_tooltip_markup(GTK_ENTRY(self.unwrap_widget()),
                                                        icon_pos))
         }

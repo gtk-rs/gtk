@@ -7,7 +7,7 @@
 use ffi;
 use cast::GTK_NOTEBOOK;
 use FFIWidget;
-use glib::translate::{FromGlibPtr, ToGlibPtr};
+use glib::translate::{from_glib_none, ToGlibPtr};
 use glib::{to_bool, to_gboolean};
 
 /// GtkNotebook — A tabbed notebook container
@@ -86,14 +86,13 @@ impl NoteBook {
     pub fn set_group_name(&self, group_name: &str) {
         unsafe {
             ffi::gtk_notebook_set_group_name(GTK_NOTEBOOK(self.pointer),
-                                             group_name.borrow_to_glib().0)
+                                             group_name.to_glib_none().0)
         }
     }
 
     pub fn get_group_name(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
-                ffi::gtk_notebook_get_group_name(GTK_NOTEBOOK(self.pointer)))
+            from_glib_none(ffi::gtk_notebook_get_group_name(GTK_NOTEBOOK(self.pointer)))
         }
     }
 
@@ -244,13 +243,13 @@ impl NoteBook {
         unsafe {
             ffi::gtk_notebook_set_tab_label_text(GTK_NOTEBOOK(self.pointer),
                                                  child.unwrap_widget(),
-                                                 tab_text.borrow_to_glib().0)
+                                                 tab_text.to_glib_none().0)
         }
     }
 
     pub fn get_tab_label_text<T: ::WidgetTrait>(&self, child: &T) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
+            from_glib_none(
                 ffi::gtk_notebook_get_tab_label_text(GTK_NOTEBOOK(self.pointer),
                                                      child.unwrap_widget()))
         }
@@ -282,13 +281,13 @@ impl NoteBook {
         unsafe {
             ffi::gtk_notebook_set_menu_label_text(GTK_NOTEBOOK(self.pointer),
                                                   child.unwrap_widget(),
-                                                  tab_text.borrow_to_glib().0)
+                                                  tab_text.to_glib_none().0)
         }
     }
 
     pub fn get_menu_label_text<T: ::WidgetTrait>(&self, child: &T) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
+            from_glib_none(
                 ffi::gtk_notebook_get_menu_label_text(GTK_NOTEBOOK(self.pointer),
                                                               child.unwrap_widget()))
         }

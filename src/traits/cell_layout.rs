@@ -61,7 +61,7 @@ pub trait CellLayoutTrait: ::WidgetTrait {
             ffi::gtk_cell_layout_add_attribute(
                 GTK_CELL_LAYOUT(self.unwrap_widget()),
                 GTK_CELL_RENDERER(cell.unwrap_widget()),
-                attribute.borrow_to_glib().0,
+                attribute.to_glib_none().0,
                 column)
             }
     }

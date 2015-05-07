@@ -30,7 +30,7 @@ impl Builder {
     #[cfg(feature = "gtk_3_10")]
     pub fn new_from_file(file_name: &str) -> Option<Builder> {
         let tmp = unsafe {
-            ffi::gtk_builder_new_from_file(file_name.borrow_to_glib().0)
+            ffi::gtk_builder_new_from_file(file_name.to_glib_none().0)
         };
 
         if tmp.is_null() {
@@ -45,7 +45,7 @@ impl Builder {
     #[cfg(feature = "gtk_3_10")]
     pub fn new_from_resource(resource_path: &str) -> Option<Builder> {
         let tmp = unsafe {
-            ffi::gtk_builder_new_from_resource(resource_path.borrow_to_glib().0)
+            ffi::gtk_builder_new_from_resource(resource_path.to_glib_none().0)
         };
 
         if tmp.is_null() {
@@ -76,7 +76,7 @@ impl Builder {
 
     pub fn get_object<T: GObjectTrait>(&self, name: &str) -> Option<T> {
         let tmp = unsafe {
-            ffi::gtk_builder_get_object(self.pointer, name.borrow_to_glib().0)
+            ffi::gtk_builder_get_object(self.pointer, name.to_glib_none().0)
         };
 
         if tmp.is_null() {

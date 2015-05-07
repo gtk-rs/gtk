@@ -4,7 +4,7 @@
 
 use std::slice;
 use ffi;
-use glib::translate::{FromGlibPtr, ToGlibPtr};
+use glib::translate::{from_glib_full, ToGlibPtr};
 
 pub struct TreePath {
     pointer:   *mut ffi::C_GtkTreePath
@@ -25,7 +25,7 @@ impl TreePath {
 
     pub fn new_from_string(path: &str) -> Option<TreePath> {
         let tmp = unsafe {
-            ffi::gtk_tree_path_new_from_string(path.borrow_to_glib().0)
+            ffi::gtk_tree_path_new_from_string(path.to_glib_none().0)
         };
 
         if tmp.is_null() {
@@ -65,8 +65,7 @@ impl TreePath {
     #[allow(unused_variables)]
     pub fn to_string(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::take(
-                ffi::gtk_tree_path_to_string(self.pointer))
+            from_glib_full(ffi::gtk_tree_path_to_string(self.pointer))
         }
     }
 

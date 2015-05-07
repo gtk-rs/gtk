@@ -22,14 +22,14 @@ impl ToggleButton {
 
     pub fn new_with_label(label: &str) -> Option<ToggleButton> {
         let tmp_pointer = unsafe {
-            ffi::gtk_toggle_button_new_with_label(label.borrow_to_glib().0)
+            ffi::gtk_toggle_button_new_with_label(label.to_glib_none().0)
         };
         check_pointer!(tmp_pointer, ToggleButton)
     }
 
     pub fn new_with_mnemonic(mnemonic: &str) -> Option<ToggleButton> {
         let tmp_pointer = unsafe {
-            ffi::gtk_toggle_button_new_with_mnemonic(mnemonic.borrow_to_glib().0)
+            ffi::gtk_toggle_button_new_with_mnemonic(mnemonic.to_glib_none().0)
         };
         check_pointer!(tmp_pointer, ToggleButton)
     }

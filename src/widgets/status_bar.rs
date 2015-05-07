@@ -22,7 +22,7 @@ impl StatusBar {
         unsafe {
             ffi::gtk_statusbar_push(GTK_STATUSBAR(self.pointer),
                                     context_id,
-                                    text.borrow_to_glib().0)
+                                    text.to_glib_none().0)
         }
     }
 

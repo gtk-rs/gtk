@@ -6,7 +6,7 @@
 
 use cast::GTK_APP_CHOOSER_WIDGET;
 use ffi;
-use glib::translate::{FromGlibPtr, ToGlibPtr};
+use glib::translate::{from_glib_none, ToGlibPtr};
 use glib::{to_bool, to_gboolean};
 
 struct_Widget!(AppChooserWidget);
@@ -14,7 +14,7 @@ struct_Widget!(AppChooserWidget);
 impl AppChooserWidget {
     pub fn new(content_type: &str) -> Option<AppChooserWidget> {
         let tmp_pointer = unsafe {
-            ffi::gtk_app_chooser_widget_new(content_type.borrow_to_glib().0)
+            ffi::gtk_app_chooser_widget_new(content_type.to_glib_none().0)
         };
         check_pointer!(tmp_pointer, AppChooserWidget)
     }
@@ -71,13 +71,13 @@ impl AppChooserWidget {
 
     pub fn set_default_text(&self, text: &str) {
         unsafe {
-            ffi::gtk_app_chooser_widget_set_default_text(GTK_APP_CHOOSER_WIDGET(self.pointer), text.borrow_to_glib().0)
+            ffi::gtk_app_chooser_widget_set_default_text(GTK_APP_CHOOSER_WIDGET(self.pointer), text.to_glib_none().0)
         }
     }
 
     pub fn get_default_text(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
+            from_glib_none(
                 ffi::gtk_app_chooser_widget_get_default_text(GTK_APP_CHOOSER_WIDGET(self.pointer)))
         }
     }

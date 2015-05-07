@@ -2,7 +2,7 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-use glib::translate::{FromGlibPtr, ToGlibPtr};
+use glib::translate::{from_glib_none, ToGlibPtr};
 use cast::GTK_TOOLBUTTON;
 use ffi;
 use glib::{to_bool, to_gboolean};
@@ -10,40 +10,40 @@ use glib::{to_bool, to_gboolean};
 pub trait ToolButtonTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait + ::ToolItemTrait {
     fn set_label(&self, label: &str) -> () {
         unsafe {
-            ffi::gtk_tool_button_set_label(GTK_TOOLBUTTON(self.unwrap_widget()), label.borrow_to_glib().0)
+            ffi::gtk_tool_button_set_label(GTK_TOOLBUTTON(self.unwrap_widget()), label.to_glib_none().0)
         }
     }
 
     fn set_stock_id(&self, stock_id: &str) -> () {
         unsafe {
-            ffi::gtk_tool_button_set_stock_id(GTK_TOOLBUTTON(self.unwrap_widget()), stock_id.borrow_to_glib().0)
+            ffi::gtk_tool_button_set_stock_id(GTK_TOOLBUTTON(self.unwrap_widget()), stock_id.to_glib_none().0)
         }
     }
 
     fn set_icon_name(&self, icon_name: &str) -> () {
         unsafe {
             ffi::gtk_tool_button_set_icon_name(GTK_TOOLBUTTON(self.unwrap_widget()),
-                                               icon_name.borrow_to_glib().0);
+                                               icon_name.to_glib_none().0);
         }
     }
 
     fn get_label(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
+            from_glib_none(
                 ffi::gtk_tool_button_get_label(GTK_TOOLBUTTON(self.unwrap_widget())))
         }
     }
 
     fn get_stock_id(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
+            from_glib_none(
                 ffi::gtk_tool_button_get_stock_id(GTK_TOOLBUTTON(self.unwrap_widget())))
         }
     }
 
     fn get_icon_name(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
+            from_glib_none(
                 ffi::gtk_tool_button_get_icon_name(GTK_TOOLBUTTON(self.unwrap_widget())))
         }
     }

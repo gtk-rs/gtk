@@ -18,7 +18,7 @@ impl CheckMenuItem {
 
     pub fn new_with_label(label: &str) -> Option<CheckMenuItem> {
         let tmp_pointer = unsafe {
-            ffi::gtk_check_menu_item_new_with_label(label.borrow_to_glib().0)
+            ffi::gtk_check_menu_item_new_with_label(label.to_glib_none().0)
         };
         check_pointer!(tmp_pointer, CheckMenuItem)
     }
@@ -26,7 +26,7 @@ impl CheckMenuItem {
     pub fn new_with_mnemonic(mnemonic: &str) -> Option<CheckMenuItem> {
         let tmp_pointer = unsafe {
             ffi::gtk_check_menu_item_new_with_mnemonic(
-                    mnemonic.borrow_to_glib().0)
+                    mnemonic.to_glib_none().0)
         };
         check_pointer!(tmp_pointer, CheckMenuItem)
     }

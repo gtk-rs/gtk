@@ -5,7 +5,7 @@
 use libc::{c_char, c_int};
 use cast::GTK_EDITABLE;
 use ffi;
-use glib::translate::{FromGlibPtr};
+use glib::translate::{from_glib_none};
 use glib::{to_bool, to_gboolean};
 
 pub trait EditableTrait: ::WidgetTrait {
@@ -47,7 +47,7 @@ pub trait EditableTrait: ::WidgetTrait {
 
     fn get_chars(&self, start_pos: i32, end_pos: i32) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
+            from_glib_none(
                 ffi::gtk_editable_get_chars(GTK_EDITABLE(self.unwrap_widget()), start_pos, end_pos))
         }
     }

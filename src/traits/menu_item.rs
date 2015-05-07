@@ -4,7 +4,7 @@
 
 //! The widget used for item in menus
 
-use glib::translate::{FromGlibPtr, ToGlibPtr};
+use glib::translate::{from_glib_none, ToGlibPtr};
 use ffi;
 use cast::GTK_MENU_ITEM;
 use glib::{to_bool, to_gboolean};
@@ -44,13 +44,13 @@ pub trait MenuItemTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait {
 
     fn set_accel_path(&self, accel_path: &str) {
         unsafe {
-            ffi::gtk_menu_item_set_accel_path(GTK_MENU_ITEM(self.unwrap_widget()), accel_path.borrow_to_glib().0)
+            ffi::gtk_menu_item_set_accel_path(GTK_MENU_ITEM(self.unwrap_widget()), accel_path.to_glib_none().0)
         }
     }
 
     fn get_accel_path(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
+            from_glib_none(
                 ffi::gtk_menu_item_get_accel_path(GTK_MENU_ITEM(self.unwrap_widget())))
         }
     }
@@ -58,13 +58,13 @@ pub trait MenuItemTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait {
     fn set_label(&self, label: &str) {
         unsafe {
             ffi::gtk_menu_item_set_label(GTK_MENU_ITEM(self.unwrap_widget()),
-                                         label.borrow_to_glib().0)
+                                         label.to_glib_none().0)
         }
     }
 
     fn get_label(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
+            from_glib_none(
                 ffi::gtk_menu_item_get_label(GTK_MENU_ITEM(self.unwrap_widget())))
         }
     }

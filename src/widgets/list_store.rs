@@ -28,7 +28,7 @@ impl ListStore {
 
     pub fn set_string(&self, iter: &TreeIter, column: i32, text: &str) {
         unsafe {
-            ffi::gtk_list_store_set(self.pointer, iter.unwrap_pointer(), column, text.borrow_to_glib().0, -1)
+            ffi::gtk_list_store_set(self.pointer, iter.unwrap_pointer(), column, text.to_glib_none().0, -1)
         }
     }
 

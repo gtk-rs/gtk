@@ -2,7 +2,7 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-use glib::translate::{FromGlibPtr, ToGlibPtr};
+use glib::translate::{from_glib_none, ToGlibPtr};
 use ffi;
 use glib::to_gboolean;
 use cast::GTK_WINDOW;
@@ -10,7 +10,7 @@ use cast::GTK_WINDOW;
 pub trait WindowTrait : ::WidgetTrait {
     fn set_title(&self, title: &str) -> () {
         unsafe {
-            ffi::gtk_window_set_title(GTK_WINDOW(self.unwrap_widget()), title.borrow_to_glib().0);
+            ffi::gtk_window_set_title(GTK_WINDOW(self.unwrap_widget()), title.to_glib_none().0);
         }
     }
 
@@ -22,8 +22,7 @@ pub trait WindowTrait : ::WidgetTrait {
 
     fn get_title(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
-                ffi::gtk_window_get_title(GTK_WINDOW(self.unwrap_widget())))
+            from_glib_none(ffi::gtk_window_get_title(GTK_WINDOW(self.unwrap_widget())))
         }
     }
 

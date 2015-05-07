@@ -2,7 +2,7 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-use glib::translate::{FromGlibPtr, FromGlibPtrContainer, ToGlibPtr};
+use glib::translate::{from_glib_none, FromGlibPtrContainer, ToGlibPtr};
 use cast::{GTK_RECENT_CHOOSER};
 use ffi;
 use glib::{to_bool, to_gboolean};
@@ -77,7 +77,7 @@ pub trait RecentChooserTrait: ::WidgetTrait + FFIWidget {
 
     fn get_current_uri(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
+            from_glib_none(
                 ffi::gtk_recent_chooser_get_current_uri(GTK_RECENT_CHOOSER(self.unwrap_widget())))
         }
     }
@@ -94,7 +94,7 @@ pub trait RecentChooserTrait: ::WidgetTrait + FFIWidget {
 
     fn unselect_uri(&self, uri: &str) -> bool {
         unsafe {
-            to_bool(ffi::gtk_recent_chooser_unselect_uri(GTK_RECENT_CHOOSER(self.unwrap_widget()), uri.borrow_to_glib().0))
+            to_bool(ffi::gtk_recent_chooser_unselect_uri(GTK_RECENT_CHOOSER(self.unwrap_widget()), uri.to_glib_none().0))
         }
     }
 
@@ -128,7 +128,7 @@ pub trait RecentChooserTrait: ::WidgetTrait + FFIWidget {
             let ptr = ffi::gtk_recent_chooser_get_uris(
                 GTK_RECENT_CHOOSER(self.unwrap_widget()),
                 &mut length) as *const *const c_char;
-            FromGlibPtrContainer::borrow_num(ptr, length as usize)
+            Vec::from_glib_none_num(ptr, length as usize)
         }
     }
 

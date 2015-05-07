@@ -7,7 +7,7 @@
 use glib;
 use ffi;
 use cast;
-use glib::translate::{FromGlibPtr, ToGlibPtr};
+use glib::translate::{from_glib_none, ToGlibPtr};
 use glib::{to_bool, to_gboolean};
 
 pub struct TreeViewColumn {
@@ -131,14 +131,13 @@ impl TreeViewColumn {
     pub fn set_title(&self, title: &str) {
         unsafe {
             ffi::gtk_tree_view_column_set_title(self.pointer,
-                                                title.borrow_to_glib().0);
+                                                title.to_glib_none().0);
         }
     }
 
     pub fn get_title(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
-                ffi::gtk_tree_view_column_get_title(self.pointer))
+            from_glib_none(ffi::gtk_tree_view_column_get_title(self.pointer))
         }
     }
 
@@ -267,7 +266,7 @@ impl TreeViewColumn {
             ffi::gtk_tree_view_column_add_attribute(
                 self.pointer,
                 cast::GTK_CELL_RENDERER(cell.unwrap_widget()),
-                attribute.borrow_to_glib().0,
+                attribute.to_glib_none().0,
                 column)
         }
 }

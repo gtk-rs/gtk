@@ -23,7 +23,7 @@ impl RecentChooserDialog {
             ::FFIWidget::wrap_widget(
                 buttons.invoke2(
                     ffi::gtk_recent_chooser_dialog_new,
-                    title.borrow_to_glib().0,
+                    title.to_glib_none().0,
                     parent))
         }
     }
@@ -39,7 +39,7 @@ impl RecentChooserDialog {
             ::FFIWidget::wrap_widget(
                 buttons.invoke3(
                     ffi::gtk_recent_chooser_dialog_new_for_manager,
-                    title.borrow_to_glib().0,
+                    title.to_glib_none().0,
                     parent,
                     GTK_RECENT_MANAGER(manager.unwrap_widget())))
         }

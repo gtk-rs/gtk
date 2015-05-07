@@ -21,21 +21,21 @@ impl MenuToolButton {
                 None    => ptr::null_mut(),
             };
 
-            ffi::gtk_menu_tool_button_new(icon_widget_ptr, label.borrow_to_glib().0)
+            ffi::gtk_menu_tool_button_new(icon_widget_ptr, label.to_glib_none().0)
         };
         check_pointer!(tmp_pointer, MenuToolButton)
     }
 
     pub fn new_from_stock(stock_id: &str) -> Option<MenuToolButton> {
         let tmp_pointer = unsafe {
-            ffi::gtk_menu_tool_button_new_from_stock(stock_id.borrow_to_glib().0)
+            ffi::gtk_menu_tool_button_new_from_stock(stock_id.to_glib_none().0)
         };
         check_pointer!(tmp_pointer, MenuToolButton)
     }
 
     pub fn set_arrow_tooltip_text(&self, text: &str) -> () {
         unsafe {
-            ffi::gtk_menu_tool_button_set_arrow_tooltip_text(GTK_MENUTOOLBUTTON(self.pointer), text.borrow_to_glib().0)
+            ffi::gtk_menu_tool_button_set_arrow_tooltip_text(GTK_MENUTOOLBUTTON(self.pointer), text.to_glib_none().0)
         }
     }
 
@@ -43,7 +43,7 @@ impl MenuToolButton {
         unsafe {
             ffi::gtk_menu_tool_button_set_arrow_tooltip_markup(
                 GTK_MENUTOOLBUTTON(self.pointer),
-                markup.borrow_to_glib().0)
+                markup.to_glib_none().0)
         }
     }
 }

@@ -4,7 +4,7 @@
 
 //! A button to launch a font chooser dialog
 
-use glib::translate::{FromGlibPtr, ToGlibPtr};
+use glib::translate::{from_glib_none, ToGlibPtr};
 use ffi;
 use glib::{to_bool, to_gboolean};
 use cast::GTK_FONTBUTTON;
@@ -24,19 +24,18 @@ impl FontButton {
 
     pub fn new_with_font(font_name: &str) -> Option<FontButton> {
         let tmp_pointer = unsafe {
-            ffi::gtk_font_button_new_with_font(font_name.borrow_to_glib().0)
+            ffi::gtk_font_button_new_with_font(font_name.to_glib_none().0)
         };
         check_pointer!(tmp_pointer, FontButton)
     }
 
     pub fn set_font_name(&self, font_name: &str) -> bool {
-        unsafe { to_bool(ffi::gtk_font_button_set_font_name(GTK_FONTBUTTON(self.pointer), font_name.borrow_to_glib().0)) }
+        unsafe { to_bool(ffi::gtk_font_button_set_font_name(GTK_FONTBUTTON(self.pointer), font_name.to_glib_none().0)) }
     }
 
     pub fn get_font_name(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
-                ffi::gtk_font_button_get_font_name(GTK_FONTBUTTON(self.pointer)))
+            from_glib_none(ffi::gtk_font_button_get_font_name(GTK_FONTBUTTON(self.pointer)))
         }
     }
 
@@ -74,14 +73,13 @@ impl FontButton {
 
     pub fn set_title(&self, title: &str) -> () {
         unsafe {
-            ffi::gtk_font_button_set_title(GTK_FONTBUTTON(self.pointer), title.borrow_to_glib().0);
+            ffi::gtk_font_button_set_title(GTK_FONTBUTTON(self.pointer), title.to_glib_none().0);
         }
     }
 
     pub fn get_title(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
-                ffi::gtk_font_button_get_title(GTK_FONTBUTTON(self.pointer)))
+            from_glib_none(ffi::gtk_font_button_get_title(GTK_FONTBUTTON(self.pointer)))
         }
     }
 }

@@ -37,7 +37,7 @@ impl RecentManager {
             to_bool(
                 ffi::gtk_recent_manager_add_item(
                     GTK_RECENT_MANAGER(self.unwrap_widget()),
-                    uri.borrow_to_glib().0))
+                    uri.to_glib_none().0))
         }
     }
 
@@ -46,8 +46,8 @@ impl RecentManager {
             to_bool(
                 ffi::gtk_recent_manager_add_full(
                     GTK_RECENT_MANAGER(self.unwrap_widget()),
-                    uri.borrow_to_glib().0,
-                    recent_data.borrow_to_glib().0))
+                    uri.to_glib_none().0,
+                    recent_data.to_glib_none().0))
         }
     }
 
@@ -56,7 +56,7 @@ impl RecentManager {
             to_bool(
                 ffi::gtk_recent_manager_has_item(
                     GTK_RECENT_MANAGER(self.unwrap_widget()),
-                    uri.borrow_to_glib().0))
+                    uri.to_glib_none().0))
         }
     }
 

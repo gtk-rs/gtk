@@ -3,7 +3,7 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 use libc::{c_int, c_double};
-use glib::translate::{FromGlibPtr, ToGlibPtr};
+use glib::translate::{from_glib_none, ToGlibPtr};
 
 use ffi;
 use glib::{to_bool, to_gboolean};
@@ -13,13 +13,13 @@ use cast::GTK_LABEL;
 pub trait LabelTrait: ::WidgetTrait {
     fn set_label(&self, text: &str) -> () {
         unsafe {
-            ffi::gtk_label_set_label(GTK_LABEL(self.unwrap_widget()), text.borrow_to_glib().0)
+            ffi::gtk_label_set_label(GTK_LABEL(self.unwrap_widget()), text.to_glib_none().0)
         }
     }
 
     fn set_text(&self, text: &str) -> () {
         unsafe {
-	    ffi::gtk_label_set_text(GTK_LABEL(self.unwrap_widget()), text.borrow_to_glib().0)
+	    ffi::gtk_label_set_text(GTK_LABEL(self.unwrap_widget()), text.to_glib_none().0)
         }
     }
 
@@ -31,25 +31,25 @@ pub trait LabelTrait: ::WidgetTrait {
 
     fn set_markup(&self, text: &str) -> () {
         unsafe {
-            ffi::gtk_label_set_markup(GTK_LABEL(self.unwrap_widget()), text.borrow_to_glib().0)
+            ffi::gtk_label_set_markup(GTK_LABEL(self.unwrap_widget()), text.to_glib_none().0)
         }
     }
 
     fn set_markup_with_mnemonic(&self, text: &str) -> () {
         unsafe {
-            ffi::gtk_label_set_markup_with_mnemonic(GTK_LABEL(self.unwrap_widget()), text.borrow_to_glib().0)
+            ffi::gtk_label_set_markup_with_mnemonic(GTK_LABEL(self.unwrap_widget()), text.to_glib_none().0)
         }
     }
 
     fn set_pattern(&self, text: &str) -> () {
         unsafe {
-            ffi::gtk_label_set_pattern(GTK_LABEL(self.unwrap_widget()), text.borrow_to_glib().0)
+            ffi::gtk_label_set_pattern(GTK_LABEL(self.unwrap_widget()), text.to_glib_none().0)
         }
     }
 
     fn set_text_with_mnemonic(&self, text: &str) -> () {
         unsafe {
-            ffi::gtk_label_set_text_with_mnemonic(GTK_LABEL(self.unwrap_widget()), text.borrow_to_glib().0);
+            ffi::gtk_label_set_text_with_mnemonic(GTK_LABEL(self.unwrap_widget()), text.to_glib_none().0);
         }
     }
 
@@ -144,22 +144,19 @@ pub trait LabelTrait: ::WidgetTrait {
 
     fn get_text(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
-                ffi::gtk_label_get_text(GTK_LABEL(self.unwrap_widget())))
+            from_glib_none(ffi::gtk_label_get_text(GTK_LABEL(self.unwrap_widget())))
         }
     }
 
     fn get_label(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
-                ffi::gtk_label_get_label(GTK_LABEL(self.unwrap_widget())))
+            from_glib_none(ffi::gtk_label_get_label(GTK_LABEL(self.unwrap_widget())))
         }
     }
 
     fn get_current_uri(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
-                ffi::gtk_label_get_current_uri(GTK_LABEL(self.unwrap_widget())))
+            from_glib_none(ffi::gtk_label_get_current_uri(GTK_LABEL(self.unwrap_widget())))
         }
     }
 

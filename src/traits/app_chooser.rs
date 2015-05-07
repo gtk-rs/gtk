@@ -2,7 +2,7 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-use glib::translate::{FromGlibPtr};
+use glib::translate::{from_glib_none};
 use ffi;
 use cast::GTK_APP_CHOOSER;
 
@@ -19,7 +19,7 @@ pub trait AppChooserTrait: ::WidgetTrait {
 
     fn get_content_info(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
+            from_glib_none(
                 ffi::gtk_app_chooser_get_content_type(GTK_APP_CHOOSER(self.unwrap_widget())))
         }
     }

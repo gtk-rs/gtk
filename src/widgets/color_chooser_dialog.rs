@@ -12,7 +12,7 @@ struct_Widget!(ColorChooserDialog);
 impl ColorChooserDialog {
     pub fn new(title: &str, parent: Option<&::Window>) -> Option<ColorChooserDialog> {
         let tmp_pointer = unsafe {
-            ffi::gtk_color_chooser_dialog_new(title.borrow_to_glib().0,
+            ffi::gtk_color_chooser_dialog_new(title.to_glib_none().0,
                 match parent {
                     Some(ref p) => GTK_WINDOW(p.unwrap_widget()),
                     None => ::std::ptr::null_mut()

@@ -5,7 +5,7 @@
 use libc::c_uint;
 use std::ptr;
 use ffi;
-use glib::translate::{FromGlibPtr};
+use glib::translate::{from_glib_none};
 use glib::{to_bool, to_gboolean};
 
 pub fn init() {
@@ -78,7 +78,7 @@ pub fn get_interface_age() -> u32 {
 
 pub fn check_version(required_major: u32, required_minor: u32, required_micro: u32) -> Option<String> {
     unsafe {
-        FromGlibPtr::borrow(
+        from_glib_none(
             ffi::gtk_check_version(required_major as c_uint, required_minor as c_uint, required_micro as c_uint))
     }
  }
