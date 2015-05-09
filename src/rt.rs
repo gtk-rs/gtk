@@ -46,7 +46,6 @@ pub fn events_pending() -> bool {
     }
 }
 
-
 pub fn get_major_version() -> u32 {
     unsafe {
         ffi::gtk_get_major_version() as u32
