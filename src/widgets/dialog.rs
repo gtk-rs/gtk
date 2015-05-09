@@ -19,7 +19,7 @@ impl Dialog {
         }
     }
 
-    pub fn with_buttons<T: DialogButtons>(title: &str, parent: Option<::Window>,
+    pub fn with_buttons<T: DialogButtons>(title: &str, parent: Option<&::Window>,
                                           flags: ::DialogFlags, buttons: T) -> Dialog {
         unsafe {
             let parent = match parent {

@@ -10,7 +10,7 @@ use glib::translate::ToGlibPtr;
 struct_Widget!(MessageDialog);
 
 impl MessageDialog {
-    pub fn new(parent: Option<::Window>, flags: ::DialogFlags, _type: ::MessageType, buttons: ::ButtonsType) -> Option<MessageDialog> {
+    pub fn new(parent: Option<&::Window>, flags: ::DialogFlags, _type: ::MessageType, buttons: ::ButtonsType) -> Option<MessageDialog> {
         let tmp_pointer = unsafe { ffi::gtk_message_dialog_new(match parent {
                 Some(ref p) => GTK_WINDOW(p.unwrap_widget()),
                 None => ::std::ptr::null_mut()
@@ -24,7 +24,7 @@ impl MessageDialog {
         }
     }
 
-    pub fn new_with_markup(parent: Option<::Window>, flags: ::DialogFlags, _type: ::MessageType, buttons: ::ButtonsType, markup: &str) -> Option<MessageDialog> {
+    pub fn new_with_markup(parent: Option<&::Window>, flags: ::DialogFlags, _type: ::MessageType, buttons: ::ButtonsType, markup: &str) -> Option<MessageDialog> {
         //gtk_message_dialog_new_with_markup
         match MessageDialog::new(parent, flags, _type, buttons) {
             Some(m) => {

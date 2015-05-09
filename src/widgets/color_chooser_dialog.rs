@@ -10,7 +10,7 @@ use glib::translate::ToGlibPtr;
 struct_Widget!(ColorChooserDialog);
 
 impl ColorChooserDialog {
-    pub fn new(title: &str, parent: Option<::Window>) -> Option<ColorChooserDialog> {
+    pub fn new(title: &str, parent: Option<&::Window>) -> Option<ColorChooserDialog> {
         let tmp_pointer = unsafe {
             ffi::gtk_color_chooser_dialog_new(title.borrow_to_glib().0,
                 match parent {

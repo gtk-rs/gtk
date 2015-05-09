@@ -11,7 +11,7 @@ use DialogButtons;
 struct_Widget!(FileChooserDialog);
 
 impl FileChooserDialog {
-    pub fn new<T: DialogButtons>(title: &str, parent: Option<::Window>,
+    pub fn new<T: DialogButtons>(title: &str, parent: Option<&::Window>,
                                  action: ::FileChooserAction, buttons: T) -> FileChooserDialog {
         unsafe {
             let parent = match parent {
