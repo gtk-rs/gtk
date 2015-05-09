@@ -65,6 +65,10 @@ impl Image {
     pub fn get_pixbuf(&self) -> Option<Pixbuf> {
         unsafe { from_glib_none(ffi::gtk_image_get_pixbuf(GTK_IMAGE(self.unwrap_widget()))) }
     }
+
+    pub fn get_animation(&self) -> Option<PixbufAnimation> {
+        unsafe { from_glib_none(ffi::gtk_image_get_animation(GTK_IMAGE(self.unwrap_widget()))) }
+    }
 }
 
 impl_drop!(Image);
