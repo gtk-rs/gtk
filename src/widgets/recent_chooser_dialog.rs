@@ -12,7 +12,7 @@ use cast::{GTK_WINDOW, GTK_RECENT_MANAGER};
 struct_Widget!(RecentChooserDialog);
 
 impl RecentChooserDialog {
-    pub fn new<T: DialogButtons>(title: &str, parent: Option<::Window>,
+    pub fn new<T: DialogButtons>(title: &str, parent: Option<&::Window>,
                                  buttons: T) -> RecentChooserDialog {
         let parent = match parent {
             Some(ref p) => GTK_WINDOW(p.unwrap_widget()),
@@ -28,7 +28,7 @@ impl RecentChooserDialog {
         }
     }
 
-    pub fn new_for_manager<T: DialogButtons>(title: &str, parent: Option<::Window>,
+    pub fn new_for_manager<T: DialogButtons>(title: &str, parent: Option<&::Window>,
                                              manager: &::RecentManager, buttons: T) -> RecentChooserDialog {
         let parent = match parent {
             Some(ref p) => GTK_WINDOW(p.unwrap_widget()),

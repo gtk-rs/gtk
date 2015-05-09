@@ -10,7 +10,7 @@ use glib::translate::ToGlibPtr;
 struct_Widget!(FontChooserDialog);
 
 impl FontChooserDialog {
-    pub fn new(title: &str, parent: Option<::Window>) -> Option<FontChooserDialog> {
+    pub fn new(title: &str, parent: Option<&::Window>) -> Option<FontChooserDialog> {
         let tmp = unsafe {
             ffi::gtk_font_chooser_dialog_new(title.borrow_to_glib().0,
                 match parent {
