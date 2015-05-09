@@ -6,7 +6,7 @@
 
 use ffi;
 use glib::{to_bool, to_gboolean};
-use glib::translate::{FromGlibPtr};
+use glib::translate::{from_glib_none};
 
 pub struct TextIter {
     pointer: *mut ffi::C_GtkTextIter
@@ -76,8 +76,7 @@ impl TextIter {
 
     pub fn get_slice(&self, end: &TextIter) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
-                ffi::gtk_text_iter_get_slice(
+            from_glib_none(ffi::gtk_text_iter_get_slice(
                     self.pointer as *const ffi::C_GtkTextIter,
                     end.pointer as *const ffi::C_GtkTextIter))
         }
@@ -85,8 +84,7 @@ impl TextIter {
 
     pub fn get_text(&self, end: &TextIter) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
-                ffi::gtk_text_iter_get_text(
+            from_glib_none(ffi::gtk_text_iter_get_text(
                     self.pointer as *const ffi::C_GtkTextIter,
                     end.pointer as *const ffi::C_GtkTextIter))
         }
@@ -94,8 +92,7 @@ impl TextIter {
 
     pub fn get_visible_slice(&self, end: &TextIter) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
-                ffi::gtk_text_iter_get_visible_slice(
+            from_glib_none(ffi::gtk_text_iter_get_visible_slice(
                     self.pointer as *const ffi::C_GtkTextIter,
                     end.pointer as *const ffi::C_GtkTextIter))
         }
@@ -103,8 +100,7 @@ impl TextIter {
 
     pub fn get_visible_text(&self, end: &TextIter) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
-                ffi::gtk_text_iter_get_visible_text(
+            from_glib_none(ffi::gtk_text_iter_get_visible_text(
                     self.pointer as *const ffi::C_GtkTextIter,
                     end.pointer as *const ffi::C_GtkTextIter))
         }

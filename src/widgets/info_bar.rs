@@ -31,7 +31,7 @@ impl InfoBar {
 
     pub fn add_button(&self, button_text: &str, response_id: i32) -> ::Button {
         let button = unsafe {
-            ffi::gtk_info_bar_add_button(GTK_INFOBAR(self.pointer), button_text.borrow_to_glib().0, response_id as c_int)
+            ffi::gtk_info_bar_add_button(GTK_INFOBAR(self.pointer), button_text.to_glib_none().0, response_id as c_int)
         };
         ::FFIWidget::wrap_widget(button)
     }

@@ -2120,6 +2120,7 @@ extern "C" {
     pub fn gtk_image_set_from_icon_name(image: *mut C_GtkImage, icon_name: *const c_char,
         size: enums::IconSize);
     pub fn gtk_image_get_pixbuf(image: *mut C_GtkImage) -> *mut gdk_ffi::C_GdkPixbuf;
+    pub fn gtk_image_get_animation(image: *mut C_GtkImage) -> *mut gdk_ffi::C_GdkPixbufAnimation;
 
     //=========================================================================
     // GtkProgressBar

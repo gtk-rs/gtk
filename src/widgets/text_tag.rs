@@ -14,7 +14,7 @@ pub struct TextTag {
 impl TextTag {
     pub fn new(name: &str) -> Option<TextTag> {
         let tmp_pointer = unsafe {
-            ffi::gtk_text_tag_new(name.borrow_to_glib().0)
+            ffi::gtk_text_tag_new(name.to_glib_none().0)
         };
 
         if tmp_pointer.is_null() {

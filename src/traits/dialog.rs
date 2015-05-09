@@ -108,7 +108,7 @@ macro_rules! impl_dialog_buttons {
                     f: unsafe extern "C" fn(A0, *const c_char, ...) -> R,
                     a0: A0) -> R {
                 // reverse the order
-                let tmp_0 = [$(self[$n].0.borrow_to_glib()),+];
+                let tmp_0 = [$(self[$n].0.to_glib_none()),+];
                 let tmp_1 = [$(self[$n].1),+];
                 f(a0, $(tmp_0[$n].0, tmp_1[$n],)+ ptr::null::<c_char>())
             }
@@ -117,7 +117,7 @@ macro_rules! impl_dialog_buttons {
                     &self,
                     f: unsafe extern "C" fn(A0, A1, *const c_char, ...) -> R,
                     a0: A0, a1: A1) -> R {
-                let tmp_0 = [$(self[$n].0.borrow_to_glib()),+];
+                let tmp_0 = [$(self[$n].0.to_glib_none()),+];
                 let tmp_1 = [$(self[$n].1),+];
                 f(a0, a1, $(tmp_0[$n].0, tmp_1[$n],)+ ptr::null::<c_char>())
             }
@@ -126,7 +126,7 @@ macro_rules! impl_dialog_buttons {
                     &self,
                     f: unsafe extern "C" fn(A0, A1, A2, *const c_char, ...) -> R,
                     a0: A0, a1: A1, a2: A2) -> R {
-                let tmp_0 = [$(self[$n].0.borrow_to_glib()),+];
+                let tmp_0 = [$(self[$n].0.to_glib_none()),+];
                 let tmp_1 = [$(self[$n].1),+];
                 f(a0, a1, a2, $(tmp_0[$n].0, tmp_1[$n],)+ ptr::null::<c_char>())
             }
@@ -137,7 +137,7 @@ macro_rules! impl_dialog_buttons {
                     &self,
                     f: unsafe extern "C" fn(A0, *const c_char, ...) -> R,
                     a0: A0) -> R {
-                let tmp_0 = [$(self[$n].0.borrow_to_glib()),+];
+                let tmp_0 = [$(self[$n].0.to_glib_none()),+];
                 let tmp_1 = [$(self[$n].1 as i32),+];
                 f(a0, $(tmp_0[$n].0, tmp_1[$n],)+ ptr::null::<c_char>())
             }
@@ -146,7 +146,7 @@ macro_rules! impl_dialog_buttons {
                     &self,
                     f: unsafe extern "C" fn(A0, A1, *const c_char, ...) -> R,
                     a0: A0, a1: A1) -> R {
-                let tmp_0 = [$(self[$n].0.borrow_to_glib()),+];
+                let tmp_0 = [$(self[$n].0.to_glib_none()),+];
                 let tmp_1 = [$(self[$n].1 as i32),+];
                 f(a0, a1, $(tmp_0[$n].0, tmp_1[$n],)+ ptr::null::<c_char>())
             }
@@ -155,7 +155,7 @@ macro_rules! impl_dialog_buttons {
                     &self,
                     f: unsafe extern "C" fn(A0, A1, A2, *const c_char, ...) -> R,
                     a0: A0, a1: A1, a2: A2) -> R {
-                let tmp_0 = [$(self[$n].0.borrow_to_glib()),+];
+                let tmp_0 = [$(self[$n].0.to_glib_none()),+];
                 let tmp_1 = [$(self[$n].1 as i32),+];
                 f(a0, a1, a2, $(tmp_0[$n].0, tmp_1[$n],)+ ptr::null::<c_char>())
             }
@@ -176,7 +176,7 @@ pub trait DialogTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait + ::WindowT
 
     fn add_button(&self, button_text: &str, response_id: i32) -> Option<::Button> {
         let tmp_pointer = unsafe {
-            ffi::gtk_dialog_add_button(GTK_DIALOG(self.unwrap_widget()), button_text.borrow_to_glib().0, response_id)
+            ffi::gtk_dialog_add_button(GTK_DIALOG(self.unwrap_widget()), button_text.to_glib_none().0, response_id)
         };
 
         if tmp_pointer.is_null() {

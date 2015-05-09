@@ -21,14 +21,14 @@ struct_Widget!(Label);
 impl Label {
     pub fn new(text: &str) -> Option<Label> {
         let tmp_pointer = unsafe {
-            ffi::gtk_label_new(text.borrow_to_glib().0)
+            ffi::gtk_label_new(text.to_glib_none().0)
         };
         check_pointer!(tmp_pointer, Label)
     }
 
     pub fn new_with_mnemonic(text: &str) -> Option<Label> {
         let tmp_pointer = unsafe {
-            ffi::gtk_label_new_with_mnemonic(text.borrow_to_glib().0)
+            ffi::gtk_label_new_with_mnemonic(text.to_glib_none().0)
         };
         check_pointer!(tmp_pointer, Label)
     }

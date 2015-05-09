@@ -2,7 +2,7 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-use glib::translate::{FromGlibPtr, ToGlibPtr};
+use glib::translate::{from_glib_none, ToGlibPtr};
 use ffi;
 use glib::{to_bool, to_gboolean};
 use cast::GTK_COMBO_BOX;
@@ -66,14 +66,14 @@ pub trait ComboBoxTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait {
 
     fn get_active_id(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
+            from_glib_none(
                 ffi::gtk_combo_box_get_active_id(GTK_COMBO_BOX(self.unwrap_widget())))
         }
     }
 
     fn set_active_id(&self, active_id: &str) -> bool {
         unsafe {
-            to_bool(ffi::gtk_combo_box_set_active_id(GTK_COMBO_BOX(self.unwrap_widget()), active_id.borrow_to_glib().0))
+            to_bool(ffi::gtk_combo_box_set_active_id(GTK_COMBO_BOX(self.unwrap_widget()), active_id.to_glib_none().0))
         }
     }
 

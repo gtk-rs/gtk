@@ -7,7 +7,7 @@ use ffi;
 use glib::{to_bool, to_gboolean};
 use FFIWidget;
 use cast::GTK_ABOUT_DIALOG;
-use glib::translate::{FromGlibPtr, FromGlibPtrContainer, ToGlibPtr};
+use glib::translate::{from_glib_none, FromGlibPtrContainer, ToGlibPtr, IterToGlibPtr};
 
 struct_Widget!(AboutDialog);
 
@@ -24,66 +24,66 @@ impl AboutDialog {
 
     pub fn get_program_name(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
+            from_glib_none(
                 ffi::gtk_about_dialog_get_program_name(GTK_ABOUT_DIALOG(self.unwrap_widget())))
         }
     }
 
     pub fn set_program_name(&self, name: &str) -> () {
         unsafe {
-            ffi::gtk_about_dialog_set_program_name(GTK_ABOUT_DIALOG(self.unwrap_widget()), name.borrow_to_glib().0)
+            ffi::gtk_about_dialog_set_program_name(GTK_ABOUT_DIALOG(self.unwrap_widget()), name.to_glib_none().0)
         };
     }
 
     pub fn get_version(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
+            from_glib_none(
                 ffi::gtk_about_dialog_get_version(GTK_ABOUT_DIALOG(self.unwrap_widget())))
         }
     }
 
     pub fn set_version(&self, version: &str) -> () {
         unsafe {
-            ffi::gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(self.unwrap_widget()), version.borrow_to_glib().0)
+            ffi::gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(self.unwrap_widget()), version.to_glib_none().0)
         };
     }
 
     pub fn get_copyright(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
+            from_glib_none(
                 ffi::gtk_about_dialog_get_copyright(GTK_ABOUT_DIALOG(self.unwrap_widget())))
         }
     }
 
     pub fn set_copyright(&self, copyright: &str) -> () {
         unsafe {
-            ffi::gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(self.unwrap_widget()), copyright.borrow_to_glib().0)
+            ffi::gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(self.unwrap_widget()), copyright.to_glib_none().0)
         };
     }
 
     pub fn get_comments(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
+            from_glib_none(
                 ffi::gtk_about_dialog_get_comments(GTK_ABOUT_DIALOG(self.unwrap_widget())))
         }
     }
 
     pub fn set_comments(&self, comments: &str) -> () {
         unsafe {
-            ffi::gtk_about_dialog_set_comments(GTK_ABOUT_DIALOG(self.unwrap_widget()), comments.borrow_to_glib().0)
+            ffi::gtk_about_dialog_set_comments(GTK_ABOUT_DIALOG(self.unwrap_widget()), comments.to_glib_none().0)
         };
     }
 
     pub fn get_license(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
+            from_glib_none(
                 ffi::gtk_about_dialog_get_license(GTK_ABOUT_DIALOG(self.unwrap_widget())))
         }
     }
 
     pub fn set_license(&self, license: &str) -> () {
         unsafe {
-            ffi::gtk_about_dialog_set_license(GTK_ABOUT_DIALOG(self.unwrap_widget()), license.borrow_to_glib().0)
+            ffi::gtk_about_dialog_set_license(GTK_ABOUT_DIALOG(self.unwrap_widget()), license.to_glib_none().0)
         };
     }
 
@@ -105,33 +105,33 @@ impl AboutDialog {
 
     pub fn get_website(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
+            from_glib_none(
                 ffi::gtk_about_dialog_get_website(GTK_ABOUT_DIALOG(self.unwrap_widget())))
         }
     }
 
     pub fn set_website(&self, website: &str) -> () {
         unsafe {
-            ffi::gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(self.unwrap_widget()), website.borrow_to_glib().0)
+            ffi::gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(self.unwrap_widget()), website.to_glib_none().0)
         };
     }
 
     pub fn get_website_label(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
+            from_glib_none(
                 ffi::gtk_about_dialog_get_website_label(GTK_ABOUT_DIALOG(self.unwrap_widget())))
         }
     }
 
     pub fn set_website_label(&self, website_label: &str) -> () {
         unsafe {
-            ffi::gtk_about_dialog_set_website_label(GTK_ABOUT_DIALOG(self.unwrap_widget()), website_label.borrow_to_glib().0)
+            ffi::gtk_about_dialog_set_website_label(GTK_ABOUT_DIALOG(self.unwrap_widget()), website_label.to_glib_none().0)
         };
     }
 
     pub fn get_authors(&self) -> Vec<String> {
         unsafe {
-            FromGlibPtrContainer::borrow(
+            Vec::from_glib_none(
                 ffi::gtk_about_dialog_get_authors(GTK_ABOUT_DIALOG(self.unwrap_widget())))
         }
     }
@@ -141,13 +141,13 @@ impl AboutDialog {
         unsafe {
             ffi::gtk_about_dialog_set_authors(
                 GTK_ABOUT_DIALOG(self.unwrap_widget()),
-                authors.borrow_to_glib().0);
+                authors.to_glib_none().0);
         }
     }
 
     pub fn get_artists(&self) -> Vec<String> {
         unsafe {
-            FromGlibPtrContainer::borrow(
+            Vec::from_glib_none(
                 ffi::gtk_about_dialog_get_artists(GTK_ABOUT_DIALOG(self.unwrap_widget())))
         }
     }
@@ -157,13 +157,13 @@ impl AboutDialog {
         unsafe {
             ffi::gtk_about_dialog_set_artists(
                 GTK_ABOUT_DIALOG(self.unwrap_widget()),
-                artists.borrow_to_glib().0);
+                artists.to_glib_none().0);
         }
     }
 
     pub fn get_documenters(&self) -> Vec<String> {
         unsafe {
-            FromGlibPtrContainer::borrow(
+            Vec::from_glib_none(
                 ffi::gtk_about_dialog_get_documenters(GTK_ABOUT_DIALOG(self.unwrap_widget())))
         }
     }
@@ -173,13 +173,13 @@ impl AboutDialog {
         unsafe {
             ffi::gtk_about_dialog_set_documenters(
                 GTK_ABOUT_DIALOG(self.unwrap_widget()),
-                documenters.borrow_to_glib().0);
+                documenters.to_glib_none().0);
         }
     }
 
     pub fn get_translator_credits(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
+            from_glib_none(
                 ffi::gtk_about_dialog_get_translator_credits(GTK_ABOUT_DIALOG(self.unwrap_widget())))
         }
     }
@@ -188,7 +188,7 @@ impl AboutDialog {
         unsafe {
             ffi::gtk_about_dialog_set_translator_credits(
                 GTK_ABOUT_DIALOG(self.unwrap_widget()),
-                translator_credits.borrow_to_glib().0)
+                translator_credits.to_glib_none().0)
         };
     }
 
@@ -208,7 +208,7 @@ impl AboutDialog {
 
     pub fn get_logo_icon_name(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
+            from_glib_none(
                 ffi::gtk_about_dialog_get_logo_icon_name(GTK_ABOUT_DIALOG(self.unwrap_widget())))
         }
     }
@@ -217,7 +217,7 @@ impl AboutDialog {
         unsafe {
             ffi::gtk_about_dialog_set_logo_icon_name(
                 GTK_ABOUT_DIALOG(self.unwrap_widget()),
-                logo_icon_name.borrow_to_glib().0)
+                logo_icon_name.to_glib_none().0)
         };
     }
 
@@ -226,8 +226,8 @@ impl AboutDialog {
         unsafe {
             ffi::gtk_about_dialog_add_credit_section(
                 GTK_ABOUT_DIALOG(self.unwrap_widget()),
-                section_name.borrow_to_glib().0,
-                people.borrow_to_glib().0)
+                section_name.to_glib_none().0,
+                people.to_glib_none().0)
         }
     }
 

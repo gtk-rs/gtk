@@ -8,7 +8,7 @@
 
 use ffi;
 use cast::GTK_STACK;
-use glib::translate::{FromGlibPtr, ToGlibPtr};
+use glib::translate::{from_glib_none, ToGlibPtr};
 use glib::{to_bool, to_gboolean};
 
 /// GtkStack — A stacking container
@@ -24,7 +24,7 @@ impl Stack {
         unsafe {
             ffi::gtk_stack_add_named(GTK_STACK(self.pointer),
                                      child.unwrap_widget(),
-                                     name.borrow_to_glib().0)
+                                     name.to_glib_none().0)
         }
     }
 
@@ -32,8 +32,8 @@ impl Stack {
         unsafe {
             ffi::gtk_stack_add_titled(GTK_STACK(self.pointer),
                                       child.unwrap_widget(),
-                                      name.borrow_to_glib().0,
-                                      title.borrow_to_glib().0)
+                                      name.to_glib_none().0,
+                                      title.to_glib_none().0)
         }
     }
 
@@ -56,21 +56,20 @@ impl Stack {
     pub fn set_visible_child_name(&self, name: &str) {
         unsafe {
             ffi::gtk_stack_set_visible_child_name(GTK_STACK(self.pointer),
-                                                  name.borrow_to_glib().0)
+                                                  name.to_glib_none().0)
         }
     }
 
     pub fn get_visible_child_name(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
-                ffi::gtk_stack_get_visible_child_name(GTK_STACK(self.pointer)))
+            from_glib_none(ffi::gtk_stack_get_visible_child_name(GTK_STACK(self.pointer)))
         }
     }
 
     pub fn set_visible_child_full(&self, name: &str, transition: ::StackTransitionType) {
         unsafe {
             ffi::gtk_stack_set_visible_child_full(GTK_STACK(self.pointer),
-                                                  name.borrow_to_glib().0,
+                                                  name.to_glib_none().0,
                                                   transition)
         }
     }

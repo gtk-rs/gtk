@@ -3,7 +3,7 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 use ffi;
-use glib::translate::{FromGlibPtr, ToGlibPtr};
+use glib::translate::{from_glib_none, ToGlibPtr};
 use glib::{to_bool, to_gboolean};
 use FFIWidget;
 use cast::{GTK_PAPER_SIZE};
@@ -15,7 +15,7 @@ struct_Widget!(PaperSize);
 impl PaperSize {
     pub fn new(name: &str) -> Option<PaperSize> {
         let tmp_pointer = unsafe {
-            ffi::gtk_paper_size_new(name.borrow_to_glib().0)
+            ffi::gtk_paper_size_new(name.to_glib_none().0)
         };
 
         if tmp_pointer.is_null() {
@@ -27,8 +27,8 @@ impl PaperSize {
 
     pub fn new_from_ppd(ppd_name: &str, ppd_display_name: &str, width: f64, height: f64) -> Option<PaperSize> {
         let tmp_pointer = unsafe {
-            ffi::gtk_paper_size_new_from_ppd(ppd_name.borrow_to_glib().0,
-                                             ppd_display_name.borrow_to_glib().0,
+            ffi::gtk_paper_size_new_from_ppd(ppd_name.to_glib_none().0,
+                                             ppd_display_name.to_glib_none().0,
                                              width, height)
         };
 
@@ -41,8 +41,8 @@ impl PaperSize {
 
     pub fn new_custom(name: &str, display_name: &str, width: f64, height: f64, unit: ::Unit) -> Option<PaperSize> {
         let tmp_pointer = unsafe {
-            ffi::gtk_paper_size_new_custom(name.borrow_to_glib().0,
-                                           display_name.borrow_to_glib().0,
+            ffi::gtk_paper_size_new_custom(name.to_glib_none().0,
+                                           display_name.to_glib_none().0,
                                            width, height, unit)
         };
 
@@ -86,21 +86,21 @@ impl PaperSize {
 
     pub fn get_name(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
+            from_glib_none(
                 ffi::gtk_paper_size_get_name(GTK_PAPER_SIZE(self.unwrap_widget())))
         }
     }
 
     pub fn get_display_name_name(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
+            from_glib_none(
                 ffi::gtk_paper_size_get_display_name(GTK_PAPER_SIZE(self.unwrap_widget())))
         }
     }
 
     pub fn get_ppd_name(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
+            from_glib_none(
                 ffi::gtk_paper_size_get_ppd_name(GTK_PAPER_SIZE(self.unwrap_widget())))
         }
     }
@@ -139,7 +139,7 @@ impl PaperSize {
 
     pub fn get_default() -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
+            from_glib_none(
                 ffi::gtk_paper_size_get_default())
         }
     }

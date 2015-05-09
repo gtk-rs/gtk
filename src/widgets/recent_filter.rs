@@ -23,13 +23,13 @@ impl RecentFilter {
 
     pub fn add_application(&self, application: &str) -> () {
         unsafe {
-            ffi::gtk_recent_filter_add_application(self.pointer, application.borrow_to_glib().0)
+            ffi::gtk_recent_filter_add_application(self.pointer, application.to_glib_none().0)
         }
     }
 
     pub fn add_group(&self, group: &str) -> () {
         unsafe {
-            ffi::gtk_recent_filter_add_group(self.pointer, group.borrow_to_glib().0)
+            ffi::gtk_recent_filter_add_group(self.pointer, group.to_glib_none().0)
         }
     }
 

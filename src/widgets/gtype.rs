@@ -14,14 +14,13 @@ pub mod g_type {
 
     pub fn name(_type: glib_ffi::GType) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
-                ffi::g_type_name(_type))
+            from_glib_none(ffi::g_type_name(_type))
         }
     }
 
     pub fn from_name(name: &str) -> glib_ffi::GType {
         unsafe {
-            ffi::g_type_from_name(name.borrow_to_glib().0)
+            ffi::g_type_from_name(name.to_glib_none().0)
         }
     }
 

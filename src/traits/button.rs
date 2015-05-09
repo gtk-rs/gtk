@@ -3,7 +3,7 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 use libc::c_float;
-use glib::translate::{FromGlibPtr, ToGlibPtr};
+use glib::translate::{from_glib_none, ToGlibPtr};
 
 use {ReliefStyle, PositionType};
 use cast::GTK_BUTTON;
@@ -55,14 +55,13 @@ pub trait ButtonTrait: ::WidgetTrait + ::ContainerTrait {
 
     fn get_label(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
-                ffi::gtk_button_get_label(GTK_BUTTON(self.unwrap_widget())))
+            from_glib_none(ffi::gtk_button_get_label(GTK_BUTTON(self.unwrap_widget())))
         }
     }
 
     fn set_label(&self, label: &str) -> () {
         unsafe {
-            ffi::gtk_button_set_label(GTK_BUTTON(self.unwrap_widget()), label.borrow_to_glib().0)
+            ffi::gtk_button_set_label(GTK_BUTTON(self.unwrap_widget()), label.to_glib_none().0)
         }
     }
 

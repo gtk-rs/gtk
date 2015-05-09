@@ -4,7 +4,7 @@
 
 use libc::c_float;
 
-use glib::translate::{FromGlibPtr, ToGlibPtr};
+use glib::translate::{from_glib_none, ToGlibPtr};
 use ShadowType;
 use cast::GTK_FRAME;
 use ffi;
@@ -13,7 +13,7 @@ pub trait FrameTrait: ::WidgetTrait + ::ContainerTrait {
     fn set_label(&self, label: Option<&str>) -> () {
         unsafe {
             ffi::gtk_frame_set_label(GTK_FRAME(self.unwrap_widget()),
-                                     label.borrow_to_glib().0);
+                                     label.to_glib_none().0);
         }
     }
 
@@ -46,8 +46,7 @@ pub trait FrameTrait: ::WidgetTrait + ::ContainerTrait {
 
     fn get_label(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
-                ffi::gtk_frame_get_label(GTK_FRAME(self.unwrap_widget())))
+            from_glib_none(ffi::gtk_frame_get_label(GTK_FRAME(self.unwrap_widget())))
         }
     }
 

@@ -31,14 +31,14 @@ impl Button {
 
     pub fn new_with_label(label: &str) -> Option<Button> {
         let tmp_pointer = unsafe {
-            ffi::gtk_button_new_with_label(label.borrow_to_glib().0)
+            ffi::gtk_button_new_with_label(label.to_glib_none().0)
         };
         check_pointer!(tmp_pointer, Button)
     }
 
     pub fn new_with_mnemonic(mnemonic: &str) -> Option<Button> {
         let tmp_pointer = unsafe {
-            ffi::gtk_button_new_with_mnemonic(mnemonic.borrow_to_glib().0)
+            ffi::gtk_button_new_with_mnemonic(mnemonic.to_glib_none().0)
         };
         check_pointer!(tmp_pointer, Button)
     }
@@ -46,14 +46,14 @@ impl Button {
     #[cfg(feature = "gtk_3_10")]
     pub fn new_from_icon_name(icon_name: &str, size: IconSize) -> Option<Button> {
         let tmp_pointer = unsafe {
-            ffi::gtk_button_new_from_icon_name(icon_name.borrow_to_glib().0, size)
+            ffi::gtk_button_new_from_icon_name(icon_name.to_glib_none().0, size)
         };
         check_pointer!(tmp_pointer, Button)
     }
 
     pub fn new_from_stock(stock_id: &str) -> Option<Button> {
         let tmp_pointer = unsafe {
-            ffi::gtk_button_new_from_stock(stock_id.borrow_to_glib().0)
+            ffi::gtk_button_new_from_stock(stock_id.to_glib_none().0)
         };
         check_pointer!(tmp_pointer, Button)
     }

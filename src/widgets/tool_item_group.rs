@@ -8,7 +8,7 @@ use ffi;
 use ToolItem;
 use FFIWidget;
 use cast::{GTK_TOOL_ITEM_GROUP, GTK_TOOL_ITEM};
-use glib::translate::{FromGlibPtr, ToGlibPtr};
+use glib::translate::{from_glib_none, ToGlibPtr};
 use glib::{to_bool, to_gboolean};
 
 struct_Widget!(ToolItemGroup);
@@ -16,7 +16,7 @@ struct_Widget!(ToolItemGroup);
 impl ToolItemGroup {
     pub fn new(label: &str) -> Option<ToolItemGroup> {
         let tmp_pointer = unsafe {
-            ffi::gtk_tool_item_group_new(label.borrow_to_glib().0)
+            ffi::gtk_tool_item_group_new(label.to_glib_none().0)
         };
         check_pointer!(tmp_pointer, ToolItemGroup)
     }
@@ -55,14 +55,14 @@ impl ToolItemGroup {
 
     pub fn get_label(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
+            from_glib_none(
                 ffi::gtk_tool_item_group_get_label(GTK_TOOL_ITEM_GROUP(self.unwrap_widget())))
         }
     }
 
     pub fn set_label(&self, label: &str) {
         unsafe {
-            ffi::gtk_tool_item_group_set_label(GTK_TOOL_ITEM_GROUP(self.unwrap_widget()), label.borrow_to_glib().0)
+            ffi::gtk_tool_item_group_set_label(GTK_TOOL_ITEM_GROUP(self.unwrap_widget()), label.to_glib_none().0)
         }
     }
 

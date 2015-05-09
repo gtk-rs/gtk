@@ -3,7 +3,7 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 use ffi;
-use glib::translate::{FromGlibPtr, ToGlibPtr};
+use glib::translate::{from_glib_none, ToGlibPtr};
 
 pub struct FileFilter {
     pointer : *mut ffi::C_GtkFileFilter
@@ -22,26 +22,25 @@ impl FileFilter {
 
     pub fn set_name(&self, name: &str) -> () {
         unsafe {
-            ffi::gtk_file_filter_set_name(self.pointer, name.borrow_to_glib().0)
+            ffi::gtk_file_filter_set_name(self.pointer, name.to_glib_none().0)
         };
     }
 
     pub fn get_name(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
-                ffi::gtk_file_filter_get_name(self.pointer))
+            from_glib_none(ffi::gtk_file_filter_get_name(self.pointer))
         }
     }
 
     pub fn add_mime_type(&self, mime_type: &str) -> () {
         unsafe {
-            ffi::gtk_file_filter_add_mime_type(self.pointer, mime_type.borrow_to_glib().0)
+            ffi::gtk_file_filter_add_mime_type(self.pointer, mime_type.to_glib_none().0)
         };
     }
 
     pub fn add_pattern(&self, pattern: &str) -> () {
         unsafe {
-            ffi::gtk_file_filter_add_pattern(self.pointer, pattern.borrow_to_glib().0)
+            ffi::gtk_file_filter_add_pattern(self.pointer, pattern.to_glib_none().0)
         };
     }
 

@@ -7,7 +7,7 @@
 use ffi;
 use TreeModel;
 use cast::GTK_ENTRY_COMPLETION;
-use glib::translate::{FromGlibPtr, ToGlibPtr};
+use glib::translate::{from_glib_none, ToGlibPtr};
 use glib_ffi;
 use libc::c_void;
 
@@ -62,10 +62,9 @@ impl EntryCompletion {
 
     pub fn compute_prefix(&self, key: &str) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
-                ffi::gtk_entry_completion_compute_prefix(
+            from_glib_none(ffi::gtk_entry_completion_compute_prefix(
                     GTK_ENTRY_COMPLETION(self.pointer),
-                    key.borrow_to_glib().0))
+                    key.to_glib_none().0))
         }
     }
 
@@ -75,7 +74,7 @@ impl EntryCompletion {
 
     pub fn get_completion_prefix(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
+            from_glib_none(
                 ffi::gtk_entry_completion_get_completion_prefix(GTK_ENTRY_COMPLETION(self.pointer)))
         }
     }
@@ -86,13 +85,13 @@ impl EntryCompletion {
 
     pub fn insert_action_text(&self, index_: i32, text: &str) {
         unsafe {
-            ffi::gtk_entry_completion_insert_action_text(GTK_ENTRY_COMPLETION(self.pointer), index_, text.borrow_to_glib().0)
+            ffi::gtk_entry_completion_insert_action_text(GTK_ENTRY_COMPLETION(self.pointer), index_, text.to_glib_none().0)
         }
     }
 
     pub fn insert_action_markup(&self, index_: i32, markup: &str) {
         unsafe {
-            ffi::gtk_entry_completion_insert_action_markup(GTK_ENTRY_COMPLETION(self.pointer), index_, markup.borrow_to_glib().0)
+            ffi::gtk_entry_completion_insert_action_markup(GTK_ENTRY_COMPLETION(self.pointer), index_, markup.to_glib_none().0)
         }
     }
 

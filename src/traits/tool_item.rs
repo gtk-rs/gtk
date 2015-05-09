@@ -60,13 +60,13 @@ pub trait ToolItemTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait {
     fn set_tooltip_text(&self, text: &str) -> () {
         unsafe {
             ffi::gtk_tool_item_set_tooltip_text(GTK_TOOLITEM(self.unwrap_widget()),
-                                                text.borrow_to_glib().0)
+                                                text.to_glib_none().0)
         }
     }
 
     fn set_tooltip_markup(&self, markup: &str) -> () {
         unsafe {
-            ffi::gtk_tool_item_set_tooltip_markup(GTK_TOOLITEM(self.unwrap_widget()), markup.borrow_to_glib().0)
+            ffi::gtk_tool_item_set_tooltip_markup(GTK_TOOLITEM(self.unwrap_widget()), markup.to_glib_none().0)
         }
     }
 

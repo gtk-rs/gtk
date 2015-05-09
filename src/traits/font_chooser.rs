@@ -3,7 +3,7 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 use libc::c_char;
-use glib::translate::{FromGlibPtr, ToGlibPtr};
+use glib::translate::{from_glib_none, ToGlibPtr};
 use cast::{GTK_FONT_CHOOSER};
 use ffi;
 use glib::{to_bool, to_gboolean};
@@ -16,7 +16,7 @@ pub trait FontChooserTrait: ::WidgetTrait {
 
     fn get_font(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
+            from_glib_none(
                 ffi::gtk_font_chooser_get_font(GTK_FONT_CHOOSER(self.unwrap_widget())))
         }
     }
@@ -25,20 +25,20 @@ pub trait FontChooserTrait: ::WidgetTrait {
         unsafe {
             ffi::gtk_font_chooser_set_font(
                 GTK_FONT_CHOOSER(self.unwrap_widget()),
-                font_name.borrow_to_glib().0 as *mut c_char)
+                font_name.to_glib_none().0 as *mut c_char)
         }
     }
 
     fn get_preview_text(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
+            from_glib_none(
                 ffi::gtk_font_chooser_get_preview_text(GTK_FONT_CHOOSER(self.unwrap_widget())))
         }
     }
 
     fn set_preview_text(&self, text: &str) {
         unsafe {
-            ffi::gtk_font_chooser_set_preview_text(GTK_FONT_CHOOSER(self.unwrap_widget()), text.borrow_to_glib().0)
+            ffi::gtk_font_chooser_set_preview_text(GTK_FONT_CHOOSER(self.unwrap_widget()), text.to_glib_none().0)
         }
     }
 

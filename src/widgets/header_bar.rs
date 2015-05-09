@@ -8,7 +8,7 @@
 
 use cast::{GTK_HEADER_BAR};
 use ffi;
-use glib::translate::{FromGlibPtr, ToGlibPtr};
+use glib::translate::{from_glib_none, ToGlibPtr};
 use glib::{to_bool, to_gboolean};
 
 /// GtkHeaderBar — A Box::new(with) a centered child
@@ -23,28 +23,26 @@ impl HeaderBar {
     pub fn set_title(&self, title: &str) {
         unsafe {
             ffi::gtk_header_bar_set_title(GTK_HEADER_BAR(self.pointer),
-                                          title.borrow_to_glib().0)
+                                          title.to_glib_none().0)
         }
     }
 
     pub fn get_title(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
-                ffi::gtk_header_bar_get_title(GTK_HEADER_BAR(self.pointer)))
+            from_glib_none(ffi::gtk_header_bar_get_title(GTK_HEADER_BAR(self.pointer)))
         }
     }
 
     pub fn set_subtitle(&self, subtitle: &str) {
         unsafe {
             ffi::gtk_header_bar_set_subtitle(GTK_HEADER_BAR(self.pointer),
-                                             subtitle.borrow_to_glib().0)
+                                             subtitle.to_glib_none().0)
         }
     }
 
     pub fn get_subtitle(&self) -> Option<String> {
         unsafe {
-            FromGlibPtr::borrow(
-                ffi::gtk_header_bar_get_title(GTK_HEADER_BAR(self.pointer)))
+            from_glib_none(ffi::gtk_header_bar_get_title(GTK_HEADER_BAR(self.pointer)))
         }
     }
 

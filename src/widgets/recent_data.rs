@@ -4,7 +4,7 @@
 
 use ffi;
 use libc::c_char;
-use glib::translate::{ToGlib, ToGlibPtr, Stash};
+use glib::translate::{ToGlib, ToGlibPtr, IterToGlibPtr, Stash, IterStash};
 
 pub struct RecentData {
     display_name: String,
@@ -16,19 +16,19 @@ pub struct RecentData {
     is_private: bool
 }
 
-impl <'a> ToGlibPtr<'a, *mut ffi::C_GtkRecentData> for RecentData {
+impl <'a> ToGlibPtr<'a, *mut ffi::C_GtkRecentData> for &'a RecentData {
     type Storage = (Box<ffi::C_GtkRecentData>,
                     [Stash<'a, *const c_char, String>; 5],
-                    Stash<'a, *mut *const c_char, Vec<String>>);
+                    IterStash<'a, *mut *const c_char, Vec<String>>);
 
-    fn borrow_to_glib(&'a self)
-        -> Stash<*mut ffi::C_GtkRecentData, RecentData> {
-        let display_name = self.display_name.borrow_to_glib();
-        let description = self.description.borrow_to_glib();
-        let mime_type = self.mime_type.borrow_to_glib();
-        let app_name = self.app_name.borrow_to_glib();
-        let app_exec = self.app_exec.borrow_to_glib();
-        let groups = self.groups.borrow_to_glib();
+    fn to_glib_none(&self)
+        -> Stash<'a, *mut ffi::C_GtkRecentData, &'a RecentData> {
+        let display_name = self.display_name.to_glib_none();
+        let description = self.description.to_glib_none();
+        let mime_type = self.mime_type.to_glib_none();
+        let app_name = self.app_name.to_glib_none();
+        let app_exec = self.app_exec.to_glib_none();
+        let groups = self.groups.to_glib_none();
 
         let mut data = Box::new(ffi::C_GtkRecentData {
             display_name: display_name.0 as *mut c_char,
@@ -41,6 +41,6 @@ impl <'a> ToGlibPtr<'a, *mut ffi::C_GtkRecentData> for RecentData {
         });
 
         Stash(&mut *data, (data, [display_name, description, mime_type,
-                                            app_name, app_exec], groups))
+                                  app_name, app_exec], groups))
     }
 }

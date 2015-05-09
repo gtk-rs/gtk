@@ -86,7 +86,7 @@ impl Scale {
 
     pub fn add_mark(&self, value: f64, position: PositionType, markup: &str) -> () {
         unsafe {
-            ffi::gtk_scale_add_mark(GTK_SCALE(self.pointer), value as c_double, position, markup.borrow_to_glib().0);
+            ffi::gtk_scale_add_mark(GTK_SCALE(self.pointer), value as c_double, position, markup.to_glib_none().0);
         }
     }
 

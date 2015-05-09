@@ -3,7 +3,7 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 use glib::{Value, Type};
-use glib::translate::{FromGlibPtr, ToGlibPtr, from_glib};
+use glib::translate::{from_glib_full, ToGlibPtr, from_glib};
 use ffi;
 use {TreeIter, TreePath};
 use libc::c_void;
@@ -34,7 +34,7 @@ impl TreeModel {
     }
 
     pub fn get_iter_from_string(&self, iter: &mut TreeIter, path_string: &str) -> bool {
-        match unsafe { ffi::gtk_tree_model_get_iter_from_string(self.pointer, iter.unwrap_pointer(), path_string.borrow_to_glib().0) } {
+        match unsafe { ffi::gtk_tree_model_get_iter_from_string(self.pointer, iter.unwrap_pointer(), path_string.to_glib_none().0) } {
                 0 => false,
                 _ => true
             }
@@ -129,7 +129,7 @@ impl TreeModel {
 
     pub fn get_string_from_iter(&self, iter: &TreeIter) -> Option<String> {
         unsafe {
-            FromGlibPtr::take(
+            from_glib_full(
                 ffi::gtk_tree_model_get_string_from_iter(self.pointer,
                                                          iter.unwrap_pointer()))
         }

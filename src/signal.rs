@@ -657,7 +657,7 @@ mod widget {
 
     extern "C" fn screen_trampoline(this: *mut C_GtkWidget, screen: *mut C_GdkScreen,
             f: &Box<Fn(Widget, Screen) + 'static>) {
-        f(FFIWidget::wrap_widget(this), Screen::wrap_pointer(screen));
+        unsafe { f(FFIWidget::wrap_widget(this), Screen::from_glib_none(screen)); }
     }
 
     extern "C" fn text_direction_trampoline(this: *mut C_GtkWidget, previous: TextDirection,

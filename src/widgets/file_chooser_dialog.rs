@@ -22,7 +22,7 @@ impl FileChooserDialog {
             ::FFIWidget::wrap_widget(
                 buttons.invoke3(
                     ffi::gtk_file_chooser_dialog_new,
-                    title.borrow_to_glib().0,
+                    title.to_glib_none().0,
                     parent,
                     action))
 

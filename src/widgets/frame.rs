@@ -13,7 +13,7 @@ struct_Widget!(Frame);
 impl Frame {
     pub fn new(label: Option<&str>) -> Option<Frame> {
         let tmp_pointer = unsafe {
-            ffi::gtk_frame_new(label.borrow_to_glib().0)
+            ffi::gtk_frame_new(label.to_glib_none().0)
         };
         check_pointer!(tmp_pointer, Frame)
     }

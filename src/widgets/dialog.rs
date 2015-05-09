@@ -28,7 +28,7 @@ impl Dialog {
             };
             ::FFIWidget::wrap_widget(
                 buttons.invoke3(ffi::gtk_dialog_new_with_buttons,
-                                title.borrow_to_glib().0,
+                                title.to_glib_none().0,
                                 parent,
                                 flags))
         }
