@@ -16,13 +16,13 @@ pub struct RecentData {
     is_private: bool
 }
 
-impl <'a> ToGlibPtr<'a, *mut ffi::C_GtkRecentData> for RecentData {
+impl <'a> ToGlibPtr<'a, *mut ffi::C_GtkRecentData> for &'a RecentData {
     type Storage = (Box<ffi::C_GtkRecentData>,
                     [Stash<'a, *const c_char, String>; 5],
                     IterStash<'a, *mut *const c_char, Vec<String>>);
 
-    fn to_glib_none(&'a self)
-        -> Stash<*mut ffi::C_GtkRecentData, RecentData> {
+    fn to_glib_none(&self)
+        -> Stash<'a, *mut ffi::C_GtkRecentData, &'a RecentData> {
         let display_name = self.display_name.to_glib_none();
         let description = self.description.to_glib_none();
         let mime_type = self.mime_type.to_glib_none();
