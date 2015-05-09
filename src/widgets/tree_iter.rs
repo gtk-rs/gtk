@@ -3,24 +3,31 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 use ffi;
+use std;
 
 pub struct TreeIter {
+    data: ffi::C_GtkTreeIter,
     pointer: *mut ffi::C_GtkTreeIter,
     is_owned: bool,
+    is_true_pointer: bool
 }
 
 impl TreeIter {
-    pub fn new() -> Option<TreeIter> {
-        let tmp_pointer = unsafe { ffi::gtk_tree_iter_copy(::std::mem::uninitialized()) };
+    pub fn new() -> TreeIter {
+        let mut t = TreeIter {
+            data: ffi::C_GtkTreeIter {
+                stamp: 0,
+                user_data: std::ptr::null_mut(),
+                user_data2: std::ptr::null_mut(),
+                user_data3: std::ptr::null_mut()
+            },
+            pointer: ::std::ptr::null_mut(),
+            is_owned: false,
+            is_true_pointer: false
+        };
 
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            Some(TreeIter {
-                pointer: tmp_pointer,
-                is_owned: true,
-            })
-        }
+        unsafe { t.pointer = std::mem::transmute(&mut t.data); }
+        t
     }
 
     pub fn copy(&self) -> Option<TreeIter> {
@@ -29,23 +36,35 @@ impl TreeIter {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(TreeIter {
-                pointer: tmp_pointer,
-                is_owned: true,
-            })
+            unsafe {
+                Some(TreeIter {
+                    data: std::mem::uninitialized(),
+                    pointer: tmp_pointer,
+                    is_owned: true,
+                    is_true_pointer: true
+                })
+            }
         }
     }
 
     #[doc(hidden)]
     pub fn unwrap_pointer(&self) -> *mut ffi::C_GtkTreeIter {
-        self.pointer
+        if self.is_true_pointer {
+            self.pointer
+        } else {
+            unsafe { std::mem::transmute(&self.data) }
+        }
     }
 
     #[doc(hidden)]
     pub fn wrap_pointer(c_treeiter: *mut ffi::C_GtkTreeIter) -> TreeIter {
-        TreeIter {
-            pointer: c_treeiter,
-            is_owned: false,
+        unsafe {
+            TreeIter {
+                data: std::mem::uninitialized(),
+                pointer: c_treeiter,
+                is_owned: false,
+                is_true_pointer: true
+            }
         }
     }
 }

@@ -211,7 +211,12 @@ pub struct C_GtkTreeStore;
 #[repr(C)]
 pub struct C_GtkTreePath;
 #[repr(C)]
-pub struct C_GtkTreeIter;
+pub struct C_GtkTreeIter {
+    pub stamp: c_int,
+    pub user_data: *mut c_void,
+    pub user_data2: *mut c_void,
+    pub user_data3: *mut c_void
+}
 #[repr(C)]
 pub struct C_GtkCellEditable;
 #[repr(C)]

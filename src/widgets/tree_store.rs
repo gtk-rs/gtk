@@ -7,7 +7,8 @@ use glib::translate::ToGlib;
 use ffi;
 use TreeIter;
 use glib::translate::ToGlibPtr;
-use glib_ffi::GType;
+use glib_ffi::{self, GType};
+use libc::c_void;
 
 pub struct TreeStore {
     pointer: *mut ffi::C_GtkTreeStore
@@ -102,7 +103,10 @@ impl TreeStore {
         if self.pointer.is_null() {
             None
         } else {
-            Some(::TreeModel::wrap_pointer(::cast::GTK_TREE_MODEL_FROM_TREE_STORE(self.pointer)))
+            let tmp = ::cast::GTK_TREE_MODEL_FROM_TREE_STORE(self.pointer);
+
+            unsafe { glib_ffi::g_object_ref(tmp as *mut c_void) };
+            Some(::TreeModel::wrap_pointer(tmp))
         }
     }
 
