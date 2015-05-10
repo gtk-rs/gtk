@@ -396,6 +396,18 @@ impl TreeView {
         };
     }
 
+    pub fn get_cursor(&self, path: Option<&mut ::TreePath>, focus_column: Option<&mut ::TreeViewColumn>) {
+        unsafe { ffi::gtk_tree_view_get_cursor(GTK_TREE_VIEW(self.pointer),
+            match path {
+                Some(p) => &mut p.unwrap_pointer(),
+                None => ::std::ptr::null_mut()
+            },
+            match focus_column {
+                Some(f) => &mut f.unwrap_pointer(),
+                None => ::std::ptr::null_mut()
+            }) }
+    }
+
     pub fn expand_row(&self, path: &TreePath, open_all: bool) -> bool {
         unsafe {
             to_bool(ffi::gtk_tree_view_expand_row(GTK_TREE_VIEW(self.pointer), path.unwrap_pointer(), to_gboolean(open_all)))
