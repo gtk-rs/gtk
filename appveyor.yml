@@ -1,0 +1,67 @@
+platform:
+  - x86
+  - x64
+environment:
+  matrix:
+    - RUST_VERSION: 1.0.0-beta.4
+      GTK: gnome
+    - RUST_VERSION: 1.0.0-beta.4
+      GTK: win64
+    #- RUST_VERSION: nightly
+      #GTK: gnome
+
+matrix:
+  #fast_finish: true
+  allow_failures:
+    - platform: x86
+      GTK: win64
+
+install:
+  - if "%PLATFORM%-%GTK%" == "x86-win64" ( exit 1 )
+  - if "%PLATFORM%" == "x86" SET RUST_PLATFORM=i686-pc-windows-gnu
+  - if "%PLATFORM%" == "x64" SET RUST_PLATFORM=x86_64-pc-windows-gnu
+  - if "%GTK%" == "win64" SET FEATURES=gtk_3_14
+  - if "%GTK%" == "win64" SET EXAMPLES_FEATURES=gtk_3_10
+  - ps: Start-FileDownload "https://static.rust-lang.org/dist/rust-$Env:RUST_VERSION-$Env:RUST_PLATFORM.exe" -FileName rust.exe
+  - cmd: rust.exe /VERYSILENT /NORESTART /COMPONENTS="rust,cargo" /DIR=C:\Rust
+  - ps: >-
+      if ($Env:PLATFORM -eq "x86") {
+        $Env:MINGW = "C:\mingw"
+      }
+      else {
+        Start-FileDownload "http://libgd.blob.core.windows.net/mingw/mingw-w64-dgn-x86_64-20141001.7z" -FileName mingw-w64.7z;
+        7z x -oC:\ mingw-w64.7z | Out-Null;
+        $Env:MINGW = "C:\mingw64"
+      }
+  - ps: >-
+      if (!(Test-Path -Path "C:\Deps\gtk")) {
+        if ($Env:GTK -eq "gnome") {
+          if ($Env:PLATFORM -eq "x86") {
+            Start-FileDownload "http://win32builder.gnome.org/gtk+-bundle_3.6.4-20130921_win32.zip" -FileName gtk.zip
+          }
+          else {
+            Start-FileDownload "http://win32builder.gnome.org/gtk+-bundle_3.6.4-20131201_win64.zip" -FileName gtk.zip
+          }
+        }
+        elseif ($Env:GTK -eq "win64" -and $Env:PLATFORM -eq "x64") {
+            Start-FileDownload "http://lvserver.ugent.be/gtk-win64/sdk/gtk2-gtk3-sdk-2.24.25-3.14.7-2015-01-27-ts-win64.zip" -FileName gtk.zip
+        }
+        7z x -oC:\Deps\gtk gtk.zip | Out-Null
+      }
+  - cmd: SET PATH=%MINGW%\bin;C:\Deps\gtk\bin;C:\Rust\bin;%PATH%
+
+cache:
+  C:\Deps
+
+build_script:
+  - rustc -V
+  - "echo Features: %FEATURES%"
+  - cargo build --features "%FEATURES%"
+  - mkdir .cargo
+  - echo paths = ["."] > .cargo\config
+  - git clone https://github.com/rust-gnome/examples _examples
+  - cd _examples
+  - "echo Features: %EXAMPLES_FEATURES%"
+  - cargo build --features "%EXAMPLES_FEATURES%"
+
+test: false
