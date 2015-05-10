@@ -2935,7 +2935,7 @@ extern "C" {
     // pub fn gtk_tree_view_get_dest_row_at_pos           (tree_view: *C_GtkTreeView, gint drag_x, gint drag_y, GtkTreePath **path, GtkTreeViewDropPosition *pos) -> Gboolean;
     pub fn gtk_tree_view_set_cursor                    (tree_view: *mut C_GtkTreeView, path: *mut C_GtkTreePath, focus_column: *mut C_GtkTreeViewColumn, start_editing: Gboolean);
     // pub fn gtk_tree_view_set_cursor_on_cell            (tree_view: *mut C_GtkTreeView, path: *mut C_GtkTreePath, focus_column: *mut GtkTreeViewColumn, focus_cell: *mut C_GtkCellRenderer, start_editing: Gboolean);
-    // pub fn gtk_tree_view_get_cursor                    (tree_view: *mut C_GtkTreeView, path: *mut *mut C_GtkTreePath, focus_column: *mut *mut GtkTreeViewColumn);
+    pub fn gtk_tree_view_get_cursor                    (tree_view: *mut C_GtkTreeView, path: *mut *mut C_GtkTreePath, focus_column: *mut *mut C_GtkTreeViewColumn);
     // pub fn gtk_tree_view_get_bin_window                (tree_view: *mut C_GtkTreeView) -> *mut C_GdkWindow;
     // pub fn gtk_tree_view_get_path_at_pos               (tree_view: *mut C_GtkTreeView, x: c_int, y: c_int, path: *mut *mut C_GtkTreePathh, column: *mut *mut C_GtkTreeViewColumn, cell_x: *mut c_int, cell_y: *mut c_int) -> Gboolean
     // pub fn gtk_tree_view_get_cell_area                 (tree_view: *mut C_GtkTreeView, path: *mut C_GtkTreePath, column: *mut C_GtkTreeViewColumn, rect: *mut C_GdkRectangle);
