@@ -7,7 +7,7 @@
 use ffi;
 use cast::GTK_NOTEBOOK;
 use FFIWidget;
-use glib::translate::{from_glib_none, ToGlibPtr};
+use glib::translate::{from_glib, from_glib_none, ToGlibPtr};
 use glib::{to_bool, to_gboolean};
 
 /// GtkNotebook — A tabbed notebook container
@@ -96,9 +96,10 @@ impl NoteBook {
         }
     }
 
-    pub fn get_current_page(&self) -> i32 {
+    pub fn get_current_page(&self) -> Option<u32> {
         unsafe {
-            ffi::gtk_notebook_get_current_page(GTK_NOTEBOOK(self.pointer))
+            from_glib(
+                ffi::gtk_notebook_get_current_page(GTK_NOTEBOOK(self.pointer)))
         }
     }
 
@@ -112,15 +113,16 @@ impl NoteBook {
         }
     }
 
-    pub fn get_n_page(&self) -> i32 {
+    pub fn get_n_pages(&self) -> i32 {
         unsafe {
             ffi::gtk_notebook_get_n_pages(GTK_NOTEBOOK(self.pointer))
         }
     }
 
-    pub fn page_num<T: ::WidgetTrait>(&self, child: &T) -> i32 {
+    pub fn page_num<T: ::WidgetTrait>(&self, child: &T) -> Option<u32> {
         unsafe {
-            ffi::gtk_notebook_page_num(GTK_NOTEBOOK(self.pointer), child.unwrap_widget())
+            from_glib(
+                ffi::gtk_notebook_page_num(GTK_NOTEBOOK(self.pointer), child.unwrap_widget()))
         }
     }
 
