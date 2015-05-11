@@ -1,4 +1,4 @@
-# gtk [![Build Status](https://travis-ci.org/rust-gnome/gtk.png?branch=master)](https://travis-ci.org/rust-gnome/gtk)
+# gtk [![Build Status](https://travis-ci.org/rust-gnome/gtk.png?branch=master)](https://travis-ci.org/rust-gnome/gtk) [![Build status](https://ci.appveyor.com/api/projects/status/e3t5yubl172pomlb?svg=true)](https://ci.appveyor.com/project/GuillaumeGomez/gtk-isosc)
 
 __Rust__ bindings and wrappers for __GLib__, __GDK 3__, __GTK+ 3__  and __Cairo__.
 
