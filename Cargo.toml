@@ -6,6 +6,12 @@ authors = ["The Rust-GNOME Project Developers"]
 description = "Rust bindings for the GTK+ library"
 repository = "https://github.com/rust-gnome/gtk"
 license = "MIT"
+homepage = "https://github.com/rust-gnome/gtk"
+documentation = "https://github.com/rust-gnome/gtk"
+
+readme = "README.md"
+
+keywords = ["gtk", "gnome", "GUI"]
 
 [lib]
 name = "gtk"
@@ -18,38 +24,17 @@ gtk_3_8 = ["gtk-sys/gtk_3_8", "gdk/gdk_3_8", "gtk_3_6"]
 gtk_3_10 = ["gtk-sys/gtk_3_10", "gdk/gdk_3_10", "gtk_3_8"]
 gtk_3_12 = ["gtk-sys/gtk_3_12", "gdk/gdk_3_12", "gtk_3_10"]
 gtk_3_14 = ["gtk-sys/gtk_3_14", "gdk/gdk_3_14", "gtk_3_12"]
-cairo_1_10 = ["cairo/cairo_1_10"]
-cairo_1_12 = ["cairo/cairo_1_12"]
+cairo_1_10 = ["cairo-rs/cairo_1_10"]
+cairo_1_12 = ["cairo-rs/cairo_1_12"]
 
 [dependencies]
 libc = "0.1"
-
-[dependencies.gtk-sys]
-path = "gtk-sys"
-version = "0.1.0"
-
-[dependencies.cairo-sys]
-git = "https://github.com/rust-gnome/cairo"
-
-[dependencies.cairo]
-git = "https://github.com/rust-gnome/cairo"
-default-features = false
-
-[dependencies.glib]
-git = "https://github.com/rust-gnome/glib"
-
-[dependencies.glib-sys]
-git = "https://github.com/rust-gnome/glib"
-
-[dependencies.gdk-sys]
-git = "https://github.com/rust-gnome/gdk"
-
-[dependencies.gdk]
-git = "https://github.com/rust-gnome/gdk"
-default-features = false
-
-[dependencies.pango-sys]
-git = "https://github.com/rust-gnome/pango"
-
-[dependencies.pango]
-git = "https://github.com/rust-gnome/pango"
+gtk-sys = "^0"
+glib = "^0"
+glib-sys = "^0"
+gdk-sys = "^0"
+gdk = "^0"
+pango-sys = "^0"
+pango = "^0"
+cairo-sys-rs = "^0"
+cairo-rs = "^0"
