@@ -18,7 +18,7 @@ impl RecentManager {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(::FFIWidget::wrap_widget(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(::FFIWidget::wrap_widget(tmp_pointer as *mut ffi::GtkWidget))
         }
     }
 
@@ -28,7 +28,7 @@ impl RecentManager {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(::FFIWidget::wrap_widget(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(::FFIWidget::wrap_widget(tmp_pointer as *mut ffi::GtkWidget))
         }
     }
 
@@ -66,11 +66,11 @@ impl RecentManager {
         if tmp.is_null() {
             glib::List::new()
         } else {
-            let old_list : glib::List<*mut ffi::C_GtkRecentInfo> = glib::GlibContainer::wrap(tmp);
+            let old_list : glib::List<*mut ffi::GtkRecentInfo> = glib::GlibContainer::wrap(tmp);
             let mut tmp_vec : glib::List<Box<::RecentInfo>> = glib::List::new();
 
             for it in old_list.iter() {
-                tmp_vec.append(Box::new(::FFIWidget::wrap_widget(*it as *mut ffi::C_GtkWidget)));
+                tmp_vec.append(Box::new(::FFIWidget::wrap_widget(*it as *mut ffi::GtkWidget)));
             }
             tmp_vec
         }

@@ -119,7 +119,7 @@ pub trait ToolItemTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait {
     }
 
     fn get_text_size_group(&self) -> Option<::SizeGroup> {
-        let tmp_pointer = unsafe { ffi::gtk_tool_item_get_text_size_group(GTK_TOOLITEM(self.unwrap_widget()) as *const ffi::C_GtkToolItem) };
+        let tmp_pointer = unsafe { ffi::gtk_tool_item_get_text_size_group(GTK_TOOLITEM(self.unwrap_widget()) as *const ffi::GtkToolItem) };
 
         if tmp_pointer.is_null() {
             None

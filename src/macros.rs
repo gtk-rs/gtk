@@ -24,7 +24,7 @@ macro_rules! check_pointer(
 macro_rules! struct_Widget(
     ($gtk_struct:ident) => (
         pub struct $gtk_struct {
-            pointer: *mut ffi::C_GtkWidget
+            pointer: *mut ffi::GtkWidget
         }
     );
 );
@@ -32,11 +32,11 @@ macro_rules! struct_Widget(
 macro_rules! impl_TraitObject(
     ($gtk_struct:ident, $ffi_type:ident) => (
         impl ::glib::traits::FFIGObject for $gtk_struct {
-            fn unwrap_gobject(&self) -> *mut ::glib::ffi::C_GObject {
-                self.pointer as *mut ::glib::ffi::C_GObject
+            fn unwrap_gobject(&self) -> *mut ::glib::ffi::GObject {
+                self.pointer as *mut ::glib::ffi::GObject
             }
 
-            fn wrap_object(object: *mut ::glib::ffi::C_GObject) -> $gtk_struct {
+            fn wrap_object(object: *mut ::glib::ffi::GObject) -> $gtk_struct {
                 unsafe{
                     ::glib::ffi::g_object_ref(object as *mut ::libc::c_void);
                 }
@@ -54,11 +54,11 @@ macro_rules! impl_TraitObject(
 macro_rules! impl_TraitWidget(
     ($gtk_struct:ident) => (
         impl ::FFIWidget for $gtk_struct {
-            fn unwrap_widget(&self) -> *mut ffi::C_GtkWidget {
+            fn unwrap_widget(&self) -> *mut ffi::GtkWidget {
                 self.pointer
             }
 
-            fn wrap_widget(widget: *mut ffi::C_GtkWidget) -> $gtk_struct {
+            fn wrap_widget(widget: *mut ffi::GtkWidget) -> $gtk_struct {
                 unsafe{
                     ::glib::ffi::g_object_ref(::ffi::cast_GtkObject(widget) as *mut ::libc::c_void);
                 }
@@ -72,18 +72,18 @@ macro_rules! impl_TraitWidget(
         impl ::WidgetTrait for $gtk_struct {}
 
         impl ::glib::traits::FFIGObject for $gtk_struct {
-            fn unwrap_gobject(&self) -> *mut ::glib::ffi::C_GObject {
+            fn unwrap_gobject(&self) -> *mut ::glib::ffi::GObject {
                 use ::FFIWidget;
                 ::cast::G_OBJECT(self.unwrap_widget())
             }
 
-            fn wrap_object(object: *mut ::glib::ffi::C_GObject) -> $gtk_struct {
+            fn wrap_object(object: *mut ::glib::ffi::GObject) -> $gtk_struct {
                 unsafe{
                     ::glib::ffi::g_object_ref(object as *mut ::libc::c_void);
                 }
 
                 $gtk_struct {
-                    pointer: object as *mut ffi::C_GtkWidget
+                    pointer: object as *mut ffi::GtkWidget
                 }
             }
         }

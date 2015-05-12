@@ -18,7 +18,7 @@ pub struct RecentFilterInfo {
 
 impl RecentFilterInfo {
     #[doc(hidden)]
-    pub fn from_c(ptr: *mut ffi::C_GtkRecentFilterInfo) -> RecentFilterInfo {
+    pub fn from_c(ptr: *mut ffi::GtkRecentFilterInfo) -> RecentFilterInfo {
         if ptr.is_null() {
             Default::default()
         } else {
@@ -60,7 +60,7 @@ impl RecentFilterInfo {
     }
 
     #[doc(hidden)]
-    pub fn get_ffi(&self) -> ffi::C_GtkRecentFilterInfo {
+    pub fn get_ffi(&self) -> ffi::GtkRecentFilterInfo {
         let mut t_app = Vec::with_capacity(self.applications.len());
         let mut t_groups = Vec::with_capacity(self.groups.len());
 
@@ -78,7 +78,7 @@ impl RecentFilterInfo {
         let c_display_name = CString::new(self.display_name.as_bytes()).unwrap();
         let c_mime_type = CString::new(self.mime_type.as_bytes()).unwrap();
 
-        ffi::C_GtkRecentFilterInfo {
+        ffi::GtkRecentFilterInfo {
             contains: self.contains,
             uri: c_uri.as_ptr(),
             display_name: c_display_name.as_ptr(),

@@ -30,7 +30,7 @@ impl ColorButton {
         check_pointer!(tmp_pointer, ColorButton)
     }
 
-    pub fn new_with_rgba(rgba: &gdk_ffi::C_GdkRGBA) -> Option<ColorButton> {
+    pub fn new_with_rgba(rgba: &gdk_ffi::GdkRGBA) -> Option<ColorButton> {
         let tmp_pointer = unsafe { ffi::gtk_color_button_new_with_rgba(rgba) };
         check_pointer!(tmp_pointer, ColorButton)
     }
@@ -61,14 +61,14 @@ impl ColorButton {
         }
     }
 
-    pub fn set_rgba(&self, rgba: &gdk_ffi::C_GdkRGBA) -> () {
+    pub fn set_rgba(&self, rgba: &gdk_ffi::GdkRGBA) -> () {
         unsafe {
             ffi::gtk_color_button_set_rgba(GTK_COLORBUTTON(self.pointer), rgba)
         }
     }
 
-    pub fn get_rgba(&self) -> gdk_ffi::C_GdkRGBA {
-        let rgba = gdk_ffi::C_GdkRGBA { red: 0., green: 0., blue: 0., alpha: 0. };
+    pub fn get_rgba(&self) -> gdk_ffi::GdkRGBA {
+        let rgba = gdk_ffi::GdkRGBA { red: 0., green: 0., blue: 0., alpha: 0. };
         unsafe {
             ffi::gtk_color_button_get_rgba(GTK_COLORBUTTON(self.pointer), &rgba);
         }

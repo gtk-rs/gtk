@@ -31,7 +31,7 @@ impl ToolItemGroup {
 
     pub fn get_drop_item(&self, x: i32, y: i32) -> Option<ToolItem> {
         let tmp_pointer = unsafe { ffi::gtk_tool_item_group_get_drop_item(GTK_TOOL_ITEM_GROUP(self.unwrap_widget()),
-            x as ::libc::c_int, y as ::libc::c_int) } as *mut ffi::C_GtkWidget;
+            x as ::libc::c_int, y as ::libc::c_int) } as *mut ffi::GtkWidget;
 
         if tmp_pointer.is_null() {
             None
@@ -77,7 +77,7 @@ impl ToolItemGroup {
     }
 
     pub fn get_nth_item(&self, index: u32) -> Option<ToolItem> {
-        let tmp_pointer = unsafe { ffi::gtk_tool_item_group_get_nth_item(GTK_TOOL_ITEM_GROUP(self.unwrap_widget()), index) } as *mut ffi::C_GtkWidget;
+        let tmp_pointer = unsafe { ffi::gtk_tool_item_group_get_nth_item(GTK_TOOL_ITEM_GROUP(self.unwrap_widget()), index) } as *mut ffi::GtkWidget;
 
         if tmp_pointer.is_null() {
             None

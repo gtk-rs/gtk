@@ -11,7 +11,7 @@ use glib::translate::{from_glib_none, ToGlibPtr};
 use glib::{to_bool, to_gboolean};
 
 pub struct TreeViewColumn {
-    pointer: *mut ffi::C_GtkTreeViewColumn
+    pointer: *mut ffi::GtkTreeViewColumn
 }
 
 impl TreeViewColumn {
@@ -289,12 +289,12 @@ impl TreeViewColumn {
     }
 
     #[doc(hidden)]
-    pub fn unwrap_pointer(&self) -> *mut ffi::C_GtkTreeViewColumn {
+    pub fn unwrap_pointer(&self) -> *mut ffi::GtkTreeViewColumn {
         self.pointer
     }
 
     #[doc(hidden)]
-    pub fn wrap_pointer(treeview_column: *mut ffi::C_GtkTreeViewColumn) -> TreeViewColumn {
+    pub fn wrap_pointer(treeview_column: *mut ffi::GtkTreeViewColumn) -> TreeViewColumn {
         unsafe{
             ::glib::ffi::g_object_ref(treeview_column as *mut ::libc::c_void);
         }
@@ -306,12 +306,12 @@ impl TreeViewColumn {
 }
 
 impl glib::traits::FFIGObject for TreeViewColumn {
-    fn unwrap_gobject(&self) -> *mut glib::ffi::C_GObject {
+    fn unwrap_gobject(&self) -> *mut glib::ffi::GObject {
         ::cast::G_OBJECT_FROM_TREE_VIEW_COLUMN(self.pointer)
     }
 
-    fn wrap_object(object: *mut glib::ffi::C_GObject) -> TreeViewColumn {
-        TreeViewColumn { pointer: object as *mut ffi::C_GtkTreeViewColumn }
+    fn wrap_object(object: *mut glib::ffi::GObject) -> TreeViewColumn {
+        TreeViewColumn { pointer: object as *mut ffi::GtkTreeViewColumn }
     }
 }
 
@@ -330,7 +330,7 @@ impl Clone for TreeViewColumn {
         };
 
         TreeViewColumn {
-            pointer: pointer as *mut ffi::C_GtkTreeViewColumn
+            pointer: pointer as *mut ffi::GtkTreeViewColumn
         }
     }
 }

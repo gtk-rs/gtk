@@ -165,19 +165,19 @@ pub trait WidgetTrait: ::FFIWidget + ::GObjectTrait {
         }
     }
 
-    fn override_background_color(&self, state: ::StateFlags, color: &gdk_ffi::C_GdkRGBA) {
+    fn override_background_color(&self, state: ::StateFlags, color: &gdk_ffi::GdkRGBA) {
         unsafe { ffi::gtk_widget_override_background_color(self.unwrap_widget(), state, color) }
     }
 
-    fn override_color(&self, state: ::StateFlags, color: &gdk_ffi::C_GdkRGBA) {
+    fn override_color(&self, state: ::StateFlags, color: &gdk_ffi::GdkRGBA) {
         unsafe { ffi::gtk_widget_override_color(self.unwrap_widget(), state, color) }
     }
 
-    fn override_symbolic_color(&self, name: &str, color: &gdk_ffi::C_GdkRGBA) {
+    fn override_symbolic_color(&self, name: &str, color: &gdk_ffi::GdkRGBA) {
         unsafe { ffi::gtk_widget_override_symbolic_color(self.unwrap_widget(), name.to_glib_none().0, color); }
     }
 
-    fn override_cursor(&self, cursor: &gdk_ffi::C_GdkRGBA, secondary_cursor: &gdk_ffi::C_GdkRGBA) {
+    fn override_cursor(&self, cursor: &gdk_ffi::GdkRGBA, secondary_cursor: &gdk_ffi::GdkRGBA) {
         unsafe { ffi::gtk_widget_override_cursor(self.unwrap_widget(), cursor, secondary_cursor) }
     }
 
@@ -261,7 +261,7 @@ pub trait WidgetTrait: ::FFIWidget + ::GObjectTrait {
         if tmp.is_null() {
             glib::List::new()
         } else {
-            let old_list : glib::List<*mut ffi::C_GtkWidget> = glib::GlibContainer::wrap(tmp);
+            let old_list : glib::List<*mut ffi::GtkWidget> = glib::GlibContainer::wrap(tmp);
             let mut tmp_vec : glib::List<Box<Self>> = glib::List::new();
 
             for it in old_list.iter() {

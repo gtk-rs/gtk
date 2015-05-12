@@ -3,8 +3,8 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 pub trait FFIWidget: Sized {
-    fn unwrap_widget(&self) -> *mut ::ffi::C_GtkWidget;
-    fn wrap_widget(widget: *mut ::ffi::C_GtkWidget) -> Self;
+    fn unwrap_widget(&self) -> *mut ::ffi::GtkWidget;
+    fn wrap_widget(widget: *mut ::ffi::GtkWidget) -> Self;
 }
 
 pub use self::widget::WidgetTrait;

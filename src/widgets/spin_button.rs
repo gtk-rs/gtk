@@ -163,8 +163,8 @@ impl SpinButton {
     }
 }
 
-// pub fn gtk_spin_button_get_update_policy   (spin_button: *C_GtkSpinButton) -> SpinButtonUpdatePolicy;
-// pub fn gtk_spin_button_get_value           (spin_button: *C_GtkSpinButton) -> c_double;
+// pub fn gtk_spin_button_get_update_policy   (spin_button: *GtkSpinButton) -> SpinButtonUpdatePolicy;
+// pub fn gtk_spin_button_get_value           (spin_button: *GtkSpinButton) -> c_double;
 
 impl_drop!(SpinButton);
 impl_TraitWidget!(SpinButton);

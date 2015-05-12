@@ -8,7 +8,7 @@ use ffi;
 use glib::translate::ToGlibPtr;
 
 pub struct TextTag {
-    pointer: *mut ffi::C_GtkTextTag
+    pointer: *mut ffi::GtkTextTag
 }
 
 impl TextTag {
@@ -33,5 +33,5 @@ impl TextTag {
     }
 }
 
-impl_GObjectFunctions!(TextTag, C_GtkTextTag);
-impl_TraitObject!(TextTag, C_GtkTextTag);
+impl_GObjectFunctions!(TextTag, GtkTextTag);
+impl_TraitObject!(TextTag, GtkTextTag);

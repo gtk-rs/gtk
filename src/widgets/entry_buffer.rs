@@ -19,7 +19,7 @@ use ffi;
 *
 */
 pub struct EntryBuffer {
-    pointer: *mut ffi::C_GtkEntryBuffer,
+    pointer: *mut ffi::GtkEntryBuffer,
 }
 
 impl EntryBuffer {
@@ -99,12 +99,12 @@ impl EntryBuffer {
     }
 
     #[doc(hidden)]
-    pub fn unwrap_pointer(&self) -> *mut ffi::C_GtkEntryBuffer {
+    pub fn unwrap_pointer(&self) -> *mut ffi::GtkEntryBuffer {
         self.pointer
     }
 
     #[doc(hidden)]
-    pub fn wrap_pointer(pointer: *mut ffi::C_GtkEntryBuffer) -> EntryBuffer {
+    pub fn wrap_pointer(pointer: *mut ffi::GtkEntryBuffer) -> EntryBuffer {
         EntryBuffer {
             pointer:    pointer
         }

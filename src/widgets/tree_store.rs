@@ -11,7 +11,7 @@ use glib_ffi::{self, GType};
 use libc::c_void;
 
 pub struct TreeStore {
-    pointer: *mut ffi::C_GtkTreeStore
+    pointer: *mut ffi::GtkTreeStore
 }
 
 impl TreeStore {
@@ -128,12 +128,12 @@ impl TreeStore {
     }*/
 
     #[doc(hidden)]
-    pub fn unwrap_pointer(&self) -> *mut ffi::C_GtkTreeStore {
+    pub fn unwrap_pointer(&self) -> *mut ffi::GtkTreeStore {
         self.pointer
     }
 
     #[doc(hidden)]
-    pub fn wrap_pointer(c_treestore: *mut ffi::C_GtkTreeStore) -> TreeStore {
+    pub fn wrap_pointer(c_treestore: *mut ffi::GtkTreeStore) -> TreeStore {
         TreeStore {
             pointer: c_treestore
         }

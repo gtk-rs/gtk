@@ -6,7 +6,7 @@ use ffi;
 use glib::to_bool;
 
 pub struct TextChildAnchor {
-    pointer: *mut ffi::C_GtkTextChildAnchor
+    pointer: *mut ffi::GtkTextChildAnchor
 }
 
 impl TextChildAnchor {
@@ -25,5 +25,5 @@ impl TextChildAnchor {
     }
 }
 
-impl_GObjectFunctions!(TextChildAnchor, C_GtkTextChildAnchor);
-impl_TraitObject!(TextChildAnchor, C_GtkTextChildAnchor);
+impl_GObjectFunctions!(TextChildAnchor, GtkTextChildAnchor);
+impl_TraitObject!(TextChildAnchor, GtkTextChildAnchor);

@@ -10,7 +10,7 @@ use libc::c_void;
 use glib;
 
 pub struct TreeModel {
-    pointer: *mut ffi::C_GtkTreeModel
+    pointer: *mut ffi::GtkTreeModel
 }
 
 impl TreeModel {
@@ -176,19 +176,19 @@ impl TreeModel {
     }
 
     #[doc(hidden)]
-    pub fn unwrap_pointer(&self) -> *mut ffi::C_GtkTreeModel {
+    pub fn unwrap_pointer(&self) -> *mut ffi::GtkTreeModel {
         self.pointer
     }
 
     #[doc(hidden)]
-    pub fn wrap_pointer(c_treemodel: *mut ffi::C_GtkTreeModel) -> TreeModel {
+    pub fn wrap_pointer(c_treemodel: *mut ffi::GtkTreeModel) -> TreeModel {
         TreeModel {
             pointer: c_treemodel
         }
     }
 }
 
-fn my_fn(model: *mut ffi::C_GtkTreeModel, path: *mut ffi::C_GtkTreePath, iter: *mut ffi::C_GtkTreeIter,
+fn my_fn(model: *mut ffi::GtkTreeModel, path: *mut ffi::GtkTreePath, iter: *mut ffi::GtkTreeIter,
     data: &mut (fn(&mut TreeModel, &mut TreePath, &mut TreeIter, data: *mut c_void) -> bool, &mut c_void)) -> ffi::Gboolean {
     glib::to_gboolean(data.0(&mut TreeModel::wrap_pointer(model), &mut TreePath::wrap_pointer(path), &mut TreeIter::wrap_pointer(iter), data.1))
 }

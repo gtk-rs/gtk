@@ -11,7 +11,7 @@ use glib_ffi::{self, GType};
 use libc::c_void;
 
 pub struct ListStore {
-    pointer: *mut ffi::C_GtkListStore
+    pointer: *mut ffi::GtkListStore
 }
 
 impl ListStore {
@@ -103,12 +103,12 @@ impl ListStore {
     }
 
     #[doc(hidden)]
-    pub fn unwrap_pointer(&self) -> *mut ffi::C_GtkListStore {
+    pub fn unwrap_pointer(&self) -> *mut ffi::GtkListStore {
         self.pointer
     }
 
     #[doc(hidden)]
-    pub fn wrap_pointer(c_liststore: *mut ffi::C_GtkListStore) -> ListStore {
+    pub fn wrap_pointer(c_liststore: *mut ffi::GtkListStore) -> ListStore {
         ListStore {
             pointer: c_liststore
         }

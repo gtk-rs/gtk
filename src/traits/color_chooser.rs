@@ -8,8 +8,8 @@ use cast::GTK_COLOR_CHOOSER;
 use gdk_ffi;
 
 pub trait ColorChooserTrait: ::WidgetTrait {
-    fn get_rgba(&self) -> gdk_ffi::C_GdkRGBA {
-        let color = gdk_ffi::C_GdkRGBA {
+    fn get_rgba(&self) -> gdk_ffi::GdkRGBA {
+        let color = gdk_ffi::GdkRGBA {
             red: 0f64,
             green: 0f64,
             blue: 0f64,
@@ -19,7 +19,7 @@ pub trait ColorChooserTrait: ::WidgetTrait {
         color
     }
 
-    fn set_rgba(&self, color: gdk_ffi::C_GdkRGBA) -> () {
+    fn set_rgba(&self, color: gdk_ffi::GdkRGBA) -> () {
         unsafe { ffi::gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(self.unwrap_widget()), &color) };
     }
 
@@ -31,7 +31,7 @@ pub trait ColorChooserTrait: ::WidgetTrait {
         unsafe { ffi::gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(self.unwrap_widget()), to_gboolean(use_alpha)) }
     }
 
-    fn add_palette(&self, orientation: ::Orientation, colors_per_line: i32, colors: Vec<gdk_ffi::C_GdkRGBA>) -> () {
+    fn add_palette(&self, orientation: ::Orientation, colors_per_line: i32, colors: Vec<gdk_ffi::GdkRGBA>) -> () {
         unsafe { ffi::gtk_color_chooser_add_palette(GTK_COLOR_CHOOSER(self.unwrap_widget()), orientation, colors_per_line, colors.len() as i32, colors.as_ptr()) }
     }
 }

@@ -7,7 +7,7 @@ use FFIWidget;
 use cast::GTK_PAPER_SIZE;
 
 pub struct PageSetup {
-    pointer: *mut ffi::C_GtkPageSetup
+    pointer: *mut ffi::GtkPageSetup
 }
 
 impl PageSetup {
@@ -45,7 +45,7 @@ impl PageSetup {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(::FFIWidget::wrap_widget(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(::FFIWidget::wrap_widget(tmp_pointer as *mut ffi::GtkWidget))
         }
     }
 

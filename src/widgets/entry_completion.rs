@@ -21,7 +21,7 @@ impl EntryCompletion {
             None
         } else {
             Some(EntryCompletion {
-                    pointer: tmp_pointer as *mut ffi::C_GtkWidget
+                    pointer: tmp_pointer as *mut ffi::GtkWidget
                 }
             )
         }
