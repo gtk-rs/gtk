@@ -163,14 +163,14 @@ impl TreeView {
     pub fn get_search_entry(&self) -> ::Entry {
         unsafe {
             ::FFIWidget::wrap_widget(ffi::gtk_tree_view_get_search_entry(GTK_TREE_VIEW(self.pointer))
-                                 as *mut ffi::C_GtkWidget)
+                                 as *mut ffi::GtkWidget)
         }
     }
 
     pub fn set_search_entry(&self, entry: &::Entry) {
         unsafe {
             ffi::gtk_tree_view_set_search_entry(GTK_TREE_VIEW(self.pointer),
-                                                entry.unwrap_widget() as *mut ffi::C_GtkEntry)
+                                                entry.unwrap_widget() as *mut ffi::GtkEntry)
         }
     }
 

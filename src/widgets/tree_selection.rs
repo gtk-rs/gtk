@@ -9,7 +9,7 @@ use ffi;
 use {TreeView, TreePath, TreeIter};
 
 pub struct TreeSelection {
-    pointer: *mut ffi::C_GtkTreeSelection
+    pointer: *mut ffi::GtkTreeSelection
 }
 
 impl TreeSelection {
@@ -26,7 +26,7 @@ impl TreeSelection {
     }
 
     pub fn get_tree_view(&self) -> Option<TreeView> {
-        let tmp_pointer = unsafe { ffi::gtk_tree_selection_get_tree_view(self.pointer) } as *mut ffi::C_GtkWidget;
+        let tmp_pointer = unsafe { ffi::gtk_tree_selection_get_tree_view(self.pointer) } as *mut ffi::GtkWidget;
 
         if tmp_pointer.is_null() {
             None
@@ -95,7 +95,7 @@ impl TreeSelection {
             end_path.unwrap_pointer()) }
     }
 
-    pub fn wrap(pointer: *mut ffi::C_GtkTreeSelection) -> Option<TreeSelection> {
+    pub fn wrap(pointer: *mut ffi::GtkTreeSelection) -> Option<TreeSelection> {
         if pointer.is_null() {
             None
         } else {
@@ -106,13 +106,13 @@ impl TreeSelection {
 }
 
 impl glib::traits::FFIGObject for TreeSelection {
-    fn unwrap_gobject(&self) -> *mut glib::ffi::C_GObject {
+    fn unwrap_gobject(&self) -> *mut glib::ffi::GObject {
         ::cast::G_OBJECT_FROM_TREE_SELECTION(self.pointer)
     }
 
-    fn wrap_object(object: *mut glib::ffi::C_GObject) -> TreeSelection {
+    fn wrap_object(object: *mut glib::ffi::GObject) -> TreeSelection {
         unsafe { ::glib_ffi::g_object_ref(object as *mut _); }
-        TreeSelection { pointer: object as *mut ffi::C_GtkTreeSelection }
+        TreeSelection { pointer: object as *mut ffi::GtkTreeSelection }
     }
 }
 

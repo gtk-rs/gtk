@@ -7,7 +7,7 @@ use glib::to_bool;
 use glib::translate::ToGlibPtr;
 
 pub struct RecentFilter {
-    pointer: *mut ffi::C_GtkRecentFilter
+    pointer: *mut ffi::GtkRecentFilter
 }
 
 impl RecentFilter {
@@ -45,7 +45,7 @@ impl RecentFilter {
         unsafe { to_bool(ffi::gtk_recent_filter_filter(self.pointer, &filter_info.get_ffi())) }
     }
 
-    pub fn wrap(pointer: *mut ffi::C_GtkRecentFilter) -> Option<RecentFilter> {
+    pub fn wrap(pointer: *mut ffi::GtkRecentFilter) -> Option<RecentFilter> {
         if pointer.is_null() {
             None
         } else {
@@ -53,7 +53,7 @@ impl RecentFilter {
         }
     }
 
-    pub fn unwrap_pointer(&self) -> *mut ffi::C_GtkRecentFilter {
+    pub fn unwrap_pointer(&self) -> *mut ffi::GtkRecentFilter {
         self.pointer
     }
 }

@@ -13,7 +13,7 @@ pub trait AppChooserTrait: ::WidgetTrait {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(::FFIWidget::wrap_widget(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(::FFIWidget::wrap_widget(tmp_pointer as *mut ffi::GtkWidget))
         }
     }
 

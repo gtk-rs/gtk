@@ -202,7 +202,7 @@ pub trait DialogTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait + ::WindowT
         unsafe { ffi::gtk_dialog_set_default_response(GTK_DIALOG(self.unwrap_widget()), response_id) }
     }
 
-    fn set_response_sensitive(&self, response_id: i32, setting: ffi::Gboolean) -> () {
+    fn set_response_sensitive(&self, response_id: i32, setting: ffi::gboolean) -> () {
         unsafe { ffi::gtk_dialog_set_response_sensitive(GTK_DIALOG(self.unwrap_widget()), response_id, setting) }
     }
 

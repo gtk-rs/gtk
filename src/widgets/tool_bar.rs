@@ -49,7 +49,7 @@ impl Toolbar {
 
     pub fn get_nth_item(&self, n: i32) -> Option<::ToolItem> {
         unsafe {
-            let tmp_pointer = ffi::gtk_toolbar_get_nth_item(GTK_TOOLBAR(self.pointer), n as c_int) as *mut ffi::C_GtkWidget;
+            let tmp_pointer = ffi::gtk_toolbar_get_nth_item(GTK_TOOLBAR(self.pointer), n as c_int) as *mut ffi::GtkWidget;
             if tmp_pointer.is_null() {
                 None
             } else {

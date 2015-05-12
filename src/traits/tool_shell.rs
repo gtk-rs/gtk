@@ -50,7 +50,7 @@ pub trait ToolShellTrait: ::WidgetTrait {
     }
 
     fn get_text_size_group(&self) -> Option<::SizeGroup> {
-        let tmp_pointer = unsafe { ffi::gtk_tool_shell_get_text_size_group(GTK_TOOLSHELL(self.unwrap_widget()) as *const ffi::C_GtkToolShell) };
+        let tmp_pointer = unsafe { ffi::gtk_tool_shell_get_text_size_group(GTK_TOOLSHELL(self.unwrap_widget()) as *const ffi::GtkToolShell) };
 
         if tmp_pointer.is_null() {
             None

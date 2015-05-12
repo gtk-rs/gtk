@@ -21,7 +21,7 @@ impl PaperSize {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(::FFIWidget::wrap_widget(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(::FFIWidget::wrap_widget(tmp_pointer as *mut ffi::GtkWidget))
         }
     }
 
@@ -35,7 +35,7 @@ impl PaperSize {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(::FFIWidget::wrap_widget(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(::FFIWidget::wrap_widget(tmp_pointer as *mut ffi::GtkWidget))
         }
     }
 
@@ -49,7 +49,7 @@ impl PaperSize {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(::FFIWidget::wrap_widget(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(::FFIWidget::wrap_widget(tmp_pointer as *mut ffi::GtkWidget))
         }
     }
 
@@ -59,7 +59,7 @@ impl PaperSize {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(::FFIWidget::wrap_widget(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(::FFIWidget::wrap_widget(tmp_pointer as *mut ffi::GtkWidget))
         }
     }
 
@@ -74,7 +74,7 @@ impl PaperSize {
         if tmp.is_null() {
             glib::List::new()
         } else {
-            let old_list : glib::List<*mut ffi::C_GtkWidget> = glib::GlibContainer::wrap(tmp);
+            let old_list : glib::List<*mut ffi::GtkWidget> = glib::GlibContainer::wrap(tmp);
             let mut tmp_vec : glib::List<Box<PaperSize>> = glib::List::new();
 
             for it in old_list.iter() {
@@ -161,7 +161,7 @@ impl Clone for PaperSize {
         };
 
         PaperSize {
-            pointer: pointer as *mut ffi::C_GtkWidget
+            pointer: pointer as *mut ffi::GtkWidget
         }
     }
 }

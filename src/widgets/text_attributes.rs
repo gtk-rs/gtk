@@ -7,7 +7,7 @@
 use ffi;
 
 pub struct TextAttributes {
-    pointer: *mut ffi::C_GtkTextAttributes
+    pointer: *mut ffi::GtkTextAttributes
 }
 
 impl TextAttributes {
@@ -50,5 +50,5 @@ impl TextAttributes {
     }
 }
 
-impl_GObjectFunctions!(TextAttributes, C_GtkTextAttributes);
-impl_TraitObject!(TextAttributes, C_GtkTextAttributes);
+impl_GObjectFunctions!(TextAttributes, GtkTextAttributes);
+impl_TraitObject!(TextAttributes, GtkTextAttributes);

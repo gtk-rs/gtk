@@ -7,7 +7,7 @@ use ffi;
 use glib::translate::{from_glib_full, ToGlibPtr};
 
 pub struct TreePath {
-    pointer:   *mut ffi::C_GtkTreePath
+    pointer:   *mut ffi::GtkTreePath
 }
 
 impl TreePath {
@@ -104,7 +104,7 @@ impl TreePath {
     }
 
     pub fn compare(&self, other: &TreePath) -> i32 {
-        unsafe { ffi::gtk_tree_path_compare(self.pointer as *const ffi::C_GtkTreePath, other.pointer as *const ffi::C_GtkTreePath) }
+        unsafe { ffi::gtk_tree_path_compare(self.pointer as *const ffi::GtkTreePath, other.pointer as *const ffi::GtkTreePath) }
     }
 
     pub fn next(&self) {
@@ -141,17 +141,17 @@ impl TreePath {
     }
 
     pub fn drop(&mut self) {
-        unsafe { ffi::gtk_tree_path_free(self.pointer as *mut ffi::C_GtkTreePath) }
+        unsafe { ffi::gtk_tree_path_free(self.pointer as *mut ffi::GtkTreePath) }
         self.pointer = ::std::ptr::null_mut();
     }
 
     #[doc(hidden)]
-    pub fn unwrap_pointer(&self) -> *mut ffi::C_GtkTreePath {
+    pub fn unwrap_pointer(&self) -> *mut ffi::GtkTreePath {
         self.pointer
     }
 
     #[doc(hidden)]
-    pub fn wrap_pointer(c_treepath: *mut ffi::C_GtkTreePath) -> TreePath {
+    pub fn wrap_pointer(c_treepath: *mut ffi::GtkTreePath) -> TreePath {
         TreePath {
             pointer: c_treepath
         }

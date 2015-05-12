@@ -6,8 +6,8 @@ use ffi;
 use std;
 
 pub struct TreeIter {
-    data: ffi::C_GtkTreeIter,
-    pointer: *mut ffi::C_GtkTreeIter,
+    data: ffi::GtkTreeIter,
+    pointer: *mut ffi::GtkTreeIter,
     is_owned: bool,
     is_true_pointer: bool
 }
@@ -15,7 +15,7 @@ pub struct TreeIter {
 impl TreeIter {
     pub fn new() -> TreeIter {
         let mut t = TreeIter {
-            data: ffi::C_GtkTreeIter {
+            data: ffi::GtkTreeIter {
                 stamp: 0,
                 user_data: std::ptr::null_mut(),
                 user_data2: std::ptr::null_mut(),
@@ -48,7 +48,7 @@ impl TreeIter {
     }
 
     #[doc(hidden)]
-    pub fn unwrap_pointer(&self) -> *mut ffi::C_GtkTreeIter {
+    pub fn unwrap_pointer(&self) -> *mut ffi::GtkTreeIter {
         if self.is_true_pointer {
             self.pointer
         } else {
@@ -57,7 +57,7 @@ impl TreeIter {
     }
 
     #[doc(hidden)]
-    pub fn wrap_pointer(c_treeiter: *mut ffi::C_GtkTreeIter) -> TreeIter {
+    pub fn wrap_pointer(c_treeiter: *mut ffi::GtkTreeIter) -> TreeIter {
         unsafe {
             TreeIter {
                 data: std::mem::uninitialized(),

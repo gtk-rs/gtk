@@ -7,7 +7,7 @@ use ffi;
 /// GtkTextTagTable — Collection of tags that can be used together
 
 pub struct TextTagTable {
-    pointer: *mut ffi::C_GtkTextTagTable
+    pointer: *mut ffi::GtkTextTagTable
 }
 
 impl TextTagTable {
@@ -20,7 +20,7 @@ impl TextTagTable {
         }
     }
 
-    pub fn unwrap_pointer(&self) -> *mut ffi::C_GtkTextTagTable {
+    pub fn unwrap_pointer(&self) -> *mut ffi::GtkTextTagTable {
         self.pointer
     }
 }

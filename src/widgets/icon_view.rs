@@ -211,7 +211,7 @@ impl IconView {
         if tmp.is_null() {
             glib::List::new()
         } else {
-            let list: glib::List<*mut ffi::C_GtkWidget> = glib::GlibContainer::wrap(tmp);
+            let list: glib::List<*mut ffi::GtkWidget> = glib::GlibContainer::wrap(tmp);
 
             list.iter().map(|it| ::FFIWidget::wrap_widget(*it)).collect()
         }

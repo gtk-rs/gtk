@@ -4,14 +4,14 @@
 
 #![cfg_attr(not(feature = "gtk_3_10"), allow(unused_imports))]
 
-use ffi::{self, C_GtkBuilder};
+use ffi::{self, GtkBuilder};
 use libc::{c_char, c_long};
 use traits::GObjectTrait;
 use glib::translate::ToGlibPtr;
 
 #[repr(C)]
 pub struct Builder {
-    pointer: *mut C_GtkBuilder
+    pointer: *mut GtkBuilder
 }
 
 impl Builder {
@@ -87,5 +87,5 @@ impl Builder {
     }
 }
 
-impl_GObjectFunctions!(Builder, C_GtkBuilder);
-impl_TraitObject!(Builder, C_GtkBuilder);
+impl_GObjectFunctions!(Builder, GtkBuilder);
+impl_TraitObject!(Builder, GtkBuilder);

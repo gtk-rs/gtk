@@ -8,7 +8,7 @@ use ffi;
 use glib::{to_bool, to_gboolean};
 
 pub struct SizeGroup {
-    pointer: *mut ffi::C_GtkSizeGroup
+    pointer: *mut ffi::GtkSizeGroup
 }
 
 impl SizeGroup {
@@ -49,4 +49,4 @@ impl SizeGroup {
     }
 }
 
-impl_GObjectFunctions!(SizeGroup, C_GtkSizeGroup);
+impl_GObjectFunctions!(SizeGroup, GtkSizeGroup);

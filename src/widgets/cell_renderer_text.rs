@@ -11,7 +11,7 @@ struct_Widget!(CellRendererText);
 
 impl CellRendererText {
     pub fn new() -> Option<CellRendererText> {
-        let tmp_pointer = unsafe { ffi::gtk_cell_renderer_text_new() as *mut ffi::C_GtkWidget };
+        let tmp_pointer = unsafe { ffi::gtk_cell_renderer_text_new() as *mut ffi::GtkWidget };
 
         check_pointer!(tmp_pointer, CellRendererText)
     }

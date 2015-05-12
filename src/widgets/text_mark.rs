@@ -9,7 +9,7 @@ use glib::translate::{from_glib_none, ToGlibPtr};
 use glib::{to_bool, to_gboolean};
 
 pub struct TextMark {
-    pointer: *mut ffi::C_GtkTextMark
+    pointer: *mut ffi::GtkTextMark
 }
 
 impl TextMark {
@@ -51,7 +51,7 @@ impl TextMark {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(::FFIWidget::wrap_widget(tmp_pointer as *mut ffi::C_GtkWidget))
+            Some(::FFIWidget::wrap_widget(tmp_pointer as *mut ffi::GtkWidget))
         }
     }
 
@@ -60,6 +60,6 @@ impl TextMark {
     }
 }
 
-impl_GObjectFunctions!(TextMark, C_GtkTextMark);
-impl_TraitObject!(TextMark, C_GtkTextMark);
+impl_GObjectFunctions!(TextMark, GtkTextMark);
+impl_TraitObject!(TextMark, GtkTextMark);
 impl_drop!(TextMark, GTK_TEXT_MARK);

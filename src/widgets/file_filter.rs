@@ -6,7 +6,7 @@ use ffi;
 use glib::translate::{from_glib_none, ToGlibPtr};
 
 pub struct FileFilter {
-    pointer : *mut ffi::C_GtkFileFilter
+    pointer : *mut ffi::GtkFileFilter
 }
 
 impl FileFilter {
@@ -48,11 +48,11 @@ impl FileFilter {
         unsafe { ffi::gtk_file_filter_add_pixbuf_formats(self.pointer) }
     }
 
-    pub fn unwrap_pointer(&self) -> *mut ffi::C_GtkFileFilter {
+    pub fn unwrap_pointer(&self) -> *mut ffi::GtkFileFilter {
         self.pointer
     }
 
-    pub fn wrap(pointer: *mut ffi::C_GtkFileFilter) -> Option<FileFilter> {
+    pub fn wrap(pointer: *mut ffi::GtkFileFilter) -> Option<FileFilter> {
         if pointer.is_null() {
             None
         } else {
