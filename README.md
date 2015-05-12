@@ -37,7 +37,9 @@ Make sure both mingw's and the sdk's `bin` directories are in your `PATH` e.g. (
 ```
 C:\> set PATH="C:\mingw-w64\bin;C:\gtk\bin;%PATH%"
 ```
-It's crucial that GCC from mingw is used by Rust so either make sure that mingw is earlier in the `PATH` or delete `gcc.exe` and `ld.exe` from the Rust installation.
+If your Rust installation has `gcc.exe` and `ld.exe` in its `bin` directory, you may
+get a linking error `ld: cannot find -limm32`. In that case remove those executables,
+they will be provided by mingw instead.
 
 ## Versions and features
 
