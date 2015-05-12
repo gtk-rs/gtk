@@ -9,7 +9,7 @@ use glib::signal::connect;
 use glib::translate::*;
 use glib::{FFIGObject, ParamSpec};
 
-use ffi::{Gboolean, GtkAdjustment, GtkTreeSelection, GtkTreeViewColumn};
+use ffi::{gboolean, GtkAdjustment, GtkTreeSelection, GtkTreeViewColumn};
 use gdk::{
     EventAny, EventButton, EventConfigure, EventCrossing, EventExpose, EventFocus, EventGrabBroken,
     EventKey, EventMotion, EventProperty, EventProximity, EventScroll, EventWindowState,
@@ -28,10 +28,10 @@ use {
 pub struct Inhibit(pub bool);
 
 impl ToGlib for Inhibit {
-    type GlibType = Gboolean;
+    type GlibType = gboolean;
 
     #[inline]
-    fn to_glib(&self) -> Gboolean {
+    fn to_glib(&self) -> gboolean {
         self.0.to_glib()
     }
 }
@@ -108,7 +108,7 @@ mod widget {
     use cairo::Context;
     use traits::{FFIWidget, WidgetTrait};
     use gdk_ffi::GdkScreen;
-    use ffi::{Gboolean, GtkWidget, GtkTooltip};
+    use ffi::{gboolean, GtkWidget, GtkTooltip};
     use {Widget, DirectionType, StateFlags, TextDirection, Tooltip, WidgetHelpType};
     use super::Inhibit;
 
@@ -530,87 +530,87 @@ mod widget {
         f(FFIWidget::wrap_widget(this));
     }
 
-    extern "C" fn bool_trampoline(this: *mut GtkWidget, f: &Box<Fn(Widget) -> bool + 'static>) -> Gboolean {
+    extern "C" fn bool_trampoline(this: *mut GtkWidget, f: &Box<Fn(Widget) -> bool + 'static>) -> gboolean {
         f(FFIWidget::wrap_widget(this)).to_glib()
     }
 
     extern "C" fn accel_trampoline(this: *mut GtkWidget, signal_id: c_uint,
-            f: &Box<Fn(Widget, u64) -> bool + 'static>) -> Gboolean {
+            f: &Box<Fn(Widget, u64) -> bool + 'static>) -> gboolean {
         f(FFIWidget::wrap_widget(this), signal_id as u64).to_glib()
     }
 
     extern "C" fn draw_trampoline(this: *mut GtkWidget, cr: *mut cairo_t,
-            f: &Box<Fn(Widget, Context) -> Inhibit + 'static>) -> Gboolean {
+            f: &Box<Fn(Widget, Context) -> Inhibit + 'static>) -> gboolean {
         f(FFIWidget::wrap_widget(this), Context::wrap(cr)).to_glib()
     }
 
     extern "C" fn event_any_trampoline(this: *mut GtkWidget, event: *mut EventAny,
-            f: &Box<Fn(Widget, &EventAny) -> Inhibit + 'static>) -> Gboolean {
+            f: &Box<Fn(Widget, &EventAny) -> Inhibit + 'static>) -> gboolean {
         unsafe { f(FFIWidget::wrap_widget(this), transmute(event)).to_glib() }
     }
 
     extern "C" fn event_button_trampoline(this: *mut GtkWidget, event: *mut EventAny,
-            f: &Box<Fn(Widget, &EventButton) -> Inhibit + 'static>) -> Gboolean {
+            f: &Box<Fn(Widget, &EventButton) -> Inhibit + 'static>) -> gboolean {
         unsafe { f(FFIWidget::wrap_widget(this), transmute(event)).to_glib() }
     }
 
     extern "C" fn event_configure_trampoline(this: *mut GtkWidget, event: *mut EventAny,
-            f: &Box<Fn(Widget, &EventConfigure) -> Inhibit + 'static>) -> Gboolean {
+            f: &Box<Fn(Widget, &EventConfigure) -> Inhibit + 'static>) -> gboolean {
         unsafe { f(FFIWidget::wrap_widget(this), transmute(event)).to_glib() }
     }
 
     extern "C" fn event_crossing_trampoline(this: *mut GtkWidget, event: *mut EventAny,
-            f: &Box<Fn(Widget, &EventCrossing) -> Inhibit + 'static>) -> Gboolean {
+            f: &Box<Fn(Widget, &EventCrossing) -> Inhibit + 'static>) -> gboolean {
         unsafe { f(FFIWidget::wrap_widget(this), transmute(event)).to_glib() }
     }
 
     extern "C" fn event_expose_trampoline(this: *mut GtkWidget, event: *mut EventAny,
-            f: &Box<Fn(Widget, &EventExpose) -> Inhibit + 'static>) -> Gboolean {
+            f: &Box<Fn(Widget, &EventExpose) -> Inhibit + 'static>) -> gboolean {
         unsafe { f(FFIWidget::wrap_widget(this), transmute(event)).to_glib() }
     }
 
     extern "C" fn event_focus_trampoline(this: *mut GtkWidget, event: *mut EventAny,
-            f: &Box<Fn(Widget, &EventFocus) -> Inhibit + 'static>) -> Gboolean {
+            f: &Box<Fn(Widget, &EventFocus) -> Inhibit + 'static>) -> gboolean {
         unsafe { f(FFIWidget::wrap_widget(this), transmute(event)).to_glib() }
     }
 
     extern "C" fn event_grab_broken_trampoline(this: *mut GtkWidget, event: *mut EventAny,
-            f: &Box<Fn(Widget, &EventGrabBroken) -> Inhibit + 'static>) -> Gboolean {
+            f: &Box<Fn(Widget, &EventGrabBroken) -> Inhibit + 'static>) -> gboolean {
         unsafe { f(FFIWidget::wrap_widget(this), transmute(event)).to_glib() }
     }
 
     extern "C" fn event_key_trampoline(this: *mut GtkWidget, event: *mut EventAny,
-            f: &Box<Fn(Widget, &EventKey) -> Inhibit + 'static>) -> Gboolean {
+            f: &Box<Fn(Widget, &EventKey) -> Inhibit + 'static>) -> gboolean {
         unsafe { f(FFIWidget::wrap_widget(this), transmute(event)).to_glib() }
     }
 
     extern "C" fn event_motion_trampoline(this: *mut GtkWidget, event: *mut EventAny,
-            f: &Box<Fn(Widget, &EventMotion) -> Inhibit + 'static>) -> Gboolean {
+            f: &Box<Fn(Widget, &EventMotion) -> Inhibit + 'static>) -> gboolean {
         unsafe { f(FFIWidget::wrap_widget(this), transmute(event)).to_glib() }
     }
 
     extern "C" fn event_property_trampoline(this: *mut GtkWidget, event: *mut EventAny,
-            f: &Box<Fn(Widget, &EventProperty) -> Inhibit + 'static>) -> Gboolean {
+            f: &Box<Fn(Widget, &EventProperty) -> Inhibit + 'static>) -> gboolean {
         unsafe { f(FFIWidget::wrap_widget(this), transmute(event)).to_glib() }
     }
 
     extern "C" fn event_proximity_trampoline(this: *mut GtkWidget, event: *mut EventAny,
-            f: &Box<Fn(Widget, &EventProximity) -> Inhibit + 'static>) -> Gboolean {
+            f: &Box<Fn(Widget, &EventProximity) -> Inhibit + 'static>) -> gboolean {
         unsafe { f(FFIWidget::wrap_widget(this), transmute(event)).to_glib() }
     }
 
     extern "C" fn event_scroll_trampoline(this: *mut GtkWidget, event: *mut EventAny,
-            f: &Box<Fn(Widget, &EventScroll) -> Inhibit + 'static>) -> Gboolean {
+            f: &Box<Fn(Widget, &EventScroll) -> Inhibit + 'static>) -> gboolean {
         unsafe { f(FFIWidget::wrap_widget(this), transmute(event)).to_glib() }
     }
 
     extern "C" fn event_window_state_trampoline(this: *mut GtkWidget, event: *mut EventAny,
-            f: &Box<Fn(Widget, &EventWindowState) -> Inhibit + 'static>) -> Gboolean {
+            f: &Box<Fn(Widget, &EventWindowState) -> Inhibit + 'static>) -> gboolean {
         unsafe { f(FFIWidget::wrap_widget(this), transmute(event)).to_glib() }
     }
 
     extern "C" fn direction_trampoline(this: *mut GtkWidget, direction: DirectionType,
-            f: &Box<Fn(Widget, DirectionType) -> Inhibit + 'static>) -> Gboolean {
+            f: &Box<Fn(Widget, DirectionType) -> Inhibit + 'static>) -> gboolean {
         f(FFIWidget::wrap_widget(this), direction).to_glib()
     }
 
@@ -619,18 +619,18 @@ mod widget {
         f(FFIWidget::wrap_widget(this), direction);
     }
 
-    extern "C" fn grab_trampoline(this: *mut GtkWidget, was_grabbed: Gboolean,
+    extern "C" fn grab_trampoline(this: *mut GtkWidget, was_grabbed: gboolean,
             f: &Box<Fn(Widget, bool) + 'static>) {
         f(FFIWidget::wrap_widget(this), from_glib(was_grabbed));
     }
 
     extern "C" fn help_trampoline(this: *mut GtkWidget, help_type: WidgetHelpType,
-            f: &Box<Fn(Widget, WidgetHelpType) -> bool + 'static>) -> Gboolean {
+            f: &Box<Fn(Widget, WidgetHelpType) -> bool + 'static>) -> gboolean {
         f(FFIWidget::wrap_widget(this), help_type).to_glib()
     }
 
-    extern "C" fn mnemonic_trampoline(this: *mut GtkWidget, arg1: Gboolean,
-            f: &Box<Fn(Widget, bool) -> Inhibit + 'static>) -> Gboolean {
+    extern "C" fn mnemonic_trampoline(this: *mut GtkWidget, arg1: gboolean,
+            f: &Box<Fn(Widget, bool) -> Inhibit + 'static>) -> gboolean {
         f(FFIWidget::wrap_widget(this), from_glib(arg1)).to_glib()
     }
 
@@ -639,9 +639,9 @@ mod widget {
         unsafe { f(FFIWidget::wrap_widget(this), transmute(pspec)); }
     }
 
-    extern "C" fn query_trampoline(this: *mut GtkWidget, x: c_int, y: c_int, keyboard: Gboolean,
+    extern "C" fn query_trampoline(this: *mut GtkWidget, x: c_int, y: c_int, keyboard: gboolean,
             _tooltip: *mut GtkTooltip, f: &Box<Fn(Widget, i32, i32, bool, Tooltip) -> bool + 'static>)
-            -> Gboolean {
+            -> gboolean {
         f(FFIWidget::wrap_widget(this), x, y, from_glib(keyboard), Tooltip).to_glib()
     }
 
@@ -834,7 +834,7 @@ mod tree_view {
     use glib::signal::connect;
     use glib::translate::*;
     use traits::FFIWidget;
-    use ffi::{Gboolean, GtkTreeIter, GtkTreePath, GtkTreeView, GtkTreeViewColumn};
+    use ffi::{gboolean, GtkTreeIter, GtkTreePath, GtkTreeView, GtkTreeViewColumn};
     use {TreeIter, TreePath, TreeView, TreeViewColumn};
 
     impl super::TreeViewSignals for TreeView {
@@ -961,17 +961,17 @@ mod tree_view {
     }
 
     extern "C" fn bool_trampoline(this: *mut GtkTreeView, f: &Box<Fn(TreeView) -> bool + 'static>)
-            -> Gboolean {
+            -> gboolean {
         f(FFIWidget::wrap_widget(this as *mut _)).to_glib()
     }
 
-    extern "C" fn bool_bool_trampoline(this: *mut GtkTreeView, arg1: Gboolean,
-            f: &Box<Fn(TreeView, bool) -> bool + 'static>) -> Gboolean {
+    extern "C" fn bool_bool_trampoline(this: *mut GtkTreeView, arg1: gboolean,
+            f: &Box<Fn(TreeView, bool) -> bool + 'static>) -> gboolean {
         f(FFIWidget::wrap_widget(this as *mut _), from_glib(arg1)).to_glib()
     }
 
-    extern "C" fn bool3_bool_trampoline(this: *mut GtkTreeView, arg1: Gboolean, arg2: Gboolean,
-            arg3: Gboolean, f: &Box<Fn(TreeView, bool, bool, bool) -> bool + 'static>) -> Gboolean {
+    extern "C" fn bool3_bool_trampoline(this: *mut GtkTreeView, arg1: gboolean, arg2: gboolean,
+            arg3: gboolean, f: &Box<Fn(TreeView, bool, bool, bool) -> bool + 'static>) -> gboolean {
         f(FFIWidget::wrap_widget(this as *mut _), from_glib(arg1), from_glib(arg2),
             from_glib(arg3)).to_glib()
     }
@@ -990,7 +990,7 @@ mod tree_view {
 
     extern "C" fn iter_path_bool_trampoline(this: *mut GtkTreeView, iter: *mut GtkTreeIter,
             path: *mut GtkTreePath, f: &Box<Fn(TreeView, &mut TreeIter, TreePath) -> bool + 'static>)
-            -> Gboolean {
+            -> gboolean {
         f(FFIWidget::wrap_widget(this as *mut _), &mut TreeIter::wrap_pointer(iter),
             TreePath::wrap_pointer(path)).to_glib()
     }
@@ -1010,7 +1010,7 @@ mod range {
     use glib::signal::connect;
     use glib::translate::*;
     use traits::{FFIWidget, RangeTrait};
-    use ffi::{Gboolean, GtkRange};
+    use ffi::{gboolean, GtkRange};
     use {Range, ScrollType};
     use super::Inhibit;
 
@@ -1059,7 +1059,7 @@ mod range {
     }
 
     extern "C" fn change_trampoline(this: *mut GtkRange, scroll: ScrollType, value: c_double,
-            f: &Box<Fn(Range, ScrollType, f64) -> Inhibit + 'static>) -> Gboolean {
+            f: &Box<Fn(Range, ScrollType, f64) -> Inhibit + 'static>) -> gboolean {
         f(FFIWidget::wrap_widget(this as *mut _), scroll, value).to_glib()
     }
 

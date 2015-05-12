@@ -189,7 +189,7 @@ impl TreeModel {
 }
 
 fn my_fn(model: *mut ffi::GtkTreeModel, path: *mut ffi::GtkTreePath, iter: *mut ffi::GtkTreeIter,
-    data: &mut (fn(&mut TreeModel, &mut TreePath, &mut TreeIter, data: *mut c_void) -> bool, &mut c_void)) -> ffi::Gboolean {
+    data: &mut (fn(&mut TreeModel, &mut TreePath, &mut TreeIter, data: *mut c_void) -> bool, &mut c_void)) -> ffi::gboolean {
     glib::to_gboolean(data.0(&mut TreeModel::wrap_pointer(model), &mut TreePath::wrap_pointer(path), &mut TreeIter::wrap_pointer(iter), data.1))
 }
 
