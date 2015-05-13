@@ -59,8 +59,9 @@ build_script:
   - cargo build --features "%FEATURES%"
   - mkdir .cargo
   - echo paths = ["."] > .cargo\config
-  - git clone https://github.com/rust-gnome/examples _examples
+  - git clone -q --depth 1 https://github.com/rust-gnome/examples _examples
   - cd _examples
+  - bash -c "./git_deps.sh cairo glib gdk pango"
   - "echo Features: %EXAMPLES_FEATURES%"
   - cargo build --features "%EXAMPLES_FEATURES%"
 
