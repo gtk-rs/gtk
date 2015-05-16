@@ -3,9 +3,9 @@ platform:
   - x64
 environment:
   matrix:
-    - RUST_VERSION: 1.0.0-beta.4
+    - RUST_VERSION: 1.0.0
       GTK: gnome
-    - RUST_VERSION: 1.0.0-beta.4
+    - RUST_VERSION: 1.0.0
       GTK: win64
     #- RUST_VERSION: nightly
       #GTK: gnome
