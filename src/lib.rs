@@ -336,9 +336,7 @@ pub use self::traits::WidgetSignals;
 pub use self::traits::WindowTrait;
 
 /// GTK various struct
-pub use self::types::{
-    Tooltip,
-};
+pub struct Tooltip;
 
 mod macros;
 mod cast;
@@ -347,4 +345,3 @@ mod rt;
 pub mod traits;
 pub mod signal;
 pub mod widgets;
-pub mod types;
