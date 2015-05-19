@@ -16,5 +16,3 @@ script:
   - cd _examples
   - ./git_deps.sh cairo glib gdk pango
   - cargo build
-  - cd ..
-  - cargo doc
