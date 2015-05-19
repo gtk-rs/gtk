@@ -3,9 +3,6 @@ rust:
 - nightly
 - stable
 sudo: true
-env:
-  global:
-    - secure: cRbvQ7JYJzUdxjf1XJIQuCIwrvZbLxNUYkSfKfnRrqnbFKXNWW8cKBFaVQWPwmDrocGBwZVEsYPxra88dZtro0NIRmRuZzZ2jZfbCeatGPveQGGxsst9a5UXX8LYnk7w3M4aOLtIgjG90vD+FgyouhZdPZwCGEodtGYieeLnwrM=
 before_install:
   - yes | sudo add-apt-repository ppa:ricotz/testing
   - sudo apt-get update
@@ -15,11 +12,7 @@ script:
   - rustc --version
   - mkdir .cargo
   - echo 'paths = ["."]' > .cargo/config
-  - git clone -q --depth 1 https://github.com/rust-gnome/examples _examples
+  - git clone -q --depth 50 https://github.com/rust-gnome/examples _examples
   - cd _examples
   - ./git_deps.sh cairo glib gdk pango
   - cargo build
-  - cd ..
-  - cargo doc
-after_script:
-  - curl http://www.rust-ci.org/artifacts/put?t=$RUSTCI_TOKEN | sh
