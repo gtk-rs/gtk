@@ -13,9 +13,9 @@ use ffi::{gboolean, GtkAdjustment, GtkTreeSelection, GtkTreeViewColumn};
 use gdk::{
     EventAny, EventButton, EventConfigure, EventCrossing, EventExpose, EventFocus, EventGrabBroken,
     EventKey, EventMotion, EventProperty, EventProximity, EventScroll, EventWindowState,
-    Rectangle, Screen,
+    Screen,
 };
-use cairo::Context;
+use cairo::{Context, RectangleInt};
 
 use {
     Adjustment, Button, Dialog, DirectionType, Range, ScrollType, SpinButton, StateFlags,
@@ -82,7 +82,7 @@ pub trait WidgetSignals {
     fn connect_scroll_event<F: Fn(Widget, &EventScroll) -> Inhibit + 'static>(&self, f: F) -> u64;
     fn connect_show<F: Fn(Widget) + 'static>(&self, f: F) -> u64;
     fn connect_show_help<F: Fn(Widget, WidgetHelpType) -> bool + 'static>(&self, f: F) -> u64;
-    fn connect_size_allocate<F: Fn(Widget, &Rectangle) + 'static>(&self, f: F) -> u64;
+    fn connect_size_allocate<F: Fn(Widget, &RectangleInt) + 'static>(&self, f: F) -> u64;
     fn connect_state_flags_changed<F: Fn(Widget, StateFlags) + 'static>(&self, f: F) -> u64;
     fn connect_style_updated<F: Fn(Widget) + 'static>(&self, f: F) -> u64;
     fn connect_touch_event<F: Fn(Widget, &EventAny) -> Inhibit + 'static>(&self, f: F) -> u64;
@@ -102,10 +102,10 @@ mod widget {
     use gdk::{
         EventAny, EventButton, EventConfigure, EventCrossing, EventExpose, EventFocus,
         EventGrabBroken, EventKey, EventMotion, EventProperty, EventProximity, EventScroll,
-        EventWindowState, Rectangle, Screen,
+        EventWindowState, Screen,
     };
     use cairo_ffi::cairo_t;
-    use cairo::Context;
+    use cairo::{Context, RectangleInt};
     use traits::{FFIWidget, WidgetTrait};
     use gdk_ffi::GdkScreen;
     use ffi::{gboolean, GtkWidget, GtkTooltip};
@@ -459,9 +459,9 @@ mod widget {
             }
         }
 
-        fn connect_size_allocate<F: Fn(Widget, &Rectangle) + 'static>(&self, f: F) -> u64 {
+        fn connect_size_allocate<F: Fn(Widget, &RectangleInt) + 'static>(&self, f: F) -> u64 {
             unsafe {
-                let f: Box<Box<Fn(Widget, &Rectangle) + 'static>> = Box::new(Box::new(f));
+                let f: Box<Box<Fn(Widget, &RectangleInt) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "size-allocate",
                     transmute(rectangle_trampoline), into_raw(f) as *mut _)
             }
@@ -645,8 +645,8 @@ mod widget {
         f(FFIWidget::wrap_widget(this), x, y, from_glib(keyboard), Tooltip).to_glib()
     }
 
-    extern "C" fn rectangle_trampoline(this: *mut GtkWidget, allocation: *mut Rectangle,
-            f: &Box<Fn(Widget, &Rectangle) + 'static>) {
+    extern "C" fn rectangle_trampoline(this: *mut GtkWidget, allocation: *mut RectangleInt,
+            f: &Box<Fn(Widget, &RectangleInt) + 'static>) {
         unsafe { f(FFIWidget::wrap_widget(this), transmute(allocation)); }
     }
 
