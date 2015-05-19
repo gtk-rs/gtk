@@ -12,7 +12,7 @@ script:
   - rustc --version
   - mkdir .cargo
   - echo 'paths = ["."]' > .cargo/config
-  - git clone -q --depth 1 https://github.com/rust-gnome/examples _examples
+  - git clone -q --depth 50 https://github.com/rust-gnome/examples _examples
   - cd _examples
   - ./git_deps.sh cairo glib gdk pango
   - cargo build
