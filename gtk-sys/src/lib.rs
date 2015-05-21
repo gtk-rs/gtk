@@ -390,6 +390,7 @@ extern "C" {
     //=========================================================================
     // GtkWidget                                                         NOT OK
     //=========================================================================
+    pub fn gtk_widget_get_type                 () -> GType;
     //pub fn gtk_widget_new                      (type: GType, first_property_name: *const c_char, ...) -> *mut GtkWidget;
     pub fn gtk_widget_destroyed                (widget: *mut GtkWidget, widget_pointer: *mut *mut GtkWidget);
     pub fn gtk_widget_show                     (widget: *mut GtkWidget);
@@ -429,7 +430,7 @@ extern "C" {
     pub fn gtk_widget_get_name                 (widget: *mut GtkWidget) -> *const c_char;
     pub fn gtk_widget_set_sensitive            (widget: *mut GtkWidget, sensitive: gboolean);
     pub fn gtk_widget_set_parent               (widget: *mut GtkWidget, parent: *mut GtkWidget);
-    //pub fn gtk_widget_set_parent_window        (widget: *mut GtkWindow, parent_window: *mut gdk::Window);
+    pub fn gtk_widget_set_parent_window        (widget: *mut GtkWidget, parent_window: *mut gdk_ffi::GdkWindow);
     //pub fn gtk_widget_get_parent_window        (widget: *mut GtkWindow) -> *mut gdk::Window;
     //pub fn gtk_widget_set_events               (widget: *mut GtkWidget, events: c_int);
     //pub fn gtk_widget_get_events               (widget: *mut GtkWidget) -> c_int;
