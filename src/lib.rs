@@ -139,6 +139,7 @@ pub mod rt;
 pub mod widgets;
 
 pub use builder::{Builder, Buildable};
+pub use widgets::container::Container;
 pub use widgets::widget::Widget;
 
 // ---------------- cut ----------------

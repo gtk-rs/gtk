@@ -711,6 +711,7 @@ extern "C" {
     //=========================================================================
     // GtkContainer                                                          OK
     //=========================================================================
+    pub fn gtk_container_get_type              () -> GType;
     pub fn gtk_container_add                   (container: *mut GtkContainer, widget: *mut GtkWidget);
     pub fn gtk_container_remove                (container: *mut GtkContainer, widget: *mut GtkWidget) -> ();
     pub fn gtk_container_get_resize_mode       (container: *mut GtkContainer) -> enums::ResizeMode;
@@ -718,6 +719,7 @@ extern "C" {
     pub fn gtk_container_check_resize          (container: *mut GtkContainer) -> ();
     pub fn gtk_container_get_border_width      (container: *mut GtkContainer) -> c_uint;
     pub fn gtk_container_set_border_width      (container: *mut GtkContainer, border_width: c_uint) -> ();
+    pub fn gtk_container_get_children          (container: *mut GtkContainer) -> *mut GList;
 
     //=========================================================================
     // GtkMisc                                                               OK
