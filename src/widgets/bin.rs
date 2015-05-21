@@ -2,18 +2,32 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-use cast::GTK_BIN;
+use glib::translate::*;
+use glib::types;
 use ffi;
 
-pub trait BinTrait: ::WidgetTrait + ::ContainerTrait {
-    fn get_child<T: ::WidgetTrait>(&self) ->  Option<T> {
-        let tmp_pointer = unsafe {
-            ffi::gtk_bin_get_child(GTK_BIN(self.unwrap_widget()))
-        };
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            Some(::FFIWidget::wrap_widget(tmp_pointer))
-        }
+use object::{Object, Upcast};
+use super::widget::Widget;
+
+pub type Bin = Object<ffi::GtkBin>;
+
+impl types::StaticType for Bin {
+    #[inline]
+    fn static_type() -> types::Type {
+        unsafe { from_glib(ffi::gtk_bin_get_type()) }
+    }
+}
+
+unsafe impl Upcast<Widget> for Bin { }
+unsafe impl Upcast<super::container::Container> for Bin { }
+unsafe impl Upcast<::builder::Buildable> for Bin { }
+
+pub trait BinExt {
+    fn get_child(&self) -> Option<Widget>;
+}
+
+impl<O: Upcast<Bin>> BinExt for O {
+    fn get_child(&self) -> Option<Widget> {
+        unsafe { from_glib_none(ffi::gtk_bin_get_child(self.upcast().to_glib_none().0)) }
     }
 }
