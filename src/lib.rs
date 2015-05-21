@@ -132,10 +132,13 @@ pub use ffi::enums::{
     WrapMode,
 };
 
+pub mod builder;
 pub mod object;
 pub mod prelude;
 pub mod rt;
 pub mod widgets;
+
+pub use builder::{Builder, Buildable};
 
 // ---------------- cut ----------------
 

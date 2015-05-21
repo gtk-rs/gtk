@@ -1578,6 +1578,7 @@ extern "C" {
     //=========================================================================
     // GtkBuildable                                                      NOT OK
     //=========================================================================
+    pub fn gtk_buildable_get_type              () -> GType;
     pub fn gtk_buildable_set_name              (buildable: *mut GtkBuildable, name: *const c_char);
     pub fn gtk_buildable_get_name              (buildable: *mut GtkBuildable) -> *const c_char;
     //pub fn gtk_buildable_add_child             (buildable: *mut GtkBuildable, builder: *mut GtkBuilder, child: *mut GObject, _type: *const c_char);
@@ -3198,6 +3199,7 @@ extern "C" {
     //=========================================================================
     // GtkBuilder                                                        NOT OK
     //=========================================================================
+    pub fn gtk_builder_get_type                () -> GType;
     pub fn gtk_builder_new                     () -> *mut GtkBuilder;
     pub fn gtk_builder_new_from_file           (file_name: *const c_char) -> *mut GtkBuilder;
     pub fn gtk_builder_new_from_resource       (resource_path: *const c_char) -> *mut GtkBuilder;

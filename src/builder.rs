@@ -4,88 +4,65 @@
 
 #![cfg_attr(not(feature = "gtk_3_10"), allow(unused_imports))]
 
-use ffi::{self, GtkBuilder};
 use libc::{c_char, c_long};
-use traits::GObjectTrait;
-use glib::translate::ToGlibPtr;
 
-#[repr(C)]
-pub struct Builder {
-    pointer: *mut GtkBuilder
+use glib::{self, types};
+use glib::translate::*;
+use ffi;
+
+use object::{Object, Downcast, Upcast};
+
+pub type Buildable = Object<ffi::GtkBuildable>;
+
+impl types::StaticType for Buildable {
+    #[inline]
+    fn static_type() -> types::Type {
+        unsafe { from_glib(ffi::gtk_buildable_get_type()) }
+    }
 }
+
+pub type Builder = Object<ffi::GtkBuilder>;
 
 impl Builder {
-    pub fn new() -> Option<Builder> {
-        let tmp = unsafe { ffi::gtk_builder_new() };
+    pub fn new() -> Builder {
+        unsafe { from_glib_full(ffi::gtk_builder_new()) }
+    }
 
-        if tmp.is_null() {
-            None
-        } else {
-            Some(Builder {
-                pointer: tmp
-            })
+    #[cfg(feature = "gtk_3_10")]
+    pub fn new_from_file(file_name: &str) -> Builder {
+        unsafe { from_glib_full(ffi::gtk_builder_new_from_file(file_name.to_glib_none().0)) }
+    }
+
+    #[cfg(feature = "gtk_3_10")]
+    pub fn new_from_resource(resource_path: &str) -> Builder {
+        unsafe {
+            from_glib_full(ffi::gtk_builder_new_from_resource(resource_path.to_glib_none().0))
         }
     }
 
     #[cfg(feature = "gtk_3_10")]
-    pub fn new_from_file(file_name: &str) -> Option<Builder> {
-        let tmp = unsafe {
-            ffi::gtk_builder_new_from_file(file_name.to_glib_none().0)
-        };
-
-        if tmp.is_null() {
-            None
-        } else {
-            Some(Builder {
-                pointer: tmp
-            })
-        }
-    }
-
-    #[cfg(feature = "gtk_3_10")]
-    pub fn new_from_resource(resource_path: &str) -> Option<Builder> {
-        let tmp = unsafe {
-            ffi::gtk_builder_new_from_resource(resource_path.to_glib_none().0)
-        };
-
-        if tmp.is_null() {
-            None
-        } else {
-            Some(Builder {
-                pointer: tmp
-            })
-        }
-    }
-
-    #[cfg(feature = "gtk_3_10")]
-    pub fn new_from_string(string: &str) -> Option<Builder> {
-        let tmp = unsafe {
+    pub fn new_from_string(string: &str) -> Builder {
+        unsafe {
             // Don't need a null-terminated string here
-            ffi::gtk_builder_new_from_string(string.as_ptr() as *const c_char,
-                                             string.len() as c_long)
-        };
-
-        if tmp.is_null() {
-            None
-        } else {
-            Some(Builder {
-                pointer: tmp
-            })
+            from_glib_full(
+                ffi::gtk_builder_new_from_string(string.as_ptr() as *const c_char,
+                    string.len() as c_long))
         }
     }
 
-    pub fn get_object<T: GObjectTrait>(&self, name: &str) -> Option<T> {
-        let tmp = unsafe {
-            ffi::gtk_builder_get_object(self.pointer, name.to_glib_none().0)
-        };
-
-        if tmp.is_null() {
-            None
-        } else {
-            Some(::glib::traits::FFIGObject::wrap_object(tmp))
+    pub fn get_object<T>(&self, name: &str) -> Option<T>
+    where T: Upcast<Buildable> + Upcast<glib::object::Object> {
+        unsafe {
+            Option::<glib::object::Object>::from_glib_none(
+                ffi::gtk_builder_get_object(self.to_glib_none().0, name.to_glib_none().0))
+                .and_then(|obj| obj.downcast().ok())
         }
     }
 }
 
-impl_GObjectFunctions!(Builder, GtkBuilder);
-impl_TraitObject!(Builder, GtkBuilder);
+impl types::StaticType for Builder {
+    #[inline]
+    fn static_type() -> types::Type {
+        unsafe { from_glib(ffi::gtk_builder_get_type()) }
+    }
+}
