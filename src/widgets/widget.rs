@@ -103,6 +103,7 @@ pub trait WidgetExt {
     fn get_can_focus(&self) -> bool;
     fn set_can_focus(&self, can_focus: bool);
     fn get_double_buffered(&self) -> bool;
+    fn get_window(&self) -> Option<gdk::Window>;
     fn get_has_window(&self) -> bool;
     fn set_has_window(&self, has_window: bool);
     fn get_sensitive(&self) -> bool;
@@ -563,7 +564,7 @@ impl<O: Upcast<Widget>> WidgetExt for O {
 
     fn get_window(&self) -> Option<gdk::Window> {
         unsafe {
-            from_glib_none(ffi::gtk_widget_get_window(self.unwrap_widget()))
+            from_glib_none(ffi::gtk_widget_get_window(self.upcast().to_glib_none().0))
         }
     }
 

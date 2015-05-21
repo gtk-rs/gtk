@@ -346,10 +346,11 @@ extern "C" {
     //=========================================================================
     // GtkWindow
     //=========================================================================
+    pub fn gtk_window_get_type                 () -> GType;
     pub fn gtk_window_new                      (wtype : enums::WindowType) -> *mut GtkWidget;
     pub fn gtk_window_set_title                (window: *mut GtkWindow, title: *const c_char) -> ();
     pub fn gtk_window_get_title                (window: *mut GtkWindow) -> *const c_char;
-    pub fn gtk_window_set_default_size         (widget: *mut GtkWidget, width: c_int, height: c_int);
+    pub fn gtk_window_set_default_size         (widget: *mut GtkWindow, width: c_int, height: c_int);
     pub fn gtk_window_set_position             (window: *mut GtkWindow, position: enums::WindowPosition) -> ();
     pub fn gtk_window_set_decorated            (window: *mut GtkWindow, setting: gboolean) -> ();
     pub fn gtk_window_set_titlebar             (window: *mut GtkWindow, titlebar: *mut GtkWidget) -> ();

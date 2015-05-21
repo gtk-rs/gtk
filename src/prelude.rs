@@ -5,3 +5,4 @@
 pub use widgets::bin::BinExt;
 pub use widgets::container::ContainerExt;
 pub use widgets::widget::WidgetExt;
+pub use window::WindowExt;
