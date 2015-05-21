@@ -48,6 +48,99 @@ extern crate pango;
 
 pub use glib::ValuePublic;
 
+pub use ffi::enums::{
+    AccelFlags,
+    Align,
+    AppInfoCreateFlags,
+    ArrowPlacement,
+    ArrowType,
+    AttachOptions,
+    BorderStyle,
+    BuilderError,
+    ButtonBoxStyle,
+    ButtonsType,
+    CalendarDisplayOptions,
+    CellRendererState,
+    CornerType,
+    DeleteType,
+    DestDefaults,
+    DialogFlags,
+    DirectionType,
+    DragResult,
+    EntryIconPosition,
+    ExpanderStyle,
+    FileChooserAction,
+    FileFilterFlags,
+    GType,
+    IMPreeditStyle,
+    IMStatusStyle,
+    IconSize,
+    IconViewDropPosition,
+    ImageType,
+    InputHints,
+    InputPurpose,
+    JunctionSides,
+    Justification,
+    LevelBarMode,
+    License,
+    MessageType,
+    MovementStep,
+    NumberUpLayout,
+    Orientation,
+    PackType,
+    PageOrientation,
+    PageSet,
+    PathPriorityType,
+    PathType,
+    PlacesOpenFlags,
+    PolicyType,
+    PositionType,
+    PrintPages,
+    RecentFilterFlags,
+    RecentSortType,
+    RegionFlags,
+    ReliefStyle,
+    ResizeMode,
+    ResponseType,
+    RevealerTransitionType,
+    ScrollStep,
+    ScrollType,
+    ScrollablePolicy,
+    SelectionMode,
+    SensitivityType,
+    ShadowType,
+    SizeGroupMode,
+    SizeRequestMode,
+    SortType,
+    SpinButtonUpdatePolicy,
+    SpinType,
+    StackTransitionType,
+    StateFlags,
+    StateType,
+    TextDirection,
+    TextSearchFlags,
+    TextWindowType,
+    ToolPaletteDragTargets,
+    ToolbarStyle,
+    TreeModelFlags,
+    TreeViewColumnSizing,
+    TreeViewGridLines,
+    Unit,
+    WidgetHelpType,
+    WindowPosition,
+    WindowType,
+    WrapMode,
+};
+
+pub mod object;
+pub mod prelude;
+pub mod rt;
+pub mod widgets;
+
+// ---------------- cut ----------------
+
+/*
+
 // These are/should be inlined
 pub use self::rt::{
     init,
@@ -209,87 +302,7 @@ pub use self::widgets::{
 };
 
 /// GTK Enum types
-pub use ffi::enums::WindowType;
-pub use ffi::enums::TextDirection;
-pub use ffi::enums::WindowPosition;
-pub use ffi::enums::ButtonBoxStyle;
-pub use ffi::enums::Orientation;
-pub use ffi::enums::DirectionType;
-pub use ffi::enums::CornerType;
-pub use ffi::enums::ResizeMode;
-pub use ffi::enums::BorderStyle;
-pub use ffi::enums::SortType;
-pub use ffi::enums::StateFlags;
-pub use ffi::enums::DragResult;
-pub use ffi::enums::AccelFlags;
-pub use ffi::enums::ArrowPlacement;
-pub use ffi::enums::ArrowType;
-pub use ffi::enums::AttachOptions;
-pub use ffi::enums::DeleteType;
-pub use ffi::enums::ExpanderStyle;
-pub use ffi::enums::IMPreeditStyle;
-pub use ffi::enums::IMStatusStyle;
-pub use ffi::enums::Justification;
-pub use ffi::enums::MovementStep;
-pub use ffi::enums::PackType;
-pub use ffi::enums::PathPriorityType;
-pub use ffi::enums::PathType;
-pub use ffi::enums::PolicyType;
-pub use ffi::enums::PositionType;
-pub use ffi::enums::ReliefStyle;
-pub use ffi::enums::ScrollStep;
-pub use ffi::enums::ScrollType;
-pub use ffi::enums::SelectionMode;
-pub use ffi::enums::ShadowType;
-pub use ffi::enums::StateType;
-pub use ffi::enums::ToolbarStyle;
-pub use ffi::enums::JunctionSides;
-pub use ffi::enums::RegionFlags;
-pub use ffi::enums::IconSize;
-pub use ffi::enums::EntryIconPosition;
-pub use ffi::enums::InputHints;
-pub use ffi::enums::InputPurpose;
-pub use ffi::enums::ImageType;
-pub use ffi::enums::SpinType;
-pub use ffi::enums::SpinButtonUpdatePolicy;
-pub use ffi::enums::LevelBarMode;
-pub use ffi::enums::CalendarDisplayOptions;
-pub use ffi::enums::MessageType;
-pub use ffi::enums::License;
-pub use ffi::enums::ResponseType;
-pub use ffi::enums::DialogFlags;
-pub use ffi::enums::FileChooserAction;
-pub use ffi::enums::ButtonsType;
-pub use ffi::enums::StackTransitionType;
-pub use ffi::enums::RevealerTransitionType;
-pub use ffi::enums::ScrollablePolicy;
-pub use ffi::enums::FileFilterFlags;
-pub use ffi::enums::AppInfoCreateFlags;
-pub use ffi::enums::SizeRequestMode;
-pub use ffi::enums::Align;
-pub use ffi::enums::BuilderError;
-pub use ffi::enums::PageOrientation;
-pub use ffi::enums::Unit;
-pub use ffi::enums::NumberUpLayout;
-pub use ffi::enums::PrintPages;
-pub use ffi::enums::PageSet;
-pub use ffi::enums::RecentSortType;
-pub use ffi::enums::RecentFilterFlags;
-pub use ffi::enums::WidgetHelpType;
-pub use ffi::enums::TextWindowType;
-pub use ffi::enums::WrapMode;
-pub use ffi::enums::TreeViewGridLines;
-pub use ffi::enums::TreeViewColumnSizing;
-pub use ffi::enums::CellRendererState;
-pub use ffi::enums::TreeModelFlags;
-pub use ffi::enums::IconViewDropPosition;
-pub use ffi::enums::SensitivityType;
-pub use ffi::enums::GType;
-pub use ffi::enums::TextSearchFlags;
-pub use ffi::enums::PlacesOpenFlags;
-pub use ffi::enums::ToolPaletteDragTargets;
-pub use ffi::enums::DestDefaults;
-pub use ffi::enums::SizeGroupMode;
+
 
 /// Gtk Traits
 pub use self::traits::FFIWidget;
@@ -340,8 +353,8 @@ pub struct Tooltip;
 
 mod macros;
 mod cast;
-mod rt;
 
 pub mod traits;
 pub mod signal;
 pub mod widgets;
+*/

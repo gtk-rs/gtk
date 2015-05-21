@@ -2,6 +2,9 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
+// ---------------- cut ----------------
+
+/*
 pub use self::widget::Widget;
 pub use self::builder::Builder;
 pub use self::window::Window;
@@ -271,3 +274,4 @@ mod font_chooser_widget;
 #[cfg(target_os = "linux")]
 mod socket;
 mod event_box;
+*/
