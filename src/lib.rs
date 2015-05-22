@@ -143,6 +143,8 @@ pub use builder::{Builder, Buildable};
 pub use widgets::bin::Bin;
 pub use widgets::button::Button;
 pub use widgets::container::Container;
+#[cfg(feature = "gtk_3_10")]
+pub use widgets::header_bar::HeaderBar;
 pub use widgets::widget::Widget;
 pub use window::Window;
 

@@ -2520,6 +2520,7 @@ extern "C" {
     //=========================================================================
     // GtkHeaderBar                                                          OK
     //=========================================================================
+    pub fn gtk_header_bar_get_type          () -> GType;
     pub fn gtk_header_bar_new               () -> *mut GtkWidget;
     pub fn gtk_header_bar_set_title         (bar: *mut GtkHeaderBar, title: *const c_char);
     pub fn gtk_header_bar_get_title         (bar: *mut GtkHeaderBar) -> *const c_char;
