@@ -3,6 +3,7 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 pub use widgets::bin::BinExt;
+pub use widgets::button::ButtonExt;
 pub use widgets::container::ContainerExt;
 pub use widgets::widget::WidgetExt;
 pub use window::WindowExt;

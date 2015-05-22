@@ -3,6 +3,7 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 pub mod bin;
+pub mod button;
 pub mod container;
 pub mod widget;
 

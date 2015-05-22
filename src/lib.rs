@@ -141,6 +141,7 @@ pub mod window;
 
 pub use builder::{Builder, Buildable};
 pub use widgets::bin::Bin;
+pub use widgets::button::Button;
 pub use widgets::container::Container;
 pub use widgets::widget::Widget;
 pub use window::Window;
