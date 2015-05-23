@@ -1,6 +1,6 @@
 [package]
 name = "gtk"
-version = "0.0.1"
+version = "0.0.2"
 authors = ["The Rust-GNOME Project Developers"]
 
 description = "Rust bindings for the GTK+ library"
