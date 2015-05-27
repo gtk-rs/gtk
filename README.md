@@ -45,7 +45,11 @@ they will be provided by mingw instead.
 
 __gtk__ targets __GTK+__ 3.6 and __Cairo__ 1.10 by default, other versions support is enabled by requesting a corresponding feature e.g.
 ```Shell
-> cargo build --features "gtk_3_10 cairo_1_12"
+> cargo build --features gtk_3_10
+```
+Disabling the default GTK 3.6 support
+```Shell
+> cargo build --no-default-features --features gtk_3_4
 ```
 Currently supported versions are __GTK+__ 3.4 to 3.14 and __Cairo__ 1.10 to 1.12.
 
@@ -83,6 +87,16 @@ To include rgtk as a cargo dependency you have to add it to your Cargo.toml and 
 git = "https://github.com/rust-gnome/gtk.git"
 features = ["gtk_3_12"]
 ```
+If it's lower than 3.6:
+```Toml
+[dependencies.rgtk]
+git = "https://github.com/rust-gnome/gtk.git"
+features = ["gtk_3_4"]
+default-features = false
+```
+For maximum compatibility the version you select here should be the lowest
+that provides all of the GTK features needed by your project.
+Don't just set it to match the libraries installed on your system.
 
 ## Use __gtk__
 
