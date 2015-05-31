@@ -54,6 +54,7 @@ pub use glib::ValuePublic;
 // These are/should be inlined
 pub use self::rt::{
     init,
+    init_check,
     main,
     main_quit,
     main_level,

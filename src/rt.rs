@@ -14,6 +14,10 @@ pub fn init() {
     }
 }
 
+pub fn init_check() -> bool {
+    unsafe { to_bool(ffi::gtk_init_check(ptr::null(), ptr::null())) }
+}
+
 pub fn main() {
     unsafe {
         ffi::gtk_main();
