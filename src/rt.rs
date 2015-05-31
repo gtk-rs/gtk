@@ -8,14 +8,13 @@ use ffi;
 use glib::translate::{from_glib_none};
 use glib::{to_bool, to_gboolean};
 
-pub fn init() {
+pub fn init() -> Result<(), ()> {
     unsafe {
-        ffi::gtk_init(ptr::null(), ptr::null());
+	match to_bool(ffi::gtk_init_check(ptr::null(), ptr::null())) {
+	    true => Ok(()),
+	    false => Err(())
+	}
     }
-}
-
-pub fn init_check() -> bool {
-    unsafe { to_bool(ffi::gtk_init_check(ptr::null(), ptr::null())) }
 }
 
 pub fn main() {
