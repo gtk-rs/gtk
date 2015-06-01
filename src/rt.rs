@@ -8,6 +8,9 @@ use ffi;
 use glib::translate::{from_glib_none};
 use glib::{to_bool, to_gboolean};
 
+/// Call this function before using any other GTK+ functions.
+/// Note that this function calls gtk_init_check() rather than gtk_init(),
+/// so will not cause the program to terminate if GTK could not be initialized.
 pub fn init() -> Result<(), ()> {
     unsafe {
 	match to_bool(ffi::gtk_init_check(ptr::null(), ptr::null())) {
