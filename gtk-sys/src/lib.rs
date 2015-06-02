@@ -335,6 +335,7 @@ extern "C" {
     // Gtk Main Loop + events
     //=========================================================================
     pub fn gtk_init                            (argc: *const c_int, argv: *const *const *const c_char) -> ();
+    pub fn gtk_init_check                      (argc: *const c_int, argv: *const *const *const c_char) -> gboolean;
     pub fn gtk_main                            () -> ();
     pub fn gtk_main_quit                       () -> ();
     pub fn gtk_main_level                      () -> c_uint;
