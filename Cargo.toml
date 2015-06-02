@@ -25,14 +25,32 @@ gtk_3_10 = ["gtk-sys/gtk_3_10", "gdk/gdk_3_10", "cairo-rs/cairo_1_12", "gtk_3_8"
 gtk_3_12 = ["gtk-sys/gtk_3_12", "gdk/gdk_3_12", "gtk_3_10"]
 gtk_3_14 = ["gtk-sys/gtk_3_14", "gdk/gdk_3_14", "gtk_3_12"]
 
+[dependencies.gdk-sys]
+git = "https://github.com/rust-gnome/gdk"
+
+[dependencies.gdk]
+git = "https://github.com/rust-gnome/gdk"
+
+[dependencies.glib-sys]
+git = "https://github.com/rust-gnome/glib"
+
+[dependencies.glib]
+git = "https://github.com/rust-gnome/glib"
+
+[dependencies.pango-sys]
+git = "https://github.com/rust-gnome/pango"
+
+[dependencies.pango]
+git = "https://github.com/rust-gnome/pango"
+
+[dependencies.cairo-sys-rs]
+git = "https://github.com/rust-gnome/cairo"
+
+[dependencies.cairo-rs]
+git = "https://github.com/rust-gnome/cairo"
+
+[dependencies.gtk-sys]
+path = "gtk-sys"
+
 [dependencies]
 libc = "0.1"
-gtk-sys = "^0"
-glib = "^0"
-glib-sys = "^0"
-gdk-sys = "^0"
-gdk = "^0"
-pango-sys = "^0"
-pango = "^0"
-cairo-sys-rs = "^0"
-cairo-rs = "^0"
