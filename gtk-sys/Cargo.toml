@@ -22,10 +22,14 @@ gtk_3_10 = []
 gtk_3_12 = []
 gtk_3_14 = []
 
+[dependencies.gdk-sys]
+git = "https://github.com/rust-gnome/gdk"
+
+[dependencies.glib-sys]
+git = "https://github.com/rust-gnome/glib"
+
 [dependencies]
 libc = "0.1"
-glib-sys = "^0"
-gdk-sys = "^0"
 
 [build-dependencies]
 pkg-config = "0.3"
