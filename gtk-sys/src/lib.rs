@@ -353,6 +353,8 @@ extern "C" {
     pub fn gtk_window_set_position             (window: *mut GtkWindow, position: enums::WindowPosition) -> ();
     pub fn gtk_window_set_decorated            (window: *mut GtkWindow, setting: gboolean) -> ();
     pub fn gtk_window_set_titlebar             (window: *mut GtkWindow, titlebar: *mut GtkWidget) -> ();
+    pub fn gtk_window_set_type_hint            (window: *mut GtkWindow, hint: gdk_ffi::enums::WindowTypeHint);
+    pub fn gtk_window_move                     (window: *mut GtkWindow, x: c_int, y: c_int);
 
     // pub fn gtk_window_set_role(window: *const const GtkWindow, role: *const c_char) -> ();
     // pub fn gtk_window_set_startup_id(window: *const const GtkWindow, startup_id: *const c_char) -> ();
@@ -509,7 +511,7 @@ extern "C" {
     pub fn gtk_widget_get_has_tooltip          (widget: *mut GtkWidget) -> gboolean;
     pub fn gtk_widget_set_has_tooltip          (widget: *mut GtkWidget, has_tooltip: gboolean);
     pub fn gtk_widget_trigger_tooltip_query    (widget: *mut GtkWidget);
-    //pub fn gtk_widget_get_window               (widget: *mut GtkWidget) -> *mut GtkWindow;
+    pub fn gtk_widget_get_window               (widget: *mut GtkWidget) -> *mut gdk_ffi::GdkWindow;
     //pub fn gtk_widget_register_window          (widget: *mut GtkWidget, window: *mut GtkWindow);
     //pub fn gtk_widget_unregister_window        (widget: *mut GtkWidget, window: *mut GtkWindow);
     //pub fn gtk_cairo_should_draw_window        (cr: *mut cairo_t, window: *mut GtkWindow);

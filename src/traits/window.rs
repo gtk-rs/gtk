@@ -6,8 +6,21 @@ use glib::translate::{from_glib_none, ToGlibPtr};
 use ffi;
 use glib::to_gboolean;
 use cast::GTK_WINDOW;
+use gdk;
 
 pub trait WindowTrait : ::WidgetTrait {
+    fn move_(&self, x: i32, y: i32) {
+        unsafe {
+            ffi::gtk_window_move(GTK_WINDOW(self.unwrap_widget()), x, y);
+        }
+    }
+
+    fn set_type_hint(&self, hint: gdk::WindowTypeHint) {
+        unsafe {
+            ffi::gtk_window_set_type_hint(GTK_WINDOW(self.unwrap_widget()), hint);
+        }
+    }
+
     fn set_title(&self, title: &str) -> () {
         unsafe {
             ffi::gtk_window_set_title(GTK_WINDOW(self.unwrap_widget()), title.to_glib_none().0);
