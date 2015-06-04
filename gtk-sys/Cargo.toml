@@ -22,6 +22,9 @@ gtk_3_10 = []
 gtk_3_12 = []
 gtk_3_14 = []
 
+[dependencies.pango-sys]
+git = "https://github.com/rust-gnome/pango"
+
 [dependencies.gdk-sys]
 git = "https://github.com/rust-gnome/gdk"
 

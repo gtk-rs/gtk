@@ -3,6 +3,7 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 use libc::{c_char, c_int};
+use pango;
 use glib::translate::{from_glib_none, from_glib_full, ToGlibPtr};
 use ffi;
 use glib::{to_bool, to_gboolean};
@@ -179,6 +180,10 @@ pub trait WidgetTrait: ::FFIWidget + ::GObjectTrait {
 
     fn override_cursor(&self, cursor: &gdk_ffi::GdkRGBA, secondary_cursor: &gdk_ffi::GdkRGBA) {
         unsafe { ffi::gtk_widget_override_cursor(self.unwrap_widget(), cursor, secondary_cursor) }
+    }
+
+    fn override_font(&self, font: &pango::FontDescription) {
+        unsafe { ffi::gtk_widget_override_font(self.unwrap_widget(), font.to_glib_none().0) }
     }
 
     fn queue_draw_area(&self, x: i32, y: i32, width: i32, height: i32) {
