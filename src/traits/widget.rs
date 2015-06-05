@@ -360,6 +360,12 @@ pub trait WidgetTrait: ::FFIWidget + ::GObjectTrait {
         unsafe { to_bool(ffi::gtk_widget_get_double_buffered(self.unwrap_widget())) }
     }
 
+    fn get_window(&self) -> Option<gdk::Window> {
+        unsafe {
+            from_glib_none(ffi::gtk_widget_get_window(self.unwrap_widget()))
+        }
+    }
+
     fn get_has_window(&self) -> bool {
         unsafe { to_bool(ffi::gtk_widget_get_has_window(self.unwrap_widget())) }
     }
