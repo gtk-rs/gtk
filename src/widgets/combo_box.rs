@@ -46,3 +46,5 @@ impl_TraitWidget!(ComboBox);
 impl ::ContainerTrait for ComboBox {}
 impl ::BinTrait for ComboBox {}
 impl ::ComboBoxTrait for ComboBox {}
+impl ::CellLayoutTrait for ComboBox {}
+impl ::CellEditableTrait for ComboBox {}
