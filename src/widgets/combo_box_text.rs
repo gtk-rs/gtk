@@ -86,3 +86,5 @@ impl_TraitWidget!(ComboBoxText);
 impl ::ContainerTrait for ComboBoxText {}
 impl ::BinTrait for ComboBoxText {}
 impl ::ComboBoxTrait for ComboBoxText {}
+impl ::CellLayoutTrait for ComboBoxText {}
+impl ::CellEditableTrait for ComboBoxText {}
