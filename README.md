@@ -73,7 +73,7 @@ When building documentation don't forget to specify the feature set you're using
 
 Your local copy can be accessed using your browser at
 
-`file:///{gtk_location}/target/doc/rgtk/index.html`
+`file:///{gtk_location}/target/doc/gtk/index.html`
 
 You can also access a daily build of the docs via the internet:
 
@@ -81,15 +81,15 @@ http://rust-ci.org/jeremyletang/rgtk/doc/rgtk/
 
 ## Including gtk as a cargo dependency
 
-To include rgtk as a cargo dependency you have to add it to your Cargo.toml and specify the GTK version you want using Cargo features:
+To include gtk as a cargo dependency you have to add it to your Cargo.toml and specify the GTK version you want using Cargo features:
 ```Toml
-[dependencies.rgtk]
+[dependencies.gtk]
 git = "https://github.com/rust-gnome/gtk.git"
 features = ["gtk_3_12"]
 ```
 If it's lower than 3.6:
 ```Toml
-[dependencies.rgtk]
+[dependencies.gtk]
 git = "https://github.com/rust-gnome/gtk.git"
 features = ["gtk_3_4"]
 default-features = false
@@ -117,7 +117,7 @@ let button = gtk::Button:new(); // You have access to the struct methods of gtk:
                                 // as the trait methods from gtk::traits::Button as GtkButtonTrait.
 ```
 
-## Projects using rgtk
+## Projects using gtk
 * [SolidOak](https://github.com/oakes/SolidOak)
 * [rrun](https://github.com/buster/rrun)
 * [process-viewer](https://github.com/GuillaumeGomez/process-viewer)
