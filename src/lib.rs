@@ -142,6 +142,8 @@ pub mod window;
 
 pub use builder::{Builder, Buildable};
 pub use dialog::Dialog;
+pub use dialog::about::AboutDialog;
+pub use dialog::message::MessageDialog;
 pub use widgets::bin::Bin;
 pub use widgets::box_::Box;
 pub use widgets::button::Button;

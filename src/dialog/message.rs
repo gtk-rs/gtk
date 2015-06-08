@@ -2,60 +2,67 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-use ffi;
-use FFIWidget;
-use cast::{GTK_MESSAGE_DIALOG, GTK_WINDOW};
-use glib::translate::ToGlibPtr;
+use std::ptr;
 
-struct_Widget!(MessageDialog);
+use glib::translate::*;
+use glib::types;
+use ffi;
+
+use object::{Object, Downcast, Upcast};
+use widgets::box_;
+use widgets::widget::Widget;
+use window::Window;
+
+use {
+    ButtonsType,
+    DialogFlags,
+    MessageType,
+};
+
+pub type MessageDialog = Object<ffi::GtkMessageDialog>;
 
 impl MessageDialog {
-    pub fn new(parent: Option<&::Window>, flags: ::DialogFlags, _type: ::MessageType, buttons: ::ButtonsType) -> Option<MessageDialog> {
-        let tmp_pointer = unsafe { ffi::gtk_message_dialog_new(match parent {
-                Some(ref p) => GTK_WINDOW(p.unwrap_widget()),
-                None => ::std::ptr::null_mut()
-            }, flags, _type, buttons, ::std::ptr::null())
-        };
-
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            Some(::FFIWidget::wrap_widget(tmp_pointer))
+    pub fn new<W: Upcast<Window>>(parent: Option<&W>, flags: DialogFlags, type_: MessageType,
+            buttons: ButtonsType) -> MessageDialog {
+        unsafe { 
+            Widget::from_glib_none(ffi::gtk_message_dialog_new(
+                parent.map(|w| w.upcast()).to_glib_none().0, flags, type_, buttons, ptr::null()))
+                .downcast_unchecked()
         }
     }
 
-    pub fn new_with_markup(parent: Option<&::Window>, flags: ::DialogFlags, _type: ::MessageType, buttons: ::ButtonsType, markup: &str) -> Option<MessageDialog> {
+    pub fn new_with_markup<W: Upcast<Window>>(parent: Option<&W>, flags: DialogFlags,
+            type_: MessageType, buttons: ButtonsType, markup: &str) -> MessageDialog {
         //gtk_message_dialog_new_with_markup
-        match MessageDialog::new(parent, flags, _type, buttons) {
-            Some(m) => {
-                m.set_markup(markup);
-                Some(m)
-            }
-            None => None
-        }
+        let dlg = MessageDialog::new(parent, flags, type_, buttons);
+        dlg.set_markup(markup);
+        dlg
     }
 
     pub fn set_markup(&self, markup: &str) -> () {
         unsafe {
-            ffi::gtk_message_dialog_set_markup(GTK_MESSAGE_DIALOG(self.unwrap_widget()), markup.to_glib_none().0)
+            ffi::gtk_message_dialog_set_markup(self.to_glib_none().0, markup.to_glib_none().0)
         }
     }
 
-    pub fn get_message_area<T: ::WidgetTrait>(&self) -> Option<T> {
-        let tmp_pointer = unsafe { ffi::gtk_message_dialog_get_message_area(GTK_MESSAGE_DIALOG(self.unwrap_widget())) };
-
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            Some(::FFIWidget::wrap_widget(tmp_pointer))
+    pub fn get_message_area(&self) -> box_::Box {
+        unsafe {
+            Widget::from_glib_none(ffi::gtk_message_dialog_get_message_area(self.to_glib_none().0))
+                .downcast_unchecked()
         }
     }
 }
 
-impl_drop!(MessageDialog);
-impl_TraitWidget!(MessageDialog);
+impl types::StaticType for MessageDialog {
+    #[inline]
+    fn static_type() -> types::Type {
+        unsafe { from_glib(ffi::gtk_message_dialog_get_type()) }
+    }
+}
 
-impl ::ContainerTrait for MessageDialog {}
-impl ::BinTrait for MessageDialog {}
-impl ::WindowTrait for MessageDialog {}
-impl ::DialogTrait for MessageDialog {}
+unsafe impl Upcast<Widget> for MessageDialog { }
+unsafe impl Upcast<::widgets::container::Container> for MessageDialog { }
+unsafe impl Upcast<::widgets::bin::Bin> for MessageDialog { }
+unsafe impl Upcast<::window::Window> for MessageDialog { }
+unsafe impl Upcast<super::Dialog> for MessageDialog { }
+unsafe impl Upcast<::builder::Buildable> for MessageDialog { }

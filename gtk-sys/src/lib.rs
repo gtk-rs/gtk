@@ -1617,6 +1617,7 @@ extern "C" {
     //=========================================================================
     // GtkMessageDialog                                                  NOT OK
     //=========================================================================
+    pub fn gtk_message_dialog_get_type         () -> GType;
     pub fn gtk_message_dialog_new              (parent: *mut GtkWindow, flags: enums::DialogFlags, _type: enums::MessageType, buttons: enums::ButtonsType,
         message_format: *const c_char, ...) -> *mut GtkWidget;
     pub fn gtk_message_dialog_new_with_markup  (parent: *mut GtkWindow, flags: enums::DialogFlags, _type: enums::MessageType, buttons: enums::ButtonsType,
@@ -1654,6 +1655,7 @@ extern "C" {
     //=========================================================================
     // GtkAboutDialog                                                    NOT OK
     //=========================================================================
+    pub fn gtk_about_dialog_get_type           () -> GType;
     pub fn gtk_about_dialog_new                () -> *mut GtkWidget;
     //pub fn gtk_show_about_dialog               (parent: *GtkWindow, first_property_name: *const c_char, ...) -> ();
     pub fn gtk_about_dialog_get_program_name   (about: *mut GtkAboutDialog) -> *const c_char;
