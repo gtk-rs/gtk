@@ -2,6 +2,7 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
+pub use dialog::DialogExt;
 pub use widgets::bin::BinExt;
 pub use widgets::box_::BoxExt;
 pub use widgets::button::ButtonExt;

@@ -2,11 +2,30 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
+//pub mod about;
+//pub mod app_chooser;
+//pub mod color_chooser;
+//pub mod file_chooser;
+//pub mod font_chooser;
+//pub mod message;
+//pub mod page_setup_unix;
+//pub mod recent_chooser;
+
 use std::ptr;
 use libc::c_char;
-use glib::translate::ToGlibPtr;
-use cast::GTK_DIALOG;
+
+use glib::translate::*;
+use glib::types;
 use ffi;
+
+use object::{Object, Downcast, Upcast};
+use widgets;
+use widgets::button::Button;
+#[cfg(feature = "gtk_3_12")]
+use widgets::header_bar::HeaderBar;
+use widgets::widget::Widget;
+use window;
+use {ResponseType};
 
 /// Pseudo-variadic array of buttons
 ///
@@ -75,7 +94,7 @@ macro_rules! impl_dialog_buttons {
             }
         }
 
-        impl <'a> DialogButtons for [(&'a str, ::ResponseType); 0] {
+        impl <'a> DialogButtons for [(&'a str, ResponseType); 0] {
             unsafe fn invoke1<A0, R>(
                     &self,
                     f: unsafe extern "C" fn(A0, *const c_char, ...) -> R,
@@ -132,7 +151,7 @@ macro_rules! impl_dialog_buttons {
             }
         }
 
-        impl <'a> DialogButtons for [(&'a str, ::ResponseType); $nn] {
+        impl <'a> DialogButtons for [(&'a str, ResponseType); $nn] {
             unsafe fn invoke1<A0, R>(
                     &self,
                     f: unsafe extern "C" fn(A0, *const c_char, ...) -> R,
@@ -165,24 +184,52 @@ macro_rules! impl_dialog_buttons {
 
 impl_dialog_buttons!(16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0,);
 
-pub trait DialogTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait + ::WindowTrait {
+pub type Dialog = Object<ffi::GtkDialog>;
+
+impl types::StaticType for Dialog {
+    #[inline]
+    fn static_type() -> types::Type {
+        unsafe { from_glib(ffi::gtk_dialog_get_type()) }
+    }
+}
+
+unsafe impl Upcast<Widget> for Dialog { }
+unsafe impl Upcast<widgets::container::Container> for Dialog { }
+unsafe impl Upcast<widgets::bin::Bin> for Dialog { }
+unsafe impl Upcast<window::Window> for Dialog { }
+unsafe impl Upcast<::builder::Buildable> for Dialog { }
+
+pub trait DialogExt {
+    fn run(&self) -> i32;
+    fn response(&self, response_id: i32);
+    fn add_button(&self, button_text: &str, response_id: i32) -> Button;
+    fn add_buttons<T: DialogButtons>(&self, buttons: T);
+    fn add_action_widget<T: Upcast<Widget>>(&self, child: &T, response_id: i32);
+    fn set_default_response(&self, response_id: i32);
+    fn set_response_sensitive(&self, response_id: i32, setting: bool);
+    fn get_response_for_widget<T: Upcast<Widget>>(&self, widget: &T) -> Result<i32, ResponseType>;
+    fn get_widget_for_response(&self, response_id: i32) -> Option<Widget>;
+    fn get_action_area(&self) -> Widget;
+    fn get_content_area(&self) -> widgets::box_::Box;
+    #[cfg(feature = "gtk_3_12")]
+    fn get_header_bar(&self) -> Option<HeaderBar>;
+}
+
+impl<O: Upcast<Dialog>> DialogExt for O {
     fn run(&self) -> i32 {
-        unsafe { ffi::gtk_dialog_run(GTK_DIALOG(self.unwrap_widget())) }
+        unsafe { ffi::gtk_dialog_run(self.upcast().to_glib_none().0) }
     }
 
-    fn response(&self, response_id: i32) -> () {
-        unsafe { ffi::gtk_dialog_response(GTK_DIALOG(self.unwrap_widget()), response_id) }
+    fn response(&self, response_id: i32) {
+        unsafe { ffi::gtk_dialog_response(self.upcast().to_glib_none().0, response_id) }
     }
 
-    fn add_button(&self, button_text: &str, response_id: i32) -> Option<::Button> {
-        let tmp_pointer = unsafe {
-            ffi::gtk_dialog_add_button(GTK_DIALOG(self.unwrap_widget()), button_text.to_glib_none().0, response_id)
-        };
-
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            Some(::FFIWidget::wrap_widget(tmp_pointer))
+    fn add_button(&self, button_text: &str, response_id: i32) -> Button {
+        unsafe {
+            Widget::from_glib_none(
+                ffi::gtk_dialog_add_button(self.upcast().to_glib_none().0,
+                    button_text.to_glib_none().0, response_id))
+                .downcast_unchecked()
         }
     }
 
@@ -190,24 +237,33 @@ pub trait DialogTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait + ::WindowT
         unsafe {
             buttons.invoke1(
                 ffi::gtk_dialog_add_buttons,
-                GTK_DIALOG(self.unwrap_widget()))
+                self.upcast().to_glib_none().0)
         }
     }
 
-    fn add_action_widget<T: ::WidgetTrait>(&self, child: &T, response_id: i32) -> () {
-        unsafe { ffi::gtk_dialog_add_action_widget(GTK_DIALOG(self.unwrap_widget()), child.unwrap_widget(), response_id) }
+    fn add_action_widget<T: Upcast<Widget>>(&self, child: &T, response_id: i32) {
+        unsafe {
+            ffi::gtk_dialog_add_action_widget(
+                self.upcast().to_glib_none().0, child.upcast().to_glib_none().0, response_id)
+        }
     }
 
-    fn set_default_response(&self, response_id: i32) -> () {
-        unsafe { ffi::gtk_dialog_set_default_response(GTK_DIALOG(self.unwrap_widget()), response_id) }
+    fn set_default_response(&self, response_id: i32) {
+        unsafe { ffi::gtk_dialog_set_default_response(self.upcast().to_glib_none().0, response_id) }
     }
 
-    fn set_response_sensitive(&self, response_id: i32, setting: ffi::gboolean) -> () {
-        unsafe { ffi::gtk_dialog_set_response_sensitive(GTK_DIALOG(self.unwrap_widget()), response_id, setting) }
+    fn set_response_sensitive(&self, response_id: i32, setting: bool) {
+        unsafe {
+            ffi::gtk_dialog_set_response_sensitive(
+                self.upcast().to_glib_none().0, response_id, setting.to_glib())
+        }
     }
 
-    fn get_response_for_widget<T: ::WidgetTrait>(&self, widget: &T) -> Result<i32, ::ResponseType> {
-        let tmp = unsafe { ffi::gtk_dialog_get_response_for_widget(GTK_DIALOG(self.unwrap_widget()), widget.unwrap_widget()) };
+    fn get_response_for_widget<T: Upcast<Widget>>(&self, widget: &T) -> Result<i32, ResponseType> {
+        let tmp = unsafe {
+            ffi::gtk_dialog_get_response_for_widget(self.upcast().to_glib_none().0,
+                widget.upcast().to_glib_none().0)
+        };
 
         if tmp < 0 {
             Err(unsafe { ::std::mem::transmute(tmp) })
@@ -216,44 +272,31 @@ pub trait DialogTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait + ::WindowT
         }
     }
 
-    fn get_widget_for_reponse<T: ::WidgetTrait>(&self, response_id: i32) -> Option<T> {
-        let tmp_pointer = unsafe { ffi::gtk_dialog_get_widget_for_response(GTK_DIALOG(self.unwrap_widget()), response_id) };
-
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            Some(::FFIWidget::wrap_widget(tmp_pointer))
+    fn get_widget_for_response(&self, response_id: i32) -> Option<Widget> {
+        unsafe {
+            from_glib_none(
+                ffi::gtk_dialog_get_widget_for_response(
+                    self.upcast().to_glib_none().0, response_id))
         }
     }
 
-    fn get_action_area<T: ::WidgetTrait>(&self) -> Option<T> {
-        let tmp_pointer = unsafe { ffi::gtk_dialog_get_action_area(GTK_DIALOG(self.unwrap_widget())) };
-
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            Some(::FFIWidget::wrap_widget(tmp_pointer))
-        }
+    fn get_action_area(&self) -> Widget {
+        unsafe { from_glib_none(ffi::gtk_dialog_get_action_area(self.upcast().to_glib_none().0)) }
     }
 
-    fn get_content_area<T: ::WidgetTrait>(&self) -> Option<T> {
-        let tmp_pointer = unsafe { ffi::gtk_dialog_get_content_area(GTK_DIALOG(self.unwrap_widget())) };
-
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            Some(::FFIWidget::wrap_widget(tmp_pointer))
+    fn get_content_area(&self) -> widgets::box_::Box {
+        unsafe {
+            Widget::from_glib_none(ffi::gtk_dialog_get_content_area(self.upcast().to_glib_none().0))
+                .downcast_unchecked()
         }
     }
 
     #[cfg(feature = "gtk_3_12")]
-    fn get_header_bar<T: ::WidgetTrait>(&self) -> Option<T> {
-        let tmp_pointer = unsafe { ffi::gtk_dialog_get_header_bar(GTK_DIALOG(self.unwrap_widget())) };
-
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            Some(::FFIWidget::wrap_widget(tmp_pointer))
+    fn get_header_bar(&self) -> Option<HeaderBar> {
+        unsafe {
+            Option::<Widget>::from_glib_none(
+                ffi::gtk_dialog_get_header_bar(self.upcast().to_glib_none().0))
+                .map(Downcast::downcast_unchecked)
         }
     }
 }

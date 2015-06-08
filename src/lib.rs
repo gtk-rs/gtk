@@ -133,6 +133,7 @@ pub use ffi::enums::{
 };
 
 pub mod builder;
+pub mod dialog;
 pub mod object;
 pub mod prelude;
 pub mod rt;
@@ -140,6 +141,7 @@ pub mod widgets;
 pub mod window;
 
 pub use builder::{Builder, Buildable};
+pub use dialog::Dialog;
 pub use widgets::bin::Bin;
 pub use widgets::box_::Box;
 pub use widgets::button::Button;

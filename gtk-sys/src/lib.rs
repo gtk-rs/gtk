@@ -1629,6 +1629,7 @@ extern "C" {
     //=========================================================================
     // GtkDialog                                                         NOT OK
     //=========================================================================
+    pub fn gtk_dialog_get_type                 () -> GType;
     pub fn gtk_dialog_new                      () -> *mut GtkWidget;
     pub fn gtk_dialog_new_with_buttons         (title: *const c_char,
                                                 parent: *mut GtkWindow,
