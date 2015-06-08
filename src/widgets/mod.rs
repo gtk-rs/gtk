@@ -3,10 +3,12 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 pub mod bin;
+pub mod box_;
 pub mod button;
 pub mod container;
 #[cfg(feature = "gtk_3_10")]
 pub mod header_bar;
+pub mod orientable;
 pub mod widget;
 
 // ---------------- cut ----------------

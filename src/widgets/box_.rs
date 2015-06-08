@@ -2,85 +2,117 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-use libc::{c_int, c_uint};
-
-use PackType;
-use cast::GTK_BOX;
+use glib::translate::*;
+use glib::types;
 use ffi;
-use glib::{to_bool, to_gboolean};
 
-pub trait BoxTrait: ::WidgetTrait {
-    fn pack_start<'r, T: ::WidgetTrait>(&'r self, child: &'r T, expand: bool, fill: bool, padding: u32) -> () {
+use object::{Object, Upcast, Downcast};
+use super::widget::Widget;
+use {
+    Orientation,
+    PackType,
+};
+
+pub type Box = Object<ffi::GtkBox>;
+
+impl Box {
+    pub fn new(orientation: Orientation, spacing: i32) -> Box {
         unsafe {
-            ffi::gtk_box_pack_start(GTK_BOX(self.unwrap_widget()), child.unwrap_widget(),
-                                    to_gboolean(expand), to_gboolean(fill),
-                                    padding as c_uint);
+            Widget::from_glib_none(ffi::gtk_box_new(orientation, spacing)).downcast_unchecked()
+        }
+    }
+}
+
+impl types::StaticType for Box {
+    #[inline]
+    fn static_type() -> types::Type {
+        unsafe { from_glib(ffi::gtk_box_get_type()) }
+    }
+}
+
+unsafe impl Upcast<Widget> for Box { }
+unsafe impl Upcast<super::container::Container> for Box { }
+unsafe impl Upcast<super::orientable::Orientable> for Box { }
+unsafe impl Upcast<::builder::Buildable> for Box { }
+
+pub trait BoxExt {
+    fn pack_start<T: Upcast<Widget>>(&self, child: &T, expand: bool, fill: bool, padding: u32);
+    fn pack_end<T: Upcast<Widget>>(&self, child: &T, expand: bool, fill: bool, padding: u32);
+    fn get_homogeneous(&self) -> bool;
+    fn set_homogeneouse(&self, homogeneous: bool);
+    fn get_spacing(&self) -> i32;
+    fn set_spacing(&self, spacing: i32);
+    fn reorder_child<T: Upcast<Widget>>(&self, child: &T, position: i32);
+    fn query_child_packing<T: Upcast<Widget>>(&self, child: &T) -> (bool, bool, u32, PackType);
+    fn set_child_packing<T: Upcast<Widget>>(&self, child: &T, expand: bool, fill: bool,
+                                            padding: u32, pack_type: PackType);
+}
+
+impl<O: Upcast<Box>> BoxExt for O {
+    fn pack_start<T: Upcast<Widget>>(&self, child: &T, expand: bool, fill: bool, padding: u32) {
+        unsafe {
+            ffi::gtk_box_pack_start(
+                self.upcast().to_glib_none().0, child.upcast().to_glib_none().0, expand.to_glib(),
+                fill.to_glib(), padding);
         }
     }
 
-    fn pack_end<'r, T: ::WidgetTrait>(&'r self, child: &'r T, expand: bool, fill: bool, padding: u32) -> () {
+    fn pack_end<T: Upcast<Widget>>(&self, child: &T, expand: bool, fill: bool, padding: u32) {
         unsafe {
-            ffi::gtk_box_pack_end(GTK_BOX(self.unwrap_widget()), child.unwrap_widget(),
-                                  to_gboolean(expand), to_gboolean(fill),
-                                  padding as c_uint);
+            ffi::gtk_box_pack_end(
+                self.upcast().to_glib_none().0, child.upcast().to_glib_none().0, expand.to_glib(),
+                fill.to_glib(), padding);
         }
     }
 
     fn get_homogeneous(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_box_get_homogeneous(GTK_BOX(self.unwrap_widget()))) }
+        unsafe { from_glib(ffi::gtk_box_get_homogeneous(self.upcast().to_glib_none().0)) }
     }
 
-    fn set_homogeneouse(&self, homogeneous: bool) -> () {
-        unsafe { ffi::gtk_box_set_homogeneous(GTK_BOX(self.unwrap_widget()), to_gboolean(homogeneous)); }
+    fn set_homogeneouse(&self, homogeneous: bool) {
+        unsafe {
+            ffi::gtk_box_set_homogeneous(self.upcast().to_glib_none().0, homogeneous.to_glib());
+        }
     }
 
     fn get_spacing(&self) -> i32 {
         unsafe {
-            ffi::gtk_box_get_spacing(GTK_BOX(self.unwrap_widget())) as i32
+            ffi::gtk_box_get_spacing(self.upcast().to_glib_none().0)
         }
     }
 
-    fn set_spacing(&self, spacing: i32) -> () {
+    fn set_spacing(&self, spacing: i32) {
         unsafe {
-            ffi::gtk_box_set_spacing(GTK_BOX(self.unwrap_widget()), spacing as c_int);
+            ffi::gtk_box_set_spacing(self.upcast().to_glib_none().0, spacing);
         }
     }
 
-    fn reorder_child<'r, T: ::WidgetTrait>(&'r self, child: &'r T, position: i32) -> () {
+    fn reorder_child<T: Upcast<Widget>>(&self, child: &T, position: i32) {
         unsafe {
-            ffi::gtk_box_reorder_child(GTK_BOX(self.unwrap_widget()), child.unwrap_widget(), position as c_int);
+            ffi::gtk_box_reorder_child(
+                self.upcast().to_glib_none().0, child.upcast().to_glib_none().0, position);
         }
     }
 
-    fn query_child_packing<'r, T: ::WidgetTrait>(&self, child: &'r T) -> (bool, bool, u32, PackType) {
+    fn query_child_packing<T: Upcast<Widget>>(&self, child: &T) -> (bool, bool, u32, PackType) {
         let mut c_expand = 0;
         let mut c_padding = 0;
         let mut c_fill = 0;
-        let mut pack_type: PackType = PackType::Start;
+        let mut pack_type = PackType::Start;
         unsafe {
-            ffi::gtk_box_query_child_packing(GTK_BOX(self.unwrap_widget()),
-                                             child.unwrap_widget(),
-                                             &mut c_expand,
-                                             &mut c_fill,
-                                             &mut c_padding,
-                                             &mut pack_type);
+            ffi::gtk_box_query_child_packing(
+                self.upcast().to_glib_none().0, child.upcast().to_glib_none().0, &mut c_expand,
+                &mut c_fill, &mut c_padding, &mut pack_type);
         }
-        (to_bool(c_expand), to_bool(c_fill), c_padding as u32, pack_type)
+        (from_glib(c_expand), from_glib(c_fill), c_padding, pack_type)
     }
 
-    fn set_child_packing<'r, T: ::WidgetTrait>(&self,
-                                                  child: &'r T,
-                                                  expand: bool,
-                                                  fill: bool,
-                                                  padding: u32,
-                                                  pack_type: PackType) {
+    fn set_child_packing<T: Upcast<Widget>>(&self, child: &T, expand: bool, fill: bool,
+                                            padding: u32, pack_type: PackType) {
         unsafe {
-            ffi::gtk_box_set_child_packing(GTK_BOX(self.unwrap_widget()),
-                                           child.unwrap_widget(),
-                                           to_gboolean(expand),
-                                           to_gboolean(fill),
-                                           padding as c_uint,
-                                           pack_type);
+            ffi::gtk_box_set_child_packing(
+                self.upcast().to_glib_none().0, child.upcast().to_glib_none().0, expand.to_glib(),
+                fill.to_glib(), padding, pack_type);
         }
     }
 }

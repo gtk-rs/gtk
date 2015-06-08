@@ -1800,6 +1800,7 @@ extern "C" {
     //=========================================================================
     // GtkBox
     //=========================================================================
+    pub fn gtk_box_get_type                    () -> GType;
     pub fn gtk_box_new                         (orientation: enums::Orientation, spacing: c_int) -> *mut GtkWidget;
     pub fn gtk_box_pack_start                  (gbox: *mut GtkBox, child: *mut GtkWidget, expand: gboolean, fill: gboolean, padding: c_uint) -> ();
     pub fn gtk_box_pack_end                    (gbox: *mut GtkBox, child: *mut GtkWidget, expand: gboolean, fill: gboolean, padding: c_uint) -> ();
@@ -1816,6 +1817,7 @@ extern "C" {
     //=========================================================================
     // GtkOrientable                                                         OK
     //=========================================================================
+    pub fn gtk_orientable_get_type             () -> GType;
     pub fn gtk_orientable_get_orientation      (orientable: *mut GtkOrientable) -> enums::Orientation;
     pub fn gtk_orientable_set_orientation      (orientable: *mut GtkOrientable,  orientation: enums::Orientation) -> ();
 
