@@ -2,170 +2,525 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-use glib::translate::{from_glib_none, FromGlibPtrContainer, ToGlibPtr};
-use cast::{GTK_RECENT_CHOOSER};
-use ffi;
-use glib::{to_bool, to_gboolean};
-use FFIWidget;
-use glib;
+use std::ptr;
 use libc::c_char;
 
-pub trait RecentChooserTrait: ::WidgetTrait + FFIWidget {
+use glib::translate::*;
+use glib::types;
+use ffi;
+
+use object::{Object, Upcast};
+
+use {
+    RecentFilterFlags,
+    RecentSortType,
+};
+
+//////////////////////////////////////////////////////////////////////////////
+
+pub struct RecentData {
+    display_name: String,
+    description: String,
+    mime_type: String,
+    app_name: String,
+    app_exec: String,
+    groups: Vec<String>,
+    is_private: bool
+}
+
+impl <'a> ToGlibPtr<'a, *mut ffi::GtkRecentData> for &'a RecentData {
+    type Storage = (Box<ffi::GtkRecentData>,
+                    [Stash<'a, *const c_char, String>; 5],
+                    IterStash<'a, *mut *const c_char, Vec<String>>);
+
+    fn to_glib_none(&self)
+        -> Stash<'a, *mut ffi::GtkRecentData, &'a RecentData> {
+        let display_name = self.display_name.to_glib_none();
+        let description = self.description.to_glib_none();
+        let mime_type = self.mime_type.to_glib_none();
+        let app_name = self.app_name.to_glib_none();
+        let app_exec = self.app_exec.to_glib_none();
+        let groups = self.groups.to_glib_none();
+
+        let mut data = Box::new(ffi::GtkRecentData {
+            display_name: display_name.0 as *mut c_char,
+            description: description.0 as *mut c_char,
+            mime_type: mime_type.0 as *mut c_char,
+            app_name: app_name.0 as *mut c_char,
+            app_exec: app_exec.0 as *mut c_char,
+            groups: groups.0 as *mut *mut c_char,
+            is_private: self.is_private.to_glib(),
+        });
+
+        Stash(&mut *data, (data, [display_name, description, mime_type,
+                                  app_name, app_exec], groups))
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+pub type RecentFilter = Object<ffi::GtkRecentFilter>;
+
+impl RecentFilter {
+    pub fn new() -> RecentFilter {
+        unsafe { from_glib_full(ffi::gtk_recent_filter_new()) }
+    }
+
+    pub fn add_application(&self, application: &str) {
+        unsafe {
+            ffi::gtk_recent_filter_add_application(self.to_glib_none().0, application.to_glib_none().0)
+        }
+    }
+
+    pub fn add_group(&self, group: &str) {
+        unsafe {
+            ffi::gtk_recent_filter_add_group(self.to_glib_none().0, group.to_glib_none().0)
+        }
+    }
+
+    pub fn add_age(&self, days: i32) {
+        unsafe { ffi::gtk_recent_filter_add_age(self.to_glib_none().0, days) }
+    }
+
+    pub fn get_needed(&self) -> RecentFilterFlags {
+        unsafe { ffi::gtk_recent_filter_get_needed(self.to_glib_none().0) }
+    }
+}
+
+impl types::StaticType for RecentFilter {
+    #[inline]
+    fn static_type() -> types::Type {
+        unsafe { from_glib(ffi::gtk_recent_filter_get_type()) }
+    }
+}
+
+unsafe impl Upcast<::builder::Buildable> for RecentFilter { }
+
+//////////////////////////////////////////////////////////////////////////////
+
+pub struct RecentInfo(*mut ffi::GtkRecentInfo);
+
+impl RecentInfo {
+    pub fn get_uri(&self) -> Option<String> {
+        unsafe {
+            from_glib_none(ffi::gtk_recent_info_get_uri(self.0))
+        }
+    }
+
+    pub fn get_display_name(&self) -> Option<String> {
+        unsafe {
+            from_glib_none(ffi::gtk_recent_info_get_display_name(self.0))
+        }
+    }
+
+    pub fn get_description(&self) -> Option<String> {
+        unsafe {
+            from_glib_none(ffi::gtk_recent_info_get_description(self.0))
+        }
+    }
+
+    pub fn get_mime_type(&self) -> Option<String> {
+        unsafe {
+            from_glib_none(ffi::gtk_recent_info_get_mime_type(self.0))
+        }
+    }
+
+    pub fn get_added(&self) -> Option<u64> {
+        match unsafe { ffi::gtk_recent_info_get_added(self.0) } {
+            x if x >= 0 => Some(x as u64),
+            _ => None
+        }
+    }
+
+    pub fn get_modified(&self) -> Option<u64> {
+        match unsafe { ffi::gtk_recent_info_get_modified(self.0) } {
+            x if x >= 0 => Some(x as u64),
+            _ => None
+        }
+    }
+
+    pub fn get_visited(&self) -> Option<u64> {
+        match unsafe { ffi::gtk_recent_info_get_visited(self.0) } {
+            x if x >= 0 => Some(x as u64),
+            _ => None
+        }
+    }
+
+    pub fn get_private_hint(&self) -> bool {
+        unsafe { from_glib(ffi::gtk_recent_info_get_private_hint(self.0)) }
+    }
+
+    pub fn get_application_info(&self, app_name: &str) -> Option<(String, u32, u64)> {
+        unsafe {
+            let mut app_exec = ptr::null();
+            let mut count = 0;
+            let mut time_ = 0;
+
+            match from_glib(ffi::gtk_recent_info_get_application_info(
+                    self.0, app_name.to_glib_none().0,
+                    &mut app_exec, &mut count, &mut time_)) {
+                true => Some((from_glib_none(app_exec), count, time_ as u64)),
+                _ => None
+            }
+        }
+    }
+
+    pub fn get_applications(&self) -> Vec<String> {
+        unsafe {
+            let mut length = 0;
+            let ptr = ffi::gtk_recent_info_get_applications(self.0, &mut length);
+            Vec::from_glib_full_num(ptr as *const *const c_char, length as usize)
+        }
+    }
+
+    pub fn last_application(&self) -> Option<String> {
+        unsafe {
+            from_glib_none(ffi::gtk_recent_info_last_application(self.0))
+        }
+    }
+
+    pub fn has_application(&self, app_name: &str) -> bool {
+        unsafe {
+            from_glib(ffi::gtk_recent_info_has_application(self.0, app_name.to_glib_none().0))
+        }
+    }
+
+    pub fn get_groups(&self) -> Vec<String> {
+        unsafe {
+            let mut length = 0;
+            let ptr = ffi::gtk_recent_info_get_groups(self.0, &mut length);
+            Vec::from_glib_full_num(ptr as *const *const c_char, length as usize)
+        }
+    }
+
+    pub fn has_group(&self, group_name: &str) -> bool {
+        unsafe {
+            from_glib(ffi::gtk_recent_info_has_group(self.0, group_name.to_glib_none().0))
+        }
+    }
+
+    pub fn get_short_name(&self) -> Option<String> {
+        unsafe {
+            from_glib_none(ffi::gtk_recent_info_get_short_name(self.0))
+        }
+    }
+
+    pub fn get_uri_display(&self) -> Option<String> {
+        unsafe {
+            from_glib_none(ffi::gtk_recent_info_get_uri_display(self.0))
+        }
+    }
+
+    pub fn get_age(&self) -> i32 {
+        unsafe { ffi::gtk_recent_info_get_age(self.0) }
+    }
+
+    pub fn is_local(&self) -> bool {
+        unsafe { from_glib(ffi::gtk_recent_info_is_local(self.0)) }
+    }
+
+    pub fn exists(&self) -> bool {
+        unsafe { from_glib(ffi::gtk_recent_info_exists(self.0)) }
+    }
+
+    pub fn match_(&self, other: &RecentInfo) -> bool {
+        unsafe { from_glib(ffi::gtk_recent_info_match(self.0, other.0)) }
+    }
+}
+
+impl<'a> ToGlibPtr<'a, *mut ffi::GtkRecentInfo> for &'a RecentInfo {
+    type Storage = &'a RecentInfo;
+
+    #[inline]
+    fn to_glib_none(&self) -> Stash<'a, *mut ffi::GtkRecentInfo, &'a RecentInfo> {
+        Stash(self.0, *self)
+    }
+
+    #[inline]
+    fn to_glib_full(&self) -> *mut ffi::GtkRecentInfo {
+        unsafe { ffi::gtk_recent_info_ref(self.0); }
+        self.0
+    }
+}
+
+impl FromGlibPtr<*mut ffi::GtkRecentInfo> for RecentInfo {
+    #[inline]
+    unsafe fn from_glib_none(ptr: *mut ffi::GtkRecentInfo) -> RecentInfo {
+        assert!(!ptr.is_null());
+        ffi::gtk_recent_info_ref(ptr);
+        RecentInfo(ptr)
+    }
+
+    #[inline]
+    unsafe fn from_glib_full(ptr: *mut ffi::GtkRecentInfo) -> RecentInfo {
+        assert!(!ptr.is_null());
+        RecentInfo(ptr)
+    }
+}
+
+impl Clone for RecentInfo {
+    fn clone(&self) -> RecentInfo {
+        unsafe { from_glib_none(self.0) }
+    }
+}
+
+impl Drop for RecentInfo {
+    fn drop(&mut self) {
+        unsafe { ffi::gtk_recent_info_unref(self.0); }
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+pub type RecentManager = Object<ffi::GtkRecentManager>;
+
+impl RecentManager {
+    /// Creates a new recent manager object.
+    ///
+    /// Recent manager objects are used to handle the list of recently used
+    /// resources. A `RecentManager` object monitors the recently used
+    /// resources list, and emits the `changed` signal each time something
+    /// inside the list changes.
+    ///
+    /// `RecentManager` objects are expensive: be sure to create them only
+    /// when needed.
+    pub fn new() -> RecentManager {
+        unsafe { from_glib_full(ffi::gtk_recent_manager_new()) }
+    }
+
+    pub fn add_item(&self, uri: &str) -> bool {
+        unsafe {
+            from_glib(
+                ffi::gtk_recent_manager_add_item(self.to_glib_none().0, uri.to_glib_none().0))
+        }
+    }
+
+    pub fn add_full(&self, uri: &str, recent_data: &RecentData) -> bool {
+        unsafe {
+            from_glib(
+                ffi::gtk_recent_manager_add_full(self.to_glib_none().0, uri.to_glib_none().0,
+                    recent_data.to_glib_none().0))
+        }
+    }
+
+    pub fn has_item(&self, uri: &str) -> bool {
+        unsafe {
+            from_glib(
+                ffi::gtk_recent_manager_has_item(self.to_glib_none().0, uri.to_glib_none().0))
+        }
+    }
+
+    pub fn get_items(&self) -> Vec<RecentInfo> {
+        unsafe { Vec::from_glib_full(ffi::gtk_recent_manager_get_items(self.to_glib_none().0)) }
+    }
+}
+
+impl types::StaticType for RecentManager {
+    #[inline]
+    fn static_type() -> types::Type {
+        unsafe { from_glib(ffi::gtk_recent_manager_get_type()) }
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+pub type RecentChooser = Object<ffi::GtkRecentChooser>;
+
+impl types::StaticType for RecentChooser {
+    #[inline]
+    fn static_type() -> types::Type {
+        unsafe { from_glib(ffi::gtk_recent_chooser_get_type()) }
+    }
+}
+
+pub trait RecentChooserExt {
+    fn set_show_private(&self, show_private: bool);
+    fn get_show_private(&self) -> bool;
+    fn set_show_not_found(&self, show_not_found: bool);
+    fn get_show_not_found(&self) -> bool;
+    fn set_show_icons(&self, show_icons: bool);
+    fn get_show_icons(&self) -> bool;
+    fn set_select_multiple(&self, select_multiple: bool);
+    fn get_select_multiple(&self) -> bool;
+    fn set_local_only(&self, local_only: bool);
+    fn get_local_only(&self) -> bool;
+    fn set_limit(&self, limit: i32);
+    fn get_limit(&self) -> i32;
+    fn set_show_tips(&self, show_tips: bool);
+    fn get_show_tips(&self) -> bool;
+    fn set_sort_type(&self, sort_type: RecentSortType);
+    fn get_sort_type(&self) -> RecentSortType;
+    fn get_current_uri(&self) -> Option<String>;
+    fn get_current_item(&self) -> Option<RecentInfo>;
+    fn unselect_uri(&self, uri: &str);
+    fn select_all(&self);
+    fn unselect_all(&self);
+    fn get_items(&self) -> Vec<RecentInfo>;
+    fn get_uris(&self) -> Vec<String>;
+    fn add_filter(&self, filter: &RecentFilter);
+    fn remove_filter(&self, filter: &RecentFilter);
+    fn list_filters(&self) -> Vec<RecentFilter>;
+    fn set_filter(&self, filter: &RecentFilter);
+    fn get_filter(&self) -> Option<RecentFilter>;
+}
+
+impl<O: Upcast<RecentChooser>> RecentChooserExt for O {
     fn set_show_private(&self, show_private: bool) {
-        unsafe { ffi::gtk_recent_chooser_set_show_private(GTK_RECENT_CHOOSER(self.unwrap_widget()), to_gboolean(show_private)) }
+        unsafe {
+            ffi::gtk_recent_chooser_set_show_private(self.upcast().to_glib_none().0,
+                show_private.to_glib())
+        }
     }
 
     fn get_show_private(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_recent_chooser_get_show_private(GTK_RECENT_CHOOSER(self.unwrap_widget()))) }
+        unsafe {
+            from_glib(ffi::gtk_recent_chooser_get_show_private(self.upcast().to_glib_none().0))
+        }
     }
 
     fn set_show_not_found(&self, show_not_found: bool) {
-        unsafe { ffi::gtk_recent_chooser_set_show_not_found(GTK_RECENT_CHOOSER(self.unwrap_widget()), to_gboolean(show_not_found)) }
+        unsafe {
+            ffi::gtk_recent_chooser_set_show_not_found(self.upcast().to_glib_none().0,
+                show_not_found.to_glib())
+        }
     }
 
     fn get_show_not_found(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_recent_chooser_get_show_not_found(GTK_RECENT_CHOOSER(self.unwrap_widget()))) }
+        unsafe {
+            from_glib(ffi::gtk_recent_chooser_get_show_not_found(self.upcast().to_glib_none().0))
+        }
     }
 
     fn set_show_icons(&self, show_icons: bool) {
-        unsafe { ffi::gtk_recent_chooser_set_show_icons(GTK_RECENT_CHOOSER(self.unwrap_widget()), to_gboolean(show_icons)) }
+        unsafe {
+            ffi::gtk_recent_chooser_set_show_icons(self.upcast().to_glib_none().0,
+                show_icons.to_glib())
+        }
     }
 
     fn get_show_icons(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_recent_chooser_get_show_icons(GTK_RECENT_CHOOSER(self.unwrap_widget()))) }
+        unsafe { from_glib(ffi::gtk_recent_chooser_get_show_icons(self.upcast().to_glib_none().0)) }
     }
 
     fn set_select_multiple(&self, select_multiple: bool) {
-        unsafe { ffi::gtk_recent_chooser_set_select_multiple(GTK_RECENT_CHOOSER(self.unwrap_widget()), to_gboolean(select_multiple)) }
+        unsafe {
+            ffi::gtk_recent_chooser_set_select_multiple(self.upcast().to_glib_none().0,
+                select_multiple.to_glib())
+        }
     }
 
     fn get_select_multiple(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_recent_chooser_get_select_multiple(GTK_RECENT_CHOOSER(self.unwrap_widget()))) }
+        unsafe {
+            from_glib(ffi::gtk_recent_chooser_get_select_multiple(self.upcast().to_glib_none().0))
+        }
     }
 
     fn set_local_only(&self, local_only: bool) {
-        unsafe { ffi::gtk_recent_chooser_set_local_only(GTK_RECENT_CHOOSER(self.unwrap_widget()), to_gboolean(local_only)) }
+        unsafe {
+            ffi::gtk_recent_chooser_set_local_only(self.upcast().to_glib_none().0,
+                local_only.to_glib())
+        }
     }
 
     fn get_local_only(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_recent_chooser_get_local_only(GTK_RECENT_CHOOSER(self.unwrap_widget()))) }
+        unsafe { from_glib(ffi::gtk_recent_chooser_get_local_only(self.upcast().to_glib_none().0)) }
     }
 
     fn set_limit(&self, limit: i32) {
-        unsafe { ffi::gtk_recent_chooser_set_limit(GTK_RECENT_CHOOSER(self.unwrap_widget()), limit) }
+        unsafe { ffi::gtk_recent_chooser_set_limit(self.upcast().to_glib_none().0, limit) }
     }
 
     fn get_limit(&self) -> i32 {
-        unsafe { ffi::gtk_recent_chooser_get_limit(GTK_RECENT_CHOOSER(self.unwrap_widget())) }
+        unsafe { ffi::gtk_recent_chooser_get_limit(self.upcast().to_glib_none().0) }
     }
 
     fn set_show_tips(&self, show_tips: bool) {
-        unsafe { ffi::gtk_recent_chooser_set_show_tips(GTK_RECENT_CHOOSER(self.unwrap_widget()), to_gboolean(show_tips)) }
+        unsafe {
+            ffi::gtk_recent_chooser_set_show_tips(self.upcast().to_glib_none().0,
+                show_tips.to_glib())
+        }
     }
 
     fn get_show_tips(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_recent_chooser_get_show_tips(GTK_RECENT_CHOOSER(self.unwrap_widget()))) }
+        unsafe { from_glib(ffi::gtk_recent_chooser_get_show_tips(self.upcast().to_glib_none().0)) }
     }
 
-    fn set_sort_type(&self, sort_type: ::RecentSortType) {
-        unsafe { ffi::gtk_recent_chooser_set_sort_type(GTK_RECENT_CHOOSER(self.unwrap_widget()), sort_type) }
+    fn set_sort_type(&self, sort_type: RecentSortType) {
+        unsafe { ffi::gtk_recent_chooser_set_sort_type(self.upcast().to_glib_none().0, sort_type) }
     }
 
-    fn get_sort_type(&self) -> ::RecentSortType {
-        unsafe { ffi::gtk_recent_chooser_get_sort_type(GTK_RECENT_CHOOSER(self.unwrap_widget())) }
+    fn get_sort_type(&self) -> RecentSortType {
+        unsafe { ffi::gtk_recent_chooser_get_sort_type(self.upcast().to_glib_none().0) }
     }
 
     fn get_current_uri(&self) -> Option<String> {
         unsafe {
             from_glib_none(
-                ffi::gtk_recent_chooser_get_current_uri(GTK_RECENT_CHOOSER(self.unwrap_widget())))
+                ffi::gtk_recent_chooser_get_current_uri(self.upcast().to_glib_none().0))
         }
     }
 
-    fn get_current_item(&self) -> Option<::RecentInfo> {
-        let tmp = unsafe { ffi::gtk_recent_chooser_get_current_item(GTK_RECENT_CHOOSER(self.unwrap_widget())) };
-
-        if tmp.is_null() {
-            None
-        } else {
-            Some(::FFIWidget::wrap_widget(tmp as *mut ffi::GtkWidget))
-        }
+    fn get_current_item(&self) -> Option<RecentInfo> {
+        unsafe { from_glib_full(ffi::gtk_recent_chooser_get_current_item(self.upcast().to_glib_none().0)) }
     }
 
-    fn unselect_uri(&self, uri: &str) -> bool {
+    fn unselect_uri(&self, uri: &str) {
         unsafe {
-            to_bool(ffi::gtk_recent_chooser_unselect_uri(GTK_RECENT_CHOOSER(self.unwrap_widget()), uri.to_glib_none().0))
+            ffi::gtk_recent_chooser_unselect_uri(self.upcast().to_glib_none().0,
+                uri.to_glib_none().0)
         }
     }
 
     fn select_all(&self) {
-        unsafe { ffi::gtk_recent_chooser_select_all(GTK_RECENT_CHOOSER(self.unwrap_widget())) }
+        unsafe { ffi::gtk_recent_chooser_select_all(self.upcast().to_glib_none().0) }
     }
 
     fn unselect_all(&self) {
-        unsafe { ffi::gtk_recent_chooser_unselect_all(GTK_RECENT_CHOOSER(self.unwrap_widget())) }
+        unsafe { ffi::gtk_recent_chooser_unselect_all(self.upcast().to_glib_none().0) }
     }
 
-    fn get_items(&self) -> glib::List<Box<::RecentInfo>> {
-        let tmp = unsafe { ffi::gtk_recent_chooser_get_items(GTK_RECENT_CHOOSER(self.unwrap_widget())) };
-
-        if tmp.is_null() {
-            glib::List::new()
-        } else {
-            let old_list : glib::List<*mut ffi::GtkRecentInfo> = glib::GlibContainer::wrap(tmp);
-            let mut tmp_vec : glib::List<Box<::RecentInfo>> = glib::List::new();
-
-            for it in old_list.iter() {
-                tmp_vec.append(Box::new(::FFIWidget::wrap_widget(*it as *mut ::ffi::GtkWidget)));
-            }
-            tmp_vec
+    fn get_items(&self) -> Vec<RecentInfo> {
+        unsafe {
+            Vec::from_glib_full(ffi::gtk_recent_chooser_get_items(self.upcast().to_glib_none().0))
         }
     }
 
     fn get_uris(&self) -> Vec<String> {
         unsafe {
             let mut length = 0;
-            let ptr = ffi::gtk_recent_chooser_get_uris(
-                GTK_RECENT_CHOOSER(self.unwrap_widget()),
-                &mut length) as *const *const c_char;
-            Vec::from_glib_none_num(ptr, length as usize)
+            let ptr = ffi::gtk_recent_chooser_get_uris(self.upcast().to_glib_none().0, &mut length);
+            Vec::from_glib_none_num(ptr as *const *const c_char, length as usize)
         }
     }
 
-    fn add_filter(&self, filter: &::RecentFilter) {
-        unsafe { ffi::gtk_recent_chooser_add_filter(GTK_RECENT_CHOOSER(self.unwrap_widget()), filter.unwrap_pointer()) }
+    fn add_filter(&self, filter: &RecentFilter) {
+        unsafe {
+            ffi::gtk_recent_chooser_add_filter(self.upcast().to_glib_none().0, filter.to_glib_none().0)
+        }
     }
 
-    fn remove_filter(&self, filter: &::RecentFilter) {
-        unsafe { ffi::gtk_recent_chooser_remove_filter(GTK_RECENT_CHOOSER(self.unwrap_widget()), filter.unwrap_pointer()) }
+    fn remove_filter(&self, filter: &RecentFilter) {
+        unsafe {
+            ffi::gtk_recent_chooser_remove_filter(self.upcast().to_glib_none().0, filter.to_glib_none().0)
+        }
     }
 
-    // fn list_filters(&self) -> glib::SList<Box<::RecentFilter>> {
-    //     let tmp = unsafe { ffi::gtk_recent_chooser_list_filters(self.unwrap_pointer()) };
-
-    //     if tmp.is_null() {
-    //         glib::SList::new()
-    //     } else {
-    //         let old_list : glib::SList<*mut ffi::GtkRecentFilter> = glib::GlibContainer::wrap(tmp);
-    //         let mut tmp_vec : glib::SList<Box<::RecentFilter>> = glib::SList::new();
-
-    //         for it in old_list.iter() {
-    //             match ::RecentFilter::wrap(*it) {
-    //                 Some(r) => tmp_vec.append(Box::new(r)),
-    //                 None => {}
-    //             }
-    //         }
-    //         tmp_vec
-    //     }
-    // }
-
-    fn set_filter(&self, filter: &::RecentFilter) {
-        unsafe { ffi::gtk_recent_chooser_set_filter(GTK_RECENT_CHOOSER(self.unwrap_widget()), filter.unwrap_pointer()) }
+    fn list_filters(&self) -> Vec<RecentFilter> {
+        unsafe {
+            Vec::from_glib_full(
+                ffi::gtk_recent_chooser_list_filters(self.upcast().to_glib_none().0))
+        }
     }
 
-    fn get_filter(&self) -> Option<::RecentFilter> {
-        let tmp = unsafe { ffi::gtk_recent_chooser_get_filter(GTK_RECENT_CHOOSER(self.unwrap_widget())) };
+    fn set_filter(&self, filter: &RecentFilter) {
+        unsafe {
+            ffi::gtk_recent_chooser_set_filter(self.upcast().to_glib_none().0, filter.to_glib_none().0)
+        }
+    }
 
-        ::RecentFilter::wrap(tmp)
+    fn get_filter(&self) -> Option<RecentFilter> {
+        unsafe {
+            from_glib_none(ffi::gtk_recent_chooser_get_filter(self.upcast().to_glib_none().0))
+        }
     }
 }

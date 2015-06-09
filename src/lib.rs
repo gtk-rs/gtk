@@ -133,6 +133,13 @@ pub use ffi::enums::{
 };
 
 pub mod builder;
+pub mod chooser {
+    pub mod app;
+    pub mod color;
+    pub mod file;
+    pub mod font;
+    pub mod recent;
+}
 pub mod dialog;
 pub mod object;
 pub mod prelude;
@@ -141,6 +148,20 @@ pub mod widgets;
 pub mod window;
 
 pub use builder::{Builder, Buildable};
+pub use chooser::app::AppChooser;
+pub use chooser::color::ColorChooser;
+pub use chooser::file::{
+    FileChooser,
+    FileFilter,
+};
+pub use chooser::font::FontChooser;
+pub use chooser::recent::{
+    RecentChooser,
+    RecentData,
+    RecentFilter,
+    RecentInfo,
+    RecentManager,
+};
 pub use dialog::Dialog;
 pub use dialog::about::AboutDialog;
 pub use dialog::message::MessageDialog;

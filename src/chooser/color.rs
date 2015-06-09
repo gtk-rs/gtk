@@ -2,36 +2,64 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-use ffi;
-use glib::{to_bool, to_gboolean};
-use cast::GTK_COLOR_CHOOSER;
-use gdk_ffi;
+use libc::c_int;
 
-pub trait ColorChooserTrait: ::WidgetTrait {
-    fn get_rgba(&self) -> gdk_ffi::GdkRGBA {
-        let color = gdk_ffi::GdkRGBA {
+use glib::translate::*;
+use glib::types;
+use gdk_ffi::GdkRGBA;
+use ffi;
+
+use object::{Object, Upcast};
+
+use Orientation;
+
+pub type ColorChooser = Object<ffi::GtkColorChooser>;
+
+impl types::StaticType for ColorChooser {
+    #[inline]
+    fn static_type() -> types::Type {
+        unsafe { from_glib(ffi::gtk_color_chooser_get_type()) }
+    }
+}
+
+pub trait ColorChooserExt {
+    fn get_rgba(&self) -> GdkRGBA;
+    fn set_rgba(&self, color: GdkRGBA);
+    fn get_use_alpha(&self) -> bool;
+    fn set_use_alpha(&self, use_alpha: bool);
+    fn add_palette(&self, orientation: Orientation, colors_per_line: i32, colors: Vec<GdkRGBA>);
+}
+
+impl<O: Upcast<ColorChooser>> ColorChooserExt for O {
+    fn get_rgba(&self) -> GdkRGBA {
+        let mut color = GdkRGBA {
             red: 0f64,
             green: 0f64,
             blue: 0f64,
             alpha: 0f64
         };
-        unsafe { ffi::gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(self.unwrap_widget()), &color) };
+        unsafe { ffi::gtk_color_chooser_get_rgba(self.upcast().to_glib_none().0, &mut color) };
         color
     }
 
-    fn set_rgba(&self, color: gdk_ffi::GdkRGBA) -> () {
-        unsafe { ffi::gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(self.unwrap_widget()), &color) };
+    fn set_rgba(&self, color: GdkRGBA) {
+        unsafe { ffi::gtk_color_chooser_set_rgba(self.upcast().to_glib_none().0, &color) };
     }
 
     fn get_use_alpha(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_color_chooser_get_use_alpha(GTK_COLOR_CHOOSER(self.unwrap_widget()))) }
+        unsafe { from_glib(ffi::gtk_color_chooser_get_use_alpha(self.upcast().to_glib_none().0)) }
     }
 
-    fn set_use_alpha(&self, use_alpha: bool) -> () {
-        unsafe { ffi::gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(self.unwrap_widget()), to_gboolean(use_alpha)) }
+    fn set_use_alpha(&self, use_alpha: bool) {
+        unsafe {
+            ffi::gtk_color_chooser_set_use_alpha(self.upcast().to_glib_none().0,
+                use_alpha.to_glib())
+        }
     }
 
-    fn add_palette(&self, orientation: ::Orientation, colors_per_line: i32, colors: Vec<gdk_ffi::GdkRGBA>) -> () {
-        unsafe { ffi::gtk_color_chooser_add_palette(GTK_COLOR_CHOOSER(self.unwrap_widget()), orientation, colors_per_line, colors.len() as i32, colors.as_ptr()) }
+    fn add_palette(&self, orientation: Orientation, colors_per_line: i32, colors: Vec<GdkRGBA>) {
+        unsafe {
+            ffi::gtk_color_chooser_add_palette(self.upcast().to_glib_none().0, orientation,
+                colors_per_line, colors.len() as c_int, colors.as_ptr()) }
     }
 }

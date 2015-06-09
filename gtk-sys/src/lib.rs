@@ -1012,6 +1012,7 @@ extern "C" {
     //=========================================================================
     // GtkFileChooser                                                    NOT OK
     //=========================================================================
+    pub fn gtk_file_chooser_get_type           () -> GType;
     // FIXME : check if memory is freed when a *const c_char is returned
     pub fn gtk_file_chooser_set_action         (chooser: *mut GtkFileChooser, action: enums::FileChooserAction) -> ();
     pub fn gtk_file_chooser_get_action         (chooser: *mut GtkFileChooser) -> enums::FileChooserAction;
@@ -1055,7 +1056,7 @@ extern "C" {
     pub fn gtk_file_chooser_get_extra_widget   (chooser: *mut GtkFileChooser) -> *mut GtkWidget;
     pub fn gtk_file_chooser_add_filter         (chooser: *mut GtkFileChooser, filter: *mut GtkFileFilter) -> ();
     pub fn gtk_file_chooser_remove_filter      (chooser: *mut GtkFileChooser, filter: *mut GtkFileFilter) -> ();
-    //pub fn gtk_file_chooser_list_filters       (chooser: *const const GtkFileChooser) -> *GSList;
+    pub fn gtk_file_chooser_list_filters       (chooser: *mut GtkFileChooser) -> *mut GSList;
     pub fn gtk_file_chooser_set_filter         (chooser: *mut GtkFileChooser, filter: *mut GtkFileFilter) -> ();
     pub fn gtk_file_chooser_get_filter         (chooser: *mut GtkFileChooser) -> *mut GtkFileFilter;
     pub fn gtk_file_chooser_add_shortcut_folder(chooser: *mut GtkFileChooser, folder: *const c_char, error: *mut *mut GError) -> gboolean;
@@ -1076,6 +1077,7 @@ extern "C" {
     //=========================================================================
     // GtkFileFilter                                                     NOT OK
     //=========================================================================
+    pub fn gtk_file_filter_get_type            () -> GType;
     pub fn gtk_file_filter_new                 () -> *mut GtkFileFilter;
     pub fn gtk_file_filter_set_name            (filter: *mut GtkFileFilter, name: *const c_char) -> ();
     pub fn gtk_file_filter_get_name            (filter: *mut GtkFileFilter) -> *const c_char;
@@ -1323,6 +1325,7 @@ extern "C" {
     //=========================================================================
     // GtkRecentChooser                                                  NOT OK
     //=========================================================================
+    pub fn gtk_recent_chooser_get_type         () -> GType;
     pub fn gtk_recent_chooser_set_show_private (chooser: *mut GtkRecentChooser, show_private: gboolean);
     pub fn gtk_recent_chooser_get_show_private (chooser: *mut GtkRecentChooser) -> gboolean;
     pub fn gtk_recent_chooser_set_show_not_found(chooser: *mut GtkRecentChooser, show_not_found: gboolean);
@@ -1344,7 +1347,7 @@ extern "C" {
     pub fn gtk_recent_chooser_get_current_uri  (chooser: *mut GtkRecentChooser) -> *mut c_char;
     pub fn gtk_recent_chooser_get_current_item (chooser: *mut GtkRecentChooser) -> *mut GtkRecentInfo;
     //pub fn gtk_recent_chooser_select_uri       (chooser: *mut GtkRecentChooser, uri: *const c_char, error: *mut *mut GError) -> gboolean;
-    pub fn gtk_recent_chooser_unselect_uri     (chooser: *mut GtkRecentChooser, uri: *const c_char) -> gboolean;
+    pub fn gtk_recent_chooser_unselect_uri     (chooser: *mut GtkRecentChooser, uri: *const c_char);
     pub fn gtk_recent_chooser_select_all       (chooser: *mut GtkRecentChooser);
     pub fn gtk_recent_chooser_unselect_all     (chooser: *mut GtkRecentChooser);
     pub fn gtk_recent_chooser_get_items        (chooser: *mut GtkRecentChooser) -> *mut GList;
@@ -1361,6 +1364,7 @@ extern "C" {
     //=========================================================================
     // GtkRecentFilter                                                   NOT OK
     //=========================================================================
+    pub fn gtk_recent_filter_get_type          () -> GType;
     pub fn gtk_recent_filter_new               () -> *mut GtkRecentFilter;
     pub fn gtk_recent_filter_get_name          (filter: *mut GtkRecentFilter) -> *const c_char;
     pub fn gtk_recent_filter_set_name          (filter: *mut GtkRecentFilter, name: *const c_char);
@@ -1388,6 +1392,7 @@ extern "C" {
     //=========================================================================
     // GtkRecentManager                                                  NOT OK
     //=========================================================================
+    pub fn gtk_recent_manager_get_type         () -> GType;
     pub fn gtk_recent_manager_new              () -> *mut GtkRecentManager;
     pub fn gtk_recent_manager_get_default      () -> *mut GtkRecentManager;
     pub fn gtk_recent_manager_add_item         (manager: *mut GtkRecentManager, uri: *const c_char) -> gboolean;
@@ -1436,6 +1441,7 @@ extern "C" {
     //=========================================================================
     // GtkFontChooser                                                    NOT OK
     //=========================================================================
+    pub fn gtk_font_chooser_get_type           () -> GType;
     //pub fn gtk_font_chooser_get_font_family    (font_chooser: *mut GtkFontChooser) -> *mut PangoFontFamily;
     //pub fn gtk_font_chooser_get_font_face      (font_chooser: *mut GtkFontChooser) -> *mut PangoFontFace;
     pub fn gtk_font_chooser_get_font_size      (font_chooser: *mut GtkFontChooser) -> c_int;
@@ -1461,11 +1467,12 @@ extern "C" {
     //=========================================================================
     // GtkColorChooser                                                       OK
     //=========================================================================
-    pub fn gtk_color_chooser_get_rgba          (chooser: *mut GtkColorChooser, color: *const gdk_ffi::GdkRGBA) -> ();
+    pub fn gtk_color_chooser_get_type          () -> GType;
+    pub fn gtk_color_chooser_get_rgba          (chooser: *mut GtkColorChooser, color: *mut gdk_ffi::GdkRGBA) -> ();
     pub fn gtk_color_chooser_set_rgba          (chooser: *mut GtkColorChooser, color: *const gdk_ffi::GdkRGBA) -> ();
     pub fn gtk_color_chooser_get_use_alpha     (chooser: *mut GtkColorChooser) -> gboolean;
     pub fn gtk_color_chooser_set_use_alpha     (chooser: *mut GtkColorChooser, use_alpha: gboolean) -> ();
-    pub fn gtk_color_chooser_add_palette       (chooser: *mut GtkColorChooser, orientation: enums::Orientation, colors_per_line: i32, n_colors: i32, colors: *const gdk_ffi::GdkRGBA) -> ();
+    pub fn gtk_color_chooser_add_palette       (chooser: *mut GtkColorChooser, orientation: enums::Orientation, colors_per_line: c_int, n_colors: c_int, colors: *const gdk_ffi::GdkRGBA);
 
     //=========================================================================
     // GtkColorChooserDialog                                                 OK
@@ -1601,7 +1608,8 @@ extern "C" {
     //=========================================================================
     // GtkAppChooser                                                         OK
     //=========================================================================
-    pub fn gtk_app_chooser_get_app_info        (_self: *mut GtkAppChooser) -> *mut GAppInfo;
+    pub fn gtk_app_chooser_get_type            () -> GType;
+    pub fn gtk_app_chooser_get_app_info        (_self: *mut GtkAppChooser) -> *mut glib_ffi::GAppInfo;
     pub fn gtk_app_chooser_get_content_type    (_self: *mut GtkAppChooser) -> *const c_char;
     pub fn gtk_app_chooser_refresh             (_self: *mut GtkAppChooser) -> ();
 

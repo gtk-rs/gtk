@@ -2,6 +2,11 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
+pub use chooser::app::AppChooserExt;
+pub use chooser::color::ColorChooserExt;
+pub use chooser::file::FileChooserExt;
+pub use chooser::font::FontChooserExt;
+pub use chooser::recent::RecentChooserExt;
 pub use dialog::DialogExt;
 pub use widgets::bin::BinExt;
 pub use widgets::box_::BoxExt;

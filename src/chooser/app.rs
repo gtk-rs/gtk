@@ -2,29 +2,44 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-use glib::translate::{from_glib_none};
+use glib::translate::*;
+use glib::types;
+use glib::AppInfo;
 use ffi;
-use cast::GTK_APP_CHOOSER;
 
-pub trait AppChooserTrait: ::WidgetTrait {
-    fn get_app_info(&self) -> Option<::AppInfo> {
-        let tmp_pointer = unsafe { ffi::gtk_app_chooser_get_app_info(GTK_APP_CHOOSER(self.unwrap_widget())) };
+use object::{Object, Upcast};
+use widgets::widget::Widget;
 
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            Some(::FFIWidget::wrap_widget(tmp_pointer as *mut ffi::GtkWidget))
-        }
+pub type AppChooser = Object<ffi::GtkAppChooser>;
+
+impl types::StaticType for AppChooser {
+    #[inline]
+    fn static_type() -> types::Type {
+        unsafe { from_glib(ffi::gtk_app_chooser_get_type()) }
+    }
+}
+
+unsafe impl Upcast<Widget> for AppChooser { }
+
+pub trait AppChooserExt {
+    fn get_app_info(&self) -> Option<AppInfo>;
+    fn get_content_type(&self) -> Option<String>;
+    fn refresh(&self);
+}
+
+impl<O: Upcast<AppChooser>> AppChooserExt for O {
+    fn get_app_info(&self) -> Option<AppInfo> {
+        unsafe { from_glib_full(ffi::gtk_app_chooser_get_app_info(self.upcast().to_glib_none().0)) }
     }
 
-    fn get_content_info(&self) -> Option<String> {
+    fn get_content_type(&self) -> Option<String> {
         unsafe {
-            from_glib_none(
-                ffi::gtk_app_chooser_get_content_type(GTK_APP_CHOOSER(self.unwrap_widget())))
+            from_glib_full(
+                ffi::gtk_app_chooser_get_content_type(self.upcast().to_glib_none().0))
         }
     }
 
-    fn refresh(&self) -> () {
-        unsafe { ffi::gtk_app_chooser_refresh(GTK_APP_CHOOSER(self.unwrap_widget())) }
+    fn refresh(&self) {
+        unsafe { ffi::gtk_app_chooser_refresh(self.upcast().to_glib_none().0) }
     }
 }
