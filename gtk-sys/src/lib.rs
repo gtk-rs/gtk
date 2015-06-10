@@ -8,6 +8,7 @@
 extern crate libc;
 extern crate glib_sys as glib_ffi;
 extern crate gdk_sys as gdk_ffi;
+extern crate pango_sys as pango_ffi;
 
 pub mod enums;
 
@@ -455,7 +456,7 @@ extern "C" {
     //pub fn gtk_widget_input_shape_combine_region(widget: *mut GtkWidget, region: *mut cairo_region_t);
     pub fn gtk_widget_override_background_color(widget: *mut GtkWidget, state: enums::StateFlags, color: *const gdk_ffi::GdkRGBA);
     pub fn gtk_widget_override_color           (widget: *mut GtkWidget, state: enums::StateFlags, color: *const gdk_ffi::GdkRGBA);
-    //pub fn gtk_widget_override_font            (widget: *mut GtkWidget, font_desc: *const PangoFontDescription);
+    pub fn gtk_widget_override_font            (widget: *mut GtkWidget, font_desc: *const pango_ffi::PangoFontDescription);
     pub fn gtk_widget_override_symbolic_color  (widget: *mut GtkWidget, name: *const c_char, color: *const gdk_ffi::GdkRGBA);
     pub fn gtk_widget_override_cursor          (widget: *mut GtkWidget, cursor: *const gdk_ffi::GdkRGBA, secondary_cursor: *const gdk_ffi::GdkRGBA);
     //pub fn gtk_widget_create_pango_context     (widget: *mut GtkWidget) -> *mut PangoContext;
