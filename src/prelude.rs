@@ -8,6 +8,14 @@ pub use chooser::file::FileChooserExt;
 pub use chooser::font::FontChooserExt;
 pub use chooser::recent::RecentChooserExt;
 pub use dialog::DialogExt;
+pub use mvc::cell_interfaces::{
+    CellEditableExt,
+    CellLayoutExt,
+};
+pub use mvc::cell_renderer::{
+    CellRendererExt,
+    CellRendererTextExt,
+};
 pub use widgets::bin::BinExt;
 pub use widgets::box_::BoxExt;
 pub use widgets::button::ButtonExt;

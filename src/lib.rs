@@ -141,6 +141,10 @@ pub mod chooser {
     pub mod recent;
 }
 pub mod dialog;
+pub mod mvc {
+    pub mod cell_interfaces;
+    pub mod cell_renderer;
+}
 pub mod object;
 pub mod prelude;
 pub mod rt;
@@ -165,6 +169,15 @@ pub use chooser::recent::{
 pub use dialog::Dialog;
 pub use dialog::about::AboutDialog;
 pub use dialog::message::MessageDialog;
+pub use mvc::cell_interfaces::{
+    CellEditable,
+    CellLayout,
+};
+pub use mvc::cell_renderer::{
+    CellRenderer,
+    CellRendererText,
+    CellRendererToggle,
+};
 pub use widgets::bin::Bin;
 pub use widgets::box_::Box;
 pub use widgets::button::Button;

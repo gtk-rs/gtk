@@ -733,6 +733,7 @@ extern "C" {
     //=========================================================================
     // GtkCellEditable                                                   NOT OK
     //=========================================================================
+    pub fn gtk_cell_editable_get_type          () -> GType;
     //pub fn gtk_cell_editable_start_editing     (cell_editable: *mut GtkCellEditable, event: *mut GdkEvent) -> ();
     pub fn gtk_cell_editable_editing_done      (cell_editable: *mut GtkCellEditable);
     pub fn gtk_cell_editable_remove_widget     (cell_editable: *mut GtkCellEditable);
@@ -740,12 +741,14 @@ extern "C" {
     //=========================================================================
     // GtkCellRendererText                                               NOT OK
     //=========================================================================
+    pub fn gtk_cell_renderer_text_get_type     () -> GType;
     pub fn gtk_cell_renderer_text_new          () -> *mut GtkCellRenderer;
     pub fn gtk_cell_renderer_text_set_fixed_height_from_font(renderer: *mut GtkCellRendererText, number_of_rows: c_int) -> ();
 
     //=========================================================================
     // GtkCellRendererToggle                                             NOT OK
     //=========================================================================
+    pub fn gtk_cell_renderer_toggle_get_type   () -> GType;
     pub fn gtk_cell_renderer_toggle_new        () -> *mut GtkCellRenderer;
     pub fn gtk_cell_renderer_toggle_get_radio  (renderer: *mut GtkCellRendererToggle) -> gboolean;
     pub fn gtk_cell_renderer_toggle_set_radio  (renderer: *mut GtkCellRendererToggle, radio: gboolean) -> ();
@@ -923,6 +926,7 @@ extern "C" {
     //=========================================================================
     // GtkCellRenderer                                                   NOT OK
     //=========================================================================
+    pub fn gtk_cell_renderer_get_type          () -> GType;
     //pub fn gtk_cell_renderer_class_set_accessible_type(renderer_class: *mut GtkCellRendererClass, _type: GType);
     //pub fn gtk_cell_renderer_get_aligned_area  (cell: *mut GtkCellRenderer, widget: *mut GtkWidget, flags: enums::CellRendererState,
     //    cell_area: *const GdkRectangle, aligned_area: *mut GdkRectangle);
@@ -960,6 +964,7 @@ extern "C" {
     //=========================================================================
     // GtkCelllayout                                                     NOT OK
     //=========================================================================
+    pub fn gtk_cell_layout_get_type            () -> GType;
     pub fn gtk_cell_layout_pack_start          (cell_layout: *mut GtkCellLayout, cell: *mut GtkCellRenderer, expand: gboolean);
     pub fn gtk_cell_layout_pack_end            (cell_layout: *mut GtkCellLayout, cell: *mut GtkCellRenderer, expand: gboolean);
     //pub fn gtk_cell_layout_get_area            (cell_layout: *mut GtkCellLayout) -> *mut GtkCellArea;
