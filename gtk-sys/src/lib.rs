@@ -1898,6 +1898,7 @@ extern "C" {
     //=========================================================================
     // GtkAdjustment                                                         OK
     //=========================================================================
+    pub fn gtk_adjustment_get_type             () -> GType;
     pub fn gtk_adjustment_new                  (value: c_double, lower: c_double, upper: c_double, step_increment: c_double, page_increment: c_double, page_size: c_double) -> *mut GtkAdjustment;
     pub fn gtk_adjustment_get_value            (adjustment: *mut GtkAdjustment) -> c_double;
     pub fn gtk_adjustment_set_value            (adjustment: *mut GtkAdjustment, value: c_double) -> ();

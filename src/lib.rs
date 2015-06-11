@@ -132,6 +132,7 @@ pub use ffi::enums::{
     WrapMode,
 };
 
+pub mod adjustment;
 pub mod builder;
 pub mod chooser {
     pub mod app;
@@ -151,6 +152,7 @@ pub mod rt;
 pub mod widgets;
 pub mod window;
 
+pub use adjustment::Adjustment;
 pub use builder::{Builder, Buildable};
 pub use chooser::app::AppChooser;
 pub use chooser::color::ColorChooser;
