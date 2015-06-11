@@ -145,6 +145,7 @@ pub mod dialog;
 pub mod mvc {
     pub mod cell_interfaces;
     pub mod cell_renderer;
+    pub mod tree_model;
 }
 pub mod object;
 pub mod prelude;
@@ -179,6 +180,11 @@ pub use mvc::cell_renderer::{
     CellRenderer,
     CellRendererText,
     CellRendererToggle,
+};
+pub use mvc::tree_model::{
+    TreeIter,
+    TreeModel,
+    TreePath,
 };
 pub use widgets::bin::Bin;
 pub use widgets::box_::Box;

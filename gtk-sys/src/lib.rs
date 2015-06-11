@@ -11,10 +11,10 @@ extern crate gdk_sys as gdk_ffi;
 
 pub mod enums;
 
-use libc::{c_int, c_char, c_float, c_uint, c_double, c_long, c_short, c_void, c_ulong, time_t};
+use libc::{c_int, c_char, c_float, c_uint, c_double, c_long, c_short, c_void, time_t};
 
 pub use glib_ffi::{
-    gboolean, GFALSE, GTRUE, gpointer, GType, GObject, GPermission,
+    gboolean, GFALSE, GTRUE, gsize, gpointer, GType, GObject, GPermission,
     GList, GSList, GError, GValue};
 
 //pub type GtkAllocation = GdkRectangle;
@@ -782,7 +782,7 @@ extern "C" {
     pub fn gtk_tree_path_new                   () -> *mut GtkTreePath;
     pub fn gtk_tree_path_new_from_string       (path: *const c_char) -> *mut GtkTreePath;
     //pub fn gtk_tree_path_new_from_indices      (first_index: c_int, ...) -> *mut GtkTreePath;
-    pub fn gtk_tree_path_new_from_indicesv     (indices: *mut c_int, length: c_ulong) -> *mut GtkTreePath;
+    pub fn gtk_tree_path_new_from_indicesv     (indices: *mut c_int, length: gsize) -> *mut GtkTreePath;
     pub fn gtk_tree_path_to_string             (path: *mut GtkTreePath) -> *mut c_char;
     pub fn gtk_tree_path_new_first             () -> *mut GtkTreePath;
     pub fn gtk_tree_path_append_index          (path: *mut GtkTreePath, index_: c_int);
@@ -837,6 +837,7 @@ extern "C" {
     //=========================================================================
     // GtkTreeModel                                                      NOT OK
     //=========================================================================
+    pub fn gtk_tree_model_get_type             () -> GType;
     pub fn gtk_tree_model_get_flags            (tree_model: *mut GtkTreeModel) -> enums::TreeModelFlags;
     pub fn gtk_tree_model_get_n_columns        (tree_model: *mut GtkTreeModel) -> c_int;
     pub fn gtk_tree_model_get_column_type      (tree_model: *mut GtkTreeModel, index_: c_int) -> GType;
