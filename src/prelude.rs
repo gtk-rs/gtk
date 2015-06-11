@@ -21,5 +21,6 @@ pub use widgets::box_::BoxExt;
 pub use widgets::button::ButtonExt;
 pub use widgets::container::ContainerExt;
 pub use widgets::orientable::OrientableExt;
+pub use widgets::scrollable::ScrollableExt;
 pub use widgets::widget::WidgetExt;
 pub use window::WindowExt;

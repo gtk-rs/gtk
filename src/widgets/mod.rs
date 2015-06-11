@@ -9,6 +9,7 @@ pub mod container;
 #[cfg(feature = "gtk_3_10")]
 pub mod header_bar;
 pub mod orientable;
+pub mod scrollable;
 pub mod widget;
 
 // ---------------- cut ----------------

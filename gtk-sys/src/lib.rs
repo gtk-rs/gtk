@@ -2517,6 +2517,7 @@ extern "C" {
     //=========================================================================
     // GtkScrollable                                                         OK
     //=========================================================================
+    pub fn gtk_scrollable_get_type               () -> GType;
     pub fn gtk_scrollable_get_hadjustment        (scrollable: *mut GtkScrollable) -> *mut GtkAdjustment;
     pub fn gtk_scrollable_set_hadjustment        (scrollable: *mut GtkScrollable, hadjustment: *mut GtkAdjustment);
     pub fn gtk_scrollable_get_vadjustment        (scrollable: *mut GtkScrollable) -> *mut GtkAdjustment;

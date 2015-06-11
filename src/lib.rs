@@ -187,6 +187,7 @@ pub use widgets::container::Container;
 #[cfg(feature = "gtk_3_10")]
 pub use widgets::header_bar::HeaderBar;
 pub use widgets::orientable::Orientable;
+pub use widgets::scrollable::Scrollable;
 pub use widgets::widget::Widget;
 pub use window::Window;
 
