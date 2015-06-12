@@ -21,6 +21,12 @@ pub use glib_ffi::{
 //pub type GtkAllocation = GdkRectangle;
 
 #[repr(C)]
+pub struct GtkStyleContext;
+#[repr(C)]
+pub struct GtkStyleProvider;
+#[repr(C)]
+pub struct GtkCssProvider;
+#[repr(C)]
 pub struct GtkWidget;
 #[repr(C)]
 pub struct GtkWindow;
@@ -389,6 +395,26 @@ extern "C" {
     pub fn g_type_get_type_registration_serial () -> c_uint;
 
     //=========================================================================
+    // GtkCssProvider                                                    NOT OK
+    //=========================================================================
+
+    pub fn gtk_css_provider_new                () -> *mut GtkCssProvider;
+    pub fn gtk_css_provider_get_default        () -> *mut GtkCssProvider;
+    pub fn gtk_css_provider_get_named          (name: *const c_char, variant: *const c_char) -> *mut GtkCssProvider;
+    pub fn gtk_css_provider_load_from_path     (provider: *mut GtkCssProvider, path: *const c_char, error: *mut *mut GError) -> gboolean;
+    //pub fn gtk_css_provider_load_from_data   (provider: GtkCssProvider, data: *const c_char, length: gssize, error: *mut *mut GError) -> gboolean;
+    //pub fn gtk_css_provider_load_from_file   (provider: *mut GtkCssProvider, file: *const GFile, *mut *mut GError) -> gboolean;
+    //pub fn gtk_css_provider_load_from_resource (provider: *mut GtkCssProvider, resource_path: *const c_char);
+    pub fn gtk_css_provider_to_string          (provider: *mut GtkCssProvider) -> *const c_char;
+
+    //=========================================================================
+    // GtkStyleContext                                                   NOT OK
+    //=========================================================================
+    pub fn gtk_style_context_new                     () -> *mut GtkStyleContext;
+    pub fn gtk_style_context_add_provider            (context: *mut GtkStyleContext, provider: *mut GtkStyleProvider, priority: u32);
+    pub fn gtk_style_context_add_provider_for_screen (screen: *mut gdk_ffi::GdkScreen, provider: *mut GtkStyleProvider, priority: u32);
+
+    //=========================================================================
     // GtkWidget                                                         NOT OK
     //=========================================================================
     //pub fn gtk_widget_new                      (type: GType, first_property_name: *const c_char, ...) -> *mut GtkWidget;
@@ -559,7 +585,7 @@ extern "C" {
     pub fn gtk_widget_get_opacity              (widget: *mut GtkWidget) -> c_double;
     pub fn gtk_widget_set_opacity              (widget: *mut GtkWidget, opacity: c_double);
     //pub fn gtk_widget_get_path                 (widget: *mut GtkWidget) -> *mut GtkWidgetPath;
-    //pub fn gtk_widget_get_style_context        (widget: *mut GtkWidget) -> *mut GtkStyleContext;
+    pub fn gtk_widget_get_style_context        (widget: *mut GtkWidget) -> *mut GtkStyleContext;
     pub fn gtk_widget_reset_style              (widget: *mut GtkWidget);
     //pub fn gtk_requisition_new                 () -> *mut GtkRequisition;
     //pub fn gtk_requisition_copy                (requisition: *const GtkRequisition) -> *mut GtkRequisition;
@@ -3364,4 +3390,5 @@ extern "C" {
     pub fn cast_GtkFontChooserWidget(widget: *mut GtkWidget) -> *mut GtkFontChooserWidget;
     pub fn cast_GtkSocket(widget: *mut GtkWidget) -> *mut GtkSocket;
     pub fn cast_GtkEventBox(widget: *mut GtkWidget) -> *mut GtkEventBox;
+    pub fn cast_GtkStyleProvider(widget: *mut GObject) -> *mut GtkStyleProvider;
 }

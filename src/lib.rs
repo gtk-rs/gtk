@@ -71,6 +71,8 @@ pub use self::rt::{
 
 /// GTK Widgets for all versions
 pub use self::widgets::{
+    CssProvider,
+    StyleContext,
     Widget,
     Window,
     Label,
@@ -296,6 +298,7 @@ pub use ffi::enums::SizeGroupMode;
 
 /// Gtk Traits
 pub use self::traits::FFIWidget;
+pub use self::traits::StyleProviderTrait;
 pub use self::traits::GObjectTrait;
 pub use self::traits::BoxTrait;
 pub use self::traits::ActionableTrait;

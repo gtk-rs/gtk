@@ -2,6 +2,9 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
+pub use self::css_provider::CssProvider;
+pub use self::style_context::StyleContext;
+
 pub use self::widget::Widget;
 pub use self::builder::Builder;
 pub use self::window::Window;
@@ -136,6 +139,9 @@ pub use self::font_chooser_widget::FontChooserWidget;
 #[cfg(target_os = "linux")]
 pub use self::socket::Socket;
 pub use self::event_box::EventBox;
+
+mod css_provider;
+mod style_context;
 
 mod widget;
 mod builder;
