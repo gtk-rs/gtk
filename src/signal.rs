@@ -11,16 +11,45 @@ use glib::{FFIGObject, ParamSpec};
 
 use ffi::{gboolean, GtkAdjustment, GtkTreeSelection, GtkTreeViewColumn};
 use gdk::{
-    EventAny, EventButton, EventConfigure, EventCrossing, EventExpose, EventFocus, EventGrabBroken,
-    EventKey, EventMotion, EventProperty, EventProximity, EventScroll, EventWindowState,
+    EventAny,
+    EventButton,
+    EventConfigure,
+    EventCrossing,
+    EventExpose,
+    EventFocus,
+    EventGrabBroken,
+    EventKey,
+    EventMotion,
+    EventProperty,
+    EventProximity,
+    EventScroll,
+    EventWindowState,
     Screen,
 };
 use cairo::{Context, RectangleInt};
 
 use {
-    Adjustment, Button, Dialog, DirectionType, Range, ScrollType, SpinButton, StateFlags,
-    TextDirection, ToolButton, Tooltip, TreeIter, TreePath, TreeSelection, TreeView,
-    TreeViewColumn, Widget, WidgetHelpType,
+    Adjustment,
+    Button,
+    DeleteType,
+    Dialog,
+    DirectionType,
+    Entry,
+    MovementStep,
+    Range,
+    ScrollType,
+    SpinButton,
+    StateFlags,
+    TextDirection,
+    ToolButton,
+    Tooltip,
+    TreeIter,
+    TreePath,
+    TreeSelection,
+    TreeView,
+    TreeViewColumn,
+    Widget,
+    WidgetHelpType,
 };
 
 /// Whether to propagate the signal to other handlers
@@ -665,6 +694,135 @@ mod widget {
         f(FFIWidget::wrap_widget(this), previous);
     }
 
+}
+
+pub trait EntrySignals {
+    fn connect_activate<F: Fn(Entry) + 'static>(&self, f: F) -> u64;
+    fn connect_backspace<F: Fn(Entry) + 'static>(&self, f: F) -> u64;
+    fn connect_copy_clipboard<F: Fn(Entry) + 'static>(&self, f: F) -> u64;
+    fn connect_cut_clipboard<F: Fn(Entry) + 'static>(&self, f: F) -> u64;
+    fn connect_paste_clipboard<F: Fn(Entry) + 'static>(&self, f: F) -> u64;
+    fn connect_toggle_overwrite<F: Fn(Entry) + 'static>(&self, f: F) -> u64;
+    fn connect_delete_from_cursor<F: Fn(Entry, DeleteType, i32) + 'static>(&self, f: F) -> u64;
+    fn connect_move_cursor<F: Fn(Entry, MovementStep, i32, bool) + 'static>(&self, f: F) -> u64;
+    fn connect_insert_at_cursor<F: Fn(Entry, &str) + 'static>(&self, f: F) -> u64;
+    fn connect_preedit_changed<F: Fn(Entry, &str) + 'static>(&self, f: F) -> u64;
+}
+
+mod entry {
+    use super::into_raw;
+    use std::mem::transmute;
+    use std::str;
+    use std::ffi::CStr;
+    use glib::signal::connect;
+    use libc::c_char;
+    use traits::{FFIWidget, EntryTrait};
+    use ffi::GtkEntry;
+    use {Entry, DeleteType, MovementStep};
+
+    impl<T: FFIWidget + EntryTrait> super::EntrySignals for T {
+        fn connect_activate<F: Fn(Entry) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(Entry) + 'static>> = Box::new(Box::new(f));
+                connect(self.unwrap_widget() as *mut _, "activate",
+                    transmute(void_trampoline), into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_backspace<F: Fn(Entry) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(Entry) + 'static>> = Box::new(Box::new(f));
+                connect(self.unwrap_widget() as *mut _, "backspace",
+                    transmute(void_trampoline), into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_copy_clipboard<F: Fn(Entry) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(Entry) + 'static>> = Box::new(Box::new(f));
+                connect(self.unwrap_widget() as *mut _, "copy_clipboard",
+                    transmute(void_trampoline), into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_cut_clipboard<F: Fn(Entry) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(Entry) + 'static>> = Box::new(Box::new(f));
+                connect(self.unwrap_widget() as *mut _, "cut_clipboard",
+                    transmute(void_trampoline), into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_paste_clipboard<F: Fn(Entry) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(Entry) + 'static>> = Box::new(Box::new(f));
+                connect(self.unwrap_widget() as *mut _, "paste_clipboard",
+                    transmute(void_trampoline), into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_toggle_overwrite<F: Fn(Entry) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(Entry) + 'static>> = Box::new(Box::new(f));
+                connect(self.unwrap_widget() as *mut _, "toggle_overwrite",
+                    transmute(void_trampoline), into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_delete_from_cursor<F: Fn(Entry, DeleteType, i32) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(Entry, DeleteType, i32) + 'static>> = Box::new(Box::new(f));
+                connect(self.unwrap_widget() as *mut _, "delete_from_cursor",
+                    transmute(delete_trampoline), into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_move_cursor<F: Fn(Entry, MovementStep, i32, bool) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(Entry, MovementStep, i32, bool) + 'static>> = Box::new(Box::new(f));
+                connect(self.unwrap_widget() as *mut _, "move_cursor",
+                    transmute(move_cursor_trampoline), into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_insert_at_cursor<F: Fn(Entry, &str) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(Entry, &str) + 'static>> = Box::new(Box::new(f));
+                connect(self.unwrap_widget() as *mut _, "insert_at_cursor",
+                    transmute(string_trampoline), into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_preedit_changed<F: Fn(Entry, &str) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(Entry, &str) + 'static>> = Box::new(Box::new(f));
+                connect(self.unwrap_widget() as *mut _, "preedit_changed",
+                    transmute(string_trampoline), into_raw(f) as *mut _)
+            }
+        }
+    }
+
+    extern "C" fn void_trampoline(this: *mut GtkEntry, f: &Box<Fn(Entry) + 'static>) {
+        f(FFIWidget::wrap_widget(this as *mut _));
+    }
+
+    extern "C" fn delete_trampoline(this: *mut GtkEntry, delete_type: DeleteType, count: i32,
+                                    f: &Box<Fn(Entry, DeleteType, i32) + 'static>) {
+        f(FFIWidget::wrap_widget(this as *mut _), delete_type, count);
+    }
+
+    extern "C" fn move_cursor_trampoline(this: *mut GtkEntry, step: MovementStep, count: i32,
+                                         extend_selection: bool,
+                                         f: &Box<Fn(Entry, MovementStep, i32, bool) + 'static>) {
+        f(FFIWidget::wrap_widget(this as *mut _), step, count, extend_selection);
+    }
+
+    extern "C" fn string_trampoline(this: *mut GtkEntry, c_str: *const c_char,
+                                    f: &Box<Fn(Entry, &str) + 'static>) {
+        let buf = unsafe { CStr::from_ptr(c_str).to_bytes() };
+        let string = str::from_utf8(buf).unwrap();
+        f(FFIWidget::wrap_widget(this as *mut _), string);
+    }
 }
 
 pub trait ButtonSignals {
