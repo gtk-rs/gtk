@@ -805,6 +805,7 @@ extern "C" {
     //=========================================================================
     // GtkTreeSelection                                                  NOT OK
     //=========================================================================
+    pub fn gtk_tree_selection_get_type         () -> GType;
     pub fn gtk_tree_selection_set_mode         (selection: *mut GtkTreeSelection, type_: enums::SelectionMode);
     pub fn gtk_tree_selection_get_mode         (selection: *mut GtkTreeSelection) -> enums::SelectionMode;
     //pub fn gtk_tree_selection_set_select_function(selection: *mut GtkTreeSelection, func: GtkTreeSelectionFunc, data: gpointer,
@@ -2910,6 +2911,7 @@ extern "C" {
     //=========================================================================
     // GtkTreeView                                                       NOT OK
     //=========================================================================
+    pub fn gtk_tree_view_get_type                      () -> GType;
     pub fn gtk_tree_view_new                           () -> *mut GtkWidget;
     pub fn gtk_tree_view_get_headers_visible           (tree_view: *mut GtkTreeView) -> gboolean;
     pub fn gtk_tree_view_set_headers_visible           (tree_view: *mut GtkTreeView, headers_visible: gboolean);
@@ -3002,6 +3004,7 @@ extern "C" {
     //=========================================================================
     // GtkTreeViewColumn
     //=========================================================================
+    pub fn gtk_tree_view_column_get_type            () -> GType;
     pub fn gtk_tree_view_column_new                 () -> *mut GtkTreeViewColumn;
     pub fn gtk_tree_view_column_clear               (tree_column: *mut GtkTreeViewColumn);
     pub fn gtk_tree_view_column_set_spacing         (tree_column: *mut GtkTreeViewColumn, spacing: c_int);

@@ -4,333 +4,307 @@
 
 //! A widget that emits a signal when clicked on
 
-use glib;
+use glib::translate::*;
+use glib::types;
 use ffi;
-use cast;
-use glib::translate::{from_glib_none, ToGlibPtr};
-use glib::{to_bool, to_gboolean};
 
-pub struct TreeViewColumn {
-    pointer: *mut ffi::GtkTreeViewColumn
-}
+use object::{Object, Downcast, Upcast};
+use widgets::widget::Widget;
+use super::cell_renderer::CellRenderer;
+use super::tree_view::TreeView;
+
+use {
+    TreeViewColumnSizing,
+    SortType,
+};
+
+pub type TreeViewColumn = Object<ffi::GtkTreeViewColumn>;
 
 impl TreeViewColumn {
-    pub fn new() -> Option<TreeViewColumn> {
-        let tmp_pointer = unsafe { ffi::gtk_tree_view_column_new() };
-        check_pointer!(tmp_pointer, TreeViewColumn, G_OBJECT_FROM_TREE_VIEW_COLUMN)
+    pub fn new() -> TreeViewColumn {
+        unsafe { from_glib_full(ffi::gtk_tree_view_column_new()) }
     }
 
     pub fn clear(&self) {
         unsafe {
-            ffi::gtk_tree_view_column_clear(self.pointer)
+            ffi::gtk_tree_view_column_clear(self.to_glib_none().0)
         }
     }
 
     pub fn set_spacing(&self, spacing: i32) {
         unsafe {
-            ffi::gtk_tree_view_column_set_spacing(self.pointer, spacing)
+            ffi::gtk_tree_view_column_set_spacing(self.to_glib_none().0, spacing)
         }
     }
 
     pub fn get_spacing(&self) -> i32 {
         unsafe {
-            ffi::gtk_tree_view_column_get_spacing(self.pointer)
+            ffi::gtk_tree_view_column_get_spacing(self.to_glib_none().0)
         }
     }
 
     pub fn set_visible(&self, visible: bool) {
         unsafe {
-            ffi::gtk_tree_view_column_set_visible(self.pointer, to_gboolean(visible))
+            ffi::gtk_tree_view_column_set_visible(self.to_glib_none().0, visible.to_glib())
         }
     }
 
     pub fn get_visible(&self) -> bool {
         unsafe {
-            to_bool(ffi::gtk_tree_view_column_get_visible(self.pointer))
+            from_glib(ffi::gtk_tree_view_column_get_visible(self.to_glib_none().0))
         }
     }
 
     pub fn set_resizable(&self, resizable: bool) {
         unsafe {
-            ffi::gtk_tree_view_column_set_resizable(self.pointer, to_gboolean(resizable))
+            ffi::gtk_tree_view_column_set_resizable(self.to_glib_none().0, resizable.to_glib())
         }
     }
 
     pub fn get_resizable(&self) -> bool {
         unsafe {
-            to_bool(ffi::gtk_tree_view_column_get_resizable(self.pointer))
+            from_glib(ffi::gtk_tree_view_column_get_resizable(self.to_glib_none().0))
         }
     }
 
-    pub fn set_sizing(&self, ty: ::TreeViewColumnSizing) {
+    pub fn set_sizing(&self, ty: TreeViewColumnSizing) {
         unsafe {
-            ffi::gtk_tree_view_column_set_sizing(self.pointer, ty)
+            ffi::gtk_tree_view_column_set_sizing(self.to_glib_none().0, ty)
         }
     }
 
-    pub fn get_sizing(&self) -> ::TreeViewColumnSizing {
+    pub fn get_sizing(&self) -> TreeViewColumnSizing {
         unsafe {
-            ffi::gtk_tree_view_column_get_sizing(self.pointer)
+            ffi::gtk_tree_view_column_get_sizing(self.to_glib_none().0)
         }
     }
 
     pub fn get_x_offset(&self) -> i32 {
         unsafe {
-            ffi::gtk_tree_view_column_get_x_offset(self.pointer)
+            ffi::gtk_tree_view_column_get_x_offset(self.to_glib_none().0)
         }
     }
 
     pub fn get_width(&self) -> i32 {
         unsafe {
-            ffi::gtk_tree_view_column_get_width(self.pointer)
+            ffi::gtk_tree_view_column_get_width(self.to_glib_none().0)
         }
     }
 
     pub fn get_fixed_width(&self) -> i32 {
         unsafe {
-            ffi::gtk_tree_view_column_get_fixed_width(self.pointer)
+            ffi::gtk_tree_view_column_get_fixed_width(self.to_glib_none().0)
         }
     }
 
     pub fn set_fixed_width(&self, fixed_width: i32) {
         unsafe {
-            ffi::gtk_tree_view_column_set_fixed_width(self.pointer, fixed_width)
+            ffi::gtk_tree_view_column_set_fixed_width(self.to_glib_none().0, fixed_width)
         }
     }
 
     pub fn set_min_width(&self, min_width: i32) {
         unsafe {
-            ffi::gtk_tree_view_column_set_min_width(self.pointer, min_width)
+            ffi::gtk_tree_view_column_set_min_width(self.to_glib_none().0, min_width)
         }
     }
 
     pub fn set_max_width(&self, max_width: i32) {
         unsafe {
-            ffi::gtk_tree_view_column_set_max_width(self.pointer, max_width)
+            ffi::gtk_tree_view_column_set_max_width(self.to_glib_none().0, max_width)
         }
     }
 
     pub fn get_min_width(&self) -> i32 {
         unsafe {
-            ffi::gtk_tree_view_column_get_min_width(self.pointer)
+            ffi::gtk_tree_view_column_get_min_width(self.to_glib_none().0)
         }
     }
 
     pub fn get_max_width(&self) -> i32 {
         unsafe {
-            ffi::gtk_tree_view_column_get_max_width(self.pointer)
+            ffi::gtk_tree_view_column_get_max_width(self.to_glib_none().0)
         }
     }
 
     pub fn clicked(&self) {
         unsafe {
-            ffi::gtk_tree_view_column_clicked(self.pointer)
+            ffi::gtk_tree_view_column_clicked(self.to_glib_none().0)
         }
     }
 
     pub fn set_title(&self, title: &str) {
         unsafe {
-            ffi::gtk_tree_view_column_set_title(self.pointer,
-                                                title.to_glib_none().0);
+            ffi::gtk_tree_view_column_set_title(self.to_glib_none().0, title.to_glib_none().0);
         }
     }
 
     pub fn get_title(&self) -> Option<String> {
         unsafe {
-            from_glib_none(ffi::gtk_tree_view_column_get_title(self.pointer))
+            from_glib_none(ffi::gtk_tree_view_column_get_title(self.to_glib_none().0))
         }
     }
 
     pub fn set_expand(&self, expand: bool) {
         unsafe {
-            ffi::gtk_tree_view_column_set_expand(self.pointer, to_gboolean(expand))
+            ffi::gtk_tree_view_column_set_expand(self.to_glib_none().0, expand.to_glib())
         }
     }
 
     pub fn get_expand(&self) -> bool {
         unsafe {
-            to_bool(ffi::gtk_tree_view_column_get_expand(self.pointer))
+            from_glib(ffi::gtk_tree_view_column_get_expand(self.to_glib_none().0))
         }
     }
 
     pub fn set_clickable(&self, clickable: bool) {
         unsafe {
-            ffi::gtk_tree_view_column_set_clickable(self.pointer, to_gboolean(clickable))
+            ffi::gtk_tree_view_column_set_clickable(self.to_glib_none().0, clickable.to_glib())
         }
     }
 
     pub fn get_clickable(&self) -> bool {
         unsafe {
-            to_bool(ffi::gtk_tree_view_column_get_clickable(self.pointer))
+            from_glib(ffi::gtk_tree_view_column_get_clickable(self.to_glib_none().0))
         }
     }
 
-    pub fn set_widget<T: ::WidgetTrait>(&self, widget: &T) {
+    pub fn set_widget<T: Upcast<Widget>>(&self, widget: &T) {
         unsafe {
-            ffi::gtk_tree_view_column_set_widget(self.pointer, widget.unwrap_widget())
+            ffi::gtk_tree_view_column_set_widget(self.to_glib_none().0, widget.upcast().to_glib_none().0)
         }
     }
 
-    pub fn get_widget<T: ::WidgetTrait>(&self) -> T {
+    pub fn get_widget(&self) -> Option<Widget> {
         unsafe {
-            ::FFIWidget::wrap_widget(ffi::gtk_tree_view_column_get_widget(self.pointer))
+            from_glib_none(ffi::gtk_tree_view_column_get_widget(self.to_glib_none().0))
         }
     }
 
     pub fn set_alignment(&self, x_align: f32) {
         unsafe {
-            ffi::gtk_tree_view_column_set_alignment(self.pointer, x_align)
+            ffi::gtk_tree_view_column_set_alignment(self.to_glib_none().0, x_align)
         }
     }
 
     pub fn get_alignment(&self) -> f32 {
         unsafe {
-            ffi::gtk_tree_view_column_get_alignment(self.pointer)
+            ffi::gtk_tree_view_column_get_alignment(self.to_glib_none().0)
         }
     }
 
     pub fn set_reorderable(&self, reorderable: bool) {
         unsafe {
-            ffi::gtk_tree_view_column_set_reorderable(self.pointer, to_gboolean(reorderable))
+            ffi::gtk_tree_view_column_set_reorderable(self.to_glib_none().0, reorderable.to_glib())
         }
     }
 
     pub fn get_reorderable(&self) -> bool {
         unsafe {
-            to_bool(ffi::gtk_tree_view_column_get_reorderable(self.pointer))
+            from_glib(ffi::gtk_tree_view_column_get_reorderable(self.to_glib_none().0))
         }
     }
 
     pub fn get_sort_column_id(&self) -> i32 {
         unsafe {
-            ffi::gtk_tree_view_column_get_sort_column_id(self.pointer)
+            ffi::gtk_tree_view_column_get_sort_column_id(self.to_glib_none().0)
         }
     }
 
     pub fn set_sort_column_id(&self, sort_column_id: i32) {
         unsafe {
-            ffi::gtk_tree_view_column_set_sort_column_id(self.pointer, sort_column_id)
+            ffi::gtk_tree_view_column_set_sort_column_id(self.to_glib_none().0, sort_column_id)
         }
     }
 
     pub fn set_sort_indicator(&self, setting: bool) {
         unsafe {
-            ffi::gtk_tree_view_column_set_sort_indicator(self.pointer, to_gboolean(setting))
+            ffi::gtk_tree_view_column_set_sort_indicator(self.to_glib_none().0, setting.to_glib())
         }
     }
 
     pub fn get_sort_indicator(&self) -> bool {
         unsafe {
-            to_bool(ffi::gtk_tree_view_column_get_sort_indicator(self.pointer))
+            from_glib(ffi::gtk_tree_view_column_get_sort_indicator(self.to_glib_none().0))
         }
     }
 
-    pub fn set_sort_order(&self, order: ::SortType) {
+    pub fn set_sort_order(&self, order: SortType) {
         unsafe {
-            ffi::gtk_tree_view_column_set_sort_order(self.pointer, order)
+            ffi::gtk_tree_view_column_set_sort_order(self.to_glib_none().0, order)
         }
     }
 
-    pub fn get_sort_order(&self) -> ::SortType {
+    pub fn get_sort_order(&self) -> SortType {
         unsafe {
-            ffi::gtk_tree_view_column_get_sort_order(self.pointer)
+            ffi::gtk_tree_view_column_get_sort_order(self.to_glib_none().0)
         }
     }
 
     pub fn column_cell_is_visible(&self) -> bool {
         unsafe {
-            to_bool(ffi::gtk_tree_view_column_cell_is_visible(self.pointer))
+            from_glib(ffi::gtk_tree_view_column_cell_is_visible(self.to_glib_none().0))
         }
     }
 
     pub fn queue_resize(&self) {
         unsafe {
-            ffi::gtk_tree_view_column_queue_resize(self.pointer)
+            ffi::gtk_tree_view_column_queue_resize(self.to_glib_none().0)
         }
     }
 
-    pub fn get_tree_view(&self) -> ::TreeView {
+    pub fn get_tree_view(&self) -> Option<TreeView> {
         unsafe {
-            ::FFIWidget::wrap_widget(ffi::gtk_tree_view_column_get_tree_view(self.pointer))
+            Option::<Widget>::from_glib_none(
+                ffi::gtk_tree_view_column_get_tree_view(self.to_glib_none().0))
+                .map(|w| w.downcast_unchecked())
         }
     }
 
-    pub fn get_button<T: ::WidgetTrait + ::ButtonTrait>(&self) -> T {
+    pub fn get_button(&self) -> Widget {
         unsafe {
-            ::FFIWidget::wrap_widget(ffi::gtk_tree_view_column_get_button(self.pointer))
+            from_glib_none(ffi::gtk_tree_view_column_get_button(self.to_glib_none().0))
         }
     }
 
-    pub fn add_attribute<T: ::FFIWidget + ::CellRendererTrait>(&self, cell: &T, attribute: &str, column: i32) {
+    pub fn add_attribute<T: Upcast<CellRenderer>>(&self, cell: &T, attribute: &str, column: i32) {
         unsafe {
             ffi::gtk_tree_view_column_add_attribute(
-                self.pointer,
-                cast::GTK_CELL_RENDERER(cell.unwrap_widget()),
+                self.to_glib_none().0,
+                cell.upcast().to_glib_none().0,
                 attribute.to_glib_none().0,
                 column)
         }
 }
 
-    pub fn clear_attributes<T: ::FFIWidget + ::CellRendererTrait>(&self, cell: &T) {
-        unsafe { ffi::gtk_tree_view_column_clear_attributes(self.pointer,
-                                                            cast::GTK_CELL_RENDERER(cell.unwrap_widget())) }
-    }
-
-    pub fn pack_start<T: ::FFIWidget + ::CellRendererTrait>(&self, cell: &T, expand: bool) {
-        unsafe { ffi::gtk_tree_view_column_pack_start(self.pointer,
-                                                      cast::GTK_CELL_RENDERER(cell.unwrap_widget()),
-                                                      to_gboolean(expand)) }
-    }
-
-    pub fn pack_end<T: ::FFIWidget + ::CellRendererTrait>(&self, cell: &T, expand: bool) {
-        unsafe { ffi::gtk_tree_view_column_pack_end(self.pointer,
-                                                    cast::GTK_CELL_RENDERER(cell.unwrap_widget()),
-                                                    to_gboolean(expand)) }
-    }
-
-    #[doc(hidden)]
-    pub fn unwrap_pointer(&self) -> *mut ffi::GtkTreeViewColumn {
-        self.pointer
-    }
-
-    #[doc(hidden)]
-    pub fn wrap_pointer(treeview_column: *mut ffi::GtkTreeViewColumn) -> TreeViewColumn {
-        unsafe{
-            ::glib::ffi::g_object_ref(treeview_column as *mut ::libc::c_void);
-        }
-
-        TreeViewColumn {
-            pointer: treeview_column
-        }
-    }
-}
-
-impl glib::traits::FFIGObject for TreeViewColumn {
-    fn unwrap_gobject(&self) -> *mut glib::ffi::GObject {
-        ::cast::G_OBJECT_FROM_TREE_VIEW_COLUMN(self.pointer)
-    }
-
-    fn wrap_object(object: *mut glib::ffi::GObject) -> TreeViewColumn {
-        TreeViewColumn { pointer: object as *mut ffi::GtkTreeViewColumn }
-    }
-}
-
-impl Drop for TreeViewColumn {
-    fn drop(&mut self) {
+    pub fn clear_attributes<T: Upcast<CellRenderer>>(&self, cell: &T) {
         unsafe {
-            ::glib::ffi::g_object_unref(self.pointer as *mut ::libc::c_void);
+            ffi::gtk_tree_view_column_clear_attributes(self.to_glib_none().0,
+                cell.upcast().to_glib_none().0)
+        }
+    }
+
+    pub fn pack_start<T: Upcast<CellRenderer>>(&self, cell: &T, expand: bool) {
+        unsafe {
+            ffi::gtk_tree_view_column_pack_start(self.to_glib_none().0,
+                cell.upcast().to_glib_none().0, expand.to_glib())
+        }
+    }
+
+    pub fn pack_end<T: Upcast<CellRenderer>>(&self, cell: &T, expand: bool) {
+        unsafe {
+            ffi::gtk_tree_view_column_pack_end(self.to_glib_none().0,
+                cell.upcast().to_glib_none().0, expand.to_glib())
         }
     }
 }
 
-impl Clone for TreeViewColumn {
-    fn clone(&self) -> TreeViewColumn {
-        let pointer = unsafe {
-            ::glib::ffi::g_object_ref(self.pointer as *mut ::libc::c_void)
-        };
-
-        TreeViewColumn {
-            pointer: pointer as *mut ffi::GtkTreeViewColumn
-        }
+impl types::StaticType for TreeViewColumn {
+    #[inline]
+    fn static_type() -> types::Type {
+        unsafe { from_glib(ffi::gtk_tree_view_column_get_type()) }
     }
 }
+
+unsafe impl Upcast<super::cell_interfaces::CellLayout> for TreeViewColumn { }
+unsafe impl Upcast<::builder::Buildable> for TreeViewColumn { }

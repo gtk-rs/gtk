@@ -147,6 +147,9 @@ pub mod mvc {
     pub mod cell_renderer;
     pub mod store;
     pub mod tree_model;
+    pub mod tree_selection;
+    pub mod tree_view;
+    pub mod tree_view_column;
 }
 pub mod object;
 pub mod prelude;
@@ -191,6 +194,9 @@ pub use mvc::tree_model::{
     TreeModel,
     TreePath,
 };
+pub use mvc::tree_selection::TreeSelection;
+pub use mvc::tree_view::TreeView;
+pub use mvc::tree_view_column::TreeViewColumn;
 pub use widgets::bin::Bin;
 pub use widgets::box_::Box;
 pub use widgets::button::Button;
