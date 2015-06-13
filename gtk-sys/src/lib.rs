@@ -11,7 +11,7 @@ extern crate gdk_sys as gdk_ffi;
 
 pub mod enums;
 
-use libc::{c_int, c_char, c_float, c_uint, c_double, c_long, c_short, c_void, time_t};
+use libc::{c_int, c_char, c_float, c_uint, c_double, c_long, c_void, time_t};
 
 pub use glib_ffi::{
     gboolean, GFALSE, GTRUE, gsize, gpointer, GType, GObject, GPermission,
@@ -326,6 +326,8 @@ pub struct GtkSocket;
 pub struct GtkEventBox;
 #[repr(C)]
 pub struct GtkTooltip;
+
+pub const GTK_ENTRY_BUFFER_MAX_SIZE: u16 = ::std::u16::MAX;
 
 //pub type GtkTreeModelForeachFunc = fn(model: *mut GtkTreeModel, path: *mut GtkTreePath, iter: *mut GtkTreeIter, data: gpointer) -> gboolean;
 
@@ -1949,31 +1951,33 @@ extern "C" {
     //=========================================================================
     // GtkEntryBuffer                                                        OK
     //=========================================================================
+    pub fn gtk_entry_buffer_get_type           () -> GType;
     pub fn gtk_entry_buffer_new                (initial_chars: *const c_char, n_initial_chars: c_int) -> *mut GtkEntryBuffer;
     pub fn gtk_entry_buffer_get_text           (buffer: *mut GtkEntryBuffer) -> *const c_char;
     pub fn gtk_entry_buffer_set_text           (buffer: *mut GtkEntryBuffer, chars: *const c_char, n_chars: c_int) -> ();
-    pub fn gtk_entry_buffer_get_bytes          (buffer: *mut GtkEntryBuffer) -> c_long;
+    pub fn gtk_entry_buffer_get_bytes          (buffer: *mut GtkEntryBuffer) -> gsize;
     pub fn gtk_entry_buffer_get_length         (buffer: *mut GtkEntryBuffer) -> c_uint;
     pub fn gtk_entry_buffer_get_max_length     (buffer: *mut GtkEntryBuffer) -> c_int;
     pub fn gtk_entry_buffer_set_max_length     (buffer: *mut GtkEntryBuffer, max_length: c_int) -> ();
     pub fn gtk_entry_buffer_insert_text        (buffer: *mut GtkEntryBuffer, position: c_uint, chars: *const c_char, n_chars: c_int);
-    pub fn gtk_entry_buffer_delete_text        (buffer: *mut GtkEntryBuffer, position: c_uint, n_char: c_uint) -> c_uint;
+    pub fn gtk_entry_buffer_delete_text        (buffer: *mut GtkEntryBuffer, position: c_uint, n_char: c_int) -> c_uint;
     pub fn gtk_entry_buffer_emit_deleted_text  (buffer: *mut GtkEntryBuffer, position: c_uint, n_chars: c_uint) -> ();
     pub fn gtk_entry_buffer_emit_inserted_text (buffer: *mut GtkEntryBuffer, position: c_uint, chars: *const c_char, n_chars: c_int) -> ();
 
     //=========================================================================
     // GtkEntry
     //=========================================================================
+    pub fn gtk_entry_get_type                  () -> GType;
     pub fn gtk_entry_new                       () -> *mut GtkWidget;
     pub fn gtk_entry_new_with_buffer           (buffer: *mut GtkEntryBuffer) -> *mut GtkWidget;
     pub fn gtk_entry_get_buffer                (entry: *mut GtkEntry) -> *mut GtkEntryBuffer;
     pub fn gtk_entry_set_buffer                (entry: *mut GtkEntry, buffer: *mut GtkEntryBuffer) -> ();
     pub fn gtk_entry_set_text                  (entry: *mut GtkEntry, text: *const c_char) -> ();
     pub fn gtk_entry_get_text                  (entry: *mut GtkEntry) -> *const c_char;
-    pub fn gtk_entry_get_text_length           (entry: *mut GtkEntry) -> c_short;
+    pub fn gtk_entry_get_text_length           (entry: *mut GtkEntry) -> u16;
     // pub fn gtk_entry_get_text_area             (entry: *const const GtkEntry, text_area: *GdkRectangle) -> ();
     pub fn gtk_entry_set_visibility            (entry: *mut GtkEntry, visible: gboolean) -> ();
-    pub fn gtk_entry_set_invisible_char        (entry: *mut GtkEntry, ch: c_int) -> ();
+    pub fn gtk_entry_set_invisible_char        (entry: *mut GtkEntry, ch: u32) -> ();
     pub fn gtk_entry_unset_invisible_char      (entry: *mut GtkEntry) -> ();
     pub fn gtk_entry_set_max_length            (entry: *mut GtkEntry, max: c_int) -> ();
     pub fn gtk_entry_get_activates_default     (entry: *mut GtkEntry) -> gboolean;
@@ -1992,7 +1996,7 @@ extern "C" {
     pub fn gtk_entry_set_overwrite_mode        (entry: *mut GtkEntry, overwrite: gboolean) -> ();
     pub fn gtk_entry_get_overwrite_mode        (entry: *mut GtkEntry) -> gboolean;
     // pub fn gtk_entry_get_layout                (entry: *const const GtkEntry) -> *PangoLayout;
-    pub fn gtk_entry_get_layout_offsets        (entry: *mut GtkEntry, x: *const c_int,  y: *const c_int) -> ();
+    pub fn gtk_entry_get_layout_offsets        (entry: *mut GtkEntry, x: *mut c_int,  y: *mut c_int) -> ();
     pub fn gtk_entry_layout_index_to_text_index(entry: *mut GtkEntry, layout_index: c_int) -> c_int;
     pub fn gtk_entry_text_index_to_layout_index(entry: *mut GtkEntry,  text_index: c_int) -> c_int;
     // pub fn gtk_entry_set_attributes            (entry: *const const GtkEntry, attrs: *PangoAttrList) -> ();
@@ -2640,8 +2644,9 @@ extern "C" {
     pub fn gtk_drawing_area_new                 () -> *mut GtkWidget;
 
     //=========================================================================
-    // GtkDrawingArea                                                        OK
+    // GtkEditable                                                           OK
     //=========================================================================
+    pub fn gtk_editable_get_type             () -> GType;
     pub fn gtk_editable_select_region        (editable: *mut GtkEditable, start_pos: c_int, end_pos: c_int);
     pub fn gtk_editable_get_selection_bounds (editable: *mut GtkEditable, start_pos: *mut c_int, end_pos: *mut c_int) -> gboolean;
     pub fn gtk_editable_insert_text          (editable: *mut GtkEditable, new_text: *const c_char, new_text_length: c_int, position: *mut c_int);

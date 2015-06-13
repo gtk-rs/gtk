@@ -6,6 +6,8 @@ pub mod bin;
 pub mod box_;
 pub mod button;
 pub mod container;
+pub mod editable;
+pub mod entry;
 #[cfg(feature = "gtk_3_10")]
 pub mod header_bar;
 pub mod orientable;

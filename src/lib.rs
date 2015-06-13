@@ -195,6 +195,9 @@ pub use widgets::bin::Bin;
 pub use widgets::box_::Box;
 pub use widgets::button::Button;
 pub use widgets::container::Container;
+pub use widgets::editable::Editable;
+pub use widgets::entry::Entry;
+pub use widgets::entry::EntryBuffer;
 #[cfg(feature = "gtk_3_10")]
 pub use widgets::header_bar::HeaderBar;
 pub use widgets::orientable::Orientable;
