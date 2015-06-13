@@ -3154,6 +3154,7 @@ extern "C" {
     //=========================================================================
     // GtkActionable                                                     NOT OK
     //=========================================================================
+    pub fn gtk_actionable_get_type() -> GType;
     pub fn gtk_actionable_get_action_name(actionable: *mut GtkActionable) -> *const c_char;
     pub fn gtk_actionable_set_action_name(actionable: *mut GtkActionable, action_name: *const c_char);
     //pub fn gtk_actionable_get_action_target_value(actionable: *mut GtkActionable) -> *mut GVariant;

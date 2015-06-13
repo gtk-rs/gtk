@@ -197,6 +197,7 @@ pub use mvc::tree_model::{
 pub use mvc::tree_selection::TreeSelection;
 pub use mvc::tree_view::TreeView;
 pub use mvc::tree_view_column::TreeViewColumn;
+pub use widgets::actionable::Actionable;
 pub use widgets::bin::Bin;
 pub use widgets::box_::Box;
 pub use widgets::button::Button;
