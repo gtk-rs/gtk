@@ -124,6 +124,11 @@ let button = gtk::Button:new(); // You have access to the struct methods of gtk:
 
 If you want yours to be added to this list, please create a Pull Request for it!
 
+##Screenshots
+
+![screenshot](http://guillaume-gomez.fr/image/gtk.png)
+![screenshot](http://guillaume-gomez.fr/image/gtk2.png)
+
 ## Contribute
 
 Contributor you're welcome!
