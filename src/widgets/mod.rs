@@ -6,6 +6,7 @@ pub mod actionable;
 pub mod bin;
 pub mod box_;
 pub mod button;
+pub mod combo_box;
 pub mod container;
 pub mod editable;
 pub mod entry;

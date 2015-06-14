@@ -1493,6 +1493,7 @@ extern "C" {
     //=========================================================================
     // GtkComboBox                                                       NOT OK
     //=========================================================================
+    pub fn gtk_combo_box_get_type              () -> GType;
     pub fn gtk_combo_box_new                   () -> *mut GtkWidget;
     pub fn gtk_combo_box_new_with_entry        () -> *mut GtkWidget;
     pub fn gtk_combo_box_new_with_model        (model: *mut GtkTreeModel) -> *mut GtkWidget;
@@ -1507,7 +1508,7 @@ extern "C" {
     pub fn gtk_combo_box_set_column_span_column(combo_box: *mut GtkComboBox, column_span: c_int);
     pub fn gtk_combo_box_get_active            (combo_box: *mut GtkComboBox) -> c_int;
     pub fn gtk_combo_box_set_active            (combo_box: *mut GtkComboBox, active: c_int);
-    pub fn gtk_combo_box_get_active_iter       (combo_box: *mut GtkComboBox) -> *mut GtkTreeIter;
+    pub fn gtk_combo_box_get_active_iter       (combo_box: *mut GtkComboBox, iter: *mut GtkTreeIter) -> gboolean;
     pub fn gtk_combo_box_set_active_iter       (combo_box: *mut GtkComboBox, iter: *mut GtkTreeIter);
     pub fn gtk_combo_box_get_id_column         (combo_box: *mut GtkComboBox) -> c_int;
     pub fn gtk_combo_box_set_id_column         (combo_box: *mut GtkComboBox, id_column: c_int);
@@ -1537,6 +1538,7 @@ extern "C" {
     //=========================================================================
     // GtkComboBoxText                                                   NOT OK
     //=========================================================================
+    pub fn gtk_combo_box_text_get_type         () -> GType;
     pub fn gtk_combo_box_text_new              () -> *mut GtkWidget;
     pub fn gtk_combo_box_text_new_with_entry   () -> *mut GtkWidget;
     pub fn gtk_combo_box_text_append           (combo_box: *mut GtkComboBoxText, id: *const c_char, text: *const c_char);
