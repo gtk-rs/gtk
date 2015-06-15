@@ -205,6 +205,10 @@ pub use widgets::container::Container;
 pub use widgets::editable::Editable;
 pub use widgets::entry::Entry;
 pub use widgets::entry::EntryBuffer;
+pub use widgets::frame::{
+    AspectFrame,
+    Frame,
+};
 #[cfg(feature = "gtk_3_10")]
 pub use widgets::header_bar::HeaderBar;
 pub use widgets::orientable::Orientable;

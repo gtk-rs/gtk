@@ -1869,6 +1869,7 @@ extern "C" {
     //=========================================================================
     // GtkFrame                                                              OK
     //=========================================================================
+    pub fn gtk_frame_get_type                  () -> GType;
     pub fn gtk_frame_new                       (label: *const c_char) -> *mut GtkWidget;
     pub fn gtk_frame_set_label                 (frame: *mut GtkFrame, label: *const c_char) -> ();
     pub fn gtk_frame_set_label_widget          (frame: *mut GtkFrame, label_widget: *mut GtkWidget) -> ();
@@ -1882,6 +1883,7 @@ extern "C" {
     //=========================================================================
     // GtkAspectFrame                                                        OK
     //=========================================================================
+    pub fn gtk_aspect_frame_get_type           () -> GType;
     pub fn gtk_aspect_frame_new                (label: *const c_char, xalign: c_float, yalign: c_float, ratio: c_float, obey_child: gboolean) -> *mut GtkWidget;
     pub fn gtk_aspect_frame_set                (aspect_frame: *mut GtkAspectFrame, xalign: c_float, yalign: c_float, ratio: c_float, obey_child: gboolean) -> ();
 

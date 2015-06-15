@@ -10,6 +10,7 @@ pub mod combo_box;
 pub mod container;
 pub mod editable;
 pub mod entry;
+pub mod frame;
 #[cfg(feature = "gtk_3_10")]
 pub mod header_bar;
 pub mod orientable;
