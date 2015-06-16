@@ -13,6 +13,7 @@ pub mod entry;
 pub mod frame;
 #[cfg(feature = "gtk_3_10")]
 pub mod header_bar;
+pub mod misc;
 pub mod orientable;
 pub mod scrollable;
 pub mod widget;

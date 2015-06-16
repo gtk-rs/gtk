@@ -727,6 +727,7 @@ extern "C" {
     //=========================================================================
     // GtkMisc                                                               OK
     //=========================================================================
+    pub fn gtk_misc_get_type                   () -> GType;
     pub fn gtk_misc_set_alignment              (misc: *mut GtkMisc, xalign: c_float, yalign: c_float) -> ();
     pub fn gtk_misc_set_padding                (misc: *mut GtkMisc, xpad: c_int, ypad: c_int) -> ();
     pub fn gtk_misc_get_alignment              (misc: *mut GtkMisc, xalign: *const c_float, yalign: *const c_float) -> ();

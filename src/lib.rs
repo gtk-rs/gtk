@@ -211,6 +211,7 @@ pub use widgets::frame::{
 };
 #[cfg(feature = "gtk_3_10")]
 pub use widgets::header_bar::HeaderBar;
+pub use widgets::misc::Misc;
 pub use widgets::orientable::Orientable;
 pub use widgets::scrollable::Scrollable;
 pub use widgets::widget::Widget;
