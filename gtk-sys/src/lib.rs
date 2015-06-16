@@ -629,6 +629,7 @@ extern "C" {
     //=========================================================================
     // GtkLabel                                                          NOT OK
     //=========================================================================
+    pub fn gtk_label_get_type                  () -> GType;
     pub fn gtk_label_new                       (text: *const c_char) -> *mut GtkWidget;
     pub fn gtk_label_set_label                 (label: *mut GtkLabel, text: *const c_char);
     pub fn gtk_label_set_justify               (label: *mut GtkLabel, jtype: enums::Justification);
