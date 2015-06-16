@@ -489,7 +489,7 @@ extern "C" {
     //pub fn gtk_widget_get_settings             (widget: *mut GtkWidget) -> *mut GtkSettings;
     //pub fn gtk_widget_get_clipboard            (widget: *mut GtkWidget, selection: gdk::Atom) -> *mut GtkClipboard;
     //pub fn gtk_widget_get_display              (widget: *mut GtkWidget) -> *mut gdk::Display;
-    //pub fn gtk_widget_get_screen               (widget: *mut GtkWidget) -> *mut gdk::Screen;
+    pub fn gtk_widget_get_screen               (widget: *mut GtkWidget) -> *mut gdk_ffi::GdkScreen;
     pub fn gtk_widget_has_screen               (widget: *mut GtkWidget) -> gboolean;
     pub fn gtk_widget_get_size_request         (widget: *mut GtkWidget, width: *mut c_int, height: *mut c_int);
     pub fn gtk_widget_set_child_visible        (widget: *mut GtkWidget, is_visible: gboolean);

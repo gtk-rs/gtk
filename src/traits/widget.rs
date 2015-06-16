@@ -236,6 +236,10 @@ pub trait WidgetTrait: ::FFIWidget + ::GObjectTrait {
         unsafe { to_bool(ffi::gtk_widget_has_screen(self.unwrap_widget())) }
     }
 
+    fn get_screen(&self) -> gdk::Screen {
+        unsafe { from_glib_none(ffi::gtk_widget_get_screen(self.unwrap_widget())) }
+    }
+
     fn get_size_request(&self) -> (i32, i32) {
         let mut width = 0i32;
         let mut height = 0i32;
