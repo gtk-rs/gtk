@@ -18,10 +18,13 @@ pub mod frame;
 pub mod header_bar;
 pub mod image;
 pub mod label;
+#[cfg(feature = "gtk_3_6")]
+pub mod level_bar;
 pub mod misc;
 pub mod orientable;
 pub mod progress_bar;
 pub mod scrollable;
+pub mod separator;
 pub mod spinner;
 pub mod switch;
 pub mod widget;

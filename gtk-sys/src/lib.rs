@@ -100,6 +100,8 @@ pub struct GtkAlignment;
 #[repr(C)]
 pub struct GtkExpander;
 #[repr(C)]
+pub struct GtkSeparator;
+#[repr(C)]
 pub struct GtkPaned;
 #[repr(C)]
 pub struct GtkInfoBar;
@@ -1907,6 +1909,7 @@ extern "C" {
     //=========================================================================
     // GtkSeparator                                                          OK
     //=========================================================================
+    pub fn gtk_separator_get_type              () -> GType;
     pub fn gtk_separator_new                   (orientation: enums::Orientation) -> *mut GtkWidget;
 
     //=========================================================================
@@ -2091,6 +2094,7 @@ extern "C" {
     //=========================================================================
     // GtkLevelBar
     //=========================================================================
+    pub fn gtk_level_bar_get_type              () -> GType;
     pub fn gtk_level_bar_new                   () -> *mut GtkWidget;
     pub fn gtk_level_bar_new_for_interval      (min_value: c_double, max_value: c_double) -> *mut GtkWidget;
     pub fn gtk_level_bar_set_mode              (bar: *mut GtkLevelBar, mode: enums::LevelBarMode) -> ();

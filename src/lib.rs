@@ -216,10 +216,13 @@ pub use widgets::frame::{
 pub use widgets::header_bar::HeaderBar;
 pub use widgets::image::Image;
 pub use widgets::label::Label;
+#[cfg(feature = "gtk_3_6")]
+pub use widgets::level_bar::LevelBar;
 pub use widgets::misc::Misc;
 pub use widgets::orientable::Orientable;
 pub use widgets::progress_bar::ProgressBar;
 pub use widgets::scrollable::Scrollable;
+pub use widgets::separator::Separator;
 pub use widgets::spinner::Spinner;
 pub use widgets::switch::Switch;
 pub use widgets::widget::Widget;

@@ -2,22 +2,33 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! A separator widget
+//! A separator widget.
 
+use glib::translate::*;
+use glib::types;
 use ffi;
+
+use object::{Object, Downcast, Upcast};
+use super::widget::Widget;
+
 use Orientation;
 
-/// Separator — A separator widget
-struct_Widget!(Separator);
+/// A separator widget.
+pub type Separator = Object<ffi::GtkSeparator>;
 
 impl Separator {
-    pub fn new(orientation: Orientation) -> Option<Separator> {
-        let tmp_pointer = unsafe { ffi::gtk_separator_new(orientation) };
-        check_pointer!(tmp_pointer, Separator)
+    pub fn new(orientation: Orientation) -> Separator {
+        unsafe { Widget::from_glib_none(ffi::gtk_separator_new(orientation)).downcast_unchecked() }
     }
 }
 
-impl_drop!(Separator);
-impl_TraitWidget!(Separator);
+impl types::StaticType for Separator {
+    #[inline]
+    fn static_type() -> types::Type {
+        unsafe { from_glib(ffi::gtk_separator_get_type()) }
+    }
+}
 
-impl ::OrientableTrait for Separator {}
+unsafe impl Upcast<Widget> for Separator { }
+unsafe impl Upcast<super::orientable::Orientable> for Separator { }
+unsafe impl Upcast<::builder::Buildable> for Separator { }
