@@ -7,8 +7,10 @@ pub mod arrow;
 pub mod bin;
 pub mod box_;
 pub mod button;
+pub mod calendar;
 pub mod combo_box;
 pub mod container;
+pub mod drawing_area;
 pub mod editable;
 pub mod entry;
 pub mod frame;
@@ -18,7 +20,10 @@ pub mod image;
 pub mod label;
 pub mod misc;
 pub mod orientable;
+pub mod progress_bar;
 pub mod scrollable;
+pub mod spinner;
+pub mod switch;
 pub mod widget;
 
 // ---------------- cut ----------------

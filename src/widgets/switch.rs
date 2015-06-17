@@ -2,33 +2,39 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! A "light switch" style toggle
+//! A "light switch" style toggle.
 
-use cast::GTK_SWITCH;
+use glib::translate::*;
+use glib::types;
 use ffi;
-use glib::{to_bool, to_gboolean};
 
-/// Switch — A "light switch" style toggle
-/*
-* # Availables signals:
-* * `activate` : Action
-*/
-struct_Widget!(Switch);
+use object::{Object, Downcast, Upcast};
+use super::widget::Widget;
+
+/// A "light switch" style toggle.
+pub type Switch = Object<ffi::GtkSwitch>;
 
 impl Switch {
-    pub fn new() -> Option<Switch> {
-        let tmp_pointer = unsafe { ffi::gtk_switch_new() };
-        check_pointer!(tmp_pointer, Switch)
+    pub fn new() -> Switch {
+        unsafe { Widget::from_glib_none(ffi::gtk_switch_new()).downcast_unchecked() }
     }
 
-    pub fn set_active(&self, is_active: bool) -> () {
-        unsafe { ffi::gtk_switch_set_active(GTK_SWITCH(self.pointer), to_gboolean(is_active)); }
+    pub fn set_active(&self, is_active: bool) {
+        unsafe { ffi::gtk_switch_set_active(self.to_glib_none().0, is_active.to_glib()); }
     }
 
     pub fn get_active(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_switch_get_active(GTK_SWITCH(self.pointer))) }
+        unsafe { from_glib(ffi::gtk_switch_get_active(self.to_glib_none().0)) }
     }
 }
 
-impl_drop!(Switch);
-impl_TraitWidget!(Switch);
+impl types::StaticType for Switch {
+    #[inline]
+    fn static_type() -> types::Type {
+        unsafe { from_glib(ffi::gtk_switch_get_type()) }
+    }
+}
+
+unsafe impl Upcast<Widget> for Switch { }
+unsafe impl Upcast<super::actionable::Actionable> for Switch { }
+unsafe impl Upcast<::builder::Buildable> for Switch { }

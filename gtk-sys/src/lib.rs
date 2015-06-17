@@ -94,6 +94,8 @@ pub struct GtkArrow;
 #[repr(C)]
 pub struct GtkCalendar;
 #[repr(C)]
+pub struct GtkDrawingArea;
+#[repr(C)]
 pub struct GtkAlignment;
 #[repr(C)]
 pub struct GtkExpander;
@@ -2057,6 +2059,7 @@ extern "C" {
     //=========================================================================
     // GtkSwitch                                                             OK
     //=========================================================================
+    pub fn gtk_switch_get_type                 () -> GType;
     pub fn gtk_switch_new                      () -> *mut GtkWidget;
     pub fn gtk_switch_set_active               (switch: *mut GtkSwitch,  is_active: gboolean) -> ();
     pub fn gtk_switch_get_active               (switch: *mut GtkSwitch) -> gboolean;
@@ -2146,6 +2149,7 @@ extern "C" {
     //=========================================================================
     // GtkSpinner                                                            OK
     //=========================================================================
+    pub fn gtk_spinner_get_type                () -> GType;
     pub fn gtk_spinner_new                     () -> *mut GtkWidget;
     pub fn gtk_spinner_start                   (spinner: *mut GtkSpinner) -> ();
     pub fn gtk_spinner_stop                    (spinner: *mut GtkSpinner) -> ();
@@ -2169,6 +2173,7 @@ extern "C" {
     //=========================================================================
     // GtkProgressBar
     //=========================================================================
+    pub fn gtk_progress_bar_get_type           () -> GType;
     pub fn gtk_progress_bar_new                () -> *mut GtkWidget;
     pub fn gtk_progress_bar_pulse              (pbar: *mut GtkProgressBar) -> ();
     pub fn gtk_progress_bar_set_fraction       (pbar: *mut GtkProgressBar, fraction: c_double) -> ();
@@ -2194,6 +2199,7 @@ extern "C" {
     //=========================================================================
     // GtkCalendar
     //=========================================================================
+    pub fn gtk_calendar_get_type               () -> GType;
     pub fn gtk_calendar_new                    () -> *mut GtkWidget;
     pub fn gtk_calendar_select_month           (calendar: *mut GtkCalendar, month: c_uint, year: c_uint) -> ();
     pub fn gtk_calendar_select_day             (calendar: *mut GtkCalendar, day: c_uint) -> ();
@@ -2650,6 +2656,7 @@ extern "C" {
     //=========================================================================
     // GtkDrawingArea
     //=========================================================================
+    pub fn gtk_drawing_area_get_type            () -> GType;
     pub fn gtk_drawing_area_new                 () -> *mut GtkWidget;
 
     //=========================================================================

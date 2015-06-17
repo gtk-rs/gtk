@@ -2,84 +2,75 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! A widget which indicates progress visually
+//! A widget which indicates progress visually.
 
-use libc::c_double;
-use glib::translate::{from_glib_none, ToGlibPtr};
-
+use glib::translate::*;
+use glib::types;
 use ffi;
-use glib::{to_bool, to_gboolean};
-use cast::GTK_PROGRESSBAR;
 
-/// ProgressBar — A widget which indicates progress visually
-struct_Widget!(ProgressBar);
+use object::{Object, Downcast, Upcast};
+use super::widget::Widget;
+
+/// A widget which indicates progress visually.
+pub type ProgressBar = Object<ffi::GtkProgressBar>;
 
 impl ProgressBar {
-    pub fn new() -> Option<ProgressBar> {
-        let tmp_pointer = unsafe { ffi::gtk_progress_bar_new() };
-        check_pointer!(tmp_pointer, ProgressBar)
+    pub fn new() -> ProgressBar {
+        unsafe { Widget::from_glib_none(ffi::gtk_progress_bar_new()).downcast_unchecked() }
     }
 
-    pub fn pulse(&self) -> () {
-        unsafe {
-            ffi::gtk_progress_bar_pulse(GTK_PROGRESSBAR(self.pointer))
-        }
+    pub fn pulse(&self) {
+        unsafe { ffi::gtk_progress_bar_pulse(self.to_glib_none().0) }
     }
 
-    pub fn set_fraction(&self, fraction: f64) -> () {
-        unsafe {
-            ffi::gtk_progress_bar_set_fraction(GTK_PROGRESSBAR(self.pointer), fraction as c_double)
-        }
+    pub fn set_fraction(&self, fraction: f64) {
+        unsafe { ffi::gtk_progress_bar_set_fraction(self.to_glib_none().0, fraction) }
     }
 
     pub fn get_fraction(&self) -> f64 {
-        unsafe {
-            ffi::gtk_progress_bar_get_fraction(GTK_PROGRESSBAR(self.pointer)) as f64
-        }
+        unsafe { ffi::gtk_progress_bar_get_fraction(self.to_glib_none().0) }
     }
 
-    pub fn set_text(&self, text: &str) -> () {
-        unsafe {
-            ffi::gtk_progress_bar_set_text(GTK_PROGRESSBAR(self.pointer), text.to_glib_none().0);
-        }
+    pub fn set_text(&self, text: &str) {
+        unsafe { ffi::gtk_progress_bar_set_text(self.to_glib_none().0, text.to_glib_none().0); }
     }
 
     pub fn get_text(&self) -> Option<String> {
-        unsafe {
-            from_glib_none(ffi::gtk_progress_bar_get_text(GTK_PROGRESSBAR(self.pointer)))
-        }
+        unsafe { from_glib_none(ffi::gtk_progress_bar_get_text(self.to_glib_none().0)) }
     }
 
-    pub fn set_inverted(&self, inverted: bool) -> () {
-        unsafe { ffi::gtk_progress_bar_set_inverted(GTK_PROGRESSBAR(self.pointer), to_gboolean(inverted)); }
+    pub fn set_inverted(&self, inverted: bool) {
+        unsafe { ffi::gtk_progress_bar_set_inverted(self.to_glib_none().0, inverted.to_glib()); }
     }
 
     pub fn get_inverted(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_progress_bar_get_inverted(GTK_PROGRESSBAR(self.pointer))) }
+        unsafe { from_glib(ffi::gtk_progress_bar_get_inverted(self.to_glib_none().0)) }
     }
 
-    pub fn set_show_text(&self, show_text: bool) -> () {
-        unsafe { ffi::gtk_progress_bar_set_show_text(GTK_PROGRESSBAR(self.pointer), to_gboolean(show_text)); }
+    pub fn set_show_text(&self, show_text: bool) {
+        unsafe { ffi::gtk_progress_bar_set_show_text(self.to_glib_none().0, show_text.to_glib()); }
     }
 
     pub fn get_show_text(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_progress_bar_get_show_text(GTK_PROGRESSBAR(self.pointer))) }
+        unsafe { from_glib(ffi::gtk_progress_bar_get_show_text(self.to_glib_none().0)) }
     }
 
-    pub fn set_pulse_step(&self, pulse_step: f64) -> () {
-        unsafe {
-            ffi::gtk_progress_bar_set_pulse_step(GTK_PROGRESSBAR(self.pointer), pulse_step as c_double)
-        }
+    pub fn set_pulse_step(&self, pulse_step: f64) {
+        unsafe { ffi::gtk_progress_bar_set_pulse_step(self.to_glib_none().0, pulse_step) }
     }
 
     pub fn get_pulse_step(&self) -> f64 {
-        unsafe {
-            ffi::gtk_progress_bar_get_pulse_step(GTK_PROGRESSBAR(self.pointer)) as f64
-        }
+        unsafe { ffi::gtk_progress_bar_get_pulse_step(self.to_glib_none().0) }
     }
 }
 
-impl_drop!(ProgressBar);
-impl_TraitWidget!(ProgressBar);
+impl types::StaticType for ProgressBar {
+    #[inline]
+    fn static_type() -> types::Type {
+        unsafe { from_glib(ffi::gtk_progress_bar_get_type()) }
+    }
+}
 
-impl ::OrientableTrait for ProgressBar {}
+unsafe impl Upcast<Widget> for ProgressBar { }
+unsafe impl Upcast<super::orientable::Orientable> for ProgressBar { }
+unsafe impl Upcast<::builder::Buildable> for ProgressBar { }
