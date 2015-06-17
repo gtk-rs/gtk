@@ -2,54 +2,54 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! Hide and show with animation
-
-use cast::{GTK_ACTION_BAR};
 use ffi;
+use object::{Object, Upcast, Downcast};
+use glib::types;
+use glib::translate::*;
+use super::widget::Widget;
 
-struct_Widget!(ActionBar);
+unsafe impl Upcast<Widget> for ActionBar { }
+unsafe impl Upcast<super::container::Container> for ActionBar { }
+unsafe impl Upcast<super::bin::Bin> for ActionBar { }
+unsafe impl Upcast<::builder::Buildable> for ActionBar { }
+
+/// Hide and show with animation
+pub type ActionBar = Object<ffi::GtkActionBar>;
 
 impl ActionBar {
-    pub fn new() -> Option<ActionBar> {
-        let tmp_pointer = unsafe { ffi::gtk_action_bar_new() };
-        check_pointer!(tmp_pointer, ActionBar)
+    pub fn new() -> ActionBar {
+        unsafe { Widget::from_glib_none(ffi::gtk_action_bar_new()).downcast_unchecked() }
     }
 
-    pub fn get_center_widget<T: ::WidgetTrait>(&self) -> Option<T> {
-        let tmp_pointer = unsafe {
-            ffi::gtk_action_bar_get_center_widget(GTK_ACTION_BAR(self.pointer))
-        };
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            Some(::FFIWidget::wrap_widget(tmp_pointer))
+    pub fn get_center_widget(&self) -> Option<Widget> {
+        unsafe {
+            from_glib_none(ffi::gtk_action_bar_get_center_widget(self.to_glib_none().0))
         }
     }
 
-    pub fn set_center_widget<T: ::WidgetTrait>(&self, center_widget: &T) {
+    pub fn set_center_widget<T: Upcast<Widget>>(&self, center_widget: &T) {
         unsafe {
-            ffi::gtk_action_bar_set_center_widget(GTK_ACTION_BAR(self.pointer),
-                                                  center_widget.unwrap_widget())
+            ffi::gtk_action_bar_set_center_widget(self.to_glib_none().0,
+                                                  center_widget.upcast().to_glib_none().0);
         }
     }
 
-    pub fn pack_start<T: ::WidgetTrait>(&self, child: &T) {
+    pub fn pack_start<T: Upcast<Widget>>(&self, child: &T) {
         unsafe {
-            ffi::gtk_action_bar_pack_start(GTK_ACTION_BAR(self.pointer),
-                                           child.unwrap_widget())
+            ffi::gtk_action_bar_pack_start(self.to_glib_none().0, child.upcast().to_glib_none().0);
         }
     }
 
-    pub fn pack_end<T: ::WidgetTrait>(&self, child: &T) {
+    pub fn pack_end<T: Upcast<Widget>>(&self, child: &T) {
         unsafe {
-            ffi::gtk_action_bar_pack_end(GTK_ACTION_BAR(self.pointer),
-                                         child.unwrap_widget())
+            ffi::gtk_action_bar_pack_end(self.to_glib_none().0, child.upcast().to_glib_none().0);
         }
     }
 }
 
-impl_drop!(ActionBar);
-impl_TraitWidget!(ActionBar);
-
-impl ::ContainerTrait for ActionBar {}
-impl ::BinTrait for ActionBar {}
+impl types::StaticType for ActionBar {
+    #[inline]
+    fn static_type() -> types::Type {
+        unsafe { from_glib(ffi::gtk_action_bar_get_type()) }
+    }
+}

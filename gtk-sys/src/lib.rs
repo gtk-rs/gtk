@@ -374,7 +374,6 @@ extern "C" {
     // pub fn gtk_window_set_default(window: *const const GtkWindow, default_widget: *const const GtkWidget) -> ();
     // pub fn gtk_window_get_default_widget(window: *const const GtkWindow) -> *const const GtkWidget;
     // pub fn gtk_window_activate_default(window: *const const GtkWindow) -> gboolean;
-    // pub fn gtk_window_get_type() -> ();
 
     //=========================================================================
     // GType
@@ -2651,6 +2650,7 @@ extern "C" {
     //=========================================================================
     // GtkActionBar                                                          OK
     //=========================================================================
+    pub fn gtk_action_bar_get_type          () -> GType;
     pub fn gtk_action_bar_new               () -> *mut GtkWidget;
     pub fn gtk_action_bar_get_center_widget (action_bar: *mut GtkActionBar) -> *mut GtkWidget;
     pub fn gtk_action_bar_set_center_widget (action_bar: *mut GtkActionBar, center_widget: *mut GtkWidget);
