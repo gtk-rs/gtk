@@ -68,7 +68,6 @@ pub use self::rt::{
     events_pending
 };
 
-
 /// GTK Widgets for all versions
 pub use self::widgets::{
     CssProvider,
@@ -340,6 +339,14 @@ pub use self::traits::ToolShellTrait;
 pub use self::traits::WidgetTrait;
 pub use self::traits::WidgetSignals;
 pub use self::traits::WindowTrait;
+
+pub use self::traits::style_provider::{
+    STYLE_PROVIDER_PRIORITY_FALLBACK,
+    STYLE_PROVIDER_PRIORITY_THEME,
+    STYLE_PROVIDER_PRIORITY_SETTINGS,
+    STYLE_PROVIDER_PRIORITY_APPLICATION,
+    STYLE_PROVIDER_PRIORITY_USER
+};
 
 /// GTK various struct
 pub use self::types::{

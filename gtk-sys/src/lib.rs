@@ -336,6 +336,12 @@ pub struct GtkTooltip;
 
 //pub type GtkTreeModelForeachFunc = fn(model: *mut GtkTreeModel, path: *mut GtkTreePath, iter: *mut GtkTreeIter, data: gpointer) -> gboolean;
 
+pub const GTK_STYLE_PROVIDER_PRIORITY_FALLBACK: u32 = 1;
+pub const GTK_STYLE_PROVIDER_PRIORITY_THEME: u32 = 200;
+pub const GTK_STYLE_PROVIDER_PRIORITY_SETTINGS: u32 = 400;
+pub const GTK_STYLE_PROVIDER_PRIORITY_APPLICATION: u32 = 600;
+pub const GTK_STYLE_PROVIDER_PRIORITY_USER: u32 = 800;
+
 extern "C" {
 
     //=========================================================================
