@@ -3,6 +3,7 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 pub mod actionable;
+pub mod arrow;
 pub mod bin;
 pub mod box_;
 pub mod button;
@@ -13,6 +14,7 @@ pub mod entry;
 pub mod frame;
 #[cfg(feature = "gtk_3_10")]
 pub mod header_bar;
+pub mod image;
 pub mod label;
 pub mod misc;
 pub mod orientable;

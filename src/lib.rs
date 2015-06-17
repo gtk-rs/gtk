@@ -198,6 +198,7 @@ pub use mvc::tree_selection::TreeSelection;
 pub use mvc::tree_view::TreeView;
 pub use mvc::tree_view_column::TreeViewColumn;
 pub use widgets::actionable::Actionable;
+pub use widgets::arrow::Arrow;
 pub use widgets::bin::Bin;
 pub use widgets::box_::Box;
 pub use widgets::button::Button;
@@ -211,6 +212,7 @@ pub use widgets::frame::{
 };
 #[cfg(feature = "gtk_3_10")]
 pub use widgets::header_bar::HeaderBar;
+pub use widgets::image::Image;
 pub use widgets::label::Label;
 pub use widgets::misc::Misc;
 pub use widgets::orientable::Orientable;

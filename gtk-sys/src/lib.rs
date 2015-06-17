@@ -2153,6 +2153,7 @@ extern "C" {
     //=========================================================================
     // GtkImage
     //=========================================================================
+    pub fn gtk_image_get_type() -> GType;
     pub fn gtk_image_new() -> *mut GtkWidget;
     pub fn gtk_image_new_from_file(filename: *const c_char) -> *mut GtkWidget;
     pub fn gtk_image_new_from_pixbuf(pixbuf: *mut gdk_ffi::GdkPixbuf) -> *mut GtkWidget;
@@ -2186,6 +2187,7 @@ extern "C" {
     //=========================================================================
     // GtkArrow                                                              OK
     //=========================================================================
+    pub fn gtk_arrow_get_type                  () -> GType;
     pub fn gtk_arrow_new                       (arrow_type: enums::ArrowType, shadow_type: enums::ShadowType) -> *mut GtkWidget;
     pub fn gtk_arrow_set                       (arrow: *mut GtkArrow,arrow_type: enums::ArrowType, shadow_type: enums::ShadowType) -> ();
 
