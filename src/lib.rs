@@ -213,6 +213,7 @@ pub use widgets::drawing_area::DrawingArea;
 pub use widgets::editable::Editable;
 pub use widgets::entry::Entry;
 pub use widgets::entry::EntryBuffer;
+pub use widgets::fixed::Fixed;
 pub use widgets::frame::{
     AspectFrame,
     Frame,

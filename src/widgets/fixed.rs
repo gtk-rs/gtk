@@ -2,43 +2,41 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! A container which allows you to position widgets at fixed coordinates
-
-use libc::c_int;
-
-use cast::GTK_FIXED;
+use glib::translate::*;
+use glib::types;
 use ffi;
 
-/// Fixed — A container which allows you to position widgets at fixed coordinates
-struct_Widget!(Fixed);
+use object::{Object, Downcast, Upcast};
+use super::widget::Widget;
+
+/// A container which allows you to position widgets at fixed coordinates.
+pub type Fixed = Object<ffi::GtkFixed>;
+
+unsafe impl Upcast<Widget> for Fixed { }
+unsafe impl Upcast<super::container::Container> for Fixed { }
+unsafe impl Upcast<::builder::Buildable> for Fixed { }
 
 impl Fixed {
-    pub fn new() -> Option<Fixed> {
-        let tmp_pointer = unsafe { ffi::gtk_fixed_new() };
-        check_pointer!(tmp_pointer, Fixed)
+    pub fn new() -> Fixed {
+        unsafe { Widget::from_glib_none(ffi::gtk_fixed_new()).downcast_unchecked() }
     }
 
-    pub fn put<T: ::WidgetTrait>(&self,
-                             widget: &T,
-                             x: i32,
-                             y: i32) -> () {
+    pub fn put<T: Upcast<Widget>>(&self, widget: &T, x: i32, y: i32) {
         unsafe {
-            ffi::gtk_fixed_put(GTK_FIXED(self.pointer), widget.unwrap_widget(), x as c_int, y as c_int);
+            ffi::gtk_fixed_put(self.to_glib_none().0, widget.upcast().to_glib_none().0, x, y);
         }
     }
 
-    // FIXME: search a new name
-    pub fn move_<T: ::WidgetTrait>(&self,
-                              widget: &T,
-                              x: i32,
-                              y: i32) -> () {
+    pub fn move_<T: Upcast<Widget>>(&self, widget: &T, x: i32, y: i32) {
         unsafe {
-            ffi::gtk_fixed_move(GTK_FIXED(self.pointer), widget.unwrap_widget(), x as c_int, y as c_int);
+            ffi::gtk_fixed_move(self.to_glib_none().0, widget.upcast().to_glib_none().0, x, y);
         }
     }
 }
 
-impl_drop!(Fixed);
-impl_TraitWidget!(Fixed);
-
-impl ::ContainerTrait for Fixed {}
+impl types::StaticType for Fixed {
+    #[inline]
+    fn static_type() -> types::Type {
+        unsafe { from_glib(ffi::gtk_fixed_get_type()) }
+    }
+}

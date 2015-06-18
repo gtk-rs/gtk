@@ -1897,6 +1897,7 @@ extern "C" {
     //=========================================================================
     // GtkFixed                                                              OK
     //=========================================================================
+    pub fn gtk_fixed_get_type                  () -> GType;
     pub fn gtk_fixed_new                       () -> *mut GtkWidget;
     pub fn gtk_fixed_put                       (fixed: *mut GtkFixed, widget: *mut GtkWidget, x: c_int, y: c_int) -> ();
     pub fn gtk_fixed_move                      (fixed: *mut GtkFixed, widget: *mut GtkWidget, x: c_int, y: c_int) -> ();
