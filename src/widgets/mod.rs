@@ -5,6 +5,7 @@
 #[cfg(feature = "gtk_3_12")]
 pub mod action_bar;
 pub mod actionable;
+pub mod alignment;
 pub mod arrow;
 pub mod bin;
 pub mod box_;
