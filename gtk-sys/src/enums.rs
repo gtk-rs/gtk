@@ -1333,11 +1333,11 @@ pub enum TextSearchFlags {
 /// These flags serve two purposes. First, the application can call gtk_places_sidebar_set_open_flags() using these flags as a bitmask. This
 /// tells the sidebar that the application is able to open folders selected from the sidebar in various ways, for example, in new tabs or in
 /// new windows in addition to the normal mode.
-/// 
+///
 /// Second, when one of these values gets passed back to the application in the “open-location” signal, it means that the application should
 /// open the selected location in the normal way, in a new tab, or in a new window. The sidebar takes care of determining the desired way to
 /// open the location, based on the modifier keys that the user is pressing at the time the selection is made.
-/// 
+///
 /// If the application never calls gtk_places_sidebar_set_open_flags(), then the sidebar will only use Normal in the
 /// “open-location” signal. This is the default mode of operation.
 #[repr(C)]

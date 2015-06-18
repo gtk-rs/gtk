@@ -568,6 +568,10 @@ GtkTextMark* cast_GtkTextMark(GObject* obj) {
     return GTK_TEXT_MARK(obj);
 }
 
+GtkStyleProvider* cast_GtkStyleProvider(GObject* obj) {
+    return GTK_STYLE_PROVIDER(obj);
+}
+
 GtkFileChooserWidget* cast_GtkFileChooserWidget(GtkWidget* widget) {
     return GTK_FILE_CHOOSER_WIDGET(widget);
 }
