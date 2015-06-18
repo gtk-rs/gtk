@@ -214,6 +214,11 @@ pub use widgets::editable::Editable;
 pub use widgets::entry::Entry;
 pub use widgets::entry::EntryBuffer;
 pub use widgets::fixed::Fixed;
+#[cfg(feature = "gtk_3_12")]
+pub use widgets::flow_box::{
+    FlowBox,
+    FlowBoxChild,
+};
 pub use widgets::frame::{
     AspectFrame,
     Frame,

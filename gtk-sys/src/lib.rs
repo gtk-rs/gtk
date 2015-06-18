@@ -2606,6 +2606,7 @@ extern "C" {
     //=========================================================================
     // GtkFlowBox                                                            OK
     //=========================================================================
+    pub fn gtk_flow_box_get_type                  () -> GType;
     pub fn gtk_flow_box_new                       () -> *mut GtkWidget;
     pub fn gtk_flow_box_set_homogeneous           (_box: *mut GtkFlowBox, homogeneous: gboolean);
     pub fn gtk_flow_box_get_homogeneous           (_box: *mut GtkFlowBox) -> gboolean;
@@ -2635,6 +2636,7 @@ extern "C" {
     //=========================================================================
     // GtkFlowBoxChild                                                       OK
     //=========================================================================
+    pub fn gtk_flow_box_child_get_type() -> GType;
     pub fn gtk_flow_box_child_new () -> *mut GtkWidget;
     pub fn gtk_flow_box_child_get_index (child: *mut GtkFlowBoxChild) -> c_int;
     pub fn gtk_flow_box_child_is_selected (child: *mut GtkFlowBoxChild) -> gboolean;

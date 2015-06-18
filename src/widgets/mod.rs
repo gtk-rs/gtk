@@ -17,6 +17,8 @@ pub mod drawing_area;
 pub mod editable;
 pub mod entry;
 pub mod fixed;
+#[cfg(feature = "gtk_3_12")]
+pub mod flow_box;
 pub mod frame;
 #[cfg(feature = "gtk_3_10")]
 pub mod header_bar;
