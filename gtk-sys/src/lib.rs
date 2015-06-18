@@ -2222,6 +2222,7 @@ extern "C" {
     //=========================================================================
     // GtkAlignments                                                         OK
     //=========================================================================
+    pub fn gtk_alignment_get_type              () -> GType;
     pub fn gtk_alignment_new                   (xalign: c_float, yalign: c_float, xscale: c_float, yscale: c_float) -> *mut GtkWidget;
     pub fn gtk_alignment_set                   (alignment: *mut GtkAlignment, xalign: c_float, yalign: c_float, xscale: c_float, yscale: c_float) -> ();
     pub fn gtk_alignment_get_padding           (alignment: *mut GtkAlignment, padding_top: *mut c_uint, padding_bottom: *mut c_uint, padding_left: *mut c_uint, padding_right: *mut c_uint) -> ();

@@ -2,59 +2,59 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! A widget which controls the alignment and size of its child
-
-use libc::{c_float, c_uint};
-
-use cast::GTK_ALIGNMENT;
+use glib::types;
+use glib::translate::*;
 use ffi;
 
-/// Alignment — A widget which controls the alignment and size of its child
-struct_Widget!(Alignment);
+use object::{Object, Upcast, Downcast};
+use super::widget::Widget;
+
+/// A widget which controls the alignment and size of its child
+pub type Alignment = Object<ffi::GtkAlignment>;
+
+unsafe impl Upcast<Widget> for Alignment { }
+unsafe impl Upcast<super::container::Container> for Alignment { }
+unsafe impl Upcast<super::bin::Bin> for Alignment { }
+unsafe impl Upcast<::builder::Buildable> for Alignment { }
 
 impl Alignment {
-    pub fn new(x_align: f32,
-               y_align: f32,
-               x_scale: f32,
-               y_scale: f32) -> Option<Alignment> {
-        let tmp_pointer = unsafe { ffi::gtk_alignment_new(x_align as c_float, y_align as c_float, x_scale as c_float, y_scale as c_float) };
-        check_pointer!(tmp_pointer, Alignment)
-    }
-
-    pub fn set(&self,
-               x_align: f32,
-               y_align: f32,
-               x_scale: f32,
-               y_scale: f32) -> () {
+    pub fn new(x_align: f32, y_align: f32, x_scale: f32, y_scale: f32) -> Alignment {
         unsafe {
-            ffi::gtk_alignment_set(GTK_ALIGNMENT(self.pointer), x_align as c_float, y_align as c_float, x_scale as c_float, y_scale as c_float)
+            Widget::from_glib_none(ffi::gtk_alignment_new(x_align, y_align, x_scale, y_scale))
+                .downcast_unchecked()
         }
     }
 
-    pub fn set_padding(&self,
-                       padding_top: u32,
-                       padding_bottom: u32,
-                       padding_left: u32,
-                       padding_right: u32) -> () {
+    pub fn set(&self, x_align: f32, y_align: f32, x_scale: f32, y_scale: f32) {
         unsafe {
-            ffi::gtk_alignment_set_padding(GTK_ALIGNMENT(self.pointer), padding_top as c_uint, padding_bottom as c_uint, padding_left as c_uint, padding_right as c_uint);
+            ffi::gtk_alignment_set(self.to_glib_none().0, x_align, y_align, x_scale, y_scale)
+        }
+    }
+
+    pub fn set_padding(&self, padding_top: u32, padding_bottom: u32, padding_left: u32,
+                       padding_right: u32) {
+        unsafe {
+            ffi::gtk_alignment_set_padding(self.to_glib_none().0, padding_top, padding_bottom,
+                                           padding_left, padding_right);
         }
     }
 
     pub fn get_padding(&self) -> (u32, u32, u32, u32) {
-        let mut top =       0;
-        let mut bottom =    0;
-        let mut left =      0;
-        let mut right =     0;
+        let mut top = 0;
+        let mut bottom = 0;
+        let mut left = 0;
+        let mut right = 0;
         unsafe {
-            ffi::gtk_alignment_get_padding(GTK_ALIGNMENT(self.pointer), &mut top, &mut bottom, &mut left, &mut right);
+            ffi::gtk_alignment_get_padding(self.to_glib_none().0, &mut top, &mut bottom, &mut left,
+                                           &mut right);
         }
         (top, bottom, left, right)
     }
 }
 
-impl_drop!(Alignment);
-impl_TraitWidget!(Alignment);
-
-impl ::ContainerTrait for Alignment {}
-impl ::BinTrait for Alignment {}
+impl types::StaticType for Alignment {
+    #[inline]
+    fn static_type() -> types::Type {
+        unsafe { from_glib(ffi::gtk_alignment_get_type()) }
+    }
+}
