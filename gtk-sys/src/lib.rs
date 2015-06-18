@@ -330,6 +330,8 @@ pub struct GtkSocket;
 pub struct GtkEventBox;
 #[repr(C)]
 pub struct GtkTooltip;
+#[repr(C)]
+pub struct GtkStatusIcon;
 
 pub const GTK_ENTRY_BUFFER_MAX_SIZE: u16 = ::std::u16::MAX;
 
@@ -1933,6 +1935,27 @@ extern "C" {
     pub fn gtk_adjustment_set_page_size        (adjustment: *mut GtkAdjustment, page_size: c_double) -> ();
     pub fn gtk_adjustment_set_step_increment   (adjustment: *mut GtkAdjustment, step_increment: c_double) -> ();
     pub fn gtk_adjustment_set_upper            (adjustment: *mut GtkAdjustment, upper: c_double) -> ();
+
+    //=========================================================================
+    // GtkStatusIcon                                                    NOT ALL
+    //=========================================================================
+    pub fn gtk_status_icon_get_type            () -> GType;
+    //TODO: mark all deprecated for 3_14
+    pub fn gtk_status_icon_new                 () -> *mut GtkStatusIcon;
+    pub fn gtk_status_icon_new_from_file       (filename: *const c_char) -> *mut GtkStatusIcon;
+    pub fn gtk_status_icon_set_from_file       (status_icon: *mut GtkStatusIcon, filename: *const c_char);
+    pub fn gtk_status_icon_get_size            (status_icon: *mut GtkStatusIcon) -> c_int;
+    pub fn gtk_status_icon_set_has_tooltip     (status_icon: *mut GtkStatusIcon, has_tooltip: gboolean);
+    pub fn gtk_status_icon_set_tooltip_text    (status_icon: *mut GtkStatusIcon, text: *const c_char);
+    pub fn gtk_status_icon_set_tooltip_markup  (status_icon: *mut GtkStatusIcon, markup: *const c_char);
+    pub fn gtk_status_icon_set_title           (status_icon: *mut GtkStatusIcon, title: *const c_char);
+    pub fn gtk_status_icon_get_title           (status_icon: *mut GtkStatusIcon) -> *const c_char;
+    pub fn gtk_status_icon_set_visible         (status_icon: *mut GtkStatusIcon, visible: gboolean);
+    pub fn gtk_status_icon_get_visible         (status_icon: *mut GtkStatusIcon) -> gboolean;
+    pub fn gtk_status_icon_is_embedded         (status_icon: *mut GtkStatusIcon) -> gboolean;
+    pub fn gtk_status_icon_get_has_tooltip     (status_icon: *mut GtkStatusIcon) -> gboolean;
+    pub fn gtk_status_icon_get_tooltip_text    (status_icon: *mut GtkStatusIcon) -> *const c_char;
+    pub fn gtk_status_icon_get_tooltip_markup  (status_icon: *mut GtkStatusIcon) -> *const c_char;
 
     //=========================================================================
     // GtkGrid
