@@ -223,6 +223,7 @@ pub use widgets::frame::{
     AspectFrame,
     Frame,
 };
+pub use widgets::grid::Grid;
 #[cfg(feature = "gtk_3_10")]
 pub use widgets::header_bar::HeaderBar;
 pub use widgets::image::Image;

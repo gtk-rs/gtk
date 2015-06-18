@@ -20,6 +20,7 @@ pub mod fixed;
 #[cfg(feature = "gtk_3_12")]
 pub mod flow_box;
 pub mod frame;
+pub mod grid;
 #[cfg(feature = "gtk_3_10")]
 pub mod header_bar;
 pub mod image;

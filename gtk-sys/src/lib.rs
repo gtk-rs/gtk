@@ -1961,6 +1961,7 @@ extern "C" {
     //=========================================================================
     // GtkGrid
     //=========================================================================
+    pub fn gtk_grid_get_type                   () -> GType;
     pub fn gtk_grid_new                        () -> *mut GtkWidget;
     pub fn gtk_grid_attach                     (grid: *mut GtkGrid, child: *mut GtkWidget, left: c_int, top: c_int, width: c_int, height: c_int) -> ();
     pub fn gtk_grid_attach_next_to             (grid: *mut GtkGrid, child: *mut GtkWidget, sibling: *mut GtkWidget, side: enums::PositionType, width: c_int, height: c_int) -> ();
