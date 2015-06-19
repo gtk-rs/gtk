@@ -2618,6 +2618,7 @@ extern "C" {
     //=========================================================================
     // GtkLayout
     //=========================================================================
+    pub fn gtk_layout_get_type        () -> GType;
     pub fn gtk_layout_new             (hadjustment: *mut GtkAdjustment, vadjustment: *mut GtkAdjustment) -> *mut GtkWidget;
     pub fn gtk_layout_put             (layout: *mut GtkLayout, child_widget: *mut GtkWidget, x: c_int, y: c_int);
     pub fn gtk_layout_move            (layout: *mut GtkLayout, child_widget: *mut GtkWidget, x: c_int, y: c_int);

@@ -28,6 +28,7 @@ pub mod header_bar;
 pub mod icon_view;
 pub mod image;
 pub mod label;
+pub mod layout;
 #[cfg(feature = "gtk_3_6")]
 pub mod level_bar;
 pub mod misc;

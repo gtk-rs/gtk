@@ -231,6 +231,7 @@ pub use widgets::header_bar::HeaderBar;
 pub use widgets::icon_view::IconView;
 pub use widgets::image::Image;
 pub use widgets::label::Label;
+pub use widgets::layout::Layout;
 #[cfg(feature = "gtk_3_6")]
 pub use widgets::level_bar::LevelBar;
 pub use widgets::misc::Misc;
