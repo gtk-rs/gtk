@@ -8,6 +8,7 @@ use glib::translate::*;
 use glib::types::{self, Type};
 use gdk;
 use gdk_ffi;
+use pango;
 use ffi;
 
 use object::{Object, Upcast};
@@ -69,6 +70,7 @@ pub trait WidgetExt {
     fn override_color(&self, state: StateFlags, color: &gdk_ffi::GdkRGBA);
     fn override_symbolic_color(&self, name: &str, color: &gdk_ffi::GdkRGBA);
     fn override_cursor(&self, cursor: &gdk_ffi::GdkRGBA, secondary_cursor: &gdk_ffi::GdkRGBA);
+    fn override_font(&self, font: &pango::FontDescription);
     fn queue_draw_area(&self, x: i32, y: i32, width: i32, height: i32);
     fn set_app_paintable(&self, app_paintable: bool);
     fn set_double_buffered(&self, double_buffered: bool);
@@ -78,6 +80,7 @@ pub trait WidgetExt {
     fn get_child_visible(&self) -> bool;
     fn get_parent(&self) -> Option<Widget>;
     fn has_screen(&self) -> bool;
+    fn get_screen(&self) -> gdk::Screen;
     fn get_size_request(&self) -> (i32, i32);
     fn set_child_visible(&self, is_visible: bool);
     fn set_size_request(&self, width: i32, height: i32);
@@ -358,6 +361,12 @@ impl<O: Upcast<Widget>> WidgetExt for O {
         }
     }
 
+    fn override_font(&self, font: &pango::FontDescription) {
+        unsafe {
+            ffi::gtk_widget_override_font(self.upcast().to_glib_none().0, font.to_glib_none().0)
+        }
+    }
+
     fn queue_draw_area(&self, x: i32, y: i32, width: i32, height: i32) {
         unsafe {
             ffi::gtk_widget_queue_draw_area(self.upcast().to_glib_none().0, x, y, width, height)
@@ -419,6 +428,10 @@ impl<O: Upcast<Widget>> WidgetExt for O {
 
     fn has_screen(&self) -> bool {
         unsafe { from_glib(ffi::gtk_widget_has_screen(self.upcast().to_glib_none().0)) }
+    }
+
+    fn get_screen(&self) -> gdk::Screen {
+        unsafe { from_glib_none(ffi::gtk_widget_get_screen(self.upcast().to_glib_none().0)) }
     }
 
     fn get_size_request(&self) -> (i32, i32) {
