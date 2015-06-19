@@ -2315,6 +2315,7 @@ extern "C" {
     //=========================================================================
     // GtkPaned                                                              OK
     //=========================================================================
+    pub fn gtk_paned_get_type                  () -> GType;
     pub fn gtk_paned_new                       (orientation: enums::Orientation) -> *mut GtkWidget;
     pub fn gtk_paned_add1                      (paned: *mut GtkPaned, child: *mut GtkWidget) -> ();
     pub fn gtk_paned_add2                      (paned: *mut GtkPaned, child: *mut GtkWidget) -> ();
@@ -2324,7 +2325,7 @@ extern "C" {
     // pub fn gtk_paned_get_child2                (paned: *const const GtkPaned) -> *const const GtkWidget;
     pub fn gtk_paned_set_position              (paned: *mut GtkPaned, position: c_int) -> ();
     pub fn gtk_paned_get_position              (paned: *mut GtkPaned) -> c_int;
-    pub fn gtk_paned_get_handle_window         (paned: *mut GtkPaned) -> *mut GtkWidget;
+    pub fn gtk_paned_get_handle_window         (paned: *mut GtkPaned) -> *mut gdk_ffi::GdkWindow;
 
     //=========================================================================
     // GtkInfoBar

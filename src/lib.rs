@@ -237,6 +237,7 @@ pub use widgets::level_bar::LevelBar;
 pub use widgets::misc::Misc;
 pub use widgets::notebook::Notebook;
 pub use widgets::orientable::Orientable;
+pub use widgets::paned::Paned;
 pub use widgets::progress_bar::ProgressBar;
 pub use widgets::scrollable::Scrollable;
 pub use widgets::separator::Separator;

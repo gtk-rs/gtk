@@ -34,6 +34,7 @@ pub mod level_bar;
 pub mod misc;
 pub mod notebook;
 pub mod orientable;
+pub mod paned;
 pub mod progress_bar;
 pub mod scrollable;
 pub mod separator;
