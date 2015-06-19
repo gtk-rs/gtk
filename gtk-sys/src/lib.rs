@@ -1888,6 +1888,7 @@ extern "C" {
     //=========================================================================
     // GtkButtonBox                                                          OK
     //=========================================================================
+    pub fn gtk_button_box_get_type             () -> GType;
     pub fn gtk_button_box_new                  (orientation: enums::Orientation) -> *mut GtkWidget;
     pub fn gtk_button_box_get_layout           (widget: *mut GtkButtonBox) -> enums::ButtonBoxStyle;
     pub fn gtk_button_box_get_child_secondary  (widget: *mut GtkButtonBox, child : *mut GtkWidget) -> gboolean;

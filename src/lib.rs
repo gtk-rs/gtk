@@ -207,6 +207,7 @@ pub use widgets::arrow::Arrow;
 pub use widgets::bin::Bin;
 pub use widgets::box_::Box;
 pub use widgets::button::Button;
+pub use widgets::button_box::ButtonBox;
 pub use widgets::container::Container;
 pub use widgets::calendar::Calendar;
 pub use widgets::drawing_area::DrawingArea;
