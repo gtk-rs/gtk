@@ -2512,6 +2512,7 @@ extern "C" {
     //=========================================================================
     // GtkNoteBook                                                           OK
     //=========================================================================
+    pub fn gtk_notebook_get_type          () -> GType;
     pub fn gtk_notebook_new               () -> *mut GtkWidget;
     pub fn gtk_notebook_append_page       (notebook: *mut GtkNotebook, child: *mut GtkWidget, tab_label: *mut GtkWidget) -> c_int;
     pub fn gtk_notebook_append_page_menu  (notebook: *mut GtkNotebook, child: *mut GtkWidget, tab_label: *mut GtkWidget, menu_label: *mut GtkWidget) -> c_int;

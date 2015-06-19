@@ -32,6 +32,7 @@ pub mod layout;
 #[cfg(feature = "gtk_3_6")]
 pub mod level_bar;
 pub mod misc;
+pub mod notebook;
 pub mod orientable;
 pub mod progress_bar;
 pub mod scrollable;
