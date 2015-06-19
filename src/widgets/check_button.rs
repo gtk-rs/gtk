@@ -4,36 +4,54 @@
 
 //! Create widgets with a discrete toggle button
 
-use glib::translate::ToGlibPtr;
+use glib::translate::*;
+use glib::types;
 use ffi;
 
+use object::{Object, Downcast, Upcast};
+use super::widget::Widget;
+
 /// CheckButton — Create widgets with a discrete toggle button
-struct_Widget!(CheckButton);
+pub type CheckButton = Object<ffi::GtkCheckButton>;
 
 impl CheckButton {
-    pub fn new() -> Option<CheckButton> {
-        let tmp_pointer = unsafe { ffi::gtk_check_button_new() };
-        check_pointer!(tmp_pointer, CheckButton)
+    /// Creates a new `CheckButton`.
+    pub fn new() -> CheckButton {
+        unsafe {
+            Widget::from_glib_none(ffi::gtk_check_button_new()).downcast_unchecked()
+        }
     }
-
-    pub fn new_with_label(label: &str) -> Option<CheckButton> {
-        let tmp_pointer = unsafe {
-            ffi::gtk_check_button_new_with_label(label.to_glib_none().0)
-        };
-        check_pointer!(tmp_pointer, CheckButton)
+    /// Creates a new `CheckButton` with a `Label` to the right of it.
+    pub fn new_with_label(label: &str) -> CheckButton {
+        unsafe {
+            Widget::from_glib_none(
+                ffi::gtk_check_button_new_with_label(label.to_glib_none().0))
+                    .downcast_unchecked()
+        }
     }
-
-    pub fn new_with_mnemonic(mnemonic: &str) -> Option<CheckButton> {
-        let tmp_pointer = unsafe {
-            ffi::gtk_check_button_new_with_mnemonic(mnemonic.to_glib_none().0)
-        };
-        check_pointer!(tmp_pointer, CheckButton)
+    /// Creates a new `CheckButton` containing a label.
+    /// The label will be created using `Label::new_with_mnemonic()`,
+    /// so underscores in `label` indicate the mnemonic for the check button.
+    pub fn new_with_mnemonic(mnemonic: &str) -> CheckButton {
+        unsafe {
+            Widget::from_glib_none(
+                ffi::gtk_check_button_new_with_mnemonic(mnemonic.to_glib_none().0))
+                    .downcast_unchecked()
+        }
     }
 }
 
-impl_drop!(CheckButton);
-impl_TraitWidget!(CheckButton);
+impl types::StaticType for CheckButton {
+    #[inline]
+    fn static_type() -> types::Type {
+        unsafe { from_glib(ffi::gtk_check_button_get_type()) }
+    }
+}
 
-impl ::ContainerTrait for CheckButton {}
-impl ::ButtonTrait for CheckButton {}
-impl ::ToggleButtonTrait for CheckButton {}
+unsafe impl Upcast<Widget> for CheckButton { }
+unsafe impl Upcast<super::container::Container> for CheckButton { }
+unsafe impl Upcast<super::bin::Bin> for CheckButton { }
+unsafe impl Upcast<super::button::Button> for CheckButton { }
+unsafe impl Upcast<super::toggle_button::ToggleButton> for CheckButton { }
+unsafe impl Upcast<::builder::Buildable> for CheckButton { }
+unsafe impl Upcast<super::actionable::Actionable> for CheckButton { }

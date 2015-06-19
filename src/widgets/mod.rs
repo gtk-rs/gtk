@@ -12,6 +12,7 @@ pub mod box_;
 pub mod button;
 pub mod button_box;
 pub mod calendar;
+pub mod check_button;
 pub mod combo_box;
 pub mod container;
 pub mod drawing_area;
@@ -35,6 +36,7 @@ pub mod scrollable;
 pub mod separator;
 pub mod spinner;
 pub mod switch;
+pub mod toggle_button;
 pub mod widget;
 
 // ---------------- cut ----------------

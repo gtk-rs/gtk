@@ -29,5 +29,6 @@ pub use widgets::label::LabelExt;
 pub use widgets::misc::MiscExt;
 pub use widgets::orientable::OrientableExt;
 pub use widgets::scrollable::ScrollableExt;
+pub use widgets::toggle_button::ToggleButtonExt;
 pub use widgets::widget::WidgetExt;
 pub use window::WindowExt;
