@@ -238,6 +238,7 @@ pub use widgets::scrollable::Scrollable;
 pub use widgets::separator::Separator;
 pub use widgets::spinner::Spinner;
 pub use widgets::switch::Switch;
+pub use widgets::toggle_button::ToggleButton;
 pub use widgets::widget::Widget;
 pub use window::Window;
 

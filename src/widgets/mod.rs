@@ -35,6 +35,7 @@ pub mod scrollable;
 pub mod separator;
 pub mod spinner;
 pub mod switch;
+pub mod toggle_button;
 pub mod widget;
 
 // ---------------- cut ----------------

@@ -1772,6 +1772,7 @@ extern "C" {
     //=========================================================================
     // GtkToggleButton                                                       OK
     //=========================================================================
+    pub fn gtk_toggle_button_get_type          () -> GType;
     pub fn gtk_toggle_button_new               () -> *mut GtkWidget;
     pub fn gtk_toggle_button_new_with_label    (label: *const c_char) -> *mut GtkWidget;
     pub fn gtk_toggle_button_new_with_mnemonic (label: *const c_char) -> *mut GtkWidget;
