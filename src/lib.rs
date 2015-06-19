@@ -235,6 +235,7 @@ pub use widgets::level_bar::LevelBar;
 pub use widgets::misc::Misc;
 pub use widgets::orientable::Orientable;
 pub use widgets::progress_bar::ProgressBar;
+pub use widgets::radio_button::RadioButton;
 pub use widgets::scrollable::Scrollable;
 pub use widgets::separator::Separator;
 pub use widgets::spinner::Spinner;

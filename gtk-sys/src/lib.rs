@@ -2984,8 +2984,9 @@ extern "C" {
     pub fn gtk_places_sidebar_set_show_enter_location(sidebar: *mut GtkPlacesSidebar, show_enter_location: gboolean);
 
     //=========================================================================
-    // GtkRadioButton                                                        OK
+    // GtkRadioButton                                                   NOT ALL
     //=========================================================================
+    pub fn gtk_radio_button_get_type         () -> GType;
     pub fn gtk_radio_button_new              (group: *mut c_void) -> *mut GtkWidget;
     pub fn gtk_radio_button_new_with_label   (group: *mut c_void, label: *const c_char) -> *mut GtkWidget;
     pub fn gtk_radio_button_new_with_mnemonic (group: *mut c_void, label: *const c_char) -> *mut GtkWidget;

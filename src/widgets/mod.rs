@@ -32,6 +32,7 @@ pub mod level_bar;
 pub mod misc;
 pub mod orientable;
 pub mod progress_bar;
+pub mod radio_button;
 pub mod scrollable;
 pub mod separator;
 pub mod spinner;
