@@ -232,6 +232,7 @@ pub use widgets::image::Image;
 pub use widgets::label::Label;
 #[cfg(feature = "gtk_3_6")]
 pub use widgets::level_bar::LevelBar;
+pub use widgets::menu_button::MenuButton;
 pub use widgets::misc::Misc;
 pub use widgets::orientable::Orientable;
 pub use widgets::progress_bar::ProgressBar;

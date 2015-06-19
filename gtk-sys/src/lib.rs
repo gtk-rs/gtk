@@ -1808,6 +1808,7 @@ extern "C" {
     //=========================================================================
     // GtkMenuButton                                                         OK
     //=========================================================================
+    pub fn gtk_menu_button_get_type            () -> GType;
     pub fn gtk_menu_button_new                 () -> *mut GtkWidget;
     pub fn gtk_menu_button_set_popup           (menu_button: *mut GtkMenuButton, popup: *mut GtkWidget) -> ();
     // pub fn gtk_menu_button_get_popup           (menu_button: *const const GtkMenuButton) -> *const const GtkMenu;

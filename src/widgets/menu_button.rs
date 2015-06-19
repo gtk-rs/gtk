@@ -4,47 +4,62 @@
 
 //! A widget that shows a menu when clicked on
 
+use glib::translate::*;
+use glib::types;
 use ffi;
-use cast::GTK_MENUBUTTON;
-use ArrowType;
+use {ArrowType};
+
+use object::{Object, Downcast, Upcast};
+use super::widget::Widget;
 
 /// MenuButton — A widget that shows a menu when clicked on
-struct_Widget!(MenuButton);
+pub type MenuButton = Object<ffi::GtkMenuButton>;
+
+unsafe impl Upcast<Widget> for MenuButton { }
+unsafe impl Upcast<super::container::Container> for MenuButton { }
+unsafe impl Upcast<super::bin::Bin> for MenuButton { }
+unsafe impl Upcast<super::button::Button> for MenuButton { }
+unsafe impl Upcast<super::toggle_button::ToggleButton> for MenuButton { }
+
+unsafe impl Upcast<super::actionable::Actionable> for MenuButton { }
+unsafe impl Upcast<::builder::Buildable> for MenuButton { }
 
 impl MenuButton {
-    pub fn new() -> Option<MenuButton> {
-        let tmp_pointer = unsafe { ffi::gtk_menu_button_new() };
-        check_pointer!(tmp_pointer, MenuButton)
-    }
-
-    pub fn set_popup<T: ::WidgetTrait>(&self, popup: &T) -> () {
+    pub fn new() -> MenuButton {
         unsafe {
-            ffi::gtk_menu_button_set_popup(GTK_MENUBUTTON(self.pointer), popup.unwrap_widget());
+            Widget::from_glib_none(ffi::gtk_menu_button_new()).downcast_unchecked()
         }
     }
 
-    pub fn set_direction(&self, direction: ArrowType) -> () {
+    pub fn set_popup<T: Upcast<Widget>>(&self, popup: &T) {
         unsafe {
-            ffi::gtk_menu_button_set_direction(GTK_MENUBUTTON(self.pointer), direction);
+            ffi::gtk_menu_button_set_popup(self.to_glib_none().0,
+                popup.upcast().to_glib_none().0)
+        }
+    }
+    pub fn set_direction(&self, direction: ArrowType) {
+        unsafe {
+            ffi::gtk_menu_button_set_direction(self.to_glib_none().0, direction)
         }
     }
 
     pub fn get_direction(&self) -> ArrowType {
         unsafe {
-            ffi::gtk_menu_button_get_direction(GTK_MENUBUTTON(self.pointer))
+            ffi::gtk_menu_button_get_direction(self.to_glib_none().0)
         }
     }
 
-    pub fn set_align_widget<T: ::WidgetTrait>(&self, align_widget: &T) -> () {
+    pub fn set_align_widget<T: Upcast<Widget>>(&self, align_widget: &T) {
         unsafe {
-            ffi::gtk_menu_button_set_align_widget(GTK_MENUBUTTON(self.pointer), align_widget.unwrap_widget())
+            ffi::gtk_menu_button_set_align_widget(self.to_glib_none().0,
+                align_widget.upcast().to_glib_none().0)
         }
     }
 }
 
-impl_drop!(MenuButton);
-impl_TraitWidget!(MenuButton);
-
-impl ::ContainerTrait for MenuButton {}
-impl ::ButtonTrait for MenuButton {}
-impl ::ToggleButtonTrait for MenuButton {}
+impl types::StaticType for MenuButton {
+    #[inline]
+    fn static_type() -> types::Type {
+        unsafe { from_glib(ffi::gtk_menu_button_get_type()) }
+    }
+}
