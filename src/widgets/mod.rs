@@ -25,6 +25,7 @@ pub mod frame;
 pub mod grid;
 #[cfg(feature = "gtk_3_10")]
 pub mod header_bar;
+pub mod icon_view;
 pub mod image;
 pub mod label;
 #[cfg(feature = "gtk_3_6")]

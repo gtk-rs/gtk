@@ -1150,6 +1150,7 @@ extern "C" {
     //=========================================================================
     // GtkIconView                                                       NOT OK
     //=========================================================================
+    pub fn gtk_icon_view_get_type              () -> GType;
     pub fn gtk_icon_view_new                   () -> *mut GtkWidget;
     //pub fn gtk_icon_view_new_with_area         (area: *mut GtkCellArea) -> *mut GtkWidget;
     pub fn gtk_icon_view_new_with_model        (model: *mut GtkTreeModel) -> *mut GtkWidget;
@@ -1196,7 +1197,7 @@ extern "C" {
     pub fn gtk_icon_view_select_path           (icon_view: *mut GtkIconView, path: *mut GtkTreePath);
     pub fn gtk_icon_view_unselect_path         (icon_view: *mut GtkIconView, path: *mut GtkTreePath);
     pub fn gtk_icon_view_path_is_selected      (icon_view: *mut GtkIconView, path: *mut GtkTreePath) -> gboolean;
-    //pub fn gtk_icon_view_get_selected_items    (icon_view: *mut GtkIconView) -> *mut GList;
+    pub fn gtk_icon_view_get_selected_items    (icon_view: *mut GtkIconView) -> *mut GList;
     pub fn gtk_icon_view_select_all            (icon_view: *mut GtkIconView);
     pub fn gtk_icon_view_unselect_all          (icon_view: *mut GtkIconView);
     pub fn gtk_icon_view_item_activated        (icon_view: *mut GtkIconView, path: *mut GtkTreePath);
@@ -1225,7 +1226,7 @@ extern "C" {
     pub fn gtk_icon_view_get_drag_dest_item    (icon_view: *mut GtkIconView, path: *mut *mut GtkTreePath,
         pos: *mut enums::IconViewDropPosition);
     pub fn gtk_icon_view_get_dest_item_at_pos  (icon_view: *mut GtkIconView, drag_x: c_int, drag_y: c_int, path: *mut *mut GtkTreePath,
-        pos: *mut enums::IconViewDropPosition);
+        pos: *mut enums::IconViewDropPosition) -> gboolean;
     //pub fn gtk_icon_view_create_drag_icon      (icon_view: *mut GtkIconView, path: *mut GtkTreePath) -> *mut cairo_surface_t;
 
     //pub type GtkIconViewForeachFunc = fn(icon_view: *mut GtkIconView, path: *mut GtkTreePath, data: gpointer);

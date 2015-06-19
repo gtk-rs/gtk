@@ -228,6 +228,7 @@ pub use widgets::frame::{
 pub use widgets::grid::Grid;
 #[cfg(feature = "gtk_3_10")]
 pub use widgets::header_bar::HeaderBar;
+pub use widgets::icon_view::IconView;
 pub use widgets::image::Image;
 pub use widgets::label::Label;
 #[cfg(feature = "gtk_3_6")]
