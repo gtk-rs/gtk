@@ -42,6 +42,8 @@ pub mod scrollable;
 pub mod separator;
 pub mod socket;
 pub mod spinner;
+#[cfg(feature = "gtk_3_10")]
+pub mod stack;
 pub mod switch;
 pub mod toggle_button;
 pub mod widget;

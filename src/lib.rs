@@ -245,6 +245,11 @@ pub use widgets::scrollable::Scrollable;
 pub use widgets::separator::Separator;
 pub use widgets::spinner::Spinner;
 pub use widgets::socket::Socket;
+#[cfg(feature = "gtk_3_10")]
+pub use widgets::stack::{
+    Stack,
+    StackSwitcher,
+};
 pub use widgets::switch::Switch;
 pub use widgets::toggle_button::ToggleButton;
 pub use widgets::widget::Widget;

@@ -2564,6 +2564,7 @@ extern "C" {
     //=========================================================================
     // GtkStack                                                              OK
     //=========================================================================
+    pub fn gtk_stack_get_type                () -> GType;
     pub fn gtk_stack_new                     () -> *mut GtkWidget;
     pub fn gtk_stack_add_named               (stack: *mut GtkStack, child: *mut GtkWidget, name: *const c_char);
     pub fn gtk_stack_add_titled              (stack: *mut GtkStack, child: *mut GtkWidget, name: *const c_char, title: *const c_char);
@@ -2582,9 +2583,10 @@ extern "C" {
     //=========================================================================
     // GtkStackSwitcher                                                      OK
     //=========================================================================
+    pub fn gtk_stack_switcher_get_type  () -> GType;
     pub fn gtk_stack_switcher_new       () -> *mut GtkWidget;
     pub fn gtk_stack_switcher_set_stack (switcher: *mut GtkStackSwitcher, stack: *mut GtkStack);
-    pub fn gtk_stack_switcher_get_stack (switcher: *mut GtkStackSwitcher) -> *mut GtkWidget;
+    pub fn gtk_stack_switcher_get_stack (switcher: *mut GtkStackSwitcher) -> *mut GtkStack;
 
 
     //=========================================================================
