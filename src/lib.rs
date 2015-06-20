@@ -234,11 +234,13 @@ pub use widgets::label::Label;
 pub use widgets::layout::Layout;
 #[cfg(feature = "gtk_3_6")]
 pub use widgets::level_bar::LevelBar;
+pub use widgets::menu_button::MenuButton;
 pub use widgets::misc::Misc;
 pub use widgets::notebook::Notebook;
 pub use widgets::orientable::Orientable;
 pub use widgets::paned::Paned;
 pub use widgets::progress_bar::ProgressBar;
+pub use widgets::radio_button::RadioButton;
 pub use widgets::scrollable::Scrollable;
 pub use widgets::separator::Separator;
 pub use widgets::spinner::Spinner;

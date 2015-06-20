@@ -15,8 +15,7 @@ use super::widget::Widget;
 pub type ToggleButton = Object<ffi::GtkToggleButton>;
 
 impl ToggleButton {
-    /// Creates a new toggle button. A widget should be packed into the button,
-    /// as in `Button::new()`.
+    /// Creates a new toggle button.
     pub fn new() -> ToggleButton {
         unsafe {
             Widget::from_glib_none(ffi::gtk_toggle_button_new()).downcast_unchecked()

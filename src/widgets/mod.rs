@@ -31,11 +31,13 @@ pub mod label;
 pub mod layout;
 #[cfg(feature = "gtk_3_6")]
 pub mod level_bar;
+pub mod menu_button;
 pub mod misc;
 pub mod notebook;
 pub mod orientable;
 pub mod paned;
 pub mod progress_bar;
+pub mod radio_button;
 pub mod scrollable;
 pub mod separator;
 pub mod spinner;

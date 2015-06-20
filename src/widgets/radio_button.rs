@@ -5,48 +5,63 @@
 //! A choice from multiple check buttons
 
 use std::ptr;
-
-use glib::translate::ToGlibPtr;
+use glib::translate::*;
+use glib::types;
 use ffi;
-use cast::GTK_RADIOBUTTON;
+
+use object::{Object, Downcast, Upcast};
+use super::widget::Widget;
 
 /// A choice from multiple check buttons
-struct_Widget!(RadioButton);
+pub type RadioButton = Object<ffi::GtkRadioButton>;
+
+unsafe impl Upcast<Widget> for RadioButton { }
+unsafe impl Upcast<super::container::Container> for RadioButton { }
+unsafe impl Upcast<super::bin::Bin> for RadioButton { }
+unsafe impl Upcast<super::button::Button> for RadioButton { }
+unsafe impl Upcast<super::toggle_button::ToggleButton> for RadioButton { }
+
+unsafe impl Upcast<super::actionable::Actionable> for RadioButton { }
+unsafe impl Upcast<::builder::Buildable> for RadioButton { }
 
 impl RadioButton {
-    pub fn new() -> Option<RadioButton> {
-        let tmp_pointer = unsafe { ffi::gtk_radio_button_new(ptr::null_mut()) };
-        check_pointer!(tmp_pointer, RadioButton)
-    }
-
-    pub fn new_with_label(label: &str) -> Option<RadioButton> {
-        let tmp_pointer = unsafe {
-            ffi::gtk_radio_button_new_with_label(ptr::null_mut(),
-                                                 label.to_glib_none().0)
-        };
-        check_pointer!(tmp_pointer, RadioButton)
-    }
-
-    pub fn new_with_mnemonic(mnemonic: &str) -> Option<RadioButton> {
-        let tmp_pointer = unsafe {
-            ffi::gtk_radio_button_new_with_mnemonic(ptr::null_mut(),
-                                                    mnemonic.to_glib_none().0)
-        };
-        check_pointer!(tmp_pointer, RadioButton)
-    }
-
-    pub fn join(&self, group_source: &RadioButton) {
+    /// Creates a new `RadioButton`.
+    pub fn new() -> RadioButton {
         unsafe {
-            ffi::gtk_radio_button_join_group(GTK_RADIOBUTTON(self.pointer),
-                                             GTK_RADIOBUTTON(group_source.pointer));
+            Widget::from_glib_none(ffi::gtk_radio_button_new(ptr::null_mut()))
+                .downcast_unchecked()
+        }
+    }
+    /// Creates a new `RadioButton` with a text label.
+    pub fn new_with_label(label: &str) -> RadioButton {
+        unsafe {
+            Widget::from_glib_none(
+                ffi::gtk_radio_button_new_with_label(ptr::null_mut(), label.to_glib_none().0))
+                .downcast_unchecked()
+        }
+    }
+    /// Creates a new `RadioButton` containing a label.
+    /// The label will be created using `Label::new_with_mnemonic()`,
+    /// so underscores in `label` indicate the mnemonic for the button.
+    pub fn new_with_mnemonic(label: &str) -> RadioButton {
+        unsafe {
+            Widget::from_glib_none(
+                ffi::gtk_check_button_new_with_mnemonic(label.to_glib_none().0))
+                .downcast_unchecked()
+        }
+    }
+    /// Joins a `RadioButton` object to the group of another `RadioButton` object
+    pub fn join_group(&self, group_source: &RadioButton) {
+        unsafe {
+            ffi::gtk_radio_button_join_group(self.to_glib_none().0,
+                group_source.to_glib_none().0)
         }
     }
 }
 
-impl_drop!(RadioButton);
-impl_TraitWidget!(RadioButton);
-
-impl ::ContainerTrait for RadioButton {}
-impl ::ButtonTrait for RadioButton {}
-impl ::BinTrait for RadioButton {}
-impl ::ToggleButtonTrait for RadioButton {}
+impl types::StaticType for RadioButton {
+    #[inline]
+    fn static_type() -> types::Type {
+        unsafe { from_glib(ffi::gtk_radio_button_get_type()) }
+    }
+}
