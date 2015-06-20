@@ -1823,6 +1823,7 @@ extern "C" {
     //=========================================================================
     // GtkColorButton                                                        OK
     //=========================================================================
+    pub fn gtk_color_button_get_type           () -> GType;
     pub fn gtk_color_button_new                () -> *mut GtkWidget;
     pub fn gtk_color_button_new_with_color     (color: *const gdk_ffi::GdkColor) -> *mut GtkWidget;
     pub fn gtk_color_button_new_with_rgba      (rgba: *const gdk_ffi::GdkRGBA) -> *mut GtkWidget;
