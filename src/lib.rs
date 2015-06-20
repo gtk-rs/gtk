@@ -209,6 +209,7 @@ pub use widgets::box_::Box;
 pub use widgets::button::Button;
 pub use widgets::button_box::ButtonBox;
 pub use widgets::check_button::CheckButton;
+pub use widgets::color_button::ColorButton;
 pub use widgets::container::Container;
 pub use widgets::calendar::Calendar;
 pub use widgets::drawing_area::DrawingArea;

@@ -4,100 +4,103 @@
 
 //! A button to launch a color selection dialog
 
-use glib::translate::{from_glib_none, ToGlibPtr};
-use cast::GTK_COLORBUTTON;
+use glib::translate::*;
+use glib::types;
 use ffi;
-use glib::{to_bool, to_gboolean};
 use gdk;
 use gdk_ffi;
 
+use object::{Object, Downcast, Upcast};
+use super::widget::Widget;
+
 /**
 * ColorButton — A button to launch a color selection dialog
-*
-* # Availables signals :
-* * `color-set` : Run First
 */
-struct_Widget!(ColorButton);
+pub type ColorButton = Object<ffi::GtkColorButton>;
+
+unsafe impl Upcast<Widget> for ColorButton { }
+unsafe impl Upcast<super::container::Container> for ColorButton { }
+unsafe impl Upcast<super::bin::Bin> for ColorButton { }
+unsafe impl Upcast<super::button::Button> for ColorButton { }
+
+unsafe impl Upcast<super::actionable::Actionable> for ColorButton { }
+unsafe impl Upcast<::builder::Buildable> for ColorButton { }
+unsafe impl Upcast<::chooser::color::ColorChooser> for ColorButton {}
 
 impl ColorButton {
-    pub fn new() -> Option<ColorButton> {
-        let tmp_pointer = unsafe { ffi::gtk_color_button_new() };
-        check_pointer!(tmp_pointer, ColorButton)
-    }
-
-    pub fn new_with_color(color: &gdk::Color) -> Option<ColorButton> {
-        let tmp_pointer = unsafe { ffi::gtk_color_button_new_with_color(color) };
-        check_pointer!(tmp_pointer, ColorButton)
-    }
-
-    pub fn new_with_rgba(rgba: &gdk_ffi::GdkRGBA) -> Option<ColorButton> {
-        let tmp_pointer = unsafe { ffi::gtk_color_button_new_with_rgba(rgba) };
-        check_pointer!(tmp_pointer, ColorButton)
-    }
-
-    pub fn set_color(&self, color: &gdk::Color) -> () {
+    /// Creates a new color button.
+    /// This returns a widget in the form of a small button
+    /// containing a swatch representing the current selected color.
+    /// When the button is clicked, a color-selection dialog will open,
+    /// allowing the user to select a color.
+    /// The swatch will be updated to reflect the new color when the user finishes.
+    pub fn new() -> ColorButton {
         unsafe {
-            ffi::gtk_color_button_set_color(GTK_COLORBUTTON(self.pointer), color)
+            Widget::from_glib_none(ffi::gtk_color_button_new()).downcast_unchecked()
         }
     }
-
+    /// Creates a new color button.
+    /// Deprecated: since 3.4, use `new_with_rgba`
+    pub fn new_with_color(color: &gdk::Color) -> ColorButton {
+        unsafe {
+            Widget::from_glib_none(ffi::gtk_color_button_new_with_color(color))
+                .downcast_unchecked()
+        }
+    }
+    /// Creates a new color button.
+    pub fn new_with_rgba(rgba: &gdk_ffi::GdkRGBA) -> ColorButton {
+        unsafe {
+            Widget::from_glib_none(ffi::gtk_color_button_new_with_rgba(rgba))
+                .downcast_unchecked()
+        }
+    }
+    /// Sets the current color to be `color`.
+    /// Deprecated: since 3.4, use `set_rgba`
+    pub fn set_color(&self, color: &gdk::Color) {
+        unsafe {
+            ffi::gtk_color_button_set_color(self.to_glib_none().0, color)
+        }
+    }
+    /// Sets `color` to be the current color in the ColorButton widget.
+    /// Deprecated: since 3.4, use `get_rgba`
     pub fn get_color(&self) -> gdk::Color {
         let color = gdk::Color { pixel: 0, red: 0, green: 0, blue: 0 };
         unsafe {
-            ffi::gtk_color_button_get_color(GTK_COLORBUTTON(self.pointer), &color);
+            ffi::gtk_color_button_get_color(self.to_glib_none().0, &color);
         }
         color
     }
-
-    pub fn set_alpha(&self, alpha: u16) -> () {
+    /// Sets the current opacity to be `alpha`.
+    /// Deprecated: since 3.4, use `set_rgba`
+    pub fn set_alpha(&self, alpha: u16) {
         unsafe {
-            ffi::gtk_color_button_set_alpha(GTK_COLORBUTTON(self.pointer), alpha)
+            ffi::gtk_color_button_set_alpha(self.to_glib_none().0, alpha)
         }
     }
-
+    /// Returns the current alpha value.
+    /// Deprecated: since 3.4, use `get_rgba`
     pub fn get_alpha(&self) -> u16 {
         unsafe {
-            ffi::gtk_color_button_get_alpha(GTK_COLORBUTTON(self.pointer))
+            ffi::gtk_color_button_get_alpha(self.to_glib_none().0)
         }
     }
-
-    pub fn set_rgba(&self, rgba: &gdk_ffi::GdkRGBA) -> () {
+    /// Sets the title for the color selection dialog.
+    pub fn set_title(&self, title: &str) {
         unsafe {
-            ffi::gtk_color_button_set_rgba(GTK_COLORBUTTON(self.pointer), rgba)
+            ffi::gtk_color_button_set_title(self.to_glib_none().0, title.to_glib_none().0);
         }
     }
-
-    pub fn get_rgba(&self) -> gdk_ffi::GdkRGBA {
-        let rgba = gdk_ffi::GdkRGBA { red: 0., green: 0., blue: 0., alpha: 0. };
-        unsafe {
-            ffi::gtk_color_button_get_rgba(GTK_COLORBUTTON(self.pointer), &rgba);
-        }
-        rgba
-    }
-
-    pub fn set_use_alpha(&self, use_alpha: bool) -> () {
-        unsafe { ffi::gtk_color_button_set_use_alpha(GTK_COLORBUTTON(self.pointer), to_gboolean(use_alpha)); }
-    }
-
-    pub fn get_use_alpha(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_color_button_get_use_alpha(GTK_COLORBUTTON(self.pointer))) }
-    }
-
-    pub fn set_title(&self, title: &str) -> () {
-        unsafe {
-            ffi::gtk_color_button_set_title(GTK_COLORBUTTON(self.pointer), title.to_glib_none().0);
-        }
-    }
-
+    /// Gets the title of the color selection dialog.
     pub fn get_title(&self) -> Option<String> {
         unsafe {
-            from_glib_none(ffi::gtk_color_button_get_title(GTK_COLORBUTTON(self.pointer)))
+            from_glib_none(ffi::gtk_color_button_get_title(self.to_glib_none().0))
         }
     }
 }
 
-impl_drop!(ColorButton);
-impl_TraitWidget!(ColorButton);
-
-impl ::ContainerTrait for ColorButton {}
-impl ::ButtonTrait for ColorButton {}
+impl types::StaticType for ColorButton {
+    #[inline]
+    fn static_type() -> types::Type {
+        unsafe { from_glib(ffi::gtk_color_button_get_type()) }
+    }
+}

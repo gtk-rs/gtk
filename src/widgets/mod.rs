@@ -13,6 +13,7 @@ pub mod button;
 pub mod button_box;
 pub mod calendar;
 pub mod check_button;
+pub mod color_button;
 pub mod combo_box;
 pub mod container;
 pub mod drawing_area;
