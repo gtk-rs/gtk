@@ -222,6 +222,7 @@ pub use widgets::flow_box::{
     FlowBox,
     FlowBoxChild,
 };
+pub use widgets::font_button::FontButton;
 pub use widgets::frame::{
     AspectFrame,
     Frame,
