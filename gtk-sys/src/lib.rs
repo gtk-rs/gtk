@@ -1755,6 +1755,7 @@ extern "C" {
     //=========================================================================
     // GtkFontButton                                                         OK
     //=========================================================================
+    pub fn gtk_font_button_get_type            () -> GType;
     pub fn gtk_font_button_new                 () -> *mut GtkWidget;
     pub fn gtk_font_button_new_with_font       (fontname: *const c_char) -> *mut GtkWidget;
     pub fn gtk_font_button_set_font_name       (font_button: *mut GtkFontButton, fontname: *const c_char) -> gboolean;
