@@ -244,6 +244,7 @@ pub use widgets::radio_button::RadioButton;
 pub use widgets::scrollable::Scrollable;
 pub use widgets::separator::Separator;
 pub use widgets::spinner::Spinner;
+#[cfg(target_os = "linux")]
 pub use widgets::socket::Socket;
 #[cfg(feature = "gtk_3_10")]
 pub use widgets::stack::{

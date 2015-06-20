@@ -40,6 +40,7 @@ pub mod progress_bar;
 pub mod radio_button;
 pub mod scrollable;
 pub mod separator;
+#[cfg(target_os = "linux")]
 pub mod socket;
 pub mod spinner;
 #[cfg(feature = "gtk_3_10")]
