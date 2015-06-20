@@ -16,6 +16,9 @@ keywords = ["gtk", "gnome", "GUI"]
 [lib]
 name = "gtk"
 
+[[bin]]
+name = "test"
+
 [features]
 default = ["gtk_3_6"]
 gtk_3_4 = ["gtk-sys/gtk_3_4", "gdk/gdk_3_4"]
