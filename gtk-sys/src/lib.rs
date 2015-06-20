@@ -1851,6 +1851,7 @@ extern "C" {
     //=========================================================================
     // GtkScaleButton
     //=========================================================================
+    pub fn gtk_scale_button_get_type           () -> GType;
     pub fn gtk_scale_button_new                (size: enums::IconSize, min: c_double, max: c_double, step: c_double, icons: *const *const c_char) -> *mut GtkWidget;
     pub fn gtk_scale_button_set_adjustment     (button: *mut GtkScaleButton, adjustment: *mut GtkAdjustment) -> ();
     // pub fn gtk_scale_button_set_icons          (button: *const const GtkScaleButton, icons: *const *const c_char) -> ();

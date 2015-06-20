@@ -39,6 +39,7 @@ pub mod orientable;
 pub mod paned;
 pub mod progress_bar;
 pub mod radio_button;
+pub mod scale_button;
 pub mod scrollable;
 pub mod separator;
 #[cfg(target_os = "linux")]
