@@ -40,6 +40,7 @@ pub mod progress_bar;
 pub mod radio_button;
 pub mod scrollable;
 pub mod separator;
+pub mod socket;
 pub mod spinner;
 pub mod switch;
 pub mod toggle_button;

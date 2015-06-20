@@ -3298,6 +3298,7 @@ extern "C" {
     //=========================================================================
     // GtkSocket                                                         NOT OK
     //=========================================================================
+    pub fn gtk_socket_get_type             () -> GType;
     pub fn gtk_socket_new                  () -> *mut GtkWidget;
     //pub fn gtk_socket_add_id               (socket: *mut GtkSocket, Window window);
     //pub fn gtk_socket_get_id               (socket: *mut GtkSocket) -> Window;
