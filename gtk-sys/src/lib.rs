@@ -2136,6 +2136,7 @@ extern "C" {
     //=========================================================================
     // GtkScale
     //=========================================================================
+    pub fn gtk_scale_get_type                  () -> GType;
     pub fn gtk_scale_new                       (orientation: enums::Orientation, adjustment: *mut GtkAdjustment) -> *mut GtkWidget;
     pub fn gtk_scale_new_with_range            (orientation: enums::Orientation, min: c_double, max: c_double, step: c_double) -> *mut GtkWidget;
     pub fn gtk_scale_set_digits                (scale: *mut GtkScale, digits: c_int) -> ();

@@ -43,6 +43,7 @@ pub mod paned;
 pub mod progress_bar;
 pub mod radio_button;
 pub mod range;
+pub mod scale;
 pub mod scale_button;
 pub mod scrollable;
 pub mod separator;
