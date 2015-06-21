@@ -43,6 +43,8 @@ pub struct GtkOrientable;
 #[repr(C)]
 pub struct GtkRange;
 #[repr(C)]
+pub struct GtkScrollbar;
+#[repr(C)]
 pub struct GtkButtonBox;
 #[repr(C)]
 pub struct GtkFrame;
@@ -3203,7 +3205,7 @@ extern "C" {
     pub fn gtk_separator_menu_item_new() -> *mut GtkWidget;
 
     //=========================================================================
-    // GtkSeparatorMenuItem
+    // GtkCheckMenuItem
     //=========================================================================
     pub fn gtk_check_menu_item_new               () -> *mut GtkWidget;
     pub fn gtk_check_menu_item_new_with_label    (label: *const c_char) -> *mut GtkWidget;
@@ -3218,8 +3220,9 @@ extern "C" {
 
 
     //=========================================================================
-    // GtkSeparatorMenuItem
+    // GtkScrollbar
     //=========================================================================
+    pub fn gtk_scrollbar_get_type () -> GType;
     pub fn gtk_scrollbar_new      (orientation: enums::Orientation, adjustment: *mut GtkAdjustment) -> *mut GtkWidget;
 
     //=========================================================================
