@@ -7,7 +7,6 @@
 use glib::translate::*;
 use glib::types;
 use ffi;
-use gdk;
 use gdk_ffi;
 
 use object::{Object, Downcast, Upcast};
