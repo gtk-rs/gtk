@@ -2154,8 +2154,11 @@ extern "C" {
     //=========================================================================
     // GtkRange
     //=========================================================================
+    pub fn gtk_range_get_type                  () -> GType;
     pub fn gtk_range_set_adjustment            (scale: *mut GtkRange, adjustment: *mut GtkAdjustment) -> ();
     pub fn gtk_range_get_adjustment            (scale: *mut GtkRange) -> *mut GtkAdjustment;
+    pub fn gtk_range_set_value                 (scale: *mut GtkRange, value: c_double);
+    pub fn gtk_range_get_value                 (scale: *mut GtkRange) -> c_double;
 
     //=========================================================================
     // GtkLevelBar
