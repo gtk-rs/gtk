@@ -246,8 +246,10 @@ pub use widgets::paned::Paned;
 pub use widgets::progress_bar::ProgressBar;
 pub use widgets::radio_button::RadioButton;
 pub use widgets::range::Range;
+pub use widgets::scale::Scale;
 pub use widgets::scale_button::ScaleButton;
 pub use widgets::scrollable::Scrollable;
+pub use widgets::scrollbar::Scrollbar;
 pub use widgets::separator::Separator;
 pub use widgets::spinner::Spinner;
 #[cfg(target_os = "linux")]

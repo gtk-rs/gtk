@@ -43,8 +43,10 @@ pub mod paned;
 pub mod progress_bar;
 pub mod radio_button;
 pub mod range;
+pub mod scale;
 pub mod scale_button;
 pub mod scrollable;
+pub mod scrollbar;
 pub mod separator;
 #[cfg(target_os = "linux")]
 pub mod socket;
