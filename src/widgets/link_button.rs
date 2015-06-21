@@ -4,56 +4,73 @@
 
 //! Create buttons bound to a URL
 
-use glib::translate::{from_glib_none, ToGlibPtr};
-use cast::GTK_LINKBUTTON;
+use glib::translate::*;
+use glib::types;
 use ffi;
-use glib::{to_bool, to_gboolean};
+
+use object::{Object, Downcast, Upcast};
+use super::widget::Widget;
 
 /// LinkButton — Create buttons bound to a URL
-/*
-* # Availables signals :
-* * `activate-link` : Run Last
-*/
-struct_Widget!(LinkButton);
+pub type LinkButton = Object<ffi::GtkLinkButton>;
+
+unsafe impl Upcast<Widget> for LinkButton { }
+unsafe impl Upcast<super::container::Container> for LinkButton { }
+unsafe impl Upcast<super::bin::Bin> for LinkButton { }
+unsafe impl Upcast<super::button::Button> for LinkButton { }
+
+unsafe impl Upcast<super::actionable::Actionable> for LinkButton { }
+unsafe impl Upcast<::builder::Buildable> for LinkButton { }
 
 impl LinkButton {
-    pub fn new(uri: &str) -> Option<LinkButton> {
-        let tmp_pointer = unsafe {
-            ffi::gtk_link_button_new(uri.to_glib_none().0)
-        };
-        check_pointer!(tmp_pointer, LinkButton)
-    }
-
-    pub fn new_with_label(uri: &str, label: &str) -> Option<LinkButton> {
-        let tmp_pointer = unsafe {
-            ffi::gtk_link_button_new_with_label(uri.to_glib_none().0, label.to_glib_none().0)
-        };
-        check_pointer!(tmp_pointer, LinkButton)
-    }
-
-    pub fn get_uri(&self) -> Option<String> {
+    /// Creates a new `LinkButton` with the URI as its text.
+    pub fn new(uri: &str) -> LinkButton {
         unsafe {
-            from_glib_none(ffi::gtk_link_button_get_uri(GTK_LINKBUTTON(self.pointer)))
+            Widget::from_glib_none(ffi::gtk_link_button_new(uri.to_glib_none().0))
+                .downcast_unchecked()
         }
     }
-
-    pub fn set_uri(&self, uri: &str) -> () {
+    /// Creates a new `LinkButton` containing a label.
+    pub fn new_with_label(uri: &str, label: &str) -> LinkButton {
         unsafe {
-            ffi::gtk_link_button_set_uri(GTK_LINKBUTTON(self.pointer), uri.to_glib_none().0)
+            Widget::from_glib_none(ffi::gtk_link_button_new_with_label(uri.to_glib_none().0,
+                label.to_glib_none().0))
+                .downcast_unchecked()
         }
     }
-
-    pub fn set_visited(&self, visited: bool) -> () {
-        unsafe { ffi::gtk_link_button_set_visited(GTK_LINKBUTTON(self.pointer), to_gboolean(visited)); }
+    /// Retrieves the URI set using `set_uri()`.
+    pub fn get_uri(&self) -> String {
+        unsafe {
+            from_glib_none(ffi::gtk_link_button_get_uri(self.to_glib_none().0))
+        }
     }
-
+    /// Sets `uri` as the URI where the `LinkButton` points.
+    /// As a side-effect this unsets the `visited` state of the button.
+    pub fn set_uri(&self, uri: &str) {
+        unsafe {
+            ffi::gtk_link_button_set_uri(self.to_glib_none().0, uri.to_glib_none().0)
+        }
+    }
+    /// Sets the `visited` state of the URI where the `GtkLinkButton` points.
+    /// See `get_visited()` for more details.
+    pub fn set_visited(&self, visited: bool) {
+        unsafe {
+            ffi::gtk_link_button_set_visited(self.to_glib_none().0, visited.to_glib());
+        }
+    }
+    /// Retrieves the `visited` state of the URI where the `LinkButton` points.
+    /// The button becomes visited when it is clicked.
+    /// If the URI is changed on the button, the `visited` state is unset again.
+    /// The state may also be changed using `set_visited()`.
     pub fn get_visited(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_link_button_get_visited(GTK_LINKBUTTON(self.pointer))) }
+        unsafe { from_glib(ffi::gtk_link_button_get_visited(self.to_glib_none().0)) }
     }
 }
 
-impl_drop!(LinkButton);
-impl_TraitWidget!(LinkButton);
 
-impl ::ContainerTrait for LinkButton {}
-impl ::ButtonTrait for LinkButton {}
+impl types::StaticType for LinkButton {
+    #[inline]
+    fn static_type() -> types::Type {
+        unsafe { from_glib(ffi::gtk_link_button_get_type()) }
+    }
+}
