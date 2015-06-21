@@ -1842,6 +1842,7 @@ extern "C" {
     //=========================================================================
     // GtkLinkButton                                                         OK
     //=========================================================================
+    pub fn gtk_link_button_get_type            () -> GType;
     pub fn gtk_link_button_new                 (uri: *const c_char) -> *mut GtkWidget;
     pub fn gtk_link_button_new_with_label      (uri: *const c_char, label: *const c_char) -> *mut GtkWidget;
     pub fn gtk_link_button_get_uri             (link_button: *mut GtkLinkButton) -> *const c_char;
@@ -3241,7 +3242,8 @@ extern "C" {
     //=========================================================================
     // GtkLockButton                                                         OK
     //=========================================================================
-    pub fn gtk_lock_button_new          (permission: *mut GPermission) -> *mut GtkWidget;
+    pub fn gtk_lock_button_get_type      () -> GType;
+    pub fn gtk_lock_button_new           (permission: *mut GPermission) -> *mut GtkWidget;
     pub fn gtk_lock_button_get_permission(button: *mut GtkLockButton) -> *mut GPermission;
     pub fn gtk_lock_button_set_permission(button: *mut GtkLockButton, permission: *mut GPermission);
 

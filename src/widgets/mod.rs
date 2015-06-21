@@ -33,6 +33,8 @@ pub mod label;
 pub mod layout;
 #[cfg(feature = "gtk_3_6")]
 pub mod level_bar;
+pub mod link_button;
+pub mod lock_button;
 pub mod menu_button;
 pub mod misc;
 pub mod notebook;
