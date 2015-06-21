@@ -3241,7 +3241,8 @@ extern "C" {
     //=========================================================================
     // GtkLockButton                                                         OK
     //=========================================================================
-    pub fn gtk_lock_button_new          (permission: *mut GPermission) -> *mut GtkWidget;
+    pub fn gtk_lock_button_get_type      () -> GType;
+    pub fn gtk_lock_button_new           (permission: *mut GPermission) -> *mut GtkWidget;
     pub fn gtk_lock_button_get_permission(button: *mut GtkLockButton) -> *mut GPermission;
     pub fn gtk_lock_button_set_permission(button: *mut GtkLockButton, permission: *mut GPermission);
 

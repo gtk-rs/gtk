@@ -237,6 +237,7 @@ pub use widgets::layout::Layout;
 #[cfg(feature = "gtk_3_6")]
 pub use widgets::level_bar::LevelBar;
 pub use widgets::link_button::LinkButton;
+pub use widgets::lock_button::LockButton;
 pub use widgets::menu_button::MenuButton;
 pub use widgets::misc::Misc;
 pub use widgets::notebook::Notebook;

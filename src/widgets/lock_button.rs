@@ -4,38 +4,57 @@
 
 //! A container for arranging buttons
 
-use cast::GTK_LOCKBUTTON;
+use glib::translate::*;
+use glib::types;
 use ffi;
+
+use object::{Object, Downcast, Upcast};
+use super::widget::Widget;
 use glib::Permission;
 use glib::GlibContainer;
 
 /// GtkLockButton — A widget to unlock or lock privileged operations
-struct_Widget!(LockButton);
+pub type LockButton = Object<ffi::GtkLockButton>;
+
+unsafe impl Upcast<Widget> for LockButton { }
+unsafe impl Upcast<super::container::Container> for LockButton { }
+unsafe impl Upcast<super::bin::Bin> for LockButton { }
+unsafe impl Upcast<super::button::Button> for LockButton { }
+
+unsafe impl Upcast<super::actionable::Actionable> for LockButton { }
+unsafe impl Upcast<::builder::Buildable> for LockButton { }
 
 impl LockButton {
-    pub fn new(permission: &Permission) -> Option<LockButton> {
-        let tmp_pointer = unsafe { ffi::gtk_lock_button_new(permission.unwrap()) };
-        check_pointer!(tmp_pointer, LockButton)
+    /// Creates a new lock button which reflects the `permission`.
+    pub fn new(permission: &Permission) -> LockButton {
+        unsafe {
+            Widget::from_glib_none(ffi::gtk_lock_button_new(permission.unwrap()))
+                .downcast_unchecked()
+        }
     }
-
+    /// Obtains the `GPermission` object that controls this button.
     pub fn get_permission(&self) -> Option<Permission> {
-        let tmp_pointer = unsafe { ffi::gtk_lock_button_get_permission(GTK_LOCKBUTTON(self.pointer)) };
-
+        let tmp_pointer = unsafe {
+            ffi::gtk_lock_button_get_permission(self.to_glib_none().0)
+        };
         if tmp_pointer.is_null() {
             None
         } else {
             Some(GlibContainer::wrap(tmp_pointer))
         }
     }
-
+    /// Sets the `GPermission` object that controls this button.
     pub fn set_permission(&self, permission: &Permission) {
-        unsafe { ffi::gtk_lock_button_set_permission(GTK_LOCKBUTTON(self.pointer), permission.unwrap()) }
+        unsafe {
+            ffi::gtk_lock_button_set_permission(self.to_glib_none().0,
+                permission.unwrap())
+        }
     }
 }
 
-impl_drop!(LockButton);
-impl_TraitWidget!(LockButton);
-
-impl ::ContainerTrait for LockButton {}
-impl ::ButtonTrait for LockButton {}
-impl ::ActionableTrait for LockButton {}
+impl types::StaticType for LockButton {
+    #[inline]
+    fn static_type() -> types::Type {
+        unsafe { from_glib(ffi::gtk_lock_button_get_type()) }
+    }
+}
