@@ -24,7 +24,7 @@ unsafe impl Upcast<::builder::Buildable> for FlowBox { }
 
 impl FlowBox {
     pub fn new() -> FlowBox {
-        unsafe { Widget::from_glib_none(ffi::gtk_revealer_new()).downcast_unchecked() }
+        unsafe { Widget::from_glib_none(ffi::gtk_flow_box_new()).downcast_unchecked() }
     }
 
     pub fn set_homogeneous(&self, homogeneous: bool) {
