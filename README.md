@@ -75,10 +75,6 @@ Your local copy can be accessed using your browser at
 
 `file:///{gtk_location}/target/doc/gtk/index.html`
 
-You can also access a daily build of the docs via the internet:
-
-http://rust-ci.org/jeremyletang/rgtk/doc/rgtk/
-
 ## Including gtk as a cargo dependency
 
 To include gtk as a cargo dependency you have to add it to your Cargo.toml and specify the GTK version you want using Cargo features:
