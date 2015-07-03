@@ -16,6 +16,9 @@ __gtk__ expects __GTK+__, __GLib__ and __Cairo__ development files to be install
 ### Fedora
 
 ```Shell
+> sudo dnf install gtk3-devel glib2-devel
+
+# Fedora 21 and earlier
 > sudo yum install gtk3-devel glib2-devel
 ```
 
