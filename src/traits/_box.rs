@@ -30,7 +30,7 @@ pub trait BoxTrait: ::WidgetTrait {
         unsafe { to_bool(ffi::gtk_box_get_homogeneous(GTK_BOX(self.unwrap_widget()))) }
     }
 
-    fn set_homogeneouse(&self, homogeneous: bool) -> () {
+    fn set_homogeneous(&self, homogeneous: bool) -> () {
         unsafe { ffi::gtk_box_set_homogeneous(GTK_BOX(self.unwrap_widget()), to_gboolean(homogeneous)); }
     }
 
