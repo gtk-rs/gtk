@@ -38,9 +38,9 @@ impl Grid {
         }
     }
 
-    pub fn attach_next_to<T: ::WidgetTrait>(&self,
+    pub fn attach_next_to<T: ::WidgetTrait, T2: ::WidgetTrait>(&self,
                                         child: &T,
-                                        sibling: &T,
+                                        sibling: &T2,
                                         side: PositionType,
                                         width: i32,
                                         height: i32) -> () {
