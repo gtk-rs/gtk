@@ -10,4 +10,5 @@ Makefile
 *.so
 *.o
 *.swp
+*.bak
 Cargo.lock

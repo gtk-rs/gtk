@@ -1,0 +1,49 @@
+[options]
+girs_dir = "../gir-files"
+library = "Gtk"
+version = "3.0"
+target_path = "."
+
+[[object]]
+name = "Gtk.Widget"
+status = "manual"
+
+[[object]]
+name = "Gtk.Container"
+status = "manual"
+
+[[object]]
+name = "Gtk.Bin"
+status = "generate"
+
+[[object]]
+name = "Gtk.Window"
+status = "manual"
+
+[[object]]
+name = "Gtk.Dialog"
+status = "manual"
+
+[[object]]
+name = "Gtk.DrawingArea"
+status = "generate"
+
+[[object]]
+name = "Gtk.Actionable"
+status = "manual"
+
+[[object]]
+name = "Gtk.Activatable"
+status = "ignore"
+
+[[object]]
+name = "Gtk.Buildable"
+status = "manual"
+
+[[object]]
+name = "Gtk.Orientable"
+status = "manual"
+
+[[object]]
+name = "Gtk.Alignment"
+status = "manual"
