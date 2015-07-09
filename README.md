@@ -104,7 +104,7 @@ To implement __GTK+__ inheritance in rust, we implemented gtk superclasses as tr
 For your convenience the various traits are reexported in the `gtk::*` namespace as `Gtk{trait_name}Trait` so you can just use...
 
 ```Rust
-extern mod gtk;
+extern crate gtk;
 
 use gtk::*;
 ```
