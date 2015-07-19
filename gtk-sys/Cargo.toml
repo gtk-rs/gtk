@@ -14,14 +14,6 @@ documentation = "https://github.com/rust-gnome/gtk"
 [lib]
 name = "gtk_sys"
 
-[features]
-gtk_3_4 = []
-gtk_3_6 = []
-gtk_3_8 = []
-gtk_3_10 = []
-gtk_3_12 = []
-gtk_3_14 = []
-
 [dependencies.glib-sys]
 git = "https://github.com/rust-gnome/glib"
 
@@ -35,5 +27,5 @@ git = "https://github.com/rust-gnome/pango"
 libc = "0.1"
 
 [build-dependencies]
-pkg-config = "0.3"
+pkg-config = "0.3.5"
 gcc = "0.3"

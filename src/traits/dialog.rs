@@ -246,7 +246,7 @@ pub trait DialogTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait + ::WindowT
         }
     }
 
-    #[cfg(feature = "gtk_3_12")]
+    #[cfg(gtk_3_12)]
     fn get_header_bar<T: ::WidgetTrait>(&self) -> Option<T> {
         let tmp_pointer = unsafe { ffi::gtk_dialog_get_header_bar(GTK_DIALOG(self.unwrap_widget())) };
 
