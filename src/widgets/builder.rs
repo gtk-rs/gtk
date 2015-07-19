@@ -2,7 +2,7 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-#![cfg_attr(not(feature = "gtk_3_10"), allow(unused_imports))]
+#![cfg_attr(not(gtk_3_10), allow(unused_imports))]
 
 use ffi::{self, GtkBuilder};
 use libc::{c_char, c_long};
@@ -27,7 +27,7 @@ impl Builder {
         }
     }
 
-    #[cfg(feature = "gtk_3_10")]
+    #[cfg(gtk_3_10)]
     pub fn new_from_file(file_name: &str) -> Option<Builder> {
         let tmp = unsafe {
             ffi::gtk_builder_new_from_file(file_name.to_glib_none().0)
@@ -42,7 +42,7 @@ impl Builder {
         }
     }
 
-    #[cfg(feature = "gtk_3_10")]
+    #[cfg(gtk_3_10)]
     pub fn new_from_resource(resource_path: &str) -> Option<Builder> {
         let tmp = unsafe {
             ffi::gtk_builder_new_from_resource(resource_path.to_glib_none().0)
@@ -57,7 +57,7 @@ impl Builder {
         }
     }
 
-    #[cfg(feature = "gtk_3_10")]
+    #[cfg(gtk_3_10)]
     pub fn new_from_string(string: &str) -> Option<Builder> {
         let tmp = unsafe {
             // Don't need a null-terminated string here

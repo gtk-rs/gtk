@@ -71,14 +71,14 @@ impl TreeView {
         }
     }
 
-    #[cfg(feature = "gtk_3_8")]
+    #[cfg(gtk_3_8)]
     pub fn get_activate_on_single_click(&self) -> bool {
         unsafe {
             to_bool(ffi::gtk_tree_view_get_activate_on_single_click(GTK_TREE_VIEW(self.pointer)))
         }
     }
 
-    #[cfg(feature = "gtk_3_8")]
+    #[cfg(gtk_3_8)]
     pub fn set_activate_on_single_click(&self, setting: bool) {
         unsafe {
             ffi::gtk_tree_view_set_activate_on_single_click(GTK_TREE_VIEW(self.pointer),
