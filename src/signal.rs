@@ -571,7 +571,7 @@ mod widget {
 
     extern "C" fn draw_trampoline(this: *mut GtkWidget, cr: *mut cairo_t,
             f: &Box<Fn(Widget, Context) -> Inhibit + 'static>) -> gboolean {
-        f(FFIWidget::wrap_widget(this), Context::wrap(cr)).to_glib()
+        unsafe { f(FFIWidget::wrap_widget(this), from_glib_none(cr)).to_glib() }
     }
 
     extern "C" fn event_any_trampoline(this: *mut GtkWidget, event: *mut EventAny,
