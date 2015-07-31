@@ -296,7 +296,7 @@ impl TreeViewColumn {
     #[doc(hidden)]
     pub fn wrap_pointer(treeview_column: *mut ffi::GtkTreeViewColumn) -> TreeViewColumn {
         unsafe{
-            ::glib::ffi::g_object_ref(treeview_column as *mut ::libc::c_void);
+            ::gobject_ffi::g_object_ref(treeview_column as *mut ::libc::c_void);
         }
 
         TreeViewColumn {
@@ -306,11 +306,11 @@ impl TreeViewColumn {
 }
 
 impl glib::traits::FFIGObject for TreeViewColumn {
-    fn unwrap_gobject(&self) -> *mut glib::ffi::GObject {
+    fn unwrap_gobject(&self) -> *mut ::gobject_ffi::GObject {
         ::cast::G_OBJECT_FROM_TREE_VIEW_COLUMN(self.pointer)
     }
 
-    fn wrap_object(object: *mut glib::ffi::GObject) -> TreeViewColumn {
+    fn wrap_object(object: *mut ::gobject_ffi::GObject) -> TreeViewColumn {
         TreeViewColumn { pointer: object as *mut ffi::GtkTreeViewColumn }
     }
 }
@@ -318,7 +318,7 @@ impl glib::traits::FFIGObject for TreeViewColumn {
 impl Drop for TreeViewColumn {
     fn drop(&mut self) {
         unsafe {
-            ::glib::ffi::g_object_unref(self.pointer as *mut ::libc::c_void);
+            ::gobject_ffi::g_object_unref(self.pointer as *mut ::libc::c_void);
         }
     }
 }
@@ -326,7 +326,7 @@ impl Drop for TreeViewColumn {
 impl Clone for TreeViewColumn {
     fn clone(&self) -> TreeViewColumn {
         let pointer = unsafe {
-            ::glib::ffi::g_object_ref(self.pointer as *mut ::libc::c_void)
+            ::gobject_ffi::g_object_ref(self.pointer as *mut ::libc::c_void)
         };
 
         TreeViewColumn {

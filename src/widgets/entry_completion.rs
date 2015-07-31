@@ -8,7 +8,6 @@ use ffi;
 use TreeModel;
 use cast::GTK_ENTRY_COMPLETION;
 use glib::translate::{from_glib_none, ToGlibPtr};
-use glib_ffi;
 use libc::c_void;
 
 struct_Widget!(EntryCompletion);
@@ -47,7 +46,7 @@ impl EntryCompletion {
         if tmp_pointer.is_null() {
             None
         } else {
-            unsafe { glib_ffi::g_object_ref(tmp_pointer as *mut c_void) };
+            unsafe { ::gobject_ffi::g_object_ref(tmp_pointer as *mut c_void) };
             Some(TreeModel::wrap_pointer(tmp_pointer))
         }
     }

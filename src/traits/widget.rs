@@ -10,7 +10,7 @@ use glib::{to_bool, to_gboolean};
 use gdk;
 use gdk_ffi;
 use glib;
-use glib::ffi::GType;
+use ffi::GType;
 
 pub trait WidgetTrait: ::FFIWidget + ::GObjectTrait {
     fn show_all(&self) -> () {
