@@ -25,32 +25,19 @@ gtk_3_10 = ["cairo-rs/cairo_1_12"]
 gtk_3_12 = ["gtk_3_10"]
 gtk_3_14 = ["gtk_3_12"]
 
-[dependencies.gdk-sys]
-git = "https://github.com/rust-gnome/gdk"
-
-[dependencies.gdk]
-git = "https://github.com/rust-gnome/gdk"
-
-[dependencies.glib-sys]
-git = "https://github.com/rust-gnome/glib"
-
-[dependencies.glib]
-git = "https://github.com/rust-gnome/glib"
-
-[dependencies.pango-sys]
-git = "https://github.com/rust-gnome/pango"
-
-[dependencies.pango]
-git = "https://github.com/rust-gnome/pango"
-
-[dependencies.cairo-sys-rs]
-git = "https://github.com/rust-gnome/cairo"
-
-[dependencies.cairo-rs]
-git = "https://github.com/rust-gnome/cairo"
-
 [dependencies.gtk-sys]
 path = "gtk-sys"
 
 [dependencies]
+cairo-rs = { git = "https://github.com/rust-gnome/cairo" }
+cairo-sys-rs = { git = "https://github.com/rust-gnome/cairo" }
+gdk-pixbuf-sys = { git = "https://github.com/rust-gnome/sys" }
+gdk = { git = "https://github.com/rust-gnome/gdk" }
+gdk-sys = { git = "https://github.com/rust-gnome/sys" }
+gio-sys = { git = "https://github.com/rust-gnome/sys" }
+glib = { git = "https://github.com/rust-gnome/glib" }
+glib-sys = { git = "https://github.com/rust-gnome/sys" }
+gobject-sys = { git = "https://github.com/rust-gnome/sys" }
 libc = "0.1"
+pango = { git = "https://github.com/rust-gnome/pango" }
+pango-sys = { git = "https://github.com/rust-gnome/sys" }

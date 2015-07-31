@@ -14,18 +14,17 @@ documentation = "https://github.com/rust-gnome/gtk"
 [lib]
 name = "gtk_sys"
 
-[dependencies.glib-sys]
-git = "https://github.com/rust-gnome/glib"
-
-[dependencies.gdk-sys]
-git = "https://github.com/rust-gnome/gdk"
-
-[dependencies.pango-sys]
-git = "https://github.com/rust-gnome/pango"
-
 [dependencies]
+cairo-rs = { git = "https://github.com/rust-gnome/cairo" }
+gdk-pixbuf-sys = { git = "https://github.com/gkoz/rust-gnome-sys" }
+gdk-sys = { git = "https://github.com/gkoz/rust-gnome-sys" }
+gio-sys = { git = "https://github.com/gkoz/rust-gnome-sys" }
+glib = { git = "https://github.com/rust-gnome/glib" }
+glib-sys = { git = "https://github.com/gkoz/rust-gnome-sys" }
+gobject-sys = { git = "https://github.com/gkoz/rust-gnome-sys" }
 libc = "0.1"
+pango-sys = { git = "https://github.com/gkoz/rust-gnome-sys" }
 
 [build-dependencies]
-pkg-config = "0.3.5"
 gcc = "=0.3.9"
+pkg-config = "0.3.5"
