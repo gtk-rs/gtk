@@ -83,8 +83,8 @@ impl RecentFilterInfo {
             uri: c_uri.as_ptr(),
             display_name: c_display_name.as_ptr(),
             mime_type: c_mime_type.as_ptr(),
-            applications: t_app.as_ptr(),
-            groups: t_groups.as_ptr(),
+            applications: t_app.as_ptr() as *mut _,
+            groups: t_groups.as_ptr() as *mut _,
             age: self.age
         }
     }
@@ -93,7 +93,7 @@ impl RecentFilterInfo {
 impl Default for RecentFilterInfo {
     fn default() -> RecentFilterInfo {
         RecentFilterInfo {
-            contains: ::RecentFilterFlags::URI,
+            contains: ::RecentFilterFlags::empty(),
             uri: String::new(),
             display_name: String::new(),
             mime_type: String::new(),

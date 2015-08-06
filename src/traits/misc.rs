@@ -20,19 +20,19 @@ pub trait MiscTrait: ::WidgetTrait {
     }
 
     fn get_alignment(&self) -> (f32, f32) {
-        let x: c_float = 0.;
-        let y: c_float = 0.;
+        let mut x: c_float = 0.;
+        let mut y: c_float = 0.;
         unsafe {
-            ffi::gtk_misc_get_alignment(GTK_MISC(self.unwrap_widget()), &x, &y);
+            ffi::gtk_misc_get_alignment(GTK_MISC(self.unwrap_widget()), &mut x, &mut y);
         }
         (x as f32, y as f32)
     }
 
     fn get_padding(&self) -> (i32, i32) {
-        let x: c_int = 0;
-        let y: c_int = 0;
+        let mut x: c_int = 0;
+        let mut y: c_int = 0;
         unsafe {
-            ffi::gtk_misc_get_padding(GTK_MISC(self.unwrap_widget()), &x, &y);
+            ffi::gtk_misc_get_padding(GTK_MISC(self.unwrap_widget()), &mut x, &mut y);
         }
         (x as i32, y as i32)
     }

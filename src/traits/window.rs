@@ -41,7 +41,7 @@ pub trait WindowTrait : ::WidgetTrait {
 
     fn set_default_size(&self, width: i32, height: i32){
         unsafe {
-            ffi::gtk_window_set_default_size(self.unwrap_widget(), width, height)
+            ffi::gtk_window_set_default_size(GTK_WINDOW(self.unwrap_widget()), width, height)
         }
     }
 

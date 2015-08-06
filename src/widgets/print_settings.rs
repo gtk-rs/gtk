@@ -206,11 +206,11 @@ impl PrintSettings {
         unsafe { ffi::gtk_print_settings_set_n_copies(GTK_PRINT_SETTINGS(self.unwrap_widget()), num_copies) }
     }
 
-    pub fn get_number_up(&self) -> ::NumberUpLayout {
+    pub fn get_number_up(&self) -> i32 {
         unsafe { ffi::gtk_print_settings_get_number_up(GTK_PRINT_SETTINGS(self.unwrap_widget())) }
     }
 
-    pub fn set_number_up(&self, number_up: ::NumberUpLayout) {
+    pub fn set_number_up(&self, number_up: i32) {
         unsafe { ffi::gtk_print_settings_set_number_up(GTK_PRINT_SETTINGS(self.unwrap_widget()), number_up) }
     }
 

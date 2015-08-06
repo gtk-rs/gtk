@@ -2,7 +2,7 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-use libc::{c_int, c_float, c_double};
+use libc::{c_int, c_uint, c_float, c_double};
 use glib::translate::{from_glib_none, from_glib_full, ToGlibPtr};
 
 use {EntryIconPosition, ImageType, InputPurpose, InputHints};
@@ -45,9 +45,9 @@ pub trait EntryTrait: ::WidgetTrait {
         unsafe { ffi::gtk_entry_set_visibility(GTK_ENTRY(self.unwrap_widget()), to_gboolean(visible)); }
     }
 
-    fn set_invisible_char(&self, ch: i32) -> () {
+    fn set_invisible_char(&self, ch: char) -> () {
         unsafe {
-            ffi::gtk_entry_set_invisible_char(GTK_ENTRY(self.unwrap_widget()), ch as c_int);
+            ffi::gtk_entry_set_invisible_char(GTK_ENTRY(self.unwrap_widget()), ch as c_uint);
         }
     }
 
@@ -130,11 +130,11 @@ pub trait EntryTrait: ::WidgetTrait {
     }
 
     fn get_layout_offsets(&self) -> (i32, i32) {
-        let x = 0;
-        let y = 0;
+        let mut x = 0;
+        let mut y = 0;
 
         unsafe {
-            ffi::gtk_entry_get_layout_offsets(GTK_ENTRY(self.unwrap_widget()), &x, &y);
+            ffi::gtk_entry_get_layout_offsets(GTK_ENTRY(self.unwrap_widget()), &mut x, &mut y);
         }
         (x, y)
     }

@@ -112,7 +112,7 @@ impl TreePath {
     }
 
     pub fn prev(&self) {
-        unsafe { ffi::gtk_tree_path_prev(self.pointer) }
+        unsafe { ffi::gtk_tree_path_prev(self.pointer); }
     }
 
     pub fn path_up(&self) -> bool {

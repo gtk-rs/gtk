@@ -11,11 +11,12 @@ macro_rules! check_pointer(
             ::std::option::Option::None
         } else {
             unsafe {
-                ::gobject_ffi::g_object_ref(::cast::$cast_fn($tmp_pointer) as *mut ::libc::c_void);
+                ::gobject_ffi::g_object_ref(
+                    ::cast::$cast_fn($tmp_pointer as *mut _) as *mut ::libc::c_void);
             }
 
             ::std::option::Option::Some($gtk_struct {
-                pointer: $tmp_pointer
+                pointer: $tmp_pointer as *mut _
             })
         }
     );

@@ -2,11 +2,11 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
+use libc::c_char;
 use glib::{to_bool, Value, Type};
-use glib::translate::ToGlib;
+use glib::translate::*;
 use ffi;
 use TreeIter;
-use glib::translate::ToGlibPtr;
 use glib_ffi::GType;
 use libc::c_void;
 
@@ -27,7 +27,8 @@ impl TreeStore {
     }
 
     pub fn set_string(&self, iter: &TreeIter, column: i32, text: &str) {
-        unsafe { ffi::gtk_tree_store_set(self.pointer, iter.unwrap_pointer(), column, text.to_glib_none().0, -1) }
+        let text: Stash<*const c_char, _> = text.to_glib_none();
+        unsafe { ffi::gtk_tree_store_set(self.pointer, iter.unwrap_pointer(), column, text.0, -1) }
     }
 
     pub fn remove(&self, iter: &TreeIter) -> bool {

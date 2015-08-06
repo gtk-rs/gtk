@@ -8,21 +8,21 @@ use glib::FFIGObject;
 /// The priority used for default style information that is used in the absence of themes.
 /// Note that this is not very useful for providing default styling for custom style classes,
 /// themes are likely to override styling provided at this priority with catch-all * {...} rules.
-pub const STYLE_PROVIDER_PRIORITY_FALLBACK: u32 = ffi::GTK_STYLE_PROVIDER_PRIORITY_FALLBACK;
+pub const STYLE_PROVIDER_PRIORITY_FALLBACK: i32 = ffi::GTK_STYLE_PROVIDER_PRIORITY_FALLBACK;
 
 /// The priority used for style information provided by themes.
-pub const STYLE_PROVIDER_PRIORITY_THEME: u32 = ffi::GTK_STYLE_PROVIDER_PRIORITY_THEME;
+pub const STYLE_PROVIDER_PRIORITY_THEME: i32 = ffi::GTK_STYLE_PROVIDER_PRIORITY_THEME;
 
 /// The priority used for style information provided via GtkSettings.
 /// This priority is higher than STYLE_PROVIDER_PRIORITY_THEME to let settings override themes.
-pub const STYLE_PROVIDER_PRIORITY_SETTINGS: u32 = ffi::GTK_STYLE_PROVIDER_PRIORITY_SETTINGS;
+pub const STYLE_PROVIDER_PRIORITY_SETTINGS: i32 = ffi::GTK_STYLE_PROVIDER_PRIORITY_SETTINGS;
 
 /// A priority that can be used when adding a GtkStyleProvider for application-specific style
 /// information.
-pub const STYLE_PROVIDER_PRIORITY_APPLICATION: u32 = ffi::GTK_STYLE_PROVIDER_PRIORITY_APPLICATION;
+pub const STYLE_PROVIDER_PRIORITY_APPLICATION: i32 = ffi::GTK_STYLE_PROVIDER_PRIORITY_APPLICATION;
 
 /// A priority that can be used when adding a GtkStyleProvider for application-specific style
 /// information.
-pub const STYLE_PROVIDER_PRIORITY_USER: u32 = ffi::GTK_STYLE_PROVIDER_PRIORITY_USER;
+pub const STYLE_PROVIDER_PRIORITY_USER: i32 = ffi::GTK_STYLE_PROVIDER_PRIORITY_USER;
 
 pub trait StyleProviderTrait : FFIGObject {}

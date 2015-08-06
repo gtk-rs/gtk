@@ -285,7 +285,7 @@ impl IconView {
     }
 
     pub fn get_dest_item_at_pos(&self, drag_x: i32, drag_y: i32, path: &TreePath, pos: &mut ::IconViewDropPosition) {
-        unsafe { ffi::gtk_icon_view_get_dest_item_at_pos(GTK_ICON_VIEW(self.pointer), drag_x, drag_y, &mut path.unwrap_pointer(), pos) }
+        unsafe { ffi::gtk_icon_view_get_dest_item_at_pos(GTK_ICON_VIEW(self.pointer), drag_x, drag_y, &mut path.unwrap_pointer(), pos); }
     }
 }
 

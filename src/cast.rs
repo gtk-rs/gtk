@@ -316,11 +316,11 @@ pub fn GTK_FONT_CHOOSER_DIALOG(widget: *mut ffi::GtkWidget) -> *mut ffi::GtkFont
     unsafe { ffi::cast_GtkFontChooserDialog(widget) }
 }
 
-pub fn GTK_APP_INFO(widget: *mut ffi::GtkWidget) -> *mut ffi::GAppInfo {
+pub fn GTK_APP_INFO(widget: *mut ffi::GtkWidget) -> *mut ::gio_ffi::GAppInfo {
     unsafe { ffi::cast_GtkAppInfo(widget) }
 }
 
-pub fn GTK_APP_LAUNCH_CONTEXT(widget: *mut ffi::GtkWidget) -> *mut ffi::GAppLaunchContext {
+pub fn GTK_APP_LAUNCH_CONTEXT(widget: *mut ffi::GtkWidget) -> *mut ::gio_ffi::GAppLaunchContext {
     unsafe { ffi::cast_GtkAppLaunchContext(widget) }
 }
 

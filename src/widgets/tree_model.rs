@@ -2,6 +2,7 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
+use std::mem;
 use glib::{Value, Type};
 use glib::translate::{from_glib_full, ToGlibPtr, from_glib};
 use ffi;
@@ -172,7 +173,7 @@ impl TreeModel {
         let t = &(func, user_data);
         let ca = t as *const (fn(&mut TreeModel, &mut TreePath, &mut TreeIter, data: &mut T) -> bool, &mut T);
 
-        unsafe { ffi::gtk_tree_model_foreach(self.pointer, my_fn as ffi::gpointer, ca as ffi::gpointer) }
+        unsafe { ffi::gtk_tree_model_foreach(self.pointer, Some(my_fn), ca as ::glib_ffi::gpointer) }
     }
 
     #[doc(hidden)]
@@ -188,8 +189,8 @@ impl TreeModel {
     }
 }
 
-fn my_fn(model: *mut ffi::GtkTreeModel, path: *mut ffi::GtkTreePath, iter: *mut ffi::GtkTreeIter,
-    data: &mut (fn(&mut TreeModel, &mut TreePath, &mut TreeIter, data: *mut c_void) -> bool, &mut c_void)) -> ffi::gboolean {
+unsafe extern "C" fn my_fn(model: *mut ffi::GtkTreeModel, path: *mut ffi::GtkTreePath, iter: *mut ffi::GtkTreeIter, data: *mut c_void) -> ::glib_ffi::gboolean {
+    let data: &mut (fn(&mut TreeModel, &mut TreePath, &mut TreeIter, data: *mut c_void) -> bool, &mut c_void) = mem::transmute(data);
     glib::to_gboolean(data.0(&mut TreeModel::wrap_pointer(model), &mut TreePath::wrap_pointer(path), &mut TreeIter::wrap_pointer(iter), data.1))
 }
 

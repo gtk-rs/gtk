@@ -75,11 +75,11 @@ impl Scale {
     }
 
     pub fn get_layout_offsets(&self) -> (i32, i32) {
-        let x = 0;
-        let y = 0;
+        let mut x = 0;
+        let mut y = 0;
 
         unsafe {
-            ffi::gtk_scale_get_layout_offsets(GTK_SCALE(self.pointer), &x, &y);
+            ffi::gtk_scale_get_layout_offsets(GTK_SCALE(self.pointer), &mut x, &mut y);
         }
         (x, y)
     }

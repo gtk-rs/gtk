@@ -8,7 +8,6 @@ use libc::c_double;
 use std::ptr;
 
 use ffi;
-use IconSize;
 
 /// ScaleButton — A button which pops up a scale
 /*
@@ -21,8 +20,8 @@ struct_Widget!(ScaleButton);
 
 impl ScaleButton {
     // FIXME: icons -> last parameter
-    pub fn new(size: IconSize, min: f64, max: f64, step: f64) -> Option<ScaleButton> {
-        let tmp_pointer = unsafe { ffi::gtk_scale_button_new(size, min as c_double, max as c_double, step as c_double, ptr::null()) };
+    pub fn new(size: i32, min: f64, max: f64, step: f64) -> Option<ScaleButton> {
+        let tmp_pointer = unsafe { ffi::gtk_scale_button_new(size, min as c_double, max as c_double, step as c_double, ptr::null_mut()) };
         check_pointer!(tmp_pointer, ScaleButton)
     }
 }
