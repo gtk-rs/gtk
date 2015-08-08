@@ -24,10 +24,8 @@ __gtk__ expects __GTK+__, __GLib__ and __Cairo__ development files to be install
 
 ### OS X
 
-Install [XQuartz](http://xquartz.macosforge.org/landing/), then:
 ```Shell
-> brew install gtk+3 --without-x11
-> export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/opt/X11/lib/pkgconfig
+> brew install gtk+3
 ```
 
 ### Windows
