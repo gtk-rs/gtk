@@ -17,14 +17,6 @@ keywords = ["gtk", "gnome", "GUI"]
 [lib]
 name = "gtk"
 
-[features]
-gtk_3_4 = []
-gtk_3_6 = []
-gtk_3_8 = []
-gtk_3_10 = ["cairo-rs/cairo_1_12"]
-gtk_3_12 = ["gtk_3_10"]
-gtk_3_14 = ["gtk_3_12"]
-
 [dependencies.gtk-sys]
 path = "gtk-sys"
 
