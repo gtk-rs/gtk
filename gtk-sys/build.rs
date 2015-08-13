@@ -26,7 +26,7 @@ fn main() {
     let mut cfgs = Vec::new();
     if version.0 == MIN_MAJOR && version.1 > MIN_MINOR {
         let major = version.0;
-        let mut minor = MIN_MINOR + MINOR_STEP;
+        let mut minor = MIN_MINOR;
         while minor <= version.1 {
             cfgs.push(format!("gtk_{}_{}", major, minor));
             minor += MINOR_STEP;

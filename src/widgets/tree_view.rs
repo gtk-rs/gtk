@@ -9,7 +9,6 @@ use ffi;
 use cast::GTK_TREE_VIEW;
 use widgets::{TreePath, TreeSelection, TreeViewColumn};
 use glib::{to_bool, to_gboolean};
-use glib_ffi;
 use libc::c_void;
 
 /// TreeView — A widget for displaying both trees and lists
@@ -362,7 +361,7 @@ impl TreeView {
         if tmp_pointer.is_null() {
             None
         } else {
-            unsafe { glib_ffi::g_object_ref(tmp_pointer as *mut c_void) };
+            unsafe { ::gobject_ffi::g_object_ref(tmp_pointer as *mut c_void) };
             Some(::TreeModel::wrap_pointer(tmp_pointer))
         }
     }

@@ -4,7 +4,7 @@
 
 use std::ptr;
 use libc::c_char;
-use glib::translate::ToGlibPtr;
+use glib::translate::*;
 use cast::GTK_DIALOG;
 use ffi;
 
@@ -202,8 +202,8 @@ pub trait DialogTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait + ::WindowT
         unsafe { ffi::gtk_dialog_set_default_response(GTK_DIALOG(self.unwrap_widget()), response_id) }
     }
 
-    fn set_response_sensitive(&self, response_id: i32, setting: ffi::gboolean) -> () {
-        unsafe { ffi::gtk_dialog_set_response_sensitive(GTK_DIALOG(self.unwrap_widget()), response_id, setting) }
+    fn set_response_sensitive(&self, response_id: i32, setting: bool) -> () {
+        unsafe { ffi::gtk_dialog_set_response_sensitive(GTK_DIALOG(self.unwrap_widget()), response_id, setting.to_glib()) }
     }
 
     fn get_response_for_widget<T: ::WidgetTrait>(&self, widget: &T) -> Result<i32, ::ResponseType> {

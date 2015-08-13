@@ -11,11 +11,12 @@ macro_rules! check_pointer(
             ::std::option::Option::None
         } else {
             unsafe {
-                ::glib::ffi::g_object_ref(::cast::$cast_fn($tmp_pointer) as *mut ::libc::c_void);
+                ::gobject_ffi::g_object_ref(
+                    ::cast::$cast_fn($tmp_pointer as *mut _) as *mut ::libc::c_void);
             }
 
             ::std::option::Option::Some($gtk_struct {
-                pointer: $tmp_pointer
+                pointer: $tmp_pointer as *mut _
             })
         }
     );
@@ -32,13 +33,13 @@ macro_rules! struct_Widget(
 macro_rules! impl_TraitObject(
     ($gtk_struct:ident, $ffi_type:ident) => (
         impl ::glib::traits::FFIGObject for $gtk_struct {
-            fn unwrap_gobject(&self) -> *mut ::glib::ffi::GObject {
-                self.pointer as *mut ::glib::ffi::GObject
+            fn unwrap_gobject(&self) -> *mut ::gobject_ffi::GObject {
+                self.pointer as *mut ::gobject_ffi::GObject
             }
 
-            fn wrap_object(object: *mut ::glib::ffi::GObject) -> $gtk_struct {
+            fn wrap_object(object: *mut ::gobject_ffi::GObject) -> $gtk_struct {
                 unsafe{
-                    ::glib::ffi::g_object_ref(object as *mut ::libc::c_void);
+                    ::gobject_ffi::g_object_ref(object as *mut ::libc::c_void);
                 }
 
                 $gtk_struct {
@@ -60,7 +61,7 @@ macro_rules! impl_TraitWidget(
 
             fn wrap_widget(widget: *mut ffi::GtkWidget) -> $gtk_struct {
                 unsafe{
-                    ::glib::ffi::g_object_ref(::ffi::cast_GtkObject(widget) as *mut ::libc::c_void);
+                    ::gobject_ffi::g_object_ref(::ffi::cast_GtkObject(widget) as *mut ::libc::c_void);
                 }
 
                 $gtk_struct {
@@ -72,14 +73,14 @@ macro_rules! impl_TraitWidget(
         impl ::WidgetTrait for $gtk_struct {}
 
         impl ::glib::traits::FFIGObject for $gtk_struct {
-            fn unwrap_gobject(&self) -> *mut ::glib::ffi::GObject {
+            fn unwrap_gobject(&self) -> *mut ::gobject_ffi::GObject {
                 use ::FFIWidget;
                 ::cast::G_OBJECT(self.unwrap_widget())
             }
 
-            fn wrap_object(object: *mut ::glib::ffi::GObject) -> $gtk_struct {
+            fn wrap_object(object: *mut ::gobject_ffi::GObject) -> $gtk_struct {
                 unsafe{
-                    ::glib::ffi::g_object_ref(object as *mut ::libc::c_void);
+                    ::gobject_ffi::g_object_ref(object as *mut ::libc::c_void);
                 }
 
                 $gtk_struct {
@@ -114,7 +115,7 @@ macro_rules! impl_drop(
         impl Drop for $gtk_struct {
             fn drop(&mut self) {
                 unsafe {
-                    ::glib::ffi::g_object_unref(self.pointer as *mut ::libc::c_void);
+                    ::gobject_ffi::g_object_unref(self.pointer as *mut ::libc::c_void);
                 }
             }
         }
@@ -122,7 +123,7 @@ macro_rules! impl_drop(
         impl Clone for $gtk_struct {
             fn clone(&self) -> $gtk_struct {
                 let pointer = unsafe {
-                    ::glib::ffi::g_object_ref(self.pointer as *mut ::libc::c_void)
+                    ::gobject_ffi::g_object_ref(self.pointer as *mut ::libc::c_void)
                 };
 
                 unsafe {

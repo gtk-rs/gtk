@@ -5,7 +5,6 @@
 use cast::{GTK_ICON_VIEW, GTK_CELL_RENDERER};
 use ffi;
 use {TreeModel, TreePath};
-use glib_ffi;
 use libc::c_void;
 
 /// GtkIconView — A widget which displays a list of icons in a grid
@@ -38,7 +37,7 @@ impl IconView {
         if tmp_pointer.is_null() {
             None
         } else {
-            unsafe { glib_ffi::g_object_ref(tmp_pointer as *mut c_void) };
+            unsafe { ::gobject_ffi::g_object_ref(tmp_pointer as *mut c_void) };
             Some(TreeModel::wrap_pointer(tmp_pointer))
         }
     }
@@ -286,7 +285,7 @@ impl IconView {
     }
 
     pub fn get_dest_item_at_pos(&self, drag_x: i32, drag_y: i32, path: &TreePath, pos: &mut ::IconViewDropPosition) {
-        unsafe { ffi::gtk_icon_view_get_dest_item_at_pos(GTK_ICON_VIEW(self.pointer), drag_x, drag_y, &mut path.unwrap_pointer(), pos) }
+        unsafe { ffi::gtk_icon_view_get_dest_item_at_pos(GTK_ICON_VIEW(self.pointer), drag_x, drag_y, &mut path.unwrap_pointer(), pos); }
     }
 }
 

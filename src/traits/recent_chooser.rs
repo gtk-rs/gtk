@@ -92,9 +92,9 @@ pub trait RecentChooserTrait: ::WidgetTrait + FFIWidget {
         }
     }
 
-    fn unselect_uri(&self, uri: &str) -> bool {
+    fn unselect_uri(&self, uri: &str) {
         unsafe {
-            to_bool(ffi::gtk_recent_chooser_unselect_uri(GTK_RECENT_CHOOSER(self.unwrap_widget()), uri.to_glib_none().0))
+            ffi::gtk_recent_chooser_unselect_uri(GTK_RECENT_CHOOSER(self.unwrap_widget()), uri.to_glib_none().0);
         }
     }
 

@@ -29,7 +29,7 @@ impl StackSwitcher {
         if tmp_pointer.is_null() {
             None
         } else {
-            Some(::FFIWidget::wrap_widget(tmp_pointer))
+            Some(::FFIWidget::wrap_widget(tmp_pointer as *mut _))
         }
     }
 }

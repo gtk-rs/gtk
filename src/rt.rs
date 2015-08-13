@@ -16,7 +16,7 @@ use glib::{to_bool, to_gboolean};
 /// initialized otherwise an Err is returned.
 pub fn init() -> Result<(), ()> {
     unsafe {
-	match to_bool(ffi::gtk_init_check(ptr::null(), ptr::null())) {
+	match to_bool(ffi::gtk_init_check(ptr::null_mut(), ptr::null_mut())) {
 	    true => Ok(()),
 	    false => Err(())
 	}

@@ -9,7 +9,8 @@ use glib::signal::connect;
 use glib::translate::*;
 use glib::{FFIGObject, ParamSpec};
 
-use ffi::{gboolean, GtkAdjustment, GtkTreeSelection, GtkTreeViewColumn};
+use glib_ffi::gboolean;
+use ffi::{GtkAdjustment, GtkTreeSelection, GtkTreeViewColumn};
 use gdk::{
     EventAny,
     EventButton,
@@ -138,7 +139,8 @@ mod widget {
     use cairo::{Context, RectangleInt};
     use traits::{FFIWidget, WidgetTrait};
     use gdk_ffi::GdkScreen;
-    use ffi::{gboolean, GtkWidget, GtkTooltip};
+    use glib_ffi::gboolean;
+    use ffi::{GtkWidget, GtkTooltip};
     use {Widget, DirectionType, StateFlags, TextDirection, Tooltip, WidgetHelpType};
     use super::Inhibit;
 
@@ -874,7 +876,8 @@ mod combobox {
     use std::mem::transmute;
     use glib::signal::connect;
     use glib::translate::*;
-    use ffi::{GtkComboBox, gboolean};
+    use glib_ffi::gboolean;
+    use ffi::GtkComboBox;
     use traits::{FFIWidget, ComboBoxTrait};
     use {ComboBox, ScrollType};
 
@@ -1058,7 +1061,8 @@ mod tree_view {
     use glib::signal::connect;
     use glib::translate::*;
     use traits::FFIWidget;
-    use ffi::{gboolean, GtkTreeIter, GtkTreePath, GtkTreeView, GtkTreeViewColumn};
+    use glib_ffi::gboolean;
+    use ffi::{GtkTreeIter, GtkTreePath, GtkTreeView, GtkTreeViewColumn};
     use {TreeIter, TreePath, TreeView, TreeViewColumn};
 
     impl super::TreeViewSignals for TreeView {
@@ -1234,7 +1238,8 @@ mod range {
     use glib::signal::connect;
     use glib::translate::*;
     use traits::{FFIWidget, RangeTrait};
-    use ffi::{gboolean, GtkRange};
+    use glib_ffi::gboolean;
+    use ffi::{GtkRange};
     use {Range, ScrollType};
     use super::Inhibit;
 

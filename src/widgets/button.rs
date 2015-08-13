@@ -7,7 +7,6 @@
 use ffi;
 use glib::translate::ToGlibPtr;
 #[cfg(gtk_3_10)]
-use IconSize;
 
 /**
 * Button — A widget that emits a signal when clicked on
@@ -44,7 +43,7 @@ impl Button {
     }
 
     #[cfg(gtk_3_10)]
-    pub fn new_from_icon_name(icon_name: &str, size: IconSize) -> Option<Button> {
+    pub fn new_from_icon_name(icon_name: &str, size: i32) -> Option<Button> {
         let tmp_pointer = unsafe {
             ffi::gtk_button_new_from_icon_name(icon_name.to_glib_none().0, size)
         };

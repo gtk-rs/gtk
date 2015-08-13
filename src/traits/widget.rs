@@ -2,15 +2,14 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-use libc::{c_char, c_int};
+use libc::c_int;
 use pango;
-use glib::translate::{from_glib_none, from_glib_full, ToGlibPtr};
+use glib::translate::*;
 use ffi;
-use glib::{to_bool, to_gboolean};
+use glib::{to_bool, to_gboolean, Type};
 use gdk;
 use gdk_ffi;
 use glib;
-use glib::ffi::GType;
 
 pub trait WidgetTrait: ::FFIWidget + ::GObjectTrait {
     fn show_all(&self) -> () {
@@ -111,8 +110,10 @@ pub trait WidgetTrait: ::FFIWidget + ::GObjectTrait {
         }
     }
 
-    fn get_ancestor(&self, widget_type: GType) -> Option<Self> {
-        let tmp = unsafe { ffi::gtk_widget_get_ancestor(self.unwrap_widget(), widget_type) };
+    fn get_ancestor(&self, widget_type: Type) -> Option<Self> {
+        let tmp = unsafe {
+            ffi::gtk_widget_get_ancestor(self.unwrap_widget(), widget_type.to_glib())
+        };
 
         if tmp.is_null() {
             None
@@ -310,7 +311,7 @@ pub trait WidgetTrait: ::FFIWidget + ::GObjectTrait {
         unsafe {
             ffi::gtk_widget_set_tooltip_markup(
                 self.unwrap_widget(),
-                markup.to_glib_none().0 as *mut c_char);
+                markup.to_glib_none().0);
         }
     }
 
@@ -325,7 +326,7 @@ pub trait WidgetTrait: ::FFIWidget + ::GObjectTrait {
         unsafe {
             ffi::gtk_widget_set_tooltip_text(
                 self.unwrap_widget(),
-                text.to_glib_none().0 as *mut c_char);
+                text.to_glib_none().0);
         }
     }
 

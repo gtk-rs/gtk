@@ -2,11 +2,10 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-use glib::translate::{from_glib_none, ToGlibPtr};
+use glib::translate::*;
 use ffi;
 use glib::{to_bool, to_gboolean};
 use cast::GTK_COMBO_BOX;
-use glib_ffi;
 use libc::c_void;
 
 pub trait ComboBoxTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait {
@@ -43,12 +42,17 @@ pub trait ComboBoxTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait {
     }
 
     fn get_active_iter(&self) -> Option<::TreeIter> {
-        let tmp_pointer = unsafe { ffi::gtk_combo_box_get_active_iter(GTK_COMBO_BOX(self.unwrap_widget())) };
-
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            Some(::TreeIter::wrap_pointer(tmp_pointer))
+         unsafe {
+            let iter = ::TreeIter::new();
+            let ok = from_glib(
+                ffi::gtk_combo_box_get_active_iter(GTK_COMBO_BOX(self.unwrap_widget()),
+                    iter.unwrap_pointer()));
+            if ok {
+                Some(iter)
+            }
+            else {
+                None
+            }
         }
     }
 
@@ -83,7 +87,7 @@ pub trait ComboBoxTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait {
         if tmp.is_null() {
             None
         } else {
-            unsafe { glib_ffi::g_object_ref(tmp as *mut c_void) };
+            unsafe { ::gobject_ffi::g_object_ref(tmp as *mut c_void) };
             Some(::TreeModel::wrap_pointer(tmp))
         }
     }

@@ -88,10 +88,10 @@ pub trait LabelTrait: ::WidgetTrait {
     }
 
     fn get_layout_offsets(&self) -> (i32, i32) {
-        let x = 0;
-        let y = 0;
+        let mut x = 0;
+        let mut y = 0;
         unsafe {
-            ffi::gtk_label_get_layout_offsets(GTK_LABEL(self.unwrap_widget()), &x, &y);
+            ffi::gtk_label_get_layout_offsets(GTK_LABEL(self.unwrap_widget()), &mut x, &mut y);
         }
         (x, y)
     }
@@ -185,10 +185,10 @@ pub trait LabelTrait: ::WidgetTrait {
     }
 
     fn get_selection_bounds(&self) -> (i32, i32) {
-        let x = 0;
-        let y = 0;
+        let mut x = 0;
+        let mut y = 0;
         unsafe {
-            ffi::gtk_label_get_selection_bounds(GTK_LABEL(self.unwrap_widget()), &x, &y);
+            ffi::gtk_label_get_selection_bounds(GTK_LABEL(self.unwrap_widget()), &mut x, &mut y);
         }
         (x, y)
     }
