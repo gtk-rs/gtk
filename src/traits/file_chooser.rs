@@ -65,6 +65,7 @@ pub trait FileChooserTrait: ::WidgetTrait {
         }
     }
 
+    #[cfg(gtk_3_10)]
     fn get_current_name(&self) -> Option<String> {
         unsafe {
             from_glib_none(

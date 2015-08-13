@@ -54,6 +54,7 @@ pub trait WidgetTrait: ::FFIWidget + ::GObjectTrait {
         unsafe { ffi::gtk_widget_queue_resize_no_redraw(self.unwrap_widget()) }
     }
 
+    #[cfg(gtk_3_10)]
     fn get_scale_factor(&self) -> i32 {
         unsafe { ffi::gtk_widget_get_scale_factor(self.unwrap_widget()) }
     }
@@ -342,6 +343,7 @@ pub trait WidgetTrait: ::FFIWidget + ::GObjectTrait {
         unsafe { ffi::gtk_widget_trigger_tooltip_query(self.unwrap_widget()) }
     }
 
+    #[cfg(gtk_3_10)]
     fn get_allocated_baseline(&self) -> i32 {
         unsafe { ffi::gtk_widget_get_allocated_baseline(self.unwrap_widget()) }
     }
@@ -396,6 +398,7 @@ pub trait WidgetTrait: ::FFIWidget + ::GObjectTrait {
         unsafe { to_bool(ffi::gtk_widget_get_visible(self.unwrap_widget())) }
     }
 
+    #[cfg(gtk_3_8)]
     fn is_visible(&self) -> bool {
         unsafe { to_bool(ffi::gtk_widget_is_visible(self.unwrap_widget())) }
     }
@@ -476,10 +479,12 @@ pub trait WidgetTrait: ::FFIWidget + ::GObjectTrait {
         unsafe { ffi::gtk_widget_get_modifier_mask(self.unwrap_widget(), intent) }
     }
 
+    #[cfg(gtk_3_8)]
     fn set_opacity(&self, opacity: f64) {
         unsafe { ffi::gtk_widget_set_opacity(self.unwrap_widget(), opacity) }
     }
 
+    #[cfg(gtk_3_8)]
     fn get_opacity(&self) -> f64 {
         unsafe { ffi::gtk_widget_get_opacity(self.unwrap_widget()) }
     }
@@ -556,6 +561,7 @@ pub trait WidgetTrait: ::FFIWidget + ::GObjectTrait {
         (minimum_width, natural_width)
     }
 
+    #[cfg(gtk_3_10)]
     fn get_preferred_height_and_baseline_for_width(&self, width: i32) -> (i32, i32, i32, i32) {
         let mut minimum_height = 0i32;
         let mut natural_height = 0i32;
@@ -584,6 +590,7 @@ pub trait WidgetTrait: ::FFIWidget + ::GObjectTrait {
         unsafe { ffi::gtk_widget_get_valign(self.unwrap_widget()) }
     }
 
+    #[cfg(gtk_3_10)]
     fn get_valign_with_baseline(&self) -> ::Align {
         unsafe { ffi::gtk_widget_get_valign_with_baseline(self.unwrap_widget()) }
     }
@@ -592,18 +599,22 @@ pub trait WidgetTrait: ::FFIWidget + ::GObjectTrait {
         unsafe { ffi::gtk_widget_set_valign(self.unwrap_widget(), align) }
     }
 
+    #[cfg(gtk_3_12)]
     fn get_margin_start(&self) -> i32 {
         unsafe { ffi::gtk_widget_get_margin_start(self.unwrap_widget()) }
     }
 
+    #[cfg(gtk_3_12)]
     fn set_margin_start(&self, margin: i32) {
         unsafe { ffi::gtk_widget_set_margin_start(self.unwrap_widget(), margin) }
     }
 
+    #[cfg(gtk_3_12)]
     fn get_margin_end(&self) -> i32 {
         unsafe { ffi::gtk_widget_get_margin_end(self.unwrap_widget()) }
     }
 
+    #[cfg(gtk_3_12)]
     fn set_margin_end(&self, margin: i32) {
         unsafe { ffi::gtk_widget_set_margin_end(self.unwrap_widget(), margin) }
     }
@@ -654,6 +665,7 @@ pub trait WidgetTrait: ::FFIWidget + ::GObjectTrait {
         unsafe { to_bool(ffi::gtk_widget_compute_expand(self.unwrap_widget(), orientation)) }
     }
 
+    #[cfg(gtk_3_10)]
     fn init_template(&self) {
         unsafe { ffi::gtk_widget_init_template(self.unwrap_widget()) }
     }
