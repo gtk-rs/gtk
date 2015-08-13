@@ -6,7 +6,6 @@
 
 use ffi;
 use glib::translate::ToGlibPtr;
-#[cfg(gtk_3_10)]
 
 /**
 * Button — A widget that emits a signal when clicked on
