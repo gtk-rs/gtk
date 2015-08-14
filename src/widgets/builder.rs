@@ -5,7 +5,7 @@
 #![cfg_attr(not(gtk_3_10), allow(unused_imports))]
 
 use ffi::{self, GtkBuilder};
-use libc::{c_char, c_long};
+use libc::{c_char, ssize_t};
 use traits::GObjectTrait;
 use glib::translate::ToGlibPtr;
 
@@ -62,7 +62,7 @@ impl Builder {
         let tmp = unsafe {
             // Don't need a null-terminated string here
             ffi::gtk_builder_new_from_string(string.as_ptr() as *const c_char,
-                                             string.len() as c_long)
+                                             string.len() as ssize_t)
         };
 
         if tmp.is_null() {
