@@ -4,7 +4,7 @@
 
 #![cfg_attr(not(gtk_3_10), allow(unused_imports))]
 
-use libc::{c_char, c_long};
+use libc::{c_char, ssize_t};
 
 use glib::{self, types};
 use glib::translate::*;
@@ -46,7 +46,7 @@ impl Builder {
             // Don't need a null-terminated string here
             from_glib_full(
                 ffi::gtk_builder_new_from_string(string.as_ptr() as *const c_char,
-                    string.len() as c_long))
+                    string.len() as ssize_t))
         }
     }
 
