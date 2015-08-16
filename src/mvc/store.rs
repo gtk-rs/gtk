@@ -3,7 +3,7 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 use std::ptr;
-use libc::c_int;
+use libc::{c_char, c_int};
 
 use glib::translate::*;
 use glib::types::{StaticType, Type};
@@ -35,8 +35,9 @@ impl ListStore {
 
     pub fn set_string(&self, iter: &TreeIter, column: i32, text: &str) {
         unsafe {
+            let text: Stash<*const c_char, _> = text.to_glib_none();
             ffi::gtk_list_store_set(self.to_glib_none().0, iter.unwrap_pointer(), column,
-                text.to_glib_none().0, -1)
+                text.0, -1)
         }
     }
 
@@ -149,8 +150,9 @@ impl TreeStore {
 
     pub fn set_string(&self, iter: &TreeIter, column: i32, text: &str) {
         unsafe {
+            let text: Stash<*const c_char, _> = text.to_glib_none();
             ffi::gtk_tree_store_set(self.to_glib_none().0, iter.unwrap_pointer(), column,
-                text.to_glib_none().0, -1)
+                text.0, -1)
         }
     }
 

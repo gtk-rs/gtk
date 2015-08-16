@@ -6,7 +6,7 @@ use glib::translate::ToGlibPtr;
 use ffi;
 use glib::{to_bool, to_gboolean};
 use cast::GTK_TOOLITEM;
-use {IconSize, Orientation, ReliefStyle, ToolbarStyle};
+use {Orientation, ReliefStyle, ToolbarStyle};
 
 pub trait ToolItemTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait {
     fn set_homogeneous(&self, homogeneous: bool) -> () {
@@ -70,7 +70,7 @@ pub trait ToolItemTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait {
         }
     }
 
-    fn get_icon_size(&self) -> IconSize {
+    fn get_icon_size(&self) -> i32 {
         unsafe {
             ffi::gtk_tool_item_get_icon_size(GTK_TOOLITEM(self.unwrap_widget()))
         }
@@ -119,7 +119,7 @@ pub trait ToolItemTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait {
     }
 
     fn get_text_size_group(&self) -> Option<::SizeGroup> {
-        let tmp_pointer = unsafe { ffi::gtk_tool_item_get_text_size_group(GTK_TOOLITEM(self.unwrap_widget()) as *const ffi::GtkToolItem) };
+        let tmp_pointer = unsafe { ffi::gtk_tool_item_get_text_size_group(GTK_TOOLITEM(self.unwrap_widget())) };
 
         if tmp_pointer.is_null() {
             None

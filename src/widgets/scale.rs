@@ -96,11 +96,11 @@ impl Scale {
     /// draw the `PangoLayout` representing the text in the scale.
     /// If the `draw-value` property is `FALSE`, the return values are undefined.
     pub fn get_layout_offsets(&self) -> (i32, i32) {
-        let x = 0;
-        let y = 0;
+        let mut x = 0;
+        let mut y = 0;
 
         unsafe {
-            ffi::gtk_scale_get_layout_offsets(self.to_glib_none().0, &x, &y)
+            ffi::gtk_scale_get_layout_offsets(self.to_glib_none().0, &mut x, &mut y)
         }
         (x, y)
     }

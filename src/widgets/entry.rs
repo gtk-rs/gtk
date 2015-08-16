@@ -84,19 +84,6 @@ impl EntryBuffer {
             ffi::gtk_entry_buffer_delete_text(self.to_glib_none().0, position, n_chars as i32)
         }
     }
-
-    pub fn emit_deleted_test(&self, position: u32, n_chars: u32) {
-        unsafe {
-            ffi::gtk_entry_buffer_emit_deleted_text(self.to_glib_none().0, position, n_chars)
-        }
-    }
-
-    pub fn emit_inserted_text(&self, position: u32, text: &str) {
-        unsafe {
-            ffi::gtk_entry_buffer_emit_inserted_text(self.to_glib_none().0, position,
-                                                     text.to_glib_none().0, -1);
-        }
-    }
 }
 
 impl types::StaticType for EntryBuffer {

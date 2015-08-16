@@ -7,7 +7,7 @@
 use std::mem;
 use std::ptr;
 use std::slice;
-use libc::{c_void, c_int};
+use libc::{c_int, size_t};
 
 use glib::translate::*;
 use glib::types::{StaticType, Type};
@@ -119,7 +119,7 @@ impl TreePath {
         assert!(!indices.is_empty());
         unsafe {
             TreePath { pointer: ffi::gtk_tree_path_new_from_indicesv(indices.as_ptr() as *mut c_int,
-                                                                     indices.len() as ffi::gsize)
+                                                                     indices.len() as size_t)
             }
         }
     }
@@ -166,7 +166,7 @@ impl TreePath {
     }
 
     pub fn prev(&self) {
-        unsafe { ffi::gtk_tree_path_prev(self.pointer) }
+        unsafe { ffi::gtk_tree_path_prev(self.pointer); }
     }
 
     pub fn path_up(&self) -> bool {
@@ -243,9 +243,8 @@ pub trait TreeModelExt {
     fn rows_reordered(&self, path: &TreePath, iter: Option<&TreeIter>, new_order: &mut [i32]);
     fn ref_node(&self, iter: &TreeIter);
     fn unref_node(&self, iter: &TreeIter);
-    fn foreach<T>(&self,
-                  func: fn(&mut TreeModel, &mut TreePath, &mut TreeIter, data: &mut T)-> bool,
-                  user_data: &mut T);
+    // FIXME
+    //fn foreach<T>(&self,
 }
 
 impl<O: Upcast<TreeModel>> TreeModelExt for O {
@@ -422,28 +421,5 @@ impl<O: Upcast<TreeModel>> TreeModelExt for O {
         unsafe {
             ffi::gtk_tree_model_unref_node(self.upcast().to_glib_none().0, iter.unwrap_pointer());
         }
-    }
-
-    fn foreach<T>(&self,
-                  func: fn(&mut TreeModel, &mut TreePath, &mut TreeIter, data: &mut T) -> bool,
-                  user_data: &mut T) {
-        let t = &(func, user_data);
-        let ca = t as *const (fn(&mut TreeModel, &mut TreePath, &mut TreeIter, data: &mut T) -> bool, &mut T);
-
-        unsafe {
-            ffi::gtk_tree_model_foreach(self.upcast().to_glib_none().0, my_fn as ffi::gpointer,
-                ca as ffi::gpointer)
-        }
-    }
-}
-
-fn my_fn(model: *mut ffi::GtkTreeModel,
-         path: *mut ffi::GtkTreePath,
-         iter: *mut ffi::GtkTreeIter,
-         data: &mut (fn(&mut TreeModel, &mut TreePath, &mut TreeIter, data: *mut c_void) -> bool,
-         &mut c_void)) -> ffi::gboolean {
-    unsafe {
-        data.0(&mut from_glib_none(model), &mut TreePath::wrap_pointer(path),
-            &mut TreeIter::wrap_pointer(iter), data.1).to_glib()
     }
 }

@@ -257,6 +257,7 @@ impl<O: Upcast<Dialog>> DialogExt for O {
             ffi::gtk_dialog_set_response_sensitive(
                 self.upcast().to_glib_none().0, response_id, setting.to_glib())
         }
+
     }
 
     fn get_response_for_widget<T: Upcast<Widget>>(&self, widget: &T) -> Result<i32, ResponseType> {

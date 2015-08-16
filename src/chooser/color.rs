@@ -60,6 +60,6 @@ impl<O: Upcast<ColorChooser>> ColorChooserExt for O {
     fn add_palette(&self, orientation: Orientation, colors_per_line: i32, colors: Vec<GdkRGBA>) {
         unsafe {
             ffi::gtk_color_chooser_add_palette(self.upcast().to_glib_none().0, orientation,
-                colors_per_line, colors.len() as c_int, colors.as_ptr()) }
+                colors_per_line, colors.len() as c_int, colors.as_ptr() as *mut GdkRGBA) }
     }
 }

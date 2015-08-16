@@ -34,7 +34,7 @@ impl Image {
         }
     }
 
-    pub fn new_from_icon_name(icon_name: &str, size: ::IconSize) -> Image {
+    pub fn new_from_icon_name(icon_name: &str, size: i32) -> Image {
         unsafe {
             Widget::from_glib_none(
                 ffi::gtk_image_new_from_icon_name(icon_name.to_glib_none().0, size))
@@ -50,7 +50,7 @@ impl Image {
         unsafe { ffi::gtk_image_set_from_pixbuf(self.to_glib_none().0, pixbuf.to_glib_none().0); }
     }
 
-    pub fn set_from_icon_name(&self, icon_name: &str, size: ::IconSize) {
+    pub fn set_from_icon_name(&self, icon_name: &str, size: i32) {
         unsafe {
             ffi::gtk_image_set_from_icon_name(self.to_glib_none().0,
                                               icon_name.to_glib_none().0, size);

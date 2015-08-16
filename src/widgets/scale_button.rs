@@ -12,7 +12,6 @@ use ffi;
 use object::{Object, Downcast, Upcast};
 use super::widget::Widget;
 use Adjustment;
-use IconSize;
 
 /// ScaleButton — A button which pops up a scale
 pub type ScaleButton = Object<ffi::GtkScaleButton>;
@@ -30,10 +29,10 @@ impl ScaleButton {
     /// Creates a GtkScaleButton, with a range between `min` and `max`,
     /// with a stepping of `step`.
     // FIXME: icons -> last parameter
-    pub fn new(size: IconSize, min: f64, max: f64, step: f64) -> ScaleButton {
+    pub fn new(size: i32, min: f64, max: f64, step: f64) -> ScaleButton {
         unsafe {
             Widget::from_glib_none(
-                ffi::gtk_scale_button_new(size, min, max, step, ptr::null()))
+                ffi::gtk_scale_button_new(size, min, max, step, ptr::null_mut()))
                 .downcast_unchecked()
         }
     }

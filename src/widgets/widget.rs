@@ -2,8 +2,6 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-use libc::c_char;
-
 use glib::translate::*;
 use glib::types::{self, Type};
 use gdk;
@@ -510,7 +508,7 @@ impl<O: Upcast<Widget>> WidgetExt for O {
         unsafe {
             ffi::gtk_widget_set_tooltip_markup(
                 self.upcast().to_glib_none().0,
-                markup.to_glib_none().0 as *mut c_char);
+                markup.to_glib_none().0);
         }
     }
 
@@ -525,7 +523,7 @@ impl<O: Upcast<Widget>> WidgetExt for O {
         unsafe {
             ffi::gtk_widget_set_tooltip_text(
                 self.upcast().to_glib_none().0,
-                text.to_glib_none().0 as *mut c_char);
+                text.to_glib_none().0);
         }
     }
 

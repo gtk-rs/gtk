@@ -31,7 +31,7 @@ pub struct RecentData {
 impl <'a> ToGlibPtr<'a, *mut ffi::GtkRecentData> for &'a RecentData {
     type Storage = (Box<ffi::GtkRecentData>,
                     [Stash<'a, *const c_char, String>; 5],
-                    IterStash<'a, *mut *const c_char, Vec<String>>);
+                    Stash<'a, *mut *const c_char, &'a [String]>);
 
     fn to_glib_none(&self)
         -> Stash<'a, *mut ffi::GtkRecentData, &'a RecentData> {
@@ -40,7 +40,7 @@ impl <'a> ToGlibPtr<'a, *mut ffi::GtkRecentData> for &'a RecentData {
         let mime_type = self.mime_type.to_glib_none();
         let app_name = self.app_name.to_glib_none();
         let app_exec = self.app_exec.to_glib_none();
-        let groups = self.groups.to_glib_none();
+        let groups = (&*self.groups).to_glib_none();
 
         let mut data = Box::new(ffi::GtkRecentData {
             display_name: display_name.0 as *mut c_char,

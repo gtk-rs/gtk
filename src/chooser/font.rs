@@ -2,8 +2,6 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-use libc::c_char;
-
 use glib::translate::*;
 use glib::types;
 use ffi;
@@ -45,7 +43,7 @@ impl<O: Upcast<FontChooser>> FontChooserExt for O {
         unsafe {
             ffi::gtk_font_chooser_set_font(
                 self.upcast().to_glib_none().0,
-                font_name.to_glib_none().0 as *mut c_char)
+                font_name.to_glib_none().0)
         }
     }
 

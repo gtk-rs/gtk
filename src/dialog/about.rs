@@ -2,8 +2,6 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-use std::iter::IntoIterator;
-
 use glib::translate::*;
 use glib::types;
 use ffi;
@@ -132,8 +130,7 @@ impl AboutDialog {
         }
     }
 
-    pub fn set_authors<'a, S, I: ?Sized>(&self, authors: &'a I)
-    where S: AsRef<str>, &'a I: IntoIterator<Item = &'a S> {
+    pub fn set_authors(&self, authors: &[&str]) {
         unsafe {
             ffi::gtk_about_dialog_set_authors(
                 self.to_glib_none().0,
@@ -148,8 +145,7 @@ impl AboutDialog {
         }
     }
 
-    pub fn set_artists<'a, S, I: ?Sized>(&self, artists: &'a I)
-    where S: AsRef<str>, &'a I: IntoIterator<Item = &'a S> {
+    pub fn set_artists(&self, artists: &[&str]) {
         unsafe {
             ffi::gtk_about_dialog_set_artists(
                 self.to_glib_none().0,
@@ -164,8 +160,7 @@ impl AboutDialog {
         }
     }
 
-    pub fn set_documenters<'a, S, I: ?Sized>(&self, documenters: &'a I)
-    where S: AsRef<str>, &'a I: IntoIterator<Item = &'a S> {
+    pub fn set_documenters(&self, documenters: &[&str]) {
         unsafe {
             ffi::gtk_about_dialog_set_documenters(
                 self.to_glib_none().0,
@@ -217,8 +212,7 @@ impl AboutDialog {
         };
     }
 
-    pub fn add_credit_section<'a, S, I: ?Sized>(&self, section_name: &str, people: &'a I)
-    where S: AsRef<str>, &'a I: IntoIterator<Item = &'a S> {
+    pub fn add_credit_section(&self, section_name: &str, people: &[&str]) {
         unsafe {
             ffi::gtk_about_dialog_add_credit_section(
                 self.to_glib_none().0,

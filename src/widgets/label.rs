@@ -142,9 +142,11 @@ impl<O: Upcast<Label>> LabelExt for O {
     }
 
     fn get_layout_offsets(&self) -> (i32, i32) {
-        let x = 0;
-        let y = 0;
-        unsafe { ffi::gtk_label_get_layout_offsets(self.upcast().to_glib_none().0, &x, &y); }
+        let mut x = 0;
+        let mut y = 0;
+        unsafe {
+            ffi::gtk_label_get_layout_offsets(self.upcast().to_glib_none().0, &mut x, &mut y);
+        }
         (x, y)
     }
 
@@ -247,9 +249,11 @@ impl<O: Upcast<Label>> LabelExt for O {
     }
 
     fn get_selection_bounds(&self) -> (i32, i32) {
-        let x = 0;
-        let y = 0;
-        unsafe { ffi::gtk_label_get_selection_bounds(self.upcast().to_glib_none().0, &x, &y); }
+        let mut x = 0;
+        let mut y = 0;
+        unsafe {
+            ffi::gtk_label_get_selection_bounds(self.upcast().to_glib_none().0, &mut x, &mut y);
+        }
         (x, y)
     }
 

@@ -38,16 +38,16 @@ impl<O: Upcast<Misc>> MiscExt for O {
     }
 
     fn get_alignment(&self) -> (f32, f32) {
-        let x = 0.;
-        let y = 0.;
-        unsafe { ffi::gtk_misc_get_alignment(self.upcast().to_glib_none().0, &x, &y); }
+        let mut x = 0.;
+        let mut y = 0.;
+        unsafe { ffi::gtk_misc_get_alignment(self.upcast().to_glib_none().0, &mut x, &mut y); }
         (x, y)
     }
 
     fn get_padding(&self) -> (i32, i32) {
-        let x = 0;
-        let y = 0;
-        unsafe { ffi::gtk_misc_get_padding(self.upcast().to_glib_none().0, &x, &y); }
+        let mut x = 0;
+        let mut y = 0;
+        unsafe { ffi::gtk_misc_get_padding(self.upcast().to_glib_none().0, &mut x, &mut y); }
         (x, y)
     }
 }
