@@ -16,15 +16,16 @@ __gtk__ expects __GTK+__, __GLib__ and __Cairo__ development files to be install
 ### Fedora
 
 ```Shell
+> sudo dnf install gtk3-devel glib2-devel
+
+# Fedora 21 and earlier
 > sudo yum install gtk3-devel glib2-devel
 ```
 
 ### OS X
 
-Install [XQuartz](http://xquartz.macosforge.org/landing/), then:
 ```Shell
-> brew install gtk+3 --without-x11
-> export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/opt/X11/lib/pkgconfig
+> brew install gtk+3
 ```
 
 ### Windows
@@ -75,10 +76,6 @@ Your local copy can be accessed using your browser at
 
 `file:///{gtk_location}/target/doc/gtk/index.html`
 
-You can also access a daily build of the docs via the internet:
-
-http://rust-ci.org/jeremyletang/rgtk/doc/rgtk/
-
 ## Including gtk as a cargo dependency
 
 To include gtk as a cargo dependency you have to add it to your Cargo.toml and specify the GTK version you want using Cargo features:
@@ -105,7 +102,7 @@ To implement __GTK+__ inheritance in rust, we implemented gtk superclasses as tr
 For your convenience the various traits are reexported in the `gtk::*` namespace as `Gtk{trait_name}Trait` so you can just use...
 
 ```Rust
-extern mod gtk;
+extern crate gtk;
 
 use gtk::*;
 ```

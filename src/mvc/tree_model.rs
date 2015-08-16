@@ -2,7 +2,7 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-#![cfg_attr(not(feature = "gtk_3_12"), allow(unused_imports))]
+#![cfg_attr(not(gtk_3_12), allow(unused_imports))]
 
 use std::mem;
 use std::ptr;
@@ -114,7 +114,7 @@ impl TreePath {
         }
     }
 
-    #[cfg(feature = "gtk_3_12")]
+    #[cfg(gtk_3_12)]
     pub fn new_from_indices(indices: &[i32]) -> TreePath {
         assert!(!indices.is_empty());
         unsafe {

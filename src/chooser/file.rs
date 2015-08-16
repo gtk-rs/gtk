@@ -91,7 +91,7 @@ pub trait FileChooserExt {
     fn set_create_folders(&self, create_folders: bool);
     fn get_create_folders(&self) -> bool;
     fn set_current_name(&self, name: &str);
-    #[cfg(feature = "gtk_3_10")]
+    #[cfg(gtk_3_10)]
     fn get_current_name(&self) -> Option<String>;
     fn set_filename(&self, filename: &str);
     fn get_filename(&self) -> Option<String>;
@@ -208,7 +208,7 @@ impl<O: Upcast<FileChooser>> FileChooserExt for O {
         }
     }
 
-    #[cfg(feature = "gtk_3_10")]
+    #[cfg(gtk_3_10)]
     fn get_current_name(&self) -> Option<String> {
         unsafe {
             from_glib_full(

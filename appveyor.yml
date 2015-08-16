@@ -55,7 +55,7 @@ cache:
 build_script:
   - rustc -V
   - mkdir .cargo
-  - echo paths = ["glib", "glib/glib-sys"] > .cargo\config
+  - echo paths = ["glib"] > .cargo\config
   - git clone -q --depth 50 -b object_reform https://github.com/gkoz/rust-gnome-glib glib
   - cargo build --features "%FEATURES%"
 

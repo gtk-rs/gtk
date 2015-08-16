@@ -199,7 +199,7 @@ pub use mvc::tree_selection::TreeSelection;
 pub use mvc::tree_view::TreeView;
 pub use mvc::tree_view_column::TreeViewColumn;
 pub use status_icon::StatusIcon;
-#[cfg(feature = "gtk_3_12")]
+#[cfg(gtk_3_12)]
 pub use widgets::action_bar::ActionBar;
 pub use widgets::actionable::Actionable;
 pub use widgets::alignment::Alignment;
@@ -217,7 +217,7 @@ pub use widgets::editable::Editable;
 pub use widgets::entry::Entry;
 pub use widgets::entry::EntryBuffer;
 pub use widgets::fixed::Fixed;
-#[cfg(feature = "gtk_3_12")]
+#[cfg(gtk_3_12)]
 pub use widgets::flow_box::{
     FlowBox,
     FlowBoxChild,
@@ -228,13 +228,13 @@ pub use widgets::frame::{
     Frame,
 };
 pub use widgets::grid::Grid;
-#[cfg(feature = "gtk_3_10")]
+#[cfg(gtk_3_10)]
 pub use widgets::header_bar::HeaderBar;
 pub use widgets::icon_view::IconView;
 pub use widgets::image::Image;
 pub use widgets::label::Label;
 pub use widgets::layout::Layout;
-#[cfg(feature = "gtk_3_6")]
+#[cfg(gtk_3_6)]
 pub use widgets::level_bar::LevelBar;
 pub use widgets::link_button::LinkButton;
 pub use widgets::lock_button::LockButton;
@@ -254,7 +254,7 @@ pub use widgets::separator::Separator;
 pub use widgets::spinner::Spinner;
 #[cfg(target_os = "linux")]
 pub use widgets::socket::Socket;
-#[cfg(feature = "gtk_3_10")]
+#[cfg(gtk_3_10)]
 pub use widgets::stack::{
     Stack,
     StackSwitcher,
@@ -399,14 +399,14 @@ pub use self::widgets::{
 #[cfg(target_os = "linux")]
 pub use self::widgets::{Socket};
 
-#[cfg(feature = "gtk_3_6")]
+#[cfg(gtk_3_6)]
 /// GTK Widgets for versions since GTK 3.6
 pub use self::widgets::{
     MenuButton,
     LevelBar,
 };
 
-#[cfg(feature = "gtk_3_10")]
+#[cfg(gtk_3_10)]
 /// GTK Widgets for versions since GTK 3.10
 pub use self::widgets::{
     SearchEntry,
@@ -420,7 +420,7 @@ pub use self::widgets::{
     PlacesSidebar
 };
 
-#[cfg(feature = "gtk_3_12")]
+#[cfg(gtk_3_12)]
 /// GTK Widgets for versions since GTK 3.12
 pub use self::widgets::{
     FlowBox,

@@ -4,7 +4,7 @@
 
 //! A bar that can used level indicator
 
-//#![cfg_attr(not(feature = "gtk_3_8"), allow(unused_imports))]
+//#![cfg_attr(not(gtk_3_8), allow(unused_imports))]
 
 use glib::translate::*;
 use glib::types;
@@ -62,12 +62,12 @@ impl LevelBar {
         unsafe { ffi::gtk_level_bar_get_max_value(self.to_glib_none().0) }
     }
 
-    #[cfg(feature = "gtk_3_8")]
+    #[cfg(gtk_3_8)]
     pub fn set_inverted(&self, inverted: bool) {
         unsafe { ffi::gtk_level_bar_set_inverted(self.to_glib_none().0, inverted.to_glib()); }
     }
 
-    #[cfg(feature = "gtk_3_8")]
+    #[cfg(gtk_3_8)]
     pub fn get_inverted(&self) -> bool {
         unsafe { from_glib(ffi::gtk_level_bar_get_inverted(self.to_glib_none().0)) }
     }

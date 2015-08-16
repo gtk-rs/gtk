@@ -46,7 +46,7 @@ pub trait WindowExt {
     fn get_title(&self) -> Option<String>;
     fn set_default_size(&self, width: i32, height: i32);
     fn set_window_position(&self, window_position: WindowPosition);
-    #[cfg(feature = "gtk_3_10")]
+    #[cfg(gtk_3_10)]
     fn set_titlebar<T: Upcast<Widget>>(&self, titlebar: &T);
 }
 
@@ -93,7 +93,7 @@ impl<O: Upcast<Window>> WindowExt for O {
         }
     }
 
-    #[cfg(feature = "gtk_3_10")]
+    #[cfg(gtk_3_10)]
     fn set_titlebar<T: Upcast<Widget>>(&self, titlebar: &T) {
         unsafe {
             ffi::gtk_window_set_titlebar(self.upcast().to_glib_none().0,

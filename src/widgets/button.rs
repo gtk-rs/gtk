@@ -9,8 +9,6 @@ use ffi;
 use object::{Object, Downcast, Upcast};
 use super::widget::Widget;
 use {PositionType, ReliefStyle};
-#[cfg(feature = "gtk_3_10")]
-use IconSize;
 
 pub type Button = Object<ffi::GtkButton>;
 
@@ -33,8 +31,8 @@ impl Button {
         }
     }
 
-    #[cfg(feature = "gtk_3_10")]
-    pub fn new_from_icon_name(icon_name: &str, size: IconSize) -> Button {
+    #[cfg(gtk_3_10)]
+    pub fn new_from_icon_name(icon_name: &str, size: i32) -> Button {
         unsafe {
             Widget::from_glib_none(
                 ffi::gtk_button_new_from_icon_name(icon_name.to_glib_none().0, size))
@@ -209,7 +207,7 @@ impl<O: Upcast<Button>> ButtonExt for O {
         }
     }
 
-    #[cfg(feature = "gtk_3_6")]
+    #[cfg(gtk_3_6)]
     fn set_always_show_image(&self, always_show: bool) {
         unsafe {
             ffi::gtk_button_set_always_show_image(
@@ -217,7 +215,7 @@ impl<O: Upcast<Button>> ButtonExt for O {
         }
     }
 
-    #[cfg(feature = "gtk_3_6")]
+    #[cfg(gtk_3_6)]
     fn get_always_show_image(&self) -> bool {
         unsafe { from_glib(ffi::gtk_button_get_always_show_image(self.upcast().to_glib_none().0)) }
     }

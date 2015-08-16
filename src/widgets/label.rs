@@ -52,9 +52,9 @@ pub trait LabelExt {
     fn set_max_width_chars(&self, n_chars: i32);
     fn set_line_wrap(&self, wrap: bool);
     fn get_line_wrap(&self) -> bool;
-    #[cfg(feature = "gtk_3_10")]
+    #[cfg(gtk_3_10)]
     fn set_lines(&self, lines: i32);
-    #[cfg(feature = "gtk_3_10")]
+    #[cfg(gtk_3_10)]
     fn get_lines(&self) -> i32;
     fn get_layout_offsets(&self) -> (i32, i32);
     fn get_mnemonic_keyval(&self) -> u32;
@@ -131,12 +131,12 @@ impl<O: Upcast<Label>> LabelExt for O {
         unsafe { from_glib(ffi::gtk_label_get_line_wrap(self.upcast().to_glib_none().0)) }
     }
 
-    #[cfg(feature = "gtk_3_10")]
+    #[cfg(gtk_3_10)]
     fn set_lines(&self, lines: i32) {
         unsafe { ffi::gtk_label_set_lines(self.upcast().to_glib_none().0, lines); }
     }
 
-    #[cfg(feature = "gtk_3_10")]
+    #[cfg(gtk_3_10)]
     fn get_lines(&self) -> i32 {
         unsafe { ffi::gtk_label_get_lines(self.upcast().to_glib_none().0) }
     }

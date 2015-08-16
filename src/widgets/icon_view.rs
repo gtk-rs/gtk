@@ -213,14 +213,14 @@ impl IconView {
         unsafe { ffi::gtk_icon_view_get_item_padding(self.to_glib_none().0) }
     }
 
-    #[cfg(feature = "gtk_3_8")]
+    #[cfg(gtk_3_8)]
     pub fn set_activate_on_single_click(&self, single: bool) {
         unsafe {
             ffi::gtk_icon_view_set_activate_on_single_click(self.to_glib_none().0, single.to_glib())
         }
     }
 
-    #[cfg(feature = "gtk_3_8")]
+    #[cfg(gtk_3_8)]
     pub fn get_activate_on_single_click(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_icon_view_get_activate_on_single_click(self.to_glib_none().0))

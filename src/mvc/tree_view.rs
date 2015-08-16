@@ -67,12 +67,12 @@ impl TreeView {
         unsafe { ffi::gtk_tree_view_set_rules_hint(self.to_glib_none().0, setting.to_glib()); }
     }
 
-    #[cfg(feature = "gtk_3_8")]
+    #[cfg(gtk_3_8)]
     pub fn get_activate_on_single_click(&self) -> bool {
         unsafe { from_glib(ffi::gtk_tree_view_get_activate_on_single_click(self.to_glib_none().0)) }
     }
 
-    #[cfg(feature = "gtk_3_8")]
+    #[cfg(gtk_3_8)]
     pub fn set_activate_on_single_click(&self, setting: bool) {
         unsafe {
             ffi::gtk_tree_view_set_activate_on_single_click(self.to_glib_none().0,

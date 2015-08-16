@@ -21,7 +21,7 @@ use ffi;
 use object::{Object, Downcast, Upcast};
 use widgets;
 use widgets::button::Button;
-#[cfg(feature = "gtk_3_12")]
+#[cfg(gtk_3_12)]
 use widgets::header_bar::HeaderBar;
 use widgets::widget::Widget;
 use window;
@@ -211,7 +211,7 @@ pub trait DialogExt {
     fn get_widget_for_response(&self, response_id: i32) -> Option<Widget>;
     fn get_action_area(&self) -> Widget;
     fn get_content_area(&self) -> widgets::box_::Box;
-    #[cfg(feature = "gtk_3_12")]
+    #[cfg(gtk_3_12)]
     fn get_header_bar(&self) -> Option<HeaderBar>;
 }
 
@@ -291,7 +291,7 @@ impl<O: Upcast<Dialog>> DialogExt for O {
         }
     }
 
-    #[cfg(feature = "gtk_3_12")]
+    #[cfg(gtk_3_12)]
     fn get_header_bar(&self) -> Option<HeaderBar> {
         unsafe {
             Option::<Widget>::from_glib_none(
