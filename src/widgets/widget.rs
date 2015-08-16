@@ -41,6 +41,7 @@ pub trait WidgetExt {
     fn queue_draw(&self);
     fn queue_resize(&self);
     fn queue_resize_no_redraw(&self);
+    #[cfg(gtk_3_10)]
     fn get_scale_factor(&self) -> i32;
     fn activate(&self) -> bool;
     fn reparent<T: Upcast<Widget>>(&self, new_parent: &T);
@@ -97,6 +98,7 @@ pub trait WidgetExt {
     fn get_has_tooltip(&self) -> bool;
     fn set_has_tooltip(&self, has_tooltip: bool);
     fn trigger_tooltip_query(&self);
+    #[cfg(gtk_3_10)]
     fn get_allocated_baseline(&self) -> i32;
     fn get_app_paintable(&self) -> bool;
     fn get_can_default(&self) -> bool;
@@ -110,6 +112,7 @@ pub trait WidgetExt {
     fn get_sensitive(&self) -> bool;
     fn is_sensitive(&self) -> bool;
     fn get_visible(&self) -> bool;
+    #[cfg(gtk_3_8)]
     fn is_visible(&self) -> bool;
     fn set_visible(&self, visible: bool);
     fn set_state_flags(&self, flags: StateFlags, clear: bool);
@@ -130,7 +133,9 @@ pub trait WidgetExt {
     fn set_mapped(&self, mapped: bool);
     fn get_mapped(&self) -> bool;
     fn get_modifier_mask(&self, intent: gdk::ModifierIntent) -> gdk::ModifierType;
+    #[cfg(gtk_3_8)]
     fn set_opacity(&self, opacity: f64);
+    #[cfg(gtk_3_8)]
     fn get_opacity(&self) -> f64;
     fn set_margin_top(&self, margin: i32) -> ();
     fn set_margin_bottom(&self, margin: i32) -> ();
@@ -143,16 +148,22 @@ pub trait WidgetExt {
     fn get_preferred_width(&self) -> (i32, i32);
     fn get_preferred_height_for_width(&self, width: i32) -> (i32, i32);
     fn get_preferred_width_for_height(&self, height: i32) -> (i32, i32);
+    #[cfg(gtk_3_10)]
     fn get_preferred_height_and_baseline_for_width(&self, width: i32) -> (i32, i32, i32, i32);
     fn get_request_mode(&self) -> SizeRequestMode;
     fn get_halign(&self) -> Align;
     fn set_halign(&self, align: Align);
     fn get_valign(&self) -> Align;
+    #[cfg(gtk_3_10)]
     fn get_valign_with_baseline(&self) -> Align;
     fn set_valign(&self, align: Align);
+    #[cfg(gtk_3_12)]
     fn get_margin_start(&self) -> i32;
+    #[cfg(gtk_3_12)]
     fn set_margin_start(&self, margin: i32);
+    #[cfg(gtk_3_12)]
     fn get_margin_end(&self) -> i32;
+    #[cfg(gtk_3_12)]
     fn set_margin_end(&self, margin: i32);
     fn get_hexpand(&self) -> bool;
     fn set_hexpand(&self, expand: bool);
@@ -164,6 +175,7 @@ pub trait WidgetExt {
     fn set_vexpand_set(&self, expand: bool);
     fn queue_compute_expand(&self);
     fn compute_expand(&self, orientation: Orientation) -> bool;
+    #[cfg(gtk_3_10)]
     fn init_template(&self);
     fn thaw_child_notify(&self);
     fn freeze_child_notify(&self);
@@ -212,6 +224,7 @@ impl<O: Upcast<Widget>> WidgetExt for O {
         unsafe { ffi::gtk_widget_queue_resize_no_redraw(self.upcast().to_glib_none().0) }
     }
 
+    #[cfg(gtk_3_10)]
     fn get_scale_factor(&self) -> i32 {
         unsafe { ffi::gtk_widget_get_scale_factor(self.upcast().to_glib_none().0) }
     }
@@ -541,6 +554,7 @@ impl<O: Upcast<Widget>> WidgetExt for O {
         unsafe { ffi::gtk_widget_trigger_tooltip_query(self.upcast().to_glib_none().0) }
     }
 
+    #[cfg(gtk_3_10)]
     fn get_allocated_baseline(&self) -> i32 {
         unsafe { ffi::gtk_widget_get_allocated_baseline(self.upcast().to_glib_none().0) }
     }
@@ -601,6 +615,7 @@ impl<O: Upcast<Widget>> WidgetExt for O {
         unsafe { from_glib(ffi::gtk_widget_get_visible(self.upcast().to_glib_none().0)) }
     }
 
+    #[cfg(gtk_3_8)]
     fn is_visible(&self) -> bool {
         unsafe { from_glib(ffi::gtk_widget_is_visible(self.upcast().to_glib_none().0)) }
     }
@@ -693,10 +708,12 @@ impl<O: Upcast<Widget>> WidgetExt for O {
         unsafe { ffi::gtk_widget_get_modifier_mask(self.upcast().to_glib_none().0, intent) }
     }
 
+    #[cfg(gtk_3_8)]
     fn set_opacity(&self, opacity: f64) {
         unsafe { ffi::gtk_widget_set_opacity(self.upcast().to_glib_none().0, opacity) }
     }
 
+    #[cfg(gtk_3_8)]
     fn get_opacity(&self) -> f64 {
         unsafe { ffi::gtk_widget_get_opacity(self.upcast().to_glib_none().0) }
     }
@@ -785,6 +802,7 @@ impl<O: Upcast<Widget>> WidgetExt for O {
         (minimum_width, natural_width)
     }
 
+    #[cfg(gtk_3_10)]
     fn get_preferred_height_and_baseline_for_width(&self, width: i32) -> (i32, i32, i32, i32) {
         let mut minimum_height = 0i32;
         let mut natural_height = 0i32;
@@ -816,6 +834,7 @@ impl<O: Upcast<Widget>> WidgetExt for O {
         unsafe { ffi::gtk_widget_get_valign(self.upcast().to_glib_none().0) }
     }
 
+    #[cfg(gtk_3_10)]
     fn get_valign_with_baseline(&self) -> Align {
         unsafe { ffi::gtk_widget_get_valign_with_baseline(self.upcast().to_glib_none().0) }
     }
@@ -824,18 +843,22 @@ impl<O: Upcast<Widget>> WidgetExt for O {
         unsafe { ffi::gtk_widget_set_valign(self.upcast().to_glib_none().0, align) }
     }
 
+    #[cfg(gtk_3_12)]
     fn get_margin_start(&self) -> i32 {
         unsafe { ffi::gtk_widget_get_margin_start(self.upcast().to_glib_none().0) }
     }
 
+    #[cfg(gtk_3_12)]
     fn set_margin_start(&self, margin: i32) {
         unsafe { ffi::gtk_widget_set_margin_start(self.upcast().to_glib_none().0, margin) }
     }
 
+    #[cfg(gtk_3_12)]
     fn get_margin_end(&self) -> i32 {
         unsafe { ffi::gtk_widget_get_margin_end(self.upcast().to_glib_none().0) }
     }
 
+    #[cfg(gtk_3_12)]
     fn set_margin_end(&self, margin: i32) {
         unsafe { ffi::gtk_widget_set_margin_end(self.upcast().to_glib_none().0, margin) }
     }
@@ -886,6 +909,7 @@ impl<O: Upcast<Widget>> WidgetExt for O {
         }
     }
 
+    #[cfg(gtk_3_10)]
     fn init_template(&self) {
         unsafe { ffi::gtk_widget_init_template(self.upcast().to_glib_none().0) }
     }
