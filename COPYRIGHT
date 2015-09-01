@@ -1,4 +1,4 @@
-The Rust-GNOME Project is copyright 2013-2015, The Rust-GNOME Project Developers:
+The Gtk-rs Project is copyright 2013-2015, The Gtk-rs Project Developers:
 
 Boden Garman <bpgarman@fastmail.fm>
 Brian Kropf <brian.kropf@gmail.com>
@@ -32,7 +32,7 @@ Vojtech Kral <vojtech@kral.hk>
 Zach Oakes <zsoakes@gmail.com>
 Zach Ploskey <zach@ploskey.com>
 
-The Rust-GNOME Project is licensed under the MIT license, see the LICENSE file
+The Gtk-rs Project is licensed under the MIT license, see the LICENSE file
 or <http://opensource.org/licenses/MIT>.
 
 This project provides interoperability with various GNOME libraries but doesn't
