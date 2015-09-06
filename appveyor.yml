@@ -56,7 +56,7 @@ build_script:
   - rustc -V
   - mkdir .cargo
   - echo paths = ["."] > .cargo\config
-  - git clone -q --depth 50 -b pending https://github.com/rust-gnome/examples _examples
+  - git clone -q --depth 50 -b pending https://github.com/gtk-rs/examples _examples
   - cd _examples
   - "echo Features: %FEATURES%"
   - cargo build --features "%FEATURES%"
