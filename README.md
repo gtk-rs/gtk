@@ -1,6 +1,7 @@
 # gtk [![Build Status](https://travis-ci.org/gtk-rs/gtk.png?branch=master)](https://travis-ci.org/gtk-rs/gtk) [![Build status](https://ci.appveyor.com/api/projects/status/e3t5yubl172pomlb?svg=true)](https://ci.appveyor.com/project/GuillaumeGomez/gtk-isosc) [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/gtk-rs/gtk)
 
 __Rust__ bindings and wrappers for __GLib__, __GDK 3__, __GTK+ 3__  and __Cairo__.
+[Online documentation](http://gtk-rs.org/docs/gtk/).
 
 ## Building
 
@@ -42,58 +43,35 @@ If your Rust installation has `gcc.exe` and `ld.exe` in its `bin` directory, you
 get a linking error `ld: cannot find -limm32`. In that case remove those executables,
 they will be provided by mingw instead.
 
-## Versions and features
+## Versions
 
-__gtk__ targets __GTK+__ 3.6 and __Cairo__ 1.10 by default, other versions support is enabled by requesting a corresponding feature e.g.
-```Shell
-> cargo build --features gtk_3_10
-```
-Disabling the default GTK 3.6 support
-```Shell
-> cargo build --no-default-features --features gtk_3_4
-```
-Currently supported versions are __GTK+__ 3.4 to 3.14 and __Cairo__ 1.10 to 1.12.
+The build script will query the installed library versions from `pkg-config`
+and instruct `rustc` via `cfg` arguments to compile the appropriate set of APIs.
 
-We are currently targetting rust master compiler to build __gtk__, make sure you have the latest version before submitting any bugs.
+All the APIs available in the installed library will just work but if you
+attempt to use newer ones, the build will fail. Presently, Rust doesn't allow
+to generate custom error messages so there doesn't appear to be a way to make
+such errors more friendly.
 
 Examples are providing in the [gtk-rs/examples](https://github.com/gtk-rs/examples) repository, you can find some tests showing off the functionality, these can be built and run as follows:
 
 ```Shell
 > cargo build --release
-# Or, if your system has GTK 3.10 or later
-> cargo build --features gtk_3_10 --release
 > ./target/release/gtktest
 > ./target/release/cairotest
 ```
 
-When building documentation don't forget to specify the feature set you're using:
+## Documentation
 
-```Shell
-> cargo doc --feature gtk_3_12
-```
-
-Your local copy can be accessed using your browser at
-
-`file:///{gtk_location}/target/doc/gtk/index.html`
+Browse the documentation [at our website](http://gtk-rs.org/docs/gtk/).
 
 ## Including gtk as a cargo dependency
 
-To include gtk as a cargo dependency you have to add it to your Cargo.toml and specify the GTK version you want using Cargo features:
+To include gtk as a cargo dependency you have to add it to your Cargo.toml:
 ```Toml
-[dependencies.gtk]
-git = "https://github.com/gtk-rs/gtk.git"
-features = ["gtk_3_12"]
+[dependencies]
+gtk = "0.0.4"
 ```
-If it's lower than 3.6:
-```Toml
-[dependencies.gtk]
-git = "https://github.com/gtk-rs/gtk.git"
-features = ["gtk_3_4"]
-default-features = false
-```
-For maximum compatibility the version you select here should be the lowest
-that provides all of the GTK features needed by your project.
-Don't just set it to match the libraries installed on your system.
 
 ## Use __gtk__
 
