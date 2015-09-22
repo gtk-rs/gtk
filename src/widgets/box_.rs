@@ -31,9 +31,9 @@ impl types::StaticType for Box {
 }
 
 unsafe impl Upcast<Widget> for Box { }
-unsafe impl Upcast<super::container::Container> for Box { }
-unsafe impl Upcast<super::orientable::Orientable> for Box { }
-unsafe impl Upcast<::builder::Buildable> for Box { }
+unsafe impl Upcast<::Container> for Box { }
+unsafe impl Upcast<::Orientable> for Box { }
+unsafe impl Upcast<::Buildable> for Box { }
 
 pub trait BoxExt {
     fn pack_start<T: Upcast<Widget>>(&self, child: &T, expand: bool, fill: bool, padding: u32);

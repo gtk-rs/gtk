@@ -24,7 +24,6 @@ use widgets::button::Button;
 #[cfg(gtk_3_12)]
 use widgets::header_bar::HeaderBar;
 use widgets::widget::Widget;
-use window;
 use {ResponseType};
 
 /// Pseudo-variadic array of buttons
@@ -194,10 +193,10 @@ impl types::StaticType for Dialog {
 }
 
 unsafe impl Upcast<Widget> for Dialog { }
-unsafe impl Upcast<widgets::container::Container> for Dialog { }
-unsafe impl Upcast<widgets::bin::Bin> for Dialog { }
-unsafe impl Upcast<window::Window> for Dialog { }
-unsafe impl Upcast<::builder::Buildable> for Dialog { }
+unsafe impl Upcast<::Container> for Dialog { }
+unsafe impl Upcast<::Bin> for Dialog { }
+unsafe impl Upcast<::Window> for Dialog { }
+unsafe impl Upcast<::Buildable> for Dialog { }
 
 pub trait DialogExt {
     fn run(&self) -> i32;

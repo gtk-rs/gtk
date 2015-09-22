@@ -72,5 +72,5 @@ impl types::StaticType for ProgressBar {
 }
 
 unsafe impl Upcast<Widget> for ProgressBar { }
-unsafe impl Upcast<super::orientable::Orientable> for ProgressBar { }
-unsafe impl Upcast<::builder::Buildable> for ProgressBar { }
+unsafe impl Upcast<::Orientable> for ProgressBar { }
+unsafe impl Upcast<::Buildable> for ProgressBar { }

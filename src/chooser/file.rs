@@ -62,7 +62,7 @@ impl types::StaticType for FileFilter {
     }
 }
 
-unsafe impl Upcast<::builder::Buildable> for FileFilter { }
+unsafe impl Upcast<::Buildable> for FileFilter { }
 
 //////////////////////////////////////////////////////////////////////////////
 

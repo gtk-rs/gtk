@@ -19,7 +19,7 @@ impl types::StaticType for Misc {
 }
 
 unsafe impl Upcast<Widget> for Misc { }
-unsafe impl Upcast<::builder::Buildable> for Misc { }
+unsafe impl Upcast<::Buildable> for Misc { }
 
 pub trait MiscExt {
     fn set_alignment(&self, x_align: f32, y_align: f32);

@@ -89,5 +89,5 @@ impl types::StaticType for HeaderBar {
 }
 
 unsafe impl Upcast<Widget> for HeaderBar { }
-unsafe impl Upcast<super::container::Container> for HeaderBar { }
-unsafe impl Upcast<::builder::Buildable> for HeaderBar { }
+unsafe impl Upcast<::Container> for HeaderBar { }
+unsafe impl Upcast<::Buildable> for HeaderBar { }

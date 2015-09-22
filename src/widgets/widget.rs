@@ -28,7 +28,7 @@ impl types::StaticType for Widget {
     }
 }
 
-unsafe impl Upcast<::builder::Buildable> for Widget { }
+unsafe impl Upcast<::Buildable> for Widget { }
 
 pub trait WidgetExt {
     fn show_all(&self);

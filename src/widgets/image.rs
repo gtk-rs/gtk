@@ -74,5 +74,5 @@ impl types::StaticType for Image {
 }
 
 unsafe impl Upcast<Widget> for Image { }
-unsafe impl Upcast<super::misc::Misc> for Image { }
-unsafe impl Upcast<::builder::Buildable> for Image { }
+unsafe impl Upcast<::Misc> for Image { }
+unsafe impl Upcast<::Buildable> for Image { }

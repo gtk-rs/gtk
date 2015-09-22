@@ -37,4 +37,4 @@ impl types::StaticType for Spinner {
 }
 
 unsafe impl Upcast<Widget> for Spinner { }
-unsafe impl Upcast<::builder::Buildable> for Spinner { }
+unsafe impl Upcast<::Buildable> for Spinner { }

@@ -23,10 +23,10 @@ use {
 pub type IconView = Object<ffi::GtkIconView>;
 
 unsafe impl Upcast<Widget> for IconView { }
-unsafe impl Upcast<super::container::Container> for IconView { }
-unsafe impl Upcast<super::scrollable::Scrollable> for IconView { }
-unsafe impl Upcast<::mvc::cell_interfaces::CellLayout> for IconView { }
-unsafe impl Upcast<::builder::Buildable> for IconView { }
+unsafe impl Upcast<::Container> for IconView { }
+unsafe impl Upcast<::Scrollable> for IconView { }
+unsafe impl Upcast<::CellLayout> for IconView { }
+unsafe impl Upcast<::Buildable> for IconView { }
 
 impl IconView {
     pub fn new() -> IconView {

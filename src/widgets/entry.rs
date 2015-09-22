@@ -12,7 +12,6 @@ use ffi;
 
 use adjustment::Adjustment;
 use object::{Object, Downcast, Upcast};
-use super::editable::Editable;
 use super::widget::Widget;
 
 use {EntryIconPosition, ImageType, InputPurpose, InputHints};
@@ -120,9 +119,9 @@ impl types::StaticType for Entry {
 }
 
 unsafe impl Upcast<Widget> for Entry { }
-unsafe impl Upcast<super::editable::Editable> for Entry { }
-unsafe impl Upcast<::mvc::cell_interfaces::CellEditable> for Entry { }
-unsafe impl Upcast<::builder::Buildable> for Entry { }
+unsafe impl Upcast<::Editable> for Entry { }
+unsafe impl Upcast<::CellEditable> for Entry { }
+unsafe impl Upcast<::Buildable> for Entry { }
 
 pub trait EntryExt {
     fn get_buffer(&self) -> EntryBuffer;

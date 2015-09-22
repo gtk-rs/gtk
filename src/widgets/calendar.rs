@@ -89,4 +89,4 @@ impl types::StaticType for Calendar {
 }
 
 unsafe impl Upcast<Widget> for Calendar { }
-unsafe impl Upcast<::builder::Buildable> for Calendar { }
+unsafe impl Upcast<::Buildable> for Calendar { }

@@ -15,13 +15,13 @@ use super::widget::Widget;
 pub type FontButton = Object<ffi::GtkFontButton>;
 
 unsafe impl Upcast<Widget> for FontButton { }
-unsafe impl Upcast<super::container::Container> for FontButton { }
-unsafe impl Upcast<super::bin::Bin> for FontButton { }
-unsafe impl Upcast<super::button::Button> for FontButton { }
+unsafe impl Upcast<::Container> for FontButton { }
+unsafe impl Upcast<::Bin> for FontButton { }
+unsafe impl Upcast<::Button> for FontButton { }
 
-unsafe impl Upcast<super::actionable::Actionable> for FontButton { }
-unsafe impl Upcast<::builder::Buildable> for FontButton { }
-unsafe impl Upcast<::chooser::font::FontChooser> for FontButton {}
+unsafe impl Upcast<::Actionable> for FontButton { }
+unsafe impl Upcast<::Buildable> for FontButton { }
+unsafe impl Upcast<::FontChooser> for FontButton {}
 
 impl FontButton {
     /// Creates a new font picker widget.

@@ -13,8 +13,8 @@ use super::widget::Widget;
 pub type Fixed = Object<ffi::GtkFixed>;
 
 unsafe impl Upcast<Widget> for Fixed { }
-unsafe impl Upcast<super::container::Container> for Fixed { }
-unsafe impl Upcast<::builder::Buildable> for Fixed { }
+unsafe impl Upcast<::Container> for Fixed { }
+unsafe impl Upcast<::Buildable> for Fixed { }
 
 impl Fixed {
     pub fn new() -> Fixed {

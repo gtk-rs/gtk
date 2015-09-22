@@ -13,8 +13,8 @@ use super::widget::Widget;
 pub type Socket = Object<ffi::GtkSocket>;
 
 unsafe impl Upcast<Widget> for Socket { }
-unsafe impl Upcast<super::container::Container> for Socket { }
-unsafe impl Upcast<::builder::Buildable> for Socket { }
+unsafe impl Upcast<::Container> for Socket { }
+unsafe impl Upcast<::Buildable> for Socket { }
 
 impl Socket {
     pub fn new() -> Socket {

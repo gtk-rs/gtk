@@ -49,11 +49,11 @@ impl types::StaticType for ToggleButton {
 }
 
 unsafe impl Upcast<Widget> for ToggleButton { }
-unsafe impl Upcast<super::container::Container> for ToggleButton { }
-unsafe impl Upcast<super::button::Button> for ToggleButton { }
-unsafe impl Upcast<super::bin::Bin> for ToggleButton { }
-unsafe impl Upcast<::builder::Buildable> for ToggleButton { }
-unsafe impl Upcast<super::actionable::Actionable> for ToggleButton { }
+unsafe impl Upcast<::Container> for ToggleButton { }
+unsafe impl Upcast<::Button> for ToggleButton { }
+unsafe impl Upcast<::Bin> for ToggleButton { }
+unsafe impl Upcast<::Buildable> for ToggleButton { }
+unsafe impl Upcast<::Actionable> for ToggleButton { }
 
 pub trait ToggleButtonExt{
     /// Sets whether the button is displayed as a separate indicator and label.

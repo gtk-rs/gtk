@@ -13,9 +13,9 @@ use super::widget::Widget;
 pub type Alignment = Object<ffi::GtkAlignment>;
 
 unsafe impl Upcast<Widget> for Alignment { }
-unsafe impl Upcast<super::container::Container> for Alignment { }
-unsafe impl Upcast<super::bin::Bin> for Alignment { }
-unsafe impl Upcast<::builder::Buildable> for Alignment { }
+unsafe impl Upcast<::Container> for Alignment { }
+unsafe impl Upcast<::Bin> for Alignment { }
+unsafe impl Upcast<::Buildable> for Alignment { }
 
 impl Alignment {
     pub fn new(x_align: f32, y_align: f32, x_scale: f32, y_scale: f32) -> Alignment {

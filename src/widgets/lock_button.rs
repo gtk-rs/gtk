@@ -17,12 +17,12 @@ use glib::GlibContainer;
 pub type LockButton = Object<ffi::GtkLockButton>;
 
 unsafe impl Upcast<Widget> for LockButton { }
-unsafe impl Upcast<super::container::Container> for LockButton { }
-unsafe impl Upcast<super::bin::Bin> for LockButton { }
-unsafe impl Upcast<super::button::Button> for LockButton { }
+unsafe impl Upcast<::Container> for LockButton { }
+unsafe impl Upcast<::Bin> for LockButton { }
+unsafe impl Upcast<::Button> for LockButton { }
 
-unsafe impl Upcast<super::actionable::Actionable> for LockButton { }
-unsafe impl Upcast<::builder::Buildable> for LockButton { }
+unsafe impl Upcast<::Actionable> for LockButton { }
+unsafe impl Upcast<::Buildable> for LockButton { }
 
 impl LockButton {
     /// Creates a new lock button which reflects the `permission`.

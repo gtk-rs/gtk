@@ -10,7 +10,6 @@ use gdk;
 use ffi;
 
 use object::{Object, Downcast, Upcast};
-use widgets;
 use widgets::widget::Widget;
 use {
     WindowPosition,
@@ -33,10 +32,10 @@ impl types::StaticType for Window {
     }
 }
 
-unsafe impl Upcast<widgets::widget::Widget> for Window { }
-unsafe impl Upcast<widgets::container::Container> for Window { }
-unsafe impl Upcast<widgets::bin::Bin> for Window { }
-unsafe impl Upcast<::builder::Buildable> for Window { }
+unsafe impl Upcast<::Widget> for Window { }
+unsafe impl Upcast<::Container> for Window { }
+unsafe impl Upcast<::Bin> for Window { }
+unsafe impl Upcast<::Buildable> for Window { }
 
 pub trait WindowExt {
     fn move_(&self, x: i32, y: i32);

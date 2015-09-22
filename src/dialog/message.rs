@@ -61,8 +61,8 @@ impl types::StaticType for MessageDialog {
 }
 
 unsafe impl Upcast<Widget> for MessageDialog { }
-unsafe impl Upcast<::widgets::container::Container> for MessageDialog { }
-unsafe impl Upcast<::widgets::bin::Bin> for MessageDialog { }
-unsafe impl Upcast<::window::Window> for MessageDialog { }
-unsafe impl Upcast<super::Dialog> for MessageDialog { }
-unsafe impl Upcast<::builder::Buildable> for MessageDialog { }
+unsafe impl Upcast<::Container> for MessageDialog { }
+unsafe impl Upcast<::Bin> for MessageDialog { }
+unsafe impl Upcast<::Window> for MessageDialog { }
+unsafe impl Upcast<::Dialog> for MessageDialog { }
+unsafe impl Upcast<::Buildable> for MessageDialog { }

@@ -37,8 +37,8 @@ impl types::StaticType for Label {
 }
 
 unsafe impl Upcast<Widget> for Label { }
-unsafe impl Upcast<super::misc::Misc> for Label { }
-unsafe impl Upcast<::builder::Buildable> for Label { }
+unsafe impl Upcast<::Misc> for Label { }
+unsafe impl Upcast<::Buildable> for Label { }
 
 pub trait LabelExt {
     fn set_label(&self, text: &str);

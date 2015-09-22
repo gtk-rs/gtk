@@ -36,5 +36,5 @@ impl types::StaticType for Switch {
 }
 
 unsafe impl Upcast<Widget> for Switch { }
-unsafe impl Upcast<super::actionable::Actionable> for Switch { }
-unsafe impl Upcast<::builder::Buildable> for Switch { }
+unsafe impl Upcast<::Actionable> for Switch { }
+unsafe impl Upcast<::Buildable> for Switch { }

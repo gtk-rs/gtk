@@ -14,9 +14,9 @@ use super::widget::Widget;
 pub type Layout = Object<ffi::GtkLayout>;
 
 unsafe impl Upcast<Widget> for Layout { }
-unsafe impl Upcast<super::container::Container> for Layout { }
-unsafe impl Upcast<super::scrollable::Scrollable> for Layout { }
-unsafe impl Upcast<::builder::Buildable> for Layout { }
+unsafe impl Upcast<::Container> for Layout { }
+unsafe impl Upcast<::Scrollable> for Layout { }
+unsafe impl Upcast<::Buildable> for Layout { }
 
 impl Layout {
     pub fn new(hadjustment: &Adjustment, vadjustment: &Adjustment) -> Layout {

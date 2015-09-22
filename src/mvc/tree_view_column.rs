@@ -306,5 +306,5 @@ impl types::StaticType for TreeViewColumn {
     }
 }
 
-unsafe impl Upcast<super::cell_interfaces::CellLayout> for TreeViewColumn { }
-unsafe impl Upcast<::builder::Buildable> for TreeViewColumn { }
+unsafe impl Upcast<::CellLayout> for TreeViewColumn { }
+unsafe impl Upcast<::Buildable> for TreeViewColumn { }

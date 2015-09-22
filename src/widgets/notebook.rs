@@ -18,8 +18,8 @@ use {
 pub type Notebook = Object<ffi::GtkNotebook>;
 
 unsafe impl Upcast<Widget> for Notebook { }
-unsafe impl Upcast<super::container::Container> for Notebook { }
-unsafe impl Upcast<::builder::Buildable> for Notebook { }
+unsafe impl Upcast<::Container> for Notebook { }
+unsafe impl Upcast<::Buildable> for Notebook { }
 
 impl Notebook {
     pub fn new() -> Notebook {

@@ -16,13 +16,13 @@ use super::widget::Widget;
 pub type MenuButton = Object<ffi::GtkMenuButton>;
 
 unsafe impl Upcast<Widget> for MenuButton { }
-unsafe impl Upcast<super::container::Container> for MenuButton { }
-unsafe impl Upcast<super::bin::Bin> for MenuButton { }
-unsafe impl Upcast<super::button::Button> for MenuButton { }
-unsafe impl Upcast<super::toggle_button::ToggleButton> for MenuButton { }
+unsafe impl Upcast<::Container> for MenuButton { }
+unsafe impl Upcast<::Bin> for MenuButton { }
+unsafe impl Upcast<::Button> for MenuButton { }
+unsafe impl Upcast<::ToggleButton> for MenuButton { }
 
-unsafe impl Upcast<super::actionable::Actionable> for MenuButton { }
-unsafe impl Upcast<::builder::Buildable> for MenuButton { }
+unsafe impl Upcast<::Actionable> for MenuButton { }
+unsafe impl Upcast<::Buildable> for MenuButton { }
 
 impl MenuButton {
     pub fn new() -> MenuButton {

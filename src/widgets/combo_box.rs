@@ -60,11 +60,11 @@ impl types::StaticType for ComboBox {
 }
 
 unsafe impl Upcast<Widget> for ComboBox { }
-unsafe impl Upcast<super::container::Container> for ComboBox { }
-unsafe impl Upcast<super::bin::Bin> for ComboBox { }
-unsafe impl Upcast<::mvc::cell_interfaces::CellEditable> for ComboBox { }
-unsafe impl Upcast<::mvc::cell_interfaces::CellLayout> for ComboBox { }
-unsafe impl Upcast<::builder::Buildable> for ComboBox { }
+unsafe impl Upcast<::Container> for ComboBox { }
+unsafe impl Upcast<::Bin> for ComboBox { }
+unsafe impl Upcast<::CellEditable> for ComboBox { }
+unsafe impl Upcast<::CellLayout> for ComboBox { }
+unsafe impl Upcast<::Buildable> for ComboBox { }
 
 pub trait ComboBoxExt {
     fn get_wrap_width(&self) -> i32;
@@ -323,9 +323,9 @@ impl types::StaticType for ComboBoxText {
 }
 
 unsafe impl Upcast<Widget> for ComboBoxText { }
-unsafe impl Upcast<super::container::Container> for ComboBoxText { }
-unsafe impl Upcast<super::bin::Bin> for ComboBoxText { }
+unsafe impl Upcast<::Container> for ComboBoxText { }
+unsafe impl Upcast<::Bin> for ComboBoxText { }
 unsafe impl Upcast<ComboBox> for ComboBoxText { }
-unsafe impl Upcast<::mvc::cell_interfaces::CellEditable> for ComboBoxText { }
-unsafe impl Upcast<::mvc::cell_interfaces::CellLayout> for ComboBoxText { }
-unsafe impl Upcast<::builder::Buildable> for ComboBoxText { }
+unsafe impl Upcast<::CellEditable> for ComboBoxText { }
+unsafe impl Upcast<::CellLayout> for ComboBoxText { }
+unsafe impl Upcast<::Buildable> for ComboBoxText { }

@@ -56,9 +56,9 @@ impl types::StaticType for Button {
 }
 
 unsafe impl Upcast<Widget> for Button { }
-unsafe impl Upcast<super::container::Container> for Button { }
-unsafe impl Upcast<super::bin::Bin> for Button { }
-unsafe impl Upcast<::builder::Buildable> for Button { }
+unsafe impl Upcast<::Container> for Button { }
+unsafe impl Upcast<::Bin> for Button { }
+unsafe impl Upcast<::Buildable> for Button { }
 
 pub trait ButtonExt {
     fn pressed(&self);

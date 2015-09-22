@@ -17,8 +17,8 @@ pub type Range = Object<ffi::GtkRange>;
 
 unsafe impl Upcast<Widget> for Range { }
 
-unsafe impl Upcast<::builder::Buildable> for Range { }
-unsafe impl Upcast<super::orientable::Orientable> for Range { }
+unsafe impl Upcast<::Buildable> for Range { }
+unsafe impl Upcast<::Orientable> for Range { }
 
 impl types::StaticType for Range {
     #[inline]

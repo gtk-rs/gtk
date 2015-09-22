@@ -49,9 +49,9 @@ impl types::StaticType for CheckButton {
 }
 
 unsafe impl Upcast<Widget> for CheckButton { }
-unsafe impl Upcast<super::container::Container> for CheckButton { }
-unsafe impl Upcast<super::bin::Bin> for CheckButton { }
-unsafe impl Upcast<super::button::Button> for CheckButton { }
-unsafe impl Upcast<super::toggle_button::ToggleButton> for CheckButton { }
-unsafe impl Upcast<::builder::Buildable> for CheckButton { }
-unsafe impl Upcast<super::actionable::Actionable> for CheckButton { }
+unsafe impl Upcast<::Container> for CheckButton { }
+unsafe impl Upcast<::Bin> for CheckButton { }
+unsafe impl Upcast<::Button> for CheckButton { }
+unsafe impl Upcast<::ToggleButton> for CheckButton { }
+unsafe impl Upcast<::Buildable> for CheckButton { }
+unsafe impl Upcast<::Actionable> for CheckButton { }

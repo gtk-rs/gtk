@@ -18,13 +18,13 @@ use super::widget::Widget;
 pub type ColorButton = Object<ffi::GtkColorButton>;
 
 unsafe impl Upcast<Widget> for ColorButton { }
-unsafe impl Upcast<super::container::Container> for ColorButton { }
-unsafe impl Upcast<super::bin::Bin> for ColorButton { }
-unsafe impl Upcast<super::button::Button> for ColorButton { }
+unsafe impl Upcast<::Container> for ColorButton { }
+unsafe impl Upcast<::Bin> for ColorButton { }
+unsafe impl Upcast<::Button> for ColorButton { }
 
-unsafe impl Upcast<super::actionable::Actionable> for ColorButton { }
-unsafe impl Upcast<::builder::Buildable> for ColorButton { }
-unsafe impl Upcast<::chooser::color::ColorChooser> for ColorButton {}
+unsafe impl Upcast<::Actionable> for ColorButton { }
+unsafe impl Upcast<::Buildable> for ColorButton { }
+unsafe impl Upcast<::ColorChooser> for ColorButton {}
 
 impl ColorButton {
     /// Creates a new color button.

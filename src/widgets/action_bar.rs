@@ -9,9 +9,9 @@ use glib::translate::*;
 use super::widget::Widget;
 
 unsafe impl Upcast<Widget> for ActionBar { }
-unsafe impl Upcast<super::container::Container> for ActionBar { }
-unsafe impl Upcast<super::bin::Bin> for ActionBar { }
-unsafe impl Upcast<::builder::Buildable> for ActionBar { }
+unsafe impl Upcast<::Container> for ActionBar { }
+unsafe impl Upcast<::Bin> for ActionBar { }
+unsafe impl Upcast<::Buildable> for ActionBar { }
 
 /// Hide and show with animation
 pub type ActionBar = Object<ffi::GtkActionBar>;

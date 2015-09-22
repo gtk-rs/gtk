@@ -94,7 +94,7 @@ impl types::StaticType for RecentFilter {
     }
 }
 
-unsafe impl Upcast<::builder::Buildable> for RecentFilter { }
+unsafe impl Upcast<::Buildable> for RecentFilter { }
 
 //////////////////////////////////////////////////////////////////////////////
 

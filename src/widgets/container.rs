@@ -20,7 +20,7 @@ impl types::StaticType for Container {
 }
 
 unsafe impl Upcast<Widget> for Container { }
-unsafe impl Upcast<::builder::Buildable> for Container { }
+unsafe impl Upcast<::Buildable> for Container { }
 
 pub trait ContainerExt {
     fn add<T: Upcast<Widget>>(&self, widget: &T);

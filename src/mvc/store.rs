@@ -126,7 +126,7 @@ impl StaticType for ListStore {
 }
 
 unsafe impl Upcast<TreeModel> for ListStore { }
-unsafe impl Upcast<::builder::Buildable> for ListStore { }
+unsafe impl Upcast<::Buildable> for ListStore { }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -277,4 +277,4 @@ impl StaticType for TreeStore {
 }
 
 unsafe impl Upcast<TreeModel> for TreeStore { }
-unsafe impl Upcast<::builder::Buildable> for TreeStore { }
+unsafe impl Upcast<::Buildable> for TreeStore { }

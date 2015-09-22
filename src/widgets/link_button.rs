@@ -15,12 +15,12 @@ use super::widget::Widget;
 pub type LinkButton = Object<ffi::GtkLinkButton>;
 
 unsafe impl Upcast<Widget> for LinkButton { }
-unsafe impl Upcast<super::container::Container> for LinkButton { }
-unsafe impl Upcast<super::bin::Bin> for LinkButton { }
-unsafe impl Upcast<super::button::Button> for LinkButton { }
+unsafe impl Upcast<::Container> for LinkButton { }
+unsafe impl Upcast<::Bin> for LinkButton { }
+unsafe impl Upcast<::Button> for LinkButton { }
 
-unsafe impl Upcast<super::actionable::Actionable> for LinkButton { }
-unsafe impl Upcast<::builder::Buildable> for LinkButton { }
+unsafe impl Upcast<::Actionable> for LinkButton { }
+unsafe impl Upcast<::Buildable> for LinkButton { }
 
 impl LinkButton {
     /// Creates a new `LinkButton` with the URI as its text.

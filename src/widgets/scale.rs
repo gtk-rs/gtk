@@ -18,10 +18,10 @@ use PositionType;
 pub type Scale = Object<ffi::GtkScale>;
 
 unsafe impl Upcast<Widget> for Scale { }
-unsafe impl Upcast<super::range::Range> for Scale { }
+unsafe impl Upcast<::Range> for Scale { }
 
-unsafe impl Upcast<::builder::Buildable> for Scale { }
-unsafe impl Upcast<super::orientable::Orientable> for Scale { }
+unsafe impl Upcast<::Buildable> for Scale { }
+unsafe impl Upcast<::Orientable> for Scale { }
 
 impl Scale {
     /// Creates a new `Scale`.

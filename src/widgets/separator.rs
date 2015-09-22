@@ -30,5 +30,5 @@ impl types::StaticType for Separator {
 }
 
 unsafe impl Upcast<Widget> for Separator { }
-unsafe impl Upcast<super::orientable::Orientable> for Separator { }
-unsafe impl Upcast<::builder::Buildable> for Separator { }
+unsafe impl Upcast<::Orientable> for Separator { }
+unsafe impl Upcast<::Buildable> for Separator { }

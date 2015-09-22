@@ -32,9 +32,9 @@ impl types::StaticType for Frame {
 }
 
 unsafe impl Upcast<Widget> for Frame { }
-unsafe impl Upcast<super::container::Container> for Frame { }
-unsafe impl Upcast<super::bin::Bin> for Frame { }
-unsafe impl Upcast<::builder::Buildable> for Frame { }
+unsafe impl Upcast<::Container> for Frame { }
+unsafe impl Upcast<::Bin> for Frame { }
+unsafe impl Upcast<::Buildable> for Frame { }
 
 pub trait FrameExt {
     fn set_label(&self, label: Option<&str>);
@@ -117,7 +117,7 @@ impl types::StaticType for AspectFrame {
 }
 
 unsafe impl Upcast<Widget> for AspectFrame { }
-unsafe impl Upcast<super::container::Container> for AspectFrame { }
-unsafe impl Upcast<super::bin::Bin> for AspectFrame { }
+unsafe impl Upcast<::Container> for AspectFrame { }
+unsafe impl Upcast<::Bin> for AspectFrame { }
 unsafe impl Upcast<Frame> for AspectFrame { }
-unsafe impl Upcast<::builder::Buildable> for AspectFrame { }
+unsafe impl Upcast<::Buildable> for AspectFrame { }

@@ -36,5 +36,5 @@ impl types::StaticType for Arrow {
 }
 
 unsafe impl Upcast<Widget> for Arrow { }
-unsafe impl Upcast<super::misc::Misc> for Arrow { }
-unsafe impl Upcast<::builder::Buildable> for Arrow { }
+unsafe impl Upcast<::Misc> for Arrow { }
+unsafe impl Upcast<::Buildable> for Arrow { }

@@ -17,10 +17,10 @@ use Orientation;
 pub type Scrollbar = Object<ffi::GtkScrollbar>;
 
 unsafe impl Upcast<Widget> for Scrollbar { }
-unsafe impl Upcast<super::range::Range> for Scrollbar { }
+unsafe impl Upcast<::Range> for Scrollbar { }
 
-unsafe impl Upcast<::builder::Buildable> for Scrollbar { }
-unsafe impl Upcast<super::orientable::Orientable> for Scrollbar { }
+unsafe impl Upcast<::Buildable> for Scrollbar { }
+unsafe impl Upcast<::Orientable> for Scrollbar { }
 
 impl Scrollbar {
     /// Creates a new scrollbar with the given orientation.

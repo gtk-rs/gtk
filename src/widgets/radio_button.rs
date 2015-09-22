@@ -16,13 +16,13 @@ use super::widget::Widget;
 pub type RadioButton = Object<ffi::GtkRadioButton>;
 
 unsafe impl Upcast<Widget> for RadioButton { }
-unsafe impl Upcast<super::container::Container> for RadioButton { }
-unsafe impl Upcast<super::bin::Bin> for RadioButton { }
-unsafe impl Upcast<super::button::Button> for RadioButton { }
-unsafe impl Upcast<super::toggle_button::ToggleButton> for RadioButton { }
+unsafe impl Upcast<::Container> for RadioButton { }
+unsafe impl Upcast<::Bin> for RadioButton { }
+unsafe impl Upcast<::Button> for RadioButton { }
+unsafe impl Upcast<::ToggleButton> for RadioButton { }
 
-unsafe impl Upcast<super::actionable::Actionable> for RadioButton { }
-unsafe impl Upcast<::builder::Buildable> for RadioButton { }
+unsafe impl Upcast<::Actionable> for RadioButton { }
+unsafe impl Upcast<::Buildable> for RadioButton { }
 
 impl RadioButton {
     /// Creates a new `RadioButton`.

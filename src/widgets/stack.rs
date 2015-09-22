@@ -19,8 +19,8 @@ use {
 pub type Stack = Object<ffi::GtkStack>;
 
 unsafe impl Upcast<Widget> for Stack { }
-unsafe impl Upcast<super::container::Container> for Stack { }
-unsafe impl Upcast<::builder::Buildable> for Stack { }
+unsafe impl Upcast<::Container> for Stack { }
+unsafe impl Upcast<::Buildable> for Stack { }
 
 impl Stack {
     pub fn new() -> Stack {
@@ -106,10 +106,10 @@ impl types::StaticType for Stack {
 pub type StackSwitcher = Object<ffi::GtkStackSwitcher>;
 
 unsafe impl Upcast<Widget> for StackSwitcher { }
-unsafe impl Upcast<super::container::Container> for StackSwitcher { }
-unsafe impl Upcast<super::box_::Box> for StackSwitcher { }
-unsafe impl Upcast<super::orientable::Orientable> for StackSwitcher { }
-unsafe impl Upcast<::builder::Buildable> for StackSwitcher { }
+unsafe impl Upcast<::Container> for StackSwitcher { }
+unsafe impl Upcast<::Box> for StackSwitcher { }
+unsafe impl Upcast<::Orientable> for StackSwitcher { }
+unsafe impl Upcast<::Buildable> for StackSwitcher { }
 
 impl StackSwitcher {
     pub fn new() -> StackSwitcher {

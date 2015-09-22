@@ -17,13 +17,13 @@ use Adjustment;
 pub type ScaleButton = Object<ffi::GtkScaleButton>;
 
 unsafe impl Upcast<Widget> for ScaleButton { }
-unsafe impl Upcast<super::container::Container> for ScaleButton { }
-unsafe impl Upcast<super::bin::Bin> for ScaleButton { }
-unsafe impl Upcast<super::button::Button> for ScaleButton { }
+unsafe impl Upcast<::Container> for ScaleButton { }
+unsafe impl Upcast<::Bin> for ScaleButton { }
+unsafe impl Upcast<::Button> for ScaleButton { }
 
-unsafe impl Upcast<super::actionable::Actionable> for ScaleButton { }
-unsafe impl Upcast<::builder::Buildable> for ScaleButton { }
-unsafe impl Upcast<super::orientable::Orientable> for ScaleButton { }
+unsafe impl Upcast<::Actionable> for ScaleButton { }
+unsafe impl Upcast<::Buildable> for ScaleButton { }
+unsafe impl Upcast<::Orientable> for ScaleButton { }
 
 impl ScaleButton {
     /// Creates a GtkScaleButton, with a range between `min` and `max`,

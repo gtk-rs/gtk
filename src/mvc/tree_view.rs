@@ -333,6 +333,6 @@ impl types::StaticType for TreeView {
 }
 
 unsafe impl Upcast<Widget> for TreeView { }
-unsafe impl Upcast<::widgets::container::Container> for TreeView { }
-unsafe impl Upcast<::widgets::scrollable::Scrollable> for TreeView { }
-unsafe impl Upcast<::builder::Buildable> for TreeView { }
+unsafe impl Upcast<::Container> for TreeView { }
+unsafe impl Upcast<::Scrollable> for TreeView { }
+unsafe impl Upcast<::Buildable> for TreeView { }

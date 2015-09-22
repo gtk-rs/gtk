@@ -15,9 +15,9 @@ use PositionType;
 pub type Grid = Object<ffi::GtkGrid>;
 
 unsafe impl Upcast<Widget> for Grid { }
-unsafe impl Upcast<super::container::Container> for Grid { }
-unsafe impl Upcast<super::orientable::Orientable> for Grid { }
-unsafe impl Upcast<::builder::Buildable> for Grid { }
+unsafe impl Upcast<::Container> for Grid { }
+unsafe impl Upcast<::Orientable> for Grid { }
+unsafe impl Upcast<::Buildable> for Grid { }
 
 impl Grid {
     pub fn new() -> Grid {

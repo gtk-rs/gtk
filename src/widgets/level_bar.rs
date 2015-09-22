@@ -104,5 +104,5 @@ impl types::StaticType for LevelBar {
 }
 
 unsafe impl Upcast<Widget> for LevelBar { }
-unsafe impl Upcast<super::orientable::Orientable> for LevelBar { }
-unsafe impl Upcast<::builder::Buildable> for LevelBar { }
+unsafe impl Upcast<::Orientable> for LevelBar { }
+unsafe impl Upcast<::Buildable> for LevelBar { }

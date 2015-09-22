@@ -19,9 +19,9 @@ use {
 pub type ButtonBox = Object<ffi::GtkButtonBox>;
 
 unsafe impl Upcast<Widget> for ButtonBox { }
-unsafe impl Upcast<super::container::Container> for ButtonBox { }
-unsafe impl Upcast<::builder::Buildable> for ButtonBox { }
-unsafe impl Upcast<super::orientable::Orientable> for ButtonBox { }
+unsafe impl Upcast<::Container> for ButtonBox { }
+unsafe impl Upcast<::Buildable> for ButtonBox { }
+unsafe impl Upcast<::Orientable> for ButtonBox { }
 
 impl types::StaticType for ButtonBox {
     #[inline]

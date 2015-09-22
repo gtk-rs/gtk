@@ -234,8 +234,8 @@ impl types::StaticType for AboutDialog {
 }
 
 unsafe impl Upcast<Widget> for AboutDialog { }
-unsafe impl Upcast<::widgets::container::Container> for AboutDialog { }
-unsafe impl Upcast<::widgets::bin::Bin> for AboutDialog { }
-unsafe impl Upcast<::window::Window> for AboutDialog { }
-unsafe impl Upcast<super::Dialog> for AboutDialog { }
-unsafe impl Upcast<::builder::Buildable> for AboutDialog { }
+unsafe impl Upcast<::Container> for AboutDialog { }
+unsafe impl Upcast<::Bin> for AboutDialog { }
+unsafe impl Upcast<::Window> for AboutDialog { }
+unsafe impl Upcast<::Dialog> for AboutDialog { }
+unsafe impl Upcast<::Buildable> for AboutDialog { }

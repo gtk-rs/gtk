@@ -16,9 +16,9 @@ use Orientation;
 pub type Paned = Object<ffi::GtkPaned>;
 
 unsafe impl Upcast<Widget> for Paned { }
-unsafe impl Upcast<super::container::Container> for Paned { }
-unsafe impl Upcast<super::orientable::Orientable> for Paned { }
-unsafe impl Upcast<::builder::Buildable> for Paned { }
+unsafe impl Upcast<::Container> for Paned { }
+unsafe impl Upcast<::Orientable> for Paned { }
+unsafe impl Upcast<::Buildable> for Paned { }
 
 impl Paned {
     pub fn new(orientation: Orientation) -> Paned {

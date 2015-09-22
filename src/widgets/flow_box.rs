@@ -18,9 +18,9 @@ use SelectionMode;
 pub type FlowBox = Object<ffi::GtkFlowBox>;
 
 unsafe impl Upcast<Widget> for FlowBox { }
-unsafe impl Upcast<super::container::Container> for FlowBox { }
-unsafe impl Upcast<super::orientable::Orientable> for FlowBox { }
-unsafe impl Upcast<::builder::Buildable> for FlowBox { }
+unsafe impl Upcast<::Container> for FlowBox { }
+unsafe impl Upcast<::Orientable> for FlowBox { }
+unsafe impl Upcast<::Buildable> for FlowBox { }
 
 impl FlowBox {
     pub fn new() -> FlowBox {
@@ -144,9 +144,9 @@ impl types::StaticType for FlowBox {
 pub type FlowBoxChild = Object<ffi::GtkFlowBoxChild>;
 
 unsafe impl Upcast<Widget> for FlowBoxChild { }
-unsafe impl Upcast<super::container::Container> for FlowBoxChild { }
-unsafe impl Upcast<super::bin::Bin> for FlowBoxChild { }
-unsafe impl Upcast<::builder::Buildable> for FlowBoxChild { }
+unsafe impl Upcast<::Container> for FlowBoxChild { }
+unsafe impl Upcast<::Bin> for FlowBoxChild { }
+unsafe impl Upcast<::Buildable> for FlowBoxChild { }
 
 impl FlowBoxChild {
     pub fn new() -> FlowBoxChild {
