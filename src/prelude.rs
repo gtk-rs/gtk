@@ -20,7 +20,6 @@ pub use mvc::cell_renderer::{
 };
 pub use mvc::tree_model::TreeModelExt;
 pub use widgets::actionable::ActionableExt;
-pub use widgets::bin::BinExt;
 pub use widgets::box_::BoxExt;
 pub use widgets::button::ButtonExt;
 pub use widgets::container::ContainerExt;

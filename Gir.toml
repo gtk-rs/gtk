@@ -2,7 +2,9 @@
 girs_dir = "../gir-files"
 library = "Gtk"
 version = "3.0"
+min_cfg_version = "3.4"
 target_path = "."
+work_mode = "normal"
 
 [[object]]
 name = "Gtk.Widget"
@@ -15,6 +17,10 @@ status = "manual"
 [[object]]
 name = "Gtk.Bin"
 status = "generate"
+
+[[object]]
+name = "Gtk.Box"
+status = "manual"
 
 [[object]]
 name = "Gtk.Window"
@@ -47,3 +53,17 @@ status = "manual"
 [[object]]
 name = "Gtk.Alignment"
 status = "manual"
+
+[[object]]
+name = "Gtk.AppChooserDialog"
+status = "generate"
+non_nullable = [
+    "get_widget",
+]
+
+[[object]]
+name = "Gtk.AppChooserWidget"
+status = "generate"
+non_nullable = [
+    "get_widget",
+]
