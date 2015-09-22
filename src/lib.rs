@@ -159,6 +159,10 @@ pub mod status_icon;
 pub mod widgets;
 pub mod window;
 
+mod auto;
+
+pub use auto::*;
+
 pub use adjustment::Adjustment;
 pub use builder::{Builder, Buildable};
 pub use chooser::app::AppChooser;

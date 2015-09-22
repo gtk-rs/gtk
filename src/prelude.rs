@@ -2,6 +2,8 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
+pub use auto::traits::*;
+
 pub use chooser::app::AppChooserExt;
 pub use chooser::color::ColorChooserExt;
 pub use chooser::file::FileChooserExt;
