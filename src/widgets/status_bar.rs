@@ -7,6 +7,7 @@
 use glib::translate::ToGlibPtr;
 use cast::GTK_STATUSBAR;
 use ffi;
+use Box;
 
 /// GtkViewport — An adapter which makes widgets scrollable
 struct_Widget!(StatusBar);
@@ -44,10 +45,9 @@ impl StatusBar {
         }
     }
 
-    pub fn get_message_area<T: ::WidgetTrait + ::BoxTrait>(&self) -> T {
-        unsafe {
-            ::FFIWidget::wrap_widget(ffi::gtk_statusbar_get_message_area(GTK_STATUSBAR(self.pointer)))
-        }
+    pub fn get_message_area(&self) -> Box {
+        let ptr = unsafe { ffi::gtk_statusbar_get_message_area(GTK_STATUSBAR(self.pointer)) };
+        check_pointer!(ptr, Box).unwrap()
     }
 }
 

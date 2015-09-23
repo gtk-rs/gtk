@@ -6,7 +6,7 @@
 
 use glib::translate::{from_glib_none, ToGlibPtr};
 use ffi;
-use cast::GTK_MENU_ITEM;
+use cast::{GTK_MENU, GTK_MENU_ITEM};
 use glib::{to_bool, to_gboolean};
 
 /// The widget used for item in menus
@@ -14,7 +14,7 @@ pub trait MenuItemTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait {
     fn set_submenu<T: ::WidgetTrait>(&self, widget: &T) {
         unsafe {
             ffi::gtk_menu_item_set_submenu(GTK_MENU_ITEM(self.unwrap_widget()),
-                                           widget.unwrap_widget())
+                                           GTK_MENU(widget.unwrap_widget()))
         }
     }
 

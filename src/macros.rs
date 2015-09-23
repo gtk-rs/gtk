@@ -25,7 +25,7 @@ macro_rules! check_pointer(
 macro_rules! struct_Widget(
     ($gtk_struct:ident) => (
         pub struct $gtk_struct {
-            pointer: *mut ffi::GtkWidget
+            pub pointer: *mut ffi::GtkWidget
         }
     );
 );

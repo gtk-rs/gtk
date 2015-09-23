@@ -392,6 +392,10 @@ pub fn GTK_TREE_VIEW(widget: *mut ffi::GtkWidget) -> *mut ffi::GtkTreeView {
     unsafe { ffi::cast_GtkTreeView(widget) }
 }
 
+pub fn GTK_MENU(widget: *mut ffi::GtkWidget) -> *mut ffi::GtkMenu {
+    unsafe { ffi::cast_GtkMenu(widget) }
+}
+
 pub fn GTK_MENU_SHELL(widget: *mut ffi::GtkWidget) -> *mut ffi::GtkMenuShell {
     unsafe { ffi::cast_GtkMenuShell(widget) }
 }
