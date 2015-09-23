@@ -9,7 +9,7 @@ use glib::types;
 use ffi;
 
 use object::{Object, Downcast, Upcast};
-use widgets::box_;
+use Box;
 use widgets::widget::Widget;
 use window::Window;
 
@@ -45,7 +45,7 @@ impl MessageDialog {
         }
     }
 
-    pub fn get_message_area(&self) -> box_::Box {
+    pub fn get_message_area(&self) -> Box {
         unsafe {
             Widget::from_glib_none(ffi::gtk_message_dialog_get_message_area(self.to_glib_none().0))
                 .downcast_unchecked()

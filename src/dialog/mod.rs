@@ -19,12 +19,10 @@ use glib::types;
 use ffi;
 
 use object::{Object, Downcast, Upcast};
-use widgets;
-use widgets::button::Button;
 #[cfg(gtk_3_12)]
-use widgets::header_bar::HeaderBar;
+use HeaderBar;
 use widgets::widget::Widget;
-use {ResponseType};
+use {Box, Button, ResponseType};
 
 /// Pseudo-variadic array of buttons
 ///
@@ -209,7 +207,7 @@ pub trait DialogExt {
     fn get_response_for_widget<T: Upcast<Widget>>(&self, widget: &T) -> Result<i32, ResponseType>;
     fn get_widget_for_response(&self, response_id: i32) -> Option<Widget>;
     fn get_action_area(&self) -> Widget;
-    fn get_content_area(&self) -> widgets::box_::Box;
+    fn get_content_area(&self) -> Box;
     #[cfg(gtk_3_12)]
     fn get_header_bar(&self) -> Option<HeaderBar>;
 }
@@ -284,11 +282,8 @@ impl<O: Upcast<Dialog>> DialogExt for O {
         unsafe { from_glib_none(ffi::gtk_dialog_get_action_area(self.upcast().to_glib_none().0)) }
     }
 
-    fn get_content_area(&self) -> widgets::box_::Box {
-        unsafe {
-            Widget::from_glib_none(ffi::gtk_dialog_get_content_area(self.upcast().to_glib_none().0))
-                .downcast_unchecked()
-        }
+    fn get_content_area(&self) -> Box {
+        unsafe { from_glib_none(ffi::gtk_dialog_get_content_area(self.upcast().to_glib_none().0)) }
     }
 
     #[cfg(gtk_3_12)]

@@ -2,47 +2,20 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-#[cfg(gtk_3_12)]
-pub mod action_bar;
 pub mod actionable;
-pub mod alignment;
-pub mod arrow;
 pub mod box_;
-pub mod button;
-pub mod button_box;
-pub mod calendar;
-pub mod check_button;
-pub mod color_button;
 pub mod combo_box;
 pub mod container;
 pub mod editable;
 pub mod entry;
-pub mod fixed;
-#[cfg(gtk_3_12)]
-pub mod flow_box;
-pub mod font_button;
-pub mod frame;
-pub mod grid;
-#[cfg(gtk_3_10)]
-pub mod header_bar;
 pub mod icon_view;
-pub mod image;
-pub mod label;
-pub mod layout;
-#[cfg(gtk_3_6)]
-pub mod level_bar;
-pub mod link_button;
 pub mod lock_button;
-pub mod menu_button;
-pub mod misc;
 pub mod notebook;
 pub mod orientable;
 pub mod paned;
 pub mod progress_bar;
-pub mod radio_button;
 pub mod range;
 pub mod scale;
-pub mod scale_button;
 pub mod scrollable;
 pub mod scrollbar;
 pub mod separator;
@@ -52,7 +25,6 @@ pub mod spinner;
 #[cfg(gtk_3_10)]
 pub mod stack;
 pub mod switch;
-pub mod toggle_button;
 pub mod widget;
 
 // ---------------- cut ----------------

@@ -31,7 +31,7 @@ name = "Gtk.Dialog"
 status = "manual"
 
 [[object]]
-name = "Gtk.DrawingArea"
+name = "Gtk.Misc"
 status = "generate"
 
 [[object]]
@@ -51,8 +51,24 @@ name = "Gtk.Orientable"
 status = "manual"
 
 [[object]]
+name = "Gtk.AccelGroup"
+status = "generate"
+
+[[object]]
 name = "Gtk.Alignment"
 status = "manual"
+
+[[object]]
+name = "Gtk.ActionBar"
+status = "generate"
+
+[[object]]
+name = "Gtk.Alignment"
+status = "generate"
+
+[[object]]
+name = "Gtk.Arrow"
+status = "generate"
 
 [[object]]
 name = "Gtk.AppChooserDialog"
@@ -64,6 +80,123 @@ non_nullable = [
 [[object]]
 name = "Gtk.AppChooserWidget"
 status = "generate"
-non_nullable = [
-    "get_widget",
-]
+
+[[object]]
+name = "Gtk.AspectFrame"
+status = "generate"
+
+[[object]]
+name = "Gtk.Button"
+status = "generate"
+
+[[object]]
+name = "Gtk.ButtonBox"
+status = "generate"
+
+[[object]]
+name = "Gtk.Calendar"
+status = "generate"
+
+[[object]]
+name = "Gtk.CheckButton"
+status = "generate"
+
+[[object]]
+name = "Gtk.ColorButton"
+status = "generate"
+
+[[object]]
+name = "Gtk.DrawingArea"
+status = "generate"
+
+[[object]]
+name = "Gtk.Fixed"
+status = "generate"
+
+[[object]]
+name = "Gtk.FlowBox"
+status = "generate"
+
+[[object]]
+name = "Gtk.FlowBoxChild"
+status = "generate"
+
+[[object]]
+name = "Gtk.FontButton"
+status = "generate"
+
+[[object]]
+name = "Gtk.Frame"
+status = "generate"
+
+[[object]]
+name = "Gtk.Grid"
+status = "generate"
+
+[[object]]
+name = "Gtk.HeaderBar"
+status = "generate"
+
+[[object]]
+name = "Gtk.Image"
+status = "generate"
+
+[[object]]
+name = "Gtk.Label"
+status = "generate"
+
+[[object]]
+name = "Gtk.Layout"
+status = "generate"
+
+[[object]]
+name = "Gtk.LevelBar"
+status = "generate"
+
+[[object]]
+name = "Gtk.LinkButton"
+status = "generate"
+
+[[object]]
+name = "Gtk.Menu"
+status = "generate"
+
+[[object]]
+name = "Gtk.MenuButton"
+status = "generate"
+
+[[object]]
+name = "Gtk.MenuItem"
+status = "generate"
+
+[[object]]
+name = "Gtk.MenuShell"
+status = "generate"
+
+[[object]]
+name = "Gtk.Popover"
+status = "generate"
+
+[[object]]
+name = "Gtk.PopoverMenu"
+status = "generate"
+
+[[object]]
+name = "Gtk.RadioButton"
+status = "generate"
+
+[[object]]
+name = "Gtk.ScaleButton"
+status = "generate"
+
+[[object]]
+name = "Gtk.ToggleButton"
+status = "generate"
+
+[[object]]
+name = "GdkPixbuf.Pixbuf"
+status = "manual"
+
+[[object]]
+name = "GdkPixbuf.PixbufAnimation"
+status = "manual"

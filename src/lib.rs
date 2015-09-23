@@ -49,6 +49,8 @@ extern crate gdk;
 extern crate cairo;
 extern crate pango;
 
+pub use gdk::pixbuf as gdk_pixbuf;
+
 pub use glib::ValuePublic;
 
 pub use ffi::GtkAccelFlags as AccelFlags;
@@ -68,6 +70,7 @@ pub use ffi::GtkDestDefaults as DestDefaults;
 pub use ffi::GtkDialogFlags as DialogFlags;
 pub use ffi::GtkDirectionType as DirectionType;
 pub use ffi::GtkDragResult as DragResult;
+pub use ffi::GtkBaselinePosition as BaselinePosition;
 pub use ffi::GtkEntryIconPosition as EntryIconPosition;
 pub use ffi::GtkExpanderStyle as ExpanderStyle;
 pub use ffi::GtkFileChooserAction as FileChooserAction;
@@ -204,53 +207,20 @@ pub use mvc::tree_selection::TreeSelection;
 pub use mvc::tree_view::TreeView;
 pub use mvc::tree_view_column::TreeViewColumn;
 pub use status_icon::StatusIcon;
-#[cfg(gtk_3_12)]
-pub use widgets::action_bar::ActionBar;
 pub use widgets::actionable::Actionable;
-pub use widgets::alignment::Alignment;
-pub use widgets::arrow::Arrow;
 pub use widgets::box_::Box;
-pub use widgets::button::Button;
-pub use widgets::button_box::ButtonBox;
-pub use widgets::check_button::CheckButton;
-pub use widgets::color_button::ColorButton;
 pub use widgets::container::Container;
-pub use widgets::calendar::Calendar;
 pub use widgets::editable::Editable;
 pub use widgets::entry::Entry;
 pub use widgets::entry::EntryBuffer;
-pub use widgets::fixed::Fixed;
-#[cfg(gtk_3_12)]
-pub use widgets::flow_box::{
-    FlowBox,
-    FlowBoxChild,
-};
-pub use widgets::font_button::FontButton;
-pub use widgets::frame::{
-    AspectFrame,
-    Frame,
-};
-pub use widgets::grid::Grid;
-#[cfg(gtk_3_10)]
-pub use widgets::header_bar::HeaderBar;
 pub use widgets::icon_view::IconView;
-pub use widgets::image::Image;
-pub use widgets::label::Label;
-pub use widgets::layout::Layout;
-#[cfg(gtk_3_6)]
-pub use widgets::level_bar::LevelBar;
-pub use widgets::link_button::LinkButton;
 pub use widgets::lock_button::LockButton;
-pub use widgets::menu_button::MenuButton;
-pub use widgets::misc::Misc;
 pub use widgets::notebook::Notebook;
 pub use widgets::orientable::Orientable;
 pub use widgets::paned::Paned;
 pub use widgets::progress_bar::ProgressBar;
-pub use widgets::radio_button::RadioButton;
 pub use widgets::range::Range;
 pub use widgets::scale::Scale;
-pub use widgets::scale_button::ScaleButton;
 pub use widgets::scrollable::Scrollable;
 pub use widgets::scrollbar::Scrollbar;
 pub use widgets::separator::Separator;
@@ -263,7 +233,6 @@ pub use widgets::stack::{
     StackSwitcher,
 };
 pub use widgets::switch::Switch;
-pub use widgets::toggle_button::ToggleButton;
 pub use widgets::widget::Widget;
 pub use window::Window;
 
