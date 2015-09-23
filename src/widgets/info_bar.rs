@@ -9,6 +9,7 @@
 use libc::c_int;
 use glib::translate::ToGlibPtr;
 
+use Button;
 use MessageType;
 use cast::GTK_INFOBAR;
 use ffi;
@@ -33,7 +34,7 @@ impl InfoBar {
         let button = unsafe {
             ffi::gtk_info_bar_add_button(GTK_INFOBAR(self.pointer), button_text.to_glib_none().0, response_id as c_int)
         };
-        ::FFIWidget::wrap_widget(button)
+        check_pointer!(button, Button).unwrap()
     }
 
     pub fn set_response_sensitive(&self, response_id: i32, setting: bool) -> () {

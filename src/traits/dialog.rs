@@ -7,6 +7,7 @@ use libc::c_char;
 use glib::translate::*;
 use cast::GTK_DIALOG;
 use ffi;
+use Box;
 
 /// Pseudo-variadic array of buttons
 ///
@@ -236,14 +237,10 @@ pub trait DialogTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait + ::WindowT
         }
     }
 
-    fn get_content_area<T: ::WidgetTrait>(&self) -> Option<T> {
+    fn get_content_area(&self) -> Box {
         let tmp_pointer = unsafe { ffi::gtk_dialog_get_content_area(GTK_DIALOG(self.unwrap_widget())) };
 
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            Some(::FFIWidget::wrap_widget(tmp_pointer))
-        }
+        check_pointer!(tmp_pointer, Box).unwrap()
     }
 
     #[cfg(gtk_3_12)]

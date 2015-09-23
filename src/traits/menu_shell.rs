@@ -5,14 +5,15 @@
 //! A base class for menu objects
 
 use ffi;
-use cast::GTK_MENU_SHELL;
+use cast::{GTK_MENU_ITEM, GTK_MENU_SHELL};
 use glib::{to_bool, to_gboolean};
 
 /// A base class for menu objects
 pub trait MenuShellTrait: ::WidgetTrait + ::ContainerTrait {
-    fn append<T: ::WidgetTrait>(&self, widget: &T) {
+    fn append<T: ::MenuItemTrait>(&self, widget: &T) {
         unsafe {
-            ffi::gtk_menu_shell_append(GTK_MENU_SHELL(self.unwrap_widget()), widget.unwrap_widget())
+            ffi::gtk_menu_shell_append(GTK_MENU_SHELL(self.unwrap_widget()),
+                GTK_MENU_ITEM(widget.unwrap_widget()))
         }
     }
 
