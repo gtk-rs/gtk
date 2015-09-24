@@ -520,6 +520,14 @@ GtkPopover *cast_GtkPopover(GtkWidget* widget) {
 
 #endif
 
+#if defined(GTK_3_16)
+
+GtkPopoverMenu *cast_GtkPopoverMenu(GtkWidget* widget) {
+    return GTK_POPOVER_MENU(widget);
+}
+
+#endif
+
 GAppInfo* cast_GtkAppInfo(GtkWidget* widget) {
     return G_APP_INFO(widget);
 }
