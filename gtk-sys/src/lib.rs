@@ -12071,6 +12071,7 @@ extern "C" {
     pub fn cast_GtkTreeStoreFromTreeModel(store: *mut GtkTreeModel) -> *mut GtkTreeStore;
     pub fn cast_GtkComboBox(widget: *mut GtkWidget) -> *mut GtkComboBox;
     pub fn cast_GtkPopover(widget: *mut GtkWidget) -> *mut GtkPopover;
+    pub fn cast_GtkPopoverMenu(widget: *mut GtkWidget) -> *mut GtkPopoverMenu;
     pub fn cast_GtkComboBoxText(widget: *mut GtkWidget) -> *mut GtkComboBoxText;
     pub fn cast_GtkTreeStore(obj: *mut gobject::GObject) -> *mut GtkTreeStore;
     pub fn cast_GtkTreeModel(obj: *mut gobject::GObject) -> *mut GtkTreeModel;

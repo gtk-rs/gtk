@@ -215,6 +215,12 @@ pub use self::widgets::{
     Popover
 };
 
+#[cfg(gtk_3_16)]
+/// GTK Widgets for versions since GTK 3.16
+pub use self::widgets::{
+    PopoverMenu
+};
+
 /// GTK Enum types
 pub use ffi::GtkAccelFlags as AccelFlags;
 pub use ffi::GtkAlign as Align;
