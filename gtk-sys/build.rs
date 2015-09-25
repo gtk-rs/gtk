@@ -51,7 +51,7 @@ fn main() {
 
     // build include path
     let mut gcc_conf = Config::new();
-    for s in output.split(' ') {
+    for s in output.split_whitespace() {
         if s.starts_with("-I") {
             let path: &Path = s[2..].as_ref();
             gcc_conf.include(path);
