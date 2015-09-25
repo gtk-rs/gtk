@@ -120,6 +120,8 @@ pub use self::recent_chooser_widget::RecentChooserWidget;
 pub use self::combo_box::ComboBox;
 #[cfg(gtk_3_12)]
 pub use self::popover::Popover;
+#[cfg(gtk_3_16)]
+pub use self::popover_menu::PopoverMenu;
 pub use self::combo_box_text::ComboBoxText;
 //pub use self::gtype::g_type;
 pub use self::text_mark::TextMark;
@@ -258,6 +260,8 @@ mod recent_chooser_widget;
 mod combo_box;
 #[cfg(gtk_3_12)]
 mod popover;
+#[cfg(gtk_3_16)]
+mod popover_menu;
 mod combo_box_text;
 //mod gtype;
 mod text_mark;
