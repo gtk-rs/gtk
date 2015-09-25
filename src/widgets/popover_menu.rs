@@ -6,7 +6,6 @@
 
 use ffi;
 use cast::GTK_POPOVER_MENU;
-use glib::translate::ToGlibPtr;
 
 struct_Widget!(PopoverMenu);
 
