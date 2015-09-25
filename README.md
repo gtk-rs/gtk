@@ -1,4 +1,4 @@
-# gtk [![Build Status](https://travis-ci.org/gtk-rs/gtk.png?branch=master)](https://travis-ci.org/gtk-rs/gtk) [![Build status](https://ci.appveyor.com/api/projects/status/e3t5yubl172pomlb?svg=true)](https://ci.appveyor.com/project/GuillaumeGomez/gtk-isosc) [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/gtk-rs/gtk)
+# gtk [![Build Status](https://travis-ci.org/gtk-rs/gtk.png?branch=master)](https://travis-ci.org/gtk-rs/gtk) [![Build status](https://ci.appveyor.com/api/projects/status/5mot32ipr12iocw0?svg=true)](https://ci.appveyor.com/project/GuillaumeGomez/gtk) [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/gtk-rs/gtk)
 
 __Rust__ bindings and wrappers for __GLib__, __GDK 3__, __GTK+ 3__  and __Cairo__.
 [Online documentation](http://gtk-rs.org/docs/gtk/).
