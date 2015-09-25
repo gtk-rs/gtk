@@ -5,8 +5,8 @@
 use libc::{c_int, c_uint, c_float, c_double};
 use glib::translate::{from_glib_none, from_glib_full, ToGlibPtr};
 
-use {EntryIconPosition, ImageType, InputPurpose, InputHints};
-use cast::GTK_ENTRY;
+use {EntryCompletion, EntryIconPosition, FFIWidget, ImageType, InputPurpose, InputHints};
+use cast::{GTK_ENTRY, GTK_ENTRY_COMPLETION};
 use ffi;
 use glib::{to_bool, to_gboolean};
 
@@ -159,6 +159,22 @@ pub trait EntryTrait: ::WidgetTrait {
 
     fn get_visibility(&self) -> bool {
         unsafe { to_bool(ffi::gtk_entry_get_visibility(GTK_ENTRY(self.unwrap_widget()))) }
+    }
+
+    fn set_completion(&self, completion: &EntryCompletion) -> () {
+        unsafe {
+            ffi::gtk_entry_set_completion(GTK_ENTRY(self.unwrap_widget()), GTK_ENTRY_COMPLETION(completion.unwrap_widget()));
+        }
+    }
+
+    fn get_completion(&self) -> Option<EntryCompletion> {
+        let tmp_pointer = unsafe { ffi::gtk_entry_get_completion(GTK_ENTRY(self.unwrap_widget())) };
+
+        if tmp_pointer.is_null() {
+            None
+        } else {
+            Some(EntryCompletion::wrap_widget(tmp_pointer as *mut ffi::GtkWidget))
+        }
     }
 
     fn set_cursor_hadjustment(&self, adjustment: &::Adjustment) -> () {
