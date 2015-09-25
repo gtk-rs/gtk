@@ -55,7 +55,7 @@ build_script:
   - rustc -V
   - mkdir .cargo
   - echo paths = ["glib"] > .cargo\config
-  - git clone -q --depth 50 -b object_reform https://github.com/gkoz/rust-gnome-glib glib
+  - git clone -q --depth 50 -b object_reform https://github.com/gkoz/gtk-rs-glib glib
   - cargo build
 
 test: false

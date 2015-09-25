@@ -1,4 +1,4 @@
-// Copyright 2013-2015, The Rust-GNOME Project Developers.
+// Copyright 2013-2015, The Gtk-rs Project Developers.
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
@@ -42,19 +42,23 @@ impl PlacesSidebar {
         unsafe { to_bool(ffi::gtk_places_sidebar_get_show_connect_to_server(GTK_PLACES_SIDEBAR(self.unwrap_widget()))) }
     }
 
+    #[cfg(gtk_3_12)]
     pub fn set_local_only(&self, local_only: bool) {
         unsafe { ffi::gtk_places_sidebar_set_local_only(GTK_PLACES_SIDEBAR(self.unwrap_widget()), to_gboolean(local_only)) }
     }
 
+    #[cfg(gtk_3_12)]
     pub fn get_local_only(&self) -> bool {
         unsafe { to_bool(ffi::gtk_places_sidebar_get_local_only(GTK_PLACES_SIDEBAR(self.unwrap_widget()))) }
     }
 
+    #[cfg(gtk_3_14)]
     pub fn set_show_enter_location(&self, show_enter_location: bool) {
         unsafe { ffi::gtk_places_sidebar_set_show_enter_location(GTK_PLACES_SIDEBAR(self.unwrap_widget()),
             to_gboolean(show_enter_location)) }
     }
 
+    #[cfg(gtk_3_14)]
     pub fn get_show_enter_location(&self) -> bool {
         unsafe { to_bool(ffi::gtk_places_sidebar_get_show_enter_location(GTK_PLACES_SIDEBAR(self.unwrap_widget()))) }
     }

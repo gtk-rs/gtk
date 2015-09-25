@@ -1,14 +1,14 @@
 [package]
 name = "gtk"
 version = "0.0.3"
-authors = ["The Rust-GNOME Project Developers"]
+authors = ["The Gtk-rs Project Developers"]
 build = "build.rs"
 
 description = "Rust bindings for the GTK+ library"
-repository = "https://github.com/rust-gnome/gtk"
+repository = "https://github.com/gtk-rs/gtk"
 license = "MIT"
-homepage = "https://github.com/rust-gnome/gtk"
-documentation = "https://github.com/rust-gnome/gtk"
+homepage = "https://github.com/gtk-rs/gtk"
+documentation = "https://github.com/gtk-rs/gtk"
 
 readme = "README.md"
 
@@ -21,16 +21,16 @@ name = "gtk"
 name = "test"
 
 [dependencies]
-cairo-rs = { git = "https://github.com/rust-gnome/cairo" }
-cairo-sys-rs = { git = "https://github.com/rust-gnome/cairo" }
-gdk-pixbuf-sys = { git = "https://github.com/rust-gnome/sys" }
-gdk = { git = "https://github.com/rust-gnome/gdk" }
-gdk-sys = { git = "https://github.com/rust-gnome/sys" }
-gio-sys = { git = "https://github.com/rust-gnome/sys" }
-glib = { git = "https://github.com/rust-gnome/glib" }
-glib-sys = { git = "https://github.com/rust-gnome/sys" }
-gobject-sys = { git = "https://github.com/rust-gnome/sys" }
-gtk-sys = { git = "https://github.com/rust-gnome/sys" }
+cairo-rs = { git = "https://github.com/gtk-rs/cairo" }
+cairo-sys-rs = { git = "https://github.com/gtk-rs/cairo" }
+gdk-pixbuf-sys = { git = "https://github.com/gtk-rs/sys" }
+gdk = { git = "https://github.com/gtk-rs/gdk" }
+gdk-sys = { git = "https://github.com/gtk-rs/sys" }
+gio-sys = { git = "https://github.com/gtk-rs/sys" }
+glib = { git = "https://github.com/gtk-rs/glib" }
+glib-sys = { git = "https://github.com/gtk-rs/sys" }
+gobject-sys = { git = "https://github.com/gtk-rs/sys" }
+gtk-sys = { git = "https://github.com/gtk-rs/sys" }
 libc = "0.1"
-pango = { git = "https://github.com/rust-gnome/pango" }
-pango-sys = { git = "https://github.com/rust-gnome/sys" }
+pango = { git = "https://github.com/gtk-rs/pango" }
+pango-sys = { git = "https://github.com/gtk-rs/sys" }
