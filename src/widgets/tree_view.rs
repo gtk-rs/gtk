@@ -423,6 +423,15 @@ impl TreeView {
         unsafe { ffi::gtk_tree_view_append_column(GTK_TREE_VIEW(self.pointer),
                                                   column.unwrap_pointer()) }
     }
+    
+    pub fn remove_column(&self, column: &::TreeViewColumn) -> i32 {
+        unsafe { 
+            ffi::gtk_tree_view_remove_column(
+                GTK_TREE_VIEW(self.pointer),
+                column.unwrap_pointer()
+            ) 
+       }
+    }
 }
 
 impl_drop!(TreeView);
