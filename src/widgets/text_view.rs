@@ -9,6 +9,8 @@ use TextBuffer;
 use FFIWidget;
 use cast::{GTK_TEXT_VIEW, GTK_TEXT_BUFFER};
 use glib::{to_bool, to_gboolean};
+use glib::translate::{ToGlibPtr, ToGlibPtrMut};
+use TextIter;
 
 struct_Widget!(TextView);
 
@@ -48,8 +50,8 @@ impl TextView {
             to_gboolean(use_align), xalign, yalign) }
     }
 
-    pub fn scroll_to_iter(&self, iter: &::TextIter, within_margin: f64, use_align: bool, xalign: f64, yalign: f64) -> bool {
-        unsafe { to_bool(ffi::gtk_text_view_scroll_to_iter(GTK_TEXT_VIEW(self.unwrap_widget()), iter.unwrap_pointer(), within_margin,
+    pub fn scroll_to_iter(&self, iter: &mut TextIter, within_margin: f64, use_align: bool, xalign: f64, yalign: f64) -> bool {
+        unsafe { to_bool(ffi::gtk_text_view_scroll_to_iter(GTK_TEXT_VIEW(self.unwrap_widget()), iter.to_glib_none_mut().0, within_margin,
             to_gboolean(use_align), xalign, yalign)) }
     }
 
@@ -65,13 +67,23 @@ impl TextView {
         unsafe { to_bool(ffi::gtk_text_view_place_cursor_onscreen(GTK_TEXT_VIEW(self.unwrap_widget()))) }
     }
 
-    pub fn get_line_at_y(&self, target_iter: &::TextIter, y: i32, line_top: &mut i32) {
-        unsafe { ffi::gtk_text_view_get_line_at_y(GTK_TEXT_VIEW(self.unwrap_widget()), target_iter.unwrap_pointer(), y as ::libc::c_int,
-            line_top) }
+    pub fn get_line_at_y(&self, y: i32) -> (TextIter, i32) {
+        unsafe {
+            let mut target_iter = TextIter::uninitialized();
+            let mut line_top = 0;
+            ffi::gtk_text_view_get_line_at_y(GTK_TEXT_VIEW(self.unwrap_widget()),
+                target_iter.to_glib_none_mut().0, y, &mut line_top);
+            (target_iter, line_top)
+        }
     }
 
-    pub fn get_iter_at_location(&self, target_iter: &::TextIter, x: i32, y: i32) {
-        unsafe { ffi::gtk_text_view_get_iter_at_location(GTK_TEXT_VIEW(self.unwrap_widget()), target_iter.unwrap_pointer(), x, y) }
+    pub fn get_iter_at_location(&self, x: i32, y: i32) -> TextIter {
+        unsafe {
+            let mut target_iter = TextIter::uninitialized();
+            ffi::gtk_text_view_get_iter_at_location(GTK_TEXT_VIEW(self.unwrap_widget()),
+                target_iter.to_glib_none_mut().0, x, y);
+            target_iter
+        }
     }
 
     pub fn buffer_to_window_coords(&self, win: ::TextWindowType, buffer_x: i32, buffer_y: i32, window_x: *mut i32, window_y: &mut i32) {
@@ -92,29 +104,29 @@ impl TextView {
         unsafe { ffi::gtk_text_view_get_border_window_size(GTK_TEXT_VIEW(self.unwrap_widget()), _type) }
     }
 
-    pub fn forward_display_line(&self, iter: &::TextIter) -> bool {
-        unsafe { to_bool(ffi::gtk_text_view_forward_display_line(GTK_TEXT_VIEW(self.unwrap_widget()), iter.unwrap_pointer())) }
+    pub fn forward_display_line(&self, iter: &mut TextIter) -> bool {
+        unsafe { to_bool(ffi::gtk_text_view_forward_display_line(GTK_TEXT_VIEW(self.unwrap_widget()), iter.to_glib_none_mut().0)) }
     }
 
-    pub fn backward_display_line(&self, iter: &::TextIter) -> bool {
-        unsafe { to_bool(ffi::gtk_text_view_forward_display_line(GTK_TEXT_VIEW(self.unwrap_widget()), iter.unwrap_pointer())) }
+    pub fn backward_display_line(&self, iter: &mut TextIter) -> bool {
+        unsafe { to_bool(ffi::gtk_text_view_forward_display_line(GTK_TEXT_VIEW(self.unwrap_widget()), iter.to_glib_none_mut().0)) }
     }
 
-    pub fn forward_display_line_end(&self, iter: &::TextIter) -> bool {
-        unsafe { to_bool(ffi::gtk_text_view_forward_display_line_end(GTK_TEXT_VIEW(self.unwrap_widget()), iter.unwrap_pointer())) }
+    pub fn forward_display_line_end(&self, iter: &mut TextIter) -> bool {
+        unsafe { to_bool(ffi::gtk_text_view_forward_display_line_end(GTK_TEXT_VIEW(self.unwrap_widget()), iter.to_glib_none_mut().0)) }
     }
 
-    pub fn backward_display_line_start(&self, iter: &::TextIter) -> bool {
-        unsafe { to_bool(ffi::gtk_text_view_backward_display_line_start(GTK_TEXT_VIEW(self.unwrap_widget()), iter.unwrap_pointer())) }
+    pub fn backward_display_line_start(&self, iter: &mut TextIter) -> bool {
+        unsafe { to_bool(ffi::gtk_text_view_backward_display_line_start(GTK_TEXT_VIEW(self.unwrap_widget()), iter.to_glib_none_mut().0)) }
     }
 
-    pub fn starts_display_line(&self, iter: &::TextIter) -> bool {
+    pub fn starts_display_line(&self, iter: &TextIter) -> bool {
         unsafe { to_bool(ffi::gtk_text_view_starts_display_line(GTK_TEXT_VIEW(self.unwrap_widget()),
-            iter.unwrap_pointer())) }
+            iter.to_glib_none().0)) }
     }
 
-    pub fn move_visually(&self, iter: &::TextIter, count: i32) -> bool {
-        unsafe { to_bool(ffi::gtk_text_view_move_visually(GTK_TEXT_VIEW(self.unwrap_widget()), iter.unwrap_pointer(),
+    pub fn move_visually(&self, iter: &mut TextIter, count: i32) -> bool {
+        unsafe { to_bool(ffi::gtk_text_view_move_visually(GTK_TEXT_VIEW(self.unwrap_widget()), iter.to_glib_none_mut().0,
             count as ::libc::c_int)) }
     }
 
