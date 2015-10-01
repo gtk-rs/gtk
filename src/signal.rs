@@ -98,6 +98,7 @@ pub trait WidgetSignals {
     fn connect_key_press_event<F: Fn(Widget, &EventKey) -> Inhibit + 'static>(&self, f: F) -> u64;
     fn connect_key_release_event<F: Fn(Widget, &EventKey) -> Inhibit + 'static>(&self, f: F) -> u64;
     fn connect_keynav_failed<F: Fn(Widget, DirectionType) -> Inhibit + 'static>(&self, f: F) -> u64;
+    fn connect_leave_notify_event<F: Fn(Widget, &EventCrossing) -> Inhibit + 'static>(&self, f: F) -> u64;
     fn connect_map<F: Fn(Widget) + 'static>(&self, f: F) -> u64;
     fn connect_map_event<F: Fn(Widget, &EventAny) -> Inhibit + 'static>(&self, f: F) -> u64;
     fn connect_mnemonic_activate<F: Fn(Widget, bool) -> Inhibit + 'static>(&self, f: F) -> u64;
@@ -362,6 +363,15 @@ mod widget {
                 let f: Box<Box<Fn(Widget, &EventKey) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "key-release-event",
                     transmute(event_key_trampoline), into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_leave_notify_event<F: Fn(Widget, &EventCrossing) -> Inhibit + 'static>(&self, f: F)
+                -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(Widget, &EventCrossing) -> Inhibit + 'static>> = Box::new(Box::new(f));
+                connect(self.unwrap_widget() as *mut _, "leave-notify-event",
+                    transmute(event_crossing_trampoline), into_raw(f) as *mut _)
             }
         }
 
