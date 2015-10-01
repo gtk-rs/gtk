@@ -5,7 +5,6 @@
 //! GtkTextIter — Text buffer iterator
 
 use ffi;
-use glib::{to_bool, to_gboolean};
 use glib::boxed::{Boxed, BoxedMemoryManager};
 use glib::translate::{Stash, StashMut, ToGlib, ToGlibPtr, ToGlibPtrMut, from_glib, from_glib_none};
 
@@ -142,63 +141,63 @@ impl TextIter {
     }
 
     pub fn begins_tag(&self, tag: &::TextTag) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_begins_tag(self.to_glib_none().0, tag.unwrap_pointer())) }
+        unsafe { from_glib(ffi::gtk_text_iter_begins_tag(self.to_glib_none().0, tag.unwrap_pointer())) }
     }
 
     pub fn ends_tag(&self, tag: &::TextTag) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_ends_tag(self.to_glib_none().0, tag.unwrap_pointer())) }
+        unsafe { from_glib(ffi::gtk_text_iter_ends_tag(self.to_glib_none().0, tag.unwrap_pointer())) }
     }
 
     pub fn toggles_tag(&self, tag: &::TextTag) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_ends_tag(self.to_glib_none().0, tag.unwrap_pointer())) }
+        unsafe { from_glib(ffi::gtk_text_iter_ends_tag(self.to_glib_none().0, tag.unwrap_pointer())) }
     }
 
     pub fn has_tag(&self, tag: &::TextTag) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_ends_tag(self.to_glib_none().0, tag.unwrap_pointer())) }
+        unsafe { from_glib(ffi::gtk_text_iter_ends_tag(self.to_glib_none().0, tag.unwrap_pointer())) }
     }
 
     pub fn editable(&self, default_setting: bool) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_editable(self.to_glib_none().0, to_gboolean(default_setting))) }
+        unsafe { from_glib(ffi::gtk_text_iter_editable(self.to_glib_none().0, default_setting.to_glib())) }
     }
 
     pub fn can_insert(&self, default_setting: bool) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_can_insert(self.to_glib_none().0, to_gboolean(default_setting))) }
+        unsafe { from_glib(ffi::gtk_text_iter_can_insert(self.to_glib_none().0, default_setting.to_glib())) }
     }
 
     pub fn starts_word(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_starts_word(self.to_glib_none().0)) }
+        unsafe { from_glib(ffi::gtk_text_iter_starts_word(self.to_glib_none().0)) }
     }
 
     pub fn ends_word(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_ends_word(self.to_glib_none().0)) }
+        unsafe { from_glib(ffi::gtk_text_iter_ends_word(self.to_glib_none().0)) }
     }
 
     pub fn inside_word(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_ends_word(self.to_glib_none().0)) }
+        unsafe { from_glib(ffi::gtk_text_iter_ends_word(self.to_glib_none().0)) }
     }
 
     pub fn starts_line(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_starts_line(self.to_glib_none().0)) }
+        unsafe { from_glib(ffi::gtk_text_iter_starts_line(self.to_glib_none().0)) }
     }
 
     pub fn ends_line(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_ends_line(self.to_glib_none().0)) }
+        unsafe { from_glib(ffi::gtk_text_iter_ends_line(self.to_glib_none().0)) }
     }
 
     pub fn starts_sentence(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_starts_sentence(self.to_glib_none().0)) }
+        unsafe { from_glib(ffi::gtk_text_iter_starts_sentence(self.to_glib_none().0)) }
     }
 
     pub fn ends_sentence(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_ends_sentence(self.to_glib_none().0)) }
+        unsafe { from_glib(ffi::gtk_text_iter_ends_sentence(self.to_glib_none().0)) }
     }
 
     pub fn inside_sentence(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_inside_sentence(self.to_glib_none().0)) }
+        unsafe { from_glib(ffi::gtk_text_iter_inside_sentence(self.to_glib_none().0)) }
     }
 
     pub fn is_cursor_position(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_is_cursor_position(self.to_glib_none().0)) }
+        unsafe { from_glib(ffi::gtk_text_iter_is_cursor_position(self.to_glib_none().0)) }
     }
 
     pub fn get_chars_in_line(&self) -> i32 {
@@ -210,143 +209,143 @@ impl TextIter {
     }
 
     pub fn get_attributes(&self, values: &::TextAttributes) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_get_attributes(self.to_glib_none().0, values.unwrap_pointer())) }
+        unsafe { from_glib(ffi::gtk_text_iter_get_attributes(self.to_glib_none().0, values.unwrap_pointer())) }
     }
 
     pub fn is_end(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_is_end(self.to_glib_none().0)) }
+        unsafe { from_glib(ffi::gtk_text_iter_is_end(self.to_glib_none().0)) }
     }
 
     pub fn is_start(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_is_start(self.to_glib_none().0)) }
+        unsafe { from_glib(ffi::gtk_text_iter_is_start(self.to_glib_none().0)) }
     }
 
     pub fn forward_char(&mut self) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_forward_char(self.to_glib_none_mut().0)) }
+        unsafe { from_glib(ffi::gtk_text_iter_forward_char(self.to_glib_none_mut().0)) }
     }
 
     pub fn backward_char(&mut self) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_backward_char(self.to_glib_none_mut().0)) }
+        unsafe { from_glib(ffi::gtk_text_iter_backward_char(self.to_glib_none_mut().0)) }
     }
 
     pub fn forward_chars(&mut self, count: i32) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_forward_chars(self.to_glib_none_mut().0, count)) }
+        unsafe { from_glib(ffi::gtk_text_iter_forward_chars(self.to_glib_none_mut().0, count)) }
     }
 
     pub fn backward_chars(&mut self, count: i32) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_backward_chars(self.to_glib_none_mut().0, count)) }
+        unsafe { from_glib(ffi::gtk_text_iter_backward_chars(self.to_glib_none_mut().0, count)) }
     }
 
     pub fn forward_line(&mut self) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_forward_line(self.to_glib_none_mut().0)) }
+        unsafe { from_glib(ffi::gtk_text_iter_forward_line(self.to_glib_none_mut().0)) }
     }
 
     pub fn backward_line(&mut self) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_backward_line(self.to_glib_none_mut().0)) }
+        unsafe { from_glib(ffi::gtk_text_iter_backward_line(self.to_glib_none_mut().0)) }
     }
 
     pub fn forward_lines(&mut self, count: i32) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_forward_lines(self.to_glib_none_mut().0, count)) }
+        unsafe { from_glib(ffi::gtk_text_iter_forward_lines(self.to_glib_none_mut().0, count)) }
     }
 
     pub fn backward_lines(&mut self, count: i32) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_backward_lines(self.to_glib_none_mut().0, count)) }
+        unsafe { from_glib(ffi::gtk_text_iter_backward_lines(self.to_glib_none_mut().0, count)) }
     }
 
     pub fn forward_word_ends(&mut self, count: i32) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_forward_word_ends(self.to_glib_none_mut().0, count)) }
+        unsafe { from_glib(ffi::gtk_text_iter_forward_word_ends(self.to_glib_none_mut().0, count)) }
     }
 
     pub fn forward_word_starts(&mut self, count: i32) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_backward_word_starts(self.to_glib_none_mut().0, count)) }
+        unsafe { from_glib(ffi::gtk_text_iter_backward_word_starts(self.to_glib_none_mut().0, count)) }
     }
 
     pub fn forward_word_end(&mut self) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_forward_word_end(self.to_glib_none_mut().0)) }
+        unsafe { from_glib(ffi::gtk_text_iter_forward_word_end(self.to_glib_none_mut().0)) }
     }
 
     pub fn backward_word_start(&mut self) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_backward_word_start(self.to_glib_none_mut().0)) }
+        unsafe { from_glib(ffi::gtk_text_iter_backward_word_start(self.to_glib_none_mut().0)) }
     }
 
     pub fn forward_cursor_position(&mut self) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_forward_cursor_position(self.to_glib_none_mut().0)) }
+        unsafe { from_glib(ffi::gtk_text_iter_forward_cursor_position(self.to_glib_none_mut().0)) }
     }
 
     pub fn backward_cursor_position(&mut self) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_backward_cursor_position(self.to_glib_none_mut().0)) }
+        unsafe { from_glib(ffi::gtk_text_iter_backward_cursor_position(self.to_glib_none_mut().0)) }
     }
 
     pub fn forward_cursor_positions(&mut self, count: i32) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_forward_cursor_positions(self.to_glib_none_mut().0, count)) }
+        unsafe { from_glib(ffi::gtk_text_iter_forward_cursor_positions(self.to_glib_none_mut().0, count)) }
     }
 
     pub fn backward_cursor_positions(&mut self, count: i32) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_backward_cursor_positions(self.to_glib_none_mut().0, count)) }
+        unsafe { from_glib(ffi::gtk_text_iter_backward_cursor_positions(self.to_glib_none_mut().0, count)) }
     }
 
     pub fn backward_sentence_start(&mut self) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_backward_sentence_start(self.to_glib_none_mut().0)) }
+        unsafe { from_glib(ffi::gtk_text_iter_backward_sentence_start(self.to_glib_none_mut().0)) }
     }
 
     pub fn backward_sentence_starts(&mut self, count: i32) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_backward_sentence_starts(self.to_glib_none_mut().0, count)) }
+        unsafe { from_glib(ffi::gtk_text_iter_backward_sentence_starts(self.to_glib_none_mut().0, count)) }
     }
 
     pub fn backward_sentence_end(&mut self) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_forward_sentence_end(self.to_glib_none_mut().0)) }
+        unsafe { from_glib(ffi::gtk_text_iter_forward_sentence_end(self.to_glib_none_mut().0)) }
     }
 
     pub fn backward_sentence_ends(&mut self, count: i32) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_forward_sentence_ends(self.to_glib_none_mut().0, count)) }
+        unsafe { from_glib(ffi::gtk_text_iter_forward_sentence_ends(self.to_glib_none_mut().0, count)) }
     }
 
     pub fn forward_visible_word_ends(&mut self, count: i32) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_forward_visible_word_ends(self.to_glib_none_mut().0, count)) }
+        unsafe { from_glib(ffi::gtk_text_iter_forward_visible_word_ends(self.to_glib_none_mut().0, count)) }
     }
 
     pub fn forward_visible_word_starts(&mut self, count: i32) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_backward_visible_word_starts(self.to_glib_none_mut().0, count)) }
+        unsafe { from_glib(ffi::gtk_text_iter_backward_visible_word_starts(self.to_glib_none_mut().0, count)) }
     }
 
     pub fn forward_visible_word_end(&mut self) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_forward_visible_word_end(self.to_glib_none_mut().0)) }
+        unsafe { from_glib(ffi::gtk_text_iter_forward_visible_word_end(self.to_glib_none_mut().0)) }
     }
 
     pub fn forward_visible_word_start(&mut self) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_backward_visible_word_start(self.to_glib_none_mut().0)) }
+        unsafe { from_glib(ffi::gtk_text_iter_backward_visible_word_start(self.to_glib_none_mut().0)) }
     }
 
     pub fn forward_visible_cursor_position(&mut self) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_forward_visible_cursor_position(self.to_glib_none_mut().0)) }
+        unsafe { from_glib(ffi::gtk_text_iter_forward_visible_cursor_position(self.to_glib_none_mut().0)) }
     }
 
     pub fn backward_visible_cursor_position(&mut self) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_backward_visible_cursor_position(self.to_glib_none_mut().0)) }
+        unsafe { from_glib(ffi::gtk_text_iter_backward_visible_cursor_position(self.to_glib_none_mut().0)) }
     }
 
     pub fn forward_visible_cursor_positions(&mut self, count: i32) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_forward_visible_cursor_positions(self.to_glib_none_mut().0, count)) }
+        unsafe { from_glib(ffi::gtk_text_iter_forward_visible_cursor_positions(self.to_glib_none_mut().0, count)) }
     }
 
     pub fn backward_visible_cursor_positions(&mut self, count: i32) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_backward_visible_cursor_positions(self.to_glib_none_mut().0, count)) }
+        unsafe { from_glib(ffi::gtk_text_iter_backward_visible_cursor_positions(self.to_glib_none_mut().0, count)) }
     }
 
     pub fn forward_visible_line(&mut self) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_forward_visible_line(self.to_glib_none_mut().0)) }
+        unsafe { from_glib(ffi::gtk_text_iter_forward_visible_line(self.to_glib_none_mut().0)) }
     }
 
     pub fn backward_visible_line(&mut self) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_backward_visible_line(self.to_glib_none_mut().0)) }
+        unsafe { from_glib(ffi::gtk_text_iter_backward_visible_line(self.to_glib_none_mut().0)) }
     }
 
     pub fn forward_visible_lines(&mut self, count: i32) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_forward_visible_lines(self.to_glib_none_mut().0, count)) }
+        unsafe { from_glib(ffi::gtk_text_iter_forward_visible_lines(self.to_glib_none_mut().0, count)) }
     }
 
     pub fn backward_visible_lines(&mut self, count: i32) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_backward_visible_lines(self.to_glib_none_mut().0, count)) }
+        unsafe { from_glib(ffi::gtk_text_iter_backward_visible_lines(self.to_glib_none_mut().0, count)) }
     }
 
     pub fn set_offset(&mut self, char_offset: i32) {
@@ -378,19 +377,19 @@ impl TextIter {
     }
 
     pub fn forward_to_line_end(&mut self) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_forward_to_line_end(self.to_glib_none_mut().0)) }
+        unsafe { from_glib(ffi::gtk_text_iter_forward_to_line_end(self.to_glib_none_mut().0)) }
     }
 
     pub fn forward_to_tag_toggle(&mut self, tag: &::TextTag) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_forward_to_tag_toggle(self.to_glib_none_mut().0, tag.unwrap_pointer())) }
+        unsafe { from_glib(ffi::gtk_text_iter_forward_to_tag_toggle(self.to_glib_none_mut().0, tag.unwrap_pointer())) }
     }
 
     pub fn backward_to_tag_toggle(&mut self, tag: &::TextTag) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_backward_to_tag_toggle(self.to_glib_none_mut().0, tag.unwrap_pointer())) }
+        unsafe { from_glib(ffi::gtk_text_iter_backward_to_tag_toggle(self.to_glib_none_mut().0, tag.unwrap_pointer())) }
     }
 
     pub fn is_equal_to(&self, other: &TextIter) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_equal(self.to_glib_none().0,
+        unsafe { from_glib(ffi::gtk_text_iter_equal(self.to_glib_none().0,
             other.to_glib_none().0)) }
     }
 
@@ -399,7 +398,7 @@ impl TextIter {
     }
 
     pub fn in_range(&self, start: &TextIter, end: &TextIter) -> bool {
-        unsafe { to_bool(ffi::gtk_text_iter_in_range(self.to_glib_none().0,
+        unsafe { from_glib(ffi::gtk_text_iter_in_range(self.to_glib_none().0,
             start.to_glib_none().0, end.to_glib_none().0)) }
     }
 
