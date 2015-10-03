@@ -68,7 +68,7 @@ pub use self::rt::{
     get_binary_age,
     get_interface_age,
     check_version,
-    events_pending
+    events_pending,
 };
 
 /// GTK Widgets for all versions
@@ -179,7 +179,7 @@ pub use self::widgets::{
     FileChooserWidget,
     ColorChooserWidget,
     FontChooserWidget,
-    EventBox
+    EventBox,
 };
 
 #[cfg(target_os = "linux")]
@@ -203,7 +203,7 @@ pub use self::widgets::{
     HeaderBar,
     ListBox,
     ListBoxRow,
-    PlacesSidebar
+    PlacesSidebar,
 };
 
 #[cfg(gtk_3_12)]
@@ -212,7 +212,7 @@ pub use self::widgets::{
     FlowBox,
     FlowBoxChild,
     ActionBar,
-    Popover
+    Popover,
 };
 
 #[cfg(gtk_3_16)]
@@ -220,6 +220,7 @@ pub use self::widgets::{
 pub use self::widgets::{
     PopoverMenu,
     StackSidebar,
+    GLArea,
 };
 
 /// GTK Enum types

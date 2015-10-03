@@ -143,6 +143,8 @@ pub use self::font_chooser_widget::FontChooserWidget;
 #[cfg(target_os = "linux")]
 pub use self::socket::Socket;
 pub use self::event_box::EventBox;
+#[cfg(gtk_3_16)]
+pub use self::gl_area::GLArea;
 
 mod css_provider;
 mod style_context;
@@ -285,3 +287,5 @@ mod font_chooser_widget;
 #[cfg(target_os = "linux")]
 mod socket;
 mod event_box;
+#[cfg(gtk_3_16)]
+mod gl_area;
