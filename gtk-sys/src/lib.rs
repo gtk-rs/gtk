@@ -12012,6 +12012,7 @@ extern "C" {
     pub fn cast_GtkNotebook(widget: *mut GtkWidget) -> *mut GtkNotebook;
     pub fn cast_GtkStack(widget: *mut GtkWidget) -> *mut GtkStack;
     pub fn cast_GtkStackSwitcher(widget: *mut GtkWidget) -> *mut GtkStackSwitcher;
+    pub fn cast_GtkStackSidebar(widget: *mut GtkWidget) -> *mut GtkStackSidebar;
     pub fn cast_GtkRevealer(widget: *mut GtkWidget) -> *mut GtkRevealer;
     pub fn cast_GtkOverlay(widget: *mut GtkWidget) -> *mut GtkOverlay;
     pub fn cast_GtkScrollable(widget: *mut GtkWidget) -> *mut GtkScrollable;

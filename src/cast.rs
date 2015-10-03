@@ -241,6 +241,11 @@ pub fn GTK_STACK_SWITCHER(widget: *mut ffi::GtkWidget) -> *mut ffi::GtkStackSwit
     unsafe { ffi::cast_GtkStackSwitcher(widget) }
 }
 
+#[cfg(gtk_3_16)]
+pub fn GTK_STACK_SIDEBAR(widget: *mut ffi::GtkWidget) -> *mut ffi::GtkStackSidebar {
+    unsafe { ffi::cast_GtkStackSidebar(widget) }
+}
+
 #[cfg(gtk_3_10)]
 pub fn GTK_REVEALER(widget: *mut ffi::GtkWidget) -> *mut ffi::GtkRevealer {
     unsafe { ffi::cast_GtkRevealer(widget) }
