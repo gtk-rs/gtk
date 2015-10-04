@@ -218,7 +218,8 @@ pub use self::widgets::{
 #[cfg(gtk_3_16)]
 /// GTK Widgets for versions since GTK 3.16
 pub use self::widgets::{
-    PopoverMenu
+    PopoverMenu,
+    StackSidebar,
 };
 
 /// GTK Enum types

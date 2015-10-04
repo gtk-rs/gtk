@@ -69,6 +69,8 @@ pub use self::note_book::NoteBook;
 pub use self::stack::Stack;
 #[cfg(gtk_3_10)]
 pub use self::stack_switcher::StackSwitcher;
+#[cfg(gtk_3_16)]
+pub use self::stack_sidebar::StackSidebar;
 #[cfg(gtk_3_10)]
 pub use self::revealer::Revealer;
 pub use self::overlay::Overlay;
@@ -204,6 +206,8 @@ mod note_book;
 mod stack;
 #[cfg(gtk_3_10)]
 mod stack_switcher;
+#[cfg(gtk_3_16)]
+mod stack_sidebar;
 #[cfg(gtk_3_10)]
 mod revealer;
 mod overlay;

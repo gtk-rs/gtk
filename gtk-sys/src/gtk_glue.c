@@ -464,6 +464,14 @@ GtkMenuButton* cast_GtkMenuButton(GtkWidget* widget) {
 
 #endif
 
+#if defined(GTK_3_16)
+
+GtkStackSidebar* cast_GtkStackSidebar(GtkWidget* widget) {
+    return GTK_STACK_SIDEBAR(widget);
+}
+
+#endif
+
 #if defined(GTK_3_10) || defined(GTK_3_12) || defined(GTK_3_14)
 
 GtkSearchBar* cast_GtkSearchBar(GtkWidget* widget) {
