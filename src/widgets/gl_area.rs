@@ -100,8 +100,8 @@ impl GLArea {
     }
 
     /// Retrieves the gdk::GLContext used by area.
-    pub fn get_context() -> Option<gdk::GLContext> {
-        unsafe { from_glib_none(ffi::gtk_gl_area_get_context()) }
+    pub fn get_context(&self) -> Option<::gdk::GLContext> {
+        unsafe { ::gdk::GLContext::from_glib_none(ffi::gtk_gl_area_get_context(GTK_GL_AREA(self.pointer))) }
     }
 
     /// Ensures that the gdk::GLContext used by area is associated with the gtk::GLArea.
@@ -152,8 +152,8 @@ impl GLArea {
     }
 
     /// Returns whether the area has an alpha component.
-    pub fn has_alpha(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_gl_area_has_alpha(GTK_GL_AREA(self.pointer))) }
+    pub fn get_has_alpha(&self) -> bool {
+        unsafe { to_bool(ffi::gtk_gl_area_get_has_alpha(GTK_GL_AREA(self.pointer))) }
     }
 
     /// If has_depth_buffer is true the widget will allocate and enable a depth buffer for the target
@@ -163,8 +163,8 @@ impl GLArea {
     }
 
     /// Returns whether the area has a depth buffer.
-    pub fn has_depth_buffer(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_gl_area_has_depth_buffer(GTK_GL_AREA(self.pointer))) }
+    pub fn get_has_depth_buffer(&self) -> bool {
+        unsafe { to_bool(ffi::gtk_gl_area_get_has_depth_buffer(GTK_GL_AREA(self.pointer))) }
     }
 
     /// If has_stencil_buffer is true the widget will allocate and enable a stencil buffer for the
@@ -174,8 +174,8 @@ impl GLArea {
     }
 
     /// Returns whether the area has a stencil buffer.
-    pub fn has_stencil_buffer(&self) -> bool {
-        unsafe { to_bool(ffi::gtk_gl_area_has_stencil_buffer(GTK_GL_AREA(self.pointer))) }
+    pub fn get_has_stencil_buffer(&self) -> bool {
+        unsafe { to_bool(ffi::gtk_gl_area_get_has_stencil_buffer(GTK_GL_AREA(self.pointer))) }
     }
 
     /// If auto_render is true the “render” signal will be emitted every time the widget draws. This

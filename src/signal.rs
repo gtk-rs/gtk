@@ -11,6 +11,7 @@ use glib::{FFIGObject, ParamSpec};
 
 use glib_ffi::gboolean;
 use ffi::{GtkAdjustment, GtkTreeSelection, GtkTreeViewColumn};
+use traits::{FFIWidget, WidgetTrait};
 use gdk::{
     EventAny,
     EventButton,
@@ -53,6 +54,11 @@ use {
     Widget,
     WidgetHelpType,
 };
+
+#[cfg(gtk_3_16)]
+use super::GLArea;
+#[cfg(gtk_3_16)]
+use ffi::GtkGLArea;
 
 /// Whether to propagate the signal to other handlers
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
@@ -1353,38 +1359,32 @@ extern "C" fn tree_view_column_trampoline(this: *mut GtkTreeViewColumn,
 }
 
 #[cfg(gtk_3_16)]
-pub trait GLAreaSignals {
-    fn connect_rendered(&self, f: Fn(GLArea, gdk::GLContext) + 'static);
-    fn connect_resized(&self, f: Fn(GLArea, i32, i32) + 'static);
+impl GLArea {
+    fn connect_rendered<F: Fn(GLArea, ::gdk::GLContext) + 'static>(&self, f: F) {
+        unsafe {
+            let f: Box<Box<Fn(GLArea, ::gdk::GLContext) + 'static>> = Box::new(Box::new(f));
+            connect(self.unwrap_widget() as *mut _,"rendered",
+                transmute(gl_area_trampoline), into_raw(f) as *mut _)
+        }
+    }
+
+    fn connect_resized<F: Fn(GLArea, i32, i32) + 'static>(&self, f: F) {
+        unsafe {
+            let f: Box<Box<Fn(GLArea, i32, i32) + 'static>> = Box::new(Box::new(f));
+            connect(self.unwrap_widget() as *mut _,"rendered",
+                transmute(gl_area_trampoline_res), into_raw(f) as *mut _)
+        }
+    }
 }
 
 #[cfg(gtk_3_16)]
-mod gl_area {
-    impl GLAreaSignals for GLArea {
-        fn connect_rendered(&self, f: Fn(GLArea, gdk::GLContext) + 'static) {
-            unsafe {
-                let f: Box<Box<Fn(GLArea, gdk::GLContext) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_pointer() as *mut _,"rendered",
-                    transmute(gl_area_trampoline), into_raw(f) as *mut _)
-            }
-        }
+extern "C" fn gl_area_trampoline(this: *mut GtkGLArea, context: *mut ::gdk_ffi::GdkGLContext,
+        f: &Box<Fn(GLArea, ::gdk::GLContext) + 'static>) {
+    f(GLArea::wrap_widget(this), ::gdk::GLContext::from_glib_none(context))
+}
 
-        fn connect_resized(&self, f: Fn(GLArea, i32, i32) + 'static) {
-            unsafe {
-                let f: Box<Box<Fn(GLArea, i32, i32) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_pointer() as *mut _,"rendered",
-                    transmute(gl_area_trampoline_res), into_raw(f) as *mut _)
-            }
-        }
-    }
-
-    extern "C" fn gl_area_trampoline(this: *mut GtkGLArea, context: *mut gdk::GdkGLContext,
-            f: &Box<Fn(GLArea, gdk::GLContext) + 'static>) {
-        f(GLArea::wrap_widget(this), from_glib_none(context))
-    }
-
-    extern "C" fn gl_area_trampoline_res(this: *mut GtkGLArea, width: i32, height: i32,
-            f: &Box<Fn(GLArea, i32, i32) + 'static>) {
-        f(GLArea::wrap_widget(this), width, height)
-    }
+#[cfg(gtk_3_16)]
+extern "C" fn gl_area_trampoline_res(this: *mut GtkGLArea, width: i32, height: i32,
+        f: &Box<Fn(GLArea, i32, i32) + 'static>) {
+    f(GLArea::wrap_widget(this), width, height)
 }

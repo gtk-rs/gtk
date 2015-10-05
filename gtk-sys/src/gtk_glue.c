@@ -610,6 +610,12 @@ GtkEventBox* cast_GtkEventBox(GtkWidget* widget) {
     return GTK_EVENT_BOX(widget);
 }
 
+#if defined(GTK_3_16)
+GtkGLArea* cast_GtkGLArea(GtkWidget* widget) {
+    return GTK_GL_AREA(widget);
+}
+#endif
+
 /* MAC OS dylib
 gcc -I/usr/local/include/gtk-3.0 -I/usr/local/include/glib-2.0 -I/usr/local/include/gobject-introspection-1.0 -I/usr/local/Cellar/glib/2.38.1/lib/glib-2.0/include/ -I/usr/local/Cellar/pango/1.36.0/include/pango-1.0/ -I/usr/local/Cellar/cairo/1.12.16/include/cairo/ -I/usr/local/Cellar/gdk-pixbuf/2.30.0/include/gdk-pixbuf-2.0/ -I/usr/local/Cellar/atk/2.10.0/include/atk-1.0/ -lglib-2.0 -lgtk-3.0 -lgobject-2.0 -dynamiclib -o libgtk_glue.dylib -dy gtk_glue.c
 */
