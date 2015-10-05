@@ -101,8 +101,7 @@ impl GLArea {
 
     /// Retrieves the gdk::GLContext used by area.
     pub fn get_context() -> Option<gdk::GLContext> {
-        let tmp_pointer = unsafe { ffi::gtk_gl_area_get_context() };
-        check_pointer!(tmp_pointer, gdk::GLContext)
+        unsafe { from_glib_none(ffi::gtk_gl_area_get_context()) }
     }
 
     /// Ensures that the gdk::GLContext used by area is associated with the gtk::GLArea.
