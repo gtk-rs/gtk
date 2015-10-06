@@ -254,18 +254,22 @@ impl TextView {
         unsafe { ffi::gtk_text_view_reset_im_context(GTK_TEXT_VIEW(self.unwrap_widget())) }
     }
 
+    #[cfg(gtk_3_6)]
     pub fn set_input_purpose(&self, purpose: ::InputPurpose) {
         unsafe { ffi::gtk_text_view_set_input_purpose(GTK_TEXT_VIEW(self.unwrap_widget()), purpose) }
     }
 
+    #[cfg(gtk_3_6)]
     pub fn get_input_purpose(&self) -> ::InputPurpose {
         unsafe { ffi::gtk_text_view_get_input_purpose(GTK_TEXT_VIEW(self.unwrap_widget())) }
     }
 
+    #[cfg(gtk_3_6)]
     pub fn set_input_hints(&self, hints: ::InputHints) {
         unsafe { ffi::gtk_text_view_set_input_hints(GTK_TEXT_VIEW(self.unwrap_widget()), hints) }
     }
 
+    #[cfg(gtk_3_6)]
     pub fn get_input_hints(&self) -> ::InputHints {
         unsafe { ffi::gtk_text_view_get_input_hints(GTK_TEXT_VIEW(self.unwrap_widget())) }
     }
