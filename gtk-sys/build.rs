@@ -24,7 +24,7 @@ fn main() {
         .map(|r| r.unwrap());
     let version: (u16, u16) = (parts.next().unwrap_or(0), parts.next().unwrap_or(0));
     let mut cfgs = Vec::new();
-    if version.0 == MIN_MAJOR && version.1 > MIN_MINOR {
+    if version.0 == MIN_MAJOR && version.1 >= MIN_MINOR {
         let major = version.0;
         let mut minor = MIN_MINOR;
         while minor <= version.1 {
