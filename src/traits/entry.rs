@@ -311,24 +311,28 @@ pub trait EntryTrait: ::WidgetTrait {
         }
     }
 
+    #[cfg(gtk_3_6)]
     fn set_input_purpose(&self, purpose: InputPurpose) -> () {
         unsafe {
             ffi::gtk_entry_set_input_purpose(GTK_ENTRY(self.unwrap_widget()), purpose)
         }
     }
 
+    #[cfg(gtk_3_6)]
     fn get_input_purpose(&self) -> InputPurpose {
         unsafe {
             ffi::gtk_entry_get_input_purpose(GTK_ENTRY(self.unwrap_widget()))
         }
     }
 
+    #[cfg(gtk_3_6)]
     fn set_input_hints(&self, hints: InputHints) -> () {
         unsafe {
             ffi::gtk_entry_set_input_hints(GTK_ENTRY(self.unwrap_widget()), hints)
         }
     }
 
+    #[cfg(gtk_3_6)]
     fn get_input_hints(&self) -> InputHints {
         unsafe {
             ffi::gtk_entry_get_input_hints(GTK_ENTRY(self.unwrap_widget()))
