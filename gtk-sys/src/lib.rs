@@ -12087,4 +12087,6 @@ extern "C" {
     pub fn cast_GtkSocket(widget: *mut GtkWidget) -> *mut GtkSocket;
     pub fn cast_GtkEventBox(widget: *mut GtkWidget) -> *mut GtkEventBox;
     pub fn cast_GtkStyleProvider(widget: *mut gobject::GObject) -> *mut GtkStyleProvider;
+    #[cfg(gtk_3_16)]
+    pub fn cast_GtkGLArea(widget: *mut GtkWidget) -> *mut GtkGLArea;
 }

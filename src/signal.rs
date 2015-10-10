@@ -1351,3 +1351,47 @@ extern "C" fn tree_view_column_trampoline(this: *mut GtkTreeViewColumn,
         f: &Box<Fn(TreeViewColumn) + 'static>) {
     f(TreeViewColumn::wrap_pointer(this))
 }
+
+#[cfg(gtk_3_16)]
+mod gl_area {
+    use std::mem::transmute;
+    use glib::signal::connect;
+    use glib::translate::*;
+    use gdk;
+    use gdk_ffi;
+    use ffi::GtkGLArea;
+    use cast::GTK_WIDGET;
+    use super::into_raw;
+    use traits::FFIWidget;
+    use GLArea;
+
+    impl GLArea {
+        fn connect_rendered<F: Fn(GLArea, gdk::GLContext) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(GLArea, gdk::GLContext) + 'static>> = Box::new(Box::new(f));
+                connect(self.unwrap_widget() as *mut _,"rendered",
+                    transmute(gl_area_trampoline), into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_resized<F: Fn(GLArea, i32, i32) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(GLArea, i32, i32) + 'static>> = Box::new(Box::new(f));
+                connect(self.unwrap_widget() as *mut _,"rendered",
+                    transmute(gl_area_trampoline_res), into_raw(f) as *mut _)
+            }
+        }
+    }
+
+    #[cfg(gtk_3_16)]
+    extern "C" fn gl_area_trampoline(this: *mut GtkGLArea, context: *mut gdk_ffi::GdkGLContext,
+            f: &Box<Fn(GLArea, gdk::GLContext) + 'static>) {
+        unsafe { f(GLArea::wrap_widget(GTK_WIDGET(this as *mut _)), from_glib_none(context)) }
+    }
+
+    #[cfg(gtk_3_16)]
+    extern "C" fn gl_area_trampoline_res(this: *mut GtkGLArea, width: i32, height: i32,
+            f: &Box<Fn(GLArea, i32, i32) + 'static>) {
+        f(GLArea::wrap_widget(GTK_WIDGET(this as *mut _)), width, height)
+    }
+}

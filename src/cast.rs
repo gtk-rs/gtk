@@ -552,3 +552,8 @@ pub fn GTK_SOCKET(widget: *mut ffi::GtkWidget) -> *mut ffi::GtkSocket {
 pub fn GTK_EVENT_BOX(widget: *mut ffi::GtkWidget) -> *mut ffi::GtkEventBox {
     unsafe { ffi::cast_GtkEventBox(widget) }
 }
+
+#[cfg(gtk_3_16)]
+pub fn GTK_GL_AREA(widget: *mut ffi::GtkWidget) -> *mut ffi::GtkGLArea {
+    unsafe { ffi::cast_GtkGLArea(widget) }
+}
