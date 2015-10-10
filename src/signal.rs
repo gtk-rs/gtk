@@ -11,7 +11,7 @@ use glib::{FFIGObject, ParamSpec};
 
 use glib_ffi::gboolean;
 use ffi::{GtkAdjustment, GtkTreeSelection, GtkTreeViewColumn};
-use traits::{FFIWidget, WidgetTrait};
+use traits::FFIWidget;
 use gdk::{
     EventAny,
     EventButton,
@@ -29,6 +29,7 @@ use gdk::{
     Screen,
 };
 use cairo::{Context, RectangleInt};
+use cast::GTK_WIDGET;
 
 use {
     Adjustment,
@@ -1360,7 +1361,7 @@ extern "C" fn tree_view_column_trampoline(this: *mut GtkTreeViewColumn,
 
 #[cfg(gtk_3_16)]
 impl GLArea {
-    fn connect_rendered<F: Fn(GLArea, ::gdk::GLContext) + 'static>(&self, f: F) {
+    fn connect_rendered<F: Fn(GLArea, ::gdk::GLContext) + 'static>(&self, f: F) -> u64 {
         unsafe {
             let f: Box<Box<Fn(GLArea, ::gdk::GLContext) + 'static>> = Box::new(Box::new(f));
             connect(self.unwrap_widget() as *mut _,"rendered",
@@ -1368,7 +1369,7 @@ impl GLArea {
         }
     }
 
-    fn connect_resized<F: Fn(GLArea, i32, i32) + 'static>(&self, f: F) {
+    fn connect_resized<F: Fn(GLArea, i32, i32) + 'static>(&self, f: F) -> u64 {
         unsafe {
             let f: Box<Box<Fn(GLArea, i32, i32) + 'static>> = Box::new(Box::new(f));
             connect(self.unwrap_widget() as *mut _,"rendered",
@@ -1380,11 +1381,11 @@ impl GLArea {
 #[cfg(gtk_3_16)]
 extern "C" fn gl_area_trampoline(this: *mut GtkGLArea, context: *mut ::gdk_ffi::GdkGLContext,
         f: &Box<Fn(GLArea, ::gdk::GLContext) + 'static>) {
-    f(GLArea::wrap_widget(this), ::gdk::GLContext::from_glib_none(context))
+    unsafe { f(GLArea::wrap_widget(GTK_WIDGET(this as *mut _)), from_glib_none(context)) }
 }
 
 #[cfg(gtk_3_16)]
 extern "C" fn gl_area_trampoline_res(this: *mut GtkGLArea, width: i32, height: i32,
         f: &Box<Fn(GLArea, i32, i32) + 'static>) {
-    f(GLArea::wrap_widget(this), width, height)
+    f(GLArea::wrap_widget(GTK_WIDGET(this as *mut _)), width, height)
 }

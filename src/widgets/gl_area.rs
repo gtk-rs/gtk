@@ -4,12 +4,10 @@
 
 //! A widget for custom drawing with OpenGL
 
-use libc::{c_uint, c_int};
-
-use CalendarDisplayOptions;
 use cast::GTK_GL_AREA;
 use ffi;
 use glib::{to_bool, to_gboolean};
+use glib::translate::from_glib_none;
 
 ///
 /// GtkGLArea sets up its own GdkGLContext for the window it creates, and creates a custom GL framebuffer that the widget will do GL rendering onto. It also ensures that this framebuffer is the default GL rendering target when rendering.
@@ -101,7 +99,7 @@ impl GLArea {
 
     /// Retrieves the gdk::GLContext used by area.
     pub fn get_context(&self) -> Option<::gdk::GLContext> {
-        unsafe { ::gdk::GLContext::from_glib_none(ffi::gtk_gl_area_get_context(GTK_GL_AREA(self.pointer))) }
+        unsafe { from_glib_none(ffi::gtk_gl_area_get_context(GTK_GL_AREA(self.pointer))) }
     }
 
     /// Ensures that the gdk::GLContext used by area is associated with the gtk::GLArea.
@@ -199,7 +197,9 @@ impl GLArea {
         let mut major = 0;
         let mut minor = 0;
 
-        unsafe { ffi::gtk_gl_area_get_required_version(GTK_GL_AREA(self.pointer), major, minor) };
+        unsafe {
+            ffi::gtk_gl_area_get_required_version(GTK_GL_AREA(self.pointer), &mut major, &mut minor)
+        };
         (major, minor)
     }
 
