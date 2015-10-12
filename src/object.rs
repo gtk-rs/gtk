@@ -11,7 +11,7 @@ pub use glib::object::{Downcast, Upcast};
 /// The generic type for `GObject` descendants in GTK.
 pub struct Object<T>(Ref, PhantomData<T>);
 
-impl<T> Wrapper for Object<T>
+impl<T: 'static> Wrapper for Object<T>
 where Object<T>: StaticType {
     type GlibType = T;
     #[inline]
@@ -28,4 +28,4 @@ impl<T> Clone for Object<T> {
     }
 }
 
-unsafe impl<T> Upcast<::glib::object::Object> for Object<T> where Object<T>: StaticType { }
+unsafe impl<T: 'static> Upcast<::glib::object::Object> for Object<T> where Object<T>: StaticType { }
