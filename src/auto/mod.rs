@@ -136,6 +136,7 @@ pub use self::menu_button::MenuButton;
 
 mod menu_item;
 pub use self::menu_item::MenuItem;
+pub use self::menu_item::MenuItemExt;
 
 mod menu_shell;
 pub use self::menu_shell::MenuShell;
@@ -154,6 +155,14 @@ pub use self::notebook::Notebook;
 mod overlay;
 pub use self::overlay::Overlay;
 
+mod paned;
+pub use self::paned::Paned;
+
+#[cfg(gtk_3_10)]
+mod places_sidebar;
+#[cfg(gtk_3_10)]
+pub use self::places_sidebar::PlacesSidebar;
+
 #[cfg(gtk_3_12)]
 mod popover;
 #[cfg(gtk_3_12)]
@@ -166,14 +175,47 @@ mod popover_menu;
 #[cfg(gtk_3_16)]
 pub use self::popover_menu::PopoverMenu;
 
+mod progress_bar;
+pub use self::progress_bar::ProgressBar;
+
 mod radio_button;
 pub use self::radio_button::RadioButton;
+
+mod range;
+pub use self::range::Range;
+pub use self::range::RangeExt;
 
 mod recent_chooser_widget;
 pub use self::recent_chooser_widget::RecentChooserWidget;
 
+#[cfg(gtk_3_10)]
+mod revealer;
+#[cfg(gtk_3_10)]
+pub use self::revealer::Revealer;
+
+mod scale;
+pub use self::scale::Scale;
+
 mod scale_button;
 pub use self::scale_button::ScaleButton;
+pub use self::scale_button::ScaleButtonExt;
+
+mod scrolled_window;
+pub use self::scrolled_window::ScrolledWindow;
+pub use self::scrolled_window::ScrolledWindowExt;
+
+#[cfg(gtk_3_10)]
+mod search_bar;
+#[cfg(gtk_3_10)]
+pub use self::search_bar::SearchBar;
+
+#[cfg(gtk_3_6)]
+mod search_entry;
+#[cfg(gtk_3_6)]
+pub use self::search_entry::SearchEntry;
+
+mod separator_menu_item;
+pub use self::separator_menu_item::SeparatorMenuItem;
 
 mod separator_tool_item;
 pub use self::separator_tool_item::SeparatorToolItem;
@@ -181,12 +223,21 @@ pub use self::separator_tool_item::SeparatorToolItem;
 mod size_group;
 pub use self::size_group::SizeGroup;
 
+mod spin_button;
+pub use self::spin_button::SpinButton;
+
 mod status_icon;
 pub use self::status_icon::StatusIcon;
+
+mod statusbar;
+pub use self::statusbar::Statusbar;
 
 mod toggle_button;
 pub use self::toggle_button::ToggleButton;
 pub use self::toggle_button::ToggleButtonExt;
+
+mod toggle_tool_button;
+pub use self::toggle_tool_button::ToggleToolButton;
 
 mod tool_button;
 pub use self::tool_button::ToolButton;
@@ -196,15 +247,34 @@ mod tool_item;
 pub use self::tool_item::ToolItem;
 pub use self::tool_item::ToolItemExt;
 
+mod tool_item_group;
+pub use self::tool_item_group::ToolItemGroup;
+
+mod tool_palette;
+pub use self::tool_palette::ToolPalette;
+
+mod toolbar;
+pub use self::toolbar::Toolbar;
+
+mod viewport;
+pub use self::viewport::Viewport;
+
+mod volume_button;
+pub use self::volume_button::VolumeButton;
+
 pub mod traits {
     pub use super::BinExt;
     pub use super::ButtonExt;
     pub use super::CheckButtonExt;
     pub use super::FrameExt;
+    pub use super::MenuItemExt;
     pub use super::MenuShellExt;
     pub use super::MiscExt;
     #[cfg(gtk_3_12)]
     pub use super::PopoverExt;
+    pub use super::RangeExt;
+    pub use super::ScaleButtonExt;
+    pub use super::ScrolledWindowExt;
     pub use super::ToggleButtonExt;
     pub use super::ToolButtonExt;
     pub use super::ToolItemExt;

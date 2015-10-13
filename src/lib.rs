@@ -212,12 +212,7 @@ pub use widgets::entry::EntryBuffer;
 pub use widgets::icon_view::IconView;
 pub use widgets::lock_button::LockButton;
 pub use widgets::orientable::Orientable;
-pub use widgets::paned::Paned;
-pub use widgets::progress_bar::ProgressBar;
-pub use widgets::range::Range;
-pub use widgets::scale::Scale;
 pub use widgets::scrollable::Scrollable;
-pub use widgets::scrollbar::Scrollbar;
 pub use widgets::separator::Separator;
 pub use widgets::spinner::Spinner;
 #[cfg(target_os = "linux")]

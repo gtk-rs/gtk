@@ -30,52 +30,6 @@ impl ScaleButton {
     //    unsafe { TODO: call ffi:gtk_scale_button_new() }
     //}
 
-    pub fn get_adjustment(&self) -> Option<Adjustment> {
-        unsafe {
-            from_glib_none(ffi::gtk_scale_button_get_adjustment(self.to_glib_none().0))
-        }
-    }
-
-    pub fn get_minus_button(&self) -> Option<Widget> {
-        unsafe {
-            from_glib_none(ffi::gtk_scale_button_get_minus_button(self.to_glib_none().0))
-        }
-    }
-
-    pub fn get_plus_button(&self) -> Option<Widget> {
-        unsafe {
-            from_glib_none(ffi::gtk_scale_button_get_plus_button(self.to_glib_none().0))
-        }
-    }
-
-    pub fn get_popup(&self) -> Option<Widget> {
-        unsafe {
-            from_glib_none(ffi::gtk_scale_button_get_popup(self.to_glib_none().0))
-        }
-    }
-
-    pub fn get_value(&self) -> f64 {
-        unsafe {
-            ffi::gtk_scale_button_get_value(self.to_glib_none().0)
-        }
-    }
-
-    pub fn set_adjustment(&self, adjustment: &Adjustment) {
-        unsafe {
-            ffi::gtk_scale_button_set_adjustment(self.to_glib_none().0, adjustment.to_glib_none().0);
-        }
-    }
-
-    //pub fn set_icons(&self, icons: /*Unknown kind*/Unknown rust type: "CArray TypeId { ns_id: 0, id: 28 }") {
-    //    unsafe { TODO: call ffi:gtk_scale_button_set_icons() }
-    //}
-
-    pub fn set_value(&self, value: f64) {
-        unsafe {
-            ffi::gtk_scale_button_set_value(self.to_glib_none().0, value);
-        }
-    }
-
 }
 
 impl types::StaticType for ScaleButton {
@@ -83,4 +37,64 @@ impl types::StaticType for ScaleButton {
     fn static_type() -> types::Type {
         unsafe { from_glib(ffi::gtk_scale_button_get_type()) }
     }
+}
+
+pub trait ScaleButtonExt {
+    fn get_adjustment(&self) -> Option<Adjustment>;
+    fn get_minus_button(&self) -> Option<Widget>;
+    fn get_plus_button(&self) -> Option<Widget>;
+    fn get_popup(&self) -> Option<Widget>;
+    fn get_value(&self) -> f64;
+    fn set_adjustment(&self, adjustment: &Adjustment);
+    //fn set_icons(&self, icons: /*Unknown kind*/Unknown rust type: "CArray TypeId { ns_id: 0, id: 28 }");
+    fn set_value(&self, value: f64);
+}
+
+impl<O: Upcast<ScaleButton>> ScaleButtonExt for O {
+    fn get_adjustment(&self) -> Option<Adjustment> {
+        unsafe {
+            from_glib_none(ffi::gtk_scale_button_get_adjustment(self.upcast().to_glib_none().0))
+        }
+    }
+
+    fn get_minus_button(&self) -> Option<Widget> {
+        unsafe {
+            from_glib_none(ffi::gtk_scale_button_get_minus_button(self.upcast().to_glib_none().0))
+        }
+    }
+
+    fn get_plus_button(&self) -> Option<Widget> {
+        unsafe {
+            from_glib_none(ffi::gtk_scale_button_get_plus_button(self.upcast().to_glib_none().0))
+        }
+    }
+
+    fn get_popup(&self) -> Option<Widget> {
+        unsafe {
+            from_glib_none(ffi::gtk_scale_button_get_popup(self.upcast().to_glib_none().0))
+        }
+    }
+
+    fn get_value(&self) -> f64 {
+        unsafe {
+            ffi::gtk_scale_button_get_value(self.upcast().to_glib_none().0)
+        }
+    }
+
+    fn set_adjustment(&self, adjustment: &Adjustment) {
+        unsafe {
+            ffi::gtk_scale_button_set_adjustment(self.upcast().to_glib_none().0, adjustment.to_glib_none().0);
+        }
+    }
+
+    //fn set_icons(&self, icons: /*Unknown kind*/Unknown rust type: "CArray TypeId { ns_id: 0, id: 28 }") {
+    //    unsafe { TODO: call ffi:gtk_scale_button_set_icons() }
+    //}
+
+    fn set_value(&self, value: f64) {
+        unsafe {
+            ffi::gtk_scale_button_set_value(self.upcast().to_glib_none().0, value);
+        }
+    }
+
 }

@@ -13,6 +13,7 @@ use Container;
 use PositionType;
 use ReliefStyle;
 use Widget;
+use gdk;
 use std::mem;
 
 pub type Button = Object<ffi::GtkButton>;
@@ -70,7 +71,7 @@ pub trait ButtonExt {
     fn get_alignment(&self) -> (f32, f32);
     #[cfg(gtk_3_6)]
     fn get_always_show_image(&self) -> bool;
-    //fn get_event_window(&self) -> Option<gdk::Window>;
+    fn get_event_window(&self) -> Option<gdk::Window>;
     fn get_focus_on_click(&self) -> bool;
     fn get_image(&self) -> Option<Widget>;
     fn get_image_position(&self) -> PositionType;
@@ -122,9 +123,11 @@ impl<O: Upcast<Button>> ButtonExt for O {
         }
     }
 
-    //fn get_event_window(&self) -> Option<gdk::Window> {
-    //    unsafe { TODO: call ffi:gtk_button_get_event_window() }
-    //}
+    fn get_event_window(&self) -> Option<gdk::Window> {
+        unsafe {
+            from_glib_none(ffi::gtk_button_get_event_window(self.upcast().to_glib_none().0))
+        }
+    }
 
     fn get_focus_on_click(&self) -> bool {
         unsafe {

@@ -218,6 +218,14 @@ name = "Gtk.Overlay"
 status = "generate"
 
 [[object]]
+name = "Gtk.Paned"
+status = "generate"
+
+[[object]]
+name = "Gtk.PlacesSidebar"
+status = "generate"
+
+[[object]]
 name = "Gtk.Popover"
 status = "generate"
 
@@ -226,7 +234,19 @@ name = "Gtk.PopoverMenu"
 status = "generate"
 
 [[object]]
+name = "Gtk.ProgressBar"
+status = "generate"
+
+[[object]]
 name = "Gtk.RadioButton"
+status = "generate"
+
+[[object]]
+name = "Gtk.Range"
+status = "generate"
+
+[[object]]
+name = "Gtk.Revealer"
 status = "generate"
 
 [[object]]
@@ -234,7 +254,31 @@ name = "Gtk.RecentChooserWidget"
 status = "generate"
 
 [[object]]
+name = "Gtk.Revealer"
+status = "generate"
+
+[[object]]
+name = "Gtk.Scale"
+status = "generate"
+
+[[object]]
 name = "Gtk.ScaleButton"
+status = "generate"
+
+[[object]]
+name = "Gtk.ScrolledWindow"
+status = "generate"
+
+[[object]]
+name = "Gtk.SearchBar"
+status = "generate"
+
+[[object]]
+name = "Gtk.SearchEntry"
+status = "generate"
+
+[[object]]
+name = "Gtk.SeparatorMenuItem"
 status = "generate"
 
 [[object]]
@@ -246,6 +290,14 @@ name = "Gtk.SizeGroup"
 status = "generate"
 
 [[object]]
+name = "Gtk.SpinButton"
+status = "generate"
+
+[[object]]
+name = "Gtk.Statusbar"
+status = "generate"
+
+[[object]]
 name = "Gtk.StatusIcon"
 status = "generate"
 
@@ -254,11 +306,35 @@ name = "Gtk.ToggleButton"
 status = "generate"
 
 [[object]]
+name = "Gtk.ToggleToolButton"
+status = "generate"
+
+[[object]]
+name = "Gtk.Toolbar"
+status = "generate"
+
+[[object]]
 name = "Gtk.ToolButton"
 status = "generate"
 
 [[object]]
 name = "Gtk.ToolItem"
+status = "generate"
+
+[[object]]
+name = "Gtk.ToolItemGroup"
+status = "generate"
+
+[[object]]
+name = "Gtk.ToolPalette"
+status = "generate"
+
+[[object]]
+name = "Gtk.Viewport"
+status = "generate"
+
+[[object]]
+name = "Gtk.VolumeButton"
 status = "generate"
 
 [[object]]
@@ -271,4 +347,8 @@ status = "manual"
 
 [[object]]
 name = "Gdk.Screen"
+status = "manual"
+
+[[object]]
+name = "Gdk.Window"
 status = "manual"

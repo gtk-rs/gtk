@@ -10,6 +10,7 @@ use Adjustment;
 use Buildable;
 use Container;
 use Widget;
+use gdk;
 use std::mem;
 
 pub type Layout = Object<ffi::GtkLayout>;
@@ -25,9 +26,11 @@ impl Layout {
         }
     }
 
-    //pub fn get_bin_window(&self) -> Option<gdk::Window> {
-    //    unsafe { TODO: call ffi:gtk_layout_get_bin_window() }
-    //}
+    pub fn get_bin_window(&self) -> Option<gdk::Window> {
+        unsafe {
+            from_glib_none(ffi::gtk_layout_get_bin_window(self.to_glib_none().0))
+        }
+    }
 
     pub fn get_hadjustment(&self) -> Option<Adjustment> {
         unsafe {

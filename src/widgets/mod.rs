@@ -11,12 +11,7 @@ pub mod entry;
 pub mod icon_view;
 pub mod lock_button;
 pub mod orientable;
-pub mod paned;
-pub mod progress_bar;
-pub mod range;
-pub mod scale;
 pub mod scrollable;
-pub mod scrollbar;
 pub mod separator;
 #[cfg(target_os = "linux")]
 pub mod socket;
