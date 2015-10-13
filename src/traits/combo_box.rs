@@ -6,7 +6,6 @@ use glib::translate::*;
 use ffi;
 use glib::{to_bool, to_gboolean};
 use cast::GTK_COMBO_BOX;
-use libc::c_void;
 
 pub trait ComboBoxTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait {
     fn get_wrap_width(&self) -> i32 {
@@ -87,7 +86,7 @@ pub trait ComboBoxTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait {
         if tmp.is_null() {
             None
         } else {
-            unsafe { ::gobject_ffi::g_object_ref(tmp as *mut c_void) };
+            unsafe { ::gobject_ffi::g_object_ref(tmp as *mut _) };
             Some(::TreeModel::wrap_pointer(tmp))
         }
     }
