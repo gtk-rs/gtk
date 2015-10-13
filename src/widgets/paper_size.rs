@@ -149,7 +149,7 @@ impl Drop for PaperSize {
     fn drop(&mut self) {
         unsafe {
             ffi::gtk_paper_size_free(GTK_PAPER_SIZE(self.unwrap_widget()));
-            ::gobject_ffi::g_object_unref(self.pointer as *mut ::libc::c_void);
+            ::gobject_ffi::g_object_unref(self.pointer as *mut _);
         }
     }
 }
@@ -157,7 +157,7 @@ impl Drop for PaperSize {
 impl Clone for PaperSize {
     fn clone(&self) -> PaperSize {
         let pointer = unsafe {
-            ::gobject_ffi::g_object_ref(self.pointer as *mut ::libc::c_void)
+            ::gobject_ffi::g_object_ref(self.pointer as *mut _)
         };
 
         PaperSize {

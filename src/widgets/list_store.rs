@@ -8,7 +8,6 @@ use glib::translate::*;
 use ffi;
 use TreeIter;
 use glib_ffi::GType;
-use libc::c_void;
 
 pub struct ListStore {
     pointer: *mut ffi::GtkListStore
@@ -91,7 +90,7 @@ impl ListStore {
         } else {
             let tmp = ::cast::GTK_TREE_MODEL_FROM_LIST_STORE(self.pointer);
 
-            unsafe { ::gobject_ffi::g_object_ref(tmp as *mut c_void) };
+            unsafe { ::gobject_ffi::g_object_ref(tmp as *mut _) };
             Some(::TreeModel::wrap_pointer(tmp))
         }
     }
