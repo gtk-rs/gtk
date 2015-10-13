@@ -8,7 +8,7 @@ use glib::translate::*;
 use glib::types;
 use ffi;
 
-use adjustment::Adjustment;
+use Adjustment;
 use object::{Object, Upcast};
 
 use ScrollablePolicy;

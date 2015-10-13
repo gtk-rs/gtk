@@ -10,7 +10,6 @@ pub mod editable;
 pub mod entry;
 pub mod icon_view;
 pub mod lock_button;
-pub mod notebook;
 pub mod orientable;
 pub mod paned;
 pub mod progress_bar;

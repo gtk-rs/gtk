@@ -10,7 +10,7 @@ use ffi;
 
 use object::{Object, Upcast};
 use super::widget::Widget;
-use adjustment::Adjustment;
+use Adjustment;
 
 /// GtkRange — Base class for widgets which visualize an adjustment
 pub type Range = Object<ffi::GtkRange>;

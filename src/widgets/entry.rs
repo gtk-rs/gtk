@@ -10,7 +10,7 @@ use glib::translate::*;
 use glib::types;
 use ffi;
 
-use adjustment::Adjustment;
+use Adjustment;
 use object::{Object, Downcast, Upcast};
 use super::widget::Widget;
 

@@ -136,7 +136,6 @@ pub use ffi::GtkWrapMode as WrapMode;
 
 pub const DIALOG_MODAL: DialogFlags = ffi::GTK_DIALOG_MODAL;
 
-pub mod adjustment;
 pub mod builder;
 pub mod chooser {
     pub mod app;
@@ -158,7 +157,6 @@ pub mod mvc {
 pub mod object;
 pub mod prelude;
 pub mod rt;
-pub mod status_icon;
 pub mod widgets;
 pub mod window;
 
@@ -166,7 +164,6 @@ mod auto;
 
 pub use auto::*;
 
-pub use adjustment::Adjustment;
 pub use builder::{Builder, Buildable};
 pub use chooser::app::AppChooser;
 pub use chooser::color::ColorChooser;
@@ -206,7 +203,6 @@ pub use mvc::tree_model::{
 pub use mvc::tree_selection::TreeSelection;
 pub use mvc::tree_view::TreeView;
 pub use mvc::tree_view_column::TreeViewColumn;
-pub use status_icon::StatusIcon;
 pub use widgets::actionable::Actionable;
 pub use widgets::box_::Box;
 pub use widgets::container::Container;
@@ -215,7 +211,6 @@ pub use widgets::entry::Entry;
 pub use widgets::entry::EntryBuffer;
 pub use widgets::icon_view::IconView;
 pub use widgets::lock_button::LockButton;
-pub use widgets::notebook::Notebook;
 pub use widgets::orientable::Orientable;
 pub use widgets::paned::Paned;
 pub use widgets::progress_bar::ProgressBar;
