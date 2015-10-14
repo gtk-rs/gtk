@@ -9,7 +9,7 @@ use TextBuffer;
 use FFIWidget;
 use cast::{GTK_TEXT_VIEW, GTK_TEXT_BUFFER};
 use glib::{to_bool, to_gboolean};
-use glib::translate::{ToGlibPtr, ToGlibPtrMut};
+use glib::translate::{ToGlibPtr, ToGlibPtrMut, Uninitialized};
 use TextIter;
 
 struct_Widget!(TextView);
