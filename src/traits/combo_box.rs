@@ -6,6 +6,7 @@ use glib::translate::*;
 use ffi;
 use glib::{to_bool, to_gboolean};
 use cast::GTK_COMBO_BOX;
+use TreeIter;
 
 pub trait ComboBoxTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait {
     fn get_wrap_width(&self) -> i32 {
@@ -40,23 +41,20 @@ pub trait ComboBoxTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait {
         unsafe { ffi::gtk_combo_box_set_active(GTK_COMBO_BOX(self.unwrap_widget()), active) }
     }
 
-    fn get_active_iter(&self) -> Option<::TreeIter> {
+    fn get_active_iter(&self) -> Option<TreeIter> {
          unsafe {
-            let iter = ::TreeIter::new();
-            let ok = from_glib(
-                ffi::gtk_combo_box_get_active_iter(GTK_COMBO_BOX(self.unwrap_widget()),
-                    iter.unwrap_pointer()));
-            if ok {
-                Some(iter)
-            }
-            else {
-                None
-            }
+            let mut iter = TreeIter::uninitialized();
+            let ok = ffi::gtk_combo_box_get_active_iter(GTK_COMBO_BOX(self.unwrap_widget()),
+                iter.to_glib_none_mut().0);
+            some_if(ok, iter)
         }
     }
 
-    fn set_active_iter(&self, iter: &::TreeIter) {
-        unsafe { ffi::gtk_combo_box_set_active_iter(GTK_COMBO_BOX(self.unwrap_widget()), iter.unwrap_pointer()) }
+    fn set_active_iter(&self, mut iter: Option<&mut TreeIter>) {
+        unsafe {
+            ffi::gtk_combo_box_set_active_iter(GTK_COMBO_BOX(self.unwrap_widget()),
+                iter.to_glib_none_mut().0)
+        }
     }
 
     fn get_id_column(&self) -> i32 {

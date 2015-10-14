@@ -1223,15 +1223,20 @@ mod tree_view {
 
     extern "C" fn iter_path_trampoline(this: *mut GtkTreeView, iter: *mut GtkTreeIter,
             path: *mut GtkTreePath, f: &Box<Fn(TreeView, &mut TreeIter, TreePath) + 'static>) {
-        f(FFIWidget::wrap_widget(this as *mut _), &mut TreeIter::wrap_pointer(iter),
-            TreePath::wrap_pointer(path));
+        unsafe {
+            f(FFIWidget::wrap_widget(this as *mut _), &mut from_glib_borrow(iter),
+                TreePath::wrap_pointer(path));
+        }
     }
 
     extern "C" fn iter_path_bool_trampoline(this: *mut GtkTreeView, iter: *mut GtkTreeIter,
-            path: *mut GtkTreePath, f: &Box<Fn(TreeView, &mut TreeIter, TreePath) -> bool + 'static>)
+            path: *mut GtkTreePath,
+            f: &Box<Fn(TreeView, &mut TreeIter, TreePath) -> bool + 'static>)
             -> gboolean {
-        f(FFIWidget::wrap_widget(this as *mut _), &mut TreeIter::wrap_pointer(iter),
-            TreePath::wrap_pointer(path)).to_glib()
+        unsafe {
+            f(FFIWidget::wrap_widget(this as *mut _), &mut from_glib_borrow(iter),
+                TreePath::wrap_pointer(path)).to_glib()
+        }
     }
 }
 

@@ -25,63 +25,63 @@ impl ListStore {
         unsafe { ffi::gtk_list_store_set_column_types(self.pointer, column_types.len() as i32, column_types_ffi.as_ptr() as *mut GType) }
     }
 
-    pub fn set_string(&self, iter: &TreeIter, column: i32, text: &str) {
+    pub fn set_string(&self, iter: &mut TreeIter, column: i32, text: &str) {
         unsafe {
             let text: Stash<*const c_char, _> = text.to_glib_none();
-            ffi::gtk_list_store_set(self.pointer, iter.unwrap_pointer(), column, text.0, -1)
+            ffi::gtk_list_store_set(self.pointer, iter.to_glib_none_mut().0, column, text.0, -1)
         }
     }
 
-    pub fn remove(&self, iter: &TreeIter) -> bool {
-        unsafe { to_bool(ffi::gtk_list_store_remove(self.pointer, iter.unwrap_pointer())) }
+    pub fn remove(&self, iter: &mut TreeIter) -> bool {
+        unsafe { to_bool(ffi::gtk_list_store_remove(self.pointer, iter.to_glib_none_mut().0)) }
     }
 
     pub fn insert(&self, iter: &mut TreeIter, position: i32) {
-        unsafe { ffi::gtk_list_store_insert(self.pointer, iter.unwrap_pointer(), position) }
+        unsafe { ffi::gtk_list_store_insert(self.pointer, iter.to_glib_none_mut().0, position) }
     }
 
-    pub fn insert_before(&self, iter: &mut TreeIter, sibling: Option<&TreeIter>) {
-        unsafe { ffi::gtk_list_store_insert_before(self.pointer, iter.unwrap_pointer(),
-                                                   if sibling.is_none() { ::std::ptr::null_mut()} else { sibling.unwrap().unwrap_pointer() }) }
+    pub fn insert_before(&self, iter: &mut TreeIter, mut sibling: Option<&mut TreeIter>) {
+        unsafe { ffi::gtk_list_store_insert_before(self.pointer, iter.to_glib_none_mut().0,
+                                                   sibling.to_glib_none_mut().0) }
     }
 
-    pub fn insert_after(&self, iter: &mut TreeIter, sibling: Option<&TreeIter>) {
-        unsafe { ffi::gtk_list_store_insert_after(self.pointer, iter.unwrap_pointer(),
-                                                  if sibling.is_none() { ::std::ptr::null_mut()} else { sibling.unwrap().unwrap_pointer() }) }
+    pub fn insert_after(&self, iter: &mut TreeIter, mut sibling: Option<&mut TreeIter>) {
+        unsafe { ffi::gtk_list_store_insert_after(self.pointer, iter.to_glib_none_mut().0,
+                                                  sibling.to_glib_none_mut().0) }
     }
 
     pub fn prepend(&self, iter: &mut TreeIter) {
-        unsafe { ffi::gtk_list_store_prepend(self.pointer, iter.unwrap_pointer()) }
+        unsafe { ffi::gtk_list_store_prepend(self.pointer, iter.to_glib_none_mut().0) }
     }
 
     pub fn append(&self, iter: &mut TreeIter) {
-        unsafe { ffi::gtk_list_store_append(self.pointer, iter.unwrap_pointer()) }
+        unsafe { ffi::gtk_list_store_append(self.pointer, iter.to_glib_none_mut().0) }
     }
 
     pub fn clear(&self) {
         unsafe { ffi::gtk_list_store_clear(self.pointer) }
     }
 
-    pub fn iter_is_valid(&self, iter: &TreeIter) -> bool {
-        unsafe { to_bool(ffi::gtk_list_store_iter_is_valid(self.pointer, iter.unwrap_pointer())) }
+    pub fn iter_is_valid(&self, iter: &mut TreeIter) -> bool {
+        unsafe { to_bool(ffi::gtk_list_store_iter_is_valid(self.pointer, iter.to_glib_none_mut().0)) }
     }
 
     pub fn reorder(&self, new_order: *mut i32) {
         unsafe { ffi::gtk_list_store_reorder(self.pointer, new_order) }
     }
 
-    pub fn swap(&self, a: &TreeIter, b: &TreeIter) {
-        unsafe { ffi::gtk_list_store_swap(self.pointer, a.unwrap_pointer(), b.unwrap_pointer()) }
+    pub fn swap(&self, a: &mut TreeIter, b: &mut TreeIter) {
+        unsafe { ffi::gtk_list_store_swap(self.pointer, a.to_glib_none_mut().0, b.to_glib_none_mut().0) }
     }
 
-    pub fn move_before(&self, iter: &TreeIter, position: Option<&TreeIter>) {
-        unsafe { ffi::gtk_list_store_move_before(self.pointer, iter.unwrap_pointer(),
-                                                 if position.is_none() { ::std::ptr::null_mut() } else { position.unwrap().unwrap_pointer() }) }
+    pub fn move_before(&self, iter: &mut TreeIter, mut position: Option<&mut TreeIter>) {
+        unsafe { ffi::gtk_list_store_move_before(self.pointer, iter.to_glib_none_mut().0,
+                                                 position.to_glib_none_mut().0) }
     }
 
-    pub fn move_after(&self, iter: &TreeIter, position: Option<&TreeIter>) {
-        unsafe { ffi::gtk_list_store_move_before(self.pointer, iter.unwrap_pointer(),
-                                                 if position.is_none() { ::std::ptr::null_mut() } else { position.unwrap().unwrap_pointer() }) }
+    pub fn move_after(&self, iter: &mut TreeIter, mut position: Option<&mut TreeIter>) {
+        unsafe { ffi::gtk_list_store_move_before(self.pointer, iter.to_glib_none_mut().0,
+                                                 position.to_glib_none_mut().0) }
     }
 
     pub fn get_model(&self) -> Option<::TreeModel> {
@@ -95,9 +95,9 @@ impl ListStore {
         }
     }
 
-    pub fn set_value(&self, iter: &TreeIter, column: i32, value: &Value) {
+    pub fn set_value(&self, iter: &mut TreeIter, column: i32, value: &Value) {
         unsafe {
-            ffi::gtk_list_store_set_value(self.pointer, iter.unwrap_pointer(),
+            ffi::gtk_list_store_set_value(self.pointer, iter.to_glib_none_mut().0,
                 column, value.as_ptr() as *mut _);
         }
     }
