@@ -36,12 +36,6 @@ pub trait MenuItemTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait {
         }
     }
 
-    fn activate(&self) {
-        unsafe {
-            ffi::gtk_menu_item_activate(GTK_MENU_ITEM(self.unwrap_widget()))
-        }
-    }
-
     fn set_accel_path(&self, accel_path: &str) {
         unsafe {
             ffi::gtk_menu_item_set_accel_path(GTK_MENU_ITEM(self.unwrap_widget()), accel_path.to_glib_none().0)
