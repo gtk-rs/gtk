@@ -8,13 +8,8 @@ glib_wrapper! {
     /// Text buffer iterator
     pub struct TreeIter(Boxed<ffi::GtkTreeIter>);
 
-    impl TextIter {
-        copy: gtk_tree_iter_copy,
-        free: ffi::gtk_tree_iter_free,
+    match fn {
+        copy => |ptr| ffi::gtk_tree_iter_copy(ptr as *mut _),
+        free => |ptr| ffi::gtk_tree_iter_free(ptr),
     }
-}
-
-#[inline]
-unsafe fn gtk_tree_iter_copy(ptr: *const ffi::GtkTreeIter) -> *mut ffi::GtkTreeIter {
-    ffi::gtk_tree_iter_copy(ptr as *mut _) // pretend it's const
 }

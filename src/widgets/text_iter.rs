@@ -9,9 +9,9 @@ glib_wrapper! {
     /// Text buffer iterator
     pub struct TextIter(Boxed<ffi::GtkTextIter>);
 
-    impl TextIter {
-        copy: ffi::gtk_text_iter_copy,
-        free: ffi::gtk_text_iter_free,
+    match fn {
+        copy => |ptr| ffi::gtk_text_iter_copy(ptr),
+        free => |ptr| ffi::gtk_text_iter_free(ptr),
     }
 }
 
