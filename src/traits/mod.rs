@@ -50,6 +50,7 @@ pub use self::gobject::GObjectTrait;
 pub use signal::{
     WidgetSignals,
     ButtonSignals,
+    CalendarSignals,
     ComboBoxSignals,
     ToolButtonSignals,
 };

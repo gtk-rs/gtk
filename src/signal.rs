@@ -32,6 +32,7 @@ use cairo::{Context, RectangleInt};
 use {
     Adjustment,
     Button,
+    Calendar,
     ComboBox,
     DeleteType,
     Dialog,
@@ -1393,5 +1394,86 @@ mod gl_area {
     extern "C" fn gl_area_trampoline_res(this: *mut GtkGLArea, width: i32, height: i32,
             f: &Box<Fn(GLArea, i32, i32) + 'static>) {
         f(GLArea::wrap_widget(GTK_WIDGET(this as *mut _)), width, height)
+    }
+}
+
+pub trait CalendarSignals {
+    fn connect_day_selected<F: Fn(Calendar) + 'static>(&self, f: F) -> u64;
+    fn connect_day_selected_double_click<F: Fn(Calendar) + 'static>(&self, f: F) -> u64;
+    fn connect_month_changed<F: Fn(Calendar) + 'static>(&self, f: F) -> u64;
+    fn connect_next_month<F: Fn(Calendar) + 'static>(&self, f: F) -> u64;
+    fn connect_next_year<F: Fn(Calendar) + 'static>(&self, f: F) -> u64;
+    fn connect_prev_month<F: Fn(Calendar) + 'static>(&self, f: F) -> u64;
+    fn connect_prev_year<F: Fn(Calendar) + 'static>(&self, f: F) -> u64;
+}
+
+mod calendar {
+    use super::into_raw;
+    use std::mem::transmute;
+    use glib::signal::connect;
+    use traits::FFIWidget;
+    use ffi::GtkCalendar;
+    use Calendar;
+
+    impl super::CalendarSignals for Calendar {
+        fn connect_day_selected<F: Fn(Calendar) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(Calendar) + 'static>> = Box::new(Box::new(f));
+                connect(self.unwrap_widget() as *mut _, "day-selected",
+                    transmute(void_trampoline), into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_day_selected_double_click<F: Fn(Calendar) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(Calendar) + 'static>> = Box::new(Box::new(f));
+                connect(self.unwrap_widget() as *mut _, "day-selected-double-click",
+                    transmute(void_trampoline), into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_month_changed<F: Fn(Calendar) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(Calendar) + 'static>> = Box::new(Box::new(f));
+                connect(self.unwrap_widget() as *mut _, "month-changed",
+                    transmute(void_trampoline), into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_next_month<F: Fn(Calendar) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(Calendar) + 'static>> = Box::new(Box::new(f));
+                connect(self.unwrap_widget() as *mut _, "next-month",
+                    transmute(void_trampoline), into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_next_year<F: Fn(Calendar) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(Calendar) + 'static>> = Box::new(Box::new(f));
+                connect(self.unwrap_widget() as *mut _, "next-year",
+                    transmute(void_trampoline), into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_prev_month<F: Fn(Calendar) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(Calendar) + 'static>> = Box::new(Box::new(f));
+                connect(self.unwrap_widget() as *mut _, "prev-month",
+                    transmute(void_trampoline), into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_prev_year<F: Fn(Calendar) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(Calendar) + 'static>> = Box::new(Box::new(f));
+                connect(self.unwrap_widget() as *mut _, "prev-year",
+                    transmute(void_trampoline), into_raw(f) as *mut _)
+            }
+        }
+    }
+
+    extern "C" fn void_trampoline(this: *mut GtkCalendar, f: &Box<Fn(Calendar) + 'static>) {
+        f(FFIWidget::wrap_widget(this as *mut _));
     }
 }
