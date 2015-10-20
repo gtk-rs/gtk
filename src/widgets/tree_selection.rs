@@ -6,7 +6,7 @@
 
 use std::ptr;
 use glib;
-use glib::translate::{ToGlibPtrMut, Uninitialized, some_if};
+use glib::translate::{ToGlibPtr, ToGlibPtrMut, Uninitialized, from_glib, some_if};
 use ffi;
 use {TreeView, TreePath, TreeIter, TreeModel};
 
@@ -66,18 +66,22 @@ impl TreeSelection {
         }
     }
 
-    pub fn select_iter(&self, iter: &mut TreeIter) {
-        unsafe { ffi::gtk_tree_selection_select_iter(self.pointer, iter.to_glib_none_mut().0) }
+    pub fn select_iter(&self, iter: &TreeIter) {
+        unsafe {
+            ffi::gtk_tree_selection_select_iter(self.pointer, iter.to_glib_none().0 as *mut _)
+        }
     }
 
-    pub fn unselect_iter(&self, iter: &mut TreeIter) {
-        unsafe { ffi::gtk_tree_selection_unselect_iter(self.pointer, iter.to_glib_none_mut().0) }
+    pub fn unselect_iter(&self, iter: &TreeIter) {
+        unsafe {
+            ffi::gtk_tree_selection_unselect_iter(self.pointer, iter.to_glib_none().0 as *mut _)
+        }
     }
 
-    pub fn iter_is_selected(&self, iter: &mut TreeIter) -> bool {
-        match unsafe { ffi::gtk_tree_selection_iter_is_selected(self.pointer, iter.to_glib_none_mut().0) } {
-            0 => false,
-            _ => true
+    pub fn iter_is_selected(&self, iter: &TreeIter) -> bool {
+        unsafe {
+            from_glib(ffi::gtk_tree_selection_iter_is_selected(self.pointer,
+                                                               iter.to_glib_none().0 as *mut _))
         }
     }
 

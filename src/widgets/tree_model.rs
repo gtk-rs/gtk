@@ -55,8 +55,10 @@ impl TreeModel {
         }
      }
 
-    pub fn get_path(&self, iter: &mut TreeIter) -> Option<TreePath> {
-        let tmp_pointer = unsafe { ffi::gtk_tree_model_get_path(self.pointer, iter.to_glib_none_mut().0) };
+    pub fn get_path(&self, iter: &TreeIter) -> Option<TreePath> {
+        let tmp_pointer = unsafe {
+            ffi::gtk_tree_model_get_path(self.pointer, iter.to_glib_none().0 as *mut _)
+        };
 
         if tmp_pointer.is_null() {
             None
@@ -65,10 +67,10 @@ impl TreeModel {
         }
     }
 
-    pub fn get_value(&self, iter: &mut TreeIter, column: i32) -> Value {
+    pub fn get_value(&self, iter: &TreeIter, column: i32) -> Value {
         unsafe {
             let mut value = Value::new();
-            ffi::gtk_tree_model_get_value(self.pointer, iter.to_glib_none_mut().0, column,
+            ffi::gtk_tree_model_get_value(self.pointer, iter.to_glib_none().0 as *mut _, column,
                 value.as_mut_ptr());
             value
         }
@@ -84,63 +86,63 @@ impl TreeModel {
         }
     }
 
-    pub fn iter_children(&self, mut parent: Option<&mut TreeIter>) -> Option<TreeIter> {
+    pub fn iter_children(&self, parent: Option<&TreeIter>) -> Option<TreeIter> {
         unsafe {
             let mut iter = TreeIter::uninitialized();
             let ok = ffi::gtk_tree_model_iter_children(self.pointer, iter.to_glib_none_mut().0,
-                parent.to_glib_none_mut().0);
+                parent.to_glib_none().0 as *mut _);
             some_if(ok, iter)
         }
     }
 
-    pub fn iter_has_child(&self, iter: &mut TreeIter) -> bool {
+    pub fn iter_has_child(&self, iter: &TreeIter) -> bool {
         unsafe {
-            from_glib(ffi::gtk_tree_model_iter_has_child(self.pointer, iter.to_glib_none_mut().0))
+            from_glib(ffi::gtk_tree_model_iter_has_child(self.pointer, iter.to_glib_none().0 as *mut _))
         }
     }
 
-    pub fn iter_n_children(&self, mut iter: Option<&mut TreeIter>) -> i32 {
+    pub fn iter_n_children(&self, iter: Option<&TreeIter>) -> i32 {
         unsafe {
-            ffi::gtk_tree_model_iter_n_children(self.pointer, iter.to_glib_none_mut().0)
+            ffi::gtk_tree_model_iter_n_children(self.pointer, iter.to_glib_none().0 as *mut _)
         }
     }
 
-    pub fn iter_nth_child(&self, mut parent: Option<&mut TreeIter>, n: i32) -> Option<TreeIter> {
+    pub fn iter_nth_child(&self, parent: Option<&TreeIter>, n: i32) -> Option<TreeIter> {
         unsafe {
             let mut iter = TreeIter::uninitialized();
             let ok = ffi::gtk_tree_model_iter_nth_child(self.pointer, iter.to_glib_none_mut().0,
-                parent.to_glib_none_mut().0, n);
+                parent.to_glib_none().0 as *mut _, n);
             some_if(ok, iter)
         }
     }
 
-    pub fn iter_parent(&self, child: &mut TreeIter) -> Option<TreeIter> {
+    pub fn iter_parent(&self, child: &TreeIter) -> Option<TreeIter> {
         unsafe {
             let mut iter = TreeIter::uninitialized();
             let ok = ffi::gtk_tree_model_iter_parent(self.pointer, iter.to_glib_none_mut().0,
-                child.to_glib_none_mut().0);
+                child.to_glib_none().0 as *mut _);
             some_if(ok, iter)
         }
      }
 
-    pub fn get_string_from_iter(&self, iter: &mut TreeIter) -> Option<String> {
+    pub fn get_string_from_iter(&self, iter: &TreeIter) -> Option<String> {
         unsafe {
             from_glib_full(
                 ffi::gtk_tree_model_get_string_from_iter(self.pointer,
-                                                         iter.to_glib_none_mut().0))
+                                                         iter.to_glib_none().0 as *mut _))
         }
     }
 
-    pub fn row_changed(&self, path: &TreePath, iter: &mut TreeIter) {
-        unsafe { ffi::gtk_tree_model_row_changed(self.pointer, path.unwrap_pointer(), iter.to_glib_none_mut().0) }
+    pub fn row_changed(&self, path: &TreePath, iter: &TreeIter) {
+        unsafe { ffi::gtk_tree_model_row_changed(self.pointer, path.unwrap_pointer(), iter.to_glib_none().0 as *mut _) }
     }
 
-    pub fn row_inserted(&self, path: &TreePath, iter: &mut TreeIter) {
-        unsafe { ffi::gtk_tree_model_row_inserted(self.pointer, path.unwrap_pointer(), iter.to_glib_none_mut().0) }
+    pub fn row_inserted(&self, path: &TreePath, iter: &TreeIter) {
+        unsafe { ffi::gtk_tree_model_row_inserted(self.pointer, path.unwrap_pointer(), iter.to_glib_none().0 as *mut _) }
     }
 
-    pub fn row_has_child_toggled(&self, path: &TreePath, iter: &mut TreeIter) {
-        unsafe { ffi::gtk_tree_model_row_has_child_toggled(self.pointer, path.unwrap_pointer(), iter.to_glib_none_mut().0) }
+    pub fn row_has_child_toggled(&self, path: &TreePath, iter: &TreeIter) {
+        unsafe { ffi::gtk_tree_model_row_has_child_toggled(self.pointer, path.unwrap_pointer(), iter.to_glib_none().0 as *mut _) }
     }
 
     pub fn row_deleted(&self, path: &TreePath) {
