@@ -163,6 +163,9 @@ impl TreeModel {
 
     #[doc(hidden)]
     pub fn wrap_pointer(c_treemodel: *mut ffi::GtkTreeModel) -> TreeModel {
+        unsafe {
+            ::gobject_ffi::g_object_ref(c_treemodel as *mut _);
+        }
         TreeModel {
             pointer: c_treemodel
         }
