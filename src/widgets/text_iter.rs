@@ -2,60 +2,20 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! GtkTextIter — Text buffer iterator
-
 use ffi;
-use glib::boxed::{Boxed, BoxedMemoryManager};
-use glib::translate::{Stash, StashMut, ToGlib, ToGlibPtr, ToGlibPtrMut, from_glib, from_glib_none};
+use glib::translate::{ToGlib, ToGlibPtr, ToGlibPtrMut, from_glib, from_glib_none};
 
-#[doc(hidden)]
-pub struct MM;
+glib_wrapper! {
+    /// Text buffer iterator
+    pub struct TextIter(Boxed<ffi::GtkTextIter>);
 
-impl BoxedMemoryManager<ffi::GtkTextIter> for MM {
-    #[inline]
-    unsafe fn copy(ptr: *const ffi::GtkTextIter) -> *mut ffi::GtkTextIter {
-        ffi::gtk_text_iter_copy(ptr)
-    }
-
-    #[inline]
-    unsafe fn free(ptr: *mut ffi::GtkTextIter) {
-        ffi::gtk_text_iter_free(ptr)
-    }
-}
-
-pub struct TextIter(Boxed<ffi::GtkTextIter, MM>);
-
-impl<'a> ToGlibPtr<'a, *const ffi::GtkTextIter> for &'a TextIter {
-    type Storage = &'a Boxed<ffi::GtkTextIter, MM>;
-
-    #[inline]
-    fn to_glib_none(&self) -> Stash<'a, *const ffi::GtkTextIter, Self> {
-        let stash = (&self.0).to_glib_none();
-        Stash(stash.0, stash.1)
-    }
-}
-
-impl<'a> ToGlibPtrMut<'a, *mut ffi::GtkTextIter> for TextIter {
-    type Storage = &'a mut Boxed<ffi::GtkTextIter, MM>;
-
-    #[inline]
-    fn to_glib_none_mut(&'a mut self) -> StashMut<'a, *mut ffi::GtkTextIter, Self> {
-        let stash = self.0.to_glib_none_mut();
-        StashMut(stash.0, stash.1)
-    }
-}
-
-impl Clone for TextIter {
-    fn clone(&self) -> Self {
-        TextIter(self.0.clone())
+    match fn {
+        copy => |ptr| ffi::gtk_text_iter_copy(ptr),
+        free => |ptr| ffi::gtk_text_iter_free(ptr),
     }
 }
 
 impl TextIter {
-    pub unsafe fn uninitialized() -> TextIter {
-        TextIter(Boxed::uninitialized())
-    }
-
     pub fn get_buffer(&self) -> Option<::TextBuffer> {
         let tmp_pointer = unsafe { ffi::gtk_text_iter_get_buffer(self.to_glib_none().0) };
 

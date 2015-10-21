@@ -4,9 +4,11 @@
 
 //! GtkTreeSelection — The selection object for GtkTreeView
 
+use std::ptr;
 use glib;
+use glib::translate::{ToGlibPtr, ToGlibPtrMut, Uninitialized, from_glib, some_if};
 use ffi;
-use {TreeView, TreePath, TreeIter};
+use {TreeView, TreePath, TreeIter, TreeModel};
 
 pub struct TreeSelection {
     pointer: *mut ffi::GtkTreeSelection
@@ -35,11 +37,13 @@ impl TreeSelection {
         }
     }
 
-    pub fn get_selected(&self, model: &::TreeModel, iter: &mut ::TreeIter) -> bool {
-        match unsafe { ffi::gtk_tree_selection_get_selected(self.pointer, &mut model.unwrap_pointer(),
-            iter.unwrap_pointer()) } {
-            0 => false,
-            _ => true
+    pub fn get_selected(&self) -> Option<(TreeModel, TreeIter)> {
+        unsafe {
+            let mut model = ptr::null_mut();
+            let mut iter = TreeIter::uninitialized();
+            let ok = ffi::gtk_tree_selection_get_selected(self.pointer, &mut model,
+                iter.to_glib_none_mut().0);
+            some_if(ok, (TreeModel::wrap_pointer(model), iter))
         }
     }
 
@@ -63,17 +67,21 @@ impl TreeSelection {
     }
 
     pub fn select_iter(&self, iter: &TreeIter) {
-        unsafe { ffi::gtk_tree_selection_select_iter(self.pointer, iter.unwrap_pointer()) }
+        unsafe {
+            ffi::gtk_tree_selection_select_iter(self.pointer, iter.to_glib_none().0 as *mut _)
+        }
     }
 
     pub fn unselect_iter(&self, iter: &TreeIter) {
-        unsafe { ffi::gtk_tree_selection_unselect_iter(self.pointer, iter.unwrap_pointer()) }
+        unsafe {
+            ffi::gtk_tree_selection_unselect_iter(self.pointer, iter.to_glib_none().0 as *mut _)
+        }
     }
 
     pub fn iter_is_selected(&self, iter: &TreeIter) -> bool {
-        match unsafe { ffi::gtk_tree_selection_iter_is_selected(self.pointer, iter.unwrap_pointer()) } {
-            0 => false,
-            _ => true
+        unsafe {
+            from_glib(ffi::gtk_tree_selection_iter_is_selected(self.pointer,
+                                                               iter.to_glib_none().0 as *mut _))
         }
     }
 
