@@ -1369,21 +1369,22 @@ mod gl_area {
     use cast::GTK_WIDGET;
     use super::into_raw;
     use traits::FFIWidget;
+    use super::Inhibit;
     use GLArea;
 
     impl GLArea {
-        fn connect_rendered<F: Fn(GLArea, gdk::GLContext) + 'static>(&self, f: F) -> u64 {
+        pub fn connect_render<F: Fn(GLArea, gdk::GLContext) -> Inhibit + 'static>(&self, f: F) -> u64 {
             unsafe {
-                let f: Box<Box<Fn(GLArea, gdk::GLContext) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _,"rendered",
+                let f: Box<Box<Fn(GLArea, gdk::GLContext) -> Inhibit + 'static>> = Box::new(Box::new(f));
+                connect(self.unwrap_widget() as *mut _,"render",
                     transmute(gl_area_trampoline), into_raw(f) as *mut _)
             }
         }
 
-        fn connect_resized<F: Fn(GLArea, i32, i32) + 'static>(&self, f: F) -> u64 {
+        pub fn connect_resize<F: Fn(GLArea, i32, i32) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(GLArea, i32, i32) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _,"rendered",
+                connect(self.unwrap_widget() as *mut _,"resize",
                     transmute(gl_area_trampoline_res), into_raw(f) as *mut _)
             }
         }
