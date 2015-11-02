@@ -55,9 +55,6 @@ pub use signal::{
     ToolButtonSignals,
 };
 
-#[cfg(gtk_3_16)]
-pub use signal::GLAreaSignals;
-
 pub mod style_provider;
 pub mod widget;
 pub mod container;

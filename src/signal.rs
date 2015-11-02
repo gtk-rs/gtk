@@ -55,12 +55,6 @@ use {
     WidgetHelpType,
 };
 
-#[cfg(gtk_3_16)]
-use {
-    gdk,
-    GLArea,
-};
-
 /// Whether to propagate the signal to other handlers
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
 pub struct Inhibit(pub bool);
@@ -1365,12 +1359,6 @@ extern "C" fn tree_view_column_trampoline(this: *mut GtkTreeViewColumn,
 }
 
 #[cfg(gtk_3_16)]
-pub trait GLAreaSignals {
-    fn connect_render<F: Fn(GLArea, gdk::GLContext) -> Inhibit + 'static>(&self, f: F) -> u64;
-    fn connect_resize<F: Fn(GLArea, i32, i32) + 'static>(&self, f: F) -> u64;
-}
-
-#[cfg(gtk_3_16)]
 mod gl_area {
     use std::mem::transmute;
     use glib::signal::connect;
@@ -1384,8 +1372,8 @@ mod gl_area {
     use super::Inhibit;
     use GLArea;
 
-    impl super::GLAreaSignals for GLArea {
-        fn connect_render<F: Fn(GLArea, gdk::GLContext) -> Inhibit + 'static>(&self, f: F) -> u64 {
+    impl GLArea {
+        pub fn connect_render<F: Fn(GLArea, gdk::GLContext) -> Inhibit + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(GLArea, gdk::GLContext) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _,"render",
@@ -1393,7 +1381,7 @@ mod gl_area {
             }
         }
 
-        fn connect_resize<F: Fn(GLArea, i32, i32) + 'static>(&self, f: F) -> u64 {
+        pub fn connect_resize<F: Fn(GLArea, i32, i32) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(GLArea, i32, i32) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _,"resize",
