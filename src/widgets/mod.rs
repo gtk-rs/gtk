@@ -146,6 +146,7 @@ pub use self::event_box::EventBox;
 #[cfg(gtk_3_16)]
 pub use self::gl_area::GLArea;
 pub use self::status_icon::StatusIcon;
+pub use self::menu::Menu;
 
 mod css_provider;
 mod style_context;
@@ -291,3 +292,4 @@ mod event_box;
 #[cfg(gtk_3_16)]
 mod gl_area;
 mod status_icon;
+mod menu;

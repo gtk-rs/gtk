@@ -182,6 +182,7 @@ pub use self::widgets::{
     FontChooserWidget,
     EventBox,
     StatusIcon,
+    Menu,
 };
 
 #[cfg(target_os = "linux")]
