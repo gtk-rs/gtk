@@ -181,6 +181,8 @@ pub use self::widgets::{
     ColorChooserWidget,
     FontChooserWidget,
     EventBox,
+    StatusIcon,
+    Menu,
 };
 
 #[cfg(target_os = "linux")]

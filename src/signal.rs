@@ -43,6 +43,7 @@ use {
     ScrollType,
     SpinButton,
     StateFlags,
+    StatusIcon,
     TextDirection,
     ToolButton,
     Tooltip,
@@ -1481,5 +1482,116 @@ mod calendar {
 
     extern "C" fn void_trampoline(this: *mut GtkCalendar, f: &Box<Fn(Calendar) + 'static>) {
         f(FFIWidget::wrap_widget(this as *mut _));
+    }
+}
+
+pub trait StatusIconSignals {
+    fn connect_activate<F: Fn(StatusIcon) + 'static>(&self, f: F) -> u64;
+    fn connect_button_press_event<F: Fn(StatusIcon, &EventButton) -> bool + 'static>(&self, f: F) -> u64;
+    fn connect_button_release_event<F: Fn(StatusIcon, &EventButton) -> bool + 'static>(&self, f: F) -> u64;
+    fn connect_popup_menu<F: Fn(StatusIcon, u32, u32) + 'static>(&self, f: F) -> u64;
+    fn connect_query_tooltip<F: Fn(StatusIcon, i32, i32, bool, Tooltip) -> bool + 'static>(&self, f: F) -> u64;
+    fn connect_scroll_event<F: Fn(StatusIcon, &EventScroll) -> bool + 'static>(&self, f: F) -> u64;
+    fn connect_size_changed<F: Fn(StatusIcon, i32) -> bool + 'static>(&self, f: F) -> u64;
+}
+
+mod status_icon {
+    use super::into_raw;
+    use StatusIcon;
+    use libc::{c_int, c_uint};
+    use std::mem::transmute;
+    use ffi::{GtkStatusIcon, GtkTooltip};
+    use gdk::{EventButton, EventScroll};
+    use glib::signal::connect;
+    use glib::translate::*;
+    use glib_ffi::gboolean;
+    use Tooltip;
+
+    impl super::StatusIconSignals for StatusIcon {
+        fn connect_activate<F: Fn(StatusIcon) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(StatusIcon) + 'static>> = Box::new(Box::new(f));
+                connect(self.to_glib_none().0 as *mut _, "activate",
+                    transmute(void_trampoline), into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_button_press_event<F: Fn(StatusIcon, &EventButton) -> bool + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(StatusIcon, &EventButton) -> bool + 'static>> = Box::new(Box::new(f));
+                connect(self.to_glib_none().0 as *mut _, "button-press-event",
+                    transmute(event_trampoline), into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_button_release_event<F: Fn(StatusIcon, &EventButton) -> bool + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(StatusIcon, &EventButton) -> bool + 'static>> = Box::new(Box::new(f));
+                connect(self.to_glib_none().0 as *mut _, "button-release-event",
+                    transmute(event_trampoline), into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_popup_menu<F: Fn(StatusIcon, u32, u32) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(StatusIcon, u32, u32) + 'static>> = Box::new(Box::new(f));
+                connect(self.to_glib_none().0 as *mut _, "popup-menu",
+                    transmute(popup_menu_trampoline), into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_query_tooltip<F: Fn(StatusIcon, i32, i32, bool, Tooltip) -> bool + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(StatusIcon, i32, i32, bool, Tooltip) -> bool + 'static>> = Box::new(Box::new(f));
+                connect(self.to_glib_none().0 as *mut _, "query-tooltip",
+                    transmute(query_tooltip_trampoline), into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_scroll_event<F: Fn(StatusIcon, &EventScroll) -> bool + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(StatusIcon, &EventScroll) -> bool + 'static>> = Box::new(Box::new(f));
+                connect(self.to_glib_none().0 as *mut _, "scroll-event",
+                    transmute(event_trampoline), into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_size_changed<F: Fn(StatusIcon, i32) -> bool + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(StatusIcon, i32) -> bool + 'static>> = Box::new(Box::new(f));
+                connect(self.to_glib_none().0 as *mut _, "size-changed",
+                    transmute(size_changed_trampoline), into_raw(f) as *mut _)
+            }
+        }
+    }
+
+    extern "C" fn void_trampoline(this: *mut GtkStatusIcon, f: &Box<Fn(StatusIcon) + 'static>) {
+        unsafe {
+            f(from_glib_none(this));
+        }
+    }
+
+    extern "C" fn event_trampoline(this: *mut GtkStatusIcon, event: *mut EventButton, f: &Box<Fn(StatusIcon, &EventScroll) -> bool + 'static>) -> gboolean {
+        unsafe {
+            f(from_glib_none(this), transmute(event)).to_glib()
+        }
+    }
+
+    extern "C" fn popup_menu_trampoline(this: *mut GtkStatusIcon, button: c_uint, activate_time: c_uint, f: &Box<Fn(StatusIcon, u32, u32) + 'static>) {
+        unsafe {
+            f(from_glib_none(this), button, activate_time);
+        }
+    }
+
+    extern "C" fn query_tooltip_trampoline(this: *mut GtkStatusIcon, x: c_int, y: c_int, keyboard_mode: gboolean, _tooltip: *mut GtkTooltip, f: &Box<Fn(StatusIcon, i32, i32, bool, Tooltip) -> bool + 'static>) -> gboolean {
+        unsafe {
+            f(from_glib_none(this), x, y, from_glib(keyboard_mode), Tooltip).to_glib()
+        }
+    }
+
+    extern "C" fn size_changed_trampoline(this: *mut GtkStatusIcon, size: c_int, f: &Box<Fn(StatusIcon, i32) -> bool + 'static>) -> gboolean {
+        unsafe {
+            f(from_glib_none(this), size).to_glib()
+        }
     }
 }
