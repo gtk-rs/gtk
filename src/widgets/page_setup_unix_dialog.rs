@@ -11,6 +11,7 @@ struct_Widget!(PageSetupUnixDialog);
 
 impl PageSetupUnixDialog {
     pub fn new(title: &str, parent: Option<&::Window>) -> Option<PageSetupUnixDialog> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe {
             title.with_c_str(|c_str|{
                 ffi::gtk_page_setup_unix_dialog_new(match parent {

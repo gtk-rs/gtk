@@ -12,11 +12,13 @@ struct_Widget!(ComboBoxText);
 
 impl ComboBoxText {
     pub fn new() -> Option<ComboBoxText> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_combo_box_text_new() };
         check_pointer!(tmp_pointer, ComboBoxText)
     }
 
     pub fn new_with_entry() -> Option<ComboBoxText> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_combo_box_text_new_with_entry() };
         check_pointer!(tmp_pointer, ComboBoxText)
     }

@@ -12,6 +12,7 @@ struct_Widget!(Separator);
 
 impl Separator {
     pub fn new(orientation: Orientation) -> Option<Separator> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_separator_new(orientation) };
         check_pointer!(tmp_pointer, Separator)
     }

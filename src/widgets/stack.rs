@@ -16,6 +16,7 @@ struct_Widget!(Stack);
 
 impl Stack {
     pub fn new() -> Option<Stack> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_stack_new() };
         check_pointer!(tmp_pointer, Stack)
     }

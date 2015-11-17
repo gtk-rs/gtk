@@ -14,6 +14,7 @@ pub struct StyleContext {
 
 impl StyleContext {
     pub fn new() -> Self {
+        assert_initialized_main_thread!();
         unsafe { StyleContext { pointer: ffi::gtk_style_context_new() } }
     }
 
@@ -28,6 +29,7 @@ impl StyleContext {
 
     pub fn add_provider_for_screen<T: ::StyleProviderTrait>(screen: &gdk::Screen, provider: &T,
                                                             priority: u32) {
+        assert_initialized_main_thread!();
         unsafe {
             ffi::gtk_style_context_add_provider_for_screen(
                 screen.to_glib_none().0,

@@ -27,11 +27,13 @@ impl SpinButton {
     pub fn new(adjustment: &::Adjustment,
                climb_rate: f64,
                digits: u32) -> Option<SpinButton> {
+        skip_assert_initialized!();
         let tmp_pointer = unsafe { ffi::gtk_spin_button_new(adjustment.unwrap_pointer(), climb_rate as c_double, digits as c_uint) };
         check_pointer!(tmp_pointer, SpinButton)
     }
 
     pub fn new_with_range(min: f64, max: f64, step: f64) -> Option<SpinButton> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_spin_button_new_with_range(min as c_double, max as c_double, step as c_double) };
         check_pointer!(tmp_pointer, SpinButton)
     }

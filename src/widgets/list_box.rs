@@ -14,6 +14,7 @@ struct_Widget!(ListBox);
 
 impl ListBox {
     pub fn new() -> Option<ListBox> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_list_box_new() };
         check_pointer!(tmp_pointer, ListBox)
     }
@@ -156,6 +157,7 @@ struct_Widget!(ListBoxRow);
 
 impl ListBoxRow {
     pub fn new() -> Option<ListBoxRow> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_list_box_row_new() };
         check_pointer!(tmp_pointer, ListBoxRow)
     }

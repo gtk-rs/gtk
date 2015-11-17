@@ -12,6 +12,7 @@ struct_Widget!(Overlay);
 
 impl Overlay {
     pub fn new() -> Option<Overlay> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_overlay_new() };
         check_pointer!(tmp_pointer, Overlay)
     }

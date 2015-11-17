@@ -12,6 +12,7 @@ struct_Widget!(AboutDialog);
 
 impl AboutDialog {
     pub fn new() -> Option<AboutDialog> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_about_dialog_new() };
 
         if tmp_pointer.is_null() {
@@ -227,6 +228,7 @@ impl AboutDialog {
     }
 
     /*pub fn show(parent: Window, properties: Vec<String>) -> () {
+        assert_initialized_main_thread!();
         unsafe { ffi::gtk_show_about_dialog(GTK_WINDOW(parent), first_property_name, ...) }
     }*/
 }

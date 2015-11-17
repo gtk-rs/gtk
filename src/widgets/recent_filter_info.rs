@@ -90,6 +90,7 @@ impl RecentFilterInfo {
 
 impl Default for RecentFilterInfo {
     fn default() -> RecentFilterInfo {
+        skip_assert_initialized!();
         RecentFilterInfo {
             contains: ::RecentFilterFlags::empty(),
             uri: String::new(),

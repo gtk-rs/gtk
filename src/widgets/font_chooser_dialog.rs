@@ -11,6 +11,7 @@ struct_Widget!(FontChooserDialog);
 
 impl FontChooserDialog {
     pub fn new(title: &str, parent: Option<&::Window>) -> Option<FontChooserDialog> {
+        assert_initialized_main_thread!();
         let tmp = unsafe {
             ffi::gtk_font_chooser_dialog_new(title.to_glib_none().0,
                 match parent {

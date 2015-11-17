@@ -12,16 +12,19 @@ struct_Widget!(IconView);
 
 impl IconView {
     pub fn new() -> Option<IconView> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_icon_view_new() };
         check_pointer!(tmp_pointer, IconView)
     }
 
     /*pub fn new_with_area(area: &::CellArea) -> Option<IconView> {
+        skip_assert_initialized!();
         let tmp_pointer = unsafe { ffi::gtk_icon_view_new_with_area(::FFIWidget::unwrap(area)) };
         check_pointer!(tmp_pointer, IconView)
     }*/
 
     pub fn new_with_model(model: &TreeModel) -> Option<IconView> {
+        skip_assert_initialized!();
         let tmp_pointer = unsafe { ffi::gtk_icon_view_new_with_model(model.unwrap_pointer()) };
         check_pointer!(tmp_pointer, IconView)
     }

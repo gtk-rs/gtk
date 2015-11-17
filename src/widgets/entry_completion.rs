@@ -13,6 +13,7 @@ struct_Widget!(EntryCompletion);
 
 impl EntryCompletion {
     pub fn new() -> Option<EntryCompletion> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_entry_completion_new() };
 
         if tmp_pointer.is_null() {

@@ -11,6 +11,7 @@ struct_Widget!(VolumeButton);
 
 impl VolumeButton {
     pub fn new() -> Option<VolumeButton> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_volume_button_new() };
         check_pointer!(tmp_pointer, VolumeButton)
     }

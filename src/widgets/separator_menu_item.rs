@@ -11,6 +11,7 @@ struct_Widget!(SeparatorMenuItem);
 
 impl SeparatorMenuItem {
     pub fn new() -> Option<SeparatorMenuItem> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_separator_menu_item_new() };
         check_pointer!(tmp_pointer, SeparatorMenuItem)
     }

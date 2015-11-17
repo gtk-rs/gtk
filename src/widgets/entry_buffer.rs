@@ -24,6 +24,7 @@ pub struct EntryBuffer {
 
 impl EntryBuffer {
     pub fn new(initial_chars: Option<&str>) -> Option<EntryBuffer> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe {
             ffi::gtk_entry_buffer_new(initial_chars.to_glib_none().0, -1)
         };

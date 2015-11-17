@@ -16,11 +16,13 @@ struct_Widget!(TextView);
 
 impl TextView {
     pub fn new() -> Option<TextView> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_text_view_new() };
         check_pointer!(tmp_pointer, TextView)
     }
 
     pub fn new_with_buffer(buffer: TextBuffer) -> Option<TextView> {
+        skip_assert_initialized!();
         let tmp_pointer = unsafe {
             ffi::gtk_text_view_new_with_buffer(GTK_TEXT_BUFFER(buffer.unwrap_widget()))
         };

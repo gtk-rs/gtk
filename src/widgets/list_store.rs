@@ -17,6 +17,7 @@ pub struct ListStore {
 
 impl ListStore {
     pub fn new(column_types: &[Type]) -> Option<ListStore> {
+        assert_initialized_main_thread!();
         let column_types_ffi: Vec<GType> = column_types.iter().map(|n| n.to_glib()).collect();
         let tmp_pointer = unsafe { ffi::gtk_list_store_newv(column_types.len() as i32, column_types_ffi.as_ptr() as *mut GType) };
         check_pointer!(tmp_pointer, ListStore, G_OBJECT_FROM_LIST_STORE)

@@ -14,6 +14,7 @@ struct_Widget!(PaperSize);
 
 impl PaperSize {
     pub fn new(name: &str) -> Option<PaperSize> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe {
             ffi::gtk_paper_size_new(name.to_glib_none().0)
         };
@@ -26,6 +27,7 @@ impl PaperSize {
     }
 
     pub fn new_from_ppd(ppd_name: &str, ppd_display_name: &str, width: f64, height: f64) -> Option<PaperSize> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe {
             ffi::gtk_paper_size_new_from_ppd(ppd_name.to_glib_none().0,
                                              ppd_display_name.to_glib_none().0,
@@ -40,6 +42,7 @@ impl PaperSize {
     }
 
     pub fn new_custom(name: &str, display_name: &str, width: f64, height: f64, unit: ::Unit) -> Option<PaperSize> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe {
             ffi::gtk_paper_size_new_custom(name.to_glib_none().0,
                                            display_name.to_glib_none().0,
@@ -68,6 +71,7 @@ impl PaperSize {
     }
 
     pub fn get_paper_sizes(include_custom: bool) -> glib::List<Box<PaperSize>> {
+        assert_initialized_main_thread!();
         let tmp = unsafe { ffi::gtk_paper_size_get_paper_sizes(to_gboolean(include_custom))
         };
 
@@ -138,6 +142,7 @@ impl PaperSize {
     }
 
     pub fn get_default() -> Option<String> {
+        assert_initialized_main_thread!();
         unsafe {
             from_glib_none(
                 ffi::gtk_paper_size_get_default())

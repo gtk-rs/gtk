@@ -15,11 +15,13 @@ struct_Widget!(TreeView);
 
 impl TreeView {
     pub fn new() -> Option<TreeView> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_tree_view_new() };
         check_pointer!(tmp_pointer, TreeView)
     }
 
     pub fn new_with_model(model: &::TreeModel) -> Option<TreeView> {
+        skip_assert_initialized!();
         let tmp_pointer = unsafe { ffi::gtk_tree_view_new_with_model(model.unwrap_pointer()) };
         check_pointer!(tmp_pointer, TreeView)
     }

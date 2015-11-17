@@ -20,6 +20,7 @@ struct_Widget!(Window);
 
 impl Window {
     pub fn new(window_type: WindowType) -> Option<Window> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_window_new(window_type) };
         check_pointer!(tmp_pointer, Window)
     }

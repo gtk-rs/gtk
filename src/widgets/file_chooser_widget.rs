@@ -11,6 +11,7 @@ struct_Widget!(FileChooserWidget);
 
 impl FileChooserWidget {
     pub fn new(action: ::FileChooserAction) -> Option<FileChooserWidget> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_file_chooser_widget_new(action) };
 
         if tmp_pointer.is_null() {

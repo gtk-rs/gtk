@@ -12,6 +12,7 @@ pub struct PageSetup {
 
 impl PageSetup {
     pub fn new() -> Option<PageSetup> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_page_setup_new() };
 
         if tmp_pointer.is_null() {

@@ -13,6 +13,7 @@ struct_Widget!(Popover);
 
 impl Popover {
     pub fn new<T: ::WidgetTrait>(relative_to: &T) -> Option<Popover> {
+        skip_assert_initialized!();
         let tmp_pointer = unsafe { ffi::gtk_popover_new(relative_to.unwrap_widget()) };
         check_pointer!(tmp_pointer, Popover)
     }

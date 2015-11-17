@@ -22,30 +22,35 @@ glib_wrapper! {
 
 impl StatusIcon {
     pub fn new() -> StatusIcon {
+        assert_initialized_main_thread!();
         unsafe {
             from_glib_full(ffi::gtk_status_icon_new())
         }
     }
 
     pub fn new_from_file(filename: &str) -> StatusIcon {
+        assert_initialized_main_thread!();
         unsafe {
             from_glib_full(ffi::gtk_status_icon_new_from_file(filename.to_glib_none().0))
         }
     }
 
     pub fn new_from_icon_name(icon_name: &str) -> StatusIcon {
+        assert_initialized_main_thread!();
         unsafe {
             from_glib_full(ffi::gtk_status_icon_new_from_icon_name(icon_name.to_glib_none().0))
         }
     }
 
     pub fn new_from_pixbuf(pixbuf: &gdk::pixbuf::Pixbuf) -> StatusIcon {
+        assert_initialized_main_thread!();
         unsafe {
             from_glib_full(ffi::gtk_status_icon_new_from_pixbuf(pixbuf.to_glib_none().0))
         }
     }
 
     pub fn new_from_stock(stock_id: &str) -> StatusIcon {
+        assert_initialized_main_thread!();
         unsafe {
             from_glib_full(ffi::gtk_status_icon_new_from_stock(stock_id.to_glib_none().0))
         }

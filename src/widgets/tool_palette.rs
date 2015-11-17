@@ -14,6 +14,7 @@ struct_Widget!(ToolPalette);
 
 impl ToolPalette {
     pub fn new() -> Option<ToolPalette> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_tool_palette_new() };
         check_pointer!(tmp_pointer, ToolPalette)
     }

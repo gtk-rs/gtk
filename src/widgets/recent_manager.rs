@@ -13,6 +13,7 @@ struct_Widget!(RecentManager);
 
 impl RecentManager {
     pub fn new() -> Option<RecentManager> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_recent_manager_new() };
 
         if tmp_pointer.is_null() {

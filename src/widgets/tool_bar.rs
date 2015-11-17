@@ -23,6 +23,7 @@ struct_Widget!(Toolbar);
 
 impl Toolbar {
     pub fn new() -> Option<Toolbar> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_toolbar_new() };
         check_pointer!(tmp_pointer, Toolbar)
     }

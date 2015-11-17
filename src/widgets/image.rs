@@ -15,6 +15,7 @@ struct_Widget!(Image);
 
 impl Image {
     pub fn new() -> Option<Image> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe {
             ffi::gtk_image_new()
         };
@@ -22,6 +23,7 @@ impl Image {
     }
 
     pub fn new_from_file(filename: &str) -> Option<Image> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe {
             ffi::gtk_image_new_from_file(filename.to_glib_none().0)
         };
@@ -29,6 +31,7 @@ impl Image {
     }
 
     pub fn new_from_pixbuf(pixbuf: &Pixbuf) -> Option<Image> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe {
             ffi::gtk_image_new_from_pixbuf(pixbuf.to_glib_none().0)
         };
@@ -36,6 +39,7 @@ impl Image {
     }
 
     pub fn new_from_icon_name(icon_name: &str, size: i32) -> Option<Image> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe {
             ffi::gtk_image_new_from_icon_name(icon_name.to_glib_none().0, size)
         };

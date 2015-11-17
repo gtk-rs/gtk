@@ -14,6 +14,7 @@ struct_Widget!(ButtonBox);
 
 impl ButtonBox {
     pub fn new(orientation: Orientation) -> Option<ButtonBox> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_button_box_new(orientation) };
         check_pointer!(tmp_pointer, ButtonBox)
     }

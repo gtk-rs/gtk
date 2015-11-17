@@ -25,6 +25,7 @@ struct_Widget!(Paned);
 
 impl Paned {
     pub fn new(orientation: Orientation) -> Option<Paned> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_paned_new(orientation) };
         check_pointer!(tmp_pointer, Paned)
     }

@@ -21,6 +21,7 @@ struct_Widget!(ScaleButton);
 impl ScaleButton {
     // FIXME: icons -> last parameter
     pub fn new(size: i32, min: f64, max: f64, step: f64) -> Option<ScaleButton> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_scale_button_new(size, min as c_double, max as c_double, step as c_double, ptr::null_mut()) };
         check_pointer!(tmp_pointer, ScaleButton)
     }

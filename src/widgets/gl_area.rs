@@ -93,6 +93,7 @@ struct_Widget!(GLArea);
 impl GLArea {
     /// Creates a new GLArea widget.
     pub fn new() -> Option<GLArea> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_gl_area_new() };
         check_pointer!(tmp_pointer, GLArea)
     }

@@ -11,6 +11,7 @@ struct_Widget!(ToolItem);
 
 impl ToolItem {
     pub fn new() -> Option<ToolItem> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_tool_item_new() };
         check_pointer!(tmp_pointer, ToolItem)
     }

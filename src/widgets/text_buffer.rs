@@ -16,6 +16,7 @@ struct_Widget!(TextBuffer);
 
 impl TextBuffer {
     pub fn new(text_tag_table: Option<::TextTagTable>) -> Option<TextBuffer> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe {
             match text_tag_table {
                 Some(ttl) => ffi::gtk_text_buffer_new(ttl.unwrap_pointer()),

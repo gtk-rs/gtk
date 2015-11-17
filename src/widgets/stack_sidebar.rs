@@ -14,6 +14,7 @@ struct_Widget!(StackSidebar);
 
 impl StackSidebar {
     pub fn new() -> Option<StackSidebar> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_stack_sidebar_new() };
         check_pointer!(tmp_pointer, StackSidebar)
     }

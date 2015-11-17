@@ -20,6 +20,7 @@ struct_Widget!(InfoBar);
 
 impl InfoBar {
     pub fn new() -> Option<InfoBar> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_info_bar_new() };
         check_pointer!(tmp_pointer, InfoBar)
     }

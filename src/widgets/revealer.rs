@@ -13,6 +13,7 @@ struct_Widget!(Revealer);
 
 impl Revealer {
     pub fn new() -> Option<Revealer> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_revealer_new() };
         check_pointer!(tmp_pointer, Revealer)
     }

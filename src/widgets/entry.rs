@@ -27,11 +27,13 @@ struct_Widget!(Entry);
 
 impl Entry {
     pub fn new() -> Option<Entry> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_entry_new() };
         check_pointer!(tmp_pointer, Entry)
     }
 
     pub fn new_with_buffer(buffer: &::EntryBuffer) -> Option<Entry> {
+        skip_assert_initialized!();
         let tmp_pointer = unsafe { ffi::gtk_entry_new_with_buffer(buffer.unwrap_pointer()) };
         check_pointer!(tmp_pointer, Entry)
     }

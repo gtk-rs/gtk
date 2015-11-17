@@ -25,6 +25,7 @@ impl Adjustment {
                step_increment: f64,
                page_increment: f64,
                page_size: f64) -> Option<Adjustment> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_adjustment_new(value as c_double, lower as c_double,
                                                            upper as c_double, step_increment as c_double,
                                                            page_increment as c_double, page_size as c_double) };

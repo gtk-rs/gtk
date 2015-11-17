@@ -16,14 +16,17 @@ impl ::StyleProviderTrait for CssProvider {}
 
 impl CssProvider {
     pub fn new() -> Self {
+        assert_initialized_main_thread!();
         unsafe { CssProvider { pointer: ffi::gtk_css_provider_new() } }
     }
 
     pub fn get_default() -> Self {
+        assert_initialized_main_thread!();
         unsafe { CssProvider { pointer: ffi::gtk_css_provider_get_default() } }
     }
 
     pub fn get_named(name: &str, variant: &str) -> Self {
+        assert_initialized_main_thread!();
         unsafe {
             CssProvider { pointer: ffi::gtk_css_provider_get_named(name.to_glib_none().0,
                                                                    variant.to_glib_none().0) }
@@ -31,6 +34,7 @@ impl CssProvider {
     }
 
     pub fn load_from_path(path: &str) -> Result<CssProvider, glib::Error> {
+        assert_initialized_main_thread!();
         unsafe {
             let pointer = ffi::gtk_css_provider_new();
             let mut error = ::std::ptr::null_mut();

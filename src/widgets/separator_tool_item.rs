@@ -13,6 +13,7 @@ struct_Widget!(SeparatorToolItem);
 
 impl SeparatorToolItem {
     pub fn new() -> Option<SeparatorToolItem> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_separator_tool_item_new() };
         check_pointer!(tmp_pointer, SeparatorToolItem)
     }

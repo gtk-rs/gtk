@@ -13,6 +13,7 @@ struct_Widget!(PlacesSidebar);
 
 impl PlacesSidebar {
     pub fn new() -> Option<PlacesSidebar> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_places_sidebar_new() };
         check_pointer!(tmp_pointer, PlacesSidebar)
     }

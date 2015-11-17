@@ -13,6 +13,7 @@ struct_Widget!(PopoverMenu);
 
 impl PopoverMenu {
     pub fn new() -> Option<PopoverMenu> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_popover_menu_new() };
         check_pointer!(tmp_pointer, PopoverMenu)
     }

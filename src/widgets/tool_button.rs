@@ -14,6 +14,7 @@ struct_Widget!(ToolButton);
 
 impl ToolButton {
     pub fn new<T: ::WidgetTrait>(icon_widget: Option<&T>, label: Option<&str>) -> Option<ToolButton> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe {
             let icon_widget_ptr = match icon_widget {
                 Some(i) => i.unwrap_widget(),
@@ -25,6 +26,7 @@ impl ToolButton {
     }
 
     pub fn new_from_stock(stock_id: &str) -> Option<ToolButton> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe {
             ffi::gtk_tool_button_new_from_stock(stock_id.to_glib_none().0)
         };

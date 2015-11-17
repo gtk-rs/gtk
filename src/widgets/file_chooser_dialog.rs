@@ -13,6 +13,7 @@ struct_Widget!(FileChooserDialog);
 impl FileChooserDialog {
     pub fn new<T: DialogButtons>(title: &str, parent: Option<&::Window>,
                                  action: ::FileChooserAction, buttons: T) -> FileChooserDialog {
+        assert_initialized_main_thread!();
         unsafe {
             let parent = match parent {
                 Some(ref p) => GTK_WINDOW(p.unwrap_widget()),

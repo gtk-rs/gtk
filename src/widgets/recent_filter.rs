@@ -12,6 +12,7 @@ pub struct RecentFilter {
 
 impl RecentFilter {
     pub fn new() -> Option<RecentFilter> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_recent_filter_new() };
 
         if tmp_pointer.is_null() {

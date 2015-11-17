@@ -13,6 +13,7 @@ struct_Widget!(MenuButton);
 
 impl MenuButton {
     pub fn new() -> Option<MenuButton> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_menu_button_new() };
         check_pointer!(tmp_pointer, MenuButton)
     }

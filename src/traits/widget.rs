@@ -140,10 +140,12 @@ pub trait WidgetTrait: ::FFIWidget + ::GObjectTrait {
     }
 
     fn set_default_direction(dir: ::TextDirection) {
+        assert_initialized_main_thread!();
         unsafe { ffi::gtk_widget_set_default_direction(dir) }
     }
 
     fn get_default_direction() -> ::TextDirection {
+        assert_initialized_main_thread!();
         unsafe { ffi::gtk_widget_get_default_direction() }
     }
 

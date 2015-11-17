@@ -16,6 +16,7 @@ pub struct Builder {
 
 impl Builder {
     pub fn new() -> Option<Builder> {
+        assert_initialized_main_thread!();
         let tmp = unsafe { ffi::gtk_builder_new() };
 
         if tmp.is_null() {
@@ -29,6 +30,7 @@ impl Builder {
 
     #[cfg(gtk_3_10)]
     pub fn new_from_file(file_name: &str) -> Option<Builder> {
+        assert_initialized_main_thread!();
         let tmp = unsafe {
             ffi::gtk_builder_new_from_file(file_name.to_glib_none().0)
         };
@@ -44,6 +46,7 @@ impl Builder {
 
     #[cfg(gtk_3_10)]
     pub fn new_from_resource(resource_path: &str) -> Option<Builder> {
+        assert_initialized_main_thread!();
         let tmp = unsafe {
             ffi::gtk_builder_new_from_resource(resource_path.to_glib_none().0)
         };
@@ -59,6 +62,7 @@ impl Builder {
 
     #[cfg(gtk_3_10)]
     pub fn new_from_string(string: &str) -> Option<Builder> {
+        assert_initialized_main_thread!();
         let tmp = unsafe {
             // Don't need a null-terminated string here
             ffi::gtk_builder_new_from_string(string.as_ptr() as *const c_char,

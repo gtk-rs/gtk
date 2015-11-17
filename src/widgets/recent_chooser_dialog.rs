@@ -14,6 +14,7 @@ struct_Widget!(RecentChooserDialog);
 impl RecentChooserDialog {
     pub fn new<T: DialogButtons>(title: &str, parent: Option<&::Window>,
                                  buttons: T) -> RecentChooserDialog {
+        assert_initialized_main_thread!();
         let parent = match parent {
             Some(ref p) => GTK_WINDOW(p.unwrap_widget()),
             None => ptr::null_mut()
@@ -30,6 +31,7 @@ impl RecentChooserDialog {
 
     pub fn new_for_manager<T: DialogButtons>(title: &str, parent: Option<&::Window>,
                                              manager: &::RecentManager, buttons: T) -> RecentChooserDialog {
+        skip_assert_initialized!();
         let parent = match parent {
             Some(ref p) => GTK_WINDOW(p.unwrap_widget()),
             None => ptr::null_mut()

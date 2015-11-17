@@ -11,6 +11,7 @@ struct_Widget!(ActionBar);
 
 impl ActionBar {
     pub fn new() -> Option<ActionBar> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_action_bar_new() };
         check_pointer!(tmp_pointer, ActionBar)
     }

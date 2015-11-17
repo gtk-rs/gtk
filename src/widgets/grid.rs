@@ -18,6 +18,7 @@ struct_Widget!(Grid);
 
 impl Grid {
     pub fn new() -> Option<Grid> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_grid_new() };
         check_pointer!(tmp_pointer, Grid)
     }

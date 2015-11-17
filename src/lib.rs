@@ -58,6 +58,7 @@ pub use glib::ValuePublic;
 // These are/should be inlined
 pub use self::rt::{
     init,
+    set_initialized,
     main,
     main_quit,
     main_level,
@@ -367,9 +368,11 @@ pub use self::types::{
     Tooltip,
 };
 
+#[macro_use]
+mod rt;
+
 mod macros;
 mod cast;
-mod rt;
 
 pub mod traits;
 pub mod signal;

@@ -12,6 +12,7 @@ struct_Widget!(Frame);
 
 impl Frame {
     pub fn new(label: Option<&str>) -> Option<Frame> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe {
             ffi::gtk_frame_new(label.to_glib_none().0)
         };

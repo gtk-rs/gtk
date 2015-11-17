@@ -15,6 +15,7 @@ struct_Widget!(SearchEntry);
 
 impl SearchEntry {
     pub fn new() -> Option<SearchEntry> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_search_entry_new() };
         check_pointer!(tmp_pointer, SearchEntry)
     }

@@ -15,6 +15,7 @@ impl_TraitWidget!(Menu);
 
 impl Menu {
     pub fn new() -> Option<Menu> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_menu_new() };
         check_pointer!(tmp_pointer, Menu)
     }

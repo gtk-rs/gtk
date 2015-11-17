@@ -13,6 +13,7 @@ pub struct TextTag {
 
 impl TextTag {
     pub fn new(name: &str) -> Option<TextTag> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe {
             ffi::gtk_text_tag_new(name.to_glib_none().0)
         };
