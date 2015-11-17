@@ -1,6 +1,6 @@
 language: rust
 rust:
-  - nightly
+  - beta
   - stable
 env:
   - GTK=3.4
