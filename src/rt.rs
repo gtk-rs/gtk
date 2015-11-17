@@ -103,7 +103,12 @@ pub fn main() {
 pub fn main_quit() {
     assert_initialized_main_thread!();
     unsafe {
-        ffi::gtk_main_quit();
+        if ffi::gtk_main_level() > 0 {
+            ffi::gtk_main_quit();
+        }
+        else if cfg!(debug_assertions) {
+            panic!("Attempted to quit a GTK main loop when none is running.");
+        }
     }
 }
 
