@@ -79,13 +79,13 @@ pub trait ComboBoxTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait {
     }
 
     fn get_model(&self) -> Option<::TreeModel> {
-        let tmp = unsafe { ffi::gtk_combo_box_get_model(GTK_COMBO_BOX(self.unwrap_widget())) };
-
-        if tmp.is_null() {
-            None
-        } else {
-            unsafe { ::gobject_ffi::g_object_ref(tmp as *mut _) };
-            Some(::TreeModel::wrap_pointer(tmp))
+        unsafe {
+            let ptr = ffi::gtk_combo_box_get_model(GTK_COMBO_BOX(self.unwrap_widget()));
+            if ptr.is_null() {
+                None
+            } else {
+                Some(::TreeModel::wrap_pointer(ptr))
+            }
         }
     }
 

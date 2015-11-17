@@ -1218,8 +1218,10 @@ mod tree_view {
 
     extern "C" fn path_column_trampoline(this: *mut GtkTreeView, path: *mut GtkTreePath,
             column: *mut GtkTreeViewColumn, f: &Box<Fn(TreeView, TreePath, TreeViewColumn) + 'static>) {
-        f(FFIWidget::wrap_widget(this as *mut _), TreePath::wrap_pointer(path),
-            TreeViewColumn::wrap_pointer(column));
+        unsafe {
+            f(FFIWidget::wrap_widget(this as *mut _), TreePath::wrap_pointer(path),
+                TreeViewColumn::wrap_pointer(column));
+        }
     }
 
     extern "C" fn iter_path_trampoline(this: *mut GtkTreeView, iter: *mut GtkTreeIter,
@@ -1326,7 +1328,7 @@ impl Adjustment {
 }
 
 extern "C" fn adjustment_trampoline(this: *mut GtkAdjustment, f: &Box<Fn(Adjustment) + 'static>) {
-    f(Adjustment::wrap_pointer(this))
+    unsafe { f(Adjustment::wrap_pointer(this)) }
 }
 
 impl TreeSelection {
@@ -1341,7 +1343,7 @@ impl TreeSelection {
 
 extern "C" fn tree_selection_trampoline(this: *mut GtkTreeSelection,
         f: &Box<Fn(TreeSelection) + 'static>) {
-    f(TreeSelection::wrap_object(this as *mut _))
+    unsafe { f(TreeSelection::wrap_object(this as *mut _)) }
 }
 
 impl TreeViewColumn {
@@ -1356,7 +1358,7 @@ impl TreeViewColumn {
 
 extern "C" fn tree_view_column_trampoline(this: *mut GtkTreeViewColumn,
         f: &Box<Fn(TreeViewColumn) + 'static>) {
-    f(TreeViewColumn::wrap_pointer(this))
+    unsafe { f(TreeViewColumn::wrap_pointer(this)) }
 }
 
 #[cfg(gtk_3_16)]

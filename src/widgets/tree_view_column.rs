@@ -294,11 +294,8 @@ impl TreeViewColumn {
     }
 
     #[doc(hidden)]
-    pub fn wrap_pointer(treeview_column: *mut ffi::GtkTreeViewColumn) -> TreeViewColumn {
-        unsafe{
-            ::gobject_ffi::g_object_ref(treeview_column as *mut _);
-        }
-
+    pub unsafe fn wrap_pointer(treeview_column: *mut ffi::GtkTreeViewColumn) -> TreeViewColumn {
+        ::gobject_ffi::g_object_ref(treeview_column as *mut _);
         TreeViewColumn {
             pointer: treeview_column
         }
@@ -310,7 +307,7 @@ impl glib::traits::FFIGObject for TreeViewColumn {
         ::cast::G_OBJECT_FROM_TREE_VIEW_COLUMN(self.pointer)
     }
 
-    fn wrap_object(object: *mut ::gobject_ffi::GObject) -> TreeViewColumn {
+    unsafe fn wrap_object(object: *mut ::gobject_ffi::GObject) -> TreeViewColumn {
         TreeViewColumn { pointer: object as *mut ffi::GtkTreeViewColumn }
     }
 }

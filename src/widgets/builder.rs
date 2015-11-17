@@ -75,14 +75,13 @@ impl Builder {
     }
 
     pub fn get_object<T: GObjectTrait>(&self, name: &str) -> Option<T> {
-        let tmp = unsafe {
-            ffi::gtk_builder_get_object(self.pointer, name.to_glib_none().0)
-        };
-
-        if tmp.is_null() {
-            None
-        } else {
-            Some(::glib::traits::FFIGObject::wrap_object(tmp))
+        unsafe {
+            let ptr = ffi::gtk_builder_get_object(self.pointer, name.to_glib_none().0);
+            if ptr.is_null() {
+                None
+            } else {
+                Some(::glib::traits::FFIGObject::wrap_object(ptr))
+            }
         }
     }
 }

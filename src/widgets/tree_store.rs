@@ -165,10 +165,10 @@ impl TreeStore {
         if self.pointer.is_null() {
             None
         } else {
-            let tmp = ::cast::GTK_TREE_MODEL_FROM_TREE_STORE(self.pointer);
-
-            unsafe { ::gobject_ffi::g_object_ref(tmp as *mut _) };
-            Some(::TreeModel::wrap_pointer(tmp))
+            unsafe {
+                let tmp = ::cast::GTK_TREE_MODEL_FROM_TREE_STORE(self.pointer);
+                Some(::TreeModel::wrap_pointer(tmp))
+            }
         }
     }
 
@@ -195,7 +195,7 @@ impl TreeStore {
     }
 
     #[doc(hidden)]
-    pub fn wrap_pointer(c_treestore: *mut ffi::GtkTreeStore) -> TreeStore {
+    pub unsafe fn wrap_pointer(c_treestore: *mut ffi::GtkTreeStore) -> TreeStore {
         TreeStore {
             pointer: c_treestore
         }

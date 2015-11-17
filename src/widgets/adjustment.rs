@@ -153,8 +153,8 @@ impl Adjustment {
     }
 
     #[doc(hidden)]
-    pub fn wrap_pointer(c_adjustment: *mut ffi::GtkAdjustment) -> Adjustment {
-        unsafe { ::gobject_ffi::g_object_ref(c_adjustment as *mut _); }
+    pub unsafe fn wrap_pointer(c_adjustment: *mut ffi::GtkAdjustment) -> Adjustment {
+        ::gobject_ffi::g_object_ref(c_adjustment as *mut _);
         Adjustment {
             pointer: c_adjustment
         }

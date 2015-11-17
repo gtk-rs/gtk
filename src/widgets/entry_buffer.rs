@@ -91,7 +91,7 @@ impl EntryBuffer {
     }
 
     #[doc(hidden)]
-    pub fn wrap_pointer(pointer: *mut ffi::GtkEntryBuffer) -> EntryBuffer {
+    pub unsafe fn wrap_pointer(pointer: *mut ffi::GtkEntryBuffer) -> EntryBuffer {
         EntryBuffer {
             pointer:    pointer
         }

@@ -246,9 +246,10 @@ pub trait FileChooserTrait: ::WidgetTrait {
     }
 
     fn get_filter(&self) -> Option<::FileFilter> {
-        let tmp = unsafe { ffi::gtk_file_chooser_get_filter(GTK_FILE_CHOOSER(self.unwrap_widget())) };
-
-        ::FileFilter::wrap(tmp)
+        unsafe {
+            let ptr = ffi::gtk_file_chooser_get_filter(GTK_FILE_CHOOSER(self.unwrap_widget()));
+            ::FileFilter::wrap(ptr)
+        }
     }
 
     fn add_shortcut_folder(&self, folder: &str, error: &mut glib::Error) -> bool {

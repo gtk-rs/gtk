@@ -12,9 +12,10 @@ use glib::{to_bool, to_gboolean};
 
 pub trait EntryTrait: ::WidgetTrait {
     fn get_buffer(&self) -> ::EntryBuffer {
-        let tmp_pointer = unsafe { ffi::gtk_entry_get_buffer(GTK_ENTRY(self.unwrap_widget())) };
-
-        ::EntryBuffer::wrap_pointer(tmp_pointer)
+        unsafe {
+            let ptr = ffi::gtk_entry_get_buffer(GTK_ENTRY(self.unwrap_widget()));
+            ::EntryBuffer::wrap_pointer(ptr)
+        }
     }
 
     fn set_buffer(&self, buffer: &::EntryBuffer) -> () {

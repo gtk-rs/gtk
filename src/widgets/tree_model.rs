@@ -56,14 +56,13 @@ impl TreeModel {
      }
 
     pub fn get_path(&self, iter: &TreeIter) -> Option<TreePath> {
-        let tmp_pointer = unsafe {
-            ffi::gtk_tree_model_get_path(self.pointer, iter.to_glib_none().0 as *mut _)
-        };
-
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            Some(TreePath::wrap_pointer(tmp_pointer))
+        unsafe {
+            let ptr = ffi::gtk_tree_model_get_path(self.pointer, iter.to_glib_none().0 as *mut _);
+            if ptr.is_null() {
+                None
+            } else {
+                Some(TreePath::wrap_pointer(ptr))
+            }
         }
     }
 
@@ -162,10 +161,8 @@ impl TreeModel {
     }
 
     #[doc(hidden)]
-    pub fn wrap_pointer(c_treemodel: *mut ffi::GtkTreeModel) -> TreeModel {
-        unsafe {
-            ::gobject_ffi::g_object_ref(c_treemodel as *mut _);
-        }
+    pub unsafe fn wrap_pointer(c_treemodel: *mut ffi::GtkTreeModel) -> TreeModel {
+        ::gobject_ffi::g_object_ref(c_treemodel as *mut _);
         TreeModel {
             pointer: c_treemodel
         }

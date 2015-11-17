@@ -31,13 +31,13 @@ impl IconView {
     }
 
     pub fn get_model(&self) -> Option<TreeModel> {
-        let tmp_pointer = unsafe { ffi::gtk_icon_view_get_model(GTK_ICON_VIEW(self.pointer)) };
-
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            unsafe { ::gobject_ffi::g_object_ref(tmp_pointer as *mut _) };
-            Some(TreeModel::wrap_pointer(tmp_pointer))
+        unsafe {
+            let ptr = ffi::gtk_icon_view_get_model(GTK_ICON_VIEW(self.pointer));
+            if ptr.is_null() {
+                None
+            } else {
+                Some(TreeModel::wrap_pointer(ptr))
+            }
         }
     }
 
@@ -66,12 +66,13 @@ impl IconView {
     }
 
     pub fn get_path_at_pos(&self, x: i32, y: i32) -> Option<TreePath> {
-        let tmp_pointer = unsafe { ffi::gtk_icon_view_get_path_at_pos(GTK_ICON_VIEW(self.pointer), x, y) };
-
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            Some(TreePath::wrap_pointer(tmp_pointer))
+        unsafe {
+            let ptr = ffi::gtk_icon_view_get_path_at_pos(GTK_ICON_VIEW(self.pointer), x, y);
+            if ptr.is_null() {
+                None
+            } else {
+                Some(TreePath::wrap_pointer(ptr))
+            }
         }
     }
 

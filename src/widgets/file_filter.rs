@@ -52,7 +52,7 @@ impl FileFilter {
         self.pointer
     }
 
-    pub fn wrap(pointer: *mut ffi::GtkFileFilter) -> Option<FileFilter> {
+    pub unsafe fn wrap(pointer: *mut ffi::GtkFileFilter) -> Option<FileFilter> {
         if pointer.is_null() {
             None
         } else {
