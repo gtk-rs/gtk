@@ -164,8 +164,9 @@ pub trait RecentChooserTrait: ::WidgetTrait + FFIWidget {
     }
 
     fn get_filter(&self) -> Option<::RecentFilter> {
-        let tmp = unsafe { ffi::gtk_recent_chooser_get_filter(GTK_RECENT_CHOOSER(self.unwrap_widget())) };
-
-        ::RecentFilter::wrap(tmp)
+        unsafe {
+            let ptr = ffi::gtk_recent_chooser_get_filter(GTK_RECENT_CHOOSER(self.unwrap_widget()));
+            ::RecentFilter::wrap(ptr)
+        }
     }
 }

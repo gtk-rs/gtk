@@ -15,6 +15,7 @@ struct_Widget!(NoteBook);
 
 impl NoteBook {
     pub fn new() -> Option<NoteBook> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_notebook_new() };
         check_pointer!(tmp_pointer, NoteBook)
     }

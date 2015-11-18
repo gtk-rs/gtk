@@ -13,6 +13,7 @@ struct_Widget!(StackSwitcher);
 
 impl StackSwitcher {
     pub fn new() -> Option<StackSwitcher> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_stack_switcher_new() };
         check_pointer!(tmp_pointer, StackSwitcher)
     }

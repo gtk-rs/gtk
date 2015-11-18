@@ -15,11 +15,13 @@ struct_Widget!(TreeView);
 
 impl TreeView {
     pub fn new() -> Option<TreeView> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_tree_view_new() };
         check_pointer!(tmp_pointer, TreeView)
     }
 
     pub fn new_with_model(model: &::TreeModel) -> Option<TreeView> {
+        skip_assert_initialized!();
         let tmp_pointer = unsafe { ffi::gtk_tree_view_new_with_model(model.unwrap_pointer()) };
         check_pointer!(tmp_pointer, TreeView)
     }
@@ -355,13 +357,13 @@ impl TreeView {
     }
 
     pub fn get_model(&self) -> Option<::TreeModel> {
-        let tmp_pointer = unsafe { ffi::gtk_tree_view_get_model(GTK_TREE_VIEW(self.pointer)) };
-
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            unsafe { ::gobject_ffi::g_object_ref(tmp_pointer as *mut _) };
-            Some(::TreeModel::wrap_pointer(tmp_pointer))
+        unsafe {
+            let ptr = ffi::gtk_tree_view_get_model(GTK_TREE_VIEW(self.pointer));
+            if ptr.is_null() {
+                None
+            } else {
+                Some(::TreeModel::wrap_pointer(ptr))
+            }
         }
     }
 
@@ -380,9 +382,10 @@ impl TreeView {
     }
 
     pub fn get_selection(&self) -> Option<TreeSelection> {
-        let tmp_pointer = unsafe { ffi::gtk_tree_view_get_selection(GTK_TREE_VIEW(self.pointer)) };
-
-        TreeSelection::wrap(tmp_pointer)
+        unsafe {
+            let ptr = ffi::gtk_tree_view_get_selection(GTK_TREE_VIEW(self.pointer));
+            TreeSelection::wrap(ptr)
+        }
     }
 
     pub fn set_cursor(&self, path: &TreePath, focus_column: Option<&TreeViewColumn>, start_editing: bool) {

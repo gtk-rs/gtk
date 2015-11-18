@@ -11,6 +11,7 @@ struct_Widget!(ColorChooserDialog);
 
 impl ColorChooserDialog {
     pub fn new(title: &str, parent: Option<&::Window>) -> Option<ColorChooserDialog> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe {
             ffi::gtk_color_chooser_dialog_new(title.to_glib_none().0,
                 match parent {

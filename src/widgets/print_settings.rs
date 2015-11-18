@@ -12,6 +12,7 @@ struct_Widget!(PrintSettings);
 
 impl PrintSettings {
     pub fn new() -> Option<PrintSettings> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_print_settings_new() };
 
         if tmp_pointer.is_null() {

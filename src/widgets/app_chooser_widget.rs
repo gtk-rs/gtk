@@ -13,6 +13,7 @@ struct_Widget!(AppChooserWidget);
 
 impl AppChooserWidget {
     pub fn new(content_type: &str) -> Option<AppChooserWidget> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe {
             ffi::gtk_app_chooser_widget_new(content_type.to_glib_none().0)
         };

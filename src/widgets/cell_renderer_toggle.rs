@@ -11,6 +11,7 @@ struct_Widget!(CellRendererToggle);
 
 impl CellRendererToggle {
     pub fn new() -> Option<CellRendererToggle> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_cell_renderer_toggle_new() as *mut ffi::GtkWidget };
 
         check_pointer!(tmp_pointer, CellRendererToggle)

@@ -103,11 +103,11 @@ impl TreeSelection {
             end_path.unwrap_pointer()) }
     }
 
-    pub fn wrap(pointer: *mut ffi::GtkTreeSelection) -> Option<TreeSelection> {
+    pub unsafe fn wrap(pointer: *mut ffi::GtkTreeSelection) -> Option<TreeSelection> {
         if pointer.is_null() {
             None
         } else {
-            unsafe { ::gobject_ffi::g_object_ref(pointer as *mut _); }
+            ::gobject_ffi::g_object_ref(pointer as *mut _);
             Some(TreeSelection { pointer: pointer })
         }
     }
@@ -118,8 +118,8 @@ impl glib::traits::FFIGObject for TreeSelection {
         ::cast::G_OBJECT_FROM_TREE_SELECTION(self.pointer)
     }
 
-    fn wrap_object(object: *mut ::gobject_ffi::GObject) -> TreeSelection {
-        unsafe { ::gobject_ffi::g_object_ref(object as *mut _); }
+    unsafe fn wrap_object(object: *mut ::gobject_ffi::GObject) -> TreeSelection {
+        ::gobject_ffi::g_object_ref(object as *mut _);
         TreeSelection { pointer: object as *mut ffi::GtkTreeSelection }
     }
 }

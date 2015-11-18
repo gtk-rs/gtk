@@ -11,6 +11,7 @@ struct_Widget!(MessageDialog);
 
 impl MessageDialog {
     pub fn new(parent: Option<&::Window>, flags: ::DialogFlags, _type: ::MessageType, buttons: ::ButtonsType) -> Option<MessageDialog> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_message_dialog_new(match parent {
                 Some(ref p) => GTK_WINDOW(p.unwrap_widget()),
                 None => ::std::ptr::null_mut()
@@ -25,6 +26,7 @@ impl MessageDialog {
     }
 
     pub fn new_with_markup(parent: Option<&::Window>, flags: ::DialogFlags, _type: ::MessageType, buttons: ::ButtonsType, markup: &str) -> Option<MessageDialog> {
+        assert_initialized_main_thread!();
         //gtk_message_dialog_new_with_markup
         match MessageDialog::new(parent, flags, _type, buttons) {
             Some(m) => {

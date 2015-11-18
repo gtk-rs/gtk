@@ -17,6 +17,7 @@ impl Alignment {
                y_align: f32,
                x_scale: f32,
                y_scale: f32) -> Option<Alignment> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_alignment_new(x_align as c_float, y_align as c_float, x_scale as c_float, y_scale as c_float) };
         check_pointer!(tmp_pointer, Alignment)
     }

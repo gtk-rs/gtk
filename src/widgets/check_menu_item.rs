@@ -12,11 +12,13 @@ struct_Widget!(CheckMenuItem);
 
 impl CheckMenuItem {
     pub fn new() -> Option<CheckMenuItem> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_check_menu_item_new() };
         check_pointer!(tmp_pointer, CheckMenuItem)
     }
 
     pub fn new_with_label(label: &str) -> Option<CheckMenuItem> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe {
             ffi::gtk_check_menu_item_new_with_label(label.to_glib_none().0)
         };
@@ -24,6 +26,7 @@ impl CheckMenuItem {
     }
 
     pub fn new_with_mnemonic(mnemonic: &str) -> Option<CheckMenuItem> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe {
             ffi::gtk_check_menu_item_new_with_mnemonic(
                     mnemonic.to_glib_none().0)

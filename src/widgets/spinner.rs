@@ -12,6 +12,7 @@ struct_Widget!(Spinner);
 
 impl Spinner {
     pub fn new() -> Option<Spinner> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_spinner_new() };
         check_pointer!(tmp_pointer, Spinner)
     }

@@ -14,6 +14,7 @@ struct_Widget!(Fixed);
 
 impl Fixed {
     pub fn new() -> Option<Fixed> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_fixed_new() };
         check_pointer!(tmp_pointer, Fixed)
     }

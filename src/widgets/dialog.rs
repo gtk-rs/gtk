@@ -13,6 +13,7 @@ struct_Widget!(Dialog);
 
 impl Dialog {
     pub fn new() -> Dialog {
+        assert_initialized_main_thread!();
         unsafe {
             ::FFIWidget::wrap_widget(
                 ffi::gtk_dialog_new())
@@ -21,6 +22,7 @@ impl Dialog {
 
     pub fn with_buttons<T: DialogButtons>(title: &str, parent: Option<&::Window>,
                                           flags: ::DialogFlags, buttons: T) -> Dialog {
+        assert_initialized_main_thread!();
         unsafe {
             let parent = match parent {
                 Some(w) => GTK_WINDOW(w.unwrap_widget()),

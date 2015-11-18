@@ -27,6 +27,7 @@ struct_Widget!(Calendar);
 
 impl Calendar {
     pub fn new() -> Option<Calendar> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_calendar_new() };
         check_pointer!(tmp_pointer, Calendar)
     }

@@ -18,6 +18,7 @@ struct_Widget!(LinkButton);
 
 impl LinkButton {
     pub fn new(uri: &str) -> Option<LinkButton> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe {
             ffi::gtk_link_button_new(uri.to_glib_none().0)
         };
@@ -25,6 +26,7 @@ impl LinkButton {
     }
 
     pub fn new_with_label(uri: &str, label: &str) -> Option<LinkButton> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe {
             ffi::gtk_link_button_new_with_label(uri.to_glib_none().0, label.to_glib_none().0)
         };

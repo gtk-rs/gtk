@@ -1,0 +1,4 @@
+#!/bin/sh
+
+perl -0777 -ne 'BEGIN { $e = 0 } while (/^(?!\s*\/\/|\s*unsafe|\s*pub unsafe)(\N*) fn (\w+)(<.*>)?(\((?!&\s*self|&\x27\w+\s+self|&mut\s+self|&\x27\w+\s+mut\s+self)[^{;]+)\{(\s+)(?!assert_init|assert_not_init|skip_assert_init)\S/gms) { print "$ARGV: $2$4\n"; $e = 1 }; END { exit $e }' src/rt.rs src/traits/*.rs src/widgets/*.rs
+perl -0777 -ne 'BEGIN { $e = 0 } while (/^(?!\s*\/\/|\s*unsafe|\s*pub unsafe)(\N*) fn (\w+)(<.*>)?(\((?!&\s*self|&\x27\w+\s+self|&mut\s+self|&\x27\w+\s+mut\s+self)[^{;]+)\{(\s+)(?!callback_guard)\S/gms) { print "$ARGV: $2$4\n"; $e = 1 }; END { exit $e }' src/signal.rs

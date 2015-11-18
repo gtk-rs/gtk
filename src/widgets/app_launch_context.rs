@@ -13,6 +13,7 @@ struct_Widget!(AppLaunchContext);
 
 impl AppLaunchContext {/*
     pub fn new() -> Option<AppLaunchContext> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::g_app_launch_context_new() };
 
         if tmp_pointer.is_null() {

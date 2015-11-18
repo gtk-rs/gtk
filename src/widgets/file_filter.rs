@@ -11,6 +11,7 @@ pub struct FileFilter {
 
 impl FileFilter {
     pub fn new() -> Option<FileFilter> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_file_filter_new() };
 
         if tmp_pointer.is_null() {
@@ -52,7 +53,7 @@ impl FileFilter {
         self.pointer
     }
 
-    pub fn wrap(pointer: *mut ffi::GtkFileFilter) -> Option<FileFilter> {
+    pub unsafe fn wrap(pointer: *mut ffi::GtkFileFilter) -> Option<FileFilter> {
         if pointer.is_null() {
             None
         } else {

@@ -13,6 +13,7 @@ pub struct SizeGroup {
 
 impl SizeGroup {
     pub fn new(mode: ::SizeGroupMode) -> Option<SizeGroup> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_size_group_new(mode) };
 
         if tmp_pointer.is_null() {

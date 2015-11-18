@@ -12,6 +12,7 @@ struct_Widget!(EventBox);
 
 impl EventBox {
     pub fn new() -> Option<EventBox> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_event_box_new() };
         check_pointer!(tmp_pointer, EventBox)
     }

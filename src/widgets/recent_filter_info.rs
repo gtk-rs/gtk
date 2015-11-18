@@ -18,7 +18,7 @@ pub struct RecentFilterInfo {
 
 impl RecentFilterInfo {
     #[doc(hidden)]
-    pub fn from_c(ptr: *mut ffi::GtkRecentFilterInfo) -> RecentFilterInfo {
+    pub unsafe fn from_c(ptr: *mut ffi::GtkRecentFilterInfo) -> RecentFilterInfo {
         if ptr.is_null() {
             Default::default()
         } else {
@@ -26,35 +26,33 @@ impl RecentFilterInfo {
             let mut tmp_groups = Vec::new();
             let mut count = 0;
 
-            unsafe {
-                loop {
-                    let tmp = (*ptr).applications.offset(count);
+            loop {
+                let tmp = (*ptr).applications.offset(count);
 
-                    if tmp.is_null() {
-                        break;
-                    }
-                    count = count + 1;
-                    tmp_app.push(String::from_utf8_lossy(::std::ffi::CStr::from_ptr(*tmp).to_bytes()).to_string());
+                if tmp.is_null() {
+                    break;
                 }
-                count = 0;
-                loop {
-                    let tmp = (*ptr).groups.offset(count);
+                count = count + 1;
+                tmp_app.push(String::from_utf8_lossy(::std::ffi::CStr::from_ptr(*tmp).to_bytes()).to_string());
+            }
+            count = 0;
+            loop {
+                let tmp = (*ptr).groups.offset(count);
 
-                    if tmp.is_null() {
-                        break;
-                    }
-                    count = count + 1;
-                    tmp_groups.push(String::from_utf8_lossy(::std::ffi::CStr::from_ptr(*tmp).to_bytes()).to_string());
+                if tmp.is_null() {
+                    break;
                 }
-                RecentFilterInfo {
-                    contains: (*ptr).contains,
-                    uri: String::from_utf8_lossy(::std::ffi::CStr::from_ptr((*ptr).uri).to_bytes()).to_string(),
-                    display_name: String::from_utf8_lossy(::std::ffi::CStr::from_ptr((*ptr).display_name).to_bytes()).to_string(),
-                    mime_type: String::from_utf8_lossy(::std::ffi::CStr::from_ptr((*ptr).mime_type).to_bytes()).to_string(),
-                    applications: tmp_app,
-                    groups: tmp_groups,
-                    age: (*ptr).age
-                }
+                count = count + 1;
+                tmp_groups.push(String::from_utf8_lossy(::std::ffi::CStr::from_ptr(*tmp).to_bytes()).to_string());
+            }
+            RecentFilterInfo {
+                contains: (*ptr).contains,
+                uri: String::from_utf8_lossy(::std::ffi::CStr::from_ptr((*ptr).uri).to_bytes()).to_string(),
+                display_name: String::from_utf8_lossy(::std::ffi::CStr::from_ptr((*ptr).display_name).to_bytes()).to_string(),
+                mime_type: String::from_utf8_lossy(::std::ffi::CStr::from_ptr((*ptr).mime_type).to_bytes()).to_string(),
+                applications: tmp_app,
+                groups: tmp_groups,
+                age: (*ptr).age
             }
         }
     }
@@ -92,6 +90,7 @@ impl RecentFilterInfo {
 
 impl Default for RecentFilterInfo {
     fn default() -> RecentFilterInfo {
+        skip_assert_initialized!();
         RecentFilterInfo {
             contains: ::RecentFilterFlags::empty(),
             uri: String::new(),

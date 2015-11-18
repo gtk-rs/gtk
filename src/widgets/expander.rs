@@ -17,6 +17,7 @@ struct_Widget!(Expander);
 
 impl Expander {
     pub fn new(label: &str) -> Option<Expander> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe {
             ffi::gtk_expander_new(label.to_glib_none().0)
         };
@@ -24,6 +25,7 @@ impl Expander {
     }
 
     pub fn new_with_mnemonic(mnemonic: &str) -> Option<Expander> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe {
             ffi::gtk_expander_new_with_mnemonic(mnemonic.to_glib_none().0)
         };

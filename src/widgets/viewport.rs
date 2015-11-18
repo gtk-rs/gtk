@@ -13,6 +13,7 @@ struct_Widget!(Viewport);
 
 impl Viewport {
     pub fn new(hadjustment: &::Adjustment, vadjustment: &::Adjustment) -> Option<Viewport> {
+        skip_assert_initialized!();
         let tmp_pointer = unsafe { ffi::gtk_viewport_new(hadjustment.unwrap_pointer(), vadjustment.unwrap_pointer()) };
         check_pointer!(tmp_pointer, Viewport)
     }

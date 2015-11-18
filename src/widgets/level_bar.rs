@@ -23,11 +23,13 @@ struct_Widget!(LevelBar);
 
 impl LevelBar {
     pub fn new() -> Option<LevelBar> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_level_bar_new() };
         check_pointer!(tmp_pointer, LevelBar)
     }
 
     pub fn new_for_interval(min: f64, max: f64) -> Option<LevelBar> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_level_bar_new_for_interval(min as c_double, max as c_double) };
         check_pointer!(tmp_pointer, LevelBar)
     }

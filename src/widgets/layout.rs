@@ -12,6 +12,7 @@ struct_Widget!(Layout);
 
 impl Layout {
     pub fn new(hadjustment: &::Adjustment, vadjustment: &::Adjustment) -> Option<Layout> {
+        skip_assert_initialized!();
         let tmp_pointer = unsafe {
             ffi::gtk_layout_new(hadjustment.unwrap_pointer(),
                                 vadjustment.unwrap_pointer())

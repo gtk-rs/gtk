@@ -11,6 +11,7 @@ struct_Widget!(ScrollBar);
 
 impl ScrollBar {
     pub fn new(orientation: ::Orientation, adjustment: &::Adjustment) -> Option<ScrollBar> {
+        skip_assert_initialized!();
         let tmp_pointer = unsafe { ffi::gtk_scrollbar_new(orientation, adjustment.unwrap_pointer()) };
         check_pointer!(tmp_pointer, ScrollBar)
     }

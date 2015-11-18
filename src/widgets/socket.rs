@@ -12,6 +12,7 @@ struct_Widget!(Socket);
 
 impl Socket {
     pub fn new() -> Option<Socket> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_socket_new() };
 
         check_pointer!(tmp_pointer, Socket)

@@ -15,6 +15,7 @@ struct_Widget!(ToolItemGroup);
 
 impl ToolItemGroup {
     pub fn new(label: &str) -> Option<ToolItemGroup> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe {
             ffi::gtk_tool_item_group_new(label.to_glib_none().0)
         };

@@ -21,16 +21,19 @@ struct_Widget!(ColorButton);
 
 impl ColorButton {
     pub fn new() -> Option<ColorButton> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_color_button_new() };
         check_pointer!(tmp_pointer, ColorButton)
     }
 
     pub fn new_with_color(color: &gdk::Color) -> Option<ColorButton> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_color_button_new_with_color(color) };
         check_pointer!(tmp_pointer, ColorButton)
     }
 
     pub fn new_with_rgba(rgba: &gdk_ffi::GdkRGBA) -> Option<ColorButton> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_color_button_new_with_rgba(rgba) };
         check_pointer!(tmp_pointer, ColorButton)
     }

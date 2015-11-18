@@ -37,10 +37,8 @@ macro_rules! impl_TraitObject(
                 self.pointer as *mut ::gobject_ffi::GObject
             }
 
-            fn wrap_object(object: *mut ::gobject_ffi::GObject) -> $gtk_struct {
-                unsafe{
-                    ::gobject_ffi::g_object_ref(object as *mut _);
-                }
+            unsafe fn wrap_object(object: *mut ::gobject_ffi::GObject) -> $gtk_struct {
+                ::gobject_ffi::g_object_ref(object as *mut _);
 
                 $gtk_struct {
                     pointer: object as *mut ffi::$ffi_type
@@ -78,10 +76,8 @@ macro_rules! impl_TraitWidget(
                 ::cast::G_OBJECT(self.unwrap_widget())
             }
 
-            fn wrap_object(object: *mut ::gobject_ffi::GObject) -> $gtk_struct {
-                unsafe{
-                    ::gobject_ffi::g_object_ref(object as *mut _);
-                }
+            unsafe fn wrap_object(object: *mut ::gobject_ffi::GObject) -> $gtk_struct {
+                ::gobject_ffi::g_object_ref(object as *mut _);
 
                 $gtk_struct {
                     pointer: object as *mut ffi::GtkWidget

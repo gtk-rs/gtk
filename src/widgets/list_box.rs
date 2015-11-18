@@ -14,6 +14,7 @@ struct_Widget!(ListBox);
 
 impl ListBox {
     pub fn new() -> Option<ListBox> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_list_box_new() };
         check_pointer!(tmp_pointer, ListBox)
     }
@@ -88,13 +89,13 @@ impl ListBox {
     }
 
     pub fn get_adjustment(&self) -> Option<::Adjustment> {
-        let tmp_pointer = unsafe {
-            ffi::gtk_list_box_get_adjustment(GTK_LIST_BOX(self.pointer))
-        };
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            Some(::Adjustment::wrap_pointer(tmp_pointer))
+        unsafe {
+            let ptr = ffi::gtk_list_box_get_adjustment(GTK_LIST_BOX(self.pointer));
+            if ptr.is_null() {
+                None
+            } else {
+                Some(::Adjustment::wrap_pointer(ptr))
+            }
         }
     }
 
@@ -156,6 +157,7 @@ struct_Widget!(ListBoxRow);
 
 impl ListBoxRow {
     pub fn new() -> Option<ListBoxRow> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_list_box_row_new() };
         check_pointer!(tmp_pointer, ListBoxRow)
     }

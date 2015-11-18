@@ -11,6 +11,7 @@ struct_Widget!(FontChooserWidget);
 
 impl FontChooserWidget {
     pub fn new() -> Option<FontChooserWidget> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_color_chooser_widget_new() };
 
         if tmp_pointer.is_null() {

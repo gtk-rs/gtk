@@ -12,6 +12,7 @@ pub struct RecentFilter {
 
 impl RecentFilter {
     pub fn new() -> Option<RecentFilter> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_recent_filter_new() };
 
         if tmp_pointer.is_null() {
@@ -45,7 +46,7 @@ impl RecentFilter {
         unsafe { to_bool(ffi::gtk_recent_filter_filter(self.pointer, &filter_info.get_ffi())) }
     }
 
-    pub fn wrap(pointer: *mut ffi::GtkRecentFilter) -> Option<RecentFilter> {
+    pub unsafe fn wrap(pointer: *mut ffi::GtkRecentFilter) -> Option<RecentFilter> {
         if pointer.is_null() {
             None
         } else {

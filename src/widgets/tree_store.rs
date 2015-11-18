@@ -16,6 +16,7 @@ pub struct TreeStore {
 
 impl TreeStore {
     pub fn new(column_types: &[Type]) -> Option<TreeStore> {
+        assert_initialized_main_thread!();
         let column_types_ffi: Vec<GType> = column_types.iter().map(|n| n.to_glib()).collect();
         let tmp_pointer = unsafe { ffi::gtk_tree_store_newv(column_types.len() as i32, column_types_ffi.as_ptr() as *mut GType) };
         check_pointer!(tmp_pointer, TreeStore, G_OBJECT_FROM_TREE_STORE)
@@ -165,10 +166,10 @@ impl TreeStore {
         if self.pointer.is_null() {
             None
         } else {
-            let tmp = ::cast::GTK_TREE_MODEL_FROM_TREE_STORE(self.pointer);
-
-            unsafe { ::gobject_ffi::g_object_ref(tmp as *mut _) };
-            Some(::TreeModel::wrap_pointer(tmp))
+            unsafe {
+                let tmp = ::cast::GTK_TREE_MODEL_FROM_TREE_STORE(self.pointer);
+                Some(::TreeModel::wrap_pointer(tmp))
+            }
         }
     }
 
@@ -195,7 +196,7 @@ impl TreeStore {
     }
 
     #[doc(hidden)]
-    pub fn wrap_pointer(c_treestore: *mut ffi::GtkTreeStore) -> TreeStore {
+    pub unsafe fn wrap_pointer(c_treestore: *mut ffi::GtkTreeStore) -> TreeStore {
         TreeStore {
             pointer: c_treestore
         }

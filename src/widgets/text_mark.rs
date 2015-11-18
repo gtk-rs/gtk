@@ -14,6 +14,7 @@ pub struct TextMark {
 
 impl TextMark {
     pub fn new(name: &str, left_gravity: bool) -> Option<TextMark> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe {
             ffi::gtk_text_mark_new(name.to_glib_none().0, to_gboolean(left_gravity))
         };

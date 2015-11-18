@@ -12,16 +12,19 @@ struct_Widget!(IconView);
 
 impl IconView {
     pub fn new() -> Option<IconView> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_icon_view_new() };
         check_pointer!(tmp_pointer, IconView)
     }
 
     /*pub fn new_with_area(area: &::CellArea) -> Option<IconView> {
+        skip_assert_initialized!();
         let tmp_pointer = unsafe { ffi::gtk_icon_view_new_with_area(::FFIWidget::unwrap(area)) };
         check_pointer!(tmp_pointer, IconView)
     }*/
 
     pub fn new_with_model(model: &TreeModel) -> Option<IconView> {
+        skip_assert_initialized!();
         let tmp_pointer = unsafe { ffi::gtk_icon_view_new_with_model(model.unwrap_pointer()) };
         check_pointer!(tmp_pointer, IconView)
     }
@@ -31,13 +34,13 @@ impl IconView {
     }
 
     pub fn get_model(&self) -> Option<TreeModel> {
-        let tmp_pointer = unsafe { ffi::gtk_icon_view_get_model(GTK_ICON_VIEW(self.pointer)) };
-
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            unsafe { ::gobject_ffi::g_object_ref(tmp_pointer as *mut _) };
-            Some(TreeModel::wrap_pointer(tmp_pointer))
+        unsafe {
+            let ptr = ffi::gtk_icon_view_get_model(GTK_ICON_VIEW(self.pointer));
+            if ptr.is_null() {
+                None
+            } else {
+                Some(TreeModel::wrap_pointer(ptr))
+            }
         }
     }
 
@@ -66,12 +69,13 @@ impl IconView {
     }
 
     pub fn get_path_at_pos(&self, x: i32, y: i32) -> Option<TreePath> {
-        let tmp_pointer = unsafe { ffi::gtk_icon_view_get_path_at_pos(GTK_ICON_VIEW(self.pointer), x, y) };
-
-        if tmp_pointer.is_null() {
-            None
-        } else {
-            Some(TreePath::wrap_pointer(tmp_pointer))
+        unsafe {
+            let ptr = ffi::gtk_icon_view_get_path_at_pos(GTK_ICON_VIEW(self.pointer), x, y);
+            if ptr.is_null() {
+                None
+            } else {
+                Some(TreePath::wrap_pointer(ptr))
+            }
         }
     }
 

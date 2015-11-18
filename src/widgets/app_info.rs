@@ -15,6 +15,7 @@ struct_Widget!(AppInfo);
 
 impl AppInfo {/*
     pub fn create_from_commandline(commande_line: &str, application_name: &str, flag: ::AppInfoCreateFlags, error: &mut glib::Error) -> Option<AppInfo> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe {
             commande_line.with_c_str(|c_command_line| {
                 application_name.with_c_str(|c_application_name| {
@@ -203,6 +204,7 @@ impl AppInfo {/*
     }
 
     pub fn get_all() -> Option<glib::List> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::g_app_info_get_all() };
 
         if tmp_pointer.is_null() {
@@ -213,6 +215,7 @@ impl AppInfo {/*
     }
 
     pub fn get_all_for_type() -> Option<glib::List> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::g_app_info_get_all_for_type() };
 
         if tmp_pointer.is_null() {
@@ -223,6 +226,7 @@ impl AppInfo {/*
     }
 
     pub fn get_default_for_type(content_type: &str, must_support_uris: bool) -> Option<AppInfo> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe {
             content_type.with_c_str(|c_str| {
                 ffi::g_app_info_get_default_for_type(c_str, to_gboolean(must_support_uris)) })
@@ -236,6 +240,7 @@ impl AppInfo {/*
     }
 
     pub fn get_default_for_uri_scheme(uri_scheme: &str) -> Option<AppInfo> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe {
             uri_scheme.with_c_str(|c_str| {
                 ffi::g_app_info_get_default_for_uri_scheme(c_str)
@@ -250,6 +255,7 @@ impl AppInfo {/*
     }
 
     pub fn get_fallback_for_type(content_type: &str) -> Option<glib::List> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe {
             content_type.with_c_str(|c_str| {
                 ffi::g_app_info_get_fallback_for_type(c_str)
@@ -264,6 +270,7 @@ impl AppInfo {/*
     }
 
     pub fn get_recommended_for_type(content_type: &str) -> Option<glib::List> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe {
             content_type.with_c_str(|c_str| {
                 ffi::g_app_info_get_recommended_for_type(c_str)
@@ -278,6 +285,7 @@ impl AppInfo {/*
     }
 
     pub fn launch_default_for_uri(uri: &str, launch_context: &::AppLaunchContext, error: &glib::Error) -> bool {
+        assert_initialized_main_thread!();
         unsafe { to_bool({
             uri.with_c_str(|c_str| {
                 ffi::g_app_info_launch_default_for_uri(c_str, GTK_APP_LAUNCH_CONTEXT(launch_context.unwrap_widget()), &mut error.unwrap())

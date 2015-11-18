@@ -14,6 +14,7 @@ struct_Widget!(LockButton);
 
 impl LockButton {
     pub fn new(permission: &Permission) -> Option<LockButton> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_lock_button_new(permission.unwrap()) };
         check_pointer!(tmp_pointer, LockButton)
     }

@@ -12,11 +12,13 @@ struct_Widget!(CheckButton);
 
 impl CheckButton {
     pub fn new() -> Option<CheckButton> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_check_button_new() };
         check_pointer!(tmp_pointer, CheckButton)
     }
 
     pub fn new_with_label(label: &str) -> Option<CheckButton> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe {
             ffi::gtk_check_button_new_with_label(label.to_glib_none().0)
         };
@@ -24,6 +26,7 @@ impl CheckButton {
     }
 
     pub fn new_with_mnemonic(mnemonic: &str) -> Option<CheckButton> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe {
             ffi::gtk_check_button_new_with_mnemonic(mnemonic.to_glib_none().0)
         };

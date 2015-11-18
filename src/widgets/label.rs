@@ -20,6 +20,7 @@ struct_Widget!(Label);
 
 impl Label {
     pub fn new(text: &str) -> Option<Label> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe {
             ffi::gtk_label_new(text.to_glib_none().0)
         };
@@ -27,6 +28,7 @@ impl Label {
     }
 
     pub fn new_with_mnemonic(text: &str) -> Option<Label> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe {
             ffi::gtk_label_new_with_mnemonic(text.to_glib_none().0)
         };

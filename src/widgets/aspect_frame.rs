@@ -16,6 +16,7 @@ struct_Widget!(AspectFrame);
 
 impl AspectFrame {
     pub fn new(label: Option<&str>, x_align: f32, y_align: f32, ratio: f32, obey_child: bool) -> Option<AspectFrame> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe {
             ffi::gtk_aspect_frame_new(label.to_glib_none().0,
                                       x_align as c_float, y_align as c_float,

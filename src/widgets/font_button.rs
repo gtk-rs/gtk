@@ -18,11 +18,13 @@ struct_Widget!(FontButton);
 
 impl FontButton {
     pub fn new() -> Option<FontButton> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe { ffi::gtk_font_button_new() };
         check_pointer!(tmp_pointer, FontButton)
     }
 
     pub fn new_with_font(font_name: &str) -> Option<FontButton> {
+        assert_initialized_main_thread!();
         let tmp_pointer = unsafe {
             ffi::gtk_font_button_new_with_font(font_name.to_glib_none().0)
         };

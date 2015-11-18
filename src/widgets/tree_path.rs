@@ -12,6 +12,7 @@ pub struct TreePath {
 
 impl TreePath {
     pub fn new() -> Option<TreePath> {
+        assert_initialized_main_thread!();
         let tmp = unsafe { ffi::gtk_tree_path_new() };
 
         if tmp.is_null() {
@@ -24,6 +25,7 @@ impl TreePath {
     }
 
     pub fn new_from_string(path: &str) -> Option<TreePath> {
+        assert_initialized_main_thread!();
         let tmp = unsafe {
             ffi::gtk_tree_path_new_from_string(path.to_glib_none().0)
         };
@@ -39,6 +41,7 @@ impl TreePath {
 
     #[cfg(gtk_3_12)]
     pub fn new_from_indicesv(indices: &mut [i32]) -> Option<TreePath> {
+        assert_initialized_main_thread!();
         let tmp = unsafe { ffi::gtk_tree_path_new_from_indicesv(indices.as_mut_ptr(), indices.len() as ::libc::size_t) };
 
         if tmp.is_null() {
@@ -51,6 +54,7 @@ impl TreePath {
     }
 
     pub fn new_first() -> Option<TreePath> {
+        assert_initialized_main_thread!();
         let tmp = unsafe { ffi::gtk_tree_path_new_first() };
 
         if tmp.is_null() {
@@ -151,7 +155,7 @@ impl TreePath {
     }
 
     #[doc(hidden)]
-    pub fn wrap_pointer(c_treepath: *mut ffi::GtkTreePath) -> TreePath {
+    pub unsafe fn wrap_pointer(c_treepath: *mut ffi::GtkTreePath) -> TreePath {
         TreePath {
             pointer: c_treepath
         }
