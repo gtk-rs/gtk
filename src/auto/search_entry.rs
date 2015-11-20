@@ -2,6 +2,7 @@
 // DO NOT EDIT
 
 use Buildable;
+use Entry;
 use Widget;
 use ffi;
 use glib::translate::*;
@@ -11,6 +12,7 @@ use object::*;
 pub type SearchEntry = Object<ffi::GtkSearchEntry>;
 
 unsafe impl Upcast<Widget> for SearchEntry { }
+unsafe impl Upcast<Entry> for SearchEntry { }
 unsafe impl Upcast<Buildable> for SearchEntry { }
 
 impl SearchEntry {

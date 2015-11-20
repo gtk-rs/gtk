@@ -11,7 +11,7 @@ use glib::types;
 use ffi;
 
 use object::{Object, Downcast, Upcast};
-use widgets::entry::Entry;
+use Entry;
 use widgets::widget::Widget;
 
 use super::tree_model::{TreeModel, TreePath};

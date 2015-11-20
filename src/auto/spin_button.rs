@@ -3,6 +3,7 @@
 
 use Adjustment;
 use Buildable;
+use Entry;
 use Orientable;
 use SpinButtonUpdatePolicy;
 use SpinType;
@@ -16,6 +17,7 @@ use std::mem;
 pub type SpinButton = Object<ffi::GtkSpinButton>;
 
 unsafe impl Upcast<Widget> for SpinButton { }
+unsafe impl Upcast<Entry> for SpinButton { }
 unsafe impl Upcast<Buildable> for SpinButton { }
 unsafe impl Upcast<Orientable> for SpinButton { }
 

@@ -56,6 +56,13 @@ pub use self::color_chooser_widget::ColorChooserWidget;
 mod drawing_area;
 pub use self::drawing_area::DrawingArea;
 
+mod entry;
+pub use self::entry::Entry;
+pub use self::entry::EntryExt;
+
+mod entry_buffer;
+pub use self::entry_buffer::EntryBuffer;
+
 mod event_box;
 pub use self::event_box::EventBox;
 
@@ -266,6 +273,7 @@ pub mod traits {
     pub use super::BinExt;
     pub use super::ButtonExt;
     pub use super::CheckButtonExt;
+    pub use super::EntryExt;
     pub use super::FrameExt;
     pub use super::MenuItemExt;
     pub use super::MenuShellExt;

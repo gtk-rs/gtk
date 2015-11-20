@@ -23,7 +23,6 @@ pub use widgets::actionable::ActionableExt;
 pub use widgets::box_::BoxExt;
 pub use widgets::container::ContainerExt;
 pub use widgets::editable::EditableExt;
-pub use widgets::entry::EntryExt;
 pub use widgets::orientable::OrientableExt;
 pub use widgets::scrollable::ScrollableExt;
 pub use widgets::widget::WidgetExt;

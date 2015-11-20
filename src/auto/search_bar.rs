@@ -4,6 +4,8 @@
 use Bin;
 use Buildable;
 use Container;
+#[cfg(gtk_3_10)]
+use Entry;
 use Widget;
 use ffi;
 use glib::translate::*;
@@ -25,10 +27,12 @@ impl SearchBar {
         }
     }
 
-    //#[cfg(gtk_3_10)]
-    //pub fn connect_entry<T: Upcast</*Ignored*/Entry>>(&self, entry: &T) {
-    //    unsafe { TODO: call ffi::gtk_search_bar_connect_entry() }
-    //}
+    #[cfg(gtk_3_10)]
+    pub fn connect_entry<T: Upcast<Entry>>(&self, entry: &T) {
+        unsafe {
+            ffi::gtk_search_bar_connect_entry(self.to_glib_none().0, entry.upcast().to_glib_none().0);
+        }
+    }
 
     #[cfg(gtk_3_10)]
     pub fn get_search_mode(&self) -> bool {

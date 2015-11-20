@@ -22,6 +22,7 @@ generate = [
     "Gtk.ColorButton",
     "Gtk.ColorChooserWidget",
     "Gtk.DrawingArea",
+    "Gtk.Entry",
     "Gtk.EventBox",
     "Gtk.Expander",
     "Gtk.FileChooserWidget",
@@ -104,6 +105,13 @@ name = "Gtk.AppChooserDialog"
 status = "generate"
 non_nullable = [
     "get_widget",
+]
+
+[[object]]
+name = "Gtk.EntryBuffer"
+status = "generate"
+non_nullable = [
+    "get_text",
 ]
 
 

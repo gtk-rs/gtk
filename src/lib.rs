@@ -207,8 +207,6 @@ pub use widgets::actionable::Actionable;
 pub use widgets::box_::Box;
 pub use widgets::container::Container;
 pub use widgets::editable::Editable;
-pub use widgets::entry::Entry;
-pub use widgets::entry::EntryBuffer;
 pub use widgets::icon_view::IconView;
 pub use widgets::lock_button::LockButton;
 pub use widgets::orientable::Orientable;
@@ -270,8 +268,6 @@ pub use self::widgets::{
     ScaleButton,
     VolumeButton,
     Grid,
-    EntryBuffer,
-    Entry,
     Switch,
     Range,
     Scale,

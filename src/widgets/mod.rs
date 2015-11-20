@@ -7,7 +7,6 @@ pub mod box_;
 pub mod combo_box;
 pub mod container;
 pub mod editable;
-pub mod entry;
 pub mod icon_view;
 pub mod lock_button;
 pub mod orientable;
@@ -47,8 +46,6 @@ pub use self::adjustment::Adjustment;
 pub use self::scale_button::ScaleButton;
 pub use self::volume_button::VolumeButton;
 pub use self::grid::Grid;
-pub use self::entry_buffer::EntryBuffer;
-pub use self::entry::Entry;
 #[cfg(gtk_3_10)]
 pub use self::search_entry::SearchEntry;
 pub use self::switch::Switch;
@@ -181,8 +178,6 @@ mod adjustment;
 mod scale_button;
 mod volume_button;
 mod grid;
-mod entry_buffer;
-mod entry;
 #[cfg(gtk_3_10)]
 mod search_entry;
 mod switch;
