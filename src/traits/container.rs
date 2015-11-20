@@ -44,4 +44,5 @@ pub trait ContainerTrait: ::WidgetTrait {
             ffi::gtk_container_set_border_width(GTK_CONTAINER(self.unwrap_widget()), border_width as c_uint);
         }
     }
+
 }
