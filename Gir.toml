@@ -6,69 +6,98 @@ min_cfg_version = "3.4"
 target_path = "."
 work_mode = "normal"
 
-[[object]]
-name = "Gtk.Widget"
-status = "manual"
+generate = [
+    "Gtk.AccelGroup",
+    "Gtk.ActionBar",
+    "Gtk.Adjustment",
+    "Gtk.Alignment",
+    "Gtk.AppChooserWidget",
+    "Gtk.Arrow",
+    "Gtk.AspectFrame",
+    "Gtk.Bin",
+    "Gtk.Button",
+    "Gtk.ButtonBox",
+    "Gtk.Calendar",
+    "Gtk.CheckButton",
+    "Gtk.ColorButton",
+    "Gtk.ColorChooserWidget",
+    "Gtk.DrawingArea",
+    "Gtk.EventBox",
+    "Gtk.Expander",
+    "Gtk.FileChooserWidget",
+    "Gtk.Fixed",
+    "Gtk.FlowBox",
+    "Gtk.FlowBoxChild",
+    "Gtk.FontButton",
+    "Gtk.FontChooserWidget",
+    "Gtk.Frame",
+    "Gtk.Grid",
+    "Gtk.HeaderBar",
+    "Gtk.Image",
+    "Gtk.InfoBar",
+    "Gtk.Label",
+    "Gtk.Layout",
+    "Gtk.LevelBar",
+    "Gtk.LinkButton",
+    "Gtk.ListBox",
+    "Gtk.ListBoxRow",
+    "Gtk.Menu",
+    "Gtk.MenuButton",
+    "Gtk.MenuItem",
+    "Gtk.MenuShell",
+    "Gtk.MenuToolButton",
+    "Gtk.Misc",
+    "Gtk.Notebook",
+    "Gtk.Overlay",
+    "Gtk.Paned",
+    "Gtk.PlacesSidebar",
+    "Gtk.Popover",
+    "Gtk.PopoverMenu",
+    "Gtk.ProgressBar",
+    "Gtk.RadioButton",
+    "Gtk.Range",
+    "Gtk.RecentChooserWidget",
+    "Gtk.Revealer",
+    "Gtk.Scale",
+    "Gtk.ScaleButton",
+    "Gtk.ScrolledWindow",
+    "Gtk.SearchBar",
+    "Gtk.SearchEntry",
+    "Gtk.SeparatorMenuItem",
+    "Gtk.SeparatorToolItem",
+    "Gtk.SizeGroup",
+    "Gtk.SpinButton",
+    "Gtk.StatusIcon",
+    "Gtk.Statusbar",
+    "Gtk.ToggleButton",
+    "Gtk.ToggleToolButton",
+    "Gtk.ToolButton",
+    "Gtk.ToolItem",
+    "Gtk.ToolItemGroup",
+    "Gtk.ToolPalette",
+    "Gtk.Toolbar",
+    "Gtk.Viewport",
+    "Gtk.VolumeButton",
+]
 
-[[object]]
-name = "Gtk.Container"
-status = "manual"
+ignore = [
+    "Gtk.Activatable",
+]
 
-[[object]]
-name = "Gtk.Bin"
-status = "generate"
-
-[[object]]
-name = "Gtk.Box"
-status = "manual"
-
-[[object]]
-name = "Gtk.Window"
-status = "manual"
-
-[[object]]
-name = "Gtk.Dialog"
-status = "manual"
-
-[[object]]
-name = "Gtk.Misc"
-status = "generate"
-
-[[object]]
-name = "Gtk.Actionable"
-status = "manual"
-
-[[object]]
-name = "Gtk.Activatable"
-status = "ignore"
-
-[[object]]
-name = "Gtk.Buildable"
-status = "manual"
-
-[[object]]
-name = "Gtk.Orientable"
-status = "manual"
-
-[[object]]
-name = "Gtk.Adjustment"
-status = "generate"
-
-[[object]]
-name = "Gtk.AccelGroup"
-status = "generate"
-
-[[object]]
-name = "Gtk.ActionBar"
-status = "generate"
-
-[[object]]
-name = "Gtk.Alignment"
-status = "generate"
-
-[[object]]
-name = "Gtk.Arrow"
-status = "generate"
+manual = [
+    "Gdk.Screen",
+    "Gdk.Window",
+    "GdkPixbuf.Pixbuf",
+    "GdkPixbuf.PixbufAnimation",
+    "Gtk.Actionable",
+    "Gtk.Box",
+    "Gtk.Buildable",
+    "Gtk.Container",
+    "Gtk.Dialog",
+    "Gtk.Orientable",
+    "Gtk.Widget",
+    "Gtk.Window",
+]
 
 [[object]]
 name = "Gtk.AppChooserDialog"
@@ -77,278 +106,4 @@ non_nullable = [
     "get_widget",
 ]
 
-[[object]]
-name = "Gtk.AppChooserWidget"
-status = "generate"
 
-[[object]]
-name = "Gtk.AspectFrame"
-status = "generate"
-
-[[object]]
-name = "Gtk.Button"
-status = "generate"
-
-[[object]]
-name = "Gtk.ButtonBox"
-status = "generate"
-
-[[object]]
-name = "Gtk.Calendar"
-status = "generate"
-
-[[object]]
-name = "Gtk.CheckButton"
-status = "generate"
-
-[[object]]
-name = "Gtk.ColorButton"
-status = "generate"
-
-[[object]]
-name = "Gtk.ColorChooserWidget"
-status = "generate"
-
-[[object]]
-name = "Gtk.DrawingArea"
-status = "generate"
-
-[[object]]
-name = "Gtk.EventBox"
-status = "generate"
-
-[[object]]
-name = "Gtk.Expander"
-status = "generate"
-
-[[object]]
-name = "Gtk.FileChooserWidget"
-status = "generate"
-
-[[object]]
-name = "Gtk.Fixed"
-status = "generate"
-
-[[object]]
-name = "Gtk.FlowBox"
-status = "generate"
-
-[[object]]
-name = "Gtk.FlowBoxChild"
-status = "generate"
-
-[[object]]
-name = "Gtk.FontButton"
-status = "generate"
-
-[[object]]
-name = "Gtk.FontChooserWidget"
-status = "generate"
-
-[[object]]
-name = "Gtk.Frame"
-status = "generate"
-
-[[object]]
-name = "Gtk.Grid"
-status = "generate"
-
-[[object]]
-name = "Gtk.HeaderBar"
-status = "generate"
-
-[[object]]
-name = "Gtk.Image"
-status = "generate"
-
-[[object]]
-name = "Gtk.InfoBar"
-status = "generate"
-
-[[object]]
-name = "Gtk.Label"
-status = "generate"
-
-[[object]]
-name = "Gtk.Layout"
-status = "generate"
-
-[[object]]
-name = "Gtk.LevelBar"
-status = "generate"
-
-[[object]]
-name = "Gtk.LinkButton"
-status = "generate"
-
-[[object]]
-name = "Gtk.ListBox"
-status = "generate"
-
-[[object]]
-name = "Gtk.ListBoxRow"
-status = "generate"
-
-[[object]]
-name = "Gtk.Menu"
-status = "generate"
-
-[[object]]
-name = "Gtk.MenuButton"
-status = "generate"
-
-[[object]]
-name = "Gtk.MenuItem"
-status = "generate"
-
-[[object]]
-name = "Gtk.MenuToolButton"
-status = "generate"
-
-[[object]]
-name = "Gtk.MenuShell"
-status = "generate"
-
-[[object]]
-name = "Gtk.Notebook"
-status = "generate"
-
-[[object]]
-name = "Gtk.Overlay"
-status = "generate"
-
-[[object]]
-name = "Gtk.Paned"
-status = "generate"
-
-[[object]]
-name = "Gtk.PlacesSidebar"
-status = "generate"
-
-[[object]]
-name = "Gtk.Popover"
-status = "generate"
-
-[[object]]
-name = "Gtk.PopoverMenu"
-status = "generate"
-
-[[object]]
-name = "Gtk.ProgressBar"
-status = "generate"
-
-[[object]]
-name = "Gtk.RadioButton"
-status = "generate"
-
-[[object]]
-name = "Gtk.Range"
-status = "generate"
-
-[[object]]
-name = "Gtk.Revealer"
-status = "generate"
-
-[[object]]
-name = "Gtk.RecentChooserWidget"
-status = "generate"
-
-[[object]]
-name = "Gtk.Revealer"
-status = "generate"
-
-[[object]]
-name = "Gtk.Scale"
-status = "generate"
-
-[[object]]
-name = "Gtk.ScaleButton"
-status = "generate"
-
-[[object]]
-name = "Gtk.ScrolledWindow"
-status = "generate"
-
-[[object]]
-name = "Gtk.SearchBar"
-status = "generate"
-
-[[object]]
-name = "Gtk.SearchEntry"
-status = "generate"
-
-[[object]]
-name = "Gtk.SeparatorMenuItem"
-status = "generate"
-
-[[object]]
-name = "Gtk.SeparatorToolItem"
-status = "generate"
-
-[[object]]
-name = "Gtk.SizeGroup"
-status = "generate"
-
-[[object]]
-name = "Gtk.SpinButton"
-status = "generate"
-
-[[object]]
-name = "Gtk.Statusbar"
-status = "generate"
-
-[[object]]
-name = "Gtk.StatusIcon"
-status = "generate"
-
-[[object]]
-name = "Gtk.ToggleButton"
-status = "generate"
-
-[[object]]
-name = "Gtk.ToggleToolButton"
-status = "generate"
-
-[[object]]
-name = "Gtk.Toolbar"
-status = "generate"
-
-[[object]]
-name = "Gtk.ToolButton"
-status = "generate"
-
-[[object]]
-name = "Gtk.ToolItem"
-status = "generate"
-
-[[object]]
-name = "Gtk.ToolItemGroup"
-status = "generate"
-
-[[object]]
-name = "Gtk.ToolPalette"
-status = "generate"
-
-[[object]]
-name = "Gtk.Viewport"
-status = "generate"
-
-[[object]]
-name = "Gtk.VolumeButton"
-status = "generate"
-
-[[object]]
-name = "GdkPixbuf.Pixbuf"
-status = "manual"
-
-[[object]]
-name = "GdkPixbuf.PixbufAnimation"
-status = "manual"
-
-[[object]]
-name = "Gdk.Screen"
-status = "manual"
-
-[[object]]
-name = "Gdk.Window"
-status = "manual"
