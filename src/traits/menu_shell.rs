@@ -84,15 +84,11 @@ pub trait MenuShellTrait: ::WidgetTrait + ::ContainerTrait {
         }
     }
 
-    fn get_selected_item<T: ::WidgetTrait>(&self) -> T {
-        unsafe {
-            ::FFIWidget::wrap_widget(ffi::gtk_menu_shell_get_selected_item(GTK_MENU_SHELL(self.unwrap_widget())))
-        }
+    unsafe fn get_selected_item<T: ::WidgetTrait>(&self) -> T {
+        ::FFIWidget::wrap_widget(ffi::gtk_menu_shell_get_selected_item(GTK_MENU_SHELL(self.unwrap_widget())))
     }
 
-    fn get_parent_shell<T: ::MenuShellTrait>(&self) -> T {
-        unsafe {
-            ::FFIWidget::wrap_widget(ffi::gtk_menu_shell_get_parent_shell(GTK_MENU_SHELL(self.unwrap_widget())))
-        }
+    unsafe fn get_parent_shell<T: ::MenuShellTrait>(&self) -> T {
+        ::FFIWidget::wrap_widget(ffi::gtk_menu_shell_get_parent_shell(GTK_MENU_SHELL(self.unwrap_widget())))
     }
 }

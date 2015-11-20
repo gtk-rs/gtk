@@ -54,10 +54,8 @@ impl HeaderBar {
         }
     }
 
-    pub fn get_custom_title<T: ::WidgetTrait>(&self) -> Option<T> {
-        let tmp_pointer = unsafe {
-            ffi::gtk_header_bar_get_custom_title(GTK_HEADER_BAR(self.pointer))
-        };
+    pub unsafe fn get_custom_title<T: ::WidgetTrait>(&self) -> Option<T> {
+        let tmp_pointer = ffi::gtk_header_bar_get_custom_title(GTK_HEADER_BAR(self.pointer));
 
         if tmp_pointer.is_null() {
             None

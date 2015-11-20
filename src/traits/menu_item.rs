@@ -18,10 +18,8 @@ pub trait MenuItemTrait: ::WidgetTrait + ::ContainerTrait + ::BinTrait {
         }
     }
 
-    fn get_submenu<T: ::WidgetTrait>(&self) -> T {
-        unsafe {
-            ::FFIWidget::wrap_widget(ffi::gtk_menu_item_get_submenu(GTK_MENU_ITEM(self.unwrap_widget())))
-        }
+    unsafe fn get_submenu<T: ::WidgetTrait>(&self) -> T {
+        ::FFIWidget::wrap_widget(ffi::gtk_menu_item_get_submenu(GTK_MENU_ITEM(self.unwrap_widget())))
     }
 
     fn select(&self) {

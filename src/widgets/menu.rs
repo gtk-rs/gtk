@@ -53,13 +53,13 @@ impl Menu {
         }
     }
 
-    // pub fn get_active<T: ::WidgetTrait>(&self) -> Option<T> {
+    // pub unsafe fn get_active<T: ::WidgetTrait>(&self) -> Option<T> {
     //     unsafe {
     //         from_glib_none(ffi::gtk_menu_get_active(GTK_MENU(self.unwrap_widget())))
     //     }
     // }
 
-    // pub fn get_attach_widget<T: ::WidgetTrait>(&self) -> Option<T> {
+    // pub unsafe fn get_attach_widget<T: ::WidgetTrait>(&self) -> Option<T> {
     //     unsafe {
     //         from_glib_none(ffi::gtk_menu_get_attach_widget(GTK_MENU(self.unwrap_widget())))
     //     }

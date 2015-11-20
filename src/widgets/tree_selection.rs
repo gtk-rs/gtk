@@ -23,8 +23,8 @@ impl TreeSelection {
         unsafe { ffi::gtk_tree_selection_get_mode(self.pointer) }
     }
 
-    pub fn get_user_data<'r, T>(&self) -> &'r mut T {
-        unsafe { ::std::mem::transmute(ffi::gtk_tree_selection_get_user_data(self.pointer)) }
+    pub unsafe fn get_user_data<'r, T>(&self) -> &'r mut T {
+        ::std::mem::transmute(ffi::gtk_tree_selection_get_user_data(self.pointer))
     }
 
     pub fn get_tree_view(&self) -> Option<TreeView> {

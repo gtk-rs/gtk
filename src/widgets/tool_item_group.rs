@@ -67,8 +67,8 @@ impl ToolItemGroup {
         }
     }
 
-    pub fn get_label_widget<T: ::WidgetTrait>(&self) -> Option<T> {
-        let tmp_pointer = unsafe { ffi::gtk_tool_item_group_get_label_widget(GTK_TOOL_ITEM_GROUP(self.unwrap_widget())) };
+    pub unsafe fn get_label_widget<T: ::WidgetTrait>(&self) -> Option<T> {
+        let tmp_pointer = ffi::gtk_tool_item_group_get_label_widget(GTK_TOOL_ITEM_GROUP(self.unwrap_widget()));
 
         if tmp_pointer.is_null() {
             None

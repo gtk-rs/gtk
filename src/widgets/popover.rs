@@ -22,8 +22,8 @@ impl Popover {
         unsafe { ffi::gtk_popover_set_relative_to(GTK_POPOVER(self.pointer), relative_to.unwrap_widget()) }
     }
 
-    pub fn get_relative_to<T: ::WidgetTrait>(&self) -> Option<T> {
-        let tmp_pointer = unsafe { ffi::gtk_popover_get_relative_to(GTK_POPOVER(self.pointer)) };
+    pub unsafe fn get_relative_to<T: ::WidgetTrait>(&self) -> Option<T> {
+        let tmp_pointer = ffi::gtk_popover_get_relative_to(GTK_POPOVER(self.pointer));
 
         if tmp_pointer.is_null() {
             None

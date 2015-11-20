@@ -172,10 +172,8 @@ impl TreeViewColumn {
         }
     }
 
-    pub fn get_widget<T: ::WidgetTrait>(&self) -> T {
-        unsafe {
-            ::FFIWidget::wrap_widget(ffi::gtk_tree_view_column_get_widget(self.pointer))
-        }
+    pub unsafe fn get_widget<T: ::WidgetTrait>(&self) -> T {
+        ::FFIWidget::wrap_widget(ffi::gtk_tree_view_column_get_widget(self.pointer))
     }
 
     pub fn set_alignment(&self, x_align: f32) {
@@ -256,10 +254,8 @@ impl TreeViewColumn {
         }
     }
 
-    pub fn get_button<T: ::WidgetTrait + ::ButtonTrait>(&self) -> T {
-        unsafe {
-            ::FFIWidget::wrap_widget(ffi::gtk_tree_view_column_get_button(self.pointer))
-        }
+    pub unsafe fn get_button<T: ::WidgetTrait + ::ButtonTrait>(&self) -> T {
+        ::FFIWidget::wrap_widget(ffi::gtk_tree_view_column_get_button(self.pointer))
     }
 
     pub fn add_attribute<T: ::FFIWidget + ::CellRendererTrait>(&self, cell: &T, attribute: &str, column: i32) {

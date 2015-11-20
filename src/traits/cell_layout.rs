@@ -36,8 +36,8 @@ pub trait CellLayoutTrait: ::WidgetTrait {
         }
     }*/
 
-    fn get_cells<T: ::CellRendererTrait>(&self) -> glib::List<T> {
-        let tmp = unsafe { ffi::gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(self.unwrap_widget())) };
+    unsafe fn get_cells<T: ::CellRendererTrait>(&self) -> glib::List<T> {
+        let tmp = ffi::gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(self.unwrap_widget()));
 
         if tmp.is_null() {
             glib::List::new()
