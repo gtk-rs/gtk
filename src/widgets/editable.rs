@@ -36,7 +36,7 @@ pub trait EditableExt {
 impl<O: Upcast<Editable>> EditableExt for O {
     fn select_region(&self, start_pos: i32, end_pos: i32) {
         unsafe {
-            ffi::gtk_editable_select_region(self.upcast().to_glib_none().0, start_pos, end_pos)
+            ffi::gtk_editable_select_region(self.to_glib_none().0, start_pos, end_pos)
         }
     }
 
@@ -44,7 +44,7 @@ impl<O: Upcast<Editable>> EditableExt for O {
         let mut i = 0;
         let mut j = 0;
         unsafe {
-            if from_glib(ffi::gtk_editable_get_selection_bounds(self.upcast().to_glib_none().0,
+            if from_glib(ffi::gtk_editable_get_selection_bounds(self.to_glib_none().0,
                                                                 &mut i,
                                                                 &mut j)) {
                 Some((i, j))
@@ -58,7 +58,7 @@ impl<O: Upcast<Editable>> EditableExt for O {
     fn insert_text(&self, new_text: &str, mut position: i32) -> i32 {
         unsafe {
             // Don't need a null-terminated string here
-            ffi::gtk_editable_insert_text(self.upcast().to_glib_none().0,
+            ffi::gtk_editable_insert_text(self.to_glib_none().0,
                                               new_text.as_ptr() as *const c_char,
                                               new_text.len() as c_int,
                                               &mut position);
@@ -68,62 +68,62 @@ impl<O: Upcast<Editable>> EditableExt for O {
 
     fn delete_text(&self, start_pos: i32, end_pos: i32) {
         unsafe {
-            ffi::gtk_editable_delete_text(self.upcast().to_glib_none().0, start_pos, end_pos)
+            ffi::gtk_editable_delete_text(self.to_glib_none().0, start_pos, end_pos)
         }
     }
 
     fn get_chars(&self, start_pos: i32, end_pos: i32) -> Option<String> {
         unsafe {
             from_glib_none(
-                ffi::gtk_editable_get_chars(self.upcast().to_glib_none().0, start_pos, end_pos))
+                ffi::gtk_editable_get_chars(self.to_glib_none().0, start_pos, end_pos))
         }
     }
 
     fn cut_clipboard(&self) {
         unsafe {
-            ffi::gtk_editable_cut_clipboard(self.upcast().to_glib_none().0)
+            ffi::gtk_editable_cut_clipboard(self.to_glib_none().0)
         }
     }
 
     fn copy_clipboard(&self) {
         unsafe {
-            ffi::gtk_editable_copy_clipboard(self.upcast().to_glib_none().0)
+            ffi::gtk_editable_copy_clipboard(self.to_glib_none().0)
         }
     }
 
     fn paste_clipboard(&self) {
         unsafe {
-            ffi::gtk_editable_paste_clipboard(self.upcast().to_glib_none().0)
+            ffi::gtk_editable_paste_clipboard(self.to_glib_none().0)
         }
     }
 
     fn delete_selection(&self) {
         unsafe {
-            ffi::gtk_editable_delete_selection(self.upcast().to_glib_none().0)
+            ffi::gtk_editable_delete_selection(self.to_glib_none().0)
         }
     }
 
     fn set_position(&self, position: i32) {
         unsafe {
-            ffi::gtk_editable_set_editable(self.upcast().to_glib_none().0, position)
+            ffi::gtk_editable_set_editable(self.to_glib_none().0, position)
         }
     }
 
     fn get_position(&self) -> i32 {
         unsafe {
-            ffi::gtk_editable_get_position(self.upcast().to_glib_none().0)
+            ffi::gtk_editable_get_position(self.to_glib_none().0)
         }
     }
 
     fn set_editable(&self, editable: bool) {
         unsafe {
-            ffi::gtk_editable_set_editable(self.upcast().to_glib_none().0, editable.to_glib())
+            ffi::gtk_editable_set_editable(self.to_glib_none().0, editable.to_glib())
         }
     }
 
     fn is_editable(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_editable_get_editable(self.upcast().to_glib_none().0))
+            from_glib(ffi::gtk_editable_get_editable(self.to_glib_none().0))
         }
     }
 }

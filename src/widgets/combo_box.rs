@@ -34,7 +34,7 @@ impl ComboBox {
     pub fn new_with_model<T: Upcast<TreeModel>>(model: &T) -> ComboBox {
         unsafe {
             Widget::from_glib_none(
-                ffi::gtk_combo_box_new_with_model(model.upcast().to_glib_none().0))
+                ffi::gtk_combo_box_new_with_model(model.to_glib_none().0))
                 .downcast_unchecked()
         }
     }
@@ -42,18 +42,18 @@ impl ComboBox {
     pub fn new_with_model_and_entry<T: Upcast<TreeModel>>(model: &T) -> ComboBox {
         unsafe {
             Widget::from_glib_none(
-                ffi::gtk_combo_box_new_with_model_and_entry(model.upcast().to_glib_none().0))
+                ffi::gtk_combo_box_new_with_model_and_entry(model.to_glib_none().0))
                 .downcast_unchecked()
         }
     }
 
     /*pub fn new_with_area(area: &CellArea) -> ComboBox {
-        let tmp_pointer = unsafe { ffi::gtk_combo_box_new_with_area(area.upcast().to_glib_none().0) };
+        let tmp_pointer = unsafe { ffi::gtk_combo_box_new_with_area(area.to_glib_none().0) };
         check_pointer!(tmp_pointer, ComboBox)
     }
 
     pub fn new_with_area_and_entry(area: &CellArea) -> ComboBox {
-        let tmp_pointer = unsafe { ffi::gtk_combo_box_new_with_area_and_entry(area.upcast().to_glib_none().0) };
+        let tmp_pointer = unsafe { ffi::gtk_combo_box_new_with_area_and_entry(area.to_glib_none().0) };
         check_pointer!(tmp_pointer, ComboBox)
     }*/
 }
@@ -90,44 +90,44 @@ pub trait ComboBoxExt {
 
 impl<O: Upcast<ComboBox>> ComboBoxExt for O {
     fn get_wrap_width(&self) -> i32 {
-        unsafe { ffi::gtk_combo_box_get_wrap_width(self.upcast().to_glib_none().0) }
+        unsafe { ffi::gtk_combo_box_get_wrap_width(self.to_glib_none().0) }
     }
 
     fn set_wrap_width(&self, width: i32) {
-        unsafe { ffi::gtk_combo_box_set_wrap_width(self.upcast().to_glib_none().0, width) }
+        unsafe { ffi::gtk_combo_box_set_wrap_width(self.to_glib_none().0, width) }
     }
 
     fn get_row_span_column(&self) -> i32 {
-        unsafe { ffi::gtk_combo_box_get_row_span_column(self.upcast().to_glib_none().0) }
+        unsafe { ffi::gtk_combo_box_get_row_span_column(self.to_glib_none().0) }
     }
 
     fn set_row_span_column(&self, row_span: i32) {
-        unsafe { ffi::gtk_combo_box_set_row_span_column(self.upcast().to_glib_none().0, row_span) }
+        unsafe { ffi::gtk_combo_box_set_row_span_column(self.to_glib_none().0, row_span) }
     }
 
     fn get_column_span_column(&self) -> i32 {
-        unsafe { ffi::gtk_combo_box_get_column_span_column(self.upcast().to_glib_none().0) }
+        unsafe { ffi::gtk_combo_box_get_column_span_column(self.to_glib_none().0) }
     }
 
     fn set_column_span_column(&self, column_span: i32) {
         unsafe {
-            ffi::gtk_combo_box_set_column_span_column(self.upcast().to_glib_none().0, column_span)
+            ffi::gtk_combo_box_set_column_span_column(self.to_glib_none().0, column_span)
         }
     }
 
     fn get_active(&self) -> i32 {
-        unsafe { ffi::gtk_combo_box_get_active(self.upcast().to_glib_none().0) }
+        unsafe { ffi::gtk_combo_box_get_active(self.to_glib_none().0) }
     }
 
     fn set_active(&self, active: i32) {
-        unsafe { ffi::gtk_combo_box_set_active(self.upcast().to_glib_none().0, active) }
+        unsafe { ffi::gtk_combo_box_set_active(self.to_glib_none().0, active) }
     }
 
     fn get_active_iter(&self) -> Option<TreeIter> {
         unsafe {
             let iter = TreeIter::new();
             let ok = from_glib(
-                ffi::gtk_combo_box_get_active_iter(self.upcast().to_glib_none().0,
+                ffi::gtk_combo_box_get_active_iter(self.to_glib_none().0,
                     iter.unwrap_pointer()));
             if ok { Some(iter) } else { None }
         }
@@ -135,98 +135,98 @@ impl<O: Upcast<ComboBox>> ComboBoxExt for O {
 
     fn set_active_iter(&self, iter: &TreeIter) {
         unsafe {
-            ffi::gtk_combo_box_set_active_iter(self.upcast().to_glib_none().0,
+            ffi::gtk_combo_box_set_active_iter(self.to_glib_none().0,
                 iter.unwrap_pointer())
         }
     }
 
     fn get_id_column(&self) -> i32 {
-        unsafe { ffi::gtk_combo_box_get_id_column(self.upcast().to_glib_none().0) }
+        unsafe { ffi::gtk_combo_box_get_id_column(self.to_glib_none().0) }
     }
 
     fn set_id_column(&self, id_column: i32) {
-        unsafe { ffi::gtk_combo_box_set_id_column(self.upcast().to_glib_none().0, id_column) }
+        unsafe { ffi::gtk_combo_box_set_id_column(self.to_glib_none().0, id_column) }
     }
 
     fn get_active_id(&self) -> Option<String> {
         unsafe {
             from_glib_none(
-                ffi::gtk_combo_box_get_active_id(self.upcast().to_glib_none().0))
+                ffi::gtk_combo_box_get_active_id(self.to_glib_none().0))
         }
     }
 
     fn set_active_id(&self, active_id: Option<&str>) -> bool {
         unsafe {
             from_glib(
-                ffi::gtk_combo_box_set_active_id(self.upcast().to_glib_none().0,
+                ffi::gtk_combo_box_set_active_id(self.to_glib_none().0,
                     active_id.to_glib_none().0))
         }
     }
 
     fn get_model(&self) -> Option<TreeModel> {
-        unsafe { from_glib_none(ffi::gtk_combo_box_get_model(self.upcast().to_glib_none().0)) }
+        unsafe { from_glib_none(ffi::gtk_combo_box_get_model(self.to_glib_none().0)) }
     }
 
     fn set_model<T: Upcast<TreeModel>>(&self, model: Option<&T>) {
         unsafe {
-            ffi::gtk_combo_box_set_model(self.upcast().to_glib_none().0,
-                model.map(|p| p.upcast()).to_glib_none().0)
+            ffi::gtk_combo_box_set_model(self.to_glib_none().0,
+                model.to_glib_none().0)
         }
     }
 
     fn popup(&self) {
-        unsafe { ffi::gtk_combo_box_popup(self.upcast().to_glib_none().0) }
+        unsafe { ffi::gtk_combo_box_popup(self.to_glib_none().0) }
     }
 
     fn popdown(&self) {
-        unsafe { ffi::gtk_combo_box_popdown(self.upcast().to_glib_none().0) }
+        unsafe { ffi::gtk_combo_box_popdown(self.to_glib_none().0) }
     }
 
     fn get_focus_on_click(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_combo_box_get_focus_on_click(self.upcast().to_glib_none().0)) }
+        unsafe { from_glib(ffi::gtk_combo_box_get_focus_on_click(self.to_glib_none().0)) }
     }
 
     fn set_focus_on_click(&self, focus_on_click: bool) {
         unsafe {
-            ffi::gtk_combo_box_set_focus_on_click(self.upcast().to_glib_none().0,
+            ffi::gtk_combo_box_set_focus_on_click(self.to_glib_none().0,
                 focus_on_click.to_glib())
         }
     }
 
     fn get_button_sensitivity(&self) -> SensitivityType {
-        unsafe { ffi::gtk_combo_box_get_button_sensitivity(self.upcast().to_glib_none().0) }
+        unsafe { ffi::gtk_combo_box_get_button_sensitivity(self.to_glib_none().0) }
     }
 
     fn set_button_sensitivity(&self, sensitivity: SensitivityType) {
         unsafe {
-            ffi::gtk_combo_box_set_button_sensitivity(self.upcast().to_glib_none().0, sensitivity)
+            ffi::gtk_combo_box_set_button_sensitivity(self.to_glib_none().0, sensitivity)
         }
     }
 
     fn get_has_entry(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_combo_box_get_has_entry(self.upcast().to_glib_none().0)) }
+        unsafe { from_glib(ffi::gtk_combo_box_get_has_entry(self.to_glib_none().0)) }
     }
 
     fn set_entry_text_column(&self, text_column: i32) {
         unsafe {
-            ffi::gtk_combo_box_set_entry_text_column(self.upcast().to_glib_none().0, text_column)
+            ffi::gtk_combo_box_set_entry_text_column(self.to_glib_none().0, text_column)
         }
     }
 
     fn get_entry_text_column(&self) -> i32 {
-        unsafe { ffi::gtk_combo_box_get_entry_text_column(self.upcast().to_glib_none().0) }
+        unsafe { ffi::gtk_combo_box_get_entry_text_column(self.to_glib_none().0) }
     }
 
     fn set_popup_fixed_width(&self, fixed: bool) {
         unsafe {
-            ffi::gtk_combo_box_set_popup_fixed_width(self.upcast().to_glib_none().0,
+            ffi::gtk_combo_box_set_popup_fixed_width(self.to_glib_none().0,
                 fixed.to_glib())
         }
     }
 
     fn get_popup_fixed_width(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_combo_box_get_popup_fixed_width(self.upcast().to_glib_none().0))
+            from_glib(ffi::gtk_combo_box_get_popup_fixed_width(self.to_glib_none().0))
         }
     }
 }

@@ -45,51 +45,51 @@ pub trait WindowExt {
 impl<O: Upcast<Window>> WindowExt for O {
     fn move_(&self, x: i32, y: i32) {
         unsafe {
-            ffi::gtk_window_move(self.upcast().to_glib_none().0, x, y);
+            ffi::gtk_window_move(self.to_glib_none().0, x, y);
         }
     }
 
     fn set_type_hint(&self, hint: gdk::WindowTypeHint) {
         unsafe {
-            ffi::gtk_window_set_type_hint(self.upcast().to_glib_none().0, hint);
+            ffi::gtk_window_set_type_hint(self.to_glib_none().0, hint);
         }
     }
 
     fn set_title(&self, title: &str) {
         unsafe {
-            ffi::gtk_window_set_title(self.upcast().to_glib_none().0, title.to_glib_none().0);
+            ffi::gtk_window_set_title(self.to_glib_none().0, title.to_glib_none().0);
         }
     }
 
     fn set_decorated(&self, setting: bool) {
         unsafe {
-            ffi::gtk_window_set_decorated(self.upcast().to_glib_none().0, setting.to_glib());
+            ffi::gtk_window_set_decorated(self.to_glib_none().0, setting.to_glib());
         }
     }
 
     fn get_title(&self) -> Option<String> {
         unsafe {
-            from_glib_none(ffi::gtk_window_get_title(self.upcast().to_glib_none().0))
+            from_glib_none(ffi::gtk_window_get_title(self.to_glib_none().0))
         }
     }
 
     fn set_default_size(&self, width: i32, height: i32) {
         unsafe {
-            ffi::gtk_window_set_default_size(self.upcast().to_glib_none().0, width, height)
+            ffi::gtk_window_set_default_size(self.to_glib_none().0, width, height)
         }
     }
 
     fn set_window_position(&self, window_position: WindowPosition) {
         unsafe {
-            ffi::gtk_window_set_position(self.upcast().to_glib_none().0, window_position);
+            ffi::gtk_window_set_position(self.to_glib_none().0, window_position);
         }
     }
 
     #[cfg(gtk_3_10)]
     fn set_titlebar<T: Upcast<Widget>>(&self, titlebar: &T) {
         unsafe {
-            ffi::gtk_window_set_titlebar(self.upcast().to_glib_none().0,
-                titlebar.upcast().to_glib_none().0);
+            ffi::gtk_window_set_titlebar(self.to_glib_none().0,
+                titlebar.to_glib_none().0);
         }
     }
 }

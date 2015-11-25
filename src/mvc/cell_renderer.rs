@@ -52,109 +52,109 @@ pub trait CellRendererExt {
 impl<O: Upcast<CellRenderer>> CellRendererExt for O {
     fn stop_editing(&self, cancelled: bool) {
         unsafe {
-            ffi::gtk_cell_renderer_stop_editing(self.upcast().to_glib_none().0, cancelled.to_glib())
+            ffi::gtk_cell_renderer_stop_editing(self.to_glib_none().0, cancelled.to_glib())
         }
     }
 
     fn get_fixed_size(&self, width: &mut i32, height: &mut i32) {
         unsafe {
-            ffi::gtk_cell_renderer_get_fixed_size(self.upcast().to_glib_none().0, width, height)
+            ffi::gtk_cell_renderer_get_fixed_size(self.to_glib_none().0, width, height)
         }
     }
 
     fn set_fixed_size(&self, width: i32, height: i32) {
         unsafe {
-            ffi::gtk_cell_renderer_set_fixed_size(self.upcast().to_glib_none().0, width, height)
+            ffi::gtk_cell_renderer_set_fixed_size(self.to_glib_none().0, width, height)
         }
     }
 
     fn get_visible(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_cell_renderer_get_visible(self.upcast().to_glib_none().0)) }
+        unsafe { from_glib(ffi::gtk_cell_renderer_get_visible(self.to_glib_none().0)) }
     }
 
     fn set_visible(&self, visible: bool) {
         unsafe {
-            ffi::gtk_cell_renderer_set_visible(self.upcast().to_glib_none().0, visible.to_glib())
+            ffi::gtk_cell_renderer_set_visible(self.to_glib_none().0, visible.to_glib())
         }
     }
 
     fn get_sensitive(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_cell_renderer_get_sensitive(self.upcast().to_glib_none().0)) }
+        unsafe { from_glib(ffi::gtk_cell_renderer_get_sensitive(self.to_glib_none().0)) }
     }
 
     fn set_sensitive(&self, sensitive: bool) {
         unsafe {
-            ffi::gtk_cell_renderer_set_sensitive(self.upcast().to_glib_none().0,
+            ffi::gtk_cell_renderer_set_sensitive(self.to_glib_none().0,
                 sensitive.to_glib())
         }
     }
 
     fn get_alignment(&self, xalign: &mut f32, yalign: &mut f32) {
         unsafe {
-            ffi::gtk_cell_renderer_get_alignment(self.upcast().to_glib_none().0, xalign, yalign)
+            ffi::gtk_cell_renderer_get_alignment(self.to_glib_none().0, xalign, yalign)
         }
     }
 
     fn set_alignment(&self, xalign: f32, yalign: f32) {
         unsafe {
-            ffi::gtk_cell_renderer_set_alignment(self.upcast().to_glib_none().0, xalign, yalign)
+            ffi::gtk_cell_renderer_set_alignment(self.to_glib_none().0, xalign, yalign)
         }
     }
 
     fn get_padding(&self, xpad: &mut i32, ypad: &mut i32) {
-        unsafe { ffi::gtk_cell_renderer_get_padding(self.upcast().to_glib_none().0, xpad, ypad) }
+        unsafe { ffi::gtk_cell_renderer_get_padding(self.to_glib_none().0, xpad, ypad) }
     }
 
     fn set_padding(&self, xpad: i32, ypad: i32) {
-        unsafe { ffi::gtk_cell_renderer_set_padding(self.upcast().to_glib_none().0, xpad, ypad) }
+        unsafe { ffi::gtk_cell_renderer_set_padding(self.to_glib_none().0, xpad, ypad) }
     }
 
     fn get_state<T: Upcast<Widget>>(&self, widget: &T, cell_state: CellRendererState)
             -> StateFlags {
         unsafe {
-            ffi::gtk_cell_renderer_get_state(self.upcast().to_glib_none().0,
-                widget.upcast().to_glib_none().0, cell_state)
+            ffi::gtk_cell_renderer_get_state(self.to_glib_none().0,
+                widget.to_glib_none().0, cell_state)
         }
     }
 
     fn is_activable(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_cell_renderer_is_activatable(self.upcast().to_glib_none().0)) }
+        unsafe { from_glib(ffi::gtk_cell_renderer_is_activatable(self.to_glib_none().0)) }
     }
 
     fn get_preferred_height<T: Upcast<Widget>>(&self, widget: &T, minimum_size: &mut i32,
             natural_size: &mut i32) {
         unsafe {
-            ffi::gtk_cell_renderer_get_preferred_height(self.upcast().to_glib_none().0,
-                widget.upcast().to_glib_none().0, minimum_size, natural_size)
+            ffi::gtk_cell_renderer_get_preferred_height(self.to_glib_none().0,
+                widget.to_glib_none().0, minimum_size, natural_size)
         }
     }
 
     fn get_preferred_height_for_width<T: Upcast<Widget>>(&self, widget: &T, width: i32,
             minimum_size: &mut i32, natural_size: &mut i32) {
         unsafe {
-            ffi::gtk_cell_renderer_get_preferred_height_for_width(self.upcast().to_glib_none().0,
-                widget.upcast().to_glib_none().0, width, minimum_size, natural_size)
+            ffi::gtk_cell_renderer_get_preferred_height_for_width(self.to_glib_none().0,
+                widget.to_glib_none().0, width, minimum_size, natural_size)
         }
     }
 
     fn get_preferred_width<T: Upcast<Widget>>(&self, widget: &T, minimum_size: &mut i32,
             natural_size: &mut i32) {
         unsafe {
-            ffi::gtk_cell_renderer_get_preferred_width(self.upcast().to_glib_none().0,
-                widget.upcast().to_glib_none().0, minimum_size, natural_size)
+            ffi::gtk_cell_renderer_get_preferred_width(self.to_glib_none().0,
+                widget.to_glib_none().0, minimum_size, natural_size)
         }
     }
 
     fn get_preferred_width_for_height<T: Upcast<Widget>>(&self, widget: &T, height: i32,
             minimum_size: &mut i32, natural_size: &mut i32) {
         unsafe {
-            ffi::gtk_cell_renderer_get_preferred_width_for_height(self.upcast().to_glib_none().0,
-                widget.upcast().to_glib_none().0, height, minimum_size, natural_size)
+            ffi::gtk_cell_renderer_get_preferred_width_for_height(self.to_glib_none().0,
+                widget.to_glib_none().0, height, minimum_size, natural_size)
         }
     }
 
     fn get_request_mode(&self) -> SizeRequestMode {
-        unsafe { ffi::gtk_cell_renderer_get_request_mode(self.upcast().to_glib_none().0) }
+        unsafe { ffi::gtk_cell_renderer_get_request_mode(self.to_glib_none().0) }
     }
 }
 
@@ -184,7 +184,7 @@ impl<O: Upcast<CellRendererText>> CellRendererTextExt for O {
     fn set_fixed_height_from_font(&self, number_of_rows: i32) {
         unsafe {
             ffi::gtk_cell_renderer_text_set_fixed_height_from_font(
-                self.upcast().to_glib_none().0, number_of_rows)
+                self.to_glib_none().0, number_of_rows)
         }
     }
 }

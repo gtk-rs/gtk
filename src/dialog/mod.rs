@@ -206,17 +206,17 @@ pub trait DialogExt {
 
 impl<O: Upcast<Dialog>> DialogExt for O {
     fn run(&self) -> i32 {
-        unsafe { ffi::gtk_dialog_run(self.upcast().to_glib_none().0) }
+        unsafe { ffi::gtk_dialog_run(self.to_glib_none().0) }
     }
 
     fn response(&self, response_id: i32) {
-        unsafe { ffi::gtk_dialog_response(self.upcast().to_glib_none().0, response_id) }
+        unsafe { ffi::gtk_dialog_response(self.to_glib_none().0, response_id) }
     }
 
     fn add_button(&self, button_text: &str, response_id: i32) -> Button {
         unsafe {
             Widget::from_glib_none(
-                ffi::gtk_dialog_add_button(self.upcast().to_glib_none().0,
+                ffi::gtk_dialog_add_button(self.to_glib_none().0,
                     button_text.to_glib_none().0, response_id))
                 .downcast_unchecked()
         }
@@ -226,33 +226,33 @@ impl<O: Upcast<Dialog>> DialogExt for O {
         unsafe {
             buttons.invoke1(
                 ffi::gtk_dialog_add_buttons,
-                self.upcast().to_glib_none().0)
+                self.to_glib_none().0)
         }
     }
 
     fn add_action_widget<T: Upcast<Widget>>(&self, child: &T, response_id: i32) {
         unsafe {
             ffi::gtk_dialog_add_action_widget(
-                self.upcast().to_glib_none().0, child.upcast().to_glib_none().0, response_id)
+                self.to_glib_none().0, child.to_glib_none().0, response_id)
         }
     }
 
     fn set_default_response(&self, response_id: i32) {
-        unsafe { ffi::gtk_dialog_set_default_response(self.upcast().to_glib_none().0, response_id) }
+        unsafe { ffi::gtk_dialog_set_default_response(self.to_glib_none().0, response_id) }
     }
 
     fn set_response_sensitive(&self, response_id: i32, setting: bool) {
         unsafe {
             ffi::gtk_dialog_set_response_sensitive(
-                self.upcast().to_glib_none().0, response_id, setting.to_glib())
+                self.to_glib_none().0, response_id, setting.to_glib())
         }
 
     }
 
     fn get_response_for_widget<T: Upcast<Widget>>(&self, widget: &T) -> Result<i32, ResponseType> {
         let tmp = unsafe {
-            ffi::gtk_dialog_get_response_for_widget(self.upcast().to_glib_none().0,
-                widget.upcast().to_glib_none().0)
+            ffi::gtk_dialog_get_response_for_widget(self.to_glib_none().0,
+                widget.to_glib_none().0)
         };
 
         if tmp < 0 {
@@ -266,24 +266,24 @@ impl<O: Upcast<Dialog>> DialogExt for O {
         unsafe {
             from_glib_none(
                 ffi::gtk_dialog_get_widget_for_response(
-                    self.upcast().to_glib_none().0, response_id))
+                    self.to_glib_none().0, response_id))
         }
     }
 
     fn get_action_area(&self) -> Widget {
-        unsafe { from_glib_none(ffi::gtk_dialog_get_action_area(self.upcast().to_glib_none().0)) }
+        unsafe { from_glib_none(ffi::gtk_dialog_get_action_area(self.to_glib_none().0)) }
     }
 
     fn get_content_area(&self) -> Box {
-        unsafe { from_glib_none(ffi::gtk_dialog_get_content_area(self.upcast().to_glib_none().0)) }
+        unsafe { from_glib_none(ffi::gtk_dialog_get_content_area(self.to_glib_none().0)) }
     }
 
     #[cfg(gtk_3_12)]
     fn get_header_bar(&self) -> Option<HeaderBar> {
         unsafe {
             Option::<Widget>::from_glib_none(
-                ffi::gtk_dialog_get_header_bar(self.upcast().to_glib_none().0))
-                .map(Downcast::downcast_unchecked)
+                ffi::gtk_dialog_get_header_bar(self.to_glib_none().0))
+                .map(|w| w.downcast_unchecked())
         }
     }
 }

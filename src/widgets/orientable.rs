@@ -24,13 +24,13 @@ pub trait OrientableExt {
 impl<O: Upcast<Orientable>> OrientableExt for O {
     fn get_orientation(&self) -> Orientation {
         unsafe {
-            ffi::gtk_orientable_get_orientation(self.upcast().to_glib_none().0)
+            ffi::gtk_orientable_get_orientation(self.to_glib_none().0)
         }
     }
 
     fn set_orientation(&self, orientation: Orientation) {
         unsafe {
-            ffi::gtk_orientable_set_orientation(self.upcast().to_glib_none().0, orientation)
+            ffi::gtk_orientable_set_orientation(self.to_glib_none().0, orientation)
         }
     }
 }

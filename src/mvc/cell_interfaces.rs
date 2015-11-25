@@ -28,11 +28,11 @@ pub trait CellEditableExt {
 
 impl<O: Upcast<CellEditable>> CellEditableExt for O {
     fn editing_done(&self) {
-        unsafe { ffi::gtk_cell_editable_editing_done(self.upcast().to_glib_none().0) }
+        unsafe { ffi::gtk_cell_editable_editing_done(self.to_glib_none().0) }
     }
 
     fn remove_widget(&self) {
-        unsafe { ffi::gtk_cell_editable_remove_widget(self.upcast().to_glib_none().0) }
+        unsafe { ffi::gtk_cell_editable_remove_widget(self.to_glib_none().0) }
     }
 }
 
@@ -59,20 +59,20 @@ pub trait CellLayoutExt {
 impl<O: Upcast<CellLayout>> CellLayoutExt for O {
     fn pack_start<T: Upcast<CellRenderer>>(&self, cell: &T, expand: bool) {
         unsafe {
-            ffi::gtk_cell_layout_pack_start(self.upcast().to_glib_none().0,
-                cell.upcast().to_glib_none().0, expand.to_glib())
+            ffi::gtk_cell_layout_pack_start(self.to_glib_none().0,
+                cell.to_glib_none().0, expand.to_glib())
         }
     }
 
     fn pack_end<T: Upcast<CellRenderer>>(&self, cell: &T, expand: bool) {
         unsafe {
-            ffi::gtk_cell_layout_pack_end(self.upcast().to_glib_none().0,
-                cell.upcast().to_glib_none().0, expand.to_glib())
+            ffi::gtk_cell_layout_pack_end(self.to_glib_none().0,
+                cell.to_glib_none().0, expand.to_glib())
         }
     }
 
     /*fn get_area(&self) -> Option<::CellArea> {
-        let tmp = unsafe { ffi::gtk_cell_layout_get_area(self.upcast().to_glib_none().0) };
+        let tmp = unsafe { ffi::gtk_cell_layout_get_area(self.to_glib_none().0) };
 
         if tmp.is_null() {
             None
@@ -83,32 +83,32 @@ impl<O: Upcast<CellLayout>> CellLayoutExt for O {
 
     fn get_cells(&self) -> Vec<CellRenderer> {
         unsafe {
-            Vec::from_glib_container(ffi::gtk_cell_layout_get_cells(self.upcast().to_glib_none().0))
+            Vec::from_glib_container(ffi::gtk_cell_layout_get_cells(self.to_glib_none().0))
         }
     }
 
     fn reorder<T: Upcast<CellRenderer>>(&self, cell: &T, position: i32) {
         unsafe {
-            ffi::gtk_cell_layout_reorder(self.upcast().to_glib_none().0,
-                cell.upcast().to_glib_none().0, position)
+            ffi::gtk_cell_layout_reorder(self.to_glib_none().0,
+                cell.to_glib_none().0, position)
         }
     }
 
     fn clear(&self) {
-        unsafe { ffi::gtk_cell_layout_clear(self.upcast().to_glib_none().0) }
+        unsafe { ffi::gtk_cell_layout_clear(self.to_glib_none().0) }
     }
 
     fn add_attribute<T: Upcast<CellRenderer>>(&self, cell: &T, attribute: &str, column: i32) {
         unsafe {
-            ffi::gtk_cell_layout_add_attribute(self.upcast().to_glib_none().0,
-                cell.upcast().to_glib_none().0, attribute.to_glib_none().0, column)
+            ffi::gtk_cell_layout_add_attribute(self.to_glib_none().0,
+                cell.to_glib_none().0, attribute.to_glib_none().0, column)
         }
     }
 
     fn clear_attributes<T: Upcast<CellRenderer>>(&self, cell: &T) {
         unsafe {
-            ffi::gtk_cell_layout_clear_attributes(self.upcast().to_glib_none().0,
-                cell.upcast().to_glib_none().0)
+            ffi::gtk_cell_layout_clear_attributes(self.to_glib_none().0,
+                cell.to_glib_none().0)
         }
     }
 }

@@ -32,7 +32,7 @@ impl MessageDialog {
             buttons: ButtonsType) -> MessageDialog {
         unsafe { 
             Widget::from_glib_none(ffi::gtk_message_dialog_new(
-                parent.map(|w| w.upcast()).to_glib_none().0, flags, type_, buttons, ptr::null()))
+                parent.to_glib_none().0, flags, type_, buttons, ptr::null()))
                 .downcast_unchecked()
         }
     }

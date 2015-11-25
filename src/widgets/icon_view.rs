@@ -42,7 +42,7 @@ impl IconView {
     pub fn new_with_model<T: Upcast<TreeModel>>(model: &T) -> IconView {
         unsafe {
             Widget::from_glib_none(
-                ffi::gtk_icon_view_new_with_model(model.upcast().to_glib_none().0))
+                ffi::gtk_icon_view_new_with_model(model.to_glib_none().0))
                 .downcast_unchecked()
         }
     }
@@ -50,7 +50,7 @@ impl IconView {
     pub fn set_model<T: Upcast<TreeModel>>(&self, model: Option<&T>) {
         unsafe {
             ffi::gtk_icon_view_set_model(self.to_glib_none().0,
-                model.map(|w| w.upcast()).to_glib_none().0)
+                model.to_glib_none().0)
         }
     }
 
@@ -119,7 +119,7 @@ impl IconView {
                                                start_edition: bool) {
         unsafe {
             ffi::gtk_icon_view_set_cursor(self.to_glib_none().0, path.unwrap_pointer(),
-                cell.map(|c| c.upcast()).to_glib_none().0, start_edition.to_glib());
+                cell.to_glib_none().0, start_edition.to_glib());
         }
     }
 

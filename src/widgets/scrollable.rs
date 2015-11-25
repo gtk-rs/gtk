@@ -34,45 +34,45 @@ pub trait ScrollableExt {
 impl<O: Upcast<Scrollable>> ScrollableExt for O {
     fn get_hadjustment(&self) -> Adjustment {
         unsafe {
-            from_glib_none(ffi::gtk_scrollable_get_hadjustment(self.upcast().to_glib_none().0))
+            from_glib_none(ffi::gtk_scrollable_get_hadjustment(self.to_glib_none().0))
         }
     }
 
     fn set_hadjustment(&self, hadjustment: &Adjustment) {
         unsafe {
-            ffi::gtk_scrollable_set_hadjustment(self.upcast().to_glib_none().0,
+            ffi::gtk_scrollable_set_hadjustment(self.to_glib_none().0,
                 hadjustment.to_glib_none().0)
         }
     }
 
     fn get_vadjustment(&self) -> Adjustment {
         unsafe {
-            from_glib_none(ffi::gtk_scrollable_get_vadjustment(self.upcast().to_glib_none().0))
+            from_glib_none(ffi::gtk_scrollable_get_vadjustment(self.to_glib_none().0))
         }
     }
 
     fn set_vadjustment(&self, vadjustment: &Adjustment) {
         unsafe {
-            ffi::gtk_scrollable_set_vadjustment(self.upcast().to_glib_none().0,
+            ffi::gtk_scrollable_set_vadjustment(self.to_glib_none().0,
                 vadjustment.to_glib_none().0)
         }
     }
 
     fn get_hscroll_policy(&self) -> ScrollablePolicy {
-        unsafe { ffi::gtk_scrollable_get_hscroll_policy(self.upcast().to_glib_none().0) }
+        unsafe { ffi::gtk_scrollable_get_hscroll_policy(self.to_glib_none().0) }
     }
 
     fn set_hscroll_policy(&self, policy: ScrollablePolicy) {
         unsafe {
-            ffi::gtk_scrollable_set_hscroll_policy(self.upcast().to_glib_none().0, policy)
+            ffi::gtk_scrollable_set_hscroll_policy(self.to_glib_none().0, policy)
         }
     }
 
     fn get_vscroll_policy(&self) -> ScrollablePolicy {
-        unsafe { ffi::gtk_scrollable_get_vscroll_policy(self.upcast().to_glib_none().0) }
+        unsafe { ffi::gtk_scrollable_get_vscroll_policy(self.to_glib_none().0) }
     }
 
     fn set_vscroll_policy(&self, policy: ScrollablePolicy) {
-        unsafe { ffi::gtk_scrollable_set_vscroll_policy(self.upcast().to_glib_none().0, policy) }
+        unsafe { ffi::gtk_scrollable_set_vscroll_policy(self.to_glib_none().0, policy) }
     }
 }

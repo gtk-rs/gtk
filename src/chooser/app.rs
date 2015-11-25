@@ -25,17 +25,17 @@ pub trait AppChooserExt {
 
 impl<O: Upcast<AppChooser>> AppChooserExt for O {
     fn get_app_info(&self) -> Option<AppInfo> {
-        unsafe { from_glib_full(ffi::gtk_app_chooser_get_app_info(self.upcast().to_glib_none().0)) }
+        unsafe { from_glib_full(ffi::gtk_app_chooser_get_app_info(self.to_glib_none().0)) }
     }
 
     fn get_content_type(&self) -> Option<String> {
         unsafe {
             from_glib_full(
-                ffi::gtk_app_chooser_get_content_type(self.upcast().to_glib_none().0))
+                ffi::gtk_app_chooser_get_content_type(self.to_glib_none().0))
         }
     }
 
     fn refresh(&self) {
-        unsafe { ffi::gtk_app_chooser_refresh(self.upcast().to_glib_none().0) }
+        unsafe { ffi::gtk_app_chooser_refresh(self.to_glib_none().0) }
     }
 }

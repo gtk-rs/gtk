@@ -176,7 +176,7 @@ impl TreeViewColumn {
 
     pub fn set_widget<T: Upcast<Widget>>(&self, widget: &T) {
         unsafe {
-            ffi::gtk_tree_view_column_set_widget(self.to_glib_none().0, widget.upcast().to_glib_none().0)
+            ffi::gtk_tree_view_column_set_widget(self.to_glib_none().0, widget.to_glib_none().0)
         }
     }
 
@@ -276,7 +276,7 @@ impl TreeViewColumn {
         unsafe {
             ffi::gtk_tree_view_column_add_attribute(
                 self.to_glib_none().0,
-                cell.upcast().to_glib_none().0,
+                cell.to_glib_none().0,
                 attribute.to_glib_none().0,
                 column)
         }
@@ -285,21 +285,21 @@ impl TreeViewColumn {
     pub fn clear_attributes<T: Upcast<CellRenderer>>(&self, cell: &T) {
         unsafe {
             ffi::gtk_tree_view_column_clear_attributes(self.to_glib_none().0,
-                cell.upcast().to_glib_none().0)
+                cell.to_glib_none().0)
         }
     }
 
     pub fn pack_start<T: Upcast<CellRenderer>>(&self, cell: &T, expand: bool) {
         unsafe {
             ffi::gtk_tree_view_column_pack_start(self.to_glib_none().0,
-                cell.upcast().to_glib_none().0, expand.to_glib())
+                cell.to_glib_none().0, expand.to_glib())
         }
     }
 
     pub fn pack_end<T: Upcast<CellRenderer>>(&self, cell: &T, expand: bool) {
         unsafe {
             ffi::gtk_tree_view_column_pack_end(self.to_glib_none().0,
-                cell.upcast().to_glib_none().0, expand.to_glib())
+                cell.to_glib_none().0, expand.to_glib())
         }
     }
 }

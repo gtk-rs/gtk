@@ -27,20 +27,20 @@ pub trait FontChooserExt {
 
 impl<O: Upcast<FontChooser>> FontChooserExt for O {
     fn get_font_size(&self) -> i32 {
-        unsafe { ffi::gtk_font_chooser_get_font_size(self.upcast().to_glib_none().0) }
+        unsafe { ffi::gtk_font_chooser_get_font_size(self.to_glib_none().0) }
     }
 
     fn get_font(&self) -> Option<String> {
         unsafe {
             from_glib_none(
-                ffi::gtk_font_chooser_get_font(self.upcast().to_glib_none().0))
+                ffi::gtk_font_chooser_get_font(self.to_glib_none().0))
         }
     }
 
     fn set_font(&self, font_name: &str) {
         unsafe {
             ffi::gtk_font_chooser_set_font(
-                self.upcast().to_glib_none().0,
+                self.to_glib_none().0,
                 font_name.to_glib_none().0)
         }
     }
@@ -48,24 +48,24 @@ impl<O: Upcast<FontChooser>> FontChooserExt for O {
     fn get_preview_text(&self) -> Option<String> {
         unsafe {
             from_glib_none(
-                ffi::gtk_font_chooser_get_preview_text(self.upcast().to_glib_none().0))
+                ffi::gtk_font_chooser_get_preview_text(self.to_glib_none().0))
         }
     }
 
     fn set_preview_text(&self, text: &str) {
         unsafe {
-            ffi::gtk_font_chooser_set_preview_text(self.upcast().to_glib_none().0, text.to_glib_none().0)
+            ffi::gtk_font_chooser_set_preview_text(self.to_glib_none().0, text.to_glib_none().0)
         }
     }
 
     fn get_show_preview_entry(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_font_chooser_get_show_preview_entry(self.upcast().to_glib_none().0))
+            from_glib(ffi::gtk_font_chooser_get_show_preview_entry(self.to_glib_none().0))
         }
     }
 
     fn set_show_preview_entry(&self, show_preview_entry: bool) {
-        unsafe { ffi::gtk_font_chooser_set_show_preview_entry(self.upcast().to_glib_none().0,
+        unsafe { ffi::gtk_font_chooser_set_show_preview_entry(self.to_glib_none().0,
                                                               show_preview_entry.to_glib());
         }
     }

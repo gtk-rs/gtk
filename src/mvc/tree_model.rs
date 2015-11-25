@@ -247,22 +247,22 @@ pub trait TreeModelExt {
 
 impl<O: Upcast<TreeModel>> TreeModelExt for O {
     fn get_flags(&self) -> ::TreeModelFlags {
-        unsafe { ffi::gtk_tree_model_get_flags(self.upcast().to_glib_none().0) }
+        unsafe { ffi::gtk_tree_model_get_flags(self.to_glib_none().0) }
     }
 
     fn get_n_columns(&self) -> i32 {
-        unsafe { ffi::gtk_tree_model_get_n_columns(self.upcast().to_glib_none().0) }
+        unsafe { ffi::gtk_tree_model_get_n_columns(self.to_glib_none().0) }
     }
 
     fn get_column_type(&self, index_: i32) -> Type {
         unsafe {
-            from_glib(ffi::gtk_tree_model_get_column_type(self.upcast().to_glib_none().0, index_))
+            from_glib(ffi::gtk_tree_model_get_column_type(self.to_glib_none().0, index_))
         }
     }
 
     fn get_iter(&self, iter: &mut TreeIter, path: &TreePath) -> bool {
         unsafe {
-            from_glib(ffi::gtk_tree_model_get_iter(self.upcast().to_glib_none().0,
+            from_glib(ffi::gtk_tree_model_get_iter(self.to_glib_none().0,
                 iter.unwrap_pointer(), path.unwrap_pointer()))
         }
     }
@@ -270,7 +270,7 @@ impl<O: Upcast<TreeModel>> TreeModelExt for O {
     fn get_iter_from_string(&self, iter: &mut TreeIter, path_string: &str) -> bool {
         unsafe {
             from_glib(
-                ffi::gtk_tree_model_get_iter_from_string(self.upcast().to_glib_none().0,
+                ffi::gtk_tree_model_get_iter_from_string(self.to_glib_none().0,
                     iter.unwrap_pointer(), path_string.to_glib_none().0))
         }
     }
@@ -278,14 +278,14 @@ impl<O: Upcast<TreeModel>> TreeModelExt for O {
     fn get_iter_first(&self, iter: &mut TreeIter) -> bool {
         unsafe {
             from_glib(
-                ffi::gtk_tree_model_get_iter_first(self.upcast().to_glib_none().0,
+                ffi::gtk_tree_model_get_iter_first(self.to_glib_none().0,
                     iter.unwrap_pointer()))
         }
     }
 
     fn get_path(&self, iter: &TreeIter) -> Option<TreePath> {
         let tmp_pointer = unsafe {
-            ffi::gtk_tree_model_get_path(self.upcast().to_glib_none().0, iter.unwrap_pointer())
+            ffi::gtk_tree_model_get_path(self.to_glib_none().0, iter.unwrap_pointer())
         };
 
         if tmp_pointer.is_null() {
@@ -298,7 +298,7 @@ impl<O: Upcast<TreeModel>> TreeModelExt for O {
     fn get_value(&self, iter: &TreeIter, column: i32) -> Value {
         unsafe {
             let mut value = Value::new();
-            ffi::gtk_tree_model_get_value(self.upcast().to_glib_none().0, iter.unwrap_pointer(),
+            ffi::gtk_tree_model_get_value(self.to_glib_none().0, iter.unwrap_pointer(),
                 column, value.as_mut_ptr());
             value
         }
@@ -307,7 +307,7 @@ impl<O: Upcast<TreeModel>> TreeModelExt for O {
     fn iter_next(&self, iter: &mut TreeIter) -> bool {
         unsafe {
             from_glib(
-                ffi::gtk_tree_model_iter_next(self.upcast().to_glib_none().0,
+                ffi::gtk_tree_model_iter_next(self.to_glib_none().0,
                     iter.unwrap_pointer()))
         }
     }
@@ -315,7 +315,7 @@ impl<O: Upcast<TreeModel>> TreeModelExt for O {
     fn iter_previous(&self, iter: &mut TreeIter) -> bool {
         unsafe {
             from_glib(
-                ffi::gtk_tree_model_iter_previous(self.upcast().to_glib_none().0,
+                ffi::gtk_tree_model_iter_previous(self.to_glib_none().0,
                     iter.unwrap_pointer()))
         }
     }
@@ -324,7 +324,7 @@ impl<O: Upcast<TreeModel>> TreeModelExt for O {
         unsafe {
             from_glib(
                 ffi::gtk_tree_model_iter_children(
-                    self.upcast().to_glib_none().0,
+                    self.to_glib_none().0,
                     iter.unwrap_pointer(),
                     parent.map_or(ptr::null_mut(), |p| p.unwrap_pointer())))
         }
@@ -333,7 +333,7 @@ impl<O: Upcast<TreeModel>> TreeModelExt for O {
     fn iter_has_child(&self, iter: &TreeIter) -> bool {
         unsafe {
             from_glib(
-                ffi::gtk_tree_model_iter_has_child(self.upcast().to_glib_none().0,
+                ffi::gtk_tree_model_iter_has_child(self.to_glib_none().0,
                     iter.unwrap_pointer()))
         }
     }
@@ -341,7 +341,7 @@ impl<O: Upcast<TreeModel>> TreeModelExt for O {
     fn iter_n_children(&self, iter: Option<&TreeIter>) -> i32 {
         unsafe {
             ffi::gtk_tree_model_iter_n_children(
-                self.upcast().to_glib_none().0,
+                self.to_glib_none().0,
                 iter.map_or(ptr::null_mut(), |p| p.unwrap_pointer()))
         }
     }
@@ -350,7 +350,7 @@ impl<O: Upcast<TreeModel>> TreeModelExt for O {
         unsafe {
             from_glib(
                 ffi::gtk_tree_model_iter_nth_child(
-                    self.upcast().to_glib_none().0,
+                    self.to_glib_none().0,
                     iter.unwrap_pointer(),
                     parent.map_or(ptr::null_mut(), |p| p.unwrap_pointer()),
                     n))
@@ -360,7 +360,7 @@ impl<O: Upcast<TreeModel>> TreeModelExt for O {
     fn iter_parent(&self, iter: &mut TreeIter, child: &TreeIter) -> bool {
         unsafe { 
             from_glib(
-                ffi::gtk_tree_model_iter_parent(self.upcast().to_glib_none().0,
+                ffi::gtk_tree_model_iter_parent(self.to_glib_none().0,
                     iter.unwrap_pointer(), child.unwrap_pointer()))
         }
     }
@@ -368,41 +368,41 @@ impl<O: Upcast<TreeModel>> TreeModelExt for O {
     fn get_string_from_iter(&self, iter: &TreeIter) -> Option<String> {
         unsafe {
             from_glib_full(
-                ffi::gtk_tree_model_get_string_from_iter(self.upcast().to_glib_none().0,
+                ffi::gtk_tree_model_get_string_from_iter(self.to_glib_none().0,
                     iter.unwrap_pointer()))
         }
     }
 
     fn row_changed(&self, path: &TreePath, iter: &TreeIter) {
         unsafe {
-            ffi::gtk_tree_model_row_changed(self.upcast().to_glib_none().0, path.unwrap_pointer(),
+            ffi::gtk_tree_model_row_changed(self.to_glib_none().0, path.unwrap_pointer(),
                 iter.unwrap_pointer());
         }
     }
 
     fn row_inserted(&self, path: &TreePath, iter: &TreeIter) {
         unsafe {
-            ffi::gtk_tree_model_row_inserted(self.upcast().to_glib_none().0, path.unwrap_pointer(), iter.unwrap_pointer());
+            ffi::gtk_tree_model_row_inserted(self.to_glib_none().0, path.unwrap_pointer(), iter.unwrap_pointer());
         }
     }
 
     fn row_has_child_toggled(&self, path: &TreePath, iter: &TreeIter) {
         unsafe {
-            ffi::gtk_tree_model_row_has_child_toggled(self.upcast().to_glib_none().0,
+            ffi::gtk_tree_model_row_has_child_toggled(self.to_glib_none().0,
                 path.unwrap_pointer(), iter.unwrap_pointer());
         }
     }
 
     fn row_deleted(&self, path: &TreePath) {
         unsafe {
-            ffi::gtk_tree_model_row_deleted(self.upcast().to_glib_none().0, path.unwrap_pointer());
+            ffi::gtk_tree_model_row_deleted(self.to_glib_none().0, path.unwrap_pointer());
         }
     }
 
     fn rows_reordered(&self, path: &TreePath, iter: Option<&TreeIter>, new_order: &mut [i32]) {
         unsafe {
             ffi::gtk_tree_model_rows_reordered(
-                self.upcast().to_glib_none().0,
+                self.to_glib_none().0,
                 path.unwrap_pointer(),
                 iter.map_or(ptr::null_mut(), |p| p.unwrap_pointer()),
                 new_order.as_mut_ptr());
@@ -411,13 +411,13 @@ impl<O: Upcast<TreeModel>> TreeModelExt for O {
 
     fn ref_node(&self, iter: &TreeIter) {
         unsafe {
-            ffi::gtk_tree_model_ref_node(self.upcast().to_glib_none().0, iter.unwrap_pointer());
+            ffi::gtk_tree_model_ref_node(self.to_glib_none().0, iter.unwrap_pointer());
         }
     }
 
     fn unref_node(&self, iter: &TreeIter) {
         unsafe {
-            ffi::gtk_tree_model_unref_node(self.upcast().to_glib_none().0, iter.unwrap_pointer());
+            ffi::gtk_tree_model_unref_node(self.to_glib_none().0, iter.unwrap_pointer());
         }
     }
 }

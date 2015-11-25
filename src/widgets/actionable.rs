@@ -27,20 +27,20 @@ pub trait ActionableExt {
 impl<O: Upcast<Actionable>> ActionableExt for O {
     fn get_action_name(&self) -> Option<String> {
         unsafe {
-            from_glib_none(ffi::gtk_actionable_get_action_name(self.upcast().to_glib_none().0))
+            from_glib_none(ffi::gtk_actionable_get_action_name(self.to_glib_none().0))
         }
     }
 
     fn set_action_name(&self, action_name: &str) {
         unsafe {
-            ffi::gtk_actionable_set_action_name(self.upcast().to_glib_none().0,
+            ffi::gtk_actionable_set_action_name(self.to_glib_none().0,
                 action_name.to_glib_none().0)
         }
     }
 
     fn set_detailed_action_name(&self, detailed_action_name: &str) {
         unsafe {
-            ffi::gtk_actionable_set_detailed_action_name(self.upcast().to_glib_none().0,
+            ffi::gtk_actionable_set_detailed_action_name(self.to_glib_none().0,
                 detailed_action_name.to_glib_none().0)
         }
     }

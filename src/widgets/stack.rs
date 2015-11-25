@@ -30,21 +30,21 @@ impl Stack {
 
     pub fn add_named<T: Upcast<Widget>>(&self, child: &T, name: &str) {
         unsafe {
-            ffi::gtk_stack_add_named(self.to_glib_none().0, child.upcast().to_glib_none().0,
+            ffi::gtk_stack_add_named(self.to_glib_none().0, child.to_glib_none().0,
                 name.to_glib_none().0)
         }
     }
 
     pub fn add_titled<T: Upcast<Widget>>(&self, child: &T, name: &str, title: &str) {
         unsafe {
-            ffi::gtk_stack_add_titled(self.to_glib_none().0, child.upcast().to_glib_none().0,
+            ffi::gtk_stack_add_titled(self.to_glib_none().0, child.to_glib_none().0,
                 name.to_glib_none().0, title.to_glib_none().0)
         }
     }
 
     pub fn set_visible_child<T: Upcast<Widget>>(&self, child: &T) {
         unsafe {
-            ffi::gtk_stack_set_visible_child(self.to_glib_none().0, child.upcast().to_glib_none().0)
+            ffi::gtk_stack_set_visible_child(self.to_glib_none().0, child.to_glib_none().0)
         }
     }
 
