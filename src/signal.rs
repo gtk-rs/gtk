@@ -1604,7 +1604,7 @@ mod status_icon {
         fn connect_activate<F: Fn(StatusIcon) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(StatusIcon) + 'static>> = Box::new(Box::new(f));
-                connect(self.to_glib_none().0 as *mut _, "activate",
+                connect(self.to_glib_none().0, "activate",
                     transmute(void_trampoline), into_raw(f) as *mut _)
             }
         }
@@ -1612,7 +1612,7 @@ mod status_icon {
         fn connect_button_press_event<F: Fn(StatusIcon, &EventButton) -> bool + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(StatusIcon, &EventButton) -> bool + 'static>> = Box::new(Box::new(f));
-                connect(self.to_glib_none().0 as *mut _, "button-press-event",
+                connect(self.to_glib_none().0, "button-press-event",
                     transmute(event_trampoline), into_raw(f) as *mut _)
             }
         }
@@ -1620,7 +1620,7 @@ mod status_icon {
         fn connect_button_release_event<F: Fn(StatusIcon, &EventButton) -> bool + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(StatusIcon, &EventButton) -> bool + 'static>> = Box::new(Box::new(f));
-                connect(self.to_glib_none().0 as *mut _, "button-release-event",
+                connect(self.to_glib_none().0, "button-release-event",
                     transmute(event_trampoline), into_raw(f) as *mut _)
             }
         }
@@ -1628,7 +1628,7 @@ mod status_icon {
         fn connect_popup_menu<F: Fn(StatusIcon, u32, u32) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(StatusIcon, u32, u32) + 'static>> = Box::new(Box::new(f));
-                connect(self.to_glib_none().0 as *mut _, "popup-menu",
+                connect(self.to_glib_none().0, "popup-menu",
                     transmute(popup_menu_trampoline), into_raw(f) as *mut _)
             }
         }
@@ -1636,7 +1636,7 @@ mod status_icon {
         fn connect_query_tooltip<F: Fn(StatusIcon, i32, i32, bool, Tooltip) -> bool + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(StatusIcon, i32, i32, bool, Tooltip) -> bool + 'static>> = Box::new(Box::new(f));
-                connect(self.to_glib_none().0 as *mut _, "query-tooltip",
+                connect(self.to_glib_none().0, "query-tooltip",
                     transmute(query_tooltip_trampoline), into_raw(f) as *mut _)
             }
         }
@@ -1644,7 +1644,7 @@ mod status_icon {
         fn connect_scroll_event<F: Fn(StatusIcon, &EventScroll) -> bool + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(StatusIcon, &EventScroll) -> bool + 'static>> = Box::new(Box::new(f));
-                connect(self.to_glib_none().0 as *mut _, "scroll-event",
+                connect(self.to_glib_none().0, "scroll-event",
                     transmute(event_trampoline), into_raw(f) as *mut _)
             }
         }
@@ -1652,7 +1652,7 @@ mod status_icon {
         fn connect_size_changed<F: Fn(StatusIcon, i32) -> bool + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(StatusIcon, i32) -> bool + 'static>> = Box::new(Box::new(f));
-                connect(self.to_glib_none().0 as *mut _, "size-changed",
+                connect(self.to_glib_none().0, "size-changed",
                     transmute(size_changed_trampoline), into_raw(f) as *mut _)
             }
         }
