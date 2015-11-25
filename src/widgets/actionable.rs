@@ -5,22 +5,18 @@
 //! GtkActionable — An interface for widgets that can be associated with actions
 
 use glib::translate::*;
-use glib::types;
 use ffi;
 
-use object::{Object, Upcast};
+use glib::object::Upcast;
 use super::widget::Widget;
 
-pub type Actionable = Object<ffi::GtkActionable>;
+glib_wrapper! {
+    pub struct Actionable(Object<ffi::GtkActionable>): Widget;
 
-impl types::StaticType for Actionable {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_actionable_get_type()) }
+    match fn {
+        get_type => || ffi::gtk_actionable_get_type(),
     }
 }
-
-unsafe impl Upcast<Widget> for Actionable { }
 
 pub trait ActionableExt {
     fn get_action_name(&self) -> Option<String>;

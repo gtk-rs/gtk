@@ -44,6 +44,7 @@ extern crate gdk_pixbuf_sys as gdk_pixbuf_ffi;
 extern crate gtk_sys as ffi;
 extern crate cairo_sys as cairo_ffi;
 extern crate pango_sys as pango_ffi;
+#[macro_use]
 extern crate glib;
 extern crate gdk;
 extern crate cairo;
@@ -154,7 +155,6 @@ pub mod mvc {
     pub mod tree_view;
     pub mod tree_view_column;
 }
-pub mod object;
 pub mod prelude;
 pub mod rt;
 pub mod widgets;

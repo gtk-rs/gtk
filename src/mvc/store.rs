@@ -6,16 +6,20 @@ use std::ptr;
 use libc::{c_char, c_int};
 
 use glib::translate::*;
-use glib::types::{StaticType, Type};
-use glib::Value;
+use glib::{Type, Value};
 use ffi;
 
-use object::{Object, Upcast};
 use super::tree_model::{TreeIter, TreeModel};
 
 ///////////////////////////////////////////////////////////////////////////////
 
-pub type ListStore = Object<ffi::GtkListStore>;
+glib_wrapper! {
+    pub struct ListStore(Object<ffi::GtkListStore>): TreeModel, ::Buildable;
+
+    match fn {
+        get_type => || ffi::gtk_list_store_get_type(),
+    }
+}
 
 impl ListStore {
     pub fn new(column_types: &[Type]) -> ListStore {
@@ -118,19 +122,15 @@ impl ListStore {
     }
 }
 
-impl StaticType for ListStore {
-    #[inline]
-    fn static_type() -> Type {
-        unsafe { from_glib(ffi::gtk_list_store_get_type()) }
-    }
-}
-
-unsafe impl Upcast<TreeModel> for ListStore { }
-unsafe impl Upcast<::Buildable> for ListStore { }
-
 ///////////////////////////////////////////////////////////////////////////////
 
-pub type TreeStore = Object<ffi::GtkTreeStore>;
+glib_wrapper! {
+    pub struct TreeStore(Object<ffi::GtkTreeStore>): TreeModel, ::Buildable;
+
+    match fn {
+        get_type => || ffi::gtk_tree_store_get_type(),
+    }
+}
 
 impl TreeStore {
     pub fn new(column_types: &[Type]) -> TreeStore {
@@ -268,13 +268,3 @@ impl TreeStore {
             columns.as_ptr(), tmp_values.as_slice().as_ptr()) }
     }*/
 }
-
-impl StaticType for TreeStore {
-    #[inline]
-    fn static_type() -> Type {
-        unsafe { from_glib(ffi::gtk_tree_store_get_type()) }
-    }
-}
-
-unsafe impl Upcast<TreeModel> for TreeStore { }
-unsafe impl Upcast<::Buildable> for TreeStore { }

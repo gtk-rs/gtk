@@ -3,17 +3,22 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 use glib::translate::*;
-use glib::types;
 use ffi;
 
-use object::{Object, Upcast, Downcast};
+use glib::object::{Downcast, Upcast};
 use super::widget::Widget;
 use {
     Orientation,
     PackType,
 };
 
-pub type Box = Object<ffi::GtkBox>;
+glib_wrapper! {
+    pub struct Box(Object<ffi::GtkBox>): Widget, ::Container, ::Orientable, ::Buildable;
+
+    match fn {
+        get_type => || ffi::gtk_box_get_type(),
+    }
+}
 
 impl Box {
     pub fn new(orientation: Orientation, spacing: i32) -> Box {
@@ -22,18 +27,6 @@ impl Box {
         }
     }
 }
-
-impl types::StaticType for Box {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_box_get_type()) }
-    }
-}
-
-unsafe impl Upcast<Widget> for Box { }
-unsafe impl Upcast<::Container> for Box { }
-unsafe impl Upcast<::Orientable> for Box { }
-unsafe impl Upcast<::Buildable> for Box { }
 
 pub trait BoxExt {
     fn pack_start<T: Upcast<Widget>>(&self, child: &T, expand: bool, fill: bool, padding: u32);

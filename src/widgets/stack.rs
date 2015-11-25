@@ -3,10 +3,9 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 use glib::translate::*;
-use glib::types;
 use ffi;
 
-use object::{Object, Downcast, Upcast};
+use glib::object::{Downcast, Upcast};
 use super::widget::Widget;
 
 use {
@@ -16,11 +15,13 @@ use {
 ///////////////////////////////////////////////////////////////////////////////
 
 /// A stacking container.
-pub type Stack = Object<ffi::GtkStack>;
+glib_wrapper! {
+    pub struct Stack(Object<ffi::GtkStack>): Widget, ::Container, ::Buildable;
 
-unsafe impl Upcast<Widget> for Stack { }
-unsafe impl Upcast<::Container> for Stack { }
-unsafe impl Upcast<::Buildable> for Stack { }
+    match fn {
+        get_type => || ffi::gtk_stack_get_type(),
+    }
+}
 
 impl Stack {
     pub fn new() -> Stack {
@@ -93,23 +94,17 @@ impl Stack {
     }
 }
 
-impl types::StaticType for Stack {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_stack_get_type()) }
-    }
-}
-
 ///////////////////////////////////////////////////////////////////////////////
 
 /// A controller for GtkStack.
-pub type StackSwitcher = Object<ffi::GtkStackSwitcher>;
+glib_wrapper! {
+    pub struct StackSwitcher(Object<ffi::GtkStackSwitcher>): Widget, ::Container, ::Box, ::Orientable,
+        ::Buildable;
 
-unsafe impl Upcast<Widget> for StackSwitcher { }
-unsafe impl Upcast<::Container> for StackSwitcher { }
-unsafe impl Upcast<::Box> for StackSwitcher { }
-unsafe impl Upcast<::Orientable> for StackSwitcher { }
-unsafe impl Upcast<::Buildable> for StackSwitcher { }
+    match fn {
+        get_type => || ffi::gtk_stack_switcher_get_type(),
+    }
+}
 
 impl StackSwitcher {
     pub fn new() -> StackSwitcher {
@@ -123,12 +118,5 @@ impl StackSwitcher {
 
     pub fn get_stack(&self) -> Option<Stack> {
         unsafe { from_glib_none(ffi::gtk_stack_switcher_get_stack(self.to_glib_none().0)) }
-    }
-}
-
-impl types::StaticType for StackSwitcher {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_stack_switcher_get_type()) }
     }
 }

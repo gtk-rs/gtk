@@ -5,20 +5,18 @@
 //! An interface for scrollable widgets
 
 use glib::translate::*;
-use glib::types;
 use ffi;
 
 use Adjustment;
-use object::{Object, Upcast};
+use glib::object::Upcast;
 
 use ScrollablePolicy;
 
-pub type Scrollable = Object<ffi::GtkScrollable>;
+glib_wrapper! {
+    pub struct Scrollable(Object<ffi::GtkScrollable>);
 
-impl types::StaticType for Scrollable {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_scrollable_get_type()) }
+    match fn {
+        get_type => || ffi::gtk_scrollable_get_type(),
     }
 }
 

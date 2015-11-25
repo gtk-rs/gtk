@@ -5,17 +5,15 @@
 use libc::{c_char, c_int};
 
 use glib::translate::*;
-use glib::types;
 use ffi;
 
-use object::{Object, Upcast};
+use glib::object::Upcast;
 
-pub type Editable = Object<ffi::GtkEditable>;
+glib_wrapper! {
+    pub struct Editable(Object<ffi::GtkEditable>);
 
-impl types::StaticType for Editable {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_editable_get_type()) }
+    match fn {
+        get_type => || ffi::gtk_editable_get_type(),
     }
 }
 

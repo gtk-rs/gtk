@@ -6,11 +6,10 @@ use libc::c_char;
 
 use glib::glib_container::GlibContainer;
 use glib::translate::*;
-use glib::types;
 use glib::Error;
 use ffi;
 
-use object::{Object, Upcast};
+use glib::object::Upcast;
 use widgets::widget::Widget;
 
 use {
@@ -19,7 +18,13 @@ use {
 
 //////////////////////////////////////////////////////////////////////////////
 
-pub type FileFilter = Object<ffi::GtkFileFilter>;
+glib_wrapper! {
+    pub struct FileFilter(Object<ffi::GtkFileFilter>): ::Buildable;
+
+    match fn {
+        get_type => || ffi::gtk_file_filter_get_type(),
+    }
+}
 
 impl FileFilter {
     pub fn new() -> FileFilter {
@@ -55,27 +60,15 @@ impl FileFilter {
     }
 }
 
-impl types::StaticType for FileFilter {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_file_filter_get_type()) }
-    }
-}
-
-unsafe impl Upcast<::Buildable> for FileFilter { }
-
 //////////////////////////////////////////////////////////////////////////////
 
-pub type FileChooser = Object<ffi::GtkFileChooser>;
+glib_wrapper! {
+    pub struct FileChooser(Object<ffi::GtkFileChooser>): Widget;
 
-impl types::StaticType for FileChooser {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_file_chooser_get_type()) }
+    match fn {
+        get_type => || ffi::gtk_file_chooser_get_type(),
     }
 }
-
-unsafe impl Upcast<Widget> for FileChooser { }
 
 pub trait FileChooserExt {
     fn set_action(&self, action: FileChooserAction);

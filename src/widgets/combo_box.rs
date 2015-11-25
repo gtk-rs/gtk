@@ -3,18 +3,24 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 use glib::translate::*;
-use glib::types;
 use ffi;
 
 use mvc::tree_model::{TreeIter, TreeModel};
-use object::{Object, Downcast, Upcast};
+use glib::object::{Downcast, Upcast};
 use super::widget::Widget;
 
 use SensitivityType;
 
 ///////////////////////////////////////////////////////////////////////////////
 
-pub type ComboBox = Object<ffi::GtkComboBox>;
+glib_wrapper! {
+    pub struct ComboBox(Object<ffi::GtkComboBox>): Widget, ::Container, ::Bin, ::CellEditable,
+        ::CellLayout, ::Buildable;
+
+    match fn {
+        get_type => || ffi::gtk_combo_box_get_type(),
+    }
+}
 
 impl ComboBox {
     pub fn new() -> ComboBox {
@@ -51,20 +57,6 @@ impl ComboBox {
         check_pointer!(tmp_pointer, ComboBox)
     }*/
 }
-
-impl types::StaticType for ComboBox {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_combo_box_get_type()) }
-    }
-}
-
-unsafe impl Upcast<Widget> for ComboBox { }
-unsafe impl Upcast<::Container> for ComboBox { }
-unsafe impl Upcast<::Bin> for ComboBox { }
-unsafe impl Upcast<::CellEditable> for ComboBox { }
-unsafe impl Upcast<::CellLayout> for ComboBox { }
-unsafe impl Upcast<::Buildable> for ComboBox { }
 
 pub trait ComboBoxExt {
     fn get_wrap_width(&self) -> i32;
@@ -242,7 +234,14 @@ impl<O: Upcast<ComboBox>> ComboBoxExt for O {
 ///////////////////////////////////////////////////////////////////////////////
 
 /// A widget used to choose from a list of items.
-pub type ComboBoxText = Object<ffi::GtkComboBoxText>;
+glib_wrapper! {
+    pub struct ComboBoxText(Object<ffi::GtkComboBoxText>): Widget, ::Container, ::Bin, ComboBox,
+        ::CellEditable, ::CellLayout, ::Buildable;
+
+    match fn {
+        get_type => || ffi::gtk_combo_box_text_get_type(),
+    }
+}
 
 impl ComboBoxText {
     pub fn new() -> ComboBoxText {
@@ -314,18 +313,3 @@ impl ComboBoxText {
         }
     }
 }
-
-impl types::StaticType for ComboBoxText {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_combo_box_text_get_type()) }
-    }
-}
-
-unsafe impl Upcast<Widget> for ComboBoxText { }
-unsafe impl Upcast<::Container> for ComboBoxText { }
-unsafe impl Upcast<::Bin> for ComboBoxText { }
-unsafe impl Upcast<ComboBox> for ComboBoxText { }
-unsafe impl Upcast<::CellEditable> for ComboBoxText { }
-unsafe impl Upcast<::CellLayout> for ComboBoxText { }
-unsafe impl Upcast<::Buildable> for ComboBoxText { }

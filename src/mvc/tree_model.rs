@@ -10,11 +10,10 @@ use std::slice;
 use libc::{c_int, size_t};
 
 use glib::translate::*;
-use glib::types::{StaticType, Type};
-use glib::Value;
+use glib::{Type, Value};
 use ffi;
 
-use object::{Object, Upcast};
+use glib::object::Upcast;
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -210,12 +209,11 @@ impl Drop for TreePath {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-pub type TreeModel = Object<ffi::GtkTreeModel>;
+glib_wrapper! {
+    pub struct TreeModel(Object<ffi::GtkTreeModel>);
 
-impl StaticType for TreeModel {
-    #[inline]
-    fn static_type() -> Type {
-        unsafe { from_glib(ffi::gtk_tree_model_get_type()) }
+    match fn {
+        get_type => || ffi::gtk_tree_model_get_type(),
     }
 }
 

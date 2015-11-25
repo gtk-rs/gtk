@@ -6,10 +6,9 @@ use std::ptr;
 use libc::c_char;
 
 use glib::translate::*;
-use glib::types;
 use ffi;
 
-use object::{Object, Upcast};
+use glib::object::Upcast;
 
 use {
     RecentFilterFlags,
@@ -59,7 +58,13 @@ impl <'a> ToGlibPtr<'a, *mut ffi::GtkRecentData> for &'a RecentData {
 
 //////////////////////////////////////////////////////////////////////////////
 
-pub type RecentFilter = Object<ffi::GtkRecentFilter>;
+glib_wrapper! {
+    pub struct RecentFilter(Object<ffi::GtkRecentFilter>): ::Buildable;
+
+    match fn {
+        get_type => || ffi::gtk_recent_filter_get_type(),
+    }
+}
 
 impl RecentFilter {
     pub fn new() -> RecentFilter {
@@ -87,67 +92,65 @@ impl RecentFilter {
     }
 }
 
-impl types::StaticType for RecentFilter {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_recent_filter_get_type()) }
-    }
-}
-
-unsafe impl Upcast<::Buildable> for RecentFilter { }
-
 //////////////////////////////////////////////////////////////////////////////
 
-pub struct RecentInfo(*mut ffi::GtkRecentInfo);
+glib_wrapper! {
+    pub struct RecentInfo(Refcounted<ffi::GtkRecentInfo>);
+
+    match fn {
+        ref => |ptr| ffi::gtk_recent_info_ref(ptr),
+        unref => |ptr| ffi::gtk_recent_info_unref(ptr),
+    }
+}
 
 impl RecentInfo {
     pub fn get_uri(&self) -> Option<String> {
         unsafe {
-            from_glib_none(ffi::gtk_recent_info_get_uri(self.0))
+            from_glib_none(ffi::gtk_recent_info_get_uri(self.to_glib_none().0))
         }
     }
 
     pub fn get_display_name(&self) -> Option<String> {
         unsafe {
-            from_glib_none(ffi::gtk_recent_info_get_display_name(self.0))
+            from_glib_none(ffi::gtk_recent_info_get_display_name(self.to_glib_none().0))
         }
     }
 
     pub fn get_description(&self) -> Option<String> {
         unsafe {
-            from_glib_none(ffi::gtk_recent_info_get_description(self.0))
+            from_glib_none(ffi::gtk_recent_info_get_description(self.to_glib_none().0))
         }
     }
 
     pub fn get_mime_type(&self) -> Option<String> {
         unsafe {
-            from_glib_none(ffi::gtk_recent_info_get_mime_type(self.0))
+            from_glib_none(ffi::gtk_recent_info_get_mime_type(self.to_glib_none().0))
         }
     }
 
     pub fn get_added(&self) -> Option<u64> {
-        match unsafe { ffi::gtk_recent_info_get_added(self.0) } {
+        match unsafe { ffi::gtk_recent_info_get_added(self.to_glib_none().0) } {
             x if x >= 0 => Some(x as u64),
             _ => None
         }
     }
 
     pub fn get_modified(&self) -> Option<u64> {
-        match unsafe { ffi::gtk_recent_info_get_modified(self.0) } {
+        match unsafe { ffi::gtk_recent_info_get_modified(self.to_glib_none().0) } {
             x if x >= 0 => Some(x as u64),
             _ => None
         }
     }
 
     pub fn get_visited(&self) -> Option<u64> {
-        match unsafe { ffi::gtk_recent_info_get_visited(self.0) } {
+        match unsafe { ffi::gtk_recent_info_get_visited(self.to_glib_none().0) } {
             x if x >= 0 => Some(x as u64),
             _ => None
         }
     }
 
     pub fn get_private_hint(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_recent_info_get_private_hint(self.0)) }
+        unsafe { from_glib(ffi::gtk_recent_info_get_private_hint(self.to_glib_none().0)) }
     }
 
     pub fn get_application_info(&self, app_name: &str) -> Option<(String, u32, u64)> {
@@ -157,7 +160,7 @@ impl RecentInfo {
             let mut time_ = 0;
 
             match from_glib(ffi::gtk_recent_info_get_application_info(
-                    self.0, app_name.to_glib_none().0,
+                    self.to_glib_none().0, app_name.to_glib_none().0,
                     &mut app_exec, &mut count, &mut time_)) {
                 true => Some((from_glib_none(app_exec), count, time_ as u64)),
                 _ => None
@@ -168,111 +171,77 @@ impl RecentInfo {
     pub fn get_applications(&self) -> Vec<String> {
         unsafe {
             let mut length = 0;
-            let ptr = ffi::gtk_recent_info_get_applications(self.0, &mut length);
+            let ptr = ffi::gtk_recent_info_get_applications(self.to_glib_none().0, &mut length);
             Vec::from_glib_full_num(ptr as *const *const c_char, length as usize)
         }
     }
 
     pub fn last_application(&self) -> Option<String> {
         unsafe {
-            from_glib_none(ffi::gtk_recent_info_last_application(self.0))
+            from_glib_none(ffi::gtk_recent_info_last_application(self.to_glib_none().0))
         }
     }
 
     pub fn has_application(&self, app_name: &str) -> bool {
         unsafe {
-            from_glib(ffi::gtk_recent_info_has_application(self.0, app_name.to_glib_none().0))
+            from_glib(ffi::gtk_recent_info_has_application(self.to_glib_none().0, app_name.to_glib_none().0))
         }
     }
 
     pub fn get_groups(&self) -> Vec<String> {
         unsafe {
             let mut length = 0;
-            let ptr = ffi::gtk_recent_info_get_groups(self.0, &mut length);
+            let ptr = ffi::gtk_recent_info_get_groups(self.to_glib_none().0, &mut length);
             Vec::from_glib_full_num(ptr as *const *const c_char, length as usize)
         }
     }
 
     pub fn has_group(&self, group_name: &str) -> bool {
         unsafe {
-            from_glib(ffi::gtk_recent_info_has_group(self.0, group_name.to_glib_none().0))
+            from_glib(ffi::gtk_recent_info_has_group(self.to_glib_none().0, group_name.to_glib_none().0))
         }
     }
 
     pub fn get_short_name(&self) -> Option<String> {
         unsafe {
-            from_glib_none(ffi::gtk_recent_info_get_short_name(self.0))
+            from_glib_none(ffi::gtk_recent_info_get_short_name(self.to_glib_none().0))
         }
     }
 
     pub fn get_uri_display(&self) -> Option<String> {
         unsafe {
-            from_glib_none(ffi::gtk_recent_info_get_uri_display(self.0))
+            from_glib_none(ffi::gtk_recent_info_get_uri_display(self.to_glib_none().0))
         }
     }
 
     pub fn get_age(&self) -> i32 {
-        unsafe { ffi::gtk_recent_info_get_age(self.0) }
+        unsafe { ffi::gtk_recent_info_get_age(self.to_glib_none().0) }
     }
 
     pub fn is_local(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_recent_info_is_local(self.0)) }
+        unsafe { from_glib(ffi::gtk_recent_info_is_local(self.to_glib_none().0)) }
     }
 
     pub fn exists(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_recent_info_exists(self.0)) }
+        unsafe { from_glib(ffi::gtk_recent_info_exists(self.to_glib_none().0)) }
     }
 
     pub fn match_(&self, other: &RecentInfo) -> bool {
-        unsafe { from_glib(ffi::gtk_recent_info_match(self.0, other.0)) }
-    }
-}
-
-impl<'a> ToGlibPtr<'a, *mut ffi::GtkRecentInfo> for &'a RecentInfo {
-    type Storage = &'a RecentInfo;
-
-    #[inline]
-    fn to_glib_none(&self) -> Stash<'a, *mut ffi::GtkRecentInfo, &'a RecentInfo> {
-        Stash(self.0, *self)
-    }
-
-    #[inline]
-    fn to_glib_full(&self) -> *mut ffi::GtkRecentInfo {
-        unsafe { ffi::gtk_recent_info_ref(self.0); }
-        self.0
-    }
-}
-
-impl FromGlibPtr<*mut ffi::GtkRecentInfo> for RecentInfo {
-    #[inline]
-    unsafe fn from_glib_none(ptr: *mut ffi::GtkRecentInfo) -> RecentInfo {
-        assert!(!ptr.is_null());
-        ffi::gtk_recent_info_ref(ptr);
-        RecentInfo(ptr)
-    }
-
-    #[inline]
-    unsafe fn from_glib_full(ptr: *mut ffi::GtkRecentInfo) -> RecentInfo {
-        assert!(!ptr.is_null());
-        RecentInfo(ptr)
-    }
-}
-
-impl Clone for RecentInfo {
-    fn clone(&self) -> RecentInfo {
-        unsafe { from_glib_none(self.0) }
-    }
-}
-
-impl Drop for RecentInfo {
-    fn drop(&mut self) {
-        unsafe { ffi::gtk_recent_info_unref(self.0); }
+        unsafe {
+            from_glib(ffi::gtk_recent_info_match(self.to_glib_none().0, other.to_glib_none().0))
+        }
     }
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
-pub type RecentManager = Object<ffi::GtkRecentManager>;
+glib_wrapper! {
+    pub struct RecentManager(Object<ffi::GtkRecentManager>);
+
+    match fn {
+        get_type => || ffi::gtk_recent_manager_get_type(),
+    }
+}
 
 impl RecentManager {
     /// Creates a new recent manager object.
@@ -315,21 +284,13 @@ impl RecentManager {
     }
 }
 
-impl types::StaticType for RecentManager {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_recent_manager_get_type()) }
-    }
-}
-
 //////////////////////////////////////////////////////////////////////////////
 
-pub type RecentChooser = Object<ffi::GtkRecentChooser>;
+glib_wrapper! {
+    pub struct RecentChooser(Object<ffi::GtkRecentChooser>);
 
-impl types::StaticType for RecentChooser {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_recent_chooser_get_type()) }
+    match fn {
+        get_type => || ffi::gtk_recent_chooser_get_type(),
     }
 }
 

@@ -5,24 +5,22 @@
 //! A container for arranging buttons
 
 use glib::translate::*;
-use glib::types;
 use ffi;
 
-use object::{Object, Downcast, Upcast};
+use glib::object::Downcast;
 use super::widget::Widget;
 use glib::Permission;
 use glib::GlibContainer;
 
 /// GtkLockButton — A widget to unlock or lock privileged operations
-pub type LockButton = Object<ffi::GtkLockButton>;
+glib_wrapper! {
+    pub struct LockButton(Object<ffi::GtkLockButton>): Widget, ::Container, ::Bin, ::Button,
+        ::Actionable, ::Buildable;
 
-unsafe impl Upcast<Widget> for LockButton { }
-unsafe impl Upcast<::Container> for LockButton { }
-unsafe impl Upcast<::Bin> for LockButton { }
-unsafe impl Upcast<::Button> for LockButton { }
-
-unsafe impl Upcast<::Actionable> for LockButton { }
-unsafe impl Upcast<::Buildable> for LockButton { }
+    match fn {
+        get_type => || ffi::gtk_lock_button_get_type(),
+    }
+}
 
 impl LockButton {
     /// Creates a new lock button which reflects the `permission`.
@@ -49,12 +47,5 @@ impl LockButton {
             ffi::gtk_lock_button_set_permission(self.to_glib_none().0,
                 permission.unwrap())
         }
-    }
-}
-
-impl types::StaticType for LockButton {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_lock_button_get_type()) }
     }
 }

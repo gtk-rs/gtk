@@ -15,10 +15,9 @@ use std::ptr;
 use libc::c_char;
 
 use glib::translate::*;
-use glib::types;
 use ffi;
 
-use object::{Object, Downcast, Upcast};
+use glib::object::{Downcast, Upcast};
 #[cfg(gtk_3_12)]
 use HeaderBar;
 use widgets::widget::Widget;
@@ -181,20 +180,13 @@ macro_rules! impl_dialog_buttons {
 
 impl_dialog_buttons!(16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0,);
 
-pub type Dialog = Object<ffi::GtkDialog>;
+glib_wrapper! {
+    pub struct Dialog(Object<ffi::GtkDialog>): Widget, ::Container, ::Bin, ::Window, ::Buildable;
 
-impl types::StaticType for Dialog {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_dialog_get_type()) }
+    match fn {
+        get_type => || ffi::gtk_dialog_get_type(),
     }
 }
-
-unsafe impl Upcast<Widget> for Dialog { }
-unsafe impl Upcast<::Container> for Dialog { }
-unsafe impl Upcast<::Bin> for Dialog { }
-unsafe impl Upcast<::Window> for Dialog { }
-unsafe impl Upcast<::Buildable> for Dialog { }
 
 pub trait DialogExt {
     fn run(&self) -> i32;

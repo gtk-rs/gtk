@@ -5,14 +5,19 @@
 //! Show a spinner animation
 
 use glib::translate::*;
-use glib::types;
 use ffi;
 
-use object::{Object, Downcast, Upcast};
+use glib::object::Downcast;
 use super::widget::Widget;
 
 /// Show a spinner animation.
-pub type Spinner = Object<ffi::GtkSpinner>;
+glib_wrapper! {
+    pub struct Spinner(Object<ffi::GtkSpinner>): Widget, ::Buildable;
+
+    match fn {
+        get_type => || ffi::gtk_spinner_get_type(),
+    }
+}
 
 impl Spinner {
     pub fn new() -> Spinner {
@@ -28,13 +33,3 @@ impl Spinner {
     }
 
 }
-
-impl types::StaticType for Spinner {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_spinner_get_type()) }
-    }
-}
-
-unsafe impl Upcast<Widget> for Spinner { }
-unsafe impl Upcast<::Buildable> for Spinner { }

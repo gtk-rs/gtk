@@ -3,18 +3,19 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 use glib::translate::*;
-use glib::types;
 use ffi;
 
-use object::{Object, Downcast, Upcast};
+use glib::object::Downcast;
 use super::widget::Widget;
 
 /// GtkSocket — Container for widgets from other processes.
-pub type Socket = Object<ffi::GtkSocket>;
+glib_wrapper! {
+    pub struct Socket(Object<ffi::GtkSocket>): Widget, ::Container, ::Buildable;
 
-unsafe impl Upcast<Widget> for Socket { }
-unsafe impl Upcast<::Container> for Socket { }
-unsafe impl Upcast<::Buildable> for Socket { }
+    match fn {
+        get_type => || ffi::gtk_socket_get_type(),
+    }
+}
 
 impl Socket {
     pub fn new() -> Socket {
@@ -34,11 +35,4 @@ impl Socket {
 
         // add end of code
     }*/
-}
-
-impl types::StaticType for Socket {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_socket_get_type()) }
-    }
 }

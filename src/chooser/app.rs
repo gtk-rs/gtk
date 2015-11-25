@@ -3,23 +3,19 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 use glib::translate::*;
-use glib::types;
 use glib::AppInfo;
 use ffi;
 
-use object::{Object, Upcast};
+use glib::object::Upcast;
 use widgets::widget::Widget;
 
-pub type AppChooser = Object<ffi::GtkAppChooser>;
+glib_wrapper! {
+    pub struct AppChooser(Object<ffi::GtkAppChooser>): Widget;
 
-impl types::StaticType for AppChooser {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_app_chooser_get_type()) }
+    match fn {
+        get_type => || ffi::gtk_app_chooser_get_type(),
     }
 }
-
-unsafe impl Upcast<Widget> for AppChooser { }
 
 pub trait AppChooserExt {
     fn get_app_info(&self) -> Option<AppInfo>;

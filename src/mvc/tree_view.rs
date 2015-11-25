@@ -6,24 +6,28 @@
 
 use std::ptr;
 
+use glib::object::Downcast;
 use glib::translate::*;
-use glib::types;
 use ffi;
-
-use object::{Object, Downcast, Upcast};
-use Entry;
-use widgets::widget::Widget;
 
 use super::tree_model::{TreeModel, TreePath};
 use super::tree_selection::TreeSelection;
 use super::tree_view_column::TreeViewColumn;
 
 use {
+    Entry,
     TreeViewGridLines,
+    Widget,
 };
 
 /// TreeView — A widget for displaying both trees and lists
-pub type TreeView = Object<ffi::GtkTreeView>;
+glib_wrapper! {
+    pub struct TreeView(Object<ffi::GtkTreeView>): Widget, ::Container, ::Scrollable, ::Buildable;
+
+    match fn {
+        get_type => || ffi::gtk_tree_view_get_type(),
+    }
+}
 
 impl TreeView {
     pub fn new() -> TreeView {
@@ -324,15 +328,3 @@ impl TreeView {
         unsafe { ffi::gtk_tree_view_append_column(self.to_glib_none().0, column.to_glib_none().0) }
     }
 }
-
-impl types::StaticType for TreeView {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_tree_view_get_type()) }
-    }
-}
-
-unsafe impl Upcast<Widget> for TreeView { }
-unsafe impl Upcast<::Container> for TreeView { }
-unsafe impl Upcast<::Scrollable> for TreeView { }
-unsafe impl Upcast<::Buildable> for TreeView { }

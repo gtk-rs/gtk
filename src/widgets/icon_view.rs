@@ -6,12 +6,11 @@ use std::mem;
 use std::ptr;
 
 use glib::translate::*;
-use glib::types;
 use ffi;
 
 use mvc::cell_renderer::CellRenderer;
 use mvc::tree_model::{TreeModel, TreePath};
-use object::{Object, Downcast, Upcast};
+use glib::object::{Downcast, Upcast};
 use super::widget::Widget;
 
 use {
@@ -20,13 +19,14 @@ use {
     SelectionMode,
 };
 
-pub type IconView = Object<ffi::GtkIconView>;
+glib_wrapper! {
+    pub struct IconView(Object<ffi::GtkIconView>): Widget, ::Container, ::Scrollable, ::CellLayout,
+        ::Buildable;
 
-unsafe impl Upcast<Widget> for IconView { }
-unsafe impl Upcast<::Container> for IconView { }
-unsafe impl Upcast<::Scrollable> for IconView { }
-unsafe impl Upcast<::CellLayout> for IconView { }
-unsafe impl Upcast<::Buildable> for IconView { }
+    match fn {
+        get_type => || ffi::gtk_icon_view_get_type(),
+    }
+}
 
 impl IconView {
     pub fn new() -> IconView {
@@ -343,12 +343,5 @@ impl IconView {
                 None
             }
         }
-    }
-}
-
-impl types::StaticType for IconView {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_icon_view_get_type()) }
     }
 }

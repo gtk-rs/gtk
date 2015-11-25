@@ -3,18 +3,16 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 use glib::translate::*;
-use glib::types;
 use ffi;
 
-use object::{Object, Upcast};
+use glib::object::Upcast;
 use Orientation;
 
-pub type Orientable = Object<ffi::GtkOrientable>;
+glib_wrapper! {
+    pub struct Orientable(Object<ffi::GtkOrientable>);
 
-impl types::StaticType for Orientable {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_orientable_get_type()) }
+    match fn {
+        get_type => || ffi::gtk_orientable_get_type(),
     }
 }
 

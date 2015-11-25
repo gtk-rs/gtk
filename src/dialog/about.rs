@@ -3,13 +3,19 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 use glib::translate::*;
-use glib::types;
 use ffi;
 
-use object::{Object, Downcast, Upcast};
-use widgets::widget::Widget;
+use glib::object::Downcast;
+use Widget;
 
-pub type AboutDialog = Object<ffi::GtkAboutDialog>;
+glib_wrapper! {
+    pub struct AboutDialog(Object<ffi::GtkAboutDialog>): Widget, ::Container, ::Bin, ::Window,
+        ::Dialog, ::Buildable;
+
+    match fn {
+        get_type => || ffi::gtk_about_dialog_get_type(),
+    }
+}
 
 impl AboutDialog {
     pub fn new() -> AboutDialog {
@@ -225,17 +231,3 @@ impl AboutDialog {
         unsafe { ffi::gtk_show_about_dialog(GTK_WINDOW(parent), first_property_name, ...) }
     }*/
 }
-
-impl types::StaticType for AboutDialog {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_about_dialog_get_type()) }
-    }
-}
-
-unsafe impl Upcast<Widget> for AboutDialog { }
-unsafe impl Upcast<::Container> for AboutDialog { }
-unsafe impl Upcast<::Bin> for AboutDialog { }
-unsafe impl Upcast<::Window> for AboutDialog { }
-unsafe impl Upcast<::Dialog> for AboutDialog { }
-unsafe impl Upcast<::Buildable> for AboutDialog { }

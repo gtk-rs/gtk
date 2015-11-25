@@ -8,16 +8,20 @@ use std::mem;
 use std::ptr;
 
 use glib::translate::*;
-use glib::types;
 use ffi;
 
-use object::Object;
 use super::tree_model::{TreeIter, TreeModel, TreePath};
 use super::tree_view::TreeView;
 
 use SelectionMode;
 
-pub type TreeSelection = Object<ffi::GtkTreeSelection>;
+glib_wrapper! {
+    pub struct TreeSelection(Object<ffi::GtkTreeSelection>);
+
+    match fn {
+        get_type => || ffi::gtk_tree_selection_get_type(),
+    }
+}
 
 impl TreeSelection {
     pub fn set_mode(&self, mode: SelectionMode) {
@@ -112,12 +116,5 @@ impl TreeSelection {
             ffi::gtk_tree_selection_unselect_range(self.to_glib_none().0,
                 start_path.unwrap_pointer(), end_path.unwrap_pointer())
         }
-    }
-}
-
-impl types::StaticType for TreeSelection {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_tree_selection_get_type()) }
     }
 }

@@ -3,24 +3,19 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 use glib::translate::*;
-use glib::types;
 use ffi;
 
-use object::{Object, Upcast};
+use glib::object::Upcast;
 use super::widget::Widget;
 use ResizeMode;
 
-pub type Container = Object<ffi::GtkContainer>;
+glib_wrapper! {
+    pub struct Container(Object<ffi::GtkContainer>): Widget, ::Buildable;
 
-impl types::StaticType for Container {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_container_get_type()) }
+    match fn {
+        get_type => || ffi::gtk_container_get_type(),
     }
 }
-
-unsafe impl Upcast<Widget> for Container { }
-unsafe impl Upcast<::Buildable> for Container { }
 
 pub trait ContainerExt {
     fn add<T: Upcast<Widget>>(&self, widget: &T);

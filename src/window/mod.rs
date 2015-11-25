@@ -5,11 +5,10 @@
 //! Toplevel which can contain other widgets.
 
 use glib::translate::*;
-use glib::types;
 use gdk;
 use ffi;
 
-use object::{Object, Downcast, Upcast};
+use glib::object::{Downcast, Upcast};
 use widgets::widget::Widget;
 use {
     WindowPosition,
@@ -17,25 +16,19 @@ use {
 };
 
 /// Toplevel which can contain other widgets.
-pub type Window = Object<ffi::GtkWindow>;
+glib_wrapper! {
+    pub struct Window(Object<ffi::GtkWindow>): ::Widget, ::Container, ::Bin, ::Buildable;
+
+    match fn {
+        get_type => || ffi::gtk_window_get_type(),
+    }
+}
 
 impl Window {
     pub fn new(window_type: WindowType) -> Window {
         unsafe { Widget::from_glib_none(ffi::gtk_window_new(window_type)).downcast_unchecked() }
     }
 }
-
-impl types::StaticType for Window {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_window_get_type()) }
-    }
-}
-
-unsafe impl Upcast<::Widget> for Window { }
-unsafe impl Upcast<::Container> for Window { }
-unsafe impl Upcast<::Bin> for Window { }
-unsafe impl Upcast<::Buildable> for Window { }
 
 pub trait WindowExt {
     fn move_(&self, x: i32, y: i32);

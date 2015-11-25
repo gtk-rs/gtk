@@ -2,14 +2,14 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
+use glib::object::Upcast;
 use glib::translate::*;
-use glib::types::{self, Type};
+use glib::Type;
 use gdk;
 use gdk_ffi;
 use pango;
 use ffi;
 
-use object::{Object, Upcast};
 use {
     Align,
     DirectionType,
@@ -19,16 +19,13 @@ use {
     TextDirection,
 };
 
-pub type Widget = Object<ffi::GtkWidget>;
+glib_wrapper! {
+    pub struct Widget(Object<ffi::GtkWidget>): ::Buildable;
 
-impl types::StaticType for Widget {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_widget_get_type()) }
+    match fn {
+        get_type => || ffi::gtk_widget_get_type(),
     }
 }
-
-unsafe impl Upcast<::Buildable> for Widget { }
 
 pub trait WidgetExt {
     fn show_all(&self);

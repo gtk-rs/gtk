@@ -3,10 +3,9 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 use glib::translate::*;
-use glib::types;
 use ffi;
 
-use object::{Object, Downcast, Upcast};
+use glib::object::{Downcast, Upcast};
 use widgets::widget::Widget;
 
 use {
@@ -17,12 +16,11 @@ use {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-pub type CellRenderer = Object<ffi::GtkCellRenderer>;
+glib_wrapper! {
+    pub struct CellRenderer(Object<ffi::GtkCellRenderer>);
 
-impl types::StaticType for CellRenderer {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_cell_renderer_get_type()) }
+    match fn {
+        get_type => || ffi::gtk_cell_renderer_get_type(),
     }
 }
 
@@ -162,7 +160,13 @@ impl<O: Upcast<CellRenderer>> CellRendererExt for O {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-pub type CellRendererText = Object<ffi::GtkCellRendererText>;
+glib_wrapper! {
+    pub struct CellRendererText(Object<ffi::GtkCellRendererText>): CellRenderer;
+
+    match fn {
+        get_type => || ffi::gtk_cell_renderer_text_get_type(),
+    }
+}
 
 impl CellRendererText {
     pub fn new() -> CellRendererText {
@@ -171,15 +175,6 @@ impl CellRendererText {
         }
     }
 }
-
-impl types::StaticType for CellRendererText {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_cell_renderer_text_get_type()) }
-    }
-}
-
-unsafe impl Upcast<CellRenderer> for CellRendererText { }
 
 pub trait CellRendererTextExt {
     fn set_fixed_height_from_font(&self, number_of_rows: i32);
@@ -196,7 +191,13 @@ impl<O: Upcast<CellRendererText>> CellRendererTextExt for O {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-pub type CellRendererToggle = Object<ffi::GtkCellRendererToggle>;
+glib_wrapper! {
+    pub struct CellRendererToggle(Object<ffi::GtkCellRendererToggle>): CellRenderer;
+
+    match fn {
+        get_type => || ffi::gtk_cell_renderer_toggle_get_type(),
+    }
+}
 
 impl CellRendererToggle {
     pub fn new() -> CellRendererToggle {
@@ -229,12 +230,3 @@ impl CellRendererToggle {
         }
     }
 }
-
-impl types::StaticType for CellRendererToggle {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_cell_renderer_toggle_get_type()) }
-    }
-}
-
-unsafe impl Upcast<CellRenderer> for CellRendererToggle { }

@@ -5,10 +5,9 @@
 //! A widget that emits a signal when clicked on
 
 use glib::translate::*;
-use glib::types;
 use ffi;
 
-use object::{Object, Downcast, Upcast};
+use glib::object::{Downcast, Upcast};
 use widgets::widget::Widget;
 use super::cell_renderer::CellRenderer;
 use super::tree_view::TreeView;
@@ -18,7 +17,13 @@ use {
     SortType,
 };
 
-pub type TreeViewColumn = Object<ffi::GtkTreeViewColumn>;
+glib_wrapper! {
+    pub struct TreeViewColumn(Object<ffi::GtkTreeViewColumn>): ::CellLayout, ::Buildable;
+
+    match fn {
+        get_type => || ffi::gtk_tree_view_column_get_type(),
+    }
+}
 
 impl TreeViewColumn {
     pub fn new() -> TreeViewColumn {
@@ -298,13 +303,3 @@ impl TreeViewColumn {
         }
     }
 }
-
-impl types::StaticType for TreeViewColumn {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_tree_view_column_get_type()) }
-    }
-}
-
-unsafe impl Upcast<::CellLayout> for TreeViewColumn { }
-unsafe impl Upcast<::Buildable> for TreeViewColumn { }

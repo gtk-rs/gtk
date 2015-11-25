@@ -5,10 +5,9 @@
 use std::ptr;
 
 use glib::translate::*;
-use glib::types;
 use ffi;
 
-use object::{Object, Downcast, Upcast};
+use glib::object::{Downcast, Upcast};
 use Box;
 use widgets::widget::Widget;
 use window::Window;
@@ -19,7 +18,14 @@ use {
     MessageType,
 };
 
-pub type MessageDialog = Object<ffi::GtkMessageDialog>;
+glib_wrapper! {
+    pub struct MessageDialog(Object<ffi::GtkMessageDialog>): Widget, ::Container, ::Bin, Window,
+        ::Dialog, ::Buildable;
+
+    match fn {
+        get_type => || ffi::gtk_message_dialog_get_type(),
+    }
+}
 
 impl MessageDialog {
     pub fn new<W: Upcast<Window>>(parent: Option<&W>, flags: DialogFlags, type_: MessageType,
@@ -52,17 +58,3 @@ impl MessageDialog {
         }
     }
 }
-
-impl types::StaticType for MessageDialog {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_message_dialog_get_type()) }
-    }
-}
-
-unsafe impl Upcast<Widget> for MessageDialog { }
-unsafe impl Upcast<::Container> for MessageDialog { }
-unsafe impl Upcast<::Bin> for MessageDialog { }
-unsafe impl Upcast<::Window> for MessageDialog { }
-unsafe impl Upcast<::Dialog> for MessageDialog { }
-unsafe impl Upcast<::Buildable> for MessageDialog { }

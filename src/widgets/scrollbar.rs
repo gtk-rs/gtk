@@ -5,22 +5,21 @@
 //! A Scrollbar
 
 use glib::translate::*;
-use glib::types;
 use ffi;
 
-use object::{Object, Downcast, Upcast};
+use glib::object::Upcast;
 use super::widget::Widget;
 use Adjustment;
 use Orientation;
 
 /// GtkScrollBar — A Scrollbar
-pub type Scrollbar = Object<ffi::GtkScrollbar>;
+glib_wrapper! {
+    pub struct Scrollbar(Object<ffi::GtkScrollbar>): Widget, ::Range, ::Buildable, ::Orientable;
 
-unsafe impl Upcast<Widget> for Scrollbar { }
-unsafe impl Upcast<::Range> for Scrollbar { }
-
-unsafe impl Upcast<::Buildable> for Scrollbar { }
-unsafe impl Upcast<::Orientable> for Scrollbar { }
+    match fn {
+        get_type => || ffi::gtk_scrollbar_get_type(),
+    }
+}
 
 impl Scrollbar {
     /// Creates a new scrollbar with the given orientation.
@@ -30,12 +29,5 @@ impl Scrollbar {
                 ffi::gtk_scrollbar_new(orientation, adjustment.to_glib_none().0))
                 .downcast_unchecked()
         }
-    }
-}
-
-impl types::StaticType for Scrollbar {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_scrollbar_get_type()) }
     }
 }

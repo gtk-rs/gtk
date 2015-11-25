@@ -6,22 +6,27 @@
 
 use libc::{c_char, ssize_t};
 
-use glib::{self, types};
+use glib::Object;
+use glib::object::{Downcast, Upcast};
 use glib::translate::*;
 use ffi;
 
-use object::{Object, Downcast, Upcast};
 
-pub type Buildable = Object<ffi::GtkBuildable>;
+glib_wrapper! {
+    pub struct Buildable(Object<ffi::GtkBuildable>);
 
-impl types::StaticType for Buildable {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_buildable_get_type()) }
+    match fn {
+        get_type => || ffi::gtk_buildable_get_type(),
     }
 }
 
-pub type Builder = Object<ffi::GtkBuilder>;
+glib_wrapper! {
+    pub struct Builder(Object<ffi::GtkBuilder>);
+
+    match fn {
+        get_type => || ffi::gtk_builder_get_type(),
+    }
+}
 
 impl Builder {
     pub fn new() -> Builder {
@@ -51,18 +56,11 @@ impl Builder {
     }
 
     pub fn get_object<T>(&self, name: &str) -> Option<T>
-    where T: Upcast<Buildable> + Upcast<glib::object::Object> {
+    where T: Upcast<Buildable> + Upcast<Object> {
         unsafe {
-            Option::<glib::object::Object>::from_glib_none(
+            Option::<Object>::from_glib_none(
                 ffi::gtk_builder_get_object(self.to_glib_none().0, name.to_glib_none().0))
                 .and_then(|obj| obj.downcast().ok())
         }
-    }
-}
-
-impl types::StaticType for Builder {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_builder_get_type()) }
     }
 }

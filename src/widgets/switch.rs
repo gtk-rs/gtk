@@ -5,14 +5,19 @@
 //! A "light switch" style toggle.
 
 use glib::translate::*;
-use glib::types;
 use ffi;
 
-use object::{Object, Downcast, Upcast};
+use glib::object::Downcast;
 use super::widget::Widget;
 
 /// A "light switch" style toggle.
-pub type Switch = Object<ffi::GtkSwitch>;
+glib_wrapper! {
+    pub struct Switch(Object<ffi::GtkSwitch>): Widget, ::Actionable, ::Buildable;
+
+    match fn {
+        get_type => || ffi::gtk_switch_get_type(),
+    }
+}
 
 impl Switch {
     pub fn new() -> Switch {
@@ -27,14 +32,3 @@ impl Switch {
         unsafe { from_glib(ffi::gtk_switch_get_active(self.to_glib_none().0)) }
     }
 }
-
-impl types::StaticType for Switch {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_switch_get_type()) }
-    }
-}
-
-unsafe impl Upcast<Widget> for Switch { }
-unsafe impl Upcast<::Actionable> for Switch { }
-unsafe impl Upcast<::Buildable> for Switch { }

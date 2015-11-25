@@ -5,25 +5,21 @@
 //! Cell-related interfaces.
 
 use glib::translate::*;
-use glib::types;
 use ffi;
 
-use object::{Object, Upcast};
+use glib::object::Upcast;
 use widgets::widget::Widget;
 use super::cell_renderer::CellRenderer;
 
 ///////////////////////////////////////////////////////////////////////////////
 
-pub type CellEditable = Object<ffi::GtkCellEditable>;
+glib_wrapper! {
+    pub struct CellEditable(Object<ffi::GtkCellEditable>): Widget;
 
-impl types::StaticType for CellEditable {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_cell_editable_get_type()) }
+    match fn {
+        get_type => || ffi::gtk_cell_editable_get_type(),
     }
 }
-
-unsafe impl Upcast<Widget> for CellEditable { }
 
 pub trait CellEditableExt {
     fn editing_done(&self);
@@ -42,12 +38,11 @@ impl<O: Upcast<CellEditable>> CellEditableExt for O {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-pub type CellLayout = Object<ffi::GtkCellLayout>;
+glib_wrapper! {
+    pub struct CellLayout(Object<ffi::GtkCellLayout>);
 
-impl types::StaticType for CellLayout {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_cell_layout_get_type()) }
+    match fn {
+        get_type => || ffi::gtk_cell_layout_get_type(),
     }
 }
 

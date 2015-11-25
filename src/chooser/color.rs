@@ -5,20 +5,18 @@
 use libc::c_int;
 
 use glib::translate::*;
-use glib::types;
 use gdk_ffi::GdkRGBA;
 use ffi;
 
-use object::{Object, Upcast};
+use glib::object::Upcast;
 
 use Orientation;
 
-pub type ColorChooser = Object<ffi::GtkColorChooser>;
+glib_wrapper! {
+    pub struct ColorChooser(Object<ffi::GtkColorChooser>);
 
-impl types::StaticType for ColorChooser {
-    #[inline]
-    fn static_type() -> types::Type {
-        unsafe { from_glib(ffi::gtk_color_chooser_get_type()) }
+    match fn {
+        get_type => || ffi::gtk_color_chooser_get_type(),
     }
 }
 
