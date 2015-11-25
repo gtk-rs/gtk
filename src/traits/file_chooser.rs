@@ -175,15 +175,13 @@ pub trait FileChooserTrait: ::WidgetTrait {
         unsafe { ffi::gtk_file_chooser_set_preview_widget(GTK_FILE_CHOOSER(self.unwrap_widget()), preview_widget.unwrap_widget()) }
     }
 
-    fn get_preview_widget<T: ::WidgetTrait>(&self) -> Option<T> {
-        unsafe {
-            let tmp_pointer = ffi::gtk_file_chooser_get_preview_widget(GTK_FILE_CHOOSER(self.unwrap_widget()));
+    unsafe fn get_preview_widget<T: ::WidgetTrait>(&self) -> Option<T> {
+        let tmp_pointer = ffi::gtk_file_chooser_get_preview_widget(GTK_FILE_CHOOSER(self.unwrap_widget()));
 
-            if tmp_pointer.is_null() {
-                None
-            } else {
-                Some(::FFIWidget::wrap_widget(tmp_pointer))
-            }
+        if tmp_pointer.is_null() {
+            None
+        } else {
+            Some(::FFIWidget::wrap_widget(tmp_pointer))
         }
     }
 
@@ -221,15 +219,13 @@ pub trait FileChooserTrait: ::WidgetTrait {
         unsafe { ffi::gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(self.unwrap_widget()), extra_widget.unwrap_widget()) }
     }
 
-    fn get_extra_widget<T: ::WidgetTrait>(&self) -> Option<T> {
-        unsafe {
-            let tmp = ffi::gtk_file_chooser_get_extra_widget(GTK_FILE_CHOOSER(self.unwrap_widget()));
+    unsafe fn get_extra_widget<T: ::WidgetTrait>(&self) -> Option<T> {
+        let tmp = ffi::gtk_file_chooser_get_extra_widget(GTK_FILE_CHOOSER(self.unwrap_widget()));
 
-            if tmp.is_null() {
-                None
-            } else {
-                Some(::FFIWidget::wrap_widget(tmp))
-            }
+        if tmp.is_null() {
+            None
+        } else {
+            Some(::FFIWidget::wrap_widget(tmp))
         }
     }
 

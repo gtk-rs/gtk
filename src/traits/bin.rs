@@ -6,10 +6,8 @@ use cast::GTK_BIN;
 use ffi;
 
 pub trait BinTrait: ::WidgetTrait + ::ContainerTrait {
-    fn get_child<T: ::WidgetTrait>(&self) ->  Option<T> {
-        let tmp_pointer = unsafe {
-            ffi::gtk_bin_get_child(GTK_BIN(self.unwrap_widget()))
-        };
+    unsafe fn get_child<T: ::WidgetTrait>(&self) -> Option<T> {
+        let tmp_pointer = ffi::gtk_bin_get_child(GTK_BIN(self.unwrap_widget()));
         if tmp_pointer.is_null() {
             None
         } else {

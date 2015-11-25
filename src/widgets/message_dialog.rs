@@ -43,8 +43,8 @@ impl MessageDialog {
         }
     }
 
-    pub fn get_message_area<T: ::WidgetTrait>(&self) -> Option<T> {
-        let tmp_pointer = unsafe { ffi::gtk_message_dialog_get_message_area(GTK_MESSAGE_DIALOG(self.unwrap_widget())) };
+    pub unsafe fn get_message_area<T: ::WidgetTrait>(&self) -> Option<T> {
+        let tmp_pointer = ffi::gtk_message_dialog_get_message_area(GTK_MESSAGE_DIALOG(self.unwrap_widget()));
 
         if tmp_pointer.is_null() {
             None

@@ -26,8 +26,8 @@ impl EntryCompletion {
         }
     }
 
-    pub fn get_entry<T: ::WidgetTrait>(&self) -> Option<T> {
-        let tmp_pointer = unsafe { ffi::gtk_entry_completion_get_entry(GTK_ENTRY_COMPLETION(self.pointer)) };
+    pub unsafe fn get_entry<T: ::WidgetTrait>(&self) -> Option<T> {
+        let tmp_pointer = ffi::gtk_entry_completion_get_entry(GTK_ENTRY_COMPLETION(self.pointer));
 
         if tmp_pointer.is_null() {
             None

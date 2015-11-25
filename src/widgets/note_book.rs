@@ -104,8 +104,8 @@ impl NoteBook {
         }
     }
 
-    pub fn get_nth_page<T: ::WidgetTrait>(&self, page_num: i32) -> Option<T> {
-        let tmp_pointer = unsafe { ffi::gtk_notebook_get_nth_page(GTK_NOTEBOOK(self.pointer), page_num) };
+    pub unsafe fn get_nth_page<T: ::WidgetTrait>(&self, page_num: i32) -> Option<T> {
+        let tmp_pointer = ffi::gtk_notebook_get_nth_page(GTK_NOTEBOOK(self.pointer), page_num);
 
         if tmp_pointer.is_null() {
             None
@@ -334,9 +334,9 @@ impl NoteBook {
         }
     }
 
-    pub fn get_action_widget<T: ::WidgetTrait>(&self, pack_type: ::PackType) -> Option<T> {
-        let tmp_pointer = unsafe { ffi::gtk_notebook_get_action_widget(GTK_NOTEBOOK(self.pointer),
-                                                                       pack_type) };
+    pub unsafe fn get_action_widget<T: ::WidgetTrait>(&self, pack_type: ::PackType) -> Option<T> {
+        let tmp_pointer = ffi::gtk_notebook_get_action_widget(GTK_NOTEBOOK(self.pointer),
+                                                              pack_type);
         if tmp_pointer.is_null() {
             None
         } else {

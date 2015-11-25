@@ -45,8 +45,8 @@ impl Stack {
         }
     }
 
-    pub fn get_visible_child<T: ::WidgetTrait>(&self) -> Option<T> {
-        let tmp_pointer = unsafe { ffi::gtk_stack_get_visible_child(GTK_STACK(self.pointer)) };
+    pub unsafe fn get_visible_child<T: ::WidgetTrait>(&self) -> Option<T> {
+        let tmp_pointer = ffi::gtk_stack_get_visible_child(GTK_STACK(self.pointer));
         if tmp_pointer.is_null() {
             None
         } else {
