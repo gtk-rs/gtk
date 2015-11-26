@@ -18,11 +18,14 @@ generate = [
     "Gtk.Button",
     "Gtk.ButtonBox",
     "Gtk.Calendar",
+    "Gtk.CssProvider",
     "Gtk.CheckButton",
+    "Gtk.CheckMenuItem",
     "Gtk.ColorButton",
     "Gtk.ColorChooserWidget",
     "Gtk.DrawingArea",
     "Gtk.Entry",
+    "Gtk.EntryCompletion",
     "Gtk.EventBox",
     "Gtk.Expander",
     "Gtk.FileChooserWidget",
@@ -50,10 +53,12 @@ generate = [
     "Gtk.Misc",
     "Gtk.Notebook",
     "Gtk.Overlay",
+    "Gtk.PageSetup",
     "Gtk.Paned",
     "Gtk.PlacesSidebar",
     "Gtk.Popover",
     "Gtk.PopoverMenu",
+    "Gtk.PrintSettings",
     "Gtk.ProgressBar",
     "Gtk.RadioButton",
     "Gtk.Range",
@@ -70,6 +75,11 @@ generate = [
     "Gtk.SpinButton",
     "Gtk.StatusIcon",
     "Gtk.Statusbar",
+    "Gtk.TextChildAnchor",
+    "Gtk.TextMark",
+    "Gtk.TextTag",
+    "Gtk.TextTagTable",
+    "Gtk.TextView",
     "Gtk.ToggleButton",
     "Gtk.ToggleToolButton",
     "Gtk.ToolButton",
@@ -96,6 +106,7 @@ manual = [
     "Gtk.Container",
     "Gtk.Dialog",
     "Gtk.Orientable",
+    "Gtk.TreeModel",
     "Gtk.Widget",
     "Gtk.Window",
 ]
@@ -114,4 +125,9 @@ non_nullable = [
     "get_text",
 ]
 
-
+[[object]]
+name = "Gtk.StyleContext"
+status = "generate"
+ignored_functions = [
+    'list_.*',
+]
