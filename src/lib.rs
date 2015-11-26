@@ -143,8 +143,6 @@ pub mod builder;
 pub mod chooser {
     pub mod app;
     pub mod color;
-    pub mod file;
-    pub mod font;
     pub mod recent;
 }
 pub mod dialog;
@@ -169,17 +167,9 @@ pub use auto::*;
 pub use builder::{Builder, Buildable};
 pub use chooser::app::AppChooser;
 pub use chooser::color::ColorChooser;
-pub use chooser::file::{
-    FileChooser,
-    FileFilter,
-};
-pub use chooser::font::FontChooser;
 pub use chooser::recent::{
-    RecentChooser,
     RecentData,
-    RecentFilter,
     RecentInfo,
-    RecentManager,
 };
 pub use dialog::Dialog;
 pub use dialog::about::AboutDialog;
@@ -205,24 +195,9 @@ pub use mvc::tree_model::{
 pub use mvc::tree_selection::TreeSelection;
 pub use mvc::tree_view::TreeView;
 pub use mvc::tree_view_column::TreeViewColumn;
-pub use widgets::actionable::Actionable;
-pub use widgets::box_::Box;
-pub use widgets::container::Container;
-pub use widgets::editable::Editable;
-pub use widgets::icon_view::IconView;
 pub use widgets::lock_button::LockButton;
-pub use widgets::orientable::Orientable;
-pub use widgets::scrollable::Scrollable;
-pub use widgets::separator::Separator;
-pub use widgets::spinner::Spinner;
 #[cfg(target_os = "linux")]
 pub use widgets::socket::Socket;
-#[cfg(gtk_3_10)]
-pub use widgets::stack::{
-    Stack,
-    StackSwitcher,
-};
-pub use widgets::switch::Switch;
 pub use widgets::widget::Widget;
 pub use window::Window;
 

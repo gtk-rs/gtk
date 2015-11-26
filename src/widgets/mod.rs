@@ -2,22 +2,9 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-pub mod actionable;
-pub mod box_;
-pub mod combo_box;
-pub mod container;
-pub mod editable;
-pub mod icon_view;
 pub mod lock_button;
-pub mod orientable;
-pub mod scrollable;
-pub mod separator;
 #[cfg(target_os = "linux")]
 pub mod socket;
-pub mod spinner;
-#[cfg(gtk_3_10)]
-pub mod stack;
-pub mod switch;
 pub mod widget;
 
 // ---------------- cut ----------------
