@@ -2,8 +2,6 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! A container which can hide its child
-
 use libc::c_int;
 
 use glib::translate::{from_glib_none, ToGlibPtr};
@@ -12,7 +10,6 @@ use ffi;
 use glib::{to_bool, to_gboolean};
 use FFIWidget;
 
-/// Expander — A container which can hide its child
 struct_Widget!(Expander);
 
 impl Expander {

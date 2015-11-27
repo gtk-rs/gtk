@@ -2,15 +2,12 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! A choice from multiple check buttons
-
 use std::ptr;
 
 use glib::translate::ToGlibPtr;
 use ffi;
 use cast::GTK_RADIOBUTTON;
 
-/// A choice from multiple check buttons
 struct_Widget!(RadioButton);
 
 impl RadioButton {

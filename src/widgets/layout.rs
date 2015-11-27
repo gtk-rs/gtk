@@ -2,12 +2,9 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! Infinite scrollable area containing child widgets and/or custom drawing
-
 use ffi;
 use cast::{GTK_LAYOUT};
 
-/// GtkLayout — Infinite scrollable area containing child widgets and/or custom drawing
 struct_Widget!(Layout);
 
 impl Layout {

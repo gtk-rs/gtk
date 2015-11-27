@@ -2,14 +2,11 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! A widget which controls the alignment and size of its child
-
 use libc::{c_float, c_uint};
 
 use cast::GTK_ALIGNMENT;
 use ffi;
 
-/// Alignment — A widget which controls the alignment and size of its child
 struct_Widget!(Alignment);
 
 impl Alignment {

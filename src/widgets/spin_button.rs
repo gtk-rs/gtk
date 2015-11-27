@@ -2,8 +2,6 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! Retrieve an integer or floating-point number from the user
-
 use libc::{c_double, c_uint};
 
 use ffi;
@@ -11,7 +9,6 @@ use glib::{to_bool, to_gboolean};
 use {SpinType, SpinButtonUpdatePolicy};
 use cast::{GTK_SPINBUTTON};
 
-/// SpinButton — Retrieve an integer or floating-point number from the user
 /*
 * # Available signals:
 * * `change-value` : Action

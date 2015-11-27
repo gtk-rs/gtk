@@ -2,15 +2,12 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! A widget for displaying both trees and lists
-
 use FFIWidget;
 use ffi;
 use cast::GTK_TREE_VIEW;
 use widgets::{TreePath, TreeSelection, TreeViewColumn};
 use glib::{to_bool, to_gboolean};
 
-/// TreeView — A widget for displaying both trees and lists
 struct_Widget!(TreeView);
 
 impl TreeView {

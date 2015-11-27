@@ -4,7 +4,6 @@
 
 use ffi;
 
-/// GtkTextTagTable — Collection of tags that can be used together
 
 pub struct TextTagTable {
     pointer: *mut ffi::GtkTextTagTable

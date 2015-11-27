@@ -2,14 +2,11 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! A ToolItem subclass that displays buttons
-
 use std::ptr;
 
 use glib::translate::ToGlibPtr;
 use ffi;
 
-/// ToolButton — A ToolItem subclass that displays buttons
 struct_Widget!(ToolButton);
 
 impl ToolButton {

@@ -2,12 +2,9 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! A container which overlays widgets on top of each other
-
 use cast::{GTK_OVERLAY};
 use ffi;
 
-/// GtkOverlay — A container which overlays widgets on top of each other
 struct_Widget!(Overlay);
 
 impl Overlay {

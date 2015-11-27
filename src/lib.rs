@@ -2,36 +2,6 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-/*!
-
-Bindings and wrappers for __GTK__
-
-To implement __GTK+__ inheritance in rust, we implemented gtk superclasses as traits
-located in `rgtk::self::traits::*`. The various widgets implement these traits and
-live in `rgtk::gtk::widgets::*` and are rexported into `rgtk::gtk::*`.
-
-GTK Inheritance in rgtk
-======================
-
-You probably know but __Gtk+__ uses its own GObject system: inherited class and interface.
-
-To respect this design I follow a special design on __rgtk__:
-
-* Interface -> Implement them on a trait with only default methods.
-* Class -> Implement the construct on the class impl and other methods on a traits.
-* Sub-class -> Implement all the methods on the class.
-
-Exemple for GtkOrientable, GtkBox, GtkButtonBox:
-
-GtkOrientable is an interface with all the methods implemented as default method of the trait self::traits::Orientable.
-
-GtkBox is a class with constructors implemented on the struct `gtk::Box`, and the other method as default methods of the trait `self::traits::Box`. So `gtk::Box` implements `self::traits::Orientable` and `self::traits::Box`.
-
-GtkButtonBox is a sub-class of GtkBox, the struct `gtk::ButtonBox` implements all the methods of GtkButtonBox and the traits `self::traits::Orientable` and `self::traits::Box`.
-
-Finally all the gtk widgets implement the trait self::traits::Widget.
-*/
-
 //#![macro_use]
 
 #![allow(dead_code)] // TODO: drop this
@@ -73,7 +43,6 @@ pub use self::rt::{
     events_pending,
 };
 
-/// GTK Widgets for all versions
 pub use self::widgets::{
     CssProvider,
     StyleContext,
@@ -190,14 +159,12 @@ pub use self::widgets::{
 pub use self::widgets::{Socket};
 
 #[cfg(gtk_3_6)]
-/// GTK Widgets for versions since GTK 3.6
 pub use self::widgets::{
     MenuButton,
     LevelBar,
 };
 
 #[cfg(gtk_3_10)]
-/// GTK Widgets for versions since GTK 3.10
 pub use self::widgets::{
     SearchEntry,
     SearchBar,
@@ -211,7 +178,6 @@ pub use self::widgets::{
 };
 
 #[cfg(gtk_3_12)]
-/// GTK Widgets for versions since GTK 3.12
 pub use self::widgets::{
     FlowBox,
     FlowBoxChild,
@@ -220,14 +186,12 @@ pub use self::widgets::{
 };
 
 #[cfg(gtk_3_16)]
-/// GTK Widgets for versions since GTK 3.16
 pub use self::widgets::{
     PopoverMenu,
     StackSidebar,
     GLArea,
 };
 
-/// GTK Enum types
 pub use ffi::GtkAccelFlags as AccelFlags;
 pub use ffi::GtkAlign as Align;
 pub use ffi::GtkArrowPlacement as ArrowPlacement;
@@ -308,7 +272,6 @@ pub use ffi::GtkWindowPosition as WindowPosition;
 pub use ffi::GtkWindowType as WindowType;
 pub use ffi::GtkWrapMode as WrapMode;
 
-/// Gtk Traits
 pub use self::traits::FFIWidget;
 pub use self::traits::StyleProviderTrait;
 pub use self::traits::GObjectTrait;
@@ -363,7 +326,6 @@ pub use self::traits::style_provider::{
 
 pub const DIALOG_MODAL: DialogFlags = ffi::GTK_DIALOG_MODAL;
 
-/// GTK various struct
 pub use self::types::{
     Tooltip,
 };

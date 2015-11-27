@@ -2,8 +2,6 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! GtkTextTag — A tag that can be applied to text in a GtkTextBuffer
-
 use ffi;
 
 pub struct TextAttributes {

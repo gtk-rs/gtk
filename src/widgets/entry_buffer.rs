@@ -2,8 +2,6 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! Text buffer for ::Entry
-
 use libc::{c_int, c_uint};
 use glib::translate::{from_glib_none, ToGlibPtr};
 use ffi;
@@ -11,7 +9,6 @@ use ffi;
 // TODO:
 // Implements custom signal : inserted-text + deleted-text
 
-/// EntryBuffer — Text buffer for ::Entry
 /*
 * # Signals available:
 * * `deleted-text` : Run First

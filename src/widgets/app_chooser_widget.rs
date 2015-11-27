@@ -2,8 +2,6 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! Application chooser widget that can be embedded in other widgets
-
 use cast::GTK_APP_CHOOSER_WIDGET;
 use ffi;
 use glib::translate::{from_glib_none, ToGlibPtr};

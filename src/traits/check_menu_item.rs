@@ -2,13 +2,10 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! The widget used for item in menus
-
 use ffi;
 use cast::GTK_CHECK_MENU_ITEM;
 use glib::{to_bool, to_gboolean};
 
-/// The widget used for item in menus
 pub trait CheckMenuItemTrait: ::WidgetTrait +
                               ::ContainerTrait +
                               ::BinTrait +

@@ -2,8 +2,6 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! GtkSizeGroup — Grouping widgets so they request the same size
-
 use ffi;
 use glib::{to_bool, to_gboolean};
 

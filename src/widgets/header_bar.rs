@@ -2,8 +2,6 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! A Box::new(with) a centered child
-
 // FIXME: add missing methods (3.12)
 
 use cast::{GTK_HEADER_BAR};
@@ -11,7 +9,6 @@ use ffi;
 use glib::translate::{from_glib_none, ToGlibPtr};
 use glib::{to_bool, to_gboolean};
 
-/// GtkHeaderBar — A Box::new(with) a centered child
 struct_Widget!(HeaderBar);
 
 impl HeaderBar {

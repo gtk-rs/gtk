@@ -2,8 +2,6 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! Report important messages to the user
-
 #![cfg_attr(not(gtk_3_10), allow(unused_imports))]
 
 use libc::c_int;
@@ -15,7 +13,6 @@ use cast::GTK_INFOBAR;
 use ffi;
 use glib::{to_bool, to_gboolean};
 
-/// InfoBar — Report important messages to the user
 struct_Widget!(InfoBar);
 
 impl InfoBar {

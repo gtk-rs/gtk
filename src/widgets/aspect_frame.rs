@@ -2,8 +2,6 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! A frame that constrains its child to a particular aspect ratio
-
 use libc::c_float;
 
 use glib::translate::ToGlibPtr;
@@ -11,7 +9,6 @@ use cast::GTK_ASPECTFRAME;
 use ffi;
 use glib::to_gboolean;
 
-/// AspectFrame — A frame that constrains its child to a particular aspect ratio
 struct_Widget!(AspectFrame);
 
 impl AspectFrame {

@@ -2,14 +2,11 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! A controller for StackSidebar
-
 use ffi;
 use cast::{GTK_STACK_SIDEBAR, GTK_STACK};
 use FFIWidget;
 use widgets::Stack;
 
-/// An automatic sidebar widget
 struct_Widget!(StackSidebar);
 
 impl StackSidebar {

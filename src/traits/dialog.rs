@@ -9,16 +9,6 @@ use cast::GTK_DIALOG;
 use ffi;
 use Box;
 
-/// Pseudo-variadic array of buttons
-///
-/// It's implemented for fixed-sized arrays `[(&str, i32); N]`
-/// and `[(&str, ::ResponseType); N]` (`N <= 16`) to allow passing variable
-/// numbers of buttons to some dialog methods.
-///
-/// ```ignore
-/// Dialog::with_buttons(title, parent, flags,
-///                      [("Ok", ResponseType::Accept), ("Cancel", ResponseType::Cancel)]);
-/// ```
 pub trait DialogButtons {
     unsafe fn invoke1<A0, R>(
         &self,
@@ -34,7 +24,6 @@ pub trait DialogButtons {
         a0: A0, a1: A1, a2: A2) -> R;
 }
 
-/// Predefined popular button combinations
 pub mod buttons {
     use ResponseType;
     use ResponseType::*;

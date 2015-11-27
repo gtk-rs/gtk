@@ -2,8 +2,6 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! A bar that can used as a level indicator
-
 #![cfg_attr(not(gtk_3_8), allow(unused_imports))]
 
 use libc::c_double;
@@ -14,7 +12,6 @@ use glib::{to_bool, to_gboolean};
 use {LevelBarMode};
 use cast::GTK_LEVELBAR;
 
-/// LevelBar — A bar that can used as a level indicator
 /*
 * # Signal availables:
 * * `offset-changed` : Has Details

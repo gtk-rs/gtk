@@ -2,8 +2,6 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! GtkPlacesSidebar — Sidebar that displays frequently-used places in the file system
-
 use ffi;
 use FFIWidget;
 use cast::GTK_PLACES_SIDEBAR;

@@ -2,8 +2,6 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! Renders a toggle button in a cell
-
 use ffi;
 use glib::{to_bool, to_gboolean};
 

@@ -2,11 +2,8 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! A button which pops up a volume control
-
 use ffi;
 
-/// VolumeButton — A button which pops up a volume control
 struct_Widget!(VolumeButton);
 
 impl VolumeButton {

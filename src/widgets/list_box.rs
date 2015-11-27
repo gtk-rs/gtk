@@ -2,14 +2,11 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! A container that allows reflowing its children
-
 use ffi;
 use cast::{GTK_LIST_BOX_ROW, GTK_LIST_BOX};
 use FFIWidget;
 use glib::{to_bool, to_gboolean};
 
-/// GtkFlowBox — A container that allows reflowing its children
 struct_Widget!(ListBox);
 
 impl ListBox {

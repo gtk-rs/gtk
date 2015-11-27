@@ -2,8 +2,6 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! A numerical value which represents the unique identifier of a registered type.
-
 // https://developer.gnome.org/gobject/unstable/gobject-Type-Information.html#GType
 pub mod g_type {
     use ffi;

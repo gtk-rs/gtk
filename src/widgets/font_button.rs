@@ -2,14 +2,11 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! A button to launch a font chooser dialog
-
 use glib::translate::{from_glib_none, ToGlibPtr};
 use ffi;
 use glib::{to_bool, to_gboolean};
 use cast::GTK_FONTBUTTON;
 
-/// FontButton — A button to launch a font chooser dialog
 /*
 * # Availables signals :
 * * `font-set` : Run First

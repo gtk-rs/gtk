@@ -2,8 +2,6 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! A stacking container
-
 // FIXME: add missing methods (3.12)
 
 use ffi;
@@ -11,7 +9,6 @@ use cast::GTK_STACK;
 use glib::translate::{from_glib_none, ToGlibPtr};
 use glib::{to_bool, to_gboolean};
 
-/// GtkStack — A stacking container
 struct_Widget!(Stack);
 
 impl Stack {

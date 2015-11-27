@@ -2,14 +2,11 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! A button which pops up a scale
-
 use libc::c_double;
 use std::ptr;
 
 use ffi;
 
-/// ScaleButton — A button which pops up a scale
 /*
 * # Availables signals :
 * * `popdown` : Action

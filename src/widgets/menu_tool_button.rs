@@ -2,15 +2,12 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! A ToolItem containing a button with an additional dropdown menu
-
 use std::ptr;
 
 use cast::GTK_MENUTOOLBUTTON;
 use ffi;
 use glib::translate::ToGlibPtr;
 
-/// MenuToolButton — A ToolItem containing a button with an additional dropdown menu
 struct_Widget!(MenuToolButton);
 
 impl MenuToolButton {

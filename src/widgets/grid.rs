@@ -2,8 +2,6 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! Pack widgets in a rows and columns
-
 // FIXME: Missings methods
 
 use libc::{c_int, c_uint};
@@ -13,7 +11,6 @@ use cast::GTK_GRID;
 use ffi;
 use glib::{to_bool, to_gboolean};
 
-/// Grid — Pack widgets in a rows and columns
 struct_Widget!(Grid);
 
 impl Grid {

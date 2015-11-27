@@ -10,7 +10,6 @@ use TextIter;
 
 use cast::GTK_TEXT_BUFFER;
 use glib::translate::{ToGlibPtrMut, Uninitialized};
-/// GtkTextBuffer — Stores attributed text for display in a GtkTextView
 
 struct_Widget!(TextBuffer);
 

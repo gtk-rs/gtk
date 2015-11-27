@@ -2,13 +2,10 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! A widget that shows a menu when clicked on
-
 use ffi;
 use cast::GTK_MENUBUTTON;
 use ArrowType;
 
-/// MenuButton — A widget that shows a menu when clicked on
 struct_Widget!(MenuButton);
 
 impl MenuButton {
