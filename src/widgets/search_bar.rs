@@ -2,14 +2,11 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! A container box
-
 use ffi;
 use glib::{to_bool, to_gboolean};
 use cast::{GTK_SEARCHBAR, GTK_ENTRY};
 use FFIWidget;
 
-/// Box — A container box
 struct_Widget!(SearchBar);
 
 impl SearchBar {

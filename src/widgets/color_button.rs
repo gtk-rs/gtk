@@ -2,8 +2,6 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! A button to launch a color selection dialog
-
 use glib::translate::{from_glib_none, ToGlibPtr};
 use cast::GTK_COLORBUTTON;
 use ffi;

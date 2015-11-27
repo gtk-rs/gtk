@@ -2,12 +2,9 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! A widget that displays a small to medium amount of text
-
 use glib::translate::ToGlibPtr;
 use ffi;
 
-/// Label — A widget that displays a small to medium amount of text
 /*
 * # Available signals:
 * * `activate-current-link` : Action

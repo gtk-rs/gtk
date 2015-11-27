@@ -2,15 +2,12 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! A widget displaying an image
-
 use ffi;
 use cast::GTK_IMAGE;
 use FFIWidget;
 use glib::translate::{from_glib_none, ToGlibPtr};
 use gdk::pixbuf::{Pixbuf, PixbufAnimation};
 
-/// Image — A widget displaying an image
 struct_Widget!(Image);
 
 impl Image {

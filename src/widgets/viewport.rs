@@ -2,13 +2,10 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! An adapter which makes widgets scrollable
-
 use ShadowType;
 use cast::GTK_VIEWPORT;
 use ffi;
 
-/// GtkViewport — An adapter which makes widgets scrollable
 struct_Widget!(Viewport);
 
 impl Viewport {

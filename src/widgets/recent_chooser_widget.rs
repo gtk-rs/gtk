@@ -2,8 +2,6 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! GtkRecentChooserWidget — Displays recently used files
-
 use cast::GTK_RECENT_MANAGER;
 use ffi;
 use FFIWidget;

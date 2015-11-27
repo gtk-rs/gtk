@@ -2,12 +2,9 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! Show a spinner animation
-
 use cast::GTK_SPINNER;
 use ffi;
 
-/// Spinner — Show a spinner animation
 struct_Widget!(Spinner);
 
 impl Spinner {

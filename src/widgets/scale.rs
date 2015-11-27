@@ -2,8 +2,6 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! A slider widget for selecting a value from a range
-
 use libc::{c_double, c_int};
 use glib::translate::ToGlibPtr;
 
@@ -12,7 +10,6 @@ use cast::GTK_SCALE;
 use ffi;
 use glib::{to_bool, to_gboolean};
 
-/// Scale — A slider widget for selecting a value from a range
 /*
 * # Signal availables:
 * * `format-value` : Run Last

@@ -2,13 +2,10 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! A base class for menu objects
-
 use ffi;
 use cast::{GTK_MENU_ITEM, GTK_MENU_SHELL};
 use glib::{to_bool, to_gboolean};
 
-/// A base class for menu objects
 pub trait MenuShellTrait: ::WidgetTrait + ::ContainerTrait {
     fn append<T: ::MenuItemTrait>(&self, widget: &T) {
         unsafe {

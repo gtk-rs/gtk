@@ -2,12 +2,9 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! A button to launch a font chooser dialog
-
 use glib::translate::ToGlibPtr;
 use ffi;
 
-/// ToggleButton — A button to launch a font chooser dialog
 /*
 * # Availables signals :
 * * `toggled` : Run First

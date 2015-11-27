@@ -2,8 +2,6 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! Create bars of buttons and other widgets
-
 use libc::c_int;
 
 use ffi;
@@ -11,7 +9,6 @@ use glib::{to_bool, to_gboolean};
 use cast::{GTK_TOOLBAR, GTK_TOOLITEM};
 use {IconSize, ReliefStyle, ToolbarStyle};
 
-/// Toolbar — Create bars of buttons and other widgets
 /*
 * # Availables signals :
 * * `focus-home-or-end` : Action

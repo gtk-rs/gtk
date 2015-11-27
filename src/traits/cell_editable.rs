@@ -2,8 +2,6 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! Interface for widgets which can are used for editing cells
-
 use ffi;
 use cast::GTK_CELL_EDITABLE;
 

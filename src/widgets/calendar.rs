@@ -2,8 +2,6 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! Displays a calendar and allows the user to select a date
-
 use libc::{c_uint, c_int};
 
 use CalendarDisplayOptions;

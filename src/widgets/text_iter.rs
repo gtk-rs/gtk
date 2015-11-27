@@ -6,7 +6,6 @@ use ffi;
 use glib::translate::{ToGlib, ToGlibPtr, ToGlibPtrMut, from_glib, from_glib_none};
 
 glib_wrapper! {
-    /// Text buffer iterator
     pub struct TextIter(Boxed<ffi::GtkTextIter>);
 
     match fn {

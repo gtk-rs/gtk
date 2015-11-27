@@ -6,7 +6,6 @@ use cast::{GTK_ICON_VIEW, GTK_CELL_RENDERER};
 use ffi;
 use {TreeModel, TreePath};
 
-/// GtkIconView — A widget which displays a list of icons in a grid
 
 struct_Widget!(IconView);
 

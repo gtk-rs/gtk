@@ -2,8 +2,6 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! GtkComboBox — A widget used to choose from a list of items
-
 use ffi;
 use cast::GTK_COMBO_BOX_TEXT;
 use glib::translate::{from_glib_none, ToGlibPtr};

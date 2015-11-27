@@ -2,14 +2,11 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! Create buttons bound to a URL
-
 use glib::translate::{from_glib_none, ToGlibPtr};
 use cast::GTK_LINKBUTTON;
 use ffi;
 use glib::{to_bool, to_gboolean};
 
-/// LinkButton — Create buttons bound to a URL
 /*
 * # Availables signals :
 * * `activate-link` : Run Last

@@ -7,7 +7,6 @@ use std::ptr;
 use ffi;
 use cast::GTK_SCROLLED_WINDOW;
 
-/// GtkScrolledWindow — Adds scrollbars to its child widget
 struct_Widget!(ScrolledWindow);
 
 impl ScrolledWindow {

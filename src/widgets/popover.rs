@@ -2,8 +2,6 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! GtkPopover — Context dependent bubbles
-
 use ffi;
 use cast::GTK_POPOVER;
 use glib::{to_bool, to_gboolean};

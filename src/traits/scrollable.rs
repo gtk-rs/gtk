@@ -2,12 +2,9 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! An interface for scrollable widgets
-
 use cast::GTK_SCROLLABLE;
 use ffi;
 
-/// GtkScrollable — An interface for scrollable widgets
 pub trait ScrollableTrait: ::WidgetTrait {
     fn get_hadjustment(&self) -> ::Adjustment {
         unsafe {

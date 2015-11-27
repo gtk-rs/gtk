@@ -5,7 +5,6 @@
 use ffi;
 
 glib_wrapper! {
-    /// Text buffer iterator
     pub struct TreeIter(Boxed<ffi::GtkTreeIter>);
 
     match fn {

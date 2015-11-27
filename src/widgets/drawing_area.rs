@@ -4,7 +4,6 @@
 
 use ffi;
 
-/// GtkDrawingArea — A widget for custom user interface elements
 struct_Widget!(DrawingArea);
 
 impl DrawingArea {
