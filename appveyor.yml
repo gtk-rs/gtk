@@ -25,13 +25,14 @@ install:
   - cmd: rust.exe /VERYSILENT /NORESTART /COMPONENTS="rust,cargo" /DIR=C:\Rust
   - ps: >-
       if ($Env:PLATFORM -eq "x86") {
-        $Env:MINGW = "C:\mingw"
+        Start-FileDownload "http://libgd.blob.core.windows.net/mingw/i686-4.9.1-release-posix-dwarf-rt_v3-rev1.7z" -FileName mingw-w64.7z;
+        $Env:MINGW = "C:\mingw32"
       }
       else {
         Start-FileDownload "http://libgd.blob.core.windows.net/mingw/mingw-w64-dgn-x86_64-20141001.7z" -FileName mingw-w64.7z;
-        7z x -oC:\ mingw-w64.7z | Out-Null;
         $Env:MINGW = "C:\mingw64"
       }
+  - ps: 7z x -oC:\ mingw-w64.7z | Out-Null;
   - ps: >-
       if (!(Test-Path -Path "C:\Deps\gtk")) {
         if ($Env:GTK -eq "gnome") {
