@@ -1502,6 +1502,15 @@ mod gl_area {
     use GLArea;
 
     impl GLArea {
+        pub fn connect_create_context<F: Fn(GLArea) -> gdk::GLContext + 'static>(&self, f: F)
+                -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(GLArea) -> gdk::GLContext + 'static>> = Box::new(Box::new(f));
+                connect(self.unwrap_widget() as *mut _,"create-context",
+                    transmute(gl_context_trampoline), Box::into_raw(f) as *mut _)
+            }
+        }
+
         pub fn connect_render<F: Fn(GLArea, gdk::GLContext) -> Inhibit + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(GLArea, gdk::GLContext) -> Inhibit + 'static>> = Box::new(Box::new(f));
@@ -1519,14 +1528,18 @@ mod gl_area {
         }
     }
 
-    #[cfg(gtk_3_16)]
+    extern "C" fn gl_context_trampoline(this: *mut GtkGLArea,
+            f: &Box<Fn(GLArea) -> gdk::GLContext + 'static>) -> *mut gdk_ffi::GdkGLContext {
+        callback_guard!();
+        f(GLArea::wrap_widget(GTK_WIDGET(this as *mut _))).to_glib_full()
+    }
+
     extern "C" fn gl_area_trampoline(this: *mut GtkGLArea, context: *mut gdk_ffi::GdkGLContext,
             f: &Box<Fn(GLArea, gdk::GLContext) + 'static>) {
         callback_guard!();
         unsafe { f(GLArea::wrap_widget(GTK_WIDGET(this as *mut _)), from_glib_none(context)) }
     }
 
-    #[cfg(gtk_3_16)]
     extern "C" fn gl_area_trampoline_res(this: *mut GtkGLArea, width: i32, height: i32,
             f: &Box<Fn(GLArea, i32, i32) + 'static>) {
         callback_guard!();
