@@ -52,6 +52,18 @@ impl Grid {
         }
     }
 
+    pub unsafe fn get_child_at<T: ::WidgetTrait>(&self, left: i32, top: i32) -> Option<T> {
+        let tmp_pointer = unsafe {
+            ffi::gtk_grid_get_child_at(GTK_GRID(self.pointer), left, top)
+        };
+
+        if tmp_pointer.is_null() {
+            None
+        } else {
+            Some(::FFIWidget::wrap_widget(tmp_pointer))
+        }
+    }
+
     pub fn insert_row(&self, position: i32) -> () {
         unsafe {
             ffi::gtk_grid_insert_row(GTK_GRID(self.pointer), position as c_int);
