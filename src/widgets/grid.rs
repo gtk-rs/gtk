@@ -53,9 +53,7 @@ impl Grid {
     }
 
     pub unsafe fn get_child_at<T: ::WidgetTrait>(&self, left: i32, top: i32) -> Option<T> {
-        let tmp_pointer = unsafe {
-            ffi::gtk_grid_get_child_at(GTK_GRID(self.pointer), left, top)
-        };
+        let tmp_pointer = ffi::gtk_grid_get_child_at(GTK_GRID(self.pointer), left, top);
 
         if tmp_pointer.is_null() {
             None
