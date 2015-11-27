@@ -43,6 +43,12 @@ pub use self::rt::{
     events_pending,
 };
 
+pub use self::signal::{
+    idle_add,
+    timeout_add,
+    timeout_add_seconds,
+};
+
 pub use self::widgets::{
     CssProvider,
     StyleContext,

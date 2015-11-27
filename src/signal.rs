@@ -2,7 +2,7 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//use std::boxed::into_raw;
+use std::cell::RefCell;
 use std::mem::transmute;
 use std::process;
 use std::thread;
@@ -11,7 +11,7 @@ use glib::signal::connect;
 use glib::translate::*;
 use glib::{FFIGObject, ParamSpec};
 
-use glib_ffi::gboolean;
+use glib_ffi::{self, gboolean, gpointer};
 use ffi::{GtkAdjustment, GtkTreeSelection, GtkTreeViewColumn};
 use gdk::{
     EventAny,
@@ -71,6 +71,8 @@ impl ToGlib for Inhibit {
     }
 }
 
+pub use glib::source::Continue;
+
 struct CallbackGuard;
 
 impl Drop for CallbackGuard {
@@ -90,8 +92,56 @@ macro_rules! callback_guard {
     )
 }
 
-// libstd stability workaround
-unsafe fn into_raw<T>(b: Box<T>) -> *mut T { transmute(b) }
+// idle_add and timeout_add fixed to the main thread
+
+extern "C" fn trampoline(func: &RefCell<Box<FnMut() -> Continue + 'static>>) -> gboolean {
+    callback_guard!();
+    (&mut *func.borrow_mut())().to_glib()
+}
+
+unsafe extern "C" fn destroy_closure(ptr: gpointer) {
+    callback_guard!();
+    Box::<RefCell<Box<FnMut() -> Continue + 'static>>>::from_raw(ptr as *mut _);
+}
+
+fn into_raw<F: FnMut() -> Continue + 'static>(func: F) -> gpointer {
+    let func: Box<RefCell<Box<FnMut() -> Continue + 'static>>> =
+        Box::new(RefCell::new(Box::new(func)));
+    Box::into_raw(func) as gpointer
+}
+
+/// Similar to `glib::idle_add` but only callable from the main thread and
+/// doesn't require `Send`.
+pub fn idle_add<F>(func: F) -> u32
+    where F: FnMut() -> Continue + 'static {
+    assert_initialized_main_thread!();
+    unsafe {
+        glib_ffi::g_idle_add_full(glib_ffi::G_PRIORITY_DEFAULT_IDLE, transmute(trampoline),
+            into_raw(func), Some(destroy_closure))
+    }
+}
+
+/// Similar to `glib::timeout_add` but only callable from the main thread and
+/// doesn't require `Send`.
+pub fn timeout_add<F>(interval: u32, func: F) -> u32
+    where F: FnMut() -> Continue + 'static {
+    assert_initialized_main_thread!();
+    unsafe {
+        glib_ffi::g_timeout_add_full(glib_ffi::G_PRIORITY_DEFAULT, interval, transmute(trampoline),
+            into_raw(func), Some(destroy_closure))
+    }
+}
+
+/// Similar to `glib::timeout_add_seconds` but only callable from the main thread and
+/// doesn't require `Send`.
+pub fn timeout_add_seconds<F>(interval: u32, func: F) -> u32
+    where F: FnMut() -> Continue + 'static {
+    assert_initialized_main_thread!();
+    unsafe {
+        glib_ffi::g_timeout_add_seconds_full(glib_ffi::G_PRIORITY_DEFAULT, interval,
+            transmute(trampoline), into_raw(func), Some(destroy_closure))
+    }
+}
 
 pub trait WidgetSignals {
     fn connect_notify<F: Fn(Widget, &ParamSpec) + 'static>(&self, f: F) -> u64;
