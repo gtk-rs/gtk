@@ -148,7 +148,6 @@ pub trait WidgetSignals {
 }
 
 mod widget {
-    use super::into_raw;
     use std::mem::transmute;
     use libc::{c_int, c_uint};
     use glib::{ParamSpec};
@@ -175,7 +174,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, &ParamSpec) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "notify",
-                    transmute(notify_trampoline), into_raw(f) as *mut _)
+                    transmute(notify_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -183,7 +182,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "accel-closures-changed",
-                    transmute(void_trampoline), into_raw(f) as *mut _)
+                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -191,7 +190,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventButton) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "button-press-event",
-                    transmute(event_button_trampoline), into_raw(f) as *mut _)
+                    transmute(event_button_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -200,7 +199,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventButton) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "button-release-event",
-                    transmute(event_button_trampoline), into_raw(f) as *mut _)
+                    transmute(event_button_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -208,7 +207,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, u64) -> bool + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "can-activate-accel",
-                    transmute(accel_trampoline), into_raw(f) as *mut _)
+                    transmute(accel_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -216,7 +215,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, &ParamSpec) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "child-notify",
-                    transmute(notify_trampoline), into_raw(f) as *mut _)
+                    transmute(notify_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -224,7 +223,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "composited-changed",
-                    transmute(void_trampoline), into_raw(f) as *mut _)
+                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -232,7 +231,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventConfigure) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "configure-event",
-                    transmute(event_configure_trampoline), into_raw(f) as *mut _)
+                    transmute(event_configure_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -240,7 +239,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventExpose) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "damage-event",
-                    transmute(event_expose_trampoline), into_raw(f) as *mut _)
+                    transmute(event_expose_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -248,7 +247,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventAny) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "delete-event",
-                    transmute(event_any_trampoline), into_raw(f) as *mut _)
+                    transmute(event_any_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -256,7 +255,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "destroy",
-                    transmute(void_trampoline), into_raw(f) as *mut _)
+                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -264,7 +263,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventAny) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "destroy-event",
-                    transmute(event_any_trampoline), into_raw(f) as *mut _)
+                    transmute(event_any_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -272,7 +271,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, TextDirection) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "direction-changed",
-                    transmute(text_direction_trampoline), into_raw(f) as *mut _)
+                    transmute(text_direction_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -280,7 +279,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, Context) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "draw",
-                    transmute(draw_trampoline), into_raw(f) as *mut _)
+                    transmute(draw_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -289,7 +288,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventCrossing) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "enter-notify-event",
-                    transmute(event_crossing_trampoline), into_raw(f) as *mut _)
+                    transmute(event_crossing_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -297,7 +296,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventAny) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "event",
-                    transmute(event_any_trampoline), into_raw(f) as *mut _)
+                    transmute(event_any_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -305,7 +304,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventAny) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "event-after",
-                    transmute(event_any_trampoline), into_raw(f) as *mut _)
+                    transmute(event_any_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -313,7 +312,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, DirectionType) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "focus",
-                    transmute(direction_trampoline), into_raw(f) as *mut _)
+                    transmute(direction_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -321,7 +320,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventFocus) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "focus-in-event",
-                    transmute(event_focus_trampoline), into_raw(f) as *mut _)
+                    transmute(event_focus_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -329,7 +328,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventFocus) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "focus-out-event",
-                    transmute(event_focus_trampoline), into_raw(f) as *mut _)
+                    transmute(event_focus_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -338,7 +337,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventGrabBroken) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "grab-broken-event",
-                    transmute(event_grab_broken_trampoline), into_raw(f) as *mut _)
+                    transmute(event_grab_broken_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -346,7 +345,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "grab-focus",
-                    transmute(void_trampoline), into_raw(f) as *mut _)
+                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -354,7 +353,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, bool) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "grab-notify",
-                    transmute(grab_trampoline), into_raw(f) as *mut _)
+                    transmute(grab_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -362,7 +361,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "hide",
-                    transmute(void_trampoline), into_raw(f) as *mut _)
+                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -370,7 +369,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, DirectionType) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "keynav-failed",
-                    transmute(direction_trampoline), into_raw(f) as *mut _)
+                    transmute(direction_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -378,7 +377,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventKey) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "key-press-event",
-                    transmute(event_key_trampoline), into_raw(f) as *mut _)
+                    transmute(event_key_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -386,7 +385,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventKey) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "key-release-event",
-                    transmute(event_key_trampoline), into_raw(f) as *mut _)
+                    transmute(event_key_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -395,7 +394,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventCrossing) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "leave-notify-event",
-                    transmute(event_crossing_trampoline), into_raw(f) as *mut _)
+                    transmute(event_crossing_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -403,7 +402,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "map",
-                    transmute(void_trampoline), into_raw(f) as *mut _)
+                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -411,7 +410,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventAny) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "map-event",
-                    transmute(event_any_trampoline), into_raw(f) as *mut _)
+                    transmute(event_any_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -419,7 +418,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, bool) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "mnemonic-activate",
-                    transmute(mnemonic_trampoline), into_raw(f) as *mut _)
+                    transmute(mnemonic_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -427,7 +426,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, DirectionType) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "move-focus",
-                    transmute(direction_void_trampoline), into_raw(f) as *mut _)
+                    transmute(direction_void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -436,7 +435,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventMotion) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "motion-notify-event",
-                    transmute(event_motion_trampoline), into_raw(f) as *mut _)
+                    transmute(event_motion_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -445,7 +444,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventProperty) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "property-notify-event",
-                    transmute(event_property_trampoline), into_raw(f) as *mut _)
+                    transmute(event_property_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -454,7 +453,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventProximity) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "proximity-in-event",
-                    transmute(event_proximity_trampoline), into_raw(f) as *mut _)
+                    transmute(event_proximity_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -463,7 +462,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventProximity) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "proximity-out-event",
-                    transmute(event_proximity_trampoline), into_raw(f) as *mut _)
+                    transmute(event_proximity_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -471,7 +470,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget) -> bool + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "popup-menu",
-                    transmute(bool_trampoline), into_raw(f) as *mut _)
+                    transmute(bool_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -481,7 +480,7 @@ mod widget {
                 let f: Box<Box<Fn(Widget, i32, i32, bool, Tooltip) -> bool + 'static>> =
                     Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "query-tooltip",
-                    transmute(query_trampoline), into_raw(f) as *mut _)
+                    transmute(query_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -489,7 +488,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "realize",
-                    transmute(void_trampoline), into_raw(f) as *mut _)
+                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -497,7 +496,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, Screen) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "screen-changed",
-                    transmute(screen_trampoline), into_raw(f) as *mut _)
+                    transmute(screen_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -505,7 +504,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventScroll) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "scroll-event",
-                    transmute(event_scroll_trampoline), into_raw(f) as *mut _)
+                    transmute(event_scroll_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -513,7 +512,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "show",
-                    transmute(void_trampoline), into_raw(f) as *mut _)
+                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -521,7 +520,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, WidgetHelpType) -> bool + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "show-help",
-                    transmute(help_trampoline), into_raw(f) as *mut _)
+                    transmute(help_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -529,7 +528,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, &RectangleInt) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "size-allocate",
-                    transmute(rectangle_trampoline), into_raw(f) as *mut _)
+                    transmute(rectangle_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -537,7 +536,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, StateFlags) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "state-flags-changed",
-                    transmute(state_trampoline), into_raw(f) as *mut _)
+                    transmute(state_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -545,7 +544,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "style-updated",
-                    transmute(void_trampoline), into_raw(f) as *mut _)
+                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -553,7 +552,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventAny) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "touch-event",
-                    transmute(event_any_trampoline), into_raw(f) as *mut _)
+                    transmute(event_any_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -561,7 +560,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "unmap",
-                    transmute(void_trampoline), into_raw(f) as *mut _)
+                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -569,7 +568,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventAny) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "unmap-event",
-                    transmute(event_any_trampoline), into_raw(f) as *mut _)
+                    transmute(event_any_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -577,7 +576,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "unrealize",
-                    transmute(void_trampoline), into_raw(f) as *mut _)
+                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -586,7 +585,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventWindowState) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "window-state-event",
-                    transmute(event_window_state_trampoline), into_raw(f) as *mut _)
+                    transmute(event_window_state_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -776,7 +775,6 @@ pub trait EntrySignals {
 }
 
 mod entry {
-    use super::into_raw;
     use std::mem::transmute;
     use std::str;
     use std::ffi::CStr;
@@ -792,7 +790,7 @@ mod entry {
             unsafe {
                 let f: Box<Box<Fn(Entry) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "activate",
-                    transmute(void_trampoline), into_raw(f) as *mut _)
+                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -800,7 +798,7 @@ mod entry {
             unsafe {
                 let f: Box<Box<Fn(Entry) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "backspace",
-                    transmute(void_trampoline), into_raw(f) as *mut _)
+                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -808,7 +806,7 @@ mod entry {
             unsafe {
                 let f: Box<Box<Fn(Entry) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "copy_clipboard",
-                    transmute(void_trampoline), into_raw(f) as *mut _)
+                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -816,7 +814,7 @@ mod entry {
             unsafe {
                 let f: Box<Box<Fn(Entry) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "cut_clipboard",
-                    transmute(void_trampoline), into_raw(f) as *mut _)
+                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -824,7 +822,7 @@ mod entry {
             unsafe {
                 let f: Box<Box<Fn(Entry) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "paste_clipboard",
-                    transmute(void_trampoline), into_raw(f) as *mut _)
+                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -832,7 +830,7 @@ mod entry {
             unsafe {
                 let f: Box<Box<Fn(Entry) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "toggle_overwrite",
-                    transmute(void_trampoline), into_raw(f) as *mut _)
+                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -840,7 +838,7 @@ mod entry {
             unsafe {
                 let f: Box<Box<Fn(Entry, DeleteType, i32) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "delete_from_cursor",
-                    transmute(delete_trampoline), into_raw(f) as *mut _)
+                    transmute(delete_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -848,7 +846,7 @@ mod entry {
             unsafe {
                 let f: Box<Box<Fn(Entry, MovementStep, i32, bool) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "move_cursor",
-                    transmute(move_cursor_trampoline), into_raw(f) as *mut _)
+                    transmute(move_cursor_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -856,7 +854,7 @@ mod entry {
             unsafe {
                 let f: Box<Box<Fn(Entry, &str) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "insert_at_cursor",
-                    transmute(string_trampoline), into_raw(f) as *mut _)
+                    transmute(string_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -864,7 +862,7 @@ mod entry {
             unsafe {
                 let f: Box<Box<Fn(Entry, &str) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "preedit_changed",
-                    transmute(string_trampoline), into_raw(f) as *mut _)
+                    transmute(string_trampoline), Box::into_raw(f) as *mut _)
             }
         }
     }
@@ -902,7 +900,6 @@ pub trait ButtonSignals {
 }
 
 mod button {
-    use super::into_raw;
     use std::mem::transmute;
     use glib::signal::connect;
     use traits::{FFIWidget, ButtonTrait};
@@ -915,7 +912,7 @@ mod button {
             unsafe {
                 let f: Box<Box<Fn(Button) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "activate",
-                    transmute(void_trampoline), into_raw(f) as *mut _)
+                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -923,7 +920,7 @@ mod button {
             unsafe {
                 let f: Box<Box<Fn(Button) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "clicked",
-                    transmute(void_trampoline), into_raw(f) as *mut _)
+                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
     }
@@ -942,7 +939,6 @@ pub trait ComboBoxSignals {
 }
 
 mod combobox {
-    use super::into_raw;
     use std::mem::transmute;
     use glib::signal::connect;
     use glib::translate::*;
@@ -957,7 +953,7 @@ mod combobox {
             unsafe {
                 let f: Box<Box<Fn(ComboBox) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "changed",
-                    transmute(void_trampoline), into_raw(f) as *mut _)
+                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -965,7 +961,7 @@ mod combobox {
             unsafe {
                 let f: Box<Box<Fn(ComboBox, ScrollType) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "move-active",
-                    transmute(move_trampoline), into_raw(f) as *mut _)
+                    transmute(move_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -973,7 +969,7 @@ mod combobox {
             unsafe {
                 let f: Box<Box<Fn(ComboBox) -> bool + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "popdown",
-                    transmute(bool_trampoline), into_raw(f) as *mut _)
+                    transmute(bool_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -981,7 +977,7 @@ mod combobox {
             unsafe {
                 let f: Box<Box<Fn(ComboBox) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "popup",
-                    transmute(void_trampoline), into_raw(f) as *mut _)
+                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
     }
@@ -1009,7 +1005,6 @@ pub trait ToolButtonSignals {
 }
 
 mod tool_button {
-    use super::into_raw;
     use std::mem::transmute;
     use glib::signal::connect;
     use traits::{FFIWidget, ToolButtonTrait};
@@ -1022,7 +1017,7 @@ mod tool_button {
             unsafe {
                 let f: Box<Box<Fn(ToolButton) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "clicked",
-                    transmute(void_trampoline), into_raw(f) as *mut _)
+                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
     }
@@ -1039,7 +1034,6 @@ pub trait SpinButtonSignals {
 }
 
 mod spin_button {
-    use super::into_raw;
     use std::mem::transmute;
     use glib::signal::connect;
     use traits::FFIWidget;
@@ -1052,7 +1046,7 @@ mod spin_button {
             unsafe {
                 let f: Box<Box<Fn(SpinButton) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "value-changed",
-                    transmute(void_trampoline), into_raw(f) as *mut _)
+                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1060,7 +1054,7 @@ mod spin_button {
             unsafe {
                 let f: Box<Box<Fn(SpinButton) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "clicked",
-                    transmute(void_trampoline), into_raw(f) as *mut _)
+                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
     }
@@ -1077,7 +1071,6 @@ pub trait DialogSignals {
 }
 
 mod dialog {
-    use super::into_raw;
     use std::mem::transmute;
     use libc::c_int;
     use glib::signal::connect;
@@ -1091,7 +1084,7 @@ mod dialog {
             unsafe {
                 let f: Box<Box<Fn(Dialog) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "close",
-                    transmute(void_trampoline), into_raw(f) as *mut _)
+                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1099,7 +1092,7 @@ mod dialog {
             unsafe {
                 let f: Box<Box<Fn(Dialog, i32) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "response",
-                    transmute(int_trampoline), into_raw(f) as *mut _)
+                    transmute(int_trampoline), Box::into_raw(f) as *mut _)
             }
         }
     }
@@ -1137,7 +1130,6 @@ pub trait TreeViewSignals {
 }
 
 mod tree_view {
-    use super::into_raw;
     use std::mem::transmute;
     use glib::signal::connect;
     use glib::translate::*;
@@ -1152,7 +1144,7 @@ mod tree_view {
             unsafe {
                 let f: Box<Box<Fn(TreeView) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "columns-changed",
-                    transmute(void_trampoline), into_raw(f) as *mut _)
+                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1160,7 +1152,7 @@ mod tree_view {
             unsafe {
                 let f: Box<Box<Fn(TreeView) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "cursor-changed",
-                    transmute(void_trampoline), into_raw(f) as *mut _)
+                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1169,7 +1161,7 @@ mod tree_view {
             unsafe {
                 let f: Box<Box<Fn(TreeView, bool, bool, bool) -> bool + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "expand-collapse-cursor-row",
-                    transmute(bool3_bool_trampoline), into_raw(f) as *mut _)
+                    transmute(bool3_bool_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1177,7 +1169,7 @@ mod tree_view {
             unsafe {
                 let f: Box<Box<Fn(TreeView, TreePath, TreeViewColumn) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "row-activated",
-                    transmute(path_column_trampoline), into_raw(f) as *mut _)
+                    transmute(path_column_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1185,7 +1177,7 @@ mod tree_view {
             unsafe {
                 let f: Box<Box<Fn(TreeView, &mut TreeIter, TreePath) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "row-collapsed",
-                    transmute(iter_path_trampoline), into_raw(f) as *mut _)
+                    transmute(iter_path_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1193,7 +1185,7 @@ mod tree_view {
             unsafe {
                 let f: Box<Box<Fn(TreeView, &mut TreeIter, TreePath) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "row-expanded",
-                    transmute(iter_path_trampoline), into_raw(f) as *mut _)
+                    transmute(iter_path_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1201,7 +1193,7 @@ mod tree_view {
             unsafe {
                 let f: Box<Box<Fn(TreeView) -> bool + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "select-all",
-                    transmute(bool_trampoline), into_raw(f) as *mut _)
+                    transmute(bool_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1209,7 +1201,7 @@ mod tree_view {
             unsafe {
                 let f: Box<Box<Fn(TreeView) -> bool + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "select-cursor-parent",
-                    transmute(bool_trampoline), into_raw(f) as *mut _)
+                    transmute(bool_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1217,7 +1209,7 @@ mod tree_view {
             unsafe {
                 let f: Box<Box<Fn(TreeView, bool) -> bool + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "select-cursor-row",
-                    transmute(bool_bool_trampoline), into_raw(f) as *mut _)
+                    transmute(bool_bool_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1225,7 +1217,7 @@ mod tree_view {
             unsafe {
                 let f: Box<Box<Fn(TreeView) -> bool + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "start-interactive-search",
-                    transmute(bool_trampoline), into_raw(f) as *mut _)
+                    transmute(bool_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1235,7 +1227,7 @@ mod tree_view {
                 let f: Box<Box<Fn(TreeView, &mut TreeIter, TreePath) -> bool + 'static>> =
                     Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "test-collapse-row",
-                    transmute(iter_path_bool_trampoline), into_raw(f) as *mut _)
+                    transmute(iter_path_bool_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1245,7 +1237,7 @@ mod tree_view {
                 let f: Box<Box<Fn(TreeView, &mut TreeIter, TreePath) -> bool + 'static>> =
                     Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "test-expand-row",
-                    transmute(iter_path_bool_trampoline), into_raw(f) as *mut _)
+                    transmute(iter_path_bool_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1253,7 +1245,7 @@ mod tree_view {
             unsafe {
                 let f: Box<Box<Fn(TreeView) -> bool + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "toggle-cursor-row",
-                    transmute(bool_trampoline), into_raw(f) as *mut _)
+                    transmute(bool_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1261,7 +1253,7 @@ mod tree_view {
             unsafe {
                 let f: Box<Box<Fn(TreeView) -> bool + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "unselect-all",
-                    transmute(bool_trampoline), into_raw(f) as *mut _)
+                    transmute(bool_trampoline), Box::into_raw(f) as *mut _)
             }
         }
     }
@@ -1328,7 +1320,6 @@ pub trait RangeSignals {
 }
 
 mod range {
-    use super::into_raw;
     use std::mem::transmute;
     use libc::c_double;
     use glib::signal::connect;
@@ -1345,7 +1336,7 @@ mod range {
             unsafe {
                 let f: Box<Box<Fn(Range, f64) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "adjust-bounds",
-                    transmute(adjust_trampoline), into_raw(f) as *mut _)
+                    transmute(adjust_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1353,7 +1344,7 @@ mod range {
             unsafe {
                 let f: Box<Box<Fn(Range, ScrollType, f64) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "change-value",
-                    transmute(change_trampoline), into_raw(f) as *mut _)
+                    transmute(change_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1361,7 +1352,7 @@ mod range {
             unsafe {
                 let f: Box<Box<Fn(Range, ScrollType) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "move-slider",
-                    transmute(move_trampoline), into_raw(f) as *mut _)
+                    transmute(move_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1369,7 +1360,7 @@ mod range {
             unsafe {
                 let f: Box<Box<Fn(Range) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "value-changed",
-                    transmute(void_trampoline), into_raw(f) as *mut _)
+                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1404,7 +1395,7 @@ impl Adjustment {
         unsafe {
             let f: Box<Box<Fn(Adjustment) + 'static>> = Box::new(Box::new(f));
             connect(self.unwrap_pointer() as *mut _, "value-changed",
-                transmute(adjustment_trampoline), into_raw(f) as *mut _)
+                transmute(adjustment_trampoline), Box::into_raw(f) as *mut _)
         }
     }
 }
@@ -1419,7 +1410,7 @@ impl TreeSelection {
         unsafe {
             let f: Box<Box<Fn(TreeSelection) + 'static>> = Box::new(Box::new(f));
             connect(self.unwrap_gobject() as *mut _, "changed",
-                transmute(tree_selection_trampoline), into_raw(f) as *mut _)
+                transmute(tree_selection_trampoline), Box::into_raw(f) as *mut _)
         }
     }
 }
@@ -1435,7 +1426,7 @@ impl TreeViewColumn {
         unsafe {
             let f: Box<Box<Fn(TreeViewColumn) + 'static>> = Box::new(Box::new(f));
             connect(self.unwrap_pointer() as *mut _, "clicked",
-                transmute(tree_view_column_trampoline), into_raw(f) as *mut _)
+                transmute(tree_view_column_trampoline), Box::into_raw(f) as *mut _)
         }
     }
 }
@@ -1455,7 +1446,6 @@ mod gl_area {
     use gdk_ffi;
     use ffi::GtkGLArea;
     use cast::GTK_WIDGET;
-    use super::into_raw;
     use traits::FFIWidget;
     use super::CallbackGuard;
     use super::Inhibit;
@@ -1466,7 +1456,7 @@ mod gl_area {
             unsafe {
                 let f: Box<Box<Fn(GLArea, gdk::GLContext) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _,"render",
-                    transmute(gl_area_trampoline), into_raw(f) as *mut _)
+                    transmute(gl_area_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1474,7 +1464,7 @@ mod gl_area {
             unsafe {
                 let f: Box<Box<Fn(GLArea, i32, i32) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _,"resize",
-                    transmute(gl_area_trampoline_res), into_raw(f) as *mut _)
+                    transmute(gl_area_trampoline_res), Box::into_raw(f) as *mut _)
             }
         }
     }
@@ -1505,7 +1495,6 @@ pub trait CalendarSignals {
 }
 
 mod calendar {
-    use super::into_raw;
     use std::mem::transmute;
     use glib::signal::connect;
     use traits::FFIWidget;
@@ -1518,7 +1507,7 @@ mod calendar {
             unsafe {
                 let f: Box<Box<Fn(Calendar) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "day-selected",
-                    transmute(void_trampoline), into_raw(f) as *mut _)
+                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1526,7 +1515,7 @@ mod calendar {
             unsafe {
                 let f: Box<Box<Fn(Calendar) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "day-selected-double-click",
-                    transmute(void_trampoline), into_raw(f) as *mut _)
+                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1534,7 +1523,7 @@ mod calendar {
             unsafe {
                 let f: Box<Box<Fn(Calendar) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "month-changed",
-                    transmute(void_trampoline), into_raw(f) as *mut _)
+                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1542,7 +1531,7 @@ mod calendar {
             unsafe {
                 let f: Box<Box<Fn(Calendar) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "next-month",
-                    transmute(void_trampoline), into_raw(f) as *mut _)
+                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1550,7 +1539,7 @@ mod calendar {
             unsafe {
                 let f: Box<Box<Fn(Calendar) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "next-year",
-                    transmute(void_trampoline), into_raw(f) as *mut _)
+                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1558,7 +1547,7 @@ mod calendar {
             unsafe {
                 let f: Box<Box<Fn(Calendar) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "prev-month",
-                    transmute(void_trampoline), into_raw(f) as *mut _)
+                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1566,7 +1555,7 @@ mod calendar {
             unsafe {
                 let f: Box<Box<Fn(Calendar) + 'static>> = Box::new(Box::new(f));
                 connect(self.unwrap_widget() as *mut _, "prev-year",
-                    transmute(void_trampoline), into_raw(f) as *mut _)
+                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
     }
@@ -1588,7 +1577,6 @@ pub trait StatusIconSignals {
 }
 
 mod status_icon {
-    use super::into_raw;
     use StatusIcon;
     use libc::{c_int, c_uint};
     use std::mem::transmute;
@@ -1605,7 +1593,7 @@ mod status_icon {
             unsafe {
                 let f: Box<Box<Fn(StatusIcon) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "activate",
-                    transmute(void_trampoline), into_raw(f) as *mut _)
+                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1613,7 +1601,7 @@ mod status_icon {
             unsafe {
                 let f: Box<Box<Fn(StatusIcon, &EventButton) -> bool + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "button-press-event",
-                    transmute(event_trampoline), into_raw(f) as *mut _)
+                    transmute(event_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1621,7 +1609,7 @@ mod status_icon {
             unsafe {
                 let f: Box<Box<Fn(StatusIcon, &EventButton) -> bool + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "button-release-event",
-                    transmute(event_trampoline), into_raw(f) as *mut _)
+                    transmute(event_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1629,7 +1617,7 @@ mod status_icon {
             unsafe {
                 let f: Box<Box<Fn(StatusIcon, u32, u32) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "popup-menu",
-                    transmute(popup_menu_trampoline), into_raw(f) as *mut _)
+                    transmute(popup_menu_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1637,7 +1625,7 @@ mod status_icon {
             unsafe {
                 let f: Box<Box<Fn(StatusIcon, i32, i32, bool, Tooltip) -> bool + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "query-tooltip",
-                    transmute(query_tooltip_trampoline), into_raw(f) as *mut _)
+                    transmute(query_tooltip_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1645,7 +1633,7 @@ mod status_icon {
             unsafe {
                 let f: Box<Box<Fn(StatusIcon, &EventScroll) -> bool + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "scroll-event",
-                    transmute(event_trampoline), into_raw(f) as *mut _)
+                    transmute(event_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1653,7 +1641,7 @@ mod status_icon {
             unsafe {
                 let f: Box<Box<Fn(StatusIcon, i32) -> bool + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "size-changed",
-                    transmute(size_changed_trampoline), into_raw(f) as *mut _)
+                    transmute(size_changed_trampoline), Box::into_raw(f) as *mut _)
             }
         }
     }
