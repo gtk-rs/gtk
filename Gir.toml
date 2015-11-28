@@ -129,6 +129,8 @@ manual = [
     "Gtk.TreeModel",
     "Gtk.Widget",
     "Gtk.Window",
+    "Gdk.Rectangle",
+    "cairo.RectangleInt",
 ]
 
 [[object]]

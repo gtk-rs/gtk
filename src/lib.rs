@@ -161,6 +161,7 @@ pub mod widgets;
 pub mod window;
 
 mod auto;
+mod rectangle;
 
 pub use auto::*;
 
@@ -195,6 +196,7 @@ pub use mvc::tree_model::{
 pub use mvc::tree_selection::TreeSelection;
 pub use mvc::tree_view::TreeView;
 pub use mvc::tree_view_column::TreeViewColumn;
+pub use rectangle::Rectangle;
 pub use widgets::lock_button::LockButton;
 #[cfg(target_os = "linux")]
 pub use widgets::socket::Socket;
