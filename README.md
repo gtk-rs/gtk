@@ -65,6 +65,10 @@ Examples are providing in the [gtk-rs/examples](https://github.com/gtk-rs/exampl
 
 Browse the documentation [at our website](http://gtk-rs.org/docs/gtk/).
 
+### Examples
+
+Examples of gtk applications can be found in the [examples repository](https://github.com/gtk-rs/examples).
+
 ## Including gtk as a cargo dependency
 
 To include gtk as a cargo dependency you have to add it to your Cargo.toml:
