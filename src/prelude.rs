@@ -7,14 +7,6 @@ pub use auto::traits::*;
 pub use chooser::app::AppChooserExt;
 pub use chooser::color::ColorChooserExt;
 pub use dialog::DialogExt;
-pub use mvc::cell_interfaces::{
-    CellEditableExt,
-    CellLayoutExt,
-};
-pub use mvc::cell_renderer::{
-    CellRendererExt,
-    CellRendererTextExt,
-};
 pub use mvc::tree_model::TreeModelExt;
 pub use widgets::widget::WidgetExt;
 pub use window::WindowExt;

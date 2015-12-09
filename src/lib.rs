@@ -147,8 +147,6 @@ pub mod chooser {
 }
 pub mod dialog;
 pub mod mvc {
-    pub mod cell_interfaces;
-    pub mod cell_renderer;
     pub mod store;
     pub mod tree_model;
     pub mod tree_selection;
@@ -161,7 +159,11 @@ pub mod widgets;
 pub mod window;
 
 mod auto;
+
+mod icon_view;
 mod rectangle;
+mod text_iter;
+mod tree_path;
 
 pub use auto::*;
 
@@ -175,28 +177,20 @@ pub use chooser::recent::{
 pub use dialog::Dialog;
 pub use dialog::about::AboutDialog;
 pub use dialog::message::MessageDialog;
-pub use mvc::cell_interfaces::{
-    CellEditable,
-    CellLayout,
-};
-pub use mvc::cell_renderer::{
-    CellRenderer,
-    CellRendererText,
-    CellRendererToggle,
-};
+pub use icon_view::IconView;
 pub use mvc::store::{
     ListStore,
     TreeStore,
 };
 pub use mvc::tree_model::{
-    TreeIter,
     TreeModel,
-    TreePath,
 };
 pub use mvc::tree_selection::TreeSelection;
 pub use mvc::tree_view::TreeView;
 pub use mvc::tree_view_column::TreeViewColumn;
 pub use rectangle::Rectangle;
+pub use text_iter::TextIter;
+pub use tree_path::TreePath;
 pub use widgets::lock_button::LockButton;
 #[cfg(target_os = "linux")]
 pub use widgets::socket::Socket;

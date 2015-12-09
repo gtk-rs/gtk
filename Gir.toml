@@ -20,11 +20,17 @@ generate = [
     "Gtk.Button",
     "Gtk.ButtonBox",
     "Gtk.Calendar",
+    "Gtk.CellAreaBox",
+    "Gtk.CellAreaContext",
+    "Gtk.CellEditable",
+    "Gtk.CellLayout",
+    "Gtk.CellRenderer",
+    "Gtk.CellRendererText",
+    "Gtk.CellRendererToggle",
     "Gtk.CheckButton",
     "Gtk.CheckMenuItem",
     "Gtk.ColorButton",
     "Gtk.ColorChooserWidget",
-    "Gtk.ComboBox",
     "Gtk.Container",
     "Gtk.CssProvider",
     "Gtk.DrawingArea",
@@ -119,6 +125,7 @@ ignore = [
 ]
 
 manual = [
+    "Gdk.Rectangle",
     "Gdk.Screen",
     "Gdk.Window",
     "GdkPixbuf.Pixbuf",
@@ -133,7 +140,6 @@ manual = [
     "Gtk.TreeStore",
     "Gtk.Widget",
     "Gtk.Window",
-    "Gdk.Rectangle",
     "cairo.RectangleInt",
 ]
 
@@ -145,6 +151,22 @@ non_nullable = [
 ]
 
 [[object]]
+name = "Gtk.CellArea"
+status = "generate"
+ignored_functions = [
+    "apply_attributes",
+    "get_cell_at_position",
+    "get_focus_siblings",
+]
+
+[[object]]
+name = "Gtk.ComboBox"
+status = "generate"
+ignored_functions = [
+    "set_active_iter",
+]
+
+[[object]]
 name = "Gtk.EntryBuffer"
 status = "generate"
 non_nullable = [
@@ -153,7 +175,7 @@ non_nullable = [
 
 [[object]]
 name = "Gtk.IconView"
-status = "generate"
+status = "manual"
 ignored_functions = [
     "get_selected_items",
 ]
