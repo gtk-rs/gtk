@@ -9,7 +9,7 @@ use ffi;
 
 use glib::object::{Downcast, Upcast};
 use Box;
-use widgets::widget::Widget;
+use Widget;
 use window::Window;
 
 use {

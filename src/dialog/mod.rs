@@ -20,7 +20,7 @@ use ffi;
 use glib::object::{Downcast, Upcast};
 #[cfg(gtk_3_12)]
 use HeaderBar;
-use widgets::widget::Widget;
+use Widget;
 use {Box, Button, ResponseType};
 
 /// Pseudo-variadic array of buttons

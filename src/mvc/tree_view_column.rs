@@ -8,7 +8,7 @@ use glib::translate::*;
 use ffi;
 
 use glib::object::{Downcast, Upcast};
-use widgets::widget::Widget;
+use Widget;
 use super::tree_view::TreeView;
 
 use {

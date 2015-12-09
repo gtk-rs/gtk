@@ -3,52 +3,8 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 use std::ptr;
-use libc::c_char;
-
 use glib::translate::*;
 use ffi;
-
-//////////////////////////////////////////////////////////////////////////////
-
-pub struct RecentData {
-    display_name: String,
-    description: String,
-    mime_type: String,
-    app_name: String,
-    app_exec: String,
-    groups: Vec<String>,
-    is_private: bool
-}
-
-impl <'a> ToGlibPtr<'a, *mut ffi::GtkRecentData> for RecentData {
-    type Storage = (Box<ffi::GtkRecentData>,
-                    [Stash<'a, *const c_char, String>; 5],
-                    Stash<'a, *mut *const c_char, [String]>);
-
-    fn to_glib_none(&'a self) -> Stash<'a, *mut ffi::GtkRecentData, Self> {
-        let display_name = self.display_name.to_glib_none();
-        let description = self.description.to_glib_none();
-        let mime_type = self.mime_type.to_glib_none();
-        let app_name = self.app_name.to_glib_none();
-        let app_exec = self.app_exec.to_glib_none();
-        let groups = self.groups.to_glib_none();
-
-        let mut data = Box::new(ffi::GtkRecentData {
-            display_name: display_name.0 as *mut c_char,
-            description: description.0 as *mut c_char,
-            mime_type: mime_type.0 as *mut c_char,
-            app_name: app_name.0 as *mut c_char,
-            app_exec: app_exec.0 as *mut c_char,
-            groups: groups.0 as *mut *mut c_char,
-            is_private: self.is_private.to_glib(),
-        });
-
-        Stash(&mut *data, (data, [display_name, description, mime_type,
-                                  app_name, app_exec], groups))
-    }
-}
-
-//////////////////////////////////////////////////////////////////////////////
 
 glib_wrapper! {
     pub struct RecentInfo(Refcounted<ffi::GtkRecentInfo>);
@@ -128,7 +84,7 @@ impl RecentInfo {
         unsafe {
             let mut length = 0;
             let ptr = ffi::gtk_recent_info_get_applications(self.to_glib_none().0, &mut length);
-            Vec::from_glib_full_num(ptr as *const *const c_char, length as usize)
+            Vec::from_glib_full_num(ptr, length as usize)
         }
     }
 
@@ -140,7 +96,9 @@ impl RecentInfo {
 
     pub fn has_application(&self, app_name: &str) -> bool {
         unsafe {
-            from_glib(ffi::gtk_recent_info_has_application(self.to_glib_none().0, app_name.to_glib_none().0))
+            from_glib(
+                ffi::gtk_recent_info_has_application(self.to_glib_none().0,
+                    app_name.to_glib_none().0))
         }
     }
 
@@ -148,13 +106,14 @@ impl RecentInfo {
         unsafe {
             let mut length = 0;
             let ptr = ffi::gtk_recent_info_get_groups(self.to_glib_none().0, &mut length);
-            Vec::from_glib_full_num(ptr as *const *const c_char, length as usize)
+            Vec::from_glib_full_num(ptr, length as usize)
         }
     }
 
     pub fn has_group(&self, group_name: &str) -> bool {
         unsafe {
-            from_glib(ffi::gtk_recent_info_has_group(self.to_glib_none().0, group_name.to_glib_none().0))
+            from_glib(
+                ffi::gtk_recent_info_has_group(self.to_glib_none().0, group_name.to_glib_none().0))
         }
     }
 

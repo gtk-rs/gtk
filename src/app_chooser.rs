@@ -7,7 +7,7 @@ use glib::AppInfo;
 use ffi;
 
 use glib::object::Upcast;
-use widgets::widget::Widget;
+use Widget;
 
 glib_wrapper! {
     pub struct AppChooser(Object<ffi::GtkAppChooser>): Widget;

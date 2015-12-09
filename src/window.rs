@@ -9,8 +9,8 @@ use gdk;
 use ffi;
 
 use glib::object::{Downcast, Upcast};
-use widgets::widget::Widget;
 use {
+    Widget,
     WindowPosition,
     WindowType,
 };

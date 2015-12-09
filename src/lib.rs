@@ -139,12 +139,13 @@ pub use ffi::GtkWrapMode as WrapMode;
 
 pub const DIALOG_MODAL: DialogFlags = ffi::GTK_DIALOG_MODAL;
 
+pub const STYLE_PROVIDER_PRIORITY_FALLBACK: i32 = ffi::GTK_STYLE_PROVIDER_PRIORITY_FALLBACK;
+pub const STYLE_PROVIDER_PRIORITY_THEME: i32 = ffi::GTK_STYLE_PROVIDER_PRIORITY_THEME;
+pub const STYLE_PROVIDER_PRIORITY_SETTINGS: i32 = ffi::GTK_STYLE_PROVIDER_PRIORITY_SETTINGS;
+pub const STYLE_PROVIDER_PRIORITY_APPLICATION: i32 = ffi::GTK_STYLE_PROVIDER_PRIORITY_APPLICATION;
+pub const STYLE_PROVIDER_PRIORITY_USER: i32 = ffi::GTK_STYLE_PROVIDER_PRIORITY_USER;
+
 pub mod builder;
-pub mod chooser {
-    pub mod app;
-    pub mod color;
-    pub mod recent;
-}
 pub mod dialog;
 pub mod mvc {
     pub mod store;
@@ -153,31 +154,36 @@ pub mod mvc {
     pub mod tree_view;
     pub mod tree_view_column;
 }
+
 pub mod prelude;
 pub mod rt;
-pub mod widgets;
-pub mod window;
 
 mod auto;
 
+mod app_chooser;
+mod color_chooser;
 mod icon_view;
+mod lock_button;
+mod recent_data;
+mod recent_info;
 mod rectangle;
+#[cfg(target_os = "linux")]
+mod socket;
 mod text_iter;
 mod tree_path;
+mod widget;
+mod window;
 
 pub use auto::*;
 
 pub use builder::{Builder, Buildable};
-pub use chooser::app::AppChooser;
-pub use chooser::color::ColorChooser;
-pub use chooser::recent::{
-    RecentData,
-    RecentInfo,
-};
+pub use app_chooser::AppChooser;
+pub use color_chooser::ColorChooser;
 pub use dialog::Dialog;
 pub use dialog::about::AboutDialog;
 pub use dialog::message::MessageDialog;
 pub use icon_view::IconView;
+pub use lock_button::LockButton;
 pub use mvc::store::{
     ListStore,
     TreeStore,
@@ -188,13 +194,14 @@ pub use mvc::tree_model::{
 pub use mvc::tree_selection::TreeSelection;
 pub use mvc::tree_view::TreeView;
 pub use mvc::tree_view_column::TreeViewColumn;
+pub use recent_data::RecentData;
+pub use recent_info::RecentInfo;
 pub use rectangle::Rectangle;
+#[cfg(target_os = "linux")]
+pub use socket::Socket;
 pub use text_iter::TextIter;
 pub use tree_path::TreePath;
-pub use widgets::lock_button::LockButton;
-#[cfg(target_os = "linux")]
-pub use widgets::socket::Socket;
-pub use widgets::widget::Widget;
+pub use widget::Widget;
 pub use window::Window;
 
 // ---------------- cut ----------------
