@@ -9,10 +9,10 @@ use ffi;
 
 use glib::object::{Downcast, Upcast};
 use widgets::widget::Widget;
-use super::cell_renderer::CellRenderer;
 use super::tree_view::TreeView;
 
 use {
+    CellRenderer,
     TreeViewColumnSizing,
     SortType,
 };

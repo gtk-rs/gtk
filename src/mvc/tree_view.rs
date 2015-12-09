@@ -10,12 +10,12 @@ use glib::object::Downcast;
 use glib::translate::*;
 use ffi;
 
-use super::tree_model::{TreeModel, TreePath};
-use super::tree_selection::TreeSelection;
-use super::tree_view_column::TreeViewColumn;
-
 use {
     Entry,
+    TreeModel,
+    TreePath,
+    TreeSelection,
+    TreeViewColumn,
     TreeViewGridLines,
     Widget,
 };
@@ -295,8 +295,9 @@ impl TreeView {
     pub fn set_cursor(&self, path: &TreePath, focus_column: Option<&TreeViewColumn>,
             start_editing: bool) {
         unsafe {
-            ffi::gtk_tree_view_set_cursor(self.to_glib_none().0, path.unwrap_pointer(),
-                focus_column.to_glib_none().0, start_editing.to_glib());
+            ffi::gtk_tree_view_set_cursor(self.to_glib_none().0,
+                mut_override(path.to_glib_none().0), focus_column.to_glib_none().0,
+                start_editing.to_glib());
         }
     }
 
@@ -305,7 +306,7 @@ impl TreeView {
             let mut path = ptr::null_mut();
             let mut focus_column = ptr::null_mut();
             ffi::gtk_tree_view_get_cursor(self.to_glib_none().0, &mut path, &mut focus_column);
-            let path = if path.is_null() { None } else { Some(TreePath::wrap_pointer(path)) };
+            let path = if path.is_null() { None } else { Some(from_glib_full(path)) };
             (path, from_glib_none(focus_column))
         }
     }
@@ -313,14 +314,15 @@ impl TreeView {
     pub fn expand_row(&self, path: &TreePath, open_all: bool) -> bool {
         unsafe {
             from_glib(
-                ffi::gtk_tree_view_expand_row(self.to_glib_none().0, path.unwrap_pointer(),
-                    open_all.to_glib()))
+                ffi::gtk_tree_view_expand_row(self.to_glib_none().0,
+                    mut_override(path.to_glib_none().0), open_all.to_glib()))
         }
     }
 
     pub fn collapse_row(&self, path: &TreePath) -> bool {
         unsafe {
-            from_glib(ffi::gtk_tree_view_collapse_row(self.to_glib_none().0, path.unwrap_pointer()))
+            from_glib(ffi::gtk_tree_view_collapse_row(self.to_glib_none().0,
+                mut_override(path.to_glib_none().0)))
         }
     }
 
