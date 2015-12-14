@@ -6,6 +6,7 @@ use std::fmt::{self, Display, Formatter};
 use ffi::{self, GtkCssProvider};
 use glib::translate::{ToGlibPtr, from_glib_full};
 use glib::{self, GlibContainer};
+use libc::ssize_t;
 
 #[repr(C)]
 pub struct CssProvider {
@@ -33,6 +34,20 @@ impl CssProvider {
         }
     }
 
+    pub fn load_from_data(data: &str) -> Result<CssProvider, glib::Error> {
+        assert_initialized_main_thread!();
+        unsafe {
+            let pointer = ffi::gtk_css_provider_new();
+            let mut error = ::std::ptr::null_mut();
+            ffi::gtk_css_provider_load_from_data(pointer, data.as_ptr() as *mut u8, data.len() as ssize_t, &mut error);
+            if error.is_null() {
+                Ok(CssProvider { pointer: pointer })
+            } else {
+                Err(glib::Error::wrap(error))
+            }
+        }
+    }
+    
     pub fn load_from_path(path: &str) -> Result<CssProvider, glib::Error> {
         assert_initialized_main_thread!();
         unsafe {
@@ -44,7 +59,6 @@ impl CssProvider {
             } else {
                 Err(glib::Error::wrap(error))
             }
-
         }
     }
 }
