@@ -74,7 +74,7 @@ Examples of gtk applications can be found in the [examples repository](https://g
 To include gtk as a cargo dependency you have to add it to your Cargo.toml:
 ```Toml
 [dependencies]
-gtk = "0.0.4"
+gtk = "0.0"
 ```
 
 ## Use __gtk__
