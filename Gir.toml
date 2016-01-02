@@ -102,6 +102,7 @@ generate = [
     "Gtk.Switch",
     "Gtk.TextBuffer",
     "Gtk.TextChildAnchor",
+    "Gtk.TextIter",
     "Gtk.TextMark",
     "Gtk.TextTag",
     "Gtk.TextTagTable",
@@ -136,7 +137,6 @@ manual = [
     "Gtk.RecentData",
     "Gtk.RecentInfo",
     "Gtk.TreeModel",
-    "Gtk.TreePath",
     "Gtk.TreeStore",
     "Gtk.Widget",
     "Gtk.Window",
@@ -146,43 +146,132 @@ manual = [
 [[object]]
 name = "Gtk.AppChooserDialog"
 status = "generate"
-non_nullable = [
-    "get_widget",
-]
+    [[object.function]]
+    name = "get_widget"
+	[object.function.return]
+	nullable = false
 
 [[object]]
 name = "Gtk.CellArea"
 status = "generate"
-ignored_functions = [
-    "apply_attributes",
-    "get_cell_at_position",
-    "get_focus_siblings",
-]
+    [[object.function]]
+    name = "apply_attributes"
+    ignore = true
+    [[object.function]]
+    name = "get_cell_at_position"
+    ignore = true
+    [[object.function]]
+    name = "get_focus_siblings"
+    ignore = true
 
 [[object]]
 name = "Gtk.ComboBox"
 status = "generate"
-ignored_functions = [
-    "set_active_iter",
-]
+    [[object.function]]
+    name = "set_active_iter"
+    ignore = true
 
 [[object]]
 name = "Gtk.EntryBuffer"
 status = "generate"
-non_nullable = [
-    "get_text",
-]
+    [[object.function]]
+    name = "get_text"
+	[object.function.return]
+	nullable = false
 
 [[object]]
 name = "Gtk.IconView"
-status = "manual"
-ignored_functions = [
-    "get_selected_items",
-]
+status = "generate"
+    [[object.function]]
+    name = "get_cell_rect"
+	[[object.function.parameter]]
+	name = "path"
+	const = true
+    [[object.function]]
+    name = "get_item_column"
+	[[object.function.parameter]]
+	name = "path"
+	const = true
+    [[object.function]]
+    name = "get_item_row"
+	[[object.function.parameter]]
+	name = "path"
+	const = true
+    [[object.function]]
+    name = "item_activated"
+	[[object.function.parameter]]
+	name = "path"
+	const = true
+    [[object.function]]
+    name = "path_is_selected"
+	[[object.function.parameter]]
+	name = "path"
+	const = true
+    [[object.function]]
+    name = "scroll_to_path"
+	[[object.function.parameter]]
+	name = "path"
+	const = true
+    [[object.function]]
+    name = "select_path"
+	[[object.function.parameter]]
+	name = "path"
+	const = true
+    [[object.function]]
+    name = "set_cursor"
+	[[object.function.parameter]]
+	name = "path"
+	const = true
+    [[object.function]]
+    name = "set_drag_dest_item"
+	[[object.function.parameter]]
+	name = "path"
+	const = true
+    [[object.function]]
+    name = "unselect_path"
+	[[object.function.parameter]]
+	name = "path"
+	const = true
+    [[object.function]]
+    name = "get_selected_items"
+    ignore = true
+
+[[object]]
+name = "Gtk.TreePath"
+status = "generate"
+    [[object.function]]
+    name = "get_depth"
+	[[object.function.parameter]]
+	name = "path"
+	const = true
+    [[object.function]]
+    name = "is_ancestor"
+	[[object.function.parameter]]
+	name = "path"
+	const = true
+	[[object.function.parameter]]
+	name = "descendant"
+	const = true
+    [[object.function]]
+    name = "is_descendant"
+	[[object.function.parameter]]
+	name = "path"
+	const = true
+	[[object.function.parameter]]
+	name = "ancestor"
+	const = true
+    [[object.function]]
+    name = "get_indices"
+    ignore = true
+    [[object.function]]
+    name = "to_string"
+	[[object.function.parameter]]
+	name = "path"
+	const = true
 
 [[object]]
 name = "Gtk.StyleContext"
 status = "generate"
-ignored_functions = [
-    'list_.*',
-]
+    [[object.function]]
+    pattern = 'list_.*'
+    ignore = true

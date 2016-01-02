@@ -162,14 +162,12 @@ mod auto;
 
 mod app_chooser;
 mod color_chooser;
-mod icon_view;
 mod lock_button;
 mod recent_data;
 mod recent_info;
 mod rectangle;
 #[cfg(target_os = "linux")]
 mod socket;
-mod text_iter;
 mod tree_path;
 mod widget;
 mod window;
@@ -182,7 +180,6 @@ pub use color_chooser::ColorChooser;
 pub use dialog::Dialog;
 pub use dialog::about::AboutDialog;
 pub use dialog::message::MessageDialog;
-pub use icon_view::IconView;
 pub use lock_button::LockButton;
 pub use mvc::store::{
     ListStore,
@@ -199,8 +196,6 @@ pub use recent_info::RecentInfo;
 pub use rectangle::Rectangle;
 #[cfg(target_os = "linux")]
 pub use socket::Socket;
-pub use text_iter::TextIter;
-pub use tree_path::TreePath;
 pub use widget::Widget;
 pub use window::Window;
 
