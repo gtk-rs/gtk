@@ -168,6 +168,9 @@ mod recent_info;
 mod rectangle;
 #[cfg(target_os = "linux")]
 mod socket;
+mod text_attributes;
+mod text_iter;
+mod text_view;
 mod tree_path;
 mod widget;
 mod window;
@@ -196,6 +199,7 @@ pub use recent_info::RecentInfo;
 pub use rectangle::Rectangle;
 #[cfg(target_os = "linux")]
 pub use socket::Socket;
+pub use text_attributes::TextAttributes;
 pub use widget::Widget;
 pub use window::Window;
 
