@@ -7,6 +7,7 @@ target_path = "."
 work_mode = "normal"
 
 generate = [
+    "Gtk.AboutDialog",
     "Gtk.AccelGroup",
     "Gtk.ActionBar",
     "Gtk.Actionable",
@@ -30,6 +31,7 @@ generate = [
     "Gtk.CheckButton",
     "Gtk.CheckMenuItem",
     "Gtk.ColorButton",
+    "Gtk.ColorChooserDialog",
     "Gtk.ColorChooserWidget",
     "Gtk.Container",
     "Gtk.CssProvider",
@@ -40,6 +42,7 @@ generate = [
     "Gtk.EventBox",
     "Gtk.Expander",
     "Gtk.FileChooser",
+    "Gtk.FileChooserDialog",
     "Gtk.FileChooserWidget",
     "Gtk.FileFilter",
     "Gtk.Fixed",
@@ -47,6 +50,7 @@ generate = [
     "Gtk.FlowBoxChild",
     "Gtk.FontButton",
     "Gtk.FontChooser",
+    "Gtk.FontChooserDialog",
     "Gtk.FontChooserWidget",
     "Gtk.Frame",
     "Gtk.Grid",
@@ -64,6 +68,7 @@ generate = [
     "Gtk.MenuItem",
     "Gtk.MenuShell",
     "Gtk.MenuToolButton",
+    "Gtk.MessageDialog",
     "Gtk.Misc",
     "Gtk.Notebook",
     "Gtk.Orientable",
@@ -78,6 +83,7 @@ generate = [
     "Gtk.RadioButton",
     "Gtk.Range",
     "Gtk.RecentChooser",
+    "Gtk.RecentChooserDialog",
     "Gtk.RecentChooserWidget",
     "Gtk.RecentFilter",
     "Gtk.RecentManager",
@@ -132,7 +138,6 @@ manual = [
     "GdkPixbuf.Pixbuf",
     "GdkPixbuf.PixbufAnimation",
     "Gtk.Buildable",
-    "Gtk.Dialog",
     "Gtk.ListStore",
     "Gtk.RecentData",
     "Gtk.RecentInfo",
@@ -170,6 +175,22 @@ status = "generate"
     [[object.function]]
     name = "set_active_iter"
     ignore = true
+
+[[object]]
+name = "Gtk.Dialog"
+status = "generate"
+    [[object.function]]
+    name = "add_button"
+	[object.function.return]
+	nullable = false
+    [[object.function]]
+    name = "get_action_area"
+	[object.function.return]
+	nullable = false
+    [[object.function]]
+    name = "get_content_area"
+	[object.function.return]
+	nullable = false
 
 [[object]]
 name = "Gtk.EntryBuffer"

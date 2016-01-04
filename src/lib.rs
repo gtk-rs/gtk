@@ -146,7 +146,6 @@ pub const STYLE_PROVIDER_PRIORITY_APPLICATION: i32 = ffi::GTK_STYLE_PROVIDER_PRI
 pub const STYLE_PROVIDER_PRIORITY_USER: i32 = ffi::GTK_STYLE_PROVIDER_PRIORITY_USER;
 
 pub mod builder;
-pub mod dialog;
 pub mod mvc {
     pub mod store;
     pub mod tree_model;
@@ -160,9 +159,13 @@ pub mod rt;
 
 mod auto;
 
+mod about_dialog;
 mod app_chooser;
 mod color_chooser;
+mod file_chooser_dialog;
 mod lock_button;
+mod message_dialog;
+mod recent_chooser_dialog;
 mod recent_data;
 mod recent_info;
 mod rectangle;
@@ -180,9 +183,6 @@ pub use auto::*;
 pub use builder::{Builder, Buildable};
 pub use app_chooser::AppChooser;
 pub use color_chooser::ColorChooser;
-pub use dialog::Dialog;
-pub use dialog::about::AboutDialog;
-pub use dialog::message::MessageDialog;
 pub use lock_button::LockButton;
 pub use mvc::store::{
     ListStore,

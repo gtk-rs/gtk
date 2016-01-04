@@ -6,7 +6,6 @@ pub use auto::traits::*;
 
 pub use app_chooser::AppChooserExt;
 pub use color_chooser::ColorChooserExt;
-pub use dialog::DialogExt;
 pub use mvc::tree_model::TreeModelExt;
 pub use widget::WidgetExt;
 pub use window::WindowExt;
