@@ -130,6 +130,7 @@ pub use ffi::GtkToolPaletteDragTargets as ToolPaletteDragTargets;
 pub use ffi::GtkToolbarStyle as ToolbarStyle;
 pub use ffi::GtkTreeModelFlags as TreeModelFlags;
 pub use ffi::GtkTreeViewColumnSizing as TreeViewColumnSizing;
+pub use ffi::GtkTreeViewDropPosition as TreeViewDropPosition;
 pub use ffi::GtkTreeViewGridLines as TreeViewGridLines;
 pub use ffi::GtkUnit as Unit;
 pub use ffi::GtkWidgetHelpType as WidgetHelpType;
@@ -146,13 +147,6 @@ pub const STYLE_PROVIDER_PRIORITY_APPLICATION: i32 = ffi::GTK_STYLE_PROVIDER_PRI
 pub const STYLE_PROVIDER_PRIORITY_USER: i32 = ffi::GTK_STYLE_PROVIDER_PRIORITY_USER;
 
 pub mod builder;
-pub mod mvc {
-    pub mod store;
-    pub mod tree_model;
-    pub mod tree_selection;
-    pub mod tree_view;
-    pub mod tree_view_column;
-}
 
 pub mod prelude;
 pub mod rt;
@@ -163,6 +157,7 @@ mod about_dialog;
 mod app_chooser;
 mod color_chooser;
 mod file_chooser_dialog;
+mod list_store;
 mod lock_button;
 mod message_dialog;
 mod recent_chooser_dialog;
@@ -174,7 +169,11 @@ mod socket;
 mod text_attributes;
 mod text_iter;
 mod text_view;
+mod tree_model;
 mod tree_path;
+mod tree_selection;
+mod tree_store;
+mod tree_view;
 mod widget;
 mod window;
 
@@ -184,16 +183,6 @@ pub use builder::{Builder, Buildable};
 pub use app_chooser::AppChooser;
 pub use color_chooser::ColorChooser;
 pub use lock_button::LockButton;
-pub use mvc::store::{
-    ListStore,
-    TreeStore,
-};
-pub use mvc::tree_model::{
-    TreeModel,
-};
-pub use mvc::tree_selection::TreeSelection;
-pub use mvc::tree_view::TreeView;
-pub use mvc::tree_view_column::TreeViewColumn;
 pub use recent_data::RecentData;
 pub use recent_info::RecentInfo;
 pub use rectangle::Rectangle;
