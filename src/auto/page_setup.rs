@@ -2,6 +2,7 @@
 // DO NOT EDIT
 
 use PageOrientation;
+use PaperSize;
 use Unit;
 use ffi;
 use glib::translate::*;
@@ -71,9 +72,11 @@ impl PageSetup {
         }
     }
 
-    //pub fn get_paper_size(&self) -> /*Ignored*/PaperSize {
-    //    unsafe { TODO: call ffi::gtk_page_setup_get_paper_size() }
-    //}
+    pub fn get_paper_size(&self) -> PaperSize {
+        unsafe {
+            from_glib_none(ffi::gtk_page_setup_get_paper_size(self.to_glib_none().0))
+        }
+    }
 
     pub fn get_paper_width(&self, unit: Unit) -> f64 {
         unsafe {
@@ -119,13 +122,17 @@ impl PageSetup {
         }
     }
 
-    //pub fn set_paper_size(&self, size: /*Ignored*/&mut PaperSize) {
-    //    unsafe { TODO: call ffi::gtk_page_setup_set_paper_size() }
-    //}
+    pub fn set_paper_size(&self, size: &PaperSize) {
+        unsafe {
+            ffi::gtk_page_setup_set_paper_size(self.to_glib_none().0, mut_override(size.to_glib_none().0));
+        }
+    }
 
-    //pub fn set_paper_size_and_default_margins(&self, size: /*Ignored*/&mut PaperSize) {
-    //    unsafe { TODO: call ffi::gtk_page_setup_set_paper_size_and_default_margins() }
-    //}
+    pub fn set_paper_size_and_default_margins(&self, size: &PaperSize) {
+        unsafe {
+            ffi::gtk_page_setup_set_paper_size_and_default_margins(self.to_glib_none().0, mut_override(size.to_glib_none().0));
+        }
+    }
 
     pub fn set_right_margin(&self, margin: f64, unit: Unit) {
         unsafe {

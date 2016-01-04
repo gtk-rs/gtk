@@ -4,6 +4,7 @@
 use NumberUpLayout;
 use PageOrientation;
 use PageSet;
+use PaperSize;
 use PrintDuplex;
 use PrintPages;
 use PrintQuality;
@@ -168,9 +169,11 @@ impl PrintSettings {
         }
     }
 
-    //pub fn get_paper_size(&self) -> /*Ignored*/PaperSize {
-    //    unsafe { TODO: call ffi::gtk_print_settings_get_paper_size() }
-    //}
+    pub fn get_paper_size(&self) -> PaperSize {
+        unsafe {
+            from_glib_full(ffi::gtk_print_settings_get_paper_size(self.to_glib_none().0))
+        }
+    }
 
     pub fn get_paper_width(&self, unit: Unit) -> f64 {
         unsafe {
@@ -364,9 +367,11 @@ impl PrintSettings {
         }
     }
 
-    //pub fn set_paper_size(&self, paper_size: /*Ignored*/&mut PaperSize) {
-    //    unsafe { TODO: call ffi::gtk_print_settings_set_paper_size() }
-    //}
+    pub fn set_paper_size(&self, paper_size: &PaperSize) {
+        unsafe {
+            ffi::gtk_print_settings_set_paper_size(self.to_glib_none().0, mut_override(paper_size.to_glib_none().0));
+        }
+    }
 
     pub fn set_paper_width(&self, width: f64, unit: Unit) {
         unsafe {
