@@ -160,6 +160,7 @@ mod file_chooser_dialog;
 mod list_store;
 mod lock_button;
 mod message_dialog;
+mod paper_size;
 mod recent_chooser_dialog;
 mod recent_data;
 mod recent_info;

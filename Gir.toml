@@ -73,12 +73,10 @@ generate = [
     "Gtk.Notebook",
     "Gtk.Orientable",
     "Gtk.Overlay",
-    "Gtk.PageSetup",
     "Gtk.Paned",
     "Gtk.PlacesSidebar",
     "Gtk.Popover",
     "Gtk.PopoverMenu",
-    "Gtk.PrintSettings",
     "Gtk.ProgressBar",
     "Gtk.RadioButton",
     "Gtk.Range",
@@ -291,6 +289,36 @@ status = "generate"
 	const = true
 	[[object.function.parameter]]
 	name = "b"
+	const = true
+
+[[object]]
+name = "Gtk.PageSetup"
+status = "generate"
+    [[object.function]]
+    pattern = "^set_paper_size"
+	[[object.function.parameter]]
+	name = "size"
+	const = true
+
+[[object]]
+name = "Gtk.PaperSize"
+status = "generate"
+    [[object.function]]
+    pattern = "^(get|is)_.*"
+	[[object.function.parameter]]
+	name = "size"
+	const = true
+    [[object.function]]
+    name = "is_equal"
+    ignore = true
+
+[[object]]
+name = "Gtk.PrintSettings"
+status = "generate"
+    [[object.function]]
+    name = "set_paper_size"
+	[[object.function.parameter]]
+	name = "paper_size"
 	const = true
 
 [[object]]
