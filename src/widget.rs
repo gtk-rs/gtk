@@ -16,6 +16,7 @@ use {
     Orientation,
     SizeRequestMode,
     StateFlags,
+    StyleContext,
     TextDirection,
 };
 
@@ -178,6 +179,7 @@ pub trait WidgetExt {
     fn freeze_child_notify(&self);
     fn child_notify(&self, child_property: &str);
     fn destroy(&self);
+    fn get_style_context(&self) -> StyleContext;
 }
 
 impl<O: Upcast<Widget>> WidgetExt for O {
@@ -928,5 +930,9 @@ impl<O: Upcast<Widget>> WidgetExt for O {
 
     fn destroy(&self) {
         unsafe { ffi::gtk_widget_destroy(self.to_glib_none().0) }
+    }
+
+    fn get_style_context(&self) -> StyleContext {
+        unsafe { from_glib_none(ffi::gtk_widget_get_style_context(self.to_glib_none().0)) }
     }
 }
