@@ -19,7 +19,7 @@ impl TreeStore {
         }
     }
 
-    pub fn reorder(&self, parent: &TreeIter, new_order: &[i32]) {
+    pub fn reorder(&self, parent: &TreeIter, new_order: &[u32]) {
         unsafe {
             let count = ffi::gtk_tree_model_iter_n_children(self.to_glib_none().0,
                                                             mut_override(parent.to_glib_none().0));
@@ -43,7 +43,7 @@ impl TreeStore {
             if safe_count && safe_values {
                 ffi::gtk_tree_store_reorder(self.to_glib_none().0,
                                             mut_override(parent.to_glib_none().0),
-                                            mut_override(new_order.as_ptr()));
+                                            mut_override(new_order.as_ptr() as *const c_int));
             }
         }
     }

@@ -20,7 +20,7 @@ impl ListStore {
         }
     }
 
-    pub fn reorder(&self, new_order: &[i32]) {
+    pub fn reorder(&self, new_order: &[u32]) {
         unsafe {
             let count = ffi::gtk_tree_model_iter_n_children(self.to_glib_none().0, ptr::null_mut());
             let safe_count = count as usize == new_order.len();
@@ -41,7 +41,8 @@ impl ListStore {
                           count - 1,
                           new_order);
             if safe_count && safe_values {
-                ffi::gtk_list_store_reorder(self.to_glib_none().0, mut_override(new_order.as_ptr()));
+                ffi::gtk_list_store_reorder(self.to_glib_none().0,
+                    mut_override(new_order.as_ptr() as *const c_int));
             }
         }
     }
