@@ -148,7 +148,8 @@ pub const STYLE_PROVIDER_PRIORITY_USER: i32 = ffi::GTK_STYLE_PROVIDER_PRIORITY_U
 pub mod builder;
 
 pub mod prelude;
-pub mod rt;
+#[macro_use]
+mod rt;
 
 mod auto;
 
@@ -194,13 +195,10 @@ pub use text_attributes::TextAttributes;
 pub use widget::Widget;
 pub use window::Window;
 
-// ---------------- cut ----------------
-
-/*
-
 // These are/should be inlined
 pub use self::rt::{
     init,
+    set_initialized,
     main,
     main_quit,
     main_level,
@@ -214,6 +212,10 @@ pub use self::rt::{
     check_version,
     events_pending
 };
+
+// ---------------- cut ----------------
+
+/*
 
 /// GTK Widgets for all versions
 pub use self::widgets::{
@@ -495,6 +497,9 @@ pub const DIALOG_MODAL: DialogFlags = ffi::GTK_DIALOG_MODAL;
 
 /// GTK various struct
 pub struct Tooltip;
+
+#[macro_use]
+mod rt;
 
 mod macros;
 mod cast;
