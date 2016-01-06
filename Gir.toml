@@ -33,6 +33,7 @@ generate = [
     "Gtk.ColorButton",
     "Gtk.ColorChooserDialog",
     "Gtk.ColorChooserWidget",
+    "Gtk.ComboBoxText",
     "Gtk.Container",
     "Gtk.CssProvider",
     "Gtk.DrawingArea",
@@ -100,6 +101,7 @@ generate = [
     "Gtk.SpinButton",
     "Gtk.Spinner",
     "Gtk.Stack",
+    "Gtk.StackSidebar",
     "Gtk.StackSwitcher",
     "Gtk.StatusIcon",
     "Gtk.Statusbar",
@@ -132,11 +134,13 @@ ignore = [
 ]
 
 manual = [
+    "Gdk.GLContext",
     "Gdk.Rectangle",
     "Gdk.Screen",
     "Gdk.Window",
     "GdkPixbuf.Pixbuf",
     "GdkPixbuf.PixbufAnimation",
+    #"GLib.Error",
     "Gtk.Buildable",
     "Gtk.RecentData",
     "Gtk.RecentInfo",
@@ -196,6 +200,11 @@ status = "generate"
     name = "get_text"
 	[object.function.return]
 	nullable = false
+
+[[object]]
+name = "Gtk.GLArea"
+status = "generate"
+module_name = "gl_area"
 
 [[object]]
 name = "Gtk.IconView"
