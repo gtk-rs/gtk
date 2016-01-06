@@ -24,6 +24,7 @@ glib_wrapper! {
 
 impl Window {
     pub fn new(window_type: WindowType) -> Window {
+        assert_initialized_main_thread!();
         unsafe { Widget::from_glib_none(ffi::gtk_window_new(window_type)).downcast_unchecked() }
     }
 }

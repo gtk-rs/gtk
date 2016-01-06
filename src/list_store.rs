@@ -12,6 +12,7 @@ use TreeIter;
 
 impl ListStore {
     pub fn new(column_types: &[Type]) -> ListStore {
+        assert_initialized_main_thread!();
         unsafe {
             let mut column_types = column_types.iter().map(|t| t.to_glib()).collect::<Vec<_>>();
             from_glib_full(

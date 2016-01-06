@@ -21,6 +21,7 @@ glib_wrapper! {
 
 impl LockButton {
     pub fn new(permission: &Permission) -> LockButton {
+        assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(ffi::gtk_lock_button_new(permission.unwrap()))
                 .downcast_unchecked()

@@ -27,6 +27,7 @@ macro_rules! to_u16 {
 
 impl EntryBuffer {
     pub fn new(initial_chars: Option<&str>) -> EntryBuffer {
+        assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gtk_entry_buffer_new(initial_chars.to_glib_none().0, -1)) }
     }
 

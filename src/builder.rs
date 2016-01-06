@@ -30,16 +30,19 @@ glib_wrapper! {
 
 impl Builder {
     pub fn new() -> Builder {
+        assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gtk_builder_new()) }
     }
 
     #[cfg(gtk_3_10)]
     pub fn new_from_file(file_name: &str) -> Builder {
+        assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gtk_builder_new_from_file(file_name.to_glib_none().0)) }
     }
 
     #[cfg(gtk_3_10)]
     pub fn new_from_resource(resource_path: &str) -> Builder {
+        assert_initialized_main_thread!();
         unsafe {
             from_glib_full(ffi::gtk_builder_new_from_resource(resource_path.to_glib_none().0))
         }
@@ -47,6 +50,7 @@ impl Builder {
 
     #[cfg(gtk_3_10)]
     pub fn new_from_string(string: &str) -> Builder {
+        assert_initialized_main_thread!();
         unsafe {
             // Don't need a null-terminated string here
             from_glib_full(

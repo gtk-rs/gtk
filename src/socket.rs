@@ -18,6 +18,7 @@ glib_wrapper! {
 
 impl Socket {
     pub fn new() -> Socket {
+        assert_initialized_main_thread!();
         unsafe { Widget::from_glib_none(ffi::gtk_socket_new()).downcast_unchecked() }
     }
 

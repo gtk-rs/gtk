@@ -16,6 +16,7 @@ glib_wrapper! {
 
 impl TextAttributes {
     pub fn new() -> TextAttributes {
+        assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gtk_text_attributes_new()) }
     }
 
