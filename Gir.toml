@@ -107,7 +107,6 @@ generate = [
     "Gtk.Switch",
     "Gtk.TextBuffer",
     "Gtk.TextChildAnchor",
-    "Gtk.TextIter",
     "Gtk.TextMark",
     "Gtk.TextTag",
     "Gtk.TextTagTable",
@@ -359,6 +358,14 @@ status = "generate"
 	[[object.function.parameter]]
 	name = "paper_size"
 	const = true
+
+[[object]]
+name = "Gtk.TextIter"
+status = "generate"
+    [[object.function]]
+    name = "get_char"
+        [object.function.return]
+        nullable = true
 
 [[object]]
 name = "Gtk.TreeModel"
