@@ -12,6 +12,7 @@ pub use auto::traits::CellEditableExt;
 pub use auto::traits::CellLayoutExt;
 pub use auto::traits::CellRendererExt;
 pub use auto::traits::CheckButtonExt;
+pub use auto::traits::ComboBoxExt;
 pub use auto::traits::ContainerExt;
 pub use auto::traits::DialogExt;
 pub use auto::traits::EditableExt;
