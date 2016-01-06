@@ -2,8 +2,6 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! A container for arranging buttons
-
 use glib::translate::*;
 use ffi;
 
@@ -12,7 +10,6 @@ use super::widget::Widget;
 use glib::Permission;
 use glib::GlibContainer;
 
-/// GtkLockButton — A widget to unlock or lock privileged operations
 glib_wrapper! {
     pub struct LockButton(Object<ffi::GtkLockButton>): Widget, ::Container, ::Bin, ::Button,
         ::Actionable, ::Buildable;
@@ -23,14 +20,12 @@ glib_wrapper! {
 }
 
 impl LockButton {
-    /// Creates a new lock button which reflects the `permission`.
     pub fn new(permission: &Permission) -> LockButton {
         unsafe {
             Widget::from_glib_none(ffi::gtk_lock_button_new(permission.unwrap()))
                 .downcast_unchecked()
         }
     }
-    /// Obtains the `GPermission` object that controls this button.
     pub fn get_permission(&self) -> Option<Permission> {
         let tmp_pointer = unsafe {
             ffi::gtk_lock_button_get_permission(self.to_glib_none().0)
@@ -41,7 +36,6 @@ impl LockButton {
             Some(GlibContainer::wrap(tmp_pointer))
         }
     }
-    /// Sets the `GPermission` object that controls this button.
     pub fn set_permission(&self, permission: &Permission) {
         unsafe {
             ffi::gtk_lock_button_set_permission(self.to_glib_none().0,

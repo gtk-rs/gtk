@@ -8,7 +8,6 @@ use ffi;
 use glib::object::Downcast;
 use super::widget::Widget;
 
-/// GtkSocket — Container for widgets from other processes.
 glib_wrapper! {
     pub struct Socket(Object<ffi::GtkSocket>): Widget, ::Container, ::Buildable;
 
