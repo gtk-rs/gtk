@@ -1,5 +1,5 @@
 extern crate gtk;
 
 fn main() {
-    let _ = gtk::rt::init();
+    let _ = gtk::init();
 }

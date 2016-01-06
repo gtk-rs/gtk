@@ -145,7 +145,6 @@ pub const STYLE_PROVIDER_PRIORITY_SETTINGS: i32 = ffi::GTK_STYLE_PROVIDER_PRIORI
 pub const STYLE_PROVIDER_PRIORITY_APPLICATION: i32 = ffi::GTK_STYLE_PROVIDER_PRIORITY_APPLICATION;
 pub const STYLE_PROVIDER_PRIORITY_USER: i32 = ffi::GTK_STYLE_PROVIDER_PRIORITY_USER;
 
-pub mod builder;
 
 pub mod prelude;
 #[macro_use]
@@ -155,6 +154,7 @@ mod auto;
 
 mod about_dialog;
 mod app_chooser;
+mod builder;
 mod color_chooser;
 mod entry_buffer;
 mod file_chooser_dialog;
