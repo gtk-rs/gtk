@@ -5,6 +5,7 @@ version = "3.0"
 min_cfg_version = "3.4"
 target_path = "."
 work_mode = "normal"
+generate_safety_asserts = true
 
 generate = [
     "Gtk.AboutDialog",
