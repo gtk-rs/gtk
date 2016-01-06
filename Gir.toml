@@ -38,7 +38,6 @@ generate = [
     "Gtk.CssProvider",
     "Gtk.DrawingArea",
     "Gtk.Editable",
-    "Gtk.Entry",
     "Gtk.EntryCompletion",
     "Gtk.EventBox",
     "Gtk.Expander",
@@ -192,6 +191,19 @@ status = "generate"
     name = "get_content_area"
 	[object.function.return]
 	nullable = false
+
+[[object]]
+name = "Gtk.Entry"
+status = "generate"
+    [[object.function]]
+    name = "get_buffer"
+        [object.function.return]
+        nullable = false
+    [[object.function]]
+    name = "set_placeholder_text"
+        [object.function.parameter]
+        name = "text"
+        nullable = true
 
 [[object]]
 name = "Gtk.EntryBuffer"
