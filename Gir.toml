@@ -141,6 +141,7 @@ manual = [
     "GdkPixbuf.PixbufAnimation",
     #"GLib.Error",
     "Gtk.Buildable",
+    "Gtk.EntryBuffer",
     "Gtk.RecentData",
     "Gtk.RecentInfo",
     "Gtk.Widget",
@@ -206,14 +207,6 @@ status = "generate"
         [object.function.parameter]
         name = "text"
         nullable = true
-
-[[object]]
-name = "Gtk.EntryBuffer"
-status = "generate"
-    [[object.function]]
-    name = "get_text"
-	[object.function.return]
-	nullable = false
 
 [[object]]
 name = "Gtk.GLArea"
