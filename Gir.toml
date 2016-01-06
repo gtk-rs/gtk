@@ -174,7 +174,9 @@ name = "Gtk.ComboBox"
 status = "generate"
     [[object.function]]
     name = "set_active_iter"
-    ignore = true
+	[[object.function.parameter]]
+	name = "iter"
+	const = true
 
 [[object]]
 name = "Gtk.Dialog"
