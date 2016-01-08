@@ -349,6 +349,9 @@ status = "generate"
     [[object.function]]
     name = "is_equal"
     ignore = true
+    [[object.function]]
+    name = "is_ipp"
+    version = "3.16"
 
 [[object]]
 name = "Gtk.PrintSettings"
