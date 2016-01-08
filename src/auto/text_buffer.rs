@@ -151,7 +151,7 @@ impl TextBuffer {
     //    unsafe { TODO: call ffi::gtk_text_buffer_get_copy_target_list() }
     //}
 
-    //pub fn get_deserialize_formats(&self, n_formats: &mut i32) -> /*Unknown conversion*/Unknown rust type: "CArray TypeId { ns_id: 10, id: 5 }" {
+    //pub fn get_deserialize_formats(&self) -> (/*Unknown conversion*/Unknown rust type: "CArray TypeId { ns_id: 10, id: 5 }", i32) {
     //    unsafe { TODO: call ffi::gtk_text_buffer_get_deserialize_formats() }
     //}
 
@@ -260,7 +260,7 @@ impl TextBuffer {
         }
     }
 
-    //pub fn get_serialize_formats(&self, n_formats: &mut i32) -> /*Unknown conversion*/Unknown rust type: "CArray TypeId { ns_id: 10, id: 5 }" {
+    //pub fn get_serialize_formats(&self) -> (/*Unknown conversion*/Unknown rust type: "CArray TypeId { ns_id: 10, id: 5 }", i32) {
     //    unsafe { TODO: call ffi::gtk_text_buffer_get_serialize_formats() }
     //}
 
@@ -419,7 +419,7 @@ impl TextBuffer {
         }
     }
 
-    //pub fn serialize(&self, content_buffer: &TextBuffer, format: &Atom, start: &TextIter, end: &TextIter, length: Fundamental: Size) -> /*Unknown conversion*/Unknown rust type: "CArray TypeId { ns_id: 0, id: 3 }" {
+    //pub fn serialize(&self, content_buffer: &TextBuffer, format: &Atom, start: &TextIter, end: &TextIter) -> (/*Unknown conversion*/Unknown rust type: "CArray TypeId { ns_id: 0, id: 3 }", Fundamental: Size) {
     //    unsafe { TODO: call ffi::gtk_text_buffer_serialize() }
     //}
 

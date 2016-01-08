@@ -108,6 +108,12 @@ impl PaperSize {
         }
     }
 
+    fn is_equal(&self, size2: &PaperSize) -> bool {
+        unsafe {
+            from_glib(ffi::gtk_paper_size_is_equal(mut_override(self.to_glib_none().0), mut_override(size2.to_glib_none().0)))
+        }
+    }
+
     #[cfg(gtk_3_16)]
     pub fn is_ipp(&self) -> bool {
         unsafe {
@@ -140,3 +146,12 @@ impl PaperSize {
     }
 
 }
+
+impl PartialEq for PaperSize {
+    #[inline]
+    fn eq(&self, other: &Self) -> bool {
+        self.is_equal(other)
+    }
+}
+
+impl Eq for PaperSize {}

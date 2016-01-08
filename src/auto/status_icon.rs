@@ -3,12 +3,15 @@
 
 use ImageType;
 use Menu;
+use Orientation;
+use Rectangle;
 use ffi;
 use gdk;
 use gdk_pixbuf;
 use glib::object::Upcast;
 use glib::translate::*;
 use std::mem;
+use std::ptr;
 
 glib_wrapper! {
     pub struct StatusIcon(Object<ffi::GtkStatusIcon>);
@@ -58,9 +61,15 @@ impl StatusIcon {
         }
     }
 
-    //pub fn get_geometry(&self, screen: /*Unimplemented*/gdk::Screen) -> Option<(Rectangle, Orientation)> {
-    //    unsafe { TODO: call ffi::gtk_status_icon_get_geometry() }
-    //}
+    pub fn get_geometry(&self) -> Option<(gdk::Screen, Rectangle, Orientation)> {
+        unsafe {
+            let mut screen = ptr::null_mut();
+            let mut area = Rectangle::uninitialized();
+            let mut orientation = mem::uninitialized();
+            let ret = from_glib(ffi::gtk_status_icon_get_geometry(self.to_glib_none().0, &mut screen, area.to_glib_none_mut().0, &mut orientation));
+            if ret { Some((from_glib_none(screen), area, orientation)) } else { None }
+        }
+    }
 
     //pub fn get_gicon(&self) -> /*Ignored*/Option<gio::Icon> {
     //    unsafe { TODO: call ffi::gtk_status_icon_get_gicon() }

@@ -3,10 +3,12 @@
 
 use SelectionMode;
 use TreeIter;
+use TreeModel;
 use TreePath;
 use TreeView;
 use ffi;
 use glib::translate::*;
+use std::ptr;
 
 glib_wrapper! {
     pub struct TreeSelection(Object<ffi::GtkTreeSelection>);
@@ -33,13 +35,22 @@ impl TreeSelection {
     //    unsafe { TODO: call ffi::gtk_tree_selection_get_select_function() }
     //}
 
-    //pub fn get_selected<T: Upcast</*Ignored*/TreeModel>>(&self, model: &T) -> Option<TreeIter> {
-    //    unsafe { TODO: call ffi::gtk_tree_selection_get_selected() }
-    //}
+    pub fn get_selected(&self) -> Option<(TreeModel, TreeIter)> {
+        unsafe {
+            let mut model = ptr::null_mut();
+            let mut iter = TreeIter::uninitialized();
+            let ret = from_glib(ffi::gtk_tree_selection_get_selected(self.to_glib_none().0, &mut model, iter.to_glib_none_mut().0));
+            if ret { Some((from_glib_none(model), iter)) } else { None }
+        }
+    }
 
-    //pub fn get_selected_rows<T: Upcast</*Ignored*/TreeModel>>(&self, model: &T) -> Vec<TreePath> {
-    //    unsafe { TODO: call ffi::gtk_tree_selection_get_selected_rows() }
-    //}
+    pub fn get_selected_rows(&self) -> (Vec<TreePath>, TreeModel) {
+        unsafe {
+            let mut model = ptr::null_mut();
+            let ret = FromGlibPtrContainer::from_glib_full(ffi::gtk_tree_selection_get_selected_rows(self.to_glib_none().0, &mut model));
+            (ret, from_glib_none(model))
+        }
+    }
 
     pub fn get_tree_view(&self) -> Option<TreeView> {
         unsafe {

@@ -95,7 +95,7 @@ impl Image {
         }
     }
 
-    //pub fn get_gicon<T: Upcast</*Ignored*/gio::Icon>>(&self, gicon: &T) -> i32 {
+    //pub fn get_gicon(&self, gicon: /*Ignored*/gio::Icon) -> i32 {
     //    unsafe { TODO: call ffi::gtk_image_get_gicon() }
     //}
 

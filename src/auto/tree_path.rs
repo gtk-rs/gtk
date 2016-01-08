@@ -70,7 +70,7 @@ impl TreePath {
         }
     }
 
-    //pub fn get_indices_with_depth(&mut self, depth: &mut i32) -> /*Unknown conversion*/Unknown rust type: "CArray TypeId { ns_id: 0, id: 14 }" {
+    //pub fn get_indices_with_depth(&mut self) -> (/*Unknown conversion*/Unknown rust type: "CArray TypeId { ns_id: 0, id: 14 }", i32) {
     //    unsafe { TODO: call ffi::gtk_tree_path_get_indices_with_depth() }
     //}
 

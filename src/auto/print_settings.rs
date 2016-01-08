@@ -154,7 +154,7 @@ impl PrintSettings {
         }
     }
 
-    //pub fn get_page_ranges(&self, num_ranges: &mut i32) -> /*Unknown conversion*/Unknown rust type: "CArray TypeId { ns_id: 1, id: 613 }" {
+    //pub fn get_page_ranges(&self) -> (/*Unknown conversion*/Unknown rust type: "CArray TypeId { ns_id: 1, id: 613 }", i32) {
     //    unsafe { TODO: call ffi::gtk_print_settings_get_page_ranges() }
     //}
 

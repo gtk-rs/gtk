@@ -30,7 +30,7 @@ pub trait RecentChooserExt {
     fn get_show_private(&self) -> bool;
     fn get_show_tips(&self) -> bool;
     fn get_sort_type(&self) -> RecentSortType;
-    //fn get_uris(&self, length: Fundamental: Size) -> /*Unknown conversion*/Unknown rust type: "CArray TypeId { ns_id: 0, id: 28 }";
+    //fn get_uris(&self) -> (/*Unknown conversion*/Unknown rust type: "CArray TypeId { ns_id: 0, id: 28 }", Fundamental: Size);
     //fn list_filters(&self) -> /*Unknown conversion*/Unknown rust type: "SList TypeId { ns_id: 1, id: 699 }";
     fn remove_filter(&self, filter: &RecentFilter);
     fn select_all(&self);
@@ -129,7 +129,7 @@ impl<O: Upcast<RecentChooser>> RecentChooserExt for O {
         }
     }
 
-    //fn get_uris(&self, length: Fundamental: Size) -> /*Unknown conversion*/Unknown rust type: "CArray TypeId { ns_id: 0, id: 28 }" {
+    //fn get_uris(&self) -> (/*Unknown conversion*/Unknown rust type: "CArray TypeId { ns_id: 0, id: 28 }", Fundamental: Size) {
     //    unsafe { TODO: call ffi::gtk_recent_chooser_get_uris() }
     //}
 

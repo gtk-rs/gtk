@@ -8,6 +8,7 @@ use Container;
 use Entry;
 use Rectangle;
 use Scrollable;
+use TreeIter;
 use TreeModel;
 use TreePath;
 use TreeSelection;
@@ -195,9 +196,14 @@ impl TreeView {
         }
     }
 
-    //pub fn get_cursor(&self, focus_column: /*Unimplemented*/Option<TreeViewColumn>) -> Option<TreePath> {
-    //    unsafe { TODO: call ffi::gtk_tree_view_get_cursor() }
-    //}
+    pub fn get_cursor(&self) -> (Option<TreePath>, Option<TreeViewColumn>) {
+        unsafe {
+            let mut path = ptr::null_mut();
+            let mut focus_column = ptr::null_mut();
+            ffi::gtk_tree_view_get_cursor(self.to_glib_none().0, &mut path, &mut focus_column);
+            (from_glib_full(path), from_glib_none(focus_column))
+        }
+    }
 
     pub fn get_dest_row_at_pos(&self, drag_x: i32, drag_y: i32) -> Option<(Option<TreePath>, TreeViewDropPosition)> {
         unsafe {
@@ -296,9 +302,16 @@ impl TreeView {
         }
     }
 
-    //pub fn get_path_at_pos(&self, x: i32, y: i32, column: /*Unimplemented*/Option<TreeViewColumn>) -> Option<(Option<TreePath>, i32, i32)> {
-    //    unsafe { TODO: call ffi::gtk_tree_view_get_path_at_pos() }
-    //}
+    pub fn get_path_at_pos(&self, x: i32, y: i32) -> Option<(Option<TreePath>, Option<TreeViewColumn>, i32, i32)> {
+        unsafe {
+            let mut path = ptr::null_mut();
+            let mut column = ptr::null_mut();
+            let mut cell_x = mem::uninitialized();
+            let mut cell_y = mem::uninitialized();
+            let ret = from_glib(ffi::gtk_tree_view_get_path_at_pos(self.to_glib_none().0, x, y, &mut path, &mut column, &mut cell_x, &mut cell_y));
+            if ret { Some((from_glib_full(path), from_glib_none(column), cell_x, cell_y)) } else { None }
+        }
+    }
 
     pub fn get_reorderable(&self) -> bool {
         unsafe {
@@ -360,9 +373,15 @@ impl TreeView {
         }
     }
 
-    //pub fn get_tooltip_context<T: Upcast</*Ignored*/TreeModel>>(&self, x: &mut i32, y: &mut i32, keyboard_tip: bool, model: Option<&T>) -> Option<(TreePath, TreeIter)> {
-    //    unsafe { TODO: call ffi::gtk_tree_view_get_tooltip_context() }
-    //}
+    pub fn get_tooltip_context(&self, x: &mut i32, y: &mut i32, keyboard_tip: bool) -> Option<(Option<TreeModel>, TreePath, TreeIter)> {
+        unsafe {
+            let mut model = ptr::null_mut();
+            let mut path = ptr::null_mut();
+            let mut iter = TreeIter::uninitialized();
+            let ret = from_glib(ffi::gtk_tree_view_get_tooltip_context(self.to_glib_none().0, x, y, keyboard_tip.to_glib(), &mut model, &mut path, iter.to_glib_none_mut().0));
+            if ret { Some((from_glib_none(model), from_glib_full(path), iter)) } else { None }
+        }
+    }
 
     pub fn get_vadjustment(&self) -> Option<Adjustment> {
         unsafe {
@@ -401,9 +420,16 @@ impl TreeView {
     //    unsafe { TODO: call ffi::gtk_tree_view_insert_column_with_data_func() }
     //}
 
-    //pub fn is_blank_at_pos(&self, x: i32, y: i32, column: /*Unimplemented*/TreeViewColumn) -> Option<(TreePath, i32, i32)> {
-    //    unsafe { TODO: call ffi::gtk_tree_view_is_blank_at_pos() }
-    //}
+    pub fn is_blank_at_pos(&self, x: i32, y: i32) -> Option<(TreePath, TreeViewColumn, i32, i32)> {
+        unsafe {
+            let mut path = ptr::null_mut();
+            let mut column = ptr::null_mut();
+            let mut cell_x = mem::uninitialized();
+            let mut cell_y = mem::uninitialized();
+            let ret = from_glib(ffi::gtk_tree_view_is_blank_at_pos(self.to_glib_none().0, x, y, &mut path, &mut column, &mut cell_x, &mut cell_y));
+            if ret { Some((from_glib_full(path), from_glib_full(column), cell_x, cell_y)) } else { None }
+        }
+    }
 
     pub fn is_rubber_banding_active(&self) -> bool {
         unsafe {

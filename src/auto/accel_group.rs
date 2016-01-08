@@ -60,7 +60,7 @@ impl AccelGroup {
         }
     }
 
-    //pub fn query(&self, accel_key: u32, accel_mods: gdk::ModifierType, n_entries: &mut u32) -> /*Unknown conversion*/Unknown rust type: "CArray TypeId { ns_id: 1, id: 14 }" {
+    //pub fn query(&self, accel_key: u32, accel_mods: gdk::ModifierType) -> (/*Unknown conversion*/Unknown rust type: "CArray TypeId { ns_id: 1, id: 14 }", u32) {
     //    unsafe { TODO: call ffi::gtk_accel_group_query() }
     //}
 

@@ -12,6 +12,7 @@ use Orientation;
 use Rectangle;
 use Scrollable;
 use SelectionMode;
+use TreeIter;
 use TreeModel;
 use TreePath;
 use Widget;
@@ -101,9 +102,14 @@ impl IconView {
         }
     }
 
-    //pub fn get_cursor<T: Upcast</*Ignored*/CellRenderer>>(&self, cell: &T) -> Option<TreePath> {
-    //    unsafe { TODO: call ffi::gtk_icon_view_get_cursor() }
-    //}
+    pub fn get_cursor(&self) -> Option<(TreePath, CellRenderer)> {
+        unsafe {
+            let mut path = ptr::null_mut();
+            let mut cell = ptr::null_mut();
+            let ret = from_glib(ffi::gtk_icon_view_get_cursor(self.to_glib_none().0, &mut path, &mut cell));
+            if ret { Some((from_glib_full(path), from_glib_none(cell))) } else { None }
+        }
+    }
 
     pub fn get_dest_item_at_pos(&self, drag_x: i32, drag_y: i32) -> Option<(TreePath, IconViewDropPosition)> {
         unsafe {
@@ -123,9 +129,14 @@ impl IconView {
         }
     }
 
-    //pub fn get_item_at_pos<T: Upcast</*Ignored*/CellRenderer>>(&self, x: i32, y: i32, cell: &T) -> Option<TreePath> {
-    //    unsafe { TODO: call ffi::gtk_icon_view_get_item_at_pos() }
-    //}
+    pub fn get_item_at_pos(&self, x: i32, y: i32) -> Option<(TreePath, CellRenderer)> {
+        unsafe {
+            let mut path = ptr::null_mut();
+            let mut cell = ptr::null_mut();
+            let ret = from_glib(ffi::gtk_icon_view_get_item_at_pos(self.to_glib_none().0, x, y, &mut path, &mut cell));
+            if ret { Some((from_glib_full(path), from_glib_full(cell))) } else { None }
+        }
+    }
 
     pub fn get_item_column(&self, path: &TreePath) -> i32 {
         unsafe {
@@ -199,6 +210,12 @@ impl IconView {
         }
     }
 
+    pub fn get_selected_items(&self) -> Vec<TreePath> {
+        unsafe {
+            FromGlibPtrContainer::from_glib_full(ffi::gtk_icon_view_get_selected_items(self.to_glib_none().0))
+        }
+    }
+
     pub fn get_selection_mode(&self) -> SelectionMode {
         unsafe {
             ffi::gtk_icon_view_get_selection_mode(self.to_glib_none().0)
@@ -223,9 +240,15 @@ impl IconView {
         }
     }
 
-    //pub fn get_tooltip_context<T: Upcast</*Ignored*/TreeModel>>(&self, x: &mut i32, y: &mut i32, keyboard_tip: bool, model: &T) -> Option<(TreePath, TreeIter)> {
-    //    unsafe { TODO: call ffi::gtk_icon_view_get_tooltip_context() }
-    //}
+    pub fn get_tooltip_context(&self, x: &mut i32, y: &mut i32, keyboard_tip: bool) -> Option<(TreeModel, TreePath, TreeIter)> {
+        unsafe {
+            let mut model = ptr::null_mut();
+            let mut path = ptr::null_mut();
+            let mut iter = TreeIter::uninitialized();
+            let ret = from_glib(ffi::gtk_icon_view_get_tooltip_context(self.to_glib_none().0, x, y, keyboard_tip.to_glib(), &mut model, &mut path, iter.to_glib_none_mut().0));
+            if ret { Some((from_glib_none(model), from_glib_full(path), iter)) } else { None }
+        }
+    }
 
     pub fn get_visible_range(&self) -> Option<(TreePath, TreePath)> {
         unsafe {

@@ -11,6 +11,8 @@ use DirectionType;
 use Orientation;
 use Rectangle;
 use SizeRequestMode;
+use TreeIter;
+use TreeModel;
 use Widget;
 use ffi;
 use glib::object::Upcast;
@@ -31,6 +33,7 @@ pub trait CellAreaExt {
     fn add<T: Upcast<CellRenderer>>(&self, renderer: &T);
     fn add_focus_sibling<T: Upcast<CellRenderer>, U: Upcast<CellRenderer>>(&self, renderer: &T, sibling: &U);
     //fn add_with_properties<T: Upcast<CellRenderer>>(&self, renderer: &T, first_prop_name: &str, : /*Unknown conversion*/Fundamental: VarArgs);
+    fn apply_attributes<T: Upcast<TreeModel>>(&self, tree_model: &T, iter: &mut TreeIter, is_expander: bool, is_expanded: bool);
     fn attribute_connect<T: Upcast<CellRenderer>>(&self, renderer: &T, attribute: &str, column: i32);
     fn attribute_disconnect<T: Upcast<CellRenderer>>(&self, renderer: &T, attribute: &str);
     #[cfg(gtk_3_14)]
@@ -48,11 +51,13 @@ pub trait CellAreaExt {
     //fn foreach(&self, callback: /*Unknown conversion*/Unknown rust type: "CellCallback", callback_data: Fundamental: Pointer);
     //fn foreach_alloc<T: Upcast<Widget>>(&self, context: &CellAreaContext, widget: &T, cell_area: &Rectangle, background_area: &Rectangle, callback: /*Unknown conversion*/Unknown rust type: "CellAllocCallback", callback_data: Fundamental: Pointer);
     fn get_cell_allocation<T: Upcast<Widget>, U: Upcast<CellRenderer>>(&self, context: &CellAreaContext, widget: &T, renderer: &U, cell_area: &Rectangle) -> Rectangle;
+    fn get_cell_at_position<T: Upcast<Widget>>(&self, context: &CellAreaContext, widget: &T, cell_area: &Rectangle, x: i32, y: i32) -> (CellRenderer, Rectangle);
     fn get_current_path_string(&self) -> Option<String>;
     fn get_edit_widget(&self) -> Option<CellEditable>;
     fn get_edited_cell(&self) -> Option<CellRenderer>;
     fn get_focus_cell(&self) -> Option<CellRenderer>;
     fn get_focus_from_sibling<T: Upcast<CellRenderer>>(&self, renderer: &T) -> Option<CellRenderer>;
+    fn get_focus_siblings<T: Upcast<CellRenderer>>(&self, renderer: &T) -> Vec<CellRenderer>;
     fn get_preferred_height<T: Upcast<Widget>>(&self, context: &CellAreaContext, widget: &T) -> (i32, i32);
     fn get_preferred_height_for_width<T: Upcast<Widget>>(&self, context: &CellAreaContext, widget: &T, width: i32) -> (i32, i32);
     fn get_preferred_width<T: Upcast<Widget>>(&self, context: &CellAreaContext, widget: &T) -> (i32, i32);
@@ -96,6 +101,12 @@ impl<O: Upcast<CellArea>> CellAreaExt for O {
     //fn add_with_properties<T: Upcast<CellRenderer>>(&self, renderer: &T, first_prop_name: &str, : /*Unknown conversion*/Fundamental: VarArgs) {
     //    unsafe { TODO: call ffi::gtk_cell_area_add_with_properties() }
     //}
+
+    fn apply_attributes<T: Upcast<TreeModel>>(&self, tree_model: &T, iter: &mut TreeIter, is_expander: bool, is_expanded: bool) {
+        unsafe {
+            ffi::gtk_cell_area_apply_attributes(self.to_glib_none().0, tree_model.to_glib_none().0, iter.to_glib_none_mut().0, is_expander.to_glib(), is_expanded.to_glib());
+        }
+    }
 
     fn attribute_connect<T: Upcast<CellRenderer>>(&self, renderer: &T, attribute: &str, column: i32) {
         unsafe {
@@ -178,6 +189,14 @@ impl<O: Upcast<CellArea>> CellAreaExt for O {
         }
     }
 
+    fn get_cell_at_position<T: Upcast<Widget>>(&self, context: &CellAreaContext, widget: &T, cell_area: &Rectangle, x: i32, y: i32) -> (CellRenderer, Rectangle) {
+        unsafe {
+            let mut alloc_area = Rectangle::uninitialized();
+            let ret = from_glib_none(ffi::gtk_cell_area_get_cell_at_position(self.to_glib_none().0, context.to_glib_none().0, widget.to_glib_none().0, cell_area.to_glib_none().0, x, y, alloc_area.to_glib_none_mut().0));
+            (ret, alloc_area)
+        }
+    }
+
     fn get_current_path_string(&self) -> Option<String> {
         unsafe {
             from_glib_none(ffi::gtk_cell_area_get_current_path_string(self.to_glib_none().0))
@@ -205,6 +224,12 @@ impl<O: Upcast<CellArea>> CellAreaExt for O {
     fn get_focus_from_sibling<T: Upcast<CellRenderer>>(&self, renderer: &T) -> Option<CellRenderer> {
         unsafe {
             from_glib_none(ffi::gtk_cell_area_get_focus_from_sibling(self.to_glib_none().0, renderer.to_glib_none().0))
+        }
+    }
+
+    fn get_focus_siblings<T: Upcast<CellRenderer>>(&self, renderer: &T) -> Vec<CellRenderer> {
+        unsafe {
+            FromGlibPtrContainer::from_glib_none(ffi::gtk_cell_area_get_focus_siblings(self.to_glib_none().0, renderer.to_glib_none().0))
         }
     }
 
