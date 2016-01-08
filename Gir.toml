@@ -348,7 +348,12 @@ status = "generate"
 	const = true
     [[object.function]]
     name = "is_equal"
-    ignore = true
+	[[object.function.parameter]]
+	name = "size1"
+	const = true
+	[[object.function.parameter]]
+	name = "size2"
+	const = true
     [[object.function]]
     name = "is_ipp"
     version = "3.16"
