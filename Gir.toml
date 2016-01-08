@@ -159,15 +159,6 @@ status = "generate"
 [[object]]
 name = "Gtk.CellArea"
 status = "generate"
-    [[object.function]]
-    name = "apply_attributes"
-    ignore = true
-    [[object.function]]
-    name = "get_cell_at_position"
-    ignore = true
-    [[object.function]]
-    name = "get_focus_siblings"
-    ignore = true
 
 [[object]]
 name = "Gtk.ComboBox"
@@ -288,9 +279,6 @@ status = "generate"
 	[[object.function.parameter]]
 	name = "path"
 	const = true
-    [[object.function]]
-    name = "get_selected_items"
-    ignore = true
 
 [[object]]
 name = "Gtk.ListStore"
