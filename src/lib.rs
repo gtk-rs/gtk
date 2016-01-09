@@ -152,7 +152,6 @@ mod rt;
 
 mod auto;
 
-mod about_dialog;
 mod app_chooser;
 mod builder;
 mod color_chooser;
