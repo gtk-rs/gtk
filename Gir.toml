@@ -139,7 +139,7 @@ manual = [
     "Gdk.Window",
     "GdkPixbuf.Pixbuf",
     "GdkPixbuf.PixbufAnimation",
-    #"GLib.Error",
+    "GLib.Error",
     "Gtk.Buildable",
     "Gtk.EntryBuffer",
     "Gtk.RecentData",
