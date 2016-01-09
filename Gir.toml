@@ -351,6 +351,12 @@ status = "generate"
 name = "Gtk.PrintSettings"
 status = "generate"
     [[object.function]]
+    name = "get_page_ranges"
+    ignore = true
+    [[object.function]]
+    name = "set_page_ranges"
+    ignore = true
+    [[object.function]]
     name = "set_paper_size"
         [[object.function.parameter]]
         name = "paper_size"
