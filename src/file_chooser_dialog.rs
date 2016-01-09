@@ -12,8 +12,8 @@ use Widget;
 use Window;
 
 impl FileChooserDialog {
-    pub fn new<T: Upcast<Window>>(title: Option<&str>, parent: Option<&T>, action: FileChooserAction)
-            -> FileChooserDialog {
+    pub fn new<T: Upcast<Window> = Window>(title: Option<&str>, parent: Option<&T>,
+            action: FileChooserAction) -> FileChooserDialog {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(
