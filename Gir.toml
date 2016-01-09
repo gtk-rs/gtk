@@ -104,6 +104,7 @@ generate = [
     "Gtk.StackSwitcher",
     "Gtk.StatusIcon",
     "Gtk.Statusbar",
+    "Gtk.StyleContext",
     "Gtk.Switch",
     "Gtk.TextBuffer",
     "Gtk.TextChildAnchor",
@@ -607,10 +608,3 @@ status = "generate"
         [[object.function.parameter]]
         name = "path"
         const = true
-
-[[object]]
-name = "Gtk.StyleContext"
-status = "generate"
-    [[object.function]]
-    pattern = 'list_.*'
-    ignore = true
