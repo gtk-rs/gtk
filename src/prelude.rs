@@ -2,6 +2,8 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
+pub use glib::object::{Downcast, Upcast};
+
 #[cfg(gtk_3_4)]
 pub use auto::traits::ActionableExt;
 pub use auto::traits::BinExt;
