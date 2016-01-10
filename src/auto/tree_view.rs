@@ -494,7 +494,7 @@ impl TreeView {
         }
     }
 
-    pub fn set_cursor_on_cell<T: Upcast<CellRenderer>>(&self, path: &TreePath, focus_column: Option<&TreeViewColumn>, focus_cell: Option<&T>, start_editing: bool) {
+    pub fn set_cursor_on_cell<T: Upcast<CellRenderer> = CellRenderer>(&self, path: &TreePath, focus_column: Option<&TreeViewColumn>, focus_cell: Option<&T>, start_editing: bool) {
         unsafe {
             ffi::gtk_tree_view_set_cursor_on_cell(self.to_glib_none().0, mut_override(path.to_glib_none().0), focus_column.to_glib_none().0, focus_cell.to_glib_none().0, start_editing.to_glib());
         }
@@ -576,7 +576,7 @@ impl TreeView {
         }
     }
 
-    pub fn set_model<T: Upcast<TreeModel>>(&self, model: Option<&T>) {
+    pub fn set_model<T: Upcast<TreeModel> = TreeModel>(&self, model: Option<&T>) {
         unsafe {
             ffi::gtk_tree_view_set_model(self.to_glib_none().0, model.to_glib_none().0);
         }
@@ -610,7 +610,7 @@ impl TreeView {
         }
     }
 
-    pub fn set_search_entry<T: Upcast<Entry>>(&self, entry: Option<&T>) {
+    pub fn set_search_entry<T: Upcast<Entry> = Entry>(&self, entry: Option<&T>) {
         unsafe {
             ffi::gtk_tree_view_set_search_entry(self.to_glib_none().0, entry.to_glib_none().0);
         }
@@ -630,7 +630,7 @@ impl TreeView {
         }
     }
 
-    //pub fn set_tooltip_cell<T: Upcast<CellRenderer>>(&self, tooltip: /*Ignored*/&Tooltip, path: Option<&mut TreePath>, column: Option<&TreeViewColumn>, cell: Option<&T>) {
+    //pub fn set_tooltip_cell<T: Upcast<CellRenderer> = CellRenderer>(&self, tooltip: /*Ignored*/&Tooltip, path: Option<&mut TreePath>, column: Option<&TreeViewColumn>, cell: Option<&T>) {
     //    unsafe { TODO: call ffi::gtk_tree_view_set_tooltip_cell() }
     //}
 

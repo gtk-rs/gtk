@@ -106,7 +106,7 @@ pub trait EntryExt {
     fn set_has_frame(&self, setting: bool);
     fn set_icon_activatable(&self, icon_pos: EntryIconPosition, activatable: bool);
     //fn set_icon_drag_source(&self, icon_pos: EntryIconPosition, target_list: /*Ignored*/&TargetList, actions: gdk::DragAction);
-    //fn set_icon_from_gicon<T: Upcast</*Ignored*/gio::Icon>>(&self, icon_pos: EntryIconPosition, icon: Option<&T>);
+    //fn set_icon_from_gicon<T: Upcast</*Ignored*/gio::Icon> = /*Ignored*/gio::Icon>(&self, icon_pos: EntryIconPosition, icon: Option<&T>);
     fn set_icon_from_icon_name(&self, icon_pos: EntryIconPosition, icon_name: Option<&str>);
     fn set_icon_from_pixbuf(&self, icon_pos: EntryIconPosition, pixbuf: Option<&gdk_pixbuf::Pixbuf>);
     fn set_icon_from_stock(&self, icon_pos: EntryIconPosition, stock_id: Option<&str>);
@@ -440,7 +440,7 @@ impl<O: Upcast<Entry>> EntryExt for O {
     //    unsafe { TODO: call ffi::gtk_entry_set_icon_drag_source() }
     //}
 
-    //fn set_icon_from_gicon<T: Upcast</*Ignored*/gio::Icon>>(&self, icon_pos: EntryIconPosition, icon: Option<&T>) {
+    //fn set_icon_from_gicon<T: Upcast</*Ignored*/gio::Icon> = /*Ignored*/gio::Icon>(&self, icon_pos: EntryIconPosition, icon: Option<&T>) {
     //    unsafe { TODO: call ffi::gtk_entry_set_icon_from_gicon() }
     //}
 

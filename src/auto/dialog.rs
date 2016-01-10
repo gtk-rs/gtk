@@ -28,7 +28,7 @@ impl Dialog {
         }
     }
 
-    //pub fn new_with_buttons<T: Upcast<Window>>(title: Option<&str>, parent: Option<&T>, flags: DialogFlags, first_button_text: Option<&str>, : /*Unknown conversion*/Fundamental: VarArgs) -> Dialog {
+    //pub fn new_with_buttons<T: Upcast<Window> = Window>(title: Option<&str>, parent: Option<&T>, flags: DialogFlags, first_button_text: Option<&str>, : /*Unknown conversion*/Fundamental: VarArgs) -> Dialog {
     //    unsafe { TODO: call ffi::gtk_dialog_new_with_buttons() }
     //}
 

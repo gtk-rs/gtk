@@ -246,7 +246,7 @@ impl Label {
         }
     }
 
-    pub fn set_mnemonic_widget<T: Upcast<Widget>>(&self, widget: Option<&T>) {
+    pub fn set_mnemonic_widget<T: Upcast<Widget> = Widget>(&self, widget: Option<&T>) {
         unsafe {
             ffi::gtk_label_set_mnemonic_widget(self.to_glib_none().0, widget.to_glib_none().0);
         }

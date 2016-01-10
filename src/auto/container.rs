@@ -45,7 +45,7 @@ pub trait ContainerExt {
     fn resize_children(&self);
     fn set_border_width(&self, border_width: u32);
     fn set_focus_chain(&self, focusable_widgets: &[Widget]);
-    fn set_focus_child<T: Upcast<Widget>>(&self, child: Option<&T>);
+    fn set_focus_child<T: Upcast<Widget> = Widget>(&self, child: Option<&T>);
     fn set_focus_hadjustment(&self, adjustment: &Adjustment);
     fn set_focus_vadjustment(&self, adjustment: &Adjustment);
     fn set_reallocate_redraws(&self, needs_redraws: bool);
@@ -186,7 +186,7 @@ impl<O: Upcast<Container>> ContainerExt for O {
         }
     }
 
-    fn set_focus_child<T: Upcast<Widget>>(&self, child: Option<&T>) {
+    fn set_focus_child<T: Upcast<Widget> = Widget>(&self, child: Option<&T>) {
         unsafe {
             ffi::gtk_container_set_focus_child(self.to_glib_none().0, child.to_glib_none().0);
         }

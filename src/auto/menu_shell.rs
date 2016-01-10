@@ -21,7 +21,7 @@ pub trait MenuShellExt {
     fn activate_item<T: Upcast<Widget>>(&self, menu_item: &T, force_deactivate: bool);
     fn append<T: Upcast<MenuItem>>(&self, child: &T);
     //#[cfg(gtk_3_6)]
-    //fn bind_model<T: Upcast</*Ignored*/gio::MenuModel>>(&self, model: Option<&T>, action_namespace: Option<&str>, with_separators: bool);
+    //fn bind_model<T: Upcast</*Ignored*/gio::MenuModel> = /*Ignored*/gio::MenuModel>(&self, model: Option<&T>, action_namespace: Option<&str>, with_separators: bool);
     fn cancel(&self);
     fn deactivate(&self);
     fn deselect(&self);
@@ -49,7 +49,7 @@ impl<O: Upcast<MenuShell>> MenuShellExt for O {
     }
 
     //#[cfg(gtk_3_6)]
-    //fn bind_model<T: Upcast</*Ignored*/gio::MenuModel>>(&self, model: Option<&T>, action_namespace: Option<&str>, with_separators: bool) {
+    //fn bind_model<T: Upcast</*Ignored*/gio::MenuModel> = /*Ignored*/gio::MenuModel>(&self, model: Option<&T>, action_namespace: Option<&str>, with_separators: bool) {
     //    unsafe { TODO: call ffi::gtk_menu_shell_bind_model() }
     //}
 

@@ -47,7 +47,7 @@ pub trait BoxExt {
     #[cfg(gtk_3_10)]
     fn set_baseline_position(&self, position: BaselinePosition);
     #[cfg(gtk_3_12)]
-    fn set_center_widget<T: Upcast<Widget>>(&self, widget: Option<&T>);
+    fn set_center_widget<T: Upcast<Widget> = Widget>(&self, widget: Option<&T>);
     fn set_child_packing<T: Upcast<Widget>>(&self, child: &T, expand: bool, fill: bool, padding: u32, pack_type: PackType);
     fn set_homogeneous(&self, homogeneous: bool);
     fn set_spacing(&self, spacing: i32);
@@ -117,7 +117,7 @@ impl<O: Upcast<Box>> BoxExt for O {
     }
 
     #[cfg(gtk_3_12)]
-    fn set_center_widget<T: Upcast<Widget>>(&self, widget: Option<&T>) {
+    fn set_center_widget<T: Upcast<Widget> = Widget>(&self, widget: Option<&T>) {
         unsafe {
             ffi::gtk_box_set_center_widget(self.to_glib_none().0, widget.to_glib_none().0);
         }

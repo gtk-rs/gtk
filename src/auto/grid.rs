@@ -35,7 +35,7 @@ impl Grid {
         }
     }
 
-    pub fn attach_next_to<T: Upcast<Widget>, U: Upcast<Widget>>(&self, child: &T, sibling: Option<&U>, side: PositionType, width: i32, height: i32) {
+    pub fn attach_next_to<T: Upcast<Widget>, U: Upcast<Widget> = Widget>(&self, child: &T, sibling: Option<&U>, side: PositionType, width: i32, height: i32) {
         unsafe {
             ffi::gtk_grid_attach_next_to(self.to_glib_none().0, child.to_glib_none().0, sibling.to_glib_none().0, side, width, height);
         }

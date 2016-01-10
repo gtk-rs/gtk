@@ -99,7 +99,7 @@ pub trait ComboBoxExt {
     fn set_entry_text_column(&self, text_column: i32);
     fn set_focus_on_click(&self, focus_on_click: bool);
     fn set_id_column(&self, id_column: i32);
-    fn set_model<T: Upcast<TreeModel>>(&self, model: Option<&T>);
+    fn set_model<T: Upcast<TreeModel> = TreeModel>(&self, model: Option<&T>);
     fn set_popup_fixed_width(&self, fixed: bool);
     //fn set_row_separator_func(&self, func: /*Unknown conversion*/Unknown rust type: "TreeViewRowSeparatorFunc", data: Option<Fundamental: Pointer>, destroy: /*Unknown conversion*/Unknown rust type: "DestroyNotify");
     fn set_row_span_column(&self, row_span: i32);
@@ -278,7 +278,7 @@ impl<O: Upcast<ComboBox>> ComboBoxExt for O {
         }
     }
 
-    fn set_model<T: Upcast<TreeModel>>(&self, model: Option<&T>) {
+    fn set_model<T: Upcast<TreeModel> = TreeModel>(&self, model: Option<&T>) {
         unsafe {
             ffi::gtk_combo_box_set_model(self.to_glib_none().0, model.to_glib_none().0);
         }

@@ -65,7 +65,6 @@ generate = [
     "Gtk.ListBoxRow",
     "Gtk.Menu",
     "Gtk.MenuButton",
-    "Gtk.MenuItem",
     "Gtk.MenuShell",
     "Gtk.MenuToolButton",
     "Gtk.MessageDialog",
@@ -317,6 +316,13 @@ status = "generate"
         [[object.function.parameter]]
         name = "b"
         const = true
+
+[[object]]
+name = "Gtk.MenuItem"
+status = "generate"
+    [[object.function]]
+    name = "activate"
+    ignore = true
 
 [[object]]
 name = "Gtk.PageSetup"

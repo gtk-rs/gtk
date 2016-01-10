@@ -97,7 +97,7 @@ impl PlacesSidebar {
     }
 
     //#[cfg(gtk_3_10)]
-    //pub fn set_location<T: Upcast</*Ignored*/gio::File>>(&self, location: Option<&T>) {
+    //pub fn set_location<T: Upcast</*Ignored*/gio::File> = /*Ignored*/gio::File>(&self, location: Option<&T>) {
     //    unsafe { TODO: call ffi::gtk_places_sidebar_set_location() }
     //}
 

@@ -27,13 +27,13 @@ impl Notebook {
         }
     }
 
-    pub fn append_page<T: Upcast<Widget>, U: Upcast<Widget>>(&self, child: &T, tab_label: Option<&U>) -> i32 {
+    pub fn append_page<T: Upcast<Widget>, U: Upcast<Widget> = Widget>(&self, child: &T, tab_label: Option<&U>) -> i32 {
         unsafe {
             ffi::gtk_notebook_append_page(self.to_glib_none().0, child.to_glib_none().0, tab_label.to_glib_none().0)
         }
     }
 
-    pub fn append_page_menu<T: Upcast<Widget>, U: Upcast<Widget>, V: Upcast<Widget>>(&self, child: &T, tab_label: Option<&U>, menu_label: Option<&V>) -> i32 {
+    pub fn append_page_menu<T: Upcast<Widget>, U: Upcast<Widget> = Widget, V: Upcast<Widget> = Widget>(&self, child: &T, tab_label: Option<&U>, menu_label: Option<&V>) -> i32 {
         unsafe {
             ffi::gtk_notebook_append_page_menu(self.to_glib_none().0, child.to_glib_none().0, tab_label.to_glib_none().0, menu_label.to_glib_none().0)
         }
@@ -148,13 +148,13 @@ impl Notebook {
         }
     }
 
-    pub fn insert_page<T: Upcast<Widget>, U: Upcast<Widget>>(&self, child: &T, tab_label: Option<&U>, position: i32) -> i32 {
+    pub fn insert_page<T: Upcast<Widget>, U: Upcast<Widget> = Widget>(&self, child: &T, tab_label: Option<&U>, position: i32) -> i32 {
         unsafe {
             ffi::gtk_notebook_insert_page(self.to_glib_none().0, child.to_glib_none().0, tab_label.to_glib_none().0, position)
         }
     }
 
-    pub fn insert_page_menu<T: Upcast<Widget>, U: Upcast<Widget>, V: Upcast<Widget>>(&self, child: &T, tab_label: Option<&U>, menu_label: Option<&V>, position: i32) -> i32 {
+    pub fn insert_page_menu<T: Upcast<Widget>, U: Upcast<Widget> = Widget, V: Upcast<Widget> = Widget>(&self, child: &T, tab_label: Option<&U>, menu_label: Option<&V>, position: i32) -> i32 {
         unsafe {
             ffi::gtk_notebook_insert_page_menu(self.to_glib_none().0, child.to_glib_none().0, tab_label.to_glib_none().0, menu_label.to_glib_none().0, position)
         }
@@ -184,13 +184,13 @@ impl Notebook {
         }
     }
 
-    pub fn prepend_page<T: Upcast<Widget>, U: Upcast<Widget>>(&self, child: &T, tab_label: Option<&U>) -> i32 {
+    pub fn prepend_page<T: Upcast<Widget>, U: Upcast<Widget> = Widget>(&self, child: &T, tab_label: Option<&U>) -> i32 {
         unsafe {
             ffi::gtk_notebook_prepend_page(self.to_glib_none().0, child.to_glib_none().0, tab_label.to_glib_none().0)
         }
     }
 
-    pub fn prepend_page_menu<T: Upcast<Widget>, U: Upcast<Widget>, V: Upcast<Widget>>(&self, child: &T, tab_label: Option<&U>, menu_label: Option<&V>) -> i32 {
+    pub fn prepend_page_menu<T: Upcast<Widget>, U: Upcast<Widget> = Widget, V: Upcast<Widget> = Widget>(&self, child: &T, tab_label: Option<&U>, menu_label: Option<&V>) -> i32 {
         unsafe {
             ffi::gtk_notebook_prepend_page_menu(self.to_glib_none().0, child.to_glib_none().0, tab_label.to_glib_none().0, menu_label.to_glib_none().0)
         }
@@ -232,7 +232,7 @@ impl Notebook {
         }
     }
 
-    pub fn set_menu_label<T: Upcast<Widget>, U: Upcast<Widget>>(&self, child: &T, menu_label: Option<&U>) {
+    pub fn set_menu_label<T: Upcast<Widget>, U: Upcast<Widget> = Widget>(&self, child: &T, menu_label: Option<&U>) {
         unsafe {
             ffi::gtk_notebook_set_menu_label(self.to_glib_none().0, child.to_glib_none().0, menu_label.to_glib_none().0);
         }
@@ -268,7 +268,7 @@ impl Notebook {
         }
     }
 
-    pub fn set_tab_label<T: Upcast<Widget>, U: Upcast<Widget>>(&self, child: &T, tab_label: Option<&U>) {
+    pub fn set_tab_label<T: Upcast<Widget>, U: Upcast<Widget> = Widget>(&self, child: &T, tab_label: Option<&U>) {
         unsafe {
             ffi::gtk_notebook_set_tab_label(self.to_glib_none().0, child.to_glib_none().0, tab_label.to_glib_none().0);
         }

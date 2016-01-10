@@ -22,7 +22,7 @@ glib_wrapper! {
 
 impl Popover {
     #[cfg(gtk_3_12)]
-    pub fn new<T: Upcast<Widget>>(relative_to: Option<&T>) -> Popover {
+    pub fn new<T: Upcast<Widget> = Widget>(relative_to: Option<&T>) -> Popover {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(ffi::gtk_popover_new(relative_to.to_glib_none().0)).downcast_unchecked()
@@ -30,7 +30,7 @@ impl Popover {
     }
 
     //#[cfg(gtk_3_12)]
-    //pub fn new_from_model<T: Upcast<Widget>, U: Upcast</*Ignored*/gio::MenuModel>>(relative_to: Option<&T>, model: &U) -> Popover {
+    //pub fn new_from_model<T: Upcast<Widget> = Widget, U: Upcast</*Ignored*/gio::MenuModel>>(relative_to: Option<&T>, model: &U) -> Popover {
     //    unsafe { TODO: call ffi::gtk_popover_new_from_model() }
     //}
 
@@ -38,7 +38,7 @@ impl Popover {
 
 pub trait PopoverExt {
     //#[cfg(gtk_3_12)]
-    //fn bind_model<T: Upcast</*Ignored*/gio::MenuModel>>(&self, model: Option<&T>, action_namespace: Option<&str>);
+    //fn bind_model<T: Upcast</*Ignored*/gio::MenuModel> = /*Ignored*/gio::MenuModel>(&self, model: Option<&T>, action_namespace: Option<&str>);
     #[cfg(gtk_3_12)]
     fn get_modal(&self) -> bool;
     fn get_pointing_to(&self) -> Option<Rectangle>;
@@ -54,14 +54,14 @@ pub trait PopoverExt {
     #[cfg(gtk_3_12)]
     fn set_position(&self, position: PositionType);
     #[cfg(gtk_3_12)]
-    fn set_relative_to<T: Upcast<Widget>>(&self, relative_to: Option<&T>);
+    fn set_relative_to<T: Upcast<Widget> = Widget>(&self, relative_to: Option<&T>);
     #[cfg(gtk_3_16)]
     fn set_transitions_enabled(&self, transitions_enabled: bool);
 }
 
 impl<O: Upcast<Popover>> PopoverExt for O {
     //#[cfg(gtk_3_12)]
-    //fn bind_model<T: Upcast</*Ignored*/gio::MenuModel>>(&self, model: Option<&T>, action_namespace: Option<&str>) {
+    //fn bind_model<T: Upcast</*Ignored*/gio::MenuModel> = /*Ignored*/gio::MenuModel>(&self, model: Option<&T>, action_namespace: Option<&str>) {
     //    unsafe { TODO: call ffi::gtk_popover_bind_model() }
     //}
 
@@ -122,7 +122,7 @@ impl<O: Upcast<Popover>> PopoverExt for O {
     }
 
     #[cfg(gtk_3_12)]
-    fn set_relative_to<T: Upcast<Widget>>(&self, relative_to: Option<&T>) {
+    fn set_relative_to<T: Upcast<Widget> = Widget>(&self, relative_to: Option<&T>) {
         unsafe {
             ffi::gtk_popover_set_relative_to(self.to_glib_none().0, relative_to.to_glib_none().0);
         }

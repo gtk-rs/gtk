@@ -152,7 +152,7 @@ impl EntryCompletion {
         }
     }
 
-    pub fn set_model<T: Upcast<TreeModel>>(&self, model: Option<&T>) {
+    pub fn set_model<T: Upcast<TreeModel> = TreeModel>(&self, model: Option<&T>) {
         unsafe {
             ffi::gtk_entry_completion_set_model(self.to_glib_none().0, model.to_glib_none().0);
         }

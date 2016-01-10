@@ -20,11 +20,11 @@ glib_wrapper! {
 }
 
 impl MessageDialog {
-    //pub fn new<T: Upcast<Window>>(parent: Option<&T>, flags: DialogFlags, type_: MessageType, buttons: ButtonsType, message_format: Option<&str>, : /*Unknown conversion*/Fundamental: VarArgs) -> MessageDialog {
+    //pub fn new<T: Upcast<Window> = Window>(parent: Option<&T>, flags: DialogFlags, type_: MessageType, buttons: ButtonsType, message_format: Option<&str>, : /*Unknown conversion*/Fundamental: VarArgs) -> MessageDialog {
     //    unsafe { TODO: call ffi::gtk_message_dialog_new() }
     //}
 
-    //pub fn new_with_markup<T: Upcast<Window>>(parent: Option<&T>, flags: DialogFlags, type_: MessageType, buttons: ButtonsType, message_format: Option<&str>, : /*Unknown conversion*/Fundamental: VarArgs) -> MessageDialog {
+    //pub fn new_with_markup<T: Upcast<Window> = Window>(parent: Option<&T>, flags: DialogFlags, type_: MessageType, buttons: ButtonsType, message_format: Option<&str>, : /*Unknown conversion*/Fundamental: VarArgs) -> MessageDialog {
     //    unsafe { TODO: call ffi::gtk_message_dialog_new_with_markup() }
     //}
 

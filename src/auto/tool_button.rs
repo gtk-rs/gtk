@@ -21,7 +21,7 @@ glib_wrapper! {
 }
 
 impl ToolButton {
-    pub fn new<T: Upcast<Widget>>(icon_widget: Option<&T>, label: Option<&str>) -> ToolButton {
+    pub fn new<T: Upcast<Widget> = Widget>(icon_widget: Option<&T>, label: Option<&str>) -> ToolButton {
         assert_initialized_main_thread!();
         unsafe {
             ToolItem::from_glib_none(ffi::gtk_tool_button_new(icon_widget.to_glib_none().0, label.to_glib_none().0)).downcast_unchecked()
@@ -45,9 +45,9 @@ pub trait ToolButtonExt {
     fn get_stock_id(&self) -> Option<String>;
     fn get_use_underline(&self) -> bool;
     fn set_icon_name(&self, icon_name: Option<&str>);
-    fn set_icon_widget<T: Upcast<Widget>>(&self, icon_widget: Option<&T>);
+    fn set_icon_widget<T: Upcast<Widget> = Widget>(&self, icon_widget: Option<&T>);
     fn set_label(&self, label: Option<&str>);
-    fn set_label_widget<T: Upcast<Widget>>(&self, label_widget: Option<&T>);
+    fn set_label_widget<T: Upcast<Widget> = Widget>(&self, label_widget: Option<&T>);
     fn set_stock_id(&self, stock_id: Option<&str>);
     fn set_use_underline(&self, use_underline: bool);
 }
@@ -95,7 +95,7 @@ impl<O: Upcast<ToolButton>> ToolButtonExt for O {
         }
     }
 
-    fn set_icon_widget<T: Upcast<Widget>>(&self, icon_widget: Option<&T>) {
+    fn set_icon_widget<T: Upcast<Widget> = Widget>(&self, icon_widget: Option<&T>) {
         unsafe {
             ffi::gtk_tool_button_set_icon_widget(self.to_glib_none().0, icon_widget.to_glib_none().0);
         }
@@ -107,7 +107,7 @@ impl<O: Upcast<ToolButton>> ToolButtonExt for O {
         }
     }
 
-    fn set_label_widget<T: Upcast<Widget>>(&self, label_widget: Option<&T>) {
+    fn set_label_widget<T: Upcast<Widget> = Widget>(&self, label_widget: Option<&T>) {
         unsafe {
             ffi::gtk_tool_button_set_label_widget(self.to_glib_none().0, label_widget.to_glib_none().0);
         }

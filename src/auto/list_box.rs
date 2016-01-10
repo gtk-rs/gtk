@@ -33,7 +33,7 @@ impl ListBox {
     }
 
     //#[cfg(gtk_3_16)]
-    //pub fn bind_model<T: Upcast</*Ignored*/gio::ListModel>>(&self, model: Option<&T>, create_widget_func: /*Unknown conversion*/Unknown rust type: "ListBoxCreateWidgetFunc", user_data: Fundamental: Pointer, user_data_free_func: /*Unknown conversion*/Unknown rust type: "DestroyNotify") {
+    //pub fn bind_model<T: Upcast</*Ignored*/gio::ListModel> = /*Ignored*/gio::ListModel>(&self, model: Option<&T>, create_widget_func: /*Unknown conversion*/Unknown rust type: "ListBoxCreateWidgetFunc", user_data: Fundamental: Pointer, user_data_free_func: /*Unknown conversion*/Unknown rust type: "DestroyNotify") {
     //    unsafe { TODO: call ffi::gtk_list_box_bind_model() }
     //}
 
@@ -179,7 +179,7 @@ impl ListBox {
     //}
 
     #[cfg(gtk_3_10)]
-    pub fn set_placeholder<T: Upcast<Widget>>(&self, placeholder: Option<&T>) {
+    pub fn set_placeholder<T: Upcast<Widget> = Widget>(&self, placeholder: Option<&T>) {
         unsafe {
             ffi::gtk_list_box_set_placeholder(self.to_glib_none().0, placeholder.to_glib_none().0);
         }

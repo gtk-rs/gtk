@@ -341,7 +341,7 @@ impl TreeViewColumn {
         }
     }
 
-    pub fn set_widget<T: Upcast<Widget>>(&self, widget: Option<&T>) {
+    pub fn set_widget<T: Upcast<Widget> = Widget>(&self, widget: Option<&T>) {
         unsafe {
             ffi::gtk_tree_view_column_set_widget(self.to_glib_none().0, widget.to_glib_none().0);
         }

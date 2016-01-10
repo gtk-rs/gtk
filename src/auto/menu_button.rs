@@ -77,7 +77,7 @@ impl MenuButton {
     }
 
     #[cfg(gtk_3_6)]
-    pub fn set_align_widget<T: Upcast<Widget>>(&self, align_widget: Option<&T>) {
+    pub fn set_align_widget<T: Upcast<Widget> = Widget>(&self, align_widget: Option<&T>) {
         unsafe {
             ffi::gtk_menu_button_set_align_widget(self.to_glib_none().0, align_widget.to_glib_none().0);
         }
@@ -91,19 +91,19 @@ impl MenuButton {
     }
 
     //#[cfg(gtk_3_6)]
-    //pub fn set_menu_model<T: Upcast</*Ignored*/gio::MenuModel>>(&self, menu_model: Option<&T>) {
+    //pub fn set_menu_model<T: Upcast</*Ignored*/gio::MenuModel> = /*Ignored*/gio::MenuModel>(&self, menu_model: Option<&T>) {
     //    unsafe { TODO: call ffi::gtk_menu_button_set_menu_model() }
     //}
 
     #[cfg(gtk_3_12)]
-    pub fn set_popover<T: Upcast<Widget>>(&self, popover: Option<&T>) {
+    pub fn set_popover<T: Upcast<Widget> = Widget>(&self, popover: Option<&T>) {
         unsafe {
             ffi::gtk_menu_button_set_popover(self.to_glib_none().0, popover.to_glib_none().0);
         }
     }
 
     #[cfg(gtk_3_6)]
-    pub fn set_popup<T: Upcast<Widget>>(&self, menu: Option<&T>) {
+    pub fn set_popup<T: Upcast<Widget> = Widget>(&self, menu: Option<&T>) {
         unsafe {
             ffi::gtk_menu_button_set_popup(self.to_glib_none().0, menu.to_glib_none().0);
         }

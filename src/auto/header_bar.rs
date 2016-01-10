@@ -83,7 +83,7 @@ impl HeaderBar {
     }
 
     #[cfg(gtk_3_10)]
-    pub fn set_custom_title<T: Upcast<Widget>>(&self, title_widget: Option<&T>) {
+    pub fn set_custom_title<T: Upcast<Widget> = Widget>(&self, title_widget: Option<&T>) {
         unsafe {
             ffi::gtk_header_bar_set_custom_title(self.to_glib_none().0, title_widget.to_glib_none().0);
         }

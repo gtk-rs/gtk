@@ -37,7 +37,7 @@ pub trait FrameExt {
     fn get_shadow_type(&self) -> ShadowType;
     fn set_label(&self, label: Option<&str>);
     fn set_label_align(&self, xalign: f32, yalign: f32);
-    fn set_label_widget<T: Upcast<Widget>>(&self, label_widget: Option<&T>);
+    fn set_label_widget<T: Upcast<Widget> = Widget>(&self, label_widget: Option<&T>);
     fn set_shadow_type(&self, type_: ShadowType);
 }
 
@@ -81,7 +81,7 @@ impl<O: Upcast<Frame>> FrameExt for O {
         }
     }
 
-    fn set_label_widget<T: Upcast<Widget>>(&self, label_widget: Option<&T>) {
+    fn set_label_widget<T: Upcast<Widget> = Widget>(&self, label_widget: Option<&T>) {
         unsafe {
             ffi::gtk_frame_set_label_widget(self.to_glib_none().0, label_widget.to_glib_none().0);
         }

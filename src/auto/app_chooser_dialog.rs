@@ -22,11 +22,11 @@ glib_wrapper! {
 }
 
 impl AppChooserDialog {
-    //pub fn new<T: Upcast<Window>, U: Upcast</*Ignored*/gio::File>>(parent: Option<&T>, flags: DialogFlags, file: &U) -> AppChooserDialog {
+    //pub fn new<T: Upcast<Window> = Window, U: Upcast</*Ignored*/gio::File>>(parent: Option<&T>, flags: DialogFlags, file: &U) -> AppChooserDialog {
     //    unsafe { TODO: call ffi::gtk_app_chooser_dialog_new() }
     //}
 
-    pub fn new_for_content_type<T: Upcast<Window>>(parent: Option<&T>, flags: DialogFlags, content_type: &str) -> AppChooserDialog {
+    pub fn new_for_content_type<T: Upcast<Window> = Window>(parent: Option<&T>, flags: DialogFlags, content_type: &str) -> AppChooserDialog {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(ffi::gtk_app_chooser_dialog_new_for_content_type(parent.to_glib_none().0, flags, content_type.to_glib_none().0)).downcast_unchecked()

@@ -22,7 +22,7 @@ glib_wrapper! {
 
 impl ColorChooserDialog {
     #[cfg(gtk_3_4)]
-    pub fn new<T: Upcast<Window>>(title: Option<&str>, parent: Option<&T>) -> ColorChooserDialog {
+    pub fn new<T: Upcast<Window> = Window>(title: Option<&str>, parent: Option<&T>) -> ColorChooserDialog {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(ffi::gtk_color_chooser_dialog_new(title.to_glib_none().0, parent.to_glib_none().0)).downcast_unchecked()

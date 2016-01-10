@@ -99,7 +99,7 @@ impl Expander {
         }
     }
 
-    pub fn set_label_widget<T: Upcast<Widget>>(&self, label_widget: Option<&T>) {
+    pub fn set_label_widget<T: Upcast<Widget> = Widget>(&self, label_widget: Option<&T>) {
         unsafe {
             ffi::gtk_expander_set_label_widget(self.to_glib_none().0, label_widget.to_glib_none().0);
         }

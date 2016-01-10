@@ -103,11 +103,11 @@ impl Menu {
         }
     }
 
-    //pub fn popup<T: Upcast<Widget>, U: Upcast<Widget>>(&self, parent_menu_shell: Option<&T>, parent_menu_item: Option<&U>, func: /*Unknown conversion*/Unknown rust type: "MenuPositionFunc", data: Fundamental: Pointer, button: u32, activate_time: u32) {
+    //pub fn popup<T: Upcast<Widget> = Widget, U: Upcast<Widget> = Widget>(&self, parent_menu_shell: Option<&T>, parent_menu_item: Option<&U>, func: /*Unknown conversion*/Unknown rust type: "MenuPositionFunc", data: Fundamental: Pointer, button: u32, activate_time: u32) {
     //    unsafe { TODO: call ffi::gtk_menu_popup() }
     //}
 
-    //pub fn popup_for_device<T: Upcast<Widget>, U: Upcast<Widget>>(&self, device: /*Ignored*/Option<&gdk::Device>, parent_menu_shell: Option<&T>, parent_menu_item: Option<&U>, func: /*Unknown conversion*/Unknown rust type: "MenuPositionFunc", data: Option<Fundamental: Pointer>, destroy: /*Unknown conversion*/Unknown rust type: "DestroyNotify", button: u32, activate_time: u32) {
+    //pub fn popup_for_device<T: Upcast<Widget> = Widget, U: Upcast<Widget> = Widget>(&self, device: /*Ignored*/Option<&gdk::Device>, parent_menu_shell: Option<&T>, parent_menu_item: Option<&U>, func: /*Unknown conversion*/Unknown rust type: "MenuPositionFunc", data: Option<Fundamental: Pointer>, destroy: /*Unknown conversion*/Unknown rust type: "DestroyNotify", button: u32, activate_time: u32) {
     //    unsafe { TODO: call ffi::gtk_menu_popup_for_device() }
     //}
 

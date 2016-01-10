@@ -22,7 +22,7 @@ glib_wrapper! {
 }
 
 impl FontChooserDialog {
-    pub fn new<T: Upcast<Window>>(title: Option<&str>, parent: Option<&T>) -> FontChooserDialog {
+    pub fn new<T: Upcast<Window> = Window>(title: Option<&str>, parent: Option<&T>) -> FontChooserDialog {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(ffi::gtk_font_chooser_dialog_new(title.to_glib_none().0, parent.to_glib_none().0)).downcast_unchecked()

@@ -22,7 +22,7 @@ glib_wrapper! {
 }
 
 impl MenuToolButton {
-    pub fn new<T: Upcast<Widget>>(icon_widget: Option<&T>, label: Option<&str>) -> MenuToolButton {
+    pub fn new<T: Upcast<Widget> = Widget>(icon_widget: Option<&T>, label: Option<&str>) -> MenuToolButton {
         assert_initialized_main_thread!();
         unsafe {
             ToolItem::from_glib_none(ffi::gtk_menu_tool_button_new(icon_widget.to_glib_none().0, label.to_glib_none().0)).downcast_unchecked()

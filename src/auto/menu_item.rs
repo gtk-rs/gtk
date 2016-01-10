@@ -58,7 +58,7 @@ pub trait MenuItemExt {
     fn set_label(&self, label: &str);
     fn set_reserve_indicator(&self, reserve: bool);
     fn set_right_justified(&self, right_justified: bool);
-    fn set_submenu<T: Upcast<Menu>>(&self, submenu: Option<&T>);
+    fn set_submenu<T: Upcast<Menu> = Menu>(&self, submenu: Option<&T>);
     fn set_use_underline(&self, setting: bool);
     fn toggle_size_allocate(&self, allocation: i32);
     fn toggle_size_request(&self, requisition: &mut i32);
@@ -143,7 +143,7 @@ impl<O: Upcast<MenuItem>> MenuItemExt for O {
         }
     }
 
-    fn set_submenu<T: Upcast<Menu>>(&self, submenu: Option<&T>) {
+    fn set_submenu<T: Upcast<Menu> = Menu>(&self, submenu: Option<&T>) {
         unsafe {
             ffi::gtk_menu_item_set_submenu(self.to_glib_none().0, submenu.to_glib_none().0);
         }

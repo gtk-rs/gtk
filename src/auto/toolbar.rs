@@ -85,7 +85,7 @@ impl Toolbar {
         }
     }
 
-    pub fn set_drop_highlight_item<T: Upcast<ToolItem>>(&self, tool_item: Option<&T>, index_: i32) {
+    pub fn set_drop_highlight_item<T: Upcast<ToolItem> = ToolItem>(&self, tool_item: Option<&T>, index_: i32) {
         unsafe {
             ffi::gtk_toolbar_set_drop_highlight_item(self.to_glib_none().0, tool_item.to_glib_none().0, index_);
         }

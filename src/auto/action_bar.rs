@@ -49,7 +49,7 @@ impl ActionBar {
     }
 
     #[cfg(gtk_3_12)]
-    pub fn set_center_widget<T: Upcast<Widget>>(&self, center_widget: Option<&T>) {
+    pub fn set_center_widget<T: Upcast<Widget> = Widget>(&self, center_widget: Option<&T>) {
         unsafe {
             ffi::gtk_action_bar_set_center_widget(self.to_glib_none().0, center_widget.to_glib_none().0);
         }

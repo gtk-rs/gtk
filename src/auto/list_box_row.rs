@@ -77,7 +77,7 @@ impl ListBoxRow {
     }
 
     #[cfg(gtk_3_10)]
-    pub fn set_header<T: Upcast<Widget>>(&self, header: Option<&T>) {
+    pub fn set_header<T: Upcast<Widget> = Widget>(&self, header: Option<&T>) {
         unsafe {
             ffi::gtk_list_box_row_set_header(self.to_glib_none().0, header.to_glib_none().0);
         }

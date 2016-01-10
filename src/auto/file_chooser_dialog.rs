@@ -20,7 +20,7 @@ glib_wrapper! {
 }
 
 impl FileChooserDialog {
-    //pub fn new<T: Upcast<Window>>(title: Option<&str>, parent: Option<&T>, action: FileChooserAction, first_button_text: Option<&str>, : /*Unknown conversion*/Fundamental: VarArgs) -> FileChooserDialog {
+    //pub fn new<T: Upcast<Window> = Window>(title: Option<&str>, parent: Option<&T>, action: FileChooserAction, first_button_text: Option<&str>, : /*Unknown conversion*/Fundamental: VarArgs) -> FileChooserDialog {
     //    unsafe { TODO: call ffi::gtk_file_chooser_dialog_new() }
     //}
 

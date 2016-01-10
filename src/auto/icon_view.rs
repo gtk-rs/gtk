@@ -82,7 +82,7 @@ impl IconView {
     }
 
     #[cfg(gtk_3_6)]
-    pub fn get_cell_rect<T: Upcast<CellRenderer>>(&self, path: &TreePath, cell: Option<&T>) -> Option<Rectangle> {
+    pub fn get_cell_rect<T: Upcast<CellRenderer> = CellRenderer>(&self, path: &TreePath, cell: Option<&T>) -> Option<Rectangle> {
         unsafe {
             let mut rect = Rectangle::uninitialized();
             let ret = from_glib(ffi::gtk_icon_view_get_cell_rect(self.to_glib_none().0, mut_override(path.to_glib_none().0), cell.to_glib_none().0, rect.to_glib_none_mut().0));
@@ -312,7 +312,7 @@ impl IconView {
         }
     }
 
-    pub fn set_cursor<T: Upcast<CellRenderer>>(&self, path: &TreePath, cell: Option<&T>, start_editing: bool) {
+    pub fn set_cursor<T: Upcast<CellRenderer> = CellRenderer>(&self, path: &TreePath, cell: Option<&T>, start_editing: bool) {
         unsafe {
             ffi::gtk_icon_view_set_cursor(self.to_glib_none().0, mut_override(path.to_glib_none().0), cell.to_glib_none().0, start_editing.to_glib());
         }
@@ -354,7 +354,7 @@ impl IconView {
         }
     }
 
-    pub fn set_model<T: Upcast<TreeModel>>(&self, model: Option<&T>) {
+    pub fn set_model<T: Upcast<TreeModel> = TreeModel>(&self, model: Option<&T>) {
         unsafe {
             ffi::gtk_icon_view_set_model(self.to_glib_none().0, model.to_glib_none().0);
         }
@@ -396,7 +396,7 @@ impl IconView {
         }
     }
 
-    //pub fn set_tooltip_cell<T: Upcast<CellRenderer>>(&self, tooltip: /*Ignored*/&Tooltip, path: &mut TreePath, cell: Option<&T>) {
+    //pub fn set_tooltip_cell<T: Upcast<CellRenderer> = CellRenderer>(&self, tooltip: /*Ignored*/&Tooltip, path: &mut TreePath, cell: Option<&T>) {
     //    unsafe { TODO: call ffi::gtk_icon_view_set_tooltip_cell() }
     //}
 

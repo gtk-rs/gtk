@@ -20,11 +20,11 @@ glib_wrapper! {
 }
 
 impl RecentChooserDialog {
-    //pub fn new<T: Upcast<Window>>(title: Option<&str>, parent: Option<&T>, first_button_text: Option<&str>, : /*Unknown conversion*/Fundamental: VarArgs) -> RecentChooserDialog {
+    //pub fn new<T: Upcast<Window> = Window>(title: Option<&str>, parent: Option<&T>, first_button_text: Option<&str>, : /*Unknown conversion*/Fundamental: VarArgs) -> RecentChooserDialog {
     //    unsafe { TODO: call ffi::gtk_recent_chooser_dialog_new() }
     //}
 
-    //pub fn new_for_manager<T: Upcast<Window>>(title: Option<&str>, parent: Option<&T>, manager: &RecentManager, first_button_text: Option<&str>, : /*Unknown conversion*/Fundamental: VarArgs) -> RecentChooserDialog {
+    //pub fn new_for_manager<T: Upcast<Window> = Window>(title: Option<&str>, parent: Option<&T>, manager: &RecentManager, first_button_text: Option<&str>, : /*Unknown conversion*/Fundamental: VarArgs) -> RecentChooserDialog {
     //    unsafe { TODO: call ffi::gtk_recent_chooser_dialog_new_for_manager() }
     //}
 
