@@ -45,7 +45,6 @@ impl MenuItem {
 }
 
 pub trait MenuItemExt {
-    fn activate(&self);
     fn deselect(&self);
     fn get_accel_path(&self) -> Option<String>;
     fn get_label(&self) -> Option<String>;
@@ -65,12 +64,6 @@ pub trait MenuItemExt {
 }
 
 impl<O: Upcast<MenuItem>> MenuItemExt for O {
-    fn activate(&self) {
-        unsafe {
-            ffi::gtk_menu_item_activate(self.to_glib_none().0);
-        }
-    }
-
     fn deselect(&self) {
         unsafe {
             ffi::gtk_menu_item_deselect(self.to_glib_none().0);

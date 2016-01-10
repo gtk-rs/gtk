@@ -3,6 +3,7 @@
 
 use CellRendererState;
 use Rectangle;
+use Requisition;
 use SizeRequestMode;
 use StateFlags;
 use Widget;
@@ -27,12 +28,11 @@ pub trait CellRendererExt {
     fn get_padding(&self) -> (i32, i32);
     fn get_preferred_height<T: Upcast<Widget>>(&self, widget: &T) -> (i32, i32);
     fn get_preferred_height_for_width<T: Upcast<Widget>>(&self, widget: &T, width: i32) -> (i32, i32);
-    //fn get_preferred_size<T: Upcast<Widget>>(&self, widget: &T, minimum_size: /*Ignored*/Requisition, natural_size: /*Ignored*/Requisition);
+    fn get_preferred_size<T: Upcast<Widget>>(&self, widget: &T) -> (Requisition, Requisition);
     fn get_preferred_width<T: Upcast<Widget>>(&self, widget: &T) -> (i32, i32);
     fn get_preferred_width_for_height<T: Upcast<Widget>>(&self, widget: &T, height: i32) -> (i32, i32);
     fn get_request_mode(&self) -> SizeRequestMode;
     fn get_sensitive(&self) -> bool;
-    fn get_size<T: Upcast<Widget>>(&self, widget: &T, cell_area: Option<&Rectangle>) -> (i32, i32, i32, i32);
     fn get_state<T: Upcast<Widget>>(&self, widget: &T, cell_state: CellRendererState) -> StateFlags;
     fn get_visible(&self) -> bool;
     fn is_activatable(&self) -> bool;
@@ -104,9 +104,14 @@ impl<O: Upcast<CellRenderer>> CellRendererExt for O {
         }
     }
 
-    //fn get_preferred_size<T: Upcast<Widget>>(&self, widget: &T, minimum_size: /*Ignored*/Requisition, natural_size: /*Ignored*/Requisition) {
-    //    unsafe { TODO: call ffi::gtk_cell_renderer_get_preferred_size() }
-    //}
+    fn get_preferred_size<T: Upcast<Widget>>(&self, widget: &T) -> (Requisition, Requisition) {
+        unsafe {
+            let mut minimum_size = Requisition::uninitialized();
+            let mut natural_size = Requisition::uninitialized();
+            ffi::gtk_cell_renderer_get_preferred_size(self.to_glib_none().0, widget.to_glib_none().0, minimum_size.to_glib_none_mut().0, natural_size.to_glib_none_mut().0);
+            (minimum_size, natural_size)
+        }
+    }
 
     fn get_preferred_width<T: Upcast<Widget>>(&self, widget: &T) -> (i32, i32) {
         unsafe {
@@ -135,17 +140,6 @@ impl<O: Upcast<CellRenderer>> CellRendererExt for O {
     fn get_sensitive(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_cell_renderer_get_sensitive(self.to_glib_none().0))
-        }
-    }
-
-    fn get_size<T: Upcast<Widget>>(&self, widget: &T, cell_area: Option<&Rectangle>) -> (i32, i32, i32, i32) {
-        unsafe {
-            let mut x_offset = mem::uninitialized();
-            let mut y_offset = mem::uninitialized();
-            let mut width = mem::uninitialized();
-            let mut height = mem::uninitialized();
-            ffi::gtk_cell_renderer_get_size(self.to_glib_none().0, widget.to_glib_none().0, cell_area.to_glib_none().0, &mut x_offset, &mut y_offset, &mut width, &mut height);
-            (x_offset, y_offset, width, height)
         }
     }
 

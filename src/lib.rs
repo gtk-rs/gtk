@@ -51,6 +51,7 @@ extern crate pango;
 
 pub use gdk::pixbuf as gdk_pixbuf;
 
+pub use glib::Error;
 pub use glib::ValuePublic;
 
 pub use ffi::GtkAccelFlags as AccelFlags;
