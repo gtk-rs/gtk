@@ -26,7 +26,6 @@ generate = [
     "Gtk.CellAreaContext",
     "Gtk.CellEditable",
     "Gtk.CellLayout",
-    "Gtk.CellRenderer",
     "Gtk.CellRendererText",
     "Gtk.CellRendererToggle",
     "Gtk.CheckButton",
@@ -160,6 +159,14 @@ status = "generate"
 [[object]]
 name = "Gtk.CellArea"
 status = "generate"
+
+[[object]]
+name = "Gtk.CellRenderer"
+status = "generate"
+    [[object.function]]
+    name = "get_size"
+    # Deprecated in 3.0, has a difficult contract
+    ignore = true
 
 [[object]]
 name = "Gtk.ComboBox"
