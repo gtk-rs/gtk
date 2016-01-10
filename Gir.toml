@@ -143,6 +143,7 @@ manual = [
     "Gtk.EntryBuffer",
     "Gtk.RecentData",
     "Gtk.RecentInfo",
+    "Gtk.Requisition",
     "Gtk.Widget",
     "Gtk.Window",
     "cairo.RectangleInt",

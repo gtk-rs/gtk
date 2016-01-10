@@ -165,6 +165,7 @@ mod recent_chooser_dialog;
 mod recent_data;
 mod recent_info;
 mod rectangle;
+mod requisition;
 #[cfg(target_os = "linux")]
 mod socket;
 mod text_attributes;
@@ -188,6 +189,7 @@ pub use lock_button::LockButton;
 pub use recent_data::RecentData;
 pub use recent_info::RecentInfo;
 pub use rectangle::Rectangle;
+pub use requisition::Requisition;
 #[cfg(target_os = "linux")]
 pub use socket::Socket;
 pub use text_attributes::TextAttributes;
