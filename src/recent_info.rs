@@ -7,7 +7,7 @@ use glib::translate::*;
 use ffi;
 
 glib_wrapper! {
-    pub struct RecentInfo(Refcounted<ffi::GtkRecentInfo>);
+    pub struct RecentInfo(Shared<ffi::GtkRecentInfo>);
 
     match fn {
         ref => |ptr| ffi::gtk_recent_info_ref(ptr),

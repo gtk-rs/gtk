@@ -6,7 +6,7 @@ use ffi;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct TextAttributes(Refcounted<ffi::GtkTextAttributes>);
+    pub struct TextAttributes(Shared<ffi::GtkTextAttributes>);
 
     match fn {
         ref => |ptr| ffi::gtk_text_attributes_ref(ptr),
