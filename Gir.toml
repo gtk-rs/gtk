@@ -76,7 +76,6 @@ generate = [
     "Gtk.PopoverMenu",
     "Gtk.ProgressBar",
     "Gtk.RadioButton",
-    "Gtk.Range",
     "Gtk.RecentChooser",
     "Gtk.RecentChooserDialog",
     "Gtk.RecentChooserWidget",
@@ -84,7 +83,6 @@ generate = [
     "Gtk.RecentManager",
     "Gtk.Revealer",
     "Gtk.Scale",
-    "Gtk.ScaleButton",
     "Gtk.Scrollable",
     "Gtk.Scrollbar",
     "Gtk.ScrolledWindow",
@@ -94,7 +92,6 @@ generate = [
     "Gtk.SeparatorMenuItem",
     "Gtk.SeparatorToolItem",
     "Gtk.SizeGroup",
-    "Gtk.SpinButton",
     "Gtk.Spinner",
     "Gtk.Stack",
     "Gtk.StackSidebar",
@@ -418,6 +415,30 @@ status = "generate"
         [[object.function.parameter]]
         name = "paper_size"
         const = true
+
+[[object]]
+name = "Gtk.Range"
+status = "generate"
+    [[object.function]]
+    name = "get_adjustment"
+        [object.function.return]
+        nullable = false
+
+[[object]]
+name = "Gtk.ScaleButton"
+status = "generate"
+    [[object.function]]
+    name = "get_adjustment"
+        [object.function.return]
+        nullable = false
+
+[[object]]
+name = "Gtk.SpinButton"
+status = "generate"
+    [[object.function]]
+    name = "get_adjustment"
+        [object.function.return]
+        nullable = false
 
 [[object]]
 name = "Gtk.TextIter"
