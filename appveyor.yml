@@ -3,9 +3,9 @@ platform:
   - x64
 environment:
   matrix:
-    - RUST_VERSION: 1.4.0
+    - RUST_VERSION: 1.5.0
       GTK: gnome
-    - RUST_VERSION: 1.4.0
+    - RUST_VERSION: 1.5.0
       GTK: win64
       FEATURES: gtk_3_14
     #- RUST_VERSION: nightly
@@ -22,17 +22,19 @@ install:
   - if "%PLATFORM%" == "x86" SET RUST_PLATFORM=i686-pc-windows-gnu
   - if "%PLATFORM%" == "x64" SET RUST_PLATFORM=x86_64-pc-windows-gnu
   - ps: Start-FileDownload "https://static.rust-lang.org/dist/rust-$Env:RUST_VERSION-$Env:RUST_PLATFORM.exe" -FileName rust.exe
-  - cmd: rust.exe /VERYSILENT /NORESTART /COMPONENTS="rust,cargo" /DIR=C:\Rust
+  - cmd: rust.exe /VERYSILENT /NORESTART /COMPONENTS="rust,std,cargo" /DIR=C:\Rust
   - ps: >-
       if ($Env:PLATFORM -eq "x86") {
-        Start-FileDownload "http://libgd.blob.core.windows.net/mingw/i686-4.9.1-release-posix-dwarf-rt_v3-rev1.7z" -FileName mingw-w64.7z;
+        $webclient = New-Object System.Net.WebClient
+        $webclient.DownloadFile("http://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/5.3.0/threads-win32/dwarf/i686-5.3.0-release-win32-dwarf-rt_v4-rev0.7z/download", "C:\mingw.7z")
         $Env:MINGW = "C:\mingw32"
       }
       else {
-        Start-FileDownload "http://libgd.blob.core.windows.net/mingw/mingw-w64-dgn-x86_64-20141001.7z" -FileName mingw-w64.7z;
+        $webclient = New-Object System.Net.WebClient
+        $webclient.DownloadFile("http://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/5.3.0/threads-win32/seh/x86_64-5.3.0-release-win32-seh-rt_v4-rev0.7z/download", "C:\mingw.7z")
         $Env:MINGW = "C:\mingw64"
       }
-  - ps: 7z x -oC:\ mingw-w64.7z | Out-Null;
+  - ps: 7z x -oC:\ C:\mingw.7z | Out-Null;
   - ps: >-
       if (!(Test-Path -Path "C:\Deps\gtk")) {
         if ($Env:GTK -eq "gnome") {
