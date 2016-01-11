@@ -114,7 +114,6 @@ generate = [
     "Gtk.ToolShell",
     "Gtk.Toolbar",
     "Gtk.TreeIter",
-    "Gtk.TreeSelection",
     "Gtk.TreeSortable",
     "Gtk.TreeViewColumn",
     "Gtk.Viewport",
@@ -582,6 +581,56 @@ status = "generate"
     name = "to_string"
         [[object.function.parameter]]
         name = "path"
+        const = true
+
+[[object]]
+name = "Gtk.TreeSelection"
+status = "generate"
+    [[object.function]]
+    name = "iter_is_selected"
+        [[object.function.parameter]]
+        name = "iter"
+        const = true
+    [[object.function]]
+    name = "path_is_selected"
+        [[object.function.parameter]]
+        name = "path"
+        const = true
+    [[object.function]]
+    name = "select_iter"
+        [[object.function.parameter]]
+        name = "iter"
+        const = true
+    [[object.function]]
+    name = "select_path"
+        [[object.function.parameter]]
+        name = "path"
+        const = true
+    [[object.function]]
+    name = "select_range"
+        [[object.function.parameter]]
+        name = "start_path"
+        const = true
+        [[object.function.parameter]]
+        name = "end_path"
+        const = true
+    [[object.function]]
+    name = "unselect_iter"
+        [[object.function.parameter]]
+        name = "iter"
+        const = true
+    [[object.function]]
+    name = "unselect_path"
+        [[object.function.parameter]]
+        name = "path"
+        const = true
+    [[object.function]]
+    name = "unselect_range"
+        [[object.function.parameter]]
+        name = "start_path"
+        const = true
+        [[object.function.parameter]]
+        name = "end_path"
         const = true
 
 [[object]]
