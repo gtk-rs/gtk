@@ -148,7 +148,6 @@ mod text_iter;
 mod text_view;
 mod tree_model;
 mod tree_path;
-mod tree_selection;
 mod tree_store;
 mod tree_view;
 mod widget;
