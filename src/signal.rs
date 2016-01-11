@@ -48,7 +48,6 @@ use {
     StatusIcon,
     TextDirection,
     ToolButton,
-    Tooltip,
     TreeIter,
     TreePath,
     TreeSelection,
@@ -57,6 +56,8 @@ use {
     Widget,
     WidgetHelpType,
 };
+
+pub type Tooltip = ();
 
 /// Whether to propagate the signal to other handlers
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
@@ -214,7 +215,8 @@ mod widget {
     use gdk_ffi::GdkScreen;
     use glib_ffi::gboolean;
     use ffi::{GtkWidget, GtkTooltip};
-    use {Widget, DirectionType, StateFlags, TextDirection, Tooltip, WidgetHelpType};
+    use {Widget, DirectionType, StateFlags, TextDirection, WidgetHelpType};
+    use super::Tooltip;
     use super::CallbackGuard;
     use super::Inhibit;
 
@@ -1649,7 +1651,7 @@ mod status_icon {
     use glib::translate::*;
     use glib_ffi::gboolean;
     use super::CallbackGuard;
-    use Tooltip;
+    use super::Tooltip;
 
     impl super::StatusIconSignals for StatusIcon {
         fn connect_activate<F: Fn(StatusIcon) + 'static>(&self, f: F) -> u64 {
