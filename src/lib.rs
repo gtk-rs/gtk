@@ -140,6 +140,7 @@ mod recent_data;
 mod recent_info;
 mod rectangle;
 mod requisition;
+mod signal;
 #[cfg(target_os = "linux")]
 mod socket;
 mod text_attributes;
@@ -156,6 +157,8 @@ mod window;
 pub mod prelude;
 
 pub use auto::*;
+pub use rt::*;
+pub use signal::*;
 
 pub use app_chooser::AppChooser;
 pub use builder::{Builder, Buildable};
@@ -171,27 +174,3 @@ pub use socket::Socket;
 pub use text_attributes::TextAttributes;
 pub use widget::Widget;
 pub use window::Window;
-
-// These are/should be inlined
-pub use self::rt::{
-    init,
-    set_initialized,
-    main,
-    main_quit,
-    main_level,
-    main_iteration,
-    main_iteration_do,
-    get_major_version,
-    get_minor_version,
-    get_micro_version,
-    get_binary_age,
-    get_interface_age,
-    check_version,
-    events_pending,
-};
-
-pub use self::signal::{
-    idle_add,
-    timeout_add,
-    timeout_add_seconds,
-};

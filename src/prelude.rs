@@ -48,3 +48,5 @@ pub use color_chooser::ColorChooserExt;
 pub use tree_model::TreeModelExt;
 pub use widget::WidgetExt;
 pub use window::WindowExt;
+
+pub use signal::*;
