@@ -68,7 +68,6 @@ generate = [
     "Gtk.MenuToolButton",
     "Gtk.MessageDialog",
     "Gtk.Misc",
-    "Gtk.Notebook",
     "Gtk.Orientable",
     "Gtk.Overlay",
     "Gtk.Paned",
@@ -330,6 +329,50 @@ name = "Gtk.MenuItem"
 status = "generate"
     [[object.function]]
     name = "activate"
+    ignore = true
+
+[[object]]
+name = "Gtk.Notebook"
+status = "generate"
+    # The following functions need integer type adjustments
+    [[object.function]]
+    name = "append_page"
+    ignore = true
+    [[object.function]]
+    name = "append_page_menu"
+    ignore = true
+    [[object.function]]
+    name = "get_current_page"
+    ignore = true
+    [[object.function]]
+    name = "get_n_pages"
+    ignore = true
+    [[object.function]]
+    name = "get_nth_page"
+    ignore = true
+    [[object.function]]
+    name = "insert_page"
+    ignore = true
+    [[object.function]]
+    name = "insert_page_menu"
+    ignore = true
+    [[object.function]]
+    name = "page_num"
+    ignore = true
+    [[object.function]]
+    name = "prepend_page"
+    ignore = true
+    [[object.function]]
+    name = "prepend_page_menu"
+    ignore = true
+    [[object.function]]
+    name = "remove_page"
+    ignore = true
+    [[object.function]]
+    name = "reorder_child"
+    ignore = true
+    [[object.function]]
+    name = "set_current_page"
     ignore = true
 
 [[object]]
