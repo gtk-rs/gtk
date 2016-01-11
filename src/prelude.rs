@@ -19,7 +19,7 @@ pub use auto::traits::CellRendererExt;
 pub use auto::traits::CheckButtonExt;
 pub use auto::traits::ComboBoxExt;
 pub use auto::traits::ContainerExt;
-pub use auto::traits::DialogExt;
+//pub use auto::traits::DialogExt;
 pub use auto::traits::EditableExt;
 pub use auto::traits::EntryExt;
 pub use auto::traits::FileChooserExt;
@@ -45,6 +45,7 @@ pub use auto::traits::TreeSortableExt;
 
 pub use app_chooser::AppChooserExt;
 pub use color_chooser::ColorChooserExt;
+pub use dialog::DialogExt;
 pub use tree_model::TreeModelExt;
 pub use widget::WidgetExt;
 pub use window::WindowExt;

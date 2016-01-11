@@ -130,6 +130,7 @@ mod app_chooser;
 mod builder;
 mod color_button;
 mod color_chooser;
+mod dialog;
 mod entry_buffer;
 mod file_chooser_dialog;
 mod list_store;
