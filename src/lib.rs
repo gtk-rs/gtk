@@ -146,6 +146,7 @@ mod signal;
 #[cfg(target_os = "linux")]
 mod socket;
 mod text_attributes;
+mod text_buffer;
 mod text_iter;
 mod text_view;
 mod tree_model;

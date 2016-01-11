@@ -100,7 +100,6 @@ generate = [
     "Gtk.Statusbar",
     "Gtk.StyleContext",
     "Gtk.Switch",
-    "Gtk.TextBuffer",
     "Gtk.TextChildAnchor",
     "Gtk.TextMark",
     "Gtk.TextTag",
@@ -439,6 +438,28 @@ status = "generate"
     name = "get_adjustment"
         [object.function.return]
         nullable = false
+
+[[object]]
+name = "Gtk.TextBuffer"
+status = "generate"
+    [[object.function]]
+    name = "insert"
+    ignore = true
+    [[object.function]]
+    name = "insert_at_cursor"
+    ignore = true
+    [[object.function]]
+    name = "insert_interactive"
+    ignore = true
+    [[object.function]]
+    name = "insert_interactive_at_cursor"
+    ignore = true
+    [[object.function]]
+    name = "insert_markup"
+    ignore = true
+    [[object.function]]
+    name = "set_text"
+    ignore = true
 
 [[object]]
 name = "Gtk.TextIter"
