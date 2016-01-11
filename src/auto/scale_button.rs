@@ -33,7 +33,7 @@ impl ScaleButton {
 }
 
 pub trait ScaleButtonExt {
-    fn get_adjustment(&self) -> Option<Adjustment>;
+    fn get_adjustment(&self) -> Adjustment;
     fn get_minus_button(&self) -> Option<Widget>;
     fn get_plus_button(&self) -> Option<Widget>;
     fn get_popup(&self) -> Option<Widget>;
@@ -44,7 +44,7 @@ pub trait ScaleButtonExt {
 }
 
 impl<O: Upcast<ScaleButton>> ScaleButtonExt for O {
-    fn get_adjustment(&self) -> Option<Adjustment> {
+    fn get_adjustment(&self) -> Adjustment {
         unsafe {
             from_glib_none(ffi::gtk_scale_button_get_adjustment(self.to_glib_none().0))
         }

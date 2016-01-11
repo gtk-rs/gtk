@@ -62,15 +62,15 @@ impl TreeSelection {
     //    unsafe { TODO: call ffi::gtk_tree_selection_get_user_data() }
     //}
 
-    pub fn iter_is_selected(&self, iter: &mut TreeIter) -> bool {
+    pub fn iter_is_selected(&self, iter: &TreeIter) -> bool {
         unsafe {
-            from_glib(ffi::gtk_tree_selection_iter_is_selected(self.to_glib_none().0, iter.to_glib_none_mut().0))
+            from_glib(ffi::gtk_tree_selection_iter_is_selected(self.to_glib_none().0, mut_override(iter.to_glib_none().0)))
         }
     }
 
-    pub fn path_is_selected(&self, path: &mut TreePath) -> bool {
+    pub fn path_is_selected(&self, path: &TreePath) -> bool {
         unsafe {
-            from_glib(ffi::gtk_tree_selection_path_is_selected(self.to_glib_none().0, path.to_glib_none_mut().0))
+            from_glib(ffi::gtk_tree_selection_path_is_selected(self.to_glib_none().0, mut_override(path.to_glib_none().0)))
         }
     }
 
@@ -80,21 +80,21 @@ impl TreeSelection {
         }
     }
 
-    pub fn select_iter(&self, iter: &mut TreeIter) {
+    pub fn select_iter(&self, iter: &TreeIter) {
         unsafe {
-            ffi::gtk_tree_selection_select_iter(self.to_glib_none().0, iter.to_glib_none_mut().0);
+            ffi::gtk_tree_selection_select_iter(self.to_glib_none().0, mut_override(iter.to_glib_none().0));
         }
     }
 
-    pub fn select_path(&self, path: &mut TreePath) {
+    pub fn select_path(&self, path: &TreePath) {
         unsafe {
-            ffi::gtk_tree_selection_select_path(self.to_glib_none().0, path.to_glib_none_mut().0);
+            ffi::gtk_tree_selection_select_path(self.to_glib_none().0, mut_override(path.to_glib_none().0));
         }
     }
 
-    pub fn select_range(&self, start_path: &mut TreePath, end_path: &mut TreePath) {
+    pub fn select_range(&self, start_path: &TreePath, end_path: &TreePath) {
         unsafe {
-            ffi::gtk_tree_selection_select_range(self.to_glib_none().0, start_path.to_glib_none_mut().0, end_path.to_glib_none_mut().0);
+            ffi::gtk_tree_selection_select_range(self.to_glib_none().0, mut_override(start_path.to_glib_none().0), mut_override(end_path.to_glib_none().0));
         }
     }
 
@@ -118,21 +118,21 @@ impl TreeSelection {
         }
     }
 
-    pub fn unselect_iter(&self, iter: &mut TreeIter) {
+    pub fn unselect_iter(&self, iter: &TreeIter) {
         unsafe {
-            ffi::gtk_tree_selection_unselect_iter(self.to_glib_none().0, iter.to_glib_none_mut().0);
+            ffi::gtk_tree_selection_unselect_iter(self.to_glib_none().0, mut_override(iter.to_glib_none().0));
         }
     }
 
-    pub fn unselect_path(&self, path: &mut TreePath) {
+    pub fn unselect_path(&self, path: &TreePath) {
         unsafe {
-            ffi::gtk_tree_selection_unselect_path(self.to_glib_none().0, path.to_glib_none_mut().0);
+            ffi::gtk_tree_selection_unselect_path(self.to_glib_none().0, mut_override(path.to_glib_none().0));
         }
     }
 
-    pub fn unselect_range(&self, start_path: &mut TreePath, end_path: &mut TreePath) {
+    pub fn unselect_range(&self, start_path: &TreePath, end_path: &TreePath) {
         unsafe {
-            ffi::gtk_tree_selection_unselect_range(self.to_glib_none().0, start_path.to_glib_none_mut().0, end_path.to_glib_none_mut().0);
+            ffi::gtk_tree_selection_unselect_range(self.to_glib_none().0, mut_override(start_path.to_glib_none().0), mut_override(end_path.to_glib_none().0));
         }
     }
 

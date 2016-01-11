@@ -21,7 +21,7 @@ glib_wrapper! {
 }
 
 pub trait RangeExt {
-    fn get_adjustment(&self) -> Option<Adjustment>;
+    fn get_adjustment(&self) -> Adjustment;
     fn get_fill_level(&self) -> f64;
     fn get_flippable(&self) -> bool;
     fn get_inverted(&self) -> bool;
@@ -52,7 +52,7 @@ pub trait RangeExt {
 }
 
 impl<O: Upcast<Range>> RangeExt for O {
-    fn get_adjustment(&self) -> Option<Adjustment> {
+    fn get_adjustment(&self) -> Adjustment {
         unsafe {
             from_glib_none(ffi::gtk_range_get_adjustment(self.to_glib_none().0))
         }

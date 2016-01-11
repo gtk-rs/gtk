@@ -290,40 +290,9 @@ impl TextBuffer {
         }
     }
 
-    pub fn insert(&self, iter: &mut TextIter, text: &str, len: i32) {
-        unsafe {
-            ffi::gtk_text_buffer_insert(self.to_glib_none().0, iter.to_glib_none_mut().0, text.to_glib_none().0, len);
-        }
-    }
-
-    pub fn insert_at_cursor(&self, text: &str, len: i32) {
-        unsafe {
-            ffi::gtk_text_buffer_insert_at_cursor(self.to_glib_none().0, text.to_glib_none().0, len);
-        }
-    }
-
     pub fn insert_child_anchor(&self, iter: &mut TextIter, anchor: &TextChildAnchor) {
         unsafe {
             ffi::gtk_text_buffer_insert_child_anchor(self.to_glib_none().0, iter.to_glib_none_mut().0, anchor.to_glib_none().0);
-        }
-    }
-
-    pub fn insert_interactive(&self, iter: &mut TextIter, text: &str, len: i32, default_editable: bool) -> bool {
-        unsafe {
-            from_glib(ffi::gtk_text_buffer_insert_interactive(self.to_glib_none().0, iter.to_glib_none_mut().0, text.to_glib_none().0, len, default_editable.to_glib()))
-        }
-    }
-
-    pub fn insert_interactive_at_cursor(&self, text: &str, len: i32, default_editable: bool) -> bool {
-        unsafe {
-            from_glib(ffi::gtk_text_buffer_insert_interactive_at_cursor(self.to_glib_none().0, text.to_glib_none().0, len, default_editable.to_glib()))
-        }
-    }
-
-    #[cfg(gtk_3_16)]
-    pub fn insert_markup(&self, iter: &mut TextIter, markup: &str, len: i32) {
-        unsafe {
-            ffi::gtk_text_buffer_insert_markup(self.to_glib_none().0, iter.to_glib_none_mut().0, markup.to_glib_none().0, len);
         }
     }
 
@@ -426,12 +395,6 @@ impl TextBuffer {
     pub fn set_modified(&self, setting: bool) {
         unsafe {
             ffi::gtk_text_buffer_set_modified(self.to_glib_none().0, setting.to_glib());
-        }
-    }
-
-    pub fn set_text(&self, text: &str, len: i32) {
-        unsafe {
-            ffi::gtk_text_buffer_set_text(self.to_glib_none().0, text.to_glib_none().0, len);
         }
     }
 

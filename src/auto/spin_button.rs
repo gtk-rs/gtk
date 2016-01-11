@@ -44,7 +44,7 @@ impl SpinButton {
         }
     }
 
-    pub fn get_adjustment(&self) -> Option<Adjustment> {
+    pub fn get_adjustment(&self) -> Adjustment {
         unsafe {
             from_glib_none(ffi::gtk_spin_button_get_adjustment(self.to_glib_none().0))
         }

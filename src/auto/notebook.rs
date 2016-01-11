@@ -27,18 +27,6 @@ impl Notebook {
         }
     }
 
-    pub fn append_page<T: Upcast<Widget>, U: Upcast<Widget> = Widget>(&self, child: &T, tab_label: Option<&U>) -> i32 {
-        unsafe {
-            ffi::gtk_notebook_append_page(self.to_glib_none().0, child.to_glib_none().0, tab_label.to_glib_none().0)
-        }
-    }
-
-    pub fn append_page_menu<T: Upcast<Widget>, U: Upcast<Widget> = Widget, V: Upcast<Widget> = Widget>(&self, child: &T, tab_label: Option<&U>, menu_label: Option<&V>) -> i32 {
-        unsafe {
-            ffi::gtk_notebook_append_page_menu(self.to_glib_none().0, child.to_glib_none().0, tab_label.to_glib_none().0, menu_label.to_glib_none().0)
-        }
-    }
-
     #[cfg(gtk_3_16)]
     pub fn detach_tab<T: Upcast<Widget>>(&self, child: &T) {
         unsafe {
@@ -49,12 +37,6 @@ impl Notebook {
     pub fn get_action_widget(&self, pack_type: PackType) -> Option<Widget> {
         unsafe {
             from_glib_none(ffi::gtk_notebook_get_action_widget(self.to_glib_none().0, pack_type))
-        }
-    }
-
-    pub fn get_current_page(&self) -> i32 {
-        unsafe {
-            ffi::gtk_notebook_get_current_page(self.to_glib_none().0)
         }
     }
 
@@ -73,18 +55,6 @@ impl Notebook {
     pub fn get_menu_label_text<T: Upcast<Widget>>(&self, child: &T) -> Option<String> {
         unsafe {
             from_glib_none(ffi::gtk_notebook_get_menu_label_text(self.to_glib_none().0, child.to_glib_none().0))
-        }
-    }
-
-    pub fn get_n_pages(&self) -> i32 {
-        unsafe {
-            ffi::gtk_notebook_get_n_pages(self.to_glib_none().0)
-        }
-    }
-
-    pub fn get_nth_page(&self, page_num: i32) -> Option<Widget> {
-        unsafe {
-            from_glib_none(ffi::gtk_notebook_get_nth_page(self.to_glib_none().0, page_num))
         }
     }
 
@@ -148,27 +118,9 @@ impl Notebook {
         }
     }
 
-    pub fn insert_page<T: Upcast<Widget>, U: Upcast<Widget> = Widget>(&self, child: &T, tab_label: Option<&U>, position: i32) -> i32 {
-        unsafe {
-            ffi::gtk_notebook_insert_page(self.to_glib_none().0, child.to_glib_none().0, tab_label.to_glib_none().0, position)
-        }
-    }
-
-    pub fn insert_page_menu<T: Upcast<Widget>, U: Upcast<Widget> = Widget, V: Upcast<Widget> = Widget>(&self, child: &T, tab_label: Option<&U>, menu_label: Option<&V>, position: i32) -> i32 {
-        unsafe {
-            ffi::gtk_notebook_insert_page_menu(self.to_glib_none().0, child.to_glib_none().0, tab_label.to_glib_none().0, menu_label.to_glib_none().0, position)
-        }
-    }
-
     pub fn next_page(&self) {
         unsafe {
             ffi::gtk_notebook_next_page(self.to_glib_none().0);
-        }
-    }
-
-    pub fn page_num<T: Upcast<Widget>>(&self, child: &T) -> i32 {
-        unsafe {
-            ffi::gtk_notebook_page_num(self.to_glib_none().0, child.to_glib_none().0)
         }
     }
 
@@ -184,45 +136,15 @@ impl Notebook {
         }
     }
 
-    pub fn prepend_page<T: Upcast<Widget>, U: Upcast<Widget> = Widget>(&self, child: &T, tab_label: Option<&U>) -> i32 {
-        unsafe {
-            ffi::gtk_notebook_prepend_page(self.to_glib_none().0, child.to_glib_none().0, tab_label.to_glib_none().0)
-        }
-    }
-
-    pub fn prepend_page_menu<T: Upcast<Widget>, U: Upcast<Widget> = Widget, V: Upcast<Widget> = Widget>(&self, child: &T, tab_label: Option<&U>, menu_label: Option<&V>) -> i32 {
-        unsafe {
-            ffi::gtk_notebook_prepend_page_menu(self.to_glib_none().0, child.to_glib_none().0, tab_label.to_glib_none().0, menu_label.to_glib_none().0)
-        }
-    }
-
     pub fn prev_page(&self) {
         unsafe {
             ffi::gtk_notebook_prev_page(self.to_glib_none().0);
         }
     }
 
-    pub fn remove_page(&self, page_num: i32) {
-        unsafe {
-            ffi::gtk_notebook_remove_page(self.to_glib_none().0, page_num);
-        }
-    }
-
-    pub fn reorder_child<T: Upcast<Widget>>(&self, child: &T, position: i32) {
-        unsafe {
-            ffi::gtk_notebook_reorder_child(self.to_glib_none().0, child.to_glib_none().0, position);
-        }
-    }
-
     pub fn set_action_widget<T: Upcast<Widget>>(&self, widget: &T, pack_type: PackType) {
         unsafe {
             ffi::gtk_notebook_set_action_widget(self.to_glib_none().0, widget.to_glib_none().0, pack_type);
-        }
-    }
-
-    pub fn set_current_page(&self, page_num: i32) {
-        unsafe {
-            ffi::gtk_notebook_set_current_page(self.to_glib_none().0, page_num);
         }
     }
 
