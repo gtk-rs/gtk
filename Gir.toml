@@ -8,7 +8,6 @@ work_mode = "normal"
 generate_safety_asserts = true
 
 generate = [
-    "Gtk.AboutDialog",
     "Gtk.AccelGroup",
     "Gtk.ActionBar",
     "Gtk.Actionable",
@@ -141,6 +140,16 @@ manual = [
     "Gtk.Window",
     "cairo.RectangleInt",
 ]
+
+[[object]]
+name = "Gtk.AboutDialog"
+status = "generate"
+    [[object.function]]
+    name = "set_website_label"
+        [[object.function.parameter]]
+        name = "website_label"
+        # Passing `NULL` here seems to influence the rendering code
+        nullable = true
 
 [[object]]
 name = "Gtk.AppChooserDialog"
