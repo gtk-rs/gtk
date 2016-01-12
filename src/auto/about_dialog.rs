@@ -204,7 +204,7 @@ impl AboutDialog {
         }
     }
 
-    pub fn set_website_label(&self, website_label: &str) {
+    pub fn set_website_label(&self, website_label: Option<&str>) {
         unsafe {
             ffi::gtk_about_dialog_set_website_label(self.to_glib_none().0, website_label.to_glib_none().0);
         }
