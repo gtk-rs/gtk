@@ -1,11 +1,6 @@
-// Copyright 2013-2015, The Gtk-rs Project Developers.
+// Copyright 2013-2016, The Gtk-rs Project Developers.
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
-
-//#![macro_use]
-
-#![allow(dead_code)] // TODO: drop this
-#![allow(raw_pointer_derive)]
 
 extern crate libc;
 
@@ -23,180 +18,15 @@ extern crate gdk;
 extern crate cairo;
 extern crate pango;
 
+pub use gdk::pixbuf as gdk_pixbuf;
+
+pub use glib::{
+    Downcast,
+    Error,
+    Object,
+    Upcast,
+};
 pub use glib::ValuePublic;
-
-// These are/should be inlined
-pub use self::rt::{
-    init,
-    set_initialized,
-    main,
-    main_quit,
-    main_level,
-    main_iteration,
-    main_iteration_do,
-    get_major_version,
-    get_minor_version,
-    get_micro_version,
-    get_binary_age,
-    get_interface_age,
-    check_version,
-    events_pending,
-};
-
-pub use self::signal::{
-    idle_add,
-    timeout_add,
-    timeout_add_seconds,
-};
-
-pub use self::widgets::{
-    CssProvider,
-    StyleContext,
-    Widget,
-    Window,
-    Label,
-    Button,
-    Box,
-    ButtonBox,
-    Frame,
-    AspectFrame,
-    Fixed,
-    Separator,
-    FontButton,
-    ToggleButton,
-    CheckButton,
-    ColorButton,
-    LinkButton,
-    Adjustment,
-    ScaleButton,
-    VolumeButton,
-    Grid,
-    EntryBuffer,
-    Entry,
-    Switch,
-    Range,
-    Scale,
-    SpinButton,
-    Spinner,
-    Image,
-    ProgressBar,
-    Arrow,
-    Calendar,
-    Alignment,
-    Expander,
-    Paned,
-    InfoBar,
-    Toolbar,
-    ToolItem,
-    SeparatorToolItem,
-    ToolButton,
-    ToggleToolButton,
-    MenuToolButton,
-    Dialog,
-    AboutDialog,
-    ColorChooserDialog,
-    FontChooserDialog,
-    MessageDialog,
-    NoteBook,
-    Overlay,
-    Layout,
-    FileFilter,
-    FileChooserDialog,
-    AppInfo,
-    AppLaunchContext,
-    AppChooserDialog,
-    DrawingArea,
-    PageSetup,
-    PaperSize,
-    PrintSettings,
-    RecentChooserDialog,
-    //PageSetupUnixDialog
-    RecentInfo,
-    RecentFilter,
-    RecentFilterInfo,
-    RecentData,
-    RecentManager,
-    TextView,
-    TextBuffer,
-    TextTagTable,
-    ScrolledWindow,
-    RadioButton,
-    TreeView,
-    TreeViewColumn,
-    TreePath,
-    TreeIter,
-    TreeModel,
-    ListStore,
-    TreeStore,
-    MenuItem,
-    SeparatorMenuItem,
-    CheckMenuItem,
-    ScrollBar,
-    Viewport,
-    StatusBar,
-    CellRendererText,
-    CellRendererToggle,
-    LockButton,
-    EntryCompletion,
-    IconView,
-    TreeSelection,
-    RecentChooserWidget,
-    ComboBox,
-    //g_type,
-    ComboBoxText,
-    TextMark,
-    TextTag,
-    TextAttributes,
-    TextIter,
-    TextChildAnchor,
-    ToolPalette,
-    ToolItemGroup,
-    SizeGroup,
-    AppChooserWidget,
-    FileChooserWidget,
-    ColorChooserWidget,
-    FontChooserWidget,
-    EventBox,
-    StatusIcon,
-    Menu,
-};
-
-#[cfg(target_os = "linux")]
-pub use self::widgets::{Socket};
-
-#[cfg(gtk_3_6)]
-pub use self::widgets::{
-    MenuButton,
-    LevelBar,
-};
-
-#[cfg(gtk_3_10)]
-pub use self::widgets::{
-    SearchEntry,
-    SearchBar,
-    Stack,
-    StackSwitcher,
-    Revealer,
-    HeaderBar,
-    ListBox,
-    ListBoxRow,
-    PlacesSidebar,
-};
-
-#[cfg(gtk_3_12)]
-pub use self::widgets::{
-    FlowBox,
-    FlowBoxChild,
-    ActionBar,
-    Popover,
-};
-
-#[cfg(gtk_3_16)]
-pub use self::widgets::{
-    PopoverMenu,
-    StackSidebar,
-    GLArea,
-};
 
 pub use ffi::GtkAccelFlags as AccelFlags;
 pub use ffi::GtkAlign as Align;
@@ -215,6 +45,7 @@ pub use ffi::GtkDestDefaults as DestDefaults;
 pub use ffi::GtkDialogFlags as DialogFlags;
 pub use ffi::GtkDirectionType as DirectionType;
 pub use ffi::GtkDragResult as DragResult;
+pub use ffi::GtkBaselinePosition as BaselinePosition;
 pub use ffi::GtkEntryIconPosition as EntryIconPosition;
 pub use ffi::GtkExpanderStyle as ExpanderStyle;
 pub use ffi::GtkFileChooserAction as FileChooserAction;
@@ -242,7 +73,9 @@ pub use ffi::GtkPathType as PathType;
 pub use ffi::GtkPlacesOpenFlags as PlacesOpenFlags;
 pub use ffi::GtkPolicyType as PolicyType;
 pub use ffi::GtkPositionType as PositionType;
+pub use ffi::GtkPrintDuplex as PrintDuplex;
 pub use ffi::GtkPrintPages as PrintPages;
+pub use ffi::GtkPrintQuality as PrintQuality;
 pub use ffi::GtkRecentFilterFlags as RecentFilterFlags;
 pub use ffi::GtkRecentSortType as RecentSortType;
 pub use ffi::GtkRegionFlags as RegionFlags;
@@ -271,6 +104,7 @@ pub use ffi::GtkToolPaletteDragTargets as ToolPaletteDragTargets;
 pub use ffi::GtkToolbarStyle as ToolbarStyle;
 pub use ffi::GtkTreeModelFlags as TreeModelFlags;
 pub use ffi::GtkTreeViewColumnSizing as TreeViewColumnSizing;
+pub use ffi::GtkTreeViewDropPosition as TreeViewDropPosition;
 pub use ffi::GtkTreeViewGridLines as TreeViewGridLines;
 pub use ffi::GtkUnit as Unit;
 pub use ffi::GtkWidgetHelpType as WidgetHelpType;
@@ -278,71 +112,67 @@ pub use ffi::GtkWindowPosition as WindowPosition;
 pub use ffi::GtkWindowType as WindowType;
 pub use ffi::GtkWrapMode as WrapMode;
 
-pub use self::traits::FFIWidget;
-pub use self::traits::StyleProviderTrait;
-pub use self::traits::GObjectTrait;
-pub use self::traits::BoxTrait;
-pub use self::traits::ActionableTrait;
-pub use self::traits::AppChooserTrait;
-pub use self::traits::BinTrait;
-pub use self::traits::ButtonTrait;
-pub use self::traits::ButtonSignals;
-pub use self::traits::CellEditableTrait;
-pub use self::traits::CellLayoutTrait;
-pub use self::traits::CellRendererTrait;
-pub use self::traits::CheckMenuItemTrait;
-pub use self::traits::ColorChooserTrait;
-pub use self::traits::ComboBoxTrait;
-pub use self::traits::ContainerTrait;
-pub use self::traits::DialogButtons;
-pub use self::traits::DialogTrait;
-pub use self::traits::EditableTrait;
-pub use self::traits::EntryTrait;
-pub use self::traits::FileChooserTrait;
-pub use self::traits::FontChooserTrait;
-pub use self::traits::FrameTrait;
-pub use self::traits::LabelTrait;
-pub use self::traits::MenuItemTrait;
-pub use self::traits::MenuShellTrait;
-pub use self::traits::MiscTrait;
-pub use self::traits::OrientableTrait;
-pub use self::traits::RangeTrait;
-pub use self::traits::RecentChooserTrait;
-pub use self::traits::ScaleButtonTrait;
-pub use self::traits::ScrollableTrait;
-pub use self::traits::ScrolledWindowTrait;
-pub use self::traits::TextBufferTrait;
-pub use self::traits::ToggleButtonTrait;
-pub use self::traits::ToggleToolButtonTrait;
-pub use self::traits::ToolButtonTrait;
-pub use self::traits::ToolButtonSignals;
-pub use self::traits::ToolItemTrait;
-pub use self::traits::ToolShellTrait;
-pub use self::traits::WidgetTrait;
-pub use self::traits::WidgetSignals;
-pub use self::traits::WindowTrait;
-
-pub use self::traits::style_provider::{
-    STYLE_PROVIDER_PRIORITY_FALLBACK,
-    STYLE_PROVIDER_PRIORITY_THEME,
-    STYLE_PROVIDER_PRIORITY_SETTINGS,
-    STYLE_PROVIDER_PRIORITY_APPLICATION,
-    STYLE_PROVIDER_PRIORITY_USER
-};
-
 pub const DIALOG_MODAL: DialogFlags = ffi::GTK_DIALOG_MODAL;
 
-pub use self::types::{
-    Tooltip,
-};
+pub const STYLE_PROVIDER_PRIORITY_FALLBACK: i32 = ffi::GTK_STYLE_PROVIDER_PRIORITY_FALLBACK;
+pub const STYLE_PROVIDER_PRIORITY_THEME: i32 = ffi::GTK_STYLE_PROVIDER_PRIORITY_THEME;
+pub const STYLE_PROVIDER_PRIORITY_SETTINGS: i32 = ffi::GTK_STYLE_PROVIDER_PRIORITY_SETTINGS;
+pub const STYLE_PROVIDER_PRIORITY_APPLICATION: i32 = ffi::GTK_STYLE_PROVIDER_PRIORITY_APPLICATION;
+pub const STYLE_PROVIDER_PRIORITY_USER: i32 = ffi::GTK_STYLE_PROVIDER_PRIORITY_USER;
+
 
 #[macro_use]
 mod rt;
 
-mod macros;
-mod cast;
+mod auto;
 
-pub mod traits;
-pub mod signal;
-pub mod widgets;
-pub mod types;
+mod app_chooser;
+mod builder;
+mod color_button;
+mod color_chooser;
+mod dialog;
+mod entry_buffer;
+mod file_chooser_dialog;
+mod list_store;
+mod lock_button;
+mod message_dialog;
+mod notebook;
+mod recent_chooser_dialog;
+mod recent_data;
+mod recent_info;
+mod rectangle;
+mod requisition;
+mod signal;
+#[cfg(target_os = "linux")]
+mod socket;
+mod text_attributes;
+mod text_buffer;
+mod text_iter;
+mod text_view;
+mod tree_model;
+mod tree_path;
+mod tree_store;
+mod tree_view;
+mod widget;
+mod window;
+
+pub mod prelude;
+
+pub use auto::*;
+pub use rt::*;
+pub use signal::*;
+
+pub use app_chooser::AppChooser;
+pub use builder::{Builder, Buildable};
+pub use color_chooser::ColorChooser;
+pub use entry_buffer::EntryBuffer;
+pub use lock_button::LockButton;
+pub use recent_data::RecentData;
+pub use recent_info::RecentInfo;
+pub use rectangle::Rectangle;
+pub use requisition::Requisition;
+#[cfg(target_os = "linux")]
+pub use socket::Socket;
+pub use text_attributes::TextAttributes;
+pub use widget::Widget;
+pub use window::Window;

@@ -9,7 +9,7 @@ use std::thread;
 
 use glib::signal::connect;
 use glib::translate::*;
-use glib::{FFIGObject, ParamSpec};
+use glib::ParamSpec;
 
 use glib_ffi::{self, gboolean, gpointer};
 use ffi::{GtkAdjustment, GtkTreeSelection, GtkTreeViewColumn};
@@ -48,7 +48,6 @@ use {
     StatusIcon,
     TextDirection,
     ToolButton,
-    Tooltip,
     TreeIter,
     TreePath,
     TreeSelection,
@@ -57,6 +56,8 @@ use {
     Widget,
     WidgetHelpType,
 };
+
+pub struct Tooltip;
 
 /// Whether to propagate the signal to other handlers
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
@@ -210,20 +211,21 @@ mod widget {
     };
     use cairo_ffi::cairo_t;
     use cairo::{Context, RectangleInt};
-    use traits::{FFIWidget, WidgetTrait};
     use gdk_ffi::GdkScreen;
     use glib_ffi::gboolean;
     use ffi::{GtkWidget, GtkTooltip};
-    use {Widget, DirectionType, StateFlags, TextDirection, Tooltip, WidgetHelpType};
+    use {Widget, DirectionType, StateFlags, TextDirection, WidgetHelpType};
+    use super::Tooltip;
     use super::CallbackGuard;
     use super::Inhibit;
+    use {Object, Upcast};
 
-    impl<T: FFIWidget + WidgetTrait> super::WidgetSignals for T {
+    impl<T: Upcast<Widget> + Upcast<Object>> super::WidgetSignals for T {
         // this is a GObject signal actually
         fn connect_notify<F: Fn(Widget, &ParamSpec) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, &ParamSpec) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "notify",
+                connect(self.to_glib_none().0, "notify",
                     transmute(notify_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -231,7 +233,7 @@ mod widget {
         fn connect_accel_closures_changed<F: Fn(Widget) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "accel-closures-changed",
+                connect(self.to_glib_none().0, "accel-closures-changed",
                     transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -239,7 +241,7 @@ mod widget {
         fn connect_button_press_event<F: Fn(Widget, &EventButton) -> Inhibit + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventButton) -> Inhibit + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "button-press-event",
+                connect(self.to_glib_none().0, "button-press-event",
                     transmute(event_button_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -248,7 +250,7 @@ mod widget {
                 -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventButton) -> Inhibit + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "button-release-event",
+                connect(self.to_glib_none().0, "button-release-event",
                     transmute(event_button_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -256,7 +258,7 @@ mod widget {
         fn connect_can_activate_accel<F: Fn(Widget, u64) -> bool + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, u64) -> bool + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "can-activate-accel",
+                connect(self.to_glib_none().0, "can-activate-accel",
                     transmute(accel_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -264,7 +266,7 @@ mod widget {
         fn connect_child_notify<F: Fn(Widget, &ParamSpec) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, &ParamSpec) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "child-notify",
+                connect(self.to_glib_none().0, "child-notify",
                     transmute(notify_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -272,7 +274,7 @@ mod widget {
         fn connect_composited_changed<F: Fn(Widget) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "composited-changed",
+                connect(self.to_glib_none().0, "composited-changed",
                     transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -280,7 +282,7 @@ mod widget {
         fn connect_configure_event<F: Fn(Widget, &EventConfigure) -> Inhibit + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventConfigure) -> Inhibit + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "configure-event",
+                connect(self.to_glib_none().0, "configure-event",
                     transmute(event_configure_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -288,7 +290,7 @@ mod widget {
         fn connect_damage_event<F: Fn(Widget, &EventExpose) -> Inhibit + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventExpose) -> Inhibit + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "damage-event",
+                connect(self.to_glib_none().0, "damage-event",
                     transmute(event_expose_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -296,7 +298,7 @@ mod widget {
         fn connect_delete_event<F: Fn(Widget, &EventAny) -> Inhibit + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventAny) -> Inhibit + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "delete-event",
+                connect(self.to_glib_none().0, "delete-event",
                     transmute(event_any_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -304,7 +306,7 @@ mod widget {
         fn connect_destroy<F: Fn(Widget) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "destroy",
+                connect(self.to_glib_none().0, "destroy",
                     transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -312,7 +314,7 @@ mod widget {
         fn connect_destroy_event<F: Fn(Widget, &EventAny) -> Inhibit + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventAny) -> Inhibit + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "destroy-event",
+                connect(self.to_glib_none().0, "destroy-event",
                     transmute(event_any_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -320,7 +322,7 @@ mod widget {
         fn connect_direction_changed<F: Fn(Widget, TextDirection) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, TextDirection) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "direction-changed",
+                connect(self.to_glib_none().0, "direction-changed",
                     transmute(text_direction_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -328,7 +330,7 @@ mod widget {
         fn connect_draw<F: Fn(Widget, Context) -> Inhibit + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, Context) -> Inhibit + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "draw",
+                connect(self.to_glib_none().0, "draw",
                     transmute(draw_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -337,7 +339,7 @@ mod widget {
                 -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventCrossing) -> Inhibit + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "enter-notify-event",
+                connect(self.to_glib_none().0, "enter-notify-event",
                     transmute(event_crossing_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -345,7 +347,7 @@ mod widget {
         fn connect_event<F: Fn(Widget, &EventAny) -> Inhibit + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventAny) -> Inhibit + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "event",
+                connect(self.to_glib_none().0, "event",
                     transmute(event_any_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -353,7 +355,7 @@ mod widget {
         fn connect_event_after<F: Fn(Widget, &EventAny) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventAny) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "event-after",
+                connect(self.to_glib_none().0, "event-after",
                     transmute(event_any_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -361,7 +363,7 @@ mod widget {
         fn connect_focus<F: Fn(Widget, DirectionType) -> Inhibit + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, DirectionType) -> Inhibit + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "focus",
+                connect(self.to_glib_none().0, "focus",
                     transmute(direction_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -369,7 +371,7 @@ mod widget {
         fn connect_focus_in_event<F: Fn(Widget, &EventFocus) -> Inhibit + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventFocus) -> Inhibit + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "focus-in-event",
+                connect(self.to_glib_none().0, "focus-in-event",
                     transmute(event_focus_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -377,7 +379,7 @@ mod widget {
         fn connect_focus_out_event<F: Fn(Widget, &EventFocus) -> Inhibit + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventFocus) -> Inhibit + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "focus-out-event",
+                connect(self.to_glib_none().0, "focus-out-event",
                     transmute(event_focus_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -386,7 +388,7 @@ mod widget {
                 -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventGrabBroken) -> Inhibit + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "grab-broken-event",
+                connect(self.to_glib_none().0, "grab-broken-event",
                     transmute(event_grab_broken_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -394,7 +396,7 @@ mod widget {
         fn connect_grab_focus<F: Fn(Widget) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "grab-focus",
+                connect(self.to_glib_none().0, "grab-focus",
                     transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -402,7 +404,7 @@ mod widget {
         fn connect_grab_notify<F: Fn(Widget, bool) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, bool) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "grab-notify",
+                connect(self.to_glib_none().0, "grab-notify",
                     transmute(grab_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -410,7 +412,7 @@ mod widget {
         fn connect_hide<F: Fn(Widget) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "hide",
+                connect(self.to_glib_none().0, "hide",
                     transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -418,7 +420,7 @@ mod widget {
         fn connect_keynav_failed<F: Fn(Widget, DirectionType) -> Inhibit + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, DirectionType) -> Inhibit + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "keynav-failed",
+                connect(self.to_glib_none().0, "keynav-failed",
                     transmute(direction_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -426,7 +428,7 @@ mod widget {
         fn connect_key_press_event<F: Fn(Widget, &EventKey) -> Inhibit + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventKey) -> Inhibit + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "key-press-event",
+                connect(self.to_glib_none().0, "key-press-event",
                     transmute(event_key_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -434,7 +436,7 @@ mod widget {
         fn connect_key_release_event<F: Fn(Widget, &EventKey) -> Inhibit + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventKey) -> Inhibit + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "key-release-event",
+                connect(self.to_glib_none().0, "key-release-event",
                     transmute(event_key_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -443,7 +445,7 @@ mod widget {
                 -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventCrossing) -> Inhibit + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "leave-notify-event",
+                connect(self.to_glib_none().0, "leave-notify-event",
                     transmute(event_crossing_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -451,7 +453,7 @@ mod widget {
         fn connect_map<F: Fn(Widget) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "map",
+                connect(self.to_glib_none().0, "map",
                     transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -459,7 +461,7 @@ mod widget {
         fn connect_map_event<F: Fn(Widget, &EventAny) -> Inhibit + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventAny) -> Inhibit + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "map-event",
+                connect(self.to_glib_none().0, "map-event",
                     transmute(event_any_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -467,7 +469,7 @@ mod widget {
         fn connect_mnemonic_activate<F: Fn(Widget, bool) -> Inhibit + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, bool) -> Inhibit + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "mnemonic-activate",
+                connect(self.to_glib_none().0, "mnemonic-activate",
                     transmute(mnemonic_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -475,7 +477,7 @@ mod widget {
         fn connect_move_focus<F: Fn(Widget, DirectionType) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, DirectionType) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "move-focus",
+                connect(self.to_glib_none().0, "move-focus",
                     transmute(direction_void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -484,7 +486,7 @@ mod widget {
                 -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventMotion) -> Inhibit + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "motion-notify-event",
+                connect(self.to_glib_none().0, "motion-notify-event",
                     transmute(event_motion_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -493,7 +495,7 @@ mod widget {
                 -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventProperty) -> Inhibit + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "property-notify-event",
+                connect(self.to_glib_none().0, "property-notify-event",
                     transmute(event_property_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -502,7 +504,7 @@ mod widget {
                 -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventProximity) -> Inhibit + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "proximity-in-event",
+                connect(self.to_glib_none().0, "proximity-in-event",
                     transmute(event_proximity_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -511,7 +513,7 @@ mod widget {
                 -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventProximity) -> Inhibit + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "proximity-out-event",
+                connect(self.to_glib_none().0, "proximity-out-event",
                     transmute(event_proximity_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -519,7 +521,7 @@ mod widget {
         fn connect_popup_menu<F: Fn(Widget) -> bool + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget) -> bool + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "popup-menu",
+                connect(self.to_glib_none().0, "popup-menu",
                     transmute(bool_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -529,7 +531,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(Widget, i32, i32, bool, Tooltip) -> bool + 'static>> =
                     Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "query-tooltip",
+                connect(self.to_glib_none().0, "query-tooltip",
                     transmute(query_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -537,7 +539,7 @@ mod widget {
         fn connect_realize<F: Fn(Widget) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "realize",
+                connect(self.to_glib_none().0, "realize",
                     transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -545,7 +547,7 @@ mod widget {
         fn connect_screen_changed<F: Fn(Widget, Screen) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, Screen) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "screen-changed",
+                connect(self.to_glib_none().0, "screen-changed",
                     transmute(screen_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -553,7 +555,7 @@ mod widget {
         fn connect_scroll_event<F: Fn(Widget, &EventScroll) -> Inhibit + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventScroll) -> Inhibit + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "scroll-event",
+                connect(self.to_glib_none().0, "scroll-event",
                     transmute(event_scroll_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -561,7 +563,7 @@ mod widget {
         fn connect_show<F: Fn(Widget) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "show",
+                connect(self.to_glib_none().0, "show",
                     transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -569,7 +571,7 @@ mod widget {
         fn connect_show_help<F: Fn(Widget, WidgetHelpType) -> bool + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, WidgetHelpType) -> bool + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "show-help",
+                connect(self.to_glib_none().0, "show-help",
                     transmute(help_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -577,7 +579,7 @@ mod widget {
         fn connect_size_allocate<F: Fn(Widget, &RectangleInt) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, &RectangleInt) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "size-allocate",
+                connect(self.to_glib_none().0, "size-allocate",
                     transmute(rectangle_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -585,7 +587,7 @@ mod widget {
         fn connect_state_flags_changed<F: Fn(Widget, StateFlags) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, StateFlags) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "state-flags-changed",
+                connect(self.to_glib_none().0, "state-flags-changed",
                     transmute(state_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -593,7 +595,7 @@ mod widget {
         fn connect_style_updated<F: Fn(Widget) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "style-updated",
+                connect(self.to_glib_none().0, "style-updated",
                     transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -601,7 +603,7 @@ mod widget {
         fn connect_touch_event<F: Fn(Widget, &EventAny) -> Inhibit + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventAny) -> Inhibit + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "touch-event",
+                connect(self.to_glib_none().0, "touch-event",
                     transmute(event_any_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -609,7 +611,7 @@ mod widget {
         fn connect_unmap<F: Fn(Widget) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "unmap",
+                connect(self.to_glib_none().0, "unmap",
                     transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -617,7 +619,7 @@ mod widget {
         fn connect_unmap_event<F: Fn(Widget, &EventAny) -> Inhibit + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventAny) -> Inhibit + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "unmap-event",
+                connect(self.to_glib_none().0, "unmap-event",
                     transmute(event_any_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -625,7 +627,7 @@ mod widget {
         fn connect_unrealize<F: Fn(Widget) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "unrealize",
+                connect(self.to_glib_none().0, "unrealize",
                     transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -634,179 +636,179 @@ mod widget {
                 -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Widget, &EventWindowState) -> Inhibit + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "window-state-event",
+                connect(self.to_glib_none().0, "window-state-event",
                     transmute(event_window_state_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
     }
 
-    extern "C" fn void_trampoline(this: *mut GtkWidget, f: &Box<Fn(Widget) + 'static>) {
+    unsafe extern "C" fn void_trampoline(this: *mut GtkWidget, f: &Box<Fn(Widget) + 'static>) {
         callback_guard!();
-        f(FFIWidget::wrap_widget(this));
+        f(from_glib_none(this));
     }
 
-    extern "C" fn bool_trampoline(this: *mut GtkWidget, f: &Box<Fn(Widget) -> bool + 'static>) -> gboolean {
+    unsafe extern "C" fn bool_trampoline(this: *mut GtkWidget, f: &Box<Fn(Widget) -> bool + 'static>) -> gboolean {
         callback_guard!();
-        f(FFIWidget::wrap_widget(this)).to_glib()
+        f(from_glib_none(this)).to_glib()
     }
 
-    extern "C" fn accel_trampoline(this: *mut GtkWidget, signal_id: c_uint,
+    unsafe extern "C" fn accel_trampoline(this: *mut GtkWidget, signal_id: c_uint,
             f: &Box<Fn(Widget, u64) -> bool + 'static>) -> gboolean {
         callback_guard!();
-        f(FFIWidget::wrap_widget(this), signal_id as u64).to_glib()
+        f(from_glib_none(this), signal_id as u64).to_glib()
     }
 
-    extern "C" fn draw_trampoline(this: *mut GtkWidget, cr: *mut cairo_t,
+    unsafe extern "C" fn draw_trampoline(this: *mut GtkWidget, cr: *mut cairo_t,
             f: &Box<Fn(Widget, Context) -> Inhibit + 'static>) -> gboolean {
         callback_guard!();
-        unsafe { f(FFIWidget::wrap_widget(this), from_glib_none(cr)).to_glib() }
+        f(from_glib_none(this), from_glib_none(cr)).to_glib()
     }
 
-    extern "C" fn event_any_trampoline(this: *mut GtkWidget, event: *mut EventAny,
+    unsafe extern "C" fn event_any_trampoline(this: *mut GtkWidget, event: *mut EventAny,
             f: &Box<Fn(Widget, &EventAny) -> Inhibit + 'static>) -> gboolean {
         callback_guard!();
-        unsafe { f(FFIWidget::wrap_widget(this), transmute(event)).to_glib() }
+        f(from_glib_none(this), transmute(event)).to_glib()
     }
 
-    extern "C" fn event_button_trampoline(this: *mut GtkWidget, event: *mut EventAny,
+    unsafe extern "C" fn event_button_trampoline(this: *mut GtkWidget, event: *mut EventAny,
             f: &Box<Fn(Widget, &EventButton) -> Inhibit + 'static>) -> gboolean {
         callback_guard!();
-        unsafe { f(FFIWidget::wrap_widget(this), transmute(event)).to_glib() }
+        f(from_glib_none(this), transmute(event)).to_glib()
     }
 
-    extern "C" fn event_configure_trampoline(this: *mut GtkWidget, event: *mut EventAny,
+    unsafe extern "C" fn event_configure_trampoline(this: *mut GtkWidget, event: *mut EventAny,
             f: &Box<Fn(Widget, &EventConfigure) -> Inhibit + 'static>) -> gboolean {
         callback_guard!();
-        unsafe { f(FFIWidget::wrap_widget(this), transmute(event)).to_glib() }
+        f(from_glib_none(this), transmute(event)).to_glib()
     }
 
-    extern "C" fn event_crossing_trampoline(this: *mut GtkWidget, event: *mut EventAny,
+    unsafe extern "C" fn event_crossing_trampoline(this: *mut GtkWidget, event: *mut EventAny,
             f: &Box<Fn(Widget, &EventCrossing) -> Inhibit + 'static>) -> gboolean {
         callback_guard!();
-        unsafe { f(FFIWidget::wrap_widget(this), transmute(event)).to_glib() }
+        f(from_glib_none(this), transmute(event)).to_glib()
     }
 
-    extern "C" fn event_expose_trampoline(this: *mut GtkWidget, event: *mut EventAny,
+    unsafe extern "C" fn event_expose_trampoline(this: *mut GtkWidget, event: *mut EventAny,
             f: &Box<Fn(Widget, &EventExpose) -> Inhibit + 'static>) -> gboolean {
         callback_guard!();
-        unsafe { f(FFIWidget::wrap_widget(this), transmute(event)).to_glib() }
+        f(from_glib_none(this), transmute(event)).to_glib()
     }
 
-    extern "C" fn event_focus_trampoline(this: *mut GtkWidget, event: *mut EventAny,
+    unsafe extern "C" fn event_focus_trampoline(this: *mut GtkWidget, event: *mut EventAny,
             f: &Box<Fn(Widget, &EventFocus) -> Inhibit + 'static>) -> gboolean {
         callback_guard!();
-        unsafe { f(FFIWidget::wrap_widget(this), transmute(event)).to_glib() }
+        f(from_glib_none(this), transmute(event)).to_glib()
     }
 
-    extern "C" fn event_grab_broken_trampoline(this: *mut GtkWidget, event: *mut EventAny,
+    unsafe extern "C" fn event_grab_broken_trampoline(this: *mut GtkWidget, event: *mut EventAny,
             f: &Box<Fn(Widget, &EventGrabBroken) -> Inhibit + 'static>) -> gboolean {
         callback_guard!();
-        unsafe { f(FFIWidget::wrap_widget(this), transmute(event)).to_glib() }
+        f(from_glib_none(this), transmute(event)).to_glib()
     }
 
-    extern "C" fn event_key_trampoline(this: *mut GtkWidget, event: *mut EventAny,
+    unsafe extern "C" fn event_key_trampoline(this: *mut GtkWidget, event: *mut EventAny,
             f: &Box<Fn(Widget, &EventKey) -> Inhibit + 'static>) -> gboolean {
         callback_guard!();
-        unsafe { f(FFIWidget::wrap_widget(this), transmute(event)).to_glib() }
+        f(from_glib_none(this), transmute(event)).to_glib()
     }
 
-    extern "C" fn event_motion_trampoline(this: *mut GtkWidget, event: *mut EventAny,
+    unsafe extern "C" fn event_motion_trampoline(this: *mut GtkWidget, event: *mut EventAny,
             f: &Box<Fn(Widget, &EventMotion) -> Inhibit + 'static>) -> gboolean {
         callback_guard!();
-        unsafe { f(FFIWidget::wrap_widget(this), transmute(event)).to_glib() }
+        f(from_glib_none(this), transmute(event)).to_glib()
     }
 
-    extern "C" fn event_property_trampoline(this: *mut GtkWidget, event: *mut EventAny,
+    unsafe extern "C" fn event_property_trampoline(this: *mut GtkWidget, event: *mut EventAny,
             f: &Box<Fn(Widget, &EventProperty) -> Inhibit + 'static>) -> gboolean {
         callback_guard!();
-        unsafe { f(FFIWidget::wrap_widget(this), transmute(event)).to_glib() }
+        f(from_glib_none(this), transmute(event)).to_glib()
     }
 
-    extern "C" fn event_proximity_trampoline(this: *mut GtkWidget, event: *mut EventAny,
+    unsafe extern "C" fn event_proximity_trampoline(this: *mut GtkWidget, event: *mut EventAny,
             f: &Box<Fn(Widget, &EventProximity) -> Inhibit + 'static>) -> gboolean {
         callback_guard!();
-        unsafe { f(FFIWidget::wrap_widget(this), transmute(event)).to_glib() }
+        f(from_glib_none(this), transmute(event)).to_glib()
     }
 
-    extern "C" fn event_scroll_trampoline(this: *mut GtkWidget, event: *mut EventAny,
+    unsafe extern "C" fn event_scroll_trampoline(this: *mut GtkWidget, event: *mut EventAny,
             f: &Box<Fn(Widget, &EventScroll) -> Inhibit + 'static>) -> gboolean {
         callback_guard!();
-        unsafe { f(FFIWidget::wrap_widget(this), transmute(event)).to_glib() }
+        f(from_glib_none(this), transmute(event)).to_glib()
     }
 
-    extern "C" fn event_window_state_trampoline(this: *mut GtkWidget, event: *mut EventAny,
+    unsafe extern "C" fn event_window_state_trampoline(this: *mut GtkWidget, event: *mut EventAny,
             f: &Box<Fn(Widget, &EventWindowState) -> Inhibit + 'static>) -> gboolean {
         callback_guard!();
-        unsafe { f(FFIWidget::wrap_widget(this), transmute(event)).to_glib() }
+        f(from_glib_none(this), transmute(event)).to_glib()
     }
 
-    extern "C" fn direction_trampoline(this: *mut GtkWidget, direction: DirectionType,
+    unsafe extern "C" fn direction_trampoline(this: *mut GtkWidget, direction: DirectionType,
             f: &Box<Fn(Widget, DirectionType) -> Inhibit + 'static>) -> gboolean {
         callback_guard!();
-        f(FFIWidget::wrap_widget(this), direction).to_glib()
+        f(from_glib_none(this), direction).to_glib()
     }
 
-    extern "C" fn direction_void_trampoline(this: *mut GtkWidget, direction: DirectionType,
+    unsafe extern "C" fn direction_void_trampoline(this: *mut GtkWidget, direction: DirectionType,
             f: &Box<Fn(Widget, DirectionType) + 'static>) {
         callback_guard!();
-        f(FFIWidget::wrap_widget(this), direction);
+        f(from_glib_none(this), direction);
     }
 
-    extern "C" fn grab_trampoline(this: *mut GtkWidget, was_grabbed: gboolean,
+    unsafe extern "C" fn grab_trampoline(this: *mut GtkWidget, was_grabbed: gboolean,
             f: &Box<Fn(Widget, bool) + 'static>) {
         callback_guard!();
-        f(FFIWidget::wrap_widget(this), from_glib(was_grabbed));
+        f(from_glib_none(this), from_glib(was_grabbed));
     }
 
-    extern "C" fn help_trampoline(this: *mut GtkWidget, help_type: WidgetHelpType,
+    unsafe extern "C" fn help_trampoline(this: *mut GtkWidget, help_type: WidgetHelpType,
             f: &Box<Fn(Widget, WidgetHelpType) -> bool + 'static>) -> gboolean {
         callback_guard!();
-        f(FFIWidget::wrap_widget(this), help_type).to_glib()
+        f(from_glib_none(this), help_type).to_glib()
     }
 
-    extern "C" fn mnemonic_trampoline(this: *mut GtkWidget, arg1: gboolean,
+    unsafe extern "C" fn mnemonic_trampoline(this: *mut GtkWidget, arg1: gboolean,
             f: &Box<Fn(Widget, bool) -> Inhibit + 'static>) -> gboolean {
         callback_guard!();
-        f(FFIWidget::wrap_widget(this), from_glib(arg1)).to_glib()
+        f(from_glib_none(this), from_glib(arg1)).to_glib()
     }
 
-    extern "C" fn notify_trampoline(this: *mut GtkWidget, pspec: *mut ParamSpec,
+    unsafe extern "C" fn notify_trampoline(this: *mut GtkWidget, pspec: *mut ParamSpec,
             f: &Box<Fn(Widget, &ParamSpec) + 'static>) {
         callback_guard!();
-        unsafe { f(FFIWidget::wrap_widget(this), transmute(pspec)); }
+        f(from_glib_none(this), transmute(pspec));
     }
 
-    extern "C" fn query_trampoline(this: *mut GtkWidget, x: c_int, y: c_int, keyboard: gboolean,
+    unsafe extern "C" fn query_trampoline(this: *mut GtkWidget, x: c_int, y: c_int, keyboard: gboolean,
             _tooltip: *mut GtkTooltip,
             f: &Box<Fn(Widget, i32, i32, bool, Tooltip) -> bool + 'static>)
             -> gboolean {
         callback_guard!();
-        f(FFIWidget::wrap_widget(this), x, y, from_glib(keyboard), Tooltip).to_glib()
+        f(from_glib_none(this), x, y, from_glib(keyboard), Tooltip).to_glib()
     }
 
-    extern "C" fn rectangle_trampoline(this: *mut GtkWidget, allocation: *mut RectangleInt,
+    unsafe extern "C" fn rectangle_trampoline(this: *mut GtkWidget, allocation: *mut RectangleInt,
             f: &Box<Fn(Widget, &RectangleInt) + 'static>) {
         callback_guard!();
-        unsafe { f(FFIWidget::wrap_widget(this), transmute(allocation)); }
+        f(from_glib_none(this), transmute(allocation));
     }
 
-    extern "C" fn state_trampoline(this: *mut GtkWidget, flags: StateFlags,
+    unsafe extern "C" fn state_trampoline(this: *mut GtkWidget, flags: StateFlags,
             f: &Box<Fn(Widget, StateFlags) + 'static>) {
         callback_guard!();
-        f(FFIWidget::wrap_widget(this), flags);
+        f(from_glib_none(this), flags);
     }
 
-    extern "C" fn screen_trampoline(this: *mut GtkWidget, screen: *mut GdkScreen,
+    unsafe extern "C" fn screen_trampoline(this: *mut GtkWidget, screen: *mut GdkScreen,
             f: &Box<Fn(Widget, Screen) + 'static>) {
         callback_guard!();
-        unsafe { f(FFIWidget::wrap_widget(this), Screen::from_glib_none(screen)); }
+        f(from_glib_none(this), Screen::from_glib_none(screen));
     }
 
-    extern "C" fn text_direction_trampoline(this: *mut GtkWidget, previous: TextDirection,
+    unsafe extern "C" fn text_direction_trampoline(this: *mut GtkWidget, previous: TextDirection,
             f: &Box<Fn(Widget, TextDirection) + 'static>) {
         callback_guard!();
-        f(FFIWidget::wrap_widget(this), previous);
+        f(from_glib_none(this), previous);
     }
 
 }
@@ -829,17 +831,17 @@ mod entry {
     use std::str;
     use std::ffi::CStr;
     use glib::signal::connect;
+    use glib::translate::*;
     use libc::c_char;
-    use traits::{FFIWidget, EntryTrait};
     use ffi::GtkEntry;
     use super::CallbackGuard;
-    use {Entry, DeleteType, MovementStep};
+    use {Entry, DeleteType, MovementStep, Object, Upcast};
 
-    impl<T: FFIWidget + EntryTrait> super::EntrySignals for T {
+    impl<T: Upcast<Entry> + Upcast<Object>> super::EntrySignals for T {
         fn connect_activate<F: Fn(Entry) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Entry) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "activate",
+                connect(self.to_glib_none().0, "activate",
                     transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -847,7 +849,7 @@ mod entry {
         fn connect_backspace<F: Fn(Entry) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Entry) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "backspace",
+                connect(self.to_glib_none().0, "backspace",
                     transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -855,7 +857,7 @@ mod entry {
         fn connect_copy_clipboard<F: Fn(Entry) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Entry) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "copy_clipboard",
+                connect(self.to_glib_none().0, "copy_clipboard",
                     transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -863,7 +865,7 @@ mod entry {
         fn connect_cut_clipboard<F: Fn(Entry) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Entry) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "cut_clipboard",
+                connect(self.to_glib_none().0, "cut_clipboard",
                     transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -871,7 +873,7 @@ mod entry {
         fn connect_paste_clipboard<F: Fn(Entry) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Entry) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "paste_clipboard",
+                connect(self.to_glib_none().0, "paste_clipboard",
                     transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -879,7 +881,7 @@ mod entry {
         fn connect_toggle_overwrite<F: Fn(Entry) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Entry) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "toggle_overwrite",
+                connect(self.to_glib_none().0, "toggle_overwrite",
                     transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -887,7 +889,7 @@ mod entry {
         fn connect_delete_from_cursor<F: Fn(Entry, DeleteType, i32) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Entry, DeleteType, i32) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "delete_from_cursor",
+                connect(self.to_glib_none().0, "delete_from_cursor",
                     transmute(delete_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -895,7 +897,7 @@ mod entry {
         fn connect_move_cursor<F: Fn(Entry, MovementStep, i32, bool) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Entry, MovementStep, i32, bool) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "move_cursor",
+                connect(self.to_glib_none().0, "move_cursor",
                     transmute(move_cursor_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -903,7 +905,7 @@ mod entry {
         fn connect_insert_at_cursor<F: Fn(Entry, &str) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Entry, &str) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "insert_at_cursor",
+                connect(self.to_glib_none().0, "insert_at_cursor",
                     transmute(string_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -911,36 +913,36 @@ mod entry {
         fn connect_preedit_changed<F: Fn(Entry, &str) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Entry, &str) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "preedit_changed",
+                connect(self.to_glib_none().0, "preedit_changed",
                     transmute(string_trampoline), Box::into_raw(f) as *mut _)
             }
         }
     }
 
-    extern "C" fn void_trampoline(this: *mut GtkEntry, f: &Box<Fn(Entry) + 'static>) {
+    unsafe extern "C" fn void_trampoline(this: *mut GtkEntry, f: &Box<Fn(Entry) + 'static>) {
         callback_guard!();
-        f(FFIWidget::wrap_widget(this as *mut _));
+        f(from_glib_none(this));
     }
 
-    extern "C" fn delete_trampoline(this: *mut GtkEntry, delete_type: DeleteType, count: i32,
+    unsafe extern "C" fn delete_trampoline(this: *mut GtkEntry, delete_type: DeleteType, count: i32,
                                     f: &Box<Fn(Entry, DeleteType, i32) + 'static>) {
         callback_guard!();
-        f(FFIWidget::wrap_widget(this as *mut _), delete_type, count);
+        f(from_glib_none(this), delete_type, count);
     }
 
-    extern "C" fn move_cursor_trampoline(this: *mut GtkEntry, step: MovementStep, count: i32,
+    unsafe extern "C" fn move_cursor_trampoline(this: *mut GtkEntry, step: MovementStep, count: i32,
                                          extend_selection: bool,
                                          f: &Box<Fn(Entry, MovementStep, i32, bool) + 'static>) {
         callback_guard!();
-        f(FFIWidget::wrap_widget(this as *mut _), step, count, extend_selection);
+        f(from_glib_none(this), step, count, extend_selection);
     }
 
-    extern "C" fn string_trampoline(this: *mut GtkEntry, c_str: *const c_char,
+    unsafe extern "C" fn string_trampoline(this: *mut GtkEntry, c_str: *const c_char,
                                     f: &Box<Fn(Entry, &str) + 'static>) {
         callback_guard!();
-        let buf = unsafe { CStr::from_ptr(c_str).to_bytes() };
+        let buf = CStr::from_ptr(c_str).to_bytes();
         let string = str::from_utf8(buf).unwrap();
-        f(FFIWidget::wrap_widget(this as *mut _), string);
+        f(from_glib_none(this), string);
     }
 }
 
@@ -952,16 +954,16 @@ pub trait ButtonSignals {
 mod button {
     use std::mem::transmute;
     use glib::signal::connect;
-    use traits::{FFIWidget, ButtonTrait};
+    use glib::translate::*;
     use ffi::GtkButton;
     use super::CallbackGuard;
-    use Button;
+    use {Button, Object, Upcast};
 
-    impl<T: FFIWidget + ButtonTrait> super::ButtonSignals for T {
+    impl<T: Upcast<Button> + Upcast<Object>> super::ButtonSignals for T {
         fn connect_activate<F: Fn(Button) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Button) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "activate",
+                connect(self.to_glib_none().0, "activate",
                     transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -969,15 +971,15 @@ mod button {
         fn connect_clicked<F: Fn(Button) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Button) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "clicked",
+                connect(self.to_glib_none().0, "clicked",
                     transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
     }
 
-    extern "C" fn void_trampoline(this: *mut GtkButton, f: &Box<Fn(Button) + 'static>) {
+    unsafe extern "C" fn void_trampoline(this: *mut GtkButton, f: &Box<Fn(Button) + 'static>) {
         callback_guard!();
-        f(FFIWidget::wrap_widget(this as *mut _));
+        f(from_glib_none(this));
     }
 }
 
@@ -994,15 +996,14 @@ mod combobox {
     use glib::translate::*;
     use glib_ffi::gboolean;
     use ffi::GtkComboBox;
-    use traits::{FFIWidget, ComboBoxTrait};
     use super::CallbackGuard;
-    use {ComboBox, ScrollType};
+    use {ComboBox, Object, Upcast, ScrollType};
 
-    impl<T: FFIWidget + ComboBoxTrait> super::ComboBoxSignals for T {
+    impl<T: Upcast<ComboBox> + Upcast<Object>> super::ComboBoxSignals for T {
         fn connect_changed<F: Fn(ComboBox) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(ComboBox) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "changed",
+                connect(self.to_glib_none().0, "changed",
                     transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -1010,7 +1011,7 @@ mod combobox {
         fn connect_move_active<F: Fn(ComboBox, ScrollType) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(ComboBox, ScrollType) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "move-active",
+                connect(self.to_glib_none().0, "move-active",
                     transmute(move_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -1018,7 +1019,7 @@ mod combobox {
         fn connect_popdown<F: Fn(ComboBox) -> bool + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(ComboBox) -> bool + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "popdown",
+                connect(self.to_glib_none().0, "popdown",
                     transmute(bool_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -1026,27 +1027,27 @@ mod combobox {
         fn connect_popup<F: Fn(ComboBox) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(ComboBox) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "popup",
+                connect(self.to_glib_none().0, "popup",
                     transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
     }
 
-    extern "C" fn void_trampoline(this: *mut GtkComboBox, f: &Box<Fn(ComboBox) + 'static>) {
+    unsafe extern "C" fn void_trampoline(this: *mut GtkComboBox, f: &Box<Fn(ComboBox) + 'static>) {
         callback_guard!();
-        f(FFIWidget::wrap_widget(this as *mut _));
+        f(from_glib_none(this));
     }
 
-    extern "C" fn bool_trampoline(this: *mut GtkComboBox, f: &Box<Fn(ComboBox) -> bool + 'static>)
+    unsafe extern "C" fn bool_trampoline(this: *mut GtkComboBox, f: &Box<Fn(ComboBox) -> bool + 'static>)
             -> gboolean {
         callback_guard!();
-        f(FFIWidget::wrap_widget(this as *mut _)).to_glib()
+        f(from_glib_none(this)).to_glib()
     }
 
-    extern "C" fn move_trampoline(this: *mut GtkComboBox, scroll_type: ScrollType,
+    unsafe extern "C" fn move_trampoline(this: *mut GtkComboBox, scroll_type: ScrollType,
             f: &Box<Fn(ComboBox, ScrollType) + 'static>) {
         callback_guard!();
-        f(FFIWidget::wrap_widget(this as *mut _), scroll_type);
+        f(from_glib_none(this), scroll_type);
     }
 }
 
@@ -1057,24 +1058,24 @@ pub trait ToolButtonSignals {
 mod tool_button {
     use std::mem::transmute;
     use glib::signal::connect;
-    use traits::{FFIWidget, ToolButtonTrait};
+    use glib::translate::*;
     use ffi::GtkToolButton;
     use super::CallbackGuard;
-    use ToolButton;
+    use {Object, ToolButton, Upcast};
 
-    impl<T: FFIWidget + ToolButtonTrait> super::ToolButtonSignals for T {
+    impl<T: Upcast<ToolButton> + Upcast<Object>> super::ToolButtonSignals for T {
         fn connect_clicked<F: Fn(ToolButton) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(ToolButton) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "clicked",
+                connect(self.to_glib_none().0, "clicked",
                     transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
     }
 
-    extern "C" fn void_trampoline(this: *mut GtkToolButton, f: &Box<Fn(ToolButton) + 'static>) {
+    unsafe extern "C" fn void_trampoline(this: *mut GtkToolButton, f: &Box<Fn(ToolButton) + 'static>) {
         callback_guard!();
-        f(FFIWidget::wrap_widget(this as *mut _));
+        f(from_glib_none(this));
     }
 }
 
@@ -1086,7 +1087,7 @@ pub trait SpinButtonSignals {
 mod spin_button {
     use std::mem::transmute;
     use glib::signal::connect;
-    use traits::FFIWidget;
+    use glib::translate::*;
     use ffi::GtkSpinButton;
     use super::CallbackGuard;
     use SpinButton;
@@ -1095,7 +1096,7 @@ mod spin_button {
         fn connect_value_changed<F: Fn(SpinButton) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(SpinButton) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "value-changed",
+                connect(self.to_glib_none().0, "value-changed",
                     transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -1103,15 +1104,15 @@ mod spin_button {
         fn connect_wrapped<F: Fn(SpinButton) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(SpinButton) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "clicked",
+                connect(self.to_glib_none().0, "clicked",
                     transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
     }
 
-    extern "C" fn void_trampoline(this: *mut GtkSpinButton, f: &Box<Fn(SpinButton) + 'static>) {
+    unsafe extern "C" fn void_trampoline(this: *mut GtkSpinButton, f: &Box<Fn(SpinButton) + 'static>) {
         callback_guard!();
-        f(FFIWidget::wrap_widget(this as *mut _));
+        f(from_glib_none(this));
     }
 }
 
@@ -1124,16 +1125,16 @@ mod dialog {
     use std::mem::transmute;
     use libc::c_int;
     use glib::signal::connect;
-    use traits::{FFIWidget, DialogTrait};
+    use glib::translate::*;
     use ffi::GtkDialog;
     use super::CallbackGuard;
-    use Dialog;
+    use {Dialog, Object, Upcast};
 
-    impl<T: FFIWidget + DialogTrait> super::DialogSignals for T {
+    impl<T: Upcast<Dialog> + Upcast<Object>> super::DialogSignals for T {
         fn connect_close<F: Fn(Dialog) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Dialog) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "close",
+                connect(self.to_glib_none().0, "close",
                     transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -1141,21 +1142,21 @@ mod dialog {
         fn connect_response<F: Fn(Dialog, i32) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Dialog, i32) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "response",
+                connect(self.to_glib_none().0, "response",
                     transmute(int_trampoline), Box::into_raw(f) as *mut _)
             }
         }
     }
 
-    extern "C" fn void_trampoline(this: *mut GtkDialog, f: &Box<Fn(Dialog) + 'static>) {
+    unsafe extern "C" fn void_trampoline(this: *mut GtkDialog, f: &Box<Fn(Dialog) + 'static>) {
         callback_guard!();
-        f(FFIWidget::wrap_widget(this as *mut _));
+        f(from_glib_none(this));
     }
 
-    extern "C" fn int_trampoline(this: *mut GtkDialog, response: c_int,
+    unsafe extern "C" fn int_trampoline(this: *mut GtkDialog, response: c_int,
             f: &Box<Fn(Dialog, i32) + 'static>) {
         callback_guard!();
-        f(FFIWidget::wrap_widget(this as *mut _), response);
+        f(from_glib_none(this), response);
     }
 }
 
@@ -1164,16 +1165,16 @@ pub trait TreeViewSignals {
     fn connect_cursor_changed<F: Fn(TreeView) + 'static>(&self, f: F) -> u64;
     fn connect_expand_collapse_cursor_row<F: Fn(TreeView, bool, bool, bool) -> bool + 'static>(&self, f: F)
         -> u64;
-    fn connect_row_activated<F: Fn(TreeView, TreePath, TreeViewColumn) + 'static>(&self, f: F) -> u64;
-    fn connect_row_collapsed<F: Fn(TreeView, &mut TreeIter, TreePath) + 'static>(&self, f: F) -> u64;
-    fn connect_row_expanded<F: Fn(TreeView, &mut TreeIter, TreePath) + 'static>(&self, f: F) -> u64;
+    fn connect_row_activated<F: Fn(TreeView, &mut TreePath, TreeViewColumn) + 'static>(&self, f: F) -> u64;
+    fn connect_row_collapsed<F: Fn(TreeView, &mut TreeIter, &mut TreePath) + 'static>(&self, f: F) -> u64;
+    fn connect_row_expanded<F: Fn(TreeView, &mut TreeIter, &mut TreePath) + 'static>(&self, f: F) -> u64;
     fn connect_select_all<F: Fn(TreeView) -> bool + 'static>(&self, f: F) -> u64;
     fn connect_select_cursor_parent<F: Fn(TreeView) -> bool + 'static>(&self, f: F) -> u64;
     fn connect_select_cursor_row<F: Fn(TreeView, bool) -> bool + 'static>(&self, f: F) -> u64;
     fn connect_start_interactive_search<F: Fn(TreeView) -> bool + 'static>(&self, f: F) -> u64;
-    fn connect_test_collapse_row<F: Fn(TreeView, &mut TreeIter, TreePath) -> bool + 'static>(&self, f: F)
+    fn connect_test_collapse_row<F: Fn(TreeView, &mut TreeIter, &mut TreePath) -> bool + 'static>(&self, f: F)
         -> u64;
-    fn connect_test_expand_row<F: Fn(TreeView, &mut TreeIter, TreePath) -> bool + 'static>(&self, f: F)
+    fn connect_test_expand_row<F: Fn(TreeView, &mut TreeIter, &mut TreePath) -> bool + 'static>(&self, f: F)
         -> u64;
     fn connect_toggle_cursor_row<F: Fn(TreeView) -> bool + 'static>(&self, f: F) -> u64;
     fn connect_unselect_all<F: Fn(TreeView) -> bool + 'static>(&self, f: F) -> u64;
@@ -1183,7 +1184,6 @@ mod tree_view {
     use std::mem::transmute;
     use glib::signal::connect;
     use glib::translate::*;
-    use traits::FFIWidget;
     use glib_ffi::gboolean;
     use ffi::{GtkTreeIter, GtkTreePath, GtkTreeView, GtkTreeViewColumn};
     use super::CallbackGuard;
@@ -1193,7 +1193,7 @@ mod tree_view {
         fn connect_columns_changed<F: Fn(TreeView) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(TreeView) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "columns-changed",
+                connect(self.to_glib_none().0, "columns-changed",
                     transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -1201,7 +1201,7 @@ mod tree_view {
         fn connect_cursor_changed<F: Fn(TreeView) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(TreeView) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "cursor-changed",
+                connect(self.to_glib_none().0, "cursor-changed",
                     transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -1210,31 +1210,31 @@ mod tree_view {
                 f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(TreeView, bool, bool, bool) -> bool + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "expand-collapse-cursor-row",
+                connect(self.to_glib_none().0, "expand-collapse-cursor-row",
                     transmute(bool3_bool_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
-        fn connect_row_activated<F: Fn(TreeView, TreePath, TreeViewColumn) + 'static>(&self, f: F) -> u64 {
+        fn connect_row_activated<F: Fn(TreeView, &mut TreePath, TreeViewColumn) + 'static>(&self, f: F) -> u64 {
             unsafe {
-                let f: Box<Box<Fn(TreeView, TreePath, TreeViewColumn) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "row-activated",
+                let f: Box<Box<Fn(TreeView, &mut TreePath, TreeViewColumn) + 'static>> = Box::new(Box::new(f));
+                connect(self.to_glib_none().0, "row-activated",
                     transmute(path_column_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
-        fn connect_row_collapsed<F: Fn(TreeView, &mut TreeIter, TreePath) + 'static>(&self, f: F) -> u64 {
+        fn connect_row_collapsed<F: Fn(TreeView, &mut TreeIter, &mut TreePath) + 'static>(&self, f: F) -> u64 {
             unsafe {
-                let f: Box<Box<Fn(TreeView, &mut TreeIter, TreePath) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "row-collapsed",
+                let f: Box<Box<Fn(TreeView, &mut TreeIter, &mut TreePath) + 'static>> = Box::new(Box::new(f));
+                connect(self.to_glib_none().0, "row-collapsed",
                     transmute(iter_path_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
-        fn connect_row_expanded<F: Fn(TreeView, &mut TreeIter, TreePath) + 'static>(&self, f: F) -> u64 {
+        fn connect_row_expanded<F: Fn(TreeView, &mut TreeIter, &mut TreePath) + 'static>(&self, f: F) -> u64 {
             unsafe {
-                let f: Box<Box<Fn(TreeView, &mut TreeIter, TreePath) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "row-expanded",
+                let f: Box<Box<Fn(TreeView, &mut TreeIter, &mut TreePath) + 'static>> = Box::new(Box::new(f));
+                connect(self.to_glib_none().0, "row-expanded",
                     transmute(iter_path_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -1242,7 +1242,7 @@ mod tree_view {
         fn connect_select_all<F: Fn(TreeView) -> bool + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(TreeView) -> bool + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "select-all",
+                connect(self.to_glib_none().0, "select-all",
                     transmute(bool_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -1250,7 +1250,7 @@ mod tree_view {
         fn connect_select_cursor_parent<F: Fn(TreeView) -> bool + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(TreeView) -> bool + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "select-cursor-parent",
+                connect(self.to_glib_none().0, "select-cursor-parent",
                     transmute(bool_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -1258,7 +1258,7 @@ mod tree_view {
         fn connect_select_cursor_row<F: Fn(TreeView, bool) -> bool + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(TreeView, bool) -> bool + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "select-cursor-row",
+                connect(self.to_glib_none().0, "select-cursor-row",
                     transmute(bool_bool_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -1266,27 +1266,27 @@ mod tree_view {
         fn connect_start_interactive_search<F: Fn(TreeView) -> bool + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(TreeView) -> bool + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "start-interactive-search",
+                connect(self.to_glib_none().0, "start-interactive-search",
                     transmute(bool_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
-        fn connect_test_collapse_row<F: Fn(TreeView, &mut TreeIter, TreePath) -> bool + 'static>(&self, f: F)
+        fn connect_test_collapse_row<F: Fn(TreeView, &mut TreeIter, &mut TreePath) -> bool + 'static>(&self, f: F)
                 -> u64 {
             unsafe {
-                let f: Box<Box<Fn(TreeView, &mut TreeIter, TreePath) -> bool + 'static>> =
+                let f: Box<Box<Fn(TreeView, &mut TreeIter, &mut TreePath) -> bool + 'static>> =
                     Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "test-collapse-row",
+                connect(self.to_glib_none().0, "test-collapse-row",
                     transmute(iter_path_bool_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
-        fn connect_test_expand_row<F: Fn(TreeView, &mut TreeIter, TreePath) -> bool + 'static>(&self, f: F)
+        fn connect_test_expand_row<F: Fn(TreeView, &mut TreeIter, &mut TreePath) -> bool + 'static>(&self, f: F)
                 -> u64 {
             unsafe {
-                let f: Box<Box<Fn(TreeView, &mut TreeIter, TreePath) -> bool + 'static>> =
+                let f: Box<Box<Fn(TreeView, &mut TreeIter, &mut TreePath) -> bool + 'static>> =
                     Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "test-expand-row",
+                connect(self.to_glib_none().0, "test-expand-row",
                     transmute(iter_path_bool_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -1294,7 +1294,7 @@ mod tree_view {
         fn connect_toggle_cursor_row<F: Fn(TreeView) -> bool + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(TreeView) -> bool + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "toggle-cursor-row",
+                connect(self.to_glib_none().0, "toggle-cursor-row",
                     transmute(bool_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -1302,63 +1302,54 @@ mod tree_view {
         fn connect_unselect_all<F: Fn(TreeView) -> bool + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(TreeView) -> bool + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "unselect-all",
+                connect(self.to_glib_none().0, "unselect-all",
                     transmute(bool_trampoline), Box::into_raw(f) as *mut _)
             }
         }
     }
 
-    extern "C" fn void_trampoline(this: *mut GtkTreeView, f: &Box<Fn(TreeView) + 'static>) {
+    unsafe extern "C" fn void_trampoline(this: *mut GtkTreeView, f: &Box<Fn(TreeView) + 'static>) {
         callback_guard!();
-        f(FFIWidget::wrap_widget(this as *mut _));
+        f(from_glib_none(this));
     }
 
-    extern "C" fn bool_trampoline(this: *mut GtkTreeView, f: &Box<Fn(TreeView) -> bool + 'static>)
+    unsafe extern "C" fn bool_trampoline(this: *mut GtkTreeView, f: &Box<Fn(TreeView) -> bool + 'static>)
             -> gboolean {
         callback_guard!();
-        f(FFIWidget::wrap_widget(this as *mut _)).to_glib()
+        f(from_glib_none(this)).to_glib()
     }
 
-    extern "C" fn bool_bool_trampoline(this: *mut GtkTreeView, arg1: gboolean,
+    unsafe extern "C" fn bool_bool_trampoline(this: *mut GtkTreeView, arg1: gboolean,
             f: &Box<Fn(TreeView, bool) -> bool + 'static>) -> gboolean {
         callback_guard!();
-        f(FFIWidget::wrap_widget(this as *mut _), from_glib(arg1)).to_glib()
+        f(from_glib_none(this), from_glib(arg1)).to_glib()
     }
 
-    extern "C" fn bool3_bool_trampoline(this: *mut GtkTreeView, arg1: gboolean, arg2: gboolean,
+    unsafe extern "C" fn bool3_bool_trampoline(this: *mut GtkTreeView, arg1: gboolean, arg2: gboolean,
             arg3: gboolean, f: &Box<Fn(TreeView, bool, bool, bool) -> bool + 'static>) -> gboolean {
         callback_guard!();
-        f(FFIWidget::wrap_widget(this as *mut _), from_glib(arg1), from_glib(arg2),
+        f(from_glib_none(this), from_glib(arg1), from_glib(arg2),
             from_glib(arg3)).to_glib()
     }
 
-    extern "C" fn path_column_trampoline(this: *mut GtkTreeView, path: *mut GtkTreePath,
+    unsafe extern "C" fn path_column_trampoline(this: *mut GtkTreeView, path: *mut GtkTreePath,
             column: *mut GtkTreeViewColumn,
-            f: &Box<Fn(TreeView, TreePath, TreeViewColumn) + 'static>) {
+            f: &Box<Fn(TreeView, &mut TreePath, TreeViewColumn) + 'static>) {
         callback_guard!();
-        unsafe {
-            f(FFIWidget::wrap_widget(this as *mut _), TreePath::wrap_pointer(path),
-                TreeViewColumn::wrap_pointer(column));
-        }
+        f(from_glib_none(this), &mut from_glib_borrow(path), from_glib_none(column));
     }
 
-    extern "C" fn iter_path_trampoline(this: *mut GtkTreeView, iter: *mut GtkTreeIter,
-            path: *mut GtkTreePath, f: &Box<Fn(TreeView, &mut TreeIter, TreePath) + 'static>) {
+    unsafe extern "C" fn iter_path_trampoline(this: *mut GtkTreeView, iter: *mut GtkTreeIter,
+            path: *mut GtkTreePath, f: &Box<Fn(TreeView, &mut TreeIter, &mut TreePath) + 'static>) {
         callback_guard!();
-        unsafe {
-            f(FFIWidget::wrap_widget(this as *mut _), &mut from_glib_borrow(iter),
-                TreePath::wrap_pointer(path));
-        }
+        f(from_glib_none(this), &mut from_glib_borrow(iter), &mut from_glib_borrow(path));
     }
 
-    extern "C" fn iter_path_bool_trampoline(this: *mut GtkTreeView, iter: *mut GtkTreeIter,
+    unsafe extern "C" fn iter_path_bool_trampoline(this: *mut GtkTreeView, iter: *mut GtkTreeIter,
             path: *mut GtkTreePath,
-            f: &Box<Fn(TreeView, &mut TreeIter, TreePath) -> bool + 'static>) -> gboolean {
+            f: &Box<Fn(TreeView, &mut TreeIter, &mut TreePath) -> bool + 'static>) -> gboolean {
         callback_guard!();
-        unsafe {
-            f(FFIWidget::wrap_widget(this as *mut _), &mut from_glib_borrow(iter),
-                TreePath::wrap_pointer(path)).to_glib()
-        }
+        f(from_glib_none(this), &mut from_glib_borrow(iter), &mut from_glib_borrow(path)).to_glib()
     }
 }
 
@@ -1374,18 +1365,17 @@ mod range {
     use libc::c_double;
     use glib::signal::connect;
     use glib::translate::*;
-    use traits::{FFIWidget, RangeTrait};
     use glib_ffi::gboolean;
     use ffi::{GtkRange};
-    use {Range, ScrollType};
+    use {Object, Range, ScrollType, Upcast};
     use super::CallbackGuard;
     use super::Inhibit;
 
-    impl<T: FFIWidget + RangeTrait> super::RangeSignals for T {
+    impl<T: Upcast<Range> + Upcast<Object>> super::RangeSignals for T {
         fn connect_adjust_bounds<F: Fn(Range, f64) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Range, f64) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "adjust-bounds",
+                connect(self.to_glib_none().0, "adjust-bounds",
                     transmute(adjust_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -1393,7 +1383,7 @@ mod range {
         fn connect_change_value<F: Fn(Range, ScrollType, f64) -> Inhibit + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Range, ScrollType, f64) -> Inhibit + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "change-value",
+                connect(self.to_glib_none().0, "change-value",
                     transmute(change_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -1401,7 +1391,7 @@ mod range {
         fn connect_move_slider<F: Fn(Range, ScrollType) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Range, ScrollType) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "move-slider",
+                connect(self.to_glib_none().0, "move-slider",
                     transmute(move_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -1409,34 +1399,34 @@ mod range {
         fn connect_value_changed<F: Fn(Range) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Range) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "value-changed",
+                connect(self.to_glib_none().0, "value-changed",
                     transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
     }
 
-    extern "C" fn void_trampoline(this: *mut GtkRange, f: &Box<Fn(Range) + 'static>) {
+    unsafe extern "C" fn void_trampoline(this: *mut GtkRange, f: &Box<Fn(Range) + 'static>) {
         callback_guard!();
-        f(FFIWidget::wrap_widget(this as *mut _));
+        f(from_glib_none(this));
     }
 
-    extern "C" fn adjust_trampoline(this: *mut GtkRange, value: c_double,
+    unsafe extern "C" fn adjust_trampoline(this: *mut GtkRange, value: c_double,
             f: &Box<Fn(Range, f64) + 'static>) {
         callback_guard!();
-        f(FFIWidget::wrap_widget(this as *mut _), value);
+        f(from_glib_none(this), value);
     }
 
-    extern "C" fn change_trampoline(this: *mut GtkRange, scroll: ScrollType, value: c_double,
+    unsafe extern "C" fn change_trampoline(this: *mut GtkRange, scroll: ScrollType, value: c_double,
             f: &Box<Fn(Range, ScrollType, f64) -> Inhibit + 'static>) -> gboolean {
         callback_guard!();
-        f(FFIWidget::wrap_widget(this as *mut _), scroll, value).to_glib()
+        f(from_glib_none(this), scroll, value).to_glib()
     }
 
-    extern "C" fn move_trampoline(this: *mut GtkRange, step: ScrollType,
+    unsafe extern "C" fn move_trampoline(this: *mut GtkRange, step: ScrollType,
             f: &Box<Fn(Range, ScrollType) + 'static>) {
         callback_guard!();
-        f(FFIWidget::wrap_widget(this as *mut _), step);
+        f(from_glib_none(this), step);
     }
 }
 
@@ -1444,47 +1434,47 @@ impl Adjustment {
     pub fn connect_value_changed<F: Fn(Adjustment) + 'static>(&self, f: F) -> u64 {
         unsafe {
             let f: Box<Box<Fn(Adjustment) + 'static>> = Box::new(Box::new(f));
-            connect(self.unwrap_pointer() as *mut _, "value-changed",
+            connect(self.to_glib_none().0, "value-changed",
                 transmute(adjustment_trampoline), Box::into_raw(f) as *mut _)
         }
     }
 }
 
-extern "C" fn adjustment_trampoline(this: *mut GtkAdjustment, f: &Box<Fn(Adjustment) + 'static>) {
+unsafe extern "C" fn adjustment_trampoline(this: *mut GtkAdjustment, f: &Box<Fn(Adjustment) + 'static>) {
         callback_guard!();
-    unsafe { f(Adjustment::wrap_pointer(this)) }
+    f(from_glib_none(this))
 }
 
 impl TreeSelection {
     pub fn connect_changed<F: Fn(TreeSelection) + 'static>(&self, f: F) -> u64 {
         unsafe {
             let f: Box<Box<Fn(TreeSelection) + 'static>> = Box::new(Box::new(f));
-            connect(self.unwrap_gobject() as *mut _, "changed",
+            connect(self.to_glib_none().0, "changed",
                 transmute(tree_selection_trampoline), Box::into_raw(f) as *mut _)
         }
     }
 }
 
-extern "C" fn tree_selection_trampoline(this: *mut GtkTreeSelection,
+unsafe extern "C" fn tree_selection_trampoline(this: *mut GtkTreeSelection,
         f: &Box<Fn(TreeSelection) + 'static>) {
         callback_guard!();
-    unsafe { f(TreeSelection::wrap_object(this as *mut _)) }
+    f(from_glib_none(this))
 }
 
 impl TreeViewColumn {
     pub fn connect_clicked<F: Fn(TreeViewColumn) + 'static>(&self, f: F) -> u64 {
         unsafe {
             let f: Box<Box<Fn(TreeViewColumn) + 'static>> = Box::new(Box::new(f));
-            connect(self.unwrap_pointer() as *mut _, "clicked",
+            connect(self.to_glib_none().0, "clicked",
                 transmute(tree_view_column_trampoline), Box::into_raw(f) as *mut _)
         }
     }
 }
 
-extern "C" fn tree_view_column_trampoline(this: *mut GtkTreeViewColumn,
+unsafe extern "C" fn tree_view_column_trampoline(this: *mut GtkTreeViewColumn,
         f: &Box<Fn(TreeViewColumn) + 'static>) {
         callback_guard!();
-    unsafe { f(TreeViewColumn::wrap_pointer(this)) }
+    f(from_glib_none(this))
 }
 
 #[cfg(gtk_3_16)]
@@ -1495,8 +1485,6 @@ mod gl_area {
     use gdk;
     use gdk_ffi;
     use ffi::GtkGLArea;
-    use cast::GTK_WIDGET;
-    use traits::FFIWidget;
     use super::CallbackGuard;
     use super::Inhibit;
     use GLArea;
@@ -1506,7 +1494,7 @@ mod gl_area {
                 -> u64 {
             unsafe {
                 let f: Box<Box<Fn(GLArea) -> gdk::GLContext + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _,"create-context",
+                connect(self.to_glib_none().0,"create-context",
                     transmute(gl_context_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -1514,7 +1502,7 @@ mod gl_area {
         pub fn connect_render<F: Fn(GLArea, gdk::GLContext) -> Inhibit + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(GLArea, gdk::GLContext) -> Inhibit + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _,"render",
+                connect(self.to_glib_none().0,"render",
                     transmute(gl_area_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -1522,28 +1510,28 @@ mod gl_area {
         pub fn connect_resize<F: Fn(GLArea, i32, i32) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(GLArea, i32, i32) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _,"resize",
+                connect(self.to_glib_none().0,"resize",
                     transmute(gl_area_trampoline_res), Box::into_raw(f) as *mut _)
             }
         }
     }
 
-    extern "C" fn gl_context_trampoline(this: *mut GtkGLArea,
+    unsafe extern "C" fn gl_context_trampoline(this: *mut GtkGLArea,
             f: &Box<Fn(GLArea) -> gdk::GLContext + 'static>) -> *mut gdk_ffi::GdkGLContext {
         callback_guard!();
-        f(GLArea::wrap_widget(GTK_WIDGET(this as *mut _))).to_glib_full()
+        f(from_glib_none(this)).to_glib_full()
     }
 
-    extern "C" fn gl_area_trampoline(this: *mut GtkGLArea, context: *mut gdk_ffi::GdkGLContext,
+    unsafe extern "C" fn gl_area_trampoline(this: *mut GtkGLArea, context: *mut gdk_ffi::GdkGLContext,
             f: &Box<Fn(GLArea, gdk::GLContext) + 'static>) {
         callback_guard!();
-        unsafe { f(GLArea::wrap_widget(GTK_WIDGET(this as *mut _)), from_glib_none(context)) }
+        f(from_glib_none(this), from_glib_none(context))
     }
 
-    extern "C" fn gl_area_trampoline_res(this: *mut GtkGLArea, width: i32, height: i32,
+    unsafe extern "C" fn gl_area_trampoline_res(this: *mut GtkGLArea, width: i32, height: i32,
             f: &Box<Fn(GLArea, i32, i32) + 'static>) {
         callback_guard!();
-        f(GLArea::wrap_widget(GTK_WIDGET(this as *mut _)), width, height)
+        f(from_glib_none(this), width, height)
     }
 }
 
@@ -1560,7 +1548,7 @@ pub trait CalendarSignals {
 mod calendar {
     use std::mem::transmute;
     use glib::signal::connect;
-    use traits::FFIWidget;
+    use glib::translate::*;
     use ffi::GtkCalendar;
     use super::CallbackGuard;
     use Calendar;
@@ -1569,7 +1557,7 @@ mod calendar {
         fn connect_day_selected<F: Fn(Calendar) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Calendar) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "day-selected",
+                connect(self.to_glib_none().0, "day-selected",
                     transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -1577,7 +1565,7 @@ mod calendar {
         fn connect_day_selected_double_click<F: Fn(Calendar) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Calendar) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "day-selected-double-click",
+                connect(self.to_glib_none().0, "day-selected-double-click",
                     transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -1585,7 +1573,7 @@ mod calendar {
         fn connect_month_changed<F: Fn(Calendar) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Calendar) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "month-changed",
+                connect(self.to_glib_none().0, "month-changed",
                     transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -1593,7 +1581,7 @@ mod calendar {
         fn connect_next_month<F: Fn(Calendar) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Calendar) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "next-month",
+                connect(self.to_glib_none().0, "next-month",
                     transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -1601,7 +1589,7 @@ mod calendar {
         fn connect_next_year<F: Fn(Calendar) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Calendar) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "next-year",
+                connect(self.to_glib_none().0, "next-year",
                     transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -1609,7 +1597,7 @@ mod calendar {
         fn connect_prev_month<F: Fn(Calendar) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Calendar) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "prev-month",
+                connect(self.to_glib_none().0, "prev-month",
                     transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
@@ -1617,15 +1605,15 @@ mod calendar {
         fn connect_prev_year<F: Fn(Calendar) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(Calendar) + 'static>> = Box::new(Box::new(f));
-                connect(self.unwrap_widget() as *mut _, "prev-year",
+                connect(self.to_glib_none().0, "prev-year",
                     transmute(void_trampoline), Box::into_raw(f) as *mut _)
             }
         }
     }
 
-    extern "C" fn void_trampoline(this: *mut GtkCalendar, f: &Box<Fn(Calendar) + 'static>) {
+    unsafe extern "C" fn void_trampoline(this: *mut GtkCalendar, f: &Box<Fn(Calendar) + 'static>) {
         callback_guard!();
-        f(FFIWidget::wrap_widget(this as *mut _));
+        f(from_glib_none(this));
     }
 }
 
@@ -1649,7 +1637,7 @@ mod status_icon {
     use glib::translate::*;
     use glib_ffi::gboolean;
     use super::CallbackGuard;
-    use Tooltip;
+    use super::Tooltip;
 
     impl super::StatusIconSignals for StatusIcon {
         fn connect_activate<F: Fn(StatusIcon) + 'static>(&self, f: F) -> u64 {
@@ -1709,43 +1697,33 @@ mod status_icon {
         }
     }
 
-    extern "C" fn void_trampoline(this: *mut GtkStatusIcon, f: &Box<Fn(StatusIcon) + 'static>) {
+    unsafe extern "C" fn void_trampoline(this: *mut GtkStatusIcon, f: &Box<Fn(StatusIcon) + 'static>) {
         callback_guard!();
-        unsafe {
-            f(from_glib_none(this));
-        }
+        f(from_glib_none(this));
     }
 
-    extern "C" fn event_trampoline(this: *mut GtkStatusIcon, event: *mut EventButton,
+    unsafe extern "C" fn event_trampoline(this: *mut GtkStatusIcon, event: *mut EventButton,
             f: &Box<Fn(StatusIcon, &EventScroll) -> bool + 'static>) -> gboolean {
         callback_guard!();
-        unsafe {
-            f(from_glib_none(this), transmute(event)).to_glib()
-        }
+        f(from_glib_none(this), transmute(event)).to_glib()
     }
 
-    extern "C" fn popup_menu_trampoline(this: *mut GtkStatusIcon, button: c_uint,
+    unsafe extern "C" fn popup_menu_trampoline(this: *mut GtkStatusIcon, button: c_uint,
             activate_time: c_uint, f: &Box<Fn(StatusIcon, u32, u32) + 'static>) {
         callback_guard!();
-        unsafe {
-            f(from_glib_none(this), button, activate_time);
-        }
+        f(from_glib_none(this), button, activate_time);
     }
 
-    extern "C" fn query_tooltip_trampoline(this: *mut GtkStatusIcon, x: c_int, y: c_int,
+    unsafe extern "C" fn query_tooltip_trampoline(this: *mut GtkStatusIcon, x: c_int, y: c_int,
             keyboard_mode: gboolean, _tooltip: *mut GtkTooltip,
             f: &Box<Fn(StatusIcon, i32, i32, bool, Tooltip) -> bool + 'static>) -> gboolean {
         callback_guard!();
-        unsafe {
-            f(from_glib_none(this), x, y, from_glib(keyboard_mode), Tooltip).to_glib()
-        }
+        f(from_glib_none(this), x, y, from_glib(keyboard_mode), Tooltip).to_glib()
     }
 
-    extern "C" fn size_changed_trampoline(this: *mut GtkStatusIcon, size: c_int,
+    unsafe extern "C" fn size_changed_trampoline(this: *mut GtkStatusIcon, size: c_int,
             f: &Box<Fn(StatusIcon, i32) -> bool + 'static>) -> gboolean {
         callback_guard!();
-        unsafe {
-            f(from_glib_none(this), size).to_glib()
-        }
+        f(from_glib_none(this), size).to_glib()
     }
 }
