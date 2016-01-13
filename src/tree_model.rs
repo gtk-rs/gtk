@@ -5,7 +5,7 @@
 use ffi;
 use glib;
 use glib::Value;
-use glib::object::Upcast;
+use glib::object::IsA;
 use glib::translate::*;
 use TreeIter;
 use TreeModel;
@@ -40,7 +40,7 @@ pub trait TreeModelExt {
     fn sort_new_with_model(&self) -> Option<TreeModel>;
 }
 
-impl<O: Upcast<TreeModel>> TreeModelExt for O {
+impl<O: IsA<TreeModel>> TreeModelExt for O {
     fn get_value(&self, iter: &TreeIter, column: i32) -> Value {
         unsafe {
             let mut value = Value::new();

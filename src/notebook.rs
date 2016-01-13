@@ -3,14 +3,14 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 use Notebook;
-use Upcast;
+use IsA;
 use Widget;
 use ffi;
 use libc::c_int;
 use glib::translate::*;
 
 impl Notebook {
-    pub fn append_page<T: Upcast<Widget>, U: Upcast<Widget> = Widget>(&self, child: &T,
+    pub fn append_page<T: IsA<Widget>, U: IsA<Widget> = Widget>(&self, child: &T,
             tab_label: Option<&U>) -> u32 {
         unsafe {
             let ret = ffi::gtk_notebook_append_page(self.to_glib_none().0, child.to_glib_none().0,
@@ -22,9 +22,9 @@ impl Notebook {
 
     pub fn append_page_menu<T, U = Widget, V = Widget>(&self, child: &T, tab_label: Option<&U>,
         menu_label: Option<&V>) -> u32
-    where T: Upcast<Widget>,
-          U: Upcast<Widget>,
-          V: Upcast<Widget> {
+    where T: IsA<Widget>,
+          U: IsA<Widget>,
+          V: IsA<Widget> {
         unsafe {
             let ret = ffi::gtk_notebook_append_page_menu(self.to_glib_none().0,
                 child.to_glib_none().0, tab_label.to_glib_none().0, menu_label.to_glib_none().0);
@@ -63,8 +63,8 @@ impl Notebook {
 
     pub fn insert_page<T, U = Widget>(&self, child: &T, tab_label: Option<&U>,
         position: Option<u32>) -> u32
-    where T: Upcast<Widget>,
-          U: Upcast<Widget> {
+    where T: IsA<Widget>,
+          U: IsA<Widget> {
         unsafe {
             let ret = ffi::gtk_notebook_insert_page(self.to_glib_none().0, child.to_glib_none().0,
                 tab_label.to_glib_none().0, position.map(|n| n as c_int).unwrap_or(-1));
@@ -75,9 +75,9 @@ impl Notebook {
 
     pub fn insert_page_menu<T, U = Widget, V = Widget>(&self, child: &T, tab_label: Option<&U>,
         menu_label: Option<&V>, position: Option<u32>) -> u32
-    where T: Upcast<Widget>,
-          U: Upcast<Widget>,
-          V: Upcast<Widget> {
+    where T: IsA<Widget>,
+          U: IsA<Widget>,
+          V: IsA<Widget> {
         unsafe {
             let ret = ffi::gtk_notebook_insert_page_menu(self.to_glib_none().0,
                 child.to_glib_none().0, tab_label.to_glib_none().0, menu_label.to_glib_none().0,
@@ -87,7 +87,7 @@ impl Notebook {
         }
     }
 
-    pub fn page_num<T: Upcast<Widget>>(&self, child: &T) -> Option<u32> {
+    pub fn page_num<T: IsA<Widget>>(&self, child: &T) -> Option<u32> {
         unsafe {
             let ret = ffi::gtk_notebook_page_num(self.to_glib_none().0, child.to_glib_none().0);
             if ret >= 0 {
@@ -99,8 +99,8 @@ impl Notebook {
     }
 
     pub fn prepend_page<T, U = Widget>(&self, child: &T, tab_label: Option<&U>) -> u32
-    where T: Upcast<Widget>,
-          U: Upcast<Widget> {
+    where T: IsA<Widget>,
+          U: IsA<Widget> {
         unsafe {
             let ret = ffi::gtk_notebook_prepend_page(self.to_glib_none().0, child.to_glib_none().0,
                 tab_label.to_glib_none().0);
@@ -111,9 +111,9 @@ impl Notebook {
 
     pub fn prepend_page_menu<T, U = Widget, V = Widget>(&self, child: &T, tab_label: Option<&U>,
         menu_label: Option<&V>) -> u32
-    where T: Upcast<Widget>,
-          U: Upcast<Widget>,
-          V: Upcast<Widget> {
+    where T: IsA<Widget>,
+          U: IsA<Widget>,
+          V: IsA<Widget> {
         unsafe {
             let ret = ffi::gtk_notebook_prepend_page_menu(self.to_glib_none().0,
                 child.to_glib_none().0, tab_label.to_glib_none().0, menu_label.to_glib_none().0);
@@ -129,7 +129,7 @@ impl Notebook {
         }
     }
 
-    pub fn reorder_child<T: Upcast<Widget>>(&self, child: &T, position: Option<u32>) {
+    pub fn reorder_child<T: IsA<Widget>>(&self, child: &T, position: Option<u32>) {
         unsafe {
             ffi::gtk_notebook_reorder_child(self.to_glib_none().0, child.to_glib_none().0,
                 position.map(|n| n as c_int).unwrap_or(-1));

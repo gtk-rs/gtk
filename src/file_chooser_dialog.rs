@@ -4,7 +4,7 @@
 
 use ffi;
 use glib::translate::*;
-use glib::object::{Downcast, Upcast};
+use glib::object::{Downcast, IsA};
 use std::ptr;
 use FileChooserAction;
 use FileChooserDialog;
@@ -12,7 +12,7 @@ use Widget;
 use Window;
 
 impl FileChooserDialog {
-    pub fn new<T: Upcast<Window>>(title: Option<&str>, parent: Option<&T>, action: FileChooserAction)
+    pub fn new<T: IsA<Window>>(title: Option<&str>, parent: Option<&T>, action: FileChooserAction)
             -> FileChooserDialog {
         assert_initialized_main_thread!();
         unsafe {

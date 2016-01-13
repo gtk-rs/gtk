@@ -9,13 +9,13 @@ use std::ptr;
 use Box;
 use Dialog;
 use DialogFlags;
-use Upcast;
+use IsA;
 use Widget;
 use Window;
 use auto::traits::DialogExt as Auto;
 
 impl Dialog {
-    pub fn new_with_buttons<T: Upcast<Window> = Window>(title: Option<&str>, parent: Option<&T>,
+    pub fn new_with_buttons<T: IsA<Window> = Window>(title: Option<&str>, parent: Option<&T>,
             flags: DialogFlags, buttons: &[(&str, i32)]) -> Dialog {
         assert_initialized_main_thread!();
         let ret: Dialog = unsafe {
@@ -35,13 +35,13 @@ pub trait DialogExt {
     // -- manual --
     fn add_buttons(&self, buttons: &[(&str, i32)]);
     // -- auto --
-    fn add_action_widget<T: Upcast<Widget>>(&self, child: &T, response_id: i32);
+    fn add_action_widget<T: IsA<Widget>>(&self, child: &T, response_id: i32);
     fn add_button(&self, button_text: &str, response_id: i32) -> Widget;
     fn get_action_area(&self) -> Widget;
     fn get_content_area(&self) -> Box;
     #[cfg(gtk_3_12)]
     fn get_header_bar(&self) -> Option<Widget>;
-    fn get_response_for_widget<T: Upcast<Widget>>(&self, widget: &T) -> i32;
+    fn get_response_for_widget<T: IsA<Widget>>(&self, widget: &T) -> i32;
     fn get_widget_for_response(&self, response_id: i32) -> Option<Widget>;
     fn response(&self, response_id: i32);
     fn run(&self) -> i32;
@@ -49,7 +49,7 @@ pub trait DialogExt {
     fn set_response_sensitive(&self, response_id: i32, setting: bool);
 }
 
-impl<O: Upcast<Dialog>> DialogExt for O {
+impl<O: IsA<Dialog>> DialogExt for O {
     fn add_buttons(&self, buttons: &[(&str, i32)]) {
         for &(text, id) in buttons {
             Auto::add_button(self, text, id);
@@ -57,7 +57,7 @@ impl<O: Upcast<Dialog>> DialogExt for O {
     }
 
     #[inline]
-    fn add_action_widget<T: Upcast<Widget>>(&self, child: &T, response_id: i32) {
+    fn add_action_widget<T: IsA<Widget>>(&self, child: &T, response_id: i32) {
         Auto::add_action_widget(self, child, response_id)
     }
 
@@ -83,7 +83,7 @@ impl<O: Upcast<Dialog>> DialogExt for O {
     }
 
     #[inline]
-    fn get_response_for_widget<T: Upcast<Widget>>(&self, widget: &T) -> i32 {
+    fn get_response_for_widget<T: IsA<Widget>>(&self, widget: &T) -> i32 {
         Auto::get_response_for_widget(self, widget)
     }
 

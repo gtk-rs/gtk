@@ -8,7 +8,7 @@ use glib::translate::*;
 use gdk_ffi::GdkRGBA;
 use ffi;
 
-use glib::object::Upcast;
+use glib::object::IsA;
 
 use Orientation;
 
@@ -28,7 +28,7 @@ pub trait ColorChooserExt {
     fn add_palette(&self, orientation: Orientation, colors_per_line: i32, colors: Vec<GdkRGBA>);
 }
 
-impl<O: Upcast<ColorChooser>> ColorChooserExt for O {
+impl<O: IsA<ColorChooser>> ColorChooserExt for O {
     fn get_rgba(&self) -> GdkRGBA {
         let mut color = GdkRGBA {
             red: 0f64,
