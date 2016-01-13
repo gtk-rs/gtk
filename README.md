@@ -65,6 +65,8 @@ or follow these steps:
  ```Shell
  $ pacman -S mingw-w64-x86_64-gtk3
  ```
+ 
+Make sure that either `<your msys installation folder>\mingw32\bin` or `<your msys installation folder>\mingw64\bin` is in your `PATH` e.g. (if you have msys32 installed at `c:\msys32`, add `c:\msys32\mingw32\bin` or `c:\msys32\mingw64\bin` to your `PATH`).
 
 #### 2. separate mingw toolchain
 
