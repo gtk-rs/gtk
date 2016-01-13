@@ -10,7 +10,7 @@ use libc::c_int;
 use glib::translate::*;
 
 impl Notebook {
-    pub fn append_page<T: IsA<Widget>, U: IsA<Widget> = Widget>(&self, child: &T,
+    pub fn append_page<T: IsA<Widget>, U: IsA<Widget>>(&self, child: &T,
             tab_label: Option<&U>) -> u32 {
         unsafe {
             let ret = ffi::gtk_notebook_append_page(self.to_glib_none().0, child.to_glib_none().0,
@@ -20,7 +20,7 @@ impl Notebook {
         }
     }
 
-    pub fn append_page_menu<T, U = Widget, V = Widget>(&self, child: &T, tab_label: Option<&U>,
+    pub fn append_page_menu<T, U, V>(&self, child: &T, tab_label: Option<&U>,
         menu_label: Option<&V>) -> u32
     where T: IsA<Widget>,
           U: IsA<Widget>,
@@ -61,7 +61,7 @@ impl Notebook {
     }
 
 
-    pub fn insert_page<T, U = Widget>(&self, child: &T, tab_label: Option<&U>,
+    pub fn insert_page<T, U>(&self, child: &T, tab_label: Option<&U>,
         position: Option<u32>) -> u32
     where T: IsA<Widget>,
           U: IsA<Widget> {
@@ -73,7 +73,7 @@ impl Notebook {
         }
     }
 
-    pub fn insert_page_menu<T, U = Widget, V = Widget>(&self, child: &T, tab_label: Option<&U>,
+    pub fn insert_page_menu<T, U, V>(&self, child: &T, tab_label: Option<&U>,
         menu_label: Option<&V>, position: Option<u32>) -> u32
     where T: IsA<Widget>,
           U: IsA<Widget>,
@@ -98,7 +98,7 @@ impl Notebook {
         }
     }
 
-    pub fn prepend_page<T, U = Widget>(&self, child: &T, tab_label: Option<&U>) -> u32
+    pub fn prepend_page<T, U>(&self, child: &T, tab_label: Option<&U>) -> u32
     where T: IsA<Widget>,
           U: IsA<Widget> {
         unsafe {
@@ -109,7 +109,7 @@ impl Notebook {
         }
     }
 
-    pub fn prepend_page_menu<T, U = Widget, V = Widget>(&self, child: &T, tab_label: Option<&U>,
+    pub fn prepend_page_menu<T, U, V>(&self, child: &T, tab_label: Option<&U>,
         menu_label: Option<&V>) -> u32
     where T: IsA<Widget>,
           U: IsA<Widget>,

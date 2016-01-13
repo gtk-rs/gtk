@@ -39,7 +39,7 @@ pub trait WindowExt {
     fn set_window_position(&self, window_position: WindowPosition);
     #[cfg(gtk_3_10)]
     fn set_titlebar<T: IsA<Widget>>(&self, titlebar: &T);
-    fn set_transient_for<T: IsA<Window> = Window>(&self, parent: Option<&T>);
+    fn set_transient_for<T: IsA<Window>>(&self, parent: Option<&T>);
 }
 
 impl<O: IsA<Window>> WindowExt for O {

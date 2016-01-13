@@ -15,7 +15,7 @@ use Window;
 use auto::traits::DialogExt as Auto;
 
 impl Dialog {
-    pub fn new_with_buttons<T: IsA<Window> = Window>(title: Option<&str>, parent: Option<&T>,
+    pub fn new_with_buttons<T: IsA<Window>>(title: Option<&str>, parent: Option<&T>,
             flags: DialogFlags, buttons: &[(&str, i32)]) -> Dialog {
         assert_initialized_main_thread!();
         let ret: Dialog = unsafe {
