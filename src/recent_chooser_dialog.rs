@@ -12,8 +12,7 @@ use Widget;
 use Window;
 
 impl RecentChooserDialog {
-    pub fn new<T: Upcast<Window> = Window>(title: Option<&str>, parent: Option<&T>)
-            -> RecentChooserDialog {
+    pub fn new<T: Upcast<Window>>(title: Option<&str>, parent: Option<&T>) -> RecentChooserDialog {
         assert_initialized_main_thread!();
         unsafe {
             Widget::from_glib_none(
@@ -23,7 +22,7 @@ impl RecentChooserDialog {
         }
     }
 
-    pub fn new_for_manager<T: Upcast<Window> = Window>(title: Option<&str>, parent: Option<&T>,
+    pub fn new_for_manager<T: Upcast<Window>>(title: Option<&str>, parent: Option<&T>,
             manager: &RecentManager) -> RecentChooserDialog {
         assert_initialized_main_thread!();
         unsafe {

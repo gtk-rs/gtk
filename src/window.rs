@@ -93,7 +93,7 @@ impl<O: Upcast<Window>> WindowExt for O {
         }
     }
 
-    fn set_transient_for<T: Upcast<Window> = Window>(&self, parent: Option<&T>) {
+    fn set_transient_for<T: Upcast<Window>>(&self, parent: Option<&T>) {
         unsafe {
             ffi::gtk_window_set_transient_for(self.to_glib_none().0, parent.to_glib_none().0);
         }
