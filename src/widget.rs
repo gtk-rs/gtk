@@ -2,7 +2,7 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-use glib::object::Upcast;
+use glib::object::IsA;
 use glib::translate::*;
 use glib::Type;
 use gdk;
@@ -42,18 +42,18 @@ pub trait WidgetExt {
     #[cfg(gtk_3_10)]
     fn get_scale_factor(&self) -> i32;
     fn activate(&self) -> bool;
-    fn reparent<T: Upcast<Widget>>(&self, new_parent: &T);
+    fn reparent<T: IsA<Widget>>(&self, new_parent: &T);
     fn is_focus(&self) -> bool;
     fn grab_focus(&self);
     fn grab_default(&self);
     fn set_name(&self, name: &str);
     fn get_name(&self) -> Option<String>;
     fn set_sensitive(&self, sensitive: bool);
-    fn set_parent<T: Upcast<Widget>>(&self, parent: &T);
+    fn set_parent<T: IsA<Widget>>(&self, parent: &T);
     fn set_parent_window(&self, parent: &gdk::window::Window);
     fn get_toplevel(&self) -> Widget;
     fn get_ancestor(&self, widget_type: Type) -> Option<Widget>;
-    fn is_ancestor<T: Upcast<Widget>>(&self, ancestor: &T) -> bool;
+    fn is_ancestor<T: IsA<Widget>>(&self, ancestor: &T) -> bool;
     fn hide_on_delete(&self) -> bool;
     fn set_direction(&self, dir: TextDirection);
     fn get_direction(&self) -> TextDirection;
@@ -61,7 +61,7 @@ pub trait WidgetExt {
     fn get_default_direction() -> TextDirection;
     fn in_destruction(&self) -> bool;
     fn unparent(&self);
-    fn translate_coordinates<T: Upcast<Widget>>(&self, dest_widget: &T, src_x: i32, src_y: i32)
+    fn translate_coordinates<T: IsA<Widget>>(&self, dest_widget: &T, src_x: i32, src_y: i32)
         -> Option<(i32, i32)>;
     fn override_background_color(&self, state: StateFlags, color: &gdk_ffi::GdkRGBA);
     fn override_color(&self, state: StateFlags, color: &gdk_ffi::GdkRGBA);
@@ -84,8 +84,8 @@ pub trait WidgetExt {
     fn set_no_show_all(&self, no_show_all: bool);
     fn get_no_show_all(&self) -> bool;
     fn list_mnemonic_labels(&self) -> Vec<Widget>;
-    fn add_mnemonic_label<T: Upcast<Widget>>(&self, label: &T);
-    fn remove_mnemonic_label<T: Upcast<Widget>>(&self, label: &T);
+    fn add_mnemonic_label<T: IsA<Widget>>(&self, label: &T);
+    fn remove_mnemonic_label<T: IsA<Widget>>(&self, label: &T);
     fn is_composited(&self) -> bool;
     fn error_bell(&self);
     fn keynav_failed(&self, direction: DirectionType) -> bool;
@@ -182,7 +182,7 @@ pub trait WidgetExt {
     fn get_style_context(&self) -> StyleContext;
 }
 
-impl<O: Upcast<Widget>> WidgetExt for O {
+impl<O: IsA<Widget>> WidgetExt for O {
     fn show_all(&self) {
         unsafe { ffi::gtk_widget_show_all(self.to_glib_none().0) }
     }
@@ -232,7 +232,7 @@ impl<O: Upcast<Widget>> WidgetExt for O {
         unsafe { from_glib(ffi::gtk_widget_activate(self.to_glib_none().0)) }
     }
 
-    fn reparent<T: Upcast<Widget>>(&self, new_parent: &T) {
+    fn reparent<T: IsA<Widget>>(&self, new_parent: &T) {
         unsafe {
             ffi::gtk_widget_reparent(self.to_glib_none().0,
                 new_parent.to_glib_none().0)
@@ -267,7 +267,7 @@ impl<O: Upcast<Widget>> WidgetExt for O {
         }
     }
 
-    fn set_parent<T: Upcast<Widget>>(&self, parent: &T) {
+    fn set_parent<T: IsA<Widget>>(&self, parent: &T) {
         unsafe {
             ffi::gtk_widget_set_parent(self.to_glib_none().0,
                 parent.to_glib_none().0)
@@ -295,7 +295,7 @@ impl<O: Upcast<Widget>> WidgetExt for O {
         }
     }
 
-    fn is_ancestor<T: Upcast<Widget>>(&self, ancestor: &T) -> bool {
+    fn is_ancestor<T: IsA<Widget>>(&self, ancestor: &T) -> bool {
         unsafe {
             from_glib(ffi::gtk_widget_is_ancestor(self.to_glib_none().0,
                 ancestor.to_glib_none().0))
@@ -332,7 +332,7 @@ impl<O: Upcast<Widget>> WidgetExt for O {
         unsafe { ffi::gtk_widget_unparent(self.to_glib_none().0) }
     }
 
-    fn translate_coordinates<T: Upcast<Widget>>(&self, dest_widget: &T, src_x: i32, src_y: i32)
+    fn translate_coordinates<T: IsA<Widget>>(&self, dest_widget: &T, src_x: i32, src_y: i32)
             -> Option<(i32, i32)> {
         unsafe {
             let mut dest_x = 0;
@@ -484,14 +484,14 @@ impl<O: Upcast<Widget>> WidgetExt for O {
         }
     }
 
-    fn add_mnemonic_label<T: Upcast<Widget>>(&self, label: &T) {
+    fn add_mnemonic_label<T: IsA<Widget>>(&self, label: &T) {
         unsafe {
             ffi::gtk_widget_add_mnemonic_label(
                 self.to_glib_none().0, label.to_glib_none().0)
         }
     }
 
-    fn remove_mnemonic_label<T: Upcast<Widget>>(&self, label: &T) {
+    fn remove_mnemonic_label<T: IsA<Widget>>(&self, label: &T) {
         unsafe {
             ffi::gtk_widget_remove_mnemonic_label(
                 self.to_glib_none().0, label.to_glib_none().0)

@@ -7,7 +7,7 @@
 use libc::{c_char, ssize_t};
 
 use glib::Object;
-use glib::object::{Downcast, Upcast};
+use glib::object::{Downcast, IsA};
 use glib::translate::*;
 use ffi;
 
@@ -60,7 +60,7 @@ impl Builder {
     }
 
     pub fn get_object<T>(&self, name: &str) -> Option<T>
-    where T: Upcast<Buildable> + Upcast<Object> {
+    where T: IsA<Buildable> + IsA<Object> {
         unsafe {
             Option::<Object>::from_glib_none(
                 ffi::gtk_builder_get_object(self.to_glib_none().0, name.to_glib_none().0))

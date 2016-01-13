@@ -6,7 +6,7 @@ use glib::translate::*;
 use glib::AppInfo;
 use ffi;
 
-use glib::object::Upcast;
+use glib::object::IsA;
 use Widget;
 
 glib_wrapper! {
@@ -23,7 +23,7 @@ pub trait AppChooserExt {
     fn refresh(&self);
 }
 
-impl<O: Upcast<AppChooser>> AppChooserExt for O {
+impl<O: IsA<AppChooser>> AppChooserExt for O {
     fn get_app_info(&self) -> Option<AppInfo> {
         unsafe { from_glib_full(ffi::gtk_app_chooser_get_app_info(self.to_glib_none().0)) }
     }

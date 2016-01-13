@@ -207,9 +207,9 @@ mod widget {
     use super::Tooltip;
     use super::CallbackGuard;
     use super::Inhibit;
-    use {Object, Upcast};
+    use {Object, IsA};
 
-    impl<T: Upcast<Widget> + Upcast<Object>> super::WidgetSignals for T {
+    impl<T: IsA<Widget> + IsA<Object>> super::WidgetSignals for T {
         // this is a GObject signal actually
         fn connect_notify<F: Fn(&Self, &ParamSpec) + 'static>(&self, f: F) -> u64 {
             unsafe {
@@ -633,160 +633,160 @@ mod widget {
     }
 
     unsafe extern "C" fn void_trampoline<T>(this: *mut GtkWidget, f: &Box<Fn(&Widget) + 'static>)
-    where T: Upcast<Widget> + Upcast<Object> {
+    where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this));
     }
 
     unsafe extern "C" fn bool_trampoline<T>(this: *mut GtkWidget, f: &Box<Fn(&Widget) -> bool + 'static>) -> gboolean
-    where T: Upcast<Widget> + Upcast<Object> {
+    where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this)).to_glib()
     }
 
     unsafe extern "C" fn accel_trampoline<T>(this: *mut GtkWidget, signal_id: c_uint,
             f: &Box<Fn(&Widget, u64) -> bool + 'static>) -> gboolean
-    where T: Upcast<Widget> + Upcast<Object> {
+    where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this), signal_id as u64).to_glib()
     }
 
     unsafe extern "C" fn draw_trampoline<T>(this: *mut GtkWidget, cr: *mut cairo_t,
             f: &Box<Fn(&Widget, &Context) -> Inhibit + 'static>) -> gboolean
-    where T: Upcast<Widget> + Upcast<Object> {
+    where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this), &from_glib_none(cr)).to_glib()
     }
 
     unsafe extern "C" fn event_any_trampoline<T>(this: *mut GtkWidget, event: *mut EventAny,
             f: &Box<Fn(&Widget, &EventAny) -> Inhibit + 'static>) -> gboolean
-    where T: Upcast<Widget> + Upcast<Object> {
+    where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this), transmute(event)).to_glib()
     }
 
     unsafe extern "C" fn event_button_trampoline<T>(this: *mut GtkWidget, event: *mut EventAny,
             f: &Box<Fn(&Widget, &EventButton) -> Inhibit + 'static>) -> gboolean
-    where T: Upcast<Widget> + Upcast<Object> {
+    where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this), transmute(event)).to_glib()
     }
 
     unsafe extern "C" fn event_configure_trampoline<T>(this: *mut GtkWidget, event: *mut EventAny,
             f: &Box<Fn(&Widget, &EventConfigure) -> Inhibit + 'static>) -> gboolean
-    where T: Upcast<Widget> + Upcast<Object> {
+    where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this), transmute(event)).to_glib()
     }
 
     unsafe extern "C" fn event_crossing_trampoline<T>(this: *mut GtkWidget, event: *mut EventAny,
             f: &Box<Fn(&Widget, &EventCrossing) -> Inhibit + 'static>) -> gboolean
-    where T: Upcast<Widget> + Upcast<Object> {
+    where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this), transmute(event)).to_glib()
     }
 
     unsafe extern "C" fn event_expose_trampoline<T>(this: *mut GtkWidget, event: *mut EventAny,
             f: &Box<Fn(&Widget, &EventExpose) -> Inhibit + 'static>) -> gboolean
-    where T: Upcast<Widget> + Upcast<Object> {
+    where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this), transmute(event)).to_glib()
     }
 
     unsafe extern "C" fn event_focus_trampoline<T>(this: *mut GtkWidget, event: *mut EventAny,
             f: &Box<Fn(&Widget, &EventFocus) -> Inhibit + 'static>) -> gboolean
-    where T: Upcast<Widget> + Upcast<Object> {
+    where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this), transmute(event)).to_glib()
     }
 
     unsafe extern "C" fn event_grab_broken_trampoline<T>(this: *mut GtkWidget, event: *mut EventAny,
             f: &Box<Fn(&Widget, &EventGrabBroken) -> Inhibit + 'static>) -> gboolean
-    where T: Upcast<Widget> + Upcast<Object> {
+    where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this), transmute(event)).to_glib()
     }
 
     unsafe extern "C" fn event_key_trampoline<T>(this: *mut GtkWidget, event: *mut EventAny,
             f: &Box<Fn(&Widget, &EventKey) -> Inhibit + 'static>) -> gboolean
-    where T: Upcast<Widget> + Upcast<Object> {
+    where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this), transmute(event)).to_glib()
     }
 
     unsafe extern "C" fn event_motion_trampoline<T>(this: *mut GtkWidget, event: *mut EventAny,
             f: &Box<Fn(&Widget, &EventMotion) -> Inhibit + 'static>) -> gboolean
-    where T: Upcast<Widget> + Upcast<Object> {
+    where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this), transmute(event)).to_glib()
     }
 
     unsafe extern "C" fn event_property_trampoline<T>(this: *mut GtkWidget, event: *mut EventAny,
             f: &Box<Fn(&Widget, &EventProperty) -> Inhibit + 'static>) -> gboolean
-    where T: Upcast<Widget> + Upcast<Object> {
+    where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this), transmute(event)).to_glib()
     }
 
     unsafe extern "C" fn event_proximity_trampoline<T>(this: *mut GtkWidget, event: *mut EventAny,
             f: &Box<Fn(&Widget, &EventProximity) -> Inhibit + 'static>) -> gboolean
-    where T: Upcast<Widget> + Upcast<Object> {
+    where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this), transmute(event)).to_glib()
     }
 
     unsafe extern "C" fn event_scroll_trampoline<T>(this: *mut GtkWidget, event: *mut EventAny,
             f: &Box<Fn(&Widget, &EventScroll) -> Inhibit + 'static>) -> gboolean
-    where T: Upcast<Widget> + Upcast<Object> {
+    where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this), transmute(event)).to_glib()
     }
 
     unsafe extern "C" fn event_window_state_trampoline<T>(this: *mut GtkWidget, event: *mut EventAny,
             f: &Box<Fn(&Widget, &EventWindowState) -> Inhibit + 'static>) -> gboolean
-    where T: Upcast<Widget> + Upcast<Object> {
+    where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this), transmute(event)).to_glib()
     }
 
     unsafe extern "C" fn direction_trampoline<T>(this: *mut GtkWidget, direction: DirectionType,
             f: &Box<Fn(&Widget, DirectionType) -> Inhibit + 'static>) -> gboolean
-    where T: Upcast<Widget> + Upcast<Object> {
+    where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this), direction).to_glib()
     }
 
     unsafe extern "C" fn direction_void_trampoline<T>(this: *mut GtkWidget, direction: DirectionType,
             f: &Box<Fn(&Widget, DirectionType) + 'static>)
-    where T: Upcast<Widget> + Upcast<Object> {
+    where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this), direction);
     }
 
     unsafe extern "C" fn grab_trampoline<T>(this: *mut GtkWidget, was_grabbed: gboolean,
             f: &Box<Fn(&Widget, bool) + 'static>)
-    where T: Upcast<Widget> + Upcast<Object> {
+    where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this), from_glib(was_grabbed));
     }
 
     unsafe extern "C" fn help_trampoline<T>(this: *mut GtkWidget, help_type: WidgetHelpType,
             f: &Box<Fn(&Widget, WidgetHelpType) -> bool + 'static>) -> gboolean
-    where T: Upcast<Widget> + Upcast<Object> {
+    where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this), help_type).to_glib()
     }
 
     unsafe extern "C" fn mnemonic_trampoline<T>(this: *mut GtkWidget, arg1: gboolean,
             f: &Box<Fn(&Widget, bool) -> Inhibit + 'static>) -> gboolean
-    where T: Upcast<Widget> + Upcast<Object> {
+    where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this), from_glib(arg1)).to_glib()
     }
 
     unsafe extern "C" fn notify_trampoline<T>(this: *mut GtkWidget, pspec: *mut ParamSpec,
             f: &Box<Fn(&Widget, &ParamSpec) + 'static>)
-    where T: Upcast<Widget> + Upcast<Object> {
+    where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this), transmute(pspec));
     }
@@ -794,35 +794,35 @@ mod widget {
     unsafe extern "C" fn query_trampoline<T>(this: *mut GtkWidget, x: c_int, y: c_int,
         keyboard: gboolean, _tooltip: *mut GtkTooltip,
         f: &Box<Fn(&Widget, i32, i32, bool, Tooltip) -> bool + 'static>) -> gboolean
-    where T: Upcast<Widget> + Upcast<Object> {
+    where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this), x, y, from_glib(keyboard), Tooltip).to_glib()
     }
 
     unsafe extern "C" fn rectangle_trampoline<T>(this: *mut GtkWidget, allocation: *mut RectangleInt,
             f: &Box<Fn(&Widget, &RectangleInt) + 'static>)
-    where T: Upcast<Widget> + Upcast<Object> {
+    where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this), transmute(allocation));
     }
 
     unsafe extern "C" fn state_trampoline<T>(this: *mut GtkWidget, flags: StateFlags,
             f: &Box<Fn(&Widget, StateFlags) + 'static>)
-    where T: Upcast<Widget> + Upcast<Object> {
+    where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this), flags);
     }
 
     unsafe extern "C" fn screen_trampoline<T>(this: *mut GtkWidget, screen: *mut GdkScreen,
             f: &Box<Fn(&Widget, &Screen) + 'static>)
-    where T: Upcast<Widget> + Upcast<Object> {
+    where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this), &from_glib_none(screen));
     }
 
     unsafe extern "C" fn text_direction_trampoline<T>(this: *mut GtkWidget, previous: TextDirection,
             f: &Box<Fn(&Widget, TextDirection) + 'static>)
-    where T: Upcast<Widget> + Upcast<Object> {
+    where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this), previous);
     }
@@ -851,9 +851,9 @@ mod entry {
     use libc::c_char;
     use ffi::GtkEntry;
     use super::CallbackGuard;
-    use {Entry, DeleteType, MovementStep, Object, Upcast};
+    use {Entry, DeleteType, MovementStep, Object, IsA};
 
-    impl<T: Upcast<Entry> + Upcast<Object>> super::EntrySignals for T {
+    impl<T: IsA<Entry> + IsA<Object>> super::EntrySignals for T {
         fn connect_activate<F: Fn(&Self) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
@@ -936,28 +936,28 @@ mod entry {
     }
 
     unsafe extern "C" fn void_trampoline<T>(this: *mut GtkEntry, f: &Box<Fn(&Entry) + 'static>)
-    where T: Upcast<Entry> + Upcast<Object> {
+    where T: IsA<Entry> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this));
     }
 
     unsafe extern "C" fn delete_trampoline<T>(this: *mut GtkEntry, delete_type: DeleteType,
         count: i32, f: &Box<Fn(&Entry, DeleteType, i32) + 'static>)
-    where T: Upcast<Entry> + Upcast<Object> {
+    where T: IsA<Entry> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this), delete_type, count);
     }
 
     unsafe extern "C" fn move_cursor_trampoline<T>(this: *mut GtkEntry, step: MovementStep,
         count: i32, extend_selection: bool, f: &Box<Fn(&Entry, MovementStep, i32, bool) + 'static>)
-    where T: Upcast<Entry> + Upcast<Object> {
+    where T: IsA<Entry> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this), step, count, extend_selection);
     }
 
     unsafe extern "C" fn string_trampoline<T>(this: *mut GtkEntry, c_str: *const c_char,
         f: &Box<Fn(&Entry, &str) + 'static>)
-    where T: Upcast<Entry> + Upcast<Object> {
+    where T: IsA<Entry> + IsA<Object> {
         callback_guard!();
         let buf = CStr::from_ptr(c_str).to_bytes();
         let string = str::from_utf8(buf).unwrap();
@@ -976,9 +976,9 @@ mod button {
     use glib::translate::*;
     use ffi::GtkButton;
     use super::CallbackGuard;
-    use {Button, Object, Upcast};
+    use {Button, Object, IsA};
 
-    impl<T: Upcast<Button> + Upcast<Object>> super::ButtonSignals for T {
+    impl<T: IsA<Button> + IsA<Object>> super::ButtonSignals for T {
         fn connect_activate<F: Fn(&Self) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
@@ -997,7 +997,7 @@ mod button {
     }
 
     unsafe extern "C" fn void_trampoline<T>(this: *mut GtkButton, f: &Box<Fn(&Button) + 'static>)
-    where T: Upcast<Button> + Upcast<Object> {
+    where T: IsA<Button> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this));
     }
@@ -1017,9 +1017,9 @@ mod combobox {
     use glib_ffi::gboolean;
     use ffi::GtkComboBox;
     use super::CallbackGuard;
-    use {ComboBox, Object, Upcast, ScrollType};
+    use {ComboBox, Object, IsA, ScrollType};
 
-    impl<T: Upcast<ComboBox> + Upcast<Object>> super::ComboBoxSignals for T {
+    impl<T: IsA<ComboBox> + IsA<Object>> super::ComboBoxSignals for T {
         fn connect_changed<F: Fn(&Self) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
@@ -1055,21 +1055,21 @@ mod combobox {
 
     unsafe extern "C" fn void_trampoline<T>(this: *mut GtkComboBox,
         f: &Box<Fn(&ComboBox) + 'static>)
-    where T: Upcast<ComboBox> + Upcast<Object> {
+    where T: IsA<ComboBox> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this));
     }
 
     unsafe extern "C" fn bool_trampoline<T>(this: *mut GtkComboBox,
         f: &Box<Fn(&ComboBox) -> bool + 'static>) -> gboolean
-    where T: Upcast<ComboBox> + Upcast<Object> {
+    where T: IsA<ComboBox> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this)).to_glib()
     }
 
     unsafe extern "C" fn move_trampoline<T>(this: *mut GtkComboBox, scroll_type: ScrollType,
             f: &Box<Fn(&ComboBox, ScrollType) + 'static>)
-    where T: Upcast<ComboBox> + Upcast<Object> {
+    where T: IsA<ComboBox> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this), scroll_type);
     }
@@ -1085,9 +1085,9 @@ mod tool_button {
     use glib::translate::*;
     use ffi::GtkToolButton;
     use super::CallbackGuard;
-    use {Object, ToolButton, Upcast};
+    use {Object, ToolButton, IsA};
 
-    impl<T: Upcast<ToolButton> + Upcast<Object>> super::ToolButtonSignals for T {
+    impl<T: IsA<ToolButton> + IsA<Object>> super::ToolButtonSignals for T {
         fn connect_clicked<F: Fn(&Self) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
@@ -1099,7 +1099,7 @@ mod tool_button {
 
     unsafe extern "C" fn void_trampoline<T>(this: *mut GtkToolButton,
         f: &Box<Fn(&ToolButton) + 'static>)
-    where T: Upcast<ToolButton> + Upcast<Object> {
+    where T: IsA<ToolButton> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this));
     }
@@ -1154,9 +1154,9 @@ mod dialog {
     use glib::translate::*;
     use ffi::GtkDialog;
     use super::CallbackGuard;
-    use {Dialog, Object, Upcast};
+    use {Dialog, Object, IsA};
 
-    impl<T: Upcast<Dialog> + Upcast<Object>> super::DialogSignals for T {
+    impl<T: IsA<Dialog> + IsA<Object>> super::DialogSignals for T {
         fn connect_close<F: Fn(&Self) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
@@ -1175,14 +1175,14 @@ mod dialog {
     }
 
     unsafe extern "C" fn void_trampoline<T>(this: *mut GtkDialog, f: &Box<Fn(&Dialog) + 'static>)
-    where T: Upcast<Dialog> + Upcast<Object> {
+    where T: IsA<Dialog> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this));
     }
 
     unsafe extern "C" fn int_trampoline<T>(this: *mut GtkDialog, response: c_int,
             f: &Box<Fn(&Dialog, i32) + 'static>)
-    where T: Upcast<Dialog> + Upcast<Object> {
+    where T: IsA<Dialog> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this), response);
     }
@@ -1395,11 +1395,11 @@ mod range {
     use glib::translate::*;
     use glib_ffi::gboolean;
     use ffi::{GtkRange};
-    use {Object, Range, ScrollType, Upcast};
+    use {Object, Range, ScrollType, IsA};
     use super::CallbackGuard;
     use super::Inhibit;
 
-    impl<T: Upcast<Range> + Upcast<Object>> super::RangeSignals for T {
+    impl<T: IsA<Range> + IsA<Object>> super::RangeSignals for T {
         fn connect_adjust_bounds<F: Fn(&Self, f64) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(&Self, f64) + 'static>> = Box::new(Box::new(f));
@@ -1435,28 +1435,28 @@ mod range {
     }
 
     unsafe extern "C" fn void_trampoline<T>(this: *mut GtkRange, f: &Box<Fn(&Range) + 'static>)
-    where T: Upcast<Range> + Upcast<Object> {
+    where T: IsA<Range> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this));
     }
 
     unsafe extern "C" fn adjust_trampoline<T>(this: *mut GtkRange, value: c_double,
         f: &Box<Fn(&Range, f64) + 'static>)
-    where T: Upcast<Range> + Upcast<Object> {
+    where T: IsA<Range> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this), value);
     }
 
     unsafe extern "C" fn change_trampoline<T>(this: *mut GtkRange, scroll: ScrollType,
         value: c_double, f: &Box<Fn(&Range, ScrollType, f64) -> Inhibit + 'static>) -> gboolean
-    where T: Upcast<Range> + Upcast<Object> {
+    where T: IsA<Range> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this), scroll, value).to_glib()
     }
 
     unsafe extern "C" fn move_trampoline<T>(this: *mut GtkRange, step: ScrollType,
             f: &Box<Fn(&Range, ScrollType) + 'static>)
-    where T: Upcast<Range> + Upcast<Object> {
+    where T: IsA<Range> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this), step);
     }

@@ -23,8 +23,8 @@ pub use gdk::pixbuf as gdk_pixbuf;
 pub use glib::{
     Cast,
     Error,
+    IsA,
     Object,
-    Upcast,
 };
 pub use glib::ValuePublic;
 

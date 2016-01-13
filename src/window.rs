@@ -7,7 +7,7 @@ use glib::translate::*;
 use gdk;
 use ffi;
 
-use glib::object::{Downcast, Upcast};
+use glib::object::{Downcast, IsA};
 use {
     Widget,
     WindowPosition,
@@ -38,11 +38,11 @@ pub trait WindowExt {
     fn set_default_size(&self, width: i32, height: i32);
     fn set_window_position(&self, window_position: WindowPosition);
     #[cfg(gtk_3_10)]
-    fn set_titlebar<T: Upcast<Widget>>(&self, titlebar: &T);
-    fn set_transient_for<T: Upcast<Window> = Window>(&self, parent: Option<&T>);
+    fn set_titlebar<T: IsA<Widget>>(&self, titlebar: &T);
+    fn set_transient_for<T: IsA<Window>>(&self, parent: Option<&T>);
 }
 
-impl<O: Upcast<Window>> WindowExt for O {
+impl<O: IsA<Window>> WindowExt for O {
     fn move_(&self, x: i32, y: i32) {
         unsafe {
             ffi::gtk_window_move(self.to_glib_none().0, x, y);
@@ -86,14 +86,14 @@ impl<O: Upcast<Window>> WindowExt for O {
     }
 
     #[cfg(gtk_3_10)]
-    fn set_titlebar<T: Upcast<Widget>>(&self, titlebar: &T) {
+    fn set_titlebar<T: IsA<Widget>>(&self, titlebar: &T) {
         unsafe {
             ffi::gtk_window_set_titlebar(self.to_glib_none().0,
                 titlebar.to_glib_none().0);
         }
     }
 
-    fn set_transient_for<T: Upcast<Window> = Window>(&self, parent: Option<&T>) {
+    fn set_transient_for<T: IsA<Window>>(&self, parent: Option<&T>) {
         unsafe {
             ffi::gtk_window_set_transient_for(self.to_glib_none().0, parent.to_glib_none().0);
         }

@@ -5,7 +5,7 @@
 use libc::c_char;
 use ffi;
 use glib::translate::*;
-use glib::object::{Downcast, Upcast};
+use glib::object::{Downcast, IsA};
 use std::ptr;
 use ButtonsType;
 use DialogFlags;
@@ -15,8 +15,8 @@ use Widget;
 use Window;
 
 impl MessageDialog {
-    pub fn new<T: Upcast<Window> = Window>(parent: Option<&T>, flags: DialogFlags,
-            type_: MessageType, buttons: ButtonsType, message: &str) -> MessageDialog {
+    pub fn new<T: IsA<Window>>(parent: Option<&T>, flags: DialogFlags, type_: MessageType,
+            buttons: ButtonsType, message: &str) -> MessageDialog {
         assert_initialized_main_thread!();
         unsafe {
             let message: Stash<*const c_char, _> = message.to_glib_none();
