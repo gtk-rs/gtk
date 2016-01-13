@@ -3,12 +3,12 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 use ffi;
+use glib::object::Downcast;
 use glib::translate::*;
 use std::ptr;
 use Box;
 use Dialog;
 use DialogFlags;
-use Downcast;
 use Upcast;
 use Widget;
 use Window;

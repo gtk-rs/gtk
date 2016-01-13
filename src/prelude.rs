@@ -3,8 +3,7 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 pub use {
-    Downcast,
-    Upcast,
+    Cast,
 };
 
 #[cfg(gtk_3_4)]

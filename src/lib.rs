@@ -21,7 +21,7 @@ extern crate pango;
 pub use gdk::pixbuf as gdk_pixbuf;
 
 pub use glib::{
-    Downcast,
+    Cast,
     Error,
     Object,
     Upcast,
