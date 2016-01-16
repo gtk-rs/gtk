@@ -1,6 +1,6 @@
 [package]
 name = "gtk"
-version = "0.0.3"
+version = "0.0.7"
 authors = ["The Gtk-rs Project Developers"]
 build = "build.rs"
 
