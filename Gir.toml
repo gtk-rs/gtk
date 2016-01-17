@@ -1,5 +1,5 @@
 [options]
-girs_dir = "../gir-files"
+girs_dir = "gir-files"
 library = "Gtk"
 version = "3.0"
 min_cfg_version = "3.4"
