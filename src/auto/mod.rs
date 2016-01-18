@@ -77,8 +77,27 @@ mod cell_renderer;
 pub use self::cell_renderer::CellRenderer;
 pub use self::cell_renderer::CellRendererExt;
 
+mod cell_renderer_accel;
+pub use self::cell_renderer_accel::CellRendererAccel;
+
+mod cell_renderer_combo;
+pub use self::cell_renderer_combo::CellRendererCombo;
+
+mod cell_renderer_pixbuf;
+pub use self::cell_renderer_pixbuf::CellRendererPixbuf;
+
+mod cell_renderer_progress;
+pub use self::cell_renderer_progress::CellRendererProgress;
+
+mod cell_renderer_spin;
+pub use self::cell_renderer_spin::CellRendererSpin;
+
+mod cell_renderer_spinner;
+pub use self::cell_renderer_spinner::CellRendererSpinner;
+
 mod cell_renderer_text;
 pub use self::cell_renderer_text::CellRendererText;
+pub use self::cell_renderer_text::CellRendererTextExt;
 
 mod cell_renderer_toggle;
 pub use self::cell_renderer_toggle::CellRendererToggle;
@@ -493,6 +512,7 @@ pub mod traits {
     pub use super::CellEditableExt;
     pub use super::CellLayoutExt;
     pub use super::CellRendererExt;
+    pub use super::CellRendererTextExt;
     pub use super::CheckButtonExt;
     pub use super::ComboBoxExt;
     pub use super::ContainerExt;
