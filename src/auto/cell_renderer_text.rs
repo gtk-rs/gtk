@@ -4,6 +4,7 @@
 use CellRenderer;
 use ffi;
 use glib::object::Downcast;
+use glib::object::IsA;
 use glib::translate::*;
 
 glib_wrapper! {
@@ -21,8 +22,14 @@ impl CellRendererText {
             CellRenderer::from_glib_none(ffi::gtk_cell_renderer_text_new()).downcast_unchecked()
         }
     }
+}
 
-    pub fn set_fixed_height_from_font(&self, number_of_rows: i32) {
+pub trait CellRendererTextExt {
+    fn set_fixed_height_from_font(&self, number_of_rows: i32);
+}
+
+impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
+    fn set_fixed_height_from_font(&self, number_of_rows: i32) {
         unsafe {
             ffi::gtk_cell_renderer_text_set_fixed_height_from_font(self.to_glib_none().0, number_of_rows);
         }
