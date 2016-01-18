@@ -41,12 +41,12 @@ pub use auto::traits::ToolItemExt;
 pub use auto::traits::ToolShellExt;
 //pub use auto::traits::TreeModelExt;
 pub use auto::traits::TreeSortableExt;
+pub use auto::traits::WindowExt;
 
 pub use app_chooser::AppChooserExt;
 pub use color_chooser::ColorChooserExt;
 pub use dialog::DialogExt;
 pub use tree_model::TreeModelExt;
 pub use widget::WidgetExt;
-pub use window::WindowExt;
 
 pub use signal::*;

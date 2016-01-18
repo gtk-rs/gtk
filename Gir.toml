@@ -131,9 +131,13 @@ ignore = [
 
 manual = [
     "Gdk.GLContext",
+    "Gdk.Gravity",
+    "Gdk.ModifierType",
     "Gdk.Rectangle",
     "Gdk.Screen",
     "Gdk.Window",
+    "Gdk.WindowEdge",
+    "Gdk.WindowTypeHint",
     "GdkPixbuf.Pixbuf",
     "GdkPixbuf.PixbufAnimation",
     "GLib.Error",
@@ -143,7 +147,6 @@ manual = [
     "Gtk.RecentInfo",
     "Gtk.Requisition",
     "Gtk.Widget",
-    "Gtk.Window",
     "cairo.RectangleInt",
 ]
 
@@ -777,3 +780,7 @@ status = "generate"
         [[object.function.parameter]]
         name = "path"
         const = true
+
+[[object]]
+name = "Gtk.Window"
+status = "generate"

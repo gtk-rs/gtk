@@ -154,7 +154,6 @@ mod tree_path;
 mod tree_store;
 mod tree_view;
 mod widget;
-mod window;
 
 pub mod prelude;
 
@@ -175,4 +174,3 @@ pub use requisition::Requisition;
 pub use socket::Socket;
 pub use text_attributes::TextAttributes;
 pub use widget::Widget;
-pub use window::Window;
