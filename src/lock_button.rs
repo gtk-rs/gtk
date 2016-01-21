@@ -6,7 +6,7 @@ use glib::translate::*;
 use ffi;
 
 use glib::object::Downcast;
-use super::widget::Widget;
+use Widget;
 use glib::Permission;
 use glib::GlibContainer;
 

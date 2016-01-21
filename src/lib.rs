@@ -161,6 +161,7 @@ pub use auto::*;
 pub use rt::*;
 pub use signal::*;
 
+pub use rectangle::Rectangle as Allocation;
 pub use app_chooser::AppChooser;
 pub use builder::{Builder, Buildable};
 pub use color_chooser::ColorChooser;
@@ -173,4 +174,3 @@ pub use requisition::Requisition;
 #[cfg(target_os = "linux")]
 pub use socket::Socket;
 pub use text_attributes::TextAttributes;
-pub use widget::Widget;

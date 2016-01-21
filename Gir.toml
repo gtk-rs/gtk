@@ -131,6 +131,7 @@ ignore = [
 manual = [
     "Gdk.GLContext",
     "Gdk.Gravity",
+    "Gdk.ModifierIntent",
     "Gdk.ModifierType",
     "Gdk.Rectangle",
     "Gdk.Screen",
@@ -140,12 +141,12 @@ manual = [
     "GdkPixbuf.Pixbuf",
     "GdkPixbuf.PixbufAnimation",
     "GLib.Error",
+    "Gtk.Allocation",
     "Gtk.Buildable",
     "Gtk.EntryBuffer",
     "Gtk.RecentData",
     "Gtk.RecentInfo",
     "Gtk.Requisition",
-    "Gtk.Widget",
     "cairo.RectangleInt",
 ]
 
@@ -788,6 +789,13 @@ status = "generate"
         [[object.function.parameter]]
         name = "path"
         const = true
+
+[[object]]
+name = "Gtk.Widget"
+status = "generate"
+    [[object.function]]
+    name = "intersect"
+    ignore = true
 
 [[object]]
 name = "Gtk.Window"
