@@ -8,7 +8,6 @@ work_mode = "normal"
 generate_safety_asserts = true
 
 generate = [
-    "Gtk.AccelGroup",
     "Gtk.ActionBar",
     "Gtk.Actionable",
     "Gtk.Adjustment",
@@ -131,19 +130,23 @@ ignore = [
 
 manual = [
     "Gdk.GLContext",
+    "Gdk.Gravity",
+    "Gdk.ModifierIntent",
+    "Gdk.ModifierType",
     "Gdk.Rectangle",
     "Gdk.Screen",
     "Gdk.Window",
+    "Gdk.WindowEdge",
+    "Gdk.WindowTypeHint",
     "GdkPixbuf.Pixbuf",
     "GdkPixbuf.PixbufAnimation",
     "GLib.Error",
+    "Gtk.Allocation",
     "Gtk.Buildable",
     "Gtk.EntryBuffer",
     "Gtk.RecentData",
     "Gtk.RecentInfo",
     "Gtk.Requisition",
-    "Gtk.Widget",
-    "Gtk.Window",
     "cairo.RectangleInt",
 ]
 
@@ -156,6 +159,15 @@ status = "generate"
         name = "website_label"
         # Passing `NULL` here seems to influence the rendering code
         nullable = true
+
+[[object]]
+name = "Gtk.AccelGroup"
+status = "generate"
+    [[object.function]]
+    name = "query"
+    # It's not a part of public API
+    # See https://mail.gnome.org/archives/commits-list/2012-May/msg07052.html
+    ignore = true
 
 [[object]]
 name = "Gtk.AppChooserDialog"
@@ -777,3 +789,14 @@ status = "generate"
         [[object.function.parameter]]
         name = "path"
         const = true
+
+[[object]]
+name = "Gtk.Widget"
+status = "generate"
+    [[object.function]]
+    name = "intersect"
+    ignore = true
+
+[[object]]
+name = "Gtk.Window"
+status = "generate"

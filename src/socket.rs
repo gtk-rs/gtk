@@ -6,7 +6,7 @@ use glib::translate::*;
 use ffi;
 
 use glib::object::Downcast;
-use super::widget::Widget;
+use Widget;
 
 glib_wrapper! {
     pub struct Socket(Object<ffi::GtkSocket>): Widget, ::Container, ::Buildable;

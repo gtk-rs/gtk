@@ -1,351 +1,459 @@
-// Copyright 2015, The Gtk-rs Project Developers.
+// Copyright 2015-2016, The Gtk-rs Project Developers.
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 use glib::object::IsA;
 use glib::translate::*;
-use glib::Type;
 use gdk;
+use gdk_pixbuf;
 use gdk_ffi;
+use glib;
 use pango;
 use ffi;
 
 use {
+    AccelFlags,
+    AccelGroup,
     Align,
+    Allocation,
     DirectionType,
     Orientation,
+    Rectangle,
+    Requisition,
     SizeRequestMode,
     StateFlags,
+    StateType,
     StyleContext,
     TextDirection,
+    Widget,
+    Window,
 };
 
-glib_wrapper! {
-    pub struct Widget(Object<ffi::GtkWidget>): ::Buildable;
-
-    match fn {
-        get_type => || ffi::gtk_widget_get_type(),
-    }
-}
+use auto::traits::WidgetExt as Auto;
 
 pub trait WidgetExt {
-    fn show_all(&self);
-    fn show_now(&self);
-    fn hide(&self);
-    fn map(&self);
-    fn unmap(&self);
-    fn realize(&self);
-    fn unrealize(&self);
-    fn queue_draw(&self);
-    fn queue_resize(&self);
-    fn queue_resize_no_redraw(&self);
-    #[cfg(gtk_3_10)]
-    fn get_scale_factor(&self) -> i32;
-    fn activate(&self) -> bool;
-    fn reparent<T: IsA<Widget>>(&self, new_parent: &T);
-    fn is_focus(&self) -> bool;
-    fn grab_focus(&self);
-    fn grab_default(&self);
-    fn set_name(&self, name: &str);
-    fn get_name(&self) -> Option<String>;
-    fn set_sensitive(&self, sensitive: bool);
-    fn set_parent<T: IsA<Widget>>(&self, parent: &T);
-    fn set_parent_window(&self, parent: &gdk::window::Window);
-    fn get_toplevel(&self) -> Widget;
-    fn get_ancestor(&self, widget_type: Type) -> Option<Widget>;
-    fn is_ancestor<T: IsA<Widget>>(&self, ancestor: &T) -> bool;
-    fn hide_on_delete(&self) -> bool;
-    fn set_direction(&self, dir: TextDirection);
-    fn get_direction(&self) -> TextDirection;
-    fn set_default_direction(dir: TextDirection);
-    fn get_default_direction() -> TextDirection;
-    fn in_destruction(&self) -> bool;
-    fn unparent(&self);
-    fn translate_coordinates<T: IsA<Widget>>(&self, dest_widget: &T, src_x: i32, src_y: i32)
-        -> Option<(i32, i32)>;
+    // -- manual --
+
+    fn intersect(&self, area: &Rectangle, intersection: Option<&mut Rectangle>) -> bool;
+
     fn override_background_color(&self, state: StateFlags, color: &gdk_ffi::GdkRGBA);
+
     fn override_color(&self, state: StateFlags, color: &gdk_ffi::GdkRGBA);
-    fn override_symbolic_color(&self, name: &str, color: &gdk_ffi::GdkRGBA);
+
     fn override_cursor(&self, cursor: &gdk_ffi::GdkRGBA, secondary_cursor: &gdk_ffi::GdkRGBA);
+
     fn override_font(&self, font: &pango::FontDescription);
-    fn queue_draw_area(&self, x: i32, y: i32, width: i32, height: i32);
-    fn set_app_paintable(&self, app_paintable: bool);
-    fn set_double_buffered(&self, double_buffered: bool);
-    fn set_redraw_on_allocate(&self, redraw_on_allocate: bool);
-    fn mnemonic_activate(&self, group_cycling: bool) -> bool;
-    fn child_focus(&self, direction: DirectionType) -> bool;
-    fn get_child_visible(&self) -> bool;
-    fn get_parent(&self) -> Option<Widget>;
-    fn has_screen(&self) -> bool;
-    fn get_screen(&self) -> gdk::Screen;
-    fn get_size_request(&self) -> (i32, i32);
-    fn set_child_visible(&self, is_visible: bool);
-    fn set_size_request(&self, width: i32, height: i32);
-    fn set_no_show_all(&self, no_show_all: bool);
-    fn get_no_show_all(&self) -> bool;
-    fn list_mnemonic_labels(&self) -> Vec<Widget>;
+
+    fn override_symbolic_color(&self, name: &str, color: &gdk_ffi::GdkRGBA);
+    // -- auto --
+
+    fn activate(&self) -> bool;
+
+    fn add_accelerator(&self, accel_signal: &str, accel_group: &AccelGroup, accel_key: u32, accel_mods: gdk::ModifierType, accel_flags: AccelFlags);
+
+    fn add_events(&self, events: i32);
+
     fn add_mnemonic_label<T: IsA<Widget>>(&self, label: &T);
-    fn remove_mnemonic_label<T: IsA<Widget>>(&self, label: &T);
-    fn is_composited(&self) -> bool;
+
+    fn can_activate_accel(&self, signal_id: u32) -> bool;
+
+    fn child_focus(&self, direction: DirectionType) -> bool;
+
+    fn child_notify(&self, child_property: &str);
+
+    fn compute_expand(&self, orientation: Orientation) -> bool;
+
+    fn destroy(&self);
+
+    fn drag_check_threshold(&self, start_x: i32, start_y: i32, current_x: i32, current_y: i32) -> bool;
+
+    fn drag_dest_add_image_targets(&self);
+
+    fn drag_dest_add_text_targets(&self);
+
+    fn drag_dest_add_uri_targets(&self);
+
+    fn drag_dest_get_track_motion(&self) -> bool;
+
+    fn drag_dest_set_track_motion(&self, track_motion: bool);
+
+    fn drag_dest_unset(&self);
+
+    fn drag_highlight(&self);
+
+    fn drag_source_add_image_targets(&self);
+
+    fn drag_source_add_text_targets(&self);
+
+    fn drag_source_add_uri_targets(&self);
+
+    fn drag_source_set_icon_name(&self, icon_name: &str);
+
+    fn drag_source_set_icon_pixbuf(&self, pixbuf: &gdk_pixbuf::Pixbuf);
+
+    fn drag_source_set_icon_stock(&self, stock_id: &str);
+
+    fn drag_source_unset(&self);
+
+    fn drag_unhighlight(&self);
+
+    fn ensure_style(&self);
+
     fn error_bell(&self);
-    fn keynav_failed(&self, direction: DirectionType) -> bool;
-    fn get_tooltip_markup(&self) -> Option<String>;
-    fn set_tooltip_markup(&self, markup: &str);
-    fn get_tooltip_text(&self) -> Option<String>;
-    fn set_tooltip_text(&self, text: &str);
-    fn get_has_tooltip(&self) -> bool;
-    fn set_has_tooltip(&self, has_tooltip: bool);
-    fn trigger_tooltip_query(&self);
+
+    fn freeze_child_notify(&self);
+
     #[cfg(gtk_3_10)]
     fn get_allocated_baseline(&self) -> i32;
-    fn get_app_paintable(&self) -> bool;
-    fn get_can_default(&self) -> bool;
-    fn set_can_default(&self, can_default: bool);
-    fn get_can_focus(&self) -> bool;
-    fn set_can_focus(&self, can_focus: bool);
-    fn get_double_buffered(&self) -> bool;
-    fn get_window(&self) -> Option<gdk::Window>;
-    fn get_has_window(&self) -> bool;
-    fn set_has_window(&self, has_window: bool);
-    fn get_sensitive(&self) -> bool;
-    fn is_sensitive(&self) -> bool;
-    fn get_visible(&self) -> bool;
-    #[cfg(gtk_3_8)]
-    fn is_visible(&self) -> bool;
-    fn set_visible(&self, visible: bool);
-    fn set_state_flags(&self, flags: StateFlags, clear: bool);
-    fn unset_state_flags(&self, flags: StateFlags);
-    fn get_state_flags(&self) -> StateFlags;
-    fn has_default(&self) -> bool;
-    fn has_focus(&self) -> bool;
-    fn has_visible_focus(&self) -> bool;
-    fn has_grab(&self) -> bool;
-    fn is_drawable(&self) -> bool;
-    fn is_toplevel(&self) -> bool;
-    fn set_receives_default(&self, receives_default: bool);
-    fn get_receives_default(&self) -> bool;
-    fn set_support_multidevice(&self, support_multidevice: bool);
-    fn get_support_multidevice(&self) -> bool;
-    fn set_realized(&self, realized: bool);
-    fn get_realized(&self) -> bool;
-    fn set_mapped(&self, mapped: bool);
-    fn get_mapped(&self) -> bool;
-    fn get_modifier_mask(&self, intent: gdk::ModifierIntent) -> gdk::ModifierType;
-    #[cfg(gtk_3_8)]
-    fn set_opacity(&self, opacity: f64);
-    #[cfg(gtk_3_8)]
-    fn get_opacity(&self) -> f64;
-    fn set_margin_top(&self, margin: i32) -> ();
-    fn set_margin_bottom(&self, margin: i32) -> ();
-    fn get_margin_top(&self) -> i32;
-    fn get_margin_bottom(&self) -> i32;
-    fn get_allocated_width(&self) -> i32;
+
     fn get_allocated_height(&self) -> i32;
-    fn reset_style(&self);
-    fn get_preferred_height(&self) -> (i32, i32);
-    fn get_preferred_width(&self) -> (i32, i32);
-    fn get_preferred_height_for_width(&self, width: i32) -> (i32, i32);
-    fn get_preferred_width_for_height(&self, height: i32) -> (i32, i32);
-    #[cfg(gtk_3_10)]
-    fn get_preferred_height_and_baseline_for_width(&self, width: i32) -> (i32, i32, i32, i32);
-    fn get_request_mode(&self) -> SizeRequestMode;
+
+    fn get_allocated_width(&self) -> i32;
+
+    fn get_allocation(&self) -> Allocation;
+
+    fn get_ancestor(&self, widget_type: glib::types::Type) -> Option<Widget>;
+
+    fn get_app_paintable(&self) -> bool;
+
+    fn get_can_default(&self) -> bool;
+
+    fn get_can_focus(&self) -> bool;
+
+    fn get_child_requisition(&self) -> Requisition;
+
+    fn get_child_visible(&self) -> bool;
+
+    #[cfg(gtk_3_14)]
+    fn get_clip(&self) -> Allocation;
+
+    fn get_composite_name(&self) -> Option<String>;
+
+    fn get_direction(&self) -> TextDirection;
+
+    fn get_double_buffered(&self) -> bool;
+
+    fn get_events(&self) -> i32;
+
     fn get_halign(&self) -> Align;
-    fn set_halign(&self, align: Align);
-    fn get_valign(&self) -> Align;
-    #[cfg(gtk_3_10)]
-    fn get_valign_with_baseline(&self) -> Align;
-    fn set_valign(&self, align: Align);
-    #[cfg(gtk_3_12)]
-    fn get_margin_start(&self) -> i32;
-    #[cfg(gtk_3_12)]
-    fn set_margin_start(&self, margin: i32);
+
+    fn get_has_tooltip(&self) -> bool;
+
+    fn get_has_window(&self) -> bool;
+
+    fn get_hexpand(&self) -> bool;
+
+    fn get_hexpand_set(&self) -> bool;
+
+    fn get_mapped(&self) -> bool;
+
+    fn get_margin_bottom(&self) -> i32;
+
     #[cfg(gtk_3_12)]
     fn get_margin_end(&self) -> i32;
+
+    fn get_margin_left(&self) -> i32;
+
+    fn get_margin_right(&self) -> i32;
+
     #[cfg(gtk_3_12)]
-    fn set_margin_end(&self, margin: i32);
-    fn get_hexpand(&self) -> bool;
-    fn set_hexpand(&self, expand: bool);
-    fn get_hexpand_set(&self) -> bool;
-    fn set_hexpand_set(&self, expand: bool);
+    fn get_margin_start(&self) -> i32;
+
+    fn get_margin_top(&self) -> i32;
+
+    #[cfg(gtk_3_4)]
+    fn get_modifier_mask(&self, intent: gdk::ModifierIntent) -> gdk::ModifierType;
+
+    fn get_name(&self) -> Option<String>;
+
+    fn get_no_show_all(&self) -> bool;
+
+    #[cfg(gtk_3_8)]
+    fn get_opacity(&self) -> f64;
+
+    fn get_parent(&self) -> Option<Widget>;
+
+    fn get_parent_window(&self) -> Option<gdk::Window>;
+
+    fn get_pointer(&self) -> (i32, i32);
+
+    fn get_preferred_height(&self) -> (i32, i32);
+
+    #[cfg(gtk_3_10)]
+    fn get_preferred_height_and_baseline_for_width(&self, width: i32) -> (i32, i32, i32, i32);
+
+    fn get_preferred_height_for_width(&self, width: i32) -> (i32, i32);
+
+    fn get_preferred_size(&self) -> (Requisition, Requisition);
+
+    fn get_preferred_width(&self) -> (i32, i32);
+
+    fn get_preferred_width_for_height(&self, height: i32) -> (i32, i32);
+
+    fn get_realized(&self) -> bool;
+
+    fn get_receives_default(&self) -> bool;
+
+    fn get_request_mode(&self) -> SizeRequestMode;
+
+    fn get_requisition(&self) -> Requisition;
+
+    fn get_root_window(&self) -> Option<gdk::Window>;
+
+    #[cfg(gtk_3_10)]
+    fn get_scale_factor(&self) -> i32;
+
+    fn get_screen(&self) -> Option<gdk::Screen>;
+
+    fn get_sensitive(&self) -> bool;
+
+    fn get_size_request(&self) -> (i32, i32);
+
+    fn get_state(&self) -> StateType;
+
+    fn get_state_flags(&self) -> StateFlags;
+
+    fn get_style_context(&self) -> Option<StyleContext>;
+
+    fn get_support_multidevice(&self) -> bool;
+
+    fn get_tooltip_markup(&self) -> Option<String>;
+
+    fn get_tooltip_text(&self) -> Option<String>;
+
+    fn get_tooltip_window(&self) -> Option<Window>;
+
+    fn get_toplevel(&self) -> Option<Widget>;
+
+    fn get_valign(&self) -> Align;
+
+    #[cfg(gtk_3_10)]
+    fn get_valign_with_baseline(&self) -> Align;
+
     fn get_vexpand(&self) -> bool;
-    fn set_vexpand(&self, expand: bool);
+
     fn get_vexpand_set(&self) -> bool;
-    fn set_vexpand_set(&self, expand: bool);
-    fn queue_compute_expand(&self);
-    fn compute_expand(&self, orientation: Orientation) -> bool;
+
+    fn get_visible(&self) -> bool;
+
+    fn get_window(&self) -> Option<gdk::Window>;
+
+    fn grab_add(&self);
+
+    fn grab_default(&self);
+
+    fn grab_focus(&self);
+
+    fn grab_remove(&self);
+
+    fn has_default(&self) -> bool;
+
+    fn has_focus(&self) -> bool;
+
+    fn has_grab(&self) -> bool;
+
+    fn has_rc_style(&self) -> bool;
+
+    fn has_screen(&self) -> bool;
+
+    fn has_visible_focus(&self) -> bool;
+
+    fn hide(&self);
+
+    fn hide_on_delete(&self) -> bool;
+
+    fn in_destruction(&self) -> bool;
+
     #[cfg(gtk_3_10)]
     fn init_template(&self);
+
+    fn is_ancestor<T: IsA<Widget>>(&self, ancestor: &T) -> bool;
+
+    fn is_composited(&self) -> bool;
+
+    fn is_drawable(&self) -> bool;
+
+    fn is_focus(&self) -> bool;
+
+    fn is_sensitive(&self) -> bool;
+
+    fn is_toplevel(&self) -> bool;
+
+    #[cfg(gtk_3_8)]
+    fn is_visible(&self) -> bool;
+
+    fn keynav_failed(&self, direction: DirectionType) -> bool;
+
+    #[cfg(gtk_3_16)]
+    fn list_action_prefixes(&self) -> Vec<String>;
+
+    fn list_mnemonic_labels(&self) -> Vec<Widget>;
+
+    fn map(&self);
+
+    fn mnemonic_activate(&self, group_cycling: bool) -> bool;
+
+    fn queue_compute_expand(&self);
+
+    fn queue_draw(&self);
+
+    fn queue_draw_area(&self, x: i32, y: i32, width: i32, height: i32);
+
+    fn queue_resize(&self);
+
+    fn queue_resize_no_redraw(&self);
+
+    fn realize(&self);
+
+    #[cfg(gtk_3_8)]
+    fn register_window(&self, window: &gdk::Window);
+
+    fn remove_accelerator(&self, accel_group: &AccelGroup, accel_key: u32, accel_mods: gdk::ModifierType) -> bool;
+
+    fn remove_mnemonic_label<T: IsA<Widget>>(&self, label: &T);
+
+    #[cfg(gtk_3_8)]
+    fn remove_tick_callback(&self, id: u32);
+
+    fn render_icon(&self, stock_id: &str, size: i32, detail: Option<&str>) -> Option<gdk_pixbuf::Pixbuf>;
+
+    fn render_icon_pixbuf(&self, stock_id: &str, size: i32) -> Option<gdk_pixbuf::Pixbuf>;
+
+    fn reparent<T: IsA<Widget>>(&self, new_parent: &T);
+
+    fn reset_rc_styles(&self);
+
+    fn reset_style(&self);
+
+    fn set_accel_path(&self, accel_path: Option<&str>, accel_group: Option<&AccelGroup>);
+
+    fn set_allocation(&self, allocation: &Allocation);
+
+    fn set_app_paintable(&self, app_paintable: bool);
+
+    fn set_can_default(&self, can_default: bool);
+
+    fn set_can_focus(&self, can_focus: bool);
+
+    fn set_child_visible(&self, is_visible: bool);
+
+    #[cfg(gtk_3_14)]
+    fn set_clip(&self, clip: &Allocation);
+
+    fn set_composite_name(&self, name: &str);
+
+    fn set_direction(&self, dir: TextDirection);
+
+    fn set_double_buffered(&self, double_buffered: bool);
+
+    fn set_events(&self, events: i32);
+
+    fn set_halign(&self, align: Align);
+
+    fn set_has_tooltip(&self, has_tooltip: bool);
+
+    fn set_has_window(&self, has_window: bool);
+
+    fn set_hexpand(&self, expand: bool);
+
+    fn set_hexpand_set(&self, set: bool);
+
+    fn set_mapped(&self, mapped: bool);
+
+    fn set_margin_bottom(&self, margin: i32);
+
+    #[cfg(gtk_3_12)]
+    fn set_margin_end(&self, margin: i32);
+
+    fn set_margin_left(&self, margin: i32);
+
+    fn set_margin_right(&self, margin: i32);
+
+    #[cfg(gtk_3_12)]
+    fn set_margin_start(&self, margin: i32);
+
+    fn set_margin_top(&self, margin: i32);
+
+    fn set_name(&self, name: &str);
+
+    fn set_no_show_all(&self, no_show_all: bool);
+
+    #[cfg(gtk_3_8)]
+    fn set_opacity(&self, opacity: f64);
+
+    fn set_parent<T: IsA<Widget>>(&self, parent: &T);
+
+    fn set_parent_window(&self, parent_window: &gdk::Window);
+
+    fn set_realized(&self, realized: bool);
+
+    fn set_receives_default(&self, receives_default: bool);
+
+    fn set_redraw_on_allocate(&self, redraw_on_allocate: bool);
+
+    fn set_sensitive(&self, sensitive: bool);
+
+    fn set_size_request(&self, width: i32, height: i32);
+
+    fn set_state(&self, state: StateType);
+
+    fn set_state_flags(&self, flags: StateFlags, clear: bool);
+
+    fn set_support_multidevice(&self, support_multidevice: bool);
+
+    fn set_tooltip_markup(&self, markup: Option<&str>);
+
+    fn set_tooltip_text(&self, text: Option<&str>);
+
+    fn set_tooltip_window<T: IsA<Window>>(&self, custom_window: Option<&T>);
+
+    fn set_valign(&self, align: Align);
+
+    fn set_vexpand(&self, expand: bool);
+
+    fn set_vexpand_set(&self, set: bool);
+
+    fn set_visible(&self, visible: bool);
+
+    fn set_window(&self, window: &gdk::Window);
+
+    fn show(&self);
+
+    fn show_all(&self);
+
+    fn show_now(&self);
+
+    fn size_allocate(&self, allocation: &mut Allocation);
+
+    #[cfg(gtk_3_10)]
+    fn size_allocate_with_baseline(&self, allocation: &mut Allocation, baseline: i32);
+
+    fn size_request(&self) -> Requisition;
+
+    fn style_attach(&self);
+
     fn thaw_child_notify(&self);
-    fn freeze_child_notify(&self);
-    fn child_notify(&self, child_property: &str);
-    fn destroy(&self);
-    fn get_style_context(&self) -> StyleContext;
+
+    fn translate_coordinates<T: IsA<Widget>>(&self, dest_widget: &T, src_x: i32, src_y: i32) -> Option<(i32, i32)>;
+
+    fn trigger_tooltip_query(&self);
+
+    fn unmap(&self);
+
+    fn unparent(&self);
+
+    fn unrealize(&self);
+
+    #[cfg(gtk_3_8)]
+    fn unregister_window(&self, window: &gdk::Window);
+
+    fn unset_state_flags(&self, flags: StateFlags);
 }
 
 impl<O: IsA<Widget>> WidgetExt for O {
-    fn show_all(&self) {
-        unsafe { ffi::gtk_widget_show_all(self.to_glib_none().0) }
-    }
-
-    fn show_now(&self) {
-        unsafe { ffi::gtk_widget_show_now(self.to_glib_none().0) }
-    }
-
-    fn hide(&self) {
-        unsafe { ffi::gtk_widget_hide(self.to_glib_none().0) }
-    }
-
-    fn map(&self) {
-        unsafe { ffi::gtk_widget_map(self.to_glib_none().0) }
-    }
-
-    fn unmap(&self) {
-        unsafe { ffi::gtk_widget_unmap(self.to_glib_none().0) }
-    }
-
-    fn realize(&self) {
-        unsafe { ffi::gtk_widget_realize(self.to_glib_none().0) }
-    }
-
-    fn unrealize(&self) {
-        unsafe { ffi::gtk_widget_unrealize(self.to_glib_none().0) }
-    }
-
-    fn queue_draw(&self) {
-        unsafe { ffi::gtk_widget_queue_draw(self.to_glib_none().0) }
-    }
-
-    fn queue_resize(&self) {
-        unsafe { ffi::gtk_widget_queue_resize(self.to_glib_none().0) }
-    }
-
-    fn queue_resize_no_redraw(&self) {
-        unsafe { ffi::gtk_widget_queue_resize_no_redraw(self.to_glib_none().0) }
-    }
-
-    #[cfg(gtk_3_10)]
-    fn get_scale_factor(&self) -> i32 {
-        unsafe { ffi::gtk_widget_get_scale_factor(self.to_glib_none().0) }
-    }
-
-    fn activate(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_widget_activate(self.to_glib_none().0)) }
-    }
-
-    fn reparent<T: IsA<Widget>>(&self, new_parent: &T) {
+    fn intersect(&self, area: &Rectangle, mut intersection: Option<&mut Rectangle>) -> bool {
         unsafe {
-            ffi::gtk_widget_reparent(self.to_glib_none().0,
-                new_parent.to_glib_none().0)
-        }
-    }
-
-    fn is_focus(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_widget_is_focus(self.to_glib_none().0)) }
-    }
-
-    fn grab_focus(&self) {
-        unsafe { ffi::gtk_widget_grab_focus(self.to_glib_none().0) }
-    }
-
-    fn grab_default(&self) {
-        unsafe { ffi::gtk_widget_grab_default(self.to_glib_none().0) }
-    }
-
-    fn set_name(&self, name: &str) {
-        unsafe { ffi::gtk_widget_set_name(self.to_glib_none().0, name.to_glib_none().0) }
-    }
-
-    fn get_name(&self) -> Option<String> {
-        unsafe {
-            from_glib_none(ffi::gtk_widget_get_name(self.to_glib_none().0))
-        }
-    }
-
-    fn set_sensitive(&self, sensitive: bool) {
-        unsafe {
-            ffi::gtk_widget_set_sensitive(self.to_glib_none().0, sensitive.to_glib())
-        }
-    }
-
-    fn set_parent<T: IsA<Widget>>(&self, parent: &T) {
-        unsafe {
-            ffi::gtk_widget_set_parent(self.to_glib_none().0,
-                parent.to_glib_none().0)
-        }
-    }
-
-    fn set_parent_window(&self, parent: &gdk::window::Window) {
-        unsafe {
-            ffi::gtk_widget_set_parent_window(
-                self.to_glib_none().0, parent.to_glib_none().0)
-        }
-    }
-
-    fn get_toplevel(&self) -> Widget {
-        unsafe {
-            from_glib_none(ffi::gtk_widget_get_toplevel(self.to_glib_none().0))
-        }
-    }
-
-    fn get_ancestor(&self, widget_type: Type) -> Option<Widget> {
-        unsafe {
-            from_glib_none(
-                ffi::gtk_widget_get_ancestor(
-                    self.to_glib_none().0, widget_type.to_glib()))
-        }
-    }
-
-    fn is_ancestor<T: IsA<Widget>>(&self, ancestor: &T) -> bool {
-        unsafe {
-            from_glib(ffi::gtk_widget_is_ancestor(self.to_glib_none().0,
-                ancestor.to_glib_none().0))
-        }
-    }
-
-    fn hide_on_delete(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_widget_hide_on_delete(self.to_glib_none().0)) }
-    }
-
-    fn set_direction(&self, dir: TextDirection) {
-        unsafe { ffi::gtk_widget_set_direction(self.to_glib_none().0, dir) }
-    }
-
-    fn get_direction(&self) -> TextDirection {
-        unsafe { ffi::gtk_widget_get_direction(self.to_glib_none().0) }
-    }
-
-    fn set_default_direction(dir: TextDirection) {
-        assert_initialized_main_thread!();
-        unsafe { ffi::gtk_widget_set_default_direction(dir) }
-    }
-
-    fn get_default_direction() -> TextDirection {
-        assert_initialized_main_thread!();
-        unsafe { ffi::gtk_widget_get_default_direction() }
-    }
-
-    fn in_destruction(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_widget_in_destruction(self.to_glib_none().0)) }
-    }
-
-    fn unparent(&self) {
-        unsafe { ffi::gtk_widget_unparent(self.to_glib_none().0) }
-    }
-
-    fn translate_coordinates<T: IsA<Widget>>(&self, dest_widget: &T, src_x: i32, src_y: i32)
-            -> Option<(i32, i32)> {
-        unsafe {
-            let mut dest_x = 0;
-            let mut dest_y = 0;
-            if from_glib(
-                ffi::gtk_widget_translate_coordinates(
-                    self.to_glib_none().0, dest_widget.to_glib_none().0,
-                    src_x, src_y, &mut dest_x, &mut dest_y)) {
-                Some((dest_x, dest_y))
-            }
-            else {
-                None
-            }
+            from_glib(ffi::gtk_widget_intersect(self.to_glib_none().0, area.to_glib_none().0, intersection.to_glib_none_mut().0))
         }
     }
 
@@ -379,562 +487,979 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn queue_draw_area(&self, x: i32, y: i32, width: i32, height: i32) {
-        unsafe {
-            ffi::gtk_widget_queue_draw_area(self.to_glib_none().0, x, y, width, height)
-        }
+    #[inline]
+    fn activate(&self) -> bool {
+        Auto::activate(self)
     }
 
-    fn set_app_paintable(&self, app_paintable: bool) {
-        unsafe {
-            ffi::gtk_widget_set_app_paintable(
-                self.to_glib_none().0, app_paintable.to_glib())
-        }
+    #[inline]
+    fn add_accelerator(&self, accel_signal: &str, accel_group: &AccelGroup, accel_key: u32, accel_mods: gdk::ModifierType, accel_flags: AccelFlags) {
+        Auto::add_accelerator(self, accel_signal, accel_group, accel_key, accel_mods, accel_flags)
     }
 
-    fn set_double_buffered(&self, double_buffered: bool) {
-        unsafe {
-            ffi::gtk_widget_set_double_buffered(
-                self.to_glib_none().0, double_buffered.to_glib())
-        }
+    #[inline]
+    fn add_events(&self, events: i32) {
+        Auto::add_events(self, events)
     }
 
-    fn set_redraw_on_allocate(&self, redraw_on_allocate: bool) {
-        unsafe {
-            ffi::gtk_widget_set_redraw_on_allocate(
-                self.to_glib_none().0, redraw_on_allocate.to_glib())
-        }
-    }
-
-    fn mnemonic_activate(&self, group_cycling: bool) -> bool {
-        unsafe {
-            from_glib(
-                ffi::gtk_widget_mnemonic_activate(
-                    self.to_glib_none().0, group_cycling.to_glib()))
-        }
-    }
-
-    /*fn send_expose(&self, event: &mut gdk::Event) -> i32 {
-        unsafe { ffi::gtk_widget_send_expose(self.to_glib_none().0, event) }
-    }
-
-    fn send_focus_change(&self, event: &mut gdk::Event) -> bool {
-        unsafe { from_glib(ffi::gtk_widget_send_expose(self.to_glib_none().0, event)) }
-    }*/
-
-    fn child_focus(&self, direction: DirectionType) -> bool {
-        unsafe {
-            from_glib(ffi::gtk_widget_child_focus(self.to_glib_none().0, direction))
-        }
-    }
-
-    fn get_child_visible(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_widget_get_child_visible(self.to_glib_none().0)) }
-    }
-
-    fn get_parent(&self) -> Option<Widget> {
-        unsafe {
-            from_glib_none(ffi::gtk_widget_get_parent(self.to_glib_none().0))
-        }
-    }
-
-    fn has_screen(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_widget_has_screen(self.to_glib_none().0)) }
-    }
-
-    fn get_screen(&self) -> gdk::Screen {
-        unsafe { from_glib_none(ffi::gtk_widget_get_screen(self.to_glib_none().0)) }
-    }
-
-    fn get_size_request(&self) -> (i32, i32) {
-        let mut width = 0i32;
-        let mut height = 0i32;
-
-        unsafe {
-            ffi::gtk_widget_get_size_request(
-                self.to_glib_none().0, &mut width, &mut height);
-        }
-        (width, height)
-    }
-
-    fn set_child_visible(&self, is_visible: bool) {
-        unsafe {
-            ffi::gtk_widget_set_child_visible(self.to_glib_none().0, is_visible.to_glib())
-        }
-    }
-
-    fn set_size_request(&self, width: i32, height: i32) {
-        unsafe { ffi::gtk_widget_set_size_request(self.to_glib_none().0, width, height) }
-    }
-
-    fn set_no_show_all(&self, no_show_all: bool) {
-        unsafe {
-            ffi::gtk_widget_set_no_show_all(self.to_glib_none().0, no_show_all.to_glib())
-        }
-    }
-
-    fn get_no_show_all(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_widget_get_no_show_all(self.to_glib_none().0)) }
-    }
-
-    fn list_mnemonic_labels(&self) -> Vec<Widget> {
-        unsafe {
-            Vec::from_glib_container(
-                ffi::gtk_widget_list_mnemonic_labels(self.to_glib_none().0))
-        }
-    }
-
+    #[inline]
     fn add_mnemonic_label<T: IsA<Widget>>(&self, label: &T) {
-        unsafe {
-            ffi::gtk_widget_add_mnemonic_label(
-                self.to_glib_none().0, label.to_glib_none().0)
-        }
+        Auto::add_mnemonic_label(self, label)
     }
 
-    fn remove_mnemonic_label<T: IsA<Widget>>(&self, label: &T) {
-        unsafe {
-            ffi::gtk_widget_remove_mnemonic_label(
-                self.to_glib_none().0, label.to_glib_none().0)
-        }
+    #[inline]
+    fn can_activate_accel(&self, signal_id: u32) -> bool {
+        Auto::can_activate_accel(self, signal_id)
     }
 
-    fn is_composited(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_widget_is_composited(self.to_glib_none().0)) }
+    #[inline]
+    fn child_focus(&self, direction: DirectionType) -> bool {
+        Auto::child_focus(self, direction)
     }
 
-    fn error_bell(&self) {
-        unsafe { ffi::gtk_widget_error_bell(self.to_glib_none().0) }
-    }
-
-    fn keynav_failed(&self, direction: DirectionType) -> bool {
-        unsafe {
-            from_glib(ffi::gtk_widget_keynav_failed(self.to_glib_none().0, direction))
-        }
-    }
-
-    fn get_tooltip_markup(&self) -> Option<String> {
-        unsafe {
-            from_glib_full(ffi::gtk_widget_get_tooltip_markup(self.to_glib_none().0))
-        }
-    }
-
-    fn set_tooltip_markup(&self, markup: &str) {
-        unsafe {
-            ffi::gtk_widget_set_tooltip_markup(
-                self.to_glib_none().0,
-                markup.to_glib_none().0);
-        }
-    }
-
-
-    fn get_tooltip_text(&self) -> Option<String> {
-        unsafe {
-            from_glib_full(ffi::gtk_widget_get_tooltip_text(self.to_glib_none().0))
-        }
-    }
-
-    fn set_tooltip_text(&self, text: &str) {
-        unsafe {
-            ffi::gtk_widget_set_tooltip_text(
-                self.to_glib_none().0,
-                text.to_glib_none().0);
-        }
-    }
-
-    fn get_has_tooltip(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_widget_get_has_tooltip(self.to_glib_none().0)) }
-    }
-
-    fn set_has_tooltip(&self, has_tooltip: bool) {
-        unsafe {
-            ffi::gtk_widget_set_has_tooltip(self.to_glib_none().0, has_tooltip.to_glib())
-        }
-    }
-
-    fn trigger_tooltip_query(&self) {
-        unsafe { ffi::gtk_widget_trigger_tooltip_query(self.to_glib_none().0) }
-    }
-
-    #[cfg(gtk_3_10)]
-    fn get_allocated_baseline(&self) -> i32 {
-        unsafe { ffi::gtk_widget_get_allocated_baseline(self.to_glib_none().0) }
-    }
-
-    fn get_app_paintable(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_widget_get_app_paintable(self.to_glib_none().0)) }
-    }
-
-    fn get_can_default(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_widget_get_can_default(self.to_glib_none().0)) }
-    }
-
-    fn set_can_default(&self, can_default: bool) {
-        unsafe {
-            ffi::gtk_widget_set_can_default(self.to_glib_none().0, can_default.to_glib())
-        }
-    }
-
-    fn get_can_focus(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_widget_get_can_focus(self.to_glib_none().0)) }
-    }
-
-    fn set_can_focus(&self, can_focus: bool) {
-        unsafe {
-            ffi::gtk_widget_set_can_focus(self.to_glib_none().0, can_focus.to_glib())
-        }
-    }
-
-    fn get_double_buffered(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_widget_get_double_buffered(self.to_glib_none().0)) }
-    }
-
-    fn get_window(&self) -> Option<gdk::Window> {
-        unsafe {
-            from_glib_none(ffi::gtk_widget_get_window(self.to_glib_none().0))
-        }
-    }
-
-    fn get_has_window(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_widget_get_has_window(self.to_glib_none().0)) }
-    }
-
-    fn set_has_window(&self, has_window: bool) {
-        unsafe {
-            ffi::gtk_widget_set_has_window(self.to_glib_none().0, has_window.to_glib())
-        }
-    }
-
-    fn get_sensitive(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_widget_get_sensitive(self.to_glib_none().0)) }
-    }
-
-    fn is_sensitive(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_widget_is_sensitive(self.to_glib_none().0)) }
-    }
-
-    fn get_visible(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_widget_get_visible(self.to_glib_none().0)) }
-    }
-
-    #[cfg(gtk_3_8)]
-    fn is_visible(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_widget_is_visible(self.to_glib_none().0)) }
-    }
-
-    fn set_visible(&self, visible: bool) {
-        unsafe { ffi::gtk_widget_set_visible(self.to_glib_none().0, visible.to_glib()) }
-    }
-
-    fn set_state_flags(&self, flags: StateFlags, clear: bool) {
-        unsafe {
-            ffi::gtk_widget_set_state_flags(self.to_glib_none().0, flags, clear.to_glib())
-        }
-    }
-
-    fn unset_state_flags(&self, flags: StateFlags) {
-        unsafe { ffi::gtk_widget_unset_state_flags(self.to_glib_none().0, flags) }
-    }
-
-    fn get_state_flags(&self) -> StateFlags {
-        unsafe { ffi::gtk_widget_get_state_flags(self.to_glib_none().0) }
-    }
-
-    fn has_default(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_widget_has_default(self.to_glib_none().0)) }
-    }
-
-    fn has_focus(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_widget_has_focus(self.to_glib_none().0)) }
-    }
-
-    fn has_visible_focus(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_widget_has_visible_focus(self.to_glib_none().0)) }
-    }
-
-    fn has_grab(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_widget_has_grab(self.to_glib_none().0)) }
-    }
-
-    fn is_drawable(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_widget_is_drawable(self.to_glib_none().0)) }
-    }
-
-    fn is_toplevel(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_widget_is_toplevel(self.to_glib_none().0)) }
-    }
-
-    fn set_receives_default(&self, receives_default: bool) {
-        unsafe {
-            ffi::gtk_widget_set_receives_default(
-                self.to_glib_none().0, receives_default.to_glib())
-        }
-    }
-
-    fn get_receives_default(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_widget_get_receives_default(self.to_glib_none().0)) }
-    }
-
-    fn set_support_multidevice(&self, support_multidevice: bool) {
-        unsafe {
-            ffi::gtk_widget_set_support_multidevice(
-                self.to_glib_none().0, support_multidevice.to_glib())
-        }
-    }
-
-    fn get_support_multidevice(&self) -> bool {
-        unsafe {
-            from_glib(ffi::gtk_widget_get_support_multidevice(self.to_glib_none().0))
-        }
-    }
-
-    fn set_realized(&self, realized: bool) {
-        unsafe {
-             ffi::gtk_widget_set_realized(self.to_glib_none().0, realized.to_glib())
-        }
-    }
-
-    fn get_realized(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_widget_get_realized(self.to_glib_none().0)) }
-    }
-
-    fn set_mapped(&self, mapped: bool) {
-        unsafe { ffi::gtk_widget_set_mapped(self.to_glib_none().0, mapped.to_glib()) }
-    }
-
-    fn get_mapped(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_widget_get_mapped(self.to_glib_none().0)) }
-    }
-
-    fn get_modifier_mask(&self, intent: gdk::ModifierIntent) -> gdk::ModifierType {
-        unsafe { ffi::gtk_widget_get_modifier_mask(self.to_glib_none().0, intent) }
-    }
-
-    #[cfg(gtk_3_8)]
-    fn set_opacity(&self, opacity: f64) {
-        unsafe { ffi::gtk_widget_set_opacity(self.to_glib_none().0, opacity) }
-    }
-
-    #[cfg(gtk_3_8)]
-    fn get_opacity(&self) -> f64 {
-        unsafe { ffi::gtk_widget_get_opacity(self.to_glib_none().0) }
-    }
-
-    fn set_margin_top(&self, margin: i32) -> () {
-        unsafe {
-            ffi::gtk_widget_set_margin_top(self.to_glib_none().0, margin)
-        }
-    }
-
-    fn set_margin_bottom(&self, margin: i32) -> () {
-        unsafe {
-            ffi::gtk_widget_set_margin_bottom(self.to_glib_none().0, margin)
-        }
-    }
-
-    fn get_margin_top(&self) -> i32 {
-        unsafe {
-            ffi::gtk_widget_get_margin_top(self.to_glib_none().0) as i32
-        }
-    }
-
-    fn get_margin_bottom(&self) -> i32 {
-        unsafe {
-            ffi::gtk_widget_get_margin_bottom(self.to_glib_none().0) as i32
-        }
-    }
-
-    fn get_allocated_width(&self) -> i32 {
-        unsafe{
-            ffi::gtk_widget_get_allocated_width(self.to_glib_none().0) as i32
-        }
-    }
-
-    fn get_allocated_height(&self) -> i32 {
-        unsafe{
-            ffi::gtk_widget_get_allocated_height(self.to_glib_none().0) as i32
-        }
-    }
-
-    fn reset_style(&self) {
-        unsafe { ffi::gtk_widget_reset_style(self.to_glib_none().0) }
-    }
-
-    fn get_preferred_height(&self) -> (i32, i32) {
-        let mut minimum_height = 0i32;
-        let mut natural_height = 0i32;
-
-        unsafe {
-            ffi::gtk_widget_get_preferred_height(
-                self.to_glib_none().0, &mut minimum_height, &mut natural_height);
-        }
-        (minimum_height, natural_height)
-    }
-
-    fn get_preferred_width(&self) -> (i32, i32) {
-        let mut minimum_width = 0i32;
-        let mut natural_width = 0i32;
-
-        unsafe {
-            ffi::gtk_widget_get_preferred_width(
-                self.to_glib_none().0, &mut minimum_width, &mut natural_width);
-        }
-        (minimum_width, natural_width)
-    }
-
-    fn get_preferred_height_for_width(&self, width: i32) -> (i32, i32) {
-        let mut minimum_height = 0i32;
-        let mut natural_height = 0i32;
-
-        unsafe {
-            ffi::gtk_widget_get_preferred_height_for_width(
-                self.to_glib_none().0, width, &mut minimum_height, &mut natural_height);
-        }
-        (minimum_height, natural_height)
-    }
-
-    fn get_preferred_width_for_height(&self, height: i32) -> (i32, i32) {
-        let mut minimum_width = 0i32;
-        let mut natural_width = 0i32;
-
-        unsafe {
-            ffi::gtk_widget_get_preferred_width_for_height(
-                self.to_glib_none().0, height, &mut minimum_width, &mut natural_width);
-        }
-        (minimum_width, natural_width)
-    }
-
-    #[cfg(gtk_3_10)]
-    fn get_preferred_height_and_baseline_for_width(&self, width: i32) -> (i32, i32, i32, i32) {
-        let mut minimum_height = 0i32;
-        let mut natural_height = 0i32;
-        let mut minimum_baseline = 0i32;
-        let mut natural_baseline = 0i32;
-
-        unsafe {
-            ffi::gtk_widget_get_preferred_height_and_baseline_for_width(
-                self.to_glib_none().0, width, &mut minimum_height, &mut natural_height,
-                &mut minimum_baseline, &mut natural_baseline);
-        }
-
-        (minimum_height, natural_height, minimum_baseline, natural_baseline)
-    }
-
-    fn get_request_mode(&self) -> SizeRequestMode {
-        unsafe { ffi::gtk_widget_get_request_mode(self.to_glib_none().0) }
-    }
-
-    fn get_halign(&self) -> Align {
-        unsafe { ffi::gtk_widget_get_halign(self.to_glib_none().0) }
-    }
-
-    fn set_halign(&self, align: Align) {
-        unsafe { ffi::gtk_widget_set_halign(self.to_glib_none().0, align) }
-    }
-
-    fn get_valign(&self) -> Align {
-        unsafe { ffi::gtk_widget_get_valign(self.to_glib_none().0) }
-    }
-
-    #[cfg(gtk_3_10)]
-    fn get_valign_with_baseline(&self) -> Align {
-        unsafe { ffi::gtk_widget_get_valign_with_baseline(self.to_glib_none().0) }
-    }
-
-    fn set_valign(&self, align: Align) {
-        unsafe { ffi::gtk_widget_set_valign(self.to_glib_none().0, align) }
-    }
-
-    #[cfg(gtk_3_12)]
-    fn get_margin_start(&self) -> i32 {
-        unsafe { ffi::gtk_widget_get_margin_start(self.to_glib_none().0) }
-    }
-
-    #[cfg(gtk_3_12)]
-    fn set_margin_start(&self, margin: i32) {
-        unsafe { ffi::gtk_widget_set_margin_start(self.to_glib_none().0, margin) }
-    }
-
-    #[cfg(gtk_3_12)]
-    fn get_margin_end(&self) -> i32 {
-        unsafe { ffi::gtk_widget_get_margin_end(self.to_glib_none().0) }
-    }
-
-    #[cfg(gtk_3_12)]
-    fn set_margin_end(&self, margin: i32) {
-        unsafe { ffi::gtk_widget_set_margin_end(self.to_glib_none().0, margin) }
-    }
-
-    fn get_hexpand(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_widget_get_hexpand(self.to_glib_none().0)) }
-    }
-
-    fn set_hexpand(&self, expand: bool) {
-        unsafe { ffi::gtk_widget_set_hexpand(self.to_glib_none().0, expand.to_glib()) }
-    }
-
-    fn get_hexpand_set(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_widget_get_hexpand_set(self.to_glib_none().0)) }
-    }
-
-    fn set_hexpand_set(&self, expand: bool) {
-        unsafe {
-            ffi::gtk_widget_set_hexpand_set(self.to_glib_none().0, expand.to_glib())
-        }
-    }
-
-    fn get_vexpand(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_widget_get_vexpand(self.to_glib_none().0)) }
-    }
-
-    fn set_vexpand(&self, expand: bool) {
-        unsafe { ffi::gtk_widget_set_vexpand(self.to_glib_none().0, expand.to_glib()) }
-    }
-
-    fn get_vexpand_set(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_widget_get_vexpand_set(self.to_glib_none().0)) }
-    }
-
-    fn set_vexpand_set(&self, expand: bool) {
-        unsafe {
-            ffi::gtk_widget_set_vexpand_set(self.to_glib_none().0, expand.to_glib())
-        }
-    }
-
-    fn queue_compute_expand(&self) {
-        unsafe { ffi::gtk_widget_queue_compute_expand(self.to_glib_none().0) }
-    }
-
-    fn compute_expand(&self, orientation: Orientation) -> bool {
-        unsafe {
-            from_glib(ffi::gtk_widget_compute_expand(self.to_glib_none().0, orientation))
-        }
-    }
-
-    #[cfg(gtk_3_10)]
-    fn init_template(&self) {
-        unsafe { ffi::gtk_widget_init_template(self.to_glib_none().0) }
-    }
-
-    fn thaw_child_notify(&self) {
-        unsafe { ffi::gtk_widget_thaw_child_notify(self.to_glib_none().0) }
-    }
-
-    fn freeze_child_notify(&self) {
-        unsafe { ffi::gtk_widget_freeze_child_notify(self.to_glib_none().0) }
-    }
-
+    #[inline]
     fn child_notify(&self, child_property: &str) {
-        unsafe {
-            ffi::gtk_widget_child_notify(
-                self.to_glib_none().0, child_property.to_glib_none().0)
-        }
+        Auto::child_notify(self, child_property)
     }
 
+    #[inline]
+    fn compute_expand(&self, orientation: Orientation) -> bool {
+        Auto::compute_expand(self, orientation)
+    }
+
+    #[inline]
     fn destroy(&self) {
-        unsafe { ffi::gtk_widget_destroy(self.to_glib_none().0) }
+        Auto::destroy(self)
     }
 
-    fn get_style_context(&self) -> StyleContext {
-        unsafe { from_glib_none(ffi::gtk_widget_get_style_context(self.to_glib_none().0)) }
+    #[inline]
+    fn drag_check_threshold(&self, start_x: i32, start_y: i32, current_x: i32, current_y: i32) -> bool {
+        Auto::drag_check_threshold(self, start_x, start_y, current_x, current_y)
     }
+
+    #[inline]
+    fn drag_dest_add_image_targets(&self) {
+        Auto::drag_dest_add_image_targets(self)
+    }
+
+    #[inline]
+    fn drag_dest_add_text_targets(&self) {
+        Auto::drag_dest_add_text_targets(self)
+    }
+
+    #[inline]
+    fn drag_dest_add_uri_targets(&self) {
+        Auto::drag_dest_add_uri_targets(self)
+    }
+
+    #[inline]
+    fn drag_dest_get_track_motion(&self) -> bool {
+        Auto::drag_dest_get_track_motion(self)
+    }
+
+    #[inline]
+    fn drag_dest_set_track_motion(&self, track_motion: bool) {
+        Auto::drag_dest_set_track_motion(self, track_motion)
+    }
+
+    #[inline]
+    fn drag_dest_unset(&self) {
+        Auto::drag_dest_unset(self)
+    }
+
+    #[inline]
+    fn drag_highlight(&self) {
+        Auto::drag_highlight(self)
+    }
+
+    #[inline]
+    fn drag_source_add_image_targets(&self) {
+        Auto::drag_source_add_image_targets(self)
+    }
+
+    #[inline]
+    fn drag_source_add_text_targets(&self) {
+        Auto::drag_source_add_text_targets(self)
+    }
+
+    #[inline]
+    fn drag_source_add_uri_targets(&self) {
+        Auto::drag_source_add_uri_targets(self)
+    }
+
+    #[inline]
+    fn drag_source_set_icon_name(&self, icon_name: &str) {
+        Auto::drag_source_set_icon_name(self, icon_name)
+    }
+
+    #[inline]
+    fn drag_source_set_icon_pixbuf(&self, pixbuf: &gdk_pixbuf::Pixbuf) {
+        Auto::drag_source_set_icon_pixbuf(self, pixbuf)
+    }
+
+    #[inline]
+    fn drag_source_set_icon_stock(&self, stock_id: &str) {
+        Auto::drag_source_set_icon_stock(self, stock_id)
+    }
+
+    #[inline]
+    fn drag_source_unset(&self) {
+        Auto::drag_source_unset(self)
+    }
+
+    #[inline]
+    fn drag_unhighlight(&self) {
+        Auto::drag_unhighlight(self)
+    }
+
+    #[inline]
+    fn ensure_style(&self) {
+        Auto::ensure_style(self)
+    }
+
+    #[inline]
+    fn error_bell(&self) {
+        Auto::error_bell(self)
+    }
+
+    #[inline]
+    fn freeze_child_notify(&self) {
+        Auto::freeze_child_notify(self)
+    }
+
+    #[cfg(gtk_3_10)]
+    #[inline]
+    fn get_allocated_baseline(&self) -> i32 {
+        Auto::get_allocated_baseline(self)
+    }
+
+    #[inline]
+    fn get_allocated_height(&self) -> i32 {
+        Auto::get_allocated_height(self)
+    }
+
+    #[inline]
+    fn get_allocated_width(&self) -> i32 {
+        Auto::get_allocated_width(self)
+    }
+
+    #[inline]
+    fn get_allocation(&self) -> Allocation {
+        Auto::get_allocation(self)
+    }
+
+    #[inline]
+    fn get_ancestor(&self, widget_type: glib::types::Type) -> Option<Widget> {
+        Auto::get_ancestor(self, widget_type)
+    }
+
+    #[inline]
+    fn get_app_paintable(&self) -> bool {
+        Auto::get_app_paintable(self)
+    }
+
+    #[inline]
+    fn get_can_default(&self) -> bool {
+        Auto::get_can_default(self)
+    }
+
+    #[inline]
+    fn get_can_focus(&self) -> bool {
+        Auto::get_can_focus(self)
+    }
+
+    #[inline]
+    fn get_child_requisition(&self) -> Requisition {
+        Auto::get_child_requisition(self)
+    }
+
+    #[inline]
+    fn get_child_visible(&self) -> bool {
+        Auto::get_child_visible(self)
+    }
+
+    #[cfg(gtk_3_14)]
+    #[inline]
+    fn get_clip(&self) -> Allocation {
+        Auto::get_clip(self)
+    }
+
+    #[inline]
+    fn get_composite_name(&self) -> Option<String> {
+        Auto::get_composite_name(self)
+    }
+
+    #[inline]
+    fn get_direction(&self) -> TextDirection {
+        Auto::get_direction(self)
+    }
+
+    #[inline]
+    fn get_double_buffered(&self) -> bool {
+        Auto::get_double_buffered(self)
+    }
+
+    #[inline]
+    fn get_events(&self) -> i32 {
+        Auto::get_events(self)
+    }
+
+    #[inline]
+    fn get_halign(&self) -> Align {
+        Auto::get_halign(self)
+    }
+
+    #[inline]
+    fn get_has_tooltip(&self) -> bool {
+        Auto::get_has_tooltip(self)
+    }
+
+    #[inline]
+    fn get_has_window(&self) -> bool {
+        Auto::get_has_window(self)
+    }
+
+    #[inline]
+    fn get_hexpand(&self) -> bool {
+        Auto::get_hexpand(self)
+    }
+
+    #[inline]
+    fn get_hexpand_set(&self) -> bool {
+        Auto::get_hexpand_set(self)
+    }
+
+    #[inline]
+    fn get_mapped(&self) -> bool {
+        Auto::get_mapped(self)
+    }
+
+    #[inline]
+    fn get_margin_bottom(&self) -> i32 {
+        Auto::get_margin_bottom(self)
+    }
+
+    #[cfg(gtk_3_12)]
+    #[inline]
+    fn get_margin_end(&self) -> i32 {
+        Auto::get_margin_end(self)
+    }
+
+    #[inline]
+    fn get_margin_left(&self) -> i32 {
+        Auto::get_margin_left(self)
+    }
+
+    #[inline]
+    fn get_margin_right(&self) -> i32 {
+        Auto::get_margin_right(self)
+    }
+
+    #[cfg(gtk_3_12)]
+    #[inline]
+    fn get_margin_start(&self) -> i32 {
+        Auto::get_margin_start(self)
+    }
+
+    #[inline]
+    fn get_margin_top(&self) -> i32 {
+        Auto::get_margin_top(self)
+    }
+
+    #[cfg(gtk_3_4)]
+    #[inline]
+    fn get_modifier_mask(&self, intent: gdk::ModifierIntent) -> gdk::ModifierType {
+        Auto::get_modifier_mask(self, intent)
+    }
+
+    #[inline]
+    fn get_name(&self) -> Option<String> {
+        Auto::get_name(self)
+    }
+
+    #[inline]
+    fn get_no_show_all(&self) -> bool {
+        Auto::get_no_show_all(self)
+    }
+
+    #[cfg(gtk_3_8)]
+    #[inline]
+    fn get_opacity(&self) -> f64 {
+        Auto::get_opacity(self)
+    }
+
+    #[inline]
+    fn get_parent(&self) -> Option<Widget> {
+        Auto::get_parent(self)
+    }
+
+    #[inline]
+    fn get_parent_window(&self) -> Option<gdk::Window> {
+        Auto::get_parent_window(self)
+    }
+
+    #[inline]
+    fn get_pointer(&self) -> (i32, i32) {
+        Auto::get_pointer(self)
+    }
+
+    #[inline]
+    fn get_preferred_height(&self) -> (i32, i32) {
+        Auto::get_preferred_height(self)
+    }
+
+    #[cfg(gtk_3_10)]
+    #[inline]
+    fn get_preferred_height_and_baseline_for_width(&self, width: i32) -> (i32, i32, i32, i32) {
+        Auto::get_preferred_height_and_baseline_for_width(self, width)
+    }
+
+    #[inline]
+    fn get_preferred_height_for_width(&self, width: i32) -> (i32, i32) {
+        Auto::get_preferred_height_for_width(self, width)
+    }
+
+    #[inline]
+    fn get_preferred_size(&self) -> (Requisition, Requisition) {
+        Auto::get_preferred_size(self)
+    }
+
+    #[inline]
+    fn get_preferred_width(&self) -> (i32, i32) {
+        Auto::get_preferred_width(self)
+    }
+
+    #[inline]
+    fn get_preferred_width_for_height(&self, height: i32) -> (i32, i32) {
+        Auto::get_preferred_width_for_height(self, height)
+    }
+
+    #[inline]
+    fn get_realized(&self) -> bool {
+        Auto::get_realized(self)
+    }
+
+    #[inline]
+    fn get_receives_default(&self) -> bool {
+        Auto::get_receives_default(self)
+    }
+
+    #[inline]
+    fn get_request_mode(&self) -> SizeRequestMode {
+        Auto::get_request_mode(self)
+    }
+
+    #[inline]
+    fn get_requisition(&self) -> Requisition {
+        Auto::get_requisition(self)
+    }
+
+    #[inline]
+    fn get_root_window(&self) -> Option<gdk::Window> {
+        Auto::get_root_window(self)
+    }
+
+    #[cfg(gtk_3_10)]
+    #[inline]
+    fn get_scale_factor(&self) -> i32 {
+        Auto::get_scale_factor(self)
+    }
+
+    #[inline]
+    fn get_screen(&self) -> Option<gdk::Screen> {
+        Auto::get_screen(self)
+    }
+
+    #[inline]
+    fn get_sensitive(&self) -> bool {
+        Auto::get_sensitive(self)
+    }
+
+    #[inline]
+    fn get_size_request(&self) -> (i32, i32) {
+        Auto::get_size_request(self)
+    }
+
+    #[inline]
+    fn get_state(&self) -> StateType {
+        Auto::get_state(self)
+    }
+
+    #[inline]
+    fn get_state_flags(&self) -> StateFlags {
+        Auto::get_state_flags(self)
+    }
+
+    #[inline]
+    fn get_style_context(&self) -> Option<StyleContext> {
+        Auto::get_style_context(self)
+    }
+
+    #[inline]
+    fn get_support_multidevice(&self) -> bool {
+        Auto::get_support_multidevice(self)
+    }
+
+    #[inline]
+    fn get_tooltip_markup(&self) -> Option<String> {
+        Auto::get_tooltip_markup(self)
+    }
+
+    #[inline]
+    fn get_tooltip_text(&self) -> Option<String> {
+        Auto::get_tooltip_text(self)
+    }
+
+    #[inline]
+    fn get_tooltip_window(&self) -> Option<Window> {
+        Auto::get_tooltip_window(self)
+    }
+
+    #[inline]
+    fn get_toplevel(&self) -> Option<Widget> {
+        Auto::get_toplevel(self)
+    }
+
+    #[inline]
+    fn get_valign(&self) -> Align {
+        Auto::get_valign(self)
+    }
+
+    #[cfg(gtk_3_10)]
+    #[inline]
+    fn get_valign_with_baseline(&self) -> Align {
+        Auto::get_valign_with_baseline(self)
+    }
+
+    #[inline]
+    fn get_vexpand(&self) -> bool {
+        Auto::get_vexpand(self)
+    }
+
+    #[inline]
+    fn get_vexpand_set(&self) -> bool {
+        Auto::get_vexpand_set(self)
+    }
+
+    #[inline]
+    fn get_visible(&self) -> bool {
+        Auto::get_visible(self)
+    }
+
+    #[inline]
+    fn get_window(&self) -> Option<gdk::Window> {
+        Auto::get_window(self)
+    }
+
+    #[inline]
+    fn grab_add(&self) {
+        Auto::grab_add(self)
+    }
+
+    #[inline]
+    fn grab_default(&self) {
+        Auto::grab_default(self)
+    }
+
+    #[inline]
+    fn grab_focus(&self) {
+        Auto::grab_focus(self)
+    }
+
+    #[inline]
+    fn grab_remove(&self) {
+        Auto::grab_remove(self)
+    }
+
+    #[inline]
+    fn has_default(&self) -> bool {
+        Auto::has_default(self)
+    }
+
+    #[inline]
+    fn has_focus(&self) -> bool {
+        Auto::has_focus(self)
+    }
+
+    #[inline]
+    fn has_grab(&self) -> bool {
+        Auto::has_grab(self)
+    }
+
+    #[inline]
+    fn has_rc_style(&self) -> bool {
+        Auto::has_rc_style(self)
+    }
+
+    #[inline]
+    fn has_screen(&self) -> bool {
+        Auto::has_screen(self)
+    }
+
+    #[inline]
+    fn has_visible_focus(&self) -> bool {
+        Auto::has_visible_focus(self)
+    }
+
+    #[inline]
+    fn hide(&self) {
+        Auto::hide(self)
+    }
+
+    #[inline]
+    fn hide_on_delete(&self) -> bool {
+        Auto::hide_on_delete(self)
+    }
+
+    #[inline]
+    fn in_destruction(&self) -> bool {
+        Auto::in_destruction(self)
+    }
+
+    #[cfg(gtk_3_10)]
+    #[inline]
+    fn init_template(&self) {
+        Auto::init_template(self)
+    }
+
+    #[inline]
+    fn is_ancestor<T: IsA<Widget>>(&self, ancestor: &T) -> bool {
+        Auto::is_ancestor(self, ancestor)
+    }
+
+    #[inline]
+    fn is_composited(&self) -> bool {
+        Auto::is_composited(self)
+    }
+
+    #[inline]
+    fn is_drawable(&self) -> bool {
+        Auto::is_drawable(self)
+    }
+
+    #[inline]
+    fn is_focus(&self) -> bool {
+        Auto::is_focus(self)
+    }
+
+    #[inline]
+    fn is_sensitive(&self) -> bool {
+        Auto::is_sensitive(self)
+    }
+
+    #[inline]
+    fn is_toplevel(&self) -> bool {
+        Auto::is_toplevel(self)
+    }
+
+    #[cfg(gtk_3_8)]
+    #[inline]
+    fn is_visible(&self) -> bool {
+        Auto::is_visible(self)
+    }
+
+    #[inline]
+    fn keynav_failed(&self, direction: DirectionType) -> bool {
+        Auto::keynav_failed(self, direction)
+    }
+
+    #[cfg(gtk_3_16)]
+    #[inline]
+    fn list_action_prefixes(&self) -> Vec<String> {
+        Auto::list_action_prefixes(self)
+    }
+
+    #[inline]
+    fn list_mnemonic_labels(&self) -> Vec<Widget> {
+        Auto::list_mnemonic_labels(self)
+    }
+
+    #[inline]
+    fn map(&self) {
+        Auto::map(self)
+    }
+
+    #[inline]
+    fn mnemonic_activate(&self, group_cycling: bool) -> bool {
+        Auto::mnemonic_activate(self, group_cycling)
+    }
+
+    #[inline]
+    fn queue_compute_expand(&self) {
+        Auto::queue_compute_expand(self)
+    }
+
+    #[inline]
+    fn queue_draw(&self) {
+        Auto::queue_draw(self)
+    }
+
+    #[inline]
+    fn queue_draw_area(&self, x: i32, y: i32, width: i32, height: i32) {
+        Auto::queue_draw_area(self, x, y, width, height)
+    }
+
+    #[inline]
+    fn queue_resize(&self) {
+        Auto::queue_resize(self)
+    }
+
+    #[inline]
+    fn queue_resize_no_redraw(&self) {
+        Auto::queue_resize_no_redraw(self)
+    }
+
+    #[inline]
+    fn realize(&self) {
+        Auto::realize(self)
+    }
+
+    #[cfg(gtk_3_8)]
+    #[inline]
+    fn register_window(&self, window: &gdk::Window) {
+        Auto::register_window(self, window)
+    }
+
+    #[inline]
+    fn remove_accelerator(&self, accel_group: &AccelGroup, accel_key: u32, accel_mods: gdk::ModifierType) -> bool {
+        Auto::remove_accelerator(self, accel_group, accel_key, accel_mods)
+    }
+
+    #[inline]
+    fn remove_mnemonic_label<T: IsA<Widget>>(&self, label: &T) {
+        Auto::remove_mnemonic_label(self, label)
+    }
+
+    #[cfg(gtk_3_8)]
+    #[inline]
+    fn remove_tick_callback(&self, id: u32) {
+        Auto::remove_tick_callback(self, id)
+    }
+
+    #[inline]
+    fn render_icon(&self, stock_id: &str, size: i32, detail: Option<&str>) -> Option<gdk_pixbuf::Pixbuf> {
+        Auto::render_icon(self, stock_id, size, detail)
+    }
+
+    #[inline]
+    fn render_icon_pixbuf(&self, stock_id: &str, size: i32) -> Option<gdk_pixbuf::Pixbuf> {
+        Auto::render_icon_pixbuf(self, stock_id, size)
+    }
+
+    #[inline]
+    fn reparent<T: IsA<Widget>>(&self, new_parent: &T) {
+        Auto::reparent(self, new_parent)
+    }
+
+    #[inline]
+    fn reset_rc_styles(&self) {
+        Auto::reset_rc_styles(self)
+    }
+
+    #[inline]
+    fn reset_style(&self) {
+        Auto::reset_style(self)
+    }
+
+    #[inline]
+    fn set_accel_path(&self, accel_path: Option<&str>, accel_group: Option<&AccelGroup>) {
+        Auto::set_accel_path(self, accel_path, accel_group)
+    }
+
+    #[inline]
+    fn set_allocation(&self, allocation: &Allocation) {
+        Auto::set_allocation(self, allocation)
+    }
+
+    #[inline]
+    fn set_app_paintable(&self, app_paintable: bool) {
+        Auto::set_app_paintable(self, app_paintable)
+    }
+
+    #[inline]
+    fn set_can_default(&self, can_default: bool) {
+        Auto::set_can_default(self, can_default)
+    }
+
+    #[inline]
+    fn set_can_focus(&self, can_focus: bool) {
+        Auto::set_can_focus(self, can_focus)
+    }
+
+    #[inline]
+    fn set_child_visible(&self, is_visible: bool) {
+        Auto::set_child_visible(self, is_visible)
+    }
+
+    #[cfg(gtk_3_14)]
+    #[inline]
+    fn set_clip(&self, clip: &Allocation) {
+        Auto::set_clip(self, clip)
+    }
+
+    #[inline]
+    fn set_composite_name(&self, name: &str) {
+        Auto::set_composite_name(self, name)
+    }
+
+    #[inline]
+    fn set_direction(&self, dir: TextDirection) {
+        Auto::set_direction(self, dir)
+    }
+
+    #[inline]
+    fn set_double_buffered(&self, double_buffered: bool) {
+        Auto::set_double_buffered(self, double_buffered)
+    }
+
+    #[inline]
+    fn set_events(&self, events: i32) {
+        Auto::set_events(self, events)
+    }
+
+    #[inline]
+    fn set_halign(&self, align: Align) {
+        Auto::set_halign(self, align)
+    }
+
+    #[inline]
+    fn set_has_tooltip(&self, has_tooltip: bool) {
+        Auto::set_has_tooltip(self, has_tooltip)
+    }
+
+    #[inline]
+    fn set_has_window(&self, has_window: bool) {
+        Auto::set_has_window(self, has_window)
+    }
+
+    #[inline]
+    fn set_hexpand(&self, expand: bool) {
+        Auto::set_hexpand(self, expand)
+    }
+
+    #[inline]
+    fn set_hexpand_set(&self, set: bool) {
+        Auto::set_hexpand_set(self, set)
+    }
+
+    #[inline]
+    fn set_mapped(&self, mapped: bool) {
+        Auto::set_mapped(self, mapped)
+    }
+
+    #[inline]
+    fn set_margin_bottom(&self, margin: i32) {
+        Auto::set_margin_bottom(self, margin)
+    }
+
+    #[cfg(gtk_3_12)]
+    #[inline]
+    fn set_margin_end(&self, margin: i32) {
+        Auto::set_margin_end(self, margin)
+    }
+
+    #[inline]
+    fn set_margin_left(&self, margin: i32) {
+        Auto::set_margin_left(self, margin)
+    }
+
+    #[inline]
+    fn set_margin_right(&self, margin: i32) {
+        Auto::set_margin_right(self, margin)
+    }
+
+    #[cfg(gtk_3_12)]
+    #[inline]
+    fn set_margin_start(&self, margin: i32) {
+        Auto::set_margin_start(self, margin)
+    }
+
+    #[inline]
+    fn set_margin_top(&self, margin: i32) {
+        Auto::set_margin_top(self, margin)
+    }
+
+    #[inline]
+    fn set_name(&self, name: &str) {
+        Auto::set_name(self, name)
+    }
+
+    #[inline]
+    fn set_no_show_all(&self, no_show_all: bool) {
+        Auto::set_no_show_all(self, no_show_all)
+    }
+
+    #[cfg(gtk_3_8)]
+    #[inline]
+    fn set_opacity(&self, opacity: f64) {
+        Auto::set_opacity(self, opacity)
+    }
+
+    #[inline]
+    fn set_parent<T: IsA<Widget>>(&self, parent: &T) {
+        Auto::set_parent(self, parent)
+    }
+
+    #[inline]
+    fn set_parent_window(&self, parent_window: &gdk::Window) {
+        Auto::set_parent_window(self, parent_window)
+    }
+
+    #[inline]
+    fn set_realized(&self, realized: bool) {
+        Auto::set_realized(self, realized)
+    }
+
+    #[inline]
+    fn set_receives_default(&self, receives_default: bool) {
+        Auto::set_receives_default(self, receives_default)
+    }
+
+    #[inline]
+    fn set_redraw_on_allocate(&self, redraw_on_allocate: bool) {
+        Auto::set_redraw_on_allocate(self, redraw_on_allocate)
+    }
+
+    #[inline]
+    fn set_sensitive(&self, sensitive: bool) {
+        Auto::set_sensitive(self, sensitive)
+    }
+
+    #[inline]
+    fn set_size_request(&self, width: i32, height: i32) {
+        Auto::set_size_request(self, width, height)
+    }
+
+    #[inline]
+    fn set_state(&self, state: StateType) {
+        Auto::set_state(self, state)
+    }
+
+    #[inline]
+    fn set_state_flags(&self, flags: StateFlags, clear: bool) {
+        Auto::set_state_flags(self, flags, clear)
+    }
+
+    #[inline]
+    fn set_support_multidevice(&self, support_multidevice: bool) {
+        Auto::set_support_multidevice(self, support_multidevice)
+    }
+
+    #[inline]
+    fn set_tooltip_markup(&self, markup: Option<&str>) {
+        Auto::set_tooltip_markup(self, markup)
+    }
+
+    #[inline]
+    fn set_tooltip_text(&self, text: Option<&str>) {
+        Auto::set_tooltip_text(self, text)
+    }
+
+    #[inline]
+    fn set_tooltip_window<T: IsA<Window>>(&self, custom_window: Option<&T>) {
+        Auto::set_tooltip_window(self, custom_window)
+    }
+
+    #[inline]
+    fn set_valign(&self, align: Align) {
+        Auto::set_valign(self, align)
+    }
+
+    #[inline]
+    fn set_vexpand(&self, expand: bool) {
+        Auto::set_vexpand(self, expand)
+    }
+
+    #[inline]
+    fn set_vexpand_set(&self, set: bool) {
+        Auto::set_vexpand_set(self, set)
+    }
+
+    #[inline]
+    fn set_visible(&self, visible: bool) {
+        Auto::set_visible(self, visible)
+    }
+
+    #[inline]
+    fn set_window(&self, window: &gdk::Window) {
+        Auto::set_window(self, window)
+    }
+
+    #[inline]
+    fn show(&self) {
+        Auto::show(self)
+    }
+
+    #[inline]
+    fn show_all(&self) {
+        Auto::show_all(self)
+    }
+
+    #[inline]
+    fn show_now(&self) {
+        Auto::show_now(self)
+    }
+
+    #[inline]
+    fn size_allocate(&self, allocation: &mut Allocation) {
+        Auto::size_allocate(self, allocation)
+    }
+
+    #[cfg(gtk_3_10)]
+    #[inline]
+    fn size_allocate_with_baseline(&self, allocation: &mut Allocation, baseline: i32) {
+        Auto::size_allocate_with_baseline(self, allocation, baseline)
+    }
+
+    #[inline]
+    fn size_request(&self) -> Requisition {
+        Auto::size_request(self)
+    }
+
+    #[inline]
+    fn style_attach(&self) {
+        Auto::style_attach(self)
+    }
+
+    #[inline]
+    fn thaw_child_notify(&self) {
+        Auto::thaw_child_notify(self)
+    }
+
+    #[inline]
+    fn translate_coordinates<T: IsA<Widget>>(&self, dest_widget: &T, src_x: i32, src_y: i32) -> Option<(i32, i32)> {
+        Auto::translate_coordinates(self, dest_widget, src_x, src_y)
+    }
+
+    #[inline]
+    fn trigger_tooltip_query(&self) {
+        Auto::trigger_tooltip_query(self)
+    }
+
+    #[inline]
+    fn unmap(&self) {
+        Auto::unmap(self)
+    }
+
+    #[inline]
+    fn unparent(&self) {
+        Auto::unparent(self)
+    }
+
+    #[inline]
+    fn unrealize(&self) {
+        Auto::unrealize(self)
+    }
+
+    #[cfg(gtk_3_8)]
+    #[inline]
+    fn unregister_window(&self, window: &gdk::Window) {
+        Auto::unregister_window(self, window)
+    }
+
+    #[inline]
+    fn unset_state_flags(&self, flags: StateFlags) {
+        Auto::unset_state_flags(self, flags)
+    }
+
 }
