@@ -1,59 +1,18 @@
-platform:
-  - x86
-  - x64
 environment:
   matrix:
-    - RUST_VERSION: 1.5.0
-      GTK: gnome
-    - RUST_VERSION: 1.5.0
-      GTK: win64
-      FEATURES: gtk_3_14
-    #- RUST_VERSION: nightly
-      #GTK: gnome
-
-matrix:
-  #fast_finish: true
-  allow_failures:
-    - platform: x86
-      GTK: win64
-
+    - TARGET: i686-pc-windows-gnu
+      RUST_VERSION: 1.5.0
+      BITS: 32
+    - TARGET: x86_64-pc-windows-gnu
+      RUST_VERSION: 1.5.0
+      BITS: 64
 install:
-  - if "%PLATFORM%-%GTK%" == "x86-win64" ( exit 1 )
-  - if "%PLATFORM%" == "x86" SET RUST_PLATFORM=i686-pc-windows-gnu
-  - if "%PLATFORM%" == "x64" SET RUST_PLATFORM=x86_64-pc-windows-gnu
-  - ps: Start-FileDownload "https://static.rust-lang.org/dist/rust-$Env:RUST_VERSION-$Env:RUST_PLATFORM.exe" -FileName rust.exe
-  - cmd: rust.exe /VERYSILENT /NORESTART /COMPONENTS="rust,std,cargo" /DIR=C:\Rust
-  - ps: >-
-      if ($Env:PLATFORM -eq "x86") {
-        $webclient = New-Object System.Net.WebClient
-        $webclient.DownloadFile("http://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/5.3.0/threads-win32/dwarf/i686-5.3.0-release-win32-dwarf-rt_v4-rev0.7z/download", "C:\mingw.7z")
-        $Env:MINGW = "C:\mingw32"
-      }
-      else {
-        $webclient = New-Object System.Net.WebClient
-        $webclient.DownloadFile("http://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/5.3.0/threads-win32/seh/x86_64-5.3.0-release-win32-seh-rt_v4-rev0.7z/download", "C:\mingw.7z")
-        $Env:MINGW = "C:\mingw64"
-      }
-  - ps: 7z x -oC:\ C:\mingw.7z | Out-Null;
-  - ps: >-
-      if (!(Test-Path -Path "C:\Deps\gtk")) {
-        if ($Env:GTK -eq "gnome") {
-          if ($Env:PLATFORM -eq "x86") {
-            Start-FileDownload "http://win32builder.gnome.org/gtk+-bundle_3.6.4-20130921_win32.zip" -FileName gtk.zip
-          }
-          else {
-            Start-FileDownload "http://win32builder.gnome.org/gtk+-bundle_3.6.4-20131201_win64.zip" -FileName gtk.zip
-          }
-        }
-        elseif ($Env:GTK -eq "win64" -and $Env:PLATFORM -eq "x64") {
-            Start-FileDownload "http://lvserver.ugent.be/gtk-win64/sdk/gtk2-gtk3-sdk-2.24.25-3.14.7-2015-01-27-ts-win64.zip" -FileName gtk.zip
-        }
-        7z x -oC:\Deps\gtk gtk.zip | Out-Null
-      }
-  - cmd: SET PATH=%MINGW%\bin;C:\Deps\gtk\bin;C:\Rust\bin;%PATH%
-
-cache:
-  C:\Deps
+  - ps: Start-FileDownload "https://static.rust-lang.org/dist/rust-${env:RUST_VERSION}-${env:TARGET}.exe"
+  - rust-%RUST_VERSION%-%TARGET%.exe /VERYSILENT /NORESTART /COMPONENTS="Rustc,Cargo,Std" /DIR="C:\Rust"
+  - SET PATH=C:\Rust\bin;C:\Program Files\Git\cmd;C:\Program Files\Git\usr\bin
+  - SET PATH=C:\msys64\mingw%BITS%\bin;C:\msys64\usr\bin;%PATH%
+  - if "%BITS%" == "32" pacman --noconfirm -S mingw-w64-i686-gtk3
+  - if "%BITS%" == "64" pacman --noconfirm -S mingw-w64-x86_64-gtk3
 
 build_script:
   - rustc -V
@@ -61,7 +20,6 @@ build_script:
   - echo paths = ["."] > .cargo\config
   - git clone -q --depth 50 -b pending https://github.com/gtk-rs/examples _examples
   - cd _examples
-  - "echo Features: %FEATURES%"
-  - cargo build --features "%FEATURES%"
+  - cargo build --features gtk_3_14
 
 test: false
