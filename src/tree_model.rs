@@ -43,9 +43,9 @@ pub trait TreeModelExt {
 impl<O: IsA<TreeModel>> TreeModelExt for O {
     fn get_value(&self, iter: &TreeIter, column: i32) -> Value {
         unsafe {
-            let mut value = Value::new();
+            let mut value = Value::uninitialized();
             ffi::gtk_tree_model_get_value(self.to_glib_none().0,
-                mut_override(iter.to_glib_none().0), column, value.as_mut_ptr());
+                mut_override(iter.to_glib_none().0), column, value.to_glib_none_mut().0);
             value
         }
     }

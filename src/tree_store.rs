@@ -69,7 +69,7 @@ impl TreeStore {
         unsafe {
             ffi::gtk_tree_store_set_value(self.to_glib_none().0,
                 mut_override(iter.to_glib_none().0),
-                column, mut_override(value.as_ptr()));
+                column, mut_override(value.to_glib_none().0));
         }
     }
 }

@@ -67,7 +67,7 @@ impl ListStore {
     pub fn set_value(&self, iter: &TreeIter, column: i32, value: &Value) {
         unsafe {
             ffi::gtk_list_store_set_value(self.to_glib_none().0,
-                mut_override(iter.to_glib_none().0), column, mut_override(value.as_ptr()));
+                mut_override(iter.to_glib_none().0), column, mut_override(value.to_glib_none().0));
         }
     }
 }
