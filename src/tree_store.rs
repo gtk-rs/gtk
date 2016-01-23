@@ -5,7 +5,7 @@
 use ffi;
 use glib::translate::*;
 use glib::{Type, Value};
-use libc::{c_char, c_int};
+use libc::c_int;
 use TreeIter;
 use TreeStore;
 
@@ -49,27 +49,16 @@ impl TreeStore {
         }
     }
 
-    pub fn set_column_types(&self, column_types: &[Type]) {
+    pub fn set_value(&self, iter: &TreeIter, column: u32, value: &Value) {
         unsafe {
-            let mut column_types = column_types.iter().map(|t| t.to_glib()).collect::<Vec<_>>();
-            ffi::gtk_tree_store_set_column_types(self.to_glib_none().0, column_types.len() as c_int,
-                column_types.as_mut_ptr())
-        }
-    }
-
-    pub fn set_string(&self, iter: &TreeIter, column: i32, text: &str) {
-        unsafe {
-            let text: Stash<*const c_char, _> = text.to_glib_none();
-            ffi::gtk_tree_store_set(self.to_glib_none().0, mut_override(iter.to_glib_none().0), column,
-                text.0, -1)
-        }
-    }
-
-    pub fn set_value(&self, iter: &TreeIter, column: i32, value: &Value) {
-        unsafe {
+            let columns = ffi::gtk_tree_model_get_n_columns(self.to_glib_none().0);
+            assert!(column < columns as u32);
+            let type_ = from_glib(
+                ffi::gtk_tree_model_get_column_type(self.to_glib_none().0, column as c_int));
+            assert!(Value::type_transformable(value.type_(), type_));
             ffi::gtk_tree_store_set_value(self.to_glib_none().0,
-                mut_override(iter.to_glib_none().0),
-                column, mut_override(value.as_ptr()));
+                mut_override(iter.to_glib_none().0), column as c_int,
+                mut_override(value.to_glib_none().0));
         }
     }
 }

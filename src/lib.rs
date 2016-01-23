@@ -26,7 +26,7 @@ pub use glib::{
     IsA,
     Object,
 };
-pub use glib::ValuePublic;
+pub use glib::Value;
 
 pub use ffi::GtkAccelFlags as AccelFlags;
 pub use ffi::GtkAlign as Align;
