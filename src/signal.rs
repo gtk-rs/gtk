@@ -1105,6 +1105,65 @@ mod tool_button {
     }
 }
 
+pub trait ToggleButtonSignals {
+    fn connect_toggled<F: Fn(&Self) + 'static>(&self, f: F) -> u64;
+}
+
+mod toggle_button {
+    use std::mem::transmute;
+    use glib::signal::connect;
+    use glib::translate::*;
+    use ffi::GtkToggleButton;
+    use super::CallbackGuard;
+    use ToggleButton;
+
+    impl super::ToggleButtonSignals for ToggleButton {
+        fn connect_toggled<F: Fn(&Self) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
+                connect(self.to_glib_none().0, "toggled",
+                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
+            }
+        }
+    }
+
+    unsafe extern "C" fn void_trampoline(this: *mut GtkToggleButton, f: &Box<Fn(&ToggleButton) + 'static>) {
+        callback_guard!();
+        f(&from_glib_none(this));
+    }
+}
+
+pub trait CellRendererToggleSignals {
+    fn connect_toggled<F: Fn(&Self, &mut TreePath) + 'static>(&self, f: F) -> u64;
+}
+
+mod cell_renderer_toggle {
+    use std::mem::transmute;
+    use glib::signal::connect;
+    use glib::translate::*;
+    use libc::c_char;
+    use ffi::{GtkCellRendererToggle, gtk_tree_path_new_from_string};
+    use super::CallbackGuard;
+    use {CellRendererToggle, TreePath};
+
+    impl super::CellRendererToggleSignals for CellRendererToggle {
+        fn connect_toggled<F: Fn(&Self, &mut TreePath) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(&Self, &mut TreePath) + 'static>> = Box::new(Box::new(f));
+                connect(self.to_glib_none().0, "toggled",
+                    transmute(string_path_trampoline), Box::into_raw(f) as *mut _)
+            }
+        }
+    }
+
+    unsafe extern "C" fn string_path_trampoline(this: *mut GtkCellRendererToggle, c_str_path: *const c_char,
+            f: &Box<Fn(&CellRendererToggle, &mut TreePath) + 'static>) {
+        callback_guard!();
+        let mut path = from_glib_full(gtk_tree_path_new_from_string(c_str_path));
+        f(&from_glib_none(this), &mut path);
+    }
+}
+
 pub trait SpinButtonSignals {
     fn connect_value_changed<F: Fn(&Self) + 'static>(&self, f: F) -> u64;
     fn connect_wrapped<F: Fn(&Self) + 'static>(&self, f: F) -> u64;
