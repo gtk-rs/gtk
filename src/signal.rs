@@ -33,6 +33,7 @@ use cairo::{Context, RectangleInt};
 
 use {
     Adjustment,
+    Continue,
     DeleteType,
     DirectionType,
     MovementStep,
@@ -60,8 +61,6 @@ impl ToGlib for Inhibit {
         self.0.to_glib()
     }
 }
-
-pub use glib::source::Continue;
 
 struct CallbackGuard;
 

@@ -4,6 +4,7 @@
 
 pub use {
     Cast,
+    Continue,
     StaticType,
     ToValue,
 };

@@ -22,6 +22,7 @@ pub use gdk::pixbuf as gdk_pixbuf;
 
 pub use glib::{
     Cast,
+    Continue,
     Error,
     IsA,
     Object,
