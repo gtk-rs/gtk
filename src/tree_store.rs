@@ -4,7 +4,7 @@
 
 use ffi;
 use glib::translate::*;
-use glib::{Type, Value};
+use glib::{Type, ToValue, Value};
 use libc::c_int;
 use TreeIter;
 use TreeStore;
@@ -46,6 +46,25 @@ impl TreeStore {
                                             mut_override(parent.to_glib_none().0),
                                             mut_override(new_order.as_ptr() as *const c_int));
             }
+        }
+    }
+
+    pub fn set(&self, iter: &TreeIter, columns: &[u32], values: &[&ToValue]) {
+        unsafe {
+            let n_columns = ffi::gtk_tree_model_get_n_columns(self.to_glib_none().0) as u32;
+            assert!(columns.len() == values.len());
+            assert!(columns.len() <= n_columns as usize);
+            for &column in columns {
+                assert!(column < n_columns);
+                let type_ = from_glib(
+                    ffi::gtk_tree_model_get_column_type(self.to_glib_none().0, column as c_int));
+                assert!(Value::type_transformable(values[column as usize].to_value_type(), type_));
+            }
+            ffi::gtk_tree_store_set_valuesv(self.to_glib_none().0,
+                mut_override(iter.to_glib_none().0),
+                mut_override(columns.as_ptr() as *const c_int),
+                values.to_glib_none().0,
+                columns.len() as c_int);
         }
     }
 
