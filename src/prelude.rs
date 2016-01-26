@@ -4,6 +4,8 @@
 
 pub use {
     Cast,
+    StaticType,
+    ToValue,
 };
 
 #[cfg(gtk_3_4)]

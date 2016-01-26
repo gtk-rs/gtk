@@ -25,8 +25,12 @@ pub use glib::{
     Error,
     IsA,
     Object,
+    StaticType,
+    ToValue,
+    Type,
+    TypedValue,
+    Value,
 };
-pub use glib::Value;
 
 pub use ffi::GtkAccelFlags as AccelFlags;
 pub use ffi::GtkAlign as Align;
