@@ -1,98 +1,34 @@
 # gtk [![Build Status](https://travis-ci.org/gtk-rs/gtk.png?branch=master)](https://travis-ci.org/gtk-rs/gtk) [![Build status](https://ci.appveyor.com/api/projects/status/5mot32ipr12iocw0?svg=true)](https://ci.appveyor.com/project/GuillaumeGomez/gtk) [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/gtk-rs/gtk)
 
-[Project site](http://gtk-rs.org/) | [Online documentation](http://gtk-rs.org/docs/gtk/)
+[Project site](http://gtk-rs.org/) | [Online documentation](http://gtk-rs.org/docs/)
 
 __Rust__ bindings and wrappers for __GLib__, __GDK 3__, __GTK+ 3__  and __Cairo__.
 
 ## Building
 
 __gtk__ expects __GTK+__, __GLib__ and __Cairo__ development files to be installed on your system.
+See the [requirements page](http://gtk-rs.org/docs/requirements.html).
 
-### Debian and Ubuntu
+## Using
 
-```Shell
-> sudo apt-get install libgtk-3-dev
+We recommend using [crates from crates.io](https://crates.io/keywords/gtk-rs),
+as [demonstrated here](http://gtk-rs.org/#using).
+
+If you want to track the bleeding edge, use the git dependency instead:
+
+```toml
+[dependencies]
+gtk = { git = "https://github.com/gtk-rs/gtk.git" }
 ```
 
-### Fedora
+Avoid mixing versioned and git crates like this:
 
-```Shell
-> sudo dnf install gtk3-devel glib2-devel
-
-# Fedora 21 and earlier
-> sudo yum install gtk3-devel glib2-devel
+```toml
+# This will not compile
+[dependencies]
+gdk = "0.2"
+gtk = { git = "https://github.com/gtk-rs/gtk.git" }
 ```
-
-### OS X
-
-```Shell
-> brew install gtk+3
-```
-
-### Windows
-
-Make sure you have the [GNU
-ABI](https://www.rust-lang.org/downloads.html#win-foot) version of the rust
-compiler installed. Since we need our own toolchain make sure to uncheck
-"Linker and platform libraries" in the Rust setup.
-![Screenshot](resources/rust_setup.png)
-
-If you already have installed Rust, check if your Rust installation has
-`gcc.exe` and `ld.exe` in its `bin` directory. In that case remove those
-executables, they will be provided by mingw instead. If you won't you'll
-probably get a linking error `ld: cannot find -limm32`.
-
-For the toolchain one has two possibilities:
- 1. Install msys2 with a mingw toolchain and the gtk3 package
- 2. Install the mingw-w64 toolchain separately and then install a GTK+ SDK
-
-#### 1. msys2 toolchain
-
-This method is recommended according to the [GTK+ project]
-(http://www.gtk.org/download/windows.php). You can follow [this guide]
-(https://blogs.gnome.org/nacho/2014/08/01/how-to-build-your-gtk-application-on-windows/)
-or follow these steps:
-
- - Install and update [msys2](https://msys2.github.io/)
- - Install the mingw toolchain:
-
- ```Shell
- $ pacman -S mingw-w64-x86_64-toolchain
- ```
-
- - Install the gtk3 package:
-
- ```Shell
- $ pacman -S mingw-w64-x86_64-gtk3
- ```
- 
-Make sure that either `<your msys installation folder>\mingw32\bin` or `<your msys installation folder>\mingw64\bin` is in your `PATH` e.g. (if you have msys32 installed at `c:\msys32`, add `c:\msys32\mingw32\bin` or `c:\msys32\mingw64\bin` to your `PATH`).
-
-#### 2. separate mingw toolchain
-
-Install [mingw-w64](http://mingw-w64.yaxm.org/) (select the win32 threading model) and download a __GTK+__ SDK:
- * The GNOME project hosts [distributions](http://win32builder.gnome.org/) of GTK+ 3.4 upto 3.10
- * [GTK+ for Windows Runtime Environment Installer: 64-bit](https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer) supports GTK+ 3.14, its SDK download links can currently be found [here](http://lvserver.ugent.be/gtk-win64/sdk/).
-
-Make sure both mingw's and the sdk's `bin` directories are in your `PATH` e.g. (assuming mingw is installed in `C:\mingw-w64` and the SDK unpacked into `C:\gtk`)
-
-```
-C:\> set PATH="C:\mingw-w64\bin;C:\gtk\bin;%PATH%"
-```
-
-## Examples
-
-See the [examples repository](https://github.com/gtk-rs/examples).
-
-## Versions
-
-The build script will query the installed library versions from `pkg-config`
-and instruct `rustc` via `cfg` arguments to compile the appropriate set of APIs.
-
-All the APIs available in the installed library will just work but if you
-attempt to use newer ones, the build will fail. Presently, Rust doesn't allow
-to generate custom error messages so there doesn't appear to be a way to make
-such errors more friendly.
 
 ## Contribute
 
