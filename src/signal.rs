@@ -14,7 +14,7 @@ use glib::ParamSpec;
 use glib_ffi::{self, gboolean, gpointer};
 use ffi::{GtkAdjustment, GtkTreeSelection, GtkTreeViewColumn};
 use gdk::{
-    EventAny,
+    Event,
     EventButton,
     EventConfigure,
     EventCrossing,
@@ -143,14 +143,14 @@ pub trait WidgetSignals {
     fn connect_composited_changed<F: Fn(&Self) + 'static>(&self, f: F) -> u64;
     fn connect_configure_event<F: Fn(&Self, &EventConfigure) -> Inhibit + 'static>(&self, f: F) -> u64;
     fn connect_damage_event<F: Fn(&Self, &EventExpose) -> Inhibit + 'static>(&self, f: F) -> u64;
-    fn connect_delete_event<F: Fn(&Self, &EventAny) -> Inhibit + 'static>(&self, f: F) -> u64;
+    fn connect_delete_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(&self, f: F) -> u64;
     fn connect_destroy<F: Fn(&Self) + 'static>(&self, f: F) -> u64;
-    fn connect_destroy_event<F: Fn(&Self, &EventAny) -> Inhibit + 'static>(&self, f: F) -> u64;
+    fn connect_destroy_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(&self, f: F) -> u64;
     fn connect_direction_changed<F: Fn(&Self, TextDirection) + 'static>(&self, f: F) -> u64;
     fn connect_draw<F: Fn(&Self, &Context) -> Inhibit + 'static>(&self, f: F) -> u64;
     fn connect_enter_notify_event<F: Fn(&Self, &EventCrossing) -> Inhibit + 'static>(&self, f: F) -> u64;
-    fn connect_event<F: Fn(&Self, &EventAny) -> Inhibit + 'static>(&self, f: F) -> u64;
-    fn connect_event_after<F: Fn(&Self, &EventAny) + 'static>(&self, f: F) -> u64;
+    fn connect_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(&self, f: F) -> u64;
+    fn connect_event_after<F: Fn(&Self, &Event) + 'static>(&self, f: F) -> u64;
     fn connect_focus<F: Fn(&Self, DirectionType) -> Inhibit + 'static>(&self, f: F) -> u64;
     fn connect_focus_in_event<F: Fn(&Self, &EventFocus) -> Inhibit + 'static>(&self, f: F) -> u64;
     fn connect_focus_out_event<F: Fn(&Self, &EventFocus) -> Inhibit + 'static>(&self, f: F) -> u64;
@@ -163,7 +163,7 @@ pub trait WidgetSignals {
     fn connect_keynav_failed<F: Fn(&Self, DirectionType) -> Inhibit + 'static>(&self, f: F) -> u64;
     fn connect_leave_notify_event<F: Fn(&Self, &EventCrossing) -> Inhibit + 'static>(&self, f: F) -> u64;
     fn connect_map<F: Fn(&Self) + 'static>(&self, f: F) -> u64;
-    fn connect_map_event<F: Fn(&Self, &EventAny) -> Inhibit + 'static>(&self, f: F) -> u64;
+    fn connect_map_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(&self, f: F) -> u64;
     fn connect_mnemonic_activate<F: Fn(&Self, bool) -> Inhibit + 'static>(&self, f: F) -> u64;
     fn connect_motion_notify_event<F: Fn(&Self, &EventMotion) -> Inhibit + 'static>(&self, f: F) -> u64;
     fn connect_move_focus<F: Fn(&Self, DirectionType) + 'static>(&self, f: F) -> u64;
@@ -180,9 +180,9 @@ pub trait WidgetSignals {
     fn connect_size_allocate<F: Fn(&Self, &RectangleInt) + 'static>(&self, f: F) -> u64;
     fn connect_state_flags_changed<F: Fn(&Self, StateFlags) + 'static>(&self, f: F) -> u64;
     fn connect_style_updated<F: Fn(&Self) + 'static>(&self, f: F) -> u64;
-    fn connect_touch_event<F: Fn(&Self, &EventAny) -> Inhibit + 'static>(&self, f: F) -> u64;
+    fn connect_touch_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(&self, f: F) -> u64;
     fn connect_unmap<F: Fn(&Self) + 'static>(&self, f: F) -> u64;
-    fn connect_unmap_event<F: Fn(&Self, &EventAny) -> Inhibit + 'static>(&self, f: F) -> u64;
+    fn connect_unmap_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(&self, f: F) -> u64;
     fn connect_unrealize<F: Fn(&Self) + 'static>(&self, f: F) -> u64;
     fn connect_window_state_event<F: Fn(&Self, &EventWindowState) -> Inhibit + 'static>(&self, f: F) -> u64;
 }
@@ -194,13 +194,17 @@ mod widget {
     use glib::signal::connect;
     use glib::translate::*;
     use gdk::{
-        EventAny, EventButton, EventConfigure, EventCrossing, EventExpose, EventFocus,
+        Event, EventButton, EventConfigure, EventCrossing, EventExpose, EventFocus,
         EventGrabBroken, EventKey, EventMotion, EventProperty, EventProximity, EventScroll,
         EventWindowState, Screen,
     };
     use cairo_ffi::cairo_t;
     use cairo::{Context, RectangleInt};
-    use gdk_ffi::GdkScreen;
+    use gdk_ffi::{
+        GdkEventAny, GdkEventButton, GdkEventConfigure, GdkEventCrossing, GdkEventExpose,
+        GdkEventFocus, GdkEventGrabBroken, GdkEventKey, GdkEventMotion, GdkEventProperty,
+        GdkEventProximity, GdkEventScroll, GdkEventWindowState, GdkScreen,
+    };
     use glib_ffi::gboolean;
     use ffi::{GtkWidget, GtkTooltip};
     use {Widget, DirectionType, StateFlags, TextDirection, WidgetHelpType};
@@ -284,9 +288,9 @@ mod widget {
             }
         }
 
-        fn connect_delete_event<F: Fn(&Self, &EventAny) -> Inhibit + 'static>(&self, f: F) -> u64 {
+        fn connect_delete_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(&self, f: F) -> u64 {
             unsafe {
-                let f: Box<Box<Fn(&Self, &EventAny) -> Inhibit + 'static>> = Box::new(Box::new(f));
+                let f: Box<Box<Fn(&Self, &Event) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "delete-event",
                     transmute(event_any_trampoline::<Self>), Box::into_raw(f) as *mut _)
             }
@@ -300,9 +304,9 @@ mod widget {
             }
         }
 
-        fn connect_destroy_event<F: Fn(&Self, &EventAny) -> Inhibit + 'static>(&self, f: F) -> u64 {
+        fn connect_destroy_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(&self, f: F) -> u64 {
             unsafe {
-                let f: Box<Box<Fn(&Self, &EventAny) -> Inhibit + 'static>> = Box::new(Box::new(f));
+                let f: Box<Box<Fn(&Self, &Event) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "destroy-event",
                     transmute(event_any_trampoline::<Self>), Box::into_raw(f) as *mut _)
             }
@@ -333,17 +337,17 @@ mod widget {
             }
         }
 
-        fn connect_event<F: Fn(&Self, &EventAny) -> Inhibit + 'static>(&self, f: F) -> u64 {
+        fn connect_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(&self, f: F) -> u64 {
             unsafe {
-                let f: Box<Box<Fn(&Self, &EventAny) -> Inhibit + 'static>> = Box::new(Box::new(f));
+                let f: Box<Box<Fn(&Self, &Event) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "event",
                     transmute(event_any_trampoline::<Self>), Box::into_raw(f) as *mut _)
             }
         }
 
-        fn connect_event_after<F: Fn(&Self, &EventAny) + 'static>(&self, f: F) -> u64 {
+        fn connect_event_after<F: Fn(&Self, &Event) + 'static>(&self, f: F) -> u64 {
             unsafe {
-                let f: Box<Box<Fn(&Self, &EventAny) + 'static>> = Box::new(Box::new(f));
+                let f: Box<Box<Fn(&Self, &Event) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "event-after",
                     transmute(event_any_trampoline::<Self>), Box::into_raw(f) as *mut _)
             }
@@ -447,9 +451,9 @@ mod widget {
             }
         }
 
-        fn connect_map_event<F: Fn(&Self, &EventAny) -> Inhibit + 'static>(&self, f: F) -> u64 {
+        fn connect_map_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(&self, f: F) -> u64 {
             unsafe {
-                let f: Box<Box<Fn(&Self, &EventAny) -> Inhibit + 'static>> = Box::new(Box::new(f));
+                let f: Box<Box<Fn(&Self, &Event) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "map-event",
                     transmute(event_any_trampoline::<Self>), Box::into_raw(f) as *mut _)
             }
@@ -589,9 +593,9 @@ mod widget {
             }
         }
 
-        fn connect_touch_event<F: Fn(&Self, &EventAny) -> Inhibit + 'static>(&self, f: F) -> u64 {
+        fn connect_touch_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(&self, f: F) -> u64 {
             unsafe {
-                let f: Box<Box<Fn(&Self, &EventAny) -> Inhibit + 'static>> = Box::new(Box::new(f));
+                let f: Box<Box<Fn(&Self, &Event) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "touch-event",
                     transmute(event_any_trampoline::<Self>), Box::into_raw(f) as *mut _)
             }
@@ -605,9 +609,9 @@ mod widget {
             }
         }
 
-        fn connect_unmap_event<F: Fn(&Self, &EventAny) -> Inhibit + 'static>(&self, f: F) -> u64 {
+        fn connect_unmap_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(&self, f: F) -> u64 {
             unsafe {
-                let f: Box<Box<Fn(&Self, &EventAny) -> Inhibit + 'static>> = Box::new(Box::new(f));
+                let f: Box<Box<Fn(&Self, &Event) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "unmap-event",
                     transmute(event_any_trampoline::<Self>), Box::into_raw(f) as *mut _)
             }
@@ -658,95 +662,105 @@ mod widget {
         f(&from_glib_none(this), &from_glib_none(cr)).to_glib()
     }
 
-    unsafe extern "C" fn event_any_trampoline<T>(this: *mut GtkWidget, event: *mut EventAny,
-            f: &Box<Fn(&Widget, &EventAny) -> Inhibit + 'static>) -> gboolean
+    unsafe extern "C" fn event_any_trampoline<T>(this: *mut GtkWidget, event: *mut GdkEventAny,
+            f: &Box<Fn(&Widget, &Event) -> Inhibit + 'static>) -> gboolean
     where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
-        f(&from_glib_none(this), transmute(event)).to_glib()
+        f(&from_glib_none(this), &from_glib_none(event)).to_glib()
     }
 
-    unsafe extern "C" fn event_button_trampoline<T>(this: *mut GtkWidget, event: *mut EventAny,
+    unsafe extern "C" fn event_button_trampoline<T>(this: *mut GtkWidget,
+            event: *mut GdkEventButton,
             f: &Box<Fn(&Widget, &EventButton) -> Inhibit + 'static>) -> gboolean
     where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
-        f(&from_glib_none(this), transmute(event)).to_glib()
+        f(&from_glib_none(this), &from_glib_none(event)).to_glib()
     }
 
-    unsafe extern "C" fn event_configure_trampoline<T>(this: *mut GtkWidget, event: *mut EventAny,
+    unsafe extern "C" fn event_configure_trampoline<T>(this: *mut GtkWidget,
+            event: *mut GdkEventConfigure,
             f: &Box<Fn(&Widget, &EventConfigure) -> Inhibit + 'static>) -> gboolean
     where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
-        f(&from_glib_none(this), transmute(event)).to_glib()
+        f(&from_glib_none(this), &from_glib_none(event)).to_glib()
     }
 
-    unsafe extern "C" fn event_crossing_trampoline<T>(this: *mut GtkWidget, event: *mut EventAny,
+    unsafe extern "C" fn event_crossing_trampoline<T>(this: *mut GtkWidget,
+            event: *mut GdkEventCrossing,
             f: &Box<Fn(&Widget, &EventCrossing) -> Inhibit + 'static>) -> gboolean
     where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
-        f(&from_glib_none(this), transmute(event)).to_glib()
+        f(&from_glib_none(this), &from_glib_none(event)).to_glib()
     }
 
-    unsafe extern "C" fn event_expose_trampoline<T>(this: *mut GtkWidget, event: *mut EventAny,
+    unsafe extern "C" fn event_expose_trampoline<T>(this: *mut GtkWidget,
+            event: *mut GdkEventExpose,
             f: &Box<Fn(&Widget, &EventExpose) -> Inhibit + 'static>) -> gboolean
     where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
-        f(&from_glib_none(this), transmute(event)).to_glib()
+        f(&from_glib_none(this), &from_glib_none(event)).to_glib()
     }
 
-    unsafe extern "C" fn event_focus_trampoline<T>(this: *mut GtkWidget, event: *mut EventAny,
+    unsafe extern "C" fn event_focus_trampoline<T>(this: *mut GtkWidget, event: *mut GdkEventFocus,
             f: &Box<Fn(&Widget, &EventFocus) -> Inhibit + 'static>) -> gboolean
     where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
-        f(&from_glib_none(this), transmute(event)).to_glib()
+        f(&from_glib_none(this), &from_glib_none(event)).to_glib()
     }
 
-    unsafe extern "C" fn event_grab_broken_trampoline<T>(this: *mut GtkWidget, event: *mut EventAny,
+    unsafe extern "C" fn event_grab_broken_trampoline<T>(this: *mut GtkWidget,
+            event: *mut GdkEventGrabBroken,
             f: &Box<Fn(&Widget, &EventGrabBroken) -> Inhibit + 'static>) -> gboolean
     where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
-        f(&from_glib_none(this), transmute(event)).to_glib()
+        f(&from_glib_none(this), &from_glib_none(event)).to_glib()
     }
 
-    unsafe extern "C" fn event_key_trampoline<T>(this: *mut GtkWidget, event: *mut EventAny,
+    unsafe extern "C" fn event_key_trampoline<T>(this: *mut GtkWidget, event: *mut GdkEventKey,
             f: &Box<Fn(&Widget, &EventKey) -> Inhibit + 'static>) -> gboolean
     where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
-        f(&from_glib_none(this), transmute(event)).to_glib()
+        f(&from_glib_none(this), &from_glib_none(event)).to_glib()
     }
 
-    unsafe extern "C" fn event_motion_trampoline<T>(this: *mut GtkWidget, event: *mut EventAny,
+    unsafe extern "C" fn event_motion_trampoline<T>(this: *mut GtkWidget,
+            event: *mut GdkEventMotion,
             f: &Box<Fn(&Widget, &EventMotion) -> Inhibit + 'static>) -> gboolean
     where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
-        f(&from_glib_none(this), transmute(event)).to_glib()
+        f(&from_glib_none(this), &from_glib_none(event)).to_glib()
     }
 
-    unsafe extern "C" fn event_property_trampoline<T>(this: *mut GtkWidget, event: *mut EventAny,
+    unsafe extern "C" fn event_property_trampoline<T>(this: *mut GtkWidget,
+            event: *mut GdkEventProperty,
             f: &Box<Fn(&Widget, &EventProperty) -> Inhibit + 'static>) -> gboolean
     where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
-        f(&from_glib_none(this), transmute(event)).to_glib()
+        f(&from_glib_none(this), &from_glib_none(event)).to_glib()
     }
 
-    unsafe extern "C" fn event_proximity_trampoline<T>(this: *mut GtkWidget, event: *mut EventAny,
+    unsafe extern "C" fn event_proximity_trampoline<T>(this: *mut GtkWidget,
+            event: *mut GdkEventProximity,
             f: &Box<Fn(&Widget, &EventProximity) -> Inhibit + 'static>) -> gboolean
     where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
-        f(&from_glib_none(this), transmute(event)).to_glib()
+        f(&from_glib_none(this), &from_glib_none(event)).to_glib()
     }
 
-    unsafe extern "C" fn event_scroll_trampoline<T>(this: *mut GtkWidget, event: *mut EventAny,
+    unsafe extern "C" fn event_scroll_trampoline<T>(this: *mut GtkWidget,
+            event: *mut GdkEventScroll,
             f: &Box<Fn(&Widget, &EventScroll) -> Inhibit + 'static>) -> gboolean
     where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
-        f(&from_glib_none(this), transmute(event)).to_glib()
+        f(&from_glib_none(this), &from_glib_none(event)).to_glib()
     }
 
-    unsafe extern "C" fn event_window_state_trampoline<T>(this: *mut GtkWidget, event: *mut EventAny,
+    unsafe extern "C" fn event_window_state_trampoline<T>(this: *mut GtkWidget,
+            event: *mut GdkEventWindowState,
             f: &Box<Fn(&Widget, &EventWindowState) -> Inhibit + 'static>) -> gboolean
     where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
-        f(&from_glib_none(this), transmute(event)).to_glib()
+        f(&from_glib_none(this), &from_glib_none(event)).to_glib()
     }
 
     unsafe extern "C" fn direction_trampoline<T>(this: *mut GtkWidget, direction: DirectionType,
