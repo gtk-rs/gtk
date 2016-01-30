@@ -22,11 +22,16 @@ pub use gdk::pixbuf as gdk_pixbuf;
 
 pub use glib::{
     Cast,
+    Continue,
     Error,
     IsA,
     Object,
+    StaticType,
+    ToValue,
+    Type,
+    TypedValue,
+    Value,
 };
-pub use glib::Value;
 
 pub use ffi::GtkAccelFlags as AccelFlags;
 pub use ffi::GtkAlign as Align;
