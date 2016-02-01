@@ -2,6 +2,7 @@
 name = "gtk"
 version = "0.0.7"
 authors = ["The Gtk-rs Project Developers"]
+build = "build.rs"
 
 description = "Rust bindings for the GTK+ library"
 repository = "https://github.com/gtk-rs/gtk"
@@ -23,6 +24,15 @@ name = "gtk"
 "3.12" = ["3.10", "gtk-sys/3.12", "gdk/3.12"]
 "3.14" = ["3.12", "gtk-sys/3.14", "gdk/3.14"]
 "3.16" = ["3.14", "gtk-sys/3.16", "gdk/3.16"]
+# Embed the LGPL-licensed doc-comments into the sources
+embed-lgpl-docs = ["gtk-rs-lgpl-docs"]
+# Remove the LGPL-licensed doc-comments
+purge-lgpl-docs = ["gtk-rs-lgpl-docs"]
+
+[build-dependencies.gtk-rs-lgpl-docs]
+git = "https://github.com/gtk-rs/lgpl-docs"
+version = "0.0.1"
+optional = true
 
 [dependencies]
 libc = "0.2"
