@@ -9,7 +9,6 @@ use std::thread;
 
 use glib::signal::connect;
 use glib::translate::*;
-use glib::ParamSpec;
 
 use glib_ffi::{self, gboolean, gpointer};
 use ffi::{GtkAdjustment, GtkTreeSelection, GtkTreeViewColumn};
@@ -133,12 +132,10 @@ pub fn timeout_add_seconds<F>(interval: u32, func: F) -> u32
 }
 
 pub trait WidgetSignals {
-    fn connect_notify<F: Fn(&Self, &ParamSpec) + 'static>(&self, f: F) -> u64;
     fn connect_accel_closures_changed<F: Fn(&Self) + 'static>(&self, f: F) -> u64;
     fn connect_button_press_event<F: Fn(&Self, &EventButton) -> Inhibit + 'static>(&self, f: F) -> u64;
     fn connect_button_release_event<F: Fn(&Self, &EventButton) -> Inhibit + 'static>(&self, f: F) -> u64;
     fn connect_can_activate_accel<F: Fn(&Self, u64) -> bool + 'static>(&self, f: F) -> u64;
-    fn connect_child_notify<F: Fn(&Self, &ParamSpec) + 'static>(&self, f: F) -> u64;
     fn connect_composited_changed<F: Fn(&Self) + 'static>(&self, f: F) -> u64;
     fn connect_configure_event<F: Fn(&Self, &EventConfigure) -> Inhibit + 'static>(&self, f: F) -> u64;
     fn connect_damage_event<F: Fn(&Self, &EventExpose) -> Inhibit + 'static>(&self, f: F) -> u64;
@@ -189,7 +186,6 @@ pub trait WidgetSignals {
 mod widget {
     use std::mem::transmute;
     use libc::{c_int, c_uint};
-    use glib::{ParamSpec};
     use glib::signal::connect;
     use glib::translate::*;
     use gdk::{
@@ -213,15 +209,6 @@ mod widget {
     use {Object, IsA};
 
     impl<T: IsA<Widget> + IsA<Object>> super::WidgetSignals for T {
-        // this is a GObject signal actually
-        fn connect_notify<F: Fn(&Self, &ParamSpec) + 'static>(&self, f: F) -> u64 {
-            unsafe {
-                let f: Box<Box<Fn(&Self, &ParamSpec) + 'static>> = Box::new(Box::new(f));
-                connect(self.to_glib_none().0, "notify",
-                    transmute(notify_trampoline::<Self>), Box::into_raw(f) as *mut _)
-            }
-        }
-
         fn connect_accel_closures_changed<F: Fn(&Self) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
@@ -252,14 +239,6 @@ mod widget {
                 let f: Box<Box<Fn(&Self, u64) -> bool + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "can-activate-accel",
                     transmute(accel_trampoline::<Self>), Box::into_raw(f) as *mut _)
-            }
-        }
-
-        fn connect_child_notify<F: Fn(&Self, &ParamSpec) + 'static>(&self, f: F) -> u64 {
-            unsafe {
-                let f: Box<Box<Fn(&Self, &ParamSpec) + 'static>> = Box::new(Box::new(f));
-                connect(self.to_glib_none().0, "child-notify",
-                    transmute(notify_trampoline::<Self>), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -795,13 +774,6 @@ mod widget {
     where T: IsA<Widget> + IsA<Object> {
         callback_guard!();
         f(&from_glib_none(this), from_glib(arg1)).to_glib()
-    }
-
-    unsafe extern "C" fn notify_trampoline<T>(this: *mut GtkWidget, pspec: *mut ParamSpec,
-            f: &Box<Fn(&Widget, &ParamSpec) + 'static>)
-    where T: IsA<Widget> + IsA<Object> {
-        callback_guard!();
-        f(&from_glib_none(this), transmute(pspec));
     }
 
     unsafe extern "C" fn query_trampoline<T>(this: *mut GtkWidget, x: c_int, y: c_int,
