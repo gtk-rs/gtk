@@ -18,15 +18,24 @@ pub use auto::traits::CellAreaExt;
 pub use auto::traits::CellEditableExt;
 pub use auto::traits::CellLayoutExt;
 pub use auto::traits::CellRendererExt;
+pub use auto::traits::CellRendererTextExt;
 pub use auto::traits::CheckButtonExt;
 pub use auto::traits::ComboBoxExt;
 pub use auto::traits::ContainerExt;
 //pub use auto::traits::DialogExt;
 pub use auto::traits::EditableExt;
 pub use auto::traits::EntryExt;
+#[cfg(gtk_3_14)]
+pub use auto::traits::EventControllerExt;
 pub use auto::traits::FileChooserExt;
 pub use auto::traits::FontChooserExt;
 pub use auto::traits::FrameExt;
+#[cfg(gtk_3_14)]
+pub use auto::traits::GestureExt;
+#[cfg(gtk_3_14)]
+pub use auto::traits::GestureDragExt;
+#[cfg(gtk_3_14)]
+pub use auto::traits::GestureSingleExt;
 pub use auto::traits::MenuItemExt;
 pub use auto::traits::MenuShellExt;
 pub use auto::traits::MiscExt;
@@ -44,8 +53,8 @@ pub use auto::traits::ToolItemExt;
 pub use auto::traits::ToolShellExt;
 //pub use auto::traits::TreeModelExt;
 pub use auto::traits::TreeSortableExt;
-pub use auto::traits::WindowExt;
 //pub use auto::traits::WidgetExt;
+pub use auto::traits::WindowExt;
 
 pub use app_chooser::AppChooserExt;
 pub use color_chooser::ColorChooserExt;
