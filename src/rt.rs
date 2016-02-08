@@ -7,8 +7,7 @@ use std::ptr;
 use std::sync::atomic::{AtomicBool, ATOMIC_BOOL_INIT, Ordering};
 use libc::c_uint;
 use ffi;
-use glib::translate::{from_glib, from_glib_none};
-use glib::{to_bool, to_gboolean};
+use glib::translate::*;
 use gdk;
 
 thread_local! {
@@ -121,18 +120,18 @@ pub fn main_level() -> u32 {
 
 pub fn main_iteration() -> bool {
     assert_initialized_main_thread!();
-    unsafe { to_bool(ffi::gtk_main_iteration()) }
+    unsafe { from_glib(ffi::gtk_main_iteration()) }
 }
 
 pub fn main_iteration_do(blocking: bool) -> bool {
     assert_initialized_main_thread!();
-    unsafe { to_bool(ffi::gtk_main_iteration_do(to_gboolean(blocking))) }
+    unsafe { from_glib(ffi::gtk_main_iteration_do(blocking.to_glib())) }
 }
 
 pub fn events_pending() -> bool {
     assert_initialized_main_thread!();
     unsafe {
-        to_bool(ffi::gtk_events_pending())
+        from_glib(ffi::gtk_events_pending())
     }
 }
 
