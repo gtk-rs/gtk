@@ -2,7 +2,6 @@
 name = "gtk"
 version = "0.0.7"
 authors = ["The Gtk-rs Project Developers"]
-build = "build.rs"
 
 description = "Rust bindings for the GTK+ library"
 repository = "https://github.com/gtk-rs/gtk"
@@ -16,6 +15,14 @@ keywords = ["gtk", "gnome", "GUI"]
 
 [lib]
 name = "gtk"
+
+[features]
+"3.6" = ["gtk-sys/3.6", "gdk/3.6"]
+"3.8" = ["3.6", "gtk-sys/3.8", "gdk/3.8"]
+"3.10" = ["3.8", "gtk-sys/3.10", "gdk/3.10"]
+"3.12" = ["3.10", "gtk-sys/3.12", "gdk/3.12"]
+"3.14" = ["3.12", "gtk-sys/3.14", "gdk/3.14"]
+"3.16" = ["3.14", "gtk-sys/3.16", "gdk/3.16"]
 
 [dependencies]
 cairo-rs = { git = "https://github.com/gtk-rs/cairo" }
