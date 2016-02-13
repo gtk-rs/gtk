@@ -52,7 +52,7 @@ git = "https://github.com/gtk-rs/glib"
 version = "0.0.8"
 
 [dependencies.gdk]
-git = "https://github.com/gtk-rs/glib"
+git = "https://github.com/gtk-rs/gdk"
 version = "0.3.0"
 
 [dependencies.pango]
