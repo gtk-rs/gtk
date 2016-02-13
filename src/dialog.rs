@@ -39,7 +39,7 @@ pub trait DialogExt {
     fn add_button(&self, button_text: &str, response_id: i32) -> Widget;
     fn get_action_area(&self) -> Widget;
     fn get_content_area(&self) -> Box;
-    #[cfg(gtk_3_12)]
+    #[cfg(feature = "3.12")]
     fn get_header_bar(&self) -> Option<Widget>;
     fn get_response_for_widget<T: IsA<Widget>>(&self, widget: &T) -> i32;
     fn get_widget_for_response(&self, response_id: i32) -> Option<Widget>;
@@ -76,7 +76,7 @@ impl<O: IsA<Dialog>> DialogExt for O {
         Auto::get_content_area(self)
     }
 
-    #[cfg(gtk_3_12)]
+    #[cfg(feature = "3.12")]
     #[inline]
     fn get_header_bar(&self) -> Option<Widget> {
         Auto::get_header_bar(self)

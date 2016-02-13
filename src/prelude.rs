@@ -9,7 +9,7 @@ pub use {
     ToValue,
 };
 
-#[cfg(gtk_3_4)]
+#[cfg(feature = "3.4")]
 pub use auto::traits::ActionableExt;
 pub use auto::traits::BinExt;
 pub use auto::traits::BoxExt;
@@ -25,22 +25,22 @@ pub use auto::traits::ContainerExt;
 //pub use auto::traits::DialogExt;
 pub use auto::traits::EditableExt;
 pub use auto::traits::EntryExt;
-#[cfg(gtk_3_14)]
+#[cfg(feature = "3.14")]
 pub use auto::traits::EventControllerExt;
 pub use auto::traits::FileChooserExt;
 pub use auto::traits::FontChooserExt;
 pub use auto::traits::FrameExt;
-#[cfg(gtk_3_14)]
+#[cfg(feature = "3.14")]
 pub use auto::traits::GestureExt;
-#[cfg(gtk_3_14)]
+#[cfg(feature = "3.14")]
 pub use auto::traits::GestureDragExt;
-#[cfg(gtk_3_14)]
+#[cfg(feature = "3.14")]
 pub use auto::traits::GestureSingleExt;
 pub use auto::traits::MenuItemExt;
 pub use auto::traits::MenuShellExt;
 pub use auto::traits::MiscExt;
 pub use auto::traits::OrientableExt;
-#[cfg(gtk_3_12)]
+#[cfg(feature = "3.12")]
 pub use auto::traits::PopoverExt;
 pub use auto::traits::RangeExt;
 pub use auto::traits::RecentChooserExt;
