@@ -5,7 +5,7 @@ rust:
   - stable
 env:
   - GTK=3.4
-  - GTK=latest
+  - GTK=3.18
 addons:
   apt:
     packages:

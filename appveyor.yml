@@ -1,25 +1,28 @@
 environment:
   matrix:
-    - TARGET: i686-pc-windows-gnu
-      RUST_VERSION: 1.5.0
+    - RUST: 1.6.0
       BITS: 32
-    - TARGET: x86_64-pc-windows-gnu
-      RUST_VERSION: 1.5.0
+    - RUST: 1.6.0
       BITS: 64
+
 install:
-  - ps: Start-FileDownload "https://static.rust-lang.org/dist/rust-${env:RUST_VERSION}-${env:TARGET}.exe"
-  - rust-%RUST_VERSION%-%TARGET%.exe /VERYSILENT /NORESTART /COMPONENTS="Rustc,Cargo,Std" /DIR="C:\Rust"
-  - SET PATH=C:\Rust\bin;C:\Program Files\Git\cmd;C:\Program Files\Git\usr\bin
-  - SET PATH=C:\msys64\mingw%BITS%\bin;C:\msys64\usr\bin;%PATH%
-  - if "%BITS%" == "32" pacman --noconfirm -S mingw-w64-i686-gtk3
-  - if "%BITS%" == "64" pacman --noconfirm -S mingw-w64-x86_64-gtk3
+  - IF "%BITS%" == "32" SET ARCH=i686
+  - IF "%BITS%" == "64" SET ARCH=x86_64
+  - SET RUST_URL=https://static.rust-lang.org/dist/rust-%RUST%-%ARCH%-pc-windows-gnu.exe
+  - SET GTK_LIB_DIR=C:\msys64\mingw%BITS%\lib
+  - SET PATH=C:\Rust\bin;C:\msys64\mingw%BITS%\bin;%PATH%;C:\msys64\usr\bin
+  - ps: Start-FileDownload $Env:RUST_URL -FileName rust-dist.exe
+  - rust-dist.exe /VERYSILENT /NORESTART /COMPONENTS="Rustc,Gcc,Cargo,Std" /DIR="C:\Rust"
+  - rustc -V
+  - cargo -V
+  - pacman --noconfirm -S mingw-w64-%ARCH%-gtk3
 
 build_script:
-  - rustc -V
   - mkdir .cargo
   - echo paths = ["."] > .cargo\config
   - git clone -q --depth 50 -b pending https://github.com/gtk-rs/examples _examples
   - cd _examples
-  - cargo build --features gtk_3_14
+  - cargo build
+  - cargo build --features gtk_3_18
 
 test: false
