@@ -9,7 +9,6 @@ install:
   - IF "%BITS%" == "32" SET ARCH=i686
   - IF "%BITS%" == "64" SET ARCH=x86_64
   - SET RUST_URL=https://static.rust-lang.org/dist/rust-%RUST%-%ARCH%-pc-windows-gnu.exe
-  - SET GTK_LIB_DIR=C:\msys64\mingw%BITS%\lib
   - SET PATH=C:\Rust\bin;C:\msys64\mingw%BITS%\bin;%PATH%;C:\msys64\usr\bin
   - ps: Start-FileDownload $Env:RUST_URL -FileName rust-dist.exe
   - rust-dist.exe /VERYSILENT /NORESTART /COMPONENTS="Rustc,Gcc,Cargo,Std" /DIR="C:\Rust"
