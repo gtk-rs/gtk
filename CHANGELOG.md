@@ -11,16 +11,19 @@
     features = ["3.10"]
     ```
 
-- Windows users should use Rust's bundled gcc instead of deleting it.
-
 ### Improvements
 
-- In the absence of `pkg-config` we try to link anyway assuming the libraries
-  can be found in the default search path. There are no version checks in this
-  case.
+- [Building][sys21]:
 
-- Setting `GTK_LIB_DIR` skips `pkg-config` altogether.
+ - Windows users no longer need to delete Rust's bundled gcc.
+
+ - In the absence of `pkg-config` we try to link anyway assuming the libraries
+   can be found in the default search path. There are no version checks in this
+   case.
+
+ - Setting `GTK_LIB_DIR` skips `pkg-config` altogether.
 
 - TBD
 
 [gtk248]: https://github.com/gtk-rs/gtk/pull/248
+[sys21]: https://github.com/gtk-rs/sys/pull/21
