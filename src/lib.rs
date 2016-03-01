@@ -11,10 +11,9 @@ extern crate cairo_sys as cairo_ffi;
 #[macro_use]
 extern crate glib;
 extern crate gdk;
+extern crate gdk_pixbuf;
 extern crate cairo;
 extern crate pango;
-
-pub use gdk::pixbuf as gdk_pixbuf;
 
 pub use glib::{
     Cast,

@@ -63,6 +63,10 @@ version = "0.0.8"
 git = "https://github.com/gtk-rs/gdk"
 version = "0.3.0"
 
+[dependencies.gdk-pixbuf]
+git = "https://github.com/gtk-rs/gdk-pixbuf"
+version = "0.0.1"
+
 [dependencies.pango]
 git = "https://github.com/gtk-rs/pango"
 version = "0.0.7"
