@@ -8,6 +8,7 @@ fn manage_docs () {
     const PATH: &'static str = "src";
     const IGNORES: &'static [&'static str] = &[
         "lib.rs",
+        "prelude.rs",
         "rt.rs",
         "signal.rs",
     ];
