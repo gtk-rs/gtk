@@ -150,11 +150,15 @@ manual = [
     "GdkPixbuf.PixbufAnimation",
     "GLib.Error",
     "Gtk.Allocation",
+    "Gtk.AppChooser",
+    "Gtk.Builder",
     "Gtk.Buildable",
+    "Gtk.ColorChooser",
     "Gtk.EntryBuffer",
     "Gtk.RecentData",
     "Gtk.RecentInfo",
     "Gtk.Requisition",
+    "Gtk.TextAttributes",
     "cairo.RectangleInt",
 ]
 
