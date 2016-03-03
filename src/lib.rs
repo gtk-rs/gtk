@@ -2,6 +2,82 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
+//! # GTK+ 3 bindings
+//!
+//! This library contains safe Rust bindings for [GTK+ 3](http://www.gtk.org), a
+//! multi-platform GUI toolkit. It's a part of [Gtk-rs](http://gtk-rs.org/).
+//!
+//! The library is a work in progress: expect missing bindings and breaking
+//! changes. A steadily increasing share of the code is machine-generated from
+//! GObject introspection metadata. The API docs were converted from the
+//! upstream ones so until they've all been reviewed there will be incongruities
+//! with actual Rust APIs.
+//!
+//! See also:
+//!
+//! - [Gtk-rs documentation overview](http://gtk-rs.org/docs/)
+//!
+//! - [General GLib family types and object system overview](../glib/index.html)
+//!
+//! - [GTK+ documentation](http://www.gtk.org/documentation.php)
+//!
+//! # Hello World
+//!
+//! ```no_run
+//! extern crate gtk;
+//! use gtk::prelude::*;
+//! use gtk::{ButtonsType, DialogFlags, MessageType, MessageDialog, Window};
+//!
+//! fn main() {
+//!     if gtk::init().is_err() {
+//!         println!("Failed to initialize GTK.");
+//!         return;
+//!     }
+//!     MessageDialog::new(None::<&Window>,
+//!                        DialogFlags::empty(),
+//!                        MessageType::Info,
+//!                        ButtonsType::Ok,
+//!                        "Hello World")
+//!         .run();
+//! }
+//! ```
+//!
+//! # Crate features
+//!
+//! ## Library versions
+//!
+//! By default this crate provides only GTK+ 3.4 APIs. You can access more
+//! modern APIs by selecting one of the following features: `3.6`, `3.8`,
+//! `3.10`, `3.12`, `3.14`, `3.16`.
+//!
+//! `Cargo.toml` example:
+//!
+//! ```toml
+//! [dependencies.gtk]
+//! version = "0.x.y"
+//! features = ["3.16"]
+//! ```
+//!
+//! **Take care when choosing the version to target: some of your users might
+//! not have easy access to the latest ones.** The higher the version, the fewer
+//! users will have it installed.
+//!
+//! ## Lgpl-docs
+//!
+//! The Gtk-rs crates come with API docs missing because of licensing
+//! incompatibilty. You can embed those docs locally via the `embed-lgpl-docs`
+//! feature, e.g.
+//!
+//! ```shell
+//! > cargo doc --features embed-lgpl-docs
+//! ```
+//!
+//! Its counterpart `purge-lgpl-docs` removes those docs regardless of edits.
+//!
+//! These features **rewrite the crate sources** so it's sufficient to enable
+//! them once. **Omitting them in the following cargo invocations will not undo
+//! their effects!**
+
 extern crate libc;
 
 extern crate glib_sys as glib_ffi;
@@ -11,10 +87,9 @@ extern crate cairo_sys as cairo_ffi;
 #[macro_use]
 extern crate glib;
 extern crate gdk;
+extern crate gdk_pixbuf;
 extern crate cairo;
 extern crate pango;
-
-pub use gdk::pixbuf as gdk_pixbuf;
 
 pub use glib::{
     Cast,
