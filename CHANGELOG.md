@@ -53,8 +53,9 @@
   - Unified upcasting and downcasting via the `Cast` trait, proper interface
     support. In particular this makes `Builder` safe to use.
 
-  - The [`prelude`][prelude] module, which reexports all traits from `gtk` and
-    its dependencies and some ubiquitous types (`Continue`, `Inhibit`).
+  - Each crate has a `prelude` module, which reexports all traits and some
+    ubiquitous types (`Continue`, `Inhibit`). `gtk`'s prelude incorporates
+    `glib`'s one.
 
   - Removal of the C glue layer and gcc dependency.
 
