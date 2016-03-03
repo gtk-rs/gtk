@@ -293,6 +293,7 @@ mod text_buffer;
 mod text_iter;
 mod text_view;
 mod tree_model;
+mod tree_sortable;
 mod tree_path;
 mod tree_store;
 mod tree_view;
@@ -316,3 +317,4 @@ pub use requisition::Requisition;
 #[cfg(target_os = "linux")]
 pub use socket::Socket;
 pub use text_attributes::TextAttributes;
+pub use tree_sortable::SortColumn;
