@@ -513,6 +513,9 @@ status = "generate"
 name = "Gtk.TextIter"
 status = "generate"
     [[object.function]]
+    name = "get_attributes"
+    ignore = true
+    [[object.function]]
     name = "get_char"
         [object.function.return]
         nullable = true
