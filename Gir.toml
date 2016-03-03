@@ -57,7 +57,6 @@ generate = [
     "Gtk.FontChooserDialog",
     "Gtk.FontChooserWidget",
     "Gtk.Frame",
-    "Gtk.Gesture",
     "Gtk.GestureDrag",
     "Gtk.GestureLongPress",
     "Gtk.GestureMultiPress",
@@ -86,7 +85,6 @@ generate = [
     "Gtk.Overlay",
     "Gtk.Paned",
     "Gtk.PlacesSidebar",
-    "Gtk.Popover",
     "Gtk.PopoverMenu",
     "Gtk.ProgressBar",
     "Gtk.RadioButton",
@@ -152,11 +150,15 @@ manual = [
     "GdkPixbuf.PixbufAnimation",
     "GLib.Error",
     "Gtk.Allocation",
+    "Gtk.AppChooser",
+    "Gtk.Builder",
     "Gtk.Buildable",
+    "Gtk.ColorChooser",
     "Gtk.EntryBuffer",
     "Gtk.RecentData",
     "Gtk.RecentInfo",
     "Gtk.Requisition",
+    "Gtk.TextAttributes",
     "cairo.RectangleInt",
 ]
 
@@ -259,6 +261,11 @@ status = "generate"
         [[object.function.parameter]]
         name = "label"
         nullable = false
+
+[[object]]
+name = "Gtk.Gesture"
+status = "generate"
+version = "3.14"
 
 [[object]]
 name = "Gtk.GLArea"
@@ -417,6 +424,11 @@ status = "generate"
         const = true
 
 [[object]]
+name = "Gtk.Popover"
+status = "generate"
+version = "3.12"
+
+[[object]]
 name = "Gtk.PaperSize"
 status = "generate"
     [[object.function]]
@@ -500,6 +512,9 @@ status = "generate"
 [[object]]
 name = "Gtk.TextIter"
 status = "generate"
+    [[object.function]]
+    name = "get_attributes"
+    ignore = true
     [[object.function]]
     name = "get_char"
         [object.function.return]
