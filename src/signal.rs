@@ -1122,7 +1122,7 @@ mod toggle_button {
 }
 
 pub trait CellRendererToggleSignals {
-    fn connect_toggled<F: Fn(&Self, &mut TreePath) + 'static>(&self, f: F) -> u64;
+    fn connect_toggled<F: Fn(&Self, &TreePath) + 'static>(&self, f: F) -> u64;
 }
 
 mod cell_renderer_toggle {
@@ -1135,9 +1135,9 @@ mod cell_renderer_toggle {
     use {CellRendererToggle, TreePath};
 
     impl super::CellRendererToggleSignals for CellRendererToggle {
-        fn connect_toggled<F: Fn(&Self, &mut TreePath) + 'static>(&self, f: F) -> u64 {
+        fn connect_toggled<F: Fn(&Self, &TreePath) + 'static>(&self, f: F) -> u64 {
             unsafe {
-                let f: Box<Box<Fn(&Self, &mut TreePath) + 'static>> = Box::new(Box::new(f));
+                let f: Box<Box<Fn(&Self, &TreePath) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "toggled",
                     transmute(string_path_trampoline), Box::into_raw(f) as *mut _)
             }
@@ -1145,10 +1145,10 @@ mod cell_renderer_toggle {
     }
 
     unsafe extern "C" fn string_path_trampoline(this: *mut GtkCellRendererToggle, c_str_path: *const c_char,
-            f: &Box<Fn(&CellRendererToggle, &mut TreePath) + 'static>) {
+            f: &Box<Fn(&CellRendererToggle, &TreePath) + 'static>) {
         callback_guard!();
-        let mut path = from_glib_full(gtk_tree_path_new_from_string(c_str_path));
-        f(&from_glib_none(this), &mut path);
+        let path = from_glib_full(gtk_tree_path_new_from_string(c_str_path));
+        f(&from_glib_none(this), &path);
     }
 }
 
@@ -1241,16 +1241,16 @@ pub trait TreeViewSignals {
     fn connect_cursor_changed<F: Fn(&Self) + 'static>(&self, f: F) -> u64;
     fn connect_expand_collapse_cursor_row<F: Fn(&Self, bool, bool, bool) -> bool + 'static>(&self, f: F)
         -> u64;
-    fn connect_row_activated<F: Fn(&Self, &mut TreePath, &TreeViewColumn) + 'static>(&self, f: F) -> u64;
-    fn connect_row_collapsed<F: Fn(&Self, &mut TreeIter, &mut TreePath) + 'static>(&self, f: F) -> u64;
-    fn connect_row_expanded<F: Fn(&Self, &mut TreeIter, &mut TreePath) + 'static>(&self, f: F) -> u64;
+    fn connect_row_activated<F: Fn(&Self, &TreePath, &TreeViewColumn) + 'static>(&self, f: F) -> u64;
+    fn connect_row_collapsed<F: Fn(&Self, &TreeIter, &TreePath) + 'static>(&self, f: F) -> u64;
+    fn connect_row_expanded<F: Fn(&Self, &TreeIter, &TreePath) + 'static>(&self, f: F) -> u64;
     fn connect_select_all<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> u64;
     fn connect_select_cursor_parent<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> u64;
     fn connect_select_cursor_row<F: Fn(&Self, bool) -> bool + 'static>(&self, f: F) -> u64;
     fn connect_start_interactive_search<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> u64;
-    fn connect_test_collapse_row<F: Fn(&Self, &mut TreeIter, &mut TreePath) -> bool + 'static>(&self, f: F)
+    fn connect_test_collapse_row<F: Fn(&Self, &TreeIter, &TreePath) -> bool + 'static>(&self, f: F)
         -> u64;
-    fn connect_test_expand_row<F: Fn(&Self, &mut TreeIter, &mut TreePath) -> bool + 'static>(&self, f: F)
+    fn connect_test_expand_row<F: Fn(&Self, &TreeIter, &TreePath) -> bool + 'static>(&self, f: F)
         -> u64;
     fn connect_toggle_cursor_row<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> u64;
     fn connect_unselect_all<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> u64;
@@ -1291,25 +1291,25 @@ mod tree_view {
             }
         }
 
-        fn connect_row_activated<F: Fn(&Self, &mut TreePath, &TreeViewColumn) + 'static>(&self, f: F) -> u64 {
+        fn connect_row_activated<F: Fn(&Self, &TreePath, &TreeViewColumn) + 'static>(&self, f: F) -> u64 {
             unsafe {
-                let f: Box<Box<Fn(&Self, &mut TreePath, &TreeViewColumn) + 'static>> = Box::new(Box::new(f));
+                let f: Box<Box<Fn(&Self, &TreePath, &TreeViewColumn) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "row-activated",
                     transmute(path_column_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
-        fn connect_row_collapsed<F: Fn(&Self, &mut TreeIter, &mut TreePath) + 'static>(&self, f: F) -> u64 {
+        fn connect_row_collapsed<F: Fn(&Self, &TreeIter, &TreePath) + 'static>(&self, f: F) -> u64 {
             unsafe {
-                let f: Box<Box<Fn(&Self, &mut TreeIter, &mut TreePath) + 'static>> = Box::new(Box::new(f));
+                let f: Box<Box<Fn(&Self, &TreeIter, &TreePath) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "row-collapsed",
                     transmute(iter_path_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
-        fn connect_row_expanded<F: Fn(&Self, &mut TreeIter, &mut TreePath) + 'static>(&self, f: F) -> u64 {
+        fn connect_row_expanded<F: Fn(&Self, &TreeIter, &TreePath) + 'static>(&self, f: F) -> u64 {
             unsafe {
-                let f: Box<Box<Fn(&Self, &mut TreeIter, &mut TreePath) + 'static>> = Box::new(Box::new(f));
+                let f: Box<Box<Fn(&Self, &TreeIter, &TreePath) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "row-expanded",
                     transmute(iter_path_trampoline), Box::into_raw(f) as *mut _)
             }
@@ -1347,20 +1347,20 @@ mod tree_view {
             }
         }
 
-        fn connect_test_collapse_row<F: Fn(&Self, &mut TreeIter, &mut TreePath) -> bool + 'static>(&self, f: F)
+        fn connect_test_collapse_row<F: Fn(&Self, &TreeIter, &TreePath) -> bool + 'static>(&self, f: F)
                 -> u64 {
             unsafe {
-                let f: Box<Box<Fn(&Self, &mut TreeIter, &mut TreePath) -> bool + 'static>> =
+                let f: Box<Box<Fn(&Self, &TreeIter, &TreePath) -> bool + 'static>> =
                     Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "test-collapse-row",
                     transmute(iter_path_bool_trampoline), Box::into_raw(f) as *mut _)
             }
         }
 
-        fn connect_test_expand_row<F: Fn(&Self, &mut TreeIter, &mut TreePath) -> bool + 'static>(&self, f: F)
+        fn connect_test_expand_row<F: Fn(&Self, &TreeIter, &TreePath) -> bool + 'static>(&self, f: F)
                 -> u64 {
             unsafe {
-                let f: Box<Box<Fn(&Self, &mut TreeIter, &mut TreePath) -> bool + 'static>> =
+                let f: Box<Box<Fn(&Self, &TreeIter, &TreePath) -> bool + 'static>> =
                     Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "test-expand-row",
                     transmute(iter_path_bool_trampoline), Box::into_raw(f) as *mut _)
@@ -1410,22 +1410,22 @@ mod tree_view {
 
     unsafe extern "C" fn path_column_trampoline(this: *mut GtkTreeView, path: *mut GtkTreePath,
             column: *mut GtkTreeViewColumn,
-            f: &Box<Fn(&TreeView, &mut TreePath, &TreeViewColumn) + 'static>) {
+            f: &Box<Fn(&TreeView, &TreePath, &TreeViewColumn) + 'static>) {
         callback_guard!();
-        f(&from_glib_none(this), &mut from_glib_borrow(path), &from_glib_none(column));
+        f(&from_glib_none(this), &from_glib_borrow(path), &from_glib_none(column));
     }
 
     unsafe extern "C" fn iter_path_trampoline(this: *mut GtkTreeView, iter: *mut GtkTreeIter,
-            path: *mut GtkTreePath, f: &Box<Fn(&TreeView, &mut TreeIter, &mut TreePath) + 'static>) {
+            path: *mut GtkTreePath, f: &Box<Fn(&TreeView, &TreeIter, &TreePath) + 'static>) {
         callback_guard!();
-        f(&from_glib_none(this), &mut from_glib_borrow(iter), &mut from_glib_borrow(path));
+        f(&from_glib_none(this), &from_glib_borrow(iter), &from_glib_borrow(path));
     }
 
     unsafe extern "C" fn iter_path_bool_trampoline(this: *mut GtkTreeView, iter: *mut GtkTreeIter,
             path: *mut GtkTreePath,
-            f: &Box<Fn(&TreeView, &mut TreeIter, &mut TreePath) -> bool + 'static>) -> gboolean {
+            f: &Box<Fn(&TreeView, &TreeIter, &TreePath) -> bool + 'static>) -> gboolean {
         callback_guard!();
-        f(&from_glib_none(this), &mut from_glib_borrow(iter), &mut from_glib_borrow(path)).to_glib()
+        f(&from_glib_none(this), &from_glib_borrow(iter), &from_glib_borrow(path)).to_glib()
     }
 }
 
