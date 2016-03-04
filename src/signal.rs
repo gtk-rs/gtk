@@ -4,8 +4,6 @@
 
 use std::cell::RefCell;
 use std::mem::transmute;
-use std::process;
-use std::thread;
 
 use glib::signal::connect;
 use glib::translate::*;
@@ -64,19 +62,9 @@ impl ToGlib for Inhibit {
     }
 }
 
-struct CallbackGuard;
-
-impl Drop for CallbackGuard {
-    fn drop(&mut self) {
-        if thread::panicking() {
-            process::exit(101);
-        }
-    }
-}
-
 macro_rules! callback_guard {
     () => (
-        let _guard = CallbackGuard;
+        let _guard = ::glib::CallbackGuard::new();
         if cfg!(debug_assertions) {
             assert_initialized_main_thread!();
         }
@@ -227,7 +215,6 @@ mod widget {
     use ffi::{GtkWidget, GtkTooltip};
     use {Widget, DirectionType, StateFlags, TextDirection, WidgetHelpType};
     use super::Tooltip;
-    use super::CallbackGuard;
     use super::Inhibit;
     use {Object, IsA};
 
@@ -858,7 +845,6 @@ mod entry {
     use glib::translate::*;
     use libc::c_char;
     use ffi::GtkEntry;
-    use super::CallbackGuard;
     use {Entry, DeleteType, MovementStep, Object, IsA};
 
     impl<T: IsA<Entry> + IsA<Object>> super::EntrySignals for T {
@@ -984,7 +970,6 @@ mod button {
     use glib::signal::connect;
     use glib::translate::*;
     use ffi::GtkButton;
-    use super::CallbackGuard;
     use {Button, Object, IsA};
 
     impl<T: IsA<Button> + IsA<Object>> super::ButtonSignals for T {
@@ -1026,7 +1011,6 @@ mod combobox {
     use glib::translate::*;
     use glib_ffi::gboolean;
     use ffi::GtkComboBox;
-    use super::CallbackGuard;
     use {ComboBox, Object, IsA, ScrollType};
 
     impl<T: IsA<ComboBox> + IsA<Object>> super::ComboBoxSignals for T {
@@ -1094,7 +1078,6 @@ mod tool_button {
     use glib::signal::connect;
     use glib::translate::*;
     use ffi::GtkToolButton;
-    use super::CallbackGuard;
     use {Object, ToolButton, IsA};
 
     impl<T: IsA<ToolButton> + IsA<Object>> super::ToolButtonSignals for T {
@@ -1124,7 +1107,6 @@ mod toggle_button {
     use glib::signal::connect;
     use glib::translate::*;
     use ffi::GtkToggleButton;
-    use super::CallbackGuard;
     use ToggleButton;
 
     impl super::ToggleButtonSignals for ToggleButton {
@@ -1153,7 +1135,6 @@ mod cell_renderer_toggle {
     use glib::translate::*;
     use libc::c_char;
     use ffi::{GtkCellRendererToggle, gtk_tree_path_new_from_string};
-    use super::CallbackGuard;
     use {CellRendererToggle, TreePath};
 
     impl super::CellRendererToggleSignals for CellRendererToggle {
@@ -1184,7 +1165,6 @@ mod spin_button {
     use glib::signal::connect;
     use glib::translate::*;
     use ffi::GtkSpinButton;
-    use super::CallbackGuard;
     use SpinButton;
 
     impl super::SpinButtonSignals for SpinButton {
@@ -1223,7 +1203,6 @@ mod dialog {
     use glib::signal::connect;
     use glib::translate::*;
     use ffi::GtkDialog;
-    use super::CallbackGuard;
     use {Dialog, Object, IsA};
 
     impl<T: IsA<Dialog> + IsA<Object>> super::DialogSignals for T {
@@ -1284,7 +1263,6 @@ mod tree_view {
     use glib::translate::*;
     use glib_ffi::gboolean;
     use ffi::{GtkTreeIter, GtkTreePath, GtkTreeView, GtkTreeViewColumn};
-    use super::CallbackGuard;
     use {TreeIter, TreePath, TreeView, TreeViewColumn};
 
     impl super::TreeViewSignals for TreeView {
@@ -1467,7 +1445,6 @@ mod range {
     use glib_ffi::gboolean;
     use ffi::{GtkRange};
     use {Object, Range, ScrollType, IsA};
-    use super::CallbackGuard;
     use super::Inhibit;
 
     impl<T: IsA<Range> + IsA<Object>> super::RangeSignals for T {
@@ -1588,7 +1565,6 @@ mod gl_area {
     use gdk;
     use gdk_ffi;
     use ffi::GtkGLArea;
-    use super::CallbackGuard;
     use super::Inhibit;
     use GLArea;
 
@@ -1653,7 +1629,6 @@ mod calendar {
     use glib::signal::connect;
     use glib::translate::*;
     use ffi::GtkCalendar;
-    use super::CallbackGuard;
     use Calendar;
 
     impl super::CalendarSignals for Calendar {
@@ -1739,7 +1714,6 @@ mod status_icon {
     use glib::signal::connect;
     use glib::translate::*;
     use glib_ffi::gboolean;
-    use super::CallbackGuard;
     use super::Tooltip;
 
     impl super::StatusIconSignals for StatusIcon {
