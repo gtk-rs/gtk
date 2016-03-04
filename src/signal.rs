@@ -52,6 +52,7 @@ pub struct Tooltip;
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
 pub struct Inhibit(pub bool);
 
+#[doc(hidden)]
 impl ToGlib for Inhibit {
     type GlibType = gboolean;
 

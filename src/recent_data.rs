@@ -16,6 +16,7 @@ pub struct RecentData {
     is_private: bool,
 }
 
+#[doc(hidden)]
 impl <'a> ToGlibPtr<'a, *mut ffi::GtkRecentData> for RecentData {
     type Storage = (Box<ffi::GtkRecentData>,
                     [Stash<'a, *mut c_char, String>; 5],
