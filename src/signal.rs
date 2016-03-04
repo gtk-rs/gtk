@@ -48,7 +48,9 @@ use {
 
 pub struct Tooltip;
 
-/// Whether to propagate the signal to other handlers
+/// Whether to propagate the signal to the default handler.
+///
+/// Don't inhibit default handlers without a reason, they're usually helpful.
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
 pub struct Inhibit(pub bool);
 
@@ -99,6 +101,10 @@ fn into_raw<F: FnMut() -> Continue + 'static>(func: F) -> gpointer {
     Box::into_raw(func) as gpointer
 }
 
+/// Adds a closure to be called by the default main loop when it's idle.
+///
+/// `func` will be called repeatedly until it returns `Continue(false)`.
+///
 /// Similar to `glib::idle_add` but only callable from the main thread and
 /// doesn't require `Send`.
 pub fn idle_add<F>(func: F) -> u32
@@ -110,6 +116,14 @@ pub fn idle_add<F>(func: F) -> u32
     }
 }
 
+/// Adds a closure to be called by the default main loop at regular intervals
+/// with millisecond granularity.
+///
+/// `func` will be called repeatedly every `interval` milliseconds until it
+/// returns `Continue(false)`. Precise timing is not guaranteed, the timeout may
+/// be delayed by other events. Prefer `timeout_add_seconds` when millisecond
+/// precision is not necessary.
+///
 /// Similar to `glib::timeout_add` but only callable from the main thread and
 /// doesn't require `Send`.
 pub fn timeout_add<F>(interval: u32, func: F) -> u32
@@ -121,6 +135,13 @@ pub fn timeout_add<F>(interval: u32, func: F) -> u32
     }
 }
 
+/// Adds a closure to be called by the default main loop at regular intervals
+/// with second granularity.
+///
+/// `func` will be called repeatedly every `interval` seconds until it
+/// returns `Continue(false)`. Precise timing is not guaranteed, the timeout may
+/// be delayed by other events.
+///
 /// Similar to `glib::timeout_add_seconds` but only callable from the main thread and
 /// doesn't require `Send`.
 pub fn timeout_add_seconds<F>(interval: u32, func: F) -> u32
