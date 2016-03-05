@@ -62,15 +62,6 @@ impl ToGlib for Inhibit {
     }
 }
 
-macro_rules! callback_guard {
-    () => (
-        let _guard = ::glib::CallbackGuard::new();
-        if cfg!(debug_assertions) {
-            assert_initialized_main_thread!();
-        }
-    )
-}
-
 // idle_add and timeout_add fixed to the main thread
 
 extern "C" fn trampoline(func: &RefCell<Box<FnMut() -> Continue + 'static>>) -> gboolean {
