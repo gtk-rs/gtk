@@ -8,6 +8,7 @@ pub struct Requisition {
     pub height: i32,
 }
 
+#[doc(hidden)]
 impl Uninitialized for Requisition {
     #[inline]
     unsafe fn uninitialized() -> Self {
@@ -15,6 +16,7 @@ impl Uninitialized for Requisition {
     }
 }
 
+#[doc(hidden)]
 impl<'a> ToGlibPtr<'a, *const ffi::GtkRequisition> for Requisition {
     type Storage = &'a Self;
 
@@ -25,6 +27,7 @@ impl<'a> ToGlibPtr<'a, *const ffi::GtkRequisition> for Requisition {
     }
 }
 
+#[doc(hidden)]
 impl<'a> ToGlibPtrMut<'a, *mut ffi::GtkRequisition> for Requisition {
     type Storage = &'a mut Self;
 

@@ -42,6 +42,72 @@
 //! }
 //! ```
 //!
+//! # Initialization
+//!
+//! GTK+ needs to be initialized before use by calling [`init`](fn.init.html).
+//! You only need to do it once and there is no 'finalize'.
+//!
+//! # The main loop
+//!
+//! In a typical GTK+ application you set up the UI, assign signal handlers
+//! and run the main event loop:
+//!
+//! ```no_run
+//! # extern crate gtk;
+//! # use gtk::prelude::*;
+//! # use gtk::{Window, WindowType};
+//! fn main() {
+//!     gtk::init().unwrap();
+//!     // Create the main window.
+//!     let window = Window::new(WindowType::Toplevel);
+//!     // UI initialization.
+//!     // ...
+//!     // Don't forget to make all widgets visible.
+//!     window.show_all();
+//!     // Handle closing of the window.
+//!     window.connect_delete_event(|_, _| {
+//!         // Stop the main loop.
+//!         gtk::main_quit();
+//!         // Let the default handler destroy the window.
+//!         Inhibit(false)
+//!     });
+//!     // Run the main loop.
+//!     gtk::main();
+//! }
+//! ```
+//!
+//! # Threads
+//!
+//! GTK+ is not thread-safe. Accoringly, none of this crate's structs implement
+//! `Send` or `Sync`.
+//!
+//! The thread where `init` was called is considered the main thread. OS X has
+//! its own notion of the main thread and `init` must be called on that thread.
+//! After successful initialization, calling any `gtk` or `gdk` functions
+//! (including `init`) from other threads will `panic`.
+//!
+//! Any thread can schedule a closure to be run by the main loop on the main
+//! thread via [`glib::idle_add`](../glib/source/fn.idle_add.html) or
+//! [`glib::timeout_add`](../glib/source/fn.timeout_add.html). This crate has
+//! versions of those functions without the `Send` bound, which may only be
+//! called from the main thread: [`idle_add`](fn.idle_add.html),
+//! [`timeout_add`](fn.timeout_add.html).
+//!
+//! # Panics
+//!
+//! This and the `gdk` crate have some run-time safety and contract checks:
+//!
+//! - Any constructor or free function will panic if called before `init` or on
+//! a non-main thread.
+//!
+//! - Any `&str` or `&Path` parameter with an interior null (`\0`) character will
+//! cause a panic.
+//!
+//! - Some functions will panic if supplied out-of-range integer parameters. All
+//! such cases will be documented individually but they're not yet.
+//!
+//! **A panic in a closure will abort the process.**
+//!
 //! # Crate features
 //!
 //! ## Library versions

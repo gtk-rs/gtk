@@ -7,18 +7,20 @@ use glib::translate::*;
 use ffi;
 
 pub struct RecentData {
-    display_name: String,
-    description: String,
-    mime_type: String,
-    app_name: String,
-    app_exec: String,
-    groups: Vec<String>,
-    is_private: bool,
+    pub display_name: Option<String>,
+    pub description: Option<String>,
+    pub mime_type: String,
+    pub app_name: String,
+    pub app_exec: String,
+    pub groups: Vec<String>,
+    pub is_private: bool,
 }
 
+#[doc(hidden)]
 impl <'a> ToGlibPtr<'a, *mut ffi::GtkRecentData> for RecentData {
     type Storage = (Box<ffi::GtkRecentData>,
-                    [Stash<'a, *mut c_char, String>; 5],
+                    [Stash<'a, *mut c_char, Option<String>>; 2],
+                    [Stash<'a, *mut c_char, String>; 3],
                     Stash<'a, *mut *mut c_char, [String]>);
 
     fn to_glib_none(&'a self) -> Stash<'a, *mut ffi::GtkRecentData, Self> {
@@ -39,7 +41,8 @@ impl <'a> ToGlibPtr<'a, *mut ffi::GtkRecentData> for RecentData {
             is_private: self.is_private.to_glib(),
         });
 
-        Stash(&mut *data, (data, [display_name, description, mime_type,
-                                  app_name, app_exec], groups))
+        Stash(&mut *data, (data, [display_name, description],
+                                 [mime_type, app_name, app_exec],
+                                 groups))
     }
 }

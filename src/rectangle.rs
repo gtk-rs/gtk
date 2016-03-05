@@ -10,6 +10,7 @@ pub struct Rectangle {
     pub height: i32,
 }
 
+#[doc(hidden)]
 impl Uninitialized for Rectangle {
     #[inline]
     unsafe fn uninitialized() -> Self {
@@ -17,6 +18,7 @@ impl Uninitialized for Rectangle {
     }
 }
 
+#[doc(hidden)]
 impl<'a> ToGlibPtr<'a, *const cairo_rectangle_int_t> for Rectangle {
     type Storage = &'a Self;
 
@@ -27,6 +29,7 @@ impl<'a> ToGlibPtr<'a, *const cairo_rectangle_int_t> for Rectangle {
     }
 }
 
+#[doc(hidden)]
 impl<'a> ToGlibPtrMut<'a, *mut cairo_rectangle_int_t> for Rectangle {
     type Storage = &'a mut Self;
 
