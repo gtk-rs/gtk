@@ -20,6 +20,31 @@ impl TreeStore {
         }
     }
 
+    pub fn insert_with_values(&self, parent: &TreeIter, position: Option<u32>, columns: &[u32],
+            values: &[&ToValue]) -> TreeIter {
+        unsafe {
+            assert!(position.unwrap_or(0) <= i32::max_value() as u32);
+            assert!(columns.len() == values.len());
+            let n_columns = ffi::gtk_tree_model_get_n_columns(self.to_glib_none().0) as u32;
+            assert!(columns.len() <= n_columns as usize);
+            for &column in columns {
+                assert!(column < n_columns);
+                let type_ = from_glib(
+                    ffi::gtk_tree_model_get_column_type(self.to_glib_none().0, column as c_int));
+                assert!(Value::type_transformable(values[column as usize].to_value_type(), type_));
+            }
+            let mut iter = TreeIter::uninitialized();
+            ffi::gtk_tree_store_insert_with_valuesv(self.to_glib_none().0,
+                iter.to_glib_none_mut().0,
+                mut_override(parent.to_glib_none().0),
+                position.map(|n| n as c_int).unwrap_or(-1),
+                mut_override(columns.as_ptr() as *const c_int),
+                values.to_glib_none().0,
+                columns.len() as c_int);
+            iter
+        }
+    }
+
     pub fn reorder(&self, parent: &TreeIter, new_order: &[u32]) {
         unsafe {
             let count = ffi::gtk_tree_model_iter_n_children(self.to_glib_none().0,
@@ -51,8 +76,8 @@ impl TreeStore {
 
     pub fn set(&self, iter: &TreeIter, columns: &[u32], values: &[&ToValue]) {
         unsafe {
-            let n_columns = ffi::gtk_tree_model_get_n_columns(self.to_glib_none().0) as u32;
             assert!(columns.len() == values.len());
+            let n_columns = ffi::gtk_tree_model_get_n_columns(self.to_glib_none().0) as u32;
             assert!(columns.len() <= n_columns as usize);
             for &column in columns {
                 assert!(column < n_columns);
