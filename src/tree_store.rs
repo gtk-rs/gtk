@@ -20,7 +20,7 @@ impl TreeStore {
         }
     }
 
-    pub fn insert_with_values(&self, parent: &TreeIter, position: Option<u32>, columns: &[u32],
+    pub fn insert_with_values(&self, parent: Option<&TreeIter>, position: Option<u32>, columns: &[u32],
             values: &[&ToValue]) -> TreeIter {
         unsafe {
             assert!(position.unwrap_or(0) <= i32::max_value() as u32);
