@@ -13,6 +13,8 @@ generate = [
     "Gtk.Adjustment",
     "Gtk.Alignment",
     "Gtk.AppChooserWidget",
+    "Gtk.Application",
+    "Gtk.ApplicationWindow",
     "Gtk.Arrow",
     "Gtk.AspectFrame",
     "Gtk.Bin",
@@ -148,6 +150,7 @@ manual = [
     "Gdk.WindowTypeHint",
     "GdkPixbuf.Pixbuf",
     "GdkPixbuf.PixbufAnimation",
+    "Gio.ApplicationFlags",
     "GLib.Error",
     "Gtk.Allocation",
     "Gtk.AppChooser",
@@ -784,6 +787,10 @@ status = "generate"
         [[object.function.parameter]]
         name = "path"
         const = true
+    [[object.function]]
+    name = "get_selection"
+        [object.function.return]
+        nullable = false
     [[object.function]]
     name = "row_activated"
         [[object.function.parameter]]

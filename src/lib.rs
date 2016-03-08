@@ -172,6 +172,7 @@ pub use glib::{
 
 pub use ffi::GtkAccelFlags as AccelFlags;
 pub use ffi::GtkAlign as Align;
+pub use ffi::GtkApplicationInhibitFlags as ApplicationInhibitFlags;
 pub use ffi::GtkArrowPlacement as ArrowPlacement;
 pub use ffi::GtkArrowType as ArrowType;
 pub use ffi::GtkAttachOptions as AttachOptions;
