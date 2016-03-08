@@ -788,6 +788,10 @@ status = "generate"
         name = "path"
         const = true
     [[object.function]]
+    name = "get_selection"
+        [object.function.return]
+        nullable = false
+    [[object.function]]
     name = "row_activated"
         [[object.function.parameter]]
         name = "path"
