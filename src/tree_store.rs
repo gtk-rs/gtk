@@ -27,11 +27,10 @@ impl TreeStore {
             assert!(columns.len() == values.len());
             let n_columns = ffi::gtk_tree_model_get_n_columns(self.to_glib_none().0) as u32;
             assert!(columns.len() <= n_columns as usize);
-            for &column in columns {
-                assert!(column < n_columns);
+            for (&column, value) in columns.iter().zip(values.iter()) {
                 let type_ = from_glib(
                     ffi::gtk_tree_model_get_column_type(self.to_glib_none().0, column as c_int));
-                assert!(Value::type_transformable(values[column as usize].to_value_type(), type_));
+                assert!(Value::type_transformable(value.to_value_type(), type_));
             }
             let mut iter = TreeIter::uninitialized();
             ffi::gtk_tree_store_insert_with_valuesv(self.to_glib_none().0,
@@ -79,11 +78,11 @@ impl TreeStore {
             assert!(columns.len() == values.len());
             let n_columns = ffi::gtk_tree_model_get_n_columns(self.to_glib_none().0) as u32;
             assert!(columns.len() <= n_columns as usize);
-            for &column in columns {
+            for (&column, value) in columns.iter().zip(values.iter()) {
                 assert!(column < n_columns);
                 let type_ = from_glib(
                     ffi::gtk_tree_model_get_column_type(self.to_glib_none().0, column as c_int));
-                assert!(Value::type_transformable(values[column as usize].to_value_type(), type_));
+                assert!(Value::type_transformable(value.to_value_type(), type_));
             }
             ffi::gtk_tree_store_set_valuesv(self.to_glib_none().0,
                 mut_override(iter.to_glib_none().0),
