@@ -31,8 +31,8 @@
   specific receiver types][gtk226-2].
 
 - New [safe event bindings][gdk95] are [passed to signal handlers][gtk244].
-  These bindings don't have many getters and setters implemented yet but the low
-  level event structs are still reachable [via `as_ref`][examples68].
+  These bindings have [safe getters][gdk107] while the low-level event structs are
+  still reachable [via `as_ref`][examples68].
 
 - New safe [`Error`][glib86-error] and [`Value`][glib95] bindings. `ListStore` and
   `TreeStore` [changed accordingly][gtk238], traded `set_string` for more
@@ -76,6 +76,7 @@
 [auto-dir]: https://github.com/gtk-rs/gtk/tree/master/src/auto
 [examples68]: https://github.com/gtk-rs/examples/pull/68
 [gdk95]: https://github.com/gtk-rs/gdk/pull/95
+[gdk107]: https://github.com/gtk-rs/gdk/pull/107
 [glib86-error]: https://github.com/gtk-rs/glib/commit/c1a30e97
 [glib95]: https://github.com/gtk-rs/glib/pull/95
 [gtk221]: https://github.com/gtk-rs/gtk/pull/221
