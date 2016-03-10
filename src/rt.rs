@@ -76,6 +76,7 @@ pub unsafe fn set_initialized() {
     else if is_initialized() {
         panic!("Attempted to initialize GTK from two different threads.");
     }
+    gdk::set_initialized();
     INITIALIZED.store(true, Ordering::Release);
     IS_MAIN_THREAD.with(|c| c.set(true));
 }
@@ -93,10 +94,14 @@ pub unsafe fn set_initialized() {
 /// initialized otherwise an Err is returned.
 pub fn init() -> Result<(), ()> {
     skip_assert_initialized!();
+    if is_initialized_main_thread() {
+        return Ok(());
+    }
+    else if is_initialized() {
+        panic!("Attempted to initialize GTK from two different threads.");
+    }
     unsafe {
-        let ok = from_glib(ffi::gtk_init_check(ptr::null_mut(), ptr::null_mut()));
-        if ok {
-            gdk::set_initialized();
+        if from_glib(ffi::gtk_init_check(ptr::null_mut(), ptr::null_mut())) {
             set_initialized();
             Ok(())
         }
