@@ -44,8 +44,9 @@
 //!
 //! # Initialization
 //!
-//! GTK+ needs to be initialized before use by calling [`init`](fn.init.html).
-//! You only need to do it once and there is no 'finalize'.
+//! GTK+ needs to be initialized before use by calling [`init`](fn.init.html) or
+//! [`Application::new`](struct.Application.html#method.new). You only need to
+//! do it once and there is no 'finalize'.
 //!
 //! # The main loop
 //!
@@ -272,6 +273,7 @@ mod rt;
 mod auto;
 
 mod app_chooser;
+mod application;
 mod builder;
 mod color_button;
 mod color_chooser;

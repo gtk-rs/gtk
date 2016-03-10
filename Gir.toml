@@ -13,7 +13,6 @@ generate = [
     "Gtk.Adjustment",
     "Gtk.Alignment",
     "Gtk.AppChooserWidget",
-    "Gtk.Application",
     "Gtk.ApplicationWindow",
     "Gtk.Arrow",
     "Gtk.AspectFrame",
@@ -191,6 +190,13 @@ status = "generate"
     name = "get_widget"
         [object.function.return]
         nullable = false
+
+[[object]]
+name = "Gtk.Application"
+status = "generate"
+    [[object.function]]
+    name = "new"
+    ignore = true
 
 [[object]]
 name = "Gtk.CellArea"

@@ -80,14 +80,19 @@ pub unsafe fn set_initialized() {
     IS_MAIN_THREAD.with(|c| c.set(true));
 }
 
-/// Call this function before using any other GTK+ functions.
+/// Tries to initialize GTK+.
 ///
-/// Note that this function calls gtk_init_check() rather than gtk_init(),
+/// Call either this function or [`Application::new`][new] before using any
+/// other GTK+ functions.
+///
+/// [new]: struct.Application.html#method.new
+///
+/// Note that this function calls `gtk_init_check()` rather than `gtk_init()`,
 /// so will not cause the program to terminate if GTK could not be initialized.
 /// Instead, an Ok is returned if the windowing system was successfully
 /// initialized otherwise an Err is returned.
 pub fn init() -> Result<(), ()> {
-    assert_not_initialized!();
+    skip_assert_initialized!();
     unsafe {
         let ok = from_glib(ffi::gtk_init_check(ptr::null_mut(), ptr::null_mut()));
         if ok {

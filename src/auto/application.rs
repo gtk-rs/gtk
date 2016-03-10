@@ -4,7 +4,6 @@
 use ApplicationInhibitFlags;
 use Window;
 use ffi;
-use glib;
 use glib::object::IsA;
 use glib::translate::*;
 
@@ -17,13 +16,6 @@ glib_wrapper! {
 }
 
 impl Application {
-    pub fn new(application_id: Option<&str>, flags: glib::ApplicationFlags) -> Application {
-        assert_initialized_main_thread!();
-        unsafe {
-            from_glib_full(ffi::gtk_application_new(application_id.to_glib_none().0, flags))
-        }
-    }
-
     //pub fn add_accelerator(&self, accelerator: &str, action_name: &str, parameter: /*Ignored*/Option<&glib::Variant>) {
     //    unsafe { TODO: call ffi::gtk_application_add_accelerator() }
     //}
