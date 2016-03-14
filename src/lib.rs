@@ -294,12 +294,10 @@ mod socket;
 mod text_attributes;
 mod text_buffer;
 mod text_iter;
-mod text_view;
 mod tree_model;
 mod tree_sortable;
 mod tree_path;
 mod tree_store;
-mod tree_view;
 mod widget;
 
 pub mod prelude;
