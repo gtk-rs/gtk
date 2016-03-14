@@ -7,12 +7,10 @@ build = "build.rs"
 description = "Rust bindings for the GTK+ library"
 repository = "https://github.com/gtk-rs/gtk"
 license = "MIT"
-homepage = "https://github.com/gtk-rs/gtk"
-documentation = "https://github.com/gtk-rs/gtk"
+homepage = "http://gtk-rs.org/"
+documentation = "http://gtk-rs.org/docs/gtk/"
 
-readme = "README.md"
-
-keywords = ["gtk", "gnome", "GUI"]
+keywords = ["gtk", "gtk-rs", "gnome", "GUI"]
 
 [lib]
 name = "gtk"
