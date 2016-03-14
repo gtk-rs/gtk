@@ -293,6 +293,7 @@ mod socket;
 mod text_attributes;
 mod text_buffer;
 mod text_iter;
+mod tree_model_filter;
 mod tree_sortable;
 mod tree_path;
 mod tree_store;

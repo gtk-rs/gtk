@@ -571,9 +571,8 @@ name = "Gtk.TreeModel"
 status = "generate"
     [[object.function]]
     name = "filter_new"
-        [[object.function.parameter]]
-        name = "root"
-        const = true
+    # Replaced by TreeModelFilter::new
+    ignore = true
     [[object.function]]
     name = "get_iter"
         [[object.function.parameter]]
@@ -652,6 +651,30 @@ status = "generate"
     [[object.function]]
     name = 'unref_node'
     ignore = true
+
+[[object]]
+name = "Gtk.TreeModelFilter"
+status = "generate"
+    [[object.function]]
+    name = "convert_child_path_to_path"
+        [[object.function.parameter]]
+        name = "child_path"
+        const = true
+    [[object.function]]
+    name = "convert_path_to_child_path"
+        [[object.function.parameter]]
+        name = "filter_path"
+        const = true
+    [[object.function]]
+    name = "convert_iter_to_child_iter"
+        [[object.function.parameter]]
+        name = "filter_iter"
+        const = true
+    [[object.function]]
+    name = "convert_child_iter_to_iter"
+        [[object.function.parameter]]
+        name = "child_iter"
+        const = true
 
 [[object]]
 name = "Gtk.TreePath"
