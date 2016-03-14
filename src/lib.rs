@@ -37,8 +37,7 @@
 //!                        DialogFlags::empty(),
 //!                        MessageType::Info,
 //!                        ButtonsType::Ok,
-//!                        "Hello World")
-//!         .run();
+//!                        "Hello World").run();
 //! }
 //! ```
 //!
