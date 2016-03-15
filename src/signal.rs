@@ -1548,7 +1548,7 @@ unsafe extern "C" fn tree_view_column_trampoline(this: *mut GtkTreeViewColumn,
     f(&from_glib_none(this))
 }
 
-#[cfg(feature = "3.16")]
+#[cfg(feature = "v3_16")]
 mod gl_area {
     use std::mem::transmute;
     use glib::signal::connect;

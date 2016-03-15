@@ -24,7 +24,7 @@
     Select the minimal version required by your application like this:
     ```toml
     [dependencies.gtk]
-    features = ["3.10"]
+    features = ["v3_10"]
     ```
 
 - Signal handlers [take the receiver by reference][gtk226-1] and support [more

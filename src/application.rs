@@ -5,7 +5,7 @@ use glib::translate::*;
 use rt;
 
 impl Application {
-    #[cfg(feature = "3.6")]
+    #[cfg(feature = "v3_6")]
     pub fn new(application_id: Option<&str>, flags: ApplicationFlags) -> Result<Application, ()> {
         skip_assert_initialized!();
         try!(rt::init());
@@ -15,7 +15,7 @@ impl Application {
         }
     }
 
-    #[cfg(not(feature = "3.6"))]
+    #[cfg(not(feature = "v3_6"))]
     pub fn new(application_id: &str, flags: ApplicationFlags) -> Result<Application, ()> {
         skip_assert_initialized!();
         try!(rt::init());

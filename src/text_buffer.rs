@@ -40,7 +40,7 @@ impl TextBuffer {
         }
     }
 
-    #[cfg(feature = "3.16")]
+    #[cfg(feature = "v3_16")]
     pub fn insert_markup(&self, iter: &mut TextIter, markup: &str) {
         unsafe {
             ffi::gtk_text_buffer_insert_markup(self.to_glib_none().0, iter.to_glib_none_mut().0,
