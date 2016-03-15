@@ -103,7 +103,7 @@ pub trait WidgetExt {
 
     fn freeze_child_notify(&self);
 
-    #[cfg(feature = "3.10")]
+    #[cfg(feature = "v3_10")]
     fn get_allocated_baseline(&self) -> i32;
 
     fn get_allocated_height(&self) -> i32;
@@ -124,7 +124,7 @@ pub trait WidgetExt {
 
     fn get_child_visible(&self) -> bool;
 
-    #[cfg(feature = "3.14")]
+    #[cfg(feature = "v3_14")]
     fn get_clip(&self) -> Allocation;
 
     fn get_composite_name(&self) -> Option<String>;
@@ -149,26 +149,25 @@ pub trait WidgetExt {
 
     fn get_margin_bottom(&self) -> i32;
 
-    #[cfg(feature = "3.12")]
+    #[cfg(feature = "v3_12")]
     fn get_margin_end(&self) -> i32;
 
     fn get_margin_left(&self) -> i32;
 
     fn get_margin_right(&self) -> i32;
 
-    #[cfg(feature = "3.12")]
+    #[cfg(feature = "v3_12")]
     fn get_margin_start(&self) -> i32;
 
     fn get_margin_top(&self) -> i32;
 
-    #[cfg(feature = "3.4")]
     fn get_modifier_mask(&self, intent: gdk::ModifierIntent) -> gdk::ModifierType;
 
     fn get_name(&self) -> Option<String>;
 
     fn get_no_show_all(&self) -> bool;
 
-    #[cfg(feature = "3.8")]
+    #[cfg(feature = "v3_8")]
     fn get_opacity(&self) -> f64;
 
     fn get_parent(&self) -> Option<Widget>;
@@ -179,7 +178,7 @@ pub trait WidgetExt {
 
     fn get_preferred_height(&self) -> (i32, i32);
 
-    #[cfg(feature = "3.10")]
+    #[cfg(feature = "v3_10")]
     fn get_preferred_height_and_baseline_for_width(&self, width: i32) -> (i32, i32, i32, i32);
 
     fn get_preferred_height_for_width(&self, width: i32) -> (i32, i32);
@@ -200,7 +199,7 @@ pub trait WidgetExt {
 
     fn get_root_window(&self) -> Option<gdk::Window>;
 
-    #[cfg(feature = "3.10")]
+    #[cfg(feature = "v3_10")]
     fn get_scale_factor(&self) -> i32;
 
     fn get_screen(&self) -> Option<gdk::Screen>;
@@ -227,7 +226,7 @@ pub trait WidgetExt {
 
     fn get_valign(&self) -> Align;
 
-    #[cfg(feature = "3.10")]
+    #[cfg(feature = "v3_10")]
     fn get_valign_with_baseline(&self) -> Align;
 
     fn get_vexpand(&self) -> bool;
@@ -264,7 +263,7 @@ pub trait WidgetExt {
 
     fn in_destruction(&self) -> bool;
 
-    #[cfg(feature = "3.10")]
+    #[cfg(feature = "v3_10")]
     fn init_template(&self);
 
     fn is_ancestor<T: IsA<Widget>>(&self, ancestor: &T) -> bool;
@@ -279,12 +278,12 @@ pub trait WidgetExt {
 
     fn is_toplevel(&self) -> bool;
 
-    #[cfg(feature = "3.8")]
+    #[cfg(feature = "v3_8")]
     fn is_visible(&self) -> bool;
 
     fn keynav_failed(&self, direction: DirectionType) -> bool;
 
-    #[cfg(feature = "3.16")]
+    #[cfg(feature = "v3_16")]
     fn list_action_prefixes(&self) -> Vec<String>;
 
     fn list_mnemonic_labels(&self) -> Vec<Widget>;
@@ -305,14 +304,14 @@ pub trait WidgetExt {
 
     fn realize(&self);
 
-    #[cfg(feature = "3.8")]
+    #[cfg(feature = "v3_8")]
     fn register_window(&self, window: &gdk::Window);
 
     fn remove_accelerator(&self, accel_group: &AccelGroup, accel_key: u32, accel_mods: gdk::ModifierType) -> bool;
 
     fn remove_mnemonic_label<T: IsA<Widget>>(&self, label: &T);
 
-    #[cfg(feature = "3.8")]
+    #[cfg(feature = "v3_8")]
     fn remove_tick_callback(&self, id: u32);
 
     fn render_icon(&self, stock_id: &str, size: i32, detail: Option<&str>) -> Option<gdk_pixbuf::Pixbuf>;
@@ -337,7 +336,7 @@ pub trait WidgetExt {
 
     fn set_child_visible(&self, is_visible: bool);
 
-    #[cfg(feature = "3.14")]
+    #[cfg(feature = "v3_14")]
     fn set_clip(&self, clip: &Allocation);
 
     fn set_composite_name(&self, name: &str);
@@ -362,14 +361,14 @@ pub trait WidgetExt {
 
     fn set_margin_bottom(&self, margin: i32);
 
-    #[cfg(feature = "3.12")]
+    #[cfg(feature = "v3_12")]
     fn set_margin_end(&self, margin: i32);
 
     fn set_margin_left(&self, margin: i32);
 
     fn set_margin_right(&self, margin: i32);
 
-    #[cfg(feature = "3.12")]
+    #[cfg(feature = "v3_12")]
     fn set_margin_start(&self, margin: i32);
 
     fn set_margin_top(&self, margin: i32);
@@ -378,7 +377,7 @@ pub trait WidgetExt {
 
     fn set_no_show_all(&self, no_show_all: bool);
 
-    #[cfg(feature = "3.8")]
+    #[cfg(feature = "v3_8")]
     fn set_opacity(&self, opacity: f64);
 
     fn set_parent<T: IsA<Widget>>(&self, parent: &T);
@@ -425,7 +424,7 @@ pub trait WidgetExt {
 
     fn size_allocate(&self, allocation: &mut Allocation);
 
-    #[cfg(feature = "3.10")]
+    #[cfg(feature = "v3_10")]
     fn size_allocate_with_baseline(&self, allocation: &mut Allocation, baseline: i32);
 
     fn size_request(&self) -> Requisition;
@@ -444,7 +443,7 @@ pub trait WidgetExt {
 
     fn unrealize(&self);
 
-    #[cfg(feature = "3.8")]
+    #[cfg(feature = "v3_8")]
     fn unregister_window(&self, window: &gdk::Window);
 
     fn unset_state_flags(&self, flags: StateFlags);
@@ -627,7 +626,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         Auto::freeze_child_notify(self)
     }
 
-    #[cfg(feature = "3.10")]
+    #[cfg(feature = "v3_10")]
     #[inline]
     fn get_allocated_baseline(&self) -> i32 {
         Auto::get_allocated_baseline(self)
@@ -678,7 +677,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         Auto::get_child_visible(self)
     }
 
-    #[cfg(feature = "3.14")]
+    #[cfg(feature = "v3_14")]
     #[inline]
     fn get_clip(&self) -> Allocation {
         Auto::get_clip(self)
@@ -739,7 +738,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         Auto::get_margin_bottom(self)
     }
 
-    #[cfg(feature = "3.12")]
+    #[cfg(feature = "v3_12")]
     #[inline]
     fn get_margin_end(&self) -> i32 {
         Auto::get_margin_end(self)
@@ -755,7 +754,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         Auto::get_margin_right(self)
     }
 
-    #[cfg(feature = "3.12")]
+    #[cfg(feature = "v3_12")]
     #[inline]
     fn get_margin_start(&self) -> i32 {
         Auto::get_margin_start(self)
@@ -766,7 +765,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
         Auto::get_margin_top(self)
     }
 
-    #[cfg(feature = "3.4")]
     #[inline]
     fn get_modifier_mask(&self, intent: gdk::ModifierIntent) -> gdk::ModifierType {
         Auto::get_modifier_mask(self, intent)
@@ -782,7 +780,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         Auto::get_no_show_all(self)
     }
 
-    #[cfg(feature = "3.8")]
+    #[cfg(feature = "v3_8")]
     #[inline]
     fn get_opacity(&self) -> f64 {
         Auto::get_opacity(self)
@@ -808,7 +806,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         Auto::get_preferred_height(self)
     }
 
-    #[cfg(feature = "3.10")]
+    #[cfg(feature = "v3_10")]
     #[inline]
     fn get_preferred_height_and_baseline_for_width(&self, width: i32) -> (i32, i32, i32, i32) {
         Auto::get_preferred_height_and_baseline_for_width(self, width)
@@ -859,7 +857,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         Auto::get_root_window(self)
     }
 
-    #[cfg(feature = "3.10")]
+    #[cfg(feature = "v3_10")]
     #[inline]
     fn get_scale_factor(&self) -> i32 {
         Auto::get_scale_factor(self)
@@ -925,7 +923,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         Auto::get_valign(self)
     }
 
-    #[cfg(feature = "3.10")]
+    #[cfg(feature = "v3_10")]
     #[inline]
     fn get_valign_with_baseline(&self) -> Align {
         Auto::get_valign_with_baseline(self)
@@ -1016,7 +1014,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         Auto::in_destruction(self)
     }
 
-    #[cfg(feature = "3.10")]
+    #[cfg(feature = "v3_10")]
     #[inline]
     fn init_template(&self) {
         Auto::init_template(self)
@@ -1052,7 +1050,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         Auto::is_toplevel(self)
     }
 
-    #[cfg(feature = "3.8")]
+    #[cfg(feature = "v3_8")]
     #[inline]
     fn is_visible(&self) -> bool {
         Auto::is_visible(self)
@@ -1063,7 +1061,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         Auto::keynav_failed(self, direction)
     }
 
-    #[cfg(feature = "3.16")]
+    #[cfg(feature = "v3_16")]
     #[inline]
     fn list_action_prefixes(&self) -> Vec<String> {
         Auto::list_action_prefixes(self)
@@ -1114,7 +1112,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         Auto::realize(self)
     }
 
-    #[cfg(feature = "3.8")]
+    #[cfg(feature = "v3_8")]
     #[inline]
     fn register_window(&self, window: &gdk::Window) {
         Auto::register_window(self, window)
@@ -1130,7 +1128,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         Auto::remove_mnemonic_label(self, label)
     }
 
-    #[cfg(feature = "3.8")]
+    #[cfg(feature = "v3_8")]
     #[inline]
     fn remove_tick_callback(&self, id: u32) {
         Auto::remove_tick_callback(self, id)
@@ -1191,7 +1189,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         Auto::set_child_visible(self, is_visible)
     }
 
-    #[cfg(feature = "3.14")]
+    #[cfg(feature = "v3_14")]
     #[inline]
     fn set_clip(&self, clip: &Allocation) {
         Auto::set_clip(self, clip)
@@ -1252,7 +1250,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         Auto::set_margin_bottom(self, margin)
     }
 
-    #[cfg(feature = "3.12")]
+    #[cfg(feature = "v3_12")]
     #[inline]
     fn set_margin_end(&self, margin: i32) {
         Auto::set_margin_end(self, margin)
@@ -1268,7 +1266,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         Auto::set_margin_right(self, margin)
     }
 
-    #[cfg(feature = "3.12")]
+    #[cfg(feature = "v3_12")]
     #[inline]
     fn set_margin_start(&self, margin: i32) {
         Auto::set_margin_start(self, margin)
@@ -1289,7 +1287,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         Auto::set_no_show_all(self, no_show_all)
     }
 
-    #[cfg(feature = "3.8")]
+    #[cfg(feature = "v3_8")]
     #[inline]
     fn set_opacity(&self, opacity: f64) {
         Auto::set_opacity(self, opacity)
@@ -1405,7 +1403,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         Auto::size_allocate(self, allocation)
     }
 
-    #[cfg(feature = "3.10")]
+    #[cfg(feature = "v3_10")]
     #[inline]
     fn size_allocate_with_baseline(&self, allocation: &mut Allocation, baseline: i32) {
         Auto::size_allocate_with_baseline(self, allocation, baseline)
@@ -1451,7 +1449,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         Auto::unrealize(self)
     }
 
-    #[cfg(feature = "3.8")]
+    #[cfg(feature = "v3_8")]
     #[inline]
     fn unregister_window(&self, window: &gdk::Window) {
         Auto::unregister_window(self, window)

@@ -2,7 +2,7 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-#![cfg_attr(not(feature = "3.10"), allow(unused_imports))]
+#![cfg_attr(not(feature = "v3_10"), allow(unused_imports))]
 
 use libc::{c_char, ssize_t};
 
@@ -34,13 +34,13 @@ impl Builder {
         unsafe { from_glib_full(ffi::gtk_builder_new()) }
     }
 
-    #[cfg(feature = "3.10")]
+    #[cfg(feature = "v3_10")]
     pub fn new_from_file(file_name: &str) -> Builder {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gtk_builder_new_from_file(file_name.to_glib_none().0)) }
     }
 
-    #[cfg(feature = "3.10")]
+    #[cfg(feature = "v3_10")]
     pub fn new_from_resource(resource_path: &str) -> Builder {
         assert_initialized_main_thread!();
         unsafe {
@@ -48,7 +48,7 @@ impl Builder {
         }
     }
 
-    #[cfg(feature = "3.10")]
+    #[cfg(feature = "v3_10")]
     pub fn new_from_string(string: &str) -> Builder {
         assert_initialized_main_thread!();
         unsafe {

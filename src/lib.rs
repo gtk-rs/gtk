@@ -114,15 +114,15 @@
 //! ## Library versions
 //!
 //! By default this crate provides only GTK+ 3.4 APIs. You can access more
-//! modern APIs by selecting one of the following features: `3.6`, `3.8`,
-//! `3.10`, `3.12`, `3.14`, `3.16`.
+//! modern APIs by selecting one of the following features: `v3_6`, `v3_8`,
+//! `v3_10`, `v3_12`, `v3_14`, `v3_16`.
 //!
 //! `Cargo.toml` example:
 //!
 //! ```toml
 //! [dependencies.gtk]
 //! version = "0.x.y"
-//! features = ["3.16"]
+//! features = ["v3_16"]
 //! ```
 //!
 //! **Take care when choosing the version to target: some of your users might

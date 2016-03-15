@@ -6,7 +6,6 @@
 
 pub use glib::prelude::*;
 
-#[cfg(feature = "3.4")]
 pub use auto::traits::ActionableExt;
 pub use auto::traits::BinExt;
 pub use auto::traits::BoxExt;
@@ -22,22 +21,22 @@ pub use auto::traits::ContainerExt;
 //pub use auto::traits::DialogExt;
 pub use auto::traits::EditableExt;
 pub use auto::traits::EntryExt;
-#[cfg(feature = "3.14")]
+#[cfg(feature = "v3_14")]
 pub use auto::traits::EventControllerExt;
 pub use auto::traits::FileChooserExt;
 pub use auto::traits::FontChooserExt;
 pub use auto::traits::FrameExt;
-#[cfg(feature = "3.14")]
+#[cfg(feature = "v3_14")]
 pub use auto::traits::GestureExt;
-#[cfg(feature = "3.14")]
+#[cfg(feature = "v3_14")]
 pub use auto::traits::GestureDragExt;
-#[cfg(feature = "3.14")]
+#[cfg(feature = "v3_14")]
 pub use auto::traits::GestureSingleExt;
 pub use auto::traits::MenuItemExt;
 pub use auto::traits::MenuShellExt;
 pub use auto::traits::MiscExt;
 pub use auto::traits::OrientableExt;
-#[cfg(feature = "3.12")]
+#[cfg(feature = "v3_12")]
 pub use auto::traits::PopoverExt;
 pub use auto::traits::RangeExt;
 pub use auto::traits::RecentChooserExt;
