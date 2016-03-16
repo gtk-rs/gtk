@@ -1,4 +1,4 @@
-## v0.0.7 (master)
+## 0.0.7 (16-Mar-2016)
 
 ### Breaking changes
 
