@@ -71,11 +71,12 @@ impl RecentInfo {
             let mut count = 0;
             let mut time_ = 0;
 
-            match from_glib(ffi::gtk_recent_info_get_application_info(
+            if from_glib(ffi::gtk_recent_info_get_application_info(
                     self.to_glib_none().0, app_name.to_glib_none().0,
                     &mut app_exec, &mut count, &mut time_)) {
-                true => Some((from_glib_none(app_exec), count, time_ as u64)),
-                _ => None
+                Some((from_glib_none(app_exec), count, time_ as u64))
+            } else {
+                None
             }
         }
     }

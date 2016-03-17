@@ -56,7 +56,7 @@ impl Notebook {
         unsafe {
             from_glib_none(
                 ffi::gtk_notebook_get_nth_page(self.to_glib_none().0,
-                    page_num.map(|n| n as c_int).unwrap_or(-1)))
+                    page_num.map_or(-1, |n| n as c_int)))
         }
     }
 
@@ -67,7 +67,7 @@ impl Notebook {
           U: IsA<Widget> {
         unsafe {
             let ret = ffi::gtk_notebook_insert_page(self.to_glib_none().0, child.to_glib_none().0,
-                tab_label.to_glib_none().0, position.map(|n| n as c_int).unwrap_or(-1));
+                tab_label.to_glib_none().0, position.map_or(-1, |n| n as c_int));
             assert!(ret >= 0);
             ret as u32
         }
@@ -81,7 +81,7 @@ impl Notebook {
         unsafe {
             let ret = ffi::gtk_notebook_insert_page_menu(self.to_glib_none().0,
                 child.to_glib_none().0, tab_label.to_glib_none().0, menu_label.to_glib_none().0,
-                position.map(|n| n as c_int).unwrap_or(-1));
+                position.map_or(-1, |n| n as c_int));
             assert!(ret >= 0);
             ret as u32
         }
@@ -125,21 +125,21 @@ impl Notebook {
     pub fn remove_page(&self, page_num: Option<u32>) {
         unsafe {
             ffi::gtk_notebook_remove_page(self.to_glib_none().0,
-                page_num.map(|n| n as c_int).unwrap_or(-1));
+                page_num.map_or(-1, |n| n as c_int));
         }
     }
 
     pub fn reorder_child<T: IsA<Widget>>(&self, child: &T, position: Option<u32>) {
         unsafe {
             ffi::gtk_notebook_reorder_child(self.to_glib_none().0, child.to_glib_none().0,
-                position.map(|n| n as c_int).unwrap_or(-1));
+                position.map_or(-1, |n| n as c_int));
         }
     }
 
     pub fn set_current_page(&self, page_num: Option<u32>) {
         unsafe {
             ffi::gtk_notebook_set_current_page(self.to_glib_none().0,
-                page_num.map(|n| n as c_int).unwrap_or(-1));
+                page_num.map_or(-1, |n| n as c_int));
         }
     }
 }
