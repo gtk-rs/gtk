@@ -36,7 +36,7 @@ impl TreeStore {
             ffi::gtk_tree_store_insert_with_valuesv(self.to_glib_none().0,
                 iter.to_glib_none_mut().0,
                 mut_override(parent.to_glib_none().0),
-                position.map(|n| n as c_int).unwrap_or(-1),
+                position.map_or(-1, |n| n as c_int),
                 mut_override(columns.as_ptr() as *const c_int),
                 values.to_glib_none().0,
                 columns.len() as c_int);
@@ -55,11 +55,10 @@ impl TreeStore {
                           new_order.len());
             let safe_values = new_order.iter()
                 .max()
-                .map(|&max| {
+                .map_or(true, |&max| {
                     let max = max as i32;
                     max >= 0 && max < count
-                })
-                .unwrap_or(true);
+                });
             debug_assert!(safe_values,
                           "Some `new_order` slice values are out of range. Maximum safe value: \
                            `{}`. The slice contents: `{:?}`",
