@@ -64,8 +64,9 @@ impl ToGlib for Inhibit {
 
 // idle_add and timeout_add fixed to the main thread
 
-extern "C" fn trampoline(func: &RefCell<Box<FnMut() -> Continue + 'static>>) -> gboolean {
+unsafe extern "C" fn trampoline(func: gpointer) -> gboolean {
     callback_guard!();
+    let func: &RefCell<Box<FnMut() -> Continue + 'static>> = transmute(func);
     (&mut *func.borrow_mut())().to_glib()
 }
 
@@ -90,7 +91,7 @@ pub fn idle_add<F>(func: F) -> u32
     where F: FnMut() -> Continue + 'static {
     assert_initialized_main_thread!();
     unsafe {
-        glib_ffi::g_idle_add_full(glib_ffi::G_PRIORITY_DEFAULT_IDLE, transmute(trampoline as usize),
+        glib_ffi::g_idle_add_full(glib_ffi::G_PRIORITY_DEFAULT_IDLE, Some(trampoline),
             into_raw(func), Some(destroy_closure))
     }
 }
@@ -109,7 +110,7 @@ pub fn timeout_add<F>(interval: u32, func: F) -> u32
     where F: FnMut() -> Continue + 'static {
     assert_initialized_main_thread!();
     unsafe {
-        glib_ffi::g_timeout_add_full(glib_ffi::G_PRIORITY_DEFAULT, interval, transmute(trampoline as usize),
+        glib_ffi::g_timeout_add_full(glib_ffi::G_PRIORITY_DEFAULT, interval, Some(trampoline),
             into_raw(func), Some(destroy_closure))
     }
 }
@@ -128,7 +129,7 @@ pub fn timeout_add_seconds<F>(interval: u32, func: F) -> u32
     assert_initialized_main_thread!();
     unsafe {
         glib_ffi::g_timeout_add_seconds_full(glib_ffi::G_PRIORITY_DEFAULT, interval,
-            transmute(trampoline as usize), into_raw(func), Some(destroy_closure))
+            Some(trampoline), into_raw(func), Some(destroy_closure))
     }
 }
 
