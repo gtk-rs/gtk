@@ -64,8 +64,9 @@ impl ToGlib for Inhibit {
 
 // idle_add and timeout_add fixed to the main thread
 
-extern "C" fn trampoline(func: &RefCell<Box<FnMut() -> Continue + 'static>>) -> gboolean {
+unsafe extern "C" fn trampoline(func: gpointer) -> gboolean {
     callback_guard!();
+    let func: &RefCell<Box<FnMut() -> Continue + 'static>> = transmute(func);
     (&mut *func.borrow_mut())().to_glib()
 }
 
@@ -90,7 +91,7 @@ pub fn idle_add<F>(func: F) -> u32
     where F: FnMut() -> Continue + 'static {
     assert_initialized_main_thread!();
     unsafe {
-        glib_ffi::g_idle_add_full(glib_ffi::G_PRIORITY_DEFAULT_IDLE, transmute(trampoline),
+        glib_ffi::g_idle_add_full(glib_ffi::G_PRIORITY_DEFAULT_IDLE, Some(trampoline),
             into_raw(func), Some(destroy_closure))
     }
 }
@@ -109,7 +110,7 @@ pub fn timeout_add<F>(interval: u32, func: F) -> u32
     where F: FnMut() -> Continue + 'static {
     assert_initialized_main_thread!();
     unsafe {
-        glib_ffi::g_timeout_add_full(glib_ffi::G_PRIORITY_DEFAULT, interval, transmute(trampoline),
+        glib_ffi::g_timeout_add_full(glib_ffi::G_PRIORITY_DEFAULT, interval, Some(trampoline),
             into_raw(func), Some(destroy_closure))
     }
 }
@@ -128,7 +129,7 @@ pub fn timeout_add_seconds<F>(interval: u32, func: F) -> u32
     assert_initialized_main_thread!();
     unsafe {
         glib_ffi::g_timeout_add_seconds_full(glib_ffi::G_PRIORITY_DEFAULT, interval,
-            transmute(trampoline), into_raw(func), Some(destroy_closure))
+            Some(trampoline), into_raw(func), Some(destroy_closure))
     }
 }
 
@@ -214,7 +215,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "accel-closures-changed",
-                    transmute(void_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(void_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -222,7 +223,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self, &EventButton) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "button-press-event",
-                    transmute(event_button_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(event_button_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -231,7 +232,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self, &EventButton) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "button-release-event",
-                    transmute(event_button_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(event_button_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -239,7 +240,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self, u64) -> bool + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "can-activate-accel",
-                    transmute(accel_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(accel_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -247,7 +248,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "composited-changed",
-                    transmute(void_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(void_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -255,7 +256,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self, &EventConfigure) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "configure-event",
-                    transmute(event_configure_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(event_configure_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -263,7 +264,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self, &EventExpose) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "damage-event",
-                    transmute(event_expose_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(event_expose_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -271,7 +272,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self, &Event) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "delete-event",
-                    transmute(event_any_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(event_any_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -279,7 +280,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "destroy",
-                    transmute(void_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(void_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -287,7 +288,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self, &Event) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "destroy-event",
-                    transmute(event_any_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(event_any_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -295,7 +296,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self, TextDirection) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "direction-changed",
-                    transmute(text_direction_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(text_direction_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -303,7 +304,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self, &Context) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "draw",
-                    transmute(draw_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(draw_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -312,7 +313,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self, &EventCrossing) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "enter-notify-event",
-                    transmute(event_crossing_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(event_crossing_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -320,7 +321,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self, &Event) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "event",
-                    transmute(event_any_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(event_any_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -328,7 +329,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self, &Event) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "event-after",
-                    transmute(event_any_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(event_any_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -336,7 +337,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self, DirectionType) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "focus",
-                    transmute(direction_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(direction_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -344,7 +345,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self, &EventFocus) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "focus-in-event",
-                    transmute(event_focus_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(event_focus_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -352,7 +353,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self, &EventFocus) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "focus-out-event",
-                    transmute(event_focus_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(event_focus_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -361,7 +362,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self, &EventGrabBroken) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "grab-broken-event",
-                    transmute(event_grab_broken_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(event_grab_broken_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -369,7 +370,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "grab-focus",
-                    transmute(void_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(void_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -377,7 +378,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self, bool) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "grab-notify",
-                    transmute(grab_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(grab_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -385,7 +386,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "hide",
-                    transmute(void_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(void_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -393,7 +394,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self, DirectionType) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "keynav-failed",
-                    transmute(direction_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(direction_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -401,7 +402,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self, &EventKey) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "key-press-event",
-                    transmute(event_key_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(event_key_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -409,7 +410,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self, &EventKey) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "key-release-event",
-                    transmute(event_key_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(event_key_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -418,7 +419,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self, &EventCrossing) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "leave-notify-event",
-                    transmute(event_crossing_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(event_crossing_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -426,7 +427,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "map",
-                    transmute(void_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(void_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -434,7 +435,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self, &Event) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "map-event",
-                    transmute(event_any_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(event_any_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -442,7 +443,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self, bool) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "mnemonic-activate",
-                    transmute(mnemonic_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(mnemonic_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -450,7 +451,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self, DirectionType) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "move-focus",
-                    transmute(direction_void_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(direction_void_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -459,7 +460,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self, &EventMotion) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "motion-notify-event",
-                    transmute(event_motion_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(event_motion_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -468,7 +469,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self, &EventProperty) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "property-notify-event",
-                    transmute(event_property_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(event_property_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -477,7 +478,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self, &EventProximity) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "proximity-in-event",
-                    transmute(event_proximity_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(event_proximity_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -486,7 +487,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self, &EventProximity) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "proximity-out-event",
-                    transmute(event_proximity_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(event_proximity_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -494,7 +495,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self) -> bool + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "popup-menu",
-                    transmute(bool_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(bool_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -504,7 +505,7 @@ mod widget {
                 let f: Box<Box<Fn(&Self, i32, i32, bool, Tooltip) -> bool + 'static>> =
                     Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "query-tooltip",
-                    transmute(query_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(query_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -512,7 +513,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "realize",
-                    transmute(void_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(void_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -520,7 +521,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self, &Screen) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "screen-changed",
-                    transmute(screen_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(screen_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -528,7 +529,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self, &EventScroll) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "scroll-event",
-                    transmute(event_scroll_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(event_scroll_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -536,7 +537,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "show",
-                    transmute(void_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(void_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -544,7 +545,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self, WidgetHelpType) -> bool + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "show-help",
-                    transmute(help_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(help_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -552,7 +553,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self, &RectangleInt) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "size-allocate",
-                    transmute(rectangle_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(rectangle_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -560,7 +561,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self, StateFlags) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "state-flags-changed",
-                    transmute(state_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(state_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -568,7 +569,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "style-updated",
-                    transmute(void_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(void_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -576,7 +577,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self, &Event) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "touch-event",
-                    transmute(event_any_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(event_any_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -584,7 +585,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "unmap",
-                    transmute(void_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(void_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -592,7 +593,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self, &Event) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "unmap-event",
-                    transmute(event_any_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(event_any_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -600,7 +601,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "unrealize",
-                    transmute(void_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(void_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -609,7 +610,7 @@ mod widget {
             unsafe {
                 let f: Box<Box<Fn(&Self, &EventWindowState) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "window-state-event",
-                    transmute(event_window_state_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(event_window_state_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -843,7 +844,7 @@ mod entry {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "activate",
-                    transmute(void_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(void_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -851,7 +852,7 @@ mod entry {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "backspace",
-                    transmute(void_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(void_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -859,7 +860,7 @@ mod entry {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "copy_clipboard",
-                    transmute(void_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(void_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -867,7 +868,7 @@ mod entry {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "cut_clipboard",
-                    transmute(void_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(void_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -875,7 +876,7 @@ mod entry {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "paste_clipboard",
-                    transmute(void_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(void_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -883,7 +884,7 @@ mod entry {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "toggle_overwrite",
-                    transmute(void_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(void_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -891,7 +892,7 @@ mod entry {
             unsafe {
                 let f: Box<Box<Fn(&Self, DeleteType, i32) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "delete_from_cursor",
-                    transmute(delete_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(delete_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -899,7 +900,7 @@ mod entry {
             unsafe {
                 let f: Box<Box<Fn(&Self, MovementStep, i32, bool) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "move_cursor",
-                    transmute(move_cursor_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(move_cursor_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -907,7 +908,7 @@ mod entry {
             unsafe {
                 let f: Box<Box<Fn(&Self, &str) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "insert_at_cursor",
-                    transmute(string_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(string_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -915,7 +916,7 @@ mod entry {
             unsafe {
                 let f: Box<Box<Fn(&Self, &str) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "preedit_changed",
-                    transmute(string_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(string_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
     }
@@ -968,7 +969,7 @@ mod button {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "activate",
-                    transmute(void_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(void_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -976,7 +977,7 @@ mod button {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "clicked",
-                    transmute(void_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(void_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
     }
@@ -1009,7 +1010,7 @@ mod combobox {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "changed",
-                    transmute(void_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(void_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1017,7 +1018,7 @@ mod combobox {
             unsafe {
                 let f: Box<Box<Fn(&Self, ScrollType) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "move-active",
-                    transmute(move_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(move_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1025,7 +1026,7 @@ mod combobox {
             unsafe {
                 let f: Box<Box<Fn(&Self) -> bool + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "popdown",
-                    transmute(bool_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(bool_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1033,7 +1034,7 @@ mod combobox {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "popup",
-                    transmute(void_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(void_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
     }
@@ -1076,7 +1077,7 @@ mod tool_button {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "clicked",
-                    transmute(void_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(void_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
     }
@@ -1105,7 +1106,7 @@ mod toggle_button {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "toggled",
-                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
+                    transmute(void_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
     }
@@ -1133,7 +1134,7 @@ mod cell_renderer_toggle {
             unsafe {
                 let f: Box<Box<Fn(&Self, &TreePath) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "toggled",
-                    transmute(string_path_trampoline), Box::into_raw(f) as *mut _)
+                    transmute(string_path_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
     }
@@ -1163,7 +1164,7 @@ mod spin_button {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "value-changed",
-                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
+                    transmute(void_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1171,7 +1172,7 @@ mod spin_button {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "clicked",
-                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
+                    transmute(void_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
     }
@@ -1201,7 +1202,7 @@ mod dialog {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "close",
-                    transmute(void_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(void_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1209,7 +1210,7 @@ mod dialog {
             unsafe {
                 let f: Box<Box<Fn(&Self, i32) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "response",
-                    transmute(int_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(int_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
     }
@@ -1261,7 +1262,7 @@ mod tree_view {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "columns-changed",
-                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
+                    transmute(void_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1269,7 +1270,7 @@ mod tree_view {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "cursor-changed",
-                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
+                    transmute(void_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1278,7 +1279,7 @@ mod tree_view {
             unsafe {
                 let f: Box<Box<Fn(&Self, bool, bool, bool) -> bool + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "expand-collapse-cursor-row",
-                    transmute(bool3_bool_trampoline), Box::into_raw(f) as *mut _)
+                    transmute(bool3_bool_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1286,7 +1287,7 @@ mod tree_view {
             unsafe {
                 let f: Box<Box<Fn(&Self, &TreePath, &TreeViewColumn) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "row-activated",
-                    transmute(path_column_trampoline), Box::into_raw(f) as *mut _)
+                    transmute(path_column_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1294,7 +1295,7 @@ mod tree_view {
             unsafe {
                 let f: Box<Box<Fn(&Self, &TreeIter, &TreePath) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "row-collapsed",
-                    transmute(iter_path_trampoline), Box::into_raw(f) as *mut _)
+                    transmute(iter_path_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1302,7 +1303,7 @@ mod tree_view {
             unsafe {
                 let f: Box<Box<Fn(&Self, &TreeIter, &TreePath) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "row-expanded",
-                    transmute(iter_path_trampoline), Box::into_raw(f) as *mut _)
+                    transmute(iter_path_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1310,7 +1311,7 @@ mod tree_view {
             unsafe {
                 let f: Box<Box<Fn(&Self) -> bool + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "select-all",
-                    transmute(bool_trampoline), Box::into_raw(f) as *mut _)
+                    transmute(bool_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1318,7 +1319,7 @@ mod tree_view {
             unsafe {
                 let f: Box<Box<Fn(&Self) -> bool + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "select-cursor-parent",
-                    transmute(bool_trampoline), Box::into_raw(f) as *mut _)
+                    transmute(bool_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1326,7 +1327,7 @@ mod tree_view {
             unsafe {
                 let f: Box<Box<Fn(&Self, bool) -> bool + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "select-cursor-row",
-                    transmute(bool_bool_trampoline), Box::into_raw(f) as *mut _)
+                    transmute(bool_bool_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1334,7 +1335,7 @@ mod tree_view {
             unsafe {
                 let f: Box<Box<Fn(&Self) -> bool + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "start-interactive-search",
-                    transmute(bool_trampoline), Box::into_raw(f) as *mut _)
+                    transmute(bool_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1344,7 +1345,7 @@ mod tree_view {
                 let f: Box<Box<Fn(&Self, &TreeIter, &TreePath) -> bool + 'static>> =
                     Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "test-collapse-row",
-                    transmute(iter_path_bool_trampoline), Box::into_raw(f) as *mut _)
+                    transmute(iter_path_bool_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1354,7 +1355,7 @@ mod tree_view {
                 let f: Box<Box<Fn(&Self, &TreeIter, &TreePath) -> bool + 'static>> =
                     Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "test-expand-row",
-                    transmute(iter_path_bool_trampoline), Box::into_raw(f) as *mut _)
+                    transmute(iter_path_bool_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1362,7 +1363,7 @@ mod tree_view {
             unsafe {
                 let f: Box<Box<Fn(&Self) -> bool + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "toggle-cursor-row",
-                    transmute(bool_trampoline), Box::into_raw(f) as *mut _)
+                    transmute(bool_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1370,7 +1371,7 @@ mod tree_view {
             unsafe {
                 let f: Box<Box<Fn(&Self) -> bool + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "unselect-all",
-                    transmute(bool_trampoline), Box::into_raw(f) as *mut _)
+                    transmute(bool_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
     }
@@ -1443,7 +1444,7 @@ mod range {
             unsafe {
                 let f: Box<Box<Fn(&Self, f64) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "adjust-bounds",
-                    transmute(adjust_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(adjust_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1451,7 +1452,7 @@ mod range {
             unsafe {
                 let f: Box<Box<Fn(&Self, ScrollType, f64) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "change-value",
-                    transmute(change_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(change_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1459,7 +1460,7 @@ mod range {
             unsafe {
                 let f: Box<Box<Fn(&Self, ScrollType) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "move-slider",
-                    transmute(move_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(move_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1467,7 +1468,7 @@ mod range {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "value-changed",
-                    transmute(void_trampoline::<Self>), Box::into_raw(f) as *mut _)
+                    transmute(void_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1506,7 +1507,7 @@ impl Adjustment {
         unsafe {
             let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
             connect(self.to_glib_none().0, "value-changed",
-                transmute(adjustment_trampoline), Box::into_raw(f) as *mut _)
+                transmute(adjustment_trampoline as usize), Box::into_raw(f) as *mut _)
         }
     }
 }
@@ -1521,7 +1522,7 @@ impl TreeSelection {
         unsafe {
             let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
             connect(self.to_glib_none().0, "changed",
-                transmute(tree_selection_trampoline), Box::into_raw(f) as *mut _)
+                transmute(tree_selection_trampoline as usize), Box::into_raw(f) as *mut _)
         }
     }
 }
@@ -1537,7 +1538,7 @@ impl TreeViewColumn {
         unsafe {
             let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
             connect(self.to_glib_none().0, "clicked",
-                transmute(tree_view_column_trampoline), Box::into_raw(f) as *mut _)
+                transmute(tree_view_column_trampoline as usize), Box::into_raw(f) as *mut _)
         }
     }
 }
@@ -1565,7 +1566,7 @@ mod gl_area {
             unsafe {
                 let f: Box<Box<Fn(&Self) -> gdk::GLContext + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0,"create-context",
-                    transmute(gl_context_trampoline), Box::into_raw(f) as *mut _)
+                    transmute(gl_context_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1573,7 +1574,7 @@ mod gl_area {
             unsafe {
                 let f: Box<Box<Fn(&Self, gdk::GLContext) -> Inhibit + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0,"render",
-                    transmute(gl_area_trampoline), Box::into_raw(f) as *mut _)
+                    transmute(gl_area_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1627,7 +1628,7 @@ mod calendar {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "day-selected",
-                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
+                    transmute(void_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1635,7 +1636,7 @@ mod calendar {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "day-selected-double-click",
-                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
+                    transmute(void_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1643,7 +1644,7 @@ mod calendar {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "month-changed",
-                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
+                    transmute(void_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1651,7 +1652,7 @@ mod calendar {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "next-month",
-                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
+                    transmute(void_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1659,7 +1660,7 @@ mod calendar {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "next-year",
-                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
+                    transmute(void_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1667,7 +1668,7 @@ mod calendar {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "prev-month",
-                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
+                    transmute(void_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1675,7 +1676,7 @@ mod calendar {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "prev-year",
-                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
+                    transmute(void_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
     }
@@ -1712,7 +1713,7 @@ mod status_icon {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "activate",
-                    transmute(void_trampoline), Box::into_raw(f) as *mut _)
+                    transmute(void_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1720,7 +1721,7 @@ mod status_icon {
             unsafe {
                 let f: Box<Box<Fn(&Self, &EventButton) -> bool + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "button-press-event",
-                    transmute(event_trampoline), Box::into_raw(f) as *mut _)
+                    transmute(event_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1728,7 +1729,7 @@ mod status_icon {
             unsafe {
                 let f: Box<Box<Fn(&Self, &EventButton) -> bool + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "button-release-event",
-                    transmute(event_trampoline), Box::into_raw(f) as *mut _)
+                    transmute(event_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1736,7 +1737,7 @@ mod status_icon {
             unsafe {
                 let f: Box<Box<Fn(&Self, u32, u32) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "popup-menu",
-                    transmute(popup_menu_trampoline), Box::into_raw(f) as *mut _)
+                    transmute(popup_menu_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1744,7 +1745,7 @@ mod status_icon {
             unsafe {
                 let f: Box<Box<Fn(&Self, i32, i32, bool, Tooltip) -> bool + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "query-tooltip",
-                    transmute(query_tooltip_trampoline), Box::into_raw(f) as *mut _)
+                    transmute(query_tooltip_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1752,7 +1753,7 @@ mod status_icon {
             unsafe {
                 let f: Box<Box<Fn(&Self, &EventScroll) -> bool + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "scroll-event",
-                    transmute(event_trampoline), Box::into_raw(f) as *mut _)
+                    transmute(event_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1760,7 +1761,7 @@ mod status_icon {
             unsafe {
                 let f: Box<Box<Fn(&Self, i32) -> bool + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "size-changed",
-                    transmute(size_changed_trampoline), Box::into_raw(f) as *mut _)
+                    transmute(size_changed_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
     }
