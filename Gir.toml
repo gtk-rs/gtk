@@ -117,7 +117,6 @@ generate = [
     "Gtk.TextMark",
     "Gtk.TextTag",
     "Gtk.TextTagTable",
-    "Gtk.TextView",
     "Gtk.ToggleButton",
     "Gtk.ToggleToolButton",
     "Gtk.ToolButton",
@@ -427,6 +426,10 @@ status = "generate"
 name = "Gtk.PageSetup"
 status = "generate"
     [[object.function]]
+    name = "get_paper_size"
+        [object.function.return]
+        nullable = false
+    [[object.function]]
     pattern = "^set_paper_size"
         [[object.function.parameter]]
         name = "size"
@@ -463,6 +466,10 @@ status = "generate"
     [[object.function]]
     name = "get_page_ranges"
     ignore = true
+    [[object.function]]
+    name = "get_paper_size"
+        [object.function.return]
+        nullable = false
     [[object.function]]
     name = "set_page_ranges"
     ignore = true
@@ -528,6 +535,14 @@ status = "generate"
     name = "get_char"
         [object.function.return]
         nullable = true
+
+[[object]]
+name = "Gtk.TextView"
+status = "generate"
+    [[object.function]]
+    name = "get_default_attributes"
+        [object.function.return]
+        nullable = false
 
 [[object]]
 name = "Gtk.TreeModel"
