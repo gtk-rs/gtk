@@ -47,7 +47,7 @@ pub use auto::traits::ToggleButtonExt;
 pub use auto::traits::ToolButtonExt;
 pub use auto::traits::ToolItemExt;
 pub use auto::traits::ToolShellExt;
-//pub use auto::traits::TreeModelExt;
+pub use auto::traits::TreeModelExt;
 //pub use auto::traits::TreeSortableExt;
 //pub use auto::traits::WidgetExt;
 pub use auto::traits::WindowExt;
@@ -55,7 +55,6 @@ pub use auto::traits::WindowExt;
 pub use app_chooser::AppChooserExt;
 pub use color_chooser::ColorChooserExt;
 pub use dialog::DialogExt;
-pub use tree_model::TreeModelExt;
 pub use tree_sortable::TreeSortableExt;
 pub use widget::WidgetExt;
 
