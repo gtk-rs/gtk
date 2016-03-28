@@ -43,6 +43,7 @@ pub use auto::traits::RecentChooserExt;
 pub use auto::traits::ScaleButtonExt;
 pub use auto::traits::ScrollableExt;
 pub use auto::traits::ScrolledWindowExt;
+pub use auto::traits::StyleProviderExt;
 pub use auto::traits::ToggleButtonExt;
 pub use auto::traits::ToolButtonExt;
 pub use auto::traits::ToolItemExt;

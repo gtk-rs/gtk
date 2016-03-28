@@ -110,6 +110,7 @@ generate = [
     "Gtk.StackSwitcher",
     "Gtk.StatusIcon",
     "Gtk.Statusbar",
+    "Gtk.StyleProvider",
     "Gtk.Switch",
     "Gtk.TextChildAnchor",
     "Gtk.TextMark",
