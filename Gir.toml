@@ -39,7 +39,6 @@ generate = [
     "Gtk.ColorChooserDialog",
     "Gtk.ColorChooserWidget",
     "Gtk.ComboBoxText",
-    "Gtk.Container",
     "Gtk.CssProvider",
     "Gtk.DrawingArea",
     "Gtk.Editable",
@@ -111,13 +110,12 @@ generate = [
     "Gtk.StackSwitcher",
     "Gtk.StatusIcon",
     "Gtk.Statusbar",
-    "Gtk.StyleContext",
+    "Gtk.StyleProvider",
     "Gtk.Switch",
     "Gtk.TextChildAnchor",
     "Gtk.TextMark",
     "Gtk.TextTag",
     "Gtk.TextTagTable",
-    "Gtk.TextView",
     "Gtk.ToggleButton",
     "Gtk.ToggleToolButton",
     "Gtk.ToolButton",
@@ -151,6 +149,9 @@ manual = [
     "GdkPixbuf.PixbufAnimation",
     "Gio.ApplicationFlags",
     "GLib.Error",
+    "GLib.Variant",
+    "GLib.VariantType",
+    "GObject.Value",
     "Gtk.Allocation",
     "Gtk.AppChooser",
     "Gtk.Builder",
@@ -201,6 +202,9 @@ status = "generate"
 [[object]]
 name = "Gtk.CellArea"
 status = "generate"
+    [[object.function]]
+    pattern = "cell_[gs]et_property"
+    ignore = true
 
 [[object]]
 name = "Gtk.CellRenderer"
@@ -218,6 +222,13 @@ status = "generate"
         [[object.function.parameter]]
         name = "iter"
         const = true
+
+[[object]]
+name = "Gtk.Container"
+status = "generate"
+    [[object.function]]
+    pattern = "child_[gs]et_property"
+    ignore = true
 
 [[object]]
 name = "Gtk.Dialog"
@@ -364,6 +375,9 @@ status = "generate"
         name = "position"
         const = true
     [[object.function]]
+    name = "set_value"
+    ignore = true
+    [[object.function]]
     name = "swap"
         [[object.function.parameter]]
         name = "a"
@@ -427,6 +441,10 @@ status = "generate"
 name = "Gtk.PageSetup"
 status = "generate"
     [[object.function]]
+    name = "get_paper_size"
+        [object.function.return]
+        nullable = false
+    [[object.function]]
     pattern = "^set_paper_size"
         [[object.function.parameter]]
         name = "size"
@@ -464,6 +482,10 @@ status = "generate"
     name = "get_page_ranges"
     ignore = true
     [[object.function]]
+    name = "get_paper_size"
+        [object.function.return]
+        nullable = false
+    [[object.function]]
     name = "set_page_ranges"
     ignore = true
     [[object.function]]
@@ -495,6 +517,13 @@ status = "generate"
     name = "get_adjustment"
         [object.function.return]
         nullable = false
+
+[[object]]
+name = "Gtk.StyleContext"
+status = "generate"
+    [[object.function]]
+    pattern = "get_(style_)?property"
+    ignore = true
 
 [[object]]
 name = "Gtk.TextBuffer"
@@ -530,6 +559,14 @@ status = "generate"
         nullable = true
 
 [[object]]
+name = "Gtk.TextView"
+status = "generate"
+    [[object.function]]
+    name = "get_default_attributes"
+        [object.function.return]
+        nullable = false
+
+[[object]]
 name = "Gtk.TreeModel"
 status = "generate"
     [[object.function]]
@@ -544,6 +581,11 @@ status = "generate"
         const = true
     [[object.function]]
     name = "get_path"
+        [[object.function.parameter]]
+        name = "iter"
+        const = true
+    [[object.function]]
+    name = "get_value"
         [[object.function.parameter]]
         name = "iter"
         const = true
@@ -757,6 +799,9 @@ status = "generate"
         name = "parent"
         const = true
     [[object.function]]
+    name = "set_value"
+    ignore = true
+    [[object.function]]
     name = "swap"
         [[object.function.parameter]]
         name = "a"
@@ -833,6 +878,9 @@ name = "Gtk.Widget"
 status = "generate"
     [[object.function]]
     name = "intersect"
+    ignore = true
+    [[object.function]]
+    name = "style_get_property"
     ignore = true
 
 [[object]]
