@@ -529,6 +529,9 @@ mod tree_model;
 pub use self::tree_model::TreeModel;
 pub use self::tree_model::TreeModelExt;
 
+mod tree_model_filter;
+pub use self::tree_model_filter::TreeModelFilter;
+
 mod tree_selection;
 pub use self::tree_selection::TreeSelection;
 
