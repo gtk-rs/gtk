@@ -18,8 +18,6 @@ glib_wrapper! {
 }
 
 pub trait TreeModelExt {
-    fn filter_new(&self, root: Option<&TreePath>) -> Option<TreeModel>;
-
     //fn foreach(&self, func: /*Unknown conversion*//*Unimplemented*/TreeModelForeachFunc, user_data: /*Unimplemented*/Fundamental: Pointer);
 
     //fn get(&self, iter: &mut TreeIter, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
@@ -73,12 +71,6 @@ pub trait TreeModelExt {
 }
 
 impl<O: IsA<TreeModel>> TreeModelExt for O {
-    fn filter_new(&self, root: Option<&TreePath>) -> Option<TreeModel> {
-        unsafe {
-            from_glib_full(ffi::gtk_tree_model_filter_new(self.to_glib_none().0, mut_override(root.to_glib_none().0)))
-        }
-    }
-
     //fn foreach(&self, func: /*Unknown conversion*//*Unimplemented*/TreeModelForeachFunc, user_data: /*Unimplemented*/Fundamental: Pointer) {
     //    unsafe { TODO: call ffi::gtk_tree_model_foreach() }
     //}
