@@ -1814,3 +1814,32 @@ mod status_icon {
         f(&from_glib_none(this), size).to_glib()
     }
 }
+
+pub trait ScaleSignals {
+    fn connect_format_value<F: Fn(&Self, f64) -> String + 'static>(&self, f: F) -> u64;
+}
+
+mod scale {
+    use Scale;
+    use libc::{c_double, c_char};
+    use std::mem::transmute;
+    use ffi::GtkScale;
+    use glib::signal::connect;
+    use glib::translate::*;
+
+    impl super::ScaleSignals for Scale {
+        fn connect_format_value<F: Fn(&Self, f64) -> String + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(&Self, f64) -> String + 'static>> = Box::new(Box::new(f));
+                connect(self.to_glib_none().0, "format-value",
+                    transmute(format_value as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+    }
+
+    unsafe extern "C" fn format_value(this: *mut GtkScale, value: c_double,
+                                      f: &Box<Fn(&Scale, f64) -> String + 'static>) -> *mut c_char {
+        callback_guard!();
+        f(&from_glib_none(this), value).to_glib_full()
+    }
+}
