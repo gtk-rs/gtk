@@ -994,6 +994,7 @@ pub trait ComboBoxSignals {
     fn connect_move_active<F: Fn(&Self, ScrollType) + 'static>(&self, f: F) -> u64;
     fn connect_popdown<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> u64;
     fn connect_popup<F: Fn(&Self) + 'static>(&self, f: F) -> u64;
+    fn connect_format_entry_text<F: Fn(&Self, &str) -> String + 'static>(&self, f: F) -> u64;
 }
 
 mod combobox {
@@ -1003,6 +1004,7 @@ mod combobox {
     use glib::translate::*;
     use glib_ffi::gboolean;
     use ffi::GtkComboBox;
+    use libc::c_char;
     use {ComboBox, Object, IsA, ScrollType};
 
     impl<T: IsA<ComboBox> + IsA<Object>> super::ComboBoxSignals for T {
@@ -1037,6 +1039,14 @@ mod combobox {
                     transmute(void_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
+
+        fn connect_format_entry_text<F: Fn(&Self, &str) -> String + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(&Self, &str) -> String + 'static>> = Box::new(Box::new(f));
+                connect(self.to_glib_none().0, "format-entry-text",
+                    transmute(format_entry_text_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
+            }
+        }
     }
 
     unsafe extern "C" fn void_trampoline<T>(this: *mut GtkComboBox, f: &Box<Fn(&T) + 'static>)
@@ -1057,6 +1067,14 @@ mod combobox {
     where T: IsA<ComboBox> {
         callback_guard!();
         f(&ComboBox::from_glib_none(this).downcast_unchecked(), scroll_type);
+    }
+
+    unsafe extern "C" fn format_entry_text_trampoline<T>(this: *mut GtkComboBox,
+        path: *mut c_char, f: &Box<Fn(&T, &str) -> String + 'static>) -> *mut c_char
+    where T: IsA<ComboBox> {
+        callback_guard!();
+        f(&ComboBox::from_glib_none(this).downcast_unchecked(),
+            &String::from_glib_none(path)).to_glib_full()
     }
 }
 
