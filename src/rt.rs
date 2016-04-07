@@ -3,9 +3,10 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 use std::cell::Cell;
+use std::env;
 use std::ptr;
 use std::sync::atomic::{AtomicBool, ATOMIC_BOOL_INIT, Ordering};
-use libc::c_uint;
+use libc::{c_char, c_int, c_uint};
 use ffi;
 use glib::translate::*;
 use gdk;
@@ -101,13 +102,55 @@ pub fn init() -> Result<(), ()> {
         panic!("Attempted to initialize GTK from two different threads.");
     }
     unsafe {
-        if from_glib(ffi::gtk_init_check(ptr::null_mut(), ptr::null_mut())) {
+        if pre_init() && from_glib(ffi::gtk_init_check(ptr::null_mut(), ptr::null_mut())) {
             set_initialized();
             Ok(())
         }
         else {
             Err(())
         }
+    }
+}
+
+/// Ensures `libgtk-3` was built with safety assertions.
+///
+/// Detects the presence of safety checks by testing if the library handles
+/// the `--gtk-debug` command line argument.
+///
+/// Panics if `enable-debug=no` is detected, which means `g_return_if_fail`
+/// checks are disabled and it's impossible to guarantee memory safety.
+fn pre_init() -> bool {
+    skip_assert_initialized!();
+    // We're going to spoof `--gtk-debug=misc` command line argument so first
+    // check if GTK_DEBUG enables 'misc' to know if we need to unset it later.
+    // See #270 for details.
+    let gtk_debug = env::var_os("GTK_DEBUG")
+        .map_or(String::new(), |s| s.to_string_lossy().to_lowercase());
+    let words = gtk_debug.split(|c| {
+        match c {
+            ':' | ';' | ',' | ' ' | '\t' => true,
+            _ => false,
+        }
+    }).collect::<Vec<_>>();
+    let has_misc = words.contains(&"all") ^ words.contains(&"misc");
+
+    unsafe {
+        let mut args = vec![
+            b"\0" as *const u8 as *mut c_char,
+            b"--gtk-debug=misc\0" as *const u8 as *mut c_char,
+        ];
+        let mut argc = args.len() as c_int;
+        let mut argv = args.as_mut_ptr();
+        let ret = from_glib(ffi::gtk_parse_args(&mut argc, &mut argv));
+        let flags = ffi::gtk_get_debug_flags();
+        if flags == 0 {
+            panic!("libgtk-3 was configured with `--enable-debug=no`. \
+                   See https://github.com/gtk-rs/gtk/issues/270 for details");
+        }
+        if !has_misc {
+            ffi::gtk_set_debug_flags(flags & !ffi::GTK_DEBUG_MISC.bits());
+        }
+        ret
     }
 }
 
