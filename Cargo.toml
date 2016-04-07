@@ -1,6 +1,6 @@
 [package]
 name = "gtk"
-version = "0.0.7"
+version = "0.0.8"
 authors = ["The Gtk-rs Project Developers"]
 build = "build.rs"
 
@@ -27,7 +27,7 @@ v3_16 = ["v3_14", "gtk-sys/v3_16", "gdk/v3_16"]
 
 [build-dependencies.gtk-rs-lgpl-docs]
 git = "https://github.com/gtk-rs/lgpl-docs"
-version = "0.0.1"
+version = "0.1.0"
 optional = true
 
 [dependencies]
@@ -51,20 +51,20 @@ version = "0.3.0"
 
 [dependencies.cairo-rs]
 git = "https://github.com/gtk-rs/cairo"
-version = "0.0.8"
+version = "0.0.9"
 
 [dependencies.glib]
 git = "https://github.com/gtk-rs/glib"
-version = "0.0.8"
+version = "0.0.9"
 
 [dependencies.gdk]
 git = "https://github.com/gtk-rs/gdk"
-version = "0.3.0"
+version = "0.4.0"
 
 [dependencies.gdk-pixbuf]
 git = "https://github.com/gtk-rs/gdk-pixbuf"
-version = "0.0.1"
+version = "0.0.2"
 
 [dependencies.pango]
 git = "https://github.com/gtk-rs/pango"
-version = "0.0.7"
+version = "0.0.8"
