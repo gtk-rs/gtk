@@ -1,3 +1,5 @@
+## 0.0.8 (master)
+
 ## 0.0.7 (16-Mar-2016)
 
 ### Breaking changes
