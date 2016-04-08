@@ -155,7 +155,6 @@ manual = [
     "Gtk.Allocation",
     "Gtk.AppChooser",
     "Gtk.Builder",
-    "Gtk.Buildable",
     "Gtk.ColorChooser",
     "Gtk.EntryBuffer",
     "Gtk.RecentData",
