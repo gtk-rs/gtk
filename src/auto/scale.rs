@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use Adjustment;
-use Buildable;
 use Orientable;
 use Orientation;
 use PositionType;
@@ -14,7 +13,7 @@ use glib::translate::*;
 use std::mem;
 
 glib_wrapper! {
-    pub struct Scale(Object<ffi::GtkScale>): Range, Widget, Buildable, Orientable;
+    pub struct Scale(Object<ffi::GtkScale>): Range, Widget, Orientable;
 
     match fn {
         get_type => || ffi::gtk_scale_get_type(),

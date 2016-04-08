@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use Bin;
-use Buildable;
 use Container;
 use Orientation;
 use ReliefStyle;
@@ -14,7 +13,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct ToolItem(Object<ffi::GtkToolItem>): Bin, Container, Widget, Buildable;
+    pub struct ToolItem(Object<ffi::GtkToolItem>): Bin, Container, Widget;
 
     match fn {
         get_type => || ffi::gtk_tool_item_get_type(),

@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use Adjustment;
-use Buildable;
 use CellEditable;
 use Editable;
 use EntryBuffer;
@@ -23,7 +22,7 @@ use glib::translate::*;
 use std::mem;
 
 glib_wrapper! {
-    pub struct Entry(Object<ffi::GtkEntry>): Widget, Buildable, CellEditable, Editable;
+    pub struct Entry(Object<ffi::GtkEntry>): Widget, CellEditable, Editable;
 
     match fn {
         get_type => || ffi::gtk_entry_get_type(),

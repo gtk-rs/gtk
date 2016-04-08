@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use Bin;
-use Buildable;
 use CellEditable;
 use CellLayout;
 use ComboBox;
@@ -13,7 +12,7 @@ use glib::object::Downcast;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct ComboBoxText(Object<ffi::GtkComboBoxText>): ComboBox, Bin, Container, Widget, Buildable, CellEditable, CellLayout;
+    pub struct ComboBoxText(Object<ffi::GtkComboBoxText>): ComboBox, Bin, Container, Widget, CellEditable, CellLayout;
 
     match fn {
         get_type => || ffi::gtk_combo_box_text_get_type(),

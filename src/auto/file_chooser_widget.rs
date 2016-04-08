@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use Box;
-use Buildable;
 use Container;
 use FileChooser;
 use FileChooserAction;
@@ -13,7 +12,7 @@ use glib::object::Downcast;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct FileChooserWidget(Object<ffi::GtkFileChooserWidget>): Box, Container, Widget, Buildable, Orientable, FileChooser;
+    pub struct FileChooserWidget(Object<ffi::GtkFileChooserWidget>): Box, Container, Widget, Orientable, FileChooser;
 
     match fn {
         get_type => || ffi::gtk_file_chooser_widget_get_type(),

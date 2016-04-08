@@ -3,7 +3,6 @@
 
 use Actionable;
 use Bin;
-use Buildable;
 use Button;
 use Container;
 use FontChooser;
@@ -13,7 +12,7 @@ use glib::object::Downcast;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct FontButton(Object<ffi::GtkFontButton>): Button, Bin, Container, Widget, Buildable, Actionable, FontChooser;
+    pub struct FontButton(Object<ffi::GtkFontButton>): Button, Bin, Container, Widget, Actionable, FontChooser;
 
     match fn {
         get_type => || ffi::gtk_font_button_get_type(),

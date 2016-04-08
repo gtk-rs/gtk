@@ -3,7 +3,6 @@
 
 use Actionable;
 use Bin;
-use Buildable;
 use Button;
 use Container;
 use Widget;
@@ -12,7 +11,7 @@ use glib::object::Downcast;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct LinkButton(Object<ffi::GtkLinkButton>): Button, Bin, Container, Widget, Buildable, Actionable;
+    pub struct LinkButton(Object<ffi::GtkLinkButton>): Button, Bin, Container, Widget, Actionable;
 
     match fn {
         get_type => || ffi::gtk_link_button_get_type(),

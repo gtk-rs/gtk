@@ -3,7 +3,6 @@
 
 use Actionable;
 use Bin;
-use Buildable;
 use Button;
 use Container;
 use Orientable;
@@ -14,7 +13,7 @@ use glib::object::Downcast;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct VolumeButton(Object<ffi::GtkVolumeButton>): ScaleButton, Button, Bin, Container, Widget, Buildable, Actionable, Orientable;
+    pub struct VolumeButton(Object<ffi::GtkVolumeButton>): ScaleButton, Button, Bin, Container, Widget, Actionable, Orientable;
 
     match fn {
         get_type => || ffi::gtk_volume_button_get_type(),

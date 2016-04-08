@@ -3,7 +3,6 @@
 
 use Application;
 use Bin;
-use Buildable;
 use Container;
 use Widget;
 use Window;
@@ -12,7 +11,7 @@ use glib::object::Downcast;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct ApplicationWindow(Object<ffi::GtkApplicationWindow>): Window, Bin, Container, Widget, Buildable;
+    pub struct ApplicationWindow(Object<ffi::GtkApplicationWindow>): Window, Bin, Container, Widget;
 
     match fn {
         get_type => || ffi::gtk_application_window_get_type(),

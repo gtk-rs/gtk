@@ -3,7 +3,6 @@
 
 use Actionable;
 use Bin;
-use Buildable;
 use Container;
 use PositionType;
 use ReliefStyle;
@@ -16,7 +15,7 @@ use glib::translate::*;
 use std::mem;
 
 glib_wrapper! {
-    pub struct Button(Object<ffi::GtkButton>): Bin, Container, Widget, Buildable, Actionable;
+    pub struct Button(Object<ffi::GtkButton>): Bin, Container, Widget, Actionable;
 
     match fn {
         get_type => || ffi::gtk_button_get_type(),

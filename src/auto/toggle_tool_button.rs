@@ -3,7 +3,6 @@
 
 use Actionable;
 use Bin;
-use Buildable;
 use Container;
 use ToolButton;
 use ToolItem;
@@ -13,7 +12,7 @@ use glib::object::Downcast;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct ToggleToolButton(Object<ffi::GtkToggleToolButton>): ToolButton, ToolItem, Bin, Container, Widget, Buildable, Actionable;
+    pub struct ToggleToolButton(Object<ffi::GtkToggleToolButton>): ToolButton, ToolItem, Bin, Container, Widget, Actionable;
 
     match fn {
         get_type => || ffi::gtk_toggle_tool_button_get_type(),

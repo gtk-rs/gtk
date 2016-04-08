@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use Bin;
-use Buildable;
 use Container;
 use Widget;
 use ffi;
@@ -11,7 +10,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct ListBoxRow(Object<ffi::GtkListBoxRow>): Bin, Container, Widget, Buildable;
+    pub struct ListBoxRow(Object<ffi::GtkListBoxRow>): Bin, Container, Widget;
 
     match fn {
         get_type => || ffi::gtk_list_box_row_get_type(),

@@ -3,7 +3,6 @@
 
 #[cfg(feature = "v3_12")]
 use Adjustment;
-use Buildable;
 use Container;
 #[cfg(feature = "v3_12")]
 use FlowBoxChild;
@@ -17,7 +16,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct FlowBox(Object<ffi::GtkFlowBox>): Container, Widget, Buildable, Orientable;
+    pub struct FlowBox(Object<ffi::GtkFlowBox>): Container, Widget, Orientable;
 
     match fn {
         get_type => || ffi::gtk_flow_box_get_type(),

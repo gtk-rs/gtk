@@ -3,7 +3,6 @@
 
 use AppChooser;
 use Box;
-use Buildable;
 use Container;
 use Orientable;
 use Widget;
@@ -12,7 +11,7 @@ use glib::object::Downcast;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct AppChooserWidget(Object<ffi::GtkAppChooserWidget>): Box, Container, Widget, Buildable, Orientable, AppChooser;
+    pub struct AppChooserWidget(Object<ffi::GtkAppChooserWidget>): Box, Container, Widget, Orientable, AppChooser;
 
     match fn {
         get_type => || ffi::gtk_app_chooser_widget_get_type(),

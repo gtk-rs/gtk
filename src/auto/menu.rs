@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use AccelGroup;
-use Buildable;
 use Container;
 use MenuShell;
 use Widget;
@@ -13,7 +12,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct Menu(Object<ffi::GtkMenu>): MenuShell, Container, Widget, Buildable;
+    pub struct Menu(Object<ffi::GtkMenu>): MenuShell, Container, Widget;
 
     match fn {
         get_type => || ffi::gtk_menu_get_type(),

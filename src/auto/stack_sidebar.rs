@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use Bin;
-use Buildable;
 use Container;
 #[cfg(feature = "v3_16")]
 use Stack;
@@ -12,7 +11,7 @@ use glib::object::Downcast;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct StackSidebar(Object<ffi::GtkStackSidebar>): Bin, Container, Widget, Buildable;
+    pub struct StackSidebar(Object<ffi::GtkStackSidebar>): Bin, Container, Widget;
 
     match fn {
         get_type => || ffi::gtk_stack_sidebar_get_type(),

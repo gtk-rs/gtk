@@ -3,7 +3,6 @@
 
 #[cfg(feature = "v3_10")]
 use BaselinePosition;
-use Buildable;
 use Container;
 use Orientable;
 use PositionType;
@@ -14,7 +13,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct Grid(Object<ffi::GtkGrid>): Container, Widget, Buildable, Orientable;
+    pub struct Grid(Object<ffi::GtkGrid>): Container, Widget, Orientable;
 
     match fn {
         get_type => || ffi::gtk_grid_get_type(),

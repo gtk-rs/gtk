@@ -3,7 +3,6 @@
 
 use Actionable;
 use Bin;
-use Buildable;
 use Container;
 use ToolButton;
 use ToolItem;
@@ -14,7 +13,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct MenuToolButton(Object<ffi::GtkMenuToolButton>): ToolButton, ToolItem, Bin, Container, Widget, Buildable, Actionable;
+    pub struct MenuToolButton(Object<ffi::GtkMenuToolButton>): ToolButton, ToolItem, Bin, Container, Widget, Actionable;
 
     match fn {
         get_type => || ffi::gtk_menu_tool_button_get_type(),

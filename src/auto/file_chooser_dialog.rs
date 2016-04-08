@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use Bin;
-use Buildable;
 use Container;
 use Dialog;
 use FileChooser;
@@ -12,7 +11,7 @@ use ffi;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct FileChooserDialog(Object<ffi::GtkFileChooserDialog>): Dialog, Window, Bin, Container, Widget, Buildable, FileChooser;
+    pub struct FileChooserDialog(Object<ffi::GtkFileChooserDialog>): Dialog, Window, Bin, Container, Widget, FileChooser;
 
     match fn {
         get_type => || ffi::gtk_file_chooser_dialog_get_type(),

@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use Adjustment;
-use Buildable;
 use CellRenderer;
 use Container;
 use Entry;
@@ -25,7 +24,7 @@ use std::mem;
 use std::ptr;
 
 glib_wrapper! {
-    pub struct TreeView(Object<ffi::GtkTreeView>): Container, Widget, Buildable, Scrollable;
+    pub struct TreeView(Object<ffi::GtkTreeView>): Container, Widget, Scrollable;
 
     match fn {
         get_type => || ffi::gtk_tree_view_get_type(),

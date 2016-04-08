@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use Adjustment;
-use Buildable;
 use Container;
 use Orientable;
 use Scrollable;
@@ -16,7 +15,7 @@ use glib::object::Downcast;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct ToolPalette(Object<ffi::GtkToolPalette>): Container, Widget, Buildable, Orientable, Scrollable;
+    pub struct ToolPalette(Object<ffi::GtkToolPalette>): Container, Widget, Orientable, Scrollable;
 
     match fn {
         get_type => || ffi::gtk_tool_palette_get_type(),

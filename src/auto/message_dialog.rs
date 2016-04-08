@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use Bin;
-use Buildable;
 use Container;
 use Dialog;
 use Widget;
@@ -12,7 +11,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct MessageDialog(Object<ffi::GtkMessageDialog>): Dialog, Window, Bin, Container, Widget, Buildable;
+    pub struct MessageDialog(Object<ffi::GtkMessageDialog>): Dialog, Window, Bin, Container, Widget;
 
     match fn {
         get_type => || ffi::gtk_message_dialog_get_type(),

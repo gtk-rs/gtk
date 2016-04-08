@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use Bin;
-use Buildable;
 use Container;
 use Dialog;
 use RecentChooser;
@@ -12,7 +11,7 @@ use ffi;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct RecentChooserDialog(Object<ffi::GtkRecentChooserDialog>): Dialog, Window, Bin, Container, Widget, Buildable, RecentChooser;
+    pub struct RecentChooserDialog(Object<ffi::GtkRecentChooserDialog>): Dialog, Window, Bin, Container, Widget, RecentChooser;
 
     match fn {
         get_type => || ffi::gtk_recent_chooser_dialog_get_type(),

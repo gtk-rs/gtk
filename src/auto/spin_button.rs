@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use Adjustment;
-use Buildable;
 use CellEditable;
 use Editable;
 use Entry;
@@ -16,7 +15,7 @@ use glib::translate::*;
 use std::mem;
 
 glib_wrapper! {
-    pub struct SpinButton(Object<ffi::GtkSpinButton>): Entry, Widget, Buildable, CellEditable, Editable, Orientable;
+    pub struct SpinButton(Object<ffi::GtkSpinButton>): Entry, Widget, CellEditable, Editable, Orientable;
 
     match fn {
         get_type => || ffi::gtk_spin_button_get_type(),

@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use ArrowType;
-use Buildable;
 use Misc;
 use ShadowType;
 use Widget;
@@ -11,7 +10,7 @@ use glib::object::Downcast;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct Arrow(Object<ffi::GtkArrow>): Misc, Widget, Buildable;
+    pub struct Arrow(Object<ffi::GtkArrow>): Misc, Widget;
 
     match fn {
         get_type => || ffi::gtk_arrow_get_type(),

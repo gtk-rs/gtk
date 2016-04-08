@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use Box;
-use Buildable;
 use ColorChooser;
 use Container;
 use Orientable;
@@ -12,7 +11,7 @@ use glib::object::Downcast;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct ColorChooserWidget(Object<ffi::GtkColorChooserWidget>): Box, Container, Widget, Buildable, Orientable, ColorChooser;
+    pub struct ColorChooserWidget(Object<ffi::GtkColorChooserWidget>): Box, Container, Widget, Orientable, ColorChooser;
 
     match fn {
         get_type => || ffi::gtk_color_chooser_widget_get_type(),

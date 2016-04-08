@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use Bin;
-use Buildable;
 use Container;
 use Widget;
 use ffi;
@@ -11,7 +10,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct Expander(Object<ffi::GtkExpander>): Bin, Container, Widget, Buildable;
+    pub struct Expander(Object<ffi::GtkExpander>): Bin, Container, Widget;
 
     match fn {
         get_type => || ffi::gtk_expander_get_type(),

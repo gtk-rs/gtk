@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use Bin;
-use Buildable;
 use Container;
 use Frame;
 use Widget;
@@ -11,7 +10,7 @@ use glib::object::Downcast;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct AspectFrame(Object<ffi::GtkAspectFrame>): Frame, Bin, Container, Widget, Buildable;
+    pub struct AspectFrame(Object<ffi::GtkAspectFrame>): Frame, Bin, Container, Widget;
 
     match fn {
         get_type => || ffi::gtk_aspect_frame_get_type(),

@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use Bin;
-use Buildable;
 use Container;
 use ToolItem;
 use Widget;
@@ -11,7 +10,7 @@ use glib::object::Downcast;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct SeparatorToolItem(Object<ffi::GtkSeparatorToolItem>): ToolItem, Bin, Container, Widget, Buildable;
+    pub struct SeparatorToolItem(Object<ffi::GtkSeparatorToolItem>): ToolItem, Bin, Container, Widget;
 
     match fn {
         get_type => || ffi::gtk_separator_tool_item_get_type(),

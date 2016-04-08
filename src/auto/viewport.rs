@@ -3,7 +3,6 @@
 
 use Adjustment;
 use Bin;
-use Buildable;
 use Container;
 use Scrollable;
 use ShadowType;
@@ -14,7 +13,7 @@ use glib::object::Downcast;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct Viewport(Object<ffi::GtkViewport>): Bin, Container, Widget, Buildable, Scrollable;
+    pub struct Viewport(Object<ffi::GtkViewport>): Bin, Container, Widget, Scrollable;
 
     match fn {
         get_type => || ffi::gtk_viewport_get_type(),

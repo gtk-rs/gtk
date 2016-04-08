@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use Box;
-use Buildable;
 use ButtonBoxStyle;
 use Container;
 use Orientable;
@@ -14,7 +13,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct ButtonBox(Object<ffi::GtkButtonBox>): Box, Container, Widget, Buildable, Orientable;
+    pub struct ButtonBox(Object<ffi::GtkButtonBox>): Box, Container, Widget, Orientable;
 
     match fn {
         get_type => || ffi::gtk_button_box_get_type(),

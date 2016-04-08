@@ -3,7 +3,6 @@
 
 #[cfg(feature = "v3_10")]
 use BaselinePosition;
-use Buildable;
 use Container;
 use Orientable;
 use Orientation;
@@ -16,7 +15,7 @@ use glib::translate::*;
 use std::mem;
 
 glib_wrapper! {
-    pub struct Box(Object<ffi::GtkBox>): Container, Widget, Buildable, Orientable;
+    pub struct Box(Object<ffi::GtkBox>): Container, Widget, Orientable;
 
     match fn {
         get_type => || ffi::gtk_box_get_type(),

@@ -3,7 +3,6 @@
 
 use Bin;
 use Box;
-use Buildable;
 use Container;
 use Widget;
 use Window;
@@ -13,7 +12,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct Dialog(Object<ffi::GtkDialog>): Window, Bin, Container, Widget, Buildable;
+    pub struct Dialog(Object<ffi::GtkDialog>): Window, Bin, Container, Widget;
 
     match fn {
         get_type => || ffi::gtk_dialog_get_type(),

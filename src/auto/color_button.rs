@@ -3,7 +3,6 @@
 
 use Actionable;
 use Bin;
-use Buildable;
 use Button;
 use ColorChooser;
 use Container;
@@ -13,7 +12,7 @@ use glib::object::Downcast;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct ColorButton(Object<ffi::GtkColorButton>): Button, Bin, Container, Widget, Buildable, Actionable, ColorChooser;
+    pub struct ColorButton(Object<ffi::GtkColorButton>): Button, Bin, Container, Widget, Actionable, ColorChooser;
 
     match fn {
         get_type => || ffi::gtk_color_button_get_type(),

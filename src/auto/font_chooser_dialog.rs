@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use Bin;
-use Buildable;
 use Container;
 use Dialog;
 use FontChooser;
@@ -14,7 +13,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct FontChooserDialog(Object<ffi::GtkFontChooserDialog>): Dialog, Window, Bin, Container, Widget, Buildable, FontChooser;
+    pub struct FontChooserDialog(Object<ffi::GtkFontChooserDialog>): Dialog, Window, Bin, Container, Widget, FontChooser;
 
     match fn {
         get_type => || ffi::gtk_font_chooser_dialog_get_type(),
