@@ -1843,3 +1843,64 @@ mod scale {
         f(&from_glib_none(this), value).to_glib_full()
     }
 }
+
+pub trait MenuItemSignals {
+    fn connect_activate<F>(&self, activate_func: F) -> u64
+        where F: Fn(&Self) + 'static;
+    fn connect_activate_item<F>(&self, activate_item_func: F) -> u64
+        where F: Fn(&Self) + 'static;
+    fn connect_deselect<F>(&self, deselect_func: F) -> u64
+        where F: Fn(&Self) + 'static;
+    fn connect_select<F>(&self, select_func: F) -> u64
+        where F: Fn(&Self) + 'static;
+}
+
+mod menu_item {
+    use MenuItem;
+    use std::mem::transmute;
+    use ffi::GtkMenuItem;
+    use glib::object::Downcast;
+    use glib::signal::connect;
+    use glib::translate::*;
+    use IsA;
+
+    impl super::MenuItemSignals for MenuItem {
+        fn connect_activate<F: Fn(&Self) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
+                connect(self.to_glib_none().0, "activate",
+                    transmute(trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_activate_item<F: Fn(&Self) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
+                connect(self.to_glib_none().0, "activate-item",
+                    transmute(trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_deselect<F: Fn(&Self) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
+                connect(self.to_glib_none().0, "deselect",
+                    transmute(trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_select<F: Fn(&Self) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
+                connect(self.to_glib_none().0, "select",
+                    transmute(trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+    }
+
+    unsafe extern "C" fn trampoline<T>(this: *mut GtkMenuItem, f: &Box<Fn(&T) + 'static>)
+    where T: IsA<MenuItem> {
+        callback_guard!();
+        f(&MenuItem::from_glib_none(this).downcast_unchecked());
+    }
+}
