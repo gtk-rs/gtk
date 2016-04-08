@@ -28,8 +28,7 @@ impl Dialog {
         ret.add_buttons(buttons);
         ret
     }
-
-    }
+}
 
 pub trait DialogExt {
     // -- manual --
