@@ -3,7 +3,6 @@
 
 use Actionable;
 use Bin;
-use Buildable;
 use Button;
 use CheckButton;
 use Container;
@@ -14,7 +13,7 @@ use glib::object::Downcast;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct RadioButton(Object<ffi::GtkRadioButton>): CheckButton, ToggleButton, Button, Bin, Container, Widget, Buildable, Actionable;
+    pub struct RadioButton(Object<ffi::GtkRadioButton>): CheckButton, ToggleButton, Button, Bin, Container, Widget, Actionable;
 
     match fn {
         get_type => || ffi::gtk_radio_button_get_type(),

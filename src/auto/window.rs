@@ -4,7 +4,6 @@
 use AccelGroup;
 use Application;
 use Bin;
-use Buildable;
 use Container;
 use Error;
 use Rectangle;
@@ -22,7 +21,7 @@ use std::mem;
 use std::ptr;
 
 glib_wrapper! {
-    pub struct Window(Object<ffi::GtkWindow>): Bin, Container, Widget, Buildable;
+    pub struct Window(Object<ffi::GtkWindow>): Bin, Container, Widget;
 
     match fn {
         get_type => || ffi::gtk_window_get_type(),

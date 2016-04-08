@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use Adjustment;
-use Buildable;
 use ResizeMode;
 use Widget;
 use ffi;
@@ -11,7 +10,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct Container(Object<ffi::GtkContainer>): Widget, Buildable;
+    pub struct Container(Object<ffi::GtkContainer>): Widget;
 
     match fn {
         get_type => || ffi::gtk_container_get_type(),

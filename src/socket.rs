@@ -9,7 +9,7 @@ use glib::object::Downcast;
 use Widget;
 
 glib_wrapper! {
-    pub struct Socket(Object<ffi::GtkSocket>): Widget, ::Container, ::Buildable;
+    pub struct Socket(Object<ffi::GtkSocket>): Widget, ::Container;
 
     match fn {
         get_type => || ffi::gtk_socket_get_type(),

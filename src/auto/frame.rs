@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use Bin;
-use Buildable;
 use Container;
 use ShadowType;
 use Widget;
@@ -13,7 +12,7 @@ use glib::translate::*;
 use std::mem;
 
 glib_wrapper! {
-    pub struct Frame(Object<ffi::GtkFrame>): Bin, Container, Widget, Buildable;
+    pub struct Frame(Object<ffi::GtkFrame>): Bin, Container, Widget;
 
     match fn {
         get_type => || ffi::gtk_frame_get_type(),

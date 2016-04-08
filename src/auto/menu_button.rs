@@ -5,7 +5,6 @@ use Actionable;
 #[cfg(feature = "v3_6")]
 use ArrowType;
 use Bin;
-use Buildable;
 use Button;
 use Container;
 #[cfg(feature = "v3_6")]
@@ -20,7 +19,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct MenuButton(Object<ffi::GtkMenuButton>): ToggleButton, Button, Bin, Container, Widget, Buildable, Actionable;
+    pub struct MenuButton(Object<ffi::GtkMenuButton>): ToggleButton, Button, Bin, Container, Widget, Actionable;
 
     match fn {
         get_type => || ffi::gtk_menu_button_get_type(),

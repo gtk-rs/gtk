@@ -3,7 +3,6 @@
 
 #[cfg(feature = "v3_10")]
 use Adjustment;
-use Buildable;
 use Container;
 #[cfg(feature = "v3_10")]
 use ListBoxRow;
@@ -16,7 +15,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct ListBox(Object<ffi::GtkListBox>): Container, Widget, Buildable;
+    pub struct ListBox(Object<ffi::GtkListBox>): Container, Widget;
 
     match fn {
         get_type => || ffi::gtk_list_box_get_type(),

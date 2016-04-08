@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use Box;
-use Buildable;
 use Container;
 use Orientable;
 use Widget;
@@ -11,7 +10,7 @@ use glib::object::Downcast;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct Statusbar(Object<ffi::GtkStatusbar>): Box, Container, Widget, Buildable, Orientable;
+    pub struct Statusbar(Object<ffi::GtkStatusbar>): Box, Container, Widget, Orientable;
 
     match fn {
         get_type => || ffi::gtk_statusbar_get_type(),

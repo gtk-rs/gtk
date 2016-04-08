@@ -5,7 +5,6 @@ use AccelFlags;
 use AccelGroup;
 use Align;
 use Allocation;
-use Buildable;
 use DirectionType;
 use Orientation;
 use Requisition;
@@ -24,7 +23,7 @@ use glib::translate::*;
 use std::mem;
 
 glib_wrapper! {
-    pub struct Widget(Object<ffi::GtkWidget>): Buildable;
+    pub struct Widget(Object<ffi::GtkWidget>);
 
     match fn {
         get_type => || ffi::gtk_widget_get_type(),

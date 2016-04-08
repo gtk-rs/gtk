@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use Bin;
-use Buildable;
 use Container;
 #[cfg(feature = "v3_10")]
 use PlacesOpenFlags;
@@ -13,7 +12,7 @@ use glib::object::Downcast;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct PlacesSidebar(Object<ffi::GtkPlacesSidebar>): ScrolledWindow, Bin, Container, Widget, Buildable;
+    pub struct PlacesSidebar(Object<ffi::GtkPlacesSidebar>): ScrolledWindow, Bin, Container, Widget;
 
     match fn {
         get_type => || ffi::gtk_places_sidebar_get_type(),

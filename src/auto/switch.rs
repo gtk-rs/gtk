@@ -2,14 +2,13 @@
 // DO NOT EDIT
 
 use Actionable;
-use Buildable;
 use Widget;
 use ffi;
 use glib::object::Downcast;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct Switch(Object<ffi::GtkSwitch>): Widget, Buildable, Actionable;
+    pub struct Switch(Object<ffi::GtkSwitch>): Widget, Actionable;
 
     match fn {
         get_type => || ffi::gtk_switch_get_type(),

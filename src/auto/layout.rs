@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use Adjustment;
-use Buildable;
 use Container;
 use Scrollable;
 use Widget;
@@ -14,7 +13,7 @@ use glib::translate::*;
 use std::mem;
 
 glib_wrapper! {
-    pub struct Layout(Object<ffi::GtkLayout>): Container, Widget, Buildable, Scrollable;
+    pub struct Layout(Object<ffi::GtkLayout>): Container, Widget, Scrollable;
 
     match fn {
         get_type => || ffi::gtk_layout_get_type(),

@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use Bin;
-use Buildable;
 use Container;
 use Dialog;
 use License;
@@ -14,7 +13,7 @@ use glib::object::Downcast;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct AboutDialog(Object<ffi::GtkAboutDialog>): Dialog, Window, Bin, Container, Widget, Buildable;
+    pub struct AboutDialog(Object<ffi::GtkAboutDialog>): Dialog, Window, Bin, Container, Widget;
 
     match fn {
         get_type => || ffi::gtk_about_dialog_get_type(),

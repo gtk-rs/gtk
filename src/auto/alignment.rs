@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use Bin;
-use Buildable;
 use Container;
 use Widget;
 use ffi;
@@ -11,7 +10,7 @@ use glib::translate::*;
 use std::mem;
 
 glib_wrapper! {
-    pub struct Alignment(Object<ffi::GtkAlignment>): Bin, Container, Widget, Buildable;
+    pub struct Alignment(Object<ffi::GtkAlignment>): Bin, Container, Widget;
 
     match fn {
         get_type => || ffi::gtk_alignment_get_type(),

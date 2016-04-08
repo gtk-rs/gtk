@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use Bin;
-use Buildable;
 use Container;
 #[cfg(feature = "v3_10")]
 use Entry;
@@ -13,7 +12,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct SearchBar(Object<ffi::GtkSearchBar>): Bin, Container, Widget, Buildable;
+    pub struct SearchBar(Object<ffi::GtkSearchBar>): Bin, Container, Widget;
 
     match fn {
         get_type => || ffi::gtk_search_bar_get_type(),

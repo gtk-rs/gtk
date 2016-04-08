@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use Box;
-use Buildable;
 use Container;
 use Orientable;
 use RecentChooser;
@@ -13,7 +12,7 @@ use glib::object::Downcast;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct RecentChooserWidget(Object<ffi::GtkRecentChooserWidget>): Box, Container, Widget, Buildable, Orientable, RecentChooser;
+    pub struct RecentChooserWidget(Object<ffi::GtkRecentChooserWidget>): Box, Container, Widget, Orientable, RecentChooser;
 
     match fn {
         get_type => || ffi::gtk_recent_chooser_widget_get_type(),

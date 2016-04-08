@@ -3,7 +3,6 @@
 
 use Actionable;
 use Bin;
-use Buildable;
 use Container;
 use MenuItem;
 use Widget;
@@ -12,7 +11,7 @@ use glib::object::Downcast;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct SeparatorMenuItem(Object<ffi::GtkSeparatorMenuItem>): MenuItem, Bin, Container, Widget, Buildable, Actionable;
+    pub struct SeparatorMenuItem(Object<ffi::GtkSeparatorMenuItem>): MenuItem, Bin, Container, Widget, Actionable;
 
     match fn {
         get_type => || ffi::gtk_separator_menu_item_get_type(),

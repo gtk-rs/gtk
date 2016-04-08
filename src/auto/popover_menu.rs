@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use Bin;
-use Buildable;
 use Container;
 use Popover;
 use Widget;
@@ -11,7 +10,7 @@ use glib::object::Downcast;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct PopoverMenu(Object<ffi::GtkPopoverMenu>): Popover, Bin, Container, Widget, Buildable;
+    pub struct PopoverMenu(Object<ffi::GtkPopoverMenu>): Popover, Bin, Container, Widget;
 
     match fn {
         get_type => || ffi::gtk_popover_menu_get_type(),

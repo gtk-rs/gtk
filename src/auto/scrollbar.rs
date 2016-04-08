@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use Adjustment;
-use Buildable;
 use Orientable;
 use Orientation;
 use Range;
@@ -12,7 +11,7 @@ use glib::object::Downcast;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct Scrollbar(Object<ffi::GtkScrollbar>): Range, Widget, Buildable, Orientable;
+    pub struct Scrollbar(Object<ffi::GtkScrollbar>): Range, Widget, Orientable;
 
     match fn {
         get_type => || ffi::gtk_scrollbar_get_type(),

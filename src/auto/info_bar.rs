@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use Box;
-use Buildable;
 use Button;
 use Container;
 use MessageType;
@@ -14,7 +13,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct InfoBar(Object<ffi::GtkInfoBar>): Box, Container, Widget, Buildable, Orientable;
+    pub struct InfoBar(Object<ffi::GtkInfoBar>): Box, Container, Widget, Orientable;
 
     match fn {
         get_type => || ffi::gtk_info_bar_get_type(),

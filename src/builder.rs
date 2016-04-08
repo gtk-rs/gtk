@@ -11,15 +11,6 @@ use glib::object::{Downcast, IsA};
 use glib::translate::*;
 use ffi;
 
-
-glib_wrapper! {
-    pub struct Buildable(Object<ffi::GtkBuildable>);
-
-    match fn {
-        get_type => || ffi::gtk_buildable_get_type(),
-    }
-}
-
 glib_wrapper! {
     pub struct Builder(Object<ffi::GtkBuilder>);
 

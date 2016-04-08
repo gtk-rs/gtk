@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use Bin;
-use Buildable;
 use ColorChooser;
 use Container;
 use Dialog;
@@ -14,7 +13,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct ColorChooserDialog(Object<ffi::GtkColorChooserDialog>): Dialog, Window, Bin, Container, Widget, Buildable, ColorChooser;
+    pub struct ColorChooserDialog(Object<ffi::GtkColorChooserDialog>): Dialog, Window, Bin, Container, Widget, ColorChooser;
 
     match fn {
         get_type => || ffi::gtk_color_chooser_dialog_get_type(),

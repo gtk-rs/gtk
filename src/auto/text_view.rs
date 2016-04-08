@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use Adjustment;
-use Buildable;
 use Container;
 #[cfg(feature = "v3_6")]
 use InputHints;
@@ -27,7 +26,7 @@ use glib::translate::*;
 use std::mem;
 
 glib_wrapper! {
-    pub struct TextView(Object<ffi::GtkTextView>): Container, Widget, Buildable, Scrollable;
+    pub struct TextView(Object<ffi::GtkTextView>): Container, Widget, Scrollable;
 
     match fn {
         get_type => || ffi::gtk_text_view_get_type(),

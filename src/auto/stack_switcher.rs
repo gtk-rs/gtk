@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use Box;
-use Buildable;
 use Container;
 use Orientable;
 #[cfg(feature = "v3_10")]
@@ -13,7 +12,7 @@ use glib::object::Downcast;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct StackSwitcher(Object<ffi::GtkStackSwitcher>): Box, Container, Widget, Buildable, Orientable;
+    pub struct StackSwitcher(Object<ffi::GtkStackSwitcher>): Box, Container, Widget, Orientable;
 
     match fn {
         get_type => || ffi::gtk_stack_switcher_get_type(),

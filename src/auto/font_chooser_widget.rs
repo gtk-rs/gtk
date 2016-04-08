@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use Box;
-use Buildable;
 use Container;
 use FontChooser;
 use Orientable;
@@ -12,7 +11,7 @@ use glib::object::Downcast;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct FontChooserWidget(Object<ffi::GtkFontChooserWidget>): Box, Container, Widget, Buildable, Orientable, FontChooser;
+    pub struct FontChooserWidget(Object<ffi::GtkFontChooserWidget>): Box, Container, Widget, Orientable, FontChooser;
 
     match fn {
         get_type => || ffi::gtk_font_chooser_widget_get_type(),

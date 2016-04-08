@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use Adjustment;
-use Buildable;
 use Orientable;
 use Rectangle;
 use SensitivityType;
@@ -13,7 +12,7 @@ use glib::translate::*;
 use std::mem;
 
 glib_wrapper! {
-    pub struct Range(Object<ffi::GtkRange>): Widget, Buildable, Orientable;
+    pub struct Range(Object<ffi::GtkRange>): Widget, Orientable;
 
     match fn {
         get_type => || ffi::gtk_range_get_type(),

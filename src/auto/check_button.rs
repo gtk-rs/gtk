@@ -3,7 +3,6 @@
 
 use Actionable;
 use Bin;
-use Buildable;
 use Button;
 use Container;
 use ToggleButton;
@@ -14,7 +13,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct CheckButton(Object<ffi::GtkCheckButton>): ToggleButton, Button, Bin, Container, Widget, Buildable, Actionable;
+    pub struct CheckButton(Object<ffi::GtkCheckButton>): ToggleButton, Button, Bin, Container, Widget, Actionable;
 
     match fn {
         get_type => || ffi::gtk_check_button_get_type(),

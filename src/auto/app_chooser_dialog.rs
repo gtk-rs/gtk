@@ -3,7 +3,6 @@
 
 use AppChooser;
 use Bin;
-use Buildable;
 use Container;
 use Dialog;
 use DialogFlags;
@@ -15,7 +14,7 @@ use glib::object::IsA;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct AppChooserDialog(Object<ffi::GtkAppChooserDialog>): Dialog, Window, Bin, Container, Widget, Buildable, AppChooser;
+    pub struct AppChooserDialog(Object<ffi::GtkAppChooserDialog>): Dialog, Window, Bin, Container, Widget, AppChooser;
 
     match fn {
         get_type => || ffi::gtk_app_chooser_dialog_get_type(),

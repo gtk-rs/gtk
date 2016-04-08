@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 use Bin;
-use Buildable;
 use Container;
 #[cfg(feature = "v3_10")]
 use RevealerTransitionType;
@@ -12,7 +11,7 @@ use glib::object::Downcast;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct Revealer(Object<ffi::GtkRevealer>): Bin, Container, Widget, Buildable;
+    pub struct Revealer(Object<ffi::GtkRevealer>): Bin, Container, Widget;
 
     match fn {
         get_type => || ffi::gtk_revealer_get_type(),
