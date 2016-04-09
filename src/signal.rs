@@ -9,7 +9,7 @@ use glib::signal::connect;
 use glib::translate::*;
 
 use glib_ffi::{self, gboolean, gpointer};
-use ffi::{GtkAdjustment, GtkTreeSelection, GtkTreeViewColumn};
+use ffi::{GtkTreeSelection, GtkTreeViewColumn};
 use gdk::{
     Event,
     EventButton,
@@ -29,15 +29,18 @@ use gdk::{
 use cairo::{Context, RectangleInt};
 
 use {
-    Adjustment,
+    CellEditable,
+    CellRenderer,
     Continue,
     DeleteType,
     DirectionType,
     MovementStep,
+    Rectangle,
     ScrollType,
     StateFlags,
     TextDirection,
     TreeIter,
+    TreeModel,
     TreePath,
     TreeSelection,
     TreeViewColumn,
@@ -1520,19 +1523,41 @@ mod range {
     }
 }
 
-impl Adjustment {
-    pub fn connect_value_changed<F: Fn(&Self) + 'static>(&self, f: F) -> u64 {
-        unsafe {
-            let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
-            connect(self.to_glib_none().0, "value-changed",
-                transmute(adjustment_trampoline as usize), Box::into_raw(f) as *mut _)
-        }
-    }
+pub trait AdjustmentSignals {
+    fn connect_value_changed<F: Fn(&Self) + 'static>(&self, f: F) -> u64;
+    fn connect_changed<F: Fn(&Self) + 'static>(&self, f: F) -> u64;
 }
 
-unsafe extern "C" fn adjustment_trampoline(this: *mut GtkAdjustment, f: &Box<Fn(&Adjustment) + 'static>) {
+mod adjustment {
+    use Adjustment;
+    use std::mem::transmute;
+    use glib::signal::connect;
+    use glib::translate::*;
+    use ffi::GtkAdjustment;
+
+    impl super::AdjustmentSignals for Adjustment {
+        fn connect_changed<F: Fn(&Self) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
+                connect(self.to_glib_none().0, "changed",
+                    transmute(adjustment_trampoline as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_value_changed<F: Fn(&Self) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
+                connect(self.to_glib_none().0, "value-changed",
+                    transmute(adjustment_trampoline as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+    }
+
+    unsafe extern "C" fn adjustment_trampoline(this: *mut GtkAdjustment,
+                                               f: &Box<Fn(&Adjustment) + 'static>) {
         callback_guard!();
-    f(&from_glib_none(this))
+        f(&from_glib_none(this))
+    }
 }
 
 impl TreeSelection {
@@ -1902,5 +1927,169 @@ mod menu_item {
     where T: IsA<MenuItem> {
         callback_guard!();
         f(&MenuItem::from_glib_none(this).downcast_unchecked());
+    }
+}
+
+pub trait AboutDialogSignals {
+    fn connect_activate_link<F>(&self, activate_func: F) -> u64
+        where F: Fn(&Self, &str) + 'static;
+}
+
+mod about_dialog {
+    use AboutDialog;
+    use std::mem::transmute;
+    use ffi::GtkAboutDialog;
+    use glib::object::Downcast;
+    use glib::signal::connect;
+    use glib::translate::*;
+    use IsA;
+    use libc::c_char;
+    use std::ffi::CStr;
+    use std::str;
+
+    impl super::AboutDialogSignals for AboutDialog {
+        fn connect_activate_link<F: Fn(&Self, &str) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(&Self, &str) + 'static>> = Box::new(Box::new(f));
+                connect(self.to_glib_none().0, "activate-link",
+                    transmute(trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+    }
+
+    unsafe extern "C" fn trampoline<T>(this: *mut GtkAboutDialog, c_str: *const c_char,
+                                       f: &Box<Fn(&T, &str) + 'static>)
+    where T: IsA<AboutDialog> {
+        callback_guard!();
+        let buf = CStr::from_ptr(c_str).to_bytes();
+        let string = str::from_utf8(buf).unwrap();
+        f(&AboutDialog::from_glib_none(this).downcast_unchecked(), string);
+    }
+}
+
+pub trait CellAreaSignals {
+    fn connect_add_editable<F>(&self, add_editable_func: F) -> u64
+        where F: Fn(&Self, &CellRenderer, &CellEditable, &Rectangle, TreePath) + 'static;
+    fn connect_apply_attributes<F>(&self, apply_attributes_func: F) -> u64
+        where F: Fn(&Self, &TreeModel, &TreeIter, bool, bool) + 'static;
+    fn connect_focus_changed<F>(&self, focus_changed_func: F) -> u64
+        where F: Fn(&Self, &CellRenderer, TreePath) + 'static;
+    fn connect_remove_editable<F>(&self, remove_editable_func: F) -> u64
+        where F: Fn(&Self, &CellRenderer, &CellEditable) + 'static;
+}
+
+mod cell_area {
+    use CellArea;
+    use CellEditable;
+    use CellRenderer;
+    use TreeIter;
+    use TreeModel;
+    use TreePath;
+    use Rectangle;
+    use std::mem::transmute;
+    use ffi::{GtkCellArea, GtkCellEditable, GtkCellRenderer, GtkTreeIter, GtkTreeModel};
+    use ffi::gtk_tree_path_new_from_string;
+    use gdk_ffi::GdkRectangle;
+    use glib_ffi::gboolean;
+    use glib::object::Downcast;
+    use glib::signal::connect;
+    use glib::translate::*;
+    use IsA;
+    use libc::c_char;
+
+    impl super::CellAreaSignals for CellArea {
+        fn connect_add_editable<F>(&self, add_editable_func: F) -> u64
+        where F: Fn(&Self, &CellRenderer, &CellEditable, &Rectangle, TreePath) + 'static {
+            unsafe {
+                let f: Box<Box<Fn(&Self, &CellRenderer, &CellEditable, &Rectangle, TreePath) + 'static>> =
+                    Box::new(Box::new(add_editable_func));
+                connect(self.to_glib_none().0, "add-editable",
+                    transmute(add_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_apply_attributes<F>(&self, apply_attributes_func: F) -> u64
+        where F: Fn(&Self, &TreeModel, &TreeIter, bool, bool) + 'static {
+            unsafe {
+                let f: Box<Box<Fn(&Self, &TreeModel, &TreeIter, bool, bool) + 'static>> =
+                    Box::new(Box::new(apply_attributes_func));
+                connect(self.to_glib_none().0, "apply-attributes",
+                    transmute(apply_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_focus_changed<F>(&self, focus_changed_func: F) -> u64
+        where F: Fn(&Self, &CellRenderer, TreePath) + 'static {
+            unsafe {
+                let f: Box<Box<Fn(&Self, &CellRenderer, TreePath) + 'static>> =
+                    Box::new(Box::new(focus_changed_func));
+                connect(self.to_glib_none().0, "focus-changed",
+                    transmute(focus_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_remove_editable<F>(&self, remove_editable_func: F) -> u64
+        where F: Fn(&Self, &CellRenderer, &CellEditable) + 'static {
+            unsafe {
+                let f: Box<Box<Fn(&Self, &CellRenderer, &CellEditable) + 'static>> =
+                    Box::new(Box::new(remove_editable_func));
+                connect(self.to_glib_none().0, "remove-editable",
+                    transmute(remove_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+    }
+
+    unsafe extern "C" fn add_trampoline<T>(this: *mut GtkCellArea,
+                                           renderer: *mut GtkCellRenderer,
+                                           editable: *mut GtkCellEditable,
+                                           cell_area: *mut GdkRectangle,
+                                           path: *const c_char,
+                                           f: &Box<Fn(&T, &CellRenderer, &CellEditable, &Rectangle, TreePath) + 'static>)
+    where T: IsA<CellArea> {
+        callback_guard!();
+        let path = from_glib_full(gtk_tree_path_new_from_string(path));
+        f(&CellArea::from_glib_none(this).downcast_unchecked(),
+          &CellRenderer::from_glib_none(renderer),
+          &CellEditable::from_glib_none(editable),
+          &Rectangle { x: (*cell_area).x, y: (*cell_area).y, width: (*cell_area).width, height: (*cell_area).height },
+          path);
+    }
+
+    unsafe extern "C" fn apply_trampoline<T>(this: *mut GtkCellArea,
+                                             model: *mut GtkTreeModel,
+                                             iter: *mut GtkTreeIter,
+                                             is_expander: gboolean,
+                                             is_expanded: gboolean,
+                                             f: &Box<Fn(&T, &TreeModel, &TreeIter, bool, bool) + 'static>)
+    where T: IsA<CellArea> {
+        callback_guard!();
+        f(&CellArea::from_glib_none(this).downcast_unchecked(),
+          &TreeModel::from_glib_none(model),
+          &TreeIter::from_glib_borrow(iter),
+          from_glib(is_expander),
+          from_glib(is_expanded));
+    }
+
+    unsafe extern "C" fn focus_trampoline<T>(this: *mut GtkCellArea,
+                                             renderer: *mut GtkCellRenderer,
+                                             path: *const c_char,
+                                             f: &Box<Fn(&T, &CellRenderer, TreePath) + 'static>)
+    where T: IsA<CellArea> {
+        callback_guard!();
+        let path = from_glib_full(gtk_tree_path_new_from_string(path));
+        f(&CellArea::from_glib_none(this).downcast_unchecked(),
+          &CellRenderer::from_glib_none(renderer),
+          path);
+    }
+
+    unsafe extern "C" fn remove_trampoline<T>(this: *mut GtkCellArea,
+                                              renderer: *mut GtkCellRenderer,
+                                              editable: *mut GtkCellEditable,
+                                              f: &Box<Fn(&T, &CellRenderer, &CellEditable) + 'static>)
+    where T: IsA<CellArea> {
+        callback_guard!();
+        f(&CellArea::from_glib_none(this).downcast_unchecked(),
+          &CellRenderer::from_glib_none(renderer),
+          &CellEditable::from_glib_none(editable));
     }
 }
