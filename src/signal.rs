@@ -2093,3 +2093,47 @@ mod cell_area {
           &CellEditable::from_glib_none(editable));
     }
 }
+
+pub trait CellEditableSignals {
+    fn connect_editing_done<F>(&self, editing_done_func: F) -> u64
+        where F: Fn(&Self) + 'static;
+    fn connect_remove_widget<F>(&self, remove_widget_func: F) -> u64
+        where F: Fn(&Self) + 'static;
+}
+
+mod cell_editable {
+    use CellEditable;
+    use std::mem::transmute;
+    use ffi::GtkCellEditable;
+    use glib::object::Downcast;
+    use glib::signal::connect;
+    use glib::translate::*;
+    use IsA;
+
+    impl super::CellEditableSignals for CellEditable {
+        fn connect_editing_done<F>(&self, editing_done_func: F) -> u64
+        where F: Fn(&Self) + 'static {
+            unsafe {
+                let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(editing_done_func));
+                connect(self.to_glib_none().0, "editing-done",
+                    transmute(trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_remove_widget<F>(&self, remove_widget_func: F) -> u64
+        where F: Fn(&Self) + 'static {
+            unsafe {
+                let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(remove_widget_func));
+                connect(self.to_glib_none().0, "remove-widget",
+                    transmute(trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+    }
+
+    unsafe extern "C" fn trampoline<T>(this: *mut GtkCellEditable,
+                                       f: &Box<Fn(&T) + 'static>)
+    where T: IsA<CellEditable> {
+        callback_guard!();
+        f(&CellEditable::from_glib_none(this).downcast_unchecked());
+    }
+}
