@@ -1904,3 +1904,40 @@ mod menu_item {
         f(&MenuItem::from_glib_none(this).downcast_unchecked());
     }
 }
+
+pub trait AboutDialogSignals {
+    fn connect_activate_link<F>(&self, activate_func: F) -> u64
+        where F: Fn(&Self, &str) + 'static;
+}
+
+mod about_dialog {
+    use AboutDialog;
+    use std::mem::transmute;
+    use ffi::GtkAboutDialog;
+    use glib::object::Downcast;
+    use glib::signal::connect;
+    use glib::translate::*;
+    use IsA;
+    use libc::c_char;
+    use std::ffi::CStr;
+    use std::str;
+
+    impl super::AboutDialogSignals for AboutDialog {
+        fn connect_activate_link<F: Fn(&Self, &str) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(&Self, &str) + 'static>> = Box::new(Box::new(f));
+                connect(self.to_glib_none().0, "activate-link",
+                    transmute(trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+    }
+
+    unsafe extern "C" fn trampoline<T>(this: *mut GtkAboutDialog, c_str: *const c_char,
+                                       f: &Box<Fn(&T, &str) + 'static>)
+    where T: IsA<AboutDialog> {
+        callback_guard!();
+        let buf = CStr::from_ptr(c_str).to_bytes();
+        let string = str::from_utf8(buf).unwrap();
+        f(&AboutDialog::from_glib_none(this).downcast_unchecked(), string);
+    }
+}
