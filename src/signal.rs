@@ -2207,3 +2207,42 @@ mod cell_renderer_accel {
            hardware_keycode);
     }
 }
+
+pub trait CellRendererComboSignals {
+    fn connect_changed<F>(&self, changed_func: F) -> u64
+        where F: Fn(&Self, TreePath) + 'static;
+}
+
+mod cell_renderer_combo {
+    use CellRendererCombo;
+    use TreePath;
+    use std::mem::transmute;
+    use ffi::GtkCellRendererCombo;
+    use glib::object::Downcast;
+    use glib::signal::connect;
+    use glib::translate::*;
+    use IsA;
+    use ffi::gtk_tree_path_new_from_string;
+    use libc::c_char;
+
+    impl super::CellRendererComboSignals for CellRendererCombo {
+        fn connect_changed<F>(&self, accel_cleared_func: F) -> u64
+        where F: Fn(&Self, TreePath) + 'static {
+            unsafe {
+                let f: Box<Box<Fn(&Self, TreePath) + 'static>> =
+                    Box::new(Box::new(accel_cleared_func));
+                connect(self.to_glib_none().0, "changed",
+                    transmute(trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+    }
+
+    unsafe extern "C" fn trampoline<T>(this: *mut GtkCellRendererCombo,
+                                       path: *const c_char,
+                                       f: &Box<Fn(&T, TreePath) + 'static>)
+    where T: IsA<CellRendererCombo> {
+        callback_guard!();
+        let path = from_glib_full(gtk_tree_path_new_from_string(path));
+        f(&CellRendererCombo::from_glib_none(this).downcast_unchecked(), path);
+    }
+}
