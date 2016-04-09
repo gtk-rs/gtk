@@ -9,7 +9,7 @@ use glib::signal::connect;
 use glib::translate::*;
 
 use glib_ffi::{self, gboolean, gpointer};
-use ffi::{GtkAdjustment, GtkTreeSelection, GtkTreeViewColumn};
+use ffi::{GtkTreeSelection, GtkTreeViewColumn};
 use gdk::{
     Event,
     EventButton,
@@ -29,7 +29,6 @@ use gdk::{
 use cairo::{Context, RectangleInt};
 
 use {
-    Adjustment,
     Continue,
     DeleteType,
     DirectionType,
@@ -1520,19 +1519,41 @@ mod range {
     }
 }
 
-impl Adjustment {
-    pub fn connect_value_changed<F: Fn(&Self) + 'static>(&self, f: F) -> u64 {
-        unsafe {
-            let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
-            connect(self.to_glib_none().0, "value-changed",
-                transmute(adjustment_trampoline as usize), Box::into_raw(f) as *mut _)
-        }
-    }
+pub trait AdjustmentSignals {
+    fn connect_value_changed<F: Fn(&Self) + 'static>(&self, f: F) -> u64;
+    fn connect_changed<F: Fn(&Self) + 'static>(&self, f: F) -> u64;
 }
 
-unsafe extern "C" fn adjustment_trampoline(this: *mut GtkAdjustment, f: &Box<Fn(&Adjustment) + 'static>) {
+mod adjustment {
+    use Adjustment;
+    use std::mem::transmute;
+    use glib::signal::connect;
+    use glib::translate::*;
+    use ffi::GtkAdjustment;
+
+    impl super::AdjustmentSignals for Adjustment {
+        fn connect_changed<F: Fn(&Self) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
+                connect(self.to_glib_none().0, "changed",
+                    transmute(adjustment_trampoline as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_value_changed<F: Fn(&Self) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
+                connect(self.to_glib_none().0, "value-changed",
+                    transmute(adjustment_trampoline as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+    }
+
+    unsafe extern "C" fn adjustment_trampoline(this: *mut GtkAdjustment,
+                                               f: &Box<Fn(&Adjustment) + 'static>) {
         callback_guard!();
-    f(&from_glib_none(this))
+        f(&from_glib_none(this))
+    }
 }
 
 impl TreeSelection {
