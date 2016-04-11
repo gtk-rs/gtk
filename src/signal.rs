@@ -24,6 +24,7 @@ use gdk::{
     EventProximity,
     EventScroll,
     EventWindowState,
+    ModifierType,
     Screen,
 };
 use cairo::{Context, RectangleInt};
@@ -2091,5 +2092,216 @@ mod cell_area {
         f(&CellArea::from_glib_none(this).downcast_unchecked(),
           &CellRenderer::from_glib_none(renderer),
           &CellEditable::from_glib_none(editable));
+    }
+}
+
+pub trait CellEditableSignals {
+    fn connect_editing_done<F>(&self, editing_done_func: F) -> u64
+        where F: Fn(&Self) + 'static;
+    fn connect_remove_widget<F>(&self, remove_widget_func: F) -> u64
+        where F: Fn(&Self) + 'static;
+}
+
+mod cell_editable {
+    use CellEditable;
+    use Object;
+    use std::mem::transmute;
+    use ffi::GtkCellEditable;
+    use glib::object::Downcast;
+    use glib::signal::connect;
+    use glib::translate::*;
+    use IsA;
+
+    impl<T: IsA<CellEditable> + IsA<Object>> super::CellEditableSignals for T {
+        fn connect_editing_done<F>(&self, editing_done_func: F) -> u64
+        where F: Fn(&Self) + 'static {
+            unsafe {
+                let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(editing_done_func));
+                connect(self.to_glib_none().0, "editing-done",
+                    transmute(trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_remove_widget<F>(&self, remove_widget_func: F) -> u64
+        where F: Fn(&Self) + 'static {
+            unsafe {
+                let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(remove_widget_func));
+                connect(self.to_glib_none().0, "remove-widget",
+                    transmute(trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+    }
+
+    unsafe extern "C" fn trampoline<T>(this: *mut GtkCellEditable,
+                                       f: &Box<Fn(&T) + 'static>)
+    where T: IsA<CellEditable> {
+        callback_guard!();
+        f(&CellEditable::from_glib_none(this).downcast_unchecked());
+    }
+}
+
+pub trait CellRendererAccelSignals {
+    fn connect_accel_cleared<F>(&self, accel_cleared_func: F) -> u64
+        where F: Fn(&Self, TreePath) + 'static;
+    fn connect_accel_edited<F>(&self, accel_edited_func: F) -> u64
+        where F: Fn(&Self, TreePath, u32, ModifierType, u32) + 'static;
+}
+
+mod cell_renderer_accel {
+    use CellRendererAccel;
+    use TreePath;
+    use std::mem::transmute;
+    use ffi::GtkCellRendererAccel;
+    use glib::signal::connect;
+    use glib::translate::*;
+    use gdk::ModifierType;
+    use ffi::gtk_tree_path_new_from_string;
+    use gdk_ffi::GdkModifierType;
+    use libc::{c_char, c_uint};
+
+    impl super::CellRendererAccelSignals for CellRendererAccel {
+        fn connect_accel_cleared<F>(&self, accel_cleared_func: F) -> u64
+        where F: Fn(&Self, TreePath) + 'static {
+            unsafe {
+                let f: Box<Box<Fn(&Self, TreePath) + 'static>> =
+                    Box::new(Box::new(accel_cleared_func));
+                connect(self.to_glib_none().0, "accel-cleared",
+                    transmute(trampoline as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_accel_edited<F>(&self, accel_edited_func: F) -> u64
+        where F: Fn(&Self, TreePath, u32, ModifierType, u32) + 'static {
+            unsafe {
+                let f: Box<Box<Fn(&Self, TreePath, u32, ModifierType, u32) + 'static>> =
+                    Box::new(Box::new(accel_edited_func));
+                connect(self.to_glib_none().0, "accel-edited",
+                    transmute(e_trampoline as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+    }
+
+    unsafe extern "C" fn trampoline(this: *mut GtkCellRendererAccel,
+                                    path: *const c_char,
+                                    f: &Box<Fn(&CellRendererAccel, TreePath) + 'static>) {
+        callback_guard!();
+        let path = from_glib_full(gtk_tree_path_new_from_string(path));
+        f(&CellRendererAccel::from_glib_none(this), path);
+    }
+
+    unsafe extern "C" fn e_trampoline(this: *mut GtkCellRendererAccel,
+                                      path: *const c_char,
+                                      accel_key: c_uint,
+                                      accel_mods: GdkModifierType,
+                                      hardware_keycode: c_uint,
+                                      f: &Box<Fn(&CellRendererAccel, TreePath, u32, ModifierType, u32) + 'static>) {
+        callback_guard!();
+        let path = from_glib_full(gtk_tree_path_new_from_string(path));
+        f(&CellRendererAccel::from_glib_none(this),
+           path,
+           accel_key,
+           accel_mods,
+           hardware_keycode);
+    }
+}
+
+pub trait CellRendererComboSignals {
+    fn connect_changed<F>(&self, changed_func: F) -> u64
+        where F: Fn(&Self, TreePath, &TreeIter) + 'static;
+}
+
+mod cell_renderer_combo {
+    use CellRendererCombo;
+    use TreeIter;
+    use TreePath;
+    use std::mem::transmute;
+    use ffi::{GtkCellRendererCombo, GtkTreeIter};
+    use glib::signal::connect;
+    use glib::translate::*;
+    use ffi::gtk_tree_path_new_from_string;
+    use libc::c_char;
+
+    impl super::CellRendererComboSignals for CellRendererCombo {
+        fn connect_changed<F>(&self, accel_cleared_func: F) -> u64
+        where F: Fn(&Self, TreePath, &TreeIter) + 'static {
+            unsafe {
+                let f: Box<Box<Fn(&Self, TreePath, &TreeIter) + 'static>> =
+                    Box::new(Box::new(accel_cleared_func));
+                connect(self.to_glib_none().0, "changed",
+                    transmute(trampoline as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+    }
+
+    unsafe extern "C" fn trampoline(this: *mut GtkCellRendererCombo,
+                                    path: *const c_char,
+                                    new_iter: *mut GtkTreeIter,
+                                    f: &Box<Fn(&CellRendererCombo, TreePath, &TreeIter) + 'static>) {
+        callback_guard!();
+        let path = from_glib_full(gtk_tree_path_new_from_string(path));
+        f(&CellRendererCombo::from_glib_none(this), path, &from_glib_borrow(new_iter));
+    }
+}
+
+pub trait CellRendererSignals {
+    fn connect_editing_canceled<F>(&self, editing_canceled_func: F) -> u64
+        where F: Fn(&Self) + 'static;
+    fn connect_editing_started<F>(&self, editing_started_func: F) -> u64
+        where F: Fn(&Self, &CellEditable, TreePath) + 'static;
+}
+
+mod cell_renderer {
+    use CellEditable;
+    use CellRenderer;
+    use Object;
+    use TreePath;
+    use std::mem::transmute;
+    use ffi::{GtkCellEditable, GtkCellRenderer};
+    use glib::object::Downcast;
+    use glib::signal::connect;
+    use glib::translate::*;
+    use IsA;
+    use ffi::gtk_tree_path_new_from_string;
+    use libc::c_char;
+
+    impl<T: IsA<CellRenderer> + IsA<Object>> super::CellRendererSignals for T {
+        fn connect_editing_canceled<F>(&self, editing_canceled_func: F) -> u64
+        where F: Fn(&Self) + 'static {
+            unsafe {
+                let f: Box<Box<Fn(&Self) + 'static>> =
+                    Box::new(Box::new(editing_canceled_func));
+                connect(self.to_glib_none().0, "editing-canceled",
+                    transmute(trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_editing_started<F>(&self, editing_started_func: F) -> u64
+        where F: Fn(&Self, &CellEditable, TreePath) + 'static {
+            unsafe {
+                let f: Box<Box<Fn(&Self, &CellEditable, TreePath) + 'static>> =
+                    Box::new(Box::new(editing_started_func));
+                connect(self.to_glib_none().0, "editing-started",
+                    transmute(start_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+    }
+
+    unsafe extern "C" fn trampoline<T>(this: *mut GtkCellRenderer,
+                                       f: &Box<Fn(&T) + 'static>)
+    where T: IsA<CellRenderer> {
+        callback_guard!();
+        f(&CellRenderer::from_glib_none(this).downcast_unchecked());
+    }
+
+    unsafe extern "C" fn start_trampoline<T>(this: *mut GtkCellRenderer,
+                                             editable: *mut GtkCellEditable,
+                                             path: *const c_char,
+                                             f: &Box<Fn(&T, &CellEditable, TreePath) + 'static>)
+    where T: IsA<CellRenderer> {
+        callback_guard!();
+        let path = from_glib_full(gtk_tree_path_new_from_string(path));
+        f(&CellRenderer::from_glib_none(this).downcast_unchecked(),
+          &CellEditable::from_glib_none(editable),
+          path);
     }
 }
