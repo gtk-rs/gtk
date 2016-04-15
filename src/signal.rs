@@ -2339,3 +2339,31 @@ mod cell_renderer_text {
         f(&from_glib_none(this), &path, new_text);
     }
 }
+
+pub trait CheckMenuItemSignals {
+    fn connect_toggled<F: Fn(&Self) + 'static>(&self, f: F) -> u64;
+}
+
+mod check_menu_item {
+    use std::mem::transmute;
+    use glib::signal::connect;
+    use glib::translate::*;
+    use ffi::GtkCheckMenuItem;
+    use CheckMenuItem;
+
+    impl super::CheckMenuItemSignals for CheckMenuItem {
+        fn connect_toggled<F: Fn(&Self) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
+                connect(self.to_glib_none().0, "toggled",
+                    transmute(trampoline as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+    }
+
+    unsafe extern "C" fn trampoline(this: *mut GtkCheckMenuItem,
+        f: &Box<Fn(&CheckMenuItem) + 'static>) {
+        callback_guard!();
+        f(&from_glib_none(this));
+    }
+}
