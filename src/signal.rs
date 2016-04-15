@@ -2305,3 +2305,37 @@ mod cell_renderer {
           path);
     }
 }
+
+pub trait CellRendererTextSignals {
+    fn connect_edited<F: Fn(&Self, &TreePath, &str) + 'static>(&self, f: F) -> u64;
+}
+
+mod cell_renderer_text {
+    use std::mem::transmute;
+    use std::str;
+    use glib::signal::connect;
+    use glib::translate::*;
+    use libc::c_char;
+    use std::ffi::CStr;
+    use ffi::{GtkCellRendererText, gtk_tree_path_new_from_string};
+    use {CellRendererText, TreePath};
+
+    impl super::CellRendererTextSignals for CellRendererText {
+        fn connect_edited<F: Fn(&Self, &TreePath, &str) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(&Self, &TreePath, &str) + 'static>> = Box::new(Box::new(f));
+                connect(self.to_glib_none().0, "edited",
+                    transmute(trampoline as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+    }
+
+    unsafe extern "C" fn trampoline(this: *mut GtkCellRendererText, path: *const c_char,
+            new_text: *const c_char, f: &Box<Fn(&CellRendererText, &TreePath, &str) + 'static>) {
+        callback_guard!();
+        let path = from_glib_full(gtk_tree_path_new_from_string(path));
+        let buf = CStr::from_ptr(new_text).to_bytes();
+        let new_text = str::from_utf8(buf).unwrap();
+        f(&from_glib_none(this), &path, new_text);
+    }
+}
