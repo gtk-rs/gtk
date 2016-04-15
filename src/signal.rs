@@ -2367,3 +2367,31 @@ mod check_menu_item {
         f(&from_glib_none(this));
     }
 }
+
+pub trait ColorButtonSignals {
+    fn connect_color_set<F: Fn(&Self) + 'static>(&self, f: F) -> u64;
+}
+
+mod color_button {
+    use std::mem::transmute;
+    use glib::signal::connect;
+    use glib::translate::*;
+    use ffi::GtkColorButton;
+    use ColorButton;
+
+    impl super::ColorButtonSignals for ColorButton {
+        fn connect_color_set<F: Fn(&Self) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
+                connect(self.to_glib_none().0, "color-set",
+                    transmute(trampoline as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+    }
+
+    unsafe extern "C" fn trampoline(this: *mut GtkColorButton,
+        f: &Box<Fn(&ColorButton) + 'static>) {
+        callback_guard!();
+        f(&from_glib_none(this));
+    }
+}
