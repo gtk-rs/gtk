@@ -45,6 +45,7 @@ use {
     TreePath,
     TreeSelection,
     TreeViewColumn,
+    Widget,
     WidgetHelpType,
 };
 
@@ -2311,32 +2312,36 @@ pub trait CellRendererTextSignals {
 }
 
 mod cell_renderer_text {
+    use Object;
     use std::mem::transmute;
     use std::str;
     use glib::signal::connect;
     use glib::translate::*;
     use libc::c_char;
     use std::ffi::CStr;
+    use glib::object::Downcast;
+    use IsA;
     use ffi::{GtkCellRendererText, gtk_tree_path_new_from_string};
     use {CellRendererText, TreePath};
 
-    impl super::CellRendererTextSignals for CellRendererText {
+    impl<T: IsA<CellRendererText> + IsA<Object>> super::CellRendererTextSignals for T {
         fn connect_edited<F: Fn(&Self, &TreePath, &str) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(&Self, &TreePath, &str) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "edited",
-                    transmute(trampoline as usize), Box::into_raw(f) as *mut _)
+                    transmute(trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
     }
 
-    unsafe extern "C" fn trampoline(this: *mut GtkCellRendererText, path: *const c_char,
-            new_text: *const c_char, f: &Box<Fn(&CellRendererText, &TreePath, &str) + 'static>) {
+    unsafe extern "C" fn trampoline<T>(this: *mut GtkCellRendererText, path: *const c_char,
+        new_text: *const c_char, f: &Box<Fn(&T, &TreePath, &str) + 'static>)
+    where T: IsA<CellRendererText> {
         callback_guard!();
         let path = from_glib_full(gtk_tree_path_new_from_string(path));
         let buf = CStr::from_ptr(new_text).to_bytes();
         let new_text = str::from_utf8(buf).unwrap();
-        f(&from_glib_none(this), &path, new_text);
+        f(&CellRendererText::from_glib_none(this).downcast_unchecked(), &path, new_text);
     }
 }
 
@@ -2350,21 +2355,25 @@ mod check_menu_item {
     use glib::translate::*;
     use ffi::GtkCheckMenuItem;
     use CheckMenuItem;
+    use glib::object::Downcast;
+    use IsA;
+    use Object;
 
-    impl super::CheckMenuItemSignals for CheckMenuItem {
+    impl<T: IsA<CheckMenuItem> + IsA<Object>> super::CheckMenuItemSignals for T {
         fn connect_toggled<F: Fn(&Self) + 'static>(&self, f: F) -> u64 {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "toggled",
-                    transmute(trampoline as usize), Box::into_raw(f) as *mut _)
+                    transmute(trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
     }
 
-    unsafe extern "C" fn trampoline(this: *mut GtkCheckMenuItem,
-        f: &Box<Fn(&CheckMenuItem) + 'static>) {
+    unsafe extern "C" fn trampoline<T>(this: *mut GtkCheckMenuItem,
+        f: &Box<Fn(&T) + 'static>)
+    where T: IsA<CheckMenuItem> {
         callback_guard!();
-        f(&from_glib_none(this));
+        f(&CheckMenuItem::from_glib_none(this).downcast_unchecked());
     }
 }
 
@@ -2393,5 +2402,71 @@ mod color_button {
         f: &Box<Fn(&ColorButton) + 'static>) {
         callback_guard!();
         f(&from_glib_none(this));
+    }
+}
+
+pub trait ContainerSignals {
+    fn connect_add<F: Fn(&Self, &Widget) + 'static>(&self, f: F) -> u64;
+    fn connect_check_resize<F: Fn(&Self) + 'static>(&self, f: F) -> u64;
+    fn connect_remove<F: Fn(&Self, &Widget) + 'static>(&self, f: F) -> u64;
+    fn connect_set_focus_child<F: Fn(&Self, &Widget) + 'static>(&self, f: F) -> u64;
+}
+
+mod container {
+    use std::mem::transmute;
+    use glib::signal::connect;
+    use glib::translate::*;
+    use ffi::{GtkContainer, GtkWidget};
+    use {Container, Widget};
+    use glib::object::Downcast;
+    use IsA;
+    use Object;
+
+    impl<T: IsA<Container> + IsA<Object>> super::ContainerSignals for T {
+        fn connect_add<F: Fn(&Self, &Widget) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(&Self, &Widget) + 'static>> = Box::new(Box::new(f));
+                connect(self.to_glib_none().0, "add",
+                    transmute(widget_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_check_resize<F: Fn(&Self) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
+                connect(self.to_glib_none().0, "check-resize",
+                    transmute(trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_remove<F: Fn(&Self, &Widget) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(&Self, &Widget) + 'static>> = Box::new(Box::new(f));
+                connect(self.to_glib_none().0, "remove",
+                    transmute(widget_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_set_focus_child<F: Fn(&Self, &Widget) + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box<Box<Fn(&Self, &Widget) + 'static>> = Box::new(Box::new(f));
+                connect(self.to_glib_none().0, "set-focus-child",
+                    transmute(widget_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+    }
+
+    unsafe extern "C" fn widget_trampoline<T>(this: *mut GtkContainer,
+        widget: *mut GtkWidget, f: &Box<Fn(&T, &Widget) + 'static>)
+    where T: IsA<Container> {
+        callback_guard!();
+        f(&Container::from_glib_none(this).downcast_unchecked(), &from_glib_none(widget));
+    }
+
+    unsafe extern "C" fn trampoline<T>(this: *mut GtkContainer,
+        f: &Box<Fn(&T) + 'static>)
+    where T: IsA<Container> {
+        callback_guard!();
+        f(&Container::from_glib_none(this).downcast_unchecked());
     }
 }
