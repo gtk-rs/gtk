@@ -1150,7 +1150,7 @@ mod gl_area {
             unsafe {
                 let f: Box<Box<Fn(&Self, i32, i32) + 'static>> = Box::new(Box::new(f));
                 connect(self.to_glib_none().0,"resize",
-                    transmute(gl_area_trampoline_res), Box::into_raw(f) as *mut _)
+                    transmute(gl_area_trampoline_res as usize), Box::into_raw(f) as *mut _)
             }
         }
     }
