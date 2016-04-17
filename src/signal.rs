@@ -1614,3 +1614,94 @@ mod cell_renderer_text {
         f(&CellRendererText::from_glib_none(this).downcast_unchecked(), &path, new_text);
     }
 }
+
+pub trait EditableSignals {
+    fn connect_changed<F>(&self, changed_func: F) -> u64
+        where F: Fn(&Self) + 'static;
+    fn connect_delete_text<F>(&self, delete_text_func: F) -> u64
+        where F: Fn(&Self, i32, i32) + 'static;
+    fn connect_insert_text<F>(&self, insert_text_func: F) -> u64
+        where F: Fn(&Self, &str, &mut i32) + 'static;
+}
+
+mod editable {
+    use Editable;
+    use Object;
+    use std::mem::transmute;
+    use ffi::GtkEditable;
+    use glib::signal::connect;
+    use glib::translate::*;
+    use IsA;
+    use libc::{c_char, c_int, c_uchar};
+    use std::ffi::CStr;
+    use std::str;
+    use glib::object::Downcast;
+    use std::slice;
+
+    impl<T: IsA<Editable> + IsA<Object>> super::EditableSignals for T {
+        fn connect_changed<F>(&self, changed_func: F) -> u64
+        where F: Fn(&Self) + 'static {
+            unsafe {
+                let f: Box<Box<Fn(&Self) + 'static>> =
+                    Box::new(Box::new(changed_func));
+                connect(self.to_glib_none().0, "changed",
+                    transmute(trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_delete_text<F>(&self, delete_text_func: F) -> u64
+        where F: Fn(&Self, i32, i32) + 'static {
+            unsafe {
+                let f: Box<Box<Fn(&Self, i32, i32) + 'static>> =
+                    Box::new(Box::new(delete_text_func));
+                connect(self.to_glib_none().0, "delete-text",
+                    transmute(delete_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_insert_text<F>(&self, insert_text_func: F) -> u64
+        where F: Fn(&Self, &str, &mut i32) + 'static {
+            unsafe {
+                let f: Box<Box<Fn(&Self, &str, &mut i32) + 'static>> =
+                    Box::new(Box::new(insert_text_func));
+                connect(self.to_glib_none().0, "insert-text",
+                    transmute(insert_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+    }
+
+    unsafe extern "C" fn trampoline<T>(this: *mut GtkEditable,
+                                       f: &Box<Fn(&T) + 'static>)
+    where T: IsA<Editable> {
+        callback_guard!();
+        f(&Editable::from_glib_none(this).downcast_unchecked());
+    }
+
+    unsafe extern "C" fn delete_trampoline<T>(this: *mut GtkEditable,
+                                              start_pos: c_int,
+                                              end_pos: c_int,
+                                              f: &Box<Fn(&T, i32, i32) + 'static>)
+    where T: IsA<Editable> {
+        callback_guard!();
+        f(&Editable::from_glib_none(this).downcast_unchecked(), start_pos, end_pos);
+    }
+
+    unsafe extern "C" fn insert_trampoline<T>(this: *mut GtkEditable,
+                                              new_text: *mut c_char,
+                                              new_text_length: c_int,
+                                              position: *mut c_int,
+                                              f: &Box<Fn(&T, &str, &mut i32) + 'static>)
+    where T: IsA<Editable> {
+        callback_guard!();
+        let buf = if new_text_length != -1 {
+            slice::from_raw_parts(new_text as *mut c_uchar,
+                                  new_text_length as usize)
+        } else {
+            CStr::from_ptr(new_text).to_bytes()
+        };
+        let string = str::from_utf8(buf).unwrap();
+        f(&Editable::from_glib_none(this).downcast_unchecked(),
+          string,
+          transmute(position));
+    }
+}
