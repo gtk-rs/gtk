@@ -1,8 +1,8 @@
 environment:
   matrix:
-    - RUST: 1.6.0
+    - RUST: 1.8.0
       BITS: 32
-    - RUST: 1.6.0
+    - RUST: 1.8.0
       BITS: 64
 
 install:
