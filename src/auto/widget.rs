@@ -14,6 +14,7 @@ use StateType;
 use StyleContext;
 use TextDirection;
 use Window;
+use cairo;
 use ffi;
 use gdk;
 use gdk_pixbuf;
@@ -159,7 +160,7 @@ pub trait WidgetExt {
 
     fn drag_unhighlight(&self);
 
-    //fn draw(&self, cr: /*Ignored*/&mut cairo::Context);
+    fn draw(&self, cr: &cairo::Context);
 
     fn ensure_style(&self);
 
@@ -829,9 +830,11 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    //fn draw(&self, cr: /*Ignored*/&mut cairo::Context) {
-    //    unsafe { TODO: call ffi::gtk_widget_draw() }
-    //}
+    fn draw(&self, cr: &cairo::Context) {
+        unsafe {
+            ffi::gtk_widget_draw(self.to_glib_none().0, mut_override(cr.to_glib_none().0));
+        }
+    }
 
     fn ensure_style(&self) {
         unsafe {

@@ -15,6 +15,7 @@ use TreeViewColumn;
 use TreeViewDropPosition;
 use TreeViewGridLines;
 use Widget;
+use cairo;
 use ffi;
 use gdk;
 use glib::object::Downcast;
@@ -124,9 +125,11 @@ impl TreeView {
         }
     }
 
-    //pub fn create_row_drag_icon(&self, path: &mut TreePath) -> /*Ignored*/Option<cairo::Surface> {
-    //    unsafe { TODO: call ffi::gtk_tree_view_create_row_drag_icon() }
-    //}
+    pub fn create_row_drag_icon(&self, path: &mut TreePath) -> Option<cairo::Surface> {
+        unsafe {
+            from_glib_full(ffi::gtk_tree_view_create_row_drag_icon(self.to_glib_none().0, path.to_glib_none_mut().0))
+        }
+    }
 
     //pub fn enable_model_drag_dest(&self, targets: /*Ignored*/&[&TargetEntry], n_targets: i32, actions: /*Ignored*/gdk::DragAction) {
     //    unsafe { TODO: call ffi::gtk_tree_view_enable_model_drag_dest() }
