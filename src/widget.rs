@@ -458,12 +458,12 @@ impl<O: IsA<Widget>> WidgetExt for O {
 
     fn override_background_color(&self, state: StateFlags, color: &gdk_ffi::GdkRGBA) {
         unsafe {
-            ffi::gtk_widget_override_background_color(self.to_glib_none().0, state, color)
+            ffi::gtk_widget_override_background_color(self.to_glib_none().0, state.to_glib(), color)
         }
     }
 
     fn override_color(&self, state: StateFlags, color: &gdk_ffi::GdkRGBA) {
-        unsafe { ffi::gtk_widget_override_color(self.to_glib_none().0, state, color) }
+        unsafe { ffi::gtk_widget_override_color(self.to_glib_none().0, state.to_glib(), color) }
     }
 
     fn override_symbolic_color(&self, name: &str, color: &gdk_ffi::GdkRGBA) {

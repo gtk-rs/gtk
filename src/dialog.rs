@@ -21,7 +21,7 @@ impl Dialog {
         let ret: Dialog = unsafe {
             Widget::from_glib_none(
                 ffi::gtk_dialog_new_with_buttons(title.to_glib_none().0, parent.to_glib_none().0,
-                    flags, ptr::null_mut()))
+                    flags.to_glib(), ptr::null_mut()))
                 .downcast_unchecked()
         };
 
