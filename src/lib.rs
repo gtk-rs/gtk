@@ -176,7 +176,6 @@ pub use ffi::GtkArrowPlacement as ArrowPlacement;
 pub use ffi::GtkAttachOptions as AttachOptions;
 pub use ffi::GtkBaselinePosition as BaselinePosition;
 pub use ffi::GtkBorderStyle as BorderStyle;
-pub use ffi::GtkBuilderError as BuilderError;
 pub use ffi::GtkDeleteType as DeleteType;
 pub use ffi::GtkDestDefaults as DestDefaults;
 pub use ffi::GtkDragResult as DragResult;
