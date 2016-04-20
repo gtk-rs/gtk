@@ -2201,7 +2201,7 @@ mod cell_renderer_accel {
         f(&CellRendererAccel::from_glib_none(this),
            path,
            accel_key,
-           accel_mods,
+           from_glib(accel_mods),
            hardware_keycode);
     }
 }

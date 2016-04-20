@@ -18,7 +18,7 @@ impl FileChooserDialog {
         unsafe {
             Widget::from_glib_none(
                 ffi::gtk_file_chooser_dialog_new(title.to_glib_none().0, parent.to_glib_none().0,
-                    action, ptr::null_mut()))
+                    action.to_glib(), ptr::null_mut()))
                 .downcast_unchecked()
         }
     }
