@@ -172,29 +172,6 @@ pub use glib::{
     Value,
 };
 
-pub use ffi::GtkArrowPlacement as ArrowPlacement;
-pub use ffi::GtkAttachOptions as AttachOptions;
-pub use ffi::GtkBaselinePosition as BaselinePosition;
-pub use ffi::GtkBorderStyle as BorderStyle;
-pub use ffi::GtkDeleteType as DeleteType;
-pub use ffi::GtkDestDefaults as DestDefaults;
-pub use ffi::GtkDragResult as DragResult;
-pub use ffi::GtkEventSequenceState as EventSequenceState;
-pub use ffi::GtkExpanderStyle as ExpanderStyle;
-pub use ffi::GtkIMPreeditStyle as IMPreeditStyle;
-pub use ffi::GtkIMStatusStyle as IMStatusStyle;
-pub use ffi::GtkInputHints as InputHints;
-pub use ffi::GtkInputPurpose as InputPurpose;
-pub use ffi::GtkLevelBarMode as LevelBarMode;
-pub use ffi::GtkMovementStep as MovementStep;
-pub use ffi::GtkPathPriorityType as PathPriorityType;
-pub use ffi::GtkPathType as PathType;
-pub use ffi::GtkPropagationPhase as PropagationPhase;
-pub use ffi::GtkResponseType as ResponseType;
-pub use ffi::GtkScrollStep as ScrollStep;
-pub use ffi::GtkScrollType as ScrollType;
-pub use ffi::GtkWidgetHelpType as WidgetHelpType;
-
 pub const STYLE_PROVIDER_PRIORITY_FALLBACK: i32 = ffi::GTK_STYLE_PROVIDER_PRIORITY_FALLBACK;
 pub const STYLE_PROVIDER_PRIORITY_THEME: i32 = ffi::GTK_STYLE_PROVIDER_PRIORITY_THEME;
 pub const STYLE_PROVIDER_PRIORITY_SETTINGS: i32 = ffi::GTK_STYLE_PROVIDER_PRIORITY_SETTINGS;
