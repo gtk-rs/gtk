@@ -78,7 +78,7 @@
 //!
 //! # Threads
 //!
-//! GTK+ is not thread-safe. Accoringly, none of this crate's structs implement
+//! GTK+ is not thread-safe. Accordingly, none of this crate's structs implement
 //! `Send` or `Sync`.
 //!
 //! The thread where `init` was called is considered the main thread. OS X has
