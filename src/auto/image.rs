@@ -4,6 +4,8 @@
 use ImageType;
 use Misc;
 use Widget;
+#[cfg(feature = "v3_10")]
+use cairo;
 use ffi;
 use gdk_pixbuf;
 use glib::object::Downcast;
@@ -77,10 +79,13 @@ impl Image {
         }
     }
 
-    //#[cfg(feature = "v3_10")]
-    //pub fn new_from_surface(surface: /*Ignored*/Option<&mut cairo::Surface>) -> Image {
-    //    unsafe { TODO: call ffi::gtk_image_new_from_surface() }
-    //}
+    #[cfg(feature = "v3_10")]
+    pub fn new_from_surface(surface: Option<&cairo::Surface>) -> Image {
+        assert_initialized_main_thread!();
+        unsafe {
+            Widget::from_glib_none(ffi::gtk_image_new_from_surface(mut_override(surface.to_glib_none().0))).downcast_unchecked()
+        }
+    }
 
     pub fn clear(&self) {
         unsafe {
@@ -172,10 +177,12 @@ impl Image {
         }
     }
 
-    //#[cfg(feature = "v3_10")]
-    //pub fn set_from_surface(&self, surface: /*Ignored*/&mut cairo::Surface) {
-    //    unsafe { TODO: call ffi::gtk_image_set_from_surface() }
-    //}
+    #[cfg(feature = "v3_10")]
+    pub fn set_from_surface(&self, surface: &cairo::Surface) {
+        unsafe {
+            ffi::gtk_image_set_from_surface(self.to_glib_none().0, mut_override(surface.to_glib_none().0));
+        }
+    }
 
     pub fn set_pixel_size(&self, pixel_size: i32) {
         unsafe {

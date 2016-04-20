@@ -13,6 +13,7 @@ use SizeRequestMode;
 use TreeIter;
 use TreeModel;
 use Widget;
+use cairo;
 use ffi;
 use glib::object::IsA;
 use glib::translate::*;
@@ -104,7 +105,7 @@ pub trait CellAreaExt {
 
     fn remove_focus_sibling<T: IsA<CellRenderer>, U: IsA<CellRenderer>>(&self, renderer: &T, sibling: &U);
 
-    //fn render<T: IsA<Widget>>(&self, context: &CellAreaContext, widget: &T, cr: /*Ignored*/&mut cairo::Context, background_area: &Rectangle, cell_area: &Rectangle, flags: CellRendererState, paint_focus: bool);
+    fn render<T: IsA<Widget>>(&self, context: &CellAreaContext, widget: &T, cr: &cairo::Context, background_area: &Rectangle, cell_area: &Rectangle, flags: CellRendererState, paint_focus: bool);
 
     fn request_renderer<T: IsA<CellRenderer>, U: IsA<Widget>>(&self, renderer: &T, orientation: Orientation, widget: &U, for_size: i32) -> (i32, i32);
 
@@ -343,9 +344,11 @@ impl<O: IsA<CellArea>> CellAreaExt for O {
         }
     }
 
-    //fn render<T: IsA<Widget>>(&self, context: &CellAreaContext, widget: &T, cr: /*Ignored*/&mut cairo::Context, background_area: &Rectangle, cell_area: &Rectangle, flags: CellRendererState, paint_focus: bool) {
-    //    unsafe { TODO: call ffi::gtk_cell_area_render() }
-    //}
+    fn render<T: IsA<Widget>>(&self, context: &CellAreaContext, widget: &T, cr: &cairo::Context, background_area: &Rectangle, cell_area: &Rectangle, flags: CellRendererState, paint_focus: bool) {
+        unsafe {
+            ffi::gtk_cell_area_render(self.to_glib_none().0, context.to_glib_none().0, widget.to_glib_none().0, mut_override(cr.to_glib_none().0), background_area.to_glib_none().0, cell_area.to_glib_none().0, flags, paint_focus.to_glib());
+        }
+    }
 
     fn request_renderer<T: IsA<CellRenderer>, U: IsA<Widget>>(&self, renderer: &T, orientation: Orientation, widget: &U, for_size: i32) -> (i32, i32) {
         unsafe {

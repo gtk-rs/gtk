@@ -4,6 +4,7 @@
 use Adjustment;
 use ResizeMode;
 use Widget;
+use cairo;
 use ffi;
 use glib;
 use glib::object::IsA;
@@ -56,7 +57,7 @@ pub trait ContainerExt {
 
     fn get_resize_mode(&self) -> ResizeMode;
 
-    //fn propagate_draw<T: IsA<Widget>>(&self, child: &T, cr: /*Ignored*/&mut cairo::Context);
+    fn propagate_draw<T: IsA<Widget>>(&self, child: &T, cr: &cairo::Context);
 
     fn remove<T: IsA<Widget>>(&self, widget: &T);
 
@@ -176,9 +177,11 @@ impl<O: IsA<Container>> ContainerExt for O {
         }
     }
 
-    //fn propagate_draw<T: IsA<Widget>>(&self, child: &T, cr: /*Ignored*/&mut cairo::Context) {
-    //    unsafe { TODO: call ffi::gtk_container_propagate_draw() }
-    //}
+    fn propagate_draw<T: IsA<Widget>>(&self, child: &T, cr: &cairo::Context) {
+        unsafe {
+            ffi::gtk_container_propagate_draw(self.to_glib_none().0, child.to_glib_none().0, mut_override(cr.to_glib_none().0));
+        }
+    }
 
     fn remove<T: IsA<Widget>>(&self, widget: &T) {
         unsafe {

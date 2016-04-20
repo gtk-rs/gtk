@@ -67,7 +67,6 @@ generate = [
     "Gtk.GestureZoom",
     "Gtk.Grid",
     "Gtk.HeaderBar",
-    "Gtk.Image",
     "Gtk.InfoBar",
     "Gtk.Label",
     "Gtk.Layout",
@@ -161,7 +160,9 @@ manual = [
     "Gtk.RecentInfo",
     "Gtk.Requisition",
     "Gtk.TextAttributes",
+    "cairo.Context",
     "cairo.RectangleInt",
+    "cairo.Surface",
 ]
 
 [[object]]
@@ -204,6 +205,12 @@ status = "generate"
     [[object.function]]
     pattern = "cell_[gs]et_property"
     ignore = true
+    [[object.function]]
+    name = "render"
+        [[object.function.parameter]]
+        name = "cr"
+        # cairo::Context is reference-counted
+        const = true
 
 [[object]]
 name = "Gtk.CellRenderer"
@@ -212,6 +219,12 @@ status = "generate"
     name = "get_size"
     # Deprecated in 3.0, has a difficult contract
     ignore = true
+    [[object.function]]
+    name = "render"
+        [[object.function.parameter]]
+        name = "cr"
+        # cairo::Context is reference-counted
+        const = true
 
 [[object]]
 name = "Gtk.ComboBox"
@@ -228,6 +241,12 @@ status = "generate"
     [[object.function]]
     pattern = "child_[gs]et_property"
     ignore = true
+    [[object.function]]
+    name = "propagate_draw"
+        [[object.function.parameter]]
+        name = "cr"
+        # cairo::Context is reference-counted
+        const = true
 
 [[object]]
 name = "Gtk.Dialog"
@@ -343,6 +362,22 @@ status = "generate"
     name = "unselect_path"
         [[object.function.parameter]]
         name = "path"
+        const = true
+
+[[object]]
+name = "Gtk.Image"
+status = "generate"
+    [[object.function]]
+    name = "new_from_surface"
+        [[object.function.parameter]]
+        name = "surface"
+        # cairo::Surface is reference-counted
+        const = true
+    [[object.function]]
+    name = "set_from_surface"
+        [[object.function.parameter]]
+        name = "surface"
+        # cairo::Surface is reference-counted
         const = true
 
 [[object]]
@@ -898,6 +933,12 @@ status = "generate"
 [[object]]
 name = "Gtk.Widget"
 status = "generate"
+    [[object.function]]
+    name = "draw"
+        [[object.function.parameter]]
+        name = "cr"
+        # cairo::Context is reference-counted
+        const = true
     [[object.function]]
     name = "intersect"
     ignore = true

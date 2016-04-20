@@ -7,6 +7,7 @@ use Requisition;
 use SizeRequestMode;
 use StateFlags;
 use Widget;
+use cairo;
 use ffi;
 use glib::object::IsA;
 use glib::translate::*;
@@ -51,7 +52,7 @@ pub trait CellRendererExt {
 
     fn is_activatable(&self) -> bool;
 
-    //fn render<T: IsA<Widget>>(&self, cr: /*Ignored*/&mut cairo::Context, widget: &T, background_area: &Rectangle, cell_area: &Rectangle, flags: CellRendererState);
+    fn render<T: IsA<Widget>>(&self, cr: &cairo::Context, widget: &T, background_area: &Rectangle, cell_area: &Rectangle, flags: CellRendererState);
 
     fn set_alignment(&self, xalign: f32, yalign: f32);
 
@@ -183,9 +184,11 @@ impl<O: IsA<CellRenderer>> CellRendererExt for O {
         }
     }
 
-    //fn render<T: IsA<Widget>>(&self, cr: /*Ignored*/&mut cairo::Context, widget: &T, background_area: &Rectangle, cell_area: &Rectangle, flags: CellRendererState) {
-    //    unsafe { TODO: call ffi::gtk_cell_renderer_render() }
-    //}
+    fn render<T: IsA<Widget>>(&self, cr: &cairo::Context, widget: &T, background_area: &Rectangle, cell_area: &Rectangle, flags: CellRendererState) {
+        unsafe {
+            ffi::gtk_cell_renderer_render(self.to_glib_none().0, mut_override(cr.to_glib_none().0), widget.to_glib_none().0, background_area.to_glib_none().0, cell_area.to_glib_none().0, flags);
+        }
+    }
 
     fn set_alignment(&self, xalign: f32, yalign: f32) {
         unsafe {
