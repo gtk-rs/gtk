@@ -10,6 +10,7 @@ use Box;
 use Dialog;
 use DialogFlags;
 use IsA;
+use Object;
 use Widget;
 use Window;
 use auto::traits::DialogExt as Auto;
@@ -48,7 +49,7 @@ pub trait DialogExt {
     fn set_response_sensitive(&self, response_id: i32, setting: bool);
 }
 
-impl<O: IsA<Dialog>> DialogExt for O {
+impl<O: IsA<Dialog> + IsA<Object>> DialogExt for O {
     fn add_buttons(&self, buttons: &[(&str, i32)]) {
         for &(text, id) in buttons {
             Auto::add_button(self, text, id);

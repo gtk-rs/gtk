@@ -2,6 +2,7 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
+use Object;
 use SortType;
 use ffi;
 use glib::object::{Downcast, IsA};
@@ -86,7 +87,7 @@ fn into_raw<F, T>(func: F) -> gpointer
     Box::into_raw(func) as gpointer
 }
 
-impl<O: IsA<TreeModel> + IsA<TreeSortable>> TreeSortableExt for O {
+impl<O: IsA<TreeModel> + IsA<TreeSortable> + IsA<Object>> TreeSortableExt for O {
     #[inline]
     fn get_sort_column_id(&self) -> Option<(SortColumn, SortType)> {
         unsafe {
