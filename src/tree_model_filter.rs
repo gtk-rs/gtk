@@ -47,6 +47,7 @@ unsafe extern "C" fn destroy_closure(ptr: gpointer) {
 
 fn into_raw<F>(func: F) -> gpointer
     where F: Fn(&TreeModel, &TreeIter) -> bool + 'static {
+    skip_assert_initialized!();
     let func: Box<Box<Fn(&TreeModel, &TreeIter) -> bool + 'static>> =
         Box::new(Box::new(func));
     Box::into_raw(func) as gpointer
