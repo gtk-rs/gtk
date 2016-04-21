@@ -80,6 +80,7 @@ unsafe extern "C" fn destroy_closure<T>(ptr: gpointer) {
 
 fn into_raw<F, T>(func: F) -> gpointer
     where F: Fn(&T, &TreeIter, &TreeIter) -> Ordering + 'static {
+    skip_assert_initialized!();
     let func: Box<Box<Fn(&T, &TreeIter, &TreeIter) -> Ordering + 'static>> =
         Box::new(Box::new(func));
     Box::into_raw(func) as gpointer

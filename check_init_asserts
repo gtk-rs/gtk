@@ -1,3 +1,20 @@
 #!/bin/sh
 
-perl -0777 -ne 'BEGIN { $e = 0 } while (/^(?!\s*\/\/|\s*unsafe|\s*pub unsafe)(\N*) fn (\w+)(<\N*>)?(\((?!&\s*self|&\x27\w+\s+self|&mut\s+self|&\x27\w+\s+mut\s+self)[^{;]+)\{(\s+)(?!assert_init|assert_not_init|skip_assert_init|callback_guard)\S/gms) { print "$ARGV: $2$4\n"; $e = 1 }; END { exit $e }' src/*.rs src/auto/*.rs
+perl -0777 -ne '
+BEGIN { $e = 0 }
+while (/^(\N*)\V*fn\s+(\w+)\s*(<[^(]+>)?\s*(\([^{;]+)\{\N*\n^(\N*)$/gms) {
+	($modifiers, $name, $signature, $first_line) = ($1, $2, $4, $5);
+	unless ($modifiers =~ /^\s*(\/\/|(pub )?unsafe)/ ||
+		$signature =~ /^\((&(\x27\w+ )?)?(mut )?self\b/ ||
+		$signature =~ /^\(\)/ ||
+		$first_line =~ /^\s*(
+			assert_initialized_main_thread |
+			assert_not_initialized |
+			skip_assert_initialized |
+			callback_guard
+		)!\(\)/x) {
+		print "$ARGV: $name$signature\n";
+		$e = 1
+	}
+}
+END { exit $e }' src/*.rs src/auto/*.rs
