@@ -34,15 +34,11 @@ generate = [
     "Gtk.CellAreaContext",
     "Gtk.CellEditable",
     "Gtk.CellLayout",
-    "Gtk.CellRendererAccel",
-    "Gtk.CellRendererCombo",
     "Gtk.CellRendererPixbuf",
     "Gtk.CellRendererProgress",
     "Gtk.CellRendererSpin",
     "Gtk.CellRendererSpinner",
     "Gtk.CellRendererState",
-    "Gtk.CellRendererText",
-    "Gtk.CellRendererToggle",
     "Gtk.CheckButton",
     "Gtk.CheckMenuItem",
     "Gtk.ColorButton",
@@ -102,7 +98,6 @@ generate = [
     "Gtk.LevelBarMode",
     "Gtk.License",
     "Gtk.LinkButton",
-    "Gtk.ListBox",
     "Gtk.ListBoxRow",
     "Gtk.Menu",
     "Gtk.MenuButton",
@@ -174,7 +169,6 @@ generate = [
     "Gtk.StackTransitionType",
     "Gtk.StateFlags",
     "Gtk.StateType",
-    "Gtk.StatusIcon",
     "Gtk.Statusbar",
     "Gtk.StyleProvider",
     "Gtk.Switch",
@@ -292,6 +286,9 @@ status = "generate"
         name = "cr"
         # cairo::Context is reference-counted
         const = true
+    [[object.signal]]
+    name = "add-editable" #ns
+    ignore = true
 
 [[object]]
 name = "Gtk.CellRenderer"
@@ -306,6 +303,37 @@ status = "generate"
         name = "cr"
         # cairo::Context is reference-counted
         const = true
+    [[object.signal]]
+    pattern = ".+" #tree_path
+    ignore = true
+
+[[object]]
+name = "Gtk.CellRendererAccel"
+status = "generate"
+    [[object.signal]]
+    name = "accel-edited" #ns #tree_path
+    ignore = true
+
+[[object]]
+name = "Gtk.CellRendererCombo"
+status = "generate"
+    [[object.signal]]
+    pattern = ".+" #tree_path
+    ignore = true
+
+[[object]]
+name = "Gtk.CellRendererText"
+status = "generate"
+    [[object.signal]]
+    pattern = ".+" #tree_path
+    ignore = true
+
+[[object]]
+name = "Gtk.CellRendererToggle"
+status = "generate"
+    [[object.signal]]
+    pattern = ".+" #tree_path
+    ignore = true
 
 [[object]]
 name = "Gtk.ComboBox"
@@ -390,6 +418,9 @@ version = "3.14"
 name = "Gtk.GLArea"
 status = "generate"
 module_name = "gl_area"
+    [[object.signal]]
+    pattern = ".+" #ns
+    ignore = true
 
 [[object]]
 name = "Gtk.IconView"
@@ -460,6 +491,13 @@ status = "generate"
         name = "surface"
         # cairo::Surface is reference-counted
         const = true
+
+[[object]]
+name = "Gtk.ListBox"
+status = "generate"
+    [[object.signal]]
+    name = "row-selected" #Option<&
+    ignore = true
 
 [[object]]
 name = "Gtk.ListStore"
@@ -616,6 +654,9 @@ status = "generate"
     name = "get_adjustment"
         [object.function.return]
         nullable = false
+    [[object.signal]]
+    pattern = ".+" #Inhibit in change-value
+    ignore = true
 
 [[object]]
 name = "Gtk.ScaleButton"
@@ -632,6 +673,13 @@ status = "generate"
     name = "get_adjustment"
         [object.function.return]
         nullable = false
+
+[[object]]
+name = "Gtk.StatusIcon"
+status = "generate"
+    [[object.function]]
+    pattern = ".+" #not all generated
+    ignore = true
 
 [[object]]
 name = "Gtk.StyleContext"
@@ -660,6 +708,9 @@ status = "generate"
     ignore = true
     [[object.function]]
     name = "set_text"
+    ignore = true
+    [[object.signal]]
+    name = "insert-pixbuf" #ns
     ignore = true
 
 [[object]]
@@ -1010,6 +1061,9 @@ status = "generate"
         [[object.function.parameter]]
         name = "path"
         const = true
+    [[object.signal]]
+    pattern = ".+" #borrow
+    ignore = true
 
 [[object]]
 name = "Gtk.Widget"
@@ -1026,6 +1080,22 @@ status = "generate"
     [[object.function]]
     name = "style_get_property"
     ignore = true
+    [[object.signal]]
+    name = "draw" #ns
+    ignore = true
+    [[object.signal]]
+    name = "screen-changed" #ns
+    ignore = true
+    [[object.signal]]
+    name = "hierarchy-changed" #Option<&
+    ignore = true
+    [[object.signal]]
+    name = "parent-set" #Option<&
+    ignore = true
+    [[object.signal]] #manual
+    pattern = ".+"
+    ignore = true
+
 
 [[object]]
 name = "Gtk.Window"
