@@ -52,7 +52,6 @@ generate = [
     "Gtk.DialogFlags",
     "Gtk.DirectionType",
     "Gtk.DrawingArea",
-    "Gtk.Editable",
     "Gtk.EntryCompletion",
     "Gtk.EntryIconPosition",
     "Gtk.EventBox",
@@ -372,6 +371,13 @@ status = "generate"
     name = "get_content_area"
         [object.function.return]
         nullable = false
+
+[[object]]
+name = "Gtk.Editable"
+status = "generate"
+    [[object.signal]]
+    pattern = ".+"
+    ignore = true
 
 [[object]]
 name = "Gtk.Entry"
