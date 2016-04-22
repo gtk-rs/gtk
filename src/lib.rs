@@ -191,6 +191,7 @@ mod color_button;
 mod color_chooser;
 mod dialog;
 mod entry_buffer;
+mod enums;
 mod file_chooser_dialog;
 mod list_store;
 mod message_dialog;
