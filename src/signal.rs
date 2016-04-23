@@ -1705,3 +1705,35 @@ mod editable {
           transmute(position));
     }
 }
+
+mod spin_button {
+    use SpinButton;
+    use ffi::{GTK_INPUT_ERROR, GtkSpinButton};
+    use glib::signal::connect;
+    use glib::translate::*;
+    use glib_ffi::{gpointer, GTRUE, GFALSE};
+    use libc::{c_int, c_double};
+    use std::boxed::Box as Box_;
+    use std::mem::transmute;
+
+    impl SpinButton {
+        pub fn connect_input<F: Fn(&SpinButton, &mut f64) -> Result<bool, ()> + 'static>(&self, f: F) -> u64 {
+            unsafe {
+                let f: Box_<Box_<Fn(&SpinButton, &mut f64) -> Result<bool, ()> + 'static>> = Box_::new(Box_::new(f));
+                connect(self.to_glib_none().0, "input",
+                        transmute(input_trampoline as usize), Box_::into_raw(f) as *mut _)
+            }
+        }
+    }
+
+    unsafe extern "C" fn input_trampoline(this: *mut GtkSpinButton, new_value: *mut c_double, f: gpointer) -> c_int {
+        callback_guard!();
+        let f: &Box_<Fn(&SpinButton, &mut f64) -> Result<bool, ()> + 'static> = transmute(f);
+        let ret = f(&from_glib_none(this), transmute(new_value));
+        match ret {
+            Ok(true) => GTRUE,
+            Ok(false) => GFALSE,
+            Err(_) => GTK_INPUT_ERROR,
+        }
+    }
+}
