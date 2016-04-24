@@ -681,6 +681,9 @@ status = "generate"
     name = "get_adjustment"
         [object.function.return]
         nullable = false
+    [[object.signal]]
+    pattern = ".+"
+    ignore = true
 
 [[object]]
 name = "Gtk.StatusIcon"
