@@ -35,6 +35,7 @@ use {
     Rectangle,
     ScrollType,
     StateFlags,
+    SpinButton,
     TextDirection,
     TreeIter,
     TreeModel,
@@ -1706,34 +1707,115 @@ mod editable {
     }
 }
 
+pub trait SpinButtonSignals {
+    fn connect_change_value<F>(&self, change_value_func: F) -> u64
+        where F: Fn(&SpinButton, ScrollType) + 'static;
+    fn connect_input<F>(&self, input_func: F) -> u64
+        where F: Fn(&SpinButton) -> Option<Result<f64, ()>> + 'static;
+    fn connect_output<F>(&self, output_func: F) -> u64
+        where F: Fn(&SpinButton) -> Inhibit + 'static;
+    fn connect_value_changed<F>(&self, value_changed_func: F) -> u64
+        where F: Fn(&SpinButton) + 'static;
+    fn connect_wrapped<F>(&self, wrapped_func: F) -> u64
+        where F: Fn(&SpinButton) + 'static;
+}
+
 mod spin_button {
+    use Inhibit;
     use SpinButton;
+    use ScrollType;
     use ffi::{GTK_INPUT_ERROR, GtkSpinButton};
     use glib::signal::connect;
     use glib::translate::*;
-    use glib_ffi::{gpointer, GTRUE, GFALSE};
+    use glib_ffi::{GTRUE, GFALSE};
     use libc::{c_int, c_double};
     use std::boxed::Box as Box_;
     use std::mem::transmute;
+    use glib_ffi::gboolean;
 
-    impl SpinButton {
-        pub fn connect_input<F: Fn(&SpinButton, &mut f64) -> Result<bool, ()> + 'static>(&self, f: F) -> u64 {
+    impl ::SpinButtonSignals for SpinButton {
+        fn connect_change_value<F>(&self, change_value_func: F) -> u64
+        where F: Fn(&SpinButton, ScrollType) + 'static {
             unsafe {
-                let f: Box_<Box_<Fn(&SpinButton, &mut f64) -> Result<bool, ()> + 'static>> = Box_::new(Box_::new(f));
+                let f: Box<Box<Fn(&SpinButton, ScrollType) + 'static>> =
+                    Box::new(Box::new(change_value_func));
+                connect(self.to_glib_none().0, "change_value",
+                        transmute(change_trampoline as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_input<F>(&self, f: F) -> u64
+        where F: Fn(&SpinButton) -> Option<Result<f64, ()>> + 'static {
+            unsafe {
+                let f: Box_<Box_<Fn(&SpinButton) -> Option<Result<f64, ()>> + 'static>> = Box_::new(Box_::new(f));
                 connect(self.to_glib_none().0, "input",
                         transmute(input_trampoline as usize), Box_::into_raw(f) as *mut _)
             }
         }
+
+        fn connect_output<F>(&self, output_func: F) -> u64
+        where F: Fn(&SpinButton) -> Inhibit + 'static {
+            unsafe {
+                let f: Box<Box<Fn(&SpinButton) -> Inhibit + 'static>> =
+                    Box::new(Box::new(output_func));
+                connect(self.to_glib_none().0, "output",
+                        transmute(output_trampoline as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_value_changed<F>(&self, value_changed_func: F) -> u64
+        where F: Fn(&SpinButton) + 'static {
+            unsafe {
+                let f: Box<Box<Fn(&SpinButton) + 'static>> =
+                    Box::new(Box::new(value_changed_func));
+                connect(self.to_glib_none().0, "value-changed",
+                        transmute(trampoline as usize), Box::into_raw(f) as *mut _)
+            }
+        }
+
+        fn connect_wrapped<F>(&self, wrapped_func: F) -> u64
+        where F: Fn(&SpinButton) + 'static {
+            unsafe {
+                let f: Box<Box<Fn(&SpinButton) + 'static>> =
+                    Box::new(Box::new(wrapped_func));
+                connect(self.to_glib_none().0, "wrapped",
+                        transmute(trampoline as usize), Box::into_raw(f) as *mut _)
+            }
+        }
     }
 
-    unsafe extern "C" fn input_trampoline(this: *mut GtkSpinButton, new_value: *mut c_double, f: gpointer) -> c_int {
+    unsafe extern "C" fn change_trampoline(this: *mut GtkSpinButton,
+                                           scroll: ScrollType,
+                                           f: &Box<Fn(&SpinButton, ScrollType) + 'static>) {
         callback_guard!();
-        let f: &Box_<Fn(&SpinButton, &mut f64) -> Result<bool, ()> + 'static> = transmute(f);
-        let ret = f(&from_glib_none(this), transmute(new_value));
-        match ret {
-            Ok(true) => GTRUE,
-            Ok(false) => GFALSE,
-            Err(_) => GTK_INPUT_ERROR,
+        f(&from_glib_none(this), scroll)
+    }
+
+    unsafe extern "C" fn input_trampoline(this: *mut GtkSpinButton,
+                                          new_value: *mut c_double,
+                                          f: &Box_<Fn(&SpinButton) -> Option<Result<f64, ()>> + 'static>)
+                                          -> c_int {
+        callback_guard!();
+        match f(&from_glib_none(this)) {
+            Some(Ok(v)) => {
+                *new_value = v;
+                GTRUE
+            }
+            Some(Err(_)) => GTK_INPUT_ERROR,
+            None => GFALSE,
         }
+    }
+
+    unsafe extern "C" fn output_trampoline(this: *mut GtkSpinButton,
+                                           f: &Box<Fn(&SpinButton) -> Inhibit + 'static>)
+                                           -> gboolean {
+        callback_guard!();
+        f(&from_glib_none(this)).to_glib()
+    }
+
+    unsafe extern "C" fn trampoline(this: *mut GtkSpinButton,
+                                    f: &Box<Fn(&SpinButton) + 'static>) {
+        callback_guard!();
+        f(&from_glib_none(this))
     }
 }

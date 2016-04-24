@@ -99,6 +99,7 @@ generate = [
     "Gtk.LinkButton",
     "Gtk.ListBoxRow",
     "Gtk.Menu",
+    "Gtk.MenuBar",
     "Gtk.MenuButton",
     "Gtk.MenuShell",
     "Gtk.MenuToolButton",
@@ -110,6 +111,7 @@ generate = [
     "Gtk.Orientable",
     "Gtk.Orientation",
     "Gtk.Overlay",
+    "Gtk.PackDirection",
     "Gtk.PackType",
     "Gtk.PageOrientation",
     "Gtk.PageSet",
@@ -679,11 +681,14 @@ status = "generate"
     name = "get_adjustment"
         [object.function.return]
         nullable = false
+    [[object.signal]]
+    pattern = ".+"
+    ignore = true
 
 [[object]]
 name = "Gtk.StatusIcon"
 status = "generate"
-    [[object.function]]
+    [[object.signal]]
     pattern = ".+" #not all generated
     ignore = true
 
