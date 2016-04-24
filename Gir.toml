@@ -59,6 +59,7 @@ generate = [
     "Gtk.EventSequenceState",
     "Gtk.FileChooser",
     "Gtk.FileChooserAction",
+    "Gtk.FileChooserConfirmation",
     "Gtk.FileChooserDialog",
     "Gtk.FileChooserError",
     "Gtk.FileChooserWidget",
@@ -101,12 +102,14 @@ generate = [
     "Gtk.Menu",
     "Gtk.MenuBar",
     "Gtk.MenuButton",
+    "Gtk.MenuDirectionType",
     "Gtk.MenuShell",
     "Gtk.MenuToolButton",
     "Gtk.MessageDialog",
     "Gtk.MessageType",
     "Gtk.Misc",
     "Gtk.MovementStep",
+    "Gtk.NotebookTab",
     "Gtk.NumberUpLayout",
     "Gtk.Orientable",
     "Gtk.Orientation",
@@ -116,6 +119,7 @@ generate = [
     "Gtk.PageOrientation",
     "Gtk.PageSet",
     "Gtk.Paned",
+    "Gtk.PanDirection",
     "Gtk.PlacesSidebar",
     "Gtk.PlacesOpenFlags",
     "Gtk.PolicyType",
@@ -148,6 +152,7 @@ generate = [
     "Gtk.ScrollablePolicy",
     "Gtk.Scrollbar",
     "Gtk.ScrolledWindow",
+    "Gtk.ScrollStep",
     "Gtk.ScrollType",
     "Gtk.SearchBar",
     "Gtk.SearchEntry",
@@ -156,6 +161,7 @@ generate = [
     "Gtk.Separator",
     "Gtk.SeparatorMenuItem",
     "Gtk.SeparatorToolItem",
+    "Gtk.Settings",
     "Gtk.ShadowType",
     "Gtk.SizeGroup",
     "Gtk.SizeGroupMode",
@@ -175,6 +181,7 @@ generate = [
     "Gtk.Switch",
     "Gtk.TextChildAnchor",
     "Gtk.TextDirection",
+    "Gtk.TextExtendSelection",
     "Gtk.TextMark",
     "Gtk.TextSearchFlags",
     "Gtk.TextTag",
@@ -189,6 +196,7 @@ generate = [
     "Gtk.ToolPalette",
     "Gtk.ToolPaletteDragTargets",
     "Gtk.ToolShell",
+    "Gtk.Tooltip",
     "Gtk.Toolbar",
     "Gtk.TreeIter",
     "Gtk.TreeModelFlags",
@@ -201,6 +209,7 @@ generate = [
     "Gtk.Viewport",
     "Gtk.VolumeButton",
     "Gtk.WidgetHelpType",
+    "Gtk.WindowGroup",
     "Gtk.WindowPosition",
     "Gtk.WindowType",
     "Gtk.WrapMode",
@@ -211,6 +220,8 @@ ignore = [
 ]
 
 manual = [
+    "Gdk.Device",
+    "Gdk.Display",
     "Gdk.GLContext",
     "Gdk.Gravity",
     "Gdk.ModifierIntent",
@@ -226,6 +237,7 @@ manual = [
     "GLib.Error",
     "GLib.Variant",
     "GLib.VariantType",
+    "GObject.Object",
     "GObject.Value",
     "Gtk.Allocation",
     "Gtk.AppChooser",
@@ -259,6 +271,9 @@ status = "generate"
     # It's not a part of public API
     # See https://mail.gnome.org/archives/commits-list/2012-May/msg07052.html
     ignore = true
+    [[object.signal]]
+    name = "accel-activate"
+    ignore = true #ns
 
 [[object]]
 name = "Gtk.AppChooserDialog"
@@ -334,6 +349,13 @@ name = "Gtk.CellRendererToggle"
 status = "generate"
     [[object.signal]]
     pattern = ".+" #tree_path
+    ignore = true
+
+[[object]]
+name = "Gtk.Clipboard"
+status = "generate"
+    [[object.function]]
+    name = "set_text"
     ignore = true
 
 [[object]]
@@ -475,6 +497,11 @@ status = "generate"
         const = true
     [[object.function]]
     name = "set_drag_dest_item"
+        [[object.function.parameter]]
+        name = "path"
+        const = true
+    [[object.function]]
+    name = "set_tooltip_cell"
         [[object.function.parameter]]
         name = "path"
         const = true
@@ -689,8 +716,18 @@ status = "generate"
 name = "Gtk.StatusIcon"
 status = "generate"
     [[object.signal]]
-    pattern = ".+" #not all generated
+    pattern = ".+" #ns
     ignore = true
+
+[[object]]
+name = "Gtk.Style"
+status = "generate"
+    [[object.function]]
+    name = "apply_default_background"
+        [[object.function.parameter]]
+        name = "cr"
+        # cairo::Context is reference-counted
+        const = true
 
 [[object]]
 name = "Gtk.StyleContext"
@@ -720,6 +757,11 @@ status = "generate"
     [[object.function]]
     name = "set_text"
     ignore = true
+    [[object.function]]
+    name = "paste_clipboard"
+        [[object.function.parameter]]
+        name = "override_location"
+        const = true
     [[object.signal]]
     name = "insert-pixbuf" #ns
     ignore = true
@@ -1069,6 +1111,11 @@ status = "generate"
         const = true
     [[object.function]]
     name = "set_drag_dest_row"
+        [[object.function.parameter]]
+        name = "path"
+        const = true
+    [[object.function]]
+    name = "set_tooltip_cell"
         [[object.function.parameter]]
         name = "path"
         const = true
