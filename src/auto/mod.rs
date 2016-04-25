@@ -282,6 +282,9 @@ pub use self::icon_view::IconView;
 mod image;
 pub use self::image::Image;
 
+mod image_menu_item;
+pub use self::image_menu_item::ImageMenuItem;
+
 mod info_bar;
 pub use self::info_bar::InfoBar;
 

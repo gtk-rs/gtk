@@ -85,6 +85,7 @@ generate = [
     "Gtk.IconSize",
     "Gtk.IconThemeError",
     "Gtk.IconViewDropPosition",
+    "Gtk.ImageMenuItem",
     "Gtk.ImageType",
     "Gtk.InfoBar",
     "Gtk.InputHints",
