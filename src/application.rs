@@ -1,6 +1,6 @@
 use Application;
 use ffi;
-use glib::ApplicationFlags;
+use gio::ApplicationFlags;
 use glib::translate::*;
 use rt;
 
@@ -10,7 +10,8 @@ impl Application {
         skip_assert_initialized!();
         try!(rt::init());
         unsafe {
-            Option::from_glib_full(ffi::gtk_application_new(application_id.to_glib_none().0, flags))
+            Option::from_glib_full(
+                ffi::gtk_application_new(application_id.to_glib_none().0, flags.to_glib()))
                 .ok_or(())
         }
     }
@@ -20,7 +21,8 @@ impl Application {
         skip_assert_initialized!();
         try!(rt::init());
         unsafe {
-            Option::from_glib_full(ffi::gtk_application_new(application_id.to_glib_none().0, flags))
+            Option::from_glib_full(
+                ffi::gtk_application_new(application_id.to_glib_none().0, flags.to_glib()))
                 .ok_or(())
         }
     }
