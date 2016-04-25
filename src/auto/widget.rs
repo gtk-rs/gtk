@@ -20,6 +20,8 @@ use cairo;
 use ffi;
 use gdk;
 use gdk_pixbuf;
+#[cfg(feature = "v3_6")]
+use gio;
 use glib;
 use glib::object::IsA;
 use glib::translate::*;
@@ -177,8 +179,8 @@ pub trait WidgetExt {
 
     //fn get_accessible(&self) -> /*Ignored*/Option<atk::Object>;
 
-    //#[cfg(feature = "v3_16")]
-    //fn get_action_group(&self, prefix: &str) -> /*Ignored*/Option<gio::ActionGroup>;
+    #[cfg(feature = "v3_16")]
+    fn get_action_group(&self, prefix: &str) -> Option<gio::ActionGroup>;
 
     #[cfg(feature = "v3_10")]
     fn get_allocated_baseline(&self) -> i32;
@@ -370,8 +372,8 @@ pub trait WidgetExt {
 
     //fn input_shape_combine_region(&self, region: /*Ignored*/Option<&mut cairo::Region>);
 
-    //#[cfg(feature = "v3_6")]
-    //fn insert_action_group<T: IsA</*Ignored*/gio::ActionGroup>>(&self, name: &str, group: Option<&T>);
+    #[cfg(feature = "v3_6")]
+    fn insert_action_group<T: IsA<gio::ActionGroup>>(&self, name: &str, group: Option<&T>);
 
     fn is_ancestor<T: IsA<Widget>>(&self, ancestor: &T) -> bool;
 
@@ -869,10 +871,12 @@ impl<O: IsA<Widget>> WidgetExt for O {
     //    unsafe { TODO: call ffi::gtk_widget_get_accessible() }
     //}
 
-    //#[cfg(feature = "v3_16")]
-    //fn get_action_group(&self, prefix: &str) -> /*Ignored*/Option<gio::ActionGroup> {
-    //    unsafe { TODO: call ffi::gtk_widget_get_action_group() }
-    //}
+    #[cfg(feature = "v3_16")]
+    fn get_action_group(&self, prefix: &str) -> Option<gio::ActionGroup> {
+        unsafe {
+            from_glib_none(ffi::gtk_widget_get_action_group(self.to_glib_none().0, prefix.to_glib_none().0))
+        }
+    }
 
     #[cfg(feature = "v3_10")]
     fn get_allocated_baseline(&self) -> i32 {
@@ -1442,10 +1446,12 @@ impl<O: IsA<Widget>> WidgetExt for O {
     //    unsafe { TODO: call ffi::gtk_widget_input_shape_combine_region() }
     //}
 
-    //#[cfg(feature = "v3_6")]
-    //fn insert_action_group<T: IsA</*Ignored*/gio::ActionGroup>>(&self, name: &str, group: Option<&T>) {
-    //    unsafe { TODO: call ffi::gtk_widget_insert_action_group() }
-    //}
+    #[cfg(feature = "v3_6")]
+    fn insert_action_group<T: IsA<gio::ActionGroup>>(&self, name: &str, group: Option<&T>) {
+        unsafe {
+            ffi::gtk_widget_insert_action_group(self.to_glib_none().0, name.to_glib_none().0, group.to_glib_none().0);
+        }
+    }
 
     fn is_ancestor<T: IsA<Widget>>(&self, ancestor: &T) -> bool {
         unsafe {

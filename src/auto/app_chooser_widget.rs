@@ -97,16 +97,4 @@ impl AppChooserWidget {
             ffi::gtk_app_chooser_widget_set_show_recommended(self.to_glib_none().0, setting.to_glib());
         }
     }
-
-    //pub fn connect_application_activated<Unsupported or ignored types>(&self, f: F) -> u64 {
-    //    Ignored application: Gio.AppInfo
-    //}
-
-    //pub fn connect_application_selected<Unsupported or ignored types>(&self, f: F) -> u64 {
-    //    Ignored application: Gio.AppInfo
-    //}
-
-    //pub fn connect_populate_popup<Unsupported or ignored types>(&self, f: F) -> u64 {
-    //    Ignored application: Gio.AppInfo
-    //}
 }

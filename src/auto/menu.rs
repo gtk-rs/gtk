@@ -10,6 +10,7 @@ use ffi;
 use ffi::GtkMenu;
 use ffi::GtkScrollType;
 use gdk;
+use gio;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::connect;
@@ -34,9 +35,12 @@ impl Menu {
         }
     }
 
-    //pub fn new_from_model<T: IsA</*Ignored*/gio::MenuModel>>(model: &T) -> Menu {
-    //    unsafe { TODO: call ffi::gtk_menu_new_from_model() }
-    //}
+    pub fn new_from_model<T: IsA<gio::MenuModel>>(model: &T) -> Menu {
+        assert_initialized_main_thread!();
+        unsafe {
+            Widget::from_glib_none(ffi::gtk_menu_new_from_model(model.to_glib_none().0)).downcast_unchecked()
+        }
+    }
 
     pub fn attach<T: IsA<Widget>>(&self, child: &T, left_attach: u32, right_attach: u32, top_attach: u32, bottom_attach: u32) {
         unsafe {
