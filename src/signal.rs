@@ -44,7 +44,7 @@ use {
     WidgetHelpType,
 };
 
-pub struct Tooltip;
+use Tooltip;
 
 /// Whether to propagate the signal to the default handler.
 ///
@@ -186,6 +186,7 @@ pub trait WidgetSignals {
 }
 
 mod widget {
+    use Tooltip;
     use std::mem::transmute;
     use libc::{c_int, c_uint};
     use glib::object::Downcast;
@@ -206,7 +207,6 @@ mod widget {
     use glib_ffi::gboolean;
     use ffi::{GtkWidget, GtkTooltip};
     use {Widget, DirectionType, StateFlags, TextDirection, WidgetHelpType};
-    use super::Tooltip;
     use super::Inhibit;
     use {Object, IsA};
 
@@ -779,11 +779,11 @@ mod widget {
     }
 
     unsafe extern "C" fn query_trampoline<T>(this: *mut GtkWidget, x: c_int, y: c_int,
-        keyboard: gboolean, _tooltip: *mut GtkTooltip,
+        keyboard: gboolean, tooltip: *mut GtkTooltip,
         f: &Box<Fn(&T, i32, i32, bool, Tooltip) -> bool + 'static>) -> gboolean
     where T: IsA<Widget> {
         callback_guard!();
-        f(&Widget::from_glib_none(this).downcast_unchecked(), x, y, from_glib(keyboard), Tooltip).to_glib()
+        f(&Widget::from_glib_none(this).downcast_unchecked(), x, y, from_glib(keyboard), from_glib_none(tooltip)).to_glib()
     }
 
     unsafe extern "C" fn rectangle_trampoline<T>(this: *mut GtkWidget, allocation: *mut RectangleInt,
@@ -1187,6 +1187,7 @@ pub trait StatusIconSignals {
 
 mod status_icon {
     use StatusIcon;
+    use Tooltip;
     use libc::{c_int, c_uint};
     use std::mem::transmute;
     use ffi::{GtkStatusIcon, GtkTooltip};
@@ -1194,7 +1195,6 @@ mod status_icon {
     use glib::signal::connect;
     use glib::translate::*;
     use glib_ffi::gboolean;
-    use super::Tooltip;
 
     impl super::StatusIconSignals for StatusIcon {
         fn connect_activate<F: Fn(&Self) + 'static>(&self, f: F) -> u64 {
@@ -1272,10 +1272,10 @@ mod status_icon {
     }
 
     unsafe extern "C" fn query_tooltip_trampoline(this: *mut GtkStatusIcon, x: c_int, y: c_int,
-            keyboard_mode: gboolean, _tooltip: *mut GtkTooltip,
+            keyboard_mode: gboolean, tooltip: *mut GtkTooltip,
             f: &Box<Fn(&StatusIcon, i32, i32, bool, Tooltip) -> bool + 'static>) -> gboolean {
         callback_guard!();
-        f(&from_glib_none(this), x, y, from_glib(keyboard_mode), Tooltip).to_glib()
+        f(&from_glib_none(this), x, y, from_glib(keyboard_mode), from_glib_none(tooltip)).to_glib()
     }
 
     unsafe extern "C" fn size_changed_trampoline(this: *mut GtkStatusIcon, size: c_int,
