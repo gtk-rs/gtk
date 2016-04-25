@@ -59,6 +59,7 @@ generate = [
     "Gtk.EventSequenceState",
     "Gtk.FileChooser",
     "Gtk.FileChooserAction",
+    "Gtk.FileChooserConfirmation",
     "Gtk.FileChooserDialog",
     "Gtk.FileChooserError",
     "Gtk.FileChooserWidget",
@@ -101,12 +102,14 @@ generate = [
     "Gtk.Menu",
     "Gtk.MenuBar",
     "Gtk.MenuButton",
+    "Gtk.MenuDirectionType",
     "Gtk.MenuShell",
     "Gtk.MenuToolButton",
     "Gtk.MessageDialog",
     "Gtk.MessageType",
     "Gtk.Misc",
     "Gtk.MovementStep",
+    "Gtk.NotebookTab",
     "Gtk.NumberUpLayout",
     "Gtk.Orientable",
     "Gtk.Orientation",
@@ -116,6 +119,7 @@ generate = [
     "Gtk.PageOrientation",
     "Gtk.PageSet",
     "Gtk.Paned",
+    "Gtk.PanDirection",
     "Gtk.PlacesSidebar",
     "Gtk.PlacesOpenFlags",
     "Gtk.PolicyType",
@@ -148,6 +152,7 @@ generate = [
     "Gtk.ScrollablePolicy",
     "Gtk.Scrollbar",
     "Gtk.ScrolledWindow",
+    "Gtk.ScrollStep",
     "Gtk.ScrollType",
     "Gtk.SearchBar",
     "Gtk.SearchEntry",
@@ -156,6 +161,7 @@ generate = [
     "Gtk.Separator",
     "Gtk.SeparatorMenuItem",
     "Gtk.SeparatorToolItem",
+    "Gtk.Settings",
     "Gtk.ShadowType",
     "Gtk.SizeGroup",
     "Gtk.SizeGroupMode",
@@ -175,6 +181,7 @@ generate = [
     "Gtk.Switch",
     "Gtk.TextChildAnchor",
     "Gtk.TextDirection",
+    "Gtk.TextExtendSelection",
     "Gtk.TextMark",
     "Gtk.TextSearchFlags",
     "Gtk.TextTag",
@@ -189,11 +196,11 @@ generate = [
     "Gtk.ToolPalette",
     "Gtk.ToolPaletteDragTargets",
     "Gtk.ToolShell",
+    "Gtk.Tooltip",
     "Gtk.Toolbar",
     "Gtk.TreeIter",
     "Gtk.TreeModelFlags",
     "Gtk.TreeSortable",
-    "Gtk.TreeViewColumn",
     "Gtk.TreeViewColumnSizing",
     "Gtk.TreeViewDropPosition",
     "Gtk.TreeViewGridLines",
@@ -201,6 +208,7 @@ generate = [
     "Gtk.Viewport",
     "Gtk.VolumeButton",
     "Gtk.WidgetHelpType",
+    "Gtk.WindowGroup",
     "Gtk.WindowPosition",
     "Gtk.WindowType",
     "Gtk.WrapMode",
@@ -211,6 +219,8 @@ ignore = [
 ]
 
 manual = [
+    "Gdk.Device",
+    "Gdk.Display",
     "Gdk.GLContext",
     "Gdk.Gravity",
     "Gdk.ModifierIntent",
@@ -226,6 +236,7 @@ manual = [
     "GLib.Error",
     "GLib.Variant",
     "GLib.VariantType",
+    "GObject.Object",
     "GObject.Value",
     "Gtk.Allocation",
     "Gtk.AppChooser",
@@ -259,6 +270,9 @@ status = "generate"
     # It's not a part of public API
     # See https://mail.gnome.org/archives/commits-list/2012-May/msg07052.html
     ignore = true
+    [[object.signal]]
+    name = "accel-activate"
+    ignore = true #ns
 
 [[object]]
 name = "Gtk.AppChooserDialog"
@@ -286,6 +300,11 @@ status = "generate"
         [[object.function.parameter]]
         name = "cr"
         # cairo::Context is reference-counted
+        const = true
+    [[object.function]]
+    name = "apply_attributes"
+        [[object.function.parameter]]
+        name = "iter"
         const = true
     [[object.signal]]
     name = "add-editable" #ns
@@ -334,6 +353,13 @@ name = "Gtk.CellRendererToggle"
 status = "generate"
     [[object.signal]]
     pattern = ".+" #tree_path
+    ignore = true
+
+[[object]]
+name = "Gtk.Clipboard"
+status = "generate"
+    [[object.function]]
+    name = "set_text"
     ignore = true
 
 [[object]]
@@ -434,52 +460,7 @@ module_name = "gl_area"
 name = "Gtk.IconView"
 status = "generate"
     [[object.function]]
-    name = "get_cell_rect"
-        [[object.function.parameter]]
-        name = "path"
-        const = true
-    [[object.function]]
-    name = "get_item_column"
-        [[object.function.parameter]]
-        name = "path"
-        const = true
-    [[object.function]]
-    name = "get_item_row"
-        [[object.function.parameter]]
-        name = "path"
-        const = true
-    [[object.function]]
-    name = "item_activated"
-        [[object.function.parameter]]
-        name = "path"
-        const = true
-    [[object.function]]
-    name = "path_is_selected"
-        [[object.function.parameter]]
-        name = "path"
-        const = true
-    [[object.function]]
-    name = "scroll_to_path"
-        [[object.function.parameter]]
-        name = "path"
-        const = true
-    [[object.function]]
-    name = "select_path"
-        [[object.function.parameter]]
-        name = "path"
-        const = true
-    [[object.function]]
-    name = "set_cursor"
-        [[object.function.parameter]]
-        name = "path"
-        const = true
-    [[object.function]]
-    name = "set_drag_dest_item"
-        [[object.function.parameter]]
-        name = "path"
-        const = true
-    [[object.function]]
-    name = "unselect_path"
+    pattern = ".+"
         [[object.function.parameter]]
         name = "path"
         const = true
@@ -511,27 +492,13 @@ status = "generate"
 name = "Gtk.ListStore"
 status = "generate"
     [[object.function]]
-    name = "insert_after"
-        [[object.function.parameter]]
-        name = "sibling"
-        const = true
-    [[object.function]]
-    name = "insert_before"
-        [[object.function.parameter]]
-        name = "sibling"
-        const = true
-    [[object.function]]
-    name = "iter_is_valid"
+    pattern = ".+"
         [[object.function.parameter]]
         name = "iter"
         const = true
-    [[object.function]]
-    name = "move_after"
         [[object.function.parameter]]
-        name = "position"
+        name = "sibling"
         const = true
-    [[object.function]]
-    name = "move_before"
         [[object.function.parameter]]
         name = "position"
         const = true
@@ -689,8 +656,18 @@ status = "generate"
 name = "Gtk.StatusIcon"
 status = "generate"
     [[object.signal]]
-    pattern = ".+" #not all generated
+    pattern = ".+" #ns
     ignore = true
+
+[[object]]
+name = "Gtk.Style"
+status = "generate"
+    [[object.function]]
+    name = "apply_default_background"
+        [[object.function.parameter]]
+        name = "cr"
+        # cairo::Context is reference-counted
+        const = true
 
 [[object]]
 name = "Gtk.StyleContext"
@@ -720,6 +697,11 @@ status = "generate"
     [[object.function]]
     name = "set_text"
     ignore = true
+    [[object.function]]
+    name = "paste_clipboard"
+        [[object.function.parameter]]
+        name = "override_location"
+        const = true
     [[object.signal]]
     name = "insert-pixbuf" #ns
     ignore = true
@@ -747,38 +729,21 @@ status = "generate"
 name = "Gtk.TreeModel"
 status = "generate"
     [[object.function]]
+    pattern = ".+"
+        [[object.function.parameter]]
+        name = "path"
+        const = true
+        [[object.function.parameter]]
+        name = "iter"
+        const = true
+    [[object.function]]
     name = "filter_new"
     # Replaced by TreeModelFilter::new
     ignore = true
     [[object.function]]
-    name = "get_iter"
-        [[object.function.parameter]]
-        name = "path"
-        const = true
-    [[object.function]]
-    name = "get_path"
-        [[object.function.parameter]]
-        name = "iter"
-        const = true
-    [[object.function]]
-    name = "get_value"
-        [[object.function.parameter]]
-        name = "iter"
-        const = true
-    [[object.function]]
     name = "iter_children"
         [[object.function.parameter]]
         name = "parent"
-        const = true
-    [[object.function]]
-    name = "iter_has_child"
-        [[object.function.parameter]]
-        name = "iter"
-        const = true
-    [[object.function]]
-    name = "iter_n_children"
-        [[object.function.parameter]]
-        name = "iter"
         const = true
     [[object.function]]
     name = "iter_nth_child"
@@ -793,35 +758,6 @@ status = "generate"
     [[object.function]]
     name = 'ref_node'
     ignore = true
-    [[object.function]]
-    name = "row_changed"
-        [[object.function.parameter]]
-        name = "path"
-        const = true
-        [[object.function.parameter]]
-        name = "iter"
-        const = true
-    [[object.function]]
-    name = "row_deleted"
-        [[object.function.parameter]]
-        name = "path"
-        const = true
-    [[object.function]]
-    name = "row_has_child_toggled"
-        [[object.function.parameter]]
-        name = "path"
-        const = true
-        [[object.function.parameter]]
-        name = "iter"
-        const = true
-    [[object.function]]
-    name = "row_inserted"
-        [[object.function.parameter]]
-        name = "path"
-        const = true
-        [[object.function.parameter]]
-        name = "iter"
-        const = true
     [[object.function]]
     name = "rows_reordered"
     ignore = true
@@ -890,45 +826,15 @@ status = "generate"
 name = "Gtk.TreeSelection"
 status = "generate"
     [[object.function]]
-    name = "iter_is_selected"
+    pattern = ".+"
         [[object.function.parameter]]
         name = "iter"
         const = true
-    [[object.function]]
-    name = "path_is_selected"
         [[object.function.parameter]]
         name = "path"
         const = true
     [[object.function]]
-    name = "select_iter"
-        [[object.function.parameter]]
-        name = "iter"
-        const = true
-    [[object.function]]
-    name = "select_path"
-        [[object.function.parameter]]
-        name = "path"
-        const = true
-    [[object.function]]
-    name = "select_range"
-        [[object.function.parameter]]
-        name = "start_path"
-        const = true
-        [[object.function.parameter]]
-        name = "end_path"
-        const = true
-    [[object.function]]
-    name = "unselect_iter"
-        [[object.function.parameter]]
-        name = "iter"
-        const = true
-    [[object.function]]
-    name = "unselect_path"
-        [[object.function.parameter]]
-        name = "path"
-        const = true
-    [[object.function]]
-    name = "unselect_range"
+    pattern = "(un)?select_range"
         [[object.function.parameter]]
         name = "start_path"
         const = true
@@ -940,25 +846,10 @@ status = "generate"
 name = "Gtk.TreeStore"
 status = "generate"
     [[object.function]]
-    name = "append"
+    pattern = ".+"
         [[object.function.parameter]]
-        name = "parent"
+        name = "iter"
         const = true
-    [[object.function]]
-    name = "insert"
-        [[object.function.parameter]]
-        name = "parent"
-        const = true
-    [[object.function]]
-    name = "insert_after"
-        [[object.function.parameter]]
-        name = "parent"
-        const = true
-        [[object.function.parameter]]
-        name = "sibling"
-        const = true
-    [[object.function]]
-    name = "insert_before"
         [[object.function.parameter]]
         name = "parent"
         const = true
@@ -968,20 +859,7 @@ status = "generate"
     [[object.function]]
     name = "is_ancestor"
         [[object.function.parameter]]
-        name = "iter"
-        const = true
-        [[object.function.parameter]]
         name = "descendant"
-        const = true
-    [[object.function]]
-    name = "iter_depth"
-        [[object.function.parameter]]
-        name = "iter"
-        const = true
-    [[object.function]]
-    name = "iter_is_valid"
-        [[object.function.parameter]]
-        name = "iter"
         const = true
     [[object.function]]
     name = "move_after"
@@ -992,11 +870,6 @@ status = "generate"
     name = "move_before"
         [[object.function.parameter]]
         name = "position"
-        const = true
-    [[object.function]]
-    name = "prepend"
-        [[object.function.parameter]]
-        name = "parent"
         const = true
     [[object.function]]
     name = "set_value"
@@ -1014,27 +887,7 @@ status = "generate"
 name = "Gtk.TreeView"
 status = "generate"
     [[object.function]]
-    name = "collapse_row"
-        [[object.function.parameter]]
-        name = "path"
-        const = true
-    [[object.function]]
-    name = "expand_row"
-        [[object.function.parameter]]
-        name = "path"
-        const = true
-    [[object.function]]
-    name = "get_background_area"
-        [[object.function.parameter]]
-        name = "path"
-        const = true
-    [[object.function]]
-    name = "get_cell_area"
-        [[object.function.parameter]]
-        name = "path"
-        const = true
-    [[object.function]]
-    name = "expand_to_path"
+    pattern = ".+"
         [[object.function.parameter]]
         name = "path"
         const = true
@@ -1042,39 +895,18 @@ status = "generate"
     name = "get_selection"
         [object.function.return]
         nullable = false
-    [[object.function]]
-    name = "row_activated"
-        [[object.function.parameter]]
-        name = "path"
-        const = true
-    [[object.function]]
-    name = "row_expanded"
-        [[object.function.parameter]]
-        name = "path"
-        const = true
-    [[object.function]]
-    name = "set_cursor"
-        [[object.function.parameter]]
-        name = "path"
-        const = true
-    [[object.function]]
-    name = "set_cursor_on_cell"
-        [[object.function.parameter]]
-        name = "path"
-        const = true
-    [[object.function]]
-    name = "scroll_to_cell"
-        [[object.function.parameter]]
-        name = "path"
-        const = true
-    [[object.function]]
-    name = "set_drag_dest_row"
-        [[object.function.parameter]]
-        name = "path"
-        const = true
     [[object.signal]]
     pattern = ".+" #borrow
     ignore = true
+
+[[object]]
+name = "Gtk.TreeViewColumn"
+status = "generate"
+    [[object.function]]
+    name = "cell_set_cell_data"
+        [[object.function.parameter]]
+        name = "iter"
+        const = true
 
 [[object]]
 name = "Gtk.Widget"

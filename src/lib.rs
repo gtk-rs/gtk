@@ -187,6 +187,7 @@ mod auto;
 mod app_chooser;
 mod application;
 mod builder;
+mod clipboard;
 mod color_button;
 mod color_chooser;
 mod dialog;
