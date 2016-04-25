@@ -6,7 +6,9 @@ use MenuShell;
 use PackDirection;
 use Widget;
 use ffi;
+use gio;
 use glib::object::Downcast;
+use glib::object::IsA;
 use glib::translate::*;
 
 glib_wrapper! {
@@ -25,9 +27,12 @@ impl MenuBar {
         }
     }
 
-    //pub fn new_from_model<T: IsA</*Ignored*/gio::MenuModel>>(model: &T) -> MenuBar {
-    //    unsafe { TODO: call ffi::gtk_menu_bar_new_from_model() }
-    //}
+    pub fn new_from_model<T: IsA<gio::MenuModel>>(model: &T) -> MenuBar {
+        assert_initialized_main_thread!();
+        unsafe {
+            Widget::from_glib_none(ffi::gtk_menu_bar_new_from_model(model.to_glib_none().0)).downcast_unchecked()
+        }
+    }
 
     pub fn get_child_pack_direction(&self) -> PackDirection {
         unsafe {

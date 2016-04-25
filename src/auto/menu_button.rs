@@ -14,6 +14,8 @@ use Popover;
 use ToggleButton;
 use Widget;
 use ffi;
+#[cfg(feature = "v3_6")]
+use gio;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::translate::*;
@@ -49,10 +51,12 @@ impl MenuButton {
         }
     }
 
-    //#[cfg(feature = "v3_6")]
-    //pub fn get_menu_model(&self) -> /*Ignored*/Option<gio::MenuModel> {
-    //    unsafe { TODO: call ffi::gtk_menu_button_get_menu_model() }
-    //}
+    #[cfg(feature = "v3_6")]
+    pub fn get_menu_model(&self) -> Option<gio::MenuModel> {
+        unsafe {
+            from_glib_none(ffi::gtk_menu_button_get_menu_model(self.to_glib_none().0))
+        }
+    }
 
     #[cfg(feature = "v3_12")]
     pub fn get_popover(&self) -> Option<Popover> {
@@ -89,10 +93,12 @@ impl MenuButton {
         }
     }
 
-    //#[cfg(feature = "v3_6")]
-    //pub fn set_menu_model<T: IsA</*Ignored*/gio::MenuModel>>(&self, menu_model: Option<&T>) {
-    //    unsafe { TODO: call ffi::gtk_menu_button_set_menu_model() }
-    //}
+    #[cfg(feature = "v3_6")]
+    pub fn set_menu_model<T: IsA<gio::MenuModel>>(&self, menu_model: Option<&T>) {
+        unsafe {
+            ffi::gtk_menu_button_set_menu_model(self.to_glib_none().0, menu_model.to_glib_none().0);
+        }
+    }
 
     #[cfg(feature = "v3_12")]
     pub fn set_popover<T: IsA<Widget>>(&self, popover: Option<&T>) {

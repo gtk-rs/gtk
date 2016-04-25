@@ -14,7 +14,6 @@ generate = [
     "Gtk.Adjustment",
     "Gtk.Align",
     "Gtk.Alignment",
-    "Gtk.AppChooserWidget",
     "Gtk.ApplicationInhibitFlags",
     "Gtk.ApplicationWindow",
     "Gtk.Arrow",
@@ -232,7 +231,14 @@ manual = [
     "Gdk.WindowTypeHint",
     "GdkPixbuf.Pixbuf",
     "GdkPixbuf.PixbufAnimation",
+    "Gio.ActionGroup",
+    "Gio.ActionMap",
+    "Gio.AppInfo",
+    "Gio.Application",
     "Gio.ApplicationFlags",
+    "Gio.Menu",
+    "Gio.MenuModel",
+    "Gio.Permission",
     "GLib.Error",
     "GLib.Variant",
     "GLib.VariantType",
@@ -281,6 +287,13 @@ status = "generate"
     name = "get_widget"
         [object.function.return]
         nullable = false
+
+[[object]]
+name = "Gtk.AppChooserWidget"
+status = "generate"
+    [[object.signal]]
+    pattern = ".+" #ns
+    ignore = true
 
 [[object]]
 name = "Gtk.Application"

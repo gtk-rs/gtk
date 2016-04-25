@@ -7,11 +7,20 @@ use Container;
 use Widget;
 use Window;
 use ffi;
+use gio;
+use gio_ffi;
 use glib::object::Downcast;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct ApplicationWindow(Object<ffi::GtkApplicationWindow>): Window, Bin, Container, Widget;
+    pub struct ApplicationWindow(Object<ffi::GtkApplicationWindow>): [
+        Window,
+        Bin,
+        Container,
+        Widget,
+        gio::ActionGroup => gio_ffi::GActionGroup,
+        gio::ActionMap => gio_ffi::GActionMap,
+    ];
 
     match fn {
         get_type => || ffi::gtk_application_window_get_type(),

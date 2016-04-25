@@ -9,6 +9,8 @@ use Rectangle;
 use Widget;
 use ffi;
 use ffi::GtkPopover;
+#[cfg(feature = "v3_12")]
+use gio;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::connect;
@@ -34,15 +36,18 @@ impl Popover {
         }
     }
 
-    //#[cfg(feature = "v3_12")]
-    //pub fn new_from_model<T: IsA<Widget>, U: IsA</*Ignored*/gio::MenuModel>>(relative_to: Option<&T>, model: &U) -> Popover {
-    //    unsafe { TODO: call ffi::gtk_popover_new_from_model() }
-    //}
+    #[cfg(feature = "v3_12")]
+    pub fn new_from_model<T: IsA<Widget>, U: IsA<gio::MenuModel>>(relative_to: Option<&T>, model: &U) -> Popover {
+        assert_initialized_main_thread!();
+        unsafe {
+            Widget::from_glib_none(ffi::gtk_popover_new_from_model(relative_to.to_glib_none().0, model.to_glib_none().0)).downcast_unchecked()
+        }
+    }
 }
 
 pub trait PopoverExt {
-    //#[cfg(feature = "v3_12")]
-    //fn bind_model<T: IsA</*Ignored*/gio::MenuModel>>(&self, model: Option<&T>, action_namespace: Option<&str>);
+    #[cfg(feature = "v3_12")]
+    fn bind_model<T: IsA<gio::MenuModel>>(&self, model: Option<&T>, action_namespace: Option<&str>);
 
     #[cfg(feature = "v3_12")]
     fn get_modal(&self) -> bool;
@@ -76,10 +81,12 @@ pub trait PopoverExt {
 }
 
 impl<O: IsA<Popover> + IsA<Object>> PopoverExt for O {
-    //#[cfg(feature = "v3_12")]
-    //fn bind_model<T: IsA</*Ignored*/gio::MenuModel>>(&self, model: Option<&T>, action_namespace: Option<&str>) {
-    //    unsafe { TODO: call ffi::gtk_popover_bind_model() }
-    //}
+    #[cfg(feature = "v3_12")]
+    fn bind_model<T: IsA<gio::MenuModel>>(&self, model: Option<&T>, action_namespace: Option<&str>) {
+        unsafe {
+            ffi::gtk_popover_bind_model(self.to_glib_none().0, model.to_glib_none().0, action_namespace.to_glib_none().0);
+        }
+    }
 
     #[cfg(feature = "v3_12")]
     fn get_modal(&self) -> bool {

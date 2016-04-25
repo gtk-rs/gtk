@@ -12,6 +12,8 @@ use ffi::GtkDirectionType;
 use ffi::GtkMenuDirectionType;
 use ffi::GtkMenuShell;
 use ffi::GtkWidget;
+#[cfg(feature = "v3_6")]
+use gio;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::connect;
@@ -35,8 +37,8 @@ pub trait MenuShellExt {
 
     fn append<T: IsA<MenuItem>>(&self, child: &T);
 
-    //#[cfg(feature = "v3_6")]
-    //fn bind_model<T: IsA</*Ignored*/gio::MenuModel>>(&self, model: Option<&T>, action_namespace: Option<&str>, with_separators: bool);
+    #[cfg(feature = "v3_6")]
+    fn bind_model<T: IsA<gio::MenuModel>>(&self, model: Option<&T>, action_namespace: Option<&str>, with_separators: bool);
 
     fn cancel(&self);
 
@@ -90,10 +92,12 @@ impl<O: IsA<MenuShell> + IsA<Object>> MenuShellExt for O {
         }
     }
 
-    //#[cfg(feature = "v3_6")]
-    //fn bind_model<T: IsA</*Ignored*/gio::MenuModel>>(&self, model: Option<&T>, action_namespace: Option<&str>, with_separators: bool) {
-    //    unsafe { TODO: call ffi::gtk_menu_shell_bind_model() }
-    //}
+    #[cfg(feature = "v3_6")]
+    fn bind_model<T: IsA<gio::MenuModel>>(&self, model: Option<&T>, action_namespace: Option<&str>, with_separators: bool) {
+        unsafe {
+            ffi::gtk_menu_shell_bind_model(self.to_glib_none().0, model.to_glib_none().0, action_namespace.to_glib_none().0, with_separators.to_glib());
+        }
+    }
 
     fn cancel(&self) {
         unsafe {

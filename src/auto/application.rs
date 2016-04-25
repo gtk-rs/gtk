@@ -6,6 +6,8 @@ use Window;
 use ffi;
 use ffi::GtkApplication;
 use ffi::GtkWindow;
+use gio;
+use gio_ffi;
 use glib;
 use glib::object::IsA;
 use glib::signal::connect;
@@ -15,7 +17,11 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct Application(Object<ffi::GtkApplication>);
+    pub struct Application(Object<ffi::GtkApplication>): [
+        gio::Application => gio_ffi::GApplication,
+        gio::ActionGroup => gio_ffi::GActionGroup,
+        gio::ActionMap => gio_ffi::GActionMap,
+    ];
 
     match fn {
         get_type => || ffi::gtk_application_get_type(),
@@ -56,18 +62,24 @@ impl Application {
         }
     }
 
-    //pub fn get_app_menu(&self) -> /*Ignored*/Option<gio::MenuModel> {
-    //    unsafe { TODO: call ffi::gtk_application_get_app_menu() }
-    //}
+    pub fn get_app_menu(&self) -> Option<gio::MenuModel> {
+        unsafe {
+            from_glib_none(ffi::gtk_application_get_app_menu(self.to_glib_none().0))
+        }
+    }
 
-    //#[cfg(feature = "v3_14")]
-    //pub fn get_menu_by_id(&self, id: &str) -> /*Ignored*/Option<gio::Menu> {
-    //    unsafe { TODO: call ffi::gtk_application_get_menu_by_id() }
-    //}
+    #[cfg(feature = "v3_14")]
+    pub fn get_menu_by_id(&self, id: &str) -> Option<gio::Menu> {
+        unsafe {
+            from_glib_none(ffi::gtk_application_get_menu_by_id(self.to_glib_none().0, id.to_glib_none().0))
+        }
+    }
 
-    //pub fn get_menubar(&self) -> /*Ignored*/Option<gio::MenuModel> {
-    //    unsafe { TODO: call ffi::gtk_application_get_menubar() }
-    //}
+    pub fn get_menubar(&self) -> Option<gio::MenuModel> {
+        unsafe {
+            from_glib_none(ffi::gtk_application_get_menubar(self.to_glib_none().0))
+        }
+    }
 
     #[cfg(feature = "v3_6")]
     pub fn get_window_by_id(&self, id: u32) -> Option<Window> {
@@ -127,13 +139,17 @@ impl Application {
         }
     }
 
-    //pub fn set_app_menu<T: IsA</*Ignored*/gio::MenuModel>>(&self, app_menu: Option<&T>) {
-    //    unsafe { TODO: call ffi::gtk_application_set_app_menu() }
-    //}
+    pub fn set_app_menu<T: IsA<gio::MenuModel>>(&self, app_menu: Option<&T>) {
+        unsafe {
+            ffi::gtk_application_set_app_menu(self.to_glib_none().0, app_menu.to_glib_none().0);
+        }
+    }
 
-    //pub fn set_menubar<T: IsA</*Ignored*/gio::MenuModel>>(&self, menubar: Option<&T>) {
-    //    unsafe { TODO: call ffi::gtk_application_set_menubar() }
-    //}
+    pub fn set_menubar<T: IsA<gio::MenuModel>>(&self, menubar: Option<&T>) {
+        unsafe {
+            ffi::gtk_application_set_menubar(self.to_glib_none().0, menubar.to_glib_none().0);
+        }
+    }
 
     pub fn uninhibit(&self, cookie: u32) {
         unsafe {
