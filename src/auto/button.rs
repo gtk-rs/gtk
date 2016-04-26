@@ -69,8 +69,6 @@ impl Button {
 pub trait ButtonExt {
     fn clicked(&self);
 
-    fn enter(&self);
-
     fn get_alignment(&self) -> (f32, f32);
 
     #[cfg(feature = "v3_6")]
@@ -91,12 +89,6 @@ pub trait ButtonExt {
     fn get_use_stock(&self) -> bool;
 
     fn get_use_underline(&self) -> bool;
-
-    fn leave(&self);
-
-    fn pressed(&self);
-
-    fn released(&self);
 
     fn set_alignment(&self, xalign: f32, yalign: f32);
 
@@ -120,26 +112,12 @@ pub trait ButtonExt {
     fn connect_activate<F: Fn(&Self) + 'static>(&self, f: F) -> u64;
 
     fn connect_clicked<F: Fn(&Self) + 'static>(&self, f: F) -> u64;
-
-    fn connect_enter<F: Fn(&Self) + 'static>(&self, f: F) -> u64;
-
-    fn connect_leave<F: Fn(&Self) + 'static>(&self, f: F) -> u64;
-
-    fn connect_pressed<F: Fn(&Self) + 'static>(&self, f: F) -> u64;
-
-    fn connect_released<F: Fn(&Self) + 'static>(&self, f: F) -> u64;
 }
 
 impl<O: IsA<Button> + IsA<Object>> ButtonExt for O {
     fn clicked(&self) {
         unsafe {
             ffi::gtk_button_clicked(self.to_glib_none().0);
-        }
-    }
-
-    fn enter(&self) {
-        unsafe {
-            ffi::gtk_button_enter(self.to_glib_none().0);
         }
     }
 
@@ -204,24 +182,6 @@ impl<O: IsA<Button> + IsA<Object>> ButtonExt for O {
     fn get_use_underline(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_button_get_use_underline(self.to_glib_none().0))
-        }
-    }
-
-    fn leave(&self) {
-        unsafe {
-            ffi::gtk_button_leave(self.to_glib_none().0);
-        }
-    }
-
-    fn pressed(&self) {
-        unsafe {
-            ffi::gtk_button_pressed(self.to_glib_none().0);
-        }
-    }
-
-    fn released(&self) {
-        unsafe {
-            ffi::gtk_button_released(self.to_glib_none().0);
         }
     }
 
@@ -295,38 +255,6 @@ impl<O: IsA<Button> + IsA<Object>> ButtonExt for O {
                 transmute(clicked_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
-
-    fn connect_enter<F: Fn(&Self) + 'static>(&self, f: F) -> u64 {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "enter",
-                transmute(enter_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    fn connect_leave<F: Fn(&Self) + 'static>(&self, f: F) -> u64 {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "leave",
-                transmute(leave_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    fn connect_pressed<F: Fn(&Self) + 'static>(&self, f: F) -> u64 {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "pressed",
-                transmute(pressed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    fn connect_released<F: Fn(&Self) + 'static>(&self, f: F) -> u64 {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "released",
-                transmute(released_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
 }
 
 unsafe extern "C" fn activate_trampoline<T>(this: *mut GtkButton, f: gpointer)
@@ -337,34 +265,6 @@ where T: IsA<Button> {
 }
 
 unsafe extern "C" fn clicked_trampoline<T>(this: *mut GtkButton, f: gpointer)
-where T: IsA<Button> {
-    callback_guard!();
-    let f: &Box_<Fn(&T) + 'static> = transmute(f);
-    f(&Button::from_glib_none(this).downcast_unchecked())
-}
-
-unsafe extern "C" fn enter_trampoline<T>(this: *mut GtkButton, f: gpointer)
-where T: IsA<Button> {
-    callback_guard!();
-    let f: &Box_<Fn(&T) + 'static> = transmute(f);
-    f(&Button::from_glib_none(this).downcast_unchecked())
-}
-
-unsafe extern "C" fn leave_trampoline<T>(this: *mut GtkButton, f: gpointer)
-where T: IsA<Button> {
-    callback_guard!();
-    let f: &Box_<Fn(&T) + 'static> = transmute(f);
-    f(&Button::from_glib_none(this).downcast_unchecked())
-}
-
-unsafe extern "C" fn pressed_trampoline<T>(this: *mut GtkButton, f: gpointer)
-where T: IsA<Button> {
-    callback_guard!();
-    let f: &Box_<Fn(&T) + 'static> = transmute(f);
-    f(&Button::from_glib_none(this).downcast_unchecked())
-}
-
-unsafe extern "C" fn released_trampoline<T>(this: *mut GtkButton, f: gpointer)
 where T: IsA<Button> {
     callback_guard!();
     let f: &Box_<Fn(&T) + 'static> = transmute(f);

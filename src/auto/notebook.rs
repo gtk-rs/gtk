@@ -94,12 +94,6 @@ impl Notebook {
         }
     }
 
-    pub fn get_tab_hborder(&self) -> u16 {
-        unsafe {
-            ffi::gtk_notebook_get_tab_hborder(self.to_glib_none().0)
-        }
-    }
-
     pub fn get_tab_label<T: IsA<Widget>>(&self, child: &T) -> Option<Widget> {
         unsafe {
             from_glib_none(ffi::gtk_notebook_get_tab_label(self.to_glib_none().0, child.to_glib_none().0))
@@ -121,12 +115,6 @@ impl Notebook {
     pub fn get_tab_reorderable<T: IsA<Widget>>(&self, child: &T) -> bool {
         unsafe {
             from_glib(ffi::gtk_notebook_get_tab_reorderable(self.to_glib_none().0, child.to_glib_none().0))
-        }
-    }
-
-    pub fn get_tab_vborder(&self) -> u16 {
-        unsafe {
-            ffi::gtk_notebook_get_tab_vborder(self.to_glib_none().0)
         }
     }
 

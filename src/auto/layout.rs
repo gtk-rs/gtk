@@ -34,24 +34,12 @@ impl Layout {
         }
     }
 
-    pub fn get_hadjustment(&self) -> Option<Adjustment> {
-        unsafe {
-            from_glib_none(ffi::gtk_layout_get_hadjustment(self.to_glib_none().0))
-        }
-    }
-
     pub fn get_size(&self) -> (u32, u32) {
         unsafe {
             let mut width = mem::uninitialized();
             let mut height = mem::uninitialized();
             ffi::gtk_layout_get_size(self.to_glib_none().0, &mut width, &mut height);
             (width, height)
-        }
-    }
-
-    pub fn get_vadjustment(&self) -> Option<Adjustment> {
-        unsafe {
-            from_glib_none(ffi::gtk_layout_get_vadjustment(self.to_glib_none().0))
         }
     }
 
@@ -67,21 +55,9 @@ impl Layout {
         }
     }
 
-    pub fn set_hadjustment(&self, adjustment: Option<&Adjustment>) {
-        unsafe {
-            ffi::gtk_layout_set_hadjustment(self.to_glib_none().0, adjustment.to_glib_none().0);
-        }
-    }
-
     pub fn set_size(&self, width: u32, height: u32) {
         unsafe {
             ffi::gtk_layout_set_size(self.to_glib_none().0, width, height);
-        }
-    }
-
-    pub fn set_vadjustment(&self, adjustment: Option<&Adjustment>) {
-        unsafe {
-            ffi::gtk_layout_set_vadjustment(self.to_glib_none().0, adjustment.to_glib_none().0);
         }
     }
 }
