@@ -481,9 +481,6 @@ pub use self::status_icon::StatusIcon;
 mod statusbar;
 pub use self::statusbar::Statusbar;
 
-mod style;
-pub use self::style::Style;
-
 mod style_context;
 pub use self::style_context::StyleContext;
 

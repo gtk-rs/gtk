@@ -22,7 +22,6 @@ use {
     Requisition,
     SizeRequestMode,
     StateFlags,
-    StateType,
     StyleContext,
     TextDirection,
     Widget,
@@ -97,8 +96,6 @@ pub trait WidgetExt {
 
     fn drag_unhighlight(&self);
 
-    fn ensure_style(&self);
-
     fn error_bell(&self);
 
     fn freeze_child_notify(&self);
@@ -119,8 +116,6 @@ pub trait WidgetExt {
     fn get_can_default(&self) -> bool;
 
     fn get_can_focus(&self) -> bool;
-
-    fn get_child_requisition(&self) -> Requisition;
 
     fn get_child_visible(&self) -> bool;
 
@@ -174,8 +169,6 @@ pub trait WidgetExt {
 
     fn get_parent_window(&self) -> Option<gdk::Window>;
 
-    fn get_pointer(&self) -> (i32, i32);
-
     fn get_preferred_height(&self) -> (i32, i32);
 
     #[cfg(feature = "v3_10")]
@@ -195,8 +188,6 @@ pub trait WidgetExt {
 
     fn get_request_mode(&self) -> SizeRequestMode;
 
-    fn get_requisition(&self) -> Requisition;
-
     fn get_root_window(&self) -> Option<gdk::Window>;
 
     #[cfg(feature = "v3_10")]
@@ -207,10 +198,6 @@ pub trait WidgetExt {
     fn get_sensitive(&self) -> bool;
 
     fn get_size_request(&self) -> (i32, i32);
-
-    fn get_state(&self) -> StateType;
-
-    fn get_state_flags(&self) -> StateFlags;
 
     fn get_style_context(&self) -> Option<StyleContext>;
 
@@ -250,8 +237,6 @@ pub trait WidgetExt {
     fn has_focus(&self) -> bool;
 
     fn has_grab(&self) -> bool;
-
-    fn has_rc_style(&self) -> bool;
 
     fn has_screen(&self) -> bool;
 
@@ -314,15 +299,9 @@ pub trait WidgetExt {
     #[cfg(feature = "v3_8")]
     fn remove_tick_callback(&self, id: u32);
 
-    fn render_icon(&self, stock_id: &str, size: i32, detail: Option<&str>) -> Option<gdk_pixbuf::Pixbuf>;
-
     fn render_icon_pixbuf(&self, stock_id: &str, size: i32) -> Option<gdk_pixbuf::Pixbuf>;
 
     fn reparent<T: IsA<Widget>>(&self, new_parent: &T);
-
-    fn reset_rc_styles(&self);
-
-    fn reset_style(&self);
 
     fn set_accel_path(&self, accel_path: Option<&str>, accel_group: Option<&AccelGroup>);
 
@@ -394,10 +373,6 @@ pub trait WidgetExt {
 
     fn set_size_request(&self, width: i32, height: i32);
 
-    fn set_state(&self, state: StateType);
-
-    fn set_state_flags(&self, flags: StateFlags, clear: bool);
-
     fn set_support_multidevice(&self, support_multidevice: bool);
 
     fn set_tooltip_markup(&self, markup: Option<&str>);
@@ -427,10 +402,6 @@ pub trait WidgetExt {
     #[cfg(feature = "v3_10")]
     fn size_allocate_with_baseline(&self, allocation: &mut Allocation, baseline: i32);
 
-    fn size_request(&self) -> Requisition;
-
-    fn style_attach(&self);
-
     fn thaw_child_notify(&self);
 
     fn translate_coordinates<T: IsA<Widget>>(&self, dest_widget: &T, src_x: i32, src_y: i32) -> Option<(i32, i32)>;
@@ -445,8 +416,6 @@ pub trait WidgetExt {
 
     #[cfg(feature = "v3_8")]
     fn unregister_window(&self, window: &gdk::Window);
-
-    fn unset_state_flags(&self, flags: StateFlags);
 }
 
 impl<O: IsA<Widget>> WidgetExt for O {
@@ -612,11 +581,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
     }
 
     #[inline]
-    fn ensure_style(&self) {
-        Auto::ensure_style(self)
-    }
-
-    #[inline]
     fn error_bell(&self) {
         Auto::error_bell(self)
     }
@@ -665,11 +629,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
     #[inline]
     fn get_can_focus(&self) -> bool {
         Auto::get_can_focus(self)
-    }
-
-    #[inline]
-    fn get_child_requisition(&self) -> Requisition {
-        Auto::get_child_requisition(self)
     }
 
     #[inline]
@@ -797,11 +756,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
     }
 
     #[inline]
-    fn get_pointer(&self) -> (i32, i32) {
-        Auto::get_pointer(self)
-    }
-
-    #[inline]
     fn get_preferred_height(&self) -> (i32, i32) {
         Auto::get_preferred_height(self)
     }
@@ -848,11 +802,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
     }
 
     #[inline]
-    fn get_requisition(&self) -> Requisition {
-        Auto::get_requisition(self)
-    }
-
-    #[inline]
     fn get_root_window(&self) -> Option<gdk::Window> {
         Auto::get_root_window(self)
     }
@@ -876,21 +825,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
     #[inline]
     fn get_size_request(&self) -> (i32, i32) {
         Auto::get_size_request(self)
-    }
-
-    #[inline]
-    fn get_state(&self) -> StateType {
-        Auto::get_state(self)
-    }
-
-    #[inline]
-    fn get_state_flags(&self) -> StateFlags {
-        Auto::get_state_flags(self)
-    }
-
-    #[inline]
-    fn get_style_context(&self) -> Option<StyleContext> {
-        Auto::get_style_context(self)
     }
 
     #[inline]
@@ -982,11 +916,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
     #[inline]
     fn has_grab(&self) -> bool {
         Auto::has_grab(self)
-    }
-
-    #[inline]
-    fn has_rc_style(&self) -> bool {
-        Auto::has_rc_style(self)
     }
 
     #[inline]
@@ -1135,11 +1064,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
     }
 
     #[inline]
-    fn render_icon(&self, stock_id: &str, size: i32, detail: Option<&str>) -> Option<gdk_pixbuf::Pixbuf> {
-        Auto::render_icon(self, stock_id, size, detail)
-    }
-
-    #[inline]
     fn render_icon_pixbuf(&self, stock_id: &str, size: i32) -> Option<gdk_pixbuf::Pixbuf> {
         Auto::render_icon_pixbuf(self, stock_id, size)
     }
@@ -1147,16 +1071,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
     #[inline]
     fn reparent<T: IsA<Widget>>(&self, new_parent: &T) {
         Auto::reparent(self, new_parent)
-    }
-
-    #[inline]
-    fn reset_rc_styles(&self) {
-        Auto::reset_rc_styles(self)
-    }
-
-    #[inline]
-    fn reset_style(&self) {
-        Auto::reset_style(self)
     }
 
     #[inline]
@@ -1329,13 +1243,8 @@ impl<O: IsA<Widget>> WidgetExt for O {
     }
 
     #[inline]
-    fn set_state(&self, state: StateType) {
-        Auto::set_state(self, state)
-    }
-
-    #[inline]
-    fn set_state_flags(&self, flags: StateFlags, clear: bool) {
-        Auto::set_state_flags(self, flags, clear)
+    fn get_style_context(&self) -> Option<StyleContext> {
+        Auto::get_style_context(self)
     }
 
     #[inline]
@@ -1410,16 +1319,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
     }
 
     #[inline]
-    fn size_request(&self) -> Requisition {
-        Auto::size_request(self)
-    }
-
-    #[inline]
-    fn style_attach(&self) {
-        Auto::style_attach(self)
-    }
-
-    #[inline]
     fn thaw_child_notify(&self) {
         Auto::thaw_child_notify(self)
     }
@@ -1453,11 +1352,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
     #[inline]
     fn unregister_window(&self, window: &gdk::Window) {
         Auto::unregister_window(self, window)
-    }
-
-    #[inline]
-    fn unset_state_flags(&self, flags: StateFlags) {
-        Auto::unset_state_flags(self, flags)
     }
 
 }

@@ -99,8 +99,6 @@ pub trait EntryExt {
 
     fn get_icon_tooltip_text(&self, icon_pos: EntryIconPosition) -> Option<String>;
 
-    //fn get_inner_border(&self) -> /*Ignored*/Option<Border>;
-
     #[cfg(feature = "v3_6")]
     fn get_input_hints(&self) -> InputHints;
 
@@ -182,8 +180,6 @@ pub trait EntryExt {
     fn set_icon_tooltip_markup(&self, icon_pos: EntryIconPosition, tooltip: Option<&str>);
 
     fn set_icon_tooltip_text(&self, icon_pos: EntryIconPosition, tooltip: Option<&str>);
-
-    //fn set_inner_border(&self, border: /*Ignored*/Option<&Border>);
 
     #[cfg(feature = "v3_6")]
     fn set_input_hints(&self, hints: InputHints);
@@ -359,10 +355,6 @@ impl<O: IsA<Entry> + IsA<Object>> EntryExt for O {
             from_glib_full(ffi::gtk_entry_get_icon_tooltip_text(self.to_glib_none().0, icon_pos.to_glib()))
         }
     }
-
-    //fn get_inner_border(&self) -> /*Ignored*/Option<Border> {
-    //    unsafe { TODO: call ffi::gtk_entry_get_inner_border() }
-    //}
 
     #[cfg(feature = "v3_6")]
     fn get_input_hints(&self) -> InputHints {
@@ -590,10 +582,6 @@ impl<O: IsA<Entry> + IsA<Object>> EntryExt for O {
             ffi::gtk_entry_set_icon_tooltip_text(self.to_glib_none().0, icon_pos.to_glib(), tooltip.to_glib_none().0);
         }
     }
-
-    //fn set_inner_border(&self, border: /*Ignored*/Option<&Border>) {
-    //    unsafe { TODO: call ffi::gtk_entry_set_inner_border() }
-    //}
 
     #[cfg(feature = "v3_6")]
     fn set_input_hints(&self, hints: InputHints) {

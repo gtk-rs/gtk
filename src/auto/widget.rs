@@ -10,9 +10,6 @@ use Orientation;
 use Requisition;
 use Settings;
 use SizeRequestMode;
-use StateFlags;
-use StateType;
-use Style;
 use StyleContext;
 use TextDirection;
 use Window;
@@ -44,13 +41,6 @@ impl Widget {
         assert_initialized_main_thread!();
         unsafe {
             from_glib(ffi::gtk_widget_get_default_direction())
-        }
-    }
-
-    pub fn get_default_style() -> Option<Style> {
-        assert_initialized_main_thread!();
-        unsafe {
-            from_glib_none(ffi::gtk_widget_get_default_style())
         }
     }
 
@@ -95,8 +85,6 @@ pub trait WidgetExt {
     fn child_focus(&self, direction: DirectionType) -> bool;
 
     fn child_notify(&self, child_property: &str);
-
-    //fn class_path(&self, path: /*Unimplemented*/String, path_reversed: /*Unimplemented*/String) -> u32;
 
     fn compute_expand(&self, orientation: Orientation) -> bool;
 
@@ -169,8 +157,6 @@ pub trait WidgetExt {
 
     fn draw(&self, cr: &cairo::Context);
 
-    fn ensure_style(&self);
-
     fn error_bell(&self);
 
     //fn event(&self, event: /*Unknown conversion*//*Unimplemented*/Event) -> bool;
@@ -198,8 +184,6 @@ pub trait WidgetExt {
     fn get_can_default(&self) -> bool;
 
     fn get_can_focus(&self) -> bool;
-
-    fn get_child_requisition(&self) -> Requisition;
 
     fn get_child_visible(&self) -> bool;
 
@@ -253,8 +237,6 @@ pub trait WidgetExt {
 
     fn get_modifier_mask(&self, intent: gdk::ModifierIntent) -> gdk::ModifierType;
 
-    //fn get_modifier_style(&self) -> /*Ignored*/Option<RcStyle>;
-
     fn get_name(&self) -> Option<String>;
 
     fn get_no_show_all(&self) -> bool;
@@ -269,8 +251,6 @@ pub trait WidgetExt {
     fn get_parent_window(&self) -> Option<gdk::Window>;
 
     //fn get_path(&self) -> /*Ignored*/Option<WidgetPath>;
-
-    fn get_pointer(&self) -> (i32, i32);
 
     fn get_preferred_height(&self) -> (i32, i32);
 
@@ -291,8 +271,6 @@ pub trait WidgetExt {
 
     fn get_request_mode(&self) -> SizeRequestMode;
 
-    fn get_requisition(&self) -> Requisition;
-
     fn get_root_window(&self) -> Option<gdk::Window>;
 
     #[cfg(feature = "v3_10")]
@@ -305,12 +283,6 @@ pub trait WidgetExt {
     fn get_settings(&self) -> Option<Settings>;
 
     fn get_size_request(&self) -> (i32, i32);
-
-    fn get_state(&self) -> StateType;
-
-    fn get_state_flags(&self) -> StateFlags;
-
-    fn get_style(&self) -> Option<Style>;
 
     fn get_style_context(&self) -> Option<StyleContext>;
 
@@ -354,8 +326,6 @@ pub trait WidgetExt {
     fn has_focus(&self) -> bool;
 
     fn has_grab(&self) -> bool;
-
-    fn has_rc_style(&self) -> bool;
 
     fn has_screen(&self) -> bool;
 
@@ -403,20 +373,6 @@ pub trait WidgetExt {
 
     fn mnemonic_activate(&self, group_cycling: bool) -> bool;
 
-    //fn modify_base(&self, state: StateType, color: /*Ignored*/Option<&gdk::Color>);
-
-    //fn modify_bg(&self, state: StateType, color: /*Ignored*/Option<&gdk::Color>);
-
-    //fn modify_cursor(&self, primary: /*Ignored*/Option<&gdk::Color>, secondary: /*Ignored*/Option<&gdk::Color>);
-
-    //fn modify_fg(&self, state: StateType, color: /*Ignored*/Option<&gdk::Color>);
-
-    //fn modify_font(&self, font_desc: /*Ignored*/Option<&mut pango::FontDescription>);
-
-    //fn modify_style(&self, style: /*Ignored*/&RcStyle);
-
-    //fn modify_text(&self, state: StateType, color: /*Ignored*/Option<&gdk::Color>);
-
     //fn override_background_color(&self, state: StateFlags, color: /*Ignored*/Option<&gdk::RGBA>);
 
     //fn override_color(&self, state: StateFlags, color: /*Ignored*/Option<&gdk::RGBA>);
@@ -426,8 +382,6 @@ pub trait WidgetExt {
     //fn override_font(&self, font_desc: /*Ignored*/Option<&pango::FontDescription>);
 
     //fn override_symbolic_color(&self, name: &str, color: /*Ignored*/Option<&gdk::RGBA>);
-
-    //fn path(&self, path: /*Unimplemented*/String, path_reversed: /*Unimplemented*/String) -> u32;
 
     fn queue_compute_expand(&self);
 
@@ -455,15 +409,9 @@ pub trait WidgetExt {
     #[cfg(feature = "v3_8")]
     fn remove_tick_callback(&self, id: u32);
 
-    fn render_icon(&self, stock_id: &str, size: i32, detail: Option<&str>) -> Option<gdk_pixbuf::Pixbuf>;
-
     fn render_icon_pixbuf(&self, stock_id: &str, size: i32) -> Option<gdk_pixbuf::Pixbuf>;
 
     fn reparent<T: IsA<Widget>>(&self, new_parent: &T);
-
-    fn reset_rc_styles(&self);
-
-    fn reset_style(&self);
 
     //fn send_expose(&self, event: /*Unknown conversion*//*Unimplemented*/Event) -> i32;
 
@@ -543,12 +491,6 @@ pub trait WidgetExt {
 
     fn set_size_request(&self, width: i32, height: i32);
 
-    fn set_state(&self, state: StateType);
-
-    fn set_state_flags(&self, flags: StateFlags, clear: bool);
-
-    fn set_style(&self, style: Option<&Style>);
-
     fn set_support_multidevice(&self, support_multidevice: bool);
 
     fn set_tooltip_markup(&self, markup: Option<&str>);
@@ -582,10 +524,6 @@ pub trait WidgetExt {
     #[cfg(feature = "v3_10")]
     fn size_allocate_with_baseline(&self, allocation: &mut Allocation, baseline: i32);
 
-    fn size_request(&self) -> Requisition;
-
-    fn style_attach(&self);
-
     //fn style_get(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
     //fn style_get_valist(&self, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
@@ -604,8 +542,6 @@ pub trait WidgetExt {
 
     #[cfg(feature = "v3_8")]
     fn unregister_window(&self, window: &gdk::Window);
-
-    fn unset_state_flags(&self, flags: StateFlags);
 }
 
 impl<O: IsA<Widget>> WidgetExt for O {
@@ -659,10 +595,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
             ffi::gtk_widget_child_notify(self.to_glib_none().0, child_property.to_glib_none().0);
         }
     }
-
-    //fn class_path(&self, path: /*Unimplemented*/String, path_reversed: /*Unimplemented*/String) -> u32 {
-    //    unsafe { TODO: call ffi::gtk_widget_class_path() }
-    //}
 
     fn compute_expand(&self, orientation: Orientation) -> bool {
         unsafe {
@@ -845,12 +777,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn ensure_style(&self) {
-        unsafe {
-            ffi::gtk_widget_ensure_style(self.to_glib_none().0);
-        }
-    }
-
     fn error_bell(&self) {
         unsafe {
             ffi::gtk_widget_error_bell(self.to_glib_none().0);
@@ -926,14 +852,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
     fn get_can_focus(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_widget_get_can_focus(self.to_glib_none().0))
-        }
-    }
-
-    fn get_child_requisition(&self) -> Requisition {
-        unsafe {
-            let mut requisition = Requisition::uninitialized();
-            ffi::gtk_widget_get_child_requisition(self.to_glib_none().0, requisition.to_glib_none_mut().0);
-            requisition
         }
     }
 
@@ -1081,10 +999,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    //fn get_modifier_style(&self) -> /*Ignored*/Option<RcStyle> {
-    //    unsafe { TODO: call ffi::gtk_widget_get_modifier_style() }
-    //}
-
     fn get_name(&self) -> Option<String> {
         unsafe {
             from_glib_none(ffi::gtk_widget_get_name(self.to_glib_none().0))
@@ -1123,15 +1037,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
     //fn get_path(&self) -> /*Ignored*/Option<WidgetPath> {
     //    unsafe { TODO: call ffi::gtk_widget_get_path() }
     //}
-
-    fn get_pointer(&self) -> (i32, i32) {
-        unsafe {
-            let mut x = mem::uninitialized();
-            let mut y = mem::uninitialized();
-            ffi::gtk_widget_get_pointer(self.to_glib_none().0, &mut x, &mut y);
-            (x, y)
-        }
-    }
 
     fn get_preferred_height(&self) -> (i32, i32) {
         unsafe {
@@ -1208,14 +1113,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn get_requisition(&self) -> Requisition {
-        unsafe {
-            let mut requisition = Requisition::uninitialized();
-            ffi::gtk_widget_get_requisition(self.to_glib_none().0, requisition.to_glib_none_mut().0);
-            requisition
-        }
-    }
-
     fn get_root_window(&self) -> Option<gdk::Window> {
         unsafe {
             from_glib_none(ffi::gtk_widget_get_root_window(self.to_glib_none().0))
@@ -1253,24 +1150,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
             let mut height = mem::uninitialized();
             ffi::gtk_widget_get_size_request(self.to_glib_none().0, &mut width, &mut height);
             (width, height)
-        }
-    }
-
-    fn get_state(&self) -> StateType {
-        unsafe {
-            from_glib(ffi::gtk_widget_get_state(self.to_glib_none().0))
-        }
-    }
-
-    fn get_state_flags(&self) -> StateFlags {
-        unsafe {
-            from_glib(ffi::gtk_widget_get_state_flags(self.to_glib_none().0))
-        }
-    }
-
-    fn get_style(&self) -> Option<Style> {
-        unsafe {
-            from_glib_none(ffi::gtk_widget_get_style(self.to_glib_none().0))
         }
     }
 
@@ -1396,12 +1275,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
     fn has_grab(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_widget_has_grab(self.to_glib_none().0))
-        }
-    }
-
-    fn has_rc_style(&self) -> bool {
-        unsafe {
-            from_glib(ffi::gtk_widget_has_rc_style(self.to_glib_none().0))
         }
     }
 
@@ -1531,34 +1404,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    //fn modify_base(&self, state: StateType, color: /*Ignored*/Option<&gdk::Color>) {
-    //    unsafe { TODO: call ffi::gtk_widget_modify_base() }
-    //}
-
-    //fn modify_bg(&self, state: StateType, color: /*Ignored*/Option<&gdk::Color>) {
-    //    unsafe { TODO: call ffi::gtk_widget_modify_bg() }
-    //}
-
-    //fn modify_cursor(&self, primary: /*Ignored*/Option<&gdk::Color>, secondary: /*Ignored*/Option<&gdk::Color>) {
-    //    unsafe { TODO: call ffi::gtk_widget_modify_cursor() }
-    //}
-
-    //fn modify_fg(&self, state: StateType, color: /*Ignored*/Option<&gdk::Color>) {
-    //    unsafe { TODO: call ffi::gtk_widget_modify_fg() }
-    //}
-
-    //fn modify_font(&self, font_desc: /*Ignored*/Option<&mut pango::FontDescription>) {
-    //    unsafe { TODO: call ffi::gtk_widget_modify_font() }
-    //}
-
-    //fn modify_style(&self, style: /*Ignored*/&RcStyle) {
-    //    unsafe { TODO: call ffi::gtk_widget_modify_style() }
-    //}
-
-    //fn modify_text(&self, state: StateType, color: /*Ignored*/Option<&gdk::Color>) {
-    //    unsafe { TODO: call ffi::gtk_widget_modify_text() }
-    //}
-
     //fn override_background_color(&self, state: StateFlags, color: /*Ignored*/Option<&gdk::RGBA>) {
     //    unsafe { TODO: call ffi::gtk_widget_override_background_color() }
     //}
@@ -1577,10 +1422,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
 
     //fn override_symbolic_color(&self, name: &str, color: /*Ignored*/Option<&gdk::RGBA>) {
     //    unsafe { TODO: call ffi::gtk_widget_override_symbolic_color() }
-    //}
-
-    //fn path(&self, path: /*Unimplemented*/String, path_reversed: /*Unimplemented*/String) -> u32 {
-    //    unsafe { TODO: call ffi::gtk_widget_path() }
     //}
 
     fn queue_compute_expand(&self) {
@@ -1653,12 +1494,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn render_icon(&self, stock_id: &str, size: i32, detail: Option<&str>) -> Option<gdk_pixbuf::Pixbuf> {
-        unsafe {
-            from_glib_full(ffi::gtk_widget_render_icon(self.to_glib_none().0, stock_id.to_glib_none().0, size, detail.to_glib_none().0))
-        }
-    }
-
     fn render_icon_pixbuf(&self, stock_id: &str, size: i32) -> Option<gdk_pixbuf::Pixbuf> {
         unsafe {
             from_glib_full(ffi::gtk_widget_render_icon_pixbuf(self.to_glib_none().0, stock_id.to_glib_none().0, size))
@@ -1668,18 +1503,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
     fn reparent<T: IsA<Widget>>(&self, new_parent: &T) {
         unsafe {
             ffi::gtk_widget_reparent(self.to_glib_none().0, new_parent.to_glib_none().0);
-        }
-    }
-
-    fn reset_rc_styles(&self) {
-        unsafe {
-            ffi::gtk_widget_reset_rc_styles(self.to_glib_none().0);
-        }
-    }
-
-    fn reset_style(&self) {
-        unsafe {
-            ffi::gtk_widget_reset_style(self.to_glib_none().0);
         }
     }
 
@@ -1903,24 +1726,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn set_state(&self, state: StateType) {
-        unsafe {
-            ffi::gtk_widget_set_state(self.to_glib_none().0, state.to_glib());
-        }
-    }
-
-    fn set_state_flags(&self, flags: StateFlags, clear: bool) {
-        unsafe {
-            ffi::gtk_widget_set_state_flags(self.to_glib_none().0, flags.to_glib(), clear.to_glib());
-        }
-    }
-
-    fn set_style(&self, style: Option<&Style>) {
-        unsafe {
-            ffi::gtk_widget_set_style(self.to_glib_none().0, style.to_glib_none().0);
-        }
-    }
-
     fn set_support_multidevice(&self, support_multidevice: bool) {
         unsafe {
             ffi::gtk_widget_set_support_multidevice(self.to_glib_none().0, support_multidevice.to_glib());
@@ -2014,20 +1819,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn size_request(&self) -> Requisition {
-        unsafe {
-            let mut requisition = Requisition::uninitialized();
-            ffi::gtk_widget_size_request(self.to_glib_none().0, requisition.to_glib_none_mut().0);
-            requisition
-        }
-    }
-
-    fn style_attach(&self) {
-        unsafe {
-            ffi::gtk_widget_style_attach(self.to_glib_none().0);
-        }
-    }
-
     //fn style_get(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
     //    unsafe { TODO: call ffi::gtk_widget_style_get() }
     //}
@@ -2079,12 +1870,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
     fn unregister_window(&self, window: &gdk::Window) {
         unsafe {
             ffi::gtk_widget_unregister_window(self.to_glib_none().0, window.to_glib_none().0);
-        }
-    }
-
-    fn unset_state_flags(&self, flags: StateFlags) {
-        unsafe {
-            ffi::gtk_widget_unset_state_flags(self.to_glib_none().0, flags.to_glib());
         }
     }
 }

@@ -58,8 +58,6 @@ pub trait MenuItemExt {
 
     fn get_reserve_indicator(&self) -> bool;
 
-    fn get_right_justified(&self) -> bool;
-
     fn get_submenu(&self) -> Option<Widget>;
 
     fn get_use_underline(&self) -> bool;
@@ -71,8 +69,6 @@ pub trait MenuItemExt {
     fn set_label(&self, label: &str);
 
     fn set_reserve_indicator(&self, reserve: bool);
-
-    fn set_right_justified(&self, right_justified: bool);
 
     fn set_submenu<T: IsA<Menu>>(&self, submenu: Option<&T>);
 
@@ -120,12 +116,6 @@ impl<O: IsA<MenuItem> + IsA<Object>> MenuItemExt for O {
         }
     }
 
-    fn get_right_justified(&self) -> bool {
-        unsafe {
-            from_glib(ffi::gtk_menu_item_get_right_justified(self.to_glib_none().0))
-        }
-    }
-
     fn get_submenu(&self) -> Option<Widget> {
         unsafe {
             from_glib_none(ffi::gtk_menu_item_get_submenu(self.to_glib_none().0))
@@ -159,12 +149,6 @@ impl<O: IsA<MenuItem> + IsA<Object>> MenuItemExt for O {
     fn set_reserve_indicator(&self, reserve: bool) {
         unsafe {
             ffi::gtk_menu_item_set_reserve_indicator(self.to_glib_none().0, reserve.to_glib());
-        }
-    }
-
-    fn set_right_justified(&self, right_justified: bool) {
-        unsafe {
-            ffi::gtk_menu_item_set_right_justified(self.to_glib_none().0, right_justified.to_glib());
         }
     }
 

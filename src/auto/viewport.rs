@@ -34,21 +34,9 @@ impl Viewport {
         }
     }
 
-    pub fn get_hadjustment(&self) -> Option<Adjustment> {
-        unsafe {
-            from_glib_none(ffi::gtk_viewport_get_hadjustment(self.to_glib_none().0))
-        }
-    }
-
     pub fn get_shadow_type(&self) -> ShadowType {
         unsafe {
             from_glib(ffi::gtk_viewport_get_shadow_type(self.to_glib_none().0))
-        }
-    }
-
-    pub fn get_vadjustment(&self) -> Option<Adjustment> {
-        unsafe {
-            from_glib_none(ffi::gtk_viewport_get_vadjustment(self.to_glib_none().0))
         }
     }
 
@@ -58,21 +46,9 @@ impl Viewport {
         }
     }
 
-    pub fn set_hadjustment(&self, adjustment: Option<&Adjustment>) {
-        unsafe {
-            ffi::gtk_viewport_set_hadjustment(self.to_glib_none().0, adjustment.to_glib_none().0);
-        }
-    }
-
     pub fn set_shadow_type(&self, type_: ShadowType) {
         unsafe {
             ffi::gtk_viewport_set_shadow_type(self.to_glib_none().0, type_.to_glib());
-        }
-    }
-
-    pub fn set_vadjustment(&self, adjustment: Option<&Adjustment>) {
-        unsafe {
-            ffi::gtk_viewport_set_vadjustment(self.to_glib_none().0, adjustment.to_glib_none().0);
         }
     }
 }
