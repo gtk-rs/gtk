@@ -6,6 +6,7 @@ min_cfg_version = "3.4"
 target_path = "."
 work_mode = "normal"
 generate_safety_asserts = true
+deprecate_by_min_version = true
 
 generate = [
     "Gtk.AccelFlags",
@@ -23,6 +24,7 @@ generate = [
     "Gtk.Bin",
     "Gtk.Box",
     "Gtk.BuilderError",
+    "Gtk.Button",
     "Gtk.ButtonBox",
     "Gtk.ButtonBoxStyle",
     "Gtk.ButtonsType",
@@ -39,6 +41,7 @@ generate = [
     "Gtk.CellRendererState",
     "Gtk.CheckButton",
     "Gtk.CheckMenuItem",
+    "Gtk.ColorButton",
     "Gtk.ColorChooserDialog",
     "Gtk.ColorChooserWidget",
     "Gtk.ComboBoxText",
@@ -91,6 +94,7 @@ generate = [
     "Gtk.JunctionSides",
     "Gtk.Justification",
     "Gtk.Label",
+    "Gtk.Layout",
     "Gtk.LevelBar",
     "Gtk.LevelBarMode",
     "Gtk.License",
@@ -190,6 +194,7 @@ generate = [
     "Gtk.ToolButton",
     "Gtk.ToolItem",
     "Gtk.ToolItemGroup",
+    "Gtk.ToolPalette",
     "Gtk.ToolPaletteDragTargets",
     "Gtk.ToolShell",
     "Gtk.Tooltip",
@@ -201,6 +206,7 @@ generate = [
     "Gtk.TreeViewDropPosition",
     "Gtk.TreeViewGridLines",
     "Gtk.Unit",
+    "Gtk.Viewport",
     "Gtk.VolumeButton",
     "Gtk.WidgetHelpType",
     "Gtk.WindowGroup",
@@ -299,34 +305,6 @@ status = "generate"
     ignore = true
 
 [[object]]
-name = "Gtk.Button"
-status = "generate"
-    [[object.function]]
-    name = "enter" #Deprecated since v2_20
-    ignore = true
-    [[object.function]]
-    name = "leave" #Deprecated since v2_20
-    ignore = true
-    [[object.function]]
-    name = "pressed" #Deprecated since v2_20
-    ignore = true
-    [[object.function]]
-    name = "released" #Deprecated since v2_20
-    ignore = true
-    [[object.signal]]
-    name = "enter" #Deprecated since v2_20
-    ignore = true
-    [[object.signal]]
-    name = "leave" #Deprecated since v2_20
-    ignore = true
-    [[object.signal]]
-    name = "pressed" #Deprecated since v2_20
-    ignore = true
-    [[object.signal]]
-    name = "released" #Deprecated since v2_20
-    ignore = true
-
-[[object]]
 name = "Gtk.CellArea"
 status = "generate"
     [[object.function]]
@@ -350,10 +328,6 @@ status = "generate"
 [[object]]
 name = "Gtk.CellRenderer"
 status = "generate"
-    [[object.function]]
-    name = "get_size"
-    # Deprecated in 3.0, has a difficult contract
-    ignore = true
     [[object.function]]
     name = "render"
         [[object.function.parameter]]
@@ -397,28 +371,6 @@ name = "Gtk.Clipboard"
 status = "generate"
     [[object.function]]
     name = "set_text"
-    ignore = true
-
-[[object]]
-name = "Gtk.ColorButton"
-status = "generate"
-    [[object.function]]
-    name = "new_with_color" #Deprecated since v3_4
-    ignore = true
-    [[object.function]]
-    pattern = "[gs]et_alpha" #Deprecated since v3_4
-    ignore = true
-    [[object.function]]
-    name = "get_color" #Deprecated since v3_4
-    ignore = true
-    [[object.function]]
-    pattern = "[gs]et_rgba" #Deprecated since v3_4
-    ignore = true
-    [[object.function]]
-    pattern = "[gs]et_use_alpha" #Deprecated since v3_4
-    ignore = true
-    [[object.function]]
-    name = "set_alpha" #Deprecated since v3_4
     ignore = true
 
 [[object]]
@@ -487,9 +439,6 @@ status = "generate"
         [[object.function.parameter]]
         name = "text"
         nullable = true
-    [[object.function]]
-    pattern = "[gs]et_inner_border" #Deprecated since v3_4
-    ignore = true
 
 [[object]]
 name = "Gtk.Expander"
@@ -544,13 +493,6 @@ status = "generate"
         const = true
 
 [[object]]
-name = "Gtk.Layout"
-status = "generate"
-    [[object.function]]
-    pattern = "[gs]et_[hv]adjustment" #Deprecated since v3_0
-    ignore = true
-
-[[object]]
 name = "Gtk.ListBox"
 status = "generate"
     [[object.signal]]
@@ -588,9 +530,6 @@ name = "Gtk.MenuItem"
 status = "generate"
     [[object.function]]
     name = "activate"
-    ignore = true
-    [[object.function]]
-    pattern = "[gs]et_right_justified" #Deprecated since v3_2
     ignore = true
 
 [[object]]
@@ -636,9 +575,6 @@ status = "generate"
     [[object.function]]
     name = "set_current_page"
     ignore = true
-    [[object.function]]
-    pattern = "get_tab_[hv]border" #Deprecated since v3_4
-    ignore = true
 
 [[object]]
 name = "Gtk.PageSetup"
@@ -648,7 +584,7 @@ status = "generate"
         [object.function.return]
         nullable = false
     [[object.function]]
-    pattern = "^set_paper_size"
+    pattern = "set_paper_size.*"
         [[object.function.parameter]]
         name = "size"
         const = true
@@ -662,7 +598,7 @@ version = "3.12"
 name = "Gtk.PaperSize"
 status = "generate"
     [[object.function]]
-    pattern = "^(get|is)_.*"
+    pattern = "(get|is)_.*"
         [[object.function.parameter]]
         name = "size"
         const = true
@@ -789,16 +725,6 @@ status = "generate"
     name = "get_default_attributes"
         [object.function.return]
         nullable = false
-    [[object.function]]
-    pattern = "get_[hv]adjustment" #Deprecated since v3_0
-    ignore = true
-
-[[object]]
-name = "Gtk.ToolPalette"
-status = "generate"
-    [[object.function]]
-    pattern = "get_[hv]adjustment" #Deprecated since v3_0
-    ignore = true
 
 [[object]]
 name = "Gtk.TreeModel"
@@ -970,12 +896,6 @@ status = "generate"
     name = "get_selection"
         [object.function.return]
         nullable = false
-    [[object.function]]
-    pattern = "[gs]et_[hv]adjustment" #Deprecated since v3_0
-    ignore = true
-    [[object.function]]
-    name = "set_destroy_count_func" #Deprecated since v3_4
-    ignore = true
     [[object.signal]]
     pattern = ".+" #borrow
     ignore = true
@@ -988,13 +908,6 @@ status = "generate"
         [[object.function.parameter]]
         name = "iter"
         const = true
-
-[[object]]
-name = "Gtk.Viewport"
-status = "generate"
-    [[object.function]]
-    pattern = "[gs]et_[hv]adjustment" #Deprecated since v3_0
-    ignore = true
 
 [[object]]
 name = "Gtk.Widget"
@@ -1010,69 +923,6 @@ status = "generate"
     ignore = true
     [[object.function]]
     name = "style_get_property"
-    ignore = true
-    [[object.function]]
-    name = "get_default_style" #Deprecated since v3_0
-    ignore = true
-    [[object.function]]
-    name = "class_path" #Deprecated since v3_0
-    ignore = true
-    [[object.function]]
-    name = "ensure_style" #Deprecated since v3_0
-    ignore = true
-    [[object.function]]
-    name = "get_child_requisition" #Deprecated since v3_0
-    ignore = true
-    [[object.function]]
-    name = "get_modifier_style" #Deprecated since v3_0
-    ignore = true
-    [[object.function]]
-    name = "get_pointer" #Deprecated since v3_4
-    ignore = true
-    [[object.function]]
-    name = "get_requisition" #Deprecated since v3_0
-    ignore = true
-    [[object.function]]
-    pattern = "[gs]et_state" #Deprecated since v3_0
-    ignore = true
-    [[object.function]]
-    pattern = "[gs]et_style$" #Deprecated since v3_0
-    ignore = true
-    [[object.function]]
-    name = "has_rc_style" #Deprecated since v3_0
-    ignore = true
-    [[object.function]]
-    name = "modify_base" #Deprecated since v3_0
-    ignore = true
-    [[object.function]]
-    pattern = "modify_[bf]g" #Deprecated since v3_0
-    ignore = true
-    [[object.function]]
-    name = "modify_cursor" #Deprecated since v3_0
-    ignore = true
-    [[object.function]]
-    name = "modify_font" #Deprecated since v3_0
-    ignore = true
-    [[object.function]]
-    name = "modify_style" #Deprecated since v3_0
-    ignore = true
-    [[object.function]]
-    name = "modify_text" #Deprecated since v3_0
-    ignore = true
-    [[object.function]]
-    name = "path" #Deprecated since v3_0
-    ignore = true
-    [[object.function]]
-    name = "render_icon" #Deprecated since v3_0
-    ignore = true
-    [[object.function]]
-    name = "reset_rc_styles" #Deprecated since v3_0
-    ignore = true
-    [[object.function]]
-    name = "size_request" #Deprecated since v3_0
-    ignore = true
-    [[object.function]]
-    name = "style_attach" #Deprecated since v3_0
     ignore = true
     [[object.signal]]
     name = "draw" #ns
