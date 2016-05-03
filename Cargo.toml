@@ -42,11 +42,19 @@ version = "0.3.0"
 git = "https://github.com/gtk-rs/sys"
 version = "0.3.0"
 
+[dependencies.gdk-pixbuf-sys]
+git = "https://github.com/gtk-rs/sys"
+version = "0.3.0"
+
 [dependencies.gio-sys]
 git = "https://github.com/gtk-rs/sys"
 version = "0.3.0"
 
 [dependencies.glib-sys]
+git = "https://github.com/gtk-rs/sys"
+version = "0.3.0"
+
+[dependencies.gobject-sys]
 git = "https://github.com/gtk-rs/sys"
 version = "0.3.0"
 

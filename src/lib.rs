@@ -151,6 +151,8 @@ extern crate bitflags;
 extern crate glib_sys as glib_ffi;
 extern crate gio_sys as gio_ffi;
 extern crate gdk_sys as gdk_ffi;
+extern crate gdk_pixbuf_sys as gdk_pixbuf_ffi;
+extern crate gobject_sys as gobject_ffi;
 extern crate gtk_sys as ffi;
 extern crate cairo_sys as cairo_ffi;
 #[macro_use]
