@@ -100,6 +100,7 @@ generate = [
     "Gtk.LevelBarMode",
     "Gtk.License",
     "Gtk.LinkButton",
+    "Gtk.ListBox",
     "Gtk.ListBoxRow",
     "Gtk.Menu",
     "Gtk.MenuBar",
@@ -485,13 +486,6 @@ status = "generate"
         name = "surface"
         # cairo::Surface is reference-counted
         const = true
-
-[[object]]
-name = "Gtk.ListBox"
-status = "generate"
-    [[object.signal]]
-    name = "row-selected" #Option<&
-    ignore = true
 
 [[object]]
 name = "Gtk.ListStore"
@@ -907,12 +901,6 @@ status = "generate"
     ignore = true
     [[object.function]]
     name = "style_get_property"
-    ignore = true
-    [[object.signal]]
-    name = "hierarchy-changed" #Option<&
-    ignore = true
-    [[object.signal]]
-    name = "parent-set" #Option<&
     ignore = true
     [[object.signal]] #manual #Inhibits
     pattern = ".+"
