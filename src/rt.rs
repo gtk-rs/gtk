@@ -6,7 +6,7 @@ use std::cell::Cell;
 use std::env;
 use std::ptr;
 use std::sync::atomic::{AtomicBool, ATOMIC_BOOL_INIT, Ordering};
-use libc::{c_char, c_int, c_uint};
+use libc::{c_int, c_uint};
 use ffi;
 use glib::translate::*;
 use gdk;
@@ -135,13 +135,10 @@ fn pre_init() -> bool {
     let has_misc = words.contains(&"all") ^ words.contains(&"misc");
 
     unsafe {
-        let mut args = vec![
-            b"\0" as *const u8 as *mut c_char,
-            b"--gtk-debug=misc\0" as *const u8 as *mut c_char,
-        ];
-        let mut argc = args.len() as c_int;
-        let mut argv = args.as_mut_ptr();
-        let ret = from_glib(ffi::gtk_parse_args(&mut argc, &mut argv));
+        let argv = ["", "--gtk-debug=misc"];
+        let mut argc = argv.len() as c_int;
+        let mut argv_stash = argv.to_glib_none();
+        let ret = from_glib(ffi::gtk_parse_args(&mut argc, &mut argv_stash.0));
         let flags = ffi::gtk_get_debug_flags();
         if flags == 0 {
             panic!("libgtk-3 was configured with `--enable-debug=no`. \
