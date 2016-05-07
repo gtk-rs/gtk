@@ -57,4 +57,31 @@ impl Builder {
                 .and_then(|obj| obj.downcast().ok())
         }
     }
+
+    pub fn add_from_file(&self, file_name: &str) -> bool {
+        unsafe {
+            let mut ptr = ::std::ptr::null_mut();
+            ffi::gtk_builder_add_from_file(self.to_glib_none().0,
+                                           file_name.to_glib_none().0,
+                                           &mut ptr) > 0
+        }
+    }
+
+    pub fn add_from_resource(&self, resource_path: &str) -> bool {
+        unsafe {
+            let mut ptr = ::std::ptr::null_mut();
+            ffi::gtk_builder_add_from_resource(self.to_glib_none().0,
+                                               resource_path.to_glib_none().0,
+                                               &mut ptr) > 0
+        }
+    }
+
+    pub fn add_from_string(&self, string: &str) -> bool {
+        unsafe {
+            let mut ptr = ::std::ptr::null_mut();
+            ffi::gtk_builder_add_from_string(self.to_glib_none().0,
+                                             string.as_ptr() as *const c_char,
+                                             string.len(), &mut ptr) > 0
+        }
+    }
 }
