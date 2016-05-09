@@ -49,6 +49,8 @@ generate = [
     "Gtk.CornerType",
     "Gtk.CssProvider",
     "Gtk.CssProviderError",
+    "Gtk.CssSection",
+    "Gtk.CssSectionType",
     "Gtk.DeleteType",
     "Gtk.DialogFlags",
     "Gtk.DirectionType",
