@@ -580,6 +580,9 @@ pub use self::window::WindowExt;
 mod window_group;
 pub use self::window_group::WindowGroup;
 
+mod css_section;
+pub use self::css_section::CssSection;
+
 mod paper_size;
 pub use self::paper_size::PaperSize;
 
@@ -602,6 +605,7 @@ pub use self::enums::ButtonBoxStyle;
 pub use self::enums::ButtonsType;
 pub use self::enums::CornerType;
 pub use self::enums::CssProviderError;
+pub use self::enums::CssSectionType;
 pub use self::enums::DeleteType;
 pub use self::enums::DirectionType;
 pub use self::enums::EntryIconPosition;
