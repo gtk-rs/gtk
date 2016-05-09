@@ -417,6 +417,59 @@ impl ErrorDomain for CssProviderError {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum CssSectionType {
+    Document,
+    Import,
+    ColorDefinition,
+    BindingSet,
+    Ruleset,
+    Selector,
+    Declaration,
+    Value,
+    Keyframes,
+    #[doc(hidden)]
+    __Nonexhaustive(()),
+}
+
+#[doc(hidden)]
+impl ToGlib for CssSectionType {
+    type GlibType = ffi::GtkCssSectionType;
+
+    fn to_glib(&self) -> ffi::GtkCssSectionType {
+        match *self {
+            CssSectionType::Document => ffi::GTK_CSS_SECTION_DOCUMENT,
+            CssSectionType::Import => ffi::GTK_CSS_SECTION_IMPORT,
+            CssSectionType::ColorDefinition => ffi::GTK_CSS_SECTION_COLOR_DEFINITION,
+            CssSectionType::BindingSet => ffi::GTK_CSS_SECTION_BINDING_SET,
+            CssSectionType::Ruleset => ffi::GTK_CSS_SECTION_RULESET,
+            CssSectionType::Selector => ffi::GTK_CSS_SECTION_SELECTOR,
+            CssSectionType::Declaration => ffi::GTK_CSS_SECTION_DECLARATION,
+            CssSectionType::Value => ffi::GTK_CSS_SECTION_VALUE,
+            CssSectionType::Keyframes => ffi::GTK_CSS_SECTION_KEYFRAMES,
+            CssSectionType::__Nonexhaustive(_) => panic!(),
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GtkCssSectionType> for CssSectionType {
+    fn from_glib(value: ffi::GtkCssSectionType) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::GTK_CSS_SECTION_DOCUMENT => CssSectionType::Document,
+            ffi::GTK_CSS_SECTION_IMPORT => CssSectionType::Import,
+            ffi::GTK_CSS_SECTION_COLOR_DEFINITION => CssSectionType::ColorDefinition,
+            ffi::GTK_CSS_SECTION_BINDING_SET => CssSectionType::BindingSet,
+            ffi::GTK_CSS_SECTION_RULESET => CssSectionType::Ruleset,
+            ffi::GTK_CSS_SECTION_SELECTOR => CssSectionType::Selector,
+            ffi::GTK_CSS_SECTION_DECLARATION => CssSectionType::Declaration,
+            ffi::GTK_CSS_SECTION_VALUE => CssSectionType::Value,
+            ffi::GTK_CSS_SECTION_KEYFRAMES => CssSectionType::Keyframes,
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum DeleteType {
     Chars,
     WordEnds,

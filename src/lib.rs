@@ -194,6 +194,7 @@ mod builder;
 mod clipboard;
 mod color_button;
 mod color_chooser;
+mod css_provider;
 mod dialog;
 mod entry_buffer;
 mod enums;
