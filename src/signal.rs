@@ -857,9 +857,9 @@ pub trait TreeViewSignals {
     fn connect_select_cursor_parent<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> u64;
     fn connect_select_cursor_row<F: Fn(&Self, bool) -> bool + 'static>(&self, f: F) -> u64;
     fn connect_start_interactive_search<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> u64;
-    fn connect_test_collapse_row<F: Fn(&Self, &TreeIter, &TreePath) -> bool + 'static>(&self, f: F)
+    fn connect_test_collapse_row<F: Fn(&Self, &TreeIter, &TreePath) -> Inhibit + 'static>(&self, f: F)
         -> u64;
-    fn connect_test_expand_row<F: Fn(&Self, &TreeIter, &TreePath) -> bool + 'static>(&self, f: F)
+    fn connect_test_expand_row<F: Fn(&Self, &TreeIter, &TreePath) -> Inhibit + 'static>(&self, f: F)
         -> u64;
     fn connect_toggle_cursor_row<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> u64;
     fn connect_unselect_all<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> u64;
@@ -871,6 +871,7 @@ mod tree_view {
     use glib::translate::*;
     use glib_ffi::gboolean;
     use ffi::{GtkTreeIter, GtkTreePath, GtkTreeView, GtkTreeViewColumn};
+    use super::Inhibit;
     use {TreeIter, TreePath, TreeView, TreeViewColumn};
 
     impl super::TreeViewSignals for TreeView {
@@ -955,23 +956,23 @@ mod tree_view {
             }
         }
 
-        fn connect_test_collapse_row<F: Fn(&Self, &TreeIter, &TreePath) -> bool + 'static>(&self, f: F)
+        fn connect_test_collapse_row<F: Fn(&Self, &TreeIter, &TreePath) -> Inhibit + 'static>(&self, f: F)
                 -> u64 {
             unsafe {
-                let f: Box<Box<Fn(&Self, &TreeIter, &TreePath) -> bool + 'static>> =
+                let f: Box<Box<Fn(&Self, &TreeIter, &TreePath) -> Inhibit + 'static>> =
                     Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "test-collapse-row",
-                    transmute(iter_path_bool_trampoline as usize), Box::into_raw(f) as *mut _)
+                    transmute(iter_path_inhibit_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
 
-        fn connect_test_expand_row<F: Fn(&Self, &TreeIter, &TreePath) -> bool + 'static>(&self, f: F)
+        fn connect_test_expand_row<F: Fn(&Self, &TreeIter, &TreePath) -> Inhibit + 'static>(&self, f: F)
                 -> u64 {
             unsafe {
-                let f: Box<Box<Fn(&Self, &TreeIter, &TreePath) -> bool + 'static>> =
+                let f: Box<Box<Fn(&Self, &TreeIter, &TreePath) -> Inhibit + 'static>> =
                     Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "test-expand-row",
-                    transmute(iter_path_bool_trampoline as usize), Box::into_raw(f) as *mut _)
+                    transmute(iter_path_inhibit_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1029,9 +1030,9 @@ mod tree_view {
         f(&from_glib_none(this), &from_glib_borrow(iter), &from_glib_borrow(path));
     }
 
-    unsafe extern "C" fn iter_path_bool_trampoline(this: *mut GtkTreeView, iter: *mut GtkTreeIter,
+    unsafe extern "C" fn iter_path_inhibit_trampoline(this: *mut GtkTreeView, iter: *mut GtkTreeIter,
             path: *mut GtkTreePath,
-            f: &Box<Fn(&TreeView, &TreeIter, &TreePath) -> bool + 'static>) -> gboolean {
+            f: &Box<Fn(&TreeView, &TreeIter, &TreePath) -> Inhibit + 'static>) -> gboolean {
         callback_guard!();
         f(&from_glib_none(this), &from_glib_borrow(iter), &from_glib_borrow(path)).to_glib()
     }
