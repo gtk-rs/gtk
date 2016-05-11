@@ -55,7 +55,6 @@ generate = [
     "Gtk.DialogFlags",
     "Gtk.DirectionType",
     "Gtk.DrawingArea",
-    "Gtk.EntryCompletion",
     "Gtk.EntryIconPosition",
     "Gtk.EventBox",
     "Gtk.EventController",
@@ -96,19 +95,16 @@ generate = [
     "Gtk.InputPurpose",
     "Gtk.JunctionSides",
     "Gtk.Justification",
-    "Gtk.Label",
     "Gtk.Layout",
     "Gtk.LevelBar",
     "Gtk.LevelBarMode",
     "Gtk.License",
-    "Gtk.LinkButton",
     "Gtk.ListBox",
     "Gtk.ListBoxRow",
     "Gtk.Menu",
     "Gtk.MenuBar",
     "Gtk.MenuButton",
     "Gtk.MenuDirectionType",
-    "Gtk.MenuShell",
     "Gtk.MenuToolButton",
     "Gtk.MessageDialog",
     "Gtk.MessageType",
@@ -184,7 +180,6 @@ generate = [
     "Gtk.Statusbar",
     "Gtk.StatusIcon",
     "Gtk.StyleProvider",
-    "Gtk.Switch",
     "Gtk.TextChildAnchor",
     "Gtk.TextDirection",
     "Gtk.TextExtendSelection",
@@ -197,13 +192,11 @@ generate = [
     "Gtk.ToggleToolButton",
     "Gtk.ToolbarStyle",
     "Gtk.ToolButton",
-    "Gtk.ToolItem",
     "Gtk.ToolItemGroup",
     "Gtk.ToolPalette",
     "Gtk.ToolPaletteDragTargets",
     "Gtk.ToolShell",
     "Gtk.Tooltip",
-    "Gtk.Toolbar",
     "Gtk.TreeIter",
     "Gtk.TreeModelFlags",
     "Gtk.TreeSortable",
@@ -276,6 +269,9 @@ status = "generate"
         name = "website_label"
         # Passing `NULL` here seems to influence the rendering code
         nullable = true
+    [[object.signal]]
+    name = "activate-link"
+    inhibit = true
 
 [[object]]
 name = "Gtk.AccelGroup"
@@ -438,6 +434,19 @@ status = "generate"
         nullable = true
 
 [[object]]
+name = "Gtk.EntryCompletion"
+status = "generate"
+    [[object.signal]]
+    name = "insert-prefix"
+    inhibit = true
+    [[object.signal]]
+    name = "match-selected"
+    inhibit = true
+    [[object.signal]]
+    name = "cursor-on-match"
+    inhibit = true
+
+[[object]]
 name = "Gtk.Expander"
 status = "generate"
     [[object.function]]
@@ -461,8 +470,8 @@ name = "Gtk.GLArea"
 status = "generate"
 module_name = "gl_area"
     [[object.signal]]
-    pattern = ".+" #manual #Inhibit in render
-    ignore = true
+    pattern = "render"
+    inhibit = true
 
 [[object]]
 name = "Gtk.IconView"
@@ -488,6 +497,20 @@ status = "generate"
         name = "surface"
         # cairo::Surface is reference-counted
         const = true
+
+[[object]]
+name = "Gtk.Label"
+status = "generate"
+    [[object.signal]]
+    name = "activate-link"
+    inhibit = true
+
+[[object]]
+name = "Gtk.LinkButton"
+status = "generate"
+    [[object.signal]]
+    name = "activate-link"
+    inhibit = true
 
 [[object]]
 name = "Gtk.ListStore"
@@ -521,6 +544,13 @@ status = "generate"
     [[object.function]]
     name = "activate"
     ignore = true
+
+[[object]]
+name = "Gtk.MenuShell"
+status = "generate"
+    [[object.signal]]
+    name = "move-selected"
+    inhibit = true
 
 [[object]]
 name = "Gtk.Notebook"
@@ -631,8 +661,8 @@ status = "generate"
         [object.function.return]
         nullable = false
     [[object.signal]]
-    pattern = ".+" #manual #Inhibit in change-value
-    ignore = true
+    name = "change-value"
+    inhibit = true
 
 [[object]]
 name = "Gtk.ScaleButton"
@@ -650,7 +680,7 @@ status = "generate"
         [object.function.return]
         nullable = false
     [[object.signal]]
-    pattern = ".+" #manual #out
+    pattern = ".+" #manual #out #not_standard_return
     ignore = true
 
 [[object]]
@@ -659,6 +689,13 @@ status = "generate"
     [[object.function]]
     pattern = "get_(style_)?property"
     ignore = true
+
+[[object]]
+name = "Gtk.Switch"
+status = "generate"
+    [[object.signal]]
+    name = "state-set"
+    inhibit = true
 
 [[object]]
 name = "Gtk.TextBuffer"
@@ -705,6 +742,23 @@ status = "generate"
     name = "get_default_attributes"
         [object.function.return]
         nullable = false
+    [[object.signal]]
+    name = "extend-selection"
+    inhibit = true
+
+[[object]]
+name = "Gtk.Toolbar"
+status = "generate"
+    [[object.signal]]
+    name = "popup-context-menu"
+    inhibit = true
+
+[[object]]
+name = "Gtk.ToolItem"
+status = "generate"
+    [[object.signal]]
+    name = "create-menu-proxy"
+    inhibit = true
 
 [[object]]
 name = "Gtk.TreeModel"
