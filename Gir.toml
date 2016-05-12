@@ -154,8 +154,6 @@ generate = [
     "Gtk.ScrolledWindow",
     "Gtk.ScrollStep",
     "Gtk.ScrollType",
-    "Gtk.SearchBar",
-    "Gtk.SearchEntry",
     "Gtk.SelectionMode",
     "Gtk.SensitivityType",
     "Gtk.Separator",
@@ -184,7 +182,6 @@ generate = [
     "Gtk.TextExtendSelection",
     "Gtk.TextMark",
     "Gtk.TextSearchFlags",
-    "Gtk.TextTag",
     "Gtk.TextTagTable",
     "Gtk.TextWindowType",
     "Gtk.ToggleButton",
@@ -324,6 +321,16 @@ status = "generate"
         [[object.function.parameter]]
         name = "iter"
         const = true
+    [[object.function]]
+    name = "activate_cell"
+        [[object.function.parameter]]
+        name = "event"
+        const = true
+    [[object.function]]
+    name = "event"
+        [[object.function.parameter]]
+        name = "event"
+        const = true
     [[object.signal]]
     pattern = ".+" #tree_path #manual
     ignore = true
@@ -345,6 +352,16 @@ status = "generate"
         [[object.function.parameter]]
         name = "cr"
         # cairo::Context is reference-counted
+        const = true
+    [[object.function]]
+    name = "activate"
+        [[object.function.parameter]]
+        name = "event"
+        const = true
+    [[object.function]]
+    name = "start_editing"
+        [[object.function.parameter]]
+        name = "event"
         const = true
     [[object.signal]]
     pattern = ".+" #tree_path
@@ -451,6 +468,12 @@ status = "generate"
         [[object.function.parameter]]
         name = "text"
         nullable = true
+    [[object.function]]
+    name = "im_context_filter_keypress"
+        [[object.function.parameter]]
+        name = "event"
+        const = true
+
 
 [[object]]
 name = "Gtk.EntryCompletion"
@@ -483,6 +506,11 @@ status = "generate"
 name = "Gtk.Gesture"
 status = "generate"
 version = "3.14"
+    [[object.function]]
+    pattern = ".+"
+        [[object.function.parameter]]
+        name = "sequence"
+        const = true
 
 [[object]]
 name = "Gtk.GLArea"
@@ -692,6 +720,24 @@ status = "generate"
         nullable = false
 
 [[object]]
+name = "Gtk.SearchBar"
+status = "generate"
+    [[object.function]]
+    name = "handle_event"
+        [[object.function.parameter]]
+        name = "event"
+        const = true
+
+[[object]]
+name = "Gtk.SearchEntry"
+status = "generate"
+    [[object.function]]
+    name = "handle_event"
+        [[object.function.parameter]]
+        name = "event"
+        const = true
+
+[[object]]
 name = "Gtk.SpinButton"
 status = "generate"
     [[object.function]]
@@ -773,6 +819,11 @@ status = "generate"
     name = "get_default_attributes"
         [object.function.return]
         nullable = false
+    [[object.function]]
+    name = "im_context_filter_keypress"
+        [[object.function.parameter]]
+        name = "event"
+        const = true
     [[object.signal]]
     name = "extend-selection"
     inhibit = true
@@ -987,6 +1038,11 @@ status = "generate"
     name = "intersect"
     ignore = true
     [[object.function]]
+    pattern = ".+"
+        [[object.function.parameter]]
+        name = "event"
+        const = true
+    [[object.function]]
     name = "style_get_property"
     ignore = true
     [[object.signal]]
@@ -1073,3 +1129,13 @@ status = "generate"
 [[object]]
 name = "Gtk.Window"
 status = "generate"
+    [[object.function]]
+    name = "activate_key"
+        [[object.function.parameter]]
+        name = "event"
+        const = true
+    [[object.function]]
+    name = "propagate_key_event"
+        [[object.function.parameter]]
+        name = "event"
+        const = true
