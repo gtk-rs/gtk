@@ -857,9 +857,9 @@ pub trait TreeViewSignals {
     fn connect_select_cursor_parent<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> u64;
     fn connect_select_cursor_row<F: Fn(&Self, bool) -> bool + 'static>(&self, f: F) -> u64;
     fn connect_start_interactive_search<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> u64;
-    fn connect_test_collapse_row<F: Fn(&Self, &TreeIter, &TreePath) -> bool + 'static>(&self, f: F)
+    fn connect_test_collapse_row<F: Fn(&Self, &TreeIter, &TreePath) -> Inhibit + 'static>(&self, f: F)
         -> u64;
-    fn connect_test_expand_row<F: Fn(&Self, &TreeIter, &TreePath) -> bool + 'static>(&self, f: F)
+    fn connect_test_expand_row<F: Fn(&Self, &TreeIter, &TreePath) -> Inhibit + 'static>(&self, f: F)
         -> u64;
     fn connect_toggle_cursor_row<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> u64;
     fn connect_unselect_all<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> u64;
@@ -871,6 +871,7 @@ mod tree_view {
     use glib::translate::*;
     use glib_ffi::gboolean;
     use ffi::{GtkTreeIter, GtkTreePath, GtkTreeView, GtkTreeViewColumn};
+    use super::Inhibit;
     use {TreeIter, TreePath, TreeView, TreeViewColumn};
 
     impl super::TreeViewSignals for TreeView {
@@ -955,23 +956,23 @@ mod tree_view {
             }
         }
 
-        fn connect_test_collapse_row<F: Fn(&Self, &TreeIter, &TreePath) -> bool + 'static>(&self, f: F)
+        fn connect_test_collapse_row<F: Fn(&Self, &TreeIter, &TreePath) -> Inhibit + 'static>(&self, f: F)
                 -> u64 {
             unsafe {
-                let f: Box<Box<Fn(&Self, &TreeIter, &TreePath) -> bool + 'static>> =
+                let f: Box<Box<Fn(&Self, &TreeIter, &TreePath) -> Inhibit + 'static>> =
                     Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "test-collapse-row",
-                    transmute(iter_path_bool_trampoline as usize), Box::into_raw(f) as *mut _)
+                    transmute(iter_path_inhibit_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
 
-        fn connect_test_expand_row<F: Fn(&Self, &TreeIter, &TreePath) -> bool + 'static>(&self, f: F)
+        fn connect_test_expand_row<F: Fn(&Self, &TreeIter, &TreePath) -> Inhibit + 'static>(&self, f: F)
                 -> u64 {
             unsafe {
-                let f: Box<Box<Fn(&Self, &TreeIter, &TreePath) -> bool + 'static>> =
+                let f: Box<Box<Fn(&Self, &TreeIter, &TreePath) -> Inhibit + 'static>> =
                     Box::new(Box::new(f));
                 connect(self.to_glib_none().0, "test-expand-row",
-                    transmute(iter_path_bool_trampoline as usize), Box::into_raw(f) as *mut _)
+                    transmute(iter_path_inhibit_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
 
@@ -1029,149 +1030,11 @@ mod tree_view {
         f(&from_glib_none(this), &from_glib_borrow(iter), &from_glib_borrow(path));
     }
 
-    unsafe extern "C" fn iter_path_bool_trampoline(this: *mut GtkTreeView, iter: *mut GtkTreeIter,
+    unsafe extern "C" fn iter_path_inhibit_trampoline(this: *mut GtkTreeView, iter: *mut GtkTreeIter,
             path: *mut GtkTreePath,
-            f: &Box<Fn(&TreeView, &TreeIter, &TreePath) -> bool + 'static>) -> gboolean {
+            f: &Box<Fn(&TreeView, &TreeIter, &TreePath) -> Inhibit + 'static>) -> gboolean {
         callback_guard!();
         f(&from_glib_none(this), &from_glib_borrow(iter), &from_glib_borrow(path)).to_glib()
-    }
-}
-
-pub trait RangeSignals {
-    fn connect_adjust_bounds<F: Fn(&Self, f64) + 'static>(&self, f: F) -> u64;
-    fn connect_change_value<F: Fn(&Self, ScrollType, f64) -> Inhibit + 'static>(&self, f: F) -> u64;
-    fn connect_move_slider<F: Fn(&Self, ScrollType) + 'static>(&self, f: F) -> u64;
-    fn connect_value_changed<F: Fn(&Self) + 'static>(&self, f: F) -> u64;
-}
-
-mod range {
-    use std::mem::transmute;
-    use libc::c_double;
-    use glib::object::Downcast;
-    use glib::signal::connect;
-    use glib::translate::*;
-    use glib_ffi::gboolean;
-    use ffi::{GtkRange};
-    use {Object, Range, ScrollType, IsA};
-    use super::Inhibit;
-
-    impl<T: IsA<Range> + IsA<Object>> super::RangeSignals for T {
-        fn connect_adjust_bounds<F: Fn(&Self, f64) + 'static>(&self, f: F) -> u64 {
-            unsafe {
-                let f: Box<Box<Fn(&Self, f64) + 'static>> = Box::new(Box::new(f));
-                connect(self.to_glib_none().0, "adjust-bounds",
-                    transmute(adjust_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
-            }
-        }
-
-        fn connect_change_value<F: Fn(&Self, ScrollType, f64) -> Inhibit + 'static>(&self, f: F) -> u64 {
-            unsafe {
-                let f: Box<Box<Fn(&Self, ScrollType, f64) -> Inhibit + 'static>> = Box::new(Box::new(f));
-                connect(self.to_glib_none().0, "change-value",
-                    transmute(change_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
-            }
-        }
-
-        fn connect_move_slider<F: Fn(&Self, ScrollType) + 'static>(&self, f: F) -> u64 {
-            unsafe {
-                let f: Box<Box<Fn(&Self, ScrollType) + 'static>> = Box::new(Box::new(f));
-                connect(self.to_glib_none().0, "move-slider",
-                    transmute(move_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
-            }
-        }
-
-        fn connect_value_changed<F: Fn(&Self) + 'static>(&self, f: F) -> u64 {
-            unsafe {
-                let f: Box<Box<Fn(&Self) + 'static>> = Box::new(Box::new(f));
-                connect(self.to_glib_none().0, "value-changed",
-                    transmute(void_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
-            }
-        }
-
-    }
-
-    unsafe extern "C" fn void_trampoline<T>(this: *mut GtkRange, f: &Box<Fn(&T) + 'static>)
-    where T: IsA<Range> {
-        callback_guard!();
-        f(&Range::from_glib_none(this).downcast_unchecked());
-    }
-
-    unsafe extern "C" fn adjust_trampoline<T>(this: *mut GtkRange, value: c_double,
-        f: &Box<Fn(&T, f64) + 'static>)
-    where T: IsA<Range> {
-        callback_guard!();
-        f(&Range::from_glib_none(this).downcast_unchecked(), value);
-    }
-
-    unsafe extern "C" fn change_trampoline<T>(this: *mut GtkRange, scroll: ScrollType,
-        value: c_double, f: &Box<Fn(&T, ScrollType, f64) -> Inhibit + 'static>) -> gboolean
-    where T: IsA<Range> {
-        callback_guard!();
-        f(&Range::from_glib_none(this).downcast_unchecked(), scroll, value).to_glib()
-    }
-
-    unsafe extern "C" fn move_trampoline<T>(this: *mut GtkRange, step: ScrollType,
-            f: &Box<Fn(&T, ScrollType) + 'static>)
-    where T: IsA<Range> {
-        callback_guard!();
-        f(&Range::from_glib_none(this).downcast_unchecked(), step);
-    }
-}
-
-#[cfg(feature = "v3_16")]
-mod gl_area {
-    use std::mem::transmute;
-    use glib::signal::connect;
-    use glib::translate::*;
-    use gdk;
-    use gdk_ffi;
-    use ffi::GtkGLArea;
-    use super::Inhibit;
-    use GLArea;
-
-    impl GLArea {
-        pub fn connect_create_context<F: Fn(&Self) -> gdk::GLContext + 'static>(&self, f: F)
-                -> u64 {
-            unsafe {
-                let f: Box<Box<Fn(&Self) -> gdk::GLContext + 'static>> = Box::new(Box::new(f));
-                connect(self.to_glib_none().0,"create-context",
-                    transmute(gl_context_trampoline as usize), Box::into_raw(f) as *mut _)
-            }
-        }
-
-        pub fn connect_render<F: Fn(&Self, gdk::GLContext) -> Inhibit + 'static>(&self, f: F) -> u64 {
-            unsafe {
-                let f: Box<Box<Fn(&Self, gdk::GLContext) -> Inhibit + 'static>> = Box::new(Box::new(f));
-                connect(self.to_glib_none().0,"render",
-                    transmute(gl_area_trampoline as usize), Box::into_raw(f) as *mut _)
-            }
-        }
-
-        pub fn connect_resize<F: Fn(&Self, i32, i32) + 'static>(&self, f: F) -> u64 {
-            unsafe {
-                let f: Box<Box<Fn(&Self, i32, i32) + 'static>> = Box::new(Box::new(f));
-                connect(self.to_glib_none().0,"resize",
-                    transmute(gl_area_trampoline_res as usize), Box::into_raw(f) as *mut _)
-            }
-        }
-    }
-
-    unsafe extern "C" fn gl_context_trampoline(this: *mut GtkGLArea,
-            f: &Box<Fn(&GLArea) -> gdk::GLContext + 'static>) -> *mut gdk_ffi::GdkGLContext {
-        callback_guard!();
-        f(&from_glib_none(this)).to_glib_full()
-    }
-
-    unsafe extern "C" fn gl_area_trampoline(this: *mut GtkGLArea, context: *mut gdk_ffi::GdkGLContext,
-            f: &Box<Fn(&GLArea, gdk::GLContext) + 'static>) {
-        callback_guard!();
-        f(&from_glib_none(this), from_glib_none(context))
-    }
-
-    unsafe extern "C" fn gl_area_trampoline_res(this: *mut GtkGLArea, width: i32, height: i32,
-            f: &Box<Fn(&GLArea, i32, i32) + 'static>) {
-        callback_guard!();
-        f(&from_glib_none(this), width, height)
     }
 }
 
