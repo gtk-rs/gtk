@@ -195,7 +195,6 @@ generate = [
     "Gtk.Tooltip",
     "Gtk.TreeIter",
     "Gtk.TreeModelFlags",
-    "Gtk.TreeSortable",
     "Gtk.TreeViewColumnSizing",
     "Gtk.TreeViewDropPosition",
     "Gtk.TreeViewGridLines",
@@ -958,6 +957,13 @@ status = "generate"
         [[object.function.parameter]]
         name = "end_path"
         const = true
+
+[[object]]
+name = "Gtk.TreeSortable"
+status = "generate"
+    [[object.function]]
+    name = "set_sort_column_id"
+    ignore = true
 
 [[object]]
 name = "Gtk.TreeStore"
