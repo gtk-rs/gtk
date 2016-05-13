@@ -33,7 +33,6 @@ generate = [
     "Gtk.CalendarDisplayOptions",
     "Gtk.CellAreaBox",
     "Gtk.CellAreaContext",
-    "Gtk.CellEditable",
     "Gtk.CellLayout",
     "Gtk.CellRendererPixbuf",
     "Gtk.CellRendererProgress",
@@ -155,8 +154,6 @@ generate = [
     "Gtk.ScrolledWindow",
     "Gtk.ScrollStep",
     "Gtk.ScrollType",
-    "Gtk.SearchBar",
-    "Gtk.SearchEntry",
     "Gtk.SelectionMode",
     "Gtk.SensitivityType",
     "Gtk.Separator",
@@ -185,7 +182,6 @@ generate = [
     "Gtk.TextExtendSelection",
     "Gtk.TextMark",
     "Gtk.TextSearchFlags",
-    "Gtk.TextTag",
     "Gtk.TextTagTable",
     "Gtk.TextWindowType",
     "Gtk.ToggleButton",
@@ -199,7 +195,6 @@ generate = [
     "Gtk.Tooltip",
     "Gtk.TreeIter",
     "Gtk.TreeModelFlags",
-    "Gtk.TreeSortable",
     "Gtk.TreeViewColumnSizing",
     "Gtk.TreeViewDropPosition",
     "Gtk.TreeViewGridLines",
@@ -220,8 +215,19 @@ ignore = [
 manual = [
     "Gdk.Device",
     "Gdk.Display",
+    "Gdk.Event",
     "Gdk.EventButton",
+    "Gdk.EventConfigure",
+    "Gdk.EventCrossing",
+    "Gdk.EventExpose",
+    "Gdk.EventFocus",
+    "Gdk.EventGrabBroken",
+    "Gdk.EventKey",
+    "Gdk.EventMotion",
+    "Gdk.EventProperty",
+    "Gdk.EventProximity",
     "Gdk.EventScroll",
+    "Gdk.EventWindowState",
     "Gdk.GLContext",
     "Gdk.Gravity",
     "Gdk.ModifierIntent",
@@ -314,9 +320,28 @@ status = "generate"
         [[object.function.parameter]]
         name = "iter"
         const = true
+    [[object.function]]
+    name = "activate_cell"
+        [[object.function.parameter]]
+        name = "event"
+        const = true
+    [[object.function]]
+    name = "event"
+        [[object.function.parameter]]
+        name = "event"
+        const = true
     [[object.signal]]
     pattern = ".+" #tree_path #manual
     ignore = true
+
+[[object]]
+name = "Gtk.CellEditable"
+status = "generate"
+    [[object.function]]
+    name = "start_editing"
+        [[object.function.parameter]]
+        name = "event"
+        const = true
 
 [[object]]
 name = "Gtk.CellRenderer"
@@ -326,6 +351,16 @@ status = "generate"
         [[object.function.parameter]]
         name = "cr"
         # cairo::Context is reference-counted
+        const = true
+    [[object.function]]
+    name = "activate"
+        [[object.function.parameter]]
+        name = "event"
+        const = true
+    [[object.function]]
+    name = "start_editing"
+        [[object.function.parameter]]
+        name = "event"
         const = true
     [[object.signal]]
     pattern = ".+" #tree_path
@@ -432,6 +467,12 @@ status = "generate"
         [[object.function.parameter]]
         name = "text"
         nullable = true
+    [[object.function]]
+    name = "im_context_filter_keypress"
+        [[object.function.parameter]]
+        name = "event"
+        const = true
+
 
 [[object]]
 name = "Gtk.EntryCompletion"
@@ -464,6 +505,11 @@ status = "generate"
 name = "Gtk.Gesture"
 status = "generate"
 version = "3.14"
+    [[object.function]]
+    pattern = ".+"
+        [[object.function.parameter]]
+        name = "sequence"
+        const = true
 
 [[object]]
 name = "Gtk.GLArea"
@@ -673,6 +719,24 @@ status = "generate"
         nullable = false
 
 [[object]]
+name = "Gtk.SearchBar"
+status = "generate"
+    [[object.function]]
+    name = "handle_event"
+        [[object.function.parameter]]
+        name = "event"
+        const = true
+
+[[object]]
+name = "Gtk.SearchEntry"
+status = "generate"
+    [[object.function]]
+    name = "handle_event"
+        [[object.function.parameter]]
+        name = "event"
+        const = true
+
+[[object]]
 name = "Gtk.SpinButton"
 status = "generate"
     [[object.function]]
@@ -736,12 +800,29 @@ status = "generate"
         nullable = true
 
 [[object]]
+name = "Gtk.TextTag"
+status = "generate"
+    [[object.function]]
+    name = "event"
+        [[object.function.parameter]]
+        name = "event"
+        const = true
+    [[object.signal]]
+    name = "event"
+    inhibit = true
+
+[[object]]
 name = "Gtk.TextView"
 status = "generate"
     [[object.function]]
     name = "get_default_attributes"
         [object.function.return]
         nullable = false
+    [[object.function]]
+    name = "im_context_filter_keypress"
+        [[object.function.parameter]]
+        name = "event"
+        const = true
     [[object.signal]]
     name = "extend-selection"
     inhibit = true
@@ -878,6 +959,13 @@ status = "generate"
         const = true
 
 [[object]]
+name = "Gtk.TreeSortable"
+status = "generate"
+    [[object.function]]
+    name = "set_sort_column_id"
+    ignore = true
+
+[[object]]
 name = "Gtk.TreeStore"
 status = "generate"
     [[object.function]]
@@ -956,13 +1044,104 @@ status = "generate"
     name = "intersect"
     ignore = true
     [[object.function]]
+    pattern = ".+"
+        [[object.function.parameter]]
+        name = "event"
+        const = true
+    [[object.function]]
     name = "style_get_property"
     ignore = true
-    [[object.signal]] #manual #Inhibits
-    pattern = ".+"
-    ignore = true
-
+    [[object.signal]]
+    name = "button-press-event"
+    inhibit = true
+    [[object.signal]]
+    name = "button-release-event"
+    inhibit = true
+    [[object.signal]]
+    name = "delete-event"
+    inhibit = true
+    [[object.signal]]
+    name = "destroy-event"
+    inhibit = true
+    [[object.signal]]
+    name = "draw"
+    inhibit = true
+    [[object.signal]]
+    name = "enter-notify-event"
+    inhibit = true
+    [[object.signal]]
+    name = "event"
+    inhibit = true
+    [[object.signal]]
+    name = "focus"
+    inhibit = true
+    [[object.signal]]
+    name = "focus-in-event"
+    inhibit = true
+    [[object.signal]]
+    name = "focus-out-event"
+    inhibit = true
+    [[object.signal]]
+    name = "grab-broken-event"
+    inhibit = true
+    [[object.signal]]
+    name = "key-press-event"
+    inhibit = true
+    [[object.signal]]
+    name = "key-release-event"
+    inhibit = true
+    [[object.signal]]
+    name = "keynav-failed"
+    inhibit = true
+    [[object.signal]]
+    name = "leave-notify-event"
+    inhibit = true
+    [[object.signal]]
+    name = "map-event"
+    inhibit = true
+    ignore = true #manual EventAny
+    [[object.signal]]
+    name = "mnemonic-activate"
+    inhibit = true
+    [[object.signal]]
+    name = "motion-notify-event"
+    inhibit = true
+    [[object.signal]]
+    name = "property-notify-event"
+    inhibit = true
+    [[object.signal]]
+    name = "proximity-in-event"
+    inhibit = true
+    [[object.signal]]
+    name = "proximity-out-event"
+    inhibit = true
+    [[object.signal]]
+    name = "scroll-event"
+    inhibit = true
+    [[object.signal]]
+    name = "size-allocate"
+    ignore = true #cairo::Rectangle
+    [[object.signal]]
+    name = "touch-event"
+    inhibit = true
+    [[object.signal]]
+    name = "unmap-event"
+    inhibit = true
+    ignore = true #manual EventAny
+    [[object.signal]]
+    name = "window-state-event"
+    inhibit = true
 
 [[object]]
 name = "Gtk.Window"
 status = "generate"
+    [[object.function]]
+    name = "activate_key"
+        [[object.function.parameter]]
+        name = "event"
+        const = true
+    [[object.function]]
+    name = "propagate_key_event"
+        [[object.function.parameter]]
+        name = "event"
+        const = true
