@@ -205,7 +205,6 @@ mod notebook;
 mod recent_chooser_dialog;
 mod recent_data;
 mod recent_info;
-mod rectangle;
 mod requisition;
 mod signal;
 #[cfg(target_os = "linux")]
@@ -225,14 +224,14 @@ pub use auto::*;
 pub use rt::*;
 pub use signal::*;
 
-pub use rectangle::Rectangle as Allocation;
+pub use gdk::Rectangle as Allocation;
 pub use app_chooser::AppChooser;
 pub use builder::Builder;
 pub use color_chooser::ColorChooser;
 pub use entry_buffer::EntryBuffer;
 pub use recent_data::RecentData;
 pub use recent_info::RecentInfo;
-pub use rectangle::Rectangle;
+pub use gdk::Rectangle;
 pub use requisition::Requisition;
 #[cfg(target_os = "linux")]
 pub use socket::Socket;

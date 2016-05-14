@@ -1142,9 +1142,6 @@ status = "generate"
     name = "selection-request-event"
     inhibit = true
     [[object.signal]]
-    name = "size-allocate"
-    ignore = true #cairo::Rectangle
-    [[object.signal]]
     name = "touch-event"
     inhibit = true
     [[object.signal]]
