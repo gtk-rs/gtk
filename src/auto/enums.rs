@@ -564,6 +564,50 @@ impl FromGlib<ffi::GtkDirectionType> for DirectionType {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum DragResult {
+    Success,
+    NoTarget,
+    UserCancelled,
+    TimeoutExpired,
+    GrabBroken,
+    Error,
+    #[doc(hidden)]
+    __Nonexhaustive(()),
+}
+
+#[doc(hidden)]
+impl ToGlib for DragResult {
+    type GlibType = ffi::GtkDragResult;
+
+    fn to_glib(&self) -> ffi::GtkDragResult {
+        match *self {
+            DragResult::Success => ffi::GTK_DRAG_RESULT_SUCCESS,
+            DragResult::NoTarget => ffi::GTK_DRAG_RESULT_NO_TARGET,
+            DragResult::UserCancelled => ffi::GTK_DRAG_RESULT_USER_CANCELLED,
+            DragResult::TimeoutExpired => ffi::GTK_DRAG_RESULT_TIMEOUT_EXPIRED,
+            DragResult::GrabBroken => ffi::GTK_DRAG_RESULT_GRAB_BROKEN,
+            DragResult::Error => ffi::GTK_DRAG_RESULT_ERROR,
+            DragResult::__Nonexhaustive(_) => panic!(),
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GtkDragResult> for DragResult {
+    fn from_glib(value: ffi::GtkDragResult) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::GTK_DRAG_RESULT_SUCCESS => DragResult::Success,
+            ffi::GTK_DRAG_RESULT_NO_TARGET => DragResult::NoTarget,
+            ffi::GTK_DRAG_RESULT_USER_CANCELLED => DragResult::UserCancelled,
+            ffi::GTK_DRAG_RESULT_TIMEOUT_EXPIRED => DragResult::TimeoutExpired,
+            ffi::GTK_DRAG_RESULT_GRAB_BROKEN => DragResult::GrabBroken,
+            ffi::GTK_DRAG_RESULT_ERROR => DragResult::Error,
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum EntryIconPosition {
     Primary,
     Secondary,

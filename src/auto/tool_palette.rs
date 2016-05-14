@@ -4,6 +4,7 @@
 use Container;
 use Orientable;
 use Scrollable;
+use SelectionData;
 use ToolItem;
 use ToolItemGroup;
 use ToolPaletteDragTargets;
@@ -33,9 +34,11 @@ impl ToolPalette {
     //    unsafe { TODO: call ffi::gtk_tool_palette_add_drag_dest() }
     //}
 
-    //pub fn get_drag_item(&self, selection: /*Ignored*/&SelectionData) -> Option<Widget> {
-    //    unsafe { TODO: call ffi::gtk_tool_palette_get_drag_item() }
-    //}
+    pub fn get_drag_item(&self, selection: &SelectionData) -> Option<Widget> {
+        unsafe {
+            from_glib_none(ffi::gtk_tool_palette_get_drag_item(self.to_glib_none().0, selection.to_glib_none().0))
+        }
+    }
 
     pub fn get_drop_group(&self, x: i32, y: i32) -> Option<ToolItemGroup> {
         unsafe {

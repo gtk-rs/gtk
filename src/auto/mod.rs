@@ -586,6 +586,9 @@ pub use self::css_section::CssSection;
 mod paper_size;
 pub use self::paper_size::PaperSize;
 
+mod selection_data;
+pub use self::selection_data::SelectionData;
+
 mod text_iter;
 pub use self::text_iter::TextIter;
 
@@ -608,6 +611,7 @@ pub use self::enums::CssProviderError;
 pub use self::enums::CssSectionType;
 pub use self::enums::DeleteType;
 pub use self::enums::DirectionType;
+pub use self::enums::DragResult;
 pub use self::enums::EntryIconPosition;
 #[cfg(feature = "v3_14")]
 pub use self::enums::EventSequenceState;

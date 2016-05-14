@@ -9,6 +9,7 @@ use glib::signal::connect;
 use glib::translate::*;
 use glib_ffi;
 use libc;
+use pango;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -23,7 +24,7 @@ glib_wrapper! {
 pub trait FontChooserExt {
     fn get_font(&self) -> Option<String>;
 
-    //fn get_font_desc(&self) -> /*Ignored*/Option<pango::FontDescription>;
+    fn get_font_desc(&self) -> Option<pango::FontDescription>;
 
     //fn get_font_face(&self) -> /*Ignored*/Option<pango::FontFace>;
 
@@ -39,7 +40,7 @@ pub trait FontChooserExt {
 
     fn set_font(&self, fontname: &str);
 
-    //fn set_font_desc(&self, font_desc: /*Ignored*/&pango::FontDescription);
+    fn set_font_desc(&self, font_desc: &pango::FontDescription);
 
     fn set_preview_text(&self, text: &str);
 
@@ -55,9 +56,11 @@ impl<O: IsA<FontChooser> + IsA<Object>> FontChooserExt for O {
         }
     }
 
-    //fn get_font_desc(&self) -> /*Ignored*/Option<pango::FontDescription> {
-    //    unsafe { TODO: call ffi::gtk_font_chooser_get_font_desc() }
-    //}
+    fn get_font_desc(&self) -> Option<pango::FontDescription> {
+        unsafe {
+            from_glib_full(ffi::gtk_font_chooser_get_font_desc(self.to_glib_none().0))
+        }
+    }
 
     //fn get_font_face(&self) -> /*Ignored*/Option<pango::FontFace> {
     //    unsafe { TODO: call ffi::gtk_font_chooser_get_font_face() }
@@ -95,9 +98,11 @@ impl<O: IsA<FontChooser> + IsA<Object>> FontChooserExt for O {
         }
     }
 
-    //fn set_font_desc(&self, font_desc: /*Ignored*/&pango::FontDescription) {
-    //    unsafe { TODO: call ffi::gtk_font_chooser_set_font_desc() }
-    //}
+    fn set_font_desc(&self, font_desc: &pango::FontDescription) {
+        unsafe {
+            ffi::gtk_font_chooser_set_font_desc(self.to_glib_none().0, font_desc.to_glib_none().0);
+        }
+    }
 
     fn set_preview_text(&self, text: &str) {
         unsafe {
