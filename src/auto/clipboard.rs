@@ -83,7 +83,7 @@ impl Clipboard {
         }
     }
 
-    //pub fn wait_for_contents(&self, target: /*Ignored*/&gdk::Atom) -> /*Ignored*/Option<SelectionData> {
+    //pub fn wait_for_contents(&self, target: /*Ignored*/&gdk::Atom) -> Option<SelectionData> {
     //    unsafe { TODO: call ffi::gtk_clipboard_wait_for_contents() }
     //}
 

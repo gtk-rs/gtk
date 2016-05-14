@@ -6,9 +6,11 @@ use AccelGroup;
 use Align;
 use Allocation;
 use DirectionType;
+use DragResult;
 use Object;
 use Orientation;
 use Requisition;
+use SelectionData;
 use Settings;
 use SizeRequestMode;
 use StateFlags;
@@ -32,6 +34,7 @@ use glib::signal::connect;
 use glib::translate::*;
 use glib_ffi;
 use libc;
+use pango;
 use signal::Inhibit;
 use std::boxed::Box as Box_;
 use std::mem;
@@ -111,10 +114,10 @@ pub trait WidgetExt {
 
     fn device_is_shadowed(&self, device: &gdk::Device) -> bool;
 
-    //fn drag_begin(&self, targets: /*Ignored*/&TargetList, actions: /*Ignored*/gdk::DragAction, button: i32, event: &gdk::Event) -> /*Ignored*/Option<gdk::DragContext>;
+    //fn drag_begin(&self, targets: /*Ignored*/&TargetList, actions: /*Ignored*/gdk::DragAction, button: i32, event: &gdk::Event) -> Option<gdk::DragContext>;
 
     //#[cfg(feature = "v3_10")]
-    //fn drag_begin_with_coordinates(&self, targets: /*Ignored*/&TargetList, actions: /*Ignored*/gdk::DragAction, button: i32, event: &gdk::Event, x: i32, y: i32) -> /*Ignored*/Option<gdk::DragContext>;
+    //fn drag_begin_with_coordinates(&self, targets: /*Ignored*/&TargetList, actions: /*Ignored*/gdk::DragAction, button: i32, event: &gdk::Event, x: i32, y: i32) -> Option<gdk::DragContext>;
 
     fn drag_check_threshold(&self, start_x: i32, start_y: i32, current_x: i32, current_y: i32) -> bool;
 
@@ -124,7 +127,7 @@ pub trait WidgetExt {
 
     fn drag_dest_add_uri_targets(&self);
 
-    //fn drag_dest_find_target(&self, context: /*Ignored*/&gdk::DragContext, target_list: /*Ignored*/Option<&TargetList>) -> /*Ignored*/Option<gdk::Atom>;
+    //fn drag_dest_find_target(&self, context: &gdk::DragContext, target_list: /*Ignored*/Option<&TargetList>) -> /*Ignored*/Option<gdk::Atom>;
 
     //fn drag_dest_get_target_list(&self) -> /*Ignored*/Option<TargetList>;
 
@@ -140,7 +143,7 @@ pub trait WidgetExt {
 
     fn drag_dest_unset(&self);
 
-    //fn drag_get_data(&self, context: /*Ignored*/&gdk::DragContext, target: /*Ignored*/&gdk::Atom, time_: u32);
+    //fn drag_get_data(&self, context: &gdk::DragContext, target: /*Ignored*/&gdk::Atom, time_: u32);
 
     fn drag_highlight(&self);
 
@@ -219,8 +222,8 @@ pub trait WidgetExt {
 
     fn get_events(&self) -> i32;
 
-    //#[cfg(feature = "v3_8")]
-    //fn get_frame_clock(&self) -> /*Ignored*/Option<gdk::FrameClock>;
+    #[cfg(feature = "v3_8")]
+    fn get_frame_clock(&self) -> Option<gdk::FrameClock>;
 
     fn get_halign(&self) -> Align;
 
@@ -324,7 +327,7 @@ pub trait WidgetExt {
 
     fn get_visible(&self) -> bool;
 
-    //fn get_visual(&self) -> /*Ignored*/Option<gdk::Visual>;
+    fn get_visual(&self) -> Option<gdk::Visual>;
 
     fn get_window(&self) -> Option<gdk::Window>;
 
@@ -394,7 +397,7 @@ pub trait WidgetExt {
 
     //fn override_cursor(&self, cursor: /*Ignored*/Option<&gdk::RGBA>, secondary_cursor: /*Ignored*/Option<&gdk::RGBA>);
 
-    //fn override_font(&self, font_desc: /*Ignored*/Option<&pango::FontDescription>);
+    fn override_font(&self, font_desc: Option<&pango::FontDescription>);
 
     //fn override_symbolic_color(&self, name: &str, color: /*Ignored*/Option<&gdk::RGBA>);
 
@@ -526,7 +529,7 @@ pub trait WidgetExt {
 
     fn set_visible(&self, visible: bool);
 
-    //fn set_visual(&self, visual: /*Ignored*/Option<&gdk::Visual>);
+    fn set_visual(&self, visual: Option<&gdk::Visual>);
 
     fn set_window(&self, window: &gdk::Window);
 
@@ -588,23 +591,23 @@ pub trait WidgetExt {
 
     fn connect_direction_changed<F: Fn(&Self, TextDirection) + 'static>(&self, f: F) -> u64;
 
-    //fn connect_drag_begin<Unsupported or ignored types>(&self, f: F) -> u64;
+    fn connect_drag_begin<F: Fn(&Self, &gdk::DragContext) + 'static>(&self, f: F) -> u64;
 
-    //fn connect_drag_data_delete<Unsupported or ignored types>(&self, f: F) -> u64;
+    fn connect_drag_data_delete<F: Fn(&Self, &gdk::DragContext) + 'static>(&self, f: F) -> u64;
 
-    //fn connect_drag_data_get<Unsupported or ignored types>(&self, f: F) -> u64;
+    fn connect_drag_data_get<F: Fn(&Self, &gdk::DragContext, &SelectionData, u32, u32) + 'static>(&self, f: F) -> u64;
 
-    //fn connect_drag_data_received<Unsupported or ignored types>(&self, f: F) -> u64;
+    fn connect_drag_data_received<F: Fn(&Self, &gdk::DragContext, i32, i32, &SelectionData, u32, u32) + 'static>(&self, f: F) -> u64;
 
-    //fn connect_drag_drop<Unsupported or ignored types>(&self, f: F) -> u64;
+    fn connect_drag_drop<F: Fn(&Self, &gdk::DragContext, i32, i32, u32) -> bool + 'static>(&self, f: F) -> u64;
 
-    //fn connect_drag_end<Unsupported or ignored types>(&self, f: F) -> u64;
+    fn connect_drag_end<F: Fn(&Self, &gdk::DragContext) + 'static>(&self, f: F) -> u64;
 
-    //fn connect_drag_failed<Unsupported or ignored types>(&self, f: F) -> u64;
+    fn connect_drag_failed<F: Fn(&Self, &gdk::DragContext, DragResult) -> Inhibit + 'static>(&self, f: F) -> u64;
 
-    //fn connect_drag_leave<Unsupported or ignored types>(&self, f: F) -> u64;
+    fn connect_drag_leave<F: Fn(&Self, &gdk::DragContext, u32) + 'static>(&self, f: F) -> u64;
 
-    //fn connect_drag_motion<Unsupported or ignored types>(&self, f: F) -> u64;
+    fn connect_drag_motion<F: Fn(&Self, &gdk::DragContext, i32, i32, u32) -> bool + 'static>(&self, f: F) -> u64;
 
     fn connect_draw<F: Fn(&Self, &cairo::Context) -> Inhibit + 'static>(&self, f: F) -> u64;
 
@@ -664,15 +667,15 @@ pub trait WidgetExt {
 
     fn connect_scroll_event<F: Fn(&Self, &gdk::EventScroll) -> Inhibit + 'static>(&self, f: F) -> u64;
 
-    //fn connect_selection_clear_event<Unsupported or ignored types>(&self, f: F) -> u64;
+    fn connect_selection_clear_event<F: Fn(&Self, &gdk::EventSelection) -> Inhibit + 'static>(&self, f: F) -> u64;
 
-    //fn connect_selection_get<Unsupported or ignored types>(&self, f: F) -> u64;
+    fn connect_selection_get<F: Fn(&Self, &SelectionData, u32, u32) + 'static>(&self, f: F) -> u64;
 
-    //fn connect_selection_notify_event<Unsupported or ignored types>(&self, f: F) -> u64;
+    fn connect_selection_notify_event<F: Fn(&Self, &gdk::EventSelection) -> Inhibit + 'static>(&self, f: F) -> u64;
 
-    //fn connect_selection_received<Unsupported or ignored types>(&self, f: F) -> u64;
+    fn connect_selection_received<F: Fn(&Self, &SelectionData, u32) + 'static>(&self, f: F) -> u64;
 
-    //fn connect_selection_request_event<Unsupported or ignored types>(&self, f: F) -> u64;
+    fn connect_selection_request_event<F: Fn(&Self, &gdk::EventSelection) -> Inhibit + 'static>(&self, f: F) -> u64;
 
     fn connect_show<F: Fn(&Self) + 'static>(&self, f: F) -> u64;
 
@@ -688,7 +691,7 @@ pub trait WidgetExt {
 
     fn connect_unrealize<F: Fn(&Self) + 'static>(&self, f: F) -> u64;
 
-    //fn connect_visibility_notify_event<Unsupported or ignored types>(&self, f: F) -> u64;
+    fn connect_visibility_notify_event<F: Fn(&Self, &gdk::EventVisibility) -> Inhibit + 'static>(&self, f: F) -> u64;
 
     fn connect_window_state_event<F: Fn(&Self, &gdk::EventWindowState) -> Inhibit + 'static>(&self, f: F) -> u64;
 }
@@ -775,12 +778,12 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExt for O {
         }
     }
 
-    //fn drag_begin(&self, targets: /*Ignored*/&TargetList, actions: /*Ignored*/gdk::DragAction, button: i32, event: &gdk::Event) -> /*Ignored*/Option<gdk::DragContext> {
+    //fn drag_begin(&self, targets: /*Ignored*/&TargetList, actions: /*Ignored*/gdk::DragAction, button: i32, event: &gdk::Event) -> Option<gdk::DragContext> {
     //    unsafe { TODO: call ffi::gtk_drag_begin() }
     //}
 
     //#[cfg(feature = "v3_10")]
-    //fn drag_begin_with_coordinates(&self, targets: /*Ignored*/&TargetList, actions: /*Ignored*/gdk::DragAction, button: i32, event: &gdk::Event, x: i32, y: i32) -> /*Ignored*/Option<gdk::DragContext> {
+    //fn drag_begin_with_coordinates(&self, targets: /*Ignored*/&TargetList, actions: /*Ignored*/gdk::DragAction, button: i32, event: &gdk::Event, x: i32, y: i32) -> Option<gdk::DragContext> {
     //    unsafe { TODO: call ffi::gtk_drag_begin_with_coordinates() }
     //}
 
@@ -808,7 +811,7 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExt for O {
         }
     }
 
-    //fn drag_dest_find_target(&self, context: /*Ignored*/&gdk::DragContext, target_list: /*Ignored*/Option<&TargetList>) -> /*Ignored*/Option<gdk::Atom> {
+    //fn drag_dest_find_target(&self, context: &gdk::DragContext, target_list: /*Ignored*/Option<&TargetList>) -> /*Ignored*/Option<gdk::Atom> {
     //    unsafe { TODO: call ffi::gtk_drag_dest_find_target() }
     //}
 
@@ -846,7 +849,7 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExt for O {
         }
     }
 
-    //fn drag_get_data(&self, context: /*Ignored*/&gdk::DragContext, target: /*Ignored*/&gdk::Atom, time_: u32) {
+    //fn drag_get_data(&self, context: &gdk::DragContext, target: /*Ignored*/&gdk::Atom, time_: u32) {
     //    unsafe { TODO: call ffi::gtk_drag_get_data() }
     //}
 
@@ -1065,10 +1068,12 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExt for O {
         }
     }
 
-    //#[cfg(feature = "v3_8")]
-    //fn get_frame_clock(&self) -> /*Ignored*/Option<gdk::FrameClock> {
-    //    unsafe { TODO: call ffi::gtk_widget_get_frame_clock() }
-    //}
+    #[cfg(feature = "v3_8")]
+    fn get_frame_clock(&self) -> Option<gdk::FrameClock> {
+        unsafe {
+            from_glib_none(ffi::gtk_widget_get_frame_clock(self.to_glib_none().0))
+        }
+    }
 
     fn get_halign(&self) -> Align {
         unsafe {
@@ -1383,9 +1388,11 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExt for O {
         }
     }
 
-    //fn get_visual(&self) -> /*Ignored*/Option<gdk::Visual> {
-    //    unsafe { TODO: call ffi::gtk_widget_get_visual() }
-    //}
+    fn get_visual(&self) -> Option<gdk::Visual> {
+        unsafe {
+            from_glib_none(ffi::gtk_widget_get_visual(self.to_glib_none().0))
+        }
+    }
 
     fn get_window(&self) -> Option<gdk::Window> {
         unsafe {
@@ -1573,9 +1580,11 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExt for O {
     //    unsafe { TODO: call ffi::gtk_widget_override_cursor() }
     //}
 
-    //fn override_font(&self, font_desc: /*Ignored*/Option<&pango::FontDescription>) {
-    //    unsafe { TODO: call ffi::gtk_widget_override_font() }
-    //}
+    fn override_font(&self, font_desc: Option<&pango::FontDescription>) {
+        unsafe {
+            ffi::gtk_widget_override_font(self.to_glib_none().0, font_desc.to_glib_none().0);
+        }
+    }
 
     //fn override_symbolic_color(&self, name: &str, color: /*Ignored*/Option<&gdk::RGBA>) {
     //    unsafe { TODO: call ffi::gtk_widget_override_symbolic_color() }
@@ -1947,9 +1956,11 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExt for O {
         }
     }
 
-    //fn set_visual(&self, visual: /*Ignored*/Option<&gdk::Visual>) {
-    //    unsafe { TODO: call ffi::gtk_widget_set_visual() }
-    //}
+    fn set_visual(&self, visual: Option<&gdk::Visual>) {
+        unsafe {
+            ffi::gtk_widget_set_visual(self.to_glib_none().0, visual.to_glib_none().0);
+        }
+    }
 
     fn set_window(&self, window: &gdk::Window) {
         unsafe {
@@ -2144,44 +2155,77 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExt for O {
         }
     }
 
-    //fn connect_drag_begin<Unsupported or ignored types>(&self, f: F) -> u64 {
-    //    Ignored context: Gdk.DragContext
-    //}
+    fn connect_drag_begin<F: Fn(&Self, &gdk::DragContext) + 'static>(&self, f: F) -> u64 {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self, &gdk::DragContext) + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "drag-begin",
+                transmute(drag_begin_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
-    //fn connect_drag_data_delete<Unsupported or ignored types>(&self, f: F) -> u64 {
-    //    Ignored context: Gdk.DragContext
-    //}
+    fn connect_drag_data_delete<F: Fn(&Self, &gdk::DragContext) + 'static>(&self, f: F) -> u64 {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self, &gdk::DragContext) + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "drag-data-delete",
+                transmute(drag_data_delete_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
-    //fn connect_drag_data_get<Unsupported or ignored types>(&self, f: F) -> u64 {
-    //    Ignored context: Gdk.DragContext
-    //    Ignored data: Gtk.SelectionData
-    //}
+    fn connect_drag_data_get<F: Fn(&Self, &gdk::DragContext, &SelectionData, u32, u32) + 'static>(&self, f: F) -> u64 {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self, &gdk::DragContext, &SelectionData, u32, u32) + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "drag-data-get",
+                transmute(drag_data_get_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
-    //fn connect_drag_data_received<Unsupported or ignored types>(&self, f: F) -> u64 {
-    //    Ignored context: Gdk.DragContext
-    //    Ignored data: Gtk.SelectionData
-    //}
+    fn connect_drag_data_received<F: Fn(&Self, &gdk::DragContext, i32, i32, &SelectionData, u32, u32) + 'static>(&self, f: F) -> u64 {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self, &gdk::DragContext, i32, i32, &SelectionData, u32, u32) + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "drag-data-received",
+                transmute(drag_data_received_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
-    //fn connect_drag_drop<Unsupported or ignored types>(&self, f: F) -> u64 {
-    //    Ignored context: Gdk.DragContext
-    //}
+    fn connect_drag_drop<F: Fn(&Self, &gdk::DragContext, i32, i32, u32) -> bool + 'static>(&self, f: F) -> u64 {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self, &gdk::DragContext, i32, i32, u32) -> bool + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "drag-drop",
+                transmute(drag_drop_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
-    //fn connect_drag_end<Unsupported or ignored types>(&self, f: F) -> u64 {
-    //    Ignored context: Gdk.DragContext
-    //}
+    fn connect_drag_end<F: Fn(&Self, &gdk::DragContext) + 'static>(&self, f: F) -> u64 {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self, &gdk::DragContext) + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "drag-end",
+                transmute(drag_end_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
-    //fn connect_drag_failed<Unsupported or ignored types>(&self, f: F) -> u64 {
-    //    Ignored context: Gdk.DragContext
-    //    Ignored result: Gtk.DragResult
-    //}
+    fn connect_drag_failed<F: Fn(&Self, &gdk::DragContext, DragResult) -> Inhibit + 'static>(&self, f: F) -> u64 {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self, &gdk::DragContext, DragResult) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "drag-failed",
+                transmute(drag_failed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
-    //fn connect_drag_leave<Unsupported or ignored types>(&self, f: F) -> u64 {
-    //    Ignored context: Gdk.DragContext
-    //}
+    fn connect_drag_leave<F: Fn(&Self, &gdk::DragContext, u32) + 'static>(&self, f: F) -> u64 {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self, &gdk::DragContext, u32) + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "drag-leave",
+                transmute(drag_leave_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
-    //fn connect_drag_motion<Unsupported or ignored types>(&self, f: F) -> u64 {
-    //    Ignored context: Gdk.DragContext
-    //}
+    fn connect_drag_motion<F: Fn(&Self, &gdk::DragContext, i32, i32, u32) -> bool + 'static>(&self, f: F) -> u64 {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self, &gdk::DragContext, i32, i32, u32) -> bool + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "drag-motion",
+                transmute(drag_motion_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
     fn connect_draw<F: Fn(&Self, &cairo::Context) -> Inhibit + 'static>(&self, f: F) -> u64 {
         unsafe {
@@ -2415,25 +2459,45 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExt for O {
         }
     }
 
-    //fn connect_selection_clear_event<Unsupported or ignored types>(&self, f: F) -> u64 {
-    //    Ignored event: Gdk.EventSelection
-    //}
+    fn connect_selection_clear_event<F: Fn(&Self, &gdk::EventSelection) -> Inhibit + 'static>(&self, f: F) -> u64 {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self, &gdk::EventSelection) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "selection-clear-event",
+                transmute(selection_clear_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
-    //fn connect_selection_get<Unsupported or ignored types>(&self, f: F) -> u64 {
-    //    Ignored data: Gtk.SelectionData
-    //}
+    fn connect_selection_get<F: Fn(&Self, &SelectionData, u32, u32) + 'static>(&self, f: F) -> u64 {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self, &SelectionData, u32, u32) + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "selection-get",
+                transmute(selection_get_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
-    //fn connect_selection_notify_event<Unsupported or ignored types>(&self, f: F) -> u64 {
-    //    Ignored event: Gdk.EventSelection
-    //}
+    fn connect_selection_notify_event<F: Fn(&Self, &gdk::EventSelection) -> Inhibit + 'static>(&self, f: F) -> u64 {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self, &gdk::EventSelection) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "selection-notify-event",
+                transmute(selection_notify_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
-    //fn connect_selection_received<Unsupported or ignored types>(&self, f: F) -> u64 {
-    //    Ignored data: Gtk.SelectionData
-    //}
+    fn connect_selection_received<F: Fn(&Self, &SelectionData, u32) + 'static>(&self, f: F) -> u64 {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self, &SelectionData, u32) + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "selection-received",
+                transmute(selection_received_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
-    //fn connect_selection_request_event<Unsupported or ignored types>(&self, f: F) -> u64 {
-    //    Ignored event: Gdk.EventSelection
-    //}
+    fn connect_selection_request_event<F: Fn(&Self, &gdk::EventSelection) -> Inhibit + 'static>(&self, f: F) -> u64 {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self, &gdk::EventSelection) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "selection-request-event",
+                transmute(selection_request_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
     fn connect_show<F: Fn(&Self) + 'static>(&self, f: F) -> u64 {
         unsafe {
@@ -2491,9 +2555,13 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExt for O {
         }
     }
 
-    //fn connect_visibility_notify_event<Unsupported or ignored types>(&self, f: F) -> u64 {
-    //    Ignored event: Gdk.EventVisibility
-    //}
+    fn connect_visibility_notify_event<F: Fn(&Self, &gdk::EventVisibility) -> Inhibit + 'static>(&self, f: F) -> u64 {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self, &gdk::EventVisibility) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "visibility-notify-event",
+                transmute(visibility_notify_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 
     fn connect_window_state_event<F: Fn(&Self, &gdk::EventWindowState) -> Inhibit + 'static>(&self, f: F) -> u64 {
         unsafe {
@@ -2579,6 +2647,69 @@ where T: IsA<Widget> {
     callback_guard!();
     let f: &Box_<Fn(&T, TextDirection) + 'static> = transmute(f);
     f(&Widget::from_glib_none(this).downcast_unchecked(), from_glib(previous_direction))
+}
+
+unsafe extern "C" fn drag_begin_trampoline<T>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, f: glib_ffi::gpointer)
+where T: IsA<Widget> {
+    callback_guard!();
+    let f: &Box_<Fn(&T, &gdk::DragContext) + 'static> = transmute(f);
+    f(&Widget::from_glib_none(this).downcast_unchecked(), &from_glib_none(context))
+}
+
+unsafe extern "C" fn drag_data_delete_trampoline<T>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, f: glib_ffi::gpointer)
+where T: IsA<Widget> {
+    callback_guard!();
+    let f: &Box_<Fn(&T, &gdk::DragContext) + 'static> = transmute(f);
+    f(&Widget::from_glib_none(this).downcast_unchecked(), &from_glib_none(context))
+}
+
+unsafe extern "C" fn drag_data_get_trampoline<T>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, data: *mut ffi::GtkSelectionData, info: libc::c_uint, time: libc::c_uint, f: glib_ffi::gpointer)
+where T: IsA<Widget> {
+    callback_guard!();
+    let f: &Box_<Fn(&T, &gdk::DragContext, &SelectionData, u32, u32) + 'static> = transmute(f);
+    f(&Widget::from_glib_none(this).downcast_unchecked(), &from_glib_none(context), &from_glib_none(data), info, time)
+}
+
+unsafe extern "C" fn drag_data_received_trampoline<T>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, x: libc::c_int, y: libc::c_int, data: *mut ffi::GtkSelectionData, info: libc::c_uint, time: libc::c_uint, f: glib_ffi::gpointer)
+where T: IsA<Widget> {
+    callback_guard!();
+    let f: &Box_<Fn(&T, &gdk::DragContext, i32, i32, &SelectionData, u32, u32) + 'static> = transmute(f);
+    f(&Widget::from_glib_none(this).downcast_unchecked(), &from_glib_none(context), x, y, &from_glib_none(data), info, time)
+}
+
+unsafe extern "C" fn drag_drop_trampoline<T>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, x: libc::c_int, y: libc::c_int, time: libc::c_uint, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+where T: IsA<Widget> {
+    callback_guard!();
+    let f: &Box_<Fn(&T, &gdk::DragContext, i32, i32, u32) -> bool + 'static> = transmute(f);
+    f(&Widget::from_glib_none(this).downcast_unchecked(), &from_glib_none(context), x, y, time).to_glib()
+}
+
+unsafe extern "C" fn drag_end_trampoline<T>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, f: glib_ffi::gpointer)
+where T: IsA<Widget> {
+    callback_guard!();
+    let f: &Box_<Fn(&T, &gdk::DragContext) + 'static> = transmute(f);
+    f(&Widget::from_glib_none(this).downcast_unchecked(), &from_glib_none(context))
+}
+
+unsafe extern "C" fn drag_failed_trampoline<T>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, result: ffi::GtkDragResult, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+where T: IsA<Widget> {
+    callback_guard!();
+    let f: &Box_<Fn(&T, &gdk::DragContext, DragResult) -> Inhibit + 'static> = transmute(f);
+    f(&Widget::from_glib_none(this).downcast_unchecked(), &from_glib_none(context), from_glib(result)).to_glib()
+}
+
+unsafe extern "C" fn drag_leave_trampoline<T>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, time: libc::c_uint, f: glib_ffi::gpointer)
+where T: IsA<Widget> {
+    callback_guard!();
+    let f: &Box_<Fn(&T, &gdk::DragContext, u32) + 'static> = transmute(f);
+    f(&Widget::from_glib_none(this).downcast_unchecked(), &from_glib_none(context), time)
+}
+
+unsafe extern "C" fn drag_motion_trampoline<T>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, x: libc::c_int, y: libc::c_int, time: libc::c_uint, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+where T: IsA<Widget> {
+    callback_guard!();
+    let f: &Box_<Fn(&T, &gdk::DragContext, i32, i32, u32) -> bool + 'static> = transmute(f);
+    f(&Widget::from_glib_none(this).downcast_unchecked(), &from_glib_none(context), x, y, time).to_glib()
 }
 
 unsafe extern "C" fn draw_trampoline<T>(this: *mut ffi::GtkWidget, cr: *mut cairo_ffi::cairo_t, f: glib_ffi::gpointer) -> glib_ffi::gboolean
@@ -2784,6 +2915,41 @@ where T: IsA<Widget> {
     f(&Widget::from_glib_none(this).downcast_unchecked(), &from_glib_none(event)).to_glib()
 }
 
+unsafe extern "C" fn selection_clear_event_trampoline<T>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventSelection, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+where T: IsA<Widget> {
+    callback_guard!();
+    let f: &Box_<Fn(&T, &gdk::EventSelection) -> Inhibit + 'static> = transmute(f);
+    f(&Widget::from_glib_none(this).downcast_unchecked(), &from_glib_none(event)).to_glib()
+}
+
+unsafe extern "C" fn selection_get_trampoline<T>(this: *mut ffi::GtkWidget, data: *mut ffi::GtkSelectionData, info: libc::c_uint, time: libc::c_uint, f: glib_ffi::gpointer)
+where T: IsA<Widget> {
+    callback_guard!();
+    let f: &Box_<Fn(&T, &SelectionData, u32, u32) + 'static> = transmute(f);
+    f(&Widget::from_glib_none(this).downcast_unchecked(), &from_glib_none(data), info, time)
+}
+
+unsafe extern "C" fn selection_notify_event_trampoline<T>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventSelection, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+where T: IsA<Widget> {
+    callback_guard!();
+    let f: &Box_<Fn(&T, &gdk::EventSelection) -> Inhibit + 'static> = transmute(f);
+    f(&Widget::from_glib_none(this).downcast_unchecked(), &from_glib_none(event)).to_glib()
+}
+
+unsafe extern "C" fn selection_received_trampoline<T>(this: *mut ffi::GtkWidget, data: *mut ffi::GtkSelectionData, time: libc::c_uint, f: glib_ffi::gpointer)
+where T: IsA<Widget> {
+    callback_guard!();
+    let f: &Box_<Fn(&T, &SelectionData, u32) + 'static> = transmute(f);
+    f(&Widget::from_glib_none(this).downcast_unchecked(), &from_glib_none(data), time)
+}
+
+unsafe extern "C" fn selection_request_event_trampoline<T>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventSelection, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+where T: IsA<Widget> {
+    callback_guard!();
+    let f: &Box_<Fn(&T, &gdk::EventSelection) -> Inhibit + 'static> = transmute(f);
+    f(&Widget::from_glib_none(this).downcast_unchecked(), &from_glib_none(event)).to_glib()
+}
+
 unsafe extern "C" fn show_trampoline<T>(this: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where T: IsA<Widget> {
     callback_guard!();
@@ -2831,6 +2997,13 @@ where T: IsA<Widget> {
     callback_guard!();
     let f: &Box_<Fn(&T) + 'static> = transmute(f);
     f(&Widget::from_glib_none(this).downcast_unchecked())
+}
+
+unsafe extern "C" fn visibility_notify_event_trampoline<T>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventVisibility, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+where T: IsA<Widget> {
+    callback_guard!();
+    let f: &Box_<Fn(&T, &gdk::EventVisibility) -> Inhibit + 'static> = transmute(f);
+    f(&Widget::from_glib_none(this).downcast_unchecked(), &from_glib_none(event)).to_glib()
 }
 
 unsafe extern "C" fn window_state_event_trampoline<T>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventWindowState, f: glib_ffi::gpointer) -> glib_ffi::gboolean

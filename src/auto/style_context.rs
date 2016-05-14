@@ -82,14 +82,12 @@ impl StyleContext {
         }
     }
 
-    //pub fn get_font(&self, state: StateFlags) -> /*Ignored*/Option<pango::FontDescription> {
-    //    unsafe { TODO: call ffi::gtk_style_context_get_font() }
-    //}
-
-    //#[cfg(feature = "v3_8")]
-    //pub fn get_frame_clock(&self) -> /*Ignored*/Option<gdk::FrameClock> {
-    //    unsafe { TODO: call ffi::gtk_style_context_get_frame_clock() }
-    //}
+    #[cfg(feature = "v3_8")]
+    pub fn get_frame_clock(&self) -> Option<gdk::FrameClock> {
+        unsafe {
+            from_glib_none(ffi::gtk_style_context_get_frame_clock(self.to_glib_none().0))
+        }
+    }
 
     pub fn get_junction_sides(&self) -> JunctionSides {
         unsafe {
@@ -254,10 +252,12 @@ impl StyleContext {
         }
     }
 
-    //#[cfg(feature = "v3_8")]
-    //pub fn set_frame_clock(&self, frame_clock: /*Ignored*/&gdk::FrameClock) {
-    //    unsafe { TODO: call ffi::gtk_style_context_set_frame_clock() }
-    //}
+    #[cfg(feature = "v3_8")]
+    pub fn set_frame_clock(&self, frame_clock: &gdk::FrameClock) {
+        unsafe {
+            ffi::gtk_style_context_set_frame_clock(self.to_glib_none().0, frame_clock.to_glib_none().0);
+        }
+    }
 
     pub fn set_junction_sides(&self, sides: JunctionSides) {
         unsafe {

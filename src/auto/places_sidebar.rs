@@ -149,7 +149,6 @@ impl PlacesSidebar {
 
     //#[cfg(feature = "v3_10")]
     //pub fn connect_drag_action_requested<Unsupported or ignored types>(&self, f: F) -> u64 {
-    //    Ignored context: Gdk.DragContext
     //    Ignored dest_file: Gio.File
     //    Ignored source_file_list: *.List TypeId { ns_id: 6, id: 149 }
     //}
