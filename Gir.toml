@@ -53,6 +53,7 @@ generate = [
     "Gtk.DeleteType",
     "Gtk.DialogFlags",
     "Gtk.DirectionType",
+    "Gtk.DragResult",
     "Gtk.DrawingArea",
     "Gtk.EntryIconPosition",
     "Gtk.EventBox",
@@ -154,6 +155,7 @@ generate = [
     "Gtk.ScrolledWindow",
     "Gtk.ScrollStep",
     "Gtk.ScrollType",
+    "Gtk.SelectionData",
     "Gtk.SelectionMode",
     "Gtk.SensitivityType",
     "Gtk.Separator",
@@ -215,6 +217,7 @@ ignore = [
 manual = [
     "Gdk.Device",
     "Gdk.Display",
+    "Gdk.DragContext",
     "Gdk.Event",
     "Gdk.EventButton",
     "Gdk.EventConfigure",
@@ -226,14 +229,18 @@ manual = [
     "Gdk.EventMotion",
     "Gdk.EventProperty",
     "Gdk.EventProximity",
+    "Gdk.EventSelection",
     "Gdk.EventScroll",
+    "Gdk.EventVisibility",
     "Gdk.EventWindowState",
+    "Gdk.FrameClock",
     "Gdk.GLContext",
     "Gdk.Gravity",
     "Gdk.ModifierIntent",
     "Gdk.ModifierType",
     "Gdk.Rectangle",
     "Gdk.Screen",
+    "Gdk.Visual",
     "Gdk.Window",
     "Gdk.WindowEdge",
     "Gdk.WindowTypeHint",
@@ -264,6 +271,7 @@ manual = [
     "cairo.Context",
     "cairo.RectangleInt",
     "cairo.Surface",
+    "Pango.FontDescription",
 ]
 
 [[object]]
@@ -753,6 +761,9 @@ status = "generate"
     [[object.function]]
     pattern = "get_(style_)?property"
     ignore = true
+    [[object.function]]
+    name = "get_font"
+    ignore = true #returning Pango.FontDescription from *const
 
 [[object]]
 name = "Gtk.Switch"
@@ -1064,6 +1075,9 @@ status = "generate"
     name = "destroy-event"
     inhibit = true
     [[object.signal]]
+    name = "drag-failed"
+    inhibit = true
+    [[object.signal]]
     name = "draw"
     inhibit = true
     [[object.signal]]
@@ -1119,6 +1133,15 @@ status = "generate"
     name = "scroll-event"
     inhibit = true
     [[object.signal]]
+    name = "selection-clear-event"
+    inhibit = true
+    [[object.signal]]
+    name = "selection-notify-event"
+    inhibit = true
+    [[object.signal]]
+    name = "selection-request-event"
+    inhibit = true
+    [[object.signal]]
     name = "size-allocate"
     ignore = true #cairo::Rectangle
     [[object.signal]]
@@ -1128,6 +1151,9 @@ status = "generate"
     name = "unmap-event"
     inhibit = true
     ignore = true #manual EventAny
+    [[object.signal]]
+    name = "visibility-notify-event"
+    inhibit = true
     [[object.signal]]
     name = "window-state-event"
     inhibit = true
