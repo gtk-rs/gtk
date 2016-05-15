@@ -450,9 +450,9 @@ status = "generate"
 [[object]]
 name = "Gtk.Editable"
 status = "generate"
-    [[object.signal]] #out #manual
+    [[object.signal]]
     pattern = ".+"
-    ignore = true
+    ignore = true #out #manual
 
 [[object]]
 name = "Gtk.Entry"
