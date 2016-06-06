@@ -13,7 +13,6 @@ use gdk_pixbuf_ffi;
 use glib::signal::connect;
 use glib::translate::*;
 use glib_ffi;
-use libc;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
@@ -479,14 +478,6 @@ impl TextBuffer {
         }
     }
 
-    pub fn connect_insert_text<F: Fn(&TextBuffer, &TextIter, &str, i32) + 'static>(&self, f: F) -> u64 {
-        unsafe {
-            let f: Box_<Box_<Fn(&TextBuffer, &TextIter, &str, i32) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "insert-text",
-                transmute(insert_text_trampoline as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
     pub fn connect_mark_deleted<F: Fn(&TextBuffer, &TextMark) + 'static>(&self, f: F) -> u64 {
         unsafe {
             let f: Box_<Box_<Fn(&TextBuffer, &TextMark) + 'static>> = Box_::new(Box_::new(f));
@@ -568,12 +559,6 @@ unsafe extern "C" fn insert_pixbuf_trampoline(this: *mut ffi::GtkTextBuffer, loc
     callback_guard!();
     let f: &Box_<Fn(&TextBuffer, &TextIter, &gdk_pixbuf::Pixbuf) + 'static> = transmute(f);
     f(&from_glib_none(this), &from_glib_none(location), &from_glib_none(pixbuf))
-}
-
-unsafe extern "C" fn insert_text_trampoline(this: *mut ffi::GtkTextBuffer, location: *mut ffi::GtkTextIter, text: *mut libc::c_char, len: libc::c_int, f: glib_ffi::gpointer) {
-    callback_guard!();
-    let f: &Box_<Fn(&TextBuffer, &TextIter, &str, i32) + 'static> = transmute(f);
-    f(&from_glib_none(this), &from_glib_none(location), &String::from_glib_none(text), len)
 }
 
 unsafe extern "C" fn mark_deleted_trampoline(this: *mut ffi::GtkTextBuffer, mark: *mut ffi::GtkTextMark, f: glib_ffi::gpointer) {

@@ -798,6 +798,9 @@ status = "generate"
         [[object.function.parameter]]
         name = "override_location"
         const = true
+    [[object.signal]]
+    name = "insert-text"
+    ignore = true
 
 [[object]]
 name = "Gtk.TextIter"
