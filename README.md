@@ -36,7 +36,7 @@ The majority of the documentation is kept [in a separate repo][gtk-md] due to
 licensing issues. You can pull it in with cargo:
 
 ```shell
-> cargo build --embed-lgpl-docs
+> cargo build --features embed-lgpl-docs
 ```
 
 Changes to those doc-comments should be submitted to the `lgpl-docs` repo. Avoid
@@ -45,12 +45,20 @@ including those embedded doc-comments in PRs to this repo.
 The opposite feature removes all of those docs regardless of edits:
 
 ```shell
-> cargo build --purge-lgpl-docs
+> cargo build --features purge-lgpl-docs
 ```
 
 These features **rewrite the crate sources** so it's sufficient to enable them
 once. **Omitting them in the following `cargo` invocations will not undo their
 effects!**
+
+Generate the docs:
+
+```shell
+> cargo doc --features v3_16
+```
+
+(if the installed GTK+ version is lower than 3.16, adjust the feature name accordingly).
 
 [gtk-md]: https://github.com/gtk-rs/lgpl-docs/blob/master/gtk.md
 
