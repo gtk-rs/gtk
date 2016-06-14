@@ -36,31 +36,31 @@ bitflags = "0.5"
 
 [dependencies.cairo-sys-rs]
 git = "https://github.com/gtk-rs/cairo"
-version = "0.3.0"
+version = "0.3.1"
 
 [dependencies.gdk-sys]
 git = "https://github.com/gtk-rs/sys"
-version = "0.3.0"
+version = "0.3.1"
 
 [dependencies.gdk-pixbuf-sys]
 git = "https://github.com/gtk-rs/sys"
-version = "0.3.0"
+version = "0.3.1"
 
 [dependencies.gio-sys]
 git = "https://github.com/gtk-rs/sys"
-version = "0.3.0"
+version = "0.3.1"
 
 [dependencies.glib-sys]
 git = "https://github.com/gtk-rs/sys"
-version = "0.3.0"
+version = "0.3.1"
 
 [dependencies.gobject-sys]
 git = "https://github.com/gtk-rs/sys"
-version = "0.3.0"
+version = "0.3.1"
 
 [dependencies.gtk-sys]
 git = "https://github.com/gtk-rs/sys"
-version = "0.3.0"
+version = "0.3.1"
 
 [dependencies.cairo-rs]
 git = "https://github.com/gtk-rs/cairo"
