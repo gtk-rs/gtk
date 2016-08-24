@@ -61,6 +61,7 @@ generate = [
     "Gtk.EventSequenceState",
     "Gtk.FileChooser",
     "Gtk.FileChooserAction",
+    "Gtk.FileChooserButton",
     "Gtk.FileChooserConfirmation",
     "Gtk.FileChooserDialog",
     "Gtk.FileChooserError",
