@@ -173,6 +173,9 @@ mod file_chooser;
 pub use self::file_chooser::FileChooser;
 pub use self::file_chooser::FileChooserExt;
 
+mod file_chooser_button;
+pub use self::file_chooser_button::FileChooserButton;
+
 mod file_chooser_dialog;
 pub use self::file_chooser_dialog::FileChooserDialog;
 
