@@ -22,8 +22,41 @@ impl MessageDialog {
             let message: Stash<*const c_char, _> = message.to_glib_none();
             Widget::from_glib_none(
                 ffi::gtk_message_dialog_new(parent.to_glib_none().0, flags.to_glib(), type_.to_glib(), buttons.to_glib(),
-                    b"%s\0".as_ptr() as *const c_char, message.0, ptr::null_mut::<*const c_char>()))
+                    b"%s\0".as_ptr() as *const c_char, message.0, ptr::null::<c_char>()))
                 .downcast_unchecked()
         }
     }
+
+    pub fn set_secondary_markup(&self, message: Option<&str>) {
+        match message {
+            Some(m) => unsafe {
+                let message: Stash<*const c_char, _> = m.to_glib_none();
+                ffi::gtk_message_dialog_format_secondary_markup(
+                    self.to_glib_none().0, b"%s\0".as_ptr() as *const c_char, message.0,
+                    ptr::null::<c_char>())
+            },
+            None => unsafe {
+                ffi::gtk_message_dialog_format_secondary_markup(
+                    self.to_glib_none().0,
+                    ptr::null::<c_char>())
+            },
+        }
+    }
+
+    pub fn set_secondary_text(&self, message: Option<&str>) {
+        match message {
+            Some(m) => unsafe {
+                let message: Stash<*const c_char, _> = m.to_glib_none();
+                ffi::gtk_message_dialog_format_secondary_text(
+                    self.to_glib_none().0,
+                    b"%s\0".as_ptr() as *const c_char, message.0, ptr::null::<c_char>())
+            },
+            None => unsafe {
+                ffi::gtk_message_dialog_format_secondary_text(
+                    self.to_glib_none().0,
+                    ptr::null::<c_char>())
+            },
+        }
+    }
+
 }
