@@ -60,7 +60,7 @@ Generate the docs:
 
 (if the installed GTK+ version is lower than 3.16, adjust the feature name accordingly).
 
-[gtk-md]: https://github.com/gtk-rs/lgpl-docs/blob/master/gtk.md
+[gtk-md]: https://github.com/gtk-rs/lgpl-docs/blob/master/README.md
 
 ## Contribute
 
