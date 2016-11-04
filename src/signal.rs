@@ -5,6 +5,7 @@
 use std::cell::RefCell;
 use std::mem::transmute;
 
+pub use glib::signal::Inhibit;
 use glib::translate::*;
 
 use glib_ffi::{self, gboolean, gpointer};
@@ -22,22 +23,6 @@ use {
     TreePath,
     TreeViewColumn,
 };
-
-/// Whether to propagate the signal to the default handler.
-///
-/// Don't inhibit default handlers without a reason, they're usually helpful.
-#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
-pub struct Inhibit(pub bool);
-
-#[doc(hidden)]
-impl ToGlib for Inhibit {
-    type GlibType = gboolean;
-
-    #[inline]
-    fn to_glib(&self) -> gboolean {
-        self.0.to_glib()
-    }
-}
 
 // idle_add and timeout_add fixed to the main thread
 
