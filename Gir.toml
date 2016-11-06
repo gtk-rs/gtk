@@ -361,8 +361,20 @@ status = "generate"
         name = "event"
         const = true
     [[object.signal]]
-    pattern = ".+" #tree_path #manual
-    ignore = true
+    name = "add-editable"
+        [[object.signal.parameter]]
+        name = "path"
+        transformation = "treepath"
+    [[object.signal]]
+    name = "apply-attributes"
+        [[object.signal.parameter]]
+        name = "iter"
+        transformation = "borrow"
+    [[object.signal]]
+    name = "focus-changed"
+        [[object.signal.parameter]]
+        name = "path"
+        transformation = "treepath"
 
 [[object]]
 name = "Gtk.CellEditable"
@@ -393,36 +405,57 @@ status = "generate"
         name = "event"
         const = true
     [[object.signal]]
-    pattern = ".+" #tree_path
-    ignore = true
+    name = "editing-started"
+        [[object.signal.parameter]]
+        name = "path"
+        transformation = "treepath"
 
 [[object]]
 name = "Gtk.CellRendererAccel"
 status = "generate"
     [[object.signal]]
-    name = "accel-edited" #tree_path #manual
-    ignore = true
+    name = "accel-cleared"
+        [[object.signal.parameter]]
+        name = "path_string"
+        transformation = "treepath"
+        new_name = "path"
+    [[object.signal]]
+    name = "accel-edited"
+        [[object.signal.parameter]]
+        name = "path_string"
+        transformation = "treepath"
+        new_name = "path"
 
 [[object]]
 name = "Gtk.CellRendererCombo"
 status = "generate"
     [[object.signal]]
-    pattern = ".+" #tree_path #manual
-    ignore = true
+    name = "changed"
+        [[object.signal.parameter]]
+        name = "new_iter"
+        transformation = "borrow"
+        [[object.signal.parameter]]
+        name = "path_string"
+        transformation = "treepath"
+        new_name = "path"
 
 [[object]]
 name = "Gtk.CellRendererText"
 status = "generate"
     [[object.signal]]
-    pattern = ".+" #tree_path #manual
-    ignore = true
+    name = "edited"
+        [[object.signal.parameter]]
+        name = "path"
+        transformation = "treepath"
 
 [[object]]
 name = "Gtk.CellRendererToggle"
 status = "generate"
     [[object.signal]]
-    pattern = ".+" #tree_path #manual
-    ignore = true
+    name = "toggled"
+        [[object.signal.parameter]]
+        name = "path"
+        transformation = "treepath"
 
 [[object]]
 name = "Gtk.Clipboard"
@@ -1198,8 +1231,16 @@ status = "generate"
         [object.function.return]
         nullable = false
     [[object.signal]]
-    pattern = ".+" #borrow
-    ignore = true
+    pattern = ".+"
+        [[object.signal.parameter]]
+        name = "iter"
+        transformation = "borrow"
+        [[object.signal.parameter]]
+        name = "path"
+        transformation = "borrow"
+    [[object.signal]]
+    pattern = "test-.+"
+    inhibit = true
 
 [[object]]
 name = "Gtk.TreeViewColumn"
