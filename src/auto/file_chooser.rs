@@ -27,9 +27,6 @@ glib_wrapper! {
 }
 
 pub trait FileChooserExt {
-    #[cfg(feature = "v3_22")]
-    fn add_choice(&self, id: &str, label: &str, options: &str, option_labels: &str);
-
     fn add_filter(&self, filter: &FileFilter);
 
     fn add_shortcut_folder<T: AsRef<std::path::Path>>(&self, folder: T) -> Result<(), Error>;
@@ -170,13 +167,6 @@ pub trait FileChooserExt {
 }
 
 impl<O: IsA<FileChooser> + IsA<Object>> FileChooserExt for O {
-    #[cfg(feature = "v3_22")]
-    fn add_choice(&self, id: &str, label: &str, options: &str, option_labels: &str) {
-        unsafe {
-            ffi::gtk_file_chooser_add_choice(self.to_glib_none().0, id.to_glib_none().0, label.to_glib_none().0, options.to_glib_none().0, option_labels.to_glib_none().0);
-        }
-    }
-
     fn add_filter(&self, filter: &FileFilter) {
         unsafe {
             ffi::gtk_file_chooser_add_filter(self.to_glib_none().0, filter.to_glib_full());
