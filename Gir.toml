@@ -59,7 +59,6 @@ generate = [
     "Gtk.EventBox",
     "Gtk.EventController",
     "Gtk.EventSequenceState",
-    "Gtk.FileChooser",
     "Gtk.FileChooserAction",
     "Gtk.FileChooserButton",
     "Gtk.FileChooserConfirmation",
@@ -509,6 +508,13 @@ status = "generate"
         [[object.function.parameter]]
         name = "label"
         nullable = false
+
+[[object]]
+name = "Gtk.FileChooser"
+status = "generate"
+    [[object.function]]
+    name = "add_choice"
+    ignore = true  #strange type of options and option_labels
 
 [[object]]
 name = "Gtk.Gesture"
