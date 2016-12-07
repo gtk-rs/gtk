@@ -199,6 +199,7 @@ mod dialog;
 mod entry_buffer;
 mod enums;
 mod file_chooser_dialog;
+mod grid;
 mod list_store;
 mod menu;
 mod message_dialog;
