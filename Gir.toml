@@ -20,6 +20,7 @@ generate = [
     "Gtk.Arrow",
     "Gtk.ArrowType",
     "Gtk.AspectFrame",
+    "Gtk.AssistantPageType",
     "Gtk.BaselinePosition",
     "Gtk.Bin",
     "Gtk.BuilderError",
@@ -308,6 +309,22 @@ status = "generate"
     [[object.function]]
     name = "new"
     ignore = true
+
+[[object]]
+name = "Gtk.Assistant"
+status = "generate"
+    [[object.child_prop]]
+    name = "complete"
+    type = "gboolean"
+    [[object.child_prop]]
+    name = "has-padding"
+    type = "gboolean"
+    [[object.child_prop]]
+    name = "page-type"
+    type = "Gtk.AssistantPageType"
+    [[object.child_prop]]
+    name = "title"
+    type = "utf8"
 
 [[object]]
 name = "Gtk.Box"
