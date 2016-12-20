@@ -190,6 +190,7 @@ mod auto;
 
 mod app_chooser;
 mod application;
+mod assistant;
 mod builder;
 mod clipboard;
 mod color_button;
