@@ -593,6 +593,9 @@ pub use self::paper_size::PaperSize;
 mod selection_data;
 pub use self::selection_data::SelectionData;
 
+mod text_attributes;
+pub use self::text_attributes::TextAttributes;
+
 mod text_iter;
 pub use self::text_iter::TextIter;
 

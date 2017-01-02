@@ -211,7 +211,6 @@ mod requisition;
 mod signal;
 #[cfg(target_os = "linux")]
 mod socket;
-mod text_attributes;
 mod text_buffer;
 mod text_iter;
 mod tree_model_filter;
@@ -237,5 +236,4 @@ pub use gdk::Rectangle;
 pub use requisition::Requisition;
 #[cfg(target_os = "linux")]
 pub use socket::Socket;
-pub use text_attributes::TextAttributes;
 pub use tree_sortable::SortColumn;
