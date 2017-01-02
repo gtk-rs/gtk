@@ -1141,7 +1141,7 @@ status = "generate"
 name = "Gtk.TreeSortable"
 status = "generate"
     [[object.function]]
-    name = "set_sort_column_id"
+    pattern = "[gs]et_sort_column_id"
     ignore = true
 
 [[object]]
