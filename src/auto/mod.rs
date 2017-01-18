@@ -649,6 +649,8 @@ pub use self::enums::PageSet;
 #[cfg(feature = "v3_14")]
 pub use self::enums::PanDirection;
 pub use self::enums::PolicyType;
+#[cfg(feature = "v3_20")]
+pub use self::enums::PopoverConstraint;
 pub use self::enums::PositionType;
 pub use self::enums::PrintDuplex;
 pub use self::enums::PrintError;

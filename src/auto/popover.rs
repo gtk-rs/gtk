@@ -4,6 +4,8 @@
 use Bin;
 use Container;
 use Object;
+#[cfg(feature = "v3_20")]
+use PopoverConstraint;
 use PositionType;
 use Widget;
 use ffi;
@@ -48,8 +50,8 @@ pub trait PopoverExt {
     #[cfg(feature = "v3_12")]
     fn bind_model<T: IsA<gio::MenuModel>>(&self, model: Option<&T>, action_namespace: Option<&str>);
 
-    //#[cfg(feature = "v3_20")]
-    //fn get_constrain_to(&self) -> /*Ignored*/PopoverConstraint;
+    #[cfg(feature = "v3_20")]
+    fn get_constrain_to(&self) -> PopoverConstraint;
 
     #[cfg(feature = "v3_18")]
     fn get_default_widget(&self) -> Option<Widget>;
@@ -73,8 +75,8 @@ pub trait PopoverExt {
     #[cfg(feature = "v3_22")]
     fn popup(&self);
 
-    //#[cfg(feature = "v3_20")]
-    //fn set_constrain_to(&self, constraint: /*Ignored*/PopoverConstraint);
+    #[cfg(feature = "v3_20")]
+    fn set_constrain_to(&self, constraint: PopoverConstraint);
 
     #[cfg(feature = "v3_18")]
     fn set_default_widget<T: IsA<Widget>>(&self, widget: Option<&T>);
@@ -105,10 +107,12 @@ impl<O: IsA<Popover> + IsA<Object>> PopoverExt for O {
         }
     }
 
-    //#[cfg(feature = "v3_20")]
-    //fn get_constrain_to(&self) -> /*Ignored*/PopoverConstraint {
-    //    unsafe { TODO: call ffi::gtk_popover_get_constrain_to() }
-    //}
+    #[cfg(feature = "v3_20")]
+    fn get_constrain_to(&self) -> PopoverConstraint {
+        unsafe {
+            from_glib(ffi::gtk_popover_get_constrain_to(self.to_glib_none().0))
+        }
+    }
 
     #[cfg(feature = "v3_18")]
     fn get_default_widget(&self) -> Option<Widget> {
@@ -166,10 +170,12 @@ impl<O: IsA<Popover> + IsA<Object>> PopoverExt for O {
         }
     }
 
-    //#[cfg(feature = "v3_20")]
-    //fn set_constrain_to(&self, constraint: /*Ignored*/PopoverConstraint) {
-    //    unsafe { TODO: call ffi::gtk_popover_set_constrain_to() }
-    //}
+    #[cfg(feature = "v3_20")]
+    fn set_constrain_to(&self, constraint: PopoverConstraint) {
+        unsafe {
+            ffi::gtk_popover_set_constrain_to(self.to_glib_none().0, constraint.to_glib());
+        }
+    }
 
     #[cfg(feature = "v3_18")]
     fn set_default_widget<T: IsA<Widget>>(&self, widget: Option<&T>) {

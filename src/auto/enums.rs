@@ -1722,6 +1722,41 @@ impl FromGlib<ffi::GtkPolicyType> for PolicyType {
     }
 }
 
+#[cfg(feature = "v3_20")]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum PopoverConstraint {
+    None,
+    Window,
+    #[doc(hidden)]
+    __Nonexhaustive(()),
+}
+
+#[cfg(feature = "v3_20")]
+#[doc(hidden)]
+impl ToGlib for PopoverConstraint {
+    type GlibType = ffi::GtkPopoverConstraint;
+
+    fn to_glib(&self) -> ffi::GtkPopoverConstraint {
+        match *self {
+            PopoverConstraint::None => ffi::GTK_POPOVER_CONSTRAINT_NONE,
+            PopoverConstraint::Window => ffi::GTK_POPOVER_CONSTRAINT_WINDOW,
+            PopoverConstraint::__Nonexhaustive(_) => panic!(),
+        }
+    }
+}
+
+#[cfg(feature = "v3_20")]
+#[doc(hidden)]
+impl FromGlib<ffi::GtkPopoverConstraint> for PopoverConstraint {
+    fn from_glib(value: ffi::GtkPopoverConstraint) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::GTK_POPOVER_CONSTRAINT_NONE => PopoverConstraint::None,
+            ffi::GTK_POPOVER_CONSTRAINT_WINDOW => PopoverConstraint::Window,
+        }
+    }
+}
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum PositionType {
     Left,
