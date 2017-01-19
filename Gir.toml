@@ -116,6 +116,7 @@ generate = [
     "Gtk.PlacesSidebar",
     "Gtk.PlacesOpenFlags",
     "Gtk.PolicyType",
+    "Gtk.PopoverConstraint",
     "Gtk.PositionType",
     "Gtk.PrintDuplex",
     "Gtk.PrintError",
