@@ -102,6 +102,7 @@ generate = [
     "Gtk.MessageDialog",
     "Gtk.MessageType",
     "Gtk.Misc",
+    "Gtk.ModelButton",
     "Gtk.MovementStep",
     "Gtk.NotebookTab",
     "Gtk.NumberUpLayout",
