@@ -33,7 +33,6 @@ generate = [
     "Gtk.CellAreaBox",
     "Gtk.CellAreaContext",
     "Gtk.CellLayout",
-    "Gtk.CellRendererPixbuf",
     "Gtk.CellRendererProgress",
     "Gtk.CellRendererSpin",
     "Gtk.CellRendererSpinner",
@@ -113,8 +112,8 @@ generate = [
     "Gtk.PageOrientation",
     "Gtk.PageSet",
     "Gtk.PanDirection",
-    "Gtk.PlacesSidebar",
     "Gtk.PlacesOpenFlags",
+    "Gtk.PlacesSidebar",
     "Gtk.PolicyType",
     "Gtk.PopoverConstraint",
     "Gtk.PositionType",
@@ -333,6 +332,9 @@ status = "generate"
     [[object.child_prop]]
     name = "position"
     type = "gint"
+    [[object.property]]
+    name = "baseline-position"
+    version = "3.10"
 
 [[object]]
 name = "Gtk.CellArea"
@@ -441,6 +443,14 @@ status = "generate"
         new_name = "path"
 
 [[object]]
+name = "Gtk.CellRendererPixbuf"
+status = "generate"
+    [[object.property]]
+    name = "surface"
+    #value cairo::Surface
+    ignore = true
+
+[[object]]
 name = "Gtk.CellRendererText"
 status = "generate"
     [[object.signal]]
@@ -448,6 +458,10 @@ status = "generate"
         [[object.signal.parameter]]
         name = "path"
         transformation = "treepath"
+    [[object.property]]
+    name = "font-desc"
+    #value pango::FontDescription
+    ignore = true
 
 [[object]]
 name = "Gtk.CellRendererToggle"
@@ -651,6 +665,10 @@ status = "generate"
         name = "surface"
         # cairo::Surface is reference-counted
         const = true
+    [[object.property]]
+    name = "surface"
+    #value cairo::Surface
+    ignore = true
 
 [[object]]
 name = "Gtk.Label"
@@ -938,6 +956,9 @@ status = "generate"
     [[object.function]]
     name = "get_font"
     ignore = true #returning Pango.FontDescription from *const
+    [[object.property]]
+    name = "paint-clock"
+    version = "3.8"
 
 [[object]]
 name = "Gtk.Switch"
@@ -998,6 +1019,10 @@ status = "generate"
     [[object.signal]]
     name = "event"
     inhibit = true
+    [[object.property]]
+    name = "font-desc"
+    #value pango::FontDescription
+    ignore = true
 
 [[object]]
 name = "Gtk.TextView"
@@ -1117,6 +1142,10 @@ status = "generate"
         [[object.function.parameter]]
         name = "child_iter"
         const = true
+    [[object.property]]
+    name = "virtual-root"
+    #value recordboxed
+    ignore = true
 
 [[object]]
 name = "Gtk.TreePath"
