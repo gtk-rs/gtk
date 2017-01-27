@@ -350,6 +350,11 @@ mod misc;
 pub use self::misc::Misc;
 pub use self::misc::MiscExt;
 
+#[cfg(feature = "v3_16")]
+mod model_button;
+#[cfg(feature = "v3_16")]
+pub use self::model_button::ModelButton;
+
 mod notebook;
 pub use self::notebook::Notebook;
 
