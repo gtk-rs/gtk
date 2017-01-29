@@ -11,7 +11,6 @@ use PrintPages;
 use PrintQuality;
 use Unit;
 use ffi;
-#[cfg(feature = "v3_22")]
 use glib;
 use glib::translate::*;
 use std;
@@ -50,9 +49,14 @@ impl PrintSettings {
         }
     }
 
-    //pub fn new_from_key_file(key_file: /*Ignored*/&glib::KeyFile, group_name: Option<&str>) -> Result<PrintSettings, Error> {
-    //    unsafe { TODO: call ffi::gtk_print_settings_new_from_key_file() }
-    //}
+    pub fn new_from_key_file(key_file: &glib::KeyFile, group_name: Option<&str>) -> Result<PrintSettings, Error> {
+        assert_initialized_main_thread!();
+        unsafe {
+            let mut error = ptr::null_mut();
+            let ret = ffi::gtk_print_settings_new_from_key_file(key_file.to_glib_none().0, group_name.to_glib_none().0, &mut error);
+            if error.is_null() { Ok(from_glib_full(ret)) } else { Err(from_glib_full(error)) }
+        }
+    }
 
     pub fn copy(&self) -> Option<PrintSettings> {
         unsafe {
@@ -270,9 +274,13 @@ impl PrintSettings {
         }
     }
 
-    //pub fn load_key_file(&self, key_file: /*Ignored*/&glib::KeyFile, group_name: Option<&str>) -> Result<(), Error> {
-    //    unsafe { TODO: call ffi::gtk_print_settings_load_key_file() }
-    //}
+    pub fn load_key_file(&self, key_file: &glib::KeyFile, group_name: Option<&str>) -> Result<(), Error> {
+        unsafe {
+            let mut error = ptr::null_mut();
+            let _ = ffi::gtk_print_settings_load_key_file(self.to_glib_none().0, key_file.to_glib_none().0, group_name.to_glib_none().0, &mut error);
+            if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
+        }
+    }
 
     pub fn set(&self, key: &str, value: Option<&str>) {
         unsafe {
@@ -463,9 +471,11 @@ impl PrintSettings {
         }
     }
 
-    //pub fn to_key_file(&self, key_file: /*Ignored*/&glib::KeyFile, group_name: &str) {
-    //    unsafe { TODO: call ffi::gtk_print_settings_to_key_file() }
-    //}
+    pub fn to_key_file(&self, key_file: &glib::KeyFile, group_name: &str) {
+        unsafe {
+            ffi::gtk_print_settings_to_key_file(self.to_glib_none().0, key_file.to_glib_none().0, group_name.to_glib_none().0);
+        }
+    }
 
     pub fn unset(&self, key: &str) {
         unsafe {

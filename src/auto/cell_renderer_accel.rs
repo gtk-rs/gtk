@@ -2,6 +2,7 @@
 // DO NOT EDIT
 
 use CellRenderer;
+use CellRendererAccelMode;
 use CellRendererText;
 use TreePath;
 use ffi;
@@ -48,20 +49,20 @@ impl CellRendererAccel {
         }
     }
 
-    //pub fn get_property_accel_mode(&self) -> /*Ignored*/CellRendererAccelMode {
-    //    let mut value = Value::from(&0);
-    //    unsafe {
-    //        gobject_ffi::g_object_get_property(self.to_glib_none().0, "accel-mode".to_glib_none().0, value.to_glib_none_mut().0);
-    //        from_glib(transmute(value.get::<i32>().unwrap()))
-    //    }
-    //}
+    pub fn get_property_accel_mode(&self) -> CellRendererAccelMode {
+        let mut value = Value::from(&0);
+        unsafe {
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, "accel-mode".to_glib_none().0, value.to_glib_none_mut().0);
+            from_glib(transmute(value.get::<i32>().unwrap()))
+        }
+    }
 
-    //pub fn set_property_accel_mode(&self, accel_mode: /*Ignored*/CellRendererAccelMode) {
-    //    let accel_mode = accel_mode.to_glib() as i32;
-    //    unsafe {
-    //        gobject_ffi::g_object_set_property(self.to_glib_none().0, "accel-mode".to_glib_none().0, Value::from(&accel_mode).to_glib_none().0);
-    //    }
-    //}
+    pub fn set_property_accel_mode(&self, accel_mode: CellRendererAccelMode) {
+        let accel_mode = accel_mode.to_glib() as i32;
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, "accel-mode".to_glib_none().0, Value::from(&accel_mode).to_glib_none().0);
+        }
+    }
 
     pub fn get_property_accel_mods(&self) -> gdk::ModifierType {
         let mut value = Value::from(&0u32);

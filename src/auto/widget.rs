@@ -619,10 +619,6 @@ pub trait WidgetExt {
 
     fn set_property_margin(&self, margin: i32);
 
-    //fn get_property_style(&self) -> /*Ignored*/Option<Style>;
-
-    //fn set_property_style(&self, style: /*Ignored*/Option<&Style>);
-
     fn get_property_width_request(&self) -> i32;
 
     fn set_property_width_request(&self, width_request: i32);
@@ -2267,20 +2263,6 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExt for O {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "margin".to_glib_none().0, Value::from(&margin).to_glib_none().0);
         }
     }
-
-    //fn get_property_style(&self) -> /*Ignored*/Option<Style> {
-    //    let mut value = Value::from(None::<&/*Ignored*/Style>);
-    //    unsafe {
-    //        gobject_ffi::g_object_get_property(self.to_glib_none().0, "style".to_glib_none().0, value.to_glib_none_mut().0);
-    //    }
-    //    value.get()
-    //}
-
-    //fn set_property_style(&self, style: /*Ignored*/Option<&Style>) {
-    //    unsafe {
-    //        gobject_ffi::g_object_set_property(self.to_glib_none().0, "style".to_glib_none().0, Value::from(style).to_glib_none().0);
-    //    }
-    //}
 
     fn get_property_width_request(&self) -> i32 {
         let mut value = Value::from(&0);
