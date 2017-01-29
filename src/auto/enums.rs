@@ -315,6 +315,41 @@ impl FromGlib<ffi::GtkButtonBoxStyle> for ButtonBoxStyle {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum ButtonRole {
+    Normal,
+    Check,
+    Radio,
+    #[doc(hidden)]
+    __Nonexhaustive(()),
+}
+
+#[doc(hidden)]
+impl ToGlib for ButtonRole {
+    type GlibType = ffi::GtkButtonRole;
+
+    fn to_glib(&self) -> ffi::GtkButtonRole {
+        match *self {
+            ButtonRole::Normal => ffi::GTK_BUTTON_ROLE_NORMAL,
+            ButtonRole::Check => ffi::GTK_BUTTON_ROLE_CHECK,
+            ButtonRole::Radio => ffi::GTK_BUTTON_ROLE_RADIO,
+            ButtonRole::__Nonexhaustive(_) => panic!(),
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GtkButtonRole> for ButtonRole {
+    fn from_glib(value: ffi::GtkButtonRole) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::GTK_BUTTON_ROLE_NORMAL => ButtonRole::Normal,
+            ffi::GTK_BUTTON_ROLE_CHECK => ButtonRole::Check,
+            ffi::GTK_BUTTON_ROLE_RADIO => ButtonRole::Radio,
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum ButtonsType {
     None,
     Ok,
@@ -354,6 +389,76 @@ impl FromGlib<ffi::GtkButtonsType> for ButtonsType {
             ffi::GTK_BUTTONS_CANCEL => ButtonsType::Cancel,
             ffi::GTK_BUTTONS_YES_NO => ButtonsType::YesNo,
             ffi::GTK_BUTTONS_OK_CANCEL => ButtonsType::OkCancel,
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum CellRendererAccelMode {
+    Gtk,
+    Other,
+    ModifierTap,
+    #[doc(hidden)]
+    __Nonexhaustive(()),
+}
+
+#[doc(hidden)]
+impl ToGlib for CellRendererAccelMode {
+    type GlibType = ffi::GtkCellRendererAccelMode;
+
+    fn to_glib(&self) -> ffi::GtkCellRendererAccelMode {
+        match *self {
+            CellRendererAccelMode::Gtk => ffi::GTK_CELL_RENDERER_ACCEL_MODE_GTK,
+            CellRendererAccelMode::Other => ffi::GTK_CELL_RENDERER_ACCEL_MODE_OTHER,
+            CellRendererAccelMode::ModifierTap => ffi::GTK_CELL_RENDERER_ACCEL_MODE_MODIFIER_TAP,
+            CellRendererAccelMode::__Nonexhaustive(_) => panic!(),
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GtkCellRendererAccelMode> for CellRendererAccelMode {
+    fn from_glib(value: ffi::GtkCellRendererAccelMode) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::GTK_CELL_RENDERER_ACCEL_MODE_GTK => CellRendererAccelMode::Gtk,
+            ffi::GTK_CELL_RENDERER_ACCEL_MODE_OTHER => CellRendererAccelMode::Other,
+            ffi::GTK_CELL_RENDERER_ACCEL_MODE_MODIFIER_TAP => CellRendererAccelMode::ModifierTap,
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum CellRendererMode {
+    Inert,
+    Activatable,
+    Editable,
+    #[doc(hidden)]
+    __Nonexhaustive(()),
+}
+
+#[doc(hidden)]
+impl ToGlib for CellRendererMode {
+    type GlibType = ffi::GtkCellRendererMode;
+
+    fn to_glib(&self) -> ffi::GtkCellRendererMode {
+        match *self {
+            CellRendererMode::Inert => ffi::GTK_CELL_RENDERER_MODE_INERT,
+            CellRendererMode::Activatable => ffi::GTK_CELL_RENDERER_MODE_ACTIVATABLE,
+            CellRendererMode::Editable => ffi::GTK_CELL_RENDERER_MODE_EDITABLE,
+            CellRendererMode::__Nonexhaustive(_) => panic!(),
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GtkCellRendererMode> for CellRendererMode {
+    fn from_glib(value: ffi::GtkCellRendererMode) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::GTK_CELL_RENDERER_MODE_INERT => CellRendererMode::Inert,
+            ffi::GTK_CELL_RENDERER_MODE_ACTIVATABLE => CellRendererMode::Activatable,
+            ffi::GTK_CELL_RENDERER_MODE_EDITABLE => CellRendererMode::Editable,
         }
     }
 }
@@ -854,6 +959,76 @@ impl ErrorDomain for FileChooserError {
             x if x == ffi::GTK_FILE_CHOOSER_ERROR_ALREADY_EXISTS as i32 => Some(FileChooserError::AlreadyExists),
             x if x == ffi::GTK_FILE_CHOOSER_ERROR_INCOMPLETE_HOSTNAME as i32 => Some(FileChooserError::IncompleteHostname),
             _ => Some(FileChooserError::__Nonexhaustive(())),
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum IMPreeditStyle {
+    Nothing,
+    Callback,
+    None,
+    #[doc(hidden)]
+    __Nonexhaustive(()),
+}
+
+#[doc(hidden)]
+impl ToGlib for IMPreeditStyle {
+    type GlibType = ffi::GtkIMPreeditStyle;
+
+    fn to_glib(&self) -> ffi::GtkIMPreeditStyle {
+        match *self {
+            IMPreeditStyle::Nothing => ffi::GTK_IM_PREEDIT_NOTHING,
+            IMPreeditStyle::Callback => ffi::GTK_IM_PREEDIT_CALLBACK,
+            IMPreeditStyle::None => ffi::GTK_IM_PREEDIT_NONE,
+            IMPreeditStyle::__Nonexhaustive(_) => panic!(),
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GtkIMPreeditStyle> for IMPreeditStyle {
+    fn from_glib(value: ffi::GtkIMPreeditStyle) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::GTK_IM_PREEDIT_NOTHING => IMPreeditStyle::Nothing,
+            ffi::GTK_IM_PREEDIT_CALLBACK => IMPreeditStyle::Callback,
+            ffi::GTK_IM_PREEDIT_NONE => IMPreeditStyle::None,
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum IMStatusStyle {
+    Nothing,
+    Callback,
+    None,
+    #[doc(hidden)]
+    __Nonexhaustive(()),
+}
+
+#[doc(hidden)]
+impl ToGlib for IMStatusStyle {
+    type GlibType = ffi::GtkIMStatusStyle;
+
+    fn to_glib(&self) -> ffi::GtkIMStatusStyle {
+        match *self {
+            IMStatusStyle::Nothing => ffi::GTK_IM_STATUS_NOTHING,
+            IMStatusStyle::Callback => ffi::GTK_IM_STATUS_CALLBACK,
+            IMStatusStyle::None => ffi::GTK_IM_STATUS_NONE,
+            IMStatusStyle::__Nonexhaustive(_) => panic!(),
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GtkIMStatusStyle> for IMStatusStyle {
+    fn from_glib(value: ffi::GtkIMStatusStyle) -> Self {
+        skip_assert_initialized!();
+        match value {
+            ffi::GTK_IM_STATUS_NOTHING => IMStatusStyle::Nothing,
+            ffi::GTK_IM_STATUS_CALLBACK => IMStatusStyle::Callback,
+            ffi::GTK_IM_STATUS_NONE => IMStatusStyle::None,
         }
     }
 }

@@ -460,6 +460,9 @@ pub use self::separator_tool_item::SeparatorToolItem;
 mod settings;
 pub use self::settings::Settings;
 
+mod shortcuts_window;
+pub use self::shortcuts_window::ShortcutsWindow;
+
 mod size_group;
 pub use self::size_group::SizeGroup;
 
@@ -618,7 +621,10 @@ pub use self::enums::AssistantPageType;
 pub use self::enums::BaselinePosition;
 pub use self::enums::BuilderError;
 pub use self::enums::ButtonBoxStyle;
+pub use self::enums::ButtonRole;
 pub use self::enums::ButtonsType;
+pub use self::enums::CellRendererAccelMode;
+pub use self::enums::CellRendererMode;
 pub use self::enums::CornerType;
 pub use self::enums::CssProviderError;
 pub use self::enums::CssSectionType;
@@ -631,6 +637,8 @@ pub use self::enums::EventSequenceState;
 pub use self::enums::FileChooserAction;
 pub use self::enums::FileChooserConfirmation;
 pub use self::enums::FileChooserError;
+pub use self::enums::IMPreeditStyle;
+pub use self::enums::IMStatusStyle;
 pub use self::enums::IconSize;
 pub use self::enums::IconThemeError;
 pub use self::enums::IconViewDropPosition;

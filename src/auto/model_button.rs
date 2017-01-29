@@ -4,6 +4,8 @@
 use Actionable;
 use Bin;
 use Button;
+#[cfg(feature = "v3_16")]
+use ButtonRole;
 use Container;
 use Widget;
 use ffi;
@@ -128,22 +130,22 @@ impl ModelButton {
         }
     }
 
-    //#[cfg(feature = "v3_16")]
-    //pub fn get_property_role(&self) -> /*Ignored*/ButtonRole {
-    //    let mut value = Value::from(&0);
-    //    unsafe {
-    //        gobject_ffi::g_object_get_property(self.to_glib_none().0, "role".to_glib_none().0, value.to_glib_none_mut().0);
-    //        from_glib(transmute(value.get::<i32>().unwrap()))
-    //    }
-    //}
+    #[cfg(feature = "v3_16")]
+    pub fn get_property_role(&self) -> ButtonRole {
+        let mut value = Value::from(&0);
+        unsafe {
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, "role".to_glib_none().0, value.to_glib_none_mut().0);
+            from_glib(transmute(value.get::<i32>().unwrap()))
+        }
+    }
 
-    //#[cfg(feature = "v3_16")]
-    //pub fn set_property_role(&self, role: /*Ignored*/ButtonRole) {
-    //    let role = role.to_glib() as i32;
-    //    unsafe {
-    //        gobject_ffi::g_object_set_property(self.to_glib_none().0, "role".to_glib_none().0, Value::from(&role).to_glib_none().0);
-    //    }
-    //}
+    #[cfg(feature = "v3_16")]
+    pub fn set_property_role(&self, role: ButtonRole) {
+        let role = role.to_glib() as i32;
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, "role".to_glib_none().0, Value::from(&role).to_glib_none().0);
+        }
+    }
 
     #[cfg(feature = "v3_16")]
     pub fn get_property_text(&self) -> Option<String> {

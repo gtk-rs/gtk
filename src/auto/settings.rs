@@ -2,6 +2,8 @@
 // DO NOT EDIT
 
 use CornerType;
+use IMPreeditStyle;
+use IMStatusStyle;
 use IconSize;
 use PolicyType;
 use StyleProvider;
@@ -547,35 +549,35 @@ impl Settings {
         }
     }
 
-    //pub fn get_property_gtk_im_preedit_style(&self) -> /*Ignored*/IMPreeditStyle {
-    //    let mut value = Value::from(&0);
-    //    unsafe {
-    //        gobject_ffi::g_object_get_property(self.to_glib_none().0, "gtk-im-preedit-style".to_glib_none().0, value.to_glib_none_mut().0);
-    //        from_glib(transmute(value.get::<i32>().unwrap()))
-    //    }
-    //}
+    pub fn get_property_gtk_im_preedit_style(&self) -> IMPreeditStyle {
+        let mut value = Value::from(&0);
+        unsafe {
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, "gtk-im-preedit-style".to_glib_none().0, value.to_glib_none_mut().0);
+            from_glib(transmute(value.get::<i32>().unwrap()))
+        }
+    }
 
-    //pub fn set_property_gtk_im_preedit_style(&self, gtk_im_preedit_style: /*Ignored*/IMPreeditStyle) {
-    //    let gtk_im_preedit_style = gtk_im_preedit_style.to_glib() as i32;
-    //    unsafe {
-    //        gobject_ffi::g_object_set_property(self.to_glib_none().0, "gtk-im-preedit-style".to_glib_none().0, Value::from(&gtk_im_preedit_style).to_glib_none().0);
-    //    }
-    //}
+    pub fn set_property_gtk_im_preedit_style(&self, gtk_im_preedit_style: IMPreeditStyle) {
+        let gtk_im_preedit_style = gtk_im_preedit_style.to_glib() as i32;
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, "gtk-im-preedit-style".to_glib_none().0, Value::from(&gtk_im_preedit_style).to_glib_none().0);
+        }
+    }
 
-    //pub fn get_property_gtk_im_status_style(&self) -> /*Ignored*/IMStatusStyle {
-    //    let mut value = Value::from(&0);
-    //    unsafe {
-    //        gobject_ffi::g_object_get_property(self.to_glib_none().0, "gtk-im-status-style".to_glib_none().0, value.to_glib_none_mut().0);
-    //        from_glib(transmute(value.get::<i32>().unwrap()))
-    //    }
-    //}
+    pub fn get_property_gtk_im_status_style(&self) -> IMStatusStyle {
+        let mut value = Value::from(&0);
+        unsafe {
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, "gtk-im-status-style".to_glib_none().0, value.to_glib_none_mut().0);
+            from_glib(transmute(value.get::<i32>().unwrap()))
+        }
+    }
 
-    //pub fn set_property_gtk_im_status_style(&self, gtk_im_status_style: /*Ignored*/IMStatusStyle) {
-    //    let gtk_im_status_style = gtk_im_status_style.to_glib() as i32;
-    //    unsafe {
-    //        gobject_ffi::g_object_set_property(self.to_glib_none().0, "gtk-im-status-style".to_glib_none().0, Value::from(&gtk_im_status_style).to_glib_none().0);
-    //    }
-    //}
+    pub fn set_property_gtk_im_status_style(&self, gtk_im_status_style: IMStatusStyle) {
+        let gtk_im_status_style = gtk_im_status_style.to_glib() as i32;
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, "gtk-im-status-style".to_glib_none().0, Value::from(&gtk_im_status_style).to_glib_none().0);
+        }
+    }
 
     pub fn get_property_gtk_key_theme_name(&self) -> Option<String> {
         let mut value = Value::from(None::<&str>);

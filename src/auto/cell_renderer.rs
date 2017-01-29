@@ -2,6 +2,7 @@
 // DO NOT EDIT
 
 use CellEditable;
+use CellRendererMode;
 use CellRendererState;
 use Object;
 use Requisition;
@@ -101,9 +102,9 @@ pub trait CellRendererExt {
 
     fn set_property_is_expander(&self, is_expander: bool);
 
-    //fn get_property_mode(&self) -> /*Ignored*/CellRendererMode;
+    fn get_property_mode(&self) -> CellRendererMode;
 
-    //fn set_property_mode(&self, mode: /*Ignored*/CellRendererMode);
+    fn set_property_mode(&self, mode: CellRendererMode);
 
     fn get_property_width(&self) -> i32;
 
@@ -371,20 +372,20 @@ impl<O: IsA<CellRenderer> + IsA<Object>> CellRendererExt for O {
         }
     }
 
-    //fn get_property_mode(&self) -> /*Ignored*/CellRendererMode {
-    //    let mut value = Value::from(&0);
-    //    unsafe {
-    //        gobject_ffi::g_object_get_property(self.to_glib_none().0, "mode".to_glib_none().0, value.to_glib_none_mut().0);
-    //        from_glib(transmute(value.get::<i32>().unwrap()))
-    //    }
-    //}
+    fn get_property_mode(&self) -> CellRendererMode {
+        let mut value = Value::from(&0);
+        unsafe {
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, "mode".to_glib_none().0, value.to_glib_none_mut().0);
+            from_glib(transmute(value.get::<i32>().unwrap()))
+        }
+    }
 
-    //fn set_property_mode(&self, mode: /*Ignored*/CellRendererMode) {
-    //    let mode = mode.to_glib() as i32;
-    //    unsafe {
-    //        gobject_ffi::g_object_set_property(self.to_glib_none().0, "mode".to_glib_none().0, Value::from(&mode).to_glib_none().0);
-    //    }
-    //}
+    fn set_property_mode(&self, mode: CellRendererMode) {
+        let mode = mode.to_glib() as i32;
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, "mode".to_glib_none().0, Value::from(&mode).to_glib_none().0);
+        }
+    }
 
     fn get_property_width(&self) -> i32 {
         let mut value = Value::from(&0);
