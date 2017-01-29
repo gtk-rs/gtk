@@ -27,12 +27,15 @@ generate = [
     "Gtk.Button",
     "Gtk.ButtonBox",
     "Gtk.ButtonBoxStyle",
+    "Gtk.ButtonRole",
     "Gtk.ButtonsType",
     "Gtk.Calendar",
     "Gtk.CalendarDisplayOptions",
     "Gtk.CellAreaBox",
     "Gtk.CellAreaContext",
     "Gtk.CellLayout",
+    "Gtk.CellRendererAccelMode",
+    "Gtk.CellRendererMode",
     "Gtk.CellRendererProgress",
     "Gtk.CellRendererSpin",
     "Gtk.CellRendererSpinner",
@@ -86,6 +89,8 @@ generate = [
     "Gtk.ImageMenuItem",
     "Gtk.ImageType",
     "Gtk.InfoBar",
+    "Gtk.IMPreeditStyle",
+    "Gtk.IMStatusStyle",
     "Gtk.InputHints",
     "Gtk.InputPurpose",
     "Gtk.JunctionSides",
@@ -155,6 +160,7 @@ generate = [
     "Gtk.SeparatorToolItem",
     "Gtk.Settings",
     "Gtk.ShadowType",
+    "Gtk.ShortcutsWindow",
     "Gtk.SizeGroup",
     "Gtk.SizeGroupMode",
     "Gtk.SizeRequestMode",
@@ -246,6 +252,7 @@ manual = [
     "Gio.MenuModel",
     "Gio.Permission",
     "GLib.Error",
+    "GLib.KeyFile",
     "GLib.Variant",
     "GLib.VariantType",
     "GObject.Object",
@@ -1394,6 +1401,10 @@ status = "generate"
     [[object.signal]]
     name = "window-state-event"
     inhibit = true
+    [[object.property]]
+    name = "style"
+    #deprecated
+    ignore = true
 
 [[object]]
 name = "Gtk.Window"
