@@ -135,7 +135,7 @@ pub trait WidgetExt {
 
     fn drag_dest_get_track_motion(&self) -> bool;
 
-    //fn drag_dest_set(&self, flags: /*Ignored*/DestDefaults, targets: /*Ignored*/&[&TargetEntry], n_targets: i32, actions: /*Ignored*/gdk::DragAction);
+    //fn drag_dest_set(&self, flags: DestDefaults, targets: /*Ignored*/&[&TargetEntry], n_targets: i32, actions: /*Ignored*/gdk::DragAction);
 
     //fn drag_dest_set_proxy(&self, proxy_window: &gdk::Window, protocol: /*Ignored*/gdk::DragProtocol, use_coordinates: bool);
 
@@ -883,7 +883,7 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExt for O {
         }
     }
 
-    //fn drag_dest_set(&self, flags: /*Ignored*/DestDefaults, targets: /*Ignored*/&[&TargetEntry], n_targets: i32, actions: /*Ignored*/gdk::DragAction) {
+    //fn drag_dest_set(&self, flags: DestDefaults, targets: /*Ignored*/&[&TargetEntry], n_targets: i32, actions: /*Ignored*/gdk::DragAction) {
     //    unsafe { TODO: call ffi::gtk_drag_dest_set() }
     //}
 

@@ -34,7 +34,7 @@ impl ToolPalette {
         }
     }
 
-    //pub fn add_drag_dest<T: IsA<Widget>>(&self, widget: &T, flags: /*Ignored*/DestDefaults, targets: ToolPaletteDragTargets, actions: /*Ignored*/gdk::DragAction) {
+    //pub fn add_drag_dest<T: IsA<Widget>>(&self, widget: &T, flags: DestDefaults, targets: ToolPaletteDragTargets, actions: /*Ignored*/gdk::DragAction) {
     //    unsafe { TODO: call ffi::gtk_tool_palette_add_drag_dest() }
     //}
 
