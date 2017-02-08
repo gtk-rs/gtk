@@ -112,6 +112,32 @@ impl FromGlib<ffi::GtkCellRendererState> for CellRendererState {
 }
 
 bitflags! {
+    pub flags DestDefaults: u32 {
+        const DEST_DEFAULT_MOTION = 1,
+        const DEST_DEFAULT_HIGHLIGHT = 2,
+        const DEST_DEFAULT_DROP = 4,
+        const DEST_DEFAULT_ALL = 7,
+    }
+}
+
+#[doc(hidden)]
+impl ToGlib for DestDefaults {
+    type GlibType = ffi::GtkDestDefaults;
+
+    fn to_glib(&self) -> ffi::GtkDestDefaults {
+        ffi::GtkDestDefaults::from_bits_truncate(self.bits())
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GtkDestDefaults> for DestDefaults {
+    fn from_glib(value: ffi::GtkDestDefaults) -> DestDefaults {
+        skip_assert_initialized!();
+        DestDefaults::from_bits_truncate(value.bits())
+    }
+}
+
+bitflags! {
     pub flags DialogFlags: u32 {
         const DIALOG_MODAL = 1,
         const DIALOG_DESTROY_WITH_PARENT = 2,
@@ -342,6 +368,31 @@ impl FromGlib<ffi::GtkStateFlags> for StateFlags {
     fn from_glib(value: ffi::GtkStateFlags) -> StateFlags {
         skip_assert_initialized!();
         StateFlags::from_bits_truncate(value.bits())
+    }
+}
+
+bitflags! {
+    pub flags StyleContextPrintFlags: u32 {
+        const STYLE_CONTEXT_PRINT_NONE = 0,
+        const STYLE_CONTEXT_PRINT_RECURSE = 1,
+        const STYLE_CONTEXT_PRINT_SHOW_STYLE = 2,
+    }
+}
+
+#[doc(hidden)]
+impl ToGlib for StyleContextPrintFlags {
+    type GlibType = ffi::GtkStyleContextPrintFlags;
+
+    fn to_glib(&self) -> ffi::GtkStyleContextPrintFlags {
+        ffi::GtkStyleContextPrintFlags::from_bits_truncate(self.bits())
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GtkStyleContextPrintFlags> for StyleContextPrintFlags {
+    fn from_glib(value: ffi::GtkStyleContextPrintFlags) -> StyleContextPrintFlags {
+        skip_assert_initialized!();
+        StyleContextPrintFlags::from_bits_truncate(value.bits())
     }
 }
 

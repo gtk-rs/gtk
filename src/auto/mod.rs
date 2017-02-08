@@ -282,6 +282,9 @@ mod header_bar;
 #[cfg(feature = "v3_10")]
 pub use self::header_bar::HeaderBar;
 
+mod icon_factory;
+pub use self::icon_factory::IconFactory;
+
 mod icon_view;
 pub use self::icon_view::IconView;
 
@@ -496,6 +499,9 @@ pub use self::statusbar::Statusbar;
 mod style_context;
 pub use self::style_context::StyleContext;
 
+mod style_properties;
+pub use self::style_properties::StyleProperties;
+
 mod style_provider;
 pub use self::style_provider::StyleProvider;
 pub use self::style_provider::StyleProviderExt;
@@ -595,11 +601,17 @@ pub use self::window_group::WindowGroup;
 mod css_section;
 pub use self::css_section::CssSection;
 
+mod icon_source;
+pub use self::icon_source::IconSource;
+
 mod paper_size;
 pub use self::paper_size::PaperSize;
 
 mod selection_data;
 pub use self::selection_data::SelectionData;
+
+mod symbolic_color;
+pub use self::symbolic_color::SymbolicColor;
 
 mod text_attributes;
 pub use self::text_attributes::TextAttributes;
@@ -729,6 +741,11 @@ pub use self::flags::CELL_RENDERER_SORTED;
 pub use self::flags::CELL_RENDERER_FOCUSED;
 pub use self::flags::CELL_RENDERER_EXPANDABLE;
 pub use self::flags::CELL_RENDERER_EXPANDED;
+pub use self::flags::DestDefaults;
+pub use self::flags::DEST_DEFAULT_MOTION;
+pub use self::flags::DEST_DEFAULT_HIGHLIGHT;
+pub use self::flags::DEST_DEFAULT_DROP;
+pub use self::flags::DEST_DEFAULT_ALL;
 pub use self::flags::DialogFlags;
 pub use self::flags::DIALOG_MODAL;
 pub use self::flags::DIALOG_DESTROY_WITH_PARENT;
@@ -803,6 +820,10 @@ pub use self::flags::STATE_FLAG_LINK;
 pub use self::flags::STATE_FLAG_VISITED;
 pub use self::flags::STATE_FLAG_CHECKED;
 pub use self::flags::STATE_FLAG_DROP_ACTIVE;
+pub use self::flags::StyleContextPrintFlags;
+pub use self::flags::STYLE_CONTEXT_PRINT_NONE;
+pub use self::flags::STYLE_CONTEXT_PRINT_RECURSE;
+pub use self::flags::STYLE_CONTEXT_PRINT_SHOW_STYLE;
 pub use self::flags::TextSearchFlags;
 pub use self::flags::TEXT_SEARCH_VISIBLE_ONLY;
 pub use self::flags::TEXT_SEARCH_TEXT_ONLY;

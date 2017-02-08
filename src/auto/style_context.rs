@@ -6,6 +6,8 @@ use JunctionSides;
 use RegionFlags;
 use StateFlags;
 use StateType;
+#[cfg(feature = "v3_20")]
+use StyleContextPrintFlags;
 use StyleProvider;
 use TextDirection;
 use ffi;
@@ -305,10 +307,12 @@ impl StyleContext {
         }
     }
 
-    //#[cfg(feature = "v3_20")]
-    //pub fn to_string(&self, flags: /*Ignored*/StyleContextPrintFlags) -> String {
-    //    unsafe { TODO: call ffi::gtk_style_context_to_string() }
-    //}
+    #[cfg(feature = "v3_20")]
+    fn to_string(&self, flags: StyleContextPrintFlags) -> String {
+        unsafe {
+            from_glib_full(ffi::gtk_style_context_to_string(self.to_glib_none().0, flags.to_glib()))
+        }
+    }
 
     #[cfg(feature = "v3_8")]
     pub fn get_property_paint_clock(&self) -> Option<gdk::FrameClock> {
