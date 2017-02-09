@@ -12,6 +12,10 @@ documentation = "http://gtk-rs.org/docs/gtk/"
 
 keywords = ["gtk", "gtk-rs", "gnome", "GUI"]
 
+[badges]
+appveyor = { repository = "GuillaumeGomez/gtk", service = "github" }
+travis-ci = { repository = "gtk-rs/gtk" }
+
 [lib]
 name = "gtk"
 
