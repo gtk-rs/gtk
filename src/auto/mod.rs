@@ -114,6 +114,7 @@ pub use self::check_button::CheckButtonExt;
 
 mod check_menu_item;
 pub use self::check_menu_item::CheckMenuItem;
+pub use self::check_menu_item::CheckMenuItemExt;
 
 mod clipboard;
 pub use self::clipboard::Clipboard;
@@ -397,6 +398,9 @@ pub use self::progress_bar::ProgressBar;
 
 mod radio_button;
 pub use self::radio_button::RadioButton;
+
+mod radio_menu_item;
+pub use self::radio_menu_item::RadioMenuItem;
 
 mod range;
 pub use self::range::Range;
@@ -847,6 +851,7 @@ pub mod traits {
     pub use super::CellRendererExt;
     pub use super::CellRendererTextExt;
     pub use super::CheckButtonExt;
+    pub use super::CheckMenuItemExt;
     pub use super::ComboBoxExt;
     pub use super::ContainerExt;
     pub use super::DialogExt;
