@@ -6,6 +6,7 @@ use std::cell::RefCell;
 use std::mem::transmute;
 
 pub use glib::signal::Inhibit;
+use glib::SourceId;
 use glib::translate::*;
 
 use glib_ffi::{self, gboolean, gpointer};
@@ -41,12 +42,12 @@ fn into_raw<F: FnMut() -> Continue + 'static>(func: F) -> gpointer {
 ///
 /// Similar to `glib::idle_add` but only callable from the main thread and
 /// doesn't require `Send`.
-pub fn idle_add<F>(func: F) -> u32
+pub fn idle_add<F>(func: F) -> SourceId
     where F: FnMut() -> Continue + 'static {
     assert_initialized_main_thread!();
     unsafe {
-        glib_ffi::g_idle_add_full(glib_ffi::G_PRIORITY_DEFAULT_IDLE, Some(trampoline),
-            into_raw(func), Some(destroy_closure))
+        from_glib(glib_ffi::g_idle_add_full(glib_ffi::G_PRIORITY_DEFAULT_IDLE, Some(trampoline),
+            into_raw(func), Some(destroy_closure)))
     }
 }
 
@@ -60,12 +61,13 @@ pub fn idle_add<F>(func: F) -> u32
 ///
 /// Similar to `glib::timeout_add` but only callable from the main thread and
 /// doesn't require `Send`.
-pub fn timeout_add<F>(interval: u32, func: F) -> u32
+pub fn timeout_add<F>(interval: u32, func: F) -> SourceId
     where F: FnMut() -> Continue + 'static {
     assert_initialized_main_thread!();
     unsafe {
-        glib_ffi::g_timeout_add_full(glib_ffi::G_PRIORITY_DEFAULT, interval, Some(trampoline),
-            into_raw(func), Some(destroy_closure))
+        from_glib(
+            glib_ffi::g_timeout_add_full(glib_ffi::G_PRIORITY_DEFAULT, interval, Some(trampoline),
+                 into_raw(func), Some(destroy_closure)))
     }
 }
 
@@ -78,12 +80,12 @@ pub fn timeout_add<F>(interval: u32, func: F) -> u32
 ///
 /// Similar to `glib::timeout_add_seconds` but only callable from the main thread and
 /// doesn't require `Send`.
-pub fn timeout_add_seconds<F>(interval: u32, func: F) -> u32
+pub fn timeout_add_seconds<F>(interval: u32, func: F) -> SourceId
     where F: FnMut() -> Continue + 'static {
     assert_initialized_main_thread!();
     unsafe {
-        glib_ffi::g_timeout_add_seconds_full(glib_ffi::G_PRIORITY_DEFAULT, interval,
-            Some(trampoline), into_raw(func), Some(destroy_closure))
+        from_glib(glib_ffi::g_timeout_add_seconds_full(glib_ffi::G_PRIORITY_DEFAULT, interval,
+            Some(trampoline), into_raw(func), Some(destroy_closure)))
     }
 }
 
