@@ -10,7 +10,6 @@ deprecate_by_min_version = true
 
 generate = [
     "Gtk.AccelFlags",
-    "Gtk.ActionBar",
     "Gtk.Actionable",
     "Gtk.Adjustment",
     "Gtk.Align",
@@ -21,20 +20,22 @@ generate = [
     "Gtk.Arrow",
     "Gtk.ArrowType",
     "Gtk.AspectFrame",
+    "Gtk.AssistantPageType",
     "Gtk.BaselinePosition",
     "Gtk.Bin",
-    "Gtk.Box",
     "Gtk.BuilderError",
     "Gtk.Button",
     "Gtk.ButtonBox",
     "Gtk.ButtonBoxStyle",
+    "Gtk.ButtonRole",
     "Gtk.ButtonsType",
     "Gtk.Calendar",
     "Gtk.CalendarDisplayOptions",
     "Gtk.CellAreaBox",
     "Gtk.CellAreaContext",
     "Gtk.CellLayout",
-    "Gtk.CellRendererPixbuf",
+    "Gtk.CellRendererAccelMode",
+    "Gtk.CellRendererMode",
     "Gtk.CellRendererProgress",
     "Gtk.CellRendererSpin",
     "Gtk.CellRendererSpinner",
@@ -51,6 +52,7 @@ generate = [
     "Gtk.CssSection",
     "Gtk.CssSectionType",
     "Gtk.DeleteType",
+    "Gtk.DestDefaults",
     "Gtk.DialogFlags",
     "Gtk.DirectionType",
     "Gtk.DragResult",
@@ -67,7 +69,6 @@ generate = [
     "Gtk.FileChooserWidget",
     "Gtk.FileFilter",
     "Gtk.FileFilterFlags",
-    "Gtk.Fixed",
     "Gtk.FlowBox",
     "Gtk.FlowBoxChild",
     "Gtk.FontButton",
@@ -83,25 +84,25 @@ generate = [
     "Gtk.GestureSingle",
     "Gtk.GestureSwipe",
     "Gtk.GestureZoom",
-    "Gtk.Grid",
-    "Gtk.HeaderBar",
+    "Gtk.IconFactory",
     "Gtk.IconSize",
+    "Gtk.IconSource",
     "Gtk.IconThemeError",
     "Gtk.IconViewDropPosition",
     "Gtk.ImageMenuItem",
     "Gtk.ImageType",
     "Gtk.InfoBar",
+    "Gtk.IMPreeditStyle",
+    "Gtk.IMStatusStyle",
     "Gtk.InputHints",
     "Gtk.InputPurpose",
     "Gtk.JunctionSides",
     "Gtk.Justification",
-    "Gtk.Layout",
     "Gtk.LevelBar",
     "Gtk.LevelBarMode",
     "Gtk.License",
     "Gtk.ListBox",
     "Gtk.ListBoxRow",
-    "Gtk.Menu",
     "Gtk.MenuBar",
     "Gtk.MenuButton",
     "Gtk.MenuDirectionType",
@@ -109,22 +110,21 @@ generate = [
     "Gtk.MessageDialog",
     "Gtk.MessageType",
     "Gtk.Misc",
+    "Gtk.ModelButton",
     "Gtk.MovementStep",
     "Gtk.NotebookTab",
     "Gtk.NumberUpLayout",
     "Gtk.Orientable",
     "Gtk.Orientation",
-    "Gtk.Overlay",
     "Gtk.PackDirection",
     "Gtk.PackType",
     "Gtk.PageOrientation",
     "Gtk.PageSet",
-    "Gtk.Paned",
     "Gtk.PanDirection",
-    "Gtk.PlacesSidebar",
     "Gtk.PlacesOpenFlags",
+    "Gtk.PlacesSidebar",
     "Gtk.PolicyType",
-    "Gtk.PopoverMenu",
+    "Gtk.PopoverConstraint",
     "Gtk.PositionType",
     "Gtk.PrintDuplex",
     "Gtk.PrintError",
@@ -133,6 +133,7 @@ generate = [
     "Gtk.ProgressBar",
     "Gtk.PropagationPhase",
     "Gtk.RadioButton",
+    "Gtk.RadioMenuItem",
     "Gtk.RecentChooser",
     "Gtk.RecentChooserDialog",
     "Gtk.RecentChooserError",
@@ -163,6 +164,7 @@ generate = [
     "Gtk.SeparatorToolItem",
     "Gtk.Settings",
     "Gtk.ShadowType",
+    "Gtk.ShortcutsWindow",
     "Gtk.SizeGroup",
     "Gtk.SizeGroupMode",
     "Gtk.SizeRequestMode",
@@ -170,7 +172,6 @@ generate = [
     "Gtk.SpinButtonUpdatePolicy",
     "Gtk.Spinner",
     "Gtk.SpinType",
-    "Gtk.Stack",
     "Gtk.StackSidebar",
     "Gtk.StackSwitcher",
     "Gtk.StackTransitionType",
@@ -178,7 +179,11 @@ generate = [
     "Gtk.StateType",
     "Gtk.Statusbar",
     "Gtk.StatusIcon",
+    "Gtk.StyleContextPrintFlags",
+    "Gtk.StyleProperties",
     "Gtk.StyleProvider",
+    "Gtk.SymbolicColor",
+    "Gtk.TextAttributes",
     "Gtk.TextChildAnchor",
     "Gtk.TextDirection",
     "Gtk.TextExtendSelection",
@@ -190,7 +195,6 @@ generate = [
     "Gtk.ToggleToolButton",
     "Gtk.ToolbarStyle",
     "Gtk.ToolButton",
-    "Gtk.ToolItemGroup",
     "Gtk.ToolPalette",
     "Gtk.ToolPaletteDragTargets",
     "Gtk.ToolShell",
@@ -255,6 +259,7 @@ manual = [
     "Gio.MenuModel",
     "Gio.Permission",
     "GLib.Error",
+    "GLib.KeyFile",
     "GLib.Variant",
     "GLib.VariantType",
     "GObject.Object",
@@ -267,7 +272,6 @@ manual = [
     "Gtk.RecentData",
     "Gtk.RecentInfo",
     "Gtk.Requisition",
-    "Gtk.TextAttributes",
     "cairo.Context",
     "cairo.RectangleInt",
     "cairo.Surface",
@@ -297,6 +301,16 @@ status = "generate"
     ignore = true
 
 [[object]]
+name = "Gtk.ActionBar"
+status = "generate"
+    [[object.child_prop]]
+    name = "pack-type"
+    type = "Gtk.PackType"
+    [[object.child_prop]]
+    name = "position"
+    type = "gint"
+
+[[object]]
 name = "Gtk.AppChooserDialog"
 status = "generate"
     [[object.function]]
@@ -310,6 +324,32 @@ status = "generate"
     [[object.function]]
     name = "new"
     ignore = true
+
+[[object]]
+name = "Gtk.Assistant"
+status = "generate"
+    [[object.child_prop]]
+    name = "complete"
+    type = "gboolean"
+    [[object.child_prop]]
+    name = "has-padding"
+    type = "gboolean"
+    [[object.child_prop]]
+    name = "page-type"
+    type = "Gtk.AssistantPageType"
+    [[object.child_prop]]
+    name = "title"
+    type = "utf8"
+
+[[object]]
+name = "Gtk.Box"
+status = "generate"
+    [[object.child_prop]]
+    name = "position"
+    type = "gint"
+    [[object.property]]
+    name = "baseline-position"
+    version = "3.10"
 
 [[object]]
 name = "Gtk.CellArea"
@@ -339,8 +379,20 @@ status = "generate"
         name = "event"
         const = true
     [[object.signal]]
-    pattern = ".+" #tree_path #manual
-    ignore = true
+    name = "add-editable"
+        [[object.signal.parameter]]
+        name = "path"
+        transformation = "treepath"
+    [[object.signal]]
+    name = "apply-attributes"
+        [[object.signal.parameter]]
+        name = "iter"
+        transformation = "borrow"
+    [[object.signal]]
+    name = "focus-changed"
+        [[object.signal.parameter]]
+        name = "path"
+        transformation = "treepath"
 
 [[object]]
 name = "Gtk.CellEditable"
@@ -371,36 +423,69 @@ status = "generate"
         name = "event"
         const = true
     [[object.signal]]
-    pattern = ".+" #tree_path
-    ignore = true
+    name = "editing-started"
+        [[object.signal.parameter]]
+        name = "path"
+        transformation = "treepath"
 
 [[object]]
 name = "Gtk.CellRendererAccel"
 status = "generate"
     [[object.signal]]
-    name = "accel-edited" #tree_path #manual
-    ignore = true
+    name = "accel-cleared"
+        [[object.signal.parameter]]
+        name = "path_string"
+        transformation = "treepath"
+        new_name = "path"
+    [[object.signal]]
+    name = "accel-edited"
+        [[object.signal.parameter]]
+        name = "path_string"
+        transformation = "treepath"
+        new_name = "path"
 
 [[object]]
 name = "Gtk.CellRendererCombo"
 status = "generate"
     [[object.signal]]
-    pattern = ".+" #tree_path #manual
+    name = "changed"
+        [[object.signal.parameter]]
+        name = "new_iter"
+        transformation = "borrow"
+        [[object.signal.parameter]]
+        name = "path_string"
+        transformation = "treepath"
+        new_name = "path"
+
+[[object]]
+name = "Gtk.CellRendererPixbuf"
+status = "generate"
+    [[object.property]]
+    name = "surface"
+    #value cairo::Surface
     ignore = true
 
 [[object]]
 name = "Gtk.CellRendererText"
 status = "generate"
     [[object.signal]]
-    pattern = ".+" #tree_path #manual
+    name = "edited"
+        [[object.signal.parameter]]
+        name = "path"
+        transformation = "treepath"
+    [[object.property]]
+    name = "font-desc"
+    #value pango::FontDescription
     ignore = true
 
 [[object]]
 name = "Gtk.CellRendererToggle"
 status = "generate"
     [[object.signal]]
-    pattern = ".+" #tree_path #manual
-    ignore = true
+    name = "toggled"
+        [[object.signal.parameter]]
+        name = "path"
+        transformation = "treepath"
 
 [[object]]
 name = "Gtk.Clipboard"
@@ -517,6 +602,16 @@ status = "generate"
     ignore = true  #strange type of options and option_labels
 
 [[object]]
+name = "Gtk.Fixed"
+status = "generate"
+    [[object.child_prop]]
+    name = "x"
+    type = "gint"
+    [[object.child_prop]]
+    name = "y"
+    type = "gint"
+
+[[object]]
 name = "Gtk.Gesture"
 status = "generate"
 version = "3.14"
@@ -533,6 +628,33 @@ module_name = "gl_area"
     [[object.signal]]
     pattern = "render"
     inhibit = true
+
+[[object]]
+name = "Gtk.Grid"
+status = "generate"
+child_name = "cell"
+    [[object.child_prop]]
+    name = "height"
+    type = "gint"
+    [[object.child_prop]]
+    name = "width"
+    type = "gint"
+    [[object.child_prop]]
+    name = "left-attach"
+    type = "gint"
+    [[object.child_prop]]
+    name = "top-attach"
+    type = "gint"
+
+[[object]]
+name = "Gtk.HeaderBar"
+status = "generate"
+    [[object.child_prop]]
+    name = "pack-type"
+    type = "Gtk.PackType"
+    [[object.child_prop]]
+    name = "position"
+    type = "gint"
 
 [[object]]
 name = "Gtk.IconView"
@@ -558,6 +680,10 @@ status = "generate"
         name = "surface"
         # cairo::Surface is reference-counted
         const = true
+    [[object.property]]
+    name = "surface"
+    #value cairo::Surface
+    ignore = true
 
 [[object]]
 name = "Gtk.Label"
@@ -565,6 +691,16 @@ status = "generate"
     [[object.signal]]
     name = "activate-link"
     inhibit = true
+
+[[object]]
+name = "Gtk.Layout"
+status = "generate"
+    [[object.child_prop]]
+    name = "x"
+    type = "gint"
+    [[object.child_prop]]
+    name = "y"
+    type = "gint"
 
 [[object]]
 name = "Gtk.LinkButton"
@@ -598,6 +734,24 @@ status = "generate"
         [[object.function.parameter]]
         name = "b"
         const = true
+
+[[object]]
+name = "Gtk.Menu"
+status = "generate"
+child_type = "Gtk.MenuItem"
+child_name = "item"
+    [[object.child_prop]]
+    name = "bottom-attach"
+    type = "gint"
+    [[object.child_prop]]
+    name = "left-attach"
+    type = "gint"
+    [[object.child_prop]]
+    name = "right-attach"
+    type = "gint"
+    [[object.child_prop]]
+    name = "top-attach"
+    type = "gint"
 
 [[object]]
 name = "Gtk.MenuItem"
@@ -658,6 +812,13 @@ status = "generate"
     ignore = true
 
 [[object]]
+name = "Gtk.Overlay"
+status = "generate"
+    [[object.child_prop]]
+    name = "index"
+    type = "gint"
+
+[[object]]
 name = "Gtk.PageSetup"
 status = "generate"
     [[object.function]]
@@ -671,9 +832,29 @@ status = "generate"
         const = true
 
 [[object]]
+name = "Gtk.Paned"
+status = "generate"
+    [[object.child_prop]]
+    name = "resize"
+    type = "gboolean"
+    [[object.child_prop]]
+    name = "shrink"
+    type = "gboolean"
+
+[[object]]
 name = "Gtk.Popover"
 status = "generate"
 version = "3.12"
+
+[[object]]
+name = "Gtk.PopoverMenu"
+status = "generate"
+    [[object.child_prop]]
+    name = "position"
+    type = "gint"
+    [[object.child_prop]]
+    name = "submenu"
+    type = "utf8"
 
 [[object]]
 name = "Gtk.PaperSize"
@@ -763,6 +944,25 @@ status = "generate"
     ignore = true
 
 [[object]]
+name = "Gtk.Stack"
+status = "generate"
+    [[object.child_prop]]
+    name = "icon-name"
+    type = "utf8"
+    [[object.child_prop]]
+    name = "name"
+    type = "utf8"
+    [[object.child_prop]]
+    name = "needs-attention"
+    type = "gboolean"
+    [[object.child_prop]]
+    name = "position"
+    type = "gint"
+    [[object.child_prop]]
+    name = "title"
+    type = "utf8"
+
+[[object]]
 name = "Gtk.StyleContext"
 status = "generate"
     [[object.function]]
@@ -771,6 +971,9 @@ status = "generate"
     [[object.function]]
     name = "get_font"
     ignore = true #returning Pango.FontDescription from *const
+    [[object.property]]
+    name = "paint-clock"
+    version = "3.8"
 
 [[object]]
 name = "Gtk.Switch"
@@ -831,6 +1034,10 @@ status = "generate"
     [[object.signal]]
     name = "event"
     inhibit = true
+    [[object.property]]
+    name = "font-desc"
+    #value pango::FontDescription
+    ignore = true
 
 [[object]]
 name = "Gtk.TextView"
@@ -851,9 +1058,16 @@ status = "generate"
 [[object]]
 name = "Gtk.Toolbar"
 status = "generate"
+child_name = "item"
     [[object.signal]]
     name = "popup-context-menu"
     inhibit = true
+    [[object.child_prop]]
+    name = "expand"
+    type = "gboolean"
+    [[object.child_prop]]
+    name = "homogeneous"
+    type = "gboolean"
 
 [[object]]
 name = "Gtk.ToolItem"
@@ -861,6 +1075,24 @@ status = "generate"
     [[object.signal]]
     name = "create-menu-proxy"
     inhibit = true
+
+[[object]]
+name = "Gtk.ToolItemGroup"
+status = "generate"
+child_type = "Gtk.ToolItem"
+child_name = "item"
+    [[object.child_prop]]
+    name = "expand"
+    type = "gboolean"
+    [[object.child_prop]]
+    name = "fill"
+    type = "gboolean"
+    [[object.child_prop]]
+    name = "homogeneous"
+    type = "gboolean"
+    [[object.child_prop]]
+    name = "new-row"
+    type = "gboolean"
 
 [[object]]
 name = "Gtk.TreeModel"
@@ -925,6 +1157,10 @@ status = "generate"
         [[object.function.parameter]]
         name = "child_iter"
         const = true
+    [[object.property]]
+    name = "virtual-root"
+    #value recordboxed
+    ignore = true
 
 [[object]]
 name = "Gtk.TreePath"
@@ -983,7 +1219,7 @@ status = "generate"
 name = "Gtk.TreeSortable"
 status = "generate"
     [[object.function]]
-    name = "set_sort_column_id"
+    pattern = "[gs]et_sort_column_id"
     ignore = true
 
 [[object]]
@@ -1040,8 +1276,16 @@ status = "generate"
         [object.function.return]
         nullable = false
     [[object.signal]]
-    pattern = ".+" #borrow
-    ignore = true
+    pattern = ".+"
+        [[object.signal.parameter]]
+        name = "iter"
+        transformation = "borrow"
+        [[object.signal.parameter]]
+        name = "path"
+        transformation = "borrow"
+    [[object.signal]]
+    pattern = "test-.+"
+    inhibit = true
 
 [[object]]
 name = "Gtk.TreeViewColumn"
@@ -1164,6 +1408,10 @@ status = "generate"
     [[object.signal]]
     name = "window-state-event"
     inhibit = true
+    [[object.property]]
+    name = "style"
+    #deprecated
+    ignore = true
 
 [[object]]
 name = "Gtk.Window"
