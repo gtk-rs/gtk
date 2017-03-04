@@ -91,4 +91,16 @@ impl Builder {
             if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
         }
     }
+    
+    pub fn set_translation_domain(&self, domain: Option<&str>) {
+        unsafe {
+            ffi::gtk_builder_set_translation_domain(self.to_glib_none().0, domain.to_glib_none().0);
+        }
+    }
+
+    pub fn get_translation_domain(&self) -> Option<String> {
+        unsafe {
+            from_glib_none(ffi::gtk_builder_get_translation_domain(self.to_glib_none().0))
+        }
+    }
 }

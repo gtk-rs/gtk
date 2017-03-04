@@ -1,9 +1,10 @@
 [package]
 name = "gtk"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["The Gtk-rs Project Developers"]
 build = "build.rs"
 
+categories = ["api-bindings", "gui"]
 description = "Rust bindings for the GTK+ 3 library"
 repository = "https://github.com/gtk-rs/gtk"
 license = "MIT"
@@ -11,6 +12,10 @@ homepage = "http://gtk-rs.org/"
 documentation = "http://gtk-rs.org/docs/gtk/"
 
 keywords = ["gtk", "gtk-rs", "gnome", "GUI"]
+
+[badges]
+appveyor = { repository = "GuillaumeGomez/gtk", service = "github" }
+travis-ci = { repository = "gtk-rs/gtk" }
 
 [lib]
 name = "gtk"
@@ -35,16 +40,16 @@ optional = true
 [dependencies]
 libc = "0.2"
 bitflags = "0.5"
-cairo-sys-rs = "^0.3.2"
-gdk-sys = "^0.3.2"
-gdk-pixbuf-sys = "^0.3.2"
-gio-sys = "^0.3.2"
-glib-sys = "^0.3.2"
-gobject-sys = "^0.3.2"
-gtk-sys = "^0.3.2"
-cairo-rs = "^0.1.1"
-gio = "^0.1.1"
-glib = "^0.1.1"
-gdk = "^0.5.1"
-gdk-pixbuf = "^0.1.1"
-pango = "^0.1.1"
+cairo-sys-rs = "^0.3.3"
+gdk-sys = "^0.3.3"
+gdk-pixbuf-sys = "^0.3.3"
+gio-sys = "^0.3.3"
+glib-sys = "^0.3.3"
+gobject-sys = "^0.3.3"
+gtk-sys = "^0.3.3"
+cairo-rs = "^0.1.2"
+gio = "^0.1.2"
+glib = "^0.1.2"
+gdk = "^0.5.2"
+gdk-pixbuf = "^0.1.2"
+pango = "^0.1.2"
