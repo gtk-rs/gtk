@@ -8,7 +8,7 @@ use glib::object::{Downcast, IsA};
 use glib::signal::connect;
 use glib::translate::*;
 use glib_ffi::gboolean;
-use gdk::Event;
+use gdk::{Event, RGBA};
 use gdk_ffi;
 use pango;
 use ffi;
@@ -24,15 +24,15 @@ use {
 pub trait WidgetExtManual {
     fn intersect(&self, area: &Rectangle, intersection: Option<&mut Rectangle>) -> bool;
 
-    fn override_background_color(&self, state: StateFlags, color: &gdk_ffi::GdkRGBA);
+    fn override_background_color(&self, state: StateFlags, color: &RGBA);
 
-    fn override_color(&self, state: StateFlags, color: &gdk_ffi::GdkRGBA);
+    fn override_color(&self, state: StateFlags, color: &RGBA);
 
-    fn override_cursor(&self, cursor: &gdk_ffi::GdkRGBA, secondary_cursor: &gdk_ffi::GdkRGBA);
+    fn override_cursor(&self, cursor: &RGBA, secondary_cursor: &RGBA);
 
     fn override_font(&self, font: &pango::FontDescription);
 
-    fn override_symbolic_color(&self, name: &str, color: &gdk_ffi::GdkRGBA);
+    fn override_symbolic_color(&self, name: &str, color: &RGBA);
 
     fn connect_map_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(&self, f: F) -> u64;
 
@@ -46,27 +46,35 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExtManual for O {
         }
     }
 
-    fn override_background_color(&self, state: StateFlags, color: &gdk_ffi::GdkRGBA) {
+    fn override_background_color(&self, state: StateFlags, color: &RGBA) {
         unsafe {
-            ffi::gtk_widget_override_background_color(self.to_glib_none().0, state.to_glib(), color)
+            ffi::gtk_widget_override_background_color(self.to_glib_none().0,
+                                                      state.to_glib(),
+                                                      color.to_glib_none().0);
         }
     }
 
-    fn override_color(&self, state: StateFlags, color: &gdk_ffi::GdkRGBA) {
-        unsafe { ffi::gtk_widget_override_color(self.to_glib_none().0, state.to_glib(), color) }
+    fn override_color(&self, state: StateFlags, color: &RGBA) {
+        unsafe {
+            ffi::gtk_widget_override_color(self.to_glib_none().0,
+                                           state.to_glib(),
+                                           color.to_glib_none().0);
+        }
     }
 
-    fn override_symbolic_color(&self, name: &str, color: &gdk_ffi::GdkRGBA) {
+    fn override_symbolic_color(&self, name: &str, color: &RGBA) {
         unsafe {
             ffi::gtk_widget_override_symbolic_color(self.to_glib_none().0,
-                name.to_glib_none().0, color);
+                                                    name.to_glib_none().0,
+                                                    color.to_glib_none().0);
         }
     }
 
-    fn override_cursor(&self, cursor: &gdk_ffi::GdkRGBA, secondary_cursor: &gdk_ffi::GdkRGBA) {
+    fn override_cursor(&self, cursor: &RGBA, secondary_cursor: &RGBA) {
         unsafe {
-            ffi::gtk_widget_override_cursor(self.to_glib_none().0, cursor,
-                secondary_cursor)
+            ffi::gtk_widget_override_cursor(self.to_glib_none().0,
+                                            cursor.to_glib_none().0,
+                                            secondary_cursor.to_glib_none().0);
         }
     }
 

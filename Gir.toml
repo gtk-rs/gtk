@@ -243,6 +243,7 @@ manual = [
     "Gdk.ModifierIntent",
     "Gdk.ModifierType",
     "Gdk.Rectangle",
+    "Gdk.RGBA",
     "Gdk.Screen",
     "Gdk.Visual",
     "Gdk.Window",
