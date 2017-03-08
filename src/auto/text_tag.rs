@@ -108,11 +108,11 @@ impl TextTag {
         }
     }
 
-    //pub fn set_property_background_rgba(&self, background_rgba: /*Ignored*/Option<&gdk::RGBA>) {
-    //    unsafe {
-    //        gobject_ffi::g_object_set_property(self.to_glib_none().0, "background-rgba".to_glib_none().0, Value::from(background_rgba).to_glib_none().0);
-    //    }
-    //}
+    pub fn set_property_background_rgba(&self, background_rgba: Option<&gdk::RGBA>) {
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, "background-rgba".to_glib_none().0, Value::from(background_rgba).to_glib_none().0);
+        }
+    }
 
     pub fn get_property_background_set(&self) -> bool {
         let mut value = Value::from(&false);
@@ -279,11 +279,11 @@ impl TextTag {
         }
     }
 
-    //pub fn set_property_foreground_rgba(&self, foreground_rgba: /*Ignored*/Option<&gdk::RGBA>) {
-    //    unsafe {
-    //        gobject_ffi::g_object_set_property(self.to_glib_none().0, "foreground-rgba".to_glib_none().0, Value::from(foreground_rgba).to_glib_none().0);
-    //    }
-    //}
+    pub fn set_property_foreground_rgba(&self, foreground_rgba: Option<&gdk::RGBA>) {
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, "foreground-rgba".to_glib_none().0, Value::from(foreground_rgba).to_glib_none().0);
+        }
+    }
 
     pub fn get_property_foreground_set(&self) -> bool {
         let mut value = Value::from(&false);
@@ -490,11 +490,11 @@ impl TextTag {
         }
     }
 
-    //pub fn set_property_paragraph_background_rgba(&self, paragraph_background_rgba: /*Ignored*/Option<&gdk::RGBA>) {
-    //    unsafe {
-    //        gobject_ffi::g_object_set_property(self.to_glib_none().0, "paragraph-background-rgba".to_glib_none().0, Value::from(paragraph_background_rgba).to_glib_none().0);
-    //    }
-    //}
+    pub fn set_property_paragraph_background_rgba(&self, paragraph_background_rgba: Option<&gdk::RGBA>) {
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, "paragraph-background-rgba".to_glib_none().0, Value::from(paragraph_background_rgba).to_glib_none().0);
+        }
+    }
 
     pub fn get_property_paragraph_background_set(&self) -> bool {
         let mut value = Value::from(&false);
@@ -763,12 +763,12 @@ impl TextTag {
         }
     }
 
-    //#[cfg(feature = "v3_16")]
-    //pub fn set_property_strikethrough_rgba(&self, strikethrough_rgba: /*Ignored*/Option<&gdk::RGBA>) {
-    //    unsafe {
-    //        gobject_ffi::g_object_set_property(self.to_glib_none().0, "strikethrough-rgba".to_glib_none().0, Value::from(strikethrough_rgba).to_glib_none().0);
-    //    }
-    //}
+    #[cfg(feature = "v3_16")]
+    pub fn set_property_strikethrough_rgba(&self, strikethrough_rgba: Option<&gdk::RGBA>) {
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, "strikethrough-rgba".to_glib_none().0, Value::from(strikethrough_rgba).to_glib_none().0);
+        }
+    }
 
     #[cfg(feature = "v3_16")]
     pub fn get_property_strikethrough_rgba_set(&self) -> bool {
@@ -864,12 +864,12 @@ impl TextTag {
     //    }
     //}
 
-    //#[cfg(feature = "v3_16")]
-    //pub fn set_property_underline_rgba(&self, underline_rgba: /*Ignored*/Option<&gdk::RGBA>) {
-    //    unsafe {
-    //        gobject_ffi::g_object_set_property(self.to_glib_none().0, "underline-rgba".to_glib_none().0, Value::from(underline_rgba).to_glib_none().0);
-    //    }
-    //}
+    #[cfg(feature = "v3_16")]
+    pub fn set_property_underline_rgba(&self, underline_rgba: Option<&gdk::RGBA>) {
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, "underline-rgba".to_glib_none().0, Value::from(underline_rgba).to_glib_none().0);
+        }
+    }
 
     #[cfg(feature = "v3_16")]
     pub fn get_property_underline_rgba_set(&self) -> bool {

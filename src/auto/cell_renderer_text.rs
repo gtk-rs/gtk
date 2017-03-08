@@ -5,6 +5,7 @@ use CellRenderer;
 use Object;
 use TreePath;
 use ffi;
+use gdk;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
@@ -48,7 +49,7 @@ pub trait CellRendererTextExt {
 
     fn set_property_background(&self, background: Option<&str>);
 
-    //fn set_property_background_rgba(&self, background_rgba: /*Ignored*/Option<&gdk::RGBA>);
+    fn set_property_background_rgba(&self, background_rgba: Option<&gdk::RGBA>);
 
     fn get_property_background_set(&self) -> bool;
 
@@ -84,7 +85,7 @@ pub trait CellRendererTextExt {
 
     fn set_property_foreground(&self, foreground: Option<&str>);
 
-    //fn set_property_foreground_rgba(&self, foreground_rgba: /*Ignored*/Option<&gdk::RGBA>);
+    fn set_property_foreground_rgba(&self, foreground_rgba: Option<&gdk::RGBA>);
 
     fn get_property_foreground_set(&self) -> bool;
 
@@ -255,11 +256,11 @@ impl<O: IsA<CellRendererText> + IsA<Object>> CellRendererTextExt for O {
         }
     }
 
-    //fn set_property_background_rgba(&self, background_rgba: /*Ignored*/Option<&gdk::RGBA>) {
-    //    unsafe {
-    //        gobject_ffi::g_object_set_property(self.to_glib_none().0, "background-rgba".to_glib_none().0, Value::from(background_rgba).to_glib_none().0);
-    //    }
-    //}
+    fn set_property_background_rgba(&self, background_rgba: Option<&gdk::RGBA>) {
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, "background-rgba".to_glib_none().0, Value::from(background_rgba).to_glib_none().0);
+        }
+    }
 
     fn get_property_background_set(&self) -> bool {
         let mut value = Value::from(&false);
@@ -380,11 +381,11 @@ impl<O: IsA<CellRendererText> + IsA<Object>> CellRendererTextExt for O {
         }
     }
 
-    //fn set_property_foreground_rgba(&self, foreground_rgba: /*Ignored*/Option<&gdk::RGBA>) {
-    //    unsafe {
-    //        gobject_ffi::g_object_set_property(self.to_glib_none().0, "foreground-rgba".to_glib_none().0, Value::from(foreground_rgba).to_glib_none().0);
-    //    }
-    //}
+    fn set_property_foreground_rgba(&self, foreground_rgba: Option<&gdk::RGBA>) {
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, "foreground-rgba".to_glib_none().0, Value::from(foreground_rgba).to_glib_none().0);
+        }
+    }
 
     fn get_property_foreground_set(&self) -> bool {
         let mut value = Value::from(&false);
