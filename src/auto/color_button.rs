@@ -8,6 +8,7 @@ use ColorChooser;
 use Container;
 use Widget;
 use ffi;
+use gdk;
 use glib::Value;
 use glib::object::Downcast;
 use glib::signal::connect;
@@ -33,9 +34,12 @@ impl ColorButton {
         }
     }
 
-    //pub fn new_with_rgba(rgba: /*Ignored*/&gdk::RGBA) -> ColorButton {
-    //    unsafe { TODO: call ffi::gtk_color_button_new_with_rgba() }
-    //}
+    pub fn new_with_rgba(rgba: &gdk::RGBA) -> ColorButton {
+        assert_initialized_main_thread!();
+        unsafe {
+            Widget::from_glib_none(ffi::gtk_color_button_new_with_rgba(rgba.to_glib_none().0)).downcast_unchecked()
+        }
+    }
 
     pub fn get_title(&self) -> Option<String> {
         unsafe {
@@ -67,11 +71,11 @@ impl ColorButton {
         }
     }
 
-    //pub fn set_property_rgba(&self, rgba: /*Ignored*/Option<&gdk::RGBA>) {
-    //    unsafe {
-    //        gobject_ffi::g_object_set_property(self.to_glib_none().0, "rgba".to_glib_none().0, Value::from(rgba).to_glib_none().0);
-    //    }
-    //}
+    pub fn set_property_rgba(&self, rgba: Option<&gdk::RGBA>) {
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, "rgba".to_glib_none().0, Value::from(rgba).to_glib_none().0);
+        }
+    }
 
     #[cfg(feature = "v3_20")]
     pub fn get_property_show_editor(&self) -> bool {

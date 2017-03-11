@@ -82,7 +82,7 @@ pub trait CellRendererExt {
 
     fn set_property_cell_background(&self, cell_background: Option<&str>);
 
-    //fn set_property_cell_background_rgba(&self, cell_background_rgba: /*Ignored*/Option<&gdk::RGBA>);
+    fn set_property_cell_background_rgba(&self, cell_background_rgba: Option<&gdk::RGBA>);
 
     fn get_property_cell_background_set(&self) -> bool;
 
@@ -302,11 +302,11 @@ impl<O: IsA<CellRenderer> + IsA<Object>> CellRendererExt for O {
         }
     }
 
-    //fn set_property_cell_background_rgba(&self, cell_background_rgba: /*Ignored*/Option<&gdk::RGBA>) {
-    //    unsafe {
-    //        gobject_ffi::g_object_set_property(self.to_glib_none().0, "cell-background-rgba".to_glib_none().0, Value::from(cell_background_rgba).to_glib_none().0);
-    //    }
-    //}
+    fn set_property_cell_background_rgba(&self, cell_background_rgba: Option<&gdk::RGBA>) {
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, "cell-background-rgba".to_glib_none().0, Value::from(cell_background_rgba).to_glib_none().0);
+        }
+    }
 
     fn get_property_cell_background_set(&self) -> bool {
         let mut value = Value::from(&false);
