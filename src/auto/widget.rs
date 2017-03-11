@@ -405,15 +405,15 @@ pub trait WidgetExt {
 
     fn mnemonic_activate(&self, group_cycling: bool) -> bool;
 
-    //fn override_background_color(&self, state: StateFlags, color: /*Ignored*/Option<&gdk::RGBA>);
+    fn override_background_color(&self, state: StateFlags, color: Option<&gdk::RGBA>);
 
-    //fn override_color(&self, state: StateFlags, color: /*Ignored*/Option<&gdk::RGBA>);
+    fn override_color(&self, state: StateFlags, color: Option<&gdk::RGBA>);
 
-    //fn override_cursor(&self, cursor: /*Ignored*/Option<&gdk::RGBA>, secondary_cursor: /*Ignored*/Option<&gdk::RGBA>);
+    fn override_cursor(&self, cursor: Option<&gdk::RGBA>, secondary_cursor: Option<&gdk::RGBA>);
 
     fn override_font(&self, font_desc: Option<&pango::FontDescription>);
 
-    //fn override_symbolic_color(&self, name: &str, color: /*Ignored*/Option<&gdk::RGBA>);
+    fn override_symbolic_color(&self, name: &str, color: Option<&gdk::RGBA>);
 
     #[cfg(feature = "v3_20")]
     fn queue_allocate(&self);
@@ -1653,17 +1653,23 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExt for O {
         }
     }
 
-    //fn override_background_color(&self, state: StateFlags, color: /*Ignored*/Option<&gdk::RGBA>) {
-    //    unsafe { TODO: call ffi::gtk_widget_override_background_color() }
-    //}
+    fn override_background_color(&self, state: StateFlags, color: Option<&gdk::RGBA>) {
+        unsafe {
+            ffi::gtk_widget_override_background_color(self.to_glib_none().0, state.to_glib(), color.to_glib_none().0);
+        }
+    }
 
-    //fn override_color(&self, state: StateFlags, color: /*Ignored*/Option<&gdk::RGBA>) {
-    //    unsafe { TODO: call ffi::gtk_widget_override_color() }
-    //}
+    fn override_color(&self, state: StateFlags, color: Option<&gdk::RGBA>) {
+        unsafe {
+            ffi::gtk_widget_override_color(self.to_glib_none().0, state.to_glib(), color.to_glib_none().0);
+        }
+    }
 
-    //fn override_cursor(&self, cursor: /*Ignored*/Option<&gdk::RGBA>, secondary_cursor: /*Ignored*/Option<&gdk::RGBA>) {
-    //    unsafe { TODO: call ffi::gtk_widget_override_cursor() }
-    //}
+    fn override_cursor(&self, cursor: Option<&gdk::RGBA>, secondary_cursor: Option<&gdk::RGBA>) {
+        unsafe {
+            ffi::gtk_widget_override_cursor(self.to_glib_none().0, cursor.to_glib_none().0, secondary_cursor.to_glib_none().0);
+        }
+    }
 
     fn override_font(&self, font_desc: Option<&pango::FontDescription>) {
         unsafe {
@@ -1671,9 +1677,11 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExt for O {
         }
     }
 
-    //fn override_symbolic_color(&self, name: &str, color: /*Ignored*/Option<&gdk::RGBA>) {
-    //    unsafe { TODO: call ffi::gtk_widget_override_symbolic_color() }
-    //}
+    fn override_symbolic_color(&self, name: &str, color: Option<&gdk::RGBA>) {
+        unsafe {
+            ffi::gtk_widget_override_symbolic_color(self.to_glib_none().0, name.to_glib_none().0, color.to_glib_none().0);
+        }
+    }
 
     #[cfg(feature = "v3_20")]
     fn queue_allocate(&self) {

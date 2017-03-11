@@ -5,11 +5,11 @@
 use libc::c_int;
 
 use glib::translate::*;
-use gdk_ffi::GdkRGBA;
 use ffi;
 
 use glib::object::IsA;
-
+use gdk::RGBA;
+use gdk_ffi;
 use Orientation;
 
 glib_wrapper! {
@@ -21,27 +21,24 @@ glib_wrapper! {
 }
 
 pub trait ColorChooserExt {
-    fn get_rgba(&self) -> GdkRGBA;
-    fn set_rgba(&self, color: GdkRGBA);
+    fn get_rgba(&self) -> RGBA;
+    fn set_rgba(&self, color: &RGBA);
     fn get_use_alpha(&self) -> bool;
     fn set_use_alpha(&self, use_alpha: bool);
-    fn add_palette(&self, orientation: Orientation, colors_per_line: i32, colors: Vec<GdkRGBA>);
+    fn add_palette(&self, orientation: Orientation, colors_per_line: i32, colors: &[RGBA]);
 }
 
 impl<O: IsA<ColorChooser>> ColorChooserExt for O {
-    fn get_rgba(&self) -> GdkRGBA {
-        let mut color = GdkRGBA {
-            red: 0f64,
-            green: 0f64,
-            blue: 0f64,
-            alpha: 0f64
-        };
-        unsafe { ffi::gtk_color_chooser_get_rgba(self.to_glib_none().0, &mut color) };
-        color
+    fn get_rgba(&self) -> RGBA {
+        unsafe {
+            let mut color = RGBA::uninitialized();
+            ffi::gtk_color_chooser_get_rgba(self.to_glib_none().0, color.to_glib_none_mut().0);
+            color
+        }
     }
 
-    fn set_rgba(&self, color: GdkRGBA) {
-        unsafe { ffi::gtk_color_chooser_set_rgba(self.to_glib_none().0, &color) };
+    fn set_rgba(&self, color: &RGBA) {
+        unsafe { ffi::gtk_color_chooser_set_rgba(self.to_glib_none().0, color.to_glib_none().0) };
     }
 
     fn get_use_alpha(&self) -> bool {
@@ -55,9 +52,13 @@ impl<O: IsA<ColorChooser>> ColorChooserExt for O {
         }
     }
 
-    fn add_palette(&self, orientation: Orientation, colors_per_line: i32, colors: Vec<GdkRGBA>) {
+    fn add_palette(&self, orientation: Orientation, colors_per_line: i32, colors: &[RGBA]) {
         unsafe {
-            ffi::gtk_color_chooser_add_palette(self.to_glib_none().0, orientation.to_glib(),
-                colors_per_line, colors.len() as c_int, colors.as_ptr() as *mut GdkRGBA) }
+            ffi::gtk_color_chooser_add_palette(self.to_glib_none().0,
+                                               orientation.to_glib(),
+                                               colors_per_line,
+                                               colors.len() as c_int,
+                                               colors.as_ptr() as *mut gdk_ffi::GdkRGBA)
+        }
     }
 }

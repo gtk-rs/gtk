@@ -66,21 +66,33 @@ impl StyleContext {
     //    unsafe { TODO: call ffi::gtk_style_context_get() }
     //}
 
-    //pub fn get_background_color(&self, state: StateFlags, color: /*Ignored*/gdk::RGBA) {
-    //    unsafe { TODO: call ffi::gtk_style_context_get_background_color() }
-    //}
+    pub fn get_background_color(&self, state: StateFlags) -> gdk::RGBA {
+        unsafe {
+            let mut color = gdk::RGBA::uninitialized();
+            ffi::gtk_style_context_get_background_color(self.to_glib_none().0, state.to_glib(), color.to_glib_none_mut().0);
+            color
+        }
+    }
 
     //pub fn get_border(&self, state: StateFlags, border: /*Ignored*/Border) {
     //    unsafe { TODO: call ffi::gtk_style_context_get_border() }
     //}
 
-    //pub fn get_border_color(&self, state: StateFlags, color: /*Ignored*/gdk::RGBA) {
-    //    unsafe { TODO: call ffi::gtk_style_context_get_border_color() }
-    //}
+    pub fn get_border_color(&self, state: StateFlags) -> gdk::RGBA {
+        unsafe {
+            let mut color = gdk::RGBA::uninitialized();
+            ffi::gtk_style_context_get_border_color(self.to_glib_none().0, state.to_glib(), color.to_glib_none_mut().0);
+            color
+        }
+    }
 
-    //pub fn get_color(&self, state: StateFlags, color: /*Ignored*/gdk::RGBA) {
-    //    unsafe { TODO: call ffi::gtk_style_context_get_color() }
-    //}
+    pub fn get_color(&self, state: StateFlags) -> gdk::RGBA {
+        unsafe {
+            let mut color = gdk::RGBA::uninitialized();
+            ffi::gtk_style_context_get_color(self.to_glib_none().0, state.to_glib(), color.to_glib_none_mut().0);
+            color
+        }
+    }
 
     pub fn get_direction(&self) -> TextDirection {
         unsafe {
@@ -188,9 +200,13 @@ impl StyleContext {
         }
     }
 
-    //pub fn lookup_color(&self, color_name: &str, color: /*Ignored*/gdk::RGBA) -> bool {
-    //    unsafe { TODO: call ffi::gtk_style_context_lookup_color() }
-    //}
+    pub fn lookup_color(&self, color_name: &str) -> Option<gdk::RGBA> {
+        unsafe {
+            let mut color = gdk::RGBA::uninitialized();
+            let ret = from_glib(ffi::gtk_style_context_lookup_color(self.to_glib_none().0, color_name.to_glib_none().0, color.to_glib_none_mut().0));
+            if ret { Some(color) } else { None }
+        }
+    }
 
     //pub fn lookup_icon_set(&self, stock_id: &str) -> /*Ignored*/Option<IconSet> {
     //    unsafe { TODO: call ffi::gtk_style_context_lookup_icon_set() }
