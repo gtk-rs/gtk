@@ -268,7 +268,6 @@ manual = [
     "Gtk.Allocation",
     "Gtk.AppChooser",
     "Gtk.Builder",
-    "Gtk.ColorChooser",
     "Gtk.EntryBuffer",
     "Gtk.RecentData",
     "Gtk.RecentInfo",
@@ -493,6 +492,14 @@ name = "Gtk.Clipboard"
 status = "generate"
     [[object.function]]
     name = "set_text"
+    ignore = true
+
+[[object]]
+name = "Gtk.ColorChooser"
+status = "generate"
+    [[object.function]]
+    name = "add_palette"
+    #array with size
     ignore = true
 
 [[object]]
