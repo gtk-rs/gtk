@@ -228,7 +228,6 @@ pub use signal::*;
 pub use gdk::Rectangle as Allocation;
 pub use app_chooser::AppChooser;
 pub use builder::Builder;
-pub use color_chooser::ColorChooser;
 pub use entry_buffer::EntryBuffer;
 pub use recent_data::RecentData;
 pub use recent_info::RecentInfo;
