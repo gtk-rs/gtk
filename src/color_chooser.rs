@@ -10,48 +10,14 @@ use ffi;
 use glib::object::IsA;
 use gdk::RGBA;
 use gdk_ffi;
+use ColorChooser;
 use Orientation;
 
-glib_wrapper! {
-    pub struct ColorChooser(Object<ffi::GtkColorChooser>);
-
-    match fn {
-        get_type => || ffi::gtk_color_chooser_get_type(),
-    }
-}
-
-pub trait ColorChooserExt {
-    fn get_rgba(&self) -> RGBA;
-    fn set_rgba(&self, color: &RGBA);
-    fn get_use_alpha(&self) -> bool;
-    fn set_use_alpha(&self, use_alpha: bool);
+pub trait ColorChooserExtManual {
     fn add_palette(&self, orientation: Orientation, colors_per_line: i32, colors: &[RGBA]);
 }
 
-impl<O: IsA<ColorChooser>> ColorChooserExt for O {
-    fn get_rgba(&self) -> RGBA {
-        unsafe {
-            let mut color = RGBA::uninitialized();
-            ffi::gtk_color_chooser_get_rgba(self.to_glib_none().0, color.to_glib_none_mut().0);
-            color
-        }
-    }
-
-    fn set_rgba(&self, color: &RGBA) {
-        unsafe { ffi::gtk_color_chooser_set_rgba(self.to_glib_none().0, color.to_glib_none().0) };
-    }
-
-    fn get_use_alpha(&self) -> bool {
-        unsafe { from_glib(ffi::gtk_color_chooser_get_use_alpha(self.to_glib_none().0)) }
-    }
-
-    fn set_use_alpha(&self, use_alpha: bool) {
-        unsafe {
-            ffi::gtk_color_chooser_set_use_alpha(self.to_glib_none().0,
-                use_alpha.to_glib())
-        }
-    }
-
+impl<O: IsA<ColorChooser>> ColorChooserExtManual for O {
     fn add_palette(&self, orientation: Orientation, colors_per_line: i32, colors: &[RGBA]) {
         unsafe {
             ffi::gtk_color_chooser_add_palette(self.to_glib_none().0,
