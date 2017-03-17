@@ -163,7 +163,7 @@ pub trait EntryExt {
 
     fn set_icon_activatable(&self, icon_pos: EntryIconPosition, activatable: bool);
 
-    //fn set_icon_drag_source(&self, icon_pos: EntryIconPosition, target_list: /*Ignored*/&TargetList, actions: /*Ignored*/gdk::DragAction);
+    //fn set_icon_drag_source(&self, icon_pos: EntryIconPosition, target_list: /*Ignored*/&TargetList, actions: gdk::DragAction);
 
     //fn set_icon_from_gicon<T: IsA</*Ignored*/gio::Icon>>(&self, icon_pos: EntryIconPosition, icon: Option<&T>);
 
@@ -645,7 +645,7 @@ impl<O: IsA<Entry> + IsA<Object>> EntryExt for O {
         }
     }
 
-    //fn set_icon_drag_source(&self, icon_pos: EntryIconPosition, target_list: /*Ignored*/&TargetList, actions: /*Ignored*/gdk::DragAction) {
+    //fn set_icon_drag_source(&self, icon_pos: EntryIconPosition, target_list: /*Ignored*/&TargetList, actions: gdk::DragAction) {
     //    unsafe { TODO: call ffi::gtk_entry_set_icon_drag_source() }
     //}
 

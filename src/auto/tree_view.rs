@@ -139,11 +139,11 @@ impl TreeView {
         }
     }
 
-    //pub fn enable_model_drag_dest(&self, targets: /*Ignored*/&[&TargetEntry], n_targets: i32, actions: /*Ignored*/gdk::DragAction) {
+    //pub fn enable_model_drag_dest(&self, targets: /*Ignored*/&[&TargetEntry], n_targets: i32, actions: gdk::DragAction) {
     //    unsafe { TODO: call ffi::gtk_tree_view_enable_model_drag_dest() }
     //}
 
-    //pub fn enable_model_drag_source(&self, start_button_mask: gdk::ModifierType, targets: /*Ignored*/&[&TargetEntry], n_targets: i32, actions: /*Ignored*/gdk::DragAction) {
+    //pub fn enable_model_drag_source(&self, start_button_mask: gdk::ModifierType, targets: /*Ignored*/&[&TargetEntry], n_targets: i32, actions: gdk::DragAction) {
     //    unsafe { TODO: call ffi::gtk_tree_view_enable_model_drag_source() }
     //}
 

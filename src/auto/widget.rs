@@ -89,7 +89,7 @@ pub trait WidgetExt {
 
     fn add_accelerator(&self, accel_signal: &str, accel_group: &AccelGroup, accel_key: u32, accel_mods: gdk::ModifierType, accel_flags: AccelFlags);
 
-    //fn add_device_events<T: IsA<gdk::Device>>(&self, device: &T, events: /*Ignored*/gdk::EventMask);
+    fn add_device_events<T: IsA<gdk::Device>>(&self, device: &T, events: gdk::EventMask);
 
     fn add_events(&self, events: i32);
 
@@ -116,10 +116,10 @@ pub trait WidgetExt {
 
     fn device_is_shadowed<T: IsA<gdk::Device>>(&self, device: &T) -> bool;
 
-    //fn drag_begin(&self, targets: /*Ignored*/&TargetList, actions: /*Ignored*/gdk::DragAction, button: i32, event: Option<&gdk::Event>) -> Option<gdk::DragContext>;
+    //fn drag_begin(&self, targets: /*Ignored*/&TargetList, actions: gdk::DragAction, button: i32, event: Option<&gdk::Event>) -> Option<gdk::DragContext>;
 
     //#[cfg(feature = "v3_10")]
-    //fn drag_begin_with_coordinates(&self, targets: /*Ignored*/&TargetList, actions: /*Ignored*/gdk::DragAction, button: i32, event: Option<&gdk::Event>, x: i32, y: i32) -> Option<gdk::DragContext>;
+    //fn drag_begin_with_coordinates(&self, targets: /*Ignored*/&TargetList, actions: gdk::DragAction, button: i32, event: Option<&gdk::Event>, x: i32, y: i32) -> Option<gdk::DragContext>;
 
     fn drag_check_threshold(&self, start_x: i32, start_y: i32, current_x: i32, current_y: i32) -> bool;
 
@@ -135,9 +135,9 @@ pub trait WidgetExt {
 
     fn drag_dest_get_track_motion(&self) -> bool;
 
-    //fn drag_dest_set(&self, flags: DestDefaults, targets: /*Ignored*/&[&TargetEntry], n_targets: i32, actions: /*Ignored*/gdk::DragAction);
+    //fn drag_dest_set(&self, flags: DestDefaults, targets: /*Ignored*/&[&TargetEntry], n_targets: i32, actions: gdk::DragAction);
 
-    //fn drag_dest_set_proxy(&self, proxy_window: &gdk::Window, protocol: /*Ignored*/gdk::DragProtocol, use_coordinates: bool);
+    fn drag_dest_set_proxy(&self, proxy_window: &gdk::Window, protocol: gdk::DragProtocol, use_coordinates: bool);
 
     //fn drag_dest_set_target_list(&self, target_list: /*Ignored*/Option<&TargetList>);
 
@@ -157,7 +157,7 @@ pub trait WidgetExt {
 
     //fn drag_source_get_target_list(&self) -> /*Ignored*/Option<TargetList>;
 
-    //fn drag_source_set(&self, start_button_mask: gdk::ModifierType, targets: /*Ignored*/&[&TargetEntry], n_targets: i32, actions: /*Ignored*/gdk::DragAction);
+    //fn drag_source_set(&self, start_button_mask: gdk::ModifierType, targets: /*Ignored*/&[&TargetEntry], n_targets: i32, actions: gdk::DragAction);
 
     //fn drag_source_set_icon_gicon<T: IsA</*Ignored*/gio::Icon>>(&self, icon: &T);
 
@@ -217,7 +217,7 @@ pub trait WidgetExt {
 
     fn get_device_enabled<T: IsA<gdk::Device>>(&self, device: &T) -> bool;
 
-    //fn get_device_events<T: IsA<gdk::Device>>(&self, device: &T) -> /*Ignored*/gdk::EventMask;
+    fn get_device_events<T: IsA<gdk::Device>>(&self, device: &T) -> gdk::EventMask;
 
     fn get_direction(&self) -> TextDirection;
 
@@ -473,7 +473,7 @@ pub trait WidgetExt {
 
     fn set_device_enabled<T: IsA<gdk::Device>>(&self, device: &T, enabled: bool);
 
-    //fn set_device_events<T: IsA<gdk::Device>>(&self, device: &T, events: /*Ignored*/gdk::EventMask);
+    fn set_device_events<T: IsA<gdk::Device>>(&self, device: &T, events: gdk::EventMask);
 
     fn set_direction(&self, dir: TextDirection);
 
@@ -767,9 +767,11 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExt for O {
         }
     }
 
-    //fn add_device_events<T: IsA<gdk::Device>>(&self, device: &T, events: /*Ignored*/gdk::EventMask) {
-    //    unsafe { TODO: call ffi::gtk_widget_add_device_events() }
-    //}
+    fn add_device_events<T: IsA<gdk::Device>>(&self, device: &T, events: gdk::EventMask) {
+        unsafe {
+            ffi::gtk_widget_add_device_events(self.to_glib_none().0, device.to_glib_none().0, events.to_glib());
+        }
+    }
 
     fn add_events(&self, events: i32) {
         unsafe {
@@ -836,12 +838,12 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExt for O {
         }
     }
 
-    //fn drag_begin(&self, targets: /*Ignored*/&TargetList, actions: /*Ignored*/gdk::DragAction, button: i32, event: Option<&gdk::Event>) -> Option<gdk::DragContext> {
+    //fn drag_begin(&self, targets: /*Ignored*/&TargetList, actions: gdk::DragAction, button: i32, event: Option<&gdk::Event>) -> Option<gdk::DragContext> {
     //    unsafe { TODO: call ffi::gtk_drag_begin() }
     //}
 
     //#[cfg(feature = "v3_10")]
-    //fn drag_begin_with_coordinates(&self, targets: /*Ignored*/&TargetList, actions: /*Ignored*/gdk::DragAction, button: i32, event: Option<&gdk::Event>, x: i32, y: i32) -> Option<gdk::DragContext> {
+    //fn drag_begin_with_coordinates(&self, targets: /*Ignored*/&TargetList, actions: gdk::DragAction, button: i32, event: Option<&gdk::Event>, x: i32, y: i32) -> Option<gdk::DragContext> {
     //    unsafe { TODO: call ffi::gtk_drag_begin_with_coordinates() }
     //}
 
@@ -883,13 +885,15 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExt for O {
         }
     }
 
-    //fn drag_dest_set(&self, flags: DestDefaults, targets: /*Ignored*/&[&TargetEntry], n_targets: i32, actions: /*Ignored*/gdk::DragAction) {
+    //fn drag_dest_set(&self, flags: DestDefaults, targets: /*Ignored*/&[&TargetEntry], n_targets: i32, actions: gdk::DragAction) {
     //    unsafe { TODO: call ffi::gtk_drag_dest_set() }
     //}
 
-    //fn drag_dest_set_proxy(&self, proxy_window: &gdk::Window, protocol: /*Ignored*/gdk::DragProtocol, use_coordinates: bool) {
-    //    unsafe { TODO: call ffi::gtk_drag_dest_set_proxy() }
-    //}
+    fn drag_dest_set_proxy(&self, proxy_window: &gdk::Window, protocol: gdk::DragProtocol, use_coordinates: bool) {
+        unsafe {
+            ffi::gtk_drag_dest_set_proxy(self.to_glib_none().0, proxy_window.to_glib_none().0, protocol.to_glib(), use_coordinates.to_glib());
+        }
+    }
 
     //fn drag_dest_set_target_list(&self, target_list: /*Ignored*/Option<&TargetList>) {
     //    unsafe { TODO: call ffi::gtk_drag_dest_set_target_list() }
@@ -939,7 +943,7 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExt for O {
     //    unsafe { TODO: call ffi::gtk_drag_source_get_target_list() }
     //}
 
-    //fn drag_source_set(&self, start_button_mask: gdk::ModifierType, targets: /*Ignored*/&[&TargetEntry], n_targets: i32, actions: /*Ignored*/gdk::DragAction) {
+    //fn drag_source_set(&self, start_button_mask: gdk::ModifierType, targets: /*Ignored*/&[&TargetEntry], n_targets: i32, actions: gdk::DragAction) {
     //    unsafe { TODO: call ffi::gtk_drag_source_set() }
     //}
 
@@ -1108,9 +1112,11 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExt for O {
         }
     }
 
-    //fn get_device_events<T: IsA<gdk::Device>>(&self, device: &T) -> /*Ignored*/gdk::EventMask {
-    //    unsafe { TODO: call ffi::gtk_widget_get_device_events() }
-    //}
+    fn get_device_events<T: IsA<gdk::Device>>(&self, device: &T) -> gdk::EventMask {
+        unsafe {
+            from_glib(ffi::gtk_widget_get_device_events(self.to_glib_none().0, device.to_glib_none().0))
+        }
+    }
 
     fn get_direction(&self) -> TextDirection {
         unsafe {
@@ -1845,9 +1851,11 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExt for O {
         }
     }
 
-    //fn set_device_events<T: IsA<gdk::Device>>(&self, device: &T, events: /*Ignored*/gdk::EventMask) {
-    //    unsafe { TODO: call ffi::gtk_widget_set_device_events() }
-    //}
+    fn set_device_events<T: IsA<gdk::Device>>(&self, device: &T, events: gdk::EventMask) {
+        unsafe {
+            ffi::gtk_widget_set_device_events(self.to_glib_none().0, device.to_glib_none().0, events.to_glib());
+        }
+    }
 
     fn set_direction(&self, dir: TextDirection) {
         unsafe {

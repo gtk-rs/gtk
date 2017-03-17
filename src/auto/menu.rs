@@ -107,9 +107,11 @@ impl Menu {
         }
     }
 
-    //pub fn place_on_monitor(&self, monitor: /*Ignored*/&gdk::Monitor) {
-    //    unsafe { TODO: call ffi::gtk_menu_place_on_monitor() }
-    //}
+    pub fn place_on_monitor(&self, monitor: &gdk::Monitor) {
+        unsafe {
+            ffi::gtk_menu_place_on_monitor(self.to_glib_none().0, monitor.to_glib_none().0);
+        }
+    }
 
     pub fn popdown(&self) {
         unsafe {
@@ -206,22 +208,22 @@ impl Menu {
         }
     }
 
-    //#[cfg(feature = "v3_22")]
-    //pub fn get_property_anchor_hints(&self) -> /*Ignored*/gdk::AnchorHints {
-    //    let mut value = Value::from(&0u32);
-    //    unsafe {
-    //        gobject_ffi::g_object_get_property(self.to_glib_none().0, "anchor-hints".to_glib_none().0, value.to_glib_none_mut().0);
-    //        from_glib(transmute(value.get::<u32>().unwrap()))
-    //    }
-    //}
+    #[cfg(feature = "v3_22")]
+    pub fn get_property_anchor_hints(&self) -> gdk::AnchorHints {
+        let mut value = Value::from(&0u32);
+        unsafe {
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, "anchor-hints".to_glib_none().0, value.to_glib_none_mut().0);
+            from_glib(transmute(value.get::<u32>().unwrap()))
+        }
+    }
 
-    //#[cfg(feature = "v3_22")]
-    //pub fn set_property_anchor_hints(&self, anchor_hints: /*Ignored*/gdk::AnchorHints) {
-    //    let anchor_hints = anchor_hints.to_glib().bits() as u32;
-    //    unsafe {
-    //        gobject_ffi::g_object_set_property(self.to_glib_none().0, "anchor-hints".to_glib_none().0, Value::from(&anchor_hints).to_glib_none().0);
-    //    }
-    //}
+    #[cfg(feature = "v3_22")]
+    pub fn set_property_anchor_hints(&self, anchor_hints: gdk::AnchorHints) {
+        let anchor_hints = anchor_hints.to_glib().bits() as u32;
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, "anchor-hints".to_glib_none().0, Value::from(&anchor_hints).to_glib_none().0);
+        }
+    }
 
     pub fn set_property_attach_widget(&self, attach_widget: Option<&Widget>) {
         unsafe {
