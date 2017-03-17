@@ -268,7 +268,7 @@ pub trait WindowExt {
 
     fn set_focus_visible(&self, setting: bool);
 
-    //fn set_geometry_hints<T: IsA<Widget>>(&self, geometry_widget: Option<&T>, geometry: /*Ignored*/Option<&mut gdk::Geometry>, geom_mask: /*Ignored*/gdk::WindowHints);
+    //fn set_geometry_hints<T: IsA<Widget>>(&self, geometry_widget: Option<&T>, geometry: /*Ignored*/Option<&mut gdk::Geometry>, geom_mask: gdk::WindowHints);
 
     fn set_gravity(&self, gravity: gdk::Gravity);
 
@@ -842,7 +842,7 @@ impl<O: IsA<Window> + IsA<Object>> WindowExt for O {
         }
     }
 
-    //fn set_geometry_hints<T: IsA<Widget>>(&self, geometry_widget: Option<&T>, geometry: /*Ignored*/Option<&mut gdk::Geometry>, geom_mask: /*Ignored*/gdk::WindowHints) {
+    //fn set_geometry_hints<T: IsA<Widget>>(&self, geometry_widget: Option<&T>, geometry: /*Ignored*/Option<&mut gdk::Geometry>, geom_mask: gdk::WindowHints) {
     //    unsafe { TODO: call ffi::gtk_window_set_geometry_hints() }
     //}
 

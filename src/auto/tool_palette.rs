@@ -2,6 +2,7 @@
 // DO NOT EDIT
 
 use Container;
+use DestDefaults;
 use Orientable;
 use Scrollable;
 use SelectionData;
@@ -11,8 +12,10 @@ use ToolPaletteDragTargets;
 use ToolbarStyle;
 use Widget;
 use ffi;
+use gdk;
 use glib::Value;
 use glib::object::Downcast;
+use glib::object::IsA;
 use glib::translate::*;
 use gobject_ffi;
 use std::mem::transmute;
@@ -33,9 +36,11 @@ impl ToolPalette {
         }
     }
 
-    //pub fn add_drag_dest<T: IsA<Widget>>(&self, widget: &T, flags: DestDefaults, targets: ToolPaletteDragTargets, actions: /*Ignored*/gdk::DragAction) {
-    //    unsafe { TODO: call ffi::gtk_tool_palette_add_drag_dest() }
-    //}
+    pub fn add_drag_dest<T: IsA<Widget>>(&self, widget: &T, flags: DestDefaults, targets: ToolPaletteDragTargets, actions: gdk::DragAction) {
+        unsafe {
+            ffi::gtk_tool_palette_add_drag_dest(self.to_glib_none().0, widget.to_glib_none().0, flags.to_glib(), targets.to_glib(), actions.to_glib());
+        }
+    }
 
     pub fn get_drag_item(&self, selection: &SelectionData) -> Option<Widget> {
         unsafe {
