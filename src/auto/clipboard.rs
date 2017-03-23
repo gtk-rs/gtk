@@ -67,21 +67,17 @@ impl Clipboard {
     //    unsafe { TODO: call ffi::gtk_clipboard_request_uris() }
     //}
 
-    //pub fn set_can_store(&self, targets: /*Ignored*/&[&TargetEntry], n_targets: i32) {
-    //    unsafe { TODO: call ffi::gtk_clipboard_set_can_store() }
-    //}
-
     pub fn set_image(&self, pixbuf: &gdk_pixbuf::Pixbuf) {
         unsafe {
             ffi::gtk_clipboard_set_image(self.to_glib_none().0, pixbuf.to_glib_none().0);
         }
     }
 
-    //pub fn set_with_data(&self, targets: /*Ignored*/&[&TargetEntry], n_targets: u32, get_func: /*Unknown conversion*//*Unimplemented*/ClipboardGetFunc, clear_func: /*Unknown conversion*//*Unimplemented*/ClipboardClearFunc, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> bool {
+    //pub fn set_with_data(&self, targets: &[&TargetEntry], n_targets: u32, get_func: /*Unknown conversion*//*Unimplemented*/ClipboardGetFunc, clear_func: /*Unknown conversion*//*Unimplemented*/ClipboardClearFunc, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) -> bool {
     //    unsafe { TODO: call ffi::gtk_clipboard_set_with_data() }
     //}
 
-    //pub fn set_with_owner<T: IsA<glib::Object>>(&self, targets: /*Ignored*/&[&TargetEntry], n_targets: u32, get_func: /*Unknown conversion*//*Unimplemented*/ClipboardGetFunc, clear_func: /*Unknown conversion*//*Unimplemented*/ClipboardClearFunc, owner: &T) -> bool {
+    //pub fn set_with_owner<T: IsA<glib::Object>>(&self, targets: &[&TargetEntry], n_targets: u32, get_func: /*Unknown conversion*//*Unimplemented*/ClipboardGetFunc, clear_func: /*Unknown conversion*//*Unimplemented*/ClipboardClearFunc, owner: &T) -> bool {
     //    unsafe { TODO: call ffi::gtk_clipboard_set_with_owner() }
     //}
 

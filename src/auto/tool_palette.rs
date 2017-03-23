@@ -6,6 +6,7 @@ use DestDefaults;
 use Orientable;
 use Scrollable;
 use SelectionData;
+use TargetEntry;
 use ToolItem;
 use ToolItemGroup;
 use ToolPaletteDragTargets;
@@ -167,11 +168,17 @@ impl ToolPalette {
         }
     }
 
-    //pub fn get_drag_target_group() -> /*Ignored*/Option<TargetEntry> {
-    //    unsafe { TODO: call ffi::gtk_tool_palette_get_drag_target_group() }
-    //}
+    pub fn get_drag_target_group() -> Option<TargetEntry> {
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_none(ffi::gtk_tool_palette_get_drag_target_group())
+        }
+    }
 
-    //pub fn get_drag_target_item() -> /*Ignored*/Option<TargetEntry> {
-    //    unsafe { TODO: call ffi::gtk_tool_palette_get_drag_target_item() }
-    //}
+    pub fn get_drag_target_item() -> Option<TargetEntry> {
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_none(ffi::gtk_tool_palette_get_drag_target_item())
+        }
+    }
 }

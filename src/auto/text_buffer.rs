@@ -2,6 +2,7 @@
 // DO NOT EDIT
 
 use Clipboard;
+use TargetList;
 use TextChildAnchor;
 use TextIter;
 use TextMark;
@@ -166,9 +167,11 @@ impl TextBuffer {
         }
     }
 
-    //pub fn get_copy_target_list(&self) -> /*Ignored*/Option<TargetList> {
-    //    unsafe { TODO: call ffi::gtk_text_buffer_get_copy_target_list() }
-    //}
+    pub fn get_copy_target_list(&self) -> Option<TargetList> {
+        unsafe {
+            from_glib_none(ffi::gtk_text_buffer_get_copy_target_list(self.to_glib_none().0))
+        }
+    }
 
     pub fn get_end_iter(&self) -> TextIter {
         unsafe {
@@ -256,9 +259,11 @@ impl TextBuffer {
         }
     }
 
-    //pub fn get_paste_target_list(&self) -> /*Ignored*/Option<TargetList> {
-    //    unsafe { TODO: call ffi::gtk_text_buffer_get_paste_target_list() }
-    //}
+    pub fn get_paste_target_list(&self) -> Option<TargetList> {
+        unsafe {
+            from_glib_none(ffi::gtk_text_buffer_get_paste_target_list(self.to_glib_none().0))
+        }
+    }
 
     pub fn get_selection_bound(&self) -> Option<TextMark> {
         unsafe {

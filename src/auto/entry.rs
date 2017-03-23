@@ -16,6 +16,7 @@ use InputPurpose;
 use MovementStep;
 use Object;
 use ShadowType;
+use TargetList;
 use Widget;
 use ffi;
 use gdk;
@@ -163,7 +164,7 @@ pub trait EntryExt {
 
     fn set_icon_activatable(&self, icon_pos: EntryIconPosition, activatable: bool);
 
-    //fn set_icon_drag_source(&self, icon_pos: EntryIconPosition, target_list: /*Ignored*/&TargetList, actions: gdk::DragAction);
+    fn set_icon_drag_source(&self, icon_pos: EntryIconPosition, target_list: &TargetList, actions: gdk::DragAction);
 
     //fn set_icon_from_gicon<T: IsA</*Ignored*/gio::Icon>>(&self, icon_pos: EntryIconPosition, icon: Option<&T>);
 
@@ -645,9 +646,11 @@ impl<O: IsA<Entry> + IsA<Object>> EntryExt for O {
         }
     }
 
-    //fn set_icon_drag_source(&self, icon_pos: EntryIconPosition, target_list: /*Ignored*/&TargetList, actions: gdk::DragAction) {
-    //    unsafe { TODO: call ffi::gtk_entry_set_icon_drag_source() }
-    //}
+    fn set_icon_drag_source(&self, icon_pos: EntryIconPosition, target_list: &TargetList, actions: gdk::DragAction) {
+        unsafe {
+            ffi::gtk_entry_set_icon_drag_source(self.to_glib_none().0, icon_pos.to_glib(), target_list.to_glib_none().0, actions.to_glib());
+        }
+    }
 
     //fn set_icon_from_gicon<T: IsA</*Ignored*/gio::Icon>>(&self, icon_pos: EntryIconPosition, icon: Option<&T>) {
     //    unsafe { TODO: call ffi::gtk_entry_set_icon_from_gicon() }

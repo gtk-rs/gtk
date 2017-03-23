@@ -87,21 +87,21 @@ impl SelectionData {
     //    unsafe { TODO: call ffi::gtk_selection_data_set() }
     //}
 
-    pub fn set_pixbuf(&mut self, pixbuf: &gdk_pixbuf::Pixbuf) -> bool {
+    pub fn set_pixbuf(&self, pixbuf: &gdk_pixbuf::Pixbuf) -> bool {
         unsafe {
-            from_glib(ffi::gtk_selection_data_set_pixbuf(self.to_glib_none_mut().0, pixbuf.to_glib_none().0))
+            from_glib(ffi::gtk_selection_data_set_pixbuf(mut_override(self.to_glib_none().0), pixbuf.to_glib_none().0))
         }
     }
 
-    pub fn set_text(&mut self, str: &str, len: i32) -> bool {
+    pub fn set_text(&self, str: &str, len: i32) -> bool {
         unsafe {
-            from_glib(ffi::gtk_selection_data_set_text(self.to_glib_none_mut().0, str.to_glib_none().0, len))
+            from_glib(ffi::gtk_selection_data_set_text(mut_override(self.to_glib_none().0), str.to_glib_none().0, len))
         }
     }
 
-    pub fn set_uris(&mut self, uris: &[&str]) -> bool {
+    pub fn set_uris(&self, uris: &[&str]) -> bool {
         unsafe {
-            from_glib(ffi::gtk_selection_data_set_uris(self.to_glib_none_mut().0, uris.to_glib_none().0))
+            from_glib(ffi::gtk_selection_data_set_uris(mut_override(self.to_glib_none().0), uris.to_glib_none().0))
         }
     }
 

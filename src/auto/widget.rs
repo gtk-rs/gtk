@@ -16,6 +16,7 @@ use Settings;
 use SizeRequestMode;
 use StateFlags;
 use StyleContext;
+use TargetList;
 use TextDirection;
 use Tooltip;
 use WidgetHelpType;
@@ -117,10 +118,10 @@ pub trait WidgetExt {
 
     fn device_is_shadowed<T: IsA<gdk::Device>>(&self, device: &T) -> bool;
 
-    //fn drag_begin(&self, targets: /*Ignored*/&TargetList, actions: gdk::DragAction, button: i32, event: Option<&gdk::Event>) -> Option<gdk::DragContext>;
+    fn drag_begin(&self, targets: &TargetList, actions: gdk::DragAction, button: i32, event: Option<&gdk::Event>) -> Option<gdk::DragContext>;
 
-    //#[cfg(feature = "v3_10")]
-    //fn drag_begin_with_coordinates(&self, targets: /*Ignored*/&TargetList, actions: gdk::DragAction, button: i32, event: Option<&gdk::Event>, x: i32, y: i32) -> Option<gdk::DragContext>;
+    #[cfg(feature = "v3_10")]
+    fn drag_begin_with_coordinates(&self, targets: &TargetList, actions: gdk::DragAction, button: i32, event: Option<&gdk::Event>, x: i32, y: i32) -> Option<gdk::DragContext>;
 
     fn drag_check_threshold(&self, start_x: i32, start_y: i32, current_x: i32, current_y: i32) -> bool;
 
@@ -130,17 +131,15 @@ pub trait WidgetExt {
 
     fn drag_dest_add_uri_targets(&self);
 
-    //fn drag_dest_find_target(&self, context: &gdk::DragContext, target_list: /*Ignored*/Option<&TargetList>) -> Option<gdk::Atom>;
+    fn drag_dest_find_target(&self, context: &gdk::DragContext, target_list: Option<&TargetList>) -> Option<gdk::Atom>;
 
-    //fn drag_dest_get_target_list(&self) -> /*Ignored*/Option<TargetList>;
+    fn drag_dest_get_target_list(&self) -> Option<TargetList>;
 
     fn drag_dest_get_track_motion(&self) -> bool;
 
-    //fn drag_dest_set(&self, flags: DestDefaults, targets: /*Ignored*/&[&TargetEntry], n_targets: i32, actions: gdk::DragAction);
-
     fn drag_dest_set_proxy(&self, proxy_window: &gdk::Window, protocol: gdk::DragProtocol, use_coordinates: bool);
 
-    //fn drag_dest_set_target_list(&self, target_list: /*Ignored*/Option<&TargetList>);
+    fn drag_dest_set_target_list(&self, target_list: Option<&TargetList>);
 
     fn drag_dest_set_track_motion(&self, track_motion: bool);
 
@@ -156,9 +155,7 @@ pub trait WidgetExt {
 
     fn drag_source_add_uri_targets(&self);
 
-    //fn drag_source_get_target_list(&self) -> /*Ignored*/Option<TargetList>;
-
-    //fn drag_source_set(&self, start_button_mask: gdk::ModifierType, targets: /*Ignored*/&[&TargetEntry], n_targets: i32, actions: gdk::DragAction);
+    fn drag_source_get_target_list(&self) -> Option<TargetList>;
 
     //fn drag_source_set_icon_gicon<T: IsA</*Ignored*/gio::Icon>>(&self, icon: &T);
 
@@ -168,7 +165,7 @@ pub trait WidgetExt {
 
     fn drag_source_set_icon_stock(&self, stock_id: &str);
 
-    //fn drag_source_set_target_list(&self, target_list: /*Ignored*/Option<&TargetList>);
+    fn drag_source_set_target_list(&self, target_list: Option<&TargetList>);
 
     fn drag_source_unset(&self);
 
@@ -656,7 +653,7 @@ pub trait WidgetExt {
 
     fn connect_drag_data_received<F: Fn(&Self, &gdk::DragContext, i32, i32, &SelectionData, u32, u32) + 'static>(&self, f: F) -> u64;
 
-    fn connect_drag_drop<F: Fn(&Self, &gdk::DragContext, i32, i32, u32) -> bool + 'static>(&self, f: F) -> u64;
+    fn connect_drag_drop<F: Fn(&Self, &gdk::DragContext, i32, i32, u32) -> Inhibit + 'static>(&self, f: F) -> u64;
 
     fn connect_drag_end<F: Fn(&Self, &gdk::DragContext) + 'static>(&self, f: F) -> u64;
 
@@ -664,7 +661,7 @@ pub trait WidgetExt {
 
     fn connect_drag_leave<F: Fn(&Self, &gdk::DragContext, u32) + 'static>(&self, f: F) -> u64;
 
-    fn connect_drag_motion<F: Fn(&Self, &gdk::DragContext, i32, i32, u32) -> bool + 'static>(&self, f: F) -> u64;
+    fn connect_drag_motion<F: Fn(&Self, &gdk::DragContext, i32, i32, u32) -> Inhibit + 'static>(&self, f: F) -> u64;
 
     fn connect_draw<F: Fn(&Self, &cairo::Context) -> Inhibit + 'static>(&self, f: F) -> u64;
 
@@ -839,14 +836,18 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExt for O {
         }
     }
 
-    //fn drag_begin(&self, targets: /*Ignored*/&TargetList, actions: gdk::DragAction, button: i32, event: Option<&gdk::Event>) -> Option<gdk::DragContext> {
-    //    unsafe { TODO: call ffi::gtk_drag_begin() }
-    //}
+    fn drag_begin(&self, targets: &TargetList, actions: gdk::DragAction, button: i32, event: Option<&gdk::Event>) -> Option<gdk::DragContext> {
+        unsafe {
+            from_glib_none(ffi::gtk_drag_begin(self.to_glib_none().0, targets.to_glib_none().0, actions.to_glib(), button, mut_override(event.to_glib_none().0)))
+        }
+    }
 
-    //#[cfg(feature = "v3_10")]
-    //fn drag_begin_with_coordinates(&self, targets: /*Ignored*/&TargetList, actions: gdk::DragAction, button: i32, event: Option<&gdk::Event>, x: i32, y: i32) -> Option<gdk::DragContext> {
-    //    unsafe { TODO: call ffi::gtk_drag_begin_with_coordinates() }
-    //}
+    #[cfg(feature = "v3_10")]
+    fn drag_begin_with_coordinates(&self, targets: &TargetList, actions: gdk::DragAction, button: i32, event: Option<&gdk::Event>, x: i32, y: i32) -> Option<gdk::DragContext> {
+        unsafe {
+            from_glib_none(ffi::gtk_drag_begin_with_coordinates(self.to_glib_none().0, targets.to_glib_none().0, actions.to_glib(), button, mut_override(event.to_glib_none().0), x, y))
+        }
+    }
 
     fn drag_check_threshold(&self, start_x: i32, start_y: i32, current_x: i32, current_y: i32) -> bool {
         unsafe {
@@ -872,13 +873,17 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExt for O {
         }
     }
 
-    //fn drag_dest_find_target(&self, context: &gdk::DragContext, target_list: /*Ignored*/Option<&TargetList>) -> Option<gdk::Atom> {
-    //    unsafe { TODO: call ffi::gtk_drag_dest_find_target() }
-    //}
+    fn drag_dest_find_target(&self, context: &gdk::DragContext, target_list: Option<&TargetList>) -> Option<gdk::Atom> {
+        unsafe {
+            from_glib_none(ffi::gtk_drag_dest_find_target(self.to_glib_none().0, context.to_glib_none().0, target_list.to_glib_none().0))
+        }
+    }
 
-    //fn drag_dest_get_target_list(&self) -> /*Ignored*/Option<TargetList> {
-    //    unsafe { TODO: call ffi::gtk_drag_dest_get_target_list() }
-    //}
+    fn drag_dest_get_target_list(&self) -> Option<TargetList> {
+        unsafe {
+            from_glib_none(ffi::gtk_drag_dest_get_target_list(self.to_glib_none().0))
+        }
+    }
 
     fn drag_dest_get_track_motion(&self) -> bool {
         unsafe {
@@ -886,19 +891,17 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExt for O {
         }
     }
 
-    //fn drag_dest_set(&self, flags: DestDefaults, targets: /*Ignored*/&[&TargetEntry], n_targets: i32, actions: gdk::DragAction) {
-    //    unsafe { TODO: call ffi::gtk_drag_dest_set() }
-    //}
-
     fn drag_dest_set_proxy(&self, proxy_window: &gdk::Window, protocol: gdk::DragProtocol, use_coordinates: bool) {
         unsafe {
             ffi::gtk_drag_dest_set_proxy(self.to_glib_none().0, proxy_window.to_glib_none().0, protocol.to_glib(), use_coordinates.to_glib());
         }
     }
 
-    //fn drag_dest_set_target_list(&self, target_list: /*Ignored*/Option<&TargetList>) {
-    //    unsafe { TODO: call ffi::gtk_drag_dest_set_target_list() }
-    //}
+    fn drag_dest_set_target_list(&self, target_list: Option<&TargetList>) {
+        unsafe {
+            ffi::gtk_drag_dest_set_target_list(self.to_glib_none().0, target_list.to_glib_none().0);
+        }
+    }
 
     fn drag_dest_set_track_motion(&self, track_motion: bool) {
         unsafe {
@@ -942,13 +945,11 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExt for O {
         }
     }
 
-    //fn drag_source_get_target_list(&self) -> /*Ignored*/Option<TargetList> {
-    //    unsafe { TODO: call ffi::gtk_drag_source_get_target_list() }
-    //}
-
-    //fn drag_source_set(&self, start_button_mask: gdk::ModifierType, targets: /*Ignored*/&[&TargetEntry], n_targets: i32, actions: gdk::DragAction) {
-    //    unsafe { TODO: call ffi::gtk_drag_source_set() }
-    //}
+    fn drag_source_get_target_list(&self) -> Option<TargetList> {
+        unsafe {
+            from_glib_none(ffi::gtk_drag_source_get_target_list(self.to_glib_none().0))
+        }
+    }
 
     //fn drag_source_set_icon_gicon<T: IsA</*Ignored*/gio::Icon>>(&self, icon: &T) {
     //    unsafe { TODO: call ffi::gtk_drag_source_set_icon_gicon() }
@@ -972,9 +973,11 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExt for O {
         }
     }
 
-    //fn drag_source_set_target_list(&self, target_list: /*Ignored*/Option<&TargetList>) {
-    //    unsafe { TODO: call ffi::gtk_drag_source_set_target_list() }
-    //}
+    fn drag_source_set_target_list(&self, target_list: Option<&TargetList>) {
+        unsafe {
+            ffi::gtk_drag_source_set_target_list(self.to_glib_none().0, target_list.to_glib_none().0);
+        }
+    }
 
     fn drag_source_unset(&self) {
         unsafe {
@@ -2423,9 +2426,9 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExt for O {
         }
     }
 
-    fn connect_drag_drop<F: Fn(&Self, &gdk::DragContext, i32, i32, u32) -> bool + 'static>(&self, f: F) -> u64 {
+    fn connect_drag_drop<F: Fn(&Self, &gdk::DragContext, i32, i32, u32) -> Inhibit + 'static>(&self, f: F) -> u64 {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::DragContext, i32, i32, u32) -> bool + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<Box_<Fn(&Self, &gdk::DragContext, i32, i32, u32) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
             connect(self.to_glib_none().0, "drag-drop",
                 transmute(drag_drop_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
@@ -2455,9 +2458,9 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExt for O {
         }
     }
 
-    fn connect_drag_motion<F: Fn(&Self, &gdk::DragContext, i32, i32, u32) -> bool + 'static>(&self, f: F) -> u64 {
+    fn connect_drag_motion<F: Fn(&Self, &gdk::DragContext, i32, i32, u32) -> Inhibit + 'static>(&self, f: F) -> u64 {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::DragContext, i32, i32, u32) -> bool + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<Box_<Fn(&Self, &gdk::DragContext, i32, i32, u32) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
             connect(self.to_glib_none().0, "drag-motion",
                 transmute(drag_motion_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
@@ -2911,7 +2914,7 @@ unsafe extern "C" fn drag_data_get_trampoline<T>(this: *mut ffi::GtkWidget, cont
 where T: IsA<Widget> {
     callback_guard!();
     let f: &Box_<Fn(&T, &gdk::DragContext, &SelectionData, u32, u32) + 'static> = transmute(f);
-    f(&Widget::from_glib_none(this).downcast_unchecked(), &from_glib_none(context), &from_glib_none(data), info, time)
+    f(&Widget::from_glib_none(this).downcast_unchecked(), &from_glib_none(context), &from_glib_borrow(data), info, time)
 }
 
 unsafe extern "C" fn drag_data_received_trampoline<T>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, x: libc::c_int, y: libc::c_int, data: *mut ffi::GtkSelectionData, info: libc::c_uint, time: libc::c_uint, f: glib_ffi::gpointer)
@@ -2924,7 +2927,7 @@ where T: IsA<Widget> {
 unsafe extern "C" fn drag_drop_trampoline<T>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, x: libc::c_int, y: libc::c_int, time: libc::c_uint, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where T: IsA<Widget> {
     callback_guard!();
-    let f: &Box_<Fn(&T, &gdk::DragContext, i32, i32, u32) -> bool + 'static> = transmute(f);
+    let f: &Box_<Fn(&T, &gdk::DragContext, i32, i32, u32) -> Inhibit + 'static> = transmute(f);
     f(&Widget::from_glib_none(this).downcast_unchecked(), &from_glib_none(context), x, y, time).to_glib()
 }
 
@@ -2952,7 +2955,7 @@ where T: IsA<Widget> {
 unsafe extern "C" fn drag_motion_trampoline<T>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, x: libc::c_int, y: libc::c_int, time: libc::c_uint, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where T: IsA<Widget> {
     callback_guard!();
-    let f: &Box_<Fn(&T, &gdk::DragContext, i32, i32, u32) -> bool + 'static> = transmute(f);
+    let f: &Box_<Fn(&T, &gdk::DragContext, i32, i32, u32) -> Inhibit + 'static> = transmute(f);
     f(&Widget::from_glib_none(this).downcast_unchecked(), &from_glib_none(context), x, y, time).to_glib()
 }
 
