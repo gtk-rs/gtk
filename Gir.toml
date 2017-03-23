@@ -182,6 +182,7 @@ generate = [
     "Gtk.StyleProperties",
     "Gtk.StyleProvider",
     "Gtk.SymbolicColor",
+    "Gtk.TargetFlags",
     "Gtk.TextAttributes",
     "Gtk.TextChildAnchor",
     "Gtk.TextDirection",
@@ -279,6 +280,7 @@ manual = [
     "Gtk.RecentData",
     "Gtk.RecentInfo",
     "Gtk.Requisition",
+    "Gtk.TargetEntry",
     "cairo.Context",
     "cairo.RectangleInt",
     "cairo.Surface",
@@ -518,6 +520,10 @@ status = "generate"
         [object.function.return]
         nullable = false
     [[object.function]]
+    name = "set_can_store"
+    #array with size
+    ignore = true
+    [[object.function]]
     name = "set_text"
     ignore = true
 
@@ -694,6 +700,14 @@ status = "generate"
 [[object]]
 name = "Gtk.IconView"
 status = "generate"
+    [[object.function]]
+    name = "enable_model_drag_dest"
+    #array with size
+    ignore = true
+    [[object.function]]
+    name = "enable_model_drag_source"
+    #array with size
+    ignore = true
     [[object.function]]
     pattern = ".+"
         [[object.function.parameter]]
@@ -985,6 +999,21 @@ status = "generate"
     name = "get_target"
         [object.function.return]
         nullable = false
+    [[object.function]]
+    name = "set_pixbuf"
+        [[object.function.parameter]]
+        name = "selection_data"
+        const = true
+    [[object.function]]
+    name = "set_text"
+        [[object.function.parameter]]
+        name = "selection_data"
+        const = true
+    [[object.function]]
+    name = "set_uris"
+        [[object.function.parameter]]
+        name = "selection_data"
+        const = true
 
 [[object]]
 name = "Gtk.SpinButton"
@@ -1035,6 +1064,18 @@ status = "generate"
     [[object.signal]]
     name = "state-set"
     inhibit = true
+
+[[object]]
+name = "Gtk.TargetList"
+status = "generate"
+    [[object.function]]
+    name = "add_table"
+    #array with size
+    ignore = true
+    [[object.function]]
+    name = "new"
+    #array with size
+    ignore = true
 
 [[object]]
 name = "Gtk.TextBuffer"
@@ -1335,6 +1376,14 @@ status = "generate"
 name = "Gtk.TreeView"
 status = "generate"
     [[object.function]]
+    name = "enable_model_drag_dest"
+    #array with size
+    ignore = true
+    [[object.function]]
+    name = "enable_model_drag_source"
+    #array with size
+    ignore = true
+    [[object.function]]
     pattern = ".+"
         [[object.function.parameter]]
         name = "path"
@@ -1367,6 +1416,18 @@ status = "generate"
 [[object]]
 name = "Gtk.Widget"
 status = "generate"
+    [[object.function]]
+    name = "drag_dest_set"
+    #array with size
+    ignore = true
+    [[object.function]]
+    name = "drag_source_set"
+    #array with size
+    ignore = true
+    [[object.function]]
+    name = "enable_model_drag_source"
+    #array with size
+    ignore = true
     [[object.function]]
     name = "draw"
         [[object.function.parameter]]
@@ -1401,7 +1462,18 @@ status = "generate"
     name = "destroy-event"
     inhibit = true
     [[object.signal]]
+    name = "drag-data-get"
+        [[object.signal.parameter]]
+        name = "data"
+        transformation = "borrow"
+    [[object.signal]]
+    name = "drag-drop"
+    inhibit = true
+    [[object.signal]]
     name = "drag-failed"
+    inhibit = true
+    [[object.signal]]
+    name = "drag-motion"
     inhibit = true
     [[object.signal]]
     name = "draw"

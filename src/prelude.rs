@@ -12,6 +12,7 @@ pub use auto::traits::*;
 pub use app_chooser::AppChooserExt;
 pub use color_chooser::ColorChooserExtManual;
 pub use dialog::DialogExtManual;
+pub use drag_context::DragContextExtManual;
 pub use tree_sortable::TreeSortableExtManual;
 pub use widget::WidgetExtManual;
 

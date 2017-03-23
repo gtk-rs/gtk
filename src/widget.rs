@@ -3,24 +3,31 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 use std::mem::transmute;
+use std::ptr;
 
 use glib::object::{Downcast, IsA};
 use glib::signal::connect;
 use glib::translate::*;
 use glib_ffi::gboolean;
-use gdk::Event;
+use gdk::{DragAction, Event, ModifierType};
 use gdk_ffi;
 use pango;
 use ffi;
 
 use {
+    DestDefaults,
     Inhibit,
     Object,
     Rectangle,
+    TargetEntry,
     Widget,
 };
 
 pub trait WidgetExtManual {
+    fn drag_dest_set(&self, flags: DestDefaults, targets: &[TargetEntry], actions: DragAction);
+
+    fn drag_source_set(&self, start_button_mask: ModifierType, targets: &[TargetEntry], actions: DragAction);
+
     fn intersect(&self, area: &Rectangle, intersection: Option<&mut Rectangle>) -> bool;
 
     fn override_font(&self, font: &pango::FontDescription);
@@ -31,6 +38,54 @@ pub trait WidgetExtManual {
 }
 
 impl<O: IsA<Widget> + IsA<Object>> WidgetExtManual for O {
+    fn drag_dest_set(&self, flags: DestDefaults, targets: &[TargetEntry], actions: DragAction) {
+        let stashes: Vec<_> = targets.iter().map(|e| e.to_glib_none()).collect();
+        let mut t = Vec::with_capacity(stashes.len());
+        for stash in &stashes {
+            unsafe {
+                t.push(ffi::GtkTargetEntry {
+                    target: (*stash.0).target,
+                    flags: (*stash.0).flags,
+                    info: (*stash.0).info,
+                });
+            }
+        }
+        let t_ptr: *mut ffi::GtkTargetEntry = if t.len() > 0 {
+            t.as_ptr() as *mut _
+        } else {
+            ptr::null_mut()
+        };
+        unsafe { ffi::gtk_drag_dest_set(self.to_glib_none().0,
+                                        flags.to_glib(),
+                                        t_ptr,
+                                        t.len() as i32,
+                                        actions.to_glib())};
+    }
+
+    fn drag_source_set(&self, start_button_mask: ModifierType, targets: &[TargetEntry], actions: DragAction) {
+        let stashes: Vec<_> = targets.iter().map(|e| e.to_glib_none()).collect();
+        let mut t = Vec::with_capacity(stashes.len());
+        for stash in &stashes {
+            unsafe {
+                t.push(ffi::GtkTargetEntry {
+                    target: (*stash.0).target,
+                    flags: (*stash.0).flags,
+                    info: (*stash.0).info,
+                });
+            }
+        }
+        let t_ptr: *mut ffi::GtkTargetEntry = if t.len() > 0 {
+            t.as_ptr() as *mut _
+        } else {
+            ptr::null_mut()
+        };
+        unsafe { ffi::gtk_drag_source_set(self.to_glib_none().0,
+                                          start_button_mask.to_glib(),
+                                          t_ptr,
+                                          t.len() as i32,
+                                          actions.to_glib())};
+    }
+
     fn intersect(&self, area: &Rectangle, mut intersection: Option<&mut Rectangle>) -> bool {
         unsafe {
             from_glib(ffi::gtk_widget_intersect(self.to_glib_none().0, area.to_glib_none().0, intersection.to_glib_none_mut().0))
