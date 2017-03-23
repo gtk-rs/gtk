@@ -8,7 +8,7 @@ use glib::object::{Downcast, IsA};
 use glib::signal::connect;
 use glib::translate::*;
 use glib_ffi::gboolean;
-use gdk::{Event, RGBA};
+use gdk::Event;
 use gdk_ffi;
 use pango;
 use ffi;
@@ -17,22 +17,13 @@ use {
     Inhibit,
     Object,
     Rectangle,
-    StateFlags,
     Widget,
 };
 
 pub trait WidgetExtManual {
     fn intersect(&self, area: &Rectangle, intersection: Option<&mut Rectangle>) -> bool;
 
-    fn override_background_color(&self, state: StateFlags, color: &RGBA);
-
-    fn override_color(&self, state: StateFlags, color: &RGBA);
-
-    fn override_cursor(&self, cursor: &RGBA, secondary_cursor: &RGBA);
-
     fn override_font(&self, font: &pango::FontDescription);
-
-    fn override_symbolic_color(&self, name: &str, color: &RGBA);
 
     fn connect_map_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(&self, f: F) -> u64;
 
@@ -43,38 +34,6 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExtManual for O {
     fn intersect(&self, area: &Rectangle, mut intersection: Option<&mut Rectangle>) -> bool {
         unsafe {
             from_glib(ffi::gtk_widget_intersect(self.to_glib_none().0, area.to_glib_none().0, intersection.to_glib_none_mut().0))
-        }
-    }
-
-    fn override_background_color(&self, state: StateFlags, color: &RGBA) {
-        unsafe {
-            ffi::gtk_widget_override_background_color(self.to_glib_none().0,
-                                                      state.to_glib(),
-                                                      color.to_glib_none().0);
-        }
-    }
-
-    fn override_color(&self, state: StateFlags, color: &RGBA) {
-        unsafe {
-            ffi::gtk_widget_override_color(self.to_glib_none().0,
-                                           state.to_glib(),
-                                           color.to_glib_none().0);
-        }
-    }
-
-    fn override_symbolic_color(&self, name: &str, color: &RGBA) {
-        unsafe {
-            ffi::gtk_widget_override_symbolic_color(self.to_glib_none().0,
-                                                    name.to_glib_none().0,
-                                                    color.to_glib_none().0);
-        }
-    }
-
-    fn override_cursor(&self, cursor: &RGBA, secondary_cursor: &RGBA) {
-        unsafe {
-            ffi::gtk_widget_override_cursor(self.to_glib_none().0,
-                                            cursor.to_glib_none().0,
-                                            secondary_cursor.to_glib_none().0);
         }
     }
 
