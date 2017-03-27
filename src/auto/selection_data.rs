@@ -21,9 +21,11 @@ impl SelectionData {
     //    unsafe { TODO: call ffi::gtk_selection_data_get_data() }
     //}
 
-    //pub fn get_data_type(&self) -> /*Ignored*/Option<gdk::Atom> {
-    //    unsafe { TODO: call ffi::gtk_selection_data_get_data_type() }
-    //}
+    pub fn get_data_type(&self) -> gdk::Atom {
+        unsafe {
+            from_glib_none(ffi::gtk_selection_data_get_data_type(self.to_glib_none().0))
+        }
+    }
 
     //pub fn get_data_with_length(&self) -> (/*Unimplemented*/CArray TypeId { ns_id: 0, id: 3 }, i32) {
     //    unsafe { TODO: call ffi::gtk_selection_data_get_data_with_length() }
@@ -53,13 +55,17 @@ impl SelectionData {
         }
     }
 
-    //pub fn get_selection(&self) -> /*Ignored*/Option<gdk::Atom> {
-    //    unsafe { TODO: call ffi::gtk_selection_data_get_selection() }
-    //}
+    pub fn get_selection(&self) -> gdk::Atom {
+        unsafe {
+            from_glib_none(ffi::gtk_selection_data_get_selection(self.to_glib_none().0))
+        }
+    }
 
-    //pub fn get_target(&self) -> /*Ignored*/Option<gdk::Atom> {
-    //    unsafe { TODO: call ffi::gtk_selection_data_get_target() }
-    //}
+    pub fn get_target(&self) -> gdk::Atom {
+        unsafe {
+            from_glib_none(ffi::gtk_selection_data_get_target(self.to_glib_none().0))
+        }
+    }
 
     //pub fn get_targets(&self, targets: /*Unimplemented*/Vec<gdk::Atom>) -> Option<i32> {
     //    unsafe { TODO: call ffi::gtk_selection_data_get_targets() }
@@ -77,7 +83,7 @@ impl SelectionData {
         }
     }
 
-    //pub fn set(&mut self, type_: /*Ignored*/&gdk::Atom, format: i32, data: /*Unimplemented*/&CArray TypeId { ns_id: 0, id: 3 }, length: i32) {
+    //pub fn set(&mut self, type_: &gdk::Atom, format: i32, data: /*Unimplemented*/&CArray TypeId { ns_id: 0, id: 3 }, length: i32) {
     //    unsafe { TODO: call ffi::gtk_selection_data_set() }
     //}
 

@@ -5,6 +5,7 @@ use AccelFlags;
 use AccelGroup;
 use Align;
 use Allocation;
+use Clipboard;
 use DirectionType;
 use DragResult;
 use Object;
@@ -129,7 +130,7 @@ pub trait WidgetExt {
 
     fn drag_dest_add_uri_targets(&self);
 
-    //fn drag_dest_find_target(&self, context: &gdk::DragContext, target_list: /*Ignored*/Option<&TargetList>) -> /*Ignored*/Option<gdk::Atom>;
+    //fn drag_dest_find_target(&self, context: &gdk::DragContext, target_list: /*Ignored*/Option<&TargetList>) -> Option<gdk::Atom>;
 
     //fn drag_dest_get_target_list(&self) -> /*Ignored*/Option<TargetList>;
 
@@ -145,7 +146,7 @@ pub trait WidgetExt {
 
     fn drag_dest_unset(&self);
 
-    //fn drag_get_data(&self, context: &gdk::DragContext, target: /*Ignored*/&gdk::Atom, time_: u32);
+    fn drag_get_data(&self, context: &gdk::DragContext, target: &gdk::Atom, time_: u32);
 
     fn drag_highlight(&self);
 
@@ -211,7 +212,7 @@ pub trait WidgetExt {
     #[cfg(feature = "v3_14")]
     fn get_clip(&self) -> Allocation;
 
-    //fn get_clipboard(&self, selection: /*Ignored*/&gdk::Atom) -> Option<Clipboard>;
+    fn get_clipboard(&self, selection: &gdk::Atom) -> Clipboard;
 
     fn get_composite_name(&self) -> Option<String>;
 
@@ -871,7 +872,7 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExt for O {
         }
     }
 
-    //fn drag_dest_find_target(&self, context: &gdk::DragContext, target_list: /*Ignored*/Option<&TargetList>) -> /*Ignored*/Option<gdk::Atom> {
+    //fn drag_dest_find_target(&self, context: &gdk::DragContext, target_list: /*Ignored*/Option<&TargetList>) -> Option<gdk::Atom> {
     //    unsafe { TODO: call ffi::gtk_drag_dest_find_target() }
     //}
 
@@ -911,9 +912,11 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExt for O {
         }
     }
 
-    //fn drag_get_data(&self, context: &gdk::DragContext, target: /*Ignored*/&gdk::Atom, time_: u32) {
-    //    unsafe { TODO: call ffi::gtk_drag_get_data() }
-    //}
+    fn drag_get_data(&self, context: &gdk::DragContext, target: &gdk::Atom, time_: u32) {
+        unsafe {
+            ffi::gtk_drag_get_data(self.to_glib_none().0, context.to_glib_none().0, target.to_glib_none().0, time_);
+        }
+    }
 
     fn drag_highlight(&self) {
         unsafe {
@@ -1096,9 +1099,11 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExt for O {
         }
     }
 
-    //fn get_clipboard(&self, selection: /*Ignored*/&gdk::Atom) -> Option<Clipboard> {
-    //    unsafe { TODO: call ffi::gtk_widget_get_clipboard() }
-    //}
+    fn get_clipboard(&self, selection: &gdk::Atom) -> Clipboard {
+        unsafe {
+            from_glib_none(ffi::gtk_widget_get_clipboard(self.to_glib_none().0, selection.to_glib_none().0))
+        }
+    }
 
     fn get_composite_name(&self) -> Option<String> {
         unsafe {
