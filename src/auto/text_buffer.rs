@@ -8,6 +8,7 @@ use TextMark;
 use TextTag;
 use TextTagTable;
 use ffi;
+use gdk;
 use gdk_pixbuf;
 use gdk_pixbuf_ffi;
 use glib::Value;
@@ -128,17 +129,21 @@ impl TextBuffer {
         }
     }
 
-    //pub fn deserialize(&self, content_buffer: &TextBuffer, format: /*Ignored*/&gdk::Atom, iter: &mut TextIter, data: /*Unimplemented*/&CArray TypeId { ns_id: 0, id: 3 }, length: /*Unimplemented*/Fundamental: Size) -> Result<(), Error> {
+    //pub fn deserialize(&self, content_buffer: &TextBuffer, format: &gdk::Atom, iter: &mut TextIter, data: /*Unimplemented*/&CArray TypeId { ns_id: 0, id: 3 }, length: /*Unimplemented*/Fundamental: Size) -> Result<(), Error> {
     //    unsafe { TODO: call ffi::gtk_text_buffer_deserialize() }
     //}
 
-    //pub fn deserialize_get_can_create_tags(&self, format: /*Ignored*/&gdk::Atom) -> bool {
-    //    unsafe { TODO: call ffi::gtk_text_buffer_deserialize_get_can_create_tags() }
-    //}
+    pub fn deserialize_get_can_create_tags(&self, format: &gdk::Atom) -> bool {
+        unsafe {
+            from_glib(ffi::gtk_text_buffer_deserialize_get_can_create_tags(self.to_glib_none().0, format.to_glib_none().0))
+        }
+    }
 
-    //pub fn deserialize_set_can_create_tags(&self, format: /*Ignored*/&gdk::Atom, can_create_tags: bool) {
-    //    unsafe { TODO: call ffi::gtk_text_buffer_deserialize_set_can_create_tags() }
-    //}
+    pub fn deserialize_set_can_create_tags(&self, format: &gdk::Atom, can_create_tags: bool) {
+        unsafe {
+            ffi::gtk_text_buffer_deserialize_set_can_create_tags(self.to_glib_none().0, format.to_glib_none().0, can_create_tags.to_glib());
+        }
+    }
 
     pub fn end_user_action(&self) {
         unsafe {
@@ -163,10 +168,6 @@ impl TextBuffer {
 
     //pub fn get_copy_target_list(&self) -> /*Ignored*/Option<TargetList> {
     //    unsafe { TODO: call ffi::gtk_text_buffer_get_copy_target_list() }
-    //}
-
-    //pub fn get_deserialize_formats(&self) -> (/*Ignored*/Vec<gdk::Atom>, i32) {
-    //    unsafe { TODO: call ffi::gtk_text_buffer_get_deserialize_formats() }
     //}
 
     pub fn get_end_iter(&self) -> TextIter {
@@ -274,10 +275,6 @@ impl TextBuffer {
         }
     }
 
-    //pub fn get_serialize_formats(&self) -> (/*Ignored*/Vec<gdk::Atom>, i32) {
-    //    unsafe { TODO: call ffi::gtk_text_buffer_get_serialize_formats() }
-    //}
-
     pub fn get_slice(&self, start: &TextIter, end: &TextIter, include_hidden_chars: bool) -> Option<String> {
         unsafe {
             from_glib_full(ffi::gtk_text_buffer_get_slice(self.to_glib_none().0, start.to_glib_none().0, end.to_glib_none().0, include_hidden_chars.to_glib()))
@@ -360,21 +357,25 @@ impl TextBuffer {
         }
     }
 
-    //pub fn register_deserialize_format(&self, mime_type: &str, function: /*Unknown conversion*//*Unimplemented*/TextBufferDeserializeFunc, user_data: /*Unimplemented*/Option<Fundamental: Pointer>, user_data_destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) -> /*Ignored*/Option<gdk::Atom> {
+    //pub fn register_deserialize_format(&self, mime_type: &str, function: /*Unknown conversion*//*Unimplemented*/TextBufferDeserializeFunc, user_data: /*Unimplemented*/Option<Fundamental: Pointer>, user_data_destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) -> Option<gdk::Atom> {
     //    unsafe { TODO: call ffi::gtk_text_buffer_register_deserialize_format() }
     //}
 
-    //pub fn register_deserialize_tagset<'a, T: Into<Option<&'a str>>>(&self, tagset_name: T) -> /*Ignored*/Option<gdk::Atom> {
-    //    unsafe { TODO: call ffi::gtk_text_buffer_register_deserialize_tagset() }
-    //}
+    pub fn register_deserialize_tagset<'a, T: Into<Option<&'a str>>>(&self, tagset_name: T) -> gdk::Atom {
+        unsafe {
+            from_glib_none(ffi::gtk_text_buffer_register_deserialize_tagset(self.to_glib_none().0, tagset_name.into().to_glib_none().0))
+        }
+    }
 
-    //pub fn register_serialize_format(&self, mime_type: &str, function: /*Unknown conversion*//*Unimplemented*/TextBufferSerializeFunc, user_data: /*Unimplemented*/Option<Fundamental: Pointer>, user_data_destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) -> /*Ignored*/Option<gdk::Atom> {
+    //pub fn register_serialize_format(&self, mime_type: &str, function: /*Unknown conversion*//*Unimplemented*/TextBufferSerializeFunc, user_data: /*Unimplemented*/Option<Fundamental: Pointer>, user_data_destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) -> Option<gdk::Atom> {
     //    unsafe { TODO: call ffi::gtk_text_buffer_register_serialize_format() }
     //}
 
-    //pub fn register_serialize_tagset<'a, T: Into<Option<&'a str>>>(&self, tagset_name: T) -> /*Ignored*/Option<gdk::Atom> {
-    //    unsafe { TODO: call ffi::gtk_text_buffer_register_serialize_tagset() }
-    //}
+    pub fn register_serialize_tagset<'a, T: Into<Option<&'a str>>>(&self, tagset_name: T) -> gdk::Atom {
+        unsafe {
+            from_glib_none(ffi::gtk_text_buffer_register_serialize_tagset(self.to_glib_none().0, tagset_name.into().to_glib_none().0))
+        }
+    }
 
     pub fn remove_all_tags(&self, start: &TextIter, end: &TextIter) {
         unsafe {
@@ -406,7 +407,7 @@ impl TextBuffer {
         }
     }
 
-    //pub fn serialize(&self, content_buffer: &TextBuffer, format: /*Ignored*/&gdk::Atom, start: &TextIter, end: &TextIter) -> (/*Unimplemented*/CArray TypeId { ns_id: 0, id: 3 }, /*Unimplemented*/Fundamental: Size) {
+    //pub fn serialize(&self, content_buffer: &TextBuffer, format: &gdk::Atom, start: &TextIter, end: &TextIter) -> (/*Unimplemented*/CArray TypeId { ns_id: 0, id: 3 }, /*Unimplemented*/Fundamental: Size) {
     //    unsafe { TODO: call ffi::gtk_text_buffer_serialize() }
     //}
 
@@ -416,13 +417,17 @@ impl TextBuffer {
         }
     }
 
-    //pub fn unregister_deserialize_format(&self, format: /*Ignored*/&gdk::Atom) {
-    //    unsafe { TODO: call ffi::gtk_text_buffer_unregister_deserialize_format() }
-    //}
+    pub fn unregister_deserialize_format(&self, format: &gdk::Atom) {
+        unsafe {
+            ffi::gtk_text_buffer_unregister_deserialize_format(self.to_glib_none().0, format.to_glib_none().0);
+        }
+    }
 
-    //pub fn unregister_serialize_format(&self, format: /*Ignored*/&gdk::Atom) {
-    //    unsafe { TODO: call ffi::gtk_text_buffer_unregister_serialize_format() }
-    //}
+    pub fn unregister_serialize_format(&self, format: &gdk::Atom) {
+        unsafe {
+            ffi::gtk_text_buffer_unregister_serialize_format(self.to_glib_none().0, format.to_glib_none().0);
+        }
+    }
 
     pub fn get_property_cursor_position(&self) -> i32 {
         let mut value = Value::from(&0);
