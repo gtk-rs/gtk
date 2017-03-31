@@ -775,6 +775,9 @@ child_name = "item"
     [[object.child_prop]]
     name = "top-attach"
     type = "gint"
+    [[object.function]]
+    name = "place_on_monitor"
+    version = "3.22"
 
 [[object]]
 name = "Gtk.MenuItem"
