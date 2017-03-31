@@ -107,6 +107,7 @@ impl Menu {
         }
     }
 
+    #[cfg(feature = "v3_22")]
     pub fn place_on_monitor(&self, monitor: &gdk::Monitor) {
         unsafe {
             ffi::gtk_menu_place_on_monitor(self.to_glib_none().0, monitor.to_glib_none().0);
