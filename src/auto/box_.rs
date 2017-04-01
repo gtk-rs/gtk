@@ -14,6 +14,7 @@ use glib::object::Downcast;
 use glib::object::IsA;
 use glib::translate::*;
 use std::mem;
+use std::mem::transmute;
 
 glib_wrapper! {
     pub struct Box(Object<ffi::GtkBox>): Container, Widget, Orientable;
@@ -62,6 +63,22 @@ pub trait BoxExt {
     fn set_homogeneous(&self, homogeneous: bool);
 
     fn set_spacing(&self, spacing: i32);
+
+    fn get_child_expand<T: IsA<Widget>>(&self, item: &T) -> bool;
+
+    fn set_child_expand<T: IsA<Widget>>(&self, item: &T, expand: bool);
+
+    fn get_child_fill<T: IsA<Widget>>(&self, item: &T) -> bool;
+
+    fn set_child_fill<T: IsA<Widget>>(&self, item: &T, fill: bool);
+
+    fn get_child_pack_type<T: IsA<Widget>>(&self, item: &T) -> PackType;
+
+    fn set_child_pack_type<T: IsA<Widget>>(&self, item: &T, pack_type: PackType);
+
+    fn get_child_padding<T: IsA<Widget>>(&self, item: &T) -> u32;
+
+    fn set_child_padding<T: IsA<Widget>>(&self, item: &T, padding: u32);
 
     fn get_child_position<T: IsA<Widget>>(&self, item: &T) -> i32;
 
@@ -153,6 +170,63 @@ impl<O: IsA<Box> + IsA<Container>> BoxExt for O {
     fn set_spacing(&self, spacing: i32) {
         unsafe {
             ffi::gtk_box_set_spacing(self.to_glib_none().0, spacing);
+        }
+    }
+
+    fn get_child_expand<T: IsA<Widget>>(&self, item: &T) -> bool {
+        let mut value = Value::from(&false);
+        unsafe {
+            ffi::gtk_container_child_get_property(self.to_glib_none().0, item.to_glib_none().0, "expand".to_glib_none().0, value.to_glib_none_mut().0);
+        }
+        value.get().unwrap()
+    }
+
+    fn set_child_expand<T: IsA<Widget>>(&self, item: &T, expand: bool) {
+        unsafe {
+            ffi::gtk_container_child_set_property(self.to_glib_none().0, item.to_glib_none().0, "expand".to_glib_none().0, Value::from(&expand).to_glib_none().0);
+        }
+    }
+
+    fn get_child_fill<T: IsA<Widget>>(&self, item: &T) -> bool {
+        let mut value = Value::from(&false);
+        unsafe {
+            ffi::gtk_container_child_get_property(self.to_glib_none().0, item.to_glib_none().0, "fill".to_glib_none().0, value.to_glib_none_mut().0);
+        }
+        value.get().unwrap()
+    }
+
+    fn set_child_fill<T: IsA<Widget>>(&self, item: &T, fill: bool) {
+        unsafe {
+            ffi::gtk_container_child_set_property(self.to_glib_none().0, item.to_glib_none().0, "fill".to_glib_none().0, Value::from(&fill).to_glib_none().0);
+        }
+    }
+
+    fn get_child_pack_type<T: IsA<Widget>>(&self, item: &T) -> PackType {
+        let mut value = Value::from(&0);
+        unsafe {
+            ffi::gtk_container_child_get_property(self.to_glib_none().0, item.to_glib_none().0, "pack-type".to_glib_none().0, value.to_glib_none_mut().0);
+            from_glib(transmute(value.get::<i32>().unwrap()))
+        }
+    }
+
+    fn set_child_pack_type<T: IsA<Widget>>(&self, item: &T, pack_type: PackType) {
+        let pack_type = pack_type.to_glib() as i32;
+        unsafe {
+            ffi::gtk_container_child_set_property(self.to_glib_none().0, item.to_glib_none().0, "pack-type".to_glib_none().0, Value::from(&pack_type).to_glib_none().0);
+        }
+    }
+
+    fn get_child_padding<T: IsA<Widget>>(&self, item: &T) -> u32 {
+        let mut value = Value::from(&0u32);
+        unsafe {
+            ffi::gtk_container_child_get_property(self.to_glib_none().0, item.to_glib_none().0, "padding".to_glib_none().0, value.to_glib_none_mut().0);
+        }
+        value.get().unwrap()
+    }
+
+    fn set_child_padding<T: IsA<Widget>>(&self, item: &T, padding: u32) {
+        unsafe {
+            ffi::gtk_container_child_set_property(self.to_glib_none().0, item.to_glib_none().0, "padding".to_glib_none().0, Value::from(&padding).to_glib_none().0);
         }
     }
 

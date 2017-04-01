@@ -352,6 +352,18 @@ status = "generate"
 name = "Gtk.Box"
 status = "generate"
     [[object.child_prop]]
+    name = "expand"
+    type = "gboolean"
+    [[object.child_prop]]
+    name = "fill"
+    type = "gboolean"
+    [[object.child_prop]]
+    name = "pack-type"
+    type = "Gtk.PackType"
+    [[object.child_prop]]
+    name = "padding"
+    type = "guint"
+    [[object.child_prop]]
     name = "position"
     type = "gint"
     [[object.property]]
