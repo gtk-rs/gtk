@@ -197,6 +197,7 @@ mod color_button;
 mod color_chooser;
 mod css_provider;
 mod dialog;
+mod drag_context;
 mod entry_buffer;
 mod enums;
 mod file_chooser_dialog;
@@ -211,6 +212,8 @@ mod requisition;
 mod signal;
 #[cfg(target_os = "linux")]
 mod socket;
+mod target_entry;
+mod target_list;
 mod text_buffer;
 mod text_iter;
 mod tree_model_filter;
@@ -235,4 +238,5 @@ pub use gdk::Rectangle;
 pub use requisition::Requisition;
 #[cfg(target_os = "linux")]
 pub use socket::Socket;
+pub use target_entry::TargetEntry;
 pub use tree_sortable::SortColumn;

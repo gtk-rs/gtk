@@ -397,6 +397,32 @@ impl FromGlib<ffi::GtkStyleContextPrintFlags> for StyleContextPrintFlags {
 }
 
 bitflags! {
+    pub flags TargetFlags: u32 {
+        const TARGET_SAME_APP = 1,
+        const TARGET_SAME_WIDGET = 2,
+        const TARGET_OTHER_APP = 4,
+        const TARGET_OTHER_WIDGET = 8,
+    }
+}
+
+#[doc(hidden)]
+impl ToGlib for TargetFlags {
+    type GlibType = ffi::GtkTargetFlags;
+
+    fn to_glib(&self) -> ffi::GtkTargetFlags {
+        ffi::GtkTargetFlags::from_bits_truncate(self.bits())
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GtkTargetFlags> for TargetFlags {
+    fn from_glib(value: ffi::GtkTargetFlags) -> TargetFlags {
+        skip_assert_initialized!();
+        TargetFlags::from_bits_truncate(value.bits())
+    }
+}
+
+bitflags! {
     pub flags TextSearchFlags: u32 {
         const TEXT_SEARCH_VISIBLE_ONLY = 1,
         const TEXT_SEARCH_TEXT_ONLY = 2,

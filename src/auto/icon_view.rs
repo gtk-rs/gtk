@@ -77,14 +77,6 @@ impl IconView {
         }
     }
 
-    //pub fn enable_model_drag_dest(&self, targets: /*Ignored*/&[&TargetEntry], n_targets: i32, actions: gdk::DragAction) {
-    //    unsafe { TODO: call ffi::gtk_icon_view_enable_model_drag_dest() }
-    //}
-
-    //pub fn enable_model_drag_source(&self, start_button_mask: gdk::ModifierType, targets: /*Ignored*/&[&TargetEntry], n_targets: i32, actions: gdk::DragAction) {
-    //    unsafe { TODO: call ffi::gtk_icon_view_enable_model_drag_source() }
-    //}
-
     #[cfg(feature = "v3_8")]
     pub fn get_activate_on_single_click(&self) -> bool {
         unsafe {

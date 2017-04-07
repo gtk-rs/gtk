@@ -621,6 +621,9 @@ pub use self::selection_data::SelectionData;
 mod symbolic_color;
 pub use self::symbolic_color::SymbolicColor;
 
+mod target_list;
+pub use self::target_list::TargetList;
+
 mod text_attributes;
 pub use self::text_attributes::TextAttributes;
 
@@ -832,6 +835,11 @@ pub use self::flags::StyleContextPrintFlags;
 pub use self::flags::STYLE_CONTEXT_PRINT_NONE;
 pub use self::flags::STYLE_CONTEXT_PRINT_RECURSE;
 pub use self::flags::STYLE_CONTEXT_PRINT_SHOW_STYLE;
+pub use self::flags::TargetFlags;
+pub use self::flags::TARGET_SAME_APP;
+pub use self::flags::TARGET_SAME_WIDGET;
+pub use self::flags::TARGET_OTHER_APP;
+pub use self::flags::TARGET_OTHER_WIDGET;
 pub use self::flags::TextSearchFlags;
 pub use self::flags::TEXT_SEARCH_VISIBLE_ONLY;
 pub use self::flags::TEXT_SEARCH_TEXT_ONLY;
