@@ -22,7 +22,7 @@ install:
 build_script:
   - mkdir .cargo
   - echo paths = ["."] > .cargo\config
-  - git clone -q --depth 50 -b pending https://github.com/gtk-rs/examples _examples
+  - git clone -q --depth 50 -b master https://github.com/gtk-rs/examples _examples
   - cd _examples
   - cargo build
   - cargo build --features gtk_3_18
