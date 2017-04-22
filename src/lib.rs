@@ -212,6 +212,7 @@ mod requisition;
 mod signal;
 #[cfg(target_os = "linux")]
 mod socket;
+mod switch;
 mod target_entry;
 mod target_list;
 mod text_buffer;
