@@ -284,7 +284,18 @@ manual = [
     "cairo.Context",
     "cairo.RectangleInt",
     "cairo.Surface",
+    "Pango.Context",
+    "Pango.EllipsizeMode",
+    "Pango.FontFace",
+    "Pango.FontFamily",
     "Pango.FontDescription",
+    "Pango.FontMap",
+    "Pango.Layout",
+    "Pango.Stretch",
+    "Pango.Style",
+    "Pango.Underline",
+    "Pango.Variant",
+    "Pango.WrapMode",
 ]
 
 [[object]]
