@@ -873,6 +873,34 @@ status = "generate"
     [[object.function]]
     name = "set_current_page"
     ignore = true
+    [[object.child_prop]]
+    name = "detachable"
+    type = "gboolean"
+    doc_hidden=true
+    [[object.child_prop]]
+    name = "menu-label"
+    type = "utf8"
+    doc_hidden=true
+    [[object.child_prop]]
+    name = "position"
+    type = "gint"
+    doc_hidden=true
+    [[object.child_prop]]
+    name = "reorderable"
+    type = "gboolean"
+    doc_hidden=true
+    [[object.child_prop]]
+    name = "tab-expand"
+    type = "gboolean"
+    doc_hidden=true
+    [[object.child_prop]]
+    name = "tab-fill"
+    type = "gboolean"
+    doc_hidden=true
+    [[object.child_prop]]
+    name = "tab-label"
+    type = "utf8"
+    doc_hidden=true
 
 [[object]]
 name = "Gtk.Overlay"
