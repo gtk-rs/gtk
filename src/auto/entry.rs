@@ -30,6 +30,7 @@ use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use libc;
+use pango;
 use std::boxed::Box as Box_;
 use std::mem;
 use std::mem::transmute;
@@ -106,7 +107,7 @@ pub trait EntryExt {
 
     fn get_invisible_char(&self) -> Option<char>;
 
-    //fn get_layout(&self) -> /*Ignored*/Option<pango::Layout>;
+    fn get_layout(&self) -> Option<pango::Layout>;
 
     fn get_layout_offsets(&self) -> (i32, i32);
 
@@ -481,9 +482,11 @@ impl<O: IsA<Entry> + IsA<Object>> EntryExt for O {
         }
     }
 
-    //fn get_layout(&self) -> /*Ignored*/Option<pango::Layout> {
-    //    unsafe { TODO: call ffi::gtk_entry_get_layout() }
-    //}
+    fn get_layout(&self) -> Option<pango::Layout> {
+        unsafe {
+            from_glib_none(ffi::gtk_entry_get_layout(self.to_glib_none().0))
+        }
+    }
 
     fn get_layout_offsets(&self) -> (i32, i32) {
         unsafe {

@@ -15,6 +15,7 @@ use glib::signal::connect;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
+use pango;
 use signal::Inhibit;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
@@ -714,20 +715,20 @@ impl TextTag {
         }
     }
 
-    //pub fn get_property_stretch(&self) -> /*Ignored*/pango::Stretch {
-    //    let mut value = Value::from(&0);
-    //    unsafe {
-    //        gobject_ffi::g_object_get_property(self.to_glib_none().0, "stretch".to_glib_none().0, value.to_glib_none_mut().0);
-    //        from_glib(transmute(value.get::<i32>().unwrap()))
-    //    }
-    //}
+    pub fn get_property_stretch(&self) -> pango::Stretch {
+        let mut value = Value::from(&0);
+        unsafe {
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, "stretch".to_glib_none().0, value.to_glib_none_mut().0);
+            from_glib(transmute(value.get::<i32>().unwrap()))
+        }
+    }
 
-    //pub fn set_property_stretch(&self, stretch: /*Ignored*/pango::Stretch) {
-    //    let stretch = stretch.to_glib() as i32;
-    //    unsafe {
-    //        gobject_ffi::g_object_set_property(self.to_glib_none().0, "stretch".to_glib_none().0, Value::from(&stretch).to_glib_none().0);
-    //    }
-    //}
+    pub fn set_property_stretch(&self, stretch: pango::Stretch) {
+        let stretch = stretch.to_glib() as i32;
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, "stretch".to_glib_none().0, Value::from(&stretch).to_glib_none().0);
+        }
+    }
 
     pub fn get_property_stretch_set(&self) -> bool {
         let mut value = Value::from(&false);
@@ -794,20 +795,20 @@ impl TextTag {
         }
     }
 
-    //pub fn get_property_style(&self) -> /*Ignored*/pango::Style {
-    //    let mut value = Value::from(&0);
-    //    unsafe {
-    //        gobject_ffi::g_object_get_property(self.to_glib_none().0, "style".to_glib_none().0, value.to_glib_none_mut().0);
-    //        from_glib(transmute(value.get::<i32>().unwrap()))
-    //    }
-    //}
+    pub fn get_property_style(&self) -> pango::Style {
+        let mut value = Value::from(&0);
+        unsafe {
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, "style".to_glib_none().0, value.to_glib_none_mut().0);
+            from_glib(transmute(value.get::<i32>().unwrap()))
+        }
+    }
 
-    //pub fn set_property_style(&self, style: /*Ignored*/pango::Style) {
-    //    let style = style.to_glib() as i32;
-    //    unsafe {
-    //        gobject_ffi::g_object_set_property(self.to_glib_none().0, "style".to_glib_none().0, Value::from(&style).to_glib_none().0);
-    //    }
-    //}
+    pub fn set_property_style(&self, style: pango::Style) {
+        let style = style.to_glib() as i32;
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, "style".to_glib_none().0, Value::from(&style).to_glib_none().0);
+        }
+    }
 
     pub fn get_property_style_set(&self) -> bool {
         let mut value = Value::from(&false);
@@ -843,20 +844,20 @@ impl TextTag {
         }
     }
 
-    //pub fn get_property_underline(&self) -> /*Ignored*/pango::Underline {
-    //    let mut value = Value::from(&0);
-    //    unsafe {
-    //        gobject_ffi::g_object_get_property(self.to_glib_none().0, "underline".to_glib_none().0, value.to_glib_none_mut().0);
-    //        from_glib(transmute(value.get::<i32>().unwrap()))
-    //    }
-    //}
+    pub fn get_property_underline(&self) -> pango::Underline {
+        let mut value = Value::from(&0);
+        unsafe {
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, "underline".to_glib_none().0, value.to_glib_none_mut().0);
+            from_glib(transmute(value.get::<i32>().unwrap()))
+        }
+    }
 
-    //pub fn set_property_underline(&self, underline: /*Ignored*/pango::Underline) {
-    //    let underline = underline.to_glib() as i32;
-    //    unsafe {
-    //        gobject_ffi::g_object_set_property(self.to_glib_none().0, "underline".to_glib_none().0, Value::from(&underline).to_glib_none().0);
-    //    }
-    //}
+    pub fn set_property_underline(&self, underline: pango::Underline) {
+        let underline = underline.to_glib() as i32;
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, "underline".to_glib_none().0, Value::from(&underline).to_glib_none().0);
+        }
+    }
 
     #[cfg(feature = "v3_16")]
     pub fn set_property_underline_rgba(&self, underline_rgba: Option<&gdk::RGBA>) {
@@ -895,20 +896,20 @@ impl TextTag {
         }
     }
 
-    //pub fn get_property_variant(&self) -> /*Ignored*/pango::Variant {
-    //    let mut value = Value::from(&0);
-    //    unsafe {
-    //        gobject_ffi::g_object_get_property(self.to_glib_none().0, "variant".to_glib_none().0, value.to_glib_none_mut().0);
-    //        from_glib(transmute(value.get::<i32>().unwrap()))
-    //    }
-    //}
+    pub fn get_property_variant(&self) -> pango::Variant {
+        let mut value = Value::from(&0);
+        unsafe {
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, "variant".to_glib_none().0, value.to_glib_none_mut().0);
+            from_glib(transmute(value.get::<i32>().unwrap()))
+        }
+    }
 
-    //pub fn set_property_variant(&self, variant: /*Ignored*/pango::Variant) {
-    //    let variant = variant.to_glib() as i32;
-    //    unsafe {
-    //        gobject_ffi::g_object_set_property(self.to_glib_none().0, "variant".to_glib_none().0, Value::from(&variant).to_glib_none().0);
-    //    }
-    //}
+    pub fn set_property_variant(&self, variant: pango::Variant) {
+        let variant = variant.to_glib() as i32;
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, "variant".to_glib_none().0, Value::from(&variant).to_glib_none().0);
+        }
+    }
 
     pub fn get_property_variant_set(&self) -> bool {
         let mut value = Value::from(&false);
