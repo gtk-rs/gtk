@@ -10,7 +10,6 @@ deprecate_by_min_version = true
 
 generate = [
     "Gtk.AccelFlags",
-    "Gtk.Actionable",
     "Gtk.Adjustment",
     "Gtk.Align",
     "Gtk.Alignment",
@@ -367,15 +366,19 @@ status = "generate"
     [[object.child_prop]]
     name = "expand"
     type = "gboolean"
+    doc_hidden = true
     [[object.child_prop]]
     name = "fill"
     type = "gboolean"
+    doc_hidden = true
     [[object.child_prop]]
     name = "pack-type"
     type = "Gtk.PackType"
+    doc_hidden = true
     [[object.child_prop]]
     name = "padding"
     type = "guint"
+    doc_hidden = true
     [[object.child_prop]]
     name = "position"
     type = "gint"
@@ -1609,3 +1612,11 @@ status = "generate"
         [[object.function.parameter]]
         name = "event"
         const = true
+
+[[object]]
+name = "Gtk.Actionable"
+status = "generate"
+    [[object.property]]
+    #value glib.Variant
+    name = "action-target"
+    ignore = true
