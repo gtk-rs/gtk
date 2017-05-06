@@ -4,9 +4,10 @@
 
 use libc::{c_char, c_int};
 use std::boxed::Box as Box_;
-use std::mem::transmute;
+use std::mem::{self, transmute};
 use std::{slice, str};
 use ffi;
+use gdk;
 use glib::translate::*;
 use glib::signal::connect;
 use glib_ffi;
@@ -14,6 +15,22 @@ use TextBuffer;
 use TextIter;
 
 impl TextBuffer {
+    pub fn get_deserialize_formats(&self) -> Vec<gdk::Atom> {
+        unsafe {
+            let mut n_formats = mem::uninitialized();
+            let formats = ffi::gtk_text_buffer_get_deserialize_formats(self.to_glib_none().0, &mut n_formats);
+            FromGlibPtrContainer::from_glib_container_num(formats, n_formats as usize)
+        }
+    }
+
+    pub fn get_serialize_formats(&self) -> Vec<gdk::Atom> {
+        unsafe {
+            let mut n_formats = mem::uninitialized();
+            let formats = ffi::gtk_text_buffer_get_serialize_formats(self.to_glib_none().0, &mut n_formats);
+            FromGlibPtrContainer::from_glib_container_num(formats, n_formats as usize)
+        }
+    }
+
     pub fn insert(&self, iter: &mut TextIter, text: &str) {
         unsafe {
             ffi::gtk_text_buffer_insert(self.to_glib_none().0, iter.to_glib_none_mut().0,

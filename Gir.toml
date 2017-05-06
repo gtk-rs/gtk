@@ -10,7 +10,6 @@ deprecate_by_min_version = true
 
 generate = [
     "Gtk.AccelFlags",
-    "Gtk.Actionable",
     "Gtk.Adjustment",
     "Gtk.Align",
     "Gtk.Alignment",
@@ -156,7 +155,6 @@ generate = [
     "Gtk.ScrolledWindow",
     "Gtk.ScrollStep",
     "Gtk.ScrollType",
-    "Gtk.SelectionData",
     "Gtk.SelectionMode",
     "Gtk.SensitivityType",
     "Gtk.Separator",
@@ -183,6 +181,7 @@ generate = [
     "Gtk.StyleProperties",
     "Gtk.StyleProvider",
     "Gtk.SymbolicColor",
+    "Gtk.TargetFlags",
     "Gtk.TextAttributes",
     "Gtk.TextChildAnchor",
     "Gtk.TextDirection",
@@ -219,9 +218,14 @@ ignore = [
 ]
 
 manual = [
+    "Gdk.AnchorHints",
+    "Gdk.Atom",
+    "Gdk.Atom_",
     "Gdk.Device",
     "Gdk.Display",
+    "Gdk.DragAction",
     "Gdk.DragContext",
+    "Gdk.DragProtocol",
     "Gdk.Event",
     "Gdk.EventButton",
     "Gdk.EventConfigure",
@@ -230,6 +234,7 @@ manual = [
     "Gdk.EventFocus",
     "Gdk.EventGrabBroken",
     "Gdk.EventKey",
+    "Gdk.EventMask",
     "Gdk.EventMotion",
     "Gdk.EventProperty",
     "Gdk.EventProximity",
@@ -242,11 +247,14 @@ manual = [
     "Gdk.Gravity",
     "Gdk.ModifierIntent",
     "Gdk.ModifierType",
+    "Gdk.Monitor",
     "Gdk.Rectangle",
+    "Gdk.RGBA",
     "Gdk.Screen",
     "Gdk.Visual",
     "Gdk.Window",
     "Gdk.WindowEdge",
+    "Gdk.WindowHints",
     "Gdk.WindowTypeHint",
     "GdkPixbuf.Pixbuf",
     "GdkPixbuf.PixbufAnimation",
@@ -267,15 +275,26 @@ manual = [
     "Gtk.Allocation",
     "Gtk.AppChooser",
     "Gtk.Builder",
-    "Gtk.ColorChooser",
     "Gtk.EntryBuffer",
     "Gtk.RecentData",
     "Gtk.RecentInfo",
     "Gtk.Requisition",
+    "Gtk.TargetEntry",
     "cairo.Context",
     "cairo.RectangleInt",
     "cairo.Surface",
+    "Pango.Context",
+    "Pango.EllipsizeMode",
+    "Pango.FontFace",
+    "Pango.FontFamily",
     "Pango.FontDescription",
+    "Pango.FontMap",
+    "Pango.Layout",
+    "Pango.Stretch",
+    "Pango.Style",
+    "Pango.Underline",
+    "Pango.Variant",
+    "Pango.WrapMode",
 ]
 
 [[object]]
@@ -344,6 +363,22 @@ status = "generate"
 [[object]]
 name = "Gtk.Box"
 status = "generate"
+    [[object.child_prop]]
+    name = "expand"
+    type = "gboolean"
+    doc_hidden = true
+    [[object.child_prop]]
+    name = "fill"
+    type = "gboolean"
+    doc_hidden = true
+    [[object.child_prop]]
+    name = "pack-type"
+    type = "Gtk.PackType"
+    doc_hidden = true
+    [[object.child_prop]]
+    name = "padding"
+    type = "guint"
+    doc_hidden = true
     [[object.child_prop]]
     name = "position"
     type = "gint"
@@ -491,7 +526,27 @@ status = "generate"
 name = "Gtk.Clipboard"
 status = "generate"
     [[object.function]]
+    name = "get"
+        [object.function.return]
+        nullable = false
+    [[object.function]]
+    name = "get_for_display"
+        [object.function.return]
+        nullable = false
+    [[object.function]]
+    name = "set_can_store"
+    #array with size
+    ignore = true
+    [[object.function]]
     name = "set_text"
+    ignore = true
+
+[[object]]
+name = "Gtk.ColorChooser"
+status = "generate"
+    [[object.function]]
+    name = "add_palette"
+    #array with size
     ignore = true
 
 [[object]]
@@ -660,6 +715,14 @@ status = "generate"
 name = "Gtk.IconView"
 status = "generate"
     [[object.function]]
+    name = "enable_model_drag_dest"
+    #array with size
+    ignore = true
+    [[object.function]]
+    name = "enable_model_drag_source"
+    #array with size
+    ignore = true
+    [[object.function]]
     pattern = ".+"
         [[object.function.parameter]]
         name = "path"
@@ -752,6 +815,9 @@ child_name = "item"
     [[object.child_prop]]
     name = "top-attach"
     type = "gint"
+    [[object.function]]
+    name = "place_on_monitor"
+    version = "3.22"
 
 [[object]]
 name = "Gtk.MenuItem"
@@ -810,6 +876,34 @@ status = "generate"
     [[object.function]]
     name = "set_current_page"
     ignore = true
+    [[object.child_prop]]
+    name = "detachable"
+    type = "gboolean"
+    doc_hidden=true
+    [[object.child_prop]]
+    name = "menu-label"
+    type = "utf8"
+    doc_hidden=true
+    [[object.child_prop]]
+    name = "position"
+    type = "gint"
+    doc_hidden=true
+    [[object.child_prop]]
+    name = "reorderable"
+    type = "gboolean"
+    doc_hidden=true
+    [[object.child_prop]]
+    name = "tab-expand"
+    type = "gboolean"
+    doc_hidden=true
+    [[object.child_prop]]
+    name = "tab-fill"
+    type = "gboolean"
+    doc_hidden=true
+    [[object.child_prop]]
+    name = "tab-label"
+    type = "utf8"
+    doc_hidden=true
 
 [[object]]
 name = "Gtk.Overlay"
@@ -933,6 +1027,37 @@ status = "generate"
         const = true
 
 [[object]]
+name = "Gtk.SelectionData"
+status = "generate"
+    [[object.function]]
+    name = "get_data_type"
+        [object.function.return]
+        nullable = false
+    [[object.function]]
+    name = "get_selection"
+        [object.function.return]
+        nullable = false
+    [[object.function]]
+    name = "get_target"
+        [object.function.return]
+        nullable = false
+    [[object.function]]
+    name = "set_pixbuf"
+        [[object.function.parameter]]
+        name = "selection_data"
+        const = true
+    [[object.function]]
+    name = "set_text"
+        [[object.function.parameter]]
+        name = "selection_data"
+        const = true
+    [[object.function]]
+    name = "set_uris"
+        [[object.function.parameter]]
+        name = "selection_data"
+        const = true
+
+[[object]]
 name = "Gtk.SpinButton"
 status = "generate"
     [[object.function]]
@@ -983,8 +1108,26 @@ status = "generate"
     inhibit = true
 
 [[object]]
+name = "Gtk.TargetList"
+status = "generate"
+    [[object.function]]
+    name = "add_table"
+    #array with size
+    ignore = true
+    [[object.function]]
+    name = "new"
+    #array with size
+    ignore = true
+
+[[object]]
 name = "Gtk.TextBuffer"
 status = "generate"
+    [[object.function]]
+    name = "get_deserialize_formats"
+    ignore = true
+    [[object.function]]
+    name = "get_serialize_formats"
+    ignore = true
     [[object.function]]
     name = "insert"
     ignore = true
@@ -1000,6 +1143,14 @@ status = "generate"
     [[object.function]]
     name = "insert_markup"
     ignore = true
+    [[object.function]]
+    name = "register_deserialize_tagset"
+        [object.function.return]
+        nullable = false
+    [[object.function]]
+    name = "register_serialize_tagset"
+        [object.function.return]
+        nullable = false
     [[object.function]]
     name = "set_text"
     ignore = true
@@ -1267,6 +1418,14 @@ status = "generate"
 name = "Gtk.TreeView"
 status = "generate"
     [[object.function]]
+    name = "enable_model_drag_dest"
+    #array with size
+    ignore = true
+    [[object.function]]
+    name = "enable_model_drag_source"
+    #array with size
+    ignore = true
+    [[object.function]]
     pattern = ".+"
         [[object.function.parameter]]
         name = "path"
@@ -1300,11 +1459,27 @@ status = "generate"
 name = "Gtk.Widget"
 status = "generate"
     [[object.function]]
+    name = "drag_dest_set"
+    #array with size
+    ignore = true
+    [[object.function]]
+    name = "drag_source_set"
+    #array with size
+    ignore = true
+    [[object.function]]
+    name = "enable_model_drag_source"
+    #array with size
+    ignore = true
+    [[object.function]]
     name = "draw"
         [[object.function.parameter]]
         name = "cr"
         # cairo::Context is reference-counted
         const = true
+    [[object.function]]
+    name = "get_clipboard"
+        [object.function.return]
+        nullable = false
     [[object.function]]
     name = "intersect"
     ignore = true
@@ -1329,7 +1504,18 @@ status = "generate"
     name = "destroy-event"
     inhibit = true
     [[object.signal]]
+    name = "drag-data-get"
+        [[object.signal.parameter]]
+        name = "data"
+        transformation = "borrow"
+    [[object.signal]]
+    name = "drag-drop"
+    inhibit = true
+    [[object.signal]]
     name = "drag-failed"
+    inhibit = true
+    [[object.signal]]
+    name = "drag-motion"
     inhibit = true
     [[object.signal]]
     name = "draw"
@@ -1426,3 +1612,11 @@ status = "generate"
         [[object.function.parameter]]
         name = "event"
         const = true
+
+[[object]]
+name = "Gtk.Actionable"
+status = "generate"
+    [[object.property]]
+    #value glib.Variant
+    name = "action-target"
+    ignore = true
