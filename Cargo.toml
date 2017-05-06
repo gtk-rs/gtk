@@ -1,6 +1,6 @@
 [package]
 name = "gtk"
-version = "0.1.1"
+version = "0.1.3"
 authors = ["The Gtk-rs Project Developers"]
 build = "build.rs"
 
@@ -34,62 +34,22 @@ v3_20 = ["v3_18", "gtk-sys/v3_20", "gdk/v3_20"]
 v3_22 = ["v3_20", "gtk-sys/v3_22", "gdk/v3_22"]
 
 [build-dependencies.gtk-rs-lgpl-docs]
-git = "https://github.com/gtk-rs/lgpl-docs"
-version = "0.1.1"
+version = "^0.1.1"
 optional = true
 
 [dependencies]
 libc = "0.2"
 bitflags = "0.5"
-
-[dependencies.cairo-sys-rs]
-git = "https://github.com/gtk-rs/cairo"
-version = "0.3.2"
-
-[dependencies.gdk-sys]
-git = "https://github.com/gtk-rs/sys"
-version = "0.3.2"
-
-[dependencies.gdk-pixbuf-sys]
-git = "https://github.com/gtk-rs/sys"
-version = "0.3.2"
-
-[dependencies.gio-sys]
-git = "https://github.com/gtk-rs/sys"
-version = "0.3.2"
-
-[dependencies.glib-sys]
-git = "https://github.com/gtk-rs/sys"
-version = "0.3.2"
-
-[dependencies.gobject-sys]
-git = "https://github.com/gtk-rs/sys"
-version = "0.3.2"
-
-[dependencies.gtk-sys]
-git = "https://github.com/gtk-rs/sys"
-version = "0.3.2"
-
-[dependencies.cairo-rs]
-git = "https://github.com/gtk-rs/cairo"
-version = "0.1.1"
-
-[dependencies.gio]
-git = "https://github.com/gtk-rs/gio"
-version = "0.1.1"
-
-[dependencies.glib]
-git = "https://github.com/gtk-rs/glib"
-version = "0.1.1"
-
-[dependencies.gdk]
-git = "https://github.com/gtk-rs/gdk"
-version = "0.5.1"
-
-[dependencies.gdk-pixbuf]
-git = "https://github.com/gtk-rs/gdk-pixbuf"
-version = "0.1.1"
-
-[dependencies.pango]
-git = "https://github.com/gtk-rs/pango"
-version = "0.1.1"
+cairo-sys-rs = "^0.3.4"
+gdk-sys = "^0.3.4"
+gdk-pixbuf-sys = "^0.3.4"
+gio-sys = "^0.3.4"
+glib-sys = "^0.3.4"
+gobject-sys = "^0.3.4"
+gtk-sys = "^0.3.4"
+cairo-rs = "^0.1.3"
+gio = "^0.1.3"
+glib = "^0.1.3"
+gdk = "^0.5.3"
+gdk-pixbuf = "^0.1.3"
+pango = "^0.1.3"
