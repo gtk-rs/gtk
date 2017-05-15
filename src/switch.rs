@@ -4,14 +4,20 @@
 
 use Switch;
 use ffi;
+use glib;
+use glib::object::IsA;
 use glib::signal::connect;
 use glib::translate::*;
 use glib_ffi;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-impl Switch {
-    pub fn connect_changed_active<F: Fn(&Switch) + 'static>(&self, f: F) -> u64 {
+pub trait SwitchExtManual {
+    fn connect_changed_active<F: Fn(&Switch) + 'static>(&self, f: F) -> u64;
+}
+
+impl<O: IsA<Switch> + IsA<glib::object::Object>> SwitchExtManual for O {
+    fn connect_changed_active<F: Fn(&Switch) + 'static>(&self, f: F) -> u64 {
         unsafe {
             let f: Box_<Box_<Fn(&Switch) + 'static>> = Box_::new(Box_::new(f));
             connect(self.to_glib_none().0, "notify::active",

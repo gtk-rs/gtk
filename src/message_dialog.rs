@@ -26,8 +26,16 @@ impl MessageDialog {
                 .downcast_unchecked()
         }
     }
+}
 
-    pub fn set_secondary_markup(&self, message: Option<&str>) {
+pub trait MessageDialogExt {
+    fn set_secondary_markup(&self, message: Option<&str>);
+
+    fn set_secondary_text(&self, message: Option<&str>);
+}
+
+impl<O: IsA<MessageDialog>> MessageDialogExt for O {
+    fn set_secondary_markup(&self, message: Option<&str>) {
         match message {
             Some(m) => unsafe {
                 let message: Stash<*const c_char, _> = m.to_glib_none();
@@ -43,7 +51,7 @@ impl MessageDialog {
         }
     }
 
-    pub fn set_secondary_text(&self, message: Option<&str>) {
+    fn set_secondary_text(&self, message: Option<&str>) {
         match message {
             Some(m) => unsafe {
                 let message: Stash<*const c_char, _> = m.to_glib_none();
