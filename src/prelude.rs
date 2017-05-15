@@ -5,7 +5,6 @@
 //! Traits and essential types inteded for blanket imports.
 
 pub use glib::prelude::*;
-pub use gio::prelude::*;
 
 pub use auto::traits::*;
 
