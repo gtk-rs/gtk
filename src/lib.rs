@@ -228,6 +228,7 @@ pub mod prelude;
 pub use auto::*;
 pub use rt::*;
 pub use signal::*;
+pub use prelude::*;
 
 pub use gdk::Rectangle as Allocation;
 pub use app_chooser::AppChooser;
