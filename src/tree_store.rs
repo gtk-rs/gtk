@@ -3,11 +3,13 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 use ffi;
+use glib::object::IsA;
 use glib::translate::*;
 use glib::{Type, ToValue, Value};
 use libc::c_int;
 use TreeIter;
 use TreeStore;
+use TreeModel;
 
 impl TreeStore {
     pub fn new(column_types: &[Type]) -> TreeStore {
@@ -19,8 +21,21 @@ impl TreeStore {
                     column_types.as_mut_ptr()))
         }
     }
+}
 
-    pub fn insert_with_values(&self, parent: Option<&TreeIter>, position: Option<u32>, columns: &[u32],
+pub trait TreeStoreExtManual {
+    fn insert_with_values(&self, parent: Option<&TreeIter>, position: Option<u32>, columns: &[u32],
+            values: &[&ToValue]) -> TreeIter;
+
+    fn reorder(&self, parent: &TreeIter, new_order: &[u32]);
+
+    fn set(&self, iter: &TreeIter, columns: &[u32], values: &[&ToValue]);
+
+    fn set_value(&self, iter: &TreeIter, column: u32, value: &Value);
+}
+
+impl<O: IsA<TreeStore> + IsA<TreeModel>> TreeStoreExtManual for O {
+    fn insert_with_values(&self, parent: Option<&TreeIter>, position: Option<u32>, columns: &[u32],
             values: &[&ToValue]) -> TreeIter {
         unsafe {
             assert!(position.unwrap_or(0) <= i32::max_value() as u32);
@@ -44,7 +59,7 @@ impl TreeStore {
         }
     }
 
-    pub fn reorder(&self, parent: &TreeIter, new_order: &[u32]) {
+    fn reorder(&self, parent: &TreeIter, new_order: &[u32]) {
         unsafe {
             let count = ffi::gtk_tree_model_iter_n_children(self.to_glib_none().0,
                                                             mut_override(parent.to_glib_none().0));
@@ -72,7 +87,7 @@ impl TreeStore {
         }
     }
 
-    pub fn set(&self, iter: &TreeIter, columns: &[u32], values: &[&ToValue]) {
+    fn set(&self, iter: &TreeIter, columns: &[u32], values: &[&ToValue]) {
         unsafe {
             assert!(columns.len() == values.len());
             let n_columns = ffi::gtk_tree_model_get_n_columns(self.to_glib_none().0) as u32;
@@ -91,7 +106,7 @@ impl TreeStore {
         }
     }
 
-    pub fn set_value(&self, iter: &TreeIter, column: u32, value: &Value) {
+    fn set_value(&self, iter: &TreeIter, column: u32, value: &Value) {
         unsafe {
             let columns = ffi::gtk_tree_model_get_n_columns(self.to_glib_none().0);
             assert!(column < columns as u32);
