@@ -298,6 +298,30 @@ manual = [
 ]
 
 [[object]]
+name = "Gtk.*"
+status = "generate"
+    [[object.function]]
+    pattern = ".+"
+        [[object.function.parameter]]
+        name = "cr"
+        const = true
+        [[object.function.parameter]]
+        name = "surface"
+        const = true
+    [[object.function]]
+    name = "selection_add_targets"
+    #array as pointer
+    ignore = true
+    [[object.function]]
+    name = "target_table_free"
+    #array as pointer
+    ignore = true
+    [[object.function]]
+    name = "target_table_new_from_list"
+    #array as pointer
+    ignore = true
+
+[[object]]
 name = "Gtk.AboutDialog"
 status = "generate"
     [[object.function]]
