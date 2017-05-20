@@ -320,6 +320,30 @@ status = "generate"
     name = "target_table_new_from_list"
     #array as pointer
     ignore = true
+    [[object.function]]
+    name = "init"
+    #manual
+    ignore = true
+    [[object.function]]
+    name = "main_quit"
+    #manual
+    ignore = true
+    [[object.function]]
+    pattern = "get_(major|minor|micro)_version"
+    #manual skip_assert_initialized
+    ignore = true
+    [[object.function]]
+    pattern = "get_(binary|interface)_age"
+    #manual skip_assert_initialized
+    ignore = true
+    [[object.function]]
+    name = "check_version"
+    #manual skip_assert_initialized
+    ignore = true
+    [[object.function]]
+    pattern = "drag_.+"
+    #manual trait
+    ignore = true
 
 [[object]]
 name = "Gtk.AboutDialog"
