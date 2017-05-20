@@ -226,6 +226,7 @@ mod widget;
 pub mod prelude;
 
 pub use auto::*;
+pub use auto::functions::*;
 pub use rt::*;
 pub use signal::*;
 pub use prelude::*;

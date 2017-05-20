@@ -148,13 +148,6 @@ pub fn cairo_transform_to_window<P: IsA<Widget>>(cr: &cairo::Context, widget: &P
     }
 }
 
-pub fn check_version(required_major: u32, required_minor: u32, required_micro: u32) -> Option<String> {
-    assert_initialized_main_thread!();
-    unsafe {
-        from_glib_none(ffi::gtk_check_version(required_major, required_minor, required_micro))
-    }
-}
-
 pub fn device_grab_add<P: IsA<Widget>, Q: IsA<gdk::Device>>(widget: &P, device: &Q, block_others: bool) {
     skip_assert_initialized!();
     unsafe {
@@ -180,74 +173,6 @@ pub fn disable_setlocale() {
 //    unsafe { TODO: call ffi::gtk_distribute_natural_allocation() }
 //}
 
-#[cfg(feature = "v3_16")]
-pub fn drag_cancel(context: &gdk::DragContext) {
-    assert_initialized_main_thread!();
-    unsafe {
-        ffi::gtk_drag_cancel(context.to_glib_none().0);
-    }
-}
-
-pub fn drag_finish(context: &gdk::DragContext, success: bool, del: bool, time_: u32) {
-    assert_initialized_main_thread!();
-    unsafe {
-        ffi::gtk_drag_finish(context.to_glib_none().0, success.to_glib(), del.to_glib(), time_);
-    }
-}
-
-pub fn drag_get_source_widget(context: &gdk::DragContext) -> Option<Widget> {
-    assert_initialized_main_thread!();
-    unsafe {
-        from_glib_none(ffi::gtk_drag_get_source_widget(context.to_glib_none().0))
-    }
-}
-
-pub fn drag_set_icon_default(context: &gdk::DragContext) {
-    assert_initialized_main_thread!();
-    unsafe {
-        ffi::gtk_drag_set_icon_default(context.to_glib_none().0);
-    }
-}
-
-//pub fn drag_set_icon_gicon<P: IsA</*Ignored*/gio::Icon>>(context: &gdk::DragContext, icon: &P, hot_x: i32, hot_y: i32) {
-//    unsafe { TODO: call ffi::gtk_drag_set_icon_gicon() }
-//}
-
-pub fn drag_set_icon_name(context: &gdk::DragContext, icon_name: &str, hot_x: i32, hot_y: i32) {
-    assert_initialized_main_thread!();
-    unsafe {
-        ffi::gtk_drag_set_icon_name(context.to_glib_none().0, icon_name.to_glib_none().0, hot_x, hot_y);
-    }
-}
-
-pub fn drag_set_icon_pixbuf(context: &gdk::DragContext, pixbuf: &gdk_pixbuf::Pixbuf, hot_x: i32, hot_y: i32) {
-    assert_initialized_main_thread!();
-    unsafe {
-        ffi::gtk_drag_set_icon_pixbuf(context.to_glib_none().0, pixbuf.to_glib_none().0, hot_x, hot_y);
-    }
-}
-
-pub fn drag_set_icon_stock(context: &gdk::DragContext, stock_id: &str, hot_x: i32, hot_y: i32) {
-    assert_initialized_main_thread!();
-    unsafe {
-        ffi::gtk_drag_set_icon_stock(context.to_glib_none().0, stock_id.to_glib_none().0, hot_x, hot_y);
-    }
-}
-
-pub fn drag_set_icon_surface(context: &gdk::DragContext, surface: &cairo::Surface) {
-    assert_initialized_main_thread!();
-    unsafe {
-        ffi::gtk_drag_set_icon_surface(context.to_glib_none().0, mut_override(surface.to_glib_none().0));
-    }
-}
-
-pub fn drag_set_icon_widget<P: IsA<Widget>>(context: &gdk::DragContext, widget: &P, hot_x: i32, hot_y: i32) {
-    skip_assert_initialized!();
-    unsafe {
-        ffi::gtk_drag_set_icon_widget(context.to_glib_none().0, widget.to_glib_none().0, hot_x, hot_y);
-    }
-}
-
 pub fn events_pending() -> bool {
     assert_initialized_main_thread!();
     unsafe {
@@ -259,13 +184,6 @@ pub fn false_() -> bool {
     assert_initialized_main_thread!();
     unsafe {
         from_glib(ffi::gtk_false())
-    }
-}
-
-pub fn get_binary_age() -> u32 {
-    assert_initialized_main_thread!();
-    unsafe {
-        ffi::gtk_get_binary_age()
     }
 }
 
@@ -317,39 +235,11 @@ pub fn get_event_widget(event: &mut gdk::Event) -> Option<Widget> {
     }
 }
 
-pub fn get_interface_age() -> u32 {
-    assert_initialized_main_thread!();
-    unsafe {
-        ffi::gtk_get_interface_age()
-    }
-}
-
 #[cfg(feature = "v3_12")]
 pub fn get_locale_direction() -> TextDirection {
     assert_initialized_main_thread!();
     unsafe {
         from_glib(ffi::gtk_get_locale_direction())
-    }
-}
-
-pub fn get_major_version() -> u32 {
-    assert_initialized_main_thread!();
-    unsafe {
-        ffi::gtk_get_major_version()
-    }
-}
-
-pub fn get_micro_version() -> u32 {
-    assert_initialized_main_thread!();
-    unsafe {
-        ffi::gtk_get_micro_version()
-    }
-}
-
-pub fn get_minor_version() -> u32 {
-    assert_initialized_main_thread!();
-    unsafe {
-        ffi::gtk_get_minor_version()
     }
 }
 
@@ -363,10 +253,6 @@ pub fn grab_get_current() -> Option<Widget> {
         from_glib_none(ffi::gtk_grab_get_current())
     }
 }
-
-//pub fn init(argc: &mut i32, argv: /*Unimplemented*/Vec<String>) {
-//    unsafe { TODO: call ffi::gtk_init() }
-//}
 
 //pub fn init_check(argc: &mut i32, argv: /*Unimplemented*/Vec<String>) -> bool {
 //    unsafe { TODO: call ffi::gtk_init_check() }
@@ -408,13 +294,6 @@ pub fn main_level() -> u32 {
     assert_initialized_main_thread!();
     unsafe {
         ffi::gtk_main_level()
-    }
-}
-
-pub fn main_quit() {
-    assert_initialized_main_thread!();
-    unsafe {
-        ffi::gtk_main_quit();
     }
 }
 
