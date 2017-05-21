@@ -26,7 +26,6 @@ use ffi;
 use gdk;
 use gdk_ffi;
 use gdk_pixbuf;
-#[cfg(feature = "v3_6")]
 use gio;
 use glib;
 use glib::Value;
@@ -156,7 +155,7 @@ pub trait WidgetExt {
 
     fn drag_source_get_target_list(&self) -> Option<TargetList>;
 
-    //fn drag_source_set_icon_gicon<P: IsA</*Ignored*/gio::Icon>>(&self, icon: &P);
+    fn drag_source_set_icon_gicon<P: IsA<gio::Icon>>(&self, icon: &P);
 
     fn drag_source_set_icon_name(&self, icon_name: &str);
 
@@ -962,9 +961,11 @@ impl<O: IsA<Widget> + IsA<glib::object::Object>> WidgetExt for O {
         }
     }
 
-    //fn drag_source_set_icon_gicon<P: IsA</*Ignored*/gio::Icon>>(&self, icon: &P) {
-    //    unsafe { TODO: call ffi::gtk_drag_source_set_icon_gicon() }
-    //}
+    fn drag_source_set_icon_gicon<P: IsA<gio::Icon>>(&self, icon: &P) {
+        unsafe {
+            ffi::gtk_drag_source_set_icon_gicon(self.to_glib_none().0, icon.to_glib_none().0);
+        }
+    }
 
     fn drag_source_set_icon_name(&self, icon_name: &str) {
         unsafe {

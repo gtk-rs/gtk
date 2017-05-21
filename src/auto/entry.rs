@@ -21,6 +21,7 @@ use ffi;
 use gdk;
 use gdk_ffi;
 use gdk_pixbuf;
+use gio;
 use glib;
 use glib::Value;
 use glib::object::Downcast;
@@ -83,7 +84,7 @@ pub trait EntryExt {
 
     fn get_icon_at_pos(&self, x: i32, y: i32) -> i32;
 
-    //fn get_icon_gicon(&self, icon_pos: EntryIconPosition) -> /*Ignored*/Option<gio::Icon>;
+    fn get_icon_gicon(&self, icon_pos: EntryIconPosition) -> Option<gio::Icon>;
 
     fn get_icon_name(&self, icon_pos: EntryIconPosition) -> Option<String>;
 
@@ -167,7 +168,7 @@ pub trait EntryExt {
 
     fn set_icon_drag_source(&self, icon_pos: EntryIconPosition, target_list: &TargetList, actions: gdk::DragAction);
 
-    //fn set_icon_from_gicon<'a, P: IsA</*Ignored*/gio::Icon> + 'a, Q: Into<Option<&'a P>>>(&self, icon_pos: EntryIconPosition, icon: Q);
+    fn set_icon_from_gicon<'a, P: IsA<gio::Icon> + 'a, Q: Into<Option<&'a P>>>(&self, icon_pos: EntryIconPosition, icon: Q);
 
     fn set_icon_from_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_pos: EntryIconPosition, icon_name: P);
 
@@ -239,9 +240,9 @@ pub trait EntryExt {
 
     fn set_property_primary_icon_activatable(&self, primary_icon_activatable: bool);
 
-    //fn get_property_primary_icon_gicon(&self) -> /*Ignored*/Option<gio::Icon>;
+    fn get_property_primary_icon_gicon(&self) -> Option<gio::Icon>;
 
-    //fn set_property_primary_icon_gicon<P: IsA</*Ignored*/gio::Icon> + IsA<glib::object::Object>>(&self, primary_icon_gicon: Option<&P>);
+    fn set_property_primary_icon_gicon<P: IsA<gio::Icon> + IsA<glib::object::Object>>(&self, primary_icon_gicon: Option<&P>);
 
     fn get_property_primary_icon_name(&self) -> Option<String>;
 
@@ -275,9 +276,9 @@ pub trait EntryExt {
 
     fn set_property_secondary_icon_activatable(&self, secondary_icon_activatable: bool);
 
-    //fn get_property_secondary_icon_gicon(&self) -> /*Ignored*/Option<gio::Icon>;
+    fn get_property_secondary_icon_gicon(&self) -> Option<gio::Icon>;
 
-    //fn set_property_secondary_icon_gicon<P: IsA</*Ignored*/gio::Icon> + IsA<glib::object::Object>>(&self, secondary_icon_gicon: Option<&P>);
+    fn set_property_secondary_icon_gicon<P: IsA<gio::Icon> + IsA<glib::object::Object>>(&self, secondary_icon_gicon: Option<&P>);
 
     fn get_property_secondary_icon_name(&self) -> Option<String>;
 
@@ -418,9 +419,11 @@ impl<O: IsA<Entry> + IsA<glib::object::Object>> EntryExt for O {
         }
     }
 
-    //fn get_icon_gicon(&self, icon_pos: EntryIconPosition) -> /*Ignored*/Option<gio::Icon> {
-    //    unsafe { TODO: call ffi::gtk_entry_get_icon_gicon() }
-    //}
+    fn get_icon_gicon(&self, icon_pos: EntryIconPosition) -> Option<gio::Icon> {
+        unsafe {
+            from_glib_none(ffi::gtk_entry_get_icon_gicon(self.to_glib_none().0, icon_pos.to_glib()))
+        }
+    }
 
     fn get_icon_name(&self, icon_pos: EntryIconPosition) -> Option<String> {
         unsafe {
@@ -661,9 +664,13 @@ impl<O: IsA<Entry> + IsA<glib::object::Object>> EntryExt for O {
         }
     }
 
-    //fn set_icon_from_gicon<'a, P: IsA</*Ignored*/gio::Icon> + 'a, Q: Into<Option<&'a P>>>(&self, icon_pos: EntryIconPosition, icon: Q) {
-    //    unsafe { TODO: call ffi::gtk_entry_set_icon_from_gicon() }
-    //}
+    fn set_icon_from_gicon<'a, P: IsA<gio::Icon> + 'a, Q: Into<Option<&'a P>>>(&self, icon_pos: EntryIconPosition, icon: Q) {
+        let icon = icon.into();
+        let icon = icon.to_glib_none();
+        unsafe {
+            ffi::gtk_entry_set_icon_from_gicon(self.to_glib_none().0, icon_pos.to_glib(), icon.0);
+        }
+    }
 
     fn set_icon_from_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_pos: EntryIconPosition, icon_name: P) {
         let icon_name = icon_name.into();
@@ -885,19 +892,19 @@ impl<O: IsA<Entry> + IsA<glib::object::Object>> EntryExt for O {
         }
     }
 
-    //fn get_property_primary_icon_gicon(&self) -> /*Ignored*/Option<gio::Icon> {
-    //    let mut value = Value::from(None::<&/*Ignored*/gio::Icon>);
-    //    unsafe {
-    //        gobject_ffi::g_object_get_property(self.to_glib_none().0, "primary-icon-gicon".to_glib_none().0, value.to_glib_none_mut().0);
-    //    }
-    //    value.get()
-    //}
+    fn get_property_primary_icon_gicon(&self) -> Option<gio::Icon> {
+        let mut value = Value::from(None::<&gio::Icon>);
+        unsafe {
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, "primary-icon-gicon".to_glib_none().0, value.to_glib_none_mut().0);
+        }
+        value.get()
+    }
 
-    //fn set_property_primary_icon_gicon<P: IsA</*Ignored*/gio::Icon> + IsA<glib::object::Object>>(&self, primary_icon_gicon: Option<&P>) {
-    //    unsafe {
-    //        gobject_ffi::g_object_set_property(self.to_glib_none().0, "primary-icon-gicon".to_glib_none().0, Value::from(primary_icon_gicon).to_glib_none().0);
-    //    }
-    //}
+    fn set_property_primary_icon_gicon<P: IsA<gio::Icon> + IsA<glib::object::Object>>(&self, primary_icon_gicon: Option<&P>) {
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, "primary-icon-gicon".to_glib_none().0, Value::from(primary_icon_gicon).to_glib_none().0);
+        }
+    }
 
     fn get_property_primary_icon_name(&self) -> Option<String> {
         let mut value = Value::from(None::<&str>);
@@ -1013,19 +1020,19 @@ impl<O: IsA<Entry> + IsA<glib::object::Object>> EntryExt for O {
         }
     }
 
-    //fn get_property_secondary_icon_gicon(&self) -> /*Ignored*/Option<gio::Icon> {
-    //    let mut value = Value::from(None::<&/*Ignored*/gio::Icon>);
-    //    unsafe {
-    //        gobject_ffi::g_object_get_property(self.to_glib_none().0, "secondary-icon-gicon".to_glib_none().0, value.to_glib_none_mut().0);
-    //    }
-    //    value.get()
-    //}
+    fn get_property_secondary_icon_gicon(&self) -> Option<gio::Icon> {
+        let mut value = Value::from(None::<&gio::Icon>);
+        unsafe {
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, "secondary-icon-gicon".to_glib_none().0, value.to_glib_none_mut().0);
+        }
+        value.get()
+    }
 
-    //fn set_property_secondary_icon_gicon<P: IsA</*Ignored*/gio::Icon> + IsA<glib::object::Object>>(&self, secondary_icon_gicon: Option<&P>) {
-    //    unsafe {
-    //        gobject_ffi::g_object_set_property(self.to_glib_none().0, "secondary-icon-gicon".to_glib_none().0, Value::from(secondary_icon_gicon).to_glib_none().0);
-    //    }
-    //}
+    fn set_property_secondary_icon_gicon<P: IsA<gio::Icon> + IsA<glib::object::Object>>(&self, secondary_icon_gicon: Option<&P>) {
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, "secondary-icon-gicon".to_glib_none().0, Value::from(secondary_icon_gicon).to_glib_none().0);
+        }
+    }
 
     fn get_property_secondary_icon_name(&self) -> Option<String> {
         let mut value = Value::from(None::<&str>);

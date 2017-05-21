@@ -4,6 +4,7 @@
 use CellRenderer;
 use ffi;
 use gdk_pixbuf;
+use gio;
 use glib;
 use glib::Value;
 use glib::object::Downcast;
@@ -33,9 +34,9 @@ pub trait CellRendererPixbufExt {
 
     fn set_property_follow_state(&self, follow_state: bool);
 
-    //fn get_property_gicon(&self) -> /*Ignored*/Option<gio::Icon>;
+    fn get_property_gicon(&self) -> Option<gio::Icon>;
 
-    //fn set_property_gicon<P: IsA</*Ignored*/gio::Icon> + IsA<glib::object::Object>>(&self, gicon: Option<&P>);
+    fn set_property_gicon<P: IsA<gio::Icon> + IsA<glib::object::Object>>(&self, gicon: Option<&P>);
 
     fn get_property_icon_name(&self) -> Option<String>;
 
@@ -81,19 +82,19 @@ impl<O: IsA<CellRendererPixbuf> + IsA<glib::object::Object>> CellRendererPixbufE
         }
     }
 
-    //fn get_property_gicon(&self) -> /*Ignored*/Option<gio::Icon> {
-    //    let mut value = Value::from(None::<&/*Ignored*/gio::Icon>);
-    //    unsafe {
-    //        gobject_ffi::g_object_get_property(self.to_glib_none().0, "gicon".to_glib_none().0, value.to_glib_none_mut().0);
-    //    }
-    //    value.get()
-    //}
+    fn get_property_gicon(&self) -> Option<gio::Icon> {
+        let mut value = Value::from(None::<&gio::Icon>);
+        unsafe {
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, "gicon".to_glib_none().0, value.to_glib_none_mut().0);
+        }
+        value.get()
+    }
 
-    //fn set_property_gicon<P: IsA</*Ignored*/gio::Icon> + IsA<glib::object::Object>>(&self, gicon: Option<&P>) {
-    //    unsafe {
-    //        gobject_ffi::g_object_set_property(self.to_glib_none().0, "gicon".to_glib_none().0, Value::from(gicon).to_glib_none().0);
-    //    }
-    //}
+    fn set_property_gicon<P: IsA<gio::Icon> + IsA<glib::object::Object>>(&self, gicon: Option<&P>) {
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, "gicon".to_glib_none().0, Value::from(gicon).to_glib_none().0);
+        }
+    }
 
     fn get_property_icon_name(&self) -> Option<String> {
         let mut value = Value::from(None::<&str>);
