@@ -8,6 +8,7 @@ use Widget;
 use cairo;
 use ffi;
 use gdk_pixbuf;
+use gio;
 use glib;
 use glib::Value;
 use glib::object::Downcast;
@@ -15,6 +16,8 @@ use glib::object::IsA;
 use glib::translate::*;
 use gobject_ffi;
 use std;
+use std::mem;
+use std::ptr;
 
 glib_wrapper! {
     pub struct Image(Object<ffi::GtkImage>): Misc, Widget;
@@ -46,9 +49,12 @@ impl Image {
         }
     }
 
-    //pub fn new_from_gicon<P: IsA</*Ignored*/gio::Icon>>(icon: &P, size: i32) -> Image {
-    //    unsafe { TODO: call ffi::gtk_image_new_from_gicon() }
-    //}
+    pub fn new_from_gicon<P: IsA<gio::Icon>>(icon: &P, size: i32) -> Image {
+        assert_initialized_main_thread!();
+        unsafe {
+            Widget::from_glib_none(ffi::gtk_image_new_from_gicon(icon.to_glib_none().0, size)).downcast_unchecked()
+        }
+    }
 
     pub fn new_from_icon_name(icon_name: &str, size: i32) -> Image {
         assert_initialized_main_thread!();
@@ -99,7 +105,7 @@ pub trait ImageExt {
 
     fn get_animation(&self) -> Option<gdk_pixbuf::PixbufAnimation>;
 
-    //fn get_gicon(&self, gicon: /*Ignored*/gio::Icon) -> i32;
+    fn get_gicon(&self) -> (gio::Icon, i32);
 
     //fn get_icon_name(&self, icon_name: /*Unimplemented*/String) -> i32;
 
@@ -117,7 +123,7 @@ pub trait ImageExt {
 
     fn set_from_file<P: AsRef<std::path::Path>>(&self, filename: P);
 
-    //fn set_from_gicon<P: IsA</*Ignored*/gio::Icon>>(&self, icon: &P, size: i32);
+    fn set_from_gicon<P: IsA<gio::Icon>>(&self, icon: &P, size: i32);
 
     fn set_from_icon_name(&self, icon_name: &str, size: i32);
 
@@ -138,7 +144,7 @@ pub trait ImageExt {
 
     fn set_property_file(&self, file: Option<&str>);
 
-    //fn set_property_gicon<P: IsA</*Ignored*/gio::Icon> + IsA<glib::object::Object>>(&self, gicon: Option<&P>);
+    fn set_property_gicon<P: IsA<gio::Icon> + IsA<glib::object::Object>>(&self, gicon: Option<&P>);
 
     fn set_property_icon_name(&self, icon_name: Option<&str>);
 
@@ -180,9 +186,14 @@ impl<O: IsA<Image> + IsA<glib::object::Object>> ImageExt for O {
         }
     }
 
-    //fn get_gicon(&self, gicon: /*Ignored*/gio::Icon) -> i32 {
-    //    unsafe { TODO: call ffi::gtk_image_get_gicon() }
-    //}
+    fn get_gicon(&self) -> (gio::Icon, i32) {
+        unsafe {
+            let mut gicon = ptr::null_mut();
+            let mut size = mem::uninitialized();
+            ffi::gtk_image_get_gicon(self.to_glib_none().0, &mut gicon, &mut size);
+            (from_glib_none(gicon), size)
+        }
+    }
 
     //fn get_icon_name(&self, icon_name: /*Unimplemented*/String) -> i32 {
     //    unsafe { TODO: call ffi::gtk_image_get_icon_name() }
@@ -226,9 +237,11 @@ impl<O: IsA<Image> + IsA<glib::object::Object>> ImageExt for O {
         }
     }
 
-    //fn set_from_gicon<P: IsA</*Ignored*/gio::Icon>>(&self, icon: &P, size: i32) {
-    //    unsafe { TODO: call ffi::gtk_image_set_from_gicon() }
-    //}
+    fn set_from_gicon<P: IsA<gio::Icon>>(&self, icon: &P, size: i32) {
+        unsafe {
+            ffi::gtk_image_set_from_gicon(self.to_glib_none().0, icon.to_glib_none().0, size);
+        }
+    }
 
     fn set_from_icon_name(&self, icon_name: &str, size: i32) {
         unsafe {
@@ -289,11 +302,11 @@ impl<O: IsA<Image> + IsA<glib::object::Object>> ImageExt for O {
         }
     }
 
-    //fn set_property_gicon<P: IsA</*Ignored*/gio::Icon> + IsA<glib::object::Object>>(&self, gicon: Option<&P>) {
-    //    unsafe {
-    //        gobject_ffi::g_object_set_property(self.to_glib_none().0, "gicon".to_glib_none().0, Value::from(gicon).to_glib_none().0);
-    //    }
-    //}
+    fn set_property_gicon<P: IsA<gio::Icon> + IsA<glib::object::Object>>(&self, gicon: Option<&P>) {
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, "gicon".to_glib_none().0, Value::from(gicon).to_glib_none().0);
+        }
+    }
 
     fn set_property_icon_name(&self, icon_name: Option<&str>) {
         unsafe {

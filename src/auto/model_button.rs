@@ -9,6 +9,8 @@ use ButtonRole;
 use Container;
 use Widget;
 use ffi;
+#[cfg(feature = "v3_16")]
+use gio;
 use glib;
 #[cfg(feature = "v3_16")]
 use glib::Value;
@@ -51,11 +53,11 @@ pub trait ModelButtonExt {
     #[cfg(feature = "v3_16")]
     fn set_property_centered(&self, centered: bool);
 
-    //#[cfg(feature = "v3_16")]
-    //fn get_property_icon(&self) -> /*Ignored*/Option<gio::Icon>;
+    #[cfg(feature = "v3_16")]
+    fn get_property_icon(&self) -> Option<gio::Icon>;
 
-    //#[cfg(feature = "v3_16")]
-    //fn set_property_icon<P: IsA</*Ignored*/gio::Icon> + IsA<glib::object::Object>>(&self, icon: Option<&P>);
+    #[cfg(feature = "v3_16")]
+    fn set_property_icon<P: IsA<gio::Icon> + IsA<glib::object::Object>>(&self, icon: Option<&P>);
 
     #[cfg(feature = "v3_16")]
     fn get_property_iconic(&self) -> bool;
@@ -121,21 +123,21 @@ impl<O: IsA<ModelButton> + IsA<glib::object::Object>> ModelButtonExt for O {
         }
     }
 
-    //#[cfg(feature = "v3_16")]
-    //fn get_property_icon(&self) -> /*Ignored*/Option<gio::Icon> {
-    //    let mut value = Value::from(None::<&/*Ignored*/gio::Icon>);
-    //    unsafe {
-    //        gobject_ffi::g_object_get_property(self.to_glib_none().0, "icon".to_glib_none().0, value.to_glib_none_mut().0);
-    //    }
-    //    value.get()
-    //}
+    #[cfg(feature = "v3_16")]
+    fn get_property_icon(&self) -> Option<gio::Icon> {
+        let mut value = Value::from(None::<&gio::Icon>);
+        unsafe {
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, "icon".to_glib_none().0, value.to_glib_none_mut().0);
+        }
+        value.get()
+    }
 
-    //#[cfg(feature = "v3_16")]
-    //fn set_property_icon<P: IsA</*Ignored*/gio::Icon> + IsA<glib::object::Object>>(&self, icon: Option<&P>) {
-    //    unsafe {
-    //        gobject_ffi::g_object_set_property(self.to_glib_none().0, "icon".to_glib_none().0, Value::from(icon).to_glib_none().0);
-    //    }
-    //}
+    #[cfg(feature = "v3_16")]
+    fn set_property_icon<P: IsA<gio::Icon> + IsA<glib::object::Object>>(&self, icon: Option<&P>) {
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, "icon".to_glib_none().0, Value::from(icon).to_glib_none().0);
+        }
+    }
 
     #[cfg(feature = "v3_16")]
     fn get_property_iconic(&self) -> bool {

@@ -425,9 +425,12 @@ pub fn render_icon_surface(context: &StyleContext, cr: &cairo::Context, surface:
     }
 }
 
-//pub fn render_insertion_cursor(context: &StyleContext, cr: &cairo::Context, x: f64, y: f64, layout: &pango::Layout, index: i32, direction: /*Ignored*/pango::Direction) {
-//    unsafe { TODO: call ffi::gtk_render_insertion_cursor() }
-//}
+pub fn render_insertion_cursor(context: &StyleContext, cr: &cairo::Context, x: f64, y: f64, layout: &pango::Layout, index: i32, direction: pango::Direction) {
+    skip_assert_initialized!();
+    unsafe {
+        ffi::gtk_render_insertion_cursor(context.to_glib_none().0, mut_override(cr.to_glib_none().0), x, y, layout.to_glib_none().0, index, direction.to_glib());
+    }
+}
 
 pub fn render_layout(context: &StyleContext, cr: &cairo::Context, x: f64, y: f64, layout: &pango::Layout) {
     skip_assert_initialized!();

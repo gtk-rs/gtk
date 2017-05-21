@@ -2,6 +2,7 @@ use ffi;
 use cairo;
 use gdk;
 use gdk_pixbuf;
+use gio;
 use glib::object::IsA;
 use glib::translate::*;
 use Widget;
@@ -17,7 +18,7 @@ pub trait DragContextExtManual {
 
     fn drag_set_icon_default(&self);
 
-    //fn drag_set_icon_gicon<P: IsA</*Ignored*/gio::Icon>>(&self, icon: &P, hot_x: i32, hot_y: i32);
+    fn drag_set_icon_gicon<P: IsA<gio::Icon>>(&self, icon: &P, hot_x: i32, hot_y: i32);
 
     fn drag_set_icon_name(&self, icon_name: &str, hot_x: i32, hot_y: i32);
 
@@ -60,9 +61,12 @@ impl<O: IsA<gdk::DragContext>> DragContextExtManual for O {
         }
     }
 
-    //fn drag_set_icon_gicon<P: IsA</*Ignored*/gio::Icon>>(&self, icon: &P, hot_x: i32, hot_y: i32) {
-    //    unsafe { TODO: call ffi::gtk_drag_set_icon_gicon() }
-    //}
+    fn drag_set_icon_gicon<P: IsA<gio::Icon>>(&self, icon: &P, hot_x: i32, hot_y: i32) {
+        assert_initialized_main_thread!();
+        unsafe {
+            ffi::gtk_drag_set_icon_gicon(self.to_glib_none().0, icon.to_glib_none().0, hot_x, hot_y);
+        }
+    }
 
     fn drag_set_icon_name(&self, icon_name: &str, hot_x: i32, hot_y: i32) {
         assert_initialized_main_thread!();

@@ -9,6 +9,7 @@ use ffi;
 use gdk;
 use gdk_ffi;
 use gdk_pixbuf;
+use gio;
 use glib;
 use glib::Value;
 use glib::object::Downcast;
@@ -47,9 +48,12 @@ impl StatusIcon {
         }
     }
 
-    //pub fn new_from_gicon<P: IsA</*Ignored*/gio::Icon>>(icon: &P) -> StatusIcon {
-    //    unsafe { TODO: call ffi::gtk_status_icon_new_from_gicon() }
-    //}
+    pub fn new_from_gicon<P: IsA<gio::Icon>>(icon: &P) -> StatusIcon {
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_full(ffi::gtk_status_icon_new_from_gicon(icon.to_glib_none().0))
+        }
+    }
 
     pub fn new_from_icon_name(icon_name: &str) -> StatusIcon {
         assert_initialized_main_thread!();
@@ -85,7 +89,7 @@ impl StatusIcon {
 pub trait StatusIconExt {
     fn get_geometry(&self) -> Option<(gdk::Screen, gdk::Rectangle, Orientation)>;
 
-    //fn get_gicon(&self) -> /*Ignored*/Option<gio::Icon>;
+    fn get_gicon(&self) -> Option<gio::Icon>;
 
     fn get_has_tooltip(&self) -> bool;
 
@@ -115,7 +119,7 @@ pub trait StatusIconExt {
 
     fn set_from_file<P: AsRef<std::path::Path>>(&self, filename: P);
 
-    //fn set_from_gicon<P: IsA</*Ignored*/gio::Icon>>(&self, icon: &P);
+    fn set_from_gicon<P: IsA<gio::Icon>>(&self, icon: &P);
 
     fn set_from_icon_name(&self, icon_name: &str);
 
@@ -141,7 +145,7 @@ pub trait StatusIconExt {
 
     fn set_property_file(&self, file: Option<&str>);
 
-    //fn set_property_gicon<P: IsA</*Ignored*/gio::Icon> + IsA<glib::object::Object>>(&self, gicon: Option<&P>);
+    fn set_property_gicon<P: IsA<gio::Icon> + IsA<glib::object::Object>>(&self, gicon: Option<&P>);
 
     fn set_property_icon_name(&self, icon_name: Option<&str>);
 
@@ -177,9 +181,11 @@ impl<O: IsA<StatusIcon> + IsA<glib::object::Object>> StatusIconExt for O {
         }
     }
 
-    //fn get_gicon(&self) -> /*Ignored*/Option<gio::Icon> {
-    //    unsafe { TODO: call ffi::gtk_status_icon_get_gicon() }
-    //}
+    fn get_gicon(&self) -> Option<gio::Icon> {
+        unsafe {
+            from_glib_none(ffi::gtk_status_icon_get_gicon(self.to_glib_none().0))
+        }
+    }
 
     fn get_has_tooltip(&self) -> bool {
         unsafe {
@@ -265,9 +271,11 @@ impl<O: IsA<StatusIcon> + IsA<glib::object::Object>> StatusIconExt for O {
         }
     }
 
-    //fn set_from_gicon<P: IsA</*Ignored*/gio::Icon>>(&self, icon: &P) {
-    //    unsafe { TODO: call ffi::gtk_status_icon_set_from_gicon() }
-    //}
+    fn set_from_gicon<P: IsA<gio::Icon>>(&self, icon: &P) {
+        unsafe {
+            ffi::gtk_status_icon_set_from_gicon(self.to_glib_none().0, icon.to_glib_none().0);
+        }
+    }
 
     fn set_from_icon_name(&self, icon_name: &str) {
         unsafe {
@@ -347,11 +355,11 @@ impl<O: IsA<StatusIcon> + IsA<glib::object::Object>> StatusIconExt for O {
         }
     }
 
-    //fn set_property_gicon<P: IsA</*Ignored*/gio::Icon> + IsA<glib::object::Object>>(&self, gicon: Option<&P>) {
-    //    unsafe {
-    //        gobject_ffi::g_object_set_property(self.to_glib_none().0, "gicon".to_glib_none().0, Value::from(gicon).to_glib_none().0);
-    //    }
-    //}
+    fn set_property_gicon<P: IsA<gio::Icon> + IsA<glib::object::Object>>(&self, gicon: Option<&P>) {
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, "gicon".to_glib_none().0, Value::from(gicon).to_glib_none().0);
+        }
+    }
 
     fn set_property_icon_name(&self, icon_name: Option<&str>) {
         unsafe {

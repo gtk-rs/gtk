@@ -5,6 +5,7 @@ use Widget;
 use ffi;
 use gdk;
 use gdk_pixbuf;
+use gio;
 use glib::object::IsA;
 use glib::translate::*;
 
@@ -30,7 +31,7 @@ pub trait TooltipExt {
 
     fn set_icon<'a, P: Into<Option<&'a gdk_pixbuf::Pixbuf>>>(&self, pixbuf: P);
 
-    //fn set_icon_from_gicon<'a, P: IsA</*Ignored*/gio::Icon> + 'a, Q: Into<Option<&'a P>>>(&self, gicon: Q, size: i32);
+    fn set_icon_from_gicon<'a, P: IsA<gio::Icon> + 'a, Q: Into<Option<&'a P>>>(&self, gicon: Q, size: i32);
 
     fn set_icon_from_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_name: P, size: i32);
 
@@ -60,9 +61,13 @@ impl<O: IsA<Tooltip>> TooltipExt for O {
         }
     }
 
-    //fn set_icon_from_gicon<'a, P: IsA</*Ignored*/gio::Icon> + 'a, Q: Into<Option<&'a P>>>(&self, gicon: Q, size: i32) {
-    //    unsafe { TODO: call ffi::gtk_tooltip_set_icon_from_gicon() }
-    //}
+    fn set_icon_from_gicon<'a, P: IsA<gio::Icon> + 'a, Q: Into<Option<&'a P>>>(&self, gicon: Q, size: i32) {
+        let gicon = gicon.into();
+        let gicon = gicon.to_glib_none();
+        unsafe {
+            ffi::gtk_tooltip_set_icon_from_gicon(self.to_glib_none().0, gicon.0, size);
+        }
+    }
 
     fn set_icon_from_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_name: P, size: i32) {
         let icon_name = icon_name.into();
