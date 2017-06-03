@@ -345,6 +345,14 @@ pub use self::header_bar::HeaderBar;
 #[cfg(feature = "v3_10")]
 pub use self::header_bar::HeaderBarExt;
 
+mod i_m_context;
+pub use self::i_m_context::IMContext;
+pub use self::i_m_context::IMContextExt;
+
+mod i_m_multicontext;
+pub use self::i_m_multicontext::IMMulticontext;
+pub use self::i_m_multicontext::IMMulticontextExt;
+
 mod icon_factory;
 pub use self::icon_factory::IconFactory;
 pub use self::icon_factory::IconFactoryExt;
@@ -1078,6 +1086,8 @@ pub mod traits {
     pub use super::GridExt;
     #[cfg(feature = "v3_10")]
     pub use super::HeaderBarExt;
+    pub use super::IMContextExt;
+    pub use super::IMMulticontextExt;
     pub use super::IconFactoryExt;
     pub use super::IconViewExt;
     pub use super::ImageExt;
