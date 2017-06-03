@@ -91,6 +91,7 @@ generate = [
     "Gtk.ImageMenuItem",
     "Gtk.ImageType",
     "Gtk.InfoBar",
+    "Gtk.IMMulticontext",
     "Gtk.IMPreeditStyle",
     "Gtk.IMStatusStyle",
     "Gtk.InputHints",
@@ -797,6 +798,21 @@ status = "generate"
     name = "surface"
     #value cairo::Surface
     ignore = true
+
+[[object]]
+name = "Gtk.IMContext"
+status = "generate"
+    [[object.function]]
+    name = "filter_keypress"
+        [[object.function.parameter]]
+        name = "event"
+        const = true
+    [[object.property]]
+    name = "input-hints"
+    version = "3.6"
+    [[object.property]]
+    name = "input-purpose"
+    version = "3.6"
 
 [[object]]
 name = "Gtk.Label"
