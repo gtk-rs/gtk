@@ -1021,6 +1021,16 @@ status = "generate"
     version = "3.16"
 
 [[object]]
+name = "Gtk.PrintContext"
+status = "generate"
+    [[object.function]]
+    name = "set_cairo_context"
+        [[object.function.parameter]]
+        name = "cr"
+        # cairo::Context is reference-counted
+        const = true
+
+[[object]]
 name = "Gtk.PrintSettings"
 status = "generate"
     [[object.function]]

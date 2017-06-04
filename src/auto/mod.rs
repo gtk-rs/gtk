@@ -482,6 +482,10 @@ pub use self::popover_menu::PopoverMenu;
 #[cfg(feature = "v3_16")]
 pub use self::popover_menu::PopoverMenuExt;
 
+mod print_context;
+pub use self::print_context::PrintContext;
+pub use self::print_context::PrintContextExt;
+
 mod print_settings;
 pub use self::print_settings::PrintSettings;
 pub use self::print_settings::PrintSettingsExt;
@@ -1114,6 +1118,7 @@ pub mod traits {
     pub use super::PopoverExt;
     #[cfg(feature = "v3_16")]
     pub use super::PopoverMenuExt;
+    pub use super::PrintContextExt;
     pub use super::PrintSettingsExt;
     pub use super::ProgressBarExt;
     pub use super::RadioButtonExt;
