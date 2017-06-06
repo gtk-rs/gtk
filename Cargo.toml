@@ -35,7 +35,7 @@ v3_22 = ["v3_20", "gtk-sys/v3_22", "gdk/v3_22"]
 
 [build-dependencies.gtk-rs-lgpl-docs]
 git = "https://github.com/gtk-rs/lgpl-docs"
-version = "0.1.2"
+version = "0.1.3"
 optional = true
 
 [dependencies]
