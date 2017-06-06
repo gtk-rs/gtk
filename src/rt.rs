@@ -9,6 +9,7 @@ use std::sync::atomic::{AtomicBool, ATOMIC_BOOL_INIT, Ordering};
 use libc::{c_int, c_uint};
 use ffi;
 use glib::translate::*;
+use glib;
 use gdk;
 
 thread_local! {
@@ -94,7 +95,7 @@ pub unsafe fn set_initialized() {
 /// so will not cause the program to terminate if GTK could not be initialized.
 /// Instead, an Ok is returned if the windowing system was successfully
 /// initialized otherwise an Err is returned.
-pub fn init() -> Result<(), ()> {
+pub fn init() -> Result<(), glib::BoolError> {
     skip_assert_initialized!();
     if is_initialized_main_thread() {
         return Ok(());
@@ -108,7 +109,7 @@ pub fn init() -> Result<(), ()> {
             Ok(())
         }
         else {
-            Err(())
+            Err(glib::BoolError("Failed to initialize GTK"))
         }
     }
 }

@@ -9,7 +9,6 @@ pub use glib::prelude::*;
 pub use auto::traits::*;
 
 pub use app_chooser::AppChooserExt;
-pub use application::ApplicationExtManual;
 pub use assistant::AssistantExtManual;
 pub use clipboard::ClipboardExtManual;
 pub use color_button::ColorButtonExtManual;
