@@ -5,15 +5,7 @@ use glib::object::IsA;
 use glib::translate::*;
 use rt;
 
-pub trait ApplicationExtManual {
-    #[cfg(feature = "v3_6")]
-    fn new(application_id: Option<&str>, flags: ApplicationFlags) -> Result<Application, ()>;
-
-    #[cfg(not(feature = "v3_6"))]
-    fn new(application_id: &str, flags: ApplicationFlags) -> Result<Application, ()>;
-}
-
-impl<O: IsA<Application>> ApplicationExtManual for O {
+impl Application {
     #[cfg(feature = "v3_6")]
     fn new(application_id: Option<&str>, flags: ApplicationFlags) -> Result<Application, ()> {
         skip_assert_initialized!();
