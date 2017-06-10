@@ -205,6 +205,8 @@ mod list_store;
 mod menu;
 mod message_dialog;
 mod notebook;
+mod radio_button;
+mod radio_menu_item;
 mod recent_chooser_dialog;
 mod recent_data;
 mod recent_info;
