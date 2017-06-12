@@ -1,11 +1,9 @@
 use Application;
 use ffi;
 use gio::ApplicationFlags;
-use glib::object::IsA;
 use glib::translate::*;
 use rt;
 use glib;
-use glib_ffi;
 
 impl Application {
     #[cfg(feature = "v3_6")]
