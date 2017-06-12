@@ -2,6 +2,7 @@
 // DO NOT EDIT
 
 use CssSection;
+use IconSet;
 use JunctionSides;
 use RegionFlags;
 use StateFlags;
@@ -125,7 +126,7 @@ pub trait StyleContextExt {
 
     fn lookup_color(&self, color_name: &str) -> Option<gdk::RGBA>;
 
-    //fn lookup_icon_set(&self, stock_id: &str) -> /*Ignored*/Option<IconSet>;
+    fn lookup_icon_set(&self, stock_id: &str) -> Option<IconSet>;
 
     //fn notify_state_change<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, window: &gdk::Window, region_id: P, state: StateType, state_value: bool);
 
@@ -348,9 +349,11 @@ impl<O: IsA<StyleContext> + IsA<glib::object::Object>> StyleContextExt for O {
         }
     }
 
-    //fn lookup_icon_set(&self, stock_id: &str) -> /*Ignored*/Option<IconSet> {
-    //    unsafe { TODO: call ffi::gtk_style_context_lookup_icon_set() }
-    //}
+    fn lookup_icon_set(&self, stock_id: &str) -> Option<IconSet> {
+        unsafe {
+            from_glib_none(ffi::gtk_style_context_lookup_icon_set(self.to_glib_none().0, stock_id.to_glib_none().0))
+        }
+    }
 
     //fn notify_state_change<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, window: &gdk::Window, region_id: P, state: StateType, state_value: bool) {
     //    unsafe { TODO: call ffi::gtk_style_context_notify_state_change() }

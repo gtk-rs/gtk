@@ -710,20 +710,20 @@ pub fn test_widget_wait_for_draw<P: IsA<Widget>>(widget: &P) {
     }
 }
 
-pub fn tree_get_row_drag_data(selection_data: &mut SelectionData) -> Option<(Option<TreeModel>, Option<TreePath>)> {
+pub fn tree_get_row_drag_data(selection_data: &SelectionData) -> Option<(Option<TreeModel>, Option<TreePath>)> {
     assert_initialized_main_thread!();
     unsafe {
         let mut tree_model = ptr::null_mut();
         let mut path = ptr::null_mut();
-        let ret = from_glib(ffi::gtk_tree_get_row_drag_data(selection_data.to_glib_none_mut().0, &mut tree_model, &mut path));
+        let ret = from_glib(ffi::gtk_tree_get_row_drag_data(mut_override(selection_data.to_glib_none().0), &mut tree_model, &mut path));
         if ret { Some((from_glib_none(tree_model), from_glib_full(path))) } else { None }
     }
 }
 
-pub fn tree_set_row_drag_data<P: IsA<TreeModel>>(selection_data: &mut SelectionData, tree_model: &P, path: &mut TreePath) -> bool {
+pub fn tree_set_row_drag_data<P: IsA<TreeModel>>(selection_data: &SelectionData, tree_model: &P, path: &mut TreePath) -> bool {
     skip_assert_initialized!();
     unsafe {
-        from_glib(ffi::gtk_tree_set_row_drag_data(selection_data.to_glib_none_mut().0, tree_model.to_glib_none().0, path.to_glib_none_mut().0))
+        from_glib(ffi::gtk_tree_set_row_drag_data(mut_override(selection_data.to_glib_none().0), tree_model.to_glib_none().0, path.to_glib_none_mut().0))
     }
 }
 
