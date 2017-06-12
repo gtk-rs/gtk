@@ -9,6 +9,7 @@ generate_safety_asserts = true
 deprecate_by_min_version = true
 
 generate = [
+    "Gtk.IconSet",
     "Gtk.AccelFlags",
     "Gtk.Adjustment",
     "Gtk.Align",
@@ -802,6 +803,10 @@ status = "generate"
     [[object.property]]
     name = "surface"
     #value cairo::Surface
+    ignore = true
+    [[object.property]]
+    name = "icon-set"
+    #value IconSet
     ignore = true
 
 [[object]]

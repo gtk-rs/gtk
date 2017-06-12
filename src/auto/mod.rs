@@ -758,6 +758,9 @@ pub use self::window_group::WindowGroupExt;
 mod css_section;
 pub use self::css_section::CssSection;
 
+mod icon_set;
+pub use self::icon_set::IconSet;
+
 mod icon_source;
 pub use self::icon_source::IconSource;
 
