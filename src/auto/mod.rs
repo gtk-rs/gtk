@@ -586,8 +586,11 @@ mod settings;
 pub use self::settings::Settings;
 pub use self::settings::SettingsExt;
 
+#[cfg(feature = "v3_20")]
 mod shortcuts_window;
+#[cfg(feature = "v3_20")]
 pub use self::shortcuts_window::ShortcutsWindow;
+#[cfg(feature = "v3_20")]
 pub use self::shortcuts_window::ShortcutsWindowExt;
 
 mod size_group;
@@ -1155,6 +1158,7 @@ pub mod traits {
     pub use super::SearchEntryExt;
     pub use super::SeparatorToolItemExt;
     pub use super::SettingsExt;
+    #[cfg(feature = "v3_20")]
     pub use super::ShortcutsWindowExt;
     pub use super::SizeGroupExt;
     pub use super::SpinButtonExt;
