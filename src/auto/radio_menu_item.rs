@@ -26,55 +26,28 @@ glib_wrapper! {
 }
 
 impl RadioMenuItem {
-    pub fn new(group: &[RadioMenuItem]) -> RadioMenuItem {
-        assert_initialized_main_thread!();
+    pub fn new_from_widget(group: &RadioMenuItem) -> RadioMenuItem {
+        skip_assert_initialized!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_radio_menu_item_new(group.to_glib_none().0)).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_radio_menu_item_new_from_widget(group.to_glib_none().0)).downcast_unchecked()
         }
     }
 
-    pub fn new_from_widget<'a, P: Into<Option<&'a RadioMenuItem>>>(group: P) -> RadioMenuItem {
-        assert_initialized_main_thread!();
-        let group = group.into();
-        let group = group.to_glib_none();
-        unsafe {
-            Widget::from_glib_none(ffi::gtk_radio_menu_item_new_from_widget(group.0)).downcast_unchecked()
-        }
-    }
-
-    pub fn new_with_label(group: &[RadioMenuItem], label: &str) -> RadioMenuItem {
-        assert_initialized_main_thread!();
-        unsafe {
-            Widget::from_glib_none(ffi::gtk_radio_menu_item_new_with_label(group.to_glib_none().0, label.to_glib_none().0)).downcast_unchecked()
-        }
-    }
-
-    pub fn new_with_label_from_widget<'a, 'b, P: Into<Option<&'a RadioMenuItem>>, Q: Into<Option<&'b str>>>(group: P, label: Q) -> RadioMenuItem {
-        assert_initialized_main_thread!();
-        let group = group.into();
-        let group = group.to_glib_none();
+    pub fn new_with_label_from_widget<'a, P: Into<Option<&'a str>>>(group: &RadioMenuItem, label: P) -> RadioMenuItem {
+        skip_assert_initialized!();
         let label = label.into();
         let label = label.to_glib_none();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_radio_menu_item_new_with_label_from_widget(group.0, label.0)).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_radio_menu_item_new_with_label_from_widget(group.to_glib_none().0, label.0)).downcast_unchecked()
         }
     }
 
-    pub fn new_with_mnemonic(group: &[RadioMenuItem], label: &str) -> RadioMenuItem {
-        assert_initialized_main_thread!();
-        unsafe {
-            Widget::from_glib_none(ffi::gtk_radio_menu_item_new_with_mnemonic(group.to_glib_none().0, label.to_glib_none().0)).downcast_unchecked()
-        }
-    }
-
-    pub fn new_with_mnemonic_from_widget<'a, 'b, P: Into<Option<&'a RadioMenuItem>>, Q: Into<Option<&'b str>>>(group: P, label: Q) -> RadioMenuItem {
-        assert_initialized_main_thread!();
-        let group = group.into();
-        let group = group.to_glib_none();
+    pub fn new_with_mnemonic_from_widget<'a, P: Into<Option<&'a str>>>(group: &RadioMenuItem, label: P) -> RadioMenuItem {
+        skip_assert_initialized!();
         let label = label.into();
         let label = label.to_glib_none();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_radio_menu_item_new_with_mnemonic_from_widget(group.0, label.0)).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_radio_menu_item_new_with_mnemonic_from_widget(group.to_glib_none().0, label.0)).downcast_unchecked()
         }
     }
 }
@@ -84,8 +57,6 @@ pub trait RadioMenuItemExt {
 
     #[cfg(feature = "v3_18")]
     fn join_group<'a, P: Into<Option<&'a RadioMenuItem>>>(&self, group_source: P);
-
-    fn set_group(&self, group: &[RadioMenuItem]);
 
     fn connect_group_changed<F: Fn(&Self) + 'static>(&self, f: F) -> u64;
 }
@@ -103,12 +74,6 @@ impl<O: IsA<RadioMenuItem> + IsA<glib::object::Object>> RadioMenuItemExt for O {
         let group_source = group_source.to_glib_none();
         unsafe {
             ffi::gtk_radio_menu_item_join_group(self.to_glib_none().0, group_source.0);
-        }
-    }
-
-    fn set_group(&self, group: &[RadioMenuItem]) {
-        unsafe {
-            ffi::gtk_radio_menu_item_set_group(self.to_glib_none().0, group.to_glib_none().0);
         }
     }
 

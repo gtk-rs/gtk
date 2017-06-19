@@ -133,8 +133,6 @@ generate = [
     "Gtk.PrintQuality",
     "Gtk.ProgressBar",
     "Gtk.PropagationPhase",
-    "Gtk.RadioButton",
-    "Gtk.RadioMenuItem",
     "Gtk.RecentChooser",
     "Gtk.RecentChooserDialog",
     "Gtk.RecentChooserError",
@@ -1074,6 +1072,54 @@ status = "generate"
         [[object.function.parameter]]
         name = "paper_size"
         const = true
+
+[[object]]
+name = "Gtk.RadioButton"
+status = "generate"
+    [[object.function]]
+    pattern = ".+_from_widget"
+        [[object.function.parameter]]
+        name = "radio_group_member"
+        nullable = false
+    [[object.function]]
+    name = "new"
+    ignore = true
+    [[object.function]]
+    name = "new_with_label"
+    ignore = true
+    [[object.function]]
+    name = "new_with_mnemonic"
+    ignore = true
+    [[object.function]]
+    name = "set_group"
+    ignore = true
+    [[object.property]]
+    name = "group"
+    ignore = true
+
+[[object]]
+name = "Gtk.RadioMenuItem"
+status = "generate"
+    [[object.function]]
+    pattern = ".+_from_widget"
+        [[object.function.parameter]]
+        name = "group"
+        nullable = false
+    [[object.function]]
+    name = "new"
+    ignore = true
+    [[object.function]]
+    name = "new_with_label"
+    ignore = true
+    [[object.function]]
+    name = "new_with_mnemonic"
+    ignore = true
+    [[object.function]]
+    name = "set_group"
+    ignore = true
+    [[object.property]]
+    name = "group"
+    ignore = true
 
 [[object]]
 name = "Gtk.Range"

@@ -27,51 +27,24 @@ glib_wrapper! {
 }
 
 impl RadioButton {
-    pub fn new(group: &[RadioButton]) -> RadioButton {
-        assert_initialized_main_thread!();
+    pub fn new_from_widget(radio_group_member: &RadioButton) -> RadioButton {
+        skip_assert_initialized!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_radio_button_new(group.to_glib_none().0)).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_radio_button_new_from_widget(radio_group_member.to_glib_none().0)).downcast_unchecked()
         }
     }
 
-    pub fn new_from_widget<'a, P: Into<Option<&'a RadioButton>>>(radio_group_member: P) -> RadioButton {
-        assert_initialized_main_thread!();
-        let radio_group_member = radio_group_member.into();
-        let radio_group_member = radio_group_member.to_glib_none();
+    pub fn new_with_label_from_widget(radio_group_member: &RadioButton, label: &str) -> RadioButton {
+        skip_assert_initialized!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_radio_button_new_from_widget(radio_group_member.0)).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_radio_button_new_with_label_from_widget(radio_group_member.to_glib_none().0, label.to_glib_none().0)).downcast_unchecked()
         }
     }
 
-    pub fn new_with_label(group: &[RadioButton], label: &str) -> RadioButton {
-        assert_initialized_main_thread!();
+    pub fn new_with_mnemonic_from_widget(radio_group_member: &RadioButton, label: &str) -> RadioButton {
+        skip_assert_initialized!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_radio_button_new_with_label(group.to_glib_none().0, label.to_glib_none().0)).downcast_unchecked()
-        }
-    }
-
-    pub fn new_with_label_from_widget<'a, P: Into<Option<&'a RadioButton>>>(radio_group_member: P, label: &str) -> RadioButton {
-        assert_initialized_main_thread!();
-        let radio_group_member = radio_group_member.into();
-        let radio_group_member = radio_group_member.to_glib_none();
-        unsafe {
-            Widget::from_glib_none(ffi::gtk_radio_button_new_with_label_from_widget(radio_group_member.0, label.to_glib_none().0)).downcast_unchecked()
-        }
-    }
-
-    pub fn new_with_mnemonic(group: &[RadioButton], label: &str) -> RadioButton {
-        assert_initialized_main_thread!();
-        unsafe {
-            Widget::from_glib_none(ffi::gtk_radio_button_new_with_mnemonic(group.to_glib_none().0, label.to_glib_none().0)).downcast_unchecked()
-        }
-    }
-
-    pub fn new_with_mnemonic_from_widget<'a, P: Into<Option<&'a RadioButton>>>(radio_group_member: P, label: &str) -> RadioButton {
-        assert_initialized_main_thread!();
-        let radio_group_member = radio_group_member.into();
-        let radio_group_member = radio_group_member.to_glib_none();
-        unsafe {
-            Widget::from_glib_none(ffi::gtk_radio_button_new_with_mnemonic_from_widget(radio_group_member.0, label.to_glib_none().0)).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_radio_button_new_with_mnemonic_from_widget(radio_group_member.to_glib_none().0, label.to_glib_none().0)).downcast_unchecked()
         }
     }
 }
@@ -80,8 +53,6 @@ pub trait RadioButtonExt {
     fn get_group(&self) -> Vec<RadioButton>;
 
     fn join_group<'a, P: Into<Option<&'a RadioButton>>>(&self, group_source: P);
-
-    fn set_group(&self, group: &[RadioButton]);
 
     fn connect_group_changed<F: Fn(&Self) + 'static>(&self, f: F) -> u64;
 }
@@ -98,12 +69,6 @@ impl<O: IsA<RadioButton> + IsA<glib::object::Object>> RadioButtonExt for O {
         let group_source = group_source.to_glib_none();
         unsafe {
             ffi::gtk_radio_button_join_group(self.to_glib_none().0, group_source.0);
-        }
-    }
-
-    fn set_group(&self, group: &[RadioButton]) {
-        unsafe {
-            ffi::gtk_radio_button_set_group(self.to_glib_none().0, group.to_glib_none().0);
         }
     }
 
