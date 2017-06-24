@@ -806,6 +806,10 @@ status = "generate"
     name = "icon-set"
     #value IconSet
     ignore = true
+    [[object.function]]
+    name = "get_stock"
+    # wrong out parameter mutability and deprecated anyway
+    ignore = true
 
 [[object]]
 name = "Gtk.IMContext"
