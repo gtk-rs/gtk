@@ -767,6 +767,9 @@ pub use self::icon_source::IconSource;
 mod paper_size;
 pub use self::paper_size::PaperSize;
 
+mod recent_info;
+pub use self::recent_info::RecentInfo;
+
 mod selection_data;
 pub use self::selection_data::SelectionData;
 
