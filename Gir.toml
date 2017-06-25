@@ -139,6 +139,7 @@ generate = [
     "Gtk.RecentChooserWidget",
     "Gtk.RecentFilter",
     "Gtk.RecentFilterFlags",
+    "Gtk.RecentInfo",
     "Gtk.RecentManager",
     "Gtk.RecentManagerError",
     "Gtk.RecentSortType",
@@ -278,7 +279,6 @@ manual = [
     "Gtk.Builder",
     "Gtk.EntryBuffer",
     "Gtk.RecentData",
-    "Gtk.RecentInfo",
     "Gtk.Requisition",
     "Gtk.TargetEntry",
     "cairo.Context",
@@ -805,6 +805,10 @@ status = "generate"
     [[object.property]]
     name = "icon-set"
     #value IconSet
+    ignore = true
+    [[object.function]]
+    name = "get_stock"
+    # wrong out parameter mutability and deprecated anyway
     ignore = true
 
 [[object]]
