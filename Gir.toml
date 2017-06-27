@@ -163,7 +163,6 @@ generate = [
     "Gtk.SeparatorToolItem",
     "Gtk.Settings",
     "Gtk.ShadowType",
-    "Gtk.ShortcutsWindow",
     "Gtk.SizeGroup",
     "Gtk.SizeGroupMode",
     "Gtk.SizeRequestMode",
@@ -1161,6 +1160,11 @@ status = "generate"
         [[object.function.parameter]]
         name = "event"
         const = true
+
+[[object]]
+name = "Gtk.ShortcutsWindow"
+status = "generate"
+version = "3.20"
 
 [[object]]
 name = "Gtk.SelectionData"
