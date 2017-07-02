@@ -84,7 +84,9 @@ generate = [
     "Gtk.GestureSingle",
     "Gtk.GestureSwipe",
     "Gtk.GestureZoom",
+    "Gtk.IconInfo",
     "Gtk.IconFactory",
+    "Gtk.IconLookupFlags",
     "Gtk.IconSize",
     "Gtk.IconSource",
     "Gtk.IconThemeError",
@@ -349,6 +351,19 @@ status = "generate"
     [[object.function]]
     pattern = "drag_.+"
     #manual trait
+    ignore = true
+
+[[object]]
+name = "Gtk.IconTheme"
+status = "generate"
+    [[object.function]]
+    name = "set_search_path"
+    ignore = true
+    [[object.function]]
+    name = "choose_icon"
+    ignore = true
+    [[object.function]]
+    name = "choose_icon_for_scale"
     ignore = true
 
 [[object]]
