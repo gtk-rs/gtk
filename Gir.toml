@@ -284,6 +284,7 @@ manual = [
     "Gtk.TargetEntry",
     "cairo.Context",
     "cairo.RectangleInt",
+    "cairo.Region",
     "cairo.Surface",
     "Pango.Context",
     "Pango.Direction",
@@ -1753,6 +1754,16 @@ status = "generate"
     name = "style"
     #deprecated
     ignore = true
+    [[object.function]]
+    name = "input_shape_combine_region"
+        [[object.function.parameter]]
+        name = "region"
+        const = true
+    [[object.function]]
+    name = "shape_combine_region"
+        [[object.function.parameter]]
+        name = "region"
+        const = true
 
 [[object]]
 name = "Gtk.Window"
