@@ -286,6 +286,7 @@ manual = [
     "cairo.RectangleInt",
     "cairo.Region",
     "cairo.Surface",
+    "Pango.AttrList",
     "Pango.Context",
     "Pango.Direction",
     "Pango.EllipsizeMode",
@@ -293,9 +294,11 @@ manual = [
     "Pango.FontFamily",
     "Pango.FontDescription",
     "Pango.FontMap",
+    "Pango.Language",
     "Pango.Layout",
     "Pango.Stretch",
     "Pango.Style",
+    "Pango.TabArray",
     "Pango.Underline",
     "Pango.Variant",
     "Pango.WrapMode",
@@ -582,6 +585,10 @@ status = "generate"
     name = "font-desc"
     #value pango::FontDescription
     ignore = true
+    [[object.property]]
+    name = "attributes"
+    #value pango::AttrList
+    ignore = true
 
 [[object]]
 name = "Gtk.CellRendererToggle"
@@ -690,7 +697,10 @@ status = "generate"
         [[object.function.parameter]]
         name = "event"
         const = true
-
+    [[object.property]]
+    name = "tabs"
+    #value pango::TabArray
+    ignore = true
 
 [[object]]
 name = "Gtk.EntryCompletion"
@@ -1344,6 +1354,10 @@ status = "generate"
     [[object.property]]
     name = "font-desc"
     #value pango::FontDescription
+    ignore = true
+    [[object.property]]
+    name = "tabs"
+    #value pango::TabArray
     ignore = true
 
 [[object]]

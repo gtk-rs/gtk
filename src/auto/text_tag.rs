@@ -284,10 +284,6 @@ pub trait TextTagExt {
 
     fn set_property_style_set(&self, style_set: bool);
 
-    //fn get_property_tabs(&self) -> /*Ignored*/Option<pango::TabArray>;
-
-    //fn set_property_tabs(&self, tabs: /*Ignored*/Option<&pango::TabArray>);
-
     fn get_property_tabs_set(&self) -> bool;
 
     fn set_property_tabs_set(&self, tabs_set: bool);
@@ -1160,20 +1156,6 @@ impl<O: IsA<TextTag> + IsA<glib::object::Object>> TextTagExt for O {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "style-set".to_glib_none().0, Value::from(&style_set).to_glib_none().0);
         }
     }
-
-    //fn get_property_tabs(&self) -> /*Ignored*/Option<pango::TabArray> {
-    //    let mut value = Value::from(None::<&/*Ignored*/pango::TabArray>);
-    //    unsafe {
-    //        gobject_ffi::g_object_get_property(self.to_glib_none().0, "tabs".to_glib_none().0, value.to_glib_none_mut().0);
-    //    }
-    //    value.get()
-    //}
-
-    //fn set_property_tabs(&self, tabs: /*Ignored*/Option<&pango::TabArray>) {
-    //    unsafe {
-    //        gobject_ffi::g_object_set_property(self.to_glib_none().0, "tabs".to_glib_none().0, Value::from(tabs).to_glib_none().0);
-    //    }
-    //}
 
     fn get_property_tabs_set(&self) -> bool {
         let mut value = Value::from(&false);

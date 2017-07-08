@@ -9,6 +9,7 @@ use TextTag;
 use ffi;
 use gdk_pixbuf;
 use glib::translate::*;
+use pango;
 use std::cmp;
 
 glib_wrapper! {
@@ -365,9 +366,11 @@ impl TextIter {
         }
     }
 
-    //pub fn get_language(&self) -> /*Ignored*/Option<pango::Language> {
-    //    unsafe { TODO: call ffi::gtk_text_iter_get_language() }
-    //}
+    pub fn get_language(&self) -> Option<pango::Language> {
+        unsafe {
+            from_glib_full(ffi::gtk_text_iter_get_language(self.to_glib_none().0))
+        }
+    }
 
     pub fn get_line(&self) -> i32 {
         unsafe {
