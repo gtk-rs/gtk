@@ -32,6 +32,7 @@ use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use libc;
+use pango;
 #[cfg(feature = "v3_16")]
 use signal::Inhibit;
 use std::boxed::Box as Box_;
@@ -129,7 +130,7 @@ pub trait TextViewExt {
 
     fn get_right_margin(&self) -> i32;
 
-    //fn get_tabs(&self) -> /*Ignored*/Option<pango::TabArray>;
+    fn get_tabs(&self) -> Option<pango::TabArray>;
 
     #[cfg(feature = "v3_18")]
     fn get_top_margin(&self) -> i32;
@@ -201,7 +202,7 @@ pub trait TextViewExt {
 
     fn set_right_margin(&self, right_margin: i32);
 
-    //fn set_tabs(&self, tabs: /*Ignored*/&mut pango::TabArray);
+    fn set_tabs(&self, tabs: &mut pango::TabArray);
 
     #[cfg(feature = "v3_18")]
     fn set_top_margin(&self, top_margin: i32);
@@ -470,9 +471,11 @@ impl<O: IsA<TextView> + IsA<glib::object::Object>> TextViewExt for O {
         }
     }
 
-    //fn get_tabs(&self) -> /*Ignored*/Option<pango::TabArray> {
-    //    unsafe { TODO: call ffi::gtk_text_view_get_tabs() }
-    //}
+    fn get_tabs(&self) -> Option<pango::TabArray> {
+        unsafe {
+            from_glib_full(ffi::gtk_text_view_get_tabs(self.to_glib_none().0))
+        }
+    }
 
     #[cfg(feature = "v3_18")]
     fn get_top_margin(&self) -> i32 {
@@ -676,9 +679,11 @@ impl<O: IsA<TextView> + IsA<glib::object::Object>> TextViewExt for O {
         }
     }
 
-    //fn set_tabs(&self, tabs: /*Ignored*/&mut pango::TabArray) {
-    //    unsafe { TODO: call ffi::gtk_text_view_set_tabs() }
-    //}
+    fn set_tabs(&self, tabs: &mut pango::TabArray) {
+        unsafe {
+            ffi::gtk_text_view_set_tabs(self.to_glib_none().0, tabs.to_glib_none_mut().0);
+        }
+    }
 
     #[cfg(feature = "v3_18")]
     fn set_top_margin(&self, top_margin: i32) {

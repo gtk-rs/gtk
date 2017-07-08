@@ -65,8 +65,8 @@ pub trait EntryExt {
 
     fn get_alignment(&self) -> f32;
 
-    //#[cfg(feature = "v3_6")]
-    //fn get_attributes(&self) -> /*Ignored*/Option<pango::AttrList>;
+    #[cfg(feature = "v3_6")]
+    fn get_attributes(&self) -> Option<pango::AttrList>;
 
     fn get_buffer(&self) -> EntryBuffer;
 
@@ -125,8 +125,8 @@ pub trait EntryExt {
 
     fn get_progress_pulse_step(&self) -> f64;
 
-    //#[cfg(feature = "v3_10")]
-    //fn get_tabs(&self) -> /*Ignored*/Option<pango::TabArray>;
+    #[cfg(feature = "v3_10")]
+    fn get_tabs(&self) -> Option<pango::TabArray>;
 
     fn get_text(&self) -> Option<String>;
 
@@ -153,8 +153,8 @@ pub trait EntryExt {
 
     fn set_alignment(&self, xalign: f32);
 
-    //#[cfg(feature = "v3_6")]
-    //fn set_attributes(&self, attrs: /*Ignored*/&pango::AttrList);
+    #[cfg(feature = "v3_6")]
+    fn set_attributes(&self, attrs: &pango::AttrList);
 
     fn set_buffer(&self, buffer: &EntryBuffer);
 
@@ -203,8 +203,8 @@ pub trait EntryExt {
 
     fn set_progress_pulse_step(&self, fraction: f64);
 
-    //#[cfg(feature = "v3_10")]
-    //fn set_tabs(&self, tabs: /*Ignored*/&mut pango::TabArray);
+    #[cfg(feature = "v3_10")]
+    fn set_tabs(&self, tabs: &mut pango::TabArray);
 
     fn set_text(&self, text: &str);
 
@@ -312,10 +312,6 @@ pub trait EntryExt {
 
     fn set_property_shadow_type(&self, shadow_type: ShadowType);
 
-    //fn get_property_tabs(&self) -> /*Ignored*/Option<pango::TabArray>;
-
-    //fn set_property_tabs(&self, tabs: /*Ignored*/Option<&pango::TabArray>);
-
     fn get_property_truncate_multiline(&self) -> bool;
 
     fn set_property_truncate_multiline(&self, truncate_multiline: bool);
@@ -364,10 +360,12 @@ impl<O: IsA<Entry> + IsA<glib::object::Object>> EntryExt for O {
         }
     }
 
-    //#[cfg(feature = "v3_6")]
-    //fn get_attributes(&self) -> /*Ignored*/Option<pango::AttrList> {
-    //    unsafe { TODO: call ffi::gtk_entry_get_attributes() }
-    //}
+    #[cfg(feature = "v3_6")]
+    fn get_attributes(&self) -> Option<pango::AttrList> {
+        unsafe {
+            from_glib_none(ffi::gtk_entry_get_attributes(self.to_glib_none().0))
+        }
+    }
 
     fn get_buffer(&self) -> EntryBuffer {
         unsafe {
@@ -539,10 +537,12 @@ impl<O: IsA<Entry> + IsA<glib::object::Object>> EntryExt for O {
         }
     }
 
-    //#[cfg(feature = "v3_10")]
-    //fn get_tabs(&self) -> /*Ignored*/Option<pango::TabArray> {
-    //    unsafe { TODO: call ffi::gtk_entry_get_tabs() }
-    //}
+    #[cfg(feature = "v3_10")]
+    fn get_tabs(&self) -> Option<pango::TabArray> {
+        unsafe {
+            from_glib_none(ffi::gtk_entry_get_tabs(self.to_glib_none().0))
+        }
+    }
 
     fn get_text(&self) -> Option<String> {
         unsafe {
@@ -619,10 +619,12 @@ impl<O: IsA<Entry> + IsA<glib::object::Object>> EntryExt for O {
         }
     }
 
-    //#[cfg(feature = "v3_6")]
-    //fn set_attributes(&self, attrs: /*Ignored*/&pango::AttrList) {
-    //    unsafe { TODO: call ffi::gtk_entry_set_attributes() }
-    //}
+    #[cfg(feature = "v3_6")]
+    fn set_attributes(&self, attrs: &pango::AttrList) {
+        unsafe {
+            ffi::gtk_entry_set_attributes(self.to_glib_none().0, attrs.to_glib_none().0);
+        }
+    }
 
     fn set_buffer(&self, buffer: &EntryBuffer) {
         unsafe {
@@ -777,10 +779,12 @@ impl<O: IsA<Entry> + IsA<glib::object::Object>> EntryExt for O {
         }
     }
 
-    //#[cfg(feature = "v3_10")]
-    //fn set_tabs(&self, tabs: /*Ignored*/&mut pango::TabArray) {
-    //    unsafe { TODO: call ffi::gtk_entry_set_tabs() }
-    //}
+    #[cfg(feature = "v3_10")]
+    fn set_tabs(&self, tabs: &mut pango::TabArray) {
+        unsafe {
+            ffi::gtk_entry_set_tabs(self.to_glib_none().0, tabs.to_glib_none_mut().0);
+        }
+    }
 
     fn set_text(&self, text: &str) {
         unsafe {
@@ -1148,20 +1152,6 @@ impl<O: IsA<Entry> + IsA<glib::object::Object>> EntryExt for O {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "shadow-type".to_glib_none().0, Value::from(&shadow_type).to_glib_none().0);
         }
     }
-
-    //fn get_property_tabs(&self) -> /*Ignored*/Option<pango::TabArray> {
-    //    let mut value = Value::from(None::<&/*Ignored*/pango::TabArray>);
-    //    unsafe {
-    //        gobject_ffi::g_object_get_property(self.to_glib_none().0, "tabs".to_glib_none().0, value.to_glib_none_mut().0);
-    //    }
-    //    value.get()
-    //}
-
-    //fn set_property_tabs(&self, tabs: /*Ignored*/Option<&pango::TabArray>) {
-    //    unsafe {
-    //        gobject_ffi::g_object_set_property(self.to_glib_none().0, "tabs".to_glib_none().0, Value::from(tabs).to_glib_none().0);
-    //    }
-    //}
 
     fn get_property_truncate_multiline(&self) -> bool {
         let mut value = Value::from(&false);

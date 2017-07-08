@@ -53,7 +53,7 @@ impl Label {
 pub trait LabelExt {
     fn get_angle(&self) -> f64;
 
-    //fn get_attributes(&self) -> /*Ignored*/Option<pango::AttrList>;
+    fn get_attributes(&self) -> Option<pango::AttrList>;
 
     fn get_current_uri(&self) -> Option<String>;
 
@@ -106,7 +106,7 @@ pub trait LabelExt {
 
     fn set_angle(&self, angle: f64);
 
-    //fn set_attributes<'a, P: Into<Option<&'a /*Ignored*/pango::AttrList>>>(&self, attrs: P);
+    fn set_attributes<'a, P: Into<Option<&'a pango::AttrList>>>(&self, attrs: P);
 
     fn set_ellipsize(&self, mode: pango::EllipsizeMode);
 
@@ -183,9 +183,11 @@ impl<O: IsA<Label> + IsA<glib::object::Object>> LabelExt for O {
         }
     }
 
-    //fn get_attributes(&self) -> /*Ignored*/Option<pango::AttrList> {
-    //    unsafe { TODO: call ffi::gtk_label_get_attributes() }
-    //}
+    fn get_attributes(&self) -> Option<pango::AttrList> {
+        unsafe {
+            from_glib_none(ffi::gtk_label_get_attributes(self.to_glib_none().0))
+        }
+    }
 
     fn get_current_uri(&self) -> Option<String> {
         unsafe {
@@ -340,9 +342,13 @@ impl<O: IsA<Label> + IsA<glib::object::Object>> LabelExt for O {
         }
     }
 
-    //fn set_attributes<'a, P: Into<Option<&'a /*Ignored*/pango::AttrList>>>(&self, attrs: P) {
-    //    unsafe { TODO: call ffi::gtk_label_set_attributes() }
-    //}
+    fn set_attributes<'a, P: Into<Option<&'a pango::AttrList>>>(&self, attrs: P) {
+        let attrs = attrs.into();
+        let attrs = attrs.to_glib_none();
+        unsafe {
+            ffi::gtk_label_set_attributes(self.to_glib_none().0, attrs.0);
+        }
+    }
 
     fn set_ellipsize(&self, mode: pango::EllipsizeMode) {
         unsafe {

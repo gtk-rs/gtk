@@ -18,6 +18,7 @@ use glib_ffi;
 #[cfg(feature = "v3_6")]
 use gobject_ffi;
 use libc;
+use pango;
 use std::boxed::Box as Box_;
 use std::mem;
 use std::mem::transmute;
@@ -40,7 +41,7 @@ pub trait IMContextExt {
 
     fn focus_out(&self);
 
-    //fn get_preedit_string(&self, attrs: /*Ignored*/pango::AttrList) -> (String, i32);
+    fn get_preedit_string(&self) -> (String, pango::AttrList, i32);
 
     fn get_surrounding(&self) -> Option<(String, i32)>;
 
@@ -104,9 +105,15 @@ impl<O: IsA<IMContext> + IsA<glib::object::Object>> IMContextExt for O {
         }
     }
 
-    //fn get_preedit_string(&self, attrs: /*Ignored*/pango::AttrList) -> (String, i32) {
-    //    unsafe { TODO: call ffi::gtk_im_context_get_preedit_string() }
-    //}
+    fn get_preedit_string(&self) -> (String, pango::AttrList, i32) {
+        unsafe {
+            let mut str = ptr::null_mut();
+            let mut attrs = ptr::null_mut();
+            let mut cursor_pos = mem::uninitialized();
+            ffi::gtk_im_context_get_preedit_string(self.to_glib_none().0, &mut str, &mut attrs, &mut cursor_pos);
+            (from_glib_full(str), from_glib_full(attrs), cursor_pos)
+        }
+    }
 
     fn get_surrounding(&self) -> Option<(String, i32)> {
         unsafe {

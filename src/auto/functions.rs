@@ -224,9 +224,12 @@ pub fn get_debug_flags() -> u32 {
     }
 }
 
-//pub fn get_default_language() -> /*Ignored*/Option<pango::Language> {
-//    unsafe { TODO: call ffi::gtk_get_default_language() }
-//}
+pub fn get_default_language() -> Option<pango::Language> {
+    assert_initialized_main_thread!();
+    unsafe {
+        from_glib_none(ffi::gtk_get_default_language())
+    }
+}
 
 pub fn get_event_widget(event: &mut gdk::Event) -> Option<Widget> {
     assert_initialized_main_thread!();

@@ -42,10 +42,6 @@ pub trait CellRendererTextExt {
 
     fn set_property_align_set(&self, align_set: bool);
 
-    //fn get_property_attributes(&self) -> /*Ignored*/Option<pango::AttrList>;
-
-    //fn set_property_attributes(&self, attributes: /*Ignored*/Option<&pango::AttrList>);
-
     fn set_property_background(&self, background: Option<&str>);
 
     fn get_property_background_rgba(&self) -> Option<gdk::RGBA>;
@@ -231,20 +227,6 @@ impl<O: IsA<CellRendererText> + IsA<glib::object::Object>> CellRendererTextExt f
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "align-set".to_glib_none().0, Value::from(&align_set).to_glib_none().0);
         }
     }
-
-    //fn get_property_attributes(&self) -> /*Ignored*/Option<pango::AttrList> {
-    //    let mut value = Value::from(None::<&/*Ignored*/pango::AttrList>);
-    //    unsafe {
-    //        gobject_ffi::g_object_get_property(self.to_glib_none().0, "attributes".to_glib_none().0, value.to_glib_none_mut().0);
-    //    }
-    //    value.get()
-    //}
-
-    //fn set_property_attributes(&self, attributes: /*Ignored*/Option<&pango::AttrList>) {
-    //    unsafe {
-    //        gobject_ffi::g_object_set_property(self.to_glib_none().0, "attributes".to_glib_none().0, Value::from(attributes).to_glib_none().0);
-    //    }
-    //}
 
     fn set_property_background(&self, background: Option<&str>) {
         unsafe {
