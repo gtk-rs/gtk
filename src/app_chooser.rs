@@ -5,6 +5,7 @@
 use glib::translate::*;
 use gio::AppInfo;
 use ffi;
+use gobject_ffi;
 
 use glib::object::IsA;
 use Widget;
