@@ -10,6 +10,7 @@ use glib::Object;
 use glib::object::{Downcast, IsA};
 use glib::translate::*;
 use ffi;
+use gobject_ffi;
 
 use std::path::Path;
 

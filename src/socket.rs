@@ -4,6 +4,7 @@
 
 use glib::translate::*;
 use ffi;
+use gobject_ffi;
 
 use glib::object::Downcast;
 use Widget;

@@ -4,6 +4,7 @@
 
 use libc::{c_int, c_uint};
 use ffi;
+use gobject_ffi;
 use glib::translate::*;
 
 glib_wrapper! {
