@@ -43,7 +43,7 @@ impl<O: IsA<TextBuffer> + IsA<glib::object::Object>> TextBufferExtManual for O {
         unsafe {
             let mut n_formats = mem::uninitialized();
             let formats = ffi::gtk_text_buffer_get_deserialize_formats(self.to_glib_none().0, &mut n_formats);
-            FromGlibPtrContainer::from_glib_container_num(formats, n_formats as usize)
+            FromGlibContainer::from_glib_container_num(formats, n_formats as usize)
         }
     }
 
@@ -51,7 +51,7 @@ impl<O: IsA<TextBuffer> + IsA<glib::object::Object>> TextBufferExtManual for O {
         unsafe {
             let mut n_formats = mem::uninitialized();
             let formats = ffi::gtk_text_buffer_get_serialize_formats(self.to_glib_none().0, &mut n_formats);
-            FromGlibPtrContainer::from_glib_container_num(formats, n_formats as usize)
+            FromGlibContainer::from_glib_container_num(formats, n_formats as usize)
         }
     }
 
