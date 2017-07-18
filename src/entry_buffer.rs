@@ -4,7 +4,10 @@
 
 use libc::{c_int, c_uint};
 use ffi;
+use glib_ffi;
 use gobject_ffi;
+use std::ptr;
+use std::mem;
 use glib::translate::*;
 
 glib_wrapper! {
