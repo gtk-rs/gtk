@@ -192,7 +192,6 @@ mod app_chooser;
 mod application;
 mod assistant;
 mod builder;
-mod clipboard;
 mod color_button;
 mod color_chooser;
 mod css_provider;
@@ -234,7 +233,6 @@ pub use prelude::*;
 
 pub use gdk::Rectangle as Allocation;
 pub use app_chooser::AppChooser;
-pub use builder::Builder;
 pub use entry_buffer::EntryBuffer;
 pub use recent_data::RecentData;
 pub use gdk::Rectangle;
