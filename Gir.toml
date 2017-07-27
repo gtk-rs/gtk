@@ -277,7 +277,6 @@ manual = [
     "GObject.Value",
     "Gtk.Allocation",
     "Gtk.AppChooser",
-    "Gtk.Builder",
     "Gtk.EntryBuffer",
     "Gtk.RecentData",
     "Gtk.Requisition",
@@ -415,6 +414,18 @@ name = "Gtk.Application"
 status = "generate"
     [[object.function]]
     name = "new"
+    ignore = true
+
+[[object]]
+name = "Gtk.Builder"
+status = "generate"
+    [[object.function]]
+    pattern = ".+_from_file"
+    #path
+    ignore = true
+    [[object.function]]
+    name = "get_object"
+    #downcast
     ignore = true
 
 [[object]]
@@ -613,9 +624,6 @@ status = "generate"
     [[object.function]]
     name = "set_can_store"
     #array with size
-    ignore = true
-    [[object.function]]
-    name = "set_text"
     ignore = true
 
 [[object]]
@@ -1289,27 +1297,6 @@ status = "generate"
 name = "Gtk.TextBuffer"
 status = "generate"
     [[object.function]]
-    name = "get_deserialize_formats"
-    ignore = true
-    [[object.function]]
-    name = "get_serialize_formats"
-    ignore = true
-    [[object.function]]
-    name = "insert"
-    ignore = true
-    [[object.function]]
-    name = "insert_at_cursor"
-    ignore = true
-    [[object.function]]
-    name = "insert_interactive"
-    ignore = true
-    [[object.function]]
-    name = "insert_interactive_at_cursor"
-    ignore = true
-    [[object.function]]
-    name = "insert_markup"
-    ignore = true
-    [[object.function]]
     name = "register_deserialize_tagset"
         [object.function.return]
         nullable = false
@@ -1317,9 +1304,6 @@ status = "generate"
     name = "register_serialize_tagset"
         [object.function.return]
         nullable = false
-    [[object.function]]
-    name = "set_text"
-    ignore = true
     [[object.function]]
     name = "paste_clipboard"
         [[object.function.parameter]]
