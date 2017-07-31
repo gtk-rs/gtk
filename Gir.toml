@@ -368,6 +368,14 @@ status = "generate"
     [[object.function]]
     name = "choose_icon_for_scale"
     ignore = true
+    [[object.function]]
+    name = "get_icon_sizes"
+    #array
+    ignore = true
+    [[object.function]]
+    name = "get_search_path"
+    #array
+    ignore = true
 
 [[object]]
 name = "Gtk.AboutDialog"
@@ -1230,6 +1238,10 @@ status = "generate"
         [[object.function.parameter]]
         name = "selection_data"
         const = true
+    [[object.function]]
+    name = "get_data"
+    #array without length
+    ignore = true
 
 [[object]]
 name = "Gtk.SpinButton"
