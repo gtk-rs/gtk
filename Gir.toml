@@ -420,6 +420,7 @@ status = "generate"
 [[object]]
 name = "Gtk.Application"
 status = "generate"
+trait_name = "GtkApplicationExt"
     [[object.function]]
     name = "new"
     ignore = true
