@@ -53,12 +53,12 @@ impl<'a> ToGlibPtr<'a, *const ffi::GtkTargetEntry> for TargetEntry {
     fn to_glib_none(&'a self) -> Stash<'a, *const ffi::GtkTargetEntry, Self> {
         let target = self.target.to_glib_none();
 
-        let mut target_entry = Box::new(ffi::GtkTargetEntry {
+        let target_entry = Box::new(ffi::GtkTargetEntry {
             target: target.0,
             flags: self.flags.bits(),
             info: self.info,
         });
-        Stash(&mut *target_entry, (target_entry, target))
+        Stash(&*target_entry, (target_entry, target))
     }
 }
 

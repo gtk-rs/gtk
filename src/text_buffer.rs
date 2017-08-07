@@ -35,8 +35,8 @@ unsafe extern "C" fn insert_text_trampoline(this: *mut ffi::GtkTextBuffer,
                                             len: c_int,
                                             f: glib_ffi::gpointer) {
     callback_guard!();
-    let f: &Box_<Fn(&TextBuffer, &TextIter, &str) + 'static> = transmute(f);
+    let f: &&(Fn(&TextBuffer, &TextIter, &str) + 'static) = transmute(f);
     f(&from_glib_none(this),
       &from_glib_none(location),
-      &str::from_utf8(slice::from_raw_parts(text as *const u8, len as usize)).unwrap())
+      str::from_utf8(slice::from_raw_parts(text as *const u8, len as usize)).unwrap())
 }

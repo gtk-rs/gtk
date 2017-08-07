@@ -39,7 +39,7 @@ impl<O: IsA<TreeStore> + IsA<TreeModel>> TreeStoreExtManual for O {
             values: &[&ToValue]) -> TreeIter {
         unsafe {
             assert!(position.unwrap_or(0) <= i32::max_value() as u32);
-            assert!(columns.len() == values.len());
+            assert_eq!(columns.len(), values.len());
             let n_columns = ffi::gtk_tree_model_get_n_columns(self.to_glib_none().0) as u32;
             assert!(columns.len() <= n_columns as usize);
             for (&column, value) in columns.iter().zip(values.iter()) {
@@ -89,7 +89,7 @@ impl<O: IsA<TreeStore> + IsA<TreeModel>> TreeStoreExtManual for O {
 
     fn set(&self, iter: &TreeIter, columns: &[u32], values: &[&ToValue]) {
         unsafe {
-            assert!(columns.len() == values.len());
+            assert_eq!(columns.len(), values.len());
             let n_columns = ffi::gtk_tree_model_get_n_columns(self.to_glib_none().0) as u32;
             assert!(columns.len() <= n_columns as usize);
             for (&column, value) in columns.iter().zip(values.iter()) {

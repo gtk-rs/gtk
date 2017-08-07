@@ -50,7 +50,7 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExtManual for O {
                 });
             }
         }
-        let t_ptr: *mut ffi::GtkTargetEntry = if t.len() > 0 {
+        let t_ptr: *mut ffi::GtkTargetEntry = if !t.is_empty() {
             t.as_ptr() as *mut _
         } else {
             ptr::null_mut()
@@ -74,7 +74,7 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExtManual for O {
                 });
             }
         }
-        let t_ptr: *mut ffi::GtkTargetEntry = if t.len() > 0 {
+        let t_ptr: *mut ffi::GtkTargetEntry = if !t.is_empty() {
             t.as_ptr() as *mut _
         } else {
             ptr::null_mut()
@@ -115,8 +115,9 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExtManual for O {
     }
 }
 
-unsafe extern "C" fn event_any_trampoline<T>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventAny,
-        f: &Box<Fn(&T, &Event) -> Inhibit + 'static>) -> gboolean
+unsafe extern "C" fn event_any_trampoline<T>(this: *mut ffi::GtkWidget,
+                                             event: *mut gdk_ffi::GdkEventAny,
+                                             f: &&(Fn(&T, &Event) -> Inhibit + 'static)) -> gboolean
 where T: IsA<Widget> {
     callback_guard!();
     f(&Widget::from_glib_none(this).downcast_unchecked(), &from_glib_none(event)).to_glib()
