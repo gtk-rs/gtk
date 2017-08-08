@@ -145,7 +145,7 @@ mod editable {
     }
 
     unsafe extern "C" fn trampoline<T>(this: *mut GtkEditable,
-                                       f: &Box<Fn(&T) + 'static>)
+                                       f: &&(Fn(&T) + 'static))
     where T: IsA<Editable> {
         callback_guard!();
         f(&Editable::from_glib_none(this).downcast_unchecked());
@@ -154,7 +154,7 @@ mod editable {
     unsafe extern "C" fn delete_trampoline<T>(this: *mut GtkEditable,
                                               start_pos: c_int,
                                               end_pos: c_int,
-                                              f: &Box<Fn(&T, i32, i32) + 'static>)
+                                              f: &&(Fn(&T, i32, i32) + 'static))
     where T: IsA<Editable> {
         callback_guard!();
         f(&Editable::from_glib_none(this).downcast_unchecked(), start_pos, end_pos);
@@ -164,7 +164,7 @@ mod editable {
                                               new_text: *mut c_char,
                                               new_text_length: c_int,
                                               position: *mut c_int,
-                                              f: &Box<Fn(&T, &str, &mut i32) + 'static>)
+                                              f: &&(Fn(&T, &str, &mut i32) + 'static))
     where T: IsA<Editable> {
         callback_guard!();
         let buf = if new_text_length != -1 {
@@ -259,14 +259,14 @@ mod spin_button {
 
     unsafe extern "C" fn change_trampoline(this: *mut GtkSpinButton,
                                            scroll: ScrollType,
-                                           f: &Box<Fn(&SpinButton, ScrollType) + 'static>) {
+                                           f: &&(Fn(&SpinButton, ScrollType) + 'static)) {
         callback_guard!();
         f(&from_glib_none(this), scroll)
     }
 
     unsafe extern "C" fn input_trampoline(this: *mut GtkSpinButton,
                                           new_value: *mut c_double,
-                                          f: &Box_<Fn(&SpinButton) -> Option<Result<f64, ()>> + 'static>)
+                                          f: &&(Fn(&SpinButton) -> Option<Result<f64, ()>> + 'static))
                                           -> c_int {
         callback_guard!();
         match f(&from_glib_none(this)) {
@@ -280,14 +280,14 @@ mod spin_button {
     }
 
     unsafe extern "C" fn output_trampoline(this: *mut GtkSpinButton,
-                                           f: &Box<Fn(&SpinButton) -> Inhibit + 'static>)
+                                           f: &&(Fn(&SpinButton) -> Inhibit + 'static))
                                            -> gboolean {
         callback_guard!();
         f(&from_glib_none(this)).to_glib()
     }
 
     unsafe extern "C" fn trampoline(this: *mut GtkSpinButton,
-                                    f: &Box<Fn(&SpinButton) + 'static>) {
+                                    f: &&(Fn(&SpinButton) + 'static)) {
         callback_guard!();
         f(&from_glib_none(this))
     }

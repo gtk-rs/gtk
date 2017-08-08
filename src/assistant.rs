@@ -22,7 +22,7 @@ impl<O: IsA<Assistant>> AssistantExtManual for O {
 
 unsafe extern "C" fn forward_page_trampoline(current_page: i32, f: glib_ffi::gpointer) -> i32 {
     callback_guard!();
-    let f: &Box_<Fn(i32) -> i32 + 'static> = transmute(f);
+    let f: &&(Fn(i32) -> i32 + 'static) = transmute(f);
     f(current_page)
 }
 

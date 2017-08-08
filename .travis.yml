@@ -13,6 +13,8 @@ addons:
 script:
   - rustc --version
   - ./check_init_asserts
+  - cargo install clippy || touch clippy_failed
+  - if [ ! -f clippy_failed ]; then cargo clippy; fi
   - cargo test --features embed-lgpl-docs
   # catch any sneaked in lgpl docs
   - cargo build --features purge-lgpl-docs

@@ -48,7 +48,7 @@ impl<O: IsA<Menu>> MenuExtManual for O {
 
 unsafe extern "C" fn position_callback(this: *mut ffi::GtkMenu, x: *mut c_int, y: *mut c_int,
                                        push_in: *mut glib_ffi::gboolean, f: glib_ffi::gpointer) {
-    let f: &Box_<Fn(&Menu, &mut i32, &mut i32) -> bool + 'static> = transmute(f);
+    let f: &&(Fn(&Menu, &mut i32, &mut i32) -> bool + 'static) = transmute(f);
     *push_in = f(&Menu::from_glib_none(this).downcast_unchecked(), x.as_mut().unwrap(),
                  y.as_mut().unwrap()).to_glib();
 }
