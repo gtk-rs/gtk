@@ -15,9 +15,9 @@ script:
   - ./check_init_asserts
   - cargo install clippy || touch clippy_failed
   - if [ ! -f clippy_failed ]; then cargo clippy; fi
-  - cargo test --features embed-lgpl-docs
+  - cargo test --features embed-lgpl-docs --jobs 1
   # catch any sneaked in lgpl docs
-  - cargo build --features purge-lgpl-docs
+  - cargo build --features purge-lgpl-docs --jobs 1
   - git diff -R --exit-code
   - mkdir .cargo
   - echo 'paths = ["."]' > .cargo/config
