@@ -3,6 +3,7 @@ name = "gtk"
 version = "0.1.3"
 authors = ["The Gtk-rs Project Developers"]
 build = "build.rs"
+readme = "README.md"
 
 categories = ["api-bindings", "gui"]
 description = "Rust bindings for the GTK+ 3 library"
