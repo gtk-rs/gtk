@@ -20,8 +20,15 @@ impl TreeModelFilter {
                                                                     .downcast_unchecked()
         }
     }
+}
 
-    pub fn set_visible_func<F>(&self, func: F)
+pub trait TreeModelFilterExtManual {
+    fn set_visible_func<F>(&self, func: F)
+        where F: Fn(&TreeModel, &TreeIter) -> bool + 'static;
+}
+
+impl<O: IsA<TreeModelFilter>> TreeModelFilterExtManual for O {
+    fn set_visible_func<F>(&self, func: F)
     where F: Fn(&TreeModel, &TreeIter) -> bool + 'static {
         unsafe {
             ffi::gtk_tree_model_filter_set_visible_func(self.to_glib_none().0,
@@ -35,7 +42,7 @@ impl TreeModelFilter {
 unsafe extern "C" fn trampoline(this: *mut GtkTreeModel, iter: *mut GtkTreeIter,
                                 f: gpointer) -> gboolean {
     callback_guard!();
-    let f: &Box<Fn(&TreeModel, &TreeIter) -> bool> = transmute(f);
+    let f: &&(Fn(&TreeModel, &TreeIter) -> bool) = transmute(f);
     f(&TreeModel::from_glib_none(this).downcast_unchecked(), &from_glib_borrow(iter))
     .to_glib()
 }

@@ -9,6 +9,7 @@ use std::sync::atomic::{AtomicBool, ATOMIC_BOOL_INIT, Ordering};
 use libc::{c_int, c_uint};
 use ffi;
 use glib::translate::*;
+use glib;
 use gdk;
 
 thread_local! {
@@ -37,6 +38,7 @@ macro_rules! skip_assert_initialized {
 }
 
 /// Asserts that `gtk::init` has not been called.
+#[allow(unused_macros)]
 macro_rules! assert_not_initialized {
     () => (
         if ::rt::is_initialized() {
@@ -93,7 +95,7 @@ pub unsafe fn set_initialized() {
 /// so will not cause the program to terminate if GTK could not be initialized.
 /// Instead, an Ok is returned if the windowing system was successfully
 /// initialized otherwise an Err is returned.
-pub fn init() -> Result<(), ()> {
+pub fn init() -> Result<(), glib::BoolError> {
     skip_assert_initialized!();
     if is_initialized_main_thread() {
         return Ok(());
@@ -107,7 +109,7 @@ pub fn init() -> Result<(), ()> {
             Ok(())
         }
         else {
-            Err(())
+            Err(glib::BoolError("Failed to initialize GTK"))
         }
     }
 }
@@ -151,13 +153,6 @@ fn pre_init() -> bool {
     }
 }
 
-pub fn main() {
-    assert_initialized_main_thread!();
-    unsafe {
-        ffi::gtk_main();
-    }
-}
-
 pub fn main_quit() {
     assert_initialized_main_thread!();
     unsafe {
@@ -167,30 +162,6 @@ pub fn main_quit() {
         else if cfg!(debug_assertions) {
             panic!("Attempted to quit a GTK main loop when none is running.");
         }
-    }
-}
-
-pub fn main_level() -> u32 {
-    assert_initialized_main_thread!();
-    unsafe {
-        ffi::gtk_main_level() as u32
-    }
-}
-
-pub fn main_iteration() -> bool {
-    assert_initialized_main_thread!();
-    unsafe { from_glib(ffi::gtk_main_iteration()) }
-}
-
-pub fn main_iteration_do(blocking: bool) -> bool {
-    assert_initialized_main_thread!();
-    unsafe { from_glib(ffi::gtk_main_iteration_do(blocking.to_glib())) }
-}
-
-pub fn events_pending() -> bool {
-    assert_initialized_main_thread!();
-    unsafe {
-        from_glib(ffi::gtk_events_pending())
     }
 }
 
@@ -235,4 +206,4 @@ pub fn check_version(required_major: u32, required_minor: u32, required_micro: u
         from_glib_none(
             ffi::gtk_check_version(required_major as c_uint, required_minor as c_uint, required_micro as c_uint))
     }
- }
+}
