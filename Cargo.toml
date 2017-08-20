@@ -78,7 +78,7 @@ version = "0.2.0"
 git = "https://github.com/gtk-rs/gio"
 
 [dependencies.glib]
-version = "0.2.0"
+version = "0.3.0"
 git = "https://github.com/gtk-rs/glib"
 
 [dependencies.gdk]
