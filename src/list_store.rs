@@ -3,12 +3,14 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 use ffi;
+use glib::object::IsA;
 use glib::translate::*;
 use glib::{Type, ToValue, Value};
 use libc::c_int;
 use std::ptr;
 use ListStore;
 use TreeIter;
+use TreeModel;
 
 impl ListStore {
     pub fn new(column_types: &[Type]) -> ListStore {
@@ -20,12 +22,25 @@ impl ListStore {
                     column_types.as_mut_ptr()))
         }
     }
+}
 
-    pub fn insert_with_values(&self, position: Option<u32>, columns: &[u32], values: &[&ToValue])
+pub trait ListStoreExtManual {
+    fn insert_with_values(&self, position: Option<u32>, columns: &[u32], values: &[&ToValue])
+            -> TreeIter;
+
+    fn reorder(&self, new_order: &[u32]);
+
+    fn set(&self, iter: &TreeIter, columns: &[u32], values: &[&ToValue]);
+
+    fn set_value(&self, iter: &TreeIter, column: u32, value: &Value);
+}
+
+impl<O: IsA<ListStore> + IsA<TreeModel>> ListStoreExtManual for O {
+    fn insert_with_values(&self, position: Option<u32>, columns: &[u32], values: &[&ToValue])
             -> TreeIter {
         unsafe {
             assert!(position.unwrap_or(0) <= i32::max_value() as u32);
-            assert!(columns.len() == values.len());
+            assert_eq!(columns.len(), values.len());
             let n_columns = ffi::gtk_tree_model_get_n_columns(self.to_glib_none().0) as u32;
             assert!(columns.len() <= n_columns as usize);
             for (&column, value) in columns.iter().zip(values.iter()) {
@@ -45,7 +60,7 @@ impl ListStore {
         }
     }
 
-    pub fn reorder(&self, new_order: &[u32]) {
+    fn reorder(&self, new_order: &[u32]) {
         unsafe {
             let count = ffi::gtk_tree_model_iter_n_children(self.to_glib_none().0, ptr::null_mut());
             let safe_count = count as usize == new_order.len();
@@ -71,9 +86,9 @@ impl ListStore {
         }
     }
 
-    pub fn set(&self, iter: &TreeIter, columns: &[u32], values: &[&ToValue]) {
+    fn set(&self, iter: &TreeIter, columns: &[u32], values: &[&ToValue]) {
         unsafe {
-            assert!(columns.len() == values.len());
+            assert_eq!(columns.len(), values.len());
             let n_columns = ffi::gtk_tree_model_get_n_columns(self.to_glib_none().0) as u32;
             assert!(columns.len() <= n_columns as usize);
             for (&column, value) in columns.iter().zip(values.iter()) {
@@ -90,7 +105,7 @@ impl ListStore {
         }
     }
 
-    pub fn set_value(&self, iter: &TreeIter, column: u32, value: &Value) {
+    fn set_value(&self, iter: &TreeIter, column: u32, value: &Value) {
         unsafe {
             let columns = ffi::gtk_tree_model_get_n_columns(self.to_glib_none().0);
             assert!(column < columns as u32);

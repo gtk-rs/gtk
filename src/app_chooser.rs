@@ -5,6 +5,10 @@
 use glib::translate::*;
 use gio::AppInfo;
 use ffi;
+use glib_ffi;
+use gobject_ffi;
+use std::ptr;
+use std::mem;
 
 use glib::object::IsA;
 use Widget;

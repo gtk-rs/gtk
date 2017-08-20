@@ -9,7 +9,7 @@
 //!
 //! The library is a work in progress: expect missing bindings and breaking
 //! changes. A steadily increasing share of the code is machine-generated from
-//! GObject introspection metadata. The API docs were converted from the
+//! `GObject` introspection metadata. The API docs were converted from the
 //! upstream ones so until they've all been reviewed there will be incongruities
 //! with actual Rust APIs.
 //!
@@ -17,7 +17,7 @@
 //!
 //! - [Gtk-rs documentation overview](http://gtk-rs.org/docs/)
 //!
-//! - [General GLib family types and object system overview](../glib/index.html)
+//! - [General `GLib` family types and object system overview](../glib/index.html)
 //!
 //! - [GTK+ documentation](http://www.gtk.org/documentation.php)
 //!
@@ -144,6 +144,10 @@
 //! them once. **Omitting them in the following cargo invocations will not undo
 //! their effects!**
 
+#![cfg_attr(feature = "cargo-clippy", allow(new_without_default))]
+#![cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
+#![cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
+
 extern crate libc;
 #[macro_use]
 extern crate bitflags;
@@ -186,13 +190,17 @@ pub const STYLE_PROVIDER_PRIORITY_USER: u32 = ffi::GTK_STYLE_PROVIDER_PRIORITY_U
 #[macro_use]
 mod rt;
 
+#[cfg_attr(feature = "cargo-clippy", allow(too_many_arguments))]
+#[cfg_attr(feature = "cargo-clippy", allow(match_same_arms))]
+#[cfg_attr(feature = "cargo-clippy", allow(let_and_return))]
+#[cfg_attr(feature = "cargo-clippy", allow(many_single_char_names))]
+#[cfg_attr(feature = "cargo-clippy", allow(wrong_self_convention))]
 mod auto;
 
 mod app_chooser;
 mod application;
 mod assistant;
 mod builder;
-mod clipboard;
 mod color_button;
 mod color_chooser;
 mod css_provider;
@@ -205,9 +213,10 @@ mod list_store;
 mod menu;
 mod message_dialog;
 mod notebook;
+mod radio_button;
+mod radio_menu_item;
 mod recent_chooser_dialog;
 mod recent_data;
-mod recent_info;
 mod requisition;
 mod signal;
 #[cfg(target_os = "linux")]
@@ -226,15 +235,15 @@ mod widget;
 pub mod prelude;
 
 pub use auto::*;
+pub use auto::functions::*;
 pub use rt::*;
 pub use signal::*;
+pub use prelude::*;
 
 pub use gdk::Rectangle as Allocation;
 pub use app_chooser::AppChooser;
-pub use builder::Builder;
 pub use entry_buffer::EntryBuffer;
 pub use recent_data::RecentData;
-pub use recent_info::RecentInfo;
 pub use gdk::Rectangle;
 pub use requisition::Requisition;
 #[cfg(target_os = "linux")]

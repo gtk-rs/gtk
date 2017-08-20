@@ -4,6 +4,10 @@
 
 use libc::{c_int, c_uint};
 use ffi;
+use glib_ffi;
+use gobject_ffi;
+use std::ptr;
+use std::mem;
 use glib::translate::*;
 
 glib_wrapper! {
@@ -73,7 +77,7 @@ impl EntryBuffer {
 
     pub fn set_max_length(&self, max_length: Option<u16>) {
         unsafe {
-            assert!(max_length != Some(0), "Zero maximum length not supported");
+            assert_ne!(max_length, Some(0), "Zero maximum length not supported");
             ffi::gtk_entry_buffer_set_max_length(self.to_glib_none().0,
                 max_length.unwrap_or(0) as c_int);
         }

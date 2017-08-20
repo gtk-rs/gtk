@@ -15,7 +15,7 @@ impl TargetList {
         for stash in &stashes {
             t.push(stash.0);
         }
-        let t_ptr: *mut ffi::GtkTargetEntry = if t.len() > 0 {
+        let t_ptr: *mut ffi::GtkTargetEntry = if !t.is_empty() {
             t.as_ptr() as *mut _
         } else {
             ptr::null_mut()
