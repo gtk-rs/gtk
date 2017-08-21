@@ -764,7 +764,7 @@ pub use self::widget::WidgetExt;
 
 mod window;
 pub use self::window::Window;
-pub use self::window::WindowExt;
+pub use self::window::GtkWindowExt;
 
 mod window_group;
 pub use self::window_group::WindowGroup;
@@ -1225,6 +1225,6 @@ pub mod traits {
     pub use super::ViewportExt;
     pub use super::VolumeButtonExt;
     pub use super::WidgetExt;
-    pub use super::WindowExt;
+    pub use super::GtkWindowExt;
     pub use super::WindowGroupExt;
 }

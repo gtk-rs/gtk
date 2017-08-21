@@ -1779,6 +1779,7 @@ status = "generate"
 [[object]]
 name = "Gtk.Window"
 status = "generate"
+trait_name = "GtkWindowExt"
     [[object.function]]
     name = "activate_key"
         [[object.function.parameter]]
