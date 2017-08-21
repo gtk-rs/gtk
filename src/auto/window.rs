@@ -110,7 +110,7 @@ impl Window {
     }
 }
 
-pub trait WindowExt {
+pub trait GtkWindowExt {
     fn activate_default(&self) -> bool;
 
     fn activate_focus(&self) -> bool;
@@ -433,7 +433,7 @@ pub trait WindowExt {
     fn connect_property_window_position_notify<F: Fn(&Self) + 'static>(&self, f: F) -> u64;
 }
 
-impl<O: IsA<Window> + IsA<glib::object::Object>> WindowExt for O {
+impl<O: IsA<Window> + IsA<glib::object::Object>> GtkWindowExt for O {
     fn activate_default(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_window_activate_default(self.to_glib_none().0))
