@@ -209,6 +209,7 @@ mod drag_context;
 mod entry_buffer;
 mod enums;
 mod file_chooser_dialog;
+mod fixed;
 mod list_store;
 mod menu;
 mod message_dialog;
@@ -241,10 +242,11 @@ pub use signal::*;
 pub use prelude::*;
 
 pub use gdk::Rectangle as Allocation;
+pub use gdk::Rectangle;
+
 pub use app_chooser::AppChooser;
 pub use entry_buffer::EntryBuffer;
 pub use recent_data::RecentData;
-pub use gdk::Rectangle;
 pub use requisition::Requisition;
 #[cfg(target_os = "linux")]
 pub use socket::Socket;
