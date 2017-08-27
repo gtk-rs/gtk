@@ -15,6 +15,7 @@ pub use color_chooser::ColorChooserExtManual;
 pub use css_provider::CssProviderExtManual;
 pub use dialog::DialogExtManual;
 pub use drag_context::DragContextExtManual;
+pub use fixed::FixedExtManual;
 pub use list_store::ListStoreExtManual;
 pub use menu::MenuExtManual;
 pub use notebook::NotebookExtManual;
