@@ -69,6 +69,7 @@ generate = [
     "Gtk.FileChooserWidget",
     "Gtk.FileFilter",
     "Gtk.FileFilterFlags",
+    "Gtk.Fixed",
     "Gtk.FlowBox",
     "Gtk.FlowBoxChild",
     "Gtk.FontButton",
@@ -752,16 +753,6 @@ status = "generate"
     [[object.function]]
     name = "add_choice"
     ignore = true  #strange type of options and option_labels
-
-[[object]]
-name = "Gtk.Fixed"
-status = "generate"
-    [[object.child_prop]]
-    name = "x"
-    type = "gint"
-    [[object.child_prop]]
-    name = "y"
-    type = "gint"
 
 [[object]]
 name = "Gtk.Gesture"
