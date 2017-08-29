@@ -2,7 +2,7 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! Traits and essential types inteded for blanket imports.
+//! Traits and essential types intended for blanket imports.
 
 pub use glib::prelude::*;
 
