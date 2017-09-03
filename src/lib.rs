@@ -203,7 +203,6 @@ mod assistant;
 mod builder;
 mod color_button;
 mod color_chooser;
-mod css_provider;
 mod dialog;
 mod drag_context;
 mod entry_buffer;

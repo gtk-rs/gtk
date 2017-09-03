@@ -12,7 +12,6 @@ pub use app_chooser::AppChooserExt;
 pub use assistant::AssistantExtManual;
 pub use color_button::ColorButtonExtManual;
 pub use color_chooser::ColorChooserExtManual;
-pub use css_provider::CssProviderExtManual;
 pub use dialog::DialogExtManual;
 pub use drag_context::DragContextExtManual;
 pub use fixed::FixedExtManual;
