@@ -1505,6 +1505,51 @@ status = "generate"
         const = true
 
 [[object]]
+name = "Gtk.TreeRowReference"
+status = "generate"
+    [[object.function]]
+    name = "new"
+        [[object.function.parameter]]
+        name = "path"
+        const = true
+        [object.function.return]
+        nullable = true
+    [[object.function]]
+    name = "new_proxy"
+        [[object.function.parameter]]
+        name = "path"
+        const = true
+        [object.function.return]
+        nullable = true
+    [[object.function]]
+    name = "get_model"
+        [[object.function.parameter]]
+        name = "reference"
+        const = true
+        [object.function.return]
+        nullable = false
+    [[object.function]]
+    name = "get_path"
+        [[object.function.parameter]]
+        name = "reference"
+        const = true
+    [[object.function]]
+    name = "valid"
+        [[object.function.parameter]]
+        name = "reference"
+        const = true
+    [[object.function]]
+    name = "inserted"
+        [[object.function.parameter]]
+        name = "path"
+        const = true
+    [[object.function]]
+    name = "deleted"
+        [[object.function.parameter]]
+        name = "path"
+        const = true
+
+[[object]]
 name = "Gtk.TreeSelection"
 status = "generate"
     [[object.function]]

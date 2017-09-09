@@ -806,6 +806,9 @@ pub use self::tree_iter::TreeIter;
 mod tree_path;
 pub use self::tree_path::TreePath;
 
+mod tree_row_reference;
+pub use self::tree_row_reference::TreeRowReference;
+
 mod enums;
 pub use self::enums::Align;
 pub use self::enums::ArrowType;
