@@ -124,8 +124,6 @@ pub trait ImageExt {
 
     fn get_gicon(&self) -> (gio::Icon, i32);
 
-    fn get_icon_name(&self) -> (String, i32);
-
     fn get_icon_set(&self) -> (IconSet, i32);
 
     fn get_pixbuf(&self) -> Option<gdk_pixbuf::Pixbuf>;
@@ -160,6 +158,8 @@ pub trait ImageExt {
     fn set_property_file(&self, file: Option<&str>);
 
     fn set_property_gicon<P: IsA<gio::Icon> + IsA<glib::object::Object> + glib::value::SetValueOptional>(&self, gicon: Option<&P>);
+
+    fn get_property_icon_name(&self) -> Option<String>;
 
     fn set_property_icon_name(&self, icon_name: Option<&str>);
 
@@ -230,15 +230,6 @@ impl<O: IsA<Image> + IsA<glib::object::Object>> ImageExt for O {
             let mut size = mem::uninitialized();
             ffi::gtk_image_get_gicon(self.to_glib_none().0, &mut gicon, &mut size);
             (from_glib_none(gicon), size)
-        }
-    }
-
-    fn get_icon_name(&self) -> (String, i32) {
-        unsafe {
-            let mut icon_name = ptr::null();
-            let mut size = mem::uninitialized();
-            ffi::gtk_image_get_icon_name(self.to_glib_none().0, &mut icon_name, &mut size);
-            (from_glib_none(icon_name), size)
         }
     }
 
@@ -355,6 +346,14 @@ impl<O: IsA<Image> + IsA<glib::object::Object>> ImageExt for O {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "gicon".to_glib_none().0, Value::from(gicon).to_glib_none().0);
         }
+    }
+
+    fn get_property_icon_name(&self) -> Option<String> {
+        let mut value = Value::from(None::<&str>);
+        unsafe {
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, "icon-name".to_glib_none().0, value.to_glib_none_mut().0);
+        }
+        value.get()
     }
 
     fn set_property_icon_name(&self, icon_name: Option<&str>) {
