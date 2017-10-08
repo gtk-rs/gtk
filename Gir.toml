@@ -831,6 +831,10 @@ status = "generate"
         name = "surface"
         # cairo::Surface is reference-counted
         const = true
+    [[object.function]]
+    name = "get_icon_name"
+    #can return NULL string
+    ignore = true
     [[object.property]]
     name = "surface"
     #value cairo::Surface
