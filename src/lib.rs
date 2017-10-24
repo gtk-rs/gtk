@@ -219,7 +219,7 @@ mod recent_chooser_dialog;
 mod recent_data;
 mod requisition;
 mod signal;
-#[cfg(target_os = "linux")]
+#[cfg(any(target_os = "linux", feature = "dox"))]
 mod socket;
 mod switch;
 mod target_entry;
@@ -248,7 +248,7 @@ pub use app_chooser::AppChooser;
 pub use entry_buffer::EntryBuffer;
 pub use recent_data::RecentData;
 pub use requisition::Requisition;
-#[cfg(target_os = "linux")]
+#[cfg(any(target_os = "linux", feature = "dox"))]
 pub use socket::Socket;
 pub use target_entry::TargetEntry;
 pub use tree_sortable::SortColumn;
