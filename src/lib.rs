@@ -215,6 +215,7 @@ mod message_dialog;
 mod notebook;
 mod radio_button;
 mod radio_menu_item;
+mod radio_tool_button;
 mod recent_chooser_dialog;
 mod recent_data;
 mod requisition;

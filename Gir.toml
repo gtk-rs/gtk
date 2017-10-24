@@ -1163,6 +1163,27 @@ status = "generate"
     ignore = true
 
 [[object]]
+name = "Gtk.RadioToolButton"
+status = "generate"
+    [[object.function]]
+    pattern = ".+_from_widget"
+        [[object.function.parameter]]
+        name = "group"
+        nullable = false
+    [[object.function]]
+    name = "new"
+    ignore = true
+    [[object.function]]
+    name = "new_from_stock"
+    ignore = true
+    [[object.function]]
+    name = "set_group"
+    ignore = true
+    [[object.property]]
+    name = "group"
+    ignore = true
+
+[[object]]
 name = "Gtk.Range"
 status = "generate"
     [[object.function]]
