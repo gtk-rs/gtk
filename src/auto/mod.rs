@@ -522,6 +522,10 @@ mod radio_menu_item;
 pub use self::radio_menu_item::RadioMenuItem;
 pub use self::radio_menu_item::RadioMenuItemExt;
 
+mod radio_tool_button;
+pub use self::radio_tool_button::RadioToolButton;
+pub use self::radio_tool_button::RadioToolButtonExt;
+
 mod range;
 pub use self::range::Range;
 pub use self::range::RangeExt;
@@ -1059,6 +1063,7 @@ pub mod traits {
     pub use super::ProgressBarExt;
     pub use super::RadioButtonExt;
     pub use super::RadioMenuItemExt;
+    pub use super::RadioToolButtonExt;
     pub use super::RangeExt;
     pub use super::RecentChooserExt;
     pub use super::RecentFilterExt;
