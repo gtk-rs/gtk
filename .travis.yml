@@ -16,6 +16,7 @@ script:
   - cargo install clippy || touch clippy_failed
   - if [ ! -f clippy_failed ]; then cargo clippy; fi
   - cargo test --features embed-lgpl-docs --jobs 1
+  - cargo doc --features "dox"
   # catch any sneaked in lgpl docs
   - cargo build --features purge-lgpl-docs --jobs 1
   - git diff -R --exit-code
