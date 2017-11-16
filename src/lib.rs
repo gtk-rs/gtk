@@ -200,6 +200,7 @@ mod auto;
 mod app_chooser;
 mod application;
 mod assistant;
+mod buildable;
 mod builder;
 mod color_button;
 mod color_chooser;

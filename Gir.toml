@@ -481,6 +481,13 @@ status = "generate"
     version = "3.10"
 
 [[object]]
+name = "Gtk.Buildable"
+status = "generate"
+    [[object.function]]
+    pattern = "[gs]et_name"
+    ignore = true
+
+[[object]]
 name = "Gtk.CellArea"
 status = "generate"
     [[object.function]]

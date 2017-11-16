@@ -10,6 +10,7 @@ pub use auto::traits::*;
 
 pub use app_chooser::AppChooserExt;
 pub use assistant::AssistantExtManual;
+pub use buildable::BuildableExtManual;
 pub use color_button::ColorButtonExtManual;
 pub use color_chooser::ColorChooserExtManual;
 pub use dialog::DialogExtManual;
