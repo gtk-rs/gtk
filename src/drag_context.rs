@@ -11,7 +11,7 @@ use Widget;
 pub trait DragContextExtManual {
     fn drag_finish(&self, success: bool, del: bool, time_: u32);
 
-    #[cfg(feature = "v3_16")]
+    #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn drag_cancel(&self);
 
     fn drag_get_source_widget(&self) -> Option<Widget>;
@@ -39,7 +39,7 @@ impl<O: IsA<gdk::DragContext>> DragContextExtManual for O {
                                       time_) };
     }
 
-    #[cfg(feature = "v3_16")]
+    #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn drag_cancel(&self) {
         assert_initialized_main_thread!();
         unsafe {

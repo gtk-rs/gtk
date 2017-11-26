@@ -69,6 +69,7 @@ generate = [
     "Gtk.FileChooserWidget",
     "Gtk.FileFilter",
     "Gtk.FileFilterFlags",
+    "Gtk.Fixed",
     "Gtk.FlowBox",
     "Gtk.FlowBoxChild",
     "Gtk.FontButton",
@@ -131,8 +132,13 @@ generate = [
     "Gtk.PositionType",
     "Gtk.PrintDuplex",
     "Gtk.PrintError",
-    "Gtk.PrintPages",
     "Gtk.PrintQuality",
+    "Gtk.PrintOperation",
+    "Gtk.PrintOperationAction",
+    "Gtk.PrintOperationPreview",
+    "Gtk.PrintOperationResult",
+    "Gtk.PrintPages",
+    "Gtk.PrintStatus",
     "Gtk.ProgressBar",
     "Gtk.PropagationPhase",
     "Gtk.RecentChooser",
@@ -265,6 +271,7 @@ manual = [
     "Gio.AppInfo",
     "Gio.Application",
     "Gio.ApplicationFlags",
+    "Gio.Cancellable",
     "Gio.Icon",
     "Gio.Menu",
     "Gio.MenuModel",
@@ -478,6 +485,13 @@ status = "generate"
     [[object.property]]
     name = "baseline-position"
     version = "3.10"
+
+[[object]]
+name = "Gtk.Buildable"
+status = "generate"
+    [[object.function]]
+    pattern = "[gs]et_name"
+    ignore = true
 
 [[object]]
 name = "Gtk.CellArea"
@@ -754,16 +768,6 @@ status = "generate"
     ignore = true  #strange type of options and option_labels
 
 [[object]]
-name = "Gtk.Fixed"
-status = "generate"
-    [[object.child_prop]]
-    name = "x"
-    type = "gint"
-    [[object.child_prop]]
-    name = "y"
-    type = "gint"
-
-[[object]]
 name = "Gtk.Gesture"
 status = "generate"
 version = "3.14"
@@ -840,6 +844,10 @@ status = "generate"
         name = "surface"
         # cairo::Surface is reference-counted
         const = true
+    [[object.function]]
+    name = "get_icon_name"
+    #can return NULL string
+    ignore = true
     [[object.property]]
     name = "surface"
     #value cairo::Surface
@@ -1159,6 +1167,27 @@ status = "generate"
     ignore = true
     [[object.function]]
     name = "new_with_mnemonic"
+    ignore = true
+    [[object.function]]
+    name = "set_group"
+    ignore = true
+    [[object.property]]
+    name = "group"
+    ignore = true
+
+[[object]]
+name = "Gtk.RadioToolButton"
+status = "generate"
+    [[object.function]]
+    pattern = ".+_from_widget"
+        [[object.function.parameter]]
+        name = "group"
+        nullable = false
+    [[object.function]]
+    name = "new"
+    ignore = true
+    [[object.function]]
+    name = "new_from_stock"
     ignore = true
     [[object.function]]
     name = "set_group"
@@ -1514,6 +1543,51 @@ status = "generate"
         const = true
 
 [[object]]
+name = "Gtk.TreeRowReference"
+status = "generate"
+    [[object.function]]
+    name = "new"
+        [[object.function.parameter]]
+        name = "path"
+        const = true
+        [object.function.return]
+        nullable = true
+    [[object.function]]
+    name = "new_proxy"
+        [[object.function.parameter]]
+        name = "path"
+        const = true
+        [object.function.return]
+        nullable = true
+    [[object.function]]
+    name = "get_model"
+        [[object.function.parameter]]
+        name = "reference"
+        const = true
+        [object.function.return]
+        nullable = false
+    [[object.function]]
+    name = "get_path"
+        [[object.function.parameter]]
+        name = "reference"
+        const = true
+    [[object.function]]
+    name = "valid"
+        [[object.function.parameter]]
+        name = "reference"
+        const = true
+    [[object.function]]
+    name = "inserted"
+        [[object.function.parameter]]
+        name = "path"
+        const = true
+    [[object.function]]
+    name = "deleted"
+        [[object.function.parameter]]
+        name = "path"
+        const = true
+
+[[object]]
 name = "Gtk.TreeSelection"
 status = "generate"
     [[object.function]]
@@ -1779,6 +1853,7 @@ status = "generate"
 [[object]]
 name = "Gtk.Window"
 status = "generate"
+trait_name = "GtkWindowExt"
     [[object.function]]
     name = "activate_key"
         [[object.function.parameter]]
