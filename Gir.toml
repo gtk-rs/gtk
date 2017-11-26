@@ -266,6 +266,7 @@ manual = [
     "Gio.AppInfo",
     "Gio.Application",
     "Gio.ApplicationFlags",
+    "Gio.Cancellable",
     "Gio.Icon",
     "Gio.Menu",
     "Gio.MenuModel",
