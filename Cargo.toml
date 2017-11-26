@@ -7,7 +7,7 @@ name = "gtk"
 homepage = "http://gtk-rs.org/"
 authors = ["The Gtk-rs Project Developers"]
 readme = "README.md"
-version = "0.2.0"
+version = "0.3.0"
 keywords = ["gtk", "gtk-rs", "gnome", "GUI"]
 repository = "https://github.com/gtk-rs/gtk"
 build = "build.rs"
@@ -43,53 +43,53 @@ libc = "0.2"
 bitflags = "1.0"
 
 [dependencies.cairo-sys-rs]
-version = "0.4.0"
+version = "0.5.0"
 git = "https://github.com/gtk-rs/cairo"
 
 [dependencies.gdk-sys]
-version = "0.4.0"
+version = "0.5.0"
 git = "https://github.com/gtk-rs/sys"
 
 [dependencies.gdk-pixbuf-sys]
-version = "0.4.0"
+version = "0.5.0"
 git = "https://github.com/gtk-rs/sys"
 
 [dependencies.gio-sys]
-version = "0.4.0"
+version = "0.5.0"
 git = "https://github.com/gtk-rs/sys"
 
 [dependencies.glib-sys]
-version = "0.4.0"
+version = "0.5.0"
 git = "https://github.com/gtk-rs/sys"
 
 [dependencies.gobject-sys]
-version = "0.4.0"
+version = "0.5.0"
 git = "https://github.com/gtk-rs/sys"
 
 [dependencies.gtk-sys]
-version = "0.4.0"
+version = "0.5.0"
 git = "https://github.com/gtk-rs/sys"
 
 [dependencies.cairo-rs]
-version = "0.2.0"
+version = "0.3.0"
 git = "https://github.com/gtk-rs/cairo"
 
 [dependencies.gio]
-version = "0.2.0"
+version = "0.3.0"
 git = "https://github.com/gtk-rs/gio"
 
 [dependencies.glib]
-version = "0.3.0"
+version = "0.4.0"
 git = "https://github.com/gtk-rs/glib"
 
 [dependencies.gdk]
-version = "0.6.0"
+version = "0.7.0"
 git = "https://github.com/gtk-rs/gdk"
 
 [dependencies.gdk-pixbuf]
-version = "0.2.0"
+version = "0.3.0"
 git = "https://github.com/gtk-rs/gdk-pixbuf"
 
 [dependencies.pango]
-version = "0.2.0"
+version = "0.3.0"
 git = "https://github.com/gtk-rs/pango"
