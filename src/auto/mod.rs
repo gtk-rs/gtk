@@ -510,6 +510,14 @@ mod print_context;
 pub use self::print_context::PrintContext;
 pub use self::print_context::PrintContextExt;
 
+mod print_operation;
+pub use self::print_operation::PrintOperation;
+pub use self::print_operation::PrintOperationExt;
+
+mod print_operation_preview;
+pub use self::print_operation_preview::PrintOperationPreview;
+pub use self::print_operation_preview::PrintOperationPreviewExt;
+
 mod print_settings;
 pub use self::print_settings::PrintSettings;
 pub use self::print_settings::PrintSettingsExt;
@@ -871,8 +879,11 @@ pub use self::enums::PopoverConstraint;
 pub use self::enums::PositionType;
 pub use self::enums::PrintDuplex;
 pub use self::enums::PrintError;
+pub use self::enums::PrintOperationAction;
+pub use self::enums::PrintOperationResult;
 pub use self::enums::PrintPages;
 pub use self::enums::PrintQuality;
+pub use self::enums::PrintStatus;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::enums::PropagationPhase;
 pub use self::enums::RecentChooserError;
@@ -1064,6 +1075,8 @@ pub mod traits {
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     pub use super::PopoverMenuExt;
     pub use super::PrintContextExt;
+    pub use super::PrintOperationExt;
+    pub use super::PrintOperationPreviewExt;
     pub use super::PrintSettingsExt;
     pub use super::ProgressBarExt;
     pub use super::RadioButtonExt;
