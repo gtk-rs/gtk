@@ -2,7 +2,7 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-//! Traits and essential types inteded for blanket imports.
+//! Traits and essential types intended for blanket imports.
 
 pub use glib::prelude::*;
 
@@ -10,11 +10,12 @@ pub use auto::traits::*;
 
 pub use app_chooser::AppChooserExt;
 pub use assistant::AssistantExtManual;
+pub use buildable::BuildableExtManual;
 pub use color_button::ColorButtonExtManual;
 pub use color_chooser::ColorChooserExtManual;
-pub use css_provider::CssProviderExtManual;
 pub use dialog::DialogExtManual;
 pub use drag_context::DragContextExtManual;
+pub use fixed::FixedExtManual;
 pub use list_store::ListStoreExtManual;
 pub use menu::MenuExtManual;
 pub use notebook::NotebookExtManual;

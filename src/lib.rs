@@ -200,26 +200,28 @@ mod auto;
 mod app_chooser;
 mod application;
 mod assistant;
+mod buildable;
 mod builder;
 mod color_button;
 mod color_chooser;
-mod css_provider;
 mod dialog;
 mod drag_context;
 mod entry_buffer;
 mod enums;
 mod file_chooser_dialog;
+mod fixed;
 mod list_store;
 mod menu;
 mod message_dialog;
 mod notebook;
 mod radio_button;
 mod radio_menu_item;
+mod radio_tool_button;
 mod recent_chooser_dialog;
 mod recent_data;
 mod requisition;
 mod signal;
-#[cfg(target_os = "linux")]
+#[cfg(any(target_os = "linux", feature = "dox"))]
 mod socket;
 mod switch;
 mod target_entry;
@@ -227,6 +229,7 @@ mod target_list;
 mod text_buffer;
 mod text_iter;
 mod tree_model_filter;
+mod tree_row_reference;
 mod tree_sortable;
 mod tree_path;
 mod tree_store;
@@ -241,12 +244,13 @@ pub use signal::*;
 pub use prelude::*;
 
 pub use gdk::Rectangle as Allocation;
+pub use gdk::Rectangle;
+
 pub use app_chooser::AppChooser;
 pub use entry_buffer::EntryBuffer;
 pub use recent_data::RecentData;
-pub use gdk::Rectangle;
 pub use requisition::Requisition;
-#[cfg(target_os = "linux")]
+#[cfg(any(target_os = "linux", feature = "dox"))]
 pub use socket::Socket;
 pub use target_entry::TargetEntry;
 pub use tree_sortable::SortColumn;

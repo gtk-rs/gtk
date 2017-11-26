@@ -6,7 +6,7 @@ use std::mem::transmute;
 use std::ptr;
 
 use glib::object::{Downcast, IsA};
-use glib::signal::connect;
+use glib::signal::{SignalHandlerId, connect};
 use glib::translate::*;
 use glib_ffi::gboolean;
 use gdk::{DragAction, Event, ModifierType};
@@ -32,9 +32,9 @@ pub trait WidgetExtManual {
 
     fn override_font(&self, font: &pango::FontDescription);
 
-    fn connect_map_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(&self, f: F) -> u64;
+    fn connect_map_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_unmap_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(&self, f: F) -> u64;
+    fn connect_unmap_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<Widget> + IsA<Object>> WidgetExtManual for O {
@@ -98,7 +98,7 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExtManual for O {
         }
     }
 
-   fn connect_map_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(&self, f: F) -> u64 {
+   fn connect_map_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box<Box<Fn(&Self, &Event) -> Inhibit + 'static>> = Box::new(Box::new(f));
             connect(self.to_glib_none().0, "map-event",
@@ -106,7 +106,7 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExtManual for O {
         }
     }
 
-    fn connect_unmap_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(&self, f: F) -> u64 {
+    fn connect_unmap_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box<Box<Fn(&Self, &Event) -> Inhibit + 'static>> = Box::new(Box::new(f));
             connect(self.to_glib_none().0, "unmap-event",
@@ -120,5 +120,5 @@ unsafe extern "C" fn event_any_trampoline<T>(this: *mut ffi::GtkWidget,
                                              f: &&(Fn(&T, &Event) -> Inhibit + 'static)) -> gboolean
 where T: IsA<Widget> {
     callback_guard!();
-    f(&Widget::from_glib_none(this).downcast_unchecked(), &from_glib_none(event)).to_glib()
+    f(&Widget::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(event)).to_glib()
 }

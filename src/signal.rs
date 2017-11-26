@@ -8,6 +8,7 @@ use std::mem::transmute;
 pub use glib::signal::Inhibit;
 use glib::SourceId;
 use glib::translate::*;
+use glib::signal::SignalHandlerId;
 
 use glib_ffi::{self, gboolean, gpointer};
 
@@ -90,11 +91,11 @@ pub fn timeout_add_seconds<F>(interval: u32, func: F) -> SourceId
 }
 
 pub trait EditableSignals {
-    fn connect_changed<F>(&self, changed_func: F) -> u64
+    fn connect_changed<F>(&self, changed_func: F) -> SignalHandlerId
         where F: Fn(&Self) + 'static;
-    fn connect_delete_text<F>(&self, delete_text_func: F) -> u64
+    fn connect_delete_text<F>(&self, delete_text_func: F) -> SignalHandlerId
         where F: Fn(&Self, i32, i32) + 'static;
-    fn connect_insert_text<F>(&self, insert_text_func: F) -> u64
+    fn connect_insert_text<F>(&self, insert_text_func: F) -> SignalHandlerId
         where F: Fn(&Self, &str, &mut i32) + 'static;
 }
 
@@ -103,7 +104,7 @@ mod editable {
     use Object;
     use std::mem::transmute;
     use ffi::GtkEditable;
-    use glib::signal::connect;
+    use glib::signal::{SignalHandlerId, connect};
     use glib::translate::*;
     use IsA;
     use libc::{c_char, c_int, c_uchar};
@@ -113,7 +114,7 @@ mod editable {
     use std::slice;
 
     impl<T: IsA<Editable> + IsA<Object>> super::EditableSignals for T {
-        fn connect_changed<F>(&self, changed_func: F) -> u64
+        fn connect_changed<F>(&self, changed_func: F) -> SignalHandlerId
         where F: Fn(&Self) + 'static {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> =
@@ -123,7 +124,7 @@ mod editable {
             }
         }
 
-        fn connect_delete_text<F>(&self, delete_text_func: F) -> u64
+        fn connect_delete_text<F>(&self, delete_text_func: F) -> SignalHandlerId
         where F: Fn(&Self, i32, i32) + 'static {
             unsafe {
                 let f: Box<Box<Fn(&Self, i32, i32) + 'static>> =
@@ -133,7 +134,7 @@ mod editable {
             }
         }
 
-        fn connect_insert_text<F>(&self, insert_text_func: F) -> u64
+        fn connect_insert_text<F>(&self, insert_text_func: F) -> SignalHandlerId
         where F: Fn(&Self, &str, &mut i32) + 'static {
             unsafe {
                 let f: Box<Box<Fn(&Self, &str, &mut i32) + 'static>> =
@@ -148,7 +149,7 @@ mod editable {
                                        f: &&(Fn(&T) + 'static))
     where T: IsA<Editable> {
         callback_guard!();
-        f(&Editable::from_glib_none(this).downcast_unchecked());
+        f(&Editable::from_glib_borrow(this).downcast_unchecked());
     }
 
     unsafe extern "C" fn delete_trampoline<T>(this: *mut GtkEditable,
@@ -157,7 +158,7 @@ mod editable {
                                               f: &&(Fn(&T, i32, i32) + 'static))
     where T: IsA<Editable> {
         callback_guard!();
-        f(&Editable::from_glib_none(this).downcast_unchecked(), start_pos, end_pos);
+        f(&Editable::from_glib_borrow(this).downcast_unchecked(), start_pos, end_pos);
     }
 
     unsafe extern "C" fn insert_trampoline<T>(this: *mut GtkEditable,
@@ -174,22 +175,22 @@ mod editable {
             CStr::from_ptr(new_text).to_bytes()
         };
         let string = str::from_utf8(buf).unwrap();
-        f(&Editable::from_glib_none(this).downcast_unchecked(),
+        f(&Editable::from_glib_borrow(this).downcast_unchecked(),
           string,
           transmute(position));
     }
 }
 
 pub trait SpinButtonSignals {
-    fn connect_change_value<F>(&self, change_value_func: F) -> u64
+    fn connect_change_value<F>(&self, change_value_func: F) -> SignalHandlerId
         where F: Fn(&SpinButton, ScrollType) + 'static;
-    fn connect_input<F>(&self, input_func: F) -> u64
+    fn connect_input<F>(&self, input_func: F) -> SignalHandlerId
         where F: Fn(&SpinButton) -> Option<Result<f64, ()>> + 'static;
-    fn connect_output<F>(&self, output_func: F) -> u64
+    fn connect_output<F>(&self, output_func: F) -> SignalHandlerId
         where F: Fn(&SpinButton) -> Inhibit + 'static;
-    fn connect_value_changed<F>(&self, value_changed_func: F) -> u64
+    fn connect_value_changed<F>(&self, value_changed_func: F) -> SignalHandlerId
         where F: Fn(&SpinButton) + 'static;
-    fn connect_wrapped<F>(&self, wrapped_func: F) -> u64
+    fn connect_wrapped<F>(&self, wrapped_func: F) -> SignalHandlerId
         where F: Fn(&SpinButton) + 'static;
 }
 
@@ -198,7 +199,7 @@ mod spin_button {
     use SpinButton;
     use ScrollType;
     use ffi::{GTK_INPUT_ERROR, GtkSpinButton};
-    use glib::signal::connect;
+    use glib::signal::{SignalHandlerId, connect};
     use glib::translate::*;
     use glib_ffi::{GTRUE, GFALSE};
     use libc::{c_int, c_double};
@@ -207,7 +208,7 @@ mod spin_button {
     use glib_ffi::gboolean;
 
     impl ::SpinButtonSignals for SpinButton {
-        fn connect_change_value<F>(&self, change_value_func: F) -> u64
+        fn connect_change_value<F>(&self, change_value_func: F) -> SignalHandlerId
         where F: Fn(&SpinButton, ScrollType) + 'static {
             unsafe {
                 let f: Box<Box<Fn(&SpinButton, ScrollType) + 'static>> =
@@ -217,7 +218,7 @@ mod spin_button {
             }
         }
 
-        fn connect_input<F>(&self, f: F) -> u64
+        fn connect_input<F>(&self, f: F) -> SignalHandlerId
         where F: Fn(&SpinButton) -> Option<Result<f64, ()>> + 'static {
             unsafe {
                 let f: Box_<Box_<Fn(&SpinButton) -> Option<Result<f64, ()>> + 'static>> = Box_::new(Box_::new(f));
@@ -226,7 +227,7 @@ mod spin_button {
             }
         }
 
-        fn connect_output<F>(&self, output_func: F) -> u64
+        fn connect_output<F>(&self, output_func: F) -> SignalHandlerId
         where F: Fn(&SpinButton) -> Inhibit + 'static {
             unsafe {
                 let f: Box<Box<Fn(&SpinButton) -> Inhibit + 'static>> =
@@ -236,7 +237,7 @@ mod spin_button {
             }
         }
 
-        fn connect_value_changed<F>(&self, value_changed_func: F) -> u64
+        fn connect_value_changed<F>(&self, value_changed_func: F) -> SignalHandlerId
         where F: Fn(&SpinButton) + 'static {
             unsafe {
                 let f: Box<Box<Fn(&SpinButton) + 'static>> =
@@ -246,7 +247,7 @@ mod spin_button {
             }
         }
 
-        fn connect_wrapped<F>(&self, wrapped_func: F) -> u64
+        fn connect_wrapped<F>(&self, wrapped_func: F) -> SignalHandlerId
         where F: Fn(&SpinButton) + 'static {
             unsafe {
                 let f: Box<Box<Fn(&SpinButton) + 'static>> =
@@ -261,7 +262,7 @@ mod spin_button {
                                            scroll: ScrollType,
                                            f: &&(Fn(&SpinButton, ScrollType) + 'static)) {
         callback_guard!();
-        f(&from_glib_none(this), scroll)
+        f(&from_glib_borrow(this), scroll)
     }
 
     unsafe extern "C" fn input_trampoline(this: *mut GtkSpinButton,
@@ -269,7 +270,7 @@ mod spin_button {
                                           f: &&(Fn(&SpinButton) -> Option<Result<f64, ()>> + 'static))
                                           -> c_int {
         callback_guard!();
-        match f(&from_glib_none(this)) {
+        match f(&from_glib_borrow(this)) {
             Some(Ok(v)) => {
                 *new_value = v;
                 GTRUE
@@ -283,12 +284,12 @@ mod spin_button {
                                            f: &&(Fn(&SpinButton) -> Inhibit + 'static))
                                            -> gboolean {
         callback_guard!();
-        f(&from_glib_none(this)).to_glib()
+        f(&from_glib_borrow(this)).to_glib()
     }
 
     unsafe extern "C" fn trampoline(this: *mut GtkSpinButton,
                                     f: &&(Fn(&SpinButton) + 'static)) {
         callback_guard!();
-        f(&from_glib_none(this))
+        f(&from_glib_borrow(this))
     }
 }
