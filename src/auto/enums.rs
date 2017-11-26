@@ -3269,6 +3269,132 @@ impl SetValue for PrintError {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum PrintOperationAction {
+    PrintDialog,
+    Print,
+    Preview,
+    Export,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for PrintOperationAction {
+    type GlibType = ffi::GtkPrintOperationAction;
+
+    fn to_glib(&self) -> ffi::GtkPrintOperationAction {
+        match *self {
+            PrintOperationAction::PrintDialog => ffi::GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,
+            PrintOperationAction::Print => ffi::GTK_PRINT_OPERATION_ACTION_PRINT,
+            PrintOperationAction::Preview => ffi::GTK_PRINT_OPERATION_ACTION_PREVIEW,
+            PrintOperationAction::Export => ffi::GTK_PRINT_OPERATION_ACTION_EXPORT,
+            PrintOperationAction::__Unknown(value) => value
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GtkPrintOperationAction> for PrintOperationAction {
+    fn from_glib(value: ffi::GtkPrintOperationAction) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => PrintOperationAction::PrintDialog,
+            1 => PrintOperationAction::Print,
+            2 => PrintOperationAction::Preview,
+            3 => PrintOperationAction::Export,
+            value => PrintOperationAction::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for PrintOperationAction {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gtk_print_operation_action_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for PrintOperationAction {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for PrintOperationAction {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for PrintOperationAction {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum PrintOperationResult {
+    Error,
+    Apply,
+    Cancel,
+    InProgress,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for PrintOperationResult {
+    type GlibType = ffi::GtkPrintOperationResult;
+
+    fn to_glib(&self) -> ffi::GtkPrintOperationResult {
+        match *self {
+            PrintOperationResult::Error => ffi::GTK_PRINT_OPERATION_RESULT_ERROR,
+            PrintOperationResult::Apply => ffi::GTK_PRINT_OPERATION_RESULT_APPLY,
+            PrintOperationResult::Cancel => ffi::GTK_PRINT_OPERATION_RESULT_CANCEL,
+            PrintOperationResult::InProgress => ffi::GTK_PRINT_OPERATION_RESULT_IN_PROGRESS,
+            PrintOperationResult::__Unknown(value) => value
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GtkPrintOperationResult> for PrintOperationResult {
+    fn from_glib(value: ffi::GtkPrintOperationResult) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => PrintOperationResult::Error,
+            1 => PrintOperationResult::Apply,
+            2 => PrintOperationResult::Cancel,
+            3 => PrintOperationResult::InProgress,
+            value => PrintOperationResult::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for PrintOperationResult {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gtk_print_operation_result_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for PrintOperationResult {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for PrintOperationResult {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for PrintOperationResult {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum PrintPages {
     All,
     Current,
@@ -3389,6 +3515,84 @@ impl<'a> FromValue<'a> for PrintQuality {
 }
 
 impl SetValue for PrintQuality {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub enum PrintStatus {
+    Initial,
+    Preparing,
+    GeneratingData,
+    SendingData,
+    Pending,
+    PendingIssue,
+    Printing,
+    Finished,
+    FinishedAborted,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[doc(hidden)]
+impl ToGlib for PrintStatus {
+    type GlibType = ffi::GtkPrintStatus;
+
+    fn to_glib(&self) -> ffi::GtkPrintStatus {
+        match *self {
+            PrintStatus::Initial => ffi::GTK_PRINT_STATUS_INITIAL,
+            PrintStatus::Preparing => ffi::GTK_PRINT_STATUS_PREPARING,
+            PrintStatus::GeneratingData => ffi::GTK_PRINT_STATUS_GENERATING_DATA,
+            PrintStatus::SendingData => ffi::GTK_PRINT_STATUS_SENDING_DATA,
+            PrintStatus::Pending => ffi::GTK_PRINT_STATUS_PENDING,
+            PrintStatus::PendingIssue => ffi::GTK_PRINT_STATUS_PENDING_ISSUE,
+            PrintStatus::Printing => ffi::GTK_PRINT_STATUS_PRINTING,
+            PrintStatus::Finished => ffi::GTK_PRINT_STATUS_FINISHED,
+            PrintStatus::FinishedAborted => ffi::GTK_PRINT_STATUS_FINISHED_ABORTED,
+            PrintStatus::__Unknown(value) => value
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GtkPrintStatus> for PrintStatus {
+    fn from_glib(value: ffi::GtkPrintStatus) -> Self {
+        skip_assert_initialized!();
+        match value {
+            0 => PrintStatus::Initial,
+            1 => PrintStatus::Preparing,
+            2 => PrintStatus::GeneratingData,
+            3 => PrintStatus::SendingData,
+            4 => PrintStatus::Pending,
+            5 => PrintStatus::PendingIssue,
+            6 => PrintStatus::Printing,
+            7 => PrintStatus::Finished,
+            8 => PrintStatus::FinishedAborted,
+            value => PrintStatus::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for PrintStatus {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gtk_print_status_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for PrintStatus {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for PrintStatus {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for PrintStatus {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
