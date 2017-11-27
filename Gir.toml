@@ -126,7 +126,6 @@ generate = [
     "Gtk.PageSet",
     "Gtk.PanDirection",
     "Gtk.PlacesOpenFlags",
-    "Gtk.PlacesSidebar",
     "Gtk.PolicyType",
     "Gtk.PopoverConstraint",
     "Gtk.PositionType",
@@ -272,6 +271,7 @@ manual = [
     "Gio.Application",
     "Gio.ApplicationFlags",
     "Gio.Cancellable",
+    "Gio.File",
     "Gio.Icon",
     "Gio.Menu",
     "Gio.MenuModel",
@@ -1097,6 +1097,18 @@ status = "generate"
     [[object.function]]
     name = "is_ipp"
     version = "3.16"
+
+[[object]]
+name = "Gtk.PlacesSidebar"
+status = "generate"
+    [[object.signal]]
+    name = "drag-action-requested"
+    #[gio::File]
+    ignore = true
+    [[object.signal]]
+    name = "drag-perform-drop"
+    #[gio::File]
+    ignore = true
 
 [[object]]
 name = "Gtk.PrintContext"
