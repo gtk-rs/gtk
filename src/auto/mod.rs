@@ -937,6 +937,7 @@ pub use self::flags::PlacesOpenFlags;
 pub use self::flags::RecentFilterFlags;
 pub use self::flags::RegionFlags;
 pub use self::flags::StateFlags;
+#[cfg(any(feature = "v3_20", feature = "dox"))]
 pub use self::flags::StyleContextPrintFlags;
 pub use self::flags::TargetFlags;
 pub use self::flags::TextSearchFlags;
