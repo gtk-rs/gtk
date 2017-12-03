@@ -27,7 +27,6 @@ generate = [
     "Gtk.Button",
     "Gtk.ButtonBox",
     "Gtk.ButtonBoxStyle",
-    "Gtk.ButtonRole",
     "Gtk.ButtonsType",
     "Gtk.Calendar",
     "Gtk.CalendarDisplayOptions",
@@ -364,27 +363,6 @@ status = "generate"
     ignore = true
 
 [[object]]
-name = "Gtk.IconTheme"
-status = "generate"
-    [[object.function]]
-    name = "set_search_path"
-    ignore = true
-    [[object.function]]
-    name = "choose_icon"
-    ignore = true
-    [[object.function]]
-    name = "choose_icon_for_scale"
-    ignore = true
-    [[object.function]]
-    name = "get_icon_sizes"
-    #array
-    ignore = true
-    [[object.function]]
-    name = "get_search_path"
-    #array
-    ignore = true
-
-[[object]]
 name = "Gtk.AboutDialog"
 status = "generate"
     [[object.function]]
@@ -492,6 +470,11 @@ status = "generate"
     [[object.function]]
     pattern = "[gs]et_name"
     ignore = true
+
+[[object]]
+name = "Gtk.ButtonRole"
+status = "generate"
+version = "3.16"
 
 [[object]]
 name = "Gtk.CellArea"
@@ -828,6 +811,27 @@ status = "generate"
         [[object.function.parameter]]
         name = "path"
         const = true
+
+[[object]]
+name = "Gtk.IconTheme"
+status = "generate"
+    [[object.function]]
+    name = "set_search_path"
+    ignore = true
+    [[object.function]]
+    name = "choose_icon"
+    ignore = true
+    [[object.function]]
+    name = "choose_icon_for_scale"
+    ignore = true
+    [[object.function]]
+    name = "get_icon_sizes"
+    #array
+    ignore = true
+    [[object.function]]
+    name = "get_search_path"
+    #array
+    ignore = true
 
 [[object]]
 name = "Gtk.Image"
