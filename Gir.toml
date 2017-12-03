@@ -183,7 +183,6 @@ generate = [
     "Gtk.StateType",
     "Gtk.Statusbar",
     "Gtk.StatusIcon",
-    "Gtk.StyleContextPrintFlags",
     "Gtk.StyleProperties",
     "Gtk.StyleProvider",
     "Gtk.SymbolicColor",
@@ -1331,6 +1330,11 @@ status = "generate"
     [[object.property]]
     name = "paint-clock"
     version = "3.8"
+
+[[object]]
+name = "Gtk.StyleContextPrintFlags"
+status = "generate"
+version = "3.20"
 
 [[object]]
 name = "Gtk.Switch"

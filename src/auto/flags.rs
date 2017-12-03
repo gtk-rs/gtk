@@ -746,6 +746,7 @@ impl SetValue for StateFlags {
     }
 }
 
+#[cfg(any(feature = "v3_20", feature = "dox"))]
 bitflags! {
     pub struct StyleContextPrintFlags: u32 {
         const NONE = 0;
@@ -754,6 +755,7 @@ bitflags! {
     }
 }
 
+#[cfg(any(feature = "v3_20", feature = "dox"))]
 #[doc(hidden)]
 impl ToGlib for StyleContextPrintFlags {
     type GlibType = ffi::GtkStyleContextPrintFlags;
@@ -763,6 +765,7 @@ impl ToGlib for StyleContextPrintFlags {
     }
 }
 
+#[cfg(any(feature = "v3_20", feature = "dox"))]
 #[doc(hidden)]
 impl FromGlib<ffi::GtkStyleContextPrintFlags> for StyleContextPrintFlags {
     fn from_glib(value: ffi::GtkStyleContextPrintFlags) -> StyleContextPrintFlags {
@@ -771,24 +774,28 @@ impl FromGlib<ffi::GtkStyleContextPrintFlags> for StyleContextPrintFlags {
     }
 }
 
+#[cfg(any(feature = "v3_20", feature = "dox"))]
 impl StaticType for StyleContextPrintFlags {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gtk_style_context_print_flags_get_type()) }
     }
 }
 
+#[cfg(any(feature = "v3_20", feature = "dox"))]
 impl<'a> FromValueOptional<'a> for StyleContextPrintFlags {
     unsafe fn from_value_optional(value: &Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
+#[cfg(any(feature = "v3_20", feature = "dox"))]
 impl<'a> FromValue<'a> for StyleContextPrintFlags {
     unsafe fn from_value(value: &Value) -> Self {
         from_glib(ffi::GtkStyleContextPrintFlags::from_bits_truncate(gobject_ffi::g_value_get_flags(value.to_glib_none().0)))
     }
 }
 
+#[cfg(any(feature = "v3_20", feature = "dox"))]
 impl SetValue for StyleContextPrintFlags {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib().bits())
