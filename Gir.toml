@@ -14,6 +14,7 @@ generate = [
     "Gtk.Adjustment",
     "Gtk.Align",
     "Gtk.Alignment",
+    "Gtk.AppChooserButton",
     "Gtk.AppChooserWidget",
     "Gtk.ApplicationInhibitFlags",
     "Gtk.ApplicationWindow",
@@ -23,6 +24,7 @@ generate = [
     "Gtk.AssistantPageType",
     "Gtk.BaselinePosition",
     "Gtk.Bin",
+    "Gtk.BorderStyle",
     "Gtk.BuilderError",
     "Gtk.Button",
     "Gtk.ButtonBox",
@@ -65,6 +67,7 @@ generate = [
     "Gtk.FileChooserConfirmation",
     "Gtk.FileChooserDialog",
     "Gtk.FileChooserError",
+    "Gtk.FileChooserNative",
     "Gtk.FileChooserWidget",
     "Gtk.FileFilter",
     "Gtk.FileFilterFlags",
@@ -94,6 +97,7 @@ generate = [
     "Gtk.ImageMenuItem",
     "Gtk.ImageType",
     "Gtk.InfoBar",
+    "Gtk.Invisible",
     "Gtk.IMMulticontext",
     "Gtk.IMPreeditStyle",
     "Gtk.IMStatusStyle",
@@ -106,6 +110,7 @@ generate = [
     "Gtk.License",
     "Gtk.ListBox",
     "Gtk.ListBoxRow",
+    "Gtk.LockButton",
     "Gtk.MenuBar",
     "Gtk.MenuButton",
     "Gtk.MenuDirectionType",
@@ -114,11 +119,17 @@ generate = [
     "Gtk.MessageType",
     "Gtk.Misc",
     "Gtk.ModelButton",
+    "Gtk.MountOperation",
     "Gtk.MovementStep",
+    "Gtk.NativeDialog",
     "Gtk.NotebookTab",
     "Gtk.NumberUpLayout",
+    "Gtk.OffscreenWindow",
     "Gtk.Orientable",
     "Gtk.Orientation",
+#    "Gtk.PadActionEntry", <- Missing memory management functions
+    "Gtk.PadActionType",
+    "Gtk.PadController",
     "Gtk.PackDirection",
     "Gtk.PackType",
     "Gtk.PageOrientation",
@@ -194,6 +205,7 @@ generate = [
     "Gtk.TextMark",
     "Gtk.TextSearchFlags",
     "Gtk.TextTagTable",
+    "Gtk.TextViewLayer",
     "Gtk.TextWindowType",
     "Gtk.ToggleButton",
     "Gtk.ToggleToolButton",
@@ -273,6 +285,7 @@ manual = [
     "Gio.Icon",
     "Gio.Menu",
     "Gio.MenuModel",
+    "Gio.MountOperation",
     "Gio.Permission",
     "GLib.Error",
     "GLib.KeyFile",
@@ -282,6 +295,7 @@ manual = [
     "GObject.Value",
     "Gtk.Allocation",
     "Gtk.AppChooser",
+    "Gtk.Border",
     "Gtk.EntryBuffer",
     "Gtk.RecentData",
     "Gtk.Requisition",
@@ -306,6 +320,7 @@ manual = [
     "Pango.Underline",
     "Pango.Variant",
     "Pango.WrapMode",
+    "xlib.Window",
 ]
 
 [[object]]
@@ -614,6 +629,15 @@ status = "generate"
         [[object.signal.parameter]]
         name = "path"
         transformation = "treepath"
+
+[[object]]
+name = "Gtk.CellView"
+status = "generate"
+    [[object.function]]
+    name = "set_displayed_row"
+    [[object.function.parameter]]
+          name = "path"
+          nullable = false
 
 [[object]]
 name = "Gtk.Clipboard"
@@ -1114,6 +1138,11 @@ status = "generate"
     ignore = true
 
 [[object]]
+name = "Gtk.Plug"
+status = "generate"
+cfg_condition = "not(windows)"
+
+[[object]]
 name = "Gtk.PrintContext"
 status = "generate"
     [[object.function]]
@@ -1287,6 +1316,11 @@ status = "generate"
     name = "get_data"
     #array without length
     ignore = true
+
+[[object]]
+name = "Gtk.Socket"
+status = "generate"
+cfg_condition = "not(windows)"
 
 [[object]]
 name = "Gtk.SpinButton"
