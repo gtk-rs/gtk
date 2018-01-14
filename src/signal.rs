@@ -9,6 +9,7 @@ pub use glib::signal::Inhibit;
 use glib::SourceId;
 use glib::translate::*;
 use glib::signal::SignalHandlerId;
+use gdk::Rectangle;
 
 use glib_ffi::{self, gboolean, gpointer};
 
@@ -16,6 +17,7 @@ use {
     Continue,
     ScrollType,
     SpinButton,
+    Widget,
 };
 
 // idle_add and timeout_add fixed to the main thread
@@ -291,5 +293,68 @@ mod spin_button {
                                     f: &&(Fn(&SpinButton) + 'static)) {
         callback_guard!();
         f(&from_glib_borrow(this))
+    }
+}
+
+pub trait OverlaySignals {
+    fn connect_get_child_position<F>(&self, f: F) -> SignalHandlerId
+    where
+        F: Fn(&Self, &Widget) -> Option<Rectangle> + 'static;
+}
+
+mod overlay {
+    use gdk::Rectangle;
+    use ffi::{GtkOverlay, GtkWidget};
+    use gdk_ffi::GdkRectangle;
+    use glib::signal::{connect, SignalHandlerId};
+    use glib::translate::*;
+    use glib::object::Downcast;
+    use std::mem::transmute;
+    use std::ptr;
+    use glib_ffi::{gboolean, gpointer};
+    use IsA;
+    use Object;
+    use Overlay;
+    use Widget;
+
+    impl<O: IsA<Overlay> + IsA<Object>> ::OverlaySignals for O {
+        fn connect_get_child_position<F>(&self, f: F) -> SignalHandlerId
+        where
+            F: Fn(&Self, &Widget) -> Option<Rectangle> + 'static,
+        {
+            unsafe {
+                let f: Box<Box<Fn(&Self, &Widget) -> Option<Rectangle> + 'static>> =
+                    Box::new(Box::new(f));
+                connect(
+                    self.to_glib_none().0,
+                    "get-child-position",
+                    transmute(get_child_position_trampoline::<Self> as usize),
+                    Box::into_raw(f) as *mut _,
+                )
+            }
+        }
+    }
+
+    unsafe extern "C" fn get_child_position_trampoline<T>(
+        this: *mut GtkOverlay,
+        widget: *mut GtkWidget,
+        allocation: *mut GdkRectangle,
+        f: gpointer,
+    ) -> gboolean
+    where
+        T: IsA<Overlay> + IsA<Object>,
+    {
+        callback_guard!();
+        let f: &&(Fn(&T, &Widget) -> Option<Rectangle> + 'static) = transmute(f);
+        match f(
+            &Overlay::from_glib_borrow(this).downcast_unchecked(),
+            &from_glib_borrow(widget),
+        ) {
+            Some(rect) => {
+                ptr::write(allocation, ptr::read(rect.to_glib_none().0));
+                true
+            }
+            None => false,
+        }.to_glib()
     }
 }
