@@ -1,4 +1,4 @@
-// Copyright 2013-2016, The Gtk-rs Project Developers.
+// Copyright 2013-2018, The Gtk-rs Project Developers.
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
@@ -147,6 +147,7 @@
 #![cfg_attr(feature = "cargo-clippy", allow(new_without_default))]
 #![cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
 #![cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
+#![allow(deprecated)]
 
 extern crate libc;
 #[macro_use]
