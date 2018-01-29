@@ -304,6 +304,7 @@ manual = [
     "cairo.RectangleInt",
     "cairo.Region",
     "cairo.Surface",
+    "Pango.Alignment",
     "Pango.AttrList",
     "Pango.Context",
     "Pango.Direction",
