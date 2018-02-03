@@ -428,7 +428,9 @@ bitflags! {
         const UPPERCASE_SENTENCES = 64;
         const INHIBIT_OSK = 128;
         const VERTICAL_WRITING = 256;
+        #[cfg(any(feature = "v3_22_20", feature = "dox"))]
         const EMOJI = 512;
+        #[cfg(any(feature = "v3_22_20", feature = "dox"))]
         const NO_EMOJI = 1024;
     }
 }

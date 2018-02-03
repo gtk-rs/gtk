@@ -260,8 +260,10 @@ pub trait TextViewExt {
 
     fn emit_insert_at_cursor(&self, string: &str);
 
+    #[cfg(any(feature = "v3_22_26", feature = "dox"))]
     fn connect_insert_emoji<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
+    #[cfg(any(feature = "v3_22_26", feature = "dox"))]
     fn emit_insert_emoji(&self);
 
     fn connect_move_cursor<F: Fn(&Self, MovementStep, i32, bool) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -913,6 +915,7 @@ impl<O: IsA<TextView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tex
         let _ = self.emit("insert-at-cursor", &[&string]).unwrap();
     }
 
+    #[cfg(any(feature = "v3_22_26", feature = "dox"))]
     fn connect_insert_emoji<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
@@ -921,6 +924,7 @@ impl<O: IsA<TextView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tex
         }
     }
 
+    #[cfg(any(feature = "v3_22_26", feature = "dox"))]
     fn emit_insert_emoji(&self) {
         let _ = self.emit("insert-emoji", &[]).unwrap();
     }
@@ -1246,6 +1250,7 @@ where P: IsA<TextView> {
     f(&TextView::from_glib_borrow(this).downcast_unchecked(), &String::from_glib_none(string))
 }
 
+#[cfg(any(feature = "v3_22_26", feature = "dox"))]
 unsafe extern "C" fn insert_emoji_trampoline<P>(this: *mut ffi::GtkTextView, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
     callback_guard!();

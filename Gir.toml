@@ -101,7 +101,6 @@ generate = [
     "Gtk.IMMulticontext",
     "Gtk.IMPreeditStyle",
     "Gtk.IMStatusStyle",
-    "Gtk.InputHints",
     "Gtk.InputPurpose",
     "Gtk.JunctionSides",
     "Gtk.Justification",
@@ -905,6 +904,16 @@ status = "generate"
     version = "3.6"
 
 [[object]]
+name = "Gtk.InputHints"
+status = "generate"
+    [[object.member]]
+    name = "emoji"
+    version = "3.22.20"
+    [[object.member]]
+    name = "no_emoji"
+    version = "3.22.20"
+
+[[object]]
 name = "Gtk.Label"
 status = "generate"
     [[object.signal]]
@@ -1459,6 +1468,10 @@ status = "generate"
     [[object.signal]]
     name = "extend-selection"
     inhibit = true
+    [[object.signal]]
+    name = "insert-emoji"
+    #actually Since 3.22.27
+    version = "3.22.26" 
 
 [[object]]
 name = "Gtk.Toolbar"
