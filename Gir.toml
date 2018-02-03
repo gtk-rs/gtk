@@ -1137,6 +1137,9 @@ status = "generate"
     name = "drag-perform-drop"
     #[gio::File]
     ignore = true
+    [[object.property]]
+    name = "show-starred-location"
+    version = "3.22.26"
 
 [[object]]
 name = "Gtk.Plug"
