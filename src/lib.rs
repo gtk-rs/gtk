@@ -206,6 +206,7 @@ mod assistant;
 mod buildable;
 mod builder;
 mod border;
+mod clipboard;
 mod color_button;
 mod color_chooser;
 mod dialog;
