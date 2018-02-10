@@ -11,6 +11,9 @@ version = "0.3.0"
 keywords = ["gtk", "gtk-rs", "gnome", "GUI"]
 repository = "https://github.com/gtk-rs/gtk"
 build = "build.rs"
+exclude = [
+    "gir-files/*",
+]
 
 [badges]
 appveyor = { repository = "GuillaumeGomez/gtk", service = "github" }
