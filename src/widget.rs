@@ -53,16 +53,7 @@ pub trait WidgetExtManual {
 impl<O: IsA<Widget> + IsA<Object>> WidgetExtManual for O {
     fn drag_dest_set(&self, flags: DestDefaults, targets: &[TargetEntry], actions: DragAction) {
         let stashes: Vec<_> = targets.iter().map(|e| e.to_glib_none()).collect();
-        let mut t = Vec::with_capacity(stashes.len());
-        for stash in &stashes {
-            unsafe {
-                t.push(ffi::GtkTargetEntry {
-                    target: (*stash.0).target,
-                    flags: (*stash.0).flags,
-                    info: (*stash.0).info,
-                });
-            }
-        }
+        let t: Vec<_> = stashes.iter().map(|stash| unsafe { *stash.0 }).collect();
         let t_ptr: *mut ffi::GtkTargetEntry = if !t.is_empty() {
             t.as_ptr() as *mut _
         } else {
@@ -77,16 +68,7 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExtManual for O {
 
     fn drag_source_set(&self, start_button_mask: ModifierType, targets: &[TargetEntry], actions: DragAction) {
         let stashes: Vec<_> = targets.iter().map(|e| e.to_glib_none()).collect();
-        let mut t = Vec::with_capacity(stashes.len());
-        for stash in &stashes {
-            unsafe {
-                t.push(ffi::GtkTargetEntry {
-                    target: (*stash.0).target,
-                    flags: (*stash.0).flags,
-                    info: (*stash.0).info,
-                });
-            }
-        }
+        let t: Vec<_> = stashes.iter().map(|stash| unsafe { *stash.0 }).collect();
         let t_ptr: *mut ffi::GtkTargetEntry = if !t.is_empty() {
             t.as_ptr() as *mut _
         } else {
