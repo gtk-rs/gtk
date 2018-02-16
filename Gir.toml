@@ -236,7 +236,6 @@ ignore = [
 manual = [
     "Gdk.AnchorHints",
     "Gdk.Atom",
-    "Gdk.Atom_",
     "Gdk.Device",
     "Gdk.Display",
     "Gdk.DragAction",
