@@ -47,15 +47,6 @@ macro_rules! assert_not_initialized {
     )
 }
 
-macro_rules! callback_guard {
-    () => (
-        let _guard = ::glib::CallbackGuard::new();
-        if cfg!(debug_assertions) {
-            assert_initialized_main_thread!();
-        }
-    )
-}
-
 /// Returns `true` if GTK has been initialized.
 #[inline]
 pub fn is_initialized() -> bool {

@@ -41,14 +41,12 @@ impl<O: IsA<TreeModelFilter>> TreeModelFilterExtManual for O {
 
 unsafe extern "C" fn trampoline(this: *mut GtkTreeModel, iter: *mut GtkTreeIter,
                                 f: gpointer) -> gboolean {
-    callback_guard!();
     let f: &&(Fn(&TreeModel, &TreeIter) -> bool) = transmute(f);
     f(&TreeModel::from_glib_none(this).downcast_unchecked(), &from_glib_borrow(iter))
     .to_glib()
 }
 
 unsafe extern "C" fn destroy_closure(ptr: gpointer) {
-    callback_guard!();
     Box::<Box<Fn(&TreeModel, &TreeIter) -> bool + 'static>>::from_raw(ptr as *mut _);
 }
 
