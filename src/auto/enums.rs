@@ -2846,6 +2846,7 @@ impl SetValue for PackType {
     }
 }
 
+#[cfg(any(feature = "v3_22", feature = "dox"))]
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum PadActionType {
     Button,
@@ -2855,6 +2856,7 @@ pub enum PadActionType {
     __Unknown(i32),
 }
 
+#[cfg(any(feature = "v3_22", feature = "dox"))]
 #[doc(hidden)]
 impl ToGlib for PadActionType {
     type GlibType = ffi::GtkPadActionType;
@@ -2869,6 +2871,7 @@ impl ToGlib for PadActionType {
     }
 }
 
+#[cfg(any(feature = "v3_22", feature = "dox"))]
 #[doc(hidden)]
 impl FromGlib<ffi::GtkPadActionType> for PadActionType {
     fn from_glib(value: ffi::GtkPadActionType) -> Self {
@@ -2882,24 +2885,28 @@ impl FromGlib<ffi::GtkPadActionType> for PadActionType {
     }
 }
 
+#[cfg(any(feature = "v3_22", feature = "dox"))]
 impl StaticType for PadActionType {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gtk_pad_action_type_get_type()) }
     }
 }
 
+#[cfg(any(feature = "v3_22", feature = "dox"))]
 impl<'a> FromValueOptional<'a> for PadActionType {
     unsafe fn from_value_optional(value: &Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
+#[cfg(any(feature = "v3_22", feature = "dox"))]
 impl<'a> FromValue<'a> for PadActionType {
     unsafe fn from_value(value: &Value) -> Self {
         from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
+#[cfg(any(feature = "v3_22", feature = "dox"))]
 impl SetValue for PadActionType {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())

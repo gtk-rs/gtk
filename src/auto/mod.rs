@@ -931,6 +931,7 @@ pub use self::enums::NumberUpLayout;
 pub use self::enums::Orientation;
 pub use self::enums::PackDirection;
 pub use self::enums::PackType;
+#[cfg(any(feature = "v3_22", feature = "dox"))]
 pub use self::enums::PadActionType;
 pub use self::enums::PageOrientation;
 pub use self::enums::PageSet;
