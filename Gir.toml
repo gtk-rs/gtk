@@ -126,9 +126,6 @@ generate = [
     "Gtk.OffscreenWindow",
     "Gtk.Orientable",
     "Gtk.Orientation",
-#    "Gtk.PadActionEntry", <- Missing memory management functions
-    "Gtk.PadActionType",
-    "Gtk.PadController",
     "Gtk.PackDirection",
     "Gtk.PackType",
     "Gtk.PageOrientation",
@@ -1075,6 +1072,21 @@ status = "generate"
     [[object.child_prop]]
     name = "index"
     type = "gint"
+
+#[[object]]
+#name = "Gtk.PadActionEntry" <- Missing memory management functions
+#status = "generate"
+#version = "3.22"
+
+[[object]]
+name = "Gtk.PadActionType"
+status = "generate"
+version = "3.22"
+
+[[object]]
+name = "Gtk.PadController"
+status = "generate"
+version = "3.22"
 
 [[object]]
 name = "Gtk.PageSetup"
