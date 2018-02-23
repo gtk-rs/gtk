@@ -21,6 +21,7 @@ use TargetList;
 use TextDirection;
 use Tooltip;
 use WidgetHelpType;
+use WidgetPath;
 use Window;
 use cairo;
 use cairo_ffi;
@@ -289,7 +290,7 @@ pub trait WidgetExt {
 
     fn get_parent_window(&self) -> Option<gdk::Window>;
 
-    //fn get_path(&self) -> /*Ignored*/Option<WidgetPath>;
+    fn get_path(&self) -> WidgetPath;
 
     fn get_preferred_height(&self) -> (i32, i32);
 
@@ -1432,9 +1433,11 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
         }
     }
 
-    //fn get_path(&self) -> /*Ignored*/Option<WidgetPath> {
-    //    unsafe { TODO: call ffi::gtk_widget_get_path() }
-    //}
+    fn get_path(&self) -> WidgetPath {
+        unsafe {
+            from_glib_none(ffi::gtk_widget_get_path(self.to_glib_none().0))
+        }
+    }
 
     fn get_preferred_height(&self) -> (i32, i32) {
         unsafe {
