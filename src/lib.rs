@@ -152,6 +152,8 @@
 extern crate libc;
 #[macro_use]
 extern crate bitflags;
+#[macro_use]
+extern crate lazy_static;
 
 extern crate glib_sys as glib_ffi;
 extern crate gio_sys as gio_ffi;

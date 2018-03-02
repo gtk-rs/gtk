@@ -1010,6 +1010,276 @@ pub use self::flags::TreeModelFlags;
 
 pub mod functions;
 
+mod constants;
+#[cfg(any(feature = "v3_20", feature = "dox"))]
+pub use self::constants::LEVEL_BAR_OFFSET_FULL;
+#[cfg(any(feature = "v3_6", feature = "dox"))]
+pub use self::constants::LEVEL_BAR_OFFSET_HIGH;
+#[cfg(any(feature = "v3_6", feature = "dox"))]
+pub use self::constants::LEVEL_BAR_OFFSET_LOW;
+pub use self::constants::PAPER_NAME_A3;
+pub use self::constants::PAPER_NAME_A4;
+pub use self::constants::PAPER_NAME_A5;
+pub use self::constants::PAPER_NAME_B5;
+pub use self::constants::PAPER_NAME_EXECUTIVE;
+pub use self::constants::PAPER_NAME_LEGAL;
+pub use self::constants::PAPER_NAME_LETTER;
+pub use self::constants::PRINT_SETTINGS_COLLATE;
+pub use self::constants::PRINT_SETTINGS_DEFAULT_SOURCE;
+pub use self::constants::PRINT_SETTINGS_DITHER;
+pub use self::constants::PRINT_SETTINGS_DUPLEX;
+pub use self::constants::PRINT_SETTINGS_FINISHINGS;
+pub use self::constants::PRINT_SETTINGS_MEDIA_TYPE;
+pub use self::constants::PRINT_SETTINGS_NUMBER_UP;
+pub use self::constants::PRINT_SETTINGS_NUMBER_UP_LAYOUT;
+pub use self::constants::PRINT_SETTINGS_N_COPIES;
+pub use self::constants::PRINT_SETTINGS_ORIENTATION;
+#[cfg(any(feature = "v3_6", feature = "dox"))]
+pub use self::constants::PRINT_SETTINGS_OUTPUT_BASENAME;
+pub use self::constants::PRINT_SETTINGS_OUTPUT_BIN;
+#[cfg(any(feature = "v3_6", feature = "dox"))]
+pub use self::constants::PRINT_SETTINGS_OUTPUT_DIR;
+pub use self::constants::PRINT_SETTINGS_OUTPUT_FILE_FORMAT;
+pub use self::constants::PRINT_SETTINGS_OUTPUT_URI;
+pub use self::constants::PRINT_SETTINGS_PAGE_RANGES;
+pub use self::constants::PRINT_SETTINGS_PAGE_SET;
+pub use self::constants::PRINT_SETTINGS_PAPER_FORMAT;
+pub use self::constants::PRINT_SETTINGS_PAPER_HEIGHT;
+pub use self::constants::PRINT_SETTINGS_PAPER_WIDTH;
+pub use self::constants::PRINT_SETTINGS_PRINTER;
+pub use self::constants::PRINT_SETTINGS_PRINTER_LPI;
+pub use self::constants::PRINT_SETTINGS_PRINT_PAGES;
+pub use self::constants::PRINT_SETTINGS_QUALITY;
+pub use self::constants::PRINT_SETTINGS_RESOLUTION;
+pub use self::constants::PRINT_SETTINGS_RESOLUTION_X;
+pub use self::constants::PRINT_SETTINGS_RESOLUTION_Y;
+pub use self::constants::PRINT_SETTINGS_REVERSE;
+pub use self::constants::PRINT_SETTINGS_SCALE;
+pub use self::constants::PRINT_SETTINGS_USE_COLOR;
+pub use self::constants::PRINT_SETTINGS_WIN32_DRIVER_EXTRA;
+pub use self::constants::PRINT_SETTINGS_WIN32_DRIVER_VERSION;
+pub use self::constants::STOCK_ABOUT;
+pub use self::constants::STOCK_ADD;
+pub use self::constants::STOCK_APPLY;
+pub use self::constants::STOCK_BOLD;
+pub use self::constants::STOCK_CANCEL;
+pub use self::constants::STOCK_CAPS_LOCK_WARNING;
+pub use self::constants::STOCK_CDROM;
+pub use self::constants::STOCK_CLEAR;
+pub use self::constants::STOCK_CLOSE;
+pub use self::constants::STOCK_COLOR_PICKER;
+pub use self::constants::STOCK_CONNECT;
+pub use self::constants::STOCK_CONVERT;
+pub use self::constants::STOCK_COPY;
+pub use self::constants::STOCK_CUT;
+pub use self::constants::STOCK_DELETE;
+pub use self::constants::STOCK_DIALOG_AUTHENTICATION;
+pub use self::constants::STOCK_DIALOG_ERROR;
+pub use self::constants::STOCK_DIALOG_INFO;
+pub use self::constants::STOCK_DIALOG_QUESTION;
+pub use self::constants::STOCK_DIALOG_WARNING;
+pub use self::constants::STOCK_DIRECTORY;
+pub use self::constants::STOCK_DISCARD;
+pub use self::constants::STOCK_DISCONNECT;
+pub use self::constants::STOCK_DND;
+pub use self::constants::STOCK_DND_MULTIPLE;
+pub use self::constants::STOCK_EDIT;
+pub use self::constants::STOCK_EXECUTE;
+pub use self::constants::STOCK_FILE;
+pub use self::constants::STOCK_FIND;
+pub use self::constants::STOCK_FIND_AND_REPLACE;
+pub use self::constants::STOCK_FLOPPY;
+pub use self::constants::STOCK_FULLSCREEN;
+pub use self::constants::STOCK_GOTO_BOTTOM;
+pub use self::constants::STOCK_GOTO_FIRST;
+pub use self::constants::STOCK_GOTO_LAST;
+pub use self::constants::STOCK_GOTO_TOP;
+pub use self::constants::STOCK_GO_BACK;
+pub use self::constants::STOCK_GO_DOWN;
+pub use self::constants::STOCK_GO_FORWARD;
+pub use self::constants::STOCK_GO_UP;
+pub use self::constants::STOCK_HARDDISK;
+pub use self::constants::STOCK_HELP;
+pub use self::constants::STOCK_HOME;
+pub use self::constants::STOCK_INDENT;
+pub use self::constants::STOCK_INDEX;
+pub use self::constants::STOCK_INFO;
+pub use self::constants::STOCK_ITALIC;
+pub use self::constants::STOCK_JUMP_TO;
+pub use self::constants::STOCK_JUSTIFY_CENTER;
+pub use self::constants::STOCK_JUSTIFY_FILL;
+pub use self::constants::STOCK_JUSTIFY_LEFT;
+pub use self::constants::STOCK_JUSTIFY_RIGHT;
+pub use self::constants::STOCK_LEAVE_FULLSCREEN;
+pub use self::constants::STOCK_MEDIA_FORWARD;
+pub use self::constants::STOCK_MEDIA_NEXT;
+pub use self::constants::STOCK_MEDIA_PAUSE;
+pub use self::constants::STOCK_MEDIA_PLAY;
+pub use self::constants::STOCK_MEDIA_PREVIOUS;
+pub use self::constants::STOCK_MEDIA_RECORD;
+pub use self::constants::STOCK_MEDIA_REWIND;
+pub use self::constants::STOCK_MEDIA_STOP;
+pub use self::constants::STOCK_MISSING_IMAGE;
+pub use self::constants::STOCK_NETWORK;
+pub use self::constants::STOCK_NEW;
+pub use self::constants::STOCK_NO;
+pub use self::constants::STOCK_OK;
+pub use self::constants::STOCK_OPEN;
+pub use self::constants::STOCK_ORIENTATION_LANDSCAPE;
+pub use self::constants::STOCK_ORIENTATION_PORTRAIT;
+pub use self::constants::STOCK_ORIENTATION_REVERSE_LANDSCAPE;
+pub use self::constants::STOCK_ORIENTATION_REVERSE_PORTRAIT;
+pub use self::constants::STOCK_PAGE_SETUP;
+pub use self::constants::STOCK_PASTE;
+pub use self::constants::STOCK_PREFERENCES;
+pub use self::constants::STOCK_PRINT;
+pub use self::constants::STOCK_PRINT_ERROR;
+pub use self::constants::STOCK_PRINT_PAUSED;
+pub use self::constants::STOCK_PRINT_PREVIEW;
+pub use self::constants::STOCK_PRINT_REPORT;
+pub use self::constants::STOCK_PRINT_WARNING;
+pub use self::constants::STOCK_PROPERTIES;
+pub use self::constants::STOCK_QUIT;
+pub use self::constants::STOCK_REDO;
+pub use self::constants::STOCK_REFRESH;
+pub use self::constants::STOCK_REMOVE;
+pub use self::constants::STOCK_REVERT_TO_SAVED;
+pub use self::constants::STOCK_SAVE;
+pub use self::constants::STOCK_SAVE_AS;
+pub use self::constants::STOCK_SELECT_ALL;
+pub use self::constants::STOCK_SELECT_COLOR;
+pub use self::constants::STOCK_SELECT_FONT;
+pub use self::constants::STOCK_SORT_ASCENDING;
+pub use self::constants::STOCK_SORT_DESCENDING;
+pub use self::constants::STOCK_SPELL_CHECK;
+pub use self::constants::STOCK_STOP;
+pub use self::constants::STOCK_STRIKETHROUGH;
+pub use self::constants::STOCK_UNDELETE;
+pub use self::constants::STOCK_UNDERLINE;
+pub use self::constants::STOCK_UNDO;
+pub use self::constants::STOCK_UNINDENT;
+pub use self::constants::STOCK_YES;
+pub use self::constants::STOCK_ZOOM_100;
+pub use self::constants::STOCK_ZOOM_FIT;
+pub use self::constants::STOCK_ZOOM_IN;
+pub use self::constants::STOCK_ZOOM_OUT;
+pub use self::constants::STYLE_CLASS_ACCELERATOR;
+pub use self::constants::STYLE_CLASS_ARROW;
+pub use self::constants::STYLE_CLASS_BACKGROUND;
+pub use self::constants::STYLE_CLASS_BOTTOM;
+pub use self::constants::STYLE_CLASS_BUTTON;
+pub use self::constants::STYLE_CLASS_CALENDAR;
+pub use self::constants::STYLE_CLASS_CELL;
+pub use self::constants::STYLE_CLASS_CHECK;
+pub use self::constants::STYLE_CLASS_COMBOBOX_ENTRY;
+pub use self::constants::STYLE_CLASS_CONTEXT_MENU;
+#[cfg(any(feature = "v3_14", feature = "dox"))]
+pub use self::constants::STYLE_CLASS_CSD;
+pub use self::constants::STYLE_CLASS_CURSOR_HANDLE;
+pub use self::constants::STYLE_CLASS_DEFAULT;
+#[cfg(any(feature = "v3_12", feature = "dox"))]
+pub use self::constants::STYLE_CLASS_DESTRUCTIVE_ACTION;
+pub use self::constants::STYLE_CLASS_DIM_LABEL;
+pub use self::constants::STYLE_CLASS_DND;
+pub use self::constants::STYLE_CLASS_DOCK;
+pub use self::constants::STYLE_CLASS_ENTRY;
+pub use self::constants::STYLE_CLASS_ERROR;
+pub use self::constants::STYLE_CLASS_EXPANDER;
+#[cfg(any(feature = "v3_14", feature = "dox"))]
+pub use self::constants::STYLE_CLASS_FLAT;
+pub use self::constants::STYLE_CLASS_FRAME;
+pub use self::constants::STYLE_CLASS_GRIP;
+pub use self::constants::STYLE_CLASS_HEADER;
+pub use self::constants::STYLE_CLASS_HIGHLIGHT;
+pub use self::constants::STYLE_CLASS_HORIZONTAL;
+pub use self::constants::STYLE_CLASS_IMAGE;
+pub use self::constants::STYLE_CLASS_INFO;
+pub use self::constants::STYLE_CLASS_INLINE_TOOLBAR;
+pub use self::constants::STYLE_CLASS_INSERTION_CURSOR;
+#[cfg(any(feature = "v3_16", feature = "dox"))]
+pub use self::constants::STYLE_CLASS_LABEL;
+pub use self::constants::STYLE_CLASS_LEFT;
+pub use self::constants::STYLE_CLASS_LEVEL_BAR;
+pub use self::constants::STYLE_CLASS_LINKED;
+pub use self::constants::STYLE_CLASS_LIST;
+pub use self::constants::STYLE_CLASS_LIST_ROW;
+pub use self::constants::STYLE_CLASS_MARK;
+pub use self::constants::STYLE_CLASS_MENU;
+pub use self::constants::STYLE_CLASS_MENUBAR;
+pub use self::constants::STYLE_CLASS_MENUITEM;
+#[cfg(any(feature = "v3_14", feature = "dox"))]
+pub use self::constants::STYLE_CLASS_MESSAGE_DIALOG;
+#[cfg(any(feature = "v3_16", feature = "dox"))]
+pub use self::constants::STYLE_CLASS_MONOSPACE;
+#[cfg(any(feature = "v3_12", feature = "dox"))]
+pub use self::constants::STYLE_CLASS_NEEDS_ATTENTION;
+pub use self::constants::STYLE_CLASS_NOTEBOOK;
+pub use self::constants::STYLE_CLASS_OSD;
+#[cfg(any(feature = "v3_14", feature = "dox"))]
+pub use self::constants::STYLE_CLASS_OVERSHOOT;
+pub use self::constants::STYLE_CLASS_PANE_SEPARATOR;
+#[cfg(any(feature = "v3_16", feature = "dox"))]
+pub use self::constants::STYLE_CLASS_PAPER;
+#[cfg(any(feature = "v3_14", feature = "dox"))]
+pub use self::constants::STYLE_CLASS_POPOVER;
+#[cfg(any(feature = "v3_14", feature = "dox"))]
+pub use self::constants::STYLE_CLASS_POPUP;
+pub use self::constants::STYLE_CLASS_PRIMARY_TOOLBAR;
+pub use self::constants::STYLE_CLASS_PROGRESSBAR;
+pub use self::constants::STYLE_CLASS_PULSE;
+pub use self::constants::STYLE_CLASS_QUESTION;
+pub use self::constants::STYLE_CLASS_RADIO;
+pub use self::constants::STYLE_CLASS_RAISED;
+pub use self::constants::STYLE_CLASS_READ_ONLY;
+pub use self::constants::STYLE_CLASS_RIGHT;
+pub use self::constants::STYLE_CLASS_RUBBERBAND;
+pub use self::constants::STYLE_CLASS_SCALE;
+pub use self::constants::STYLE_CLASS_SCALE_HAS_MARKS_ABOVE;
+pub use self::constants::STYLE_CLASS_SCALE_HAS_MARKS_BELOW;
+pub use self::constants::STYLE_CLASS_SCROLLBAR;
+pub use self::constants::STYLE_CLASS_SCROLLBARS_JUNCTION;
+pub use self::constants::STYLE_CLASS_SEPARATOR;
+pub use self::constants::STYLE_CLASS_SIDEBAR;
+pub use self::constants::STYLE_CLASS_SLIDER;
+pub use self::constants::STYLE_CLASS_SPINBUTTON;
+pub use self::constants::STYLE_CLASS_SPINNER;
+#[cfg(any(feature = "v3_16", feature = "dox"))]
+pub use self::constants::STYLE_CLASS_STATUSBAR;
+#[cfg(any(feature = "v3_14", feature = "dox"))]
+pub use self::constants::STYLE_CLASS_SUBTITLE;
+#[cfg(any(feature = "v3_12", feature = "dox"))]
+pub use self::constants::STYLE_CLASS_SUGGESTED_ACTION;
+#[cfg(any(feature = "v3_14", feature = "dox"))]
+pub use self::constants::STYLE_CLASS_TITLE;
+pub use self::constants::STYLE_CLASS_TITLEBAR;
+pub use self::constants::STYLE_CLASS_TOOLBAR;
+pub use self::constants::STYLE_CLASS_TOOLTIP;
+pub use self::constants::STYLE_CLASS_TOP;
+#[cfg(any(feature = "v3_16", feature = "dox"))]
+pub use self::constants::STYLE_CLASS_TOUCH_SELECTION;
+pub use self::constants::STYLE_CLASS_TROUGH;
+#[cfg(any(feature = "v3_16", feature = "dox"))]
+pub use self::constants::STYLE_CLASS_UNDERSHOOT;
+pub use self::constants::STYLE_CLASS_VERTICAL;
+pub use self::constants::STYLE_CLASS_VIEW;
+pub use self::constants::STYLE_CLASS_WARNING;
+#[cfg(any(feature = "v3_16", feature = "dox"))]
+pub use self::constants::STYLE_CLASS_WIDE;
+pub use self::constants::STYLE_PROPERTY_BACKGROUND_COLOR;
+pub use self::constants::STYLE_PROPERTY_BACKGROUND_IMAGE;
+pub use self::constants::STYLE_PROPERTY_BORDER_COLOR;
+pub use self::constants::STYLE_PROPERTY_BORDER_RADIUS;
+pub use self::constants::STYLE_PROPERTY_BORDER_STYLE;
+pub use self::constants::STYLE_PROPERTY_BORDER_WIDTH;
+pub use self::constants::STYLE_PROPERTY_COLOR;
+pub use self::constants::STYLE_PROPERTY_FONT;
+pub use self::constants::STYLE_PROPERTY_MARGIN;
+pub use self::constants::STYLE_PROPERTY_PADDING;
+pub use self::constants::STYLE_REGION_COLUMN;
+pub use self::constants::STYLE_REGION_COLUMN_HEADER;
+pub use self::constants::STYLE_REGION_ROW;
+pub use self::constants::STYLE_REGION_TAB;
+
 #[doc(hidden)]
 pub mod traits {
     pub use super::AboutDialogExt;
