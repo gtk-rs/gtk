@@ -105,6 +105,7 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExtManual for O {
         ) -> gboolean
         where T: IsA<Widget>
         {
+            callback_guard!();
             let func: &RefCell<Box<FnMut(&T, &FrameClock) -> Continue + 'static>> = transmute(func);
 
             (&mut *func.borrow_mut())(
@@ -114,6 +115,7 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExtManual for O {
         }
 
         unsafe extern "C" fn destroy_closure<T>(func: gpointer) {
+            callback_guard!();
             Box::<RefCell<Box<FnMut(&T, &FrameClock) -> Continue + 'static>>>::from_raw(
                 func as *mut _
             );
@@ -155,5 +157,6 @@ unsafe extern "C" fn event_any_trampoline<T>(this: *mut ffi::GtkWidget,
                                              event: *mut gdk_ffi::GdkEventAny,
                                              f: &&(Fn(&T, &Event) -> Inhibit + 'static)) -> gboolean
 where T: IsA<Widget> {
+    callback_guard!();
     f(&Widget::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(event)).to_glib()
 }

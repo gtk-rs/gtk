@@ -21,10 +21,12 @@ impl<O: IsA<Assistant>> AssistantExtManual for O {
 }
 
 unsafe extern "C" fn forward_page_trampoline(current_page: i32, f: glib_ffi::gpointer) -> i32 {
+    callback_guard!();
     let f: &&(Fn(i32) -> i32 + 'static) = transmute(f);
     f(current_page)
 }
 
 unsafe extern "C" fn destroy_closure(ptr: glib_ffi::gpointer) {
+    callback_guard!();
     Box_::<Box_<Fn(i32) -> i32 + 'static>>::from_raw(ptr as *mut _);
 }

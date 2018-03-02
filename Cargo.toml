@@ -46,6 +46,7 @@ git = "https://github.com/gtk-rs/lgpl-docs"
 [dependencies]
 libc = "0.2"
 bitflags = "1.0"
+lazy_static = "1.0"
 
 [dependencies.cairo-sys-rs]
 version = "0.5.0"
