@@ -13,6 +13,7 @@ use StateType;
 use StyleContextPrintFlags;
 use StyleProvider;
 use TextDirection;
+use WidgetPath;
 use ffi;
 use gdk;
 use glib;
@@ -113,7 +114,7 @@ pub trait StyleContextExt {
 
     fn get_parent(&self) -> Option<StyleContext>;
 
-    //fn get_path(&self) -> /*Ignored*/Option<WidgetPath>;
+    fn get_path(&self) -> Option<WidgetPath>;
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_scale(&self) -> i32;
@@ -184,7 +185,7 @@ pub trait StyleContextExt {
 
     fn set_parent<'a, P: Into<Option<&'a StyleContext>>>(&self, parent: P);
 
-    //fn set_path(&self, path: /*Ignored*/&WidgetPath);
+    fn set_path(&self, path: &WidgetPath);
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_scale(&self, scale: i32);
@@ -317,9 +318,11 @@ impl<O: IsA<StyleContext> + IsA<glib::object::Object>> StyleContextExt for O {
         }
     }
 
-    //fn get_path(&self) -> /*Ignored*/Option<WidgetPath> {
-    //    unsafe { TODO: call ffi::gtk_style_context_get_path() }
-    //}
+    fn get_path(&self) -> Option<WidgetPath> {
+        unsafe {
+            from_glib_none(ffi::gtk_style_context_get_path(self.to_glib_none().0))
+        }
+    }
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_scale(&self) -> i32 {
@@ -487,9 +490,11 @@ impl<O: IsA<StyleContext> + IsA<glib::object::Object>> StyleContextExt for O {
         }
     }
 
-    //fn set_path(&self, path: /*Ignored*/&WidgetPath) {
-    //    unsafe { TODO: call ffi::gtk_style_context_set_path() }
-    //}
+    fn set_path(&self, path: &WidgetPath) {
+        unsafe {
+            ffi::gtk_style_context_set_path(self.to_glib_none().0, path.to_glib_none().0);
+        }
+    }
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_scale(&self, scale: i32) {

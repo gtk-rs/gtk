@@ -6,6 +6,7 @@ use Adjustment;
 use Buildable;
 use ResizeMode;
 use Widget;
+use WidgetPath;
 use cairo;
 use ffi;
 use glib;
@@ -68,7 +69,7 @@ pub trait ContainerExt {
 
     fn get_focus_vadjustment(&self) -> Option<Adjustment>;
 
-    //fn get_path_for_child<P: IsA<Widget>>(&self, child: &P) -> /*Ignored*/Option<WidgetPath>;
+    fn get_path_for_child<P: IsA<Widget>>(&self, child: &P) -> Option<WidgetPath>;
 
     #[cfg_attr(feature = "v3_12", deprecated)]
     fn get_resize_mode(&self) -> ResizeMode;
@@ -207,9 +208,11 @@ impl<O: IsA<Container> + IsA<glib::object::Object>> ContainerExt for O {
         }
     }
 
-    //fn get_path_for_child<P: IsA<Widget>>(&self, child: &P) -> /*Ignored*/Option<WidgetPath> {
-    //    unsafe { TODO: call ffi::gtk_container_get_path_for_child() }
-    //}
+    fn get_path_for_child<P: IsA<Widget>>(&self, child: &P) -> Option<WidgetPath> {
+        unsafe {
+            from_glib_full(ffi::gtk_container_get_path_for_child(self.to_glib_none().0, child.to_glib_none().0))
+        }
+    }
 
     fn get_resize_mode(&self) -> ResizeMode {
         unsafe {

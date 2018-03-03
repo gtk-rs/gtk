@@ -220,6 +220,7 @@ generate = [
     "Gtk.Viewport",
     "Gtk.VolumeButton",
     "Gtk.WidgetHelpType",
+    "Gtk.WidgetPath",
     "Gtk.WindowGroup",
     "Gtk.WindowPosition",
     "Gtk.WindowType",
@@ -1814,6 +1815,10 @@ status = "generate"
     [[object.function]]
     name = "style_get_property"
     ignore = true
+    [[object.function]]
+    name = "get_path"
+        [object.function.return]
+        nullable = false
     [[object.signal]]
     name = "button-press-event"
     inhibit = true
