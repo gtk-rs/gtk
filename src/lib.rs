@@ -1,4 +1,4 @@
-// Copyright 2013-2016, The Gtk-rs Project Developers.
+// Copyright 2013-2018, The Gtk-rs Project Developers.
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
@@ -147,10 +147,13 @@
 #![cfg_attr(feature = "cargo-clippy", allow(new_without_default))]
 #![cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
 #![cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
+#![allow(deprecated)]
 
 extern crate libc;
 #[macro_use]
 extern crate bitflags;
+#[macro_use]
+extern crate lazy_static;
 
 extern crate glib_sys as glib_ffi;
 extern crate gio_sys as gio_ffi;
@@ -180,6 +183,8 @@ pub use glib::{
     Value,
 };
 
+pub mod xlib;
+
 pub const STYLE_PROVIDER_PRIORITY_FALLBACK: u32 = ffi::GTK_STYLE_PROVIDER_PRIORITY_FALLBACK as u32;
 pub const STYLE_PROVIDER_PRIORITY_THEME: u32 = ffi::GTK_STYLE_PROVIDER_PRIORITY_THEME as u32;
 pub const STYLE_PROVIDER_PRIORITY_SETTINGS: u32 = ffi::GTK_STYLE_PROVIDER_PRIORITY_SETTINGS as u32;
@@ -202,6 +207,8 @@ mod application;
 mod assistant;
 mod buildable;
 mod builder;
+mod border;
+mod clipboard;
 mod color_button;
 mod color_chooser;
 mod dialog;
@@ -210,6 +217,7 @@ mod entry_buffer;
 mod enums;
 mod file_chooser_dialog;
 mod fixed;
+mod invisible;
 mod list_store;
 mod menu;
 mod message_dialog;
@@ -247,6 +255,7 @@ pub use gdk::Rectangle as Allocation;
 pub use gdk::Rectangle;
 
 pub use app_chooser::AppChooser;
+pub use border::Border;
 pub use entry_buffer::EntryBuffer;
 pub use recent_data::RecentData;
 pub use requisition::Requisition;
