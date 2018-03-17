@@ -14,6 +14,7 @@ generate = [
     "Gtk.Adjustment",
     "Gtk.Align",
     "Gtk.Alignment",
+    "Gtk.AppChooserButton",
     "Gtk.AppChooserWidget",
     "Gtk.ApplicationInhibitFlags",
     "Gtk.ApplicationWindow",
@@ -23,11 +24,11 @@ generate = [
     "Gtk.AssistantPageType",
     "Gtk.BaselinePosition",
     "Gtk.Bin",
+    "Gtk.BorderStyle",
     "Gtk.BuilderError",
     "Gtk.Button",
     "Gtk.ButtonBox",
     "Gtk.ButtonBoxStyle",
-    "Gtk.ButtonRole",
     "Gtk.ButtonsType",
     "Gtk.Calendar",
     "Gtk.CalendarDisplayOptions",
@@ -66,6 +67,7 @@ generate = [
     "Gtk.FileChooserConfirmation",
     "Gtk.FileChooserDialog",
     "Gtk.FileChooserError",
+    "Gtk.FileChooserNative",
     "Gtk.FileChooserWidget",
     "Gtk.FileFilter",
     "Gtk.FileFilterFlags",
@@ -95,10 +97,10 @@ generate = [
     "Gtk.ImageMenuItem",
     "Gtk.ImageType",
     "Gtk.InfoBar",
+    "Gtk.Invisible",
     "Gtk.IMMulticontext",
     "Gtk.IMPreeditStyle",
     "Gtk.IMStatusStyle",
-    "Gtk.InputHints",
     "Gtk.InputPurpose",
     "Gtk.JunctionSides",
     "Gtk.Justification",
@@ -107,6 +109,7 @@ generate = [
     "Gtk.License",
     "Gtk.ListBox",
     "Gtk.ListBoxRow",
+    "Gtk.LockButton",
     "Gtk.MenuBar",
     "Gtk.MenuButton",
     "Gtk.MenuDirectionType",
@@ -115,9 +118,12 @@ generate = [
     "Gtk.MessageType",
     "Gtk.Misc",
     "Gtk.ModelButton",
+    "Gtk.MountOperation",
     "Gtk.MovementStep",
+    "Gtk.NativeDialog",
     "Gtk.NotebookTab",
     "Gtk.NumberUpLayout",
+    "Gtk.OffscreenWindow",
     "Gtk.Orientable",
     "Gtk.Orientation",
     "Gtk.PackDirection",
@@ -126,7 +132,6 @@ generate = [
     "Gtk.PageSet",
     "Gtk.PanDirection",
     "Gtk.PlacesOpenFlags",
-    "Gtk.PlacesSidebar",
     "Gtk.PolicyType",
     "Gtk.PopoverConstraint",
     "Gtk.PositionType",
@@ -185,7 +190,6 @@ generate = [
     "Gtk.StateType",
     "Gtk.Statusbar",
     "Gtk.StatusIcon",
-    "Gtk.StyleContextPrintFlags",
     "Gtk.StyleProperties",
     "Gtk.StyleProvider",
     "Gtk.SymbolicColor",
@@ -197,6 +201,7 @@ generate = [
     "Gtk.TextMark",
     "Gtk.TextSearchFlags",
     "Gtk.TextTagTable",
+    "Gtk.TextViewLayer",
     "Gtk.TextWindowType",
     "Gtk.ToggleButton",
     "Gtk.ToggleToolButton",
@@ -215,6 +220,7 @@ generate = [
     "Gtk.Viewport",
     "Gtk.VolumeButton",
     "Gtk.WidgetHelpType",
+    "Gtk.WidgetPath",
     "Gtk.WindowGroup",
     "Gtk.WindowPosition",
     "Gtk.WindowType",
@@ -228,7 +234,6 @@ ignore = [
 manual = [
     "Gdk.AnchorHints",
     "Gdk.Atom",
-    "Gdk.Atom_",
     "Gdk.Device",
     "Gdk.Display",
     "Gdk.DragAction",
@@ -272,9 +277,11 @@ manual = [
     "Gio.Application",
     "Gio.ApplicationFlags",
     "Gio.Cancellable",
+    "Gio.File",
     "Gio.Icon",
     "Gio.Menu",
     "Gio.MenuModel",
+    "Gio.MountOperation",
     "Gio.Permission",
     "GLib.Error",
     "GLib.KeyFile",
@@ -284,6 +291,7 @@ manual = [
     "GObject.Value",
     "Gtk.Allocation",
     "Gtk.AppChooser",
+    "Gtk.Border",
     "Gtk.EntryBuffer",
     "Gtk.RecentData",
     "Gtk.Requisition",
@@ -292,6 +300,7 @@ manual = [
     "cairo.RectangleInt",
     "cairo.Region",
     "cairo.Surface",
+    "Pango.Alignment",
     "Pango.AttrList",
     "Pango.Context",
     "Pango.Direction",
@@ -308,6 +317,7 @@ manual = [
     "Pango.Underline",
     "Pango.Variant",
     "Pango.WrapMode",
+    "xlib.Window",
 ]
 
 [[object]]
@@ -361,27 +371,6 @@ status = "generate"
     [[object.function]]
     pattern = "drag_.+"
     #manual trait
-    ignore = true
-
-[[object]]
-name = "Gtk.IconTheme"
-status = "generate"
-    [[object.function]]
-    name = "set_search_path"
-    ignore = true
-    [[object.function]]
-    name = "choose_icon"
-    ignore = true
-    [[object.function]]
-    name = "choose_icon_for_scale"
-    ignore = true
-    [[object.function]]
-    name = "get_icon_sizes"
-    #array
-    ignore = true
-    [[object.function]]
-    name = "get_search_path"
-    #array
     ignore = true
 
 [[object]]
@@ -492,6 +481,11 @@ status = "generate"
     [[object.function]]
     pattern = "[gs]et_name"
     ignore = true
+
+[[object]]
+name = "Gtk.ButtonRole"
+status = "generate"
+version = "3.16"
 
 [[object]]
 name = "Gtk.CellArea"
@@ -632,6 +626,15 @@ status = "generate"
         [[object.signal.parameter]]
         name = "path"
         transformation = "treepath"
+
+[[object]]
+name = "Gtk.CellView"
+status = "generate"
+    [[object.function]]
+    name = "set_displayed_row"
+    [[object.function.parameter]]
+          name = "path"
+          nullable = false
 
 [[object]]
 name = "Gtk.Clipboard"
@@ -830,6 +833,27 @@ status = "generate"
         const = true
 
 [[object]]
+name = "Gtk.IconTheme"
+status = "generate"
+    [[object.function]]
+    name = "set_search_path"
+    ignore = true
+    [[object.function]]
+    name = "choose_icon"
+    ignore = true
+    [[object.function]]
+    name = "choose_icon_for_scale"
+    ignore = true
+    [[object.function]]
+    name = "get_icon_sizes"
+    #array
+    ignore = true
+    [[object.function]]
+    name = "get_search_path"
+    #array
+    ignore = true
+
+[[object]]
 name = "Gtk.Image"
 status = "generate"
     [[object.function]]
@@ -875,6 +899,16 @@ status = "generate"
     [[object.property]]
     name = "input-purpose"
     version = "3.6"
+
+[[object]]
+name = "Gtk.InputHints"
+status = "generate"
+    [[object.member]]
+    name = "emoji"
+    version = "3.22.20"
+    [[object.member]]
+    name = "no_emoji"
+    version = "3.22.20"
 
 [[object]]
 name = "Gtk.Label"
@@ -1040,6 +1074,21 @@ status = "generate"
     name = "index"
     type = "gint"
 
+#[[object]]
+#name = "Gtk.PadActionEntry" <- Missing memory management functions
+#status = "generate"
+#version = "3.22"
+
+[[object]]
+name = "Gtk.PadActionType"
+status = "generate"
+version = "3.22"
+
+[[object]]
+name = "Gtk.PadController"
+status = "generate"
+version = "3.22"
+
 [[object]]
 name = "Gtk.PageSetup"
 status = "generate"
@@ -1097,6 +1146,26 @@ status = "generate"
     [[object.function]]
     name = "is_ipp"
     version = "3.16"
+
+[[object]]
+name = "Gtk.PlacesSidebar"
+status = "generate"
+    [[object.signal]]
+    name = "drag-action-requested"
+    #[gio::File]
+    ignore = true
+    [[object.signal]]
+    name = "drag-perform-drop"
+    #[gio::File]
+    ignore = true
+    [[object.property]]
+    name = "show-starred-location"
+    version = "3.22.26"
+
+[[object]]
+name = "Gtk.Plug"
+status = "generate"
+cfg_condition = "not(windows)"
 
 [[object]]
 name = "Gtk.PrintContext"
@@ -1274,6 +1343,11 @@ status = "generate"
     ignore = true
 
 [[object]]
+name = "Gtk.Socket"
+status = "generate"
+cfg_condition = "not(windows)"
+
+[[object]]
 name = "Gtk.SpinButton"
 status = "generate"
     [[object.function]]
@@ -1315,6 +1389,11 @@ status = "generate"
     [[object.property]]
     name = "paint-clock"
     version = "3.8"
+
+[[object]]
+name = "Gtk.StyleContextPrintFlags"
+status = "generate"
+version = "3.20"
 
 [[object]]
 name = "Gtk.Switch"
@@ -1401,6 +1480,10 @@ status = "generate"
     [[object.signal]]
     name = "extend-selection"
     inhibit = true
+    [[object.signal]]
+    name = "insert-emoji"
+    #actually Since 3.22.27
+    version = "3.22.26" 
 
 [[object]]
 name = "Gtk.Toolbar"
@@ -1732,6 +1815,10 @@ status = "generate"
     [[object.function]]
     name = "style_get_property"
     ignore = true
+    [[object.function]]
+    name = "get_path"
+        [object.function.return]
+        nullable = false
     [[object.signal]]
     name = "button-press-event"
     inhibit = true
