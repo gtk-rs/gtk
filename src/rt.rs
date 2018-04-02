@@ -147,7 +147,7 @@ fn pre_init() -> bool {
                    See https://github.com/gtk-rs/gtk/issues/270 for details");
         }
         if !has_misc {
-            ffi::gtk_set_debug_flags(flags & !ffi::GTK_DEBUG_MISC.bits());
+            ffi::gtk_set_debug_flags(flags & !ffi::GTK_DEBUG_MISC);
         }
         ret
     }
