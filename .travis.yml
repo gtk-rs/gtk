@@ -12,6 +12,9 @@ addons:
     - libgtk-3-dev
 script:
   - rustc --version
+  - if [ "$TRAVIS_RUST_VERSION" == "nightly" ] && [ "$GTK" == "3.4" ]; then
+    make regen_check;
+    fi
   - ./check_init_asserts
   - cargo install clippy || touch clippy_failed
   - if [ ! -f clippy_failed ]; then cargo clippy; fi
