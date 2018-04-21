@@ -369,13 +369,13 @@ pub use self::header_bar::HeaderBar;
 #[cfg(any(feature = "v3_10", feature = "dox"))]
 pub use self::header_bar::HeaderBarExt;
 
-mod i_m_context;
-pub use self::i_m_context::IMContext;
-pub use self::i_m_context::IMContextExt;
+mod im_context;
+pub use self::im_context::IMContext;
+pub use self::im_context::IMContextExt;
 
-mod i_m_multicontext;
-pub use self::i_m_multicontext::IMMulticontext;
-pub use self::i_m_multicontext::IMMulticontextExt;
+mod im_multicontext;
+pub use self::im_multicontext::IMMulticontext;
+pub use self::im_multicontext::IMMulticontextExt;
 
 mod icon_factory;
 pub use self::icon_factory::IconFactory;

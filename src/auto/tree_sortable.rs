@@ -28,9 +28,9 @@ glib_wrapper! {
 pub trait TreeSortableExt {
     fn has_default_sort_func(&self) -> bool;
 
-    //fn set_default_sort_func<'a, P: Into<Option</*Unimplemented*/Fundamental: Pointer>>, Q: Into<Option<&'a /*Ignored*/glib::DestroyNotify>>>(&self, sort_func: /*Unknown conversion*//*Unimplemented*/TreeIterCompareFunc, user_data: P, destroy: Q);
+    //fn set_default_sort_func<'a, P: Into<Option<&'a /*Ignored*/glib::DestroyNotify>>>(&self, sort_func: /*Unknown conversion*//*Unimplemented*/TreeIterCompareFunc, destroy: P);
 
-    //fn set_sort_func<'a, P: Into<Option</*Unimplemented*/Fundamental: Pointer>>, Q: Into<Option<&'a /*Ignored*/glib::DestroyNotify>>>(&self, sort_column_id: i32, sort_func: /*Unknown conversion*//*Unimplemented*/TreeIterCompareFunc, user_data: P, destroy: Q);
+    //fn set_sort_func<'a, P: Into<Option<&'a /*Ignored*/glib::DestroyNotify>>>(&self, sort_column_id: i32, sort_func: /*Unknown conversion*//*Unimplemented*/TreeIterCompareFunc, destroy: P);
 
     fn sort_column_changed(&self);
 
@@ -44,11 +44,11 @@ impl<O: IsA<TreeSortable> + IsA<glib::object::Object>> TreeSortableExt for O {
         }
     }
 
-    //fn set_default_sort_func<'a, P: Into<Option</*Unimplemented*/Fundamental: Pointer>>, Q: Into<Option<&'a /*Ignored*/glib::DestroyNotify>>>(&self, sort_func: /*Unknown conversion*//*Unimplemented*/TreeIterCompareFunc, user_data: P, destroy: Q) {
+    //fn set_default_sort_func<'a, P: Into<Option<&'a /*Ignored*/glib::DestroyNotify>>>(&self, sort_func: /*Unknown conversion*//*Unimplemented*/TreeIterCompareFunc, destroy: P) {
     //    unsafe { TODO: call ffi::gtk_tree_sortable_set_default_sort_func() }
     //}
 
-    //fn set_sort_func<'a, P: Into<Option</*Unimplemented*/Fundamental: Pointer>>, Q: Into<Option<&'a /*Ignored*/glib::DestroyNotify>>>(&self, sort_column_id: i32, sort_func: /*Unknown conversion*//*Unimplemented*/TreeIterCompareFunc, user_data: P, destroy: Q) {
+    //fn set_sort_func<'a, P: Into<Option<&'a /*Ignored*/glib::DestroyNotify>>>(&self, sort_column_id: i32, sort_func: /*Unknown conversion*//*Unimplemented*/TreeIterCompareFunc, destroy: P) {
     //    unsafe { TODO: call ffi::gtk_tree_sortable_set_sort_func() }
     //}
 

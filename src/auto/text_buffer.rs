@@ -168,11 +168,11 @@ pub trait TextBufferExt {
 
     fn place_cursor(&self, where_: &TextIter);
 
-    //fn register_deserialize_format<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, mime_type: &str, function: /*Unknown conversion*//*Unimplemented*/TextBufferDeserializeFunc, user_data: P, user_data_destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) -> Option<gdk::Atom>;
+    //fn register_deserialize_format(&self, mime_type: &str, function: /*Unknown conversion*//*Unimplemented*/TextBufferDeserializeFunc, user_data_destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) -> Option<gdk::Atom>;
 
     fn register_deserialize_tagset<'a, P: Into<Option<&'a str>>>(&self, tagset_name: P) -> gdk::Atom;
 
-    //fn register_serialize_format<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, mime_type: &str, function: /*Unknown conversion*//*Unimplemented*/TextBufferSerializeFunc, user_data: P, user_data_destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) -> Option<gdk::Atom>;
+    //fn register_serialize_format(&self, mime_type: &str, function: /*Unknown conversion*//*Unimplemented*/TextBufferSerializeFunc, user_data_destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) -> Option<gdk::Atom>;
 
     fn register_serialize_tagset<'a, P: Into<Option<&'a str>>>(&self, tagset_name: P) -> gdk::Atom;
 
@@ -622,7 +622,7 @@ impl<O: IsA<TextBuffer> + IsA<glib::object::Object>> TextBufferExt for O {
         }
     }
 
-    //fn register_deserialize_format<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, mime_type: &str, function: /*Unknown conversion*//*Unimplemented*/TextBufferDeserializeFunc, user_data: P, user_data_destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) -> Option<gdk::Atom> {
+    //fn register_deserialize_format(&self, mime_type: &str, function: /*Unknown conversion*//*Unimplemented*/TextBufferDeserializeFunc, user_data_destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) -> Option<gdk::Atom> {
     //    unsafe { TODO: call ffi::gtk_text_buffer_register_deserialize_format() }
     //}
 
@@ -634,7 +634,7 @@ impl<O: IsA<TextBuffer> + IsA<glib::object::Object>> TextBufferExt for O {
         }
     }
 
-    //fn register_serialize_format<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, mime_type: &str, function: /*Unknown conversion*//*Unimplemented*/TextBufferSerializeFunc, user_data: P, user_data_destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) -> Option<gdk::Atom> {
+    //fn register_serialize_format(&self, mime_type: &str, function: /*Unknown conversion*//*Unimplemented*/TextBufferSerializeFunc, user_data_destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) -> Option<gdk::Atom> {
     //    unsafe { TODO: call ffi::gtk_text_buffer_register_serialize_format() }
     //}
 

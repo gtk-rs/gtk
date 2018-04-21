@@ -197,7 +197,7 @@ pub trait TreeViewExt {
     #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn set_activate_on_single_click(&self, single: bool);
 
-    //fn set_column_drag_function<'a, 'b, P: Into<Option<&'a /*Unimplemented*/TreeViewColumnDropFunc>>, Q: Into<Option</*Unimplemented*/Fundamental: Pointer>>, R: Into<Option<&'b /*Ignored*/glib::DestroyNotify>>>(&self, func: P, user_data: Q, destroy: R);
+    //fn set_column_drag_function<'a, 'b, P: Into<Option<&'a /*Unimplemented*/TreeViewColumnDropFunc>>, Q: Into<Option<&'b /*Ignored*/glib::DestroyNotify>>>(&self, func: P, destroy: Q);
 
     fn set_cursor<'a, P: Into<Option<&'a TreeViewColumn>>>(&self, path: &TreePath, focus_column: P, start_editing: bool);
 
@@ -781,7 +781,7 @@ impl<O: IsA<TreeView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tre
         }
     }
 
-    //fn set_column_drag_function<'a, 'b, P: Into<Option<&'a /*Unimplemented*/TreeViewColumnDropFunc>>, Q: Into<Option</*Unimplemented*/Fundamental: Pointer>>, R: Into<Option<&'b /*Ignored*/glib::DestroyNotify>>>(&self, func: P, user_data: Q, destroy: R) {
+    //fn set_column_drag_function<'a, 'b, P: Into<Option<&'a /*Unimplemented*/TreeViewColumnDropFunc>>, Q: Into<Option<&'b /*Ignored*/glib::DestroyNotify>>>(&self, func: P, destroy: Q) {
     //    unsafe { TODO: call ffi::gtk_tree_view_set_column_drag_function() }
     //}
 

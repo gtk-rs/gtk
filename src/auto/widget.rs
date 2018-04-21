@@ -104,7 +104,7 @@ pub trait WidgetExt {
     fn add_mnemonic_label<P: IsA<Widget>>(&self, label: &P);
 
     //#[cfg(any(feature = "v3_8", feature = "dox"))]
-    //fn add_tick_callback<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, callback: /*Unknown conversion*//*Unimplemented*/TickCallback, user_data: P, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify) -> u32;
+    //fn add_tick_callback(&self, callback: /*Unknown conversion*//*Unimplemented*/TickCallback, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify) -> u32;
 
     fn can_activate_accel(&self, signal_id: u32) -> bool;
 
@@ -908,7 +908,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     }
 
     //#[cfg(any(feature = "v3_8", feature = "dox"))]
-    //fn add_tick_callback<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, callback: /*Unknown conversion*//*Unimplemented*/TickCallback, user_data: P, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify) -> u32 {
+    //fn add_tick_callback(&self, callback: /*Unknown conversion*//*Unimplemented*/TickCallback, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify) -> u32 {
     //    unsafe { TODO: call ffi::gtk_widget_add_tick_callback() }
     //}
 

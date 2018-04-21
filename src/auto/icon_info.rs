@@ -8,17 +8,24 @@ use StyleContext;
 #[cfg(any(feature = "v3_10", feature = "dox"))]
 use cairo;
 use ffi;
+#[cfg(feature = "futures")]
+#[cfg(any(feature = "v3_8", feature = "dox"))]
+use futures_core;
 use gdk;
 use gdk_pixbuf;
 #[cfg(any(feature = "v3_8", feature = "dox"))]
 use gio;
 #[cfg(any(feature = "v3_8", feature = "dox"))]
 use gio_ffi;
+use glib;
 use glib::object::IsA;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std;
+#[cfg(feature = "futures")]
+#[cfg(any(feature = "v3_8", feature = "dox"))]
+use std::boxed::Box as Box_;
 use std::mem;
 use std::ptr;
 
@@ -39,7 +46,7 @@ impl IconInfo {
     }
 }
 
-pub trait IconInfoExt {
+pub trait IconInfoExt: Sized {
     #[cfg_attr(feature = "v3_8", deprecated)]
     fn copy(&self) -> Option<IconInfo>;
 
@@ -70,6 +77,10 @@ pub trait IconInfoExt {
     #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn load_icon_async<'a, P: Into<Option<&'a gio::Cancellable>>, Q: FnOnce(Result<gdk_pixbuf::Pixbuf, Error>) + Send + 'static>(&self, cancellable: P, callback: Q);
 
+    #[cfg(feature = "futures")]
+    #[cfg(any(feature = "v3_8", feature = "dox"))]
+    fn load_icon_async_future(&self) -> Box_<futures_core::Future<Item = (Self, gdk_pixbuf::Pixbuf), Error = (Self, Error)>>;
+
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn load_surface<'a, P: Into<Option<&'a gdk::Window>>>(&self, for_window: P) -> Result<cairo::Surface, Error>;
 
@@ -78,16 +89,24 @@ pub trait IconInfoExt {
     #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn load_symbolic_async<'a, 'b, 'c, 'd, P: Into<Option<&'a gdk::RGBA>>, Q: Into<Option<&'b gdk::RGBA>>, R: Into<Option<&'c gdk::RGBA>>, S: Into<Option<&'d gio::Cancellable>>, T: FnOnce(Result<(gdk_pixbuf::Pixbuf, bool), Error>) + Send + 'static>(&self, fg: &gdk::RGBA, success_color: P, warning_color: Q, error_color: R, cancellable: S, callback: T);
 
+    #[cfg(feature = "futures")]
+    #[cfg(any(feature = "v3_8", feature = "dox"))]
+    fn load_symbolic_async_future<'a, 'b, 'c, P: Into<Option<&'a gdk::RGBA>>, Q: Into<Option<&'b gdk::RGBA>>, R: Into<Option<&'c gdk::RGBA>>>(&self, fg: &gdk::RGBA, success_color: P, warning_color: Q, error_color: R) -> Box_<futures_core::Future<Item = (Self, (gdk_pixbuf::Pixbuf, bool)), Error = (Self, Error)>>;
+
     fn load_symbolic_for_context(&self, context: &StyleContext) -> Result<(gdk_pixbuf::Pixbuf, bool), Error>;
 
     #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn load_symbolic_for_context_async<'a, P: Into<Option<&'a gio::Cancellable>>, Q: FnOnce(Result<(gdk_pixbuf::Pixbuf, bool), Error>) + Send + 'static>(&self, context: &StyleContext, cancellable: P, callback: Q);
 
+    #[cfg(feature = "futures")]
+    #[cfg(any(feature = "v3_8", feature = "dox"))]
+    fn load_symbolic_for_context_async_future(&self, context: &StyleContext) -> Box_<futures_core::Future<Item = (Self, (gdk_pixbuf::Pixbuf, bool)), Error = (Self, Error)>>;
+
     #[cfg_attr(feature = "v3_14", deprecated)]
     fn set_raw_coordinates(&self, raw_coordinates: bool);
 }
 
-impl<O: IsA<IconInfo>> IconInfoExt for O {
+impl<O: IsA<IconInfo> + IsA<glib::object::Object> + Clone + 'static> IconInfoExt for O {
     fn copy(&self) -> Option<IconInfo> {
         unsafe {
             from_glib_full(ffi::gtk_icon_info_copy(self.to_glib_none().0))
@@ -172,6 +191,29 @@ impl<O: IsA<IconInfo>> IconInfoExt for O {
         }
     }
 
+    #[cfg(feature = "futures")]
+    #[cfg(any(feature = "v3_8", feature = "dox"))]
+    fn load_icon_async_future(&self) -> Box_<futures_core::Future<Item = (Self, gdk_pixbuf::Pixbuf), Error = (Self, Error)>> {
+        use gio::GioFuture;
+        use send_cell::SendCell;
+
+        GioFuture::new(self, move |obj, send| {
+            let cancellable = gio::Cancellable::new();
+            let send = SendCell::new(send);
+            let obj_clone = SendCell::new(obj.clone());
+            obj.load_icon_async(
+                 Some(&cancellable),
+                 move |res| {
+                     let obj = obj_clone.into_inner();
+                     let res = res.map(|v| (obj.clone(), v)).map_err(|v| (obj.clone(), v));
+                     let _ = send.into_inner().send(res);
+                 },
+            );
+
+            cancellable
+        })
+    }
+
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn load_surface<'a, P: Into<Option<&'a gdk::Window>>>(&self, for_window: P) -> Result<cairo::Surface, Error> {
         let for_window = for_window.into();
@@ -225,6 +267,40 @@ impl<O: IsA<IconInfo>> IconInfoExt for O {
         }
     }
 
+    #[cfg(feature = "futures")]
+    #[cfg(any(feature = "v3_8", feature = "dox"))]
+    fn load_symbolic_async_future<'a, 'b, 'c, P: Into<Option<&'a gdk::RGBA>>, Q: Into<Option<&'b gdk::RGBA>>, R: Into<Option<&'c gdk::RGBA>>>(&self, fg: &gdk::RGBA, success_color: P, warning_color: Q, error_color: R) -> Box_<futures_core::Future<Item = (Self, (gdk_pixbuf::Pixbuf, bool)), Error = (Self, Error)>> {
+        use gio::GioFuture;
+        use send_cell::SendCell;
+
+        let fg = fg.clone();
+        let success_color = success_color.into();
+        let success_color = success_color.cloned();
+        let warning_color = warning_color.into();
+        let warning_color = warning_color.cloned();
+        let error_color = error_color.into();
+        let error_color = error_color.cloned();
+        GioFuture::new(self, move |obj, send| {
+            let cancellable = gio::Cancellable::new();
+            let send = SendCell::new(send);
+            let obj_clone = SendCell::new(obj.clone());
+            obj.load_symbolic_async(
+                 &fg,
+                 success_color.as_ref(),
+                 warning_color.as_ref(),
+                 error_color.as_ref(),
+                 Some(&cancellable),
+                 move |res| {
+                     let obj = obj_clone.into_inner();
+                     let res = res.map(|v| (obj.clone(), v)).map_err(|v| (obj.clone(), v));
+                     let _ = send.into_inner().send(res);
+                 },
+            );
+
+            cancellable
+        })
+    }
+
     fn load_symbolic_for_context(&self, context: &StyleContext) -> Result<(gdk_pixbuf::Pixbuf, bool), Error> {
         unsafe {
             let mut was_symbolic = mem::uninitialized();
@@ -253,6 +329,31 @@ impl<O: IsA<IconInfo>> IconInfoExt for O {
         unsafe {
             ffi::gtk_icon_info_load_symbolic_for_context_async(self.to_glib_none().0, context.to_glib_none().0, cancellable.0, Some(callback), Box::into_raw(user_data) as *mut _);
         }
+    }
+
+    #[cfg(feature = "futures")]
+    #[cfg(any(feature = "v3_8", feature = "dox"))]
+    fn load_symbolic_for_context_async_future(&self, context: &StyleContext) -> Box_<futures_core::Future<Item = (Self, (gdk_pixbuf::Pixbuf, bool)), Error = (Self, Error)>> {
+        use gio::GioFuture;
+        use send_cell::SendCell;
+
+        let context = context.clone();
+        GioFuture::new(self, move |obj, send| {
+            let cancellable = gio::Cancellable::new();
+            let send = SendCell::new(send);
+            let obj_clone = SendCell::new(obj.clone());
+            obj.load_symbolic_for_context_async(
+                 &context,
+                 Some(&cancellable),
+                 move |res| {
+                     let obj = obj_clone.into_inner();
+                     let res = res.map(|v| (obj.clone(), v)).map_err(|v| (obj.clone(), v));
+                     let _ = send.into_inner().send(res);
+                 },
+            );
+
+            cancellable
+        })
     }
 
     fn set_raw_coordinates(&self, raw_coordinates: bool) {

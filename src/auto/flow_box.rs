@@ -55,7 +55,7 @@ impl Default for FlowBox {
 
 pub trait FlowBoxExt {
     //#[cfg(any(feature = "v3_18", feature = "dox"))]
-    //fn bind_model<'a, P: IsA</*Ignored*/gio::ListModel> + 'a, Q: Into<Option<&'a P>>, R: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, model: Q, create_widget_func: /*Unknown conversion*//*Unimplemented*/FlowBoxCreateWidgetFunc, user_data: R, user_data_free_func: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
+    //fn bind_model<'a, P: IsA</*Ignored*/gio::ListModel> + 'a, Q: Into<Option<&'a P>>>(&self, model: Q, create_widget_func: /*Unknown conversion*//*Unimplemented*/FlowBoxCreateWidgetFunc, user_data_free_func: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
 
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_activate_on_single_click(&self) -> bool;
@@ -112,7 +112,7 @@ pub trait FlowBoxExt {
     fn set_column_spacing(&self, spacing: u32);
 
     //#[cfg(any(feature = "v3_12", feature = "dox"))]
-    //fn set_filter_func<'a, P: Into<Option<&'a /*Unimplemented*/FlowBoxFilterFunc>>, Q: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, filter_func: P, user_data: Q, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
+    //fn set_filter_func<'a, P: Into<Option<&'a /*Unimplemented*/FlowBoxFilterFunc>>>(&self, filter_func: P, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
 
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_hadjustment(&self, adjustment: &Adjustment);
@@ -133,7 +133,7 @@ pub trait FlowBoxExt {
     fn set_selection_mode(&self, mode: SelectionMode);
 
     //#[cfg(any(feature = "v3_12", feature = "dox"))]
-    //fn set_sort_func<'a, P: Into<Option<&'a /*Unimplemented*/FlowBoxSortFunc>>, Q: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, sort_func: P, user_data: Q, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
+    //fn set_sort_func<'a, P: Into<Option<&'a /*Unimplemented*/FlowBoxSortFunc>>>(&self, sort_func: P, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
 
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_vadjustment(&self, adjustment: &Adjustment);
@@ -213,7 +213,7 @@ pub trait FlowBoxExt {
 
 impl<O: IsA<FlowBox> + IsA<glib::object::Object> + glib::object::ObjectExt> FlowBoxExt for O {
     //#[cfg(any(feature = "v3_18", feature = "dox"))]
-    //fn bind_model<'a, P: IsA</*Ignored*/gio::ListModel> + 'a, Q: Into<Option<&'a P>>, R: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, model: Q, create_widget_func: /*Unknown conversion*//*Unimplemented*/FlowBoxCreateWidgetFunc, user_data: R, user_data_free_func: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
+    //fn bind_model<'a, P: IsA</*Ignored*/gio::ListModel> + 'a, Q: Into<Option<&'a P>>>(&self, model: Q, create_widget_func: /*Unknown conversion*//*Unimplemented*/FlowBoxCreateWidgetFunc, user_data_free_func: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
     //    unsafe { TODO: call ffi::gtk_flow_box_bind_model() }
     //}
 
@@ -342,7 +342,7 @@ impl<O: IsA<FlowBox> + IsA<glib::object::Object> + glib::object::ObjectExt> Flow
     }
 
     //#[cfg(any(feature = "v3_12", feature = "dox"))]
-    //fn set_filter_func<'a, P: Into<Option<&'a /*Unimplemented*/FlowBoxFilterFunc>>, Q: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, filter_func: P, user_data: Q, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
+    //fn set_filter_func<'a, P: Into<Option<&'a /*Unimplemented*/FlowBoxFilterFunc>>>(&self, filter_func: P, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
     //    unsafe { TODO: call ffi::gtk_flow_box_set_filter_func() }
     //}
 
@@ -389,7 +389,7 @@ impl<O: IsA<FlowBox> + IsA<glib::object::Object> + glib::object::ObjectExt> Flow
     }
 
     //#[cfg(any(feature = "v3_12", feature = "dox"))]
-    //fn set_sort_func<'a, P: Into<Option<&'a /*Unimplemented*/FlowBoxSortFunc>>, Q: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, sort_func: P, user_data: Q, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
+    //fn set_sort_func<'a, P: Into<Option<&'a /*Unimplemented*/FlowBoxSortFunc>>>(&self, sort_func: P, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
     //    unsafe { TODO: call ffi::gtk_flow_box_set_sort_func() }
     //}
 
