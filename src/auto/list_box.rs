@@ -55,7 +55,7 @@ impl Default for ListBox {
 
 pub trait ListBoxExt {
     //#[cfg(any(feature = "v3_16", feature = "dox"))]
-    //fn bind_model<'a, 'b, P: IsA</*Ignored*/gio::ListModel> + 'a, Q: Into<Option<&'a P>>, R: Into<Option<&'b /*Unimplemented*/ListBoxCreateWidgetFunc>>, S: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, model: Q, create_widget_func: R, user_data: S, user_data_free_func: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
+    //fn bind_model<'a, 'b, P: IsA</*Ignored*/gio::ListModel> + 'a, Q: Into<Option<&'a P>>, R: Into<Option<&'b /*Unimplemented*/ListBoxCreateWidgetFunc>>>(&self, model: Q, create_widget_func: R, user_data_free_func: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn drag_highlight_row(&self, row: &ListBoxRow);
@@ -115,10 +115,10 @@ pub trait ListBoxExt {
     fn set_adjustment<'a, P: Into<Option<&'a Adjustment>>>(&self, adjustment: P);
 
     //#[cfg(any(feature = "v3_10", feature = "dox"))]
-    //fn set_filter_func<'a, P: Into<Option<&'a /*Unimplemented*/ListBoxFilterFunc>>, Q: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, filter_func: P, user_data: Q, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
+    //fn set_filter_func<'a, P: Into<Option<&'a /*Unimplemented*/ListBoxFilterFunc>>>(&self, filter_func: P, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
 
     //#[cfg(any(feature = "v3_10", feature = "dox"))]
-    //fn set_header_func<'a, P: Into<Option<&'a /*Unimplemented*/ListBoxUpdateHeaderFunc>>, Q: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, update_header: P, user_data: Q, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
+    //fn set_header_func<'a, P: Into<Option<&'a /*Unimplemented*/ListBoxUpdateHeaderFunc>>>(&self, update_header: P, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_placeholder<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, placeholder: Q);
@@ -127,7 +127,7 @@ pub trait ListBoxExt {
     fn set_selection_mode(&self, mode: SelectionMode);
 
     //#[cfg(any(feature = "v3_10", feature = "dox"))]
-    //fn set_sort_func<'a, P: Into<Option<&'a /*Unimplemented*/ListBoxSortFunc>>, Q: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, sort_func: P, user_data: Q, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
+    //fn set_sort_func<'a, P: Into<Option<&'a /*Unimplemented*/ListBoxSortFunc>>>(&self, sort_func: P, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn unselect_all(&self);
@@ -183,7 +183,7 @@ pub trait ListBoxExt {
 
 impl<O: IsA<ListBox> + IsA<glib::object::Object> + glib::object::ObjectExt> ListBoxExt for O {
     //#[cfg(any(feature = "v3_16", feature = "dox"))]
-    //fn bind_model<'a, 'b, P: IsA</*Ignored*/gio::ListModel> + 'a, Q: Into<Option<&'a P>>, R: Into<Option<&'b /*Unimplemented*/ListBoxCreateWidgetFunc>>, S: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, model: Q, create_widget_func: R, user_data: S, user_data_free_func: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
+    //fn bind_model<'a, 'b, P: IsA</*Ignored*/gio::ListModel> + 'a, Q: Into<Option<&'a P>>, R: Into<Option<&'b /*Unimplemented*/ListBoxCreateWidgetFunc>>>(&self, model: Q, create_widget_func: R, user_data_free_func: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
     //    unsafe { TODO: call ffi::gtk_list_box_bind_model() }
     //}
 
@@ -323,12 +323,12 @@ impl<O: IsA<ListBox> + IsA<glib::object::Object> + glib::object::ObjectExt> List
     }
 
     //#[cfg(any(feature = "v3_10", feature = "dox"))]
-    //fn set_filter_func<'a, P: Into<Option<&'a /*Unimplemented*/ListBoxFilterFunc>>, Q: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, filter_func: P, user_data: Q, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
+    //fn set_filter_func<'a, P: Into<Option<&'a /*Unimplemented*/ListBoxFilterFunc>>>(&self, filter_func: P, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
     //    unsafe { TODO: call ffi::gtk_list_box_set_filter_func() }
     //}
 
     //#[cfg(any(feature = "v3_10", feature = "dox"))]
-    //fn set_header_func<'a, P: Into<Option<&'a /*Unimplemented*/ListBoxUpdateHeaderFunc>>, Q: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, update_header: P, user_data: Q, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
+    //fn set_header_func<'a, P: Into<Option<&'a /*Unimplemented*/ListBoxUpdateHeaderFunc>>>(&self, update_header: P, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
     //    unsafe { TODO: call ffi::gtk_list_box_set_header_func() }
     //}
 
@@ -349,7 +349,7 @@ impl<O: IsA<ListBox> + IsA<glib::object::Object> + glib::object::ObjectExt> List
     }
 
     //#[cfg(any(feature = "v3_10", feature = "dox"))]
-    //fn set_sort_func<'a, P: Into<Option<&'a /*Unimplemented*/ListBoxSortFunc>>, Q: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, sort_func: P, user_data: Q, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
+    //fn set_sort_func<'a, P: Into<Option<&'a /*Unimplemented*/ListBoxSortFunc>>>(&self, sort_func: P, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
     //    unsafe { TODO: call ffi::gtk_list_box_set_sort_func() }
     //}
 

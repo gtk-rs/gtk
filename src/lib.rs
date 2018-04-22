@@ -170,6 +170,11 @@ extern crate gdk_pixbuf;
 extern crate cairo;
 extern crate pango;
 
+#[cfg(feature = "futures")]
+extern crate send_cell;
+#[cfg(feature = "futures")]
+extern crate futures_core;
+
 pub use glib::{
     Cast,
     Continue,

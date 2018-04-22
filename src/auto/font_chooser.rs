@@ -44,7 +44,7 @@ pub trait FontChooserExt {
 
     fn get_show_preview_entry(&self) -> bool;
 
-    //fn set_filter_func<'a, P: Into<Option<&'a /*Unimplemented*/FontFilterFunc>>, Q: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, filter: P, user_data: Q, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
+    //fn set_filter_func<'a, P: Into<Option<&'a /*Unimplemented*/FontFilterFunc>>>(&self, filter: P, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
 
     fn set_font(&self, fontname: &str);
 
@@ -118,7 +118,7 @@ impl<O: IsA<FontChooser> + IsA<glib::object::Object>> FontChooserExt for O {
         }
     }
 
-    //fn set_filter_func<'a, P: Into<Option<&'a /*Unimplemented*/FontFilterFunc>>, Q: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, filter: P, user_data: Q, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
+    //fn set_filter_func<'a, P: Into<Option<&'a /*Unimplemented*/FontFilterFunc>>>(&self, filter: P, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
     //    unsafe { TODO: call ffi::gtk_font_chooser_set_filter_func() }
     //}
 
