@@ -234,8 +234,6 @@ pub trait GtkWindowExt {
     #[cfg_attr(feature = "v3_20", deprecated)]
     fn parse_geometry(&self, geometry: &str) -> bool;
 
-    fn present(&self);
-
     fn present_with_time(&self, timestamp: u32);
 
     fn propagate_key_event(&self, event: &gdk::EventKey) -> bool;
@@ -801,12 +799,6 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn parse_geometry(&self, geometry: &str) -> bool {
         unsafe {
             from_glib(ffi::gtk_window_parse_geometry(self.to_glib_none().0, geometry.to_glib_none().0))
-        }
-    }
-
-    fn present(&self) {
-        unsafe {
-            ffi::gtk_window_present(self.to_glib_none().0);
         }
     }
 

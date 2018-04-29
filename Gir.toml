@@ -1952,6 +1952,9 @@ trait_name = "GtkWindowExt"
         [[object.function.parameter]]
         name = "event"
         const = true
+    [[object.function]]
+    name = "present"
+    ignore = true
 
 [[object]]
 name = "Gtk.Actionable"
