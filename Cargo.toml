@@ -39,6 +39,9 @@ v3_14 = ["v3_12", "gtk-sys/v3_14", "gdk/v3_14"]
 dox = ["gdk/dox", "gtk-sys/dox"]
 futures = ["futures-core", "send-cell", "gio/futures"]
 
+[target.'cfg(target_os = "macos")'.build-dependencies]
+cc = "^1.0"
+
 [build-dependencies.gtk-rs-lgpl-docs]
 version = "0.1.3"
 optional = true

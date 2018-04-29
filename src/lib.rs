@@ -247,6 +247,7 @@ mod tree_sortable;
 mod tree_path;
 mod tree_store;
 mod widget;
+mod window;
 
 pub mod prelude;
 
