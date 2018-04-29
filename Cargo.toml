@@ -7,7 +7,7 @@ name = "gtk"
 homepage = "http://gtk-rs.org/"
 authors = ["The Gtk-rs Project Developers"]
 readme = "README.md"
-version = "0.4.0"
+version = "0.4.1"
 keywords = ["gtk", "gtk-rs", "gnome", "GUI"]
 repository = "https://github.com/gtk-rs/gtk"
 build = "build.rs"
@@ -37,6 +37,9 @@ v3_16 = ["v3_14", "gtk-sys/v3_16", "gdk/v3_16"]
 v3_10 = ["v3_8", "gtk-sys/v3_10", "gdk/v3_10"]
 v3_14 = ["v3_12", "gtk-sys/v3_14", "gdk/v3_14"]
 dox = ["gdk/dox", "gtk-sys/dox"]
+
+[target.'cfg(target_os = "macos")'.build-dependencies]
+cc = "^1.0"
 
 [build-dependencies.gtk-rs-lgpl-docs]
 version = "0.1.3"

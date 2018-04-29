@@ -27,5 +27,6 @@ pub use tree_model_filter::TreeModelFilterExtManual;
 pub use tree_sortable::TreeSortableExtManual;
 pub use tree_store::TreeStoreExtManual;
 pub use widget::WidgetExtManual;
+pub use window::GtkWindowExtManual;
 
 pub use signal::*;
