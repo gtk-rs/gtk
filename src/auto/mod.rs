@@ -976,6 +976,7 @@ pub use self::enums::StateType;
 pub use self::enums::TextDirection;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 pub use self::enums::TextExtendSelection;
+#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::enums::TextViewLayer;
 pub use self::enums::TextWindowType;
 pub use self::enums::ToolbarStyle;
