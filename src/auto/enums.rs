@@ -5388,6 +5388,7 @@ impl SetValue for TextExtendSelection {
     }
 }
 
+#[cfg(any(feature = "v3_14", feature = "dox"))]
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum TextViewLayer {
     Below,
@@ -5398,6 +5399,7 @@ pub enum TextViewLayer {
     __Unknown(i32),
 }
 
+#[cfg(any(feature = "v3_14", feature = "dox"))]
 #[doc(hidden)]
 impl ToGlib for TextViewLayer {
     type GlibType = ffi::GtkTextViewLayer;
@@ -5413,6 +5415,7 @@ impl ToGlib for TextViewLayer {
     }
 }
 
+#[cfg(any(feature = "v3_14", feature = "dox"))]
 #[doc(hidden)]
 impl FromGlib<ffi::GtkTextViewLayer> for TextViewLayer {
     fn from_glib(value: ffi::GtkTextViewLayer) -> Self {
@@ -5427,24 +5430,28 @@ impl FromGlib<ffi::GtkTextViewLayer> for TextViewLayer {
     }
 }
 
+#[cfg(any(feature = "v3_14", feature = "dox"))]
 impl StaticType for TextViewLayer {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gtk_text_view_layer_get_type()) }
     }
 }
 
+#[cfg(any(feature = "v3_14", feature = "dox"))]
 impl<'a> FromValueOptional<'a> for TextViewLayer {
     unsafe fn from_value_optional(value: &Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
+#[cfg(any(feature = "v3_14", feature = "dox"))]
 impl<'a> FromValue<'a> for TextViewLayer {
     unsafe fn from_value(value: &Value) -> Self {
         from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
+#[cfg(any(feature = "v3_14", feature = "dox"))]
 impl SetValue for TextViewLayer {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
