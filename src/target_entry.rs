@@ -19,8 +19,8 @@ impl TargetEntry {
         assert_initialized_main_thread!();
         TargetEntry {
             target: target.to_owned(),
-            flags: flags,
-            info: info,
+            flags,
+            info,
         }
     }
 
