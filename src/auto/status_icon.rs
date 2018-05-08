@@ -77,7 +77,7 @@ impl StatusIcon {
         }
     }
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
+    #[cfg_attr(feature = "v3_14", deprecated)]
     pub fn new_from_stock(stock_id: &str) -> StatusIcon {
         assert_initialized_main_thread!();
         unsafe {

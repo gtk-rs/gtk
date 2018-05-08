@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use Actionable;
 use Bin;
 use Buildable;
 use Container;
@@ -10,18 +11,22 @@ use ffi;
 use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
+#[cfg(any(feature = "v3_10", feature = "dox"))]
 use glib::signal::SignalHandlerId;
+#[cfg(any(feature = "v3_10", feature = "dox"))]
 use glib::signal::connect;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
+#[cfg(any(feature = "v3_10", feature = "dox"))]
 use std::boxed::Box as Box_;
 use std::mem;
+#[cfg(any(feature = "v3_10", feature = "dox"))]
 use std::mem::transmute;
 use std::ptr;
 
 glib_wrapper! {
-    pub struct ListBoxRow(Object<ffi::GtkListBoxRow, ffi::GtkListBoxRowClass>): Bin, Container, Widget, Buildable;
+    pub struct ListBoxRow(Object<ffi::GtkListBoxRow, ffi::GtkListBoxRowClass>): Bin, Container, Widget, Buildable, Actionable;
 
     match fn {
         get_type => || ffi::gtk_list_box_row_get_type(),
@@ -73,8 +78,10 @@ pub trait ListBoxRowExt {
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn set_selectable(&self, selectable: bool);
 
+    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn connect_activate<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
+    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn emit_activate(&self);
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
@@ -150,6 +157,7 @@ impl<O: IsA<ListBoxRow> + IsA<glib::object::Object> + glib::object::ObjectExt> L
         }
     }
 
+    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn connect_activate<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
@@ -158,6 +166,7 @@ impl<O: IsA<ListBoxRow> + IsA<glib::object::Object> + glib::object::ObjectExt> L
         }
     }
 
+    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn emit_activate(&self) {
         let _ = self.emit("activate", &[]).unwrap();
     }
@@ -181,6 +190,7 @@ impl<O: IsA<ListBoxRow> + IsA<glib::object::Object> + glib::object::ObjectExt> L
     }
 }
 
+#[cfg(any(feature = "v3_10", feature = "dox"))]
 unsafe extern "C" fn activate_trampoline<P>(this: *mut ffi::GtkListBoxRow, f: glib_ffi::gpointer)
 where P: IsA<ListBoxRow> {
     callback_guard!();

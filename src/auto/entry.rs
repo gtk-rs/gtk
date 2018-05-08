@@ -371,6 +371,12 @@ pub trait EntryExt {
 
     fn emit_insert_at_cursor(&self, string: &str);
 
+    #[cfg(any(feature = "v3_22_27", feature = "dox"))]
+    fn connect_insert_emoji<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
+    #[cfg(any(feature = "v3_22_27", feature = "dox"))]
+    fn emit_insert_emoji(&self);
+
     fn connect_move_cursor<F: Fn(&Self, MovementStep, i32, bool) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn emit_move_cursor(&self, step: MovementStep, count: i32, extend_selection: bool);
@@ -1429,6 +1435,20 @@ impl<O: IsA<Entry> + IsA<glib::object::Object> + glib::object::ObjectExt> EntryE
         let _ = self.emit("insert-at-cursor", &[&string]).unwrap();
     }
 
+    #[cfg(any(feature = "v3_22_27", feature = "dox"))]
+    fn connect_insert_emoji<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "insert-emoji",
+                transmute(insert_emoji_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
+
+    #[cfg(any(feature = "v3_22_27", feature = "dox"))]
+    fn emit_insert_emoji(&self) {
+        let _ = self.emit("insert-emoji", &[]).unwrap();
+    }
+
     fn connect_move_cursor<F: Fn(&Self, MovementStep, i32, bool) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, MovementStep, i32, bool) + 'static>> = Box_::new(Box_::new(f));
@@ -1929,6 +1949,14 @@ where P: IsA<Entry> {
     callback_guard!();
     let f: &&(Fn(&P, &str) + 'static) = transmute(f);
     f(&Entry::from_glib_borrow(this).downcast_unchecked(), &String::from_glib_none(string))
+}
+
+#[cfg(any(feature = "v3_22_27", feature = "dox"))]
+unsafe extern "C" fn insert_emoji_trampoline<P>(this: *mut ffi::GtkEntry, f: glib_ffi::gpointer)
+where P: IsA<Entry> {
+    callback_guard!();
+    let f: &&(Fn(&P) + 'static) = transmute(f);
+    f(&Entry::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn move_cursor_trampoline<P>(this: *mut ffi::GtkEntry, step: ffi::GtkMovementStep, count: libc::c_int, extend_selection: glib_ffi::gboolean, f: glib_ffi::gpointer)

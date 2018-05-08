@@ -275,20 +275,20 @@ impl<O: IsA<IconInfo> + IsA<glib::object::Object> + Clone + 'static> IconInfoExt
 
         let fg = fg.clone();
         let success_color = success_color.into();
-        let success_color = success_color.cloned();
+        let success_color = success_color.map(ToOwned::to_owned);
         let warning_color = warning_color.into();
-        let warning_color = warning_color.cloned();
+        let warning_color = warning_color.map(ToOwned::to_owned);
         let error_color = error_color.into();
-        let error_color = error_color.cloned();
+        let error_color = error_color.map(ToOwned::to_owned);
         GioFuture::new(self, move |obj, send| {
             let cancellable = gio::Cancellable::new();
             let send = SendCell::new(send);
             let obj_clone = SendCell::new(obj.clone());
             obj.load_symbolic_async(
                  &fg,
-                 success_color.as_ref(),
-                 warning_color.as_ref(),
-                 error_color.as_ref(),
+                 success_color.as_ref().map(::std::borrow::Borrow::borrow),
+                 warning_color.as_ref().map(::std::borrow::Borrow::borrow),
+                 error_color.as_ref().map(::std::borrow::Borrow::borrow),
                  Some(&cancellable),
                  move |res| {
                      let obj = obj_clone.into_inner();
