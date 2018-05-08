@@ -18,7 +18,6 @@ generate = [
     "Gtk.AppChooserButton",
     "Gtk.AppChooserWidget",
     "Gtk.ApplicationInhibitFlags",
-    "Gtk.ApplicationWindow",
     "Gtk.Arrow",
     "Gtk.ArrowType",
     "Gtk.AspectFrame",
@@ -417,6 +416,13 @@ status = "generate"
 name = "Gtk.Application"
 status = "generate"
 trait_name = "GtkApplicationExt"
+    [[object.function]]
+    name = "new"
+    ignore = true
+
+[[object]]
+name = "Gtk.ApplicationWindow"
+status = "generate"
     [[object.function]]
     name = "new"
     ignore = true
@@ -1483,7 +1489,7 @@ status = "generate"
     [[object.signal]]
     name = "insert-emoji"
     #actually Since 3.22.27
-    version = "3.22.26" 
+    version = "3.22.26"
 
 [[object]]
 name = "Gtk.TextViewLayer"

@@ -209,6 +209,7 @@ mod auto;
 
 mod app_chooser;
 mod application;
+mod application_window;
 mod assistant;
 mod buildable;
 mod builder;

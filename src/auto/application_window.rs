@@ -2,7 +2,6 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use Application;
 use Bin;
 use Buildable;
 use Container;
@@ -39,15 +38,6 @@ glib_wrapper! {
 
     match fn {
         get_type => || ffi::gtk_application_window_get_type(),
-    }
-}
-
-impl ApplicationWindow {
-    pub fn new(application: &Application) -> ApplicationWindow {
-        skip_assert_initialized!();
-        unsafe {
-            Widget::from_glib_none(ffi::gtk_application_window_new(application.to_glib_none().0)).downcast_unchecked()
-        }
     }
 }
 
