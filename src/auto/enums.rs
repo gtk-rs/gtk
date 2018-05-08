@@ -2250,6 +2250,7 @@ pub enum License {
     Lgpl21Only,
     Lgpl30Only,
     Agpl30,
+    Agpl30Only,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -2274,6 +2275,7 @@ impl ToGlib for License {
             License::Lgpl21Only => ffi::GTK_LICENSE_LGPL_2_1_ONLY,
             License::Lgpl30Only => ffi::GTK_LICENSE_LGPL_3_0_ONLY,
             License::Agpl30 => ffi::GTK_LICENSE_AGPL_3_0,
+            License::Agpl30Only => ffi::GTK_LICENSE_AGPL_3_0_ONLY,
             License::__Unknown(value) => value
         }
     }
@@ -2298,6 +2300,7 @@ impl FromGlib<ffi::GtkLicense> for License {
             11 => License::Lgpl21Only,
             12 => License::Lgpl30Only,
             13 => License::Agpl30,
+            14 => License::Agpl30Only,
             value => License::__Unknown(value),
         }
     }

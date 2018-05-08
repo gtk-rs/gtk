@@ -340,7 +340,7 @@ impl<O: IsA<IconView> + IsA<glib::object::Object> + glib::object::ObjectExt> Ico
             let mut path = ptr::null_mut();
             let mut cell = ptr::null_mut();
             let ret = from_glib(ffi::gtk_icon_view_get_item_at_pos(self.to_glib_none().0, x, y, &mut path, &mut cell));
-            if ret { Some((from_glib_full(path), from_glib_full(cell))) } else { None }
+            if ret { Some((from_glib_full(path), from_glib_none(cell))) } else { None }
         }
     }
 

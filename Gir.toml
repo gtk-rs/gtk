@@ -96,7 +96,6 @@ generate = [
     "Gtk.IconViewDropPosition",
     "Gtk.ImageMenuItem",
     "Gtk.ImageType",
-    "Gtk.InfoBar",
     "Gtk.Invisible",
     "Gtk.IMMulticontext",
     "Gtk.IMPreeditStyle",
@@ -905,6 +904,13 @@ status = "generate"
     [[object.property]]
     name = "input-purpose"
     version = "3.6"
+
+[[object]]
+name = "Gtk.InfoBar"
+status = "generate"
+    [[object.property]]
+    name = "revealed"
+    version = "3.22.29"
 
 [[object]]
 name = "Gtk.InputHints"

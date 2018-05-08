@@ -64,6 +64,9 @@ pub trait InfoBarExt {
 
     fn get_message_type(&self) -> MessageType;
 
+    #[cfg(any(feature = "v3_22_29", feature = "dox"))]
+    fn get_revealed(&self) -> bool;
+
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_show_close_button(&self) -> bool;
 
@@ -75,6 +78,9 @@ pub trait InfoBarExt {
 
     fn set_response_sensitive(&self, response_id: i32, setting: bool);
 
+    #[cfg(any(feature = "v3_22_29", feature = "dox"))]
+    fn set_revealed(&self, revealed: bool);
+
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_show_close_button(&self, setting: bool);
 
@@ -85,6 +91,9 @@ pub trait InfoBarExt {
     fn connect_response<F: Fn(&Self, i32) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_message_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
+    #[cfg(any(feature = "v3_22_29", feature = "dox"))]
+    fn connect_property_revealed_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn connect_property_show_close_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -125,6 +134,13 @@ impl<O: IsA<InfoBar> + IsA<glib::object::Object> + glib::object::ObjectExt> Info
         }
     }
 
+    #[cfg(any(feature = "v3_22_29", feature = "dox"))]
+    fn get_revealed(&self) -> bool {
+        unsafe {
+            from_glib(ffi::gtk_info_bar_get_revealed(self.to_glib_none().0))
+        }
+    }
+
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_show_close_button(&self) -> bool {
         unsafe {
@@ -153,6 +169,13 @@ impl<O: IsA<InfoBar> + IsA<glib::object::Object> + glib::object::ObjectExt> Info
     fn set_response_sensitive(&self, response_id: i32, setting: bool) {
         unsafe {
             ffi::gtk_info_bar_set_response_sensitive(self.to_glib_none().0, response_id, setting.to_glib());
+        }
+    }
+
+    #[cfg(any(feature = "v3_22_29", feature = "dox"))]
+    fn set_revealed(&self, revealed: bool) {
+        unsafe {
+            ffi::gtk_info_bar_set_revealed(self.to_glib_none().0, revealed.to_glib());
         }
     }
 
@@ -191,6 +214,15 @@ impl<O: IsA<InfoBar> + IsA<glib::object::Object> + glib::object::ObjectExt> Info
         }
     }
 
+    #[cfg(any(feature = "v3_22_29", feature = "dox"))]
+    fn connect_property_revealed_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            connect(self.to_glib_none().0, "notify::revealed",
+                transmute(notify_revealed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
+
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn connect_property_show_close_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
@@ -216,6 +248,14 @@ where P: IsA<InfoBar> {
 }
 
 unsafe extern "C" fn notify_message_type_trampoline<P>(this: *mut ffi::GtkInfoBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+where P: IsA<InfoBar> {
+    callback_guard!();
+    let f: &&(Fn(&P) + 'static) = transmute(f);
+    f(&InfoBar::from_glib_borrow(this).downcast_unchecked())
+}
+
+#[cfg(any(feature = "v3_22_29", feature = "dox"))]
+unsafe extern "C" fn notify_revealed_trampoline<P>(this: *mut ffi::GtkInfoBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<InfoBar> {
     callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);

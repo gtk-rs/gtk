@@ -176,7 +176,7 @@ pub trait TreeViewExt {
 
     //fn insert_column_with_data_func<P: IsA<CellRenderer>, Q: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, position: i32, title: &str, cell: &P, func: /*Unknown conversion*//*Unimplemented*/TreeCellDataFunc, data: Q, dnotify: /*Unknown conversion*//*Unimplemented*/DestroyNotify) -> i32;
 
-    fn is_blank_at_pos(&self, x: i32, y: i32) -> Option<(TreePath, TreeViewColumn, i32, i32)>;
+    fn is_blank_at_pos(&self, x: i32, y: i32) -> Option<(Option<TreePath>, Option<TreeViewColumn>, i32, i32)>;
 
     fn is_rubber_banding_active(&self) -> bool;
 
@@ -712,14 +712,14 @@ impl<O: IsA<TreeView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tre
     //    unsafe { TODO: call ffi::gtk_tree_view_insert_column_with_data_func() }
     //}
 
-    fn is_blank_at_pos(&self, x: i32, y: i32) -> Option<(TreePath, TreeViewColumn, i32, i32)> {
+    fn is_blank_at_pos(&self, x: i32, y: i32) -> Option<(Option<TreePath>, Option<TreeViewColumn>, i32, i32)> {
         unsafe {
             let mut path = ptr::null_mut();
             let mut column = ptr::null_mut();
             let mut cell_x = mem::uninitialized();
             let mut cell_y = mem::uninitialized();
             let ret = from_glib(ffi::gtk_tree_view_is_blank_at_pos(self.to_glib_none().0, x, y, &mut path, &mut column, &mut cell_x, &mut cell_y));
-            if ret { Some((from_glib_full(path), from_glib_full(column), cell_x, cell_y)) } else { None }
+            if ret { Some((from_glib_full(path), from_glib_none(column), cell_x, cell_y)) } else { None }
         }
     }
 

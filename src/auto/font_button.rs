@@ -54,6 +54,7 @@ impl Default for FontButton {
 }
 
 pub trait FontButtonExt {
+    #[cfg_attr(feature = "v3_22", deprecated)]
     fn get_font_name(&self) -> Option<String>;
 
     fn get_show_size(&self) -> bool;
@@ -66,6 +67,7 @@ pub trait FontButtonExt {
 
     fn get_use_size(&self) -> bool;
 
+    #[cfg_attr(feature = "v3_22", deprecated)]
     fn set_font_name(&self, fontname: &str) -> bool;
 
     fn set_show_size(&self, show_size: bool);
@@ -80,6 +82,7 @@ pub trait FontButtonExt {
 
     fn connect_font_set<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
+    #[cfg_attr(feature = "v3_22", deprecated)]
     fn connect_property_font_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_show_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
