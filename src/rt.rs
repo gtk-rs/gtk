@@ -13,10 +13,10 @@ use glib;
 use gdk;
 
 thread_local! {
-    static IS_MAIN_THREAD: Cell<bool> = Cell::new(false)
+    pub static IS_MAIN_THREAD: Cell<bool> = Cell::new(false)
 }
 
-static INITIALIZED: AtomicBool = ATOMIC_BOOL_INIT;
+pub static INITIALIZED: AtomicBool = ATOMIC_BOOL_INIT;
 
 /// Asserts that this is the main thread and `gtk::init` has been called.
 macro_rules! assert_initialized_main_thread {

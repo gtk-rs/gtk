@@ -197,8 +197,9 @@ pub const STYLE_PROVIDER_PRIORITY_APPLICATION: u32 = ffi::GTK_STYLE_PROVIDER_PRI
 pub const STYLE_PROVIDER_PRIORITY_USER: u32 = ffi::GTK_STYLE_PROVIDER_PRIORITY_USER as u32;
 
 
+#[doc(hidden)]
 #[macro_use]
-mod rt;
+pub mod rt;
 
 #[cfg_attr(feature = "cargo-clippy", allow(too_many_arguments))]
 #[cfg_attr(feature = "cargo-clippy", allow(match_same_arms))]
