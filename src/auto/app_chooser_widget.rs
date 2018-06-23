@@ -234,63 +234,54 @@ impl<O: IsA<AppChooserWidget> + IsA<glib::object::Object>> AppChooserWidgetExt f
 
 unsafe extern "C" fn application_activated_trampoline<P>(this: *mut ffi::GtkAppChooserWidget, application: *mut gio_ffi::GAppInfo, f: glib_ffi::gpointer)
 where P: IsA<AppChooserWidget> {
-    callback_guard!();
     let f: &&(Fn(&P, &gio::AppInfo) + 'static) = transmute(f);
     f(&AppChooserWidget::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(application))
 }
 
 unsafe extern "C" fn application_selected_trampoline<P>(this: *mut ffi::GtkAppChooserWidget, application: *mut gio_ffi::GAppInfo, f: glib_ffi::gpointer)
 where P: IsA<AppChooserWidget> {
-    callback_guard!();
     let f: &&(Fn(&P, &gio::AppInfo) + 'static) = transmute(f);
     f(&AppChooserWidget::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(application))
 }
 
 unsafe extern "C" fn populate_popup_trampoline<P>(this: *mut ffi::GtkAppChooserWidget, menu: *mut ffi::GtkMenu, application: *mut gio_ffi::GAppInfo, f: glib_ffi::gpointer)
 where P: IsA<AppChooserWidget> {
-    callback_guard!();
     let f: &&(Fn(&P, &Menu, &gio::AppInfo) + 'static) = transmute(f);
     f(&AppChooserWidget::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(menu), &from_glib_borrow(application))
 }
 
 unsafe extern "C" fn notify_default_text_trampoline<P>(this: *mut ffi::GtkAppChooserWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AppChooserWidget> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&AppChooserWidget::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_show_all_trampoline<P>(this: *mut ffi::GtkAppChooserWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AppChooserWidget> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&AppChooserWidget::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_show_default_trampoline<P>(this: *mut ffi::GtkAppChooserWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AppChooserWidget> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&AppChooserWidget::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_show_fallback_trampoline<P>(this: *mut ffi::GtkAppChooserWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AppChooserWidget> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&AppChooserWidget::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_show_other_trampoline<P>(this: *mut ffi::GtkAppChooserWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AppChooserWidget> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&AppChooserWidget::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_show_recommended_trampoline<P>(this: *mut ffi::GtkAppChooserWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AppChooserWidget> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&AppChooserWidget::from_glib_borrow(this).downcast_unchecked())
 }

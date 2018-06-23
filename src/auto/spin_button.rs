@@ -341,56 +341,48 @@ impl<O: IsA<SpinButton> + IsA<glib::object::Object>> SpinButtonExt for O {
 
 unsafe extern "C" fn notify_adjustment_trampoline<P>(this: *mut ffi::GtkSpinButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<SpinButton> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&SpinButton::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_climb_rate_trampoline<P>(this: *mut ffi::GtkSpinButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<SpinButton> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&SpinButton::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_digits_trampoline<P>(this: *mut ffi::GtkSpinButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<SpinButton> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&SpinButton::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_numeric_trampoline<P>(this: *mut ffi::GtkSpinButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<SpinButton> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&SpinButton::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_snap_to_ticks_trampoline<P>(this: *mut ffi::GtkSpinButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<SpinButton> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&SpinButton::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_update_policy_trampoline<P>(this: *mut ffi::GtkSpinButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<SpinButton> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&SpinButton::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_value_trampoline<P>(this: *mut ffi::GtkSpinButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<SpinButton> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&SpinButton::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_wrap_trampoline<P>(this: *mut ffi::GtkSpinButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<SpinButton> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&SpinButton::from_glib_borrow(this).downcast_unchecked())
 }

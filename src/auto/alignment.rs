@@ -326,56 +326,48 @@ impl<O: IsA<Alignment> + IsA<glib::object::Object>> AlignmentExt for O {
 
 unsafe extern "C" fn notify_bottom_padding_trampoline<P>(this: *mut ffi::GtkAlignment, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Alignment> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Alignment::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_left_padding_trampoline<P>(this: *mut ffi::GtkAlignment, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Alignment> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Alignment::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_right_padding_trampoline<P>(this: *mut ffi::GtkAlignment, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Alignment> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Alignment::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_top_padding_trampoline<P>(this: *mut ffi::GtkAlignment, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Alignment> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Alignment::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_xalign_trampoline<P>(this: *mut ffi::GtkAlignment, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Alignment> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Alignment::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_xscale_trampoline<P>(this: *mut ffi::GtkAlignment, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Alignment> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Alignment::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_yalign_trampoline<P>(this: *mut ffi::GtkAlignment, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Alignment> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Alignment::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_yscale_trampoline<P>(this: *mut ffi::GtkAlignment, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Alignment> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Alignment::from_glib_borrow(this).downcast_unchecked())
 }

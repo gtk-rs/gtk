@@ -102,7 +102,6 @@ impl<O: IsA<StackSidebar> + IsA<glib::object::Object>> StackSidebarExt for O {
 
 unsafe extern "C" fn notify_stack_trampoline<P>(this: *mut ffi::GtkStackSidebar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<StackSidebar> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&StackSidebar::from_glib_borrow(this).downcast_unchecked())
 }

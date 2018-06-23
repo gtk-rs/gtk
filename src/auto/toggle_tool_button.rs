@@ -96,14 +96,12 @@ impl<O: IsA<ToggleToolButton> + IsA<glib::object::Object>> ToggleToolButtonExt f
 
 unsafe extern "C" fn toggled_trampoline<P>(this: *mut ffi::GtkToggleToolButton, f: glib_ffi::gpointer)
 where P: IsA<ToggleToolButton> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&ToggleToolButton::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_active_trampoline<P>(this: *mut ffi::GtkToggleToolButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToggleToolButton> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&ToggleToolButton::from_glib_borrow(this).downcast_unchecked())
 }

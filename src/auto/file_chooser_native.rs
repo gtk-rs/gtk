@@ -156,14 +156,12 @@ impl<O: IsA<FileChooserNative> + IsA<glib::object::Object>> FileChooserNativeExt
 
 unsafe extern "C" fn notify_accept_label_trampoline<P>(this: *mut ffi::GtkFileChooserNative, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FileChooserNative> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&FileChooserNative::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_cancel_label_trampoline<P>(this: *mut ffi::GtkFileChooserNative, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FileChooserNative> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&FileChooserNative::from_glib_borrow(this).downcast_unchecked())
 }

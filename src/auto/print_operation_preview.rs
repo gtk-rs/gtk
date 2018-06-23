@@ -76,14 +76,12 @@ impl<O: IsA<PrintOperationPreview> + IsA<glib::object::Object>> PrintOperationPr
 
 unsafe extern "C" fn got_page_size_trampoline<P>(this: *mut ffi::GtkPrintOperationPreview, context: *mut ffi::GtkPrintContext, page_setup: *mut ffi::GtkPageSetup, f: glib_ffi::gpointer)
 where P: IsA<PrintOperationPreview> {
-    callback_guard!();
     let f: &&(Fn(&P, &PrintContext, &PageSetup) + 'static) = transmute(f);
     f(&PrintOperationPreview::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(context), &from_glib_borrow(page_setup))
 }
 
 unsafe extern "C" fn ready_trampoline<P>(this: *mut ffi::GtkPrintOperationPreview, context: *mut ffi::GtkPrintContext, f: glib_ffi::gpointer)
 where P: IsA<PrintOperationPreview> {
-    callback_guard!();
     let f: &&(Fn(&P, &PrintContext) + 'static) = transmute(f);
     f(&PrintOperationPreview::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(context))
 }

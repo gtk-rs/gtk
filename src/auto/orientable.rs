@@ -57,7 +57,6 @@ impl<O: IsA<Orientable> + IsA<glib::object::Object>> OrientableExt for O {
 
 unsafe extern "C" fn notify_orientation_trampoline<P>(this: *mut ffi::GtkOrientable, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Orientable> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Orientable::from_glib_borrow(this).downcast_unchecked())
 }

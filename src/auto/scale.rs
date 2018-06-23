@@ -208,35 +208,30 @@ impl<O: IsA<Scale> + IsA<glib::object::Object>> ScaleExt for O {
 
 unsafe extern "C" fn format_value_trampoline<P>(this: *mut ffi::GtkScale, value: libc::c_double, f: glib_ffi::gpointer) -> *mut libc::c_char
 where P: IsA<Scale> {
-    callback_guard!();
     let f: &&(Fn(&P, f64) -> String + 'static) = transmute(f);
     f(&Scale::from_glib_borrow(this).downcast_unchecked(), value).to_glib_full()
 }
 
 unsafe extern "C" fn notify_digits_trampoline<P>(this: *mut ffi::GtkScale, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Scale> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Scale::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_draw_value_trampoline<P>(this: *mut ffi::GtkScale, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Scale> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Scale::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_has_origin_trampoline<P>(this: *mut ffi::GtkScale, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Scale> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Scale::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_value_pos_trampoline<P>(this: *mut ffi::GtkScale, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Scale> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Scale::from_glib_borrow(this).downcast_unchecked())
 }

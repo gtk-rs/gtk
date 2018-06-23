@@ -283,63 +283,54 @@ impl<O: IsA<Expander> + IsA<glib::object::Object> + glib::object::ObjectExt> Exp
 
 unsafe extern "C" fn activate_trampoline<P>(this: *mut ffi::GtkExpander, f: glib_ffi::gpointer)
 where P: IsA<Expander> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Expander::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_expanded_trampoline<P>(this: *mut ffi::GtkExpander, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Expander> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Expander::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_label_trampoline<P>(this: *mut ffi::GtkExpander, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Expander> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Expander::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_label_fill_trampoline<P>(this: *mut ffi::GtkExpander, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Expander> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Expander::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_label_widget_trampoline<P>(this: *mut ffi::GtkExpander, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Expander> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Expander::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_resize_toplevel_trampoline<P>(this: *mut ffi::GtkExpander, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Expander> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Expander::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_spacing_trampoline<P>(this: *mut ffi::GtkExpander, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Expander> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Expander::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_use_markup_trampoline<P>(this: *mut ffi::GtkExpander, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Expander> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Expander::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_use_underline_trampoline<P>(this: *mut ffi::GtkExpander, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Expander> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Expander::from_glib_borrow(this).downcast_unchecked())
 }

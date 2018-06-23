@@ -353,49 +353,42 @@ impl<O: IsA<Container> + IsA<glib::object::Object>> ContainerExt for O {
 
 unsafe extern "C" fn add_trampoline<P>(this: *mut ffi::GtkContainer, object: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<Container> {
-    callback_guard!();
     let f: &&(Fn(&P, &Widget) + 'static) = transmute(f);
     f(&Container::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(object))
 }
 
 unsafe extern "C" fn check_resize_trampoline<P>(this: *mut ffi::GtkContainer, f: glib_ffi::gpointer)
 where P: IsA<Container> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Container::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn remove_trampoline<P>(this: *mut ffi::GtkContainer, object: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<Container> {
-    callback_guard!();
     let f: &&(Fn(&P, &Widget) + 'static) = transmute(f);
     f(&Container::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(object))
 }
 
 unsafe extern "C" fn set_focus_child_trampoline<P>(this: *mut ffi::GtkContainer, object: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<Container> {
-    callback_guard!();
     let f: &&(Fn(&P, &Widget) + 'static) = transmute(f);
     f(&Container::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(object))
 }
 
 unsafe extern "C" fn notify_border_width_trampoline<P>(this: *mut ffi::GtkContainer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Container> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Container::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_child_trampoline<P>(this: *mut ffi::GtkContainer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Container> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Container::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_resize_mode_trampoline<P>(this: *mut ffi::GtkContainer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Container> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Container::from_glib_borrow(this).downcast_unchecked())
 }

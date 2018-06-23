@@ -235,21 +235,18 @@ impl<O: IsA<InfoBar> + IsA<glib::object::Object> + glib::object::ObjectExt> Info
 
 unsafe extern "C" fn close_trampoline<P>(this: *mut ffi::GtkInfoBar, f: glib_ffi::gpointer)
 where P: IsA<InfoBar> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&InfoBar::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn response_trampoline<P>(this: *mut ffi::GtkInfoBar, response_id: libc::c_int, f: glib_ffi::gpointer)
 where P: IsA<InfoBar> {
-    callback_guard!();
     let f: &&(Fn(&P, i32) + 'static) = transmute(f);
     f(&InfoBar::from_glib_borrow(this).downcast_unchecked(), response_id)
 }
 
 unsafe extern "C" fn notify_message_type_trampoline<P>(this: *mut ffi::GtkInfoBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<InfoBar> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&InfoBar::from_glib_borrow(this).downcast_unchecked())
 }
@@ -257,7 +254,6 @@ where P: IsA<InfoBar> {
 #[cfg(any(feature = "v3_22_29", feature = "dox"))]
 unsafe extern "C" fn notify_revealed_trampoline<P>(this: *mut ffi::GtkInfoBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<InfoBar> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&InfoBar::from_glib_borrow(this).downcast_unchecked())
 }
@@ -265,7 +261,6 @@ where P: IsA<InfoBar> {
 #[cfg(any(feature = "v3_10", feature = "dox"))]
 unsafe extern "C" fn notify_show_close_button_trampoline<P>(this: *mut ffi::GtkInfoBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<InfoBar> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&InfoBar::from_glib_borrow(this).downcast_unchecked())
 }

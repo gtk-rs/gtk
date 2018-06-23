@@ -1303,105 +1303,90 @@ impl<O: IsA<TreeView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tre
 
 unsafe extern "C" fn columns_changed_trampoline<P>(this: *mut ffi::GtkTreeView, f: glib_ffi::gpointer)
 where P: IsA<TreeView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TreeView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn cursor_changed_trampoline<P>(this: *mut ffi::GtkTreeView, f: glib_ffi::gpointer)
 where P: IsA<TreeView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TreeView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn expand_collapse_cursor_row_trampoline<P>(this: *mut ffi::GtkTreeView, object: glib_ffi::gboolean, p0: glib_ffi::gboolean, p1: glib_ffi::gboolean, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<TreeView> {
-    callback_guard!();
     let f: &&(Fn(&P, bool, bool, bool) -> bool + 'static) = transmute(f);
     f(&TreeView::from_glib_borrow(this).downcast_unchecked(), from_glib(object), from_glib(p0), from_glib(p1)).to_glib()
 }
 
 unsafe extern "C" fn move_cursor_trampoline<P>(this: *mut ffi::GtkTreeView, step: ffi::GtkMovementStep, direction: libc::c_int, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<TreeView> {
-    callback_guard!();
     let f: &&(Fn(&P, MovementStep, i32) -> bool + 'static) = transmute(f);
     f(&TreeView::from_glib_borrow(this).downcast_unchecked(), from_glib(step), direction).to_glib()
 }
 
 unsafe extern "C" fn row_activated_trampoline<P>(this: *mut ffi::GtkTreeView, path: *mut ffi::GtkTreePath, column: *mut ffi::GtkTreeViewColumn, f: glib_ffi::gpointer)
 where P: IsA<TreeView> {
-    callback_guard!();
     let f: &&(Fn(&P, &TreePath, &TreeViewColumn) + 'static) = transmute(f);
     f(&TreeView::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(path), &from_glib_borrow(column))
 }
 
 unsafe extern "C" fn row_collapsed_trampoline<P>(this: *mut ffi::GtkTreeView, iter: *mut ffi::GtkTreeIter, path: *mut ffi::GtkTreePath, f: glib_ffi::gpointer)
 where P: IsA<TreeView> {
-    callback_guard!();
     let f: &&(Fn(&P, &TreeIter, &TreePath) + 'static) = transmute(f);
     f(&TreeView::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(iter), &from_glib_borrow(path))
 }
 
 unsafe extern "C" fn row_expanded_trampoline<P>(this: *mut ffi::GtkTreeView, iter: *mut ffi::GtkTreeIter, path: *mut ffi::GtkTreePath, f: glib_ffi::gpointer)
 where P: IsA<TreeView> {
-    callback_guard!();
     let f: &&(Fn(&P, &TreeIter, &TreePath) + 'static) = transmute(f);
     f(&TreeView::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(iter), &from_glib_borrow(path))
 }
 
 unsafe extern "C" fn select_all_trampoline<P>(this: *mut ffi::GtkTreeView, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<TreeView> {
-    callback_guard!();
     let f: &&(Fn(&P) -> bool + 'static) = transmute(f);
     f(&TreeView::from_glib_borrow(this).downcast_unchecked()).to_glib()
 }
 
 unsafe extern "C" fn select_cursor_parent_trampoline<P>(this: *mut ffi::GtkTreeView, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<TreeView> {
-    callback_guard!();
     let f: &&(Fn(&P) -> bool + 'static) = transmute(f);
     f(&TreeView::from_glib_borrow(this).downcast_unchecked()).to_glib()
 }
 
 unsafe extern "C" fn select_cursor_row_trampoline<P>(this: *mut ffi::GtkTreeView, object: glib_ffi::gboolean, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<TreeView> {
-    callback_guard!();
     let f: &&(Fn(&P, bool) -> bool + 'static) = transmute(f);
     f(&TreeView::from_glib_borrow(this).downcast_unchecked(), from_glib(object)).to_glib()
 }
 
 unsafe extern "C" fn start_interactive_search_trampoline<P>(this: *mut ffi::GtkTreeView, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<TreeView> {
-    callback_guard!();
     let f: &&(Fn(&P) -> bool + 'static) = transmute(f);
     f(&TreeView::from_glib_borrow(this).downcast_unchecked()).to_glib()
 }
 
 unsafe extern "C" fn test_collapse_row_trampoline<P>(this: *mut ffi::GtkTreeView, iter: *mut ffi::GtkTreeIter, path: *mut ffi::GtkTreePath, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<TreeView> {
-    callback_guard!();
     let f: &&(Fn(&P, &TreeIter, &TreePath) -> Inhibit + 'static) = transmute(f);
     f(&TreeView::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(iter), &from_glib_borrow(path)).to_glib()
 }
 
 unsafe extern "C" fn test_expand_row_trampoline<P>(this: *mut ffi::GtkTreeView, iter: *mut ffi::GtkTreeIter, path: *mut ffi::GtkTreePath, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<TreeView> {
-    callback_guard!();
     let f: &&(Fn(&P, &TreeIter, &TreePath) -> Inhibit + 'static) = transmute(f);
     f(&TreeView::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(iter), &from_glib_borrow(path)).to_glib()
 }
 
 unsafe extern "C" fn toggle_cursor_row_trampoline<P>(this: *mut ffi::GtkTreeView, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<TreeView> {
-    callback_guard!();
     let f: &&(Fn(&P) -> bool + 'static) = transmute(f);
     f(&TreeView::from_glib_borrow(this).downcast_unchecked()).to_glib()
 }
 
 unsafe extern "C" fn unselect_all_trampoline<P>(this: *mut ffi::GtkTreeView, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<TreeView> {
-    callback_guard!();
     let f: &&(Fn(&P) -> bool + 'static) = transmute(f);
     f(&TreeView::from_glib_borrow(this).downcast_unchecked()).to_glib()
 }
@@ -1409,133 +1394,114 @@ where P: IsA<TreeView> {
 #[cfg(any(feature = "v3_8", feature = "dox"))]
 unsafe extern "C" fn notify_activate_on_single_click_trampoline<P>(this: *mut ffi::GtkTreeView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TreeView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TreeView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_enable_grid_lines_trampoline<P>(this: *mut ffi::GtkTreeView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TreeView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TreeView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_enable_search_trampoline<P>(this: *mut ffi::GtkTreeView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TreeView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TreeView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_enable_tree_lines_trampoline<P>(this: *mut ffi::GtkTreeView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TreeView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TreeView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_expander_column_trampoline<P>(this: *mut ffi::GtkTreeView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TreeView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TreeView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_fixed_height_mode_trampoline<P>(this: *mut ffi::GtkTreeView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TreeView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TreeView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_headers_clickable_trampoline<P>(this: *mut ffi::GtkTreeView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TreeView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TreeView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_headers_visible_trampoline<P>(this: *mut ffi::GtkTreeView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TreeView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TreeView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_hover_expand_trampoline<P>(this: *mut ffi::GtkTreeView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TreeView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TreeView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_hover_selection_trampoline<P>(this: *mut ffi::GtkTreeView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TreeView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TreeView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_level_indentation_trampoline<P>(this: *mut ffi::GtkTreeView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TreeView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TreeView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_model_trampoline<P>(this: *mut ffi::GtkTreeView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TreeView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TreeView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_reorderable_trampoline<P>(this: *mut ffi::GtkTreeView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TreeView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TreeView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_rubber_banding_trampoline<P>(this: *mut ffi::GtkTreeView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TreeView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TreeView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_rules_hint_trampoline<P>(this: *mut ffi::GtkTreeView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TreeView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TreeView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_search_column_trampoline<P>(this: *mut ffi::GtkTreeView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TreeView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TreeView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_show_expanders_trampoline<P>(this: *mut ffi::GtkTreeView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TreeView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TreeView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_tooltip_column_trampoline<P>(this: *mut ffi::GtkTreeView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TreeView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TreeView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_ubuntu_almost_fixed_height_mode_trampoline<P>(this: *mut ffi::GtkTreeView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TreeView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TreeView::from_glib_borrow(this).downcast_unchecked())
 }

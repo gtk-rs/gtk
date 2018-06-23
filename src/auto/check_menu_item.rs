@@ -161,28 +161,24 @@ impl<O: IsA<CheckMenuItem> + IsA<glib::object::Object>> CheckMenuItemExt for O {
 
 unsafe extern "C" fn toggled_trampoline<P>(this: *mut ffi::GtkCheckMenuItem, f: glib_ffi::gpointer)
 where P: IsA<CheckMenuItem> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CheckMenuItem::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_active_trampoline<P>(this: *mut ffi::GtkCheckMenuItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CheckMenuItem> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CheckMenuItem::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_draw_as_radio_trampoline<P>(this: *mut ffi::GtkCheckMenuItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CheckMenuItem> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CheckMenuItem::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_inconsistent_trampoline<P>(this: *mut ffi::GtkCheckMenuItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CheckMenuItem> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CheckMenuItem::from_glib_borrow(this).downcast_unchecked())
 }

@@ -46,13 +46,11 @@ impl<O: IsA<Clipboard>> ClipboardExtManual for O {
 }
 
 unsafe extern "C" fn trampoline(clipboard: *mut ffi::GtkClipboard, selection_data: *mut ffi::GtkSelectionData, info: c_uint, user_data: gpointer) {
-    callback_guard!();
     let f: &&(Fn(&Clipboard, &SelectionData, u32) + 'static) = transmute(user_data);
     f(&from_glib_borrow(clipboard), &from_glib_borrow(selection_data), info);
 }
 
 
 unsafe extern "C" fn cleanup(_clipboard: *mut ffi::GtkClipboard, user_data: gpointer) {
-    callback_guard!();
     Box_::<Box_<Fn(&Clipboard, &SelectionData, u32) + 'static>>::from_raw(user_data as *mut _);
 }

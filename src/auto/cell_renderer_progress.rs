@@ -217,42 +217,36 @@ impl<O: IsA<CellRendererProgress> + IsA<glib::object::Object>> CellRendererProgr
 
 unsafe extern "C" fn notify_inverted_trampoline<P>(this: *mut ffi::GtkCellRendererProgress, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererProgress> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CellRendererProgress::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_pulse_trampoline<P>(this: *mut ffi::GtkCellRendererProgress, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererProgress> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CellRendererProgress::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_text_trampoline<P>(this: *mut ffi::GtkCellRendererProgress, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererProgress> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CellRendererProgress::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_text_xalign_trampoline<P>(this: *mut ffi::GtkCellRendererProgress, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererProgress> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CellRendererProgress::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_text_yalign_trampoline<P>(this: *mut ffi::GtkCellRendererProgress, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererProgress> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CellRendererProgress::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_value_trampoline<P>(this: *mut ffi::GtkCellRendererProgress, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererProgress> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CellRendererProgress::from_glib_borrow(this).downcast_unchecked())
 }

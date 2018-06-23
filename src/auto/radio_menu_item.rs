@@ -94,7 +94,6 @@ impl<O: IsA<RadioMenuItem> + IsA<glib::object::Object>> RadioMenuItemExt for O {
 
 unsafe extern "C" fn group_changed_trampoline<P>(this: *mut ffi::GtkRadioMenuItem, f: glib_ffi::gpointer)
 where P: IsA<RadioMenuItem> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&RadioMenuItem::from_glib_borrow(this).downcast_unchecked())
 }

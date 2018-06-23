@@ -198,35 +198,30 @@ impl<O: IsA<FontChooser> + IsA<glib::object::Object>> FontChooserExt for O {
 
 unsafe extern "C" fn font_activated_trampoline<P>(this: *mut ffi::GtkFontChooser, fontname: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<FontChooser> {
-    callback_guard!();
     let f: &&(Fn(&P, &str) + 'static) = transmute(f);
     f(&FontChooser::from_glib_borrow(this).downcast_unchecked(), &String::from_glib_none(fontname))
 }
 
 unsafe extern "C" fn notify_font_trampoline<P>(this: *mut ffi::GtkFontChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FontChooser> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&FontChooser::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_font_desc_trampoline<P>(this: *mut ffi::GtkFontChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FontChooser> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&FontChooser::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_preview_text_trampoline<P>(this: *mut ffi::GtkFontChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FontChooser> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&FontChooser::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_show_preview_entry_trampoline<P>(this: *mut ffi::GtkFontChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FontChooser> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&FontChooser::from_glib_borrow(this).downcast_unchecked())
 }

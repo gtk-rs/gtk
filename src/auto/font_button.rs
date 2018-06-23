@@ -228,49 +228,42 @@ impl<O: IsA<FontButton> + IsA<glib::object::Object>> FontButtonExt for O {
 
 unsafe extern "C" fn font_set_trampoline<P>(this: *mut ffi::GtkFontButton, f: glib_ffi::gpointer)
 where P: IsA<FontButton> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&FontButton::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_font_name_trampoline<P>(this: *mut ffi::GtkFontButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FontButton> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&FontButton::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_show_size_trampoline<P>(this: *mut ffi::GtkFontButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FontButton> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&FontButton::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_show_style_trampoline<P>(this: *mut ffi::GtkFontButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FontButton> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&FontButton::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_title_trampoline<P>(this: *mut ffi::GtkFontButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FontButton> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&FontButton::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_use_font_trampoline<P>(this: *mut ffi::GtkFontButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FontButton> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&FontButton::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_use_size_trampoline<P>(this: *mut ffi::GtkFontButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FontButton> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&FontButton::from_glib_borrow(this).downcast_unchecked())
 }

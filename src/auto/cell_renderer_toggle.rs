@@ -194,7 +194,6 @@ impl<O: IsA<CellRendererToggle> + IsA<glib::object::Object>> CellRendererToggleE
 
 unsafe extern "C" fn toggled_trampoline<P>(this: *mut ffi::GtkCellRendererToggle, path: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<CellRendererToggle> {
-    callback_guard!();
     let f: &&(Fn(&P, TreePath) + 'static) = transmute(f);
     let path = from_glib_full(ffi::gtk_tree_path_new_from_string(path));
     f(&CellRendererToggle::from_glib_borrow(this).downcast_unchecked(), path)
@@ -202,35 +201,30 @@ where P: IsA<CellRendererToggle> {
 
 unsafe extern "C" fn notify_activatable_trampoline<P>(this: *mut ffi::GtkCellRendererToggle, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererToggle> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CellRendererToggle::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_active_trampoline<P>(this: *mut ffi::GtkCellRendererToggle, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererToggle> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CellRendererToggle::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_inconsistent_trampoline<P>(this: *mut ffi::GtkCellRendererToggle, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererToggle> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CellRendererToggle::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_indicator_size_trampoline<P>(this: *mut ffi::GtkCellRendererToggle, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererToggle> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CellRendererToggle::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_radio_trampoline<P>(this: *mut ffi::GtkCellRendererToggle, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererToggle> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CellRendererToggle::from_glib_borrow(this).downcast_unchecked())
 }

@@ -590,14 +590,12 @@ impl<O: IsA<StyleContext> + IsA<glib::object::Object>> StyleContextExt for O {
 
 unsafe extern "C" fn changed_trampoline<P>(this: *mut ffi::GtkStyleContext, f: glib_ffi::gpointer)
 where P: IsA<StyleContext> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&StyleContext::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_direction_trampoline<P>(this: *mut ffi::GtkStyleContext, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<StyleContext> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&StyleContext::from_glib_borrow(this).downcast_unchecked())
 }
@@ -605,21 +603,18 @@ where P: IsA<StyleContext> {
 #[cfg(any(feature = "v3_8", feature = "dox"))]
 unsafe extern "C" fn notify_paint_clock_trampoline<P>(this: *mut ffi::GtkStyleContext, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<StyleContext> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&StyleContext::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_parent_trampoline<P>(this: *mut ffi::GtkStyleContext, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<StyleContext> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&StyleContext::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_screen_trampoline<P>(this: *mut ffi::GtkStyleContext, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<StyleContext> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&StyleContext::from_glib_borrow(this).downcast_unchecked())
 }

@@ -115,14 +115,12 @@ impl<O: IsA<AppChooserDialog> + IsA<glib::object::Object>> AppChooserDialogExt f
 
 unsafe extern "C" fn notify_gfile_trampoline<P>(this: *mut ffi::GtkAppChooserDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AppChooserDialog> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&AppChooserDialog::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_heading_trampoline<P>(this: *mut ffi::GtkAppChooserDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AppChooserDialog> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&AppChooserDialog::from_glib_borrow(this).downcast_unchecked())
 }

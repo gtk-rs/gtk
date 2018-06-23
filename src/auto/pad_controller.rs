@@ -109,14 +109,12 @@ impl<O: IsA<PadController> + IsA<glib::object::Object>> PadControllerExt for O {
 
 unsafe extern "C" fn notify_action_group_trampoline<P>(this: *mut ffi::GtkPadController, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<PadController> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&PadController::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_pad_trampoline<P>(this: *mut ffi::GtkPadController, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<PadController> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&PadController::from_glib_borrow(this).downcast_unchecked())
 }

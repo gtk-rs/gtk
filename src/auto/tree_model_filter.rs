@@ -135,7 +135,6 @@ impl<O: IsA<TreeModelFilter> + IsA<glib::object::Object>> TreeModelFilterExt for
 
 unsafe extern "C" fn notify_child_model_trampoline<P>(this: *mut ffi::GtkTreeModelFilter, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TreeModelFilter> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TreeModelFilter::from_glib_borrow(this).downcast_unchecked())
 }

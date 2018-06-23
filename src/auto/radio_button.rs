@@ -89,7 +89,6 @@ impl<O: IsA<RadioButton> + IsA<glib::object::Object>> RadioButtonExt for O {
 
 unsafe extern "C" fn group_changed_trampoline<P>(this: *mut ffi::GtkRadioButton, f: glib_ffi::gpointer)
 where P: IsA<RadioButton> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&RadioButton::from_glib_borrow(this).downcast_unchecked())
 }

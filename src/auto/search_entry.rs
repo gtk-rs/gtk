@@ -141,7 +141,6 @@ impl<O: IsA<SearchEntry> + IsA<glib::object::Object> + glib::object::ObjectExt> 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 unsafe extern "C" fn next_match_trampoline<P>(this: *mut ffi::GtkSearchEntry, f: glib_ffi::gpointer)
 where P: IsA<SearchEntry> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&SearchEntry::from_glib_borrow(this).downcast_unchecked())
 }
@@ -149,7 +148,6 @@ where P: IsA<SearchEntry> {
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 unsafe extern "C" fn previous_match_trampoline<P>(this: *mut ffi::GtkSearchEntry, f: glib_ffi::gpointer)
 where P: IsA<SearchEntry> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&SearchEntry::from_glib_borrow(this).downcast_unchecked())
 }
@@ -157,7 +155,6 @@ where P: IsA<SearchEntry> {
 #[cfg(any(feature = "v3_10", feature = "dox"))]
 unsafe extern "C" fn search_changed_trampoline<P>(this: *mut ffi::GtkSearchEntry, f: glib_ffi::gpointer)
 where P: IsA<SearchEntry> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&SearchEntry::from_glib_borrow(this).downcast_unchecked())
 }
@@ -165,7 +162,6 @@ where P: IsA<SearchEntry> {
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 unsafe extern "C" fn stop_search_trampoline<P>(this: *mut ffi::GtkSearchEntry, f: glib_ffi::gpointer)
 where P: IsA<SearchEntry> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&SearchEntry::from_glib_borrow(this).downcast_unchecked())
 }

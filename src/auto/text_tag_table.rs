@@ -115,21 +115,18 @@ impl<O: IsA<TextTagTable> + IsA<glib::object::Object>> TextTagTableExt for O {
 
 unsafe extern "C" fn tag_added_trampoline<P>(this: *mut ffi::GtkTextTagTable, tag: *mut ffi::GtkTextTag, f: glib_ffi::gpointer)
 where P: IsA<TextTagTable> {
-    callback_guard!();
     let f: &&(Fn(&P, &TextTag) + 'static) = transmute(f);
     f(&TextTagTable::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(tag))
 }
 
 unsafe extern "C" fn tag_changed_trampoline<P>(this: *mut ffi::GtkTextTagTable, tag: *mut ffi::GtkTextTag, size_changed: glib_ffi::gboolean, f: glib_ffi::gpointer)
 where P: IsA<TextTagTable> {
-    callback_guard!();
     let f: &&(Fn(&P, &TextTag, bool) + 'static) = transmute(f);
     f(&TextTagTable::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(tag), from_glib(size_changed))
 }
 
 unsafe extern "C" fn tag_removed_trampoline<P>(this: *mut ffi::GtkTextTagTable, tag: *mut ffi::GtkTextTag, f: glib_ffi::gpointer)
 where P: IsA<TextTagTable> {
-    callback_guard!();
     let f: &&(Fn(&P, &TextTag) + 'static) = transmute(f);
     f(&TextTagTable::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(tag))
 }

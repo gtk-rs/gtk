@@ -304,7 +304,6 @@ impl<O: IsA<Gesture> + IsA<glib::object::Object>> GestureExt for O {
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 unsafe extern "C" fn notify_n_points_trampoline<P>(this: *mut ffi::GtkGesture, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Gesture> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Gesture::from_glib_borrow(this).downcast_unchecked())
 }
@@ -312,7 +311,6 @@ where P: IsA<Gesture> {
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 unsafe extern "C" fn notify_window_trampoline<P>(this: *mut ffi::GtkGesture, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Gesture> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Gesture::from_glib_borrow(this).downcast_unchecked())
 }

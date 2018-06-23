@@ -246,7 +246,6 @@ impl<O: IsA<Builder> + IsA<glib::object::Object>> BuilderExt for O {
 
 unsafe extern "C" fn notify_translation_domain_trampoline<P>(this: *mut ffi::GtkBuilder, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Builder> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Builder::from_glib_borrow(this).downcast_unchecked())
 }

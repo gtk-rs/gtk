@@ -134,21 +134,18 @@ impl<O: IsA<CellRendererSpin> + IsA<glib::object::Object>> CellRendererSpinExt f
 
 unsafe extern "C" fn notify_adjustment_trampoline<P>(this: *mut ffi::GtkCellRendererSpin, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererSpin> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CellRendererSpin::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_climb_rate_trampoline<P>(this: *mut ffi::GtkCellRendererSpin, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererSpin> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CellRendererSpin::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_digits_trampoline<P>(this: *mut ffi::GtkCellRendererSpin, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererSpin> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CellRendererSpin::from_glib_borrow(this).downcast_unchecked())
 }

@@ -101,7 +101,6 @@ impl<O: IsA<GesturePan> + IsA<glib::object::Object>> GesturePanExt for O {
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 unsafe extern "C" fn pan_trampoline<P>(this: *mut ffi::GtkGesturePan, direction: ffi::GtkPanDirection, offset: libc::c_double, f: glib_ffi::gpointer)
 where P: IsA<GesturePan> {
-    callback_guard!();
     let f: &&(Fn(&P, PanDirection, f64) + 'static) = transmute(f);
     f(&GesturePan::from_glib_borrow(this).downcast_unchecked(), from_glib(direction), offset)
 }
@@ -109,7 +108,6 @@ where P: IsA<GesturePan> {
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 unsafe extern "C" fn notify_orientation_trampoline<P>(this: *mut ffi::GtkGesturePan, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<GesturePan> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&GesturePan::from_glib_borrow(this).downcast_unchecked())
 }

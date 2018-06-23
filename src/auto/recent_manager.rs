@@ -181,21 +181,18 @@ impl<O: IsA<RecentManager> + IsA<glib::object::Object>> RecentManagerExt for O {
 
 unsafe extern "C" fn changed_trampoline<P>(this: *mut ffi::GtkRecentManager, f: glib_ffi::gpointer)
 where P: IsA<RecentManager> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&RecentManager::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_filename_trampoline<P>(this: *mut ffi::GtkRecentManager, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RecentManager> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&RecentManager::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_size_trampoline<P>(this: *mut ffi::GtkRecentManager, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RecentManager> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&RecentManager::from_glib_borrow(this).downcast_unchecked())
 }

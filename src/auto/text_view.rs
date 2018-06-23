@@ -1210,28 +1210,24 @@ impl<O: IsA<TextView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tex
 
 unsafe extern "C" fn backspace_trampoline<P>(this: *mut ffi::GtkTextView, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn copy_clipboard_trampoline<P>(this: *mut ffi::GtkTextView, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn cut_clipboard_trampoline<P>(this: *mut ffi::GtkTextView, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn delete_from_cursor_trampoline<P>(this: *mut ffi::GtkTextView, type_: ffi::GtkDeleteType, count: libc::c_int, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
-    callback_guard!();
     let f: &&(Fn(&P, DeleteType, i32) + 'static) = transmute(f);
     f(&TextView::from_glib_borrow(this).downcast_unchecked(), from_glib(type_), count)
 }
@@ -1239,14 +1235,12 @@ where P: IsA<TextView> {
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 unsafe extern "C" fn extend_selection_trampoline<P>(this: *mut ffi::GtkTextView, granularity: ffi::GtkTextExtendSelection, location: *mut ffi::GtkTextIter, start: *mut ffi::GtkTextIter, end: *mut ffi::GtkTextIter, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<TextView> {
-    callback_guard!();
     let f: &&(Fn(&P, TextExtendSelection, &TextIter, &TextIter, &TextIter) -> Inhibit + 'static) = transmute(f);
     f(&TextView::from_glib_borrow(this).downcast_unchecked(), from_glib(granularity), &from_glib_borrow(location), &from_glib_borrow(start), &from_glib_borrow(end)).to_glib()
 }
 
 unsafe extern "C" fn insert_at_cursor_trampoline<P>(this: *mut ffi::GtkTextView, string: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
-    callback_guard!();
     let f: &&(Fn(&P, &str) + 'static) = transmute(f);
     f(&TextView::from_glib_borrow(this).downcast_unchecked(), &String::from_glib_none(string))
 }
@@ -1254,77 +1248,66 @@ where P: IsA<TextView> {
 #[cfg(any(feature = "v3_22_26", feature = "dox"))]
 unsafe extern "C" fn insert_emoji_trampoline<P>(this: *mut ffi::GtkTextView, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn move_cursor_trampoline<P>(this: *mut ffi::GtkTextView, step: ffi::GtkMovementStep, count: libc::c_int, extend_selection: glib_ffi::gboolean, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
-    callback_guard!();
     let f: &&(Fn(&P, MovementStep, i32, bool) + 'static) = transmute(f);
     f(&TextView::from_glib_borrow(this).downcast_unchecked(), from_glib(step), count, from_glib(extend_selection))
 }
 
 unsafe extern "C" fn move_viewport_trampoline<P>(this: *mut ffi::GtkTextView, step: ffi::GtkScrollStep, count: libc::c_int, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
-    callback_guard!();
     let f: &&(Fn(&P, ScrollStep, i32) + 'static) = transmute(f);
     f(&TextView::from_glib_borrow(this).downcast_unchecked(), from_glib(step), count)
 }
 
 unsafe extern "C" fn paste_clipboard_trampoline<P>(this: *mut ffi::GtkTextView, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn populate_popup_trampoline<P>(this: *mut ffi::GtkTextView, popup: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
-    callback_guard!();
     let f: &&(Fn(&P, &Widget) + 'static) = transmute(f);
     f(&TextView::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(popup))
 }
 
 unsafe extern "C" fn preedit_changed_trampoline<P>(this: *mut ffi::GtkTextView, preedit: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
-    callback_guard!();
     let f: &&(Fn(&P, &str) + 'static) = transmute(f);
     f(&TextView::from_glib_borrow(this).downcast_unchecked(), &String::from_glib_none(preedit))
 }
 
 unsafe extern "C" fn select_all_trampoline<P>(this: *mut ffi::GtkTextView, select: glib_ffi::gboolean, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
-    callback_guard!();
     let f: &&(Fn(&P, bool) + 'static) = transmute(f);
     f(&TextView::from_glib_borrow(this).downcast_unchecked(), from_glib(select))
 }
 
 unsafe extern "C" fn set_anchor_trampoline<P>(this: *mut ffi::GtkTextView, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn toggle_cursor_visible_trampoline<P>(this: *mut ffi::GtkTextView, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn toggle_overwrite_trampoline<P>(this: *mut ffi::GtkTextView, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_accepts_tab_trampoline<P>(this: *mut ffi::GtkTextView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextView::from_glib_borrow(this).downcast_unchecked())
 }
@@ -1332,42 +1315,36 @@ where P: IsA<TextView> {
 #[cfg(any(feature = "v3_18", feature = "dox"))]
 unsafe extern "C" fn notify_bottom_margin_trampoline<P>(this: *mut ffi::GtkTextView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_buffer_trampoline<P>(this: *mut ffi::GtkTextView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_cursor_visible_trampoline<P>(this: *mut ffi::GtkTextView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_editable_trampoline<P>(this: *mut ffi::GtkTextView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_im_module_trampoline<P>(this: *mut ffi::GtkTextView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_indent_trampoline<P>(this: *mut ffi::GtkTextView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextView::from_glib_borrow(this).downcast_unchecked())
 }
@@ -1375,7 +1352,6 @@ where P: IsA<TextView> {
 #[cfg(any(feature = "v3_6", feature = "dox"))]
 unsafe extern "C" fn notify_input_hints_trampoline<P>(this: *mut ffi::GtkTextView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextView::from_glib_borrow(this).downcast_unchecked())
 }
@@ -1383,56 +1359,48 @@ where P: IsA<TextView> {
 #[cfg(any(feature = "v3_6", feature = "dox"))]
 unsafe extern "C" fn notify_input_purpose_trampoline<P>(this: *mut ffi::GtkTextView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_justification_trampoline<P>(this: *mut ffi::GtkTextView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_left_margin_trampoline<P>(this: *mut ffi::GtkTextView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_monospace_trampoline<P>(this: *mut ffi::GtkTextView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_overwrite_trampoline<P>(this: *mut ffi::GtkTextView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_pixels_above_lines_trampoline<P>(this: *mut ffi::GtkTextView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_pixels_below_lines_trampoline<P>(this: *mut ffi::GtkTextView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_pixels_inside_wrap_trampoline<P>(this: *mut ffi::GtkTextView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextView::from_glib_borrow(this).downcast_unchecked())
 }
@@ -1440,21 +1408,18 @@ where P: IsA<TextView> {
 #[cfg(any(feature = "v3_8", feature = "dox"))]
 unsafe extern "C" fn notify_populate_all_trampoline<P>(this: *mut ffi::GtkTextView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_right_margin_trampoline<P>(this: *mut ffi::GtkTextView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_tabs_trampoline<P>(this: *mut ffi::GtkTextView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextView::from_glib_borrow(this).downcast_unchecked())
 }
@@ -1462,14 +1427,12 @@ where P: IsA<TextView> {
 #[cfg(any(feature = "v3_18", feature = "dox"))]
 unsafe extern "C" fn notify_top_margin_trampoline<P>(this: *mut ffi::GtkTextView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_wrap_mode_trampoline<P>(this: *mut ffi::GtkTextView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextView::from_glib_borrow(this).downcast_unchecked())
 }

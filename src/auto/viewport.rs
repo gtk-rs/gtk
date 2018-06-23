@@ -93,7 +93,6 @@ impl<O: IsA<Viewport> + IsA<glib::object::Object>> ViewportExt for O {
 
 unsafe extern "C" fn notify_shadow_type_trampoline<P>(this: *mut ffi::GtkViewport, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Viewport> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Viewport::from_glib_borrow(this).downcast_unchecked())
 }

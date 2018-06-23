@@ -133,21 +133,18 @@ impl<O: IsA<CellRendererSpinner> + IsA<glib::object::Object>> CellRendererSpinne
 
 unsafe extern "C" fn notify_active_trampoline<P>(this: *mut ffi::GtkCellRendererSpinner, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererSpinner> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CellRendererSpinner::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_pulse_trampoline<P>(this: *mut ffi::GtkCellRendererSpinner, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererSpinner> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CellRendererSpinner::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_size_trampoline<P>(this: *mut ffi::GtkCellRendererSpinner, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererSpinner> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CellRendererSpinner::from_glib_borrow(this).downcast_unchecked())
 }
