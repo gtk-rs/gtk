@@ -308,63 +308,54 @@ impl<O: IsA<CellRendererPixbuf> + IsA<glib::object::Object>> CellRendererPixbufE
 
 unsafe extern "C" fn notify_follow_state_trampoline<P>(this: *mut ffi::GtkCellRendererPixbuf, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererPixbuf> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CellRendererPixbuf::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_gicon_trampoline<P>(this: *mut ffi::GtkCellRendererPixbuf, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererPixbuf> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CellRendererPixbuf::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_icon_name_trampoline<P>(this: *mut ffi::GtkCellRendererPixbuf, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererPixbuf> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CellRendererPixbuf::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_pixbuf_trampoline<P>(this: *mut ffi::GtkCellRendererPixbuf, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererPixbuf> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CellRendererPixbuf::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_pixbuf_expander_closed_trampoline<P>(this: *mut ffi::GtkCellRendererPixbuf, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererPixbuf> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CellRendererPixbuf::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_pixbuf_expander_open_trampoline<P>(this: *mut ffi::GtkCellRendererPixbuf, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererPixbuf> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CellRendererPixbuf::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_stock_detail_trampoline<P>(this: *mut ffi::GtkCellRendererPixbuf, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererPixbuf> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CellRendererPixbuf::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_stock_id_trampoline<P>(this: *mut ffi::GtkCellRendererPixbuf, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererPixbuf> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CellRendererPixbuf::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_stock_size_trampoline<P>(this: *mut ffi::GtkCellRendererPixbuf, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererPixbuf> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CellRendererPixbuf::from_glib_borrow(this).downcast_unchecked())
 }

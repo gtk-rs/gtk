@@ -889,56 +889,48 @@ impl<O: IsA<IconView> + IsA<glib::object::Object> + glib::object::ObjectExt> Ico
 
 unsafe extern "C" fn activate_cursor_item_trampoline<P>(this: *mut ffi::GtkIconView, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<IconView> {
-    callback_guard!();
     let f: &&(Fn(&P) -> bool + 'static) = transmute(f);
     f(&IconView::from_glib_borrow(this).downcast_unchecked()).to_glib()
 }
 
 unsafe extern "C" fn item_activated_trampoline<P>(this: *mut ffi::GtkIconView, path: *mut ffi::GtkTreePath, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    callback_guard!();
     let f: &&(Fn(&P, &TreePath) + 'static) = transmute(f);
     f(&IconView::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(path))
 }
 
 unsafe extern "C" fn move_cursor_trampoline<P>(this: *mut ffi::GtkIconView, step: ffi::GtkMovementStep, count: libc::c_int, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<IconView> {
-    callback_guard!();
     let f: &&(Fn(&P, MovementStep, i32) -> bool + 'static) = transmute(f);
     f(&IconView::from_glib_borrow(this).downcast_unchecked(), from_glib(step), count).to_glib()
 }
 
 unsafe extern "C" fn select_all_trampoline<P>(this: *mut ffi::GtkIconView, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&IconView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn select_cursor_item_trampoline<P>(this: *mut ffi::GtkIconView, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&IconView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn selection_changed_trampoline<P>(this: *mut ffi::GtkIconView, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&IconView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn toggle_cursor_item_trampoline<P>(this: *mut ffi::GtkIconView, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&IconView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn unselect_all_trampoline<P>(this: *mut ffi::GtkIconView, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&IconView::from_glib_borrow(this).downcast_unchecked())
 }
@@ -946,119 +938,102 @@ where P: IsA<IconView> {
 #[cfg(any(feature = "v3_8", feature = "dox"))]
 unsafe extern "C" fn notify_activate_on_single_click_trampoline<P>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&IconView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_cell_area_trampoline<P>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&IconView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_column_spacing_trampoline<P>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&IconView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_columns_trampoline<P>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&IconView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_item_orientation_trampoline<P>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&IconView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_item_padding_trampoline<P>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&IconView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_item_width_trampoline<P>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&IconView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_margin_trampoline<P>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&IconView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_markup_column_trampoline<P>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&IconView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_model_trampoline<P>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&IconView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_pixbuf_column_trampoline<P>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&IconView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_reorderable_trampoline<P>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&IconView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_row_spacing_trampoline<P>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&IconView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_selection_mode_trampoline<P>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&IconView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_spacing_trampoline<P>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&IconView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_text_column_trampoline<P>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&IconView::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_tooltip_column_trampoline<P>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&IconView::from_glib_borrow(this).downcast_unchecked())
 }

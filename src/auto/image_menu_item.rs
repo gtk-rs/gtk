@@ -189,28 +189,24 @@ impl<O: IsA<ImageMenuItem> + IsA<glib::object::Object>> ImageMenuItemExt for O {
 
 unsafe extern "C" fn notify_accel_group_trampoline<P>(this: *mut ffi::GtkImageMenuItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ImageMenuItem> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&ImageMenuItem::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_always_show_image_trampoline<P>(this: *mut ffi::GtkImageMenuItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ImageMenuItem> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&ImageMenuItem::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_image_trampoline<P>(this: *mut ffi::GtkImageMenuItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ImageMenuItem> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&ImageMenuItem::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_use_stock_trampoline<P>(this: *mut ffi::GtkImageMenuItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ImageMenuItem> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&ImageMenuItem::from_glib_borrow(this).downcast_unchecked())
 }

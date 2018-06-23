@@ -105,7 +105,6 @@ impl<O: IsA<ApplicationWindow> + IsA<glib::object::Object>> ApplicationWindowExt
 
 unsafe extern "C" fn notify_show_menubar_trampoline<P>(this: *mut ffi::GtkApplicationWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ApplicationWindow> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&ApplicationWindow::from_glib_borrow(this).downcast_unchecked())
 }

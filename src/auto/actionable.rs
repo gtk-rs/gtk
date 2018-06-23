@@ -90,7 +90,6 @@ impl<O: IsA<Actionable> + IsA<glib::object::Object>> ActionableExt for O {
 
 unsafe extern "C" fn notify_action_name_trampoline<P>(this: *mut ffi::GtkActionable, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Actionable> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Actionable::from_glib_borrow(this).downcast_unchecked())
 }

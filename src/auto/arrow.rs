@@ -112,14 +112,12 @@ impl<O: IsA<Arrow> + IsA<glib::object::Object>> ArrowExt for O {
 
 unsafe extern "C" fn notify_arrow_type_trampoline<P>(this: *mut ffi::GtkArrow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Arrow> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Arrow::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_shadow_type_trampoline<P>(this: *mut ffi::GtkArrow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Arrow> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Arrow::from_glib_borrow(this).downcast_unchecked())
 }

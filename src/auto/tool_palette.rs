@@ -276,21 +276,18 @@ impl<O: IsA<ToolPalette> + IsA<glib::object::Object>> ToolPaletteExt for O {
 
 unsafe extern "C" fn notify_icon_size_trampoline<P>(this: *mut ffi::GtkToolPalette, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolPalette> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&ToolPalette::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_icon_size_set_trampoline<P>(this: *mut ffi::GtkToolPalette, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolPalette> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&ToolPalette::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_toolbar_style_trampoline<P>(this: *mut ffi::GtkToolPalette, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolPalette> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&ToolPalette::from_glib_borrow(this).downcast_unchecked())
 }

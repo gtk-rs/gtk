@@ -76,7 +76,6 @@ impl<O: IsA<SeparatorToolItem> + IsA<glib::object::Object>> SeparatorToolItemExt
 
 unsafe extern "C" fn notify_draw_trampoline<P>(this: *mut ffi::GtkSeparatorToolItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<SeparatorToolItem> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&SeparatorToolItem::from_glib_borrow(this).downcast_unchecked())
 }

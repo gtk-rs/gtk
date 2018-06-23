@@ -110,14 +110,12 @@ impl<O: IsA<MenuBar> + IsA<glib::object::Object>> MenuBarExt for O {
 
 unsafe extern "C" fn notify_child_pack_direction_trampoline<P>(this: *mut ffi::GtkMenuBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MenuBar> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&MenuBar::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_pack_direction_trampoline<P>(this: *mut ffi::GtkMenuBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MenuBar> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&MenuBar::from_glib_borrow(this).downcast_unchecked())
 }

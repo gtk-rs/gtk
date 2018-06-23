@@ -161,28 +161,24 @@ impl<O: IsA<AppChooserButton> + IsA<glib::object::Object>> AppChooserButtonExt f
 
 unsafe extern "C" fn custom_item_activated_trampoline<P>(this: *mut ffi::GtkAppChooserButton, item_name: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<AppChooserButton> {
-    callback_guard!();
     let f: &&(Fn(&P, &str) + 'static) = transmute(f);
     f(&AppChooserButton::from_glib_borrow(this).downcast_unchecked(), &String::from_glib_none(item_name))
 }
 
 unsafe extern "C" fn notify_heading_trampoline<P>(this: *mut ffi::GtkAppChooserButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AppChooserButton> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&AppChooserButton::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_show_default_item_trampoline<P>(this: *mut ffi::GtkAppChooserButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AppChooserButton> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&AppChooserButton::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_show_dialog_item_trampoline<P>(this: *mut ffi::GtkAppChooserButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AppChooserButton> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&AppChooserButton::from_glib_borrow(this).downcast_unchecked())
 }

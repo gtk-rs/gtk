@@ -110,14 +110,12 @@ impl<O: IsA<MenuToolButton> + IsA<glib::object::Object>> MenuToolButtonExt for O
 
 unsafe extern "C" fn show_menu_trampoline<P>(this: *mut ffi::GtkMenuToolButton, f: glib_ffi::gpointer)
 where P: IsA<MenuToolButton> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&MenuToolButton::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_menu_trampoline<P>(this: *mut ffi::GtkMenuToolButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MenuToolButton> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&MenuToolButton::from_glib_borrow(this).downcast_unchecked())
 }

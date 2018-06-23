@@ -73,7 +73,6 @@ impl<O: IsA<GestureZoom> + IsA<glib::object::Object>> GestureZoomExt for O {
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 unsafe extern "C" fn scale_changed_trampoline<P>(this: *mut ffi::GtkGestureZoom, scale: libc::c_double, f: glib_ffi::gpointer)
 where P: IsA<GestureZoom> {
-    callback_guard!();
     let f: &&(Fn(&P, f64) + 'static) = transmute(f);
     f(&GestureZoom::from_glib_borrow(this).downcast_unchecked(), scale)
 }

@@ -368,35 +368,30 @@ impl<O: IsA<Grid> + IsA<Container> + IsA<glib::object::Object>> GridExt for O {
 
 unsafe extern "C" fn notify_baseline_row_trampoline<P>(this: *mut ffi::GtkGrid, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Grid> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Grid::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_column_homogeneous_trampoline<P>(this: *mut ffi::GtkGrid, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Grid> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Grid::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_column_spacing_trampoline<P>(this: *mut ffi::GtkGrid, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Grid> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Grid::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_row_homogeneous_trampoline<P>(this: *mut ffi::GtkGrid, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Grid> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Grid::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_row_spacing_trampoline<P>(this: *mut ffi::GtkGrid, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Grid> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Grid::from_glib_borrow(this).downcast_unchecked())
 }

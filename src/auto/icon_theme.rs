@@ -244,7 +244,6 @@ impl<O: IsA<IconTheme> + IsA<glib::object::Object>> IconThemeExt for O {
 
 unsafe extern "C" fn changed_trampoline<P>(this: *mut ffi::GtkIconTheme, f: glib_ffi::gpointer)
 where P: IsA<IconTheme> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&IconTheme::from_glib_borrow(this).downcast_unchecked())
 }

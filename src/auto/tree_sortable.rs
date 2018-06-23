@@ -69,7 +69,6 @@ impl<O: IsA<TreeSortable> + IsA<glib::object::Object>> TreeSortableExt for O {
 
 unsafe extern "C" fn sort_column_changed_trampoline<P>(this: *mut ffi::GtkTreeSortable, f: glib_ffi::gpointer)
 where P: IsA<TreeSortable> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TreeSortable::from_glib_borrow(this).downcast_unchecked())
 }

@@ -307,35 +307,30 @@ impl<O: IsA<ToolItem> + IsA<glib::object::Object>> ToolItemExt for O {
 
 unsafe extern "C" fn create_menu_proxy_trampoline<P>(this: *mut ffi::GtkToolItem, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<ToolItem> {
-    callback_guard!();
     let f: &&(Fn(&P) -> Inhibit + 'static) = transmute(f);
     f(&ToolItem::from_glib_borrow(this).downcast_unchecked()).to_glib()
 }
 
 unsafe extern "C" fn toolbar_reconfigured_trampoline<P>(this: *mut ffi::GtkToolItem, f: glib_ffi::gpointer)
 where P: IsA<ToolItem> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&ToolItem::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_is_important_trampoline<P>(this: *mut ffi::GtkToolItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolItem> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&ToolItem::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_visible_horizontal_trampoline<P>(this: *mut ffi::GtkToolItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolItem> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&ToolItem::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_visible_vertical_trampoline<P>(this: *mut ffi::GtkToolItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolItem> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&ToolItem::from_glib_borrow(this).downcast_unchecked())
 }

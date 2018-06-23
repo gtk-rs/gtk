@@ -193,7 +193,6 @@ impl<O: IsA<ListBoxRow> + IsA<glib::object::Object> + glib::object::ObjectExt> L
 #[cfg(any(feature = "v3_10", feature = "dox"))]
 unsafe extern "C" fn activate_trampoline<P>(this: *mut ffi::GtkListBoxRow, f: glib_ffi::gpointer)
 where P: IsA<ListBoxRow> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&ListBoxRow::from_glib_borrow(this).downcast_unchecked())
 }
@@ -201,7 +200,6 @@ where P: IsA<ListBoxRow> {
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 unsafe extern "C" fn notify_activatable_trampoline<P>(this: *mut ffi::GtkListBoxRow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ListBoxRow> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&ListBoxRow::from_glib_borrow(this).downcast_unchecked())
 }
@@ -209,7 +207,6 @@ where P: IsA<ListBoxRow> {
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 unsafe extern "C" fn notify_selectable_trampoline<P>(this: *mut ffi::GtkListBoxRow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ListBoxRow> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&ListBoxRow::from_glib_borrow(this).downcast_unchecked())
 }

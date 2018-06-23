@@ -168,28 +168,24 @@ impl<O: IsA<AspectFrame> + IsA<glib::object::Object>> AspectFrameExt for O {
 
 unsafe extern "C" fn notify_obey_child_trampoline<P>(this: *mut ffi::GtkAspectFrame, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AspectFrame> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&AspectFrame::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_ratio_trampoline<P>(this: *mut ffi::GtkAspectFrame, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AspectFrame> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&AspectFrame::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_xalign_trampoline<P>(this: *mut ffi::GtkAspectFrame, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AspectFrame> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&AspectFrame::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_yalign_trampoline<P>(this: *mut ffi::GtkAspectFrame, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AspectFrame> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&AspectFrame::from_glib_borrow(this).downcast_unchecked())
 }

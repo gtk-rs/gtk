@@ -215,42 +215,36 @@ impl<O: IsA<ProgressBar> + IsA<glib::object::Object>> ProgressBarExt for O {
 
 unsafe extern "C" fn notify_ellipsize_trampoline<P>(this: *mut ffi::GtkProgressBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ProgressBar> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&ProgressBar::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_fraction_trampoline<P>(this: *mut ffi::GtkProgressBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ProgressBar> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&ProgressBar::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_inverted_trampoline<P>(this: *mut ffi::GtkProgressBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ProgressBar> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&ProgressBar::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_pulse_step_trampoline<P>(this: *mut ffi::GtkProgressBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ProgressBar> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&ProgressBar::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_show_text_trampoline<P>(this: *mut ffi::GtkProgressBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ProgressBar> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&ProgressBar::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_text_trampoline<P>(this: *mut ffi::GtkProgressBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ProgressBar> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&ProgressBar::from_glib_borrow(this).downcast_unchecked())
 }

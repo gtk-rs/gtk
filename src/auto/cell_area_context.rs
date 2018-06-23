@@ -218,35 +218,30 @@ impl<O: IsA<CellAreaContext> + IsA<glib::object::Object>> CellAreaContextExt for
 
 unsafe extern "C" fn notify_area_trampoline<P>(this: *mut ffi::GtkCellAreaContext, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellAreaContext> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CellAreaContext::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_minimum_height_trampoline<P>(this: *mut ffi::GtkCellAreaContext, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellAreaContext> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CellAreaContext::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_minimum_width_trampoline<P>(this: *mut ffi::GtkCellAreaContext, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellAreaContext> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CellAreaContext::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_natural_height_trampoline<P>(this: *mut ffi::GtkCellAreaContext, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellAreaContext> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CellAreaContext::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_natural_width_trampoline<P>(this: *mut ffi::GtkCellAreaContext, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellAreaContext> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CellAreaContext::from_glib_borrow(this).downcast_unchecked())
 }

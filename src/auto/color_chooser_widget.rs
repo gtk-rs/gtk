@@ -81,7 +81,6 @@ impl<O: IsA<ColorChooserWidget> + IsA<glib::object::Object>> ColorChooserWidgetE
 
 unsafe extern "C" fn notify_show_editor_trampoline<P>(this: *mut ffi::GtkColorChooserWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ColorChooserWidget> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&ColorChooserWidget::from_glib_borrow(this).downcast_unchecked())
 }

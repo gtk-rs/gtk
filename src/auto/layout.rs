@@ -186,14 +186,12 @@ impl<O: IsA<Layout> + IsA<Container> + IsA<glib::object::Object>> LayoutExt for 
 
 unsafe extern "C" fn notify_height_trampoline<P>(this: *mut ffi::GtkLayout, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Layout> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Layout::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_width_trampoline<P>(this: *mut ffi::GtkLayout, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Layout> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Layout::from_glib_borrow(this).downcast_unchecked())
 }

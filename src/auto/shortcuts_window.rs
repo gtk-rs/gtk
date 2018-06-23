@@ -125,28 +125,24 @@ impl<O: IsA<ShortcutsWindow> + IsA<glib::object::Object> + glib::object::ObjectE
 
 unsafe extern "C" fn close_trampoline<P>(this: *mut ffi::GtkShortcutsWindow, f: glib_ffi::gpointer)
 where P: IsA<ShortcutsWindow> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&ShortcutsWindow::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn search_trampoline<P>(this: *mut ffi::GtkShortcutsWindow, f: glib_ffi::gpointer)
 where P: IsA<ShortcutsWindow> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&ShortcutsWindow::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_section_name_trampoline<P>(this: *mut ffi::GtkShortcutsWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ShortcutsWindow> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&ShortcutsWindow::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_view_name_trampoline<P>(this: *mut ffi::GtkShortcutsWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ShortcutsWindow> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&ShortcutsWindow::from_glib_borrow(this).downcast_unchecked())
 }

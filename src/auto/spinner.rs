@@ -93,7 +93,6 @@ impl<O: IsA<Spinner> + IsA<glib::object::Object>> SpinnerExt for O {
 
 unsafe extern "C" fn notify_active_trampoline<P>(this: *mut ffi::GtkSpinner, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Spinner> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Spinner::from_glib_borrow(this).downcast_unchecked())
 }

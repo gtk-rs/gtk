@@ -136,7 +136,6 @@ impl<O: IsA<Switch> + IsA<glib::object::Object> + glib::object::ObjectExt> Switc
 
 unsafe extern "C" fn activate_trampoline<P>(this: *mut ffi::GtkSwitch, f: glib_ffi::gpointer)
 where P: IsA<Switch> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Switch::from_glib_borrow(this).downcast_unchecked())
 }
@@ -144,14 +143,12 @@ where P: IsA<Switch> {
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 unsafe extern "C" fn state_set_trampoline<P>(this: *mut ffi::GtkSwitch, state: glib_ffi::gboolean, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Switch> {
-    callback_guard!();
     let f: &&(Fn(&P, bool) -> Inhibit + 'static) = transmute(f);
     f(&Switch::from_glib_borrow(this).downcast_unchecked(), from_glib(state)).to_glib()
 }
 
 unsafe extern "C" fn notify_active_trampoline<P>(this: *mut ffi::GtkSwitch, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Switch> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Switch::from_glib_borrow(this).downcast_unchecked())
 }
@@ -159,7 +156,6 @@ where P: IsA<Switch> {
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 unsafe extern "C" fn notify_state_trampoline<P>(this: *mut ffi::GtkSwitch, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Switch> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Switch::from_glib_borrow(this).downcast_unchecked())
 }

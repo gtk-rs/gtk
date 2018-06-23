@@ -654,154 +654,132 @@ impl<O: IsA<StatusIcon> + IsA<glib::object::Object> + glib::object::ObjectExt> S
 
 unsafe extern "C" fn activate_trampoline<P>(this: *mut ffi::GtkStatusIcon, f: glib_ffi::gpointer)
 where P: IsA<StatusIcon> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&StatusIcon::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn button_press_event_trampoline<P>(this: *mut ffi::GtkStatusIcon, event: *mut gdk_ffi::GdkEventButton, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<StatusIcon> {
-    callback_guard!();
     let f: &&(Fn(&P, &gdk::EventButton) -> bool + 'static) = transmute(f);
     f(&StatusIcon::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(event)).to_glib()
 }
 
 unsafe extern "C" fn button_release_event_trampoline<P>(this: *mut ffi::GtkStatusIcon, event: *mut gdk_ffi::GdkEventButton, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<StatusIcon> {
-    callback_guard!();
     let f: &&(Fn(&P, &gdk::EventButton) -> bool + 'static) = transmute(f);
     f(&StatusIcon::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(event)).to_glib()
 }
 
 unsafe extern "C" fn popup_menu_trampoline<P>(this: *mut ffi::GtkStatusIcon, button: libc::c_uint, activate_time: libc::c_uint, f: glib_ffi::gpointer)
 where P: IsA<StatusIcon> {
-    callback_guard!();
     let f: &&(Fn(&P, u32, u32) + 'static) = transmute(f);
     f(&StatusIcon::from_glib_borrow(this).downcast_unchecked(), button, activate_time)
 }
 
 unsafe extern "C" fn query_tooltip_trampoline<P>(this: *mut ffi::GtkStatusIcon, x: libc::c_int, y: libc::c_int, keyboard_mode: glib_ffi::gboolean, tooltip: *mut ffi::GtkTooltip, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<StatusIcon> {
-    callback_guard!();
     let f: &&(Fn(&P, i32, i32, bool, &Tooltip) -> bool + 'static) = transmute(f);
     f(&StatusIcon::from_glib_borrow(this).downcast_unchecked(), x, y, from_glib(keyboard_mode), &from_glib_borrow(tooltip)).to_glib()
 }
 
 unsafe extern "C" fn scroll_event_trampoline<P>(this: *mut ffi::GtkStatusIcon, event: *mut gdk_ffi::GdkEventScroll, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<StatusIcon> {
-    callback_guard!();
     let f: &&(Fn(&P, &gdk::EventScroll) -> bool + 'static) = transmute(f);
     f(&StatusIcon::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(event)).to_glib()
 }
 
 unsafe extern "C" fn size_changed_trampoline<P>(this: *mut ffi::GtkStatusIcon, size: libc::c_int, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<StatusIcon> {
-    callback_guard!();
     let f: &&(Fn(&P, i32) -> bool + 'static) = transmute(f);
     f(&StatusIcon::from_glib_borrow(this).downcast_unchecked(), size).to_glib()
 }
 
 unsafe extern "C" fn notify_embedded_trampoline<P>(this: *mut ffi::GtkStatusIcon, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<StatusIcon> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&StatusIcon::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_file_trampoline<P>(this: *mut ffi::GtkStatusIcon, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<StatusIcon> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&StatusIcon::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_gicon_trampoline<P>(this: *mut ffi::GtkStatusIcon, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<StatusIcon> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&StatusIcon::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_has_tooltip_trampoline<P>(this: *mut ffi::GtkStatusIcon, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<StatusIcon> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&StatusIcon::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_icon_name_trampoline<P>(this: *mut ffi::GtkStatusIcon, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<StatusIcon> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&StatusIcon::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_orientation_trampoline<P>(this: *mut ffi::GtkStatusIcon, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<StatusIcon> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&StatusIcon::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_pixbuf_trampoline<P>(this: *mut ffi::GtkStatusIcon, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<StatusIcon> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&StatusIcon::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_screen_trampoline<P>(this: *mut ffi::GtkStatusIcon, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<StatusIcon> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&StatusIcon::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_size_trampoline<P>(this: *mut ffi::GtkStatusIcon, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<StatusIcon> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&StatusIcon::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_stock_trampoline<P>(this: *mut ffi::GtkStatusIcon, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<StatusIcon> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&StatusIcon::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_storage_type_trampoline<P>(this: *mut ffi::GtkStatusIcon, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<StatusIcon> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&StatusIcon::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_title_trampoline<P>(this: *mut ffi::GtkStatusIcon, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<StatusIcon> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&StatusIcon::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_tooltip_markup_trampoline<P>(this: *mut ffi::GtkStatusIcon, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<StatusIcon> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&StatusIcon::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_tooltip_text_trampoline<P>(this: *mut ffi::GtkStatusIcon, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<StatusIcon> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&StatusIcon::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_visible_trampoline<P>(this: *mut ffi::GtkStatusIcon, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<StatusIcon> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&StatusIcon::from_glib_borrow(this).downcast_unchecked())
 }

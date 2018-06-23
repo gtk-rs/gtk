@@ -124,7 +124,6 @@ impl<O: IsA<ButtonBox> + IsA<glib::object::Object>> ButtonBoxExt for O {
 
 unsafe extern "C" fn notify_layout_style_trampoline<P>(this: *mut ffi::GtkButtonBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ButtonBox> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&ButtonBox::from_glib_borrow(this).downcast_unchecked())
 }

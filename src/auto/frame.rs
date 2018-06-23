@@ -205,35 +205,30 @@ impl<O: IsA<Frame> + IsA<glib::object::Object>> FrameExt for O {
 
 unsafe extern "C" fn notify_label_trampoline<P>(this: *mut ffi::GtkFrame, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Frame> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Frame::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_label_widget_trampoline<P>(this: *mut ffi::GtkFrame, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Frame> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Frame::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_label_xalign_trampoline<P>(this: *mut ffi::GtkFrame, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Frame> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Frame::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_label_yalign_trampoline<P>(this: *mut ffi::GtkFrame, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Frame> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Frame::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_shadow_type_trampoline<P>(this: *mut ffi::GtkFrame, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Frame> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Frame::from_glib_borrow(this).downcast_unchecked())
 }

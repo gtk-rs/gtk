@@ -108,21 +108,18 @@ impl<O: IsA<CellEditable> + IsA<glib::object::Object>> CellEditableExt for O {
 
 unsafe extern "C" fn editing_done_trampoline<P>(this: *mut ffi::GtkCellEditable, f: glib_ffi::gpointer)
 where P: IsA<CellEditable> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CellEditable::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn remove_widget_trampoline<P>(this: *mut ffi::GtkCellEditable, f: glib_ffi::gpointer)
 where P: IsA<CellEditable> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CellEditable::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_editing_canceled_trampoline<P>(this: *mut ffi::GtkCellEditable, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellEditable> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&CellEditable::from_glib_borrow(this).downcast_unchecked())
 }

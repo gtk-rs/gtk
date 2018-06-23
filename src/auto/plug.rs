@@ -123,21 +123,18 @@ impl<O: IsA<Plug> + IsA<glib::object::Object>> PlugExt for O {
 
 unsafe extern "C" fn embedded_trampoline<P>(this: *mut ffi::GtkPlug, f: glib_ffi::gpointer)
 where P: IsA<Plug> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Plug::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_embedded_trampoline<P>(this: *mut ffi::GtkPlug, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Plug> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Plug::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_socket_window_trampoline<P>(this: *mut ffi::GtkPlug, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Plug> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Plug::from_glib_borrow(this).downcast_unchecked())
 }

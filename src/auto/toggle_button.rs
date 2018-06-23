@@ -181,28 +181,24 @@ impl<O: IsA<ToggleButton> + IsA<glib::object::Object>> ToggleButtonExt for O {
 
 unsafe extern "C" fn toggled_trampoline<P>(this: *mut ffi::GtkToggleButton, f: glib_ffi::gpointer)
 where P: IsA<ToggleButton> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&ToggleButton::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_active_trampoline<P>(this: *mut ffi::GtkToggleButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToggleButton> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&ToggleButton::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_draw_indicator_trampoline<P>(this: *mut ffi::GtkToggleButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToggleButton> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&ToggleButton::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_inconsistent_trampoline<P>(this: *mut ffi::GtkToggleButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToggleButton> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&ToggleButton::from_glib_borrow(this).downcast_unchecked())
 }

@@ -34,7 +34,6 @@ unsafe extern "C" fn insert_text_trampoline(this: *mut ffi::GtkTextBuffer,
                                             text: *mut c_char,
                                             len: c_int,
                                             f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&TextBuffer, &TextIter, &str) + 'static) = transmute(f);
     f(&from_glib_borrow(this),
       &mut from_glib_borrow(location),

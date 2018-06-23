@@ -173,14 +173,12 @@ impl<O: IsA<SearchBar> + IsA<glib::object::Object>> SearchBarExt for O {
 
 unsafe extern "C" fn notify_search_mode_enabled_trampoline<P>(this: *mut ffi::GtkSearchBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<SearchBar> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&SearchBar::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_show_close_button_trampoline<P>(this: *mut ffi::GtkSearchBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<SearchBar> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&SearchBar::from_glib_borrow(this).downcast_unchecked())
 }

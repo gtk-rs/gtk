@@ -864,126 +864,108 @@ impl<O: IsA<TextBuffer> + IsA<glib::object::Object>> TextBufferExt for O {
 
 unsafe extern "C" fn apply_tag_trampoline<P>(this: *mut ffi::GtkTextBuffer, tag: *mut ffi::GtkTextTag, start: *mut ffi::GtkTextIter, end: *mut ffi::GtkTextIter, f: glib_ffi::gpointer)
 where P: IsA<TextBuffer> {
-    callback_guard!();
     let f: &&(Fn(&P, &TextTag, &TextIter, &TextIter) + 'static) = transmute(f);
     f(&TextBuffer::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(tag), &from_glib_borrow(start), &from_glib_borrow(end))
 }
 
 unsafe extern "C" fn begin_user_action_trampoline<P>(this: *mut ffi::GtkTextBuffer, f: glib_ffi::gpointer)
 where P: IsA<TextBuffer> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextBuffer::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn changed_trampoline<P>(this: *mut ffi::GtkTextBuffer, f: glib_ffi::gpointer)
 where P: IsA<TextBuffer> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextBuffer::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn delete_range_trampoline<P>(this: *mut ffi::GtkTextBuffer, start: *mut ffi::GtkTextIter, end: *mut ffi::GtkTextIter, f: glib_ffi::gpointer)
 where P: IsA<TextBuffer> {
-    callback_guard!();
     let f: &&(Fn(&P, &TextIter, &TextIter) + 'static) = transmute(f);
     f(&TextBuffer::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(start), &from_glib_borrow(end))
 }
 
 unsafe extern "C" fn end_user_action_trampoline<P>(this: *mut ffi::GtkTextBuffer, f: glib_ffi::gpointer)
 where P: IsA<TextBuffer> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextBuffer::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn insert_child_anchor_trampoline<P>(this: *mut ffi::GtkTextBuffer, location: *mut ffi::GtkTextIter, anchor: *mut ffi::GtkTextChildAnchor, f: glib_ffi::gpointer)
 where P: IsA<TextBuffer> {
-    callback_guard!();
     let f: &&(Fn(&P, &TextIter, &TextChildAnchor) + 'static) = transmute(f);
     f(&TextBuffer::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(location), &from_glib_borrow(anchor))
 }
 
 unsafe extern "C" fn insert_pixbuf_trampoline<P>(this: *mut ffi::GtkTextBuffer, location: *mut ffi::GtkTextIter, pixbuf: *mut gdk_pixbuf_ffi::GdkPixbuf, f: glib_ffi::gpointer)
 where P: IsA<TextBuffer> {
-    callback_guard!();
     let f: &&(Fn(&P, &TextIter, &gdk_pixbuf::Pixbuf) + 'static) = transmute(f);
     f(&TextBuffer::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(location), &from_glib_borrow(pixbuf))
 }
 
 unsafe extern "C" fn mark_deleted_trampoline<P>(this: *mut ffi::GtkTextBuffer, mark: *mut ffi::GtkTextMark, f: glib_ffi::gpointer)
 where P: IsA<TextBuffer> {
-    callback_guard!();
     let f: &&(Fn(&P, &TextMark) + 'static) = transmute(f);
     f(&TextBuffer::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(mark))
 }
 
 unsafe extern "C" fn mark_set_trampoline<P>(this: *mut ffi::GtkTextBuffer, location: *mut ffi::GtkTextIter, mark: *mut ffi::GtkTextMark, f: glib_ffi::gpointer)
 where P: IsA<TextBuffer> {
-    callback_guard!();
     let f: &&(Fn(&P, &TextIter, &TextMark) + 'static) = transmute(f);
     f(&TextBuffer::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(location), &from_glib_borrow(mark))
 }
 
 unsafe extern "C" fn modified_changed_trampoline<P>(this: *mut ffi::GtkTextBuffer, f: glib_ffi::gpointer)
 where P: IsA<TextBuffer> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextBuffer::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn paste_done_trampoline<P>(this: *mut ffi::GtkTextBuffer, clipboard: *mut ffi::GtkClipboard, f: glib_ffi::gpointer)
 where P: IsA<TextBuffer> {
-    callback_guard!();
     let f: &&(Fn(&P, &Clipboard) + 'static) = transmute(f);
     f(&TextBuffer::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(clipboard))
 }
 
 unsafe extern "C" fn remove_tag_trampoline<P>(this: *mut ffi::GtkTextBuffer, tag: *mut ffi::GtkTextTag, start: *mut ffi::GtkTextIter, end: *mut ffi::GtkTextIter, f: glib_ffi::gpointer)
 where P: IsA<TextBuffer> {
-    callback_guard!();
     let f: &&(Fn(&P, &TextTag, &TextIter, &TextIter) + 'static) = transmute(f);
     f(&TextBuffer::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(tag), &from_glib_borrow(start), &from_glib_borrow(end))
 }
 
 unsafe extern "C" fn notify_copy_target_list_trampoline<P>(this: *mut ffi::GtkTextBuffer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextBuffer> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextBuffer::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_cursor_position_trampoline<P>(this: *mut ffi::GtkTextBuffer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextBuffer> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextBuffer::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_has_selection_trampoline<P>(this: *mut ffi::GtkTextBuffer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextBuffer> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextBuffer::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_paste_target_list_trampoline<P>(this: *mut ffi::GtkTextBuffer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextBuffer> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextBuffer::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_tag_table_trampoline<P>(this: *mut ffi::GtkTextBuffer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextBuffer> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextBuffer::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_text_trampoline<P>(this: *mut ffi::GtkTextBuffer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextBuffer> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextBuffer::from_glib_borrow(this).downcast_unchecked())
 }

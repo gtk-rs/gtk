@@ -129,7 +129,6 @@ impl<O: IsA<PopoverMenu> + IsA<Container> + IsA<glib::object::Object>> PopoverMe
 
 unsafe extern "C" fn notify_visible_submenu_trampoline<P>(this: *mut ffi::GtkPopoverMenu, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<PopoverMenu> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&PopoverMenu::from_glib_borrow(this).downcast_unchecked())
 }

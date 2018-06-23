@@ -224,7 +224,6 @@ impl<O: IsA<NativeDialog> + IsA<glib::object::Object>> NativeDialogExt for O {
 #[cfg(any(feature = "v3_20", feature = "dox"))]
 unsafe extern "C" fn response_trampoline<P>(this: *mut ffi::GtkNativeDialog, response_id: libc::c_int, f: glib_ffi::gpointer)
 where P: IsA<NativeDialog> {
-    callback_guard!();
     let f: &&(Fn(&P, i32) + 'static) = transmute(f);
     f(&NativeDialog::from_glib_borrow(this).downcast_unchecked(), response_id)
 }
@@ -232,7 +231,6 @@ where P: IsA<NativeDialog> {
 #[cfg(any(feature = "v3_20", feature = "dox"))]
 unsafe extern "C" fn notify_modal_trampoline<P>(this: *mut ffi::GtkNativeDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<NativeDialog> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&NativeDialog::from_glib_borrow(this).downcast_unchecked())
 }
@@ -240,7 +238,6 @@ where P: IsA<NativeDialog> {
 #[cfg(any(feature = "v3_20", feature = "dox"))]
 unsafe extern "C" fn notify_title_trampoline<P>(this: *mut ffi::GtkNativeDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<NativeDialog> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&NativeDialog::from_glib_borrow(this).downcast_unchecked())
 }
@@ -248,7 +245,6 @@ where P: IsA<NativeDialog> {
 #[cfg(any(feature = "v3_20", feature = "dox"))]
 unsafe extern "C" fn notify_transient_for_trampoline<P>(this: *mut ffi::GtkNativeDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<NativeDialog> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&NativeDialog::from_glib_borrow(this).downcast_unchecked())
 }
@@ -256,7 +252,6 @@ where P: IsA<NativeDialog> {
 #[cfg(any(feature = "v3_20", feature = "dox"))]
 unsafe extern "C" fn notify_visible_trampoline<P>(this: *mut ffi::GtkNativeDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<NativeDialog> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&NativeDialog::from_glib_borrow(this).downcast_unchecked())
 }

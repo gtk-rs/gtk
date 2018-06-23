@@ -110,14 +110,12 @@ impl<O: IsA<TextMark> + IsA<glib::object::Object>> TextMarkExt for O {
 
 unsafe extern "C" fn notify_left_gravity_trampoline<P>(this: *mut ffi::GtkTextMark, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextMark> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextMark::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_name_trampoline<P>(this: *mut ffi::GtkTextMark, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextMark> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextMark::from_glib_borrow(this).downcast_unchecked())
 }

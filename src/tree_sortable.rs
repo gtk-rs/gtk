@@ -62,14 +62,12 @@ pub trait TreeSortableExtManual {
 unsafe extern "C" fn trampoline<T>(this: *mut GtkTreeModel, iter: *mut GtkTreeIter,
                                    iter2: *mut GtkTreeIter, f: gpointer) -> i32
 where T: IsA<TreeModel> {
-    callback_guard!();
     let f: &&(Fn(&T, &TreeIter, &TreeIter) -> Ordering) = transmute(f);
     f(&TreeModel::from_glib_none(this).downcast_unchecked(), &from_glib_borrow(iter),
       &from_glib_borrow(iter2)).to_glib()
 }
 
 unsafe extern "C" fn destroy_closure<T>(ptr: gpointer) {
-    callback_guard!();
     Box::<Box<Fn(&T, &TreeIter, &TreeIter) -> Ordering + 'static>>::from_raw(ptr as *mut _);
 }
 

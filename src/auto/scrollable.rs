@@ -154,28 +154,24 @@ impl<O: IsA<Scrollable> + IsA<glib::object::Object>> ScrollableExt for O {
 
 unsafe extern "C" fn notify_hadjustment_trampoline<P>(this: *mut ffi::GtkScrollable, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Scrollable> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Scrollable::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_hscroll_policy_trampoline<P>(this: *mut ffi::GtkScrollable, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Scrollable> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Scrollable::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_vadjustment_trampoline<P>(this: *mut ffi::GtkScrollable, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Scrollable> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Scrollable::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_vscroll_policy_trampoline<P>(this: *mut ffi::GtkScrollable, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Scrollable> {
-    callback_guard!();
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Scrollable::from_glib_borrow(this).downcast_unchecked())
 }
