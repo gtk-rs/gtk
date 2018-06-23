@@ -10,8 +10,7 @@ while (/^(\N*)\V*fn\s+(\w+)\s*(<[^(]+>)?\s*(\([^{;]+)\{\N*\n^(\N*)$/gms) {
 		$first_line =~ /^\s*(
 			assert_initialized_main_thread |
 			assert_not_initialized |
-			skip_assert_initialized |
-			callback_guard
+			skip_assert_initialized
 		)!\(\)/x) {
 		print "$ARGV: $name$signature\n";
 		$e = 1

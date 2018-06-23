@@ -23,13 +23,11 @@ use {
 // idle_add and timeout_add fixed to the main thread
 
 unsafe extern "C" fn trampoline(func: gpointer) -> gboolean {
-    callback_guard!();
     let func: &RefCell<Box<FnMut() -> Continue + 'static>> = transmute(func);
     (&mut *func.borrow_mut())().to_glib()
 }
 
 unsafe extern "C" fn destroy_closure(ptr: gpointer) {
-    callback_guard!();
     Box::<RefCell<Box<FnMut() -> Continue + 'static>>>::from_raw(ptr as *mut _);
 }
 
@@ -150,7 +148,6 @@ mod editable {
     unsafe extern "C" fn trampoline<T>(this: *mut GtkEditable,
                                        f: &&(Fn(&T) + 'static))
     where T: IsA<Editable> {
-        callback_guard!();
         f(&Editable::from_glib_borrow(this).downcast_unchecked());
     }
 
@@ -159,7 +156,6 @@ mod editable {
                                               end_pos: c_int,
                                               f: &&(Fn(&T, i32, i32) + 'static))
     where T: IsA<Editable> {
-        callback_guard!();
         f(&Editable::from_glib_borrow(this).downcast_unchecked(), start_pos, end_pos);
     }
 
@@ -169,7 +165,6 @@ mod editable {
                                               position: *mut c_int,
                                               f: &&(Fn(&T, &str, &mut i32) + 'static))
     where T: IsA<Editable> {
-        callback_guard!();
         let buf = if new_text_length != -1 {
             slice::from_raw_parts(new_text as *mut c_uchar,
                                   new_text_length as usize)
@@ -263,7 +258,6 @@ mod spin_button {
     unsafe extern "C" fn change_trampoline(this: *mut GtkSpinButton,
                                            scroll: ScrollType,
                                            f: &&(Fn(&SpinButton, ScrollType) + 'static)) {
-        callback_guard!();
         f(&from_glib_borrow(this), scroll)
     }
 
@@ -271,7 +265,6 @@ mod spin_button {
                                           new_value: *mut c_double,
                                           f: &&(Fn(&SpinButton) -> Option<Result<f64, ()>> + 'static))
                                           -> c_int {
-        callback_guard!();
         match f(&from_glib_borrow(this)) {
             Some(Ok(v)) => {
                 *new_value = v;
@@ -285,13 +278,11 @@ mod spin_button {
     unsafe extern "C" fn output_trampoline(this: *mut GtkSpinButton,
                                            f: &&(Fn(&SpinButton) -> Inhibit + 'static))
                                            -> gboolean {
-        callback_guard!();
         f(&from_glib_borrow(this)).to_glib()
     }
 
     unsafe extern "C" fn trampoline(this: *mut GtkSpinButton,
                                     f: &&(Fn(&SpinButton) + 'static)) {
-        callback_guard!();
         f(&from_glib_borrow(this))
     }
 }
@@ -344,7 +335,6 @@ mod overlay {
     where
         T: IsA<Overlay> + IsA<Object>,
     {
-        callback_guard!();
         let f: &&(Fn(&T, &Widget) -> Option<Rectangle> + 'static) = transmute(f);
         match f(
             &Overlay::from_glib_borrow(this).downcast_unchecked(),
