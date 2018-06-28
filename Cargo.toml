@@ -39,7 +39,7 @@ v3_16 = ["v3_14", "gtk-sys/v3_16", "gdk/v3_16"]
 v3_10 = ["v3_8", "gtk-sys/v3_10", "gdk/v3_10"]
 v3_14 = ["v3_12", "gtk-sys/v3_14", "gdk/v3_14"]
 dox = ["gdk/dox", "gtk-sys/dox"]
-futures = ["futures-core", "send-cell", "gio/futures"]
+futures = ["futures-core-preview", "send-cell", "gio/futures"]
 
 [target.'cfg(target_os = "macos")'.build-dependencies]
 cc = "^1.0"
@@ -54,7 +54,7 @@ libc = "0.2"
 bitflags = "1.0"
 lazy_static = "1.0"
 send-cell = { version = "0.1", optional = true }
-futures-core = { version = "0.2", optional = true }
+futures-core-preview = { version = "0.2", optional = true }
 
 [dependencies.cairo-sys-rs]
 version = "0.6.0"
