@@ -949,6 +949,7 @@ status = "generate"
 [[object]]
 name = "Gtk.ListStore"
 status = "generate"
+trait_name = "GtkListStoreExt"
     [[object.function]]
     pattern = ".+"
         [[object.function.parameter]]

@@ -32,7 +32,7 @@ impl ListStore {
     //}
 }
 
-pub trait ListStoreExt {
+pub trait GtkListStoreExt {
     fn append(&self) -> TreeIter;
 
     fn clear(&self);
@@ -70,7 +70,7 @@ pub trait ListStoreExt {
     fn swap(&self, a: &TreeIter, b: &TreeIter);
 }
 
-impl<O: IsA<ListStore>> ListStoreExt for O {
+impl<O: IsA<ListStore>> GtkListStoreExt for O {
     fn append(&self) -> TreeIter {
         unsafe {
             let mut iter = TreeIter::uninitialized();

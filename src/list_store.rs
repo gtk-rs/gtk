@@ -24,7 +24,7 @@ impl ListStore {
     }
 }
 
-pub trait ListStoreExtManual {
+pub trait GtkListStoreExtManual {
     fn insert_with_values(&self, position: Option<u32>, columns: &[u32], values: &[&ToValue])
             -> TreeIter;
 
@@ -35,7 +35,7 @@ pub trait ListStoreExtManual {
     fn set_value(&self, iter: &TreeIter, column: u32, value: &Value);
 }
 
-impl<O: IsA<ListStore> + IsA<TreeModel>> ListStoreExtManual for O {
+impl<O: IsA<ListStore> + IsA<TreeModel>> GtkListStoreExtManual for O {
     fn insert_with_values(&self, position: Option<u32>, columns: &[u32], values: &[&ToValue])
             -> TreeIter {
         unsafe {
