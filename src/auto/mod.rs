@@ -444,7 +444,7 @@ pub use self::list_box_row::ListBoxRowExt;
 
 mod list_store;
 pub use self::list_store::ListStore;
-pub use self::list_store::ListStoreExt;
+pub use self::list_store::GtkListStoreExt;
 
 mod lock_button;
 pub use self::lock_button::LockButton;
@@ -1397,7 +1397,7 @@ pub mod traits {
     pub use super::ListBoxExt;
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     pub use super::ListBoxRowExt;
-    pub use super::ListStoreExt;
+    pub use super::GtkListStoreExt;
     pub use super::LockButtonExt;
     pub use super::MenuExt;
     pub use super::MenuBarExt;
