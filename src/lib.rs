@@ -226,6 +226,8 @@ mod enums;
 mod file_chooser_dialog;
 mod fixed;
 mod invisible;
+#[cfg(any(feature = "v3_10", feature = "dox"))]
+mod list_box;
 mod list_store;
 mod menu;
 mod message_dialog;

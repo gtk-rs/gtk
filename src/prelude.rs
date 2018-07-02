@@ -17,6 +17,8 @@ pub use color_chooser::ColorChooserExtManual;
 pub use dialog::DialogExtManual;
 pub use drag_context::DragContextExtManual;
 pub use fixed::FixedExtManual;
+#[cfg(any(feature = "v3_10", feature = "dox"))]
+pub use list_box::ListBoxExtManual;
 pub use list_store::GtkListStoreExtManual;
 pub use invisible::InvisibleExtManual;
 pub use menu::MenuExtManual;
