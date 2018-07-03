@@ -6,37 +6,37 @@ matrix:
       env: GTK=3.4
     - os: linux
       rust: nightly
-      env: GTK=3.18
+      env: GTK=3.22.30
     - os: linux
       rust: beta
       env: GTK=3.4
     - os: linux
       rust: beta
-      env: GTK=3.18
+      env: GTK=3.22.30
     - os: linux
       rust: stable
       env: GTK=3.4
     - os: linux
       rust: stable
-      env: GTK=3.18
+      env: GTK=3.22.30
     - os: osx
       rust: nightly
       env: GTK=3.4
     # - os: osx
     #   rust: nightly
-    #   env: GTK=3.18
+    #   env: GTK=3.22.30
     - os: osx
       rust: beta
       env: GTK=3.4
     # - os: osx
     #   rust: beta
-    #   env: GTK=3.18
+    #   env: GTK=3.22.30
     - os: osx
       rust: stable
       env: GTK=3.4
     # - os: osx
     #   rust: stable
-    #   env: GTK=3.18
+    #   env: GTK=3.22.30
 addons:
   apt:
     packages:
