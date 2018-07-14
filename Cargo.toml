@@ -57,54 +57,16 @@ lazy_static = "1.0"
 send-cell = { version = "0.1", optional = true }
 futures-core-preview = { version = "0.2", optional = true }
 
-[dependencies.cairo-sys-rs]
-version = "0.6.0"
-git = "https://github.com/gtk-rs/cairo"
-
-[dependencies.gdk-sys]
-version = "0.6.0"
-git = "https://github.com/gtk-rs/sys"
-
-[dependencies.gdk-pixbuf-sys]
-version = "0.6.0"
-git = "https://github.com/gtk-rs/sys"
-
-[dependencies.gio-sys]
-version = "0.6.0"
-git = "https://github.com/gtk-rs/sys"
-
-[dependencies.glib-sys]
-version = "0.6.0"
-git = "https://github.com/gtk-rs/sys"
-
-[dependencies.gobject-sys]
-version = "0.6.0"
-git = "https://github.com/gtk-rs/sys"
-
-[dependencies.gtk-sys]
-version = "0.6.0"
-git = "https://github.com/gtk-rs/sys"
-
-[dependencies.cairo-rs]
-version = "0.4.0"
-git = "https://github.com/gtk-rs/cairo"
-
-[dependencies.gio]
-version = "0.4.0"
-git = "https://github.com/gtk-rs/gio"
-
-[dependencies.glib]
-version = "0.5.0"
-git = "https://github.com/gtk-rs/glib"
-
-[dependencies.gdk]
-version = "0.8.0"
-git = "https://github.com/gtk-rs/gdk"
-
-[dependencies.gdk-pixbuf]
-version = "0.4.0"
-git = "https://github.com/gtk-rs/gdk-pixbuf"
-
-[dependencies.pango]
-version = "0.4.0"
-git = "https://github.com/gtk-rs/pango"
+cairo-sys-rs = { git = "https://github.com/gtk-rs/cairo" }
+gdk-sys = { git = "https://github.com/gtk-rs/sys" }
+gdk-pixbuf-sys = { git = "https://github.com/gtk-rs/sys" }
+gio-sys = { git = "https://github.com/gtk-rs/sys" }
+glib-sys = { git = "https://github.com/gtk-rs/sys" }
+gobject-sys = { git = "https://github.com/gtk-rs/sys" }
+gtk-sys = { git = "https://github.com/gtk-rs/sys" }
+cairo-rs = { git = "https://github.com/gtk-rs/cairo" }
+gio = { git = "https://github.com/gtk-rs/gio" }
+glib = { git = "https://github.com/gtk-rs/glib" }
+gdk = { git = "https://github.com/gtk-rs/gdk" }
+gdk-pixbuf = { git = "https://github.com/gtk-rs/gdk-pixbuf" }
+pango = { git = "https://github.com/gtk-rs/pango" }
