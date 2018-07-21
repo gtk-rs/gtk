@@ -23,6 +23,8 @@ pub use list_store::GtkListStoreExtManual;
 pub use invisible::InvisibleExtManual;
 pub use menu::MenuExtManual;
 pub use notebook::NotebookExtManual;
+#[cfg(any(feature = "v3_22", feature = "dox"))]
+pub use pad_controller::PadControllerExtManual;
 pub use switch::SwitchExtManual;
 pub use text_buffer::TextBufferExtManual;
 pub use tree_model_filter::TreeModelFilterExtManual;

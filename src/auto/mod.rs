@@ -10,6 +10,10 @@ mod accel_group;
 pub use self::accel_group::AccelGroup;
 pub use self::accel_group::AccelGroupExt;
 
+mod accel_label;
+pub use self::accel_label::AccelLabel;
+pub use self::accel_label::AccelLabelExt;
+
 #[cfg(any(feature = "v3_12", feature = "dox"))]
 mod action_bar;
 #[cfg(any(feature = "v3_12", feature = "dox"))]
@@ -373,6 +377,10 @@ mod im_context;
 pub use self::im_context::IMContext;
 pub use self::im_context::IMContextExt;
 
+mod im_context_simple;
+pub use self::im_context_simple::IMContextSimple;
+pub use self::im_context_simple::IMContextSimpleExt;
+
 mod im_multicontext;
 pub use self::im_multicontext::IMMulticontext;
 pub use self::im_multicontext::IMMulticontextExt;
@@ -602,6 +610,10 @@ pub use self::recent_chooser::RecentChooserExt;
 mod recent_chooser_dialog;
 pub use self::recent_chooser_dialog::RecentChooserDialog;
 
+mod recent_chooser_menu;
+pub use self::recent_chooser_menu::RecentChooserMenu;
+pub use self::recent_chooser_menu::RecentChooserMenuExt;
+
 mod recent_chooser_widget;
 pub use self::recent_chooser_widget::RecentChooserWidget;
 
@@ -797,6 +809,14 @@ pub use self::toolbar::ToolbarExt;
 mod tooltip;
 pub use self::tooltip::Tooltip;
 pub use self::tooltip::TooltipExt;
+
+mod tree_drag_dest;
+pub use self::tree_drag_dest::TreeDragDest;
+pub use self::tree_drag_dest::TreeDragDestExt;
+
+mod tree_drag_source;
+pub use self::tree_drag_source::TreeDragSource;
+pub use self::tree_drag_source::TreeDragSourceExt;
 
 mod tree_model;
 pub use self::tree_model::TreeModel;
@@ -1288,6 +1308,7 @@ pub use self::constants::STYLE_REGION_TAB;
 pub mod traits {
     pub use super::AboutDialogExt;
     pub use super::AccelGroupExt;
+    pub use super::AccelLabelExt;
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     pub use super::ActionBarExt;
     pub use super::ActionableExt;
@@ -1379,6 +1400,7 @@ pub mod traits {
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     pub use super::HeaderBarExt;
     pub use super::IMContextExt;
+    pub use super::IMContextSimpleExt;
     pub use super::IMMulticontextExt;
     pub use super::IconFactoryExt;
     pub use super::IconInfoExt;
@@ -1438,6 +1460,7 @@ pub mod traits {
     pub use super::RadioToolButtonExt;
     pub use super::RangeExt;
     pub use super::RecentChooserExt;
+    pub use super::RecentChooserMenuExt;
     pub use super::RecentFilterExt;
     pub use super::RecentManagerExt;
     #[cfg(any(feature = "v3_10", feature = "dox"))]
@@ -1486,6 +1509,8 @@ pub mod traits {
     pub use super::ToolShellExt;
     pub use super::ToolbarExt;
     pub use super::TooltipExt;
+    pub use super::TreeDragDestExt;
+    pub use super::TreeDragSourceExt;
     pub use super::TreeModelExt;
     pub use super::TreeModelFilterExt;
     pub use super::TreeSelectionExt;

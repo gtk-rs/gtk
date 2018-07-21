@@ -232,6 +232,11 @@ mod list_store;
 mod menu;
 mod message_dialog;
 mod notebook;
+#[cfg(any(feature = "v3_22", feature = "dox"))]
+mod pad_action_entry;
+#[cfg(any(feature = "v3_22", feature = "dox"))]
+mod pad_controller;
+mod page_range;
 mod radio_button;
 mod radio_menu_item;
 mod radio_tool_button;
@@ -268,6 +273,9 @@ pub use gdk::Rectangle;
 pub use app_chooser::AppChooser;
 pub use border::Border;
 pub use entry_buffer::EntryBuffer;
+#[cfg(any(feature = "v3_22", feature = "dox"))]
+pub use pad_action_entry::PadActionEntry;
+pub use page_range::PageRange;
 pub use recent_data::RecentData;
 pub use requisition::Requisition;
 #[cfg(any(target_os = "linux", feature = "dox"))]

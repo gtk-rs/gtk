@@ -406,7 +406,7 @@ pub trait WidgetExt {
 
     fn keynav_failed(&self, direction: DirectionType) -> bool;
 
-    //fn list_accel_closures(&self) -> /*Ignored*/Vec<glib::Closure>;
+    fn list_accel_closures(&self) -> Vec<glib::Closure>;
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn list_action_prefixes(&self) -> Vec<String>;
@@ -1789,9 +1789,11 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
         }
     }
 
-    //fn list_accel_closures(&self) -> /*Ignored*/Vec<glib::Closure> {
-    //    unsafe { TODO: call ffi::gtk_widget_list_accel_closures() }
-    //}
+    fn list_accel_closures(&self) -> Vec<glib::Closure> {
+        unsafe {
+            FromGlibPtrContainer::from_glib_container(ffi::gtk_widget_list_accel_closures(self.to_glib_none().0))
+        }
+    }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn list_action_prefixes(&self) -> Vec<String> {

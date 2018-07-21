@@ -11,6 +11,7 @@ single_version_file = true
 
 generate = [
     "Gtk.AccelFlags",
+    "Gtk.AccelLabel",
     "Gtk.Adjustment",
     "Gtk.Align",
     "Gtk.Alignment",
@@ -96,6 +97,7 @@ generate = [
     "Gtk.IconViewDropPosition",
     "Gtk.ImageMenuItem",
     "Gtk.ImageType",
+    "Gtk.IMContextSimple",
     "Gtk.IMMulticontext",
     "Gtk.IMPreeditStyle",
     "Gtk.IMStatusStyle",
@@ -148,6 +150,7 @@ generate = [
     "Gtk.RecentChooser",
     "Gtk.RecentChooserDialog",
     "Gtk.RecentChooserError",
+    "Gtk.RecentChooserMenu",
     "Gtk.RecentChooserWidget",
     "Gtk.RecentFilter",
     "Gtk.RecentFilterFlags",
@@ -209,6 +212,8 @@ generate = [
     "Gtk.ToolPaletteDragTargets",
     "Gtk.ToolShell",
     "Gtk.Tooltip",
+    "Gtk.TreeDragDest",
+    "Gtk.TreeDragSource",
     "Gtk.TreeIter",
     "Gtk.TreeModelFlags",
     "Gtk.TreeViewColumnSizing",
@@ -289,12 +294,15 @@ manual = [
     "GLib.KeyFile",
     "GLib.Variant",
     "GLib.VariantType",
+    "GObject.Closure",
     "GObject.Object",
     "GObject.Value",
     "Gtk.Allocation",
     "Gtk.AppChooser",
     "Gtk.Border",
     "Gtk.EntryBuffer",
+    "Gtk.PadActionEntry",
+    "Gtk.PageRange",
     "Gtk.RecentData",
     "Gtk.Requisition",
     "Gtk.TargetEntry",
@@ -1109,6 +1117,9 @@ version = "3.22"
 name = "Gtk.PadController"
 status = "generate"
 version = "3.22"
+    [[object.function]]
+    name = "set_action_entries"
+    ignore = true
 
 [[object]]
 name = "Gtk.PageSetup"
