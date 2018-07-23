@@ -70,3 +70,6 @@ glib = { git = "https://github.com/gtk-rs/glib" }
 gdk = { git = "https://github.com/gtk-rs/gdk" }
 gdk-pixbuf = { git = "https://github.com/gtk-rs/gdk-pixbuf" }
 pango = { git = "https://github.com/gtk-rs/pango" }
+
+[dev-dependencies]
+gir-format-check = "^0.1"
