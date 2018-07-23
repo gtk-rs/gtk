@@ -10,7 +10,6 @@ deprecate_by_min_version = true
 single_version_file = true
 
 generate = [
-    "Gtk.IconSet",
     "Gtk.AccelFlags",
     "Gtk.Adjustment",
     "Gtk.Align",
@@ -87,20 +86,21 @@ generate = [
     "Gtk.GestureSingle",
     "Gtk.GestureSwipe",
     "Gtk.GestureZoom",
-    "Gtk.IconInfo",
     "Gtk.IconFactory",
+    "Gtk.IconInfo",
     "Gtk.IconLookupFlags",
+    "Gtk.IconSet",
     "Gtk.IconSize",
     "Gtk.IconSource",
     "Gtk.IconThemeError",
     "Gtk.IconViewDropPosition",
     "Gtk.ImageMenuItem",
     "Gtk.ImageType",
-    "Gtk.Invisible",
     "Gtk.IMMulticontext",
     "Gtk.IMPreeditStyle",
     "Gtk.IMStatusStyle",
     "Gtk.InputPurpose",
+    "Gtk.Invisible",
     "Gtk.JunctionSides",
     "Gtk.Justification",
     "Gtk.LevelBar",
@@ -136,12 +136,12 @@ generate = [
     "Gtk.PositionType",
     "Gtk.PrintDuplex",
     "Gtk.PrintError",
-    "Gtk.PrintQuality",
     "Gtk.PrintOperation",
     "Gtk.PrintOperationAction",
     "Gtk.PrintOperationPreview",
     "Gtk.PrintOperationResult",
     "Gtk.PrintPages",
+    "Gtk.PrintQuality",
     "Gtk.PrintStatus",
     "Gtk.ProgressBar",
     "Gtk.PropagationPhase",
@@ -230,6 +230,10 @@ ignore = [
 ]
 
 manual = [
+    "cairo.Context",
+    "cairo.RectangleInt",
+    "cairo.Region",
+    "cairo.Surface",
     "Gdk.AnchorHints",
     "Gdk.Atom",
     "Gdk.Device",
@@ -249,8 +253,8 @@ manual = [
     "Gdk.EventMotion",
     "Gdk.EventProperty",
     "Gdk.EventProximity",
-    "Gdk.EventSelection",
     "Gdk.EventScroll",
+    "Gdk.EventSelection",
     "Gdk.EventVisibility",
     "Gdk.EventWindowState",
     "Gdk.FrameClock",
@@ -294,18 +298,14 @@ manual = [
     "Gtk.RecentData",
     "Gtk.Requisition",
     "Gtk.TargetEntry",
-    "cairo.Context",
-    "cairo.RectangleInt",
-    "cairo.Region",
-    "cairo.Surface",
     "Pango.Alignment",
     "Pango.AttrList",
     "Pango.Context",
     "Pango.Direction",
     "Pango.EllipsizeMode",
+    "Pango.FontDescription",
     "Pango.FontFace",
     "Pango.FontFamily",
-    "Pango.FontDescription",
     "Pango.FontMap",
     "Pango.Language",
     "Pango.Layout",
@@ -394,6 +394,14 @@ status = "generate"
     ignore = true
 
 [[object]]
+name = "Gtk.Actionable"
+status = "generate"
+    [[object.property]]
+    #value glib.Variant
+    name = "action-target"
+    ignore = true
+
+[[object]]
 name = "Gtk.ActionBar"
 status = "generate"
     [[object.child_prop]]
@@ -424,18 +432,6 @@ name = "Gtk.ApplicationWindow"
 status = "generate"
     [[object.function]]
     name = "new"
-    ignore = true
-
-[[object]]
-name = "Gtk.Builder"
-status = "generate"
-    [[object.function]]
-    pattern = ".+_from_file"
-    #path
-    ignore = true
-    [[object.function]]
-    name = "get_object"
-    #downcast
     ignore = true
 
 [[object]]
@@ -485,6 +481,18 @@ name = "Gtk.Buildable"
 status = "generate"
     [[object.function]]
     pattern = "[gs]et_name"
+    ignore = true
+
+[[object]]
+name = "Gtk.Builder"
+status = "generate"
+    [[object.function]]
+    pattern = ".+_from_file"
+    #path
+    ignore = true
+    [[object.function]]
+    name = "get_object"
+    #downcast
     ignore = true
 
 [[object]]
@@ -821,23 +829,6 @@ status = "generate"
     type = "gint"
 
 [[object]]
-name = "Gtk.IconView"
-status = "generate"
-    [[object.function]]
-    name = "enable_model_drag_dest"
-    #array with size
-    ignore = true
-    [[object.function]]
-    name = "enable_model_drag_source"
-    #array with size
-    ignore = true
-    [[object.function]]
-    pattern = ".+"
-        [[object.function.parameter]]
-        name = "path"
-        const = true
-
-[[object]]
 name = "Gtk.IconTheme"
 status = "generate"
     [[object.function]]
@@ -857,6 +848,23 @@ status = "generate"
     name = "get_search_path"
     #array
     ignore = true
+
+[[object]]
+name = "Gtk.IconView"
+status = "generate"
+    [[object.function]]
+    name = "enable_model_drag_dest"
+    #array with size
+    ignore = true
+    [[object.function]]
+    name = "enable_model_drag_source"
+    #array with size
+    ignore = true
+    [[object.function]]
+    pattern = ".+"
+        [[object.function.parameter]]
+        name = "path"
+        const = true
 
 [[object]]
 name = "Gtk.Image"
@@ -1126,21 +1134,6 @@ status = "generate"
     type = "gboolean"
 
 [[object]]
-name = "Gtk.Popover"
-status = "generate"
-version = "3.12"
-
-[[object]]
-name = "Gtk.PopoverMenu"
-status = "generate"
-    [[object.child_prop]]
-    name = "position"
-    type = "gint"
-    [[object.child_prop]]
-    name = "submenu"
-    type = "utf8"
-
-[[object]]
 name = "Gtk.PaperSize"
 status = "generate"
     [[object.function]]
@@ -1179,6 +1172,21 @@ status = "generate"
 name = "Gtk.Plug"
 status = "generate"
 cfg_condition = "not(windows)"
+
+[[object]]
+name = "Gtk.Popover"
+status = "generate"
+version = "3.12"
+
+[[object]]
+name = "Gtk.PopoverMenu"
+status = "generate"
+    [[object.child_prop]]
+    name = "position"
+    type = "gint"
+    [[object.child_prop]]
+    name = "submenu"
+    type = "utf8"
 
 [[object]]
 name = "Gtk.PrintContext"
@@ -1316,11 +1324,6 @@ status = "generate"
         const = true
 
 [[object]]
-name = "Gtk.ShortcutsWindow"
-status = "generate"
-version = "3.20"
-
-[[object]]
 name = "Gtk.SelectionData"
 status = "generate"
     [[object.function]]
@@ -1354,6 +1357,11 @@ status = "generate"
     name = "get_data"
     #array without length
     ignore = true
+
+[[object]]
+name = "Gtk.ShortcutsWindow"
+status = "generate"
+version = "3.20"
 
 [[object]]
 name = "Gtk.Socket"
@@ -1971,12 +1979,4 @@ trait_name = "GtkWindowExt"
         const = true
     [[object.function]]
     name = "present"
-    ignore = true
-
-[[object]]
-name = "Gtk.Actionable"
-status = "generate"
-    [[object.property]]
-    #value glib.Variant
-    name = "action-target"
     ignore = true
