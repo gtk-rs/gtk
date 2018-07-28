@@ -379,7 +379,6 @@ pub use self::im_context::IMContextExt;
 
 mod im_context_simple;
 pub use self::im_context_simple::IMContextSimple;
-pub use self::im_context_simple::IMContextSimpleExt;
 
 mod im_multicontext;
 pub use self::im_multicontext::IMMulticontext;
@@ -1400,7 +1399,6 @@ pub mod traits {
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     pub use super::HeaderBarExt;
     pub use super::IMContextExt;
-    pub use super::IMContextSimpleExt;
     pub use super::IMMulticontextExt;
     pub use super::IconFactoryExt;
     pub use super::IconInfoExt;

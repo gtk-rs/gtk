@@ -17,6 +17,7 @@ pub use color_chooser::ColorChooserExtManual;
 pub use dialog::DialogExtManual;
 pub use drag_context::DragContextExtManual;
 pub use fixed::FixedExtManual;
+pub use im_context_simple::IMContextSimpleExtManual;
 #[cfg(any(feature = "v3_10", feature = "dox"))]
 pub use list_box::ListBoxExtManual;
 pub use list_store::GtkListStoreExtManual;
@@ -25,6 +26,7 @@ pub use menu::MenuExtManual;
 pub use notebook::NotebookExtManual;
 #[cfg(any(feature = "v3_22", feature = "dox"))]
 pub use pad_controller::PadControllerExtManual;
+pub use print_settings::PrintSettingsExtManual;
 pub use switch::SwitchExtManual;
 pub use text_buffer::TextBufferExtManual;
 pub use tree_model_filter::TreeModelFilterExtManual;

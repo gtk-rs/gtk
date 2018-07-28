@@ -225,6 +225,7 @@ mod entry_buffer;
 mod enums;
 mod file_chooser_dialog;
 mod fixed;
+mod im_context_simple;
 mod invisible;
 #[cfg(any(feature = "v3_10", feature = "dox"))]
 mod list_box;
@@ -237,6 +238,7 @@ mod pad_action_entry;
 #[cfg(any(feature = "v3_22", feature = "dox"))]
 mod pad_controller;
 mod page_range;
+mod print_settings;
 mod radio_button;
 mod radio_menu_item;
 mod radio_tool_button;

@@ -11,17 +11,17 @@ use PadController;
 
 pub trait PadControllerExtManual {
     #[cfg(any(feature = "v3_22", feature = "dox"))]
-    fn set_action_entries(&self, entries: &[&PadActionEntry]);
+    fn set_action_entries(&self, entries: &[PadActionEntry]);
 }
 
 impl<O: IsA<PadController>> PadControllerExtManual for O {
     #[cfg(any(feature = "v3_22", feature = "dox"))]
-    fn set_action_entries(&self, entries: &[&PadActionEntry]) {
-        let mut entries = entries.iter().map(|p| p.to_glib()).collect::<Vec<_>>();
+    fn set_action_entries(&self, entries: &[PadActionEntry]) {
         let n_entries = entries.len() as i32;
+        let entries = entries.as_ptr();
         unsafe {
             ffi::gtk_pad_controller_set_action_entries(self.to_glib_none().0,
-                                                       entries.as_mut_ptr(),
+                                                       mut_override(entries as *const _),
                                                        n_entries);
         }
     }

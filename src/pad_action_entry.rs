@@ -6,6 +6,7 @@ use PadActionType;
 use ffi;
 use glib::translate::*;
 
+#[repr(C)]
 pub struct PadActionEntry(ffi::GtkPadActionEntry);
 
 impl PadActionEntry {

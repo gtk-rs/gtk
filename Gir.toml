@@ -97,7 +97,6 @@ generate = [
     "Gtk.IconViewDropPosition",
     "Gtk.ImageMenuItem",
     "Gtk.ImageType",
-    "Gtk.IMContextSimple",
     "Gtk.IMMulticontext",
     "Gtk.IMPreeditStyle",
     "Gtk.IMStatusStyle",
@@ -922,6 +921,16 @@ status = "generate"
     version = "3.6"
 
 [[object]]
+name = "Gtk.IMContextSimple"
+status = "generate"
+    [[object.function]]
+    name = "add_compose_file"
+    ignore = true
+    [[object.function]]
+    name = "add_table"
+    ignore = true
+
+[[object]]
 name = "Gtk.InfoBar"
 status = "generate"
     [[object.property]]
@@ -1212,9 +1221,6 @@ status = "generate"
 [[object]]
 name = "Gtk.PrintSettings"
 status = "generate"
-    [[object.function]]
-    name = "get_page_ranges"
-    ignore = true
     [[object.function]]
     name = "get_paper_size"
         [object.function.return]
