@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use TreeDragSource;
 use TreeIter;
 use TreeModel;
 use TreePath;
@@ -22,7 +23,7 @@ use std::mem::transmute;
 use std::ptr;
 
 glib_wrapper! {
-    pub struct TreeModelFilter(Object<ffi::GtkTreeModelFilter, ffi::GtkTreeModelFilterClass>): TreeModel;
+    pub struct TreeModelFilter(Object<ffi::GtkTreeModelFilter, ffi::GtkTreeModelFilterClass>): TreeDragSource, TreeModel;
 
     match fn {
         get_type => || ffi::gtk_tree_model_filter_get_type(),

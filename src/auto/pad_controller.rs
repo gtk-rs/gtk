@@ -49,9 +49,6 @@ pub trait PadControllerExt {
     #[cfg(any(feature = "v3_22", feature = "dox"))]
     fn set_action(&self, type_: PadActionType, index: i32, mode: i32, label: &str, action_name: &str);
 
-    //#[cfg(any(feature = "v3_22", feature = "dox"))]
-    //fn set_action_entries(&self, entries: /*Ignored*/&[&PadActionEntry]);
-
     fn get_property_action_group(&self) -> Option<gio::ActionGroup>;
 
     fn get_property_pad(&self) -> Option<gdk::Device>;
@@ -68,11 +65,6 @@ impl<O: IsA<PadController> + IsA<glib::object::Object>> PadControllerExt for O {
             ffi::gtk_pad_controller_set_action(self.to_glib_none().0, type_.to_glib(), index, mode, label.to_glib_none().0, action_name.to_glib_none().0);
         }
     }
-
-    //#[cfg(any(feature = "v3_22", feature = "dox"))]
-    //fn set_action_entries(&self, entries: /*Ignored*/&[&PadActionEntry]) {
-    //    unsafe { TODO: call ffi::gtk_pad_controller_set_action_entries() }
-    //}
 
     fn get_property_action_group(&self) -> Option<gio::ActionGroup> {
         unsafe {

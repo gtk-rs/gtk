@@ -5,6 +5,7 @@
 use Error;
 use NumberUpLayout;
 use PageOrientation;
+use PageRange;
 use PageSet;
 use PaperSize;
 use PrintDuplex;
@@ -112,6 +113,8 @@ pub trait PrintSettingsExt {
     fn get_orientation(&self) -> PageOrientation;
 
     fn get_output_bin(&self) -> Option<String>;
+
+    fn get_page_ranges(&self) -> Vec<PageRange>;
 
     fn get_page_set(&self) -> PageSet;
 
@@ -331,6 +334,14 @@ impl<O: IsA<PrintSettings>> PrintSettingsExt for O {
     fn get_output_bin(&self) -> Option<String> {
         unsafe {
             from_glib_none(ffi::gtk_print_settings_get_output_bin(self.to_glib_none().0))
+        }
+    }
+
+    fn get_page_ranges(&self) -> Vec<PageRange> {
+        unsafe {
+            let mut num_ranges = mem::uninitialized();
+            let ret = FromGlibContainer::from_glib_full_num(ffi::gtk_print_settings_get_page_ranges(self.to_glib_none().0, &mut num_ranges), num_ranges as usize);
+            ret
         }
     }
 

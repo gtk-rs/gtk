@@ -3,6 +3,8 @@
 // DO NOT EDIT
 
 use Buildable;
+use TreeDragDest;
+use TreeDragSource;
 use TreeIter;
 use TreeModel;
 use TreeSortable;
@@ -15,7 +17,7 @@ use std::mem;
 use std::ptr;
 
 glib_wrapper! {
-    pub struct TreeStore(Object<ffi::GtkTreeStore, ffi::GtkTreeStoreClass>): Buildable, TreeModel, TreeSortable;
+    pub struct TreeStore(Object<ffi::GtkTreeStore, ffi::GtkTreeStoreClass>): Buildable, TreeDragDest, TreeDragSource, TreeModel, TreeSortable;
 
     match fn {
         get_type => || ffi::gtk_tree_store_get_type(),

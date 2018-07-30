@@ -11,6 +11,7 @@ single_version_file = true
 
 generate = [
     "Gtk.AccelFlags",
+    "Gtk.AccelLabel",
     "Gtk.Adjustment",
     "Gtk.Align",
     "Gtk.Alignment",
@@ -148,6 +149,7 @@ generate = [
     "Gtk.RecentChooser",
     "Gtk.RecentChooserDialog",
     "Gtk.RecentChooserError",
+    "Gtk.RecentChooserMenu",
     "Gtk.RecentChooserWidget",
     "Gtk.RecentFilter",
     "Gtk.RecentFilterFlags",
@@ -209,6 +211,8 @@ generate = [
     "Gtk.ToolPaletteDragTargets",
     "Gtk.ToolShell",
     "Gtk.Tooltip",
+    "Gtk.TreeDragDest",
+    "Gtk.TreeDragSource",
     "Gtk.TreeIter",
     "Gtk.TreeModelFlags",
     "Gtk.TreeViewColumnSizing",
@@ -289,12 +293,15 @@ manual = [
     "GLib.KeyFile",
     "GLib.Variant",
     "GLib.VariantType",
+    "GObject.Closure",
     "GObject.Object",
     "GObject.Value",
     "Gtk.Allocation",
     "Gtk.AppChooser",
     "Gtk.Border",
     "Gtk.EntryBuffer",
+    "Gtk.PadActionEntry",
+    "Gtk.PageRange",
     "Gtk.RecentData",
     "Gtk.Requisition",
     "Gtk.TargetEntry",
@@ -914,6 +921,16 @@ status = "generate"
     version = "3.6"
 
 [[object]]
+name = "Gtk.IMContextSimple"
+status = "generate"
+    [[object.function]]
+    name = "add_compose_file"
+    ignore = true
+    [[object.function]]
+    name = "add_table"
+    ignore = true # We don't understand API
+
+[[object]]
 name = "Gtk.InfoBar"
 status = "generate"
     [[object.property]]
@@ -1109,6 +1126,9 @@ version = "3.22"
 name = "Gtk.PadController"
 status = "generate"
 version = "3.22"
+    [[object.function]]
+    name = "set_action_entries"
+    ignore = true
 
 [[object]]
 name = "Gtk.PageSetup"
@@ -1201,9 +1221,6 @@ status = "generate"
 [[object]]
 name = "Gtk.PrintSettings"
 status = "generate"
-    [[object.function]]
-    name = "get_page_ranges"
-    ignore = true
     [[object.function]]
     name = "get_paper_size"
         [object.function.return]
