@@ -928,7 +928,7 @@ status = "generate"
     ignore = true
     [[object.function]]
     name = "add_table"
-    ignore = true
+    ignore = true # We don't understand API
 
 [[object]]
 name = "Gtk.InfoBar"
