@@ -3,6 +3,7 @@
 // DO NOT EDIT
 
 use ffi;
+use glib::Quark;
 use glib::StaticType;
 use glib::Type;
 use glib::error::ErrorDomain;
@@ -11,7 +12,6 @@ use glib::value::FromValue;
 use glib::value::FromValueOptional;
 use glib::value::SetValue;
 use glib::value::Value;
-use glib_ffi;
 use gobject_ffi;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
@@ -433,9 +433,9 @@ impl FromGlib<ffi::GtkBuilderError> for BuilderError {
 }
 
 impl ErrorDomain for BuilderError {
-    fn domain() -> glib_ffi::GQuark {
+    fn domain() -> Quark {
         skip_assert_initialized!();
-        unsafe { ffi::gtk_builder_error_quark() }
+        unsafe { from_glib(ffi::gtk_builder_error_quark()) }
     }
 
     fn code(self) -> i32 {
@@ -922,9 +922,9 @@ impl FromGlib<ffi::GtkCssProviderError> for CssProviderError {
 }
 
 impl ErrorDomain for CssProviderError {
-    fn domain() -> glib_ffi::GQuark {
+    fn domain() -> Quark {
         skip_assert_initialized!();
-        unsafe { ffi::gtk_css_provider_error_quark() }
+        unsafe { from_glib(ffi::gtk_css_provider_error_quark()) }
     }
 
     fn code(self) -> i32 {
@@ -1547,9 +1547,9 @@ impl FromGlib<ffi::GtkFileChooserError> for FileChooserError {
 }
 
 impl ErrorDomain for FileChooserError {
-    fn domain() -> glib_ffi::GQuark {
+    fn domain() -> Quark {
         skip_assert_initialized!();
-        unsafe { ffi::gtk_file_chooser_error_quark() }
+        unsafe { from_glib(ffi::gtk_file_chooser_error_quark()) }
     }
 
     fn code(self) -> i32 {
@@ -1832,9 +1832,9 @@ impl FromGlib<ffi::GtkIconThemeError> for IconThemeError {
 }
 
 impl ErrorDomain for IconThemeError {
-    fn domain() -> glib_ffi::GQuark {
+    fn domain() -> Quark {
         skip_assert_initialized!();
-        unsafe { ffi::gtk_icon_theme_error_quark() }
+        unsafe { from_glib(ffi::gtk_icon_theme_error_quark()) }
     }
 
     fn code(self) -> i32 {
@@ -3399,9 +3399,9 @@ impl FromGlib<ffi::GtkPrintError> for PrintError {
 }
 
 impl ErrorDomain for PrintError {
-    fn domain() -> glib_ffi::GQuark {
+    fn domain() -> Quark {
         skip_assert_initialized!();
-        unsafe { ffi::gtk_print_error_quark() }
+        unsafe { from_glib(ffi::gtk_print_error_quark()) }
     }
 
     fn code(self) -> i32 {
@@ -3878,9 +3878,9 @@ impl FromGlib<ffi::GtkRecentChooserError> for RecentChooserError {
 }
 
 impl ErrorDomain for RecentChooserError {
-    fn domain() -> glib_ffi::GQuark {
+    fn domain() -> Quark {
         skip_assert_initialized!();
-        unsafe { ffi::gtk_recent_chooser_error_quark() }
+        unsafe { from_glib(ffi::gtk_recent_chooser_error_quark()) }
     }
 
     fn code(self) -> i32 {
@@ -3970,9 +3970,9 @@ impl FromGlib<ffi::GtkRecentManagerError> for RecentManagerError {
 }
 
 impl ErrorDomain for RecentManagerError {
-    fn domain() -> glib_ffi::GQuark {
+    fn domain() -> Quark {
         skip_assert_initialized!();
-        unsafe { ffi::gtk_recent_manager_error_quark() }
+        unsafe { from_glib(ffi::gtk_recent_manager_error_quark()) }
     }
 
     fn code(self) -> i32 {
