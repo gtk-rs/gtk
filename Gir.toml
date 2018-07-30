@@ -290,6 +290,7 @@ manual = [
     "Gio.MountOperation",
     "Gio.Permission",
     "GLib.Error",
+    "GLib.Quark",
     "GLib.KeyFile",
     "GLib.Variant",
     "GLib.VariantType",
