@@ -291,6 +291,7 @@ manual = [
     "Gio.Permission",
     "GLib.Error",
     "GLib.KeyFile",
+    "GLib.Quark",
     "GLib.Variant",
     "GLib.VariantType",
     "GObject.Closure",

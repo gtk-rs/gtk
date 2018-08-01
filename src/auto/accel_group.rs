@@ -51,7 +51,7 @@ impl Default for AccelGroup {
 }
 
 pub trait AccelGroupExt {
-    //fn activate<P: IsA<glib::Object>>(&self, accel_quark: /*Ignored*/glib::Quark, acceleratable: &P, accel_key: u32, accel_mods: gdk::ModifierType) -> bool;
+    fn activate<P: IsA<glib::Object>>(&self, accel_quark: glib::Quark, acceleratable: &P, accel_key: u32, accel_mods: gdk::ModifierType) -> bool;
 
     fn connect(&self, accel_key: u32, accel_mods: gdk::ModifierType, accel_flags: AccelFlags, closure: &glib::Closure);
 
@@ -81,9 +81,11 @@ pub trait AccelGroupExt {
 }
 
 impl<O: IsA<AccelGroup> + IsA<glib::object::Object>> AccelGroupExt for O {
-    //fn activate<P: IsA<glib::Object>>(&self, accel_quark: /*Ignored*/glib::Quark, acceleratable: &P, accel_key: u32, accel_mods: gdk::ModifierType) -> bool {
-    //    unsafe { TODO: call ffi::gtk_accel_group_activate() }
-    //}
+    fn activate<P: IsA<glib::Object>>(&self, accel_quark: glib::Quark, acceleratable: &P, accel_key: u32, accel_mods: gdk::ModifierType) -> bool {
+        unsafe {
+            from_glib(ffi::gtk_accel_group_activate(self.to_glib_none().0, accel_quark.to_glib(), acceleratable.to_glib_none().0, accel_key, accel_mods.to_glib()))
+        }
+    }
 
     fn connect(&self, accel_key: u32, accel_mods: gdk::ModifierType, accel_flags: AccelFlags, closure: &glib::Closure) {
         unsafe {
