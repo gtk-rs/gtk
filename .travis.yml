@@ -54,8 +54,10 @@ script:
     make regen_check;
     fi
   - ./check_init_asserts
-  - cargo install clippy || touch clippy_failed
-  - if [ ! -f clippy_failed ]; then cargo clippy; fi
+  - if [ "$TRAVIS_RUST_VERSION" == "nightly" ] && [ "$GTK" == "3.4" ]; then
+    rustup component add clippy-preview;
+    cargo clippy;
+    fi
   - cargo test --features embed-lgpl-docs --jobs 1
   - cargo doc --features "dox"
   # catch any sneaked in lgpl docs
