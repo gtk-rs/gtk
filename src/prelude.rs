@@ -16,6 +16,7 @@ pub use color_button::ColorButtonExtManual;
 pub use color_chooser::ColorChooserExtManual;
 pub use dialog::DialogExtManual;
 pub use drag_context::DragContextExtManual;
+pub use entry_completion::EntryCompletionExtManual;
 pub use fixed::FixedExtManual;
 pub use im_context_simple::IMContextSimpleExtManual;
 #[cfg(any(feature = "v3_10", feature = "dox"))]

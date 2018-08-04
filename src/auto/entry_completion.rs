@@ -93,8 +93,6 @@ pub trait EntryCompletionExt {
 
     fn set_inline_selection(&self, inline_selection: bool);
 
-    //fn set_match_func<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: /*Unknown conversion*//*Unimplemented*/EntryCompletionMatchFunc, func_data: P, func_notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
-
     fn set_minimum_key_length(&self, length: i32);
 
     fn set_model<'a, P: IsA<TreeModel> + 'a, Q: Into<Option<&'a P>>>(&self, model: Q);
@@ -247,10 +245,6 @@ impl<O: IsA<EntryCompletion> + IsA<glib::object::Object>> EntryCompletionExt for
             ffi::gtk_entry_completion_set_inline_selection(self.to_glib_none().0, inline_selection.to_glib());
         }
     }
-
-    //fn set_match_func<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: /*Unknown conversion*//*Unimplemented*/EntryCompletionMatchFunc, func_data: P, func_notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
-    //    unsafe { TODO: call ffi::gtk_entry_completion_set_match_func() }
-    //}
 
     fn set_minimum_key_length(&self, length: i32) {
         unsafe {
