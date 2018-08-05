@@ -222,6 +222,7 @@ mod color_chooser;
 mod dialog;
 mod drag_context;
 mod entry_buffer;
+mod entry_completion;
 mod enums;
 mod file_chooser_dialog;
 mod fixed;

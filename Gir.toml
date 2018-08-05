@@ -769,6 +769,9 @@ status = "generate"
     [[object.signal]]
     name = "cursor-on-match"
     inhibit = true
+    [[object.function]]
+    name = "set_match_func"
+    ignore = true # manual implementation as a test for now
 
 [[object]]
 name = "Gtk.Expander"
