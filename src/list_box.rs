@@ -80,7 +80,7 @@ impl<O: IsA<ListBox> + IsA<Object>> ListBoxExtManual for O {
             func: glib_ffi::gpointer,
         ) where T: IsA<ListBox>
         {
-            let func = func as *const &mut (FnMut(&T, &ListBoxRow));
+            let func = func as *mut &mut (FnMut(&T, &ListBoxRow));
 
             (*func)(
                 &ListBox::from_glib_borrow(this).downcast_unchecked(),
