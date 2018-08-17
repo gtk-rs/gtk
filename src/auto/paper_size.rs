@@ -13,6 +13,7 @@ use std::mem;
 use std::ptr;
 
 glib_wrapper! {
+    #[derive(Debug, PartialOrd, Ord, Hash)]
     pub struct PaperSize(Boxed<ffi::GtkPaperSize>);
 
     match fn {

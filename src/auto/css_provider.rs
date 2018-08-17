@@ -16,7 +16,6 @@ use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
-use std::fmt;
 use std::mem;
 use std::mem::transmute;
 use std::ptr;
@@ -57,13 +56,6 @@ impl CssProvider {
 impl Default for CssProvider {
     fn default() -> Self {
         Self::new()
-    }
-}
-
-impl fmt::Display for CssProvider {
-    #[inline]
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", CssProviderExt::to_string(self))
     }
 }
 
