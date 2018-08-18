@@ -18,6 +18,7 @@ use std::mem;
 use std::ptr;
 
 glib_wrapper! {
+    #[derive(Debug, Hash)]
     pub struct TextIter(Boxed<ffi::GtkTextIter>);
 
     match fn {
