@@ -5,6 +5,8 @@
 use EventController;
 use Gesture;
 use ffi;
+#[cfg(any(feature = "v3_14", feature = "dox"))]
+use gdk;
 use glib;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use glib::object::Downcast;
@@ -38,8 +40,8 @@ pub trait GestureSingleExt {
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_current_button(&self) -> u32;
 
-    //#[cfg(any(feature = "v3_14", feature = "dox"))]
-    //fn get_current_sequence(&self) -> /*Ignored*/Option<gdk::EventSequence>;
+    #[cfg(any(feature = "v3_14", feature = "dox"))]
+    fn get_current_sequence(&self) -> Option<gdk::EventSequence>;
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_exclusive(&self) -> bool;
@@ -81,10 +83,12 @@ impl<O: IsA<GestureSingle> + IsA<glib::object::Object>> GestureSingleExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v3_14", feature = "dox"))]
-    //fn get_current_sequence(&self) -> /*Ignored*/Option<gdk::EventSequence> {
-    //    unsafe { TODO: call ffi::gtk_gesture_single_get_current_sequence() }
-    //}
+    #[cfg(any(feature = "v3_14", feature = "dox"))]
+    fn get_current_sequence(&self) -> Option<gdk::EventSequence> {
+        unsafe {
+            from_glib_full(ffi::gtk_gesture_single_get_current_sequence(self.to_glib_none().0))
+        }
+    }
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_exclusive(&self) -> bool {

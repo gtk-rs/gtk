@@ -241,8 +241,8 @@ pub trait WidgetExt {
     #[cfg(any(feature = "v3_18", feature = "dox"))]
     fn get_font_map(&self) -> Option<pango::FontMap>;
 
-    //#[cfg(any(feature = "v3_18", feature = "dox"))]
-    //fn get_font_options(&self) -> /*Ignored*/Option<cairo::FontOptions>;
+    #[cfg(any(feature = "v3_18", feature = "dox"))]
+    fn get_font_options(&self) -> Option<cairo::FontOptions>;
 
     #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn get_frame_clock(&self) -> Option<gdk::FrameClock>;
@@ -510,8 +510,8 @@ pub trait WidgetExt {
     #[cfg(any(feature = "v3_18", feature = "dox"))]
     fn set_font_map<'a, P: Into<Option<&'a pango::FontMap>>>(&self, font_map: P);
 
-    //#[cfg(any(feature = "v3_18", feature = "dox"))]
-    //fn set_font_options<'a, P: Into<Option<&'a /*Ignored*/cairo::FontOptions>>>(&self, options: P);
+    #[cfg(any(feature = "v3_18", feature = "dox"))]
+    fn set_font_options<'a, P: Into<Option<&'a cairo::FontOptions>>>(&self, options: P);
 
     fn set_halign(&self, align: Align);
 
@@ -1304,10 +1304,12 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
         }
     }
 
-    //#[cfg(any(feature = "v3_18", feature = "dox"))]
-    //fn get_font_options(&self) -> /*Ignored*/Option<cairo::FontOptions> {
-    //    unsafe { TODO: call ffi::gtk_widget_get_font_options() }
-    //}
+    #[cfg(any(feature = "v3_18", feature = "dox"))]
+    fn get_font_options(&self) -> Option<cairo::FontOptions> {
+        unsafe {
+            from_glib_none(ffi::gtk_widget_get_font_options(self.to_glib_none().0))
+        }
+    }
 
     #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn get_frame_clock(&self) -> Option<gdk::FrameClock> {
@@ -2072,10 +2074,14 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
         }
     }
 
-    //#[cfg(any(feature = "v3_18", feature = "dox"))]
-    //fn set_font_options<'a, P: Into<Option<&'a /*Ignored*/cairo::FontOptions>>>(&self, options: P) {
-    //    unsafe { TODO: call ffi::gtk_widget_set_font_options() }
-    //}
+    #[cfg(any(feature = "v3_18", feature = "dox"))]
+    fn set_font_options<'a, P: Into<Option<&'a cairo::FontOptions>>>(&self, options: P) {
+        let options = options.into();
+        let options = options.to_glib_none();
+        unsafe {
+            ffi::gtk_widget_set_font_options(self.to_glib_none().0, options.0);
+        }
+    }
 
     fn set_halign(&self, align: Align) {
         unsafe {

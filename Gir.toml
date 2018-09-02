@@ -235,6 +235,7 @@ ignore = [
 
 manual = [
     "cairo.Context",
+    "cairo.FontOptions",
     "cairo.RectangleInt",
     "cairo.Region",
     "cairo.Surface",
@@ -259,6 +260,7 @@ manual = [
     "Gdk.EventProximity",
     "Gdk.EventScroll",
     "Gdk.EventSelection",
+    "Gdk.EventSequence",
     "Gdk.EventVisibility",
     "Gdk.EventWindowState",
     "Gdk.FrameClock",
