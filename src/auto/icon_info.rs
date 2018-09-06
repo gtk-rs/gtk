@@ -194,12 +194,12 @@ impl<O: IsA<IconInfo> + IsA<glib::object::Object> + Clone + 'static> IconInfoExt
     #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn load_icon_async_future(&self) -> Box_<futures_core::Future<Item = (Self, gdk_pixbuf::Pixbuf), Error = (Self, Error)>> {
         use gio::GioFuture;
-        use send_cell::SendCell;
+        use fragile::Fragile;
 
         GioFuture::new(self, move |obj, send| {
             let cancellable = gio::Cancellable::new();
-            let send = SendCell::new(send);
-            let obj_clone = SendCell::new(obj.clone());
+            let send = Fragile::new(send);
+            let obj_clone = Fragile::new(obj.clone());
             obj.load_icon_async(
                  Some(&cancellable),
                  move |res| {
@@ -269,7 +269,7 @@ impl<O: IsA<IconInfo> + IsA<glib::object::Object> + Clone + 'static> IconInfoExt
     #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn load_symbolic_async_future<'a, 'b, 'c, P: Into<Option<&'a gdk::RGBA>>, Q: Into<Option<&'b gdk::RGBA>>, R: Into<Option<&'c gdk::RGBA>>>(&self, fg: &gdk::RGBA, success_color: P, warning_color: Q, error_color: R) -> Box_<futures_core::Future<Item = (Self, (gdk_pixbuf::Pixbuf, bool)), Error = (Self, Error)>> {
         use gio::GioFuture;
-        use send_cell::SendCell;
+        use fragile::Fragile;
 
         let fg = fg.clone();
         let success_color = success_color.into();
@@ -280,8 +280,8 @@ impl<O: IsA<IconInfo> + IsA<glib::object::Object> + Clone + 'static> IconInfoExt
         let error_color = error_color.map(ToOwned::to_owned);
         GioFuture::new(self, move |obj, send| {
             let cancellable = gio::Cancellable::new();
-            let send = SendCell::new(send);
-            let obj_clone = SendCell::new(obj.clone());
+            let send = Fragile::new(send);
+            let obj_clone = Fragile::new(obj.clone());
             obj.load_symbolic_async(
                  &fg,
                  success_color.as_ref().map(::std::borrow::Borrow::borrow),
@@ -332,13 +332,13 @@ impl<O: IsA<IconInfo> + IsA<glib::object::Object> + Clone + 'static> IconInfoExt
     #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn load_symbolic_for_context_async_future(&self, context: &StyleContext) -> Box_<futures_core::Future<Item = (Self, (gdk_pixbuf::Pixbuf, bool)), Error = (Self, Error)>> {
         use gio::GioFuture;
-        use send_cell::SendCell;
+        use fragile::Fragile;
 
         let context = context.clone();
         GioFuture::new(self, move |obj, send| {
             let cancellable = gio::Cancellable::new();
-            let send = SendCell::new(send);
-            let obj_clone = SendCell::new(obj.clone());
+            let send = Fragile::new(send);
+            let obj_clone = Fragile::new(obj.clone());
             obj.load_symbolic_for_context_async(
                  &context,
                  Some(&cancellable),
