@@ -174,7 +174,7 @@ extern crate cairo;
 extern crate pango;
 
 #[cfg(feature = "futures")]
-extern crate send_cell;
+extern crate fragile;
 #[cfg(feature = "futures")]
 extern crate futures_core;
 
