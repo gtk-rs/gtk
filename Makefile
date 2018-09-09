@@ -5,6 +5,14 @@ GIR_FILES = gir-files/Gtk-3.0.gir
 # Run `gir` generating the bindings
 gir : src/auto/mod.rs
 
+not_bound: $(GIR) $(GIR_FILES)
+	$(GIR) -m not_bound -c Gir.toml
+
+regen_check: $(GIR) $(GIR_FILES)
+	rm src/auto/*
+	$(GIR) -c Gir.toml
+	git diff -R --exit-code
+
 src/auto/mod.rs : Gir.toml $(GIR) $(GIR_FILES)
 	$(GIR) -c Gir.toml
 

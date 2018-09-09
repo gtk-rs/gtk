@@ -144,9 +144,12 @@
 //! them once. **Omitting them in the following cargo invocations will not undo
 //! their effects!**
 
+#![cfg_attr(feature = "cargo-clippy", allow(let_unit_value))]
 #![cfg_attr(feature = "cargo-clippy", allow(new_without_default))]
 #![cfg_attr(feature = "cargo-clippy", allow(type_complexity))]
 #![cfg_attr(feature = "cargo-clippy", allow(transmute_ptr_to_ref))]
+#![cfg_attr(feature = "cargo-clippy", allow(trivially_copy_pass_by_ref))]
+#![cfg_attr(feature = "cargo-clippy", allow(derive_hash_xor_eq))]
 #![allow(deprecated)]
 
 extern crate libc;
@@ -169,6 +172,11 @@ extern crate gdk;
 extern crate gdk_pixbuf;
 extern crate cairo;
 extern crate pango;
+
+#[cfg(feature = "futures")]
+extern crate fragile;
+#[cfg(feature = "futures")]
+extern crate futures_core;
 
 pub use glib::{
     Cast,
@@ -204,6 +212,7 @@ mod auto;
 
 mod app_chooser;
 mod application;
+mod application_window;
 mod assistant;
 mod buildable;
 mod builder;
@@ -214,14 +223,24 @@ mod color_chooser;
 mod dialog;
 mod drag_context;
 mod entry_buffer;
+mod entry_completion;
 mod enums;
 mod file_chooser_dialog;
 mod fixed;
+mod im_context_simple;
 mod invisible;
+#[cfg(any(feature = "v3_10", feature = "dox"))]
+mod list_box;
 mod list_store;
 mod menu;
 mod message_dialog;
 mod notebook;
+#[cfg(any(feature = "v3_22", feature = "dox"))]
+mod pad_action_entry;
+#[cfg(any(feature = "v3_22", feature = "dox"))]
+mod pad_controller;
+mod page_range;
+mod print_settings;
 mod radio_button;
 mod radio_menu_item;
 mod radio_tool_button;
@@ -258,6 +277,9 @@ pub use gdk::Rectangle;
 pub use app_chooser::AppChooser;
 pub use border::Border;
 pub use entry_buffer::EntryBuffer;
+#[cfg(any(feature = "v3_22", feature = "dox"))]
+pub use pad_action_entry::PadActionEntry;
+pub use page_range::PageRange;
 pub use recent_data::RecentData;
 pub use requisition::Requisition;
 #[cfg(any(target_os = "linux", feature = "dox"))]

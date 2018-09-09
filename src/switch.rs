@@ -27,7 +27,6 @@ impl<O: IsA<Switch> + IsA<glib::object::Object>> SwitchExtManual for O {
 }
 
 unsafe extern "C" fn changed_active_trampoline(this: *mut ffi::GtkSwitch, _gparamspec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    callback_guard!();
     let f: &&(Fn(&Switch) + 'static) = transmute(f);
     f(&from_glib_borrow(this))
 }

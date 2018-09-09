@@ -8,8 +8,11 @@ use glib_ffi;
 use gobject_ffi;
 use std::mem;
 use std::ptr;
+use std::fmt;
+use std::ops;
 
 glib_wrapper! {
+    #[derive(PartialEq, Eq, PartialOrd, Ord, Hash)]
     pub struct Border(Boxed<ffi::GtkBorder>);
 
     match fn {
@@ -19,6 +22,21 @@ glib_wrapper! {
     }
 }
 
+impl ops::Deref for Border {
+    type Target = ffi::GtkBorder;
+
+    fn deref(&self) -> &Self::Target {
+        &(*self.0)
+    }
+}
+
+impl ops::DerefMut for Border {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut (*self.0)
+    }
+}
+
+
 impl Border {
     pub fn new() -> Border {
         assert_initialized_main_thread!();
@@ -26,26 +44,21 @@ impl Border {
             from_glib_full(ffi::gtk_border_new())
         }
     }
-
-    pub fn right(&mut self) -> &mut i16 {
-        &mut (*self.0).right
-    }
-
-    pub fn left(&mut self) -> &mut i16 {
-        &mut (*self.0).left
-    }
-
-    pub fn top(&mut self) -> &mut i16 {
-        &mut (*self.0).top
-    }
-
-    pub fn bottom(&mut self) -> &mut i16 {
-        &mut (*self.0).bottom
-    }
 }
 
 impl Default for Border {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+impl fmt::Debug for Border {
+    fn fmt(&self, fmt: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+        fmt.debug_struct("Border")
+            .field("left", &self.left)
+            .field("right", &self.right)
+            .field("top", &self.top)
+            .field("bottom", &self.bottom)
+            .finish()
     }
 }
