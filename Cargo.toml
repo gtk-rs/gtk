@@ -7,7 +7,7 @@ name = "gtk"
 homepage = "http://gtk-rs.org/"
 authors = ["The Gtk-rs Project Developers"]
 readme = "README.md"
-version = "0.4.0"
+version = "0.5.0"
 keywords = ["gtk", "gtk-rs", "gnome", "GUI"]
 repository = "https://github.com/gtk-rs/gtk"
 build = "build.rs"
@@ -56,7 +56,6 @@ bitflags = "1.0"
 lazy_static = "1.0"
 fragile = { version = "0.3", optional = true }
 futures-core-preview = { version = "0.2", optional = true }
-
 cairo-sys-rs = { git = "https://github.com/gtk-rs/cairo" }
 gdk-sys = { git = "https://github.com/gtk-rs/sys" }
 gdk-pixbuf-sys = { git = "https://github.com/gtk-rs/sys" }
