@@ -30,13 +30,20 @@ purge-lgpl-docs = ["gtk-rs-lgpl-docs", "gdk/purge-lgpl-docs"]
 v3_22 = ["v3_20", "gtk-sys/v3_22", "gdk/v3_22"]
 v3_22_20 = ["v3_22", "gtk-sys/v3_22_26", "gdk/v3_22"]
 v3_22_26 = ["v3_22_20", "gtk-sys/v3_22_26", "gdk/v3_22"]
+v3_22_27 = ["v3_22_26", "gtk-sys/v3_22_27"]
+v3_22_29 = ["v3_22_27", "gtk-sys/v3_22_29"]
+v3_22_30 = ["v3_22_29", "gdk/v3_22_30"]
 v3_12 = ["v3_10", "gtk-sys/v3_12", "gdk/v3_12"]
 v3_8 = ["v3_6", "gtk-sys/v3_8", "gdk/v3_8"]
 embed-lgpl-docs = ["gtk-rs-lgpl-docs", "gdk/embed-lgpl-docs"]
-v3_16 = ["v3_14", "gtk-sys/v3_16", "gdk/v3_16"]
+v3_16 = ["v3_14", "gtk-sys/v3_16", "gdk/v3_16", "gio/v2_44"]
 v3_10 = ["v3_8", "gtk-sys/v3_10", "gdk/v3_10"]
 v3_14 = ["v3_12", "gtk-sys/v3_14", "gdk/v3_14"]
 dox = ["gdk/dox", "gtk-sys/dox"]
+futures = ["futures-core-preview", "fragile", "gio/futures"]
+
+[target.'cfg(target_os = "macos")'.build-dependencies]
+cc = "^1.0"
 
 [target.'cfg(target_os = "macos")'.build-dependencies]
 cc = "^1.0"
@@ -62,3 +69,8 @@ gtk-sys = "0.6.0"
 libc = "0.2"
 bitflags = "1.0"
 lazy_static = "1.0"
+fragile = { version = "0.3", optional = true }
+futures-core-preview = { version = "0.2", optional = true }
+
+[dev-dependencies]
+gir-format-check = "^0.1"

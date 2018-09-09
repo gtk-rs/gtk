@@ -7,17 +7,17 @@ target_path = "."
 work_mode = "normal"
 generate_safety_asserts = true
 deprecate_by_min_version = true
+single_version_file = true
 
 generate = [
-    "Gtk.IconSet",
     "Gtk.AccelFlags",
+    "Gtk.AccelLabel",
     "Gtk.Adjustment",
     "Gtk.Align",
     "Gtk.Alignment",
     "Gtk.AppChooserButton",
     "Gtk.AppChooserWidget",
     "Gtk.ApplicationInhibitFlags",
-    "Gtk.ApplicationWindow",
     "Gtk.Arrow",
     "Gtk.ArrowType",
     "Gtk.AspectFrame",
@@ -87,21 +87,21 @@ generate = [
     "Gtk.GestureSingle",
     "Gtk.GestureSwipe",
     "Gtk.GestureZoom",
-    "Gtk.IconInfo",
     "Gtk.IconFactory",
+    "Gtk.IconInfo",
     "Gtk.IconLookupFlags",
+    "Gtk.IconSet",
     "Gtk.IconSize",
     "Gtk.IconSource",
     "Gtk.IconThemeError",
     "Gtk.IconViewDropPosition",
     "Gtk.ImageMenuItem",
     "Gtk.ImageType",
-    "Gtk.InfoBar",
-    "Gtk.Invisible",
     "Gtk.IMMulticontext",
     "Gtk.IMPreeditStyle",
     "Gtk.IMStatusStyle",
     "Gtk.InputPurpose",
+    "Gtk.Invisible",
     "Gtk.JunctionSides",
     "Gtk.Justification",
     "Gtk.LevelBar",
@@ -137,18 +137,19 @@ generate = [
     "Gtk.PositionType",
     "Gtk.PrintDuplex",
     "Gtk.PrintError",
-    "Gtk.PrintQuality",
     "Gtk.PrintOperation",
     "Gtk.PrintOperationAction",
     "Gtk.PrintOperationPreview",
     "Gtk.PrintOperationResult",
     "Gtk.PrintPages",
+    "Gtk.PrintQuality",
     "Gtk.PrintStatus",
     "Gtk.ProgressBar",
     "Gtk.PropagationPhase",
     "Gtk.RecentChooser",
     "Gtk.RecentChooserDialog",
     "Gtk.RecentChooserError",
+    "Gtk.RecentChooserMenu",
     "Gtk.RecentChooserWidget",
     "Gtk.RecentFilter",
     "Gtk.RecentFilterFlags",
@@ -201,7 +202,6 @@ generate = [
     "Gtk.TextMark",
     "Gtk.TextSearchFlags",
     "Gtk.TextTagTable",
-    "Gtk.TextViewLayer",
     "Gtk.TextWindowType",
     "Gtk.ToggleButton",
     "Gtk.ToggleToolButton",
@@ -211,6 +211,8 @@ generate = [
     "Gtk.ToolPaletteDragTargets",
     "Gtk.ToolShell",
     "Gtk.Tooltip",
+    "Gtk.TreeDragDest",
+    "Gtk.TreeDragSource",
     "Gtk.TreeIter",
     "Gtk.TreeModelFlags",
     "Gtk.TreeViewColumnSizing",
@@ -232,6 +234,11 @@ ignore = [
 ]
 
 manual = [
+    "cairo.Context",
+    "cairo.FontOptions",
+    "cairo.RectangleInt",
+    "cairo.Region",
+    "cairo.Surface",
     "Gdk.AnchorHints",
     "Gdk.Atom",
     "Gdk.Device",
@@ -251,8 +258,9 @@ manual = [
     "Gdk.EventMotion",
     "Gdk.EventProperty",
     "Gdk.EventProximity",
-    "Gdk.EventSelection",
     "Gdk.EventScroll",
+    "Gdk.EventSelection",
+    "Gdk.EventSequence",
     "Gdk.EventVisibility",
     "Gdk.EventWindowState",
     "Gdk.FrameClock",
@@ -285,29 +293,29 @@ manual = [
     "Gio.Permission",
     "GLib.Error",
     "GLib.KeyFile",
+    "GLib.Quark",
     "GLib.Variant",
     "GLib.VariantType",
+    "GObject.Closure",
     "GObject.Object",
     "GObject.Value",
     "Gtk.Allocation",
     "Gtk.AppChooser",
     "Gtk.Border",
     "Gtk.EntryBuffer",
+    "Gtk.PadActionEntry",
+    "Gtk.PageRange",
     "Gtk.RecentData",
     "Gtk.Requisition",
     "Gtk.TargetEntry",
-    "cairo.Context",
-    "cairo.RectangleInt",
-    "cairo.Region",
-    "cairo.Surface",
     "Pango.Alignment",
     "Pango.AttrList",
     "Pango.Context",
     "Pango.Direction",
     "Pango.EllipsizeMode",
+    "Pango.FontDescription",
     "Pango.FontFace",
     "Pango.FontFamily",
-    "Pango.FontDescription",
     "Pango.FontMap",
     "Pango.Language",
     "Pango.Layout",
@@ -396,6 +404,14 @@ status = "generate"
     ignore = true
 
 [[object]]
+name = "Gtk.Actionable"
+status = "generate"
+    [[object.property]]
+    #value glib.Variant
+    name = "action-target"
+    ignore = true
+
+[[object]]
 name = "Gtk.ActionBar"
 status = "generate"
     [[object.child_prop]]
@@ -422,15 +438,10 @@ trait_name = "GtkApplicationExt"
     ignore = true
 
 [[object]]
-name = "Gtk.Builder"
+name = "Gtk.ApplicationWindow"
 status = "generate"
     [[object.function]]
-    pattern = ".+_from_file"
-    #path
-    ignore = true
-    [[object.function]]
-    name = "get_object"
-    #downcast
+    name = "new"
     ignore = true
 
 [[object]]
@@ -480,6 +491,18 @@ name = "Gtk.Buildable"
 status = "generate"
     [[object.function]]
     pattern = "[gs]et_name"
+    ignore = true
+
+[[object]]
+name = "Gtk.Builder"
+status = "generate"
+    [[object.function]]
+    pattern = ".+_from_file"
+    #path
+    ignore = true
+    [[object.function]]
+    name = "get_object"
+    #downcast
     ignore = true
 
 [[object]]
@@ -748,6 +771,9 @@ status = "generate"
     [[object.signal]]
     name = "cursor-on-match"
     inhibit = true
+    [[object.function]]
+    name = "set_match_func"
+    ignore = true # manual implementation as a test for now
 
 [[object]]
 name = "Gtk.Expander"
@@ -816,23 +842,6 @@ status = "generate"
     type = "gint"
 
 [[object]]
-name = "Gtk.IconView"
-status = "generate"
-    [[object.function]]
-    name = "enable_model_drag_dest"
-    #array with size
-    ignore = true
-    [[object.function]]
-    name = "enable_model_drag_source"
-    #array with size
-    ignore = true
-    [[object.function]]
-    pattern = ".+"
-        [[object.function.parameter]]
-        name = "path"
-        const = true
-
-[[object]]
 name = "Gtk.IconTheme"
 status = "generate"
     [[object.function]]
@@ -852,6 +861,23 @@ status = "generate"
     name = "get_search_path"
     #array
     ignore = true
+
+[[object]]
+name = "Gtk.IconView"
+status = "generate"
+    [[object.function]]
+    name = "enable_model_drag_dest"
+    #array with size
+    ignore = true
+    [[object.function]]
+    name = "enable_model_drag_source"
+    #array with size
+    ignore = true
+    [[object.function]]
+    pattern = ".+"
+        [[object.function.parameter]]
+        name = "path"
+        const = true
 
 [[object]]
 name = "Gtk.Image"
@@ -901,6 +927,23 @@ status = "generate"
     version = "3.6"
 
 [[object]]
+name = "Gtk.IMContextSimple"
+status = "generate"
+    [[object.function]]
+    name = "add_compose_file"
+    ignore = true
+    [[object.function]]
+    name = "add_table"
+    ignore = true # We don't understand API
+
+[[object]]
+name = "Gtk.InfoBar"
+status = "generate"
+    [[object.property]]
+    name = "revealed"
+    version = "3.22.29"
+
+[[object]]
 name = "Gtk.InputHints"
 status = "generate"
     [[object.member]]
@@ -937,6 +980,7 @@ status = "generate"
 [[object]]
 name = "Gtk.ListStore"
 status = "generate"
+trait_name = "GtkListStoreExt"
     [[object.function]]
     pattern = ".+"
         [[object.function.parameter]]
@@ -1088,6 +1132,9 @@ version = "3.22"
 name = "Gtk.PadController"
 status = "generate"
 version = "3.22"
+    [[object.function]]
+    name = "set_action_entries"
+    ignore = true
 
 [[object]]
 name = "Gtk.PageSetup"
@@ -1111,21 +1158,6 @@ status = "generate"
     [[object.child_prop]]
     name = "shrink"
     type = "gboolean"
-
-[[object]]
-name = "Gtk.Popover"
-status = "generate"
-version = "3.12"
-
-[[object]]
-name = "Gtk.PopoverMenu"
-status = "generate"
-    [[object.child_prop]]
-    name = "position"
-    type = "gint"
-    [[object.child_prop]]
-    name = "submenu"
-    type = "utf8"
 
 [[object]]
 name = "Gtk.PaperSize"
@@ -1168,6 +1200,21 @@ status = "generate"
 cfg_condition = "not(windows)"
 
 [[object]]
+name = "Gtk.Popover"
+status = "generate"
+version = "3.12"
+
+[[object]]
+name = "Gtk.PopoverMenu"
+status = "generate"
+    [[object.child_prop]]
+    name = "position"
+    type = "gint"
+    [[object.child_prop]]
+    name = "submenu"
+    type = "utf8"
+
+[[object]]
 name = "Gtk.PrintContext"
 status = "generate"
     [[object.function]]
@@ -1180,9 +1227,6 @@ status = "generate"
 [[object]]
 name = "Gtk.PrintSettings"
 status = "generate"
-    [[object.function]]
-    name = "get_page_ranges"
-    ignore = true
     [[object.function]]
     name = "get_paper_size"
         [object.function.return]
@@ -1303,11 +1347,6 @@ status = "generate"
         const = true
 
 [[object]]
-name = "Gtk.ShortcutsWindow"
-status = "generate"
-version = "3.20"
-
-[[object]]
 name = "Gtk.SelectionData"
 status = "generate"
     [[object.function]]
@@ -1341,6 +1380,11 @@ status = "generate"
     name = "get_data"
     #array without length
     ignore = true
+
+[[object]]
+name = "Gtk.ShortcutsWindow"
+status = "generate"
+version = "3.20"
 
 [[object]]
 name = "Gtk.Socket"
@@ -1483,7 +1527,12 @@ status = "generate"
     [[object.signal]]
     name = "insert-emoji"
     #actually Since 3.22.27
-    version = "3.22.26" 
+    version = "3.22.26"
+
+[[object]]
+name = "Gtk.TextViewLayer"
+status = "generate"
+version = "3.14"
 
 [[object]]
 name = "Gtk.Toolbar"
@@ -1953,12 +2002,4 @@ trait_name = "GtkWindowExt"
         const = true
     [[object.function]]
     name = "present"
-    ignore = true
-
-[[object]]
-name = "Gtk.Actionable"
-status = "generate"
-    [[object.property]]
-    #value glib.Variant
-    name = "action-target"
     ignore = true
