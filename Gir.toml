@@ -1868,6 +1868,15 @@ status = "generate"
     name = "get_path"
         [object.function.return]
         nullable = false
+    [[object.function]]
+    name = "add_events"
+    ignore = true
+    [[object.function]]
+    name = "get_events"
+    ignore = true
+    [[object.function]]
+    name = "set_events"
+    ignore = true
     [[object.signal]]
     name = "button-press-event"
     inhibit = true
