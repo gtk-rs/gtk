@@ -99,8 +99,6 @@ pub trait WidgetExt {
 
     fn add_device_events<P: IsA<gdk::Device>>(&self, device: &P, events: gdk::EventMask);
 
-    fn add_events(&self, events: i32);
-
     fn add_mnemonic_label<P: IsA<Widget>>(&self, label: &P);
 
     //#[cfg(any(feature = "v3_8", feature = "dox"))]
@@ -232,8 +230,6 @@ pub trait WidgetExt {
     fn get_display(&self) -> Option<gdk::Display>;
 
     fn get_double_buffered(&self) -> bool;
-
-    fn get_events(&self) -> i32;
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn get_focus_on_click(&self) -> bool;
@@ -502,8 +498,6 @@ pub trait WidgetExt {
     #[cfg_attr(feature = "v3_14", deprecated)]
     fn set_double_buffered(&self, double_buffered: bool);
 
-    fn set_events(&self, events: i32);
-
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn set_focus_on_click(&self, focus_on_click: bool);
 
@@ -619,6 +613,10 @@ pub trait WidgetExt {
     fn unset_state_flags(&self, flags: StateFlags);
 
     fn get_property_composite_child(&self) -> bool;
+
+    fn get_property_events(&self) -> gdk::EventMask;
+
+    fn set_property_events(&self, events: gdk::EventMask);
 
     fn get_property_expand(&self) -> bool;
 
@@ -892,12 +890,6 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn add_device_events<P: IsA<gdk::Device>>(&self, device: &P, events: gdk::EventMask) {
         unsafe {
             ffi::gtk_widget_add_device_events(self.to_glib_none().0, device.to_glib_none().0, events.to_glib());
-        }
-    }
-
-    fn add_events(&self, events: i32) {
-        unsafe {
-            ffi::gtk_widget_add_events(self.to_glib_none().0, events);
         }
     }
 
@@ -1281,12 +1273,6 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn get_double_buffered(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_widget_get_double_buffered(self.to_glib_none().0))
-        }
-    }
-
-    fn get_events(&self) -> i32 {
-        unsafe {
-            ffi::gtk_widget_get_events(self.to_glib_none().0)
         }
     }
 
@@ -2052,12 +2038,6 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
         }
     }
 
-    fn set_events(&self, events: i32) {
-        unsafe {
-            ffi::gtk_widget_set_events(self.to_glib_none().0, events);
-        }
-    }
-
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn set_focus_on_click(&self, focus_on_click: bool) {
         unsafe {
@@ -2395,6 +2375,20 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
             let mut value = Value::from_type(<bool as StaticType>::static_type());
             gobject_ffi::g_object_get_property(self.to_glib_none().0, "composite-child".to_glib_none().0, value.to_glib_none_mut().0);
             value.get().unwrap()
+        }
+    }
+
+    fn get_property_events(&self) -> gdk::EventMask {
+        unsafe {
+            let mut value = Value::from_type(<gdk::EventMask as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, "events".to_glib_none().0, value.to_glib_none_mut().0);
+            value.get().unwrap()
+        }
+    }
+
+    fn set_property_events(&self, events: gdk::EventMask) {
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, "events".to_glib_none().0, Value::from(&events).to_glib_none().0);
         }
     }
 

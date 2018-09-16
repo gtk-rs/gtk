@@ -16,6 +16,7 @@ use glib_ffi::gpointer;
 use gdk::{DragAction, Event, ModifierType};
 #[cfg(any(feature = "v3_8", feature = "dox"))]
 use gdk::FrameClock;
+use gdk;
 use gdk_ffi;
 use pango;
 use ffi;
@@ -48,6 +49,10 @@ pub trait WidgetExtManual {
     fn connect_map_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_unmap_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId;
+
+    fn add_events(&self, events: gdk::EventMask);
+    fn get_events(&self) -> gdk::EventMask;
+    fn set_events(&self, events: gdk::EventMask);
 }
 
 impl<O: IsA<Widget> + IsA<Object>> WidgetExtManual for O {
@@ -147,6 +152,24 @@ impl<O: IsA<Widget> + IsA<Object>> WidgetExtManual for O {
             let f: Box<Box<Fn(&Self, &Event) -> Inhibit + 'static>> = Box::new(Box::new(f));
             connect(self.to_glib_none().0, "unmap-event",
                 transmute(event_any_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
+        }
+    }
+
+    fn add_events(&self, events: gdk::EventMask) {
+        unsafe {
+            ffi::gtk_widget_add_events(self.to_glib_none().0, events.to_glib() as i32);
+        }
+    }
+
+    fn get_events(&self) -> gdk::EventMask {
+        unsafe {
+            from_glib(ffi::gtk_widget_get_events(self.to_glib_none().0) as u32)
+        }
+    }
+
+    fn set_events(&self, events: gdk::EventMask) {
+        unsafe {
+            ffi::gtk_widget_set_events(self.to_glib_none().0, events.to_glib() as i32);
         }
     }
 }
