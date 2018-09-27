@@ -614,10 +614,6 @@ pub trait WidgetExt {
 
     fn get_property_composite_child(&self) -> bool;
 
-    fn get_property_events(&self) -> gdk::EventMask;
-
-    fn set_property_events(&self, events: gdk::EventMask);
-
     fn get_property_expand(&self) -> bool;
 
     fn set_property_expand(&self, expand: bool);
@@ -2375,20 +2371,6 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
             let mut value = Value::from_type(<bool as StaticType>::static_type());
             gobject_ffi::g_object_get_property(self.to_glib_none().0, "composite-child".to_glib_none().0, value.to_glib_none_mut().0);
             value.get().unwrap()
-        }
-    }
-
-    fn get_property_events(&self) -> gdk::EventMask {
-        unsafe {
-            let mut value = Value::from_type(<gdk::EventMask as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "events".to_glib_none().0, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_events(&self, events: gdk::EventMask) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "events".to_glib_none().0, Value::from(&events).to_glib_none().0);
         }
     }
 
