@@ -1984,6 +1984,9 @@ status = "generate"
     name = "style"
     #deprecated
     ignore = true
+    [[object.property]]
+    name = "events"
+    generate = ["notify"]
     [[object.function]]
     name = "input_shape_combine_region"
         [[object.function.parameter]]
