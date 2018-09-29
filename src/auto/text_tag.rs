@@ -404,8 +404,6 @@ pub trait TextTagExt {
 
     fn connect_property_letter_spacing_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
     fn connect_property_paragraph_background_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_paragraph_background_rgba_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -1720,14 +1718,6 @@ impl<O: IsA<TextTag> + IsA<glib::object::Object>> TextTagExt for O {
         }
     }
 
-    fn connect_property_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::name",
-                transmute(notify_name_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
     fn connect_property_paragraph_background_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
@@ -2219,12 +2209,6 @@ where P: IsA<TextTag> {
 }
 
 unsafe extern "C" fn notify_letter_spacing_set_trampoline<P>(this: *mut ffi::GtkTextTag, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<TextTag> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&TextTag::from_glib_borrow(this).downcast_unchecked())
-}
-
-unsafe extern "C" fn notify_name_trampoline<P>(this: *mut ffi::GtkTextTag, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextTag> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextTag::from_glib_borrow(this).downcast_unchecked())

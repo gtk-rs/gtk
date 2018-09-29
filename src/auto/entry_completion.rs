@@ -118,8 +118,6 @@ pub trait EntryCompletionExt {
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_no_matches<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_cell_area_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
     fn connect_property_inline_completion_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_inline_selection_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -333,14 +331,6 @@ impl<O: IsA<EntryCompletion> + IsA<glib::object::Object>> EntryCompletionExt for
         }
     }
 
-    fn connect_property_cell_area_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::cell-area",
-                transmute(notify_cell_area_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
     fn connect_property_inline_completion_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
@@ -432,12 +422,6 @@ where P: IsA<EntryCompletion> {
 
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 unsafe extern "C" fn no_matches_trampoline<P>(this: *mut ffi::GtkEntryCompletion, f: glib_ffi::gpointer)
-where P: IsA<EntryCompletion> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&EntryCompletion::from_glib_borrow(this).downcast_unchecked())
-}
-
-unsafe extern "C" fn notify_cell_area_trampoline<P>(this: *mut ffi::GtkEntryCompletion, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<EntryCompletion> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&EntryCompletion::from_glib_borrow(this).downcast_unchecked())

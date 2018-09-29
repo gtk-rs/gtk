@@ -78,8 +78,6 @@ pub trait MessageDialogExt {
 
     fn set_property_use_markup(&self, use_markup: bool);
 
-    fn connect_property_buttons_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
     #[cfg_attr(feature = "v3_12", deprecated)]
     fn connect_property_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -199,14 +197,6 @@ impl<O: IsA<MessageDialog> + IsA<glib::object::Object>> MessageDialogExt for O {
         }
     }
 
-    fn connect_property_buttons_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::buttons",
-                transmute(notify_buttons_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
     fn connect_property_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
@@ -262,12 +252,6 @@ impl<O: IsA<MessageDialog> + IsA<glib::object::Object>> MessageDialogExt for O {
                 transmute(notify_use_markup_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
-}
-
-unsafe extern "C" fn notify_buttons_trampoline<P>(this: *mut ffi::GtkMessageDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<MessageDialog> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&MessageDialog::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_image_trampoline<P>(this: *mut ffi::GtkMessageDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)

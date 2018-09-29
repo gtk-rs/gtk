@@ -207,13 +207,9 @@ pub trait ComboBoxExt {
 
     fn connect_property_button_sensitivity_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_cell_area_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
     fn connect_property_column_span_column_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_entry_text_column_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    fn connect_property_has_entry_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_has_frame_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -576,14 +572,6 @@ impl<O: IsA<ComboBox> + IsA<glib::object::Object> + glib::object::ObjectExt> Com
         }
     }
 
-    fn connect_property_cell_area_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::cell-area",
-                transmute(notify_cell_area_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
     fn connect_property_column_span_column_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
@@ -597,14 +585,6 @@ impl<O: IsA<ComboBox> + IsA<glib::object::Object> + glib::object::ObjectExt> Com
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
             connect(self.to_glib_none().0, "notify::entry-text-column",
                 transmute(notify_entry_text_column_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    fn connect_property_has_entry_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::has-entry",
-                transmute(notify_has_entry_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
@@ -727,12 +707,6 @@ where P: IsA<ComboBox> {
     f(&ComboBox::from_glib_borrow(this).downcast_unchecked())
 }
 
-unsafe extern "C" fn notify_cell_area_trampoline<P>(this: *mut ffi::GtkComboBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<ComboBox> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ComboBox::from_glib_borrow(this).downcast_unchecked())
-}
-
 unsafe extern "C" fn notify_column_span_column_trampoline<P>(this: *mut ffi::GtkComboBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ComboBox> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
@@ -740,12 +714,6 @@ where P: IsA<ComboBox> {
 }
 
 unsafe extern "C" fn notify_entry_text_column_trampoline<P>(this: *mut ffi::GtkComboBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<ComboBox> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ComboBox::from_glib_borrow(this).downcast_unchecked())
-}
-
-unsafe extern "C" fn notify_has_entry_trampoline<P>(this: *mut ffi::GtkComboBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ComboBox> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&ComboBox::from_glib_borrow(this).downcast_unchecked())

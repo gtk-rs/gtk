@@ -64,8 +64,6 @@ pub trait AppChooserDialogExt {
 
     fn get_property_gfile(&self) -> Option<gio::File>;
 
-    fn connect_property_gfile_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
     fn connect_property_heading_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
@@ -96,14 +94,6 @@ impl<O: IsA<AppChooserDialog> + IsA<glib::object::Object>> AppChooserDialogExt f
         }
     }
 
-    fn connect_property_gfile_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::gfile",
-                transmute(notify_gfile_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
     fn connect_property_heading_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
@@ -111,12 +101,6 @@ impl<O: IsA<AppChooserDialog> + IsA<glib::object::Object>> AppChooserDialogExt f
                 transmute(notify_heading_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
-}
-
-unsafe extern "C" fn notify_gfile_trampoline<P>(this: *mut ffi::GtkAppChooserDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<AppChooserDialog> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&AppChooserDialog::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_heading_trampoline<P>(this: *mut ffi::GtkAppChooserDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)

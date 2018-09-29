@@ -10,16 +10,11 @@ use ffi;
 use glib;
 use glib::StaticType;
 use glib::Value;
-use glib::object::Downcast;
 use glib::object::IsA;
-use glib::signal::SignalHandlerId;
-use glib::signal::connect;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
-use std::boxed::Box as Box_;
 use std::mem;
-use std::mem::transmute;
 use std::ptr;
 
 glib_wrapper! {
@@ -52,8 +47,6 @@ pub trait TreeModelFilterExt {
     //fn set_visible_func<'a, P: Into<Option</*Unimplemented*/Fundamental: Pointer>>, Q: Into<Option<&'a /*Ignored*/glib::DestroyNotify>>>(&self, func: /*Unknown conversion*//*Unimplemented*/TreeModelFilterVisibleFunc, data: P, destroy: Q);
 
     fn get_property_child_model(&self) -> Option<TreeModel>;
-
-    fn connect_property_child_model_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<TreeModelFilter> + IsA<glib::object::Object>> TreeModelFilterExt for O {
@@ -124,18 +117,4 @@ impl<O: IsA<TreeModelFilter> + IsA<glib::object::Object>> TreeModelFilterExt for
             value.get()
         }
     }
-
-    fn connect_property_child_model_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::child-model",
-                transmute(notify_child_model_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-}
-
-unsafe extern "C" fn notify_child_model_trampoline<P>(this: *mut ffi::GtkTreeModelFilter, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<TreeModelFilter> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&TreeModelFilter::from_glib_borrow(this).downcast_unchecked())
 }

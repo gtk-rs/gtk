@@ -230,8 +230,6 @@ pub trait TextBufferExt {
 
     fn connect_property_paste_target_list_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_tag_table_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
     fn connect_property_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
@@ -845,14 +843,6 @@ impl<O: IsA<TextBuffer> + IsA<glib::object::Object>> TextBufferExt for O {
         }
     }
 
-    fn connect_property_tag_table_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::tag-table",
-                transmute(notify_tag_table_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
     fn connect_property_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
@@ -953,12 +943,6 @@ where P: IsA<TextBuffer> {
 }
 
 unsafe extern "C" fn notify_paste_target_list_trampoline<P>(this: *mut ffi::GtkTextBuffer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<TextBuffer> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&TextBuffer::from_glib_borrow(this).downcast_unchecked())
-}
-
-unsafe extern "C" fn notify_tag_table_trampoline<P>(this: *mut ffi::GtkTextBuffer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextBuffer> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TextBuffer::from_glib_borrow(this).downcast_unchecked())
