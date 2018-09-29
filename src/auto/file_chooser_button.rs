@@ -67,8 +67,6 @@ pub trait FileChooserButtonExt {
 
     fn connect_file_set<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_dialog_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
     fn connect_property_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_width_chars_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -121,14 +119,6 @@ impl<O: IsA<FileChooserButton> + IsA<glib::object::Object>> FileChooserButtonExt
         }
     }
 
-    fn connect_property_dialog_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::dialog",
-                transmute(notify_dialog_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
     fn connect_property_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
@@ -147,12 +137,6 @@ impl<O: IsA<FileChooserButton> + IsA<glib::object::Object>> FileChooserButtonExt
 }
 
 unsafe extern "C" fn file_set_trampoline<P>(this: *mut ffi::GtkFileChooserButton, f: glib_ffi::gpointer)
-where P: IsA<FileChooserButton> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&FileChooserButton::from_glib_borrow(this).downcast_unchecked())
-}
-
-unsafe extern "C" fn notify_dialog_trampoline<P>(this: *mut ffi::GtkFileChooserButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FileChooserButton> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&FileChooserButton::from_glib_borrow(this).downcast_unchecked())

@@ -74,8 +74,6 @@ pub trait RecentManagerExt {
 
     fn connect_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_filename_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
     fn connect_property_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
@@ -162,14 +160,6 @@ impl<O: IsA<RecentManager> + IsA<glib::object::Object>> RecentManagerExt for O {
         }
     }
 
-    fn connect_property_filename_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::filename",
-                transmute(notify_filename_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
     fn connect_property_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
@@ -180,12 +170,6 @@ impl<O: IsA<RecentManager> + IsA<glib::object::Object>> RecentManagerExt for O {
 }
 
 unsafe extern "C" fn changed_trampoline<P>(this: *mut ffi::GtkRecentManager, f: glib_ffi::gpointer)
-where P: IsA<RecentManager> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&RecentManager::from_glib_borrow(this).downcast_unchecked())
-}
-
-unsafe extern "C" fn notify_filename_trampoline<P>(this: *mut ffi::GtkRecentManager, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RecentManager> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&RecentManager::from_glib_borrow(this).downcast_unchecked())

@@ -95,9 +95,6 @@ pub trait DialogExt {
     fn emit_close(&self);
 
     fn connect_response<F: Fn(&Self, i32) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
-    fn connect_property_use_header_bar_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<Dialog> + IsA<glib::object::Object> + glib::object::ObjectExt> DialogExt for O {
@@ -211,15 +208,6 @@ impl<O: IsA<Dialog> + IsA<glib::object::Object> + glib::object::ObjectExt> Dialo
                 transmute(response_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
-
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
-    fn connect_property_use_header_bar_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::use-header-bar",
-                transmute(notify_use_header_bar_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
 }
 
 unsafe extern "C" fn close_trampoline<P>(this: *mut ffi::GtkDialog, f: glib_ffi::gpointer)
@@ -232,11 +220,4 @@ unsafe extern "C" fn response_trampoline<P>(this: *mut ffi::GtkDialog, response_
 where P: IsA<Dialog> {
     let f: &&(Fn(&P, i32) + 'static) = transmute(f);
     f(&Dialog::from_glib_borrow(this).downcast_unchecked(), response_id)
-}
-
-#[cfg(any(feature = "v3_12", feature = "dox"))]
-unsafe extern "C" fn notify_use_header_bar_trampoline<P>(this: *mut ffi::GtkDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Dialog> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Dialog::from_glib_borrow(this).downcast_unchecked())
 }

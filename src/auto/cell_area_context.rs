@@ -56,8 +56,6 @@ pub trait CellAreaContextExt {
 
     fn get_property_natural_width(&self) -> i32;
 
-    fn connect_property_area_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
     fn connect_property_minimum_height_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_minimum_width_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -175,14 +173,6 @@ impl<O: IsA<CellAreaContext> + IsA<glib::object::Object>> CellAreaContextExt for
         }
     }
 
-    fn connect_property_area_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::area",
-                transmute(notify_area_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
     fn connect_property_minimum_height_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
@@ -214,12 +204,6 @@ impl<O: IsA<CellAreaContext> + IsA<glib::object::Object>> CellAreaContextExt for
                 transmute(notify_natural_width_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
-}
-
-unsafe extern "C" fn notify_area_trampoline<P>(this: *mut ffi::GtkCellAreaContext, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<CellAreaContext> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellAreaContext::from_glib_borrow(this).downcast_unchecked())
 }
 
 unsafe extern "C" fn notify_minimum_height_trampoline<P>(this: *mut ffi::GtkCellAreaContext, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
