@@ -1877,6 +1877,10 @@ status = "generate"
     [[object.function]]
     name = "set_events"
     ignore = true
+    [[object.function]]
+    name = "get_style_context"
+        [object.function.return]
+        nullable = false
     [[object.signal]]
     name = "button-press-event"
     inhibit = true
