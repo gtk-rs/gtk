@@ -323,7 +323,7 @@ pub trait WidgetExt {
 
     fn get_state_flags(&self) -> StateFlags;
 
-    fn get_style_context(&self) -> Option<StyleContext>;
+    fn get_style_context(&self) -> StyleContext;
 
     fn get_support_multidevice(&self) -> bool;
 
@@ -1544,7 +1544,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
         }
     }
 
-    fn get_style_context(&self) -> Option<StyleContext> {
+    fn get_style_context(&self) -> StyleContext {
         unsafe {
             from_glib_none(ffi::gtk_widget_get_style_context(self.to_glib_none().0))
         }
