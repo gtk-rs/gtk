@@ -64,7 +64,7 @@ impl Default for Menu {
     }
 }
 
-pub trait MenuExt {
+pub trait GtkMenuExt {
     fn attach<P: IsA<Widget>>(&self, child: &P, left_attach: u32, right_attach: u32, top_attach: u32, bottom_attach: u32);
 
     //fn attach_to_widget<'a, P: IsA<Widget>, Q: Into<Option<&'a /*Unimplemented*/MenuDetachFunc>>>(&self, attach_widget: &P, detacher: Q);
@@ -217,7 +217,7 @@ pub trait MenuExt {
     fn connect_property_tearoff_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Menu> + IsA<Container> + IsA<glib::object::Object> + glib::object::ObjectExt> MenuExt for O {
+impl<O: IsA<Menu> + IsA<Container> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkMenuExt for O {
     fn attach<P: IsA<Widget>>(&self, child: &P, left_attach: u32, right_attach: u32, top_attach: u32, bottom_attach: u32) {
         unsafe {
             ffi::gtk_menu_attach(self.to_glib_none().0, child.to_glib_none().0, left_attach, right_attach, top_attach, bottom_attach);
