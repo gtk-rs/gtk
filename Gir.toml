@@ -1009,6 +1009,7 @@ name = "Gtk.Menu"
 status = "generate"
 child_type = "Gtk.MenuItem"
 child_name = "item"
+trait_name = "GtkMenuExt"
     [[object.child_prop]]
     name = "bottom-attach"
     type = "gint"

@@ -459,7 +459,7 @@ pub use self::lock_button::LockButtonExt;
 
 mod menu;
 pub use self::menu::Menu;
-pub use self::menu::MenuExt;
+pub use self::menu::GtkMenuExt;
 
 mod menu_bar;
 pub use self::menu_bar::MenuBar;
@@ -1419,7 +1419,7 @@ pub mod traits {
     pub use super::ListBoxRowExt;
     pub use super::GtkListStoreExt;
     pub use super::LockButtonExt;
-    pub use super::MenuExt;
+    pub use super::GtkMenuExt;
     pub use super::MenuBarExt;
     #[cfg(any(feature = "v3_6", feature = "dox"))]
     pub use super::MenuButtonExt;
