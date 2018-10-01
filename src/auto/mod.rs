@@ -474,7 +474,7 @@ pub use self::menu_button::MenuButtonExt;
 
 mod menu_item;
 pub use self::menu_item::MenuItem;
-pub use self::menu_item::MenuItemExt;
+pub use self::menu_item::GtkMenuItemExt;
 
 mod menu_shell;
 pub use self::menu_shell::MenuShell;
@@ -1423,7 +1423,7 @@ pub mod traits {
     pub use super::MenuBarExt;
     #[cfg(any(feature = "v3_6", feature = "dox"))]
     pub use super::MenuButtonExt;
-    pub use super::MenuItemExt;
+    pub use super::GtkMenuItemExt;
     pub use super::MenuShellExt;
     pub use super::MenuToolButtonExt;
     pub use super::MessageDialogExt;
