@@ -23,7 +23,7 @@ pub use im_context_simple::IMContextSimpleExtManual;
 pub use list_box::ListBoxExtManual;
 pub use list_store::GtkListStoreExtManual;
 pub use invisible::InvisibleExtManual;
-pub use menu::MenuExtManual;
+pub use menu::GtkMenuExtManual;
 pub use notebook::NotebookExtManual;
 #[cfg(any(feature = "v3_22", feature = "dox"))]
 pub use pad_controller::PadControllerExtManual;

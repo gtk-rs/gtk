@@ -14,7 +14,7 @@ use std::mem::transmute;
 use libc::c_int;
 use std::ptr;
 
-pub trait MenuExtManual {
+pub trait GtkMenuExtManual {
     fn popup<T: IsA<Widget>, U: IsA<Widget>,
                  F: Fn(&Menu, &mut i32, &mut i32) -> bool + 'static>(
         &self, parent_menu_shell: Option<&T>, parent_menu_item: Option<&U>, f: F,
@@ -23,7 +23,7 @@ pub trait MenuExtManual {
     fn popup_easy(&self, button: u32, activate_time: u32);
 }
 
-impl<O: IsA<Menu>> MenuExtManual for O {
+impl<O: IsA<Menu>> GtkMenuExtManual for O {
     fn popup<T: IsA<Widget>, U: IsA<Widget>,
                  F: Fn(&Menu, &mut i32, &mut i32) -> bool + 'static>(
         &self, parent_menu_shell: Option<&T>, parent_menu_item: Option<&U>, f: F,

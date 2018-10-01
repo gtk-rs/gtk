@@ -62,7 +62,7 @@ impl Default for MenuItem {
     }
 }
 
-pub trait MenuItemExt {
+pub trait GtkMenuItemExt {
     fn deselect(&self);
 
     fn get_accel_path(&self) -> Option<String>;
@@ -120,7 +120,7 @@ pub trait MenuItemExt {
     fn connect_property_use_underline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<MenuItem> + IsA<glib::object::Object> + glib::object::ObjectExt> MenuItemExt for O {
+impl<O: IsA<MenuItem> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkMenuItemExt for O {
     fn deselect(&self) {
         unsafe {
             ffi::gtk_menu_item_deselect(self.to_glib_none().0);

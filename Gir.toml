@@ -1029,6 +1029,7 @@ trait_name = "GtkMenuExt"
 [[object]]
 name = "Gtk.MenuItem"
 status = "generate"
+trait_name = "GtkMenuItemExt"
     [[object.function]]
     name = "activate"
     ignore = true
