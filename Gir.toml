@@ -813,6 +813,10 @@ module_name = "gl_area"
     [[object.signal]]
     pattern = "render"
     inhibit = true
+    [[object.signal]]
+    name = "create-context"
+        [object.signal.return]
+        nullable = true
 
 [[object]]
 name = "Gtk.Grid"
