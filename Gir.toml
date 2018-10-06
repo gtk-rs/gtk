@@ -1692,6 +1692,10 @@ status = "generate"
     # Replaced by TreeModelFilter::new
     ignore = true
     [[object.function]]
+    name = " sort_new_with_model"
+    # Replaced by TreeModelSort::new
+    ignore = true
+    [[object.function]]
     name = "iter_children"
         [[object.function.parameter]]
         name = "parent"
@@ -1743,6 +1747,39 @@ status = "generate"
     name = "virtual-root"
     #value recordboxed
     ignore = true
+
+[[object]]
+name = "Gtk.TreeModelSort"
+status = "generate"
+    [[object.function]]
+    name = "convert_child_path_to_path"
+        [[object.function.parameter]]
+        name = "child_path"
+        const = true
+    [[object.function]]
+    name = "convert_path_to_child_path"
+        [[object.function.parameter]]
+        name = "sorted_path"
+        const = true
+    [[object.function]]
+    name = "convert_iter_to_child_iter"
+        [[object.function.parameter]]
+        name = "sorted_iter"
+        const = true
+    [[object.function]]
+    name = "convert_child_iter_to_iter"
+        [[object.function.parameter]]
+        name = "child_iter"
+        const = true
+    [[object.function]]
+    name = "iter_is_valid"
+        [[object.function.parameter]]
+        name = "iter"
+        const = true
+    [[object.function]]
+    name = "get_model"
+        [[object.function.return]]
+        nullable = false
 
 [[object]]
 name = "Gtk.TreePath"
