@@ -113,7 +113,7 @@ pub trait GLAreaExt {
     fn set_use_es(&self, use_es: bool);
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn connect_create_context<F: Fn(&Self) -> gdk::GLContext + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_create_context<F: Fn(&Self) -> Option<gdk::GLContext> + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn connect_render<F: Fn(&Self, &gdk::GLContext) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId;
@@ -273,9 +273,9 @@ impl<O: IsA<GLArea> + IsA<glib::object::Object>> GLAreaExt for O {
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn connect_create_context<F: Fn(&Self) -> gdk::GLContext + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_create_context<F: Fn(&Self) -> Option<gdk::GLContext> + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) -> gdk::GLContext + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<Box_<Fn(&Self) -> Option<gdk::GLContext> + 'static>> = Box_::new(Box_::new(f));
             connect(self.to_glib_none().0, "create-context",
                 transmute(create_context_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
@@ -357,7 +357,7 @@ impl<O: IsA<GLArea> + IsA<glib::object::Object>> GLAreaExt for O {
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 unsafe extern "C" fn create_context_trampoline<P>(this: *mut ffi::GtkGLArea, f: glib_ffi::gpointer) -> *mut gdk_ffi::GdkGLContext
 where P: IsA<GLArea> {
-    let f: &&(Fn(&P) -> gdk::GLContext + 'static) = transmute(f);
+    let f: &&(Fn(&P) -> Option<gdk::GLContext> + 'static) = transmute(f);
     f(&GLArea::from_glib_borrow(this).downcast_unchecked()).to_glib_full()
 }
 
