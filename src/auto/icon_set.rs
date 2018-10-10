@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use IconSize;
 use IconSource;
 use StyleContext;
 #[cfg(any(feature = "v3_10", feature = "dox"))]
@@ -59,29 +60,19 @@ impl IconSet {
     }
 
     #[cfg_attr(feature = "v3_10", deprecated)]
-    pub fn get_sizes(&self) -> Vec<i32> {
+    pub fn render_icon_pixbuf(&self, context: &StyleContext, size: IconSize) -> Option<gdk_pixbuf::Pixbuf> {
         unsafe {
-            let mut sizes = ptr::null_mut();
-            let mut n_sizes = mem::uninitialized();
-            ffi::gtk_icon_set_get_sizes(self.to_glib_none().0, &mut sizes, &mut n_sizes);
-            FromGlibContainer::from_glib_full_num(sizes, n_sizes as usize)
-        }
-    }
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    pub fn render_icon_pixbuf(&self, context: &StyleContext, size: i32) -> Option<gdk_pixbuf::Pixbuf> {
-        unsafe {
-            from_glib_full(ffi::gtk_icon_set_render_icon_pixbuf(self.to_glib_none().0, context.to_glib_none().0, size))
+            from_glib_full(ffi::gtk_icon_set_render_icon_pixbuf(self.to_glib_none().0, context.to_glib_none().0, size.to_glib()))
         }
     }
 
     #[cfg_attr(feature = "v3_10", deprecated)]
     #[cfg(any(feature = "v3_10", feature = "dox"))]
-    pub fn render_icon_surface<'a, P: Into<Option<&'a gdk::Window>>>(&self, context: &StyleContext, size: i32, scale: i32, for_window: P) -> Option<cairo::Surface> {
+    pub fn render_icon_surface<'a, P: Into<Option<&'a gdk::Window>>>(&self, context: &StyleContext, size: IconSize, scale: i32, for_window: P) -> Option<cairo::Surface> {
         let for_window = for_window.into();
         let for_window = for_window.to_glib_none();
         unsafe {
-            from_glib_full(ffi::gtk_icon_set_render_icon_surface(self.to_glib_none().0, context.to_glib_none().0, size, scale, for_window.0))
+            from_glib_full(ffi::gtk_icon_set_render_icon_surface(self.to_glib_none().0, context.to_glib_none().0, size.to_glib(), scale, for_window.0))
         }
     }
 }

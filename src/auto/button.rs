@@ -6,6 +6,8 @@ use Actionable;
 use Bin;
 use Buildable;
 use Container;
+#[cfg(any(feature = "v3_10", feature = "dox"))]
+use IconSize;
 use PositionType;
 use ReliefStyle;
 use Widget;
@@ -43,12 +45,12 @@ impl Button {
     }
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
-    pub fn new_from_icon_name<'a, P: Into<Option<&'a str>>>(icon_name: P, size: i32) -> Button {
+    pub fn new_from_icon_name<'a, P: Into<Option<&'a str>>>(icon_name: P, size: IconSize) -> Button {
         assert_initialized_main_thread!();
         let icon_name = icon_name.into();
         let icon_name = icon_name.to_glib_none();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_button_new_from_icon_name(icon_name.0, size)).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_button_new_from_icon_name(icon_name.0, size.to_glib())).downcast_unchecked()
         }
     }
 

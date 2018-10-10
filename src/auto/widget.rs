@@ -10,6 +10,7 @@ use Buildable;
 use Clipboard;
 use DirectionType;
 use DragResult;
+use IconSize;
 use Orientation;
 use Requisition;
 use SelectionData;
@@ -459,7 +460,7 @@ pub trait WidgetExt {
     fn remove_tick_callback(&self, id: u32);
 
     #[cfg_attr(feature = "v3_10", deprecated)]
-    fn render_icon_pixbuf(&self, stock_id: &str, size: i32) -> Option<gdk_pixbuf::Pixbuf>;
+    fn render_icon_pixbuf(&self, stock_id: &str, size: IconSize) -> Option<gdk_pixbuf::Pixbuf>;
 
     #[cfg_attr(feature = "v3_14", deprecated)]
     fn reparent<P: IsA<Widget>>(&self, new_parent: &P);
@@ -1927,9 +1928,9 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
         }
     }
 
-    fn render_icon_pixbuf(&self, stock_id: &str, size: i32) -> Option<gdk_pixbuf::Pixbuf> {
+    fn render_icon_pixbuf(&self, stock_id: &str, size: IconSize) -> Option<gdk_pixbuf::Pixbuf> {
         unsafe {
-            from_glib_full(ffi::gtk_widget_render_icon_pixbuf(self.to_glib_none().0, stock_id.to_glib_none().0, size))
+            from_glib_full(ffi::gtk_widget_render_icon_pixbuf(self.to_glib_none().0, stock_id.to_glib_none().0, size.to_glib()))
         }
     }
 

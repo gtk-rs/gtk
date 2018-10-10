@@ -81,10 +81,6 @@ pub trait CellRendererPixbufExt {
     #[cfg_attr(feature = "v3_10", deprecated)]
     fn set_property_stock_id(&self, stock_id: Option<&str>);
 
-    fn get_property_stock_size(&self) -> u32;
-
-    fn set_property_stock_size(&self, stock_size: u32);
-
     #[cfg_attr(feature = "v3_16", deprecated)]
     fn connect_property_follow_state_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -216,20 +212,6 @@ impl<O: IsA<CellRendererPixbuf> + IsA<glib::object::Object>> CellRendererPixbufE
     fn set_property_stock_id(&self, stock_id: Option<&str>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "stock-id".to_glib_none().0, Value::from(stock_id).to_glib_none().0);
-        }
-    }
-
-    fn get_property_stock_size(&self) -> u32 {
-        unsafe {
-            let mut value = Value::from_type(<u32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "stock-size".to_glib_none().0, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_stock_size(&self, stock_size: u32) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "stock-size".to_glib_none().0, Value::from(&stock_size).to_glib_none().0);
         }
     }
 

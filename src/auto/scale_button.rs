@@ -37,10 +37,10 @@ glib_wrapper! {
 }
 
 impl ScaleButton {
-    pub fn new(size: i32, min: f64, max: f64, step: f64, icons: &[&str]) -> ScaleButton {
+    pub fn new(size: IconSize, min: f64, max: f64, step: f64, icons: &[&str]) -> ScaleButton {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_scale_button_new(size, min, max, step, icons.to_glib_none().0)).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_scale_button_new(size.to_glib(), min, max, step, icons.to_glib_none().0)).downcast_unchecked()
         }
     }
 }

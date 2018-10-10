@@ -55,8 +55,6 @@ impl Default for Toolbar {
 pub trait ToolbarExt {
     fn get_drop_index(&self, x: i32, y: i32) -> i32;
 
-    fn get_icon_size(&self) -> IconSize;
-
     fn get_item_index<P: IsA<ToolItem>>(&self, item: &P) -> i32;
 
     fn get_n_items(&self) -> i32;
@@ -118,12 +116,6 @@ impl<O: IsA<Toolbar> + IsA<Container> + IsA<glib::object::Object> + glib::object
     fn get_drop_index(&self, x: i32, y: i32) -> i32 {
         unsafe {
             ffi::gtk_toolbar_get_drop_index(self.to_glib_none().0, x, y)
-        }
-    }
-
-    fn get_icon_size(&self) -> IconSize {
-        unsafe {
-            from_glib(ffi::gtk_toolbar_get_icon_size(self.to_glib_none().0))
         }
     }
 

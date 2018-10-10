@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use IconSize;
 use StateType;
 use TextDirection;
 use ffi;
@@ -69,9 +70,9 @@ impl IconSource {
     }
 
     #[cfg_attr(feature = "v3_10", deprecated)]
-    pub fn get_size(&self) -> i32 {
+    pub fn get_size(&self) -> IconSize {
         unsafe {
-            ffi::gtk_icon_source_get_size(self.to_glib_none().0)
+            from_glib(ffi::gtk_icon_source_get_size(self.to_glib_none().0))
         }
     }
 
@@ -134,9 +135,9 @@ impl IconSource {
     }
 
     #[cfg_attr(feature = "v3_10", deprecated)]
-    pub fn set_size(&mut self, size: i32) {
+    pub fn set_size(&mut self, size: IconSize) {
         unsafe {
-            ffi::gtk_icon_source_set_size(self.to_glib_none_mut().0, size);
+            ffi::gtk_icon_source_set_size(self.to_glib_none_mut().0, size.to_glib());
         }
     }
 

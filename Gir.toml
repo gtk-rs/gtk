@@ -90,7 +90,6 @@ generate = [
     "Gtk.IconFactory",
     "Gtk.IconInfo",
     "Gtk.IconLookupFlags",
-    "Gtk.IconSet",
     "Gtk.IconSize",
     "Gtk.IconSource",
     "Gtk.IconThemeError",
@@ -623,6 +622,10 @@ status = "generate"
     name = "surface"
     #value cairo::Surface
     ignore = true
+    [[object.property]]
+    name = "stock-size"
+    #value ImageSize
+    generate = ["notify"]
 
 [[object]]
 name = "Gtk.CellRendererText"
@@ -844,6 +847,14 @@ status = "generate"
     [[object.child_prop]]
     name = "position"
     type = "gint"
+
+[[object]]
+name = "Gtk.IconSet"
+status = "generate"
+    [[object.function]]
+    name = "get_sizes"
+    #return array of IconSize
+    ignore = true
 
 [[object]]
 name = "Gtk.IconTheme"

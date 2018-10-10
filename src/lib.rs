@@ -217,6 +217,7 @@ mod assistant;
 mod buildable;
 mod builder;
 mod border;
+mod cell_renderer_pixbuf;
 mod clipboard;
 mod color_button;
 mod color_chooser;
@@ -227,6 +228,7 @@ mod entry_completion;
 mod enums;
 mod file_chooser_dialog;
 mod fixed;
+mod icon_set;
 mod im_context_simple;
 mod invisible;
 #[cfg(any(feature = "v3_10", feature = "dox"))]
