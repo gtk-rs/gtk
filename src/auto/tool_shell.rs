@@ -3,6 +3,7 @@
 // DO NOT EDIT
 
 use Buildable;
+use IconSize;
 use Orientation;
 use ReliefStyle;
 use SizeGroup;
@@ -28,7 +29,7 @@ glib_wrapper! {
 pub trait ToolShellExt {
     fn get_ellipsize_mode(&self) -> pango::EllipsizeMode;
 
-    fn get_icon_size(&self) -> i32;
+    fn get_icon_size(&self) -> IconSize;
 
     fn get_orientation(&self) -> Orientation;
 
@@ -52,9 +53,9 @@ impl<O: IsA<ToolShell>> ToolShellExt for O {
         }
     }
 
-    fn get_icon_size(&self) -> i32 {
+    fn get_icon_size(&self) -> IconSize {
         unsafe {
-            ffi::gtk_tool_shell_get_icon_size(self.to_glib_none().0)
+            from_glib(ffi::gtk_tool_shell_get_icon_size(self.to_glib_none().0))
         }
     }
 

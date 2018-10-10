@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use IconSize;
 use Widget;
 use ffi;
 use gdk;
@@ -36,12 +37,12 @@ pub trait TooltipExt {
 
     fn set_icon<'a, P: Into<Option<&'a gdk_pixbuf::Pixbuf>>>(&self, pixbuf: P);
 
-    fn set_icon_from_gicon<'a, P: IsA<gio::Icon> + 'a, Q: Into<Option<&'a P>>>(&self, gicon: Q, size: i32);
+    fn set_icon_from_gicon<'a, P: IsA<gio::Icon> + 'a, Q: Into<Option<&'a P>>>(&self, gicon: Q, size: IconSize);
 
-    fn set_icon_from_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_name: P, size: i32);
+    fn set_icon_from_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_name: P, size: IconSize);
 
     #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_icon_from_stock<'a, P: Into<Option<&'a str>>>(&self, stock_id: P, size: i32);
+    fn set_icon_from_stock<'a, P: Into<Option<&'a str>>>(&self, stock_id: P, size: IconSize);
 
     fn set_markup<'a, P: Into<Option<&'a str>>>(&self, markup: P);
 
@@ -67,27 +68,27 @@ impl<O: IsA<Tooltip>> TooltipExt for O {
         }
     }
 
-    fn set_icon_from_gicon<'a, P: IsA<gio::Icon> + 'a, Q: Into<Option<&'a P>>>(&self, gicon: Q, size: i32) {
+    fn set_icon_from_gicon<'a, P: IsA<gio::Icon> + 'a, Q: Into<Option<&'a P>>>(&self, gicon: Q, size: IconSize) {
         let gicon = gicon.into();
         let gicon = gicon.to_glib_none();
         unsafe {
-            ffi::gtk_tooltip_set_icon_from_gicon(self.to_glib_none().0, gicon.0, size);
+            ffi::gtk_tooltip_set_icon_from_gicon(self.to_glib_none().0, gicon.0, size.to_glib());
         }
     }
 
-    fn set_icon_from_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_name: P, size: i32) {
+    fn set_icon_from_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_name: P, size: IconSize) {
         let icon_name = icon_name.into();
         let icon_name = icon_name.to_glib_none();
         unsafe {
-            ffi::gtk_tooltip_set_icon_from_icon_name(self.to_glib_none().0, icon_name.0, size);
+            ffi::gtk_tooltip_set_icon_from_icon_name(self.to_glib_none().0, icon_name.0, size.to_glib());
         }
     }
 
-    fn set_icon_from_stock<'a, P: Into<Option<&'a str>>>(&self, stock_id: P, size: i32) {
+    fn set_icon_from_stock<'a, P: Into<Option<&'a str>>>(&self, stock_id: P, size: IconSize) {
         let stock_id = stock_id.into();
         let stock_id = stock_id.to_glib_none();
         unsafe {
-            ffi::gtk_tooltip_set_icon_from_stock(self.to_glib_none().0, stock_id.0, size);
+            ffi::gtk_tooltip_set_icon_from_stock(self.to_glib_none().0, stock_id.0, size.to_glib());
         }
     }
 

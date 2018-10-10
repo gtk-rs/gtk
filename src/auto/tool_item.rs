@@ -5,6 +5,7 @@
 use Bin;
 use Buildable;
 use Container;
+use IconSize;
 use Orientation;
 use ReliefStyle;
 use SizeGroup;
@@ -56,7 +57,7 @@ pub trait ToolItemExt {
 
     fn get_homogeneous(&self) -> bool;
 
-    fn get_icon_size(&self) -> i32;
+    fn get_icon_size(&self) -> IconSize;
 
     fn get_is_important(&self) -> bool;
 
@@ -130,9 +131,9 @@ impl<O: IsA<ToolItem> + IsA<glib::object::Object>> ToolItemExt for O {
         }
     }
 
-    fn get_icon_size(&self) -> i32 {
+    fn get_icon_size(&self) -> IconSize {
         unsafe {
-            ffi::gtk_tool_item_get_icon_size(self.to_glib_none().0)
+            from_glib(ffi::gtk_tool_item_get_icon_size(self.to_glib_none().0))
         }
     }
 

@@ -4,6 +4,7 @@
 
 use Buildable;
 use IconSet;
+use IconSize;
 use ImageType;
 use Misc;
 use Widget;
@@ -58,27 +59,27 @@ impl Image {
         }
     }
 
-    pub fn new_from_gicon<P: IsA<gio::Icon>>(icon: &P, size: i32) -> Image {
+    pub fn new_from_gicon<P: IsA<gio::Icon>>(icon: &P, size: IconSize) -> Image {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_image_new_from_gicon(icon.to_glib_none().0, size)).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_image_new_from_gicon(icon.to_glib_none().0, size.to_glib())).downcast_unchecked()
         }
     }
 
-    pub fn new_from_icon_name<'a, P: Into<Option<&'a str>>>(icon_name: P, size: i32) -> Image {
+    pub fn new_from_icon_name<'a, P: Into<Option<&'a str>>>(icon_name: P, size: IconSize) -> Image {
         assert_initialized_main_thread!();
         let icon_name = icon_name.into();
         let icon_name = icon_name.to_glib_none();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_image_new_from_icon_name(icon_name.0, size)).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_image_new_from_icon_name(icon_name.0, size.to_glib())).downcast_unchecked()
         }
     }
 
     #[cfg_attr(feature = "v3_10", deprecated)]
-    pub fn new_from_icon_set(icon_set: &IconSet, size: i32) -> Image {
+    pub fn new_from_icon_set(icon_set: &IconSet, size: IconSize) -> Image {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_image_new_from_icon_set(icon_set.to_glib_none().0, size)).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_image_new_from_icon_set(icon_set.to_glib_none().0, size.to_glib())).downcast_unchecked()
         }
     }
 
@@ -99,10 +100,10 @@ impl Image {
     }
 
     #[cfg_attr(feature = "v3_10", deprecated)]
-    pub fn new_from_stock(stock_id: &str, size: i32) -> Image {
+    pub fn new_from_stock(stock_id: &str, size: IconSize) -> Image {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_image_new_from_stock(stock_id.to_glib_none().0, size)).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_image_new_from_stock(stock_id.to_glib_none().0, size.to_glib())).downcast_unchecked()
         }
     }
 
@@ -127,10 +128,10 @@ pub trait ImageExt {
 
     fn get_animation(&self) -> Option<gdk_pixbuf::PixbufAnimation>;
 
-    fn get_gicon(&self) -> (gio::Icon, i32);
+    fn get_gicon(&self) -> (gio::Icon, IconSize);
 
     #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_icon_set(&self) -> (IconSet, i32);
+    fn get_icon_set(&self) -> (IconSet, IconSize);
 
     fn get_pixbuf(&self) -> Option<gdk_pixbuf::Pixbuf>;
 
@@ -142,19 +143,19 @@ pub trait ImageExt {
 
     fn set_from_file<P: AsRef<std::path::Path>>(&self, filename: P);
 
-    fn set_from_gicon<P: IsA<gio::Icon>>(&self, icon: &P, size: i32);
+    fn set_from_gicon<P: IsA<gio::Icon>>(&self, icon: &P, size: IconSize);
 
-    fn set_from_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_name: P, size: i32);
+    fn set_from_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_name: P, size: IconSize);
 
     #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_from_icon_set(&self, icon_set: &IconSet, size: i32);
+    fn set_from_icon_set(&self, icon_set: &IconSet, size: IconSize);
 
     fn set_from_pixbuf<'a, P: Into<Option<&'a gdk_pixbuf::Pixbuf>>>(&self, pixbuf: P);
 
     fn set_from_resource<'a, P: Into<Option<&'a str>>>(&self, resource_path: P);
 
     #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_from_stock(&self, stock_id: &str, size: i32);
+    fn set_from_stock(&self, stock_id: &str, size: IconSize);
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_from_surface<'a, P: Into<Option<&'a cairo::Surface>>>(&self, surface: P);
@@ -235,21 +236,21 @@ impl<O: IsA<Image> + IsA<glib::object::Object>> ImageExt for O {
         }
     }
 
-    fn get_gicon(&self) -> (gio::Icon, i32) {
+    fn get_gicon(&self) -> (gio::Icon, IconSize) {
         unsafe {
             let mut gicon = ptr::null_mut();
             let mut size = mem::uninitialized();
             ffi::gtk_image_get_gicon(self.to_glib_none().0, &mut gicon, &mut size);
-            (from_glib_none(gicon), size)
+            (from_glib_none(gicon), from_glib(size))
         }
     }
 
-    fn get_icon_set(&self) -> (IconSet, i32) {
+    fn get_icon_set(&self) -> (IconSet, IconSize) {
         unsafe {
             let mut icon_set = ptr::null_mut();
             let mut size = mem::uninitialized();
             ffi::gtk_image_get_icon_set(self.to_glib_none().0, &mut icon_set, &mut size);
-            (from_glib_none(icon_set), size)
+            (from_glib_none(icon_set), from_glib(size))
         }
     }
 
@@ -283,23 +284,23 @@ impl<O: IsA<Image> + IsA<glib::object::Object>> ImageExt for O {
         }
     }
 
-    fn set_from_gicon<P: IsA<gio::Icon>>(&self, icon: &P, size: i32) {
+    fn set_from_gicon<P: IsA<gio::Icon>>(&self, icon: &P, size: IconSize) {
         unsafe {
-            ffi::gtk_image_set_from_gicon(self.to_glib_none().0, icon.to_glib_none().0, size);
+            ffi::gtk_image_set_from_gicon(self.to_glib_none().0, icon.to_glib_none().0, size.to_glib());
         }
     }
 
-    fn set_from_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_name: P, size: i32) {
+    fn set_from_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_name: P, size: IconSize) {
         let icon_name = icon_name.into();
         let icon_name = icon_name.to_glib_none();
         unsafe {
-            ffi::gtk_image_set_from_icon_name(self.to_glib_none().0, icon_name.0, size);
+            ffi::gtk_image_set_from_icon_name(self.to_glib_none().0, icon_name.0, size.to_glib());
         }
     }
 
-    fn set_from_icon_set(&self, icon_set: &IconSet, size: i32) {
+    fn set_from_icon_set(&self, icon_set: &IconSet, size: IconSize) {
         unsafe {
-            ffi::gtk_image_set_from_icon_set(self.to_glib_none().0, icon_set.to_glib_none().0, size);
+            ffi::gtk_image_set_from_icon_set(self.to_glib_none().0, icon_set.to_glib_none().0, size.to_glib());
         }
     }
 
@@ -319,9 +320,9 @@ impl<O: IsA<Image> + IsA<glib::object::Object>> ImageExt for O {
         }
     }
 
-    fn set_from_stock(&self, stock_id: &str, size: i32) {
+    fn set_from_stock(&self, stock_id: &str, size: IconSize) {
         unsafe {
-            ffi::gtk_image_set_from_stock(self.to_glib_none().0, stock_id.to_glib_none().0, size);
+            ffi::gtk_image_set_from_stock(self.to_glib_none().0, stock_id.to_glib_none().0, size.to_glib());
         }
     }
 

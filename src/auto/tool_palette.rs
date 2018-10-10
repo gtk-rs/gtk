@@ -5,6 +5,7 @@
 use Buildable;
 use Container;
 use DestDefaults;
+use IconSize;
 use Orientable;
 use Scrollable;
 use SelectionData;
@@ -83,7 +84,7 @@ pub trait ToolPaletteExt {
 
     fn get_group_position(&self, group: &ToolItemGroup) -> i32;
 
-    fn get_icon_size(&self) -> i32;
+    fn get_icon_size(&self) -> IconSize;
 
     fn get_style(&self) -> ToolbarStyle;
 
@@ -95,7 +96,7 @@ pub trait ToolPaletteExt {
 
     fn set_group_position(&self, group: &ToolItemGroup, position: i32);
 
-    fn set_icon_size(&self, icon_size: i32);
+    fn set_icon_size(&self, icon_size: IconSize);
 
     fn set_style(&self, style: ToolbarStyle);
 
@@ -161,9 +162,9 @@ impl<O: IsA<ToolPalette> + IsA<glib::object::Object>> ToolPaletteExt for O {
         }
     }
 
-    fn get_icon_size(&self) -> i32 {
+    fn get_icon_size(&self) -> IconSize {
         unsafe {
-            ffi::gtk_tool_palette_get_icon_size(self.to_glib_none().0)
+            from_glib(ffi::gtk_tool_palette_get_icon_size(self.to_glib_none().0))
         }
     }
 
@@ -197,9 +198,9 @@ impl<O: IsA<ToolPalette> + IsA<glib::object::Object>> ToolPaletteExt for O {
         }
     }
 
-    fn set_icon_size(&self, icon_size: i32) {
+    fn set_icon_size(&self, icon_size: IconSize) {
         unsafe {
-            ffi::gtk_tool_palette_set_icon_size(self.to_glib_none().0, icon_size);
+            ffi::gtk_tool_palette_set_icon_size(self.to_glib_none().0, icon_size.to_glib());
         }
     }
 

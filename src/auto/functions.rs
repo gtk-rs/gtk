@@ -4,6 +4,7 @@
 
 use AccelGroup;
 use Error;
+use IconSize;
 use IconSource;
 use Orientation;
 use PageSetup;
@@ -416,10 +417,10 @@ pub fn render_icon(context: &StyleContext, cr: &cairo::Context, pixbuf: &gdk_pix
 }
 
 #[cfg_attr(feature = "v3_10", deprecated)]
-pub fn render_icon_pixbuf(context: &StyleContext, source: &IconSource, size: i32) -> Option<gdk_pixbuf::Pixbuf> {
+pub fn render_icon_pixbuf(context: &StyleContext, source: &IconSource, size: IconSize) -> Option<gdk_pixbuf::Pixbuf> {
     skip_assert_initialized!();
     unsafe {
-        from_glib_full(ffi::gtk_render_icon_pixbuf(context.to_glib_none().0, source.to_glib_none().0, size))
+        from_glib_full(ffi::gtk_render_icon_pixbuf(context.to_glib_none().0, source.to_glib_none().0, size.to_glib()))
     }
 }
 
