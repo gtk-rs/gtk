@@ -249,6 +249,7 @@ mod radio_tool_button;
 mod recent_chooser_dialog;
 mod recent_data;
 mod requisition;
+mod response_type;
 mod signal;
 #[cfg(any(target_os = "linux", feature = "dox"))]
 mod socket;
@@ -284,6 +285,7 @@ pub use pad_action_entry::PadActionEntry;
 pub use page_range::PageRange;
 pub use recent_data::RecentData;
 pub use requisition::Requisition;
+pub use response_type::ResponseType;
 #[cfg(any(target_os = "linux", feature = "dox"))]
 pub use socket::Socket;
 pub use target_entry::TargetEntry;

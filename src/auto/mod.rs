@@ -977,7 +977,6 @@ pub use self::enums::RecentManagerError;
 pub use self::enums::RecentSortType;
 pub use self::enums::ReliefStyle;
 pub use self::enums::ResizeMode;
-pub use self::enums::ResponseType;
 pub use self::enums::RevealerTransitionType;
 pub use self::enums::ScrollStep;
 pub use self::enums::ScrollType;
