@@ -8,6 +8,7 @@ use Button;
 use Container;
 use MessageType;
 use Orientable;
+use ResponseType;
 use Widget;
 use ffi;
 use glib;
@@ -18,7 +19,6 @@ use glib::signal::connect;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
-use libc;
 use std::boxed::Box as Box_;
 use std::mem;
 use std::mem::transmute;
@@ -52,9 +52,9 @@ impl Default for InfoBar {
 }
 
 pub trait InfoBarExt {
-    fn add_action_widget<P: IsA<Widget>>(&self, child: &P, response_id: i32);
+    fn add_action_widget<P: IsA<Widget>>(&self, child: &P, response_id: ResponseType);
 
-    fn add_button(&self, button_text: &str, response_id: i32) -> Option<Button>;
+    fn add_button(&self, button_text: &str, response_id: ResponseType) -> Option<Button>;
 
     //fn add_buttons(&self, first_button_text: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
@@ -70,13 +70,13 @@ pub trait InfoBarExt {
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_show_close_button(&self) -> bool;
 
-    fn response(&self, response_id: i32);
+    fn response(&self, response_id: ResponseType);
 
-    fn set_default_response(&self, response_id: i32);
+    fn set_default_response(&self, response_id: ResponseType);
 
     fn set_message_type(&self, message_type: MessageType);
 
-    fn set_response_sensitive(&self, response_id: i32, setting: bool);
+    fn set_response_sensitive(&self, response_id: ResponseType, setting: bool);
 
     #[cfg(any(feature = "v3_22_29", feature = "dox"))]
     fn set_revealed(&self, revealed: bool);
@@ -88,7 +88,7 @@ pub trait InfoBarExt {
 
     fn emit_close(&self);
 
-    fn connect_response<F: Fn(&Self, i32) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_response<F: Fn(&Self, ResponseType) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_message_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -100,15 +100,15 @@ pub trait InfoBarExt {
 }
 
 impl<O: IsA<InfoBar> + IsA<glib::object::Object> + glib::object::ObjectExt> InfoBarExt for O {
-    fn add_action_widget<P: IsA<Widget>>(&self, child: &P, response_id: i32) {
+    fn add_action_widget<P: IsA<Widget>>(&self, child: &P, response_id: ResponseType) {
         unsafe {
-            ffi::gtk_info_bar_add_action_widget(self.to_glib_none().0, child.to_glib_none().0, response_id);
+            ffi::gtk_info_bar_add_action_widget(self.to_glib_none().0, child.to_glib_none().0, response_id.to_glib());
         }
     }
 
-    fn add_button(&self, button_text: &str, response_id: i32) -> Option<Button> {
+    fn add_button(&self, button_text: &str, response_id: ResponseType) -> Option<Button> {
         unsafe {
-            from_glib_none(ffi::gtk_info_bar_add_button(self.to_glib_none().0, button_text.to_glib_none().0, response_id))
+            from_glib_none(ffi::gtk_info_bar_add_button(self.to_glib_none().0, button_text.to_glib_none().0, response_id.to_glib()))
         }
     }
 
@@ -148,15 +148,15 @@ impl<O: IsA<InfoBar> + IsA<glib::object::Object> + glib::object::ObjectExt> Info
         }
     }
 
-    fn response(&self, response_id: i32) {
+    fn response(&self, response_id: ResponseType) {
         unsafe {
-            ffi::gtk_info_bar_response(self.to_glib_none().0, response_id);
+            ffi::gtk_info_bar_response(self.to_glib_none().0, response_id.to_glib());
         }
     }
 
-    fn set_default_response(&self, response_id: i32) {
+    fn set_default_response(&self, response_id: ResponseType) {
         unsafe {
-            ffi::gtk_info_bar_set_default_response(self.to_glib_none().0, response_id);
+            ffi::gtk_info_bar_set_default_response(self.to_glib_none().0, response_id.to_glib());
         }
     }
 
@@ -166,9 +166,9 @@ impl<O: IsA<InfoBar> + IsA<glib::object::Object> + glib::object::ObjectExt> Info
         }
     }
 
-    fn set_response_sensitive(&self, response_id: i32, setting: bool) {
+    fn set_response_sensitive(&self, response_id: ResponseType, setting: bool) {
         unsafe {
-            ffi::gtk_info_bar_set_response_sensitive(self.to_glib_none().0, response_id, setting.to_glib());
+            ffi::gtk_info_bar_set_response_sensitive(self.to_glib_none().0, response_id.to_glib(), setting.to_glib());
         }
     }
 
@@ -198,9 +198,9 @@ impl<O: IsA<InfoBar> + IsA<glib::object::Object> + glib::object::ObjectExt> Info
         let _ = self.emit("close", &[]).unwrap();
     }
 
-    fn connect_response<F: Fn(&Self, i32) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_response<F: Fn(&Self, ResponseType) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, i32) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<Box_<Fn(&Self, ResponseType) + 'static>> = Box_::new(Box_::new(f));
             connect(self.to_glib_none().0, "response",
                 transmute(response_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
@@ -239,10 +239,10 @@ where P: IsA<InfoBar> {
     f(&InfoBar::from_glib_borrow(this).downcast_unchecked())
 }
 
-unsafe extern "C" fn response_trampoline<P>(this: *mut ffi::GtkInfoBar, response_id: libc::c_int, f: glib_ffi::gpointer)
+unsafe extern "C" fn response_trampoline<P>(this: *mut ffi::GtkInfoBar, response_id: ffi::GtkResponseType, f: glib_ffi::gpointer)
 where P: IsA<InfoBar> {
-    let f: &&(Fn(&P, i32) + 'static) = transmute(f);
-    f(&InfoBar::from_glib_borrow(this).downcast_unchecked(), response_id)
+    let f: &&(Fn(&P, ResponseType) + 'static) = transmute(f);
+    f(&InfoBar::from_glib_borrow(this).downcast_unchecked(), from_glib(response_id))
 }
 
 unsafe extern "C" fn notify_message_type_trampoline<P>(this: *mut ffi::GtkInfoBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)

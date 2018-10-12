@@ -12,10 +12,11 @@ use IsA;
 use Widget;
 use Window;
 use auto::DialogExt;
+use ResponseType;
 
 impl Dialog {
     pub fn new_with_buttons<T: IsA<Window>>(title: Option<&str>, parent: Option<&T>,
-            flags: DialogFlags, buttons: &[(&str, i32)]) -> Dialog {
+            flags: DialogFlags, buttons: &[(&str, ResponseType)]) -> Dialog {
         assert_initialized_main_thread!();
         let ret: Dialog = unsafe {
             Widget::from_glib_none(
@@ -30,11 +31,11 @@ impl Dialog {
 }
 
 pub trait DialogExtManual {
-    fn add_buttons(&self, buttons: &[(&str, i32)]);
+    fn add_buttons(&self, buttons: &[(&str, ResponseType)]);
 }
 
 impl<O: DialogExt> DialogExtManual for O {
-    fn add_buttons(&self, buttons: &[(&str, i32)]) {
+    fn add_buttons(&self, buttons: &[(&str, ResponseType)]) {
         for &(text, id) in buttons {
             //FIXME: self.add_button don't work on 1.8
             O::add_button(self, text, id);
