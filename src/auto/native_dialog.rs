@@ -3,6 +3,8 @@
 // DO NOT EDIT
 
 #[cfg(any(feature = "v3_20", feature = "dox"))]
+use ResponseType;
+#[cfg(any(feature = "v3_20", feature = "dox"))]
 use Window;
 use ffi;
 use glib;
@@ -18,8 +20,6 @@ use glib::signal::connect;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
-#[cfg(any(feature = "v3_20", feature = "dox"))]
-use libc;
 #[cfg(any(feature = "v3_20", feature = "dox"))]
 use std::boxed::Box as Box_;
 use std::mem;
@@ -73,7 +73,7 @@ pub trait NativeDialogExt {
     fn set_property_visible(&self, visible: bool);
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
-    fn connect_response<F: Fn(&Self, i32) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_response<F: Fn(&Self, ResponseType) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn connect_property_modal_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -176,9 +176,9 @@ impl<O: IsA<NativeDialog> + IsA<glib::object::Object>> NativeDialogExt for O {
     }
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
-    fn connect_response<F: Fn(&Self, i32) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_response<F: Fn(&Self, ResponseType) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, i32) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<Box_<Fn(&Self, ResponseType) + 'static>> = Box_::new(Box_::new(f));
             connect(self.to_glib_none().0, "response",
                 transmute(response_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
@@ -222,10 +222,10 @@ impl<O: IsA<NativeDialog> + IsA<glib::object::Object>> NativeDialogExt for O {
 }
 
 #[cfg(any(feature = "v3_20", feature = "dox"))]
-unsafe extern "C" fn response_trampoline<P>(this: *mut ffi::GtkNativeDialog, response_id: libc::c_int, f: glib_ffi::gpointer)
+unsafe extern "C" fn response_trampoline<P>(this: *mut ffi::GtkNativeDialog, response_id: ffi::GtkResponseType, f: glib_ffi::gpointer)
 where P: IsA<NativeDialog> {
-    let f: &&(Fn(&P, i32) + 'static) = transmute(f);
-    f(&NativeDialog::from_glib_borrow(this).downcast_unchecked(), response_id)
+    let f: &&(Fn(&P, ResponseType) + 'static) = transmute(f);
+    f(&NativeDialog::from_glib_borrow(this).downcast_unchecked(), from_glib(response_id))
 }
 
 #[cfg(any(feature = "v3_20", feature = "dox"))]
