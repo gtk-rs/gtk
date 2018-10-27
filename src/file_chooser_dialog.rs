@@ -16,8 +16,13 @@ use Window;
 impl FileChooserDialog {
     // TODO: Keep the other constructor with buttons support as the only constructor (this one was
     //       left for compatibility) and rename it to `new` for consistency.
-    pub fn new<T: IsA<Window>>(title: Option<&str>, parent: Option<&T>, action: FileChooserAction) -> FileChooserDialog {
+    pub fn new<'a, I: Into<Option<&'a str>>, T: IsA<Window>>(
+        title: I,
+        parent: Option<&T>,
+        action: FileChooserAction,
+    ) -> FileChooserDialog {
         assert_initialized_main_thread!();
+        let title = title.into();
         unsafe {
             Widget::from_glib_none(ffi::gtk_file_chooser_dialog_new(
                 title.to_glib_none().0,
@@ -28,8 +33,14 @@ impl FileChooserDialog {
         }
     }
 
-    pub fn with_buttons<T: IsA<Window>>(title: Option<&str>, parent: Option<&T>, action: FileChooserAction, buttons: &[(&str, ResponseType)]) -> FileChooserDialog {
+    pub fn with_buttons<'a, I: Into<Option<&'a str>>, T: IsA<Window>>(
+        title: I,
+        parent: Option<&T>,
+        action: FileChooserAction,
+        buttons: &[(&str, ResponseType)]
+    ) -> FileChooserDialog {
         assert_initialized_main_thread!();
+        let title = title.into();
         unsafe {
             Widget::from_glib_none(match buttons.len() {
                 0 => {

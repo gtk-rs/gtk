@@ -13,8 +13,14 @@ use TreeRowReference;
 
 impl TreeRowReference {
     // This is unsafe because new_order bounds can't be checked.
-    pub unsafe fn reordered<T: IsA<glib::Object>>(proxy: &T, path: &TreePath, iter: Option<&TreeIter>, new_order: &[u32]) {
+    pub unsafe fn reordered<'a, I: Into<Option<&'a TreeIter>>, T: IsA<glib::Object>>(
+        proxy: &T,
+        path: &TreePath,
+        iter: I,
+        new_order: &[u32],
+    ) {
         assert_initialized_main_thread!();
+        let iter = iter.into();
         assert!(iter.is_some() || path.get_depth()==0, "If 'iter' is None, 'path' must point to the root.");
         ffi::gtk_tree_row_reference_reordered(proxy.to_glib_none().0, mut_override(path.to_glib_none().0),
             mut_override(iter.to_glib_none().0), mut_override(new_order.as_ptr() as *const c_int));

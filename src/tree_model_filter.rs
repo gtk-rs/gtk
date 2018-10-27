@@ -12,8 +12,12 @@ use {TreeIter, TreeModel, TreeModelFilter, TreePath};
 use ffi::{GtkTreeIter, GtkTreeModel};
 
 impl TreeModelFilter {
-    pub fn new<T: IsA<TreeModel>>(child_model: &T, root: Option<&TreePath>) -> TreeModelFilter {
+    pub fn new<'a, I: Into<Option<&'a TreePath>>, T: IsA<TreeModel>>(
+        child_model: &T,
+        root: I,
+    ) -> TreeModelFilter {
         skip_assert_initialized!();
+        let root = root.into();
         unsafe {
             TreeModel::from_glib_none(ffi::gtk_tree_model_filter_new(child_model.to_glib_none().0,
                                                                      mut_override(root.to_glib_none().0)))

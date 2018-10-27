@@ -25,7 +25,7 @@ impl ListStore {
 }
 
 pub trait GtkListStoreExtManual {
-    fn insert_with_values(&self, position: Option<u32>, columns: &[u32], values: &[&ToValue])
+    fn insert_with_values<I: Into<Option<u32>>>(&self, position: I, columns: &[u32], values: &[&ToValue])
             -> TreeIter;
 
     fn reorder(&self, new_order: &[u32]);
@@ -36,8 +36,13 @@ pub trait GtkListStoreExtManual {
 }
 
 impl<O: IsA<ListStore> + IsA<TreeModel>> GtkListStoreExtManual for O {
-    fn insert_with_values(&self, position: Option<u32>, columns: &[u32], values: &[&ToValue])
-            -> TreeIter {
+    fn insert_with_values<I: Into<Option<u32>>>(
+        &self,
+        position: I,
+        columns: &[u32],
+        values: &[&ToValue],
+    ) -> TreeIter {
+        let position = position.into();
         unsafe {
             assert!(position.unwrap_or(0) <= i32::max_value() as u32);
             assert_eq!(columns.len(), values.len());
