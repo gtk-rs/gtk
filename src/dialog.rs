@@ -15,9 +15,14 @@ use auto::DialogExt;
 use ResponseType;
 
 impl Dialog {
-    pub fn new_with_buttons<T: IsA<Window>>(title: Option<&str>, parent: Option<&T>,
-            flags: DialogFlags, buttons: &[(&str, ResponseType)]) -> Dialog {
+    pub fn new_with_buttons<'a, I: Into<Option<&'a str>>, T: IsA<Window>>(
+        title: I,
+        parent: Option<&T>,
+        flags: DialogFlags,
+        buttons: &[(&str, ResponseType)],
+    ) -> Dialog {
         assert_initialized_main_thread!();
+        let title = title.into();
         let ret: Dialog = unsafe {
             Widget::from_glib_none(
                 ffi::gtk_dialog_new_with_buttons(title.to_glib_none().0, parent.to_glib_none().0,

@@ -29,13 +29,14 @@ impl MessageDialog {
 }
 
 pub trait MessageDialogExt {
-    fn set_secondary_markup(&self, message: Option<&str>);
+    fn set_secondary_markup<'a, I: Into<Option<&'a str>>>(&self, message: I);
 
-    fn set_secondary_text(&self, message: Option<&str>);
+    fn set_secondary_text<'a, I: Into<Option<&'a str>>>(&self, message: I);
 }
 
 impl<O: IsA<MessageDialog>> MessageDialogExt for O {
-    fn set_secondary_markup(&self, message: Option<&str>) {
+    fn set_secondary_markup<'a, I: Into<Option<&'a str>>>(&self, message: I) {
+        let message = message.into();
         match message {
             Some(m) => unsafe {
                 let message: Stash<*const c_char, _> = m.to_glib_none();
@@ -51,7 +52,8 @@ impl<O: IsA<MessageDialog>> MessageDialogExt for O {
         }
     }
 
-    fn set_secondary_text(&self, message: Option<&str>) {
+    fn set_secondary_text<'a, I: Into<Option<&'a str>>>(&self, message: I) {
+        let message = message.into();
         match message {
             Some(m) => unsafe {
                 let message: Stash<*const c_char, _> = m.to_glib_none();

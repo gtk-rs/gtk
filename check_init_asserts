@@ -5,7 +5,7 @@ BEGIN { $e = 0 }
 while (/^(\N*)\V*fn\s+(\w+)\s*(<[^(]+>)?\s*(\([^{;]+)\{\N*\n^(\N*)$/gms) {
 	($modifiers, $name, $signature, $first_line) = ($1, $2, $4, $5);
 	unless ($modifiers =~ /^\s*(\/\/|(pub )?unsafe)/ ||
-		$signature =~ /^\((&(\x27\w+ )?)?(mut )?self\b/ ||
+		$signature =~ /^\(\s*(&(\x27\w+ )?)?(mut )?self\b/ ||
 		$signature =~ /^\(\)/ ||
 		$first_line =~ /^\s*(
 			assert_initialized_main_thread |
