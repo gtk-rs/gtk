@@ -54,7 +54,7 @@ pub trait CellRendererProgressExt {
 
     fn get_property_text(&self) -> Option<String>;
 
-    fn set_property_text(&self, text: Option<&str>);
+    fn set_property_text<'a, P: Into<Option<&'a str>>>(&self, text: P);
 
     fn get_property_text_xalign(&self) -> f32;
 
@@ -118,7 +118,8 @@ impl<O: IsA<CellRendererProgress> + IsA<glib::object::Object>> CellRendererProgr
         }
     }
 
-    fn set_property_text(&self, text: Option<&str>) {
+    fn set_property_text<'a, P: Into<Option<&'a str>>>(&self, text: P) {
+        let text = text.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "text".to_glib_none().0, Value::from(text).to_glib_none().0);
         }

@@ -59,7 +59,7 @@ pub trait TextTagExt {
 
     fn set_property_accumulative_margin(&self, accumulative_margin: bool);
 
-    fn set_property_background(&self, background: Option<&str>);
+    fn set_property_background<'a, P: Into<Option<&'a str>>>(&self, background: P);
 
     fn get_property_background_full_height(&self) -> bool;
 
@@ -101,7 +101,7 @@ pub trait TextTagExt {
 
     fn get_property_family(&self) -> Option<String>;
 
-    fn set_property_family(&self, family: Option<&str>);
+    fn set_property_family<'a, P: Into<Option<&'a str>>>(&self, family: P);
 
     fn get_property_family_set(&self) -> bool;
 
@@ -109,19 +109,19 @@ pub trait TextTagExt {
 
     fn get_property_font(&self) -> Option<String>;
 
-    fn set_property_font(&self, font: Option<&str>);
+    fn set_property_font<'a, P: Into<Option<&'a str>>>(&self, font: P);
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
     fn get_property_font_features(&self) -> Option<String>;
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn set_property_font_features(&self, font_features: Option<&str>);
+    fn set_property_font_features<'a, P: Into<Option<&'a str>>>(&self, font_features: P);
 
     fn get_property_font_features_set(&self) -> bool;
 
     fn set_property_font_features_set(&self, font_features_set: bool);
 
-    fn set_property_foreground(&self, foreground: Option<&str>);
+    fn set_property_foreground<'a, P: Into<Option<&'a str>>>(&self, foreground: P);
 
     fn get_property_foreground_rgba(&self) -> Option<gdk::RGBA>;
 
@@ -157,7 +157,7 @@ pub trait TextTagExt {
 
     fn get_property_language(&self) -> Option<String>;
 
-    fn set_property_language(&self, language: Option<&str>);
+    fn set_property_language<'a, P: Into<Option<&'a str>>>(&self, language: P);
 
     fn get_property_language_set(&self) -> bool;
 
@@ -183,7 +183,7 @@ pub trait TextTagExt {
 
     fn get_property_name(&self) -> Option<String>;
 
-    fn set_property_paragraph_background(&self, paragraph_background: Option<&str>);
+    fn set_property_paragraph_background<'a, P: Into<Option<&'a str>>>(&self, paragraph_background: P);
 
     fn get_property_paragraph_background_rgba(&self) -> Option<gdk::RGBA>;
 
@@ -523,7 +523,8 @@ impl<O: IsA<TextTag> + IsA<glib::object::Object>> TextTagExt for O {
         }
     }
 
-    fn set_property_background(&self, background: Option<&str>) {
+    fn set_property_background<'a, P: Into<Option<&'a str>>>(&self, background: P) {
+        let background = background.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "background".to_glib_none().0, Value::from(background).to_glib_none().0);
         }
@@ -665,7 +666,8 @@ impl<O: IsA<TextTag> + IsA<glib::object::Object>> TextTagExt for O {
         }
     }
 
-    fn set_property_family(&self, family: Option<&str>) {
+    fn set_property_family<'a, P: Into<Option<&'a str>>>(&self, family: P) {
+        let family = family.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "family".to_glib_none().0, Value::from(family).to_glib_none().0);
         }
@@ -693,7 +695,8 @@ impl<O: IsA<TextTag> + IsA<glib::object::Object>> TextTagExt for O {
         }
     }
 
-    fn set_property_font(&self, font: Option<&str>) {
+    fn set_property_font<'a, P: Into<Option<&'a str>>>(&self, font: P) {
+        let font = font.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "font".to_glib_none().0, Value::from(font).to_glib_none().0);
         }
@@ -709,7 +712,8 @@ impl<O: IsA<TextTag> + IsA<glib::object::Object>> TextTagExt for O {
     }
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn set_property_font_features(&self, font_features: Option<&str>) {
+    fn set_property_font_features<'a, P: Into<Option<&'a str>>>(&self, font_features: P) {
+        let font_features = font_features.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "font-features".to_glib_none().0, Value::from(font_features).to_glib_none().0);
         }
@@ -729,7 +733,8 @@ impl<O: IsA<TextTag> + IsA<glib::object::Object>> TextTagExt for O {
         }
     }
 
-    fn set_property_foreground(&self, foreground: Option<&str>) {
+    fn set_property_foreground<'a, P: Into<Option<&'a str>>>(&self, foreground: P) {
+        let foreground = foreground.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "foreground".to_glib_none().0, Value::from(foreground).to_glib_none().0);
         }
@@ -855,7 +860,8 @@ impl<O: IsA<TextTag> + IsA<glib::object::Object>> TextTagExt for O {
         }
     }
 
-    fn set_property_language(&self, language: Option<&str>) {
+    fn set_property_language<'a, P: Into<Option<&'a str>>>(&self, language: P) {
+        let language = language.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "language".to_glib_none().0, Value::from(language).to_glib_none().0);
         }
@@ -941,7 +947,8 @@ impl<O: IsA<TextTag> + IsA<glib::object::Object>> TextTagExt for O {
         }
     }
 
-    fn set_property_paragraph_background(&self, paragraph_background: Option<&str>) {
+    fn set_property_paragraph_background<'a, P: Into<Option<&'a str>>>(&self, paragraph_background: P) {
+        let paragraph_background = paragraph_background.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "paragraph-background".to_glib_none().0, Value::from(paragraph_background).to_glib_none().0);
         }

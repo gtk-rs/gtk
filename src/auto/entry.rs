@@ -237,7 +237,7 @@ pub trait EntryExt {
 
     fn get_property_im_module(&self) -> Option<String>;
 
-    fn set_property_im_module(&self, im_module: Option<&str>);
+    fn set_property_im_module<'a, P: Into<Option<&'a str>>>(&self, im_module: P);
 
     fn get_property_invisible_char_set(&self) -> bool;
 
@@ -259,7 +259,7 @@ pub trait EntryExt {
 
     fn get_property_primary_icon_name(&self) -> Option<String>;
 
-    fn set_property_primary_icon_name(&self, primary_icon_name: Option<&str>);
+    fn set_property_primary_icon_name<'a, P: Into<Option<&'a str>>>(&self, primary_icon_name: P);
 
     fn get_property_primary_icon_pixbuf(&self) -> Option<gdk_pixbuf::Pixbuf>;
 
@@ -273,17 +273,17 @@ pub trait EntryExt {
     fn get_property_primary_icon_stock(&self) -> Option<String>;
 
     #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_primary_icon_stock(&self, primary_icon_stock: Option<&str>);
+    fn set_property_primary_icon_stock<'a, P: Into<Option<&'a str>>>(&self, primary_icon_stock: P);
 
     fn get_property_primary_icon_storage_type(&self) -> ImageType;
 
     fn get_property_primary_icon_tooltip_markup(&self) -> Option<String>;
 
-    fn set_property_primary_icon_tooltip_markup(&self, primary_icon_tooltip_markup: Option<&str>);
+    fn set_property_primary_icon_tooltip_markup<'a, P: Into<Option<&'a str>>>(&self, primary_icon_tooltip_markup: P);
 
     fn get_property_primary_icon_tooltip_text(&self) -> Option<String>;
 
-    fn set_property_primary_icon_tooltip_text(&self, primary_icon_tooltip_text: Option<&str>);
+    fn set_property_primary_icon_tooltip_text<'a, P: Into<Option<&'a str>>>(&self, primary_icon_tooltip_text: P);
 
     fn get_property_scroll_offset(&self) -> i32;
 
@@ -297,7 +297,7 @@ pub trait EntryExt {
 
     fn get_property_secondary_icon_name(&self) -> Option<String>;
 
-    fn set_property_secondary_icon_name(&self, secondary_icon_name: Option<&str>);
+    fn set_property_secondary_icon_name<'a, P: Into<Option<&'a str>>>(&self, secondary_icon_name: P);
 
     fn get_property_secondary_icon_pixbuf(&self) -> Option<gdk_pixbuf::Pixbuf>;
 
@@ -311,17 +311,17 @@ pub trait EntryExt {
     fn get_property_secondary_icon_stock(&self) -> Option<String>;
 
     #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_secondary_icon_stock(&self, secondary_icon_stock: Option<&str>);
+    fn set_property_secondary_icon_stock<'a, P: Into<Option<&'a str>>>(&self, secondary_icon_stock: P);
 
     fn get_property_secondary_icon_storage_type(&self) -> ImageType;
 
     fn get_property_secondary_icon_tooltip_markup(&self) -> Option<String>;
 
-    fn set_property_secondary_icon_tooltip_markup(&self, secondary_icon_tooltip_markup: Option<&str>);
+    fn set_property_secondary_icon_tooltip_markup<'a, P: Into<Option<&'a str>>>(&self, secondary_icon_tooltip_markup: P);
 
     fn get_property_secondary_icon_tooltip_text(&self) -> Option<String>;
 
-    fn set_property_secondary_icon_tooltip_text(&self, secondary_icon_tooltip_text: Option<&str>);
+    fn set_property_secondary_icon_tooltip_text<'a, P: Into<Option<&'a str>>>(&self, secondary_icon_tooltip_text: P);
 
     fn get_property_selection_bound(&self) -> i32;
 
@@ -999,7 +999,8 @@ impl<O: IsA<Entry> + IsA<glib::object::Object> + glib::object::ObjectExt> EntryE
         }
     }
 
-    fn set_property_im_module(&self, im_module: Option<&str>) {
+    fn set_property_im_module<'a, P: Into<Option<&'a str>>>(&self, im_module: P) {
+        let im_module = im_module.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "im-module".to_glib_none().0, Value::from(im_module).to_glib_none().0);
         }
@@ -1071,7 +1072,8 @@ impl<O: IsA<Entry> + IsA<glib::object::Object> + glib::object::ObjectExt> EntryE
         }
     }
 
-    fn set_property_primary_icon_name(&self, primary_icon_name: Option<&str>) {
+    fn set_property_primary_icon_name<'a, P: Into<Option<&'a str>>>(&self, primary_icon_name: P) {
+        let primary_icon_name = primary_icon_name.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "primary-icon-name".to_glib_none().0, Value::from(primary_icon_name).to_glib_none().0);
         }
@@ -1113,7 +1115,8 @@ impl<O: IsA<Entry> + IsA<glib::object::Object> + glib::object::ObjectExt> EntryE
         }
     }
 
-    fn set_property_primary_icon_stock(&self, primary_icon_stock: Option<&str>) {
+    fn set_property_primary_icon_stock<'a, P: Into<Option<&'a str>>>(&self, primary_icon_stock: P) {
+        let primary_icon_stock = primary_icon_stock.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "primary-icon-stock".to_glib_none().0, Value::from(primary_icon_stock).to_glib_none().0);
         }
@@ -1135,7 +1138,8 @@ impl<O: IsA<Entry> + IsA<glib::object::Object> + glib::object::ObjectExt> EntryE
         }
     }
 
-    fn set_property_primary_icon_tooltip_markup(&self, primary_icon_tooltip_markup: Option<&str>) {
+    fn set_property_primary_icon_tooltip_markup<'a, P: Into<Option<&'a str>>>(&self, primary_icon_tooltip_markup: P) {
+        let primary_icon_tooltip_markup = primary_icon_tooltip_markup.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "primary-icon-tooltip-markup".to_glib_none().0, Value::from(primary_icon_tooltip_markup).to_glib_none().0);
         }
@@ -1149,7 +1153,8 @@ impl<O: IsA<Entry> + IsA<glib::object::Object> + glib::object::ObjectExt> EntryE
         }
     }
 
-    fn set_property_primary_icon_tooltip_text(&self, primary_icon_tooltip_text: Option<&str>) {
+    fn set_property_primary_icon_tooltip_text<'a, P: Into<Option<&'a str>>>(&self, primary_icon_tooltip_text: P) {
+        let primary_icon_tooltip_text = primary_icon_tooltip_text.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "primary-icon-tooltip-text".to_glib_none().0, Value::from(primary_icon_tooltip_text).to_glib_none().0);
         }
@@ -1199,7 +1204,8 @@ impl<O: IsA<Entry> + IsA<glib::object::Object> + glib::object::ObjectExt> EntryE
         }
     }
 
-    fn set_property_secondary_icon_name(&self, secondary_icon_name: Option<&str>) {
+    fn set_property_secondary_icon_name<'a, P: Into<Option<&'a str>>>(&self, secondary_icon_name: P) {
+        let secondary_icon_name = secondary_icon_name.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "secondary-icon-name".to_glib_none().0, Value::from(secondary_icon_name).to_glib_none().0);
         }
@@ -1241,7 +1247,8 @@ impl<O: IsA<Entry> + IsA<glib::object::Object> + glib::object::ObjectExt> EntryE
         }
     }
 
-    fn set_property_secondary_icon_stock(&self, secondary_icon_stock: Option<&str>) {
+    fn set_property_secondary_icon_stock<'a, P: Into<Option<&'a str>>>(&self, secondary_icon_stock: P) {
+        let secondary_icon_stock = secondary_icon_stock.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "secondary-icon-stock".to_glib_none().0, Value::from(secondary_icon_stock).to_glib_none().0);
         }
@@ -1263,7 +1270,8 @@ impl<O: IsA<Entry> + IsA<glib::object::Object> + glib::object::ObjectExt> EntryE
         }
     }
 
-    fn set_property_secondary_icon_tooltip_markup(&self, secondary_icon_tooltip_markup: Option<&str>) {
+    fn set_property_secondary_icon_tooltip_markup<'a, P: Into<Option<&'a str>>>(&self, secondary_icon_tooltip_markup: P) {
+        let secondary_icon_tooltip_markup = secondary_icon_tooltip_markup.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "secondary-icon-tooltip-markup".to_glib_none().0, Value::from(secondary_icon_tooltip_markup).to_glib_none().0);
         }
@@ -1277,7 +1285,8 @@ impl<O: IsA<Entry> + IsA<glib::object::Object> + glib::object::ObjectExt> EntryE
         }
     }
 
-    fn set_property_secondary_icon_tooltip_text(&self, secondary_icon_tooltip_text: Option<&str>) {
+    fn set_property_secondary_icon_tooltip_text<'a, P: Into<Option<&'a str>>>(&self, secondary_icon_tooltip_text: P) {
+        let secondary_icon_tooltip_text = secondary_icon_tooltip_text.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "secondary-icon-tooltip-text".to_glib_none().0, Value::from(secondary_icon_tooltip_text).to_glib_none().0);
         }

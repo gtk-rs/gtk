@@ -64,7 +64,7 @@ pub trait MessageDialogExt {
 
     fn get_property_secondary_text(&self) -> Option<String>;
 
-    fn set_property_secondary_text(&self, secondary_text: Option<&str>);
+    fn set_property_secondary_text<'a, P: Into<Option<&'a str>>>(&self, secondary_text: P);
 
     fn get_property_secondary_use_markup(&self) -> bool;
 
@@ -72,7 +72,7 @@ pub trait MessageDialogExt {
 
     fn get_property_text(&self) -> Option<String>;
 
-    fn set_property_text(&self, text: Option<&str>);
+    fn set_property_text<'a, P: Into<Option<&'a str>>>(&self, text: P);
 
     fn get_property_use_markup(&self) -> bool;
 
@@ -149,7 +149,8 @@ impl<O: IsA<MessageDialog> + IsA<glib::object::Object>> MessageDialogExt for O {
         }
     }
 
-    fn set_property_secondary_text(&self, secondary_text: Option<&str>) {
+    fn set_property_secondary_text<'a, P: Into<Option<&'a str>>>(&self, secondary_text: P) {
+        let secondary_text = secondary_text.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "secondary-text".to_glib_none().0, Value::from(secondary_text).to_glib_none().0);
         }
@@ -177,7 +178,8 @@ impl<O: IsA<MessageDialog> + IsA<glib::object::Object>> MessageDialogExt for O {
         }
     }
 
-    fn set_property_text(&self, text: Option<&str>) {
+    fn set_property_text<'a, P: Into<Option<&'a str>>>(&self, text: P) {
+        let text = text.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "text".to_glib_none().0, Value::from(text).to_glib_none().0);
         }

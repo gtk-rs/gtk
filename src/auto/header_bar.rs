@@ -110,11 +110,11 @@ pub trait HeaderBarExt {
 
     fn get_property_subtitle(&self) -> Option<String>;
 
-    fn set_property_subtitle(&self, subtitle: Option<&str>);
+    fn set_property_subtitle<'a, P: Into<Option<&'a str>>>(&self, subtitle: P);
 
     fn get_property_title(&self) -> Option<String>;
 
-    fn set_property_title(&self, title: Option<&str>);
+    fn set_property_title<'a, P: Into<Option<&'a str>>>(&self, title: P);
 
     fn get_child_pack_type<T: IsA<Widget>>(&self, item: &T) -> PackType;
 
@@ -317,7 +317,8 @@ impl<O: IsA<HeaderBar> + IsA<Container> + IsA<glib::object::Object>> HeaderBarEx
         }
     }
 
-    fn set_property_subtitle(&self, subtitle: Option<&str>) {
+    fn set_property_subtitle<'a, P: Into<Option<&'a str>>>(&self, subtitle: P) {
+        let subtitle = subtitle.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "subtitle".to_glib_none().0, Value::from(subtitle).to_glib_none().0);
         }
@@ -331,7 +332,8 @@ impl<O: IsA<HeaderBar> + IsA<Container> + IsA<glib::object::Object>> HeaderBarEx
         }
     }
 
-    fn set_property_title(&self, title: Option<&str>) {
+    fn set_property_title<'a, P: Into<Option<&'a str>>>(&self, title: P) {
+        let title = title.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "title".to_glib_none().0, Value::from(title).to_glib_none().0);
         }

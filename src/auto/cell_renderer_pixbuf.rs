@@ -57,7 +57,7 @@ pub trait CellRendererPixbufExt {
 
     fn get_property_icon_name(&self) -> Option<String>;
 
-    fn set_property_icon_name(&self, icon_name: Option<&str>);
+    fn set_property_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_name: P);
 
     fn get_property_pixbuf(&self) -> Option<gdk_pixbuf::Pixbuf>;
 
@@ -73,13 +73,13 @@ pub trait CellRendererPixbufExt {
 
     fn get_property_stock_detail(&self) -> Option<String>;
 
-    fn set_property_stock_detail(&self, stock_detail: Option<&str>);
+    fn set_property_stock_detail<'a, P: Into<Option<&'a str>>>(&self, stock_detail: P);
 
     #[cfg_attr(feature = "v3_10", deprecated)]
     fn get_property_stock_id(&self) -> Option<String>;
 
     #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_stock_id(&self, stock_id: Option<&str>);
+    fn set_property_stock_id<'a, P: Into<Option<&'a str>>>(&self, stock_id: P);
 
     #[cfg_attr(feature = "v3_16", deprecated)]
     fn connect_property_follow_state_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -139,7 +139,8 @@ impl<O: IsA<CellRendererPixbuf> + IsA<glib::object::Object>> CellRendererPixbufE
         }
     }
 
-    fn set_property_icon_name(&self, icon_name: Option<&str>) {
+    fn set_property_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_name: P) {
+        let icon_name = icon_name.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "icon-name".to_glib_none().0, Value::from(icon_name).to_glib_none().0);
         }
@@ -195,7 +196,8 @@ impl<O: IsA<CellRendererPixbuf> + IsA<glib::object::Object>> CellRendererPixbufE
         }
     }
 
-    fn set_property_stock_detail(&self, stock_detail: Option<&str>) {
+    fn set_property_stock_detail<'a, P: Into<Option<&'a str>>>(&self, stock_detail: P) {
+        let stock_detail = stock_detail.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "stock-detail".to_glib_none().0, Value::from(stock_detail).to_glib_none().0);
         }
@@ -209,7 +211,8 @@ impl<O: IsA<CellRendererPixbuf> + IsA<glib::object::Object>> CellRendererPixbufE
         }
     }
 
-    fn set_property_stock_id(&self, stock_id: Option<&str>) {
+    fn set_property_stock_id<'a, P: Into<Option<&'a str>>>(&self, stock_id: P) {
+        let stock_id = stock_id.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "stock-id".to_glib_none().0, Value::from(stock_id).to_glib_none().0);
         }

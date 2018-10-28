@@ -135,7 +135,7 @@ pub trait StackExt {
 
     fn get_property_visible_child_name(&self) -> Option<String>;
 
-    fn set_property_visible_child_name(&self, visible_child_name: Option<&str>);
+    fn set_property_visible_child_name<'a, P: Into<Option<&'a str>>>(&self, visible_child_name: P);
 
     fn get_child_icon_name<T: IsA<Widget>>(&self, item: &T) -> Option<String>;
 
@@ -412,7 +412,8 @@ impl<O: IsA<Stack> + IsA<Container> + IsA<glib::object::Object>> StackExt for O 
         }
     }
 
-    fn set_property_visible_child_name(&self, visible_child_name: Option<&str>) {
+    fn set_property_visible_child_name<'a, P: Into<Option<&'a str>>>(&self, visible_child_name: P) {
+        let visible_child_name = visible_child_name.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "visible-child-name".to_glib_none().0, Value::from(visible_child_name).to_glib_none().0);
         }

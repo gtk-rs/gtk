@@ -164,13 +164,13 @@ pub trait ImageExt {
 
     fn get_property_file(&self) -> Option<String>;
 
-    fn set_property_file(&self, file: Option<&str>);
+    fn set_property_file<'a, P: Into<Option<&'a str>>>(&self, file: P);
 
     fn set_property_gicon<P: IsA<gio::Icon> + IsA<glib::object::Object> + glib::value::SetValueOptional>(&self, gicon: Option<&P>);
 
     fn get_property_icon_name(&self) -> Option<String>;
 
-    fn set_property_icon_name(&self, icon_name: Option<&str>);
+    fn set_property_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_name: P);
 
     fn get_property_icon_size(&self) -> i32;
 
@@ -186,13 +186,13 @@ pub trait ImageExt {
     fn get_property_resource(&self) -> Option<String>;
 
     #[cfg(any(feature = "v3_8", feature = "dox"))]
-    fn set_property_resource(&self, resource: Option<&str>);
+    fn set_property_resource<'a, P: Into<Option<&'a str>>>(&self, resource: P);
 
     #[cfg_attr(feature = "v3_10", deprecated)]
     fn get_property_stock(&self) -> Option<String>;
 
     #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_stock(&self, stock: Option<&str>);
+    fn set_property_stock<'a, P: Into<Option<&'a str>>>(&self, stock: P);
 
     fn get_property_use_fallback(&self) -> bool;
 
@@ -348,7 +348,8 @@ impl<O: IsA<Image> + IsA<glib::object::Object>> ImageExt for O {
         }
     }
 
-    fn set_property_file(&self, file: Option<&str>) {
+    fn set_property_file<'a, P: Into<Option<&'a str>>>(&self, file: P) {
+        let file = file.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "file".to_glib_none().0, Value::from(file).to_glib_none().0);
         }
@@ -368,7 +369,8 @@ impl<O: IsA<Image> + IsA<glib::object::Object>> ImageExt for O {
         }
     }
 
-    fn set_property_icon_name(&self, icon_name: Option<&str>) {
+    fn set_property_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_name: P) {
+        let icon_name = icon_name.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "icon-name".to_glib_none().0, Value::from(icon_name).to_glib_none().0);
         }
@@ -418,7 +420,8 @@ impl<O: IsA<Image> + IsA<glib::object::Object>> ImageExt for O {
     }
 
     #[cfg(any(feature = "v3_8", feature = "dox"))]
-    fn set_property_resource(&self, resource: Option<&str>) {
+    fn set_property_resource<'a, P: Into<Option<&'a str>>>(&self, resource: P) {
+        let resource = resource.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "resource".to_glib_none().0, Value::from(resource).to_glib_none().0);
         }
@@ -432,7 +435,8 @@ impl<O: IsA<Image> + IsA<glib::object::Object>> ImageExt for O {
         }
     }
 
-    fn set_property_stock(&self, stock: Option<&str>) {
+    fn set_property_stock<'a, P: Into<Option<&'a str>>>(&self, stock: P) {
+        let stock = stock.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "stock".to_glib_none().0, Value::from(stock).to_glib_none().0);
         }

@@ -180,7 +180,7 @@ pub trait ComboBoxExt {
     fn get_property_tearoff_title(&self) -> Option<String>;
 
     #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_tearoff_title(&self, tearoff_title: Option<&str>);
+    fn set_property_tearoff_title<'a, P: Into<Option<&'a str>>>(&self, tearoff_title: P);
 
     fn connect_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -481,7 +481,8 @@ impl<O: IsA<ComboBox> + IsA<glib::object::Object> + glib::object::ObjectExt> Com
         }
     }
 
-    fn set_property_tearoff_title(&self, tearoff_title: Option<&str>) {
+    fn set_property_tearoff_title<'a, P: Into<Option<&'a str>>>(&self, tearoff_title: P) {
+        let tearoff_title = tearoff_title.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "tearoff-title".to_glib_none().0, Value::from(tearoff_title).to_glib_none().0);
         }
