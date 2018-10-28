@@ -53,26 +53,31 @@
 //! and run the main event loop:
 //!
 //! ```no_run
-//! # extern crate gtk;
-//! # use gtk::prelude::*;
-//! # use gtk::{Window, WindowType};
+//! extern crate gtk;
+//! extern crate gio;
+//!
+//! // To import all needed traits.
+//! use gtk::prelude::*;
+//! use gio::prelude::*;
+//!
+//! use std::env;
+//!
 //! fn main() {
-//!     gtk::init().unwrap();
-//!     // Create the main window.
-//!     let window = Window::new(WindowType::Toplevel);
-//!     // UI initialization.
-//!     // ...
-//!     // Don't forget to make all widgets visible.
-//!     window.show_all();
-//!     // Handle closing of the window.
-//!     window.connect_delete_event(|_, _| {
-//!         // Stop the main loop.
-//!         gtk::main_quit();
-//!         // Let the default handler destroy the window.
-//!         Inhibit(false)
+//!     let uiapp = gtk::Application::new("org.gtkrsnotes.demo",
+//!                                       gio::ApplicationFlags::FLAGS_NONE)
+//!                                  .expect("Application::new failed");
+//!     uiapp.connect_activate(|app| {
+//!         // We create the main window.
+//!         let win = gtk::ApplicationWindow::new(app);
+//!
+//!         // Then we set its size and a title.
+//!         win.set_default_size(320, 200);
+//!         win.set_title("Basic example");
+//!
+//!         // Don't forget to make all widgets visible.
+//!         win.show_all();
 //!     });
-//!     // Run the main loop.
-//!     gtk::main();
+//!     uiapp.run(&env::args().collect::<Vec<_>>());
 //! }
 //! ```
 //!
