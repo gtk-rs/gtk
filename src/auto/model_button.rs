@@ -94,7 +94,7 @@ pub trait ModelButtonExt {
     fn get_property_menu_name(&self) -> Option<String>;
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn set_property_menu_name(&self, menu_name: Option<&str>);
+    fn set_property_menu_name<'a, P: Into<Option<&'a str>>>(&self, menu_name: P);
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn get_property_role(&self) -> ButtonRole;
@@ -106,7 +106,7 @@ pub trait ModelButtonExt {
     fn get_property_text(&self) -> Option<String>;
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn set_property_text(&self, text: Option<&str>);
+    fn set_property_text<'a, P: Into<Option<&'a str>>>(&self, text: P);
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn connect_property_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -224,7 +224,8 @@ impl<O: IsA<ModelButton> + IsA<glib::object::Object>> ModelButtonExt for O {
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn set_property_menu_name(&self, menu_name: Option<&str>) {
+    fn set_property_menu_name<'a, P: Into<Option<&'a str>>>(&self, menu_name: P) {
+        let menu_name = menu_name.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "menu-name".to_glib_none().0, Value::from(menu_name).to_glib_none().0);
         }
@@ -256,7 +257,8 @@ impl<O: IsA<ModelButton> + IsA<glib::object::Object>> ModelButtonExt for O {
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn set_property_text(&self, text: Option<&str>) {
+    fn set_property_text<'a, P: Into<Option<&'a str>>>(&self, text: P) {
+        let text = text.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "text".to_glib_none().0, Value::from(text).to_glib_none().0);
         }

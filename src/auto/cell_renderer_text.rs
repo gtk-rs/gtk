@@ -57,7 +57,7 @@ pub trait CellRendererTextExt {
 
     fn set_property_alignment(&self, alignment: pango::Alignment);
 
-    fn set_property_background(&self, background: Option<&str>);
+    fn set_property_background<'a, P: Into<Option<&'a str>>>(&self, background: P);
 
     fn get_property_background_rgba(&self) -> Option<gdk::RGBA>;
 
@@ -85,7 +85,7 @@ pub trait CellRendererTextExt {
 
     fn get_property_family(&self) -> Option<String>;
 
-    fn set_property_family(&self, family: Option<&str>);
+    fn set_property_family<'a, P: Into<Option<&'a str>>>(&self, family: P);
 
     fn get_property_family_set(&self) -> bool;
 
@@ -93,9 +93,9 @@ pub trait CellRendererTextExt {
 
     fn get_property_font(&self) -> Option<String>;
 
-    fn set_property_font(&self, font: Option<&str>);
+    fn set_property_font<'a, P: Into<Option<&'a str>>>(&self, font: P);
 
-    fn set_property_foreground(&self, foreground: Option<&str>);
+    fn set_property_foreground<'a, P: Into<Option<&'a str>>>(&self, foreground: P);
 
     fn get_property_foreground_rgba(&self) -> Option<gdk::RGBA>;
 
@@ -107,13 +107,13 @@ pub trait CellRendererTextExt {
 
     fn get_property_language(&self) -> Option<String>;
 
-    fn set_property_language(&self, language: Option<&str>);
+    fn set_property_language<'a, P: Into<Option<&'a str>>>(&self, language: P);
 
     fn get_property_language_set(&self) -> bool;
 
     fn set_property_language_set(&self, language_set: bool);
 
-    fn set_property_markup(&self, markup: Option<&str>);
+    fn set_property_markup<'a, P: Into<Option<&'a str>>>(&self, markup: P);
 
     fn get_property_max_width_chars(&self) -> i32;
 
@@ -121,7 +121,7 @@ pub trait CellRendererTextExt {
 
     fn get_property_placeholder_text(&self) -> Option<String>;
 
-    fn set_property_placeholder_text(&self, placeholder_text: Option<&str>);
+    fn set_property_placeholder_text<'a, P: Into<Option<&'a str>>>(&self, placeholder_text: P);
 
     fn get_property_rise(&self) -> i32;
 
@@ -181,7 +181,7 @@ pub trait CellRendererTextExt {
 
     fn get_property_text(&self) -> Option<String>;
 
-    fn set_property_text(&self, text: Option<&str>);
+    fn set_property_text<'a, P: Into<Option<&'a str>>>(&self, text: P);
 
     fn get_property_underline(&self) -> pango::Underline;
 
@@ -345,7 +345,8 @@ impl<O: IsA<CellRendererText> + IsA<glib::object::Object>> CellRendererTextExt f
         }
     }
 
-    fn set_property_background(&self, background: Option<&str>) {
+    fn set_property_background<'a, P: Into<Option<&'a str>>>(&self, background: P) {
+        let background = background.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "background".to_glib_none().0, Value::from(background).to_glib_none().0);
         }
@@ -443,7 +444,8 @@ impl<O: IsA<CellRendererText> + IsA<glib::object::Object>> CellRendererTextExt f
         }
     }
 
-    fn set_property_family(&self, family: Option<&str>) {
+    fn set_property_family<'a, P: Into<Option<&'a str>>>(&self, family: P) {
+        let family = family.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "family".to_glib_none().0, Value::from(family).to_glib_none().0);
         }
@@ -471,13 +473,15 @@ impl<O: IsA<CellRendererText> + IsA<glib::object::Object>> CellRendererTextExt f
         }
     }
 
-    fn set_property_font(&self, font: Option<&str>) {
+    fn set_property_font<'a, P: Into<Option<&'a str>>>(&self, font: P) {
+        let font = font.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "font".to_glib_none().0, Value::from(font).to_glib_none().0);
         }
     }
 
-    fn set_property_foreground(&self, foreground: Option<&str>) {
+    fn set_property_foreground<'a, P: Into<Option<&'a str>>>(&self, foreground: P) {
+        let foreground = foreground.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "foreground".to_glib_none().0, Value::from(foreground).to_glib_none().0);
         }
@@ -519,7 +523,8 @@ impl<O: IsA<CellRendererText> + IsA<glib::object::Object>> CellRendererTextExt f
         }
     }
 
-    fn set_property_language(&self, language: Option<&str>) {
+    fn set_property_language<'a, P: Into<Option<&'a str>>>(&self, language: P) {
+        let language = language.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "language".to_glib_none().0, Value::from(language).to_glib_none().0);
         }
@@ -539,7 +544,8 @@ impl<O: IsA<CellRendererText> + IsA<glib::object::Object>> CellRendererTextExt f
         }
     }
 
-    fn set_property_markup(&self, markup: Option<&str>) {
+    fn set_property_markup<'a, P: Into<Option<&'a str>>>(&self, markup: P) {
+        let markup = markup.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "markup".to_glib_none().0, Value::from(markup).to_glib_none().0);
         }
@@ -567,7 +573,8 @@ impl<O: IsA<CellRendererText> + IsA<glib::object::Object>> CellRendererTextExt f
         }
     }
 
-    fn set_property_placeholder_text(&self, placeholder_text: Option<&str>) {
+    fn set_property_placeholder_text<'a, P: Into<Option<&'a str>>>(&self, placeholder_text: P) {
+        let placeholder_text = placeholder_text.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "placeholder-text".to_glib_none().0, Value::from(placeholder_text).to_glib_none().0);
         }
@@ -777,7 +784,8 @@ impl<O: IsA<CellRendererText> + IsA<glib::object::Object>> CellRendererTextExt f
         }
     }
 
-    fn set_property_text(&self, text: Option<&str>) {
+    fn set_property_text<'a, P: Into<Option<&'a str>>>(&self, text: P) {
+        let text = text.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "text".to_glib_none().0, Value::from(text).to_glib_none().0);
         }

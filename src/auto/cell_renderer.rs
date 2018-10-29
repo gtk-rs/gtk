@@ -84,7 +84,7 @@ pub trait CellRendererExt {
 
     fn stop_editing(&self, canceled: bool);
 
-    fn set_property_cell_background(&self, cell_background: Option<&str>);
+    fn set_property_cell_background<'a, P: Into<Option<&'a str>>>(&self, cell_background: P);
 
     fn get_property_cell_background_rgba(&self) -> Option<gdk::RGBA>;
 
@@ -335,7 +335,8 @@ impl<O: IsA<CellRenderer> + IsA<glib::object::Object>> CellRendererExt for O {
         }
     }
 
-    fn set_property_cell_background(&self, cell_background: Option<&str>) {
+    fn set_property_cell_background<'a, P: Into<Option<&'a str>>>(&self, cell_background: P) {
+        let cell_background = cell_background.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "cell-background".to_glib_none().0, Value::from(cell_background).to_glib_none().0);
         }

@@ -34,11 +34,11 @@ glib_wrapper! {
 pub trait ShortcutsWindowExt {
     fn get_property_section_name(&self) -> Option<String>;
 
-    fn set_property_section_name(&self, section_name: Option<&str>);
+    fn set_property_section_name<'a, P: Into<Option<&'a str>>>(&self, section_name: P);
 
     fn get_property_view_name(&self) -> Option<String>;
 
-    fn set_property_view_name(&self, view_name: Option<&str>);
+    fn set_property_view_name<'a, P: Into<Option<&'a str>>>(&self, view_name: P);
 
     fn connect_close<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -62,7 +62,8 @@ impl<O: IsA<ShortcutsWindow> + IsA<glib::object::Object> + glib::object::ObjectE
         }
     }
 
-    fn set_property_section_name(&self, section_name: Option<&str>) {
+    fn set_property_section_name<'a, P: Into<Option<&'a str>>>(&self, section_name: P) {
+        let section_name = section_name.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "section-name".to_glib_none().0, Value::from(section_name).to_glib_none().0);
         }
@@ -76,7 +77,8 @@ impl<O: IsA<ShortcutsWindow> + IsA<glib::object::Object> + glib::object::ObjectE
         }
     }
 
-    fn set_property_view_name(&self, view_name: Option<&str>) {
+    fn set_property_view_name<'a, P: Into<Option<&'a str>>>(&self, view_name: P) {
+        let view_name = view_name.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "view-name".to_glib_none().0, Value::from(view_name).to_glib_none().0);
         }

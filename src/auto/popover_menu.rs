@@ -54,7 +54,7 @@ pub trait PopoverMenuExt {
 
     fn get_property_visible_submenu(&self) -> Option<String>;
 
-    fn set_property_visible_submenu(&self, visible_submenu: Option<&str>);
+    fn set_property_visible_submenu<'a, P: Into<Option<&'a str>>>(&self, visible_submenu: P);
 
     fn get_child_position<T: IsA<Widget>>(&self, item: &T) -> i32;
 
@@ -83,7 +83,8 @@ impl<O: IsA<PopoverMenu> + IsA<Container> + IsA<glib::object::Object>> PopoverMe
         }
     }
 
-    fn set_property_visible_submenu(&self, visible_submenu: Option<&str>) {
+    fn set_property_visible_submenu<'a, P: Into<Option<&'a str>>>(&self, visible_submenu: P) {
+        let visible_submenu = visible_submenu.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "visible-submenu".to_glib_none().0, Value::from(visible_submenu).to_glib_none().0);
         }

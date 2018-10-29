@@ -114,13 +114,13 @@ pub trait SettingsExt {
     fn get_property_gtk_color_palette(&self) -> Option<String>;
 
     #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_gtk_color_palette(&self, gtk_color_palette: Option<&str>);
+    fn set_property_gtk_color_palette<'a, P: Into<Option<&'a str>>>(&self, gtk_color_palette: P);
 
     #[cfg_attr(feature = "v3_8", deprecated)]
     fn get_property_gtk_color_scheme(&self) -> Option<String>;
 
     #[cfg_attr(feature = "v3_8", deprecated)]
-    fn set_property_gtk_color_scheme(&self, gtk_color_scheme: Option<&str>);
+    fn set_property_gtk_color_scheme<'a, P: Into<Option<&'a str>>>(&self, gtk_color_scheme: P);
 
     fn get_property_gtk_cursor_blink(&self) -> bool;
 
@@ -136,7 +136,7 @@ pub trait SettingsExt {
 
     fn get_property_gtk_cursor_theme_name(&self) -> Option<String>;
 
-    fn set_property_gtk_cursor_theme_name(&self, gtk_cursor_theme_name: Option<&str>);
+    fn set_property_gtk_cursor_theme_name<'a, P: Into<Option<&'a str>>>(&self, gtk_cursor_theme_name: P);
 
     fn get_property_gtk_cursor_theme_size(&self) -> i32;
 
@@ -146,7 +146,7 @@ pub trait SettingsExt {
     fn get_property_gtk_decoration_layout(&self) -> Option<String>;
 
     #[cfg(any(feature = "v3_12", feature = "dox"))]
-    fn set_property_gtk_decoration_layout(&self, gtk_decoration_layout: Option<&str>);
+    fn set_property_gtk_decoration_layout<'a, P: Into<Option<&'a str>>>(&self, gtk_decoration_layout: P);
 
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_property_gtk_dialogs_use_header(&self) -> bool;
@@ -214,17 +214,17 @@ pub trait SettingsExt {
     fn get_property_gtk_fallback_icon_theme(&self) -> Option<String>;
 
     #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_gtk_fallback_icon_theme(&self, gtk_fallback_icon_theme: Option<&str>);
+    fn set_property_gtk_fallback_icon_theme<'a, P: Into<Option<&'a str>>>(&self, gtk_fallback_icon_theme: P);
 
     #[cfg_attr(feature = "v3_10", deprecated)]
     fn get_property_gtk_file_chooser_backend(&self) -> Option<String>;
 
     #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_gtk_file_chooser_backend(&self, gtk_file_chooser_backend: Option<&str>);
+    fn set_property_gtk_file_chooser_backend<'a, P: Into<Option<&'a str>>>(&self, gtk_file_chooser_backend: P);
 
     fn get_property_gtk_font_name(&self) -> Option<String>;
 
-    fn set_property_gtk_font_name(&self, gtk_font_name: Option<&str>);
+    fn set_property_gtk_font_name<'a, P: Into<Option<&'a str>>>(&self, gtk_font_name: P);
 
     fn get_property_gtk_fontconfig_timestamp(&self) -> u32;
 
@@ -234,15 +234,15 @@ pub trait SettingsExt {
     fn get_property_gtk_icon_sizes(&self) -> Option<String>;
 
     #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_gtk_icon_sizes(&self, gtk_icon_sizes: Option<&str>);
+    fn set_property_gtk_icon_sizes<'a, P: Into<Option<&'a str>>>(&self, gtk_icon_sizes: P);
 
     fn get_property_gtk_icon_theme_name(&self) -> Option<String>;
 
-    fn set_property_gtk_icon_theme_name(&self, gtk_icon_theme_name: Option<&str>);
+    fn set_property_gtk_icon_theme_name<'a, P: Into<Option<&'a str>>>(&self, gtk_icon_theme_name: P);
 
     fn get_property_gtk_im_module(&self) -> Option<String>;
 
-    fn set_property_gtk_im_module(&self, gtk_im_module: Option<&str>);
+    fn set_property_gtk_im_module<'a, P: Into<Option<&'a str>>>(&self, gtk_im_module: P);
 
     #[cfg_attr(feature = "v3_10", deprecated)]
     fn get_property_gtk_im_preedit_style(&self) -> IMPreeditStyle;
@@ -258,7 +258,7 @@ pub trait SettingsExt {
 
     fn get_property_gtk_key_theme_name(&self) -> Option<String>;
 
-    fn set_property_gtk_key_theme_name(&self, gtk_key_theme_name: Option<&str>);
+    fn set_property_gtk_key_theme_name<'a, P: Into<Option<&'a str>>>(&self, gtk_key_theme_name: P);
 
     #[cfg_attr(feature = "v3_10", deprecated)]
     fn get_property_gtk_keynav_cursor_only(&self) -> bool;
@@ -292,7 +292,7 @@ pub trait SettingsExt {
     fn get_property_gtk_menu_bar_accel(&self) -> Option<String>;
 
     #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_gtk_menu_bar_accel(&self, gtk_menu_bar_accel: Option<&str>);
+    fn set_property_gtk_menu_bar_accel<'a, P: Into<Option<&'a str>>>(&self, gtk_menu_bar_accel: P);
 
     #[cfg_attr(feature = "v3_10", deprecated)]
     fn get_property_gtk_menu_bar_popup_delay(&self) -> i32;
@@ -320,7 +320,7 @@ pub trait SettingsExt {
 
     fn get_property_gtk_modules(&self) -> Option<String>;
 
-    fn set_property_gtk_modules(&self, gtk_modules: Option<&str>);
+    fn set_property_gtk_modules<'a, P: Into<Option<&'a str>>>(&self, gtk_modules: P);
 
     #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_property_gtk_primary_button_warps_slider(&self) -> bool;
@@ -330,11 +330,11 @@ pub trait SettingsExt {
 
     fn get_property_gtk_print_backends(&self) -> Option<String>;
 
-    fn set_property_gtk_print_backends(&self, gtk_print_backends: Option<&str>);
+    fn set_property_gtk_print_backends<'a, P: Into<Option<&'a str>>>(&self, gtk_print_backends: P);
 
     fn get_property_gtk_print_preview_command(&self) -> Option<String>;
 
-    fn set_property_gtk_print_preview_command(&self, gtk_print_preview_command: Option<&str>);
+    fn set_property_gtk_print_preview_command<'a, P: Into<Option<&'a str>>>(&self, gtk_print_preview_command: P);
 
     #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn get_property_gtk_recent_files_enabled(&self) -> bool;
@@ -384,7 +384,7 @@ pub trait SettingsExt {
 
     fn get_property_gtk_sound_theme_name(&self) -> Option<String>;
 
-    fn set_property_gtk_sound_theme_name(&self, gtk_sound_theme_name: Option<&str>);
+    fn set_property_gtk_sound_theme_name<'a, P: Into<Option<&'a str>>>(&self, gtk_sound_theme_name: P);
 
     fn get_property_gtk_split_cursor(&self) -> bool;
 
@@ -392,7 +392,7 @@ pub trait SettingsExt {
 
     fn get_property_gtk_theme_name(&self) -> Option<String>;
 
-    fn set_property_gtk_theme_name(&self, gtk_theme_name: Option<&str>);
+    fn set_property_gtk_theme_name<'a, P: Into<Option<&'a str>>>(&self, gtk_theme_name: P);
 
     #[cfg_attr(feature = "v3_10", deprecated)]
     fn get_property_gtk_timeout_expand(&self) -> i32;
@@ -416,19 +416,19 @@ pub trait SettingsExt {
     fn get_property_gtk_titlebar_double_click(&self) -> Option<String>;
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
-    fn set_property_gtk_titlebar_double_click(&self, gtk_titlebar_double_click: Option<&str>);
+    fn set_property_gtk_titlebar_double_click<'a, P: Into<Option<&'a str>>>(&self, gtk_titlebar_double_click: P);
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_property_gtk_titlebar_middle_click(&self) -> Option<String>;
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
-    fn set_property_gtk_titlebar_middle_click(&self, gtk_titlebar_middle_click: Option<&str>);
+    fn set_property_gtk_titlebar_middle_click<'a, P: Into<Option<&'a str>>>(&self, gtk_titlebar_middle_click: P);
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_property_gtk_titlebar_right_click(&self) -> Option<String>;
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
-    fn set_property_gtk_titlebar_right_click(&self, gtk_titlebar_right_click: Option<&str>);
+    fn set_property_gtk_titlebar_right_click<'a, P: Into<Option<&'a str>>>(&self, gtk_titlebar_right_click: P);
 
     #[cfg_attr(feature = "v3_10", deprecated)]
     fn get_property_gtk_toolbar_icon_size(&self) -> IconSize;
@@ -480,11 +480,11 @@ pub trait SettingsExt {
 
     fn get_property_gtk_xft_hintstyle(&self) -> Option<String>;
 
-    fn set_property_gtk_xft_hintstyle(&self, gtk_xft_hintstyle: Option<&str>);
+    fn set_property_gtk_xft_hintstyle<'a, P: Into<Option<&'a str>>>(&self, gtk_xft_hintstyle: P);
 
     fn get_property_gtk_xft_rgba(&self) -> Option<String>;
 
-    fn set_property_gtk_xft_rgba(&self, gtk_xft_rgba: Option<&str>);
+    fn set_property_gtk_xft_rgba<'a, P: Into<Option<&'a str>>>(&self, gtk_xft_rgba: P);
 
     #[cfg_attr(feature = "v3_8", deprecated)]
     fn connect_property_color_hash_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -823,7 +823,8 @@ impl<O: IsA<Settings> + IsA<glib::object::Object>> SettingsExt for O {
         }
     }
 
-    fn set_property_gtk_color_palette(&self, gtk_color_palette: Option<&str>) {
+    fn set_property_gtk_color_palette<'a, P: Into<Option<&'a str>>>(&self, gtk_color_palette: P) {
+        let gtk_color_palette = gtk_color_palette.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "gtk-color-palette".to_glib_none().0, Value::from(gtk_color_palette).to_glib_none().0);
         }
@@ -837,7 +838,8 @@ impl<O: IsA<Settings> + IsA<glib::object::Object>> SettingsExt for O {
         }
     }
 
-    fn set_property_gtk_color_scheme(&self, gtk_color_scheme: Option<&str>) {
+    fn set_property_gtk_color_scheme<'a, P: Into<Option<&'a str>>>(&self, gtk_color_scheme: P) {
+        let gtk_color_scheme = gtk_color_scheme.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "gtk-color-scheme".to_glib_none().0, Value::from(gtk_color_scheme).to_glib_none().0);
         }
@@ -893,7 +895,8 @@ impl<O: IsA<Settings> + IsA<glib::object::Object>> SettingsExt for O {
         }
     }
 
-    fn set_property_gtk_cursor_theme_name(&self, gtk_cursor_theme_name: Option<&str>) {
+    fn set_property_gtk_cursor_theme_name<'a, P: Into<Option<&'a str>>>(&self, gtk_cursor_theme_name: P) {
+        let gtk_cursor_theme_name = gtk_cursor_theme_name.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "gtk-cursor-theme-name".to_glib_none().0, Value::from(gtk_cursor_theme_name).to_glib_none().0);
         }
@@ -923,7 +926,8 @@ impl<O: IsA<Settings> + IsA<glib::object::Object>> SettingsExt for O {
     }
 
     #[cfg(any(feature = "v3_12", feature = "dox"))]
-    fn set_property_gtk_decoration_layout(&self, gtk_decoration_layout: Option<&str>) {
+    fn set_property_gtk_decoration_layout<'a, P: Into<Option<&'a str>>>(&self, gtk_decoration_layout: P) {
+        let gtk_decoration_layout = gtk_decoration_layout.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "gtk-decoration-layout".to_glib_none().0, Value::from(gtk_decoration_layout).to_glib_none().0);
         }
@@ -1135,7 +1139,8 @@ impl<O: IsA<Settings> + IsA<glib::object::Object>> SettingsExt for O {
         }
     }
 
-    fn set_property_gtk_fallback_icon_theme(&self, gtk_fallback_icon_theme: Option<&str>) {
+    fn set_property_gtk_fallback_icon_theme<'a, P: Into<Option<&'a str>>>(&self, gtk_fallback_icon_theme: P) {
+        let gtk_fallback_icon_theme = gtk_fallback_icon_theme.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "gtk-fallback-icon-theme".to_glib_none().0, Value::from(gtk_fallback_icon_theme).to_glib_none().0);
         }
@@ -1149,7 +1154,8 @@ impl<O: IsA<Settings> + IsA<glib::object::Object>> SettingsExt for O {
         }
     }
 
-    fn set_property_gtk_file_chooser_backend(&self, gtk_file_chooser_backend: Option<&str>) {
+    fn set_property_gtk_file_chooser_backend<'a, P: Into<Option<&'a str>>>(&self, gtk_file_chooser_backend: P) {
+        let gtk_file_chooser_backend = gtk_file_chooser_backend.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "gtk-file-chooser-backend".to_glib_none().0, Value::from(gtk_file_chooser_backend).to_glib_none().0);
         }
@@ -1163,7 +1169,8 @@ impl<O: IsA<Settings> + IsA<glib::object::Object>> SettingsExt for O {
         }
     }
 
-    fn set_property_gtk_font_name(&self, gtk_font_name: Option<&str>) {
+    fn set_property_gtk_font_name<'a, P: Into<Option<&'a str>>>(&self, gtk_font_name: P) {
+        let gtk_font_name = gtk_font_name.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "gtk-font-name".to_glib_none().0, Value::from(gtk_font_name).to_glib_none().0);
         }
@@ -1191,7 +1198,8 @@ impl<O: IsA<Settings> + IsA<glib::object::Object>> SettingsExt for O {
         }
     }
 
-    fn set_property_gtk_icon_sizes(&self, gtk_icon_sizes: Option<&str>) {
+    fn set_property_gtk_icon_sizes<'a, P: Into<Option<&'a str>>>(&self, gtk_icon_sizes: P) {
+        let gtk_icon_sizes = gtk_icon_sizes.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "gtk-icon-sizes".to_glib_none().0, Value::from(gtk_icon_sizes).to_glib_none().0);
         }
@@ -1205,7 +1213,8 @@ impl<O: IsA<Settings> + IsA<glib::object::Object>> SettingsExt for O {
         }
     }
 
-    fn set_property_gtk_icon_theme_name(&self, gtk_icon_theme_name: Option<&str>) {
+    fn set_property_gtk_icon_theme_name<'a, P: Into<Option<&'a str>>>(&self, gtk_icon_theme_name: P) {
+        let gtk_icon_theme_name = gtk_icon_theme_name.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "gtk-icon-theme-name".to_glib_none().0, Value::from(gtk_icon_theme_name).to_glib_none().0);
         }
@@ -1219,7 +1228,8 @@ impl<O: IsA<Settings> + IsA<glib::object::Object>> SettingsExt for O {
         }
     }
 
-    fn set_property_gtk_im_module(&self, gtk_im_module: Option<&str>) {
+    fn set_property_gtk_im_module<'a, P: Into<Option<&'a str>>>(&self, gtk_im_module: P) {
+        let gtk_im_module = gtk_im_module.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "gtk-im-module".to_glib_none().0, Value::from(gtk_im_module).to_glib_none().0);
         }
@@ -1261,7 +1271,8 @@ impl<O: IsA<Settings> + IsA<glib::object::Object>> SettingsExt for O {
         }
     }
 
-    fn set_property_gtk_key_theme_name(&self, gtk_key_theme_name: Option<&str>) {
+    fn set_property_gtk_key_theme_name<'a, P: Into<Option<&'a str>>>(&self, gtk_key_theme_name: P) {
+        let gtk_key_theme_name = gtk_key_theme_name.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "gtk-key-theme-name".to_glib_none().0, Value::from(gtk_key_theme_name).to_glib_none().0);
         }
@@ -1349,7 +1360,8 @@ impl<O: IsA<Settings> + IsA<glib::object::Object>> SettingsExt for O {
         }
     }
 
-    fn set_property_gtk_menu_bar_accel(&self, gtk_menu_bar_accel: Option<&str>) {
+    fn set_property_gtk_menu_bar_accel<'a, P: Into<Option<&'a str>>>(&self, gtk_menu_bar_accel: P) {
+        let gtk_menu_bar_accel = gtk_menu_bar_accel.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "gtk-menu-bar-accel".to_glib_none().0, Value::from(gtk_menu_bar_accel).to_glib_none().0);
         }
@@ -1419,7 +1431,8 @@ impl<O: IsA<Settings> + IsA<glib::object::Object>> SettingsExt for O {
         }
     }
 
-    fn set_property_gtk_modules(&self, gtk_modules: Option<&str>) {
+    fn set_property_gtk_modules<'a, P: Into<Option<&'a str>>>(&self, gtk_modules: P) {
+        let gtk_modules = gtk_modules.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "gtk-modules".to_glib_none().0, Value::from(gtk_modules).to_glib_none().0);
         }
@@ -1449,7 +1462,8 @@ impl<O: IsA<Settings> + IsA<glib::object::Object>> SettingsExt for O {
         }
     }
 
-    fn set_property_gtk_print_backends(&self, gtk_print_backends: Option<&str>) {
+    fn set_property_gtk_print_backends<'a, P: Into<Option<&'a str>>>(&self, gtk_print_backends: P) {
+        let gtk_print_backends = gtk_print_backends.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "gtk-print-backends".to_glib_none().0, Value::from(gtk_print_backends).to_glib_none().0);
         }
@@ -1463,7 +1477,8 @@ impl<O: IsA<Settings> + IsA<glib::object::Object>> SettingsExt for O {
         }
     }
 
-    fn set_property_gtk_print_preview_command(&self, gtk_print_preview_command: Option<&str>) {
+    fn set_property_gtk_print_preview_command<'a, P: Into<Option<&'a str>>>(&self, gtk_print_preview_command: P) {
+        let gtk_print_preview_command = gtk_print_preview_command.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "gtk-print-preview-command".to_glib_none().0, Value::from(gtk_print_preview_command).to_glib_none().0);
         }
@@ -1605,7 +1620,8 @@ impl<O: IsA<Settings> + IsA<glib::object::Object>> SettingsExt for O {
         }
     }
 
-    fn set_property_gtk_sound_theme_name(&self, gtk_sound_theme_name: Option<&str>) {
+    fn set_property_gtk_sound_theme_name<'a, P: Into<Option<&'a str>>>(&self, gtk_sound_theme_name: P) {
+        let gtk_sound_theme_name = gtk_sound_theme_name.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "gtk-sound-theme-name".to_glib_none().0, Value::from(gtk_sound_theme_name).to_glib_none().0);
         }
@@ -1633,7 +1649,8 @@ impl<O: IsA<Settings> + IsA<glib::object::Object>> SettingsExt for O {
         }
     }
 
-    fn set_property_gtk_theme_name(&self, gtk_theme_name: Option<&str>) {
+    fn set_property_gtk_theme_name<'a, P: Into<Option<&'a str>>>(&self, gtk_theme_name: P) {
+        let gtk_theme_name = gtk_theme_name.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "gtk-theme-name".to_glib_none().0, Value::from(gtk_theme_name).to_glib_none().0);
         }
@@ -1691,7 +1708,8 @@ impl<O: IsA<Settings> + IsA<glib::object::Object>> SettingsExt for O {
     }
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
-    fn set_property_gtk_titlebar_double_click(&self, gtk_titlebar_double_click: Option<&str>) {
+    fn set_property_gtk_titlebar_double_click<'a, P: Into<Option<&'a str>>>(&self, gtk_titlebar_double_click: P) {
+        let gtk_titlebar_double_click = gtk_titlebar_double_click.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "gtk-titlebar-double-click".to_glib_none().0, Value::from(gtk_titlebar_double_click).to_glib_none().0);
         }
@@ -1707,7 +1725,8 @@ impl<O: IsA<Settings> + IsA<glib::object::Object>> SettingsExt for O {
     }
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
-    fn set_property_gtk_titlebar_middle_click(&self, gtk_titlebar_middle_click: Option<&str>) {
+    fn set_property_gtk_titlebar_middle_click<'a, P: Into<Option<&'a str>>>(&self, gtk_titlebar_middle_click: P) {
+        let gtk_titlebar_middle_click = gtk_titlebar_middle_click.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "gtk-titlebar-middle-click".to_glib_none().0, Value::from(gtk_titlebar_middle_click).to_glib_none().0);
         }
@@ -1723,7 +1742,8 @@ impl<O: IsA<Settings> + IsA<glib::object::Object>> SettingsExt for O {
     }
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
-    fn set_property_gtk_titlebar_right_click(&self, gtk_titlebar_right_click: Option<&str>) {
+    fn set_property_gtk_titlebar_right_click<'a, P: Into<Option<&'a str>>>(&self, gtk_titlebar_right_click: P) {
+        let gtk_titlebar_right_click = gtk_titlebar_right_click.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "gtk-titlebar-right-click".to_glib_none().0, Value::from(gtk_titlebar_right_click).to_glib_none().0);
         }
@@ -1863,7 +1883,8 @@ impl<O: IsA<Settings> + IsA<glib::object::Object>> SettingsExt for O {
         }
     }
 
-    fn set_property_gtk_xft_hintstyle(&self, gtk_xft_hintstyle: Option<&str>) {
+    fn set_property_gtk_xft_hintstyle<'a, P: Into<Option<&'a str>>>(&self, gtk_xft_hintstyle: P) {
+        let gtk_xft_hintstyle = gtk_xft_hintstyle.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "gtk-xft-hintstyle".to_glib_none().0, Value::from(gtk_xft_hintstyle).to_glib_none().0);
         }
@@ -1877,7 +1898,8 @@ impl<O: IsA<Settings> + IsA<glib::object::Object>> SettingsExt for O {
         }
     }
 
-    fn set_property_gtk_xft_rgba(&self, gtk_xft_rgba: Option<&str>) {
+    fn set_property_gtk_xft_rgba<'a, P: Into<Option<&'a str>>>(&self, gtk_xft_rgba: P) {
+        let gtk_xft_rgba = gtk_xft_rgba.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "gtk-xft-rgba".to_glib_none().0, Value::from(gtk_xft_rgba).to_glib_none().0);
         }

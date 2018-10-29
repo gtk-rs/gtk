@@ -65,11 +65,11 @@ pub trait FileChooserNativeExt {
 
     fn get_property_accept_label(&self) -> Option<String>;
 
-    fn set_property_accept_label(&self, accept_label: Option<&str>);
+    fn set_property_accept_label<'a, P: Into<Option<&'a str>>>(&self, accept_label: P);
 
     fn get_property_cancel_label(&self) -> Option<String>;
 
-    fn set_property_cancel_label(&self, cancel_label: Option<&str>);
+    fn set_property_cancel_label<'a, P: Into<Option<&'a str>>>(&self, cancel_label: P);
 
     fn connect_property_accept_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -117,7 +117,8 @@ impl<O: IsA<FileChooserNative> + IsA<glib::object::Object>> FileChooserNativeExt
         }
     }
 
-    fn set_property_accept_label(&self, accept_label: Option<&str>) {
+    fn set_property_accept_label<'a, P: Into<Option<&'a str>>>(&self, accept_label: P) {
+        let accept_label = accept_label.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "accept-label".to_glib_none().0, Value::from(accept_label).to_glib_none().0);
         }
@@ -131,7 +132,8 @@ impl<O: IsA<FileChooserNative> + IsA<glib::object::Object>> FileChooserNativeExt
         }
     }
 
-    fn set_property_cancel_label(&self, cancel_label: Option<&str>) {
+    fn set_property_cancel_label<'a, P: Into<Option<&'a str>>>(&self, cancel_label: P) {
+        let cancel_label = cancel_label.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "cancel-label".to_glib_none().0, Value::from(cancel_label).to_glib_none().0);
         }

@@ -187,18 +187,18 @@ pub trait StatusIconExt {
 
     fn get_property_embedded(&self) -> bool;
 
-    fn set_property_file(&self, file: Option<&str>);
+    fn set_property_file<'a, P: Into<Option<&'a str>>>(&self, file: P);
 
     fn set_property_gicon<P: IsA<gio::Icon> + IsA<glib::object::Object> + glib::value::SetValueOptional>(&self, gicon: Option<&P>);
 
-    fn set_property_icon_name(&self, icon_name: Option<&str>);
+    fn set_property_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_name: P);
 
     fn get_property_orientation(&self) -> Orientation;
 
     fn set_property_pixbuf(&self, pixbuf: Option<&gdk_pixbuf::Pixbuf>);
 
     #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_stock(&self, stock: Option<&str>);
+    fn set_property_stock<'a, P: Into<Option<&'a str>>>(&self, stock: P);
 
     fn connect_activate<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -429,7 +429,8 @@ impl<O: IsA<StatusIcon> + IsA<glib::object::Object> + glib::object::ObjectExt> S
         }
     }
 
-    fn set_property_file(&self, file: Option<&str>) {
+    fn set_property_file<'a, P: Into<Option<&'a str>>>(&self, file: P) {
+        let file = file.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "file".to_glib_none().0, Value::from(file).to_glib_none().0);
         }
@@ -441,7 +442,8 @@ impl<O: IsA<StatusIcon> + IsA<glib::object::Object> + glib::object::ObjectExt> S
         }
     }
 
-    fn set_property_icon_name(&self, icon_name: Option<&str>) {
+    fn set_property_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_name: P) {
+        let icon_name = icon_name.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "icon-name".to_glib_none().0, Value::from(icon_name).to_glib_none().0);
         }
@@ -461,7 +463,8 @@ impl<O: IsA<StatusIcon> + IsA<glib::object::Object> + glib::object::ObjectExt> S
         }
     }
 
-    fn set_property_stock(&self, stock: Option<&str>) {
+    fn set_property_stock<'a, P: Into<Option<&'a str>>>(&self, stock: P) {
+        let stock = stock.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "stock".to_glib_none().0, Value::from(stock).to_glib_none().0);
         }

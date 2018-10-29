@@ -226,7 +226,7 @@ pub trait TextViewExt {
 
     fn get_property_im_module(&self) -> Option<String>;
 
-    fn set_property_im_module(&self, im_module: Option<&str>);
+    fn set_property_im_module<'a, P: Into<Option<&'a str>>>(&self, im_module: P);
 
     fn get_property_monospace(&self) -> bool;
 
@@ -811,7 +811,8 @@ impl<O: IsA<TextView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tex
         }
     }
 
-    fn set_property_im_module(&self, im_module: Option<&str>) {
+    fn set_property_im_module<'a, P: Into<Option<&'a str>>>(&self, im_module: P) {
+        let im_module = im_module.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "im-module".to_glib_none().0, Value::from(im_module).to_glib_none().0);
         }

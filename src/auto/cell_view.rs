@@ -98,7 +98,7 @@ pub trait CellViewExt {
 
     fn set_model<'a, P: IsA<TreeModel> + 'a, Q: Into<Option<&'a P>>>(&self, model: Q);
 
-    fn set_property_background(&self, background: Option<&str>);
+    fn set_property_background<'a, P: Into<Option<&'a str>>>(&self, background: P);
 
     fn get_property_background_rgba(&self) -> Option<gdk::RGBA>;
 
@@ -180,7 +180,8 @@ impl<O: IsA<CellView> + IsA<glib::object::Object>> CellViewExt for O {
         }
     }
 
-    fn set_property_background(&self, background: Option<&str>) {
+    fn set_property_background<'a, P: Into<Option<&'a str>>>(&self, background: P) {
+        let background = background.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0, "background".to_glib_none().0, Value::from(background).to_glib_none().0);
         }
