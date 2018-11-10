@@ -694,7 +694,7 @@ mod socket;
 #[cfg(any(not(windows), feature = "dox"))]
 pub use self::socket::Socket;
 #[cfg(any(not(windows), feature = "dox"))]
-pub use self::socket::SocketExt;
+pub use self::socket::GtkSocketExt;
 
 mod spin_button;
 pub use self::spin_button::SpinButton;
@@ -1476,7 +1476,7 @@ pub mod traits {
     pub use super::ShortcutsWindowExt;
     pub use super::SizeGroupExt;
     #[cfg(any(not(windows), feature = "dox"))]
-    pub use super::SocketExt;
+    pub use super::GtkSocketExt;
     pub use super::SpinButtonExt;
     pub use super::SpinnerExt;
     #[cfg(any(feature = "v3_10", feature = "dox"))]
