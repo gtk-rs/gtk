@@ -177,6 +177,7 @@ extern crate gdk;
 extern crate gdk_pixbuf;
 extern crate cairo;
 extern crate pango;
+extern crate atk;
 
 #[cfg(feature = "futures")]
 extern crate fragile;

@@ -24,6 +24,7 @@ use Tooltip;
 use WidgetHelpType;
 use WidgetPath;
 use Window;
+use atk;
 use cairo;
 use cairo_ffi;
 use ffi;
@@ -187,7 +188,7 @@ pub trait WidgetExt {
 
     fn freeze_child_notify(&self);
 
-    //fn get_accessible(&self) -> /*Ignored*/Option<atk::Object>;
+    fn get_accessible(&self) -> Option<atk::Object>;
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn get_action_group(&self, prefix: &str) -> Option<gio::ActionGroup>;
@@ -1144,9 +1145,11 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
         }
     }
 
-    //fn get_accessible(&self) -> /*Ignored*/Option<atk::Object> {
-    //    unsafe { TODO: call ffi::gtk_widget_get_accessible() }
-    //}
+    fn get_accessible(&self) -> Option<atk::Object> {
+        unsafe {
+            from_glib_none(ffi::gtk_widget_get_accessible(self.to_glib_none().0))
+        }
+    }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn get_action_group(&self, prefix: &str) -> Option<gio::ActionGroup> {

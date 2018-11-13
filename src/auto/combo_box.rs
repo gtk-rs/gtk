@@ -13,6 +13,7 @@ use SensitivityType;
 use TreeIter;
 use TreeModel;
 use Widget;
+use atk;
 use ffi;
 use gdk;
 use glib;
@@ -115,7 +116,7 @@ pub trait ComboBoxExt {
 
     fn get_model(&self) -> Option<TreeModel>;
 
-    //fn get_popup_accessible(&self) -> /*Ignored*/Option<atk::Object>;
+    fn get_popup_accessible(&self) -> Option<atk::Object>;
 
     fn get_popup_fixed_width(&self) -> bool;
 
@@ -299,9 +300,11 @@ impl<O: IsA<ComboBox> + IsA<glib::object::Object> + glib::object::ObjectExt> Com
         }
     }
 
-    //fn get_popup_accessible(&self) -> /*Ignored*/Option<atk::Object> {
-    //    unsafe { TODO: call ffi::gtk_combo_box_get_popup_accessible() }
-    //}
+    fn get_popup_accessible(&self) -> Option<atk::Object> {
+        unsafe {
+            from_glib_none(ffi::gtk_combo_box_get_popup_accessible(self.to_glib_none().0))
+        }
+    }
 
     fn get_popup_fixed_width(&self) -> bool {
         unsafe {
