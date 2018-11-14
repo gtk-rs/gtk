@@ -232,6 +232,7 @@ ignore = [
 ]
 
 manual = [
+    "Atk.Object",
     "cairo.Context",
     "cairo.FontOptions",
     "cairo.RectangleInt",

@@ -56,6 +56,7 @@ bitflags = "1.0"
 lazy_static = "1.0"
 fragile = { version = "0.3", optional = true }
 futures-core-preview = { version = "0.2", optional = true }
+atk = { git = "https://github.com/gtk-rs/atk" }
 cairo-sys-rs = { git = "https://github.com/gtk-rs/cairo" }
 gdk-sys = { git = "https://github.com/gtk-rs/sys" }
 gdk-pixbuf-sys = { git = "https://github.com/gtk-rs/sys" }
