@@ -44,7 +44,7 @@ impl Default for Socket {
     }
 }
 
-pub trait SocketExt {
+pub trait GtkSocketExt {
     fn add_id(&self, window: xlib::Window);
 
     fn get_id(&self) -> xlib::Window;
@@ -56,7 +56,7 @@ pub trait SocketExt {
     fn connect_plug_removed<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Socket> + IsA<glib::object::Object>> SocketExt for O {
+impl<O: IsA<Socket> + IsA<glib::object::Object>> GtkSocketExt for O {
     fn add_id(&self, window: xlib::Window) {
         unsafe {
             ffi::gtk_socket_add_id(self.to_glib_none().0, window);
