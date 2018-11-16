@@ -11,6 +11,7 @@ use glib::object::IsA;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
+use std::fmt;
 use std::mem;
 use std::ptr;
 
@@ -143,5 +144,11 @@ impl<O: IsA<StyleProperties>> StylePropertiesExt for O {
         unsafe {
             ffi::gtk_style_properties_unset_property(self.to_glib_none().0, property.to_glib_none().0, state.to_glib());
         }
+    }
+}
+
+impl fmt::Display for StyleProperties {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "StyleProperties")
     }
 }

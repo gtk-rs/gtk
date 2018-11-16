@@ -22,6 +22,7 @@ use gobject_ffi;
 use libc;
 use signal::Inhibit;
 use std::boxed::Box as Box_;
+use std::fmt;
 use std::mem;
 use std::mem::transmute;
 use std::ptr;
@@ -573,4 +574,10 @@ unsafe extern "C" fn notify_wrap_license_trampoline<P>(this: *mut ffi::GtkAboutD
 where P: IsA<AboutDialog> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&AboutDialog::from_glib_borrow(this).downcast_unchecked())
+}
+
+impl fmt::Display for AboutDialog {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "AboutDialog")
+    }
 }

@@ -10,6 +10,7 @@ use glib::object::IsA;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
+use std::fmt;
 use std::mem;
 use std::ptr;
 
@@ -77,5 +78,11 @@ impl<O: IsA<WindowGroup>> WindowGroupExt for O {
         unsafe {
             ffi::gtk_window_group_remove_window(self.to_glib_none().0, window.to_glib_none().0);
         }
+    }
+}
+
+impl fmt::Display for WindowGroup {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "WindowGroup")
     }
 }

@@ -27,6 +27,7 @@ use gobject_ffi;
 use libc;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use std::boxed::Box as Box_;
+use std::fmt;
 use std::mem;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use std::mem::transmute;
@@ -110,4 +111,10 @@ unsafe extern "C" fn notify_orientation_trampoline<P>(this: *mut ffi::GtkGesture
 where P: IsA<GesturePan> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&GesturePan::from_glib_borrow(this).downcast_unchecked())
+}
+
+impl fmt::Display for GesturePan {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "GesturePan")
+    }
 }

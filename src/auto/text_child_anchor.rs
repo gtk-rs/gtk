@@ -8,6 +8,7 @@ use glib::object::IsA;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
+use std::fmt;
 use std::mem;
 use std::ptr;
 
@@ -51,5 +52,11 @@ impl<O: IsA<TextChildAnchor>> TextChildAnchorExt for O {
         unsafe {
             FromGlibPtrContainer::from_glib_container(ffi::gtk_text_child_anchor_get_widgets(self.to_glib_none().0))
         }
+    }
+}
+
+impl fmt::Display for TextChildAnchor {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "TextChildAnchor")
     }
 }

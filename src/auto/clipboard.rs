@@ -12,6 +12,7 @@ use glib::object::IsA;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
+use std::fmt;
 use std::mem;
 use std::ptr;
 
@@ -256,4 +257,10 @@ impl<O: IsA<Clipboard>> ClipboardExt for O {
     //fn connect_owner_change<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
     //    Ignored event: Gdk.EventOwnerChange
     //}
+}
+
+impl fmt::Display for Clipboard {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Clipboard")
+    }
 }

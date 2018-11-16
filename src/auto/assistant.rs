@@ -20,6 +20,7 @@ use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
+use std::fmt;
 use std::mem;
 use std::mem::transmute;
 use std::ptr;
@@ -406,4 +407,10 @@ unsafe extern "C" fn prepare_trampoline<P>(this: *mut ffi::GtkAssistant, page: *
 where P: IsA<Assistant> {
     let f: &&(Fn(&P, &Widget) + 'static) = transmute(f);
     f(&Assistant::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(page))
+}
+
+impl fmt::Display for Assistant {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Assistant")
+    }
 }

@@ -15,6 +15,7 @@ use glib::object::IsA;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
+use std::fmt;
 use std::mem;
 use std::ptr;
 
@@ -122,5 +123,11 @@ impl<O: IsA<ActionBar> + IsA<Container>> ActionBarExt for O {
         unsafe {
             ffi::gtk_container_child_set_property(self.to_glib_none().0, item.to_glib_none().0, "position".to_glib_none().0, Value::from(&position).to_glib_none().0);
         }
+    }
+}
+
+impl fmt::Display for ActionBar {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "ActionBar")
     }
 }

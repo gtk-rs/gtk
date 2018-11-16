@@ -9,6 +9,7 @@ use glib::object::IsA;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
+use std::fmt;
 use std::mem;
 use std::ptr;
 
@@ -120,5 +121,11 @@ impl<O: IsA<RecentFilter>> RecentFilterExt for O {
         unsafe {
             ffi::gtk_recent_filter_set_name(self.to_glib_none().0, name.to_glib_none().0);
         }
+    }
+}
+
+impl fmt::Display for RecentFilter {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "RecentFilter")
     }
 }

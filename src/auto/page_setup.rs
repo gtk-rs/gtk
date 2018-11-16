@@ -13,6 +13,7 @@ use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std;
+use std::fmt;
 use std::mem;
 use std::ptr;
 
@@ -262,5 +263,11 @@ impl<O: IsA<PageSetup>> PageSetupExt for O {
         unsafe {
             ffi::gtk_page_setup_to_key_file(self.to_glib_none().0, key_file.to_glib_none().0, group_name.to_glib_none().0);
         }
+    }
+}
+
+impl fmt::Display for PageSetup {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "PageSetup")
     }
 }

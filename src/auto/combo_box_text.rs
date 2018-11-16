@@ -15,6 +15,7 @@ use glib::object::IsA;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
+use std::fmt;
 use std::mem;
 use std::ptr;
 
@@ -127,5 +128,11 @@ impl<O: IsA<ComboBoxText>> ComboBoxTextExt for O {
         unsafe {
             ffi::gtk_combo_box_text_remove_all(self.to_glib_none().0);
         }
+    }
+}
+
+impl fmt::Display for ComboBoxText {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "ComboBoxText")
     }
 }

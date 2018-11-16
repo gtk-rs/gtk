@@ -11,6 +11,7 @@ use glib::object::Downcast;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
+use std::fmt;
 use std::mem;
 use std::ptr;
 
@@ -28,5 +29,11 @@ impl Separator {
         unsafe {
             Widget::from_glib_none(ffi::gtk_separator_new(orientation.to_glib())).downcast_unchecked()
         }
+    }
+}
+
+impl fmt::Display for Separator {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Separator")
     }
 }

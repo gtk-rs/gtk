@@ -22,6 +22,7 @@ use glib_ffi;
 use gobject_ffi;
 use libc;
 use std::boxed::Box as Box_;
+use std::fmt;
 use std::mem;
 use std::mem::transmute;
 use std::ptr;
@@ -789,4 +790,10 @@ unsafe extern "C" fn notify_tab_pos_trampoline<P>(this: *mut ffi::GtkNotebook, _
 where P: IsA<Notebook> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Notebook::from_glib_borrow(this).downcast_unchecked())
+}
+
+impl fmt::Display for Notebook {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Notebook")
+    }
 }

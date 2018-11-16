@@ -8,6 +8,7 @@ use glib::object::IsA;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
+use std::fmt;
 use std::mem;
 use std::ptr;
 
@@ -79,5 +80,11 @@ impl<O: IsA<TextMark>> TextMarkExt for O {
         unsafe {
             ffi::gtk_text_mark_set_visible(self.to_glib_none().0, setting.to_glib());
         }
+    }
+}
+
+impl fmt::Display for TextMark {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "TextMark")
     }
 }

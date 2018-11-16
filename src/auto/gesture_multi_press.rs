@@ -24,6 +24,7 @@ use gobject_ffi;
 use libc;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use std::boxed::Box as Box_;
+use std::fmt;
 use std::mem;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use std::mem::transmute;
@@ -130,4 +131,10 @@ unsafe extern "C" fn stopped_trampoline<P>(this: *mut ffi::GtkGestureMultiPress,
 where P: IsA<GestureMultiPress> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&GestureMultiPress::from_glib_borrow(this).downcast_unchecked())
+}
+
+impl fmt::Display for GestureMultiPress {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "GestureMultiPress")
+    }
 }

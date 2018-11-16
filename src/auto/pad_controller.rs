@@ -17,6 +17,7 @@ use glib::object::IsA;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
+use std::fmt;
 use std::mem;
 use std::ptr;
 
@@ -71,5 +72,11 @@ impl<O: IsA<PadController> + IsA<glib::object::Object>> PadControllerExt for O {
             gobject_ffi::g_object_get_property(self.to_glib_none().0, "pad".to_glib_none().0, value.to_glib_none_mut().0);
             value.get()
         }
+    }
+}
+
+impl fmt::Display for PadController {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "PadController")
     }
 }

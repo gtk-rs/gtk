@@ -15,6 +15,7 @@ use glib::object::IsA;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
+use std::fmt;
 use std::mem;
 use std::ptr;
 
@@ -36,5 +37,11 @@ impl FontChooserDialog {
         unsafe {
             Widget::from_glib_none(ffi::gtk_font_chooser_dialog_new(title.0, parent.0)).downcast_unchecked()
         }
+    }
+}
+
+impl fmt::Display for FontChooserDialog {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "FontChooserDialog")
     }
 }

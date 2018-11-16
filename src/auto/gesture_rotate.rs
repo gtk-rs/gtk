@@ -21,6 +21,7 @@ use gobject_ffi;
 use libc;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use std::boxed::Box as Box_;
+use std::fmt;
 use std::mem;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use std::mem::transmute;
@@ -75,4 +76,10 @@ unsafe extern "C" fn angle_changed_trampoline<P>(this: *mut ffi::GtkGestureRotat
 where P: IsA<GestureRotate> {
     let f: &&(Fn(&P, f64, f64) + 'static) = transmute(f);
     f(&GestureRotate::from_glib_borrow(this).downcast_unchecked(), angle, angle_delta)
+}
+
+impl fmt::Display for GestureRotate {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "GestureRotate")
+    }
 }

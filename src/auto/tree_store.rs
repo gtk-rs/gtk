@@ -13,6 +13,7 @@ use glib::object::IsA;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
+use std::fmt;
 use std::mem;
 use std::ptr;
 
@@ -200,5 +201,11 @@ impl<O: IsA<TreeStore>> TreeStoreExt for O {
         unsafe {
             ffi::gtk_tree_store_swap(self.to_glib_none().0, mut_override(a.to_glib_none().0), mut_override(b.to_glib_none().0));
         }
+    }
+}
+
+impl fmt::Display for TreeStore {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "TreeStore")
     }
 }

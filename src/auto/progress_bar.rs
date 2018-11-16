@@ -16,6 +16,7 @@ use glib_ffi;
 use gobject_ffi;
 use pango;
 use std::boxed::Box as Box_;
+use std::fmt;
 use std::mem;
 use std::mem::transmute;
 use std::ptr;
@@ -247,4 +248,10 @@ unsafe extern "C" fn notify_text_trampoline<P>(this: *mut ffi::GtkProgressBar, _
 where P: IsA<ProgressBar> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&ProgressBar::from_glib_borrow(this).downcast_unchecked())
+}
+
+impl fmt::Display for ProgressBar {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "ProgressBar")
+    }
 }

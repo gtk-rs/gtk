@@ -19,6 +19,7 @@ use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
+use std::fmt;
 use std::mem;
 use std::mem::transmute;
 use std::ptr;
@@ -132,4 +133,10 @@ unsafe extern "C" fn notify_visible_submenu_trampoline<P>(this: *mut ffi::GtkPop
 where P: IsA<PopoverMenu> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&PopoverMenu::from_glib_borrow(this).downcast_unchecked())
+}
+
+impl fmt::Display for PopoverMenu {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "PopoverMenu")
+    }
 }

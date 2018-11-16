@@ -13,6 +13,7 @@ use glib::object::Downcast;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
+use std::fmt;
 use std::mem;
 use std::ptr;
 
@@ -32,5 +33,11 @@ impl Scrollbar {
         unsafe {
             Widget::from_glib_none(ffi::gtk_scrollbar_new(orientation.to_glib(), adjustment.0)).downcast_unchecked()
         }
+    }
+}
+
+impl fmt::Display for Scrollbar {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Scrollbar")
     }
 }

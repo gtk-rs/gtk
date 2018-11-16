@@ -21,6 +21,7 @@ use glib_ffi;
 use gobject_ffi;
 use std;
 use std::boxed::Box as Box_;
+use std::fmt;
 use std::mem;
 use std::mem::transmute;
 use std::ptr;
@@ -246,4 +247,10 @@ unsafe extern "C" fn changed_trampoline<P>(this: *mut ffi::GtkIconTheme, f: glib
 where P: IsA<IconTheme> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&IconTheme::from_glib_borrow(this).downcast_unchecked())
+}
+
+impl fmt::Display for IconTheme {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "IconTheme")
+    }
 }

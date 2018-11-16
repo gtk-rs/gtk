@@ -10,6 +10,7 @@ use glib::object::IsA;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
+use std::fmt;
 use std::mem;
 use std::ptr;
 
@@ -47,4 +48,10 @@ impl<O: IsA<StyleProvider>> StyleProviderExt for O {
     //fn get_style_property<P: IsA</*Ignored*/glib::ParamSpec>>(&self, path: &WidgetPath, state: StateFlags, pspec: &P) -> Option<glib::Value> {
     //    unsafe { TODO: call ffi::gtk_style_provider_get_style_property() }
     //}
+}
+
+impl fmt::Display for StyleProvider {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "StyleProvider")
+    }
 }

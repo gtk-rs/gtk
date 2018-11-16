@@ -16,6 +16,7 @@ use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
+use std::fmt;
 use std::mem;
 use std::mem::transmute;
 use std::ptr;
@@ -126,4 +127,10 @@ unsafe extern "C" fn parsing_error_trampoline<P>(this: *mut ffi::GtkCssProvider,
 where P: IsA<CssProvider> {
     let f: &&(Fn(&P, &CssSection, &Error) + 'static) = transmute(f);
     f(&CssProvider::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(section), &from_glib_borrow(error))
+}
+
+impl fmt::Display for CssProvider {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "CssProvider")
+    }
 }

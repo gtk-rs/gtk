@@ -46,6 +46,7 @@ use libc;
 use pango;
 use signal::Inhibit;
 use std::boxed::Box as Box_;
+use std::fmt;
 use std::mem;
 use std::mem::transmute;
 use std::ptr;
@@ -3939,4 +3940,10 @@ unsafe extern "C" fn notify_window_trampoline<P>(this: *mut ffi::GtkWidget, _par
 where P: IsA<Widget> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Widget::from_glib_borrow(this).downcast_unchecked())
+}
+
+impl fmt::Display for Widget {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Widget")
+    }
 }

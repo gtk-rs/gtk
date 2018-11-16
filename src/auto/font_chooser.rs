@@ -14,6 +14,7 @@ use gobject_ffi;
 use libc;
 use pango;
 use std::boxed::Box as Box_;
+use std::fmt;
 use std::mem;
 use std::mem::transmute;
 use std::ptr;
@@ -224,4 +225,10 @@ unsafe extern "C" fn notify_show_preview_entry_trampoline<P>(this: *mut ffi::Gtk
 where P: IsA<FontChooser> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&FontChooser::from_glib_borrow(this).downcast_unchecked())
+}
+
+impl fmt::Display for FontChooser {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "FontChooser")
+    }
 }

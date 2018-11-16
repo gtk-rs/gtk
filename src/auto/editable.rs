@@ -7,6 +7,7 @@ use glib::object::IsA;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
+use std::fmt;
 use std::mem;
 use std::ptr;
 
@@ -127,5 +128,11 @@ impl<O: IsA<Editable>> EditableExt for O {
         unsafe {
             ffi::gtk_editable_set_position(self.to_glib_none().0, position);
         }
+    }
+}
+
+impl fmt::Display for Editable {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Editable")
     }
 }
