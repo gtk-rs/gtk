@@ -14,6 +14,7 @@ use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
+use std::fmt;
 use std::mem;
 use std::mem::transmute;
 use std::ptr;
@@ -84,4 +85,10 @@ unsafe extern "C" fn ready_trampoline<P>(this: *mut ffi::GtkPrintOperationPrevie
 where P: IsA<PrintOperationPreview> {
     let f: &&(Fn(&P, &PrintContext) + 'static) = transmute(f);
     f(&PrintOperationPreview::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(context))
+}
+
+impl fmt::Display for PrintOperationPreview {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "PrintOperationPreview")
+    }
 }

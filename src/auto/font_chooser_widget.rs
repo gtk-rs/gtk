@@ -13,6 +13,7 @@ use glib::object::Downcast;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
+use std::fmt;
 use std::mem;
 use std::ptr;
 
@@ -36,5 +37,11 @@ impl FontChooserWidget {
 impl Default for FontChooserWidget {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+impl fmt::Display for FontChooserWidget {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "FontChooserWidget")
     }
 }

@@ -22,6 +22,7 @@ use gobject_ffi;
 use libc;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use std::boxed::Box as Box_;
+use std::fmt;
 use std::mem;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use std::mem::transmute;
@@ -79,4 +80,10 @@ unsafe extern "C" fn swipe_trampoline<P>(this: *mut ffi::GtkGestureSwipe, veloci
 where P: IsA<GestureSwipe> {
     let f: &&(Fn(&P, f64, f64) + 'static) = transmute(f);
     f(&GestureSwipe::from_glib_borrow(this).downcast_unchecked(), velocity_x, velocity_y)
+}
+
+impl fmt::Display for GestureSwipe {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "GestureSwipe")
+    }
 }

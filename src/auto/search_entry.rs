@@ -22,6 +22,7 @@ use glib_ffi;
 use gobject_ffi;
 #[cfg(any(feature = "v3_10", feature = "dox"))]
 use std::boxed::Box as Box_;
+use std::fmt;
 use std::mem;
 #[cfg(any(feature = "v3_10", feature = "dox"))]
 use std::mem::transmute;
@@ -164,4 +165,10 @@ unsafe extern "C" fn stop_search_trampoline<P>(this: *mut ffi::GtkSearchEntry, f
 where P: IsA<SearchEntry> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&SearchEntry::from_glib_borrow(this).downcast_unchecked())
+}
+
+impl fmt::Display for SearchEntry {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "SearchEntry")
+    }
 }

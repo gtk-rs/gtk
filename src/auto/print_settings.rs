@@ -19,6 +19,7 @@ use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std;
+use std::fmt;
 use std::mem;
 use std::ptr;
 
@@ -654,5 +655,11 @@ impl<O: IsA<PrintSettings>> PrintSettingsExt for O {
         unsafe {
             ffi::gtk_print_settings_unset(self.to_glib_none().0, key.to_glib_none().0);
         }
+    }
+}
+
+impl fmt::Display for PrintSettings {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "PrintSettings")
     }
 }

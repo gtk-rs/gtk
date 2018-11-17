@@ -9,6 +9,7 @@ use glib::object::IsA;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
+use std::fmt;
 use std::mem;
 use std::ptr;
 
@@ -98,4 +99,10 @@ impl<O: IsA<CellLayout>> CellLayoutExt for O {
     //fn set_cell_data_func<'a, P: IsA<CellRenderer>, Q: Into<Option<&'a /*Unimplemented*/CellLayoutDataFunc>>, R: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, cell: &P, func: Q, func_data: R, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
     //    unsafe { TODO: call ffi::gtk_cell_layout_set_cell_data_func() }
     //}
+}
+
+impl fmt::Display for CellLayout {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "CellLayout")
+    }
 }

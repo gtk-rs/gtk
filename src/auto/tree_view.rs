@@ -33,6 +33,7 @@ use gobject_ffi;
 use libc;
 use signal::Inhibit;
 use std::boxed::Box as Box_;
+use std::fmt;
 use std::mem;
 use std::mem::transmute;
 use std::ptr;
@@ -1504,4 +1505,10 @@ unsafe extern "C" fn notify_ubuntu_almost_fixed_height_mode_trampoline<P>(this: 
 where P: IsA<TreeView> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&TreeView::from_glib_borrow(this).downcast_unchecked())
+}
+
+impl fmt::Display for TreeView {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "TreeView")
+    }
 }

@@ -15,6 +15,7 @@ use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
+use std::fmt;
 use std::mem;
 use std::mem::transmute;
 use std::ptr;
@@ -314,4 +315,10 @@ unsafe extern "C" fn row_inserted_trampoline<P>(this: *mut ffi::GtkTreeModel, pa
 where P: IsA<TreeModel> {
     let f: &&(Fn(&P, &TreePath, &TreeIter) + 'static) = transmute(f);
     f(&TreeModel::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(path), &from_glib_borrow(iter))
+}
+
+impl fmt::Display for TreeModel {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "TreeModel")
+    }
 }

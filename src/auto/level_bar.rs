@@ -22,6 +22,7 @@ use gobject_ffi;
 use libc;
 #[cfg(any(feature = "v3_6", feature = "dox"))]
 use std::boxed::Box as Box_;
+use std::fmt;
 use std::mem;
 #[cfg(any(feature = "v3_6", feature = "dox"))]
 use std::mem::transmute;
@@ -312,4 +313,10 @@ unsafe extern "C" fn notify_value_trampoline<P>(this: *mut ffi::GtkLevelBar, _pa
 where P: IsA<LevelBar> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&LevelBar::from_glib_borrow(this).downcast_unchecked())
+}
+
+impl fmt::Display for LevelBar {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "LevelBar")
+    }
 }

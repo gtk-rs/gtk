@@ -10,6 +10,7 @@ use glib::object::IsA;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
+use std::fmt;
 use std::mem;
 use std::ptr;
 
@@ -62,5 +63,11 @@ impl<O: IsA<IMMulticontext>> IMMulticontextExt for O {
         unsafe {
             ffi::gtk_im_multicontext_set_context_id(self.to_glib_none().0, context_id.to_glib_none().0);
         }
+    }
+}
+
+impl fmt::Display for IMMulticontext {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "IMMulticontext")
     }
 }

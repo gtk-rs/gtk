@@ -10,6 +10,7 @@ use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use pango;
+use std::fmt;
 use std::mem;
 use std::ptr;
 
@@ -115,5 +116,11 @@ impl<O: IsA<PrintContext>> PrintContextExt for O {
         unsafe {
             ffi::gtk_print_context_set_cairo_context(self.to_glib_none().0, mut_override(cr.to_glib_none().0), dpi_x, dpi_y);
         }
+    }
+}
+
+impl fmt::Display for PrintContext {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "PrintContext")
     }
 }

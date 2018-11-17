@@ -14,6 +14,7 @@ use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
+use std::fmt;
 use std::mem;
 use std::mem::transmute;
 use std::ptr;
@@ -129,4 +130,10 @@ unsafe extern "C" fn tag_removed_trampoline<P>(this: *mut ffi::GtkTextTagTable, 
 where P: IsA<TextTagTable> {
     let f: &&(Fn(&P, &TextTag) + 'static) = transmute(f);
     f(&TextTagTable::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(tag))
+}
+
+impl fmt::Display for TextTagTable {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "TextTagTable")
+    }
 }

@@ -10,6 +10,7 @@ use glib::object::IsA;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
+use std::fmt;
 use std::mem;
 use std::ptr;
 
@@ -30,5 +31,11 @@ impl<O: IsA<Bin>> BinExt for O {
         unsafe {
             from_glib_none(ffi::gtk_bin_get_child(self.to_glib_none().0))
         }
+    }
+}
+
+impl fmt::Display for Bin {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Bin")
     }
 }

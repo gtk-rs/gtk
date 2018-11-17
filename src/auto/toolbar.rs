@@ -25,6 +25,7 @@ use gobject_ffi;
 use libc;
 use signal::Inhibit;
 use std::boxed::Box as Box_;
+use std::fmt;
 use std::mem;
 use std::mem::transmute;
 use std::ptr;
@@ -359,4 +360,10 @@ unsafe extern "C" fn notify_toolbar_style_trampoline<P>(this: *mut ffi::GtkToolb
 where P: IsA<Toolbar> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&Toolbar::from_glib_borrow(this).downcast_unchecked())
+}
+
+impl fmt::Display for Toolbar {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Toolbar")
+    }
 }

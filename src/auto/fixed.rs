@@ -11,6 +11,7 @@ use glib::object::IsA;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
+use std::fmt;
 use std::mem;
 use std::ptr;
 
@@ -54,5 +55,11 @@ impl<O: IsA<Fixed>> FixedExt for O {
         unsafe {
             ffi::gtk_fixed_put(self.to_glib_none().0, widget.to_glib_none().0, x, y);
         }
+    }
+}
+
+impl fmt::Display for Fixed {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Fixed")
     }
 }

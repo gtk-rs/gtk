@@ -9,6 +9,7 @@ use glib::object::IsA;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
+use std::fmt;
 use std::mem;
 use std::ptr;
 
@@ -37,5 +38,11 @@ impl<O: IsA<TreeDragDest>> TreeDragDestExt for O {
         unsafe {
             from_glib(ffi::gtk_tree_drag_dest_row_drop_possible(self.to_glib_none().0, dest_path.to_glib_none_mut().0, selection_data.to_glib_none_mut().0))
         }
+    }
+}
+
+impl fmt::Display for TreeDragDest {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "TreeDragDest")
     }
 }

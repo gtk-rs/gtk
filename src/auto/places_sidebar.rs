@@ -27,6 +27,7 @@ use gobject_ffi;
 #[cfg(any(feature = "v3_10", feature = "dox"))]
 use libc;
 use std::boxed::Box as Box_;
+use std::fmt;
 use std::mem;
 use std::mem::transmute;
 use std::ptr;
@@ -863,4 +864,10 @@ unsafe extern "C" fn notify_show_trash_trampoline<P>(this: *mut ffi::GtkPlacesSi
 where P: IsA<PlacesSidebar> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&PlacesSidebar::from_glib_borrow(this).downcast_unchecked())
+}
+
+impl fmt::Display for PlacesSidebar {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "PlacesSidebar")
+    }
 }

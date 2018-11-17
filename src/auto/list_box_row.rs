@@ -20,6 +20,7 @@ use glib_ffi;
 use gobject_ffi;
 #[cfg(any(feature = "v3_10", feature = "dox"))]
 use std::boxed::Box as Box_;
+use std::fmt;
 use std::mem;
 #[cfg(any(feature = "v3_10", feature = "dox"))]
 use std::mem::transmute;
@@ -209,4 +210,10 @@ unsafe extern "C" fn notify_selectable_trampoline<P>(this: *mut ffi::GtkListBoxR
 where P: IsA<ListBoxRow> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
     f(&ListBoxRow::from_glib_borrow(this).downcast_unchecked())
+}
+
+impl fmt::Display for ListBoxRow {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "ListBoxRow")
+    }
 }

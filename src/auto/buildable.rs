@@ -9,6 +9,7 @@ use glib::object::IsA;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
+use std::fmt;
 use std::mem;
 use std::ptr;
 
@@ -81,5 +82,11 @@ impl<O: IsA<Buildable>> BuildableExt for O {
         unsafe {
             ffi::gtk_buildable_set_buildable_property(self.to_glib_none().0, builder.to_glib_none().0, name.to_glib_none().0, value.to_glib_none().0);
         }
+    }
+}
+
+impl fmt::Display for Buildable {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Buildable")
     }
 }

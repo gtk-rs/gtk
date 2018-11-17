@@ -14,6 +14,7 @@ use glib::object::IsA;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
+use std::fmt;
 use std::mem;
 use std::ptr;
 
@@ -104,4 +105,10 @@ impl<O: IsA<Overlay> + IsA<Container>> OverlayExt for O {
     //fn connect_get_child_position<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
     //    Out allocation: Gdk.Rectangle
     //}
+}
+
+impl fmt::Display for Overlay {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Overlay")
+    }
 }

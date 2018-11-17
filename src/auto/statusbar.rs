@@ -18,6 +18,7 @@ use glib_ffi;
 use gobject_ffi;
 use libc;
 use std::boxed::Box as Box_;
+use std::fmt;
 use std::mem;
 use std::mem::transmute;
 use std::ptr;
@@ -127,4 +128,10 @@ unsafe extern "C" fn text_pushed_trampoline<P>(this: *mut ffi::GtkStatusbar, con
 where P: IsA<Statusbar> {
     let f: &&(Fn(&P, u32, &str) + 'static) = transmute(f);
     f(&Statusbar::from_glib_borrow(this).downcast_unchecked(), context_id, &String::from_glib_none(text))
+}
+
+impl fmt::Display for Statusbar {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Statusbar")
+    }
 }

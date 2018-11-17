@@ -26,6 +26,7 @@ use std;
 #[cfg(feature = "futures")]
 #[cfg(any(feature = "v3_8", feature = "dox"))]
 use std::boxed::Box as Box_;
+use std::fmt;
 use std::mem;
 use std::ptr;
 
@@ -357,5 +358,11 @@ impl<O: IsA<IconInfo> + IsA<glib::object::Object> + Clone + 'static> IconInfoExt
         unsafe {
             ffi::gtk_icon_info_set_raw_coordinates(self.to_glib_none().0, raw_coordinates.to_glib());
         }
+    }
+}
+
+impl fmt::Display for IconInfo {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "IconInfo")
     }
 }

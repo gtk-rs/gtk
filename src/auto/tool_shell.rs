@@ -15,6 +15,7 @@ use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use pango;
+use std::fmt;
 use std::mem;
 use std::ptr;
 
@@ -99,5 +100,11 @@ impl<O: IsA<ToolShell>> ToolShellExt for O {
         unsafe {
             ffi::gtk_tool_shell_rebuild_menu(self.to_glib_none().0);
         }
+    }
+}
+
+impl fmt::Display for ToolShell {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "ToolShell")
     }
 }

@@ -14,6 +14,7 @@ use glib::object::IsA;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
+use std::fmt;
 use std::mem;
 use std::ptr;
 
@@ -116,5 +117,11 @@ impl<O: IsA<TreeModelFilter> + IsA<glib::object::Object>> TreeModelFilterExt for
             gobject_ffi::g_object_get_property(self.to_glib_none().0, "child-model".to_glib_none().0, value.to_glib_none_mut().0);
             value.get()
         }
+    }
+}
+
+impl fmt::Display for TreeModelFilter {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "TreeModelFilter")
     }
 }
