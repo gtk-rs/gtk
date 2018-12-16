@@ -695,6 +695,9 @@ status = "generate"
         [[object.function.parameter]]
         name = "iter"
         const = true
+    [[object.function]]
+    name = "set_active"
+    ignore = true
 
 [[object]]
 name = "Gtk.Container"

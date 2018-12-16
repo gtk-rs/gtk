@@ -15,6 +15,7 @@ pub use cell_renderer_pixbuf::CellRendererPixbufExtManual;
 pub use clipboard::ClipboardExtManual;
 pub use color_button::ColorButtonExtManual;
 pub use color_chooser::ColorChooserExtManual;
+pub use combo_box::ComboBoxExtManual;
 pub use dialog::DialogExtManual;
 pub use drag_context::DragContextExtManual;
 pub use entry_completion::EntryCompletionExtManual;

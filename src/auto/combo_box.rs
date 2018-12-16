@@ -136,8 +136,6 @@ pub trait ComboBoxExt {
 
     fn popup_for_device<P: IsA<gdk::Device>>(&self, device: &P);
 
-    fn set_active(&self, index_: i32);
-
     fn set_active_id<'a, P: Into<Option<&'a str>>>(&self, active_id: P) -> bool;
 
     fn set_active_iter<'a, P: Into<Option<&'a TreeIter>>>(&self, iter: P);
@@ -169,6 +167,8 @@ pub trait ComboBoxExt {
     fn set_title(&self, title: &str);
 
     fn set_wrap_width(&self, width: i32);
+
+    fn set_property_active(&self, active: i32);
 
     fn get_property_cell_area(&self) -> Option<CellArea>;
 
@@ -353,12 +353,6 @@ impl<O: IsA<ComboBox> + IsA<glib::object::Object> + glib::object::ObjectExt> Com
         }
     }
 
-    fn set_active(&self, index_: i32) {
-        unsafe {
-            ffi::gtk_combo_box_set_active(self.to_glib_none().0, index_);
-        }
-    }
-
     fn set_active_id<'a, P: Into<Option<&'a str>>>(&self, active_id: P) -> bool {
         let active_id = active_id.into();
         let active_id = active_id.to_glib_none();
@@ -444,6 +438,12 @@ impl<O: IsA<ComboBox> + IsA<glib::object::Object> + glib::object::ObjectExt> Com
     fn set_wrap_width(&self, width: i32) {
         unsafe {
             ffi::gtk_combo_box_set_wrap_width(self.to_glib_none().0, width);
+        }
+    }
+
+    fn set_property_active(&self, active: i32) {
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0, "active".to_glib_none().0, Value::from(&active).to_glib_none().0);
         }
     }
 
