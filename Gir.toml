@@ -1390,6 +1390,11 @@ status = "generate"
         name = "selection_data"
         const = true
     [[object.function]]
+    name = "set"
+        [[object.function.parameter]]
+        name = "selection_data"
+        const = true
+    [[object.function]]
     name = "set_uris"
         [[object.function.parameter]]
         name = "selection_data"
