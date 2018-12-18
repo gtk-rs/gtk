@@ -92,8 +92,6 @@ impl Default for ComboBox {
 }
 
 pub trait ComboBoxExt {
-    fn get_active(&self) -> i32;
-
     fn get_active_id(&self) -> Option<String>;
 
     fn get_active_iter(&self) -> Option<TreeIter>;
@@ -168,6 +166,8 @@ pub trait ComboBoxExt {
 
     fn set_wrap_width(&self, width: i32);
 
+    fn get_property_active(&self) -> i32;
+
     fn set_property_active(&self, active: i32);
 
     fn get_property_cell_area(&self) -> Option<CellArea>;
@@ -232,12 +232,6 @@ pub trait ComboBoxExt {
 }
 
 impl<O: IsA<ComboBox> + IsA<glib::object::Object> + glib::object::ObjectExt> ComboBoxExt for O {
-    fn get_active(&self) -> i32 {
-        unsafe {
-            ffi::gtk_combo_box_get_active(self.to_glib_none().0)
-        }
-    }
-
     fn get_active_id(&self) -> Option<String> {
         unsafe {
             from_glib_none(ffi::gtk_combo_box_get_active_id(self.to_glib_none().0))
@@ -438,6 +432,14 @@ impl<O: IsA<ComboBox> + IsA<glib::object::Object> + glib::object::ObjectExt> Com
     fn set_wrap_width(&self, width: i32) {
         unsafe {
             ffi::gtk_combo_box_set_wrap_width(self.to_glib_none().0, width);
+        }
+    }
+
+    fn get_property_active(&self) -> i32 {
+        unsafe {
+            let mut value = Value::from_type(<i32 as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0, "active".to_glib_none().0, value.to_glib_none_mut().0);
+            value.get().unwrap()
         }
     }
 

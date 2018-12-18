@@ -698,6 +698,9 @@ status = "generate"
     [[object.function]]
     name = "set_active"
     ignore = true
+    [[object.function]]
+    name = "get_active"
+    ignore = true
 
 [[object]]
 name = "Gtk.Container"
