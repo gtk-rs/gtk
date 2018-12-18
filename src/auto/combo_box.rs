@@ -166,10 +166,6 @@ pub trait ComboBoxExt {
 
     fn set_wrap_width(&self, width: i32);
 
-    fn get_property_active(&self) -> i32;
-
-    fn set_property_active(&self, active: i32);
-
     fn get_property_cell_area(&self) -> Option<CellArea>;
 
     fn get_property_has_frame(&self) -> bool;
@@ -432,20 +428,6 @@ impl<O: IsA<ComboBox> + IsA<glib::object::Object> + glib::object::ObjectExt> Com
     fn set_wrap_width(&self, width: i32) {
         unsafe {
             ffi::gtk_combo_box_set_wrap_width(self.to_glib_none().0, width);
-        }
-    }
-
-    fn get_property_active(&self) -> i32 {
-        unsafe {
-            let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "active".to_glib_none().0, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_active(&self, active: i32) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "active".to_glib_none().0, Value::from(&active).to_glib_none().0);
         }
     }
 

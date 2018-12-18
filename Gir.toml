@@ -701,6 +701,10 @@ status = "generate"
     [[object.function]]
     name = "get_active"
     ignore = true
+    [[object.property]]
+    name = "active"
+    #manual Option
+    generate = ["notify"]
 
 [[object]]
 name = "Gtk.Container"
