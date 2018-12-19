@@ -227,6 +227,7 @@ mod cell_renderer_pixbuf;
 mod clipboard;
 mod color_button;
 mod color_chooser;
+mod combo_box;
 mod dialog;
 mod drag_context;
 mod entry_buffer;

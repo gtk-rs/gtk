@@ -92,8 +92,6 @@ impl Default for ComboBox {
 }
 
 pub trait ComboBoxExt {
-    fn get_active(&self) -> i32;
-
     fn get_active_id(&self) -> Option<String>;
 
     fn get_active_iter(&self) -> Option<TreeIter>;
@@ -135,8 +133,6 @@ pub trait ComboBoxExt {
     fn popup(&self);
 
     fn popup_for_device<P: IsA<gdk::Device>>(&self, device: &P);
-
-    fn set_active(&self, index_: i32);
 
     fn set_active_id<'a, P: Into<Option<&'a str>>>(&self, active_id: P) -> bool;
 
@@ -232,12 +228,6 @@ pub trait ComboBoxExt {
 }
 
 impl<O: IsA<ComboBox> + IsA<glib::object::Object> + glib::object::ObjectExt> ComboBoxExt for O {
-    fn get_active(&self) -> i32 {
-        unsafe {
-            ffi::gtk_combo_box_get_active(self.to_glib_none().0)
-        }
-    }
-
     fn get_active_id(&self) -> Option<String> {
         unsafe {
             from_glib_none(ffi::gtk_combo_box_get_active_id(self.to_glib_none().0))
@@ -350,12 +340,6 @@ impl<O: IsA<ComboBox> + IsA<glib::object::Object> + glib::object::ObjectExt> Com
     fn popup_for_device<P: IsA<gdk::Device>>(&self, device: &P) {
         unsafe {
             ffi::gtk_combo_box_popup_for_device(self.to_glib_none().0, device.to_glib_none().0);
-        }
-    }
-
-    fn set_active(&self, index_: i32) {
-        unsafe {
-            ffi::gtk_combo_box_set_active(self.to_glib_none().0, index_);
         }
     }
 

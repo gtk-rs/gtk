@@ -695,6 +695,16 @@ status = "generate"
         [[object.function.parameter]]
         name = "iter"
         const = true
+    [[object.function]]
+    name = "set_active"
+    ignore = true
+    [[object.function]]
+    name = "get_active"
+    ignore = true
+    [[object.property]]
+    name = "active"
+    #manual Option
+    generate = ["notify"]
 
 [[object]]
 name = "Gtk.Container"
