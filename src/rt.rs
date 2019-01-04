@@ -100,7 +100,7 @@ pub fn init() -> Result<(), glib::BoolError> {
             Ok(())
         }
         else {
-            Err(glib::BoolError("Failed to initialize GTK"))
+            Err(glib_bool_error!("Failed to initialize GTK"))
         }
     }
 }

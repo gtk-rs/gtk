@@ -12,8 +12,9 @@ impl Application {
         try!(rt::init());
         unsafe {
             Option::from_glib_full(
-                ffi::gtk_application_new(application_id.into().to_glib_none().0, flags.to_glib()))
-                .ok_or(glib::BoolError("Failed to create application"))
+                ffi::gtk_application_new(application_id.into().to_glib_none().0, flags.to_glib())
+            )
+            .ok_or_else(|| glib_bool_error!("Failed to create application"))
         }
     }
 
@@ -23,8 +24,9 @@ impl Application {
         try!(rt::init());
         unsafe {
             Option::from_glib_full(
-                ffi::gtk_application_new(application_id.to_glib_none().0, flags.to_glib()))
-                .ok_or(glib::BoolError("Failed to create application"))
+                ffi::gtk_application_new(application_id.to_glib_none().0, flags.to_glib())
+            )
+            .ok_or_else(|| glib_bool_error!("Failed to create application"))
         }
     }
 }
