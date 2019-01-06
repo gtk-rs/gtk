@@ -173,8 +173,6 @@ pub trait TextBufferExt {
 
     fn register_deserialize_tagset<'a, P: Into<Option<&'a str>>>(&self, tagset_name: P) -> gdk::Atom;
 
-    //fn register_serialize_format(&self, mime_type: &str, function: /*Unknown conversion*//*Unimplemented*/TextBufferSerializeFunc, user_data_destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) -> Option<gdk::Atom>;
-
     fn register_serialize_tagset<'a, P: Into<Option<&'a str>>>(&self, tagset_name: P) -> gdk::Atom;
 
     fn remove_all_tags(&self, start: &TextIter, end: &TextIter);
@@ -632,10 +630,6 @@ impl<O: IsA<TextBuffer> + IsA<glib::object::Object>> TextBufferExt for O {
             from_glib_none(ffi::gtk_text_buffer_register_deserialize_tagset(self.to_glib_none().0, tagset_name.0))
         }
     }
-
-    //fn register_serialize_format(&self, mime_type: &str, function: /*Unknown conversion*//*Unimplemented*/TextBufferSerializeFunc, user_data_destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) -> Option<gdk::Atom> {
-    //    unsafe { TODO: call ffi::gtk_text_buffer_register_serialize_format() }
-    //}
 
     fn register_serialize_tagset<'a, P: Into<Option<&'a str>>>(&self, tagset_name: P) -> gdk::Atom {
         let tagset_name = tagset_name.into();
