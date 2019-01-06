@@ -678,6 +678,22 @@ status = "generate"
     name = "set_can_store"
     #array with size
     ignore = true
+    [[object.function]]
+    name = "request_targets"
+    #array with size
+    ignore = true
+    [[object.function]]
+    name = "request_uris"
+    #array with size
+    ignore = true
+    [[object.function]]
+    name = "set_with_data"
+    #array with size
+    ignore = true
+    [[object.function]]
+    name = "set_with_owner"
+    #array with size
+    ignore = true
 
 [[object]]
 name = "Gtk.ColorChooser"
@@ -1505,6 +1521,9 @@ status = "generate"
         const = true
     [[object.signal]]
     name = "insert-text"
+    ignore = true
+    [[object.function]]
+    name = "register_serialize_format"
     ignore = true
 
 [[object]]

@@ -64,19 +64,11 @@ pub trait ClipboardExt {
 
     //fn request_rich_text(&self, buffer: &TextBuffer, callback: /*Unknown conversion*//*Unimplemented*/ClipboardRichTextReceivedFunc);
 
-    //fn request_targets(&self, callback: /*Unknown conversion*//*Unimplemented*/ClipboardTargetsReceivedFunc);
-
     //fn request_text(&self, callback: /*Unknown conversion*//*Unimplemented*/ClipboardTextReceivedFunc);
-
-    //fn request_uris(&self, callback: /*Unknown conversion*//*Unimplemented*/ClipboardURIReceivedFunc);
 
     fn set_image(&self, pixbuf: &gdk_pixbuf::Pixbuf);
 
     fn set_text(&self, text: &str);
-
-    //fn set_with_data(&self, targets: &[&TargetEntry], get_func: /*Unknown conversion*//*Unimplemented*/ClipboardGetFunc, clear_func: /*Unknown conversion*//*Unimplemented*/ClipboardClearFunc) -> bool;
-
-    //fn set_with_owner<P: IsA<glib::Object>>(&self, targets: &[&TargetEntry], get_func: /*Unknown conversion*//*Unimplemented*/ClipboardGetFunc, clear_func: /*Unknown conversion*//*Unimplemented*/ClipboardClearFunc, owner: &P) -> bool;
 
     fn store(&self);
 
@@ -143,16 +135,8 @@ impl<O: IsA<Clipboard>> ClipboardExt for O {
     //    unsafe { TODO: call ffi::gtk_clipboard_request_rich_text() }
     //}
 
-    //fn request_targets(&self, callback: /*Unknown conversion*//*Unimplemented*/ClipboardTargetsReceivedFunc) {
-    //    unsafe { TODO: call ffi::gtk_clipboard_request_targets() }
-    //}
-
     //fn request_text(&self, callback: /*Unknown conversion*//*Unimplemented*/ClipboardTextReceivedFunc) {
     //    unsafe { TODO: call ffi::gtk_clipboard_request_text() }
-    //}
-
-    //fn request_uris(&self, callback: /*Unknown conversion*//*Unimplemented*/ClipboardURIReceivedFunc) {
-    //    unsafe { TODO: call ffi::gtk_clipboard_request_uris() }
     //}
 
     fn set_image(&self, pixbuf: &gdk_pixbuf::Pixbuf) {
@@ -167,14 +151,6 @@ impl<O: IsA<Clipboard>> ClipboardExt for O {
             ffi::gtk_clipboard_set_text(self.to_glib_none().0, text.to_glib_none().0, len);
         }
     }
-
-    //fn set_with_data(&self, targets: &[&TargetEntry], get_func: /*Unknown conversion*//*Unimplemented*/ClipboardGetFunc, clear_func: /*Unknown conversion*//*Unimplemented*/ClipboardClearFunc) -> bool {
-    //    unsafe { TODO: call ffi::gtk_clipboard_set_with_data() }
-    //}
-
-    //fn set_with_owner<P: IsA<glib::Object>>(&self, targets: &[&TargetEntry], get_func: /*Unknown conversion*//*Unimplemented*/ClipboardGetFunc, clear_func: /*Unknown conversion*//*Unimplemented*/ClipboardClearFunc, owner: &P) -> bool {
-    //    unsafe { TODO: call ffi::gtk_clipboard_set_with_owner() }
-    //}
 
     fn store(&self) {
         unsafe {
