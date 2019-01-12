@@ -12,19 +12,15 @@ use Window;
 use ffi;
 use gio;
 use gio_ffi;
-use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct ApplicationWindow(Object<ffi::GtkApplicationWindow, ffi::GtkApplicationWindowClass>): [
@@ -42,7 +38,7 @@ glib_wrapper! {
     }
 }
 
-pub trait ApplicationWindowExt {
+pub trait ApplicationWindowExt: 'static {
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn get_help_overlay(&self) -> Option<ShortcutsWindow>;
 
@@ -59,7 +55,7 @@ pub trait ApplicationWindowExt {
     fn connect_property_show_menubar_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<ApplicationWindow> + IsA<glib::object::Object>> ApplicationWindowExt for O {
+impl<O: IsA<ApplicationWindow>> ApplicationWindowExt for O {
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn get_help_overlay(&self) -> Option<ShortcutsWindow> {
         unsafe {
@@ -98,7 +94,7 @@ impl<O: IsA<ApplicationWindow> + IsA<glib::object::Object>> ApplicationWindowExt
     fn connect_property_show_menubar_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::show-menubar",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::show-menubar\0".as_ptr() as *const _,
                 transmute(notify_show_menubar_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

@@ -11,11 +11,7 @@ use Widget;
 use ffi;
 use glib::object::Downcast;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use std::fmt;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Scrollbar(Object<ffi::GtkScrollbar, ffi::GtkScrollbarClass>): Range, Widget, Buildable, Orientable;

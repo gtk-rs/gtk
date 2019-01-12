@@ -19,20 +19,18 @@ use cairo;
 use ffi;
 use gdk;
 use gdk_ffi;
-use glib;
+use glib::GString;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct CellArea(Object<ffi::GtkCellArea, ffi::GtkCellAreaClass>): Buildable, CellLayout;
@@ -42,7 +40,7 @@ glib_wrapper! {
     }
 }
 
-pub trait CellAreaExt {
+pub trait CellAreaExt: 'static {
     fn activate<P: IsA<Widget>>(&self, context: &CellAreaContext, widget: &P, cell_area: &gdk::Rectangle, flags: CellRendererState, edit_only: bool) -> bool;
 
     fn activate_cell<P: IsA<Widget>, Q: IsA<CellRenderer>>(&self, widget: &P, renderer: &Q, event: &gdk::Event, cell_area: &gdk::Rectangle, flags: CellRendererState) -> bool;
@@ -86,7 +84,7 @@ pub trait CellAreaExt {
 
     fn get_cell_at_position<P: IsA<Widget>>(&self, context: &CellAreaContext, widget: &P, cell_area: &gdk::Rectangle, x: i32, y: i32) -> (CellRenderer, gdk::Rectangle);
 
-    fn get_current_path_string(&self) -> Option<String>;
+    fn get_current_path_string(&self) -> Option<GString>;
 
     fn get_edit_widget(&self) -> Option<CellEditable>;
 
@@ -143,7 +141,7 @@ pub trait CellAreaExt {
     fn connect_property_focus_cell_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<CellArea> + IsA<glib::object::Object>> CellAreaExt for O {
+impl<O: IsA<CellArea>> CellAreaExt for O {
     fn activate<P: IsA<Widget>>(&self, context: &CellAreaContext, widget: &P, cell_area: &gdk::Rectangle, flags: CellRendererState, edit_only: bool) -> bool {
         unsafe {
             from_glib(ffi::gtk_cell_area_activate(self.to_glib_none().0, context.to_glib_none().0, widget.to_glib_none().0, cell_area.to_glib_none().0, flags.to_glib(), edit_only.to_glib()))
@@ -261,7 +259,7 @@ impl<O: IsA<CellArea> + IsA<glib::object::Object>> CellAreaExt for O {
         }
     }
 
-    fn get_current_path_string(&self) -> Option<String> {
+    fn get_current_path_string(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_cell_area_get_current_path_string(self.to_glib_none().0))
         }
@@ -407,7 +405,7 @@ impl<O: IsA<CellArea> + IsA<glib::object::Object>> CellAreaExt for O {
     fn connect_add_editable<F: Fn(&Self, &CellRenderer, &CellEditable, &gdk::Rectangle, TreePath) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &CellRenderer, &CellEditable, &gdk::Rectangle, TreePath) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "add-editable",
+            connect_raw(self.to_glib_none().0 as *mut _, b"add-editable\0".as_ptr() as *const _,
                 transmute(add_editable_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -415,7 +413,7 @@ impl<O: IsA<CellArea> + IsA<glib::object::Object>> CellAreaExt for O {
     fn connect_apply_attributes<F: Fn(&Self, &TreeModel, &TreeIter, bool, bool) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &TreeModel, &TreeIter, bool, bool) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "apply-attributes",
+            connect_raw(self.to_glib_none().0 as *mut _, b"apply-attributes\0".as_ptr() as *const _,
                 transmute(apply_attributes_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -423,7 +421,7 @@ impl<O: IsA<CellArea> + IsA<glib::object::Object>> CellAreaExt for O {
     fn connect_focus_changed<F: Fn(&Self, &CellRenderer, TreePath) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &CellRenderer, TreePath) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "focus-changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"focus-changed\0".as_ptr() as *const _,
                 transmute(focus_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -431,7 +429,7 @@ impl<O: IsA<CellArea> + IsA<glib::object::Object>> CellAreaExt for O {
     fn connect_remove_editable<F: Fn(&Self, &CellRenderer, &CellEditable) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &CellRenderer, &CellEditable) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "remove-editable",
+            connect_raw(self.to_glib_none().0 as *mut _, b"remove-editable\0".as_ptr() as *const _,
                 transmute(remove_editable_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -439,7 +437,7 @@ impl<O: IsA<CellArea> + IsA<glib::object::Object>> CellAreaExt for O {
     fn connect_property_edit_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::edit-widget",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::edit-widget\0".as_ptr() as *const _,
                 transmute(notify_edit_widget_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -447,7 +445,7 @@ impl<O: IsA<CellArea> + IsA<glib::object::Object>> CellAreaExt for O {
     fn connect_property_edited_cell_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::edited-cell",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::edited-cell\0".as_ptr() as *const _,
                 transmute(notify_edited_cell_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -455,7 +453,7 @@ impl<O: IsA<CellArea> + IsA<glib::object::Object>> CellAreaExt for O {
     fn connect_property_focus_cell_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::focus-cell",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::focus-cell\0".as_ptr() as *const _,
                 transmute(notify_focus_cell_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

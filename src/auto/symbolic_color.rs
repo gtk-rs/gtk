@@ -5,12 +5,9 @@
 use StyleProperties;
 use ffi;
 use gdk;
+use glib::GString;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use std::fmt;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -84,7 +81,7 @@ impl SymbolicColor {
     }
 
     #[cfg_attr(feature = "v3_8", deprecated)]
-    fn to_string(&self) -> String {
+    fn to_string(&self) -> GString {
         unsafe {
             from_glib_full(ffi::gtk_symbolic_color_to_string(self.to_glib_none().0))
         }

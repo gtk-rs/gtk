@@ -12,21 +12,17 @@ use SizeGroup;
 use ToolbarStyle;
 use Widget;
 use ffi;
-use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use pango;
 use signal::Inhibit;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct ToolItem(Object<ffi::GtkToolItem, ffi::GtkToolItemClass>): Bin, Container, Widget, Buildable;
@@ -51,7 +47,7 @@ impl Default for ToolItem {
     }
 }
 
-pub trait ToolItemExt {
+pub trait ToolItemExt: 'static {
     fn get_ellipsize_mode(&self) -> pango::EllipsizeMode;
 
     fn get_expand(&self) -> bool;
@@ -113,7 +109,7 @@ pub trait ToolItemExt {
     fn connect_property_visible_vertical_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<ToolItem> + IsA<glib::object::Object>> ToolItemExt for O {
+impl<O: IsA<ToolItem>> ToolItemExt for O {
     fn get_ellipsize_mode(&self) -> pango::EllipsizeMode {
         unsafe {
             from_glib(ffi::gtk_tool_item_get_ellipsize_mode(self.to_glib_none().0))
@@ -269,7 +265,7 @@ impl<O: IsA<ToolItem> + IsA<glib::object::Object>> ToolItemExt for O {
     fn connect_create_menu_proxy<F: Fn(&Self) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "create-menu-proxy",
+            connect_raw(self.to_glib_none().0 as *mut _, b"create-menu-proxy\0".as_ptr() as *const _,
                 transmute(create_menu_proxy_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -277,7 +273,7 @@ impl<O: IsA<ToolItem> + IsA<glib::object::Object>> ToolItemExt for O {
     fn connect_toolbar_reconfigured<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "toolbar-reconfigured",
+            connect_raw(self.to_glib_none().0 as *mut _, b"toolbar-reconfigured\0".as_ptr() as *const _,
                 transmute(toolbar_reconfigured_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -285,7 +281,7 @@ impl<O: IsA<ToolItem> + IsA<glib::object::Object>> ToolItemExt for O {
     fn connect_property_is_important_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::is-important",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::is-important\0".as_ptr() as *const _,
                 transmute(notify_is_important_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -293,7 +289,7 @@ impl<O: IsA<ToolItem> + IsA<glib::object::Object>> ToolItemExt for O {
     fn connect_property_visible_horizontal_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::visible-horizontal",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::visible-horizontal\0".as_ptr() as *const _,
                 transmute(notify_visible_horizontal_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -301,7 +297,7 @@ impl<O: IsA<ToolItem> + IsA<glib::object::Object>> ToolItemExt for O {
     fn connect_property_visible_vertical_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::visible-vertical",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::visible-vertical\0".as_ptr() as *const _,
                 transmute(notify_visible_vertical_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

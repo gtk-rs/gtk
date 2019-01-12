@@ -10,21 +10,18 @@ use Orientable;
 use Orientation;
 use Widget;
 use ffi;
-use glib;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct ButtonBox(Object<ffi::GtkButtonBox, ffi::GtkButtonBoxClass>): Box, Container, Widget, Buildable, Orientable;
@@ -43,7 +40,7 @@ impl ButtonBox {
     }
 }
 
-pub trait ButtonBoxExt {
+pub trait ButtonBoxExt: 'static {
     fn get_child_non_homogeneous<P: IsA<Widget>>(&self, child: &P) -> bool;
 
     fn get_child_secondary<P: IsA<Widget>>(&self, child: &P) -> bool;
@@ -63,7 +60,7 @@ pub trait ButtonBoxExt {
     fn connect_property_layout_style_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<ButtonBox> + IsA<glib::object::Object>> ButtonBoxExt for O {
+impl<O: IsA<ButtonBox>> ButtonBoxExt for O {
     fn get_child_non_homogeneous<P: IsA<Widget>>(&self, child: &P) -> bool {
         unsafe {
             from_glib(ffi::gtk_button_box_get_child_non_homogeneous(self.to_glib_none().0, child.to_glib_none().0))
@@ -103,21 +100,21 @@ impl<O: IsA<ButtonBox> + IsA<glib::object::Object>> ButtonBoxExt for O {
     fn get_property_layout_style(&self) -> ButtonBoxStyle {
         unsafe {
             let mut value = Value::from_type(<ButtonBoxStyle as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "layout-style".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"layout-style\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_layout_style(&self, layout_style: ButtonBoxStyle) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "layout-style".to_glib_none().0, Value::from(&layout_style).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"layout-style\0".as_ptr() as *const _, Value::from(&layout_style).to_glib_none().0);
         }
     }
 
     fn connect_property_layout_style_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::layout-style",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::layout-style\0".as_ptr() as *const _,
                 transmute(notify_layout_style_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

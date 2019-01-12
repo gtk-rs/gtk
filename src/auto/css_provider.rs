@@ -7,17 +7,15 @@ use Error;
 use StyleProvider;
 use ffi;
 use gio;
-use glib;
+use glib::GString;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
 use std::ptr;
 
@@ -60,7 +58,7 @@ impl Default for CssProvider {
     }
 }
 
-pub trait CssProviderExt {
+pub trait CssProviderExt: 'static {
     fn load_from_data(&self, data: &[u8]) -> Result<(), Error>;
 
     fn load_from_file<P: IsA<gio::File>>(&self, file: &P) -> Result<(), Error>;
@@ -70,12 +68,12 @@ pub trait CssProviderExt {
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn load_from_resource(&self, resource_path: &str);
 
-    fn to_string(&self) -> String;
+    fn to_string(&self) -> GString;
 
     fn connect_parsing_error<F: Fn(&Self, &CssSection, &Error) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<CssProvider> + IsA<glib::object::Object>> CssProviderExt for O {
+impl<O: IsA<CssProvider>> CssProviderExt for O {
     fn load_from_data(&self, data: &[u8]) -> Result<(), Error> {
         let length = data.len() as isize;
         unsafe {
@@ -108,7 +106,7 @@ impl<O: IsA<CssProvider> + IsA<glib::object::Object>> CssProviderExt for O {
         }
     }
 
-    fn to_string(&self) -> String {
+    fn to_string(&self) -> GString {
         unsafe {
             from_glib_full(ffi::gtk_css_provider_to_string(self.to_glib_none().0))
         }
@@ -117,7 +115,7 @@ impl<O: IsA<CssProvider> + IsA<glib::object::Object>> CssProviderExt for O {
     fn connect_parsing_error<F: Fn(&Self, &CssSection, &Error) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &CssSection, &Error) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "parsing-error",
+            connect_raw(self.to_glib_none().0 as *mut _, b"parsing-error\0".as_ptr() as *const _,
                 transmute(parsing_error_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

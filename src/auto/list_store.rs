@@ -11,11 +11,7 @@ use TreeSortable;
 use ffi;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use std::fmt;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct ListStore(Object<ffi::GtkListStore, ffi::GtkListStoreClass>): Buildable, TreeDragDest, TreeDragSource, TreeModel, TreeSortable;
@@ -35,7 +31,7 @@ impl ListStore {
     //}
 }
 
-pub trait GtkListStoreExt {
+pub trait GtkListStoreExt: 'static {
     fn append(&self) -> TreeIter;
 
     fn clear(&self);

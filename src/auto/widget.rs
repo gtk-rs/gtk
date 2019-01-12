@@ -33,12 +33,14 @@ use gdk_ffi;
 use gdk_pixbuf;
 use gio;
 use glib;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
+use glib::object::ObjectExt;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
@@ -49,7 +51,6 @@ use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Widget(Object<ffi::GtkWidget, ffi::GtkWidgetClass>): Buildable;
@@ -95,7 +96,7 @@ impl Widget {
     }
 }
 
-pub trait WidgetExt {
+pub trait WidgetExt: 'static {
     fn activate(&self) -> bool;
 
     fn add_accelerator(&self, accel_signal: &str, accel_group: &AccelGroup, accel_key: u32, accel_mods: gdk::ModifierType, accel_flags: AccelFlags);
@@ -222,7 +223,7 @@ pub trait WidgetExt {
     fn get_clipboard(&self, selection: &gdk::Atom) -> Clipboard;
 
     #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_composite_name(&self) -> Option<String>;
+    fn get_composite_name(&self) -> Option<GString>;
 
     fn get_device_enabled<P: IsA<gdk::Device>>(&self, device: &P) -> bool;
 
@@ -276,7 +277,7 @@ pub trait WidgetExt {
 
     fn get_modifier_mask(&self, intent: gdk::ModifierIntent) -> gdk::ModifierType;
 
-    fn get_name(&self) -> Option<String>;
+    fn get_name(&self) -> Option<GString>;
 
     fn get_no_show_all(&self) -> bool;
 
@@ -332,9 +333,9 @@ pub trait WidgetExt {
 
     fn get_template_child(&self, widget_type: glib::types::Type, name: &str) -> Option<glib::Object>;
 
-    fn get_tooltip_markup(&self) -> Option<String>;
+    fn get_tooltip_markup(&self) -> Option<GString>;
 
-    fn get_tooltip_text(&self) -> Option<String>;
+    fn get_tooltip_text(&self) -> Option<GString>;
 
     fn get_tooltip_window(&self) -> Option<Window>;
 
@@ -408,7 +409,7 @@ pub trait WidgetExt {
     fn list_accel_closures(&self) -> Vec<glib::Closure>;
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn list_action_prefixes(&self) -> Vec<String>;
+    fn list_action_prefixes(&self) -> Vec<GString>;
 
     fn list_mnemonic_labels(&self) -> Vec<Widget>;
 
@@ -873,7 +874,7 @@ pub trait WidgetExt {
     fn connect_property_window_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> WidgetExt for O {
+impl<O: IsA<Widget>> WidgetExt for O {
     fn activate(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_widget_activate(self.to_glib_none().0))
@@ -1241,7 +1242,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
         }
     }
 
-    fn get_composite_name(&self) -> Option<String> {
+    fn get_composite_name(&self) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gtk_widget_get_composite_name(self.to_glib_none().0))
         }
@@ -1385,7 +1386,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
         }
     }
 
-    fn get_name(&self) -> Option<String> {
+    fn get_name(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_widget_get_name(self.to_glib_none().0))
         }
@@ -1567,13 +1568,13 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
         }
     }
 
-    fn get_tooltip_markup(&self) -> Option<String> {
+    fn get_tooltip_markup(&self) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gtk_widget_get_tooltip_markup(self.to_glib_none().0))
         }
     }
 
-    fn get_tooltip_text(&self) -> Option<String> {
+    fn get_tooltip_text(&self) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gtk_widget_get_tooltip_text(self.to_glib_none().0))
         }
@@ -1785,7 +1786,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn list_action_prefixes(&self) -> Vec<String> {
+    fn list_action_prefixes(&self) -> Vec<GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_container(ffi::gtk_widget_list_action_prefixes(self.to_glib_none().0))
         }
@@ -2374,7 +2375,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn get_property_composite_child(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "composite-child".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"composite-child\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -2382,105 +2383,105 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn get_property_expand(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "expand".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"expand\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_expand(&self, expand: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "expand".to_glib_none().0, Value::from(&expand).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"expand\0".as_ptr() as *const _, Value::from(&expand).to_glib_none().0);
         }
     }
 
     fn get_property_has_default(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "has-default".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"has-default\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_has_default(&self, has_default: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "has-default".to_glib_none().0, Value::from(&has_default).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"has-default\0".as_ptr() as *const _, Value::from(&has_default).to_glib_none().0);
         }
     }
 
     fn get_property_has_focus(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "has-focus".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"has-focus\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_has_focus(&self, has_focus: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "has-focus".to_glib_none().0, Value::from(&has_focus).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"has-focus\0".as_ptr() as *const _, Value::from(&has_focus).to_glib_none().0);
         }
     }
 
     fn get_property_height_request(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "height-request".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"height-request\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_height_request(&self, height_request: i32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "height-request".to_glib_none().0, Value::from(&height_request).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"height-request\0".as_ptr() as *const _, Value::from(&height_request).to_glib_none().0);
         }
     }
 
     fn get_property_is_focus(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "is-focus".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"is-focus\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_is_focus(&self, is_focus: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "is-focus".to_glib_none().0, Value::from(&is_focus).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"is-focus\0".as_ptr() as *const _, Value::from(&is_focus).to_glib_none().0);
         }
     }
 
     fn get_property_margin(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "margin".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"margin\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_margin(&self, margin: i32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "margin".to_glib_none().0, Value::from(&margin).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"margin\0".as_ptr() as *const _, Value::from(&margin).to_glib_none().0);
         }
     }
 
     fn get_property_width_request(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "width-request".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"width-request\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_width_request(&self, width_request: i32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "width-request".to_glib_none().0, Value::from(&width_request).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"width-request\0".as_ptr() as *const _, Value::from(&width_request).to_glib_none().0);
         }
     }
 
     fn connect_accel_closures_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "accel-closures-changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"accel-closures-changed\0".as_ptr() as *const _,
                 transmute(accel_closures_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2488,7 +2489,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_button_press_event<F: Fn(&Self, &gdk::EventButton) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::EventButton) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "button-press-event",
+            connect_raw(self.to_glib_none().0 as *mut _, b"button-press-event\0".as_ptr() as *const _,
                 transmute(button_press_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2496,7 +2497,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_button_release_event<F: Fn(&Self, &gdk::EventButton) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::EventButton) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "button-release-event",
+            connect_raw(self.to_glib_none().0 as *mut _, b"button-release-event\0".as_ptr() as *const _,
                 transmute(button_release_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2504,7 +2505,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_can_activate_accel<F: Fn(&Self, u32) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, u32) -> bool + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "can-activate-accel",
+            connect_raw(self.to_glib_none().0 as *mut _, b"can-activate-accel\0".as_ptr() as *const _,
                 transmute(can_activate_accel_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2516,19 +2517,19 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_composited_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "composited-changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"composited-changed\0".as_ptr() as *const _,
                 transmute(composited_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_composited_changed(&self) {
-        let _ = self.emit("composited-changed", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("composited-changed", &[]).unwrap() };
     }
 
     fn connect_configure_event<F: Fn(&Self, &gdk::EventConfigure) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::EventConfigure) -> bool + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "configure-event",
+            connect_raw(self.to_glib_none().0 as *mut _, b"configure-event\0".as_ptr() as *const _,
                 transmute(configure_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2536,7 +2537,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_damage_event<F: Fn(&Self, &gdk::EventExpose) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::EventExpose) -> bool + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "damage-event",
+            connect_raw(self.to_glib_none().0 as *mut _, b"damage-event\0".as_ptr() as *const _,
                 transmute(damage_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2544,7 +2545,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_delete_event<F: Fn(&Self, &gdk::Event) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::Event) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "delete-event",
+            connect_raw(self.to_glib_none().0 as *mut _, b"delete-event\0".as_ptr() as *const _,
                 transmute(delete_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2552,7 +2553,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_destroy<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "destroy",
+            connect_raw(self.to_glib_none().0 as *mut _, b"destroy\0".as_ptr() as *const _,
                 transmute(destroy_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2560,7 +2561,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_destroy_event<F: Fn(&Self, &gdk::Event) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::Event) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "destroy-event",
+            connect_raw(self.to_glib_none().0 as *mut _, b"destroy-event\0".as_ptr() as *const _,
                 transmute(destroy_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2568,7 +2569,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_direction_changed<F: Fn(&Self, TextDirection) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, TextDirection) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "direction-changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"direction-changed\0".as_ptr() as *const _,
                 transmute(direction_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2576,7 +2577,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_drag_begin<F: Fn(&Self, &gdk::DragContext) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::DragContext) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "drag-begin",
+            connect_raw(self.to_glib_none().0 as *mut _, b"drag-begin\0".as_ptr() as *const _,
                 transmute(drag_begin_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2584,7 +2585,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_drag_data_delete<F: Fn(&Self, &gdk::DragContext) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::DragContext) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "drag-data-delete",
+            connect_raw(self.to_glib_none().0 as *mut _, b"drag-data-delete\0".as_ptr() as *const _,
                 transmute(drag_data_delete_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2592,7 +2593,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_drag_data_get<F: Fn(&Self, &gdk::DragContext, &SelectionData, u32, u32) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::DragContext, &SelectionData, u32, u32) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "drag-data-get",
+            connect_raw(self.to_glib_none().0 as *mut _, b"drag-data-get\0".as_ptr() as *const _,
                 transmute(drag_data_get_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2600,7 +2601,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_drag_data_received<F: Fn(&Self, &gdk::DragContext, i32, i32, &SelectionData, u32, u32) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::DragContext, i32, i32, &SelectionData, u32, u32) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "drag-data-received",
+            connect_raw(self.to_glib_none().0 as *mut _, b"drag-data-received\0".as_ptr() as *const _,
                 transmute(drag_data_received_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2608,7 +2609,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_drag_drop<F: Fn(&Self, &gdk::DragContext, i32, i32, u32) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::DragContext, i32, i32, u32) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "drag-drop",
+            connect_raw(self.to_glib_none().0 as *mut _, b"drag-drop\0".as_ptr() as *const _,
                 transmute(drag_drop_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2616,7 +2617,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_drag_end<F: Fn(&Self, &gdk::DragContext) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::DragContext) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "drag-end",
+            connect_raw(self.to_glib_none().0 as *mut _, b"drag-end\0".as_ptr() as *const _,
                 transmute(drag_end_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2624,7 +2625,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_drag_failed<F: Fn(&Self, &gdk::DragContext, DragResult) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::DragContext, DragResult) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "drag-failed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"drag-failed\0".as_ptr() as *const _,
                 transmute(drag_failed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2632,7 +2633,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_drag_leave<F: Fn(&Self, &gdk::DragContext, u32) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::DragContext, u32) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "drag-leave",
+            connect_raw(self.to_glib_none().0 as *mut _, b"drag-leave\0".as_ptr() as *const _,
                 transmute(drag_leave_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2640,7 +2641,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_drag_motion<F: Fn(&Self, &gdk::DragContext, i32, i32, u32) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::DragContext, i32, i32, u32) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "drag-motion",
+            connect_raw(self.to_glib_none().0 as *mut _, b"drag-motion\0".as_ptr() as *const _,
                 transmute(drag_motion_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2648,7 +2649,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_draw<F: Fn(&Self, &cairo::Context) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &cairo::Context) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "draw",
+            connect_raw(self.to_glib_none().0 as *mut _, b"draw\0".as_ptr() as *const _,
                 transmute(draw_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2656,7 +2657,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_enter_notify_event<F: Fn(&Self, &gdk::EventCrossing) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::EventCrossing) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "enter-notify-event",
+            connect_raw(self.to_glib_none().0 as *mut _, b"enter-notify-event\0".as_ptr() as *const _,
                 transmute(enter_notify_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2664,7 +2665,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_event<F: Fn(&Self, &gdk::Event) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::Event) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "event",
+            connect_raw(self.to_glib_none().0 as *mut _, b"event\0".as_ptr() as *const _,
                 transmute(event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2672,7 +2673,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_event_after<F: Fn(&Self, &gdk::Event) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::Event) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "event-after",
+            connect_raw(self.to_glib_none().0 as *mut _, b"event-after\0".as_ptr() as *const _,
                 transmute(event_after_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2680,7 +2681,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_focus<F: Fn(&Self, DirectionType) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, DirectionType) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "focus",
+            connect_raw(self.to_glib_none().0 as *mut _, b"focus\0".as_ptr() as *const _,
                 transmute(focus_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2688,7 +2689,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_focus_in_event<F: Fn(&Self, &gdk::EventFocus) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::EventFocus) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "focus-in-event",
+            connect_raw(self.to_glib_none().0 as *mut _, b"focus-in-event\0".as_ptr() as *const _,
                 transmute(focus_in_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2696,7 +2697,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_focus_out_event<F: Fn(&Self, &gdk::EventFocus) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::EventFocus) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "focus-out-event",
+            connect_raw(self.to_glib_none().0 as *mut _, b"focus-out-event\0".as_ptr() as *const _,
                 transmute(focus_out_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2704,7 +2705,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_grab_broken_event<F: Fn(&Self, &gdk::EventGrabBroken) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::EventGrabBroken) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "grab-broken-event",
+            connect_raw(self.to_glib_none().0 as *mut _, b"grab-broken-event\0".as_ptr() as *const _,
                 transmute(grab_broken_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2712,19 +2713,19 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_grab_focus<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "grab-focus",
+            connect_raw(self.to_glib_none().0 as *mut _, b"grab-focus\0".as_ptr() as *const _,
                 transmute(grab_focus_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_grab_focus(&self) {
-        let _ = self.emit("grab-focus", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("grab-focus", &[]).unwrap() };
     }
 
     fn connect_grab_notify<F: Fn(&Self, bool) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, bool) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "grab-notify",
+            connect_raw(self.to_glib_none().0 as *mut _, b"grab-notify\0".as_ptr() as *const _,
                 transmute(grab_notify_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2732,7 +2733,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_hide<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "hide",
+            connect_raw(self.to_glib_none().0 as *mut _, b"hide\0".as_ptr() as *const _,
                 transmute(hide_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2740,7 +2741,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_hierarchy_changed<F: Fn(&Self, &Option<Widget>) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Option<Widget>) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "hierarchy-changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"hierarchy-changed\0".as_ptr() as *const _,
                 transmute(hierarchy_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2748,7 +2749,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_key_press_event<F: Fn(&Self, &gdk::EventKey) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::EventKey) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "key-press-event",
+            connect_raw(self.to_glib_none().0 as *mut _, b"key-press-event\0".as_ptr() as *const _,
                 transmute(key_press_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2756,7 +2757,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_key_release_event<F: Fn(&Self, &gdk::EventKey) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::EventKey) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "key-release-event",
+            connect_raw(self.to_glib_none().0 as *mut _, b"key-release-event\0".as_ptr() as *const _,
                 transmute(key_release_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2764,7 +2765,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_keynav_failed<F: Fn(&Self, DirectionType) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, DirectionType) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "keynav-failed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"keynav-failed\0".as_ptr() as *const _,
                 transmute(keynav_failed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2772,7 +2773,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_leave_notify_event<F: Fn(&Self, &gdk::EventCrossing) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::EventCrossing) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "leave-notify-event",
+            connect_raw(self.to_glib_none().0 as *mut _, b"leave-notify-event\0".as_ptr() as *const _,
                 transmute(leave_notify_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2780,7 +2781,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_map<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "map",
+            connect_raw(self.to_glib_none().0 as *mut _, b"map\0".as_ptr() as *const _,
                 transmute(map_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2788,7 +2789,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_mnemonic_activate<F: Fn(&Self, bool) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, bool) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "mnemonic-activate",
+            connect_raw(self.to_glib_none().0 as *mut _, b"mnemonic-activate\0".as_ptr() as *const _,
                 transmute(mnemonic_activate_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2796,7 +2797,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_motion_notify_event<F: Fn(&Self, &gdk::EventMotion) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::EventMotion) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "motion-notify-event",
+            connect_raw(self.to_glib_none().0 as *mut _, b"motion-notify-event\0".as_ptr() as *const _,
                 transmute(motion_notify_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2804,19 +2805,19 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_move_focus<F: Fn(&Self, DirectionType) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, DirectionType) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "move-focus",
+            connect_raw(self.to_glib_none().0 as *mut _, b"move-focus\0".as_ptr() as *const _,
                 transmute(move_focus_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_move_focus(&self, direction: DirectionType) {
-        let _ = self.emit("move-focus", &[&direction]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("move-focus", &[&direction]).unwrap() };
     }
 
     fn connect_parent_set<F: Fn(&Self, &Option<Widget>) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Option<Widget>) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "parent-set",
+            connect_raw(self.to_glib_none().0 as *mut _, b"parent-set\0".as_ptr() as *const _,
                 transmute(parent_set_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2824,20 +2825,20 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_popup_menu<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) -> bool + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "popup-menu",
+            connect_raw(self.to_glib_none().0 as *mut _, b"popup-menu\0".as_ptr() as *const _,
                 transmute(popup_menu_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_popup_menu(&self) -> bool {
-        let res = self.emit("popup-menu", &[]).unwrap();
+        let res = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("popup-menu", &[]).unwrap() };
         res.unwrap().get().unwrap()
     }
 
     fn connect_property_notify_event<F: Fn(&Self, &gdk::EventProperty) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::EventProperty) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "property-notify-event",
+            connect_raw(self.to_glib_none().0 as *mut _, b"property-notify-event\0".as_ptr() as *const _,
                 transmute(property_notify_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2845,7 +2846,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_proximity_in_event<F: Fn(&Self, &gdk::EventProximity) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::EventProximity) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "proximity-in-event",
+            connect_raw(self.to_glib_none().0 as *mut _, b"proximity-in-event\0".as_ptr() as *const _,
                 transmute(proximity_in_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2853,7 +2854,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_proximity_out_event<F: Fn(&Self, &gdk::EventProximity) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::EventProximity) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "proximity-out-event",
+            connect_raw(self.to_glib_none().0 as *mut _, b"proximity-out-event\0".as_ptr() as *const _,
                 transmute(proximity_out_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2861,7 +2862,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_query_tooltip<F: Fn(&Self, i32, i32, bool, &Tooltip) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, i32, i32, bool, &Tooltip) -> bool + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "query-tooltip",
+            connect_raw(self.to_glib_none().0 as *mut _, b"query-tooltip\0".as_ptr() as *const _,
                 transmute(query_tooltip_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2869,7 +2870,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_realize<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "realize",
+            connect_raw(self.to_glib_none().0 as *mut _, b"realize\0".as_ptr() as *const _,
                 transmute(realize_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2877,7 +2878,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_screen_changed<F: Fn(&Self, &Option<gdk::Screen>) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Option<gdk::Screen>) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "screen-changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"screen-changed\0".as_ptr() as *const _,
                 transmute(screen_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2885,7 +2886,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_scroll_event<F: Fn(&Self, &gdk::EventScroll) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::EventScroll) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "scroll-event",
+            connect_raw(self.to_glib_none().0 as *mut _, b"scroll-event\0".as_ptr() as *const _,
                 transmute(scroll_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2893,7 +2894,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_selection_clear_event<F: Fn(&Self, &gdk::EventSelection) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::EventSelection) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "selection-clear-event",
+            connect_raw(self.to_glib_none().0 as *mut _, b"selection-clear-event\0".as_ptr() as *const _,
                 transmute(selection_clear_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2901,7 +2902,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_selection_get<F: Fn(&Self, &SelectionData, u32, u32) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &SelectionData, u32, u32) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "selection-get",
+            connect_raw(self.to_glib_none().0 as *mut _, b"selection-get\0".as_ptr() as *const _,
                 transmute(selection_get_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2909,7 +2910,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_selection_notify_event<F: Fn(&Self, &gdk::EventSelection) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::EventSelection) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "selection-notify-event",
+            connect_raw(self.to_glib_none().0 as *mut _, b"selection-notify-event\0".as_ptr() as *const _,
                 transmute(selection_notify_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2917,7 +2918,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_selection_received<F: Fn(&Self, &SelectionData, u32) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &SelectionData, u32) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "selection-received",
+            connect_raw(self.to_glib_none().0 as *mut _, b"selection-received\0".as_ptr() as *const _,
                 transmute(selection_received_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2925,7 +2926,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_selection_request_event<F: Fn(&Self, &gdk::EventSelection) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::EventSelection) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "selection-request-event",
+            connect_raw(self.to_glib_none().0 as *mut _, b"selection-request-event\0".as_ptr() as *const _,
                 transmute(selection_request_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2933,7 +2934,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_show<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "show",
+            connect_raw(self.to_glib_none().0 as *mut _, b"show\0".as_ptr() as *const _,
                 transmute(show_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2941,20 +2942,20 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_show_help<F: Fn(&Self, WidgetHelpType) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, WidgetHelpType) -> bool + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "show-help",
+            connect_raw(self.to_glib_none().0 as *mut _, b"show-help\0".as_ptr() as *const _,
                 transmute(show_help_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_show_help(&self, help_type: WidgetHelpType) -> bool {
-        let res = self.emit("show-help", &[&help_type]).unwrap();
+        let res = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("show-help", &[&help_type]).unwrap() };
         res.unwrap().get().unwrap()
     }
 
     fn connect_size_allocate<F: Fn(&Self, &Allocation) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Allocation) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "size-allocate",
+            connect_raw(self.to_glib_none().0 as *mut _, b"size-allocate\0".as_ptr() as *const _,
                 transmute(size_allocate_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2962,7 +2963,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_state_flags_changed<F: Fn(&Self, StateFlags) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, StateFlags) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "state-flags-changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"state-flags-changed\0".as_ptr() as *const _,
                 transmute(state_flags_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2970,7 +2971,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_style_updated<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "style-updated",
+            connect_raw(self.to_glib_none().0 as *mut _, b"style-updated\0".as_ptr() as *const _,
                 transmute(style_updated_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2978,7 +2979,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_touch_event<F: Fn(&Self, &gdk::Event) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::Event) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "touch-event",
+            connect_raw(self.to_glib_none().0 as *mut _, b"touch-event\0".as_ptr() as *const _,
                 transmute(touch_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2986,7 +2987,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_unmap<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "unmap",
+            connect_raw(self.to_glib_none().0 as *mut _, b"unmap\0".as_ptr() as *const _,
                 transmute(unmap_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -2994,7 +2995,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_unrealize<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "unrealize",
+            connect_raw(self.to_glib_none().0 as *mut _, b"unrealize\0".as_ptr() as *const _,
                 transmute(unrealize_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3002,7 +3003,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_visibility_notify_event<F: Fn(&Self, &gdk::EventVisibility) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::EventVisibility) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "visibility-notify-event",
+            connect_raw(self.to_glib_none().0 as *mut _, b"visibility-notify-event\0".as_ptr() as *const _,
                 transmute(visibility_notify_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3010,7 +3011,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_window_state_event<F: Fn(&Self, &gdk::EventWindowState) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::EventWindowState) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "window-state-event",
+            connect_raw(self.to_glib_none().0 as *mut _, b"window-state-event\0".as_ptr() as *const _,
                 transmute(window_state_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3018,7 +3019,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_app_paintable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::app-paintable",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::app-paintable\0".as_ptr() as *const _,
                 transmute(notify_app_paintable_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3026,7 +3027,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_can_default_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::can-default",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::can-default\0".as_ptr() as *const _,
                 transmute(notify_can_default_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3034,7 +3035,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_can_focus_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::can-focus",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::can-focus\0".as_ptr() as *const _,
                 transmute(notify_can_focus_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3042,7 +3043,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_composite_child_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::composite-child",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::composite-child\0".as_ptr() as *const _,
                 transmute(notify_composite_child_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3050,7 +3051,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_double_buffered_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::double-buffered",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::double-buffered\0".as_ptr() as *const _,
                 transmute(notify_double_buffered_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3058,7 +3059,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_events_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::events",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::events\0".as_ptr() as *const _,
                 transmute(notify_events_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3066,7 +3067,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_expand_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::expand",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::expand\0".as_ptr() as *const _,
                 transmute(notify_expand_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3075,7 +3076,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_focus_on_click_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::focus-on-click",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::focus-on-click\0".as_ptr() as *const _,
                 transmute(notify_focus_on_click_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3083,7 +3084,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_halign_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::halign",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::halign\0".as_ptr() as *const _,
                 transmute(notify_halign_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3091,7 +3092,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_has_default_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::has-default",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::has-default\0".as_ptr() as *const _,
                 transmute(notify_has_default_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3099,7 +3100,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_has_focus_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::has-focus",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::has-focus\0".as_ptr() as *const _,
                 transmute(notify_has_focus_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3107,7 +3108,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_has_tooltip_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::has-tooltip",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::has-tooltip\0".as_ptr() as *const _,
                 transmute(notify_has_tooltip_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3115,7 +3116,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_height_request_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::height-request",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::height-request\0".as_ptr() as *const _,
                 transmute(notify_height_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3123,7 +3124,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_hexpand_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::hexpand",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::hexpand\0".as_ptr() as *const _,
                 transmute(notify_hexpand_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3131,7 +3132,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_hexpand_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::hexpand-set",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::hexpand-set\0".as_ptr() as *const _,
                 transmute(notify_hexpand_set_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3139,7 +3140,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_is_focus_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::is-focus",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::is-focus\0".as_ptr() as *const _,
                 transmute(notify_is_focus_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3147,7 +3148,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_margin_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::margin",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::margin\0".as_ptr() as *const _,
                 transmute(notify_margin_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3155,7 +3156,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_margin_bottom_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::margin-bottom",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::margin-bottom\0".as_ptr() as *const _,
                 transmute(notify_margin_bottom_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3164,7 +3165,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_margin_end_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::margin-end",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::margin-end\0".as_ptr() as *const _,
                 transmute(notify_margin_end_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3172,7 +3173,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_margin_left_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::margin-left",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::margin-left\0".as_ptr() as *const _,
                 transmute(notify_margin_left_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3180,7 +3181,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_margin_right_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::margin-right",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::margin-right\0".as_ptr() as *const _,
                 transmute(notify_margin_right_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3189,7 +3190,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_margin_start_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::margin-start",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::margin-start\0".as_ptr() as *const _,
                 transmute(notify_margin_start_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3197,7 +3198,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_margin_top_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::margin-top",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::margin-top\0".as_ptr() as *const _,
                 transmute(notify_margin_top_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3205,7 +3206,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::name",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::name\0".as_ptr() as *const _,
                 transmute(notify_name_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3213,7 +3214,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_no_show_all_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::no-show-all",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::no-show-all\0".as_ptr() as *const _,
                 transmute(notify_no_show_all_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3222,7 +3223,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_opacity_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::opacity",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::opacity\0".as_ptr() as *const _,
                 transmute(notify_opacity_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3230,7 +3231,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_parent_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::parent",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::parent\0".as_ptr() as *const _,
                 transmute(notify_parent_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3238,7 +3239,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_receives_default_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::receives-default",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::receives-default\0".as_ptr() as *const _,
                 transmute(notify_receives_default_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3247,7 +3248,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_scale_factor_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::scale-factor",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::scale-factor\0".as_ptr() as *const _,
                 transmute(notify_scale_factor_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3255,7 +3256,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_sensitive_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::sensitive",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::sensitive\0".as_ptr() as *const _,
                 transmute(notify_sensitive_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3263,7 +3264,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_tooltip_markup_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::tooltip-markup",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::tooltip-markup\0".as_ptr() as *const _,
                 transmute(notify_tooltip_markup_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3271,7 +3272,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_tooltip_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::tooltip-text",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::tooltip-text\0".as_ptr() as *const _,
                 transmute(notify_tooltip_text_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3279,7 +3280,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_valign_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::valign",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::valign\0".as_ptr() as *const _,
                 transmute(notify_valign_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3287,7 +3288,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_vexpand_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::vexpand",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::vexpand\0".as_ptr() as *const _,
                 transmute(notify_vexpand_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3295,7 +3296,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_vexpand_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::vexpand-set",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::vexpand-set\0".as_ptr() as *const _,
                 transmute(notify_vexpand_set_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3303,7 +3304,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_visible_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::visible",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::visible\0".as_ptr() as *const _,
                 transmute(notify_visible_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3311,7 +3312,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_width_request_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::width-request",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::width-request\0".as_ptr() as *const _,
                 transmute(notify_width_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -3319,7 +3320,7 @@ impl<O: IsA<Widget> + IsA<glib::object::Object> + glib::object::ObjectExt> Widge
     fn connect_property_window_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::window",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::window\0".as_ptr() as *const _,
                 transmute(notify_window_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

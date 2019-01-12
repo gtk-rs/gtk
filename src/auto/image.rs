@@ -14,12 +14,13 @@ use ffi;
 use gdk_pixbuf;
 use gio;
 use glib;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
@@ -124,7 +125,7 @@ impl Default for Image {
     }
 }
 
-pub trait ImageExt {
+pub trait ImageExt: 'static {
     fn clear(&self);
 
     fn get_animation(&self) -> Option<gdk_pixbuf::PixbufAnimation>;
@@ -163,13 +164,13 @@ pub trait ImageExt {
 
     fn set_pixel_size(&self, pixel_size: i32);
 
-    fn get_property_file(&self) -> Option<String>;
+    fn get_property_file(&self) -> Option<GString>;
 
     fn set_property_file<'a, P: Into<Option<&'a str>>>(&self, file: P);
 
-    fn set_property_gicon<P: IsA<gio::Icon> + IsA<glib::object::Object> + glib::value::SetValueOptional>(&self, gicon: Option<&P>);
+    fn set_property_gicon<P: IsA<gio::Icon> + glib::value::SetValueOptional>(&self, gicon: Option<&P>);
 
-    fn get_property_icon_name(&self) -> Option<String>;
+    fn get_property_icon_name(&self) -> Option<GString>;
 
     fn set_property_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_name: P);
 
@@ -181,16 +182,16 @@ pub trait ImageExt {
 
     fn get_property_pixbuf_animation(&self) -> Option<gdk_pixbuf::PixbufAnimation>;
 
-    fn set_property_pixbuf_animation<P: IsA<gdk_pixbuf::PixbufAnimation> + IsA<glib::object::Object> + glib::value::SetValueOptional>(&self, pixbuf_animation: Option<&P>);
+    fn set_property_pixbuf_animation<P: IsA<gdk_pixbuf::PixbufAnimation> + glib::value::SetValueOptional>(&self, pixbuf_animation: Option<&P>);
 
     #[cfg(any(feature = "v3_8", feature = "dox"))]
-    fn get_property_resource(&self) -> Option<String>;
+    fn get_property_resource(&self) -> Option<GString>;
 
     #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn set_property_resource<'a, P: Into<Option<&'a str>>>(&self, resource: P);
 
     #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_stock(&self) -> Option<String>;
+    fn get_property_stock(&self) -> Option<GString>;
 
     #[cfg_attr(feature = "v3_10", deprecated)]
     fn set_property_stock<'a, P: Into<Option<&'a str>>>(&self, stock: P);
@@ -224,7 +225,7 @@ pub trait ImageExt {
     fn connect_property_use_fallback_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Image> + IsA<glib::object::Object>> ImageExt for O {
+impl<O: IsA<Image>> ImageExt for O {
     fn clear(&self) {
         unsafe {
             ffi::gtk_image_clear(self.to_glib_none().0);
@@ -341,10 +342,10 @@ impl<O: IsA<Image> + IsA<glib::object::Object>> ImageExt for O {
         }
     }
 
-    fn get_property_file(&self) -> Option<String> {
+    fn get_property_file(&self) -> Option<GString> {
         unsafe {
-            let mut value = Value::from_type(<String as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "file".to_glib_none().0, value.to_glib_none_mut().0);
+            let mut value = Value::from_type(<GString as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"file\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -352,20 +353,20 @@ impl<O: IsA<Image> + IsA<glib::object::Object>> ImageExt for O {
     fn set_property_file<'a, P: Into<Option<&'a str>>>(&self, file: P) {
         let file = file.into();
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "file".to_glib_none().0, Value::from(file).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"file\0".as_ptr() as *const _, Value::from(file).to_glib_none().0);
         }
     }
 
-    fn set_property_gicon<P: IsA<gio::Icon> + IsA<glib::object::Object> + glib::value::SetValueOptional>(&self, gicon: Option<&P>) {
+    fn set_property_gicon<P: IsA<gio::Icon> + glib::value::SetValueOptional>(&self, gicon: Option<&P>) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "gicon".to_glib_none().0, Value::from(gicon).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gicon\0".as_ptr() as *const _, Value::from(gicon).to_glib_none().0);
         }
     }
 
-    fn get_property_icon_name(&self) -> Option<String> {
+    fn get_property_icon_name(&self) -> Option<GString> {
         unsafe {
-            let mut value = Value::from_type(<String as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "icon-name".to_glib_none().0, value.to_glib_none_mut().0);
+            let mut value = Value::from_type(<GString as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"icon-name\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -373,49 +374,49 @@ impl<O: IsA<Image> + IsA<glib::object::Object>> ImageExt for O {
     fn set_property_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_name: P) {
         let icon_name = icon_name.into();
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "icon-name".to_glib_none().0, Value::from(icon_name).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"icon-name\0".as_ptr() as *const _, Value::from(icon_name).to_glib_none().0);
         }
     }
 
     fn get_property_icon_size(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "icon-size".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"icon-size\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_icon_size(&self, icon_size: i32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "icon-size".to_glib_none().0, Value::from(&icon_size).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"icon-size\0".as_ptr() as *const _, Value::from(&icon_size).to_glib_none().0);
         }
     }
 
     fn set_property_pixbuf(&self, pixbuf: Option<&gdk_pixbuf::Pixbuf>) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "pixbuf".to_glib_none().0, Value::from(pixbuf).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"pixbuf\0".as_ptr() as *const _, Value::from(pixbuf).to_glib_none().0);
         }
     }
 
     fn get_property_pixbuf_animation(&self) -> Option<gdk_pixbuf::PixbufAnimation> {
         unsafe {
             let mut value = Value::from_type(<gdk_pixbuf::PixbufAnimation as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "pixbuf-animation".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"pixbuf-animation\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
 
-    fn set_property_pixbuf_animation<P: IsA<gdk_pixbuf::PixbufAnimation> + IsA<glib::object::Object> + glib::value::SetValueOptional>(&self, pixbuf_animation: Option<&P>) {
+    fn set_property_pixbuf_animation<P: IsA<gdk_pixbuf::PixbufAnimation> + glib::value::SetValueOptional>(&self, pixbuf_animation: Option<&P>) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "pixbuf-animation".to_glib_none().0, Value::from(pixbuf_animation).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"pixbuf-animation\0".as_ptr() as *const _, Value::from(pixbuf_animation).to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v3_8", feature = "dox"))]
-    fn get_property_resource(&self) -> Option<String> {
+    fn get_property_resource(&self) -> Option<GString> {
         unsafe {
-            let mut value = Value::from_type(<String as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "resource".to_glib_none().0, value.to_glib_none_mut().0);
+            let mut value = Value::from_type(<GString as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"resource\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -424,14 +425,14 @@ impl<O: IsA<Image> + IsA<glib::object::Object>> ImageExt for O {
     fn set_property_resource<'a, P: Into<Option<&'a str>>>(&self, resource: P) {
         let resource = resource.into();
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "resource".to_glib_none().0, Value::from(resource).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"resource\0".as_ptr() as *const _, Value::from(resource).to_glib_none().0);
         }
     }
 
-    fn get_property_stock(&self) -> Option<String> {
+    fn get_property_stock(&self) -> Option<GString> {
         unsafe {
-            let mut value = Value::from_type(<String as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "stock".to_glib_none().0, value.to_glib_none_mut().0);
+            let mut value = Value::from_type(<GString as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"stock\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -439,28 +440,28 @@ impl<O: IsA<Image> + IsA<glib::object::Object>> ImageExt for O {
     fn set_property_stock<'a, P: Into<Option<&'a str>>>(&self, stock: P) {
         let stock = stock.into();
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "stock".to_glib_none().0, Value::from(stock).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"stock\0".as_ptr() as *const _, Value::from(stock).to_glib_none().0);
         }
     }
 
     fn get_property_use_fallback(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "use-fallback".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"use-fallback\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_use_fallback(&self, use_fallback: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "use-fallback".to_glib_none().0, Value::from(&use_fallback).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"use-fallback\0".as_ptr() as *const _, Value::from(&use_fallback).to_glib_none().0);
         }
     }
 
     fn connect_property_file_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::file",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::file\0".as_ptr() as *const _,
                 transmute(notify_file_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -468,7 +469,7 @@ impl<O: IsA<Image> + IsA<glib::object::Object>> ImageExt for O {
     fn connect_property_gicon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::gicon",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::gicon\0".as_ptr() as *const _,
                 transmute(notify_gicon_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -476,7 +477,7 @@ impl<O: IsA<Image> + IsA<glib::object::Object>> ImageExt for O {
     fn connect_property_icon_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::icon-name",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::icon-name\0".as_ptr() as *const _,
                 transmute(notify_icon_name_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -484,7 +485,7 @@ impl<O: IsA<Image> + IsA<glib::object::Object>> ImageExt for O {
     fn connect_property_icon_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::icon-size",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::icon-size\0".as_ptr() as *const _,
                 transmute(notify_icon_size_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -492,7 +493,7 @@ impl<O: IsA<Image> + IsA<glib::object::Object>> ImageExt for O {
     fn connect_property_pixbuf_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::pixbuf",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::pixbuf\0".as_ptr() as *const _,
                 transmute(notify_pixbuf_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -500,7 +501,7 @@ impl<O: IsA<Image> + IsA<glib::object::Object>> ImageExt for O {
     fn connect_property_pixbuf_animation_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::pixbuf-animation",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::pixbuf-animation\0".as_ptr() as *const _,
                 transmute(notify_pixbuf_animation_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -508,7 +509,7 @@ impl<O: IsA<Image> + IsA<glib::object::Object>> ImageExt for O {
     fn connect_property_pixel_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::pixel-size",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::pixel-size\0".as_ptr() as *const _,
                 transmute(notify_pixel_size_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -517,7 +518,7 @@ impl<O: IsA<Image> + IsA<glib::object::Object>> ImageExt for O {
     fn connect_property_resource_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::resource",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::resource\0".as_ptr() as *const _,
                 transmute(notify_resource_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -525,7 +526,7 @@ impl<O: IsA<Image> + IsA<glib::object::Object>> ImageExt for O {
     fn connect_property_stock_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::stock",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::stock\0".as_ptr() as *const _,
                 transmute(notify_stock_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -533,7 +534,7 @@ impl<O: IsA<Image> + IsA<glib::object::Object>> ImageExt for O {
     fn connect_property_storage_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::storage-type",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::storage-type\0".as_ptr() as *const _,
                 transmute(notify_storage_type_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -541,7 +542,7 @@ impl<O: IsA<Image> + IsA<glib::object::Object>> ImageExt for O {
     fn connect_property_use_fallback_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::use-fallback",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::use-fallback\0".as_ptr() as *const _,
                 transmute(notify_use_fallback_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

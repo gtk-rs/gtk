@@ -9,13 +9,10 @@ use TextSearchFlags;
 use TextTag;
 use ffi;
 use gdk_pixbuf;
+use glib::GString;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use pango;
 use std::cmp;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     #[derive(Debug, Hash)]
@@ -416,7 +413,7 @@ impl TextIter {
         }
     }
 
-    pub fn get_slice(&self, end: &TextIter) -> Option<String> {
+    pub fn get_slice(&self, end: &TextIter) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gtk_text_iter_get_slice(self.to_glib_none().0, end.to_glib_none().0))
         }
@@ -428,7 +425,7 @@ impl TextIter {
         }
     }
 
-    pub fn get_text(&self, end: &TextIter) -> Option<String> {
+    pub fn get_text(&self, end: &TextIter) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gtk_text_iter_get_text(self.to_glib_none().0, end.to_glib_none().0))
         }
@@ -452,13 +449,13 @@ impl TextIter {
         }
     }
 
-    pub fn get_visible_slice(&self, end: &TextIter) -> Option<String> {
+    pub fn get_visible_slice(&self, end: &TextIter) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gtk_text_iter_get_visible_slice(self.to_glib_none().0, end.to_glib_none().0))
         }
     }
 
-    pub fn get_visible_text(&self, end: &TextIter) -> Option<String> {
+    pub fn get_visible_text(&self, end: &TextIter) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gtk_text_iter_get_visible_text(self.to_glib_none().0, end.to_glib_none().0))
         }

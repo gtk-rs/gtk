@@ -7,11 +7,7 @@ use TreePath;
 use ffi;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use std::fmt;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct TreeDragSource(Object<ffi::GtkTreeDragSource, ffi::GtkTreeDragSourceIface>);
@@ -21,7 +17,7 @@ glib_wrapper! {
     }
 }
 
-pub trait TreeDragSourceExt {
+pub trait TreeDragSourceExt: 'static {
     fn drag_data_delete(&self, path: &mut TreePath) -> bool;
 
     fn drag_data_get(&self, path: &mut TreePath, selection_data: &mut SelectionData) -> bool;

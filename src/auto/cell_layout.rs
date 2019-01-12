@@ -7,11 +7,7 @@ use CellRenderer;
 use ffi;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use std::fmt;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct CellLayout(Object<ffi::GtkCellLayout, ffi::GtkCellLayoutIface>);
@@ -21,7 +17,7 @@ glib_wrapper! {
     }
 }
 
-pub trait CellLayoutExt {
+pub trait CellLayoutExt: 'static {
     fn add_attribute<P: IsA<CellRenderer>>(&self, cell: &P, attribute: &str, column: i32);
 
     fn clear(&self);

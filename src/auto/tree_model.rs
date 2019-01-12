@@ -7,18 +7,16 @@ use TreeModelFlags;
 use TreePath;
 use ffi;
 use glib;
+use glib::GString;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct TreeModel(Object<ffi::GtkTreeModel, ffi::GtkTreeModelIface>);
@@ -28,7 +26,7 @@ glib_wrapper! {
     }
 }
 
-pub trait TreeModelExt {
+pub trait TreeModelExt: 'static {
     //fn foreach<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: /*Unknown conversion*//*Unimplemented*/TreeModelForeachFunc, user_data: P);
 
     //fn get(&self, iter: &TreeIter, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
@@ -47,7 +45,7 @@ pub trait TreeModelExt {
 
     fn get_path(&self, iter: &TreeIter) -> Option<TreePath>;
 
-    fn get_string_from_iter(&self, iter: &TreeIter) -> Option<String>;
+    fn get_string_from_iter(&self, iter: &TreeIter) -> Option<GString>;
 
     //fn get_valist(&self, iter: &TreeIter, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
 
@@ -91,7 +89,7 @@ pub trait TreeModelExt {
     //fn connect_rows_reordered<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<TreeModel> + IsA<glib::object::Object>> TreeModelExt for O {
+impl<O: IsA<TreeModel>> TreeModelExt for O {
     //fn foreach<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: /*Unknown conversion*//*Unimplemented*/TreeModelForeachFunc, user_data: P) {
     //    unsafe { TODO: call ffi::gtk_tree_model_foreach() }
     //}
@@ -148,7 +146,7 @@ impl<O: IsA<TreeModel> + IsA<glib::object::Object>> TreeModelExt for O {
         }
     }
 
-    fn get_string_from_iter(&self, iter: &TreeIter) -> Option<String> {
+    fn get_string_from_iter(&self, iter: &TreeIter) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gtk_tree_model_get_string_from_iter(self.to_glib_none().0, mut_override(iter.to_glib_none().0)))
         }
@@ -259,7 +257,7 @@ impl<O: IsA<TreeModel> + IsA<glib::object::Object>> TreeModelExt for O {
     fn connect_row_changed<F: Fn(&Self, &TreePath, &TreeIter) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &TreePath, &TreeIter) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "row-changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"row-changed\0".as_ptr() as *const _,
                 transmute(row_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -267,7 +265,7 @@ impl<O: IsA<TreeModel> + IsA<glib::object::Object>> TreeModelExt for O {
     fn connect_row_deleted<F: Fn(&Self, &TreePath) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &TreePath) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "row-deleted",
+            connect_raw(self.to_glib_none().0 as *mut _, b"row-deleted\0".as_ptr() as *const _,
                 transmute(row_deleted_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -275,7 +273,7 @@ impl<O: IsA<TreeModel> + IsA<glib::object::Object>> TreeModelExt for O {
     fn connect_row_has_child_toggled<F: Fn(&Self, &TreePath, &TreeIter) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &TreePath, &TreeIter) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "row-has-child-toggled",
+            connect_raw(self.to_glib_none().0 as *mut _, b"row-has-child-toggled\0".as_ptr() as *const _,
                 transmute(row_has_child_toggled_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -283,7 +281,7 @@ impl<O: IsA<TreeModel> + IsA<glib::object::Object>> TreeModelExt for O {
     fn connect_row_inserted<F: Fn(&Self, &TreePath, &TreeIter) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &TreePath, &TreeIter) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "row-inserted",
+            connect_raw(self.to_glib_none().0 as *mut _, b"row-inserted\0".as_ptr() as *const _,
                 transmute(row_inserted_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

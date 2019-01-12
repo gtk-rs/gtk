@@ -8,11 +8,7 @@ use ffi;
 use gdk;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use std::fmt;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct WindowGroup(Object<ffi::GtkWindowGroup, ffi::GtkWindowGroupClass>);
@@ -37,7 +33,7 @@ impl Default for WindowGroup {
     }
 }
 
-pub trait WindowGroupExt {
+pub trait WindowGroupExt: 'static {
     fn add_window<P: IsA<Window>>(&self, window: &P);
 
     fn get_current_device_grab<P: IsA<gdk::Device>>(&self, device: &P) -> Option<Widget>;

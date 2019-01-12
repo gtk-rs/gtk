@@ -9,13 +9,13 @@ use TreeIter;
 use TreeModel;
 use Widget;
 use ffi;
-use glib;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
@@ -23,9 +23,7 @@ use libc;
 use signal::Inhibit;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct EntryCompletion(Object<ffi::GtkEntryCompletion, ffi::GtkEntryCompletionClass>): Buildable, CellLayout;
@@ -57,14 +55,14 @@ impl Default for EntryCompletion {
     }
 }
 
-pub trait EntryCompletionExt {
+pub trait EntryCompletionExt: 'static {
     fn complete(&self);
 
-    fn compute_prefix(&self, key: &str) -> Option<String>;
+    fn compute_prefix(&self, key: &str) -> Option<GString>;
 
     fn delete_action(&self, index_: i32);
 
-    fn get_completion_prefix(&self) -> Option<String>;
+    fn get_completion_prefix(&self) -> Option<GString>;
 
     fn get_entry(&self) -> Option<Widget>;
 
@@ -136,14 +134,14 @@ pub trait EntryCompletionExt {
     fn connect_property_text_column_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<EntryCompletion> + IsA<glib::object::Object>> EntryCompletionExt for O {
+impl<O: IsA<EntryCompletion>> EntryCompletionExt for O {
     fn complete(&self) {
         unsafe {
             ffi::gtk_entry_completion_complete(self.to_glib_none().0);
         }
     }
 
-    fn compute_prefix(&self, key: &str) -> Option<String> {
+    fn compute_prefix(&self, key: &str) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gtk_entry_completion_compute_prefix(self.to_glib_none().0, key.to_glib_none().0))
         }
@@ -155,7 +153,7 @@ impl<O: IsA<EntryCompletion> + IsA<glib::object::Object>> EntryCompletionExt for
         }
     }
 
-    fn get_completion_prefix(&self) -> Option<String> {
+    fn get_completion_prefix(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_entry_completion_get_completion_prefix(self.to_glib_none().0))
         }
@@ -286,7 +284,7 @@ impl<O: IsA<EntryCompletion> + IsA<glib::object::Object>> EntryCompletionExt for
     fn get_property_cell_area(&self) -> Option<CellArea> {
         unsafe {
             let mut value = Value::from_type(<CellArea as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "cell-area".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"cell-area\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -294,7 +292,7 @@ impl<O: IsA<EntryCompletion> + IsA<glib::object::Object>> EntryCompletionExt for
     fn connect_action_activated<F: Fn(&Self, i32) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, i32) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "action-activated",
+            connect_raw(self.to_glib_none().0 as *mut _, b"action-activated\0".as_ptr() as *const _,
                 transmute(action_activated_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -302,7 +300,7 @@ impl<O: IsA<EntryCompletion> + IsA<glib::object::Object>> EntryCompletionExt for
     fn connect_cursor_on_match<F: Fn(&Self, &TreeModel, &TreeIter) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &TreeModel, &TreeIter) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "cursor-on-match",
+            connect_raw(self.to_glib_none().0 as *mut _, b"cursor-on-match\0".as_ptr() as *const _,
                 transmute(cursor_on_match_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -310,7 +308,7 @@ impl<O: IsA<EntryCompletion> + IsA<glib::object::Object>> EntryCompletionExt for
     fn connect_insert_prefix<F: Fn(&Self, &str) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &str) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "insert-prefix",
+            connect_raw(self.to_glib_none().0 as *mut _, b"insert-prefix\0".as_ptr() as *const _,
                 transmute(insert_prefix_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -318,7 +316,7 @@ impl<O: IsA<EntryCompletion> + IsA<glib::object::Object>> EntryCompletionExt for
     fn connect_match_selected<F: Fn(&Self, &TreeModel, &TreeIter) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &TreeModel, &TreeIter) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "match-selected",
+            connect_raw(self.to_glib_none().0 as *mut _, b"match-selected\0".as_ptr() as *const _,
                 transmute(match_selected_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -327,7 +325,7 @@ impl<O: IsA<EntryCompletion> + IsA<glib::object::Object>> EntryCompletionExt for
     fn connect_no_matches<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "no-matches",
+            connect_raw(self.to_glib_none().0 as *mut _, b"no-matches\0".as_ptr() as *const _,
                 transmute(no_matches_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -335,7 +333,7 @@ impl<O: IsA<EntryCompletion> + IsA<glib::object::Object>> EntryCompletionExt for
     fn connect_property_inline_completion_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::inline-completion",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::inline-completion\0".as_ptr() as *const _,
                 transmute(notify_inline_completion_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -343,7 +341,7 @@ impl<O: IsA<EntryCompletion> + IsA<glib::object::Object>> EntryCompletionExt for
     fn connect_property_inline_selection_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::inline-selection",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::inline-selection\0".as_ptr() as *const _,
                 transmute(notify_inline_selection_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -351,7 +349,7 @@ impl<O: IsA<EntryCompletion> + IsA<glib::object::Object>> EntryCompletionExt for
     fn connect_property_minimum_key_length_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::minimum-key-length",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::minimum-key-length\0".as_ptr() as *const _,
                 transmute(notify_minimum_key_length_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -359,7 +357,7 @@ impl<O: IsA<EntryCompletion> + IsA<glib::object::Object>> EntryCompletionExt for
     fn connect_property_model_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::model",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::model\0".as_ptr() as *const _,
                 transmute(notify_model_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -367,7 +365,7 @@ impl<O: IsA<EntryCompletion> + IsA<glib::object::Object>> EntryCompletionExt for
     fn connect_property_popup_completion_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::popup-completion",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::popup-completion\0".as_ptr() as *const _,
                 transmute(notify_popup_completion_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -375,7 +373,7 @@ impl<O: IsA<EntryCompletion> + IsA<glib::object::Object>> EntryCompletionExt for
     fn connect_property_popup_set_width_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::popup-set-width",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::popup-set-width\0".as_ptr() as *const _,
                 transmute(notify_popup_set_width_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -383,7 +381,7 @@ impl<O: IsA<EntryCompletion> + IsA<glib::object::Object>> EntryCompletionExt for
     fn connect_property_popup_single_match_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::popup-single-match",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::popup-single-match\0".as_ptr() as *const _,
                 transmute(notify_popup_single_match_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -391,7 +389,7 @@ impl<O: IsA<EntryCompletion> + IsA<glib::object::Object>> EntryCompletionExt for
     fn connect_property_text_column_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::text-column",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::text-column\0".as_ptr() as *const _,
                 transmute(notify_text_column_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -412,7 +410,7 @@ where P: IsA<EntryCompletion> {
 unsafe extern "C" fn insert_prefix_trampoline<P>(this: *mut ffi::GtkEntryCompletion, prefix: *mut libc::c_char, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<EntryCompletion> {
     let f: &&(Fn(&P, &str) -> Inhibit + 'static) = transmute(f);
-    f(&EntryCompletion::from_glib_borrow(this).downcast_unchecked(), &String::from_glib_none(prefix)).to_glib()
+    f(&EntryCompletion::from_glib_borrow(this).downcast_unchecked(), &GString::from_glib_borrow(prefix)).to_glib()
 }
 
 unsafe extern "C" fn match_selected_trampoline<P>(this: *mut ffi::GtkEntryCompletion, model: *mut ffi::GtkTreeModel, iter: *mut ffi::GtkTreeIter, f: glib_ffi::gpointer) -> glib_ffi::gboolean

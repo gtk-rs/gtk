@@ -11,18 +11,16 @@ use ffi;
 use gdk;
 use gdk_pixbuf;
 use gio;
-use glib;
+use glib::GString;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
 use std::ptr;
 
@@ -71,19 +69,19 @@ impl Default for IconTheme {
     }
 }
 
-pub trait IconThemeExt {
+pub trait IconThemeExt: 'static {
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn add_resource_path(&self, path: &str);
 
     fn append_search_path<P: AsRef<std::path::Path>>(&self, path: P);
 
-    fn get_example_icon_name(&self) -> Option<String>;
+    fn get_example_icon_name(&self) -> Option<GString>;
 
     fn has_icon(&self, icon_name: &str) -> bool;
 
-    fn list_contexts(&self) -> Vec<String>;
+    fn list_contexts(&self) -> Vec<GString>;
 
-    fn list_icons<'a, P: Into<Option<&'a str>>>(&self, context: P) -> Vec<String>;
+    fn list_icons<'a, P: Into<Option<&'a str>>>(&self, context: P) -> Vec<GString>;
 
     fn load_icon(&self, icon_name: &str, size: i32, flags: IconLookupFlags) -> Result<Option<gdk_pixbuf::Pixbuf>, Error>;
 
@@ -114,7 +112,7 @@ pub trait IconThemeExt {
     fn connect_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<IconTheme> + IsA<glib::object::Object>> IconThemeExt for O {
+impl<O: IsA<IconTheme>> IconThemeExt for O {
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn add_resource_path(&self, path: &str) {
         unsafe {
@@ -128,7 +126,7 @@ impl<O: IsA<IconTheme> + IsA<glib::object::Object>> IconThemeExt for O {
         }
     }
 
-    fn get_example_icon_name(&self) -> Option<String> {
+    fn get_example_icon_name(&self) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gtk_icon_theme_get_example_icon_name(self.to_glib_none().0))
         }
@@ -140,13 +138,13 @@ impl<O: IsA<IconTheme> + IsA<glib::object::Object>> IconThemeExt for O {
         }
     }
 
-    fn list_contexts(&self) -> Vec<String> {
+    fn list_contexts(&self) -> Vec<GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gtk_icon_theme_list_contexts(self.to_glib_none().0))
         }
     }
 
-    fn list_icons<'a, P: Into<Option<&'a str>>>(&self, context: P) -> Vec<String> {
+    fn list_icons<'a, P: Into<Option<&'a str>>>(&self, context: P) -> Vec<GString> {
         let context = context.into();
         let context = context.to_glib_none();
         unsafe {
@@ -237,7 +235,7 @@ impl<O: IsA<IconTheme> + IsA<glib::object::Object>> IconThemeExt for O {
     fn connect_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"changed\0".as_ptr() as *const _,
                 transmute(changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

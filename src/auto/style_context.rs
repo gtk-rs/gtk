@@ -16,7 +16,7 @@ use TextDirection;
 use WidgetPath;
 use ffi;
 use gdk;
-use glib;
+use glib::GString;
 #[cfg(any(feature = "v3_8", feature = "dox"))]
 use glib::StaticType;
 #[cfg(any(feature = "v3_8", feature = "dox"))]
@@ -24,15 +24,15 @@ use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
+#[cfg(any(feature = "v3_8", feature = "dox"))]
 use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct StyleContext(Object<ffi::GtkStyleContext, ffi::GtkStyleContextClass>);
@@ -78,7 +78,7 @@ impl Default for StyleContext {
     }
 }
 
-pub trait StyleContextExt {
+pub trait StyleContextExt: 'static {
     fn add_class(&self, class_name: &str);
 
     fn add_provider<P: IsA<StyleProvider>>(&self, provider: &P, priority: u32);
@@ -140,10 +140,10 @@ pub trait StyleContextExt {
     #[cfg_attr(feature = "v3_12", deprecated)]
     fn invalidate(&self);
 
-    fn list_classes(&self) -> Vec<String>;
+    fn list_classes(&self) -> Vec<GString>;
 
     #[cfg_attr(feature = "v3_14", deprecated)]
-    fn list_regions(&self) -> Vec<String>;
+    fn list_regions(&self) -> Vec<GString>;
 
     fn lookup_color(&self, color_name: &str) -> Option<gdk::RGBA>;
 
@@ -199,7 +199,7 @@ pub trait StyleContextExt {
     fn state_is_running(&self, state: StateType) -> Option<f64>;
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
-    fn to_string(&self, flags: StyleContextPrintFlags) -> String;
+    fn to_string(&self, flags: StyleContextPrintFlags) -> GString;
 
     #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn get_property_paint_clock(&self) -> Option<gdk::FrameClock>;
@@ -219,7 +219,7 @@ pub trait StyleContextExt {
     fn connect_property_screen_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<StyleContext> + IsA<glib::object::Object>> StyleContextExt for O {
+impl<O: IsA<StyleContext>> StyleContextExt for O {
     fn add_class(&self, class_name: &str) {
         unsafe {
             ffi::gtk_style_context_add_class(self.to_glib_none().0, class_name.to_glib_none().0);
@@ -382,13 +382,13 @@ impl<O: IsA<StyleContext> + IsA<glib::object::Object>> StyleContextExt for O {
         }
     }
 
-    fn list_classes(&self) -> Vec<String> {
+    fn list_classes(&self) -> Vec<GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_container(ffi::gtk_style_context_list_classes(self.to_glib_none().0))
         }
     }
 
-    fn list_regions(&self) -> Vec<String> {
+    fn list_regions(&self) -> Vec<GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_container(ffi::gtk_style_context_list_regions(self.to_glib_none().0))
         }
@@ -525,7 +525,7 @@ impl<O: IsA<StyleContext> + IsA<glib::object::Object>> StyleContextExt for O {
     }
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
-    fn to_string(&self, flags: StyleContextPrintFlags) -> String {
+    fn to_string(&self, flags: StyleContextPrintFlags) -> GString {
         unsafe {
             from_glib_full(ffi::gtk_style_context_to_string(self.to_glib_none().0, flags.to_glib()))
         }
@@ -535,7 +535,7 @@ impl<O: IsA<StyleContext> + IsA<glib::object::Object>> StyleContextExt for O {
     fn get_property_paint_clock(&self) -> Option<gdk::FrameClock> {
         unsafe {
             let mut value = Value::from_type(<gdk::FrameClock as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "paint-clock".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"paint-clock\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -543,14 +543,14 @@ impl<O: IsA<StyleContext> + IsA<glib::object::Object>> StyleContextExt for O {
     #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn set_property_paint_clock(&self, paint_clock: Option<&gdk::FrameClock>) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "paint-clock".to_glib_none().0, Value::from(paint_clock).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"paint-clock\0".as_ptr() as *const _, Value::from(paint_clock).to_glib_none().0);
         }
     }
 
     fn connect_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"changed\0".as_ptr() as *const _,
                 transmute(changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -558,7 +558,7 @@ impl<O: IsA<StyleContext> + IsA<glib::object::Object>> StyleContextExt for O {
     fn connect_property_direction_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::direction",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::direction\0".as_ptr() as *const _,
                 transmute(notify_direction_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -567,7 +567,7 @@ impl<O: IsA<StyleContext> + IsA<glib::object::Object>> StyleContextExt for O {
     fn connect_property_paint_clock_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::paint-clock",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::paint-clock\0".as_ptr() as *const _,
                 transmute(notify_paint_clock_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -575,7 +575,7 @@ impl<O: IsA<StyleContext> + IsA<glib::object::Object>> StyleContextExt for O {
     fn connect_property_parent_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::parent",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::parent\0".as_ptr() as *const _,
                 transmute(notify_parent_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -583,7 +583,7 @@ impl<O: IsA<StyleContext> + IsA<glib::object::Object>> StyleContextExt for O {
     fn connect_property_screen_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::screen",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::screen\0".as_ptr() as *const _,
                 transmute(notify_screen_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

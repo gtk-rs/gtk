@@ -5,13 +5,10 @@
 use Buildable;
 use RecentFilterFlags;
 use ffi;
+use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use std::fmt;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct RecentFilter(Object<ffi::GtkRecentFilter>): Buildable;
@@ -36,7 +33,7 @@ impl Default for RecentFilter {
     }
 }
 
-pub trait RecentFilterExt {
+pub trait RecentFilterExt: 'static {
     fn add_age(&self, days: i32);
 
     fn add_application(&self, application: &str);
@@ -53,7 +50,7 @@ pub trait RecentFilterExt {
 
     //fn filter(&self, filter_info: /*Ignored*/&RecentFilterInfo) -> bool;
 
-    fn get_name(&self) -> Option<String>;
+    fn get_name(&self) -> Option<GString>;
 
     fn get_needed(&self) -> RecentFilterFlags;
 
@@ -105,7 +102,7 @@ impl<O: IsA<RecentFilter>> RecentFilterExt for O {
     //    unsafe { TODO: call ffi::gtk_recent_filter_filter() }
     //}
 
-    fn get_name(&self) -> Option<String> {
+    fn get_name(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_recent_filter_get_name(self.to_glib_none().0))
         }

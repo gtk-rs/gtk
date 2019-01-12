@@ -13,8 +13,9 @@ use gdk;
 use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
+use glib::object::ObjectExt;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
@@ -24,7 +25,6 @@ use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Range(Object<ffi::GtkRange, ffi::GtkRangeClass>): Widget, Buildable, Orientable;
@@ -34,7 +34,7 @@ glib_wrapper! {
     }
 }
 
-pub trait RangeExt {
+pub trait RangeExt: 'static {
     fn get_adjustment(&self) -> Adjustment;
 
     fn get_fill_level(&self) -> f64;
@@ -120,7 +120,7 @@ pub trait RangeExt {
     fn connect_property_upper_stepper_sensitivity_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Range> + IsA<glib::object::Object> + glib::object::ObjectExt> RangeExt for O {
+impl<O: IsA<Range>> RangeExt for O {
     fn get_adjustment(&self) -> Adjustment {
         unsafe {
             from_glib_none(ffi::gtk_range_get_adjustment(self.to_glib_none().0))
@@ -297,7 +297,7 @@ impl<O: IsA<Range> + IsA<glib::object::Object> + glib::object::ObjectExt> RangeE
     fn connect_adjust_bounds<F: Fn(&Self, f64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, f64) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "adjust-bounds",
+            connect_raw(self.to_glib_none().0 as *mut _, b"adjust-bounds\0".as_ptr() as *const _,
                 transmute(adjust_bounds_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -305,7 +305,7 @@ impl<O: IsA<Range> + IsA<glib::object::Object> + glib::object::ObjectExt> RangeE
     fn connect_change_value<F: Fn(&Self, ScrollType, f64) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, ScrollType, f64) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "change-value",
+            connect_raw(self.to_glib_none().0 as *mut _, b"change-value\0".as_ptr() as *const _,
                 transmute(change_value_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -313,19 +313,19 @@ impl<O: IsA<Range> + IsA<glib::object::Object> + glib::object::ObjectExt> RangeE
     fn connect_move_slider<F: Fn(&Self, ScrollType) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, ScrollType) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "move-slider",
+            connect_raw(self.to_glib_none().0 as *mut _, b"move-slider\0".as_ptr() as *const _,
                 transmute(move_slider_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_move_slider(&self, step: ScrollType) {
-        let _ = self.emit("move-slider", &[&step]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("move-slider", &[&step]).unwrap() };
     }
 
     fn connect_value_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "value-changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"value-changed\0".as_ptr() as *const _,
                 transmute(value_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -333,7 +333,7 @@ impl<O: IsA<Range> + IsA<glib::object::Object> + glib::object::ObjectExt> RangeE
     fn connect_property_adjustment_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::adjustment",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::adjustment\0".as_ptr() as *const _,
                 transmute(notify_adjustment_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -341,7 +341,7 @@ impl<O: IsA<Range> + IsA<glib::object::Object> + glib::object::ObjectExt> RangeE
     fn connect_property_fill_level_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::fill-level",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::fill-level\0".as_ptr() as *const _,
                 transmute(notify_fill_level_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -349,7 +349,7 @@ impl<O: IsA<Range> + IsA<glib::object::Object> + glib::object::ObjectExt> RangeE
     fn connect_property_inverted_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::inverted",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::inverted\0".as_ptr() as *const _,
                 transmute(notify_inverted_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -357,7 +357,7 @@ impl<O: IsA<Range> + IsA<glib::object::Object> + glib::object::ObjectExt> RangeE
     fn connect_property_lower_stepper_sensitivity_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::lower-stepper-sensitivity",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::lower-stepper-sensitivity\0".as_ptr() as *const _,
                 transmute(notify_lower_stepper_sensitivity_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -365,7 +365,7 @@ impl<O: IsA<Range> + IsA<glib::object::Object> + glib::object::ObjectExt> RangeE
     fn connect_property_restrict_to_fill_level_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::restrict-to-fill-level",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::restrict-to-fill-level\0".as_ptr() as *const _,
                 transmute(notify_restrict_to_fill_level_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -373,7 +373,7 @@ impl<O: IsA<Range> + IsA<glib::object::Object> + glib::object::ObjectExt> RangeE
     fn connect_property_round_digits_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::round-digits",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::round-digits\0".as_ptr() as *const _,
                 transmute(notify_round_digits_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -381,7 +381,7 @@ impl<O: IsA<Range> + IsA<glib::object::Object> + glib::object::ObjectExt> RangeE
     fn connect_property_show_fill_level_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::show-fill-level",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::show-fill-level\0".as_ptr() as *const _,
                 transmute(notify_show_fill_level_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -389,7 +389,7 @@ impl<O: IsA<Range> + IsA<glib::object::Object> + glib::object::ObjectExt> RangeE
     fn connect_property_upper_stepper_sensitivity_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::upper-stepper-sensitivity",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::upper-stepper-sensitivity\0".as_ptr() as *const _,
                 transmute(notify_upper_stepper_sensitivity_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

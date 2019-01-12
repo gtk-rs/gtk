@@ -14,12 +14,14 @@ use Widget;
 use ffi;
 use gdk;
 use glib;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
+use glib::object::ObjectExt;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
@@ -27,7 +29,6 @@ use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Button(Object<ffi::GtkButton, ffi::GtkButtonClass>): Bin, Container, Widget, Buildable, Actionable;
@@ -84,7 +85,7 @@ impl Default for Button {
     }
 }
 
-pub trait ButtonExt {
+pub trait ButtonExt: 'static {
     fn clicked(&self);
 
     #[cfg_attr(feature = "v3_14", deprecated)]
@@ -103,7 +104,7 @@ pub trait ButtonExt {
 
     fn get_image_position(&self) -> PositionType;
 
-    fn get_label(&self) -> Option<String>;
+    fn get_label(&self) -> Option<GString>;
 
     fn get_relief(&self) -> ReliefStyle;
 
@@ -178,7 +179,7 @@ pub trait ButtonExt {
     fn connect_property_yalign_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Button> + IsA<glib::object::Object> + glib::object::ObjectExt> ButtonExt for O {
+impl<O: IsA<Button>> ButtonExt for O {
     fn clicked(&self) {
         unsafe {
             ffi::gtk_button_clicked(self.to_glib_none().0);
@@ -226,7 +227,7 @@ impl<O: IsA<Button> + IsA<glib::object::Object> + glib::object::ObjectExt> Butto
         }
     }
 
-    fn get_label(&self) -> Option<String> {
+    fn get_label(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_button_get_label(self.to_glib_none().0))
         }
@@ -311,60 +312,60 @@ impl<O: IsA<Button> + IsA<glib::object::Object> + glib::object::ObjectExt> Butto
     fn get_property_xalign(&self) -> f32 {
         unsafe {
             let mut value = Value::from_type(<f32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "xalign".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"xalign\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_xalign(&self, xalign: f32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "xalign".to_glib_none().0, Value::from(&xalign).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"xalign\0".as_ptr() as *const _, Value::from(&xalign).to_glib_none().0);
         }
     }
 
     fn get_property_yalign(&self) -> f32 {
         unsafe {
             let mut value = Value::from_type(<f32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "yalign".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"yalign\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_yalign(&self, yalign: f32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "yalign".to_glib_none().0, Value::from(&yalign).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"yalign\0".as_ptr() as *const _, Value::from(&yalign).to_glib_none().0);
         }
     }
 
     fn connect_activate<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "activate",
+            connect_raw(self.to_glib_none().0 as *mut _, b"activate\0".as_ptr() as *const _,
                 transmute(activate_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_activate(&self) {
-        let _ = self.emit("activate", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("activate", &[]).unwrap() };
     }
 
     fn connect_clicked<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "clicked",
+            connect_raw(self.to_glib_none().0 as *mut _, b"clicked\0".as_ptr() as *const _,
                 transmute(clicked_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_clicked(&self) {
-        let _ = self.emit("clicked", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("clicked", &[]).unwrap() };
     }
 
     #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_always_show_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::always-show-image",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::always-show-image\0".as_ptr() as *const _,
                 transmute(notify_always_show_image_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -372,7 +373,7 @@ impl<O: IsA<Button> + IsA<glib::object::Object> + glib::object::ObjectExt> Butto
     fn connect_property_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::image",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::image\0".as_ptr() as *const _,
                 transmute(notify_image_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -380,7 +381,7 @@ impl<O: IsA<Button> + IsA<glib::object::Object> + glib::object::ObjectExt> Butto
     fn connect_property_image_position_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::image-position",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::image-position\0".as_ptr() as *const _,
                 transmute(notify_image_position_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -388,7 +389,7 @@ impl<O: IsA<Button> + IsA<glib::object::Object> + glib::object::ObjectExt> Butto
     fn connect_property_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::label",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::label\0".as_ptr() as *const _,
                 transmute(notify_label_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -396,7 +397,7 @@ impl<O: IsA<Button> + IsA<glib::object::Object> + glib::object::ObjectExt> Butto
     fn connect_property_relief_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::relief",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::relief\0".as_ptr() as *const _,
                 transmute(notify_relief_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -404,7 +405,7 @@ impl<O: IsA<Button> + IsA<glib::object::Object> + glib::object::ObjectExt> Butto
     fn connect_property_use_stock_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::use-stock",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::use-stock\0".as_ptr() as *const _,
                 transmute(notify_use_stock_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -412,7 +413,7 @@ impl<O: IsA<Button> + IsA<glib::object::Object> + glib::object::ObjectExt> Butto
     fn connect_property_use_underline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::use-underline",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::use-underline\0".as_ptr() as *const _,
                 transmute(notify_use_underline_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -420,7 +421,7 @@ impl<O: IsA<Button> + IsA<glib::object::Object> + glib::object::ObjectExt> Butto
     fn connect_property_xalign_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::xalign",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::xalign\0".as_ptr() as *const _,
                 transmute(notify_xalign_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -428,7 +429,7 @@ impl<O: IsA<Button> + IsA<glib::object::Object> + glib::object::ObjectExt> Butto
     fn connect_property_yalign_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::yalign",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::yalign\0".as_ptr() as *const _,
                 transmute(notify_yalign_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

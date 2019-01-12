@@ -10,19 +10,15 @@ use Container;
 use MenuItem;
 use Widget;
 use ffi;
-use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct RadioMenuItem(Object<ffi::GtkRadioMenuItem, ffi::GtkRadioMenuItemClass>): CheckMenuItem, MenuItem, Bin, Container, Widget, Buildable, Actionable;
@@ -59,7 +55,7 @@ impl RadioMenuItem {
     }
 }
 
-pub trait RadioMenuItemExt {
+pub trait RadioMenuItemExt: 'static {
     fn get_group(&self) -> Vec<RadioMenuItem>;
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
@@ -68,7 +64,7 @@ pub trait RadioMenuItemExt {
     fn connect_group_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<RadioMenuItem> + IsA<glib::object::Object>> RadioMenuItemExt for O {
+impl<O: IsA<RadioMenuItem>> RadioMenuItemExt for O {
     fn get_group(&self) -> Vec<RadioMenuItem> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(ffi::gtk_radio_menu_item_get_group(self.to_glib_none().0))
@@ -87,7 +83,7 @@ impl<O: IsA<RadioMenuItem> + IsA<glib::object::Object>> RadioMenuItemExt for O {
     fn connect_group_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "group-changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"group-changed\0".as_ptr() as *const _,
                 transmute(group_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

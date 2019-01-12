@@ -26,12 +26,14 @@ use WrapMode;
 use ffi;
 use gdk;
 use glib;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
+use glib::object::ObjectExt;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
@@ -43,7 +45,6 @@ use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct TextView(Object<ffi::GtkTextView, ffi::GtkTextViewClass>): Container, Widget, Buildable, Scrollable;
@@ -75,7 +76,7 @@ impl Default for TextView {
     }
 }
 
-pub trait TextViewExt {
+pub trait TextViewExt: 'static {
     fn add_child_at_anchor<P: IsA<Widget>>(&self, child: &P, anchor: &TextChildAnchor);
 
     fn add_child_in_window<P: IsA<Widget>>(&self, child: &P, which_window: TextWindowType, xpos: i32, ypos: i32);
@@ -225,7 +226,7 @@ pub trait TextViewExt {
 
     fn window_to_buffer_coords(&self, win: TextWindowType, window_x: i32, window_y: i32) -> (i32, i32);
 
-    fn get_property_im_module(&self) -> Option<String>;
+    fn get_property_im_module(&self) -> Option<GString>;
 
     fn set_property_im_module<'a, P: Into<Option<&'a str>>>(&self, im_module: P);
 
@@ -350,7 +351,7 @@ pub trait TextViewExt {
     fn connect_property_wrap_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<TextView> + IsA<glib::object::Object> + glib::object::ObjectExt> TextViewExt for O {
+impl<O: IsA<TextView>> TextViewExt for O {
     fn add_child_at_anchor<P: IsA<Widget>>(&self, child: &P, anchor: &TextChildAnchor) {
         unsafe {
             ffi::gtk_text_view_add_child_at_anchor(self.to_glib_none().0, child.to_glib_none().0, anchor.to_glib_none().0);
@@ -804,10 +805,10 @@ impl<O: IsA<TextView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tex
         }
     }
 
-    fn get_property_im_module(&self) -> Option<String> {
+    fn get_property_im_module(&self) -> Option<GString> {
         unsafe {
-            let mut value = Value::from_type(<String as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "im-module".to_glib_none().0, value.to_glib_none_mut().0);
+            let mut value = Value::from_type(<GString as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"im-module\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -815,21 +816,21 @@ impl<O: IsA<TextView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tex
     fn set_property_im_module<'a, P: Into<Option<&'a str>>>(&self, im_module: P) {
         let im_module = im_module.into();
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "im-module".to_glib_none().0, Value::from(im_module).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"im-module\0".as_ptr() as *const _, Value::from(im_module).to_glib_none().0);
         }
     }
 
     fn get_property_monospace(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "monospace".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"monospace\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_monospace(&self, monospace: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "monospace".to_glib_none().0, Value::from(&monospace).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"monospace\0".as_ptr() as *const _, Value::from(&monospace).to_glib_none().0);
         }
     }
 
@@ -837,7 +838,7 @@ impl<O: IsA<TextView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tex
     fn get_property_populate_all(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "populate-all".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"populate-all\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -845,63 +846,63 @@ impl<O: IsA<TextView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tex
     #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn set_property_populate_all(&self, populate_all: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "populate-all".to_glib_none().0, Value::from(&populate_all).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"populate-all\0".as_ptr() as *const _, Value::from(&populate_all).to_glib_none().0);
         }
     }
 
     fn connect_backspace<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "backspace",
+            connect_raw(self.to_glib_none().0 as *mut _, b"backspace\0".as_ptr() as *const _,
                 transmute(backspace_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_backspace(&self) {
-        let _ = self.emit("backspace", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("backspace", &[]).unwrap() };
     }
 
     fn connect_copy_clipboard<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "copy-clipboard",
+            connect_raw(self.to_glib_none().0 as *mut _, b"copy-clipboard\0".as_ptr() as *const _,
                 transmute(copy_clipboard_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_copy_clipboard(&self) {
-        let _ = self.emit("copy-clipboard", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("copy-clipboard", &[]).unwrap() };
     }
 
     fn connect_cut_clipboard<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "cut-clipboard",
+            connect_raw(self.to_glib_none().0 as *mut _, b"cut-clipboard\0".as_ptr() as *const _,
                 transmute(cut_clipboard_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_cut_clipboard(&self) {
-        let _ = self.emit("cut-clipboard", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("cut-clipboard", &[]).unwrap() };
     }
 
     fn connect_delete_from_cursor<F: Fn(&Self, DeleteType, i32) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, DeleteType, i32) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "delete-from-cursor",
+            connect_raw(self.to_glib_none().0 as *mut _, b"delete-from-cursor\0".as_ptr() as *const _,
                 transmute(delete_from_cursor_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_delete_from_cursor(&self, type_: DeleteType, count: i32) {
-        let _ = self.emit("delete-from-cursor", &[&type_, &count]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("delete-from-cursor", &[&type_, &count]).unwrap() };
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn connect_extend_selection<F: Fn(&Self, TextExtendSelection, &TextIter, &TextIter, &TextIter) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, TextExtendSelection, &TextIter, &TextIter, &TextIter) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "extend-selection",
+            connect_raw(self.to_glib_none().0 as *mut _, b"extend-selection\0".as_ptr() as *const _,
                 transmute(extend_selection_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -909,69 +910,69 @@ impl<O: IsA<TextView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tex
     fn connect_insert_at_cursor<F: Fn(&Self, &str) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &str) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "insert-at-cursor",
+            connect_raw(self.to_glib_none().0 as *mut _, b"insert-at-cursor\0".as_ptr() as *const _,
                 transmute(insert_at_cursor_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_insert_at_cursor(&self, string: &str) {
-        let _ = self.emit("insert-at-cursor", &[&string]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("insert-at-cursor", &[&string]).unwrap() };
     }
 
     #[cfg(any(feature = "v3_22_26", feature = "dox"))]
     fn connect_insert_emoji<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "insert-emoji",
+            connect_raw(self.to_glib_none().0 as *mut _, b"insert-emoji\0".as_ptr() as *const _,
                 transmute(insert_emoji_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     #[cfg(any(feature = "v3_22_26", feature = "dox"))]
     fn emit_insert_emoji(&self) {
-        let _ = self.emit("insert-emoji", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("insert-emoji", &[]).unwrap() };
     }
 
     fn connect_move_cursor<F: Fn(&Self, MovementStep, i32, bool) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, MovementStep, i32, bool) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "move-cursor",
+            connect_raw(self.to_glib_none().0 as *mut _, b"move-cursor\0".as_ptr() as *const _,
                 transmute(move_cursor_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_move_cursor(&self, step: MovementStep, count: i32, extend_selection: bool) {
-        let _ = self.emit("move-cursor", &[&step, &count, &extend_selection]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("move-cursor", &[&step, &count, &extend_selection]).unwrap() };
     }
 
     fn connect_move_viewport<F: Fn(&Self, ScrollStep, i32) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, ScrollStep, i32) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "move-viewport",
+            connect_raw(self.to_glib_none().0 as *mut _, b"move-viewport\0".as_ptr() as *const _,
                 transmute(move_viewport_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_move_viewport(&self, step: ScrollStep, count: i32) {
-        let _ = self.emit("move-viewport", &[&step, &count]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("move-viewport", &[&step, &count]).unwrap() };
     }
 
     fn connect_paste_clipboard<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "paste-clipboard",
+            connect_raw(self.to_glib_none().0 as *mut _, b"paste-clipboard\0".as_ptr() as *const _,
                 transmute(paste_clipboard_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_paste_clipboard(&self) {
-        let _ = self.emit("paste-clipboard", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("paste-clipboard", &[]).unwrap() };
     }
 
     fn connect_populate_popup<F: Fn(&Self, &Widget) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Widget) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "populate-popup",
+            connect_raw(self.to_glib_none().0 as *mut _, b"populate-popup\0".as_ptr() as *const _,
                 transmute(populate_popup_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -979,67 +980,67 @@ impl<O: IsA<TextView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tex
     fn connect_preedit_changed<F: Fn(&Self, &str) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &str) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "preedit-changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"preedit-changed\0".as_ptr() as *const _,
                 transmute(preedit_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_preedit_changed(&self, preedit: &str) {
-        let _ = self.emit("preedit-changed", &[&preedit]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("preedit-changed", &[&preedit]).unwrap() };
     }
 
     fn connect_select_all<F: Fn(&Self, bool) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, bool) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "select-all",
+            connect_raw(self.to_glib_none().0 as *mut _, b"select-all\0".as_ptr() as *const _,
                 transmute(select_all_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_select_all(&self, select: bool) {
-        let _ = self.emit("select-all", &[&select]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("select-all", &[&select]).unwrap() };
     }
 
     fn connect_set_anchor<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "set-anchor",
+            connect_raw(self.to_glib_none().0 as *mut _, b"set-anchor\0".as_ptr() as *const _,
                 transmute(set_anchor_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_set_anchor(&self) {
-        let _ = self.emit("set-anchor", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("set-anchor", &[]).unwrap() };
     }
 
     fn connect_toggle_cursor_visible<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "toggle-cursor-visible",
+            connect_raw(self.to_glib_none().0 as *mut _, b"toggle-cursor-visible\0".as_ptr() as *const _,
                 transmute(toggle_cursor_visible_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_toggle_cursor_visible(&self) {
-        let _ = self.emit("toggle-cursor-visible", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("toggle-cursor-visible", &[]).unwrap() };
     }
 
     fn connect_toggle_overwrite<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "toggle-overwrite",
+            connect_raw(self.to_glib_none().0 as *mut _, b"toggle-overwrite\0".as_ptr() as *const _,
                 transmute(toggle_overwrite_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_toggle_overwrite(&self) {
-        let _ = self.emit("toggle-overwrite", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("toggle-overwrite", &[]).unwrap() };
     }
 
     fn connect_property_accepts_tab_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::accepts-tab",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::accepts-tab\0".as_ptr() as *const _,
                 transmute(notify_accepts_tab_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1048,7 +1049,7 @@ impl<O: IsA<TextView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tex
     fn connect_property_bottom_margin_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::bottom-margin",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::bottom-margin\0".as_ptr() as *const _,
                 transmute(notify_bottom_margin_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1056,7 +1057,7 @@ impl<O: IsA<TextView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tex
     fn connect_property_buffer_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::buffer",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::buffer\0".as_ptr() as *const _,
                 transmute(notify_buffer_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1064,7 +1065,7 @@ impl<O: IsA<TextView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tex
     fn connect_property_cursor_visible_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::cursor-visible",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::cursor-visible\0".as_ptr() as *const _,
                 transmute(notify_cursor_visible_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1072,7 +1073,7 @@ impl<O: IsA<TextView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tex
     fn connect_property_editable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::editable",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::editable\0".as_ptr() as *const _,
                 transmute(notify_editable_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1080,7 +1081,7 @@ impl<O: IsA<TextView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tex
     fn connect_property_im_module_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::im-module",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::im-module\0".as_ptr() as *const _,
                 transmute(notify_im_module_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1088,7 +1089,7 @@ impl<O: IsA<TextView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tex
     fn connect_property_indent_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::indent",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::indent\0".as_ptr() as *const _,
                 transmute(notify_indent_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1097,7 +1098,7 @@ impl<O: IsA<TextView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tex
     fn connect_property_input_hints_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::input-hints",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::input-hints\0".as_ptr() as *const _,
                 transmute(notify_input_hints_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1106,7 +1107,7 @@ impl<O: IsA<TextView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tex
     fn connect_property_input_purpose_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::input-purpose",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::input-purpose\0".as_ptr() as *const _,
                 transmute(notify_input_purpose_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1114,7 +1115,7 @@ impl<O: IsA<TextView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tex
     fn connect_property_justification_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::justification",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::justification\0".as_ptr() as *const _,
                 transmute(notify_justification_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1122,7 +1123,7 @@ impl<O: IsA<TextView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tex
     fn connect_property_left_margin_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::left-margin",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::left-margin\0".as_ptr() as *const _,
                 transmute(notify_left_margin_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1130,7 +1131,7 @@ impl<O: IsA<TextView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tex
     fn connect_property_monospace_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::monospace",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::monospace\0".as_ptr() as *const _,
                 transmute(notify_monospace_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1138,7 +1139,7 @@ impl<O: IsA<TextView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tex
     fn connect_property_overwrite_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::overwrite",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::overwrite\0".as_ptr() as *const _,
                 transmute(notify_overwrite_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1146,7 +1147,7 @@ impl<O: IsA<TextView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tex
     fn connect_property_pixels_above_lines_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::pixels-above-lines",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::pixels-above-lines\0".as_ptr() as *const _,
                 transmute(notify_pixels_above_lines_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1154,7 +1155,7 @@ impl<O: IsA<TextView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tex
     fn connect_property_pixels_below_lines_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::pixels-below-lines",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::pixels-below-lines\0".as_ptr() as *const _,
                 transmute(notify_pixels_below_lines_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1162,7 +1163,7 @@ impl<O: IsA<TextView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tex
     fn connect_property_pixels_inside_wrap_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::pixels-inside-wrap",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::pixels-inside-wrap\0".as_ptr() as *const _,
                 transmute(notify_pixels_inside_wrap_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1171,7 +1172,7 @@ impl<O: IsA<TextView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tex
     fn connect_property_populate_all_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::populate-all",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::populate-all\0".as_ptr() as *const _,
                 transmute(notify_populate_all_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1179,7 +1180,7 @@ impl<O: IsA<TextView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tex
     fn connect_property_right_margin_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::right-margin",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::right-margin\0".as_ptr() as *const _,
                 transmute(notify_right_margin_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1187,7 +1188,7 @@ impl<O: IsA<TextView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tex
     fn connect_property_tabs_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::tabs",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::tabs\0".as_ptr() as *const _,
                 transmute(notify_tabs_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1196,7 +1197,7 @@ impl<O: IsA<TextView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tex
     fn connect_property_top_margin_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::top-margin",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::top-margin\0".as_ptr() as *const _,
                 transmute(notify_top_margin_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1204,7 +1205,7 @@ impl<O: IsA<TextView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tex
     fn connect_property_wrap_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::wrap-mode",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::wrap-mode\0".as_ptr() as *const _,
                 transmute(notify_wrap_mode_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1244,7 +1245,7 @@ where P: IsA<TextView> {
 unsafe extern "C" fn insert_at_cursor_trampoline<P>(this: *mut ffi::GtkTextView, string: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
     let f: &&(Fn(&P, &str) + 'static) = transmute(f);
-    f(&TextView::from_glib_borrow(this).downcast_unchecked(), &String::from_glib_none(string))
+    f(&TextView::from_glib_borrow(this).downcast_unchecked(), &GString::from_glib_borrow(string))
 }
 
 #[cfg(any(feature = "v3_22_26", feature = "dox"))]
@@ -1281,7 +1282,7 @@ where P: IsA<TextView> {
 unsafe extern "C" fn preedit_changed_trampoline<P>(this: *mut ffi::GtkTextView, preedit: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
     let f: &&(Fn(&P, &str) + 'static) = transmute(f);
-    f(&TextView::from_glib_borrow(this).downcast_unchecked(), &String::from_glib_none(preedit))
+    f(&TextView::from_glib_borrow(this).downcast_unchecked(), &GString::from_glib_borrow(preedit))
 }
 
 unsafe extern "C" fn select_all_trampoline<P>(this: *mut ffi::GtkTextView, select: glib_ffi::gboolean, f: glib_ffi::gpointer)

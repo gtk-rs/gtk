@@ -7,11 +7,7 @@ use IconSet;
 use ffi;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use std::fmt;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct IconFactory(Object<ffi::GtkIconFactory, ffi::GtkIconFactoryClass>): Buildable;
@@ -46,7 +42,7 @@ impl Default for IconFactory {
     }
 }
 
-pub trait IconFactoryExt {
+pub trait IconFactoryExt: 'static {
     #[cfg_attr(feature = "v3_10", deprecated)]
     fn add(&self, stock_id: &str, icon_set: &IconSet);
 

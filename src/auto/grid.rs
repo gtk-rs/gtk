@@ -10,21 +10,18 @@ use Orientable;
 use PositionType;
 use Widget;
 use ffi;
-use glib;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Grid(Object<ffi::GtkGrid, ffi::GtkGridClass>): Container, Widget, Buildable, Orientable;
@@ -49,7 +46,7 @@ impl Default for Grid {
     }
 }
 
-pub trait GridExt {
+pub trait GridExt: 'static {
     fn attach<P: IsA<Widget>>(&self, child: &P, left: i32, top: i32, width: i32, height: i32);
 
     fn attach_next_to<'a, P: IsA<Widget>, Q: IsA<Widget> + 'a, R: Into<Option<&'a Q>>>(&self, child: &P, sibling: R, side: PositionType, width: i32, height: i32);
@@ -127,7 +124,7 @@ pub trait GridExt {
     fn connect_property_row_spacing_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Grid> + IsA<Container> + IsA<glib::object::Object>> GridExt for O {
+impl<O: IsA<Grid>> GridExt for O {
     fn attach<P: IsA<Widget>>(&self, child: &P, left: i32, top: i32, width: i32, height: i32) {
         unsafe {
             ffi::gtk_grid_attach(self.to_glib_none().0, child.to_glib_none().0, left, top, width, height);
@@ -259,77 +256,77 @@ impl<O: IsA<Grid> + IsA<Container> + IsA<glib::object::Object>> GridExt for O {
     fn get_property_baseline_row(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "baseline-row".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"baseline-row\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_baseline_row(&self, baseline_row: i32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "baseline-row".to_glib_none().0, Value::from(&baseline_row).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"baseline-row\0".as_ptr() as *const _, Value::from(&baseline_row).to_glib_none().0);
         }
     }
 
     fn get_cell_height<T: IsA<Widget>>(&self, item: &T) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            ffi::gtk_container_child_get_property(self.to_glib_none().0, item.to_glib_none().0, "height".to_glib_none().0, value.to_glib_none_mut().0);
+            ffi::gtk_container_child_get_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"height\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_cell_height<T: IsA<Widget>>(&self, item: &T, height: i32) {
         unsafe {
-            ffi::gtk_container_child_set_property(self.to_glib_none().0, item.to_glib_none().0, "height".to_glib_none().0, Value::from(&height).to_glib_none().0);
+            ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"height\0".as_ptr() as *const _, Value::from(&height).to_glib_none().0);
         }
     }
 
     fn get_cell_width<T: IsA<Widget>>(&self, item: &T) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            ffi::gtk_container_child_get_property(self.to_glib_none().0, item.to_glib_none().0, "width".to_glib_none().0, value.to_glib_none_mut().0);
+            ffi::gtk_container_child_get_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"width\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_cell_width<T: IsA<Widget>>(&self, item: &T, width: i32) {
         unsafe {
-            ffi::gtk_container_child_set_property(self.to_glib_none().0, item.to_glib_none().0, "width".to_glib_none().0, Value::from(&width).to_glib_none().0);
+            ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"width\0".as_ptr() as *const _, Value::from(&width).to_glib_none().0);
         }
     }
 
     fn get_cell_left_attach<T: IsA<Widget>>(&self, item: &T) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            ffi::gtk_container_child_get_property(self.to_glib_none().0, item.to_glib_none().0, "left-attach".to_glib_none().0, value.to_glib_none_mut().0);
+            ffi::gtk_container_child_get_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"left-attach\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_cell_left_attach<T: IsA<Widget>>(&self, item: &T, left_attach: i32) {
         unsafe {
-            ffi::gtk_container_child_set_property(self.to_glib_none().0, item.to_glib_none().0, "left-attach".to_glib_none().0, Value::from(&left_attach).to_glib_none().0);
+            ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"left-attach\0".as_ptr() as *const _, Value::from(&left_attach).to_glib_none().0);
         }
     }
 
     fn get_cell_top_attach<T: IsA<Widget>>(&self, item: &T) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            ffi::gtk_container_child_get_property(self.to_glib_none().0, item.to_glib_none().0, "top-attach".to_glib_none().0, value.to_glib_none_mut().0);
+            ffi::gtk_container_child_get_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"top-attach\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_cell_top_attach<T: IsA<Widget>>(&self, item: &T, top_attach: i32) {
         unsafe {
-            ffi::gtk_container_child_set_property(self.to_glib_none().0, item.to_glib_none().0, "top-attach".to_glib_none().0, Value::from(&top_attach).to_glib_none().0);
+            ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"top-attach\0".as_ptr() as *const _, Value::from(&top_attach).to_glib_none().0);
         }
     }
 
     fn connect_property_baseline_row_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::baseline-row",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::baseline-row\0".as_ptr() as *const _,
                 transmute(notify_baseline_row_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -337,7 +334,7 @@ impl<O: IsA<Grid> + IsA<Container> + IsA<glib::object::Object>> GridExt for O {
     fn connect_property_column_homogeneous_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::column-homogeneous",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::column-homogeneous\0".as_ptr() as *const _,
                 transmute(notify_column_homogeneous_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -345,7 +342,7 @@ impl<O: IsA<Grid> + IsA<Container> + IsA<glib::object::Object>> GridExt for O {
     fn connect_property_column_spacing_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::column-spacing",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::column-spacing\0".as_ptr() as *const _,
                 transmute(notify_column_spacing_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -353,7 +350,7 @@ impl<O: IsA<Grid> + IsA<Container> + IsA<glib::object::Object>> GridExt for O {
     fn connect_property_row_homogeneous_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::row-homogeneous",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::row-homogeneous\0".as_ptr() as *const _,
                 transmute(notify_row_homogeneous_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -361,7 +358,7 @@ impl<O: IsA<Grid> + IsA<Container> + IsA<glib::object::Object>> GridExt for O {
     fn connect_property_row_spacing_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::row-spacing",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::row-spacing\0".as_ptr() as *const _,
                 transmute(notify_row_spacing_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

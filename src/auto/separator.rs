@@ -9,11 +9,7 @@ use Widget;
 use ffi;
 use glib::object::Downcast;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use std::fmt;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Separator(Object<ffi::GtkSeparator, ffi::GtkSeparatorClass>): Widget, Buildable, Orientable;

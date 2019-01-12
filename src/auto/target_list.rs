@@ -6,10 +6,7 @@ use TextBuffer;
 use ffi;
 use gdk;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]

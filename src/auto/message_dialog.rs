@@ -10,21 +10,19 @@ use MessageType;
 use Widget;
 use Window;
 use ffi;
-use glib;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct MessageDialog(Object<ffi::GtkMessageDialog, ffi::GtkMessageDialogClass>): Dialog, Window, Bin, Container, Widget, Buildable;
@@ -44,7 +42,7 @@ impl MessageDialog {
     //}
 }
 
-pub trait MessageDialogExt {
+pub trait MessageDialogExt: 'static {
     //fn format_secondary_markup(&self, message_format: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
     //fn format_secondary_text<'a, P: Into<Option<&'a str>>>(&self, message_format: P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
@@ -63,7 +61,7 @@ pub trait MessageDialogExt {
 
     fn set_property_message_type(&self, message_type: MessageType);
 
-    fn get_property_secondary_text(&self) -> Option<String>;
+    fn get_property_secondary_text(&self) -> Option<GString>;
 
     fn set_property_secondary_text<'a, P: Into<Option<&'a str>>>(&self, secondary_text: P);
 
@@ -71,7 +69,7 @@ pub trait MessageDialogExt {
 
     fn set_property_secondary_use_markup(&self, secondary_use_markup: bool);
 
-    fn get_property_text(&self) -> Option<String>;
+    fn get_property_text(&self) -> Option<GString>;
 
     fn set_property_text<'a, P: Into<Option<&'a str>>>(&self, text: P);
 
@@ -95,7 +93,7 @@ pub trait MessageDialogExt {
     fn connect_property_use_markup_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<MessageDialog> + IsA<glib::object::Object>> MessageDialogExt for O {
+impl<O: IsA<MessageDialog>> MessageDialogExt for O {
     //fn format_secondary_markup(&self, message_format: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
     //    unsafe { TODO: call ffi::gtk_message_dialog_format_secondary_markup() }
     //}
@@ -131,21 +129,21 @@ impl<O: IsA<MessageDialog> + IsA<glib::object::Object>> MessageDialogExt for O {
     fn get_property_message_type(&self) -> MessageType {
         unsafe {
             let mut value = Value::from_type(<MessageType as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "message-type".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"message-type\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_message_type(&self, message_type: MessageType) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "message-type".to_glib_none().0, Value::from(&message_type).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"message-type\0".as_ptr() as *const _, Value::from(&message_type).to_glib_none().0);
         }
     }
 
-    fn get_property_secondary_text(&self) -> Option<String> {
+    fn get_property_secondary_text(&self) -> Option<GString> {
         unsafe {
-            let mut value = Value::from_type(<String as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "secondary-text".to_glib_none().0, value.to_glib_none_mut().0);
+            let mut value = Value::from_type(<GString as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"secondary-text\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -153,28 +151,28 @@ impl<O: IsA<MessageDialog> + IsA<glib::object::Object>> MessageDialogExt for O {
     fn set_property_secondary_text<'a, P: Into<Option<&'a str>>>(&self, secondary_text: P) {
         let secondary_text = secondary_text.into();
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "secondary-text".to_glib_none().0, Value::from(secondary_text).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"secondary-text\0".as_ptr() as *const _, Value::from(secondary_text).to_glib_none().0);
         }
     }
 
     fn get_property_secondary_use_markup(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "secondary-use-markup".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"secondary-use-markup\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_secondary_use_markup(&self, secondary_use_markup: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "secondary-use-markup".to_glib_none().0, Value::from(&secondary_use_markup).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"secondary-use-markup\0".as_ptr() as *const _, Value::from(&secondary_use_markup).to_glib_none().0);
         }
     }
 
-    fn get_property_text(&self) -> Option<String> {
+    fn get_property_text(&self) -> Option<GString> {
         unsafe {
-            let mut value = Value::from_type(<String as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "text".to_glib_none().0, value.to_glib_none_mut().0);
+            let mut value = Value::from_type(<GString as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"text\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -182,28 +180,28 @@ impl<O: IsA<MessageDialog> + IsA<glib::object::Object>> MessageDialogExt for O {
     fn set_property_text<'a, P: Into<Option<&'a str>>>(&self, text: P) {
         let text = text.into();
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "text".to_glib_none().0, Value::from(text).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"text\0".as_ptr() as *const _, Value::from(text).to_glib_none().0);
         }
     }
 
     fn get_property_use_markup(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "use-markup".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"use-markup\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_use_markup(&self, use_markup: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "use-markup".to_glib_none().0, Value::from(&use_markup).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"use-markup\0".as_ptr() as *const _, Value::from(&use_markup).to_glib_none().0);
         }
     }
 
     fn connect_property_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::image",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::image\0".as_ptr() as *const _,
                 transmute(notify_image_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -211,7 +209,7 @@ impl<O: IsA<MessageDialog> + IsA<glib::object::Object>> MessageDialogExt for O {
     fn connect_property_message_area_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::message-area",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::message-area\0".as_ptr() as *const _,
                 transmute(notify_message_area_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -219,7 +217,7 @@ impl<O: IsA<MessageDialog> + IsA<glib::object::Object>> MessageDialogExt for O {
     fn connect_property_message_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::message-type",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::message-type\0".as_ptr() as *const _,
                 transmute(notify_message_type_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -227,7 +225,7 @@ impl<O: IsA<MessageDialog> + IsA<glib::object::Object>> MessageDialogExt for O {
     fn connect_property_secondary_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::secondary-text",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::secondary-text\0".as_ptr() as *const _,
                 transmute(notify_secondary_text_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -235,7 +233,7 @@ impl<O: IsA<MessageDialog> + IsA<glib::object::Object>> MessageDialogExt for O {
     fn connect_property_secondary_use_markup_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::secondary-use-markup",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::secondary-use-markup\0".as_ptr() as *const _,
                 transmute(notify_secondary_use_markup_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -243,7 +241,7 @@ impl<O: IsA<MessageDialog> + IsA<glib::object::Object>> MessageDialogExt for O {
     fn connect_property_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::text",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::text\0".as_ptr() as *const _,
                 transmute(notify_text_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -251,7 +249,7 @@ impl<O: IsA<MessageDialog> + IsA<glib::object::Object>> MessageDialogExt for O {
     fn connect_property_use_markup_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::use-markup",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::use-markup\0".as_ptr() as *const _,
                 transmute(notify_use_markup_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

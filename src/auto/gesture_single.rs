@@ -7,24 +7,21 @@ use Gesture;
 use ffi;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use gdk;
-use glib;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use glib::object::Downcast;
 use glib::object::IsA;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use glib::signal::SignalHandlerId;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
+#[cfg(any(feature = "v3_14", feature = "dox"))]
 use glib_ffi;
-use gobject_ffi;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct GestureSingle(Object<ffi::GtkGestureSingle, ffi::GtkGestureSingleClass>): Gesture, EventController;
@@ -34,7 +31,7 @@ glib_wrapper! {
     }
 }
 
-pub trait GestureSingleExt {
+pub trait GestureSingleExt: 'static {
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_button(&self) -> u32;
 
@@ -69,7 +66,7 @@ pub trait GestureSingleExt {
     fn connect_property_touch_only_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<GestureSingle> + IsA<glib::object::Object>> GestureSingleExt for O {
+impl<O: IsA<GestureSingle>> GestureSingleExt for O {
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_button(&self) -> u32 {
         unsafe {
@@ -130,7 +127,7 @@ impl<O: IsA<GestureSingle> + IsA<glib::object::Object>> GestureSingleExt for O {
     fn connect_property_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::button",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::button\0".as_ptr() as *const _,
                 transmute(notify_button_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -139,7 +136,7 @@ impl<O: IsA<GestureSingle> + IsA<glib::object::Object>> GestureSingleExt for O {
     fn connect_property_exclusive_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::exclusive",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::exclusive\0".as_ptr() as *const _,
                 transmute(notify_exclusive_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -148,7 +145,7 @@ impl<O: IsA<GestureSingle> + IsA<glib::object::Object>> GestureSingleExt for O {
     fn connect_property_touch_only_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::touch-only",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::touch-only\0".as_ptr() as *const _,
                 transmute(notify_touch_only_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

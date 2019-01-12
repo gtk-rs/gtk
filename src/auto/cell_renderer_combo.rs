@@ -14,16 +14,14 @@ use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct CellRendererCombo(Object<ffi::GtkCellRendererCombo, ffi::GtkCellRendererComboClass>): CellRendererText, CellRenderer;
@@ -48,14 +46,14 @@ impl Default for CellRendererCombo {
     }
 }
 
-pub trait CellRendererComboExt {
+pub trait CellRendererComboExt: 'static {
     fn get_property_has_entry(&self) -> bool;
 
     fn set_property_has_entry(&self, has_entry: bool);
 
     fn get_property_model(&self) -> Option<TreeModel>;
 
-    fn set_property_model<P: IsA<TreeModel> + IsA<glib::object::Object> + glib::value::SetValueOptional>(&self, model: Option<&P>);
+    fn set_property_model<P: IsA<TreeModel> + glib::value::SetValueOptional>(&self, model: Option<&P>);
 
     fn get_property_text_column(&self) -> i32;
 
@@ -70,53 +68,53 @@ pub trait CellRendererComboExt {
     fn connect_property_text_column_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<CellRendererCombo> + IsA<glib::object::Object>> CellRendererComboExt for O {
+impl<O: IsA<CellRendererCombo>> CellRendererComboExt for O {
     fn get_property_has_entry(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "has-entry".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"has-entry\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_has_entry(&self, has_entry: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "has-entry".to_glib_none().0, Value::from(&has_entry).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"has-entry\0".as_ptr() as *const _, Value::from(&has_entry).to_glib_none().0);
         }
     }
 
     fn get_property_model(&self) -> Option<TreeModel> {
         unsafe {
             let mut value = Value::from_type(<TreeModel as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "model".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"model\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
 
-    fn set_property_model<P: IsA<TreeModel> + IsA<glib::object::Object> + glib::value::SetValueOptional>(&self, model: Option<&P>) {
+    fn set_property_model<P: IsA<TreeModel> + glib::value::SetValueOptional>(&self, model: Option<&P>) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "model".to_glib_none().0, Value::from(model).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"model\0".as_ptr() as *const _, Value::from(model).to_glib_none().0);
         }
     }
 
     fn get_property_text_column(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "text-column".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"text-column\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_text_column(&self, text_column: i32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "text-column".to_glib_none().0, Value::from(&text_column).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"text-column\0".as_ptr() as *const _, Value::from(&text_column).to_glib_none().0);
         }
     }
 
     fn connect_changed<F: Fn(&Self, TreePath, &TreeIter) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, TreePath, &TreeIter) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"changed\0".as_ptr() as *const _,
                 transmute(changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -124,7 +122,7 @@ impl<O: IsA<CellRendererCombo> + IsA<glib::object::Object>> CellRendererComboExt
     fn connect_property_has_entry_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::has-entry",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::has-entry\0".as_ptr() as *const _,
                 transmute(notify_has_entry_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -132,7 +130,7 @@ impl<O: IsA<CellRendererCombo> + IsA<glib::object::Object>> CellRendererComboExt
     fn connect_property_model_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::model",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::model\0".as_ptr() as *const _,
                 transmute(notify_model_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -140,7 +138,7 @@ impl<O: IsA<CellRendererCombo> + IsA<glib::object::Object>> CellRendererComboExt
     fn connect_property_text_column_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::text-column",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::text-column\0".as_ptr() as *const _,
                 transmute(notify_text_column_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

@@ -10,21 +10,18 @@ use PositionType;
 use Range;
 use Widget;
 use ffi;
-use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use libc;
 use pango;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Scale(Object<ffi::GtkScale, ffi::GtkScaleClass>): Range, Widget, Buildable, Orientable;
@@ -52,7 +49,7 @@ impl Scale {
     }
 }
 
-pub trait ScaleExt {
+pub trait ScaleExt: 'static {
     fn add_mark<'a, P: Into<Option<&'a str>>>(&self, value: f64, position: PositionType, markup: P);
 
     fn clear_marks(&self);
@@ -88,7 +85,7 @@ pub trait ScaleExt {
     fn connect_property_value_pos_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Scale> + IsA<glib::object::Object>> ScaleExt for O {
+impl<O: IsA<Scale>> ScaleExt for O {
     fn add_mark<'a, P: Into<Option<&'a str>>>(&self, value: f64, position: PositionType, markup: P) {
         let markup = markup.into();
         let markup = markup.to_glib_none();
@@ -169,7 +166,7 @@ impl<O: IsA<Scale> + IsA<glib::object::Object>> ScaleExt for O {
     fn connect_format_value<F: Fn(&Self, f64) -> String + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, f64) -> String + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "format-value",
+            connect_raw(self.to_glib_none().0 as *mut _, b"format-value\0".as_ptr() as *const _,
                 transmute(format_value_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -177,7 +174,7 @@ impl<O: IsA<Scale> + IsA<glib::object::Object>> ScaleExt for O {
     fn connect_property_digits_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::digits",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::digits\0".as_ptr() as *const _,
                 transmute(notify_digits_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -185,7 +182,7 @@ impl<O: IsA<Scale> + IsA<glib::object::Object>> ScaleExt for O {
     fn connect_property_draw_value_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::draw-value",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::draw-value\0".as_ptr() as *const _,
                 transmute(notify_draw_value_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -193,7 +190,7 @@ impl<O: IsA<Scale> + IsA<glib::object::Object>> ScaleExt for O {
     fn connect_property_has_origin_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::has-origin",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::has-origin\0".as_ptr() as *const _,
                 transmute(notify_has_origin_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -201,7 +198,7 @@ impl<O: IsA<Scale> + IsA<glib::object::Object>> ScaleExt for O {
     fn connect_property_value_pos_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::value-pos",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::value-pos\0".as_ptr() as *const _,
                 transmute(notify_value_pos_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

@@ -9,21 +9,18 @@ use Button;
 use Container;
 use Widget;
 use ffi;
-use glib;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct ToggleButton(Object<ffi::GtkToggleButton, ffi::GtkToggleButtonClass>): Button, Bin, Container, Widget, Buildable, Actionable;
@@ -62,7 +59,7 @@ impl Default for ToggleButton {
     }
 }
 
-pub trait ToggleButtonExt {
+pub trait ToggleButtonExt: 'static {
     fn get_active(&self) -> bool;
 
     fn get_inconsistent(&self) -> bool;
@@ -90,7 +87,7 @@ pub trait ToggleButtonExt {
     fn connect_property_inconsistent_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<ToggleButton> + IsA<glib::object::Object>> ToggleButtonExt for O {
+impl<O: IsA<ToggleButton>> ToggleButtonExt for O {
     fn get_active(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_toggle_button_get_active(self.to_glib_none().0))
@@ -136,21 +133,21 @@ impl<O: IsA<ToggleButton> + IsA<glib::object::Object>> ToggleButtonExt for O {
     fn get_property_draw_indicator(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "draw-indicator".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"draw-indicator\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_draw_indicator(&self, draw_indicator: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "draw-indicator".to_glib_none().0, Value::from(&draw_indicator).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"draw-indicator\0".as_ptr() as *const _, Value::from(&draw_indicator).to_glib_none().0);
         }
     }
 
     fn connect_toggled<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "toggled",
+            connect_raw(self.to_glib_none().0 as *mut _, b"toggled\0".as_ptr() as *const _,
                 transmute(toggled_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -158,7 +155,7 @@ impl<O: IsA<ToggleButton> + IsA<glib::object::Object>> ToggleButtonExt for O {
     fn connect_property_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::active",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::active\0".as_ptr() as *const _,
                 transmute(notify_active_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -166,7 +163,7 @@ impl<O: IsA<ToggleButton> + IsA<glib::object::Object>> ToggleButtonExt for O {
     fn connect_property_draw_indicator_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::draw-indicator",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::draw-indicator\0".as_ptr() as *const _,
                 transmute(notify_draw_indicator_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -174,7 +171,7 @@ impl<O: IsA<ToggleButton> + IsA<glib::object::Object>> ToggleButtonExt for O {
     fn connect_property_inconsistent_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::inconsistent",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::inconsistent\0".as_ptr() as *const _,
                 transmute(notify_inconsistent_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

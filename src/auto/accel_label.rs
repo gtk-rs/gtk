@@ -15,15 +15,15 @@ use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
+#[cfg(any(feature = "v3_12", feature = "dox"))]
 use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct AccelLabel(Object<ffi::GtkAccelLabel, ffi::GtkAccelLabelClass>): Label, Misc, Widget, Buildable;
@@ -42,7 +42,7 @@ impl AccelLabel {
     }
 }
 
-pub trait AccelLabelExt {
+pub trait AccelLabelExt: 'static {
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_accel(&self) -> (u32, gdk::ModifierType);
 
@@ -66,7 +66,7 @@ pub trait AccelLabelExt {
     fn connect_property_accel_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<AccelLabel> + IsA<glib::object::Object>> AccelLabelExt for O {
+impl<O: IsA<AccelLabel>> AccelLabelExt for O {
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_accel(&self) -> (u32, gdk::ModifierType) {
         unsafe {
@@ -121,7 +121,7 @@ impl<O: IsA<AccelLabel> + IsA<glib::object::Object>> AccelLabelExt for O {
     fn get_property_accel_closure(&self) -> Option<glib::Closure> {
         unsafe {
             let mut value = Value::from_type(<glib::Closure as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "accel-closure".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"accel-closure\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -129,7 +129,7 @@ impl<O: IsA<AccelLabel> + IsA<glib::object::Object>> AccelLabelExt for O {
     fn connect_property_accel_closure_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::accel-closure",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::accel-closure\0".as_ptr() as *const _,
                 transmute(notify_accel_closure_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -137,7 +137,7 @@ impl<O: IsA<AccelLabel> + IsA<glib::object::Object>> AccelLabelExt for O {
     fn connect_property_accel_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::accel-widget",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::accel-widget\0".as_ptr() as *const _,
                 transmute(notify_accel_widget_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

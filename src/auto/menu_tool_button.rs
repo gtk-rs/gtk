@@ -10,19 +10,15 @@ use ToolButton;
 use ToolItem;
 use Widget;
 use ffi;
-use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct MenuToolButton(Object<ffi::GtkMenuToolButton, ffi::GtkMenuToolButtonClass>): ToolButton, ToolItem, Bin, Container, Widget, Buildable, Actionable;
@@ -53,7 +49,7 @@ impl MenuToolButton {
     }
 }
 
-pub trait MenuToolButtonExt {
+pub trait MenuToolButtonExt: 'static {
     fn get_menu(&self) -> Option<Widget>;
 
     fn set_arrow_tooltip_markup(&self, markup: &str);
@@ -67,7 +63,7 @@ pub trait MenuToolButtonExt {
     fn connect_property_menu_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<MenuToolButton> + IsA<glib::object::Object>> MenuToolButtonExt for O {
+impl<O: IsA<MenuToolButton>> MenuToolButtonExt for O {
     fn get_menu(&self) -> Option<Widget> {
         unsafe {
             from_glib_none(ffi::gtk_menu_tool_button_get_menu(self.to_glib_none().0))
@@ -95,7 +91,7 @@ impl<O: IsA<MenuToolButton> + IsA<glib::object::Object>> MenuToolButtonExt for O
     fn connect_show_menu<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "show-menu",
+            connect_raw(self.to_glib_none().0 as *mut _, b"show-menu\0".as_ptr() as *const _,
                 transmute(show_menu_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -103,7 +99,7 @@ impl<O: IsA<MenuToolButton> + IsA<glib::object::Object>> MenuToolButtonExt for O
     fn connect_property_menu_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::menu",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::menu\0".as_ptr() as *const _,
                 transmute(notify_menu_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

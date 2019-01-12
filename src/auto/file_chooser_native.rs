@@ -9,21 +9,19 @@ use NativeDialog;
 #[cfg(any(feature = "v3_20", feature = "dox"))]
 use Window;
 use ffi;
-use glib;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct FileChooserNative(Object<ffi::GtkFileChooserNative, ffi::GtkFileChooserNativeClass>): NativeDialog, FileChooser;
@@ -51,12 +49,12 @@ impl FileChooserNative {
     }
 }
 
-pub trait FileChooserNativeExt {
+pub trait FileChooserNativeExt: 'static {
     #[cfg(any(feature = "v3_20", feature = "dox"))]
-    fn get_accept_label(&self) -> Option<String>;
+    fn get_accept_label(&self) -> Option<GString>;
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
-    fn get_cancel_label(&self) -> Option<String>;
+    fn get_cancel_label(&self) -> Option<GString>;
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn set_accept_label<'a, P: Into<Option<&'a str>>>(&self, accept_label: P);
@@ -64,11 +62,11 @@ pub trait FileChooserNativeExt {
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn set_cancel_label<'a, P: Into<Option<&'a str>>>(&self, cancel_label: P);
 
-    fn get_property_accept_label(&self) -> Option<String>;
+    fn get_property_accept_label(&self) -> Option<GString>;
 
     fn set_property_accept_label<'a, P: Into<Option<&'a str>>>(&self, accept_label: P);
 
-    fn get_property_cancel_label(&self) -> Option<String>;
+    fn get_property_cancel_label(&self) -> Option<GString>;
 
     fn set_property_cancel_label<'a, P: Into<Option<&'a str>>>(&self, cancel_label: P);
 
@@ -77,16 +75,16 @@ pub trait FileChooserNativeExt {
     fn connect_property_cancel_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<FileChooserNative> + IsA<glib::object::Object>> FileChooserNativeExt for O {
+impl<O: IsA<FileChooserNative>> FileChooserNativeExt for O {
     #[cfg(any(feature = "v3_20", feature = "dox"))]
-    fn get_accept_label(&self) -> Option<String> {
+    fn get_accept_label(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_file_chooser_native_get_accept_label(self.to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
-    fn get_cancel_label(&self) -> Option<String> {
+    fn get_cancel_label(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_file_chooser_native_get_cancel_label(self.to_glib_none().0))
         }
@@ -110,10 +108,10 @@ impl<O: IsA<FileChooserNative> + IsA<glib::object::Object>> FileChooserNativeExt
         }
     }
 
-    fn get_property_accept_label(&self) -> Option<String> {
+    fn get_property_accept_label(&self) -> Option<GString> {
         unsafe {
-            let mut value = Value::from_type(<String as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "accept-label".to_glib_none().0, value.to_glib_none_mut().0);
+            let mut value = Value::from_type(<GString as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"accept-label\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -121,14 +119,14 @@ impl<O: IsA<FileChooserNative> + IsA<glib::object::Object>> FileChooserNativeExt
     fn set_property_accept_label<'a, P: Into<Option<&'a str>>>(&self, accept_label: P) {
         let accept_label = accept_label.into();
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "accept-label".to_glib_none().0, Value::from(accept_label).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"accept-label\0".as_ptr() as *const _, Value::from(accept_label).to_glib_none().0);
         }
     }
 
-    fn get_property_cancel_label(&self) -> Option<String> {
+    fn get_property_cancel_label(&self) -> Option<GString> {
         unsafe {
-            let mut value = Value::from_type(<String as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "cancel-label".to_glib_none().0, value.to_glib_none_mut().0);
+            let mut value = Value::from_type(<GString as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"cancel-label\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -136,14 +134,14 @@ impl<O: IsA<FileChooserNative> + IsA<glib::object::Object>> FileChooserNativeExt
     fn set_property_cancel_label<'a, P: Into<Option<&'a str>>>(&self, cancel_label: P) {
         let cancel_label = cancel_label.into();
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "cancel-label".to_glib_none().0, Value::from(cancel_label).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"cancel-label\0".as_ptr() as *const _, Value::from(cancel_label).to_glib_none().0);
         }
     }
 
     fn connect_property_accept_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::accept-label",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::accept-label\0".as_ptr() as *const _,
                 transmute(notify_accept_label_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -151,7 +149,7 @@ impl<O: IsA<FileChooserNative> + IsA<glib::object::Object>> FileChooserNativeExt
     fn connect_property_cancel_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::cancel-label",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::cancel-label\0".as_ptr() as *const _,
                 transmute(notify_cancel_label_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

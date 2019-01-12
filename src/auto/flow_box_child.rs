@@ -10,16 +10,15 @@ use ffi;
 use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
+use glib::object::ObjectExt;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct FlowBoxChild(Object<ffi::GtkFlowBoxChild, ffi::GtkFlowBoxChildClass>): Bin, Container, Widget, Buildable;
@@ -46,7 +45,7 @@ impl Default for FlowBoxChild {
     }
 }
 
-pub trait FlowBoxChildExt {
+pub trait FlowBoxChildExt: 'static {
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn changed(&self);
 
@@ -61,7 +60,7 @@ pub trait FlowBoxChildExt {
     fn emit_activate(&self);
 }
 
-impl<O: IsA<FlowBoxChild> + IsA<glib::object::Object> + glib::object::ObjectExt> FlowBoxChildExt for O {
+impl<O: IsA<FlowBoxChild>> FlowBoxChildExt for O {
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn changed(&self) {
         unsafe {
@@ -86,13 +85,13 @@ impl<O: IsA<FlowBoxChild> + IsA<glib::object::Object> + glib::object::ObjectExt>
     fn connect_activate<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "activate",
+            connect_raw(self.to_glib_none().0 as *mut _, b"activate\0".as_ptr() as *const _,
                 transmute(activate_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_activate(&self) {
-        let _ = self.emit("activate", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("activate", &[]).unwrap() };
     }
 }
 

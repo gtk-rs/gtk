@@ -6,10 +6,8 @@ use Error;
 use Unit;
 use ffi;
 use glib;
+use glib::GString;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use std::mem;
 use std::ptr;
 
 glib_wrapper! {
@@ -96,7 +94,7 @@ impl PaperSize {
         }
     }
 
-    pub fn get_display_name(&self) -> Option<String> {
+    pub fn get_display_name(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_paper_size_get_display_name(mut_override(self.to_glib_none().0)))
         }
@@ -108,13 +106,13 @@ impl PaperSize {
         }
     }
 
-    pub fn get_name(&self) -> Option<String> {
+    pub fn get_name(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_paper_size_get_name(mut_override(self.to_glib_none().0)))
         }
     }
 
-    pub fn get_ppd_name(&self) -> Option<String> {
+    pub fn get_ppd_name(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_paper_size_get_ppd_name(mut_override(self.to_glib_none().0)))
         }
@@ -164,7 +162,7 @@ impl PaperSize {
         }
     }
 
-    pub fn get_default() -> Option<String> {
+    pub fn get_default() -> Option<GString> {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_none(ffi::gtk_paper_size_get_default())

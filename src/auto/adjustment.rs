@@ -3,19 +3,15 @@
 // DO NOT EDIT
 
 use ffi;
-use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Adjustment(Object<ffi::GtkAdjustment, ffi::GtkAdjustmentClass>);
@@ -34,7 +30,7 @@ impl Adjustment {
     }
 }
 
-pub trait AdjustmentExt {
+pub trait AdjustmentExt: 'static {
     #[cfg_attr(feature = "v3_18", deprecated)]
     fn changed(&self);
 
@@ -88,7 +84,7 @@ pub trait AdjustmentExt {
     fn connect_property_value_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Adjustment> + IsA<glib::object::Object>> AdjustmentExt for O {
+impl<O: IsA<Adjustment>> AdjustmentExt for O {
     fn changed(&self) {
         unsafe {
             ffi::gtk_adjustment_changed(self.to_glib_none().0);
@@ -194,7 +190,7 @@ impl<O: IsA<Adjustment> + IsA<glib::object::Object>> AdjustmentExt for O {
     fn connect_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"changed\0".as_ptr() as *const _,
                 transmute(changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -202,7 +198,7 @@ impl<O: IsA<Adjustment> + IsA<glib::object::Object>> AdjustmentExt for O {
     fn connect_value_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "value-changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"value-changed\0".as_ptr() as *const _,
                 transmute(value_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -210,7 +206,7 @@ impl<O: IsA<Adjustment> + IsA<glib::object::Object>> AdjustmentExt for O {
     fn connect_property_lower_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::lower",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::lower\0".as_ptr() as *const _,
                 transmute(notify_lower_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -218,7 +214,7 @@ impl<O: IsA<Adjustment> + IsA<glib::object::Object>> AdjustmentExt for O {
     fn connect_property_page_increment_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::page-increment",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::page-increment\0".as_ptr() as *const _,
                 transmute(notify_page_increment_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -226,7 +222,7 @@ impl<O: IsA<Adjustment> + IsA<glib::object::Object>> AdjustmentExt for O {
     fn connect_property_page_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::page-size",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::page-size\0".as_ptr() as *const _,
                 transmute(notify_page_size_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -234,7 +230,7 @@ impl<O: IsA<Adjustment> + IsA<glib::object::Object>> AdjustmentExt for O {
     fn connect_property_step_increment_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::step-increment",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::step-increment\0".as_ptr() as *const _,
                 transmute(notify_step_increment_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -242,7 +238,7 @@ impl<O: IsA<Adjustment> + IsA<glib::object::Object>> AdjustmentExt for O {
     fn connect_property_upper_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::upper",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::upper\0".as_ptr() as *const _,
                 transmute(notify_upper_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -250,7 +246,7 @@ impl<O: IsA<Adjustment> + IsA<glib::object::Object>> AdjustmentExt for O {
     fn connect_property_value_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::value",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::value\0".as_ptr() as *const _,
                 transmute(notify_value_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

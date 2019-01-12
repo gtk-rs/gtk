@@ -8,21 +8,19 @@ use Container;
 use Popover;
 use Widget;
 use ffi;
-use glib;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct PopoverMenu(Object<ffi::GtkPopoverMenu, ffi::GtkPopoverMenuClass>): Popover, Bin, Container, Widget, Buildable;
@@ -49,11 +47,11 @@ impl Default for PopoverMenu {
     }
 }
 
-pub trait PopoverMenuExt {
+pub trait PopoverMenuExt: 'static {
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn open_submenu(&self, name: &str);
 
-    fn get_property_visible_submenu(&self) -> Option<String>;
+    fn get_property_visible_submenu(&self) -> Option<GString>;
 
     fn set_property_visible_submenu<'a, P: Into<Option<&'a str>>>(&self, visible_submenu: P);
 
@@ -61,14 +59,14 @@ pub trait PopoverMenuExt {
 
     fn set_child_position<T: IsA<Widget>>(&self, item: &T, position: i32);
 
-    fn get_child_submenu<T: IsA<Widget>>(&self, item: &T) -> Option<String>;
+    fn get_child_submenu<T: IsA<Widget>>(&self, item: &T) -> Option<GString>;
 
     fn set_child_submenu<'a, P: Into<Option<&'a str>>, T: IsA<Widget>>(&self, item: &T, submenu: P);
 
     fn connect_property_visible_submenu_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<PopoverMenu> + IsA<Container> + IsA<glib::object::Object>> PopoverMenuExt for O {
+impl<O: IsA<PopoverMenu>> PopoverMenuExt for O {
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn open_submenu(&self, name: &str) {
         unsafe {
@@ -76,10 +74,10 @@ impl<O: IsA<PopoverMenu> + IsA<Container> + IsA<glib::object::Object>> PopoverMe
         }
     }
 
-    fn get_property_visible_submenu(&self) -> Option<String> {
+    fn get_property_visible_submenu(&self) -> Option<GString> {
         unsafe {
-            let mut value = Value::from_type(<String as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "visible-submenu".to_glib_none().0, value.to_glib_none_mut().0);
+            let mut value = Value::from_type(<GString as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"visible-submenu\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -87,28 +85,28 @@ impl<O: IsA<PopoverMenu> + IsA<Container> + IsA<glib::object::Object>> PopoverMe
     fn set_property_visible_submenu<'a, P: Into<Option<&'a str>>>(&self, visible_submenu: P) {
         let visible_submenu = visible_submenu.into();
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "visible-submenu".to_glib_none().0, Value::from(visible_submenu).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"visible-submenu\0".as_ptr() as *const _, Value::from(visible_submenu).to_glib_none().0);
         }
     }
 
     fn get_child_position<T: IsA<Widget>>(&self, item: &T) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            ffi::gtk_container_child_get_property(self.to_glib_none().0, item.to_glib_none().0, "position".to_glib_none().0, value.to_glib_none_mut().0);
+            ffi::gtk_container_child_get_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"position\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_child_position<T: IsA<Widget>>(&self, item: &T, position: i32) {
         unsafe {
-            ffi::gtk_container_child_set_property(self.to_glib_none().0, item.to_glib_none().0, "position".to_glib_none().0, Value::from(&position).to_glib_none().0);
+            ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"position\0".as_ptr() as *const _, Value::from(&position).to_glib_none().0);
         }
     }
 
-    fn get_child_submenu<T: IsA<Widget>>(&self, item: &T) -> Option<String> {
+    fn get_child_submenu<T: IsA<Widget>>(&self, item: &T) -> Option<GString> {
         unsafe {
-            let mut value = Value::from_type(<String as StaticType>::static_type());
-            ffi::gtk_container_child_get_property(self.to_glib_none().0, item.to_glib_none().0, "submenu".to_glib_none().0, value.to_glib_none_mut().0);
+            let mut value = Value::from_type(<GString as StaticType>::static_type());
+            ffi::gtk_container_child_get_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"submenu\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -116,14 +114,14 @@ impl<O: IsA<PopoverMenu> + IsA<Container> + IsA<glib::object::Object>> PopoverMe
     fn set_child_submenu<'a, P: Into<Option<&'a str>>, T: IsA<Widget>>(&self, item: &T, submenu: P) {
         let submenu = submenu.into();
         unsafe {
-            ffi::gtk_container_child_set_property(self.to_glib_none().0, item.to_glib_none().0, "submenu".to_glib_none().0, Value::from(submenu).to_glib_none().0);
+            ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"submenu\0".as_ptr() as *const _, Value::from(submenu).to_glib_none().0);
         }
     }
 
     fn connect_property_visible_submenu_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::visible-submenu",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::visible-submenu\0".as_ptr() as *const _,
                 transmute(notify_visible_submenu_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

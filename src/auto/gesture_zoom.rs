@@ -7,25 +7,22 @@ use Gesture;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use Widget;
 use ffi;
-use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use glib::signal::SignalHandlerId;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
+#[cfg(any(feature = "v3_14", feature = "dox"))]
 use glib_ffi;
-use gobject_ffi;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use libc;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct GestureZoom(Object<ffi::GtkGestureZoom, ffi::GtkGestureZoomClass>): Gesture, EventController;
@@ -45,7 +42,7 @@ impl GestureZoom {
     }
 }
 
-pub trait GestureZoomExt {
+pub trait GestureZoomExt: 'static {
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_scale_delta(&self) -> f64;
 
@@ -53,7 +50,7 @@ pub trait GestureZoomExt {
     fn connect_scale_changed<F: Fn(&Self, f64) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<GestureZoom> + IsA<glib::object::Object>> GestureZoomExt for O {
+impl<O: IsA<GestureZoom>> GestureZoomExt for O {
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_scale_delta(&self) -> f64 {
         unsafe {
@@ -65,7 +62,7 @@ impl<O: IsA<GestureZoom> + IsA<glib::object::Object>> GestureZoomExt for O {
     fn connect_scale_changed<F: Fn(&Self, f64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, f64) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "scale-changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"scale-changed\0".as_ptr() as *const _,
                 transmute(scale_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

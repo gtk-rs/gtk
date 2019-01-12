@@ -5,19 +5,15 @@
 use ffi;
 use gdk;
 use gdk_ffi;
-use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct ColorChooser(Object<ffi::GtkColorChooser, ffi::GtkColorChooserInterface>);
@@ -27,7 +23,7 @@ glib_wrapper! {
     }
 }
 
-pub trait ColorChooserExt {
+pub trait ColorChooserExt: 'static {
     fn get_rgba(&self) -> gdk::RGBA;
 
     fn get_use_alpha(&self) -> bool;
@@ -43,7 +39,7 @@ pub trait ColorChooserExt {
     fn connect_property_use_alpha_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<ColorChooser> + IsA<glib::object::Object>> ColorChooserExt for O {
+impl<O: IsA<ColorChooser>> ColorChooserExt for O {
     fn get_rgba(&self) -> gdk::RGBA {
         unsafe {
             let mut color = gdk::RGBA::uninitialized();
@@ -73,7 +69,7 @@ impl<O: IsA<ColorChooser> + IsA<glib::object::Object>> ColorChooserExt for O {
     fn connect_color_activated<F: Fn(&Self, &gdk::RGBA) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::RGBA) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "color-activated",
+            connect_raw(self.to_glib_none().0 as *mut _, b"color-activated\0".as_ptr() as *const _,
                 transmute(color_activated_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -81,7 +77,7 @@ impl<O: IsA<ColorChooser> + IsA<glib::object::Object>> ColorChooserExt for O {
     fn connect_property_rgba_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::rgba",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::rgba\0".as_ptr() as *const _,
                 transmute(notify_rgba_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -89,7 +85,7 @@ impl<O: IsA<ColorChooser> + IsA<glib::object::Object>> ColorChooserExt for O {
     fn connect_property_use_alpha_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::use-alpha",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::use-alpha\0".as_ptr() as *const _,
                 transmute(notify_use_alpha_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

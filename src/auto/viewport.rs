@@ -11,19 +11,15 @@ use ShadowType;
 use Widget;
 use ffi;
 use gdk;
-use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Viewport(Object<ffi::GtkViewport, ffi::GtkViewportClass>): Bin, Container, Widget, Buildable, Scrollable;
@@ -46,7 +42,7 @@ impl Viewport {
     }
 }
 
-pub trait ViewportExt {
+pub trait ViewportExt: 'static {
     fn get_bin_window(&self) -> Option<gdk::Window>;
 
     fn get_shadow_type(&self) -> ShadowType;
@@ -58,7 +54,7 @@ pub trait ViewportExt {
     fn connect_property_shadow_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Viewport> + IsA<glib::object::Object>> ViewportExt for O {
+impl<O: IsA<Viewport>> ViewportExt for O {
     fn get_bin_window(&self) -> Option<gdk::Window> {
         unsafe {
             from_glib_none(ffi::gtk_viewport_get_bin_window(self.to_glib_none().0))
@@ -86,7 +82,7 @@ impl<O: IsA<Viewport> + IsA<glib::object::Object>> ViewportExt for O {
     fn connect_property_shadow_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::shadow-type",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::shadow-type\0".as_ptr() as *const _,
                 transmute(notify_shadow_type_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

@@ -8,19 +8,15 @@ use Container;
 use ToolItem;
 use Widget;
 use ffi;
-use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct SeparatorToolItem(Object<ffi::GtkSeparatorToolItem, ffi::GtkSeparatorToolItemClass>): ToolItem, Bin, Container, Widget, Buildable;
@@ -45,7 +41,7 @@ impl Default for SeparatorToolItem {
     }
 }
 
-pub trait SeparatorToolItemExt {
+pub trait SeparatorToolItemExt: 'static {
     fn get_draw(&self) -> bool;
 
     fn set_draw(&self, draw: bool);
@@ -53,7 +49,7 @@ pub trait SeparatorToolItemExt {
     fn connect_property_draw_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<SeparatorToolItem> + IsA<glib::object::Object>> SeparatorToolItemExt for O {
+impl<O: IsA<SeparatorToolItem>> SeparatorToolItemExt for O {
     fn get_draw(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_separator_tool_item_get_draw(self.to_glib_none().0))
@@ -69,7 +65,7 @@ impl<O: IsA<SeparatorToolItem> + IsA<glib::object::Object>> SeparatorToolItemExt
     fn connect_property_draw_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::draw",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::draw\0".as_ptr() as *const _,
                 transmute(notify_draw_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

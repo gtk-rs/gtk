@@ -6,19 +6,15 @@ use Buildable;
 use Widget;
 use ffi;
 use gdk;
-use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Invisible(Object<ffi::GtkInvisible, ffi::GtkInvisibleClass>): Widget, Buildable;
@@ -50,13 +46,13 @@ impl Default for Invisible {
     }
 }
 
-pub trait InvisibleExt {
+pub trait InvisibleExt: 'static {
     fn set_screen(&self, screen: &gdk::Screen);
 
     fn connect_property_screen_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Invisible> + IsA<glib::object::Object>> InvisibleExt for O {
+impl<O: IsA<Invisible>> InvisibleExt for O {
     fn set_screen(&self, screen: &gdk::Screen) {
         unsafe {
             ffi::gtk_invisible_set_screen(self.to_glib_none().0, screen.to_glib_none().0);
@@ -66,7 +62,7 @@ impl<O: IsA<Invisible> + IsA<glib::object::Object>> InvisibleExt for O {
     fn connect_property_screen_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::screen",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::screen\0".as_ptr() as *const _,
                 transmute(notify_screen_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

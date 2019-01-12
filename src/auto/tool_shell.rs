@@ -12,12 +12,8 @@ use Widget;
 use ffi;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use pango;
 use std::fmt;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct ToolShell(Object<ffi::GtkToolShell, ffi::GtkToolShellIface>): Widget, Buildable;
@@ -27,7 +23,7 @@ glib_wrapper! {
     }
 }
 
-pub trait ToolShellExt {
+pub trait ToolShellExt: 'static {
     fn get_ellipsize_mode(&self) -> pango::EllipsizeMode;
 
     fn get_icon_size(&self) -> IconSize;

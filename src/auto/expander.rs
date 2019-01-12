@@ -8,18 +8,18 @@ use Container;
 use Widget;
 use ffi;
 use glib;
+use glib::GString;
 use glib::object::Downcast;
 use glib::object::IsA;
+use glib::object::ObjectExt;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Expander(Object<ffi::GtkExpander, ffi::GtkExpanderClass>): Bin, Container, Widget, Buildable;
@@ -47,10 +47,10 @@ impl Expander {
     }
 }
 
-pub trait ExpanderExt {
+pub trait ExpanderExt: 'static {
     fn get_expanded(&self) -> bool;
 
-    fn get_label(&self) -> Option<String>;
+    fn get_label(&self) -> Option<GString>;
 
     fn get_label_fill(&self) -> bool;
 
@@ -104,14 +104,14 @@ pub trait ExpanderExt {
     fn connect_property_use_underline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Expander> + IsA<glib::object::Object> + glib::object::ObjectExt> ExpanderExt for O {
+impl<O: IsA<Expander>> ExpanderExt for O {
     fn get_expanded(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_expander_get_expanded(self.to_glib_none().0))
         }
     }
 
-    fn get_label(&self) -> Option<String> {
+    fn get_label(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_expander_get_label(self.to_glib_none().0))
         }
@@ -208,19 +208,19 @@ impl<O: IsA<Expander> + IsA<glib::object::Object> + glib::object::ObjectExt> Exp
     fn connect_activate<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "activate",
+            connect_raw(self.to_glib_none().0 as *mut _, b"activate\0".as_ptr() as *const _,
                 transmute(activate_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_activate(&self) {
-        let _ = self.emit("activate", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("activate", &[]).unwrap() };
     }
 
     fn connect_property_expanded_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::expanded",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::expanded\0".as_ptr() as *const _,
                 transmute(notify_expanded_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -228,7 +228,7 @@ impl<O: IsA<Expander> + IsA<glib::object::Object> + glib::object::ObjectExt> Exp
     fn connect_property_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::label",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::label\0".as_ptr() as *const _,
                 transmute(notify_label_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -236,7 +236,7 @@ impl<O: IsA<Expander> + IsA<glib::object::Object> + glib::object::ObjectExt> Exp
     fn connect_property_label_fill_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::label-fill",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::label-fill\0".as_ptr() as *const _,
                 transmute(notify_label_fill_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -244,7 +244,7 @@ impl<O: IsA<Expander> + IsA<glib::object::Object> + glib::object::ObjectExt> Exp
     fn connect_property_label_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::label-widget",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::label-widget\0".as_ptr() as *const _,
                 transmute(notify_label_widget_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -252,7 +252,7 @@ impl<O: IsA<Expander> + IsA<glib::object::Object> + glib::object::ObjectExt> Exp
     fn connect_property_resize_toplevel_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::resize-toplevel",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::resize-toplevel\0".as_ptr() as *const _,
                 transmute(notify_resize_toplevel_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -260,7 +260,7 @@ impl<O: IsA<Expander> + IsA<glib::object::Object> + glib::object::ObjectExt> Exp
     fn connect_property_spacing_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::spacing",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::spacing\0".as_ptr() as *const _,
                 transmute(notify_spacing_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -268,7 +268,7 @@ impl<O: IsA<Expander> + IsA<glib::object::Object> + glib::object::ObjectExt> Exp
     fn connect_property_use_markup_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::use-markup",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::use-markup\0".as_ptr() as *const _,
                 transmute(notify_use_markup_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -276,7 +276,7 @@ impl<O: IsA<Expander> + IsA<glib::object::Object> + glib::object::ObjectExt> Exp
     fn connect_property_use_underline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::use-underline",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::use-underline\0".as_ptr() as *const _,
                 transmute(notify_use_underline_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

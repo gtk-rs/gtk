@@ -9,18 +9,16 @@ use FileFilter;
 use Widget;
 use ffi;
 use gio;
-use glib;
+use glib::GString;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
 use std::ptr;
 
@@ -32,7 +30,7 @@ glib_wrapper! {
     }
 }
 
-pub trait FileChooserExt {
+pub trait FileChooserExt: 'static {
     fn add_filter(&self, filter: &FileFilter);
 
     fn add_shortcut_folder<P: AsRef<std::path::Path>>(&self, folder: P) -> Result<(), Error>;
@@ -42,7 +40,7 @@ pub trait FileChooserExt {
     fn get_action(&self) -> FileChooserAction;
 
     #[cfg(any(feature = "v3_22", feature = "dox"))]
-    fn get_choice(&self, id: &str) -> Option<String>;
+    fn get_choice(&self, id: &str) -> Option<GString>;
 
     fn get_create_folders(&self) -> bool;
 
@@ -50,10 +48,10 @@ pub trait FileChooserExt {
 
     fn get_current_folder_file(&self) -> Option<gio::File>;
 
-    fn get_current_folder_uri(&self) -> Option<String>;
+    fn get_current_folder_uri(&self) -> Option<GString>;
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
-    fn get_current_name(&self) -> Option<String>;
+    fn get_current_name(&self) -> Option<GString>;
 
     fn get_do_overwrite_confirmation(&self) -> bool;
 
@@ -75,7 +73,7 @@ pub trait FileChooserExt {
 
     fn get_preview_filename(&self) -> Option<std::path::PathBuf>;
 
-    fn get_preview_uri(&self) -> Option<String>;
+    fn get_preview_uri(&self) -> Option<GString>;
 
     fn get_preview_widget(&self) -> Option<Widget>;
 
@@ -85,15 +83,15 @@ pub trait FileChooserExt {
 
     fn get_show_hidden(&self) -> bool;
 
-    fn get_uri(&self) -> Option<String>;
+    fn get_uri(&self) -> Option<GString>;
 
-    fn get_uris(&self) -> Vec<String>;
+    fn get_uris(&self) -> Vec<GString>;
 
     fn get_use_preview_label(&self) -> bool;
 
     fn list_filters(&self) -> Vec<FileFilter>;
 
-    fn list_shortcut_folder_uris(&self) -> Vec<String>;
+    fn list_shortcut_folder_uris(&self) -> Vec<GString>;
 
     fn list_shortcut_folders(&self) -> Vec<std::path::PathBuf>;
 
@@ -194,7 +192,7 @@ pub trait FileChooserExt {
     fn connect_property_use_preview_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<FileChooser> + IsA<glib::object::Object>> FileChooserExt for O {
+impl<O: IsA<FileChooser>> FileChooserExt for O {
     fn add_filter(&self, filter: &FileFilter) {
         unsafe {
             ffi::gtk_file_chooser_add_filter(self.to_glib_none().0, filter.to_glib_full());
@@ -224,7 +222,7 @@ impl<O: IsA<FileChooser> + IsA<glib::object::Object>> FileChooserExt for O {
     }
 
     #[cfg(any(feature = "v3_22", feature = "dox"))]
-    fn get_choice(&self, id: &str) -> Option<String> {
+    fn get_choice(&self, id: &str) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_file_chooser_get_choice(self.to_glib_none().0, id.to_glib_none().0))
         }
@@ -248,14 +246,14 @@ impl<O: IsA<FileChooser> + IsA<glib::object::Object>> FileChooserExt for O {
         }
     }
 
-    fn get_current_folder_uri(&self) -> Option<String> {
+    fn get_current_folder_uri(&self) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gtk_file_chooser_get_current_folder_uri(self.to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
-    fn get_current_name(&self) -> Option<String> {
+    fn get_current_name(&self) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gtk_file_chooser_get_current_name(self.to_glib_none().0))
         }
@@ -321,7 +319,7 @@ impl<O: IsA<FileChooser> + IsA<glib::object::Object>> FileChooserExt for O {
         }
     }
 
-    fn get_preview_uri(&self) -> Option<String> {
+    fn get_preview_uri(&self) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gtk_file_chooser_get_preview_uri(self.to_glib_none().0))
         }
@@ -351,13 +349,13 @@ impl<O: IsA<FileChooser> + IsA<glib::object::Object>> FileChooserExt for O {
         }
     }
 
-    fn get_uri(&self) -> Option<String> {
+    fn get_uri(&self) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gtk_file_chooser_get_uri(self.to_glib_none().0))
         }
     }
 
-    fn get_uris(&self) -> Vec<String> {
+    fn get_uris(&self) -> Vec<GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gtk_file_chooser_get_uris(self.to_glib_none().0))
         }
@@ -375,7 +373,7 @@ impl<O: IsA<FileChooser> + IsA<glib::object::Object>> FileChooserExt for O {
         }
     }
 
-    fn list_shortcut_folder_uris(&self) -> Vec<String> {
+    fn list_shortcut_folder_uris(&self) -> Vec<GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gtk_file_chooser_list_shortcut_folder_uris(self.to_glib_none().0))
         }
@@ -588,7 +586,7 @@ impl<O: IsA<FileChooser> + IsA<glib::object::Object>> FileChooserExt for O {
     fn connect_confirm_overwrite<F: Fn(&Self) -> FileChooserConfirmation + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) -> FileChooserConfirmation + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "confirm-overwrite",
+            connect_raw(self.to_glib_none().0 as *mut _, b"confirm-overwrite\0".as_ptr() as *const _,
                 transmute(confirm_overwrite_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -596,7 +594,7 @@ impl<O: IsA<FileChooser> + IsA<glib::object::Object>> FileChooserExt for O {
     fn connect_current_folder_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "current-folder-changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"current-folder-changed\0".as_ptr() as *const _,
                 transmute(current_folder_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -604,7 +602,7 @@ impl<O: IsA<FileChooser> + IsA<glib::object::Object>> FileChooserExt for O {
     fn connect_file_activated<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "file-activated",
+            connect_raw(self.to_glib_none().0 as *mut _, b"file-activated\0".as_ptr() as *const _,
                 transmute(file_activated_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -612,7 +610,7 @@ impl<O: IsA<FileChooser> + IsA<glib::object::Object>> FileChooserExt for O {
     fn connect_selection_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "selection-changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"selection-changed\0".as_ptr() as *const _,
                 transmute(selection_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -620,7 +618,7 @@ impl<O: IsA<FileChooser> + IsA<glib::object::Object>> FileChooserExt for O {
     fn connect_update_preview<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "update-preview",
+            connect_raw(self.to_glib_none().0 as *mut _, b"update-preview\0".as_ptr() as *const _,
                 transmute(update_preview_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -628,7 +626,7 @@ impl<O: IsA<FileChooser> + IsA<glib::object::Object>> FileChooserExt for O {
     fn connect_property_action_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::action",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::action\0".as_ptr() as *const _,
                 transmute(notify_action_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -636,7 +634,7 @@ impl<O: IsA<FileChooser> + IsA<glib::object::Object>> FileChooserExt for O {
     fn connect_property_create_folders_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::create-folders",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::create-folders\0".as_ptr() as *const _,
                 transmute(notify_create_folders_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -644,7 +642,7 @@ impl<O: IsA<FileChooser> + IsA<glib::object::Object>> FileChooserExt for O {
     fn connect_property_do_overwrite_confirmation_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::do-overwrite-confirmation",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::do-overwrite-confirmation\0".as_ptr() as *const _,
                 transmute(notify_do_overwrite_confirmation_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -652,7 +650,7 @@ impl<O: IsA<FileChooser> + IsA<glib::object::Object>> FileChooserExt for O {
     fn connect_property_extra_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::extra-widget",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::extra-widget\0".as_ptr() as *const _,
                 transmute(notify_extra_widget_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -660,7 +658,7 @@ impl<O: IsA<FileChooser> + IsA<glib::object::Object>> FileChooserExt for O {
     fn connect_property_filter_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::filter",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::filter\0".as_ptr() as *const _,
                 transmute(notify_filter_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -668,7 +666,7 @@ impl<O: IsA<FileChooser> + IsA<glib::object::Object>> FileChooserExt for O {
     fn connect_property_local_only_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::local-only",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::local-only\0".as_ptr() as *const _,
                 transmute(notify_local_only_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -676,7 +674,7 @@ impl<O: IsA<FileChooser> + IsA<glib::object::Object>> FileChooserExt for O {
     fn connect_property_preview_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::preview-widget",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::preview-widget\0".as_ptr() as *const _,
                 transmute(notify_preview_widget_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -684,7 +682,7 @@ impl<O: IsA<FileChooser> + IsA<glib::object::Object>> FileChooserExt for O {
     fn connect_property_preview_widget_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::preview-widget-active",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::preview-widget-active\0".as_ptr() as *const _,
                 transmute(notify_preview_widget_active_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -692,7 +690,7 @@ impl<O: IsA<FileChooser> + IsA<glib::object::Object>> FileChooserExt for O {
     fn connect_property_select_multiple_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::select-multiple",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::select-multiple\0".as_ptr() as *const _,
                 transmute(notify_select_multiple_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -700,7 +698,7 @@ impl<O: IsA<FileChooser> + IsA<glib::object::Object>> FileChooserExt for O {
     fn connect_property_show_hidden_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::show-hidden",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::show-hidden\0".as_ptr() as *const _,
                 transmute(notify_show_hidden_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -708,7 +706,7 @@ impl<O: IsA<FileChooser> + IsA<glib::object::Object>> FileChooserExt for O {
     fn connect_property_use_preview_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::use-preview-label",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::use-preview-label\0".as_ptr() as *const _,
                 transmute(notify_use_preview_label_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

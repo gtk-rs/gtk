@@ -8,20 +8,20 @@ use ffi;
 use gio;
 use gio_ffi;
 use glib;
+#[cfg(any(feature = "v3_12", feature = "dox"))]
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Application(Object<ffi::GtkApplication, ffi::GtkApplicationClass>): [
@@ -35,17 +35,17 @@ glib_wrapper! {
     }
 }
 
-pub trait GtkApplicationExt {
+pub trait GtkApplicationExt: 'static {
     #[cfg_attr(feature = "v3_14", deprecated)]
     fn add_accelerator<'a, P: Into<Option<&'a glib::Variant>>>(&self, accelerator: &str, action_name: &str, parameter: P);
 
     fn add_window<P: IsA<Window>>(&self, window: &P);
 
     #[cfg(any(feature = "v3_12", feature = "dox"))]
-    fn get_accels_for_action(&self, detailed_action_name: &str) -> Vec<String>;
+    fn get_accels_for_action(&self, detailed_action_name: &str) -> Vec<GString>;
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
-    fn get_actions_for_accel(&self, accel: &str) -> Vec<String>;
+    fn get_actions_for_accel(&self, accel: &str) -> Vec<GString>;
 
     #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_active_window(&self) -> Option<Window>;
@@ -67,7 +67,7 @@ pub trait GtkApplicationExt {
     fn is_inhibited(&self, flags: ApplicationInhibitFlags) -> bool;
 
     #[cfg(any(feature = "v3_12", feature = "dox"))]
-    fn list_action_descriptions(&self) -> Vec<String>;
+    fn list_action_descriptions(&self) -> Vec<GString>;
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn prefers_app_menu(&self) -> bool;
@@ -105,7 +105,7 @@ pub trait GtkApplicationExt {
     fn connect_property_register_session_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Application> + IsA<glib::object::Object>> GtkApplicationExt for O {
+impl<O: IsA<Application>> GtkApplicationExt for O {
     fn add_accelerator<'a, P: Into<Option<&'a glib::Variant>>>(&self, accelerator: &str, action_name: &str, parameter: P) {
         let parameter = parameter.into();
         let parameter = parameter.to_glib_none();
@@ -121,14 +121,14 @@ impl<O: IsA<Application> + IsA<glib::object::Object>> GtkApplicationExt for O {
     }
 
     #[cfg(any(feature = "v3_12", feature = "dox"))]
-    fn get_accels_for_action(&self, detailed_action_name: &str) -> Vec<String> {
+    fn get_accels_for_action(&self, detailed_action_name: &str) -> Vec<GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gtk_application_get_accels_for_action(self.to_glib_none().0, detailed_action_name.to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
-    fn get_actions_for_accel(&self, accel: &str) -> Vec<String> {
+    fn get_actions_for_accel(&self, accel: &str) -> Vec<GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gtk_application_get_actions_for_accel(self.to_glib_none().0, accel.to_glib_none().0))
         }
@@ -190,7 +190,7 @@ impl<O: IsA<Application> + IsA<glib::object::Object>> GtkApplicationExt for O {
     }
 
     #[cfg(any(feature = "v3_12", feature = "dox"))]
-    fn list_action_descriptions(&self) -> Vec<String> {
+    fn list_action_descriptions(&self) -> Vec<GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gtk_application_list_action_descriptions(self.to_glib_none().0))
         }
@@ -249,7 +249,7 @@ impl<O: IsA<Application> + IsA<glib::object::Object>> GtkApplicationExt for O {
     fn get_property_active_window(&self) -> Option<Window> {
         unsafe {
             let mut value = Value::from_type(<Window as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "active-window".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"active-window\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -257,21 +257,21 @@ impl<O: IsA<Application> + IsA<glib::object::Object>> GtkApplicationExt for O {
     fn get_property_register_session(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "register-session".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"register-session\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_register_session(&self, register_session: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "register-session".to_glib_none().0, Value::from(&register_session).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"register-session\0".as_ptr() as *const _, Value::from(&register_session).to_glib_none().0);
         }
     }
 
     fn connect_window_added<F: Fn(&Self, &Window) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Window) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "window-added",
+            connect_raw(self.to_glib_none().0 as *mut _, b"window-added\0".as_ptr() as *const _,
                 transmute(window_added_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -279,7 +279,7 @@ impl<O: IsA<Application> + IsA<glib::object::Object>> GtkApplicationExt for O {
     fn connect_window_removed<F: Fn(&Self, &Window) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Window) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "window-removed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"window-removed\0".as_ptr() as *const _,
                 transmute(window_removed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -287,7 +287,7 @@ impl<O: IsA<Application> + IsA<glib::object::Object>> GtkApplicationExt for O {
     fn connect_property_active_window_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::active-window",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::active-window\0".as_ptr() as *const _,
                 transmute(notify_active_window_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -295,7 +295,7 @@ impl<O: IsA<Application> + IsA<glib::object::Object>> GtkApplicationExt for O {
     fn connect_property_app_menu_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::app-menu",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::app-menu\0".as_ptr() as *const _,
                 transmute(notify_app_menu_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -303,7 +303,7 @@ impl<O: IsA<Application> + IsA<glib::object::Object>> GtkApplicationExt for O {
     fn connect_property_menubar_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::menubar",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::menubar\0".as_ptr() as *const _,
                 transmute(notify_menubar_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -311,7 +311,7 @@ impl<O: IsA<Application> + IsA<glib::object::Object>> GtkApplicationExt for O {
     fn connect_property_register_session_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::register-session",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::register-session\0".as_ptr() as *const _,
                 transmute(notify_register_session_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

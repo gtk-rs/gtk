@@ -16,12 +16,14 @@ use ffi;
 use gdk;
 use gdk_pixbuf;
 use glib;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
+use glib::object::ObjectExt;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
@@ -55,7 +57,7 @@ impl Window {
         }
     }
 
-    pub fn get_default_icon_name() -> Option<String> {
+    pub fn get_default_icon_name() -> Option<GString> {
         assert_initialized_main_thread!();
         unsafe {
             from_glib_none(ffi::gtk_window_get_default_icon_name())
@@ -115,7 +117,7 @@ impl Window {
     }
 }
 
-pub trait GtkWindowExt {
+pub trait GtkWindowExt: 'static {
     fn activate_default(&self) -> bool;
 
     fn activate_focus(&self) -> bool;
@@ -175,7 +177,7 @@ pub trait GtkWindowExt {
 
     fn get_icon_list(&self) -> Vec<gdk_pixbuf::Pixbuf>;
 
-    fn get_icon_name(&self) -> Option<String>;
+    fn get_icon_name(&self) -> Option<GString>;
 
     fn get_mnemonic_modifier(&self) -> gdk::ModifierType;
 
@@ -194,7 +196,7 @@ pub trait GtkWindowExt {
     #[cfg_attr(feature = "v3_14", deprecated)]
     fn get_resize_grip_area(&self) -> Option<gdk::Rectangle>;
 
-    fn get_role(&self) -> Option<String>;
+    fn get_role(&self) -> Option<GString>;
 
     fn get_size(&self) -> (i32, i32);
 
@@ -202,7 +204,7 @@ pub trait GtkWindowExt {
 
     fn get_skip_taskbar_hint(&self) -> bool;
 
-    fn get_title(&self) -> Option<String>;
+    fn get_title(&self) -> Option<GString>;
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn get_titlebar(&self) -> Option<Widget>;
@@ -454,7 +456,7 @@ pub trait GtkWindowExt {
     fn connect_property_window_position_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWindowExt for O {
+impl<O: IsA<Window>> GtkWindowExt for O {
     fn activate_default(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_window_activate_default(self.to_glib_none().0))
@@ -628,7 +630,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
         }
     }
 
-    fn get_icon_name(&self) -> Option<String> {
+    fn get_icon_name(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_window_get_icon_name(self.to_glib_none().0))
         }
@@ -682,7 +684,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
         }
     }
 
-    fn get_role(&self) -> Option<String> {
+    fn get_role(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_window_get_role(self.to_glib_none().0))
         }
@@ -709,7 +711,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
         }
     }
 
-    fn get_title(&self) -> Option<String> {
+    fn get_title(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_window_get_title(self.to_glib_none().0))
         }
@@ -1134,35 +1136,35 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn get_property_default_height(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "default-height".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"default-height\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_default_height(&self, default_height: i32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "default-height".to_glib_none().0, Value::from(&default_height).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"default-height\0".as_ptr() as *const _, Value::from(&default_height).to_glib_none().0);
         }
     }
 
     fn get_property_default_width(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "default-width".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"default-width\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_default_width(&self, default_width: i32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "default-width".to_glib_none().0, Value::from(&default_width).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"default-width\0".as_ptr() as *const _, Value::from(&default_width).to_glib_none().0);
         }
     }
 
     fn get_property_has_toplevel_focus(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "has-toplevel-focus".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"has-toplevel-focus\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -1170,7 +1172,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn get_property_is_active(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "is-active".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"is-active\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -1178,7 +1180,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn get_property_is_maximized(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "is-maximized".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"is-maximized\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -1186,7 +1188,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn get_property_resize_grip_visible(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "resize-grip-visible".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"resize-grip-visible\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -1194,7 +1196,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn get_property_type(&self) -> WindowType {
         unsafe {
             let mut value = Value::from_type(<WindowType as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "type".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"type\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -1202,58 +1204,58 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn get_property_window_position(&self) -> WindowPosition {
         unsafe {
             let mut value = Value::from_type(<WindowPosition as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "window-position".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"window-position\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_window_position(&self, window_position: WindowPosition) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "window-position".to_glib_none().0, Value::from(&window_position).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"window-position\0".as_ptr() as *const _, Value::from(&window_position).to_glib_none().0);
         }
     }
 
     fn connect_activate_default<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "activate-default",
+            connect_raw(self.to_glib_none().0 as *mut _, b"activate-default\0".as_ptr() as *const _,
                 transmute(activate_default_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_activate_default(&self) {
-        let _ = self.emit("activate-default", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("activate-default", &[]).unwrap() };
     }
 
     fn connect_activate_focus<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "activate-focus",
+            connect_raw(self.to_glib_none().0 as *mut _, b"activate-focus\0".as_ptr() as *const _,
                 transmute(activate_focus_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_activate_focus(&self) {
-        let _ = self.emit("activate-focus", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("activate-focus", &[]).unwrap() };
     }
 
     fn connect_enable_debugging<F: Fn(&Self, bool) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, bool) -> bool + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "enable-debugging",
+            connect_raw(self.to_glib_none().0 as *mut _, b"enable-debugging\0".as_ptr() as *const _,
                 transmute(enable_debugging_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_enable_debugging(&self, toggle: bool) -> bool {
-        let res = self.emit("enable-debugging", &[&toggle]).unwrap();
+        let res = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("enable-debugging", &[&toggle]).unwrap() };
         res.unwrap().get().unwrap()
     }
 
     fn connect_keys_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "keys-changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"keys-changed\0".as_ptr() as *const _,
                 transmute(keys_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1261,7 +1263,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn connect_set_focus<F: Fn(&Self, &Widget) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Widget) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "set-focus",
+            connect_raw(self.to_glib_none().0 as *mut _, b"set-focus\0".as_ptr() as *const _,
                 transmute(set_focus_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1269,7 +1271,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn connect_property_accept_focus_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::accept-focus",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::accept-focus\0".as_ptr() as *const _,
                 transmute(notify_accept_focus_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1277,7 +1279,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn connect_property_application_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::application",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::application\0".as_ptr() as *const _,
                 transmute(notify_application_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1285,7 +1287,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn connect_property_attached_to_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::attached-to",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::attached-to\0".as_ptr() as *const _,
                 transmute(notify_attached_to_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1293,7 +1295,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn connect_property_decorated_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::decorated",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::decorated\0".as_ptr() as *const _,
                 transmute(notify_decorated_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1301,7 +1303,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn connect_property_default_height_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::default-height",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::default-height\0".as_ptr() as *const _,
                 transmute(notify_default_height_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1309,7 +1311,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn connect_property_default_width_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::default-width",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::default-width\0".as_ptr() as *const _,
                 transmute(notify_default_width_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1317,7 +1319,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn connect_property_deletable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::deletable",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::deletable\0".as_ptr() as *const _,
                 transmute(notify_deletable_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1325,7 +1327,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn connect_property_destroy_with_parent_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::destroy-with-parent",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::destroy-with-parent\0".as_ptr() as *const _,
                 transmute(notify_destroy_with_parent_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1333,7 +1335,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn connect_property_focus_on_map_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::focus-on-map",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::focus-on-map\0".as_ptr() as *const _,
                 transmute(notify_focus_on_map_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1341,7 +1343,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn connect_property_focus_visible_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::focus-visible",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::focus-visible\0".as_ptr() as *const _,
                 transmute(notify_focus_visible_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1349,7 +1351,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn connect_property_gravity_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::gravity",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::gravity\0".as_ptr() as *const _,
                 transmute(notify_gravity_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1357,7 +1359,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn connect_property_has_resize_grip_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::has-resize-grip",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::has-resize-grip\0".as_ptr() as *const _,
                 transmute(notify_has_resize_grip_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1365,7 +1367,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn connect_property_has_toplevel_focus_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::has-toplevel-focus",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::has-toplevel-focus\0".as_ptr() as *const _,
                 transmute(notify_has_toplevel_focus_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1373,7 +1375,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn connect_property_hide_titlebar_when_maximized_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::hide-titlebar-when-maximized",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::hide-titlebar-when-maximized\0".as_ptr() as *const _,
                 transmute(notify_hide_titlebar_when_maximized_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1381,7 +1383,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn connect_property_icon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::icon",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::icon\0".as_ptr() as *const _,
                 transmute(notify_icon_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1389,7 +1391,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn connect_property_icon_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::icon-name",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::icon-name\0".as_ptr() as *const _,
                 transmute(notify_icon_name_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1397,7 +1399,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn connect_property_is_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::is-active",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::is-active\0".as_ptr() as *const _,
                 transmute(notify_is_active_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1405,7 +1407,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn connect_property_is_maximized_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::is-maximized",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::is-maximized\0".as_ptr() as *const _,
                 transmute(notify_is_maximized_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1413,7 +1415,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn connect_property_mnemonics_visible_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::mnemonics-visible",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::mnemonics-visible\0".as_ptr() as *const _,
                 transmute(notify_mnemonics_visible_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1421,7 +1423,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn connect_property_modal_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::modal",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::modal\0".as_ptr() as *const _,
                 transmute(notify_modal_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1429,7 +1431,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn connect_property_resizable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::resizable",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::resizable\0".as_ptr() as *const _,
                 transmute(notify_resizable_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1437,7 +1439,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn connect_property_resize_grip_visible_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::resize-grip-visible",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::resize-grip-visible\0".as_ptr() as *const _,
                 transmute(notify_resize_grip_visible_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1445,7 +1447,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn connect_property_role_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::role",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::role\0".as_ptr() as *const _,
                 transmute(notify_role_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1453,7 +1455,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn connect_property_screen_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::screen",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::screen\0".as_ptr() as *const _,
                 transmute(notify_screen_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1461,7 +1463,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn connect_property_skip_pager_hint_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::skip-pager-hint",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::skip-pager-hint\0".as_ptr() as *const _,
                 transmute(notify_skip_pager_hint_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1469,7 +1471,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn connect_property_skip_taskbar_hint_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::skip-taskbar-hint",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::skip-taskbar-hint\0".as_ptr() as *const _,
                 transmute(notify_skip_taskbar_hint_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1477,7 +1479,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn connect_property_startup_id_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::startup-id",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::startup-id\0".as_ptr() as *const _,
                 transmute(notify_startup_id_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1485,7 +1487,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn connect_property_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::title",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::title\0".as_ptr() as *const _,
                 transmute(notify_title_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1493,7 +1495,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn connect_property_transient_for_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::transient-for",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::transient-for\0".as_ptr() as *const _,
                 transmute(notify_transient_for_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1501,7 +1503,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn connect_property_type_hint_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::type-hint",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::type-hint\0".as_ptr() as *const _,
                 transmute(notify_type_hint_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1509,7 +1511,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn connect_property_urgency_hint_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::urgency-hint",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::urgency-hint\0".as_ptr() as *const _,
                 transmute(notify_urgency_hint_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1517,7 +1519,7 @@ impl<O: IsA<Window> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkWi
     fn connect_property_window_position_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::window-position",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::window-position\0".as_ptr() as *const _,
                 transmute(notify_window_position_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

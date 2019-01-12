@@ -8,13 +8,13 @@ use Container;
 use ShadowType;
 use Widget;
 use ffi;
-use glib;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
@@ -22,7 +22,6 @@ use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Frame(Object<ffi::GtkFrame, ffi::GtkFrameClass>): Bin, Container, Widget, Buildable;
@@ -43,8 +42,8 @@ impl Frame {
     }
 }
 
-pub trait FrameExt {
-    fn get_label(&self) -> Option<String>;
+pub trait FrameExt: 'static {
+    fn get_label(&self) -> Option<GString>;
 
     fn get_label_align(&self) -> (f32, f32);
 
@@ -79,8 +78,8 @@ pub trait FrameExt {
     fn connect_property_shadow_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Frame> + IsA<glib::object::Object>> FrameExt for O {
-    fn get_label(&self) -> Option<String> {
+impl<O: IsA<Frame>> FrameExt for O {
+    fn get_label(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_frame_get_label(self.to_glib_none().0))
         }
@@ -138,35 +137,35 @@ impl<O: IsA<Frame> + IsA<glib::object::Object>> FrameExt for O {
     fn get_property_label_xalign(&self) -> f32 {
         unsafe {
             let mut value = Value::from_type(<f32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "label-xalign".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"label-xalign\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_label_xalign(&self, label_xalign: f32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "label-xalign".to_glib_none().0, Value::from(&label_xalign).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"label-xalign\0".as_ptr() as *const _, Value::from(&label_xalign).to_glib_none().0);
         }
     }
 
     fn get_property_label_yalign(&self) -> f32 {
         unsafe {
             let mut value = Value::from_type(<f32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "label-yalign".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"label-yalign\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_label_yalign(&self, label_yalign: f32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "label-yalign".to_glib_none().0, Value::from(&label_yalign).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"label-yalign\0".as_ptr() as *const _, Value::from(&label_yalign).to_glib_none().0);
         }
     }
 
     fn connect_property_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::label",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::label\0".as_ptr() as *const _,
                 transmute(notify_label_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -174,7 +173,7 @@ impl<O: IsA<Frame> + IsA<glib::object::Object>> FrameExt for O {
     fn connect_property_label_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::label-widget",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::label-widget\0".as_ptr() as *const _,
                 transmute(notify_label_widget_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -182,7 +181,7 @@ impl<O: IsA<Frame> + IsA<glib::object::Object>> FrameExt for O {
     fn connect_property_label_xalign_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::label-xalign",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::label-xalign\0".as_ptr() as *const _,
                 transmute(notify_label_xalign_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -190,7 +189,7 @@ impl<O: IsA<Frame> + IsA<glib::object::Object>> FrameExt for O {
     fn connect_property_label_yalign_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::label-yalign",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::label-yalign\0".as_ptr() as *const _,
                 transmute(notify_label_yalign_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -198,7 +197,7 @@ impl<O: IsA<Frame> + IsA<glib::object::Object>> FrameExt for O {
     fn connect_property_shadow_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::shadow-type",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::shadow-type\0".as_ptr() as *const _,
                 transmute(notify_shadow_type_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

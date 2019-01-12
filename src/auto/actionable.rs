@@ -6,18 +6,16 @@ use Buildable;
 use Widget;
 use ffi;
 use glib;
+use glib::GString;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Actionable(Object<ffi::GtkActionable, ffi::GtkActionableInterface>): Widget, Buildable;
@@ -27,8 +25,8 @@ glib_wrapper! {
     }
 }
 
-pub trait ActionableExt {
-    fn get_action_name(&self) -> Option<String>;
+pub trait ActionableExt: 'static {
+    fn get_action_name(&self) -> Option<GString>;
 
     fn get_action_target_value(&self) -> Option<glib::Variant>;
 
@@ -43,8 +41,8 @@ pub trait ActionableExt {
     fn connect_property_action_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Actionable> + IsA<glib::object::Object>> ActionableExt for O {
-    fn get_action_name(&self) -> Option<String> {
+impl<O: IsA<Actionable>> ActionableExt for O {
+    fn get_action_name(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_actionable_get_action_name(self.to_glib_none().0))
         }
@@ -83,7 +81,7 @@ impl<O: IsA<Actionable> + IsA<glib::object::Object>> ActionableExt for O {
     fn connect_property_action_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::action-name",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::action-name\0".as_ptr() as *const _,
                 transmute(notify_action_name_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

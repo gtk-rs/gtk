@@ -17,16 +17,15 @@ use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
+use glib::object::ObjectExt;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Dialog(Object<ffi::GtkDialog, ffi::GtkDialogClass>): Window, Bin, Container, Widget, Buildable;
@@ -55,7 +54,7 @@ impl Default for Dialog {
     }
 }
 
-pub trait DialogExt {
+pub trait DialogExt: 'static {
     fn add_action_widget<P: IsA<Widget>>(&self, child: &P, response_id: ResponseType);
 
     fn add_button(&self, button_text: &str, response_id: ResponseType) -> Widget;
@@ -98,7 +97,7 @@ pub trait DialogExt {
     fn connect_response<F: Fn(&Self, ResponseType) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Dialog> + IsA<glib::object::Object> + glib::object::ObjectExt> DialogExt for O {
+impl<O: IsA<Dialog>> DialogExt for O {
     fn add_action_widget<P: IsA<Widget>>(&self, child: &P, response_id: ResponseType) {
         unsafe {
             ffi::gtk_dialog_add_action_widget(self.to_glib_none().0, child.to_glib_none().0, response_id.to_glib());
@@ -185,7 +184,7 @@ impl<O: IsA<Dialog> + IsA<glib::object::Object> + glib::object::ObjectExt> Dialo
     fn get_property_use_header_bar(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "use-header-bar".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"use-header-bar\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -193,19 +192,19 @@ impl<O: IsA<Dialog> + IsA<glib::object::Object> + glib::object::ObjectExt> Dialo
     fn connect_close<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "close",
+            connect_raw(self.to_glib_none().0 as *mut _, b"close\0".as_ptr() as *const _,
                 transmute(close_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_close(&self) {
-        let _ = self.emit("close", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("close", &[]).unwrap() };
     }
 
     fn connect_response<F: Fn(&Self, ResponseType) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, ResponseType) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "response",
+            connect_raw(self.to_glib_none().0 as *mut _, b"response\0".as_ptr() as *const _,
                 transmute(response_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

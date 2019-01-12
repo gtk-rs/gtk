@@ -6,19 +6,18 @@ use Error;
 use RecentData;
 use RecentInfo;
 use ffi;
-use glib;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
 use std::ptr;
 
@@ -52,7 +51,7 @@ impl Default for RecentManager {
     }
 }
 
-pub trait RecentManagerExt {
+pub trait RecentManagerExt: 'static {
     fn add_full(&self, uri: &str, recent_data: &RecentData) -> bool;
 
     fn add_item(&self, uri: &str) -> bool;
@@ -69,7 +68,7 @@ pub trait RecentManagerExt {
 
     fn remove_item(&self, uri: &str) -> Result<(), Error>;
 
-    fn get_property_filename(&self) -> Option<String>;
+    fn get_property_filename(&self) -> Option<GString>;
 
     fn get_property_size(&self) -> i32;
 
@@ -78,7 +77,7 @@ pub trait RecentManagerExt {
     fn connect_property_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<RecentManager> + IsA<glib::object::Object>> RecentManagerExt for O {
+impl<O: IsA<RecentManager>> RecentManagerExt for O {
     fn add_full(&self, uri: &str, recent_data: &RecentData) -> bool {
         unsafe {
             from_glib(ffi::gtk_recent_manager_add_full(self.to_glib_none().0, uri.to_glib_none().0, recent_data.to_glib_none().0))
@@ -137,10 +136,10 @@ impl<O: IsA<RecentManager> + IsA<glib::object::Object>> RecentManagerExt for O {
         }
     }
 
-    fn get_property_filename(&self) -> Option<String> {
+    fn get_property_filename(&self) -> Option<GString> {
         unsafe {
-            let mut value = Value::from_type(<String as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "filename".to_glib_none().0, value.to_glib_none_mut().0);
+            let mut value = Value::from_type(<GString as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"filename\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -148,7 +147,7 @@ impl<O: IsA<RecentManager> + IsA<glib::object::Object>> RecentManagerExt for O {
     fn get_property_size(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "size".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"size\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -156,7 +155,7 @@ impl<O: IsA<RecentManager> + IsA<glib::object::Object>> RecentManagerExt for O {
     fn connect_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"changed\0".as_ptr() as *const _,
                 transmute(changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -164,7 +163,7 @@ impl<O: IsA<RecentManager> + IsA<glib::object::Object>> RecentManagerExt for O {
     fn connect_property_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::size",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::size\0".as_ptr() as *const _,
                 transmute(notify_size_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

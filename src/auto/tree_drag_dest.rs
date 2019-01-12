@@ -7,11 +7,7 @@ use TreePath;
 use ffi;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use std::fmt;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct TreeDragDest(Object<ffi::GtkTreeDragDest, ffi::GtkTreeDragDestIface>);
@@ -21,7 +17,7 @@ glib_wrapper! {
     }
 }
 
-pub trait TreeDragDestExt {
+pub trait TreeDragDestExt: 'static {
     fn drag_data_received(&self, dest: &mut TreePath, selection_data: &mut SelectionData) -> bool;
 
     fn row_drop_possible(&self, dest_path: &mut TreePath, selection_data: &mut SelectionData) -> bool;

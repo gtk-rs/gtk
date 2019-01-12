@@ -6,11 +6,7 @@ use Widget;
 use ffi;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use std::fmt;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct TextChildAnchor(Object<ffi::GtkTextChildAnchor, ffi::GtkTextChildAnchorClass>);
@@ -35,7 +31,7 @@ impl Default for TextChildAnchor {
     }
 }
 
-pub trait TextChildAnchorExt {
+pub trait TextChildAnchorExt: 'static {
     fn get_deleted(&self) -> bool;
 
     fn get_widgets(&self) -> Vec<Widget>;

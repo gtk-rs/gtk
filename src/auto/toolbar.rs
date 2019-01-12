@@ -17,8 +17,9 @@ use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
+use glib::object::ObjectExt;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
@@ -26,9 +27,7 @@ use libc;
 use signal::Inhibit;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Toolbar(Object<ffi::GtkToolbar, ffi::GtkToolbarClass>): Container, Widget, Buildable, Orientable, ToolShell;
@@ -53,7 +52,7 @@ impl Default for Toolbar {
     }
 }
 
-pub trait ToolbarExt {
+pub trait ToolbarExt: 'static {
     fn get_drop_index(&self, x: i32, y: i32) -> i32;
 
     fn get_item_index<P: IsA<ToolItem>>(&self, item: &P) -> i32;
@@ -113,7 +112,7 @@ pub trait ToolbarExt {
     fn connect_property_toolbar_style_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Toolbar> + IsA<Container> + IsA<glib::object::Object> + glib::object::ObjectExt> ToolbarExt for O {
+impl<O: IsA<Toolbar>> ToolbarExt for O {
     fn get_drop_index(&self, x: i32, y: i32) -> i32 {
         unsafe {
             ffi::gtk_toolbar_get_drop_index(self.to_glib_none().0, x, y)
@@ -191,76 +190,76 @@ impl<O: IsA<Toolbar> + IsA<Container> + IsA<glib::object::Object> + glib::object
     fn get_property_icon_size_set(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "icon-size-set".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"icon-size-set\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_icon_size_set(&self, icon_size_set: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "icon-size-set".to_glib_none().0, Value::from(&icon_size_set).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"icon-size-set\0".as_ptr() as *const _, Value::from(&icon_size_set).to_glib_none().0);
         }
     }
 
     fn get_property_toolbar_style(&self) -> ToolbarStyle {
         unsafe {
             let mut value = Value::from_type(<ToolbarStyle as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "toolbar-style".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"toolbar-style\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_toolbar_style(&self, toolbar_style: ToolbarStyle) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "toolbar-style".to_glib_none().0, Value::from(&toolbar_style).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"toolbar-style\0".as_ptr() as *const _, Value::from(&toolbar_style).to_glib_none().0);
         }
     }
 
     fn get_item_expand<T: IsA<Widget>>(&self, item: &T) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            ffi::gtk_container_child_get_property(self.to_glib_none().0, item.to_glib_none().0, "expand".to_glib_none().0, value.to_glib_none_mut().0);
+            ffi::gtk_container_child_get_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"expand\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_item_expand<T: IsA<Widget>>(&self, item: &T, expand: bool) {
         unsafe {
-            ffi::gtk_container_child_set_property(self.to_glib_none().0, item.to_glib_none().0, "expand".to_glib_none().0, Value::from(&expand).to_glib_none().0);
+            ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"expand\0".as_ptr() as *const _, Value::from(&expand).to_glib_none().0);
         }
     }
 
     fn get_item_homogeneous<T: IsA<Widget>>(&self, item: &T) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            ffi::gtk_container_child_get_property(self.to_glib_none().0, item.to_glib_none().0, "homogeneous".to_glib_none().0, value.to_glib_none_mut().0);
+            ffi::gtk_container_child_get_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"homogeneous\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_item_homogeneous<T: IsA<Widget>>(&self, item: &T, homogeneous: bool) {
         unsafe {
-            ffi::gtk_container_child_set_property(self.to_glib_none().0, item.to_glib_none().0, "homogeneous".to_glib_none().0, Value::from(&homogeneous).to_glib_none().0);
+            ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"homogeneous\0".as_ptr() as *const _, Value::from(&homogeneous).to_glib_none().0);
         }
     }
 
     fn connect_focus_home_or_end<F: Fn(&Self, bool) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, bool) -> bool + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "focus-home-or-end",
+            connect_raw(self.to_glib_none().0 as *mut _, b"focus-home-or-end\0".as_ptr() as *const _,
                 transmute(focus_home_or_end_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_focus_home_or_end(&self, focus_home: bool) -> bool {
-        let res = self.emit("focus-home-or-end", &[&focus_home]).unwrap();
+        let res = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("focus-home-or-end", &[&focus_home]).unwrap() };
         res.unwrap().get().unwrap()
     }
 
     fn connect_orientation_changed<F: Fn(&Self, Orientation) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, Orientation) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "orientation-changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"orientation-changed\0".as_ptr() as *const _,
                 transmute(orientation_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -268,7 +267,7 @@ impl<O: IsA<Toolbar> + IsA<Container> + IsA<glib::object::Object> + glib::object
     fn connect_popup_context_menu<F: Fn(&Self, i32, i32, i32) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, i32, i32, i32) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "popup-context-menu",
+            connect_raw(self.to_glib_none().0 as *mut _, b"popup-context-menu\0".as_ptr() as *const _,
                 transmute(popup_context_menu_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -276,7 +275,7 @@ impl<O: IsA<Toolbar> + IsA<Container> + IsA<glib::object::Object> + glib::object
     fn connect_style_changed<F: Fn(&Self, ToolbarStyle) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, ToolbarStyle) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "style-changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"style-changed\0".as_ptr() as *const _,
                 transmute(style_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -284,7 +283,7 @@ impl<O: IsA<Toolbar> + IsA<Container> + IsA<glib::object::Object> + glib::object
     fn connect_property_icon_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::icon-size",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::icon-size\0".as_ptr() as *const _,
                 transmute(notify_icon_size_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -292,7 +291,7 @@ impl<O: IsA<Toolbar> + IsA<Container> + IsA<glib::object::Object> + glib::object
     fn connect_property_icon_size_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::icon-size-set",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::icon-size-set\0".as_ptr() as *const _,
                 transmute(notify_icon_size_set_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -300,7 +299,7 @@ impl<O: IsA<Toolbar> + IsA<Container> + IsA<glib::object::Object> + glib::object
     fn connect_property_show_arrow_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::show-arrow",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::show-arrow\0".as_ptr() as *const _,
                 transmute(notify_show_arrow_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -308,7 +307,7 @@ impl<O: IsA<Toolbar> + IsA<Container> + IsA<glib::object::Object> + glib::object
     fn connect_property_toolbar_style_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::toolbar-style",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::toolbar-style\0".as_ptr() as *const _,
                 transmute(notify_toolbar_style_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

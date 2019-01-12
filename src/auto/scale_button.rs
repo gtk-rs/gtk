@@ -13,21 +13,21 @@ use Orientable;
 use Widget;
 use ffi;
 use glib;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
+use glib::object::ObjectExt;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct ScaleButton(Object<ffi::GtkScaleButton, ffi::GtkScaleButtonClass>): Button, Bin, Container, Widget, Buildable, Actionable, Orientable;
@@ -46,7 +46,7 @@ impl ScaleButton {
     }
 }
 
-pub trait ScaleButtonExt {
+pub trait ScaleButtonExt: 'static {
     fn get_adjustment(&self) -> Adjustment;
 
     fn get_minus_button(&self) -> Option<Button>;
@@ -63,7 +63,7 @@ pub trait ScaleButtonExt {
 
     fn set_value(&self, value: f64);
 
-    fn get_property_icons(&self) -> Vec<String>;
+    fn get_property_icons(&self) -> Vec<GString>;
 
     fn get_property_size(&self) -> IconSize;
 
@@ -88,7 +88,7 @@ pub trait ScaleButtonExt {
     fn connect_property_value_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<ScaleButton> + IsA<glib::object::Object> + glib::object::ObjectExt> ScaleButtonExt for O {
+impl<O: IsA<ScaleButton>> ScaleButtonExt for O {
     fn get_adjustment(&self) -> Adjustment {
         unsafe {
             from_glib_none(ffi::gtk_scale_button_get_adjustment(self.to_glib_none().0))
@@ -137,10 +137,10 @@ impl<O: IsA<ScaleButton> + IsA<glib::object::Object> + glib::object::ObjectExt> 
         }
     }
 
-    fn get_property_icons(&self) -> Vec<String> {
+    fn get_property_icons(&self) -> Vec<GString> {
         unsafe {
-            let mut value = Value::from_type(<Vec<String> as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "icons".to_glib_none().0, value.to_glib_none_mut().0);
+            let mut value = Value::from_type(<Vec<GString> as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"icons\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -148,45 +148,45 @@ impl<O: IsA<ScaleButton> + IsA<glib::object::Object> + glib::object::ObjectExt> 
     fn get_property_size(&self) -> IconSize {
         unsafe {
             let mut value = Value::from_type(<IconSize as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "size".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"size\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_size(&self, size: IconSize) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "size".to_glib_none().0, Value::from(&size).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"size\0".as_ptr() as *const _, Value::from(&size).to_glib_none().0);
         }
     }
 
     fn connect_popdown<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "popdown",
+            connect_raw(self.to_glib_none().0 as *mut _, b"popdown\0".as_ptr() as *const _,
                 transmute(popdown_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_popdown(&self) {
-        let _ = self.emit("popdown", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("popdown", &[]).unwrap() };
     }
 
     fn connect_popup<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "popup",
+            connect_raw(self.to_glib_none().0 as *mut _, b"popup\0".as_ptr() as *const _,
                 transmute(popup_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_popup(&self) {
-        let _ = self.emit("popup", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("popup", &[]).unwrap() };
     }
 
     fn connect_value_changed<F: Fn(&Self, f64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, f64) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "value-changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"value-changed\0".as_ptr() as *const _,
                 transmute(value_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -194,7 +194,7 @@ impl<O: IsA<ScaleButton> + IsA<glib::object::Object> + glib::object::ObjectExt> 
     fn connect_property_adjustment_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::adjustment",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::adjustment\0".as_ptr() as *const _,
                 transmute(notify_adjustment_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -202,7 +202,7 @@ impl<O: IsA<ScaleButton> + IsA<glib::object::Object> + glib::object::ObjectExt> 
     fn connect_property_icons_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::icons",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::icons\0".as_ptr() as *const _,
                 transmute(notify_icons_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -210,7 +210,7 @@ impl<O: IsA<ScaleButton> + IsA<glib::object::Object> + glib::object::ObjectExt> 
     fn connect_property_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::size",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::size\0".as_ptr() as *const _,
                 transmute(notify_size_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -218,7 +218,7 @@ impl<O: IsA<ScaleButton> + IsA<glib::object::Object> + glib::object::ObjectExt> 
     fn connect_property_value_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::value",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::value\0".as_ptr() as *const _,
                 transmute(notify_value_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

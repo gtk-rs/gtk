@@ -17,21 +17,18 @@ use ToolbarStyle;
 use Widget;
 use ffi;
 use gdk;
-use glib;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct ToolPalette(Object<ffi::GtkToolPalette, ffi::GtkToolPaletteClass>): Container, Widget, Buildable, Orientable, Scrollable;
@@ -70,7 +67,7 @@ impl Default for ToolPalette {
     }
 }
 
-pub trait ToolPaletteExt {
+pub trait ToolPaletteExt: 'static {
     fn add_drag_dest<P: IsA<Widget>>(&self, widget: &P, flags: DestDefaults, targets: ToolPaletteDragTargets, actions: gdk::DragAction);
 
     fn get_drag_item(&self, selection: &SelectionData) -> Option<Widget>;
@@ -120,7 +117,7 @@ pub trait ToolPaletteExt {
     fn connect_property_toolbar_style_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<ToolPalette> + IsA<glib::object::Object>> ToolPaletteExt for O {
+impl<O: IsA<ToolPalette>> ToolPaletteExt for O {
     fn add_drag_dest<P: IsA<Widget>>(&self, widget: &P, flags: DestDefaults, targets: ToolPaletteDragTargets, actions: gdk::DragAction) {
         unsafe {
             ffi::gtk_tool_palette_add_drag_dest(self.to_glib_none().0, widget.to_glib_none().0, flags.to_glib(), targets.to_glib(), actions.to_glib());
@@ -226,35 +223,35 @@ impl<O: IsA<ToolPalette> + IsA<glib::object::Object>> ToolPaletteExt for O {
     fn get_property_icon_size_set(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "icon-size-set".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"icon-size-set\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_icon_size_set(&self, icon_size_set: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "icon-size-set".to_glib_none().0, Value::from(&icon_size_set).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"icon-size-set\0".as_ptr() as *const _, Value::from(&icon_size_set).to_glib_none().0);
         }
     }
 
     fn get_property_toolbar_style(&self) -> ToolbarStyle {
         unsafe {
             let mut value = Value::from_type(<ToolbarStyle as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "toolbar-style".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"toolbar-style\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_toolbar_style(&self, toolbar_style: ToolbarStyle) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "toolbar-style".to_glib_none().0, Value::from(&toolbar_style).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"toolbar-style\0".as_ptr() as *const _, Value::from(&toolbar_style).to_glib_none().0);
         }
     }
 
     fn connect_property_icon_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::icon-size",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::icon-size\0".as_ptr() as *const _,
                 transmute(notify_icon_size_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -262,7 +259,7 @@ impl<O: IsA<ToolPalette> + IsA<glib::object::Object>> ToolPaletteExt for O {
     fn connect_property_icon_size_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::icon-size-set",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::icon-size-set\0".as_ptr() as *const _,
                 transmute(notify_icon_size_set_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -270,7 +267,7 @@ impl<O: IsA<ToolPalette> + IsA<glib::object::Object>> ToolPaletteExt for O {
     fn connect_property_toolbar_style_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::toolbar-style",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::toolbar-style\0".as_ptr() as *const _,
                 transmute(notify_toolbar_style_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

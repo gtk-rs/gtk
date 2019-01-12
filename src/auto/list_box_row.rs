@@ -8,23 +8,26 @@ use Buildable;
 use Container;
 use Widget;
 use ffi;
+#[cfg(any(feature = "v3_10", feature = "dox"))]
 use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 #[cfg(any(feature = "v3_10", feature = "dox"))]
+use glib::object::ObjectExt;
+#[cfg(any(feature = "v3_10", feature = "dox"))]
 use glib::signal::SignalHandlerId;
 #[cfg(any(feature = "v3_10", feature = "dox"))]
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
+#[cfg(any(feature = "v3_10", feature = "dox"))]
 use glib_ffi;
+#[cfg(any(feature = "v3_10", feature = "dox"))]
 use gobject_ffi;
 #[cfg(any(feature = "v3_10", feature = "dox"))]
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 #[cfg(any(feature = "v3_10", feature = "dox"))]
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct ListBoxRow(Object<ffi::GtkListBoxRow, ffi::GtkListBoxRowClass>): Bin, Container, Widget, Buildable, Actionable;
@@ -51,7 +54,7 @@ impl Default for ListBoxRow {
     }
 }
 
-pub trait ListBoxRowExt {
+pub trait ListBoxRowExt: 'static {
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn changed(&self);
 
@@ -92,7 +95,7 @@ pub trait ListBoxRowExt {
     fn connect_property_selectable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<ListBoxRow> + IsA<glib::object::Object> + glib::object::ObjectExt> ListBoxRowExt for O {
+impl<O: IsA<ListBoxRow>> ListBoxRowExt for O {
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn changed(&self) {
         unsafe {
@@ -162,21 +165,21 @@ impl<O: IsA<ListBoxRow> + IsA<glib::object::Object> + glib::object::ObjectExt> L
     fn connect_activate<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "activate",
+            connect_raw(self.to_glib_none().0 as *mut _, b"activate\0".as_ptr() as *const _,
                 transmute(activate_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn emit_activate(&self) {
-        let _ = self.emit("activate", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("activate", &[]).unwrap() };
     }
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_property_activatable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::activatable",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::activatable\0".as_ptr() as *const _,
                 transmute(notify_activatable_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -185,7 +188,7 @@ impl<O: IsA<ListBoxRow> + IsA<glib::object::Object> + glib::object::ObjectExt> L
     fn connect_property_selectable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::selectable",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::selectable\0".as_ptr() as *const _,
                 transmute(notify_selectable_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

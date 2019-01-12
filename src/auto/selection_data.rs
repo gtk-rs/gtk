@@ -6,9 +6,8 @@ use TextBuffer;
 use ffi;
 use gdk;
 use gdk_pixbuf;
+use glib::GString;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use std::mem;
 use std::ptr;
 
@@ -83,13 +82,13 @@ impl SelectionData {
         }
     }
 
-    pub fn get_text(&self) -> Option<String> {
+    pub fn get_text(&self) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gtk_selection_data_get_text(self.to_glib_none().0))
         }
     }
 
-    pub fn get_uris(&self) -> Vec<String> {
+    pub fn get_uris(&self) -> Vec<GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gtk_selection_data_get_uris(self.to_glib_none().0))
         }

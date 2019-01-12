@@ -5,19 +5,15 @@
 use Buildable;
 use TextTag;
 use ffi;
-use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct TextTagTable(Object<ffi::GtkTextTagTable, ffi::GtkTextTagTableClass>): Buildable;
@@ -42,7 +38,7 @@ impl Default for TextTagTable {
     }
 }
 
-pub trait TextTagTableExt {
+pub trait TextTagTableExt: 'static {
     fn add(&self, tag: &TextTag) -> bool;
 
     //fn foreach<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: /*Unknown conversion*//*Unimplemented*/TextTagTableForeach, data: P);
@@ -60,7 +56,7 @@ pub trait TextTagTableExt {
     fn connect_tag_removed<F: Fn(&Self, &TextTag) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<TextTagTable> + IsA<glib::object::Object>> TextTagTableExt for O {
+impl<O: IsA<TextTagTable>> TextTagTableExt for O {
     fn add(&self, tag: &TextTag) -> bool {
         unsafe {
             from_glib(ffi::gtk_text_tag_table_add(self.to_glib_none().0, tag.to_glib_none().0))
@@ -92,7 +88,7 @@ impl<O: IsA<TextTagTable> + IsA<glib::object::Object>> TextTagTableExt for O {
     fn connect_tag_added<F: Fn(&Self, &TextTag) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &TextTag) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "tag-added",
+            connect_raw(self.to_glib_none().0 as *mut _, b"tag-added\0".as_ptr() as *const _,
                 transmute(tag_added_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -100,7 +96,7 @@ impl<O: IsA<TextTagTable> + IsA<glib::object::Object>> TextTagTableExt for O {
     fn connect_tag_changed<F: Fn(&Self, &TextTag, bool) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &TextTag, bool) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "tag-changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"tag-changed\0".as_ptr() as *const _,
                 transmute(tag_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -108,7 +104,7 @@ impl<O: IsA<TextTagTable> + IsA<glib::object::Object>> TextTagTableExt for O {
     fn connect_tag_removed<F: Fn(&Self, &TextTag) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &TextTag) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "tag-removed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"tag-removed\0".as_ptr() as *const _,
                 transmute(tag_removed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

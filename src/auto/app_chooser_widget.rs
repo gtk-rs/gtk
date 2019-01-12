@@ -12,19 +12,16 @@ use Widget;
 use ffi;
 use gio;
 use gio_ffi;
-use glib;
+use glib::GString;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct AppChooserWidget(Object<ffi::GtkAppChooserWidget, ffi::GtkAppChooserWidgetClass>): Box, Container, Widget, Buildable, Orientable, AppChooser;
@@ -43,8 +40,8 @@ impl AppChooserWidget {
     }
 }
 
-pub trait AppChooserWidgetExt {
-    fn get_default_text(&self) -> Option<String>;
+pub trait AppChooserWidgetExt: 'static {
+    fn get_default_text(&self) -> Option<GString>;
 
     fn get_show_all(&self) -> bool;
 
@@ -87,8 +84,8 @@ pub trait AppChooserWidgetExt {
     fn connect_property_show_recommended_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<AppChooserWidget> + IsA<glib::object::Object>> AppChooserWidgetExt for O {
-    fn get_default_text(&self) -> Option<String> {
+impl<O: IsA<AppChooserWidget>> AppChooserWidgetExt for O {
+    fn get_default_text(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_app_chooser_widget_get_default_text(self.to_glib_none().0))
         }
@@ -163,7 +160,7 @@ impl<O: IsA<AppChooserWidget> + IsA<glib::object::Object>> AppChooserWidgetExt f
     fn connect_application_activated<F: Fn(&Self, &gio::AppInfo) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gio::AppInfo) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "application-activated",
+            connect_raw(self.to_glib_none().0 as *mut _, b"application-activated\0".as_ptr() as *const _,
                 transmute(application_activated_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -171,7 +168,7 @@ impl<O: IsA<AppChooserWidget> + IsA<glib::object::Object>> AppChooserWidgetExt f
     fn connect_application_selected<F: Fn(&Self, &gio::AppInfo) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gio::AppInfo) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "application-selected",
+            connect_raw(self.to_glib_none().0 as *mut _, b"application-selected\0".as_ptr() as *const _,
                 transmute(application_selected_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -179,7 +176,7 @@ impl<O: IsA<AppChooserWidget> + IsA<glib::object::Object>> AppChooserWidgetExt f
     fn connect_populate_popup<F: Fn(&Self, &Menu, &gio::AppInfo) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Menu, &gio::AppInfo) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "populate-popup",
+            connect_raw(self.to_glib_none().0 as *mut _, b"populate-popup\0".as_ptr() as *const _,
                 transmute(populate_popup_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -187,7 +184,7 @@ impl<O: IsA<AppChooserWidget> + IsA<glib::object::Object>> AppChooserWidgetExt f
     fn connect_property_default_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::default-text",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::default-text\0".as_ptr() as *const _,
                 transmute(notify_default_text_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -195,7 +192,7 @@ impl<O: IsA<AppChooserWidget> + IsA<glib::object::Object>> AppChooserWidgetExt f
     fn connect_property_show_all_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::show-all",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::show-all\0".as_ptr() as *const _,
                 transmute(notify_show_all_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -203,7 +200,7 @@ impl<O: IsA<AppChooserWidget> + IsA<glib::object::Object>> AppChooserWidgetExt f
     fn connect_property_show_default_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::show-default",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::show-default\0".as_ptr() as *const _,
                 transmute(notify_show_default_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -211,7 +208,7 @@ impl<O: IsA<AppChooserWidget> + IsA<glib::object::Object>> AppChooserWidgetExt f
     fn connect_property_show_fallback_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::show-fallback",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::show-fallback\0".as_ptr() as *const _,
                 transmute(notify_show_fallback_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -219,7 +216,7 @@ impl<O: IsA<AppChooserWidget> + IsA<glib::object::Object>> AppChooserWidgetExt f
     fn connect_property_show_other_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::show-other",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::show-other\0".as_ptr() as *const _,
                 transmute(notify_show_other_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -227,7 +224,7 @@ impl<O: IsA<AppChooserWidget> + IsA<glib::object::Object>> AppChooserWidgetExt f
     fn connect_property_show_recommended_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::show-recommended",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::show-recommended\0".as_ptr() as *const _,
                 transmute(notify_show_recommended_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

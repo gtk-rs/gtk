@@ -10,18 +10,18 @@ use ToolItem;
 use Widget;
 use ffi;
 use glib;
+use glib::GString;
 use glib::object::Downcast;
 use glib::object::IsA;
+use glib::object::ObjectExt;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct ToolButton(Object<ffi::GtkToolButton, ffi::GtkToolButtonClass>): ToolItem, Bin, Container, Widget, Buildable, Actionable;
@@ -52,17 +52,17 @@ impl ToolButton {
     }
 }
 
-pub trait ToolButtonExt {
-    fn get_icon_name(&self) -> Option<String>;
+pub trait ToolButtonExt: 'static {
+    fn get_icon_name(&self) -> Option<GString>;
 
     fn get_icon_widget(&self) -> Option<Widget>;
 
-    fn get_label(&self) -> Option<String>;
+    fn get_label(&self) -> Option<GString>;
 
     fn get_label_widget(&self) -> Option<Widget>;
 
     #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_stock_id(&self) -> Option<String>;
+    fn get_stock_id(&self) -> Option<GString>;
 
     fn get_use_underline(&self) -> bool;
 
@@ -97,8 +97,8 @@ pub trait ToolButtonExt {
     fn connect_property_use_underline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<ToolButton> + IsA<glib::object::Object> + glib::object::ObjectExt> ToolButtonExt for O {
-    fn get_icon_name(&self) -> Option<String> {
+impl<O: IsA<ToolButton>> ToolButtonExt for O {
+    fn get_icon_name(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_tool_button_get_icon_name(self.to_glib_none().0))
         }
@@ -110,7 +110,7 @@ impl<O: IsA<ToolButton> + IsA<glib::object::Object> + glib::object::ObjectExt> T
         }
     }
 
-    fn get_label(&self) -> Option<String> {
+    fn get_label(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_tool_button_get_label(self.to_glib_none().0))
         }
@@ -122,7 +122,7 @@ impl<O: IsA<ToolButton> + IsA<glib::object::Object> + glib::object::ObjectExt> T
         }
     }
 
-    fn get_stock_id(&self) -> Option<String> {
+    fn get_stock_id(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_tool_button_get_stock_id(self.to_glib_none().0))
         }
@@ -183,19 +183,19 @@ impl<O: IsA<ToolButton> + IsA<glib::object::Object> + glib::object::ObjectExt> T
     fn connect_clicked<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "clicked",
+            connect_raw(self.to_glib_none().0 as *mut _, b"clicked\0".as_ptr() as *const _,
                 transmute(clicked_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_clicked(&self) {
-        let _ = self.emit("clicked", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("clicked", &[]).unwrap() };
     }
 
     fn connect_property_icon_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::icon-name",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::icon-name\0".as_ptr() as *const _,
                 transmute(notify_icon_name_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -203,7 +203,7 @@ impl<O: IsA<ToolButton> + IsA<glib::object::Object> + glib::object::ObjectExt> T
     fn connect_property_icon_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::icon-widget",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::icon-widget\0".as_ptr() as *const _,
                 transmute(notify_icon_widget_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -211,7 +211,7 @@ impl<O: IsA<ToolButton> + IsA<glib::object::Object> + glib::object::ObjectExt> T
     fn connect_property_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::label",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::label\0".as_ptr() as *const _,
                 transmute(notify_label_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -219,7 +219,7 @@ impl<O: IsA<ToolButton> + IsA<glib::object::Object> + glib::object::ObjectExt> T
     fn connect_property_label_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::label-widget",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::label-widget\0".as_ptr() as *const _,
                 transmute(notify_label_widget_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -227,7 +227,7 @@ impl<O: IsA<ToolButton> + IsA<glib::object::Object> + glib::object::ObjectExt> T
     fn connect_property_stock_id_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::stock-id",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::stock-id\0".as_ptr() as *const _,
                 transmute(notify_stock_id_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -235,7 +235,7 @@ impl<O: IsA<ToolButton> + IsA<glib::object::Object> + glib::object::ObjectExt> T
     fn connect_property_use_underline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::use-underline",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::use-underline\0".as_ptr() as *const _,
                 transmute(notify_use_underline_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

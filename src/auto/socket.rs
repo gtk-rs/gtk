@@ -7,19 +7,15 @@ use Container;
 use Widget;
 use ffi;
 use gdk;
-use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 use xlib;
 
 glib_wrapper! {
@@ -45,7 +41,7 @@ impl Default for Socket {
     }
 }
 
-pub trait GtkSocketExt {
+pub trait GtkSocketExt: 'static {
     fn add_id(&self, window: xlib::Window);
 
     fn get_id(&self) -> xlib::Window;
@@ -57,7 +53,7 @@ pub trait GtkSocketExt {
     fn connect_plug_removed<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Socket> + IsA<glib::object::Object>> GtkSocketExt for O {
+impl<O: IsA<Socket>> GtkSocketExt for O {
     fn add_id(&self, window: xlib::Window) {
         unsafe {
             ffi::gtk_socket_add_id(self.to_glib_none().0, window);
@@ -79,7 +75,7 @@ impl<O: IsA<Socket> + IsA<glib::object::Object>> GtkSocketExt for O {
     fn connect_plug_added<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "plug-added",
+            connect_raw(self.to_glib_none().0 as *mut _, b"plug-added\0".as_ptr() as *const _,
                 transmute(plug_added_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -87,7 +83,7 @@ impl<O: IsA<Socket> + IsA<glib::object::Object>> GtkSocketExt for O {
     fn connect_plug_removed<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) -> bool + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "plug-removed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"plug-removed\0".as_ptr() as *const _,
                 transmute(plug_removed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

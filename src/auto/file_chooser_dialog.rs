@@ -11,11 +11,7 @@ use Widget;
 use Window;
 use ffi;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use std::fmt;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct FileChooserDialog(Object<ffi::GtkFileChooserDialog, ffi::GtkFileChooserDialogClass>): Dialog, Window, Bin, Container, Widget, Buildable, FileChooser;

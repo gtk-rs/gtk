@@ -10,11 +10,8 @@ use ffi;
 use glib;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use std;
 use std::fmt;
-use std::mem;
 use std::ptr;
 
 glib_wrapper! {
@@ -68,7 +65,7 @@ impl Default for PageSetup {
     }
 }
 
-pub trait PageSetupExt {
+pub trait PageSetupExt: 'static {
     fn copy(&self) -> Option<PageSetup>;
 
     fn get_bottom_margin(&self, unit: Unit) -> f64;

@@ -13,25 +13,22 @@ use PanDirection;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use Widget;
 use ffi;
-use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use glib::signal::SignalHandlerId;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
+#[cfg(any(feature = "v3_14", feature = "dox"))]
 use glib_ffi;
-use gobject_ffi;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use libc;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct GesturePan(Object<ffi::GtkGesturePan, ffi::GtkGesturePanClass>): GestureDrag, GestureSingle, Gesture, EventController;
@@ -51,7 +48,7 @@ impl GesturePan {
     }
 }
 
-pub trait GesturePanExt {
+pub trait GesturePanExt: 'static {
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_orientation(&self) -> Orientation;
 
@@ -65,7 +62,7 @@ pub trait GesturePanExt {
     fn connect_property_orientation_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<GesturePan> + IsA<glib::object::Object>> GesturePanExt for O {
+impl<O: IsA<GesturePan>> GesturePanExt for O {
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_orientation(&self) -> Orientation {
         unsafe {
@@ -84,7 +81,7 @@ impl<O: IsA<GesturePan> + IsA<glib::object::Object>> GesturePanExt for O {
     fn connect_pan<F: Fn(&Self, PanDirection, f64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, PanDirection, f64) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "pan",
+            connect_raw(self.to_glib_none().0 as *mut _, b"pan\0".as_ptr() as *const _,
                 transmute(pan_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -93,7 +90,7 @@ impl<O: IsA<GesturePan> + IsA<glib::object::Object>> GesturePanExt for O {
     fn connect_property_orientation_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::orientation",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::orientation\0".as_ptr() as *const _,
                 transmute(notify_orientation_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

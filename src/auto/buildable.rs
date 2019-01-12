@@ -7,11 +7,7 @@ use ffi;
 use glib;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use std::fmt;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Buildable(Object<ffi::GtkBuildable, ffi::GtkBuildableIface>);
@@ -21,7 +17,7 @@ glib_wrapper! {
     }
 }
 
-pub trait BuildableExt {
+pub trait BuildableExt: 'static {
     fn add_child<'a, P: IsA<glib::Object>, Q: Into<Option<&'a str>>>(&self, builder: &Builder, child: &P, type_: Q);
 
     fn construct_child(&self, builder: &Builder, name: &str) -> Option<glib::Object>;

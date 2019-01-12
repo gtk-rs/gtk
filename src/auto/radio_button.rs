@@ -11,19 +11,15 @@ use Container;
 use ToggleButton;
 use Widget;
 use ffi;
-use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct RadioButton(Object<ffi::GtkRadioButton, ffi::GtkRadioButtonClass>): CheckButton, ToggleButton, Button, Bin, Container, Widget, Buildable, Actionable;
@@ -56,7 +52,7 @@ impl RadioButton {
     }
 }
 
-pub trait RadioButtonExt {
+pub trait RadioButtonExt: 'static {
     fn get_group(&self) -> Vec<RadioButton>;
 
     fn join_group<'a, P: Into<Option<&'a RadioButton>>>(&self, group_source: P);
@@ -64,7 +60,7 @@ pub trait RadioButtonExt {
     fn connect_group_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<RadioButton> + IsA<glib::object::Object>> RadioButtonExt for O {
+impl<O: IsA<RadioButton>> RadioButtonExt for O {
     fn get_group(&self) -> Vec<RadioButton> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(ffi::gtk_radio_button_get_group(self.to_glib_none().0))
@@ -82,7 +78,7 @@ impl<O: IsA<RadioButton> + IsA<glib::object::Object>> RadioButtonExt for O {
     fn connect_group_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "group-changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"group-changed\0".as_ptr() as *const _,
                 transmute(group_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

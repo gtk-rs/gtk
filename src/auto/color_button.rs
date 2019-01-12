@@ -11,21 +11,19 @@ use Container;
 use Widget;
 use ffi;
 use gdk;
-use glib;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct ColorButton(Object<ffi::GtkColorButton, ffi::GtkColorButtonClass>): Button, Bin, Container, Widget, Buildable, Actionable, ColorChooser;
@@ -57,8 +55,8 @@ impl Default for ColorButton {
     }
 }
 
-pub trait ColorButtonExt {
-    fn get_title(&self) -> Option<String>;
+pub trait ColorButtonExt: 'static {
+    fn get_title(&self) -> Option<GString>;
 
     //fn set_color(&self, color: /*Ignored*/&gdk::Color);
 
@@ -88,8 +86,8 @@ pub trait ColorButtonExt {
     fn connect_property_use_alpha_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<ColorButton> + IsA<glib::object::Object>> ColorButtonExt for O {
-    fn get_title(&self) -> Option<String> {
+impl<O: IsA<ColorButton>> ColorButtonExt for O {
+    fn get_title(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_color_button_get_title(self.to_glib_none().0))
         }
@@ -108,14 +106,14 @@ impl<O: IsA<ColorButton> + IsA<glib::object::Object>> ColorButtonExt for O {
     fn get_property_alpha(&self) -> u32 {
         unsafe {
             let mut value = Value::from_type(<u32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "alpha".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"alpha\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_alpha(&self, alpha: u32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "alpha".to_glib_none().0, Value::from(&alpha).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"alpha\0".as_ptr() as *const _, Value::from(&alpha).to_glib_none().0);
         }
     }
 
@@ -123,7 +121,7 @@ impl<O: IsA<ColorButton> + IsA<glib::object::Object>> ColorButtonExt for O {
     fn get_property_show_editor(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "show-editor".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"show-editor\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -131,14 +129,14 @@ impl<O: IsA<ColorButton> + IsA<glib::object::Object>> ColorButtonExt for O {
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn set_property_show_editor(&self, show_editor: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "show-editor".to_glib_none().0, Value::from(&show_editor).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"show-editor\0".as_ptr() as *const _, Value::from(&show_editor).to_glib_none().0);
         }
     }
 
     fn connect_color_set<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "color-set",
+            connect_raw(self.to_glib_none().0 as *mut _, b"color-set\0".as_ptr() as *const _,
                 transmute(color_set_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -146,7 +144,7 @@ impl<O: IsA<ColorButton> + IsA<glib::object::Object>> ColorButtonExt for O {
     fn connect_property_alpha_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::alpha",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::alpha\0".as_ptr() as *const _,
                 transmute(notify_alpha_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -154,7 +152,7 @@ impl<O: IsA<ColorButton> + IsA<glib::object::Object>> ColorButtonExt for O {
     fn connect_property_rgba_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::rgba",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::rgba\0".as_ptr() as *const _,
                 transmute(notify_rgba_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -163,7 +161,7 @@ impl<O: IsA<ColorButton> + IsA<glib::object::Object>> ColorButtonExt for O {
     fn connect_property_show_editor_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::show-editor",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::show-editor\0".as_ptr() as *const _,
                 transmute(notify_show_editor_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -171,7 +169,7 @@ impl<O: IsA<ColorButton> + IsA<glib::object::Object>> ColorButtonExt for O {
     fn connect_property_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::title",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::title\0".as_ptr() as *const _,
                 transmute(notify_title_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -179,7 +177,7 @@ impl<O: IsA<ColorButton> + IsA<glib::object::Object>> ColorButtonExt for O {
     fn connect_property_use_alpha_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::use-alpha",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::use-alpha\0".as_ptr() as *const _,
                 transmute(notify_use_alpha_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

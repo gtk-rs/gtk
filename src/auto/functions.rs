@@ -25,6 +25,7 @@ use ffi;
 use gdk;
 use gdk_pixbuf;
 use glib;
+use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
 use pango;
@@ -53,14 +54,14 @@ pub fn accelerator_get_default_mod_mask() -> gdk::ModifierType {
     }
 }
 
-pub fn accelerator_get_label(accelerator_key: u32, accelerator_mods: gdk::ModifierType) -> Option<String> {
+pub fn accelerator_get_label(accelerator_key: u32, accelerator_mods: gdk::ModifierType) -> Option<GString> {
     assert_initialized_main_thread!();
     unsafe {
         from_glib_full(ffi::gtk_accelerator_get_label(accelerator_key, accelerator_mods.to_glib()))
     }
 }
 
-pub fn accelerator_get_label_with_keycode<'a, P: Into<Option<&'a gdk::Display>>>(display: P, accelerator_key: u32, keycode: u32, accelerator_mods: gdk::ModifierType) -> Option<String> {
+pub fn accelerator_get_label_with_keycode<'a, P: Into<Option<&'a gdk::Display>>>(display: P, accelerator_key: u32, keycode: u32, accelerator_mods: gdk::ModifierType) -> Option<GString> {
     assert_initialized_main_thread!();
     let display = display.into();
     let display = display.to_glib_none();
@@ -69,14 +70,14 @@ pub fn accelerator_get_label_with_keycode<'a, P: Into<Option<&'a gdk::Display>>>
     }
 }
 
-pub fn accelerator_name(accelerator_key: u32, accelerator_mods: gdk::ModifierType) -> Option<String> {
+pub fn accelerator_name(accelerator_key: u32, accelerator_mods: gdk::ModifierType) -> Option<GString> {
     assert_initialized_main_thread!();
     unsafe {
         from_glib_full(ffi::gtk_accelerator_name(accelerator_key, accelerator_mods.to_glib()))
     }
 }
 
-pub fn accelerator_name_with_keycode<'a, P: Into<Option<&'a gdk::Display>>>(display: P, accelerator_key: u32, keycode: u32, accelerator_mods: gdk::ModifierType) -> Option<String> {
+pub fn accelerator_name_with_keycode<'a, P: Into<Option<&'a gdk::Display>>>(display: P, accelerator_key: u32, keycode: u32, accelerator_mods: gdk::ModifierType) -> Option<GString> {
     assert_initialized_main_thread!();
     let display = display.into();
     let display = display.to_glib_none();
@@ -260,11 +261,11 @@ pub fn grab_get_current() -> Option<Widget> {
     }
 }
 
-//pub fn init_check(argv: /*Unimplemented*/Vec<String>) -> bool {
+//pub fn init_check(argv: /*Unimplemented*/Vec<GString>) -> bool {
 //    unsafe { TODO: call ffi::gtk_init_check() }
 //}
 
-//pub fn init_with_args<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b str>>>(argv: /*Unimplemented*/Vec<String>, parameter_string: P, entries: /*Ignored*/&[&glib::OptionEntry], translation_domain: Q) -> Result<(), Error> {
+//pub fn init_with_args<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b str>>>(argv: /*Unimplemented*/Vec<GString>, parameter_string: P, entries: /*Ignored*/&[&glib::OptionEntry], translation_domain: Q) -> Result<(), Error> {
 //    unsafe { TODO: call ffi::gtk_init_with_args() }
 //}
 
@@ -303,7 +304,7 @@ pub fn main_level() -> u32 {
     }
 }
 
-//pub fn parse_args(argv: /*Unimplemented*/Vec<String>) -> bool {
+//pub fn parse_args(argv: /*Unimplemented*/Vec<GString>) -> bool {
 //    unsafe { TODO: call ffi::gtk_parse_args() }
 //}
 
@@ -569,7 +570,7 @@ pub fn show_uri_on_window<'a, P: IsA<Window> + 'a, Q: Into<Option<&'a P>>>(paren
 //}
 
 #[cfg_attr(feature = "v3_10", deprecated)]
-pub fn stock_list_ids() -> Vec<String> {
+pub fn stock_list_ids() -> Vec<GString> {
     assert_initialized_main_thread!();
     unsafe {
         FromGlibPtrContainer::from_glib_full(ffi::gtk_stock_list_ids())
@@ -657,7 +658,7 @@ pub fn test_find_widget<P: IsA<Widget>>(widget: &P, label_pattern: &str, widget_
     }
 }
 
-//pub fn test_init(argvp: /*Unimplemented*/Vec<String>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
+//pub fn test_init(argvp: /*Unimplemented*/Vec<GString>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
 //    unsafe { TODO: call ffi::gtk_test_init() }
 //}
 
@@ -697,7 +698,7 @@ pub fn test_spin_button_click(spinner: &SpinButton, button: u32, upwards: bool) 
 }
 
 #[cfg_attr(feature = "v3_20", deprecated)]
-pub fn test_text_get<P: IsA<Widget>>(widget: &P) -> Option<String> {
+pub fn test_text_get<P: IsA<Widget>>(widget: &P) -> Option<GString> {
     skip_assert_initialized!();
     unsafe {
         from_glib_full(ffi::gtk_test_text_get(widget.to_glib_none().0))

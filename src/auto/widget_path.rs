@@ -8,13 +8,11 @@ use StateFlags;
 use Widget;
 use ffi;
 use glib;
+use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use std::fmt;
 use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -103,14 +101,14 @@ impl WidgetPath {
         }
     }
 
-    pub fn iter_get_name(&self, pos: i32) -> Option<String> {
+    pub fn iter_get_name(&self, pos: i32) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_widget_path_iter_get_name(self.to_glib_none().0, pos))
         }
     }
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
-    pub fn iter_get_object_name(&self, pos: i32) -> Option<String> {
+    pub fn iter_get_object_name(&self, pos: i32) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_widget_path_iter_get_object_name(self.to_glib_none().0, pos))
         }
@@ -183,14 +181,14 @@ impl WidgetPath {
         }
     }
 
-    pub fn iter_list_classes(&self, pos: i32) -> Vec<String> {
+    pub fn iter_list_classes(&self, pos: i32) -> Vec<GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_container(ffi::gtk_widget_path_iter_list_classes(self.to_glib_none().0, pos))
         }
     }
 
     #[cfg_attr(feature = "v3_14", deprecated)]
-    pub fn iter_list_regions(&self, pos: i32) -> Vec<String> {
+    pub fn iter_list_regions(&self, pos: i32) -> Vec<GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_container(ffi::gtk_widget_path_iter_list_regions(self.to_glib_none().0, pos))
         }
@@ -249,7 +247,7 @@ impl WidgetPath {
         }
     }
 
-    fn to_string(&self) -> String {
+    fn to_string(&self) -> GString {
         unsafe {
             from_glib_full(ffi::gtk_widget_path_to_string(self.to_glib_none().0))
         }

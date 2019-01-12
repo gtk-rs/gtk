@@ -7,7 +7,8 @@ use ResponseType;
 #[cfg(any(feature = "v3_20", feature = "dox"))]
 use Window;
 use ffi;
-use glib;
+#[cfg(any(feature = "v3_20", feature = "dox"))]
+use glib::GString;
 #[cfg(any(feature = "v3_20", feature = "dox"))]
 use glib::Value;
 #[cfg(any(feature = "v3_20", feature = "dox"))]
@@ -16,17 +17,17 @@ use glib::object::IsA;
 #[cfg(any(feature = "v3_20", feature = "dox"))]
 use glib::signal::SignalHandlerId;
 #[cfg(any(feature = "v3_20", feature = "dox"))]
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
+#[cfg(any(feature = "v3_20", feature = "dox"))]
 use glib_ffi;
+#[cfg(any(feature = "v3_20", feature = "dox"))]
 use gobject_ffi;
 #[cfg(any(feature = "v3_20", feature = "dox"))]
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 #[cfg(any(feature = "v3_20", feature = "dox"))]
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct NativeDialog(Object<ffi::GtkNativeDialog, ffi::GtkNativeDialogClass>);
@@ -36,7 +37,7 @@ glib_wrapper! {
     }
 }
 
-pub trait NativeDialogExt {
+pub trait NativeDialogExt: 'static {
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn destroy(&self);
 
@@ -44,7 +45,7 @@ pub trait NativeDialogExt {
     fn get_modal(&self) -> bool;
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
-    fn get_title(&self) -> Option<String>;
+    fn get_title(&self) -> Option<GString>;
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn get_transient_for(&self) -> Option<Window>;
@@ -89,7 +90,7 @@ pub trait NativeDialogExt {
     fn connect_property_visible_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<NativeDialog> + IsA<glib::object::Object>> NativeDialogExt for O {
+impl<O: IsA<NativeDialog>> NativeDialogExt for O {
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn destroy(&self) {
         unsafe {
@@ -105,7 +106,7 @@ impl<O: IsA<NativeDialog> + IsA<glib::object::Object>> NativeDialogExt for O {
     }
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
-    fn get_title(&self) -> Option<String> {
+    fn get_title(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_native_dialog_get_title(self.to_glib_none().0))
         }
@@ -172,7 +173,7 @@ impl<O: IsA<NativeDialog> + IsA<glib::object::Object>> NativeDialogExt for O {
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn set_property_visible(&self, visible: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "visible".to_glib_none().0, Value::from(&visible).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"visible\0".as_ptr() as *const _, Value::from(&visible).to_glib_none().0);
         }
     }
 
@@ -180,7 +181,7 @@ impl<O: IsA<NativeDialog> + IsA<glib::object::Object>> NativeDialogExt for O {
     fn connect_response<F: Fn(&Self, ResponseType) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, ResponseType) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "response",
+            connect_raw(self.to_glib_none().0 as *mut _, b"response\0".as_ptr() as *const _,
                 transmute(response_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -189,7 +190,7 @@ impl<O: IsA<NativeDialog> + IsA<glib::object::Object>> NativeDialogExt for O {
     fn connect_property_modal_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::modal",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::modal\0".as_ptr() as *const _,
                 transmute(notify_modal_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -198,7 +199,7 @@ impl<O: IsA<NativeDialog> + IsA<glib::object::Object>> NativeDialogExt for O {
     fn connect_property_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::title",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::title\0".as_ptr() as *const _,
                 transmute(notify_title_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -207,7 +208,7 @@ impl<O: IsA<NativeDialog> + IsA<glib::object::Object>> NativeDialogExt for O {
     fn connect_property_transient_for_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::transient-for",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::transient-for\0".as_ptr() as *const _,
                 transmute(notify_transient_for_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -216,7 +217,7 @@ impl<O: IsA<NativeDialog> + IsA<glib::object::Object>> NativeDialogExt for O {
     fn connect_property_visible_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::visible",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::visible\0".as_ptr() as *const _,
                 transmute(notify_visible_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

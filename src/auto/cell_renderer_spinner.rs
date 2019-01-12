@@ -5,21 +5,18 @@
 use CellRenderer;
 use IconSize;
 use ffi;
-use glib;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct CellRendererSpinner(Object<ffi::GtkCellRendererSpinner, ffi::GtkCellRendererSpinnerClass>): CellRenderer;
@@ -44,7 +41,7 @@ impl Default for CellRendererSpinner {
     }
 }
 
-pub trait CellRendererSpinnerExt {
+pub trait CellRendererSpinnerExt: 'static {
     fn get_property_active(&self) -> bool;
 
     fn set_property_active(&self, active: bool);
@@ -64,53 +61,53 @@ pub trait CellRendererSpinnerExt {
     fn connect_property_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<CellRendererSpinner> + IsA<glib::object::Object>> CellRendererSpinnerExt for O {
+impl<O: IsA<CellRendererSpinner>> CellRendererSpinnerExt for O {
     fn get_property_active(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "active".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"active\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_active(&self, active: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "active".to_glib_none().0, Value::from(&active).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"active\0".as_ptr() as *const _, Value::from(&active).to_glib_none().0);
         }
     }
 
     fn get_property_pulse(&self) -> u32 {
         unsafe {
             let mut value = Value::from_type(<u32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "pulse".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"pulse\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_pulse(&self, pulse: u32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "pulse".to_glib_none().0, Value::from(&pulse).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"pulse\0".as_ptr() as *const _, Value::from(&pulse).to_glib_none().0);
         }
     }
 
     fn get_property_size(&self) -> IconSize {
         unsafe {
             let mut value = Value::from_type(<IconSize as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "size".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"size\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_size(&self, size: IconSize) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "size".to_glib_none().0, Value::from(&size).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"size\0".as_ptr() as *const _, Value::from(&size).to_glib_none().0);
         }
     }
 
     fn connect_property_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::active",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::active\0".as_ptr() as *const _,
                 transmute(notify_active_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -118,7 +115,7 @@ impl<O: IsA<CellRendererSpinner> + IsA<glib::object::Object>> CellRendererSpinne
     fn connect_property_pulse_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::pulse",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::pulse\0".as_ptr() as *const _,
                 transmute(notify_pulse_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -126,7 +123,7 @@ impl<O: IsA<CellRendererSpinner> + IsA<glib::object::Object>> CellRendererSpinne
     fn connect_property_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::size",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::size\0".as_ptr() as *const _,
                 transmute(notify_size_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
