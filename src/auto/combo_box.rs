@@ -17,21 +17,21 @@ use atk;
 use ffi;
 use gdk;
 use glib;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
+use glib::object::ObjectExt;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct ComboBox(Object<ffi::GtkComboBox, ffi::GtkComboBoxClass>): Bin, Container, Widget, Buildable, CellEditable, CellLayout;
@@ -91,8 +91,8 @@ impl Default for ComboBox {
     }
 }
 
-pub trait ComboBoxExt {
-    fn get_active_id(&self) -> Option<String>;
+pub trait ComboBoxExt: 'static {
+    fn get_active_id(&self) -> Option<GString>;
 
     fn get_active_iter(&self) -> Option<TreeIter>;
 
@@ -124,7 +124,7 @@ pub trait ComboBoxExt {
     fn get_row_span_column(&self) -> i32;
 
     #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_title(&self) -> Option<String>;
+    fn get_title(&self) -> Option<GString>;
 
     fn get_wrap_width(&self) -> i32;
 
@@ -175,7 +175,7 @@ pub trait ComboBoxExt {
     fn get_property_popup_shown(&self) -> bool;
 
     #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_tearoff_title(&self) -> Option<String>;
+    fn get_property_tearoff_title(&self) -> Option<GString>;
 
     #[cfg_attr(feature = "v3_10", deprecated)]
     fn set_property_tearoff_title<'a, P: Into<Option<&'a str>>>(&self, tearoff_title: P);
@@ -227,8 +227,8 @@ pub trait ComboBoxExt {
     fn connect_property_wrap_width_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<ComboBox> + IsA<glib::object::Object> + glib::object::ObjectExt> ComboBoxExt for O {
-    fn get_active_id(&self) -> Option<String> {
+impl<O: IsA<ComboBox>> ComboBoxExt for O {
+    fn get_active_id(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_combo_box_get_active_id(self.to_glib_none().0))
         }
@@ -313,7 +313,7 @@ impl<O: IsA<ComboBox> + IsA<glib::object::Object> + glib::object::ObjectExt> Com
         }
     }
 
-    fn get_title(&self) -> Option<String> {
+    fn get_title(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_combo_box_get_title(self.to_glib_none().0))
         }
@@ -434,7 +434,7 @@ impl<O: IsA<ComboBox> + IsA<glib::object::Object> + glib::object::ObjectExt> Com
     fn get_property_cell_area(&self) -> Option<CellArea> {
         unsafe {
             let mut value = Value::from_type(<CellArea as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "cell-area".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"cell-area\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -442,29 +442,29 @@ impl<O: IsA<ComboBox> + IsA<glib::object::Object> + glib::object::ObjectExt> Com
     fn get_property_has_frame(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "has-frame".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"has-frame\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_has_frame(&self, has_frame: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "has-frame".to_glib_none().0, Value::from(&has_frame).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"has-frame\0".as_ptr() as *const _, Value::from(&has_frame).to_glib_none().0);
         }
     }
 
     fn get_property_popup_shown(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "popup-shown".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"popup-shown\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
-    fn get_property_tearoff_title(&self) -> Option<String> {
+    fn get_property_tearoff_title(&self) -> Option<GString> {
         unsafe {
-            let mut value = Value::from_type(<String as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "tearoff-title".to_glib_none().0, value.to_glib_none_mut().0);
+            let mut value = Value::from_type(<GString as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"tearoff-title\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -472,14 +472,14 @@ impl<O: IsA<ComboBox> + IsA<glib::object::Object> + glib::object::ObjectExt> Com
     fn set_property_tearoff_title<'a, P: Into<Option<&'a str>>>(&self, tearoff_title: P) {
         let tearoff_title = tearoff_title.into();
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "tearoff-title".to_glib_none().0, Value::from(tearoff_title).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"tearoff-title\0".as_ptr() as *const _, Value::from(tearoff_title).to_glib_none().0);
         }
     }
 
     fn connect_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"changed\0".as_ptr() as *const _,
                 transmute(changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -487,7 +487,7 @@ impl<O: IsA<ComboBox> + IsA<glib::object::Object> + glib::object::ObjectExt> Com
     fn connect_format_entry_text<F: Fn(&Self, &str) -> String + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &str) -> String + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "format-entry-text",
+            connect_raw(self.to_glib_none().0 as *mut _, b"format-entry-text\0".as_ptr() as *const _,
                 transmute(format_entry_text_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -495,44 +495,44 @@ impl<O: IsA<ComboBox> + IsA<glib::object::Object> + glib::object::ObjectExt> Com
     fn connect_move_active<F: Fn(&Self, ScrollType) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, ScrollType) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "move-active",
+            connect_raw(self.to_glib_none().0 as *mut _, b"move-active\0".as_ptr() as *const _,
                 transmute(move_active_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_move_active(&self, scroll_type: ScrollType) {
-        let _ = self.emit("move-active", &[&scroll_type]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("move-active", &[&scroll_type]).unwrap() };
     }
 
     fn connect_popdown<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) -> bool + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "popdown",
+            connect_raw(self.to_glib_none().0 as *mut _, b"popdown\0".as_ptr() as *const _,
                 transmute(popdown_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_popdown(&self) -> bool {
-        let res = self.emit("popdown", &[]).unwrap();
+        let res = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("popdown", &[]).unwrap() };
         res.unwrap().get().unwrap()
     }
 
     fn connect_popup<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "popup",
+            connect_raw(self.to_glib_none().0 as *mut _, b"popup\0".as_ptr() as *const _,
                 transmute(popup_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_popup(&self) {
-        let _ = self.emit("popup", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("popup", &[]).unwrap() };
     }
 
     fn connect_property_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::active",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::active\0".as_ptr() as *const _,
                 transmute(notify_active_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -540,7 +540,7 @@ impl<O: IsA<ComboBox> + IsA<glib::object::Object> + glib::object::ObjectExt> Com
     fn connect_property_active_id_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::active-id",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::active-id\0".as_ptr() as *const _,
                 transmute(notify_active_id_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -548,7 +548,7 @@ impl<O: IsA<ComboBox> + IsA<glib::object::Object> + glib::object::ObjectExt> Com
     fn connect_property_add_tearoffs_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::add-tearoffs",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::add-tearoffs\0".as_ptr() as *const _,
                 transmute(notify_add_tearoffs_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -556,7 +556,7 @@ impl<O: IsA<ComboBox> + IsA<glib::object::Object> + glib::object::ObjectExt> Com
     fn connect_property_button_sensitivity_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::button-sensitivity",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::button-sensitivity\0".as_ptr() as *const _,
                 transmute(notify_button_sensitivity_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -564,7 +564,7 @@ impl<O: IsA<ComboBox> + IsA<glib::object::Object> + glib::object::ObjectExt> Com
     fn connect_property_column_span_column_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::column-span-column",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::column-span-column\0".as_ptr() as *const _,
                 transmute(notify_column_span_column_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -572,7 +572,7 @@ impl<O: IsA<ComboBox> + IsA<glib::object::Object> + glib::object::ObjectExt> Com
     fn connect_property_entry_text_column_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::entry-text-column",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::entry-text-column\0".as_ptr() as *const _,
                 transmute(notify_entry_text_column_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -580,7 +580,7 @@ impl<O: IsA<ComboBox> + IsA<glib::object::Object> + glib::object::ObjectExt> Com
     fn connect_property_has_frame_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::has-frame",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::has-frame\0".as_ptr() as *const _,
                 transmute(notify_has_frame_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -588,7 +588,7 @@ impl<O: IsA<ComboBox> + IsA<glib::object::Object> + glib::object::ObjectExt> Com
     fn connect_property_id_column_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::id-column",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::id-column\0".as_ptr() as *const _,
                 transmute(notify_id_column_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -596,7 +596,7 @@ impl<O: IsA<ComboBox> + IsA<glib::object::Object> + glib::object::ObjectExt> Com
     fn connect_property_model_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::model",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::model\0".as_ptr() as *const _,
                 transmute(notify_model_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -604,7 +604,7 @@ impl<O: IsA<ComboBox> + IsA<glib::object::Object> + glib::object::ObjectExt> Com
     fn connect_property_popup_fixed_width_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::popup-fixed-width",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::popup-fixed-width\0".as_ptr() as *const _,
                 transmute(notify_popup_fixed_width_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -612,7 +612,7 @@ impl<O: IsA<ComboBox> + IsA<glib::object::Object> + glib::object::ObjectExt> Com
     fn connect_property_popup_shown_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::popup-shown",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::popup-shown\0".as_ptr() as *const _,
                 transmute(notify_popup_shown_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -620,7 +620,7 @@ impl<O: IsA<ComboBox> + IsA<glib::object::Object> + glib::object::ObjectExt> Com
     fn connect_property_row_span_column_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::row-span-column",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::row-span-column\0".as_ptr() as *const _,
                 transmute(notify_row_span_column_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -628,7 +628,7 @@ impl<O: IsA<ComboBox> + IsA<glib::object::Object> + glib::object::ObjectExt> Com
     fn connect_property_tearoff_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::tearoff-title",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::tearoff-title\0".as_ptr() as *const _,
                 transmute(notify_tearoff_title_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -636,7 +636,7 @@ impl<O: IsA<ComboBox> + IsA<glib::object::Object> + glib::object::ObjectExt> Com
     fn connect_property_wrap_width_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::wrap-width",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::wrap-width\0".as_ptr() as *const _,
                 transmute(notify_wrap_width_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -651,7 +651,7 @@ where P: IsA<ComboBox> {
 unsafe extern "C" fn format_entry_text_trampoline<P>(this: *mut ffi::GtkComboBox, path: *mut libc::c_char, f: glib_ffi::gpointer) -> *mut libc::c_char
 where P: IsA<ComboBox> {
     let f: &&(Fn(&P, &str) -> String + 'static) = transmute(f);
-    f(&ComboBox::from_glib_borrow(this).downcast_unchecked(), &String::from_glib_none(path)).to_glib_full()
+    f(&ComboBox::from_glib_borrow(this).downcast_unchecked(), &GString::from_glib_borrow(path)).to_glib_full()
 }
 
 unsafe extern "C" fn move_active_trampoline<P>(this: *mut ffi::GtkComboBox, scroll_type: ffi::GtkScrollType, f: glib_ffi::gpointer)

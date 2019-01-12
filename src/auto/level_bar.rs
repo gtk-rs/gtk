@@ -8,25 +8,26 @@ use LevelBarMode;
 use Orientable;
 use Widget;
 use ffi;
-use glib;
+#[cfg(any(feature = "v3_6", feature = "dox"))]
+use glib::GString;
 use glib::object::Downcast;
 use glib::object::IsA;
 #[cfg(any(feature = "v3_6", feature = "dox"))]
 use glib::signal::SignalHandlerId;
 #[cfg(any(feature = "v3_6", feature = "dox"))]
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
+#[cfg(any(feature = "v3_6", feature = "dox"))]
 use glib_ffi;
-use gobject_ffi;
 #[cfg(any(feature = "v3_6", feature = "dox"))]
 use libc;
 #[cfg(any(feature = "v3_6", feature = "dox"))]
 use std::boxed::Box as Box_;
 use std::fmt;
+#[cfg(any(feature = "v3_6", feature = "dox"))]
 use std::mem;
 #[cfg(any(feature = "v3_6", feature = "dox"))]
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct LevelBar(Object<ffi::GtkLevelBar, ffi::GtkLevelBarClass>): Widget, Buildable, Orientable;
@@ -61,7 +62,7 @@ impl Default for LevelBar {
     }
 }
 
-pub trait LevelBarExt {
+pub trait LevelBarExt: 'static {
     #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn add_offset_value(&self, name: &str, value: f64);
 
@@ -120,7 +121,7 @@ pub trait LevelBarExt {
     fn connect_property_value_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<LevelBar> + IsA<glib::object::Object>> LevelBarExt for O {
+impl<O: IsA<LevelBar>> LevelBarExt for O {
     #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn add_offset_value(&self, name: &str, value: f64) {
         unsafe {
@@ -222,7 +223,7 @@ impl<O: IsA<LevelBar> + IsA<glib::object::Object>> LevelBarExt for O {
     fn connect_offset_changed<F: Fn(&Self, &str) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &str) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "offset-changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"offset-changed\0".as_ptr() as *const _,
                 transmute(offset_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -231,7 +232,7 @@ impl<O: IsA<LevelBar> + IsA<glib::object::Object>> LevelBarExt for O {
     fn connect_property_inverted_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::inverted",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::inverted\0".as_ptr() as *const _,
                 transmute(notify_inverted_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -240,7 +241,7 @@ impl<O: IsA<LevelBar> + IsA<glib::object::Object>> LevelBarExt for O {
     fn connect_property_max_value_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::max-value",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::max-value\0".as_ptr() as *const _,
                 transmute(notify_max_value_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -249,7 +250,7 @@ impl<O: IsA<LevelBar> + IsA<glib::object::Object>> LevelBarExt for O {
     fn connect_property_min_value_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::min-value",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::min-value\0".as_ptr() as *const _,
                 transmute(notify_min_value_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -258,7 +259,7 @@ impl<O: IsA<LevelBar> + IsA<glib::object::Object>> LevelBarExt for O {
     fn connect_property_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::mode",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::mode\0".as_ptr() as *const _,
                 transmute(notify_mode_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -267,7 +268,7 @@ impl<O: IsA<LevelBar> + IsA<glib::object::Object>> LevelBarExt for O {
     fn connect_property_value_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::value",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::value\0".as_ptr() as *const _,
                 transmute(notify_value_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -277,7 +278,7 @@ impl<O: IsA<LevelBar> + IsA<glib::object::Object>> LevelBarExt for O {
 unsafe extern "C" fn offset_changed_trampoline<P>(this: *mut ffi::GtkLevelBar, name: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<LevelBar> {
     let f: &&(Fn(&P, &str) + 'static) = transmute(f);
-    f(&LevelBar::from_glib_borrow(this).downcast_unchecked(), &String::from_glib_none(name))
+    f(&LevelBar::from_glib_borrow(this).downcast_unchecked(), &GString::from_glib_borrow(name))
 }
 
 #[cfg(any(feature = "v3_8", feature = "dox"))]

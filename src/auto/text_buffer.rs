@@ -14,13 +14,13 @@ use ffi;
 use gdk;
 use gdk_pixbuf;
 use gdk_pixbuf_ffi;
-use glib;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
@@ -49,7 +49,7 @@ impl TextBuffer {
     }
 }
 
-pub trait TextBufferExt {
+pub trait TextBufferExt: 'static {
     fn add_mark(&self, mark: &TextMark, where_: &TextIter);
 
     fn add_selection_clipboard(&self, clipboard: &Clipboard);
@@ -130,13 +130,13 @@ pub trait TextBufferExt {
 
     fn get_serialize_formats(&self) -> Vec<gdk::Atom>;
 
-    fn get_slice(&self, start: &TextIter, end: &TextIter, include_hidden_chars: bool) -> Option<String>;
+    fn get_slice(&self, start: &TextIter, end: &TextIter, include_hidden_chars: bool) -> Option<GString>;
 
     fn get_start_iter(&self) -> TextIter;
 
     fn get_tag_table(&self) -> Option<TextTagTable>;
 
-    fn get_text(&self, start: &TextIter, end: &TextIter, include_hidden_chars: bool) -> Option<String>;
+    fn get_text(&self, start: &TextIter, end: &TextIter, include_hidden_chars: bool) -> Option<GString>;
 
     fn insert(&self, iter: &mut TextIter, text: &str);
 
@@ -232,7 +232,7 @@ pub trait TextBufferExt {
     fn connect_property_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<TextBuffer> + IsA<glib::object::Object>> TextBufferExt for O {
+impl<O: IsA<TextBuffer>> TextBufferExt for O {
     fn add_mark(&self, mark: &TextMark, where_: &TextIter) {
         unsafe {
             ffi::gtk_text_buffer_add_mark(self.to_glib_none().0, mark.to_glib_none().0, where_.to_glib_none().0);
@@ -500,7 +500,7 @@ impl<O: IsA<TextBuffer> + IsA<glib::object::Object>> TextBufferExt for O {
         }
     }
 
-    fn get_slice(&self, start: &TextIter, end: &TextIter, include_hidden_chars: bool) -> Option<String> {
+    fn get_slice(&self, start: &TextIter, end: &TextIter, include_hidden_chars: bool) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gtk_text_buffer_get_slice(self.to_glib_none().0, start.to_glib_none().0, end.to_glib_none().0, include_hidden_chars.to_glib()))
         }
@@ -520,7 +520,7 @@ impl<O: IsA<TextBuffer> + IsA<glib::object::Object>> TextBufferExt for O {
         }
     }
 
-    fn get_text(&self, start: &TextIter, end: &TextIter, include_hidden_chars: bool) -> Option<String> {
+    fn get_text(&self, start: &TextIter, end: &TextIter, include_hidden_chars: bool) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gtk_text_buffer_get_text(self.to_glib_none().0, start.to_glib_none().0, end.to_glib_none().0, include_hidden_chars.to_glib()))
         }
@@ -705,7 +705,7 @@ impl<O: IsA<TextBuffer> + IsA<glib::object::Object>> TextBufferExt for O {
     fn get_property_cursor_position(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "cursor-position".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"cursor-position\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -713,7 +713,7 @@ impl<O: IsA<TextBuffer> + IsA<glib::object::Object>> TextBufferExt for O {
     fn connect_apply_tag<F: Fn(&Self, &TextTag, &TextIter, &TextIter) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &TextTag, &TextIter, &TextIter) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "apply-tag",
+            connect_raw(self.to_glib_none().0 as *mut _, b"apply-tag\0".as_ptr() as *const _,
                 transmute(apply_tag_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -721,7 +721,7 @@ impl<O: IsA<TextBuffer> + IsA<glib::object::Object>> TextBufferExt for O {
     fn connect_begin_user_action<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "begin-user-action",
+            connect_raw(self.to_glib_none().0 as *mut _, b"begin-user-action\0".as_ptr() as *const _,
                 transmute(begin_user_action_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -729,7 +729,7 @@ impl<O: IsA<TextBuffer> + IsA<glib::object::Object>> TextBufferExt for O {
     fn connect_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"changed\0".as_ptr() as *const _,
                 transmute(changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -737,7 +737,7 @@ impl<O: IsA<TextBuffer> + IsA<glib::object::Object>> TextBufferExt for O {
     fn connect_delete_range<F: Fn(&Self, &TextIter, &TextIter) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &TextIter, &TextIter) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "delete-range",
+            connect_raw(self.to_glib_none().0 as *mut _, b"delete-range\0".as_ptr() as *const _,
                 transmute(delete_range_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -745,7 +745,7 @@ impl<O: IsA<TextBuffer> + IsA<glib::object::Object>> TextBufferExt for O {
     fn connect_end_user_action<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "end-user-action",
+            connect_raw(self.to_glib_none().0 as *mut _, b"end-user-action\0".as_ptr() as *const _,
                 transmute(end_user_action_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -753,7 +753,7 @@ impl<O: IsA<TextBuffer> + IsA<glib::object::Object>> TextBufferExt for O {
     fn connect_insert_child_anchor<F: Fn(&Self, &TextIter, &TextChildAnchor) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &TextIter, &TextChildAnchor) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "insert-child-anchor",
+            connect_raw(self.to_glib_none().0 as *mut _, b"insert-child-anchor\0".as_ptr() as *const _,
                 transmute(insert_child_anchor_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -761,7 +761,7 @@ impl<O: IsA<TextBuffer> + IsA<glib::object::Object>> TextBufferExt for O {
     fn connect_insert_pixbuf<F: Fn(&Self, &TextIter, &gdk_pixbuf::Pixbuf) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &TextIter, &gdk_pixbuf::Pixbuf) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "insert-pixbuf",
+            connect_raw(self.to_glib_none().0 as *mut _, b"insert-pixbuf\0".as_ptr() as *const _,
                 transmute(insert_pixbuf_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -769,7 +769,7 @@ impl<O: IsA<TextBuffer> + IsA<glib::object::Object>> TextBufferExt for O {
     fn connect_mark_deleted<F: Fn(&Self, &TextMark) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &TextMark) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "mark-deleted",
+            connect_raw(self.to_glib_none().0 as *mut _, b"mark-deleted\0".as_ptr() as *const _,
                 transmute(mark_deleted_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -777,7 +777,7 @@ impl<O: IsA<TextBuffer> + IsA<glib::object::Object>> TextBufferExt for O {
     fn connect_mark_set<F: Fn(&Self, &TextIter, &TextMark) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &TextIter, &TextMark) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "mark-set",
+            connect_raw(self.to_glib_none().0 as *mut _, b"mark-set\0".as_ptr() as *const _,
                 transmute(mark_set_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -785,7 +785,7 @@ impl<O: IsA<TextBuffer> + IsA<glib::object::Object>> TextBufferExt for O {
     fn connect_modified_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "modified-changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"modified-changed\0".as_ptr() as *const _,
                 transmute(modified_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -793,7 +793,7 @@ impl<O: IsA<TextBuffer> + IsA<glib::object::Object>> TextBufferExt for O {
     fn connect_paste_done<F: Fn(&Self, &Clipboard) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Clipboard) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "paste-done",
+            connect_raw(self.to_glib_none().0 as *mut _, b"paste-done\0".as_ptr() as *const _,
                 transmute(paste_done_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -801,7 +801,7 @@ impl<O: IsA<TextBuffer> + IsA<glib::object::Object>> TextBufferExt for O {
     fn connect_remove_tag<F: Fn(&Self, &TextTag, &TextIter, &TextIter) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &TextTag, &TextIter, &TextIter) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "remove-tag",
+            connect_raw(self.to_glib_none().0 as *mut _, b"remove-tag\0".as_ptr() as *const _,
                 transmute(remove_tag_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -809,7 +809,7 @@ impl<O: IsA<TextBuffer> + IsA<glib::object::Object>> TextBufferExt for O {
     fn connect_property_copy_target_list_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::copy-target-list",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::copy-target-list\0".as_ptr() as *const _,
                 transmute(notify_copy_target_list_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -817,7 +817,7 @@ impl<O: IsA<TextBuffer> + IsA<glib::object::Object>> TextBufferExt for O {
     fn connect_property_cursor_position_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::cursor-position",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::cursor-position\0".as_ptr() as *const _,
                 transmute(notify_cursor_position_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -825,7 +825,7 @@ impl<O: IsA<TextBuffer> + IsA<glib::object::Object>> TextBufferExt for O {
     fn connect_property_has_selection_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::has-selection",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::has-selection\0".as_ptr() as *const _,
                 transmute(notify_has_selection_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -833,7 +833,7 @@ impl<O: IsA<TextBuffer> + IsA<glib::object::Object>> TextBufferExt for O {
     fn connect_property_paste_target_list_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::paste-target-list",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::paste-target-list\0".as_ptr() as *const _,
                 transmute(notify_paste_target_list_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -841,7 +841,7 @@ impl<O: IsA<TextBuffer> + IsA<glib::object::Object>> TextBufferExt for O {
     fn connect_property_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::text",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::text\0".as_ptr() as *const _,
                 transmute(notify_text_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

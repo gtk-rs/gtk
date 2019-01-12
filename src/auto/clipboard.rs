@@ -8,10 +8,9 @@ use ffi;
 use gdk;
 use gdk_pixbuf;
 use glib;
+use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use std::fmt;
 use std::mem;
 use std::ptr;
@@ -48,7 +47,7 @@ impl Clipboard {
     }
 }
 
-pub trait ClipboardExt {
+pub trait ClipboardExt: 'static {
     fn clear(&self);
 
     fn get_display(&self) -> Option<gdk::Display>;
@@ -80,9 +79,9 @@ pub trait ClipboardExt {
 
     fn wait_for_targets(&self) -> Option<Vec<gdk::Atom>>;
 
-    fn wait_for_text(&self) -> Option<String>;
+    fn wait_for_text(&self) -> Option<GString>;
 
-    fn wait_for_uris(&self) -> Vec<String>;
+    fn wait_for_uris(&self) -> Vec<GString>;
 
     fn wait_is_image_available(&self) -> bool;
 
@@ -188,13 +187,13 @@ impl<O: IsA<Clipboard>> ClipboardExt for O {
         }
     }
 
-    fn wait_for_text(&self) -> Option<String> {
+    fn wait_for_text(&self) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gtk_clipboard_wait_for_text(self.to_glib_none().0))
         }
     }
 
-    fn wait_for_uris(&self) -> Vec<String> {
+    fn wait_for_uris(&self) -> Vec<GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gtk_clipboard_wait_for_uris(self.to_glib_none().0))
         }

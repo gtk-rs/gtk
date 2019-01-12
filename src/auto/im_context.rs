@@ -8,7 +8,7 @@ use InputHints;
 use InputPurpose;
 use ffi;
 use gdk;
-use glib;
+use glib::GString;
 #[cfg(any(feature = "v3_6", feature = "dox"))]
 use glib::StaticType;
 #[cfg(any(feature = "v3_6", feature = "dox"))]
@@ -16,9 +16,10 @@ use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
+#[cfg(any(feature = "v3_6", feature = "dox"))]
 use gobject_ffi;
 use libc;
 use pango;
@@ -36,7 +37,7 @@ glib_wrapper! {
     }
 }
 
-pub trait IMContextExt {
+pub trait IMContextExt: 'static {
     fn delete_surrounding(&self, offset: i32, n_chars: i32) -> bool;
 
     fn filter_keypress(&self, event: &gdk::EventKey) -> bool;
@@ -45,9 +46,9 @@ pub trait IMContextExt {
 
     fn focus_out(&self);
 
-    fn get_preedit_string(&self) -> (String, pango::AttrList, i32);
+    fn get_preedit_string(&self) -> (GString, pango::AttrList, i32);
 
-    fn get_surrounding(&self) -> Option<(String, i32)>;
+    fn get_surrounding(&self) -> Option<(GString, i32)>;
 
     fn reset(&self);
 
@@ -90,7 +91,7 @@ pub trait IMContextExt {
     fn connect_property_input_purpose_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<IMContext> + IsA<glib::object::Object>> IMContextExt for O {
+impl<O: IsA<IMContext>> IMContextExt for O {
     fn delete_surrounding(&self, offset: i32, n_chars: i32) -> bool {
         unsafe {
             from_glib(ffi::gtk_im_context_delete_surrounding(self.to_glib_none().0, offset, n_chars))
@@ -115,7 +116,7 @@ impl<O: IsA<IMContext> + IsA<glib::object::Object>> IMContextExt for O {
         }
     }
 
-    fn get_preedit_string(&self) -> (String, pango::AttrList, i32) {
+    fn get_preedit_string(&self) -> (GString, pango::AttrList, i32) {
         unsafe {
             let mut str = ptr::null_mut();
             let mut attrs = ptr::null_mut();
@@ -125,7 +126,7 @@ impl<O: IsA<IMContext> + IsA<glib::object::Object>> IMContextExt for O {
         }
     }
 
-    fn get_surrounding(&self) -> Option<(String, i32)> {
+    fn get_surrounding(&self) -> Option<(GString, i32)> {
         unsafe {
             let mut text = ptr::null_mut();
             let mut cursor_index = mem::uninitialized();
@@ -171,7 +172,7 @@ impl<O: IsA<IMContext> + IsA<glib::object::Object>> IMContextExt for O {
     fn get_property_input_hints(&self) -> InputHints {
         unsafe {
             let mut value = Value::from_type(<InputHints as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "input-hints".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"input-hints\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -179,7 +180,7 @@ impl<O: IsA<IMContext> + IsA<glib::object::Object>> IMContextExt for O {
     #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn set_property_input_hints(&self, input_hints: InputHints) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "input-hints".to_glib_none().0, Value::from(&input_hints).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"input-hints\0".as_ptr() as *const _, Value::from(&input_hints).to_glib_none().0);
         }
     }
 
@@ -187,7 +188,7 @@ impl<O: IsA<IMContext> + IsA<glib::object::Object>> IMContextExt for O {
     fn get_property_input_purpose(&self) -> InputPurpose {
         unsafe {
             let mut value = Value::from_type(<InputPurpose as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "input-purpose".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"input-purpose\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -195,14 +196,14 @@ impl<O: IsA<IMContext> + IsA<glib::object::Object>> IMContextExt for O {
     #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn set_property_input_purpose(&self, input_purpose: InputPurpose) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "input-purpose".to_glib_none().0, Value::from(&input_purpose).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"input-purpose\0".as_ptr() as *const _, Value::from(&input_purpose).to_glib_none().0);
         }
     }
 
     fn connect_commit<F: Fn(&Self, &str) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &str) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "commit",
+            connect_raw(self.to_glib_none().0 as *mut _, b"commit\0".as_ptr() as *const _,
                 transmute(commit_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -210,7 +211,7 @@ impl<O: IsA<IMContext> + IsA<glib::object::Object>> IMContextExt for O {
     fn connect_delete_surrounding<F: Fn(&Self, i32, i32) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, i32, i32) -> bool + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "delete-surrounding",
+            connect_raw(self.to_glib_none().0 as *mut _, b"delete-surrounding\0".as_ptr() as *const _,
                 transmute(delete_surrounding_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -218,7 +219,7 @@ impl<O: IsA<IMContext> + IsA<glib::object::Object>> IMContextExt for O {
     fn connect_preedit_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "preedit-changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"preedit-changed\0".as_ptr() as *const _,
                 transmute(preedit_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -226,7 +227,7 @@ impl<O: IsA<IMContext> + IsA<glib::object::Object>> IMContextExt for O {
     fn connect_preedit_end<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "preedit-end",
+            connect_raw(self.to_glib_none().0 as *mut _, b"preedit-end\0".as_ptr() as *const _,
                 transmute(preedit_end_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -234,7 +235,7 @@ impl<O: IsA<IMContext> + IsA<glib::object::Object>> IMContextExt for O {
     fn connect_preedit_start<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "preedit-start",
+            connect_raw(self.to_glib_none().0 as *mut _, b"preedit-start\0".as_ptr() as *const _,
                 transmute(preedit_start_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -242,7 +243,7 @@ impl<O: IsA<IMContext> + IsA<glib::object::Object>> IMContextExt for O {
     fn connect_retrieve_surrounding<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) -> bool + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "retrieve-surrounding",
+            connect_raw(self.to_glib_none().0 as *mut _, b"retrieve-surrounding\0".as_ptr() as *const _,
                 transmute(retrieve_surrounding_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -251,7 +252,7 @@ impl<O: IsA<IMContext> + IsA<glib::object::Object>> IMContextExt for O {
     fn connect_property_input_hints_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::input-hints",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::input-hints\0".as_ptr() as *const _,
                 transmute(notify_input_hints_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -260,7 +261,7 @@ impl<O: IsA<IMContext> + IsA<glib::object::Object>> IMContextExt for O {
     fn connect_property_input_purpose_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::input-purpose",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::input-purpose\0".as_ptr() as *const _,
                 transmute(notify_input_purpose_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -269,7 +270,7 @@ impl<O: IsA<IMContext> + IsA<glib::object::Object>> IMContextExt for O {
 unsafe extern "C" fn commit_trampoline<P>(this: *mut ffi::GtkIMContext, str: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<IMContext> {
     let f: &&(Fn(&P, &str) + 'static) = transmute(f);
-    f(&IMContext::from_glib_borrow(this).downcast_unchecked(), &String::from_glib_none(str))
+    f(&IMContext::from_glib_borrow(this).downcast_unchecked(), &GString::from_glib_borrow(str))
 }
 
 unsafe extern "C" fn delete_surrounding_trampoline<P>(this: *mut ffi::GtkIMContext, offset: libc::c_int, n_chars: libc::c_int, f: glib_ffi::gpointer) -> glib_ffi::gboolean

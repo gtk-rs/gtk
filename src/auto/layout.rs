@@ -9,13 +9,12 @@ use Scrollable;
 use Widget;
 use ffi;
 use gdk;
-use glib;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
@@ -23,7 +22,6 @@ use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Layout(Object<ffi::GtkLayout, ffi::GtkLayoutClass>): Container, Widget, Buildable, Scrollable;
@@ -46,7 +44,7 @@ impl Layout {
     }
 }
 
-pub trait LayoutExt {
+pub trait LayoutExt: 'static {
     fn get_bin_window(&self) -> Option<gdk::Window>;
 
     fn get_size(&self) -> (u32, u32);
@@ -78,7 +76,7 @@ pub trait LayoutExt {
     fn connect_property_width_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Layout> + IsA<Container> + IsA<glib::object::Object>> LayoutExt for O {
+impl<O: IsA<Layout>> LayoutExt for O {
     fn get_bin_window(&self) -> Option<gdk::Window> {
         unsafe {
             from_glib_none(ffi::gtk_layout_get_bin_window(self.to_glib_none().0))
@@ -115,63 +113,63 @@ impl<O: IsA<Layout> + IsA<Container> + IsA<glib::object::Object>> LayoutExt for 
     fn get_property_height(&self) -> u32 {
         unsafe {
             let mut value = Value::from_type(<u32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "height".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"height\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_height(&self, height: u32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "height".to_glib_none().0, Value::from(&height).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"height\0".as_ptr() as *const _, Value::from(&height).to_glib_none().0);
         }
     }
 
     fn get_property_width(&self) -> u32 {
         unsafe {
             let mut value = Value::from_type(<u32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "width".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"width\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_width(&self, width: u32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "width".to_glib_none().0, Value::from(&width).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"width\0".as_ptr() as *const _, Value::from(&width).to_glib_none().0);
         }
     }
 
     fn get_child_x<T: IsA<Widget>>(&self, item: &T) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            ffi::gtk_container_child_get_property(self.to_glib_none().0, item.to_glib_none().0, "x".to_glib_none().0, value.to_glib_none_mut().0);
+            ffi::gtk_container_child_get_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"x\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_child_x<T: IsA<Widget>>(&self, item: &T, x: i32) {
         unsafe {
-            ffi::gtk_container_child_set_property(self.to_glib_none().0, item.to_glib_none().0, "x".to_glib_none().0, Value::from(&x).to_glib_none().0);
+            ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"x\0".as_ptr() as *const _, Value::from(&x).to_glib_none().0);
         }
     }
 
     fn get_child_y<T: IsA<Widget>>(&self, item: &T) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            ffi::gtk_container_child_get_property(self.to_glib_none().0, item.to_glib_none().0, "y".to_glib_none().0, value.to_glib_none_mut().0);
+            ffi::gtk_container_child_get_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"y\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_child_y<T: IsA<Widget>>(&self, item: &T, y: i32) {
         unsafe {
-            ffi::gtk_container_child_set_property(self.to_glib_none().0, item.to_glib_none().0, "y".to_glib_none().0, Value::from(&y).to_glib_none().0);
+            ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"y\0".as_ptr() as *const _, Value::from(&y).to_glib_none().0);
         }
     }
 
     fn connect_property_height_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::height",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::height\0".as_ptr() as *const _,
                 transmute(notify_height_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -179,7 +177,7 @@ impl<O: IsA<Layout> + IsA<Container> + IsA<glib::object::Object>> LayoutExt for 
     fn connect_property_width_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::width",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::width\0".as_ptr() as *const _,
                 transmute(notify_width_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

@@ -10,14 +10,11 @@ use ComboBox;
 use Container;
 use Widget;
 use ffi;
+use glib::GString;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use std::fmt;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct ComboBoxText(Object<ffi::GtkComboBoxText, ffi::GtkComboBoxTextClass>): ComboBox, Bin, Container, Widget, Buildable, CellEditable, CellLayout;
@@ -49,12 +46,12 @@ impl Default for ComboBoxText {
     }
 }
 
-pub trait ComboBoxTextExt {
+pub trait ComboBoxTextExt: 'static {
     fn append<'a, P: Into<Option<&'a str>>>(&self, id: P, text: &str);
 
     fn append_text(&self, text: &str);
 
-    fn get_active_text(&self) -> Option<String>;
+    fn get_active_text(&self) -> Option<GString>;
 
     fn insert<'a, P: Into<Option<&'a str>>>(&self, position: i32, id: P, text: &str);
 
@@ -84,7 +81,7 @@ impl<O: IsA<ComboBoxText>> ComboBoxTextExt for O {
         }
     }
 
-    fn get_active_text(&self) -> Option<String> {
+    fn get_active_text(&self) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gtk_combo_box_text_get_active_text(self.to_glib_none().0))
         }

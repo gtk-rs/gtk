@@ -14,8 +14,9 @@ use gio;
 use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
+use glib::object::ObjectExt;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
@@ -23,9 +24,7 @@ use libc;
 use signal::Inhibit;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct MenuShell(Object<ffi::GtkMenuShell, ffi::GtkMenuShellClass>): Container, Widget, Buildable;
@@ -35,7 +34,7 @@ glib_wrapper! {
     }
 }
 
-pub trait MenuShellExt {
+pub trait MenuShellExt: 'static {
     fn activate_item<P: IsA<Widget>>(&self, menu_item: &P, force_deactivate: bool);
 
     fn append<P: IsA<MenuItem>>(&self, child: &P);
@@ -92,7 +91,7 @@ pub trait MenuShellExt {
     fn connect_property_take_focus_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<MenuShell> + IsA<glib::object::Object> + glib::object::ObjectExt> MenuShellExt for O {
+impl<O: IsA<MenuShell>> MenuShellExt for O {
     fn activate_item<P: IsA<Widget>>(&self, menu_item: &P, force_deactivate: bool) {
         unsafe {
             ffi::gtk_menu_shell_activate_item(self.to_glib_none().0, menu_item.to_glib_none().0, force_deactivate.to_glib());
@@ -185,43 +184,43 @@ impl<O: IsA<MenuShell> + IsA<glib::object::Object> + glib::object::ObjectExt> Me
     fn connect_activate_current<F: Fn(&Self, bool) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, bool) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "activate-current",
+            connect_raw(self.to_glib_none().0 as *mut _, b"activate-current\0".as_ptr() as *const _,
                 transmute(activate_current_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_activate_current(&self, force_hide: bool) {
-        let _ = self.emit("activate-current", &[&force_hide]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("activate-current", &[&force_hide]).unwrap() };
     }
 
     fn connect_cancel<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "cancel",
+            connect_raw(self.to_glib_none().0 as *mut _, b"cancel\0".as_ptr() as *const _,
                 transmute(cancel_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_cancel(&self) {
-        let _ = self.emit("cancel", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("cancel", &[]).unwrap() };
     }
 
     fn connect_cycle_focus<F: Fn(&Self, DirectionType) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, DirectionType) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "cycle-focus",
+            connect_raw(self.to_glib_none().0 as *mut _, b"cycle-focus\0".as_ptr() as *const _,
                 transmute(cycle_focus_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_cycle_focus(&self, direction: DirectionType) {
-        let _ = self.emit("cycle-focus", &[&direction]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("cycle-focus", &[&direction]).unwrap() };
     }
 
     fn connect_deactivate<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "deactivate",
+            connect_raw(self.to_glib_none().0 as *mut _, b"deactivate\0".as_ptr() as *const _,
                 transmute(deactivate_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -229,7 +228,7 @@ impl<O: IsA<MenuShell> + IsA<glib::object::Object> + glib::object::ObjectExt> Me
     fn connect_insert<F: Fn(&Self, &Widget, i32) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Widget, i32) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "insert",
+            connect_raw(self.to_glib_none().0 as *mut _, b"insert\0".as_ptr() as *const _,
                 transmute(insert_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -237,19 +236,19 @@ impl<O: IsA<MenuShell> + IsA<glib::object::Object> + glib::object::ObjectExt> Me
     fn connect_move_current<F: Fn(&Self, MenuDirectionType) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, MenuDirectionType) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "move-current",
+            connect_raw(self.to_glib_none().0 as *mut _, b"move-current\0".as_ptr() as *const _,
                 transmute(move_current_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_move_current(&self, direction: MenuDirectionType) {
-        let _ = self.emit("move-current", &[&direction]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("move-current", &[&direction]).unwrap() };
     }
 
     fn connect_move_selected<F: Fn(&Self, i32) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, i32) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "move-selected",
+            connect_raw(self.to_glib_none().0 as *mut _, b"move-selected\0".as_ptr() as *const _,
                 transmute(move_selected_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -257,7 +256,7 @@ impl<O: IsA<MenuShell> + IsA<glib::object::Object> + glib::object::ObjectExt> Me
     fn connect_selection_done<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "selection-done",
+            connect_raw(self.to_glib_none().0 as *mut _, b"selection-done\0".as_ptr() as *const _,
                 transmute(selection_done_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -265,7 +264,7 @@ impl<O: IsA<MenuShell> + IsA<glib::object::Object> + glib::object::ObjectExt> Me
     fn connect_property_take_focus_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::take-focus",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::take-focus\0".as_ptr() as *const _,
                 transmute(notify_take_focus_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

@@ -3,21 +3,18 @@
 // DO NOT EDIT
 
 use ffi;
-use glib;
+use glib::GString;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use libc;
 use pango;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct FontChooser(Object<ffi::GtkFontChooser, ffi::GtkFontChooserIface>);
@@ -27,8 +24,8 @@ glib_wrapper! {
     }
 }
 
-pub trait FontChooserExt {
-    fn get_font(&self) -> Option<String>;
+pub trait FontChooserExt: 'static {
+    fn get_font(&self) -> Option<GString>;
 
     fn get_font_desc(&self) -> Option<pango::FontDescription>;
 
@@ -41,7 +38,7 @@ pub trait FontChooserExt {
 
     fn get_font_size(&self) -> i32;
 
-    fn get_preview_text(&self) -> Option<String>;
+    fn get_preview_text(&self) -> Option<GString>;
 
     fn get_show_preview_entry(&self) -> bool;
 
@@ -69,8 +66,8 @@ pub trait FontChooserExt {
     fn connect_property_show_preview_entry_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<FontChooser> + IsA<glib::object::Object>> FontChooserExt for O {
-    fn get_font(&self) -> Option<String> {
+impl<O: IsA<FontChooser>> FontChooserExt for O {
+    fn get_font(&self) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gtk_font_chooser_get_font(self.to_glib_none().0))
         }
@@ -107,7 +104,7 @@ impl<O: IsA<FontChooser> + IsA<glib::object::Object>> FontChooserExt for O {
         }
     }
 
-    fn get_preview_text(&self) -> Option<String> {
+    fn get_preview_text(&self) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gtk_font_chooser_get_preview_text(self.to_glib_none().0))
         }
@@ -159,7 +156,7 @@ impl<O: IsA<FontChooser> + IsA<glib::object::Object>> FontChooserExt for O {
     fn connect_font_activated<F: Fn(&Self, &str) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &str) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "font-activated",
+            connect_raw(self.to_glib_none().0 as *mut _, b"font-activated\0".as_ptr() as *const _,
                 transmute(font_activated_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -167,7 +164,7 @@ impl<O: IsA<FontChooser> + IsA<glib::object::Object>> FontChooserExt for O {
     fn connect_property_font_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::font",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::font\0".as_ptr() as *const _,
                 transmute(notify_font_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -175,7 +172,7 @@ impl<O: IsA<FontChooser> + IsA<glib::object::Object>> FontChooserExt for O {
     fn connect_property_font_desc_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::font-desc",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::font-desc\0".as_ptr() as *const _,
                 transmute(notify_font_desc_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -183,7 +180,7 @@ impl<O: IsA<FontChooser> + IsA<glib::object::Object>> FontChooserExt for O {
     fn connect_property_preview_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::preview-text",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::preview-text\0".as_ptr() as *const _,
                 transmute(notify_preview_text_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -191,7 +188,7 @@ impl<O: IsA<FontChooser> + IsA<glib::object::Object>> FontChooserExt for O {
     fn connect_property_show_preview_entry_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::show-preview-entry",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::show-preview-entry\0".as_ptr() as *const _,
                 transmute(notify_show_preview_entry_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -200,7 +197,7 @@ impl<O: IsA<FontChooser> + IsA<glib::object::Object>> FontChooserExt for O {
 unsafe extern "C" fn font_activated_trampoline<P>(this: *mut ffi::GtkFontChooser, fontname: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<FontChooser> {
     let f: &&(Fn(&P, &str) + 'static) = transmute(f);
-    f(&FontChooser::from_glib_borrow(this).downcast_unchecked(), &String::from_glib_none(fontname))
+    f(&FontChooser::from_glib_borrow(this).downcast_unchecked(), &GString::from_glib_borrow(fontname))
 }
 
 unsafe extern "C" fn notify_font_trampoline<P>(this: *mut ffi::GtkFontChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)

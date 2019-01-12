@@ -8,16 +8,15 @@ use Error;
 use Widget;
 use ffi;
 use glib;
+use glib::GString;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
 use std::ptr;
 
@@ -61,7 +60,7 @@ impl Default for Builder {
     }
 }
 
-pub trait BuilderExt {
+pub trait BuilderExt: 'static {
     //#[cfg(any(feature = "v3_10", feature = "dox"))]
     //fn add_callback_symbol(&self, callback_name: &str, callback_symbol: /*Unknown conversion*//*Unimplemented*/Callback);
 
@@ -90,7 +89,7 @@ pub trait BuilderExt {
 
     fn get_objects(&self) -> Vec<glib::Object>;
 
-    fn get_translation_domain(&self) -> Option<String>;
+    fn get_translation_domain(&self) -> Option<GString>;
 
     fn get_type_from_name(&self, type_name: &str) -> glib::types::Type;
 
@@ -109,7 +108,7 @@ pub trait BuilderExt {
     fn connect_property_translation_domain_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Builder> + IsA<glib::object::Object>> BuilderExt for O {
+impl<O: IsA<Builder>> BuilderExt for O {
     //#[cfg(any(feature = "v3_10", feature = "dox"))]
     //fn add_callback_symbol(&self, callback_name: &str, callback_symbol: /*Unknown conversion*//*Unimplemented*/Callback) {
     //    unsafe { TODO: call ffi::gtk_builder_add_callback_symbol() }
@@ -191,7 +190,7 @@ impl<O: IsA<Builder> + IsA<glib::object::Object>> BuilderExt for O {
         }
     }
 
-    fn get_translation_domain(&self) -> Option<String> {
+    fn get_translation_domain(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_builder_get_translation_domain(self.to_glib_none().0))
         }
@@ -239,7 +238,7 @@ impl<O: IsA<Builder> + IsA<glib::object::Object>> BuilderExt for O {
     fn connect_property_translation_domain_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::translation-domain",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::translation-domain\0".as_ptr() as *const _,
                 transmute(notify_translation_domain_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

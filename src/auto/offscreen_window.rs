@@ -13,11 +13,7 @@ use gdk_pixbuf;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use std::fmt;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct OffscreenWindow(Object<ffi::GtkOffscreenWindow, ffi::GtkOffscreenWindowClass>): Window, Bin, Container, Widget, Buildable;
@@ -42,7 +38,7 @@ impl Default for OffscreenWindow {
     }
 }
 
-pub trait OffscreenWindowExt {
+pub trait OffscreenWindowExt: 'static {
     fn get_pixbuf(&self) -> Option<gdk_pixbuf::Pixbuf>;
 
     fn get_surface(&self) -> Option<cairo::Surface>;

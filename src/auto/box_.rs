@@ -11,21 +11,18 @@ use Orientation;
 use PackType;
 use Widget;
 use ffi;
-use glib;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Box(Object<ffi::GtkBox, ffi::GtkBoxClass>): Container, Widget, Buildable, Orientable;
@@ -44,7 +41,7 @@ impl Box {
     }
 }
 
-pub trait BoxExt {
+pub trait BoxExt: 'static {
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_baseline_position(&self) -> BaselinePosition;
 
@@ -111,7 +108,7 @@ pub trait BoxExt {
     fn connect_property_spacing_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Box> + IsA<Container> + IsA<glib::object::Object>> BoxExt for O {
+impl<O: IsA<Box>> BoxExt for O {
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_baseline_position(&self) -> BaselinePosition {
         unsafe {
@@ -205,7 +202,7 @@ impl<O: IsA<Box> + IsA<Container> + IsA<glib::object::Object>> BoxExt for O {
     fn get_child_expand<T: IsA<Widget>>(&self, item: &T) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            ffi::gtk_container_child_get_property(self.to_glib_none().0, item.to_glib_none().0, "expand".to_glib_none().0, value.to_glib_none_mut().0);
+            ffi::gtk_container_child_get_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"expand\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -213,7 +210,7 @@ impl<O: IsA<Box> + IsA<Container> + IsA<glib::object::Object>> BoxExt for O {
     #[doc(hidden)]
     fn set_child_expand<T: IsA<Widget>>(&self, item: &T, expand: bool) {
         unsafe {
-            ffi::gtk_container_child_set_property(self.to_glib_none().0, item.to_glib_none().0, "expand".to_glib_none().0, Value::from(&expand).to_glib_none().0);
+            ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"expand\0".as_ptr() as *const _, Value::from(&expand).to_glib_none().0);
         }
     }
 
@@ -221,7 +218,7 @@ impl<O: IsA<Box> + IsA<Container> + IsA<glib::object::Object>> BoxExt for O {
     fn get_child_fill<T: IsA<Widget>>(&self, item: &T) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            ffi::gtk_container_child_get_property(self.to_glib_none().0, item.to_glib_none().0, "fill".to_glib_none().0, value.to_glib_none_mut().0);
+            ffi::gtk_container_child_get_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"fill\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -229,7 +226,7 @@ impl<O: IsA<Box> + IsA<Container> + IsA<glib::object::Object>> BoxExt for O {
     #[doc(hidden)]
     fn set_child_fill<T: IsA<Widget>>(&self, item: &T, fill: bool) {
         unsafe {
-            ffi::gtk_container_child_set_property(self.to_glib_none().0, item.to_glib_none().0, "fill".to_glib_none().0, Value::from(&fill).to_glib_none().0);
+            ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"fill\0".as_ptr() as *const _, Value::from(&fill).to_glib_none().0);
         }
     }
 
@@ -237,7 +234,7 @@ impl<O: IsA<Box> + IsA<Container> + IsA<glib::object::Object>> BoxExt for O {
     fn get_child_pack_type<T: IsA<Widget>>(&self, item: &T) -> PackType {
         unsafe {
             let mut value = Value::from_type(<PackType as StaticType>::static_type());
-            ffi::gtk_container_child_get_property(self.to_glib_none().0, item.to_glib_none().0, "pack-type".to_glib_none().0, value.to_glib_none_mut().0);
+            ffi::gtk_container_child_get_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"pack-type\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -245,7 +242,7 @@ impl<O: IsA<Box> + IsA<Container> + IsA<glib::object::Object>> BoxExt for O {
     #[doc(hidden)]
     fn set_child_pack_type<T: IsA<Widget>>(&self, item: &T, pack_type: PackType) {
         unsafe {
-            ffi::gtk_container_child_set_property(self.to_glib_none().0, item.to_glib_none().0, "pack-type".to_glib_none().0, Value::from(&pack_type).to_glib_none().0);
+            ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"pack-type\0".as_ptr() as *const _, Value::from(&pack_type).to_glib_none().0);
         }
     }
 
@@ -253,7 +250,7 @@ impl<O: IsA<Box> + IsA<Container> + IsA<glib::object::Object>> BoxExt for O {
     fn get_child_padding<T: IsA<Widget>>(&self, item: &T) -> u32 {
         unsafe {
             let mut value = Value::from_type(<u32 as StaticType>::static_type());
-            ffi::gtk_container_child_get_property(self.to_glib_none().0, item.to_glib_none().0, "padding".to_glib_none().0, value.to_glib_none_mut().0);
+            ffi::gtk_container_child_get_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"padding\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -261,21 +258,21 @@ impl<O: IsA<Box> + IsA<Container> + IsA<glib::object::Object>> BoxExt for O {
     #[doc(hidden)]
     fn set_child_padding<T: IsA<Widget>>(&self, item: &T, padding: u32) {
         unsafe {
-            ffi::gtk_container_child_set_property(self.to_glib_none().0, item.to_glib_none().0, "padding".to_glib_none().0, Value::from(&padding).to_glib_none().0);
+            ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"padding\0".as_ptr() as *const _, Value::from(&padding).to_glib_none().0);
         }
     }
 
     fn get_child_position<T: IsA<Widget>>(&self, item: &T) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            ffi::gtk_container_child_get_property(self.to_glib_none().0, item.to_glib_none().0, "position".to_glib_none().0, value.to_glib_none_mut().0);
+            ffi::gtk_container_child_get_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"position\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_child_position<T: IsA<Widget>>(&self, item: &T, position: i32) {
         unsafe {
-            ffi::gtk_container_child_set_property(self.to_glib_none().0, item.to_glib_none().0, "position".to_glib_none().0, Value::from(&position).to_glib_none().0);
+            ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"position\0".as_ptr() as *const _, Value::from(&position).to_glib_none().0);
         }
     }
 
@@ -283,7 +280,7 @@ impl<O: IsA<Box> + IsA<Container> + IsA<glib::object::Object>> BoxExt for O {
     fn connect_property_baseline_position_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::baseline-position",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::baseline-position\0".as_ptr() as *const _,
                 transmute(notify_baseline_position_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -291,7 +288,7 @@ impl<O: IsA<Box> + IsA<Container> + IsA<glib::object::Object>> BoxExt for O {
     fn connect_property_homogeneous_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::homogeneous",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::homogeneous\0".as_ptr() as *const _,
                 transmute(notify_homogeneous_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -299,7 +296,7 @@ impl<O: IsA<Box> + IsA<Container> + IsA<glib::object::Object>> BoxExt for O {
     fn connect_property_spacing_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::spacing",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::spacing\0".as_ptr() as *const _,
                 transmute(notify_spacing_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

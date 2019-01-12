@@ -4,13 +4,12 @@
 
 use CellArea;
 use ffi;
-use glib;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
@@ -18,7 +17,6 @@ use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct CellAreaContext(Object<ffi::GtkCellAreaContext, ffi::GtkCellAreaContextClass>);
@@ -28,7 +26,7 @@ glib_wrapper! {
     }
 }
 
-pub trait CellAreaContextExt {
+pub trait CellAreaContextExt: 'static {
     fn allocate(&self, width: i32, height: i32);
 
     fn get_allocation(&self) -> (i32, i32);
@@ -66,7 +64,7 @@ pub trait CellAreaContextExt {
     fn connect_property_natural_width_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<CellAreaContext> + IsA<glib::object::Object>> CellAreaContextExt for O {
+impl<O: IsA<CellAreaContext>> CellAreaContextExt for O {
     fn allocate(&self, width: i32, height: i32) {
         unsafe {
             ffi::gtk_cell_area_context_allocate(self.to_glib_none().0, width, height);
@@ -145,7 +143,7 @@ impl<O: IsA<CellAreaContext> + IsA<glib::object::Object>> CellAreaContextExt for
     fn get_property_minimum_height(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "minimum-height".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"minimum-height\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -153,7 +151,7 @@ impl<O: IsA<CellAreaContext> + IsA<glib::object::Object>> CellAreaContextExt for
     fn get_property_minimum_width(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "minimum-width".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"minimum-width\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -161,7 +159,7 @@ impl<O: IsA<CellAreaContext> + IsA<glib::object::Object>> CellAreaContextExt for
     fn get_property_natural_height(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "natural-height".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"natural-height\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -169,7 +167,7 @@ impl<O: IsA<CellAreaContext> + IsA<glib::object::Object>> CellAreaContextExt for
     fn get_property_natural_width(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "natural-width".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"natural-width\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -177,7 +175,7 @@ impl<O: IsA<CellAreaContext> + IsA<glib::object::Object>> CellAreaContextExt for
     fn connect_property_minimum_height_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::minimum-height",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::minimum-height\0".as_ptr() as *const _,
                 transmute(notify_minimum_height_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -185,7 +183,7 @@ impl<O: IsA<CellAreaContext> + IsA<glib::object::Object>> CellAreaContextExt for
     fn connect_property_minimum_width_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::minimum-width",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::minimum-width\0".as_ptr() as *const _,
                 transmute(notify_minimum_width_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -193,7 +191,7 @@ impl<O: IsA<CellAreaContext> + IsA<glib::object::Object>> CellAreaContextExt for
     fn connect_property_natural_height_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::natural-height",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::natural-height\0".as_ptr() as *const _,
                 transmute(notify_natural_height_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -201,7 +199,7 @@ impl<O: IsA<CellAreaContext> + IsA<glib::object::Object>> CellAreaContextExt for
     fn connect_property_natural_width_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::natural-width",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::natural-width\0".as_ptr() as *const _,
                 transmute(notify_natural_width_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

@@ -13,21 +13,18 @@ use Widget;
 use ffi;
 use gdk;
 use gdk_pixbuf;
-use glib;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct CellView(Object<ffi::GtkCellView, ffi::GtkCellViewClass>): Widget, Buildable, CellLayout, Orientable;
@@ -80,7 +77,7 @@ impl Default for CellView {
     }
 }
 
-pub trait CellViewExt {
+pub trait CellViewExt: 'static {
     fn get_displayed_row(&self) -> Option<TreePath>;
 
     fn get_draw_sensitive(&self) -> bool;
@@ -124,7 +121,7 @@ pub trait CellViewExt {
     fn connect_property_model_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<CellView> + IsA<glib::object::Object>> CellViewExt for O {
+impl<O: IsA<CellView>> CellViewExt for O {
     fn get_displayed_row(&self) -> Option<TreePath> {
         unsafe {
             from_glib_full(ffi::gtk_cell_view_get_displayed_row(self.to_glib_none().0))
@@ -184,14 +181,14 @@ impl<O: IsA<CellView> + IsA<glib::object::Object>> CellViewExt for O {
     fn set_property_background<'a, P: Into<Option<&'a str>>>(&self, background: P) {
         let background = background.into();
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "background".to_glib_none().0, Value::from(background).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"background\0".as_ptr() as *const _, Value::from(background).to_glib_none().0);
         }
     }
 
     fn get_property_background_rgba(&self) -> Option<gdk::RGBA> {
         unsafe {
             let mut value = Value::from_type(<gdk::RGBA as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "background-rgba".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"background-rgba\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -199,21 +196,21 @@ impl<O: IsA<CellView> + IsA<glib::object::Object>> CellViewExt for O {
     fn get_property_background_set(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "background-set".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"background-set\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_background_set(&self, background_set: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "background-set".to_glib_none().0, Value::from(&background_set).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"background-set\0".as_ptr() as *const _, Value::from(&background_set).to_glib_none().0);
         }
     }
 
     fn get_property_cell_area(&self) -> Option<CellArea> {
         unsafe {
             let mut value = Value::from_type(<CellArea as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "cell-area".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"cell-area\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -221,7 +218,7 @@ impl<O: IsA<CellView> + IsA<glib::object::Object>> CellViewExt for O {
     fn get_property_cell_area_context(&self) -> Option<CellAreaContext> {
         unsafe {
             let mut value = Value::from_type(<CellAreaContext as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "cell-area-context".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"cell-area-context\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -229,7 +226,7 @@ impl<O: IsA<CellView> + IsA<glib::object::Object>> CellViewExt for O {
     fn connect_property_background_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::background",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::background\0".as_ptr() as *const _,
                 transmute(notify_background_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -237,7 +234,7 @@ impl<O: IsA<CellView> + IsA<glib::object::Object>> CellViewExt for O {
     fn connect_property_background_rgba_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::background-rgba",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::background-rgba\0".as_ptr() as *const _,
                 transmute(notify_background_rgba_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -245,7 +242,7 @@ impl<O: IsA<CellView> + IsA<glib::object::Object>> CellViewExt for O {
     fn connect_property_background_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::background-set",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::background-set\0".as_ptr() as *const _,
                 transmute(notify_background_set_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -253,7 +250,7 @@ impl<O: IsA<CellView> + IsA<glib::object::Object>> CellViewExt for O {
     fn connect_property_draw_sensitive_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::draw-sensitive",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::draw-sensitive\0".as_ptr() as *const _,
                 transmute(notify_draw_sensitive_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -261,7 +258,7 @@ impl<O: IsA<CellView> + IsA<glib::object::Object>> CellViewExt for O {
     fn connect_property_fit_model_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::fit-model",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::fit-model\0".as_ptr() as *const _,
                 transmute(notify_fit_model_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -269,7 +266,7 @@ impl<O: IsA<CellView> + IsA<glib::object::Object>> CellViewExt for O {
     fn connect_property_model_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::model",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::model\0".as_ptr() as *const _,
                 transmute(notify_model_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

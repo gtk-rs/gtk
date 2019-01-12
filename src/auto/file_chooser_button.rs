@@ -11,19 +11,16 @@ use FileChooserAction;
 use Orientable;
 use Widget;
 use ffi;
-use glib;
+use glib::GString;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct FileChooserButton(Object<ffi::GtkFileChooserButton, ffi::GtkFileChooserButtonClass>): Box, Container, Widget, Buildable, Orientable, FileChooser;
@@ -49,12 +46,12 @@ impl FileChooserButton {
     }
 }
 
-pub trait FileChooserButtonExt {
+pub trait FileChooserButtonExt: 'static {
     #[cfg_attr(feature = "v3_20", deprecated)]
     #[cfg(any(not(feature = "v3_20"), feature = "dox"))]
     fn get_focus_on_click(&self) -> bool;
 
-    fn get_title(&self) -> Option<String>;
+    fn get_title(&self) -> Option<GString>;
 
     fn get_width_chars(&self) -> i32;
 
@@ -73,7 +70,7 @@ pub trait FileChooserButtonExt {
     fn connect_property_width_chars_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<FileChooserButton> + IsA<glib::object::Object>> FileChooserButtonExt for O {
+impl<O: IsA<FileChooserButton>> FileChooserButtonExt for O {
     #[cfg(any(not(feature = "v3_20"), feature = "dox"))]
     fn get_focus_on_click(&self) -> bool {
         unsafe {
@@ -81,7 +78,7 @@ impl<O: IsA<FileChooserButton> + IsA<glib::object::Object>> FileChooserButtonExt
         }
     }
 
-    fn get_title(&self) -> Option<String> {
+    fn get_title(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_file_chooser_button_get_title(self.to_glib_none().0))
         }
@@ -115,7 +112,7 @@ impl<O: IsA<FileChooserButton> + IsA<glib::object::Object>> FileChooserButtonExt
     fn connect_file_set<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "file-set",
+            connect_raw(self.to_glib_none().0 as *mut _, b"file-set\0".as_ptr() as *const _,
                 transmute(file_set_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -123,7 +120,7 @@ impl<O: IsA<FileChooserButton> + IsA<glib::object::Object>> FileChooserButtonExt
     fn connect_property_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::title",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::title\0".as_ptr() as *const _,
                 transmute(notify_title_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -131,7 +128,7 @@ impl<O: IsA<FileChooserButton> + IsA<glib::object::Object>> FileChooserButtonExt
     fn connect_property_width_chars_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::width-chars",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::width-chars\0".as_ptr() as *const _,
                 transmute(notify_width_chars_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

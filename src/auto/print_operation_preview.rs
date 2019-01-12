@@ -5,19 +5,15 @@
 use PageSetup;
 use PrintContext;
 use ffi;
-use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct PrintOperationPreview(Object<ffi::GtkPrintOperationPreview, ffi::GtkPrintOperationPreviewIface>);
@@ -27,7 +23,7 @@ glib_wrapper! {
     }
 }
 
-pub trait PrintOperationPreviewExt {
+pub trait PrintOperationPreviewExt: 'static {
     fn end_preview(&self);
 
     fn is_selected(&self, page_nr: i32) -> bool;
@@ -39,7 +35,7 @@ pub trait PrintOperationPreviewExt {
     fn connect_ready<F: Fn(&Self, &PrintContext) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<PrintOperationPreview> + IsA<glib::object::Object>> PrintOperationPreviewExt for O {
+impl<O: IsA<PrintOperationPreview>> PrintOperationPreviewExt for O {
     fn end_preview(&self) {
         unsafe {
             ffi::gtk_print_operation_preview_end_preview(self.to_glib_none().0);
@@ -61,7 +57,7 @@ impl<O: IsA<PrintOperationPreview> + IsA<glib::object::Object>> PrintOperationPr
     fn connect_got_page_size<F: Fn(&Self, &PrintContext, &PageSetup) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &PrintContext, &PageSetup) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "got-page-size",
+            connect_raw(self.to_glib_none().0 as *mut _, b"got-page-size\0".as_ptr() as *const _,
                 transmute(got_page_size_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -69,7 +65,7 @@ impl<O: IsA<PrintOperationPreview> + IsA<glib::object::Object>> PrintOperationPr
     fn connect_ready<F: Fn(&Self, &PrintContext) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &PrintContext) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "ready",
+            connect_raw(self.to_glib_none().0 as *mut _, b"ready\0".as_ptr() as *const _,
                 transmute(ready_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

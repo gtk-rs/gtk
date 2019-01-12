@@ -4,13 +4,10 @@
 
 use TextBuffer;
 use ffi;
+use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use std::fmt;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct TextMark(Object<ffi::GtkTextMark, ffi::GtkTextMarkClass>);
@@ -31,14 +28,14 @@ impl TextMark {
     }
 }
 
-pub trait TextMarkExt {
+pub trait TextMarkExt: 'static {
     fn get_buffer(&self) -> Option<TextBuffer>;
 
     fn get_deleted(&self) -> bool;
 
     fn get_left_gravity(&self) -> bool;
 
-    fn get_name(&self) -> Option<String>;
+    fn get_name(&self) -> Option<GString>;
 
     fn get_visible(&self) -> bool;
 
@@ -64,7 +61,7 @@ impl<O: IsA<TextMark>> TextMarkExt for O {
         }
     }
 
-    fn get_name(&self) -> Option<String> {
+    fn get_name(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_text_mark_get_name(self.to_glib_none().0))
         }

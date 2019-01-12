@@ -15,11 +15,7 @@ use ffi;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use std::fmt;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct RadioToolButton(Object<ffi::GtkRadioToolButton, ffi::GtkRadioToolButtonClass>): ToggleToolButton, ToolButton, ToolItem, Bin, Container, Widget, Buildable, Actionable;
@@ -46,7 +42,7 @@ impl RadioToolButton {
     }
 }
 
-pub trait RadioToolButtonExt {
+pub trait RadioToolButtonExt: 'static {
     fn get_group(&self) -> Vec<RadioButton>;
 }
 

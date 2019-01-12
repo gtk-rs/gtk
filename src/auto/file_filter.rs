@@ -7,13 +7,10 @@ use FileFilterFlags;
 use ffi;
 #[cfg(any(feature = "v3_22", feature = "dox"))]
 use glib;
+use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use std::fmt;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct FileFilter(Object<ffi::GtkFileFilter>): Buildable;
@@ -46,7 +43,7 @@ impl Default for FileFilter {
     }
 }
 
-pub trait FileFilterExt {
+pub trait FileFilterExt: 'static {
     //fn add_custom<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, needed: FileFilterFlags, func: /*Unknown conversion*//*Unimplemented*/FileFilterFunc, data: P, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
 
     fn add_mime_type(&self, mime_type: &str);
@@ -57,7 +54,7 @@ pub trait FileFilterExt {
 
     //fn filter(&self, filter_info: /*Ignored*/&FileFilterInfo) -> bool;
 
-    fn get_name(&self) -> Option<String>;
+    fn get_name(&self) -> Option<GString>;
 
     fn get_needed(&self) -> FileFilterFlags;
 
@@ -94,7 +91,7 @@ impl<O: IsA<FileFilter>> FileFilterExt for O {
     //    unsafe { TODO: call ffi::gtk_file_filter_filter() }
     //}
 
-    fn get_name(&self) -> Option<String> {
+    fn get_name(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_file_filter_get_name(self.to_glib_none().0))
         }

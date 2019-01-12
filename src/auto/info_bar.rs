@@ -14,16 +14,15 @@ use ffi;
 use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
+use glib::object::ObjectExt;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct InfoBar(Object<ffi::GtkInfoBar, ffi::GtkInfoBarClass>): Box, Container, Widget, Buildable, Orientable;
@@ -52,7 +51,7 @@ impl Default for InfoBar {
     }
 }
 
-pub trait InfoBarExt {
+pub trait InfoBarExt: 'static {
     fn add_action_widget<P: IsA<Widget>>(&self, child: &P, response_id: ResponseType);
 
     fn add_button(&self, button_text: &str, response_id: ResponseType) -> Option<Button>;
@@ -100,7 +99,7 @@ pub trait InfoBarExt {
     fn connect_property_show_close_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<InfoBar> + IsA<glib::object::Object> + glib::object::ObjectExt> InfoBarExt for O {
+impl<O: IsA<InfoBar>> InfoBarExt for O {
     fn add_action_widget<P: IsA<Widget>>(&self, child: &P, response_id: ResponseType) {
         unsafe {
             ffi::gtk_info_bar_add_action_widget(self.to_glib_none().0, child.to_glib_none().0, response_id.to_glib());
@@ -190,19 +189,19 @@ impl<O: IsA<InfoBar> + IsA<glib::object::Object> + glib::object::ObjectExt> Info
     fn connect_close<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "close",
+            connect_raw(self.to_glib_none().0 as *mut _, b"close\0".as_ptr() as *const _,
                 transmute(close_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_close(&self) {
-        let _ = self.emit("close", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("close", &[]).unwrap() };
     }
 
     fn connect_response<F: Fn(&Self, ResponseType) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, ResponseType) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "response",
+            connect_raw(self.to_glib_none().0 as *mut _, b"response\0".as_ptr() as *const _,
                 transmute(response_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -210,7 +209,7 @@ impl<O: IsA<InfoBar> + IsA<glib::object::Object> + glib::object::ObjectExt> Info
     fn connect_property_message_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::message-type",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::message-type\0".as_ptr() as *const _,
                 transmute(notify_message_type_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -219,7 +218,7 @@ impl<O: IsA<InfoBar> + IsA<glib::object::Object> + glib::object::ObjectExt> Info
     fn connect_property_revealed_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::revealed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::revealed\0".as_ptr() as *const _,
                 transmute(notify_revealed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -228,7 +227,7 @@ impl<O: IsA<InfoBar> + IsA<glib::object::Object> + glib::object::ObjectExt> Info
     fn connect_property_show_close_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::show-close-button",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::show-close-button\0".as_ptr() as *const _,
                 transmute(notify_show_close_button_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

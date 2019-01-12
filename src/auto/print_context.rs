@@ -7,12 +7,9 @@ use cairo;
 use ffi;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use pango;
 use std::fmt;
 use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct PrintContext(Object<ffi::GtkPrintContext>);
@@ -22,7 +19,7 @@ glib_wrapper! {
     }
 }
 
-pub trait PrintContextExt {
+pub trait PrintContextExt: 'static {
     fn create_pango_context(&self) -> Option<pango::Context>;
 
     fn create_pango_layout(&self) -> Option<pango::Layout>;

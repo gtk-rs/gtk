@@ -9,19 +9,15 @@ use Container;
 use MenuItem;
 use Widget;
 use ffi;
-use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct CheckMenuItem(Object<ffi::GtkCheckMenuItem, ffi::GtkCheckMenuItemClass>): MenuItem, Bin, Container, Widget, Buildable, Actionable;
@@ -60,7 +56,7 @@ impl Default for CheckMenuItem {
     }
 }
 
-pub trait CheckMenuItemExt {
+pub trait CheckMenuItemExt: 'static {
     fn get_active(&self) -> bool;
 
     fn get_draw_as_radio(&self) -> bool;
@@ -84,7 +80,7 @@ pub trait CheckMenuItemExt {
     fn connect_property_inconsistent_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<CheckMenuItem> + IsA<glib::object::Object>> CheckMenuItemExt for O {
+impl<O: IsA<CheckMenuItem>> CheckMenuItemExt for O {
     fn get_active(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_check_menu_item_get_active(self.to_glib_none().0))
@@ -130,7 +126,7 @@ impl<O: IsA<CheckMenuItem> + IsA<glib::object::Object>> CheckMenuItemExt for O {
     fn connect_toggled<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "toggled",
+            connect_raw(self.to_glib_none().0 as *mut _, b"toggled\0".as_ptr() as *const _,
                 transmute(toggled_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -138,7 +134,7 @@ impl<O: IsA<CheckMenuItem> + IsA<glib::object::Object>> CheckMenuItemExt for O {
     fn connect_property_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::active",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::active\0".as_ptr() as *const _,
                 transmute(notify_active_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -146,7 +142,7 @@ impl<O: IsA<CheckMenuItem> + IsA<glib::object::Object>> CheckMenuItemExt for O {
     fn connect_property_draw_as_radio_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::draw-as-radio",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::draw-as-radio\0".as_ptr() as *const _,
                 transmute(notify_draw_as_radio_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -154,7 +150,7 @@ impl<O: IsA<CheckMenuItem> + IsA<glib::object::Object>> CheckMenuItemExt for O {
     fn connect_property_inconsistent_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::inconsistent",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::inconsistent\0".as_ptr() as *const _,
                 transmute(notify_inconsistent_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

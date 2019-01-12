@@ -4,10 +4,6 @@
 
 use glib::translate::*;
 use ffi;
-use glib_ffi;
-use gobject_ffi;
-use std::ptr;
-use std::mem;
 
 use glib::object::Downcast;
 use Widget;

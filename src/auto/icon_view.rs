@@ -26,8 +26,9 @@ use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
+use glib::object::ObjectExt;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
@@ -75,7 +76,7 @@ impl Default for IconView {
     }
 }
 
-pub trait IconViewExt {
+pub trait IconViewExt: 'static {
     fn convert_widget_to_bin_window_coords(&self, wx: i32, wy: i32) -> (i32, i32);
 
     fn create_drag_icon(&self, path: &TreePath) -> Option<cairo::Surface>;
@@ -261,7 +262,7 @@ pub trait IconViewExt {
     fn connect_property_tooltip_column_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<IconView> + IsA<glib::object::Object> + glib::object::ObjectExt> IconViewExt for O {
+impl<O: IsA<IconView>> IconViewExt for O {
     fn convert_widget_to_bin_window_coords(&self, wx: i32, wy: i32) -> (i32, i32) {
         unsafe {
             let mut bx = mem::uninitialized();
@@ -653,7 +654,7 @@ impl<O: IsA<IconView> + IsA<glib::object::Object> + glib::object::ObjectExt> Ico
     fn get_property_cell_area(&self) -> Option<CellArea> {
         unsafe {
             let mut value = Value::from_type(<CellArea as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "cell-area".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"cell-area\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -661,20 +662,20 @@ impl<O: IsA<IconView> + IsA<glib::object::Object> + glib::object::ObjectExt> Ico
     fn connect_activate_cursor_item<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) -> bool + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "activate-cursor-item",
+            connect_raw(self.to_glib_none().0 as *mut _, b"activate-cursor-item\0".as_ptr() as *const _,
                 transmute(activate_cursor_item_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_activate_cursor_item(&self) -> bool {
-        let res = self.emit("activate-cursor-item", &[]).unwrap();
+        let res = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("activate-cursor-item", &[]).unwrap() };
         res.unwrap().get().unwrap()
     }
 
     fn connect_item_activated<F: Fn(&Self, &TreePath) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &TreePath) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "item-activated",
+            connect_raw(self.to_glib_none().0 as *mut _, b"item-activated\0".as_ptr() as *const _,
                 transmute(item_activated_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -682,44 +683,44 @@ impl<O: IsA<IconView> + IsA<glib::object::Object> + glib::object::ObjectExt> Ico
     fn connect_move_cursor<F: Fn(&Self, MovementStep, i32) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, MovementStep, i32) -> bool + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "move-cursor",
+            connect_raw(self.to_glib_none().0 as *mut _, b"move-cursor\0".as_ptr() as *const _,
                 transmute(move_cursor_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_move_cursor(&self, step: MovementStep, count: i32) -> bool {
-        let res = self.emit("move-cursor", &[&step, &count]).unwrap();
+        let res = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("move-cursor", &[&step, &count]).unwrap() };
         res.unwrap().get().unwrap()
     }
 
     fn connect_select_all<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "select-all",
+            connect_raw(self.to_glib_none().0 as *mut _, b"select-all\0".as_ptr() as *const _,
                 transmute(select_all_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_select_all(&self) {
-        let _ = self.emit("select-all", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("select-all", &[]).unwrap() };
     }
 
     fn connect_select_cursor_item<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "select-cursor-item",
+            connect_raw(self.to_glib_none().0 as *mut _, b"select-cursor-item\0".as_ptr() as *const _,
                 transmute(select_cursor_item_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_select_cursor_item(&self) {
-        let _ = self.emit("select-cursor-item", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("select-cursor-item", &[]).unwrap() };
     }
 
     fn connect_selection_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "selection-changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"selection-changed\0".as_ptr() as *const _,
                 transmute(selection_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -727,32 +728,32 @@ impl<O: IsA<IconView> + IsA<glib::object::Object> + glib::object::ObjectExt> Ico
     fn connect_toggle_cursor_item<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "toggle-cursor-item",
+            connect_raw(self.to_glib_none().0 as *mut _, b"toggle-cursor-item\0".as_ptr() as *const _,
                 transmute(toggle_cursor_item_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_toggle_cursor_item(&self) {
-        let _ = self.emit("toggle-cursor-item", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("toggle-cursor-item", &[]).unwrap() };
     }
 
     fn connect_unselect_all<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "unselect-all",
+            connect_raw(self.to_glib_none().0 as *mut _, b"unselect-all\0".as_ptr() as *const _,
                 transmute(unselect_all_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_unselect_all(&self) {
-        let _ = self.emit("unselect-all", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("unselect-all", &[]).unwrap() };
     }
 
     #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn connect_property_activate_on_single_click_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::activate-on-single-click",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::activate-on-single-click\0".as_ptr() as *const _,
                 transmute(notify_activate_on_single_click_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -760,7 +761,7 @@ impl<O: IsA<IconView> + IsA<glib::object::Object> + glib::object::ObjectExt> Ico
     fn connect_property_column_spacing_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::column-spacing",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::column-spacing\0".as_ptr() as *const _,
                 transmute(notify_column_spacing_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -768,7 +769,7 @@ impl<O: IsA<IconView> + IsA<glib::object::Object> + glib::object::ObjectExt> Ico
     fn connect_property_columns_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::columns",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::columns\0".as_ptr() as *const _,
                 transmute(notify_columns_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -776,7 +777,7 @@ impl<O: IsA<IconView> + IsA<glib::object::Object> + glib::object::ObjectExt> Ico
     fn connect_property_item_orientation_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::item-orientation",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::item-orientation\0".as_ptr() as *const _,
                 transmute(notify_item_orientation_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -784,7 +785,7 @@ impl<O: IsA<IconView> + IsA<glib::object::Object> + glib::object::ObjectExt> Ico
     fn connect_property_item_padding_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::item-padding",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::item-padding\0".as_ptr() as *const _,
                 transmute(notify_item_padding_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -792,7 +793,7 @@ impl<O: IsA<IconView> + IsA<glib::object::Object> + glib::object::ObjectExt> Ico
     fn connect_property_item_width_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::item-width",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::item-width\0".as_ptr() as *const _,
                 transmute(notify_item_width_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -800,7 +801,7 @@ impl<O: IsA<IconView> + IsA<glib::object::Object> + glib::object::ObjectExt> Ico
     fn connect_property_margin_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::margin",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::margin\0".as_ptr() as *const _,
                 transmute(notify_margin_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -808,7 +809,7 @@ impl<O: IsA<IconView> + IsA<glib::object::Object> + glib::object::ObjectExt> Ico
     fn connect_property_markup_column_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::markup-column",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::markup-column\0".as_ptr() as *const _,
                 transmute(notify_markup_column_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -816,7 +817,7 @@ impl<O: IsA<IconView> + IsA<glib::object::Object> + glib::object::ObjectExt> Ico
     fn connect_property_model_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::model",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::model\0".as_ptr() as *const _,
                 transmute(notify_model_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -824,7 +825,7 @@ impl<O: IsA<IconView> + IsA<glib::object::Object> + glib::object::ObjectExt> Ico
     fn connect_property_pixbuf_column_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::pixbuf-column",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::pixbuf-column\0".as_ptr() as *const _,
                 transmute(notify_pixbuf_column_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -832,7 +833,7 @@ impl<O: IsA<IconView> + IsA<glib::object::Object> + glib::object::ObjectExt> Ico
     fn connect_property_reorderable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::reorderable",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::reorderable\0".as_ptr() as *const _,
                 transmute(notify_reorderable_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -840,7 +841,7 @@ impl<O: IsA<IconView> + IsA<glib::object::Object> + glib::object::ObjectExt> Ico
     fn connect_property_row_spacing_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::row-spacing",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::row-spacing\0".as_ptr() as *const _,
                 transmute(notify_row_spacing_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -848,7 +849,7 @@ impl<O: IsA<IconView> + IsA<glib::object::Object> + glib::object::ObjectExt> Ico
     fn connect_property_selection_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::selection-mode",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::selection-mode\0".as_ptr() as *const _,
                 transmute(notify_selection_mode_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -856,7 +857,7 @@ impl<O: IsA<IconView> + IsA<glib::object::Object> + glib::object::ObjectExt> Ico
     fn connect_property_spacing_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::spacing",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::spacing\0".as_ptr() as *const _,
                 transmute(notify_spacing_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -864,7 +865,7 @@ impl<O: IsA<IconView> + IsA<glib::object::Object> + glib::object::ObjectExt> Ico
     fn connect_property_text_column_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::text-column",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::text-column\0".as_ptr() as *const _,
                 transmute(notify_text_column_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -872,7 +873,7 @@ impl<O: IsA<IconView> + IsA<glib::object::Object> + glib::object::ObjectExt> Ico
     fn connect_property_tooltip_column_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::tooltip-column",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::tooltip-column\0".as_ptr() as *const _,
                 transmute(notify_tooltip_column_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

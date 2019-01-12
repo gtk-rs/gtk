@@ -10,19 +10,16 @@ use Container;
 use FontChooser;
 use Widget;
 use ffi;
-use glib;
+use glib::GString;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct FontButton(Object<ffi::GtkFontButton, ffi::GtkFontButtonClass>): Button, Bin, Container, Widget, Buildable, Actionable, FontChooser;
@@ -54,15 +51,15 @@ impl Default for FontButton {
     }
 }
 
-pub trait FontButtonExt {
+pub trait FontButtonExt: 'static {
     #[cfg_attr(feature = "v3_22", deprecated)]
-    fn get_font_name(&self) -> Option<String>;
+    fn get_font_name(&self) -> Option<GString>;
 
     fn get_show_size(&self) -> bool;
 
     fn get_show_style(&self) -> bool;
 
-    fn get_title(&self) -> Option<String>;
+    fn get_title(&self) -> Option<GString>;
 
     fn get_use_font(&self) -> bool;
 
@@ -97,8 +94,8 @@ pub trait FontButtonExt {
     fn connect_property_use_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<FontButton> + IsA<glib::object::Object>> FontButtonExt for O {
-    fn get_font_name(&self) -> Option<String> {
+impl<O: IsA<FontButton>> FontButtonExt for O {
+    fn get_font_name(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_font_button_get_font_name(self.to_glib_none().0))
         }
@@ -116,7 +113,7 @@ impl<O: IsA<FontButton> + IsA<glib::object::Object>> FontButtonExt for O {
         }
     }
 
-    fn get_title(&self) -> Option<String> {
+    fn get_title(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_font_button_get_title(self.to_glib_none().0))
         }
@@ -173,7 +170,7 @@ impl<O: IsA<FontButton> + IsA<glib::object::Object>> FontButtonExt for O {
     fn connect_font_set<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "font-set",
+            connect_raw(self.to_glib_none().0 as *mut _, b"font-set\0".as_ptr() as *const _,
                 transmute(font_set_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -181,7 +178,7 @@ impl<O: IsA<FontButton> + IsA<glib::object::Object>> FontButtonExt for O {
     fn connect_property_font_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::font-name",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::font-name\0".as_ptr() as *const _,
                 transmute(notify_font_name_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -189,7 +186,7 @@ impl<O: IsA<FontButton> + IsA<glib::object::Object>> FontButtonExt for O {
     fn connect_property_show_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::show-size",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::show-size\0".as_ptr() as *const _,
                 transmute(notify_show_size_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -197,7 +194,7 @@ impl<O: IsA<FontButton> + IsA<glib::object::Object>> FontButtonExt for O {
     fn connect_property_show_style_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::show-style",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::show-style\0".as_ptr() as *const _,
                 transmute(notify_show_style_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -205,7 +202,7 @@ impl<O: IsA<FontButton> + IsA<glib::object::Object>> FontButtonExt for O {
     fn connect_property_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::title",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::title\0".as_ptr() as *const _,
                 transmute(notify_title_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -213,7 +210,7 @@ impl<O: IsA<FontButton> + IsA<glib::object::Object>> FontButtonExt for O {
     fn connect_property_use_font_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::use-font",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::use-font\0".as_ptr() as *const _,
                 transmute(notify_use_font_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -221,7 +218,7 @@ impl<O: IsA<FontButton> + IsA<glib::object::Object>> FontButtonExt for O {
     fn connect_property_use_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::use-size",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::use-size\0".as_ptr() as *const _,
                 transmute(notify_use_size_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

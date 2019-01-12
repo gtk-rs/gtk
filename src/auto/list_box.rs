@@ -17,17 +17,16 @@ use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
+use glib::object::ObjectExt;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct ListBox(Object<ffi::GtkListBox, ffi::GtkListBoxClass>): Container, Widget, Buildable;
@@ -54,7 +53,7 @@ impl Default for ListBox {
     }
 }
 
-pub trait ListBoxExt {
+pub trait ListBoxExt: 'static {
     //#[cfg(any(feature = "v3_16", feature = "dox"))]
     //fn bind_model<'a, 'b, P: IsA</*Ignored*/gio::ListModel> + 'a, Q: Into<Option<&'a P>>, R: Into<Option<&'b /*Unimplemented*/ListBoxCreateWidgetFunc>>>(&self, model: Q, create_widget_func: R, user_data_free_func: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
 
@@ -182,7 +181,7 @@ pub trait ListBoxExt {
     fn connect_property_selection_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<ListBox> + IsA<glib::object::Object> + glib::object::ObjectExt> ListBoxExt for O {
+impl<O: IsA<ListBox>> ListBoxExt for O {
     //#[cfg(any(feature = "v3_16", feature = "dox"))]
     //fn bind_model<'a, 'b, P: IsA</*Ignored*/gio::ListModel> + 'a, Q: Into<Option<&'a P>>, R: Into<Option<&'b /*Unimplemented*/ListBoxCreateWidgetFunc>>>(&self, model: Q, create_widget_func: R, user_data_free_func: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
     //    unsafe { TODO: call ffi::gtk_list_box_bind_model() }
@@ -371,60 +370,60 @@ impl<O: IsA<ListBox> + IsA<glib::object::Object> + glib::object::ObjectExt> List
     fn get_property_activate_on_single_click(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "activate-on-single-click".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"activate-on-single-click\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_activate_on_single_click(&self, activate_on_single_click: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "activate-on-single-click".to_glib_none().0, Value::from(&activate_on_single_click).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"activate-on-single-click\0".as_ptr() as *const _, Value::from(&activate_on_single_click).to_glib_none().0);
         }
     }
 
     fn get_property_selection_mode(&self) -> SelectionMode {
         unsafe {
             let mut value = Value::from_type(<SelectionMode as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "selection-mode".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"selection-mode\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_selection_mode(&self, selection_mode: SelectionMode) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "selection-mode".to_glib_none().0, Value::from(&selection_mode).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"selection-mode\0".as_ptr() as *const _, Value::from(&selection_mode).to_glib_none().0);
         }
     }
 
     fn connect_activate_cursor_row<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "activate-cursor-row",
+            connect_raw(self.to_glib_none().0 as *mut _, b"activate-cursor-row\0".as_ptr() as *const _,
                 transmute(activate_cursor_row_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_activate_cursor_row(&self) {
-        let _ = self.emit("activate-cursor-row", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("activate-cursor-row", &[]).unwrap() };
     }
 
     fn connect_move_cursor<F: Fn(&Self, MovementStep, i32) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, MovementStep, i32) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "move-cursor",
+            connect_raw(self.to_glib_none().0 as *mut _, b"move-cursor\0".as_ptr() as *const _,
                 transmute(move_cursor_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_move_cursor(&self, object: MovementStep, p0: i32) {
-        let _ = self.emit("move-cursor", &[&object, &p0]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("move-cursor", &[&object, &p0]).unwrap() };
     }
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn connect_row_activated<F: Fn(&Self, &ListBoxRow) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &ListBoxRow) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "row-activated",
+            connect_raw(self.to_glib_none().0 as *mut _, b"row-activated\0".as_ptr() as *const _,
                 transmute(row_activated_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -433,7 +432,7 @@ impl<O: IsA<ListBox> + IsA<glib::object::Object> + glib::object::ObjectExt> List
     fn connect_row_selected<F: Fn(&Self, &Option<ListBoxRow>) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Option<ListBoxRow>) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "row-selected",
+            connect_raw(self.to_glib_none().0 as *mut _, b"row-selected\0".as_ptr() as *const _,
                 transmute(row_selected_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -442,21 +441,21 @@ impl<O: IsA<ListBox> + IsA<glib::object::Object> + glib::object::ObjectExt> List
     fn connect_select_all<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "select-all",
+            connect_raw(self.to_glib_none().0 as *mut _, b"select-all\0".as_ptr() as *const _,
                 transmute(select_all_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn emit_select_all(&self) {
-        let _ = self.emit("select-all", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("select-all", &[]).unwrap() };
     }
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_selected_rows_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "selected-rows-changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"selected-rows-changed\0".as_ptr() as *const _,
                 transmute(selected_rows_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -464,33 +463,33 @@ impl<O: IsA<ListBox> + IsA<glib::object::Object> + glib::object::ObjectExt> List
     fn connect_toggle_cursor_row<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "toggle-cursor-row",
+            connect_raw(self.to_glib_none().0 as *mut _, b"toggle-cursor-row\0".as_ptr() as *const _,
                 transmute(toggle_cursor_row_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_toggle_cursor_row(&self) {
-        let _ = self.emit("toggle-cursor-row", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("toggle-cursor-row", &[]).unwrap() };
     }
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_unselect_all<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "unselect-all",
+            connect_raw(self.to_glib_none().0 as *mut _, b"unselect-all\0".as_ptr() as *const _,
                 transmute(unselect_all_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn emit_unselect_all(&self) {
-        let _ = self.emit("unselect-all", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("unselect-all", &[]).unwrap() };
     }
 
     fn connect_property_activate_on_single_click_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::activate-on-single-click",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::activate-on-single-click\0".as_ptr() as *const _,
                 transmute(notify_activate_on_single_click_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -498,7 +497,7 @@ impl<O: IsA<ListBox> + IsA<glib::object::Object> + glib::object::ObjectExt> List
     fn connect_property_selection_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::selection-mode",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::selection-mode\0".as_ptr() as *const _,
                 transmute(notify_selection_mode_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

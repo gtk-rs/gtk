@@ -9,19 +9,15 @@ use Widget;
 use Window;
 use ffi;
 use gdk;
-use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 use xlib;
 
 glib_wrapper! {
@@ -48,7 +44,7 @@ impl Plug {
     }
 }
 
-pub trait PlugExt {
+pub trait PlugExt: 'static {
     fn construct(&self, socket_id: xlib::Window);
 
     fn construct_for_display(&self, display: &gdk::Display, socket_id: xlib::Window);
@@ -66,7 +62,7 @@ pub trait PlugExt {
     fn connect_property_socket_window_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Plug> + IsA<glib::object::Object>> PlugExt for O {
+impl<O: IsA<Plug>> PlugExt for O {
     fn construct(&self, socket_id: xlib::Window) {
         unsafe {
             ffi::gtk_plug_construct(self.to_glib_none().0, socket_id);
@@ -100,7 +96,7 @@ impl<O: IsA<Plug> + IsA<glib::object::Object>> PlugExt for O {
     fn connect_embedded<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "embedded",
+            connect_raw(self.to_glib_none().0 as *mut _, b"embedded\0".as_ptr() as *const _,
                 transmute(embedded_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -108,7 +104,7 @@ impl<O: IsA<Plug> + IsA<glib::object::Object>> PlugExt for O {
     fn connect_property_embedded_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::embedded",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::embedded\0".as_ptr() as *const _,
                 transmute(notify_embedded_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -116,7 +112,7 @@ impl<O: IsA<Plug> + IsA<glib::object::Object>> PlugExt for O {
     fn connect_property_socket_window_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::socket-window",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::socket-window\0".as_ptr() as *const _,
                 transmute(notify_socket_window_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

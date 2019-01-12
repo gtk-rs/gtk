@@ -7,25 +7,22 @@ use Gesture;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use Widget;
 use ffi;
-use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use glib::signal::SignalHandlerId;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
+#[cfg(any(feature = "v3_14", feature = "dox"))]
 use glib_ffi;
-use gobject_ffi;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use libc;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct GestureRotate(Object<ffi::GtkGestureRotate, ffi::GtkGestureRotateClass>): Gesture, EventController;
@@ -45,7 +42,7 @@ impl GestureRotate {
     }
 }
 
-pub trait GestureRotateExt {
+pub trait GestureRotateExt: 'static {
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_angle_delta(&self) -> f64;
 
@@ -53,7 +50,7 @@ pub trait GestureRotateExt {
     fn connect_angle_changed<F: Fn(&Self, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<GestureRotate> + IsA<glib::object::Object>> GestureRotateExt for O {
+impl<O: IsA<GestureRotate>> GestureRotateExt for O {
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_angle_delta(&self) -> f64 {
         unsafe {
@@ -65,7 +62,7 @@ impl<O: IsA<GestureRotate> + IsA<glib::object::Object>> GestureRotateExt for O {
     fn connect_angle_changed<F: Fn(&Self, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, f64, f64) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "angle-changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"angle-changed\0".as_ptr() as *const _,
                 transmute(angle_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

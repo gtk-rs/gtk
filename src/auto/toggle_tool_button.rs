@@ -10,19 +10,15 @@ use ToolButton;
 use ToolItem;
 use Widget;
 use ffi;
-use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct ToggleToolButton(Object<ffi::GtkToggleToolButton, ffi::GtkToggleToolButtonClass>): ToolButton, ToolItem, Bin, Container, Widget, Buildable, Actionable;
@@ -55,7 +51,7 @@ impl Default for ToggleToolButton {
     }
 }
 
-pub trait ToggleToolButtonExt {
+pub trait ToggleToolButtonExt: 'static {
     fn get_active(&self) -> bool;
 
     fn set_active(&self, is_active: bool);
@@ -65,7 +61,7 @@ pub trait ToggleToolButtonExt {
     fn connect_property_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<ToggleToolButton> + IsA<glib::object::Object>> ToggleToolButtonExt for O {
+impl<O: IsA<ToggleToolButton>> ToggleToolButtonExt for O {
     fn get_active(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_toggle_tool_button_get_active(self.to_glib_none().0))
@@ -81,7 +77,7 @@ impl<O: IsA<ToggleToolButton> + IsA<glib::object::Object>> ToggleToolButtonExt f
     fn connect_toggled<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "toggled",
+            connect_raw(self.to_glib_none().0 as *mut _, b"toggled\0".as_ptr() as *const _,
                 transmute(toggled_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -89,7 +85,7 @@ impl<O: IsA<ToggleToolButton> + IsA<glib::object::Object>> ToggleToolButtonExt f
     fn connect_property_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::active",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::active\0".as_ptr() as *const _,
                 transmute(notify_active_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

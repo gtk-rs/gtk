@@ -6,21 +6,18 @@ use Buildable;
 use Widget;
 use ffi;
 use gdk;
-use glib;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct CellEditable(Object<ffi::GtkCellEditable, ffi::GtkCellEditableIface>): Widget, Buildable;
@@ -30,7 +27,7 @@ glib_wrapper! {
     }
 }
 
-pub trait CellEditableExt {
+pub trait CellEditableExt: 'static {
     fn editing_done(&self);
 
     fn remove_widget(&self);
@@ -48,7 +45,7 @@ pub trait CellEditableExt {
     fn connect_property_editing_canceled_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<CellEditable> + IsA<glib::object::Object>> CellEditableExt for O {
+impl<O: IsA<CellEditable>> CellEditableExt for O {
     fn editing_done(&self) {
         unsafe {
             ffi::gtk_cell_editable_editing_done(self.to_glib_none().0);
@@ -71,21 +68,21 @@ impl<O: IsA<CellEditable> + IsA<glib::object::Object>> CellEditableExt for O {
     fn get_property_editing_canceled(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "editing-canceled".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"editing-canceled\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_editing_canceled(&self, editing_canceled: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "editing-canceled".to_glib_none().0, Value::from(&editing_canceled).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"editing-canceled\0".as_ptr() as *const _, Value::from(&editing_canceled).to_glib_none().0);
         }
     }
 
     fn connect_editing_done<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "editing-done",
+            connect_raw(self.to_glib_none().0 as *mut _, b"editing-done\0".as_ptr() as *const _,
                 transmute(editing_done_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -93,7 +90,7 @@ impl<O: IsA<CellEditable> + IsA<glib::object::Object>> CellEditableExt for O {
     fn connect_remove_widget<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "remove-widget",
+            connect_raw(self.to_glib_none().0 as *mut _, b"remove-widget\0".as_ptr() as *const _,
                 transmute(remove_widget_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -101,7 +98,7 @@ impl<O: IsA<CellEditable> + IsA<glib::object::Object>> CellEditableExt for O {
     fn connect_property_editing_canceled_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::editing-canceled",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::editing-canceled\0".as_ptr() as *const _,
                 transmute(notify_editing_canceled_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

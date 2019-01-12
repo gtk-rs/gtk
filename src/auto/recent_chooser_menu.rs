@@ -10,19 +10,15 @@ use RecentChooser;
 use RecentManager;
 use Widget;
 use ffi;
-use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct RecentChooserMenu(Object<ffi::GtkRecentChooserMenu, ffi::GtkRecentChooserMenuClass>): Menu, MenuShell, Container, Widget, Buildable, RecentChooser;
@@ -54,7 +50,7 @@ impl Default for RecentChooserMenu {
     }
 }
 
-pub trait RecentChooserMenuExt {
+pub trait RecentChooserMenuExt: 'static {
     fn get_show_numbers(&self) -> bool;
 
     fn set_show_numbers(&self, show_numbers: bool);
@@ -62,7 +58,7 @@ pub trait RecentChooserMenuExt {
     fn connect_property_show_numbers_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<RecentChooserMenu> + IsA<glib::object::Object>> RecentChooserMenuExt for O {
+impl<O: IsA<RecentChooserMenu>> RecentChooserMenuExt for O {
     fn get_show_numbers(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_recent_chooser_menu_get_show_numbers(self.to_glib_none().0))
@@ -78,7 +74,7 @@ impl<O: IsA<RecentChooserMenu> + IsA<glib::object::Object>> RecentChooserMenuExt
     fn connect_property_show_numbers_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::show-numbers",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::show-numbers\0".as_ptr() as *const _,
                 transmute(notify_show_numbers_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

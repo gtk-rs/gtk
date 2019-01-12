@@ -7,16 +7,12 @@ use TreeIter;
 use TreeModel;
 use TreePath;
 use ffi;
-use glib;
 use glib::StaticType;
 use glib::Value;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
 use gobject_ffi;
 use std::fmt;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct TreeModelFilter(Object<ffi::GtkTreeModelFilter, ffi::GtkTreeModelFilterClass>): TreeDragSource, TreeModel;
@@ -26,7 +22,7 @@ glib_wrapper! {
     }
 }
 
-pub trait TreeModelFilterExt {
+pub trait TreeModelFilterExt: 'static {
     fn clear_cache(&self);
 
     fn convert_child_iter_to_iter(&self, child_iter: &TreeIter) -> Option<TreeIter>;
@@ -50,7 +46,7 @@ pub trait TreeModelFilterExt {
     fn get_property_child_model(&self) -> Option<TreeModel>;
 }
 
-impl<O: IsA<TreeModelFilter> + IsA<glib::object::Object>> TreeModelFilterExt for O {
+impl<O: IsA<TreeModelFilter>> TreeModelFilterExt for O {
     fn clear_cache(&self) {
         unsafe {
             ffi::gtk_tree_model_filter_clear_cache(self.to_glib_none().0);
@@ -114,7 +110,7 @@ impl<O: IsA<TreeModelFilter> + IsA<glib::object::Object>> TreeModelFilterExt for
     fn get_property_child_model(&self) -> Option<TreeModel> {
         unsafe {
             let mut value = Value::from_type(<TreeModel as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "child-model".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"child-model\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }

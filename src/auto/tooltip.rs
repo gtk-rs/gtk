@@ -10,11 +10,7 @@ use gdk_pixbuf;
 use gio;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use std::fmt;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Tooltip(Object<ffi::GtkTooltip>);
@@ -33,7 +29,7 @@ impl Tooltip {
     }
 }
 
-pub trait TooltipExt {
+pub trait TooltipExt: 'static {
     fn set_custom<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, custom_widget: Q);
 
     fn set_icon<'a, P: Into<Option<&'a gdk_pixbuf::Pixbuf>>>(&self, pixbuf: P);

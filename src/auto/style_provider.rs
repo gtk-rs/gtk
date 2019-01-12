@@ -8,11 +8,7 @@ use WidgetPath;
 use ffi;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use std::fmt;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct StyleProvider(Object<ffi::GtkStyleProvider, ffi::GtkStyleProviderIface>);
@@ -22,7 +18,7 @@ glib_wrapper! {
     }
 }
 
-pub trait StyleProviderExt {
+pub trait StyleProviderExt: 'static {
     #[cfg_attr(feature = "v3_8", deprecated)]
     fn get_icon_factory(&self, path: &WidgetPath) -> Option<IconFactory>;
 

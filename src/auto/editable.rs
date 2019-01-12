@@ -3,13 +3,11 @@
 // DO NOT EDIT
 
 use ffi;
+use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use std::fmt;
 use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Editable(Object<ffi::GtkEditable, ffi::GtkEditableInterface>);
@@ -19,7 +17,7 @@ glib_wrapper! {
     }
 }
 
-pub trait EditableExt {
+pub trait EditableExt: 'static {
     fn copy_clipboard(&self);
 
     fn cut_clipboard(&self);
@@ -28,7 +26,7 @@ pub trait EditableExt {
 
     fn delete_text(&self, start_pos: i32, end_pos: i32);
 
-    fn get_chars(&self, start_pos: i32, end_pos: i32) -> Option<String>;
+    fn get_chars(&self, start_pos: i32, end_pos: i32) -> Option<GString>;
 
     fn get_editable(&self) -> bool;
 
@@ -72,7 +70,7 @@ impl<O: IsA<Editable>> EditableExt for O {
         }
     }
 
-    fn get_chars(&self, start_pos: i32, end_pos: i32) -> Option<String> {
+    fn get_chars(&self, start_pos: i32, end_pos: i32) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gtk_editable_get_chars(self.to_glib_none().0, start_pos, end_pos))
         }

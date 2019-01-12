@@ -10,19 +10,15 @@ use Container;
 use MenuItem;
 use Widget;
 use ffi;
-use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct ImageMenuItem(Object<ffi::GtkImageMenuItem, ffi::GtkImageMenuItemClass>): MenuItem, Bin, Container, Widget, Buildable, Actionable;
@@ -75,7 +71,7 @@ impl Default for ImageMenuItem {
     }
 }
 
-pub trait ImageMenuItemExt {
+pub trait ImageMenuItemExt: 'static {
     #[cfg_attr(feature = "v3_10", deprecated)]
     fn get_always_show_image(&self) -> bool;
 
@@ -110,7 +106,7 @@ pub trait ImageMenuItemExt {
     fn connect_property_use_stock_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<ImageMenuItem> + IsA<glib::object::Object>> ImageMenuItemExt for O {
+impl<O: IsA<ImageMenuItem>> ImageMenuItemExt for O {
     fn get_always_show_image(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_image_menu_item_get_always_show_image(self.to_glib_none().0))
@@ -158,7 +154,7 @@ impl<O: IsA<ImageMenuItem> + IsA<glib::object::Object>> ImageMenuItemExt for O {
     fn connect_property_accel_group_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::accel-group",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::accel-group\0".as_ptr() as *const _,
                 transmute(notify_accel_group_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -166,7 +162,7 @@ impl<O: IsA<ImageMenuItem> + IsA<glib::object::Object>> ImageMenuItemExt for O {
     fn connect_property_always_show_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::always-show-image",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::always-show-image\0".as_ptr() as *const _,
                 transmute(notify_always_show_image_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -174,7 +170,7 @@ impl<O: IsA<ImageMenuItem> + IsA<glib::object::Object>> ImageMenuItemExt for O {
     fn connect_property_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::image",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::image\0".as_ptr() as *const _,
                 transmute(notify_image_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -182,7 +178,7 @@ impl<O: IsA<ImageMenuItem> + IsA<glib::object::Object>> ImageMenuItemExt for O {
     fn connect_property_use_stock_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::use-stock",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::use-stock\0".as_ptr() as *const _,
                 transmute(notify_use_stock_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

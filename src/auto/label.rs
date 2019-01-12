@@ -10,12 +10,14 @@ use MovementStep;
 use Widget;
 use ffi;
 use glib;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
+use glib::object::ObjectExt;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
@@ -26,7 +28,6 @@ use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Label(Object<ffi::GtkLabel, ffi::GtkLabelClass>): Misc, Widget, Buildable;
@@ -56,18 +57,18 @@ impl Label {
     }
 }
 
-pub trait LabelExt {
+pub trait LabelExt: 'static {
     fn get_angle(&self) -> f64;
 
     fn get_attributes(&self) -> Option<pango::AttrList>;
 
-    fn get_current_uri(&self) -> Option<String>;
+    fn get_current_uri(&self) -> Option<GString>;
 
     fn get_ellipsize(&self) -> pango::EllipsizeMode;
 
     fn get_justify(&self) -> Justification;
 
-    fn get_label(&self) -> Option<String>;
+    fn get_label(&self) -> Option<GString>;
 
     fn get_layout(&self) -> Option<pango::Layout>;
 
@@ -92,7 +93,7 @@ pub trait LabelExt {
 
     fn get_single_line_mode(&self) -> bool;
 
-    fn get_text(&self) -> Option<String>;
+    fn get_text(&self) -> Option<GString>;
 
     fn get_track_visited_links(&self) -> bool;
 
@@ -235,7 +236,7 @@ pub trait LabelExt {
     fn connect_property_yalign_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Label> + IsA<glib::object::Object> + glib::object::ObjectExt> LabelExt for O {
+impl<O: IsA<Label>> LabelExt for O {
     fn get_angle(&self) -> f64 {
         unsafe {
             ffi::gtk_label_get_angle(self.to_glib_none().0)
@@ -248,7 +249,7 @@ impl<O: IsA<Label> + IsA<glib::object::Object> + glib::object::ObjectExt> LabelE
         }
     }
 
-    fn get_current_uri(&self) -> Option<String> {
+    fn get_current_uri(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_label_get_current_uri(self.to_glib_none().0))
         }
@@ -266,7 +267,7 @@ impl<O: IsA<Label> + IsA<glib::object::Object> + glib::object::ObjectExt> LabelE
         }
     }
 
-    fn get_label(&self) -> Option<String> {
+    fn get_label(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_label_get_label(self.to_glib_none().0))
         }
@@ -345,7 +346,7 @@ impl<O: IsA<Label> + IsA<glib::object::Object> + glib::object::ObjectExt> LabelE
         }
     }
 
-    fn get_text(&self) -> Option<String> {
+    fn get_text(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_label_get_text(self.to_glib_none().0))
         }
@@ -543,7 +544,7 @@ impl<O: IsA<Label> + IsA<glib::object::Object> + glib::object::ObjectExt> LabelE
     fn get_property_cursor_position(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "cursor-position".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"cursor-position\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -551,7 +552,7 @@ impl<O: IsA<Label> + IsA<glib::object::Object> + glib::object::ObjectExt> LabelE
     fn get_property_selection_bound(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "selection-bound".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"selection-bound\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -559,47 +560,47 @@ impl<O: IsA<Label> + IsA<glib::object::Object> + glib::object::ObjectExt> LabelE
     fn get_property_wrap(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "wrap".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"wrap\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_wrap(&self, wrap: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "wrap".to_glib_none().0, Value::from(&wrap).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"wrap\0".as_ptr() as *const _, Value::from(&wrap).to_glib_none().0);
         }
     }
 
     fn get_property_wrap_mode(&self) -> pango::WrapMode {
         unsafe {
             let mut value = Value::from_type(<pango::WrapMode as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "wrap-mode".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"wrap-mode\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_wrap_mode(&self, wrap_mode: pango::WrapMode) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "wrap-mode".to_glib_none().0, Value::from(&wrap_mode).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"wrap-mode\0".as_ptr() as *const _, Value::from(&wrap_mode).to_glib_none().0);
         }
     }
 
     fn connect_activate_current_link<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "activate-current-link",
+            connect_raw(self.to_glib_none().0 as *mut _, b"activate-current-link\0".as_ptr() as *const _,
                 transmute(activate_current_link_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_activate_current_link(&self) {
-        let _ = self.emit("activate-current-link", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("activate-current-link", &[]).unwrap() };
     }
 
     fn connect_activate_link<F: Fn(&Self, &str) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &str) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "activate-link",
+            connect_raw(self.to_glib_none().0 as *mut _, b"activate-link\0".as_ptr() as *const _,
                 transmute(activate_link_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -607,31 +608,31 @@ impl<O: IsA<Label> + IsA<glib::object::Object> + glib::object::ObjectExt> LabelE
     fn connect_copy_clipboard<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "copy-clipboard",
+            connect_raw(self.to_glib_none().0 as *mut _, b"copy-clipboard\0".as_ptr() as *const _,
                 transmute(copy_clipboard_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_copy_clipboard(&self) {
-        let _ = self.emit("copy-clipboard", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("copy-clipboard", &[]).unwrap() };
     }
 
     fn connect_move_cursor<F: Fn(&Self, MovementStep, i32, bool) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, MovementStep, i32, bool) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "move-cursor",
+            connect_raw(self.to_glib_none().0 as *mut _, b"move-cursor\0".as_ptr() as *const _,
                 transmute(move_cursor_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_move_cursor(&self, step: MovementStep, count: i32, extend_selection: bool) {
-        let _ = self.emit("move-cursor", &[&step, &count, &extend_selection]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("move-cursor", &[&step, &count, &extend_selection]).unwrap() };
     }
 
     fn connect_populate_popup<F: Fn(&Self, &Menu) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Menu) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "populate-popup",
+            connect_raw(self.to_glib_none().0 as *mut _, b"populate-popup\0".as_ptr() as *const _,
                 transmute(populate_popup_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -639,7 +640,7 @@ impl<O: IsA<Label> + IsA<glib::object::Object> + glib::object::ObjectExt> LabelE
     fn connect_property_angle_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::angle",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::angle\0".as_ptr() as *const _,
                 transmute(notify_angle_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -647,7 +648,7 @@ impl<O: IsA<Label> + IsA<glib::object::Object> + glib::object::ObjectExt> LabelE
     fn connect_property_attributes_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::attributes",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::attributes\0".as_ptr() as *const _,
                 transmute(notify_attributes_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -655,7 +656,7 @@ impl<O: IsA<Label> + IsA<glib::object::Object> + glib::object::ObjectExt> LabelE
     fn connect_property_cursor_position_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::cursor-position",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::cursor-position\0".as_ptr() as *const _,
                 transmute(notify_cursor_position_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -663,7 +664,7 @@ impl<O: IsA<Label> + IsA<glib::object::Object> + glib::object::ObjectExt> LabelE
     fn connect_property_ellipsize_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::ellipsize",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::ellipsize\0".as_ptr() as *const _,
                 transmute(notify_ellipsize_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -671,7 +672,7 @@ impl<O: IsA<Label> + IsA<glib::object::Object> + glib::object::ObjectExt> LabelE
     fn connect_property_justify_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::justify",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::justify\0".as_ptr() as *const _,
                 transmute(notify_justify_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -679,7 +680,7 @@ impl<O: IsA<Label> + IsA<glib::object::Object> + glib::object::ObjectExt> LabelE
     fn connect_property_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::label",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::label\0".as_ptr() as *const _,
                 transmute(notify_label_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -688,7 +689,7 @@ impl<O: IsA<Label> + IsA<glib::object::Object> + glib::object::ObjectExt> LabelE
     fn connect_property_lines_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::lines",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::lines\0".as_ptr() as *const _,
                 transmute(notify_lines_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -696,7 +697,7 @@ impl<O: IsA<Label> + IsA<glib::object::Object> + glib::object::ObjectExt> LabelE
     fn connect_property_max_width_chars_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::max-width-chars",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::max-width-chars\0".as_ptr() as *const _,
                 transmute(notify_max_width_chars_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -704,7 +705,7 @@ impl<O: IsA<Label> + IsA<glib::object::Object> + glib::object::ObjectExt> LabelE
     fn connect_property_mnemonic_keyval_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::mnemonic-keyval",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::mnemonic-keyval\0".as_ptr() as *const _,
                 transmute(notify_mnemonic_keyval_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -712,7 +713,7 @@ impl<O: IsA<Label> + IsA<glib::object::Object> + glib::object::ObjectExt> LabelE
     fn connect_property_mnemonic_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::mnemonic-widget",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::mnemonic-widget\0".as_ptr() as *const _,
                 transmute(notify_mnemonic_widget_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -720,7 +721,7 @@ impl<O: IsA<Label> + IsA<glib::object::Object> + glib::object::ObjectExt> LabelE
     fn connect_property_pattern_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::pattern",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::pattern\0".as_ptr() as *const _,
                 transmute(notify_pattern_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -728,7 +729,7 @@ impl<O: IsA<Label> + IsA<glib::object::Object> + glib::object::ObjectExt> LabelE
     fn connect_property_selectable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::selectable",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::selectable\0".as_ptr() as *const _,
                 transmute(notify_selectable_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -736,7 +737,7 @@ impl<O: IsA<Label> + IsA<glib::object::Object> + glib::object::ObjectExt> LabelE
     fn connect_property_selection_bound_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::selection-bound",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::selection-bound\0".as_ptr() as *const _,
                 transmute(notify_selection_bound_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -744,7 +745,7 @@ impl<O: IsA<Label> + IsA<glib::object::Object> + glib::object::ObjectExt> LabelE
     fn connect_property_single_line_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::single-line-mode",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::single-line-mode\0".as_ptr() as *const _,
                 transmute(notify_single_line_mode_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -752,7 +753,7 @@ impl<O: IsA<Label> + IsA<glib::object::Object> + glib::object::ObjectExt> LabelE
     fn connect_property_track_visited_links_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::track-visited-links",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::track-visited-links\0".as_ptr() as *const _,
                 transmute(notify_track_visited_links_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -760,7 +761,7 @@ impl<O: IsA<Label> + IsA<glib::object::Object> + glib::object::ObjectExt> LabelE
     fn connect_property_use_markup_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::use-markup",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::use-markup\0".as_ptr() as *const _,
                 transmute(notify_use_markup_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -768,7 +769,7 @@ impl<O: IsA<Label> + IsA<glib::object::Object> + glib::object::ObjectExt> LabelE
     fn connect_property_use_underline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::use-underline",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::use-underline\0".as_ptr() as *const _,
                 transmute(notify_use_underline_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -776,7 +777,7 @@ impl<O: IsA<Label> + IsA<glib::object::Object> + glib::object::ObjectExt> LabelE
     fn connect_property_width_chars_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::width-chars",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::width-chars\0".as_ptr() as *const _,
                 transmute(notify_width_chars_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -784,7 +785,7 @@ impl<O: IsA<Label> + IsA<glib::object::Object> + glib::object::ObjectExt> LabelE
     fn connect_property_wrap_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::wrap",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::wrap\0".as_ptr() as *const _,
                 transmute(notify_wrap_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -792,7 +793,7 @@ impl<O: IsA<Label> + IsA<glib::object::Object> + glib::object::ObjectExt> LabelE
     fn connect_property_wrap_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::wrap-mode",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::wrap-mode\0".as_ptr() as *const _,
                 transmute(notify_wrap_mode_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -801,7 +802,7 @@ impl<O: IsA<Label> + IsA<glib::object::Object> + glib::object::ObjectExt> LabelE
     fn connect_property_xalign_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::xalign",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::xalign\0".as_ptr() as *const _,
                 transmute(notify_xalign_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -810,7 +811,7 @@ impl<O: IsA<Label> + IsA<glib::object::Object> + glib::object::ObjectExt> LabelE
     fn connect_property_yalign_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::yalign",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::yalign\0".as_ptr() as *const _,
                 transmute(notify_yalign_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -825,7 +826,7 @@ where P: IsA<Label> {
 unsafe extern "C" fn activate_link_trampoline<P>(this: *mut ffi::GtkLabel, uri: *mut libc::c_char, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Label> {
     let f: &&(Fn(&P, &str) -> Inhibit + 'static) = transmute(f);
-    f(&Label::from_glib_borrow(this).downcast_unchecked(), &String::from_glib_none(uri)).to_glib()
+    f(&Label::from_glib_borrow(this).downcast_unchecked(), &GString::from_glib_borrow(uri)).to_glib()
 }
 
 unsafe extern "C" fn copy_clipboard_trampoline<P>(this: *mut ffi::GtkLabel, f: glib_ffi::gpointer)

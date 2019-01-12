@@ -10,16 +10,12 @@ use Window;
 use ffi;
 use gdk;
 use gio;
-use glib;
 use glib::StaticType;
 use glib::Value;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
 use gobject_ffi;
 use std::fmt;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct PadController(Object<ffi::GtkPadController, ffi::GtkPadControllerClass>): EventController;
@@ -41,7 +37,7 @@ impl PadController {
     }
 }
 
-pub trait PadControllerExt {
+pub trait PadControllerExt: 'static {
     #[cfg(any(feature = "v3_22", feature = "dox"))]
     fn set_action(&self, type_: PadActionType, index: i32, mode: i32, label: &str, action_name: &str);
 
@@ -50,7 +46,7 @@ pub trait PadControllerExt {
     fn get_property_pad(&self) -> Option<gdk::Device>;
 }
 
-impl<O: IsA<PadController> + IsA<glib::object::Object>> PadControllerExt for O {
+impl<O: IsA<PadController>> PadControllerExt for O {
     #[cfg(any(feature = "v3_22", feature = "dox"))]
     fn set_action(&self, type_: PadActionType, index: i32, mode: i32, label: &str, action_name: &str) {
         unsafe {
@@ -61,7 +57,7 @@ impl<O: IsA<PadController> + IsA<glib::object::Object>> PadControllerExt for O {
     fn get_property_action_group(&self) -> Option<gio::ActionGroup> {
         unsafe {
             let mut value = Value::from_type(<gio::ActionGroup as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "action-group".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"action-group\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -69,7 +65,7 @@ impl<O: IsA<PadController> + IsA<glib::object::Object>> PadControllerExt for O {
     fn get_property_pad(&self) -> Option<gdk::Device> {
         unsafe {
             let mut value = Value::from_type(<gdk::Device as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "pad".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"pad\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }

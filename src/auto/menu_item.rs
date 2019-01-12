@@ -10,21 +10,21 @@ use Menu;
 use Widget;
 use ffi;
 use glib;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
+use glib::object::ObjectExt;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct MenuItem(Object<ffi::GtkMenuItem, ffi::GtkMenuItemClass>): Bin, Container, Widget, Buildable, Actionable;
@@ -63,12 +63,12 @@ impl Default for MenuItem {
     }
 }
 
-pub trait GtkMenuItemExt {
+pub trait GtkMenuItemExt: 'static {
     fn deselect(&self);
 
-    fn get_accel_path(&self) -> Option<String>;
+    fn get_accel_path(&self) -> Option<GString>;
 
-    fn get_label(&self) -> Option<String>;
+    fn get_label(&self) -> Option<GString>;
 
     fn get_reserve_indicator(&self) -> bool;
 
@@ -121,20 +121,20 @@ pub trait GtkMenuItemExt {
     fn connect_property_use_underline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<MenuItem> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkMenuItemExt for O {
+impl<O: IsA<MenuItem>> GtkMenuItemExt for O {
     fn deselect(&self) {
         unsafe {
             ffi::gtk_menu_item_deselect(self.to_glib_none().0);
         }
     }
 
-    fn get_accel_path(&self) -> Option<String> {
+    fn get_accel_path(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_menu_item_get_accel_path(self.to_glib_none().0))
         }
     }
 
-    fn get_label(&self) -> Option<String> {
+    fn get_label(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_menu_item_get_label(self.to_glib_none().0))
         }
@@ -213,33 +213,33 @@ impl<O: IsA<MenuItem> + IsA<glib::object::Object> + glib::object::ObjectExt> Gtk
     fn get_property_right_justified(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "right-justified".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"right-justified\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_right_justified(&self, right_justified: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "right-justified".to_glib_none().0, Value::from(&right_justified).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"right-justified\0".as_ptr() as *const _, Value::from(&right_justified).to_glib_none().0);
         }
     }
 
     fn connect_activate<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "activate",
+            connect_raw(self.to_glib_none().0 as *mut _, b"activate\0".as_ptr() as *const _,
                 transmute(activate_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_activate(&self) {
-        let _ = self.emit("activate", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("activate", &[]).unwrap() };
     }
 
     fn connect_activate_item<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "activate-item",
+            connect_raw(self.to_glib_none().0 as *mut _, b"activate-item\0".as_ptr() as *const _,
                 transmute(activate_item_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -247,7 +247,7 @@ impl<O: IsA<MenuItem> + IsA<glib::object::Object> + glib::object::ObjectExt> Gtk
     fn connect_deselect<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "deselect",
+            connect_raw(self.to_glib_none().0 as *mut _, b"deselect\0".as_ptr() as *const _,
                 transmute(deselect_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -255,7 +255,7 @@ impl<O: IsA<MenuItem> + IsA<glib::object::Object> + glib::object::ObjectExt> Gtk
     fn connect_select<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "select",
+            connect_raw(self.to_glib_none().0 as *mut _, b"select\0".as_ptr() as *const _,
                 transmute(select_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -263,7 +263,7 @@ impl<O: IsA<MenuItem> + IsA<glib::object::Object> + glib::object::ObjectExt> Gtk
     fn connect_toggle_size_allocate<F: Fn(&Self, i32) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, i32) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "toggle-size-allocate",
+            connect_raw(self.to_glib_none().0 as *mut _, b"toggle-size-allocate\0".as_ptr() as *const _,
                 transmute(toggle_size_allocate_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -275,7 +275,7 @@ impl<O: IsA<MenuItem> + IsA<glib::object::Object> + glib::object::ObjectExt> Gtk
     fn connect_property_accel_path_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::accel-path",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::accel-path\0".as_ptr() as *const _,
                 transmute(notify_accel_path_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -283,7 +283,7 @@ impl<O: IsA<MenuItem> + IsA<glib::object::Object> + glib::object::ObjectExt> Gtk
     fn connect_property_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::label",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::label\0".as_ptr() as *const _,
                 transmute(notify_label_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -291,7 +291,7 @@ impl<O: IsA<MenuItem> + IsA<glib::object::Object> + glib::object::ObjectExt> Gtk
     fn connect_property_right_justified_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::right-justified",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::right-justified\0".as_ptr() as *const _,
                 transmute(notify_right_justified_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -299,7 +299,7 @@ impl<O: IsA<MenuItem> + IsA<glib::object::Object> + glib::object::ObjectExt> Gtk
     fn connect_property_submenu_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::submenu",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::submenu\0".as_ptr() as *const _,
                 transmute(notify_submenu_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -307,7 +307,7 @@ impl<O: IsA<MenuItem> + IsA<glib::object::Object> + glib::object::ObjectExt> Gtk
     fn connect_property_use_underline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::use-underline",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::use-underline\0".as_ptr() as *const _,
                 transmute(notify_use_underline_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

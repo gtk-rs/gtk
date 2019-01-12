@@ -7,14 +7,13 @@ use RecentFilter;
 use RecentInfo;
 use RecentSortType;
 use ffi;
-use glib;
+use glib::GString;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
@@ -29,12 +28,12 @@ glib_wrapper! {
     }
 }
 
-pub trait RecentChooserExt {
+pub trait RecentChooserExt: 'static {
     fn add_filter(&self, filter: &RecentFilter);
 
     fn get_current_item(&self) -> Option<RecentInfo>;
 
-    fn get_current_uri(&self) -> Option<String>;
+    fn get_current_uri(&self) -> Option<GString>;
 
     fn get_filter(&self) -> Option<RecentFilter>;
 
@@ -56,7 +55,7 @@ pub trait RecentChooserExt {
 
     fn get_sort_type(&self) -> RecentSortType;
 
-    fn get_uris(&self) -> Vec<String>;
+    fn get_uris(&self) -> Vec<GString>;
 
     fn list_filters(&self) -> Vec<RecentFilter>;
 
@@ -115,7 +114,7 @@ pub trait RecentChooserExt {
     fn connect_property_sort_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<RecentChooser> + IsA<glib::object::Object>> RecentChooserExt for O {
+impl<O: IsA<RecentChooser>> RecentChooserExt for O {
     fn add_filter(&self, filter: &RecentFilter) {
         unsafe {
             ffi::gtk_recent_chooser_add_filter(self.to_glib_none().0, filter.to_glib_none().0);
@@ -128,7 +127,7 @@ impl<O: IsA<RecentChooser> + IsA<glib::object::Object>> RecentChooserExt for O {
         }
     }
 
-    fn get_current_uri(&self) -> Option<String> {
+    fn get_current_uri(&self) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gtk_recent_chooser_get_current_uri(self.to_glib_none().0))
         }
@@ -194,7 +193,7 @@ impl<O: IsA<RecentChooser> + IsA<glib::object::Object>> RecentChooserExt for O {
         }
     }
 
-    fn get_uris(&self) -> Vec<String> {
+    fn get_uris(&self) -> Vec<GString> {
         unsafe {
             let mut length = mem::uninitialized();
             let ret = FromGlibContainer::from_glib_full_num(ffi::gtk_recent_chooser_get_uris(self.to_glib_none().0, &mut length), length as usize);
@@ -311,7 +310,7 @@ impl<O: IsA<RecentChooser> + IsA<glib::object::Object>> RecentChooserExt for O {
     fn connect_item_activated<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "item-activated",
+            connect_raw(self.to_glib_none().0 as *mut _, b"item-activated\0".as_ptr() as *const _,
                 transmute(item_activated_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -319,7 +318,7 @@ impl<O: IsA<RecentChooser> + IsA<glib::object::Object>> RecentChooserExt for O {
     fn connect_selection_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "selection-changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"selection-changed\0".as_ptr() as *const _,
                 transmute(selection_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -327,7 +326,7 @@ impl<O: IsA<RecentChooser> + IsA<glib::object::Object>> RecentChooserExt for O {
     fn connect_property_filter_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::filter",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::filter\0".as_ptr() as *const _,
                 transmute(notify_filter_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -335,7 +334,7 @@ impl<O: IsA<RecentChooser> + IsA<glib::object::Object>> RecentChooserExt for O {
     fn connect_property_limit_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::limit",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::limit\0".as_ptr() as *const _,
                 transmute(notify_limit_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -343,7 +342,7 @@ impl<O: IsA<RecentChooser> + IsA<glib::object::Object>> RecentChooserExt for O {
     fn connect_property_local_only_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::local-only",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::local-only\0".as_ptr() as *const _,
                 transmute(notify_local_only_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -351,7 +350,7 @@ impl<O: IsA<RecentChooser> + IsA<glib::object::Object>> RecentChooserExt for O {
     fn connect_property_select_multiple_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::select-multiple",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::select-multiple\0".as_ptr() as *const _,
                 transmute(notify_select_multiple_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -359,7 +358,7 @@ impl<O: IsA<RecentChooser> + IsA<glib::object::Object>> RecentChooserExt for O {
     fn connect_property_show_icons_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::show-icons",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::show-icons\0".as_ptr() as *const _,
                 transmute(notify_show_icons_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -367,7 +366,7 @@ impl<O: IsA<RecentChooser> + IsA<glib::object::Object>> RecentChooserExt for O {
     fn connect_property_show_not_found_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::show-not-found",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::show-not-found\0".as_ptr() as *const _,
                 transmute(notify_show_not_found_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -375,7 +374,7 @@ impl<O: IsA<RecentChooser> + IsA<glib::object::Object>> RecentChooserExt for O {
     fn connect_property_show_private_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::show-private",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::show-private\0".as_ptr() as *const _,
                 transmute(notify_show_private_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -383,7 +382,7 @@ impl<O: IsA<RecentChooser> + IsA<glib::object::Object>> RecentChooserExt for O {
     fn connect_property_show_tips_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::show-tips",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::show-tips\0".as_ptr() as *const _,
                 transmute(notify_show_tips_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -391,7 +390,7 @@ impl<O: IsA<RecentChooser> + IsA<glib::object::Object>> RecentChooserExt for O {
     fn connect_property_sort_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::sort-type",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::sort-type\0".as_ptr() as *const _,
                 transmute(notify_sort_type_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

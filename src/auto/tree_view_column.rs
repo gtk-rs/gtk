@@ -13,13 +13,13 @@ use TreeViewColumnSizing;
 use Widget;
 use ffi;
 use gdk;
-use glib;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
@@ -27,7 +27,6 @@ use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct TreeViewColumn(Object<ffi::GtkTreeViewColumn, ffi::GtkTreeViewColumnClass>): Buildable, CellLayout;
@@ -63,7 +62,7 @@ impl Default for TreeViewColumn {
     }
 }
 
-pub trait TreeViewColumnExt {
+pub trait TreeViewColumnExt: 'static {
     fn cell_get_position<P: IsA<CellRenderer>>(&self, cell_renderer: &P) -> Option<(i32, i32)>;
 
     fn cell_get_size<'a, P: Into<Option<&'a gdk::Rectangle>>>(&self, cell_area: P) -> (i32, i32, i32, i32);
@@ -104,7 +103,7 @@ pub trait TreeViewColumnExt {
 
     fn get_spacing(&self) -> i32;
 
-    fn get_title(&self) -> Option<String>;
+    fn get_title(&self) -> Option<GString>;
 
     fn get_tree_view(&self) -> Option<Widget>;
 
@@ -193,7 +192,7 @@ pub trait TreeViewColumnExt {
     fn connect_property_x_offset_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<TreeViewColumn> + IsA<glib::object::Object>> TreeViewColumnExt for O {
+impl<O: IsA<TreeViewColumn>> TreeViewColumnExt for O {
     fn cell_get_position<P: IsA<CellRenderer>>(&self, cell_renderer: &P) -> Option<(i32, i32)> {
         unsafe {
             let mut x_offset = mem::uninitialized();
@@ -324,7 +323,7 @@ impl<O: IsA<TreeViewColumn> + IsA<glib::object::Object>> TreeViewColumnExt for O
         }
     }
 
-    fn get_title(&self) -> Option<String> {
+    fn get_title(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_tree_view_column_get_title(self.to_glib_none().0))
         }
@@ -471,7 +470,7 @@ impl<O: IsA<TreeViewColumn> + IsA<glib::object::Object>> TreeViewColumnExt for O
     fn get_property_cell_area(&self) -> Option<CellArea> {
         unsafe {
             let mut value = Value::from_type(<CellArea as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "cell-area".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"cell-area\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -479,7 +478,7 @@ impl<O: IsA<TreeViewColumn> + IsA<glib::object::Object>> TreeViewColumnExt for O
     fn connect_clicked<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "clicked",
+            connect_raw(self.to_glib_none().0 as *mut _, b"clicked\0".as_ptr() as *const _,
                 transmute(clicked_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -487,7 +486,7 @@ impl<O: IsA<TreeViewColumn> + IsA<glib::object::Object>> TreeViewColumnExt for O
     fn connect_property_alignment_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::alignment",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::alignment\0".as_ptr() as *const _,
                 transmute(notify_alignment_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -495,7 +494,7 @@ impl<O: IsA<TreeViewColumn> + IsA<glib::object::Object>> TreeViewColumnExt for O
     fn connect_property_clickable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::clickable",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::clickable\0".as_ptr() as *const _,
                 transmute(notify_clickable_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -503,7 +502,7 @@ impl<O: IsA<TreeViewColumn> + IsA<glib::object::Object>> TreeViewColumnExt for O
     fn connect_property_expand_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::expand",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::expand\0".as_ptr() as *const _,
                 transmute(notify_expand_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -511,7 +510,7 @@ impl<O: IsA<TreeViewColumn> + IsA<glib::object::Object>> TreeViewColumnExt for O
     fn connect_property_fixed_width_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::fixed-width",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::fixed-width\0".as_ptr() as *const _,
                 transmute(notify_fixed_width_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -519,7 +518,7 @@ impl<O: IsA<TreeViewColumn> + IsA<glib::object::Object>> TreeViewColumnExt for O
     fn connect_property_max_width_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::max-width",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::max-width\0".as_ptr() as *const _,
                 transmute(notify_max_width_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -527,7 +526,7 @@ impl<O: IsA<TreeViewColumn> + IsA<glib::object::Object>> TreeViewColumnExt for O
     fn connect_property_min_width_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::min-width",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::min-width\0".as_ptr() as *const _,
                 transmute(notify_min_width_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -535,7 +534,7 @@ impl<O: IsA<TreeViewColumn> + IsA<glib::object::Object>> TreeViewColumnExt for O
     fn connect_property_reorderable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::reorderable",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::reorderable\0".as_ptr() as *const _,
                 transmute(notify_reorderable_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -543,7 +542,7 @@ impl<O: IsA<TreeViewColumn> + IsA<glib::object::Object>> TreeViewColumnExt for O
     fn connect_property_resizable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::resizable",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::resizable\0".as_ptr() as *const _,
                 transmute(notify_resizable_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -551,7 +550,7 @@ impl<O: IsA<TreeViewColumn> + IsA<glib::object::Object>> TreeViewColumnExt for O
     fn connect_property_sizing_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::sizing",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::sizing\0".as_ptr() as *const _,
                 transmute(notify_sizing_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -559,7 +558,7 @@ impl<O: IsA<TreeViewColumn> + IsA<glib::object::Object>> TreeViewColumnExt for O
     fn connect_property_sort_column_id_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::sort-column-id",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::sort-column-id\0".as_ptr() as *const _,
                 transmute(notify_sort_column_id_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -567,7 +566,7 @@ impl<O: IsA<TreeViewColumn> + IsA<glib::object::Object>> TreeViewColumnExt for O
     fn connect_property_sort_indicator_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::sort-indicator",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::sort-indicator\0".as_ptr() as *const _,
                 transmute(notify_sort_indicator_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -575,7 +574,7 @@ impl<O: IsA<TreeViewColumn> + IsA<glib::object::Object>> TreeViewColumnExt for O
     fn connect_property_sort_order_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::sort-order",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::sort-order\0".as_ptr() as *const _,
                 transmute(notify_sort_order_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -583,7 +582,7 @@ impl<O: IsA<TreeViewColumn> + IsA<glib::object::Object>> TreeViewColumnExt for O
     fn connect_property_spacing_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::spacing",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::spacing\0".as_ptr() as *const _,
                 transmute(notify_spacing_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -591,7 +590,7 @@ impl<O: IsA<TreeViewColumn> + IsA<glib::object::Object>> TreeViewColumnExt for O
     fn connect_property_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::title",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::title\0".as_ptr() as *const _,
                 transmute(notify_title_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -599,7 +598,7 @@ impl<O: IsA<TreeViewColumn> + IsA<glib::object::Object>> TreeViewColumnExt for O
     fn connect_property_visible_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::visible",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::visible\0".as_ptr() as *const _,
                 transmute(notify_visible_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -607,7 +606,7 @@ impl<O: IsA<TreeViewColumn> + IsA<glib::object::Object>> TreeViewColumnExt for O
     fn connect_property_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::widget",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::widget\0".as_ptr() as *const _,
                 transmute(notify_widget_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -615,7 +614,7 @@ impl<O: IsA<TreeViewColumn> + IsA<glib::object::Object>> TreeViewColumnExt for O
     fn connect_property_width_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::width",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::width\0".as_ptr() as *const _,
                 transmute(notify_width_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -623,7 +622,7 @@ impl<O: IsA<TreeViewColumn> + IsA<glib::object::Object>> TreeViewColumnExt for O
     fn connect_property_x_offset_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::x-offset",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::x-offset\0".as_ptr() as *const _,
                 transmute(notify_x_offset_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

@@ -18,23 +18,20 @@ use Widget;
 use ffi;
 #[cfg(any(feature = "v3_6", feature = "dox"))]
 use gio;
-use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 #[cfg(any(feature = "v3_6", feature = "dox"))]
 use glib::signal::SignalHandlerId;
 #[cfg(any(feature = "v3_6", feature = "dox"))]
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
+#[cfg(any(feature = "v3_6", feature = "dox"))]
 use glib_ffi;
-use gobject_ffi;
 #[cfg(any(feature = "v3_6", feature = "dox"))]
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 #[cfg(any(feature = "v3_6", feature = "dox"))]
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct MenuButton(Object<ffi::GtkMenuButton, ffi::GtkMenuButtonClass>): ToggleButton, Button, Bin, Container, Widget, Buildable, Actionable;
@@ -61,7 +58,7 @@ impl Default for MenuButton {
     }
 }
 
-pub trait MenuButtonExt {
+pub trait MenuButtonExt: 'static {
     #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_align_widget(&self) -> Option<Widget>;
 
@@ -117,7 +114,7 @@ pub trait MenuButtonExt {
     fn connect_property_use_popover_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<MenuButton> + IsA<glib::object::Object>> MenuButtonExt for O {
+impl<O: IsA<MenuButton>> MenuButtonExt for O {
     #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_align_widget(&self) -> Option<Widget> {
         unsafe {
@@ -214,7 +211,7 @@ impl<O: IsA<MenuButton> + IsA<glib::object::Object>> MenuButtonExt for O {
     fn connect_property_align_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::align-widget",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::align-widget\0".as_ptr() as *const _,
                 transmute(notify_align_widget_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -223,7 +220,7 @@ impl<O: IsA<MenuButton> + IsA<glib::object::Object>> MenuButtonExt for O {
     fn connect_property_direction_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::direction",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::direction\0".as_ptr() as *const _,
                 transmute(notify_direction_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -232,7 +229,7 @@ impl<O: IsA<MenuButton> + IsA<glib::object::Object>> MenuButtonExt for O {
     fn connect_property_menu_model_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::menu-model",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::menu-model\0".as_ptr() as *const _,
                 transmute(notify_menu_model_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -241,7 +238,7 @@ impl<O: IsA<MenuButton> + IsA<glib::object::Object>> MenuButtonExt for O {
     fn connect_property_popover_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::popover",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::popover\0".as_ptr() as *const _,
                 transmute(notify_popover_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -250,7 +247,7 @@ impl<O: IsA<MenuButton> + IsA<glib::object::Object>> MenuButtonExt for O {
     fn connect_property_popup_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::popup",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::popup\0".as_ptr() as *const _,
                 transmute(notify_popup_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -259,7 +256,7 @@ impl<O: IsA<MenuButton> + IsA<glib::object::Object>> MenuButtonExt for O {
     fn connect_property_use_popover_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::use-popover",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::use-popover\0".as_ptr() as *const _,
                 transmute(notify_use_popover_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

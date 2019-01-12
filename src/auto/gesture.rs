@@ -10,7 +10,6 @@ use ffi;
 use gdk;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use gdk_ffi;
-use glib;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use glib::StaticType;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
@@ -21,17 +20,19 @@ use glib::object::IsA;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use glib::signal::SignalHandlerId;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
+#[cfg(any(feature = "v3_14", feature = "dox"))]
 use glib_ffi;
+#[cfg(any(feature = "v3_14", feature = "dox"))]
 use gobject_ffi;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use std::boxed::Box as Box_;
 use std::fmt;
+#[cfg(any(feature = "v3_14", feature = "dox"))]
 use std::mem;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Gesture(Object<ffi::GtkGesture, ffi::GtkGestureClass>): EventController;
@@ -41,7 +42,7 @@ glib_wrapper! {
     }
 }
 
-pub trait GestureExt {
+pub trait GestureExt: 'static {
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_bounding_box(&self) -> Option<gdk::Rectangle>;
 
@@ -121,7 +122,7 @@ pub trait GestureExt {
     fn connect_property_window_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Gesture> + IsA<glib::object::Object>> GestureExt for O {
+impl<O: IsA<Gesture>> GestureExt for O {
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_bounding_box(&self) -> Option<gdk::Rectangle> {
         unsafe {
@@ -271,7 +272,7 @@ impl<O: IsA<Gesture> + IsA<glib::object::Object>> GestureExt for O {
     fn get_property_n_points(&self) -> u32 {
         unsafe {
             let mut value = Value::from_type(<u32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "n-points".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"n-points\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -280,7 +281,7 @@ impl<O: IsA<Gesture> + IsA<glib::object::Object>> GestureExt for O {
     fn connect_begin<F: Fn(&Self, &gdk::EventSequence) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::EventSequence) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "begin",
+            connect_raw(self.to_glib_none().0 as *mut _, b"begin\0".as_ptr() as *const _,
                 transmute(begin_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -289,7 +290,7 @@ impl<O: IsA<Gesture> + IsA<glib::object::Object>> GestureExt for O {
     fn connect_cancel<F: Fn(&Self, &gdk::EventSequence) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::EventSequence) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "cancel",
+            connect_raw(self.to_glib_none().0 as *mut _, b"cancel\0".as_ptr() as *const _,
                 transmute(cancel_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -298,7 +299,7 @@ impl<O: IsA<Gesture> + IsA<glib::object::Object>> GestureExt for O {
     fn connect_end<F: Fn(&Self, &gdk::EventSequence) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::EventSequence) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "end",
+            connect_raw(self.to_glib_none().0 as *mut _, b"end\0".as_ptr() as *const _,
                 transmute(end_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -307,7 +308,7 @@ impl<O: IsA<Gesture> + IsA<glib::object::Object>> GestureExt for O {
     fn connect_sequence_state_changed<F: Fn(&Self, &gdk::EventSequence, EventSequenceState) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::EventSequence, EventSequenceState) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "sequence-state-changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"sequence-state-changed\0".as_ptr() as *const _,
                 transmute(sequence_state_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -316,7 +317,7 @@ impl<O: IsA<Gesture> + IsA<glib::object::Object>> GestureExt for O {
     fn connect_update<F: Fn(&Self, &gdk::EventSequence) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &gdk::EventSequence) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "update",
+            connect_raw(self.to_glib_none().0 as *mut _, b"update\0".as_ptr() as *const _,
                 transmute(update_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -325,7 +326,7 @@ impl<O: IsA<Gesture> + IsA<glib::object::Object>> GestureExt for O {
     fn connect_property_window_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::window",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::window\0".as_ptr() as *const _,
                 transmute(notify_window_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

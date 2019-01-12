@@ -12,13 +12,12 @@ use SpinButtonUpdatePolicy;
 use SpinType;
 use Widget;
 use ffi;
-use glib;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
@@ -26,7 +25,6 @@ use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct SpinButton(Object<ffi::GtkSpinButton, ffi::GtkSpinButtonClass>): Entry, Widget, Buildable, CellEditable, Editable, Orientable;
@@ -54,7 +52,7 @@ impl SpinButton {
     }
 }
 
-pub trait SpinButtonExt {
+pub trait SpinButtonExt: 'static {
     fn configure<'a, P: Into<Option<&'a Adjustment>>>(&self, adjustment: P, climb_rate: f64, digits: u32);
 
     fn get_adjustment(&self) -> Adjustment;
@@ -120,7 +118,7 @@ pub trait SpinButtonExt {
     fn connect_property_wrap_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<SpinButton> + IsA<glib::object::Object>> SpinButtonExt for O {
+impl<O: IsA<SpinButton>> SpinButtonExt for O {
     fn configure<'a, P: Into<Option<&'a Adjustment>>>(&self, adjustment: P, climb_rate: f64, digits: u32) {
         let adjustment = adjustment.into();
         let adjustment = adjustment.to_glib_none();
@@ -264,21 +262,21 @@ impl<O: IsA<SpinButton> + IsA<glib::object::Object>> SpinButtonExt for O {
     fn get_property_climb_rate(&self) -> f64 {
         unsafe {
             let mut value = Value::from_type(<f64 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "climb-rate".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"climb-rate\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_climb_rate(&self, climb_rate: f64) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "climb-rate".to_glib_none().0, Value::from(&climb_rate).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"climb-rate\0".as_ptr() as *const _, Value::from(&climb_rate).to_glib_none().0);
         }
     }
 
     fn connect_property_adjustment_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::adjustment",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::adjustment\0".as_ptr() as *const _,
                 transmute(notify_adjustment_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -286,7 +284,7 @@ impl<O: IsA<SpinButton> + IsA<glib::object::Object>> SpinButtonExt for O {
     fn connect_property_climb_rate_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::climb-rate",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::climb-rate\0".as_ptr() as *const _,
                 transmute(notify_climb_rate_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -294,7 +292,7 @@ impl<O: IsA<SpinButton> + IsA<glib::object::Object>> SpinButtonExt for O {
     fn connect_property_digits_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::digits",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::digits\0".as_ptr() as *const _,
                 transmute(notify_digits_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -302,7 +300,7 @@ impl<O: IsA<SpinButton> + IsA<glib::object::Object>> SpinButtonExt for O {
     fn connect_property_numeric_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::numeric",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::numeric\0".as_ptr() as *const _,
                 transmute(notify_numeric_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -310,7 +308,7 @@ impl<O: IsA<SpinButton> + IsA<glib::object::Object>> SpinButtonExt for O {
     fn connect_property_snap_to_ticks_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::snap-to-ticks",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::snap-to-ticks\0".as_ptr() as *const _,
                 transmute(notify_snap_to_ticks_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -318,7 +316,7 @@ impl<O: IsA<SpinButton> + IsA<glib::object::Object>> SpinButtonExt for O {
     fn connect_property_update_policy_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::update-policy",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::update-policy\0".as_ptr() as *const _,
                 transmute(notify_update_policy_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -326,7 +324,7 @@ impl<O: IsA<SpinButton> + IsA<glib::object::Object>> SpinButtonExt for O {
     fn connect_property_value_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::value",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::value\0".as_ptr() as *const _,
                 transmute(notify_value_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -334,7 +332,7 @@ impl<O: IsA<SpinButton> + IsA<glib::object::Object>> SpinButtonExt for O {
     fn connect_property_wrap_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::wrap",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::wrap\0".as_ptr() as *const _,
                 transmute(notify_wrap_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

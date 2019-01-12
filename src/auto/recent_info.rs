@@ -6,9 +6,8 @@ use Error;
 use ffi;
 use gdk_pixbuf;
 use gio;
+use glib::GString;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use libc;
 use std::mem;
 use std::ptr;
@@ -53,7 +52,7 @@ impl RecentInfo {
         }
     }
 
-    pub fn get_application_info(&self, app_name: &str) -> Option<(String, u32, libc::c_long)> {
+    pub fn get_application_info(&self, app_name: &str) -> Option<(GString, u32, libc::c_long)> {
         unsafe {
             let mut app_exec = ptr::null();
             let mut count = mem::uninitialized();
@@ -63,7 +62,7 @@ impl RecentInfo {
         }
     }
 
-    pub fn get_applications(&self) -> Vec<String> {
+    pub fn get_applications(&self) -> Vec<GString> {
         unsafe {
             let mut length = mem::uninitialized();
             let ret = FromGlibContainer::from_glib_full_num(ffi::gtk_recent_info_get_applications(self.to_glib_none().0, &mut length), length as usize);
@@ -71,13 +70,13 @@ impl RecentInfo {
         }
     }
 
-    pub fn get_description(&self) -> Option<String> {
+    pub fn get_description(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_recent_info_get_description(self.to_glib_none().0))
         }
     }
 
-    pub fn get_display_name(&self) -> Option<String> {
+    pub fn get_display_name(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_recent_info_get_display_name(self.to_glib_none().0))
         }
@@ -89,7 +88,7 @@ impl RecentInfo {
         }
     }
 
-    pub fn get_groups(&self) -> Vec<String> {
+    pub fn get_groups(&self) -> Vec<GString> {
         unsafe {
             let mut length = mem::uninitialized();
             let ret = FromGlibContainer::from_glib_full_num(ffi::gtk_recent_info_get_groups(self.to_glib_none().0, &mut length), length as usize);
@@ -103,7 +102,7 @@ impl RecentInfo {
         }
     }
 
-    pub fn get_mime_type(&self) -> Option<String> {
+    pub fn get_mime_type(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_recent_info_get_mime_type(self.to_glib_none().0))
         }
@@ -121,19 +120,19 @@ impl RecentInfo {
         }
     }
 
-    pub fn get_short_name(&self) -> Option<String> {
+    pub fn get_short_name(&self) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gtk_recent_info_get_short_name(self.to_glib_none().0))
         }
     }
 
-    pub fn get_uri(&self) -> Option<String> {
+    pub fn get_uri(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_recent_info_get_uri(self.to_glib_none().0))
         }
     }
 
-    pub fn get_uri_display(&self) -> Option<String> {
+    pub fn get_uri_display(&self) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gtk_recent_info_get_uri_display(self.to_glib_none().0))
         }
@@ -163,7 +162,7 @@ impl RecentInfo {
         }
     }
 
-    pub fn last_application(&self) -> Option<String> {
+    pub fn last_application(&self) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gtk_recent_info_last_application(self.to_glib_none().0))
         }

@@ -14,10 +14,9 @@ use PrintQuality;
 use Unit;
 use ffi;
 use glib;
+use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use std;
 use std::fmt;
 use std::mem;
@@ -74,20 +73,20 @@ impl Default for PrintSettings {
     }
 }
 
-pub trait PrintSettingsExt {
+pub trait PrintSettingsExt: 'static {
     fn copy(&self) -> Option<PrintSettings>;
 
     //fn foreach<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: /*Unknown conversion*//*Unimplemented*/PrintSettingsFunc, user_data: P);
 
-    fn get(&self, key: &str) -> Option<String>;
+    fn get(&self, key: &str) -> Option<GString>;
 
     fn get_bool(&self, key: &str) -> bool;
 
     fn get_collate(&self) -> bool;
 
-    fn get_default_source(&self) -> Option<String>;
+    fn get_default_source(&self) -> Option<GString>;
 
-    fn get_dither(&self) -> Option<String>;
+    fn get_dither(&self) -> Option<GString>;
 
     fn get_double(&self, key: &str) -> f64;
 
@@ -95,7 +94,7 @@ pub trait PrintSettingsExt {
 
     fn get_duplex(&self) -> PrintDuplex;
 
-    fn get_finishings(&self) -> Option<String>;
+    fn get_finishings(&self) -> Option<GString>;
 
     fn get_int(&self, key: &str) -> i32;
 
@@ -103,7 +102,7 @@ pub trait PrintSettingsExt {
 
     fn get_length(&self, key: &str, unit: Unit) -> f64;
 
-    fn get_media_type(&self) -> Option<String>;
+    fn get_media_type(&self) -> Option<GString>;
 
     fn get_n_copies(&self) -> i32;
 
@@ -113,7 +112,7 @@ pub trait PrintSettingsExt {
 
     fn get_orientation(&self) -> PageOrientation;
 
-    fn get_output_bin(&self) -> Option<String>;
+    fn get_output_bin(&self) -> Option<GString>;
 
     fn get_page_ranges(&self) -> Vec<PageRange>;
 
@@ -127,7 +126,7 @@ pub trait PrintSettingsExt {
 
     fn get_print_pages(&self) -> PrintPages;
 
-    fn get_printer(&self) -> Option<String>;
+    fn get_printer(&self) -> Option<GString>;
 
     fn get_printer_lpi(&self) -> f64;
 
@@ -230,7 +229,7 @@ impl<O: IsA<PrintSettings>> PrintSettingsExt for O {
     //    unsafe { TODO: call ffi::gtk_print_settings_foreach() }
     //}
 
-    fn get(&self, key: &str) -> Option<String> {
+    fn get(&self, key: &str) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_print_settings_get(self.to_glib_none().0, key.to_glib_none().0))
         }
@@ -248,13 +247,13 @@ impl<O: IsA<PrintSettings>> PrintSettingsExt for O {
         }
     }
 
-    fn get_default_source(&self) -> Option<String> {
+    fn get_default_source(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_print_settings_get_default_source(self.to_glib_none().0))
         }
     }
 
-    fn get_dither(&self) -> Option<String> {
+    fn get_dither(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_print_settings_get_dither(self.to_glib_none().0))
         }
@@ -278,7 +277,7 @@ impl<O: IsA<PrintSettings>> PrintSettingsExt for O {
         }
     }
 
-    fn get_finishings(&self) -> Option<String> {
+    fn get_finishings(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_print_settings_get_finishings(self.to_glib_none().0))
         }
@@ -302,7 +301,7 @@ impl<O: IsA<PrintSettings>> PrintSettingsExt for O {
         }
     }
 
-    fn get_media_type(&self) -> Option<String> {
+    fn get_media_type(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_print_settings_get_media_type(self.to_glib_none().0))
         }
@@ -332,7 +331,7 @@ impl<O: IsA<PrintSettings>> PrintSettingsExt for O {
         }
     }
 
-    fn get_output_bin(&self) -> Option<String> {
+    fn get_output_bin(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_print_settings_get_output_bin(self.to_glib_none().0))
         }
@@ -376,7 +375,7 @@ impl<O: IsA<PrintSettings>> PrintSettingsExt for O {
         }
     }
 
-    fn get_printer(&self) -> Option<String> {
+    fn get_printer(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_print_settings_get_printer(self.to_glib_none().0))
         }

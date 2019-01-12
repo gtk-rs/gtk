@@ -9,22 +9,19 @@ use TreePath;
 use ffi;
 use gdk;
 use gdk_ffi;
-use glib;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct CellRendererAccel(Object<ffi::GtkCellRendererAccel, ffi::GtkCellRendererAccelClass>): CellRendererText, CellRenderer;
@@ -49,7 +46,7 @@ impl Default for CellRendererAccel {
     }
 }
 
-pub trait CellRendererAccelExt {
+pub trait CellRendererAccelExt: 'static {
     fn get_property_accel_key(&self) -> u32;
 
     fn set_property_accel_key(&self, accel_key: u32);
@@ -79,67 +76,67 @@ pub trait CellRendererAccelExt {
     fn connect_property_keycode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<CellRendererAccel> + IsA<glib::object::Object>> CellRendererAccelExt for O {
+impl<O: IsA<CellRendererAccel>> CellRendererAccelExt for O {
     fn get_property_accel_key(&self) -> u32 {
         unsafe {
             let mut value = Value::from_type(<u32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "accel-key".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"accel-key\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_accel_key(&self, accel_key: u32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "accel-key".to_glib_none().0, Value::from(&accel_key).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"accel-key\0".as_ptr() as *const _, Value::from(&accel_key).to_glib_none().0);
         }
     }
 
     fn get_property_accel_mode(&self) -> CellRendererAccelMode {
         unsafe {
             let mut value = Value::from_type(<CellRendererAccelMode as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "accel-mode".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"accel-mode\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_accel_mode(&self, accel_mode: CellRendererAccelMode) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "accel-mode".to_glib_none().0, Value::from(&accel_mode).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"accel-mode\0".as_ptr() as *const _, Value::from(&accel_mode).to_glib_none().0);
         }
     }
 
     fn get_property_accel_mods(&self) -> gdk::ModifierType {
         unsafe {
             let mut value = Value::from_type(<gdk::ModifierType as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "accel-mods".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"accel-mods\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_accel_mods(&self, accel_mods: gdk::ModifierType) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "accel-mods".to_glib_none().0, Value::from(&accel_mods).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"accel-mods\0".as_ptr() as *const _, Value::from(&accel_mods).to_glib_none().0);
         }
     }
 
     fn get_property_keycode(&self) -> u32 {
         unsafe {
             let mut value = Value::from_type(<u32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "keycode".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"keycode\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_keycode(&self, keycode: u32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "keycode".to_glib_none().0, Value::from(&keycode).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"keycode\0".as_ptr() as *const _, Value::from(&keycode).to_glib_none().0);
         }
     }
 
     fn connect_accel_cleared<F: Fn(&Self, TreePath) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, TreePath) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "accel-cleared",
+            connect_raw(self.to_glib_none().0 as *mut _, b"accel-cleared\0".as_ptr() as *const _,
                 transmute(accel_cleared_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -147,7 +144,7 @@ impl<O: IsA<CellRendererAccel> + IsA<glib::object::Object>> CellRendererAccelExt
     fn connect_accel_edited<F: Fn(&Self, TreePath, u32, gdk::ModifierType, u32) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, TreePath, u32, gdk::ModifierType, u32) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "accel-edited",
+            connect_raw(self.to_glib_none().0 as *mut _, b"accel-edited\0".as_ptr() as *const _,
                 transmute(accel_edited_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -155,7 +152,7 @@ impl<O: IsA<CellRendererAccel> + IsA<glib::object::Object>> CellRendererAccelExt
     fn connect_property_accel_key_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::accel-key",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::accel-key\0".as_ptr() as *const _,
                 transmute(notify_accel_key_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -163,7 +160,7 @@ impl<O: IsA<CellRendererAccel> + IsA<glib::object::Object>> CellRendererAccelExt
     fn connect_property_accel_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::accel-mode",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::accel-mode\0".as_ptr() as *const _,
                 transmute(notify_accel_mode_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -171,7 +168,7 @@ impl<O: IsA<CellRendererAccel> + IsA<glib::object::Object>> CellRendererAccelExt
     fn connect_property_accel_mods_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::accel-mods",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::accel-mods\0".as_ptr() as *const _,
                 transmute(notify_accel_mods_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -179,7 +176,7 @@ impl<O: IsA<CellRendererAccel> + IsA<glib::object::Object>> CellRendererAccelExt
     fn connect_property_keycode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::keycode",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::keycode\0".as_ptr() as *const _,
                 transmute(notify_keycode_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

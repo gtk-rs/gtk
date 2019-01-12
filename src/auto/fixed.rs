@@ -9,11 +9,7 @@ use ffi;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use std::fmt;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Fixed(Object<ffi::GtkFixed, ffi::GtkFixedClass>): Container, Widget, Buildable;
@@ -38,7 +34,7 @@ impl Default for Fixed {
     }
 }
 
-pub trait FixedExt {
+pub trait FixedExt: 'static {
     fn move_<P: IsA<Widget>>(&self, widget: &P, x: i32, y: i32);
 
     fn put<P: IsA<Widget>>(&self, widget: &P, x: i32, y: i32);

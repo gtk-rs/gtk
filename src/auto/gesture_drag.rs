@@ -8,25 +8,24 @@ use GestureSingle;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use Widget;
 use ffi;
-use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use glib::signal::SignalHandlerId;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
+#[cfg(any(feature = "v3_14", feature = "dox"))]
 use glib_ffi;
-use gobject_ffi;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use libc;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use std::boxed::Box as Box_;
 use std::fmt;
+#[cfg(any(feature = "v3_14", feature = "dox"))]
 use std::mem;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct GestureDrag(Object<ffi::GtkGestureDrag, ffi::GtkGestureDragClass>): GestureSingle, Gesture, EventController;
@@ -46,7 +45,7 @@ impl GestureDrag {
     }
 }
 
-pub trait GestureDragExt {
+pub trait GestureDragExt: 'static {
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_offset(&self) -> Option<(f64, f64)>;
 
@@ -63,7 +62,7 @@ pub trait GestureDragExt {
     fn connect_drag_update<F: Fn(&Self, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<GestureDrag> + IsA<glib::object::Object>> GestureDragExt for O {
+impl<O: IsA<GestureDrag>> GestureDragExt for O {
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_offset(&self) -> Option<(f64, f64)> {
         unsafe {
@@ -88,7 +87,7 @@ impl<O: IsA<GestureDrag> + IsA<glib::object::Object>> GestureDragExt for O {
     fn connect_drag_begin<F: Fn(&Self, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, f64, f64) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "drag-begin",
+            connect_raw(self.to_glib_none().0 as *mut _, b"drag-begin\0".as_ptr() as *const _,
                 transmute(drag_begin_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -97,7 +96,7 @@ impl<O: IsA<GestureDrag> + IsA<glib::object::Object>> GestureDragExt for O {
     fn connect_drag_end<F: Fn(&Self, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, f64, f64) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "drag-end",
+            connect_raw(self.to_glib_none().0 as *mut _, b"drag-end\0".as_ptr() as *const _,
                 transmute(drag_end_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -106,7 +105,7 @@ impl<O: IsA<GestureDrag> + IsA<glib::object::Object>> GestureDragExt for O {
     fn connect_drag_update<F: Fn(&Self, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, f64, f64) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "drag-update",
+            connect_raw(self.to_glib_none().0 as *mut _, b"drag-update\0".as_ptr() as *const _,
                 transmute(drag_update_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

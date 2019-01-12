@@ -13,20 +13,20 @@ use ffi;
 use gdk;
 use gio;
 use glib;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
+use glib::object::ObjectExt;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Menu(Object<ffi::GtkMenu, ffi::GtkMenuClass>): MenuShell, Container, Widget, Buildable;
@@ -65,7 +65,7 @@ impl Default for Menu {
     }
 }
 
-pub trait GtkMenuExt {
+pub trait GtkMenuExt: 'static {
     fn attach<P: IsA<Widget>>(&self, child: &P, left_attach: u32, right_attach: u32, top_attach: u32, bottom_attach: u32);
 
     //fn attach_to_widget<'a, P: IsA<Widget>, Q: Into<Option<&'a /*Unimplemented*/MenuDetachFunc>>>(&self, attach_widget: &P, detacher: Q);
@@ -74,7 +74,7 @@ pub trait GtkMenuExt {
 
     fn get_accel_group(&self) -> Option<AccelGroup>;
 
-    fn get_accel_path(&self) -> Option<String>;
+    fn get_accel_path(&self) -> Option<GString>;
 
     fn get_active(&self) -> Option<Widget>;
 
@@ -88,7 +88,7 @@ pub trait GtkMenuExt {
     fn get_tearoff_state(&self) -> bool;
 
     #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_title(&self) -> Option<String>;
+    fn get_title(&self) -> Option<GString>;
 
     #[cfg(any(feature = "v3_22", feature = "dox"))]
     fn place_on_monitor(&self, monitor: &gdk::Monitor);
@@ -138,7 +138,7 @@ pub trait GtkMenuExt {
     #[cfg(any(feature = "v3_22", feature = "dox"))]
     fn set_property_anchor_hints(&self, anchor_hints: gdk::AnchorHints);
 
-    fn set_property_attach_widget<P: IsA<Widget> + IsA<glib::object::Object> + glib::value::SetValueOptional>(&self, attach_widget: Option<&P>);
+    fn set_property_attach_widget<P: IsA<Widget> + glib::value::SetValueOptional>(&self, attach_widget: Option<&P>);
 
     #[cfg(any(feature = "v3_22", feature = "dox"))]
     fn get_property_menu_type_hint(&self) -> gdk::WindowTypeHint;
@@ -159,7 +159,7 @@ pub trait GtkMenuExt {
     fn set_property_rect_anchor_dy(&self, rect_anchor_dy: i32);
 
     #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_tearoff_title(&self) -> Option<String>;
+    fn get_property_tearoff_title(&self) -> Option<GString>;
 
     #[cfg_attr(feature = "v3_10", deprecated)]
     fn set_property_tearoff_title<'a, P: Into<Option<&'a str>>>(&self, tearoff_title: P);
@@ -218,7 +218,7 @@ pub trait GtkMenuExt {
     fn connect_property_tearoff_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Menu> + IsA<Container> + IsA<glib::object::Object> + glib::object::ObjectExt> GtkMenuExt for O {
+impl<O: IsA<Menu>> GtkMenuExt for O {
     fn attach<P: IsA<Widget>>(&self, child: &P, left_attach: u32, right_attach: u32, top_attach: u32, bottom_attach: u32) {
         unsafe {
             ffi::gtk_menu_attach(self.to_glib_none().0, child.to_glib_none().0, left_attach, right_attach, top_attach, bottom_attach);
@@ -241,7 +241,7 @@ impl<O: IsA<Menu> + IsA<Container> + IsA<glib::object::Object> + glib::object::O
         }
     }
 
-    fn get_accel_path(&self) -> Option<String> {
+    fn get_accel_path(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_menu_get_accel_path(self.to_glib_none().0))
         }
@@ -277,7 +277,7 @@ impl<O: IsA<Menu> + IsA<Container> + IsA<glib::object::Object> + glib::object::O
         }
     }
 
-    fn get_title(&self) -> Option<String> {
+    fn get_title(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_menu_get_title(self.to_glib_none().0))
         }
@@ -401,7 +401,7 @@ impl<O: IsA<Menu> + IsA<Container> + IsA<glib::object::Object> + glib::object::O
     fn get_property_anchor_hints(&self) -> gdk::AnchorHints {
         unsafe {
             let mut value = Value::from_type(<gdk::AnchorHints as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "anchor-hints".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"anchor-hints\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -409,13 +409,13 @@ impl<O: IsA<Menu> + IsA<Container> + IsA<glib::object::Object> + glib::object::O
     #[cfg(any(feature = "v3_22", feature = "dox"))]
     fn set_property_anchor_hints(&self, anchor_hints: gdk::AnchorHints) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "anchor-hints".to_glib_none().0, Value::from(&anchor_hints).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"anchor-hints\0".as_ptr() as *const _, Value::from(&anchor_hints).to_glib_none().0);
         }
     }
 
-    fn set_property_attach_widget<P: IsA<Widget> + IsA<glib::object::Object> + glib::value::SetValueOptional>(&self, attach_widget: Option<&P>) {
+    fn set_property_attach_widget<P: IsA<Widget> + glib::value::SetValueOptional>(&self, attach_widget: Option<&P>) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "attach-widget".to_glib_none().0, Value::from(attach_widget).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"attach-widget\0".as_ptr() as *const _, Value::from(attach_widget).to_glib_none().0);
         }
     }
 
@@ -423,7 +423,7 @@ impl<O: IsA<Menu> + IsA<Container> + IsA<glib::object::Object> + glib::object::O
     fn get_property_menu_type_hint(&self) -> gdk::WindowTypeHint {
         unsafe {
             let mut value = Value::from_type(<gdk::WindowTypeHint as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "menu-type-hint".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"menu-type-hint\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -431,7 +431,7 @@ impl<O: IsA<Menu> + IsA<Container> + IsA<glib::object::Object> + glib::object::O
     #[cfg(any(feature = "v3_22", feature = "dox"))]
     fn set_property_menu_type_hint(&self, menu_type_hint: gdk::WindowTypeHint) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "menu-type-hint".to_glib_none().0, Value::from(&menu_type_hint).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"menu-type-hint\0".as_ptr() as *const _, Value::from(&menu_type_hint).to_glib_none().0);
         }
     }
 
@@ -439,7 +439,7 @@ impl<O: IsA<Menu> + IsA<Container> + IsA<glib::object::Object> + glib::object::O
     fn get_property_rect_anchor_dx(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "rect-anchor-dx".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"rect-anchor-dx\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -447,7 +447,7 @@ impl<O: IsA<Menu> + IsA<Container> + IsA<glib::object::Object> + glib::object::O
     #[cfg(any(feature = "v3_22", feature = "dox"))]
     fn set_property_rect_anchor_dx(&self, rect_anchor_dx: i32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "rect-anchor-dx".to_glib_none().0, Value::from(&rect_anchor_dx).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"rect-anchor-dx\0".as_ptr() as *const _, Value::from(&rect_anchor_dx).to_glib_none().0);
         }
     }
 
@@ -455,7 +455,7 @@ impl<O: IsA<Menu> + IsA<Container> + IsA<glib::object::Object> + glib::object::O
     fn get_property_rect_anchor_dy(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "rect-anchor-dy".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"rect-anchor-dy\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -463,14 +463,14 @@ impl<O: IsA<Menu> + IsA<Container> + IsA<glib::object::Object> + glib::object::O
     #[cfg(any(feature = "v3_22", feature = "dox"))]
     fn set_property_rect_anchor_dy(&self, rect_anchor_dy: i32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "rect-anchor-dy".to_glib_none().0, Value::from(&rect_anchor_dy).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"rect-anchor-dy\0".as_ptr() as *const _, Value::from(&rect_anchor_dy).to_glib_none().0);
         }
     }
 
-    fn get_property_tearoff_title(&self) -> Option<String> {
+    fn get_property_tearoff_title(&self) -> Option<GString> {
         unsafe {
-            let mut value = Value::from_type(<String as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "tearoff-title".to_glib_none().0, value.to_glib_none_mut().0);
+            let mut value = Value::from_type(<GString as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"tearoff-title\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -478,76 +478,76 @@ impl<O: IsA<Menu> + IsA<Container> + IsA<glib::object::Object> + glib::object::O
     fn set_property_tearoff_title<'a, P: Into<Option<&'a str>>>(&self, tearoff_title: P) {
         let tearoff_title = tearoff_title.into();
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "tearoff-title".to_glib_none().0, Value::from(tearoff_title).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"tearoff-title\0".as_ptr() as *const _, Value::from(tearoff_title).to_glib_none().0);
         }
     }
 
     fn get_item_bottom_attach<T: IsA<MenuItem> + IsA<Widget>>(&self, item: &T) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            ffi::gtk_container_child_get_property(self.to_glib_none().0, item.to_glib_none().0, "bottom-attach".to_glib_none().0, value.to_glib_none_mut().0);
+            ffi::gtk_container_child_get_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"bottom-attach\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_item_bottom_attach<T: IsA<MenuItem> + IsA<Widget>>(&self, item: &T, bottom_attach: i32) {
         unsafe {
-            ffi::gtk_container_child_set_property(self.to_glib_none().0, item.to_glib_none().0, "bottom-attach".to_glib_none().0, Value::from(&bottom_attach).to_glib_none().0);
+            ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"bottom-attach\0".as_ptr() as *const _, Value::from(&bottom_attach).to_glib_none().0);
         }
     }
 
     fn get_item_left_attach<T: IsA<MenuItem> + IsA<Widget>>(&self, item: &T) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            ffi::gtk_container_child_get_property(self.to_glib_none().0, item.to_glib_none().0, "left-attach".to_glib_none().0, value.to_glib_none_mut().0);
+            ffi::gtk_container_child_get_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"left-attach\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_item_left_attach<T: IsA<MenuItem> + IsA<Widget>>(&self, item: &T, left_attach: i32) {
         unsafe {
-            ffi::gtk_container_child_set_property(self.to_glib_none().0, item.to_glib_none().0, "left-attach".to_glib_none().0, Value::from(&left_attach).to_glib_none().0);
+            ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"left-attach\0".as_ptr() as *const _, Value::from(&left_attach).to_glib_none().0);
         }
     }
 
     fn get_item_right_attach<T: IsA<MenuItem> + IsA<Widget>>(&self, item: &T) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            ffi::gtk_container_child_get_property(self.to_glib_none().0, item.to_glib_none().0, "right-attach".to_glib_none().0, value.to_glib_none_mut().0);
+            ffi::gtk_container_child_get_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"right-attach\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_item_right_attach<T: IsA<MenuItem> + IsA<Widget>>(&self, item: &T, right_attach: i32) {
         unsafe {
-            ffi::gtk_container_child_set_property(self.to_glib_none().0, item.to_glib_none().0, "right-attach".to_glib_none().0, Value::from(&right_attach).to_glib_none().0);
+            ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"right-attach\0".as_ptr() as *const _, Value::from(&right_attach).to_glib_none().0);
         }
     }
 
     fn get_item_top_attach<T: IsA<MenuItem> + IsA<Widget>>(&self, item: &T) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            ffi::gtk_container_child_get_property(self.to_glib_none().0, item.to_glib_none().0, "top-attach".to_glib_none().0, value.to_glib_none_mut().0);
+            ffi::gtk_container_child_get_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"top-attach\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_item_top_attach<T: IsA<MenuItem> + IsA<Widget>>(&self, item: &T, top_attach: i32) {
         unsafe {
-            ffi::gtk_container_child_set_property(self.to_glib_none().0, item.to_glib_none().0, "top-attach".to_glib_none().0, Value::from(&top_attach).to_glib_none().0);
+            ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"top-attach\0".as_ptr() as *const _, Value::from(&top_attach).to_glib_none().0);
         }
     }
 
     fn connect_move_scroll<F: Fn(&Self, ScrollType) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, ScrollType) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "move-scroll",
+            connect_raw(self.to_glib_none().0 as *mut _, b"move-scroll\0".as_ptr() as *const _,
                 transmute(move_scroll_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_move_scroll(&self, scroll_type: ScrollType) {
-        let _ = self.emit("move-scroll", &[&scroll_type]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("move-scroll", &[&scroll_type]).unwrap() };
     }
 
     //#[cfg(any(feature = "v3_22", feature = "dox"))]
@@ -559,7 +559,7 @@ impl<O: IsA<Menu> + IsA<Container> + IsA<glib::object::Object> + glib::object::O
     fn connect_property_accel_group_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::accel-group",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::accel-group\0".as_ptr() as *const _,
                 transmute(notify_accel_group_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -567,7 +567,7 @@ impl<O: IsA<Menu> + IsA<Container> + IsA<glib::object::Object> + glib::object::O
     fn connect_property_accel_path_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::accel-path",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::accel-path\0".as_ptr() as *const _,
                 transmute(notify_accel_path_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -575,7 +575,7 @@ impl<O: IsA<Menu> + IsA<Container> + IsA<glib::object::Object> + glib::object::O
     fn connect_property_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::active",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::active\0".as_ptr() as *const _,
                 transmute(notify_active_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -584,7 +584,7 @@ impl<O: IsA<Menu> + IsA<Container> + IsA<glib::object::Object> + glib::object::O
     fn connect_property_anchor_hints_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::anchor-hints",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::anchor-hints\0".as_ptr() as *const _,
                 transmute(notify_anchor_hints_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -592,7 +592,7 @@ impl<O: IsA<Menu> + IsA<Container> + IsA<glib::object::Object> + glib::object::O
     fn connect_property_attach_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::attach-widget",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::attach-widget\0".as_ptr() as *const _,
                 transmute(notify_attach_widget_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -601,7 +601,7 @@ impl<O: IsA<Menu> + IsA<Container> + IsA<glib::object::Object> + glib::object::O
     fn connect_property_menu_type_hint_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::menu-type-hint",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::menu-type-hint\0".as_ptr() as *const _,
                 transmute(notify_menu_type_hint_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -609,7 +609,7 @@ impl<O: IsA<Menu> + IsA<Container> + IsA<glib::object::Object> + glib::object::O
     fn connect_property_monitor_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::monitor",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::monitor\0".as_ptr() as *const _,
                 transmute(notify_monitor_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -618,7 +618,7 @@ impl<O: IsA<Menu> + IsA<Container> + IsA<glib::object::Object> + glib::object::O
     fn connect_property_rect_anchor_dx_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::rect-anchor-dx",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::rect-anchor-dx\0".as_ptr() as *const _,
                 transmute(notify_rect_anchor_dx_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -627,7 +627,7 @@ impl<O: IsA<Menu> + IsA<Container> + IsA<glib::object::Object> + glib::object::O
     fn connect_property_rect_anchor_dy_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::rect-anchor-dy",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::rect-anchor-dy\0".as_ptr() as *const _,
                 transmute(notify_rect_anchor_dy_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -635,7 +635,7 @@ impl<O: IsA<Menu> + IsA<Container> + IsA<glib::object::Object> + glib::object::O
     fn connect_property_reserve_toggle_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::reserve-toggle-size",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::reserve-toggle-size\0".as_ptr() as *const _,
                 transmute(notify_reserve_toggle_size_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -643,7 +643,7 @@ impl<O: IsA<Menu> + IsA<Container> + IsA<glib::object::Object> + glib::object::O
     fn connect_property_tearoff_state_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::tearoff-state",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::tearoff-state\0".as_ptr() as *const _,
                 transmute(notify_tearoff_state_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -651,7 +651,7 @@ impl<O: IsA<Menu> + IsA<Container> + IsA<glib::object::Object> + glib::object::O
     fn connect_property_tearoff_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::tearoff-title",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::tearoff-title\0".as_ptr() as *const _,
                 transmute(notify_tearoff_title_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

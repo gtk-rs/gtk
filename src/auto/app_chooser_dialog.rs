@@ -12,21 +12,19 @@ use Widget;
 use Window;
 use ffi;
 use gio;
-use glib;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct AppChooserDialog(Object<ffi::GtkAppChooserDialog, ffi::GtkAppChooserDialogClass>): Dialog, Window, Bin, Container, Widget, Buildable, AppChooser;
@@ -56,8 +54,8 @@ impl AppChooserDialog {
     }
 }
 
-pub trait AppChooserDialogExt {
-    fn get_heading(&self) -> Option<String>;
+pub trait AppChooserDialogExt: 'static {
+    fn get_heading(&self) -> Option<GString>;
 
     fn get_widget(&self) -> Widget;
 
@@ -68,8 +66,8 @@ pub trait AppChooserDialogExt {
     fn connect_property_heading_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<AppChooserDialog> + IsA<glib::object::Object>> AppChooserDialogExt for O {
-    fn get_heading(&self) -> Option<String> {
+impl<O: IsA<AppChooserDialog>> AppChooserDialogExt for O {
+    fn get_heading(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_app_chooser_dialog_get_heading(self.to_glib_none().0))
         }
@@ -90,7 +88,7 @@ impl<O: IsA<AppChooserDialog> + IsA<glib::object::Object>> AppChooserDialogExt f
     fn get_property_gfile(&self) -> Option<gio::File> {
         unsafe {
             let mut value = Value::from_type(<gio::File as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "gfile".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gfile\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -98,7 +96,7 @@ impl<O: IsA<AppChooserDialog> + IsA<glib::object::Object>> AppChooserDialogExt f
     fn connect_property_heading_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::heading",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::heading\0".as_ptr() as *const _,
                 transmute(notify_heading_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

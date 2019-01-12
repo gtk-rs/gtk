@@ -14,15 +14,13 @@ use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Container(Object<ffi::GtkContainer, ffi::GtkContainerClass>): Widget, Buildable;
@@ -32,7 +30,7 @@ glib_wrapper! {
     }
 }
 
-pub trait ContainerExt {
+pub trait ContainerExt: 'static {
     fn add<P: IsA<Widget>>(&self, widget: &P);
 
     //fn add_with_properties<P: IsA<Widget>>(&self, widget: &P, first_prop_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
@@ -100,7 +98,7 @@ pub trait ContainerExt {
 
     fn unset_focus_chain(&self);
 
-    fn set_property_child<P: IsA<Widget> + IsA<glib::object::Object> + glib::value::SetValueOptional>(&self, child: Option<&P>);
+    fn set_property_child<P: IsA<Widget> + glib::value::SetValueOptional>(&self, child: Option<&P>);
 
     fn connect_add<F: Fn(&Self, &Widget) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -117,7 +115,7 @@ pub trait ContainerExt {
     fn connect_property_resize_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Container> + IsA<glib::object::Object>> ContainerExt for O {
+impl<O: IsA<Container>> ContainerExt for O {
     fn add<P: IsA<Widget>>(&self, widget: &P) {
         unsafe {
             ffi::gtk_container_add(self.to_glib_none().0, widget.to_glib_none().0);
@@ -289,16 +287,16 @@ impl<O: IsA<Container> + IsA<glib::object::Object>> ContainerExt for O {
         }
     }
 
-    fn set_property_child<P: IsA<Widget> + IsA<glib::object::Object> + glib::value::SetValueOptional>(&self, child: Option<&P>) {
+    fn set_property_child<P: IsA<Widget> + glib::value::SetValueOptional>(&self, child: Option<&P>) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "child".to_glib_none().0, Value::from(child).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"child\0".as_ptr() as *const _, Value::from(child).to_glib_none().0);
         }
     }
 
     fn connect_add<F: Fn(&Self, &Widget) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Widget) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "add",
+            connect_raw(self.to_glib_none().0 as *mut _, b"add\0".as_ptr() as *const _,
                 transmute(add_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -306,7 +304,7 @@ impl<O: IsA<Container> + IsA<glib::object::Object>> ContainerExt for O {
     fn connect_check_resize<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "check-resize",
+            connect_raw(self.to_glib_none().0 as *mut _, b"check-resize\0".as_ptr() as *const _,
                 transmute(check_resize_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -314,7 +312,7 @@ impl<O: IsA<Container> + IsA<glib::object::Object>> ContainerExt for O {
     fn connect_remove<F: Fn(&Self, &Widget) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Widget) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "remove",
+            connect_raw(self.to_glib_none().0 as *mut _, b"remove\0".as_ptr() as *const _,
                 transmute(remove_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -322,7 +320,7 @@ impl<O: IsA<Container> + IsA<glib::object::Object>> ContainerExt for O {
     fn connect_set_focus_child<F: Fn(&Self, &Widget) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &Widget) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "set-focus-child",
+            connect_raw(self.to_glib_none().0 as *mut _, b"set-focus-child\0".as_ptr() as *const _,
                 transmute(set_focus_child_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -330,7 +328,7 @@ impl<O: IsA<Container> + IsA<glib::object::Object>> ContainerExt for O {
     fn connect_property_border_width_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::border-width",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::border-width\0".as_ptr() as *const _,
                 transmute(notify_border_width_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -338,7 +336,7 @@ impl<O: IsA<Container> + IsA<glib::object::Object>> ContainerExt for O {
     fn connect_property_child_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::child",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::child\0".as_ptr() as *const _,
                 transmute(notify_child_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -346,7 +344,7 @@ impl<O: IsA<Container> + IsA<glib::object::Object>> ContainerExt for O {
     fn connect_property_resize_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::resize-mode",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::resize-mode\0".as_ptr() as *const _,
                 transmute(notify_resize_mode_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

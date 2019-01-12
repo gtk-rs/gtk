@@ -9,20 +9,17 @@ use Button;
 use Container;
 use Widget;
 use ffi;
-use glib;
+use glib::GString;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use signal::Inhibit;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct LinkButton(Object<ffi::GtkLinkButton, ffi::GtkLinkButtonClass>): Button, Bin, Container, Widget, Buildable, Actionable;
@@ -50,8 +47,8 @@ impl LinkButton {
     }
 }
 
-pub trait LinkButtonExt {
-    fn get_uri(&self) -> Option<String>;
+pub trait LinkButtonExt: 'static {
+    fn get_uri(&self) -> Option<GString>;
 
     fn get_visited(&self) -> bool;
 
@@ -66,8 +63,8 @@ pub trait LinkButtonExt {
     fn connect_property_visited_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<LinkButton> + IsA<glib::object::Object>> LinkButtonExt for O {
-    fn get_uri(&self) -> Option<String> {
+impl<O: IsA<LinkButton>> LinkButtonExt for O {
+    fn get_uri(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_link_button_get_uri(self.to_glib_none().0))
         }
@@ -94,7 +91,7 @@ impl<O: IsA<LinkButton> + IsA<glib::object::Object>> LinkButtonExt for O {
     fn connect_activate_link<F: Fn(&Self) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "activate-link",
+            connect_raw(self.to_glib_none().0 as *mut _, b"activate-link\0".as_ptr() as *const _,
                 transmute(activate_link_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -102,7 +99,7 @@ impl<O: IsA<LinkButton> + IsA<glib::object::Object>> LinkButtonExt for O {
     fn connect_property_uri_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::uri",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::uri\0".as_ptr() as *const _,
                 transmute(notify_uri_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -110,7 +107,7 @@ impl<O: IsA<LinkButton> + IsA<glib::object::Object>> LinkButtonExt for O {
     fn connect_property_visited_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::visited",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::visited\0".as_ptr() as *const _,
                 transmute(notify_visited_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

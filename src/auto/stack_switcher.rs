@@ -9,21 +9,18 @@ use Orientable;
 use Stack;
 use Widget;
 use ffi;
-use glib;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct StackSwitcher(Object<ffi::GtkStackSwitcher, ffi::GtkStackSwitcherClass>): Box, Container, Widget, Buildable, Orientable;
@@ -50,7 +47,7 @@ impl Default for StackSwitcher {
     }
 }
 
-pub trait StackSwitcherExt {
+pub trait StackSwitcherExt: 'static {
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_stack(&self) -> Option<Stack>;
 
@@ -73,7 +70,7 @@ pub trait StackSwitcherExt {
     fn connect_property_stack_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<StackSwitcher> + IsA<glib::object::Object>> StackSwitcherExt for O {
+impl<O: IsA<StackSwitcher>> StackSwitcherExt for O {
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_stack(&self) -> Option<Stack> {
         unsafe {
@@ -94,7 +91,7 @@ impl<O: IsA<StackSwitcher> + IsA<glib::object::Object>> StackSwitcherExt for O {
     fn get_property_icon_size(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "icon-size".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"icon-size\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -102,21 +99,21 @@ impl<O: IsA<StackSwitcher> + IsA<glib::object::Object>> StackSwitcherExt for O {
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn set_property_icon_size(&self, icon_size: i32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "icon-size".to_glib_none().0, Value::from(&icon_size).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"icon-size\0".as_ptr() as *const _, Value::from(&icon_size).to_glib_none().0);
         }
     }
 
     fn get_property_stack(&self) -> Option<Stack> {
         unsafe {
             let mut value = Value::from_type(<Stack as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "stack".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"stack\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
 
     fn set_property_stack(&self, stack: Option<&Stack>) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "stack".to_glib_none().0, Value::from(stack).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"stack\0".as_ptr() as *const _, Value::from(stack).to_glib_none().0);
         }
     }
 
@@ -124,7 +121,7 @@ impl<O: IsA<StackSwitcher> + IsA<glib::object::Object>> StackSwitcherExt for O {
     fn connect_property_icon_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::icon-size",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::icon-size\0".as_ptr() as *const _,
                 transmute(notify_icon_size_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -132,7 +129,7 @@ impl<O: IsA<StackSwitcher> + IsA<glib::object::Object>> StackSwitcherExt for O {
     fn connect_property_stack_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::stack",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::stack\0".as_ptr() as *const _,
                 transmute(notify_stack_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

@@ -25,8 +25,9 @@ use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
+use glib::object::ObjectExt;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
@@ -68,7 +69,7 @@ impl Default for TreeView {
     }
 }
 
-pub trait TreeViewExt {
+pub trait TreeViewExt: 'static {
     fn append_column(&self, column: &TreeViewColumn) -> i32;
 
     fn collapse_all(&self);
@@ -352,7 +353,7 @@ pub trait TreeViewExt {
     fn connect_property_ubuntu_almost_fixed_height_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<TreeView> + IsA<glib::object::Object> + glib::object::ObjectExt> TreeViewExt for O {
+impl<O: IsA<TreeView>> TreeViewExt for O {
     fn append_column(&self, column: &TreeViewColumn) -> i32 {
         unsafe {
             ffi::gtk_tree_view_append_column(self.to_glib_none().0, column.to_glib_none().0)
@@ -967,27 +968,27 @@ impl<O: IsA<TreeView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tre
     fn get_property_enable_grid_lines(&self) -> TreeViewGridLines {
         unsafe {
             let mut value = Value::from_type(<TreeViewGridLines as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "enable-grid-lines".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"enable-grid-lines\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_enable_grid_lines(&self, enable_grid_lines: TreeViewGridLines) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "enable-grid-lines".to_glib_none().0, Value::from(&enable_grid_lines).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"enable-grid-lines\0".as_ptr() as *const _, Value::from(&enable_grid_lines).to_glib_none().0);
         }
     }
 
     fn set_property_ubuntu_almost_fixed_height_mode(&self, ubuntu_almost_fixed_height_mode: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "ubuntu-almost-fixed-height-mode".to_glib_none().0, Value::from(&ubuntu_almost_fixed_height_mode).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"ubuntu-almost-fixed-height-mode\0".as_ptr() as *const _, Value::from(&ubuntu_almost_fixed_height_mode).to_glib_none().0);
         }
     }
 
     fn connect_columns_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "columns-changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"columns-changed\0".as_ptr() as *const _,
                 transmute(columns_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -995,7 +996,7 @@ impl<O: IsA<TreeView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tre
     fn connect_cursor_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "cursor-changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"cursor-changed\0".as_ptr() as *const _,
                 transmute(cursor_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1003,45 +1004,45 @@ impl<O: IsA<TreeView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tre
     fn connect_expand_collapse_cursor_row<F: Fn(&Self, bool, bool, bool) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, bool, bool, bool) -> bool + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "expand-collapse-cursor-row",
+            connect_raw(self.to_glib_none().0 as *mut _, b"expand-collapse-cursor-row\0".as_ptr() as *const _,
                 transmute(expand_collapse_cursor_row_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_expand_collapse_cursor_row(&self, object: bool, p0: bool, p1: bool) -> bool {
-        let res = self.emit("expand-collapse-cursor-row", &[&object, &p0, &p1]).unwrap();
+        let res = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("expand-collapse-cursor-row", &[&object, &p0, &p1]).unwrap() };
         res.unwrap().get().unwrap()
     }
 
     fn connect_move_cursor<F: Fn(&Self, MovementStep, i32) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, MovementStep, i32) -> bool + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "move-cursor",
+            connect_raw(self.to_glib_none().0 as *mut _, b"move-cursor\0".as_ptr() as *const _,
                 transmute(move_cursor_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_move_cursor(&self, step: MovementStep, direction: i32) -> bool {
-        let res = self.emit("move-cursor", &[&step, &direction]).unwrap();
+        let res = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("move-cursor", &[&step, &direction]).unwrap() };
         res.unwrap().get().unwrap()
     }
 
     fn connect_row_activated<F: Fn(&Self, &TreePath, &TreeViewColumn) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &TreePath, &TreeViewColumn) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "row-activated",
+            connect_raw(self.to_glib_none().0 as *mut _, b"row-activated\0".as_ptr() as *const _,
                 transmute(row_activated_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_row_activated(&self, path: &TreePath, column: &TreeViewColumn) {
-        let _ = self.emit("row-activated", &[&path, &column]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("row-activated", &[&path, &column]).unwrap() };
     }
 
     fn connect_row_collapsed<F: Fn(&Self, &TreeIter, &TreePath) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &TreeIter, &TreePath) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "row-collapsed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"row-collapsed\0".as_ptr() as *const _,
                 transmute(row_collapsed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1049,7 +1050,7 @@ impl<O: IsA<TreeView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tre
     fn connect_row_expanded<F: Fn(&Self, &TreeIter, &TreePath) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &TreeIter, &TreePath) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "row-expanded",
+            connect_raw(self.to_glib_none().0 as *mut _, b"row-expanded\0".as_ptr() as *const _,
                 transmute(row_expanded_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1057,59 +1058,59 @@ impl<O: IsA<TreeView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tre
     fn connect_select_all<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) -> bool + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "select-all",
+            connect_raw(self.to_glib_none().0 as *mut _, b"select-all\0".as_ptr() as *const _,
                 transmute(select_all_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_select_all(&self) -> bool {
-        let res = self.emit("select-all", &[]).unwrap();
+        let res = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("select-all", &[]).unwrap() };
         res.unwrap().get().unwrap()
     }
 
     fn connect_select_cursor_parent<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) -> bool + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "select-cursor-parent",
+            connect_raw(self.to_glib_none().0 as *mut _, b"select-cursor-parent\0".as_ptr() as *const _,
                 transmute(select_cursor_parent_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_select_cursor_parent(&self) -> bool {
-        let res = self.emit("select-cursor-parent", &[]).unwrap();
+        let res = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("select-cursor-parent", &[]).unwrap() };
         res.unwrap().get().unwrap()
     }
 
     fn connect_select_cursor_row<F: Fn(&Self, bool) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, bool) -> bool + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "select-cursor-row",
+            connect_raw(self.to_glib_none().0 as *mut _, b"select-cursor-row\0".as_ptr() as *const _,
                 transmute(select_cursor_row_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_select_cursor_row(&self, object: bool) -> bool {
-        let res = self.emit("select-cursor-row", &[&object]).unwrap();
+        let res = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("select-cursor-row", &[&object]).unwrap() };
         res.unwrap().get().unwrap()
     }
 
     fn connect_start_interactive_search<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) -> bool + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "start-interactive-search",
+            connect_raw(self.to_glib_none().0 as *mut _, b"start-interactive-search\0".as_ptr() as *const _,
                 transmute(start_interactive_search_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_start_interactive_search(&self) -> bool {
-        let res = self.emit("start-interactive-search", &[]).unwrap();
+        let res = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("start-interactive-search", &[]).unwrap() };
         res.unwrap().get().unwrap()
     }
 
     fn connect_test_collapse_row<F: Fn(&Self, &TreeIter, &TreePath) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &TreeIter, &TreePath) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "test-collapse-row",
+            connect_raw(self.to_glib_none().0 as *mut _, b"test-collapse-row\0".as_ptr() as *const _,
                 transmute(test_collapse_row_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1117,7 +1118,7 @@ impl<O: IsA<TreeView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tre
     fn connect_test_expand_row<F: Fn(&Self, &TreeIter, &TreePath) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &TreeIter, &TreePath) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "test-expand-row",
+            connect_raw(self.to_glib_none().0 as *mut _, b"test-expand-row\0".as_ptr() as *const _,
                 transmute(test_expand_row_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1125,26 +1126,26 @@ impl<O: IsA<TreeView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tre
     fn connect_toggle_cursor_row<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) -> bool + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "toggle-cursor-row",
+            connect_raw(self.to_glib_none().0 as *mut _, b"toggle-cursor-row\0".as_ptr() as *const _,
                 transmute(toggle_cursor_row_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_toggle_cursor_row(&self) -> bool {
-        let res = self.emit("toggle-cursor-row", &[]).unwrap();
+        let res = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("toggle-cursor-row", &[]).unwrap() };
         res.unwrap().get().unwrap()
     }
 
     fn connect_unselect_all<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) -> bool + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "unselect-all",
+            connect_raw(self.to_glib_none().0 as *mut _, b"unselect-all\0".as_ptr() as *const _,
                 transmute(unselect_all_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     fn emit_unselect_all(&self) -> bool {
-        let res = self.emit("unselect-all", &[]).unwrap();
+        let res = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("unselect-all", &[]).unwrap() };
         res.unwrap().get().unwrap()
     }
 
@@ -1152,7 +1153,7 @@ impl<O: IsA<TreeView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tre
     fn connect_property_activate_on_single_click_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::activate-on-single-click",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::activate-on-single-click\0".as_ptr() as *const _,
                 transmute(notify_activate_on_single_click_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1160,7 +1161,7 @@ impl<O: IsA<TreeView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tre
     fn connect_property_enable_grid_lines_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::enable-grid-lines",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::enable-grid-lines\0".as_ptr() as *const _,
                 transmute(notify_enable_grid_lines_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1168,7 +1169,7 @@ impl<O: IsA<TreeView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tre
     fn connect_property_enable_search_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::enable-search",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::enable-search\0".as_ptr() as *const _,
                 transmute(notify_enable_search_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1176,7 +1177,7 @@ impl<O: IsA<TreeView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tre
     fn connect_property_enable_tree_lines_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::enable-tree-lines",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::enable-tree-lines\0".as_ptr() as *const _,
                 transmute(notify_enable_tree_lines_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1184,7 +1185,7 @@ impl<O: IsA<TreeView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tre
     fn connect_property_expander_column_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::expander-column",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::expander-column\0".as_ptr() as *const _,
                 transmute(notify_expander_column_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1192,7 +1193,7 @@ impl<O: IsA<TreeView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tre
     fn connect_property_fixed_height_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::fixed-height-mode",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::fixed-height-mode\0".as_ptr() as *const _,
                 transmute(notify_fixed_height_mode_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1200,7 +1201,7 @@ impl<O: IsA<TreeView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tre
     fn connect_property_headers_clickable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::headers-clickable",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::headers-clickable\0".as_ptr() as *const _,
                 transmute(notify_headers_clickable_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1208,7 +1209,7 @@ impl<O: IsA<TreeView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tre
     fn connect_property_headers_visible_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::headers-visible",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::headers-visible\0".as_ptr() as *const _,
                 transmute(notify_headers_visible_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1216,7 +1217,7 @@ impl<O: IsA<TreeView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tre
     fn connect_property_hover_expand_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::hover-expand",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::hover-expand\0".as_ptr() as *const _,
                 transmute(notify_hover_expand_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1224,7 +1225,7 @@ impl<O: IsA<TreeView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tre
     fn connect_property_hover_selection_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::hover-selection",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::hover-selection\0".as_ptr() as *const _,
                 transmute(notify_hover_selection_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1232,7 +1233,7 @@ impl<O: IsA<TreeView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tre
     fn connect_property_level_indentation_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::level-indentation",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::level-indentation\0".as_ptr() as *const _,
                 transmute(notify_level_indentation_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1240,7 +1241,7 @@ impl<O: IsA<TreeView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tre
     fn connect_property_model_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::model",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::model\0".as_ptr() as *const _,
                 transmute(notify_model_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1248,7 +1249,7 @@ impl<O: IsA<TreeView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tre
     fn connect_property_reorderable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::reorderable",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::reorderable\0".as_ptr() as *const _,
                 transmute(notify_reorderable_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1256,7 +1257,7 @@ impl<O: IsA<TreeView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tre
     fn connect_property_rubber_banding_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::rubber-banding",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::rubber-banding\0".as_ptr() as *const _,
                 transmute(notify_rubber_banding_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1264,7 +1265,7 @@ impl<O: IsA<TreeView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tre
     fn connect_property_rules_hint_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::rules-hint",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::rules-hint\0".as_ptr() as *const _,
                 transmute(notify_rules_hint_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1272,7 +1273,7 @@ impl<O: IsA<TreeView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tre
     fn connect_property_search_column_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::search-column",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::search-column\0".as_ptr() as *const _,
                 transmute(notify_search_column_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1280,7 +1281,7 @@ impl<O: IsA<TreeView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tre
     fn connect_property_show_expanders_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::show-expanders",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::show-expanders\0".as_ptr() as *const _,
                 transmute(notify_show_expanders_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1288,7 +1289,7 @@ impl<O: IsA<TreeView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tre
     fn connect_property_tooltip_column_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::tooltip-column",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::tooltip-column\0".as_ptr() as *const _,
                 transmute(notify_tooltip_column_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -1296,7 +1297,7 @@ impl<O: IsA<TreeView> + IsA<glib::object::Object> + glib::object::ObjectExt> Tre
     fn connect_property_ubuntu_almost_fixed_height_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::ubuntu-almost-fixed-height-mode",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::ubuntu-almost-fixed-height-mode\0".as_ptr() as *const _,
                 transmute(notify_ubuntu_almost_fixed_height_mode_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

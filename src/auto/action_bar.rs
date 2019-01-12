@@ -13,11 +13,7 @@ use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use std::fmt;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     pub struct ActionBar(Object<ffi::GtkActionBar, ffi::GtkActionBarClass>): Bin, Container, Widget, Buildable;
@@ -44,7 +40,7 @@ impl Default for ActionBar {
     }
 }
 
-pub trait ActionBarExt {
+pub trait ActionBarExt: 'static {
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_center_widget(&self) -> Option<Widget>;
 
@@ -66,7 +62,7 @@ pub trait ActionBarExt {
     fn set_child_position<T: IsA<Widget>>(&self, item: &T, position: i32);
 }
 
-impl<O: IsA<ActionBar> + IsA<Container>> ActionBarExt for O {
+impl<O: IsA<ActionBar>> ActionBarExt for O {
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_center_widget(&self) -> Option<Widget> {
         unsafe {
@@ -100,28 +96,28 @@ impl<O: IsA<ActionBar> + IsA<Container>> ActionBarExt for O {
     fn get_child_pack_type<T: IsA<Widget>>(&self, item: &T) -> PackType {
         unsafe {
             let mut value = Value::from_type(<PackType as StaticType>::static_type());
-            ffi::gtk_container_child_get_property(self.to_glib_none().0, item.to_glib_none().0, "pack-type".to_glib_none().0, value.to_glib_none_mut().0);
+            ffi::gtk_container_child_get_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"pack-type\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_child_pack_type<T: IsA<Widget>>(&self, item: &T, pack_type: PackType) {
         unsafe {
-            ffi::gtk_container_child_set_property(self.to_glib_none().0, item.to_glib_none().0, "pack-type".to_glib_none().0, Value::from(&pack_type).to_glib_none().0);
+            ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"pack-type\0".as_ptr() as *const _, Value::from(&pack_type).to_glib_none().0);
         }
     }
 
     fn get_child_position<T: IsA<Widget>>(&self, item: &T) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            ffi::gtk_container_child_get_property(self.to_glib_none().0, item.to_glib_none().0, "position".to_glib_none().0, value.to_glib_none_mut().0);
+            ffi::gtk_container_child_get_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"position\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_child_position<T: IsA<Widget>>(&self, item: &T, position: i32) {
         unsafe {
-            ffi::gtk_container_child_set_property(self.to_glib_none().0, item.to_glib_none().0, "position".to_glib_none().0, Value::from(&position).to_glib_none().0);
+            ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0, b"position\0".as_ptr() as *const _, Value::from(&position).to_glib_none().0);
         }
     }
 }

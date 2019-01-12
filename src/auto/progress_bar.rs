@@ -6,20 +6,17 @@ use Buildable;
 use Orientable;
 use Widget;
 use ffi;
-use glib;
+use glib::GString;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use pango;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct ProgressBar(Object<ffi::GtkProgressBar, ffi::GtkProgressBarClass>): Widget, Buildable, Orientable;
@@ -44,7 +41,7 @@ impl Default for ProgressBar {
     }
 }
 
-pub trait ProgressBarExt {
+pub trait ProgressBarExt: 'static {
     fn get_ellipsize(&self) -> pango::EllipsizeMode;
 
     fn get_fraction(&self) -> f64;
@@ -55,7 +52,7 @@ pub trait ProgressBarExt {
 
     fn get_show_text(&self) -> bool;
 
-    fn get_text(&self) -> Option<String>;
+    fn get_text(&self) -> Option<GString>;
 
     fn pulse(&self);
 
@@ -84,7 +81,7 @@ pub trait ProgressBarExt {
     fn connect_property_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<ProgressBar> + IsA<glib::object::Object>> ProgressBarExt for O {
+impl<O: IsA<ProgressBar>> ProgressBarExt for O {
     fn get_ellipsize(&self) -> pango::EllipsizeMode {
         unsafe {
             from_glib(ffi::gtk_progress_bar_get_ellipsize(self.to_glib_none().0))
@@ -115,7 +112,7 @@ impl<O: IsA<ProgressBar> + IsA<glib::object::Object>> ProgressBarExt for O {
         }
     }
 
-    fn get_text(&self) -> Option<String> {
+    fn get_text(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_progress_bar_get_text(self.to_glib_none().0))
         }
@@ -168,7 +165,7 @@ impl<O: IsA<ProgressBar> + IsA<glib::object::Object>> ProgressBarExt for O {
     fn connect_property_ellipsize_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::ellipsize",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::ellipsize\0".as_ptr() as *const _,
                 transmute(notify_ellipsize_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -176,7 +173,7 @@ impl<O: IsA<ProgressBar> + IsA<glib::object::Object>> ProgressBarExt for O {
     fn connect_property_fraction_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::fraction",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::fraction\0".as_ptr() as *const _,
                 transmute(notify_fraction_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -184,7 +181,7 @@ impl<O: IsA<ProgressBar> + IsA<glib::object::Object>> ProgressBarExt for O {
     fn connect_property_inverted_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::inverted",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::inverted\0".as_ptr() as *const _,
                 transmute(notify_inverted_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -192,7 +189,7 @@ impl<O: IsA<ProgressBar> + IsA<glib::object::Object>> ProgressBarExt for O {
     fn connect_property_pulse_step_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::pulse-step",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::pulse-step\0".as_ptr() as *const _,
                 transmute(notify_pulse_step_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -200,7 +197,7 @@ impl<O: IsA<ProgressBar> + IsA<glib::object::Object>> ProgressBarExt for O {
     fn connect_property_show_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::show-text",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::show-text\0".as_ptr() as *const _,
                 transmute(notify_show_text_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -208,7 +205,7 @@ impl<O: IsA<ProgressBar> + IsA<glib::object::Object>> ProgressBarExt for O {
     fn connect_property_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::text",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::text\0".as_ptr() as *const _,
                 transmute(notify_text_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

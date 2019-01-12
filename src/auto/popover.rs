@@ -15,19 +15,15 @@ use ffi;
 use gdk;
 #[cfg(any(feature = "v3_12", feature = "dox"))]
 use gio;
-use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Popover(Object<ffi::GtkPopover, ffi::GtkPopoverClass>): Bin, Container, Widget, Buildable;
@@ -59,7 +55,7 @@ impl Popover {
     }
 }
 
-pub trait PopoverExt {
+pub trait PopoverExt: 'static {
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn bind_model<'a, 'b, P: IsA<gio::MenuModel> + 'a, Q: Into<Option<&'a P>>, R: Into<Option<&'b str>>>(&self, model: Q, action_namespace: R);
 
@@ -135,7 +131,7 @@ pub trait PopoverExt {
     fn connect_property_transitions_enabled_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Popover> + IsA<glib::object::Object>> PopoverExt for O {
+impl<O: IsA<Popover>> PopoverExt for O {
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn bind_model<'a, 'b, P: IsA<gio::MenuModel> + 'a, Q: Into<Option<&'a P>>, R: Into<Option<&'b str>>>(&self, model: Q, action_namespace: R) {
         let model = model.into();
@@ -268,7 +264,7 @@ impl<O: IsA<Popover> + IsA<glib::object::Object>> PopoverExt for O {
     fn connect_closed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "closed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"closed\0".as_ptr() as *const _,
                 transmute(closed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -277,7 +273,7 @@ impl<O: IsA<Popover> + IsA<glib::object::Object>> PopoverExt for O {
     fn connect_property_constrain_to_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::constrain-to",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::constrain-to\0".as_ptr() as *const _,
                 transmute(notify_constrain_to_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -286,7 +282,7 @@ impl<O: IsA<Popover> + IsA<glib::object::Object>> PopoverExt for O {
     fn connect_property_modal_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::modal",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::modal\0".as_ptr() as *const _,
                 transmute(notify_modal_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -295,7 +291,7 @@ impl<O: IsA<Popover> + IsA<glib::object::Object>> PopoverExt for O {
     fn connect_property_pointing_to_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::pointing-to",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::pointing-to\0".as_ptr() as *const _,
                 transmute(notify_pointing_to_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -304,7 +300,7 @@ impl<O: IsA<Popover> + IsA<glib::object::Object>> PopoverExt for O {
     fn connect_property_position_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::position",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::position\0".as_ptr() as *const _,
                 transmute(notify_position_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -313,7 +309,7 @@ impl<O: IsA<Popover> + IsA<glib::object::Object>> PopoverExt for O {
     fn connect_property_relative_to_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::relative-to",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::relative-to\0".as_ptr() as *const _,
                 transmute(notify_relative_to_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -322,7 +318,7 @@ impl<O: IsA<Popover> + IsA<glib::object::Object>> PopoverExt for O {
     fn connect_property_transitions_enabled_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::transitions-enabled",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::transitions-enabled\0".as_ptr() as *const _,
                 transmute(notify_transitions_enabled_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

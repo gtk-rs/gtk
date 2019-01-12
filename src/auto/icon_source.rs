@@ -7,12 +7,9 @@ use StateType;
 use TextDirection;
 use ffi;
 use gdk_pixbuf;
+use glib::GString;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use std;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -56,7 +53,7 @@ impl IconSource {
     }
 
     #[cfg_attr(feature = "v3_10", deprecated)]
-    pub fn get_icon_name(&self) -> Option<String> {
+    pub fn get_icon_name(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_icon_source_get_icon_name(self.to_glib_none().0))
         }

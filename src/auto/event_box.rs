@@ -7,19 +7,15 @@ use Buildable;
 use Container;
 use Widget;
 use ffi;
-use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct EventBox(Object<ffi::GtkEventBox, ffi::GtkEventBoxClass>): Bin, Container, Widget, Buildable;
@@ -44,7 +40,7 @@ impl Default for EventBox {
     }
 }
 
-pub trait EventBoxExt {
+pub trait EventBoxExt: 'static {
     fn get_above_child(&self) -> bool;
 
     fn get_visible_window(&self) -> bool;
@@ -58,7 +54,7 @@ pub trait EventBoxExt {
     fn connect_property_visible_window_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<EventBox> + IsA<glib::object::Object>> EventBoxExt for O {
+impl<O: IsA<EventBox>> EventBoxExt for O {
     fn get_above_child(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_event_box_get_above_child(self.to_glib_none().0))
@@ -86,7 +82,7 @@ impl<O: IsA<EventBox> + IsA<glib::object::Object>> EventBoxExt for O {
     fn connect_property_above_child_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::above-child",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::above-child\0".as_ptr() as *const _,
                 transmute(notify_above_child_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -94,7 +90,7 @@ impl<O: IsA<EventBox> + IsA<glib::object::Object>> EventBoxExt for O {
     fn connect_property_visible_window_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::visible-window",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::visible-window\0".as_ptr() as *const _,
                 transmute(notify_visible_window_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

@@ -10,23 +10,26 @@ use Widget;
 use ffi;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 use gdk;
+#[cfg(any(feature = "v3_16", feature = "dox"))]
 use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
+#[cfg(any(feature = "v3_16", feature = "dox"))]
+use glib::object::ObjectExt;
 #[cfg(any(feature = "v3_10", feature = "dox"))]
 use glib::signal::SignalHandlerId;
 #[cfg(any(feature = "v3_10", feature = "dox"))]
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
+#[cfg(any(feature = "v3_10", feature = "dox"))]
 use glib_ffi;
+#[cfg(any(feature = "v3_16", feature = "dox"))]
 use gobject_ffi;
 #[cfg(any(feature = "v3_10", feature = "dox"))]
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 #[cfg(any(feature = "v3_10", feature = "dox"))]
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct SearchEntry(Object<ffi::GtkSearchEntry, ffi::GtkSearchEntryClass>): Entry, Widget, Buildable, CellEditable, Editable;
@@ -53,7 +56,7 @@ impl Default for SearchEntry {
     }
 }
 
-pub trait SearchEntryExt {
+pub trait SearchEntryExt: 'static {
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn handle_event(&self, event: &gdk::Event) -> bool;
 
@@ -79,7 +82,7 @@ pub trait SearchEntryExt {
     fn emit_stop_search(&self);
 }
 
-impl<O: IsA<SearchEntry> + IsA<glib::object::Object> + glib::object::ObjectExt> SearchEntryExt for O {
+impl<O: IsA<SearchEntry>> SearchEntryExt for O {
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn handle_event(&self, event: &gdk::Event) -> bool {
         unsafe {
@@ -91,35 +94,35 @@ impl<O: IsA<SearchEntry> + IsA<glib::object::Object> + glib::object::ObjectExt> 
     fn connect_next_match<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "next-match",
+            connect_raw(self.to_glib_none().0 as *mut _, b"next-match\0".as_ptr() as *const _,
                 transmute(next_match_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn emit_next_match(&self) {
-        let _ = self.emit("next-match", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("next-match", &[]).unwrap() };
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn connect_previous_match<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "previous-match",
+            connect_raw(self.to_glib_none().0 as *mut _, b"previous-match\0".as_ptr() as *const _,
                 transmute(previous_match_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn emit_previous_match(&self) {
-        let _ = self.emit("previous-match", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("previous-match", &[]).unwrap() };
     }
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn connect_search_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "search-changed",
+            connect_raw(self.to_glib_none().0 as *mut _, b"search-changed\0".as_ptr() as *const _,
                 transmute(search_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -128,14 +131,14 @@ impl<O: IsA<SearchEntry> + IsA<glib::object::Object> + glib::object::ObjectExt> 
     fn connect_stop_search<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "stop-search",
+            connect_raw(self.to_glib_none().0 as *mut _, b"stop-search\0".as_ptr() as *const _,
                 transmute(stop_search_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn emit_stop_search(&self) {
-        let _ = self.emit("stop-search", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("stop-search", &[]).unwrap() };
     }
 }
 

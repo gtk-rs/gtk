@@ -7,19 +7,15 @@ use Adjustment;
 use Border;
 use ScrollablePolicy;
 use ffi;
-use glib;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct Scrollable(Object<ffi::GtkScrollable, ffi::GtkScrollableInterface>);
@@ -29,7 +25,7 @@ glib_wrapper! {
     }
 }
 
-pub trait ScrollableExt {
+pub trait ScrollableExt: 'static {
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn get_border(&self) -> Option<Border>;
 
@@ -58,7 +54,7 @@ pub trait ScrollableExt {
     fn connect_property_vscroll_policy_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Scrollable> + IsA<glib::object::Object>> ScrollableExt for O {
+impl<O: IsA<Scrollable>> ScrollableExt for O {
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn get_border(&self) -> Option<Border> {
         unsafe {
@@ -123,7 +119,7 @@ impl<O: IsA<Scrollable> + IsA<glib::object::Object>> ScrollableExt for O {
     fn connect_property_hadjustment_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::hadjustment",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::hadjustment\0".as_ptr() as *const _,
                 transmute(notify_hadjustment_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -131,7 +127,7 @@ impl<O: IsA<Scrollable> + IsA<glib::object::Object>> ScrollableExt for O {
     fn connect_property_hscroll_policy_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::hscroll-policy",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::hscroll-policy\0".as_ptr() as *const _,
                 transmute(notify_hscroll_policy_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -139,7 +135,7 @@ impl<O: IsA<Scrollable> + IsA<glib::object::Object>> ScrollableExt for O {
     fn connect_property_vadjustment_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::vadjustment",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::vadjustment\0".as_ptr() as *const _,
                 transmute(notify_vadjustment_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -147,7 +143,7 @@ impl<O: IsA<Scrollable> + IsA<glib::object::Object>> ScrollableExt for O {
     fn connect_property_vscroll_policy_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::vscroll-policy",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::vscroll-policy\0".as_ptr() as *const _,
                 transmute(notify_vscroll_policy_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }

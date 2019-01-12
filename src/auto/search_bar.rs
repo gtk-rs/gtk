@@ -11,21 +11,18 @@ use Widget;
 use ffi;
 #[cfg(any(feature = "v3_10", feature = "dox"))]
 use gdk;
-use glib;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Downcast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct SearchBar(Object<ffi::GtkSearchBar, ffi::GtkSearchBarClass>): Bin, Container, Widget, Buildable;
@@ -52,7 +49,7 @@ impl Default for SearchBar {
     }
 }
 
-pub trait SearchBarExt {
+pub trait SearchBarExt: 'static {
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn connect_entry<P: IsA<Entry>>(&self, entry: &P);
 
@@ -84,7 +81,7 @@ pub trait SearchBarExt {
     fn connect_property_show_close_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<SearchBar> + IsA<glib::object::Object>> SearchBarExt for O {
+impl<O: IsA<SearchBar>> SearchBarExt for O {
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn connect_entry<P: IsA<Entry>>(&self, entry: &P) {
         unsafe {
@@ -130,35 +127,35 @@ impl<O: IsA<SearchBar> + IsA<glib::object::Object>> SearchBarExt for O {
     fn get_property_search_mode_enabled(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "search-mode-enabled".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"search-mode-enabled\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_search_mode_enabled(&self, search_mode_enabled: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "search-mode-enabled".to_glib_none().0, Value::from(&search_mode_enabled).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"search-mode-enabled\0".as_ptr() as *const _, Value::from(&search_mode_enabled).to_glib_none().0);
         }
     }
 
     fn get_property_show_close_button(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "show-close-button".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"show-close-button\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_show_close_button(&self, show_close_button: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "show-close-button".to_glib_none().0, Value::from(&show_close_button).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"show-close-button\0".as_ptr() as *const _, Value::from(&show_close_button).to_glib_none().0);
         }
     }
 
     fn connect_property_search_mode_enabled_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::search-mode-enabled",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::search-mode-enabled\0".as_ptr() as *const _,
                 transmute(notify_search_mode_enabled_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -166,7 +163,7 @@ impl<O: IsA<SearchBar> + IsA<glib::object::Object>> SearchBarExt for O {
     fn connect_property_show_close_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::show-close-button",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::show-close-button\0".as_ptr() as *const _,
                 transmute(notify_show_close_button_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
