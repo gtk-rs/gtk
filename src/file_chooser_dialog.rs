@@ -4,7 +4,7 @@
 
 use ffi;
 use glib::translate::*;
-use glib::object::{Downcast, IsA};
+use glib::object::{Cast, IsA};
 use libc::c_char;
 use std::ptr;
 use FileChooserAction;
@@ -26,10 +26,10 @@ impl FileChooserDialog {
         unsafe {
             Widget::from_glib_none(ffi::gtk_file_chooser_dialog_new(
                 title.to_glib_none().0,
-                parent.to_glib_none().0,
+                parent.map(|p| p.as_ref()).to_glib_none().0,
                 action.to_glib(),
                 ptr::null::<c_char>()
-            )).downcast_unchecked()
+            )).unsafe_cast()
         }
     }
 
@@ -46,7 +46,7 @@ impl FileChooserDialog {
                 0 => {
                     ffi::gtk_file_chooser_dialog_new(
                         title.to_glib_none().0,
-                        parent.to_glib_none().0,
+                        parent.map(|p| p.as_ref()).to_glib_none().0,
                         action.to_glib(),
                         ptr::null::<c_char>()
                     )
@@ -54,7 +54,7 @@ impl FileChooserDialog {
                 1 => {
                     ffi::gtk_file_chooser_dialog_new(
                         title.to_glib_none().0,
-                        parent.to_glib_none().0,
+                        parent.map(|p| p.as_ref()).to_glib_none().0,
                         action.to_glib(),
                         buttons[0].0.to_glib_none().0,
                         buttons[0].1.to_glib(),
@@ -64,7 +64,7 @@ impl FileChooserDialog {
                 2 => {
                     ffi::gtk_file_chooser_dialog_new(
                         title.to_glib_none().0,
-                        parent.to_glib_none().0,
+                        parent.map(|p| p.as_ref()).to_glib_none().0,
                         action.to_glib(),
                         buttons[0].0.to_glib_none().0,
                         buttons[0].1.to_glib(),
@@ -76,7 +76,7 @@ impl FileChooserDialog {
                 3 => {
                     ffi::gtk_file_chooser_dialog_new(
                         title.to_glib_none().0,
-                        parent.to_glib_none().0,
+                        parent.map(|p| p.as_ref()).to_glib_none().0,
                         action.to_glib(),
                         buttons[0].0.to_glib_none().0,
                         buttons[0].1.to_glib(),
@@ -92,7 +92,7 @@ impl FileChooserDialog {
                     //       See: https://github.com/rust-lang/rust/issues/44930
                     panic!(format!("`FileChooserDialog::with_buttons` does not support 4+ buttons, received {}", buttons.len()))
                 }
-            }).downcast_unchecked()
+            }).unsafe_cast()
         }
     }
 }

@@ -4,7 +4,7 @@
 
 use ffi;
 use glib::translate::*;
-use glib::object::{Downcast, IsA};
+use glib::object::{Cast, IsA};
 use std::ptr;
 use RecentChooserDialog;
 use RecentManager;
@@ -20,9 +20,9 @@ impl RecentChooserDialog {
         let title = title.into();
         unsafe {
             Widget::from_glib_none(
-                ffi::gtk_recent_chooser_dialog_new(title.to_glib_none().0, parent.to_glib_none().0,
+                ffi::gtk_recent_chooser_dialog_new(title.to_glib_none().0, parent.map(|p| p.as_ref()).to_glib_none().0,
                     ptr::null_mut()))
-                .downcast_unchecked()
+                .unsafe_cast()
         }
     }
 
@@ -36,8 +36,8 @@ impl RecentChooserDialog {
         unsafe {
             Widget::from_glib_none(
                 ffi::gtk_recent_chooser_dialog_new_for_manager(title.to_glib_none().0,
-                    parent.to_glib_none().0, manager.to_glib_none().0, ptr::null_mut()))
-                .downcast_unchecked()
+                    parent.map(|p| p.as_ref()).to_glib_none().0, manager.to_glib_none().0, ptr::null_mut()))
+                .unsafe_cast()
         }
     }
 }

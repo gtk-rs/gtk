@@ -7,7 +7,7 @@ use glib::translate::*;
 use Buildable;
 use IsA;
 
-pub trait BuildableExtManual {
+pub trait BuildableExtManual: 'static {
     fn get_name(&self) -> Option<String>;
 
     fn set_name(&self, name: &str);
@@ -16,13 +16,13 @@ pub trait BuildableExtManual {
 impl<O: IsA<Buildable>> BuildableExtManual for O {
     fn get_name(&self) -> Option<String> {
         unsafe {
-            from_glib_none(ffi::gtk_buildable_get_name(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_buildable_get_name(self.as_ref().to_glib_none().0))
         }
     }
 
     fn set_name(&self, name: &str) {
         unsafe {
-            ffi::gtk_buildable_set_name(self.to_glib_none().0, name.to_glib_none().0);
+            ffi::gtk_buildable_set_name(self.as_ref().to_glib_none().0, name.to_glib_none().0);
         }
     }
 }

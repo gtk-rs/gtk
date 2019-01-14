@@ -5,7 +5,7 @@
 use ffi;
 use glib_ffi;
 use glib::IsA;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::translate::*;
 
 use libc::c_char;
@@ -16,7 +16,7 @@ use std::cell::RefCell;
 use EntryCompletion;
 use TreeIter;
 
-pub trait EntryCompletionExtManual {
+pub trait EntryCompletionExtManual: 'static {
     fn set_match_func<F: FnMut(&Self, &str, &TreeIter) -> bool>(&self, f: F);
 }
 
@@ -27,7 +27,7 @@ impl<O: IsA<EntryCompletion>> EntryCompletionExtManual for O {
                 Box_::new(RefCell::new(Box_::new(f)));
             let callback = transmute(set_match_func_trampoline::<Self> as usize);
             let destroy_callback = transmute(set_match_func_destroy::<Self> as usize);
-            ffi::gtk_entry_completion_set_match_func(self.to_glib_none().0,
+            ffi::gtk_entry_completion_set_match_func(self.as_ref().to_glib_none().0,
                                                      callback,
                                                      Box_::into_raw(f) as *mut _,
                                                      destroy_callback);
@@ -44,7 +44,7 @@ where P: IsA<EntryCompletion> {
     let func: &RefCell<Box<FnMut(&P, &str, &TreeIter) -> bool>> = transmute(f);
 
     (&mut *func.borrow_mut())(
-        &EntryCompletion::from_glib_borrow(this).downcast_unchecked(),
+        &EntryCompletion::from_glib_borrow(this).unsafe_cast(),
         &String::from_glib_none(key),
         &TreeIter::from_glib_borrow(iter)
     ).to_glib()

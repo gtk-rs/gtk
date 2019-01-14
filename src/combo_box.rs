@@ -4,9 +4,10 @@
 
 use ComboBox;
 use ffi;
+use glib::translate::*;
 use glib::object::IsA;
 
-pub trait ComboBoxExtManual {
+pub trait ComboBoxExtManual: 'static {
     fn set_active<P: Into<Option<u32>>>(&self, index_: P);
     fn get_active(&self) -> Option<u32>;
 }
@@ -19,13 +20,13 @@ impl<O: IsA<ComboBox>> ComboBoxExtManual for O {
             None => -1,
         };
         unsafe {
-            ffi::gtk_combo_box_set_active(self.to_glib_none().0, index_);
+            ffi::gtk_combo_box_set_active(self.as_ref().to_glib_none().0, index_);
         }
     }
 
     fn get_active(&self) -> Option<u32> {
         match unsafe {
-            ffi::gtk_combo_box_get_active(self.to_glib_none().0)
+            ffi::gtk_combo_box_get_active(self.as_ref().to_glib_none().0)
         } {
             -1 => None,
             x => Some(x as _),

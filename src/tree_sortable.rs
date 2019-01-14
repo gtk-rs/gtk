@@ -4,7 +4,7 @@
 
 use SortType;
 use ffi;
-use glib::object::{Downcast, IsA};
+use glib::object::{Cast, IsA};
 use glib::translate::*;
 use std::mem::{self, transmute};
 use std::cmp::Ordering;
@@ -49,7 +49,7 @@ impl FromGlib<i32> for SortColumn {
     }
 }
 
-pub trait TreeSortableExtManual {
+pub trait TreeSortableExtManual: 'static {
     fn set_default_sort_func<F>(&self, sort_func: F)
         where F: Fn(&Self, &TreeIter, &TreeIter) -> Ordering + 'static;
     fn set_sort_func<F>(&self, sort_column_id: SortColumn, sort_func: F)
@@ -61,9 +61,9 @@ pub trait TreeSortableExtManual {
 
 unsafe extern "C" fn trampoline<T>(this: *mut GtkTreeModel, iter: *mut GtkTreeIter,
                                    iter2: *mut GtkTreeIter, f: gpointer) -> i32
-where T: IsA<TreeModel> {
+where T: IsA<TreeSortable> {
     let f: &&(Fn(&T, &TreeIter, &TreeIter) -> Ordering) = transmute(f);
-    f(&TreeModel::from_glib_none(this).downcast_unchecked(), &from_glib_borrow(iter),
+    f(&TreeModel::from_glib_none(this).unsafe_cast(), &from_glib_borrow(iter),
       &from_glib_borrow(iter2)).to_glib()
 }
 
@@ -79,13 +79,13 @@ fn into_raw<F, T>(func: F) -> gpointer
     Box::into_raw(func) as gpointer
 }
 
-impl<O: IsA<TreeModel> + IsA<TreeSortable>> TreeSortableExtManual for O {
+impl<O: IsA<TreeSortable>> TreeSortableExtManual for O {
     #[inline]
     fn get_sort_column_id(&self) -> Option<(SortColumn, SortType)> {
         unsafe {
             let mut sort_column_id = mem::uninitialized();
             let mut order = mem::uninitialized();
-            ffi::gtk_tree_sortable_get_sort_column_id(self.to_glib_none().0, &mut sort_column_id, &mut order);
+            ffi::gtk_tree_sortable_get_sort_column_id(self.as_ref().to_glib_none().0, &mut sort_column_id, &mut order);
             if sort_column_id != ffi::GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID {
                 Some((from_glib(sort_column_id), from_glib(order)))
             } else {
@@ -97,7 +97,7 @@ impl<O: IsA<TreeModel> + IsA<TreeSortable>> TreeSortableExtManual for O {
     fn set_default_sort_func<F>(&self, sort_func: F)
     where F: Fn(&Self, &TreeIter, &TreeIter) -> Ordering + 'static {
         unsafe {
-            ffi::gtk_tree_sortable_set_default_sort_func(self.to_glib_none().0,
+            ffi::gtk_tree_sortable_set_default_sort_func(self.as_ref().to_glib_none().0,
                                                          Some(trampoline::<Self>),
                                                          into_raw(sort_func),
                                                          Some(destroy_closure::<Self>))
@@ -107,13 +107,13 @@ impl<O: IsA<TreeModel> + IsA<TreeSortable>> TreeSortableExtManual for O {
     #[inline]
     fn set_sort_column_id(&self, sort_column_id: SortColumn, order: SortType) {
         unsafe {
-            ffi::gtk_tree_sortable_set_sort_column_id(self.to_glib_none().0, sort_column_id.to_glib(), order.to_glib());
+            ffi::gtk_tree_sortable_set_sort_column_id(self.as_ref().to_glib_none().0, sort_column_id.to_glib(), order.to_glib());
         }
     }
 
     fn set_unsorted(&self) {
         unsafe {
-            ffi::gtk_tree_sortable_set_sort_column_id(self.to_glib_none().0,
+            ffi::gtk_tree_sortable_set_sort_column_id(self.as_ref().to_glib_none().0,
                                                       ffi::GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID,
                                                       SortType::Ascending.to_glib());
         }
@@ -122,7 +122,7 @@ impl<O: IsA<TreeModel> + IsA<TreeSortable>> TreeSortableExtManual for O {
     fn set_sort_func<F>(&self, sort_column_id: SortColumn, sort_func: F)
     where F: Fn(&Self, &TreeIter, &TreeIter) -> Ordering + 'static {
         unsafe {
-            ffi::gtk_tree_sortable_set_sort_func(self.to_glib_none().0,
+            ffi::gtk_tree_sortable_set_sort_func(self.as_ref().to_glib_none().0,
                                                  sort_column_id.to_glib(),
                                                  Some(trampoline::<Self>),
                                                  into_raw(sort_func),

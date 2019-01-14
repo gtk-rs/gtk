@@ -4,23 +4,22 @@
 
 use Switch;
 use ffi;
-use glib;
 use glib::object::IsA;
-use glib::signal::{SignalHandlerId, connect};
+use glib::signal::{SignalHandlerId, connect_raw};
 use glib::translate::*;
 use glib_ffi;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-pub trait SwitchExtManual {
+pub trait SwitchExtManual: 'static {
     fn connect_changed_active<F: Fn(&Switch) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Switch> + IsA<glib::object::Object>> SwitchExtManual for O {
+impl<O: IsA<Switch>> SwitchExtManual for O {
     fn connect_changed_active<F: Fn(&Switch) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Switch) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::active",
+            connect_raw(self.to_glib_none().0 as *mut _, b"notify::active\0".as_ptr() as *mut _,
                 transmute(changed_active_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }
