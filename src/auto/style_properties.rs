@@ -12,7 +12,7 @@ use glib::translate::*;
 use std::fmt;
 
 glib_wrapper! {
-    pub struct StyleProperties(Object<ffi::GtkStyleProperties, ffi::GtkStylePropertiesClass>): StyleProvider;
+    pub struct StyleProperties(Object<ffi::GtkStyleProperties, ffi::GtkStylePropertiesClass, StylePropertiesClass>) @implements StyleProvider;
 
     match fn {
         get_type => || ffi::gtk_style_properties_get_type(),
@@ -46,6 +46,8 @@ impl Default for StyleProperties {
     }
 }
 
+pub const NONE_STYLE_PROPERTIES: Option<&StyleProperties> = None;
+
 pub trait StylePropertiesExt: 'static {
     #[cfg_attr(feature = "v3_16", deprecated)]
     fn clear(&self);
@@ -66,7 +68,7 @@ pub trait StylePropertiesExt: 'static {
     fn map_color(&self, name: &str, color: &SymbolicColor);
 
     #[cfg_attr(feature = "v3_16", deprecated)]
-    fn merge(&self, props_to_merge: &StyleProperties, replace: bool);
+    fn merge<P: IsA<StyleProperties>>(&self, props_to_merge: &P, replace: bool);
 
     //#[cfg_attr(feature = "v3_16", deprecated)]
     //fn set(&self, state: StateFlags, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
@@ -84,7 +86,7 @@ pub trait StylePropertiesExt: 'static {
 impl<O: IsA<StyleProperties>> StylePropertiesExt for O {
     fn clear(&self) {
         unsafe {
-            ffi::gtk_style_properties_clear(self.to_glib_none().0);
+            ffi::gtk_style_properties_clear(self.as_ref().to_glib_none().0);
         }
     }
 
@@ -95,7 +97,7 @@ impl<O: IsA<StyleProperties>> StylePropertiesExt for O {
     fn get_property(&self, property: &str, state: StateFlags) -> Option<glib::Value> {
         unsafe {
             let mut value = glib::Value::uninitialized();
-            let ret = from_glib(ffi::gtk_style_properties_get_property(self.to_glib_none().0, property.to_glib_none().0, state.to_glib(), value.to_glib_none_mut().0));
+            let ret = from_glib(ffi::gtk_style_properties_get_property(self.as_ref().to_glib_none().0, property.to_glib_none().0, state.to_glib(), value.to_glib_none_mut().0));
             if ret { Some(value) } else { None }
         }
     }
@@ -106,19 +108,19 @@ impl<O: IsA<StyleProperties>> StylePropertiesExt for O {
 
     fn lookup_color(&self, name: &str) -> Option<SymbolicColor> {
         unsafe {
-            from_glib_none(ffi::gtk_style_properties_lookup_color(self.to_glib_none().0, name.to_glib_none().0))
+            from_glib_none(ffi::gtk_style_properties_lookup_color(self.as_ref().to_glib_none().0, name.to_glib_none().0))
         }
     }
 
     fn map_color(&self, name: &str, color: &SymbolicColor) {
         unsafe {
-            ffi::gtk_style_properties_map_color(self.to_glib_none().0, name.to_glib_none().0, color.to_glib_none().0);
+            ffi::gtk_style_properties_map_color(self.as_ref().to_glib_none().0, name.to_glib_none().0, color.to_glib_none().0);
         }
     }
 
-    fn merge(&self, props_to_merge: &StyleProperties, replace: bool) {
+    fn merge<P: IsA<StyleProperties>>(&self, props_to_merge: &P, replace: bool) {
         unsafe {
-            ffi::gtk_style_properties_merge(self.to_glib_none().0, props_to_merge.to_glib_none().0, replace.to_glib());
+            ffi::gtk_style_properties_merge(self.as_ref().to_glib_none().0, props_to_merge.as_ref().to_glib_none().0, replace.to_glib());
         }
     }
 
@@ -128,7 +130,7 @@ impl<O: IsA<StyleProperties>> StylePropertiesExt for O {
 
     fn set_property(&self, property: &str, state: StateFlags, value: &glib::Value) {
         unsafe {
-            ffi::gtk_style_properties_set_property(self.to_glib_none().0, property.to_glib_none().0, state.to_glib(), value.to_glib_none().0);
+            ffi::gtk_style_properties_set_property(self.as_ref().to_glib_none().0, property.to_glib_none().0, state.to_glib(), value.to_glib_none().0);
         }
     }
 
@@ -138,7 +140,7 @@ impl<O: IsA<StyleProperties>> StylePropertiesExt for O {
 
     fn unset_property(&self, property: &str, state: StateFlags) {
         unsafe {
-            ffi::gtk_style_properties_unset_property(self.to_glib_none().0, property.to_glib_none().0, state.to_glib());
+            ffi::gtk_style_properties_unset_property(self.as_ref().to_glib_none().0, property.to_glib_none().0, state.to_glib());
         }
     }
 }

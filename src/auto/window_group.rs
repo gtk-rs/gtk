@@ -11,7 +11,7 @@ use glib::translate::*;
 use std::fmt;
 
 glib_wrapper! {
-    pub struct WindowGroup(Object<ffi::GtkWindowGroup, ffi::GtkWindowGroupClass>);
+    pub struct WindowGroup(Object<ffi::GtkWindowGroup, ffi::GtkWindowGroupClass, WindowGroupClass>);
 
     match fn {
         get_type => || ffi::gtk_window_group_get_type(),
@@ -33,6 +33,8 @@ impl Default for WindowGroup {
     }
 }
 
+pub const NONE_WINDOW_GROUP: Option<&WindowGroup> = None;
+
 pub trait WindowGroupExt: 'static {
     fn add_window<P: IsA<Window>>(&self, window: &P);
 
@@ -48,31 +50,31 @@ pub trait WindowGroupExt: 'static {
 impl<O: IsA<WindowGroup>> WindowGroupExt for O {
     fn add_window<P: IsA<Window>>(&self, window: &P) {
         unsafe {
-            ffi::gtk_window_group_add_window(self.to_glib_none().0, window.to_glib_none().0);
+            ffi::gtk_window_group_add_window(self.as_ref().to_glib_none().0, window.as_ref().to_glib_none().0);
         }
     }
 
     fn get_current_device_grab<P: IsA<gdk::Device>>(&self, device: &P) -> Option<Widget> {
         unsafe {
-            from_glib_none(ffi::gtk_window_group_get_current_device_grab(self.to_glib_none().0, device.to_glib_none().0))
+            from_glib_none(ffi::gtk_window_group_get_current_device_grab(self.as_ref().to_glib_none().0, device.as_ref().to_glib_none().0))
         }
     }
 
     fn get_current_grab(&self) -> Option<Widget> {
         unsafe {
-            from_glib_none(ffi::gtk_window_group_get_current_grab(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_window_group_get_current_grab(self.as_ref().to_glib_none().0))
         }
     }
 
     fn list_windows(&self) -> Vec<Window> {
         unsafe {
-            FromGlibPtrContainer::from_glib_container(ffi::gtk_window_group_list_windows(self.to_glib_none().0))
+            FromGlibPtrContainer::from_glib_container(ffi::gtk_window_group_list_windows(self.as_ref().to_glib_none().0))
         }
     }
 
     fn remove_window<P: IsA<Window>>(&self, window: &P) {
         unsafe {
-            ffi::gtk_window_group_remove_window(self.to_glib_none().0, window.to_glib_none().0);
+            ffi::gtk_window_group_remove_window(self.as_ref().to_glib_none().0, window.as_ref().to_glib_none().0);
         }
     }
 }

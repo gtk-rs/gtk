@@ -13,7 +13,7 @@ use PanDirection;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use Widget;
 use ffi;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use glib::signal::SignalHandlerId;
@@ -31,7 +31,7 @@ use std::fmt;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct GesturePan(Object<ffi::GtkGesturePan, ffi::GtkGesturePanClass>): GestureDrag, GestureSingle, Gesture, EventController;
+    pub struct GesturePan(Object<ffi::GtkGesturePan, ffi::GtkGesturePanClass, GesturePanClass>) @extends GestureDrag, GestureSingle, Gesture, EventController;
 
     match fn {
         get_type => || ffi::gtk_gesture_pan_get_type(),
@@ -43,10 +43,12 @@ impl GesturePan {
     pub fn new<P: IsA<Widget>>(widget: &P, orientation: Orientation) -> GesturePan {
         skip_assert_initialized!();
         unsafe {
-            Gesture::from_glib_full(ffi::gtk_gesture_pan_new(widget.to_glib_none().0, orientation.to_glib())).downcast_unchecked()
+            Gesture::from_glib_full(ffi::gtk_gesture_pan_new(widget.as_ref().to_glib_none().0, orientation.to_glib())).unsafe_cast()
         }
     }
 }
+
+pub const NONE_GESTURE_PAN: Option<&GesturePan> = None;
 
 pub trait GesturePanExt: 'static {
     #[cfg(any(feature = "v3_14", feature = "dox"))]
@@ -66,14 +68,14 @@ impl<O: IsA<GesturePan>> GesturePanExt for O {
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_orientation(&self) -> Orientation {
         unsafe {
-            from_glib(ffi::gtk_gesture_pan_get_orientation(self.to_glib_none().0))
+            from_glib(ffi::gtk_gesture_pan_get_orientation(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn set_orientation(&self, orientation: Orientation) {
         unsafe {
-            ffi::gtk_gesture_pan_set_orientation(self.to_glib_none().0, orientation.to_glib());
+            ffi::gtk_gesture_pan_set_orientation(self.as_ref().to_glib_none().0, orientation.to_glib());
         }
     }
 
@@ -81,7 +83,7 @@ impl<O: IsA<GesturePan>> GesturePanExt for O {
     fn connect_pan<F: Fn(&Self, PanDirection, f64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, PanDirection, f64) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"pan\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"pan\0".as_ptr() as *const _,
                 transmute(pan_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -90,7 +92,7 @@ impl<O: IsA<GesturePan>> GesturePanExt for O {
     fn connect_property_orientation_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::orientation\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::orientation\0".as_ptr() as *const _,
                 transmute(notify_orientation_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -100,14 +102,14 @@ impl<O: IsA<GesturePan>> GesturePanExt for O {
 unsafe extern "C" fn pan_trampoline<P>(this: *mut ffi::GtkGesturePan, direction: ffi::GtkPanDirection, offset: libc::c_double, f: glib_ffi::gpointer)
 where P: IsA<GesturePan> {
     let f: &&(Fn(&P, PanDirection, f64) + 'static) = transmute(f);
-    f(&GesturePan::from_glib_borrow(this).downcast_unchecked(), from_glib(direction), offset)
+    f(&GesturePan::from_glib_borrow(this).unsafe_cast(), from_glib(direction), offset)
 }
 
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 unsafe extern "C" fn notify_orientation_trampoline<P>(this: *mut ffi::GtkGesturePan, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<GesturePan> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&GesturePan::from_glib_borrow(this).downcast_unchecked())
+    f(&GesturePan::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for GesturePan {

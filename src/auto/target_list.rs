@@ -5,6 +5,7 @@
 use TextBuffer;
 use ffi;
 use gdk;
+use glib::object::IsA;
 use glib::translate::*;
 use std::mem;
 
@@ -32,9 +33,9 @@ impl TargetList {
         }
     }
 
-    pub fn add_rich_text_targets(&self, info: u32, deserializable: bool, buffer: &TextBuffer) {
+    pub fn add_rich_text_targets<P: IsA<TextBuffer>>(&self, info: u32, deserializable: bool, buffer: &P) {
         unsafe {
-            ffi::gtk_target_list_add_rich_text_targets(self.to_glib_none().0, info, deserializable.to_glib(), buffer.to_glib_none().0);
+            ffi::gtk_target_list_add_rich_text_targets(self.to_glib_none().0, info, deserializable.to_glib(), buffer.as_ref().to_glib_none().0);
         }
     }
 

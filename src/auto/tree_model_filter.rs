@@ -15,12 +15,14 @@ use gobject_ffi;
 use std::fmt;
 
 glib_wrapper! {
-    pub struct TreeModelFilter(Object<ffi::GtkTreeModelFilter, ffi::GtkTreeModelFilterClass>): TreeDragSource, TreeModel;
+    pub struct TreeModelFilter(Object<ffi::GtkTreeModelFilter, ffi::GtkTreeModelFilterClass, TreeModelFilterClass>) @implements TreeDragSource, TreeModel;
 
     match fn {
         get_type => || ffi::gtk_tree_model_filter_get_type(),
     }
 }
+
+pub const NONE_TREE_MODEL_FILTER: Option<&TreeModelFilter> = None;
 
 pub trait TreeModelFilterExt: 'static {
     fn clear_cache(&self);
@@ -49,47 +51,47 @@ pub trait TreeModelFilterExt: 'static {
 impl<O: IsA<TreeModelFilter>> TreeModelFilterExt for O {
     fn clear_cache(&self) {
         unsafe {
-            ffi::gtk_tree_model_filter_clear_cache(self.to_glib_none().0);
+            ffi::gtk_tree_model_filter_clear_cache(self.as_ref().to_glib_none().0);
         }
     }
 
     fn convert_child_iter_to_iter(&self, child_iter: &TreeIter) -> Option<TreeIter> {
         unsafe {
             let mut filter_iter = TreeIter::uninitialized();
-            let ret = from_glib(ffi::gtk_tree_model_filter_convert_child_iter_to_iter(self.to_glib_none().0, filter_iter.to_glib_none_mut().0, mut_override(child_iter.to_glib_none().0)));
+            let ret = from_glib(ffi::gtk_tree_model_filter_convert_child_iter_to_iter(self.as_ref().to_glib_none().0, filter_iter.to_glib_none_mut().0, mut_override(child_iter.to_glib_none().0)));
             if ret { Some(filter_iter) } else { None }
         }
     }
 
     fn convert_child_path_to_path(&self, child_path: &TreePath) -> Option<TreePath> {
         unsafe {
-            from_glib_full(ffi::gtk_tree_model_filter_convert_child_path_to_path(self.to_glib_none().0, mut_override(child_path.to_glib_none().0)))
+            from_glib_full(ffi::gtk_tree_model_filter_convert_child_path_to_path(self.as_ref().to_glib_none().0, mut_override(child_path.to_glib_none().0)))
         }
     }
 
     fn convert_iter_to_child_iter(&self, filter_iter: &TreeIter) -> TreeIter {
         unsafe {
             let mut child_iter = TreeIter::uninitialized();
-            ffi::gtk_tree_model_filter_convert_iter_to_child_iter(self.to_glib_none().0, child_iter.to_glib_none_mut().0, mut_override(filter_iter.to_glib_none().0));
+            ffi::gtk_tree_model_filter_convert_iter_to_child_iter(self.as_ref().to_glib_none().0, child_iter.to_glib_none_mut().0, mut_override(filter_iter.to_glib_none().0));
             child_iter
         }
     }
 
     fn convert_path_to_child_path(&self, filter_path: &TreePath) -> Option<TreePath> {
         unsafe {
-            from_glib_full(ffi::gtk_tree_model_filter_convert_path_to_child_path(self.to_glib_none().0, mut_override(filter_path.to_glib_none().0)))
+            from_glib_full(ffi::gtk_tree_model_filter_convert_path_to_child_path(self.as_ref().to_glib_none().0, mut_override(filter_path.to_glib_none().0)))
         }
     }
 
     fn get_model(&self) -> Option<TreeModel> {
         unsafe {
-            from_glib_none(ffi::gtk_tree_model_filter_get_model(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_tree_model_filter_get_model(self.as_ref().to_glib_none().0))
         }
     }
 
     fn refilter(&self) {
         unsafe {
-            ffi::gtk_tree_model_filter_refilter(self.to_glib_none().0);
+            ffi::gtk_tree_model_filter_refilter(self.as_ref().to_glib_none().0);
         }
     }
 
@@ -99,7 +101,7 @@ impl<O: IsA<TreeModelFilter>> TreeModelFilterExt for O {
 
     fn set_visible_column(&self, column: i32) {
         unsafe {
-            ffi::gtk_tree_model_filter_set_visible_column(self.to_glib_none().0, column);
+            ffi::gtk_tree_model_filter_set_visible_column(self.as_ref().to_glib_none().0, column);
         }
     }
 

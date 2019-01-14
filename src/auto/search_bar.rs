@@ -13,7 +13,7 @@ use ffi;
 use gdk;
 use glib::StaticType;
 use glib::Value;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
@@ -25,7 +25,7 @@ use std::fmt;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct SearchBar(Object<ffi::GtkSearchBar, ffi::GtkSearchBarClass>): Bin, Container, Widget, Buildable;
+    pub struct SearchBar(Object<ffi::GtkSearchBar, ffi::GtkSearchBarClass, SearchBarClass>) @extends Bin, Container, Widget, @implements Buildable;
 
     match fn {
         get_type => || ffi::gtk_search_bar_get_type(),
@@ -37,7 +37,7 @@ impl SearchBar {
     pub fn new() -> SearchBar {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_search_bar_new()).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_search_bar_new()).unsafe_cast()
         }
     }
 }
@@ -48,6 +48,8 @@ impl Default for SearchBar {
         Self::new()
     }
 }
+
+pub const NONE_SEARCH_BAR: Option<&SearchBar> = None;
 
 pub trait SearchBarExt: 'static {
     #[cfg(any(feature = "v3_10", feature = "dox"))]
@@ -85,42 +87,42 @@ impl<O: IsA<SearchBar>> SearchBarExt for O {
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn connect_entry<P: IsA<Entry>>(&self, entry: &P) {
         unsafe {
-            ffi::gtk_search_bar_connect_entry(self.to_glib_none().0, entry.to_glib_none().0);
+            ffi::gtk_search_bar_connect_entry(self.as_ref().to_glib_none().0, entry.as_ref().to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_search_mode(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_search_bar_get_search_mode(self.to_glib_none().0))
+            from_glib(ffi::gtk_search_bar_get_search_mode(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_show_close_button(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_search_bar_get_show_close_button(self.to_glib_none().0))
+            from_glib(ffi::gtk_search_bar_get_show_close_button(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn handle_event(&self, event: &gdk::Event) -> bool {
         unsafe {
-            from_glib(ffi::gtk_search_bar_handle_event(self.to_glib_none().0, mut_override(event.to_glib_none().0)))
+            from_glib(ffi::gtk_search_bar_handle_event(self.as_ref().to_glib_none().0, mut_override(event.to_glib_none().0)))
         }
     }
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_search_mode(&self, search_mode: bool) {
         unsafe {
-            ffi::gtk_search_bar_set_search_mode(self.to_glib_none().0, search_mode.to_glib());
+            ffi::gtk_search_bar_set_search_mode(self.as_ref().to_glib_none().0, search_mode.to_glib());
         }
     }
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_show_close_button(&self, visible: bool) {
         unsafe {
-            ffi::gtk_search_bar_set_show_close_button(self.to_glib_none().0, visible.to_glib());
+            ffi::gtk_search_bar_set_show_close_button(self.as_ref().to_glib_none().0, visible.to_glib());
         }
     }
 
@@ -155,7 +157,7 @@ impl<O: IsA<SearchBar>> SearchBarExt for O {
     fn connect_property_search_mode_enabled_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::search-mode-enabled\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::search-mode-enabled\0".as_ptr() as *const _,
                 transmute(notify_search_mode_enabled_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -163,7 +165,7 @@ impl<O: IsA<SearchBar>> SearchBarExt for O {
     fn connect_property_show_close_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::show-close-button\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::show-close-button\0".as_ptr() as *const _,
                 transmute(notify_show_close_button_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -172,13 +174,13 @@ impl<O: IsA<SearchBar>> SearchBarExt for O {
 unsafe extern "C" fn notify_search_mode_enabled_trampoline<P>(this: *mut ffi::GtkSearchBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<SearchBar> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&SearchBar::from_glib_borrow(this).downcast_unchecked())
+    f(&SearchBar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_close_button_trampoline<P>(this: *mut ffi::GtkSearchBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<SearchBar> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&SearchBar::from_glib_borrow(this).downcast_unchecked())
+    f(&SearchBar::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for SearchBar {

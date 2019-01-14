@@ -6,6 +6,7 @@ use StyleProperties;
 use ffi;
 use gdk;
 use glib::GString;
+use glib::object::IsA;
 use glib::translate::*;
 use std::fmt;
 
@@ -70,12 +71,11 @@ impl SymbolicColor {
     }
 
     #[cfg_attr(feature = "v3_8", deprecated)]
-    pub fn resolve<'a, P: Into<Option<&'a StyleProperties>>>(&self, props: P) -> Option<gdk::RGBA> {
+    pub fn resolve<'a, P: IsA<StyleProperties> + 'a, Q: Into<Option<&'a P>>>(&self, props: Q) -> Option<gdk::RGBA> {
         let props = props.into();
-        let props = props.to_glib_none();
         unsafe {
             let mut resolved_color = gdk::RGBA::uninitialized();
-            let ret = from_glib(ffi::gtk_symbolic_color_resolve(self.to_glib_none().0, props.0, resolved_color.to_glib_none_mut().0));
+            let ret = from_glib(ffi::gtk_symbolic_color_resolve(self.to_glib_none().0, props.map(|p| p.as_ref()).to_glib_none().0, resolved_color.to_glib_none_mut().0));
             if ret { Some(resolved_color) } else { None }
         }
     }

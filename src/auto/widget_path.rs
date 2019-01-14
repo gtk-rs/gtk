@@ -35,7 +35,7 @@ impl WidgetPath {
 
     pub fn append_for_widget<P: IsA<Widget>>(&self, widget: &P) -> i32 {
         unsafe {
-            ffi::gtk_widget_path_append_for_widget(self.to_glib_none().0, widget.to_glib_none().0)
+            ffi::gtk_widget_path_append_for_widget(self.to_glib_none().0, widget.as_ref().to_glib_none().0)
         }
     }
 
@@ -216,9 +216,8 @@ impl WidgetPath {
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     pub fn iter_set_object_name<'a, P: Into<Option<&'a str>>>(&self, pos: i32, name: P) {
         let name = name.into();
-        let name = name.to_glib_none();
         unsafe {
-            ffi::gtk_widget_path_iter_set_object_name(self.to_glib_none().0, pos, name.0);
+            ffi::gtk_widget_path_iter_set_object_name(self.to_glib_none().0, pos, name.to_glib_none().0);
         }
     }
 

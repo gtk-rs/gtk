@@ -4,7 +4,7 @@
 
 use TreeModel;
 use ffi;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
@@ -15,12 +15,14 @@ use std::fmt;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct TreeSortable(Object<ffi::GtkTreeSortable, ffi::GtkTreeSortableIface>): TreeModel;
+    pub struct TreeSortable(Interface<ffi::GtkTreeSortable>) @requires TreeModel;
 
     match fn {
         get_type => || ffi::gtk_tree_sortable_get_type(),
     }
 }
+
+pub const NONE_TREE_SORTABLE: Option<&TreeSortable> = None;
 
 pub trait TreeSortableExt: 'static {
     fn has_default_sort_func(&self) -> bool;
@@ -37,7 +39,7 @@ pub trait TreeSortableExt: 'static {
 impl<O: IsA<TreeSortable>> TreeSortableExt for O {
     fn has_default_sort_func(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_tree_sortable_has_default_sort_func(self.to_glib_none().0))
+            from_glib(ffi::gtk_tree_sortable_has_default_sort_func(self.as_ref().to_glib_none().0))
         }
     }
 
@@ -51,14 +53,14 @@ impl<O: IsA<TreeSortable>> TreeSortableExt for O {
 
     fn sort_column_changed(&self) {
         unsafe {
-            ffi::gtk_tree_sortable_sort_column_changed(self.to_glib_none().0);
+            ffi::gtk_tree_sortable_sort_column_changed(self.as_ref().to_glib_none().0);
         }
     }
 
     fn connect_sort_column_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"sort-column-changed\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"sort-column-changed\0".as_ptr() as *const _,
                 transmute(sort_column_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -67,7 +69,7 @@ impl<O: IsA<TreeSortable>> TreeSortableExt for O {
 unsafe extern "C" fn sort_column_changed_trampoline<P>(this: *mut ffi::GtkTreeSortable, f: glib_ffi::gpointer)
 where P: IsA<TreeSortable> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&TreeSortable::from_glib_borrow(this).downcast_unchecked())
+    f(&TreeSortable::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for TreeSortable {

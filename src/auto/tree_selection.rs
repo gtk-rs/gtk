@@ -8,7 +8,7 @@ use TreeModel;
 use TreePath;
 use TreeView;
 use ffi;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
@@ -20,12 +20,14 @@ use std::mem::transmute;
 use std::ptr;
 
 glib_wrapper! {
-    pub struct TreeSelection(Object<ffi::GtkTreeSelection, ffi::GtkTreeSelectionClass>);
+    pub struct TreeSelection(Object<ffi::GtkTreeSelection, ffi::GtkTreeSelectionClass, TreeSelectionClass>);
 
     match fn {
         get_type => || ffi::gtk_tree_selection_get_type(),
     }
 }
+
+pub const NONE_TREE_SELECTION: Option<&TreeSelection> = None;
 
 pub trait TreeSelectionExt: 'static {
     fn count_selected_rows(&self) -> i32;
@@ -76,13 +78,13 @@ pub trait TreeSelectionExt: 'static {
 impl<O: IsA<TreeSelection>> TreeSelectionExt for O {
     fn count_selected_rows(&self) -> i32 {
         unsafe {
-            ffi::gtk_tree_selection_count_selected_rows(self.to_glib_none().0)
+            ffi::gtk_tree_selection_count_selected_rows(self.as_ref().to_glib_none().0)
         }
     }
 
     fn get_mode(&self) -> SelectionMode {
         unsafe {
-            from_glib(ffi::gtk_tree_selection_get_mode(self.to_glib_none().0))
+            from_glib(ffi::gtk_tree_selection_get_mode(self.as_ref().to_glib_none().0))
         }
     }
 
@@ -94,7 +96,7 @@ impl<O: IsA<TreeSelection>> TreeSelectionExt for O {
         unsafe {
             let mut model = ptr::null_mut();
             let mut iter = TreeIter::uninitialized();
-            let ret = from_glib(ffi::gtk_tree_selection_get_selected(self.to_glib_none().0, &mut model, iter.to_glib_none_mut().0));
+            let ret = from_glib(ffi::gtk_tree_selection_get_selected(self.as_ref().to_glib_none().0, &mut model, iter.to_glib_none_mut().0));
             if ret { Some((from_glib_none(model), iter)) } else { None }
         }
     }
@@ -102,14 +104,14 @@ impl<O: IsA<TreeSelection>> TreeSelectionExt for O {
     fn get_selected_rows(&self) -> (Vec<TreePath>, TreeModel) {
         unsafe {
             let mut model = ptr::null_mut();
-            let ret = FromGlibPtrContainer::from_glib_full(ffi::gtk_tree_selection_get_selected_rows(self.to_glib_none().0, &mut model));
+            let ret = FromGlibPtrContainer::from_glib_full(ffi::gtk_tree_selection_get_selected_rows(self.as_ref().to_glib_none().0, &mut model));
             (ret, from_glib_none(model))
         }
     }
 
     fn get_tree_view(&self) -> Option<TreeView> {
         unsafe {
-            from_glib_none(ffi::gtk_tree_selection_get_tree_view(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_tree_selection_get_tree_view(self.as_ref().to_glib_none().0))
         }
     }
 
@@ -119,37 +121,37 @@ impl<O: IsA<TreeSelection>> TreeSelectionExt for O {
 
     fn iter_is_selected(&self, iter: &TreeIter) -> bool {
         unsafe {
-            from_glib(ffi::gtk_tree_selection_iter_is_selected(self.to_glib_none().0, mut_override(iter.to_glib_none().0)))
+            from_glib(ffi::gtk_tree_selection_iter_is_selected(self.as_ref().to_glib_none().0, mut_override(iter.to_glib_none().0)))
         }
     }
 
     fn path_is_selected(&self, path: &TreePath) -> bool {
         unsafe {
-            from_glib(ffi::gtk_tree_selection_path_is_selected(self.to_glib_none().0, mut_override(path.to_glib_none().0)))
+            from_glib(ffi::gtk_tree_selection_path_is_selected(self.as_ref().to_glib_none().0, mut_override(path.to_glib_none().0)))
         }
     }
 
     fn select_all(&self) {
         unsafe {
-            ffi::gtk_tree_selection_select_all(self.to_glib_none().0);
+            ffi::gtk_tree_selection_select_all(self.as_ref().to_glib_none().0);
         }
     }
 
     fn select_iter(&self, iter: &TreeIter) {
         unsafe {
-            ffi::gtk_tree_selection_select_iter(self.to_glib_none().0, mut_override(iter.to_glib_none().0));
+            ffi::gtk_tree_selection_select_iter(self.as_ref().to_glib_none().0, mut_override(iter.to_glib_none().0));
         }
     }
 
     fn select_path(&self, path: &TreePath) {
         unsafe {
-            ffi::gtk_tree_selection_select_path(self.to_glib_none().0, mut_override(path.to_glib_none().0));
+            ffi::gtk_tree_selection_select_path(self.as_ref().to_glib_none().0, mut_override(path.to_glib_none().0));
         }
     }
 
     fn select_range(&self, start_path: &TreePath, end_path: &TreePath) {
         unsafe {
-            ffi::gtk_tree_selection_select_range(self.to_glib_none().0, mut_override(start_path.to_glib_none().0), mut_override(end_path.to_glib_none().0));
+            ffi::gtk_tree_selection_select_range(self.as_ref().to_glib_none().0, mut_override(start_path.to_glib_none().0), mut_override(end_path.to_glib_none().0));
         }
     }
 
@@ -159,7 +161,7 @@ impl<O: IsA<TreeSelection>> TreeSelectionExt for O {
 
     fn set_mode(&self, type_: SelectionMode) {
         unsafe {
-            ffi::gtk_tree_selection_set_mode(self.to_glib_none().0, type_.to_glib());
+            ffi::gtk_tree_selection_set_mode(self.as_ref().to_glib_none().0, type_.to_glib());
         }
     }
 
@@ -169,32 +171,32 @@ impl<O: IsA<TreeSelection>> TreeSelectionExt for O {
 
     fn unselect_all(&self) {
         unsafe {
-            ffi::gtk_tree_selection_unselect_all(self.to_glib_none().0);
+            ffi::gtk_tree_selection_unselect_all(self.as_ref().to_glib_none().0);
         }
     }
 
     fn unselect_iter(&self, iter: &TreeIter) {
         unsafe {
-            ffi::gtk_tree_selection_unselect_iter(self.to_glib_none().0, mut_override(iter.to_glib_none().0));
+            ffi::gtk_tree_selection_unselect_iter(self.as_ref().to_glib_none().0, mut_override(iter.to_glib_none().0));
         }
     }
 
     fn unselect_path(&self, path: &TreePath) {
         unsafe {
-            ffi::gtk_tree_selection_unselect_path(self.to_glib_none().0, mut_override(path.to_glib_none().0));
+            ffi::gtk_tree_selection_unselect_path(self.as_ref().to_glib_none().0, mut_override(path.to_glib_none().0));
         }
     }
 
     fn unselect_range(&self, start_path: &TreePath, end_path: &TreePath) {
         unsafe {
-            ffi::gtk_tree_selection_unselect_range(self.to_glib_none().0, mut_override(start_path.to_glib_none().0), mut_override(end_path.to_glib_none().0));
+            ffi::gtk_tree_selection_unselect_range(self.as_ref().to_glib_none().0, mut_override(start_path.to_glib_none().0), mut_override(end_path.to_glib_none().0));
         }
     }
 
     fn connect_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"changed\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"changed\0".as_ptr() as *const _,
                 transmute(changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -202,7 +204,7 @@ impl<O: IsA<TreeSelection>> TreeSelectionExt for O {
     fn connect_property_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::mode\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::mode\0".as_ptr() as *const _,
                 transmute(notify_mode_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -211,13 +213,13 @@ impl<O: IsA<TreeSelection>> TreeSelectionExt for O {
 unsafe extern "C" fn changed_trampoline<P>(this: *mut ffi::GtkTreeSelection, f: glib_ffi::gpointer)
 where P: IsA<TreeSelection> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&TreeSelection::from_glib_borrow(this).downcast_unchecked())
+    f(&TreeSelection::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_mode_trampoline<P>(this: *mut ffi::GtkTreeSelection, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TreeSelection> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&TreeSelection::from_glib_borrow(this).downcast_unchecked())
+    f(&TreeSelection::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for TreeSelection {

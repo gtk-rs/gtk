@@ -14,7 +14,7 @@ use gdk;
 use glib::GString;
 use glib::StaticType;
 use glib::Value;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
@@ -26,7 +26,7 @@ use std::fmt;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct ColorButton(Object<ffi::GtkColorButton, ffi::GtkColorButtonClass>): Button, Bin, Container, Widget, Buildable, Actionable, ColorChooser;
+    pub struct ColorButton(Object<ffi::GtkColorButton, ffi::GtkColorButtonClass, ColorButtonClass>) @extends Button, Bin, Container, Widget, @implements Buildable, Actionable, ColorChooser;
 
     match fn {
         get_type => || ffi::gtk_color_button_get_type(),
@@ -37,14 +37,14 @@ impl ColorButton {
     pub fn new() -> ColorButton {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_color_button_new()).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_color_button_new()).unsafe_cast()
         }
     }
 
     pub fn new_with_rgba(rgba: &gdk::RGBA) -> ColorButton {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_color_button_new_with_rgba(rgba.to_glib_none().0)).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_color_button_new_with_rgba(rgba.to_glib_none().0)).unsafe_cast()
         }
     }
 }
@@ -54,6 +54,8 @@ impl Default for ColorButton {
         Self::new()
     }
 }
+
+pub const NONE_COLOR_BUTTON: Option<&ColorButton> = None;
 
 pub trait ColorButtonExt: 'static {
     fn get_title(&self) -> Option<GString>;
@@ -89,7 +91,7 @@ pub trait ColorButtonExt: 'static {
 impl<O: IsA<ColorButton>> ColorButtonExt for O {
     fn get_title(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::gtk_color_button_get_title(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_color_button_get_title(self.as_ref().to_glib_none().0))
         }
     }
 
@@ -99,7 +101,7 @@ impl<O: IsA<ColorButton>> ColorButtonExt for O {
 
     fn set_title(&self, title: &str) {
         unsafe {
-            ffi::gtk_color_button_set_title(self.to_glib_none().0, title.to_glib_none().0);
+            ffi::gtk_color_button_set_title(self.as_ref().to_glib_none().0, title.to_glib_none().0);
         }
     }
 
@@ -136,7 +138,7 @@ impl<O: IsA<ColorButton>> ColorButtonExt for O {
     fn connect_color_set<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"color-set\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"color-set\0".as_ptr() as *const _,
                 transmute(color_set_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -144,7 +146,7 @@ impl<O: IsA<ColorButton>> ColorButtonExt for O {
     fn connect_property_alpha_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::alpha\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::alpha\0".as_ptr() as *const _,
                 transmute(notify_alpha_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -152,7 +154,7 @@ impl<O: IsA<ColorButton>> ColorButtonExt for O {
     fn connect_property_rgba_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::rgba\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::rgba\0".as_ptr() as *const _,
                 transmute(notify_rgba_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -161,7 +163,7 @@ impl<O: IsA<ColorButton>> ColorButtonExt for O {
     fn connect_property_show_editor_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::show-editor\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::show-editor\0".as_ptr() as *const _,
                 transmute(notify_show_editor_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -169,7 +171,7 @@ impl<O: IsA<ColorButton>> ColorButtonExt for O {
     fn connect_property_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::title\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::title\0".as_ptr() as *const _,
                 transmute(notify_title_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -177,7 +179,7 @@ impl<O: IsA<ColorButton>> ColorButtonExt for O {
     fn connect_property_use_alpha_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::use-alpha\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::use-alpha\0".as_ptr() as *const _,
                 transmute(notify_use_alpha_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -186,38 +188,38 @@ impl<O: IsA<ColorButton>> ColorButtonExt for O {
 unsafe extern "C" fn color_set_trampoline<P>(this: *mut ffi::GtkColorButton, f: glib_ffi::gpointer)
 where P: IsA<ColorButton> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ColorButton::from_glib_borrow(this).downcast_unchecked())
+    f(&ColorButton::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_alpha_trampoline<P>(this: *mut ffi::GtkColorButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ColorButton> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ColorButton::from_glib_borrow(this).downcast_unchecked())
+    f(&ColorButton::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_rgba_trampoline<P>(this: *mut ffi::GtkColorButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ColorButton> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ColorButton::from_glib_borrow(this).downcast_unchecked())
+    f(&ColorButton::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_20", feature = "dox"))]
 unsafe extern "C" fn notify_show_editor_trampoline<P>(this: *mut ffi::GtkColorButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ColorButton> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ColorButton::from_glib_borrow(this).downcast_unchecked())
+    f(&ColorButton::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_title_trampoline<P>(this: *mut ffi::GtkColorButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ColorButton> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ColorButton::from_glib_borrow(this).downcast_unchecked())
+    f(&ColorButton::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_use_alpha_trampoline<P>(this: *mut ffi::GtkColorButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ColorButton> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ColorButton::from_glib_borrow(this).downcast_unchecked())
+    f(&ColorButton::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for ColorButton {

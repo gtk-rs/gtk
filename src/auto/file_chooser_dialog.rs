@@ -14,7 +14,7 @@ use glib::translate::*;
 use std::fmt;
 
 glib_wrapper! {
-    pub struct FileChooserDialog(Object<ffi::GtkFileChooserDialog, ffi::GtkFileChooserDialogClass>): Dialog, Window, Bin, Container, Widget, Buildable, FileChooser;
+    pub struct FileChooserDialog(Object<ffi::GtkFileChooserDialog, ffi::GtkFileChooserDialogClass, FileChooserDialogClass>) @extends Dialog, Window, Bin, Container, Widget, @implements Buildable, FileChooser;
 
     match fn {
         get_type => || ffi::gtk_file_chooser_dialog_get_type(),
@@ -26,6 +26,8 @@ impl FileChooserDialog {
     //    unsafe { TODO: call ffi::gtk_file_chooser_dialog_new() }
     //}
 }
+
+pub const NONE_FILE_CHOOSER_DIALOG: Option<&FileChooserDialog> = None;
 
 impl fmt::Display for FileChooserDialog {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

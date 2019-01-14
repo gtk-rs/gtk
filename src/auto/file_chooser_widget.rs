@@ -14,7 +14,7 @@ use glib;
 use glib::GString;
 use glib::StaticType;
 use glib::Value;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::object::ObjectExt;
 use glib::signal::SignalHandlerId;
@@ -28,7 +28,7 @@ use std::fmt;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct FileChooserWidget(Object<ffi::GtkFileChooserWidget, ffi::GtkFileChooserWidgetClass>): Box, Container, Widget, Buildable, Orientable, FileChooser;
+    pub struct FileChooserWidget(Object<ffi::GtkFileChooserWidget, ffi::GtkFileChooserWidgetClass, FileChooserWidgetClass>) @extends Box, Container, Widget, @implements Buildable, Orientable, FileChooser;
 
     match fn {
         get_type => || ffi::gtk_file_chooser_widget_get_type(),
@@ -39,10 +39,12 @@ impl FileChooserWidget {
     pub fn new(action: FileChooserAction) -> FileChooserWidget {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_file_chooser_widget_new(action.to_glib())).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_file_chooser_widget_new(action.to_glib())).unsafe_cast()
         }
     }
 }
+
+pub const NONE_FILE_CHOOSER_WIDGET: Option<&FileChooserWidget> = None;
 
 pub trait FileChooserWidgetExt: 'static {
     fn get_property_search_mode(&self) -> bool;
@@ -130,7 +132,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
     fn connect_desktop_folder<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"desktop-folder\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"desktop-folder\0".as_ptr() as *const _,
                 transmute(desktop_folder_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -142,7 +144,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
     fn connect_down_folder<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"down-folder\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"down-folder\0".as_ptr() as *const _,
                 transmute(down_folder_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -154,7 +156,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
     fn connect_home_folder<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"home-folder\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"home-folder\0".as_ptr() as *const _,
                 transmute(home_folder_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -166,7 +168,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
     fn connect_location_popup<F: Fn(&Self, &str) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &str) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"location-popup\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"location-popup\0".as_ptr() as *const _,
                 transmute(location_popup_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -178,7 +180,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
     fn connect_location_popup_on_paste<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"location-popup-on-paste\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"location-popup-on-paste\0".as_ptr() as *const _,
                 transmute(location_popup_on_paste_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -190,7 +192,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
     fn connect_location_toggle_popup<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"location-toggle-popup\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"location-toggle-popup\0".as_ptr() as *const _,
                 transmute(location_toggle_popup_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -202,7 +204,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
     fn connect_places_shortcut<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"places-shortcut\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"places-shortcut\0".as_ptr() as *const _,
                 transmute(places_shortcut_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -214,7 +216,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
     fn connect_quick_bookmark<F: Fn(&Self, i32) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, i32) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"quick-bookmark\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"quick-bookmark\0".as_ptr() as *const _,
                 transmute(quick_bookmark_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -226,7 +228,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
     fn connect_recent_shortcut<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"recent-shortcut\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"recent-shortcut\0".as_ptr() as *const _,
                 transmute(recent_shortcut_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -238,7 +240,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
     fn connect_search_shortcut<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"search-shortcut\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"search-shortcut\0".as_ptr() as *const _,
                 transmute(search_shortcut_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -250,7 +252,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
     fn connect_show_hidden<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"show-hidden\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"show-hidden\0".as_ptr() as *const _,
                 transmute(show_hidden_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -262,7 +264,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
     fn connect_up_folder<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"up-folder\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"up-folder\0".as_ptr() as *const _,
                 transmute(up_folder_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -274,7 +276,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
     fn connect_property_search_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::search-mode\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::search-mode\0".as_ptr() as *const _,
                 transmute(notify_search_mode_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -282,7 +284,7 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
     fn connect_property_subtitle_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::subtitle\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::subtitle\0".as_ptr() as *const _,
                 transmute(notify_subtitle_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -291,85 +293,85 @@ impl<O: IsA<FileChooserWidget>> FileChooserWidgetExt for O {
 unsafe extern "C" fn desktop_folder_trampoline<P>(this: *mut ffi::GtkFileChooserWidget, f: glib_ffi::gpointer)
 where P: IsA<FileChooserWidget> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&FileChooserWidget::from_glib_borrow(this).downcast_unchecked())
+    f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn down_folder_trampoline<P>(this: *mut ffi::GtkFileChooserWidget, f: glib_ffi::gpointer)
 where P: IsA<FileChooserWidget> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&FileChooserWidget::from_glib_borrow(this).downcast_unchecked())
+    f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn home_folder_trampoline<P>(this: *mut ffi::GtkFileChooserWidget, f: glib_ffi::gpointer)
 where P: IsA<FileChooserWidget> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&FileChooserWidget::from_glib_borrow(this).downcast_unchecked())
+    f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn location_popup_trampoline<P>(this: *mut ffi::GtkFileChooserWidget, path: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<FileChooserWidget> {
     let f: &&(Fn(&P, &str) + 'static) = transmute(f);
-    f(&FileChooserWidget::from_glib_borrow(this).downcast_unchecked(), &GString::from_glib_borrow(path))
+    f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(path))
 }
 
 unsafe extern "C" fn location_popup_on_paste_trampoline<P>(this: *mut ffi::GtkFileChooserWidget, f: glib_ffi::gpointer)
 where P: IsA<FileChooserWidget> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&FileChooserWidget::from_glib_borrow(this).downcast_unchecked())
+    f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn location_toggle_popup_trampoline<P>(this: *mut ffi::GtkFileChooserWidget, f: glib_ffi::gpointer)
 where P: IsA<FileChooserWidget> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&FileChooserWidget::from_glib_borrow(this).downcast_unchecked())
+    f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn places_shortcut_trampoline<P>(this: *mut ffi::GtkFileChooserWidget, f: glib_ffi::gpointer)
 where P: IsA<FileChooserWidget> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&FileChooserWidget::from_glib_borrow(this).downcast_unchecked())
+    f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn quick_bookmark_trampoline<P>(this: *mut ffi::GtkFileChooserWidget, bookmark_index: libc::c_int, f: glib_ffi::gpointer)
 where P: IsA<FileChooserWidget> {
     let f: &&(Fn(&P, i32) + 'static) = transmute(f);
-    f(&FileChooserWidget::from_glib_borrow(this).downcast_unchecked(), bookmark_index)
+    f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast(), bookmark_index)
 }
 
 unsafe extern "C" fn recent_shortcut_trampoline<P>(this: *mut ffi::GtkFileChooserWidget, f: glib_ffi::gpointer)
 where P: IsA<FileChooserWidget> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&FileChooserWidget::from_glib_borrow(this).downcast_unchecked())
+    f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn search_shortcut_trampoline<P>(this: *mut ffi::GtkFileChooserWidget, f: glib_ffi::gpointer)
 where P: IsA<FileChooserWidget> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&FileChooserWidget::from_glib_borrow(this).downcast_unchecked())
+    f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn show_hidden_trampoline<P>(this: *mut ffi::GtkFileChooserWidget, f: glib_ffi::gpointer)
 where P: IsA<FileChooserWidget> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&FileChooserWidget::from_glib_borrow(this).downcast_unchecked())
+    f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn up_folder_trampoline<P>(this: *mut ffi::GtkFileChooserWidget, f: glib_ffi::gpointer)
 where P: IsA<FileChooserWidget> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&FileChooserWidget::from_glib_borrow(this).downcast_unchecked())
+    f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_search_mode_trampoline<P>(this: *mut ffi::GtkFileChooserWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FileChooserWidget> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&FileChooserWidget::from_glib_borrow(this).downcast_unchecked())
+    f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_subtitle_trampoline<P>(this: *mut ffi::GtkFileChooserWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FileChooserWidget> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&FileChooserWidget::from_glib_borrow(this).downcast_unchecked())
+    f(&FileChooserWidget::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for FileChooserWidget {

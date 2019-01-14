@@ -10,7 +10,7 @@ use ToolButton;
 use ToolItem;
 use Widget;
 use ffi;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
@@ -21,7 +21,7 @@ use std::fmt;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct ToggleToolButton(Object<ffi::GtkToggleToolButton, ffi::GtkToggleToolButtonClass>): ToolButton, ToolItem, Bin, Container, Widget, Buildable, Actionable;
+    pub struct ToggleToolButton(Object<ffi::GtkToggleToolButton, ffi::GtkToggleToolButtonClass, ToggleToolButtonClass>) @extends ToolButton, ToolItem, Bin, Container, Widget, @implements Buildable, Actionable;
 
     match fn {
         get_type => || ffi::gtk_toggle_tool_button_get_type(),
@@ -32,7 +32,7 @@ impl ToggleToolButton {
     pub fn new() -> ToggleToolButton {
         assert_initialized_main_thread!();
         unsafe {
-            ToolItem::from_glib_none(ffi::gtk_toggle_tool_button_new()).downcast_unchecked()
+            ToolItem::from_glib_none(ffi::gtk_toggle_tool_button_new()).unsafe_cast()
         }
     }
 
@@ -40,7 +40,7 @@ impl ToggleToolButton {
     pub fn new_from_stock(stock_id: &str) -> ToggleToolButton {
         assert_initialized_main_thread!();
         unsafe {
-            ToolItem::from_glib_none(ffi::gtk_toggle_tool_button_new_from_stock(stock_id.to_glib_none().0)).downcast_unchecked()
+            ToolItem::from_glib_none(ffi::gtk_toggle_tool_button_new_from_stock(stock_id.to_glib_none().0)).unsafe_cast()
         }
     }
 }
@@ -50,6 +50,8 @@ impl Default for ToggleToolButton {
         Self::new()
     }
 }
+
+pub const NONE_TOGGLE_TOOL_BUTTON: Option<&ToggleToolButton> = None;
 
 pub trait ToggleToolButtonExt: 'static {
     fn get_active(&self) -> bool;
@@ -64,20 +66,20 @@ pub trait ToggleToolButtonExt: 'static {
 impl<O: IsA<ToggleToolButton>> ToggleToolButtonExt for O {
     fn get_active(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_toggle_tool_button_get_active(self.to_glib_none().0))
+            from_glib(ffi::gtk_toggle_tool_button_get_active(self.as_ref().to_glib_none().0))
         }
     }
 
     fn set_active(&self, is_active: bool) {
         unsafe {
-            ffi::gtk_toggle_tool_button_set_active(self.to_glib_none().0, is_active.to_glib());
+            ffi::gtk_toggle_tool_button_set_active(self.as_ref().to_glib_none().0, is_active.to_glib());
         }
     }
 
     fn connect_toggled<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"toggled\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"toggled\0".as_ptr() as *const _,
                 transmute(toggled_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -85,7 +87,7 @@ impl<O: IsA<ToggleToolButton>> ToggleToolButtonExt for O {
     fn connect_property_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::active\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::active\0".as_ptr() as *const _,
                 transmute(notify_active_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -94,13 +96,13 @@ impl<O: IsA<ToggleToolButton>> ToggleToolButtonExt for O {
 unsafe extern "C" fn toggled_trampoline<P>(this: *mut ffi::GtkToggleToolButton, f: glib_ffi::gpointer)
 where P: IsA<ToggleToolButton> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ToggleToolButton::from_glib_borrow(this).downcast_unchecked())
+    f(&ToggleToolButton::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_active_trampoline<P>(this: *mut ffi::GtkToggleToolButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToggleToolButton> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ToggleToolButton::from_glib_borrow(this).downcast_unchecked())
+    f(&ToggleToolButton::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for ToggleToolButton {

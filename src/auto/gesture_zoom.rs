@@ -7,7 +7,7 @@ use Gesture;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use Widget;
 use ffi;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use glib::signal::SignalHandlerId;
@@ -25,7 +25,7 @@ use std::fmt;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct GestureZoom(Object<ffi::GtkGestureZoom, ffi::GtkGestureZoomClass>): Gesture, EventController;
+    pub struct GestureZoom(Object<ffi::GtkGestureZoom, ffi::GtkGestureZoomClass, GestureZoomClass>) @extends Gesture, EventController;
 
     match fn {
         get_type => || ffi::gtk_gesture_zoom_get_type(),
@@ -37,10 +37,12 @@ impl GestureZoom {
     pub fn new<P: IsA<Widget>>(widget: &P) -> GestureZoom {
         skip_assert_initialized!();
         unsafe {
-            Gesture::from_glib_full(ffi::gtk_gesture_zoom_new(widget.to_glib_none().0)).downcast_unchecked()
+            Gesture::from_glib_full(ffi::gtk_gesture_zoom_new(widget.as_ref().to_glib_none().0)).unsafe_cast()
         }
     }
 }
+
+pub const NONE_GESTURE_ZOOM: Option<&GestureZoom> = None;
 
 pub trait GestureZoomExt: 'static {
     #[cfg(any(feature = "v3_14", feature = "dox"))]
@@ -54,7 +56,7 @@ impl<O: IsA<GestureZoom>> GestureZoomExt for O {
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_scale_delta(&self) -> f64 {
         unsafe {
-            ffi::gtk_gesture_zoom_get_scale_delta(self.to_glib_none().0)
+            ffi::gtk_gesture_zoom_get_scale_delta(self.as_ref().to_glib_none().0)
         }
     }
 
@@ -62,7 +64,7 @@ impl<O: IsA<GestureZoom>> GestureZoomExt for O {
     fn connect_scale_changed<F: Fn(&Self, f64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, f64) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"scale-changed\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"scale-changed\0".as_ptr() as *const _,
                 transmute(scale_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -72,7 +74,7 @@ impl<O: IsA<GestureZoom>> GestureZoomExt for O {
 unsafe extern "C" fn scale_changed_trampoline<P>(this: *mut ffi::GtkGestureZoom, scale: libc::c_double, f: glib_ffi::gpointer)
 where P: IsA<GestureZoom> {
     let f: &&(Fn(&P, f64) + 'static) = transmute(f);
-    f(&GestureZoom::from_glib_borrow(this).downcast_unchecked(), scale)
+    f(&GestureZoom::from_glib_borrow(this).unsafe_cast(), scale)
 }
 
 impl fmt::Display for GestureZoom {

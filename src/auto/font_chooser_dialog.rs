@@ -10,13 +10,13 @@ use FontChooser;
 use Widget;
 use Window;
 use ffi;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::translate::*;
 use std::fmt;
 
 glib_wrapper! {
-    pub struct FontChooserDialog(Object<ffi::GtkFontChooserDialog, ffi::GtkFontChooserDialogClass>): Dialog, Window, Bin, Container, Widget, Buildable, FontChooser;
+    pub struct FontChooserDialog(Object<ffi::GtkFontChooserDialog, ffi::GtkFontChooserDialogClass, FontChooserDialogClass>) @extends Dialog, Window, Bin, Container, Widget, @implements Buildable, FontChooser;
 
     match fn {
         get_type => || ffi::gtk_font_chooser_dialog_get_type(),
@@ -27,14 +27,14 @@ impl FontChooserDialog {
     pub fn new<'a, 'b, P: Into<Option<&'a str>>, Q: IsA<Window> + 'b, R: Into<Option<&'b Q>>>(title: P, parent: R) -> FontChooserDialog {
         assert_initialized_main_thread!();
         let title = title.into();
-        let title = title.to_glib_none();
         let parent = parent.into();
-        let parent = parent.to_glib_none();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_font_chooser_dialog_new(title.0, parent.0)).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_font_chooser_dialog_new(title.to_glib_none().0, parent.map(|p| p.as_ref()).to_glib_none().0)).unsafe_cast()
         }
     }
 }
+
+pub const NONE_FONT_CHOOSER_DIALOG: Option<&FontChooserDialog> = None;
 
 impl fmt::Display for FontChooserDialog {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

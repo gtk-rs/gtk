@@ -9,7 +9,7 @@ use Widget;
 use ffi;
 use glib::StaticType;
 use glib::Value;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
@@ -22,7 +22,7 @@ use std::mem;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct Alignment(Object<ffi::GtkAlignment, ffi::GtkAlignmentClass>): Bin, Container, Widget, Buildable;
+    pub struct Alignment(Object<ffi::GtkAlignment, ffi::GtkAlignmentClass, AlignmentClass>) @extends Bin, Container, Widget, @implements Buildable;
 
     match fn {
         get_type => || ffi::gtk_alignment_get_type(),
@@ -34,10 +34,12 @@ impl Alignment {
     pub fn new(xalign: f32, yalign: f32, xscale: f32, yscale: f32) -> Alignment {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_alignment_new(xalign, yalign, xscale, yscale)).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_alignment_new(xalign, yalign, xscale, yscale)).unsafe_cast()
         }
     }
 }
+
+pub const NONE_ALIGNMENT: Option<&Alignment> = None;
 
 pub trait AlignmentExt: 'static {
     #[cfg_attr(feature = "v3_14", deprecated)]
@@ -129,20 +131,20 @@ impl<O: IsA<Alignment>> AlignmentExt for O {
             let mut padding_bottom = mem::uninitialized();
             let mut padding_left = mem::uninitialized();
             let mut padding_right = mem::uninitialized();
-            ffi::gtk_alignment_get_padding(self.to_glib_none().0, &mut padding_top, &mut padding_bottom, &mut padding_left, &mut padding_right);
+            ffi::gtk_alignment_get_padding(self.as_ref().to_glib_none().0, &mut padding_top, &mut padding_bottom, &mut padding_left, &mut padding_right);
             (padding_top, padding_bottom, padding_left, padding_right)
         }
     }
 
     fn set(&self, xalign: f32, yalign: f32, xscale: f32, yscale: f32) {
         unsafe {
-            ffi::gtk_alignment_set(self.to_glib_none().0, xalign, yalign, xscale, yscale);
+            ffi::gtk_alignment_set(self.as_ref().to_glib_none().0, xalign, yalign, xscale, yscale);
         }
     }
 
     fn set_padding(&self, padding_top: u32, padding_bottom: u32, padding_left: u32, padding_right: u32) {
         unsafe {
-            ffi::gtk_alignment_set_padding(self.to_glib_none().0, padding_top, padding_bottom, padding_left, padding_right);
+            ffi::gtk_alignment_set_padding(self.as_ref().to_glib_none().0, padding_top, padding_bottom, padding_left, padding_right);
         }
     }
 
@@ -261,7 +263,7 @@ impl<O: IsA<Alignment>> AlignmentExt for O {
     fn connect_property_bottom_padding_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::bottom-padding\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::bottom-padding\0".as_ptr() as *const _,
                 transmute(notify_bottom_padding_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -269,7 +271,7 @@ impl<O: IsA<Alignment>> AlignmentExt for O {
     fn connect_property_left_padding_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::left-padding\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::left-padding\0".as_ptr() as *const _,
                 transmute(notify_left_padding_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -277,7 +279,7 @@ impl<O: IsA<Alignment>> AlignmentExt for O {
     fn connect_property_right_padding_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::right-padding\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::right-padding\0".as_ptr() as *const _,
                 transmute(notify_right_padding_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -285,7 +287,7 @@ impl<O: IsA<Alignment>> AlignmentExt for O {
     fn connect_property_top_padding_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::top-padding\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::top-padding\0".as_ptr() as *const _,
                 transmute(notify_top_padding_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -293,7 +295,7 @@ impl<O: IsA<Alignment>> AlignmentExt for O {
     fn connect_property_xalign_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::xalign\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::xalign\0".as_ptr() as *const _,
                 transmute(notify_xalign_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -301,7 +303,7 @@ impl<O: IsA<Alignment>> AlignmentExt for O {
     fn connect_property_xscale_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::xscale\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::xscale\0".as_ptr() as *const _,
                 transmute(notify_xscale_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -309,7 +311,7 @@ impl<O: IsA<Alignment>> AlignmentExt for O {
     fn connect_property_yalign_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::yalign\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::yalign\0".as_ptr() as *const _,
                 transmute(notify_yalign_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -317,7 +319,7 @@ impl<O: IsA<Alignment>> AlignmentExt for O {
     fn connect_property_yscale_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::yscale\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::yscale\0".as_ptr() as *const _,
                 transmute(notify_yscale_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -326,49 +328,49 @@ impl<O: IsA<Alignment>> AlignmentExt for O {
 unsafe extern "C" fn notify_bottom_padding_trampoline<P>(this: *mut ffi::GtkAlignment, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Alignment> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Alignment::from_glib_borrow(this).downcast_unchecked())
+    f(&Alignment::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_left_padding_trampoline<P>(this: *mut ffi::GtkAlignment, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Alignment> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Alignment::from_glib_borrow(this).downcast_unchecked())
+    f(&Alignment::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_right_padding_trampoline<P>(this: *mut ffi::GtkAlignment, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Alignment> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Alignment::from_glib_borrow(this).downcast_unchecked())
+    f(&Alignment::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_top_padding_trampoline<P>(this: *mut ffi::GtkAlignment, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Alignment> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Alignment::from_glib_borrow(this).downcast_unchecked())
+    f(&Alignment::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_xalign_trampoline<P>(this: *mut ffi::GtkAlignment, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Alignment> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Alignment::from_glib_borrow(this).downcast_unchecked())
+    f(&Alignment::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_xscale_trampoline<P>(this: *mut ffi::GtkAlignment, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Alignment> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Alignment::from_glib_borrow(this).downcast_unchecked())
+    f(&Alignment::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_yalign_trampoline<P>(this: *mut ffi::GtkAlignment, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Alignment> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Alignment::from_glib_borrow(this).downcast_unchecked())
+    f(&Alignment::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_yscale_trampoline<P>(this: *mut ffi::GtkAlignment, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Alignment> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Alignment::from_glib_borrow(this).downcast_unchecked())
+    f(&Alignment::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for Alignment {

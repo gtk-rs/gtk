@@ -6,10 +6,9 @@ use Window;
 use ffi;
 use gdk;
 use gio;
-use gio_ffi;
 use glib::StaticType;
 use glib::Value;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
@@ -21,9 +20,7 @@ use std::fmt;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct MountOperation(Object<ffi::GtkMountOperation, ffi::GtkMountOperationClass>): [
-        gio::MountOperation => gio_ffi::GMountOperation,
-    ];
+    pub struct MountOperation(Object<ffi::GtkMountOperation, ffi::GtkMountOperationClass, MountOperationClass>) @extends gio::MountOperation;
 
     match fn {
         get_type => || ffi::gtk_mount_operation_get_type(),
@@ -34,12 +31,13 @@ impl MountOperation {
     pub fn new<'a, P: IsA<Window> + 'a, Q: Into<Option<&'a P>>>(parent: Q) -> MountOperation {
         assert_initialized_main_thread!();
         let parent = parent.into();
-        let parent = parent.to_glib_none();
         unsafe {
-            gio::MountOperation::from_glib_full(ffi::gtk_mount_operation_new(parent.0)).downcast_unchecked()
+            gio::MountOperation::from_glib_full(ffi::gtk_mount_operation_new(parent.map(|p| p.as_ref()).to_glib_none().0)).unsafe_cast()
         }
     }
 }
+
+pub const NONE_MOUNT_OPERATION: Option<&MountOperation> = None;
 
 pub trait MountOperationExt: 'static {
     fn get_parent(&self) -> Option<Window>;
@@ -50,7 +48,7 @@ pub trait MountOperationExt: 'static {
 
     fn set_parent<'a, P: IsA<Window> + 'a, Q: Into<Option<&'a P>>>(&self, parent: Q);
 
-    fn set_screen(&self, screen: &gdk::Screen);
+    fn set_screen<P: IsA<gdk::Screen>>(&self, screen: &P);
 
     fn get_property_is_showing(&self) -> bool;
 
@@ -64,33 +62,32 @@ pub trait MountOperationExt: 'static {
 impl<O: IsA<MountOperation>> MountOperationExt for O {
     fn get_parent(&self) -> Option<Window> {
         unsafe {
-            from_glib_none(ffi::gtk_mount_operation_get_parent(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_mount_operation_get_parent(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_screen(&self) -> Option<gdk::Screen> {
         unsafe {
-            from_glib_none(ffi::gtk_mount_operation_get_screen(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_mount_operation_get_screen(self.as_ref().to_glib_none().0))
         }
     }
 
     fn is_showing(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_mount_operation_is_showing(self.to_glib_none().0))
+            from_glib(ffi::gtk_mount_operation_is_showing(self.as_ref().to_glib_none().0))
         }
     }
 
     fn set_parent<'a, P: IsA<Window> + 'a, Q: Into<Option<&'a P>>>(&self, parent: Q) {
         let parent = parent.into();
-        let parent = parent.to_glib_none();
         unsafe {
-            ffi::gtk_mount_operation_set_parent(self.to_glib_none().0, parent.0);
+            ffi::gtk_mount_operation_set_parent(self.as_ref().to_glib_none().0, parent.map(|p| p.as_ref()).to_glib_none().0);
         }
     }
 
-    fn set_screen(&self, screen: &gdk::Screen) {
+    fn set_screen<P: IsA<gdk::Screen>>(&self, screen: &P) {
         unsafe {
-            ffi::gtk_mount_operation_set_screen(self.to_glib_none().0, screen.to_glib_none().0);
+            ffi::gtk_mount_operation_set_screen(self.as_ref().to_glib_none().0, screen.as_ref().to_glib_none().0);
         }
     }
 
@@ -105,7 +102,7 @@ impl<O: IsA<MountOperation>> MountOperationExt for O {
     fn connect_property_is_showing_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::is-showing\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::is-showing\0".as_ptr() as *const _,
                 transmute(notify_is_showing_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -113,7 +110,7 @@ impl<O: IsA<MountOperation>> MountOperationExt for O {
     fn connect_property_parent_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::parent\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::parent\0".as_ptr() as *const _,
                 transmute(notify_parent_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -121,7 +118,7 @@ impl<O: IsA<MountOperation>> MountOperationExt for O {
     fn connect_property_screen_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::screen\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::screen\0".as_ptr() as *const _,
                 transmute(notify_screen_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -130,19 +127,19 @@ impl<O: IsA<MountOperation>> MountOperationExt for O {
 unsafe extern "C" fn notify_is_showing_trampoline<P>(this: *mut ffi::GtkMountOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MountOperation> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&MountOperation::from_glib_borrow(this).downcast_unchecked())
+    f(&MountOperation::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_parent_trampoline<P>(this: *mut ffi::GtkMountOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MountOperation> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&MountOperation::from_glib_borrow(this).downcast_unchecked())
+    f(&MountOperation::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_screen_trampoline<P>(this: *mut ffi::GtkMountOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MountOperation> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&MountOperation::from_glib_borrow(this).downcast_unchecked())
+    f(&MountOperation::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for MountOperation {

@@ -10,7 +10,7 @@ use Widget;
 use ffi;
 #[cfg(any(feature = "v3_6", feature = "dox"))]
 use glib::GString;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 #[cfg(any(feature = "v3_6", feature = "dox"))]
 use glib::signal::SignalHandlerId;
@@ -30,7 +30,7 @@ use std::mem;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct LevelBar(Object<ffi::GtkLevelBar, ffi::GtkLevelBarClass>): Widget, Buildable, Orientable;
+    pub struct LevelBar(Object<ffi::GtkLevelBar, ffi::GtkLevelBarClass, LevelBarClass>) @extends Widget, @implements Buildable, Orientable;
 
     match fn {
         get_type => || ffi::gtk_level_bar_get_type(),
@@ -42,7 +42,7 @@ impl LevelBar {
     pub fn new() -> LevelBar {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_level_bar_new()).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_level_bar_new()).unsafe_cast()
         }
     }
 
@@ -50,7 +50,7 @@ impl LevelBar {
     pub fn new_for_interval(min_value: f64, max_value: f64) -> LevelBar {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_level_bar_new_for_interval(min_value, max_value)).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_level_bar_new_for_interval(min_value, max_value)).unsafe_cast()
         }
     }
 }
@@ -61,6 +61,8 @@ impl Default for LevelBar {
         Self::new()
     }
 }
+
+pub const NONE_LEVEL_BAR: Option<&LevelBar> = None;
 
 pub trait LevelBarExt: 'static {
     #[cfg(any(feature = "v3_6", feature = "dox"))]
@@ -125,45 +127,44 @@ impl<O: IsA<LevelBar>> LevelBarExt for O {
     #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn add_offset_value(&self, name: &str, value: f64) {
         unsafe {
-            ffi::gtk_level_bar_add_offset_value(self.to_glib_none().0, name.to_glib_none().0, value);
+            ffi::gtk_level_bar_add_offset_value(self.as_ref().to_glib_none().0, name.to_glib_none().0, value);
         }
     }
 
     #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn get_inverted(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_level_bar_get_inverted(self.to_glib_none().0))
+            from_glib(ffi::gtk_level_bar_get_inverted(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_max_value(&self) -> f64 {
         unsafe {
-            ffi::gtk_level_bar_get_max_value(self.to_glib_none().0)
+            ffi::gtk_level_bar_get_max_value(self.as_ref().to_glib_none().0)
         }
     }
 
     #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_min_value(&self) -> f64 {
         unsafe {
-            ffi::gtk_level_bar_get_min_value(self.to_glib_none().0)
+            ffi::gtk_level_bar_get_min_value(self.as_ref().to_glib_none().0)
         }
     }
 
     #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_mode(&self) -> LevelBarMode {
         unsafe {
-            from_glib(ffi::gtk_level_bar_get_mode(self.to_glib_none().0))
+            from_glib(ffi::gtk_level_bar_get_mode(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_offset_value<'a, P: Into<Option<&'a str>>>(&self, name: P) -> Option<f64> {
         let name = name.into();
-        let name = name.to_glib_none();
         unsafe {
             let mut value = mem::uninitialized();
-            let ret = from_glib(ffi::gtk_level_bar_get_offset_value(self.to_glib_none().0, name.0, &mut value));
+            let ret = from_glib(ffi::gtk_level_bar_get_offset_value(self.as_ref().to_glib_none().0, name.to_glib_none().0, &mut value));
             if ret { Some(value) } else { None }
         }
     }
@@ -171,51 +172,50 @@ impl<O: IsA<LevelBar>> LevelBarExt for O {
     #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_value(&self) -> f64 {
         unsafe {
-            ffi::gtk_level_bar_get_value(self.to_glib_none().0)
+            ffi::gtk_level_bar_get_value(self.as_ref().to_glib_none().0)
         }
     }
 
     #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn remove_offset_value<'a, P: Into<Option<&'a str>>>(&self, name: P) {
         let name = name.into();
-        let name = name.to_glib_none();
         unsafe {
-            ffi::gtk_level_bar_remove_offset_value(self.to_glib_none().0, name.0);
+            ffi::gtk_level_bar_remove_offset_value(self.as_ref().to_glib_none().0, name.to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn set_inverted(&self, inverted: bool) {
         unsafe {
-            ffi::gtk_level_bar_set_inverted(self.to_glib_none().0, inverted.to_glib());
+            ffi::gtk_level_bar_set_inverted(self.as_ref().to_glib_none().0, inverted.to_glib());
         }
     }
 
     #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn set_max_value(&self, value: f64) {
         unsafe {
-            ffi::gtk_level_bar_set_max_value(self.to_glib_none().0, value);
+            ffi::gtk_level_bar_set_max_value(self.as_ref().to_glib_none().0, value);
         }
     }
 
     #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn set_min_value(&self, value: f64) {
         unsafe {
-            ffi::gtk_level_bar_set_min_value(self.to_glib_none().0, value);
+            ffi::gtk_level_bar_set_min_value(self.as_ref().to_glib_none().0, value);
         }
     }
 
     #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn set_mode(&self, mode: LevelBarMode) {
         unsafe {
-            ffi::gtk_level_bar_set_mode(self.to_glib_none().0, mode.to_glib());
+            ffi::gtk_level_bar_set_mode(self.as_ref().to_glib_none().0, mode.to_glib());
         }
     }
 
     #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn set_value(&self, value: f64) {
         unsafe {
-            ffi::gtk_level_bar_set_value(self.to_glib_none().0, value);
+            ffi::gtk_level_bar_set_value(self.as_ref().to_glib_none().0, value);
         }
     }
 
@@ -223,7 +223,7 @@ impl<O: IsA<LevelBar>> LevelBarExt for O {
     fn connect_offset_changed<F: Fn(&Self, &str) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &str) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"offset-changed\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"offset-changed\0".as_ptr() as *const _,
                 transmute(offset_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -232,7 +232,7 @@ impl<O: IsA<LevelBar>> LevelBarExt for O {
     fn connect_property_inverted_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::inverted\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::inverted\0".as_ptr() as *const _,
                 transmute(notify_inverted_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -241,7 +241,7 @@ impl<O: IsA<LevelBar>> LevelBarExt for O {
     fn connect_property_max_value_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::max-value\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::max-value\0".as_ptr() as *const _,
                 transmute(notify_max_value_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -250,7 +250,7 @@ impl<O: IsA<LevelBar>> LevelBarExt for O {
     fn connect_property_min_value_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::min-value\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::min-value\0".as_ptr() as *const _,
                 transmute(notify_min_value_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -259,7 +259,7 @@ impl<O: IsA<LevelBar>> LevelBarExt for O {
     fn connect_property_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::mode\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::mode\0".as_ptr() as *const _,
                 transmute(notify_mode_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -268,7 +268,7 @@ impl<O: IsA<LevelBar>> LevelBarExt for O {
     fn connect_property_value_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::value\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::value\0".as_ptr() as *const _,
                 transmute(notify_value_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -278,42 +278,42 @@ impl<O: IsA<LevelBar>> LevelBarExt for O {
 unsafe extern "C" fn offset_changed_trampoline<P>(this: *mut ffi::GtkLevelBar, name: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<LevelBar> {
     let f: &&(Fn(&P, &str) + 'static) = transmute(f);
-    f(&LevelBar::from_glib_borrow(this).downcast_unchecked(), &GString::from_glib_borrow(name))
+    f(&LevelBar::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(name))
 }
 
 #[cfg(any(feature = "v3_8", feature = "dox"))]
 unsafe extern "C" fn notify_inverted_trampoline<P>(this: *mut ffi::GtkLevelBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<LevelBar> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&LevelBar::from_glib_borrow(this).downcast_unchecked())
+    f(&LevelBar::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_6", feature = "dox"))]
 unsafe extern "C" fn notify_max_value_trampoline<P>(this: *mut ffi::GtkLevelBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<LevelBar> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&LevelBar::from_glib_borrow(this).downcast_unchecked())
+    f(&LevelBar::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_6", feature = "dox"))]
 unsafe extern "C" fn notify_min_value_trampoline<P>(this: *mut ffi::GtkLevelBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<LevelBar> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&LevelBar::from_glib_borrow(this).downcast_unchecked())
+    f(&LevelBar::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_6", feature = "dox"))]
 unsafe extern "C" fn notify_mode_trampoline<P>(this: *mut ffi::GtkLevelBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<LevelBar> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&LevelBar::from_glib_borrow(this).downcast_unchecked())
+    f(&LevelBar::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_6", feature = "dox"))]
 unsafe extern "C" fn notify_value_trampoline<P>(this: *mut ffi::GtkLevelBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<LevelBar> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&LevelBar::from_glib_borrow(this).downcast_unchecked())
+    f(&LevelBar::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for LevelBar {

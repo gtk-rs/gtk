@@ -10,7 +10,7 @@ use glib::translate::*;
 use std::fmt;
 
 glib_wrapper! {
-    pub struct IconFactory(Object<ffi::GtkIconFactory, ffi::GtkIconFactoryClass>): Buildable;
+    pub struct IconFactory(Object<ffi::GtkIconFactory, ffi::GtkIconFactoryClass, IconFactoryClass>) @implements Buildable;
 
     match fn {
         get_type => || ffi::gtk_icon_factory_get_type(),
@@ -42,6 +42,8 @@ impl Default for IconFactory {
     }
 }
 
+pub const NONE_ICON_FACTORY: Option<&IconFactory> = None;
+
 pub trait IconFactoryExt: 'static {
     #[cfg_attr(feature = "v3_10", deprecated)]
     fn add(&self, stock_id: &str, icon_set: &IconSet);
@@ -59,25 +61,25 @@ pub trait IconFactoryExt: 'static {
 impl<O: IsA<IconFactory>> IconFactoryExt for O {
     fn add(&self, stock_id: &str, icon_set: &IconSet) {
         unsafe {
-            ffi::gtk_icon_factory_add(self.to_glib_none().0, stock_id.to_glib_none().0, icon_set.to_glib_none().0);
+            ffi::gtk_icon_factory_add(self.as_ref().to_glib_none().0, stock_id.to_glib_none().0, icon_set.to_glib_none().0);
         }
     }
 
     fn add_default(&self) {
         unsafe {
-            ffi::gtk_icon_factory_add_default(self.to_glib_none().0);
+            ffi::gtk_icon_factory_add_default(self.as_ref().to_glib_none().0);
         }
     }
 
     fn lookup(&self, stock_id: &str) -> Option<IconSet> {
         unsafe {
-            from_glib_none(ffi::gtk_icon_factory_lookup(self.to_glib_none().0, stock_id.to_glib_none().0))
+            from_glib_none(ffi::gtk_icon_factory_lookup(self.as_ref().to_glib_none().0, stock_id.to_glib_none().0))
         }
     }
 
     fn remove_default(&self) {
         unsafe {
-            ffi::gtk_icon_factory_remove_default(self.to_glib_none().0);
+            ffi::gtk_icon_factory_remove_default(self.as_ref().to_glib_none().0);
         }
     }
 }

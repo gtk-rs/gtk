@@ -7,7 +7,7 @@ use IconSize;
 use ffi;
 use glib::StaticType;
 use glib::Value;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
@@ -19,7 +19,7 @@ use std::fmt;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct CellRendererSpinner(Object<ffi::GtkCellRendererSpinner, ffi::GtkCellRendererSpinnerClass>): CellRenderer;
+    pub struct CellRendererSpinner(Object<ffi::GtkCellRendererSpinner, ffi::GtkCellRendererSpinnerClass, CellRendererSpinnerClass>) @extends CellRenderer;
 
     match fn {
         get_type => || ffi::gtk_cell_renderer_spinner_get_type(),
@@ -30,7 +30,7 @@ impl CellRendererSpinner {
     pub fn new() -> CellRendererSpinner {
         assert_initialized_main_thread!();
         unsafe {
-            CellRenderer::from_glib_none(ffi::gtk_cell_renderer_spinner_new()).downcast_unchecked()
+            CellRenderer::from_glib_none(ffi::gtk_cell_renderer_spinner_new()).unsafe_cast()
         }
     }
 }
@@ -40,6 +40,8 @@ impl Default for CellRendererSpinner {
         Self::new()
     }
 }
+
+pub const NONE_CELL_RENDERER_SPINNER: Option<&CellRendererSpinner> = None;
 
 pub trait CellRendererSpinnerExt: 'static {
     fn get_property_active(&self) -> bool;
@@ -107,7 +109,7 @@ impl<O: IsA<CellRendererSpinner>> CellRendererSpinnerExt for O {
     fn connect_property_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::active\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::active\0".as_ptr() as *const _,
                 transmute(notify_active_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -115,7 +117,7 @@ impl<O: IsA<CellRendererSpinner>> CellRendererSpinnerExt for O {
     fn connect_property_pulse_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::pulse\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::pulse\0".as_ptr() as *const _,
                 transmute(notify_pulse_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -123,7 +125,7 @@ impl<O: IsA<CellRendererSpinner>> CellRendererSpinnerExt for O {
     fn connect_property_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::size\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::size\0".as_ptr() as *const _,
                 transmute(notify_size_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -132,19 +134,19 @@ impl<O: IsA<CellRendererSpinner>> CellRendererSpinnerExt for O {
 unsafe extern "C" fn notify_active_trampoline<P>(this: *mut ffi::GtkCellRendererSpinner, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererSpinner> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererSpinner::from_glib_borrow(this).downcast_unchecked())
+    f(&CellRendererSpinner::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_pulse_trampoline<P>(this: *mut ffi::GtkCellRendererSpinner, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererSpinner> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererSpinner::from_glib_borrow(this).downcast_unchecked())
+    f(&CellRendererSpinner::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_size_trampoline<P>(this: *mut ffi::GtkCellRendererSpinner, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererSpinner> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererSpinner::from_glib_borrow(this).downcast_unchecked())
+    f(&CellRendererSpinner::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for CellRendererSpinner {

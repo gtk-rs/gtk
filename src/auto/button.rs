@@ -17,7 +17,7 @@ use glib;
 use glib::GString;
 use glib::StaticType;
 use glib::Value;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::object::ObjectExt;
 use glib::signal::SignalHandlerId;
@@ -31,7 +31,7 @@ use std::mem;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct Button(Object<ffi::GtkButton, ffi::GtkButtonClass>): Bin, Container, Widget, Buildable, Actionable;
+    pub struct Button(Object<ffi::GtkButton, ffi::GtkButtonClass, ButtonClass>) @extends Bin, Container, Widget, @implements Buildable, Actionable;
 
     match fn {
         get_type => || ffi::gtk_button_get_type(),
@@ -42,7 +42,7 @@ impl Button {
     pub fn new() -> Button {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_button_new()).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_button_new()).unsafe_cast()
         }
     }
 
@@ -50,9 +50,8 @@ impl Button {
     pub fn new_from_icon_name<'a, P: Into<Option<&'a str>>>(icon_name: P, size: IconSize) -> Button {
         assert_initialized_main_thread!();
         let icon_name = icon_name.into();
-        let icon_name = icon_name.to_glib_none();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_button_new_from_icon_name(icon_name.0, size.to_glib())).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_button_new_from_icon_name(icon_name.to_glib_none().0, size.to_glib())).unsafe_cast()
         }
     }
 
@@ -60,21 +59,21 @@ impl Button {
     pub fn new_from_stock(stock_id: &str) -> Button {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_button_new_from_stock(stock_id.to_glib_none().0)).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_button_new_from_stock(stock_id.to_glib_none().0)).unsafe_cast()
         }
     }
 
     pub fn new_with_label(label: &str) -> Button {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_button_new_with_label(label.to_glib_none().0)).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_button_new_with_label(label.to_glib_none().0)).unsafe_cast()
         }
     }
 
     pub fn new_with_mnemonic(label: &str) -> Button {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_button_new_with_mnemonic(label.to_glib_none().0)).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_button_new_with_mnemonic(label.to_glib_none().0)).unsafe_cast()
         }
     }
 }
@@ -84,6 +83,8 @@ impl Default for Button {
         Self::new()
     }
 }
+
+pub const NONE_BUTTON: Option<&Button> = None;
 
 pub trait ButtonExt: 'static {
     fn clicked(&self);
@@ -182,7 +183,7 @@ pub trait ButtonExt: 'static {
 impl<O: IsA<Button>> ButtonExt for O {
     fn clicked(&self) {
         unsafe {
-            ffi::gtk_button_clicked(self.to_glib_none().0);
+            ffi::gtk_button_clicked(self.as_ref().to_glib_none().0);
         }
     }
 
@@ -190,7 +191,7 @@ impl<O: IsA<Button>> ButtonExt for O {
         unsafe {
             let mut xalign = mem::uninitialized();
             let mut yalign = mem::uninitialized();
-            ffi::gtk_button_get_alignment(self.to_glib_none().0, &mut xalign, &mut yalign);
+            ffi::gtk_button_get_alignment(self.as_ref().to_glib_none().0, &mut xalign, &mut yalign);
             (xalign, yalign)
         }
     }
@@ -198,114 +199,113 @@ impl<O: IsA<Button>> ButtonExt for O {
     #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_always_show_image(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_button_get_always_show_image(self.to_glib_none().0))
+            from_glib(ffi::gtk_button_get_always_show_image(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_event_window(&self) -> Option<gdk::Window> {
         unsafe {
-            from_glib_none(ffi::gtk_button_get_event_window(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_button_get_event_window(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(not(feature = "v3_20"), feature = "dox"))]
     fn get_focus_on_click(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_button_get_focus_on_click(self.to_glib_none().0))
+            from_glib(ffi::gtk_button_get_focus_on_click(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_image(&self) -> Option<Widget> {
         unsafe {
-            from_glib_none(ffi::gtk_button_get_image(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_button_get_image(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_image_position(&self) -> PositionType {
         unsafe {
-            from_glib(ffi::gtk_button_get_image_position(self.to_glib_none().0))
+            from_glib(ffi::gtk_button_get_image_position(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_label(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::gtk_button_get_label(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_button_get_label(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_relief(&self) -> ReliefStyle {
         unsafe {
-            from_glib(ffi::gtk_button_get_relief(self.to_glib_none().0))
+            from_glib(ffi::gtk_button_get_relief(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_use_stock(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_button_get_use_stock(self.to_glib_none().0))
+            from_glib(ffi::gtk_button_get_use_stock(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_use_underline(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_button_get_use_underline(self.to_glib_none().0))
+            from_glib(ffi::gtk_button_get_use_underline(self.as_ref().to_glib_none().0))
         }
     }
 
     fn set_alignment(&self, xalign: f32, yalign: f32) {
         unsafe {
-            ffi::gtk_button_set_alignment(self.to_glib_none().0, xalign, yalign);
+            ffi::gtk_button_set_alignment(self.as_ref().to_glib_none().0, xalign, yalign);
         }
     }
 
     #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn set_always_show_image(&self, always_show: bool) {
         unsafe {
-            ffi::gtk_button_set_always_show_image(self.to_glib_none().0, always_show.to_glib());
+            ffi::gtk_button_set_always_show_image(self.as_ref().to_glib_none().0, always_show.to_glib());
         }
     }
 
     #[cfg(any(not(feature = "v3_20"), feature = "dox"))]
     fn set_focus_on_click(&self, focus_on_click: bool) {
         unsafe {
-            ffi::gtk_button_set_focus_on_click(self.to_glib_none().0, focus_on_click.to_glib());
+            ffi::gtk_button_set_focus_on_click(self.as_ref().to_glib_none().0, focus_on_click.to_glib());
         }
     }
 
     fn set_image<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, image: Q) {
         let image = image.into();
-        let image = image.to_glib_none();
         unsafe {
-            ffi::gtk_button_set_image(self.to_glib_none().0, image.0);
+            ffi::gtk_button_set_image(self.as_ref().to_glib_none().0, image.map(|p| p.as_ref()).to_glib_none().0);
         }
     }
 
     fn set_image_position(&self, position: PositionType) {
         unsafe {
-            ffi::gtk_button_set_image_position(self.to_glib_none().0, position.to_glib());
+            ffi::gtk_button_set_image_position(self.as_ref().to_glib_none().0, position.to_glib());
         }
     }
 
     fn set_label(&self, label: &str) {
         unsafe {
-            ffi::gtk_button_set_label(self.to_glib_none().0, label.to_glib_none().0);
+            ffi::gtk_button_set_label(self.as_ref().to_glib_none().0, label.to_glib_none().0);
         }
     }
 
     fn set_relief(&self, relief: ReliefStyle) {
         unsafe {
-            ffi::gtk_button_set_relief(self.to_glib_none().0, relief.to_glib());
+            ffi::gtk_button_set_relief(self.as_ref().to_glib_none().0, relief.to_glib());
         }
     }
 
     fn set_use_stock(&self, use_stock: bool) {
         unsafe {
-            ffi::gtk_button_set_use_stock(self.to_glib_none().0, use_stock.to_glib());
+            ffi::gtk_button_set_use_stock(self.as_ref().to_glib_none().0, use_stock.to_glib());
         }
     }
 
     fn set_use_underline(&self, use_underline: bool) {
         unsafe {
-            ffi::gtk_button_set_use_underline(self.to_glib_none().0, use_underline.to_glib());
+            ffi::gtk_button_set_use_underline(self.as_ref().to_glib_none().0, use_underline.to_glib());
         }
     }
 
@@ -340,7 +340,7 @@ impl<O: IsA<Button>> ButtonExt for O {
     fn connect_activate<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"activate\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"activate\0".as_ptr() as *const _,
                 transmute(activate_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -352,7 +352,7 @@ impl<O: IsA<Button>> ButtonExt for O {
     fn connect_clicked<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"clicked\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"clicked\0".as_ptr() as *const _,
                 transmute(clicked_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -365,7 +365,7 @@ impl<O: IsA<Button>> ButtonExt for O {
     fn connect_property_always_show_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::always-show-image\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::always-show-image\0".as_ptr() as *const _,
                 transmute(notify_always_show_image_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -373,7 +373,7 @@ impl<O: IsA<Button>> ButtonExt for O {
     fn connect_property_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::image\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::image\0".as_ptr() as *const _,
                 transmute(notify_image_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -381,7 +381,7 @@ impl<O: IsA<Button>> ButtonExt for O {
     fn connect_property_image_position_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::image-position\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::image-position\0".as_ptr() as *const _,
                 transmute(notify_image_position_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -389,7 +389,7 @@ impl<O: IsA<Button>> ButtonExt for O {
     fn connect_property_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::label\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::label\0".as_ptr() as *const _,
                 transmute(notify_label_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -397,7 +397,7 @@ impl<O: IsA<Button>> ButtonExt for O {
     fn connect_property_relief_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::relief\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::relief\0".as_ptr() as *const _,
                 transmute(notify_relief_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -405,7 +405,7 @@ impl<O: IsA<Button>> ButtonExt for O {
     fn connect_property_use_stock_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::use-stock\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::use-stock\0".as_ptr() as *const _,
                 transmute(notify_use_stock_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -413,7 +413,7 @@ impl<O: IsA<Button>> ButtonExt for O {
     fn connect_property_use_underline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::use-underline\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::use-underline\0".as_ptr() as *const _,
                 transmute(notify_use_underline_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -421,7 +421,7 @@ impl<O: IsA<Button>> ButtonExt for O {
     fn connect_property_xalign_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::xalign\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::xalign\0".as_ptr() as *const _,
                 transmute(notify_xalign_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -429,7 +429,7 @@ impl<O: IsA<Button>> ButtonExt for O {
     fn connect_property_yalign_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::yalign\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::yalign\0".as_ptr() as *const _,
                 transmute(notify_yalign_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -438,68 +438,68 @@ impl<O: IsA<Button>> ButtonExt for O {
 unsafe extern "C" fn activate_trampoline<P>(this: *mut ffi::GtkButton, f: glib_ffi::gpointer)
 where P: IsA<Button> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Button::from_glib_borrow(this).downcast_unchecked())
+    f(&Button::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn clicked_trampoline<P>(this: *mut ffi::GtkButton, f: glib_ffi::gpointer)
 where P: IsA<Button> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Button::from_glib_borrow(this).downcast_unchecked())
+    f(&Button::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_6", feature = "dox"))]
 unsafe extern "C" fn notify_always_show_image_trampoline<P>(this: *mut ffi::GtkButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Button> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Button::from_glib_borrow(this).downcast_unchecked())
+    f(&Button::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_image_trampoline<P>(this: *mut ffi::GtkButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Button> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Button::from_glib_borrow(this).downcast_unchecked())
+    f(&Button::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_image_position_trampoline<P>(this: *mut ffi::GtkButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Button> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Button::from_glib_borrow(this).downcast_unchecked())
+    f(&Button::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_label_trampoline<P>(this: *mut ffi::GtkButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Button> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Button::from_glib_borrow(this).downcast_unchecked())
+    f(&Button::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_relief_trampoline<P>(this: *mut ffi::GtkButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Button> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Button::from_glib_borrow(this).downcast_unchecked())
+    f(&Button::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_use_stock_trampoline<P>(this: *mut ffi::GtkButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Button> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Button::from_glib_borrow(this).downcast_unchecked())
+    f(&Button::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_use_underline_trampoline<P>(this: *mut ffi::GtkButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Button> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Button::from_glib_borrow(this).downcast_unchecked())
+    f(&Button::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_xalign_trampoline<P>(this: *mut ffi::GtkButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Button> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Button::from_glib_borrow(this).downcast_unchecked())
+    f(&Button::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_yalign_trampoline<P>(this: *mut ffi::GtkButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Button> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Button::from_glib_borrow(this).downcast_unchecked())
+    f(&Button::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for Button {

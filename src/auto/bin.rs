@@ -11,12 +11,14 @@ use glib::translate::*;
 use std::fmt;
 
 glib_wrapper! {
-    pub struct Bin(Object<ffi::GtkBin, ffi::GtkBinClass>): Container, Widget, Buildable;
+    pub struct Bin(Object<ffi::GtkBin, ffi::GtkBinClass, BinClass>) @extends Container, Widget, @implements Buildable;
 
     match fn {
         get_type => || ffi::gtk_bin_get_type(),
     }
 }
+
+pub const NONE_BIN: Option<&Bin> = None;
 
 pub trait BinExt: 'static {
     fn get_child(&self) -> Option<Widget>;
@@ -25,7 +27,7 @@ pub trait BinExt: 'static {
 impl<O: IsA<Bin>> BinExt for O {
     fn get_child(&self) -> Option<Widget> {
         unsafe {
-            from_glib_none(ffi::gtk_bin_get_child(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_bin_get_child(self.as_ref().to_glib_none().0))
         }
     }
 }

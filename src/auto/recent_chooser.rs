@@ -8,7 +8,7 @@ use RecentInfo;
 use RecentSortType;
 use ffi;
 use glib::GString;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
@@ -21,15 +21,17 @@ use std::mem::transmute;
 use std::ptr;
 
 glib_wrapper! {
-    pub struct RecentChooser(Object<ffi::GtkRecentChooser, ffi::GtkRecentChooserIface>);
+    pub struct RecentChooser(Interface<ffi::GtkRecentChooser>);
 
     match fn {
         get_type => || ffi::gtk_recent_chooser_get_type(),
     }
 }
 
+pub const NONE_RECENT_CHOOSER: Option<&RecentChooser> = None;
+
 pub trait RecentChooserExt: 'static {
-    fn add_filter(&self, filter: &RecentFilter);
+    fn add_filter<P: IsA<RecentFilter>>(&self, filter: &P);
 
     fn get_current_item(&self) -> Option<RecentInfo>;
 
@@ -59,7 +61,7 @@ pub trait RecentChooserExt: 'static {
 
     fn list_filters(&self) -> Vec<RecentFilter>;
 
-    fn remove_filter(&self, filter: &RecentFilter);
+    fn remove_filter<P: IsA<RecentFilter>>(&self, filter: &P);
 
     fn select_all(&self);
 
@@ -67,7 +69,7 @@ pub trait RecentChooserExt: 'static {
 
     fn set_current_uri(&self, uri: &str) -> Result<(), Error>;
 
-    fn set_filter<'a, P: Into<Option<&'a RecentFilter>>>(&self, filter: P);
+    fn set_filter<'a, P: IsA<RecentFilter> + 'a, Q: Into<Option<&'a P>>>(&self, filter: Q);
 
     fn set_limit(&self, limit: i32);
 
@@ -115,114 +117,114 @@ pub trait RecentChooserExt: 'static {
 }
 
 impl<O: IsA<RecentChooser>> RecentChooserExt for O {
-    fn add_filter(&self, filter: &RecentFilter) {
+    fn add_filter<P: IsA<RecentFilter>>(&self, filter: &P) {
         unsafe {
-            ffi::gtk_recent_chooser_add_filter(self.to_glib_none().0, filter.to_glib_none().0);
+            ffi::gtk_recent_chooser_add_filter(self.as_ref().to_glib_none().0, filter.as_ref().to_glib_none().0);
         }
     }
 
     fn get_current_item(&self) -> Option<RecentInfo> {
         unsafe {
-            from_glib_full(ffi::gtk_recent_chooser_get_current_item(self.to_glib_none().0))
+            from_glib_full(ffi::gtk_recent_chooser_get_current_item(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_current_uri(&self) -> Option<GString> {
         unsafe {
-            from_glib_full(ffi::gtk_recent_chooser_get_current_uri(self.to_glib_none().0))
+            from_glib_full(ffi::gtk_recent_chooser_get_current_uri(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_filter(&self) -> Option<RecentFilter> {
         unsafe {
-            from_glib_none(ffi::gtk_recent_chooser_get_filter(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_recent_chooser_get_filter(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_items(&self) -> Vec<RecentInfo> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(ffi::gtk_recent_chooser_get_items(self.to_glib_none().0))
+            FromGlibPtrContainer::from_glib_full(ffi::gtk_recent_chooser_get_items(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_limit(&self) -> i32 {
         unsafe {
-            ffi::gtk_recent_chooser_get_limit(self.to_glib_none().0)
+            ffi::gtk_recent_chooser_get_limit(self.as_ref().to_glib_none().0)
         }
     }
 
     fn get_local_only(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_recent_chooser_get_local_only(self.to_glib_none().0))
+            from_glib(ffi::gtk_recent_chooser_get_local_only(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_select_multiple(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_recent_chooser_get_select_multiple(self.to_glib_none().0))
+            from_glib(ffi::gtk_recent_chooser_get_select_multiple(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_show_icons(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_recent_chooser_get_show_icons(self.to_glib_none().0))
+            from_glib(ffi::gtk_recent_chooser_get_show_icons(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_show_not_found(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_recent_chooser_get_show_not_found(self.to_glib_none().0))
+            from_glib(ffi::gtk_recent_chooser_get_show_not_found(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_show_private(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_recent_chooser_get_show_private(self.to_glib_none().0))
+            from_glib(ffi::gtk_recent_chooser_get_show_private(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_show_tips(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_recent_chooser_get_show_tips(self.to_glib_none().0))
+            from_glib(ffi::gtk_recent_chooser_get_show_tips(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_sort_type(&self) -> RecentSortType {
         unsafe {
-            from_glib(ffi::gtk_recent_chooser_get_sort_type(self.to_glib_none().0))
+            from_glib(ffi::gtk_recent_chooser_get_sort_type(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_uris(&self) -> Vec<GString> {
         unsafe {
             let mut length = mem::uninitialized();
-            let ret = FromGlibContainer::from_glib_full_num(ffi::gtk_recent_chooser_get_uris(self.to_glib_none().0, &mut length), length as usize);
+            let ret = FromGlibContainer::from_glib_full_num(ffi::gtk_recent_chooser_get_uris(self.as_ref().to_glib_none().0, &mut length), length as usize);
             ret
         }
     }
 
     fn list_filters(&self) -> Vec<RecentFilter> {
         unsafe {
-            FromGlibPtrContainer::from_glib_container(ffi::gtk_recent_chooser_list_filters(self.to_glib_none().0))
+            FromGlibPtrContainer::from_glib_container(ffi::gtk_recent_chooser_list_filters(self.as_ref().to_glib_none().0))
         }
     }
 
-    fn remove_filter(&self, filter: &RecentFilter) {
+    fn remove_filter<P: IsA<RecentFilter>>(&self, filter: &P) {
         unsafe {
-            ffi::gtk_recent_chooser_remove_filter(self.to_glib_none().0, filter.to_glib_none().0);
+            ffi::gtk_recent_chooser_remove_filter(self.as_ref().to_glib_none().0, filter.as_ref().to_glib_none().0);
         }
     }
 
     fn select_all(&self) {
         unsafe {
-            ffi::gtk_recent_chooser_select_all(self.to_glib_none().0);
+            ffi::gtk_recent_chooser_select_all(self.as_ref().to_glib_none().0);
         }
     }
 
     fn select_uri(&self, uri: &str) -> Result<(), Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::gtk_recent_chooser_select_uri(self.to_glib_none().0, uri.to_glib_none().0, &mut error);
+            let _ = ffi::gtk_recent_chooser_select_uri(self.as_ref().to_glib_none().0, uri.to_glib_none().0, &mut error);
             if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
         }
     }
@@ -230,58 +232,57 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
     fn set_current_uri(&self, uri: &str) -> Result<(), Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::gtk_recent_chooser_set_current_uri(self.to_glib_none().0, uri.to_glib_none().0, &mut error);
+            let _ = ffi::gtk_recent_chooser_set_current_uri(self.as_ref().to_glib_none().0, uri.to_glib_none().0, &mut error);
             if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
         }
     }
 
-    fn set_filter<'a, P: Into<Option<&'a RecentFilter>>>(&self, filter: P) {
+    fn set_filter<'a, P: IsA<RecentFilter> + 'a, Q: Into<Option<&'a P>>>(&self, filter: Q) {
         let filter = filter.into();
-        let filter = filter.to_glib_none();
         unsafe {
-            ffi::gtk_recent_chooser_set_filter(self.to_glib_none().0, filter.0);
+            ffi::gtk_recent_chooser_set_filter(self.as_ref().to_glib_none().0, filter.map(|p| p.as_ref()).to_glib_none().0);
         }
     }
 
     fn set_limit(&self, limit: i32) {
         unsafe {
-            ffi::gtk_recent_chooser_set_limit(self.to_glib_none().0, limit);
+            ffi::gtk_recent_chooser_set_limit(self.as_ref().to_glib_none().0, limit);
         }
     }
 
     fn set_local_only(&self, local_only: bool) {
         unsafe {
-            ffi::gtk_recent_chooser_set_local_only(self.to_glib_none().0, local_only.to_glib());
+            ffi::gtk_recent_chooser_set_local_only(self.as_ref().to_glib_none().0, local_only.to_glib());
         }
     }
 
     fn set_select_multiple(&self, select_multiple: bool) {
         unsafe {
-            ffi::gtk_recent_chooser_set_select_multiple(self.to_glib_none().0, select_multiple.to_glib());
+            ffi::gtk_recent_chooser_set_select_multiple(self.as_ref().to_glib_none().0, select_multiple.to_glib());
         }
     }
 
     fn set_show_icons(&self, show_icons: bool) {
         unsafe {
-            ffi::gtk_recent_chooser_set_show_icons(self.to_glib_none().0, show_icons.to_glib());
+            ffi::gtk_recent_chooser_set_show_icons(self.as_ref().to_glib_none().0, show_icons.to_glib());
         }
     }
 
     fn set_show_not_found(&self, show_not_found: bool) {
         unsafe {
-            ffi::gtk_recent_chooser_set_show_not_found(self.to_glib_none().0, show_not_found.to_glib());
+            ffi::gtk_recent_chooser_set_show_not_found(self.as_ref().to_glib_none().0, show_not_found.to_glib());
         }
     }
 
     fn set_show_private(&self, show_private: bool) {
         unsafe {
-            ffi::gtk_recent_chooser_set_show_private(self.to_glib_none().0, show_private.to_glib());
+            ffi::gtk_recent_chooser_set_show_private(self.as_ref().to_glib_none().0, show_private.to_glib());
         }
     }
 
     fn set_show_tips(&self, show_tips: bool) {
         unsafe {
-            ffi::gtk_recent_chooser_set_show_tips(self.to_glib_none().0, show_tips.to_glib());
+            ffi::gtk_recent_chooser_set_show_tips(self.as_ref().to_glib_none().0, show_tips.to_glib());
         }
     }
 
@@ -291,26 +292,26 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
 
     fn set_sort_type(&self, sort_type: RecentSortType) {
         unsafe {
-            ffi::gtk_recent_chooser_set_sort_type(self.to_glib_none().0, sort_type.to_glib());
+            ffi::gtk_recent_chooser_set_sort_type(self.as_ref().to_glib_none().0, sort_type.to_glib());
         }
     }
 
     fn unselect_all(&self) {
         unsafe {
-            ffi::gtk_recent_chooser_unselect_all(self.to_glib_none().0);
+            ffi::gtk_recent_chooser_unselect_all(self.as_ref().to_glib_none().0);
         }
     }
 
     fn unselect_uri(&self, uri: &str) {
         unsafe {
-            ffi::gtk_recent_chooser_unselect_uri(self.to_glib_none().0, uri.to_glib_none().0);
+            ffi::gtk_recent_chooser_unselect_uri(self.as_ref().to_glib_none().0, uri.to_glib_none().0);
         }
     }
 
     fn connect_item_activated<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"item-activated\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"item-activated\0".as_ptr() as *const _,
                 transmute(item_activated_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -318,7 +319,7 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
     fn connect_selection_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"selection-changed\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"selection-changed\0".as_ptr() as *const _,
                 transmute(selection_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -326,7 +327,7 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
     fn connect_property_filter_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::filter\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::filter\0".as_ptr() as *const _,
                 transmute(notify_filter_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -334,7 +335,7 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
     fn connect_property_limit_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::limit\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::limit\0".as_ptr() as *const _,
                 transmute(notify_limit_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -342,7 +343,7 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
     fn connect_property_local_only_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::local-only\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::local-only\0".as_ptr() as *const _,
                 transmute(notify_local_only_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -350,7 +351,7 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
     fn connect_property_select_multiple_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::select-multiple\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::select-multiple\0".as_ptr() as *const _,
                 transmute(notify_select_multiple_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -358,7 +359,7 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
     fn connect_property_show_icons_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::show-icons\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::show-icons\0".as_ptr() as *const _,
                 transmute(notify_show_icons_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -366,7 +367,7 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
     fn connect_property_show_not_found_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::show-not-found\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::show-not-found\0".as_ptr() as *const _,
                 transmute(notify_show_not_found_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -374,7 +375,7 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
     fn connect_property_show_private_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::show-private\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::show-private\0".as_ptr() as *const _,
                 transmute(notify_show_private_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -382,7 +383,7 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
     fn connect_property_show_tips_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::show-tips\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::show-tips\0".as_ptr() as *const _,
                 transmute(notify_show_tips_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -390,7 +391,7 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
     fn connect_property_sort_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::sort-type\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::sort-type\0".as_ptr() as *const _,
                 transmute(notify_sort_type_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -399,67 +400,67 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
 unsafe extern "C" fn item_activated_trampoline<P>(this: *mut ffi::GtkRecentChooser, f: glib_ffi::gpointer)
 where P: IsA<RecentChooser> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&RecentChooser::from_glib_borrow(this).downcast_unchecked())
+    f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn selection_changed_trampoline<P>(this: *mut ffi::GtkRecentChooser, f: glib_ffi::gpointer)
 where P: IsA<RecentChooser> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&RecentChooser::from_glib_borrow(this).downcast_unchecked())
+    f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_filter_trampoline<P>(this: *mut ffi::GtkRecentChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RecentChooser> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&RecentChooser::from_glib_borrow(this).downcast_unchecked())
+    f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_limit_trampoline<P>(this: *mut ffi::GtkRecentChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RecentChooser> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&RecentChooser::from_glib_borrow(this).downcast_unchecked())
+    f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_local_only_trampoline<P>(this: *mut ffi::GtkRecentChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RecentChooser> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&RecentChooser::from_glib_borrow(this).downcast_unchecked())
+    f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_select_multiple_trampoline<P>(this: *mut ffi::GtkRecentChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RecentChooser> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&RecentChooser::from_glib_borrow(this).downcast_unchecked())
+    f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_icons_trampoline<P>(this: *mut ffi::GtkRecentChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RecentChooser> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&RecentChooser::from_glib_borrow(this).downcast_unchecked())
+    f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_not_found_trampoline<P>(this: *mut ffi::GtkRecentChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RecentChooser> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&RecentChooser::from_glib_borrow(this).downcast_unchecked())
+    f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_private_trampoline<P>(this: *mut ffi::GtkRecentChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RecentChooser> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&RecentChooser::from_glib_borrow(this).downcast_unchecked())
+    f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_tips_trampoline<P>(this: *mut ffi::GtkRecentChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RecentChooser> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&RecentChooser::from_glib_borrow(this).downcast_unchecked())
+    f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_sort_type_trampoline<P>(this: *mut ffi::GtkRecentChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RecentChooser> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&RecentChooser::from_glib_borrow(this).downcast_unchecked())
+    f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for RecentChooser {

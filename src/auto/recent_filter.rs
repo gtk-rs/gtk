@@ -11,7 +11,7 @@ use glib::translate::*;
 use std::fmt;
 
 glib_wrapper! {
-    pub struct RecentFilter(Object<ffi::GtkRecentFilter>): Buildable;
+    pub struct RecentFilter(Object<ffi::GtkRecentFilter, RecentFilterClass>) @implements Buildable;
 
     match fn {
         get_type => || ffi::gtk_recent_filter_get_type(),
@@ -32,6 +32,8 @@ impl Default for RecentFilter {
         Self::new()
     }
 }
+
+pub const NONE_RECENT_FILTER: Option<&RecentFilter> = None;
 
 pub trait RecentFilterExt: 'static {
     fn add_age(&self, days: i32);
@@ -60,13 +62,13 @@ pub trait RecentFilterExt: 'static {
 impl<O: IsA<RecentFilter>> RecentFilterExt for O {
     fn add_age(&self, days: i32) {
         unsafe {
-            ffi::gtk_recent_filter_add_age(self.to_glib_none().0, days);
+            ffi::gtk_recent_filter_add_age(self.as_ref().to_glib_none().0, days);
         }
     }
 
     fn add_application(&self, application: &str) {
         unsafe {
-            ffi::gtk_recent_filter_add_application(self.to_glib_none().0, application.to_glib_none().0);
+            ffi::gtk_recent_filter_add_application(self.as_ref().to_glib_none().0, application.to_glib_none().0);
         }
     }
 
@@ -76,25 +78,25 @@ impl<O: IsA<RecentFilter>> RecentFilterExt for O {
 
     fn add_group(&self, group: &str) {
         unsafe {
-            ffi::gtk_recent_filter_add_group(self.to_glib_none().0, group.to_glib_none().0);
+            ffi::gtk_recent_filter_add_group(self.as_ref().to_glib_none().0, group.to_glib_none().0);
         }
     }
 
     fn add_mime_type(&self, mime_type: &str) {
         unsafe {
-            ffi::gtk_recent_filter_add_mime_type(self.to_glib_none().0, mime_type.to_glib_none().0);
+            ffi::gtk_recent_filter_add_mime_type(self.as_ref().to_glib_none().0, mime_type.to_glib_none().0);
         }
     }
 
     fn add_pattern(&self, pattern: &str) {
         unsafe {
-            ffi::gtk_recent_filter_add_pattern(self.to_glib_none().0, pattern.to_glib_none().0);
+            ffi::gtk_recent_filter_add_pattern(self.as_ref().to_glib_none().0, pattern.to_glib_none().0);
         }
     }
 
     fn add_pixbuf_formats(&self) {
         unsafe {
-            ffi::gtk_recent_filter_add_pixbuf_formats(self.to_glib_none().0);
+            ffi::gtk_recent_filter_add_pixbuf_formats(self.as_ref().to_glib_none().0);
         }
     }
 
@@ -104,19 +106,19 @@ impl<O: IsA<RecentFilter>> RecentFilterExt for O {
 
     fn get_name(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::gtk_recent_filter_get_name(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_recent_filter_get_name(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_needed(&self) -> RecentFilterFlags {
         unsafe {
-            from_glib(ffi::gtk_recent_filter_get_needed(self.to_glib_none().0))
+            from_glib(ffi::gtk_recent_filter_get_needed(self.as_ref().to_glib_none().0))
         }
     }
 
     fn set_name(&self, name: &str) {
         unsafe {
-            ffi::gtk_recent_filter_set_name(self.to_glib_none().0, name.to_glib_none().0);
+            ffi::gtk_recent_filter_set_name(self.as_ref().to_glib_none().0, name.to_glib_none().0);
         }
     }
 }

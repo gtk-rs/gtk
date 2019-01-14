@@ -10,7 +10,7 @@ use Widget;
 use ffi;
 use glib::StaticType;
 use glib::Value;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
@@ -22,7 +22,7 @@ use std::fmt;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct Arrow(Object<ffi::GtkArrow, ffi::GtkArrowClass>): Misc, Widget, Buildable;
+    pub struct Arrow(Object<ffi::GtkArrow, ffi::GtkArrowClass, ArrowClass>) @extends Misc, Widget, @implements Buildable;
 
     match fn {
         get_type => || ffi::gtk_arrow_get_type(),
@@ -34,10 +34,12 @@ impl Arrow {
     pub fn new(arrow_type: ArrowType, shadow_type: ShadowType) -> Arrow {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_arrow_new(arrow_type.to_glib(), shadow_type.to_glib())).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_arrow_new(arrow_type.to_glib(), shadow_type.to_glib())).unsafe_cast()
         }
     }
 }
+
+pub const NONE_ARROW: Option<&Arrow> = None;
 
 pub trait ArrowExt: 'static {
     #[cfg_attr(feature = "v3_14", deprecated)]
@@ -59,7 +61,7 @@ pub trait ArrowExt: 'static {
 impl<O: IsA<Arrow>> ArrowExt for O {
     fn set(&self, arrow_type: ArrowType, shadow_type: ShadowType) {
         unsafe {
-            ffi::gtk_arrow_set(self.to_glib_none().0, arrow_type.to_glib(), shadow_type.to_glib());
+            ffi::gtk_arrow_set(self.as_ref().to_glib_none().0, arrow_type.to_glib(), shadow_type.to_glib());
         }
     }
 
@@ -94,7 +96,7 @@ impl<O: IsA<Arrow>> ArrowExt for O {
     fn connect_property_arrow_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::arrow-type\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::arrow-type\0".as_ptr() as *const _,
                 transmute(notify_arrow_type_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -102,7 +104,7 @@ impl<O: IsA<Arrow>> ArrowExt for O {
     fn connect_property_shadow_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::shadow-type\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::shadow-type\0".as_ptr() as *const _,
                 transmute(notify_shadow_type_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -111,13 +113,13 @@ impl<O: IsA<Arrow>> ArrowExt for O {
 unsafe extern "C" fn notify_arrow_type_trampoline<P>(this: *mut ffi::GtkArrow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Arrow> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Arrow::from_glib_borrow(this).downcast_unchecked())
+    f(&Arrow::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_shadow_type_trampoline<P>(this: *mut ffi::GtkArrow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Arrow> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Arrow::from_glib_borrow(this).downcast_unchecked())
+    f(&Arrow::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for Arrow {

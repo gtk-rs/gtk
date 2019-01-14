@@ -7,6 +7,7 @@ use ffi;
 use gdk;
 use gdk_pixbuf;
 use glib::GString;
+use glib::object::IsA;
 use glib::translate::*;
 use std::mem;
 use std::ptr;
@@ -101,9 +102,9 @@ impl SelectionData {
         }
     }
 
-    pub fn set_pixbuf(&self, pixbuf: &gdk_pixbuf::Pixbuf) -> bool {
+    pub fn set_pixbuf<P: IsA<gdk_pixbuf::Pixbuf>>(&self, pixbuf: &P) -> bool {
         unsafe {
-            from_glib(ffi::gtk_selection_data_set_pixbuf(mut_override(self.to_glib_none().0), pixbuf.to_glib_none().0))
+            from_glib(ffi::gtk_selection_data_set_pixbuf(mut_override(self.to_glib_none().0), pixbuf.as_ref().to_glib_none().0))
         }
     }
 
@@ -126,9 +127,9 @@ impl SelectionData {
         }
     }
 
-    pub fn targets_include_rich_text(&self, buffer: &TextBuffer) -> bool {
+    pub fn targets_include_rich_text<P: IsA<TextBuffer>>(&self, buffer: &P) -> bool {
         unsafe {
-            from_glib(ffi::gtk_selection_data_targets_include_rich_text(self.to_glib_none().0, buffer.to_glib_none().0))
+            from_glib(ffi::gtk_selection_data_targets_include_rich_text(self.to_glib_none().0, buffer.as_ref().to_glib_none().0))
         }
     }
 
