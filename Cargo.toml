@@ -64,6 +64,7 @@ gio-sys = { git = "https://github.com/gtk-rs/sys" }
 glib-sys = { git = "https://github.com/gtk-rs/sys" }
 gobject-sys = { git = "https://github.com/gtk-rs/sys" }
 gtk-sys = { git = "https://github.com/gtk-rs/sys" }
+pango-sys = { git = "https://github.com/gtk-rs/sys" }
 cairo-rs = { git = "https://github.com/gtk-rs/cairo" }
 gio = { git = "https://github.com/gtk-rs/gio" }
 glib = { git = "https://github.com/gtk-rs/glib" }
