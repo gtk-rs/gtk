@@ -11,7 +11,7 @@ use gobject_ffi;
 use CellRendererPixbuf;
 use IconSize;
 
-pub trait CellRendererPixbufExtManual {
+pub trait CellRendererPixbufExtManual: 'static {
     fn get_property_stock_size(&self) -> IconSize;
 
     fn set_property_stock_size(&self, stock_size: IconSize);
@@ -22,7 +22,7 @@ impl<O: IsA<CellRendererPixbuf> + IsA<glib::object::Object>> CellRendererPixbufE
         unsafe {
             let mut value = Value::from_type(<u32 as StaticType>::static_type());
             gobject_ffi::g_object_get_property(
-                self.to_glib_none().0,
+                self.to_glib_none().0 as *mut _,
                 "stock-size".to_glib_none().0,
                 value.to_glib_none_mut().0,
             );
@@ -34,7 +34,7 @@ impl<O: IsA<CellRendererPixbuf> + IsA<glib::object::Object>> CellRendererPixbufE
         unsafe {
             let value = Value::from(&(stock_size.to_glib() as u32));
             gobject_ffi::g_object_set_property(
-                self.to_glib_none().0,
+                self.to_glib_none().0 as *mut _,
                 "stock-size".to_glib_none().0,
                 value.to_glib_none().0,
             );

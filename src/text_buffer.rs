@@ -7,23 +7,22 @@ use std::boxed::Box as Box_;
 use std::mem::transmute;
 use std::{slice, str};
 use ffi;
-use glib;
 use glib::object::IsA;
 use glib::translate::*;
-use glib::signal::{SignalHandlerId, connect};
+use glib::signal::{SignalHandlerId, connect_raw};
 use glib_ffi;
 use TextBuffer;
 use TextIter;
 
-pub trait TextBufferExtManual {
+pub trait TextBufferExtManual: 'static {
     fn connect_insert_text<F: Fn(&TextBuffer, &mut TextIter, &str) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<TextBuffer> + IsA<glib::object::Object>> TextBufferExtManual for O {
+impl<O: IsA<TextBuffer>> TextBufferExtManual for O {
     fn connect_insert_text<F: Fn(&TextBuffer, &mut TextIter, &str) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&TextBuffer, &mut TextIter, &str) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "insert-text",
+            connect_raw(self.to_glib_none().0 as *mut _, b"insert-text\0".as_ptr() as *mut _,
                 transmute(insert_text_trampoline as usize), Box_::into_raw(f) as *mut _)
         }
     }

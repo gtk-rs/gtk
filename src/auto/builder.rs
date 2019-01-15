@@ -9,7 +9,7 @@ use Widget;
 use ffi;
 use glib;
 use glib::GString;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
@@ -21,7 +21,7 @@ use std::mem::transmute;
 use std::ptr;
 
 glib_wrapper! {
-    pub struct Builder(Object<ffi::GtkBuilder, ffi::GtkBuilderClass>);
+    pub struct Builder(Object<ffi::GtkBuilder, ffi::GtkBuilderClass, BuilderClass>);
 
     match fn {
         get_type => || ffi::gtk_builder_get_type(),
@@ -60,6 +60,8 @@ impl Default for Builder {
     }
 }
 
+pub const NONE_BUILDER: Option<&Builder> = None;
+
 pub trait BuilderExt: 'static {
     //#[cfg(any(feature = "v3_10", feature = "dox"))]
     //fn add_callback_symbol(&self, callback_name: &str, callback_symbol: /*Unknown conversion*//*Unimplemented*/Callback);
@@ -97,7 +99,7 @@ pub trait BuilderExt: 'static {
     //fn lookup_callback_symbol(&self, callback_name: &str) -> /*Unknown conversion*//*Unimplemented*/Callback;
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
-    fn set_application(&self, application: &Application);
+    fn set_application<P: IsA<Application>>(&self, application: &P);
 
     fn set_translation_domain<'a, P: Into<Option<&'a str>>>(&self, domain: P);
 
@@ -122,7 +124,7 @@ impl<O: IsA<Builder>> BuilderExt for O {
     fn add_from_resource(&self, resource_path: &str) -> Result<(), Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::gtk_builder_add_from_resource(self.to_glib_none().0, resource_path.to_glib_none().0, &mut error);
+            let _ = ffi::gtk_builder_add_from_resource(self.as_ref().to_glib_none().0, resource_path.to_glib_none().0, &mut error);
             if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
         }
     }
@@ -131,7 +133,7 @@ impl<O: IsA<Builder>> BuilderExt for O {
         let length = buffer.len() as usize;
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::gtk_builder_add_from_string(self.to_glib_none().0, buffer.to_glib_none().0, length, &mut error);
+            let _ = ffi::gtk_builder_add_from_string(self.as_ref().to_glib_none().0, buffer.to_glib_none().0, length, &mut error);
             if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
         }
     }
@@ -139,7 +141,7 @@ impl<O: IsA<Builder>> BuilderExt for O {
     fn add_objects_from_resource(&self, resource_path: &str, object_ids: &[&str]) -> Result<(), Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::gtk_builder_add_objects_from_resource(self.to_glib_none().0, resource_path.to_glib_none().0, object_ids.to_glib_none().0, &mut error);
+            let _ = ffi::gtk_builder_add_objects_from_resource(self.as_ref().to_glib_none().0, resource_path.to_glib_none().0, object_ids.to_glib_none().0, &mut error);
             if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
         }
     }
@@ -148,7 +150,7 @@ impl<O: IsA<Builder>> BuilderExt for O {
         let length = buffer.len() as usize;
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::gtk_builder_add_objects_from_string(self.to_glib_none().0, buffer.to_glib_none().0, length, object_ids.to_glib_none().0, &mut error);
+            let _ = ffi::gtk_builder_add_objects_from_string(self.as_ref().to_glib_none().0, buffer.to_glib_none().0, length, object_ids.to_glib_none().0, &mut error);
             if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
         }
     }
@@ -164,7 +166,7 @@ impl<O: IsA<Builder>> BuilderExt for O {
     #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn expose_object<P: IsA<glib::Object>>(&self, name: &str, object: &P) {
         unsafe {
-            ffi::gtk_builder_expose_object(self.to_glib_none().0, name.to_glib_none().0, object.to_glib_none().0);
+            ffi::gtk_builder_expose_object(self.as_ref().to_glib_none().0, name.to_glib_none().0, object.as_ref().to_glib_none().0);
         }
     }
 
@@ -172,7 +174,7 @@ impl<O: IsA<Builder>> BuilderExt for O {
         let length = buffer.len() as usize;
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::gtk_builder_extend_with_template(self.to_glib_none().0, widget.to_glib_none().0, template_type.to_glib(), buffer.to_glib_none().0, length, &mut error);
+            let _ = ffi::gtk_builder_extend_with_template(self.as_ref().to_glib_none().0, widget.as_ref().to_glib_none().0, template_type.to_glib(), buffer.to_glib_none().0, length, &mut error);
             if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
         }
     }
@@ -180,25 +182,25 @@ impl<O: IsA<Builder>> BuilderExt for O {
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_application(&self) -> Option<Application> {
         unsafe {
-            from_glib_none(ffi::gtk_builder_get_application(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_builder_get_application(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_objects(&self) -> Vec<glib::Object> {
         unsafe {
-            FromGlibPtrContainer::from_glib_container(ffi::gtk_builder_get_objects(self.to_glib_none().0))
+            FromGlibPtrContainer::from_glib_container(ffi::gtk_builder_get_objects(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_translation_domain(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::gtk_builder_get_translation_domain(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_builder_get_translation_domain(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_type_from_name(&self, type_name: &str) -> glib::types::Type {
         unsafe {
-            from_glib(ffi::gtk_builder_get_type_from_name(self.to_glib_none().0, type_name.to_glib_none().0))
+            from_glib(ffi::gtk_builder_get_type_from_name(self.as_ref().to_glib_none().0, type_name.to_glib_none().0))
         }
     }
 
@@ -208,17 +210,16 @@ impl<O: IsA<Builder>> BuilderExt for O {
     //}
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
-    fn set_application(&self, application: &Application) {
+    fn set_application<P: IsA<Application>>(&self, application: &P) {
         unsafe {
-            ffi::gtk_builder_set_application(self.to_glib_none().0, application.to_glib_none().0);
+            ffi::gtk_builder_set_application(self.as_ref().to_glib_none().0, application.as_ref().to_glib_none().0);
         }
     }
 
     fn set_translation_domain<'a, P: Into<Option<&'a str>>>(&self, domain: P) {
         let domain = domain.into();
-        let domain = domain.to_glib_none();
         unsafe {
-            ffi::gtk_builder_set_translation_domain(self.to_glib_none().0, domain.0);
+            ffi::gtk_builder_set_translation_domain(self.as_ref().to_glib_none().0, domain.to_glib_none().0);
         }
     }
 
@@ -230,7 +231,7 @@ impl<O: IsA<Builder>> BuilderExt for O {
         unsafe {
             let mut value = glib::Value::uninitialized();
             let mut error = ptr::null_mut();
-            let _ = ffi::gtk_builder_value_from_string_type(self.to_glib_none().0, type_.to_glib(), string.to_glib_none().0, value.to_glib_none_mut().0, &mut error);
+            let _ = ffi::gtk_builder_value_from_string_type(self.as_ref().to_glib_none().0, type_.to_glib(), string.to_glib_none().0, value.to_glib_none_mut().0, &mut error);
             if error.is_null() { Ok(value) } else { Err(from_glib_full(error)) }
         }
     }
@@ -238,7 +239,7 @@ impl<O: IsA<Builder>> BuilderExt for O {
     fn connect_property_translation_domain_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::translation-domain\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::translation-domain\0".as_ptr() as *const _,
                 transmute(notify_translation_domain_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -247,7 +248,7 @@ impl<O: IsA<Builder>> BuilderExt for O {
 unsafe extern "C" fn notify_translation_domain_trampoline<P>(this: *mut ffi::GtkBuilder, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Builder> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Builder::from_glib_borrow(this).downcast_unchecked())
+    f(&Builder::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for Builder {

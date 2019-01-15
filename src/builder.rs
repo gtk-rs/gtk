@@ -3,7 +3,7 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 use glib::Object;
-use glib::object::{Downcast, IsA};
+use glib::object::{Cast, IsA};
 use glib::translate::*;
 use ffi;
 use std::path::Path;
@@ -22,7 +22,7 @@ impl Builder {
         unsafe {
             Option::<Object>::from_glib_none(
                 ffi::gtk_builder_get_object(self.to_glib_none().0, name.to_glib_none().0))
-                .and_then(|obj| obj.downcast().ok())
+                .and_then(|obj| obj.dynamic_cast::<T>().ok())
         }
     }
 

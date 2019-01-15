@@ -25,9 +25,8 @@ impl PaperSize {
     pub fn new<'a, P: Into<Option<&'a str>>>(name: P) -> PaperSize {
         assert_initialized_main_thread!();
         let name = name.into();
-        let name = name.to_glib_none();
         unsafe {
-            from_glib_full(ffi::gtk_paper_size_new(name.0))
+            from_glib_full(ffi::gtk_paper_size_new(name.to_glib_none().0))
         }
     }
 

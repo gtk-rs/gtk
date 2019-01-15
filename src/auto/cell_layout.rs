@@ -10,12 +10,14 @@ use glib::translate::*;
 use std::fmt;
 
 glib_wrapper! {
-    pub struct CellLayout(Object<ffi::GtkCellLayout, ffi::GtkCellLayoutIface>);
+    pub struct CellLayout(Interface<ffi::GtkCellLayout>);
 
     match fn {
         get_type => || ffi::gtk_cell_layout_get_type(),
     }
 }
+
+pub const NONE_CELL_LAYOUT: Option<&CellLayout> = None;
 
 pub trait CellLayoutExt: 'static {
     fn add_attribute<P: IsA<CellRenderer>>(&self, cell: &P, attribute: &str, column: i32);
@@ -42,49 +44,49 @@ pub trait CellLayoutExt: 'static {
 impl<O: IsA<CellLayout>> CellLayoutExt for O {
     fn add_attribute<P: IsA<CellRenderer>>(&self, cell: &P, attribute: &str, column: i32) {
         unsafe {
-            ffi::gtk_cell_layout_add_attribute(self.to_glib_none().0, cell.to_glib_none().0, attribute.to_glib_none().0, column);
+            ffi::gtk_cell_layout_add_attribute(self.as_ref().to_glib_none().0, cell.as_ref().to_glib_none().0, attribute.to_glib_none().0, column);
         }
     }
 
     fn clear(&self) {
         unsafe {
-            ffi::gtk_cell_layout_clear(self.to_glib_none().0);
+            ffi::gtk_cell_layout_clear(self.as_ref().to_glib_none().0);
         }
     }
 
     fn clear_attributes<P: IsA<CellRenderer>>(&self, cell: &P) {
         unsafe {
-            ffi::gtk_cell_layout_clear_attributes(self.to_glib_none().0, cell.to_glib_none().0);
+            ffi::gtk_cell_layout_clear_attributes(self.as_ref().to_glib_none().0, cell.as_ref().to_glib_none().0);
         }
     }
 
     fn get_area(&self) -> Option<CellArea> {
         unsafe {
-            from_glib_none(ffi::gtk_cell_layout_get_area(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_cell_layout_get_area(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_cells(&self) -> Vec<CellRenderer> {
         unsafe {
-            FromGlibPtrContainer::from_glib_container(ffi::gtk_cell_layout_get_cells(self.to_glib_none().0))
+            FromGlibPtrContainer::from_glib_container(ffi::gtk_cell_layout_get_cells(self.as_ref().to_glib_none().0))
         }
     }
 
     fn pack_end<P: IsA<CellRenderer>>(&self, cell: &P, expand: bool) {
         unsafe {
-            ffi::gtk_cell_layout_pack_end(self.to_glib_none().0, cell.to_glib_none().0, expand.to_glib());
+            ffi::gtk_cell_layout_pack_end(self.as_ref().to_glib_none().0, cell.as_ref().to_glib_none().0, expand.to_glib());
         }
     }
 
     fn pack_start<P: IsA<CellRenderer>>(&self, cell: &P, expand: bool) {
         unsafe {
-            ffi::gtk_cell_layout_pack_start(self.to_glib_none().0, cell.to_glib_none().0, expand.to_glib());
+            ffi::gtk_cell_layout_pack_start(self.as_ref().to_glib_none().0, cell.as_ref().to_glib_none().0, expand.to_glib());
         }
     }
 
     fn reorder<P: IsA<CellRenderer>>(&self, cell: &P, position: i32) {
         unsafe {
-            ffi::gtk_cell_layout_reorder(self.to_glib_none().0, cell.to_glib_none().0, position);
+            ffi::gtk_cell_layout_reorder(self.as_ref().to_glib_none().0, cell.as_ref().to_glib_none().0, position);
         }
     }
 

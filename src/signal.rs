@@ -90,7 +90,7 @@ pub fn timeout_add_seconds<F>(interval: u32, func: F) -> SourceId
     }
 }
 
-pub trait EditableSignals {
+pub trait EditableSignals: 'static {
     fn connect_changed<F>(&self, changed_func: F) -> SignalHandlerId
         where F: Fn(&Self) + 'static;
     fn connect_delete_text<F>(&self, delete_text_func: F) -> SignalHandlerId
@@ -101,25 +101,24 @@ pub trait EditableSignals {
 
 mod editable {
     use Editable;
-    use Object;
     use std::mem::transmute;
     use ffi::GtkEditable;
-    use glib::signal::{SignalHandlerId, connect};
+    use glib::signal::{SignalHandlerId, connect_raw};
     use glib::translate::*;
     use IsA;
     use libc::{c_char, c_int, c_uchar};
     use std::ffi::CStr;
     use std::str;
-    use glib::object::Downcast;
+    use glib::object::Cast;
     use std::slice;
 
-    impl<T: IsA<Editable> + IsA<Object>> super::EditableSignals for T {
+    impl<T: IsA<Editable>> super::EditableSignals for T {
         fn connect_changed<F>(&self, changed_func: F) -> SignalHandlerId
         where F: Fn(&Self) + 'static {
             unsafe {
                 let f: Box<Box<Fn(&Self) + 'static>> =
                     Box::new(Box::new(changed_func));
-                connect(self.to_glib_none().0, "changed",
+                connect_raw(self.to_glib_none().0 as *mut _, b"changed\0".as_ptr() as *mut _,
                     transmute(trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
@@ -129,7 +128,7 @@ mod editable {
             unsafe {
                 let f: Box<Box<Fn(&Self, i32, i32) + 'static>> =
                     Box::new(Box::new(delete_text_func));
-                connect(self.to_glib_none().0, "delete-text",
+                connect_raw(self.to_glib_none().0 as *mut _, b"delete-text\0".as_ptr() as *mut _,
                     transmute(delete_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
@@ -139,7 +138,7 @@ mod editable {
             unsafe {
                 let f: Box<Box<Fn(&Self, &str, &mut i32) + 'static>> =
                     Box::new(Box::new(insert_text_func));
-                connect(self.to_glib_none().0, "insert-text",
+                connect_raw(self.to_glib_none().0 as *mut _, b"insert-text\0".as_ptr() as *mut _,
                     transmute(insert_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
             }
         }
@@ -148,7 +147,7 @@ mod editable {
     unsafe extern "C" fn trampoline<T>(this: *mut GtkEditable,
                                        f: &&(Fn(&T) + 'static))
     where T: IsA<Editable> {
-        f(&Editable::from_glib_borrow(this).downcast_unchecked());
+        f(&Editable::from_glib_borrow(this).unsafe_cast());
     }
 
     unsafe extern "C" fn delete_trampoline<T>(this: *mut GtkEditable,
@@ -156,7 +155,7 @@ mod editable {
                                               end_pos: c_int,
                                               f: &&(Fn(&T, i32, i32) + 'static))
     where T: IsA<Editable> {
-        f(&Editable::from_glib_borrow(this).downcast_unchecked(), start_pos, end_pos);
+        f(&Editable::from_glib_borrow(this).unsafe_cast(), start_pos, end_pos);
     }
 
     unsafe extern "C" fn insert_trampoline<T>(this: *mut GtkEditable,
@@ -172,13 +171,13 @@ mod editable {
             CStr::from_ptr(new_text).to_bytes()
         };
         let string = str::from_utf8(buf).unwrap();
-        f(&Editable::from_glib_borrow(this).downcast_unchecked(),
+        f(&Editable::from_glib_borrow(this).unsafe_cast(),
           string,
           transmute(position));
     }
 }
 
-pub trait SpinButtonSignals {
+pub trait SpinButtonSignals: 'static {
     fn connect_change_value<F>(&self, change_value_func: F) -> SignalHandlerId
         where F: Fn(&SpinButton, ScrollType) + 'static;
     fn connect_input<F>(&self, input_func: F) -> SignalHandlerId
@@ -196,7 +195,8 @@ mod spin_button {
     use SpinButton;
     use ScrollType;
     use ffi::{GTK_INPUT_ERROR, GtkSpinButton};
-    use glib::signal::{SignalHandlerId, connect};
+    use glib::signal::{SignalHandlerId, connect_raw};
+    use glib::IsA;
     use glib::translate::*;
     use glib_ffi::{GTRUE, GFALSE};
     use libc::{c_int, c_double};
@@ -204,13 +204,13 @@ mod spin_button {
     use std::mem::transmute;
     use glib_ffi::gboolean;
 
-    impl ::SpinButtonSignals for SpinButton {
+    impl<T: IsA<SpinButton>> ::SpinButtonSignals for T {
         fn connect_change_value<F>(&self, change_value_func: F) -> SignalHandlerId
         where F: Fn(&SpinButton, ScrollType) + 'static {
             unsafe {
                 let f: Box<Box<Fn(&SpinButton, ScrollType) + 'static>> =
                     Box::new(Box::new(change_value_func));
-                connect(self.to_glib_none().0, "change_value",
+                connect_raw(self.to_glib_none().0 as *mut _, b"change_value\0".as_ptr() as *mut _,
                         transmute(change_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
@@ -219,7 +219,7 @@ mod spin_button {
         where F: Fn(&SpinButton) -> Option<Result<f64, ()>> + 'static {
             unsafe {
                 let f: Box_<Box_<Fn(&SpinButton) -> Option<Result<f64, ()>> + 'static>> = Box_::new(Box_::new(f));
-                connect(self.to_glib_none().0, "input",
+                connect_raw(self.to_glib_none().0 as *mut _, b"input\0".as_ptr() as *mut _,
                         transmute(input_trampoline as usize), Box_::into_raw(f) as *mut _)
             }
         }
@@ -229,7 +229,7 @@ mod spin_button {
             unsafe {
                 let f: Box<Box<Fn(&SpinButton) -> Inhibit + 'static>> =
                     Box::new(Box::new(output_func));
-                connect(self.to_glib_none().0, "output",
+                connect_raw(self.to_glib_none().0 as *mut _, b"output\0".as_ptr() as *mut _,
                         transmute(output_trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
@@ -239,7 +239,7 @@ mod spin_button {
             unsafe {
                 let f: Box<Box<Fn(&SpinButton) + 'static>> =
                     Box::new(Box::new(value_changed_func));
-                connect(self.to_glib_none().0, "value-changed",
+                connect_raw(self.to_glib_none().0 as *mut _, b"value-changed\0".as_ptr() as *mut _,
                         transmute(trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
@@ -249,7 +249,7 @@ mod spin_button {
             unsafe {
                 let f: Box<Box<Fn(&SpinButton) + 'static>> =
                     Box::new(Box::new(wrapped_func));
-                connect(self.to_glib_none().0, "wrapped",
+                connect_raw(self.to_glib_none().0 as *mut _, b"wrapped\0".as_ptr() as *mut _,
                         transmute(trampoline as usize), Box::into_raw(f) as *mut _)
             }
         }
@@ -287,7 +287,7 @@ mod spin_button {
     }
 }
 
-pub trait OverlaySignals {
+pub trait OverlaySignals: 'static {
     fn connect_get_child_position<F>(&self, f: F) -> SignalHandlerId
     where
         F: Fn(&Self, &Widget) -> Option<Rectangle> + 'static;
@@ -297,18 +297,17 @@ mod overlay {
     use gdk::Rectangle;
     use ffi::{GtkOverlay, GtkWidget};
     use gdk_ffi::GdkRectangle;
-    use glib::signal::{connect, SignalHandlerId};
+    use glib::signal::{connect_raw, SignalHandlerId};
     use glib::translate::*;
-    use glib::object::Downcast;
+    use glib::object::Cast;
     use std::mem::transmute;
     use std::ptr;
     use glib_ffi::{gboolean, gpointer};
     use IsA;
-    use Object;
     use Overlay;
     use Widget;
 
-    impl<O: IsA<Overlay> + IsA<Object>> ::OverlaySignals for O {
+    impl<O: IsA<Overlay>> ::OverlaySignals for O {
         fn connect_get_child_position<F>(&self, f: F) -> SignalHandlerId
         where
             F: Fn(&Self, &Widget) -> Option<Rectangle> + 'static,
@@ -316,9 +315,9 @@ mod overlay {
             unsafe {
                 let f: Box<Box<Fn(&Self, &Widget) -> Option<Rectangle> + 'static>> =
                     Box::new(Box::new(f));
-                connect(
-                    self.to_glib_none().0,
-                    "get-child-position",
+                connect_raw(
+                    self.to_glib_none().0 as *mut _,
+                    b"get-child-position\0".as_ptr() as *mut _,
                     transmute(get_child_position_trampoline::<Self> as usize),
                     Box::into_raw(f) as *mut _,
                 )
@@ -333,11 +332,11 @@ mod overlay {
         f: gpointer,
     ) -> gboolean
     where
-        T: IsA<Overlay> + IsA<Object>,
+        T: IsA<Overlay>,
     {
         let f: &&(Fn(&T, &Widget) -> Option<Rectangle> + 'static) = transmute(f);
         match f(
-            &Overlay::from_glib_borrow(this).downcast_unchecked(),
+            &Overlay::from_glib_borrow(this).unsafe_cast(),
             &from_glib_borrow(widget),
         ) {
             Some(rect) => {

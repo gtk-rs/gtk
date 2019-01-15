@@ -8,7 +8,7 @@ use CellLayout;
 use CellRenderer;
 use Orientable;
 use ffi;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
@@ -19,7 +19,7 @@ use std::fmt;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct CellAreaBox(Object<ffi::GtkCellAreaBox, ffi::GtkCellAreaBoxClass>): CellArea, Buildable, CellLayout, Orientable;
+    pub struct CellAreaBox(Object<ffi::GtkCellAreaBox, ffi::GtkCellAreaBoxClass, CellAreaBoxClass>) @extends CellArea, @implements Buildable, CellLayout, Orientable;
 
     match fn {
         get_type => || ffi::gtk_cell_area_box_get_type(),
@@ -30,7 +30,7 @@ impl CellAreaBox {
     pub fn new() -> CellAreaBox {
         assert_initialized_main_thread!();
         unsafe {
-            CellArea::from_glib_none(ffi::gtk_cell_area_box_new()).downcast_unchecked()
+            CellArea::from_glib_none(ffi::gtk_cell_area_box_new()).unsafe_cast()
         }
     }
 }
@@ -40,6 +40,8 @@ impl Default for CellAreaBox {
         Self::new()
     }
 }
+
+pub const NONE_CELL_AREA_BOX: Option<&CellAreaBox> = None;
 
 pub trait CellAreaBoxExt: 'static {
     fn get_spacing(&self) -> i32;
@@ -56,32 +58,32 @@ pub trait CellAreaBoxExt: 'static {
 impl<O: IsA<CellAreaBox>> CellAreaBoxExt for O {
     fn get_spacing(&self) -> i32 {
         unsafe {
-            ffi::gtk_cell_area_box_get_spacing(self.to_glib_none().0)
+            ffi::gtk_cell_area_box_get_spacing(self.as_ref().to_glib_none().0)
         }
     }
 
     fn pack_end<P: IsA<CellRenderer>>(&self, renderer: &P, expand: bool, align: bool, fixed: bool) {
         unsafe {
-            ffi::gtk_cell_area_box_pack_end(self.to_glib_none().0, renderer.to_glib_none().0, expand.to_glib(), align.to_glib(), fixed.to_glib());
+            ffi::gtk_cell_area_box_pack_end(self.as_ref().to_glib_none().0, renderer.as_ref().to_glib_none().0, expand.to_glib(), align.to_glib(), fixed.to_glib());
         }
     }
 
     fn pack_start<P: IsA<CellRenderer>>(&self, renderer: &P, expand: bool, align: bool, fixed: bool) {
         unsafe {
-            ffi::gtk_cell_area_box_pack_start(self.to_glib_none().0, renderer.to_glib_none().0, expand.to_glib(), align.to_glib(), fixed.to_glib());
+            ffi::gtk_cell_area_box_pack_start(self.as_ref().to_glib_none().0, renderer.as_ref().to_glib_none().0, expand.to_glib(), align.to_glib(), fixed.to_glib());
         }
     }
 
     fn set_spacing(&self, spacing: i32) {
         unsafe {
-            ffi::gtk_cell_area_box_set_spacing(self.to_glib_none().0, spacing);
+            ffi::gtk_cell_area_box_set_spacing(self.as_ref().to_glib_none().0, spacing);
         }
     }
 
     fn connect_property_spacing_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::spacing\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::spacing\0".as_ptr() as *const _,
                 transmute(notify_spacing_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -90,7 +92,7 @@ impl<O: IsA<CellAreaBox>> CellAreaBoxExt for O {
 unsafe extern "C" fn notify_spacing_trampoline<P>(this: *mut ffi::GtkCellAreaBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellAreaBox> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellAreaBox::from_glib_borrow(this).downcast_unchecked())
+    f(&CellAreaBox::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for CellAreaBox {

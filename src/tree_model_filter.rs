@@ -3,7 +3,7 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 use ffi;
-use glib::object::{Downcast, IsA};
+use glib::object::{Cast, IsA};
 use glib::translate::*;
 use std::mem::transmute;
 
@@ -19,14 +19,14 @@ impl TreeModelFilter {
         skip_assert_initialized!();
         let root = root.into();
         unsafe {
-            TreeModel::from_glib_none(ffi::gtk_tree_model_filter_new(child_model.to_glib_none().0,
+            TreeModel::from_glib_none(ffi::gtk_tree_model_filter_new(child_model.as_ref().to_glib_none().0,
                                                                      mut_override(root.to_glib_none().0)))
-                                                                    .downcast_unchecked()
+                                                                    .unsafe_cast()
         }
     }
 }
 
-pub trait TreeModelFilterExtManual {
+pub trait TreeModelFilterExtManual: 'static {
     fn set_visible_func<F>(&self, func: F)
         where F: Fn(&TreeModel, &TreeIter) -> bool + 'static;
 }
@@ -35,7 +35,7 @@ impl<O: IsA<TreeModelFilter>> TreeModelFilterExtManual for O {
     fn set_visible_func<F>(&self, func: F)
     where F: Fn(&TreeModel, &TreeIter) -> bool + 'static {
         unsafe {
-            ffi::gtk_tree_model_filter_set_visible_func(self.to_glib_none().0,
+            ffi::gtk_tree_model_filter_set_visible_func(self.as_ref().to_glib_none().0,
                                                         Some(trampoline),
                                                         into_raw(func),
                                                         Some(destroy_closure))
@@ -46,7 +46,7 @@ impl<O: IsA<TreeModelFilter>> TreeModelFilterExtManual for O {
 unsafe extern "C" fn trampoline(this: *mut GtkTreeModel, iter: *mut GtkTreeIter,
                                 f: gpointer) -> gboolean {
     let f: &&(Fn(&TreeModel, &TreeIter) -> bool) = transmute(f);
-    f(&TreeModel::from_glib_none(this).downcast_unchecked(), &from_glib_borrow(iter))
+    f(&TreeModel::from_glib_none(this).unsafe_cast(), &from_glib_borrow(iter))
     .to_glib()
 }
 

@@ -4,7 +4,7 @@
 
 use Orientation;
 use ffi;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
@@ -15,12 +15,14 @@ use std::fmt;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct Orientable(Object<ffi::GtkOrientable, ffi::GtkOrientableIface>);
+    pub struct Orientable(Interface<ffi::GtkOrientable>);
 
     match fn {
         get_type => || ffi::gtk_orientable_get_type(),
     }
 }
+
+pub const NONE_ORIENTABLE: Option<&Orientable> = None;
 
 pub trait OrientableExt: 'static {
     fn get_orientation(&self) -> Orientation;
@@ -33,20 +35,20 @@ pub trait OrientableExt: 'static {
 impl<O: IsA<Orientable>> OrientableExt for O {
     fn get_orientation(&self) -> Orientation {
         unsafe {
-            from_glib(ffi::gtk_orientable_get_orientation(self.to_glib_none().0))
+            from_glib(ffi::gtk_orientable_get_orientation(self.as_ref().to_glib_none().0))
         }
     }
 
     fn set_orientation(&self, orientation: Orientation) {
         unsafe {
-            ffi::gtk_orientable_set_orientation(self.to_glib_none().0, orientation.to_glib());
+            ffi::gtk_orientable_set_orientation(self.as_ref().to_glib_none().0, orientation.to_glib());
         }
     }
 
     fn connect_property_orientation_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::orientation\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::orientation\0".as_ptr() as *const _,
                 transmute(notify_orientation_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -55,7 +57,7 @@ impl<O: IsA<Orientable>> OrientableExt for O {
 unsafe extern "C" fn notify_orientation_trampoline<P>(this: *mut ffi::GtkOrientable, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Orientable> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Orientable::from_glib_borrow(this).downcast_unchecked())
+    f(&Orientable::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for Orientable {

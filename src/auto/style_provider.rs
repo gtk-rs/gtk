@@ -11,12 +11,14 @@ use glib::translate::*;
 use std::fmt;
 
 glib_wrapper! {
-    pub struct StyleProvider(Object<ffi::GtkStyleProvider, ffi::GtkStyleProviderIface>);
+    pub struct StyleProvider(Interface<ffi::GtkStyleProvider>);
 
     match fn {
         get_type => || ffi::gtk_style_provider_get_type(),
     }
 }
+
+pub const NONE_STYLE_PROVIDER: Option<&StyleProvider> = None;
 
 pub trait StyleProviderExt: 'static {
     #[cfg_attr(feature = "v3_8", deprecated)]
@@ -31,13 +33,13 @@ pub trait StyleProviderExt: 'static {
 impl<O: IsA<StyleProvider>> StyleProviderExt for O {
     fn get_icon_factory(&self, path: &WidgetPath) -> Option<IconFactory> {
         unsafe {
-            from_glib_none(ffi::gtk_style_provider_get_icon_factory(self.to_glib_none().0, path.to_glib_none().0))
+            from_glib_none(ffi::gtk_style_provider_get_icon_factory(self.as_ref().to_glib_none().0, path.to_glib_none().0))
         }
     }
 
     fn get_style(&self, path: &WidgetPath) -> Option<StyleProperties> {
         unsafe {
-            from_glib_full(ffi::gtk_style_provider_get_style(self.to_glib_none().0, path.to_glib_none().0))
+            from_glib_full(ffi::gtk_style_provider_get_style(self.as_ref().to_glib_none().0, path.to_glib_none().0))
         }
     }
 

@@ -18,7 +18,7 @@ use gobject_ffi;
 use std::fmt;
 
 glib_wrapper! {
-    pub struct PadController(Object<ffi::GtkPadController, ffi::GtkPadControllerClass>): EventController;
+    pub struct PadController(Object<ffi::GtkPadController, ffi::GtkPadControllerClass, PadControllerClass>) @extends EventController;
 
     match fn {
         get_type => || ffi::gtk_pad_controller_get_type(),
@@ -30,12 +30,13 @@ impl PadController {
     pub fn new<'a, P: IsA<Window>, Q: IsA<gio::ActionGroup>, R: IsA<gdk::Device> + 'a, S: Into<Option<&'a R>>>(window: &P, group: &Q, pad: S) -> PadController {
         skip_assert_initialized!();
         let pad = pad.into();
-        let pad = pad.to_glib_none();
         unsafe {
-            from_glib_full(ffi::gtk_pad_controller_new(window.to_glib_none().0, group.to_glib_none().0, pad.0))
+            from_glib_full(ffi::gtk_pad_controller_new(window.as_ref().to_glib_none().0, group.as_ref().to_glib_none().0, pad.map(|p| p.as_ref()).to_glib_none().0))
         }
     }
 }
+
+pub const NONE_PAD_CONTROLLER: Option<&PadController> = None;
 
 pub trait PadControllerExt: 'static {
     #[cfg(any(feature = "v3_22", feature = "dox"))]
@@ -50,7 +51,7 @@ impl<O: IsA<PadController>> PadControllerExt for O {
     #[cfg(any(feature = "v3_22", feature = "dox"))]
     fn set_action(&self, type_: PadActionType, index: i32, mode: i32, label: &str, action_name: &str) {
         unsafe {
-            ffi::gtk_pad_controller_set_action(self.to_glib_none().0, type_.to_glib(), index, mode, label.to_glib_none().0, action_name.to_glib_none().0);
+            ffi::gtk_pad_controller_set_action(self.as_ref().to_glib_none().0, type_.to_glib(), index, mode, label.to_glib_none().0, action_name.to_glib_none().0);
         }
     }
 

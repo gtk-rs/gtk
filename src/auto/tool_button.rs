@@ -11,7 +11,7 @@ use Widget;
 use ffi;
 use glib;
 use glib::GString;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::object::ObjectExt;
 use glib::signal::SignalHandlerId;
@@ -24,7 +24,7 @@ use std::fmt;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct ToolButton(Object<ffi::GtkToolButton, ffi::GtkToolButtonClass>): ToolItem, Bin, Container, Widget, Buildable, Actionable;
+    pub struct ToolButton(Object<ffi::GtkToolButton, ffi::GtkToolButtonClass, ToolButtonClass>) @extends ToolItem, Bin, Container, Widget, @implements Buildable, Actionable;
 
     match fn {
         get_type => || ffi::gtk_tool_button_get_type(),
@@ -35,11 +35,9 @@ impl ToolButton {
     pub fn new<'a, 'b, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>, R: Into<Option<&'b str>>>(icon_widget: Q, label: R) -> ToolButton {
         assert_initialized_main_thread!();
         let icon_widget = icon_widget.into();
-        let icon_widget = icon_widget.to_glib_none();
         let label = label.into();
-        let label = label.to_glib_none();
         unsafe {
-            ToolItem::from_glib_none(ffi::gtk_tool_button_new(icon_widget.0, label.0)).downcast_unchecked()
+            ToolItem::from_glib_none(ffi::gtk_tool_button_new(icon_widget.map(|p| p.as_ref()).to_glib_none().0, label.to_glib_none().0)).unsafe_cast()
         }
     }
 
@@ -47,10 +45,12 @@ impl ToolButton {
     pub fn new_from_stock(stock_id: &str) -> ToolButton {
         assert_initialized_main_thread!();
         unsafe {
-            ToolItem::from_glib_none(ffi::gtk_tool_button_new_from_stock(stock_id.to_glib_none().0)).downcast_unchecked()
+            ToolItem::from_glib_none(ffi::gtk_tool_button_new_from_stock(stock_id.to_glib_none().0)).unsafe_cast()
         }
     }
 }
+
+pub const NONE_TOOL_BUTTON: Option<&ToolButton> = None;
 
 pub trait ToolButtonExt: 'static {
     fn get_icon_name(&self) -> Option<GString>;
@@ -100,90 +100,85 @@ pub trait ToolButtonExt: 'static {
 impl<O: IsA<ToolButton>> ToolButtonExt for O {
     fn get_icon_name(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::gtk_tool_button_get_icon_name(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_tool_button_get_icon_name(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_icon_widget(&self) -> Option<Widget> {
         unsafe {
-            from_glib_none(ffi::gtk_tool_button_get_icon_widget(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_tool_button_get_icon_widget(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_label(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::gtk_tool_button_get_label(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_tool_button_get_label(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_label_widget(&self) -> Option<Widget> {
         unsafe {
-            from_glib_none(ffi::gtk_tool_button_get_label_widget(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_tool_button_get_label_widget(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_stock_id(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::gtk_tool_button_get_stock_id(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_tool_button_get_stock_id(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_use_underline(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_tool_button_get_use_underline(self.to_glib_none().0))
+            from_glib(ffi::gtk_tool_button_get_use_underline(self.as_ref().to_glib_none().0))
         }
     }
 
     fn set_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_name: P) {
         let icon_name = icon_name.into();
-        let icon_name = icon_name.to_glib_none();
         unsafe {
-            ffi::gtk_tool_button_set_icon_name(self.to_glib_none().0, icon_name.0);
+            ffi::gtk_tool_button_set_icon_name(self.as_ref().to_glib_none().0, icon_name.to_glib_none().0);
         }
     }
 
     fn set_icon_widget<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, icon_widget: Q) {
         let icon_widget = icon_widget.into();
-        let icon_widget = icon_widget.to_glib_none();
         unsafe {
-            ffi::gtk_tool_button_set_icon_widget(self.to_glib_none().0, icon_widget.0);
+            ffi::gtk_tool_button_set_icon_widget(self.as_ref().to_glib_none().0, icon_widget.map(|p| p.as_ref()).to_glib_none().0);
         }
     }
 
     fn set_label<'a, P: Into<Option<&'a str>>>(&self, label: P) {
         let label = label.into();
-        let label = label.to_glib_none();
         unsafe {
-            ffi::gtk_tool_button_set_label(self.to_glib_none().0, label.0);
+            ffi::gtk_tool_button_set_label(self.as_ref().to_glib_none().0, label.to_glib_none().0);
         }
     }
 
     fn set_label_widget<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, label_widget: Q) {
         let label_widget = label_widget.into();
-        let label_widget = label_widget.to_glib_none();
         unsafe {
-            ffi::gtk_tool_button_set_label_widget(self.to_glib_none().0, label_widget.0);
+            ffi::gtk_tool_button_set_label_widget(self.as_ref().to_glib_none().0, label_widget.map(|p| p.as_ref()).to_glib_none().0);
         }
     }
 
     fn set_stock_id<'a, P: Into<Option<&'a str>>>(&self, stock_id: P) {
         let stock_id = stock_id.into();
-        let stock_id = stock_id.to_glib_none();
         unsafe {
-            ffi::gtk_tool_button_set_stock_id(self.to_glib_none().0, stock_id.0);
+            ffi::gtk_tool_button_set_stock_id(self.as_ref().to_glib_none().0, stock_id.to_glib_none().0);
         }
     }
 
     fn set_use_underline(&self, use_underline: bool) {
         unsafe {
-            ffi::gtk_tool_button_set_use_underline(self.to_glib_none().0, use_underline.to_glib());
+            ffi::gtk_tool_button_set_use_underline(self.as_ref().to_glib_none().0, use_underline.to_glib());
         }
     }
 
     fn connect_clicked<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"clicked\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"clicked\0".as_ptr() as *const _,
                 transmute(clicked_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -195,7 +190,7 @@ impl<O: IsA<ToolButton>> ToolButtonExt for O {
     fn connect_property_icon_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::icon-name\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::icon-name\0".as_ptr() as *const _,
                 transmute(notify_icon_name_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -203,7 +198,7 @@ impl<O: IsA<ToolButton>> ToolButtonExt for O {
     fn connect_property_icon_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::icon-widget\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::icon-widget\0".as_ptr() as *const _,
                 transmute(notify_icon_widget_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -211,7 +206,7 @@ impl<O: IsA<ToolButton>> ToolButtonExt for O {
     fn connect_property_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::label\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::label\0".as_ptr() as *const _,
                 transmute(notify_label_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -219,7 +214,7 @@ impl<O: IsA<ToolButton>> ToolButtonExt for O {
     fn connect_property_label_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::label-widget\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::label-widget\0".as_ptr() as *const _,
                 transmute(notify_label_widget_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -227,7 +222,7 @@ impl<O: IsA<ToolButton>> ToolButtonExt for O {
     fn connect_property_stock_id_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::stock-id\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::stock-id\0".as_ptr() as *const _,
                 transmute(notify_stock_id_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -235,7 +230,7 @@ impl<O: IsA<ToolButton>> ToolButtonExt for O {
     fn connect_property_use_underline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::use-underline\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::use-underline\0".as_ptr() as *const _,
                 transmute(notify_use_underline_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -244,43 +239,43 @@ impl<O: IsA<ToolButton>> ToolButtonExt for O {
 unsafe extern "C" fn clicked_trampoline<P>(this: *mut ffi::GtkToolButton, f: glib_ffi::gpointer)
 where P: IsA<ToolButton> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ToolButton::from_glib_borrow(this).downcast_unchecked())
+    f(&ToolButton::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_icon_name_trampoline<P>(this: *mut ffi::GtkToolButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolButton> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ToolButton::from_glib_borrow(this).downcast_unchecked())
+    f(&ToolButton::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_icon_widget_trampoline<P>(this: *mut ffi::GtkToolButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolButton> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ToolButton::from_glib_borrow(this).downcast_unchecked())
+    f(&ToolButton::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_label_trampoline<P>(this: *mut ffi::GtkToolButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolButton> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ToolButton::from_glib_borrow(this).downcast_unchecked())
+    f(&ToolButton::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_label_widget_trampoline<P>(this: *mut ffi::GtkToolButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolButton> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ToolButton::from_glib_borrow(this).downcast_unchecked())
+    f(&ToolButton::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_stock_id_trampoline<P>(this: *mut ffi::GtkToolButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolButton> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ToolButton::from_glib_borrow(this).downcast_unchecked())
+    f(&ToolButton::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_use_underline_trampoline<P>(this: *mut ffi::GtkToolButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolButton> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ToolButton::from_glib_borrow(this).downcast_unchecked())
+    f(&ToolButton::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for ToolButton {

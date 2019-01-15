@@ -7,7 +7,7 @@ use ffi;
 use glib::translate::*;
 
 glib_wrapper! {
-    pub struct EntryBuffer(Object<ffi::GtkEntryBuffer, ffi::GtkEntryBufferClass>);
+    pub struct EntryBuffer(Object<ffi::GtkEntryBuffer, ffi::GtkEntryBufferClass, EntryBufferClass>);
 
     match fn {
         get_type => || ffi::gtk_entry_buffer_get_type(),

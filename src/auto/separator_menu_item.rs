@@ -9,12 +9,12 @@ use Container;
 use MenuItem;
 use Widget;
 use ffi;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::translate::*;
 use std::fmt;
 
 glib_wrapper! {
-    pub struct SeparatorMenuItem(Object<ffi::GtkSeparatorMenuItem, ffi::GtkSeparatorMenuItemClass>): MenuItem, Bin, Container, Widget, Buildable, Actionable;
+    pub struct SeparatorMenuItem(Object<ffi::GtkSeparatorMenuItem, ffi::GtkSeparatorMenuItemClass, SeparatorMenuItemClass>) @extends MenuItem, Bin, Container, Widget, @implements Buildable, Actionable;
 
     match fn {
         get_type => || ffi::gtk_separator_menu_item_get_type(),
@@ -25,7 +25,7 @@ impl SeparatorMenuItem {
     pub fn new() -> SeparatorMenuItem {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_separator_menu_item_new()).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_separator_menu_item_new()).unsafe_cast()
         }
     }
 }
@@ -35,6 +35,8 @@ impl Default for SeparatorMenuItem {
         Self::new()
     }
 }
+
+pub const NONE_SEPARATOR_MENU_ITEM: Option<&SeparatorMenuItem> = None;
 
 impl fmt::Display for SeparatorMenuItem {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

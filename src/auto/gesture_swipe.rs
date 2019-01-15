@@ -8,7 +8,7 @@ use GestureSingle;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use Widget;
 use ffi;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 use glib::signal::SignalHandlerId;
@@ -28,7 +28,7 @@ use std::mem;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct GestureSwipe(Object<ffi::GtkGestureSwipe, ffi::GtkGestureSwipeClass>): GestureSingle, Gesture, EventController;
+    pub struct GestureSwipe(Object<ffi::GtkGestureSwipe, ffi::GtkGestureSwipeClass, GestureSwipeClass>) @extends GestureSingle, Gesture, EventController;
 
     match fn {
         get_type => || ffi::gtk_gesture_swipe_get_type(),
@@ -40,10 +40,12 @@ impl GestureSwipe {
     pub fn new<P: IsA<Widget>>(widget: &P) -> GestureSwipe {
         skip_assert_initialized!();
         unsafe {
-            Gesture::from_glib_full(ffi::gtk_gesture_swipe_new(widget.to_glib_none().0)).downcast_unchecked()
+            Gesture::from_glib_full(ffi::gtk_gesture_swipe_new(widget.as_ref().to_glib_none().0)).unsafe_cast()
         }
     }
 }
+
+pub const NONE_GESTURE_SWIPE: Option<&GestureSwipe> = None;
 
 pub trait GestureSwipeExt: 'static {
     #[cfg(any(feature = "v3_14", feature = "dox"))]
@@ -59,7 +61,7 @@ impl<O: IsA<GestureSwipe>> GestureSwipeExt for O {
         unsafe {
             let mut velocity_x = mem::uninitialized();
             let mut velocity_y = mem::uninitialized();
-            let ret = from_glib(ffi::gtk_gesture_swipe_get_velocity(self.to_glib_none().0, &mut velocity_x, &mut velocity_y));
+            let ret = from_glib(ffi::gtk_gesture_swipe_get_velocity(self.as_ref().to_glib_none().0, &mut velocity_x, &mut velocity_y));
             if ret { Some((velocity_x, velocity_y)) } else { None }
         }
     }
@@ -68,7 +70,7 @@ impl<O: IsA<GestureSwipe>> GestureSwipeExt for O {
     fn connect_swipe<F: Fn(&Self, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, f64, f64) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"swipe\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"swipe\0".as_ptr() as *const _,
                 transmute(swipe_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -78,7 +80,7 @@ impl<O: IsA<GestureSwipe>> GestureSwipeExt for O {
 unsafe extern "C" fn swipe_trampoline<P>(this: *mut ffi::GtkGestureSwipe, velocity_x: libc::c_double, velocity_y: libc::c_double, f: glib_ffi::gpointer)
 where P: IsA<GestureSwipe> {
     let f: &&(Fn(&P, f64, f64) + 'static) = transmute(f);
-    f(&GestureSwipe::from_glib_borrow(this).downcast_unchecked(), velocity_x, velocity_y)
+    f(&GestureSwipe::from_glib_borrow(this).unsafe_cast(), velocity_x, velocity_y)
 }
 
 impl fmt::Display for GestureSwipe {

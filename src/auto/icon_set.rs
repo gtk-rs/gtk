@@ -11,6 +11,7 @@ use ffi;
 #[cfg(any(feature = "v3_10", feature = "dox"))]
 use gdk;
 use gdk_pixbuf;
+use glib::object::IsA;
 use glib::translate::*;
 
 glib_wrapper! {
@@ -34,10 +35,10 @@ impl IconSet {
     }
 
     #[cfg_attr(feature = "v3_10", deprecated)]
-    pub fn new_from_pixbuf(pixbuf: &gdk_pixbuf::Pixbuf) -> IconSet {
+    pub fn new_from_pixbuf<P: IsA<gdk_pixbuf::Pixbuf>>(pixbuf: &P) -> IconSet {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(ffi::gtk_icon_set_new_from_pixbuf(pixbuf.to_glib_none().0))
+            from_glib_full(ffi::gtk_icon_set_new_from_pixbuf(pixbuf.as_ref().to_glib_none().0))
         }
     }
 
@@ -56,19 +57,18 @@ impl IconSet {
     }
 
     #[cfg_attr(feature = "v3_10", deprecated)]
-    pub fn render_icon_pixbuf(&self, context: &StyleContext, size: IconSize) -> Option<gdk_pixbuf::Pixbuf> {
+    pub fn render_icon_pixbuf<P: IsA<StyleContext>>(&self, context: &P, size: IconSize) -> Option<gdk_pixbuf::Pixbuf> {
         unsafe {
-            from_glib_full(ffi::gtk_icon_set_render_icon_pixbuf(self.to_glib_none().0, context.to_glib_none().0, size.to_glib()))
+            from_glib_full(ffi::gtk_icon_set_render_icon_pixbuf(self.to_glib_none().0, context.as_ref().to_glib_none().0, size.to_glib()))
         }
     }
 
     #[cfg_attr(feature = "v3_10", deprecated)]
     #[cfg(any(feature = "v3_10", feature = "dox"))]
-    pub fn render_icon_surface<'a, P: Into<Option<&'a gdk::Window>>>(&self, context: &StyleContext, size: IconSize, scale: i32, for_window: P) -> Option<cairo::Surface> {
+    pub fn render_icon_surface<'a, P: IsA<StyleContext>, Q: IsA<gdk::Window> + 'a, R: Into<Option<&'a Q>>>(&self, context: &P, size: IconSize, scale: i32, for_window: R) -> Option<cairo::Surface> {
         let for_window = for_window.into();
-        let for_window = for_window.to_glib_none();
         unsafe {
-            from_glib_full(ffi::gtk_icon_set_render_icon_surface(self.to_glib_none().0, context.to_glib_none().0, size.to_glib(), scale, for_window.0))
+            from_glib_full(ffi::gtk_icon_set_render_icon_surface(self.to_glib_none().0, context.as_ref().to_glib_none().0, size.to_glib(), scale, for_window.map(|p| p.as_ref()).to_glib_none().0))
         }
     }
 }

@@ -10,7 +10,7 @@ use Widget;
 use ffi;
 use glib::StaticType;
 use glib::Value;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
@@ -24,7 +24,7 @@ use std::fmt;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct GestureLongPress(Object<ffi::GtkGestureLongPress, ffi::GtkGestureLongPressClass>): GestureSingle, Gesture, EventController;
+    pub struct GestureLongPress(Object<ffi::GtkGestureLongPress, ffi::GtkGestureLongPressClass, GestureLongPressClass>) @extends GestureSingle, Gesture, EventController;
 
     match fn {
         get_type => || ffi::gtk_gesture_long_press_get_type(),
@@ -36,10 +36,12 @@ impl GestureLongPress {
     pub fn new<P: IsA<Widget>>(widget: &P) -> GestureLongPress {
         skip_assert_initialized!();
         unsafe {
-            Gesture::from_glib_full(ffi::gtk_gesture_long_press_new(widget.to_glib_none().0)).downcast_unchecked()
+            Gesture::from_glib_full(ffi::gtk_gesture_long_press_new(widget.as_ref().to_glib_none().0)).unsafe_cast()
         }
     }
 }
+
+pub const NONE_GESTURE_LONG_PRESS: Option<&GestureLongPress> = None;
 
 pub trait GestureLongPressExt: 'static {
     fn get_property_delay_factor(&self) -> f64;
@@ -74,7 +76,7 @@ impl<O: IsA<GestureLongPress>> GestureLongPressExt for O {
     fn connect_cancelled<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"cancelled\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"cancelled\0".as_ptr() as *const _,
                 transmute(cancelled_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -83,7 +85,7 @@ impl<O: IsA<GestureLongPress>> GestureLongPressExt for O {
     fn connect_pressed<F: Fn(&Self, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, f64, f64) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"pressed\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"pressed\0".as_ptr() as *const _,
                 transmute(pressed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -91,7 +93,7 @@ impl<O: IsA<GestureLongPress>> GestureLongPressExt for O {
     fn connect_property_delay_factor_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::delay-factor\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::delay-factor\0".as_ptr() as *const _,
                 transmute(notify_delay_factor_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -101,20 +103,20 @@ impl<O: IsA<GestureLongPress>> GestureLongPressExt for O {
 unsafe extern "C" fn cancelled_trampoline<P>(this: *mut ffi::GtkGestureLongPress, f: glib_ffi::gpointer)
 where P: IsA<GestureLongPress> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&GestureLongPress::from_glib_borrow(this).downcast_unchecked())
+    f(&GestureLongPress::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_14", feature = "dox"))]
 unsafe extern "C" fn pressed_trampoline<P>(this: *mut ffi::GtkGestureLongPress, x: libc::c_double, y: libc::c_double, f: glib_ffi::gpointer)
 where P: IsA<GestureLongPress> {
     let f: &&(Fn(&P, f64, f64) + 'static) = transmute(f);
-    f(&GestureLongPress::from_glib_borrow(this).downcast_unchecked(), x, y)
+    f(&GestureLongPress::from_glib_borrow(this).unsafe_cast(), x, y)
 }
 
 unsafe extern "C" fn notify_delay_factor_trampoline<P>(this: *mut ffi::GtkGestureLongPress, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<GestureLongPress> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&GestureLongPress::from_glib_borrow(this).downcast_unchecked())
+    f(&GestureLongPress::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for GestureLongPress {

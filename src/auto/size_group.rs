@@ -6,7 +6,7 @@ use Buildable;
 use SizeGroupMode;
 use Widget;
 use ffi;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
@@ -17,7 +17,7 @@ use std::fmt;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct SizeGroup(Object<ffi::GtkSizeGroup, ffi::GtkSizeGroupClass>): Buildable;
+    pub struct SizeGroup(Object<ffi::GtkSizeGroup, ffi::GtkSizeGroupClass, SizeGroupClass>) @implements Buildable;
 
     match fn {
         get_type => || ffi::gtk_size_group_get_type(),
@@ -32,6 +32,8 @@ impl SizeGroup {
         }
     }
 }
+
+pub const NONE_SIZE_GROUP: Option<&SizeGroup> = None;
 
 pub trait SizeGroupExt: 'static {
     fn add_widget<P: IsA<Widget>>(&self, widget: &P);
@@ -59,50 +61,50 @@ pub trait SizeGroupExt: 'static {
 impl<O: IsA<SizeGroup>> SizeGroupExt for O {
     fn add_widget<P: IsA<Widget>>(&self, widget: &P) {
         unsafe {
-            ffi::gtk_size_group_add_widget(self.to_glib_none().0, widget.to_glib_none().0);
+            ffi::gtk_size_group_add_widget(self.as_ref().to_glib_none().0, widget.as_ref().to_glib_none().0);
         }
     }
 
     fn get_ignore_hidden(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_size_group_get_ignore_hidden(self.to_glib_none().0))
+            from_glib(ffi::gtk_size_group_get_ignore_hidden(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_mode(&self) -> SizeGroupMode {
         unsafe {
-            from_glib(ffi::gtk_size_group_get_mode(self.to_glib_none().0))
+            from_glib(ffi::gtk_size_group_get_mode(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_widgets(&self) -> Vec<Widget> {
         unsafe {
-            FromGlibPtrContainer::from_glib_none(ffi::gtk_size_group_get_widgets(self.to_glib_none().0))
+            FromGlibPtrContainer::from_glib_none(ffi::gtk_size_group_get_widgets(self.as_ref().to_glib_none().0))
         }
     }
 
     fn remove_widget<P: IsA<Widget>>(&self, widget: &P) {
         unsafe {
-            ffi::gtk_size_group_remove_widget(self.to_glib_none().0, widget.to_glib_none().0);
+            ffi::gtk_size_group_remove_widget(self.as_ref().to_glib_none().0, widget.as_ref().to_glib_none().0);
         }
     }
 
     fn set_ignore_hidden(&self, ignore_hidden: bool) {
         unsafe {
-            ffi::gtk_size_group_set_ignore_hidden(self.to_glib_none().0, ignore_hidden.to_glib());
+            ffi::gtk_size_group_set_ignore_hidden(self.as_ref().to_glib_none().0, ignore_hidden.to_glib());
         }
     }
 
     fn set_mode(&self, mode: SizeGroupMode) {
         unsafe {
-            ffi::gtk_size_group_set_mode(self.to_glib_none().0, mode.to_glib());
+            ffi::gtk_size_group_set_mode(self.as_ref().to_glib_none().0, mode.to_glib());
         }
     }
 
     fn connect_property_ignore_hidden_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::ignore-hidden\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::ignore-hidden\0".as_ptr() as *const _,
                 transmute(notify_ignore_hidden_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -110,7 +112,7 @@ impl<O: IsA<SizeGroup>> SizeGroupExt for O {
     fn connect_property_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::mode\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::mode\0".as_ptr() as *const _,
                 transmute(notify_mode_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -119,13 +121,13 @@ impl<O: IsA<SizeGroup>> SizeGroupExt for O {
 unsafe extern "C" fn notify_ignore_hidden_trampoline<P>(this: *mut ffi::GtkSizeGroup, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<SizeGroup> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&SizeGroup::from_glib_borrow(this).downcast_unchecked())
+    f(&SizeGroup::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_mode_trampoline<P>(this: *mut ffi::GtkSizeGroup, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<SizeGroup> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&SizeGroup::from_glib_borrow(this).downcast_unchecked())
+    f(&SizeGroup::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for SizeGroup {

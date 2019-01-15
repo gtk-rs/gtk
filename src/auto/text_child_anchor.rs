@@ -9,7 +9,7 @@ use glib::translate::*;
 use std::fmt;
 
 glib_wrapper! {
-    pub struct TextChildAnchor(Object<ffi::GtkTextChildAnchor, ffi::GtkTextChildAnchorClass>);
+    pub struct TextChildAnchor(Object<ffi::GtkTextChildAnchor, ffi::GtkTextChildAnchorClass, TextChildAnchorClass>);
 
     match fn {
         get_type => || ffi::gtk_text_child_anchor_get_type(),
@@ -31,6 +31,8 @@ impl Default for TextChildAnchor {
     }
 }
 
+pub const NONE_TEXT_CHILD_ANCHOR: Option<&TextChildAnchor> = None;
+
 pub trait TextChildAnchorExt: 'static {
     fn get_deleted(&self) -> bool;
 
@@ -40,13 +42,13 @@ pub trait TextChildAnchorExt: 'static {
 impl<O: IsA<TextChildAnchor>> TextChildAnchorExt for O {
     fn get_deleted(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_text_child_anchor_get_deleted(self.to_glib_none().0))
+            from_glib(ffi::gtk_text_child_anchor_get_deleted(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_widgets(&self) -> Vec<Widget> {
         unsafe {
-            FromGlibPtrContainer::from_glib_container(ffi::gtk_text_child_anchor_get_widgets(self.to_glib_none().0))
+            FromGlibPtrContainer::from_glib_container(ffi::gtk_text_child_anchor_get_widgets(self.as_ref().to_glib_none().0))
         }
     }
 }

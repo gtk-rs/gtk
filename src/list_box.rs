@@ -6,17 +6,18 @@ use ffi;
 use glib_ffi;
 use gobject_ffi;
 use glib::translate::*;
-use glib::object::{Downcast, IsA};
+use glib::object::{Cast, IsA};
 use glib::Object;
 use ListBox;
 use ListBoxRow;
+use Widget;
 
 use gio;
 
 use std::cell::RefCell;
 use std::mem::transmute;
 
-pub trait ListBoxExtManual {
+pub trait ListBoxExtManual: 'static {
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn bind_model<'a, 'b, P: IsA<gio::ListModel> + 'a, Q: Into<Option<&'a P>>, R: FnMut(&Object) -> ListBoxRow + 'static>(&self, model: Q, create_widget_func: R);
 
@@ -33,7 +34,7 @@ pub trait ListBoxExtManual {
     //fn set_sort_func<'a, P: Into<Option<&'a /*Unimplemented*/ListBoxSortFunc>>>(&self, sort_func: P, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
 }
 
-impl<O: IsA<ListBox> + IsA<Object>> ListBoxExtManual for O {
+impl<O: IsA<ListBox>> ListBoxExtManual for O {
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn bind_model<'a, 'b, P: IsA<gio::ListModel> + 'a, Q: Into<Option<&'a P>>, R: FnMut(&Object) -> ListBoxRow + 'static>(&self, model: Q, create_widget_func: R) {
         unsafe extern "C" fn bind_model_trampoline(
@@ -45,7 +46,9 @@ impl<O: IsA<ListBox> + IsA<Object>> ListBoxExtManual for O {
 
             (&mut *func.borrow_mut())(
                 &from_glib_borrow(item),
-            ).to_glib_full()
+            )
+            .upcast::<Widget>()
+            .to_glib_full()
         }
 
         unsafe extern "C" fn destroy_closure(func: glib_ffi::gpointer) {
@@ -59,12 +62,11 @@ impl<O: IsA<ListBox> + IsA<Object>> ListBoxExtManual for O {
         let destroy_closure = destroy_closure;
 
         let model = model.into();
-        let model = model.to_glib_none();
 
         unsafe {
             ffi::gtk_list_box_bind_model(
-                self.to_glib_none().0,
-                model.0,
+                self.as_ref().to_glib_none().0,
+                model.map(|p| p.as_ref()).to_glib_none().0,
                 Some(bind_model_trampoline),
                 Box::into_raw(func) as glib_ffi::gpointer,
                 Some(destroy_closure),
@@ -83,7 +85,7 @@ impl<O: IsA<ListBox> + IsA<Object>> ListBoxExtManual for O {
             let func = func as *mut &mut (FnMut(&T, &ListBoxRow));
 
             (*func)(
-                &ListBox::from_glib_borrow(this).downcast_unchecked(),
+                &ListBox::from_glib_borrow(this).unsafe_cast(),
                 &from_glib_borrow(row),
             )
         }
@@ -94,7 +96,7 @@ impl<O: IsA<ListBox> + IsA<Object>> ListBoxExtManual for O {
             let func_ptr = &func_obj as *const &mut (FnMut(&Self, &ListBoxRow)) as glib_ffi::gpointer;
 
             ffi::gtk_list_box_selected_foreach(
-                self.to_glib_none().0,
+                self.as_ref().to_glib_none().0,
                 Some(foreach_trampoline::<Self>),
                 func_ptr
             )

@@ -8,7 +8,7 @@ use StyleProvider;
 use ffi;
 use gio;
 use glib::GString;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
@@ -20,7 +20,7 @@ use std::mem::transmute;
 use std::ptr;
 
 glib_wrapper! {
-    pub struct CssProvider(Object<ffi::GtkCssProvider, ffi::GtkCssProviderClass>): StyleProvider;
+    pub struct CssProvider(Object<ffi::GtkCssProvider, ffi::GtkCssProviderClass, CssProviderClass>) @implements StyleProvider;
 
     match fn {
         get_type => || ffi::gtk_css_provider_get_type(),
@@ -45,9 +45,8 @@ impl CssProvider {
     pub fn get_named<'a, P: Into<Option<&'a str>>>(name: &str, variant: P) -> Option<CssProvider> {
         assert_initialized_main_thread!();
         let variant = variant.into();
-        let variant = variant.to_glib_none();
         unsafe {
-            from_glib_none(ffi::gtk_css_provider_get_named(name.to_glib_none().0, variant.0))
+            from_glib_none(ffi::gtk_css_provider_get_named(name.to_glib_none().0, variant.to_glib_none().0))
         }
     }
 }
@@ -57,6 +56,8 @@ impl Default for CssProvider {
         Self::new()
     }
 }
+
+pub const NONE_CSS_PROVIDER: Option<&CssProvider> = None;
 
 pub trait CssProviderExt: 'static {
     fn load_from_data(&self, data: &[u8]) -> Result<(), Error>;
@@ -78,7 +79,7 @@ impl<O: IsA<CssProvider>> CssProviderExt for O {
         let length = data.len() as isize;
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::gtk_css_provider_load_from_data(self.to_glib_none().0, data.to_glib_none().0, length, &mut error);
+            let _ = ffi::gtk_css_provider_load_from_data(self.as_ref().to_glib_none().0, data.to_glib_none().0, length, &mut error);
             if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
         }
     }
@@ -86,7 +87,7 @@ impl<O: IsA<CssProvider>> CssProviderExt for O {
     fn load_from_file<P: IsA<gio::File>>(&self, file: &P) -> Result<(), Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::gtk_css_provider_load_from_file(self.to_glib_none().0, file.to_glib_none().0, &mut error);
+            let _ = ffi::gtk_css_provider_load_from_file(self.as_ref().to_glib_none().0, file.as_ref().to_glib_none().0, &mut error);
             if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
         }
     }
@@ -94,7 +95,7 @@ impl<O: IsA<CssProvider>> CssProviderExt for O {
     fn load_from_path(&self, path: &str) -> Result<(), Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::gtk_css_provider_load_from_path(self.to_glib_none().0, path.to_glib_none().0, &mut error);
+            let _ = ffi::gtk_css_provider_load_from_path(self.as_ref().to_glib_none().0, path.to_glib_none().0, &mut error);
             if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
         }
     }
@@ -102,20 +103,20 @@ impl<O: IsA<CssProvider>> CssProviderExt for O {
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn load_from_resource(&self, resource_path: &str) {
         unsafe {
-            ffi::gtk_css_provider_load_from_resource(self.to_glib_none().0, resource_path.to_glib_none().0);
+            ffi::gtk_css_provider_load_from_resource(self.as_ref().to_glib_none().0, resource_path.to_glib_none().0);
         }
     }
 
     fn to_string(&self) -> GString {
         unsafe {
-            from_glib_full(ffi::gtk_css_provider_to_string(self.to_glib_none().0))
+            from_glib_full(ffi::gtk_css_provider_to_string(self.as_ref().to_glib_none().0))
         }
     }
 
     fn connect_parsing_error<F: Fn(&Self, &CssSection, &Error) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, &CssSection, &Error) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"parsing-error\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"parsing-error\0".as_ptr() as *const _,
                 transmute(parsing_error_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -124,7 +125,7 @@ impl<O: IsA<CssProvider>> CssProviderExt for O {
 unsafe extern "C" fn parsing_error_trampoline<P>(this: *mut ffi::GtkCssProvider, section: *mut ffi::GtkCssSection, error: *mut glib_ffi::GError, f: glib_ffi::gpointer)
 where P: IsA<CssProvider> {
     let f: &&(Fn(&P, &CssSection, &Error) + 'static) = transmute(f);
-    f(&CssProvider::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(section), &from_glib_borrow(error))
+    f(&CssProvider::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(section), &from_glib_borrow(error))
 }
 
 impl fmt::Display for CssProvider {

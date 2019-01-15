@@ -9,7 +9,7 @@ use glib::translate::*;
 use PageRange;
 use PrintSettings;
 
-pub trait PrintSettingsExtManual {
+pub trait PrintSettingsExtManual: 'static {
     fn set_page_ranges(&self, page_ranges: &[PageRange]);
 }
 
@@ -17,7 +17,7 @@ impl<O: IsA<PrintSettings>> PrintSettingsExtManual for O {
     fn set_page_ranges(&self, page_ranges: &[PageRange]) {
         let num_ranges = page_ranges.len() as i32;
         unsafe {
-            ffi::gtk_print_settings_set_page_ranges(self.to_glib_none().0,
+            ffi::gtk_print_settings_set_page_ranges(self.as_ref().to_glib_none().0,
                                                     mut_override(page_ranges.as_ptr() as *const _),
                                                     num_ranges);
         }

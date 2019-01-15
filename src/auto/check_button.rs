@@ -10,12 +10,12 @@ use Container;
 use ToggleButton;
 use Widget;
 use ffi;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::translate::*;
 use std::fmt;
 
 glib_wrapper! {
-    pub struct CheckButton(Object<ffi::GtkCheckButton, ffi::GtkCheckButtonClass>): ToggleButton, Button, Bin, Container, Widget, Buildable, Actionable;
+    pub struct CheckButton(Object<ffi::GtkCheckButton, ffi::GtkCheckButtonClass, CheckButtonClass>) @extends ToggleButton, Button, Bin, Container, Widget, @implements Buildable, Actionable;
 
     match fn {
         get_type => || ffi::gtk_check_button_get_type(),
@@ -26,21 +26,21 @@ impl CheckButton {
     pub fn new() -> CheckButton {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_check_button_new()).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_check_button_new()).unsafe_cast()
         }
     }
 
     pub fn new_with_label(label: &str) -> CheckButton {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_check_button_new_with_label(label.to_glib_none().0)).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_check_button_new_with_label(label.to_glib_none().0)).unsafe_cast()
         }
     }
 
     pub fn new_with_mnemonic(label: &str) -> CheckButton {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_check_button_new_with_mnemonic(label.to_glib_none().0)).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_check_button_new_with_mnemonic(label.to_glib_none().0)).unsafe_cast()
         }
     }
 }
@@ -50,6 +50,8 @@ impl Default for CheckButton {
         Self::new()
     }
 }
+
+pub const NONE_CHECK_BUTTON: Option<&CheckButton> = None;
 
 impl fmt::Display for CheckButton {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

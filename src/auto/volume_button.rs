@@ -13,7 +13,7 @@ use Widget;
 use ffi;
 use glib::StaticType;
 use glib::Value;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
@@ -25,7 +25,7 @@ use std::fmt;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct VolumeButton(Object<ffi::GtkVolumeButton, ffi::GtkVolumeButtonClass>): ScaleButton, Button, Bin, Container, Widget, Buildable, Actionable, Orientable;
+    pub struct VolumeButton(Object<ffi::GtkVolumeButton, ffi::GtkVolumeButtonClass, VolumeButtonClass>) @extends ScaleButton, Button, Bin, Container, Widget, @implements Buildable, Actionable, Orientable;
 
     match fn {
         get_type => || ffi::gtk_volume_button_get_type(),
@@ -36,7 +36,7 @@ impl VolumeButton {
     pub fn new() -> VolumeButton {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_volume_button_new()).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_volume_button_new()).unsafe_cast()
         }
     }
 }
@@ -46,6 +46,8 @@ impl Default for VolumeButton {
         Self::new()
     }
 }
+
+pub const NONE_VOLUME_BUTTON: Option<&VolumeButton> = None;
 
 pub trait VolumeButtonExt: 'static {
     fn get_property_use_symbolic(&self) -> bool;
@@ -73,7 +75,7 @@ impl<O: IsA<VolumeButton>> VolumeButtonExt for O {
     fn connect_property_use_symbolic_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::use-symbolic\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::use-symbolic\0".as_ptr() as *const _,
                 transmute(notify_use_symbolic_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -82,7 +84,7 @@ impl<O: IsA<VolumeButton>> VolumeButtonExt for O {
 unsafe extern "C" fn notify_use_symbolic_trampoline<P>(this: *mut ffi::GtkVolumeButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<VolumeButton> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&VolumeButton::from_glib_borrow(this).downcast_unchecked())
+    f(&VolumeButton::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for VolumeButton {

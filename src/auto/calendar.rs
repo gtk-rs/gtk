@@ -8,7 +8,7 @@ use Widget;
 use ffi;
 use glib::StaticType;
 use glib::Value;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
@@ -21,7 +21,7 @@ use std::mem;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct Calendar(Object<ffi::GtkCalendar, ffi::GtkCalendarClass>): Widget, Buildable;
+    pub struct Calendar(Object<ffi::GtkCalendar, ffi::GtkCalendarClass, CalendarClass>) @extends Widget, @implements Buildable;
 
     match fn {
         get_type => || ffi::gtk_calendar_get_type(),
@@ -32,7 +32,7 @@ impl Calendar {
     pub fn new() -> Calendar {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_calendar_new()).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_calendar_new()).unsafe_cast()
         }
     }
 }
@@ -42,6 +42,8 @@ impl Default for Calendar {
         Self::new()
     }
 }
+
+pub const NONE_CALENDAR: Option<&Calendar> = None;
 
 pub trait CalendarExt: 'static {
     fn clear_marks(&self);
@@ -142,7 +144,7 @@ pub trait CalendarExt: 'static {
 impl<O: IsA<Calendar>> CalendarExt for O {
     fn clear_marks(&self) {
         unsafe {
-            ffi::gtk_calendar_clear_marks(self.to_glib_none().0);
+            ffi::gtk_calendar_clear_marks(self.as_ref().to_glib_none().0);
         }
     }
 
@@ -151,50 +153,50 @@ impl<O: IsA<Calendar>> CalendarExt for O {
             let mut year = mem::uninitialized();
             let mut month = mem::uninitialized();
             let mut day = mem::uninitialized();
-            ffi::gtk_calendar_get_date(self.to_glib_none().0, &mut year, &mut month, &mut day);
+            ffi::gtk_calendar_get_date(self.as_ref().to_glib_none().0, &mut year, &mut month, &mut day);
             (year, month, day)
         }
     }
 
     fn get_day_is_marked(&self, day: u32) -> bool {
         unsafe {
-            from_glib(ffi::gtk_calendar_get_day_is_marked(self.to_glib_none().0, day))
+            from_glib(ffi::gtk_calendar_get_day_is_marked(self.as_ref().to_glib_none().0, day))
         }
     }
 
     fn get_detail_height_rows(&self) -> i32 {
         unsafe {
-            ffi::gtk_calendar_get_detail_height_rows(self.to_glib_none().0)
+            ffi::gtk_calendar_get_detail_height_rows(self.as_ref().to_glib_none().0)
         }
     }
 
     fn get_detail_width_chars(&self) -> i32 {
         unsafe {
-            ffi::gtk_calendar_get_detail_width_chars(self.to_glib_none().0)
+            ffi::gtk_calendar_get_detail_width_chars(self.as_ref().to_glib_none().0)
         }
     }
 
     fn get_display_options(&self) -> CalendarDisplayOptions {
         unsafe {
-            from_glib(ffi::gtk_calendar_get_display_options(self.to_glib_none().0))
+            from_glib(ffi::gtk_calendar_get_display_options(self.as_ref().to_glib_none().0))
         }
     }
 
     fn mark_day(&self, day: u32) {
         unsafe {
-            ffi::gtk_calendar_mark_day(self.to_glib_none().0, day);
+            ffi::gtk_calendar_mark_day(self.as_ref().to_glib_none().0, day);
         }
     }
 
     fn select_day(&self, day: u32) {
         unsafe {
-            ffi::gtk_calendar_select_day(self.to_glib_none().0, day);
+            ffi::gtk_calendar_select_day(self.as_ref().to_glib_none().0, day);
         }
     }
 
     fn select_month(&self, month: u32, year: u32) {
         unsafe {
-            ffi::gtk_calendar_select_month(self.to_glib_none().0, month, year);
+            ffi::gtk_calendar_select_month(self.as_ref().to_glib_none().0, month, year);
         }
     }
 
@@ -204,25 +206,25 @@ impl<O: IsA<Calendar>> CalendarExt for O {
 
     fn set_detail_height_rows(&self, rows: i32) {
         unsafe {
-            ffi::gtk_calendar_set_detail_height_rows(self.to_glib_none().0, rows);
+            ffi::gtk_calendar_set_detail_height_rows(self.as_ref().to_glib_none().0, rows);
         }
     }
 
     fn set_detail_width_chars(&self, chars: i32) {
         unsafe {
-            ffi::gtk_calendar_set_detail_width_chars(self.to_glib_none().0, chars);
+            ffi::gtk_calendar_set_detail_width_chars(self.as_ref().to_glib_none().0, chars);
         }
     }
 
     fn set_display_options(&self, flags: CalendarDisplayOptions) {
         unsafe {
-            ffi::gtk_calendar_set_display_options(self.to_glib_none().0, flags.to_glib());
+            ffi::gtk_calendar_set_display_options(self.as_ref().to_glib_none().0, flags.to_glib());
         }
     }
 
     fn unmark_day(&self, day: u32) {
         unsafe {
-            ffi::gtk_calendar_unmark_day(self.to_glib_none().0, day);
+            ffi::gtk_calendar_unmark_day(self.as_ref().to_glib_none().0, day);
         }
     }
 
@@ -341,7 +343,7 @@ impl<O: IsA<Calendar>> CalendarExt for O {
     fn connect_day_selected<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"day-selected\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"day-selected\0".as_ptr() as *const _,
                 transmute(day_selected_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -349,7 +351,7 @@ impl<O: IsA<Calendar>> CalendarExt for O {
     fn connect_day_selected_double_click<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"day-selected-double-click\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"day-selected-double-click\0".as_ptr() as *const _,
                 transmute(day_selected_double_click_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -357,7 +359,7 @@ impl<O: IsA<Calendar>> CalendarExt for O {
     fn connect_month_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"month-changed\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"month-changed\0".as_ptr() as *const _,
                 transmute(month_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -365,7 +367,7 @@ impl<O: IsA<Calendar>> CalendarExt for O {
     fn connect_next_month<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"next-month\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"next-month\0".as_ptr() as *const _,
                 transmute(next_month_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -373,7 +375,7 @@ impl<O: IsA<Calendar>> CalendarExt for O {
     fn connect_next_year<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"next-year\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"next-year\0".as_ptr() as *const _,
                 transmute(next_year_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -381,7 +383,7 @@ impl<O: IsA<Calendar>> CalendarExt for O {
     fn connect_prev_month<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"prev-month\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"prev-month\0".as_ptr() as *const _,
                 transmute(prev_month_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -389,7 +391,7 @@ impl<O: IsA<Calendar>> CalendarExt for O {
     fn connect_prev_year<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"prev-year\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"prev-year\0".as_ptr() as *const _,
                 transmute(prev_year_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -397,7 +399,7 @@ impl<O: IsA<Calendar>> CalendarExt for O {
     fn connect_property_day_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::day\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::day\0".as_ptr() as *const _,
                 transmute(notify_day_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -405,7 +407,7 @@ impl<O: IsA<Calendar>> CalendarExt for O {
     fn connect_property_detail_height_rows_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::detail-height-rows\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::detail-height-rows\0".as_ptr() as *const _,
                 transmute(notify_detail_height_rows_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -413,7 +415,7 @@ impl<O: IsA<Calendar>> CalendarExt for O {
     fn connect_property_detail_width_chars_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::detail-width-chars\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::detail-width-chars\0".as_ptr() as *const _,
                 transmute(notify_detail_width_chars_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -421,7 +423,7 @@ impl<O: IsA<Calendar>> CalendarExt for O {
     fn connect_property_month_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::month\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::month\0".as_ptr() as *const _,
                 transmute(notify_month_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -429,7 +431,7 @@ impl<O: IsA<Calendar>> CalendarExt for O {
     fn connect_property_no_month_change_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::no-month-change\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::no-month-change\0".as_ptr() as *const _,
                 transmute(notify_no_month_change_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -437,7 +439,7 @@ impl<O: IsA<Calendar>> CalendarExt for O {
     fn connect_property_show_day_names_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::show-day-names\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::show-day-names\0".as_ptr() as *const _,
                 transmute(notify_show_day_names_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -445,7 +447,7 @@ impl<O: IsA<Calendar>> CalendarExt for O {
     fn connect_property_show_details_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::show-details\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::show-details\0".as_ptr() as *const _,
                 transmute(notify_show_details_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -453,7 +455,7 @@ impl<O: IsA<Calendar>> CalendarExt for O {
     fn connect_property_show_heading_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::show-heading\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::show-heading\0".as_ptr() as *const _,
                 transmute(notify_show_heading_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -461,7 +463,7 @@ impl<O: IsA<Calendar>> CalendarExt for O {
     fn connect_property_show_week_numbers_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::show-week-numbers\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::show-week-numbers\0".as_ptr() as *const _,
                 transmute(notify_show_week_numbers_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -469,7 +471,7 @@ impl<O: IsA<Calendar>> CalendarExt for O {
     fn connect_property_year_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"notify::year\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"notify::year\0".as_ptr() as *const _,
                 transmute(notify_year_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -478,103 +480,103 @@ impl<O: IsA<Calendar>> CalendarExt for O {
 unsafe extern "C" fn day_selected_trampoline<P>(this: *mut ffi::GtkCalendar, f: glib_ffi::gpointer)
 where P: IsA<Calendar> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Calendar::from_glib_borrow(this).downcast_unchecked())
+    f(&Calendar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn day_selected_double_click_trampoline<P>(this: *mut ffi::GtkCalendar, f: glib_ffi::gpointer)
 where P: IsA<Calendar> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Calendar::from_glib_borrow(this).downcast_unchecked())
+    f(&Calendar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn month_changed_trampoline<P>(this: *mut ffi::GtkCalendar, f: glib_ffi::gpointer)
 where P: IsA<Calendar> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Calendar::from_glib_borrow(this).downcast_unchecked())
+    f(&Calendar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn next_month_trampoline<P>(this: *mut ffi::GtkCalendar, f: glib_ffi::gpointer)
 where P: IsA<Calendar> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Calendar::from_glib_borrow(this).downcast_unchecked())
+    f(&Calendar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn next_year_trampoline<P>(this: *mut ffi::GtkCalendar, f: glib_ffi::gpointer)
 where P: IsA<Calendar> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Calendar::from_glib_borrow(this).downcast_unchecked())
+    f(&Calendar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn prev_month_trampoline<P>(this: *mut ffi::GtkCalendar, f: glib_ffi::gpointer)
 where P: IsA<Calendar> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Calendar::from_glib_borrow(this).downcast_unchecked())
+    f(&Calendar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn prev_year_trampoline<P>(this: *mut ffi::GtkCalendar, f: glib_ffi::gpointer)
 where P: IsA<Calendar> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Calendar::from_glib_borrow(this).downcast_unchecked())
+    f(&Calendar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_day_trampoline<P>(this: *mut ffi::GtkCalendar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Calendar> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Calendar::from_glib_borrow(this).downcast_unchecked())
+    f(&Calendar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_detail_height_rows_trampoline<P>(this: *mut ffi::GtkCalendar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Calendar> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Calendar::from_glib_borrow(this).downcast_unchecked())
+    f(&Calendar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_detail_width_chars_trampoline<P>(this: *mut ffi::GtkCalendar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Calendar> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Calendar::from_glib_borrow(this).downcast_unchecked())
+    f(&Calendar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_month_trampoline<P>(this: *mut ffi::GtkCalendar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Calendar> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Calendar::from_glib_borrow(this).downcast_unchecked())
+    f(&Calendar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_no_month_change_trampoline<P>(this: *mut ffi::GtkCalendar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Calendar> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Calendar::from_glib_borrow(this).downcast_unchecked())
+    f(&Calendar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_day_names_trampoline<P>(this: *mut ffi::GtkCalendar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Calendar> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Calendar::from_glib_borrow(this).downcast_unchecked())
+    f(&Calendar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_details_trampoline<P>(this: *mut ffi::GtkCalendar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Calendar> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Calendar::from_glib_borrow(this).downcast_unchecked())
+    f(&Calendar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_heading_trampoline<P>(this: *mut ffi::GtkCalendar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Calendar> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Calendar::from_glib_borrow(this).downcast_unchecked())
+    f(&Calendar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_week_numbers_trampoline<P>(this: *mut ffi::GtkCalendar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Calendar> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Calendar::from_glib_borrow(this).downcast_unchecked())
+    f(&Calendar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_year_trampoline<P>(this: *mut ffi::GtkCalendar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Calendar> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Calendar::from_glib_borrow(this).downcast_unchecked())
+    f(&Calendar::from_glib_borrow(this).unsafe_cast())
 }
 
 impl fmt::Display for Calendar {

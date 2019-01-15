@@ -15,7 +15,7 @@ use glib;
 use glib::StaticType;
 #[cfg(any(feature = "v3_12", feature = "dox"))]
 use glib::Value;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::object::ObjectExt;
 use glib::signal::SignalHandlerId;
@@ -28,7 +28,7 @@ use std::fmt;
 use std::mem::transmute;
 
 glib_wrapper! {
-    pub struct Dialog(Object<ffi::GtkDialog, ffi::GtkDialogClass>): Window, Bin, Container, Widget, Buildable;
+    pub struct Dialog(Object<ffi::GtkDialog, ffi::GtkDialogClass, DialogClass>) @extends Window, Bin, Container, Widget, @implements Buildable;
 
     match fn {
         get_type => || ffi::gtk_dialog_get_type(),
@@ -39,7 +39,7 @@ impl Dialog {
     pub fn new() -> Dialog {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_dialog_new()).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_dialog_new()).unsafe_cast()
         }
     }
 
@@ -53,6 +53,8 @@ impl Default for Dialog {
         Self::new()
     }
 }
+
+pub const NONE_DIALOG: Option<&Dialog> = None;
 
 pub trait DialogExt: 'static {
     fn add_action_widget<P: IsA<Widget>>(&self, child: &P, response_id: ResponseType);
@@ -100,13 +102,13 @@ pub trait DialogExt: 'static {
 impl<O: IsA<Dialog>> DialogExt for O {
     fn add_action_widget<P: IsA<Widget>>(&self, child: &P, response_id: ResponseType) {
         unsafe {
-            ffi::gtk_dialog_add_action_widget(self.to_glib_none().0, child.to_glib_none().0, response_id.to_glib());
+            ffi::gtk_dialog_add_action_widget(self.as_ref().to_glib_none().0, child.as_ref().to_glib_none().0, response_id.to_glib());
         }
     }
 
     fn add_button(&self, button_text: &str, response_id: ResponseType) -> Widget {
         unsafe {
-            from_glib_none(ffi::gtk_dialog_add_button(self.to_glib_none().0, button_text.to_glib_none().0, response_id.to_glib()))
+            from_glib_none(ffi::gtk_dialog_add_button(self.as_ref().to_glib_none().0, button_text.to_glib_none().0, response_id.to_glib()))
         }
     }
 
@@ -116,44 +118,44 @@ impl<O: IsA<Dialog>> DialogExt for O {
 
     fn get_action_area(&self) -> Widget {
         unsafe {
-            from_glib_none(ffi::gtk_dialog_get_action_area(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_dialog_get_action_area(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_content_area(&self) -> Box {
         unsafe {
-            from_glib_none(ffi::gtk_dialog_get_content_area(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_dialog_get_content_area(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_header_bar(&self) -> Option<Widget> {
         unsafe {
-            from_glib_none(ffi::gtk_dialog_get_header_bar(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_dialog_get_header_bar(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_response_for_widget<P: IsA<Widget>>(&self, widget: &P) -> i32 {
         unsafe {
-            ffi::gtk_dialog_get_response_for_widget(self.to_glib_none().0, widget.to_glib_none().0)
+            ffi::gtk_dialog_get_response_for_widget(self.as_ref().to_glib_none().0, widget.as_ref().to_glib_none().0)
         }
     }
 
     fn get_widget_for_response(&self, response_id: ResponseType) -> Option<Widget> {
         unsafe {
-            from_glib_none(ffi::gtk_dialog_get_widget_for_response(self.to_glib_none().0, response_id.to_glib()))
+            from_glib_none(ffi::gtk_dialog_get_widget_for_response(self.as_ref().to_glib_none().0, response_id.to_glib()))
         }
     }
 
     fn response(&self, response_id: ResponseType) {
         unsafe {
-            ffi::gtk_dialog_response(self.to_glib_none().0, response_id.to_glib());
+            ffi::gtk_dialog_response(self.as_ref().to_glib_none().0, response_id.to_glib());
         }
     }
 
     fn run(&self) -> i32 {
         unsafe {
-            ffi::gtk_dialog_run(self.to_glib_none().0)
+            ffi::gtk_dialog_run(self.as_ref().to_glib_none().0)
         }
     }
 
@@ -164,19 +166,19 @@ impl<O: IsA<Dialog>> DialogExt for O {
     fn set_alternative_button_order_from_array(&self, new_order: &[i32]) {
         let n_params = new_order.len() as i32;
         unsafe {
-            ffi::gtk_dialog_set_alternative_button_order_from_array(self.to_glib_none().0, n_params, new_order.to_glib_none().0);
+            ffi::gtk_dialog_set_alternative_button_order_from_array(self.as_ref().to_glib_none().0, n_params, new_order.to_glib_none().0);
         }
     }
 
     fn set_default_response(&self, response_id: ResponseType) {
         unsafe {
-            ffi::gtk_dialog_set_default_response(self.to_glib_none().0, response_id.to_glib());
+            ffi::gtk_dialog_set_default_response(self.as_ref().to_glib_none().0, response_id.to_glib());
         }
     }
 
     fn set_response_sensitive(&self, response_id: ResponseType, setting: bool) {
         unsafe {
-            ffi::gtk_dialog_set_response_sensitive(self.to_glib_none().0, response_id.to_glib(), setting.to_glib());
+            ffi::gtk_dialog_set_response_sensitive(self.as_ref().to_glib_none().0, response_id.to_glib(), setting.to_glib());
         }
     }
 
@@ -192,7 +194,7 @@ impl<O: IsA<Dialog>> DialogExt for O {
     fn connect_close<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"close\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"close\0".as_ptr() as *const _,
                 transmute(close_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -204,7 +206,7 @@ impl<O: IsA<Dialog>> DialogExt for O {
     fn connect_response<F: Fn(&Self, ResponseType) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<Box_<Fn(&Self, ResponseType) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.to_glib_none().0 as *mut _, b"response\0".as_ptr() as *const _,
+            connect_raw(self.as_ptr() as *mut _, b"response\0".as_ptr() as *const _,
                 transmute(response_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
         }
     }
@@ -213,13 +215,13 @@ impl<O: IsA<Dialog>> DialogExt for O {
 unsafe extern "C" fn close_trampoline<P>(this: *mut ffi::GtkDialog, f: glib_ffi::gpointer)
 where P: IsA<Dialog> {
     let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Dialog::from_glib_borrow(this).downcast_unchecked())
+    f(&Dialog::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn response_trampoline<P>(this: *mut ffi::GtkDialog, response_id: ffi::GtkResponseType, f: glib_ffi::gpointer)
 where P: IsA<Dialog> {
     let f: &&(Fn(&P, ResponseType) + 'static) = transmute(f);
-    f(&Dialog::from_glib_borrow(this).downcast_unchecked(), from_glib(response_id))
+    f(&Dialog::from_glib_borrow(this).unsafe_cast(), from_glib(response_id))
 }
 
 impl fmt::Display for Dialog {
