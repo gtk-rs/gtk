@@ -84,7 +84,7 @@ pub trait IconInfoExt: 'static {
 
     #[cfg(feature = "futures")]
     #[cfg(any(feature = "v3_8", feature = "dox"))]
-    fn load_icon_async_future<P: IsA<gio::Cancellable> + Clone + 'static>(&self) -> Box_<futures_core::Future<Item = (Self, gdk_pixbuf::Pixbuf), Error = (Self, Error)>> where Self: Sized + Clone;
+    fn load_icon_async_future(&self) -> Box_<futures_core::Future<Item = (Self, gdk_pixbuf::Pixbuf), Error = (Self, Error)>> where Self: Sized + Clone;
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn load_surface<'a, P: IsA<gdk::Window> + 'a, Q: Into<Option<&'a P>>>(&self, for_window: Q) -> Result<cairo::Surface, Error>;
@@ -96,7 +96,7 @@ pub trait IconInfoExt: 'static {
 
     #[cfg(feature = "futures")]
     #[cfg(any(feature = "v3_8", feature = "dox"))]
-    fn load_symbolic_async_future<'a, 'b, 'c, P: Into<Option<&'a gdk::RGBA>>, Q: Into<Option<&'b gdk::RGBA>>, R: Into<Option<&'c gdk::RGBA>>, S: IsA<gio::Cancellable> + Clone + 'static>(&self, fg: &gdk::RGBA, success_color: P, warning_color: Q, error_color: R) -> Box_<futures_core::Future<Item = (Self, (gdk_pixbuf::Pixbuf, bool)), Error = (Self, Error)>> where Self: Sized + Clone;
+    fn load_symbolic_async_future<'a, 'b, 'c, P: Into<Option<&'a gdk::RGBA>>, Q: Into<Option<&'b gdk::RGBA>>, R: Into<Option<&'c gdk::RGBA>>>(&self, fg: &gdk::RGBA, success_color: P, warning_color: Q, error_color: R) -> Box_<futures_core::Future<Item = (Self, (gdk_pixbuf::Pixbuf, bool)), Error = (Self, Error)>> where Self: Sized + Clone;
 
     fn load_symbolic_for_context<P: IsA<StyleContext>>(&self, context: &P) -> Result<(gdk_pixbuf::Pixbuf, bool), Error>;
 
@@ -105,7 +105,7 @@ pub trait IconInfoExt: 'static {
 
     #[cfg(feature = "futures")]
     #[cfg(any(feature = "v3_8", feature = "dox"))]
-    fn load_symbolic_for_context_async_future<P: IsA<StyleContext> + Clone + 'static, Q: IsA<gio::Cancellable> + Clone + 'static>(&self, context: &P) -> Box_<futures_core::Future<Item = (Self, (gdk_pixbuf::Pixbuf, bool)), Error = (Self, Error)>> where Self: Sized + Clone;
+    fn load_symbolic_for_context_async_future<P: IsA<StyleContext> + Clone + 'static>(&self, context: &P) -> Box_<futures_core::Future<Item = (Self, (gdk_pixbuf::Pixbuf, bool)), Error = (Self, Error)>> where Self: Sized + Clone;
 
     #[cfg_attr(feature = "v3_14", deprecated)]
     fn set_raw_coordinates(&self, raw_coordinates: bool);
@@ -196,7 +196,7 @@ impl<O: IsA<IconInfo>> IconInfoExt for O {
 
     #[cfg(feature = "futures")]
     #[cfg(any(feature = "v3_8", feature = "dox"))]
-    fn load_icon_async_future<P: IsA<gio::Cancellable> + Clone + 'static>(&self) -> Box_<futures_core::Future<Item = (Self, gdk_pixbuf::Pixbuf), Error = (Self, Error)>> where Self: Sized + Clone {
+    fn load_icon_async_future(&self) -> Box_<futures_core::Future<Item = (Self, gdk_pixbuf::Pixbuf), Error = (Self, Error)>> where Self: Sized + Clone {
         use gio::GioFuture;
         use fragile::Fragile;
 
@@ -263,7 +263,7 @@ impl<O: IsA<IconInfo>> IconInfoExt for O {
 
     #[cfg(feature = "futures")]
     #[cfg(any(feature = "v3_8", feature = "dox"))]
-    fn load_symbolic_async_future<'a, 'b, 'c, P: Into<Option<&'a gdk::RGBA>>, Q: Into<Option<&'b gdk::RGBA>>, R: Into<Option<&'c gdk::RGBA>>, S: IsA<gio::Cancellable> + Clone + 'static>(&self, fg: &gdk::RGBA, success_color: P, warning_color: Q, error_color: R) -> Box_<futures_core::Future<Item = (Self, (gdk_pixbuf::Pixbuf, bool)), Error = (Self, Error)>> where Self: Sized + Clone {
+    fn load_symbolic_async_future<'a, 'b, 'c, P: Into<Option<&'a gdk::RGBA>>, Q: Into<Option<&'b gdk::RGBA>>, R: Into<Option<&'c gdk::RGBA>>>(&self, fg: &gdk::RGBA, success_color: P, warning_color: Q, error_color: R) -> Box_<futures_core::Future<Item = (Self, (gdk_pixbuf::Pixbuf, bool)), Error = (Self, Error)>> where Self: Sized + Clone {
         use gio::GioFuture;
         use fragile::Fragile;
 
@@ -325,7 +325,7 @@ impl<O: IsA<IconInfo>> IconInfoExt for O {
 
     #[cfg(feature = "futures")]
     #[cfg(any(feature = "v3_8", feature = "dox"))]
-    fn load_symbolic_for_context_async_future<P: IsA<StyleContext> + Clone + 'static, Q: IsA<gio::Cancellable> + Clone + 'static>(&self, context: &P) -> Box_<futures_core::Future<Item = (Self, (gdk_pixbuf::Pixbuf, bool)), Error = (Self, Error)>> where Self: Sized + Clone {
+    fn load_symbolic_for_context_async_future<P: IsA<StyleContext> + Clone + 'static>(&self, context: &P) -> Box_<futures_core::Future<Item = (Self, (gdk_pixbuf::Pixbuf, bool)), Error = (Self, Error)>> where Self: Sized + Clone {
         use gio::GioFuture;
         use fragile::Fragile;
 
