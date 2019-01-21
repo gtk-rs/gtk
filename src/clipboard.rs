@@ -6,19 +6,14 @@ use Clipboard;
 use SelectionData;
 use TargetEntry;
 use ffi;
-use glib::object::IsA;
 use glib::translate::*;
 use glib_ffi::gpointer;
 use libc::c_uint;
 use std::boxed::Box as Box_;
 use std::mem::transmute;
 
-pub trait ClipboardExtManual: 'static {
-    fn set_with_data<F: Fn(&Clipboard, &SelectionData, u32) + 'static>(&self, targets: &[TargetEntry], f: F) -> bool;
-}
-
-impl<O: IsA<Clipboard>> ClipboardExtManual for O {
-    fn set_with_data<F: Fn(&Clipboard, &SelectionData, u32) + 'static>(&self, targets: &[TargetEntry], f: F) -> bool {
+impl Clipboard {
+    pub fn set_with_data<F: Fn(&Clipboard, &SelectionData, u32) + 'static>(&self, targets: &[TargetEntry], f: F) -> bool {
         let stashed_targets: Vec<_> = targets.iter().map(|e| e.to_glib_none()).collect();
         let mut t = Vec::with_capacity(stashed_targets.len());
         for stash in &stashed_targets {
@@ -33,8 +28,8 @@ impl<O: IsA<Clipboard>> ClipboardExtManual for O {
         let t_ptr: *mut ffi::GtkTargetEntry = t.as_mut_ptr();
         let f: Box_<Box_<Fn(&Clipboard, &SelectionData, u32) + 'static>> = Box_::new(Box_::new(f));
         let user_data = Box_::into_raw(f) as *mut _;
-        let success : bool = unsafe { from_glib(ffi::gtk_clipboard_set_with_data(self.as_ref().to_glib_none().0,
-                                             t_ptr, t.len() as c_uint, 
+        let success : bool = unsafe { from_glib(ffi::gtk_clipboard_set_with_data(self.to_glib_none().0,
+                                             t_ptr, t.len() as c_uint,
                                              Some(trampoline), Some(cleanup), user_data))
         };
         if !success {
