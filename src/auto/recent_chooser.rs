@@ -31,7 +31,7 @@ glib_wrapper! {
 pub const NONE_RECENT_CHOOSER: Option<&RecentChooser> = None;
 
 pub trait RecentChooserExt: 'static {
-    fn add_filter<P: IsA<RecentFilter>>(&self, filter: &P);
+    fn add_filter(&self, filter: &RecentFilter);
 
     fn get_current_item(&self) -> Option<RecentInfo>;
 
@@ -61,7 +61,7 @@ pub trait RecentChooserExt: 'static {
 
     fn list_filters(&self) -> Vec<RecentFilter>;
 
-    fn remove_filter<P: IsA<RecentFilter>>(&self, filter: &P);
+    fn remove_filter(&self, filter: &RecentFilter);
 
     fn select_all(&self);
 
@@ -69,7 +69,7 @@ pub trait RecentChooserExt: 'static {
 
     fn set_current_uri(&self, uri: &str) -> Result<(), Error>;
 
-    fn set_filter<'a, P: IsA<RecentFilter> + 'a, Q: Into<Option<&'a P>>>(&self, filter: Q);
+    fn set_filter<'a, P: Into<Option<&'a RecentFilter>>>(&self, filter: P);
 
     fn set_limit(&self, limit: i32);
 
@@ -117,9 +117,9 @@ pub trait RecentChooserExt: 'static {
 }
 
 impl<O: IsA<RecentChooser>> RecentChooserExt for O {
-    fn add_filter<P: IsA<RecentFilter>>(&self, filter: &P) {
+    fn add_filter(&self, filter: &RecentFilter) {
         unsafe {
-            ffi::gtk_recent_chooser_add_filter(self.as_ref().to_glib_none().0, filter.as_ref().to_glib_none().0);
+            ffi::gtk_recent_chooser_add_filter(self.as_ref().to_glib_none().0, filter.to_glib_none().0);
         }
     }
 
@@ -209,9 +209,9 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
         }
     }
 
-    fn remove_filter<P: IsA<RecentFilter>>(&self, filter: &P) {
+    fn remove_filter(&self, filter: &RecentFilter) {
         unsafe {
-            ffi::gtk_recent_chooser_remove_filter(self.as_ref().to_glib_none().0, filter.as_ref().to_glib_none().0);
+            ffi::gtk_recent_chooser_remove_filter(self.as_ref().to_glib_none().0, filter.to_glib_none().0);
         }
     }
 
@@ -237,10 +237,10 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
         }
     }
 
-    fn set_filter<'a, P: IsA<RecentFilter> + 'a, Q: Into<Option<&'a P>>>(&self, filter: Q) {
+    fn set_filter<'a, P: Into<Option<&'a RecentFilter>>>(&self, filter: P) {
         let filter = filter.into();
         unsafe {
-            ffi::gtk_recent_chooser_set_filter(self.as_ref().to_glib_none().0, filter.map(|p| p.as_ref()).to_glib_none().0);
+            ffi::gtk_recent_chooser_set_filter(self.as_ref().to_glib_none().0, filter.to_glib_none().0);
         }
     }
 

@@ -48,7 +48,7 @@ pub trait MountOperationExt: 'static {
 
     fn set_parent<'a, P: IsA<Window> + 'a, Q: Into<Option<&'a P>>>(&self, parent: Q);
 
-    fn set_screen<P: IsA<gdk::Screen>>(&self, screen: &P);
+    fn set_screen(&self, screen: &gdk::Screen);
 
     fn get_property_is_showing(&self) -> bool;
 
@@ -85,9 +85,9 @@ impl<O: IsA<MountOperation>> MountOperationExt for O {
         }
     }
 
-    fn set_screen<P: IsA<gdk::Screen>>(&self, screen: &P) {
+    fn set_screen(&self, screen: &gdk::Screen) {
         unsafe {
-            ffi::gtk_mount_operation_set_screen(self.as_ref().to_glib_none().0, screen.as_ref().to_glib_none().0);
+            ffi::gtk_mount_operation_set_screen(self.as_ref().to_glib_none().0, screen.to_glib_none().0);
         }
     }
 

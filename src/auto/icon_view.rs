@@ -186,11 +186,11 @@ pub trait IconViewExt: 'static {
 
     fn set_text_column(&self, column: i32);
 
-    fn set_tooltip_cell<'a, P: IsA<Tooltip>, Q: IsA<CellRenderer> + 'a, R: Into<Option<&'a Q>>>(&self, tooltip: &P, path: &TreePath, cell: R);
+    fn set_tooltip_cell<'a, P: IsA<CellRenderer> + 'a, Q: Into<Option<&'a P>>>(&self, tooltip: &Tooltip, path: &TreePath, cell: Q);
 
     fn set_tooltip_column(&self, column: i32);
 
-    fn set_tooltip_item<P: IsA<Tooltip>>(&self, tooltip: &P, path: &TreePath);
+    fn set_tooltip_item(&self, tooltip: &Tooltip, path: &TreePath);
 
     fn unselect_all(&self);
 
@@ -606,10 +606,10 @@ impl<O: IsA<IconView>> IconViewExt for O {
         }
     }
 
-    fn set_tooltip_cell<'a, P: IsA<Tooltip>, Q: IsA<CellRenderer> + 'a, R: Into<Option<&'a Q>>>(&self, tooltip: &P, path: &TreePath, cell: R) {
+    fn set_tooltip_cell<'a, P: IsA<CellRenderer> + 'a, Q: Into<Option<&'a P>>>(&self, tooltip: &Tooltip, path: &TreePath, cell: Q) {
         let cell = cell.into();
         unsafe {
-            ffi::gtk_icon_view_set_tooltip_cell(self.as_ref().to_glib_none().0, tooltip.as_ref().to_glib_none().0, mut_override(path.to_glib_none().0), cell.map(|p| p.as_ref()).to_glib_none().0);
+            ffi::gtk_icon_view_set_tooltip_cell(self.as_ref().to_glib_none().0, tooltip.to_glib_none().0, mut_override(path.to_glib_none().0), cell.map(|p| p.as_ref()).to_glib_none().0);
         }
     }
 
@@ -619,9 +619,9 @@ impl<O: IsA<IconView>> IconViewExt for O {
         }
     }
 
-    fn set_tooltip_item<P: IsA<Tooltip>>(&self, tooltip: &P, path: &TreePath) {
+    fn set_tooltip_item(&self, tooltip: &Tooltip, path: &TreePath) {
         unsafe {
-            ffi::gtk_icon_view_set_tooltip_item(self.as_ref().to_glib_none().0, tooltip.as_ref().to_glib_none().0, mut_override(path.to_glib_none().0));
+            ffi::gtk_icon_view_set_tooltip_item(self.as_ref().to_glib_none().0, tooltip.to_glib_none().0, mut_override(path.to_glib_none().0));
         }
     }
 

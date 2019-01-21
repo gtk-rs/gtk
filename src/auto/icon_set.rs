@@ -35,10 +35,10 @@ impl IconSet {
     }
 
     #[cfg_attr(feature = "v3_10", deprecated)]
-    pub fn new_from_pixbuf<P: IsA<gdk_pixbuf::Pixbuf>>(pixbuf: &P) -> IconSet {
+    pub fn new_from_pixbuf(pixbuf: &gdk_pixbuf::Pixbuf) -> IconSet {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(ffi::gtk_icon_set_new_from_pixbuf(pixbuf.as_ref().to_glib_none().0))
+            from_glib_full(ffi::gtk_icon_set_new_from_pixbuf(pixbuf.to_glib_none().0))
         }
     }
 

@@ -110,7 +110,7 @@ pub trait GtkMenuExt: 'static {
     fn popup_at_widget<'a, P: IsA<Widget>, Q: Into<Option<&'a gdk::Event>>>(&self, widget: &P, widget_anchor: gdk::Gravity, menu_anchor: gdk::Gravity, trigger_event: Q);
 
     //#[cfg_attr(feature = "v3_22", deprecated)]
-    //fn popup_for_device<'a, 'b, 'c, 'd, 'e, P: IsA<gdk::Device> + 'a, Q: Into<Option<&'a P>>, R: IsA<Widget> + 'b, S: Into<Option<&'b R>>, T: IsA<Widget> + 'c, U: Into<Option<&'c T>>, V: Into<Option<&'d /*Unimplemented*/MenuPositionFunc>>, W: Into<Option</*Unimplemented*/Fundamental: Pointer>>, X: Into<Option<&'e /*Ignored*/glib::DestroyNotify>>>(&self, device: Q, parent_menu_shell: S, parent_menu_item: U, func: V, data: W, destroy: X, button: u32, activate_time: u32);
+    //fn popup_for_device<'a, 'b, 'c, 'd, 'e, P: Into<Option<&'a gdk::Device>>, Q: IsA<Widget> + 'b, R: Into<Option<&'b Q>>, S: IsA<Widget> + 'c, T: Into<Option<&'c S>>, U: Into<Option<&'d /*Unimplemented*/MenuPositionFunc>>, V: Into<Option</*Unimplemented*/Fundamental: Pointer>>, W: Into<Option<&'e /*Ignored*/glib::DestroyNotify>>>(&self, device: P, parent_menu_shell: R, parent_menu_item: T, func: U, data: V, destroy: W, button: u32, activate_time: u32);
 
     fn reorder_child<P: IsA<Widget>>(&self, child: &P, position: i32);
 
@@ -126,7 +126,7 @@ pub trait GtkMenuExt: 'static {
 
     fn set_reserve_toggle_size(&self, reserve_toggle_size: bool);
 
-    fn set_screen<'a, P: IsA<gdk::Screen> + 'a, Q: Into<Option<&'a P>>>(&self, screen: Q);
+    fn set_screen<'a, P: Into<Option<&'a gdk::Screen>>>(&self, screen: P);
 
     #[cfg_attr(feature = "v3_10", deprecated)]
     fn set_tearoff_state(&self, torn_off: bool);
@@ -326,7 +326,7 @@ impl<O: IsA<Menu>> GtkMenuExt for O {
         }
     }
 
-    //fn popup_for_device<'a, 'b, 'c, 'd, 'e, P: IsA<gdk::Device> + 'a, Q: Into<Option<&'a P>>, R: IsA<Widget> + 'b, S: Into<Option<&'b R>>, T: IsA<Widget> + 'c, U: Into<Option<&'c T>>, V: Into<Option<&'d /*Unimplemented*/MenuPositionFunc>>, W: Into<Option</*Unimplemented*/Fundamental: Pointer>>, X: Into<Option<&'e /*Ignored*/glib::DestroyNotify>>>(&self, device: Q, parent_menu_shell: S, parent_menu_item: U, func: V, data: W, destroy: X, button: u32, activate_time: u32) {
+    //fn popup_for_device<'a, 'b, 'c, 'd, 'e, P: Into<Option<&'a gdk::Device>>, Q: IsA<Widget> + 'b, R: Into<Option<&'b Q>>, S: IsA<Widget> + 'c, T: Into<Option<&'c S>>, U: Into<Option<&'d /*Unimplemented*/MenuPositionFunc>>, V: Into<Option</*Unimplemented*/Fundamental: Pointer>>, W: Into<Option<&'e /*Ignored*/glib::DestroyNotify>>>(&self, device: P, parent_menu_shell: R, parent_menu_item: T, func: U, data: V, destroy: W, button: u32, activate_time: u32) {
     //    unsafe { TODO: call ffi::gtk_menu_popup_for_device() }
     //}
 
@@ -374,10 +374,10 @@ impl<O: IsA<Menu>> GtkMenuExt for O {
         }
     }
 
-    fn set_screen<'a, P: IsA<gdk::Screen> + 'a, Q: Into<Option<&'a P>>>(&self, screen: Q) {
+    fn set_screen<'a, P: Into<Option<&'a gdk::Screen>>>(&self, screen: P) {
         let screen = screen.into();
         unsafe {
-            ffi::gtk_menu_set_screen(self.as_ref().to_glib_none().0, screen.map(|p| p.as_ref()).to_glib_none().0);
+            ffi::gtk_menu_set_screen(self.as_ref().to_glib_none().0, screen.to_glib_none().0);
         }
     }
 

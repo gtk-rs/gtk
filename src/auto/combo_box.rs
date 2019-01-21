@@ -134,7 +134,7 @@ pub trait ComboBoxExt: 'static {
 
     fn popup(&self);
 
-    fn popup_for_device<P: IsA<gdk::Device>>(&self, device: &P);
+    fn popup_for_device(&self, device: &gdk::Device);
 
     fn set_active_id<'a, P: Into<Option<&'a str>>>(&self, active_id: P) -> bool;
 
@@ -339,9 +339,9 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
         }
     }
 
-    fn popup_for_device<P: IsA<gdk::Device>>(&self, device: &P) {
+    fn popup_for_device(&self, device: &gdk::Device) {
         unsafe {
-            ffi::gtk_combo_box_popup_for_device(self.as_ref().to_glib_none().0, device.as_ref().to_glib_none().0);
+            ffi::gtk_combo_box_popup_for_device(self.as_ref().to_glib_none().0, device.to_glib_none().0);
         }
     }
 

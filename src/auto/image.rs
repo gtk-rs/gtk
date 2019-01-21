@@ -47,10 +47,10 @@ impl Image {
         }
     }
 
-    pub fn new_from_animation<P: IsA<gdk_pixbuf::PixbufAnimation>>(animation: &P) -> Image {
+    pub fn new_from_animation(animation: &gdk_pixbuf::PixbufAnimation) -> Image {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_image_new_from_animation(animation.as_ref().to_glib_none().0)).unsafe_cast()
+            Widget::from_glib_none(ffi::gtk_image_new_from_animation(animation.to_glib_none().0)).unsafe_cast()
         }
     }
 
@@ -84,11 +84,11 @@ impl Image {
         }
     }
 
-    pub fn new_from_pixbuf<'a, P: IsA<gdk_pixbuf::Pixbuf> + 'a, Q: Into<Option<&'a P>>>(pixbuf: Q) -> Image {
+    pub fn new_from_pixbuf<'a, P: Into<Option<&'a gdk_pixbuf::Pixbuf>>>(pixbuf: P) -> Image {
         assert_initialized_main_thread!();
         let pixbuf = pixbuf.into();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_image_new_from_pixbuf(pixbuf.map(|p| p.as_ref()).to_glib_none().0)).unsafe_cast()
+            Widget::from_glib_none(ffi::gtk_image_new_from_pixbuf(pixbuf.to_glib_none().0)).unsafe_cast()
         }
     }
 
@@ -141,7 +141,7 @@ pub trait ImageExt: 'static {
 
     fn get_storage_type(&self) -> ImageType;
 
-    fn set_from_animation<P: IsA<gdk_pixbuf::PixbufAnimation>>(&self, animation: &P);
+    fn set_from_animation(&self, animation: &gdk_pixbuf::PixbufAnimation);
 
     fn set_from_file<P: AsRef<std::path::Path>>(&self, filename: P);
 
@@ -152,7 +152,7 @@ pub trait ImageExt: 'static {
     #[cfg_attr(feature = "v3_10", deprecated)]
     fn set_from_icon_set(&self, icon_set: &IconSet, size: IconSize);
 
-    fn set_from_pixbuf<'a, P: IsA<gdk_pixbuf::Pixbuf> + 'a, Q: Into<Option<&'a P>>>(&self, pixbuf: Q);
+    fn set_from_pixbuf<'a, P: Into<Option<&'a gdk_pixbuf::Pixbuf>>>(&self, pixbuf: P);
 
     fn set_from_resource<'a, P: Into<Option<&'a str>>>(&self, resource_path: P);
 
@@ -178,11 +178,11 @@ pub trait ImageExt: 'static {
 
     fn set_property_icon_size(&self, icon_size: i32);
 
-    fn set_property_pixbuf<P: IsA<gdk_pixbuf::Pixbuf> + glib::value::SetValueOptional>(&self, pixbuf: Option<&P>);
+    fn set_property_pixbuf(&self, pixbuf: Option<&gdk_pixbuf::Pixbuf>);
 
     fn get_property_pixbuf_animation(&self) -> Option<gdk_pixbuf::PixbufAnimation>;
 
-    fn set_property_pixbuf_animation<P: IsA<gdk_pixbuf::PixbufAnimation> + glib::value::SetValueOptional>(&self, pixbuf_animation: Option<&P>);
+    fn set_property_pixbuf_animation(&self, pixbuf_animation: Option<&gdk_pixbuf::PixbufAnimation>);
 
     #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn get_property_resource(&self) -> Option<GString>;
@@ -274,9 +274,9 @@ impl<O: IsA<Image>> ImageExt for O {
         }
     }
 
-    fn set_from_animation<P: IsA<gdk_pixbuf::PixbufAnimation>>(&self, animation: &P) {
+    fn set_from_animation(&self, animation: &gdk_pixbuf::PixbufAnimation) {
         unsafe {
-            ffi::gtk_image_set_from_animation(self.as_ref().to_glib_none().0, animation.as_ref().to_glib_none().0);
+            ffi::gtk_image_set_from_animation(self.as_ref().to_glib_none().0, animation.to_glib_none().0);
         }
     }
 
@@ -305,10 +305,10 @@ impl<O: IsA<Image>> ImageExt for O {
         }
     }
 
-    fn set_from_pixbuf<'a, P: IsA<gdk_pixbuf::Pixbuf> + 'a, Q: Into<Option<&'a P>>>(&self, pixbuf: Q) {
+    fn set_from_pixbuf<'a, P: Into<Option<&'a gdk_pixbuf::Pixbuf>>>(&self, pixbuf: P) {
         let pixbuf = pixbuf.into();
         unsafe {
-            ffi::gtk_image_set_from_pixbuf(self.as_ref().to_glib_none().0, pixbuf.map(|p| p.as_ref()).to_glib_none().0);
+            ffi::gtk_image_set_from_pixbuf(self.as_ref().to_glib_none().0, pixbuf.to_glib_none().0);
         }
     }
 
@@ -389,7 +389,7 @@ impl<O: IsA<Image>> ImageExt for O {
         }
     }
 
-    fn set_property_pixbuf<P: IsA<gdk_pixbuf::Pixbuf> + glib::value::SetValueOptional>(&self, pixbuf: Option<&P>) {
+    fn set_property_pixbuf(&self, pixbuf: Option<&gdk_pixbuf::Pixbuf>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"pixbuf\0".as_ptr() as *const _, Value::from(pixbuf).to_glib_none().0);
         }
@@ -403,7 +403,7 @@ impl<O: IsA<Image>> ImageExt for O {
         }
     }
 
-    fn set_property_pixbuf_animation<P: IsA<gdk_pixbuf::PixbufAnimation> + glib::value::SetValueOptional>(&self, pixbuf_animation: Option<&P>) {
+    fn set_property_pixbuf_animation(&self, pixbuf_animation: Option<&gdk_pixbuf::PixbufAnimation>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"pixbuf-animation\0".as_ptr() as *const _, Value::from(pixbuf_animation).to_glib_none().0);
         }

@@ -52,24 +52,24 @@ impl StyleContext {
         }
     }
 
-    pub fn add_provider_for_screen<P: IsA<gdk::Screen>, Q: IsA<StyleProvider>>(screen: &P, provider: &Q, priority: u32) {
+    pub fn add_provider_for_screen<P: IsA<StyleProvider>>(screen: &gdk::Screen, provider: &P, priority: u32) {
         skip_assert_initialized!();
         unsafe {
-            ffi::gtk_style_context_add_provider_for_screen(screen.as_ref().to_glib_none().0, provider.as_ref().to_glib_none().0, priority);
+            ffi::gtk_style_context_add_provider_for_screen(screen.to_glib_none().0, provider.as_ref().to_glib_none().0, priority);
         }
     }
 
-    pub fn remove_provider_for_screen<P: IsA<gdk::Screen>, Q: IsA<StyleProvider>>(screen: &P, provider: &Q) {
+    pub fn remove_provider_for_screen<P: IsA<StyleProvider>>(screen: &gdk::Screen, provider: &P) {
         skip_assert_initialized!();
         unsafe {
-            ffi::gtk_style_context_remove_provider_for_screen(screen.as_ref().to_glib_none().0, provider.as_ref().to_glib_none().0);
+            ffi::gtk_style_context_remove_provider_for_screen(screen.to_glib_none().0, provider.as_ref().to_glib_none().0);
         }
     }
 
-    pub fn reset_widgets<P: IsA<gdk::Screen>>(screen: &P) {
+    pub fn reset_widgets(screen: &gdk::Screen) {
         assert_initialized_main_thread!();
         unsafe {
-            ffi::gtk_style_context_reset_widgets(screen.as_ref().to_glib_none().0);
+            ffi::gtk_style_context_reset_widgets(screen.to_glib_none().0);
         }
     }
 }
@@ -195,7 +195,7 @@ pub trait StyleContextExt: 'static {
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_scale(&self, scale: i32);
 
-    fn set_screen<P: IsA<gdk::Screen>>(&self, screen: &P);
+    fn set_screen(&self, screen: &gdk::Screen);
 
     fn set_state(&self, flags: StateFlags);
 
@@ -507,9 +507,9 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
         }
     }
 
-    fn set_screen<P: IsA<gdk::Screen>>(&self, screen: &P) {
+    fn set_screen(&self, screen: &gdk::Screen) {
         unsafe {
-            ffi::gtk_style_context_set_screen(self.as_ref().to_glib_none().0, screen.as_ref().to_glib_none().0);
+            ffi::gtk_style_context_set_screen(self.as_ref().to_glib_none().0, screen.to_glib_none().0);
         }
     }
 

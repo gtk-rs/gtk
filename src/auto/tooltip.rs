@@ -21,88 +21,66 @@ glib_wrapper! {
 }
 
 impl Tooltip {
-    pub fn trigger_tooltip_query<P: IsA<gdk::Display>>(display: &P) {
-        assert_initialized_main_thread!();
-        unsafe {
-            ffi::gtk_tooltip_trigger_tooltip_query(display.as_ref().to_glib_none().0);
-        }
-    }
-}
-
-pub const NONE_TOOLTIP: Option<&Tooltip> = None;
-
-pub trait TooltipExt: 'static {
-    fn set_custom<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, custom_widget: Q);
-
-    fn set_icon<'a, P: IsA<gdk_pixbuf::Pixbuf> + 'a, Q: Into<Option<&'a P>>>(&self, pixbuf: Q);
-
-    fn set_icon_from_gicon<'a, P: IsA<gio::Icon> + 'a, Q: Into<Option<&'a P>>>(&self, gicon: Q, size: IconSize);
-
-    fn set_icon_from_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_name: P, size: IconSize);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_icon_from_stock<'a, P: Into<Option<&'a str>>>(&self, stock_id: P, size: IconSize);
-
-    fn set_markup<'a, P: Into<Option<&'a str>>>(&self, markup: P);
-
-    fn set_text<'a, P: Into<Option<&'a str>>>(&self, text: P);
-
-    fn set_tip_area(&self, rect: &gdk::Rectangle);
-}
-
-impl<O: IsA<Tooltip>> TooltipExt for O {
-    fn set_custom<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, custom_widget: Q) {
+    pub fn set_custom<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, custom_widget: Q) {
         let custom_widget = custom_widget.into();
         unsafe {
-            ffi::gtk_tooltip_set_custom(self.as_ref().to_glib_none().0, custom_widget.map(|p| p.as_ref()).to_glib_none().0);
+            ffi::gtk_tooltip_set_custom(self.to_glib_none().0, custom_widget.map(|p| p.as_ref()).to_glib_none().0);
         }
     }
 
-    fn set_icon<'a, P: IsA<gdk_pixbuf::Pixbuf> + 'a, Q: Into<Option<&'a P>>>(&self, pixbuf: Q) {
+    pub fn set_icon<'a, P: Into<Option<&'a gdk_pixbuf::Pixbuf>>>(&self, pixbuf: P) {
         let pixbuf = pixbuf.into();
         unsafe {
-            ffi::gtk_tooltip_set_icon(self.as_ref().to_glib_none().0, pixbuf.map(|p| p.as_ref()).to_glib_none().0);
+            ffi::gtk_tooltip_set_icon(self.to_glib_none().0, pixbuf.to_glib_none().0);
         }
     }
 
-    fn set_icon_from_gicon<'a, P: IsA<gio::Icon> + 'a, Q: Into<Option<&'a P>>>(&self, gicon: Q, size: IconSize) {
+    pub fn set_icon_from_gicon<'a, P: IsA<gio::Icon> + 'a, Q: Into<Option<&'a P>>>(&self, gicon: Q, size: IconSize) {
         let gicon = gicon.into();
         unsafe {
-            ffi::gtk_tooltip_set_icon_from_gicon(self.as_ref().to_glib_none().0, gicon.map(|p| p.as_ref()).to_glib_none().0, size.to_glib());
+            ffi::gtk_tooltip_set_icon_from_gicon(self.to_glib_none().0, gicon.map(|p| p.as_ref()).to_glib_none().0, size.to_glib());
         }
     }
 
-    fn set_icon_from_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_name: P, size: IconSize) {
+    pub fn set_icon_from_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_name: P, size: IconSize) {
         let icon_name = icon_name.into();
         unsafe {
-            ffi::gtk_tooltip_set_icon_from_icon_name(self.as_ref().to_glib_none().0, icon_name.to_glib_none().0, size.to_glib());
+            ffi::gtk_tooltip_set_icon_from_icon_name(self.to_glib_none().0, icon_name.to_glib_none().0, size.to_glib());
         }
     }
 
-    fn set_icon_from_stock<'a, P: Into<Option<&'a str>>>(&self, stock_id: P, size: IconSize) {
+    #[cfg_attr(feature = "v3_10", deprecated)]
+    pub fn set_icon_from_stock<'a, P: Into<Option<&'a str>>>(&self, stock_id: P, size: IconSize) {
         let stock_id = stock_id.into();
         unsafe {
-            ffi::gtk_tooltip_set_icon_from_stock(self.as_ref().to_glib_none().0, stock_id.to_glib_none().0, size.to_glib());
+            ffi::gtk_tooltip_set_icon_from_stock(self.to_glib_none().0, stock_id.to_glib_none().0, size.to_glib());
         }
     }
 
-    fn set_markup<'a, P: Into<Option<&'a str>>>(&self, markup: P) {
+    pub fn set_markup<'a, P: Into<Option<&'a str>>>(&self, markup: P) {
         let markup = markup.into();
         unsafe {
-            ffi::gtk_tooltip_set_markup(self.as_ref().to_glib_none().0, markup.to_glib_none().0);
+            ffi::gtk_tooltip_set_markup(self.to_glib_none().0, markup.to_glib_none().0);
         }
     }
 
-    fn set_text<'a, P: Into<Option<&'a str>>>(&self, text: P) {
+    pub fn set_text<'a, P: Into<Option<&'a str>>>(&self, text: P) {
         let text = text.into();
         unsafe {
-            ffi::gtk_tooltip_set_text(self.as_ref().to_glib_none().0, text.to_glib_none().0);
+            ffi::gtk_tooltip_set_text(self.to_glib_none().0, text.to_glib_none().0);
         }
     }
 
-    fn set_tip_area(&self, rect: &gdk::Rectangle) {
+    pub fn set_tip_area(&self, rect: &gdk::Rectangle) {
         unsafe {
-            ffi::gtk_tooltip_set_tip_area(self.as_ref().to_glib_none().0, rect.to_glib_none().0);
+            ffi::gtk_tooltip_set_tip_area(self.to_glib_none().0, rect.to_glib_none().0);
+        }
+    }
+
+    pub fn trigger_tooltip_query(display: &gdk::Display) {
+        assert_initialized_main_thread!();
+        unsafe {
+            ffi::gtk_tooltip_trigger_tooltip_query(display.to_glib_none().0);
         }
     }
 }

@@ -103,7 +103,7 @@ pub trait PlacesSidebarExt: 'static {
     fn remove_shortcut<P: IsA<gio::File>>(&self, location: &P);
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn set_drop_targets_visible<P: IsA<gdk::DragContext>>(&self, visible: bool, context: &P);
+    fn set_drop_targets_visible(&self, visible: bool, context: &gdk::DragContext);
 
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_local_only(&self, local_only: bool);
@@ -334,9 +334,9 @@ impl<O: IsA<PlacesSidebar>> PlacesSidebarExt for O {
     }
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn set_drop_targets_visible<P: IsA<gdk::DragContext>>(&self, visible: bool, context: &P) {
+    fn set_drop_targets_visible(&self, visible: bool, context: &gdk::DragContext) {
         unsafe {
-            ffi::gtk_places_sidebar_set_drop_targets_visible(self.as_ref().to_glib_none().0, visible.to_glib(), context.as_ref().to_glib_none().0);
+            ffi::gtk_places_sidebar_set_drop_targets_visible(self.as_ref().to_glib_none().0, visible.to_glib(), context.to_glib_none().0);
         }
     }
 

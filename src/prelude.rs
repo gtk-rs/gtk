@@ -12,7 +12,6 @@ pub use app_chooser::AppChooserExt;
 pub use assistant::AssistantExtManual;
 pub use buildable::BuildableExtManual;
 pub use cell_renderer_pixbuf::CellRendererPixbufExtManual;
-pub use clipboard::ClipboardExtManual;
 pub use color_button::ColorButtonExtManual;
 pub use color_chooser::ColorChooserExtManual;
 pub use combo_box::ComboBoxExtManual;
@@ -29,7 +28,6 @@ pub use menu::GtkMenuExtManual;
 pub use notebook::NotebookExtManual;
 #[cfg(any(feature = "v3_22", feature = "dox"))]
 pub use pad_controller::PadControllerExtManual;
-pub use print_settings::PrintSettingsExtManual;
 pub use switch::SwitchExtManual;
 pub use text_buffer::TextBufferExtManual;
 pub use tree_model_filter::TreeModelFilterExtManual;

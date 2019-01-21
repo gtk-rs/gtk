@@ -32,10 +32,10 @@ impl Invisible {
         }
     }
 
-    pub fn new_for_screen<P: IsA<gdk::Screen>>(screen: &P) -> Invisible {
+    pub fn new_for_screen(screen: &gdk::Screen) -> Invisible {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_invisible_new_for_screen(screen.as_ref().to_glib_none().0)).unsafe_cast()
+            Widget::from_glib_none(ffi::gtk_invisible_new_for_screen(screen.to_glib_none().0)).unsafe_cast()
         }
     }
 }
@@ -49,15 +49,15 @@ impl Default for Invisible {
 pub const NONE_INVISIBLE: Option<&Invisible> = None;
 
 pub trait InvisibleExt: 'static {
-    fn set_screen<P: IsA<gdk::Screen>>(&self, screen: &P);
+    fn set_screen(&self, screen: &gdk::Screen);
 
     fn connect_property_screen_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<Invisible>> InvisibleExt for O {
-    fn set_screen<P: IsA<gdk::Screen>>(&self, screen: &P) {
+    fn set_screen(&self, screen: &gdk::Screen) {
         unsafe {
-            ffi::gtk_invisible_set_screen(self.as_ref().to_glib_none().0, screen.as_ref().to_glib_none().0);
+            ffi::gtk_invisible_set_screen(self.as_ref().to_glib_none().0, screen.to_glib_none().0);
         }
     }
 

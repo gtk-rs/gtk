@@ -8,7 +8,6 @@ use TextDirection;
 use ffi;
 use gdk_pixbuf;
 use glib::GString;
-use glib::object::IsA;
 use glib::translate::*;
 use std;
 
@@ -125,9 +124,9 @@ impl IconSource {
     }
 
     #[cfg_attr(feature = "v3_10", deprecated)]
-    pub fn set_pixbuf<P: IsA<gdk_pixbuf::Pixbuf>>(&mut self, pixbuf: &P) {
+    pub fn set_pixbuf(&mut self, pixbuf: &gdk_pixbuf::Pixbuf) {
         unsafe {
-            ffi::gtk_icon_source_set_pixbuf(self.to_glib_none_mut().0, pixbuf.as_ref().to_glib_none().0);
+            ffi::gtk_icon_source_set_pixbuf(self.to_glib_none_mut().0, pixbuf.to_glib_none().0);
         }
     }
 

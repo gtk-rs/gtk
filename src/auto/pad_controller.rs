@@ -27,11 +27,11 @@ glib_wrapper! {
 
 impl PadController {
     #[cfg(any(feature = "v3_22", feature = "dox"))]
-    pub fn new<'a, P: IsA<Window>, Q: IsA<gio::ActionGroup>, R: IsA<gdk::Device> + 'a, S: Into<Option<&'a R>>>(window: &P, group: &Q, pad: S) -> PadController {
+    pub fn new<'a, P: IsA<Window>, Q: IsA<gio::ActionGroup>, R: Into<Option<&'a gdk::Device>>>(window: &P, group: &Q, pad: R) -> PadController {
         skip_assert_initialized!();
         let pad = pad.into();
         unsafe {
-            from_glib_full(ffi::gtk_pad_controller_new(window.as_ref().to_glib_none().0, group.as_ref().to_glib_none().0, pad.map(|p| p.as_ref()).to_glib_none().0))
+            from_glib_full(ffi::gtk_pad_controller_new(window.as_ref().to_glib_none().0, group.as_ref().to_glib_none().0, pad.to_glib_none().0))
         }
     }
 }

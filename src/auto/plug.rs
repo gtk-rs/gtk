@@ -36,10 +36,10 @@ impl Plug {
         }
     }
 
-    pub fn new_for_display<P: IsA<gdk::Display>>(display: &P, socket_id: xlib::Window) -> Plug {
+    pub fn new_for_display(display: &gdk::Display, socket_id: xlib::Window) -> Plug {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_plug_new_for_display(display.as_ref().to_glib_none().0, socket_id)).unsafe_cast()
+            Widget::from_glib_none(ffi::gtk_plug_new_for_display(display.to_glib_none().0, socket_id)).unsafe_cast()
         }
     }
 }
@@ -49,7 +49,7 @@ pub const NONE_PLUG: Option<&Plug> = None;
 pub trait PlugExt: 'static {
     fn construct(&self, socket_id: xlib::Window);
 
-    fn construct_for_display<P: IsA<gdk::Display>>(&self, display: &P, socket_id: xlib::Window);
+    fn construct_for_display(&self, display: &gdk::Display, socket_id: xlib::Window);
 
     fn get_embedded(&self) -> bool;
 
@@ -71,9 +71,9 @@ impl<O: IsA<Plug>> PlugExt for O {
         }
     }
 
-    fn construct_for_display<P: IsA<gdk::Display>>(&self, display: &P, socket_id: xlib::Window) {
+    fn construct_for_display(&self, display: &gdk::Display, socket_id: xlib::Window) {
         unsafe {
-            ffi::gtk_plug_construct_for_display(self.as_ref().to_glib_none().0, display.as_ref().to_glib_none().0, socket_id);
+            ffi::gtk_plug_construct_for_display(self.as_ref().to_glib_none().0, display.to_glib_none().0, socket_id);
         }
     }
 

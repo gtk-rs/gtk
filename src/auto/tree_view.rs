@@ -250,11 +250,11 @@ pub trait TreeViewExt: 'static {
 
     fn set_show_expanders(&self, enabled: bool);
 
-    fn set_tooltip_cell<'a, 'b, 'c, P: IsA<Tooltip>, Q: Into<Option<&'a TreePath>>, R: IsA<TreeViewColumn> + 'b, S: Into<Option<&'b R>>, T: IsA<CellRenderer> + 'c, U: Into<Option<&'c T>>>(&self, tooltip: &P, path: Q, column: S, cell: U);
+    fn set_tooltip_cell<'a, 'b, 'c, P: Into<Option<&'a TreePath>>, Q: IsA<TreeViewColumn> + 'b, R: Into<Option<&'b Q>>, S: IsA<CellRenderer> + 'c, T: Into<Option<&'c S>>>(&self, tooltip: &Tooltip, path: P, column: R, cell: T);
 
     fn set_tooltip_column(&self, column: i32);
 
-    fn set_tooltip_row<P: IsA<Tooltip>>(&self, tooltip: &P, path: &TreePath);
+    fn set_tooltip_row(&self, tooltip: &Tooltip, path: &TreePath);
 
     fn unset_rows_drag_dest(&self);
 
@@ -923,12 +923,12 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
         }
     }
 
-    fn set_tooltip_cell<'a, 'b, 'c, P: IsA<Tooltip>, Q: Into<Option<&'a TreePath>>, R: IsA<TreeViewColumn> + 'b, S: Into<Option<&'b R>>, T: IsA<CellRenderer> + 'c, U: Into<Option<&'c T>>>(&self, tooltip: &P, path: Q, column: S, cell: U) {
+    fn set_tooltip_cell<'a, 'b, 'c, P: Into<Option<&'a TreePath>>, Q: IsA<TreeViewColumn> + 'b, R: Into<Option<&'b Q>>, S: IsA<CellRenderer> + 'c, T: Into<Option<&'c S>>>(&self, tooltip: &Tooltip, path: P, column: R, cell: T) {
         let path = path.into();
         let column = column.into();
         let cell = cell.into();
         unsafe {
-            ffi::gtk_tree_view_set_tooltip_cell(self.as_ref().to_glib_none().0, tooltip.as_ref().to_glib_none().0, mut_override(path.to_glib_none().0), column.map(|p| p.as_ref()).to_glib_none().0, cell.map(|p| p.as_ref()).to_glib_none().0);
+            ffi::gtk_tree_view_set_tooltip_cell(self.as_ref().to_glib_none().0, tooltip.to_glib_none().0, mut_override(path.to_glib_none().0), column.map(|p| p.as_ref()).to_glib_none().0, cell.map(|p| p.as_ref()).to_glib_none().0);
         }
     }
 
@@ -938,9 +938,9 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
         }
     }
 
-    fn set_tooltip_row<P: IsA<Tooltip>>(&self, tooltip: &P, path: &TreePath) {
+    fn set_tooltip_row(&self, tooltip: &Tooltip, path: &TreePath) {
         unsafe {
-            ffi::gtk_tree_view_set_tooltip_row(self.as_ref().to_glib_none().0, tooltip.as_ref().to_glib_none().0, mut_override(path.to_glib_none().0));
+            ffi::gtk_tree_view_set_tooltip_row(self.as_ref().to_glib_none().0, tooltip.to_glib_none().0, mut_override(path.to_glib_none().0));
         }
     }
 

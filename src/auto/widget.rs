@@ -103,7 +103,7 @@ pub trait WidgetExt: 'static {
 
     fn add_accelerator<P: IsA<AccelGroup>>(&self, accel_signal: &str, accel_group: &P, accel_key: u32, accel_mods: gdk::ModifierType, accel_flags: AccelFlags);
 
-    fn add_device_events<P: IsA<gdk::Device>>(&self, device: &P, events: gdk::EventMask);
+    fn add_device_events(&self, device: &gdk::Device, events: gdk::EventMask);
 
     fn add_mnemonic_label<P: IsA<Widget>>(&self, label: &P);
 
@@ -126,7 +126,7 @@ pub trait WidgetExt: 'static {
 
     //fn destroyed<P: IsA<Widget>>(&self, widget_pointer: &P);
 
-    fn device_is_shadowed<P: IsA<gdk::Device>>(&self, device: &P) -> bool;
+    fn device_is_shadowed(&self, device: &gdk::Device) -> bool;
 
     #[cfg_attr(feature = "v3_10", deprecated)]
     fn drag_begin<'a, P: Into<Option<&'a gdk::Event>>>(&self, targets: &TargetList, actions: gdk::DragAction, button: i32, event: P) -> Option<gdk::DragContext>;
@@ -142,7 +142,7 @@ pub trait WidgetExt: 'static {
 
     fn drag_dest_add_uri_targets(&self);
 
-    fn drag_dest_find_target<'a, P: IsA<gdk::DragContext>, Q: Into<Option<&'a TargetList>>>(&self, context: &P, target_list: Q) -> Option<gdk::Atom>;
+    fn drag_dest_find_target<'a, P: Into<Option<&'a TargetList>>>(&self, context: &gdk::DragContext, target_list: P) -> Option<gdk::Atom>;
 
     fn drag_dest_get_target_list(&self) -> Option<TargetList>;
 
@@ -157,7 +157,7 @@ pub trait WidgetExt: 'static {
 
     fn drag_dest_unset(&self);
 
-    fn drag_get_data<P: IsA<gdk::DragContext>>(&self, context: &P, target: &gdk::Atom, time_: u32);
+    fn drag_get_data(&self, context: &gdk::DragContext, target: &gdk::Atom, time_: u32);
 
     fn drag_highlight(&self);
 
@@ -173,7 +173,7 @@ pub trait WidgetExt: 'static {
 
     fn drag_source_set_icon_name(&self, icon_name: &str);
 
-    fn drag_source_set_icon_pixbuf<P: IsA<gdk_pixbuf::Pixbuf>>(&self, pixbuf: &P);
+    fn drag_source_set_icon_pixbuf(&self, pixbuf: &gdk_pixbuf::Pixbuf);
 
     #[cfg_attr(feature = "v3_10", deprecated)]
     fn drag_source_set_icon_stock(&self, stock_id: &str);
@@ -227,9 +227,9 @@ pub trait WidgetExt: 'static {
     #[cfg_attr(feature = "v3_10", deprecated)]
     fn get_composite_name(&self) -> Option<GString>;
 
-    fn get_device_enabled<P: IsA<gdk::Device>>(&self, device: &P) -> bool;
+    fn get_device_enabled(&self, device: &gdk::Device) -> bool;
 
-    fn get_device_events<P: IsA<gdk::Device>>(&self, device: &P) -> gdk::EventMask;
+    fn get_device_events(&self, device: &gdk::Device) -> gdk::EventMask;
 
     fn get_direction(&self) -> TextDirection;
 
@@ -495,9 +495,9 @@ pub trait WidgetExt: 'static {
     #[cfg_attr(feature = "v3_10", deprecated)]
     fn set_composite_name(&self, name: &str);
 
-    fn set_device_enabled<P: IsA<gdk::Device>>(&self, device: &P, enabled: bool);
+    fn set_device_enabled(&self, device: &gdk::Device, enabled: bool);
 
-    fn set_device_events<P: IsA<gdk::Device>>(&self, device: &P, events: gdk::EventMask);
+    fn set_device_events(&self, device: &gdk::Device, events: gdk::EventMask);
 
     fn set_direction(&self, dir: TextDirection);
 
@@ -580,7 +580,7 @@ pub trait WidgetExt: 'static {
 
     fn set_visible(&self, visible: bool);
 
-    fn set_visual<'a, P: IsA<gdk::Visual> + 'a, Q: Into<Option<&'a P>>>(&self, visual: Q);
+    fn set_visual<'a, P: Into<Option<&'a gdk::Visual>>>(&self, visual: P);
 
     fn set_window<P: IsA<gdk::Window>>(&self, window: &P);
 
@@ -889,9 +889,9 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn add_device_events<P: IsA<gdk::Device>>(&self, device: &P, events: gdk::EventMask) {
+    fn add_device_events(&self, device: &gdk::Device, events: gdk::EventMask) {
         unsafe {
-            ffi::gtk_widget_add_device_events(self.as_ref().to_glib_none().0, device.as_ref().to_glib_none().0, events.to_glib());
+            ffi::gtk_widget_add_device_events(self.as_ref().to_glib_none().0, device.to_glib_none().0, events.to_glib());
         }
     }
 
@@ -953,9 +953,9 @@ impl<O: IsA<Widget>> WidgetExt for O {
     //    unsafe { TODO: call ffi::gtk_widget_destroyed() }
     //}
 
-    fn device_is_shadowed<P: IsA<gdk::Device>>(&self, device: &P) -> bool {
+    fn device_is_shadowed(&self, device: &gdk::Device) -> bool {
         unsafe {
-            from_glib(ffi::gtk_widget_device_is_shadowed(self.as_ref().to_glib_none().0, device.as_ref().to_glib_none().0))
+            from_glib(ffi::gtk_widget_device_is_shadowed(self.as_ref().to_glib_none().0, device.to_glib_none().0))
         }
     }
 
@@ -998,10 +998,10 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn drag_dest_find_target<'a, P: IsA<gdk::DragContext>, Q: Into<Option<&'a TargetList>>>(&self, context: &P, target_list: Q) -> Option<gdk::Atom> {
+    fn drag_dest_find_target<'a, P: Into<Option<&'a TargetList>>>(&self, context: &gdk::DragContext, target_list: P) -> Option<gdk::Atom> {
         let target_list = target_list.into();
         unsafe {
-            from_glib_none(ffi::gtk_drag_dest_find_target(self.as_ref().to_glib_none().0, context.as_ref().to_glib_none().0, target_list.to_glib_none().0))
+            from_glib_none(ffi::gtk_drag_dest_find_target(self.as_ref().to_glib_none().0, context.to_glib_none().0, target_list.to_glib_none().0))
         }
     }
 
@@ -1042,9 +1042,9 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn drag_get_data<P: IsA<gdk::DragContext>>(&self, context: &P, target: &gdk::Atom, time_: u32) {
+    fn drag_get_data(&self, context: &gdk::DragContext, target: &gdk::Atom, time_: u32) {
         unsafe {
-            ffi::gtk_drag_get_data(self.as_ref().to_glib_none().0, context.as_ref().to_glib_none().0, target.to_glib_none().0, time_);
+            ffi::gtk_drag_get_data(self.as_ref().to_glib_none().0, context.to_glib_none().0, target.to_glib_none().0, time_);
         }
     }
 
@@ -1090,9 +1090,9 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn drag_source_set_icon_pixbuf<P: IsA<gdk_pixbuf::Pixbuf>>(&self, pixbuf: &P) {
+    fn drag_source_set_icon_pixbuf(&self, pixbuf: &gdk_pixbuf::Pixbuf) {
         unsafe {
-            ffi::gtk_drag_source_set_icon_pixbuf(self.as_ref().to_glib_none().0, pixbuf.as_ref().to_glib_none().0);
+            ffi::gtk_drag_source_set_icon_pixbuf(self.as_ref().to_glib_none().0, pixbuf.to_glib_none().0);
         }
     }
 
@@ -1246,15 +1246,15 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn get_device_enabled<P: IsA<gdk::Device>>(&self, device: &P) -> bool {
+    fn get_device_enabled(&self, device: &gdk::Device) -> bool {
         unsafe {
-            from_glib(ffi::gtk_widget_get_device_enabled(self.as_ref().to_glib_none().0, device.as_ref().to_glib_none().0))
+            from_glib(ffi::gtk_widget_get_device_enabled(self.as_ref().to_glib_none().0, device.to_glib_none().0))
         }
     }
 
-    fn get_device_events<P: IsA<gdk::Device>>(&self, device: &P) -> gdk::EventMask {
+    fn get_device_events(&self, device: &gdk::Device) -> gdk::EventMask {
         unsafe {
-            from_glib(ffi::gtk_widget_get_device_events(self.as_ref().to_glib_none().0, device.as_ref().to_glib_none().0))
+            from_glib(ffi::gtk_widget_get_device_events(self.as_ref().to_glib_none().0, device.to_glib_none().0))
         }
     }
 
@@ -2005,15 +2005,15 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn set_device_enabled<P: IsA<gdk::Device>>(&self, device: &P, enabled: bool) {
+    fn set_device_enabled(&self, device: &gdk::Device, enabled: bool) {
         unsafe {
-            ffi::gtk_widget_set_device_enabled(self.as_ref().to_glib_none().0, device.as_ref().to_glib_none().0, enabled.to_glib());
+            ffi::gtk_widget_set_device_enabled(self.as_ref().to_glib_none().0, device.to_glib_none().0, enabled.to_glib());
         }
     }
 
-    fn set_device_events<P: IsA<gdk::Device>>(&self, device: &P, events: gdk::EventMask) {
+    fn set_device_events(&self, device: &gdk::Device, events: gdk::EventMask) {
         unsafe {
-            ffi::gtk_widget_set_device_events(self.as_ref().to_glib_none().0, device.as_ref().to_glib_none().0, events.to_glib());
+            ffi::gtk_widget_set_device_events(self.as_ref().to_glib_none().0, device.to_glib_none().0, events.to_glib());
         }
     }
 
@@ -2244,10 +2244,10 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn set_visual<'a, P: IsA<gdk::Visual> + 'a, Q: Into<Option<&'a P>>>(&self, visual: Q) {
+    fn set_visual<'a, P: Into<Option<&'a gdk::Visual>>>(&self, visual: P) {
         let visual = visual.into();
         unsafe {
-            ffi::gtk_widget_set_visual(self.as_ref().to_glib_none().0, visual.map(|p| p.as_ref()).to_glib_none().0);
+            ffi::gtk_widget_set_visual(self.as_ref().to_glib_none().0, visual.to_glib_none().0);
         }
     }
 

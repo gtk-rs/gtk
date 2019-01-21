@@ -63,15 +63,15 @@ pub trait CellRendererPixbufExt: 'static {
 
     fn get_property_pixbuf(&self) -> Option<gdk_pixbuf::Pixbuf>;
 
-    fn set_property_pixbuf<P: IsA<gdk_pixbuf::Pixbuf> + glib::value::SetValueOptional>(&self, pixbuf: Option<&P>);
+    fn set_property_pixbuf(&self, pixbuf: Option<&gdk_pixbuf::Pixbuf>);
 
     fn get_property_pixbuf_expander_closed(&self) -> Option<gdk_pixbuf::Pixbuf>;
 
-    fn set_property_pixbuf_expander_closed<P: IsA<gdk_pixbuf::Pixbuf> + glib::value::SetValueOptional>(&self, pixbuf_expander_closed: Option<&P>);
+    fn set_property_pixbuf_expander_closed(&self, pixbuf_expander_closed: Option<&gdk_pixbuf::Pixbuf>);
 
     fn get_property_pixbuf_expander_open(&self) -> Option<gdk_pixbuf::Pixbuf>;
 
-    fn set_property_pixbuf_expander_open<P: IsA<gdk_pixbuf::Pixbuf> + glib::value::SetValueOptional>(&self, pixbuf_expander_open: Option<&P>);
+    fn set_property_pixbuf_expander_open(&self, pixbuf_expander_open: Option<&gdk_pixbuf::Pixbuf>);
 
     fn get_property_stock_detail(&self) -> Option<GString>;
 
@@ -156,7 +156,7 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
         }
     }
 
-    fn set_property_pixbuf<P: IsA<gdk_pixbuf::Pixbuf> + glib::value::SetValueOptional>(&self, pixbuf: Option<&P>) {
+    fn set_property_pixbuf(&self, pixbuf: Option<&gdk_pixbuf::Pixbuf>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"pixbuf\0".as_ptr() as *const _, Value::from(pixbuf).to_glib_none().0);
         }
@@ -170,7 +170,7 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
         }
     }
 
-    fn set_property_pixbuf_expander_closed<P: IsA<gdk_pixbuf::Pixbuf> + glib::value::SetValueOptional>(&self, pixbuf_expander_closed: Option<&P>) {
+    fn set_property_pixbuf_expander_closed(&self, pixbuf_expander_closed: Option<&gdk_pixbuf::Pixbuf>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"pixbuf-expander-closed\0".as_ptr() as *const _, Value::from(pixbuf_expander_closed).to_glib_none().0);
         }
@@ -184,7 +184,7 @@ impl<O: IsA<CellRendererPixbuf>> CellRendererPixbufExt for O {
         }
     }
 
-    fn set_property_pixbuf_expander_open<P: IsA<gdk_pixbuf::Pixbuf> + glib::value::SetValueOptional>(&self, pixbuf_expander_open: Option<&P>) {
+    fn set_property_pixbuf_expander_open(&self, pixbuf_expander_open: Option<&gdk_pixbuf::Pixbuf>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"pixbuf-expander-open\0".as_ptr() as *const _, Value::from(pixbuf_expander_open).to_glib_none().0);
         }

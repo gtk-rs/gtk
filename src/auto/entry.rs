@@ -188,7 +188,7 @@ pub trait EntryExt: 'static {
 
     fn set_icon_from_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_pos: EntryIconPosition, icon_name: P);
 
-    fn set_icon_from_pixbuf<'a, P: IsA<gdk_pixbuf::Pixbuf> + 'a, Q: Into<Option<&'a P>>>(&self, icon_pos: EntryIconPosition, pixbuf: Q);
+    fn set_icon_from_pixbuf<'a, P: Into<Option<&'a gdk_pixbuf::Pixbuf>>>(&self, icon_pos: EntryIconPosition, pixbuf: P);
 
     #[cfg_attr(feature = "v3_10", deprecated)]
     fn set_icon_from_stock<'a, P: Into<Option<&'a str>>>(&self, icon_pos: EntryIconPosition, stock_id: P);
@@ -267,7 +267,7 @@ pub trait EntryExt: 'static {
 
     fn get_property_primary_icon_pixbuf(&self) -> Option<gdk_pixbuf::Pixbuf>;
 
-    fn set_property_primary_icon_pixbuf<P: IsA<gdk_pixbuf::Pixbuf> + glib::value::SetValueOptional>(&self, primary_icon_pixbuf: Option<&P>);
+    fn set_property_primary_icon_pixbuf(&self, primary_icon_pixbuf: Option<&gdk_pixbuf::Pixbuf>);
 
     fn get_property_primary_icon_sensitive(&self) -> bool;
 
@@ -305,7 +305,7 @@ pub trait EntryExt: 'static {
 
     fn get_property_secondary_icon_pixbuf(&self) -> Option<gdk_pixbuf::Pixbuf>;
 
-    fn set_property_secondary_icon_pixbuf<P: IsA<gdk_pixbuf::Pixbuf> + glib::value::SetValueOptional>(&self, secondary_icon_pixbuf: Option<&P>);
+    fn set_property_secondary_icon_pixbuf(&self, secondary_icon_pixbuf: Option<&gdk_pixbuf::Pixbuf>);
 
     fn get_property_secondary_icon_sensitive(&self) -> bool;
 
@@ -835,10 +835,10 @@ impl<O: IsA<Entry>> EntryExt for O {
         }
     }
 
-    fn set_icon_from_pixbuf<'a, P: IsA<gdk_pixbuf::Pixbuf> + 'a, Q: Into<Option<&'a P>>>(&self, icon_pos: EntryIconPosition, pixbuf: Q) {
+    fn set_icon_from_pixbuf<'a, P: Into<Option<&'a gdk_pixbuf::Pixbuf>>>(&self, icon_pos: EntryIconPosition, pixbuf: P) {
         let pixbuf = pixbuf.into();
         unsafe {
-            ffi::gtk_entry_set_icon_from_pixbuf(self.as_ref().to_glib_none().0, icon_pos.to_glib(), pixbuf.map(|p| p.as_ref()).to_glib_none().0);
+            ffi::gtk_entry_set_icon_from_pixbuf(self.as_ref().to_glib_none().0, icon_pos.to_glib(), pixbuf.to_glib_none().0);
         }
     }
 
@@ -1082,7 +1082,7 @@ impl<O: IsA<Entry>> EntryExt for O {
         }
     }
 
-    fn set_property_primary_icon_pixbuf<P: IsA<gdk_pixbuf::Pixbuf> + glib::value::SetValueOptional>(&self, primary_icon_pixbuf: Option<&P>) {
+    fn set_property_primary_icon_pixbuf(&self, primary_icon_pixbuf: Option<&gdk_pixbuf::Pixbuf>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"primary-icon-pixbuf\0".as_ptr() as *const _, Value::from(primary_icon_pixbuf).to_glib_none().0);
         }
@@ -1214,7 +1214,7 @@ impl<O: IsA<Entry>> EntryExt for O {
         }
     }
 
-    fn set_property_secondary_icon_pixbuf<P: IsA<gdk_pixbuf::Pixbuf> + glib::value::SetValueOptional>(&self, secondary_icon_pixbuf: Option<&P>) {
+    fn set_property_secondary_icon_pixbuf(&self, secondary_icon_pixbuf: Option<&gdk_pixbuf::Pixbuf>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"secondary-icon-pixbuf\0".as_ptr() as *const _, Value::from(secondary_icon_pixbuf).to_glib_none().0);
         }

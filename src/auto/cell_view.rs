@@ -56,10 +56,10 @@ impl CellView {
         }
     }
 
-    pub fn new_with_pixbuf<P: IsA<gdk_pixbuf::Pixbuf>>(pixbuf: &P) -> CellView {
+    pub fn new_with_pixbuf(pixbuf: &gdk_pixbuf::Pixbuf) -> CellView {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_cell_view_new_with_pixbuf(pixbuf.as_ref().to_glib_none().0)).unsafe_cast()
+            Widget::from_glib_none(ffi::gtk_cell_view_new_with_pixbuf(pixbuf.to_glib_none().0)).unsafe_cast()
         }
     }
 

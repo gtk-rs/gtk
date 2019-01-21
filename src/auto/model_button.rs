@@ -22,7 +22,10 @@ use glib::StaticType;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 use glib::Value;
 use glib::object::Cast;
+#[cfg(any(feature = "v3_16", feature = "dox"))]
 use glib::object::IsA;
+#[cfg(any(feature = "v3_16", feature = "dox"))]
+use glib::object::ObjectType;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 use glib::signal::SignalHandlerId;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
@@ -54,6 +57,208 @@ impl ModelButton {
             Widget::from_glib_none(ffi::gtk_model_button_new()).unsafe_cast()
         }
     }
+
+    #[cfg(any(feature = "v3_16", feature = "dox"))]
+    pub fn get_property_active(&self) -> bool {
+        unsafe {
+            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"active\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            value.get().unwrap()
+        }
+    }
+
+    #[cfg(any(feature = "v3_16", feature = "dox"))]
+    pub fn set_property_active(&self, active: bool) {
+        unsafe {
+            gobject_ffi::g_object_set_property(self.as_ptr() as *mut gobject_ffi::GObject, b"active\0".as_ptr() as *const _, Value::from(&active).to_glib_none().0);
+        }
+    }
+
+    #[cfg(any(feature = "v3_16", feature = "dox"))]
+    pub fn get_property_centered(&self) -> bool {
+        unsafe {
+            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"centered\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            value.get().unwrap()
+        }
+    }
+
+    #[cfg(any(feature = "v3_16", feature = "dox"))]
+    pub fn set_property_centered(&self, centered: bool) {
+        unsafe {
+            gobject_ffi::g_object_set_property(self.as_ptr() as *mut gobject_ffi::GObject, b"centered\0".as_ptr() as *const _, Value::from(&centered).to_glib_none().0);
+        }
+    }
+
+    #[cfg(any(feature = "v3_16", feature = "dox"))]
+    pub fn get_property_icon(&self) -> Option<gio::Icon> {
+        unsafe {
+            let mut value = Value::from_type(<gio::Icon as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"icon\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            value.get()
+        }
+    }
+
+    #[cfg(any(feature = "v3_16", feature = "dox"))]
+    pub fn set_property_icon<P: IsA<gio::Icon> + glib::value::SetValueOptional>(&self, icon: Option<&P>) {
+        unsafe {
+            gobject_ffi::g_object_set_property(self.as_ptr() as *mut gobject_ffi::GObject, b"icon\0".as_ptr() as *const _, Value::from(icon).to_glib_none().0);
+        }
+    }
+
+    #[cfg(any(feature = "v3_16", feature = "dox"))]
+    pub fn get_property_iconic(&self) -> bool {
+        unsafe {
+            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"iconic\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            value.get().unwrap()
+        }
+    }
+
+    #[cfg(any(feature = "v3_16", feature = "dox"))]
+    pub fn set_property_iconic(&self, iconic: bool) {
+        unsafe {
+            gobject_ffi::g_object_set_property(self.as_ptr() as *mut gobject_ffi::GObject, b"iconic\0".as_ptr() as *const _, Value::from(&iconic).to_glib_none().0);
+        }
+    }
+
+    #[cfg(any(feature = "v3_16", feature = "dox"))]
+    pub fn get_property_inverted(&self) -> bool {
+        unsafe {
+            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"inverted\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            value.get().unwrap()
+        }
+    }
+
+    #[cfg(any(feature = "v3_16", feature = "dox"))]
+    pub fn set_property_inverted(&self, inverted: bool) {
+        unsafe {
+            gobject_ffi::g_object_set_property(self.as_ptr() as *mut gobject_ffi::GObject, b"inverted\0".as_ptr() as *const _, Value::from(&inverted).to_glib_none().0);
+        }
+    }
+
+    #[cfg(any(feature = "v3_16", feature = "dox"))]
+    pub fn get_property_menu_name(&self) -> Option<GString> {
+        unsafe {
+            let mut value = Value::from_type(<GString as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"menu-name\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            value.get()
+        }
+    }
+
+    #[cfg(any(feature = "v3_16", feature = "dox"))]
+    pub fn set_property_menu_name<'a, P: Into<Option<&'a str>>>(&self, menu_name: P) {
+        let menu_name = menu_name.into();
+        unsafe {
+            gobject_ffi::g_object_set_property(self.as_ptr() as *mut gobject_ffi::GObject, b"menu-name\0".as_ptr() as *const _, Value::from(menu_name).to_glib_none().0);
+        }
+    }
+
+    #[cfg(any(feature = "v3_16", feature = "dox"))]
+    pub fn get_property_role(&self) -> ButtonRole {
+        unsafe {
+            let mut value = Value::from_type(<ButtonRole as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"role\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            value.get().unwrap()
+        }
+    }
+
+    #[cfg(any(feature = "v3_16", feature = "dox"))]
+    pub fn set_property_role(&self, role: ButtonRole) {
+        unsafe {
+            gobject_ffi::g_object_set_property(self.as_ptr() as *mut gobject_ffi::GObject, b"role\0".as_ptr() as *const _, Value::from(&role).to_glib_none().0);
+        }
+    }
+
+    #[cfg(any(feature = "v3_16", feature = "dox"))]
+    pub fn get_property_text(&self) -> Option<GString> {
+        unsafe {
+            let mut value = Value::from_type(<GString as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"text\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            value.get()
+        }
+    }
+
+    #[cfg(any(feature = "v3_16", feature = "dox"))]
+    pub fn set_property_text<'a, P: Into<Option<&'a str>>>(&self, text: P) {
+        let text = text.into();
+        unsafe {
+            gobject_ffi::g_object_set_property(self.as_ptr() as *mut gobject_ffi::GObject, b"text\0".as_ptr() as *const _, Value::from(text).to_glib_none().0);
+        }
+    }
+
+    #[cfg(any(feature = "v3_16", feature = "dox"))]
+    pub fn connect_property_active_notify<F: Fn(&ModelButton) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<Box_<Fn(&ModelButton) + 'static>> = Box_::new(Box_::new(f));
+            connect_raw(self.as_ptr() as *mut _, b"notify::active\0".as_ptr() as *const _,
+                transmute(notify_active_trampoline as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
+
+    #[cfg(any(feature = "v3_16", feature = "dox"))]
+    pub fn connect_property_centered_notify<F: Fn(&ModelButton) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<Box_<Fn(&ModelButton) + 'static>> = Box_::new(Box_::new(f));
+            connect_raw(self.as_ptr() as *mut _, b"notify::centered\0".as_ptr() as *const _,
+                transmute(notify_centered_trampoline as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
+
+    #[cfg(any(feature = "v3_16", feature = "dox"))]
+    pub fn connect_property_icon_notify<F: Fn(&ModelButton) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<Box_<Fn(&ModelButton) + 'static>> = Box_::new(Box_::new(f));
+            connect_raw(self.as_ptr() as *mut _, b"notify::icon\0".as_ptr() as *const _,
+                transmute(notify_icon_trampoline as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
+
+    #[cfg(any(feature = "v3_16", feature = "dox"))]
+    pub fn connect_property_iconic_notify<F: Fn(&ModelButton) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<Box_<Fn(&ModelButton) + 'static>> = Box_::new(Box_::new(f));
+            connect_raw(self.as_ptr() as *mut _, b"notify::iconic\0".as_ptr() as *const _,
+                transmute(notify_iconic_trampoline as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
+
+    #[cfg(any(feature = "v3_16", feature = "dox"))]
+    pub fn connect_property_inverted_notify<F: Fn(&ModelButton) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<Box_<Fn(&ModelButton) + 'static>> = Box_::new(Box_::new(f));
+            connect_raw(self.as_ptr() as *mut _, b"notify::inverted\0".as_ptr() as *const _,
+                transmute(notify_inverted_trampoline as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
+
+    #[cfg(any(feature = "v3_16", feature = "dox"))]
+    pub fn connect_property_menu_name_notify<F: Fn(&ModelButton) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<Box_<Fn(&ModelButton) + 'static>> = Box_::new(Box_::new(f));
+            connect_raw(self.as_ptr() as *mut _, b"notify::menu-name\0".as_ptr() as *const _,
+                transmute(notify_menu_name_trampoline as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
+
+    #[cfg(any(feature = "v3_16", feature = "dox"))]
+    pub fn connect_property_role_notify<F: Fn(&ModelButton) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<Box_<Fn(&ModelButton) + 'static>> = Box_::new(Box_::new(f));
+            connect_raw(self.as_ptr() as *mut _, b"notify::role\0".as_ptr() as *const _,
+                transmute(notify_role_trampoline as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
+
+    #[cfg(any(feature = "v3_16", feature = "dox"))]
+    pub fn connect_property_text_notify<F: Fn(&ModelButton) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<Box_<Fn(&ModelButton) + 'static>> = Box_::new(Box_::new(f));
+            connect_raw(self.as_ptr() as *mut _, b"notify::text\0".as_ptr() as *const _,
+                transmute(notify_text_trampoline as usize), Box_::into_raw(f) as *mut _)
+        }
+    }
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
@@ -63,340 +268,52 @@ impl Default for ModelButton {
     }
 }
 
-pub const NONE_MODEL_BUTTON: Option<&ModelButton> = None;
-
-pub trait ModelButtonExt: 'static {
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn get_property_active(&self) -> bool;
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn set_property_active(&self, active: bool);
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn get_property_centered(&self) -> bool;
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn set_property_centered(&self, centered: bool);
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn get_property_icon(&self) -> Option<gio::Icon>;
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn set_property_icon<P: IsA<gio::Icon> + glib::value::SetValueOptional>(&self, icon: Option<&P>);
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn get_property_iconic(&self) -> bool;
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn set_property_iconic(&self, iconic: bool);
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn get_property_inverted(&self) -> bool;
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn set_property_inverted(&self, inverted: bool);
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn get_property_menu_name(&self) -> Option<GString>;
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn set_property_menu_name<'a, P: Into<Option<&'a str>>>(&self, menu_name: P);
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn get_property_role(&self) -> ButtonRole;
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn set_property_role(&self, role: ButtonRole);
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn get_property_text(&self) -> Option<GString>;
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn set_property_text<'a, P: Into<Option<&'a str>>>(&self, text: P);
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn connect_property_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn connect_property_centered_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn connect_property_icon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn connect_property_iconic_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn connect_property_inverted_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn connect_property_menu_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn connect_property_role_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn connect_property_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-}
-
-impl<O: IsA<ModelButton>> ModelButtonExt for O {
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn get_property_active(&self) -> bool {
-        unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"active\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn set_property_active(&self, active: bool) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"active\0".as_ptr() as *const _, Value::from(&active).to_glib_none().0);
-        }
-    }
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn get_property_centered(&self) -> bool {
-        unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"centered\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn set_property_centered(&self, centered: bool) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"centered\0".as_ptr() as *const _, Value::from(&centered).to_glib_none().0);
-        }
-    }
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn get_property_icon(&self) -> Option<gio::Icon> {
-        unsafe {
-            let mut value = Value::from_type(<gio::Icon as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"icon\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get()
-        }
-    }
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn set_property_icon<P: IsA<gio::Icon> + glib::value::SetValueOptional>(&self, icon: Option<&P>) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"icon\0".as_ptr() as *const _, Value::from(icon).to_glib_none().0);
-        }
-    }
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn get_property_iconic(&self) -> bool {
-        unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"iconic\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn set_property_iconic(&self, iconic: bool) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"iconic\0".as_ptr() as *const _, Value::from(&iconic).to_glib_none().0);
-        }
-    }
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn get_property_inverted(&self) -> bool {
-        unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"inverted\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn set_property_inverted(&self, inverted: bool) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"inverted\0".as_ptr() as *const _, Value::from(&inverted).to_glib_none().0);
-        }
-    }
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn get_property_menu_name(&self) -> Option<GString> {
-        unsafe {
-            let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"menu-name\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get()
-        }
-    }
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn set_property_menu_name<'a, P: Into<Option<&'a str>>>(&self, menu_name: P) {
-        let menu_name = menu_name.into();
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"menu-name\0".as_ptr() as *const _, Value::from(menu_name).to_glib_none().0);
-        }
-    }
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn get_property_role(&self) -> ButtonRole {
-        unsafe {
-            let mut value = Value::from_type(<ButtonRole as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"role\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn set_property_role(&self, role: ButtonRole) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"role\0".as_ptr() as *const _, Value::from(&role).to_glib_none().0);
-        }
-    }
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn get_property_text(&self) -> Option<GString> {
-        unsafe {
-            let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"text\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get()
-        }
-    }
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn set_property_text<'a, P: Into<Option<&'a str>>>(&self, text: P) {
-        let text = text.into();
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"text\0".as_ptr() as *const _, Value::from(text).to_glib_none().0);
-        }
-    }
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn connect_property_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.as_ptr() as *mut _, b"notify::active\0".as_ptr() as *const _,
-                transmute(notify_active_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn connect_property_centered_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.as_ptr() as *mut _, b"notify::centered\0".as_ptr() as *const _,
-                transmute(notify_centered_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn connect_property_icon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.as_ptr() as *mut _, b"notify::icon\0".as_ptr() as *const _,
-                transmute(notify_icon_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn connect_property_iconic_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.as_ptr() as *mut _, b"notify::iconic\0".as_ptr() as *const _,
-                transmute(notify_iconic_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn connect_property_inverted_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.as_ptr() as *mut _, b"notify::inverted\0".as_ptr() as *const _,
-                transmute(notify_inverted_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn connect_property_menu_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.as_ptr() as *mut _, b"notify::menu-name\0".as_ptr() as *const _,
-                transmute(notify_menu_name_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn connect_property_role_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.as_ptr() as *mut _, b"notify::role\0".as_ptr() as *const _,
-                transmute(notify_role_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn connect_property_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect_raw(self.as_ptr() as *mut _, b"notify::text\0".as_ptr() as *const _,
-                transmute(notify_text_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
+#[cfg(any(feature = "v3_16", feature = "dox"))]
+unsafe extern "C" fn notify_active_trampoline(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &&(Fn(&ModelButton) + 'static) = transmute(f);
+    f(&from_glib_borrow(this))
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn notify_active_trampoline<P>(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<ModelButton> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ModelButton::from_glib_borrow(this).unsafe_cast())
+unsafe extern "C" fn notify_centered_trampoline(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &&(Fn(&ModelButton) + 'static) = transmute(f);
+    f(&from_glib_borrow(this))
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn notify_centered_trampoline<P>(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<ModelButton> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ModelButton::from_glib_borrow(this).unsafe_cast())
+unsafe extern "C" fn notify_icon_trampoline(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &&(Fn(&ModelButton) + 'static) = transmute(f);
+    f(&from_glib_borrow(this))
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn notify_icon_trampoline<P>(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<ModelButton> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ModelButton::from_glib_borrow(this).unsafe_cast())
+unsafe extern "C" fn notify_iconic_trampoline(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &&(Fn(&ModelButton) + 'static) = transmute(f);
+    f(&from_glib_borrow(this))
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn notify_iconic_trampoline<P>(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<ModelButton> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ModelButton::from_glib_borrow(this).unsafe_cast())
+unsafe extern "C" fn notify_inverted_trampoline(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &&(Fn(&ModelButton) + 'static) = transmute(f);
+    f(&from_glib_borrow(this))
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn notify_inverted_trampoline<P>(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<ModelButton> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ModelButton::from_glib_borrow(this).unsafe_cast())
+unsafe extern "C" fn notify_menu_name_trampoline(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &&(Fn(&ModelButton) + 'static) = transmute(f);
+    f(&from_glib_borrow(this))
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn notify_menu_name_trampoline<P>(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<ModelButton> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ModelButton::from_glib_borrow(this).unsafe_cast())
+unsafe extern "C" fn notify_role_trampoline(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &&(Fn(&ModelButton) + 'static) = transmute(f);
+    f(&from_glib_borrow(this))
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn notify_role_trampoline<P>(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<ModelButton> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ModelButton::from_glib_borrow(this).unsafe_cast())
-}
-
-#[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn notify_text_trampoline<P>(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<ModelButton> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ModelButton::from_glib_borrow(this).unsafe_cast())
+unsafe extern "C" fn notify_text_trampoline(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &&(Fn(&ModelButton) + 'static) = transmute(f);
+    f(&from_glib_borrow(this))
 }
 
 impl fmt::Display for ModelButton {

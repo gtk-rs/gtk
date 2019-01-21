@@ -73,10 +73,10 @@ impl StatusIcon {
     }
 
     #[cfg_attr(feature = "v3_14", deprecated)]
-    pub fn new_from_pixbuf<P: IsA<gdk_pixbuf::Pixbuf>>(pixbuf: &P) -> StatusIcon {
+    pub fn new_from_pixbuf(pixbuf: &gdk_pixbuf::Pixbuf) -> StatusIcon {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(ffi::gtk_status_icon_new_from_pixbuf(pixbuf.as_ref().to_glib_none().0))
+            from_glib_full(ffi::gtk_status_icon_new_from_pixbuf(pixbuf.to_glib_none().0))
         }
     }
 
@@ -164,7 +164,7 @@ pub trait StatusIconExt: 'static {
     fn set_from_icon_name(&self, icon_name: &str);
 
     #[cfg_attr(feature = "v3_14", deprecated)]
-    fn set_from_pixbuf<'a, P: IsA<gdk_pixbuf::Pixbuf> + 'a, Q: Into<Option<&'a P>>>(&self, pixbuf: Q);
+    fn set_from_pixbuf<'a, P: Into<Option<&'a gdk_pixbuf::Pixbuf>>>(&self, pixbuf: P);
 
     #[cfg_attr(feature = "v3_10", deprecated)]
     fn set_from_stock(&self, stock_id: &str);
@@ -176,7 +176,7 @@ pub trait StatusIconExt: 'static {
     fn set_name(&self, name: &str);
 
     #[cfg_attr(feature = "v3_14", deprecated)]
-    fn set_screen<P: IsA<gdk::Screen>>(&self, screen: &P);
+    fn set_screen(&self, screen: &gdk::Screen);
 
     #[cfg_attr(feature = "v3_14", deprecated)]
     fn set_title(&self, title: &str);
@@ -200,7 +200,7 @@ pub trait StatusIconExt: 'static {
 
     fn get_property_orientation(&self) -> Orientation;
 
-    fn set_property_pixbuf<P: IsA<gdk_pixbuf::Pixbuf> + glib::value::SetValueOptional>(&self, pixbuf: Option<&P>);
+    fn set_property_pixbuf(&self, pixbuf: Option<&gdk_pixbuf::Pixbuf>);
 
     #[cfg_attr(feature = "v3_10", deprecated)]
     fn set_property_stock<'a, P: Into<Option<&'a str>>>(&self, stock: P);
@@ -368,10 +368,10 @@ impl<O: IsA<StatusIcon>> StatusIconExt for O {
         }
     }
 
-    fn set_from_pixbuf<'a, P: IsA<gdk_pixbuf::Pixbuf> + 'a, Q: Into<Option<&'a P>>>(&self, pixbuf: Q) {
+    fn set_from_pixbuf<'a, P: Into<Option<&'a gdk_pixbuf::Pixbuf>>>(&self, pixbuf: P) {
         let pixbuf = pixbuf.into();
         unsafe {
-            ffi::gtk_status_icon_set_from_pixbuf(self.as_ref().to_glib_none().0, pixbuf.map(|p| p.as_ref()).to_glib_none().0);
+            ffi::gtk_status_icon_set_from_pixbuf(self.as_ref().to_glib_none().0, pixbuf.to_glib_none().0);
         }
     }
 
@@ -393,9 +393,9 @@ impl<O: IsA<StatusIcon>> StatusIconExt for O {
         }
     }
 
-    fn set_screen<P: IsA<gdk::Screen>>(&self, screen: &P) {
+    fn set_screen(&self, screen: &gdk::Screen) {
         unsafe {
-            ffi::gtk_status_icon_set_screen(self.as_ref().to_glib_none().0, screen.as_ref().to_glib_none().0);
+            ffi::gtk_status_icon_set_screen(self.as_ref().to_glib_none().0, screen.to_glib_none().0);
         }
     }
 
@@ -460,7 +460,7 @@ impl<O: IsA<StatusIcon>> StatusIconExt for O {
         }
     }
 
-    fn set_property_pixbuf<P: IsA<gdk_pixbuf::Pixbuf> + glib::value::SetValueOptional>(&self, pixbuf: Option<&P>) {
+    fn set_property_pixbuf(&self, pixbuf: Option<&gdk_pixbuf::Pixbuf>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"pixbuf\0".as_ptr() as *const _, Value::from(pixbuf).to_glib_none().0);
         }
