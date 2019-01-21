@@ -78,10 +78,10 @@ impl Window {
         }
     }
 
-    pub fn set_default_icon<P: IsA<gdk_pixbuf::Pixbuf>>(icon: &P) {
+    pub fn set_default_icon(icon: &gdk_pixbuf::Pixbuf) {
         assert_initialized_main_thread!();
         unsafe {
-            ffi::gtk_window_set_default_icon(icon.as_ref().to_glib_none().0);
+            ffi::gtk_window_set_default_icon(icon.to_glib_none().0);
         }
     }
 
@@ -142,7 +142,7 @@ pub trait GtkWindowExt: 'static {
     fn fullscreen(&self);
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn fullscreen_on_monitor<P: IsA<gdk::Screen>>(&self, screen: &P, monitor: i32);
+    fn fullscreen_on_monitor(&self, screen: &gdk::Screen, monitor: i32);
 
     fn get_accept_focus(&self) -> bool;
 
@@ -294,7 +294,7 @@ pub trait GtkWindowExt: 'static {
 
     fn set_hide_titlebar_when_maximized(&self, setting: bool);
 
-    fn set_icon<'a, P: IsA<gdk_pixbuf::Pixbuf> + 'a, Q: Into<Option<&'a P>>>(&self, icon: Q);
+    fn set_icon<'a, P: Into<Option<&'a gdk_pixbuf::Pixbuf>>>(&self, icon: P);
 
     fn set_icon_from_file<P: AsRef<std::path::Path>>(&self, filename: P) -> Result<(), Error>;
 
@@ -322,7 +322,7 @@ pub trait GtkWindowExt: 'static {
 
     fn set_role(&self, role: &str);
 
-    fn set_screen<P: IsA<gdk::Screen>>(&self, screen: &P);
+    fn set_screen(&self, screen: &gdk::Screen);
 
     fn set_skip_pager_hint(&self, setting: bool);
 
@@ -521,9 +521,9 @@ impl<O: IsA<Window>> GtkWindowExt for O {
     }
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn fullscreen_on_monitor<P: IsA<gdk::Screen>>(&self, screen: &P, monitor: i32) {
+    fn fullscreen_on_monitor(&self, screen: &gdk::Screen, monitor: i32) {
         unsafe {
-            ffi::gtk_window_fullscreen_on_monitor(self.as_ref().to_glib_none().0, screen.as_ref().to_glib_none().0, monitor);
+            ffi::gtk_window_fullscreen_on_monitor(self.as_ref().to_glib_none().0, screen.to_glib_none().0, monitor);
         }
     }
 
@@ -957,10 +957,10 @@ impl<O: IsA<Window>> GtkWindowExt for O {
         }
     }
 
-    fn set_icon<'a, P: IsA<gdk_pixbuf::Pixbuf> + 'a, Q: Into<Option<&'a P>>>(&self, icon: Q) {
+    fn set_icon<'a, P: Into<Option<&'a gdk_pixbuf::Pixbuf>>>(&self, icon: P) {
         let icon = icon.into();
         unsafe {
-            ffi::gtk_window_set_icon(self.as_ref().to_glib_none().0, icon.map(|p| p.as_ref()).to_glib_none().0);
+            ffi::gtk_window_set_icon(self.as_ref().to_glib_none().0, icon.to_glib_none().0);
         }
     }
 
@@ -1040,9 +1040,9 @@ impl<O: IsA<Window>> GtkWindowExt for O {
         }
     }
 
-    fn set_screen<P: IsA<gdk::Screen>>(&self, screen: &P) {
+    fn set_screen(&self, screen: &gdk::Screen) {
         unsafe {
-            ffi::gtk_window_set_screen(self.as_ref().to_glib_none().0, screen.as_ref().to_glib_none().0);
+            ffi::gtk_window_set_screen(self.as_ref().to_glib_none().0, screen.to_glib_none().0);
         }
     }
 

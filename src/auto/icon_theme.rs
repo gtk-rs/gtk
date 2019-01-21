@@ -41,10 +41,10 @@ impl IconTheme {
     }
 
     #[cfg_attr(feature = "v3_14", deprecated)]
-    pub fn add_builtin_icon<P: IsA<gdk_pixbuf::Pixbuf>>(icon_name: &str, size: i32, pixbuf: &P) {
+    pub fn add_builtin_icon(icon_name: &str, size: i32, pixbuf: &gdk_pixbuf::Pixbuf) {
         assert_initialized_main_thread!();
         unsafe {
-            ffi::gtk_icon_theme_add_builtin_icon(icon_name.to_glib_none().0, size, pixbuf.as_ref().to_glib_none().0);
+            ffi::gtk_icon_theme_add_builtin_icon(icon_name.to_glib_none().0, size, pixbuf.to_glib_none().0);
         }
     }
 
@@ -55,10 +55,10 @@ impl IconTheme {
         }
     }
 
-    pub fn get_for_screen<P: IsA<gdk::Screen>>(screen: &P) -> Option<IconTheme> {
+    pub fn get_for_screen(screen: &gdk::Screen) -> Option<IconTheme> {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_none(ffi::gtk_icon_theme_get_for_screen(screen.as_ref().to_glib_none().0))
+            from_glib_none(ffi::gtk_icon_theme_get_for_screen(screen.to_glib_none().0))
         }
     }
 }
@@ -109,7 +109,7 @@ pub trait IconThemeExt: 'static {
 
     fn set_custom_theme<'a, P: Into<Option<&'a str>>>(&self, theme_name: P);
 
-    fn set_screen<P: IsA<gdk::Screen>>(&self, screen: &P);
+    fn set_screen(&self, screen: &gdk::Screen);
 
     fn connect_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
@@ -225,9 +225,9 @@ impl<O: IsA<IconTheme>> IconThemeExt for O {
         }
     }
 
-    fn set_screen<P: IsA<gdk::Screen>>(&self, screen: &P) {
+    fn set_screen(&self, screen: &gdk::Screen) {
         unsafe {
-            ffi::gtk_icon_theme_set_screen(self.as_ref().to_glib_none().0, screen.as_ref().to_glib_none().0);
+            ffi::gtk_icon_theme_set_screen(self.as_ref().to_glib_none().0, screen.to_glib_none().0);
         }
     }
 

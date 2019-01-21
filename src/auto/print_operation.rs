@@ -90,7 +90,7 @@ pub trait PrintOperationExt: 'static {
 
     fn set_custom_tab_label<'a, P: Into<Option<&'a str>>>(&self, label: P);
 
-    fn set_default_page_setup<'a, P: IsA<PageSetup> + 'a, Q: Into<Option<&'a P>>>(&self, default_page_setup: Q);
+    fn set_default_page_setup<'a, P: Into<Option<&'a PageSetup>>>(&self, default_page_setup: P);
 
     fn set_defer_drawing(&self);
 
@@ -104,7 +104,7 @@ pub trait PrintOperationExt: 'static {
 
     fn set_n_pages(&self, n_pages: i32);
 
-    fn set_print_settings<'a, P: IsA<PrintSettings> + 'a, Q: Into<Option<&'a P>>>(&self, print_settings: Q);
+    fn set_print_settings<'a, P: Into<Option<&'a PrintSettings>>>(&self, print_settings: P);
 
     fn set_show_progress(&self, show_progress: bool);
 
@@ -298,10 +298,10 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
         }
     }
 
-    fn set_default_page_setup<'a, P: IsA<PageSetup> + 'a, Q: Into<Option<&'a P>>>(&self, default_page_setup: Q) {
+    fn set_default_page_setup<'a, P: Into<Option<&'a PageSetup>>>(&self, default_page_setup: P) {
         let default_page_setup = default_page_setup.into();
         unsafe {
-            ffi::gtk_print_operation_set_default_page_setup(self.as_ref().to_glib_none().0, default_page_setup.map(|p| p.as_ref()).to_glib_none().0);
+            ffi::gtk_print_operation_set_default_page_setup(self.as_ref().to_glib_none().0, default_page_setup.to_glib_none().0);
         }
     }
 
@@ -341,10 +341,10 @@ impl<O: IsA<PrintOperation>> PrintOperationExt for O {
         }
     }
 
-    fn set_print_settings<'a, P: IsA<PrintSettings> + 'a, Q: Into<Option<&'a P>>>(&self, print_settings: Q) {
+    fn set_print_settings<'a, P: Into<Option<&'a PrintSettings>>>(&self, print_settings: P) {
         let print_settings = print_settings.into();
         unsafe {
-            ffi::gtk_print_operation_set_print_settings(self.as_ref().to_glib_none().0, print_settings.map(|p| p.as_ref()).to_glib_none().0);
+            ffi::gtk_print_operation_set_print_settings(self.as_ref().to_glib_none().0, print_settings.to_glib_none().0);
         }
     }
 

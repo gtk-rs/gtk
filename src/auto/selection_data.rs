@@ -102,9 +102,9 @@ impl SelectionData {
         }
     }
 
-    pub fn set_pixbuf<P: IsA<gdk_pixbuf::Pixbuf>>(&self, pixbuf: &P) -> bool {
+    pub fn set_pixbuf(&self, pixbuf: &gdk_pixbuf::Pixbuf) -> bool {
         unsafe {
-            from_glib(ffi::gtk_selection_data_set_pixbuf(mut_override(self.to_glib_none().0), pixbuf.as_ref().to_glib_none().0))
+            from_glib(ffi::gtk_selection_data_set_pixbuf(mut_override(self.to_glib_none().0), pixbuf.to_glib_none().0))
         }
     }
 

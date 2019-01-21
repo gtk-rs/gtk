@@ -41,10 +41,10 @@ glib_wrapper! {
 }
 
 impl IconInfo {
-    pub fn new_for_pixbuf<P: IsA<IconTheme>, Q: IsA<gdk_pixbuf::Pixbuf>>(icon_theme: &P, pixbuf: &Q) -> IconInfo {
+    pub fn new_for_pixbuf<P: IsA<IconTheme>>(icon_theme: &P, pixbuf: &gdk_pixbuf::Pixbuf) -> IconInfo {
         skip_assert_initialized!();
         unsafe {
-            from_glib_full(ffi::gtk_icon_info_new_for_pixbuf(icon_theme.as_ref().to_glib_none().0, pixbuf.as_ref().to_glib_none().0))
+            from_glib_full(ffi::gtk_icon_info_new_for_pixbuf(icon_theme.as_ref().to_glib_none().0, pixbuf.to_glib_none().0))
         }
     }
 }

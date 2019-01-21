@@ -42,10 +42,10 @@ impl Settings {
         }
     }
 
-    pub fn get_for_screen<P: IsA<gdk::Screen>>(screen: &P) -> Option<Settings> {
+    pub fn get_for_screen(screen: &gdk::Screen) -> Option<Settings> {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_none(ffi::gtk_settings_get_for_screen(screen.as_ref().to_glib_none().0))
+            from_glib_none(ffi::gtk_settings_get_for_screen(screen.to_glib_none().0))
         }
     }
 

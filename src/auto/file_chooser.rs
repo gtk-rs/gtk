@@ -33,7 +33,7 @@ glib_wrapper! {
 pub const NONE_FILE_CHOOSER: Option<&FileChooser> = None;
 
 pub trait FileChooserExt: 'static {
-    fn add_filter<P: IsA<FileFilter>>(&self, filter: &P);
+    fn add_filter(&self, filter: &FileFilter);
 
     fn add_shortcut_folder<P: AsRef<std::path::Path>>(&self, folder: P) -> Result<(), Error>;
 
@@ -100,7 +100,7 @@ pub trait FileChooserExt: 'static {
     #[cfg(any(feature = "v3_22", feature = "dox"))]
     fn remove_choice(&self, id: &str);
 
-    fn remove_filter<P: IsA<FileFilter>>(&self, filter: &P);
+    fn remove_filter(&self, filter: &FileFilter);
 
     fn remove_shortcut_folder<P: AsRef<std::path::Path>>(&self, folder: P) -> Result<(), Error>;
 
@@ -137,7 +137,7 @@ pub trait FileChooserExt: 'static {
 
     fn set_filename<P: AsRef<std::path::Path>>(&self, filename: P) -> bool;
 
-    fn set_filter<P: IsA<FileFilter>>(&self, filter: &P);
+    fn set_filter(&self, filter: &FileFilter);
 
     fn set_local_only(&self, local_only: bool);
 
@@ -195,9 +195,9 @@ pub trait FileChooserExt: 'static {
 }
 
 impl<O: IsA<FileChooser>> FileChooserExt for O {
-    fn add_filter<P: IsA<FileFilter>>(&self, filter: &P) {
+    fn add_filter(&self, filter: &FileFilter) {
         unsafe {
-            ffi::gtk_file_chooser_add_filter(self.as_ref().to_glib_none().0, filter.as_ref().to_glib_full());
+            ffi::gtk_file_chooser_add_filter(self.as_ref().to_glib_none().0, filter.to_glib_full());
         }
     }
 
@@ -394,9 +394,9 @@ impl<O: IsA<FileChooser>> FileChooserExt for O {
         }
     }
 
-    fn remove_filter<P: IsA<FileFilter>>(&self, filter: &P) {
+    fn remove_filter(&self, filter: &FileFilter) {
         unsafe {
-            ffi::gtk_file_chooser_remove_filter(self.as_ref().to_glib_none().0, filter.as_ref().to_glib_none().0);
+            ffi::gtk_file_chooser_remove_filter(self.as_ref().to_glib_none().0, filter.to_glib_none().0);
         }
     }
 
@@ -513,9 +513,9 @@ impl<O: IsA<FileChooser>> FileChooserExt for O {
         }
     }
 
-    fn set_filter<P: IsA<FileFilter>>(&self, filter: &P) {
+    fn set_filter(&self, filter: &FileFilter) {
         unsafe {
-            ffi::gtk_file_chooser_set_filter(self.as_ref().to_glib_none().0, filter.as_ref().to_glib_none().0);
+            ffi::gtk_file_chooser_set_filter(self.as_ref().to_glib_none().0, filter.to_glib_none().0);
         }
     }
 

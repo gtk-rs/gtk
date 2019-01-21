@@ -161,8 +161,7 @@ pub use self::check_menu_item::{CheckMenuItem, CheckMenuItemClass, NONE_CHECK_ME
 pub use self::check_menu_item::CheckMenuItemExt;
 
 mod clipboard;
-pub use self::clipboard::{Clipboard, ClipboardClass, NONE_CLIPBOARD};
-pub use self::clipboard::ClipboardExt;
+pub use self::clipboard::{Clipboard, ClipboardClass};
 
 mod color_button;
 pub use self::color_button::{ColorButton, ColorButtonClass, NONE_COLOR_BUTTON};
@@ -253,8 +252,7 @@ pub use self::file_chooser_widget::{FileChooserWidget, FileChooserWidgetClass, N
 pub use self::file_chooser_widget::FileChooserWidgetExt;
 
 mod file_filter;
-pub use self::file_filter::{FileFilter, FileFilterClass, NONE_FILE_FILTER};
-pub use self::file_filter::FileFilterExt;
+pub use self::file_filter::{FileFilter, FileFilterClass};
 
 mod fixed;
 pub use self::fixed::{Fixed, FixedClass, NONE_FIXED};
@@ -495,9 +493,7 @@ pub use self::misc::MiscExt;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 mod model_button;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-pub use self::model_button::{ModelButton, ModelButtonClass, NONE_MODEL_BUTTON};
-#[cfg(any(feature = "v3_16", feature = "dox"))]
-pub use self::model_button::ModelButtonExt;
+pub use self::model_button::{ModelButton, ModelButtonClass};
 
 mod mount_operation;
 pub use self::mount_operation::{MountOperation, MountOperationClass, NONE_MOUNT_OPERATION};
@@ -534,8 +530,7 @@ pub use self::pad_controller::{PadController, PadControllerClass, NONE_PAD_CONTR
 pub use self::pad_controller::PadControllerExt;
 
 mod page_setup;
-pub use self::page_setup::{PageSetup, PageSetupClass, NONE_PAGE_SETUP};
-pub use self::page_setup::PageSetupExt;
+pub use self::page_setup::{PageSetup, PageSetupClass};
 
 mod paned;
 pub use self::paned::{Paned, PanedClass, NONE_PANED};
@@ -567,8 +562,7 @@ pub use self::popover_menu::{PopoverMenu, PopoverMenuClass, NONE_POPOVER_MENU};
 pub use self::popover_menu::PopoverMenuExt;
 
 mod print_context;
-pub use self::print_context::{PrintContext, PrintContextClass, NONE_PRINT_CONTEXT};
-pub use self::print_context::PrintContextExt;
+pub use self::print_context::{PrintContext, PrintContextClass};
 
 mod print_operation;
 pub use self::print_operation::{PrintOperation, PrintOperationClass, NONE_PRINT_OPERATION};
@@ -579,8 +573,7 @@ pub use self::print_operation_preview::{PrintOperationPreview, NONE_PRINT_OPERAT
 pub use self::print_operation_preview::PrintOperationPreviewExt;
 
 mod print_settings;
-pub use self::print_settings::{PrintSettings, PrintSettingsClass, NONE_PRINT_SETTINGS};
-pub use self::print_settings::PrintSettingsExt;
+pub use self::print_settings::{PrintSettings, PrintSettingsClass};
 
 mod progress_bar;
 pub use self::progress_bar::{ProgressBar, ProgressBarClass, NONE_PROGRESS_BAR};
@@ -617,8 +610,7 @@ mod recent_chooser_widget;
 pub use self::recent_chooser_widget::{RecentChooserWidget, RecentChooserWidgetClass, NONE_RECENT_CHOOSER_WIDGET};
 
 mod recent_filter;
-pub use self::recent_filter::{RecentFilter, RecentFilterClass, NONE_RECENT_FILTER};
-pub use self::recent_filter::RecentFilterExt;
+pub use self::recent_filter::{RecentFilter, RecentFilterClass};
 
 mod recent_manager;
 pub use self::recent_manager::{RecentManager, RecentManagerClass, NONE_RECENT_MANAGER};
@@ -806,8 +798,7 @@ pub use self::toolbar::{Toolbar, ToolbarClass, NONE_TOOLBAR};
 pub use self::toolbar::ToolbarExt;
 
 mod tooltip;
-pub use self::tooltip::{Tooltip, TooltipClass, NONE_TOOLTIP};
-pub use self::tooltip::TooltipExt;
+pub use self::tooltip::{Tooltip, TooltipClass};
 
 mod tree_drag_dest;
 pub use self::tree_drag_dest::{TreeDragDest, NONE_TREE_DRAG_DEST};
@@ -1343,7 +1334,6 @@ pub mod traits {
     pub use super::CellRendererToggleExt;
     pub use super::CellViewExt;
     pub use super::CheckMenuItemExt;
-    pub use super::ClipboardExt;
     pub use super::ColorButtonExt;
     pub use super::ColorChooserExt;
     pub use super::ColorChooserDialogExt;
@@ -1365,7 +1355,6 @@ pub mod traits {
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     pub use super::FileChooserNativeExt;
     pub use super::FileChooserWidgetExt;
-    pub use super::FileFilterExt;
     pub use super::FixedExt;
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     pub use super::FlowBoxExt;
@@ -1427,8 +1416,6 @@ pub mod traits {
     pub use super::MenuToolButtonExt;
     pub use super::MessageDialogExt;
     pub use super::MiscExt;
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    pub use super::ModelButtonExt;
     pub use super::MountOperationExt;
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     pub use super::NativeDialogExt;
@@ -1438,7 +1425,6 @@ pub mod traits {
     pub use super::OverlayExt;
     #[cfg(any(feature = "v3_22", feature = "dox"))]
     pub use super::PadControllerExt;
-    pub use super::PageSetupExt;
     pub use super::PanedExt;
     pub use super::PlacesSidebarExt;
     #[cfg(any(not(windows), feature = "dox"))]
@@ -1447,10 +1433,8 @@ pub mod traits {
     pub use super::PopoverExt;
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     pub use super::PopoverMenuExt;
-    pub use super::PrintContextExt;
     pub use super::PrintOperationExt;
     pub use super::PrintOperationPreviewExt;
-    pub use super::PrintSettingsExt;
     pub use super::ProgressBarExt;
     pub use super::RadioButtonExt;
     pub use super::RadioMenuItemExt;
@@ -1458,7 +1442,6 @@ pub mod traits {
     pub use super::RangeExt;
     pub use super::RecentChooserExt;
     pub use super::RecentChooserMenuExt;
-    pub use super::RecentFilterExt;
     pub use super::RecentManagerExt;
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     pub use super::RevealerExt;
@@ -1505,7 +1488,6 @@ pub mod traits {
     pub use super::ToolPaletteExt;
     pub use super::ToolShellExt;
     pub use super::ToolbarExt;
-    pub use super::TooltipExt;
     pub use super::TreeDragDestExt;
     pub use super::TreeDragSourceExt;
     pub use super::TreeModelExt;

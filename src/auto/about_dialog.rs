@@ -96,7 +96,7 @@ pub trait AboutDialogExt: 'static {
 
     fn set_license_type(&self, license_type: License);
 
-    fn set_logo<'a, P: IsA<gdk_pixbuf::Pixbuf> + 'a, Q: Into<Option<&'a P>>>(&self, logo: Q);
+    fn set_logo<'a, P: Into<Option<&'a gdk_pixbuf::Pixbuf>>>(&self, logo: P);
 
     fn set_logo_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_name: P);
 
@@ -287,10 +287,10 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
         }
     }
 
-    fn set_logo<'a, P: IsA<gdk_pixbuf::Pixbuf> + 'a, Q: Into<Option<&'a P>>>(&self, logo: Q) {
+    fn set_logo<'a, P: Into<Option<&'a gdk_pixbuf::Pixbuf>>>(&self, logo: P) {
         let logo = logo.into();
         unsafe {
-            ffi::gtk_about_dialog_set_logo(self.as_ref().to_glib_none().0, logo.map(|p| p.as_ref()).to_glib_none().0);
+            ffi::gtk_about_dialog_set_logo(self.as_ref().to_glib_none().0, logo.to_glib_none().0);
         }
     }
 

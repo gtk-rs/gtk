@@ -53,7 +53,7 @@ pub const NONE_TEXT_BUFFER: Option<&TextBuffer> = None;
 pub trait TextBufferExt: 'static {
     fn add_mark<P: IsA<TextMark>>(&self, mark: &P, where_: &TextIter);
 
-    fn add_selection_clipboard<P: IsA<Clipboard>>(&self, clipboard: &P);
+    fn add_selection_clipboard(&self, clipboard: &Clipboard);
 
     fn apply_tag<P: IsA<TextTag>>(&self, tag: &P, start: &TextIter, end: &TextIter);
 
@@ -63,7 +63,7 @@ pub trait TextBufferExt: 'static {
 
     fn begin_user_action(&self);
 
-    fn copy_clipboard<P: IsA<Clipboard>>(&self, clipboard: &P);
+    fn copy_clipboard(&self, clipboard: &Clipboard);
 
     fn create_child_anchor(&self, iter: &mut TextIter) -> Option<TextChildAnchor>;
 
@@ -71,7 +71,7 @@ pub trait TextBufferExt: 'static {
 
     //fn create_tag<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b str>>>(&self, tag_name: P, first_property_name: Q, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> Option<TextTag>;
 
-    fn cut_clipboard<P: IsA<Clipboard>>(&self, clipboard: &P, default_editable: bool);
+    fn cut_clipboard(&self, clipboard: &Clipboard, default_editable: bool);
 
     fn delete(&self, start: &mut TextIter, end: &mut TextIter);
 
@@ -152,7 +152,7 @@ pub trait TextBufferExt: 'static {
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn insert_markup(&self, iter: &mut TextIter, markup: &str);
 
-    fn insert_pixbuf<P: IsA<gdk_pixbuf::Pixbuf>>(&self, iter: &mut TextIter, pixbuf: &P);
+    fn insert_pixbuf(&self, iter: &mut TextIter, pixbuf: &gdk_pixbuf::Pixbuf);
 
     fn insert_range(&self, iter: &mut TextIter, start: &TextIter, end: &TextIter);
 
@@ -166,7 +166,7 @@ pub trait TextBufferExt: 'static {
 
     fn move_mark_by_name(&self, name: &str, where_: &TextIter);
 
-    fn paste_clipboard<'a, P: IsA<Clipboard>, Q: Into<Option<&'a TextIter>>>(&self, clipboard: &P, override_location: Q, default_editable: bool);
+    fn paste_clipboard<'a, P: Into<Option<&'a TextIter>>>(&self, clipboard: &Clipboard, override_location: P, default_editable: bool);
 
     fn place_cursor(&self, where_: &TextIter);
 
@@ -178,7 +178,7 @@ pub trait TextBufferExt: 'static {
 
     fn remove_all_tags(&self, start: &TextIter, end: &TextIter);
 
-    fn remove_selection_clipboard<P: IsA<Clipboard>>(&self, clipboard: &P);
+    fn remove_selection_clipboard(&self, clipboard: &Clipboard);
 
     fn remove_tag<P: IsA<TextTag>>(&self, tag: &P, start: &TextIter, end: &TextIter);
 
@@ -240,9 +240,9 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
         }
     }
 
-    fn add_selection_clipboard<P: IsA<Clipboard>>(&self, clipboard: &P) {
+    fn add_selection_clipboard(&self, clipboard: &Clipboard) {
         unsafe {
-            ffi::gtk_text_buffer_add_selection_clipboard(self.as_ref().to_glib_none().0, clipboard.as_ref().to_glib_none().0);
+            ffi::gtk_text_buffer_add_selection_clipboard(self.as_ref().to_glib_none().0, clipboard.to_glib_none().0);
         }
     }
 
@@ -270,9 +270,9 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
         }
     }
 
-    fn copy_clipboard<P: IsA<Clipboard>>(&self, clipboard: &P) {
+    fn copy_clipboard(&self, clipboard: &Clipboard) {
         unsafe {
-            ffi::gtk_text_buffer_copy_clipboard(self.as_ref().to_glib_none().0, clipboard.as_ref().to_glib_none().0);
+            ffi::gtk_text_buffer_copy_clipboard(self.as_ref().to_glib_none().0, clipboard.to_glib_none().0);
         }
     }
 
@@ -293,9 +293,9 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
     //    unsafe { TODO: call ffi::gtk_text_buffer_create_tag() }
     //}
 
-    fn cut_clipboard<P: IsA<Clipboard>>(&self, clipboard: &P, default_editable: bool) {
+    fn cut_clipboard(&self, clipboard: &Clipboard, default_editable: bool) {
         unsafe {
-            ffi::gtk_text_buffer_cut_clipboard(self.as_ref().to_glib_none().0, clipboard.as_ref().to_glib_none().0, default_editable.to_glib());
+            ffi::gtk_text_buffer_cut_clipboard(self.as_ref().to_glib_none().0, clipboard.to_glib_none().0, default_editable.to_glib());
         }
     }
 
@@ -568,9 +568,9 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
         }
     }
 
-    fn insert_pixbuf<P: IsA<gdk_pixbuf::Pixbuf>>(&self, iter: &mut TextIter, pixbuf: &P) {
+    fn insert_pixbuf(&self, iter: &mut TextIter, pixbuf: &gdk_pixbuf::Pixbuf) {
         unsafe {
-            ffi::gtk_text_buffer_insert_pixbuf(self.as_ref().to_glib_none().0, iter.to_glib_none_mut().0, pixbuf.as_ref().to_glib_none().0);
+            ffi::gtk_text_buffer_insert_pixbuf(self.as_ref().to_glib_none().0, iter.to_glib_none_mut().0, pixbuf.to_glib_none().0);
         }
     }
 
@@ -606,10 +606,10 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
         }
     }
 
-    fn paste_clipboard<'a, P: IsA<Clipboard>, Q: Into<Option<&'a TextIter>>>(&self, clipboard: &P, override_location: Q, default_editable: bool) {
+    fn paste_clipboard<'a, P: Into<Option<&'a TextIter>>>(&self, clipboard: &Clipboard, override_location: P, default_editable: bool) {
         let override_location = override_location.into();
         unsafe {
-            ffi::gtk_text_buffer_paste_clipboard(self.as_ref().to_glib_none().0, clipboard.as_ref().to_glib_none().0, mut_override(override_location.to_glib_none().0), default_editable.to_glib());
+            ffi::gtk_text_buffer_paste_clipboard(self.as_ref().to_glib_none().0, clipboard.to_glib_none().0, mut_override(override_location.to_glib_none().0), default_editable.to_glib());
         }
     }
 
@@ -643,9 +643,9 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
         }
     }
 
-    fn remove_selection_clipboard<P: IsA<Clipboard>>(&self, clipboard: &P) {
+    fn remove_selection_clipboard(&self, clipboard: &Clipboard) {
         unsafe {
-            ffi::gtk_text_buffer_remove_selection_clipboard(self.as_ref().to_glib_none().0, clipboard.as_ref().to_glib_none().0);
+            ffi::gtk_text_buffer_remove_selection_clipboard(self.as_ref().to_glib_none().0, clipboard.to_glib_none().0);
         }
     }
 

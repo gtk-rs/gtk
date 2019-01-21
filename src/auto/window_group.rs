@@ -38,7 +38,7 @@ pub const NONE_WINDOW_GROUP: Option<&WindowGroup> = None;
 pub trait WindowGroupExt: 'static {
     fn add_window<P: IsA<Window>>(&self, window: &P);
 
-    fn get_current_device_grab<P: IsA<gdk::Device>>(&self, device: &P) -> Option<Widget>;
+    fn get_current_device_grab(&self, device: &gdk::Device) -> Option<Widget>;
 
     fn get_current_grab(&self) -> Option<Widget>;
 
@@ -54,9 +54,9 @@ impl<O: IsA<WindowGroup>> WindowGroupExt for O {
         }
     }
 
-    fn get_current_device_grab<P: IsA<gdk::Device>>(&self, device: &P) -> Option<Widget> {
+    fn get_current_device_grab(&self, device: &gdk::Device) -> Option<Widget> {
         unsafe {
-            from_glib_none(ffi::gtk_window_group_get_current_device_grab(self.as_ref().to_glib_none().0, device.as_ref().to_glib_none().0))
+            from_glib_none(ffi::gtk_window_group_get_current_device_grab(self.as_ref().to_glib_none().0, device.to_glib_none().0))
         }
     }
 
