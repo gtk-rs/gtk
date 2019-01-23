@@ -30,14 +30,6 @@ impl SelectionData {
         }
     }
 
-    pub fn get_data_with_length(&self) -> Vec<u8> {
-        unsafe {
-            let mut length = mem::uninitialized();
-            let ret = FromGlibContainer::from_glib_none_num(ffi::gtk_selection_data_get_data_with_length(self.to_glib_none().0, &mut length), length as usize);
-            ret
-        }
-    }
-
     pub fn get_display(&self) -> Option<gdk::Display> {
         unsafe {
             from_glib_none(ffi::gtk_selection_data_get_display(self.to_glib_none().0))

@@ -258,6 +258,7 @@ mod recent_chooser_dialog;
 mod recent_data;
 mod requisition;
 mod response_type;
+mod selection_data;
 mod signal;
 #[cfg(any(target_os = "linux", feature = "dox"))]
 mod socket;

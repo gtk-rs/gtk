@@ -1429,6 +1429,9 @@ status = "generate"
     name = "get_data"
     #array without length
     ignore = true
+    [[object.function]]
+    name = "get_data_with_length"
+    ignore = true
 
 [[object]]
 name = "Gtk.ShortcutsWindow"
