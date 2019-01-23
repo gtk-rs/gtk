@@ -95,10 +95,10 @@ impl SelectionData {
         }
     }
 
-    pub fn set(&mut self, type_: &gdk::Atom, format: i32, data: &[u8]) {
+    pub fn set(&self, type_: &gdk::Atom, format: i32, data: &[u8]) {
         let length = data.len() as i32;
         unsafe {
-            ffi::gtk_selection_data_set(self.to_glib_none_mut().0, type_.to_glib_none().0, format, data.to_glib_none().0, length);
+            ffi::gtk_selection_data_set(mut_override(self.to_glib_none().0), type_.to_glib_none().0, format, data.to_glib_none().0, length);
         }
     }
 
