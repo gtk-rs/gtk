@@ -59,23 +59,22 @@ pub trait TreeSortableExtManual: 'static {
     fn set_unsorted(&self);
 }
 
-unsafe extern "C" fn trampoline<T>(this: *mut GtkTreeModel, iter: *mut GtkTreeIter,
+unsafe extern "C" fn trampoline<T, F: Fn(&T, &TreeIter, &TreeIter) -> Ordering>(this: *mut GtkTreeModel, iter: *mut GtkTreeIter,
                                    iter2: *mut GtkTreeIter, f: gpointer) -> i32
 where T: IsA<TreeSortable> {
-    let f: &&(Fn(&T, &TreeIter, &TreeIter) -> Ordering) = transmute(f);
+    let f: &F = transmute(f);
     f(&TreeModel::from_glib_none(this).unsafe_cast(), &from_glib_borrow(iter),
       &from_glib_borrow(iter2)).to_glib()
 }
 
-unsafe extern "C" fn destroy_closure<T>(ptr: gpointer) {
-    Box::<Box<Fn(&T, &TreeIter, &TreeIter) -> Ordering + 'static>>::from_raw(ptr as *mut _);
+unsafe extern "C" fn destroy_closure<T, F: Fn(&T, &TreeIter, &TreeIter) -> Ordering>(ptr: gpointer) {
+    Box::<F>::from_raw(ptr as *mut _);
 }
 
 fn into_raw<F, T>(func: F) -> gpointer
     where F: Fn(&T, &TreeIter, &TreeIter) -> Ordering + 'static {
     skip_assert_initialized!();
-    let func: Box<Box<Fn(&T, &TreeIter, &TreeIter) -> Ordering + 'static>> =
-        Box::new(Box::new(func));
+    let func: Box<F> = Box::new(func);
     Box::into_raw(func) as gpointer
 }
 
@@ -98,9 +97,9 @@ impl<O: IsA<TreeSortable>> TreeSortableExtManual for O {
     where F: Fn(&Self, &TreeIter, &TreeIter) -> Ordering + 'static {
         unsafe {
             ffi::gtk_tree_sortable_set_default_sort_func(self.as_ref().to_glib_none().0,
-                                                         Some(trampoline::<Self>),
+                                                         Some(trampoline::<Self, F>),
                                                          into_raw(sort_func),
-                                                         Some(destroy_closure::<Self>))
+                                                         Some(destroy_closure::<Self, F>))
         }
     }
 
@@ -124,9 +123,9 @@ impl<O: IsA<TreeSortable>> TreeSortableExtManual for O {
         unsafe {
             ffi::gtk_tree_sortable_set_sort_func(self.as_ref().to_glib_none().0,
                                                  sort_column_id.to_glib(),
-                                                 Some(trampoline::<Self>),
+                                                 Some(trampoline::<Self, F>),
                                                  into_raw(sort_func),
-                                                 Some(destroy_closure::<Self>))
+                                                 Some(destroy_closure::<Self, F>))
         }
     }
 }
