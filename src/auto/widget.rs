@@ -107,8 +107,8 @@ pub trait WidgetExt: 'static {
 
     fn add_mnemonic_label<P: IsA<Widget>>(&self, label: &P);
 
-    //#[cfg(any(feature = "v3_8", feature = "dox"))]
-    //fn add_tick_callback(&self, callback: /*Unknown conversion*//*Unimplemented*/TickCallback, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify) -> u32;
+    #[cfg(any(feature = "v3_8", feature = "dox"))]
+    fn add_tick_callback<P: Fn(&Widget, &gdk::FrameClock) -> bool + 'static>(&self, callback: P) -> u32;
 
     fn can_activate_accel(&self, signal_id: u32) -> bool;
 
@@ -901,10 +901,26 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v3_8", feature = "dox"))]
-    //fn add_tick_callback(&self, callback: /*Unknown conversion*//*Unimplemented*/TickCallback, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify) -> u32 {
-    //    unsafe { TODO: call ffi::gtk_widget_add_tick_callback() }
-    //}
+    #[cfg(any(feature = "v3_8", feature = "dox"))]
+    fn add_tick_callback<P: Fn(&Widget, &gdk::FrameClock) -> bool + 'static>(&self, callback: P) -> u32 {
+        let callback_data: Box_<P> = Box::new(callback);
+        unsafe extern "C" fn callback_func<P: Fn(&Widget, &gdk::FrameClock) -> bool + 'static>(widget: *mut ffi::GtkWidget, frame_clock: *mut gdk_ffi::GdkFrameClock, user_data: glib_ffi::gpointer) -> glib_ffi::gboolean {
+            let widget = from_glib_borrow(widget);
+            let frame_clock = from_glib_borrow(frame_clock);
+            let callback: &P = &*(user_data as *mut _);
+            let res = (*callback)(&widget, &frame_clock);
+            res.to_glib()
+        }
+        let callback = Some(callback_func::<P> as _);
+        unsafe extern "C" fn notify_func<P: Fn(&Widget, &gdk::FrameClock) -> bool + 'static>(data: glib_ffi::gpointer) {
+            let _callback: Box_<P> = Box_::from_raw(data as *mut _);
+        }
+        let destroy_call3 = Some(notify_func::<P> as _);
+        let super_callback0: Box_<P> = callback_data;
+        unsafe {
+            ffi::gtk_widget_add_tick_callback(self.as_ref().to_glib_none().0, callback, Box::into_raw(super_callback0) as *mut _, destroy_call3)
+        }
+    }
 
     fn can_activate_accel(&self, signal_id: u32) -> bool {
         unsafe {

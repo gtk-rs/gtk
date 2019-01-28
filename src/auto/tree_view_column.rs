@@ -121,7 +121,7 @@ pub trait TreeViewColumnExt: 'static {
 
     fn set_alignment(&self, xalign: f32);
 
-    //fn set_cell_data_func<'a, P: IsA<CellRenderer>, Q: Into<Option<&'a /*Unimplemented*/TreeCellDataFunc>>, R: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, cell_renderer: &P, func: Q, func_data: R, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
+    fn set_cell_data_func<P: IsA<CellRenderer>, Q: Fn(&TreeViewColumn, &CellRenderer, &TreeModel, &TreeIter) + 'static, R: Into<Option<Q>>>(&self, cell_renderer: &P, func: R);
 
     fn set_clickable(&self, clickable: bool);
 
@@ -372,9 +372,31 @@ impl<O: IsA<TreeViewColumn>> TreeViewColumnExt for O {
         }
     }
 
-    //fn set_cell_data_func<'a, P: IsA<CellRenderer>, Q: Into<Option<&'a /*Unimplemented*/TreeCellDataFunc>>, R: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, cell_renderer: &P, func: Q, func_data: R, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
-    //    unsafe { TODO: call ffi::gtk_tree_view_column_set_cell_data_func() }
-    //}
+    fn set_cell_data_func<P: IsA<CellRenderer>, Q: Fn(&TreeViewColumn, &CellRenderer, &TreeModel, &TreeIter) + 'static, R: Into<Option<Q>>>(&self, cell_renderer: &P, func: R) {
+        let func = func.into();
+        let func_data: Box_<Option<Q>> = Box::new(func.into());
+        unsafe extern "C" fn func_func<P: IsA<CellRenderer>, Q: Fn(&TreeViewColumn, &CellRenderer, &TreeModel, &TreeIter) + 'static>(tree_column: *mut ffi::GtkTreeViewColumn, cell: *mut ffi::GtkCellRenderer, tree_model: *mut ffi::GtkTreeModel, iter: *mut ffi::GtkTreeIter, data: glib_ffi::gpointer) {
+            let tree_column = from_glib_borrow(tree_column);
+            let cell = from_glib_borrow(cell);
+            let tree_model = from_glib_borrow(tree_model);
+            let iter = from_glib_borrow(iter);
+            let callback: &Option<Q> = &*(data as *mut _);
+            if let Some(ref callback) = *callback {
+                callback(&tree_column, &cell, &tree_model, &iter)
+            } else {
+                panic!("cannot get closure...")
+            };
+        }
+        let func = if func_data.is_some() { Some(func_func::<P, Q> as _) } else { None };
+        unsafe extern "C" fn destroy_func<P: IsA<CellRenderer>, Q: Fn(&TreeViewColumn, &CellRenderer, &TreeModel, &TreeIter) + 'static>(data: glib_ffi::gpointer) {
+            let _callback: Box_<Option<Q>> = Box_::from_raw(data as *mut _);
+        }
+        let destroy_call4 = Some(destroy_func::<P, Q> as _);
+        let super_callback0: Box_<Option<Q>> = func_data;
+        unsafe {
+            ffi::gtk_tree_view_column_set_cell_data_func(self.as_ref().to_glib_none().0, cell_renderer.as_ref().to_glib_none().0, func, Box::into_raw(super_callback0) as *mut _, destroy_call4);
+        }
+    }
 
     fn set_clickable(&self, clickable: bool) {
         unsafe {

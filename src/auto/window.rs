@@ -283,7 +283,7 @@ pub trait GtkWindowExt: 'static {
 
     fn set_focus_visible(&self, setting: bool);
 
-    //fn set_geometry_hints<'a, 'b, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>, R: Into<Option<&'b /*Ignored*/gdk::Geometry>>>(&self, geometry_widget: Q, geometry: R, geom_mask: gdk::WindowHints);
+    //fn set_geometry_hints<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, geometry_widget: Q, geometry: /*Ignored*/Option<&mut gdk::Geometry>, geom_mask: gdk::WindowHints);
 
     fn set_gravity(&self, gravity: gdk::Gravity);
 
@@ -929,7 +929,7 @@ impl<O: IsA<Window>> GtkWindowExt for O {
         }
     }
 
-    //fn set_geometry_hints<'a, 'b, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>, R: Into<Option<&'b /*Ignored*/gdk::Geometry>>>(&self, geometry_widget: Q, geometry: R, geom_mask: gdk::WindowHints) {
+    //fn set_geometry_hints<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, geometry_widget: Q, geometry: /*Ignored*/Option<&mut gdk::Geometry>, geom_mask: gdk::WindowHints) {
     //    unsafe { TODO: call ffi::gtk_window_set_geometry_hints() }
     //}
 

@@ -46,7 +46,7 @@ pub trait ContainerExt: 'static {
     fn child_notify<P: IsA<Widget>>(&self, child: &P, child_property: &str);
 
     //#[cfg(any(feature = "v3_18", feature = "dox"))]
-    //fn child_notify_by_pspec<P: IsA<Widget>, Q: IsA</*Ignored*/glib::ParamSpec>>(&self, child: &P, pspec: &Q);
+    //fn child_notify_by_pspec<P: IsA<Widget>>(&self, child: &P, pspec: /*Ignored*/&glib::ParamSpec);
 
     //fn child_set<P: IsA<Widget>>(&self, child: &P, first_prop_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
@@ -54,9 +54,9 @@ pub trait ContainerExt: 'static {
 
     fn child_type(&self) -> glib::types::Type;
 
-    //fn forall<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, callback: /*Unknown conversion*//*Unimplemented*/Callback, callback_data: P);
+    fn forall<P: FnMut(&Widget)>(&self, callback: P);
 
-    //fn foreach<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, callback: /*Unknown conversion*//*Unimplemented*/Callback, callback_data: P);
+    fn foreach<P: FnMut(&Widget)>(&self, callback: P);
 
     fn get_border_width(&self) -> u32;
 
@@ -149,7 +149,7 @@ impl<O: IsA<Container>> ContainerExt for O {
     }
 
     //#[cfg(any(feature = "v3_18", feature = "dox"))]
-    //fn child_notify_by_pspec<P: IsA<Widget>, Q: IsA</*Ignored*/glib::ParamSpec>>(&self, child: &P, pspec: &Q) {
+    //fn child_notify_by_pspec<P: IsA<Widget>>(&self, child: &P, pspec: /*Ignored*/&glib::ParamSpec) {
     //    unsafe { TODO: call ffi::gtk_container_child_notify_by_pspec() }
     //}
 
@@ -167,13 +167,33 @@ impl<O: IsA<Container>> ContainerExt for O {
         }
     }
 
-    //fn forall<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, callback: /*Unknown conversion*//*Unimplemented*/Callback, callback_data: P) {
-    //    unsafe { TODO: call ffi::gtk_container_forall() }
-    //}
+    fn forall<P: FnMut(&Widget)>(&self, callback: P) {
+        let callback_data: P = callback;
+        unsafe extern "C" fn callback_func<P: FnMut(&Widget)>(widget: *mut ffi::GtkWidget, data: glib_ffi::gpointer) {
+            let widget = from_glib_borrow(widget);
+            let callback: *mut P = data as *const _ as usize as *mut P;
+            (*callback)(&widget);
+        }
+        let callback = Some(callback_func::<P> as _);
+        let super_callback0: &P = &callback_data;
+        unsafe {
+            ffi::gtk_container_forall(self.as_ref().to_glib_none().0, callback, super_callback0 as *const _ as usize as *mut _);
+        }
+    }
 
-    //fn foreach<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, callback: /*Unknown conversion*//*Unimplemented*/Callback, callback_data: P) {
-    //    unsafe { TODO: call ffi::gtk_container_foreach() }
-    //}
+    fn foreach<P: FnMut(&Widget)>(&self, callback: P) {
+        let callback_data: P = callback;
+        unsafe extern "C" fn callback_func<P: FnMut(&Widget)>(widget: *mut ffi::GtkWidget, data: glib_ffi::gpointer) {
+            let widget = from_glib_borrow(widget);
+            let callback: *mut P = data as *const _ as usize as *mut P;
+            (*callback)(&widget);
+        }
+        let callback = Some(callback_func::<P> as _);
+        let super_callback0: &P = &callback_data;
+        unsafe {
+            ffi::gtk_container_foreach(self.as_ref().to_glib_none().0, callback, super_callback0 as *const _ as usize as *mut _);
+        }
+    }
 
     fn get_border_width(&self) -> u32 {
         unsafe {

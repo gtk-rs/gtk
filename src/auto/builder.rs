@@ -64,10 +64,10 @@ pub const NONE_BUILDER: Option<&Builder> = None;
 
 pub trait BuilderExt: 'static {
     //#[cfg(any(feature = "v3_10", feature = "dox"))]
-    //fn add_callback_symbol(&self, callback_name: &str, callback_symbol: /*Unknown conversion*//*Unimplemented*/Callback);
+    //fn add_callback_symbol<P: FnOnce() + 'static>(&self, callback_name: &str, callback_symbol: P);
 
     //#[cfg(any(feature = "v3_10", feature = "dox"))]
-    //fn add_callback_symbols(&self, first_callback_name: &str, first_callback_symbol: /*Unknown conversion*//*Unimplemented*/Callback, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
+    //fn add_callback_symbols<P: FnOnce() + 'static>(&self, first_callback_name: &str, first_callback_symbol: P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
     fn add_from_resource(&self, resource_path: &str) -> Result<(), Error>;
 
@@ -77,9 +77,9 @@ pub trait BuilderExt: 'static {
 
     fn add_objects_from_string(&self, buffer: &str, object_ids: &[&str]) -> Result<(), Error>;
 
-    //fn connect_signals<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, user_data: P);
+    //fn connect_signals(&self, user_data: /*Unimplemented*/Option<Fundamental: Pointer>);
 
-    //fn connect_signals_full<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: /*Unknown conversion*//*Unimplemented*/BuilderConnectFunc, user_data: P);
+    //fn connect_signals_full(&self, func: /*Unimplemented*/Fn(&Builder, &glib::Object, &str, &str, &glib::Object, /*Ignored*/glib::ConnectFlags), user_data: /*Unimplemented*/Option<Fundamental: Pointer>);
 
     #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn expose_object<P: IsA<glib::Object>>(&self, name: &str, object: &P);
@@ -96,14 +96,14 @@ pub trait BuilderExt: 'static {
     fn get_type_from_name(&self, type_name: &str) -> glib::types::Type;
 
     //#[cfg(any(feature = "v3_10", feature = "dox"))]
-    //fn lookup_callback_symbol(&self, callback_name: &str) -> /*Unknown conversion*//*Unimplemented*/Callback;
+    //fn lookup_callback_symbol(&self, callback_name: &str) -> Fn() + 'static;
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_application<P: IsA<Application>>(&self, application: &P);
 
     fn set_translation_domain<'a, P: Into<Option<&'a str>>>(&self, domain: P);
 
-    //fn value_from_string<P: IsA</*Ignored*/glib::ParamSpec>>(&self, pspec: &P, string: &str) -> Result<glib::Value, Error>;
+    //fn value_from_string(&self, pspec: /*Ignored*/&glib::ParamSpec, string: &str) -> Result<glib::Value, Error>;
 
     fn value_from_string_type(&self, type_: glib::types::Type, string: &str) -> Result<glib::Value, Error>;
 
@@ -112,12 +112,12 @@ pub trait BuilderExt: 'static {
 
 impl<O: IsA<Builder>> BuilderExt for O {
     //#[cfg(any(feature = "v3_10", feature = "dox"))]
-    //fn add_callback_symbol(&self, callback_name: &str, callback_symbol: /*Unknown conversion*//*Unimplemented*/Callback) {
+    //fn add_callback_symbol<P: FnOnce() + 'static>(&self, callback_name: &str, callback_symbol: P) {
     //    unsafe { TODO: call ffi::gtk_builder_add_callback_symbol() }
     //}
 
     //#[cfg(any(feature = "v3_10", feature = "dox"))]
-    //fn add_callback_symbols(&self, first_callback_name: &str, first_callback_symbol: /*Unknown conversion*//*Unimplemented*/Callback, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
+    //fn add_callback_symbols<P: FnOnce() + 'static>(&self, first_callback_name: &str, first_callback_symbol: P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
     //    unsafe { TODO: call ffi::gtk_builder_add_callback_symbols() }
     //}
 
@@ -155,11 +155,11 @@ impl<O: IsA<Builder>> BuilderExt for O {
         }
     }
 
-    //fn connect_signals<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, user_data: P) {
+    //fn connect_signals(&self, user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
     //    unsafe { TODO: call ffi::gtk_builder_connect_signals() }
     //}
 
-    //fn connect_signals_full<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: /*Unknown conversion*//*Unimplemented*/BuilderConnectFunc, user_data: P) {
+    //fn connect_signals_full(&self, func: /*Unimplemented*/Fn(&Builder, &glib::Object, &str, &str, &glib::Object, /*Ignored*/glib::ConnectFlags), user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
     //    unsafe { TODO: call ffi::gtk_builder_connect_signals_full() }
     //}
 
@@ -205,7 +205,7 @@ impl<O: IsA<Builder>> BuilderExt for O {
     }
 
     //#[cfg(any(feature = "v3_10", feature = "dox"))]
-    //fn lookup_callback_symbol(&self, callback_name: &str) -> /*Unknown conversion*//*Unimplemented*/Callback {
+    //fn lookup_callback_symbol(&self, callback_name: &str) -> Fn() + 'static {
     //    unsafe { TODO: call ffi::gtk_builder_lookup_callback_symbol() }
     //}
 
@@ -223,7 +223,7 @@ impl<O: IsA<Builder>> BuilderExt for O {
         }
     }
 
-    //fn value_from_string<P: IsA</*Ignored*/glib::ParamSpec>>(&self, pspec: &P, string: &str) -> Result<glib::Value, Error> {
+    //fn value_from_string(&self, pspec: /*Ignored*/&glib::ParamSpec, string: &str) -> Result<glib::Value, Error> {
     //    unsafe { TODO: call ffi::gtk_builder_value_from_string() }
     //}
 

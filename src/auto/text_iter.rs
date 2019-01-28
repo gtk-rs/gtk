@@ -57,9 +57,21 @@ impl TextIter {
         }
     }
 
-    //pub fn backward_find_char<'a, P: Into<Option</*Unimplemented*/Fundamental: Pointer>>, Q: Into<Option<&'a TextIter>>>(&mut self, pred: /*Unknown conversion*//*Unimplemented*/TextCharPredicate, user_data: P, limit: Q) -> bool {
-    //    unsafe { TODO: call ffi::gtk_text_iter_backward_find_char() }
-    //}
+    pub fn backward_find_char<'a, P: FnMut(char) -> bool, Q: Into<Option<&'a TextIter>>>(&mut self, pred: P, limit: Q) -> bool {
+        let limit = limit.into();
+        let pred_data: P = pred;
+        unsafe extern "C" fn pred_func<'a, P: FnMut(char) -> bool, Q: Into<Option<&'a TextIter>>>(ch: u32, user_data: glib_ffi::gpointer) -> glib_ffi::gboolean {
+            let ch = from_glib(ch);
+            let callback: *mut P = user_data as *const _ as usize as *mut P;
+            let res = (*callback)(ch);
+            res.to_glib()
+        }
+        let pred = Some(pred_func::<'a, P, Q> as _);
+        let super_callback0: &P = &pred_data;
+        unsafe {
+            from_glib(ffi::gtk_text_iter_backward_find_char(self.to_glib_none_mut().0, pred, super_callback0 as *const _ as usize as *mut _, limit.to_glib_none().0))
+        }
+    }
 
     pub fn backward_line(&mut self) -> bool {
         unsafe {
@@ -231,9 +243,21 @@ impl TextIter {
         }
     }
 
-    //pub fn forward_find_char<'a, P: Into<Option</*Unimplemented*/Fundamental: Pointer>>, Q: Into<Option<&'a TextIter>>>(&mut self, pred: /*Unknown conversion*//*Unimplemented*/TextCharPredicate, user_data: P, limit: Q) -> bool {
-    //    unsafe { TODO: call ffi::gtk_text_iter_forward_find_char() }
-    //}
+    pub fn forward_find_char<'a, P: FnMut(char) -> bool, Q: Into<Option<&'a TextIter>>>(&mut self, pred: P, limit: Q) -> bool {
+        let limit = limit.into();
+        let pred_data: P = pred;
+        unsafe extern "C" fn pred_func<'a, P: FnMut(char) -> bool, Q: Into<Option<&'a TextIter>>>(ch: u32, user_data: glib_ffi::gpointer) -> glib_ffi::gboolean {
+            let ch = from_glib(ch);
+            let callback: *mut P = user_data as *const _ as usize as *mut P;
+            let res = (*callback)(ch);
+            res.to_glib()
+        }
+        let pred = Some(pred_func::<'a, P, Q> as _);
+        let super_callback0: &P = &pred_data;
+        unsafe {
+            from_glib(ffi::gtk_text_iter_forward_find_char(self.to_glib_none_mut().0, pred, super_callback0 as *const _ as usize as *mut _, limit.to_glib_none().0))
+        }
+    }
 
     pub fn forward_line(&mut self) -> bool {
         unsafe {

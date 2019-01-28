@@ -27,7 +27,7 @@ pub trait StyleProviderExt: 'static {
     #[cfg_attr(feature = "v3_8", deprecated)]
     fn get_style(&self, path: &WidgetPath) -> Option<StyleProperties>;
 
-    //fn get_style_property<P: IsA</*Ignored*/glib::ParamSpec>>(&self, path: &WidgetPath, state: StateFlags, pspec: &P) -> Option<glib::Value>;
+    //fn get_style_property(&self, path: &WidgetPath, state: StateFlags, pspec: /*Ignored*/&glib::ParamSpec) -> Option<glib::Value>;
 }
 
 impl<O: IsA<StyleProvider>> StyleProviderExt for O {
@@ -43,7 +43,7 @@ impl<O: IsA<StyleProvider>> StyleProviderExt for O {
         }
     }
 
-    //fn get_style_property<P: IsA</*Ignored*/glib::ParamSpec>>(&self, path: &WidgetPath, state: StateFlags, pspec: &P) -> Option<glib::Value> {
+    //fn get_style_property(&self, path: &WidgetPath, state: StateFlags, pspec: /*Ignored*/&glib::ParamSpec) -> Option<glib::Value> {
     //    unsafe { TODO: call ffi::gtk_style_provider_get_style_property() }
     //}
 }

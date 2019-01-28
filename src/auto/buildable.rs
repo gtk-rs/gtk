@@ -24,9 +24,9 @@ pub trait BuildableExt: 'static {
 
     fn construct_child<P: IsA<Builder>>(&self, builder: &P, name: &str) -> Option<glib::Object>;
 
-    //fn custom_finished<'a, P: IsA<Builder>, Q: IsA<glib::Object> + 'a, R: Into<Option<&'a Q>>, S: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, builder: &P, child: R, tagname: &str, data: S);
+    //fn custom_finished<'a, P: IsA<Builder>, Q: IsA<glib::Object> + 'a, R: Into<Option<&'a Q>>>(&self, builder: &P, child: R, tagname: &str, data: /*Unimplemented*/Option<Fundamental: Pointer>);
 
-    //fn custom_tag_end<'a, P: IsA<Builder>, Q: IsA<glib::Object> + 'a, R: Into<Option<&'a Q>>, S: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, builder: &P, child: R, tagname: &str, data: S);
+    //fn custom_tag_end<'a, P: IsA<Builder>, Q: IsA<glib::Object> + 'a, R: Into<Option<&'a Q>>>(&self, builder: &P, child: R, tagname: &str, data: /*Unimplemented*/Option<Fundamental: Pointer>);
 
     //fn custom_tag_start<'a, P: IsA<Builder>, Q: IsA<glib::Object> + 'a, R: Into<Option<&'a Q>>>(&self, builder: &P, child: R, tagname: &str, parser: /*Ignored*/glib::MarkupParser, data: /*Unimplemented*/&mut Option<Fundamental: Pointer>) -> bool;
 
@@ -51,11 +51,11 @@ impl<O: IsA<Buildable>> BuildableExt for O {
         }
     }
 
-    //fn custom_finished<'a, P: IsA<Builder>, Q: IsA<glib::Object> + 'a, R: Into<Option<&'a Q>>, S: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, builder: &P, child: R, tagname: &str, data: S) {
+    //fn custom_finished<'a, P: IsA<Builder>, Q: IsA<glib::Object> + 'a, R: Into<Option<&'a Q>>>(&self, builder: &P, child: R, tagname: &str, data: /*Unimplemented*/Option<Fundamental: Pointer>) {
     //    unsafe { TODO: call ffi::gtk_buildable_custom_finished() }
     //}
 
-    //fn custom_tag_end<'a, P: IsA<Builder>, Q: IsA<glib::Object> + 'a, R: Into<Option<&'a Q>>, S: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, builder: &P, child: R, tagname: &str, data: S) {
+    //fn custom_tag_end<'a, P: IsA<Builder>, Q: IsA<glib::Object> + 'a, R: Into<Option<&'a Q>>>(&self, builder: &P, child: R, tagname: &str, data: /*Unimplemented*/Option<Fundamental: Pointer>) {
     //    unsafe { TODO: call ffi::gtk_buildable_custom_tag_end() }
     //}
 

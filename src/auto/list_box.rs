@@ -6,7 +6,6 @@
 use Adjustment;
 use Buildable;
 use Container;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 use ListBoxRow;
 use MovementStep;
 use SelectionMode;
@@ -57,7 +56,7 @@ pub const NONE_LIST_BOX: Option<&ListBox> = None;
 
 pub trait ListBoxExt: 'static {
     //#[cfg(any(feature = "v3_16", feature = "dox"))]
-    //fn bind_model<'a, 'b, P: IsA</*Ignored*/gio::ListModel> + 'a, Q: Into<Option<&'a P>>, R: Into<Option<&'b /*Unimplemented*/ListBoxCreateWidgetFunc>>>(&self, model: Q, create_widget_func: R, user_data_free_func: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
+    //fn bind_model<P: Fn(&glib::Object) -> Widget + 'static, Q: Into<Option<P>>>(&self, model: /*Ignored*/Option<&gio::ListModel>, create_widget_func: Q);
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn drag_highlight_row<P: IsA<ListBoxRow>>(&self, row: &P);
@@ -107,8 +106,8 @@ pub trait ListBoxExt: 'static {
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn select_row<'a, P: IsA<ListBoxRow> + 'a, Q: Into<Option<&'a P>>>(&self, row: Q);
 
-    //#[cfg(any(feature = "v3_14", feature = "dox"))]
-    //fn selected_foreach<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: /*Unknown conversion*//*Unimplemented*/ListBoxForeachFunc, data: P);
+    #[cfg(any(feature = "v3_14", feature = "dox"))]
+    fn selected_foreach<P: FnMut(&ListBox, &ListBoxRow)>(&self, func: P);
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_activate_on_single_click(&self, single: bool);
@@ -116,11 +115,11 @@ pub trait ListBoxExt: 'static {
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_adjustment<'a, P: IsA<Adjustment> + 'a, Q: Into<Option<&'a P>>>(&self, adjustment: Q);
 
-    //#[cfg(any(feature = "v3_10", feature = "dox"))]
-    //fn set_filter_func<'a, P: Into<Option<&'a /*Unimplemented*/ListBoxFilterFunc>>>(&self, filter_func: P, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
+    #[cfg(any(feature = "v3_10", feature = "dox"))]
+    fn set_filter_func<P: Fn(&ListBoxRow) -> bool + 'static, Q: Into<Option<P>>>(&self, filter_func: Q);
 
-    //#[cfg(any(feature = "v3_10", feature = "dox"))]
-    //fn set_header_func<'a, P: Into<Option<&'a /*Unimplemented*/ListBoxUpdateHeaderFunc>>>(&self, update_header: P, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
+    #[cfg(any(feature = "v3_10", feature = "dox"))]
+    fn set_header_func<P: Fn(&ListBoxRow, &ListBoxRow) + 'static, Q: Into<Option<P>>>(&self, update_header: Q);
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_placeholder<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, placeholder: Q);
@@ -128,8 +127,8 @@ pub trait ListBoxExt: 'static {
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_selection_mode(&self, mode: SelectionMode);
 
-    //#[cfg(any(feature = "v3_10", feature = "dox"))]
-    //fn set_sort_func<'a, P: Into<Option<&'a /*Unimplemented*/ListBoxSortFunc>>>(&self, sort_func: P, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
+    #[cfg(any(feature = "v3_10", feature = "dox"))]
+    fn set_sort_func<P: Fn(&ListBoxRow, &ListBoxRow) -> i32 + 'static, Q: Into<Option<P>>>(&self, sort_func: Q);
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn unselect_all(&self);
@@ -185,7 +184,7 @@ pub trait ListBoxExt: 'static {
 
 impl<O: IsA<ListBox>> ListBoxExt for O {
     //#[cfg(any(feature = "v3_16", feature = "dox"))]
-    //fn bind_model<'a, 'b, P: IsA</*Ignored*/gio::ListModel> + 'a, Q: Into<Option<&'a P>>, R: Into<Option<&'b /*Unimplemented*/ListBoxCreateWidgetFunc>>>(&self, model: Q, create_widget_func: R, user_data_free_func: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
+    //fn bind_model<P: Fn(&glib::Object) -> Widget + 'static, Q: Into<Option<P>>>(&self, model: /*Ignored*/Option<&gio::ListModel>, create_widget_func: Q) {
     //    unsafe { TODO: call ffi::gtk_list_box_bind_model() }
     //}
 
@@ -302,10 +301,21 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v3_14", feature = "dox"))]
-    //fn selected_foreach<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: /*Unknown conversion*//*Unimplemented*/ListBoxForeachFunc, data: P) {
-    //    unsafe { TODO: call ffi::gtk_list_box_selected_foreach() }
-    //}
+    #[cfg(any(feature = "v3_14", feature = "dox"))]
+    fn selected_foreach<P: FnMut(&ListBox, &ListBoxRow)>(&self, func: P) {
+        let func_data: P = func;
+        unsafe extern "C" fn func_func<P: FnMut(&ListBox, &ListBoxRow)>(box_: *mut ffi::GtkListBox, row: *mut ffi::GtkListBoxRow, user_data: glib_ffi::gpointer) {
+            let box_ = from_glib_borrow(box_);
+            let row = from_glib_borrow(row);
+            let callback: *mut P = user_data as *const _ as usize as *mut P;
+            (*callback)(&box_, &row);
+        }
+        let func = Some(func_func::<P> as _);
+        let super_callback0: &P = &func_data;
+        unsafe {
+            ffi::gtk_list_box_selected_foreach(self.as_ref().to_glib_none().0, func, super_callback0 as *const _ as usize as *mut _);
+        }
+    }
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_activate_on_single_click(&self, single: bool) {
@@ -322,15 +332,55 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v3_10", feature = "dox"))]
-    //fn set_filter_func<'a, P: Into<Option<&'a /*Unimplemented*/ListBoxFilterFunc>>>(&self, filter_func: P, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
-    //    unsafe { TODO: call ffi::gtk_list_box_set_filter_func() }
-    //}
+    #[cfg(any(feature = "v3_10", feature = "dox"))]
+    fn set_filter_func<P: Fn(&ListBoxRow) -> bool + 'static, Q: Into<Option<P>>>(&self, filter_func: Q) {
+        let filter_func = filter_func.into();
+        let filter_func_data: Box_<Option<P>> = Box::new(filter_func.into());
+        unsafe extern "C" fn filter_func_func<P: Fn(&ListBoxRow) -> bool + 'static>(row: *mut ffi::GtkListBoxRow, user_data: glib_ffi::gpointer) -> glib_ffi::gboolean {
+            let row = from_glib_borrow(row);
+            let callback: &Option<P> = &*(user_data as *mut _);
+            let res = if let Some(ref callback) = *callback {
+                callback(&row)
+            } else {
+                panic!("cannot get closure...")
+            };
+            res.to_glib()
+        }
+        let filter_func = if filter_func_data.is_some() { Some(filter_func_func::<P> as _) } else { None };
+        unsafe extern "C" fn destroy_func<P: Fn(&ListBoxRow) -> bool + 'static>(data: glib_ffi::gpointer) {
+            let _callback: Box_<Option<P>> = Box_::from_raw(data as *mut _);
+        }
+        let destroy_call3 = Some(destroy_func::<P> as _);
+        let super_callback0: Box_<Option<P>> = filter_func_data;
+        unsafe {
+            ffi::gtk_list_box_set_filter_func(self.as_ref().to_glib_none().0, filter_func, Box::into_raw(super_callback0) as *mut _, destroy_call3);
+        }
+    }
 
-    //#[cfg(any(feature = "v3_10", feature = "dox"))]
-    //fn set_header_func<'a, P: Into<Option<&'a /*Unimplemented*/ListBoxUpdateHeaderFunc>>>(&self, update_header: P, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
-    //    unsafe { TODO: call ffi::gtk_list_box_set_header_func() }
-    //}
+    #[cfg(any(feature = "v3_10", feature = "dox"))]
+    fn set_header_func<P: Fn(&ListBoxRow, &ListBoxRow) + 'static, Q: Into<Option<P>>>(&self, update_header: Q) {
+        let update_header = update_header.into();
+        let update_header_data: Box_<Option<P>> = Box::new(update_header.into());
+        unsafe extern "C" fn update_header_func<P: Fn(&ListBoxRow, &ListBoxRow) + 'static>(row: *mut ffi::GtkListBoxRow, before: *mut ffi::GtkListBoxRow, user_data: glib_ffi::gpointer) {
+            let row = from_glib_borrow(row);
+            let before = from_glib_borrow(before);
+            let callback: &Option<P> = &*(user_data as *mut _);
+            if let Some(ref callback) = *callback {
+                callback(&row, &before)
+            } else {
+                panic!("cannot get closure...")
+            };
+        }
+        let update_header = if update_header_data.is_some() { Some(update_header_func::<P> as _) } else { None };
+        unsafe extern "C" fn destroy_func<P: Fn(&ListBoxRow, &ListBoxRow) + 'static>(data: glib_ffi::gpointer) {
+            let _callback: Box_<Option<P>> = Box_::from_raw(data as *mut _);
+        }
+        let destroy_call3 = Some(destroy_func::<P> as _);
+        let super_callback0: Box_<Option<P>> = update_header_data;
+        unsafe {
+            ffi::gtk_list_box_set_header_func(self.as_ref().to_glib_none().0, update_header, Box::into_raw(super_callback0) as *mut _, destroy_call3);
+        }
+    }
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_placeholder<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, placeholder: Q) {
@@ -347,10 +397,31 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v3_10", feature = "dox"))]
-    //fn set_sort_func<'a, P: Into<Option<&'a /*Unimplemented*/ListBoxSortFunc>>>(&self, sort_func: P, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
-    //    unsafe { TODO: call ffi::gtk_list_box_set_sort_func() }
-    //}
+    #[cfg(any(feature = "v3_10", feature = "dox"))]
+    fn set_sort_func<P: Fn(&ListBoxRow, &ListBoxRow) -> i32 + 'static, Q: Into<Option<P>>>(&self, sort_func: Q) {
+        let sort_func = sort_func.into();
+        let sort_func_data: Box_<Option<P>> = Box::new(sort_func.into());
+        unsafe extern "C" fn sort_func_func<P: Fn(&ListBoxRow, &ListBoxRow) -> i32 + 'static>(row1: *mut ffi::GtkListBoxRow, row2: *mut ffi::GtkListBoxRow, user_data: glib_ffi::gpointer) -> libc::c_int {
+            let row1 = from_glib_borrow(row1);
+            let row2 = from_glib_borrow(row2);
+            let callback: &Option<P> = &*(user_data as *mut _);
+            let res = if let Some(ref callback) = *callback {
+                callback(&row1, &row2)
+            } else {
+                panic!("cannot get closure...")
+            };
+            res
+        }
+        let sort_func = if sort_func_data.is_some() { Some(sort_func_func::<P> as _) } else { None };
+        unsafe extern "C" fn destroy_func<P: Fn(&ListBoxRow, &ListBoxRow) -> i32 + 'static>(data: glib_ffi::gpointer) {
+            let _callback: Box_<Option<P>> = Box_::from_raw(data as *mut _);
+        }
+        let destroy_call3 = Some(destroy_func::<P> as _);
+        let super_callback0: Box_<Option<P>> = sort_func_data;
+        unsafe {
+            ffi::gtk_list_box_set_sort_func(self.as_ref().to_glib_none().0, sort_func, Box::into_raw(super_callback0) as *mut _, destroy_call3);
+        }
+    }
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn unselect_all(&self) {

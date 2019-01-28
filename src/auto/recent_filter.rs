@@ -37,7 +37,7 @@ impl RecentFilter {
         }
     }
 
-    //pub fn add_custom<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, needed: RecentFilterFlags, func: /*Unknown conversion*//*Unimplemented*/RecentFilterFunc, data: P, data_destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
+    //pub fn add_custom(&self, needed: RecentFilterFlags, func: /*Unimplemented*/Fn(/*Ignored*/RecentFilterInfo) -> bool, data: /*Unimplemented*/Option<Fundamental: Pointer>) {
     //    unsafe { TODO: call ffi::gtk_recent_filter_add_custom() }
     //}
 

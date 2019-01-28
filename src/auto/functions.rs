@@ -29,6 +29,7 @@ use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
 use pango;
+use std::boxed::Box as Box_;
 use std::mem;
 use std::ptr;
 
@@ -314,9 +315,22 @@ pub fn print_run_page_setup_dialog<'a, 'b, P: IsA<Window> + 'a, Q: Into<Option<&
     }
 }
 
-//pub fn print_run_page_setup_dialog_async<'a, 'b, P: IsA<Window> + 'a, Q: Into<Option<&'a P>>, R: Into<Option<&'b PageSetup>>, S: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(parent: Q, page_setup: R, settings: &PrintSettings, done_cb: /*Unknown conversion*//*Unimplemented*/PageSetupDoneFunc, data: S) {
-//    unsafe { TODO: call ffi::gtk_print_run_page_setup_dialog_async() }
-//}
+pub fn print_run_page_setup_dialog_async<'a, 'b, P: IsA<Window> + 'a, Q: Into<Option<&'a P>>, R: Into<Option<&'b PageSetup>>, S: FnOnce(&PageSetup) + Send + Sync + 'static>(parent: Q, page_setup: R, settings: &PrintSettings, done_cb: S) {
+    skip_assert_initialized!();
+    let parent = parent.into();
+    let page_setup = page_setup.into();
+    let done_cb_data: Box_<S> = Box::new(done_cb);
+    unsafe extern "C" fn done_cb_func<'a, 'b, P: IsA<Window> + 'a, Q: Into<Option<&'a P>>, R: Into<Option<&'b PageSetup>>, S: FnOnce(&PageSetup) + Send + Sync + 'static>(page_setup: *mut ffi::GtkPageSetup, data: glib_ffi::gpointer) {
+        let page_setup = from_glib_borrow(page_setup);
+        let callback: Box_<S> = Box_::from_raw(data as *mut _);
+        (*callback)(&page_setup);
+    }
+    let done_cb = Some(done_cb_func::<'a, 'b, P, Q, R, S> as _);
+    let super_callback0: Box_<S> = done_cb_data;
+    unsafe {
+        ffi::gtk_print_run_page_setup_dialog_async(parent.map(|p| p.as_ref()).to_glib_none().0, page_setup.to_glib_none().0, settings.to_glib_none().0, done_cb, Box::into_raw(super_callback0) as *mut _);
+    }
+}
 
 pub fn propagate_event<P: IsA<Widget>>(widget: &P, event: &mut gdk::Event) {
     skip_assert_initialized!();
@@ -573,10 +587,26 @@ pub fn stock_list_ids() -> Vec<GString> {
 //    unsafe { TODO: call ffi::gtk_stock_lookup() }
 //}
 
-//#[cfg_attr(feature = "v3_10", deprecated)]
-//pub fn stock_set_translate_func<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(domain: &str, func: /*Unknown conversion*//*Unimplemented*/TranslateFunc, data: P, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
-//    unsafe { TODO: call ffi::gtk_stock_set_translate_func() }
-//}
+#[cfg_attr(feature = "v3_10", deprecated)]
+pub fn stock_set_translate_func<P: Fn(&str) -> String + Send + Sync + 'static>(domain: &str, func: P) {
+    assert_initialized_main_thread!();
+    let func_data: Box_<P> = Box::new(func);
+    unsafe extern "C" fn func_func<P: Fn(&str) -> String + Send + Sync + 'static>(path: *const libc::c_char, func_data: glib_ffi::gpointer) -> *mut libc::c_char {
+        let path: GString = from_glib_borrow(path);
+        let callback: &P = &*(func_data as *mut _);
+        let res = (*callback)(path.as_str());
+        res.to_glib_full()
+    }
+    let func = Some(func_func::<P> as _);
+    unsafe extern "C" fn notify_func<P: Fn(&str) -> String + Send + Sync + 'static>(data: glib_ffi::gpointer) {
+        let _callback: Box_<P> = Box_::from_raw(data as *mut _);
+    }
+    let destroy_call3 = Some(notify_func::<P> as _);
+    let super_callback0: Box_<P> = func_data;
+    unsafe {
+        ffi::gtk_stock_set_translate_func(domain.to_glib_none().0, func, Box::into_raw(super_callback0) as *mut _, destroy_call3);
+    }
+}
 
 pub fn targets_include_image(targets: &[&gdk::Atom], writable: bool) -> bool {
     assert_initialized_main_thread!();
