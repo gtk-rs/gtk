@@ -28,36 +28,38 @@ impl TreeModelFilter {
 
 pub trait TreeModelFilterExtManual: 'static {
     fn set_visible_func<F>(&self, func: F)
-        where F: Fn(&TreeModel, &TreeIter) -> bool + 'static;
+        where F: Fn(&Self, &TreeIter) -> bool + 'static;
 }
 
 impl<O: IsA<TreeModelFilter>> TreeModelFilterExtManual for O {
     fn set_visible_func<F>(&self, func: F)
-    where F: Fn(&TreeModel, &TreeIter) -> bool + 'static {
+    where F: Fn(&Self, &TreeIter) -> bool + 'static {
         unsafe {
             ffi::gtk_tree_model_filter_set_visible_func(self.as_ref().to_glib_none().0,
-                                                        Some(trampoline),
+                                                        Some(trampoline::<Self, F>),
                                                         into_raw(func),
-                                                        Some(destroy_closure))
+                                                        Some(destroy_closure::<Self, F>))
         }
     }
 }
 
-unsafe extern "C" fn trampoline(this: *mut GtkTreeModel, iter: *mut GtkTreeIter,
-                                f: gpointer) -> gboolean {
-    let f: &&(Fn(&TreeModel, &TreeIter) -> bool) = transmute(f);
+unsafe extern "C" fn trampoline<T, F: Fn(&T, &TreeIter) -> bool + 'static>(this: *mut GtkTreeModel, iter: *mut GtkTreeIter,
+                                                                           f: gpointer) -> gboolean
+where T: IsA<TreeModelFilter> {
+    let f: &F = transmute(f);
     f(&TreeModel::from_glib_none(this).unsafe_cast(), &from_glib_borrow(iter))
     .to_glib()
 }
 
-unsafe extern "C" fn destroy_closure(ptr: gpointer) {
-    Box::<Box<Fn(&TreeModel, &TreeIter) -> bool + 'static>>::from_raw(ptr as *mut _);
+unsafe extern "C" fn destroy_closure<T, F: Fn(&T, &TreeIter) -> bool + 'static>(ptr: gpointer)
+where T: IsA<TreeModelFilter> {
+    Box::<F>::from_raw(ptr as *mut _);
 }
 
-fn into_raw<F>(func: F) -> gpointer
-    where F: Fn(&TreeModel, &TreeIter) -> bool + 'static {
+fn into_raw<T, F>(func: F) -> gpointer
+    where T: IsA<TreeModelFilter>,
+          F: Fn(&T, &TreeIter) -> bool + 'static {
     skip_assert_initialized!();
-    let func: Box<Box<Fn(&TreeModel, &TreeIter) -> bool + 'static>> =
-        Box::new(Box::new(func));
+    let func: Box<F> = Box::new(func);
     Box::into_raw(func) as gpointer
 }

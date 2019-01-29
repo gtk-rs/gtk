@@ -111,14 +111,14 @@ impl<O: IsA<Widget>> WidgetExtManual for O {
     where
         F: FnMut(&Self, &FrameClock) -> Continue + 'static,
     {
-        unsafe extern "C" fn add_tick_callback_trampoline<T>(
+        unsafe extern "C" fn add_tick_callback_trampoline<T, F: FnMut(&T, &FrameClock) -> Continue + 'static>(
             this: *mut ffi::GtkWidget,
             frame_clock: *mut gdk_ffi::GdkFrameClock,
             func: gpointer,
         ) -> gboolean
         where T: IsA<Widget>
         {
-            let func: &RefCell<Box<FnMut(&T, &FrameClock) -> Continue + 'static>> = transmute(func);
+            let func: &RefCell<F> = transmute(func);
 
             (&mut *func.borrow_mut())(
                 &Widget::from_glib_borrow(this).unsafe_cast(),
@@ -126,40 +126,34 @@ impl<O: IsA<Widget>> WidgetExtManual for O {
             ).to_glib()
         }
 
-        unsafe extern "C" fn destroy_closure<T>(func: gpointer) {
-            Box::<RefCell<Box<FnMut(&T, &FrameClock) -> Continue + 'static>>>::from_raw(
-                func as *mut _
-            );
+        unsafe extern "C" fn destroy_closure<T, F: FnMut(&T, &FrameClock) -> Continue + 'static>(func: gpointer) {
+            Box::<RefCell<F>>::from_raw(func as *mut _);
         }
 
-        let add_tick_callback_trampoline = add_tick_callback_trampoline::<Self>;
-        let func: Box<RefCell<Box<FnMut(&Self, &FrameClock) -> Continue + 'static>>> =
-            Box::new(RefCell::new(Box::new(func)));
-        let destroy_closure = destroy_closure::<Self>;
-                
+        let func: Box<RefCell<F>> = Box::new(RefCell::new(func));
         unsafe {
             ffi::gtk_widget_add_tick_callback(
                 self.as_ref().to_glib_none().0,
-                Some(add_tick_callback_trampoline),
+                Some(add_tick_callback_trampoline::<Self, F>),
                 Box::into_raw(func) as gpointer,
-                Some(destroy_closure),
+                Some(destroy_closure::<Self, F>),
             )
         }
     }
 
    fn connect_map_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box<Box<Fn(&Self, &Event) -> Inhibit + 'static>> = Box::new(Box::new(f));
+            let f: Box<F> = Box::new(f);
             connect_raw(self.to_glib_none().0 as *mut _, b"map-event\0".as_ptr() as *mut _,
-                transmute(event_any_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
+                Some(transmute(event_any_trampoline::<Self, F> as usize)), Box::into_raw(f))
         }
     }
 
     fn connect_unmap_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box<Box<Fn(&Self, &Event) -> Inhibit + 'static>> = Box::new(Box::new(f));
+            let f: Box<F> = Box::new(f);
             connect_raw(self.to_glib_none().0 as *mut _, b"unmap-event\0".as_ptr() as *mut _,
-                transmute(event_any_trampoline::<Self> as usize), Box::into_raw(f) as *mut _)
+                Some(transmute(event_any_trampoline::<Self, F> as usize)), Box::into_raw(f))
         }
     }
 
@@ -182,9 +176,9 @@ impl<O: IsA<Widget>> WidgetExtManual for O {
     }
 }
 
-unsafe extern "C" fn event_any_trampoline<T>(this: *mut ffi::GtkWidget,
+unsafe extern "C" fn event_any_trampoline<T, F: Fn(&T, &Event) -> Inhibit + 'static>(this: *mut ffi::GtkWidget,
                                              event: *mut gdk_ffi::GdkEventAny,
-                                             f: &&(Fn(&T, &Event) -> Inhibit + 'static)) -> gboolean
+                                             f: &F) -> gboolean
 where T: IsA<Widget> {
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
