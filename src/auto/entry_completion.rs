@@ -94,6 +94,8 @@ pub trait EntryCompletionExt: 'static {
 
     fn set_inline_selection(&self, inline_selection: bool);
 
+    fn set_match_func<P: Fn(&EntryCompletion, &str, &TreeIter) -> bool + 'static>(&self, func: P);
+
     fn set_minimum_key_length(&self, length: i32);
 
     fn set_model<'a, P: IsA<TreeModel> + 'a, Q: Into<Option<&'a P>>>(&self, model: Q);
@@ -242,6 +244,27 @@ impl<O: IsA<EntryCompletion>> EntryCompletionExt for O {
     fn set_inline_selection(&self, inline_selection: bool) {
         unsafe {
             ffi::gtk_entry_completion_set_inline_selection(self.as_ref().to_glib_none().0, inline_selection.to_glib());
+        }
+    }
+
+    fn set_match_func<P: Fn(&EntryCompletion, &str, &TreeIter) -> bool + 'static>(&self, func: P) {
+        let func_data: Box_<P> = Box::new(func);
+        unsafe extern "C" fn func_func<P: Fn(&EntryCompletion, &str, &TreeIter) -> bool + 'static>(completion: *mut ffi::GtkEntryCompletion, key: *const libc::c_char, iter: *mut ffi::GtkTreeIter, user_data: glib_ffi::gpointer) -> glib_ffi::gboolean {
+            let completion = from_glib_borrow(completion);
+            let key: GString = from_glib_borrow(key);
+            let iter = from_glib_borrow(iter);
+            let callback: &P = &*(user_data as *mut _);
+            let res = (*callback)(&completion, key.as_str(), &iter);
+            res.to_glib()
+        }
+        let func = Some(func_func::<P> as _);
+        unsafe extern "C" fn func_notify_func<P: Fn(&EntryCompletion, &str, &TreeIter) -> bool + 'static>(data: glib_ffi::gpointer) {
+            let _callback: Box_<P> = Box_::from_raw(data as *mut _);
+        }
+        let destroy_call3 = Some(func_notify_func::<P> as _);
+        let super_callback0: Box_<P> = func_data;
+        unsafe {
+            ffi::gtk_entry_completion_set_match_func(self.as_ref().to_glib_none().0, func, Box::into_raw(super_callback0) as *mut _, destroy_call3);
         }
     }
 

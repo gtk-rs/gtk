@@ -2,7 +2,6 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use TreeIter;
 use TreeModel;
 use ffi;
 use glib::object::Cast;
@@ -28,10 +27,6 @@ pub const NONE_TREE_SORTABLE: Option<&TreeSortable> = None;
 pub trait TreeSortableExt: 'static {
     fn has_default_sort_func(&self) -> bool;
 
-    fn set_default_sort_func<P: Fn(&TreeModel, &TreeIter, &TreeIter) -> i32 + 'static>(&self, sort_func: P);
-
-    fn set_sort_func<P: Fn(&TreeModel, &TreeIter, &TreeIter) -> i32 + 'static>(&self, sort_column_id: i32, sort_func: P);
-
     fn sort_column_changed(&self);
 
     fn connect_sort_column_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -41,48 +36,6 @@ impl<O: IsA<TreeSortable>> TreeSortableExt for O {
     fn has_default_sort_func(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_tree_sortable_has_default_sort_func(self.as_ref().to_glib_none().0))
-        }
-    }
-
-    fn set_default_sort_func<P: Fn(&TreeModel, &TreeIter, &TreeIter) -> i32 + 'static>(&self, sort_func: P) {
-        let sort_func_data: Box_<P> = Box::new(sort_func);
-        unsafe extern "C" fn sort_func_func<P: Fn(&TreeModel, &TreeIter, &TreeIter) -> i32 + 'static>(model: *mut ffi::GtkTreeModel, a: *mut ffi::GtkTreeIter, b: *mut ffi::GtkTreeIter, user_data: glib_ffi::gpointer) -> libc::c_int {
-            let model = from_glib_borrow(model);
-            let a = from_glib_borrow(a);
-            let b = from_glib_borrow(b);
-            let callback: &P = &*(user_data as *mut _);
-            let res = (*callback)(&model, &a, &b);
-            res
-        }
-        let sort_func = Some(sort_func_func::<P> as _);
-        unsafe extern "C" fn destroy_func<P: Fn(&TreeModel, &TreeIter, &TreeIter) -> i32 + 'static>(data: glib_ffi::gpointer) {
-            let _callback: Box_<P> = Box_::from_raw(data as *mut _);
-        }
-        let destroy_call3 = Some(destroy_func::<P> as _);
-        let super_callback0: Box_<P> = sort_func_data;
-        unsafe {
-            ffi::gtk_tree_sortable_set_default_sort_func(self.as_ref().to_glib_none().0, sort_func, Box::into_raw(super_callback0) as *mut _, destroy_call3);
-        }
-    }
-
-    fn set_sort_func<P: Fn(&TreeModel, &TreeIter, &TreeIter) -> i32 + 'static>(&self, sort_column_id: i32, sort_func: P) {
-        let sort_func_data: Box_<P> = Box::new(sort_func);
-        unsafe extern "C" fn sort_func_func<P: Fn(&TreeModel, &TreeIter, &TreeIter) -> i32 + 'static>(model: *mut ffi::GtkTreeModel, a: *mut ffi::GtkTreeIter, b: *mut ffi::GtkTreeIter, user_data: glib_ffi::gpointer) -> libc::c_int {
-            let model = from_glib_borrow(model);
-            let a = from_glib_borrow(a);
-            let b = from_glib_borrow(b);
-            let callback: &P = &*(user_data as *mut _);
-            let res = (*callback)(&model, &a, &b);
-            res
-        }
-        let sort_func = Some(sort_func_func::<P> as _);
-        unsafe extern "C" fn destroy_func<P: Fn(&TreeModel, &TreeIter, &TreeIter) -> i32 + 'static>(data: glib_ffi::gpointer) {
-            let _callback: Box_<P> = Box_::from_raw(data as *mut _);
-        }
-        let destroy_call4 = Some(destroy_func::<P> as _);
-        let super_callback0: Box_<P> = sort_func_data;
-        unsafe {
-            ffi::gtk_tree_sortable_set_sort_func(self.as_ref().to_glib_none().0, sort_column_id, sort_func, Box::into_raw(super_callback0) as *mut _, destroy_call4);
         }
     }
 

@@ -11,6 +11,8 @@ use MovementStep;
 use SelectionMode;
 use Widget;
 use ffi;
+#[cfg(any(feature = "v3_16", feature = "dox"))]
+use gio;
 use glib;
 use glib::StaticType;
 use glib::Value;
@@ -55,8 +57,8 @@ impl Default for ListBox {
 pub const NONE_LIST_BOX: Option<&ListBox> = None;
 
 pub trait ListBoxExt: 'static {
-    //#[cfg(any(feature = "v3_16", feature = "dox"))]
-    //fn bind_model<P: Fn(&glib::Object) -> Widget + 'static>(&self, model: /*Ignored*/Option<&gio::ListModel>, create_widget_func: P);
+    #[cfg(any(feature = "v3_16", feature = "dox"))]
+    fn bind_model<'a, P: IsA<gio::ListModel> + 'a, Q: Into<Option<&'a P>>, R: Fn(&glib::Object) -> Widget + 'static>(&self, model: Q, create_widget_func: R);
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn drag_highlight_row<P: IsA<ListBoxRow>>(&self, row: &P);
@@ -183,10 +185,26 @@ pub trait ListBoxExt: 'static {
 }
 
 impl<O: IsA<ListBox>> ListBoxExt for O {
-    //#[cfg(any(feature = "v3_16", feature = "dox"))]
-    //fn bind_model<P: Fn(&glib::Object) -> Widget + 'static>(&self, model: /*Ignored*/Option<&gio::ListModel>, create_widget_func: P) {
-    //    unsafe { TODO: call ffi::gtk_list_box_bind_model() }
-    //}
+    #[cfg(any(feature = "v3_16", feature = "dox"))]
+    fn bind_model<'a, P: IsA<gio::ListModel> + 'a, Q: Into<Option<&'a P>>, R: Fn(&glib::Object) -> Widget + 'static>(&self, model: Q, create_widget_func: R) {
+        let model = model.into();
+        let create_widget_func_data: Box_<R> = Box::new(create_widget_func);
+        unsafe extern "C" fn create_widget_func_func<'a, P: IsA<gio::ListModel> + 'a, Q: Into<Option<&'a P>>, R: Fn(&glib::Object) -> Widget + 'static>(item: *mut gobject_ffi::GObject, user_data: glib_ffi::gpointer) -> *mut ffi::GtkWidget {
+            let item = from_glib_borrow(item);
+            let callback: &R = &*(user_data as *mut _);
+            let res = (*callback)(&item);
+            res.to_glib_full()
+        }
+        let create_widget_func = Some(create_widget_func_func::<'a, P, Q, R> as _);
+        unsafe extern "C" fn user_data_free_func_func<'a, P: IsA<gio::ListModel> + 'a, Q: Into<Option<&'a P>>, R: Fn(&glib::Object) -> Widget + 'static>(data: glib_ffi::gpointer) {
+            let _callback: Box_<R> = Box_::from_raw(data as *mut _);
+        }
+        let destroy_call4 = Some(user_data_free_func_func::<'a, P, Q, R> as _);
+        let super_callback0: Box_<R> = create_widget_func_data;
+        unsafe {
+            ffi::gtk_list_box_bind_model(self.as_ref().to_glib_none().0, model.map(|p| p.as_ref()).to_glib_none().0, create_widget_func, Box::into_raw(super_callback0) as *mut _, destroy_call4);
+        }
+    }
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn drag_highlight_row<P: IsA<ListBoxRow>>(&self, row: &P) {

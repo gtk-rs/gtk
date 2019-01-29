@@ -284,6 +284,7 @@ manual = [
     "Gio.Cancellable",
     "Gio.File",
     "Gio.Icon",
+    "Gio.ListModel",
     "Gio.Menu",
     "Gio.MenuModel",
     "Gio.MountOperation",
@@ -799,9 +800,6 @@ status = "generate"
     [[object.signal]]
     name = "cursor-on-match"
     inhibit = true
-    [[object.function]]
-    name = "set_match_func"
-    ignore = true # manual implementation as a test for now
 
 [[object]]
 name = "Gtk.Expander"
@@ -1818,6 +1816,14 @@ name = "Gtk.TreeSortable"
 status = "generate"
     [[object.function]]
     pattern = "[gs]et_sort_column_id"
+    ignore = true
+    [[object.function]]
+    pattern = "set_sort_func"
+    # return type u32 -> Ordering
+    ignore = true
+    [[object.function]]
+    pattern = "set_default_sort_func"
+    # return type u32 -> Ordering
     ignore = true
 
 [[object]]
