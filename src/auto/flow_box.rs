@@ -57,7 +57,7 @@ pub const NONE_FLOW_BOX: Option<&FlowBox> = None;
 
 pub trait FlowBoxExt: 'static {
     //#[cfg(any(feature = "v3_18", feature = "dox"))]
-    //fn bind_model<'a, P: IsA</*Ignored*/gio::ListModel> + 'a, Q: Into<Option<&'a P>>>(&self, model: Q, create_widget_func: /*Unknown conversion*//*Unimplemented*/FlowBoxCreateWidgetFunc, user_data_free_func: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
+    //fn bind_model<P: Fn(&glib::Object) -> Widget + 'static>(&self, model: /*Ignored*/Option<&gio::ListModel>, create_widget_func: P);
 
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_activate_on_single_click(&self) -> bool;
@@ -104,8 +104,8 @@ pub trait FlowBoxExt: 'static {
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn select_child<P: IsA<FlowBoxChild>>(&self, child: &P);
 
-    //#[cfg(any(feature = "v3_12", feature = "dox"))]
-    //fn selected_foreach<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: /*Unknown conversion*//*Unimplemented*/FlowBoxForeachFunc, data: P);
+    #[cfg(any(feature = "v3_12", feature = "dox"))]
+    fn selected_foreach<P: FnMut(&FlowBox, &FlowBoxChild)>(&self, func: P);
 
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_activate_on_single_click(&self, single: bool);
@@ -113,8 +113,8 @@ pub trait FlowBoxExt: 'static {
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_column_spacing(&self, spacing: u32);
 
-    //#[cfg(any(feature = "v3_12", feature = "dox"))]
-    //fn set_filter_func<'a, P: Into<Option<&'a /*Unimplemented*/FlowBoxFilterFunc>>>(&self, filter_func: P, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
+    #[cfg(any(feature = "v3_12", feature = "dox"))]
+    fn set_filter_func<P: Fn(&FlowBoxChild) -> bool + 'static, Q: Into<Option<P>>>(&self, filter_func: Q);
 
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_hadjustment<P: IsA<Adjustment>>(&self, adjustment: &P);
@@ -134,8 +134,8 @@ pub trait FlowBoxExt: 'static {
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_selection_mode(&self, mode: SelectionMode);
 
-    //#[cfg(any(feature = "v3_12", feature = "dox"))]
-    //fn set_sort_func<'a, P: Into<Option<&'a /*Unimplemented*/FlowBoxSortFunc>>>(&self, sort_func: P, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
+    #[cfg(any(feature = "v3_12", feature = "dox"))]
+    fn set_sort_func<P: Fn(&FlowBoxChild, &FlowBoxChild) -> i32 + 'static, Q: Into<Option<P>>>(&self, sort_func: Q);
 
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_vadjustment<P: IsA<Adjustment>>(&self, adjustment: &P);
@@ -215,7 +215,7 @@ pub trait FlowBoxExt: 'static {
 
 impl<O: IsA<FlowBox>> FlowBoxExt for O {
     //#[cfg(any(feature = "v3_18", feature = "dox"))]
-    //fn bind_model<'a, P: IsA</*Ignored*/gio::ListModel> + 'a, Q: Into<Option<&'a P>>>(&self, model: Q, create_widget_func: /*Unknown conversion*//*Unimplemented*/FlowBoxCreateWidgetFunc, user_data_free_func: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
+    //fn bind_model<P: Fn(&glib::Object) -> Widget + 'static>(&self, model: /*Ignored*/Option<&gio::ListModel>, create_widget_func: P) {
     //    unsafe { TODO: call ffi::gtk_flow_box_bind_model() }
     //}
 
@@ -324,10 +324,21 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v3_12", feature = "dox"))]
-    //fn selected_foreach<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: /*Unknown conversion*//*Unimplemented*/FlowBoxForeachFunc, data: P) {
-    //    unsafe { TODO: call ffi::gtk_flow_box_selected_foreach() }
-    //}
+    #[cfg(any(feature = "v3_12", feature = "dox"))]
+    fn selected_foreach<P: FnMut(&FlowBox, &FlowBoxChild)>(&self, func: P) {
+        let func_data: P = func;
+        unsafe extern "C" fn func_func<P: FnMut(&FlowBox, &FlowBoxChild)>(box_: *mut ffi::GtkFlowBox, child: *mut ffi::GtkFlowBoxChild, user_data: glib_ffi::gpointer) {
+            let box_ = from_glib_borrow(box_);
+            let child = from_glib_borrow(child);
+            let callback: *mut P = user_data as *const _ as usize as *mut P;
+            (*callback)(&box_, &child);
+        }
+        let func = Some(func_func::<P> as _);
+        let super_callback0: &P = &func_data;
+        unsafe {
+            ffi::gtk_flow_box_selected_foreach(self.as_ref().to_glib_none().0, func, super_callback0 as *const _ as usize as *mut _);
+        }
+    }
 
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_activate_on_single_click(&self, single: bool) {
@@ -343,10 +354,30 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v3_12", feature = "dox"))]
-    //fn set_filter_func<'a, P: Into<Option<&'a /*Unimplemented*/FlowBoxFilterFunc>>>(&self, filter_func: P, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
-    //    unsafe { TODO: call ffi::gtk_flow_box_set_filter_func() }
-    //}
+    #[cfg(any(feature = "v3_12", feature = "dox"))]
+    fn set_filter_func<P: Fn(&FlowBoxChild) -> bool + 'static, Q: Into<Option<P>>>(&self, filter_func: Q) {
+        let filter_func = filter_func.into();
+        let filter_func_data: Box_<Option<P>> = Box::new(filter_func.into());
+        unsafe extern "C" fn filter_func_func<P: Fn(&FlowBoxChild) -> bool + 'static>(child: *mut ffi::GtkFlowBoxChild, user_data: glib_ffi::gpointer) -> glib_ffi::gboolean {
+            let child = from_glib_borrow(child);
+            let callback: &Option<P> = &*(user_data as *mut _);
+            let res = if let Some(ref callback) = *callback {
+                callback(&child)
+            } else {
+                panic!("cannot get closure...")
+            };
+            res.to_glib()
+        }
+        let filter_func = if filter_func_data.is_some() { Some(filter_func_func::<P> as _) } else { None };
+        unsafe extern "C" fn destroy_func<P: Fn(&FlowBoxChild) -> bool + 'static>(data: glib_ffi::gpointer) {
+            let _callback: Box_<Option<P>> = Box_::from_raw(data as *mut _);
+        }
+        let destroy_call3 = Some(destroy_func::<P> as _);
+        let super_callback0: Box_<Option<P>> = filter_func_data;
+        unsafe {
+            ffi::gtk_flow_box_set_filter_func(self.as_ref().to_glib_none().0, filter_func, Box::into_raw(super_callback0) as *mut _, destroy_call3);
+        }
+    }
 
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_hadjustment<P: IsA<Adjustment>>(&self, adjustment: &P) {
@@ -390,10 +421,31 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v3_12", feature = "dox"))]
-    //fn set_sort_func<'a, P: Into<Option<&'a /*Unimplemented*/FlowBoxSortFunc>>>(&self, sort_func: P, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
-    //    unsafe { TODO: call ffi::gtk_flow_box_set_sort_func() }
-    //}
+    #[cfg(any(feature = "v3_12", feature = "dox"))]
+    fn set_sort_func<P: Fn(&FlowBoxChild, &FlowBoxChild) -> i32 + 'static, Q: Into<Option<P>>>(&self, sort_func: Q) {
+        let sort_func = sort_func.into();
+        let sort_func_data: Box_<Option<P>> = Box::new(sort_func.into());
+        unsafe extern "C" fn sort_func_func<P: Fn(&FlowBoxChild, &FlowBoxChild) -> i32 + 'static>(child1: *mut ffi::GtkFlowBoxChild, child2: *mut ffi::GtkFlowBoxChild, user_data: glib_ffi::gpointer) -> libc::c_int {
+            let child1 = from_glib_borrow(child1);
+            let child2 = from_glib_borrow(child2);
+            let callback: &Option<P> = &*(user_data as *mut _);
+            let res = if let Some(ref callback) = *callback {
+                callback(&child1, &child2)
+            } else {
+                panic!("cannot get closure...")
+            };
+            res
+        }
+        let sort_func = if sort_func_data.is_some() { Some(sort_func_func::<P> as _) } else { None };
+        unsafe extern "C" fn destroy_func<P: Fn(&FlowBoxChild, &FlowBoxChild) -> i32 + 'static>(data: glib_ffi::gpointer) {
+            let _callback: Box_<Option<P>> = Box_::from_raw(data as *mut _);
+        }
+        let destroy_call3 = Some(destroy_func::<P> as _);
+        let super_callback0: Box_<Option<P>> = sort_func_data;
+        unsafe {
+            ffi::gtk_flow_box_set_sort_func(self.as_ref().to_glib_none().0, sort_func, Box::into_raw(super_callback0) as *mut _, destroy_call3);
+        }
+    }
 
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_vadjustment<P: IsA<Adjustment>>(&self, adjustment: &P) {

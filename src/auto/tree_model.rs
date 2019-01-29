@@ -29,7 +29,7 @@ glib_wrapper! {
 pub const NONE_TREE_MODEL: Option<&TreeModel> = None;
 
 pub trait TreeModelExt: 'static {
-    //fn foreach<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: /*Unknown conversion*//*Unimplemented*/TreeModelForeachFunc, user_data: P);
+    fn foreach<P: FnMut(&TreeModel, &TreePath, &TreeIter) -> bool>(&self, func: P);
 
     //fn get(&self, iter: &TreeIter, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
@@ -92,9 +92,22 @@ pub trait TreeModelExt: 'static {
 }
 
 impl<O: IsA<TreeModel>> TreeModelExt for O {
-    //fn foreach<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: /*Unknown conversion*//*Unimplemented*/TreeModelForeachFunc, user_data: P) {
-    //    unsafe { TODO: call ffi::gtk_tree_model_foreach() }
-    //}
+    fn foreach<P: FnMut(&TreeModel, &TreePath, &TreeIter) -> bool>(&self, func: P) {
+        let func_data: P = func;
+        unsafe extern "C" fn func_func<P: FnMut(&TreeModel, &TreePath, &TreeIter) -> bool>(model: *mut ffi::GtkTreeModel, path: *mut ffi::GtkTreePath, iter: *mut ffi::GtkTreeIter, data: glib_ffi::gpointer) -> glib_ffi::gboolean {
+            let model = from_glib_borrow(model);
+            let path = from_glib_borrow(path);
+            let iter = from_glib_borrow(iter);
+            let callback: *mut P = data as *const _ as usize as *mut P;
+            let res = (*callback)(&model, &path, &iter);
+            res.to_glib()
+        }
+        let func = Some(func_func::<P> as _);
+        let super_callback0: &P = &func_data;
+        unsafe {
+            ffi::gtk_tree_model_foreach(self.as_ref().to_glib_none().0, func, super_callback0 as *const _ as usize as *mut _);
+        }
+    }
 
     //fn get(&self, iter: &TreeIter, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
     //    unsafe { TODO: call ffi::gtk_tree_model_get() }

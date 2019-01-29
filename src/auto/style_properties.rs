@@ -29,12 +29,12 @@ impl StyleProperties {
     }
 
     //#[cfg_attr(feature = "v3_8", deprecated)]
-    //pub fn lookup_property(property_name: &str, parse_func: /*Unknown conversion*//*Unimplemented*/StylePropertyParser, pspec: /*Ignored*/glib::ParamSpec) -> bool {
+    //pub fn lookup_property(property_name: &str, pspec: /*Ignored*/glib::ParamSpec) -> Option<Fn(&str, &glib::Value, &Error) -> bool + 'static> {
     //    unsafe { TODO: call ffi::gtk_style_properties_lookup_property() }
     //}
 
     //#[cfg_attr(feature = "v3_8", deprecated)]
-    //pub fn register_property<'a, P: Into<Option<&'a /*Unimplemented*/StylePropertyParser>>, Q: IsA</*Ignored*/glib::ParamSpec>>(parse_func: P, pspec: &Q) {
+    //pub fn register_property<P: Fn(&str, &glib::Value, &Error) -> bool + 'static, Q: Into<Option<P>>>(parse_func: Q, pspec: /*Ignored*/&glib::ParamSpec) {
     //    unsafe { TODO: call ffi::gtk_style_properties_register_property() }
     //}
 }

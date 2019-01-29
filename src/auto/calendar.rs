@@ -6,6 +6,7 @@ use Buildable;
 use CalendarDisplayOptions;
 use Widget;
 use ffi;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Cast;
@@ -64,7 +65,7 @@ pub trait CalendarExt: 'static {
 
     fn select_month(&self, month: u32, year: u32);
 
-    //fn set_detail_func<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: /*Unknown conversion*//*Unimplemented*/CalendarDetailFunc, data: P, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
+    fn set_detail_func<P: Fn(&Calendar, u32, u32, u32) -> String + 'static>(&self, func: P);
 
     fn set_detail_height_rows(&self, rows: i32);
 
@@ -200,9 +201,24 @@ impl<O: IsA<Calendar>> CalendarExt for O {
         }
     }
 
-    //fn set_detail_func<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: /*Unknown conversion*//*Unimplemented*/CalendarDetailFunc, data: P, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
-    //    unsafe { TODO: call ffi::gtk_calendar_set_detail_func() }
-    //}
+    fn set_detail_func<P: Fn(&Calendar, u32, u32, u32) -> String + 'static>(&self, func: P) {
+        let func_data: Box_<P> = Box::new(func);
+        unsafe extern "C" fn func_func<P: Fn(&Calendar, u32, u32, u32) -> String + 'static>(calendar: *mut ffi::GtkCalendar, year: libc::c_uint, month: libc::c_uint, day: libc::c_uint, user_data: glib_ffi::gpointer) -> *mut libc::c_char {
+            let calendar = from_glib_borrow(calendar);
+            let callback: &P = &*(user_data as *mut _);
+            let res = (*callback)(&calendar, year, month, day);
+            res.to_glib_full()
+        }
+        let func = Some(func_func::<P> as _);
+        unsafe extern "C" fn destroy_func<P: Fn(&Calendar, u32, u32, u32) -> String + 'static>(data: glib_ffi::gpointer) {
+            let _callback: Box_<P> = Box_::from_raw(data as *mut _);
+        }
+        let destroy_call3 = Some(destroy_func::<P> as _);
+        let super_callback0: Box_<P> = func_data;
+        unsafe {
+            ffi::gtk_calendar_set_detail_func(self.as_ref().to_glib_none().0, func, Box::into_raw(super_callback0) as *mut _, destroy_call3);
+        }
+    }
 
     fn set_detail_height_rows(&self, rows: i32) {
         unsafe {

@@ -86,7 +86,7 @@ pub trait AssistantExt: 'static {
 
     fn set_current_page(&self, page_num: i32);
 
-    //fn set_forward_page_func<'a, P: Into<Option<&'a /*Unimplemented*/AssistantPageFunc>>, Q: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, page_func: P, data: Q, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
+    fn set_forward_page_func<P: Fn(i32) -> i32 + 'static, Q: Into<Option<P>>>(&self, page_func: Q);
 
     fn set_page_complete<P: IsA<Widget>>(&self, page: &P, complete: bool);
 
@@ -235,9 +235,28 @@ impl<O: IsA<Assistant>> AssistantExt for O {
         }
     }
 
-    //fn set_forward_page_func<'a, P: Into<Option<&'a /*Unimplemented*/AssistantPageFunc>>, Q: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, page_func: P, data: Q, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
-    //    unsafe { TODO: call ffi::gtk_assistant_set_forward_page_func() }
-    //}
+    fn set_forward_page_func<P: Fn(i32) -> i32 + 'static, Q: Into<Option<P>>>(&self, page_func: Q) {
+        let page_func = page_func.into();
+        let page_func_data: Box_<Option<P>> = Box::new(page_func.into());
+        unsafe extern "C" fn page_func_func<P: Fn(i32) -> i32 + 'static>(current_page: libc::c_int, data: glib_ffi::gpointer) -> libc::c_int {
+            let callback: &Option<P> = &*(data as *mut _);
+            let res = if let Some(ref callback) = *callback {
+                callback(current_page)
+            } else {
+                panic!("cannot get closure...")
+            };
+            res
+        }
+        let page_func = if page_func_data.is_some() { Some(page_func_func::<P> as _) } else { None };
+        unsafe extern "C" fn destroy_func<P: Fn(i32) -> i32 + 'static>(data: glib_ffi::gpointer) {
+            let _callback: Box_<Option<P>> = Box_::from_raw(data as *mut _);
+        }
+        let destroy_call3 = Some(destroy_func::<P> as _);
+        let super_callback0: Box_<Option<P>> = page_func_data;
+        unsafe {
+            ffi::gtk_assistant_set_forward_page_func(self.as_ref().to_glib_none().0, page_func, Box::into_raw(super_callback0) as *mut _, destroy_call3);
+        }
+    }
 
     fn set_page_complete<P: IsA<Widget>>(&self, page: &P, complete: bool) {
         unsafe {

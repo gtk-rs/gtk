@@ -70,7 +70,7 @@ pub const NONE_MENU: Option<&Menu> = None;
 pub trait GtkMenuExt: 'static {
     fn attach<P: IsA<Widget>>(&self, child: &P, left_attach: u32, right_attach: u32, top_attach: u32, bottom_attach: u32);
 
-    //fn attach_to_widget<'a, P: IsA<Widget>, Q: Into<Option<&'a /*Unimplemented*/MenuDetachFunc>>>(&self, attach_widget: &P, detacher: Q);
+    //fn attach_to_widget<P: IsA<Widget>, Q: FnOnce(&Widget, &Menu) + 'static, R: Into<Option<Q>>>(&self, attach_widget: &P, detacher: R);
 
     fn detach(&self);
 
@@ -98,7 +98,7 @@ pub trait GtkMenuExt: 'static {
     fn popdown(&self);
 
     //#[cfg_attr(feature = "v3_22", deprecated)]
-    //fn popup<'a, 'b, 'c, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>, R: IsA<Widget> + 'b, S: Into<Option<&'b R>>, T: Into<Option<&'c /*Unimplemented*/MenuPositionFunc>>, U: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, parent_menu_shell: Q, parent_menu_item: S, func: T, data: U, button: u32, activate_time: u32);
+    //fn popup<'a, 'b, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>, R: IsA<Widget> + 'b, S: Into<Option<&'b R>>, T: FnOnce(&Menu, i32, i32, bool) + 'static, U: Into<Option<T>>>(&self, parent_menu_shell: Q, parent_menu_item: S, func: U, button: u32, activate_time: u32);
 
     #[cfg(any(feature = "v3_22", feature = "dox"))]
     fn popup_at_pointer<'a, P: Into<Option<&'a gdk::Event>>>(&self, trigger_event: P);
@@ -110,7 +110,7 @@ pub trait GtkMenuExt: 'static {
     fn popup_at_widget<'a, P: IsA<Widget>, Q: Into<Option<&'a gdk::Event>>>(&self, widget: &P, widget_anchor: gdk::Gravity, menu_anchor: gdk::Gravity, trigger_event: Q);
 
     //#[cfg_attr(feature = "v3_22", deprecated)]
-    //fn popup_for_device<'a, 'b, 'c, 'd, 'e, P: Into<Option<&'a gdk::Device>>, Q: IsA<Widget> + 'b, R: Into<Option<&'b Q>>, S: IsA<Widget> + 'c, T: Into<Option<&'c S>>, U: Into<Option<&'d /*Unimplemented*/MenuPositionFunc>>, V: Into<Option</*Unimplemented*/Fundamental: Pointer>>, W: Into<Option<&'e /*Ignored*/glib::DestroyNotify>>>(&self, device: P, parent_menu_shell: R, parent_menu_item: T, func: U, data: V, destroy: W, button: u32, activate_time: u32);
+    //fn popup_for_device<'a, 'b, 'c, P: Into<Option<&'a gdk::Device>>, Q: IsA<Widget> + 'b, R: Into<Option<&'b Q>>, S: IsA<Widget> + 'c, T: Into<Option<&'c S>>, U: Fn(&Menu, i32, i32, bool) + 'static, V: Into<Option<U>>>(&self, device: P, parent_menu_shell: R, parent_menu_item: T, func: V, button: u32, activate_time: u32);
 
     fn reorder_child<P: IsA<Widget>>(&self, child: &P, position: i32);
 
@@ -227,7 +227,7 @@ impl<O: IsA<Menu>> GtkMenuExt for O {
         }
     }
 
-    //fn attach_to_widget<'a, P: IsA<Widget>, Q: Into<Option<&'a /*Unimplemented*/MenuDetachFunc>>>(&self, attach_widget: &P, detacher: Q) {
+    //fn attach_to_widget<P: IsA<Widget>, Q: FnOnce(&Widget, &Menu) + 'static, R: Into<Option<Q>>>(&self, attach_widget: &P, detacher: R) {
     //    unsafe { TODO: call ffi::gtk_menu_attach_to_widget() }
     //}
 
@@ -298,7 +298,7 @@ impl<O: IsA<Menu>> GtkMenuExt for O {
         }
     }
 
-    //fn popup<'a, 'b, 'c, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>, R: IsA<Widget> + 'b, S: Into<Option<&'b R>>, T: Into<Option<&'c /*Unimplemented*/MenuPositionFunc>>, U: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, parent_menu_shell: Q, parent_menu_item: S, func: T, data: U, button: u32, activate_time: u32) {
+    //fn popup<'a, 'b, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>, R: IsA<Widget> + 'b, S: Into<Option<&'b R>>, T: FnOnce(&Menu, i32, i32, bool) + 'static, U: Into<Option<T>>>(&self, parent_menu_shell: Q, parent_menu_item: S, func: U, button: u32, activate_time: u32) {
     //    unsafe { TODO: call ffi::gtk_menu_popup() }
     //}
 
@@ -326,7 +326,7 @@ impl<O: IsA<Menu>> GtkMenuExt for O {
         }
     }
 
-    //fn popup_for_device<'a, 'b, 'c, 'd, 'e, P: Into<Option<&'a gdk::Device>>, Q: IsA<Widget> + 'b, R: Into<Option<&'b Q>>, S: IsA<Widget> + 'c, T: Into<Option<&'c S>>, U: Into<Option<&'d /*Unimplemented*/MenuPositionFunc>>, V: Into<Option</*Unimplemented*/Fundamental: Pointer>>, W: Into<Option<&'e /*Ignored*/glib::DestroyNotify>>>(&self, device: P, parent_menu_shell: R, parent_menu_item: T, func: U, data: V, destroy: W, button: u32, activate_time: u32) {
+    //fn popup_for_device<'a, 'b, 'c, P: Into<Option<&'a gdk::Device>>, Q: IsA<Widget> + 'b, R: Into<Option<&'b Q>>, S: IsA<Widget> + 'c, T: Into<Option<&'c S>>, U: Fn(&Menu, i32, i32, bool) + 'static, V: Into<Option<U>>>(&self, device: P, parent_menu_shell: R, parent_menu_item: T, func: V, button: u32, activate_time: u32) {
     //    unsafe { TODO: call ffi::gtk_menu_popup_for_device() }
     //}
 

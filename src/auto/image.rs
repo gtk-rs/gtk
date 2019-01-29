@@ -47,10 +47,10 @@ impl Image {
         }
     }
 
-    pub fn new_from_animation(animation: &gdk_pixbuf::PixbufAnimation) -> Image {
+    pub fn new_from_animation<P: IsA<gdk_pixbuf::PixbufAnimation>>(animation: &P) -> Image {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_image_new_from_animation(animation.to_glib_none().0)).unsafe_cast()
+            Widget::from_glib_none(ffi::gtk_image_new_from_animation(animation.as_ref().to_glib_none().0)).unsafe_cast()
         }
     }
 
@@ -141,7 +141,7 @@ pub trait ImageExt: 'static {
 
     fn get_storage_type(&self) -> ImageType;
 
-    fn set_from_animation(&self, animation: &gdk_pixbuf::PixbufAnimation);
+    fn set_from_animation<P: IsA<gdk_pixbuf::PixbufAnimation>>(&self, animation: &P);
 
     fn set_from_file<P: AsRef<std::path::Path>>(&self, filename: P);
 
@@ -182,7 +182,7 @@ pub trait ImageExt: 'static {
 
     fn get_property_pixbuf_animation(&self) -> Option<gdk_pixbuf::PixbufAnimation>;
 
-    fn set_property_pixbuf_animation(&self, pixbuf_animation: Option<&gdk_pixbuf::PixbufAnimation>);
+    fn set_property_pixbuf_animation<P: IsA<gdk_pixbuf::PixbufAnimation> + glib::value::SetValueOptional>(&self, pixbuf_animation: Option<&P>);
 
     #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn get_property_resource(&self) -> Option<GString>;
@@ -274,9 +274,9 @@ impl<O: IsA<Image>> ImageExt for O {
         }
     }
 
-    fn set_from_animation(&self, animation: &gdk_pixbuf::PixbufAnimation) {
+    fn set_from_animation<P: IsA<gdk_pixbuf::PixbufAnimation>>(&self, animation: &P) {
         unsafe {
-            ffi::gtk_image_set_from_animation(self.as_ref().to_glib_none().0, animation.to_glib_none().0);
+            ffi::gtk_image_set_from_animation(self.as_ref().to_glib_none().0, animation.as_ref().to_glib_none().0);
         }
     }
 
@@ -403,7 +403,7 @@ impl<O: IsA<Image>> ImageExt for O {
         }
     }
 
-    fn set_property_pixbuf_animation(&self, pixbuf_animation: Option<&gdk_pixbuf::PixbufAnimation>) {
+    fn set_property_pixbuf_animation<P: IsA<gdk_pixbuf::PixbufAnimation> + glib::value::SetValueOptional>(&self, pixbuf_animation: Option<&P>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"pixbuf-animation\0".as_ptr() as *const _, Value::from(pixbuf_animation).to_glib_none().0);
         }

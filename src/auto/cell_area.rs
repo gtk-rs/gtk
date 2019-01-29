@@ -78,9 +78,9 @@ pub trait CellAreaExt: 'static {
 
     fn focus(&self, direction: DirectionType) -> bool;
 
-    //fn foreach<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, callback: /*Unknown conversion*//*Unimplemented*/CellCallback, callback_data: P);
+    fn foreach<P: FnMut(&CellRenderer) -> bool>(&self, callback: P);
 
-    //fn foreach_alloc<P: IsA<CellAreaContext>, Q: IsA<Widget>, R: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, context: &P, widget: &Q, cell_area: &gdk::Rectangle, background_area: &gdk::Rectangle, callback: /*Unknown conversion*//*Unimplemented*/CellAllocCallback, callback_data: R);
+    fn foreach_alloc<P: IsA<CellAreaContext>, Q: IsA<Widget>, R: FnMut(&CellRenderer, &gdk::Rectangle, &gdk::Rectangle) -> bool>(&self, context: &P, widget: &Q, cell_area: &gdk::Rectangle, background_area: &gdk::Rectangle, callback: R);
 
     fn get_cell_allocation<P: IsA<CellAreaContext>, Q: IsA<Widget>, R: IsA<CellRenderer>>(&self, context: &P, widget: &Q, renderer: &R, cell_area: &gdk::Rectangle) -> gdk::Rectangle;
 
@@ -237,13 +237,37 @@ impl<O: IsA<CellArea>> CellAreaExt for O {
         }
     }
 
-    //fn foreach<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, callback: /*Unknown conversion*//*Unimplemented*/CellCallback, callback_data: P) {
-    //    unsafe { TODO: call ffi::gtk_cell_area_foreach() }
-    //}
+    fn foreach<P: FnMut(&CellRenderer) -> bool>(&self, callback: P) {
+        let callback_data: P = callback;
+        unsafe extern "C" fn callback_func<P: FnMut(&CellRenderer) -> bool>(renderer: *mut ffi::GtkCellRenderer, data: glib_ffi::gpointer) -> glib_ffi::gboolean {
+            let renderer = from_glib_borrow(renderer);
+            let callback: *mut P = data as *const _ as usize as *mut P;
+            let res = (*callback)(&renderer);
+            res.to_glib()
+        }
+        let callback = Some(callback_func::<P> as _);
+        let super_callback0: &P = &callback_data;
+        unsafe {
+            ffi::gtk_cell_area_foreach(self.as_ref().to_glib_none().0, callback, super_callback0 as *const _ as usize as *mut _);
+        }
+    }
 
-    //fn foreach_alloc<P: IsA<CellAreaContext>, Q: IsA<Widget>, R: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, context: &P, widget: &Q, cell_area: &gdk::Rectangle, background_area: &gdk::Rectangle, callback: /*Unknown conversion*//*Unimplemented*/CellAllocCallback, callback_data: R) {
-    //    unsafe { TODO: call ffi::gtk_cell_area_foreach_alloc() }
-    //}
+    fn foreach_alloc<P: IsA<CellAreaContext>, Q: IsA<Widget>, R: FnMut(&CellRenderer, &gdk::Rectangle, &gdk::Rectangle) -> bool>(&self, context: &P, widget: &Q, cell_area: &gdk::Rectangle, background_area: &gdk::Rectangle, callback: R) {
+        let callback_data: R = callback;
+        unsafe extern "C" fn callback_func<P: IsA<CellAreaContext>, Q: IsA<Widget>, R: FnMut(&CellRenderer, &gdk::Rectangle, &gdk::Rectangle) -> bool>(renderer: *mut ffi::GtkCellRenderer, cell_area: *const gdk_ffi::GdkRectangle, cell_background: *const gdk_ffi::GdkRectangle, data: glib_ffi::gpointer) -> glib_ffi::gboolean {
+            let renderer = from_glib_borrow(renderer);
+            let cell_area = from_glib_borrow(cell_area);
+            let cell_background = from_glib_borrow(cell_background);
+            let callback: *mut R = data as *const _ as usize as *mut R;
+            let res = (*callback)(&renderer, &cell_area, &cell_background);
+            res.to_glib()
+        }
+        let callback = Some(callback_func::<P, Q, R> as _);
+        let super_callback0: &R = &callback_data;
+        unsafe {
+            ffi::gtk_cell_area_foreach_alloc(self.as_ref().to_glib_none().0, context.as_ref().to_glib_none().0, widget.as_ref().to_glib_none().0, cell_area.to_glib_none().0, background_area.to_glib_none().0, callback, super_callback0 as *const _ as usize as *mut _);
+        }
+    }
 
     fn get_cell_allocation<P: IsA<CellAreaContext>, Q: IsA<Widget>, R: IsA<CellRenderer>>(&self, context: &P, widget: &Q, renderer: &R, cell_area: &gdk::Rectangle) -> gdk::Rectangle {
         unsafe {

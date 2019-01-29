@@ -50,12 +50,12 @@ impl Settings {
     }
 
     //#[cfg_attr(feature = "v3_16", deprecated)]
-    //pub fn install_property<P: IsA</*Ignored*/glib::ParamSpec>>(pspec: &P) {
+    //pub fn install_property(pspec: /*Ignored*/&glib::ParamSpec) {
     //    unsafe { TODO: call ffi::gtk_settings_install_property() }
     //}
 
     //#[cfg_attr(feature = "v3_16", deprecated)]
-    //pub fn install_property_parser<P: IsA</*Ignored*/glib::ParamSpec>>(pspec: &P, parser: /*Unknown conversion*//*Unimplemented*/RcPropertyParser) {
+    //pub fn install_property_parser(pspec: /*Ignored*/&glib::ParamSpec, parser: /*Unimplemented*/Fn(/*Ignored*/glib::ParamSpec, /*Ignored*/glib::String, &glib::Value) -> bool) {
     //    unsafe { TODO: call ffi::gtk_settings_install_property_parser() }
     //}
 }

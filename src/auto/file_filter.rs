@@ -35,7 +35,7 @@ impl FileFilter {
         }
     }
 
-    //pub fn add_custom<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, needed: FileFilterFlags, func: /*Unknown conversion*//*Unimplemented*/FileFilterFunc, data: P, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
+    //pub fn add_custom(&self, needed: FileFilterFlags, func: /*Unimplemented*/Fn(/*Ignored*/FileFilterInfo) -> bool, data: /*Unimplemented*/Option<Fundamental: Pointer>) {
     //    unsafe { TODO: call ffi::gtk_file_filter_add_custom() }
     //}
 

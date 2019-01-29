@@ -44,7 +44,7 @@ pub trait FontChooserExt: 'static {
 
     fn get_show_preview_entry(&self) -> bool;
 
-    //fn set_filter_func<'a, P: Into<Option<&'a /*Unimplemented*/FontFilterFunc>>>(&self, filter: P, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
+    fn set_filter_func<P: Fn(&pango::FontFamily, &pango::FontFace) -> bool + 'static, Q: Into<Option<P>>>(&self, filter: Q);
 
     fn set_font(&self, fontname: &str);
 
@@ -118,9 +118,30 @@ impl<O: IsA<FontChooser>> FontChooserExt for O {
         }
     }
 
-    //fn set_filter_func<'a, P: Into<Option<&'a /*Unimplemented*/FontFilterFunc>>>(&self, filter: P, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
-    //    unsafe { TODO: call ffi::gtk_font_chooser_set_filter_func() }
-    //}
+    fn set_filter_func<P: Fn(&pango::FontFamily, &pango::FontFace) -> bool + 'static, Q: Into<Option<P>>>(&self, filter: Q) {
+        let filter = filter.into();
+        let filter_data: Box_<Option<P>> = Box::new(filter.into());
+        unsafe extern "C" fn filter_func<P: Fn(&pango::FontFamily, &pango::FontFace) -> bool + 'static>(family: *const pango_ffi::PangoFontFamily, face: *const pango_ffi::PangoFontFace, data: glib_ffi::gpointer) -> glib_ffi::gboolean {
+            let family = from_glib_borrow(family);
+            let face = from_glib_borrow(face);
+            let callback: &Option<P> = &*(data as *mut _);
+            let res = if let Some(ref callback) = *callback {
+                callback(&family, &face)
+            } else {
+                panic!("cannot get closure...")
+            };
+            res.to_glib()
+        }
+        let filter = if filter_data.is_some() { Some(filter_func::<P> as _) } else { None };
+        unsafe extern "C" fn destroy_func<P: Fn(&pango::FontFamily, &pango::FontFace) -> bool + 'static>(data: glib_ffi::gpointer) {
+            let _callback: Box_<Option<P>> = Box_::from_raw(data as *mut _);
+        }
+        let destroy_call3 = Some(destroy_func::<P> as _);
+        let super_callback0: Box_<Option<P>> = filter_data;
+        unsafe {
+            ffi::gtk_font_chooser_set_filter_func(self.as_ref().to_glib_none().0, filter, Box::into_raw(super_callback0) as *mut _, destroy_call3);
+        }
+    }
 
     fn set_font(&self, fontname: &str) {
         unsafe {

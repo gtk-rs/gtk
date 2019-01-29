@@ -34,7 +34,7 @@ pub trait TreeSelectionExt: 'static {
 
     fn get_mode(&self) -> SelectionMode;
 
-    //fn get_select_function(&self) -> /*Unknown conversion*//*Unimplemented*/TreeSelectionFunc;
+    //fn get_select_function(&self) -> Fn(&TreeSelection, &TreeModel, &TreePath, bool) -> bool + 'static;
 
     fn get_selected(&self) -> Option<(TreeModel, TreeIter)>;
 
@@ -56,11 +56,11 @@ pub trait TreeSelectionExt: 'static {
 
     fn select_range(&self, start_path: &TreePath, end_path: &TreePath);
 
-    //fn selected_foreach<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: /*Unknown conversion*//*Unimplemented*/TreeSelectionForeachFunc, data: P);
+    fn selected_foreach<P: FnMut(&TreeModel, &TreePath, &TreeIter)>(&self, func: P);
 
     fn set_mode(&self, type_: SelectionMode);
 
-    //fn set_select_function<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: /*Unknown conversion*//*Unimplemented*/TreeSelectionFunc, data: P, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify);
+    fn set_select_function<P: Fn(&TreeSelection, &TreeModel, &TreePath, bool) -> bool + 'static>(&self, func: P);
 
     fn unselect_all(&self);
 
@@ -88,7 +88,7 @@ impl<O: IsA<TreeSelection>> TreeSelectionExt for O {
         }
     }
 
-    //fn get_select_function(&self) -> /*Unknown conversion*//*Unimplemented*/TreeSelectionFunc {
+    //fn get_select_function(&self) -> Fn(&TreeSelection, &TreeModel, &TreePath, bool) -> bool + 'static {
     //    unsafe { TODO: call ffi::gtk_tree_selection_get_select_function() }
     //}
 
@@ -155,9 +155,21 @@ impl<O: IsA<TreeSelection>> TreeSelectionExt for O {
         }
     }
 
-    //fn selected_foreach<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: /*Unknown conversion*//*Unimplemented*/TreeSelectionForeachFunc, data: P) {
-    //    unsafe { TODO: call ffi::gtk_tree_selection_selected_foreach() }
-    //}
+    fn selected_foreach<P: FnMut(&TreeModel, &TreePath, &TreeIter)>(&self, func: P) {
+        let func_data: P = func;
+        unsafe extern "C" fn func_func<P: FnMut(&TreeModel, &TreePath, &TreeIter)>(model: *mut ffi::GtkTreeModel, path: *mut ffi::GtkTreePath, iter: *mut ffi::GtkTreeIter, data: glib_ffi::gpointer) {
+            let model = from_glib_borrow(model);
+            let path = from_glib_borrow(path);
+            let iter = from_glib_borrow(iter);
+            let callback: *mut P = data as *const _ as usize as *mut P;
+            (*callback)(&model, &path, &iter);
+        }
+        let func = Some(func_func::<P> as _);
+        let super_callback0: &P = &func_data;
+        unsafe {
+            ffi::gtk_tree_selection_selected_foreach(self.as_ref().to_glib_none().0, func, super_callback0 as *const _ as usize as *mut _);
+        }
+    }
 
     fn set_mode(&self, type_: SelectionMode) {
         unsafe {
@@ -165,9 +177,27 @@ impl<O: IsA<TreeSelection>> TreeSelectionExt for O {
         }
     }
 
-    //fn set_select_function<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: /*Unknown conversion*//*Unimplemented*/TreeSelectionFunc, data: P, destroy: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
-    //    unsafe { TODO: call ffi::gtk_tree_selection_set_select_function() }
-    //}
+    fn set_select_function<P: Fn(&TreeSelection, &TreeModel, &TreePath, bool) -> bool + 'static>(&self, func: P) {
+        let func_data: Box_<P> = Box::new(func);
+        unsafe extern "C" fn func_func<P: Fn(&TreeSelection, &TreeModel, &TreePath, bool) -> bool + 'static>(selection: *mut ffi::GtkTreeSelection, model: *mut ffi::GtkTreeModel, path: *mut ffi::GtkTreePath, path_currently_selected: glib_ffi::gboolean, data: glib_ffi::gpointer) -> glib_ffi::gboolean {
+            let selection = from_glib_borrow(selection);
+            let model = from_glib_borrow(model);
+            let path = from_glib_borrow(path);
+            let path_currently_selected = from_glib(path_currently_selected);
+            let callback: &P = &*(data as *mut _);
+            let res = (*callback)(&selection, &model, &path, path_currently_selected);
+            res.to_glib()
+        }
+        let func = Some(func_func::<P> as _);
+        unsafe extern "C" fn destroy_func<P: Fn(&TreeSelection, &TreeModel, &TreePath, bool) -> bool + 'static>(data: glib_ffi::gpointer) {
+            let _callback: Box_<P> = Box_::from_raw(data as *mut _);
+        }
+        let destroy_call3 = Some(destroy_func::<P> as _);
+        let super_callback0: Box_<P> = func_data;
+        unsafe {
+            ffi::gtk_tree_selection_set_select_function(self.as_ref().to_glib_none().0, func, Box::into_raw(super_callback0) as *mut _, destroy_call3);
+        }
+    }
 
     fn unselect_all(&self) {
         unsafe {

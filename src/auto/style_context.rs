@@ -91,7 +91,7 @@ pub trait StyleContextExt: 'static {
     fn add_region(&self, region_name: &str, flags: RegionFlags);
 
     //#[cfg_attr(feature = "v3_6", deprecated)]
-    //fn cancel_animations<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, region_id: P);
+    //fn cancel_animations(&self, region_id: /*Unimplemented*/Option<Fundamental: Pointer>);
 
     //fn get(&self, state: StateFlags, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
@@ -155,13 +155,13 @@ pub trait StyleContextExt: 'static {
     fn lookup_icon_set(&self, stock_id: &str) -> Option<IconSet>;
 
     //#[cfg_attr(feature = "v3_6", deprecated)]
-    //fn notify_state_change<P: IsA<gdk::Window>, Q: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, window: &P, region_id: Q, state: StateType, state_value: bool);
+    //fn notify_state_change<P: IsA<gdk::Window>>(&self, window: &P, region_id: /*Unimplemented*/Option<Fundamental: Pointer>, state: StateType, state_value: bool);
 
     #[cfg_attr(feature = "v3_6", deprecated)]
     fn pop_animatable_region(&self);
 
     //#[cfg_attr(feature = "v3_6", deprecated)]
-    //fn push_animatable_region<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, region_id: P);
+    //fn push_animatable_region(&self, region_id: /*Unimplemented*/Option<Fundamental: Pointer>);
 
     fn remove_class(&self, class_name: &str);
 
@@ -242,7 +242,7 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
         }
     }
 
-    //fn cancel_animations<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, region_id: P) {
+    //fn cancel_animations(&self, region_id: /*Unimplemented*/Option<Fundamental: Pointer>) {
     //    unsafe { TODO: call ffi::gtk_style_context_cancel_animations() }
     //}
 
@@ -412,7 +412,7 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
         }
     }
 
-    //fn notify_state_change<P: IsA<gdk::Window>, Q: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, window: &P, region_id: Q, state: StateType, state_value: bool) {
+    //fn notify_state_change<P: IsA<gdk::Window>>(&self, window: &P, region_id: /*Unimplemented*/Option<Fundamental: Pointer>, state: StateType, state_value: bool) {
     //    unsafe { TODO: call ffi::gtk_style_context_notify_state_change() }
     //}
 
@@ -422,7 +422,7 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
         }
     }
 
-    //fn push_animatable_region<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, region_id: P) {
+    //fn push_animatable_region(&self, region_id: /*Unimplemented*/Option<Fundamental: Pointer>) {
     //    unsafe { TODO: call ffi::gtk_style_context_push_animatable_region() }
     //}
 
