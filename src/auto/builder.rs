@@ -79,7 +79,7 @@ pub trait BuilderExt: 'static {
 
     //fn connect_signals(&self, user_data: /*Unimplemented*/Option<Fundamental: Pointer>);
 
-    //fn connect_signals_full(&self, func: /*Unimplemented*/Fn(&Builder, &glib::Object, &str, &str, &glib::Object, /*Ignored*/glib::ConnectFlags), user_data: /*Unimplemented*/Option<Fundamental: Pointer>);
+    //fn connect_signals_full(&self, func: /*Unimplemented*/FnMut(&Builder, &glib::Object, &str, &str, &glib::Object, /*Ignored*/glib::ConnectFlags), user_data: /*Unimplemented*/Option<Fundamental: Pointer>);
 
     #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn expose_object<P: IsA<glib::Object>>(&self, name: &str, object: &P);
@@ -96,7 +96,7 @@ pub trait BuilderExt: 'static {
     fn get_type_from_name(&self, type_name: &str) -> glib::types::Type;
 
     //#[cfg(any(feature = "v3_10", feature = "dox"))]
-    //fn lookup_callback_symbol(&self, callback_name: &str) -> Fn() + 'static;
+    //fn lookup_callback_symbol(&self, callback_name: &str) -> Option<Box<dyn Fn() + 'static>>;
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_application<P: IsA<Application>>(&self, application: &P);
@@ -159,7 +159,7 @@ impl<O: IsA<Builder>> BuilderExt for O {
     //    unsafe { TODO: call ffi::gtk_builder_connect_signals() }
     //}
 
-    //fn connect_signals_full(&self, func: /*Unimplemented*/Fn(&Builder, &glib::Object, &str, &str, &glib::Object, /*Ignored*/glib::ConnectFlags), user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
+    //fn connect_signals_full(&self, func: /*Unimplemented*/FnMut(&Builder, &glib::Object, &str, &str, &glib::Object, /*Ignored*/glib::ConnectFlags), user_data: /*Unimplemented*/Option<Fundamental: Pointer>) {
     //    unsafe { TODO: call ffi::gtk_builder_connect_signals_full() }
     //}
 
@@ -205,7 +205,7 @@ impl<O: IsA<Builder>> BuilderExt for O {
     }
 
     //#[cfg(any(feature = "v3_10", feature = "dox"))]
-    //fn lookup_callback_symbol(&self, callback_name: &str) -> Fn() + 'static {
+    //fn lookup_callback_symbol(&self, callback_name: &str) -> Option<Box<dyn Fn() + 'static>> {
     //    unsafe { TODO: call ffi::gtk_builder_lookup_callback_symbol() }
     //}
 
@@ -238,16 +238,16 @@ impl<O: IsA<Builder>> BuilderExt for O {
 
     fn connect_property_translation_domain_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::translation-domain\0".as_ptr() as *const _,
-                transmute(notify_translation_domain_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_translation_domain_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn notify_translation_domain_trampoline<P>(this: *mut ffi::GtkBuilder, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_translation_domain_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkBuilder, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Builder> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Builder::from_glib_borrow(this).unsafe_cast())
 }
 

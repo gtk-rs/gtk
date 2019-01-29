@@ -89,9 +89,9 @@ impl<O: IsA<ShortcutsWindow>> ShortcutsWindowExt for O {
 
     fn connect_close<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"close\0".as_ptr() as *const _,
-                transmute(close_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(close_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -101,9 +101,9 @@ impl<O: IsA<ShortcutsWindow>> ShortcutsWindowExt for O {
 
     fn connect_search<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"search\0".as_ptr() as *const _,
-                transmute(search_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(search_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -113,42 +113,42 @@ impl<O: IsA<ShortcutsWindow>> ShortcutsWindowExt for O {
 
     fn connect_property_section_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::section-name\0".as_ptr() as *const _,
-                transmute(notify_section_name_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_section_name_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_view_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::view-name\0".as_ptr() as *const _,
-                transmute(notify_view_name_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_view_name_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn close_trampoline<P>(this: *mut ffi::GtkShortcutsWindow, f: glib_ffi::gpointer)
+unsafe extern "C" fn close_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkShortcutsWindow, f: glib_ffi::gpointer)
 where P: IsA<ShortcutsWindow> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&ShortcutsWindow::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn search_trampoline<P>(this: *mut ffi::GtkShortcutsWindow, f: glib_ffi::gpointer)
+unsafe extern "C" fn search_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkShortcutsWindow, f: glib_ffi::gpointer)
 where P: IsA<ShortcutsWindow> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&ShortcutsWindow::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_section_name_trampoline<P>(this: *mut ffi::GtkShortcutsWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_section_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkShortcutsWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ShortcutsWindow> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&ShortcutsWindow::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_view_name_trampoline<P>(this: *mut ffi::GtkShortcutsWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_view_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkShortcutsWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ShortcutsWindow> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&ShortcutsWindow::from_glib_borrow(this).unsafe_cast())
 }
 

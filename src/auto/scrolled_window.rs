@@ -462,26 +462,26 @@ impl<O: IsA<ScrolledWindow>> ScrolledWindowExt for O {
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn connect_edge_overshot<F: Fn(&Self, PositionType) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, PositionType) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"edge-overshot\0".as_ptr() as *const _,
-                transmute(edge_overshot_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(edge_overshot_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn connect_edge_reached<F: Fn(&Self, PositionType) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, PositionType) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"edge-reached\0".as_ptr() as *const _,
-                transmute(edge_reached_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(edge_reached_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_move_focus_out<F: Fn(&Self, DirectionType) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, DirectionType) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"move-focus-out\0".as_ptr() as *const _,
-                transmute(move_focus_out_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(move_focus_out_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -491,9 +491,9 @@ impl<O: IsA<ScrolledWindow>> ScrolledWindowExt for O {
 
     fn connect_scroll_child<F: Fn(&Self, ScrollType, bool) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, ScrollType, bool) -> bool + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"scroll-child\0".as_ptr() as *const _,
-                transmute(scroll_child_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(scroll_child_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -504,248 +504,248 @@ impl<O: IsA<ScrolledWindow>> ScrolledWindowExt for O {
 
     fn connect_property_hadjustment_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::hadjustment\0".as_ptr() as *const _,
-                transmute(notify_hadjustment_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_hadjustment_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_hscrollbar_policy_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::hscrollbar-policy\0".as_ptr() as *const _,
-                transmute(notify_hscrollbar_policy_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_hscrollbar_policy_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_kinetic_scrolling_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::kinetic-scrolling\0".as_ptr() as *const _,
-                transmute(notify_kinetic_scrolling_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_kinetic_scrolling_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_22", feature = "dox"))]
     fn connect_property_max_content_height_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::max-content-height\0".as_ptr() as *const _,
-                transmute(notify_max_content_height_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_max_content_height_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_22", feature = "dox"))]
     fn connect_property_max_content_width_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::max-content-width\0".as_ptr() as *const _,
-                transmute(notify_max_content_width_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_max_content_width_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_min_content_height_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::min-content-height\0".as_ptr() as *const _,
-                transmute(notify_min_content_height_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_min_content_height_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_min_content_width_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::min-content-width\0".as_ptr() as *const _,
-                transmute(notify_min_content_width_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_min_content_width_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn connect_property_overlay_scrolling_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::overlay-scrolling\0".as_ptr() as *const _,
-                transmute(notify_overlay_scrolling_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_overlay_scrolling_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_22", feature = "dox"))]
     fn connect_property_propagate_natural_height_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::propagate-natural-height\0".as_ptr() as *const _,
-                transmute(notify_propagate_natural_height_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_propagate_natural_height_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_22", feature = "dox"))]
     fn connect_property_propagate_natural_width_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::propagate-natural-width\0".as_ptr() as *const _,
-                transmute(notify_propagate_natural_width_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_propagate_natural_width_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_shadow_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::shadow-type\0".as_ptr() as *const _,
-                transmute(notify_shadow_type_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_shadow_type_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_vadjustment_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::vadjustment\0".as_ptr() as *const _,
-                transmute(notify_vadjustment_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_vadjustment_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_vscrollbar_policy_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::vscrollbar-policy\0".as_ptr() as *const _,
-                transmute(notify_vscrollbar_policy_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_vscrollbar_policy_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_window_placement_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::window-placement\0".as_ptr() as *const _,
-                transmute(notify_window_placement_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_window_placement_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_window_placement_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::window-placement-set\0".as_ptr() as *const _,
-                transmute(notify_window_placement_set_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_window_placement_set_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn edge_overshot_trampoline<P>(this: *mut ffi::GtkScrolledWindow, pos: ffi::GtkPositionType, f: glib_ffi::gpointer)
+unsafe extern "C" fn edge_overshot_trampoline<P, F: Fn(&P, PositionType) + 'static>(this: *mut ffi::GtkScrolledWindow, pos: ffi::GtkPositionType, f: glib_ffi::gpointer)
 where P: IsA<ScrolledWindow> {
-    let f: &&(Fn(&P, PositionType) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&ScrolledWindow::from_glib_borrow(this).unsafe_cast(), from_glib(pos))
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn edge_reached_trampoline<P>(this: *mut ffi::GtkScrolledWindow, pos: ffi::GtkPositionType, f: glib_ffi::gpointer)
+unsafe extern "C" fn edge_reached_trampoline<P, F: Fn(&P, PositionType) + 'static>(this: *mut ffi::GtkScrolledWindow, pos: ffi::GtkPositionType, f: glib_ffi::gpointer)
 where P: IsA<ScrolledWindow> {
-    let f: &&(Fn(&P, PositionType) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&ScrolledWindow::from_glib_borrow(this).unsafe_cast(), from_glib(pos))
 }
 
-unsafe extern "C" fn move_focus_out_trampoline<P>(this: *mut ffi::GtkScrolledWindow, direction_type: ffi::GtkDirectionType, f: glib_ffi::gpointer)
+unsafe extern "C" fn move_focus_out_trampoline<P, F: Fn(&P, DirectionType) + 'static>(this: *mut ffi::GtkScrolledWindow, direction_type: ffi::GtkDirectionType, f: glib_ffi::gpointer)
 where P: IsA<ScrolledWindow> {
-    let f: &&(Fn(&P, DirectionType) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&ScrolledWindow::from_glib_borrow(this).unsafe_cast(), from_glib(direction_type))
 }
 
-unsafe extern "C" fn scroll_child_trampoline<P>(this: *mut ffi::GtkScrolledWindow, scroll: ffi::GtkScrollType, horizontal: glib_ffi::gboolean, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn scroll_child_trampoline<P, F: Fn(&P, ScrollType, bool) -> bool + 'static>(this: *mut ffi::GtkScrolledWindow, scroll: ffi::GtkScrollType, horizontal: glib_ffi::gboolean, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<ScrolledWindow> {
-    let f: &&(Fn(&P, ScrollType, bool) -> bool + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&ScrolledWindow::from_glib_borrow(this).unsafe_cast(), from_glib(scroll), from_glib(horizontal)).to_glib()
 }
 
-unsafe extern "C" fn notify_hadjustment_trampoline<P>(this: *mut ffi::GtkScrolledWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_hadjustment_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkScrolledWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ScrolledWindow> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&ScrolledWindow::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_hscrollbar_policy_trampoline<P>(this: *mut ffi::GtkScrolledWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_hscrollbar_policy_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkScrolledWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ScrolledWindow> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&ScrolledWindow::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_kinetic_scrolling_trampoline<P>(this: *mut ffi::GtkScrolledWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_kinetic_scrolling_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkScrolledWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ScrolledWindow> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ScrolledWindow::from_glib_borrow(this).unsafe_cast())
-}
-
-#[cfg(any(feature = "v3_22", feature = "dox"))]
-unsafe extern "C" fn notify_max_content_height_trampoline<P>(this: *mut ffi::GtkScrolledWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<ScrolledWindow> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&ScrolledWindow::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_22", feature = "dox"))]
-unsafe extern "C" fn notify_max_content_width_trampoline<P>(this: *mut ffi::GtkScrolledWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_max_content_height_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkScrolledWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ScrolledWindow> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&ScrolledWindow::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_min_content_height_trampoline<P>(this: *mut ffi::GtkScrolledWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+#[cfg(any(feature = "v3_22", feature = "dox"))]
+unsafe extern "C" fn notify_max_content_width_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkScrolledWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ScrolledWindow> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&ScrolledWindow::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_min_content_width_trampoline<P>(this: *mut ffi::GtkScrolledWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_min_content_height_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkScrolledWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ScrolledWindow> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
+    f(&ScrolledWindow::from_glib_borrow(this).unsafe_cast())
+}
+
+unsafe extern "C" fn notify_min_content_width_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkScrolledWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+where P: IsA<ScrolledWindow> {
+    let f: &F = transmute(f);
     f(&ScrolledWindow::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn notify_overlay_scrolling_trampoline<P>(this: *mut ffi::GtkScrolledWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_overlay_scrolling_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkScrolledWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ScrolledWindow> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&ScrolledWindow::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_22", feature = "dox"))]
-unsafe extern "C" fn notify_propagate_natural_height_trampoline<P>(this: *mut ffi::GtkScrolledWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_propagate_natural_height_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkScrolledWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ScrolledWindow> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&ScrolledWindow::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_22", feature = "dox"))]
-unsafe extern "C" fn notify_propagate_natural_width_trampoline<P>(this: *mut ffi::GtkScrolledWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_propagate_natural_width_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkScrolledWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ScrolledWindow> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&ScrolledWindow::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_shadow_type_trampoline<P>(this: *mut ffi::GtkScrolledWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_shadow_type_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkScrolledWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ScrolledWindow> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&ScrolledWindow::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_vadjustment_trampoline<P>(this: *mut ffi::GtkScrolledWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_vadjustment_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkScrolledWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ScrolledWindow> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&ScrolledWindow::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_vscrollbar_policy_trampoline<P>(this: *mut ffi::GtkScrolledWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_vscrollbar_policy_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkScrolledWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ScrolledWindow> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&ScrolledWindow::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_window_placement_trampoline<P>(this: *mut ffi::GtkScrolledWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_window_placement_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkScrolledWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ScrolledWindow> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&ScrolledWindow::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_window_placement_set_trampoline<P>(this: *mut ffi::GtkScrolledWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_window_placement_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkScrolledWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ScrolledWindow> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&ScrolledWindow::from_glib_borrow(this).unsafe_cast())
 }
 

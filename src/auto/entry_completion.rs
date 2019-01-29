@@ -292,186 +292,186 @@ impl<O: IsA<EntryCompletion>> EntryCompletionExt for O {
 
     fn connect_action_activated<F: Fn(&Self, i32) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, i32) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"action-activated\0".as_ptr() as *const _,
-                transmute(action_activated_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(action_activated_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_cursor_on_match<F: Fn(&Self, &TreeModel, &TreeIter) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &TreeModel, &TreeIter) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"cursor-on-match\0".as_ptr() as *const _,
-                transmute(cursor_on_match_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(cursor_on_match_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_insert_prefix<F: Fn(&Self, &str) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &str) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"insert-prefix\0".as_ptr() as *const _,
-                transmute(insert_prefix_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(insert_prefix_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_match_selected<F: Fn(&Self, &TreeModel, &TreeIter) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &TreeModel, &TreeIter) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"match-selected\0".as_ptr() as *const _,
-                transmute(match_selected_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(match_selected_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_no_matches<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"no-matches\0".as_ptr() as *const _,
-                transmute(no_matches_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(no_matches_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_inline_completion_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::inline-completion\0".as_ptr() as *const _,
-                transmute(notify_inline_completion_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_inline_completion_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_inline_selection_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::inline-selection\0".as_ptr() as *const _,
-                transmute(notify_inline_selection_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_inline_selection_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_minimum_key_length_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::minimum-key-length\0".as_ptr() as *const _,
-                transmute(notify_minimum_key_length_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_minimum_key_length_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_model_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::model\0".as_ptr() as *const _,
-                transmute(notify_model_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_model_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_popup_completion_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::popup-completion\0".as_ptr() as *const _,
-                transmute(notify_popup_completion_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_popup_completion_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_popup_set_width_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::popup-set-width\0".as_ptr() as *const _,
-                transmute(notify_popup_set_width_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_popup_set_width_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_popup_single_match_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::popup-single-match\0".as_ptr() as *const _,
-                transmute(notify_popup_single_match_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_popup_single_match_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_text_column_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::text-column\0".as_ptr() as *const _,
-                transmute(notify_text_column_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_text_column_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn action_activated_trampoline<P>(this: *mut ffi::GtkEntryCompletion, index: libc::c_int, f: glib_ffi::gpointer)
+unsafe extern "C" fn action_activated_trampoline<P, F: Fn(&P, i32) + 'static>(this: *mut ffi::GtkEntryCompletion, index: libc::c_int, f: glib_ffi::gpointer)
 where P: IsA<EntryCompletion> {
-    let f: &&(Fn(&P, i32) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&EntryCompletion::from_glib_borrow(this).unsafe_cast(), index)
 }
 
-unsafe extern "C" fn cursor_on_match_trampoline<P>(this: *mut ffi::GtkEntryCompletion, model: *mut ffi::GtkTreeModel, iter: *mut ffi::GtkTreeIter, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn cursor_on_match_trampoline<P, F: Fn(&P, &TreeModel, &TreeIter) -> Inhibit + 'static>(this: *mut ffi::GtkEntryCompletion, model: *mut ffi::GtkTreeModel, iter: *mut ffi::GtkTreeIter, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<EntryCompletion> {
-    let f: &&(Fn(&P, &TreeModel, &TreeIter) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&EntryCompletion::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(model), &from_glib_borrow(iter)).to_glib()
 }
 
-unsafe extern "C" fn insert_prefix_trampoline<P>(this: *mut ffi::GtkEntryCompletion, prefix: *mut libc::c_char, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn insert_prefix_trampoline<P, F: Fn(&P, &str) -> Inhibit + 'static>(this: *mut ffi::GtkEntryCompletion, prefix: *mut libc::c_char, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<EntryCompletion> {
-    let f: &&(Fn(&P, &str) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&EntryCompletion::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(prefix)).to_glib()
 }
 
-unsafe extern "C" fn match_selected_trampoline<P>(this: *mut ffi::GtkEntryCompletion, model: *mut ffi::GtkTreeModel, iter: *mut ffi::GtkTreeIter, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn match_selected_trampoline<P, F: Fn(&P, &TreeModel, &TreeIter) -> Inhibit + 'static>(this: *mut ffi::GtkEntryCompletion, model: *mut ffi::GtkTreeModel, iter: *mut ffi::GtkTreeIter, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<EntryCompletion> {
-    let f: &&(Fn(&P, &TreeModel, &TreeIter) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&EntryCompletion::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(model), &from_glib_borrow(iter)).to_glib()
 }
 
 #[cfg(any(feature = "v3_14", feature = "dox"))]
-unsafe extern "C" fn no_matches_trampoline<P>(this: *mut ffi::GtkEntryCompletion, f: glib_ffi::gpointer)
+unsafe extern "C" fn no_matches_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntryCompletion, f: glib_ffi::gpointer)
 where P: IsA<EntryCompletion> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&EntryCompletion::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_inline_completion_trampoline<P>(this: *mut ffi::GtkEntryCompletion, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_inline_completion_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntryCompletion, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<EntryCompletion> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&EntryCompletion::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_inline_selection_trampoline<P>(this: *mut ffi::GtkEntryCompletion, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_inline_selection_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntryCompletion, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<EntryCompletion> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&EntryCompletion::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_minimum_key_length_trampoline<P>(this: *mut ffi::GtkEntryCompletion, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_minimum_key_length_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntryCompletion, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<EntryCompletion> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&EntryCompletion::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_model_trampoline<P>(this: *mut ffi::GtkEntryCompletion, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_model_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntryCompletion, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<EntryCompletion> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&EntryCompletion::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_popup_completion_trampoline<P>(this: *mut ffi::GtkEntryCompletion, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_popup_completion_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntryCompletion, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<EntryCompletion> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&EntryCompletion::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_popup_set_width_trampoline<P>(this: *mut ffi::GtkEntryCompletion, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_popup_set_width_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntryCompletion, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<EntryCompletion> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&EntryCompletion::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_popup_single_match_trampoline<P>(this: *mut ffi::GtkEntryCompletion, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_popup_single_match_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntryCompletion, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<EntryCompletion> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&EntryCompletion::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_text_column_trampoline<P>(this: *mut ffi::GtkEntryCompletion, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_text_column_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntryCompletion, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<EntryCompletion> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&EntryCompletion::from_glib_borrow(this).unsafe_cast())
 }
 

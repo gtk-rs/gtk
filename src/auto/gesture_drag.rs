@@ -88,49 +88,49 @@ impl<O: IsA<GestureDrag>> GestureDragExt for O {
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_drag_begin<F: Fn(&Self, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, f64, f64) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"drag-begin\0".as_ptr() as *const _,
-                transmute(drag_begin_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(drag_begin_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_drag_end<F: Fn(&Self, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, f64, f64) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"drag-end\0".as_ptr() as *const _,
-                transmute(drag_end_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(drag_end_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_drag_update<F: Fn(&Self, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, f64, f64) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"drag-update\0".as_ptr() as *const _,
-                transmute(drag_update_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(drag_update_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
 #[cfg(any(feature = "v3_14", feature = "dox"))]
-unsafe extern "C" fn drag_begin_trampoline<P>(this: *mut ffi::GtkGestureDrag, start_x: libc::c_double, start_y: libc::c_double, f: glib_ffi::gpointer)
+unsafe extern "C" fn drag_begin_trampoline<P, F: Fn(&P, f64, f64) + 'static>(this: *mut ffi::GtkGestureDrag, start_x: libc::c_double, start_y: libc::c_double, f: glib_ffi::gpointer)
 where P: IsA<GestureDrag> {
-    let f: &&(Fn(&P, f64, f64) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&GestureDrag::from_glib_borrow(this).unsafe_cast(), start_x, start_y)
 }
 
 #[cfg(any(feature = "v3_14", feature = "dox"))]
-unsafe extern "C" fn drag_end_trampoline<P>(this: *mut ffi::GtkGestureDrag, offset_x: libc::c_double, offset_y: libc::c_double, f: glib_ffi::gpointer)
+unsafe extern "C" fn drag_end_trampoline<P, F: Fn(&P, f64, f64) + 'static>(this: *mut ffi::GtkGestureDrag, offset_x: libc::c_double, offset_y: libc::c_double, f: glib_ffi::gpointer)
 where P: IsA<GestureDrag> {
-    let f: &&(Fn(&P, f64, f64) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&GestureDrag::from_glib_borrow(this).unsafe_cast(), offset_x, offset_y)
 }
 
 #[cfg(any(feature = "v3_14", feature = "dox"))]
-unsafe extern "C" fn drag_update_trampoline<P>(this: *mut ffi::GtkGestureDrag, offset_x: libc::c_double, offset_y: libc::c_double, f: glib_ffi::gpointer)
+unsafe extern "C" fn drag_update_trampoline<P, F: Fn(&P, f64, f64) + 'static>(this: *mut ffi::GtkGestureDrag, offset_x: libc::c_double, offset_y: libc::c_double, f: glib_ffi::gpointer)
 where P: IsA<GestureDrag> {
-    let f: &&(Fn(&P, f64, f64) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&GestureDrag::from_glib_borrow(this).unsafe_cast(), offset_x, offset_y)
 }
 

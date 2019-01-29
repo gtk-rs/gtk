@@ -128,30 +128,30 @@ impl<O: IsA<AccelLabel>> AccelLabelExt for O {
 
     fn connect_property_accel_closure_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::accel-closure\0".as_ptr() as *const _,
-                transmute(notify_accel_closure_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_accel_closure_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_accel_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::accel-widget\0".as_ptr() as *const _,
-                transmute(notify_accel_widget_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_accel_widget_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn notify_accel_closure_trampoline<P>(this: *mut ffi::GtkAccelLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_accel_closure_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAccelLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AccelLabel> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&AccelLabel::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_accel_widget_trampoline<P>(this: *mut ffi::GtkAccelLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_accel_widget_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAccelLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AccelLabel> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&AccelLabel::from_glib_borrow(this).unsafe_cast())
 }
 

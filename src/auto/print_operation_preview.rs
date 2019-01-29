@@ -58,30 +58,30 @@ impl<O: IsA<PrintOperationPreview>> PrintOperationPreviewExt for O {
 
     fn connect_got_page_size<F: Fn(&Self, &PrintContext, &PageSetup) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &PrintContext, &PageSetup) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"got-page-size\0".as_ptr() as *const _,
-                transmute(got_page_size_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(got_page_size_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_ready<F: Fn(&Self, &PrintContext) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &PrintContext) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"ready\0".as_ptr() as *const _,
-                transmute(ready_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(ready_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn got_page_size_trampoline<P>(this: *mut ffi::GtkPrintOperationPreview, context: *mut ffi::GtkPrintContext, page_setup: *mut ffi::GtkPageSetup, f: glib_ffi::gpointer)
+unsafe extern "C" fn got_page_size_trampoline<P, F: Fn(&P, &PrintContext, &PageSetup) + 'static>(this: *mut ffi::GtkPrintOperationPreview, context: *mut ffi::GtkPrintContext, page_setup: *mut ffi::GtkPageSetup, f: glib_ffi::gpointer)
 where P: IsA<PrintOperationPreview> {
-    let f: &&(Fn(&P, &PrintContext, &PageSetup) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&PrintOperationPreview::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(context), &from_glib_borrow(page_setup))
 }
 
-unsafe extern "C" fn ready_trampoline<P>(this: *mut ffi::GtkPrintOperationPreview, context: *mut ffi::GtkPrintContext, f: glib_ffi::gpointer)
+unsafe extern "C" fn ready_trampoline<P, F: Fn(&P, &PrintContext) + 'static>(this: *mut ffi::GtkPrintOperationPreview, context: *mut ffi::GtkPrintContext, f: glib_ffi::gpointer)
 where P: IsA<PrintOperationPreview> {
-    let f: &&(Fn(&P, &PrintContext) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&PrintOperationPreview::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(context))
 }
 

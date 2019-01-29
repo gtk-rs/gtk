@@ -114,7 +114,7 @@ pub trait FlowBoxExt: 'static {
     fn set_column_spacing(&self, spacing: u32);
 
     #[cfg(any(feature = "v3_12", feature = "dox"))]
-    fn set_filter_func<P: Fn(&FlowBoxChild) -> bool + 'static, Q: Into<Option<P>>>(&self, filter_func: Q);
+    fn set_filter_func(&self, filter_func: Option<Box<dyn Fn(&FlowBoxChild) -> bool + 'static>>);
 
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_hadjustment<P: IsA<Adjustment>>(&self, adjustment: &P);
@@ -135,7 +135,7 @@ pub trait FlowBoxExt: 'static {
     fn set_selection_mode(&self, mode: SelectionMode);
 
     #[cfg(any(feature = "v3_12", feature = "dox"))]
-    fn set_sort_func<P: Fn(&FlowBoxChild, &FlowBoxChild) -> i32 + 'static, Q: Into<Option<P>>>(&self, sort_func: Q);
+    fn set_sort_func(&self, sort_func: Option<Box<dyn Fn(&FlowBoxChild, &FlowBoxChild) -> i32 + 'static>>);
 
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_vadjustment<P: IsA<Adjustment>>(&self, adjustment: &P);
@@ -355,12 +355,11 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
     }
 
     #[cfg(any(feature = "v3_12", feature = "dox"))]
-    fn set_filter_func<P: Fn(&FlowBoxChild) -> bool + 'static, Q: Into<Option<P>>>(&self, filter_func: Q) {
-        let filter_func = filter_func.into();
-        let filter_func_data: Box_<Option<P>> = Box::new(filter_func.into());
-        unsafe extern "C" fn filter_func_func<P: Fn(&FlowBoxChild) -> bool + 'static>(child: *mut ffi::GtkFlowBoxChild, user_data: glib_ffi::gpointer) -> glib_ffi::gboolean {
+    fn set_filter_func(&self, filter_func: Option<Box<dyn Fn(&FlowBoxChild) -> bool + 'static>>) {
+        let filter_func_data: Box_<Option<Box<dyn Fn(&FlowBoxChild) -> bool + 'static>>> = Box::new(filter_func);
+        unsafe extern "C" fn filter_func_func(child: *mut ffi::GtkFlowBoxChild, user_data: glib_ffi::gpointer) -> glib_ffi::gboolean {
             let child = from_glib_borrow(child);
-            let callback: &Option<P> = &*(user_data as *mut _);
+            let callback: &Option<Box<dyn Fn(&FlowBoxChild) -> bool + 'static>> = &*(user_data as *mut _);
             let res = if let Some(ref callback) = *callback {
                 callback(&child)
             } else {
@@ -368,12 +367,12 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             };
             res.to_glib()
         }
-        let filter_func = if filter_func_data.is_some() { Some(filter_func_func::<P> as _) } else { None };
-        unsafe extern "C" fn destroy_func<P: Fn(&FlowBoxChild) -> bool + 'static>(data: glib_ffi::gpointer) {
-            let _callback: Box_<Option<P>> = Box_::from_raw(data as *mut _);
+        let filter_func = if filter_func_data.is_some() { Some(filter_func_func as _) } else { None };
+        unsafe extern "C" fn destroy_func(data: glib_ffi::gpointer) {
+            let _callback: Box_<Option<Box<dyn Fn(&FlowBoxChild) -> bool + 'static>>> = Box_::from_raw(data as *mut _);
         }
-        let destroy_call3 = Some(destroy_func::<P> as _);
-        let super_callback0: Box_<Option<P>> = filter_func_data;
+        let destroy_call3 = Some(destroy_func as _);
+        let super_callback0: Box_<Option<Box<dyn Fn(&FlowBoxChild) -> bool + 'static>>> = filter_func_data;
         unsafe {
             ffi::gtk_flow_box_set_filter_func(self.as_ref().to_glib_none().0, filter_func, Box::into_raw(super_callback0) as *mut _, destroy_call3);
         }
@@ -422,13 +421,12 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
     }
 
     #[cfg(any(feature = "v3_12", feature = "dox"))]
-    fn set_sort_func<P: Fn(&FlowBoxChild, &FlowBoxChild) -> i32 + 'static, Q: Into<Option<P>>>(&self, sort_func: Q) {
-        let sort_func = sort_func.into();
-        let sort_func_data: Box_<Option<P>> = Box::new(sort_func.into());
-        unsafe extern "C" fn sort_func_func<P: Fn(&FlowBoxChild, &FlowBoxChild) -> i32 + 'static>(child1: *mut ffi::GtkFlowBoxChild, child2: *mut ffi::GtkFlowBoxChild, user_data: glib_ffi::gpointer) -> libc::c_int {
+    fn set_sort_func(&self, sort_func: Option<Box<dyn Fn(&FlowBoxChild, &FlowBoxChild) -> i32 + 'static>>) {
+        let sort_func_data: Box_<Option<Box<dyn Fn(&FlowBoxChild, &FlowBoxChild) -> i32 + 'static>>> = Box::new(sort_func);
+        unsafe extern "C" fn sort_func_func(child1: *mut ffi::GtkFlowBoxChild, child2: *mut ffi::GtkFlowBoxChild, user_data: glib_ffi::gpointer) -> libc::c_int {
             let child1 = from_glib_borrow(child1);
             let child2 = from_glib_borrow(child2);
-            let callback: &Option<P> = &*(user_data as *mut _);
+            let callback: &Option<Box<dyn Fn(&FlowBoxChild, &FlowBoxChild) -> i32 + 'static>> = &*(user_data as *mut _);
             let res = if let Some(ref callback) = *callback {
                 callback(&child1, &child2)
             } else {
@@ -436,12 +434,12 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
             };
             res
         }
-        let sort_func = if sort_func_data.is_some() { Some(sort_func_func::<P> as _) } else { None };
-        unsafe extern "C" fn destroy_func<P: Fn(&FlowBoxChild, &FlowBoxChild) -> i32 + 'static>(data: glib_ffi::gpointer) {
-            let _callback: Box_<Option<P>> = Box_::from_raw(data as *mut _);
+        let sort_func = if sort_func_data.is_some() { Some(sort_func_func as _) } else { None };
+        unsafe extern "C" fn destroy_func(data: glib_ffi::gpointer) {
+            let _callback: Box_<Option<Box<dyn Fn(&FlowBoxChild, &FlowBoxChild) -> i32 + 'static>>> = Box_::from_raw(data as *mut _);
         }
-        let destroy_call3 = Some(destroy_func::<P> as _);
-        let super_callback0: Box_<Option<P>> = sort_func_data;
+        let destroy_call3 = Some(destroy_func as _);
+        let super_callback0: Box_<Option<Box<dyn Fn(&FlowBoxChild, &FlowBoxChild) -> i32 + 'static>>> = sort_func_data;
         unsafe {
             ffi::gtk_flow_box_set_sort_func(self.as_ref().to_glib_none().0, sort_func, Box::into_raw(super_callback0) as *mut _, destroy_call3);
         }
@@ -568,9 +566,9 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
 
     fn connect_activate_cursor_child<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"activate-cursor-child\0".as_ptr() as *const _,
-                transmute(activate_cursor_child_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(activate_cursor_child_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -580,17 +578,17 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
 
     fn connect_child_activated<F: Fn(&Self, &FlowBoxChild) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &FlowBoxChild) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"child-activated\0".as_ptr() as *const _,
-                transmute(child_activated_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(child_activated_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_move_cursor<F: Fn(&Self, MovementStep, i32) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, MovementStep, i32) -> bool + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"move-cursor\0".as_ptr() as *const _,
-                transmute(move_cursor_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(move_cursor_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -601,9 +599,9 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
 
     fn connect_select_all<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"select-all\0".as_ptr() as *const _,
-                transmute(select_all_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(select_all_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -613,17 +611,17 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
 
     fn connect_selected_children_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"selected-children-changed\0".as_ptr() as *const _,
-                transmute(selected_children_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(selected_children_changed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_toggle_cursor_child<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"toggle-cursor-child\0".as_ptr() as *const _,
-                transmute(toggle_cursor_child_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(toggle_cursor_child_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -633,9 +631,9 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
 
     fn connect_unselect_all<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"unselect-all\0".as_ptr() as *const _,
-                transmute(unselect_all_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(unselect_all_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -645,142 +643,142 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
 
     fn connect_property_activate_on_single_click_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::activate-on-single-click\0".as_ptr() as *const _,
-                transmute(notify_activate_on_single_click_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_activate_on_single_click_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_column_spacing_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::column-spacing\0".as_ptr() as *const _,
-                transmute(notify_column_spacing_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_column_spacing_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_homogeneous_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::homogeneous\0".as_ptr() as *const _,
-                transmute(notify_homogeneous_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_homogeneous_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_max_children_per_line_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::max-children-per-line\0".as_ptr() as *const _,
-                transmute(notify_max_children_per_line_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_max_children_per_line_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_min_children_per_line_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::min-children-per-line\0".as_ptr() as *const _,
-                transmute(notify_min_children_per_line_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_min_children_per_line_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_row_spacing_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::row-spacing\0".as_ptr() as *const _,
-                transmute(notify_row_spacing_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_row_spacing_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_selection_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::selection-mode\0".as_ptr() as *const _,
-                transmute(notify_selection_mode_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_selection_mode_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn activate_cursor_child_trampoline<P>(this: *mut ffi::GtkFlowBox, f: glib_ffi::gpointer)
+unsafe extern "C" fn activate_cursor_child_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFlowBox, f: glib_ffi::gpointer)
 where P: IsA<FlowBox> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&FlowBox::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn child_activated_trampoline<P>(this: *mut ffi::GtkFlowBox, child: *mut ffi::GtkFlowBoxChild, f: glib_ffi::gpointer)
+unsafe extern "C" fn child_activated_trampoline<P, F: Fn(&P, &FlowBoxChild) + 'static>(this: *mut ffi::GtkFlowBox, child: *mut ffi::GtkFlowBoxChild, f: glib_ffi::gpointer)
 where P: IsA<FlowBox> {
-    let f: &&(Fn(&P, &FlowBoxChild) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&FlowBox::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(child))
 }
 
-unsafe extern "C" fn move_cursor_trampoline<P>(this: *mut ffi::GtkFlowBox, step: ffi::GtkMovementStep, count: libc::c_int, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn move_cursor_trampoline<P, F: Fn(&P, MovementStep, i32) -> bool + 'static>(this: *mut ffi::GtkFlowBox, step: ffi::GtkMovementStep, count: libc::c_int, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<FlowBox> {
-    let f: &&(Fn(&P, MovementStep, i32) -> bool + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&FlowBox::from_glib_borrow(this).unsafe_cast(), from_glib(step), count).to_glib()
 }
 
-unsafe extern "C" fn select_all_trampoline<P>(this: *mut ffi::GtkFlowBox, f: glib_ffi::gpointer)
+unsafe extern "C" fn select_all_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFlowBox, f: glib_ffi::gpointer)
 where P: IsA<FlowBox> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&FlowBox::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn selected_children_changed_trampoline<P>(this: *mut ffi::GtkFlowBox, f: glib_ffi::gpointer)
+unsafe extern "C" fn selected_children_changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFlowBox, f: glib_ffi::gpointer)
 where P: IsA<FlowBox> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&FlowBox::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn toggle_cursor_child_trampoline<P>(this: *mut ffi::GtkFlowBox, f: glib_ffi::gpointer)
+unsafe extern "C" fn toggle_cursor_child_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFlowBox, f: glib_ffi::gpointer)
 where P: IsA<FlowBox> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&FlowBox::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn unselect_all_trampoline<P>(this: *mut ffi::GtkFlowBox, f: glib_ffi::gpointer)
+unsafe extern "C" fn unselect_all_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFlowBox, f: glib_ffi::gpointer)
 where P: IsA<FlowBox> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&FlowBox::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_activate_on_single_click_trampoline<P>(this: *mut ffi::GtkFlowBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_activate_on_single_click_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFlowBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FlowBox> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&FlowBox::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_column_spacing_trampoline<P>(this: *mut ffi::GtkFlowBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_column_spacing_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFlowBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FlowBox> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&FlowBox::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_homogeneous_trampoline<P>(this: *mut ffi::GtkFlowBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_homogeneous_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFlowBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FlowBox> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&FlowBox::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_max_children_per_line_trampoline<P>(this: *mut ffi::GtkFlowBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_max_children_per_line_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFlowBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FlowBox> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&FlowBox::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_min_children_per_line_trampoline<P>(this: *mut ffi::GtkFlowBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_min_children_per_line_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFlowBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FlowBox> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&FlowBox::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_row_spacing_trampoline<P>(this: *mut ffi::GtkFlowBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_row_spacing_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFlowBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FlowBox> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&FlowBox::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_selection_mode_trampoline<P>(this: *mut ffi::GtkFlowBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_selection_mode_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFlowBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FlowBox> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&FlowBox::from_glib_borrow(this).unsafe_cast())
 }
 

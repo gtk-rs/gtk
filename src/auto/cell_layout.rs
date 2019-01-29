@@ -41,7 +41,7 @@ pub trait CellLayoutExt: 'static {
 
     //fn set_attributes<P: IsA<CellRenderer>>(&self, cell: &P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
-    fn set_cell_data_func<P: IsA<CellRenderer>, Q: Fn(&CellLayout, &CellRenderer, &TreeModel, &TreeIter) + 'static, R: Into<Option<Q>>>(&self, cell: &P, func: R);
+    fn set_cell_data_func<P: IsA<CellRenderer>>(&self, cell: &P, func: Option<Box<dyn Fn(&CellLayout, &CellRenderer, &TreeModel, &TreeIter) + 'static>>);
 }
 
 impl<O: IsA<CellLayout>> CellLayoutExt for O {
@@ -97,27 +97,26 @@ impl<O: IsA<CellLayout>> CellLayoutExt for O {
     //    unsafe { TODO: call ffi::gtk_cell_layout_set_attributes() }
     //}
 
-    fn set_cell_data_func<P: IsA<CellRenderer>, Q: Fn(&CellLayout, &CellRenderer, &TreeModel, &TreeIter) + 'static, R: Into<Option<Q>>>(&self, cell: &P, func: R) {
-        let func = func.into();
-        let func_data: Box_<Option<Q>> = Box::new(func.into());
-        unsafe extern "C" fn func_func<P: IsA<CellRenderer>, Q: Fn(&CellLayout, &CellRenderer, &TreeModel, &TreeIter) + 'static>(cell_layout: *mut ffi::GtkCellLayout, cell: *mut ffi::GtkCellRenderer, tree_model: *mut ffi::GtkTreeModel, iter: *mut ffi::GtkTreeIter, data: glib_ffi::gpointer) {
+    fn set_cell_data_func<P: IsA<CellRenderer>>(&self, cell: &P, func: Option<Box<dyn Fn(&CellLayout, &CellRenderer, &TreeModel, &TreeIter) + 'static>>) {
+        let func_data: Box_<Option<Box<dyn Fn(&CellLayout, &CellRenderer, &TreeModel, &TreeIter) + 'static>>> = Box::new(func);
+        unsafe extern "C" fn func_func<P: IsA<CellRenderer>>(cell_layout: *mut ffi::GtkCellLayout, cell: *mut ffi::GtkCellRenderer, tree_model: *mut ffi::GtkTreeModel, iter: *mut ffi::GtkTreeIter, data: glib_ffi::gpointer) {
             let cell_layout = from_glib_borrow(cell_layout);
             let cell = from_glib_borrow(cell);
             let tree_model = from_glib_borrow(tree_model);
             let iter = from_glib_borrow(iter);
-            let callback: &Option<Q> = &*(data as *mut _);
+            let callback: &Option<Box<dyn Fn(&CellLayout, &CellRenderer, &TreeModel, &TreeIter) + 'static>> = &*(data as *mut _);
             if let Some(ref callback) = *callback {
                 callback(&cell_layout, &cell, &tree_model, &iter)
             } else {
                 panic!("cannot get closure...")
             };
         }
-        let func = if func_data.is_some() { Some(func_func::<P, Q> as _) } else { None };
-        unsafe extern "C" fn destroy_func<P: IsA<CellRenderer>, Q: Fn(&CellLayout, &CellRenderer, &TreeModel, &TreeIter) + 'static>(data: glib_ffi::gpointer) {
-            let _callback: Box_<Option<Q>> = Box_::from_raw(data as *mut _);
+        let func = if func_data.is_some() { Some(func_func::<P> as _) } else { None };
+        unsafe extern "C" fn destroy_func<P: IsA<CellRenderer>>(data: glib_ffi::gpointer) {
+            let _callback: Box_<Option<Box<dyn Fn(&CellLayout, &CellRenderer, &TreeModel, &TreeIter) + 'static>>> = Box_::from_raw(data as *mut _);
         }
-        let destroy_call4 = Some(destroy_func::<P, Q> as _);
-        let super_callback0: Box_<Option<Q>> = func_data;
+        let destroy_call4 = Some(destroy_func::<P> as _);
+        let super_callback0: Box_<Option<Box<dyn Fn(&CellLayout, &CellRenderer, &TreeModel, &TreeIter) + 'static>>> = func_data;
         unsafe {
             ffi::gtk_cell_layout_set_cell_data_func(self.as_ref().to_glib_none().0, cell.as_ref().to_glib_none().0, func, Box::into_raw(super_callback0) as *mut _, destroy_call4);
         }

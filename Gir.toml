@@ -72,7 +72,6 @@ generate = [
     "Gtk.FileFilter",
     "Gtk.FileFilterFlags",
     "Gtk.Fixed",
-    "Gtk.FlowBox",
     "Gtk.FlowBoxChild",
     "Gtk.FontButton",
     "Gtk.FontChooser",
@@ -106,7 +105,6 @@ generate = [
     "Gtk.LevelBar",
     "Gtk.LevelBarMode",
     "Gtk.License",
-    "Gtk.ListBox",
     "Gtk.ListBoxRow",
     "Gtk.LockButton",
     "Gtk.MenuBar",
@@ -827,6 +825,16 @@ status = "generate"
     ignore = true  #strange type of options and option_labels
 
 [[object]]
+name = "Gtk.FlowBox"
+status = "generate"
+    [[object.function]]
+    name = "bind_model"
+        [[object.function.parameter]]
+        name = "create_widget_func"
+        # we add a manual unbind() function instead
+        nullable = false
+
+[[object]]
 name = "Gtk.Gesture"
 status = "generate"
 version = "3.14"
@@ -1018,6 +1026,16 @@ status = "generate"
     [[object.signal]]
     name = "activate-link"
     inhibit = true
+
+[[object]]
+name = "Gtk.ListBox"
+status = "generate"
+    [[object.function]]
+    name = "bind_model"
+        [[object.function.parameter]]
+        name = "create_widget_func"
+        # we add a manual unbind() function instead
+        nullable = false
 
 [[object]]
 name = "Gtk.ListStore"

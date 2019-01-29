@@ -69,17 +69,17 @@ impl<O: IsA<GestureSwipe>> GestureSwipeExt for O {
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_swipe<F: Fn(&Self, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, f64, f64) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"swipe\0".as_ptr() as *const _,
-                transmute(swipe_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(swipe_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
 #[cfg(any(feature = "v3_14", feature = "dox"))]
-unsafe extern "C" fn swipe_trampoline<P>(this: *mut ffi::GtkGestureSwipe, velocity_x: libc::c_double, velocity_y: libc::c_double, f: glib_ffi::gpointer)
+unsafe extern "C" fn swipe_trampoline<P, F: Fn(&P, f64, f64) + 'static>(this: *mut ffi::GtkGestureSwipe, velocity_x: libc::c_double, velocity_y: libc::c_double, f: glib_ffi::gpointer)
 where P: IsA<GestureSwipe> {
-    let f: &&(Fn(&P, f64, f64) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&GestureSwipe::from_glib_borrow(this).unsafe_cast(), velocity_x, velocity_y)
 }
 

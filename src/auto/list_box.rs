@@ -56,7 +56,7 @@ pub const NONE_LIST_BOX: Option<&ListBox> = None;
 
 pub trait ListBoxExt: 'static {
     //#[cfg(any(feature = "v3_16", feature = "dox"))]
-    //fn bind_model<P: Fn(&glib::Object) -> Widget + 'static, Q: Into<Option<P>>>(&self, model: /*Ignored*/Option<&gio::ListModel>, create_widget_func: Q);
+    //fn bind_model<P: Fn(&glib::Object) -> Widget + 'static>(&self, model: /*Ignored*/Option<&gio::ListModel>, create_widget_func: P);
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn drag_highlight_row<P: IsA<ListBoxRow>>(&self, row: &P);
@@ -116,10 +116,10 @@ pub trait ListBoxExt: 'static {
     fn set_adjustment<'a, P: IsA<Adjustment> + 'a, Q: Into<Option<&'a P>>>(&self, adjustment: Q);
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
-    fn set_filter_func<P: Fn(&ListBoxRow) -> bool + 'static, Q: Into<Option<P>>>(&self, filter_func: Q);
+    fn set_filter_func(&self, filter_func: Option<Box<dyn Fn(&ListBoxRow) -> bool + 'static>>);
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
-    fn set_header_func<P: Fn(&ListBoxRow, &ListBoxRow) + 'static, Q: Into<Option<P>>>(&self, update_header: Q);
+    fn set_header_func(&self, update_header: Option<Box<dyn Fn(&ListBoxRow, &ListBoxRow) + 'static>>);
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_placeholder<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, placeholder: Q);
@@ -128,7 +128,7 @@ pub trait ListBoxExt: 'static {
     fn set_selection_mode(&self, mode: SelectionMode);
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
-    fn set_sort_func<P: Fn(&ListBoxRow, &ListBoxRow) -> i32 + 'static, Q: Into<Option<P>>>(&self, sort_func: Q);
+    fn set_sort_func(&self, sort_func: Option<Box<dyn Fn(&ListBoxRow, &ListBoxRow) -> i32 + 'static>>);
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn unselect_all(&self);
@@ -184,7 +184,7 @@ pub trait ListBoxExt: 'static {
 
 impl<O: IsA<ListBox>> ListBoxExt for O {
     //#[cfg(any(feature = "v3_16", feature = "dox"))]
-    //fn bind_model<P: Fn(&glib::Object) -> Widget + 'static, Q: Into<Option<P>>>(&self, model: /*Ignored*/Option<&gio::ListModel>, create_widget_func: Q) {
+    //fn bind_model<P: Fn(&glib::Object) -> Widget + 'static>(&self, model: /*Ignored*/Option<&gio::ListModel>, create_widget_func: P) {
     //    unsafe { TODO: call ffi::gtk_list_box_bind_model() }
     //}
 
@@ -333,12 +333,11 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
     }
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
-    fn set_filter_func<P: Fn(&ListBoxRow) -> bool + 'static, Q: Into<Option<P>>>(&self, filter_func: Q) {
-        let filter_func = filter_func.into();
-        let filter_func_data: Box_<Option<P>> = Box::new(filter_func.into());
-        unsafe extern "C" fn filter_func_func<P: Fn(&ListBoxRow) -> bool + 'static>(row: *mut ffi::GtkListBoxRow, user_data: glib_ffi::gpointer) -> glib_ffi::gboolean {
+    fn set_filter_func(&self, filter_func: Option<Box<dyn Fn(&ListBoxRow) -> bool + 'static>>) {
+        let filter_func_data: Box_<Option<Box<dyn Fn(&ListBoxRow) -> bool + 'static>>> = Box::new(filter_func);
+        unsafe extern "C" fn filter_func_func(row: *mut ffi::GtkListBoxRow, user_data: glib_ffi::gpointer) -> glib_ffi::gboolean {
             let row = from_glib_borrow(row);
-            let callback: &Option<P> = &*(user_data as *mut _);
+            let callback: &Option<Box<dyn Fn(&ListBoxRow) -> bool + 'static>> = &*(user_data as *mut _);
             let res = if let Some(ref callback) = *callback {
                 callback(&row)
             } else {
@@ -346,37 +345,36 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
             };
             res.to_glib()
         }
-        let filter_func = if filter_func_data.is_some() { Some(filter_func_func::<P> as _) } else { None };
-        unsafe extern "C" fn destroy_func<P: Fn(&ListBoxRow) -> bool + 'static>(data: glib_ffi::gpointer) {
-            let _callback: Box_<Option<P>> = Box_::from_raw(data as *mut _);
+        let filter_func = if filter_func_data.is_some() { Some(filter_func_func as _) } else { None };
+        unsafe extern "C" fn destroy_func(data: glib_ffi::gpointer) {
+            let _callback: Box_<Option<Box<dyn Fn(&ListBoxRow) -> bool + 'static>>> = Box_::from_raw(data as *mut _);
         }
-        let destroy_call3 = Some(destroy_func::<P> as _);
-        let super_callback0: Box_<Option<P>> = filter_func_data;
+        let destroy_call3 = Some(destroy_func as _);
+        let super_callback0: Box_<Option<Box<dyn Fn(&ListBoxRow) -> bool + 'static>>> = filter_func_data;
         unsafe {
             ffi::gtk_list_box_set_filter_func(self.as_ref().to_glib_none().0, filter_func, Box::into_raw(super_callback0) as *mut _, destroy_call3);
         }
     }
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
-    fn set_header_func<P: Fn(&ListBoxRow, &ListBoxRow) + 'static, Q: Into<Option<P>>>(&self, update_header: Q) {
-        let update_header = update_header.into();
-        let update_header_data: Box_<Option<P>> = Box::new(update_header.into());
-        unsafe extern "C" fn update_header_func<P: Fn(&ListBoxRow, &ListBoxRow) + 'static>(row: *mut ffi::GtkListBoxRow, before: *mut ffi::GtkListBoxRow, user_data: glib_ffi::gpointer) {
+    fn set_header_func(&self, update_header: Option<Box<dyn Fn(&ListBoxRow, &ListBoxRow) + 'static>>) {
+        let update_header_data: Box_<Option<Box<dyn Fn(&ListBoxRow, &ListBoxRow) + 'static>>> = Box::new(update_header);
+        unsafe extern "C" fn update_header_func(row: *mut ffi::GtkListBoxRow, before: *mut ffi::GtkListBoxRow, user_data: glib_ffi::gpointer) {
             let row = from_glib_borrow(row);
             let before = from_glib_borrow(before);
-            let callback: &Option<P> = &*(user_data as *mut _);
+            let callback: &Option<Box<dyn Fn(&ListBoxRow, &ListBoxRow) + 'static>> = &*(user_data as *mut _);
             if let Some(ref callback) = *callback {
                 callback(&row, &before)
             } else {
                 panic!("cannot get closure...")
             };
         }
-        let update_header = if update_header_data.is_some() { Some(update_header_func::<P> as _) } else { None };
-        unsafe extern "C" fn destroy_func<P: Fn(&ListBoxRow, &ListBoxRow) + 'static>(data: glib_ffi::gpointer) {
-            let _callback: Box_<Option<P>> = Box_::from_raw(data as *mut _);
+        let update_header = if update_header_data.is_some() { Some(update_header_func as _) } else { None };
+        unsafe extern "C" fn destroy_func(data: glib_ffi::gpointer) {
+            let _callback: Box_<Option<Box<dyn Fn(&ListBoxRow, &ListBoxRow) + 'static>>> = Box_::from_raw(data as *mut _);
         }
-        let destroy_call3 = Some(destroy_func::<P> as _);
-        let super_callback0: Box_<Option<P>> = update_header_data;
+        let destroy_call3 = Some(destroy_func as _);
+        let super_callback0: Box_<Option<Box<dyn Fn(&ListBoxRow, &ListBoxRow) + 'static>>> = update_header_data;
         unsafe {
             ffi::gtk_list_box_set_header_func(self.as_ref().to_glib_none().0, update_header, Box::into_raw(super_callback0) as *mut _, destroy_call3);
         }
@@ -398,13 +396,12 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
     }
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
-    fn set_sort_func<P: Fn(&ListBoxRow, &ListBoxRow) -> i32 + 'static, Q: Into<Option<P>>>(&self, sort_func: Q) {
-        let sort_func = sort_func.into();
-        let sort_func_data: Box_<Option<P>> = Box::new(sort_func.into());
-        unsafe extern "C" fn sort_func_func<P: Fn(&ListBoxRow, &ListBoxRow) -> i32 + 'static>(row1: *mut ffi::GtkListBoxRow, row2: *mut ffi::GtkListBoxRow, user_data: glib_ffi::gpointer) -> libc::c_int {
+    fn set_sort_func(&self, sort_func: Option<Box<dyn Fn(&ListBoxRow, &ListBoxRow) -> i32 + 'static>>) {
+        let sort_func_data: Box_<Option<Box<dyn Fn(&ListBoxRow, &ListBoxRow) -> i32 + 'static>>> = Box::new(sort_func);
+        unsafe extern "C" fn sort_func_func(row1: *mut ffi::GtkListBoxRow, row2: *mut ffi::GtkListBoxRow, user_data: glib_ffi::gpointer) -> libc::c_int {
             let row1 = from_glib_borrow(row1);
             let row2 = from_glib_borrow(row2);
-            let callback: &Option<P> = &*(user_data as *mut _);
+            let callback: &Option<Box<dyn Fn(&ListBoxRow, &ListBoxRow) -> i32 + 'static>> = &*(user_data as *mut _);
             let res = if let Some(ref callback) = *callback {
                 callback(&row1, &row2)
             } else {
@@ -412,12 +409,12 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
             };
             res
         }
-        let sort_func = if sort_func_data.is_some() { Some(sort_func_func::<P> as _) } else { None };
-        unsafe extern "C" fn destroy_func<P: Fn(&ListBoxRow, &ListBoxRow) -> i32 + 'static>(data: glib_ffi::gpointer) {
-            let _callback: Box_<Option<P>> = Box_::from_raw(data as *mut _);
+        let sort_func = if sort_func_data.is_some() { Some(sort_func_func as _) } else { None };
+        unsafe extern "C" fn destroy_func(data: glib_ffi::gpointer) {
+            let _callback: Box_<Option<Box<dyn Fn(&ListBoxRow, &ListBoxRow) -> i32 + 'static>>> = Box_::from_raw(data as *mut _);
         }
-        let destroy_call3 = Some(destroy_func::<P> as _);
-        let super_callback0: Box_<Option<P>> = sort_func_data;
+        let destroy_call3 = Some(destroy_func as _);
+        let super_callback0: Box_<Option<Box<dyn Fn(&ListBoxRow, &ListBoxRow) -> i32 + 'static>>> = sort_func_data;
         unsafe {
             ffi::gtk_list_box_set_sort_func(self.as_ref().to_glib_none().0, sort_func, Box::into_raw(super_callback0) as *mut _, destroy_call3);
         }
@@ -467,9 +464,9 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
 
     fn connect_activate_cursor_row<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"activate-cursor-row\0".as_ptr() as *const _,
-                transmute(activate_cursor_row_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(activate_cursor_row_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -479,9 +476,9 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
 
     fn connect_move_cursor<F: Fn(&Self, MovementStep, i32) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, MovementStep, i32) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"move-cursor\0".as_ptr() as *const _,
-                transmute(move_cursor_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(move_cursor_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -492,27 +489,27 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn connect_row_activated<F: Fn(&Self, &ListBoxRow) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &ListBoxRow) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"row-activated\0".as_ptr() as *const _,
-                transmute(row_activated_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(row_activated_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn connect_row_selected<F: Fn(&Self, &Option<ListBoxRow>) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &Option<ListBoxRow>) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"row-selected\0".as_ptr() as *const _,
-                transmute(row_selected_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(row_selected_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_select_all<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"select-all\0".as_ptr() as *const _,
-                transmute(select_all_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(select_all_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -524,17 +521,17 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_selected_rows_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"selected-rows-changed\0".as_ptr() as *const _,
-                transmute(selected_rows_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(selected_rows_changed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_toggle_cursor_row<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"toggle-cursor-row\0".as_ptr() as *const _,
-                transmute(toggle_cursor_row_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(toggle_cursor_row_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -545,9 +542,9 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_unselect_all<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"unselect-all\0".as_ptr() as *const _,
-                transmute(unselect_all_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(unselect_all_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -558,83 +555,83 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
 
     fn connect_property_activate_on_single_click_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::activate-on-single-click\0".as_ptr() as *const _,
-                transmute(notify_activate_on_single_click_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_activate_on_single_click_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_selection_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::selection-mode\0".as_ptr() as *const _,
-                transmute(notify_selection_mode_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_selection_mode_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn activate_cursor_row_trampoline<P>(this: *mut ffi::GtkListBox, f: glib_ffi::gpointer)
+unsafe extern "C" fn activate_cursor_row_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkListBox, f: glib_ffi::gpointer)
 where P: IsA<ListBox> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&ListBox::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn move_cursor_trampoline<P>(this: *mut ffi::GtkListBox, object: ffi::GtkMovementStep, p0: libc::c_int, f: glib_ffi::gpointer)
+unsafe extern "C" fn move_cursor_trampoline<P, F: Fn(&P, MovementStep, i32) + 'static>(this: *mut ffi::GtkListBox, object: ffi::GtkMovementStep, p0: libc::c_int, f: glib_ffi::gpointer)
 where P: IsA<ListBox> {
-    let f: &&(Fn(&P, MovementStep, i32) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&ListBox::from_glib_borrow(this).unsafe_cast(), from_glib(object), p0)
 }
 
 #[cfg(any(feature = "v3_10", feature = "dox"))]
-unsafe extern "C" fn row_activated_trampoline<P>(this: *mut ffi::GtkListBox, row: *mut ffi::GtkListBoxRow, f: glib_ffi::gpointer)
+unsafe extern "C" fn row_activated_trampoline<P, F: Fn(&P, &ListBoxRow) + 'static>(this: *mut ffi::GtkListBox, row: *mut ffi::GtkListBoxRow, f: glib_ffi::gpointer)
 where P: IsA<ListBox> {
-    let f: &&(Fn(&P, &ListBoxRow) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&ListBox::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(row))
 }
 
 #[cfg(any(feature = "v3_10", feature = "dox"))]
-unsafe extern "C" fn row_selected_trampoline<P>(this: *mut ffi::GtkListBox, row: *mut ffi::GtkListBoxRow, f: glib_ffi::gpointer)
+unsafe extern "C" fn row_selected_trampoline<P, F: Fn(&P, &Option<ListBoxRow>) + 'static>(this: *mut ffi::GtkListBox, row: *mut ffi::GtkListBoxRow, f: glib_ffi::gpointer)
 where P: IsA<ListBox> {
-    let f: &&(Fn(&P, &Option<ListBoxRow>) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&ListBox::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(row))
 }
 
 #[cfg(any(feature = "v3_14", feature = "dox"))]
-unsafe extern "C" fn select_all_trampoline<P>(this: *mut ffi::GtkListBox, f: glib_ffi::gpointer)
+unsafe extern "C" fn select_all_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkListBox, f: glib_ffi::gpointer)
 where P: IsA<ListBox> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&ListBox::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_14", feature = "dox"))]
-unsafe extern "C" fn selected_rows_changed_trampoline<P>(this: *mut ffi::GtkListBox, f: glib_ffi::gpointer)
+unsafe extern "C" fn selected_rows_changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkListBox, f: glib_ffi::gpointer)
 where P: IsA<ListBox> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&ListBox::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn toggle_cursor_row_trampoline<P>(this: *mut ffi::GtkListBox, f: glib_ffi::gpointer)
+unsafe extern "C" fn toggle_cursor_row_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkListBox, f: glib_ffi::gpointer)
 where P: IsA<ListBox> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&ListBox::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_14", feature = "dox"))]
-unsafe extern "C" fn unselect_all_trampoline<P>(this: *mut ffi::GtkListBox, f: glib_ffi::gpointer)
+unsafe extern "C" fn unselect_all_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkListBox, f: glib_ffi::gpointer)
 where P: IsA<ListBox> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&ListBox::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_activate_on_single_click_trampoline<P>(this: *mut ffi::GtkListBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_activate_on_single_click_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkListBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ListBox> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&ListBox::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_selection_mode_trampoline<P>(this: *mut ffi::GtkListBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_selection_mode_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkListBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ListBox> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&ListBox::from_glib_borrow(this).unsafe_cast())
 }
 

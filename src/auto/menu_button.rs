@@ -208,97 +208,97 @@ impl<O: IsA<MenuButton>> MenuButtonExt for O {
     #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_align_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::align-widget\0".as_ptr() as *const _,
-                transmute(notify_align_widget_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_align_widget_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_direction_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::direction\0".as_ptr() as *const _,
-                transmute(notify_direction_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_direction_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_menu_model_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::menu-model\0".as_ptr() as *const _,
-                transmute(notify_menu_model_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_menu_model_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_popover_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::popover\0".as_ptr() as *const _,
-                transmute(notify_popover_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_popover_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_popup_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::popup\0".as_ptr() as *const _,
-                transmute(notify_popup_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_popup_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_use_popover_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::use-popover\0".as_ptr() as *const _,
-                transmute(notify_use_popover_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_use_popover_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
 #[cfg(any(feature = "v3_6", feature = "dox"))]
-unsafe extern "C" fn notify_align_widget_trampoline<P>(this: *mut ffi::GtkMenuButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_align_widget_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MenuButton> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&MenuButton::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_6", feature = "dox"))]
-unsafe extern "C" fn notify_direction_trampoline<P>(this: *mut ffi::GtkMenuButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_direction_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MenuButton> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&MenuButton::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_6", feature = "dox"))]
-unsafe extern "C" fn notify_menu_model_trampoline<P>(this: *mut ffi::GtkMenuButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_menu_model_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MenuButton> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&MenuButton::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_12", feature = "dox"))]
-unsafe extern "C" fn notify_popover_trampoline<P>(this: *mut ffi::GtkMenuButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_popover_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MenuButton> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&MenuButton::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_6", feature = "dox"))]
-unsafe extern "C" fn notify_popup_trampoline<P>(this: *mut ffi::GtkMenuButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_popup_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MenuButton> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&MenuButton::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_12", feature = "dox"))]
-unsafe extern "C" fn notify_use_popover_trampoline<P>(this: *mut ffi::GtkMenuButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_use_popover_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MenuButton> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&MenuButton::from_glib_borrow(this).unsafe_cast())
 }
 

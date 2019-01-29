@@ -246,9 +246,9 @@ impl<O: IsA<Toolbar>> ToolbarExt for O {
 
     fn connect_focus_home_or_end<F: Fn(&Self, bool) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, bool) -> bool + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"focus-home-or-end\0".as_ptr() as *const _,
-                transmute(focus_home_or_end_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(focus_home_or_end_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -259,106 +259,106 @@ impl<O: IsA<Toolbar>> ToolbarExt for O {
 
     fn connect_orientation_changed<F: Fn(&Self, Orientation) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, Orientation) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"orientation-changed\0".as_ptr() as *const _,
-                transmute(orientation_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(orientation_changed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_popup_context_menu<F: Fn(&Self, i32, i32, i32) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, i32, i32, i32) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"popup-context-menu\0".as_ptr() as *const _,
-                transmute(popup_context_menu_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(popup_context_menu_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_style_changed<F: Fn(&Self, ToolbarStyle) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, ToolbarStyle) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"style-changed\0".as_ptr() as *const _,
-                transmute(style_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(style_changed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_icon_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::icon-size\0".as_ptr() as *const _,
-                transmute(notify_icon_size_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_icon_size_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_icon_size_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::icon-size-set\0".as_ptr() as *const _,
-                transmute(notify_icon_size_set_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_icon_size_set_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_show_arrow_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::show-arrow\0".as_ptr() as *const _,
-                transmute(notify_show_arrow_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_show_arrow_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_toolbar_style_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::toolbar-style\0".as_ptr() as *const _,
-                transmute(notify_toolbar_style_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_toolbar_style_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn focus_home_or_end_trampoline<P>(this: *mut ffi::GtkToolbar, focus_home: glib_ffi::gboolean, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn focus_home_or_end_trampoline<P, F: Fn(&P, bool) -> bool + 'static>(this: *mut ffi::GtkToolbar, focus_home: glib_ffi::gboolean, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Toolbar> {
-    let f: &&(Fn(&P, bool) -> bool + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Toolbar::from_glib_borrow(this).unsafe_cast(), from_glib(focus_home)).to_glib()
 }
 
-unsafe extern "C" fn orientation_changed_trampoline<P>(this: *mut ffi::GtkToolbar, orientation: ffi::GtkOrientation, f: glib_ffi::gpointer)
+unsafe extern "C" fn orientation_changed_trampoline<P, F: Fn(&P, Orientation) + 'static>(this: *mut ffi::GtkToolbar, orientation: ffi::GtkOrientation, f: glib_ffi::gpointer)
 where P: IsA<Toolbar> {
-    let f: &&(Fn(&P, Orientation) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Toolbar::from_glib_borrow(this).unsafe_cast(), from_glib(orientation))
 }
 
-unsafe extern "C" fn popup_context_menu_trampoline<P>(this: *mut ffi::GtkToolbar, x: libc::c_int, y: libc::c_int, button: libc::c_int, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn popup_context_menu_trampoline<P, F: Fn(&P, i32, i32, i32) -> Inhibit + 'static>(this: *mut ffi::GtkToolbar, x: libc::c_int, y: libc::c_int, button: libc::c_int, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Toolbar> {
-    let f: &&(Fn(&P, i32, i32, i32) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Toolbar::from_glib_borrow(this).unsafe_cast(), x, y, button).to_glib()
 }
 
-unsafe extern "C" fn style_changed_trampoline<P>(this: *mut ffi::GtkToolbar, style: ffi::GtkToolbarStyle, f: glib_ffi::gpointer)
+unsafe extern "C" fn style_changed_trampoline<P, F: Fn(&P, ToolbarStyle) + 'static>(this: *mut ffi::GtkToolbar, style: ffi::GtkToolbarStyle, f: glib_ffi::gpointer)
 where P: IsA<Toolbar> {
-    let f: &&(Fn(&P, ToolbarStyle) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Toolbar::from_glib_borrow(this).unsafe_cast(), from_glib(style))
 }
 
-unsafe extern "C" fn notify_icon_size_trampoline<P>(this: *mut ffi::GtkToolbar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_icon_size_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkToolbar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Toolbar> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Toolbar::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_icon_size_set_trampoline<P>(this: *mut ffi::GtkToolbar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_icon_size_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkToolbar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Toolbar> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Toolbar::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_show_arrow_trampoline<P>(this: *mut ffi::GtkToolbar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_show_arrow_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkToolbar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Toolbar> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Toolbar::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_toolbar_style_trampoline<P>(this: *mut ffi::GtkToolbar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_toolbar_style_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkToolbar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Toolbar> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Toolbar::from_glib_borrow(this).unsafe_cast())
 }
 

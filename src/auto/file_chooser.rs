@@ -587,226 +587,226 @@ impl<O: IsA<FileChooser>> FileChooserExt for O {
 
     fn connect_confirm_overwrite<F: Fn(&Self) -> FileChooserConfirmation + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) -> FileChooserConfirmation + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"confirm-overwrite\0".as_ptr() as *const _,
-                transmute(confirm_overwrite_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(confirm_overwrite_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_current_folder_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"current-folder-changed\0".as_ptr() as *const _,
-                transmute(current_folder_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(current_folder_changed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_file_activated<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"file-activated\0".as_ptr() as *const _,
-                transmute(file_activated_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(file_activated_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_selection_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"selection-changed\0".as_ptr() as *const _,
-                transmute(selection_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(selection_changed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_update_preview<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"update-preview\0".as_ptr() as *const _,
-                transmute(update_preview_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(update_preview_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_action_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::action\0".as_ptr() as *const _,
-                transmute(notify_action_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_action_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_create_folders_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::create-folders\0".as_ptr() as *const _,
-                transmute(notify_create_folders_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_create_folders_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_do_overwrite_confirmation_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::do-overwrite-confirmation\0".as_ptr() as *const _,
-                transmute(notify_do_overwrite_confirmation_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_do_overwrite_confirmation_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_extra_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::extra-widget\0".as_ptr() as *const _,
-                transmute(notify_extra_widget_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_extra_widget_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_filter_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::filter\0".as_ptr() as *const _,
-                transmute(notify_filter_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_filter_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_local_only_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::local-only\0".as_ptr() as *const _,
-                transmute(notify_local_only_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_local_only_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_preview_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::preview-widget\0".as_ptr() as *const _,
-                transmute(notify_preview_widget_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_preview_widget_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_preview_widget_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::preview-widget-active\0".as_ptr() as *const _,
-                transmute(notify_preview_widget_active_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_preview_widget_active_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_select_multiple_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::select-multiple\0".as_ptr() as *const _,
-                transmute(notify_select_multiple_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_select_multiple_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_show_hidden_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::show-hidden\0".as_ptr() as *const _,
-                transmute(notify_show_hidden_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_show_hidden_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_use_preview_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::use-preview-label\0".as_ptr() as *const _,
-                transmute(notify_use_preview_label_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_use_preview_label_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn confirm_overwrite_trampoline<P>(this: *mut ffi::GtkFileChooser, f: glib_ffi::gpointer) -> ffi::GtkFileChooserConfirmation
+unsafe extern "C" fn confirm_overwrite_trampoline<P, F: Fn(&P) -> FileChooserConfirmation + 'static>(this: *mut ffi::GtkFileChooser, f: glib_ffi::gpointer) -> ffi::GtkFileChooserConfirmation
 where P: IsA<FileChooser> {
-    let f: &&(Fn(&P) -> FileChooserConfirmation + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&FileChooser::from_glib_borrow(this).unsafe_cast()).to_glib()
 }
 
-unsafe extern "C" fn current_folder_changed_trampoline<P>(this: *mut ffi::GtkFileChooser, f: glib_ffi::gpointer)
+unsafe extern "C" fn current_folder_changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFileChooser, f: glib_ffi::gpointer)
 where P: IsA<FileChooser> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&FileChooser::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn file_activated_trampoline<P>(this: *mut ffi::GtkFileChooser, f: glib_ffi::gpointer)
+unsafe extern "C" fn file_activated_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFileChooser, f: glib_ffi::gpointer)
 where P: IsA<FileChooser> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&FileChooser::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn selection_changed_trampoline<P>(this: *mut ffi::GtkFileChooser, f: glib_ffi::gpointer)
+unsafe extern "C" fn selection_changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFileChooser, f: glib_ffi::gpointer)
 where P: IsA<FileChooser> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&FileChooser::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn update_preview_trampoline<P>(this: *mut ffi::GtkFileChooser, f: glib_ffi::gpointer)
+unsafe extern "C" fn update_preview_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFileChooser, f: glib_ffi::gpointer)
 where P: IsA<FileChooser> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&FileChooser::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_action_trampoline<P>(this: *mut ffi::GtkFileChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_action_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFileChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FileChooser> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&FileChooser::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_create_folders_trampoline<P>(this: *mut ffi::GtkFileChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_create_folders_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFileChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FileChooser> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&FileChooser::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_do_overwrite_confirmation_trampoline<P>(this: *mut ffi::GtkFileChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_do_overwrite_confirmation_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFileChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FileChooser> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&FileChooser::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_extra_widget_trampoline<P>(this: *mut ffi::GtkFileChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_extra_widget_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFileChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FileChooser> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&FileChooser::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_filter_trampoline<P>(this: *mut ffi::GtkFileChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_filter_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFileChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FileChooser> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&FileChooser::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_local_only_trampoline<P>(this: *mut ffi::GtkFileChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_local_only_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFileChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FileChooser> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&FileChooser::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_preview_widget_trampoline<P>(this: *mut ffi::GtkFileChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_preview_widget_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFileChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FileChooser> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&FileChooser::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_preview_widget_active_trampoline<P>(this: *mut ffi::GtkFileChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_preview_widget_active_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFileChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FileChooser> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&FileChooser::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_select_multiple_trampoline<P>(this: *mut ffi::GtkFileChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_select_multiple_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFileChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FileChooser> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&FileChooser::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_show_hidden_trampoline<P>(this: *mut ffi::GtkFileChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_show_hidden_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFileChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FileChooser> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&FileChooser::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_use_preview_label_trampoline<P>(this: *mut ffi::GtkFileChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_use_preview_label_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFileChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FileChooser> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&FileChooser::from_glib_borrow(this).unsafe_cast())
 }
 

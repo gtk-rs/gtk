@@ -271,33 +271,33 @@ impl<O: IsA<TreeModel>> TreeModelExt for O {
 
     fn connect_row_changed<F: Fn(&Self, &TreePath, &TreeIter) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &TreePath, &TreeIter) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"row-changed\0".as_ptr() as *const _,
-                transmute(row_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(row_changed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_row_deleted<F: Fn(&Self, &TreePath) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &TreePath) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"row-deleted\0".as_ptr() as *const _,
-                transmute(row_deleted_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(row_deleted_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_row_has_child_toggled<F: Fn(&Self, &TreePath, &TreeIter) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &TreePath, &TreeIter) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"row-has-child-toggled\0".as_ptr() as *const _,
-                transmute(row_has_child_toggled_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(row_has_child_toggled_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_row_inserted<F: Fn(&Self, &TreePath, &TreeIter) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &TreePath, &TreeIter) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"row-inserted\0".as_ptr() as *const _,
-                transmute(row_inserted_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(row_inserted_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -306,27 +306,27 @@ impl<O: IsA<TreeModel>> TreeModelExt for O {
     //}
 }
 
-unsafe extern "C" fn row_changed_trampoline<P>(this: *mut ffi::GtkTreeModel, path: *mut ffi::GtkTreePath, iter: *mut ffi::GtkTreeIter, f: glib_ffi::gpointer)
+unsafe extern "C" fn row_changed_trampoline<P, F: Fn(&P, &TreePath, &TreeIter) + 'static>(this: *mut ffi::GtkTreeModel, path: *mut ffi::GtkTreePath, iter: *mut ffi::GtkTreeIter, f: glib_ffi::gpointer)
 where P: IsA<TreeModel> {
-    let f: &&(Fn(&P, &TreePath, &TreeIter) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&TreeModel::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(path), &from_glib_borrow(iter))
 }
 
-unsafe extern "C" fn row_deleted_trampoline<P>(this: *mut ffi::GtkTreeModel, path: *mut ffi::GtkTreePath, f: glib_ffi::gpointer)
+unsafe extern "C" fn row_deleted_trampoline<P, F: Fn(&P, &TreePath) + 'static>(this: *mut ffi::GtkTreeModel, path: *mut ffi::GtkTreePath, f: glib_ffi::gpointer)
 where P: IsA<TreeModel> {
-    let f: &&(Fn(&P, &TreePath) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&TreeModel::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(path))
 }
 
-unsafe extern "C" fn row_has_child_toggled_trampoline<P>(this: *mut ffi::GtkTreeModel, path: *mut ffi::GtkTreePath, iter: *mut ffi::GtkTreeIter, f: glib_ffi::gpointer)
+unsafe extern "C" fn row_has_child_toggled_trampoline<P, F: Fn(&P, &TreePath, &TreeIter) + 'static>(this: *mut ffi::GtkTreeModel, path: *mut ffi::GtkTreePath, iter: *mut ffi::GtkTreeIter, f: glib_ffi::gpointer)
 where P: IsA<TreeModel> {
-    let f: &&(Fn(&P, &TreePath, &TreeIter) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&TreeModel::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(path), &from_glib_borrow(iter))
 }
 
-unsafe extern "C" fn row_inserted_trampoline<P>(this: *mut ffi::GtkTreeModel, path: *mut ffi::GtkTreePath, iter: *mut ffi::GtkTreeIter, f: glib_ffi::gpointer)
+unsafe extern "C" fn row_inserted_trampoline<P, F: Fn(&P, &TreePath, &TreeIter) + 'static>(this: *mut ffi::GtkTreeModel, path: *mut ffi::GtkTreePath, iter: *mut ffi::GtkTreeIter, f: glib_ffi::gpointer)
 where P: IsA<TreeModel> {
-    let f: &&(Fn(&P, &TreePath, &TreeIter) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&TreeModel::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(path), &from_glib_borrow(iter))
 }
 

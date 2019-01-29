@@ -343,226 +343,226 @@ impl<O: IsA<AboutDialog>> AboutDialogExt for O {
 
     fn connect_activate_link<F: Fn(&Self, &str) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &str) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"activate-link\0".as_ptr() as *const _,
-                transmute(activate_link_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(activate_link_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_artists_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::artists\0".as_ptr() as *const _,
-                transmute(notify_artists_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_artists_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_authors_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::authors\0".as_ptr() as *const _,
-                transmute(notify_authors_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_authors_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_comments_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::comments\0".as_ptr() as *const _,
-                transmute(notify_comments_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_comments_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_copyright_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::copyright\0".as_ptr() as *const _,
-                transmute(notify_copyright_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_copyright_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_documenters_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::documenters\0".as_ptr() as *const _,
-                transmute(notify_documenters_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_documenters_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_license_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::license\0".as_ptr() as *const _,
-                transmute(notify_license_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_license_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_license_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::license-type\0".as_ptr() as *const _,
-                transmute(notify_license_type_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_license_type_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_logo_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::logo\0".as_ptr() as *const _,
-                transmute(notify_logo_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_logo_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_logo_icon_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::logo-icon-name\0".as_ptr() as *const _,
-                transmute(notify_logo_icon_name_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_logo_icon_name_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_program_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::program-name\0".as_ptr() as *const _,
-                transmute(notify_program_name_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_program_name_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_translator_credits_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::translator-credits\0".as_ptr() as *const _,
-                transmute(notify_translator_credits_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_translator_credits_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_version_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::version\0".as_ptr() as *const _,
-                transmute(notify_version_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_version_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_website_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::website\0".as_ptr() as *const _,
-                transmute(notify_website_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_website_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_website_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::website-label\0".as_ptr() as *const _,
-                transmute(notify_website_label_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_website_label_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_wrap_license_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::wrap-license\0".as_ptr() as *const _,
-                transmute(notify_wrap_license_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_wrap_license_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn activate_link_trampoline<P>(this: *mut ffi::GtkAboutDialog, uri: *mut libc::c_char, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn activate_link_trampoline<P, F: Fn(&P, &str) -> Inhibit + 'static>(this: *mut ffi::GtkAboutDialog, uri: *mut libc::c_char, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<AboutDialog> {
-    let f: &&(Fn(&P, &str) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&AboutDialog::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(uri)).to_glib()
 }
 
-unsafe extern "C" fn notify_artists_trampoline<P>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_artists_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AboutDialog> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_authors_trampoline<P>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_authors_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AboutDialog> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_comments_trampoline<P>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_comments_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AboutDialog> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_copyright_trampoline<P>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_copyright_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AboutDialog> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_documenters_trampoline<P>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_documenters_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AboutDialog> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_license_trampoline<P>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_license_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AboutDialog> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_license_type_trampoline<P>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_license_type_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AboutDialog> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_logo_trampoline<P>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_logo_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AboutDialog> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_logo_icon_name_trampoline<P>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_logo_icon_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AboutDialog> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_program_name_trampoline<P>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_program_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AboutDialog> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_translator_credits_trampoline<P>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_translator_credits_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AboutDialog> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_version_trampoline<P>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_version_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AboutDialog> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_website_trampoline<P>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_website_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AboutDialog> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_website_label_trampoline<P>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_website_label_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AboutDialog> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_wrap_license_trampoline<P>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_wrap_license_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAboutDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AboutDialog> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&AboutDialog::from_glib_borrow(this).unsafe_cast())
 }
 

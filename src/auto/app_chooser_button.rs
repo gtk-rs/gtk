@@ -128,58 +128,58 @@ impl<O: IsA<AppChooserButton>> AppChooserButtonExt for O {
 
     fn connect_custom_item_activated<F: Fn(&Self, &str) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &str) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"custom-item-activated\0".as_ptr() as *const _,
-                transmute(custom_item_activated_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(custom_item_activated_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_heading_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::heading\0".as_ptr() as *const _,
-                transmute(notify_heading_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_heading_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_show_default_item_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::show-default-item\0".as_ptr() as *const _,
-                transmute(notify_show_default_item_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_show_default_item_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_show_dialog_item_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::show-dialog-item\0".as_ptr() as *const _,
-                transmute(notify_show_dialog_item_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_show_dialog_item_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn custom_item_activated_trampoline<P>(this: *mut ffi::GtkAppChooserButton, item_name: *mut libc::c_char, f: glib_ffi::gpointer)
+unsafe extern "C" fn custom_item_activated_trampoline<P, F: Fn(&P, &str) + 'static>(this: *mut ffi::GtkAppChooserButton, item_name: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<AppChooserButton> {
-    let f: &&(Fn(&P, &str) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&AppChooserButton::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(item_name))
 }
 
-unsafe extern "C" fn notify_heading_trampoline<P>(this: *mut ffi::GtkAppChooserButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_heading_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAppChooserButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AppChooserButton> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&AppChooserButton::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_show_default_item_trampoline<P>(this: *mut ffi::GtkAppChooserButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_show_default_item_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAppChooserButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AppChooserButton> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&AppChooserButton::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_show_dialog_item_trampoline<P>(this: *mut ffi::GtkAppChooserButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_show_dialog_item_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAppChooserButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AppChooserButton> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&AppChooserButton::from_glib_borrow(this).unsafe_cast())
 }
 

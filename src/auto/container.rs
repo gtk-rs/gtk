@@ -316,100 +316,100 @@ impl<O: IsA<Container>> ContainerExt for O {
 
     fn connect_add<F: Fn(&Self, &Widget) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &Widget) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"add\0".as_ptr() as *const _,
-                transmute(add_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(add_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_check_resize<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"check-resize\0".as_ptr() as *const _,
-                transmute(check_resize_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(check_resize_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_remove<F: Fn(&Self, &Widget) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &Widget) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"remove\0".as_ptr() as *const _,
-                transmute(remove_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(remove_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_set_focus_child<F: Fn(&Self, &Widget) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &Widget) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"set-focus-child\0".as_ptr() as *const _,
-                transmute(set_focus_child_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(set_focus_child_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_border_width_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::border-width\0".as_ptr() as *const _,
-                transmute(notify_border_width_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_border_width_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_child_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::child\0".as_ptr() as *const _,
-                transmute(notify_child_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_child_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_resize_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::resize-mode\0".as_ptr() as *const _,
-                transmute(notify_resize_mode_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_resize_mode_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn add_trampoline<P>(this: *mut ffi::GtkContainer, object: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
+unsafe extern "C" fn add_trampoline<P, F: Fn(&P, &Widget) + 'static>(this: *mut ffi::GtkContainer, object: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<Container> {
-    let f: &&(Fn(&P, &Widget) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Container::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
 }
 
-unsafe extern "C" fn check_resize_trampoline<P>(this: *mut ffi::GtkContainer, f: glib_ffi::gpointer)
+unsafe extern "C" fn check_resize_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkContainer, f: glib_ffi::gpointer)
 where P: IsA<Container> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Container::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn remove_trampoline<P>(this: *mut ffi::GtkContainer, object: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
+unsafe extern "C" fn remove_trampoline<P, F: Fn(&P, &Widget) + 'static>(this: *mut ffi::GtkContainer, object: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<Container> {
-    let f: &&(Fn(&P, &Widget) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Container::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
 }
 
-unsafe extern "C" fn set_focus_child_trampoline<P>(this: *mut ffi::GtkContainer, object: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
+unsafe extern "C" fn set_focus_child_trampoline<P, F: Fn(&P, &Widget) + 'static>(this: *mut ffi::GtkContainer, object: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<Container> {
-    let f: &&(Fn(&P, &Widget) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Container::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(object))
 }
 
-unsafe extern "C" fn notify_border_width_trampoline<P>(this: *mut ffi::GtkContainer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_border_width_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkContainer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Container> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Container::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_child_trampoline<P>(this: *mut ffi::GtkContainer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_child_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkContainer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Container> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Container::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_resize_mode_trampoline<P>(this: *mut ffi::GtkContainer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_resize_mode_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkContainer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Container> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Container::from_glib_borrow(this).unsafe_cast())
 }
 

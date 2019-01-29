@@ -179,12 +179,12 @@ impl<O: IsA<IconInfo>> IconInfoExt for O {
     #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn load_icon_async<'a, P: IsA<gio::Cancellable> + 'a, Q: Into<Option<&'a P>>, R: FnOnce(Result<gdk_pixbuf::Pixbuf, Error>) + Send + 'static>(&self, cancellable: Q, callback: R) {
         let cancellable = cancellable.into();
-        let user_data: Box<Box<R>> = Box::new(Box::new(callback));
+        let user_data: Box<R> = Box::new(callback);
         unsafe extern "C" fn load_icon_async_trampoline<R: FnOnce(Result<gdk_pixbuf::Pixbuf, Error>) + Send + 'static>(_source_object: *mut gobject_ffi::GObject, res: *mut gio_ffi::GAsyncResult, user_data: glib_ffi::gpointer) {
             let mut error = ptr::null_mut();
             let ret = ffi::gtk_icon_info_load_icon_finish(_source_object as *mut _, res, &mut error);
             let result = if error.is_null() { Ok(from_glib_full(ret)) } else { Err(from_glib_full(error)) };
-            let callback: Box<Box<R>> = Box::from_raw(user_data as *mut _);
+            let callback: Box<R> = Box::from_raw(user_data as *mut _);
             callback(result);
         }
         let callback = load_icon_async_trampoline::<R>;
@@ -244,13 +244,13 @@ impl<O: IsA<IconInfo>> IconInfoExt for O {
         let warning_color = warning_color.into();
         let error_color = error_color.into();
         let cancellable = cancellable.into();
-        let user_data: Box<Box<U>> = Box::new(Box::new(callback));
+        let user_data: Box<U> = Box::new(callback);
         unsafe extern "C" fn load_symbolic_async_trampoline<U: FnOnce(Result<(gdk_pixbuf::Pixbuf, bool), Error>) + Send + 'static>(_source_object: *mut gobject_ffi::GObject, res: *mut gio_ffi::GAsyncResult, user_data: glib_ffi::gpointer) {
             let mut error = ptr::null_mut();
             let mut was_symbolic = mem::uninitialized();
             let ret = ffi::gtk_icon_info_load_symbolic_finish(_source_object as *mut _, res, &mut was_symbolic, &mut error);
             let result = if error.is_null() { Ok((from_glib_full(ret), from_glib(was_symbolic))) } else { Err(from_glib_full(error)) };
-            let callback: Box<Box<U>> = Box::from_raw(user_data as *mut _);
+            let callback: Box<U> = Box::from_raw(user_data as *mut _);
             callback(result);
         }
         let callback = load_symbolic_async_trampoline::<U>;
@@ -305,13 +305,13 @@ impl<O: IsA<IconInfo>> IconInfoExt for O {
     #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn load_symbolic_for_context_async<'a, P: IsA<StyleContext>, Q: IsA<gio::Cancellable> + 'a, R: Into<Option<&'a Q>>, S: FnOnce(Result<(gdk_pixbuf::Pixbuf, bool), Error>) + Send + 'static>(&self, context: &P, cancellable: R, callback: S) {
         let cancellable = cancellable.into();
-        let user_data: Box<Box<S>> = Box::new(Box::new(callback));
+        let user_data: Box<S> = Box::new(callback);
         unsafe extern "C" fn load_symbolic_for_context_async_trampoline<S: FnOnce(Result<(gdk_pixbuf::Pixbuf, bool), Error>) + Send + 'static>(_source_object: *mut gobject_ffi::GObject, res: *mut gio_ffi::GAsyncResult, user_data: glib_ffi::gpointer) {
             let mut error = ptr::null_mut();
             let mut was_symbolic = mem::uninitialized();
             let ret = ffi::gtk_icon_info_load_symbolic_for_context_finish(_source_object as *mut _, res, &mut was_symbolic, &mut error);
             let result = if error.is_null() { Ok((from_glib_full(ret), from_glib(was_symbolic))) } else { Err(from_glib_full(error)) };
-            let callback: Box<Box<S>> = Box::from_raw(user_data as *mut _);
+            let callback: Box<S> = Box::from_raw(user_data as *mut _);
             callback(result);
         }
         let callback = load_symbolic_for_context_async_trampoline::<S>;

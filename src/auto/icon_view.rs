@@ -670,9 +670,9 @@ impl<O: IsA<IconView>> IconViewExt for O {
 
     fn connect_activate_cursor_item<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) -> bool + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"activate-cursor-item\0".as_ptr() as *const _,
-                transmute(activate_cursor_item_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(activate_cursor_item_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -683,17 +683,17 @@ impl<O: IsA<IconView>> IconViewExt for O {
 
     fn connect_item_activated<F: Fn(&Self, &TreePath) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &TreePath) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"item-activated\0".as_ptr() as *const _,
-                transmute(item_activated_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(item_activated_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_move_cursor<F: Fn(&Self, MovementStep, i32) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, MovementStep, i32) -> bool + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"move-cursor\0".as_ptr() as *const _,
-                transmute(move_cursor_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(move_cursor_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -704,9 +704,9 @@ impl<O: IsA<IconView>> IconViewExt for O {
 
     fn connect_select_all<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"select-all\0".as_ptr() as *const _,
-                transmute(select_all_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(select_all_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -716,9 +716,9 @@ impl<O: IsA<IconView>> IconViewExt for O {
 
     fn connect_select_cursor_item<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"select-cursor-item\0".as_ptr() as *const _,
-                transmute(select_cursor_item_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(select_cursor_item_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -728,17 +728,17 @@ impl<O: IsA<IconView>> IconViewExt for O {
 
     fn connect_selection_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"selection-changed\0".as_ptr() as *const _,
-                transmute(selection_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(selection_changed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_toggle_cursor_item<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"toggle-cursor-item\0".as_ptr() as *const _,
-                transmute(toggle_cursor_item_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(toggle_cursor_item_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -748,9 +748,9 @@ impl<O: IsA<IconView>> IconViewExt for O {
 
     fn connect_unselect_all<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"unselect-all\0".as_ptr() as *const _,
-                transmute(unselect_all_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(unselect_all_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -761,275 +761,275 @@ impl<O: IsA<IconView>> IconViewExt for O {
     #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn connect_property_activate_on_single_click_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::activate-on-single-click\0".as_ptr() as *const _,
-                transmute(notify_activate_on_single_click_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_activate_on_single_click_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_column_spacing_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::column-spacing\0".as_ptr() as *const _,
-                transmute(notify_column_spacing_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_column_spacing_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_columns_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::columns\0".as_ptr() as *const _,
-                transmute(notify_columns_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_columns_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_item_orientation_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::item-orientation\0".as_ptr() as *const _,
-                transmute(notify_item_orientation_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_item_orientation_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_item_padding_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::item-padding\0".as_ptr() as *const _,
-                transmute(notify_item_padding_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_item_padding_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_item_width_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::item-width\0".as_ptr() as *const _,
-                transmute(notify_item_width_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_item_width_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_margin_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::margin\0".as_ptr() as *const _,
-                transmute(notify_margin_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_margin_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_markup_column_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::markup-column\0".as_ptr() as *const _,
-                transmute(notify_markup_column_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_markup_column_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_model_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::model\0".as_ptr() as *const _,
-                transmute(notify_model_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_model_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_pixbuf_column_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::pixbuf-column\0".as_ptr() as *const _,
-                transmute(notify_pixbuf_column_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_pixbuf_column_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_reorderable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::reorderable\0".as_ptr() as *const _,
-                transmute(notify_reorderable_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_reorderable_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_row_spacing_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::row-spacing\0".as_ptr() as *const _,
-                transmute(notify_row_spacing_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_row_spacing_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_selection_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::selection-mode\0".as_ptr() as *const _,
-                transmute(notify_selection_mode_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_selection_mode_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_spacing_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::spacing\0".as_ptr() as *const _,
-                transmute(notify_spacing_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_spacing_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_text_column_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::text-column\0".as_ptr() as *const _,
-                transmute(notify_text_column_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_text_column_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_tooltip_column_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::tooltip-column\0".as_ptr() as *const _,
-                transmute(notify_tooltip_column_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_tooltip_column_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn activate_cursor_item_trampoline<P>(this: *mut ffi::GtkIconView, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn activate_cursor_item_trampoline<P, F: Fn(&P) -> bool + 'static>(this: *mut ffi::GtkIconView, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<IconView> {
-    let f: &&(Fn(&P) -> bool + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&IconView::from_glib_borrow(this).unsafe_cast()).to_glib()
 }
 
-unsafe extern "C" fn item_activated_trampoline<P>(this: *mut ffi::GtkIconView, path: *mut ffi::GtkTreePath, f: glib_ffi::gpointer)
+unsafe extern "C" fn item_activated_trampoline<P, F: Fn(&P, &TreePath) + 'static>(this: *mut ffi::GtkIconView, path: *mut ffi::GtkTreePath, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &&(Fn(&P, &TreePath) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&IconView::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(path))
 }
 
-unsafe extern "C" fn move_cursor_trampoline<P>(this: *mut ffi::GtkIconView, step: ffi::GtkMovementStep, count: libc::c_int, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn move_cursor_trampoline<P, F: Fn(&P, MovementStep, i32) -> bool + 'static>(this: *mut ffi::GtkIconView, step: ffi::GtkMovementStep, count: libc::c_int, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<IconView> {
-    let f: &&(Fn(&P, MovementStep, i32) -> bool + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&IconView::from_glib_borrow(this).unsafe_cast(), from_glib(step), count).to_glib()
 }
 
-unsafe extern "C" fn select_all_trampoline<P>(this: *mut ffi::GtkIconView, f: glib_ffi::gpointer)
+unsafe extern "C" fn select_all_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn select_cursor_item_trampoline<P>(this: *mut ffi::GtkIconView, f: glib_ffi::gpointer)
+unsafe extern "C" fn select_cursor_item_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn selection_changed_trampoline<P>(this: *mut ffi::GtkIconView, f: glib_ffi::gpointer)
+unsafe extern "C" fn selection_changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn toggle_cursor_item_trampoline<P>(this: *mut ffi::GtkIconView, f: glib_ffi::gpointer)
+unsafe extern "C" fn toggle_cursor_item_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn unselect_all_trampoline<P>(this: *mut ffi::GtkIconView, f: glib_ffi::gpointer)
+unsafe extern "C" fn unselect_all_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_8", feature = "dox"))]
-unsafe extern "C" fn notify_activate_on_single_click_trampoline<P>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_activate_on_single_click_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_column_spacing_trampoline<P>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_column_spacing_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_columns_trampoline<P>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_columns_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_item_orientation_trampoline<P>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_item_orientation_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_item_padding_trampoline<P>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_item_padding_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_item_width_trampoline<P>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_item_width_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_margin_trampoline<P>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_margin_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_markup_column_trampoline<P>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_markup_column_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_model_trampoline<P>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_model_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_pixbuf_column_trampoline<P>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_pixbuf_column_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_reorderable_trampoline<P>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_reorderable_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_row_spacing_trampoline<P>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_row_spacing_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_selection_mode_trampoline<P>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_selection_mode_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_spacing_trampoline<P>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_spacing_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_text_column_trampoline<P>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_text_column_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_tooltip_column_trampoline<P>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_tooltip_column_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 

@@ -183,9 +183,9 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
 
     fn connect_activate_current<F: Fn(&Self, bool) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, bool) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"activate-current\0".as_ptr() as *const _,
-                transmute(activate_current_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(activate_current_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -195,9 +195,9 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
 
     fn connect_cancel<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"cancel\0".as_ptr() as *const _,
-                transmute(cancel_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(cancel_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -207,9 +207,9 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
 
     fn connect_cycle_focus<F: Fn(&Self, DirectionType) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, DirectionType) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"cycle-focus\0".as_ptr() as *const _,
-                transmute(cycle_focus_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(cycle_focus_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -219,25 +219,25 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
 
     fn connect_deactivate<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"deactivate\0".as_ptr() as *const _,
-                transmute(deactivate_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(deactivate_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_insert<F: Fn(&Self, &Widget, i32) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &Widget, i32) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"insert\0".as_ptr() as *const _,
-                transmute(insert_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(insert_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_move_current<F: Fn(&Self, MenuDirectionType) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, MenuDirectionType) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"move-current\0".as_ptr() as *const _,
-                transmute(move_current_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(move_current_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -247,80 +247,80 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
 
     fn connect_move_selected<F: Fn(&Self, i32) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, i32) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"move-selected\0".as_ptr() as *const _,
-                transmute(move_selected_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(move_selected_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_selection_done<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"selection-done\0".as_ptr() as *const _,
-                transmute(selection_done_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(selection_done_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_take_focus_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::take-focus\0".as_ptr() as *const _,
-                transmute(notify_take_focus_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_take_focus_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn activate_current_trampoline<P>(this: *mut ffi::GtkMenuShell, force_hide: glib_ffi::gboolean, f: glib_ffi::gpointer)
+unsafe extern "C" fn activate_current_trampoline<P, F: Fn(&P, bool) + 'static>(this: *mut ffi::GtkMenuShell, force_hide: glib_ffi::gboolean, f: glib_ffi::gpointer)
 where P: IsA<MenuShell> {
-    let f: &&(Fn(&P, bool) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&MenuShell::from_glib_borrow(this).unsafe_cast(), from_glib(force_hide))
 }
 
-unsafe extern "C" fn cancel_trampoline<P>(this: *mut ffi::GtkMenuShell, f: glib_ffi::gpointer)
+unsafe extern "C" fn cancel_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuShell, f: glib_ffi::gpointer)
 where P: IsA<MenuShell> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&MenuShell::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn cycle_focus_trampoline<P>(this: *mut ffi::GtkMenuShell, direction: ffi::GtkDirectionType, f: glib_ffi::gpointer)
+unsafe extern "C" fn cycle_focus_trampoline<P, F: Fn(&P, DirectionType) + 'static>(this: *mut ffi::GtkMenuShell, direction: ffi::GtkDirectionType, f: glib_ffi::gpointer)
 where P: IsA<MenuShell> {
-    let f: &&(Fn(&P, DirectionType) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&MenuShell::from_glib_borrow(this).unsafe_cast(), from_glib(direction))
 }
 
-unsafe extern "C" fn deactivate_trampoline<P>(this: *mut ffi::GtkMenuShell, f: glib_ffi::gpointer)
+unsafe extern "C" fn deactivate_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuShell, f: glib_ffi::gpointer)
 where P: IsA<MenuShell> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&MenuShell::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn insert_trampoline<P>(this: *mut ffi::GtkMenuShell, child: *mut ffi::GtkWidget, position: libc::c_int, f: glib_ffi::gpointer)
+unsafe extern "C" fn insert_trampoline<P, F: Fn(&P, &Widget, i32) + 'static>(this: *mut ffi::GtkMenuShell, child: *mut ffi::GtkWidget, position: libc::c_int, f: glib_ffi::gpointer)
 where P: IsA<MenuShell> {
-    let f: &&(Fn(&P, &Widget, i32) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&MenuShell::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(child), position)
 }
 
-unsafe extern "C" fn move_current_trampoline<P>(this: *mut ffi::GtkMenuShell, direction: ffi::GtkMenuDirectionType, f: glib_ffi::gpointer)
+unsafe extern "C" fn move_current_trampoline<P, F: Fn(&P, MenuDirectionType) + 'static>(this: *mut ffi::GtkMenuShell, direction: ffi::GtkMenuDirectionType, f: glib_ffi::gpointer)
 where P: IsA<MenuShell> {
-    let f: &&(Fn(&P, MenuDirectionType) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&MenuShell::from_glib_borrow(this).unsafe_cast(), from_glib(direction))
 }
 
-unsafe extern "C" fn move_selected_trampoline<P>(this: *mut ffi::GtkMenuShell, distance: libc::c_int, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn move_selected_trampoline<P, F: Fn(&P, i32) -> Inhibit + 'static>(this: *mut ffi::GtkMenuShell, distance: libc::c_int, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<MenuShell> {
-    let f: &&(Fn(&P, i32) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&MenuShell::from_glib_borrow(this).unsafe_cast(), distance).to_glib()
 }
 
-unsafe extern "C" fn selection_done_trampoline<P>(this: *mut ffi::GtkMenuShell, f: glib_ffi::gpointer)
+unsafe extern "C" fn selection_done_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuShell, f: glib_ffi::gpointer)
 where P: IsA<MenuShell> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&MenuShell::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_take_focus_trampoline<P>(this: *mut ffi::GtkMenuShell, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_take_focus_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuShell, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MenuShell> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&MenuShell::from_glib_borrow(this).unsafe_cast())
 }
 

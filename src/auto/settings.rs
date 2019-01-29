@@ -55,7 +55,7 @@ impl Settings {
     //}
 
     //#[cfg_attr(feature = "v3_16", deprecated)]
-    //pub fn install_property_parser(pspec: /*Ignored*/&glib::ParamSpec, parser: /*Unimplemented*/Fn(/*Ignored*/glib::ParamSpec, /*Ignored*/glib::String, &glib::Value) -> bool) {
+    //pub fn install_property_parser(pspec: /*Ignored*/&glib::ParamSpec, parser: /*Unimplemented*/FnMut(/*Ignored*/glib::ParamSpec, /*Ignored*/glib::String, &glib::Value) -> bool) {
     //    unsafe { TODO: call ffi::gtk_settings_install_property_parser() }
     //}
 }
@@ -1908,1168 +1908,1168 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
     fn connect_property_color_hash_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::color-hash\0".as_ptr() as *const _,
-                transmute(notify_color_hash_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_color_hash_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_alternative_button_order_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-alternative-button-order\0".as_ptr() as *const _,
-                transmute(notify_gtk_alternative_button_order_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_alternative_button_order_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_alternative_sort_arrows_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-alternative-sort-arrows\0".as_ptr() as *const _,
-                transmute(notify_gtk_alternative_sort_arrows_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_alternative_sort_arrows_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_application_prefer_dark_theme_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-application-prefer-dark-theme\0".as_ptr() as *const _,
-                transmute(notify_gtk_application_prefer_dark_theme_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_application_prefer_dark_theme_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_auto_mnemonics_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-auto-mnemonics\0".as_ptr() as *const _,
-                transmute(notify_gtk_auto_mnemonics_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_auto_mnemonics_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_button_images_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-button-images\0".as_ptr() as *const _,
-                transmute(notify_gtk_button_images_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_button_images_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_can_change_accels_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-can-change-accels\0".as_ptr() as *const _,
-                transmute(notify_gtk_can_change_accels_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_can_change_accels_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_color_palette_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-color-palette\0".as_ptr() as *const _,
-                transmute(notify_gtk_color_palette_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_color_palette_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_color_scheme_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-color-scheme\0".as_ptr() as *const _,
-                transmute(notify_gtk_color_scheme_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_color_scheme_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_cursor_blink_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-cursor-blink\0".as_ptr() as *const _,
-                transmute(notify_gtk_cursor_blink_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_cursor_blink_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_cursor_blink_time_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-cursor-blink-time\0".as_ptr() as *const _,
-                transmute(notify_gtk_cursor_blink_time_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_cursor_blink_time_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_cursor_blink_timeout_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-cursor-blink-timeout\0".as_ptr() as *const _,
-                transmute(notify_gtk_cursor_blink_timeout_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_cursor_blink_timeout_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_cursor_theme_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-cursor-theme-name\0".as_ptr() as *const _,
-                transmute(notify_gtk_cursor_theme_name_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_cursor_theme_name_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_cursor_theme_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-cursor-theme-size\0".as_ptr() as *const _,
-                transmute(notify_gtk_cursor_theme_size_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_cursor_theme_size_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_gtk_decoration_layout_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-decoration-layout\0".as_ptr() as *const _,
-                transmute(notify_gtk_decoration_layout_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_decoration_layout_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_gtk_dialogs_use_header_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-dialogs-use-header\0".as_ptr() as *const _,
-                transmute(notify_gtk_dialogs_use_header_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_dialogs_use_header_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_dnd_drag_threshold_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-dnd-drag-threshold\0".as_ptr() as *const _,
-                transmute(notify_gtk_dnd_drag_threshold_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_dnd_drag_threshold_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_double_click_distance_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-double-click-distance\0".as_ptr() as *const _,
-                transmute(notify_gtk_double_click_distance_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_double_click_distance_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_double_click_time_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-double-click-time\0".as_ptr() as *const _,
-                transmute(notify_gtk_double_click_time_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_double_click_time_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_enable_accels_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-enable-accels\0".as_ptr() as *const _,
-                transmute(notify_gtk_enable_accels_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_enable_accels_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_enable_animations_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-enable-animations\0".as_ptr() as *const _,
-                transmute(notify_gtk_enable_animations_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_enable_animations_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_enable_event_sounds_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-enable-event-sounds\0".as_ptr() as *const _,
-                transmute(notify_gtk_enable_event_sounds_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_enable_event_sounds_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_enable_input_feedback_sounds_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-enable-input-feedback-sounds\0".as_ptr() as *const _,
-                transmute(notify_gtk_enable_input_feedback_sounds_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_enable_input_feedback_sounds_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_enable_mnemonics_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-enable-mnemonics\0".as_ptr() as *const _,
-                transmute(notify_gtk_enable_mnemonics_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_enable_mnemonics_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_enable_primary_paste_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-enable-primary-paste\0".as_ptr() as *const _,
-                transmute(notify_gtk_enable_primary_paste_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_enable_primary_paste_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_enable_tooltips_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-enable-tooltips\0".as_ptr() as *const _,
-                transmute(notify_gtk_enable_tooltips_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_enable_tooltips_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_entry_password_hint_timeout_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-entry-password-hint-timeout\0".as_ptr() as *const _,
-                transmute(notify_gtk_entry_password_hint_timeout_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_entry_password_hint_timeout_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_entry_select_on_focus_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-entry-select-on-focus\0".as_ptr() as *const _,
-                transmute(notify_gtk_entry_select_on_focus_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_entry_select_on_focus_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_error_bell_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-error-bell\0".as_ptr() as *const _,
-                transmute(notify_gtk_error_bell_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_error_bell_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_fallback_icon_theme_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-fallback-icon-theme\0".as_ptr() as *const _,
-                transmute(notify_gtk_fallback_icon_theme_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_fallback_icon_theme_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_file_chooser_backend_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-file-chooser-backend\0".as_ptr() as *const _,
-                transmute(notify_gtk_file_chooser_backend_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_file_chooser_backend_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_font_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-font-name\0".as_ptr() as *const _,
-                transmute(notify_gtk_font_name_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_font_name_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_fontconfig_timestamp_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-fontconfig-timestamp\0".as_ptr() as *const _,
-                transmute(notify_gtk_fontconfig_timestamp_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_fontconfig_timestamp_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_icon_sizes_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-icon-sizes\0".as_ptr() as *const _,
-                transmute(notify_gtk_icon_sizes_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_icon_sizes_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_icon_theme_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-icon-theme-name\0".as_ptr() as *const _,
-                transmute(notify_gtk_icon_theme_name_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_icon_theme_name_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_im_module_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-im-module\0".as_ptr() as *const _,
-                transmute(notify_gtk_im_module_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_im_module_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_im_preedit_style_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-im-preedit-style\0".as_ptr() as *const _,
-                transmute(notify_gtk_im_preedit_style_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_im_preedit_style_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_im_status_style_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-im-status-style\0".as_ptr() as *const _,
-                transmute(notify_gtk_im_status_style_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_im_status_style_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_key_theme_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-key-theme-name\0".as_ptr() as *const _,
-                transmute(notify_gtk_key_theme_name_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_key_theme_name_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_keynav_cursor_only_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-keynav-cursor-only\0".as_ptr() as *const _,
-                transmute(notify_gtk_keynav_cursor_only_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_keynav_cursor_only_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn connect_property_gtk_keynav_use_caret_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-keynav-use-caret\0".as_ptr() as *const _,
-                transmute(notify_gtk_keynav_use_caret_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_keynav_use_caret_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_keynav_wrap_around_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-keynav-wrap-around\0".as_ptr() as *const _,
-                transmute(notify_gtk_keynav_wrap_around_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_keynav_wrap_around_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_label_select_on_focus_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-label-select-on-focus\0".as_ptr() as *const _,
-                transmute(notify_gtk_label_select_on_focus_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_label_select_on_focus_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_property_gtk_long_press_time_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-long-press-time\0".as_ptr() as *const _,
-                transmute(notify_gtk_long_press_time_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_long_press_time_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_menu_bar_accel_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-menu-bar-accel\0".as_ptr() as *const _,
-                transmute(notify_gtk_menu_bar_accel_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_menu_bar_accel_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_menu_bar_popup_delay_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-menu-bar-popup-delay\0".as_ptr() as *const _,
-                transmute(notify_gtk_menu_bar_popup_delay_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_menu_bar_popup_delay_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_menu_images_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-menu-images\0".as_ptr() as *const _,
-                transmute(notify_gtk_menu_images_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_menu_images_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_menu_popdown_delay_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-menu-popdown-delay\0".as_ptr() as *const _,
-                transmute(notify_gtk_menu_popdown_delay_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_menu_popdown_delay_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_menu_popup_delay_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-menu-popup-delay\0".as_ptr() as *const _,
-                transmute(notify_gtk_menu_popup_delay_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_menu_popup_delay_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_modules_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-modules\0".as_ptr() as *const _,
-                transmute(notify_gtk_modules_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_modules_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_gtk_primary_button_warps_slider_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-primary-button-warps-slider\0".as_ptr() as *const _,
-                transmute(notify_gtk_primary_button_warps_slider_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_primary_button_warps_slider_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_print_backends_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-print-backends\0".as_ptr() as *const _,
-                transmute(notify_gtk_print_backends_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_print_backends_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_print_preview_command_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-print-preview-command\0".as_ptr() as *const _,
-                transmute(notify_gtk_print_preview_command_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_print_preview_command_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn connect_property_gtk_recent_files_enabled_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-recent-files-enabled\0".as_ptr() as *const _,
-                transmute(notify_gtk_recent_files_enabled_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_recent_files_enabled_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_recent_files_limit_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-recent-files-limit\0".as_ptr() as *const _,
-                transmute(notify_gtk_recent_files_limit_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_recent_files_limit_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_recent_files_max_age_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-recent-files-max-age\0".as_ptr() as *const _,
-                transmute(notify_gtk_recent_files_max_age_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_recent_files_max_age_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_scrolled_window_placement_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-scrolled-window-placement\0".as_ptr() as *const _,
-                transmute(notify_gtk_scrolled_window_placement_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_scrolled_window_placement_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_shell_shows_app_menu_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-shell-shows-app-menu\0".as_ptr() as *const _,
-                transmute(notify_gtk_shell_shows_app_menu_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_shell_shows_app_menu_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_shell_shows_desktop_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-shell-shows-desktop\0".as_ptr() as *const _,
-                transmute(notify_gtk_shell_shows_desktop_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_shell_shows_desktop_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_shell_shows_menubar_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-shell-shows-menubar\0".as_ptr() as *const _,
-                transmute(notify_gtk_shell_shows_menubar_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_shell_shows_menubar_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_show_input_method_menu_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-show-input-method-menu\0".as_ptr() as *const _,
-                transmute(notify_gtk_show_input_method_menu_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_show_input_method_menu_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_show_unicode_menu_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-show-unicode-menu\0".as_ptr() as *const _,
-                transmute(notify_gtk_show_unicode_menu_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_show_unicode_menu_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_sound_theme_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-sound-theme-name\0".as_ptr() as *const _,
-                transmute(notify_gtk_sound_theme_name_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_sound_theme_name_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_split_cursor_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-split-cursor\0".as_ptr() as *const _,
-                transmute(notify_gtk_split_cursor_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_split_cursor_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_theme_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-theme-name\0".as_ptr() as *const _,
-                transmute(notify_gtk_theme_name_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_theme_name_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_timeout_expand_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-timeout-expand\0".as_ptr() as *const _,
-                transmute(notify_gtk_timeout_expand_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_timeout_expand_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_timeout_initial_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-timeout-initial\0".as_ptr() as *const _,
-                transmute(notify_gtk_timeout_initial_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_timeout_initial_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_timeout_repeat_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-timeout-repeat\0".as_ptr() as *const _,
-                transmute(notify_gtk_timeout_repeat_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_timeout_repeat_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_property_gtk_titlebar_double_click_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-titlebar-double-click\0".as_ptr() as *const _,
-                transmute(notify_gtk_titlebar_double_click_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_titlebar_double_click_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_property_gtk_titlebar_middle_click_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-titlebar-middle-click\0".as_ptr() as *const _,
-                transmute(notify_gtk_titlebar_middle_click_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_titlebar_middle_click_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_property_gtk_titlebar_right_click_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-titlebar-right-click\0".as_ptr() as *const _,
-                transmute(notify_gtk_titlebar_right_click_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_titlebar_right_click_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_toolbar_icon_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-toolbar-icon-size\0".as_ptr() as *const _,
-                transmute(notify_gtk_toolbar_icon_size_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_toolbar_icon_size_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_toolbar_style_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-toolbar-style\0".as_ptr() as *const _,
-                transmute(notify_gtk_toolbar_style_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_toolbar_style_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_tooltip_browse_mode_timeout_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-tooltip-browse-mode-timeout\0".as_ptr() as *const _,
-                transmute(notify_gtk_tooltip_browse_mode_timeout_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_tooltip_browse_mode_timeout_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_tooltip_browse_timeout_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-tooltip-browse-timeout\0".as_ptr() as *const _,
-                transmute(notify_gtk_tooltip_browse_timeout_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_tooltip_browse_timeout_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_tooltip_timeout_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-tooltip-timeout\0".as_ptr() as *const _,
-                transmute(notify_gtk_tooltip_timeout_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_tooltip_timeout_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_visible_focus_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-visible-focus\0".as_ptr() as *const _,
-                transmute(notify_gtk_visible_focus_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_visible_focus_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_xft_antialias_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-xft-antialias\0".as_ptr() as *const _,
-                transmute(notify_gtk_xft_antialias_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_xft_antialias_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_xft_dpi_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-xft-dpi\0".as_ptr() as *const _,
-                transmute(notify_gtk_xft_dpi_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_xft_dpi_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_xft_hinting_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-xft-hinting\0".as_ptr() as *const _,
-                transmute(notify_gtk_xft_hinting_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_xft_hinting_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_xft_hintstyle_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-xft-hintstyle\0".as_ptr() as *const _,
-                transmute(notify_gtk_xft_hintstyle_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_xft_hintstyle_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gtk_xft_rgba_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-xft-rgba\0".as_ptr() as *const _,
-                transmute(notify_gtk_xft_rgba_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_gtk_xft_rgba_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn notify_color_hash_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_color_hash_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_alternative_button_order_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_alternative_button_order_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_alternative_sort_arrows_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_alternative_sort_arrows_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_application_prefer_dark_theme_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_application_prefer_dark_theme_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_auto_mnemonics_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_auto_mnemonics_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_button_images_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_button_images_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_can_change_accels_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_can_change_accels_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_color_palette_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_color_palette_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_color_scheme_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_color_scheme_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_cursor_blink_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_cursor_blink_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_cursor_blink_time_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_cursor_blink_time_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_cursor_blink_timeout_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_cursor_blink_timeout_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_cursor_theme_name_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_cursor_theme_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_cursor_theme_size_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_cursor_theme_size_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-#[cfg(any(feature = "v3_12", feature = "dox"))]
-unsafe extern "C" fn notify_gtk_decoration_layout_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_12", feature = "dox"))]
-unsafe extern "C" fn notify_gtk_dialogs_use_header_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_decoration_layout_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_dnd_drag_threshold_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+#[cfg(any(feature = "v3_12", feature = "dox"))]
+unsafe extern "C" fn notify_gtk_dialogs_use_header_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_double_click_distance_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_dnd_drag_threshold_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_double_click_time_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_double_click_distance_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_enable_accels_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_double_click_time_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_enable_animations_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_enable_accels_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_enable_event_sounds_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_enable_animations_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_enable_input_feedback_sounds_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_enable_event_sounds_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_enable_mnemonics_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_enable_input_feedback_sounds_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_enable_primary_paste_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_enable_mnemonics_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_enable_tooltips_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_enable_primary_paste_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_entry_password_hint_timeout_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_enable_tooltips_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_entry_select_on_focus_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_entry_password_hint_timeout_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_error_bell_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_entry_select_on_focus_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_fallback_icon_theme_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_error_bell_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_file_chooser_backend_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_fallback_icon_theme_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_font_name_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_file_chooser_backend_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_fontconfig_timestamp_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_font_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_icon_sizes_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_fontconfig_timestamp_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_icon_theme_name_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_icon_sizes_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_im_module_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_icon_theme_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_im_preedit_style_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_im_module_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_im_status_style_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_im_preedit_style_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_key_theme_name_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_im_status_style_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_keynav_cursor_only_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_key_theme_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
+    f(&Settings::from_glib_borrow(this).unsafe_cast())
+}
+
+unsafe extern "C" fn notify_gtk_keynav_cursor_only_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+where P: IsA<Settings> {
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_20", feature = "dox"))]
-unsafe extern "C" fn notify_gtk_keynav_use_caret_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_keynav_use_caret_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_keynav_wrap_around_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_keynav_wrap_around_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_label_select_on_focus_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_label_select_on_focus_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_14", feature = "dox"))]
-unsafe extern "C" fn notify_gtk_long_press_time_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_long_press_time_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_menu_bar_accel_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_menu_bar_accel_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_menu_bar_popup_delay_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_menu_bar_popup_delay_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_menu_images_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_menu_images_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_menu_popdown_delay_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_menu_popdown_delay_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_menu_popup_delay_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_menu_popup_delay_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_modules_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_modules_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_6", feature = "dox"))]
-unsafe extern "C" fn notify_gtk_primary_button_warps_slider_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_primary_button_warps_slider_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_print_backends_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_print_backends_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_print_preview_command_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_print_preview_command_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_8", feature = "dox"))]
-unsafe extern "C" fn notify_gtk_recent_files_enabled_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_recent_files_enabled_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_recent_files_limit_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_recent_files_limit_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_recent_files_max_age_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_recent_files_max_age_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_scrolled_window_placement_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_scrolled_window_placement_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_shell_shows_app_menu_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_shell_shows_app_menu_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_shell_shows_desktop_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_shell_shows_desktop_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_shell_shows_menubar_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_shell_shows_menubar_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_show_input_method_menu_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_show_input_method_menu_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_show_unicode_menu_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_show_unicode_menu_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_sound_theme_name_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_sound_theme_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_split_cursor_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_split_cursor_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_theme_name_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_theme_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_timeout_expand_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_timeout_expand_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_timeout_initial_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_timeout_initial_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_timeout_repeat_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_timeout_repeat_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-#[cfg(any(feature = "v3_14", feature = "dox"))]
-unsafe extern "C" fn notify_gtk_titlebar_double_click_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_14", feature = "dox"))]
-unsafe extern "C" fn notify_gtk_titlebar_middle_click_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_titlebar_double_click_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_14", feature = "dox"))]
-unsafe extern "C" fn notify_gtk_titlebar_right_click_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_titlebar_middle_click_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_toolbar_icon_size_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+#[cfg(any(feature = "v3_14", feature = "dox"))]
+unsafe extern "C" fn notify_gtk_titlebar_right_click_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_toolbar_style_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_toolbar_icon_size_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_tooltip_browse_mode_timeout_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_toolbar_style_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_tooltip_browse_timeout_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_tooltip_browse_mode_timeout_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_tooltip_timeout_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_tooltip_browse_timeout_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_visible_focus_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_tooltip_timeout_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_xft_antialias_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_visible_focus_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_xft_dpi_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_xft_antialias_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_xft_hinting_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_xft_dpi_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_xft_hintstyle_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_xft_hinting_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_xft_rgba_trampoline<P>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gtk_xft_hintstyle_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
+    f(&Settings::from_glib_borrow(this).unsafe_cast())
+}
+
+unsafe extern "C" fn notify_gtk_xft_rgba_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+where P: IsA<Settings> {
+    let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 

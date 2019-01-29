@@ -63,17 +63,17 @@ impl<O: IsA<GestureRotate>> GestureRotateExt for O {
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_angle_changed<F: Fn(&Self, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, f64, f64) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"angle-changed\0".as_ptr() as *const _,
-                transmute(angle_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(angle_changed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
 #[cfg(any(feature = "v3_14", feature = "dox"))]
-unsafe extern "C" fn angle_changed_trampoline<P>(this: *mut ffi::GtkGestureRotate, angle: libc::c_double, angle_delta: libc::c_double, f: glib_ffi::gpointer)
+unsafe extern "C" fn angle_changed_trampoline<P, F: Fn(&P, f64, f64) + 'static>(this: *mut ffi::GtkGestureRotate, angle: libc::c_double, angle_delta: libc::c_double, f: glib_ffi::gpointer)
 where P: IsA<GestureRotate> {
-    let f: &&(Fn(&P, f64, f64) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&GestureRotate::from_glib_borrow(this).unsafe_cast(), angle, angle_delta)
 }
 
