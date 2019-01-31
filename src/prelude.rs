@@ -9,7 +9,6 @@ pub use glib::prelude::*;
 pub use auto::traits::*;
 
 pub use app_chooser::AppChooserExt;
-pub use assistant::AssistantExtManual;
 pub use buildable::BuildableExtManual;
 pub use cell_renderer_pixbuf::CellRendererPixbufExtManual;
 pub use color_button::ColorButtonExtManual;
@@ -17,10 +16,11 @@ pub use color_chooser::ColorChooserExtManual;
 pub use combo_box::ComboBoxExtManual;
 pub use dialog::DialogExtManual;
 pub use drag_context::DragContextExtManual;
-pub use entry_completion::EntryCompletionExtManual;
 pub use fixed::FixedExtManual;
+#[cfg(any(feature = "v3_18", feature = "dox"))]
+pub use flow_box::FlowBoxExtManual;
 pub use im_context_simple::IMContextSimpleExtManual;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
+#[cfg(any(feature = "v3_16", feature = "dox"))]
 pub use list_box::ListBoxExtManual;
 pub use list_store::GtkListStoreExtManual;
 pub use invisible::InvisibleExtManual;
@@ -30,7 +30,6 @@ pub use notebook::NotebookExtManual;
 pub use pad_controller::PadControllerExtManual;
 pub use switch::SwitchExtManual;
 pub use text_buffer::TextBufferExtManual;
-pub use tree_model_filter::TreeModelFilterExtManual;
 pub use tree_sortable::TreeSortableExtManual;
 pub use tree_store::TreeStoreExtManual;
 pub use widget::WidgetExtManual;

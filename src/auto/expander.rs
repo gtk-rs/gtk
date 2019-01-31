@@ -206,9 +206,9 @@ impl<O: IsA<Expander>> ExpanderExt for O {
 
     fn connect_activate<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"activate\0".as_ptr() as *const _,
-                transmute(activate_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(activate_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -218,120 +218,120 @@ impl<O: IsA<Expander>> ExpanderExt for O {
 
     fn connect_property_expanded_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::expanded\0".as_ptr() as *const _,
-                transmute(notify_expanded_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_expanded_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::label\0".as_ptr() as *const _,
-                transmute(notify_label_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_label_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_label_fill_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::label-fill\0".as_ptr() as *const _,
-                transmute(notify_label_fill_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_label_fill_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_label_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::label-widget\0".as_ptr() as *const _,
-                transmute(notify_label_widget_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_label_widget_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_resize_toplevel_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::resize-toplevel\0".as_ptr() as *const _,
-                transmute(notify_resize_toplevel_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_resize_toplevel_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_spacing_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::spacing\0".as_ptr() as *const _,
-                transmute(notify_spacing_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_spacing_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_use_markup_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::use-markup\0".as_ptr() as *const _,
-                transmute(notify_use_markup_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_use_markup_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_use_underline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::use-underline\0".as_ptr() as *const _,
-                transmute(notify_use_underline_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_use_underline_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn activate_trampoline<P>(this: *mut ffi::GtkExpander, f: glib_ffi::gpointer)
+unsafe extern "C" fn activate_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkExpander, f: glib_ffi::gpointer)
 where P: IsA<Expander> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Expander::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_expanded_trampoline<P>(this: *mut ffi::GtkExpander, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_expanded_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkExpander, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Expander> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Expander::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_label_trampoline<P>(this: *mut ffi::GtkExpander, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_label_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkExpander, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Expander> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Expander::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_label_fill_trampoline<P>(this: *mut ffi::GtkExpander, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_label_fill_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkExpander, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Expander> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Expander::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_label_widget_trampoline<P>(this: *mut ffi::GtkExpander, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_label_widget_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkExpander, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Expander> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Expander::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_resize_toplevel_trampoline<P>(this: *mut ffi::GtkExpander, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_resize_toplevel_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkExpander, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Expander> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Expander::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_spacing_trampoline<P>(this: *mut ffi::GtkExpander, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_spacing_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkExpander, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Expander> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Expander::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_use_markup_trampoline<P>(this: *mut ffi::GtkExpander, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_use_markup_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkExpander, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Expander> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Expander::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_use_underline_trampoline<P>(this: *mut ffi::GtkExpander, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_use_underline_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkExpander, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Expander> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Expander::from_glib_borrow(this).unsafe_cast())
 }
 

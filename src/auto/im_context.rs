@@ -203,118 +203,118 @@ impl<O: IsA<IMContext>> IMContextExt for O {
 
     fn connect_commit<F: Fn(&Self, &str) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &str) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"commit\0".as_ptr() as *const _,
-                transmute(commit_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(commit_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_delete_surrounding<F: Fn(&Self, i32, i32) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, i32, i32) -> bool + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"delete-surrounding\0".as_ptr() as *const _,
-                transmute(delete_surrounding_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(delete_surrounding_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_preedit_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"preedit-changed\0".as_ptr() as *const _,
-                transmute(preedit_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(preedit_changed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_preedit_end<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"preedit-end\0".as_ptr() as *const _,
-                transmute(preedit_end_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(preedit_end_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_preedit_start<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"preedit-start\0".as_ptr() as *const _,
-                transmute(preedit_start_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(preedit_start_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_retrieve_surrounding<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) -> bool + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"retrieve-surrounding\0".as_ptr() as *const _,
-                transmute(retrieve_surrounding_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(retrieve_surrounding_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_input_hints_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::input-hints\0".as_ptr() as *const _,
-                transmute(notify_input_hints_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_input_hints_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_input_purpose_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::input-purpose\0".as_ptr() as *const _,
-                transmute(notify_input_purpose_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_input_purpose_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn commit_trampoline<P>(this: *mut ffi::GtkIMContext, str: *mut libc::c_char, f: glib_ffi::gpointer)
+unsafe extern "C" fn commit_trampoline<P, F: Fn(&P, &str) + 'static>(this: *mut ffi::GtkIMContext, str: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<IMContext> {
-    let f: &&(Fn(&P, &str) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&IMContext::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(str))
 }
 
-unsafe extern "C" fn delete_surrounding_trampoline<P>(this: *mut ffi::GtkIMContext, offset: libc::c_int, n_chars: libc::c_int, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn delete_surrounding_trampoline<P, F: Fn(&P, i32, i32) -> bool + 'static>(this: *mut ffi::GtkIMContext, offset: libc::c_int, n_chars: libc::c_int, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<IMContext> {
-    let f: &&(Fn(&P, i32, i32) -> bool + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&IMContext::from_glib_borrow(this).unsafe_cast(), offset, n_chars).to_glib()
 }
 
-unsafe extern "C" fn preedit_changed_trampoline<P>(this: *mut ffi::GtkIMContext, f: glib_ffi::gpointer)
+unsafe extern "C" fn preedit_changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIMContext, f: glib_ffi::gpointer)
 where P: IsA<IMContext> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&IMContext::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn preedit_end_trampoline<P>(this: *mut ffi::GtkIMContext, f: glib_ffi::gpointer)
+unsafe extern "C" fn preedit_end_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIMContext, f: glib_ffi::gpointer)
 where P: IsA<IMContext> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&IMContext::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn preedit_start_trampoline<P>(this: *mut ffi::GtkIMContext, f: glib_ffi::gpointer)
+unsafe extern "C" fn preedit_start_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIMContext, f: glib_ffi::gpointer)
 where P: IsA<IMContext> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&IMContext::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn retrieve_surrounding_trampoline<P>(this: *mut ffi::GtkIMContext, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn retrieve_surrounding_trampoline<P, F: Fn(&P) -> bool + 'static>(this: *mut ffi::GtkIMContext, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<IMContext> {
-    let f: &&(Fn(&P) -> bool + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&IMContext::from_glib_borrow(this).unsafe_cast()).to_glib()
 }
 
 #[cfg(any(feature = "v3_6", feature = "dox"))]
-unsafe extern "C" fn notify_input_hints_trampoline<P>(this: *mut ffi::GtkIMContext, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_input_hints_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIMContext, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IMContext> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&IMContext::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_6", feature = "dox"))]
-unsafe extern "C" fn notify_input_purpose_trampoline<P>(this: *mut ffi::GtkIMContext, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_input_purpose_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIMContext, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IMContext> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&IMContext::from_glib_borrow(this).unsafe_cast())
 }
 

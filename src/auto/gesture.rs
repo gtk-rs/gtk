@@ -281,97 +281,97 @@ impl<O: IsA<Gesture>> GestureExt for O {
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_begin<F: Fn(&Self, &gdk::EventSequence) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::EventSequence) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"begin\0".as_ptr() as *const _,
-                transmute(begin_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(begin_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_cancel<F: Fn(&Self, &gdk::EventSequence) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::EventSequence) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"cancel\0".as_ptr() as *const _,
-                transmute(cancel_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(cancel_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_end<F: Fn(&Self, &gdk::EventSequence) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::EventSequence) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"end\0".as_ptr() as *const _,
-                transmute(end_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(end_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_sequence_state_changed<F: Fn(&Self, &gdk::EventSequence, EventSequenceState) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::EventSequence, EventSequenceState) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"sequence-state-changed\0".as_ptr() as *const _,
-                transmute(sequence_state_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(sequence_state_changed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_update<F: Fn(&Self, &gdk::EventSequence) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::EventSequence) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"update\0".as_ptr() as *const _,
-                transmute(update_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(update_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_property_window_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::window\0".as_ptr() as *const _,
-                transmute(notify_window_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_window_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
 #[cfg(any(feature = "v3_14", feature = "dox"))]
-unsafe extern "C" fn begin_trampoline<P>(this: *mut ffi::GtkGesture, sequence: *mut gdk_ffi::GdkEventSequence, f: glib_ffi::gpointer)
+unsafe extern "C" fn begin_trampoline<P, F: Fn(&P, &gdk::EventSequence) + 'static>(this: *mut ffi::GtkGesture, sequence: *mut gdk_ffi::GdkEventSequence, f: glib_ffi::gpointer)
 where P: IsA<Gesture> {
-    let f: &&(Fn(&P, &gdk::EventSequence) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Gesture::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(sequence))
 }
 
 #[cfg(any(feature = "v3_14", feature = "dox"))]
-unsafe extern "C" fn cancel_trampoline<P>(this: *mut ffi::GtkGesture, sequence: *mut gdk_ffi::GdkEventSequence, f: glib_ffi::gpointer)
+unsafe extern "C" fn cancel_trampoline<P, F: Fn(&P, &gdk::EventSequence) + 'static>(this: *mut ffi::GtkGesture, sequence: *mut gdk_ffi::GdkEventSequence, f: glib_ffi::gpointer)
 where P: IsA<Gesture> {
-    let f: &&(Fn(&P, &gdk::EventSequence) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Gesture::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(sequence))
 }
 
 #[cfg(any(feature = "v3_14", feature = "dox"))]
-unsafe extern "C" fn end_trampoline<P>(this: *mut ffi::GtkGesture, sequence: *mut gdk_ffi::GdkEventSequence, f: glib_ffi::gpointer)
+unsafe extern "C" fn end_trampoline<P, F: Fn(&P, &gdk::EventSequence) + 'static>(this: *mut ffi::GtkGesture, sequence: *mut gdk_ffi::GdkEventSequence, f: glib_ffi::gpointer)
 where P: IsA<Gesture> {
-    let f: &&(Fn(&P, &gdk::EventSequence) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Gesture::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(sequence))
 }
 
 #[cfg(any(feature = "v3_14", feature = "dox"))]
-unsafe extern "C" fn sequence_state_changed_trampoline<P>(this: *mut ffi::GtkGesture, sequence: *mut gdk_ffi::GdkEventSequence, state: ffi::GtkEventSequenceState, f: glib_ffi::gpointer)
+unsafe extern "C" fn sequence_state_changed_trampoline<P, F: Fn(&P, &gdk::EventSequence, EventSequenceState) + 'static>(this: *mut ffi::GtkGesture, sequence: *mut gdk_ffi::GdkEventSequence, state: ffi::GtkEventSequenceState, f: glib_ffi::gpointer)
 where P: IsA<Gesture> {
-    let f: &&(Fn(&P, &gdk::EventSequence, EventSequenceState) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Gesture::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(sequence), from_glib(state))
 }
 
 #[cfg(any(feature = "v3_14", feature = "dox"))]
-unsafe extern "C" fn update_trampoline<P>(this: *mut ffi::GtkGesture, sequence: *mut gdk_ffi::GdkEventSequence, f: glib_ffi::gpointer)
+unsafe extern "C" fn update_trampoline<P, F: Fn(&P, &gdk::EventSequence) + 'static>(this: *mut ffi::GtkGesture, sequence: *mut gdk_ffi::GdkEventSequence, f: glib_ffi::gpointer)
 where P: IsA<Gesture> {
-    let f: &&(Fn(&P, &gdk::EventSequence) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Gesture::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(sequence))
 }
 
 #[cfg(any(feature = "v3_14", feature = "dox"))]
-unsafe extern "C" fn notify_window_trampoline<P>(this: *mut ffi::GtkGesture, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_window_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGesture, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Gesture> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Gesture::from_glib_borrow(this).unsafe_cast())
 }
 

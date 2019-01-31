@@ -75,47 +75,47 @@ impl<O: IsA<GestureLongPress>> GestureLongPressExt for O {
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_cancelled<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"cancelled\0".as_ptr() as *const _,
-                transmute(cancelled_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(cancelled_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_pressed<F: Fn(&Self, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, f64, f64) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"pressed\0".as_ptr() as *const _,
-                transmute(pressed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(pressed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_delay_factor_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::delay-factor\0".as_ptr() as *const _,
-                transmute(notify_delay_factor_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_delay_factor_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
 #[cfg(any(feature = "v3_14", feature = "dox"))]
-unsafe extern "C" fn cancelled_trampoline<P>(this: *mut ffi::GtkGestureLongPress, f: glib_ffi::gpointer)
+unsafe extern "C" fn cancelled_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGestureLongPress, f: glib_ffi::gpointer)
 where P: IsA<GestureLongPress> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&GestureLongPress::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_14", feature = "dox"))]
-unsafe extern "C" fn pressed_trampoline<P>(this: *mut ffi::GtkGestureLongPress, x: libc::c_double, y: libc::c_double, f: glib_ffi::gpointer)
+unsafe extern "C" fn pressed_trampoline<P, F: Fn(&P, f64, f64) + 'static>(this: *mut ffi::GtkGestureLongPress, x: libc::c_double, y: libc::c_double, f: glib_ffi::gpointer)
 where P: IsA<GestureLongPress> {
-    let f: &&(Fn(&P, f64, f64) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&GestureLongPress::from_glib_borrow(this).unsafe_cast(), x, y)
 }
 
-unsafe extern "C" fn notify_delay_factor_trampoline<P>(this: *mut ffi::GtkGestureLongPress, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_delay_factor_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGestureLongPress, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<GestureLongPress> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&GestureLongPress::from_glib_borrow(this).unsafe_cast())
 }
 

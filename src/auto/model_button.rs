@@ -191,72 +191,72 @@ impl ModelButton {
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     pub fn connect_property_active_notify<F: Fn(&ModelButton) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&ModelButton) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::active\0".as_ptr() as *const _,
-                transmute(notify_active_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_active_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     pub fn connect_property_centered_notify<F: Fn(&ModelButton) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&ModelButton) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::centered\0".as_ptr() as *const _,
-                transmute(notify_centered_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_centered_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     pub fn connect_property_icon_notify<F: Fn(&ModelButton) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&ModelButton) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::icon\0".as_ptr() as *const _,
-                transmute(notify_icon_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_icon_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     pub fn connect_property_iconic_notify<F: Fn(&ModelButton) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&ModelButton) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::iconic\0".as_ptr() as *const _,
-                transmute(notify_iconic_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_iconic_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     pub fn connect_property_inverted_notify<F: Fn(&ModelButton) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&ModelButton) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::inverted\0".as_ptr() as *const _,
-                transmute(notify_inverted_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_inverted_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     pub fn connect_property_menu_name_notify<F: Fn(&ModelButton) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&ModelButton) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::menu-name\0".as_ptr() as *const _,
-                transmute(notify_menu_name_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_menu_name_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     pub fn connect_property_role_notify<F: Fn(&ModelButton) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&ModelButton) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::role\0".as_ptr() as *const _,
-                transmute(notify_role_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_role_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     pub fn connect_property_text_notify<F: Fn(&ModelButton) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&ModelButton) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::text\0".as_ptr() as *const _,
-                transmute(notify_text_trampoline as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_text_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
 }
@@ -269,50 +269,50 @@ impl Default for ModelButton {
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn notify_active_trampoline(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&ModelButton) + 'static) = transmute(f);
+unsafe extern "C" fn notify_active_trampoline<F: Fn(&ModelButton) + 'static>(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn notify_centered_trampoline(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&ModelButton) + 'static) = transmute(f);
+unsafe extern "C" fn notify_centered_trampoline<F: Fn(&ModelButton) + 'static>(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn notify_icon_trampoline(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&ModelButton) + 'static) = transmute(f);
+unsafe extern "C" fn notify_icon_trampoline<F: Fn(&ModelButton) + 'static>(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn notify_iconic_trampoline(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&ModelButton) + 'static) = transmute(f);
+unsafe extern "C" fn notify_iconic_trampoline<F: Fn(&ModelButton) + 'static>(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn notify_inverted_trampoline(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&ModelButton) + 'static) = transmute(f);
+unsafe extern "C" fn notify_inverted_trampoline<F: Fn(&ModelButton) + 'static>(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn notify_menu_name_trampoline(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&ModelButton) + 'static) = transmute(f);
+unsafe extern "C" fn notify_menu_name_trampoline<F: Fn(&ModelButton) + 'static>(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn notify_role_trampoline(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&ModelButton) + 'static) = transmute(f);
+unsafe extern "C" fn notify_role_trampoline<F: Fn(&ModelButton) + 'static>(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn notify_text_trampoline(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &&(Fn(&ModelButton) + 'static) = transmute(f);
+unsafe extern "C" fn notify_text_trampoline<F: Fn(&ModelButton) + 'static>(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
 

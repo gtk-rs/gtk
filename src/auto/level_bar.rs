@@ -222,97 +222,97 @@ impl<O: IsA<LevelBar>> LevelBarExt for O {
     #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_offset_changed<F: Fn(&Self, &str) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &str) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"offset-changed\0".as_ptr() as *const _,
-                transmute(offset_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(offset_changed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn connect_property_inverted_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::inverted\0".as_ptr() as *const _,
-                transmute(notify_inverted_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_inverted_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_max_value_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::max-value\0".as_ptr() as *const _,
-                transmute(notify_max_value_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_max_value_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_min_value_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::min-value\0".as_ptr() as *const _,
-                transmute(notify_min_value_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_min_value_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::mode\0".as_ptr() as *const _,
-                transmute(notify_mode_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_mode_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_value_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::value\0".as_ptr() as *const _,
-                transmute(notify_value_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_value_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
 #[cfg(any(feature = "v3_6", feature = "dox"))]
-unsafe extern "C" fn offset_changed_trampoline<P>(this: *mut ffi::GtkLevelBar, name: *mut libc::c_char, f: glib_ffi::gpointer)
+unsafe extern "C" fn offset_changed_trampoline<P, F: Fn(&P, &str) + 'static>(this: *mut ffi::GtkLevelBar, name: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<LevelBar> {
-    let f: &&(Fn(&P, &str) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&LevelBar::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(name))
 }
 
 #[cfg(any(feature = "v3_8", feature = "dox"))]
-unsafe extern "C" fn notify_inverted_trampoline<P>(this: *mut ffi::GtkLevelBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_inverted_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLevelBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<LevelBar> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&LevelBar::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_6", feature = "dox"))]
-unsafe extern "C" fn notify_max_value_trampoline<P>(this: *mut ffi::GtkLevelBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_max_value_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLevelBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<LevelBar> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&LevelBar::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_6", feature = "dox"))]
-unsafe extern "C" fn notify_min_value_trampoline<P>(this: *mut ffi::GtkLevelBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_min_value_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLevelBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<LevelBar> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&LevelBar::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_6", feature = "dox"))]
-unsafe extern "C" fn notify_mode_trampoline<P>(this: *mut ffi::GtkLevelBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_mode_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLevelBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<LevelBar> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&LevelBar::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_6", feature = "dox"))]
-unsafe extern "C" fn notify_value_trampoline<P>(this: *mut ffi::GtkLevelBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_value_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLevelBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<LevelBar> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&LevelBar::from_glib_borrow(this).unsafe_cast())
 }
 

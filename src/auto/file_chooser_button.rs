@@ -113,44 +113,44 @@ impl<O: IsA<FileChooserButton>> FileChooserButtonExt for O {
 
     fn connect_file_set<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"file-set\0".as_ptr() as *const _,
-                transmute(file_set_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(file_set_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::title\0".as_ptr() as *const _,
-                transmute(notify_title_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_title_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_width_chars_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::width-chars\0".as_ptr() as *const _,
-                transmute(notify_width_chars_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_width_chars_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn file_set_trampoline<P>(this: *mut ffi::GtkFileChooserButton, f: glib_ffi::gpointer)
+unsafe extern "C" fn file_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFileChooserButton, f: glib_ffi::gpointer)
 where P: IsA<FileChooserButton> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&FileChooserButton::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_title_trampoline<P>(this: *mut ffi::GtkFileChooserButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_title_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFileChooserButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FileChooserButton> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&FileChooserButton::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_width_chars_trampoline<P>(this: *mut ffi::GtkFileChooserButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_width_chars_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFileChooserButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FileChooserButton> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&FileChooserButton::from_glib_borrow(this).unsafe_cast())
 }
 

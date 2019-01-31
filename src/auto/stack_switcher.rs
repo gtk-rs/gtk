@@ -122,31 +122,31 @@ impl<O: IsA<StackSwitcher>> StackSwitcherExt for O {
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn connect_property_icon_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::icon-size\0".as_ptr() as *const _,
-                transmute(notify_icon_size_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_icon_size_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_stack_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::stack\0".as_ptr() as *const _,
-                transmute(notify_stack_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_stack_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
 #[cfg(any(feature = "v3_20", feature = "dox"))]
-unsafe extern "C" fn notify_icon_size_trampoline<P>(this: *mut ffi::GtkStackSwitcher, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_icon_size_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkStackSwitcher, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<StackSwitcher> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&StackSwitcher::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_stack_trampoline<P>(this: *mut ffi::GtkStackSwitcher, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_stack_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkStackSwitcher, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<StackSwitcher> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&StackSwitcher::from_glib_borrow(this).unsafe_cast())
 }
 

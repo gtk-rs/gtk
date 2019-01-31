@@ -86,7 +86,7 @@ pub trait AssistantExt: 'static {
 
     fn set_current_page(&self, page_num: i32);
 
-    fn set_forward_page_func<P: Fn(i32) -> i32 + 'static, Q: Into<Option<P>>>(&self, page_func: Q);
+    fn set_forward_page_func(&self, page_func: Option<Box<dyn Fn(i32) -> i32 + 'static>>);
 
     fn set_page_complete<P: IsA<Widget>>(&self, page: &P, complete: bool);
 
@@ -235,11 +235,10 @@ impl<O: IsA<Assistant>> AssistantExt for O {
         }
     }
 
-    fn set_forward_page_func<P: Fn(i32) -> i32 + 'static, Q: Into<Option<P>>>(&self, page_func: Q) {
-        let page_func = page_func.into();
-        let page_func_data: Box_<Option<P>> = Box::new(page_func.into());
-        unsafe extern "C" fn page_func_func<P: Fn(i32) -> i32 + 'static>(current_page: libc::c_int, data: glib_ffi::gpointer) -> libc::c_int {
-            let callback: &Option<P> = &*(data as *mut _);
+    fn set_forward_page_func(&self, page_func: Option<Box<dyn Fn(i32) -> i32 + 'static>>) {
+        let page_func_data: Box_<Option<Box<dyn Fn(i32) -> i32 + 'static>>> = Box::new(page_func);
+        unsafe extern "C" fn page_func_func(current_page: libc::c_int, data: glib_ffi::gpointer) -> libc::c_int {
+            let callback: &Option<Box<dyn Fn(i32) -> i32 + 'static>> = &*(data as *mut _);
             let res = if let Some(ref callback) = *callback {
                 callback(current_page)
             } else {
@@ -247,12 +246,12 @@ impl<O: IsA<Assistant>> AssistantExt for O {
             };
             res
         }
-        let page_func = if page_func_data.is_some() { Some(page_func_func::<P> as _) } else { None };
-        unsafe extern "C" fn destroy_func<P: Fn(i32) -> i32 + 'static>(data: glib_ffi::gpointer) {
-            let _callback: Box_<Option<P>> = Box_::from_raw(data as *mut _);
+        let page_func = if page_func_data.is_some() { Some(page_func_func as _) } else { None };
+        unsafe extern "C" fn destroy_func(data: glib_ffi::gpointer) {
+            let _callback: Box_<Option<Box<dyn Fn(i32) -> i32 + 'static>>> = Box_::from_raw(data as *mut _);
         }
-        let destroy_call3 = Some(destroy_func::<P> as _);
-        let super_callback0: Box_<Option<P>> = page_func_data;
+        let destroy_call3 = Some(destroy_func as _);
+        let super_callback0: Box_<Option<Box<dyn Fn(i32) -> i32 + 'static>>> = page_func_data;
         unsafe {
             ffi::gtk_assistant_set_forward_page_func(self.as_ref().to_glib_none().0, page_func, Box::into_raw(super_callback0) as *mut _, destroy_call3);
         }
@@ -357,33 +356,33 @@ impl<O: IsA<Assistant>> AssistantExt for O {
 
     fn connect_apply<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"apply\0".as_ptr() as *const _,
-                transmute(apply_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(apply_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_cancel<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"cancel\0".as_ptr() as *const _,
-                transmute(cancel_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(cancel_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_close<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"close\0".as_ptr() as *const _,
-                transmute(close_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(close_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_escape<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"escape\0".as_ptr() as *const _,
-                transmute(escape_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(escape_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -393,40 +392,40 @@ impl<O: IsA<Assistant>> AssistantExt for O {
 
     fn connect_prepare<F: Fn(&Self, &Widget) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &Widget) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"prepare\0".as_ptr() as *const _,
-                transmute(prepare_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(prepare_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn apply_trampoline<P>(this: *mut ffi::GtkAssistant, f: glib_ffi::gpointer)
+unsafe extern "C" fn apply_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAssistant, f: glib_ffi::gpointer)
 where P: IsA<Assistant> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Assistant::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn cancel_trampoline<P>(this: *mut ffi::GtkAssistant, f: glib_ffi::gpointer)
+unsafe extern "C" fn cancel_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAssistant, f: glib_ffi::gpointer)
 where P: IsA<Assistant> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Assistant::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn close_trampoline<P>(this: *mut ffi::GtkAssistant, f: glib_ffi::gpointer)
+unsafe extern "C" fn close_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAssistant, f: glib_ffi::gpointer)
 where P: IsA<Assistant> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Assistant::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn escape_trampoline<P>(this: *mut ffi::GtkAssistant, f: glib_ffi::gpointer)
+unsafe extern "C" fn escape_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAssistant, f: glib_ffi::gpointer)
 where P: IsA<Assistant> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Assistant::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn prepare_trampoline<P>(this: *mut ffi::GtkAssistant, page: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
+unsafe extern "C" fn prepare_trampoline<P, F: Fn(&P, &Widget) + 'static>(this: *mut ffi::GtkAssistant, page: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<Assistant> {
-    let f: &&(Fn(&P, &Widget) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Assistant::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(page))
 }
 

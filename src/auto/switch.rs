@@ -99,9 +99,9 @@ impl<O: IsA<Switch>> SwitchExt for O {
 
     fn connect_activate<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"activate\0".as_ptr() as *const _,
-                transmute(activate_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(activate_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -112,53 +112,53 @@ impl<O: IsA<Switch>> SwitchExt for O {
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_state_set<F: Fn(&Self, bool) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, bool) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"state-set\0".as_ptr() as *const _,
-                transmute(state_set_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(state_set_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::active\0".as_ptr() as *const _,
-                transmute(notify_active_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_active_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_property_state_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::state\0".as_ptr() as *const _,
-                transmute(notify_state_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_state_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn activate_trampoline<P>(this: *mut ffi::GtkSwitch, f: glib_ffi::gpointer)
+unsafe extern "C" fn activate_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSwitch, f: glib_ffi::gpointer)
 where P: IsA<Switch> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Switch::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_14", feature = "dox"))]
-unsafe extern "C" fn state_set_trampoline<P>(this: *mut ffi::GtkSwitch, state: glib_ffi::gboolean, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn state_set_trampoline<P, F: Fn(&P, bool) -> Inhibit + 'static>(this: *mut ffi::GtkSwitch, state: glib_ffi::gboolean, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Switch> {
-    let f: &&(Fn(&P, bool) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Switch::from_glib_borrow(this).unsafe_cast(), from_glib(state)).to_glib()
 }
 
-unsafe extern "C" fn notify_active_trampoline<P>(this: *mut ffi::GtkSwitch, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_active_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSwitch, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Switch> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Switch::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_14", feature = "dox"))]
-unsafe extern "C" fn notify_state_trampoline<P>(this: *mut ffi::GtkSwitch, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_state_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSwitch, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Switch> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Switch::from_glib_borrow(this).unsafe_cast())
 }
 

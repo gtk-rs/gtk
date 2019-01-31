@@ -259,112 +259,112 @@ impl<O: IsA<Popover>> PopoverExt for O {
 
     fn connect_closed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"closed\0".as_ptr() as *const _,
-                transmute(closed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(closed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn connect_property_constrain_to_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::constrain-to\0".as_ptr() as *const _,
-                transmute(notify_constrain_to_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_constrain_to_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_modal_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::modal\0".as_ptr() as *const _,
-                transmute(notify_modal_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_modal_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_pointing_to_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::pointing-to\0".as_ptr() as *const _,
-                transmute(notify_pointing_to_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_pointing_to_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_position_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::position\0".as_ptr() as *const _,
-                transmute(notify_position_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_position_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_relative_to_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::relative-to\0".as_ptr() as *const _,
-                transmute(notify_relative_to_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_relative_to_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn connect_property_transitions_enabled_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::transitions-enabled\0".as_ptr() as *const _,
-                transmute(notify_transitions_enabled_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_transitions_enabled_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn closed_trampoline<P>(this: *mut ffi::GtkPopover, f: glib_ffi::gpointer)
+unsafe extern "C" fn closed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPopover, f: glib_ffi::gpointer)
 where P: IsA<Popover> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Popover::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_20", feature = "dox"))]
-unsafe extern "C" fn notify_constrain_to_trampoline<P>(this: *mut ffi::GtkPopover, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_constrain_to_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPopover, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Popover> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Popover::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_12", feature = "dox"))]
-unsafe extern "C" fn notify_modal_trampoline<P>(this: *mut ffi::GtkPopover, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_modal_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPopover, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Popover> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Popover::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_12", feature = "dox"))]
-unsafe extern "C" fn notify_pointing_to_trampoline<P>(this: *mut ffi::GtkPopover, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_pointing_to_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPopover, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Popover> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Popover::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_12", feature = "dox"))]
-unsafe extern "C" fn notify_position_trampoline<P>(this: *mut ffi::GtkPopover, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_position_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPopover, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Popover> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Popover::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_12", feature = "dox"))]
-unsafe extern "C" fn notify_relative_to_trampoline<P>(this: *mut ffi::GtkPopover, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_relative_to_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPopover, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Popover> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Popover::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn notify_transitions_enabled_trampoline<P>(this: *mut ffi::GtkPopover, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_transitions_enabled_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPopover, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Popover> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Popover::from_glib_borrow(this).unsafe_cast())
 }
 

@@ -195,58 +195,58 @@ impl<O: IsA<Revealer>> RevealerExt for O {
 
     fn connect_property_child_revealed_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::child-revealed\0".as_ptr() as *const _,
-                transmute(notify_child_revealed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_child_revealed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_reveal_child_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::reveal-child\0".as_ptr() as *const _,
-                transmute(notify_reveal_child_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_reveal_child_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_transition_duration_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::transition-duration\0".as_ptr() as *const _,
-                transmute(notify_transition_duration_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_transition_duration_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_transition_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::transition-type\0".as_ptr() as *const _,
-                transmute(notify_transition_type_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_transition_type_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn notify_child_revealed_trampoline<P>(this: *mut ffi::GtkRevealer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_child_revealed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRevealer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Revealer> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Revealer::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_reveal_child_trampoline<P>(this: *mut ffi::GtkRevealer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_reveal_child_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRevealer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Revealer> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Revealer::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_transition_duration_trampoline<P>(this: *mut ffi::GtkRevealer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_transition_duration_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRevealer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Revealer> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Revealer::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_transition_type_trampoline<P>(this: *mut ffi::GtkRevealer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_transition_type_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRevealer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Revealer> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Revealer::from_glib_borrow(this).unsafe_cast())
 }
 

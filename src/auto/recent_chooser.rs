@@ -326,156 +326,156 @@ impl<O: IsA<RecentChooser>> RecentChooserExt for O {
 
     fn connect_item_activated<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"item-activated\0".as_ptr() as *const _,
-                transmute(item_activated_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(item_activated_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_selection_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"selection-changed\0".as_ptr() as *const _,
-                transmute(selection_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(selection_changed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_filter_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::filter\0".as_ptr() as *const _,
-                transmute(notify_filter_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_filter_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_limit_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::limit\0".as_ptr() as *const _,
-                transmute(notify_limit_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_limit_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_local_only_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::local-only\0".as_ptr() as *const _,
-                transmute(notify_local_only_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_local_only_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_select_multiple_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::select-multiple\0".as_ptr() as *const _,
-                transmute(notify_select_multiple_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_select_multiple_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_show_icons_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::show-icons\0".as_ptr() as *const _,
-                transmute(notify_show_icons_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_show_icons_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_show_not_found_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::show-not-found\0".as_ptr() as *const _,
-                transmute(notify_show_not_found_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_show_not_found_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_show_private_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::show-private\0".as_ptr() as *const _,
-                transmute(notify_show_private_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_show_private_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_show_tips_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::show-tips\0".as_ptr() as *const _,
-                transmute(notify_show_tips_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_show_tips_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_sort_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::sort-type\0".as_ptr() as *const _,
-                transmute(notify_sort_type_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_sort_type_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn item_activated_trampoline<P>(this: *mut ffi::GtkRecentChooser, f: glib_ffi::gpointer)
+unsafe extern "C" fn item_activated_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRecentChooser, f: glib_ffi::gpointer)
 where P: IsA<RecentChooser> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn selection_changed_trampoline<P>(this: *mut ffi::GtkRecentChooser, f: glib_ffi::gpointer)
+unsafe extern "C" fn selection_changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRecentChooser, f: glib_ffi::gpointer)
 where P: IsA<RecentChooser> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_filter_trampoline<P>(this: *mut ffi::GtkRecentChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_filter_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRecentChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RecentChooser> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_limit_trampoline<P>(this: *mut ffi::GtkRecentChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_limit_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRecentChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RecentChooser> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_local_only_trampoline<P>(this: *mut ffi::GtkRecentChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_local_only_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRecentChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RecentChooser> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_select_multiple_trampoline<P>(this: *mut ffi::GtkRecentChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_select_multiple_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRecentChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RecentChooser> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_show_icons_trampoline<P>(this: *mut ffi::GtkRecentChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_show_icons_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRecentChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RecentChooser> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_show_not_found_trampoline<P>(this: *mut ffi::GtkRecentChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_show_not_found_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRecentChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RecentChooser> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_show_private_trampoline<P>(this: *mut ffi::GtkRecentChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_show_private_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRecentChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RecentChooser> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_show_tips_trampoline<P>(this: *mut ffi::GtkRecentChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_show_tips_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRecentChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RecentChooser> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_sort_type_trampoline<P>(this: *mut ffi::GtkRecentChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_sort_type_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRecentChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RecentChooser> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&RecentChooser::from_glib_borrow(this).unsafe_cast())
 }
 

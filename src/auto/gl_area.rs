@@ -276,145 +276,145 @@ impl<O: IsA<GLArea>> GLAreaExt for O {
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn connect_create_context<F: Fn(&Self) -> Option<gdk::GLContext> + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) -> Option<gdk::GLContext> + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"create-context\0".as_ptr() as *const _,
-                transmute(create_context_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(create_context_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn connect_render<F: Fn(&Self, &gdk::GLContext) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::GLContext) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"render\0".as_ptr() as *const _,
-                transmute(render_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(render_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn connect_resize<F: Fn(&Self, i32, i32) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, i32, i32) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"resize\0".as_ptr() as *const _,
-                transmute(resize_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(resize_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn connect_property_auto_render_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::auto-render\0".as_ptr() as *const _,
-                transmute(notify_auto_render_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_auto_render_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn connect_property_context_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::context\0".as_ptr() as *const _,
-                transmute(notify_context_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_context_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn connect_property_has_alpha_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::has-alpha\0".as_ptr() as *const _,
-                transmute(notify_has_alpha_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_has_alpha_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn connect_property_has_depth_buffer_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::has-depth-buffer\0".as_ptr() as *const _,
-                transmute(notify_has_depth_buffer_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_has_depth_buffer_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn connect_property_has_stencil_buffer_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::has-stencil-buffer\0".as_ptr() as *const _,
-                transmute(notify_has_stencil_buffer_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_has_stencil_buffer_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_22", feature = "dox"))]
     fn connect_property_use_es_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::use-es\0".as_ptr() as *const _,
-                transmute(notify_use_es_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_use_es_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn create_context_trampoline<P>(this: *mut ffi::GtkGLArea, f: glib_ffi::gpointer) -> *mut gdk_ffi::GdkGLContext
+unsafe extern "C" fn create_context_trampoline<P, F: Fn(&P) -> Option<gdk::GLContext> + 'static>(this: *mut ffi::GtkGLArea, f: glib_ffi::gpointer) -> *mut gdk_ffi::GdkGLContext
 where P: IsA<GLArea> {
-    let f: &&(Fn(&P) -> Option<gdk::GLContext> + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&GLArea::from_glib_borrow(this).unsafe_cast()).to_glib_full()
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn render_trampoline<P>(this: *mut ffi::GtkGLArea, context: *mut gdk_ffi::GdkGLContext, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn render_trampoline<P, F: Fn(&P, &gdk::GLContext) -> Inhibit + 'static>(this: *mut ffi::GtkGLArea, context: *mut gdk_ffi::GdkGLContext, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<GLArea> {
-    let f: &&(Fn(&P, &gdk::GLContext) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&GLArea::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(context)).to_glib()
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn resize_trampoline<P>(this: *mut ffi::GtkGLArea, width: libc::c_int, height: libc::c_int, f: glib_ffi::gpointer)
+unsafe extern "C" fn resize_trampoline<P, F: Fn(&P, i32, i32) + 'static>(this: *mut ffi::GtkGLArea, width: libc::c_int, height: libc::c_int, f: glib_ffi::gpointer)
 where P: IsA<GLArea> {
-    let f: &&(Fn(&P, i32, i32) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&GLArea::from_glib_borrow(this).unsafe_cast(), width, height)
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn notify_auto_render_trampoline<P>(this: *mut ffi::GtkGLArea, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_auto_render_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGLArea, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<GLArea> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&GLArea::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn notify_context_trampoline<P>(this: *mut ffi::GtkGLArea, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_context_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGLArea, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<GLArea> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&GLArea::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn notify_has_alpha_trampoline<P>(this: *mut ffi::GtkGLArea, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_has_alpha_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGLArea, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<GLArea> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&GLArea::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn notify_has_depth_buffer_trampoline<P>(this: *mut ffi::GtkGLArea, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_has_depth_buffer_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGLArea, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<GLArea> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&GLArea::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn notify_has_stencil_buffer_trampoline<P>(this: *mut ffi::GtkGLArea, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_has_stencil_buffer_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGLArea, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<GLArea> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&GLArea::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_22", feature = "dox"))]
-unsafe extern "C" fn notify_use_es_trampoline<P>(this: *mut ffi::GtkGLArea, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_use_es_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGLArea, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<GLArea> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&GLArea::from_glib_borrow(this).unsafe_cast())
 }
 

@@ -220,7 +220,6 @@ mod auto;
 mod app_chooser;
 mod application;
 mod application_window;
-mod assistant;
 mod buildable;
 mod builder;
 mod border;
@@ -232,14 +231,15 @@ mod combo_box;
 mod dialog;
 mod drag_context;
 mod entry_buffer;
-mod entry_completion;
 mod enums;
 mod file_chooser_dialog;
 mod fixed;
+#[cfg(any(feature = "v3_18", feature = "dox"))]
+mod flow_box;
 mod icon_set;
 mod im_context_simple;
 mod invisible;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
+#[cfg(any(feature = "v3_16", feature = "dox"))]
 mod list_box;
 mod list_store;
 mod menu;

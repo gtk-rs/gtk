@@ -92,30 +92,30 @@ impl<O: IsA<MenuBar>> MenuBarExt for O {
 
     fn connect_property_child_pack_direction_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::child-pack-direction\0".as_ptr() as *const _,
-                transmute(notify_child_pack_direction_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_child_pack_direction_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_pack_direction_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::pack-direction\0".as_ptr() as *const _,
-                transmute(notify_pack_direction_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_pack_direction_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn notify_child_pack_direction_trampoline<P>(this: *mut ffi::GtkMenuBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_child_pack_direction_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MenuBar> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&MenuBar::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_pack_direction_trampoline<P>(this: *mut ffi::GtkMenuBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_pack_direction_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MenuBar> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&MenuBar::from_glib_borrow(this).unsafe_cast())
 }
 

@@ -5,20 +5,20 @@
 use ffi;
 use glib::translate::*;
 use glib::object::IsA;
-use ListBox;
+use FlowBox;
 
 use std::ptr;
 
-pub trait ListBoxExtManual: 'static {
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
+pub trait FlowBoxExtManual: 'static {
+    #[cfg(any(feature = "v3_18", feature = "dox"))]
     fn unbind_model(&self);
 }
 
-impl<O: IsA<ListBox>> ListBoxExtManual for O {
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
+impl<O: IsA<FlowBox>> FlowBoxExtManual for O {
+    #[cfg(any(feature = "v3_18", feature = "dox"))]
     fn unbind_model(&self) {
         unsafe {
-            ffi::gtk_list_box_bind_model(
+            ffi::gtk_flow_box_bind_model(
                 self.as_ref().to_glib_none().0,
                 ptr::null_mut(),
                 None,

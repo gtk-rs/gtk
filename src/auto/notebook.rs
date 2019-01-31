@@ -530,9 +530,9 @@ impl<O: IsA<Notebook>> NotebookExt for O {
 
     fn connect_change_current_page<F: Fn(&Self, i32) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, i32) -> bool + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"change-current-page\0".as_ptr() as *const _,
-                transmute(change_current_page_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(change_current_page_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -543,17 +543,17 @@ impl<O: IsA<Notebook>> NotebookExt for O {
 
     fn connect_create_window<F: Fn(&Self, &Widget, i32, i32) -> Notebook + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &Widget, i32, i32) -> Notebook + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"create-window\0".as_ptr() as *const _,
-                transmute(create_window_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(create_window_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_focus_tab<F: Fn(&Self, NotebookTab) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, NotebookTab) -> bool + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"focus-tab\0".as_ptr() as *const _,
-                transmute(focus_tab_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(focus_tab_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -564,9 +564,9 @@ impl<O: IsA<Notebook>> NotebookExt for O {
 
     fn connect_move_focus_out<F: Fn(&Self, DirectionType) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, DirectionType) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"move-focus-out\0".as_ptr() as *const _,
-                transmute(move_focus_out_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(move_focus_out_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -576,33 +576,33 @@ impl<O: IsA<Notebook>> NotebookExt for O {
 
     fn connect_page_added<F: Fn(&Self, &Widget, u32) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &Widget, u32) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"page-added\0".as_ptr() as *const _,
-                transmute(page_added_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(page_added_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_page_removed<F: Fn(&Self, &Widget, u32) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &Widget, u32) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"page-removed\0".as_ptr() as *const _,
-                transmute(page_removed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(page_removed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_page_reordered<F: Fn(&Self, &Widget, u32) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &Widget, u32) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"page-reordered\0".as_ptr() as *const _,
-                transmute(page_reordered_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(page_reordered_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_reorder_tab<F: Fn(&Self, DirectionType, bool) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, DirectionType, bool) -> bool + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"reorder-tab\0".as_ptr() as *const _,
-                transmute(reorder_tab_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(reorder_tab_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -613,9 +613,9 @@ impl<O: IsA<Notebook>> NotebookExt for O {
 
     fn connect_select_page<F: Fn(&Self, bool) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, bool) -> bool + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"select-page\0".as_ptr() as *const _,
-                transmute(select_page_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(select_page_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -626,168 +626,168 @@ impl<O: IsA<Notebook>> NotebookExt for O {
 
     fn connect_switch_page<F: Fn(&Self, &Widget, u32) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &Widget, u32) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"switch-page\0".as_ptr() as *const _,
-                transmute(switch_page_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(switch_page_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_enable_popup_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::enable-popup\0".as_ptr() as *const _,
-                transmute(notify_enable_popup_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_enable_popup_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_group_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::group-name\0".as_ptr() as *const _,
-                transmute(notify_group_name_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_group_name_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_page_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::page\0".as_ptr() as *const _,
-                transmute(notify_page_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_page_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_scrollable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::scrollable\0".as_ptr() as *const _,
-                transmute(notify_scrollable_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_scrollable_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_show_border_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::show-border\0".as_ptr() as *const _,
-                transmute(notify_show_border_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_show_border_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_show_tabs_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::show-tabs\0".as_ptr() as *const _,
-                transmute(notify_show_tabs_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_show_tabs_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_tab_pos_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::tab-pos\0".as_ptr() as *const _,
-                transmute(notify_tab_pos_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_tab_pos_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn change_current_page_trampoline<P>(this: *mut ffi::GtkNotebook, object: libc::c_int, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn change_current_page_trampoline<P, F: Fn(&P, i32) -> bool + 'static>(this: *mut ffi::GtkNotebook, object: libc::c_int, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Notebook> {
-    let f: &&(Fn(&P, i32) -> bool + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Notebook::from_glib_borrow(this).unsafe_cast(), object).to_glib()
 }
 
-unsafe extern "C" fn create_window_trampoline<P>(this: *mut ffi::GtkNotebook, page: *mut ffi::GtkWidget, x: libc::c_int, y: libc::c_int, f: glib_ffi::gpointer) -> *mut ffi::GtkNotebook
+unsafe extern "C" fn create_window_trampoline<P, F: Fn(&P, &Widget, i32, i32) -> Notebook + 'static>(this: *mut ffi::GtkNotebook, page: *mut ffi::GtkWidget, x: libc::c_int, y: libc::c_int, f: glib_ffi::gpointer) -> *mut ffi::GtkNotebook
 where P: IsA<Notebook> {
-    let f: &&(Fn(&P, &Widget, i32, i32) -> Notebook + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Notebook::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(page), x, y)/*Not checked*/.to_glib_none().0
 }
 
-unsafe extern "C" fn focus_tab_trampoline<P>(this: *mut ffi::GtkNotebook, object: ffi::GtkNotebookTab, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn focus_tab_trampoline<P, F: Fn(&P, NotebookTab) -> bool + 'static>(this: *mut ffi::GtkNotebook, object: ffi::GtkNotebookTab, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Notebook> {
-    let f: &&(Fn(&P, NotebookTab) -> bool + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Notebook::from_glib_borrow(this).unsafe_cast(), from_glib(object)).to_glib()
 }
 
-unsafe extern "C" fn move_focus_out_trampoline<P>(this: *mut ffi::GtkNotebook, object: ffi::GtkDirectionType, f: glib_ffi::gpointer)
+unsafe extern "C" fn move_focus_out_trampoline<P, F: Fn(&P, DirectionType) + 'static>(this: *mut ffi::GtkNotebook, object: ffi::GtkDirectionType, f: glib_ffi::gpointer)
 where P: IsA<Notebook> {
-    let f: &&(Fn(&P, DirectionType) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Notebook::from_glib_borrow(this).unsafe_cast(), from_glib(object))
 }
 
-unsafe extern "C" fn page_added_trampoline<P>(this: *mut ffi::GtkNotebook, child: *mut ffi::GtkWidget, page_num: libc::c_uint, f: glib_ffi::gpointer)
+unsafe extern "C" fn page_added_trampoline<P, F: Fn(&P, &Widget, u32) + 'static>(this: *mut ffi::GtkNotebook, child: *mut ffi::GtkWidget, page_num: libc::c_uint, f: glib_ffi::gpointer)
 where P: IsA<Notebook> {
-    let f: &&(Fn(&P, &Widget, u32) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Notebook::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(child), page_num)
 }
 
-unsafe extern "C" fn page_removed_trampoline<P>(this: *mut ffi::GtkNotebook, child: *mut ffi::GtkWidget, page_num: libc::c_uint, f: glib_ffi::gpointer)
+unsafe extern "C" fn page_removed_trampoline<P, F: Fn(&P, &Widget, u32) + 'static>(this: *mut ffi::GtkNotebook, child: *mut ffi::GtkWidget, page_num: libc::c_uint, f: glib_ffi::gpointer)
 where P: IsA<Notebook> {
-    let f: &&(Fn(&P, &Widget, u32) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Notebook::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(child), page_num)
 }
 
-unsafe extern "C" fn page_reordered_trampoline<P>(this: *mut ffi::GtkNotebook, child: *mut ffi::GtkWidget, page_num: libc::c_uint, f: glib_ffi::gpointer)
+unsafe extern "C" fn page_reordered_trampoline<P, F: Fn(&P, &Widget, u32) + 'static>(this: *mut ffi::GtkNotebook, child: *mut ffi::GtkWidget, page_num: libc::c_uint, f: glib_ffi::gpointer)
 where P: IsA<Notebook> {
-    let f: &&(Fn(&P, &Widget, u32) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Notebook::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(child), page_num)
 }
 
-unsafe extern "C" fn reorder_tab_trampoline<P>(this: *mut ffi::GtkNotebook, object: ffi::GtkDirectionType, p0: glib_ffi::gboolean, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn reorder_tab_trampoline<P, F: Fn(&P, DirectionType, bool) -> bool + 'static>(this: *mut ffi::GtkNotebook, object: ffi::GtkDirectionType, p0: glib_ffi::gboolean, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Notebook> {
-    let f: &&(Fn(&P, DirectionType, bool) -> bool + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Notebook::from_glib_borrow(this).unsafe_cast(), from_glib(object), from_glib(p0)).to_glib()
 }
 
-unsafe extern "C" fn select_page_trampoline<P>(this: *mut ffi::GtkNotebook, object: glib_ffi::gboolean, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn select_page_trampoline<P, F: Fn(&P, bool) -> bool + 'static>(this: *mut ffi::GtkNotebook, object: glib_ffi::gboolean, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Notebook> {
-    let f: &&(Fn(&P, bool) -> bool + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Notebook::from_glib_borrow(this).unsafe_cast(), from_glib(object)).to_glib()
 }
 
-unsafe extern "C" fn switch_page_trampoline<P>(this: *mut ffi::GtkNotebook, page: *mut ffi::GtkWidget, page_num: libc::c_uint, f: glib_ffi::gpointer)
+unsafe extern "C" fn switch_page_trampoline<P, F: Fn(&P, &Widget, u32) + 'static>(this: *mut ffi::GtkNotebook, page: *mut ffi::GtkWidget, page_num: libc::c_uint, f: glib_ffi::gpointer)
 where P: IsA<Notebook> {
-    let f: &&(Fn(&P, &Widget, u32) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Notebook::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(page), page_num)
 }
 
-unsafe extern "C" fn notify_enable_popup_trampoline<P>(this: *mut ffi::GtkNotebook, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_enable_popup_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkNotebook, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Notebook> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Notebook::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_group_name_trampoline<P>(this: *mut ffi::GtkNotebook, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_group_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkNotebook, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Notebook> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Notebook::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_page_trampoline<P>(this: *mut ffi::GtkNotebook, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_page_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkNotebook, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Notebook> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Notebook::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_scrollable_trampoline<P>(this: *mut ffi::GtkNotebook, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_scrollable_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkNotebook, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Notebook> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Notebook::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_show_border_trampoline<P>(this: *mut ffi::GtkNotebook, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_show_border_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkNotebook, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Notebook> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Notebook::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_show_tabs_trampoline<P>(this: *mut ffi::GtkNotebook, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_show_tabs_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkNotebook, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Notebook> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Notebook::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_tab_pos_trampoline<P>(this: *mut ffi::GtkNotebook, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_tab_pos_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkNotebook, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Notebook> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Notebook::from_glib_borrow(this).unsafe_cast())
 }
 

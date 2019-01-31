@@ -2479,33 +2479,33 @@ impl<O: IsA<Widget>> WidgetExt for O {
 
     fn connect_accel_closures_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"accel-closures-changed\0".as_ptr() as *const _,
-                transmute(accel_closures_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(accel_closures_changed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_button_press_event<F: Fn(&Self, &gdk::EventButton) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::EventButton) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"button-press-event\0".as_ptr() as *const _,
-                transmute(button_press_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(button_press_event_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_button_release_event<F: Fn(&Self, &gdk::EventButton) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::EventButton) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"button-release-event\0".as_ptr() as *const _,
-                transmute(button_release_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(button_release_event_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_can_activate_accel<F: Fn(&Self, u32) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, u32) -> bool + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"can-activate-accel\0".as_ptr() as *const _,
-                transmute(can_activate_accel_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(can_activate_accel_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -2515,9 +2515,9 @@ impl<O: IsA<Widget>> WidgetExt for O {
 
     fn connect_composited_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"composited-changed\0".as_ptr() as *const _,
-                transmute(composited_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(composited_changed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -2527,193 +2527,193 @@ impl<O: IsA<Widget>> WidgetExt for O {
 
     fn connect_configure_event<F: Fn(&Self, &gdk::EventConfigure) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::EventConfigure) -> bool + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"configure-event\0".as_ptr() as *const _,
-                transmute(configure_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(configure_event_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_damage_event<F: Fn(&Self, &gdk::EventExpose) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::EventExpose) -> bool + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"damage-event\0".as_ptr() as *const _,
-                transmute(damage_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(damage_event_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_delete_event<F: Fn(&Self, &gdk::Event) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::Event) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"delete-event\0".as_ptr() as *const _,
-                transmute(delete_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(delete_event_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_destroy<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"destroy\0".as_ptr() as *const _,
-                transmute(destroy_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(destroy_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_destroy_event<F: Fn(&Self, &gdk::Event) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::Event) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"destroy-event\0".as_ptr() as *const _,
-                transmute(destroy_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(destroy_event_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_direction_changed<F: Fn(&Self, TextDirection) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, TextDirection) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"direction-changed\0".as_ptr() as *const _,
-                transmute(direction_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(direction_changed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_drag_begin<F: Fn(&Self, &gdk::DragContext) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::DragContext) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"drag-begin\0".as_ptr() as *const _,
-                transmute(drag_begin_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(drag_begin_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_drag_data_delete<F: Fn(&Self, &gdk::DragContext) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::DragContext) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"drag-data-delete\0".as_ptr() as *const _,
-                transmute(drag_data_delete_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(drag_data_delete_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_drag_data_get<F: Fn(&Self, &gdk::DragContext, &SelectionData, u32, u32) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::DragContext, &SelectionData, u32, u32) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"drag-data-get\0".as_ptr() as *const _,
-                transmute(drag_data_get_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(drag_data_get_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_drag_data_received<F: Fn(&Self, &gdk::DragContext, i32, i32, &SelectionData, u32, u32) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::DragContext, i32, i32, &SelectionData, u32, u32) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"drag-data-received\0".as_ptr() as *const _,
-                transmute(drag_data_received_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(drag_data_received_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_drag_drop<F: Fn(&Self, &gdk::DragContext, i32, i32, u32) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::DragContext, i32, i32, u32) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"drag-drop\0".as_ptr() as *const _,
-                transmute(drag_drop_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(drag_drop_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_drag_end<F: Fn(&Self, &gdk::DragContext) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::DragContext) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"drag-end\0".as_ptr() as *const _,
-                transmute(drag_end_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(drag_end_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_drag_failed<F: Fn(&Self, &gdk::DragContext, DragResult) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::DragContext, DragResult) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"drag-failed\0".as_ptr() as *const _,
-                transmute(drag_failed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(drag_failed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_drag_leave<F: Fn(&Self, &gdk::DragContext, u32) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::DragContext, u32) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"drag-leave\0".as_ptr() as *const _,
-                transmute(drag_leave_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(drag_leave_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_drag_motion<F: Fn(&Self, &gdk::DragContext, i32, i32, u32) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::DragContext, i32, i32, u32) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"drag-motion\0".as_ptr() as *const _,
-                transmute(drag_motion_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(drag_motion_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_draw<F: Fn(&Self, &cairo::Context) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &cairo::Context) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"draw\0".as_ptr() as *const _,
-                transmute(draw_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(draw_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_enter_notify_event<F: Fn(&Self, &gdk::EventCrossing) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::EventCrossing) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"enter-notify-event\0".as_ptr() as *const _,
-                transmute(enter_notify_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(enter_notify_event_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_event<F: Fn(&Self, &gdk::Event) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::Event) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"event\0".as_ptr() as *const _,
-                transmute(event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(event_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_event_after<F: Fn(&Self, &gdk::Event) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::Event) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"event-after\0".as_ptr() as *const _,
-                transmute(event_after_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(event_after_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_focus<F: Fn(&Self, DirectionType) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, DirectionType) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"focus\0".as_ptr() as *const _,
-                transmute(focus_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(focus_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_focus_in_event<F: Fn(&Self, &gdk::EventFocus) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::EventFocus) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"focus-in-event\0".as_ptr() as *const _,
-                transmute(focus_in_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(focus_in_event_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_focus_out_event<F: Fn(&Self, &gdk::EventFocus) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::EventFocus) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"focus-out-event\0".as_ptr() as *const _,
-                transmute(focus_out_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(focus_out_event_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_grab_broken_event<F: Fn(&Self, &gdk::EventGrabBroken) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::EventGrabBroken) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"grab-broken-event\0".as_ptr() as *const _,
-                transmute(grab_broken_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(grab_broken_event_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_grab_focus<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"grab-focus\0".as_ptr() as *const _,
-                transmute(grab_focus_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(grab_focus_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -2723,89 +2723,89 @@ impl<O: IsA<Widget>> WidgetExt for O {
 
     fn connect_grab_notify<F: Fn(&Self, bool) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, bool) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"grab-notify\0".as_ptr() as *const _,
-                transmute(grab_notify_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(grab_notify_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_hide<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"hide\0".as_ptr() as *const _,
-                transmute(hide_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(hide_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_hierarchy_changed<F: Fn(&Self, &Option<Widget>) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &Option<Widget>) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"hierarchy-changed\0".as_ptr() as *const _,
-                transmute(hierarchy_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(hierarchy_changed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_key_press_event<F: Fn(&Self, &gdk::EventKey) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::EventKey) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"key-press-event\0".as_ptr() as *const _,
-                transmute(key_press_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(key_press_event_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_key_release_event<F: Fn(&Self, &gdk::EventKey) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::EventKey) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"key-release-event\0".as_ptr() as *const _,
-                transmute(key_release_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(key_release_event_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_keynav_failed<F: Fn(&Self, DirectionType) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, DirectionType) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"keynav-failed\0".as_ptr() as *const _,
-                transmute(keynav_failed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(keynav_failed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_leave_notify_event<F: Fn(&Self, &gdk::EventCrossing) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::EventCrossing) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"leave-notify-event\0".as_ptr() as *const _,
-                transmute(leave_notify_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(leave_notify_event_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_map<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"map\0".as_ptr() as *const _,
-                transmute(map_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(map_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_mnemonic_activate<F: Fn(&Self, bool) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, bool) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"mnemonic-activate\0".as_ptr() as *const _,
-                transmute(mnemonic_activate_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(mnemonic_activate_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_motion_notify_event<F: Fn(&Self, &gdk::EventMotion) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::EventMotion) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"motion-notify-event\0".as_ptr() as *const _,
-                transmute(motion_notify_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(motion_notify_event_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_move_focus<F: Fn(&Self, DirectionType) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, DirectionType) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"move-focus\0".as_ptr() as *const _,
-                transmute(move_focus_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(move_focus_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -2815,17 +2815,17 @@ impl<O: IsA<Widget>> WidgetExt for O {
 
     fn connect_parent_set<F: Fn(&Self, &Option<Widget>) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &Option<Widget>) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"parent-set\0".as_ptr() as *const _,
-                transmute(parent_set_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(parent_set_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_popup_menu<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) -> bool + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"popup-menu\0".as_ptr() as *const _,
-                transmute(popup_menu_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(popup_menu_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -2836,113 +2836,113 @@ impl<O: IsA<Widget>> WidgetExt for O {
 
     fn connect_property_notify_event<F: Fn(&Self, &gdk::EventProperty) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::EventProperty) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"property-notify-event\0".as_ptr() as *const _,
-                transmute(property_notify_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(property_notify_event_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_proximity_in_event<F: Fn(&Self, &gdk::EventProximity) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::EventProximity) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"proximity-in-event\0".as_ptr() as *const _,
-                transmute(proximity_in_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(proximity_in_event_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_proximity_out_event<F: Fn(&Self, &gdk::EventProximity) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::EventProximity) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"proximity-out-event\0".as_ptr() as *const _,
-                transmute(proximity_out_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(proximity_out_event_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_query_tooltip<F: Fn(&Self, i32, i32, bool, &Tooltip) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, i32, i32, bool, &Tooltip) -> bool + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"query-tooltip\0".as_ptr() as *const _,
-                transmute(query_tooltip_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(query_tooltip_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_realize<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"realize\0".as_ptr() as *const _,
-                transmute(realize_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(realize_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_screen_changed<F: Fn(&Self, &Option<gdk::Screen>) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &Option<gdk::Screen>) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"screen-changed\0".as_ptr() as *const _,
-                transmute(screen_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(screen_changed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_scroll_event<F: Fn(&Self, &gdk::EventScroll) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::EventScroll) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"scroll-event\0".as_ptr() as *const _,
-                transmute(scroll_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(scroll_event_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_selection_clear_event<F: Fn(&Self, &gdk::EventSelection) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::EventSelection) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"selection-clear-event\0".as_ptr() as *const _,
-                transmute(selection_clear_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(selection_clear_event_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_selection_get<F: Fn(&Self, &SelectionData, u32, u32) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &SelectionData, u32, u32) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"selection-get\0".as_ptr() as *const _,
-                transmute(selection_get_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(selection_get_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_selection_notify_event<F: Fn(&Self, &gdk::EventSelection) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::EventSelection) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"selection-notify-event\0".as_ptr() as *const _,
-                transmute(selection_notify_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(selection_notify_event_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_selection_received<F: Fn(&Self, &SelectionData, u32) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &SelectionData, u32) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"selection-received\0".as_ptr() as *const _,
-                transmute(selection_received_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(selection_received_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_selection_request_event<F: Fn(&Self, &gdk::EventSelection) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::EventSelection) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"selection-request-event\0".as_ptr() as *const _,
-                transmute(selection_request_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(selection_request_event_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_show<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"show\0".as_ptr() as *const _,
-                transmute(show_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(show_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_show_help<F: Fn(&Self, WidgetHelpType) -> bool + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, WidgetHelpType) -> bool + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"show-help\0".as_ptr() as *const _,
-                transmute(show_help_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(show_help_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -2953,992 +2953,992 @@ impl<O: IsA<Widget>> WidgetExt for O {
 
     fn connect_size_allocate<F: Fn(&Self, &Allocation) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &Allocation) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"size-allocate\0".as_ptr() as *const _,
-                transmute(size_allocate_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(size_allocate_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_state_flags_changed<F: Fn(&Self, StateFlags) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, StateFlags) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"state-flags-changed\0".as_ptr() as *const _,
-                transmute(state_flags_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(state_flags_changed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_style_updated<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"style-updated\0".as_ptr() as *const _,
-                transmute(style_updated_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(style_updated_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_touch_event<F: Fn(&Self, &gdk::Event) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::Event) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"touch-event\0".as_ptr() as *const _,
-                transmute(touch_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(touch_event_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_unmap<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"unmap\0".as_ptr() as *const _,
-                transmute(unmap_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(unmap_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_unrealize<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"unrealize\0".as_ptr() as *const _,
-                transmute(unrealize_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(unrealize_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_visibility_notify_event<F: Fn(&Self, &gdk::EventVisibility) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::EventVisibility) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"visibility-notify-event\0".as_ptr() as *const _,
-                transmute(visibility_notify_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(visibility_notify_event_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_window_state_event<F: Fn(&Self, &gdk::EventWindowState) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::EventWindowState) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"window-state-event\0".as_ptr() as *const _,
-                transmute(window_state_event_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(window_state_event_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_app_paintable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::app-paintable\0".as_ptr() as *const _,
-                transmute(notify_app_paintable_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_app_paintable_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_can_default_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::can-default\0".as_ptr() as *const _,
-                transmute(notify_can_default_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_can_default_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_can_focus_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::can-focus\0".as_ptr() as *const _,
-                transmute(notify_can_focus_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_can_focus_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_composite_child_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::composite-child\0".as_ptr() as *const _,
-                transmute(notify_composite_child_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_composite_child_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_double_buffered_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::double-buffered\0".as_ptr() as *const _,
-                transmute(notify_double_buffered_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_double_buffered_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_events_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::events\0".as_ptr() as *const _,
-                transmute(notify_events_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_events_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_expand_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::expand\0".as_ptr() as *const _,
-                transmute(notify_expand_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_expand_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn connect_property_focus_on_click_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::focus-on-click\0".as_ptr() as *const _,
-                transmute(notify_focus_on_click_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_focus_on_click_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_halign_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::halign\0".as_ptr() as *const _,
-                transmute(notify_halign_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_halign_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_has_default_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::has-default\0".as_ptr() as *const _,
-                transmute(notify_has_default_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_has_default_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_has_focus_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::has-focus\0".as_ptr() as *const _,
-                transmute(notify_has_focus_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_has_focus_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_has_tooltip_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::has-tooltip\0".as_ptr() as *const _,
-                transmute(notify_has_tooltip_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_has_tooltip_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_height_request_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::height-request\0".as_ptr() as *const _,
-                transmute(notify_height_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_height_request_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_hexpand_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::hexpand\0".as_ptr() as *const _,
-                transmute(notify_hexpand_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_hexpand_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_hexpand_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::hexpand-set\0".as_ptr() as *const _,
-                transmute(notify_hexpand_set_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_hexpand_set_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_is_focus_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::is-focus\0".as_ptr() as *const _,
-                transmute(notify_is_focus_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_is_focus_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_margin_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::margin\0".as_ptr() as *const _,
-                transmute(notify_margin_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_margin_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_margin_bottom_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::margin-bottom\0".as_ptr() as *const _,
-                transmute(notify_margin_bottom_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_margin_bottom_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_margin_end_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::margin-end\0".as_ptr() as *const _,
-                transmute(notify_margin_end_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_margin_end_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_margin_left_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::margin-left\0".as_ptr() as *const _,
-                transmute(notify_margin_left_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_margin_left_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_margin_right_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::margin-right\0".as_ptr() as *const _,
-                transmute(notify_margin_right_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_margin_right_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_margin_start_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::margin-start\0".as_ptr() as *const _,
-                transmute(notify_margin_start_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_margin_start_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_margin_top_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::margin-top\0".as_ptr() as *const _,
-                transmute(notify_margin_top_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_margin_top_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::name\0".as_ptr() as *const _,
-                transmute(notify_name_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_name_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_no_show_all_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::no-show-all\0".as_ptr() as *const _,
-                transmute(notify_no_show_all_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_no_show_all_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn connect_property_opacity_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::opacity\0".as_ptr() as *const _,
-                transmute(notify_opacity_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_opacity_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_parent_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::parent\0".as_ptr() as *const _,
-                transmute(notify_parent_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_parent_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_receives_default_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::receives-default\0".as_ptr() as *const _,
-                transmute(notify_receives_default_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_receives_default_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn connect_property_scale_factor_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::scale-factor\0".as_ptr() as *const _,
-                transmute(notify_scale_factor_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_scale_factor_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_sensitive_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::sensitive\0".as_ptr() as *const _,
-                transmute(notify_sensitive_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_sensitive_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_tooltip_markup_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::tooltip-markup\0".as_ptr() as *const _,
-                transmute(notify_tooltip_markup_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_tooltip_markup_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_tooltip_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::tooltip-text\0".as_ptr() as *const _,
-                transmute(notify_tooltip_text_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_tooltip_text_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_valign_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::valign\0".as_ptr() as *const _,
-                transmute(notify_valign_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_valign_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_vexpand_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::vexpand\0".as_ptr() as *const _,
-                transmute(notify_vexpand_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_vexpand_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_vexpand_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::vexpand-set\0".as_ptr() as *const _,
-                transmute(notify_vexpand_set_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_vexpand_set_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_visible_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::visible\0".as_ptr() as *const _,
-                transmute(notify_visible_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_visible_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_width_request_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::width-request\0".as_ptr() as *const _,
-                transmute(notify_width_request_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_width_request_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_window_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::window\0".as_ptr() as *const _,
-                transmute(notify_window_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_window_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn accel_closures_changed_trampoline<P>(this: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
+unsafe extern "C" fn accel_closures_changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn button_press_event_trampoline<P>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventButton, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn button_press_event_trampoline<P, F: Fn(&P, &gdk::EventButton) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventButton, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &gdk::EventButton) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
-unsafe extern "C" fn button_release_event_trampoline<P>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventButton, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn button_release_event_trampoline<P, F: Fn(&P, &gdk::EventButton) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventButton, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &gdk::EventButton) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
-unsafe extern "C" fn can_activate_accel_trampoline<P>(this: *mut ffi::GtkWidget, signal_id: libc::c_uint, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn can_activate_accel_trampoline<P, F: Fn(&P, u32) -> bool + 'static>(this: *mut ffi::GtkWidget, signal_id: libc::c_uint, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, u32) -> bool + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), signal_id).to_glib()
 }
 
-unsafe extern "C" fn composited_changed_trampoline<P>(this: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
+unsafe extern "C" fn composited_changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn configure_event_trampoline<P>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventConfigure, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn configure_event_trampoline<P, F: Fn(&P, &gdk::EventConfigure) -> bool + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventConfigure, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &gdk::EventConfigure) -> bool + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
-unsafe extern "C" fn damage_event_trampoline<P>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventExpose, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn damage_event_trampoline<P, F: Fn(&P, &gdk::EventExpose) -> bool + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventExpose, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &gdk::EventExpose) -> bool + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
-unsafe extern "C" fn delete_event_trampoline<P>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEvent, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn delete_event_trampoline<P, F: Fn(&P, &gdk::Event) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEvent, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &gdk::Event) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_none(event)).to_glib()
 }
 
-unsafe extern "C" fn destroy_trampoline<P>(this: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
+unsafe extern "C" fn destroy_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn destroy_event_trampoline<P>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEvent, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn destroy_event_trampoline<P, F: Fn(&P, &gdk::Event) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEvent, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &gdk::Event) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_none(event)).to_glib()
 }
 
-unsafe extern "C" fn direction_changed_trampoline<P>(this: *mut ffi::GtkWidget, previous_direction: ffi::GtkTextDirection, f: glib_ffi::gpointer)
+unsafe extern "C" fn direction_changed_trampoline<P, F: Fn(&P, TextDirection) + 'static>(this: *mut ffi::GtkWidget, previous_direction: ffi::GtkTextDirection, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, TextDirection) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), from_glib(previous_direction))
 }
 
-unsafe extern "C" fn drag_begin_trampoline<P>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, f: glib_ffi::gpointer)
+unsafe extern "C" fn drag_begin_trampoline<P, F: Fn(&P, &gdk::DragContext) + 'static>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &gdk::DragContext) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(context))
 }
 
-unsafe extern "C" fn drag_data_delete_trampoline<P>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, f: glib_ffi::gpointer)
+unsafe extern "C" fn drag_data_delete_trampoline<P, F: Fn(&P, &gdk::DragContext) + 'static>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &gdk::DragContext) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(context))
 }
 
-unsafe extern "C" fn drag_data_get_trampoline<P>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, data: *mut ffi::GtkSelectionData, info: libc::c_uint, time: libc::c_uint, f: glib_ffi::gpointer)
+unsafe extern "C" fn drag_data_get_trampoline<P, F: Fn(&P, &gdk::DragContext, &SelectionData, u32, u32) + 'static>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, data: *mut ffi::GtkSelectionData, info: libc::c_uint, time: libc::c_uint, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &gdk::DragContext, &SelectionData, u32, u32) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(context), &from_glib_borrow(data), info, time)
 }
 
-unsafe extern "C" fn drag_data_received_trampoline<P>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, x: libc::c_int, y: libc::c_int, data: *mut ffi::GtkSelectionData, info: libc::c_uint, time: libc::c_uint, f: glib_ffi::gpointer)
+unsafe extern "C" fn drag_data_received_trampoline<P, F: Fn(&P, &gdk::DragContext, i32, i32, &SelectionData, u32, u32) + 'static>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, x: libc::c_int, y: libc::c_int, data: *mut ffi::GtkSelectionData, info: libc::c_uint, time: libc::c_uint, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &gdk::DragContext, i32, i32, &SelectionData, u32, u32) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(context), x, y, &from_glib_borrow(data), info, time)
 }
 
-unsafe extern "C" fn drag_drop_trampoline<P>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, x: libc::c_int, y: libc::c_int, time: libc::c_uint, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn drag_drop_trampoline<P, F: Fn(&P, &gdk::DragContext, i32, i32, u32) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, x: libc::c_int, y: libc::c_int, time: libc::c_uint, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &gdk::DragContext, i32, i32, u32) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(context), x, y, time).to_glib()
 }
 
-unsafe extern "C" fn drag_end_trampoline<P>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, f: glib_ffi::gpointer)
+unsafe extern "C" fn drag_end_trampoline<P, F: Fn(&P, &gdk::DragContext) + 'static>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &gdk::DragContext) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(context))
 }
 
-unsafe extern "C" fn drag_failed_trampoline<P>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, result: ffi::GtkDragResult, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn drag_failed_trampoline<P, F: Fn(&P, &gdk::DragContext, DragResult) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, result: ffi::GtkDragResult, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &gdk::DragContext, DragResult) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(context), from_glib(result)).to_glib()
 }
 
-unsafe extern "C" fn drag_leave_trampoline<P>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, time: libc::c_uint, f: glib_ffi::gpointer)
+unsafe extern "C" fn drag_leave_trampoline<P, F: Fn(&P, &gdk::DragContext, u32) + 'static>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, time: libc::c_uint, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &gdk::DragContext, u32) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(context), time)
 }
 
-unsafe extern "C" fn drag_motion_trampoline<P>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, x: libc::c_int, y: libc::c_int, time: libc::c_uint, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn drag_motion_trampoline<P, F: Fn(&P, &gdk::DragContext, i32, i32, u32) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, x: libc::c_int, y: libc::c_int, time: libc::c_uint, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &gdk::DragContext, i32, i32, u32) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(context), x, y, time).to_glib()
 }
 
-unsafe extern "C" fn draw_trampoline<P>(this: *mut ffi::GtkWidget, cr: *mut cairo_ffi::cairo_t, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn draw_trampoline<P, F: Fn(&P, &cairo::Context) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, cr: *mut cairo_ffi::cairo_t, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &cairo::Context) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(cr)).to_glib()
 }
 
-unsafe extern "C" fn enter_notify_event_trampoline<P>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventCrossing, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn enter_notify_event_trampoline<P, F: Fn(&P, &gdk::EventCrossing) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventCrossing, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &gdk::EventCrossing) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
-unsafe extern "C" fn event_trampoline<P>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEvent, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn event_trampoline<P, F: Fn(&P, &gdk::Event) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEvent, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &gdk::Event) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_none(event)).to_glib()
 }
 
-unsafe extern "C" fn event_after_trampoline<P>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEvent, f: glib_ffi::gpointer)
+unsafe extern "C" fn event_after_trampoline<P, F: Fn(&P, &gdk::Event) + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEvent, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &gdk::Event) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_none(event))
 }
 
-unsafe extern "C" fn focus_trampoline<P>(this: *mut ffi::GtkWidget, direction: ffi::GtkDirectionType, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn focus_trampoline<P, F: Fn(&P, DirectionType) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, direction: ffi::GtkDirectionType, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, DirectionType) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), from_glib(direction)).to_glib()
 }
 
-unsafe extern "C" fn focus_in_event_trampoline<P>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventFocus, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn focus_in_event_trampoline<P, F: Fn(&P, &gdk::EventFocus) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventFocus, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &gdk::EventFocus) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
-unsafe extern "C" fn focus_out_event_trampoline<P>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventFocus, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn focus_out_event_trampoline<P, F: Fn(&P, &gdk::EventFocus) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventFocus, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &gdk::EventFocus) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
-unsafe extern "C" fn grab_broken_event_trampoline<P>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventGrabBroken, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn grab_broken_event_trampoline<P, F: Fn(&P, &gdk::EventGrabBroken) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventGrabBroken, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &gdk::EventGrabBroken) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
-unsafe extern "C" fn grab_focus_trampoline<P>(this: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
+unsafe extern "C" fn grab_focus_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn grab_notify_trampoline<P>(this: *mut ffi::GtkWidget, was_grabbed: glib_ffi::gboolean, f: glib_ffi::gpointer)
+unsafe extern "C" fn grab_notify_trampoline<P, F: Fn(&P, bool) + 'static>(this: *mut ffi::GtkWidget, was_grabbed: glib_ffi::gboolean, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, bool) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), from_glib(was_grabbed))
 }
 
-unsafe extern "C" fn hide_trampoline<P>(this: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
+unsafe extern "C" fn hide_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn hierarchy_changed_trampoline<P>(this: *mut ffi::GtkWidget, previous_toplevel: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
+unsafe extern "C" fn hierarchy_changed_trampoline<P, F: Fn(&P, &Option<Widget>) + 'static>(this: *mut ffi::GtkWidget, previous_toplevel: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &Option<Widget>) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(previous_toplevel))
 }
 
-unsafe extern "C" fn key_press_event_trampoline<P>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventKey, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn key_press_event_trampoline<P, F: Fn(&P, &gdk::EventKey) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventKey, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &gdk::EventKey) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
-unsafe extern "C" fn key_release_event_trampoline<P>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventKey, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn key_release_event_trampoline<P, F: Fn(&P, &gdk::EventKey) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventKey, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &gdk::EventKey) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
-unsafe extern "C" fn keynav_failed_trampoline<P>(this: *mut ffi::GtkWidget, direction: ffi::GtkDirectionType, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn keynav_failed_trampoline<P, F: Fn(&P, DirectionType) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, direction: ffi::GtkDirectionType, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, DirectionType) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), from_glib(direction)).to_glib()
 }
 
-unsafe extern "C" fn leave_notify_event_trampoline<P>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventCrossing, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn leave_notify_event_trampoline<P, F: Fn(&P, &gdk::EventCrossing) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventCrossing, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &gdk::EventCrossing) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
-unsafe extern "C" fn map_trampoline<P>(this: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
+unsafe extern "C" fn map_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn mnemonic_activate_trampoline<P>(this: *mut ffi::GtkWidget, group_cycling: glib_ffi::gboolean, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn mnemonic_activate_trampoline<P, F: Fn(&P, bool) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, group_cycling: glib_ffi::gboolean, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, bool) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), from_glib(group_cycling)).to_glib()
 }
 
-unsafe extern "C" fn motion_notify_event_trampoline<P>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventMotion, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn motion_notify_event_trampoline<P, F: Fn(&P, &gdk::EventMotion) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventMotion, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &gdk::EventMotion) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
-unsafe extern "C" fn move_focus_trampoline<P>(this: *mut ffi::GtkWidget, direction: ffi::GtkDirectionType, f: glib_ffi::gpointer)
+unsafe extern "C" fn move_focus_trampoline<P, F: Fn(&P, DirectionType) + 'static>(this: *mut ffi::GtkWidget, direction: ffi::GtkDirectionType, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, DirectionType) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), from_glib(direction))
 }
 
-unsafe extern "C" fn parent_set_trampoline<P>(this: *mut ffi::GtkWidget, old_parent: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
+unsafe extern "C" fn parent_set_trampoline<P, F: Fn(&P, &Option<Widget>) + 'static>(this: *mut ffi::GtkWidget, old_parent: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &Option<Widget>) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(old_parent))
 }
 
-unsafe extern "C" fn popup_menu_trampoline<P>(this: *mut ffi::GtkWidget, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn popup_menu_trampoline<P, F: Fn(&P) -> bool + 'static>(this: *mut ffi::GtkWidget, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) -> bool + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast()).to_glib()
 }
 
-unsafe extern "C" fn property_notify_event_trampoline<P>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventProperty, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn property_notify_event_trampoline<P, F: Fn(&P, &gdk::EventProperty) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventProperty, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &gdk::EventProperty) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
-unsafe extern "C" fn proximity_in_event_trampoline<P>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventProximity, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn proximity_in_event_trampoline<P, F: Fn(&P, &gdk::EventProximity) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventProximity, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &gdk::EventProximity) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
-unsafe extern "C" fn proximity_out_event_trampoline<P>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventProximity, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn proximity_out_event_trampoline<P, F: Fn(&P, &gdk::EventProximity) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventProximity, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &gdk::EventProximity) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
-unsafe extern "C" fn query_tooltip_trampoline<P>(this: *mut ffi::GtkWidget, x: libc::c_int, y: libc::c_int, keyboard_mode: glib_ffi::gboolean, tooltip: *mut ffi::GtkTooltip, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn query_tooltip_trampoline<P, F: Fn(&P, i32, i32, bool, &Tooltip) -> bool + 'static>(this: *mut ffi::GtkWidget, x: libc::c_int, y: libc::c_int, keyboard_mode: glib_ffi::gboolean, tooltip: *mut ffi::GtkTooltip, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, i32, i32, bool, &Tooltip) -> bool + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), x, y, from_glib(keyboard_mode), &from_glib_borrow(tooltip)).to_glib()
 }
 
-unsafe extern "C" fn realize_trampoline<P>(this: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
+unsafe extern "C" fn realize_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn screen_changed_trampoline<P>(this: *mut ffi::GtkWidget, previous_screen: *mut gdk_ffi::GdkScreen, f: glib_ffi::gpointer)
+unsafe extern "C" fn screen_changed_trampoline<P, F: Fn(&P, &Option<gdk::Screen>) + 'static>(this: *mut ffi::GtkWidget, previous_screen: *mut gdk_ffi::GdkScreen, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &Option<gdk::Screen>) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(previous_screen))
 }
 
-unsafe extern "C" fn scroll_event_trampoline<P>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventScroll, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn scroll_event_trampoline<P, F: Fn(&P, &gdk::EventScroll) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventScroll, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &gdk::EventScroll) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
-unsafe extern "C" fn selection_clear_event_trampoline<P>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventSelection, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn selection_clear_event_trampoline<P, F: Fn(&P, &gdk::EventSelection) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventSelection, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &gdk::EventSelection) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
-unsafe extern "C" fn selection_get_trampoline<P>(this: *mut ffi::GtkWidget, data: *mut ffi::GtkSelectionData, info: libc::c_uint, time: libc::c_uint, f: glib_ffi::gpointer)
+unsafe extern "C" fn selection_get_trampoline<P, F: Fn(&P, &SelectionData, u32, u32) + 'static>(this: *mut ffi::GtkWidget, data: *mut ffi::GtkSelectionData, info: libc::c_uint, time: libc::c_uint, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &SelectionData, u32, u32) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(data), info, time)
 }
 
-unsafe extern "C" fn selection_notify_event_trampoline<P>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventSelection, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn selection_notify_event_trampoline<P, F: Fn(&P, &gdk::EventSelection) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventSelection, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &gdk::EventSelection) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
-unsafe extern "C" fn selection_received_trampoline<P>(this: *mut ffi::GtkWidget, data: *mut ffi::GtkSelectionData, time: libc::c_uint, f: glib_ffi::gpointer)
+unsafe extern "C" fn selection_received_trampoline<P, F: Fn(&P, &SelectionData, u32) + 'static>(this: *mut ffi::GtkWidget, data: *mut ffi::GtkSelectionData, time: libc::c_uint, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &SelectionData, u32) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(data), time)
 }
 
-unsafe extern "C" fn selection_request_event_trampoline<P>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventSelection, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn selection_request_event_trampoline<P, F: Fn(&P, &gdk::EventSelection) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventSelection, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &gdk::EventSelection) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
-unsafe extern "C" fn show_trampoline<P>(this: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
+unsafe extern "C" fn show_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn show_help_trampoline<P>(this: *mut ffi::GtkWidget, help_type: ffi::GtkWidgetHelpType, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn show_help_trampoline<P, F: Fn(&P, WidgetHelpType) -> bool + 'static>(this: *mut ffi::GtkWidget, help_type: ffi::GtkWidgetHelpType, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, WidgetHelpType) -> bool + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), from_glib(help_type)).to_glib()
 }
 
-unsafe extern "C" fn size_allocate_trampoline<P>(this: *mut ffi::GtkWidget, allocation: *mut ffi::GtkAllocation, f: glib_ffi::gpointer)
+unsafe extern "C" fn size_allocate_trampoline<P, F: Fn(&P, &Allocation) + 'static>(this: *mut ffi::GtkWidget, allocation: *mut ffi::GtkAllocation, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &Allocation) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_none(allocation))
 }
 
-unsafe extern "C" fn state_flags_changed_trampoline<P>(this: *mut ffi::GtkWidget, flags: ffi::GtkStateFlags, f: glib_ffi::gpointer)
+unsafe extern "C" fn state_flags_changed_trampoline<P, F: Fn(&P, StateFlags) + 'static>(this: *mut ffi::GtkWidget, flags: ffi::GtkStateFlags, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, StateFlags) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), from_glib(flags))
 }
 
-unsafe extern "C" fn style_updated_trampoline<P>(this: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
+unsafe extern "C" fn style_updated_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn touch_event_trampoline<P>(this: *mut ffi::GtkWidget, object: *mut gdk_ffi::GdkEvent, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn touch_event_trampoline<P, F: Fn(&P, &gdk::Event) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, object: *mut gdk_ffi::GdkEvent, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &gdk::Event) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_none(object)).to_glib()
 }
 
-unsafe extern "C" fn unmap_trampoline<P>(this: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
+unsafe extern "C" fn unmap_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn unrealize_trampoline<P>(this: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
+unsafe extern "C" fn unrealize_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn visibility_notify_event_trampoline<P>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventVisibility, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn visibility_notify_event_trampoline<P, F: Fn(&P, &gdk::EventVisibility) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventVisibility, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &gdk::EventVisibility) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
-unsafe extern "C" fn window_state_event_trampoline<P>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventWindowState, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn window_state_event_trampoline<P, F: Fn(&P, &gdk::EventWindowState) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventWindowState, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &&(Fn(&P, &gdk::EventWindowState) -> Inhibit + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
-unsafe extern "C" fn notify_app_paintable_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_app_paintable_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_can_default_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_can_default_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_can_focus_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_can_focus_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_composite_child_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_composite_child_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_double_buffered_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_double_buffered_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_events_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_events_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_expand_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_expand_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_20", feature = "dox"))]
-unsafe extern "C" fn notify_focus_on_click_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_focus_on_click_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_halign_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_halign_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_has_default_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_has_default_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_has_focus_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_has_focus_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_has_tooltip_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_has_tooltip_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_height_request_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_height_request_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_hexpand_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_hexpand_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_hexpand_set_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_hexpand_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_is_focus_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_is_focus_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_margin_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_margin_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_margin_bottom_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_margin_bottom_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Widget::from_glib_borrow(this).unsafe_cast())
-}
-
-#[cfg(any(feature = "v3_12", feature = "dox"))]
-unsafe extern "C" fn notify_margin_end_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Widget::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_margin_left_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Widget::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_margin_right_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_12", feature = "dox"))]
-unsafe extern "C" fn notify_margin_start_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_margin_end_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_margin_top_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_margin_left_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_name_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_margin_right_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_no_show_all_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+#[cfg(any(feature = "v3_12", feature = "dox"))]
+unsafe extern "C" fn notify_margin_start_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
+    f(&Widget::from_glib_borrow(this).unsafe_cast())
+}
+
+unsafe extern "C" fn notify_margin_top_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+where P: IsA<Widget> {
+    let f: &F = transmute(f);
+    f(&Widget::from_glib_borrow(this).unsafe_cast())
+}
+
+unsafe extern "C" fn notify_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+where P: IsA<Widget> {
+    let f: &F = transmute(f);
+    f(&Widget::from_glib_borrow(this).unsafe_cast())
+}
+
+unsafe extern "C" fn notify_no_show_all_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+where P: IsA<Widget> {
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_8", feature = "dox"))]
-unsafe extern "C" fn notify_opacity_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_opacity_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_parent_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_parent_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_receives_default_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_receives_default_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_10", feature = "dox"))]
-unsafe extern "C" fn notify_scale_factor_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_scale_factor_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_sensitive_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_sensitive_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_tooltip_markup_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_tooltip_markup_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_tooltip_text_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_tooltip_text_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_valign_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_valign_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_vexpand_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_vexpand_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_vexpand_set_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_vexpand_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_visible_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_visible_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_width_request_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_width_request_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_window_trampoline<P>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_window_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 

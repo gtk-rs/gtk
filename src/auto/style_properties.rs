@@ -34,7 +34,7 @@ impl StyleProperties {
     //}
 
     //#[cfg_attr(feature = "v3_8", deprecated)]
-    //pub fn register_property<P: Fn(&str, &glib::Value, &Error) -> bool + 'static, Q: Into<Option<P>>>(parse_func: Q, pspec: /*Ignored*/&glib::ParamSpec) {
+    //pub fn register_property(parse_func: Option<Box<dyn Fn(&str, &glib::Value, &Error) -> bool + 'static>>, pspec: /*Ignored*/&glib::ParamSpec) {
     //    unsafe { TODO: call ffi::gtk_style_properties_register_property() }
     //}
 }

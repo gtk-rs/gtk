@@ -261,86 +261,86 @@ impl<O: IsA<Application>> GtkApplicationExt for O {
 
     fn connect_window_added<F: Fn(&Self, &Window) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &Window) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"window-added\0".as_ptr() as *const _,
-                transmute(window_added_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(window_added_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_window_removed<F: Fn(&Self, &Window) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &Window) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"window-removed\0".as_ptr() as *const _,
-                transmute(window_removed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(window_removed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_active_window_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::active-window\0".as_ptr() as *const _,
-                transmute(notify_active_window_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_active_window_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_app_menu_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::app-menu\0".as_ptr() as *const _,
-                transmute(notify_app_menu_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_app_menu_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_menubar_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::menubar\0".as_ptr() as *const _,
-                transmute(notify_menubar_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_menubar_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_register_session_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::register-session\0".as_ptr() as *const _,
-                transmute(notify_register_session_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_register_session_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn window_added_trampoline<P>(this: *mut ffi::GtkApplication, window: *mut ffi::GtkWindow, f: glib_ffi::gpointer)
+unsafe extern "C" fn window_added_trampoline<P, F: Fn(&P, &Window) + 'static>(this: *mut ffi::GtkApplication, window: *mut ffi::GtkWindow, f: glib_ffi::gpointer)
 where P: IsA<Application> {
-    let f: &&(Fn(&P, &Window) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Application::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(window))
 }
 
-unsafe extern "C" fn window_removed_trampoline<P>(this: *mut ffi::GtkApplication, window: *mut ffi::GtkWindow, f: glib_ffi::gpointer)
+unsafe extern "C" fn window_removed_trampoline<P, F: Fn(&P, &Window) + 'static>(this: *mut ffi::GtkApplication, window: *mut ffi::GtkWindow, f: glib_ffi::gpointer)
 where P: IsA<Application> {
-    let f: &&(Fn(&P, &Window) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Application::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(window))
 }
 
-unsafe extern "C" fn notify_active_window_trampoline<P>(this: *mut ffi::GtkApplication, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_active_window_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkApplication, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Application> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Application::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_app_menu_trampoline<P>(this: *mut ffi::GtkApplication, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_app_menu_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkApplication, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Application> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Application::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_menubar_trampoline<P>(this: *mut ffi::GtkApplication, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_menubar_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkApplication, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Application> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Application::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_register_session_trampoline<P>(this: *mut ffi::GtkApplication, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_register_session_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkApplication, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Application> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&Application::from_glib_borrow(this).unsafe_cast())
 }
 

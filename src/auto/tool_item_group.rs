@@ -257,72 +257,72 @@ impl<O: IsA<ToolItemGroup>> ToolItemGroupExt for O {
 
     fn connect_property_collapsed_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::collapsed\0".as_ptr() as *const _,
-                transmute(notify_collapsed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_collapsed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_ellipsize_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::ellipsize\0".as_ptr() as *const _,
-                transmute(notify_ellipsize_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_ellipsize_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_header_relief_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::header-relief\0".as_ptr() as *const _,
-                transmute(notify_header_relief_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_header_relief_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::label\0".as_ptr() as *const _,
-                transmute(notify_label_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_label_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_label_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::label-widget\0".as_ptr() as *const _,
-                transmute(notify_label_widget_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_label_widget_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn notify_collapsed_trampoline<P>(this: *mut ffi::GtkToolItemGroup, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_collapsed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkToolItemGroup, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolItemGroup> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&ToolItemGroup::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_ellipsize_trampoline<P>(this: *mut ffi::GtkToolItemGroup, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_ellipsize_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkToolItemGroup, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolItemGroup> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&ToolItemGroup::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_header_relief_trampoline<P>(this: *mut ffi::GtkToolItemGroup, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_header_relief_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkToolItemGroup, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolItemGroup> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&ToolItemGroup::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_label_trampoline<P>(this: *mut ffi::GtkToolItemGroup, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_label_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkToolItemGroup, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolItemGroup> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&ToolItemGroup::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_label_widget_trampoline<P>(this: *mut ffi::GtkToolItemGroup, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_label_widget_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkToolItemGroup, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolItemGroup> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&ToolItemGroup::from_glib_borrow(this).unsafe_cast())
 }
 

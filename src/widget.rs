@@ -2,8 +2,6 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-#[cfg(any(feature = "v3_8", feature = "dox"))]
-use std::cell::RefCell;
 use std::mem::transmute;
 use std::ptr;
 
@@ -11,11 +9,7 @@ use glib::object::{Cast, IsA};
 use glib::signal::{SignalHandlerId, connect_raw};
 use glib::translate::*;
 use glib_ffi::gboolean;
-#[cfg(any(feature = "v3_8", feature = "dox"))]
-use glib_ffi::gpointer;
 use gdk::{DragAction, Event, ModifierType};
-#[cfg(any(feature = "v3_8", feature = "dox"))]
-use gdk::FrameClock;
 use gdk;
 use gdk_ffi;
 use pango;
@@ -28,8 +22,6 @@ use {
     TargetEntry,
     Widget,
 };
-#[cfg(any(feature = "v3_8", feature = "dox"))]
-use::Continue;
 
 pub trait WidgetExtManual: 'static {
     fn drag_dest_set(&self, flags: DestDefaults, targets: &[TargetEntry], actions: DragAction);
@@ -43,11 +35,6 @@ pub trait WidgetExtManual: 'static {
     ) -> bool;
 
     fn override_font(&self, font: &pango::FontDescription);
-
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
-    fn add_tick_callback<F>(&self, func: F) -> u32
-    where
-        F: FnMut(&Self, &FrameClock) -> Continue + 'static;
 
     fn connect_map_event<F: Fn(&Self, &Event) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -103,41 +90,6 @@ impl<O: IsA<Widget>> WidgetExtManual for O {
     fn override_font(&self, font: &pango::FontDescription) {
         unsafe {
             ffi::gtk_widget_override_font(self.as_ref().to_glib_none().0, font.to_glib_none().0)
-        }
-    }
-
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
-    fn add_tick_callback<F>(&self, func: F) -> u32
-    where
-        F: FnMut(&Self, &FrameClock) -> Continue + 'static,
-    {
-        unsafe extern "C" fn add_tick_callback_trampoline<T, F: FnMut(&T, &FrameClock) -> Continue + 'static>(
-            this: *mut ffi::GtkWidget,
-            frame_clock: *mut gdk_ffi::GdkFrameClock,
-            func: gpointer,
-        ) -> gboolean
-        where T: IsA<Widget>
-        {
-            let func: &RefCell<F> = transmute(func);
-
-            (&mut *func.borrow_mut())(
-                &Widget::from_glib_borrow(this).unsafe_cast(),
-                &from_glib_borrow(frame_clock)
-            ).to_glib()
-        }
-
-        unsafe extern "C" fn destroy_closure<T, F: FnMut(&T, &FrameClock) -> Continue + 'static>(func: gpointer) {
-            Box::<RefCell<F>>::from_raw(func as *mut _);
-        }
-
-        let func: Box<RefCell<F>> = Box::new(RefCell::new(func));
-        unsafe {
-            ffi::gtk_widget_add_tick_callback(
-                self.as_ref().to_glib_none().0,
-                Some(add_tick_callback_trampoline::<Self, F>),
-                Box::into_raw(func) as gpointer,
-                Some(destroy_closure::<Self, F>),
-            )
         }
     }
 

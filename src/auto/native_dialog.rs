@@ -181,81 +181,81 @@ impl<O: IsA<NativeDialog>> NativeDialogExt for O {
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn connect_response<F: Fn(&Self, ResponseType) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, ResponseType) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"response\0".as_ptr() as *const _,
-                transmute(response_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(response_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn connect_property_modal_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::modal\0".as_ptr() as *const _,
-                transmute(notify_modal_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_modal_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn connect_property_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::title\0".as_ptr() as *const _,
-                transmute(notify_title_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_title_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn connect_property_transient_for_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::transient-for\0".as_ptr() as *const _,
-                transmute(notify_transient_for_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_transient_for_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn connect_property_visible_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
+            let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::visible\0".as_ptr() as *const _,
-                transmute(notify_visible_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+                Some(transmute(notify_visible_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
 #[cfg(any(feature = "v3_20", feature = "dox"))]
-unsafe extern "C" fn response_trampoline<P>(this: *mut ffi::GtkNativeDialog, response_id: ffi::GtkResponseType, f: glib_ffi::gpointer)
+unsafe extern "C" fn response_trampoline<P, F: Fn(&P, ResponseType) + 'static>(this: *mut ffi::GtkNativeDialog, response_id: ffi::GtkResponseType, f: glib_ffi::gpointer)
 where P: IsA<NativeDialog> {
-    let f: &&(Fn(&P, ResponseType) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&NativeDialog::from_glib_borrow(this).unsafe_cast(), from_glib(response_id))
 }
 
 #[cfg(any(feature = "v3_20", feature = "dox"))]
-unsafe extern "C" fn notify_modal_trampoline<P>(this: *mut ffi::GtkNativeDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_modal_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkNativeDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<NativeDialog> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&NativeDialog::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_20", feature = "dox"))]
-unsafe extern "C" fn notify_title_trampoline<P>(this: *mut ffi::GtkNativeDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_title_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkNativeDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<NativeDialog> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&NativeDialog::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_20", feature = "dox"))]
-unsafe extern "C" fn notify_transient_for_trampoline<P>(this: *mut ffi::GtkNativeDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_transient_for_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkNativeDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<NativeDialog> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&NativeDialog::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_20", feature = "dox"))]
-unsafe extern "C" fn notify_visible_trampoline<P>(this: *mut ffi::GtkNativeDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_visible_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkNativeDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<NativeDialog> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     f(&NativeDialog::from_glib_borrow(this).unsafe_cast())
 }
 
