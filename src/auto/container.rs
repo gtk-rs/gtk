@@ -62,6 +62,7 @@ pub trait ContainerExt: 'static {
 
     fn get_children(&self) -> Vec<Widget>;
 
+    //#[cfg_attr(feature = "v3_24", deprecated)]
     //fn get_focus_chain(&self, focusable_widgets: /*Unimplemented*/Vec<Widget>) -> bool;
 
     fn get_focus_child(&self) -> Option<Widget>;
@@ -84,6 +85,7 @@ pub trait ContainerExt: 'static {
 
     fn set_border_width(&self, border_width: u32);
 
+    #[cfg_attr(feature = "v3_24", deprecated)]
     fn set_focus_chain(&self, focusable_widgets: &[Widget]);
 
     fn set_focus_child<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, child: Q);
@@ -98,6 +100,7 @@ pub trait ContainerExt: 'static {
     #[cfg_attr(feature = "v3_12", deprecated)]
     fn set_resize_mode(&self, resize_mode: ResizeMode);
 
+    #[cfg_attr(feature = "v3_24", deprecated)]
     fn unset_focus_chain(&self);
 
     fn set_property_child<P: IsA<Widget> + glib::value::SetValueOptional>(&self, child: Option<&P>);

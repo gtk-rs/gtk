@@ -58,7 +58,7 @@ pub trait GestureExt: 'static {
     fn get_group(&self) -> Vec<Gesture>;
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
-    fn get_last_event(&self, sequence: &gdk::EventSequence) -> Option<gdk::Event>;
+    fn get_last_event<'a, P: Into<Option<&'a gdk::EventSequence>>>(&self, sequence: P) -> Option<gdk::Event>;
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_last_updated_sequence(&self) -> Option<gdk::EventSequence>;
@@ -159,7 +159,8 @@ impl<O: IsA<Gesture>> GestureExt for O {
     }
 
     #[cfg(any(feature = "v3_14", feature = "dox"))]
-    fn get_last_event(&self, sequence: &gdk::EventSequence) -> Option<gdk::Event> {
+    fn get_last_event<'a, P: Into<Option<&'a gdk::EventSequence>>>(&self, sequence: P) -> Option<gdk::Event> {
+        let sequence = sequence.into();
         unsafe {
             from_glib_none(ffi::gtk_gesture_get_last_event(self.as_ref().to_glib_none().0, mut_override(sequence.to_glib_none().0)))
         }

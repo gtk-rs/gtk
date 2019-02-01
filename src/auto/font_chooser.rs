@@ -2,14 +2,22 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+#[cfg(any(feature = "v3_22_30", feature = "dox"))]
+use FontChooserLevel;
 use ffi;
 use glib::GString;
+#[cfg(any(feature = "v3_22_30", feature = "dox"))]
+use glib::StaticType;
+#[cfg(any(feature = "v3_22_30", feature = "dox"))]
+use glib::Value;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
+#[cfg(any(feature = "v3_22_30", feature = "dox"))]
+use gobject_ffi;
 use libc;
 use pango;
 use std::boxed::Box as Box_;
@@ -35,10 +43,19 @@ pub trait FontChooserExt: 'static {
 
     fn get_font_family(&self) -> Option<pango::FontFamily>;
 
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    fn get_font_features(&self) -> Option<GString>;
+
     #[cfg(any(feature = "v3_18", feature = "dox"))]
     fn get_font_map(&self) -> Option<pango::FontMap>;
 
     fn get_font_size(&self) -> i32;
+
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    fn get_language(&self) -> Option<GString>;
+
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    fn get_level(&self) -> FontChooserLevel;
 
     fn get_preview_text(&self) -> Option<GString>;
 
@@ -53,15 +70,45 @@ pub trait FontChooserExt: 'static {
     #[cfg(any(feature = "v3_18", feature = "dox"))]
     fn set_font_map<'a, P: IsA<pango::FontMap> + 'a, Q: Into<Option<&'a P>>>(&self, fontmap: Q);
 
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    fn set_language(&self, language: &str);
+
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    fn set_level(&self, level: FontChooserLevel);
+
     fn set_preview_text(&self, text: &str);
 
     fn set_show_preview_entry(&self, show_preview_entry: bool);
+
+    #[cfg(any(feature = "v3_22_30", feature = "dox"))]
+    fn get_property_font_features(&self) -> Option<GString>;
+
+    #[cfg(any(feature = "v3_22_30", feature = "dox"))]
+    fn get_property_language(&self) -> Option<GString>;
+
+    #[cfg(any(feature = "v3_22_30", feature = "dox"))]
+    fn set_property_language<'a, P: Into<Option<&'a str>>>(&self, language: P);
+
+    #[cfg(any(feature = "v3_22_30", feature = "dox"))]
+    fn get_property_level(&self) -> FontChooserLevel;
+
+    #[cfg(any(feature = "v3_22_30", feature = "dox"))]
+    fn set_property_level(&self, level: FontChooserLevel);
 
     fn connect_font_activated<F: Fn(&Self, &str) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_font_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_font_desc_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
+    #[cfg(any(feature = "v3_22_30", feature = "dox"))]
+    fn connect_property_font_features_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
+    #[cfg(any(feature = "v3_22_30", feature = "dox"))]
+    fn connect_property_language_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
+    #[cfg(any(feature = "v3_22_30", feature = "dox"))]
+    fn connect_property_level_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_preview_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -93,6 +140,13 @@ impl<O: IsA<FontChooser>> FontChooserExt for O {
         }
     }
 
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    fn get_font_features(&self) -> Option<GString> {
+        unsafe {
+            from_glib_full(ffi::gtk_font_chooser_get_font_features(self.as_ref().to_glib_none().0))
+        }
+    }
+
     #[cfg(any(feature = "v3_18", feature = "dox"))]
     fn get_font_map(&self) -> Option<pango::FontMap> {
         unsafe {
@@ -103,6 +157,20 @@ impl<O: IsA<FontChooser>> FontChooserExt for O {
     fn get_font_size(&self) -> i32 {
         unsafe {
             ffi::gtk_font_chooser_get_font_size(self.as_ref().to_glib_none().0)
+        }
+    }
+
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    fn get_language(&self) -> Option<GString> {
+        unsafe {
+            from_glib_full(ffi::gtk_font_chooser_get_language(self.as_ref().to_glib_none().0))
+        }
+    }
+
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    fn get_level(&self) -> FontChooserLevel {
+        unsafe {
+            from_glib(ffi::gtk_font_chooser_get_level(self.as_ref().to_glib_none().0))
         }
     }
 
@@ -162,6 +230,20 @@ impl<O: IsA<FontChooser>> FontChooserExt for O {
         }
     }
 
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    fn set_language(&self, language: &str) {
+        unsafe {
+            ffi::gtk_font_chooser_set_language(self.as_ref().to_glib_none().0, language.to_glib_none().0);
+        }
+    }
+
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    fn set_level(&self, level: FontChooserLevel) {
+        unsafe {
+            ffi::gtk_font_chooser_set_level(self.as_ref().to_glib_none().0, level.to_glib());
+        }
+    }
+
     fn set_preview_text(&self, text: &str) {
         unsafe {
             ffi::gtk_font_chooser_set_preview_text(self.as_ref().to_glib_none().0, text.to_glib_none().0);
@@ -171,6 +253,48 @@ impl<O: IsA<FontChooser>> FontChooserExt for O {
     fn set_show_preview_entry(&self, show_preview_entry: bool) {
         unsafe {
             ffi::gtk_font_chooser_set_show_preview_entry(self.as_ref().to_glib_none().0, show_preview_entry.to_glib());
+        }
+    }
+
+    #[cfg(any(feature = "v3_22_30", feature = "dox"))]
+    fn get_property_font_features(&self) -> Option<GString> {
+        unsafe {
+            let mut value = Value::from_type(<GString as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"font-features\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            value.get()
+        }
+    }
+
+    #[cfg(any(feature = "v3_22_30", feature = "dox"))]
+    fn get_property_language(&self) -> Option<GString> {
+        unsafe {
+            let mut value = Value::from_type(<GString as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"language\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            value.get()
+        }
+    }
+
+    #[cfg(any(feature = "v3_22_30", feature = "dox"))]
+    fn set_property_language<'a, P: Into<Option<&'a str>>>(&self, language: P) {
+        let language = language.into();
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"language\0".as_ptr() as *const _, Value::from(language).to_glib_none().0);
+        }
+    }
+
+    #[cfg(any(feature = "v3_22_30", feature = "dox"))]
+    fn get_property_level(&self) -> FontChooserLevel {
+        unsafe {
+            let mut value = Value::from_type(<FontChooserLevel as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"level\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            value.get().unwrap()
+        }
+    }
+
+    #[cfg(any(feature = "v3_22_30", feature = "dox"))]
+    fn set_property_level(&self, level: FontChooserLevel) {
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"level\0".as_ptr() as *const _, Value::from(&level).to_glib_none().0);
         }
     }
 
@@ -195,6 +319,33 @@ impl<O: IsA<FontChooser>> FontChooserExt for O {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::font-desc\0".as_ptr() as *const _,
                 Some(transmute(notify_font_desc_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+        }
+    }
+
+    #[cfg(any(feature = "v3_22_30", feature = "dox"))]
+    fn connect_property_font_features_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::font-features\0".as_ptr() as *const _,
+                Some(transmute(notify_font_features_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+        }
+    }
+
+    #[cfg(any(feature = "v3_22_30", feature = "dox"))]
+    fn connect_property_language_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::language\0".as_ptr() as *const _,
+                Some(transmute(notify_language_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+        }
+    }
+
+    #[cfg(any(feature = "v3_22_30", feature = "dox"))]
+    fn connect_property_level_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::level\0".as_ptr() as *const _,
+                Some(transmute(notify_level_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -228,6 +379,27 @@ where P: IsA<FontChooser> {
 }
 
 unsafe extern "C" fn notify_font_desc_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFontChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+where P: IsA<FontChooser> {
+    let f: &F = transmute(f);
+    f(&FontChooser::from_glib_borrow(this).unsafe_cast())
+}
+
+#[cfg(any(feature = "v3_22_30", feature = "dox"))]
+unsafe extern "C" fn notify_font_features_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFontChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+where P: IsA<FontChooser> {
+    let f: &F = transmute(f);
+    f(&FontChooser::from_glib_borrow(this).unsafe_cast())
+}
+
+#[cfg(any(feature = "v3_22_30", feature = "dox"))]
+unsafe extern "C" fn notify_language_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFontChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+where P: IsA<FontChooser> {
+    let f: &F = transmute(f);
+    f(&FontChooser::from_glib_borrow(this).unsafe_cast())
+}
+
+#[cfg(any(feature = "v3_22_30", feature = "dox"))]
+unsafe extern "C" fn notify_level_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFontChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FontChooser> {
     let f: &F = transmute(f);
     f(&FontChooser::from_glib_borrow(this).unsafe_cast())

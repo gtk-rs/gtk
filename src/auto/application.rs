@@ -89,6 +89,9 @@ pub trait GtkApplicationExt: 'static {
 
     fn set_property_register_session(&self, register_session: bool);
 
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    fn get_property_screensaver_active(&self) -> bool;
+
     fn connect_window_added<F: Fn(&Self, &Window) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_window_removed<F: Fn(&Self, &Window) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -100,6 +103,9 @@ pub trait GtkApplicationExt: 'static {
     fn connect_property_menubar_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_register_session_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    fn connect_property_screensaver_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<Application>> GtkApplicationExt for O {
@@ -259,6 +265,15 @@ impl<O: IsA<Application>> GtkApplicationExt for O {
         }
     }
 
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    fn get_property_screensaver_active(&self) -> bool {
+        unsafe {
+            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"screensaver-active\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            value.get().unwrap()
+        }
+    }
+
     fn connect_window_added<F: Fn(&Self, &Window) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -306,6 +321,15 @@ impl<O: IsA<Application>> GtkApplicationExt for O {
                 Some(transmute(notify_register_session_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
+
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    fn connect_property_screensaver_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::screensaver-active\0".as_ptr() as *const _,
+                Some(transmute(notify_screensaver_active_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+        }
+    }
 }
 
 unsafe extern "C" fn window_added_trampoline<P, F: Fn(&P, &Window) + 'static>(this: *mut ffi::GtkApplication, window: *mut ffi::GtkWindow, f: glib_ffi::gpointer)
@@ -339,6 +363,13 @@ where P: IsA<Application> {
 }
 
 unsafe extern "C" fn notify_register_session_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkApplication, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+where P: IsA<Application> {
+    let f: &F = transmute(f);
+    f(&Application::from_glib_borrow(this).unsafe_cast())
+}
+
+#[cfg(any(feature = "v3_24", feature = "dox"))]
+unsafe extern "C" fn notify_screensaver_active_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkApplication, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Application> {
     let f: &F = transmute(f);
     f(&Application::from_glib_borrow(this).unsafe_cast())

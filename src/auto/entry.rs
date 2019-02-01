@@ -239,6 +239,10 @@ pub trait EntryExt: 'static {
 
     fn get_property_cursor_position(&self) -> i32;
 
+    fn get_property_enable_emoji_completion(&self) -> bool;
+
+    fn set_property_enable_emoji_completion(&self, enable_emoji_completion: bool);
+
     fn get_property_im_module(&self) -> Option<GString>;
 
     fn set_property_im_module<'a, P: Into<Option<&'a str>>>(&self, im_module: P);
@@ -413,6 +417,8 @@ pub trait EntryExt: 'static {
     fn connect_property_cursor_position_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_editable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
+    fn connect_property_enable_emoji_completion_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_has_frame_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -983,6 +989,20 @@ impl<O: IsA<Entry>> EntryExt for O {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
             gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"cursor-position\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
+        }
+    }
+
+    fn get_property_enable_emoji_completion(&self) -> bool {
+        unsafe {
+            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"enable-emoji-completion\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            value.get().unwrap()
+        }
+    }
+
+    fn set_property_enable_emoji_completion(&self, enable_emoji_completion: bool) {
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"enable-emoji-completion\0".as_ptr() as *const _, Value::from(&enable_emoji_completion).to_glib_none().0);
         }
     }
 
@@ -1566,6 +1586,14 @@ impl<O: IsA<Entry>> EntryExt for O {
         }
     }
 
+    fn connect_property_enable_emoji_completion_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::enable-emoji-completion\0".as_ptr() as *const _,
+                Some(transmute(notify_enable_emoji_completion_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+        }
+    }
+
     fn connect_property_has_frame_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2022,6 +2050,12 @@ where P: IsA<Entry> {
 }
 
 unsafe extern "C" fn notify_editable_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+where P: IsA<Entry> {
+    let f: &F = transmute(f);
+    f(&Entry::from_glib_borrow(this).unsafe_cast())
+}
+
+unsafe extern "C" fn notify_enable_emoji_completion_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Entry> {
     let f: &F = transmute(f);
     f(&Entry::from_glib_borrow(this).unsafe_cast())

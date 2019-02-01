@@ -35,6 +35,7 @@ impl CssProvider {
         }
     }
 
+    #[cfg_attr(feature = "v3_24", deprecated)]
     pub fn get_default() -> Option<CssProvider> {
         assert_initialized_main_thread!();
         unsafe {

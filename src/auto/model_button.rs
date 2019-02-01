@@ -188,6 +188,22 @@ impl ModelButton {
         }
     }
 
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    pub fn get_property_use_markup(&self) -> bool {
+        unsafe {
+            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.as_ptr() as *mut gobject_ffi::GObject, b"use-markup\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            value.get().unwrap()
+        }
+    }
+
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    pub fn set_property_use_markup(&self, use_markup: bool) {
+        unsafe {
+            gobject_ffi::g_object_set_property(self.as_ptr() as *mut gobject_ffi::GObject, b"use-markup\0".as_ptr() as *const _, Value::from(&use_markup).to_glib_none().0);
+        }
+    }
+
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     pub fn connect_property_active_notify<F: Fn(&ModelButton) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
@@ -259,6 +275,15 @@ impl ModelButton {
                 Some(transmute(notify_text_trampoline::<F> as usize)), Box_::into_raw(f))
         }
     }
+
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    pub fn connect_property_use_markup_notify<F: Fn(&ModelButton) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::use-markup\0".as_ptr() as *const _,
+                Some(transmute(notify_use_markup_trampoline::<F> as usize)), Box_::into_raw(f))
+        }
+    }
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
@@ -312,6 +337,12 @@ unsafe extern "C" fn notify_role_trampoline<F: Fn(&ModelButton) + 'static>(this:
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 unsafe extern "C" fn notify_text_trampoline<F: Fn(&ModelButton) + 'static>(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
+    let f: &F = transmute(f);
+    f(&from_glib_borrow(this))
+}
+
+#[cfg(any(feature = "v3_24", feature = "dox"))]
+unsafe extern "C" fn notify_use_markup_trampoline<F: Fn(&ModelButton) + 'static>(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
     let f: &F = transmute(f);
     f(&from_glib_borrow(this))
 }
