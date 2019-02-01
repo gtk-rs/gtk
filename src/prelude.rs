@@ -20,10 +20,10 @@ pub use fixed::FixedExtManual;
 #[cfg(any(feature = "v3_18", feature = "dox"))]
 pub use flow_box::FlowBoxExtManual;
 pub use im_context_simple::IMContextSimpleExtManual;
+pub use invisible::InvisibleExtManual;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 pub use list_box::ListBoxExtManual;
 pub use list_store::GtkListStoreExtManual;
-pub use invisible::InvisibleExtManual;
 pub use menu::GtkMenuExtManual;
 pub use notebook::NotebookExtManual;
 #[cfg(any(feature = "v3_22", feature = "dox"))]

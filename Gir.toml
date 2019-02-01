@@ -43,7 +43,6 @@ generate = [
     "Gtk.CellRendererState",
     "Gtk.CheckButton",
     "Gtk.CheckMenuItem",
-    "Gtk.ColorButton",
     "Gtk.ColorChooserDialog",
     "Gtk.ColorChooserWidget",
     "Gtk.ComboBoxText",
@@ -71,7 +70,6 @@ generate = [
     "Gtk.FileChooserWidget",
     "Gtk.FileFilter",
     "Gtk.FileFilterFlags",
-    "Gtk.Fixed",
     "Gtk.FlowBoxChild",
     "Gtk.FontButton",
     "Gtk.FontChooser",
@@ -99,7 +97,6 @@ generate = [
     "Gtk.IMPreeditStyle",
     "Gtk.IMStatusStyle",
     "Gtk.InputPurpose",
-    "Gtk.Invisible",
     "Gtk.JunctionSides",
     "Gtk.Justification",
     "Gtk.LevelBar",
@@ -432,6 +429,7 @@ status = "generate"
 name = "Gtk.Application"
 status = "generate"
 trait_name = "GtkApplicationExt"
+manual_traits = ["gio::ApplicationExtManual"]
     [[object.function]]
     name = "new"
     ignore = true
@@ -488,6 +486,7 @@ status = "generate"
 [[object]]
 name = "Gtk.Buildable"
 status = "generate"
+manual_traits = ["BuildableExtManual"]
     [[object.function]]
     pattern = "[gs]et_name"
     ignore = true
@@ -618,6 +617,7 @@ status = "generate"
 [[object]]
 name = "Gtk.CellRendererPixbuf"
 status = "generate"
+manual_traits = ["CellRendererPixbufExtManual"]
     [[object.property]]
     name = "surface"
     #value cairo::Surface
@@ -695,8 +695,14 @@ status = "generate"
     ignore = true
 
 [[object]]
+name = "Gtk.ColorButton"
+status = "generate"
+manual_traits = ["ColorButtonExtManual"]
+
+[[object]]
 name = "Gtk.ColorChooser"
 status = "generate"
+manual_traits = ["ColorChooserExtManual"]
     [[object.function]]
     name = "add_palette"
     #array with size
@@ -705,6 +711,7 @@ status = "generate"
 [[object]]
 name = "Gtk.ComboBox"
 status = "generate"
+manual_traits = ["ColorBoxExtManual"]
     [[object.function]]
     name = "set_active_iter"
         [[object.function.parameter]]
@@ -737,6 +744,7 @@ status = "generate"
 [[object]]
 name = "Gtk.Dialog"
 status = "generate"
+manual_traits = ["DialogExtManual"]
     [[object.function]]
     name = "add_button"
         [object.function.return]
@@ -753,6 +761,7 @@ status = "generate"
 [[object]]
 name = "Gtk.Editable"
 status = "generate"
+manual_traits = ["EditableSignals"]
     [[object.signal]]
     pattern = ".+"
     ignore = true #out #manual
@@ -823,8 +832,14 @@ status = "generate"
     ignore = true  #strange type of options and option_labels
 
 [[object]]
+name = "Gtk.Fixed"
+status = "generate"
+manual_traits = ["FixedExtManual"]
+
+[[object]]
 name = "Gtk.FlowBox"
 status = "generate"
+manual_traits = ["FlowBoxExtManual"]
     [[object.function]]
     name = "bind_model"
         [[object.function.parameter]]
@@ -977,6 +992,7 @@ status = "generate"
 [[object]]
 name = "Gtk.IMContextSimple"
 status = "generate"
+manual_traits = ["IMContextSimpleExtManual"]
     [[object.function]]
     name = "add_compose_file"
     ignore = true
@@ -1000,6 +1016,11 @@ status = "generate"
     [[object.member]]
     name = "no_emoji"
     version = "3.22.20"
+
+[[object]]
+name = "Gtk.Invisible"
+status = "generate"
+manual_traits = ["InvisibleExtManual"]
 
 [[object]]
 name = "Gtk.Label"
@@ -1028,6 +1049,7 @@ status = "generate"
 [[object]]
 name = "Gtk.ListBox"
 status = "generate"
+manual_traits = ["ListBoxExtManual"]
     [[object.function]]
     name = "bind_model"
         [[object.function.parameter]]
@@ -1039,6 +1061,7 @@ status = "generate"
 name = "Gtk.ListStore"
 status = "generate"
 trait_name = "GtkListStoreExt"
+manual_traits = ["GtkListStoreExtManual"]
     [[object.function]]
     pattern = ".+"
         [[object.function.parameter]]
@@ -1068,6 +1091,7 @@ status = "generate"
 child_type = "Gtk.MenuItem"
 child_name = "item"
 trait_name = "GtkMenuExt"
+manual_traits = ["GtkMenuExtManual"]
     [[object.child_prop]]
     name = "bottom-attach"
     type = "gint"
@@ -1102,6 +1126,7 @@ status = "generate"
 [[object]]
 name = "Gtk.Notebook"
 status = "generate"
+manual_traits = ["NotebookExtManual"]
     # The following functions need integer type adjustments
     [[object.function]]
     name = "append_page"
@@ -1174,6 +1199,7 @@ status = "generate"
 [[object]]
 name = "Gtk.Overlay"
 status = "generate"
+manual_traits = ["OverlaySignals"]
     [[object.child_prop]]
     name = "index"
     type = "gint"
@@ -1191,6 +1217,7 @@ version = "3.22"
 [[object]]
 name = "Gtk.PadController"
 status = "generate"
+manual_traits = ["PadControllerExtManual"]
 version = "3.22"
     [[object.function]]
     name = "set_action_entries"
@@ -1463,6 +1490,7 @@ trait_name = "GtkSocketExt"
 [[object]]
 name = "Gtk.SpinButton"
 status = "generate"
+manual_traits = ["SpinButtonSignals"]
     [[object.function]]
     name = "get_adjustment"
         [object.function.return]
@@ -1511,6 +1539,7 @@ version = "3.20"
 [[object]]
 name = "Gtk.Switch"
 status = "generate"
+manual_traits = ["SwitchExtManual"]
     [[object.signal]]
     name = "state-set"
     inhibit = true
@@ -1530,6 +1559,7 @@ status = "generate"
 [[object]]
 name = "Gtk.TextBuffer"
 status = "generate"
+manual_traits = ["TextBufferExtManual"]
     [[object.function]]
     name = "register_deserialize_tagset"
         [object.function.return]
@@ -1814,6 +1844,7 @@ status = "generate"
 [[object]]
 name = "Gtk.TreeSortable"
 status = "generate"
+manual_traits = ["TreeSortableExtManual"]
     [[object.function]]
     pattern = "[gs]et_sort_column_id"
     ignore = true
@@ -1829,6 +1860,7 @@ status = "generate"
 [[object]]
 name = "Gtk.TreeStore"
 status = "generate"
+manual_traits = ["TreeStoreExtManual"]
     [[object.function]]
     pattern = ".+"
         [[object.function.parameter]]
@@ -1911,6 +1943,7 @@ status = "generate"
 [[object]]
 name = "Gtk.Widget"
 status = "generate"
+manual_traits = ["WidgetExtManual"]
     [[object.function]]
     name = "drag_dest_set"
     #array with size
@@ -2086,6 +2119,7 @@ status = "generate"
 name = "Gtk.Window"
 status = "generate"
 trait_name = "GtkWindowExt"
+manual_traits = ["GtkWindowExtManual"]
     [[object.function]]
     name = "activate_key"
         [[object.function.parameter]]
