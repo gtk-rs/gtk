@@ -786,10 +786,10 @@ where P: IsA<PlacesSidebar> {
 }
 
 #[cfg(any(feature = "v3_22_26", feature = "dox"))]
-unsafe extern "C" fn show_starred_location_trampoline<P, F: Fn(&P, PlacesOpenFlags) + 'static>(this: *mut ffi::GtkPlacesSidebar, object: ffi::GtkPlacesOpenFlags, f: glib_ffi::gpointer)
+unsafe extern "C" fn show_starred_location_trampoline<P, F: Fn(&P, PlacesOpenFlags) + 'static>(this: *mut ffi::GtkPlacesSidebar, open_flags: ffi::GtkPlacesOpenFlags, f: glib_ffi::gpointer)
 where P: IsA<PlacesSidebar> {
     let f: &F = transmute(f);
-    f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast(), from_glib(object))
+    f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast(), from_glib(open_flags))
 }
 
 #[cfg(any(feature = "v3_20", feature = "dox"))]

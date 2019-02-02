@@ -132,7 +132,7 @@ pub trait GtkMenuExt: 'static {
     fn set_tearoff_state(&self, torn_off: bool);
 
     #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_title(&self, title: &str);
+    fn set_title<'a, P: Into<Option<&'a str>>>(&self, title: P);
 
     #[cfg(any(feature = "v3_22", feature = "dox"))]
     fn get_property_anchor_hints(&self) -> gdk::AnchorHints;
@@ -387,7 +387,8 @@ impl<O: IsA<Menu>> GtkMenuExt for O {
         }
     }
 
-    fn set_title(&self, title: &str) {
+    fn set_title<'a, P: Into<Option<&'a str>>>(&self, title: P) {
+        let title = title.into();
         unsafe {
             ffi::gtk_menu_set_title(self.as_ref().to_glib_none().0, title.to_glib_none().0);
         }

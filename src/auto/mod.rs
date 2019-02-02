@@ -285,6 +285,7 @@ pub use self::font_chooser_dialog::{FontChooserDialog, FontChooserDialogClass, N
 
 mod font_chooser_widget;
 pub use self::font_chooser_widget::{FontChooserWidget, FontChooserWidgetClass, NONE_FONT_CHOOSER_WIDGET};
+pub use self::font_chooser_widget::FontChooserWidgetExt;
 
 mod frame;
 pub use self::frame::{Frame, FrameClass, NONE_FRAME};
@@ -1006,6 +1007,7 @@ pub use self::flags::CellRendererState;
 pub use self::flags::DestDefaults;
 pub use self::flags::DialogFlags;
 pub use self::flags::FileFilterFlags;
+pub use self::flags::FontChooserLevel;
 pub use self::flags::IconLookupFlags;
 #[cfg(any(feature = "v3_6", feature = "dox"))]
 pub use self::flags::InputHints;
@@ -1362,6 +1364,7 @@ pub mod traits {
     pub use super::FlowBoxChildExt;
     pub use super::FontButtonExt;
     pub use super::FontChooserExt;
+    pub use super::FontChooserWidgetExt;
     pub use super::FrameExt;
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     pub use super::GLAreaExt;

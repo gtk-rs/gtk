@@ -405,6 +405,7 @@ pub fn render_frame<P: IsA<StyleContext>>(context: &P, cr: &cairo::Context, x: f
     }
 }
 
+#[cfg_attr(feature = "v3_24", deprecated)]
 pub fn render_frame_gap<P: IsA<StyleContext>>(context: &P, cr: &cairo::Context, x: f64, y: f64, width: f64, height: f64, gap_side: PositionType, xy0_gap: f64, xy1_gap: f64) {
     skip_assert_initialized!();
     unsafe {

@@ -74,6 +74,7 @@ generate = [
     "Gtk.FontButton",
     "Gtk.FontChooser",
     "Gtk.FontChooserDialog",
+    "Gtk.FontChooserLevel",
     "Gtk.FontChooserWidget",
     "Gtk.Frame",
     "Gtk.GestureDrag",

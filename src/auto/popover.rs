@@ -17,12 +17,17 @@ use gdk;
 use gio;
 use glib::object::Cast;
 use glib::object::IsA;
+#[cfg(any(feature = "v3_12", feature = "dox"))]
 use glib::signal::SignalHandlerId;
+#[cfg(any(feature = "v3_12", feature = "dox"))]
 use glib::signal::connect_raw;
 use glib::translate::*;
+#[cfg(any(feature = "v3_12", feature = "dox"))]
 use glib_ffi;
+#[cfg(any(feature = "v3_12", feature = "dox"))]
 use std::boxed::Box as Box_;
 use std::fmt;
+#[cfg(any(feature = "v3_12", feature = "dox"))]
 use std::mem::transmute;
 
 glib_wrapper! {
@@ -109,6 +114,7 @@ pub trait PopoverExt: 'static {
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn set_transitions_enabled(&self, transitions_enabled: bool);
 
+    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_closed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
@@ -257,6 +263,7 @@ impl<O: IsA<Popover>> PopoverExt for O {
         }
     }
 
+    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_closed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -320,6 +327,7 @@ impl<O: IsA<Popover>> PopoverExt for O {
     }
 }
 
+#[cfg(any(feature = "v3_12", feature = "dox"))]
 unsafe extern "C" fn closed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPopover, f: glib_ffi::gpointer)
 where P: IsA<Popover> {
     let f: &F = transmute(f);

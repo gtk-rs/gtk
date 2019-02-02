@@ -214,7 +214,7 @@ pub trait TreeViewExt: 'static {
 
     fn set_enable_tree_lines(&self, enabled: bool);
 
-    fn set_expander_column<P: IsA<TreeViewColumn>>(&self, column: &P);
+    fn set_expander_column<'a, P: IsA<TreeViewColumn> + 'a, Q: Into<Option<&'a P>>>(&self, column: Q);
 
     fn set_fixed_height_mode(&self, enable: bool);
 
@@ -870,9 +870,10 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
         }
     }
 
-    fn set_expander_column<P: IsA<TreeViewColumn>>(&self, column: &P) {
+    fn set_expander_column<'a, P: IsA<TreeViewColumn> + 'a, Q: Into<Option<&'a P>>>(&self, column: Q) {
+        let column = column.into();
         unsafe {
-            ffi::gtk_tree_view_set_expander_column(self.as_ref().to_glib_none().0, column.as_ref().to_glib_none().0);
+            ffi::gtk_tree_view_set_expander_column(self.as_ref().to_glib_none().0, column.map(|p| p.as_ref()).to_glib_none().0);
         }
     }
 

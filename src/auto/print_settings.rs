@@ -498,7 +498,8 @@ impl PrintSettings {
         }
     }
 
-    pub fn to_key_file(&self, key_file: &glib::KeyFile, group_name: &str) {
+    pub fn to_key_file<'a, P: Into<Option<&'a str>>>(&self, key_file: &glib::KeyFile, group_name: P) {
+        let group_name = group_name.into();
         unsafe {
             ffi::gtk_print_settings_to_key_file(self.to_glib_none().0, key_file.to_glib_none().0, group_name.to_glib_none().0);
         }

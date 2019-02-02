@@ -36,7 +36,7 @@ pub trait ActionableExt: 'static {
 
     //fn set_action_target(&self, format_string: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
-    fn set_action_target_value(&self, target_value: &glib::Variant);
+    fn set_action_target_value<'a, P: Into<Option<&'a glib::Variant>>>(&self, target_value: P);
 
     fn set_detailed_action_name(&self, detailed_action_name: &str);
 
@@ -67,7 +67,8 @@ impl<O: IsA<Actionable>> ActionableExt for O {
     //    unsafe { TODO: call ffi::gtk_actionable_set_action_target() }
     //}
 
-    fn set_action_target_value(&self, target_value: &glib::Variant) {
+    fn set_action_target_value<'a, P: Into<Option<&'a glib::Variant>>>(&self, target_value: P) {
+        let target_value = target_value.into();
         unsafe {
             ffi::gtk_actionable_set_action_target_value(self.as_ref().to_glib_none().0, target_value.to_glib_none().0);
         }

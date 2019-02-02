@@ -60,7 +60,7 @@ pub trait TreeSelectionExt: 'static {
 
     fn set_mode(&self, type_: SelectionMode);
 
-    fn set_select_function<P: Fn(&TreeSelection, &TreeModel, &TreePath, bool) -> bool + 'static>(&self, func: P);
+    fn set_select_function(&self, func: Option<Box<dyn Fn(&TreeSelection, &TreeModel, &TreePath, bool) -> bool + 'static>>);
 
     fn unselect_all(&self);
 
@@ -177,23 +177,27 @@ impl<O: IsA<TreeSelection>> TreeSelectionExt for O {
         }
     }
 
-    fn set_select_function<P: Fn(&TreeSelection, &TreeModel, &TreePath, bool) -> bool + 'static>(&self, func: P) {
-        let func_data: Box_<P> = Box::new(func);
-        unsafe extern "C" fn func_func<P: Fn(&TreeSelection, &TreeModel, &TreePath, bool) -> bool + 'static>(selection: *mut ffi::GtkTreeSelection, model: *mut ffi::GtkTreeModel, path: *mut ffi::GtkTreePath, path_currently_selected: glib_ffi::gboolean, data: glib_ffi::gpointer) -> glib_ffi::gboolean {
+    fn set_select_function(&self, func: Option<Box<dyn Fn(&TreeSelection, &TreeModel, &TreePath, bool) -> bool + 'static>>) {
+        let func_data: Box_<Option<Box<dyn Fn(&TreeSelection, &TreeModel, &TreePath, bool) -> bool + 'static>>> = Box::new(func);
+        unsafe extern "C" fn func_func(selection: *mut ffi::GtkTreeSelection, model: *mut ffi::GtkTreeModel, path: *mut ffi::GtkTreePath, path_currently_selected: glib_ffi::gboolean, data: glib_ffi::gpointer) -> glib_ffi::gboolean {
             let selection = from_glib_borrow(selection);
             let model = from_glib_borrow(model);
             let path = from_glib_borrow(path);
             let path_currently_selected = from_glib(path_currently_selected);
-            let callback: &P = &*(data as *mut _);
-            let res = (*callback)(&selection, &model, &path, path_currently_selected);
+            let callback: &Option<Box<dyn Fn(&TreeSelection, &TreeModel, &TreePath, bool) -> bool + 'static>> = &*(data as *mut _);
+            let res = if let Some(ref callback) = *callback {
+                callback(&selection, &model, &path, path_currently_selected)
+            } else {
+                panic!("cannot get closure...")
+            };
             res.to_glib()
         }
-        let func = Some(func_func::<P> as _);
-        unsafe extern "C" fn destroy_func<P: Fn(&TreeSelection, &TreeModel, &TreePath, bool) -> bool + 'static>(data: glib_ffi::gpointer) {
-            let _callback: Box_<P> = Box_::from_raw(data as *mut _);
+        let func = if func_data.is_some() { Some(func_func as _) } else { None };
+        unsafe extern "C" fn destroy_func(data: glib_ffi::gpointer) {
+            let _callback: Box_<Option<Box<dyn Fn(&TreeSelection, &TreeModel, &TreePath, bool) -> bool + 'static>>> = Box_::from_raw(data as *mut _);
         }
-        let destroy_call3 = Some(destroy_func::<P> as _);
-        let super_callback0: Box_<P> = func_data;
+        let destroy_call3 = Some(destroy_func as _);
+        let super_callback0: Box_<Option<Box<dyn Fn(&TreeSelection, &TreeModel, &TreePath, bool) -> bool + 'static>>> = func_data;
         unsafe {
             ffi::gtk_tree_selection_set_select_function(self.as_ref().to_glib_none().0, func, Box::into_raw(super_callback0) as *mut _, destroy_call3);
         }
