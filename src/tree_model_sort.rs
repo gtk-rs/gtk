@@ -3,7 +3,8 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 use ffi;
-use glib::object::{Downcast, IsA};
+use glib::Cast;
+use glib::object::IsA;
 use glib::translate::*;
 
 use {TreeModel, TreeModelSort};
@@ -14,8 +15,8 @@ impl TreeModelSort {
         unsafe {
             TreeModel::from_glib_none(
                 ffi::gtk_tree_model_sort_new_with_model(
-                    child_model.to_glib_none().0)
-                ).downcast_unchecked()
+                    child_model.as_ref().to_glib_none().0)
+                ).unsafe_cast()
         }
     }
 }
