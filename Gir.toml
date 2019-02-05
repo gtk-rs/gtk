@@ -1778,7 +1778,7 @@ status = "generate"
         const = true
     [[object.function]]
     name = "get_model"
-        [[object.function.return]]
+        [object.function.return]
         nullable = false
 
 [[object]]

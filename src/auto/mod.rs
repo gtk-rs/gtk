@@ -818,7 +818,7 @@ pub use self::tree_model_filter::{TreeModelFilter, TreeModelFilterClass, NONE_TR
 pub use self::tree_model_filter::TreeModelFilterExt;
 
 mod tree_model_sort;
-pub use self::tree_model_sort::TreeModelSort;
+pub use self::tree_model_sort::{TreeModelSort, TreeModelSortClass, NONE_TREE_MODEL_SORT};
 pub use self::tree_model_sort::TreeModelSortExt;
 
 mod tree_selection;
