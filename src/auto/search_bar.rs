@@ -5,11 +5,9 @@
 use Bin;
 use Buildable;
 use Container;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 use Entry;
 use Widget;
 use ffi;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 use gdk;
 use glib::StaticType;
 use glib::Value;
@@ -33,7 +31,6 @@ glib_wrapper! {
 }
 
 impl SearchBar {
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     pub fn new() -> SearchBar {
         assert_initialized_main_thread!();
         unsafe {
@@ -42,7 +39,6 @@ impl SearchBar {
     }
 }
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 impl Default for SearchBar {
     fn default() -> Self {
         Self::new()
@@ -52,31 +48,21 @@ impl Default for SearchBar {
 pub const NONE_SEARCH_BAR: Option<&SearchBar> = None;
 
 pub trait SearchBarExt: 'static {
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn connect_entry<P: IsA<Entry>>(&self, entry: &P);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_search_mode(&self) -> bool;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_show_close_button(&self) -> bool;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn handle_event(&self, event: &gdk::Event) -> bool;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_search_mode(&self, search_mode: bool);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_show_close_button(&self, visible: bool);
 
     fn get_property_search_mode_enabled(&self) -> bool;
 
     fn set_property_search_mode_enabled(&self, search_mode_enabled: bool);
-
-    fn get_property_show_close_button(&self) -> bool;
-
-    fn set_property_show_close_button(&self, show_close_button: bool);
 
     fn connect_property_search_mode_enabled_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -84,42 +70,36 @@ pub trait SearchBarExt: 'static {
 }
 
 impl<O: IsA<SearchBar>> SearchBarExt for O {
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn connect_entry<P: IsA<Entry>>(&self, entry: &P) {
         unsafe {
             ffi::gtk_search_bar_connect_entry(self.as_ref().to_glib_none().0, entry.as_ref().to_glib_none().0);
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_search_mode(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_search_bar_get_search_mode(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_show_close_button(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_search_bar_get_show_close_button(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn handle_event(&self, event: &gdk::Event) -> bool {
         unsafe {
             from_glib(ffi::gtk_search_bar_handle_event(self.as_ref().to_glib_none().0, mut_override(event.to_glib_none().0)))
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_search_mode(&self, search_mode: bool) {
         unsafe {
             ffi::gtk_search_bar_set_search_mode(self.as_ref().to_glib_none().0, search_mode.to_glib());
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_show_close_button(&self, visible: bool) {
         unsafe {
             ffi::gtk_search_bar_set_show_close_button(self.as_ref().to_glib_none().0, visible.to_glib());
@@ -137,20 +117,6 @@ impl<O: IsA<SearchBar>> SearchBarExt for O {
     fn set_property_search_mode_enabled(&self, search_mode_enabled: bool) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"search-mode-enabled\0".as_ptr() as *const _, Value::from(&search_mode_enabled).to_glib_none().0);
-        }
-    }
-
-    fn get_property_show_close_button(&self) -> bool {
-        unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"show-close-button\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_show_close_button(&self, show_close_button: bool) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"show-close-button\0".as_ptr() as *const _, Value::from(&show_close_button).to_glib_none().0);
         }
     }
 

@@ -15,7 +15,6 @@ use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use signal::Inhibit;
 use std::boxed::Box as Box_;
 use std::fmt;
@@ -49,24 +48,20 @@ pub const NONE_SWITCH: Option<&Switch> = None;
 pub trait SwitchExt: 'static {
     fn get_active(&self) -> bool;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_state(&self) -> bool;
 
     fn set_active(&self, is_active: bool);
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn set_state(&self, state: bool);
 
     fn connect_activate<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn emit_activate(&self);
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_state_set<F: Fn(&Self, bool) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_property_state_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
@@ -77,7 +72,6 @@ impl<O: IsA<Switch>> SwitchExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_state(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_switch_get_state(self.as_ref().to_glib_none().0))
@@ -90,7 +84,6 @@ impl<O: IsA<Switch>> SwitchExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn set_state(&self, state: bool) {
         unsafe {
             ffi::gtk_switch_set_state(self.as_ref().to_glib_none().0, state.to_glib());
@@ -109,7 +102,6 @@ impl<O: IsA<Switch>> SwitchExt for O {
         let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("activate", &[]).unwrap() };
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_state_set<F: Fn(&Self, bool) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -126,7 +118,6 @@ impl<O: IsA<Switch>> SwitchExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_property_state_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -142,7 +133,6 @@ where P: IsA<Switch> {
     f(&Switch::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 unsafe extern "C" fn state_set_trampoline<P, F: Fn(&P, bool) -> Inhibit + 'static>(this: *mut ffi::GtkSwitch, state: glib_ffi::gboolean, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Switch> {
     let f: &F = transmute(f);
@@ -155,7 +145,6 @@ where P: IsA<Switch> {
     f(&Switch::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 unsafe extern "C" fn notify_state_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSwitch, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Switch> {
     let f: &F = transmute(f);

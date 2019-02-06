@@ -19,7 +19,6 @@ use TreePath;
 use Widget;
 use cairo;
 use ffi;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 use gdk;
 use glib;
 use glib::StaticType;
@@ -83,10 +82,8 @@ pub trait IconViewExt: 'static {
 
     fn create_drag_icon(&self, path: &TreePath) -> Option<cairo::Surface>;
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn get_activate_on_single_click(&self) -> bool;
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_cell_rect<'a, P: IsA<CellRenderer> + 'a, Q: Into<Option<&'a P>>>(&self, path: &TreePath, cell: Q) -> Option<gdk::Rectangle>;
 
     fn get_column_spacing(&self) -> i32;
@@ -151,7 +148,6 @@ pub trait IconViewExt: 'static {
 
     fn selected_foreach<P: FnMut(&IconView, &TreePath)>(&self, func: P);
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn set_activate_on_single_click(&self, single: bool);
 
     fn set_column_spacing(&self, column_spacing: i32);
@@ -230,7 +226,6 @@ pub trait IconViewExt: 'static {
 
     fn emit_unselect_all(&self);
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn connect_property_activate_on_single_click_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_column_spacing_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -280,14 +275,12 @@ impl<O: IsA<IconView>> IconViewExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn get_activate_on_single_click(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_icon_view_get_activate_on_single_click(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_cell_rect<'a, P: IsA<CellRenderer> + 'a, Q: Into<Option<&'a P>>>(&self, path: &TreePath, cell: Q) -> Option<gdk::Rectangle> {
         let cell = cell.into();
         unsafe {
@@ -511,7 +504,6 @@ impl<O: IsA<IconView>> IconViewExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn set_activate_on_single_click(&self, single: bool) {
         unsafe {
             ffi::gtk_icon_view_set_activate_on_single_click(self.as_ref().to_glib_none().0, single.to_glib());
@@ -758,7 +750,6 @@ impl<O: IsA<IconView>> IconViewExt for O {
         let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("unselect-all", &[]).unwrap() };
     }
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn connect_property_activate_on_single_click_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -936,7 +927,6 @@ where P: IsA<IconView> {
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_8", feature = "dox"))]
 unsafe extern "C" fn notify_activate_on_single_click_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
     let f: &F = transmute(f);

@@ -40,14 +40,6 @@ impl ToolButton {
             ToolItem::from_glib_none(ffi::gtk_tool_button_new(icon_widget.map(|p| p.as_ref()).to_glib_none().0, label.to_glib_none().0)).unsafe_cast()
         }
     }
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    pub fn new_from_stock(stock_id: &str) -> ToolButton {
-        assert_initialized_main_thread!();
-        unsafe {
-            ToolItem::from_glib_none(ffi::gtk_tool_button_new_from_stock(stock_id.to_glib_none().0)).unsafe_cast()
-        }
-    }
 }
 
 pub const NONE_TOOL_BUTTON: Option<&ToolButton> = None;
@@ -61,9 +53,6 @@ pub trait ToolButtonExt: 'static {
 
     fn get_label_widget(&self) -> Option<Widget>;
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_stock_id(&self) -> Option<GString>;
-
     fn get_use_underline(&self) -> bool;
 
     fn set_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_name: P);
@@ -73,9 +62,6 @@ pub trait ToolButtonExt: 'static {
     fn set_label<'a, P: Into<Option<&'a str>>>(&self, label: P);
 
     fn set_label_widget<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, label_widget: Q);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_stock_id<'a, P: Into<Option<&'a str>>>(&self, stock_id: P);
 
     fn set_use_underline(&self, use_underline: bool);
 
@@ -90,9 +76,6 @@ pub trait ToolButtonExt: 'static {
     fn connect_property_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_label_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_stock_id_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_use_underline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
@@ -119,12 +102,6 @@ impl<O: IsA<ToolButton>> ToolButtonExt for O {
     fn get_label_widget(&self) -> Option<Widget> {
         unsafe {
             from_glib_none(ffi::gtk_tool_button_get_label_widget(self.as_ref().to_glib_none().0))
-        }
-    }
-
-    fn get_stock_id(&self) -> Option<GString> {
-        unsafe {
-            from_glib_none(ffi::gtk_tool_button_get_stock_id(self.as_ref().to_glib_none().0))
         }
     }
 
@@ -159,13 +136,6 @@ impl<O: IsA<ToolButton>> ToolButtonExt for O {
         let label_widget = label_widget.into();
         unsafe {
             ffi::gtk_tool_button_set_label_widget(self.as_ref().to_glib_none().0, label_widget.map(|p| p.as_ref()).to_glib_none().0);
-        }
-    }
-
-    fn set_stock_id<'a, P: Into<Option<&'a str>>>(&self, stock_id: P) {
-        let stock_id = stock_id.into();
-        unsafe {
-            ffi::gtk_tool_button_set_stock_id(self.as_ref().to_glib_none().0, stock_id.to_glib_none().0);
         }
     }
 
@@ -219,14 +189,6 @@ impl<O: IsA<ToolButton>> ToolButtonExt for O {
         }
     }
 
-    fn connect_property_stock_id_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::stock-id\0".as_ptr() as *const _,
-                Some(transmute(notify_stock_id_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
     fn connect_property_use_underline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -261,12 +223,6 @@ where P: IsA<ToolButton> {
 }
 
 unsafe extern "C" fn notify_label_widget_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkToolButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<ToolButton> {
-    let f: &F = transmute(f);
-    f(&ToolButton::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_stock_id_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkToolButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolButton> {
     let f: &F = transmute(f);
     f(&ToolButton::from_glib_borrow(this).unsafe_cast())

@@ -7,7 +7,6 @@ use Container;
 use StackTransitionType;
 use Widget;
 use ffi;
-use glib;
 use glib::GString;
 use glib::StaticType;
 use glib::Value;
@@ -31,7 +30,6 @@ glib_wrapper! {
 }
 
 impl Stack {
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     pub fn new() -> Stack {
         assert_initialized_main_thread!();
         unsafe {
@@ -40,7 +38,6 @@ impl Stack {
     }
 }
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 impl Default for Stack {
     fn default() -> Self {
         Self::new()
@@ -50,94 +47,57 @@ impl Default for Stack {
 pub const NONE_STACK: Option<&Stack> = None;
 
 pub trait StackExt: 'static {
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn add_named<P: IsA<Widget>>(&self, child: &P, name: &str);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn add_titled<P: IsA<Widget>>(&self, child: &P, name: &str, title: &str);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_child_by_name(&self, name: &str) -> Option<Widget>;
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn get_hhomogeneous(&self) -> bool;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_homogeneous(&self) -> bool;
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
     fn get_interpolate_size(&self) -> bool;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_transition_duration(&self) -> u32;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_transition_running(&self) -> bool;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_transition_type(&self) -> StackTransitionType;
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn get_vhomogeneous(&self) -> bool;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_visible_child(&self) -> Option<Widget>;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_visible_child_name(&self) -> Option<GString>;
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn set_hhomogeneous(&self, hhomogeneous: bool);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_homogeneous(&self, homogeneous: bool);
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
     fn set_interpolate_size(&self, interpolate_size: bool);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_transition_duration(&self, duration: u32);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_transition_type(&self, transition: StackTransitionType);
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn set_vhomogeneous(&self, vhomogeneous: bool);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_visible_child<P: IsA<Widget>>(&self, child: &P);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_visible_child_full(&self, name: &str, transition: StackTransitionType);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_visible_child_name(&self, name: &str);
-
-    fn get_property_homogeneous(&self) -> bool;
-
-    fn set_property_homogeneous(&self, homogeneous: bool);
 
     fn get_property_interpolate_size(&self) -> bool;
 
     fn set_property_interpolate_size(&self, interpolate_size: bool);
-
-    fn get_property_transition_duration(&self) -> u32;
-
-    fn set_property_transition_duration(&self, transition_duration: u32);
-
-    fn get_property_transition_running(&self) -> bool;
-
-    fn get_property_transition_type(&self) -> StackTransitionType;
-
-    fn set_property_transition_type(&self, transition_type: StackTransitionType);
-
-    fn get_property_visible_child(&self) -> Option<Widget>;
-
-    fn set_property_visible_child<P: IsA<Widget> + glib::value::SetValueOptional>(&self, visible_child: Option<&P>);
-
-    fn get_property_visible_child_name(&self) -> Option<GString>;
-
-    fn set_property_visible_child_name<'a, P: Into<Option<&'a str>>>(&self, visible_child_name: P);
 
     fn get_child_icon_name<T: IsA<Widget>>(&self, item: &T) -> Option<GString>;
 
@@ -181,21 +141,18 @@ pub trait StackExt: 'static {
 }
 
 impl<O: IsA<Stack>> StackExt for O {
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn add_named<P: IsA<Widget>>(&self, child: &P, name: &str) {
         unsafe {
             ffi::gtk_stack_add_named(self.as_ref().to_glib_none().0, child.as_ref().to_glib_none().0, name.to_glib_none().0);
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn add_titled<P: IsA<Widget>>(&self, child: &P, name: &str, title: &str) {
         unsafe {
             ffi::gtk_stack_add_titled(self.as_ref().to_glib_none().0, child.as_ref().to_glib_none().0, name.to_glib_none().0, title.to_glib_none().0);
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_child_by_name(&self, name: &str) -> Option<Widget> {
         unsafe {
             from_glib_none(ffi::gtk_stack_get_child_by_name(self.as_ref().to_glib_none().0, name.to_glib_none().0))
@@ -209,7 +166,6 @@ impl<O: IsA<Stack>> StackExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_homogeneous(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_stack_get_homogeneous(self.as_ref().to_glib_none().0))
@@ -223,21 +179,18 @@ impl<O: IsA<Stack>> StackExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_transition_duration(&self) -> u32 {
         unsafe {
             ffi::gtk_stack_get_transition_duration(self.as_ref().to_glib_none().0)
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_transition_running(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_stack_get_transition_running(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_transition_type(&self) -> StackTransitionType {
         unsafe {
             from_glib(ffi::gtk_stack_get_transition_type(self.as_ref().to_glib_none().0))
@@ -251,14 +204,12 @@ impl<O: IsA<Stack>> StackExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_visible_child(&self) -> Option<Widget> {
         unsafe {
             from_glib_none(ffi::gtk_stack_get_visible_child(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_visible_child_name(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_stack_get_visible_child_name(self.as_ref().to_glib_none().0))
@@ -272,7 +223,6 @@ impl<O: IsA<Stack>> StackExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_homogeneous(&self, homogeneous: bool) {
         unsafe {
             ffi::gtk_stack_set_homogeneous(self.as_ref().to_glib_none().0, homogeneous.to_glib());
@@ -286,14 +236,12 @@ impl<O: IsA<Stack>> StackExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_transition_duration(&self, duration: u32) {
         unsafe {
             ffi::gtk_stack_set_transition_duration(self.as_ref().to_glib_none().0, duration);
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_transition_type(&self, transition: StackTransitionType) {
         unsafe {
             ffi::gtk_stack_set_transition_type(self.as_ref().to_glib_none().0, transition.to_glib());
@@ -307,38 +255,21 @@ impl<O: IsA<Stack>> StackExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_visible_child<P: IsA<Widget>>(&self, child: &P) {
         unsafe {
             ffi::gtk_stack_set_visible_child(self.as_ref().to_glib_none().0, child.as_ref().to_glib_none().0);
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_visible_child_full(&self, name: &str, transition: StackTransitionType) {
         unsafe {
             ffi::gtk_stack_set_visible_child_full(self.as_ref().to_glib_none().0, name.to_glib_none().0, transition.to_glib());
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_visible_child_name(&self, name: &str) {
         unsafe {
             ffi::gtk_stack_set_visible_child_name(self.as_ref().to_glib_none().0, name.to_glib_none().0);
-        }
-    }
-
-    fn get_property_homogeneous(&self) -> bool {
-        unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"homogeneous\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_homogeneous(&self, homogeneous: bool) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"homogeneous\0".as_ptr() as *const _, Value::from(&homogeneous).to_glib_none().0);
         }
     }
 
@@ -353,71 +284,6 @@ impl<O: IsA<Stack>> StackExt for O {
     fn set_property_interpolate_size(&self, interpolate_size: bool) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"interpolate-size\0".as_ptr() as *const _, Value::from(&interpolate_size).to_glib_none().0);
-        }
-    }
-
-    fn get_property_transition_duration(&self) -> u32 {
-        unsafe {
-            let mut value = Value::from_type(<u32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"transition-duration\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_transition_duration(&self, transition_duration: u32) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"transition-duration\0".as_ptr() as *const _, Value::from(&transition_duration).to_glib_none().0);
-        }
-    }
-
-    fn get_property_transition_running(&self) -> bool {
-        unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"transition-running\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn get_property_transition_type(&self) -> StackTransitionType {
-        unsafe {
-            let mut value = Value::from_type(<StackTransitionType as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"transition-type\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_transition_type(&self, transition_type: StackTransitionType) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"transition-type\0".as_ptr() as *const _, Value::from(&transition_type).to_glib_none().0);
-        }
-    }
-
-    fn get_property_visible_child(&self) -> Option<Widget> {
-        unsafe {
-            let mut value = Value::from_type(<Widget as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"visible-child\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get()
-        }
-    }
-
-    fn set_property_visible_child<P: IsA<Widget> + glib::value::SetValueOptional>(&self, visible_child: Option<&P>) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"visible-child\0".as_ptr() as *const _, Value::from(visible_child).to_glib_none().0);
-        }
-    }
-
-    fn get_property_visible_child_name(&self) -> Option<GString> {
-        unsafe {
-            let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"visible-child-name\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get()
-        }
-    }
-
-    fn set_property_visible_child_name<'a, P: Into<Option<&'a str>>>(&self, visible_child_name: P) {
-        let visible_child_name = visible_child_name.into();
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"visible-child-name\0".as_ptr() as *const _, Value::from(visible_child_name).to_glib_none().0);
         }
     }
 

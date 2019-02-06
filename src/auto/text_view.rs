@@ -5,9 +5,7 @@
 use Buildable;
 use Container;
 use DeleteType;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 use InputHints;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 use InputPurpose;
 use Justification;
 use MovementStep;
@@ -112,10 +110,8 @@ pub trait TextViewExt: 'static {
 
     fn get_indent(&self) -> i32;
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_input_hints(&self) -> InputHints;
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_input_purpose(&self) -> InputPurpose;
 
     fn get_iter_at_location(&self, x: i32, y: i32) -> Option<TextIter>;
@@ -194,10 +190,8 @@ pub trait TextViewExt: 'static {
 
     fn set_indent(&self, indent: i32);
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn set_input_hints(&self, hints: InputHints);
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn set_input_purpose(&self, purpose: InputPurpose);
 
     fn set_justification(&self, justification: Justification);
@@ -236,10 +230,8 @@ pub trait TextViewExt: 'static {
 
     fn set_property_monospace(&self, monospace: bool);
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn get_property_populate_all(&self) -> bool;
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn set_property_populate_all(&self, populate_all: bool);
 
     fn connect_backspace<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -320,10 +312,8 @@ pub trait TextViewExt: 'static {
 
     fn connect_property_indent_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_input_hints_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_input_purpose_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_justification_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -340,7 +330,6 @@ pub trait TextViewExt: 'static {
 
     fn connect_property_pixels_inside_wrap_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn connect_property_populate_all_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_right_margin_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -458,14 +447,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_input_hints(&self) -> InputHints {
         unsafe {
             from_glib(ffi::gtk_text_view_get_input_hints(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_input_purpose(&self) -> InputPurpose {
         unsafe {
             from_glib(ffi::gtk_text_view_get_input_purpose(self.as_ref().to_glib_none().0))
@@ -708,14 +695,12 @@ impl<O: IsA<TextView>> TextViewExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn set_input_hints(&self, hints: InputHints) {
         unsafe {
             ffi::gtk_text_view_set_input_hints(self.as_ref().to_glib_none().0, hints.to_glib());
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn set_input_purpose(&self, purpose: InputPurpose) {
         unsafe {
             ffi::gtk_text_view_set_input_purpose(self.as_ref().to_glib_none().0, purpose.to_glib());
@@ -834,7 +819,6 @@ impl<O: IsA<TextView>> TextViewExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn get_property_populate_all(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
@@ -843,7 +827,6 @@ impl<O: IsA<TextView>> TextViewExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn set_property_populate_all(&self, populate_all: bool) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"populate-all\0".as_ptr() as *const _, Value::from(&populate_all).to_glib_none().0);
@@ -1094,7 +1077,6 @@ impl<O: IsA<TextView>> TextViewExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_input_hints_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1103,7 +1085,6 @@ impl<O: IsA<TextView>> TextViewExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_input_purpose_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1168,7 +1149,6 @@ impl<O: IsA<TextView>> TextViewExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn connect_property_populate_all_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1352,14 +1332,12 @@ where P: IsA<TextView> {
     f(&TextView::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 unsafe extern "C" fn notify_input_hints_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkTextView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
     let f: &F = transmute(f);
     f(&TextView::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 unsafe extern "C" fn notify_input_purpose_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkTextView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
     let f: &F = transmute(f);
@@ -1408,7 +1386,6 @@ where P: IsA<TextView> {
     f(&TextView::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_8", feature = "dox"))]
 unsafe extern "C" fn notify_populate_all_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkTextView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextView> {
     let f: &F = transmute(f);

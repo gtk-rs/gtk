@@ -2,7 +2,6 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 use BaselinePosition;
 use Buildable;
 use Container;
@@ -44,10 +43,8 @@ impl Box {
 pub const NONE_BOX: Option<&Box> = None;
 
 pub trait BoxExt: 'static {
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_baseline_position(&self) -> BaselinePosition;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_center_widget(&self) -> Option<Widget>;
 
     fn get_homogeneous(&self) -> bool;
@@ -62,10 +59,8 @@ pub trait BoxExt: 'static {
 
     fn reorder_child<P: IsA<Widget>>(&self, child: &P, position: i32);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_baseline_position(&self, position: BaselinePosition);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_center_widget<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, widget: Q);
 
     fn set_child_packing<P: IsA<Widget>>(&self, child: &P, expand: bool, fill: bool, padding: u32, pack_type: PackType);
@@ -102,7 +97,6 @@ pub trait BoxExt: 'static {
 
     fn set_child_position<T: IsA<Widget>>(&self, item: &T, position: i32);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn connect_property_baseline_position_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_homogeneous_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -111,14 +105,12 @@ pub trait BoxExt: 'static {
 }
 
 impl<O: IsA<Box>> BoxExt for O {
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_baseline_position(&self) -> BaselinePosition {
         unsafe {
             from_glib(ffi::gtk_box_get_baseline_position(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_center_widget(&self) -> Option<Widget> {
         unsafe {
             from_glib_none(ffi::gtk_box_get_center_widget(self.as_ref().to_glib_none().0))
@@ -166,14 +158,12 @@ impl<O: IsA<Box>> BoxExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_baseline_position(&self, position: BaselinePosition) {
         unsafe {
             ffi::gtk_box_set_baseline_position(self.as_ref().to_glib_none().0, position.to_glib());
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_center_widget<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, widget: Q) {
         let widget = widget.into();
         unsafe {
@@ -277,7 +267,6 @@ impl<O: IsA<Box>> BoxExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn connect_property_baseline_position_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -303,7 +292,6 @@ impl<O: IsA<Box>> BoxExt for O {
     }
 }
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 unsafe extern "C" fn notify_baseline_position_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Box> {
     let f: &F = transmute(f);

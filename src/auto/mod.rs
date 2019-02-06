@@ -14,11 +14,8 @@ mod accel_label;
 pub use self::accel_label::{AccelLabel, AccelLabelClass, NONE_ACCEL_LABEL};
 pub use self::accel_label::AccelLabelExt;
 
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 mod action_bar;
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 pub use self::action_bar::{ActionBar, ActionBarClass, NONE_ACTION_BAR};
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 pub use self::action_bar::ActionBarExt;
 
 mod actionable;
@@ -31,7 +28,6 @@ pub use self::adjustment::AdjustmentExt;
 
 mod alignment;
 pub use self::alignment::{Alignment, AlignmentClass, NONE_ALIGNMENT};
-pub use self::alignment::AlignmentExt;
 
 mod app_chooser_button;
 pub use self::app_chooser_button::{AppChooserButton, AppChooserButtonClass, NONE_APP_CHOOSER_BUTTON};
@@ -218,11 +214,8 @@ mod event_box;
 pub use self::event_box::{EventBox, EventBoxClass, NONE_EVENT_BOX};
 pub use self::event_box::EventBoxExt;
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 mod event_controller;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::event_controller::{EventController, EventControllerClass, NONE_EVENT_CONTROLLER};
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::event_controller::EventControllerExt;
 
 mod expander;
@@ -258,18 +251,12 @@ mod fixed;
 pub use self::fixed::{Fixed, FixedClass, NONE_FIXED};
 pub use self::fixed::FixedExt;
 
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 mod flow_box;
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 pub use self::flow_box::{FlowBox, FlowBoxClass, NONE_FLOW_BOX};
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 pub use self::flow_box::FlowBoxExt;
 
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 mod flow_box_child;
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 pub use self::flow_box_child::{FlowBoxChild, FlowBoxChildClass, NONE_FLOW_BOX_CHILD};
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 pub use self::flow_box_child::FlowBoxChildExt;
 
 mod font_button;
@@ -298,78 +285,48 @@ pub use self::gl_area::{GLArea, GLAreaClass, NONE_GL_AREA};
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 pub use self::gl_area::GLAreaExt;
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 mod gesture;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::gesture::{Gesture, GestureClass, NONE_GESTURE};
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::gesture::GestureExt;
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 mod gesture_drag;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::gesture_drag::{GestureDrag, GestureDragClass, NONE_GESTURE_DRAG};
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::gesture_drag::GestureDragExt;
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 mod gesture_long_press;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::gesture_long_press::{GestureLongPress, GestureLongPressClass, NONE_GESTURE_LONG_PRESS};
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::gesture_long_press::GestureLongPressExt;
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 mod gesture_multi_press;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::gesture_multi_press::{GestureMultiPress, GestureMultiPressClass, NONE_GESTURE_MULTI_PRESS};
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::gesture_multi_press::GestureMultiPressExt;
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 mod gesture_pan;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::gesture_pan::{GesturePan, GesturePanClass, NONE_GESTURE_PAN};
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::gesture_pan::GesturePanExt;
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 mod gesture_rotate;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::gesture_rotate::{GestureRotate, GestureRotateClass, NONE_GESTURE_ROTATE};
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::gesture_rotate::GestureRotateExt;
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 mod gesture_single;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::gesture_single::{GestureSingle, GestureSingleClass, NONE_GESTURE_SINGLE};
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::gesture_single::GestureSingleExt;
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 mod gesture_swipe;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::gesture_swipe::{GestureSwipe, GestureSwipeClass, NONE_GESTURE_SWIPE};
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::gesture_swipe::GestureSwipeExt;
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 mod gesture_zoom;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::gesture_zoom::{GestureZoom, GestureZoomClass, NONE_GESTURE_ZOOM};
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::gesture_zoom::GestureZoomExt;
 
 mod grid;
 pub use self::grid::{Grid, GridClass, NONE_GRID};
 pub use self::grid::GridExt;
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 mod header_bar;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 pub use self::header_bar::{HeaderBar, HeaderBarClass, NONE_HEADER_BAR};
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 pub use self::header_bar::HeaderBarExt;
 
 mod im_context;
@@ -385,7 +342,6 @@ pub use self::im_multicontext::IMMulticontextExt;
 
 mod icon_factory;
 pub use self::icon_factory::{IconFactory, IconFactoryClass, NONE_ICON_FACTORY};
-pub use self::icon_factory::IconFactoryExt;
 
 mod icon_info;
 pub use self::icon_info::{IconInfo, IconInfoClass, NONE_ICON_INFO};
@@ -405,7 +361,6 @@ pub use self::image::ImageExt;
 
 mod image_menu_item;
 pub use self::image_menu_item::{ImageMenuItem, ImageMenuItemClass, NONE_IMAGE_MENU_ITEM};
-pub use self::image_menu_item::ImageMenuItemExt;
 
 mod info_bar;
 pub use self::info_bar::{InfoBar, InfoBarClass, NONE_INFO_BAR};
@@ -423,29 +378,20 @@ mod layout;
 pub use self::layout::{Layout, LayoutClass, NONE_LAYOUT};
 pub use self::layout::LayoutExt;
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 mod level_bar;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 pub use self::level_bar::{LevelBar, LevelBarClass, NONE_LEVEL_BAR};
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 pub use self::level_bar::LevelBarExt;
 
 mod link_button;
 pub use self::link_button::{LinkButton, LinkButtonClass, NONE_LINK_BUTTON};
 pub use self::link_button::LinkButtonExt;
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 mod list_box;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 pub use self::list_box::{ListBox, ListBoxClass, NONE_LIST_BOX};
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 pub use self::list_box::ListBoxExt;
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 mod list_box_row;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 pub use self::list_box_row::{ListBoxRow, ListBoxRowClass, NONE_LIST_BOX_ROW};
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 pub use self::list_box_row::ListBoxRowExt;
 
 mod list_store;
@@ -464,11 +410,8 @@ mod menu_bar;
 pub use self::menu_bar::{MenuBar, MenuBarClass, NONE_MENU_BAR};
 pub use self::menu_bar::MenuBarExt;
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 mod menu_button;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 pub use self::menu_button::{MenuButton, MenuButtonClass, NONE_MENU_BUTTON};
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 pub use self::menu_button::MenuButtonExt;
 
 mod menu_item;
@@ -489,7 +432,6 @@ pub use self::message_dialog::MessageDialogExt;
 
 mod misc;
 pub use self::misc::{Misc, MiscClass, NONE_MISC};
-pub use self::misc::MiscExt;
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 mod model_button;
@@ -548,11 +490,8 @@ pub use self::plug::{Plug, PlugClass, NONE_PLUG};
 #[cfg(any(not(windows), feature = "dox"))]
 pub use self::plug::PlugExt;
 
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 mod popover;
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 pub use self::popover::{Popover, PopoverClass, NONE_POPOVER};
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 pub use self::popover::PopoverExt;
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
@@ -617,11 +556,8 @@ mod recent_manager;
 pub use self::recent_manager::{RecentManager, RecentManagerClass, NONE_RECENT_MANAGER};
 pub use self::recent_manager::RecentManagerExt;
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 mod revealer;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 pub use self::revealer::{Revealer, RevealerClass, NONE_REVEALER};
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 pub use self::revealer::RevealerExt;
 
 mod scale;
@@ -643,18 +579,12 @@ mod scrolled_window;
 pub use self::scrolled_window::{ScrolledWindow, ScrolledWindowClass, NONE_SCROLLED_WINDOW};
 pub use self::scrolled_window::ScrolledWindowExt;
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 mod search_bar;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 pub use self::search_bar::{SearchBar, SearchBarClass, NONE_SEARCH_BAR};
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 pub use self::search_bar::SearchBarExt;
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 mod search_entry;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 pub use self::search_entry::{SearchEntry, SearchEntryClass, NONE_SEARCH_ENTRY};
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 pub use self::search_entry::SearchEntryExt;
 
 mod separator;
@@ -697,11 +627,8 @@ mod spinner;
 pub use self::spinner::{Spinner, SpinnerClass, NONE_SPINNER};
 pub use self::spinner::SpinnerExt;
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 mod stack;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 pub use self::stack::{Stack, StackClass, NONE_STACK};
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 pub use self::stack::StackExt;
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
@@ -711,11 +638,8 @@ pub use self::stack_sidebar::{StackSidebar, StackSidebarClass, NONE_STACK_SIDEBA
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 pub use self::stack_sidebar::StackSidebarExt;
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 mod stack_switcher;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 pub use self::stack_switcher::{StackSwitcher, StackSwitcherClass, NONE_STACK_SWITCHER};
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 pub use self::stack_switcher::StackSwitcherExt;
 
 mod status_icon;
@@ -907,7 +831,6 @@ mod enums;
 pub use self::enums::Align;
 pub use self::enums::ArrowType;
 pub use self::enums::AssistantPageType;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 pub use self::enums::BaselinePosition;
 pub use self::enums::BorderStyle;
 pub use self::enums::BuilderError;
@@ -924,7 +847,6 @@ pub use self::enums::DeleteType;
 pub use self::enums::DirectionType;
 pub use self::enums::DragResult;
 pub use self::enums::EntryIconPosition;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::enums::EventSequenceState;
 pub use self::enums::FileChooserAction;
 pub use self::enums::FileChooserConfirmation;
@@ -935,10 +857,8 @@ pub use self::enums::IconSize;
 pub use self::enums::IconThemeError;
 pub use self::enums::IconViewDropPosition;
 pub use self::enums::ImageType;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 pub use self::enums::InputPurpose;
 pub use self::enums::Justification;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 pub use self::enums::LevelBarMode;
 pub use self::enums::License;
 pub use self::enums::MenuDirectionType;
@@ -953,7 +873,6 @@ pub use self::enums::PackType;
 pub use self::enums::PadActionType;
 pub use self::enums::PageOrientation;
 pub use self::enums::PageSet;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::enums::PanDirection;
 pub use self::enums::PolicyType;
 #[cfg(any(feature = "v3_20", feature = "dox"))]
@@ -966,7 +885,6 @@ pub use self::enums::PrintOperationResult;
 pub use self::enums::PrintPages;
 pub use self::enums::PrintQuality;
 pub use self::enums::PrintStatus;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::enums::PropagationPhase;
 pub use self::enums::RecentChooserError;
 pub use self::enums::RecentManagerError;
@@ -990,7 +908,6 @@ pub use self::enums::StateType;
 pub use self::enums::TextDirection;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 pub use self::enums::TextExtendSelection;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::enums::TextViewLayer;
 pub use self::enums::TextWindowType;
 pub use self::enums::ToolbarStyle;
@@ -1013,7 +930,6 @@ pub use self::flags::DialogFlags;
 pub use self::flags::FileFilterFlags;
 pub use self::flags::FontChooserLevel;
 pub use self::flags::IconLookupFlags;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 pub use self::flags::InputHints;
 pub use self::flags::JunctionSides;
 pub use self::flags::PlacesOpenFlags;
@@ -1032,9 +948,7 @@ pub mod functions;
 mod constants;
 #[cfg(any(feature = "v3_20", feature = "dox"))]
 pub use self::constants::LEVEL_BAR_OFFSET_FULL;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 pub use self::constants::LEVEL_BAR_OFFSET_HIGH;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 pub use self::constants::LEVEL_BAR_OFFSET_LOW;
 pub use self::constants::PAPER_NAME_A3;
 pub use self::constants::PAPER_NAME_A4;
@@ -1053,10 +967,8 @@ pub use self::constants::PRINT_SETTINGS_NUMBER_UP;
 pub use self::constants::PRINT_SETTINGS_NUMBER_UP_LAYOUT;
 pub use self::constants::PRINT_SETTINGS_N_COPIES;
 pub use self::constants::PRINT_SETTINGS_ORIENTATION;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 pub use self::constants::PRINT_SETTINGS_OUTPUT_BASENAME;
 pub use self::constants::PRINT_SETTINGS_OUTPUT_BIN;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 pub use self::constants::PRINT_SETTINGS_OUTPUT_DIR;
 pub use self::constants::PRINT_SETTINGS_OUTPUT_FILE_FORMAT;
 pub use self::constants::PRINT_SETTINGS_OUTPUT_URI;
@@ -1077,111 +989,6 @@ pub use self::constants::PRINT_SETTINGS_SCALE;
 pub use self::constants::PRINT_SETTINGS_USE_COLOR;
 pub use self::constants::PRINT_SETTINGS_WIN32_DRIVER_EXTRA;
 pub use self::constants::PRINT_SETTINGS_WIN32_DRIVER_VERSION;
-pub use self::constants::STOCK_ABOUT;
-pub use self::constants::STOCK_ADD;
-pub use self::constants::STOCK_APPLY;
-pub use self::constants::STOCK_BOLD;
-pub use self::constants::STOCK_CANCEL;
-pub use self::constants::STOCK_CAPS_LOCK_WARNING;
-pub use self::constants::STOCK_CDROM;
-pub use self::constants::STOCK_CLEAR;
-pub use self::constants::STOCK_CLOSE;
-pub use self::constants::STOCK_COLOR_PICKER;
-pub use self::constants::STOCK_CONNECT;
-pub use self::constants::STOCK_CONVERT;
-pub use self::constants::STOCK_COPY;
-pub use self::constants::STOCK_CUT;
-pub use self::constants::STOCK_DELETE;
-pub use self::constants::STOCK_DIALOG_AUTHENTICATION;
-pub use self::constants::STOCK_DIALOG_ERROR;
-pub use self::constants::STOCK_DIALOG_INFO;
-pub use self::constants::STOCK_DIALOG_QUESTION;
-pub use self::constants::STOCK_DIALOG_WARNING;
-pub use self::constants::STOCK_DIRECTORY;
-pub use self::constants::STOCK_DISCARD;
-pub use self::constants::STOCK_DISCONNECT;
-pub use self::constants::STOCK_DND;
-pub use self::constants::STOCK_DND_MULTIPLE;
-pub use self::constants::STOCK_EDIT;
-pub use self::constants::STOCK_EXECUTE;
-pub use self::constants::STOCK_FILE;
-pub use self::constants::STOCK_FIND;
-pub use self::constants::STOCK_FIND_AND_REPLACE;
-pub use self::constants::STOCK_FLOPPY;
-pub use self::constants::STOCK_FULLSCREEN;
-pub use self::constants::STOCK_GOTO_BOTTOM;
-pub use self::constants::STOCK_GOTO_FIRST;
-pub use self::constants::STOCK_GOTO_LAST;
-pub use self::constants::STOCK_GOTO_TOP;
-pub use self::constants::STOCK_GO_BACK;
-pub use self::constants::STOCK_GO_DOWN;
-pub use self::constants::STOCK_GO_FORWARD;
-pub use self::constants::STOCK_GO_UP;
-pub use self::constants::STOCK_HARDDISK;
-pub use self::constants::STOCK_HELP;
-pub use self::constants::STOCK_HOME;
-pub use self::constants::STOCK_INDENT;
-pub use self::constants::STOCK_INDEX;
-pub use self::constants::STOCK_INFO;
-pub use self::constants::STOCK_ITALIC;
-pub use self::constants::STOCK_JUMP_TO;
-pub use self::constants::STOCK_JUSTIFY_CENTER;
-pub use self::constants::STOCK_JUSTIFY_FILL;
-pub use self::constants::STOCK_JUSTIFY_LEFT;
-pub use self::constants::STOCK_JUSTIFY_RIGHT;
-pub use self::constants::STOCK_LEAVE_FULLSCREEN;
-pub use self::constants::STOCK_MEDIA_FORWARD;
-pub use self::constants::STOCK_MEDIA_NEXT;
-pub use self::constants::STOCK_MEDIA_PAUSE;
-pub use self::constants::STOCK_MEDIA_PLAY;
-pub use self::constants::STOCK_MEDIA_PREVIOUS;
-pub use self::constants::STOCK_MEDIA_RECORD;
-pub use self::constants::STOCK_MEDIA_REWIND;
-pub use self::constants::STOCK_MEDIA_STOP;
-pub use self::constants::STOCK_MISSING_IMAGE;
-pub use self::constants::STOCK_NETWORK;
-pub use self::constants::STOCK_NEW;
-pub use self::constants::STOCK_NO;
-pub use self::constants::STOCK_OK;
-pub use self::constants::STOCK_OPEN;
-pub use self::constants::STOCK_ORIENTATION_LANDSCAPE;
-pub use self::constants::STOCK_ORIENTATION_PORTRAIT;
-pub use self::constants::STOCK_ORIENTATION_REVERSE_LANDSCAPE;
-pub use self::constants::STOCK_ORIENTATION_REVERSE_PORTRAIT;
-pub use self::constants::STOCK_PAGE_SETUP;
-pub use self::constants::STOCK_PASTE;
-pub use self::constants::STOCK_PREFERENCES;
-pub use self::constants::STOCK_PRINT;
-pub use self::constants::STOCK_PRINT_ERROR;
-pub use self::constants::STOCK_PRINT_PAUSED;
-pub use self::constants::STOCK_PRINT_PREVIEW;
-pub use self::constants::STOCK_PRINT_REPORT;
-pub use self::constants::STOCK_PRINT_WARNING;
-pub use self::constants::STOCK_PROPERTIES;
-pub use self::constants::STOCK_QUIT;
-pub use self::constants::STOCK_REDO;
-pub use self::constants::STOCK_REFRESH;
-pub use self::constants::STOCK_REMOVE;
-pub use self::constants::STOCK_REVERT_TO_SAVED;
-pub use self::constants::STOCK_SAVE;
-pub use self::constants::STOCK_SAVE_AS;
-pub use self::constants::STOCK_SELECT_ALL;
-pub use self::constants::STOCK_SELECT_COLOR;
-pub use self::constants::STOCK_SELECT_FONT;
-pub use self::constants::STOCK_SORT_ASCENDING;
-pub use self::constants::STOCK_SORT_DESCENDING;
-pub use self::constants::STOCK_SPELL_CHECK;
-pub use self::constants::STOCK_STOP;
-pub use self::constants::STOCK_STRIKETHROUGH;
-pub use self::constants::STOCK_UNDELETE;
-pub use self::constants::STOCK_UNDERLINE;
-pub use self::constants::STOCK_UNDO;
-pub use self::constants::STOCK_UNINDENT;
-pub use self::constants::STOCK_YES;
-pub use self::constants::STOCK_ZOOM_100;
-pub use self::constants::STOCK_ZOOM_FIT;
-pub use self::constants::STOCK_ZOOM_IN;
-pub use self::constants::STOCK_ZOOM_OUT;
 pub use self::constants::STYLE_CLASS_ACCELERATOR;
 pub use self::constants::STYLE_CLASS_ARROW;
 pub use self::constants::STYLE_CLASS_BACKGROUND;
@@ -1192,11 +999,9 @@ pub use self::constants::STYLE_CLASS_CELL;
 pub use self::constants::STYLE_CLASS_CHECK;
 pub use self::constants::STYLE_CLASS_COMBOBOX_ENTRY;
 pub use self::constants::STYLE_CLASS_CONTEXT_MENU;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::constants::STYLE_CLASS_CSD;
 pub use self::constants::STYLE_CLASS_CURSOR_HANDLE;
 pub use self::constants::STYLE_CLASS_DEFAULT;
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 pub use self::constants::STYLE_CLASS_DESTRUCTIVE_ACTION;
 pub use self::constants::STYLE_CLASS_DIM_LABEL;
 pub use self::constants::STYLE_CLASS_DND;
@@ -1204,7 +1009,6 @@ pub use self::constants::STYLE_CLASS_DOCK;
 pub use self::constants::STYLE_CLASS_ENTRY;
 pub use self::constants::STYLE_CLASS_ERROR;
 pub use self::constants::STYLE_CLASS_EXPANDER;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::constants::STYLE_CLASS_FLAT;
 pub use self::constants::STYLE_CLASS_FRAME;
 pub use self::constants::STYLE_CLASS_GRIP;
@@ -1226,22 +1030,17 @@ pub use self::constants::STYLE_CLASS_MARK;
 pub use self::constants::STYLE_CLASS_MENU;
 pub use self::constants::STYLE_CLASS_MENUBAR;
 pub use self::constants::STYLE_CLASS_MENUITEM;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::constants::STYLE_CLASS_MESSAGE_DIALOG;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 pub use self::constants::STYLE_CLASS_MONOSPACE;
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 pub use self::constants::STYLE_CLASS_NEEDS_ATTENTION;
 pub use self::constants::STYLE_CLASS_NOTEBOOK;
 pub use self::constants::STYLE_CLASS_OSD;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::constants::STYLE_CLASS_OVERSHOOT;
 pub use self::constants::STYLE_CLASS_PANE_SEPARATOR;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 pub use self::constants::STYLE_CLASS_PAPER;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::constants::STYLE_CLASS_POPOVER;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::constants::STYLE_CLASS_POPUP;
 pub use self::constants::STYLE_CLASS_PRIMARY_TOOLBAR;
 pub use self::constants::STYLE_CLASS_PROGRESSBAR;
@@ -1264,11 +1063,8 @@ pub use self::constants::STYLE_CLASS_SPINBUTTON;
 pub use self::constants::STYLE_CLASS_SPINNER;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 pub use self::constants::STYLE_CLASS_STATUSBAR;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::constants::STYLE_CLASS_SUBTITLE;
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 pub use self::constants::STYLE_CLASS_SUGGESTED_ACTION;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::constants::STYLE_CLASS_TITLE;
 pub use self::constants::STYLE_CLASS_TITLEBAR;
 pub use self::constants::STYLE_CLASS_TOOLBAR;
@@ -1304,11 +1100,9 @@ pub mod traits {
     pub use super::AboutDialogExt;
     pub use super::AccelGroupExt;
     pub use super::AccelLabelExt;
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     pub use super::ActionBarExt;
     pub use super::ActionableExt;
     pub use super::AdjustmentExt;
-    pub use super::AlignmentExt;
     pub use super::AppChooserButtonExt;
     pub use super::AppChooserDialogExt;
     pub use super::AppChooserWidgetExt;
@@ -1353,7 +1147,6 @@ pub mod traits {
     pub use super::EntryExt;
     pub use super::EntryCompletionExt;
     pub use super::EventBoxExt;
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     pub use super::EventControllerExt;
     pub use super::ExpanderExt;
     pub use super::FileChooserExt;
@@ -1362,9 +1155,7 @@ pub mod traits {
     pub use super::FileChooserNativeExt;
     pub use super::FileChooserWidgetExt;
     pub use super::FixedExt;
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     pub use super::FlowBoxExt;
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     pub use super::FlowBoxChildExt;
     pub use super::FontButtonExt;
     pub use super::FontChooserExt;
@@ -1372,57 +1163,40 @@ pub mod traits {
     pub use super::FrameExt;
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     pub use super::GLAreaExt;
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     pub use super::GestureExt;
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     pub use super::GestureDragExt;
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     pub use super::GestureLongPressExt;
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     pub use super::GestureMultiPressExt;
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     pub use super::GesturePanExt;
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     pub use super::GestureRotateExt;
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     pub use super::GestureSingleExt;
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     pub use super::GestureSwipeExt;
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     pub use super::GestureZoomExt;
     pub use super::GridExt;
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     pub use super::HeaderBarExt;
     pub use super::IMContextExt;
     pub use super::IMMulticontextExt;
-    pub use super::IconFactoryExt;
     pub use super::IconInfoExt;
     pub use super::IconThemeExt;
     pub use super::IconViewExt;
     pub use super::ImageExt;
-    pub use super::ImageMenuItemExt;
     pub use super::InfoBarExt;
     pub use super::InvisibleExt;
     pub use super::LabelExt;
     pub use super::LayoutExt;
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     pub use super::LevelBarExt;
     pub use super::LinkButtonExt;
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     pub use super::ListBoxExt;
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     pub use super::ListBoxRowExt;
     pub use super::GtkListStoreExt;
     pub use super::LockButtonExt;
     pub use super::GtkMenuExt;
     pub use super::MenuBarExt;
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     pub use super::MenuButtonExt;
     pub use super::GtkMenuItemExt;
     pub use super::MenuShellExt;
     pub use super::MenuToolButtonExt;
     pub use super::MessageDialogExt;
-    pub use super::MiscExt;
     pub use super::MountOperationExt;
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     pub use super::NativeDialogExt;
@@ -1436,7 +1210,6 @@ pub mod traits {
     pub use super::PlacesSidebarExt;
     #[cfg(any(not(windows), feature = "dox"))]
     pub use super::PlugExt;
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     pub use super::PopoverExt;
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     pub use super::PopoverMenuExt;
@@ -1450,15 +1223,12 @@ pub mod traits {
     pub use super::RecentChooserExt;
     pub use super::RecentChooserMenuExt;
     pub use super::RecentManagerExt;
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     pub use super::RevealerExt;
     pub use super::ScaleExt;
     pub use super::ScaleButtonExt;
     pub use super::ScrollableExt;
     pub use super::ScrolledWindowExt;
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     pub use super::SearchBarExt;
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     pub use super::SearchEntryExt;
     pub use super::SeparatorToolItemExt;
     pub use super::SettingsExt;
@@ -1469,11 +1239,9 @@ pub mod traits {
     pub use super::GtkSocketExt;
     pub use super::SpinButtonExt;
     pub use super::SpinnerExt;
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     pub use super::StackExt;
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     pub use super::StackSidebarExt;
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     pub use super::StackSwitcherExt;
     pub use super::StatusIconExt;
     pub use super::StatusbarExt;

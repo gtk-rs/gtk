@@ -78,7 +78,6 @@ pub trait LabelExt: 'static {
 
     fn get_line_wrap_mode(&self) -> pango::WrapMode;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_lines(&self) -> i32;
 
     fn get_max_width_chars(&self) -> i32;
@@ -125,7 +124,6 @@ pub trait LabelExt: 'static {
 
     fn set_line_wrap_mode(&self, wrap_mode: pango::WrapMode);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_lines(&self, lines: i32);
 
     fn set_markup(&self, str: &str);
@@ -200,7 +198,6 @@ pub trait LabelExt: 'static {
 
     fn connect_property_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn connect_property_lines_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_max_width_chars_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -300,7 +297,6 @@ impl<O: IsA<Label>> LabelExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_lines(&self) -> i32 {
         unsafe {
             ffi::gtk_label_get_lines(self.as_ref().to_glib_none().0)
@@ -439,7 +435,6 @@ impl<O: IsA<Label>> LabelExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_lines(&self, lines: i32) {
         unsafe {
             ffi::gtk_label_set_lines(self.as_ref().to_glib_none().0, lines);
@@ -683,7 +678,6 @@ impl<O: IsA<Label>> LabelExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn connect_property_lines_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -881,7 +875,6 @@ where P: IsA<Label> {
     f(&Label::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 unsafe extern "C" fn notify_lines_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Label> {
     let f: &F = transmute(f);

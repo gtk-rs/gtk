@@ -3,9 +3,7 @@
 // DO NOT EDIT
 
 use Buildable;
-use IconSet;
 use ffi;
-use glib::object::IsA;
 use glib::translate::*;
 use std::fmt;
 
@@ -17,72 +15,9 @@ glib_wrapper! {
     }
 }
 
-impl IconFactory {
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    pub fn new() -> IconFactory {
-        assert_initialized_main_thread!();
-        unsafe {
-            from_glib_full(ffi::gtk_icon_factory_new())
-        }
-    }
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    pub fn lookup_default(stock_id: &str) -> Option<IconSet> {
-        assert_initialized_main_thread!();
-        unsafe {
-            from_glib_none(ffi::gtk_icon_factory_lookup_default(stock_id.to_glib_none().0))
-        }
-    }
-}
-
-#[cfg_attr(feature = "v3_10", deprecated)]
-impl Default for IconFactory {
-    fn default() -> Self {
-        Self::new()
-    }
-}
+impl IconFactory {}
 
 pub const NONE_ICON_FACTORY: Option<&IconFactory> = None;
-
-pub trait IconFactoryExt: 'static {
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn add(&self, stock_id: &str, icon_set: &IconSet);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn add_default(&self);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn lookup(&self, stock_id: &str) -> Option<IconSet>;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn remove_default(&self);
-}
-
-impl<O: IsA<IconFactory>> IconFactoryExt for O {
-    fn add(&self, stock_id: &str, icon_set: &IconSet) {
-        unsafe {
-            ffi::gtk_icon_factory_add(self.as_ref().to_glib_none().0, stock_id.to_glib_none().0, icon_set.to_glib_none().0);
-        }
-    }
-
-    fn add_default(&self) {
-        unsafe {
-            ffi::gtk_icon_factory_add_default(self.as_ref().to_glib_none().0);
-        }
-    }
-
-    fn lookup(&self, stock_id: &str) -> Option<IconSet> {
-        unsafe {
-            from_glib_none(ffi::gtk_icon_factory_lookup(self.as_ref().to_glib_none().0, stock_id.to_glib_none().0))
-        }
-    }
-
-    fn remove_default(&self) {
-        unsafe {
-            ffi::gtk_icon_factory_remove_default(self.as_ref().to_glib_none().0);
-        }
-    }
-}
 
 impl fmt::Display for IconFactory {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

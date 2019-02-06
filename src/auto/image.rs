@@ -3,12 +3,10 @@
 // DO NOT EDIT
 
 use Buildable;
-use IconSet;
 use IconSize;
 use ImageType;
 use Misc;
 use Widget;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 use cairo;
 use ffi;
 use gdk_pixbuf;
@@ -76,14 +74,6 @@ impl Image {
         }
     }
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    pub fn new_from_icon_set(icon_set: &IconSet, size: IconSize) -> Image {
-        assert_initialized_main_thread!();
-        unsafe {
-            Widget::from_glib_none(ffi::gtk_image_new_from_icon_set(icon_set.to_glib_none().0, size.to_glib())).unsafe_cast()
-        }
-    }
-
     pub fn new_from_pixbuf<'a, P: Into<Option<&'a gdk_pixbuf::Pixbuf>>>(pixbuf: P) -> Image {
         assert_initialized_main_thread!();
         let pixbuf = pixbuf.into();
@@ -99,15 +89,6 @@ impl Image {
         }
     }
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    pub fn new_from_stock(stock_id: &str, size: IconSize) -> Image {
-        assert_initialized_main_thread!();
-        unsafe {
-            Widget::from_glib_none(ffi::gtk_image_new_from_stock(stock_id.to_glib_none().0, size.to_glib())).unsafe_cast()
-        }
-    }
-
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     pub fn new_from_surface<'a, P: Into<Option<&'a cairo::Surface>>>(surface: P) -> Image {
         assert_initialized_main_thread!();
         let surface = surface.into();
@@ -132,9 +113,6 @@ pub trait ImageExt: 'static {
 
     fn get_gicon(&self) -> (gio::Icon, IconSize);
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_icon_set(&self) -> (IconSet, IconSize);
-
     fn get_pixbuf(&self) -> Option<gdk_pixbuf::Pixbuf>;
 
     fn get_pixel_size(&self) -> i32;
@@ -149,17 +127,10 @@ pub trait ImageExt: 'static {
 
     fn set_from_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_name: P, size: IconSize);
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_from_icon_set(&self, icon_set: &IconSet, size: IconSize);
-
     fn set_from_pixbuf<'a, P: Into<Option<&'a gdk_pixbuf::Pixbuf>>>(&self, pixbuf: P);
 
     fn set_from_resource<'a, P: Into<Option<&'a str>>>(&self, resource_path: P);
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_from_stock(&self, stock_id: &str, size: IconSize);
-
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_from_surface<'a, P: Into<Option<&'a cairo::Surface>>>(&self, surface: P);
 
     fn set_pixel_size(&self, pixel_size: i32);
@@ -184,17 +155,9 @@ pub trait ImageExt: 'static {
 
     fn set_property_pixbuf_animation<P: IsA<gdk_pixbuf::PixbufAnimation> + glib::value::SetValueOptional>(&self, pixbuf_animation: Option<&P>);
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn get_property_resource(&self) -> Option<GString>;
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn set_property_resource<'a, P: Into<Option<&'a str>>>(&self, resource: P);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_stock(&self) -> Option<GString>;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_stock<'a, P: Into<Option<&'a str>>>(&self, stock: P);
 
     fn get_property_use_fallback(&self) -> bool;
 
@@ -214,11 +177,7 @@ pub trait ImageExt: 'static {
 
     fn connect_property_pixel_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn connect_property_resource_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_stock_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_storage_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -244,15 +203,6 @@ impl<O: IsA<Image>> ImageExt for O {
             let mut size = mem::uninitialized();
             ffi::gtk_image_get_gicon(self.as_ref().to_glib_none().0, &mut gicon, &mut size);
             (from_glib_none(gicon), from_glib(size))
-        }
-    }
-
-    fn get_icon_set(&self) -> (IconSet, IconSize) {
-        unsafe {
-            let mut icon_set = ptr::null_mut();
-            let mut size = mem::uninitialized();
-            ffi::gtk_image_get_icon_set(self.as_ref().to_glib_none().0, &mut icon_set, &mut size);
-            (from_glib_none(icon_set), from_glib(size))
         }
     }
 
@@ -299,12 +249,6 @@ impl<O: IsA<Image>> ImageExt for O {
         }
     }
 
-    fn set_from_icon_set(&self, icon_set: &IconSet, size: IconSize) {
-        unsafe {
-            ffi::gtk_image_set_from_icon_set(self.as_ref().to_glib_none().0, icon_set.to_glib_none().0, size.to_glib());
-        }
-    }
-
     fn set_from_pixbuf<'a, P: Into<Option<&'a gdk_pixbuf::Pixbuf>>>(&self, pixbuf: P) {
         let pixbuf = pixbuf.into();
         unsafe {
@@ -319,13 +263,6 @@ impl<O: IsA<Image>> ImageExt for O {
         }
     }
 
-    fn set_from_stock(&self, stock_id: &str, size: IconSize) {
-        unsafe {
-            ffi::gtk_image_set_from_stock(self.as_ref().to_glib_none().0, stock_id.to_glib_none().0, size.to_glib());
-        }
-    }
-
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_from_surface<'a, P: Into<Option<&'a cairo::Surface>>>(&self, surface: P) {
         let surface = surface.into();
         unsafe {
@@ -409,7 +346,6 @@ impl<O: IsA<Image>> ImageExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn get_property_resource(&self) -> Option<GString> {
         unsafe {
             let mut value = Value::from_type(<GString as StaticType>::static_type());
@@ -418,26 +354,10 @@ impl<O: IsA<Image>> ImageExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn set_property_resource<'a, P: Into<Option<&'a str>>>(&self, resource: P) {
         let resource = resource.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"resource\0".as_ptr() as *const _, Value::from(resource).to_glib_none().0);
-        }
-    }
-
-    fn get_property_stock(&self) -> Option<GString> {
-        unsafe {
-            let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"stock\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get()
-        }
-    }
-
-    fn set_property_stock<'a, P: Into<Option<&'a str>>>(&self, stock: P) {
-        let stock = stock.into();
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"stock\0".as_ptr() as *const _, Value::from(stock).to_glib_none().0);
         }
     }
 
@@ -511,20 +431,11 @@ impl<O: IsA<Image>> ImageExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn connect_property_resource_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::resource\0".as_ptr() as *const _,
                 Some(transmute(notify_resource_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_stock_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::stock\0".as_ptr() as *const _,
-                Some(transmute(notify_stock_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -587,14 +498,7 @@ where P: IsA<Image> {
     f(&Image::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_8", feature = "dox"))]
 unsafe extern "C" fn notify_resource_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkImage, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Image> {
-    let f: &F = transmute(f);
-    f(&Image::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_stock_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkImage, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Image> {
     let f: &F = transmute(f);
     f(&Image::from_glib_borrow(this).unsafe_cast())

@@ -12,10 +12,7 @@ use ffi;
 #[cfg(any(feature = "v3_18", feature = "dox"))]
 use gdk;
 use gio;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 use gio_ffi;
-use glib;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 use glib::GString;
 use glib::StaticType;
 use glib::Value;
@@ -26,7 +23,6 @@ use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
@@ -41,7 +37,6 @@ glib_wrapper! {
 }
 
 impl PlacesSidebar {
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     pub fn new() -> PlacesSidebar {
         assert_initialized_main_thread!();
         unsafe {
@@ -50,7 +45,6 @@ impl PlacesSidebar {
     }
 }
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 impl Default for PlacesSidebar {
     fn default() -> Self {
         Self::new()
@@ -60,28 +54,21 @@ impl Default for PlacesSidebar {
 pub const NONE_PLACES_SIDEBAR: Option<&PlacesSidebar> = None;
 
 pub trait PlacesSidebarExt: 'static {
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn add_shortcut<P: IsA<gio::File>>(&self, location: &P);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_local_only(&self) -> bool;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_location(&self) -> Option<gio::File>;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_nth_bookmark(&self, n: i32) -> Option<gio::File>;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_open_flags(&self) -> PlacesOpenFlags;
 
     #[cfg_attr(feature = "v3_18", deprecated)]
     fn get_show_connect_to_server(&self) -> bool;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_show_desktop(&self) -> bool;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_show_enter_location(&self) -> bool;
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
@@ -96,32 +83,24 @@ pub trait PlacesSidebarExt: 'static {
     #[cfg(any(feature = "v3_18", feature = "dox"))]
     fn get_show_trash(&self) -> bool;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn list_shortcuts(&self) -> Vec<gio::File>;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn remove_shortcut<P: IsA<gio::File>>(&self, location: &P);
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
     fn set_drop_targets_visible(&self, visible: bool, context: &gdk::DragContext);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_local_only(&self, local_only: bool);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_location<'a, P: IsA<gio::File> + 'a, Q: Into<Option<&'a P>>>(&self, location: Q);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_open_flags(&self, flags: PlacesOpenFlags);
 
     #[cfg_attr(feature = "v3_18", deprecated)]
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_show_connect_to_server(&self, show_connect_to_server: bool);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_show_desktop(&self, show_desktop: bool);
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn set_show_enter_location(&self, show_enter_location: bool);
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
@@ -136,33 +115,11 @@ pub trait PlacesSidebarExt: 'static {
     #[cfg(any(feature = "v3_18", feature = "dox"))]
     fn set_show_trash(&self, show_trash: bool);
 
-    fn get_property_local_only(&self) -> bool;
-
-    fn set_property_local_only(&self, local_only: bool);
-
-    fn get_property_location(&self) -> Option<gio::File>;
-
-    fn set_property_location<P: IsA<gio::File> + glib::value::SetValueOptional>(&self, location: Option<&P>);
-
-    fn get_property_open_flags(&self) -> PlacesOpenFlags;
-
-    fn set_property_open_flags(&self, open_flags: PlacesOpenFlags);
-
     #[cfg(any(feature = "v3_18", feature = "dox"))]
     fn get_property_populate_all(&self) -> bool;
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
     fn set_property_populate_all(&self, populate_all: bool);
-
-    fn set_property_show_connect_to_server(&self, show_connect_to_server: bool);
-
-    fn get_property_show_desktop(&self) -> bool;
-
-    fn set_property_show_desktop(&self, show_desktop: bool);
-
-    fn get_property_show_enter_location(&self) -> bool;
-
-    fn set_property_show_enter_location(&self, show_enter_location: bool);
 
     fn get_property_show_other_locations(&self) -> bool;
 
@@ -176,25 +133,20 @@ pub trait PlacesSidebarExt: 'static {
 
     fn set_property_show_trash(&self, show_trash: bool);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn connect_drag_action_ask<F: Fn(&Self, i32) -> i32 + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn connect_mount<F: Fn(&Self, &gio::MountOperation) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn connect_open_location<F: Fn(&Self, &gio::File, PlacesOpenFlags) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    //#[cfg(any(feature = "v3_10", feature = "dox"))]
     //fn connect_populate_popup<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
 
     #[cfg_attr(feature = "v3_18", deprecated)]
     fn connect_show_connect_to_server<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_show_enter_location<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn connect_show_error_message<F: Fn(&Self, &str, &str) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[cfg_attr(feature = "v3_20", deprecated)]
@@ -236,35 +188,30 @@ pub trait PlacesSidebarExt: 'static {
 }
 
 impl<O: IsA<PlacesSidebar>> PlacesSidebarExt for O {
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn add_shortcut<P: IsA<gio::File>>(&self, location: &P) {
         unsafe {
             ffi::gtk_places_sidebar_add_shortcut(self.as_ref().to_glib_none().0, location.as_ref().to_glib_none().0);
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_local_only(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_places_sidebar_get_local_only(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_location(&self) -> Option<gio::File> {
         unsafe {
             from_glib_full(ffi::gtk_places_sidebar_get_location(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_nth_bookmark(&self, n: i32) -> Option<gio::File> {
         unsafe {
             from_glib_full(ffi::gtk_places_sidebar_get_nth_bookmark(self.as_ref().to_glib_none().0, n))
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_open_flags(&self) -> PlacesOpenFlags {
         unsafe {
             from_glib(ffi::gtk_places_sidebar_get_open_flags(self.as_ref().to_glib_none().0))
@@ -277,14 +224,12 @@ impl<O: IsA<PlacesSidebar>> PlacesSidebarExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_show_desktop(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_places_sidebar_get_show_desktop(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_show_enter_location(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_places_sidebar_get_show_enter_location(self.as_ref().to_glib_none().0))
@@ -319,14 +264,12 @@ impl<O: IsA<PlacesSidebar>> PlacesSidebarExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn list_shortcuts(&self) -> Vec<gio::File> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gtk_places_sidebar_list_shortcuts(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn remove_shortcut<P: IsA<gio::File>>(&self, location: &P) {
         unsafe {
             ffi::gtk_places_sidebar_remove_shortcut(self.as_ref().to_glib_none().0, location.as_ref().to_glib_none().0);
@@ -340,14 +283,12 @@ impl<O: IsA<PlacesSidebar>> PlacesSidebarExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_local_only(&self, local_only: bool) {
         unsafe {
             ffi::gtk_places_sidebar_set_local_only(self.as_ref().to_glib_none().0, local_only.to_glib());
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_location<'a, P: IsA<gio::File> + 'a, Q: Into<Option<&'a P>>>(&self, location: Q) {
         let location = location.into();
         unsafe {
@@ -355,28 +296,24 @@ impl<O: IsA<PlacesSidebar>> PlacesSidebarExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_open_flags(&self, flags: PlacesOpenFlags) {
         unsafe {
             ffi::gtk_places_sidebar_set_open_flags(self.as_ref().to_glib_none().0, flags.to_glib());
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_show_connect_to_server(&self, show_connect_to_server: bool) {
         unsafe {
             ffi::gtk_places_sidebar_set_show_connect_to_server(self.as_ref().to_glib_none().0, show_connect_to_server.to_glib());
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_show_desktop(&self, show_desktop: bool) {
         unsafe {
             ffi::gtk_places_sidebar_set_show_desktop(self.as_ref().to_glib_none().0, show_desktop.to_glib());
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn set_show_enter_location(&self, show_enter_location: bool) {
         unsafe {
             ffi::gtk_places_sidebar_set_show_enter_location(self.as_ref().to_glib_none().0, show_enter_location.to_glib());
@@ -411,48 +348,6 @@ impl<O: IsA<PlacesSidebar>> PlacesSidebarExt for O {
         }
     }
 
-    fn get_property_local_only(&self) -> bool {
-        unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"local-only\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_local_only(&self, local_only: bool) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"local-only\0".as_ptr() as *const _, Value::from(&local_only).to_glib_none().0);
-        }
-    }
-
-    fn get_property_location(&self) -> Option<gio::File> {
-        unsafe {
-            let mut value = Value::from_type(<gio::File as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"location\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get()
-        }
-    }
-
-    fn set_property_location<P: IsA<gio::File> + glib::value::SetValueOptional>(&self, location: Option<&P>) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"location\0".as_ptr() as *const _, Value::from(location).to_glib_none().0);
-        }
-    }
-
-    fn get_property_open_flags(&self) -> PlacesOpenFlags {
-        unsafe {
-            let mut value = Value::from_type(<PlacesOpenFlags as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"open-flags\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_open_flags(&self, open_flags: PlacesOpenFlags) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"open-flags\0".as_ptr() as *const _, Value::from(&open_flags).to_glib_none().0);
-        }
-    }
-
     #[cfg(any(feature = "v3_18", feature = "dox"))]
     fn get_property_populate_all(&self) -> bool {
         unsafe {
@@ -466,40 +361,6 @@ impl<O: IsA<PlacesSidebar>> PlacesSidebarExt for O {
     fn set_property_populate_all(&self, populate_all: bool) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"populate-all\0".as_ptr() as *const _, Value::from(&populate_all).to_glib_none().0);
-        }
-    }
-
-    fn set_property_show_connect_to_server(&self, show_connect_to_server: bool) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"show-connect-to-server\0".as_ptr() as *const _, Value::from(&show_connect_to_server).to_glib_none().0);
-        }
-    }
-
-    fn get_property_show_desktop(&self) -> bool {
-        unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"show-desktop\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_show_desktop(&self, show_desktop: bool) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"show-desktop\0".as_ptr() as *const _, Value::from(&show_desktop).to_glib_none().0);
-        }
-    }
-
-    fn get_property_show_enter_location(&self) -> bool {
-        unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"show-enter-location\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_show_enter_location(&self, show_enter_location: bool) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"show-enter-location\0".as_ptr() as *const _, Value::from(&show_enter_location).to_glib_none().0);
         }
     }
 
@@ -545,7 +406,6 @@ impl<O: IsA<PlacesSidebar>> PlacesSidebarExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn connect_drag_action_ask<F: Fn(&Self, i32) -> i32 + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -563,7 +423,6 @@ impl<O: IsA<PlacesSidebar>> PlacesSidebarExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn connect_open_location<F: Fn(&Self, &gio::File, PlacesOpenFlags) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -572,7 +431,6 @@ impl<O: IsA<PlacesSidebar>> PlacesSidebarExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v3_10", feature = "dox"))]
     //fn connect_populate_popup<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
     //    Ignored selected_volume: Gio.Volume
     //}
@@ -585,7 +443,6 @@ impl<O: IsA<PlacesSidebar>> PlacesSidebarExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_show_enter_location<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -594,7 +451,6 @@ impl<O: IsA<PlacesSidebar>> PlacesSidebarExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn connect_show_error_message<F: Fn(&Self, &str, &str) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -730,7 +586,6 @@ impl<O: IsA<PlacesSidebar>> PlacesSidebarExt for O {
     }
 }
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 unsafe extern "C" fn drag_action_ask_trampoline<P, F: Fn(&P, i32) -> i32 + 'static>(this: *mut ffi::GtkPlacesSidebar, actions: libc::c_int, f: glib_ffi::gpointer) -> libc::c_int
 where P: IsA<PlacesSidebar> {
     let f: &F = transmute(f);
@@ -744,7 +599,6 @@ where P: IsA<PlacesSidebar> {
     f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(mount_operation))
 }
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 unsafe extern "C" fn open_location_trampoline<P, F: Fn(&P, &gio::File, PlacesOpenFlags) + 'static>(this: *mut ffi::GtkPlacesSidebar, location: *mut gio_ffi::GFile, open_flags: ffi::GtkPlacesOpenFlags, f: glib_ffi::gpointer)
 where P: IsA<PlacesSidebar> {
     let f: &F = transmute(f);
@@ -757,14 +611,12 @@ where P: IsA<PlacesSidebar> {
     f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 unsafe extern "C" fn show_enter_location_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPlacesSidebar, f: glib_ffi::gpointer)
 where P: IsA<PlacesSidebar> {
     let f: &F = transmute(f);
     f(&PlacesSidebar::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 unsafe extern "C" fn show_error_message_trampoline<P, F: Fn(&P, &str, &str) + 'static>(this: *mut ffi::GtkPlacesSidebar, primary: *mut libc::c_char, secondary: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<PlacesSidebar> {
     let f: &F = transmute(f);

@@ -86,12 +86,6 @@ pub trait GtkMenuExt: 'static {
 
     fn get_reserve_toggle_size(&self) -> bool;
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_tearoff_state(&self) -> bool;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_title(&self) -> Option<GString>;
-
     #[cfg(any(feature = "v3_22", feature = "dox"))]
     fn place_on_monitor<P: IsA<gdk::Monitor>>(&self, monitor: &P);
 
@@ -128,12 +122,6 @@ pub trait GtkMenuExt: 'static {
 
     fn set_screen<'a, P: Into<Option<&'a gdk::Screen>>>(&self, screen: P);
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_tearoff_state(&self, torn_off: bool);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_title<'a, P: Into<Option<&'a str>>>(&self, title: P);
-
     #[cfg(any(feature = "v3_22", feature = "dox"))]
     fn get_property_anchor_hints(&self) -> gdk::AnchorHints;
 
@@ -159,12 +147,6 @@ pub trait GtkMenuExt: 'static {
 
     #[cfg(any(feature = "v3_22", feature = "dox"))]
     fn set_property_rect_anchor_dy(&self, rect_anchor_dy: i32);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_tearoff_title(&self) -> Option<GString>;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_tearoff_title<'a, P: Into<Option<&'a str>>>(&self, tearoff_title: P);
 
     fn get_item_bottom_attach<T: IsA<MenuItem>>(&self, item: &T) -> i32;
 
@@ -212,12 +194,6 @@ pub trait GtkMenuExt: 'static {
     fn connect_property_rect_anchor_dy_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_reserve_toggle_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_tearoff_state_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_tearoff_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<Menu>> GtkMenuExt for O {
@@ -270,18 +246,6 @@ impl<O: IsA<Menu>> GtkMenuExt for O {
     fn get_reserve_toggle_size(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_menu_get_reserve_toggle_size(self.as_ref().to_glib_none().0))
-        }
-    }
-
-    fn get_tearoff_state(&self) -> bool {
-        unsafe {
-            from_glib(ffi::gtk_menu_get_tearoff_state(self.as_ref().to_glib_none().0))
-        }
-    }
-
-    fn get_title(&self) -> Option<GString> {
-        unsafe {
-            from_glib_none(ffi::gtk_menu_get_title(self.as_ref().to_glib_none().0))
         }
     }
 
@@ -381,19 +345,6 @@ impl<O: IsA<Menu>> GtkMenuExt for O {
         }
     }
 
-    fn set_tearoff_state(&self, torn_off: bool) {
-        unsafe {
-            ffi::gtk_menu_set_tearoff_state(self.as_ref().to_glib_none().0, torn_off.to_glib());
-        }
-    }
-
-    fn set_title<'a, P: Into<Option<&'a str>>>(&self, title: P) {
-        let title = title.into();
-        unsafe {
-            ffi::gtk_menu_set_title(self.as_ref().to_glib_none().0, title.to_glib_none().0);
-        }
-    }
-
     #[cfg(any(feature = "v3_22", feature = "dox"))]
     fn get_property_anchor_hints(&self) -> gdk::AnchorHints {
         unsafe {
@@ -461,21 +412,6 @@ impl<O: IsA<Menu>> GtkMenuExt for O {
     fn set_property_rect_anchor_dy(&self, rect_anchor_dy: i32) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"rect-anchor-dy\0".as_ptr() as *const _, Value::from(&rect_anchor_dy).to_glib_none().0);
-        }
-    }
-
-    fn get_property_tearoff_title(&self) -> Option<GString> {
-        unsafe {
-            let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"tearoff-title\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get()
-        }
-    }
-
-    fn set_property_tearoff_title<'a, P: Into<Option<&'a str>>>(&self, tearoff_title: P) {
-        let tearoff_title = tearoff_title.into();
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"tearoff-title\0".as_ptr() as *const _, Value::from(tearoff_title).to_glib_none().0);
         }
     }
 
@@ -636,22 +572,6 @@ impl<O: IsA<Menu>> GtkMenuExt for O {
                 Some(transmute(notify_reserve_toggle_size_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
-
-    fn connect_property_tearoff_state_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::tearoff-state\0".as_ptr() as *const _,
-                Some(transmute(notify_tearoff_state_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_tearoff_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::tearoff-title\0".as_ptr() as *const _,
-                Some(transmute(notify_tearoff_title_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
 }
 
 unsafe extern "C" fn move_scroll_trampoline<P, F: Fn(&P, ScrollType) + 'static>(this: *mut ffi::GtkMenu, scroll_type: ffi::GtkScrollType, f: glib_ffi::gpointer)
@@ -719,18 +639,6 @@ where P: IsA<Menu> {
 }
 
 unsafe extern "C" fn notify_reserve_toggle_size_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenu, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Menu> {
-    let f: &F = transmute(f);
-    f(&Menu::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_tearoff_state_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenu, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Menu> {
-    let f: &F = transmute(f);
-    f(&Menu::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_tearoff_title_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenu, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Menu> {
     let f: &F = transmute(f);
     f(&Menu::from_glib_borrow(this).unsafe_cast())

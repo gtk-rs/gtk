@@ -24,7 +24,6 @@ glib_wrapper! {
 }
 
 impl ActionBar {
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     pub fn new() -> ActionBar {
         assert_initialized_main_thread!();
         unsafe {
@@ -33,7 +32,6 @@ impl ActionBar {
     }
 }
 
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 impl Default for ActionBar {
     fn default() -> Self {
         Self::new()
@@ -43,16 +41,12 @@ impl Default for ActionBar {
 pub const NONE_ACTION_BAR: Option<&ActionBar> = None;
 
 pub trait ActionBarExt: 'static {
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_center_widget(&self) -> Option<Widget>;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn pack_end<P: IsA<Widget>>(&self, child: &P);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn pack_start<P: IsA<Widget>>(&self, child: &P);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_center_widget<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, center_widget: Q);
 
     fn get_child_pack_type<T: IsA<Widget>>(&self, item: &T) -> PackType;
@@ -65,28 +59,24 @@ pub trait ActionBarExt: 'static {
 }
 
 impl<O: IsA<ActionBar>> ActionBarExt for O {
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_center_widget(&self) -> Option<Widget> {
         unsafe {
             from_glib_none(ffi::gtk_action_bar_get_center_widget(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn pack_end<P: IsA<Widget>>(&self, child: &P) {
         unsafe {
             ffi::gtk_action_bar_pack_end(self.as_ref().to_glib_none().0, child.as_ref().to_glib_none().0);
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn pack_start<P: IsA<Widget>>(&self, child: &P) {
         unsafe {
             ffi::gtk_action_bar_pack_start(self.as_ref().to_glib_none().0, child.as_ref().to_glib_none().0);
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_center_widget<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, center_widget: Q) {
         let center_widget = center_widget.into();
         unsafe {

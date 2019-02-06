@@ -9,7 +9,6 @@ use MenuDirectionType;
 use MenuItem;
 use Widget;
 use ffi;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 use gio;
 use glib;
 use glib::object::Cast;
@@ -41,7 +40,6 @@ pub trait MenuShellExt: 'static {
 
     fn append<P: IsA<MenuItem>>(&self, child: &P);
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn bind_model<'a, 'b, P: IsA<gio::MenuModel> + 'a, Q: Into<Option<&'a P>>, R: Into<Option<&'b str>>>(&self, model: Q, action_namespace: R, with_separators: bool);
 
     fn cancel(&self);
@@ -106,7 +104,6 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn bind_model<'a, 'b, P: IsA<gio::MenuModel> + 'a, Q: Into<Option<&'a P>>, R: Into<Option<&'b str>>>(&self, model: Q, action_namespace: R, with_separators: bool) {
         let model = model.into();
         let action_namespace = action_namespace.into();

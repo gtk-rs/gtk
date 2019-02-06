@@ -4,24 +4,17 @@
 
 use EventController;
 use Gesture;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use Widget;
 use ffi;
 use glib::object::Cast;
 use glib::object::IsA;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use glib::signal::SignalHandlerId;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use glib::signal::connect_raw;
 use glib::translate::*;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use glib_ffi;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use libc;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use std::boxed::Box as Box_;
 use std::fmt;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use std::mem::transmute;
 
 glib_wrapper! {
@@ -33,7 +26,6 @@ glib_wrapper! {
 }
 
 impl GestureZoom {
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     pub fn new<P: IsA<Widget>>(widget: &P) -> GestureZoom {
         skip_assert_initialized!();
         unsafe {
@@ -45,22 +37,18 @@ impl GestureZoom {
 pub const NONE_GESTURE_ZOOM: Option<&GestureZoom> = None;
 
 pub trait GestureZoomExt: 'static {
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_scale_delta(&self) -> f64;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_scale_changed<F: Fn(&Self, f64) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<GestureZoom>> GestureZoomExt for O {
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_scale_delta(&self) -> f64 {
         unsafe {
             ffi::gtk_gesture_zoom_get_scale_delta(self.as_ref().to_glib_none().0)
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_scale_changed<F: Fn(&Self, f64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -70,7 +58,6 @@ impl<O: IsA<GestureZoom>> GestureZoomExt for O {
     }
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 unsafe extern "C" fn scale_changed_trampoline<P, F: Fn(&P, f64) + 'static>(this: *mut ffi::GtkGestureZoom, scale: libc::c_double, f: glib_ffi::gpointer)
 where P: IsA<GestureZoom> {
     let f: &F = transmute(f);

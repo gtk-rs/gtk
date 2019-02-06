@@ -6,8 +6,6 @@ use ApplicationInhibitFlags;
 use Window;
 use ffi;
 use gio;
-use glib;
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 use glib::GString;
 use glib::StaticType;
 use glib::Value;
@@ -33,28 +31,20 @@ glib_wrapper! {
 pub const NONE_APPLICATION: Option<&Application> = None;
 
 pub trait GtkApplicationExt: 'static {
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn add_accelerator<'a, P: Into<Option<&'a glib::Variant>>>(&self, accelerator: &str, action_name: &str, parameter: P);
-
     fn add_window<P: IsA<Window>>(&self, window: &P);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_accels_for_action(&self, detailed_action_name: &str) -> Vec<GString>;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_actions_for_accel(&self, accel: &str) -> Vec<GString>;
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_active_window(&self) -> Option<Window>;
 
     fn get_app_menu(&self) -> Option<gio::MenuModel>;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_menu_by_id(&self, id: &str) -> Option<gio::Menu>;
 
     fn get_menubar(&self) -> Option<gio::MenuModel>;
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_window_by_id(&self, id: u32) -> Option<Window>;
 
     fn get_windows(&self) -> Vec<Window>;
@@ -63,18 +53,12 @@ pub trait GtkApplicationExt: 'static {
 
     fn is_inhibited(&self, flags: ApplicationInhibitFlags) -> bool;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn list_action_descriptions(&self) -> Vec<GString>;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn prefers_app_menu(&self) -> bool;
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn remove_accelerator<'a, P: Into<Option<&'a glib::Variant>>>(&self, action_name: &str, parameter: P);
 
     fn remove_window<P: IsA<Window>>(&self, window: &P);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_accels_for_action(&self, detailed_action_name: &str, accels: &[&str]);
 
     fn set_app_menu<'a, P: IsA<gio::MenuModel> + 'a, Q: Into<Option<&'a P>>>(&self, app_menu: Q);
@@ -82,8 +66,6 @@ pub trait GtkApplicationExt: 'static {
     fn set_menubar<'a, P: IsA<gio::MenuModel> + 'a, Q: Into<Option<&'a P>>>(&self, menubar: Q);
 
     fn uninhibit(&self, cookie: u32);
-
-    fn get_property_active_window(&self) -> Option<Window>;
 
     fn get_property_register_session(&self) -> bool;
 
@@ -109,34 +91,24 @@ pub trait GtkApplicationExt: 'static {
 }
 
 impl<O: IsA<Application>> GtkApplicationExt for O {
-    fn add_accelerator<'a, P: Into<Option<&'a glib::Variant>>>(&self, accelerator: &str, action_name: &str, parameter: P) {
-        let parameter = parameter.into();
-        unsafe {
-            ffi::gtk_application_add_accelerator(self.as_ref().to_glib_none().0, accelerator.to_glib_none().0, action_name.to_glib_none().0, parameter.to_glib_none().0);
-        }
-    }
-
     fn add_window<P: IsA<Window>>(&self, window: &P) {
         unsafe {
             ffi::gtk_application_add_window(self.as_ref().to_glib_none().0, window.as_ref().to_glib_none().0);
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_accels_for_action(&self, detailed_action_name: &str) -> Vec<GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gtk_application_get_accels_for_action(self.as_ref().to_glib_none().0, detailed_action_name.to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_actions_for_accel(&self, accel: &str) -> Vec<GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gtk_application_get_actions_for_accel(self.as_ref().to_glib_none().0, accel.to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_active_window(&self) -> Option<Window> {
         unsafe {
             from_glib_none(ffi::gtk_application_get_active_window(self.as_ref().to_glib_none().0))
@@ -149,7 +121,6 @@ impl<O: IsA<Application>> GtkApplicationExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_menu_by_id(&self, id: &str) -> Option<gio::Menu> {
         unsafe {
             from_glib_none(ffi::gtk_application_get_menu_by_id(self.as_ref().to_glib_none().0, id.to_glib_none().0))
@@ -162,7 +133,6 @@ impl<O: IsA<Application>> GtkApplicationExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_window_by_id(&self, id: u32) -> Option<Window> {
         unsafe {
             from_glib_none(ffi::gtk_application_get_window_by_id(self.as_ref().to_glib_none().0, id))
@@ -189,24 +159,15 @@ impl<O: IsA<Application>> GtkApplicationExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn list_action_descriptions(&self) -> Vec<GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gtk_application_list_action_descriptions(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn prefers_app_menu(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_application_prefers_app_menu(self.as_ref().to_glib_none().0))
-        }
-    }
-
-    fn remove_accelerator<'a, P: Into<Option<&'a glib::Variant>>>(&self, action_name: &str, parameter: P) {
-        let parameter = parameter.into();
-        unsafe {
-            ffi::gtk_application_remove_accelerator(self.as_ref().to_glib_none().0, action_name.to_glib_none().0, parameter.to_glib_none().0);
         }
     }
 
@@ -216,7 +177,6 @@ impl<O: IsA<Application>> GtkApplicationExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_accels_for_action(&self, detailed_action_name: &str, accels: &[&str]) {
         unsafe {
             ffi::gtk_application_set_accels_for_action(self.as_ref().to_glib_none().0, detailed_action_name.to_glib_none().0, accels.to_glib_none().0);
@@ -240,14 +200,6 @@ impl<O: IsA<Application>> GtkApplicationExt for O {
     fn uninhibit(&self, cookie: u32) {
         unsafe {
             ffi::gtk_application_uninhibit(self.as_ref().to_glib_none().0, cookie);
-        }
-    }
-
-    fn get_property_active_window(&self) -> Option<Window> {
-        unsafe {
-            let mut value = Value::from_type(<Window as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"active-window\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get()
         }
     }
 

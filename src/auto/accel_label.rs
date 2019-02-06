@@ -7,7 +7,6 @@ use Label;
 use Misc;
 use Widget;
 use ffi;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 use gdk;
 use glib;
 use glib::StaticType;
@@ -21,7 +20,6 @@ use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 use std::mem;
 use std::mem::transmute;
 
@@ -45,7 +43,6 @@ impl AccelLabel {
 pub const NONE_ACCEL_LABEL: Option<&AccelLabel> = None;
 
 pub trait AccelLabelExt: 'static {
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_accel(&self) -> (u32, gdk::ModifierType);
 
     fn get_accel_widget(&self) -> Option<Widget>;
@@ -54,7 +51,6 @@ pub trait AccelLabelExt: 'static {
 
     fn refetch(&self) -> bool;
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn set_accel(&self, accelerator_key: u32, accelerator_mods: gdk::ModifierType);
 
     fn set_accel_closure<'a, P: Into<Option<&'a glib::Closure>>>(&self, accel_closure: P);
@@ -69,7 +65,6 @@ pub trait AccelLabelExt: 'static {
 }
 
 impl<O: IsA<AccelLabel>> AccelLabelExt for O {
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_accel(&self) -> (u32, gdk::ModifierType) {
         unsafe {
             let mut accelerator_key = mem::uninitialized();
@@ -97,7 +92,6 @@ impl<O: IsA<AccelLabel>> AccelLabelExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn set_accel(&self, accelerator_key: u32, accelerator_mods: gdk::ModifierType) {
         unsafe {
             ffi::gtk_accel_label_set_accel(self.as_ref().to_glib_none().0, accelerator_key, accelerator_mods.to_glib());

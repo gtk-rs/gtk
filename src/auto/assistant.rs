@@ -99,7 +99,6 @@ pub trait AssistantExt: 'static {
 
     fn update_buttons_state(&self);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_property_use_header_bar(&self) -> i32;
 
     fn get_child_complete<T: IsA<Widget>>(&self, item: &T) -> bool;
@@ -288,7 +287,6 @@ impl<O: IsA<Assistant>> AssistantExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_property_use_header_bar(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());

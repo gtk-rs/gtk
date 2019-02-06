@@ -2,13 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use CornerType;
-use IMPreeditStyle;
-use IMStatusStyle;
-use IconSize;
-use PolicyType;
 use StyleProvider;
-use ToolbarStyle;
 use ffi;
 use gdk;
 use glib::GString;
@@ -78,9 +72,6 @@ pub trait SettingsExt: 'static {
     #[cfg_attr(feature = "v3_16", deprecated)]
     fn set_string_property(&self, name: &str, v_string: &str, origin: &str);
 
-    //#[cfg_attr(feature = "v3_8", deprecated)]
-    //fn get_property_color_hash(&self) -> /*Unimplemented*/HashTable TypeId { ns_id: 0, id: 28 }/TypeId { ns_id: 10, id: 9 };
-
     fn get_property_gtk_alternative_button_order(&self) -> bool;
 
     fn set_property_gtk_alternative_button_order(&self, gtk_alternative_button_order: bool);
@@ -92,36 +83,6 @@ pub trait SettingsExt: 'static {
     fn get_property_gtk_application_prefer_dark_theme(&self) -> bool;
 
     fn set_property_gtk_application_prefer_dark_theme(&self, gtk_application_prefer_dark_theme: bool);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_gtk_auto_mnemonics(&self) -> bool;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_gtk_auto_mnemonics(&self, gtk_auto_mnemonics: bool);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_gtk_button_images(&self) -> bool;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_gtk_button_images(&self, gtk_button_images: bool);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_gtk_can_change_accels(&self) -> bool;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_gtk_can_change_accels(&self, gtk_can_change_accels: bool);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_gtk_color_palette(&self) -> Option<GString>;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_gtk_color_palette<'a, P: Into<Option<&'a str>>>(&self, gtk_color_palette: P);
-
-    #[cfg_attr(feature = "v3_8", deprecated)]
-    fn get_property_gtk_color_scheme(&self) -> Option<GString>;
-
-    #[cfg_attr(feature = "v3_8", deprecated)]
-    fn set_property_gtk_color_scheme<'a, P: Into<Option<&'a str>>>(&self, gtk_color_scheme: P);
 
     fn get_property_gtk_cursor_blink(&self) -> bool;
 
@@ -143,16 +104,12 @@ pub trait SettingsExt: 'static {
 
     fn set_property_gtk_cursor_theme_size(&self, gtk_cursor_theme_size: i32);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_property_gtk_decoration_layout(&self) -> Option<GString>;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_property_gtk_decoration_layout<'a, P: Into<Option<&'a str>>>(&self, gtk_decoration_layout: P);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_property_gtk_dialogs_use_header(&self) -> bool;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_property_gtk_dialogs_use_header(&self, gtk_dialogs_use_header: bool);
 
     fn get_property_gtk_dnd_drag_threshold(&self) -> i32;
@@ -183,21 +140,9 @@ pub trait SettingsExt: 'static {
 
     fn set_property_gtk_enable_input_feedback_sounds(&self, gtk_enable_input_feedback_sounds: bool);
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_gtk_enable_mnemonics(&self) -> bool;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_gtk_enable_mnemonics(&self, gtk_enable_mnemonics: bool);
-
     fn get_property_gtk_enable_primary_paste(&self) -> bool;
 
     fn set_property_gtk_enable_primary_paste(&self, gtk_enable_primary_paste: bool);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_gtk_enable_tooltips(&self) -> bool;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_gtk_enable_tooltips(&self, gtk_enable_tooltips: bool);
 
     fn get_property_gtk_entry_password_hint_timeout(&self) -> u32;
 
@@ -211,18 +156,6 @@ pub trait SettingsExt: 'static {
 
     fn set_property_gtk_error_bell(&self, gtk_error_bell: bool);
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_gtk_fallback_icon_theme(&self) -> Option<GString>;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_gtk_fallback_icon_theme<'a, P: Into<Option<&'a str>>>(&self, gtk_fallback_icon_theme: P);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_gtk_file_chooser_backend(&self) -> Option<GString>;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_gtk_file_chooser_backend<'a, P: Into<Option<&'a str>>>(&self, gtk_file_chooser_backend: P);
-
     fn get_property_gtk_font_name(&self) -> Option<GString>;
 
     fn set_property_gtk_font_name<'a, P: Into<Option<&'a str>>>(&self, gtk_font_name: P);
@@ -230,12 +163,6 @@ pub trait SettingsExt: 'static {
     fn get_property_gtk_fontconfig_timestamp(&self) -> u32;
 
     fn set_property_gtk_fontconfig_timestamp(&self, gtk_fontconfig_timestamp: u32);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_gtk_icon_sizes(&self) -> Option<GString>;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_gtk_icon_sizes<'a, P: Into<Option<&'a str>>>(&self, gtk_icon_sizes: P);
 
     fn get_property_gtk_icon_theme_name(&self) -> Option<GString>;
 
@@ -245,27 +172,9 @@ pub trait SettingsExt: 'static {
 
     fn set_property_gtk_im_module<'a, P: Into<Option<&'a str>>>(&self, gtk_im_module: P);
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_gtk_im_preedit_style(&self) -> IMPreeditStyle;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_gtk_im_preedit_style(&self, gtk_im_preedit_style: IMPreeditStyle);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_gtk_im_status_style(&self) -> IMStatusStyle;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_gtk_im_status_style(&self, gtk_im_status_style: IMStatusStyle);
-
     fn get_property_gtk_key_theme_name(&self) -> Option<GString>;
 
     fn set_property_gtk_key_theme_name<'a, P: Into<Option<&'a str>>>(&self, gtk_key_theme_name: P);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_gtk_keynav_cursor_only(&self) -> bool;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_gtk_keynav_cursor_only(&self, gtk_keynav_cursor_only: bool);
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn get_property_gtk_keynav_use_caret(&self) -> bool;
@@ -273,60 +182,20 @@ pub trait SettingsExt: 'static {
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn set_property_gtk_keynav_use_caret(&self, gtk_keynav_use_caret: bool);
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_gtk_keynav_wrap_around(&self) -> bool;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_gtk_keynav_wrap_around(&self, gtk_keynav_wrap_around: bool);
-
     fn get_property_gtk_label_select_on_focus(&self) -> bool;
 
     fn set_property_gtk_label_select_on_focus(&self, gtk_label_select_on_focus: bool);
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_property_gtk_long_press_time(&self) -> u32;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn set_property_gtk_long_press_time(&self, gtk_long_press_time: u32);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_gtk_menu_bar_accel(&self) -> Option<GString>;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_gtk_menu_bar_accel<'a, P: Into<Option<&'a str>>>(&self, gtk_menu_bar_accel: P);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_gtk_menu_bar_popup_delay(&self) -> i32;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_gtk_menu_bar_popup_delay(&self, gtk_menu_bar_popup_delay: i32);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_gtk_menu_images(&self) -> bool;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_gtk_menu_images(&self, gtk_menu_images: bool);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_gtk_menu_popdown_delay(&self) -> i32;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_gtk_menu_popdown_delay(&self, gtk_menu_popdown_delay: i32);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_gtk_menu_popup_delay(&self) -> i32;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_gtk_menu_popup_delay(&self, gtk_menu_popup_delay: i32);
 
     fn get_property_gtk_modules(&self) -> Option<GString>;
 
     fn set_property_gtk_modules<'a, P: Into<Option<&'a str>>>(&self, gtk_modules: P);
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_property_gtk_primary_button_warps_slider(&self) -> bool;
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn set_property_gtk_primary_button_warps_slider(&self, gtk_primary_button_warps_slider: bool);
 
     fn get_property_gtk_print_backends(&self) -> Option<GString>;
@@ -337,27 +206,13 @@ pub trait SettingsExt: 'static {
 
     fn set_property_gtk_print_preview_command<'a, P: Into<Option<&'a str>>>(&self, gtk_print_preview_command: P);
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn get_property_gtk_recent_files_enabled(&self) -> bool;
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn set_property_gtk_recent_files_enabled(&self, gtk_recent_files_enabled: bool);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_gtk_recent_files_limit(&self) -> i32;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_gtk_recent_files_limit(&self, gtk_recent_files_limit: i32);
 
     fn get_property_gtk_recent_files_max_age(&self) -> i32;
 
     fn set_property_gtk_recent_files_max_age(&self, gtk_recent_files_max_age: i32);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_gtk_scrolled_window_placement(&self) -> CornerType;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_gtk_scrolled_window_placement(&self, gtk_scrolled_window_placement: CornerType);
 
     fn get_property_gtk_shell_shows_app_menu(&self) -> bool;
 
@@ -371,18 +226,6 @@ pub trait SettingsExt: 'static {
 
     fn set_property_gtk_shell_shows_menubar(&self, gtk_shell_shows_menubar: bool);
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_gtk_show_input_method_menu(&self) -> bool;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_gtk_show_input_method_menu(&self, gtk_show_input_method_menu: bool);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_gtk_show_unicode_menu(&self) -> bool;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_gtk_show_unicode_menu(&self, gtk_show_unicode_menu: bool);
-
     fn get_property_gtk_sound_theme_name(&self) -> Option<GString>;
 
     fn set_property_gtk_sound_theme_name<'a, P: Into<Option<&'a str>>>(&self, gtk_sound_theme_name: P);
@@ -395,77 +238,17 @@ pub trait SettingsExt: 'static {
 
     fn set_property_gtk_theme_name<'a, P: Into<Option<&'a str>>>(&self, gtk_theme_name: P);
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_gtk_timeout_expand(&self) -> i32;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_gtk_timeout_expand(&self, gtk_timeout_expand: i32);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_gtk_timeout_initial(&self) -> i32;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_gtk_timeout_initial(&self, gtk_timeout_initial: i32);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_gtk_timeout_repeat(&self) -> i32;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_gtk_timeout_repeat(&self, gtk_timeout_repeat: i32);
-
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_property_gtk_titlebar_double_click(&self) -> Option<GString>;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn set_property_gtk_titlebar_double_click<'a, P: Into<Option<&'a str>>>(&self, gtk_titlebar_double_click: P);
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_property_gtk_titlebar_middle_click(&self) -> Option<GString>;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn set_property_gtk_titlebar_middle_click<'a, P: Into<Option<&'a str>>>(&self, gtk_titlebar_middle_click: P);
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_property_gtk_titlebar_right_click(&self) -> Option<GString>;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn set_property_gtk_titlebar_right_click<'a, P: Into<Option<&'a str>>>(&self, gtk_titlebar_right_click: P);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_gtk_toolbar_icon_size(&self) -> IconSize;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_gtk_toolbar_icon_size(&self, gtk_toolbar_icon_size: IconSize);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_gtk_toolbar_style(&self) -> ToolbarStyle;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_gtk_toolbar_style(&self, gtk_toolbar_style: ToolbarStyle);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_gtk_tooltip_browse_mode_timeout(&self) -> i32;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_gtk_tooltip_browse_mode_timeout(&self, gtk_tooltip_browse_mode_timeout: i32);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_gtk_tooltip_browse_timeout(&self) -> i32;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_gtk_tooltip_browse_timeout(&self, gtk_tooltip_browse_timeout: i32);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_gtk_tooltip_timeout(&self) -> i32;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_gtk_tooltip_timeout(&self, gtk_tooltip_timeout: i32);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_gtk_visible_focus(&self) -> PolicyType;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_gtk_visible_focus(&self, gtk_visible_focus: PolicyType);
 
     fn get_property_gtk_xft_antialias(&self) -> i32;
 
@@ -487,29 +270,11 @@ pub trait SettingsExt: 'static {
 
     fn set_property_gtk_xft_rgba<'a, P: Into<Option<&'a str>>>(&self, gtk_xft_rgba: P);
 
-    #[cfg_attr(feature = "v3_8", deprecated)]
-    fn connect_property_color_hash_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
     fn connect_property_gtk_alternative_button_order_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_gtk_alternative_sort_arrows_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_gtk_application_prefer_dark_theme_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_gtk_auto_mnemonics_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_gtk_button_images_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_gtk_can_change_accels_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_gtk_color_palette_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_8", deprecated)]
-    fn connect_property_gtk_color_scheme_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_gtk_cursor_blink_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -521,10 +286,8 @@ pub trait SettingsExt: 'static {
 
     fn connect_property_gtk_cursor_theme_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_gtk_decoration_layout_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_gtk_dialogs_use_header_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_gtk_dnd_drag_threshold_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -541,13 +304,7 @@ pub trait SettingsExt: 'static {
 
     fn connect_property_gtk_enable_input_feedback_sounds_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_gtk_enable_mnemonics_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
     fn connect_property_gtk_enable_primary_paste_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_gtk_enable_tooltips_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_gtk_entry_password_hint_timeout_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -555,79 +312,34 @@ pub trait SettingsExt: 'static {
 
     fn connect_property_gtk_error_bell_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_gtk_fallback_icon_theme_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_gtk_file_chooser_backend_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
     fn connect_property_gtk_font_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_gtk_fontconfig_timestamp_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_gtk_icon_sizes_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_gtk_icon_theme_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_gtk_im_module_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_gtk_im_preedit_style_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_gtk_im_status_style_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
     fn connect_property_gtk_key_theme_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_gtk_keynav_cursor_only_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn connect_property_gtk_keynav_use_caret_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_gtk_keynav_wrap_around_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
     fn connect_property_gtk_label_select_on_focus_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_property_gtk_long_press_time_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_gtk_menu_bar_accel_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_gtk_menu_bar_popup_delay_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_gtk_menu_images_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_gtk_menu_popdown_delay_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_gtk_menu_popup_delay_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_gtk_modules_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_gtk_primary_button_warps_slider_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_gtk_print_backends_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_gtk_print_preview_command_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn connect_property_gtk_recent_files_enabled_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_gtk_recent_files_limit_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
     fn connect_property_gtk_recent_files_max_age_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_gtk_scrolled_window_placement_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_gtk_shell_shows_app_menu_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -635,53 +347,17 @@ pub trait SettingsExt: 'static {
 
     fn connect_property_gtk_shell_shows_menubar_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_gtk_show_input_method_menu_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_gtk_show_unicode_menu_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
     fn connect_property_gtk_sound_theme_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_gtk_split_cursor_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_gtk_theme_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_gtk_timeout_expand_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_gtk_timeout_initial_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_gtk_timeout_repeat_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_property_gtk_titlebar_double_click_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_property_gtk_titlebar_middle_click_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_property_gtk_titlebar_right_click_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_gtk_toolbar_icon_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_gtk_toolbar_style_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_gtk_tooltip_browse_mode_timeout_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_gtk_tooltip_browse_timeout_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_gtk_tooltip_timeout_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_gtk_visible_focus_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_gtk_xft_antialias_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -724,14 +400,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    //fn get_property_color_hash(&self) -> /*Unimplemented*/HashTable TypeId { ns_id: 0, id: 28 }/TypeId { ns_id: 10, id: 9 } {
-    //    unsafe {
-    //        let mut value = Value::from_type(</*Unknown type*/ as StaticType>::static_type());
-    //        gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"color-hash\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-    //        value.get().unwrap()
-    //    }
-    //}
-
     fn get_property_gtk_alternative_button_order(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
@@ -771,78 +439,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
     fn set_property_gtk_application_prefer_dark_theme(&self, gtk_application_prefer_dark_theme: bool) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-application-prefer-dark-theme\0".as_ptr() as *const _, Value::from(&gtk_application_prefer_dark_theme).to_glib_none().0);
-        }
-    }
-
-    fn get_property_gtk_auto_mnemonics(&self) -> bool {
-        unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-auto-mnemonics\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_gtk_auto_mnemonics(&self, gtk_auto_mnemonics: bool) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-auto-mnemonics\0".as_ptr() as *const _, Value::from(&gtk_auto_mnemonics).to_glib_none().0);
-        }
-    }
-
-    fn get_property_gtk_button_images(&self) -> bool {
-        unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-button-images\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_gtk_button_images(&self, gtk_button_images: bool) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-button-images\0".as_ptr() as *const _, Value::from(&gtk_button_images).to_glib_none().0);
-        }
-    }
-
-    fn get_property_gtk_can_change_accels(&self) -> bool {
-        unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-can-change-accels\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_gtk_can_change_accels(&self, gtk_can_change_accels: bool) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-can-change-accels\0".as_ptr() as *const _, Value::from(&gtk_can_change_accels).to_glib_none().0);
-        }
-    }
-
-    fn get_property_gtk_color_palette(&self) -> Option<GString> {
-        unsafe {
-            let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-color-palette\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get()
-        }
-    }
-
-    fn set_property_gtk_color_palette<'a, P: Into<Option<&'a str>>>(&self, gtk_color_palette: P) {
-        let gtk_color_palette = gtk_color_palette.into();
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-color-palette\0".as_ptr() as *const _, Value::from(gtk_color_palette).to_glib_none().0);
-        }
-    }
-
-    fn get_property_gtk_color_scheme(&self) -> Option<GString> {
-        unsafe {
-            let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-color-scheme\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get()
-        }
-    }
-
-    fn set_property_gtk_color_scheme<'a, P: Into<Option<&'a str>>>(&self, gtk_color_scheme: P) {
-        let gtk_color_scheme = gtk_color_scheme.into();
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-color-scheme\0".as_ptr() as *const _, Value::from(gtk_color_scheme).to_glib_none().0);
         }
     }
 
@@ -917,7 +513,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_property_gtk_decoration_layout(&self) -> Option<GString> {
         unsafe {
             let mut value = Value::from_type(<GString as StaticType>::static_type());
@@ -926,7 +521,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_property_gtk_decoration_layout<'a, P: Into<Option<&'a str>>>(&self, gtk_decoration_layout: P) {
         let gtk_decoration_layout = gtk_decoration_layout.into();
         unsafe {
@@ -934,7 +528,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_property_gtk_dialogs_use_header(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
@@ -943,7 +536,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_property_gtk_dialogs_use_header(&self, gtk_dialogs_use_header: bool) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-dialogs-use-header\0".as_ptr() as *const _, Value::from(&gtk_dialogs_use_header).to_glib_none().0);
@@ -1048,20 +640,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    fn get_property_gtk_enable_mnemonics(&self) -> bool {
-        unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-enable-mnemonics\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_gtk_enable_mnemonics(&self, gtk_enable_mnemonics: bool) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-enable-mnemonics\0".as_ptr() as *const _, Value::from(&gtk_enable_mnemonics).to_glib_none().0);
-        }
-    }
-
     fn get_property_gtk_enable_primary_paste(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
@@ -1073,20 +651,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
     fn set_property_gtk_enable_primary_paste(&self, gtk_enable_primary_paste: bool) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-enable-primary-paste\0".as_ptr() as *const _, Value::from(&gtk_enable_primary_paste).to_glib_none().0);
-        }
-    }
-
-    fn get_property_gtk_enable_tooltips(&self) -> bool {
-        unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-enable-tooltips\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_gtk_enable_tooltips(&self, gtk_enable_tooltips: bool) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-enable-tooltips\0".as_ptr() as *const _, Value::from(&gtk_enable_tooltips).to_glib_none().0);
         }
     }
 
@@ -1132,36 +696,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    fn get_property_gtk_fallback_icon_theme(&self) -> Option<GString> {
-        unsafe {
-            let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-fallback-icon-theme\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get()
-        }
-    }
-
-    fn set_property_gtk_fallback_icon_theme<'a, P: Into<Option<&'a str>>>(&self, gtk_fallback_icon_theme: P) {
-        let gtk_fallback_icon_theme = gtk_fallback_icon_theme.into();
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-fallback-icon-theme\0".as_ptr() as *const _, Value::from(gtk_fallback_icon_theme).to_glib_none().0);
-        }
-    }
-
-    fn get_property_gtk_file_chooser_backend(&self) -> Option<GString> {
-        unsafe {
-            let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-file-chooser-backend\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get()
-        }
-    }
-
-    fn set_property_gtk_file_chooser_backend<'a, P: Into<Option<&'a str>>>(&self, gtk_file_chooser_backend: P) {
-        let gtk_file_chooser_backend = gtk_file_chooser_backend.into();
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-file-chooser-backend\0".as_ptr() as *const _, Value::from(gtk_file_chooser_backend).to_glib_none().0);
-        }
-    }
-
     fn get_property_gtk_font_name(&self) -> Option<GString> {
         unsafe {
             let mut value = Value::from_type(<GString as StaticType>::static_type());
@@ -1188,21 +722,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
     fn set_property_gtk_fontconfig_timestamp(&self, gtk_fontconfig_timestamp: u32) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-fontconfig-timestamp\0".as_ptr() as *const _, Value::from(&gtk_fontconfig_timestamp).to_glib_none().0);
-        }
-    }
-
-    fn get_property_gtk_icon_sizes(&self) -> Option<GString> {
-        unsafe {
-            let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-icon-sizes\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get()
-        }
-    }
-
-    fn set_property_gtk_icon_sizes<'a, P: Into<Option<&'a str>>>(&self, gtk_icon_sizes: P) {
-        let gtk_icon_sizes = gtk_icon_sizes.into();
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-icon-sizes\0".as_ptr() as *const _, Value::from(gtk_icon_sizes).to_glib_none().0);
         }
     }
 
@@ -1236,34 +755,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    fn get_property_gtk_im_preedit_style(&self) -> IMPreeditStyle {
-        unsafe {
-            let mut value = Value::from_type(<IMPreeditStyle as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-im-preedit-style\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_gtk_im_preedit_style(&self, gtk_im_preedit_style: IMPreeditStyle) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-im-preedit-style\0".as_ptr() as *const _, Value::from(&gtk_im_preedit_style).to_glib_none().0);
-        }
-    }
-
-    fn get_property_gtk_im_status_style(&self) -> IMStatusStyle {
-        unsafe {
-            let mut value = Value::from_type(<IMStatusStyle as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-im-status-style\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_gtk_im_status_style(&self, gtk_im_status_style: IMStatusStyle) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-im-status-style\0".as_ptr() as *const _, Value::from(&gtk_im_status_style).to_glib_none().0);
-        }
-    }
-
     fn get_property_gtk_key_theme_name(&self) -> Option<GString> {
         unsafe {
             let mut value = Value::from_type(<GString as StaticType>::static_type());
@@ -1276,20 +767,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
         let gtk_key_theme_name = gtk_key_theme_name.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-key-theme-name\0".as_ptr() as *const _, Value::from(gtk_key_theme_name).to_glib_none().0);
-        }
-    }
-
-    fn get_property_gtk_keynav_cursor_only(&self) -> bool {
-        unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-keynav-cursor-only\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_gtk_keynav_cursor_only(&self, gtk_keynav_cursor_only: bool) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-keynav-cursor-only\0".as_ptr() as *const _, Value::from(&gtk_keynav_cursor_only).to_glib_none().0);
         }
     }
 
@@ -1309,20 +786,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    fn get_property_gtk_keynav_wrap_around(&self) -> bool {
-        unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-keynav-wrap-around\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_gtk_keynav_wrap_around(&self, gtk_keynav_wrap_around: bool) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-keynav-wrap-around\0".as_ptr() as *const _, Value::from(&gtk_keynav_wrap_around).to_glib_none().0);
-        }
-    }
-
     fn get_property_gtk_label_select_on_focus(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
@@ -1337,7 +800,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_property_gtk_long_press_time(&self) -> u32 {
         unsafe {
             let mut value = Value::from_type(<u32 as StaticType>::static_type());
@@ -1346,81 +808,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn set_property_gtk_long_press_time(&self, gtk_long_press_time: u32) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-long-press-time\0".as_ptr() as *const _, Value::from(&gtk_long_press_time).to_glib_none().0);
-        }
-    }
-
-    fn get_property_gtk_menu_bar_accel(&self) -> Option<GString> {
-        unsafe {
-            let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-menu-bar-accel\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get()
-        }
-    }
-
-    fn set_property_gtk_menu_bar_accel<'a, P: Into<Option<&'a str>>>(&self, gtk_menu_bar_accel: P) {
-        let gtk_menu_bar_accel = gtk_menu_bar_accel.into();
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-menu-bar-accel\0".as_ptr() as *const _, Value::from(gtk_menu_bar_accel).to_glib_none().0);
-        }
-    }
-
-    fn get_property_gtk_menu_bar_popup_delay(&self) -> i32 {
-        unsafe {
-            let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-menu-bar-popup-delay\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_gtk_menu_bar_popup_delay(&self, gtk_menu_bar_popup_delay: i32) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-menu-bar-popup-delay\0".as_ptr() as *const _, Value::from(&gtk_menu_bar_popup_delay).to_glib_none().0);
-        }
-    }
-
-    fn get_property_gtk_menu_images(&self) -> bool {
-        unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-menu-images\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_gtk_menu_images(&self, gtk_menu_images: bool) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-menu-images\0".as_ptr() as *const _, Value::from(&gtk_menu_images).to_glib_none().0);
-        }
-    }
-
-    fn get_property_gtk_menu_popdown_delay(&self) -> i32 {
-        unsafe {
-            let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-menu-popdown-delay\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_gtk_menu_popdown_delay(&self, gtk_menu_popdown_delay: i32) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-menu-popdown-delay\0".as_ptr() as *const _, Value::from(&gtk_menu_popdown_delay).to_glib_none().0);
-        }
-    }
-
-    fn get_property_gtk_menu_popup_delay(&self) -> i32 {
-        unsafe {
-            let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-menu-popup-delay\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_gtk_menu_popup_delay(&self, gtk_menu_popup_delay: i32) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-menu-popup-delay\0".as_ptr() as *const _, Value::from(&gtk_menu_popup_delay).to_glib_none().0);
         }
     }
 
@@ -1439,7 +829,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_property_gtk_primary_button_warps_slider(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
@@ -1448,7 +837,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn set_property_gtk_primary_button_warps_slider(&self, gtk_primary_button_warps_slider: bool) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-primary-button-warps-slider\0".as_ptr() as *const _, Value::from(&gtk_primary_button_warps_slider).to_glib_none().0);
@@ -1485,7 +873,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn get_property_gtk_recent_files_enabled(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
@@ -1494,24 +881,9 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn set_property_gtk_recent_files_enabled(&self, gtk_recent_files_enabled: bool) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-recent-files-enabled\0".as_ptr() as *const _, Value::from(&gtk_recent_files_enabled).to_glib_none().0);
-        }
-    }
-
-    fn get_property_gtk_recent_files_limit(&self) -> i32 {
-        unsafe {
-            let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-recent-files-limit\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_gtk_recent_files_limit(&self, gtk_recent_files_limit: i32) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-recent-files-limit\0".as_ptr() as *const _, Value::from(&gtk_recent_files_limit).to_glib_none().0);
         }
     }
 
@@ -1526,20 +898,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
     fn set_property_gtk_recent_files_max_age(&self, gtk_recent_files_max_age: i32) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-recent-files-max-age\0".as_ptr() as *const _, Value::from(&gtk_recent_files_max_age).to_glib_none().0);
-        }
-    }
-
-    fn get_property_gtk_scrolled_window_placement(&self) -> CornerType {
-        unsafe {
-            let mut value = Value::from_type(<CornerType as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-scrolled-window-placement\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_gtk_scrolled_window_placement(&self, gtk_scrolled_window_placement: CornerType) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-scrolled-window-placement\0".as_ptr() as *const _, Value::from(&gtk_scrolled_window_placement).to_glib_none().0);
         }
     }
 
@@ -1582,34 +940,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
     fn set_property_gtk_shell_shows_menubar(&self, gtk_shell_shows_menubar: bool) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-shell-shows-menubar\0".as_ptr() as *const _, Value::from(&gtk_shell_shows_menubar).to_glib_none().0);
-        }
-    }
-
-    fn get_property_gtk_show_input_method_menu(&self) -> bool {
-        unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-show-input-method-menu\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_gtk_show_input_method_menu(&self, gtk_show_input_method_menu: bool) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-show-input-method-menu\0".as_ptr() as *const _, Value::from(&gtk_show_input_method_menu).to_glib_none().0);
-        }
-    }
-
-    fn get_property_gtk_show_unicode_menu(&self) -> bool {
-        unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-show-unicode-menu\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_gtk_show_unicode_menu(&self, gtk_show_unicode_menu: bool) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-show-unicode-menu\0".as_ptr() as *const _, Value::from(&gtk_show_unicode_menu).to_glib_none().0);
         }
     }
 
@@ -1657,49 +987,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    fn get_property_gtk_timeout_expand(&self) -> i32 {
-        unsafe {
-            let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-timeout-expand\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_gtk_timeout_expand(&self, gtk_timeout_expand: i32) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-timeout-expand\0".as_ptr() as *const _, Value::from(&gtk_timeout_expand).to_glib_none().0);
-        }
-    }
-
-    fn get_property_gtk_timeout_initial(&self) -> i32 {
-        unsafe {
-            let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-timeout-initial\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_gtk_timeout_initial(&self, gtk_timeout_initial: i32) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-timeout-initial\0".as_ptr() as *const _, Value::from(&gtk_timeout_initial).to_glib_none().0);
-        }
-    }
-
-    fn get_property_gtk_timeout_repeat(&self) -> i32 {
-        unsafe {
-            let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-timeout-repeat\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_gtk_timeout_repeat(&self, gtk_timeout_repeat: i32) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-timeout-repeat\0".as_ptr() as *const _, Value::from(&gtk_timeout_repeat).to_glib_none().0);
-        }
-    }
-
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_property_gtk_titlebar_double_click(&self) -> Option<GString> {
         unsafe {
             let mut value = Value::from_type(<GString as StaticType>::static_type());
@@ -1708,7 +995,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn set_property_gtk_titlebar_double_click<'a, P: Into<Option<&'a str>>>(&self, gtk_titlebar_double_click: P) {
         let gtk_titlebar_double_click = gtk_titlebar_double_click.into();
         unsafe {
@@ -1716,7 +1002,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_property_gtk_titlebar_middle_click(&self) -> Option<GString> {
         unsafe {
             let mut value = Value::from_type(<GString as StaticType>::static_type());
@@ -1725,7 +1010,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn set_property_gtk_titlebar_middle_click<'a, P: Into<Option<&'a str>>>(&self, gtk_titlebar_middle_click: P) {
         let gtk_titlebar_middle_click = gtk_titlebar_middle_click.into();
         unsafe {
@@ -1733,7 +1017,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_property_gtk_titlebar_right_click(&self) -> Option<GString> {
         unsafe {
             let mut value = Value::from_type(<GString as StaticType>::static_type());
@@ -1742,95 +1025,10 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn set_property_gtk_titlebar_right_click<'a, P: Into<Option<&'a str>>>(&self, gtk_titlebar_right_click: P) {
         let gtk_titlebar_right_click = gtk_titlebar_right_click.into();
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-titlebar-right-click\0".as_ptr() as *const _, Value::from(gtk_titlebar_right_click).to_glib_none().0);
-        }
-    }
-
-    fn get_property_gtk_toolbar_icon_size(&self) -> IconSize {
-        unsafe {
-            let mut value = Value::from_type(<IconSize as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-toolbar-icon-size\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_gtk_toolbar_icon_size(&self, gtk_toolbar_icon_size: IconSize) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-toolbar-icon-size\0".as_ptr() as *const _, Value::from(&gtk_toolbar_icon_size).to_glib_none().0);
-        }
-    }
-
-    fn get_property_gtk_toolbar_style(&self) -> ToolbarStyle {
-        unsafe {
-            let mut value = Value::from_type(<ToolbarStyle as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-toolbar-style\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_gtk_toolbar_style(&self, gtk_toolbar_style: ToolbarStyle) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-toolbar-style\0".as_ptr() as *const _, Value::from(&gtk_toolbar_style).to_glib_none().0);
-        }
-    }
-
-    fn get_property_gtk_tooltip_browse_mode_timeout(&self) -> i32 {
-        unsafe {
-            let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-tooltip-browse-mode-timeout\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_gtk_tooltip_browse_mode_timeout(&self, gtk_tooltip_browse_mode_timeout: i32) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-tooltip-browse-mode-timeout\0".as_ptr() as *const _, Value::from(&gtk_tooltip_browse_mode_timeout).to_glib_none().0);
-        }
-    }
-
-    fn get_property_gtk_tooltip_browse_timeout(&self) -> i32 {
-        unsafe {
-            let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-tooltip-browse-timeout\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_gtk_tooltip_browse_timeout(&self, gtk_tooltip_browse_timeout: i32) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-tooltip-browse-timeout\0".as_ptr() as *const _, Value::from(&gtk_tooltip_browse_timeout).to_glib_none().0);
-        }
-    }
-
-    fn get_property_gtk_tooltip_timeout(&self) -> i32 {
-        unsafe {
-            let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-tooltip-timeout\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_gtk_tooltip_timeout(&self, gtk_tooltip_timeout: i32) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-tooltip-timeout\0".as_ptr() as *const _, Value::from(&gtk_tooltip_timeout).to_glib_none().0);
-        }
-    }
-
-    fn get_property_gtk_visible_focus(&self) -> PolicyType {
-        unsafe {
-            let mut value = Value::from_type(<PolicyType as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-visible-focus\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_gtk_visible_focus(&self, gtk_visible_focus: PolicyType) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-visible-focus\0".as_ptr() as *const _, Value::from(&gtk_visible_focus).to_glib_none().0);
         }
     }
 
@@ -1906,14 +1104,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    fn connect_property_color_hash_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::color-hash\0".as_ptr() as *const _,
-                Some(transmute(notify_color_hash_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
     fn connect_property_gtk_alternative_button_order_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1935,46 +1125,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-application-prefer-dark-theme\0".as_ptr() as *const _,
                 Some(transmute(notify_gtk_application_prefer_dark_theme_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_gtk_auto_mnemonics_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::gtk-auto-mnemonics\0".as_ptr() as *const _,
-                Some(transmute(notify_gtk_auto_mnemonics_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_gtk_button_images_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::gtk-button-images\0".as_ptr() as *const _,
-                Some(transmute(notify_gtk_button_images_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_gtk_can_change_accels_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::gtk-can-change-accels\0".as_ptr() as *const _,
-                Some(transmute(notify_gtk_can_change_accels_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_gtk_color_palette_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::gtk-color-palette\0".as_ptr() as *const _,
-                Some(transmute(notify_gtk_color_palette_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_gtk_color_scheme_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::gtk-color-scheme\0".as_ptr() as *const _,
-                Some(transmute(notify_gtk_color_scheme_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -2018,7 +1168,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_gtk_decoration_layout_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2027,7 +1176,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_gtk_dialogs_use_header_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2092,27 +1240,11 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    fn connect_property_gtk_enable_mnemonics_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::gtk-enable-mnemonics\0".as_ptr() as *const _,
-                Some(transmute(notify_gtk_enable_mnemonics_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
     fn connect_property_gtk_enable_primary_paste_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-enable-primary-paste\0".as_ptr() as *const _,
                 Some(transmute(notify_gtk_enable_primary_paste_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_gtk_enable_tooltips_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::gtk-enable-tooltips\0".as_ptr() as *const _,
-                Some(transmute(notify_gtk_enable_tooltips_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -2140,22 +1272,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    fn connect_property_gtk_fallback_icon_theme_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::gtk-fallback-icon-theme\0".as_ptr() as *const _,
-                Some(transmute(notify_gtk_fallback_icon_theme_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_gtk_file_chooser_backend_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::gtk-file-chooser-backend\0".as_ptr() as *const _,
-                Some(transmute(notify_gtk_file_chooser_backend_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
     fn connect_property_gtk_font_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2169,14 +1285,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-fontconfig-timestamp\0".as_ptr() as *const _,
                 Some(transmute(notify_gtk_fontconfig_timestamp_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_gtk_icon_sizes_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::gtk-icon-sizes\0".as_ptr() as *const _,
-                Some(transmute(notify_gtk_icon_sizes_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -2196,35 +1304,11 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    fn connect_property_gtk_im_preedit_style_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::gtk-im-preedit-style\0".as_ptr() as *const _,
-                Some(transmute(notify_gtk_im_preedit_style_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_gtk_im_status_style_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::gtk-im-status-style\0".as_ptr() as *const _,
-                Some(transmute(notify_gtk_im_status_style_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
     fn connect_property_gtk_key_theme_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-key-theme-name\0".as_ptr() as *const _,
                 Some(transmute(notify_gtk_key_theme_name_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_gtk_keynav_cursor_only_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::gtk-keynav-cursor-only\0".as_ptr() as *const _,
-                Some(transmute(notify_gtk_keynav_cursor_only_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -2237,14 +1321,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    fn connect_property_gtk_keynav_wrap_around_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::gtk-keynav-wrap-around\0".as_ptr() as *const _,
-                Some(transmute(notify_gtk_keynav_wrap_around_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
     fn connect_property_gtk_label_select_on_focus_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2253,52 +1329,11 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_property_gtk_long_press_time_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-long-press-time\0".as_ptr() as *const _,
                 Some(transmute(notify_gtk_long_press_time_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_gtk_menu_bar_accel_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::gtk-menu-bar-accel\0".as_ptr() as *const _,
-                Some(transmute(notify_gtk_menu_bar_accel_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_gtk_menu_bar_popup_delay_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::gtk-menu-bar-popup-delay\0".as_ptr() as *const _,
-                Some(transmute(notify_gtk_menu_bar_popup_delay_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_gtk_menu_images_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::gtk-menu-images\0".as_ptr() as *const _,
-                Some(transmute(notify_gtk_menu_images_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_gtk_menu_popdown_delay_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::gtk-menu-popdown-delay\0".as_ptr() as *const _,
-                Some(transmute(notify_gtk_menu_popdown_delay_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_gtk_menu_popup_delay_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::gtk-menu-popup-delay\0".as_ptr() as *const _,
-                Some(transmute(notify_gtk_menu_popup_delay_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -2310,7 +1345,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_gtk_primary_button_warps_slider_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2335,7 +1369,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn connect_property_gtk_recent_files_enabled_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2344,27 +1377,11 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    fn connect_property_gtk_recent_files_limit_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::gtk-recent-files-limit\0".as_ptr() as *const _,
-                Some(transmute(notify_gtk_recent_files_limit_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
     fn connect_property_gtk_recent_files_max_age_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-recent-files-max-age\0".as_ptr() as *const _,
                 Some(transmute(notify_gtk_recent_files_max_age_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_gtk_scrolled_window_placement_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::gtk-scrolled-window-placement\0".as_ptr() as *const _,
-                Some(transmute(notify_gtk_scrolled_window_placement_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -2392,22 +1409,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    fn connect_property_gtk_show_input_method_menu_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::gtk-show-input-method-menu\0".as_ptr() as *const _,
-                Some(transmute(notify_gtk_show_input_method_menu_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_gtk_show_unicode_menu_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::gtk-show-unicode-menu\0".as_ptr() as *const _,
-                Some(transmute(notify_gtk_show_unicode_menu_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
     fn connect_property_gtk_sound_theme_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2432,31 +1433,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    fn connect_property_gtk_timeout_expand_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::gtk-timeout-expand\0".as_ptr() as *const _,
-                Some(transmute(notify_gtk_timeout_expand_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_gtk_timeout_initial_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::gtk-timeout-initial\0".as_ptr() as *const _,
-                Some(transmute(notify_gtk_timeout_initial_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_gtk_timeout_repeat_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::gtk-timeout-repeat\0".as_ptr() as *const _,
-                Some(transmute(notify_gtk_timeout_repeat_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_property_gtk_titlebar_double_click_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2465,7 +1441,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_property_gtk_titlebar_middle_click_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -2474,60 +1449,11 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_property_gtk_titlebar_right_click_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::gtk-titlebar-right-click\0".as_ptr() as *const _,
                 Some(transmute(notify_gtk_titlebar_right_click_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_gtk_toolbar_icon_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::gtk-toolbar-icon-size\0".as_ptr() as *const _,
-                Some(transmute(notify_gtk_toolbar_icon_size_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_gtk_toolbar_style_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::gtk-toolbar-style\0".as_ptr() as *const _,
-                Some(transmute(notify_gtk_toolbar_style_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_gtk_tooltip_browse_mode_timeout_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::gtk-tooltip-browse-mode-timeout\0".as_ptr() as *const _,
-                Some(transmute(notify_gtk_tooltip_browse_mode_timeout_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_gtk_tooltip_browse_timeout_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::gtk-tooltip-browse-timeout\0".as_ptr() as *const _,
-                Some(transmute(notify_gtk_tooltip_browse_timeout_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_gtk_tooltip_timeout_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::gtk-tooltip-timeout\0".as_ptr() as *const _,
-                Some(transmute(notify_gtk_tooltip_timeout_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_gtk_visible_focus_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::gtk-visible-focus\0".as_ptr() as *const _,
-                Some(transmute(notify_gtk_visible_focus_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -2572,12 +1498,6 @@ impl<O: IsA<Settings>> SettingsExt for O {
     }
 }
 
-unsafe extern "C" fn notify_color_hash_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Settings> {
-    let f: &F = transmute(f);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
 unsafe extern "C" fn notify_gtk_alternative_button_order_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
     let f: &F = transmute(f);
@@ -2591,36 +1511,6 @@ where P: IsA<Settings> {
 }
 
 unsafe extern "C" fn notify_gtk_application_prefer_dark_theme_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Settings> {
-    let f: &F = transmute(f);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_gtk_auto_mnemonics_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Settings> {
-    let f: &F = transmute(f);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_gtk_button_images_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Settings> {
-    let f: &F = transmute(f);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_gtk_can_change_accels_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Settings> {
-    let f: &F = transmute(f);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_gtk_color_palette_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Settings> {
-    let f: &F = transmute(f);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_gtk_color_scheme_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
     let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
@@ -2656,14 +1546,12 @@ where P: IsA<Settings> {
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 unsafe extern "C" fn notify_gtk_decoration_layout_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
     let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 unsafe extern "C" fn notify_gtk_dialogs_use_header_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
     let f: &F = transmute(f);
@@ -2712,19 +1600,7 @@ where P: IsA<Settings> {
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_enable_mnemonics_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Settings> {
-    let f: &F = transmute(f);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
 unsafe extern "C" fn notify_gtk_enable_primary_paste_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Settings> {
-    let f: &F = transmute(f);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_gtk_enable_tooltips_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
     let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
@@ -2748,18 +1624,6 @@ where P: IsA<Settings> {
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_fallback_icon_theme_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Settings> {
-    let f: &F = transmute(f);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_gtk_file_chooser_backend_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Settings> {
-    let f: &F = transmute(f);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
 unsafe extern "C" fn notify_gtk_font_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
     let f: &F = transmute(f);
@@ -2767,12 +1631,6 @@ where P: IsA<Settings> {
 }
 
 unsafe extern "C" fn notify_gtk_fontconfig_timestamp_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Settings> {
-    let f: &F = transmute(f);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_gtk_icon_sizes_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
     let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
@@ -2790,25 +1648,7 @@ where P: IsA<Settings> {
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_im_preedit_style_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Settings> {
-    let f: &F = transmute(f);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_gtk_im_status_style_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Settings> {
-    let f: &F = transmute(f);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
 unsafe extern "C" fn notify_gtk_key_theme_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Settings> {
-    let f: &F = transmute(f);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_gtk_keynav_cursor_only_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
     let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
@@ -2821,50 +1661,13 @@ where P: IsA<Settings> {
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_keynav_wrap_around_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Settings> {
-    let f: &F = transmute(f);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
 unsafe extern "C" fn notify_gtk_label_select_on_focus_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
     let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 unsafe extern "C" fn notify_gtk_long_press_time_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Settings> {
-    let f: &F = transmute(f);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_gtk_menu_bar_accel_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Settings> {
-    let f: &F = transmute(f);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_gtk_menu_bar_popup_delay_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Settings> {
-    let f: &F = transmute(f);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_gtk_menu_images_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Settings> {
-    let f: &F = transmute(f);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_gtk_menu_popdown_delay_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Settings> {
-    let f: &F = transmute(f);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_gtk_menu_popup_delay_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
     let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
@@ -2876,7 +1679,6 @@ where P: IsA<Settings> {
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 unsafe extern "C" fn notify_gtk_primary_button_warps_slider_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
     let f: &F = transmute(f);
@@ -2895,26 +1697,13 @@ where P: IsA<Settings> {
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_8", feature = "dox"))]
 unsafe extern "C" fn notify_gtk_recent_files_enabled_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
     let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_recent_files_limit_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Settings> {
-    let f: &F = transmute(f);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
 unsafe extern "C" fn notify_gtk_recent_files_max_age_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Settings> {
-    let f: &F = transmute(f);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_gtk_scrolled_window_placement_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
     let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
@@ -2938,18 +1727,6 @@ where P: IsA<Settings> {
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_show_input_method_menu_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Settings> {
-    let f: &F = transmute(f);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_gtk_show_unicode_menu_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Settings> {
-    let f: &F = transmute(f);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
 unsafe extern "C" fn notify_gtk_sound_theme_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
     let f: &F = transmute(f);
@@ -2968,76 +1745,19 @@ where P: IsA<Settings> {
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gtk_timeout_expand_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Settings> {
-    let f: &F = transmute(f);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_gtk_timeout_initial_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Settings> {
-    let f: &F = transmute(f);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_gtk_timeout_repeat_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Settings> {
-    let f: &F = transmute(f);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 unsafe extern "C" fn notify_gtk_titlebar_double_click_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
     let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 unsafe extern "C" fn notify_gtk_titlebar_middle_click_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
     let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 unsafe extern "C" fn notify_gtk_titlebar_right_click_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Settings> {
-    let f: &F = transmute(f);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_gtk_toolbar_icon_size_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Settings> {
-    let f: &F = transmute(f);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_gtk_toolbar_style_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Settings> {
-    let f: &F = transmute(f);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_gtk_tooltip_browse_mode_timeout_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Settings> {
-    let f: &F = transmute(f);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_gtk_tooltip_browse_timeout_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Settings> {
-    let f: &F = transmute(f);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_gtk_tooltip_timeout_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Settings> {
-    let f: &F = transmute(f);
-    f(&Settings::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_gtk_visible_focus_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
     let f: &F = transmute(f);
     f(&Settings::from_glib_borrow(this).unsafe_cast())

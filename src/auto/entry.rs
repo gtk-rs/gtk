@@ -11,9 +11,7 @@ use EntryBuffer;
 use EntryCompletion;
 use EntryIconPosition;
 use ImageType;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 use InputHints;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 use InputPurpose;
 use MovementStep;
 use ShadowType;
@@ -80,7 +78,6 @@ pub trait EntryExt: 'static {
 
     fn get_alignment(&self) -> f32;
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_attributes(&self) -> Option<pango::AttrList>;
 
     fn get_buffer(&self) -> EntryBuffer;
@@ -107,19 +104,14 @@ pub trait EntryExt: 'static {
 
     fn get_icon_sensitive(&self, icon_pos: EntryIconPosition) -> bool;
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_icon_stock(&self, icon_pos: EntryIconPosition) -> Option<GString>;
-
     fn get_icon_storage_type(&self, icon_pos: EntryIconPosition) -> ImageType;
 
     fn get_icon_tooltip_markup(&self, icon_pos: EntryIconPosition) -> Option<GString>;
 
     fn get_icon_tooltip_text(&self, icon_pos: EntryIconPosition) -> Option<GString>;
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_input_hints(&self) -> InputHints;
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_input_purpose(&self) -> InputPurpose;
 
     fn get_invisible_char(&self) -> Option<char>;
@@ -130,7 +122,6 @@ pub trait EntryExt: 'static {
 
     fn get_max_length(&self) -> i32;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_max_width_chars(&self) -> i32;
 
     fn get_overwrite_mode(&self) -> bool;
@@ -141,7 +132,6 @@ pub trait EntryExt: 'static {
 
     fn get_progress_pulse_step(&self) -> f64;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_tabs(&self) -> Option<pango::TabArray>;
 
     fn get_text(&self) -> Option<GString>;
@@ -169,7 +159,6 @@ pub trait EntryExt: 'static {
 
     fn set_alignment(&self, xalign: f32);
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn set_attributes(&self, attrs: &pango::AttrList);
 
     fn set_buffer<P: IsA<EntryBuffer>>(&self, buffer: &P);
@@ -190,26 +179,20 @@ pub trait EntryExt: 'static {
 
     fn set_icon_from_pixbuf<'a, P: Into<Option<&'a gdk_pixbuf::Pixbuf>>>(&self, icon_pos: EntryIconPosition, pixbuf: P);
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_icon_from_stock<'a, P: Into<Option<&'a str>>>(&self, icon_pos: EntryIconPosition, stock_id: P);
-
     fn set_icon_sensitive(&self, icon_pos: EntryIconPosition, sensitive: bool);
 
     fn set_icon_tooltip_markup<'a, P: Into<Option<&'a str>>>(&self, icon_pos: EntryIconPosition, tooltip: P);
 
     fn set_icon_tooltip_text<'a, P: Into<Option<&'a str>>>(&self, icon_pos: EntryIconPosition, tooltip: P);
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn set_input_hints(&self, hints: InputHints);
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn set_input_purpose(&self, purpose: InputPurpose);
 
     fn set_invisible_char<P: Into<Option<char>>>(&self, ch: P);
 
     fn set_max_length(&self, max: i32);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_max_width_chars(&self, n_chars: i32);
 
     fn set_overwrite_mode(&self, overwrite: bool);
@@ -220,7 +203,6 @@ pub trait EntryExt: 'static {
 
     fn set_progress_pulse_step(&self, fraction: f64);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_tabs(&self, tabs: &mut pango::TabArray);
 
     fn set_text(&self, text: &str);
@@ -251,10 +233,8 @@ pub trait EntryExt: 'static {
 
     fn set_property_invisible_char_set(&self, invisible_char_set: bool);
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn get_property_populate_all(&self) -> bool;
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn set_property_populate_all(&self, populate_all: bool);
 
     fn get_property_primary_icon_activatable(&self) -> bool;
@@ -276,12 +256,6 @@ pub trait EntryExt: 'static {
     fn get_property_primary_icon_sensitive(&self) -> bool;
 
     fn set_property_primary_icon_sensitive(&self, primary_icon_sensitive: bool);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_primary_icon_stock(&self) -> Option<GString>;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_primary_icon_stock<'a, P: Into<Option<&'a str>>>(&self, primary_icon_stock: P);
 
     fn get_property_primary_icon_storage_type(&self) -> ImageType;
 
@@ -314,12 +288,6 @@ pub trait EntryExt: 'static {
     fn get_property_secondary_icon_sensitive(&self) -> bool;
 
     fn set_property_secondary_icon_sensitive(&self, secondary_icon_sensitive: bool);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_secondary_icon_stock(&self) -> Option<GString>;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_secondary_icon_stock<'a, P: Into<Option<&'a str>>>(&self, secondary_icon_stock: P);
 
     fn get_property_secondary_icon_storage_type(&self) -> ImageType;
 
@@ -405,7 +373,6 @@ pub trait EntryExt: 'static {
 
     fn connect_property_activates_default_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_attributes_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_buffer_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -424,10 +391,8 @@ pub trait EntryExt: 'static {
 
     fn connect_property_im_module_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_input_hints_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_input_purpose_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_invisible_char_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -436,14 +401,12 @@ pub trait EntryExt: 'static {
 
     fn connect_property_max_length_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_max_width_chars_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_overwrite_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_placeholder_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn connect_property_populate_all_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_primary_icon_activatable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -455,9 +418,6 @@ pub trait EntryExt: 'static {
     fn connect_property_primary_icon_pixbuf_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_primary_icon_sensitive_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_primary_icon_stock_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_primary_icon_storage_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -480,9 +440,6 @@ pub trait EntryExt: 'static {
     fn connect_property_secondary_icon_pixbuf_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_secondary_icon_sensitive_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_secondary_icon_stock_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_secondary_icon_storage_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -523,7 +480,6 @@ impl<O: IsA<Entry>> EntryExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_attributes(&self) -> Option<pango::AttrList> {
         unsafe {
             from_glib_none(ffi::gtk_entry_get_attributes(self.as_ref().to_glib_none().0))
@@ -604,12 +560,6 @@ impl<O: IsA<Entry>> EntryExt for O {
         }
     }
 
-    fn get_icon_stock(&self, icon_pos: EntryIconPosition) -> Option<GString> {
-        unsafe {
-            from_glib_none(ffi::gtk_entry_get_icon_stock(self.as_ref().to_glib_none().0, icon_pos.to_glib()))
-        }
-    }
-
     fn get_icon_storage_type(&self, icon_pos: EntryIconPosition) -> ImageType {
         unsafe {
             from_glib(ffi::gtk_entry_get_icon_storage_type(self.as_ref().to_glib_none().0, icon_pos.to_glib()))
@@ -628,14 +578,12 @@ impl<O: IsA<Entry>> EntryExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_input_hints(&self) -> InputHints {
         unsafe {
             from_glib(ffi::gtk_entry_get_input_hints(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_input_purpose(&self) -> InputPurpose {
         unsafe {
             from_glib(ffi::gtk_entry_get_input_purpose(self.as_ref().to_glib_none().0))
@@ -669,7 +617,6 @@ impl<O: IsA<Entry>> EntryExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_max_width_chars(&self) -> i32 {
         unsafe {
             ffi::gtk_entry_get_max_width_chars(self.as_ref().to_glib_none().0)
@@ -700,7 +647,6 @@ impl<O: IsA<Entry>> EntryExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_tabs(&self) -> Option<pango::TabArray> {
         unsafe {
             from_glib_none(ffi::gtk_entry_get_tabs(self.as_ref().to_glib_none().0))
@@ -782,7 +728,6 @@ impl<O: IsA<Entry>> EntryExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn set_attributes(&self, attrs: &pango::AttrList) {
         unsafe {
             ffi::gtk_entry_set_attributes(self.as_ref().to_glib_none().0, attrs.to_glib_none().0);
@@ -848,13 +793,6 @@ impl<O: IsA<Entry>> EntryExt for O {
         }
     }
 
-    fn set_icon_from_stock<'a, P: Into<Option<&'a str>>>(&self, icon_pos: EntryIconPosition, stock_id: P) {
-        let stock_id = stock_id.into();
-        unsafe {
-            ffi::gtk_entry_set_icon_from_stock(self.as_ref().to_glib_none().0, icon_pos.to_glib(), stock_id.to_glib_none().0);
-        }
-    }
-
     fn set_icon_sensitive(&self, icon_pos: EntryIconPosition, sensitive: bool) {
         unsafe {
             ffi::gtk_entry_set_icon_sensitive(self.as_ref().to_glib_none().0, icon_pos.to_glib(), sensitive.to_glib());
@@ -875,14 +813,12 @@ impl<O: IsA<Entry>> EntryExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn set_input_hints(&self, hints: InputHints) {
         unsafe {
             ffi::gtk_entry_set_input_hints(self.as_ref().to_glib_none().0, hints.to_glib());
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn set_input_purpose(&self, purpose: InputPurpose) {
         unsafe {
             ffi::gtk_entry_set_input_purpose(self.as_ref().to_glib_none().0, purpose.to_glib());
@@ -901,7 +837,6 @@ impl<O: IsA<Entry>> EntryExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_max_width_chars(&self, n_chars: i32) {
         unsafe {
             ffi::gtk_entry_set_max_width_chars(self.as_ref().to_glib_none().0, n_chars);
@@ -933,7 +868,6 @@ impl<O: IsA<Entry>> EntryExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_tabs(&self, tabs: &mut pango::TabArray) {
         unsafe {
             ffi::gtk_entry_set_tabs(self.as_ref().to_glib_none().0, tabs.to_glib_none_mut().0);
@@ -1035,7 +969,6 @@ impl<O: IsA<Entry>> EntryExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn get_property_populate_all(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
@@ -1044,7 +977,6 @@ impl<O: IsA<Entry>> EntryExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn set_property_populate_all(&self, populate_all: bool) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"populate-all\0".as_ptr() as *const _, Value::from(&populate_all).to_glib_none().0);
@@ -1119,21 +1051,6 @@ impl<O: IsA<Entry>> EntryExt for O {
     fn set_property_primary_icon_sensitive(&self, primary_icon_sensitive: bool) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"primary-icon-sensitive\0".as_ptr() as *const _, Value::from(&primary_icon_sensitive).to_glib_none().0);
-        }
-    }
-
-    fn get_property_primary_icon_stock(&self) -> Option<GString> {
-        unsafe {
-            let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"primary-icon-stock\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get()
-        }
-    }
-
-    fn set_property_primary_icon_stock<'a, P: Into<Option<&'a str>>>(&self, primary_icon_stock: P) {
-        let primary_icon_stock = primary_icon_stock.into();
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"primary-icon-stock\0".as_ptr() as *const _, Value::from(primary_icon_stock).to_glib_none().0);
         }
     }
 
@@ -1251,21 +1168,6 @@ impl<O: IsA<Entry>> EntryExt for O {
     fn set_property_secondary_icon_sensitive(&self, secondary_icon_sensitive: bool) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"secondary-icon-sensitive\0".as_ptr() as *const _, Value::from(&secondary_icon_sensitive).to_glib_none().0);
-        }
-    }
-
-    fn get_property_secondary_icon_stock(&self) -> Option<GString> {
-        unsafe {
-            let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"secondary-icon-stock\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get()
-        }
-    }
-
-    fn set_property_secondary_icon_stock<'a, P: Into<Option<&'a str>>>(&self, secondary_icon_stock: P) {
-        let secondary_icon_stock = secondary_icon_stock.into();
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"secondary-icon-stock\0".as_ptr() as *const _, Value::from(secondary_icon_stock).to_glib_none().0);
         }
     }
 
@@ -1537,7 +1439,6 @@ impl<O: IsA<Entry>> EntryExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_attributes_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1610,7 +1511,6 @@ impl<O: IsA<Entry>> EntryExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_input_hints_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1619,7 +1519,6 @@ impl<O: IsA<Entry>> EntryExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_input_purpose_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1652,7 +1551,6 @@ impl<O: IsA<Entry>> EntryExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_max_width_chars_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1677,7 +1575,6 @@ impl<O: IsA<Entry>> EntryExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn connect_property_populate_all_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1723,14 +1620,6 @@ impl<O: IsA<Entry>> EntryExt for O {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::primary-icon-sensitive\0".as_ptr() as *const _,
                 Some(transmute(notify_primary_icon_sensitive_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_primary_icon_stock_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::primary-icon-stock\0".as_ptr() as *const _,
-                Some(transmute(notify_primary_icon_stock_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -1819,14 +1708,6 @@ impl<O: IsA<Entry>> EntryExt for O {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::secondary-icon-sensitive\0".as_ptr() as *const _,
                 Some(transmute(notify_secondary_icon_sensitive_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_secondary_icon_stock_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::secondary-icon-stock\0".as_ptr() as *const _,
-                Some(transmute(notify_secondary_icon_stock_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -2018,7 +1899,6 @@ where P: IsA<Entry> {
     f(&Entry::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 unsafe extern "C" fn notify_attributes_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Entry> {
     let f: &F = transmute(f);
@@ -2073,14 +1953,12 @@ where P: IsA<Entry> {
     f(&Entry::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 unsafe extern "C" fn notify_input_hints_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Entry> {
     let f: &F = transmute(f);
     f(&Entry::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 unsafe extern "C" fn notify_input_purpose_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Entry> {
     let f: &F = transmute(f);
@@ -2105,7 +1983,6 @@ where P: IsA<Entry> {
     f(&Entry::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 unsafe extern "C" fn notify_max_width_chars_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Entry> {
     let f: &F = transmute(f);
@@ -2124,7 +2001,6 @@ where P: IsA<Entry> {
     f(&Entry::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_8", feature = "dox"))]
 unsafe extern "C" fn notify_populate_all_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Entry> {
     let f: &F = transmute(f);
@@ -2156,12 +2032,6 @@ where P: IsA<Entry> {
 }
 
 unsafe extern "C" fn notify_primary_icon_sensitive_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_primary_icon_stock_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Entry> {
     let f: &F = transmute(f);
     f(&Entry::from_glib_borrow(this).unsafe_cast())
@@ -2228,12 +2098,6 @@ where P: IsA<Entry> {
 }
 
 unsafe extern "C" fn notify_secondary_icon_sensitive_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Entry> {
-    let f: &F = transmute(f);
-    f(&Entry::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_secondary_icon_stock_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEntry, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Entry> {
     let f: &F = transmute(f);
     f(&Entry::from_glib_borrow(this).unsafe_cast())

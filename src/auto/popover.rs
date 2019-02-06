@@ -7,27 +7,19 @@ use Buildable;
 use Container;
 #[cfg(any(feature = "v3_20", feature = "dox"))]
 use PopoverConstraint;
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 use PositionType;
 use Widget;
 use ffi;
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 use gdk;
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 use gio;
 use glib::object::Cast;
 use glib::object::IsA;
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 use glib::signal::SignalHandlerId;
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 use glib::signal::connect_raw;
 use glib::translate::*;
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 use glib_ffi;
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 use std::boxed::Box as Box_;
 use std::fmt;
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 use std::mem::transmute;
 
 glib_wrapper! {
@@ -39,7 +31,6 @@ glib_wrapper! {
 }
 
 impl Popover {
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     pub fn new<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(relative_to: Q) -> Popover {
         assert_initialized_main_thread!();
         let relative_to = relative_to.into();
@@ -48,7 +39,6 @@ impl Popover {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     pub fn new_from_model<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>, R: IsA<gio::MenuModel>>(relative_to: Q, model: &R) -> Popover {
         assert_initialized_main_thread!();
         let relative_to = relative_to.into();
@@ -61,7 +51,6 @@ impl Popover {
 pub const NONE_POPOVER: Option<&Popover> = None;
 
 pub trait PopoverExt: 'static {
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn bind_model<'a, 'b, P: IsA<gio::MenuModel> + 'a, Q: Into<Option<&'a P>>, R: Into<Option<&'b str>>>(&self, model: Q, action_namespace: R);
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
@@ -70,16 +59,12 @@ pub trait PopoverExt: 'static {
     #[cfg(any(feature = "v3_18", feature = "dox"))]
     fn get_default_widget(&self) -> Option<Widget>;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_modal(&self) -> bool;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_pointing_to(&self) -> Option<gdk::Rectangle>;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_position(&self) -> PositionType;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_relative_to(&self) -> Option<Widget>;
 
     #[cfg_attr(feature = "v3_22", deprecated)]
@@ -98,38 +83,29 @@ pub trait PopoverExt: 'static {
     #[cfg(any(feature = "v3_18", feature = "dox"))]
     fn set_default_widget<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, widget: Q);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_modal(&self, modal: bool);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_pointing_to(&self, rect: &gdk::Rectangle);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_position(&self, position: PositionType);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_relative_to<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, relative_to: Q);
 
     #[cfg_attr(feature = "v3_22", deprecated)]
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn set_transitions_enabled(&self, transitions_enabled: bool);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_closed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn connect_property_constrain_to_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_modal_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_pointing_to_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_position_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_relative_to_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[cfg_attr(feature = "v3_22", deprecated)]
@@ -138,7 +114,6 @@ pub trait PopoverExt: 'static {
 }
 
 impl<O: IsA<Popover>> PopoverExt for O {
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn bind_model<'a, 'b, P: IsA<gio::MenuModel> + 'a, Q: Into<Option<&'a P>>, R: Into<Option<&'b str>>>(&self, model: Q, action_namespace: R) {
         let model = model.into();
         let action_namespace = action_namespace.into();
@@ -161,14 +136,12 @@ impl<O: IsA<Popover>> PopoverExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_modal(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_popover_get_modal(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_pointing_to(&self) -> Option<gdk::Rectangle> {
         unsafe {
             let mut rect = gdk::Rectangle::uninitialized();
@@ -177,14 +150,12 @@ impl<O: IsA<Popover>> PopoverExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_position(&self) -> PositionType {
         unsafe {
             from_glib(ffi::gtk_popover_get_position(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_relative_to(&self) -> Option<Widget> {
         unsafe {
             from_glib_none(ffi::gtk_popover_get_relative_to(self.as_ref().to_glib_none().0))
@@ -227,28 +198,24 @@ impl<O: IsA<Popover>> PopoverExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_modal(&self, modal: bool) {
         unsafe {
             ffi::gtk_popover_set_modal(self.as_ref().to_glib_none().0, modal.to_glib());
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_pointing_to(&self, rect: &gdk::Rectangle) {
         unsafe {
             ffi::gtk_popover_set_pointing_to(self.as_ref().to_glib_none().0, rect.to_glib_none().0);
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_position(&self, position: PositionType) {
         unsafe {
             ffi::gtk_popover_set_position(self.as_ref().to_glib_none().0, position.to_glib());
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_relative_to<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, relative_to: Q) {
         let relative_to = relative_to.into();
         unsafe {
@@ -263,7 +230,6 @@ impl<O: IsA<Popover>> PopoverExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_closed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -281,7 +247,6 @@ impl<O: IsA<Popover>> PopoverExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_modal_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -290,7 +255,6 @@ impl<O: IsA<Popover>> PopoverExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_pointing_to_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -299,7 +263,6 @@ impl<O: IsA<Popover>> PopoverExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_position_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -308,7 +271,6 @@ impl<O: IsA<Popover>> PopoverExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_relative_to_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -327,7 +289,6 @@ impl<O: IsA<Popover>> PopoverExt for O {
     }
 }
 
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 unsafe extern "C" fn closed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPopover, f: glib_ffi::gpointer)
 where P: IsA<Popover> {
     let f: &F = transmute(f);
@@ -341,28 +302,24 @@ where P: IsA<Popover> {
     f(&Popover::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 unsafe extern "C" fn notify_modal_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPopover, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Popover> {
     let f: &F = transmute(f);
     f(&Popover::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 unsafe extern "C" fn notify_pointing_to_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPopover, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Popover> {
     let f: &F = transmute(f);
     f(&Popover::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 unsafe extern "C" fn notify_position_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPopover, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Popover> {
     let f: &F = transmute(f);
     f(&Popover::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 unsafe extern "C" fn notify_relative_to_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPopover, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Popover> {
     let f: &F = transmute(f);

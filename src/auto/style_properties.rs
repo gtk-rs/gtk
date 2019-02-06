@@ -4,7 +4,6 @@
 
 use StateFlags;
 use StyleProvider;
-use SymbolicColor;
 use ffi;
 use glib;
 use glib::object::IsA;
@@ -27,16 +26,6 @@ impl StyleProperties {
             from_glib_full(ffi::gtk_style_properties_new())
         }
     }
-
-    //#[cfg_attr(feature = "v3_8", deprecated)]
-    //pub fn lookup_property(property_name: &str, pspec: /*Ignored*/glib::ParamSpec) -> Option<Fn(&str, &glib::Value, &Error) -> bool + 'static> {
-    //    unsafe { TODO: call ffi::gtk_style_properties_lookup_property() }
-    //}
-
-    //#[cfg_attr(feature = "v3_8", deprecated)]
-    //pub fn register_property(parse_func: Option<Box<dyn Fn(&str, &glib::Value, &Error) -> bool + 'static>>, pspec: /*Ignored*/&glib::ParamSpec) {
-    //    unsafe { TODO: call ffi::gtk_style_properties_register_property() }
-    //}
 }
 
 #[cfg_attr(feature = "v3_16", deprecated)]
@@ -60,12 +49,6 @@ pub trait StylePropertiesExt: 'static {
 
     //#[cfg_attr(feature = "v3_16", deprecated)]
     //fn get_valist(&self, state: StateFlags, args: /*Unknown conversion*//*Unimplemented*/Unsupported);
-
-    #[cfg_attr(feature = "v3_8", deprecated)]
-    fn lookup_color(&self, name: &str) -> Option<SymbolicColor>;
-
-    #[cfg_attr(feature = "v3_8", deprecated)]
-    fn map_color(&self, name: &str, color: &SymbolicColor);
 
     #[cfg_attr(feature = "v3_16", deprecated)]
     fn merge<P: IsA<StyleProperties>>(&self, props_to_merge: &P, replace: bool);
@@ -105,18 +88,6 @@ impl<O: IsA<StyleProperties>> StylePropertiesExt for O {
     //fn get_valist(&self, state: StateFlags, args: /*Unknown conversion*//*Unimplemented*/Unsupported) {
     //    unsafe { TODO: call ffi::gtk_style_properties_get_valist() }
     //}
-
-    fn lookup_color(&self, name: &str) -> Option<SymbolicColor> {
-        unsafe {
-            from_glib_none(ffi::gtk_style_properties_lookup_color(self.as_ref().to_glib_none().0, name.to_glib_none().0))
-        }
-    }
-
-    fn map_color(&self, name: &str, color: &SymbolicColor) {
-        unsafe {
-            ffi::gtk_style_properties_map_color(self.as_ref().to_glib_none().0, name.to_glib_none().0, color.to_glib_none().0);
-        }
-    }
 
     fn merge<P: IsA<StyleProperties>>(&self, props_to_merge: &P, replace: bool) {
         unsafe {

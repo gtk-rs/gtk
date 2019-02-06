@@ -29,22 +29,9 @@ glib_wrapper! {
     }
 }
 
-impl Arrow {
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    pub fn new(arrow_type: ArrowType, shadow_type: ShadowType) -> Arrow {
-        assert_initialized_main_thread!();
-        unsafe {
-            Widget::from_glib_none(ffi::gtk_arrow_new(arrow_type.to_glib(), shadow_type.to_glib())).unsafe_cast()
-        }
-    }
-}
-
 pub const NONE_ARROW: Option<&Arrow> = None;
 
 pub trait ArrowExt: 'static {
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn set(&self, arrow_type: ArrowType, shadow_type: ShadowType);
-
     fn get_property_arrow_type(&self) -> ArrowType;
 
     fn set_property_arrow_type(&self, arrow_type: ArrowType);
@@ -59,12 +46,6 @@ pub trait ArrowExt: 'static {
 }
 
 impl<O: IsA<Arrow>> ArrowExt for O {
-    fn set(&self, arrow_type: ArrowType, shadow_type: ShadowType) {
-        unsafe {
-            ffi::gtk_arrow_set(self.as_ref().to_glib_none().0, arrow_type.to_glib(), shadow_type.to_glib());
-        }
-    }
-
     fn get_property_arrow_type(&self) -> ArrowType {
         unsafe {
             let mut value = Value::from_type(<ArrowType as StaticType>::static_type());

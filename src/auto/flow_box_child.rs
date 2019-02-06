@@ -29,7 +29,6 @@ glib_wrapper! {
 }
 
 impl FlowBoxChild {
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     pub fn new() -> FlowBoxChild {
         assert_initialized_main_thread!();
         unsafe {
@@ -38,7 +37,6 @@ impl FlowBoxChild {
     }
 }
 
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 impl Default for FlowBoxChild {
     fn default() -> Self {
         Self::new()
@@ -48,13 +46,10 @@ impl Default for FlowBoxChild {
 pub const NONE_FLOW_BOX_CHILD: Option<&FlowBoxChild> = None;
 
 pub trait FlowBoxChildExt: 'static {
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn changed(&self);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_index(&self) -> i32;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn is_selected(&self) -> bool;
 
     fn connect_activate<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -63,21 +58,18 @@ pub trait FlowBoxChildExt: 'static {
 }
 
 impl<O: IsA<FlowBoxChild>> FlowBoxChildExt for O {
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn changed(&self) {
         unsafe {
             ffi::gtk_flow_box_child_changed(self.as_ref().to_glib_none().0);
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_index(&self) -> i32 {
         unsafe {
             ffi::gtk_flow_box_child_get_index(self.as_ref().to_glib_none().0)
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn is_selected(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_flow_box_child_is_selected(self.as_ref().to_glib_none().0))

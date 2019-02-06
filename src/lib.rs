@@ -117,9 +117,8 @@
 //!
 //! ## Library versions
 //!
-//! By default this crate provides only GTK+ 3.4 APIs. You can access more
-//! modern APIs by selecting one of the following features: `v3_6`, `v3_8`,
-//! `v3_10`, `v3_12`, `v3_14`, `v3_16`.
+//! By default this crate provides only GTK+ 3.14 APIs. You can access more
+//! modern APIs by selecting one of the following features: `v3_14`, `v3_16`, etc.
 //!
 //! `Cargo.toml` example:
 //!
@@ -236,7 +235,6 @@ mod file_chooser_dialog;
 mod fixed;
 #[cfg(any(feature = "v3_18", feature = "dox"))]
 mod flow_box;
-mod icon_set;
 mod im_context_simple;
 mod invisible;
 #[cfg(any(feature = "v3_16", feature = "dox"))]

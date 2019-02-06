@@ -39,7 +39,6 @@ impl TreePath {
     //    unsafe { TODO: call ffi::gtk_tree_path_new_from_indices() }
     //}
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     pub fn new_from_indicesv(indices: &[i32]) -> TreePath {
         assert_initialized_main_thread!();
         let length = indices.len() as usize;

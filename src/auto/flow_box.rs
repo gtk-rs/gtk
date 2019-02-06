@@ -2,7 +2,6 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 use Adjustment;
 use Buildable;
 use Container;
@@ -15,8 +14,6 @@ use ffi;
 #[cfg(any(feature = "v3_18", feature = "dox"))]
 use gio;
 use glib;
-use glib::StaticType;
-use glib::Value;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::object::ObjectExt;
@@ -39,7 +36,6 @@ glib_wrapper! {
 }
 
 impl FlowBox {
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     pub fn new() -> FlowBox {
         assert_initialized_main_thread!();
         unsafe {
@@ -48,7 +44,6 @@ impl FlowBox {
     }
 }
 
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 impl Default for FlowBox {
     fn default() -> Self {
         Self::new()
@@ -61,120 +56,64 @@ pub trait FlowBoxExt: 'static {
     #[cfg(any(feature = "v3_18", feature = "dox"))]
     fn bind_model<'a, P: IsA<gio::ListModel> + 'a, Q: Into<Option<&'a P>>, R: Fn(&glib::Object) -> Widget + 'static>(&self, model: Q, create_widget_func: R);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_activate_on_single_click(&self) -> bool;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_child_at_index(&self, idx: i32) -> Option<FlowBoxChild>;
 
     #[cfg(any(feature = "v3_22_6", feature = "dox"))]
     fn get_child_at_pos(&self, x: i32, y: i32) -> Option<FlowBoxChild>;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_column_spacing(&self) -> u32;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_homogeneous(&self) -> bool;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_max_children_per_line(&self) -> u32;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_min_children_per_line(&self) -> u32;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_row_spacing(&self) -> u32;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_selected_children(&self) -> Vec<FlowBoxChild>;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_selection_mode(&self) -> SelectionMode;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn insert<P: IsA<Widget>>(&self, widget: &P, position: i32);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn invalidate_filter(&self);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn invalidate_sort(&self);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn select_all(&self);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn select_child<P: IsA<FlowBoxChild>>(&self, child: &P);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn selected_foreach<P: FnMut(&FlowBox, &FlowBoxChild)>(&self, func: P);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_activate_on_single_click(&self, single: bool);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_column_spacing(&self, spacing: u32);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_filter_func(&self, filter_func: Option<Box<dyn Fn(&FlowBoxChild) -> bool + 'static>>);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_hadjustment<P: IsA<Adjustment>>(&self, adjustment: &P);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_homogeneous(&self, homogeneous: bool);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_max_children_per_line(&self, n_children: u32);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_min_children_per_line(&self, n_children: u32);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_row_spacing(&self, spacing: u32);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_selection_mode(&self, mode: SelectionMode);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_sort_func(&self, sort_func: Option<Box<dyn Fn(&FlowBoxChild, &FlowBoxChild) -> i32 + 'static>>);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_vadjustment<P: IsA<Adjustment>>(&self, adjustment: &P);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn unselect_all(&self);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn unselect_child<P: IsA<FlowBoxChild>>(&self, child: &P);
-
-    fn get_property_activate_on_single_click(&self) -> bool;
-
-    fn set_property_activate_on_single_click(&self, activate_on_single_click: bool);
-
-    fn get_property_column_spacing(&self) -> u32;
-
-    fn set_property_column_spacing(&self, column_spacing: u32);
-
-    fn get_property_homogeneous(&self) -> bool;
-
-    fn set_property_homogeneous(&self, homogeneous: bool);
-
-    fn get_property_max_children_per_line(&self) -> u32;
-
-    fn set_property_max_children_per_line(&self, max_children_per_line: u32);
-
-    fn get_property_min_children_per_line(&self) -> u32;
-
-    fn set_property_min_children_per_line(&self, min_children_per_line: u32);
-
-    fn get_property_row_spacing(&self) -> u32;
-
-    fn set_property_row_spacing(&self, row_spacing: u32);
-
-    fn get_property_selection_mode(&self) -> SelectionMode;
-
-    fn set_property_selection_mode(&self, selection_mode: SelectionMode);
 
     fn connect_activate_cursor_child<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -237,14 +176,12 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_activate_on_single_click(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_flow_box_get_activate_on_single_click(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_child_at_index(&self, idx: i32) -> Option<FlowBoxChild> {
         unsafe {
             from_glib_none(ffi::gtk_flow_box_get_child_at_index(self.as_ref().to_glib_none().0, idx))
@@ -258,91 +195,78 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_column_spacing(&self) -> u32 {
         unsafe {
             ffi::gtk_flow_box_get_column_spacing(self.as_ref().to_glib_none().0)
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_homogeneous(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_flow_box_get_homogeneous(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_max_children_per_line(&self) -> u32 {
         unsafe {
             ffi::gtk_flow_box_get_max_children_per_line(self.as_ref().to_glib_none().0)
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_min_children_per_line(&self) -> u32 {
         unsafe {
             ffi::gtk_flow_box_get_min_children_per_line(self.as_ref().to_glib_none().0)
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_row_spacing(&self) -> u32 {
         unsafe {
             ffi::gtk_flow_box_get_row_spacing(self.as_ref().to_glib_none().0)
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_selected_children(&self) -> Vec<FlowBoxChild> {
         unsafe {
             FromGlibPtrContainer::from_glib_container(ffi::gtk_flow_box_get_selected_children(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_selection_mode(&self) -> SelectionMode {
         unsafe {
             from_glib(ffi::gtk_flow_box_get_selection_mode(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn insert<P: IsA<Widget>>(&self, widget: &P, position: i32) {
         unsafe {
             ffi::gtk_flow_box_insert(self.as_ref().to_glib_none().0, widget.as_ref().to_glib_none().0, position);
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn invalidate_filter(&self) {
         unsafe {
             ffi::gtk_flow_box_invalidate_filter(self.as_ref().to_glib_none().0);
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn invalidate_sort(&self) {
         unsafe {
             ffi::gtk_flow_box_invalidate_sort(self.as_ref().to_glib_none().0);
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn select_all(&self) {
         unsafe {
             ffi::gtk_flow_box_select_all(self.as_ref().to_glib_none().0);
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn select_child<P: IsA<FlowBoxChild>>(&self, child: &P) {
         unsafe {
             ffi::gtk_flow_box_select_child(self.as_ref().to_glib_none().0, child.as_ref().to_glib_none().0);
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn selected_foreach<P: FnMut(&FlowBox, &FlowBoxChild)>(&self, func: P) {
         let func_data: P = func;
         unsafe extern "C" fn func_func<P: FnMut(&FlowBox, &FlowBoxChild)>(box_: *mut ffi::GtkFlowBox, child: *mut ffi::GtkFlowBoxChild, user_data: glib_ffi::gpointer) {
@@ -358,21 +282,18 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_activate_on_single_click(&self, single: bool) {
         unsafe {
             ffi::gtk_flow_box_set_activate_on_single_click(self.as_ref().to_glib_none().0, single.to_glib());
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_column_spacing(&self, spacing: u32) {
         unsafe {
             ffi::gtk_flow_box_set_column_spacing(self.as_ref().to_glib_none().0, spacing);
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_filter_func(&self, filter_func: Option<Box<dyn Fn(&FlowBoxChild) -> bool + 'static>>) {
         let filter_func_data: Box_<Option<Box<dyn Fn(&FlowBoxChild) -> bool + 'static>>> = Box::new(filter_func);
         unsafe extern "C" fn filter_func_func(child: *mut ffi::GtkFlowBoxChild, user_data: glib_ffi::gpointer) -> glib_ffi::gboolean {
@@ -396,49 +317,42 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_hadjustment<P: IsA<Adjustment>>(&self, adjustment: &P) {
         unsafe {
             ffi::gtk_flow_box_set_hadjustment(self.as_ref().to_glib_none().0, adjustment.as_ref().to_glib_none().0);
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_homogeneous(&self, homogeneous: bool) {
         unsafe {
             ffi::gtk_flow_box_set_homogeneous(self.as_ref().to_glib_none().0, homogeneous.to_glib());
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_max_children_per_line(&self, n_children: u32) {
         unsafe {
             ffi::gtk_flow_box_set_max_children_per_line(self.as_ref().to_glib_none().0, n_children);
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_min_children_per_line(&self, n_children: u32) {
         unsafe {
             ffi::gtk_flow_box_set_min_children_per_line(self.as_ref().to_glib_none().0, n_children);
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_row_spacing(&self, spacing: u32) {
         unsafe {
             ffi::gtk_flow_box_set_row_spacing(self.as_ref().to_glib_none().0, spacing);
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_selection_mode(&self, mode: SelectionMode) {
         unsafe {
             ffi::gtk_flow_box_set_selection_mode(self.as_ref().to_glib_none().0, mode.to_glib());
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_sort_func(&self, sort_func: Option<Box<dyn Fn(&FlowBoxChild, &FlowBoxChild) -> i32 + 'static>>) {
         let sort_func_data: Box_<Option<Box<dyn Fn(&FlowBoxChild, &FlowBoxChild) -> i32 + 'static>>> = Box::new(sort_func);
         unsafe extern "C" fn sort_func_func(child1: *mut ffi::GtkFlowBoxChild, child2: *mut ffi::GtkFlowBoxChild, user_data: glib_ffi::gpointer) -> libc::c_int {
@@ -463,122 +377,21 @@ impl<O: IsA<FlowBox>> FlowBoxExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_vadjustment<P: IsA<Adjustment>>(&self, adjustment: &P) {
         unsafe {
             ffi::gtk_flow_box_set_vadjustment(self.as_ref().to_glib_none().0, adjustment.as_ref().to_glib_none().0);
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn unselect_all(&self) {
         unsafe {
             ffi::gtk_flow_box_unselect_all(self.as_ref().to_glib_none().0);
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn unselect_child<P: IsA<FlowBoxChild>>(&self, child: &P) {
         unsafe {
             ffi::gtk_flow_box_unselect_child(self.as_ref().to_glib_none().0, child.as_ref().to_glib_none().0);
-        }
-    }
-
-    fn get_property_activate_on_single_click(&self) -> bool {
-        unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"activate-on-single-click\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_activate_on_single_click(&self, activate_on_single_click: bool) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"activate-on-single-click\0".as_ptr() as *const _, Value::from(&activate_on_single_click).to_glib_none().0);
-        }
-    }
-
-    fn get_property_column_spacing(&self) -> u32 {
-        unsafe {
-            let mut value = Value::from_type(<u32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"column-spacing\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_column_spacing(&self, column_spacing: u32) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"column-spacing\0".as_ptr() as *const _, Value::from(&column_spacing).to_glib_none().0);
-        }
-    }
-
-    fn get_property_homogeneous(&self) -> bool {
-        unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"homogeneous\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_homogeneous(&self, homogeneous: bool) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"homogeneous\0".as_ptr() as *const _, Value::from(&homogeneous).to_glib_none().0);
-        }
-    }
-
-    fn get_property_max_children_per_line(&self) -> u32 {
-        unsafe {
-            let mut value = Value::from_type(<u32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"max-children-per-line\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_max_children_per_line(&self, max_children_per_line: u32) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"max-children-per-line\0".as_ptr() as *const _, Value::from(&max_children_per_line).to_glib_none().0);
-        }
-    }
-
-    fn get_property_min_children_per_line(&self) -> u32 {
-        unsafe {
-            let mut value = Value::from_type(<u32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"min-children-per-line\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_min_children_per_line(&self, min_children_per_line: u32) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"min-children-per-line\0".as_ptr() as *const _, Value::from(&min_children_per_line).to_glib_none().0);
-        }
-    }
-
-    fn get_property_row_spacing(&self) -> u32 {
-        unsafe {
-            let mut value = Value::from_type(<u32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"row-spacing\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_row_spacing(&self, row_spacing: u32) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"row-spacing\0".as_ptr() as *const _, Value::from(&row_spacing).to_glib_none().0);
-        }
-    }
-
-    fn get_property_selection_mode(&self) -> SelectionMode {
-        unsafe {
-            let mut value = Value::from_type(<SelectionMode as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"selection-mode\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_selection_mode(&self, selection_mode: SelectionMode) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"selection-mode\0".as_ptr() as *const _, Value::from(&selection_mode).to_glib_none().0);
         }
     }
 

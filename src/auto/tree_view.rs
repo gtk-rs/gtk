@@ -101,7 +101,6 @@ pub trait TreeViewExt: 'static {
 
     fn expand_to_path(&self, path: &TreePath);
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn get_activate_on_single_click(&self) -> bool;
 
     fn get_background_area<'a, 'b, P: Into<Option<&'a TreePath>>, Q: IsA<TreeViewColumn> + 'b, R: Into<Option<&'b Q>>>(&self, path: P, column: R) -> gdk::Rectangle;
@@ -152,9 +151,6 @@ pub trait TreeViewExt: 'static {
 
     fn get_rubber_banding(&self) -> bool;
 
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn get_rules_hint(&self) -> bool;
-
     fn get_search_column(&self) -> i32;
 
     fn get_search_entry(&self) -> Option<Entry>;
@@ -199,7 +195,6 @@ pub trait TreeViewExt: 'static {
 
     fn scroll_to_point(&self, tree_x: i32, tree_y: i32);
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn set_activate_on_single_click(&self, single: bool);
 
     fn set_column_drag_function(&self, func: Option<Box<dyn Fn(&TreeView, &TreeViewColumn, &TreeViewColumn, &TreeViewColumn) -> bool + 'static>>);
@@ -237,9 +232,6 @@ pub trait TreeViewExt: 'static {
     fn set_row_separator_func(&self, func: Option<Box<dyn Fn(&TreeModel, &TreeIter) -> bool + 'static>>);
 
     fn set_rubber_banding(&self, enable: bool);
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn set_rules_hint(&self, setting: bool);
 
     fn set_search_column(&self, column: i32);
 
@@ -315,7 +307,6 @@ pub trait TreeViewExt: 'static {
 
     fn emit_unselect_all(&self) -> bool;
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn connect_property_activate_on_single_click_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_enable_grid_lines_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -343,9 +334,6 @@ pub trait TreeViewExt: 'static {
     fn connect_property_reorderable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_rubber_banding_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn connect_property_rules_hint_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_search_column_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -459,7 +447,6 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn get_activate_on_single_click(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_tree_view_get_activate_on_single_click(self.as_ref().to_glib_none().0))
@@ -630,12 +617,6 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
         }
     }
 
-    fn get_rules_hint(&self) -> bool {
-        unsafe {
-            from_glib(ffi::gtk_tree_view_get_rules_hint(self.as_ref().to_glib_none().0))
-        }
-    }
-
     fn get_search_column(&self) -> i32 {
         unsafe {
             ffi::gtk_tree_view_get_search_column(self.as_ref().to_glib_none().0)
@@ -803,7 +784,6 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn set_activate_on_single_click(&self, single: bool) {
         unsafe {
             ffi::gtk_tree_view_set_activate_on_single_click(self.as_ref().to_glib_none().0, single.to_glib());
@@ -959,12 +939,6 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
     fn set_rubber_banding(&self, enable: bool) {
         unsafe {
             ffi::gtk_tree_view_set_rubber_banding(self.as_ref().to_glib_none().0, enable.to_glib());
-        }
-    }
-
-    fn set_rules_hint(&self, setting: bool) {
-        unsafe {
-            ffi::gtk_tree_view_set_rules_hint(self.as_ref().to_glib_none().0, setting.to_glib());
         }
     }
 
@@ -1248,7 +1222,6 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
         res.unwrap().get().unwrap()
     }
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn connect_property_activate_on_single_click_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1358,14 +1331,6 @@ impl<O: IsA<TreeView>> TreeViewExt for O {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::rubber-banding\0".as_ptr() as *const _,
                 Some(transmute(notify_rubber_banding_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_rules_hint_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::rules-hint\0".as_ptr() as *const _,
-                Some(transmute(notify_rules_hint_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -1492,7 +1457,6 @@ where P: IsA<TreeView> {
     f(&TreeView::from_glib_borrow(this).unsafe_cast()).to_glib()
 }
 
-#[cfg(any(feature = "v3_8", feature = "dox"))]
 unsafe extern "C" fn notify_activate_on_single_click_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkTreeView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TreeView> {
     let f: &F = transmute(f);
@@ -1572,12 +1536,6 @@ where P: IsA<TreeView> {
 }
 
 unsafe extern "C" fn notify_rubber_banding_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkTreeView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<TreeView> {
-    let f: &F = transmute(f);
-    f(&TreeView::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_rules_hint_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkTreeView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TreeView> {
     let f: &F = transmute(f);
     f(&TreeView::from_glib_borrow(this).unsafe_cast())

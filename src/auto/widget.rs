@@ -10,7 +10,6 @@ use Buildable;
 use Clipboard;
 use DirectionType;
 use DragResult;
-use IconSize;
 use Orientation;
 use Requisition;
 use SelectionData;
@@ -72,22 +71,6 @@ impl Widget {
         }
     }
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    pub fn pop_composite_child() {
-        assert_initialized_main_thread!();
-        unsafe {
-            ffi::gtk_widget_pop_composite_child();
-        }
-    }
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    pub fn push_composite_child() {
-        assert_initialized_main_thread!();
-        unsafe {
-            ffi::gtk_widget_push_composite_child();
-        }
-    }
-
     pub fn set_default_direction(dir: TextDirection) {
         assert_initialized_main_thread!();
         unsafe {
@@ -107,7 +90,6 @@ pub trait WidgetExt: 'static {
 
     fn add_mnemonic_label<P: IsA<Widget>>(&self, label: &P);
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn add_tick_callback<P: Fn(&Widget, &gdk::FrameClock) -> bool + 'static>(&self, callback: P) -> u32;
 
     fn can_activate_accel(&self, signal_id: u32) -> bool;
@@ -128,10 +110,6 @@ pub trait WidgetExt: 'static {
 
     fn device_is_shadowed(&self, device: &gdk::Device) -> bool;
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn drag_begin<'a, P: Into<Option<&'a gdk::Event>>>(&self, targets: &TargetList, actions: gdk::DragAction, button: i32, event: P) -> Option<gdk::DragContext>;
-
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn drag_begin_with_coordinates<'a, P: Into<Option<&'a gdk::Event>>>(&self, targets: &TargetList, actions: gdk::DragAction, button: i32, event: P, x: i32, y: i32) -> Option<gdk::DragContext>;
 
     fn drag_check_threshold(&self, start_x: i32, start_y: i32, current_x: i32, current_y: i32) -> bool;
@@ -175,9 +153,6 @@ pub trait WidgetExt: 'static {
 
     fn drag_source_set_icon_pixbuf(&self, pixbuf: &gdk_pixbuf::Pixbuf);
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn drag_source_set_icon_stock(&self, stock_id: &str);
-
     fn drag_source_set_target_list<'a, P: Into<Option<&'a TargetList>>>(&self, target_list: P);
 
     fn drag_source_unset(&self);
@@ -197,7 +172,6 @@ pub trait WidgetExt: 'static {
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn get_action_group(&self, prefix: &str) -> Option<gio::ActionGroup>;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_allocated_baseline(&self) -> i32;
 
     fn get_allocated_height(&self) -> i32;
@@ -219,13 +193,9 @@ pub trait WidgetExt: 'static {
 
     fn get_child_visible(&self) -> bool;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_clip(&self) -> Allocation;
 
     fn get_clipboard(&self, selection: &gdk::Atom) -> Clipboard;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_composite_name(&self) -> Option<GString>;
 
     fn get_device_enabled(&self, device: &gdk::Device) -> bool;
 
@@ -246,7 +216,6 @@ pub trait WidgetExt: 'static {
     #[cfg(any(feature = "v3_18", feature = "dox"))]
     fn get_font_options(&self) -> Option<cairo::FontOptions>;
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn get_frame_clock(&self) -> Option<gdk::FrameClock>;
 
     fn get_halign(&self) -> Align;
@@ -263,16 +232,8 @@ pub trait WidgetExt: 'static {
 
     fn get_margin_bottom(&self) -> i32;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_margin_end(&self) -> i32;
 
-    #[cfg_attr(feature = "v3_12", deprecated)]
-    fn get_margin_left(&self) -> i32;
-
-    #[cfg_attr(feature = "v3_12", deprecated)]
-    fn get_margin_right(&self) -> i32;
-
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_margin_start(&self) -> i32;
 
     fn get_margin_top(&self) -> i32;
@@ -283,7 +244,6 @@ pub trait WidgetExt: 'static {
 
     fn get_no_show_all(&self) -> bool;
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn get_opacity(&self) -> f64;
 
     fn get_pango_context(&self) -> Option<pango::Context>;
@@ -296,7 +256,6 @@ pub trait WidgetExt: 'static {
 
     fn get_preferred_height(&self) -> (i32, i32);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_preferred_height_and_baseline_for_width(&self, width: i32) -> (i32, i32, i32, i32);
 
     fn get_preferred_height_for_width(&self, width: i32) -> (i32, i32);
@@ -313,10 +272,6 @@ pub trait WidgetExt: 'static {
 
     fn get_request_mode(&self) -> SizeRequestMode;
 
-    #[cfg_attr(feature = "v3_12", deprecated)]
-    fn get_root_window(&self) -> Option<gdk::Window>;
-
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_scale_factor(&self) -> i32;
 
     fn get_screen(&self) -> Option<gdk::Screen>;
@@ -345,7 +300,6 @@ pub trait WidgetExt: 'static {
 
     fn get_valign(&self) -> Align;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_valign_with_baseline(&self) -> Align;
 
     fn get_vexpand(&self) -> bool;
@@ -382,12 +336,10 @@ pub trait WidgetExt: 'static {
 
     fn in_destruction(&self) -> bool;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn init_template(&self);
 
     fn input_shape_combine_region<'a, P: Into<Option<&'a cairo::Region>>>(&self, region: P);
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn insert_action_group<'a, P: IsA<gio::ActionGroup> + 'a, Q: Into<Option<&'a P>>>(&self, name: &str, group: Q);
 
     fn is_ancestor<P: IsA<Widget>>(&self, ancestor: &P) -> bool;
@@ -403,7 +355,6 @@ pub trait WidgetExt: 'static {
 
     fn is_toplevel(&self) -> bool;
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn is_visible(&self) -> bool;
 
     fn keynav_failed(&self, direction: DirectionType) -> bool;
@@ -451,24 +402,13 @@ pub trait WidgetExt: 'static {
 
     fn realize(&self);
 
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn region_intersect(&self, region: &cairo::Region) -> Option<cairo::Region>;
-
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn register_window<P: IsA<gdk::Window>>(&self, window: &P);
 
     fn remove_accelerator<P: IsA<AccelGroup>>(&self, accel_group: &P, accel_key: u32, accel_mods: gdk::ModifierType) -> bool;
 
     fn remove_mnemonic_label<P: IsA<Widget>>(&self, label: &P);
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn remove_tick_callback(&self, id: u32);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn render_icon_pixbuf(&self, stock_id: &str, size: IconSize) -> Option<gdk_pixbuf::Pixbuf>;
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn reparent<P: IsA<Widget>>(&self, new_parent: &P);
 
     fn reset_style(&self);
 
@@ -489,20 +429,13 @@ pub trait WidgetExt: 'static {
 
     fn set_child_visible(&self, is_visible: bool);
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn set_clip(&self, clip: &Allocation);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_composite_name(&self, name: &str);
 
     fn set_device_enabled(&self, device: &gdk::Device, enabled: bool);
 
     fn set_device_events(&self, device: &gdk::Device, events: gdk::EventMask);
 
     fn set_direction(&self, dir: TextDirection);
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn set_double_buffered(&self, double_buffered: bool);
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn set_focus_on_click(&self, focus_on_click: bool);
@@ -527,16 +460,8 @@ pub trait WidgetExt: 'static {
 
     fn set_margin_bottom(&self, margin: i32);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_margin_end(&self, margin: i32);
 
-    #[cfg_attr(feature = "v3_12", deprecated)]
-    fn set_margin_left(&self, margin: i32);
-
-    #[cfg_attr(feature = "v3_12", deprecated)]
-    fn set_margin_right(&self, margin: i32);
-
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_margin_start(&self, margin: i32);
 
     fn set_margin_top(&self, margin: i32);
@@ -545,7 +470,6 @@ pub trait WidgetExt: 'static {
 
     fn set_no_show_all(&self, no_show_all: bool);
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn set_opacity(&self, opacity: f64);
 
     fn set_parent<P: IsA<Widget>>(&self, parent: &P);
@@ -594,7 +518,6 @@ pub trait WidgetExt: 'static {
 
     fn size_allocate(&self, allocation: &mut Allocation);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn size_allocate_with_baseline(&self, allocation: &mut Allocation, baseline: i32);
 
     //fn style_get(&self, first_property_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
@@ -613,7 +536,6 @@ pub trait WidgetExt: 'static {
 
     fn unrealize(&self);
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn unregister_window<P: IsA<gdk::Window>>(&self, window: &P);
 
     fn unset_state_flags(&self, flags: StateFlags);
@@ -786,9 +708,6 @@ pub trait WidgetExt: 'static {
 
     fn connect_unrealize<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg_attr(feature = "v3_12", deprecated)]
-    fn connect_visibility_notify_event<F: Fn(&Self, &gdk::EventVisibility) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId;
-
     fn connect_window_state_event<F: Fn(&Self, &gdk::EventWindowState) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_app_paintable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -798,9 +717,6 @@ pub trait WidgetExt: 'static {
     fn connect_property_can_focus_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_composite_child_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn connect_property_double_buffered_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_events_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -829,16 +745,8 @@ pub trait WidgetExt: 'static {
 
     fn connect_property_margin_bottom_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_margin_end_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg_attr(feature = "v3_12", deprecated)]
-    fn connect_property_margin_left_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_12", deprecated)]
-    fn connect_property_margin_right_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_margin_start_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_margin_top_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -847,14 +755,12 @@ pub trait WidgetExt: 'static {
 
     fn connect_property_no_show_all_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn connect_property_opacity_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_parent_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_receives_default_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn connect_property_scale_factor_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_sensitive_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -901,7 +807,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn add_tick_callback<P: Fn(&Widget, &gdk::FrameClock) -> bool + 'static>(&self, callback: P) -> u32 {
         let callback_data: Box_<P> = Box::new(callback);
         unsafe extern "C" fn callback_func<P: Fn(&Widget, &gdk::FrameClock) -> bool + 'static>(widget: *mut ffi::GtkWidget, frame_clock: *mut gdk_ffi::GdkFrameClock, user_data: glib_ffi::gpointer) -> glib_ffi::gboolean {
@@ -975,14 +880,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn drag_begin<'a, P: Into<Option<&'a gdk::Event>>>(&self, targets: &TargetList, actions: gdk::DragAction, button: i32, event: P) -> Option<gdk::DragContext> {
-        let event = event.into();
-        unsafe {
-            from_glib_none(ffi::gtk_drag_begin(self.as_ref().to_glib_none().0, targets.to_glib_none().0, actions.to_glib(), button, mut_override(event.to_glib_none().0)))
-        }
-    }
-
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn drag_begin_with_coordinates<'a, P: Into<Option<&'a gdk::Event>>>(&self, targets: &TargetList, actions: gdk::DragAction, button: i32, event: P, x: i32, y: i32) -> Option<gdk::DragContext> {
         let event = event.into();
         unsafe {
@@ -1112,12 +1009,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn drag_source_set_icon_stock(&self, stock_id: &str) {
-        unsafe {
-            ffi::gtk_drag_source_set_icon_stock(self.as_ref().to_glib_none().0, stock_id.to_glib_none().0);
-        }
-    }
-
     fn drag_source_set_target_list<'a, P: Into<Option<&'a TargetList>>>(&self, target_list: P) {
         let target_list = target_list.into();
         unsafe {
@@ -1174,7 +1065,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_allocated_baseline(&self) -> i32 {
         unsafe {
             ffi::gtk_widget_get_allocated_baseline(self.as_ref().to_glib_none().0)
@@ -1241,7 +1131,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_clip(&self) -> Allocation {
         unsafe {
             let mut clip = Allocation::uninitialized();
@@ -1253,12 +1142,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
     fn get_clipboard(&self, selection: &gdk::Atom) -> Clipboard {
         unsafe {
             from_glib_none(ffi::gtk_widget_get_clipboard(self.as_ref().to_glib_none().0, selection.to_glib_none().0))
-        }
-    }
-
-    fn get_composite_name(&self) -> Option<GString> {
-        unsafe {
-            from_glib_full(ffi::gtk_widget_get_composite_name(self.as_ref().to_glib_none().0))
         }
     }
 
@@ -1313,7 +1196,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn get_frame_clock(&self) -> Option<gdk::FrameClock> {
         unsafe {
             from_glib_none(ffi::gtk_widget_get_frame_clock(self.as_ref().to_glib_none().0))
@@ -1362,26 +1244,12 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_margin_end(&self) -> i32 {
         unsafe {
             ffi::gtk_widget_get_margin_end(self.as_ref().to_glib_none().0)
         }
     }
 
-    fn get_margin_left(&self) -> i32 {
-        unsafe {
-            ffi::gtk_widget_get_margin_left(self.as_ref().to_glib_none().0)
-        }
-    }
-
-    fn get_margin_right(&self) -> i32 {
-        unsafe {
-            ffi::gtk_widget_get_margin_right(self.as_ref().to_glib_none().0)
-        }
-    }
-
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_margin_start(&self) -> i32 {
         unsafe {
             ffi::gtk_widget_get_margin_start(self.as_ref().to_glib_none().0)
@@ -1412,7 +1280,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn get_opacity(&self) -> f64 {
         unsafe {
             ffi::gtk_widget_get_opacity(self.as_ref().to_glib_none().0)
@@ -1452,7 +1319,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_preferred_height_and_baseline_for_width(&self, width: i32) -> (i32, i32, i32, i32) {
         unsafe {
             let mut minimum_height = mem::uninitialized();
@@ -1518,13 +1384,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn get_root_window(&self) -> Option<gdk::Window> {
-        unsafe {
-            from_glib_none(ffi::gtk_widget_get_root_window(self.as_ref().to_glib_none().0))
-        }
-    }
-
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_scale_factor(&self) -> i32 {
         unsafe {
             ffi::gtk_widget_get_scale_factor(self.as_ref().to_glib_none().0)
@@ -1612,7 +1471,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_valign_with_baseline(&self) -> Align {
         unsafe {
             from_glib(ffi::gtk_widget_get_valign_with_baseline(self.as_ref().to_glib_none().0))
@@ -1721,7 +1579,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn init_template(&self) {
         unsafe {
             ffi::gtk_widget_init_template(self.as_ref().to_glib_none().0);
@@ -1735,7 +1592,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn insert_action_group<'a, P: IsA<gio::ActionGroup> + 'a, Q: Into<Option<&'a P>>>(&self, name: &str, group: Q) {
         let group = group.into();
         unsafe {
@@ -1779,7 +1635,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn is_visible(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_widget_is_visible(self.as_ref().to_glib_none().0))
@@ -1908,13 +1763,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn region_intersect(&self, region: &cairo::Region) -> Option<cairo::Region> {
-        unsafe {
-            from_glib_full(ffi::gtk_widget_region_intersect(self.as_ref().to_glib_none().0, region.to_glib_none().0))
-        }
-    }
-
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn register_window<P: IsA<gdk::Window>>(&self, window: &P) {
         unsafe {
             ffi::gtk_widget_register_window(self.as_ref().to_glib_none().0, window.as_ref().to_glib_none().0);
@@ -1933,22 +1781,9 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn remove_tick_callback(&self, id: u32) {
         unsafe {
             ffi::gtk_widget_remove_tick_callback(self.as_ref().to_glib_none().0, id);
-        }
-    }
-
-    fn render_icon_pixbuf(&self, stock_id: &str, size: IconSize) -> Option<gdk_pixbuf::Pixbuf> {
-        unsafe {
-            from_glib_full(ffi::gtk_widget_render_icon_pixbuf(self.as_ref().to_glib_none().0, stock_id.to_glib_none().0, size.to_glib()))
-        }
-    }
-
-    fn reparent<P: IsA<Widget>>(&self, new_parent: &P) {
-        unsafe {
-            ffi::gtk_widget_reparent(self.as_ref().to_glib_none().0, new_parent.as_ref().to_glib_none().0);
         }
     }
 
@@ -2008,16 +1843,9 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn set_clip(&self, clip: &Allocation) {
         unsafe {
             ffi::gtk_widget_set_clip(self.as_ref().to_glib_none().0, clip.to_glib_none().0);
-        }
-    }
-
-    fn set_composite_name(&self, name: &str) {
-        unsafe {
-            ffi::gtk_widget_set_composite_name(self.as_ref().to_glib_none().0, name.to_glib_none().0);
         }
     }
 
@@ -2036,12 +1864,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
     fn set_direction(&self, dir: TextDirection) {
         unsafe {
             ffi::gtk_widget_set_direction(self.as_ref().to_glib_none().0, dir.to_glib());
-        }
-    }
-
-    fn set_double_buffered(&self, double_buffered: bool) {
-        unsafe {
-            ffi::gtk_widget_set_double_buffered(self.as_ref().to_glib_none().0, double_buffered.to_glib());
         }
     }
 
@@ -2110,26 +1932,12 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_margin_end(&self, margin: i32) {
         unsafe {
             ffi::gtk_widget_set_margin_end(self.as_ref().to_glib_none().0, margin);
         }
     }
 
-    fn set_margin_left(&self, margin: i32) {
-        unsafe {
-            ffi::gtk_widget_set_margin_left(self.as_ref().to_glib_none().0, margin);
-        }
-    }
-
-    fn set_margin_right(&self, margin: i32) {
-        unsafe {
-            ffi::gtk_widget_set_margin_right(self.as_ref().to_glib_none().0, margin);
-        }
-    }
-
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_margin_start(&self, margin: i32) {
         unsafe {
             ffi::gtk_widget_set_margin_start(self.as_ref().to_glib_none().0, margin);
@@ -2154,7 +1962,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn set_opacity(&self, opacity: f64) {
         unsafe {
             ffi::gtk_widget_set_opacity(self.as_ref().to_glib_none().0, opacity);
@@ -2304,7 +2111,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn size_allocate_with_baseline(&self, allocation: &mut Allocation, baseline: i32) {
         unsafe {
             ffi::gtk_widget_size_allocate_with_baseline(self.as_ref().to_glib_none().0, allocation.to_glib_none_mut().0, baseline);
@@ -2358,7 +2164,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn unregister_window<P: IsA<gdk::Window>>(&self, window: &P) {
         unsafe {
             ffi::gtk_widget_unregister_window(self.as_ref().to_glib_none().0, window.as_ref().to_glib_none().0);
@@ -2999,14 +2804,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn connect_visibility_notify_event<F: Fn(&Self, &gdk::EventVisibility) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"visibility-notify-event\0".as_ptr() as *const _,
-                Some(transmute(visibility_notify_event_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
     fn connect_window_state_event<F: Fn(&Self, &gdk::EventWindowState) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3044,14 +2841,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::composite-child\0".as_ptr() as *const _,
                 Some(transmute(notify_composite_child_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_double_buffered_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::double-buffered\0".as_ptr() as *const _,
-                Some(transmute(notify_double_buffered_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -3160,7 +2949,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_margin_end_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3169,23 +2957,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn connect_property_margin_left_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::margin-left\0".as_ptr() as *const _,
-                Some(transmute(notify_margin_left_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_margin_right_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::margin-right\0".as_ptr() as *const _,
-                Some(transmute(notify_margin_right_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_margin_start_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3218,7 +2989,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn connect_property_opacity_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3243,7 +3013,6 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn connect_property_scale_factor_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -3697,12 +3466,6 @@ where P: IsA<Widget> {
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn visibility_notify_event_trampoline<P, F: Fn(&P, &gdk::EventVisibility) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventVisibility, f: glib_ffi::gpointer) -> glib_ffi::gboolean
-where P: IsA<Widget> {
-    let f: &F = transmute(f);
-    f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
-}
-
 unsafe extern "C" fn window_state_event_trampoline<P, F: Fn(&P, &gdk::EventWindowState) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventWindowState, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
     let f: &F = transmute(f);
@@ -3728,12 +3491,6 @@ where P: IsA<Widget> {
 }
 
 unsafe extern "C" fn notify_composite_child_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Widget> {
-    let f: &F = transmute(f);
-    f(&Widget::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_double_buffered_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
     let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
@@ -3818,26 +3575,12 @@ where P: IsA<Widget> {
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 unsafe extern "C" fn notify_margin_end_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
     let f: &F = transmute(f);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_margin_left_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Widget> {
-    let f: &F = transmute(f);
-    f(&Widget::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_margin_right_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Widget> {
-    let f: &F = transmute(f);
-    f(&Widget::from_glib_borrow(this).unsafe_cast())
-}
-
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 unsafe extern "C" fn notify_margin_start_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
     let f: &F = transmute(f);
@@ -3862,7 +3605,6 @@ where P: IsA<Widget> {
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_8", feature = "dox"))]
 unsafe extern "C" fn notify_opacity_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
     let f: &F = transmute(f);
@@ -3881,7 +3623,6 @@ where P: IsA<Widget> {
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 unsafe extern "C" fn notify_scale_factor_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
     let f: &F = transmute(f);

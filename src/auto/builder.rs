@@ -2,7 +2,6 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 use Application;
 use Error;
 use Widget;
@@ -36,7 +35,6 @@ impl Builder {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     pub fn new_from_resource(resource_path: &str) -> Builder {
         assert_initialized_main_thread!();
         unsafe {
@@ -44,7 +42,6 @@ impl Builder {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     pub fn new_from_string(string: &str) -> Builder {
         assert_initialized_main_thread!();
         let length = string.len() as isize;
@@ -63,10 +60,8 @@ impl Default for Builder {
 pub const NONE_BUILDER: Option<&Builder> = None;
 
 pub trait BuilderExt: 'static {
-    //#[cfg(any(feature = "v3_10", feature = "dox"))]
     //fn add_callback_symbol<P: FnOnce() + 'static>(&self, callback_name: &str, callback_symbol: P);
 
-    //#[cfg(any(feature = "v3_10", feature = "dox"))]
     //fn add_callback_symbols<P: FnOnce() + 'static>(&self, first_callback_name: &str, first_callback_symbol: P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
     fn add_from_resource(&self, resource_path: &str) -> Result<(), Error>;
@@ -81,12 +76,10 @@ pub trait BuilderExt: 'static {
 
     //fn connect_signals_full(&self, func: /*Unimplemented*/FnMut(&Builder, &glib::Object, &str, &str, &glib::Object, /*Ignored*/glib::ConnectFlags), user_data: /*Unimplemented*/Option<Fundamental: Pointer>);
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn expose_object<P: IsA<glib::Object>>(&self, name: &str, object: &P);
 
     fn extend_with_template<P: IsA<Widget>>(&self, widget: &P, template_type: glib::types::Type, buffer: &str) -> Result<(), Error>;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_application(&self) -> Option<Application>;
 
     fn get_objects(&self) -> Vec<glib::Object>;
@@ -95,10 +88,8 @@ pub trait BuilderExt: 'static {
 
     fn get_type_from_name(&self, type_name: &str) -> glib::types::Type;
 
-    //#[cfg(any(feature = "v3_10", feature = "dox"))]
     //fn lookup_callback_symbol(&self, callback_name: &str) -> Option<Box<dyn Fn() + 'static>>;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_application<P: IsA<Application>>(&self, application: &P);
 
     fn set_translation_domain<'a, P: Into<Option<&'a str>>>(&self, domain: P);
@@ -111,12 +102,10 @@ pub trait BuilderExt: 'static {
 }
 
 impl<O: IsA<Builder>> BuilderExt for O {
-    //#[cfg(any(feature = "v3_10", feature = "dox"))]
     //fn add_callback_symbol<P: FnOnce() + 'static>(&self, callback_name: &str, callback_symbol: P) {
     //    unsafe { TODO: call ffi::gtk_builder_add_callback_symbol() }
     //}
 
-    //#[cfg(any(feature = "v3_10", feature = "dox"))]
     //fn add_callback_symbols<P: FnOnce() + 'static>(&self, first_callback_name: &str, first_callback_symbol: P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
     //    unsafe { TODO: call ffi::gtk_builder_add_callback_symbols() }
     //}
@@ -163,7 +152,6 @@ impl<O: IsA<Builder>> BuilderExt for O {
     //    unsafe { TODO: call ffi::gtk_builder_connect_signals_full() }
     //}
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn expose_object<P: IsA<glib::Object>>(&self, name: &str, object: &P) {
         unsafe {
             ffi::gtk_builder_expose_object(self.as_ref().to_glib_none().0, name.to_glib_none().0, object.as_ref().to_glib_none().0);
@@ -179,7 +167,6 @@ impl<O: IsA<Builder>> BuilderExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_application(&self) -> Option<Application> {
         unsafe {
             from_glib_none(ffi::gtk_builder_get_application(self.as_ref().to_glib_none().0))
@@ -204,12 +191,10 @@ impl<O: IsA<Builder>> BuilderExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v3_10", feature = "dox"))]
     //fn lookup_callback_symbol(&self, callback_name: &str) -> Option<Box<dyn Fn() + 'static>> {
     //    unsafe { TODO: call ffi::gtk_builder_lookup_callback_symbol() }
     //}
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_application<P: IsA<Application>>(&self, application: &P) {
         unsafe {
             ffi::gtk_builder_set_application(self.as_ref().to_glib_none().0, application.as_ref().to_glib_none().0);

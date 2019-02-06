@@ -49,13 +49,7 @@ pub trait MessageDialogExt: 'static {
 
     //fn format_secondary_text<'a, P: Into<Option<&'a str>>>(&self, message_format: P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
-    #[cfg_attr(feature = "v3_12", deprecated)]
-    fn get_image(&self) -> Option<Widget>;
-
     fn get_message_area(&self) -> Option<Widget>;
-
-    #[cfg_attr(feature = "v3_12", deprecated)]
-    fn set_image<P: IsA<Widget>>(&self, image: &P);
 
     fn set_markup(&self, str: &str);
 
@@ -79,9 +73,6 @@ pub trait MessageDialogExt: 'static {
 
     fn set_property_use_markup(&self, use_markup: bool);
 
-    #[cfg_attr(feature = "v3_12", deprecated)]
-    fn connect_property_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
     fn connect_property_message_area_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_message_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -104,21 +95,9 @@ impl<O: IsA<MessageDialog>> MessageDialogExt for O {
     //    unsafe { TODO: call ffi::gtk_message_dialog_format_secondary_text() }
     //}
 
-    fn get_image(&self) -> Option<Widget> {
-        unsafe {
-            from_glib_none(ffi::gtk_message_dialog_get_image(self.as_ref().to_glib_none().0))
-        }
-    }
-
     fn get_message_area(&self) -> Option<Widget> {
         unsafe {
             from_glib_none(ffi::gtk_message_dialog_get_message_area(self.as_ref().to_glib_none().0))
-        }
-    }
-
-    fn set_image<P: IsA<Widget>>(&self, image: &P) {
-        unsafe {
-            ffi::gtk_message_dialog_set_image(self.as_ref().to_glib_none().0, image.as_ref().to_glib_none().0);
         }
     }
 
@@ -200,14 +179,6 @@ impl<O: IsA<MessageDialog>> MessageDialogExt for O {
         }
     }
 
-    fn connect_property_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::image\0".as_ptr() as *const _,
-                Some(transmute(notify_image_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
     fn connect_property_message_area_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -255,12 +226,6 @@ impl<O: IsA<MessageDialog>> MessageDialogExt for O {
                 Some(transmute(notify_use_markup_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
-}
-
-unsafe extern "C" fn notify_image_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMessageDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<MessageDialog> {
-    let f: &F = transmute(f);
-    f(&MessageDialog::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_message_area_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMessageDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)

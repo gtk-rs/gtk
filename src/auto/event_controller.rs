@@ -2,27 +2,18 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use PropagationPhase;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use Widget;
 use ffi;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use gdk;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use glib::object::Cast;
 use glib::object::IsA;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use glib::signal::SignalHandlerId;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use glib::signal::connect_raw;
 use glib::translate::*;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use glib_ffi;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use std::boxed::Box as Box_;
 use std::fmt;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use std::mem::transmute;
 
 glib_wrapper! {
@@ -36,62 +27,50 @@ glib_wrapper! {
 pub const NONE_EVENT_CONTROLLER: Option<&EventController> = None;
 
 pub trait EventControllerExt: 'static {
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_propagation_phase(&self) -> PropagationPhase;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_widget(&self) -> Option<Widget>;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn handle_event(&self, event: &gdk::Event) -> bool;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn reset(&self);
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn set_propagation_phase(&self, phase: PropagationPhase);
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_property_propagation_phase_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<EventController>> EventControllerExt for O {
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_propagation_phase(&self) -> PropagationPhase {
         unsafe {
             from_glib(ffi::gtk_event_controller_get_propagation_phase(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_widget(&self) -> Option<Widget> {
         unsafe {
             from_glib_none(ffi::gtk_event_controller_get_widget(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn handle_event(&self, event: &gdk::Event) -> bool {
         unsafe {
             from_glib(ffi::gtk_event_controller_handle_event(self.as_ref().to_glib_none().0, event.to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn reset(&self) {
         unsafe {
             ffi::gtk_event_controller_reset(self.as_ref().to_glib_none().0);
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn set_propagation_phase(&self, phase: PropagationPhase) {
         unsafe {
             ffi::gtk_event_controller_set_propagation_phase(self.as_ref().to_glib_none().0, phase.to_glib());
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_property_propagation_phase_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -101,7 +80,6 @@ impl<O: IsA<EventController>> EventControllerExt for O {
     }
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 unsafe extern "C" fn notify_propagation_phase_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEventController, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<EventController> {
     let f: &F = transmute(f);

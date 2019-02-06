@@ -53,9 +53,6 @@ impl ScrolledWindow {
 pub const NONE_SCROLLED_WINDOW: Option<&ScrolledWindow> = None;
 
 pub trait ScrolledWindowExt: 'static {
-    #[cfg_attr(feature = "v3_8", deprecated)]
-    fn add_with_viewport<P: IsA<Widget>>(&self, child: &P);
-
     fn get_capture_button_press(&self) -> bool;
 
     fn get_hadjustment(&self) -> Option<Adjustment>;
@@ -140,12 +137,6 @@ pub trait ScrolledWindowExt: 'static {
 
     fn set_property_window_placement(&self, window_placement: CornerType);
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_window_placement_set(&self) -> bool;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_window_placement_set(&self, window_placement_set: bool);
-
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn connect_edge_overshot<F: Fn(&Self, PositionType) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -192,18 +183,9 @@ pub trait ScrolledWindowExt: 'static {
     fn connect_property_vscrollbar_policy_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_window_placement_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_window_placement_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<ScrolledWindow>> ScrolledWindowExt for O {
-    fn add_with_viewport<P: IsA<Widget>>(&self, child: &P) {
-        unsafe {
-            ffi::gtk_scrolled_window_add_with_viewport(self.as_ref().to_glib_none().0, child.as_ref().to_glib_none().0);
-        }
-    }
-
     fn get_capture_button_press(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_scrolled_window_get_capture_button_press(self.as_ref().to_glib_none().0))
@@ -445,20 +427,6 @@ impl<O: IsA<ScrolledWindow>> ScrolledWindowExt for O {
         }
     }
 
-    fn get_property_window_placement_set(&self) -> bool {
-        unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"window-placement-set\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_window_placement_set(&self, window_placement_set: bool) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"window-placement-set\0".as_ptr() as *const _, Value::from(&window_placement_set).to_glib_none().0);
-        }
-    }
-
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn connect_edge_overshot<F: Fn(&Self, PositionType) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
@@ -618,14 +586,6 @@ impl<O: IsA<ScrolledWindow>> ScrolledWindowExt for O {
                 Some(transmute(notify_window_placement_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
-
-    fn connect_property_window_placement_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::window-placement-set\0".as_ptr() as *const _,
-                Some(transmute(notify_window_placement_set_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
@@ -738,12 +698,6 @@ where P: IsA<ScrolledWindow> {
 }
 
 unsafe extern "C" fn notify_window_placement_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkScrolledWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<ScrolledWindow> {
-    let f: &F = transmute(f);
-    f(&ScrolledWindow::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_window_placement_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkScrolledWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ScrolledWindow> {
     let f: &F = transmute(f);
     f(&ScrolledWindow::from_glib_borrow(this).unsafe_cast())

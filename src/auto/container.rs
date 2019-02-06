@@ -10,6 +10,7 @@ use WidgetPath;
 use cairo;
 use ffi;
 use glib;
+use glib::StaticType;
 use glib::Value;
 use glib::object::Cast;
 use glib::object::IsA;
@@ -73,15 +74,9 @@ pub trait ContainerExt: 'static {
 
     fn get_path_for_child<P: IsA<Widget>>(&self, child: &P) -> Option<WidgetPath>;
 
-    #[cfg_attr(feature = "v3_12", deprecated)]
-    fn get_resize_mode(&self) -> ResizeMode;
-
     fn propagate_draw<P: IsA<Widget>>(&self, child: &P, cr: &cairo::Context);
 
     fn remove<P: IsA<Widget>>(&self, widget: &P);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn resize_children(&self);
 
     fn set_border_width(&self, border_width: u32);
 
@@ -94,16 +89,14 @@ pub trait ContainerExt: 'static {
 
     fn set_focus_vadjustment<P: IsA<Adjustment>>(&self, adjustment: &P);
 
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn set_reallocate_redraws(&self, needs_redraws: bool);
-
-    #[cfg_attr(feature = "v3_12", deprecated)]
-    fn set_resize_mode(&self, resize_mode: ResizeMode);
-
     #[cfg_attr(feature = "v3_24", deprecated)]
     fn unset_focus_chain(&self);
 
     fn set_property_child<P: IsA<Widget> + glib::value::SetValueOptional>(&self, child: Option<&P>);
+
+    fn get_property_resize_mode(&self) -> ResizeMode;
+
+    fn set_property_resize_mode(&self, resize_mode: ResizeMode);
 
     fn connect_add<F: Fn(&Self, &Widget) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -238,12 +231,6 @@ impl<O: IsA<Container>> ContainerExt for O {
         }
     }
 
-    fn get_resize_mode(&self) -> ResizeMode {
-        unsafe {
-            from_glib(ffi::gtk_container_get_resize_mode(self.as_ref().to_glib_none().0))
-        }
-    }
-
     fn propagate_draw<P: IsA<Widget>>(&self, child: &P, cr: &cairo::Context) {
         unsafe {
             ffi::gtk_container_propagate_draw(self.as_ref().to_glib_none().0, child.as_ref().to_glib_none().0, mut_override(cr.to_glib_none().0));
@@ -253,12 +240,6 @@ impl<O: IsA<Container>> ContainerExt for O {
     fn remove<P: IsA<Widget>>(&self, widget: &P) {
         unsafe {
             ffi::gtk_container_remove(self.as_ref().to_glib_none().0, widget.as_ref().to_glib_none().0);
-        }
-    }
-
-    fn resize_children(&self) {
-        unsafe {
-            ffi::gtk_container_resize_children(self.as_ref().to_glib_none().0);
         }
     }
 
@@ -293,18 +274,6 @@ impl<O: IsA<Container>> ContainerExt for O {
         }
     }
 
-    fn set_reallocate_redraws(&self, needs_redraws: bool) {
-        unsafe {
-            ffi::gtk_container_set_reallocate_redraws(self.as_ref().to_glib_none().0, needs_redraws.to_glib());
-        }
-    }
-
-    fn set_resize_mode(&self, resize_mode: ResizeMode) {
-        unsafe {
-            ffi::gtk_container_set_resize_mode(self.as_ref().to_glib_none().0, resize_mode.to_glib());
-        }
-    }
-
     fn unset_focus_chain(&self) {
         unsafe {
             ffi::gtk_container_unset_focus_chain(self.as_ref().to_glib_none().0);
@@ -314,6 +283,20 @@ impl<O: IsA<Container>> ContainerExt for O {
     fn set_property_child<P: IsA<Widget> + glib::value::SetValueOptional>(&self, child: Option<&P>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"child\0".as_ptr() as *const _, Value::from(child).to_glib_none().0);
+        }
+    }
+
+    fn get_property_resize_mode(&self) -> ResizeMode {
+        unsafe {
+            let mut value = Value::from_type(<ResizeMode as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"resize-mode\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            value.get().unwrap()
+        }
+    }
+
+    fn set_property_resize_mode(&self, resize_mode: ResizeMode) {
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"resize-mode\0".as_ptr() as *const _, Value::from(&resize_mode).to_glib_none().0);
         }
     }
 

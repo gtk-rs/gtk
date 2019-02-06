@@ -11,9 +11,7 @@ use Widget;
 use Window;
 use ffi;
 use glib;
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 use glib::StaticType;
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 use glib::Value;
 use glib::object::Cast;
 use glib::object::IsA;
@@ -63,12 +61,8 @@ pub trait DialogExt: 'static {
 
     //fn add_buttons(&self, first_button_text: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
-    #[cfg_attr(feature = "v3_12", deprecated)]
-    fn get_action_area(&self) -> Widget;
-
     fn get_content_area(&self) -> Box;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_header_bar(&self) -> Option<Widget>;
 
     fn get_response_for_widget<P: IsA<Widget>>(&self, widget: &P) -> i32;
@@ -79,17 +73,10 @@ pub trait DialogExt: 'static {
 
     fn run(&self) -> i32;
 
-    //#[cfg_attr(feature = "v3_10", deprecated)]
-    //fn set_alternative_button_order(&self, first_response_id: i32, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_alternative_button_order_from_array(&self, new_order: &[i32]);
-
     fn set_default_response(&self, response_id: ResponseType);
 
     fn set_response_sensitive(&self, response_id: ResponseType, setting: bool);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_property_use_header_bar(&self) -> i32;
 
     fn connect_close<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -116,19 +103,12 @@ impl<O: IsA<Dialog>> DialogExt for O {
     //    unsafe { TODO: call ffi::gtk_dialog_add_buttons() }
     //}
 
-    fn get_action_area(&self) -> Widget {
-        unsafe {
-            from_glib_none(ffi::gtk_dialog_get_action_area(self.as_ref().to_glib_none().0))
-        }
-    }
-
     fn get_content_area(&self) -> Box {
         unsafe {
             from_glib_none(ffi::gtk_dialog_get_content_area(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_header_bar(&self) -> Option<Widget> {
         unsafe {
             from_glib_none(ffi::gtk_dialog_get_header_bar(self.as_ref().to_glib_none().0))
@@ -159,17 +139,6 @@ impl<O: IsA<Dialog>> DialogExt for O {
         }
     }
 
-    //fn set_alternative_button_order(&self, first_response_id: i32, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
-    //    unsafe { TODO: call ffi::gtk_dialog_set_alternative_button_order() }
-    //}
-
-    fn set_alternative_button_order_from_array(&self, new_order: &[i32]) {
-        let n_params = new_order.len() as i32;
-        unsafe {
-            ffi::gtk_dialog_set_alternative_button_order_from_array(self.as_ref().to_glib_none().0, n_params, new_order.to_glib_none().0);
-        }
-    }
-
     fn set_default_response(&self, response_id: ResponseType) {
         unsafe {
             ffi::gtk_dialog_set_default_response(self.as_ref().to_glib_none().0, response_id.to_glib());
@@ -182,7 +151,6 @@ impl<O: IsA<Dialog>> DialogExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_property_use_header_bar(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());

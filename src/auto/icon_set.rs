@@ -2,80 +2,15 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use IconSize;
-use IconSource;
-use StyleContext;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
-use cairo;
 use ffi;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
-use gdk;
-use gdk_pixbuf;
-use glib::object::IsA;
-use glib::translate::*;
 
 glib_wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-    pub struct IconSet(Shared<ffi::GtkIconSet>);
+    pub struct IconSet(Boxed<ffi::GtkIconSet>);
 
     match fn {
-        ref => |ptr| ffi::gtk_icon_set_ref(ptr),
-        unref => |ptr| ffi::gtk_icon_set_unref(ptr),
+        copy => |ptr| gobject_ffi::g_boxed_copy(ffi::gtk_icon_set_get_type(), ptr as *mut _) as *mut ffi::GtkIconSet,
+        free => |ptr| gobject_ffi::g_boxed_free(ffi::gtk_icon_set_get_type(), ptr as *mut _),
         get_type => || ffi::gtk_icon_set_get_type(),
-    }
-}
-
-impl IconSet {
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    pub fn new() -> IconSet {
-        assert_initialized_main_thread!();
-        unsafe {
-            from_glib_full(ffi::gtk_icon_set_new())
-        }
-    }
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    pub fn new_from_pixbuf(pixbuf: &gdk_pixbuf::Pixbuf) -> IconSet {
-        assert_initialized_main_thread!();
-        unsafe {
-            from_glib_full(ffi::gtk_icon_set_new_from_pixbuf(pixbuf.to_glib_none().0))
-        }
-    }
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    pub fn add_source(&self, source: &IconSource) {
-        unsafe {
-            ffi::gtk_icon_set_add_source(self.to_glib_none().0, source.to_glib_none().0);
-        }
-    }
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    pub fn copy(&self) -> Option<IconSet> {
-        unsafe {
-            from_glib_full(ffi::gtk_icon_set_copy(self.to_glib_none().0))
-        }
-    }
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    pub fn render_icon_pixbuf<P: IsA<StyleContext>>(&self, context: &P, size: IconSize) -> Option<gdk_pixbuf::Pixbuf> {
-        unsafe {
-            from_glib_full(ffi::gtk_icon_set_render_icon_pixbuf(self.to_glib_none().0, context.as_ref().to_glib_none().0, size.to_glib()))
-        }
-    }
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
-    pub fn render_icon_surface<'a, P: IsA<StyleContext>, Q: IsA<gdk::Window> + 'a, R: Into<Option<&'a Q>>>(&self, context: &P, size: IconSize, scale: i32, for_window: R) -> Option<cairo::Surface> {
-        let for_window = for_window.into();
-        unsafe {
-            from_glib_full(ffi::gtk_icon_set_render_icon_surface(self.to_glib_none().0, context.as_ref().to_glib_none().0, size.to_glib(), scale, for_window.map(|p| p.as_ref()).to_glib_none().0))
-        }
-    }
-}
-
-#[cfg_attr(feature = "v3_10", deprecated)]
-impl Default for IconSet {
-    fn default() -> Self {
-        Self::new()
     }
 }

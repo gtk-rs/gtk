@@ -3,34 +3,25 @@
 // DO NOT EDIT
 
 use Actionable;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 use ArrowType;
 use Bin;
 use Buildable;
 use Button;
 use Container;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 use Menu;
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 use Popover;
 use ToggleButton;
 use Widget;
 use ffi;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 use gio;
 use glib::object::Cast;
 use glib::object::IsA;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 use glib::signal::SignalHandlerId;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 use glib::signal::connect_raw;
 use glib::translate::*;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 use glib_ffi;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 use std::boxed::Box as Box_;
 use std::fmt;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 use std::mem::transmute;
 
 glib_wrapper! {
@@ -42,7 +33,6 @@ glib_wrapper! {
 }
 
 impl MenuButton {
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     pub fn new() -> MenuButton {
         assert_initialized_main_thread!();
         unsafe {
@@ -51,7 +41,6 @@ impl MenuButton {
     }
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 impl Default for MenuButton {
     fn default() -> Self {
         Self::new()
@@ -61,105 +50,80 @@ impl Default for MenuButton {
 pub const NONE_MENU_BUTTON: Option<&MenuButton> = None;
 
 pub trait MenuButtonExt: 'static {
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_align_widget(&self) -> Option<Widget>;
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_direction(&self) -> ArrowType;
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_menu_model(&self) -> Option<gio::MenuModel>;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_popover(&self) -> Option<Popover>;
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_popup(&self) -> Option<Menu>;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_use_popover(&self) -> bool;
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn set_align_widget<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, align_widget: Q);
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn set_direction(&self, direction: ArrowType);
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn set_menu_model<'a, P: IsA<gio::MenuModel> + 'a, Q: Into<Option<&'a P>>>(&self, menu_model: Q);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_popover<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, popover: Q);
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn set_popup<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, menu: Q);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_use_popover(&self, use_popover: bool);
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_align_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_direction_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_menu_model_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_popover_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_popup_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_use_popover_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<MenuButton>> MenuButtonExt for O {
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_align_widget(&self) -> Option<Widget> {
         unsafe {
             from_glib_none(ffi::gtk_menu_button_get_align_widget(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_direction(&self) -> ArrowType {
         unsafe {
             from_glib(ffi::gtk_menu_button_get_direction(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_menu_model(&self) -> Option<gio::MenuModel> {
         unsafe {
             from_glib_none(ffi::gtk_menu_button_get_menu_model(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_popover(&self) -> Option<Popover> {
         unsafe {
             from_glib_none(ffi::gtk_menu_button_get_popover(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_popup(&self) -> Option<Menu> {
         unsafe {
             from_glib_none(ffi::gtk_menu_button_get_popup(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_use_popover(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_menu_button_get_use_popover(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn set_align_widget<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, align_widget: Q) {
         let align_widget = align_widget.into();
         unsafe {
@@ -167,14 +131,12 @@ impl<O: IsA<MenuButton>> MenuButtonExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn set_direction(&self, direction: ArrowType) {
         unsafe {
             ffi::gtk_menu_button_set_direction(self.as_ref().to_glib_none().0, direction.to_glib());
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn set_menu_model<'a, P: IsA<gio::MenuModel> + 'a, Q: Into<Option<&'a P>>>(&self, menu_model: Q) {
         let menu_model = menu_model.into();
         unsafe {
@@ -182,7 +144,6 @@ impl<O: IsA<MenuButton>> MenuButtonExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_popover<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, popover: Q) {
         let popover = popover.into();
         unsafe {
@@ -190,7 +151,6 @@ impl<O: IsA<MenuButton>> MenuButtonExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn set_popup<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, menu: Q) {
         let menu = menu.into();
         unsafe {
@@ -198,14 +158,12 @@ impl<O: IsA<MenuButton>> MenuButtonExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_use_popover(&self, use_popover: bool) {
         unsafe {
             ffi::gtk_menu_button_set_use_popover(self.as_ref().to_glib_none().0, use_popover.to_glib());
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_align_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -214,7 +172,6 @@ impl<O: IsA<MenuButton>> MenuButtonExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_direction_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -223,7 +180,6 @@ impl<O: IsA<MenuButton>> MenuButtonExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_menu_model_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -232,7 +188,6 @@ impl<O: IsA<MenuButton>> MenuButtonExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_popover_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -241,7 +196,6 @@ impl<O: IsA<MenuButton>> MenuButtonExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_popup_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -250,7 +204,6 @@ impl<O: IsA<MenuButton>> MenuButtonExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_use_popover_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -260,42 +213,36 @@ impl<O: IsA<MenuButton>> MenuButtonExt for O {
     }
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 unsafe extern "C" fn notify_align_widget_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MenuButton> {
     let f: &F = transmute(f);
     f(&MenuButton::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 unsafe extern "C" fn notify_direction_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MenuButton> {
     let f: &F = transmute(f);
     f(&MenuButton::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 unsafe extern "C" fn notify_menu_model_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MenuButton> {
     let f: &F = transmute(f);
     f(&MenuButton::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 unsafe extern "C" fn notify_popover_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MenuButton> {
     let f: &F = transmute(f);
     f(&MenuButton::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 unsafe extern "C" fn notify_popup_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MenuButton> {
     let f: &F = transmute(f);
     f(&MenuButton::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 unsafe extern "C" fn notify_use_popover_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MenuButton> {
     let f: &F = transmute(f);

@@ -2,7 +2,6 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 use BaselinePosition;
 use Buildable;
 use Container;
@@ -18,7 +17,6 @@ use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
@@ -53,7 +51,6 @@ pub trait GridExt: 'static {
 
     fn attach_next_to<'a, P: IsA<Widget>, Q: IsA<Widget> + 'a, R: Into<Option<&'a Q>>>(&self, child: &P, sibling: R, side: PositionType, width: i32, height: i32);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_baseline_row(&self) -> i32;
 
     fn get_child_at(&self, left: i32, top: i32) -> Option<Widget>;
@@ -62,7 +59,6 @@ pub trait GridExt: 'static {
 
     fn get_column_spacing(&self) -> u32;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_row_baseline_position(&self, row: i32) -> BaselinePosition;
 
     fn get_row_homogeneous(&self) -> bool;
@@ -75,29 +71,21 @@ pub trait GridExt: 'static {
 
     fn insert_row(&self, position: i32);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn remove_column(&self, position: i32);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn remove_row(&self, position: i32);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_baseline_row(&self, row: i32);
 
     fn set_column_homogeneous(&self, homogeneous: bool);
 
     fn set_column_spacing(&self, spacing: u32);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_row_baseline_position(&self, row: i32, pos: BaselinePosition);
 
     fn set_row_homogeneous(&self, homogeneous: bool);
 
     fn set_row_spacing(&self, spacing: u32);
-
-    fn get_property_baseline_row(&self) -> i32;
-
-    fn set_property_baseline_row(&self, baseline_row: i32);
 
     fn get_cell_height<T: IsA<Widget>>(&self, item: &T) -> i32;
 
@@ -140,7 +128,6 @@ impl<O: IsA<Grid>> GridExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_baseline_row(&self) -> i32 {
         unsafe {
             ffi::gtk_grid_get_baseline_row(self.as_ref().to_glib_none().0)
@@ -165,7 +152,6 @@ impl<O: IsA<Grid>> GridExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_row_baseline_position(&self, row: i32) -> BaselinePosition {
         unsafe {
             from_glib(ffi::gtk_grid_get_row_baseline_position(self.as_ref().to_glib_none().0, row))
@@ -202,21 +188,18 @@ impl<O: IsA<Grid>> GridExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn remove_column(&self, position: i32) {
         unsafe {
             ffi::gtk_grid_remove_column(self.as_ref().to_glib_none().0, position);
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn remove_row(&self, position: i32) {
         unsafe {
             ffi::gtk_grid_remove_row(self.as_ref().to_glib_none().0, position);
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_baseline_row(&self, row: i32) {
         unsafe {
             ffi::gtk_grid_set_baseline_row(self.as_ref().to_glib_none().0, row);
@@ -235,7 +218,6 @@ impl<O: IsA<Grid>> GridExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_row_baseline_position(&self, row: i32, pos: BaselinePosition) {
         unsafe {
             ffi::gtk_grid_set_row_baseline_position(self.as_ref().to_glib_none().0, row, pos.to_glib());
@@ -251,20 +233,6 @@ impl<O: IsA<Grid>> GridExt for O {
     fn set_row_spacing(&self, spacing: u32) {
         unsafe {
             ffi::gtk_grid_set_row_spacing(self.as_ref().to_glib_none().0, spacing);
-        }
-    }
-
-    fn get_property_baseline_row(&self) -> i32 {
-        unsafe {
-            let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"baseline-row\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_baseline_row(&self, baseline_row: i32) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"baseline-row\0".as_ptr() as *const _, Value::from(&baseline_row).to_glib_none().0);
         }
     }
 

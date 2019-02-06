@@ -49,14 +49,6 @@ impl Tooltip {
         }
     }
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    pub fn set_icon_from_stock<'a, P: Into<Option<&'a str>>>(&self, stock_id: P, size: IconSize) {
-        let stock_id = stock_id.into();
-        unsafe {
-            ffi::gtk_tooltip_set_icon_from_stock(self.to_glib_none().0, stock_id.to_glib_none().0, size.to_glib());
-        }
-    }
-
     pub fn set_markup<'a, P: Into<Option<&'a str>>>(&self, markup: P) {
         let markup = markup.into();
         unsafe {

@@ -59,7 +59,6 @@ pub trait CellAreaExt: 'static {
 
     fn attribute_disconnect<P: IsA<CellRenderer>>(&self, renderer: &P, attribute: &str);
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn attribute_get_column<P: IsA<CellRenderer>>(&self, renderer: &P, attribute: &str) -> i32;
 
     //fn cell_get<P: IsA<CellRenderer>>(&self, renderer: &P, first_prop_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
@@ -190,7 +189,6 @@ impl<O: IsA<CellArea>> CellAreaExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn attribute_get_column<P: IsA<CellRenderer>>(&self, renderer: &P, attribute: &str) -> i32 {
         unsafe {
             ffi::gtk_cell_area_attribute_get_column(self.as_ref().to_glib_none().0, renderer.as_ref().to_glib_none().0, attribute.to_glib_none().0)
