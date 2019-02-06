@@ -12,7 +12,6 @@ use Error;
 
 
 impl Builder {
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     pub fn new_from_file<T: AsRef<Path>>(file_path: T) -> Builder {
         assert_initialized_main_thread!();
         unsafe { from_glib_full(ffi::gtk_builder_new_from_file(file_path.as_ref().to_glib_none().0)) }
