@@ -6,28 +6,19 @@ use EventController;
 use Gesture;
 use GestureDrag;
 use GestureSingle;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use Orientation;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use PanDirection;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use Widget;
 use ffi;
 use glib::object::Cast;
 use glib::object::IsA;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use glib::signal::SignalHandlerId;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use glib::signal::connect_raw;
 use glib::translate::*;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use glib_ffi;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use libc;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use std::boxed::Box as Box_;
 use std::fmt;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use std::mem::transmute;
 
 glib_wrapper! {
@@ -39,7 +30,6 @@ glib_wrapper! {
 }
 
 impl GesturePan {
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     pub fn new<P: IsA<Widget>>(widget: &P, orientation: Orientation) -> GesturePan {
         skip_assert_initialized!();
         unsafe {
@@ -51,35 +41,28 @@ impl GesturePan {
 pub const NONE_GESTURE_PAN: Option<&GesturePan> = None;
 
 pub trait GesturePanExt: 'static {
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_orientation(&self) -> Orientation;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn set_orientation(&self, orientation: Orientation);
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_pan<F: Fn(&Self, PanDirection, f64) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_property_orientation_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<GesturePan>> GesturePanExt for O {
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_orientation(&self) -> Orientation {
         unsafe {
             from_glib(ffi::gtk_gesture_pan_get_orientation(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn set_orientation(&self, orientation: Orientation) {
         unsafe {
             ffi::gtk_gesture_pan_set_orientation(self.as_ref().to_glib_none().0, orientation.to_glib());
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_pan<F: Fn(&Self, PanDirection, f64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -88,7 +71,6 @@ impl<O: IsA<GesturePan>> GesturePanExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_property_orientation_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -98,14 +80,12 @@ impl<O: IsA<GesturePan>> GesturePanExt for O {
     }
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 unsafe extern "C" fn pan_trampoline<P, F: Fn(&P, PanDirection, f64) + 'static>(this: *mut ffi::GtkGesturePan, direction: ffi::GtkPanDirection, offset: libc::c_double, f: glib_ffi::gpointer)
 where P: IsA<GesturePan> {
     let f: &F = transmute(f);
     f(&GesturePan::from_glib_borrow(this).unsafe_cast(), from_glib(direction), offset)
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 unsafe extern "C" fn notify_orientation_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGesturePan, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<GesturePan> {
     let f: &F = transmute(f);

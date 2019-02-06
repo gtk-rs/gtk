@@ -6,7 +6,6 @@ use Actionable;
 use Bin;
 use Buildable;
 use Container;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 use IconSize;
 use PositionType;
 use ReliefStyle;
@@ -15,8 +14,6 @@ use ffi;
 use gdk;
 use glib;
 use glib::GString;
-use glib::StaticType;
-use glib::Value;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::object::ObjectExt;
@@ -27,7 +24,6 @@ use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
 
 glib_wrapper! {
@@ -46,20 +42,11 @@ impl Button {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     pub fn new_from_icon_name<'a, P: Into<Option<&'a str>>>(icon_name: P, size: IconSize) -> Button {
         assert_initialized_main_thread!();
         let icon_name = icon_name.into();
         unsafe {
             Widget::from_glib_none(ffi::gtk_button_new_from_icon_name(icon_name.to_glib_none().0, size.to_glib())).unsafe_cast()
-        }
-    }
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    pub fn new_from_stock(stock_id: &str) -> Button {
-        assert_initialized_main_thread!();
-        unsafe {
-            Widget::from_glib_none(ffi::gtk_button_new_from_stock(stock_id.to_glib_none().0)).unsafe_cast()
         }
     }
 
@@ -89,10 +76,6 @@ pub const NONE_BUTTON: Option<&Button> = None;
 pub trait ButtonExt: 'static {
     fn clicked(&self);
 
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn get_alignment(&self) -> (f32, f32);
-
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_always_show_image(&self) -> bool;
 
     fn get_event_window(&self) -> Option<gdk::Window>;
@@ -109,15 +92,8 @@ pub trait ButtonExt: 'static {
 
     fn get_relief(&self) -> ReliefStyle;
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_use_stock(&self) -> bool;
-
     fn get_use_underline(&self) -> bool;
 
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn set_alignment(&self, xalign: f32, yalign: f32);
-
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn set_always_show_image(&self, always_show: bool);
 
     #[cfg_attr(feature = "v3_20", deprecated)]
@@ -132,22 +108,7 @@ pub trait ButtonExt: 'static {
 
     fn set_relief(&self, relief: ReliefStyle);
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_use_stock(&self, use_stock: bool);
-
     fn set_use_underline(&self, use_underline: bool);
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn get_property_xalign(&self) -> f32;
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn set_property_xalign(&self, xalign: f32);
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn get_property_yalign(&self) -> f32;
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn set_property_yalign(&self, yalign: f32);
 
     fn connect_activate<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -157,7 +118,6 @@ pub trait ButtonExt: 'static {
 
     fn emit_clicked(&self);
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_always_show_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -168,16 +128,7 @@ pub trait ButtonExt: 'static {
 
     fn connect_property_relief_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_use_stock_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
     fn connect_property_use_underline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn connect_property_xalign_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn connect_property_yalign_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<Button>> ButtonExt for O {
@@ -187,16 +138,6 @@ impl<O: IsA<Button>> ButtonExt for O {
         }
     }
 
-    fn get_alignment(&self) -> (f32, f32) {
-        unsafe {
-            let mut xalign = mem::uninitialized();
-            let mut yalign = mem::uninitialized();
-            ffi::gtk_button_get_alignment(self.as_ref().to_glib_none().0, &mut xalign, &mut yalign);
-            (xalign, yalign)
-        }
-    }
-
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_always_show_image(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_button_get_always_show_image(self.as_ref().to_glib_none().0))
@@ -240,25 +181,12 @@ impl<O: IsA<Button>> ButtonExt for O {
         }
     }
 
-    fn get_use_stock(&self) -> bool {
-        unsafe {
-            from_glib(ffi::gtk_button_get_use_stock(self.as_ref().to_glib_none().0))
-        }
-    }
-
     fn get_use_underline(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_button_get_use_underline(self.as_ref().to_glib_none().0))
         }
     }
 
-    fn set_alignment(&self, xalign: f32, yalign: f32) {
-        unsafe {
-            ffi::gtk_button_set_alignment(self.as_ref().to_glib_none().0, xalign, yalign);
-        }
-    }
-
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn set_always_show_image(&self, always_show: bool) {
         unsafe {
             ffi::gtk_button_set_always_show_image(self.as_ref().to_glib_none().0, always_show.to_glib());
@@ -297,43 +225,9 @@ impl<O: IsA<Button>> ButtonExt for O {
         }
     }
 
-    fn set_use_stock(&self, use_stock: bool) {
-        unsafe {
-            ffi::gtk_button_set_use_stock(self.as_ref().to_glib_none().0, use_stock.to_glib());
-        }
-    }
-
     fn set_use_underline(&self, use_underline: bool) {
         unsafe {
             ffi::gtk_button_set_use_underline(self.as_ref().to_glib_none().0, use_underline.to_glib());
-        }
-    }
-
-    fn get_property_xalign(&self) -> f32 {
-        unsafe {
-            let mut value = Value::from_type(<f32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"xalign\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_xalign(&self, xalign: f32) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"xalign\0".as_ptr() as *const _, Value::from(&xalign).to_glib_none().0);
-        }
-    }
-
-    fn get_property_yalign(&self) -> f32 {
-        unsafe {
-            let mut value = Value::from_type(<f32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"yalign\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_yalign(&self, yalign: f32) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"yalign\0".as_ptr() as *const _, Value::from(&yalign).to_glib_none().0);
         }
     }
 
@@ -361,7 +255,6 @@ impl<O: IsA<Button>> ButtonExt for O {
         let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("clicked", &[]).unwrap() };
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_always_show_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -402,35 +295,11 @@ impl<O: IsA<Button>> ButtonExt for O {
         }
     }
 
-    fn connect_property_use_stock_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::use-stock\0".as_ptr() as *const _,
-                Some(transmute(notify_use_stock_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
     fn connect_property_use_underline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::use-underline\0".as_ptr() as *const _,
                 Some(transmute(notify_use_underline_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_xalign_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::xalign\0".as_ptr() as *const _,
-                Some(transmute(notify_xalign_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_yalign_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::yalign\0".as_ptr() as *const _,
-                Some(transmute(notify_yalign_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
@@ -447,7 +316,6 @@ where P: IsA<Button> {
     f(&Button::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 unsafe extern "C" fn notify_always_show_image_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Button> {
     let f: &F = transmute(f);
@@ -478,25 +346,7 @@ where P: IsA<Button> {
     f(&Button::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_use_stock_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Button> {
-    let f: &F = transmute(f);
-    f(&Button::from_glib_borrow(this).unsafe_cast())
-}
-
 unsafe extern "C" fn notify_use_underline_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Button> {
-    let f: &F = transmute(f);
-    f(&Button::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_xalign_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Button> {
-    let f: &F = transmute(f);
-    f(&Button::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_yalign_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Button> {
     let f: &F = transmute(f);
     f(&Button::from_glib_borrow(this).unsafe_cast())

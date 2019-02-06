@@ -98,9 +98,6 @@ pub trait ComboBoxExt: 'static {
 
     fn get_active_iter(&self) -> Option<TreeIter>;
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_add_tearoffs(&self) -> bool;
-
     fn get_button_sensitivity(&self) -> SensitivityType;
 
     fn get_column_span_column(&self) -> i32;
@@ -125,9 +122,6 @@ pub trait ComboBoxExt: 'static {
 
     fn get_row_span_column(&self) -> i32;
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_title(&self) -> Option<GString>;
-
     fn get_wrap_width(&self) -> i32;
 
     fn popdown(&self);
@@ -139,9 +133,6 @@ pub trait ComboBoxExt: 'static {
     fn set_active_id<'a, P: Into<Option<&'a str>>>(&self, active_id: P) -> bool;
 
     fn set_active_iter<'a, P: Into<Option<&'a TreeIter>>>(&self, iter: P);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_add_tearoffs(&self, add_tearoffs: bool);
 
     fn set_button_sensitivity(&self, sensitivity: SensitivityType);
 
@@ -163,9 +154,6 @@ pub trait ComboBoxExt: 'static {
 
     fn set_row_span_column(&self, row_span: i32);
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_title(&self, title: &str);
-
     fn set_wrap_width(&self, width: i32);
 
     fn get_property_cell_area(&self) -> Option<CellArea>;
@@ -175,12 +163,6 @@ pub trait ComboBoxExt: 'static {
     fn set_property_has_frame(&self, has_frame: bool);
 
     fn get_property_popup_shown(&self) -> bool;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_tearoff_title(&self) -> Option<GString>;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_tearoff_title<'a, P: Into<Option<&'a str>>>(&self, tearoff_title: P);
 
     fn connect_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -202,9 +184,6 @@ pub trait ComboBoxExt: 'static {
 
     fn connect_property_active_id_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_add_tearoffs_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
     fn connect_property_button_sensitivity_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_column_span_column_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -223,9 +202,6 @@ pub trait ComboBoxExt: 'static {
 
     fn connect_property_row_span_column_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_tearoff_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
     fn connect_property_wrap_width_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
@@ -241,12 +217,6 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
             let mut iter = TreeIter::uninitialized();
             let ret = from_glib(ffi::gtk_combo_box_get_active_iter(self.as_ref().to_glib_none().0, iter.to_glib_none_mut().0));
             if ret { Some(iter) } else { None }
-        }
-    }
-
-    fn get_add_tearoffs(&self) -> bool {
-        unsafe {
-            from_glib(ffi::gtk_combo_box_get_add_tearoffs(self.as_ref().to_glib_none().0))
         }
     }
 
@@ -315,12 +285,6 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
         }
     }
 
-    fn get_title(&self) -> Option<GString> {
-        unsafe {
-            from_glib_none(ffi::gtk_combo_box_get_title(self.as_ref().to_glib_none().0))
-        }
-    }
-
     fn get_wrap_width(&self) -> i32 {
         unsafe {
             ffi::gtk_combo_box_get_wrap_width(self.as_ref().to_glib_none().0)
@@ -356,12 +320,6 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
         let iter = iter.into();
         unsafe {
             ffi::gtk_combo_box_set_active_iter(self.as_ref().to_glib_none().0, mut_override(iter.to_glib_none().0));
-        }
-    }
-
-    fn set_add_tearoffs(&self, add_tearoffs: bool) {
-        unsafe {
-            ffi::gtk_combo_box_set_add_tearoffs(self.as_ref().to_glib_none().0, add_tearoffs.to_glib());
         }
     }
 
@@ -435,12 +393,6 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
         }
     }
 
-    fn set_title(&self, title: &str) {
-        unsafe {
-            ffi::gtk_combo_box_set_title(self.as_ref().to_glib_none().0, title.to_glib_none().0);
-        }
-    }
-
     fn set_wrap_width(&self, width: i32) {
         unsafe {
             ffi::gtk_combo_box_set_wrap_width(self.as_ref().to_glib_none().0, width);
@@ -474,21 +426,6 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
             gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"popup-shown\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
-        }
-    }
-
-    fn get_property_tearoff_title(&self) -> Option<GString> {
-        unsafe {
-            let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"tearoff-title\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get()
-        }
-    }
-
-    fn set_property_tearoff_title<'a, P: Into<Option<&'a str>>>(&self, tearoff_title: P) {
-        let tearoff_title = tearoff_title.into();
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"tearoff-title\0".as_ptr() as *const _, Value::from(tearoff_title).to_glib_none().0);
         }
     }
 
@@ -558,14 +495,6 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::active-id\0".as_ptr() as *const _,
                 Some(transmute(notify_active_id_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_add_tearoffs_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::add-tearoffs\0".as_ptr() as *const _,
-                Some(transmute(notify_add_tearoffs_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -641,14 +570,6 @@ impl<O: IsA<ComboBox>> ComboBoxExt for O {
         }
     }
 
-    fn connect_property_tearoff_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::tearoff-title\0".as_ptr() as *const _,
-                Some(transmute(notify_tearoff_title_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
     fn connect_property_wrap_width_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -695,12 +616,6 @@ where P: IsA<ComboBox> {
 }
 
 unsafe extern "C" fn notify_active_id_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkComboBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<ComboBox> {
-    let f: &F = transmute(f);
-    f(&ComboBox::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_add_tearoffs_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkComboBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ComboBox> {
     let f: &F = transmute(f);
     f(&ComboBox::from_glib_borrow(this).unsafe_cast())
@@ -755,12 +670,6 @@ where P: IsA<ComboBox> {
 }
 
 unsafe extern "C" fn notify_row_span_column_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkComboBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<ComboBox> {
-    let f: &F = transmute(f);
-    f(&ComboBox::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_tearoff_title_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkComboBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ComboBox> {
     let f: &F = transmute(f);
     f(&ComboBox::from_glib_borrow(this).unsafe_cast())

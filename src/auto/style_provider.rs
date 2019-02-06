@@ -2,9 +2,6 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use IconFactory;
-use StyleProperties;
-use WidgetPath;
 use ffi;
 use glib::object::IsA;
 use glib::translate::*;
@@ -21,28 +18,10 @@ glib_wrapper! {
 pub const NONE_STYLE_PROVIDER: Option<&StyleProvider> = None;
 
 pub trait StyleProviderExt: 'static {
-    #[cfg_attr(feature = "v3_8", deprecated)]
-    fn get_icon_factory(&self, path: &WidgetPath) -> Option<IconFactory>;
-
-    #[cfg_attr(feature = "v3_8", deprecated)]
-    fn get_style(&self, path: &WidgetPath) -> Option<StyleProperties>;
-
     //fn get_style_property(&self, path: &WidgetPath, state: StateFlags, pspec: /*Ignored*/&glib::ParamSpec) -> Option<glib::Value>;
 }
 
 impl<O: IsA<StyleProvider>> StyleProviderExt for O {
-    fn get_icon_factory(&self, path: &WidgetPath) -> Option<IconFactory> {
-        unsafe {
-            from_glib_none(ffi::gtk_style_provider_get_icon_factory(self.as_ref().to_glib_none().0, path.to_glib_none().0))
-        }
-    }
-
-    fn get_style(&self, path: &WidgetPath) -> Option<StyleProperties> {
-        unsafe {
-            from_glib_full(ffi::gtk_style_provider_get_style(self.as_ref().to_glib_none().0, path.to_glib_none().0))
-        }
-    }
-
     //fn get_style_property(&self, path: &WidgetPath, state: StateFlags, pspec: /*Ignored*/&glib::ParamSpec) -> Option<glib::Value> {
     //    unsafe { TODO: call ffi::gtk_style_provider_get_style_property() }
     //}

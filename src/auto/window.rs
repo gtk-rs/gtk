@@ -108,7 +108,6 @@ impl Window {
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     pub fn set_interactive_debugging(enable: bool) {
         assert_initialized_main_thread!();
         unsafe {
@@ -134,7 +133,6 @@ pub trait GtkWindowExt: 'static {
 
     fn begin_resize_drag(&self, edge: gdk::WindowEdge, button: i32, root_x: i32, root_y: i32, timestamp: u32);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn close(&self);
 
     fn deiconify(&self);
@@ -170,9 +168,6 @@ pub trait GtkWindowExt: 'static {
 
     fn get_group(&self) -> Option<WindowGroup>;
 
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn get_has_resize_grip(&self) -> bool;
-
     fn get_hide_titlebar_when_maximized(&self) -> bool;
 
     fn get_icon(&self) -> Option<gdk_pixbuf::Pixbuf>;
@@ -187,16 +182,9 @@ pub trait GtkWindowExt: 'static {
 
     fn get_modal(&self) -> bool;
 
-    #[cfg_attr(feature = "v3_8", deprecated)]
-    #[cfg(any(not(feature = "v3_8"), feature = "dox"))]
-    fn get_opacity(&self) -> f64;
-
     fn get_position(&self) -> (i32, i32);
 
     fn get_resizable(&self) -> bool;
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn get_resize_grip_area(&self) -> Option<gdk::Rectangle>;
 
     fn get_role(&self) -> Option<GString>;
 
@@ -227,7 +215,6 @@ pub trait GtkWindowExt: 'static {
 
     fn is_active(&self) -> bool;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn is_maximized(&self) -> bool;
 
     fn maximize(&self);
@@ -247,13 +234,7 @@ pub trait GtkWindowExt: 'static {
 
     fn remove_mnemonic<P: IsA<Widget>>(&self, keyval: u32, target: &P);
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn reshow_with_initial_size(&self);
-
     fn resize(&self, width: i32, height: i32);
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn resize_grip_is_visible(&self) -> bool;
 
     #[cfg_attr(feature = "v3_20", deprecated)]
     fn resize_to_geometry(&self, width: i32, height: i32);
@@ -287,9 +268,6 @@ pub trait GtkWindowExt: 'static {
 
     fn set_gravity(&self, gravity: gdk::Gravity);
 
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn set_has_resize_grip(&self, value: bool);
-
     fn set_has_user_ref_count(&self, setting: bool);
 
     fn set_hide_titlebar_when_maximized(&self, setting: bool);
@@ -312,10 +290,6 @@ pub trait GtkWindowExt: 'static {
 
     fn set_modal(&self, modal: bool);
 
-    #[cfg_attr(feature = "v3_8", deprecated)]
-    #[cfg(any(not(feature = "v3_8"), feature = "dox"))]
-    fn set_opacity(&self, opacity: f64);
-
     fn set_position(&self, position: WindowPosition);
 
     fn set_resizable(&self, resizable: bool);
@@ -332,7 +306,6 @@ pub trait GtkWindowExt: 'static {
 
     fn set_title(&self, title: &str);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_titlebar<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, titlebar: Q);
 
     fn set_transient_for<'a, P: IsA<Window> + 'a, Q: Into<Option<&'a P>>>(&self, parent: Q);
@@ -365,9 +338,6 @@ pub trait GtkWindowExt: 'static {
     fn get_property_is_active(&self) -> bool;
 
     fn get_property_is_maximized(&self) -> bool;
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn get_property_resize_grip_visible(&self) -> bool;
 
     fn get_property_type(&self) -> WindowType;
 
@@ -413,9 +383,6 @@ pub trait GtkWindowExt: 'static {
 
     fn connect_property_gravity_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn connect_property_has_resize_grip_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
     fn connect_property_has_toplevel_focus_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_hide_titlebar_when_maximized_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -433,9 +400,6 @@ pub trait GtkWindowExt: 'static {
     fn connect_property_modal_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_resizable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn connect_property_resize_grip_visible_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_role_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -501,7 +465,6 @@ impl<O: IsA<Window>> GtkWindowExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn close(&self) {
         unsafe {
             ffi::gtk_window_close(self.as_ref().to_glib_none().0);
@@ -608,12 +571,6 @@ impl<O: IsA<Window>> GtkWindowExt for O {
         }
     }
 
-    fn get_has_resize_grip(&self) -> bool {
-        unsafe {
-            from_glib(ffi::gtk_window_get_has_resize_grip(self.as_ref().to_glib_none().0))
-        }
-    }
-
     fn get_hide_titlebar_when_maximized(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_window_get_hide_titlebar_when_maximized(self.as_ref().to_glib_none().0))
@@ -656,13 +613,6 @@ impl<O: IsA<Window>> GtkWindowExt for O {
         }
     }
 
-    #[cfg(any(not(feature = "v3_8"), feature = "dox"))]
-    fn get_opacity(&self) -> f64 {
-        unsafe {
-            ffi::gtk_window_get_opacity(self.as_ref().to_glib_none().0)
-        }
-    }
-
     fn get_position(&self) -> (i32, i32) {
         unsafe {
             let mut root_x = mem::uninitialized();
@@ -675,14 +625,6 @@ impl<O: IsA<Window>> GtkWindowExt for O {
     fn get_resizable(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_window_get_resizable(self.as_ref().to_glib_none().0))
-        }
-    }
-
-    fn get_resize_grip_area(&self) -> Option<gdk::Rectangle> {
-        unsafe {
-            let mut rect = gdk::Rectangle::uninitialized();
-            let ret = from_glib(ffi::gtk_window_get_resize_grip_area(self.as_ref().to_glib_none().0, rect.to_glib_none_mut().0));
-            if ret { Some(rect) } else { None }
         }
     }
 
@@ -774,7 +716,6 @@ impl<O: IsA<Window>> GtkWindowExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn is_maximized(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_window_is_maximized(self.as_ref().to_glib_none().0))
@@ -829,21 +770,9 @@ impl<O: IsA<Window>> GtkWindowExt for O {
         }
     }
 
-    fn reshow_with_initial_size(&self) {
-        unsafe {
-            ffi::gtk_window_reshow_with_initial_size(self.as_ref().to_glib_none().0);
-        }
-    }
-
     fn resize(&self, width: i32, height: i32) {
         unsafe {
             ffi::gtk_window_resize(self.as_ref().to_glib_none().0, width, height);
-        }
-    }
-
-    fn resize_grip_is_visible(&self) -> bool {
-        unsafe {
-            from_glib(ffi::gtk_window_resize_grip_is_visible(self.as_ref().to_glib_none().0))
         }
     }
 
@@ -939,12 +868,6 @@ impl<O: IsA<Window>> GtkWindowExt for O {
         }
     }
 
-    fn set_has_resize_grip(&self, value: bool) {
-        unsafe {
-            ffi::gtk_window_set_has_resize_grip(self.as_ref().to_glib_none().0, value.to_glib());
-        }
-    }
-
     fn set_has_user_ref_count(&self, setting: bool) {
         unsafe {
             ffi::gtk_window_set_has_user_ref_count(self.as_ref().to_glib_none().0, setting.to_glib());
@@ -1015,13 +938,6 @@ impl<O: IsA<Window>> GtkWindowExt for O {
         }
     }
 
-    #[cfg(any(not(feature = "v3_8"), feature = "dox"))]
-    fn set_opacity(&self, opacity: f64) {
-        unsafe {
-            ffi::gtk_window_set_opacity(self.as_ref().to_glib_none().0, opacity);
-        }
-    }
-
     fn set_position(&self, position: WindowPosition) {
         unsafe {
             ffi::gtk_window_set_position(self.as_ref().to_glib_none().0, position.to_glib());
@@ -1070,7 +986,6 @@ impl<O: IsA<Window>> GtkWindowExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_titlebar<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, titlebar: Q) {
         let titlebar = titlebar.into();
         unsafe {
@@ -1175,14 +1090,6 @@ impl<O: IsA<Window>> GtkWindowExt for O {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
             gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"is-maximized\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn get_property_resize_grip_visible(&self) -> bool {
-        unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"resize-grip-visible\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
@@ -1350,14 +1257,6 @@ impl<O: IsA<Window>> GtkWindowExt for O {
         }
     }
 
-    fn connect_property_has_resize_grip_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::has-resize-grip\0".as_ptr() as *const _,
-                Some(transmute(notify_has_resize_grip_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
     fn connect_property_has_toplevel_focus_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1427,14 +1326,6 @@ impl<O: IsA<Window>> GtkWindowExt for O {
             let f: Box_<F> = Box_::new(f);
             connect_raw(self.as_ptr() as *mut _, b"notify::resizable\0".as_ptr() as *const _,
                 Some(transmute(notify_resizable_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_resize_grip_visible_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::resize-grip-visible\0".as_ptr() as *const _,
-                Some(transmute(notify_resize_grip_visible_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -1615,12 +1506,6 @@ where P: IsA<Window> {
     f(&Window::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_has_resize_grip_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Window> {
-    let f: &F = transmute(f);
-    f(&Window::from_glib_borrow(this).unsafe_cast())
-}
-
 unsafe extern "C" fn notify_has_toplevel_focus_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Window> {
     let f: &F = transmute(f);
@@ -1670,12 +1555,6 @@ where P: IsA<Window> {
 }
 
 unsafe extern "C" fn notify_resizable_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Window> {
-    let f: &F = transmute(f);
-    f(&Window::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_resize_grip_visible_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Window> {
     let f: &F = transmute(f);
     f(&Window::from_glib_borrow(this).unsafe_cast())

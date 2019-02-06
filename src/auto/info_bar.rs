@@ -69,7 +69,6 @@ pub trait InfoBarExt: 'static {
     #[cfg(any(feature = "v3_22_29", feature = "dox"))]
     fn get_revealed(&self) -> bool;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_show_close_button(&self) -> bool;
 
     fn response(&self, response_id: ResponseType);
@@ -83,7 +82,6 @@ pub trait InfoBarExt: 'static {
     #[cfg(any(feature = "v3_22_29", feature = "dox"))]
     fn set_revealed(&self, revealed: bool);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_show_close_button(&self, setting: bool);
 
     fn connect_close<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -97,7 +95,6 @@ pub trait InfoBarExt: 'static {
     #[cfg(any(feature = "v3_22_29", feature = "dox"))]
     fn connect_property_revealed_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn connect_property_show_close_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
@@ -143,7 +140,6 @@ impl<O: IsA<InfoBar>> InfoBarExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_show_close_button(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_info_bar_get_show_close_button(self.as_ref().to_glib_none().0))
@@ -181,7 +177,6 @@ impl<O: IsA<InfoBar>> InfoBarExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_show_close_button(&self, setting: bool) {
         unsafe {
             ffi::gtk_info_bar_set_show_close_button(self.as_ref().to_glib_none().0, setting.to_glib());
@@ -225,7 +220,6 @@ impl<O: IsA<InfoBar>> InfoBarExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn connect_property_show_close_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -260,7 +254,6 @@ where P: IsA<InfoBar> {
     f(&InfoBar::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 unsafe extern "C" fn notify_show_close_button_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkInfoBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<InfoBar> {
     let f: &F = transmute(f);

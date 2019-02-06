@@ -8,15 +8,12 @@ use Container;
 use RevealerTransitionType;
 use Widget;
 use ffi;
-use glib::StaticType;
-use glib::Value;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
@@ -30,7 +27,6 @@ glib_wrapper! {
 }
 
 impl Revealer {
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     pub fn new() -> Revealer {
         assert_initialized_main_thread!();
         unsafe {
@@ -39,7 +35,6 @@ impl Revealer {
     }
 }
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 impl Default for Revealer {
     fn default() -> Self {
         Self::new()
@@ -49,40 +44,19 @@ impl Default for Revealer {
 pub const NONE_REVEALER: Option<&Revealer> = None;
 
 pub trait RevealerExt: 'static {
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_child_revealed(&self) -> bool;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_reveal_child(&self) -> bool;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_transition_duration(&self) -> u32;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_transition_type(&self) -> RevealerTransitionType;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_reveal_child(&self, reveal_child: bool);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_transition_duration(&self, duration: u32);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_transition_type(&self, transition: RevealerTransitionType);
-
-    fn get_property_child_revealed(&self) -> bool;
-
-    fn get_property_reveal_child(&self) -> bool;
-
-    fn set_property_reveal_child(&self, reveal_child: bool);
-
-    fn get_property_transition_duration(&self) -> u32;
-
-    fn set_property_transition_duration(&self, transition_duration: u32);
-
-    fn get_property_transition_type(&self) -> RevealerTransitionType;
-
-    fn set_property_transition_type(&self, transition_type: RevealerTransitionType);
 
     fn connect_property_child_revealed_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -94,102 +68,45 @@ pub trait RevealerExt: 'static {
 }
 
 impl<O: IsA<Revealer>> RevealerExt for O {
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_child_revealed(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_revealer_get_child_revealed(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_reveal_child(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_revealer_get_reveal_child(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_transition_duration(&self) -> u32 {
         unsafe {
             ffi::gtk_revealer_get_transition_duration(self.as_ref().to_glib_none().0)
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_transition_type(&self) -> RevealerTransitionType {
         unsafe {
             from_glib(ffi::gtk_revealer_get_transition_type(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_reveal_child(&self, reveal_child: bool) {
         unsafe {
             ffi::gtk_revealer_set_reveal_child(self.as_ref().to_glib_none().0, reveal_child.to_glib());
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_transition_duration(&self, duration: u32) {
         unsafe {
             ffi::gtk_revealer_set_transition_duration(self.as_ref().to_glib_none().0, duration);
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_transition_type(&self, transition: RevealerTransitionType) {
         unsafe {
             ffi::gtk_revealer_set_transition_type(self.as_ref().to_glib_none().0, transition.to_glib());
-        }
-    }
-
-    fn get_property_child_revealed(&self) -> bool {
-        unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"child-revealed\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn get_property_reveal_child(&self) -> bool {
-        unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"reveal-child\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_reveal_child(&self, reveal_child: bool) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"reveal-child\0".as_ptr() as *const _, Value::from(&reveal_child).to_glib_none().0);
-        }
-    }
-
-    fn get_property_transition_duration(&self) -> u32 {
-        unsafe {
-            let mut value = Value::from_type(<u32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"transition-duration\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_transition_duration(&self, transition_duration: u32) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"transition-duration\0".as_ptr() as *const _, Value::from(&transition_duration).to_glib_none().0);
-        }
-    }
-
-    fn get_property_transition_type(&self) -> RevealerTransitionType {
-        unsafe {
-            let mut value = Value::from_type(<RevealerTransitionType as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"transition-type\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_transition_type(&self, transition_type: RevealerTransitionType) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"transition-type\0".as_ptr() as *const _, Value::from(&transition_type).to_glib_none().0);
         }
     }
 

@@ -16,19 +16,14 @@ use glib::object::Cast;
 use glib::object::IsA;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 use glib::object::ObjectExt;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 use glib::signal::SignalHandlerId;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 use glib::signal::connect_raw;
 use glib::translate::*;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 use glib_ffi;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 use gobject_ffi;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 use std::boxed::Box as Box_;
 use std::fmt;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 use std::mem::transmute;
 
 glib_wrapper! {
@@ -40,7 +35,6 @@ glib_wrapper! {
 }
 
 impl SearchEntry {
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     pub fn new() -> SearchEntry {
         assert_initialized_main_thread!();
         unsafe {
@@ -49,7 +43,6 @@ impl SearchEntry {
     }
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 impl Default for SearchEntry {
     fn default() -> Self {
         Self::new()
@@ -74,7 +67,6 @@ pub trait SearchEntryExt: 'static {
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn emit_previous_match(&self);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn connect_search_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
@@ -120,7 +112,6 @@ impl<O: IsA<SearchEntry>> SearchEntryExt for O {
         let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("previous-match", &[]).unwrap() };
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn connect_search_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -158,7 +149,6 @@ where P: IsA<SearchEntry> {
     f(&SearchEntry::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 unsafe extern "C" fn search_changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSearchEntry, f: glib_ffi::gpointer)
 where P: IsA<SearchEntry> {
     let f: &F = transmute(f);

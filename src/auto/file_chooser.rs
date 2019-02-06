@@ -52,7 +52,6 @@ pub trait FileChooserExt: 'static {
 
     fn get_current_folder_uri(&self) -> Option<GString>;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_current_name(&self) -> Option<GString>;
 
     fn get_do_overwrite_confirmation(&self) -> bool;
@@ -254,7 +253,6 @@ impl<O: IsA<FileChooser>> FileChooserExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_current_name(&self) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gtk_file_chooser_get_current_name(self.as_ref().to_glib_none().0))

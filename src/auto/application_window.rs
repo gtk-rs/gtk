@@ -35,7 +35,6 @@ pub trait ApplicationWindowExt: 'static {
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn get_help_overlay(&self) -> Option<ShortcutsWindow>;
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_id(&self) -> u32;
 
     fn get_show_menubar(&self) -> bool;
@@ -56,7 +55,6 @@ impl<O: IsA<ApplicationWindow>> ApplicationWindowExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_id(&self) -> u32 {
         unsafe {
             ffi::gtk_application_window_get_id(self.as_ref().to_glib_none().0)

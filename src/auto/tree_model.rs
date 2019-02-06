@@ -75,7 +75,6 @@ pub trait TreeModelExt: 'static {
 
     fn row_inserted(&self, path: &TreePath, iter: &TreeIter);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn rows_reordered_with_length<'a, P: Into<Option<&'a TreeIter>>>(&self, path: &TreePath, iter: P, new_order: &[i32]);
 
     fn sort_new_with_model(&self) -> Option<TreeModel>;
@@ -254,7 +253,6 @@ impl<O: IsA<TreeModel>> TreeModelExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn rows_reordered_with_length<'a, P: Into<Option<&'a TreeIter>>>(&self, path: &TreePath, iter: P, new_order: &[i32]) {
         let iter = iter.into();
         let length = new_order.len() as i32;

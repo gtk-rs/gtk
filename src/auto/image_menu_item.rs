@@ -2,7 +2,6 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use AccelGroup;
 use Actionable;
 use Bin;
 use Buildable;
@@ -10,15 +9,8 @@ use Container;
 use MenuItem;
 use Widget;
 use ffi;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::SignalHandlerId;
-use glib::signal::connect_raw;
 use glib::translate::*;
-use glib_ffi;
-use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem::transmute;
 
 glib_wrapper! {
     pub struct ImageMenuItem(Object<ffi::GtkImageMenuItem, ffi::GtkImageMenuItemClass, ImageMenuItemClass>) @extends MenuItem, Bin, Container, Widget, @implements Buildable, Actionable;
@@ -28,185 +20,9 @@ glib_wrapper! {
     }
 }
 
-impl ImageMenuItem {
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    pub fn new() -> ImageMenuItem {
-        assert_initialized_main_thread!();
-        unsafe {
-            Widget::from_glib_none(ffi::gtk_image_menu_item_new()).unsafe_cast()
-        }
-    }
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    pub fn new_from_stock<'a, P: IsA<AccelGroup> + 'a, Q: Into<Option<&'a P>>>(stock_id: &str, accel_group: Q) -> ImageMenuItem {
-        assert_initialized_main_thread!();
-        let accel_group = accel_group.into();
-        unsafe {
-            Widget::from_glib_none(ffi::gtk_image_menu_item_new_from_stock(stock_id.to_glib_none().0, accel_group.map(|p| p.as_ref()).to_glib_none().0)).unsafe_cast()
-        }
-    }
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    pub fn new_with_label(label: &str) -> ImageMenuItem {
-        assert_initialized_main_thread!();
-        unsafe {
-            Widget::from_glib_none(ffi::gtk_image_menu_item_new_with_label(label.to_glib_none().0)).unsafe_cast()
-        }
-    }
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    pub fn new_with_mnemonic(label: &str) -> ImageMenuItem {
-        assert_initialized_main_thread!();
-        unsafe {
-            Widget::from_glib_none(ffi::gtk_image_menu_item_new_with_mnemonic(label.to_glib_none().0)).unsafe_cast()
-        }
-    }
-}
-
-#[cfg_attr(feature = "v3_10", deprecated)]
-impl Default for ImageMenuItem {
-    fn default() -> Self {
-        Self::new()
-    }
-}
+impl ImageMenuItem {}
 
 pub const NONE_IMAGE_MENU_ITEM: Option<&ImageMenuItem> = None;
-
-pub trait ImageMenuItemExt: 'static {
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_always_show_image(&self) -> bool;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_image(&self) -> Option<Widget>;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_use_stock(&self) -> bool;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_accel_group<P: IsA<AccelGroup>>(&self, accel_group: &P);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_always_show_image(&self, always_show: bool);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_image<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, image: Q);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_use_stock(&self, use_stock: bool);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_accel_group_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_always_show_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_use_stock_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-}
-
-impl<O: IsA<ImageMenuItem>> ImageMenuItemExt for O {
-    fn get_always_show_image(&self) -> bool {
-        unsafe {
-            from_glib(ffi::gtk_image_menu_item_get_always_show_image(self.as_ref().to_glib_none().0))
-        }
-    }
-
-    fn get_image(&self) -> Option<Widget> {
-        unsafe {
-            from_glib_none(ffi::gtk_image_menu_item_get_image(self.as_ref().to_glib_none().0))
-        }
-    }
-
-    fn get_use_stock(&self) -> bool {
-        unsafe {
-            from_glib(ffi::gtk_image_menu_item_get_use_stock(self.as_ref().to_glib_none().0))
-        }
-    }
-
-    fn set_accel_group<P: IsA<AccelGroup>>(&self, accel_group: &P) {
-        unsafe {
-            ffi::gtk_image_menu_item_set_accel_group(self.as_ref().to_glib_none().0, accel_group.as_ref().to_glib_none().0);
-        }
-    }
-
-    fn set_always_show_image(&self, always_show: bool) {
-        unsafe {
-            ffi::gtk_image_menu_item_set_always_show_image(self.as_ref().to_glib_none().0, always_show.to_glib());
-        }
-    }
-
-    fn set_image<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, image: Q) {
-        let image = image.into();
-        unsafe {
-            ffi::gtk_image_menu_item_set_image(self.as_ref().to_glib_none().0, image.map(|p| p.as_ref()).to_glib_none().0);
-        }
-    }
-
-    fn set_use_stock(&self, use_stock: bool) {
-        unsafe {
-            ffi::gtk_image_menu_item_set_use_stock(self.as_ref().to_glib_none().0, use_stock.to_glib());
-        }
-    }
-
-    fn connect_property_accel_group_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::accel-group\0".as_ptr() as *const _,
-                Some(transmute(notify_accel_group_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_always_show_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::always-show-image\0".as_ptr() as *const _,
-                Some(transmute(notify_always_show_image_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::image\0".as_ptr() as *const _,
-                Some(transmute(notify_image_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
-    fn connect_property_use_stock_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::use-stock\0".as_ptr() as *const _,
-                Some(transmute(notify_use_stock_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-}
-
-unsafe extern "C" fn notify_accel_group_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkImageMenuItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<ImageMenuItem> {
-    let f: &F = transmute(f);
-    f(&ImageMenuItem::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_always_show_image_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkImageMenuItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<ImageMenuItem> {
-    let f: &F = transmute(f);
-    f(&ImageMenuItem::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_image_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkImageMenuItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<ImageMenuItem> {
-    let f: &F = transmute(f);
-    f(&ImageMenuItem::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_use_stock_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkImageMenuItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<ImageMenuItem> {
-    let f: &F = transmute(f);
-    f(&ImageMenuItem::from_glib_borrow(this).unsafe_cast())
-}
 
 impl fmt::Display for ImageMenuItem {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

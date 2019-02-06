@@ -4,11 +4,8 @@
 
 use Border;
 use CssSection;
-use IconSet;
 use JunctionSides;
-use RegionFlags;
 use StateFlags;
-use StateType;
 #[cfg(any(feature = "v3_20", feature = "dox"))]
 use StyleContextPrintFlags;
 use StyleProvider;
@@ -16,12 +13,9 @@ use TextDirection;
 use WidgetPath;
 use ffi;
 use gdk;
-#[cfg(any(feature = "v3_8", feature = "dox"))]
 use glib;
 use glib::GString;
-#[cfg(any(feature = "v3_8", feature = "dox"))]
 use glib::StaticType;
-#[cfg(any(feature = "v3_8", feature = "dox"))]
 use glib::Value;
 use glib::object::Cast;
 use glib::object::IsA;
@@ -29,11 +23,9 @@ use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-#[cfg(any(feature = "v3_8", feature = "dox"))]
 use gobject_ffi;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
 
 glib_wrapper! {
@@ -87,12 +79,6 @@ pub trait StyleContextExt: 'static {
 
     fn add_provider<P: IsA<StyleProvider>>(&self, provider: &P, priority: u32);
 
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn add_region(&self, region_name: &str, flags: RegionFlags);
-
-    //#[cfg_attr(feature = "v3_6", deprecated)]
-    //fn cancel_animations(&self, region_id: /*Unimplemented*/Option<Fundamental: Pointer>);
-
     //fn get(&self, state: StateFlags, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
     #[cfg_attr(feature = "v3_16", deprecated)]
@@ -105,10 +91,6 @@ pub trait StyleContextExt: 'static {
 
     fn get_color(&self, state: StateFlags) -> gdk::RGBA;
 
-    #[cfg_attr(feature = "v3_8", deprecated)]
-    fn get_direction(&self) -> TextDirection;
-
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn get_frame_clock(&self) -> Option<gdk::FrameClock>;
 
     fn get_junction_sides(&self) -> JunctionSides;
@@ -121,7 +103,6 @@ pub trait StyleContextExt: 'static {
 
     fn get_path(&self) -> Option<WidgetPath>;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_scale(&self) -> i32;
 
     fn get_screen(&self) -> Option<gdk::Screen>;
@@ -138,52 +119,21 @@ pub trait StyleContextExt: 'static {
 
     fn has_class(&self, class_name: &str) -> bool;
 
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn has_region(&self, region_name: &str) -> Option<RegionFlags>;
-
-    #[cfg_attr(feature = "v3_12", deprecated)]
-    fn invalidate(&self);
-
     fn list_classes(&self) -> Vec<GString>;
 
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn list_regions(&self) -> Vec<GString>;
-
     fn lookup_color(&self, color_name: &str) -> Option<gdk::RGBA>;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn lookup_icon_set(&self, stock_id: &str) -> Option<IconSet>;
-
-    //#[cfg_attr(feature = "v3_6", deprecated)]
-    //fn notify_state_change<P: IsA<gdk::Window>>(&self, window: &P, region_id: /*Unimplemented*/Option<Fundamental: Pointer>, state: StateType, state_value: bool);
-
-    #[cfg_attr(feature = "v3_6", deprecated)]
-    fn pop_animatable_region(&self);
-
-    //#[cfg_attr(feature = "v3_6", deprecated)]
-    //fn push_animatable_region(&self, region_id: /*Unimplemented*/Option<Fundamental: Pointer>);
 
     fn remove_class(&self, class_name: &str);
 
     fn remove_provider<P: IsA<StyleProvider>>(&self, provider: &P);
 
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn remove_region(&self, region_name: &str);
-
     fn restore(&self);
 
     fn save(&self);
 
-    #[cfg_attr(feature = "v3_6", deprecated)]
-    fn scroll_animations<P: IsA<gdk::Window>>(&self, window: &P, dx: i32, dy: i32);
-
     #[cfg_attr(feature = "v3_18", deprecated)]
     fn set_background<P: IsA<gdk::Window>>(&self, window: &P);
 
-    #[cfg_attr(feature = "v3_8", deprecated)]
-    fn set_direction(&self, direction: TextDirection);
-
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn set_frame_clock<P: IsA<gdk::FrameClock>>(&self, frame_clock: &P);
 
     fn set_junction_sides(&self, sides: JunctionSides);
@@ -192,30 +142,27 @@ pub trait StyleContextExt: 'static {
 
     fn set_path(&self, path: &WidgetPath);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_scale(&self, scale: i32);
 
     fn set_screen(&self, screen: &gdk::Screen);
 
     fn set_state(&self, flags: StateFlags);
 
-    #[cfg_attr(feature = "v3_6", deprecated)]
-    fn state_is_running(&self, state: StateType) -> Option<f64>;
-
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn to_string(&self, flags: StyleContextPrintFlags) -> GString;
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
+    fn get_property_direction(&self) -> TextDirection;
+
+    fn set_property_direction(&self, direction: TextDirection);
+
     fn get_property_paint_clock(&self) -> Option<gdk::FrameClock>;
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn set_property_paint_clock<P: IsA<gdk::FrameClock> + glib::value::SetValueOptional>(&self, paint_clock: Option<&P>);
 
     fn connect_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_direction_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn connect_property_paint_clock_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_parent_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -235,16 +182,6 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
             ffi::gtk_style_context_add_provider(self.as_ref().to_glib_none().0, provider.as_ref().to_glib_none().0, priority);
         }
     }
-
-    fn add_region(&self, region_name: &str, flags: RegionFlags) {
-        unsafe {
-            ffi::gtk_style_context_add_region(self.as_ref().to_glib_none().0, region_name.to_glib_none().0, flags.to_glib());
-        }
-    }
-
-    //fn cancel_animations(&self, region_id: /*Unimplemented*/Option<Fundamental: Pointer>) {
-    //    unsafe { TODO: call ffi::gtk_style_context_cancel_animations() }
-    //}
 
     //fn get(&self, state: StateFlags, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
     //    unsafe { TODO: call ffi::gtk_style_context_get() }
@@ -282,13 +219,6 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
         }
     }
 
-    fn get_direction(&self) -> TextDirection {
-        unsafe {
-            from_glib(ffi::gtk_style_context_get_direction(self.as_ref().to_glib_none().0))
-        }
-    }
-
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn get_frame_clock(&self) -> Option<gdk::FrameClock> {
         unsafe {
             from_glib_none(ffi::gtk_style_context_get_frame_clock(self.as_ref().to_glib_none().0))
@@ -329,7 +259,6 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_scale(&self) -> i32 {
         unsafe {
             ffi::gtk_style_context_get_scale(self.as_ref().to_glib_none().0)
@@ -372,29 +301,9 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
         }
     }
 
-    fn has_region(&self, region_name: &str) -> Option<RegionFlags> {
-        unsafe {
-            let mut flags_return = mem::uninitialized();
-            let ret = from_glib(ffi::gtk_style_context_has_region(self.as_ref().to_glib_none().0, region_name.to_glib_none().0, &mut flags_return));
-            if ret { Some(from_glib(flags_return)) } else { None }
-        }
-    }
-
-    fn invalidate(&self) {
-        unsafe {
-            ffi::gtk_style_context_invalidate(self.as_ref().to_glib_none().0);
-        }
-    }
-
     fn list_classes(&self) -> Vec<GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_container(ffi::gtk_style_context_list_classes(self.as_ref().to_glib_none().0))
-        }
-    }
-
-    fn list_regions(&self) -> Vec<GString> {
-        unsafe {
-            FromGlibPtrContainer::from_glib_container(ffi::gtk_style_context_list_regions(self.as_ref().to_glib_none().0))
         }
     }
 
@@ -406,26 +315,6 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
         }
     }
 
-    fn lookup_icon_set(&self, stock_id: &str) -> Option<IconSet> {
-        unsafe {
-            from_glib_none(ffi::gtk_style_context_lookup_icon_set(self.as_ref().to_glib_none().0, stock_id.to_glib_none().0))
-        }
-    }
-
-    //fn notify_state_change<P: IsA<gdk::Window>>(&self, window: &P, region_id: /*Unimplemented*/Option<Fundamental: Pointer>, state: StateType, state_value: bool) {
-    //    unsafe { TODO: call ffi::gtk_style_context_notify_state_change() }
-    //}
-
-    fn pop_animatable_region(&self) {
-        unsafe {
-            ffi::gtk_style_context_pop_animatable_region(self.as_ref().to_glib_none().0);
-        }
-    }
-
-    //fn push_animatable_region(&self, region_id: /*Unimplemented*/Option<Fundamental: Pointer>) {
-    //    unsafe { TODO: call ffi::gtk_style_context_push_animatable_region() }
-    //}
-
     fn remove_class(&self, class_name: &str) {
         unsafe {
             ffi::gtk_style_context_remove_class(self.as_ref().to_glib_none().0, class_name.to_glib_none().0);
@@ -435,12 +324,6 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
     fn remove_provider<P: IsA<StyleProvider>>(&self, provider: &P) {
         unsafe {
             ffi::gtk_style_context_remove_provider(self.as_ref().to_glib_none().0, provider.as_ref().to_glib_none().0);
-        }
-    }
-
-    fn remove_region(&self, region_name: &str) {
-        unsafe {
-            ffi::gtk_style_context_remove_region(self.as_ref().to_glib_none().0, region_name.to_glib_none().0);
         }
     }
 
@@ -456,25 +339,12 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
         }
     }
 
-    fn scroll_animations<P: IsA<gdk::Window>>(&self, window: &P, dx: i32, dy: i32) {
-        unsafe {
-            ffi::gtk_style_context_scroll_animations(self.as_ref().to_glib_none().0, window.as_ref().to_glib_none().0, dx, dy);
-        }
-    }
-
     fn set_background<P: IsA<gdk::Window>>(&self, window: &P) {
         unsafe {
             ffi::gtk_style_context_set_background(self.as_ref().to_glib_none().0, window.as_ref().to_glib_none().0);
         }
     }
 
-    fn set_direction(&self, direction: TextDirection) {
-        unsafe {
-            ffi::gtk_style_context_set_direction(self.as_ref().to_glib_none().0, direction.to_glib());
-        }
-    }
-
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn set_frame_clock<P: IsA<gdk::FrameClock>>(&self, frame_clock: &P) {
         unsafe {
             ffi::gtk_style_context_set_frame_clock(self.as_ref().to_glib_none().0, frame_clock.as_ref().to_glib_none().0);
@@ -500,7 +370,6 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_scale(&self, scale: i32) {
         unsafe {
             ffi::gtk_style_context_set_scale(self.as_ref().to_glib_none().0, scale);
@@ -519,14 +388,6 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
         }
     }
 
-    fn state_is_running(&self, state: StateType) -> Option<f64> {
-        unsafe {
-            let mut progress = mem::uninitialized();
-            let ret = from_glib(ffi::gtk_style_context_state_is_running(self.as_ref().to_glib_none().0, state.to_glib(), &mut progress));
-            if ret { Some(progress) } else { None }
-        }
-    }
-
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn to_string(&self, flags: StyleContextPrintFlags) -> GString {
         unsafe {
@@ -534,7 +395,20 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
+    fn get_property_direction(&self) -> TextDirection {
+        unsafe {
+            let mut value = Value::from_type(<TextDirection as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"direction\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            value.get().unwrap()
+        }
+    }
+
+    fn set_property_direction(&self, direction: TextDirection) {
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"direction\0".as_ptr() as *const _, Value::from(&direction).to_glib_none().0);
+        }
+    }
+
     fn get_property_paint_clock(&self) -> Option<gdk::FrameClock> {
         unsafe {
             let mut value = Value::from_type(<gdk::FrameClock as StaticType>::static_type());
@@ -543,7 +417,6 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn set_property_paint_clock<P: IsA<gdk::FrameClock> + glib::value::SetValueOptional>(&self, paint_clock: Option<&P>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"paint-clock\0".as_ptr() as *const _, Value::from(paint_clock).to_glib_none().0);
@@ -566,7 +439,6 @@ impl<O: IsA<StyleContext>> StyleContextExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn connect_property_paint_clock_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -604,7 +476,6 @@ where P: IsA<StyleContext> {
     f(&StyleContext::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_8", feature = "dox"))]
 unsafe extern "C" fn notify_paint_clock_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkStyleContext, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<StyleContext> {
     let f: &F = transmute(f);

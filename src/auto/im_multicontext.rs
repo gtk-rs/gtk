@@ -3,7 +3,6 @@
 // DO NOT EDIT
 
 use IMContext;
-use MenuShell;
 use ffi;
 use glib::GString;
 use glib::object::Cast;
@@ -37,21 +36,12 @@ impl Default for IMMulticontext {
 pub const NONE_IM_MULTICONTEXT: Option<&IMMulticontext> = None;
 
 pub trait IMMulticontextExt: 'static {
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn append_menuitems<P: IsA<MenuShell>>(&self, menushell: &P);
-
     fn get_context_id(&self) -> Option<GString>;
 
     fn set_context_id(&self, context_id: &str);
 }
 
 impl<O: IsA<IMMulticontext>> IMMulticontextExt for O {
-    fn append_menuitems<P: IsA<MenuShell>>(&self, menushell: &P) {
-        unsafe {
-            ffi::gtk_im_multicontext_append_menuitems(self.as_ref().to_glib_none().0, menushell.as_ref().to_glib_none().0);
-        }
-    }
-
     fn get_context_id(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_im_multicontext_get_context_id(self.as_ref().to_glib_none().0))

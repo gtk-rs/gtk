@@ -4,8 +4,6 @@
 
 use AccelGroup;
 use Error;
-use IconSize;
-use IconSource;
 use Orientation;
 use PageSetup;
 use PositionType;
@@ -14,7 +12,6 @@ use SelectionData;
 use SpinButton;
 use StyleContext;
 use TextBuffer;
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 use TextDirection;
 use TreeModel;
 use TreePath;
@@ -110,15 +107,6 @@ pub fn accelerator_valid(keyval: u32, modifiers: gdk::ModifierType) -> bool {
     assert_initialized_main_thread!();
     unsafe {
         from_glib(ffi::gtk_accelerator_valid(keyval, modifiers.to_glib()))
-    }
-}
-
-#[cfg_attr(feature = "v3_10", deprecated)]
-pub fn alternative_dialog_button_order<'a, P: Into<Option<&'a gdk::Screen>>>(screen: P) -> bool {
-    assert_initialized_main_thread!();
-    let screen = screen.into();
-    unsafe {
-        from_glib(ffi::gtk_alternative_dialog_button_order(screen.to_glib_none().0))
     }
 }
 
@@ -240,7 +228,6 @@ pub fn get_event_widget(event: &mut gdk::Event) -> Option<Widget> {
     }
 }
 
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 pub fn get_locale_direction() -> TextDirection {
     assert_initialized_main_thread!();
     unsafe {
@@ -427,15 +414,6 @@ pub fn render_icon<P: IsA<StyleContext>>(context: &P, cr: &cairo::Context, pixbu
     }
 }
 
-#[cfg_attr(feature = "v3_10", deprecated)]
-pub fn render_icon_pixbuf<P: IsA<StyleContext>>(context: &P, source: &IconSource, size: IconSize) -> Option<gdk_pixbuf::Pixbuf> {
-    skip_assert_initialized!();
-    unsafe {
-        from_glib_full(ffi::gtk_render_icon_pixbuf(context.as_ref().to_glib_none().0, source.to_glib_none().0, size.to_glib()))
-    }
-}
-
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 pub fn render_icon_surface<P: IsA<StyleContext>>(context: &P, cr: &cairo::Context, surface: &cairo::Surface, x: f64, y: f64) {
     skip_assert_initialized!();
     unsafe {
@@ -562,50 +540,6 @@ pub fn show_uri_on_window<'a, P: IsA<Window> + 'a, Q: Into<Option<&'a P>>>(paren
         let mut error = ptr::null_mut();
         let _ = ffi::gtk_show_uri_on_window(parent.map(|p| p.as_ref()).to_glib_none().0, uri.to_glib_none().0, timestamp, &mut error);
         if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
-    }
-}
-
-//#[cfg_attr(feature = "v3_10", deprecated)]
-//pub fn stock_add(items: /*Ignored*/&[&StockItem]) {
-//    unsafe { TODO: call ffi::gtk_stock_add() }
-//}
-
-//#[cfg_attr(feature = "v3_10", deprecated)]
-//pub fn stock_add_static(items: /*Ignored*/&[&StockItem]) {
-//    unsafe { TODO: call ffi::gtk_stock_add_static() }
-//}
-
-#[cfg_attr(feature = "v3_10", deprecated)]
-pub fn stock_list_ids() -> Vec<GString> {
-    assert_initialized_main_thread!();
-    unsafe {
-        FromGlibPtrContainer::from_glib_full(ffi::gtk_stock_list_ids())
-    }
-}
-
-//#[cfg_attr(feature = "v3_10", deprecated)]
-//pub fn stock_lookup(stock_id: &str, item: /*Ignored*/StockItem) -> bool {
-//    unsafe { TODO: call ffi::gtk_stock_lookup() }
-//}
-
-#[cfg_attr(feature = "v3_10", deprecated)]
-pub fn stock_set_translate_func<P: Fn(&str) -> String + Send + Sync + 'static>(domain: &str, func: P) {
-    assert_initialized_main_thread!();
-    let func_data: Box_<P> = Box::new(func);
-    unsafe extern "C" fn func_func<P: Fn(&str) -> String + Send + Sync + 'static>(path: *const libc::c_char, func_data: glib_ffi::gpointer) -> *mut libc::c_char {
-        let path: GString = from_glib_borrow(path);
-        let callback: &P = &*(func_data as *mut _);
-        let res = (*callback)(path.as_str());
-        res.to_glib_full()
-    }
-    let func = Some(func_func::<P> as _);
-    unsafe extern "C" fn notify_func<P: Fn(&str) -> String + Send + Sync + 'static>(data: glib_ffi::gpointer) {
-        let _callback: Box_<P> = Box_::from_raw(data as *mut _);
-    }
-    let destroy_call3 = Some(notify_func::<P> as _);
-    let super_callback0: Box_<P> = func_data;
-    unsafe {
-        ffi::gtk_stock_set_translate_func(domain.to_glib_none().0, func, Box::into_raw(super_callback0) as *mut _, destroy_call3);
     }
 }
 
@@ -750,7 +684,6 @@ pub fn test_widget_send_key<P: IsA<Widget>>(widget: &P, keyval: u32, modifiers: 
     }
 }
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 pub fn test_widget_wait_for_draw<P: IsA<Widget>>(widget: &P) {
     skip_assert_initialized!();
     unsafe {

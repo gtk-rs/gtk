@@ -259,7 +259,6 @@ impl SetValue for AssistantPageType {
     }
 }
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
 pub enum BaselinePosition {
@@ -270,7 +269,6 @@ pub enum BaselinePosition {
     __Unknown(i32),
 }
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 impl fmt::Display for BaselinePosition {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "BaselinePosition::{}", match *self {
@@ -282,7 +280,6 @@ impl fmt::Display for BaselinePosition {
     }
 }
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 #[doc(hidden)]
 impl ToGlib for BaselinePosition {
     type GlibType = ffi::GtkBaselinePosition;
@@ -297,7 +294,6 @@ impl ToGlib for BaselinePosition {
     }
 }
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 #[doc(hidden)]
 impl FromGlib<ffi::GtkBaselinePosition> for BaselinePosition {
     fn from_glib(value: ffi::GtkBaselinePosition) -> Self {
@@ -311,28 +307,24 @@ impl FromGlib<ffi::GtkBaselinePosition> for BaselinePosition {
     }
 }
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 impl StaticType for BaselinePosition {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gtk_baseline_position_get_type()) }
     }
 }
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 impl<'a> FromValueOptional<'a> for BaselinePosition {
     unsafe fn from_value_optional(value: &Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 impl<'a> FromValue<'a> for BaselinePosition {
     unsafe fn from_value(value: &Value) -> Self {
         from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 impl SetValue for BaselinePosition {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
@@ -1587,7 +1579,6 @@ impl SetValue for EntryIconPosition {
     }
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
 pub enum EventSequenceState {
@@ -1598,7 +1589,6 @@ pub enum EventSequenceState {
     __Unknown(i32),
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 impl fmt::Display for EventSequenceState {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "EventSequenceState::{}", match *self {
@@ -1610,7 +1600,6 @@ impl fmt::Display for EventSequenceState {
     }
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 #[doc(hidden)]
 impl ToGlib for EventSequenceState {
     type GlibType = ffi::GtkEventSequenceState;
@@ -1625,7 +1614,6 @@ impl ToGlib for EventSequenceState {
     }
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 #[doc(hidden)]
 impl FromGlib<ffi::GtkEventSequenceState> for EventSequenceState {
     fn from_glib(value: ffi::GtkEventSequenceState) -> Self {
@@ -1639,28 +1627,24 @@ impl FromGlib<ffi::GtkEventSequenceState> for EventSequenceState {
     }
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 impl StaticType for EventSequenceState {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gtk_event_sequence_state_get_type()) }
     }
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 impl<'a> FromValueOptional<'a> for EventSequenceState {
     unsafe fn from_value_optional(value: &Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 impl<'a> FromValue<'a> for EventSequenceState {
     unsafe fn from_value(value: &Value) -> Self {
         from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 impl SetValue for EventSequenceState {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
@@ -1913,7 +1897,7 @@ impl SetValue for FileChooserError {
     }
 }
 
-#[cfg_attr(feature = "v3_10", deprecated)]
+#[deprecated]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
 pub enum IMPreeditStyle {
@@ -1924,7 +1908,7 @@ pub enum IMPreeditStyle {
     __Unknown(i32),
 }
 
-#[cfg_attr(feature = "v3_10", deprecated)]
+#[deprecated]
 impl fmt::Display for IMPreeditStyle {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "IMPreeditStyle::{}", match *self {
@@ -1936,7 +1920,7 @@ impl fmt::Display for IMPreeditStyle {
     }
 }
 
-#[cfg_attr(feature = "v3_10", deprecated)]
+#[deprecated]
 #[doc(hidden)]
 impl ToGlib for IMPreeditStyle {
     type GlibType = ffi::GtkIMPreeditStyle;
@@ -1951,7 +1935,7 @@ impl ToGlib for IMPreeditStyle {
     }
 }
 
-#[cfg_attr(feature = "v3_10", deprecated)]
+#[deprecated]
 #[doc(hidden)]
 impl FromGlib<ffi::GtkIMPreeditStyle> for IMPreeditStyle {
     fn from_glib(value: ffi::GtkIMPreeditStyle) -> Self {
@@ -1965,35 +1949,35 @@ impl FromGlib<ffi::GtkIMPreeditStyle> for IMPreeditStyle {
     }
 }
 
-#[cfg_attr(feature = "v3_10", deprecated)]
+#[deprecated]
 impl StaticType for IMPreeditStyle {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gtk_im_preedit_style_get_type()) }
     }
 }
 
-#[cfg_attr(feature = "v3_10", deprecated)]
+#[deprecated]
 impl<'a> FromValueOptional<'a> for IMPreeditStyle {
     unsafe fn from_value_optional(value: &Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
-#[cfg_attr(feature = "v3_10", deprecated)]
+#[deprecated]
 impl<'a> FromValue<'a> for IMPreeditStyle {
     unsafe fn from_value(value: &Value) -> Self {
         from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
-#[cfg_attr(feature = "v3_10", deprecated)]
+#[deprecated]
 impl SetValue for IMPreeditStyle {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
     }
 }
 
-#[cfg_attr(feature = "v3_10", deprecated)]
+#[deprecated]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
 pub enum IMStatusStyle {
@@ -2004,7 +1988,7 @@ pub enum IMStatusStyle {
     __Unknown(i32),
 }
 
-#[cfg_attr(feature = "v3_10", deprecated)]
+#[deprecated]
 impl fmt::Display for IMStatusStyle {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "IMStatusStyle::{}", match *self {
@@ -2016,7 +2000,7 @@ impl fmt::Display for IMStatusStyle {
     }
 }
 
-#[cfg_attr(feature = "v3_10", deprecated)]
+#[deprecated]
 #[doc(hidden)]
 impl ToGlib for IMStatusStyle {
     type GlibType = ffi::GtkIMStatusStyle;
@@ -2031,7 +2015,7 @@ impl ToGlib for IMStatusStyle {
     }
 }
 
-#[cfg_attr(feature = "v3_10", deprecated)]
+#[deprecated]
 #[doc(hidden)]
 impl FromGlib<ffi::GtkIMStatusStyle> for IMStatusStyle {
     fn from_glib(value: ffi::GtkIMStatusStyle) -> Self {
@@ -2045,28 +2029,28 @@ impl FromGlib<ffi::GtkIMStatusStyle> for IMStatusStyle {
     }
 }
 
-#[cfg_attr(feature = "v3_10", deprecated)]
+#[deprecated]
 impl StaticType for IMStatusStyle {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gtk_im_status_style_get_type()) }
     }
 }
 
-#[cfg_attr(feature = "v3_10", deprecated)]
+#[deprecated]
 impl<'a> FromValueOptional<'a> for IMStatusStyle {
     unsafe fn from_value_optional(value: &Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
-#[cfg_attr(feature = "v3_10", deprecated)]
+#[deprecated]
 impl<'a> FromValue<'a> for IMStatusStyle {
     unsafe fn from_value(value: &Value) -> Self {
         from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
-#[cfg_attr(feature = "v3_10", deprecated)]
+#[deprecated]
 impl SetValue for IMStatusStyle {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
@@ -2425,7 +2409,6 @@ impl SetValue for ImageType {
     }
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
 pub enum InputPurpose {
@@ -2443,7 +2426,6 @@ pub enum InputPurpose {
     __Unknown(i32),
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 impl fmt::Display for InputPurpose {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "InputPurpose::{}", match *self {
@@ -2462,7 +2444,6 @@ impl fmt::Display for InputPurpose {
     }
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 #[doc(hidden)]
 impl ToGlib for InputPurpose {
     type GlibType = ffi::GtkInputPurpose;
@@ -2484,7 +2465,6 @@ impl ToGlib for InputPurpose {
     }
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 #[doc(hidden)]
 impl FromGlib<ffi::GtkInputPurpose> for InputPurpose {
     fn from_glib(value: ffi::GtkInputPurpose) -> Self {
@@ -2505,28 +2485,24 @@ impl FromGlib<ffi::GtkInputPurpose> for InputPurpose {
     }
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 impl StaticType for InputPurpose {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gtk_input_purpose_get_type()) }
     }
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 impl<'a> FromValueOptional<'a> for InputPurpose {
     unsafe fn from_value_optional(value: &Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 impl<'a> FromValue<'a> for InputPurpose {
     unsafe fn from_value(value: &Value) -> Self {
         from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 impl SetValue for InputPurpose {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
@@ -2609,7 +2585,6 @@ impl SetValue for Justification {
     }
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
 pub enum LevelBarMode {
@@ -2619,7 +2594,6 @@ pub enum LevelBarMode {
     __Unknown(i32),
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 impl fmt::Display for LevelBarMode {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "LevelBarMode::{}", match *self {
@@ -2630,7 +2604,6 @@ impl fmt::Display for LevelBarMode {
     }
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 #[doc(hidden)]
 impl ToGlib for LevelBarMode {
     type GlibType = ffi::GtkLevelBarMode;
@@ -2644,7 +2617,6 @@ impl ToGlib for LevelBarMode {
     }
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 #[doc(hidden)]
 impl FromGlib<ffi::GtkLevelBarMode> for LevelBarMode {
     fn from_glib(value: ffi::GtkLevelBarMode) -> Self {
@@ -2657,28 +2629,24 @@ impl FromGlib<ffi::GtkLevelBarMode> for LevelBarMode {
     }
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 impl StaticType for LevelBarMode {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gtk_level_bar_mode_get_type()) }
     }
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 impl<'a> FromValueOptional<'a> for LevelBarMode {
     unsafe fn from_value_optional(value: &Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 impl<'a> FromValue<'a> for LevelBarMode {
     unsafe fn from_value(value: &Value) -> Self {
         from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 impl SetValue for LevelBarMode {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
@@ -3661,7 +3629,6 @@ impl SetValue for PageSet {
     }
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
 pub enum PanDirection {
@@ -3673,7 +3640,6 @@ pub enum PanDirection {
     __Unknown(i32),
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 impl fmt::Display for PanDirection {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "PanDirection::{}", match *self {
@@ -3686,7 +3652,6 @@ impl fmt::Display for PanDirection {
     }
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 #[doc(hidden)]
 impl ToGlib for PanDirection {
     type GlibType = ffi::GtkPanDirection;
@@ -3702,7 +3667,6 @@ impl ToGlib for PanDirection {
     }
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 #[doc(hidden)]
 impl FromGlib<ffi::GtkPanDirection> for PanDirection {
     fn from_glib(value: ffi::GtkPanDirection) -> Self {
@@ -3717,28 +3681,24 @@ impl FromGlib<ffi::GtkPanDirection> for PanDirection {
     }
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 impl StaticType for PanDirection {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gtk_pan_direction_get_type()) }
     }
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 impl<'a> FromValueOptional<'a> for PanDirection {
     unsafe fn from_value_optional(value: &Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 impl<'a> FromValue<'a> for PanDirection {
     unsafe fn from_value(value: &Value) -> Self {
         from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 impl SetValue for PanDirection {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
@@ -4543,7 +4503,6 @@ impl SetValue for PrintStatus {
     }
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
 pub enum PropagationPhase {
@@ -4555,7 +4514,6 @@ pub enum PropagationPhase {
     __Unknown(i32),
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 impl fmt::Display for PropagationPhase {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "PropagationPhase::{}", match *self {
@@ -4568,7 +4526,6 @@ impl fmt::Display for PropagationPhase {
     }
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 #[doc(hidden)]
 impl ToGlib for PropagationPhase {
     type GlibType = ffi::GtkPropagationPhase;
@@ -4584,7 +4541,6 @@ impl ToGlib for PropagationPhase {
     }
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 #[doc(hidden)]
 impl FromGlib<ffi::GtkPropagationPhase> for PropagationPhase {
     fn from_glib(value: ffi::GtkPropagationPhase) -> Self {
@@ -4599,28 +4555,24 @@ impl FromGlib<ffi::GtkPropagationPhase> for PropagationPhase {
     }
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 impl StaticType for PropagationPhase {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gtk_propagation_phase_get_type()) }
     }
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 impl<'a> FromValueOptional<'a> for PropagationPhase {
     unsafe fn from_value_optional(value: &Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 impl<'a> FromValue<'a> for PropagationPhase {
     unsafe fn from_value(value: &Value) -> Self {
         from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 impl SetValue for PropagationPhase {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
@@ -6148,7 +6100,7 @@ impl SetValue for StackTransitionType {
     }
 }
 
-#[cfg_attr(feature = "v3_14", deprecated)]
+#[deprecated]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
 pub enum StateType {
@@ -6163,7 +6115,7 @@ pub enum StateType {
     __Unknown(i32),
 }
 
-#[cfg_attr(feature = "v3_14", deprecated)]
+#[deprecated]
 impl fmt::Display for StateType {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "StateType::{}", match *self {
@@ -6179,7 +6131,7 @@ impl fmt::Display for StateType {
     }
 }
 
-#[cfg_attr(feature = "v3_14", deprecated)]
+#[deprecated]
 #[doc(hidden)]
 impl ToGlib for StateType {
     type GlibType = ffi::GtkStateType;
@@ -6198,7 +6150,7 @@ impl ToGlib for StateType {
     }
 }
 
-#[cfg_attr(feature = "v3_14", deprecated)]
+#[deprecated]
 #[doc(hidden)]
 impl FromGlib<ffi::GtkStateType> for StateType {
     fn from_glib(value: ffi::GtkStateType) -> Self {
@@ -6216,28 +6168,28 @@ impl FromGlib<ffi::GtkStateType> for StateType {
     }
 }
 
-#[cfg_attr(feature = "v3_14", deprecated)]
+#[deprecated]
 impl StaticType for StateType {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gtk_state_type_get_type()) }
     }
 }
 
-#[cfg_attr(feature = "v3_14", deprecated)]
+#[deprecated]
 impl<'a> FromValueOptional<'a> for StateType {
     unsafe fn from_value_optional(value: &Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
-#[cfg_attr(feature = "v3_14", deprecated)]
+#[deprecated]
 impl<'a> FromValue<'a> for StateType {
     unsafe fn from_value(value: &Value) -> Self {
         from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
-#[cfg_attr(feature = "v3_14", deprecated)]
+#[deprecated]
 impl SetValue for StateType {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
@@ -6392,7 +6344,6 @@ impl SetValue for TextExtendSelection {
     }
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
 pub enum TextViewLayer {
@@ -6404,7 +6355,6 @@ pub enum TextViewLayer {
     __Unknown(i32),
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 impl fmt::Display for TextViewLayer {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "TextViewLayer::{}", match *self {
@@ -6417,7 +6367,6 @@ impl fmt::Display for TextViewLayer {
     }
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 #[doc(hidden)]
 impl ToGlib for TextViewLayer {
     type GlibType = ffi::GtkTextViewLayer;
@@ -6433,7 +6382,6 @@ impl ToGlib for TextViewLayer {
     }
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 #[doc(hidden)]
 impl FromGlib<ffi::GtkTextViewLayer> for TextViewLayer {
     fn from_glib(value: ffi::GtkTextViewLayer) -> Self {
@@ -6448,28 +6396,24 @@ impl FromGlib<ffi::GtkTextViewLayer> for TextViewLayer {
     }
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 impl StaticType for TextViewLayer {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gtk_text_view_layer_get_type()) }
     }
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 impl<'a> FromValueOptional<'a> for TextViewLayer {
     unsafe fn from_value_optional(value: &Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 impl<'a> FromValue<'a> for TextViewLayer {
     unsafe fn from_value(value: &Value) -> Self {
         from_glib(gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 impl SetValue for TextViewLayer {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())

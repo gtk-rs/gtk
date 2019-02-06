@@ -5,7 +5,6 @@
 use EventController;
 use Gesture;
 use GestureSingle;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use Widget;
 use ffi;
 use glib::StaticType;
@@ -17,7 +16,6 @@ use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use libc;
 use std::boxed::Box as Box_;
 use std::fmt;
@@ -32,7 +30,6 @@ glib_wrapper! {
 }
 
 impl GestureLongPress {
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     pub fn new<P: IsA<Widget>>(widget: &P) -> GestureLongPress {
         skip_assert_initialized!();
         unsafe {
@@ -48,10 +45,8 @@ pub trait GestureLongPressExt: 'static {
 
     fn set_property_delay_factor(&self, delay_factor: f64);
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_cancelled<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_pressed<F: Fn(&Self, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_delay_factor_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -72,7 +67,6 @@ impl<O: IsA<GestureLongPress>> GestureLongPressExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_cancelled<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -81,7 +75,6 @@ impl<O: IsA<GestureLongPress>> GestureLongPressExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_pressed<F: Fn(&Self, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -99,14 +92,12 @@ impl<O: IsA<GestureLongPress>> GestureLongPressExt for O {
     }
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 unsafe extern "C" fn cancelled_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGestureLongPress, f: glib_ffi::gpointer)
 where P: IsA<GestureLongPress> {
     let f: &F = transmute(f);
     f(&GestureLongPress::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 unsafe extern "C" fn pressed_trampoline<P, F: Fn(&P, f64, f64) + 'static>(this: *mut ffi::GtkGestureLongPress, x: libc::c_double, y: libc::c_double, f: glib_ffi::gpointer)
 where P: IsA<GestureLongPress> {
     let f: &F = transmute(f);

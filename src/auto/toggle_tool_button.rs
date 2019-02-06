@@ -35,14 +35,6 @@ impl ToggleToolButton {
             ToolItem::from_glib_none(ffi::gtk_toggle_tool_button_new()).unsafe_cast()
         }
     }
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    pub fn new_from_stock(stock_id: &str) -> ToggleToolButton {
-        assert_initialized_main_thread!();
-        unsafe {
-            ToolItem::from_glib_none(ffi::gtk_toggle_tool_button_new_from_stock(stock_id.to_glib_none().0)).unsafe_cast()
-        }
-    }
 }
 
 impl Default for ToggleToolButton {

@@ -3,7 +3,6 @@
 // DO NOT EDIT
 
 use ImageType;
-use Menu;
 use Orientation;
 use Tooltip;
 use ffi;
@@ -24,12 +23,9 @@ use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use libc;
-use std;
 use std::boxed::Box as Box_;
 use std::fmt;
-use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
     pub struct StatusIcon(Object<ffi::GtkStatusIcon, ffi::GtkStatusIconClass, StatusIconClass>);
@@ -39,171 +35,54 @@ glib_wrapper! {
     }
 }
 
-impl StatusIcon {
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    pub fn new() -> StatusIcon {
-        assert_initialized_main_thread!();
-        unsafe {
-            from_glib_full(ffi::gtk_status_icon_new())
-        }
-    }
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    pub fn new_from_file<P: AsRef<std::path::Path>>(filename: P) -> StatusIcon {
-        assert_initialized_main_thread!();
-        unsafe {
-            from_glib_full(ffi::gtk_status_icon_new_from_file(filename.as_ref().to_glib_none().0))
-        }
-    }
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    pub fn new_from_gicon<P: IsA<gio::Icon>>(icon: &P) -> StatusIcon {
-        assert_initialized_main_thread!();
-        unsafe {
-            from_glib_full(ffi::gtk_status_icon_new_from_gicon(icon.as_ref().to_glib_none().0))
-        }
-    }
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    pub fn new_from_icon_name(icon_name: &str) -> StatusIcon {
-        assert_initialized_main_thread!();
-        unsafe {
-            from_glib_full(ffi::gtk_status_icon_new_from_icon_name(icon_name.to_glib_none().0))
-        }
-    }
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    pub fn new_from_pixbuf(pixbuf: &gdk_pixbuf::Pixbuf) -> StatusIcon {
-        assert_initialized_main_thread!();
-        unsafe {
-            from_glib_full(ffi::gtk_status_icon_new_from_pixbuf(pixbuf.to_glib_none().0))
-        }
-    }
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    pub fn new_from_stock(stock_id: &str) -> StatusIcon {
-        assert_initialized_main_thread!();
-        unsafe {
-            from_glib_full(ffi::gtk_status_icon_new_from_stock(stock_id.to_glib_none().0))
-        }
-    }
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    pub fn position_menu<P: IsA<Menu>, Q: IsA<StatusIcon>>(menu: &P, x: &mut i32, y: &mut i32, user_data: &Q) -> bool {
-        skip_assert_initialized!();
-        unsafe {
-            let mut push_in = mem::uninitialized();
-            ffi::gtk_status_icon_position_menu(menu.as_ref().to_glib_none().0, x, y, &mut push_in, user_data.as_ref().to_glib_none().0);
-            from_glib(push_in)
-        }
-    }
-}
-
-#[cfg_attr(feature = "v3_14", deprecated)]
-impl Default for StatusIcon {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
 pub const NONE_STATUS_ICON: Option<&StatusIcon> = None;
 
 pub trait StatusIconExt: 'static {
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn get_geometry(&self) -> Option<(gdk::Screen, gdk::Rectangle, Orientation)>;
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn get_gicon(&self) -> Option<gio::Icon>;
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn get_has_tooltip(&self) -> bool;
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn get_icon_name(&self) -> Option<GString>;
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn get_pixbuf(&self) -> Option<gdk_pixbuf::Pixbuf>;
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn get_screen(&self) -> Option<gdk::Screen>;
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn get_size(&self) -> i32;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_stock(&self) -> Option<GString>;
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn get_storage_type(&self) -> ImageType;
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn get_title(&self) -> Option<GString>;
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn get_tooltip_markup(&self) -> Option<GString>;
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn get_tooltip_text(&self) -> Option<GString>;
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn get_visible(&self) -> bool;
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn get_x11_window_id(&self) -> u32;
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn is_embedded(&self) -> bool;
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn set_from_file<P: AsRef<std::path::Path>>(&self, filename: P);
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn set_from_gicon<P: IsA<gio::Icon>>(&self, icon: &P);
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn set_from_icon_name(&self, icon_name: &str);
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn set_from_pixbuf<'a, P: Into<Option<&'a gdk_pixbuf::Pixbuf>>>(&self, pixbuf: P);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_from_stock(&self, stock_id: &str);
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn set_has_tooltip(&self, has_tooltip: bool);
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn set_name(&self, name: &str);
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn set_screen(&self, screen: &gdk::Screen);
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn set_title(&self, title: &str);
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn set_tooltip_markup<'a, P: Into<Option<&'a str>>>(&self, markup: P);
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn set_tooltip_text(&self, text: &str);
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn set_visible(&self, visible: bool);
-
     fn get_property_embedded(&self) -> bool;
 
     fn set_property_file<'a, P: Into<Option<&'a str>>>(&self, file: P);
 
+    fn get_property_gicon(&self) -> Option<gio::Icon>;
+
     fn set_property_gicon<P: IsA<gio::Icon> + glib::value::SetValueOptional>(&self, gicon: Option<&P>);
+
+    fn get_property_has_tooltip(&self) -> bool;
+
+    fn set_property_has_tooltip(&self, has_tooltip: bool);
+
+    fn get_property_icon_name(&self) -> Option<GString>;
 
     fn set_property_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_name: P);
 
     fn get_property_orientation(&self) -> Orientation;
 
+    fn get_property_pixbuf(&self) -> Option<gdk_pixbuf::Pixbuf>;
+
     fn set_property_pixbuf(&self, pixbuf: Option<&gdk_pixbuf::Pixbuf>);
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_stock<'a, P: Into<Option<&'a str>>>(&self, stock: P);
+    fn get_property_screen(&self) -> Option<gdk::Screen>;
+
+    fn set_property_screen(&self, screen: Option<&gdk::Screen>);
+
+    fn get_property_size(&self) -> i32;
+
+    fn get_property_storage_type(&self) -> ImageType;
+
+    fn get_property_title(&self) -> Option<GString>;
+
+    fn set_property_title<'a, P: Into<Option<&'a str>>>(&self, title: P);
+
+    fn get_property_tooltip_markup(&self) -> Option<GString>;
+
+    fn set_property_tooltip_markup<'a, P: Into<Option<&'a str>>>(&self, tooltip_markup: P);
+
+    fn get_property_tooltip_text(&self) -> Option<GString>;
+
+    fn set_property_tooltip_text<'a, P: Into<Option<&'a str>>>(&self, tooltip_text: P);
+
+    fn get_property_visible(&self) -> bool;
+
+    fn set_property_visible(&self, visible: bool);
 
     fn connect_activate<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -241,9 +120,6 @@ pub trait StatusIconExt: 'static {
 
     fn connect_property_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_stock_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
     fn connect_property_storage_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -256,174 +132,6 @@ pub trait StatusIconExt: 'static {
 }
 
 impl<O: IsA<StatusIcon>> StatusIconExt for O {
-    fn get_geometry(&self) -> Option<(gdk::Screen, gdk::Rectangle, Orientation)> {
-        unsafe {
-            let mut screen = ptr::null_mut();
-            let mut area = gdk::Rectangle::uninitialized();
-            let mut orientation = mem::uninitialized();
-            let ret = from_glib(ffi::gtk_status_icon_get_geometry(self.as_ref().to_glib_none().0, &mut screen, area.to_glib_none_mut().0, &mut orientation));
-            if ret { Some((from_glib_none(screen), area, from_glib(orientation))) } else { None }
-        }
-    }
-
-    fn get_gicon(&self) -> Option<gio::Icon> {
-        unsafe {
-            from_glib_none(ffi::gtk_status_icon_get_gicon(self.as_ref().to_glib_none().0))
-        }
-    }
-
-    fn get_has_tooltip(&self) -> bool {
-        unsafe {
-            from_glib(ffi::gtk_status_icon_get_has_tooltip(self.as_ref().to_glib_none().0))
-        }
-    }
-
-    fn get_icon_name(&self) -> Option<GString> {
-        unsafe {
-            from_glib_none(ffi::gtk_status_icon_get_icon_name(self.as_ref().to_glib_none().0))
-        }
-    }
-
-    fn get_pixbuf(&self) -> Option<gdk_pixbuf::Pixbuf> {
-        unsafe {
-            from_glib_none(ffi::gtk_status_icon_get_pixbuf(self.as_ref().to_glib_none().0))
-        }
-    }
-
-    fn get_screen(&self) -> Option<gdk::Screen> {
-        unsafe {
-            from_glib_none(ffi::gtk_status_icon_get_screen(self.as_ref().to_glib_none().0))
-        }
-    }
-
-    fn get_size(&self) -> i32 {
-        unsafe {
-            ffi::gtk_status_icon_get_size(self.as_ref().to_glib_none().0)
-        }
-    }
-
-    fn get_stock(&self) -> Option<GString> {
-        unsafe {
-            from_glib_none(ffi::gtk_status_icon_get_stock(self.as_ref().to_glib_none().0))
-        }
-    }
-
-    fn get_storage_type(&self) -> ImageType {
-        unsafe {
-            from_glib(ffi::gtk_status_icon_get_storage_type(self.as_ref().to_glib_none().0))
-        }
-    }
-
-    fn get_title(&self) -> Option<GString> {
-        unsafe {
-            from_glib_none(ffi::gtk_status_icon_get_title(self.as_ref().to_glib_none().0))
-        }
-    }
-
-    fn get_tooltip_markup(&self) -> Option<GString> {
-        unsafe {
-            from_glib_full(ffi::gtk_status_icon_get_tooltip_markup(self.as_ref().to_glib_none().0))
-        }
-    }
-
-    fn get_tooltip_text(&self) -> Option<GString> {
-        unsafe {
-            from_glib_full(ffi::gtk_status_icon_get_tooltip_text(self.as_ref().to_glib_none().0))
-        }
-    }
-
-    fn get_visible(&self) -> bool {
-        unsafe {
-            from_glib(ffi::gtk_status_icon_get_visible(self.as_ref().to_glib_none().0))
-        }
-    }
-
-    fn get_x11_window_id(&self) -> u32 {
-        unsafe {
-            ffi::gtk_status_icon_get_x11_window_id(self.as_ref().to_glib_none().0)
-        }
-    }
-
-    fn is_embedded(&self) -> bool {
-        unsafe {
-            from_glib(ffi::gtk_status_icon_is_embedded(self.as_ref().to_glib_none().0))
-        }
-    }
-
-    fn set_from_file<P: AsRef<std::path::Path>>(&self, filename: P) {
-        unsafe {
-            ffi::gtk_status_icon_set_from_file(self.as_ref().to_glib_none().0, filename.as_ref().to_glib_none().0);
-        }
-    }
-
-    fn set_from_gicon<P: IsA<gio::Icon>>(&self, icon: &P) {
-        unsafe {
-            ffi::gtk_status_icon_set_from_gicon(self.as_ref().to_glib_none().0, icon.as_ref().to_glib_none().0);
-        }
-    }
-
-    fn set_from_icon_name(&self, icon_name: &str) {
-        unsafe {
-            ffi::gtk_status_icon_set_from_icon_name(self.as_ref().to_glib_none().0, icon_name.to_glib_none().0);
-        }
-    }
-
-    fn set_from_pixbuf<'a, P: Into<Option<&'a gdk_pixbuf::Pixbuf>>>(&self, pixbuf: P) {
-        let pixbuf = pixbuf.into();
-        unsafe {
-            ffi::gtk_status_icon_set_from_pixbuf(self.as_ref().to_glib_none().0, pixbuf.to_glib_none().0);
-        }
-    }
-
-    fn set_from_stock(&self, stock_id: &str) {
-        unsafe {
-            ffi::gtk_status_icon_set_from_stock(self.as_ref().to_glib_none().0, stock_id.to_glib_none().0);
-        }
-    }
-
-    fn set_has_tooltip(&self, has_tooltip: bool) {
-        unsafe {
-            ffi::gtk_status_icon_set_has_tooltip(self.as_ref().to_glib_none().0, has_tooltip.to_glib());
-        }
-    }
-
-    fn set_name(&self, name: &str) {
-        unsafe {
-            ffi::gtk_status_icon_set_name(self.as_ref().to_glib_none().0, name.to_glib_none().0);
-        }
-    }
-
-    fn set_screen(&self, screen: &gdk::Screen) {
-        unsafe {
-            ffi::gtk_status_icon_set_screen(self.as_ref().to_glib_none().0, screen.to_glib_none().0);
-        }
-    }
-
-    fn set_title(&self, title: &str) {
-        unsafe {
-            ffi::gtk_status_icon_set_title(self.as_ref().to_glib_none().0, title.to_glib_none().0);
-        }
-    }
-
-    fn set_tooltip_markup<'a, P: Into<Option<&'a str>>>(&self, markup: P) {
-        let markup = markup.into();
-        unsafe {
-            ffi::gtk_status_icon_set_tooltip_markup(self.as_ref().to_glib_none().0, markup.to_glib_none().0);
-        }
-    }
-
-    fn set_tooltip_text(&self, text: &str) {
-        unsafe {
-            ffi::gtk_status_icon_set_tooltip_text(self.as_ref().to_glib_none().0, text.to_glib_none().0);
-        }
-    }
-
-    fn set_visible(&self, visible: bool) {
-        unsafe {
-            ffi::gtk_status_icon_set_visible(self.as_ref().to_glib_none().0, visible.to_glib());
-        }
-    }
-
     fn get_property_embedded(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
@@ -439,9 +147,39 @@ impl<O: IsA<StatusIcon>> StatusIconExt for O {
         }
     }
 
+    fn get_property_gicon(&self) -> Option<gio::Icon> {
+        unsafe {
+            let mut value = Value::from_type(<gio::Icon as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gicon\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            value.get()
+        }
+    }
+
     fn set_property_gicon<P: IsA<gio::Icon> + glib::value::SetValueOptional>(&self, gicon: Option<&P>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gicon\0".as_ptr() as *const _, Value::from(gicon).to_glib_none().0);
+        }
+    }
+
+    fn get_property_has_tooltip(&self) -> bool {
+        unsafe {
+            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"has-tooltip\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            value.get().unwrap()
+        }
+    }
+
+    fn set_property_has_tooltip(&self, has_tooltip: bool) {
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"has-tooltip\0".as_ptr() as *const _, Value::from(&has_tooltip).to_glib_none().0);
+        }
+    }
+
+    fn get_property_icon_name(&self) -> Option<GString> {
+        unsafe {
+            let mut value = Value::from_type(<GString as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"icon-name\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            value.get()
         }
     }
 
@@ -460,16 +198,106 @@ impl<O: IsA<StatusIcon>> StatusIconExt for O {
         }
     }
 
+    fn get_property_pixbuf(&self) -> Option<gdk_pixbuf::Pixbuf> {
+        unsafe {
+            let mut value = Value::from_type(<gdk_pixbuf::Pixbuf as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"pixbuf\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            value.get()
+        }
+    }
+
     fn set_property_pixbuf(&self, pixbuf: Option<&gdk_pixbuf::Pixbuf>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"pixbuf\0".as_ptr() as *const _, Value::from(pixbuf).to_glib_none().0);
         }
     }
 
-    fn set_property_stock<'a, P: Into<Option<&'a str>>>(&self, stock: P) {
-        let stock = stock.into();
+    fn get_property_screen(&self) -> Option<gdk::Screen> {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"stock\0".as_ptr() as *const _, Value::from(stock).to_glib_none().0);
+            let mut value = Value::from_type(<gdk::Screen as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"screen\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            value.get()
+        }
+    }
+
+    fn set_property_screen(&self, screen: Option<&gdk::Screen>) {
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"screen\0".as_ptr() as *const _, Value::from(screen).to_glib_none().0);
+        }
+    }
+
+    fn get_property_size(&self) -> i32 {
+        unsafe {
+            let mut value = Value::from_type(<i32 as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"size\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            value.get().unwrap()
+        }
+    }
+
+    fn get_property_storage_type(&self) -> ImageType {
+        unsafe {
+            let mut value = Value::from_type(<ImageType as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"storage-type\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            value.get().unwrap()
+        }
+    }
+
+    fn get_property_title(&self) -> Option<GString> {
+        unsafe {
+            let mut value = Value::from_type(<GString as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"title\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            value.get()
+        }
+    }
+
+    fn set_property_title<'a, P: Into<Option<&'a str>>>(&self, title: P) {
+        let title = title.into();
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"title\0".as_ptr() as *const _, Value::from(title).to_glib_none().0);
+        }
+    }
+
+    fn get_property_tooltip_markup(&self) -> Option<GString> {
+        unsafe {
+            let mut value = Value::from_type(<GString as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"tooltip-markup\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            value.get()
+        }
+    }
+
+    fn set_property_tooltip_markup<'a, P: Into<Option<&'a str>>>(&self, tooltip_markup: P) {
+        let tooltip_markup = tooltip_markup.into();
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"tooltip-markup\0".as_ptr() as *const _, Value::from(tooltip_markup).to_glib_none().0);
+        }
+    }
+
+    fn get_property_tooltip_text(&self) -> Option<GString> {
+        unsafe {
+            let mut value = Value::from_type(<GString as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"tooltip-text\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            value.get()
+        }
+    }
+
+    fn set_property_tooltip_text<'a, P: Into<Option<&'a str>>>(&self, tooltip_text: P) {
+        let tooltip_text = tooltip_text.into();
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"tooltip-text\0".as_ptr() as *const _, Value::from(tooltip_text).to_glib_none().0);
+        }
+    }
+
+    fn get_property_visible(&self) -> bool {
+        unsafe {
+            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"visible\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            value.get().unwrap()
+        }
+    }
+
+    fn set_property_visible(&self, visible: bool) {
+        unsafe {
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"visible\0".as_ptr() as *const _, Value::from(&visible).to_glib_none().0);
         }
     }
 
@@ -609,14 +437,6 @@ impl<O: IsA<StatusIcon>> StatusIconExt for O {
         }
     }
 
-    fn connect_property_stock_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::stock\0".as_ptr() as *const _,
-                Some(transmute(notify_stock_trampoline::<Self, F> as usize)), Box_::into_raw(f))
-        }
-    }
-
     fn connect_property_storage_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -749,12 +569,6 @@ where P: IsA<StatusIcon> {
 }
 
 unsafe extern "C" fn notify_size_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkStatusIcon, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<StatusIcon> {
-    let f: &F = transmute(f);
-    f(&StatusIcon::from_glib_borrow(this).unsafe_cast())
-}
-
-unsafe extern "C" fn notify_stock_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkStatusIcon, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<StatusIcon> {
     let f: &F = transmute(f);
     f(&StatusIcon::from_glib_borrow(this).unsafe_cast())

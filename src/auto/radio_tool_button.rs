@@ -32,14 +32,6 @@ impl RadioToolButton {
             ToolItem::from_glib_none(ffi::gtk_radio_tool_button_new_from_widget(group.as_ref().to_glib_none().0)).unsafe_cast()
         }
     }
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    pub fn new_with_stock_from_widget<P: IsA<RadioToolButton>>(group: &P, stock_id: &str) -> RadioToolButton {
-        skip_assert_initialized!();
-        unsafe {
-            ToolItem::from_glib_none(ffi::gtk_radio_tool_button_new_with_stock_from_widget(group.as_ref().to_glib_none().0, stock_id.to_glib_none().0)).unsafe_cast()
-        }
-    }
 }
 
 pub const NONE_RADIO_TOOL_BUTTON: Option<&RadioToolButton> = None;

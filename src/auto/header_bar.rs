@@ -7,7 +7,6 @@ use Container;
 use PackType;
 use Widget;
 use ffi;
-use glib;
 use glib::GString;
 use glib::StaticType;
 use glib::Value;
@@ -31,7 +30,6 @@ glib_wrapper! {
 }
 
 impl HeaderBar {
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     pub fn new() -> HeaderBar {
         assert_initialized_main_thread!();
         unsafe {
@@ -40,7 +38,6 @@ impl HeaderBar {
     }
 }
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 impl Default for HeaderBar {
     fn default() -> Self {
         Self::new()
@@ -50,73 +47,41 @@ impl Default for HeaderBar {
 pub const NONE_HEADER_BAR: Option<&HeaderBar> = None;
 
 pub trait HeaderBarExt: 'static {
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_custom_title(&self) -> Option<Widget>;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_decoration_layout(&self) -> Option<GString>;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_has_subtitle(&self) -> bool;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_show_close_button(&self) -> bool;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_subtitle(&self) -> Option<GString>;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_title(&self) -> Option<GString>;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn pack_end<P: IsA<Widget>>(&self, child: &P);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn pack_start<P: IsA<Widget>>(&self, child: &P);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_custom_title<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, title_widget: Q);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_decoration_layout<'a, P: Into<Option<&'a str>>>(&self, layout: P);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_has_subtitle(&self, setting: bool);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_show_close_button(&self, setting: bool);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_subtitle<'a, P: Into<Option<&'a str>>>(&self, subtitle: P);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_title<'a, P: Into<Option<&'a str>>>(&self, title: P);
 
-    fn get_property_custom_title(&self) -> Option<Widget>;
-
-    fn set_property_custom_title<P: IsA<Widget> + glib::value::SetValueOptional>(&self, custom_title: Option<&P>);
-
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_property_decoration_layout_set(&self) -> bool;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_property_decoration_layout_set(&self, decoration_layout_set: bool);
-
-    fn get_property_show_close_button(&self) -> bool;
-
-    fn set_property_show_close_button(&self, show_close_button: bool);
 
     fn get_property_spacing(&self) -> i32;
 
     fn set_property_spacing(&self, spacing: i32);
-
-    fn get_property_subtitle(&self) -> Option<GString>;
-
-    fn set_property_subtitle<'a, P: Into<Option<&'a str>>>(&self, subtitle: P);
-
-    fn get_property_title(&self) -> Option<GString>;
-
-    fn set_property_title<'a, P: Into<Option<&'a str>>>(&self, title: P);
 
     fn get_child_pack_type<T: IsA<Widget>>(&self, item: &T) -> PackType;
 
@@ -128,13 +93,10 @@ pub trait HeaderBarExt: 'static {
 
     fn connect_property_custom_title_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_decoration_layout_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_decoration_layout_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_has_subtitle_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_show_close_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -147,63 +109,54 @@ pub trait HeaderBarExt: 'static {
 }
 
 impl<O: IsA<HeaderBar>> HeaderBarExt for O {
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_custom_title(&self) -> Option<Widget> {
         unsafe {
             from_glib_none(ffi::gtk_header_bar_get_custom_title(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_decoration_layout(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_header_bar_get_decoration_layout(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_has_subtitle(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_header_bar_get_has_subtitle(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_show_close_button(&self) -> bool {
         unsafe {
             from_glib(ffi::gtk_header_bar_get_show_close_button(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_subtitle(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_header_bar_get_subtitle(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_title(&self) -> Option<GString> {
         unsafe {
             from_glib_none(ffi::gtk_header_bar_get_title(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn pack_end<P: IsA<Widget>>(&self, child: &P) {
         unsafe {
             ffi::gtk_header_bar_pack_end(self.as_ref().to_glib_none().0, child.as_ref().to_glib_none().0);
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn pack_start<P: IsA<Widget>>(&self, child: &P) {
         unsafe {
             ffi::gtk_header_bar_pack_start(self.as_ref().to_glib_none().0, child.as_ref().to_glib_none().0);
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_custom_title<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, title_widget: Q) {
         let title_widget = title_widget.into();
         unsafe {
@@ -211,7 +164,6 @@ impl<O: IsA<HeaderBar>> HeaderBarExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_decoration_layout<'a, P: Into<Option<&'a str>>>(&self, layout: P) {
         let layout = layout.into();
         unsafe {
@@ -219,21 +171,18 @@ impl<O: IsA<HeaderBar>> HeaderBarExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_has_subtitle(&self, setting: bool) {
         unsafe {
             ffi::gtk_header_bar_set_has_subtitle(self.as_ref().to_glib_none().0, setting.to_glib());
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_show_close_button(&self, setting: bool) {
         unsafe {
             ffi::gtk_header_bar_set_show_close_button(self.as_ref().to_glib_none().0, setting.to_glib());
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_subtitle<'a, P: Into<Option<&'a str>>>(&self, subtitle: P) {
         let subtitle = subtitle.into();
         unsafe {
@@ -241,7 +190,6 @@ impl<O: IsA<HeaderBar>> HeaderBarExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_title<'a, P: Into<Option<&'a str>>>(&self, title: P) {
         let title = title.into();
         unsafe {
@@ -249,21 +197,6 @@ impl<O: IsA<HeaderBar>> HeaderBarExt for O {
         }
     }
 
-    fn get_property_custom_title(&self) -> Option<Widget> {
-        unsafe {
-            let mut value = Value::from_type(<Widget as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"custom-title\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get()
-        }
-    }
-
-    fn set_property_custom_title<P: IsA<Widget> + glib::value::SetValueOptional>(&self, custom_title: Option<&P>) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"custom-title\0".as_ptr() as *const _, Value::from(custom_title).to_glib_none().0);
-        }
-    }
-
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn get_property_decoration_layout_set(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
@@ -272,24 +205,9 @@ impl<O: IsA<HeaderBar>> HeaderBarExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_property_decoration_layout_set(&self, decoration_layout_set: bool) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"decoration-layout-set\0".as_ptr() as *const _, Value::from(&decoration_layout_set).to_glib_none().0);
-        }
-    }
-
-    fn get_property_show_close_button(&self) -> bool {
-        unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"show-close-button\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().unwrap()
-        }
-    }
-
-    fn set_property_show_close_button(&self, show_close_button: bool) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"show-close-button\0".as_ptr() as *const _, Value::from(&show_close_button).to_glib_none().0);
         }
     }
 
@@ -304,36 +222,6 @@ impl<O: IsA<HeaderBar>> HeaderBarExt for O {
     fn set_property_spacing(&self, spacing: i32) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"spacing\0".as_ptr() as *const _, Value::from(&spacing).to_glib_none().0);
-        }
-    }
-
-    fn get_property_subtitle(&self) -> Option<GString> {
-        unsafe {
-            let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"subtitle\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get()
-        }
-    }
-
-    fn set_property_subtitle<'a, P: Into<Option<&'a str>>>(&self, subtitle: P) {
-        let subtitle = subtitle.into();
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"subtitle\0".as_ptr() as *const _, Value::from(subtitle).to_glib_none().0);
-        }
-    }
-
-    fn get_property_title(&self) -> Option<GString> {
-        unsafe {
-            let mut value = Value::from_type(<GString as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"title\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get()
-        }
-    }
-
-    fn set_property_title<'a, P: Into<Option<&'a str>>>(&self, title: P) {
-        let title = title.into();
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"title\0".as_ptr() as *const _, Value::from(title).to_glib_none().0);
         }
     }
 
@@ -373,7 +261,6 @@ impl<O: IsA<HeaderBar>> HeaderBarExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_decoration_layout_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -382,7 +269,6 @@ impl<O: IsA<HeaderBar>> HeaderBarExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_decoration_layout_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -391,7 +277,6 @@ impl<O: IsA<HeaderBar>> HeaderBarExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn connect_property_has_subtitle_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -439,21 +324,18 @@ where P: IsA<HeaderBar> {
     f(&HeaderBar::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 unsafe extern "C" fn notify_decoration_layout_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkHeaderBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<HeaderBar> {
     let f: &F = transmute(f);
     f(&HeaderBar::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 unsafe extern "C" fn notify_decoration_layout_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkHeaderBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<HeaderBar> {
     let f: &F = transmute(f);
     f(&HeaderBar::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 unsafe extern "C" fn notify_has_subtitle_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkHeaderBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<HeaderBar> {
     let f: &F = transmute(f);

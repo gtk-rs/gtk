@@ -2,8 +2,6 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use RegionFlags;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use StateFlags;
 use Widget;
 use ffi;
@@ -12,7 +10,6 @@ use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
 use std::fmt;
-use std::mem;
 
 glib_wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -81,23 +78,9 @@ impl WidgetPath {
         }
     }
 
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    pub fn iter_add_region(&self, pos: i32, name: &str, flags: RegionFlags) {
-        unsafe {
-            ffi::gtk_widget_path_iter_add_region(self.to_glib_none().0, pos, name.to_glib_none().0, flags.to_glib());
-        }
-    }
-
     pub fn iter_clear_classes(&self, pos: i32) {
         unsafe {
             ffi::gtk_widget_path_iter_clear_classes(self.to_glib_none().0, pos);
-        }
-    }
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    pub fn iter_clear_regions(&self, pos: i32) {
-        unsafe {
-            ffi::gtk_widget_path_iter_clear_regions(self.to_glib_none().0, pos);
         }
     }
 
@@ -132,7 +115,6 @@ impl WidgetPath {
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     pub fn iter_get_state(&self, pos: i32) -> StateFlags {
         unsafe {
             from_glib(ffi::gtk_widget_path_iter_get_state(self.to_glib_none().0, pos))
@@ -163,47 +145,15 @@ impl WidgetPath {
         }
     }
 
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    pub fn iter_has_qregion(&self, pos: i32, qname: glib::Quark) -> Option<RegionFlags> {
-        unsafe {
-            let mut flags = mem::uninitialized();
-            let ret = from_glib(ffi::gtk_widget_path_iter_has_qregion(self.to_glib_none().0, pos, qname.to_glib(), &mut flags));
-            if ret { Some(from_glib(flags)) } else { None }
-        }
-    }
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    pub fn iter_has_region(&self, pos: i32, name: &str) -> Option<RegionFlags> {
-        unsafe {
-            let mut flags = mem::uninitialized();
-            let ret = from_glib(ffi::gtk_widget_path_iter_has_region(self.to_glib_none().0, pos, name.to_glib_none().0, &mut flags));
-            if ret { Some(from_glib(flags)) } else { None }
-        }
-    }
-
     pub fn iter_list_classes(&self, pos: i32) -> Vec<GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_container(ffi::gtk_widget_path_iter_list_classes(self.to_glib_none().0, pos))
         }
     }
 
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    pub fn iter_list_regions(&self, pos: i32) -> Vec<GString> {
-        unsafe {
-            FromGlibPtrContainer::from_glib_container(ffi::gtk_widget_path_iter_list_regions(self.to_glib_none().0, pos))
-        }
-    }
-
     pub fn iter_remove_class(&self, pos: i32, name: &str) {
         unsafe {
             ffi::gtk_widget_path_iter_remove_class(self.to_glib_none().0, pos, name.to_glib_none().0);
-        }
-    }
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    pub fn iter_remove_region(&self, pos: i32, name: &str) {
-        unsafe {
-            ffi::gtk_widget_path_iter_remove_region(self.to_glib_none().0, pos, name.to_glib_none().0);
         }
     }
 
@@ -227,7 +177,6 @@ impl WidgetPath {
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     pub fn iter_set_state(&self, pos: i32, state: StateFlags) {
         unsafe {
             ffi::gtk_widget_path_iter_set_state(self.to_glib_none().0, pos, state.to_glib());

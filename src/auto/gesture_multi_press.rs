@@ -5,26 +5,18 @@
 use EventController;
 use Gesture;
 use GestureSingle;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use Widget;
 use ffi;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use gdk;
 use glib::object::Cast;
 use glib::object::IsA;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use glib::signal::SignalHandlerId;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use glib::signal::connect_raw;
 use glib::translate::*;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use glib_ffi;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use libc;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use std::boxed::Box as Box_;
 use std::fmt;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use std::mem::transmute;
 
 glib_wrapper! {
@@ -36,7 +28,6 @@ glib_wrapper! {
 }
 
 impl GestureMultiPress {
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     pub fn new<P: IsA<Widget>>(widget: &P) -> GestureMultiPress {
         skip_assert_initialized!();
         unsafe {
@@ -48,24 +39,18 @@ impl GestureMultiPress {
 pub const NONE_GESTURE_MULTI_PRESS: Option<&GestureMultiPress> = None;
 
 pub trait GestureMultiPressExt: 'static {
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_area(&self) -> Option<gdk::Rectangle>;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn set_area<'a, P: Into<Option<&'a gdk::Rectangle>>>(&self, rect: P);
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_pressed<F: Fn(&Self, i32, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_released<F: Fn(&Self, i32, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_stopped<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<GestureMultiPress>> GestureMultiPressExt for O {
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_area(&self) -> Option<gdk::Rectangle> {
         unsafe {
             let mut rect = gdk::Rectangle::uninitialized();
@@ -74,7 +59,6 @@ impl<O: IsA<GestureMultiPress>> GestureMultiPressExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn set_area<'a, P: Into<Option<&'a gdk::Rectangle>>>(&self, rect: P) {
         let rect = rect.into();
         unsafe {
@@ -82,7 +66,6 @@ impl<O: IsA<GestureMultiPress>> GestureMultiPressExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_pressed<F: Fn(&Self, i32, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -91,7 +74,6 @@ impl<O: IsA<GestureMultiPress>> GestureMultiPressExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_released<F: Fn(&Self, i32, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -100,7 +82,6 @@ impl<O: IsA<GestureMultiPress>> GestureMultiPressExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_stopped<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -110,21 +91,18 @@ impl<O: IsA<GestureMultiPress>> GestureMultiPressExt for O {
     }
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 unsafe extern "C" fn pressed_trampoline<P, F: Fn(&P, i32, f64, f64) + 'static>(this: *mut ffi::GtkGestureMultiPress, n_press: libc::c_int, x: libc::c_double, y: libc::c_double, f: glib_ffi::gpointer)
 where P: IsA<GestureMultiPress> {
     let f: &F = transmute(f);
     f(&GestureMultiPress::from_glib_borrow(this).unsafe_cast(), n_press, x, y)
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 unsafe extern "C" fn released_trampoline<P, F: Fn(&P, i32, f64, f64) + 'static>(this: *mut ffi::GtkGestureMultiPress, n_press: libc::c_int, x: libc::c_double, y: libc::c_double, f: glib_ffi::gpointer)
 where P: IsA<GestureMultiPress> {
     let f: &F = transmute(f);
     f(&GestureMultiPress::from_glib_borrow(this).unsafe_cast(), n_press, x, y)
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 unsafe extern "C" fn stopped_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGestureMultiPress, f: glib_ffi::gpointer)
 where P: IsA<GestureMultiPress> {
     let f: &F = transmute(f);

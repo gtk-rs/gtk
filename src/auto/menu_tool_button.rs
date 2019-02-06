@@ -37,14 +37,6 @@ impl MenuToolButton {
             ToolItem::from_glib_none(ffi::gtk_menu_tool_button_new(icon_widget.map(|p| p.as_ref()).to_glib_none().0, label.to_glib_none().0)).unsafe_cast()
         }
     }
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    pub fn new_from_stock(stock_id: &str) -> MenuToolButton {
-        assert_initialized_main_thread!();
-        unsafe {
-            ToolItem::from_glib_none(ffi::gtk_menu_tool_button_new_from_stock(stock_id.to_glib_none().0)).unsafe_cast()
-        }
-    }
 }
 
 pub const NONE_MENU_TOOL_BUTTON: Option<&MenuToolButton> = None;

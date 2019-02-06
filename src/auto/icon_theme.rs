@@ -5,7 +5,6 @@
 use Error;
 use IconInfo;
 use IconLookupFlags;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 use cairo;
 use ffi;
 use gdk;
@@ -40,14 +39,6 @@ impl IconTheme {
         }
     }
 
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    pub fn add_builtin_icon(icon_name: &str, size: i32, pixbuf: &gdk_pixbuf::Pixbuf) {
-        assert_initialized_main_thread!();
-        unsafe {
-            ffi::gtk_icon_theme_add_builtin_icon(icon_name.to_glib_none().0, size, pixbuf.to_glib_none().0);
-        }
-    }
-
     pub fn get_default() -> Option<IconTheme> {
         assert_initialized_main_thread!();
         unsafe {
@@ -72,7 +63,6 @@ impl Default for IconTheme {
 pub const NONE_ICON_THEME: Option<&IconTheme> = None;
 
 pub trait IconThemeExt: 'static {
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn add_resource_path(&self, path: &str);
 
     fn append_search_path<P: AsRef<std::path::Path>>(&self, path: P);
@@ -87,20 +77,16 @@ pub trait IconThemeExt: 'static {
 
     fn load_icon(&self, icon_name: &str, size: i32, flags: IconLookupFlags) -> Result<Option<gdk_pixbuf::Pixbuf>, Error>;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn load_icon_for_scale(&self, icon_name: &str, size: i32, scale: i32, flags: IconLookupFlags) -> Result<Option<gdk_pixbuf::Pixbuf>, Error>;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn load_surface<'a, P: IsA<gdk::Window> + 'a, Q: Into<Option<&'a P>>>(&self, icon_name: &str, size: i32, scale: i32, for_window: Q, flags: IconLookupFlags) -> Result<Option<cairo::Surface>, Error>;
 
     fn lookup_by_gicon<P: IsA<gio::Icon>>(&self, icon: &P, size: i32, flags: IconLookupFlags) -> Option<IconInfo>;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn lookup_by_gicon_for_scale<P: IsA<gio::Icon>>(&self, icon: &P, size: i32, scale: i32, flags: IconLookupFlags) -> Option<IconInfo>;
 
     fn lookup_icon(&self, icon_name: &str, size: i32, flags: IconLookupFlags) -> Option<IconInfo>;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn lookup_icon_for_scale(&self, icon_name: &str, size: i32, scale: i32, flags: IconLookupFlags) -> Option<IconInfo>;
 
     fn prepend_search_path<P: AsRef<std::path::Path>>(&self, path: P);
@@ -115,7 +101,6 @@ pub trait IconThemeExt: 'static {
 }
 
 impl<O: IsA<IconTheme>> IconThemeExt for O {
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn add_resource_path(&self, path: &str) {
         unsafe {
             ffi::gtk_icon_theme_add_resource_path(self.as_ref().to_glib_none().0, path.to_glib_none().0);
@@ -161,7 +146,6 @@ impl<O: IsA<IconTheme>> IconThemeExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn load_icon_for_scale(&self, icon_name: &str, size: i32, scale: i32, flags: IconLookupFlags) -> Result<Option<gdk_pixbuf::Pixbuf>, Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -170,7 +154,6 @@ impl<O: IsA<IconTheme>> IconThemeExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn load_surface<'a, P: IsA<gdk::Window> + 'a, Q: Into<Option<&'a P>>>(&self, icon_name: &str, size: i32, scale: i32, for_window: Q, flags: IconLookupFlags) -> Result<Option<cairo::Surface>, Error> {
         let for_window = for_window.into();
         unsafe {
@@ -186,7 +169,6 @@ impl<O: IsA<IconTheme>> IconThemeExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn lookup_by_gicon_for_scale<P: IsA<gio::Icon>>(&self, icon: &P, size: i32, scale: i32, flags: IconLookupFlags) -> Option<IconInfo> {
         unsafe {
             from_glib_full(ffi::gtk_icon_theme_lookup_by_gicon_for_scale(self.as_ref().to_glib_none().0, icon.as_ref().to_glib_none().0, size, scale, flags.to_glib()))
@@ -199,7 +181,6 @@ impl<O: IsA<IconTheme>> IconThemeExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn lookup_icon_for_scale(&self, icon_name: &str, size: i32, scale: i32, flags: IconLookupFlags) -> Option<IconInfo> {
         unsafe {
             from_glib_full(ffi::gtk_icon_theme_lookup_icon_for_scale(self.as_ref().to_glib_none().0, icon_name.to_glib_none().0, size, scale, flags.to_glib()))

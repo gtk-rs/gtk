@@ -2,16 +2,12 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 use InputHints;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 use InputPurpose;
 use ffi;
 use gdk;
 use glib::GString;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 use glib::StaticType;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 use glib::Value;
 use glib::object::Cast;
 use glib::object::IsA;
@@ -19,7 +15,6 @@ use glib::signal::SignalHandlerId;
 use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 use gobject_ffi;
 use libc;
 use pango;
@@ -62,16 +57,12 @@ pub trait IMContextExt: 'static {
 
     fn set_use_preedit(&self, use_preedit: bool);
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_property_input_hints(&self) -> InputHints;
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn set_property_input_hints(&self, input_hints: InputHints);
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_property_input_purpose(&self) -> InputPurpose;
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn set_property_input_purpose(&self, input_purpose: InputPurpose);
 
     fn connect_commit<F: Fn(&Self, &str) + 'static>(&self, f: F) -> SignalHandlerId;
@@ -86,10 +77,8 @@ pub trait IMContextExt: 'static {
 
     fn connect_retrieve_surrounding<F: Fn(&Self) -> bool + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_input_hints_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_input_purpose_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
@@ -169,7 +158,6 @@ impl<O: IsA<IMContext>> IMContextExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_property_input_hints(&self) -> InputHints {
         unsafe {
             let mut value = Value::from_type(<InputHints as StaticType>::static_type());
@@ -178,14 +166,12 @@ impl<O: IsA<IMContext>> IMContextExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn set_property_input_hints(&self, input_hints: InputHints) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"input-hints\0".as_ptr() as *const _, Value::from(&input_hints).to_glib_none().0);
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_property_input_purpose(&self) -> InputPurpose {
         unsafe {
             let mut value = Value::from_type(<InputPurpose as StaticType>::static_type());
@@ -194,7 +180,6 @@ impl<O: IsA<IMContext>> IMContextExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn set_property_input_purpose(&self, input_purpose: InputPurpose) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"input-purpose\0".as_ptr() as *const _, Value::from(&input_purpose).to_glib_none().0);
@@ -249,7 +234,6 @@ impl<O: IsA<IMContext>> IMContextExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_input_hints_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -258,7 +242,6 @@ impl<O: IsA<IMContext>> IMContextExt for O {
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn connect_property_input_purpose_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -304,14 +287,12 @@ where P: IsA<IMContext> {
     f(&IMContext::from_glib_borrow(this).unsafe_cast()).to_glib()
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 unsafe extern "C" fn notify_input_hints_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIMContext, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IMContext> {
     let f: &F = transmute(f);
     f(&IMContext::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 unsafe extern "C" fn notify_input_purpose_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIMContext, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IMContext> {
     let f: &F = transmute(f);

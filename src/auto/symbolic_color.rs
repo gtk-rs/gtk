@@ -2,95 +2,15 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use StyleProperties;
 use ffi;
-use gdk;
-use glib::GString;
-use glib::object::IsA;
-use glib::translate::*;
-use std::fmt;
 
 glib_wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-    pub struct SymbolicColor(Shared<ffi::GtkSymbolicColor>);
+    pub struct SymbolicColor(Boxed<ffi::GtkSymbolicColor>);
 
     match fn {
-        ref => |ptr| ffi::gtk_symbolic_color_ref(ptr),
-        unref => |ptr| ffi::gtk_symbolic_color_unref(ptr),
+        copy => |ptr| gobject_ffi::g_boxed_copy(ffi::gtk_symbolic_color_get_type(), ptr as *mut _) as *mut ffi::GtkSymbolicColor,
+        free => |ptr| gobject_ffi::g_boxed_free(ffi::gtk_symbolic_color_get_type(), ptr as *mut _),
         get_type => || ffi::gtk_symbolic_color_get_type(),
-    }
-}
-
-impl SymbolicColor {
-    #[cfg_attr(feature = "v3_8", deprecated)]
-    pub fn new_alpha(color: &SymbolicColor, factor: f64) -> SymbolicColor {
-        assert_initialized_main_thread!();
-        unsafe {
-            from_glib_full(ffi::gtk_symbolic_color_new_alpha(color.to_glib_none().0, factor))
-        }
-    }
-
-    #[cfg_attr(feature = "v3_8", deprecated)]
-    pub fn new_literal(color: &gdk::RGBA) -> SymbolicColor {
-        assert_initialized_main_thread!();
-        unsafe {
-            from_glib_full(ffi::gtk_symbolic_color_new_literal(color.to_glib_none().0))
-        }
-    }
-
-    #[cfg_attr(feature = "v3_8", deprecated)]
-    pub fn new_mix(color1: &SymbolicColor, color2: &SymbolicColor, factor: f64) -> SymbolicColor {
-        assert_initialized_main_thread!();
-        unsafe {
-            from_glib_full(ffi::gtk_symbolic_color_new_mix(color1.to_glib_none().0, color2.to_glib_none().0, factor))
-        }
-    }
-
-    #[cfg_attr(feature = "v3_8", deprecated)]
-    pub fn new_name(name: &str) -> SymbolicColor {
-        assert_initialized_main_thread!();
-        unsafe {
-            from_glib_full(ffi::gtk_symbolic_color_new_name(name.to_glib_none().0))
-        }
-    }
-
-    #[cfg_attr(feature = "v3_8", deprecated)]
-    pub fn new_shade(color: &SymbolicColor, factor: f64) -> SymbolicColor {
-        assert_initialized_main_thread!();
-        unsafe {
-            from_glib_full(ffi::gtk_symbolic_color_new_shade(color.to_glib_none().0, factor))
-        }
-    }
-
-    #[cfg_attr(feature = "v3_8", deprecated)]
-    pub fn new_win32(theme_class: &str, id: i32) -> SymbolicColor {
-        assert_initialized_main_thread!();
-        unsafe {
-            from_glib_full(ffi::gtk_symbolic_color_new_win32(theme_class.to_glib_none().0, id))
-        }
-    }
-
-    #[cfg_attr(feature = "v3_8", deprecated)]
-    pub fn resolve<'a, P: IsA<StyleProperties> + 'a, Q: Into<Option<&'a P>>>(&self, props: Q) -> Option<gdk::RGBA> {
-        let props = props.into();
-        unsafe {
-            let mut resolved_color = gdk::RGBA::uninitialized();
-            let ret = from_glib(ffi::gtk_symbolic_color_resolve(self.to_glib_none().0, props.map(|p| p.as_ref()).to_glib_none().0, resolved_color.to_glib_none_mut().0));
-            if ret { Some(resolved_color) } else { None }
-        }
-    }
-
-    #[cfg_attr(feature = "v3_8", deprecated)]
-    fn to_string(&self) -> GString {
-        unsafe {
-            from_glib_full(ffi::gtk_symbolic_color_to_string(self.to_glib_none().0))
-        }
-    }
-}
-
-impl fmt::Display for SymbolicColor {
-    #[inline]
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.to_string())
     }
 }
