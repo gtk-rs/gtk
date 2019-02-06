@@ -817,6 +817,10 @@ mod tree_model_filter;
 pub use self::tree_model_filter::{TreeModelFilter, TreeModelFilterClass, NONE_TREE_MODEL_FILTER};
 pub use self::tree_model_filter::TreeModelFilterExt;
 
+mod tree_model_sort;
+pub use self::tree_model_sort::{TreeModelSort, TreeModelSortClass, NONE_TREE_MODEL_SORT};
+pub use self::tree_model_sort::TreeModelSortExt;
+
 mod tree_selection;
 pub use self::tree_selection::{TreeSelection, TreeSelectionClass, NONE_TREE_SELECTION};
 pub use self::tree_selection::TreeSelectionExt;
@@ -1495,6 +1499,7 @@ pub mod traits {
     pub use super::TreeDragSourceExt;
     pub use super::TreeModelExt;
     pub use super::TreeModelFilterExt;
+    pub use super::TreeModelSortExt;
     pub use super::TreeSelectionExt;
     pub use super::TreeSortableExt;
     pub use super::TreeStoreExt;
