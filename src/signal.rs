@@ -2,16 +2,11 @@
 // See the COPYRIGHT file at the top-level directory of this distribution.
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
-use std::cell::RefCell;
-use std::mem::transmute;
-
+use glib;
 pub use glib::signal::Inhibit;
 use glib::SourceId;
-use glib::translate::*;
 use glib::signal::SignalHandlerId;
 use gdk::Rectangle;
-
-use glib_ffi::{self, gboolean, gpointer};
 
 use {
     Continue,
@@ -19,35 +14,16 @@ use {
     Widget,
 };
 
-// idle_add and timeout_add fixed to the main thread
-
-unsafe extern "C" fn trampoline<F: FnMut() -> Continue + 'static>(func: gpointer) -> gboolean {
-    let func: &RefCell<F> = transmute(func);
-    (&mut *func.borrow_mut())().to_glib()
-}
-
-unsafe extern "C" fn destroy_closure<F: FnMut() -> Continue + 'static>(ptr: gpointer) {
-    Box::<RefCell<F>>::from_raw(ptr as *mut _);
-}
-
-fn into_raw<F: FnMut() -> Continue + 'static>(func: F) -> gpointer {
-    let func: Box<RefCell<F>> = Box::new(RefCell::new(func));
-    Box::into_raw(func) as gpointer
-}
-
 /// Adds a closure to be called by the default main loop when it's idle.
 ///
 /// `func` will be called repeatedly until it returns `Continue(false)`.
 ///
 /// Similar to `glib::idle_add` but only callable from the main thread and
-/// doesn't require `Send`.
+/// doesn't require `Send`. It is the same as `glib::idle_add_local`.
 pub fn idle_add<F>(func: F) -> SourceId
     where F: FnMut() -> Continue + 'static {
     assert_initialized_main_thread!();
-    unsafe {
-        from_glib(glib_ffi::g_idle_add_full(glib_ffi::G_PRIORITY_DEFAULT_IDLE, Some(trampoline::<F>),
-            into_raw(func), Some(destroy_closure::<F>)))
-    }
+    glib::idle_add_local(func)
 }
 
 /// Adds a closure to be called by the default main loop at regular intervals
@@ -59,15 +35,11 @@ pub fn idle_add<F>(func: F) -> SourceId
 /// precision is not necessary.
 ///
 /// Similar to `glib::timeout_add` but only callable from the main thread and
-/// doesn't require `Send`.
+/// doesn't require `Send`. It is the same as `glib::timeout_add_local`.
 pub fn timeout_add<F>(interval: u32, func: F) -> SourceId
     where F: FnMut() -> Continue + 'static {
     assert_initialized_main_thread!();
-    unsafe {
-        from_glib(
-            glib_ffi::g_timeout_add_full(glib_ffi::G_PRIORITY_DEFAULT, interval, Some(trampoline::<F>),
-                 into_raw(func), Some(destroy_closure::<F>)))
-    }
+    glib::timeout_add_local(interval, func)
 }
 
 /// Adds a closure to be called by the default main loop at regular intervals
@@ -78,14 +50,11 @@ pub fn timeout_add<F>(interval: u32, func: F) -> SourceId
 /// be delayed by other events.
 ///
 /// Similar to `glib::timeout_add_seconds` but only callable from the main thread and
-/// doesn't require `Send`.
+/// doesn't require `Send`. It is the same as `glib::timeout_add_seconds_local`.
 pub fn timeout_add_seconds<F>(interval: u32, func: F) -> SourceId
     where F: FnMut() -> Continue + 'static {
     assert_initialized_main_thread!();
-    unsafe {
-        from_glib(glib_ffi::g_timeout_add_seconds_full(glib_ffi::G_PRIORITY_DEFAULT, interval,
-            Some(trampoline::<F>), into_raw(func), Some(destroy_closure::<F>)))
-    }
+    glib::timeout_add_seconds_local(interval, func)
 }
 
 pub trait EditableSignals: 'static {
