@@ -96,6 +96,10 @@ pub fn init() -> Result<(), glib::BoolError> {
     }
     unsafe {
         if pre_init() && from_glib(ffi::gtk_init_check(ptr::null_mut(), ptr::null_mut())) {
+            if !glib::MainContext::default().acquire() {
+                return Err(glib_bool_error!("Failed to acquire default main context"));
+            }
+
             set_initialized();
             Ok(())
         }
