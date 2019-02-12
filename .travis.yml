@@ -50,7 +50,7 @@ before_install:
     fi
 script:
   - rustc --version
-  - if [ "$TRAVIS_RUST_VERSION" == "nightly" ] && [ "$GTK" == "3.4" ]; then
+  - if [ "$TRAVIS_RUST_VERSION" == "nightly" ] && [ "$GTK" == "3.14" ]; then
     make regen_check;
     fi
   - ./check_init_asserts
