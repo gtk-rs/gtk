@@ -2,7 +2,7 @@
 girs_dir = "gir-files"
 library = "Gtk"
 version = "3.0"
-min_cfg_version = "3.4"
+min_cfg_version = "3.14"
 target_path = "."
 work_mode = "normal"
 generate_safety_asserts = true
@@ -43,7 +43,6 @@ generate = [
     "Gtk.CellRendererState",
     "Gtk.CheckButton",
     "Gtk.CheckMenuItem",
-    "Gtk.ColorButton",
     "Gtk.ColorChooserDialog",
     "Gtk.ColorChooserWidget",
     "Gtk.ComboBoxText",
@@ -71,12 +70,11 @@ generate = [
     "Gtk.FileChooserWidget",
     "Gtk.FileFilter",
     "Gtk.FileFilterFlags",
-    "Gtk.Fixed",
-    "Gtk.FlowBox",
     "Gtk.FlowBoxChild",
     "Gtk.FontButton",
     "Gtk.FontChooser",
     "Gtk.FontChooserDialog",
+    "Gtk.FontChooserLevel",
     "Gtk.FontChooserWidget",
     "Gtk.Frame",
     "Gtk.GestureDrag",
@@ -90,7 +88,6 @@ generate = [
     "Gtk.IconFactory",
     "Gtk.IconInfo",
     "Gtk.IconLookupFlags",
-    "Gtk.IconSet",
     "Gtk.IconSize",
     "Gtk.IconSource",
     "Gtk.IconThemeError",
@@ -101,13 +98,11 @@ generate = [
     "Gtk.IMPreeditStyle",
     "Gtk.IMStatusStyle",
     "Gtk.InputPurpose",
-    "Gtk.Invisible",
     "Gtk.JunctionSides",
     "Gtk.Justification",
     "Gtk.LevelBar",
     "Gtk.LevelBarMode",
     "Gtk.License",
-    "Gtk.ListBox",
     "Gtk.ListBoxRow",
     "Gtk.LockButton",
     "Gtk.MenuBar",
@@ -160,7 +155,6 @@ generate = [
     "Gtk.RegionFlags",
     "Gtk.ReliefStyle",
     "Gtk.ResizeMode",
-    "Gtk.ResponseType",
     "Gtk.Revealer",
     "Gtk.RevealerTransitionType",
     "Gtk.Scale",
@@ -234,6 +228,7 @@ ignore = [
 ]
 
 manual = [
+    "Atk.Object",
     "cairo.Context",
     "cairo.FontOptions",
     "cairo.RectangleInt",
@@ -287,6 +282,7 @@ manual = [
     "Gio.Cancellable",
     "Gio.File",
     "Gio.Icon",
+    "Gio.ListModel",
     "Gio.Menu",
     "Gio.MenuModel",
     "Gio.MountOperation",
@@ -307,6 +303,7 @@ manual = [
     "Gtk.PageRange",
     "Gtk.RecentData",
     "Gtk.Requisition",
+    "Gtk.ResponseType",
     "Gtk.TargetEntry",
     "Pango.Alignment",
     "Pango.AttrList",
@@ -433,6 +430,7 @@ status = "generate"
 name = "Gtk.Application"
 status = "generate"
 trait_name = "GtkApplicationExt"
+manual_traits = ["gio::ApplicationExtManual"]
     [[object.function]]
     name = "new"
     ignore = true
@@ -489,6 +487,7 @@ status = "generate"
 [[object]]
 name = "Gtk.Buildable"
 status = "generate"
+manual_traits = ["BuildableExtManual"]
     [[object.function]]
     pattern = "[gs]et_name"
     ignore = true
@@ -619,10 +618,15 @@ status = "generate"
 [[object]]
 name = "Gtk.CellRendererPixbuf"
 status = "generate"
+manual_traits = ["CellRendererPixbufExtManual"]
     [[object.property]]
     name = "surface"
     #value cairo::Surface
     ignore = true
+    [[object.property]]
+    name = "stock-size"
+    #value ImageSize
+    generate = ["notify"]
 
 [[object]]
 name = "Gtk.CellRendererText"
@@ -674,10 +678,32 @@ status = "generate"
     name = "set_can_store"
     #array with size
     ignore = true
+    [[object.function]]
+    name = "request_targets"
+    #array with size
+    ignore = true
+    [[object.function]]
+    name = "request_uris"
+    #array with size
+    ignore = true
+    [[object.function]]
+    name = "set_with_data"
+    #array with size
+    ignore = true
+    [[object.function]]
+    name = "set_with_owner"
+    #array with size
+    ignore = true
+
+[[object]]
+name = "Gtk.ColorButton"
+status = "generate"
+manual_traits = ["ColorButtonExtManual"]
 
 [[object]]
 name = "Gtk.ColorChooser"
 status = "generate"
+manual_traits = ["ColorChooserExtManual"]
     [[object.function]]
     name = "add_palette"
     #array with size
@@ -686,11 +712,22 @@ status = "generate"
 [[object]]
 name = "Gtk.ComboBox"
 status = "generate"
+manual_traits = ["ColorBoxExtManual"]
     [[object.function]]
     name = "set_active_iter"
         [[object.function.parameter]]
         name = "iter"
         const = true
+    [[object.function]]
+    name = "set_active"
+    ignore = true
+    [[object.function]]
+    name = "get_active"
+    ignore = true
+    [[object.property]]
+    name = "active"
+    #manual Option
+    generate = ["notify"]
 
 [[object]]
 name = "Gtk.Container"
@@ -708,6 +745,7 @@ status = "generate"
 [[object]]
 name = "Gtk.Dialog"
 status = "generate"
+manual_traits = ["DialogExtManual"]
     [[object.function]]
     name = "add_button"
         [object.function.return]
@@ -724,6 +762,7 @@ status = "generate"
 [[object]]
 name = "Gtk.Editable"
 status = "generate"
+manual_traits = ["EditableSignals"]
     [[object.signal]]
     pattern = ".+"
     ignore = true #out #manual
@@ -771,9 +810,6 @@ status = "generate"
     [[object.signal]]
     name = "cursor-on-match"
     inhibit = true
-    [[object.function]]
-    name = "set_match_func"
-    ignore = true # manual implementation as a test for now
 
 [[object]]
 name = "Gtk.Expander"
@@ -797,6 +833,22 @@ status = "generate"
     ignore = true  #strange type of options and option_labels
 
 [[object]]
+name = "Gtk.Fixed"
+status = "generate"
+manual_traits = ["FixedExtManual"]
+
+[[object]]
+name = "Gtk.FlowBox"
+status = "generate"
+manual_traits = ["FlowBoxExtManual"]
+    [[object.function]]
+    name = "bind_model"
+        [[object.function.parameter]]
+        name = "create_widget_func"
+        # we add a manual unbind() function instead
+        nullable = false
+
+[[object]]
 name = "Gtk.Gesture"
 status = "generate"
 version = "3.14"
@@ -813,6 +865,10 @@ module_name = "gl_area"
     [[object.signal]]
     pattern = "render"
     inhibit = true
+    [[object.signal]]
+    name = "create-context"
+        [object.signal.return]
+        nullable = true
 
 [[object]]
 name = "Gtk.Grid"
@@ -840,6 +896,14 @@ status = "generate"
     [[object.child_prop]]
     name = "position"
     type = "gint"
+
+[[object]]
+name = "Gtk.IconSet"
+status = "generate"
+    [[object.function]]
+    name = "get_sizes"
+    #return array of IconSize
+    ignore = true
 
 [[object]]
 name = "Gtk.IconTheme"
@@ -929,6 +993,7 @@ status = "generate"
 [[object]]
 name = "Gtk.IMContextSimple"
 status = "generate"
+manual_traits = ["IMContextSimpleExtManual"]
     [[object.function]]
     name = "add_compose_file"
     ignore = true
@@ -952,6 +1017,11 @@ status = "generate"
     [[object.member]]
     name = "no_emoji"
     version = "3.22.20"
+
+[[object]]
+name = "Gtk.Invisible"
+status = "generate"
+manual_traits = ["InvisibleExtManual"]
 
 [[object]]
 name = "Gtk.Label"
@@ -978,9 +1048,21 @@ status = "generate"
     inhibit = true
 
 [[object]]
+name = "Gtk.ListBox"
+status = "generate"
+manual_traits = ["ListBoxExtManual"]
+    [[object.function]]
+    name = "bind_model"
+        [[object.function.parameter]]
+        name = "create_widget_func"
+        # we add a manual unbind() function instead
+        nullable = false
+
+[[object]]
 name = "Gtk.ListStore"
 status = "generate"
 trait_name = "GtkListStoreExt"
+manual_traits = ["GtkListStoreExtManual"]
     [[object.function]]
     pattern = ".+"
         [[object.function.parameter]]
@@ -1009,6 +1091,8 @@ name = "Gtk.Menu"
 status = "generate"
 child_type = "Gtk.MenuItem"
 child_name = "item"
+trait_name = "GtkMenuExt"
+manual_traits = ["GtkMenuExtManual"]
     [[object.child_prop]]
     name = "bottom-attach"
     type = "gint"
@@ -1028,6 +1112,7 @@ child_name = "item"
 [[object]]
 name = "Gtk.MenuItem"
 status = "generate"
+trait_name = "GtkMenuItemExt"
     [[object.function]]
     name = "activate"
     ignore = true
@@ -1042,6 +1127,7 @@ status = "generate"
 [[object]]
 name = "Gtk.Notebook"
 status = "generate"
+manual_traits = ["NotebookExtManual"]
     # The following functions need integer type adjustments
     [[object.function]]
     name = "append_page"
@@ -1114,6 +1200,7 @@ status = "generate"
 [[object]]
 name = "Gtk.Overlay"
 status = "generate"
+manual_traits = ["OverlaySignals"]
     [[object.child_prop]]
     name = "index"
     type = "gint"
@@ -1131,6 +1218,7 @@ version = "3.22"
 [[object]]
 name = "Gtk.PadController"
 status = "generate"
+manual_traits = ["PadControllerExtManual"]
 version = "3.22"
     [[object.function]]
     name = "set_action_entries"
@@ -1372,6 +1460,11 @@ status = "generate"
         name = "selection_data"
         const = true
     [[object.function]]
+    name = "set"
+        [[object.function.parameter]]
+        name = "selection_data"
+        const = true
+    [[object.function]]
     name = "set_uris"
         [[object.function.parameter]]
         name = "selection_data"
@@ -1379,6 +1472,9 @@ status = "generate"
     [[object.function]]
     name = "get_data"
     #array without length
+    ignore = true
+    [[object.function]]
+    name = "get_data_with_length"
     ignore = true
 
 [[object]]
@@ -1390,10 +1486,12 @@ version = "3.20"
 name = "Gtk.Socket"
 status = "generate"
 cfg_condition = "not(windows)"
+trait_name = "GtkSocketExt"
 
 [[object]]
 name = "Gtk.SpinButton"
 status = "generate"
+manual_traits = ["SpinButtonSignals"]
     [[object.function]]
     name = "get_adjustment"
         [object.function.return]
@@ -1442,6 +1540,7 @@ version = "3.20"
 [[object]]
 name = "Gtk.Switch"
 status = "generate"
+manual_traits = ["SwitchExtManual"]
     [[object.signal]]
     name = "state-set"
     inhibit = true
@@ -1461,6 +1560,7 @@ status = "generate"
 [[object]]
 name = "Gtk.TextBuffer"
 status = "generate"
+manual_traits = ["TextBufferExtManual"]
     [[object.function]]
     name = "register_deserialize_tagset"
         [object.function.return]
@@ -1476,6 +1576,9 @@ status = "generate"
         const = true
     [[object.signal]]
     name = "insert-text"
+    ignore = true
+    [[object.function]]
+    name = "register_serialize_format"
     ignore = true
 
 [[object]]
@@ -1589,6 +1692,10 @@ status = "generate"
     # Replaced by TreeModelFilter::new
     ignore = true
     [[object.function]]
+    name = " sort_new_with_model"
+    # Replaced by TreeModelSort::new
+    ignore = true
+    [[object.function]]
     name = "iter_children"
         [[object.function.parameter]]
         name = "parent"
@@ -1640,6 +1747,39 @@ status = "generate"
     name = "virtual-root"
     #value recordboxed
     ignore = true
+
+[[object]]
+name = "Gtk.TreeModelSort"
+status = "generate"
+    [[object.function]]
+    name = "convert_child_path_to_path"
+        [[object.function.parameter]]
+        name = "child_path"
+        const = true
+    [[object.function]]
+    name = "convert_path_to_child_path"
+        [[object.function.parameter]]
+        name = "sorted_path"
+        const = true
+    [[object.function]]
+    name = "convert_iter_to_child_iter"
+        [[object.function.parameter]]
+        name = "sorted_iter"
+        const = true
+    [[object.function]]
+    name = "convert_child_iter_to_iter"
+        [[object.function.parameter]]
+        name = "child_iter"
+        const = true
+    [[object.function]]
+    name = "iter_is_valid"
+        [[object.function.parameter]]
+        name = "iter"
+        const = true
+    [[object.function]]
+    name = "get_model"
+        [object.function.return]
+        nullable = false
 
 [[object]]
 name = "Gtk.TreePath"
@@ -1742,13 +1882,23 @@ status = "generate"
 [[object]]
 name = "Gtk.TreeSortable"
 status = "generate"
+manual_traits = ["TreeSortableExtManual"]
     [[object.function]]
     pattern = "[gs]et_sort_column_id"
+    ignore = true
+    [[object.function]]
+    pattern = "set_sort_func"
+    # return type u32 -> Ordering
+    ignore = true
+    [[object.function]]
+    pattern = "set_default_sort_func"
+    # return type u32 -> Ordering
     ignore = true
 
 [[object]]
 name = "Gtk.TreeStore"
 status = "generate"
+manual_traits = ["TreeStoreExtManual"]
     [[object.function]]
     pattern = ".+"
         [[object.function.parameter]]
@@ -1831,6 +1981,7 @@ status = "generate"
 [[object]]
 name = "Gtk.Widget"
 status = "generate"
+manual_traits = ["WidgetExtManual"]
     [[object.function]]
     name = "drag_dest_set"
     #array with size
@@ -1866,6 +2017,19 @@ status = "generate"
     ignore = true
     [[object.function]]
     name = "get_path"
+        [object.function.return]
+        nullable = false
+    [[object.function]]
+    name = "add_events"
+    ignore = true
+    [[object.function]]
+    name = "get_events"
+    ignore = true
+    [[object.function]]
+    name = "set_events"
+    ignore = true
+    [[object.function]]
+    name = "get_style_context"
         [object.function.return]
         nullable = false
     [[object.signal]]
@@ -1975,6 +2139,9 @@ status = "generate"
     name = "style"
     #deprecated
     ignore = true
+    [[object.property]]
+    name = "events"
+    generate = ["notify"]
     [[object.function]]
     name = "input_shape_combine_region"
         [[object.function.parameter]]
@@ -1990,6 +2157,7 @@ status = "generate"
 name = "Gtk.Window"
 status = "generate"
 trait_name = "GtkWindowExt"
+manual_traits = ["GtkWindowExtManual"]
     [[object.function]]
     name = "activate_key"
         [[object.function.parameter]]

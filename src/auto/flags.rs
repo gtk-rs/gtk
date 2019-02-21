@@ -365,6 +365,57 @@ impl SetValue for FileFilterFlags {
 }
 
 bitflags! {
+    pub struct FontChooserLevel: u32 {
+        const FAMILY = 0;
+        const STYLE = 1;
+        const SIZE = 2;
+        const VARIATIONS = 4;
+        const FEATURES = 8;
+    }
+}
+
+#[doc(hidden)]
+impl ToGlib for FontChooserLevel {
+    type GlibType = ffi::GtkFontChooserLevel;
+
+    fn to_glib(&self) -> ffi::GtkFontChooserLevel {
+        self.bits()
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GtkFontChooserLevel> for FontChooserLevel {
+    fn from_glib(value: ffi::GtkFontChooserLevel) -> FontChooserLevel {
+        skip_assert_initialized!();
+        FontChooserLevel::from_bits_truncate(value)
+    }
+}
+
+impl StaticType for FontChooserLevel {
+    fn static_type() -> Type {
+        unsafe { from_glib(ffi::gtk_font_chooser_level_get_type()) }
+    }
+}
+
+impl<'a> FromValueOptional<'a> for FontChooserLevel {
+    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
+        Some(FromValue::from_value(value))
+    }
+}
+
+impl<'a> FromValue<'a> for FontChooserLevel {
+    unsafe fn from_value(value: &Value) -> Self {
+        from_glib(gobject_ffi::g_value_get_flags(value.to_glib_none().0))
+    }
+}
+
+impl SetValue for FontChooserLevel {
+    unsafe fn set_value(value: &mut Value, this: &Self) {
+        gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())
+    }
+}
+
+bitflags! {
     pub struct IconLookupFlags: u32 {
         const NO_SVG = 1;
         const FORCE_SVG = 2;
@@ -419,7 +470,6 @@ impl SetValue for IconLookupFlags {
     }
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 bitflags! {
     pub struct InputHints: u32 {
         const NONE = 0;
@@ -439,7 +489,6 @@ bitflags! {
     }
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 #[doc(hidden)]
 impl ToGlib for InputHints {
     type GlibType = ffi::GtkInputHints;
@@ -449,7 +498,6 @@ impl ToGlib for InputHints {
     }
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 #[doc(hidden)]
 impl FromGlib<ffi::GtkInputHints> for InputHints {
     fn from_glib(value: ffi::GtkInputHints) -> InputHints {
@@ -458,28 +506,24 @@ impl FromGlib<ffi::GtkInputHints> for InputHints {
     }
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 impl StaticType for InputHints {
     fn static_type() -> Type {
         unsafe { from_glib(ffi::gtk_input_hints_get_type()) }
     }
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 impl<'a> FromValueOptional<'a> for InputHints {
     unsafe fn from_value_optional(value: &Value) -> Option<Self> {
         Some(FromValue::from_value(value))
     }
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 impl<'a> FromValue<'a> for InputHints {
     unsafe fn from_value(value: &Value) -> Self {
         from_glib(gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 impl SetValue for InputHints {
     unsafe fn set_value(value: &mut Value, this: &Self) {
         gobject_ffi::g_value_set_flags(value.to_glib_none_mut().0, this.to_glib())

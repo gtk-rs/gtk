@@ -10,23 +10,24 @@ use Menu;
 use Widget;
 use ffi;
 use glib;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
+use glib::object::ObjectExt;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use libc;
 use std::boxed::Box as Box_;
-use std::mem;
+use std::fmt;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
-    pub struct MenuItem(Object<ffi::GtkMenuItem, ffi::GtkMenuItemClass>): Bin, Container, Widget, Buildable, Actionable;
+    pub struct MenuItem(Object<ffi::GtkMenuItem, ffi::GtkMenuItemClass, MenuItemClass>) @extends Bin, Container, Widget, @implements Buildable, Actionable;
 
     match fn {
         get_type => || ffi::gtk_menu_item_get_type(),
@@ -37,21 +38,21 @@ impl MenuItem {
     pub fn new() -> MenuItem {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_menu_item_new()).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_menu_item_new()).unsafe_cast()
         }
     }
 
     pub fn new_with_label(label: &str) -> MenuItem {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_menu_item_new_with_label(label.to_glib_none().0)).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_menu_item_new_with_label(label.to_glib_none().0)).unsafe_cast()
         }
     }
 
     pub fn new_with_mnemonic(label: &str) -> MenuItem {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_menu_item_new_with_mnemonic(label.to_glib_none().0)).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_menu_item_new_with_mnemonic(label.to_glib_none().0)).unsafe_cast()
         }
     }
 }
@@ -62,12 +63,14 @@ impl Default for MenuItem {
     }
 }
 
-pub trait MenuItemExt {
+pub const NONE_MENU_ITEM: Option<&MenuItem> = None;
+
+pub trait GtkMenuItemExt: 'static {
     fn deselect(&self);
 
-    fn get_accel_path(&self) -> Option<String>;
+    fn get_accel_path(&self) -> Option<GString>;
 
-    fn get_label(&self) -> Option<String>;
+    fn get_label(&self) -> Option<GString>;
 
     fn get_reserve_indicator(&self) -> bool;
 
@@ -120,150 +123,148 @@ pub trait MenuItemExt {
     fn connect_property_use_underline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<MenuItem> + IsA<glib::object::Object> + glib::object::ObjectExt> MenuItemExt for O {
+impl<O: IsA<MenuItem>> GtkMenuItemExt for O {
     fn deselect(&self) {
         unsafe {
-            ffi::gtk_menu_item_deselect(self.to_glib_none().0);
+            ffi::gtk_menu_item_deselect(self.as_ref().to_glib_none().0);
         }
     }
 
-    fn get_accel_path(&self) -> Option<String> {
+    fn get_accel_path(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::gtk_menu_item_get_accel_path(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_menu_item_get_accel_path(self.as_ref().to_glib_none().0))
         }
     }
 
-    fn get_label(&self) -> Option<String> {
+    fn get_label(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::gtk_menu_item_get_label(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_menu_item_get_label(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_reserve_indicator(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_menu_item_get_reserve_indicator(self.to_glib_none().0))
+            from_glib(ffi::gtk_menu_item_get_reserve_indicator(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_submenu(&self) -> Option<Widget> {
         unsafe {
-            from_glib_none(ffi::gtk_menu_item_get_submenu(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_menu_item_get_submenu(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_use_underline(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_menu_item_get_use_underline(self.to_glib_none().0))
+            from_glib(ffi::gtk_menu_item_get_use_underline(self.as_ref().to_glib_none().0))
         }
     }
 
     fn select(&self) {
         unsafe {
-            ffi::gtk_menu_item_select(self.to_glib_none().0);
+            ffi::gtk_menu_item_select(self.as_ref().to_glib_none().0);
         }
     }
 
     fn set_accel_path<'a, P: Into<Option<&'a str>>>(&self, accel_path: P) {
         let accel_path = accel_path.into();
-        let accel_path = accel_path.to_glib_none();
         unsafe {
-            ffi::gtk_menu_item_set_accel_path(self.to_glib_none().0, accel_path.0);
+            ffi::gtk_menu_item_set_accel_path(self.as_ref().to_glib_none().0, accel_path.to_glib_none().0);
         }
     }
 
     fn set_label(&self, label: &str) {
         unsafe {
-            ffi::gtk_menu_item_set_label(self.to_glib_none().0, label.to_glib_none().0);
+            ffi::gtk_menu_item_set_label(self.as_ref().to_glib_none().0, label.to_glib_none().0);
         }
     }
 
     fn set_reserve_indicator(&self, reserve: bool) {
         unsafe {
-            ffi::gtk_menu_item_set_reserve_indicator(self.to_glib_none().0, reserve.to_glib());
+            ffi::gtk_menu_item_set_reserve_indicator(self.as_ref().to_glib_none().0, reserve.to_glib());
         }
     }
 
     fn set_submenu<'a, P: IsA<Menu> + 'a, Q: Into<Option<&'a P>>>(&self, submenu: Q) {
         let submenu = submenu.into();
-        let submenu = submenu.to_glib_none();
         unsafe {
-            ffi::gtk_menu_item_set_submenu(self.to_glib_none().0, submenu.0);
+            ffi::gtk_menu_item_set_submenu(self.as_ref().to_glib_none().0, submenu.map(|p| p.as_ref()).to_glib_none().0);
         }
     }
 
     fn set_use_underline(&self, setting: bool) {
         unsafe {
-            ffi::gtk_menu_item_set_use_underline(self.to_glib_none().0, setting.to_glib());
+            ffi::gtk_menu_item_set_use_underline(self.as_ref().to_glib_none().0, setting.to_glib());
         }
     }
 
     fn toggle_size_allocate(&self, allocation: i32) {
         unsafe {
-            ffi::gtk_menu_item_toggle_size_allocate(self.to_glib_none().0, allocation);
+            ffi::gtk_menu_item_toggle_size_allocate(self.as_ref().to_glib_none().0, allocation);
         }
     }
 
     fn toggle_size_request(&self, requisition: &mut i32) {
         unsafe {
-            ffi::gtk_menu_item_toggle_size_request(self.to_glib_none().0, requisition);
+            ffi::gtk_menu_item_toggle_size_request(self.as_ref().to_glib_none().0, requisition);
         }
     }
 
     fn get_property_right_justified(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "right-justified".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"right-justified\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_right_justified(&self, right_justified: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "right-justified".to_glib_none().0, Value::from(&right_justified).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"right-justified\0".as_ptr() as *const _, Value::from(&right_justified).to_glib_none().0);
         }
     }
 
     fn connect_activate<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "activate",
-                transmute(activate_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"activate\0".as_ptr() as *const _,
+                Some(transmute(activate_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn emit_activate(&self) {
-        let _ = self.emit("activate", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("activate", &[]).unwrap() };
     }
 
     fn connect_activate_item<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "activate-item",
-                transmute(activate_item_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"activate-item\0".as_ptr() as *const _,
+                Some(transmute(activate_item_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_deselect<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "deselect",
-                transmute(deselect_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"deselect\0".as_ptr() as *const _,
+                Some(transmute(deselect_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_select<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "select",
-                transmute(select_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"select\0".as_ptr() as *const _,
+                Some(transmute(select_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_toggle_size_allocate<F: Fn(&Self, i32) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, i32) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "toggle-size-allocate",
-                transmute(toggle_size_allocate_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"toggle-size-allocate\0".as_ptr() as *const _,
+                Some(transmute(toggle_size_allocate_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
@@ -273,101 +274,107 @@ impl<O: IsA<MenuItem> + IsA<glib::object::Object> + glib::object::ObjectExt> Men
 
     fn connect_property_accel_path_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::accel-path",
-                transmute(notify_accel_path_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::accel-path\0".as_ptr() as *const _,
+                Some(transmute(notify_accel_path_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::label",
-                transmute(notify_label_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::label\0".as_ptr() as *const _,
+                Some(transmute(notify_label_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_right_justified_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::right-justified",
-                transmute(notify_right_justified_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::right-justified\0".as_ptr() as *const _,
+                Some(transmute(notify_right_justified_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_submenu_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::submenu",
-                transmute(notify_submenu_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::submenu\0".as_ptr() as *const _,
+                Some(transmute(notify_submenu_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_use_underline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::use-underline",
-                transmute(notify_use_underline_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::use-underline\0".as_ptr() as *const _,
+                Some(transmute(notify_use_underline_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn activate_trampoline<P>(this: *mut ffi::GtkMenuItem, f: glib_ffi::gpointer)
+unsafe extern "C" fn activate_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuItem, f: glib_ffi::gpointer)
 where P: IsA<MenuItem> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&MenuItem::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&MenuItem::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn activate_item_trampoline<P>(this: *mut ffi::GtkMenuItem, f: glib_ffi::gpointer)
+unsafe extern "C" fn activate_item_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuItem, f: glib_ffi::gpointer)
 where P: IsA<MenuItem> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&MenuItem::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&MenuItem::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn deselect_trampoline<P>(this: *mut ffi::GtkMenuItem, f: glib_ffi::gpointer)
+unsafe extern "C" fn deselect_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuItem, f: glib_ffi::gpointer)
 where P: IsA<MenuItem> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&MenuItem::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&MenuItem::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn select_trampoline<P>(this: *mut ffi::GtkMenuItem, f: glib_ffi::gpointer)
+unsafe extern "C" fn select_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuItem, f: glib_ffi::gpointer)
 where P: IsA<MenuItem> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&MenuItem::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&MenuItem::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn toggle_size_allocate_trampoline<P>(this: *mut ffi::GtkMenuItem, object: libc::c_int, f: glib_ffi::gpointer)
+unsafe extern "C" fn toggle_size_allocate_trampoline<P, F: Fn(&P, i32) + 'static>(this: *mut ffi::GtkMenuItem, object: libc::c_int, f: glib_ffi::gpointer)
 where P: IsA<MenuItem> {
-    let f: &&(Fn(&P, i32) + 'static) = transmute(f);
-    f(&MenuItem::from_glib_borrow(this).downcast_unchecked(), object)
+    let f: &F = transmute(f);
+    f(&MenuItem::from_glib_borrow(this).unsafe_cast(), object)
 }
 
-unsafe extern "C" fn notify_accel_path_trampoline<P>(this: *mut ffi::GtkMenuItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_accel_path_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MenuItem> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&MenuItem::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&MenuItem::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_label_trampoline<P>(this: *mut ffi::GtkMenuItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_label_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MenuItem> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&MenuItem::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&MenuItem::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_right_justified_trampoline<P>(this: *mut ffi::GtkMenuItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_right_justified_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MenuItem> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&MenuItem::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&MenuItem::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_submenu_trampoline<P>(this: *mut ffi::GtkMenuItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_submenu_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MenuItem> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&MenuItem::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&MenuItem::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_use_underline_trampoline<P>(this: *mut ffi::GtkMenuItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_use_underline_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MenuItem> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&MenuItem::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&MenuItem::from_glib_borrow(this).unsafe_cast())
+}
+
+impl fmt::Display for MenuItem {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "MenuItem")
+    }
 }

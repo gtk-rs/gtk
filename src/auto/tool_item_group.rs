@@ -9,24 +9,22 @@ use ToolItem;
 use ToolShell;
 use Widget;
 use ffi;
-use glib;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use pango;
 use std::boxed::Box as Box_;
-use std::mem;
+use std::fmt;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
-    pub struct ToolItemGroup(Object<ffi::GtkToolItemGroup, ffi::GtkToolItemGroupClass>): Container, Widget, Buildable, ToolShell;
+    pub struct ToolItemGroup(Object<ffi::GtkToolItemGroup, ffi::GtkToolItemGroupClass, ToolItemGroupClass>) @extends Container, Widget, @implements Buildable, ToolShell;
 
     match fn {
         get_type => || ffi::gtk_tool_item_group_get_type(),
@@ -37,12 +35,14 @@ impl ToolItemGroup {
     pub fn new(label: &str) -> ToolItemGroup {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_tool_item_group_new(label.to_glib_none().0)).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_tool_item_group_new(label.to_glib_none().0)).unsafe_cast()
         }
     }
 }
 
-pub trait ToolItemGroupExt {
+pub const NONE_TOOL_ITEM_GROUP: Option<&ToolItemGroup> = None;
+
+pub trait ToolItemGroupExt: 'static {
     fn get_collapsed(&self) -> bool;
 
     fn get_drop_item(&self, x: i32, y: i32) -> Option<ToolItem>;
@@ -53,7 +53,7 @@ pub trait ToolItemGroupExt {
 
     fn get_item_position<P: IsA<ToolItem>>(&self, item: &P) -> i32;
 
-    fn get_label(&self) -> Option<String>;
+    fn get_label(&self) -> Option<GString>;
 
     fn get_label_widget(&self) -> Option<Widget>;
 
@@ -75,21 +75,21 @@ pub trait ToolItemGroupExt {
 
     fn set_label_widget<P: IsA<Widget>>(&self, label_widget: &P);
 
-    fn get_item_expand<T: IsA<ToolItem> + IsA<Widget>>(&self, item: &T) -> bool;
+    fn get_item_expand<T: IsA<ToolItem>>(&self, item: &T) -> bool;
 
-    fn set_item_expand<T: IsA<ToolItem> + IsA<Widget>>(&self, item: &T, expand: bool);
+    fn set_item_expand<T: IsA<ToolItem>>(&self, item: &T, expand: bool);
 
-    fn get_item_fill<T: IsA<ToolItem> + IsA<Widget>>(&self, item: &T) -> bool;
+    fn get_item_fill<T: IsA<ToolItem>>(&self, item: &T) -> bool;
 
-    fn set_item_fill<T: IsA<ToolItem> + IsA<Widget>>(&self, item: &T, fill: bool);
+    fn set_item_fill<T: IsA<ToolItem>>(&self, item: &T, fill: bool);
 
-    fn get_item_homogeneous<T: IsA<ToolItem> + IsA<Widget>>(&self, item: &T) -> bool;
+    fn get_item_homogeneous<T: IsA<ToolItem>>(&self, item: &T) -> bool;
 
-    fn set_item_homogeneous<T: IsA<ToolItem> + IsA<Widget>>(&self, item: &T, homogeneous: bool);
+    fn set_item_homogeneous<T: IsA<ToolItem>>(&self, item: &T, homogeneous: bool);
 
-    fn get_item_new_row<T: IsA<ToolItem> + IsA<Widget>>(&self, item: &T) -> bool;
+    fn get_item_new_row<T: IsA<ToolItem>>(&self, item: &T) -> bool;
 
-    fn set_item_new_row<T: IsA<ToolItem> + IsA<Widget>>(&self, item: &T, new_row: bool);
+    fn set_item_new_row<T: IsA<ToolItem>>(&self, item: &T, new_row: bool);
 
     fn connect_property_collapsed_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -102,226 +102,232 @@ pub trait ToolItemGroupExt {
     fn connect_property_label_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<ToolItemGroup> + IsA<Container> + IsA<glib::object::Object>> ToolItemGroupExt for O {
+impl<O: IsA<ToolItemGroup>> ToolItemGroupExt for O {
     fn get_collapsed(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_tool_item_group_get_collapsed(self.to_glib_none().0))
+            from_glib(ffi::gtk_tool_item_group_get_collapsed(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_drop_item(&self, x: i32, y: i32) -> Option<ToolItem> {
         unsafe {
-            from_glib_none(ffi::gtk_tool_item_group_get_drop_item(self.to_glib_none().0, x, y))
+            from_glib_none(ffi::gtk_tool_item_group_get_drop_item(self.as_ref().to_glib_none().0, x, y))
         }
     }
 
     fn get_ellipsize(&self) -> pango::EllipsizeMode {
         unsafe {
-            from_glib(ffi::gtk_tool_item_group_get_ellipsize(self.to_glib_none().0))
+            from_glib(ffi::gtk_tool_item_group_get_ellipsize(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_header_relief(&self) -> ReliefStyle {
         unsafe {
-            from_glib(ffi::gtk_tool_item_group_get_header_relief(self.to_glib_none().0))
+            from_glib(ffi::gtk_tool_item_group_get_header_relief(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_item_position<P: IsA<ToolItem>>(&self, item: &P) -> i32 {
         unsafe {
-            ffi::gtk_tool_item_group_get_item_position(self.to_glib_none().0, item.to_glib_none().0)
+            ffi::gtk_tool_item_group_get_item_position(self.as_ref().to_glib_none().0, item.as_ref().to_glib_none().0)
         }
     }
 
-    fn get_label(&self) -> Option<String> {
+    fn get_label(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::gtk_tool_item_group_get_label(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_tool_item_group_get_label(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_label_widget(&self) -> Option<Widget> {
         unsafe {
-            from_glib_none(ffi::gtk_tool_item_group_get_label_widget(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_tool_item_group_get_label_widget(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_n_items(&self) -> u32 {
         unsafe {
-            ffi::gtk_tool_item_group_get_n_items(self.to_glib_none().0)
+            ffi::gtk_tool_item_group_get_n_items(self.as_ref().to_glib_none().0)
         }
     }
 
     fn get_nth_item(&self, index: u32) -> Option<ToolItem> {
         unsafe {
-            from_glib_none(ffi::gtk_tool_item_group_get_nth_item(self.to_glib_none().0, index))
+            from_glib_none(ffi::gtk_tool_item_group_get_nth_item(self.as_ref().to_glib_none().0, index))
         }
     }
 
     fn insert<P: IsA<ToolItem>>(&self, item: &P, position: i32) {
         unsafe {
-            ffi::gtk_tool_item_group_insert(self.to_glib_none().0, item.to_glib_none().0, position);
+            ffi::gtk_tool_item_group_insert(self.as_ref().to_glib_none().0, item.as_ref().to_glib_none().0, position);
         }
     }
 
     fn set_collapsed(&self, collapsed: bool) {
         unsafe {
-            ffi::gtk_tool_item_group_set_collapsed(self.to_glib_none().0, collapsed.to_glib());
+            ffi::gtk_tool_item_group_set_collapsed(self.as_ref().to_glib_none().0, collapsed.to_glib());
         }
     }
 
     fn set_ellipsize(&self, ellipsize: pango::EllipsizeMode) {
         unsafe {
-            ffi::gtk_tool_item_group_set_ellipsize(self.to_glib_none().0, ellipsize.to_glib());
+            ffi::gtk_tool_item_group_set_ellipsize(self.as_ref().to_glib_none().0, ellipsize.to_glib());
         }
     }
 
     fn set_header_relief(&self, style: ReliefStyle) {
         unsafe {
-            ffi::gtk_tool_item_group_set_header_relief(self.to_glib_none().0, style.to_glib());
+            ffi::gtk_tool_item_group_set_header_relief(self.as_ref().to_glib_none().0, style.to_glib());
         }
     }
 
     fn set_item_position<P: IsA<ToolItem>>(&self, item: &P, position: i32) {
         unsafe {
-            ffi::gtk_tool_item_group_set_item_position(self.to_glib_none().0, item.to_glib_none().0, position);
+            ffi::gtk_tool_item_group_set_item_position(self.as_ref().to_glib_none().0, item.as_ref().to_glib_none().0, position);
         }
     }
 
     fn set_label(&self, label: &str) {
         unsafe {
-            ffi::gtk_tool_item_group_set_label(self.to_glib_none().0, label.to_glib_none().0);
+            ffi::gtk_tool_item_group_set_label(self.as_ref().to_glib_none().0, label.to_glib_none().0);
         }
     }
 
     fn set_label_widget<P: IsA<Widget>>(&self, label_widget: &P) {
         unsafe {
-            ffi::gtk_tool_item_group_set_label_widget(self.to_glib_none().0, label_widget.to_glib_none().0);
+            ffi::gtk_tool_item_group_set_label_widget(self.as_ref().to_glib_none().0, label_widget.as_ref().to_glib_none().0);
         }
     }
 
-    fn get_item_expand<T: IsA<ToolItem> + IsA<Widget>>(&self, item: &T) -> bool {
+    fn get_item_expand<T: IsA<ToolItem>>(&self, item: &T) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            ffi::gtk_container_child_get_property(self.to_glib_none().0, item.to_glib_none().0, "expand".to_glib_none().0, value.to_glib_none_mut().0);
+            ffi::gtk_container_child_get_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0 as *mut _, b"expand\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
-    fn set_item_expand<T: IsA<ToolItem> + IsA<Widget>>(&self, item: &T, expand: bool) {
+    fn set_item_expand<T: IsA<ToolItem>>(&self, item: &T, expand: bool) {
         unsafe {
-            ffi::gtk_container_child_set_property(self.to_glib_none().0, item.to_glib_none().0, "expand".to_glib_none().0, Value::from(&expand).to_glib_none().0);
+            ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0 as *mut _, b"expand\0".as_ptr() as *const _, Value::from(&expand).to_glib_none().0);
         }
     }
 
-    fn get_item_fill<T: IsA<ToolItem> + IsA<Widget>>(&self, item: &T) -> bool {
+    fn get_item_fill<T: IsA<ToolItem>>(&self, item: &T) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            ffi::gtk_container_child_get_property(self.to_glib_none().0, item.to_glib_none().0, "fill".to_glib_none().0, value.to_glib_none_mut().0);
+            ffi::gtk_container_child_get_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0 as *mut _, b"fill\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
-    fn set_item_fill<T: IsA<ToolItem> + IsA<Widget>>(&self, item: &T, fill: bool) {
+    fn set_item_fill<T: IsA<ToolItem>>(&self, item: &T, fill: bool) {
         unsafe {
-            ffi::gtk_container_child_set_property(self.to_glib_none().0, item.to_glib_none().0, "fill".to_glib_none().0, Value::from(&fill).to_glib_none().0);
+            ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0 as *mut _, b"fill\0".as_ptr() as *const _, Value::from(&fill).to_glib_none().0);
         }
     }
 
-    fn get_item_homogeneous<T: IsA<ToolItem> + IsA<Widget>>(&self, item: &T) -> bool {
+    fn get_item_homogeneous<T: IsA<ToolItem>>(&self, item: &T) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            ffi::gtk_container_child_get_property(self.to_glib_none().0, item.to_glib_none().0, "homogeneous".to_glib_none().0, value.to_glib_none_mut().0);
+            ffi::gtk_container_child_get_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0 as *mut _, b"homogeneous\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
-    fn set_item_homogeneous<T: IsA<ToolItem> + IsA<Widget>>(&self, item: &T, homogeneous: bool) {
+    fn set_item_homogeneous<T: IsA<ToolItem>>(&self, item: &T, homogeneous: bool) {
         unsafe {
-            ffi::gtk_container_child_set_property(self.to_glib_none().0, item.to_glib_none().0, "homogeneous".to_glib_none().0, Value::from(&homogeneous).to_glib_none().0);
+            ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0 as *mut _, b"homogeneous\0".as_ptr() as *const _, Value::from(&homogeneous).to_glib_none().0);
         }
     }
 
-    fn get_item_new_row<T: IsA<ToolItem> + IsA<Widget>>(&self, item: &T) -> bool {
+    fn get_item_new_row<T: IsA<ToolItem>>(&self, item: &T) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            ffi::gtk_container_child_get_property(self.to_glib_none().0, item.to_glib_none().0, "new-row".to_glib_none().0, value.to_glib_none_mut().0);
+            ffi::gtk_container_child_get_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0 as *mut _, b"new-row\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
-    fn set_item_new_row<T: IsA<ToolItem> + IsA<Widget>>(&self, item: &T, new_row: bool) {
+    fn set_item_new_row<T: IsA<ToolItem>>(&self, item: &T, new_row: bool) {
         unsafe {
-            ffi::gtk_container_child_set_property(self.to_glib_none().0, item.to_glib_none().0, "new-row".to_glib_none().0, Value::from(&new_row).to_glib_none().0);
+            ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0 as *mut _, b"new-row\0".as_ptr() as *const _, Value::from(&new_row).to_glib_none().0);
         }
     }
 
     fn connect_property_collapsed_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::collapsed",
-                transmute(notify_collapsed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::collapsed\0".as_ptr() as *const _,
+                Some(transmute(notify_collapsed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_ellipsize_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::ellipsize",
-                transmute(notify_ellipsize_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::ellipsize\0".as_ptr() as *const _,
+                Some(transmute(notify_ellipsize_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_header_relief_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::header-relief",
-                transmute(notify_header_relief_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::header-relief\0".as_ptr() as *const _,
+                Some(transmute(notify_header_relief_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_label_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::label",
-                transmute(notify_label_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::label\0".as_ptr() as *const _,
+                Some(transmute(notify_label_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_label_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::label-widget",
-                transmute(notify_label_widget_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::label-widget\0".as_ptr() as *const _,
+                Some(transmute(notify_label_widget_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn notify_collapsed_trampoline<P>(this: *mut ffi::GtkToolItemGroup, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_collapsed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkToolItemGroup, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolItemGroup> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ToolItemGroup::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&ToolItemGroup::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_ellipsize_trampoline<P>(this: *mut ffi::GtkToolItemGroup, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_ellipsize_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkToolItemGroup, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolItemGroup> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ToolItemGroup::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&ToolItemGroup::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_header_relief_trampoline<P>(this: *mut ffi::GtkToolItemGroup, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_header_relief_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkToolItemGroup, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolItemGroup> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ToolItemGroup::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&ToolItemGroup::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_label_trampoline<P>(this: *mut ffi::GtkToolItemGroup, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_label_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkToolItemGroup, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolItemGroup> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ToolItemGroup::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&ToolItemGroup::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_label_widget_trampoline<P>(this: *mut ffi::GtkToolItemGroup, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_label_widget_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkToolItemGroup, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolItemGroup> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ToolItemGroup::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&ToolItemGroup::from_glib_borrow(this).unsafe_cast())
+}
+
+impl fmt::Display for ToolItemGroup {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "ToolItemGroup")
+    }
 }

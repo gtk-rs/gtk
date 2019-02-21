@@ -3,13 +3,11 @@
 // DO NOT EDIT
 
 use ffi;
+use glib::GString;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use std::cmp;
 use std::fmt;
 use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     #[derive(Debug, Hash)]
@@ -41,7 +39,6 @@ impl TreePath {
     //    unsafe { TODO: call ffi::gtk_tree_path_new_from_indices() }
     //}
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     pub fn new_from_indicesv(indices: &[i32]) -> TreePath {
         assert_initialized_main_thread!();
         let length = indices.len() as usize;
@@ -119,7 +116,7 @@ impl TreePath {
         }
     }
 
-    fn to_string(&self) -> String {
+    fn to_string(&self) -> GString {
         unsafe {
             from_glib_full(ffi::gtk_tree_path_to_string(mut_override(self.to_glib_none().0)))
         }

@@ -6,25 +6,24 @@ use CellRenderer;
 use TreePath;
 use ffi;
 use gdk;
-use glib;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use libc;
 use pango;
 use std::boxed::Box as Box_;
-use std::mem;
+use std::fmt;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
-    pub struct CellRendererText(Object<ffi::GtkCellRendererText, ffi::GtkCellRendererTextClass>): CellRenderer;
+    pub struct CellRendererText(Object<ffi::GtkCellRendererText, ffi::GtkCellRendererTextClass, CellRendererTextClass>) @extends CellRenderer;
 
     match fn {
         get_type => || ffi::gtk_cell_renderer_text_get_type(),
@@ -35,7 +34,7 @@ impl CellRendererText {
     pub fn new() -> CellRendererText {
         assert_initialized_main_thread!();
         unsafe {
-            CellRenderer::from_glib_none(ffi::gtk_cell_renderer_text_new()).downcast_unchecked()
+            CellRenderer::from_glib_none(ffi::gtk_cell_renderer_text_new()).unsafe_cast()
         }
     }
 }
@@ -46,7 +45,9 @@ impl Default for CellRendererText {
     }
 }
 
-pub trait CellRendererTextExt {
+pub const NONE_CELL_RENDERER_TEXT: Option<&CellRendererText> = None;
+
+pub trait CellRendererTextExt: 'static {
     fn set_fixed_height_from_font(&self, number_of_rows: i32);
 
     fn get_property_align_set(&self) -> bool;
@@ -57,7 +58,7 @@ pub trait CellRendererTextExt {
 
     fn set_property_alignment(&self, alignment: pango::Alignment);
 
-    fn set_property_background(&self, background: Option<&str>);
+    fn set_property_background<'a, P: Into<Option<&'a str>>>(&self, background: P);
 
     fn get_property_background_rgba(&self) -> Option<gdk::RGBA>;
 
@@ -83,19 +84,19 @@ pub trait CellRendererTextExt {
 
     fn set_property_ellipsize_set(&self, ellipsize_set: bool);
 
-    fn get_property_family(&self) -> Option<String>;
+    fn get_property_family(&self) -> Option<GString>;
 
-    fn set_property_family(&self, family: Option<&str>);
+    fn set_property_family<'a, P: Into<Option<&'a str>>>(&self, family: P);
 
     fn get_property_family_set(&self) -> bool;
 
     fn set_property_family_set(&self, family_set: bool);
 
-    fn get_property_font(&self) -> Option<String>;
+    fn get_property_font(&self) -> Option<GString>;
 
-    fn set_property_font(&self, font: Option<&str>);
+    fn set_property_font<'a, P: Into<Option<&'a str>>>(&self, font: P);
 
-    fn set_property_foreground(&self, foreground: Option<&str>);
+    fn set_property_foreground<'a, P: Into<Option<&'a str>>>(&self, foreground: P);
 
     fn get_property_foreground_rgba(&self) -> Option<gdk::RGBA>;
 
@@ -105,23 +106,23 @@ pub trait CellRendererTextExt {
 
     fn set_property_foreground_set(&self, foreground_set: bool);
 
-    fn get_property_language(&self) -> Option<String>;
+    fn get_property_language(&self) -> Option<GString>;
 
-    fn set_property_language(&self, language: Option<&str>);
+    fn set_property_language<'a, P: Into<Option<&'a str>>>(&self, language: P);
 
     fn get_property_language_set(&self) -> bool;
 
     fn set_property_language_set(&self, language_set: bool);
 
-    fn set_property_markup(&self, markup: Option<&str>);
+    fn set_property_markup<'a, P: Into<Option<&'a str>>>(&self, markup: P);
 
     fn get_property_max_width_chars(&self) -> i32;
 
     fn set_property_max_width_chars(&self, max_width_chars: i32);
 
-    fn get_property_placeholder_text(&self) -> Option<String>;
+    fn get_property_placeholder_text(&self) -> Option<GString>;
 
-    fn set_property_placeholder_text(&self, placeholder_text: Option<&str>);
+    fn set_property_placeholder_text<'a, P: Into<Option<&'a str>>>(&self, placeholder_text: P);
 
     fn get_property_rise(&self) -> i32;
 
@@ -179,9 +180,9 @@ pub trait CellRendererTextExt {
 
     fn set_property_style_set(&self, style_set: bool);
 
-    fn get_property_text(&self) -> Option<String>;
+    fn get_property_text(&self) -> Option<GString>;
 
-    fn set_property_text(&self, text: Option<&str>);
+    fn set_property_text<'a, P: Into<Option<&'a str>>>(&self, text: P);
 
     fn get_property_underline(&self) -> pango::Underline;
 
@@ -310,1233 +311,1247 @@ pub trait CellRendererTextExt {
     fn connect_property_wrap_width_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<CellRendererText> + IsA<glib::object::Object>> CellRendererTextExt for O {
+impl<O: IsA<CellRendererText>> CellRendererTextExt for O {
     fn set_fixed_height_from_font(&self, number_of_rows: i32) {
         unsafe {
-            ffi::gtk_cell_renderer_text_set_fixed_height_from_font(self.to_glib_none().0, number_of_rows);
+            ffi::gtk_cell_renderer_text_set_fixed_height_from_font(self.as_ref().to_glib_none().0, number_of_rows);
         }
     }
 
     fn get_property_align_set(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "align-set".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"align-set\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_align_set(&self, align_set: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "align-set".to_glib_none().0, Value::from(&align_set).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"align-set\0".as_ptr() as *const _, Value::from(&align_set).to_glib_none().0);
         }
     }
 
     fn get_property_alignment(&self) -> pango::Alignment {
         unsafe {
             let mut value = Value::from_type(<pango::Alignment as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "alignment".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"alignment\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_alignment(&self, alignment: pango::Alignment) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "alignment".to_glib_none().0, Value::from(&alignment).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"alignment\0".as_ptr() as *const _, Value::from(&alignment).to_glib_none().0);
         }
     }
 
-    fn set_property_background(&self, background: Option<&str>) {
+    fn set_property_background<'a, P: Into<Option<&'a str>>>(&self, background: P) {
+        let background = background.into();
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "background".to_glib_none().0, Value::from(background).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"background\0".as_ptr() as *const _, Value::from(background).to_glib_none().0);
         }
     }
 
     fn get_property_background_rgba(&self) -> Option<gdk::RGBA> {
         unsafe {
             let mut value = Value::from_type(<gdk::RGBA as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "background-rgba".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"background-rgba\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
 
     fn set_property_background_rgba(&self, background_rgba: Option<&gdk::RGBA>) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "background-rgba".to_glib_none().0, Value::from(background_rgba).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"background-rgba\0".as_ptr() as *const _, Value::from(background_rgba).to_glib_none().0);
         }
     }
 
     fn get_property_background_set(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "background-set".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"background-set\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_background_set(&self, background_set: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "background-set".to_glib_none().0, Value::from(&background_set).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"background-set\0".as_ptr() as *const _, Value::from(&background_set).to_glib_none().0);
         }
     }
 
     fn get_property_editable(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "editable".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"editable\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_editable(&self, editable: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "editable".to_glib_none().0, Value::from(&editable).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"editable\0".as_ptr() as *const _, Value::from(&editable).to_glib_none().0);
         }
     }
 
     fn get_property_editable_set(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "editable-set".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"editable-set\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_editable_set(&self, editable_set: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "editable-set".to_glib_none().0, Value::from(&editable_set).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"editable-set\0".as_ptr() as *const _, Value::from(&editable_set).to_glib_none().0);
         }
     }
 
     fn get_property_ellipsize(&self) -> pango::EllipsizeMode {
         unsafe {
             let mut value = Value::from_type(<pango::EllipsizeMode as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "ellipsize".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"ellipsize\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_ellipsize(&self, ellipsize: pango::EllipsizeMode) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "ellipsize".to_glib_none().0, Value::from(&ellipsize).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"ellipsize\0".as_ptr() as *const _, Value::from(&ellipsize).to_glib_none().0);
         }
     }
 
     fn get_property_ellipsize_set(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "ellipsize-set".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"ellipsize-set\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_ellipsize_set(&self, ellipsize_set: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "ellipsize-set".to_glib_none().0, Value::from(&ellipsize_set).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"ellipsize-set\0".as_ptr() as *const _, Value::from(&ellipsize_set).to_glib_none().0);
         }
     }
 
-    fn get_property_family(&self) -> Option<String> {
+    fn get_property_family(&self) -> Option<GString> {
         unsafe {
-            let mut value = Value::from_type(<String as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "family".to_glib_none().0, value.to_glib_none_mut().0);
+            let mut value = Value::from_type(<GString as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"family\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
 
-    fn set_property_family(&self, family: Option<&str>) {
+    fn set_property_family<'a, P: Into<Option<&'a str>>>(&self, family: P) {
+        let family = family.into();
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "family".to_glib_none().0, Value::from(family).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"family\0".as_ptr() as *const _, Value::from(family).to_glib_none().0);
         }
     }
 
     fn get_property_family_set(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "family-set".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"family-set\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_family_set(&self, family_set: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "family-set".to_glib_none().0, Value::from(&family_set).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"family-set\0".as_ptr() as *const _, Value::from(&family_set).to_glib_none().0);
         }
     }
 
-    fn get_property_font(&self) -> Option<String> {
+    fn get_property_font(&self) -> Option<GString> {
         unsafe {
-            let mut value = Value::from_type(<String as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "font".to_glib_none().0, value.to_glib_none_mut().0);
+            let mut value = Value::from_type(<GString as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"font\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
 
-    fn set_property_font(&self, font: Option<&str>) {
+    fn set_property_font<'a, P: Into<Option<&'a str>>>(&self, font: P) {
+        let font = font.into();
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "font".to_glib_none().0, Value::from(font).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"font\0".as_ptr() as *const _, Value::from(font).to_glib_none().0);
         }
     }
 
-    fn set_property_foreground(&self, foreground: Option<&str>) {
+    fn set_property_foreground<'a, P: Into<Option<&'a str>>>(&self, foreground: P) {
+        let foreground = foreground.into();
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "foreground".to_glib_none().0, Value::from(foreground).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"foreground\0".as_ptr() as *const _, Value::from(foreground).to_glib_none().0);
         }
     }
 
     fn get_property_foreground_rgba(&self) -> Option<gdk::RGBA> {
         unsafe {
             let mut value = Value::from_type(<gdk::RGBA as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "foreground-rgba".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"foreground-rgba\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
 
     fn set_property_foreground_rgba(&self, foreground_rgba: Option<&gdk::RGBA>) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "foreground-rgba".to_glib_none().0, Value::from(foreground_rgba).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"foreground-rgba\0".as_ptr() as *const _, Value::from(foreground_rgba).to_glib_none().0);
         }
     }
 
     fn get_property_foreground_set(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "foreground-set".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"foreground-set\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_foreground_set(&self, foreground_set: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "foreground-set".to_glib_none().0, Value::from(&foreground_set).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"foreground-set\0".as_ptr() as *const _, Value::from(&foreground_set).to_glib_none().0);
         }
     }
 
-    fn get_property_language(&self) -> Option<String> {
+    fn get_property_language(&self) -> Option<GString> {
         unsafe {
-            let mut value = Value::from_type(<String as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "language".to_glib_none().0, value.to_glib_none_mut().0);
+            let mut value = Value::from_type(<GString as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"language\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
 
-    fn set_property_language(&self, language: Option<&str>) {
+    fn set_property_language<'a, P: Into<Option<&'a str>>>(&self, language: P) {
+        let language = language.into();
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "language".to_glib_none().0, Value::from(language).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"language\0".as_ptr() as *const _, Value::from(language).to_glib_none().0);
         }
     }
 
     fn get_property_language_set(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "language-set".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"language-set\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_language_set(&self, language_set: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "language-set".to_glib_none().0, Value::from(&language_set).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"language-set\0".as_ptr() as *const _, Value::from(&language_set).to_glib_none().0);
         }
     }
 
-    fn set_property_markup(&self, markup: Option<&str>) {
+    fn set_property_markup<'a, P: Into<Option<&'a str>>>(&self, markup: P) {
+        let markup = markup.into();
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "markup".to_glib_none().0, Value::from(markup).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"markup\0".as_ptr() as *const _, Value::from(markup).to_glib_none().0);
         }
     }
 
     fn get_property_max_width_chars(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "max-width-chars".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"max-width-chars\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_max_width_chars(&self, max_width_chars: i32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "max-width-chars".to_glib_none().0, Value::from(&max_width_chars).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"max-width-chars\0".as_ptr() as *const _, Value::from(&max_width_chars).to_glib_none().0);
         }
     }
 
-    fn get_property_placeholder_text(&self) -> Option<String> {
+    fn get_property_placeholder_text(&self) -> Option<GString> {
         unsafe {
-            let mut value = Value::from_type(<String as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "placeholder-text".to_glib_none().0, value.to_glib_none_mut().0);
+            let mut value = Value::from_type(<GString as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"placeholder-text\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
 
-    fn set_property_placeholder_text(&self, placeholder_text: Option<&str>) {
+    fn set_property_placeholder_text<'a, P: Into<Option<&'a str>>>(&self, placeholder_text: P) {
+        let placeholder_text = placeholder_text.into();
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "placeholder-text".to_glib_none().0, Value::from(placeholder_text).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"placeholder-text\0".as_ptr() as *const _, Value::from(placeholder_text).to_glib_none().0);
         }
     }
 
     fn get_property_rise(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "rise".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"rise\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_rise(&self, rise: i32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "rise".to_glib_none().0, Value::from(&rise).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"rise\0".as_ptr() as *const _, Value::from(&rise).to_glib_none().0);
         }
     }
 
     fn get_property_rise_set(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "rise-set".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"rise-set\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_rise_set(&self, rise_set: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "rise-set".to_glib_none().0, Value::from(&rise_set).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"rise-set\0".as_ptr() as *const _, Value::from(&rise_set).to_glib_none().0);
         }
     }
 
     fn get_property_scale(&self) -> f64 {
         unsafe {
             let mut value = Value::from_type(<f64 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "scale".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"scale\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_scale(&self, scale: f64) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "scale".to_glib_none().0, Value::from(&scale).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"scale\0".as_ptr() as *const _, Value::from(&scale).to_glib_none().0);
         }
     }
 
     fn get_property_scale_set(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "scale-set".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"scale-set\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_scale_set(&self, scale_set: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "scale-set".to_glib_none().0, Value::from(&scale_set).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"scale-set\0".as_ptr() as *const _, Value::from(&scale_set).to_glib_none().0);
         }
     }
 
     fn get_property_single_paragraph_mode(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "single-paragraph-mode".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"single-paragraph-mode\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_single_paragraph_mode(&self, single_paragraph_mode: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "single-paragraph-mode".to_glib_none().0, Value::from(&single_paragraph_mode).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"single-paragraph-mode\0".as_ptr() as *const _, Value::from(&single_paragraph_mode).to_glib_none().0);
         }
     }
 
     fn get_property_size(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "size".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"size\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_size(&self, size: i32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "size".to_glib_none().0, Value::from(&size).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"size\0".as_ptr() as *const _, Value::from(&size).to_glib_none().0);
         }
     }
 
     fn get_property_size_points(&self) -> f64 {
         unsafe {
             let mut value = Value::from_type(<f64 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "size-points".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"size-points\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_size_points(&self, size_points: f64) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "size-points".to_glib_none().0, Value::from(&size_points).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"size-points\0".as_ptr() as *const _, Value::from(&size_points).to_glib_none().0);
         }
     }
 
     fn get_property_size_set(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "size-set".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"size-set\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_size_set(&self, size_set: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "size-set".to_glib_none().0, Value::from(&size_set).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"size-set\0".as_ptr() as *const _, Value::from(&size_set).to_glib_none().0);
         }
     }
 
     fn get_property_stretch(&self) -> pango::Stretch {
         unsafe {
             let mut value = Value::from_type(<pango::Stretch as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "stretch".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"stretch\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_stretch(&self, stretch: pango::Stretch) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "stretch".to_glib_none().0, Value::from(&stretch).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"stretch\0".as_ptr() as *const _, Value::from(&stretch).to_glib_none().0);
         }
     }
 
     fn get_property_stretch_set(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "stretch-set".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"stretch-set\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_stretch_set(&self, stretch_set: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "stretch-set".to_glib_none().0, Value::from(&stretch_set).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"stretch-set\0".as_ptr() as *const _, Value::from(&stretch_set).to_glib_none().0);
         }
     }
 
     fn get_property_strikethrough(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "strikethrough".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"strikethrough\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_strikethrough(&self, strikethrough: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "strikethrough".to_glib_none().0, Value::from(&strikethrough).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"strikethrough\0".as_ptr() as *const _, Value::from(&strikethrough).to_glib_none().0);
         }
     }
 
     fn get_property_strikethrough_set(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "strikethrough-set".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"strikethrough-set\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_strikethrough_set(&self, strikethrough_set: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "strikethrough-set".to_glib_none().0, Value::from(&strikethrough_set).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"strikethrough-set\0".as_ptr() as *const _, Value::from(&strikethrough_set).to_glib_none().0);
         }
     }
 
     fn get_property_style(&self) -> pango::Style {
         unsafe {
             let mut value = Value::from_type(<pango::Style as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "style".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"style\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_style(&self, style: pango::Style) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "style".to_glib_none().0, Value::from(&style).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"style\0".as_ptr() as *const _, Value::from(&style).to_glib_none().0);
         }
     }
 
     fn get_property_style_set(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "style-set".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"style-set\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_style_set(&self, style_set: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "style-set".to_glib_none().0, Value::from(&style_set).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"style-set\0".as_ptr() as *const _, Value::from(&style_set).to_glib_none().0);
         }
     }
 
-    fn get_property_text(&self) -> Option<String> {
+    fn get_property_text(&self) -> Option<GString> {
         unsafe {
-            let mut value = Value::from_type(<String as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "text".to_glib_none().0, value.to_glib_none_mut().0);
+            let mut value = Value::from_type(<GString as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"text\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
 
-    fn set_property_text(&self, text: Option<&str>) {
+    fn set_property_text<'a, P: Into<Option<&'a str>>>(&self, text: P) {
+        let text = text.into();
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "text".to_glib_none().0, Value::from(text).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"text\0".as_ptr() as *const _, Value::from(text).to_glib_none().0);
         }
     }
 
     fn get_property_underline(&self) -> pango::Underline {
         unsafe {
             let mut value = Value::from_type(<pango::Underline as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "underline".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"underline\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_underline(&self, underline: pango::Underline) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "underline".to_glib_none().0, Value::from(&underline).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"underline\0".as_ptr() as *const _, Value::from(&underline).to_glib_none().0);
         }
     }
 
     fn get_property_underline_set(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "underline-set".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"underline-set\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_underline_set(&self, underline_set: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "underline-set".to_glib_none().0, Value::from(&underline_set).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"underline-set\0".as_ptr() as *const _, Value::from(&underline_set).to_glib_none().0);
         }
     }
 
     fn get_property_variant(&self) -> pango::Variant {
         unsafe {
             let mut value = Value::from_type(<pango::Variant as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "variant".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"variant\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_variant(&self, variant: pango::Variant) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "variant".to_glib_none().0, Value::from(&variant).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"variant\0".as_ptr() as *const _, Value::from(&variant).to_glib_none().0);
         }
     }
 
     fn get_property_variant_set(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "variant-set".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"variant-set\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_variant_set(&self, variant_set: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "variant-set".to_glib_none().0, Value::from(&variant_set).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"variant-set\0".as_ptr() as *const _, Value::from(&variant_set).to_glib_none().0);
         }
     }
 
     fn get_property_weight(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "weight".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"weight\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_weight(&self, weight: i32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "weight".to_glib_none().0, Value::from(&weight).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"weight\0".as_ptr() as *const _, Value::from(&weight).to_glib_none().0);
         }
     }
 
     fn get_property_weight_set(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "weight-set".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"weight-set\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_weight_set(&self, weight_set: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "weight-set".to_glib_none().0, Value::from(&weight_set).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"weight-set\0".as_ptr() as *const _, Value::from(&weight_set).to_glib_none().0);
         }
     }
 
     fn get_property_width_chars(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "width-chars".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"width-chars\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_width_chars(&self, width_chars: i32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "width-chars".to_glib_none().0, Value::from(&width_chars).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"width-chars\0".as_ptr() as *const _, Value::from(&width_chars).to_glib_none().0);
         }
     }
 
     fn get_property_wrap_mode(&self) -> pango::WrapMode {
         unsafe {
             let mut value = Value::from_type(<pango::WrapMode as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "wrap-mode".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"wrap-mode\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_wrap_mode(&self, wrap_mode: pango::WrapMode) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "wrap-mode".to_glib_none().0, Value::from(&wrap_mode).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"wrap-mode\0".as_ptr() as *const _, Value::from(&wrap_mode).to_glib_none().0);
         }
     }
 
     fn get_property_wrap_width(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "wrap-width".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"wrap-width\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_wrap_width(&self, wrap_width: i32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "wrap-width".to_glib_none().0, Value::from(&wrap_width).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"wrap-width\0".as_ptr() as *const _, Value::from(&wrap_width).to_glib_none().0);
         }
     }
 
     fn connect_edited<F: Fn(&Self, TreePath, &str) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, TreePath, &str) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "edited",
-                transmute(edited_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"edited\0".as_ptr() as *const _,
+                Some(transmute(edited_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_align_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::align-set",
-                transmute(notify_align_set_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::align-set\0".as_ptr() as *const _,
+                Some(transmute(notify_align_set_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_alignment_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::alignment",
-                transmute(notify_alignment_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::alignment\0".as_ptr() as *const _,
+                Some(transmute(notify_alignment_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_background_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::background",
-                transmute(notify_background_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::background\0".as_ptr() as *const _,
+                Some(transmute(notify_background_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_background_rgba_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::background-rgba",
-                transmute(notify_background_rgba_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::background-rgba\0".as_ptr() as *const _,
+                Some(transmute(notify_background_rgba_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_background_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::background-set",
-                transmute(notify_background_set_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::background-set\0".as_ptr() as *const _,
+                Some(transmute(notify_background_set_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_editable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::editable",
-                transmute(notify_editable_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::editable\0".as_ptr() as *const _,
+                Some(transmute(notify_editable_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_editable_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::editable-set",
-                transmute(notify_editable_set_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::editable-set\0".as_ptr() as *const _,
+                Some(transmute(notify_editable_set_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_ellipsize_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::ellipsize",
-                transmute(notify_ellipsize_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::ellipsize\0".as_ptr() as *const _,
+                Some(transmute(notify_ellipsize_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_ellipsize_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::ellipsize-set",
-                transmute(notify_ellipsize_set_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::ellipsize-set\0".as_ptr() as *const _,
+                Some(transmute(notify_ellipsize_set_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_family_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::family",
-                transmute(notify_family_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::family\0".as_ptr() as *const _,
+                Some(transmute(notify_family_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_family_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::family-set",
-                transmute(notify_family_set_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::family-set\0".as_ptr() as *const _,
+                Some(transmute(notify_family_set_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_font_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::font",
-                transmute(notify_font_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::font\0".as_ptr() as *const _,
+                Some(transmute(notify_font_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_foreground_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::foreground",
-                transmute(notify_foreground_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::foreground\0".as_ptr() as *const _,
+                Some(transmute(notify_foreground_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_foreground_rgba_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::foreground-rgba",
-                transmute(notify_foreground_rgba_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::foreground-rgba\0".as_ptr() as *const _,
+                Some(transmute(notify_foreground_rgba_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_foreground_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::foreground-set",
-                transmute(notify_foreground_set_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::foreground-set\0".as_ptr() as *const _,
+                Some(transmute(notify_foreground_set_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_language_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::language",
-                transmute(notify_language_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::language\0".as_ptr() as *const _,
+                Some(transmute(notify_language_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_language_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::language-set",
-                transmute(notify_language_set_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::language-set\0".as_ptr() as *const _,
+                Some(transmute(notify_language_set_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_markup_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::markup",
-                transmute(notify_markup_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::markup\0".as_ptr() as *const _,
+                Some(transmute(notify_markup_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_max_width_chars_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::max-width-chars",
-                transmute(notify_max_width_chars_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::max-width-chars\0".as_ptr() as *const _,
+                Some(transmute(notify_max_width_chars_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_placeholder_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::placeholder-text",
-                transmute(notify_placeholder_text_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::placeholder-text\0".as_ptr() as *const _,
+                Some(transmute(notify_placeholder_text_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_rise_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::rise",
-                transmute(notify_rise_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::rise\0".as_ptr() as *const _,
+                Some(transmute(notify_rise_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_rise_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::rise-set",
-                transmute(notify_rise_set_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::rise-set\0".as_ptr() as *const _,
+                Some(transmute(notify_rise_set_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_scale_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::scale",
-                transmute(notify_scale_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::scale\0".as_ptr() as *const _,
+                Some(transmute(notify_scale_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_scale_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::scale-set",
-                transmute(notify_scale_set_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::scale-set\0".as_ptr() as *const _,
+                Some(transmute(notify_scale_set_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_single_paragraph_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::single-paragraph-mode",
-                transmute(notify_single_paragraph_mode_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::single-paragraph-mode\0".as_ptr() as *const _,
+                Some(transmute(notify_single_paragraph_mode_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::size",
-                transmute(notify_size_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::size\0".as_ptr() as *const _,
+                Some(transmute(notify_size_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_size_points_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::size-points",
-                transmute(notify_size_points_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::size-points\0".as_ptr() as *const _,
+                Some(transmute(notify_size_points_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_size_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::size-set",
-                transmute(notify_size_set_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::size-set\0".as_ptr() as *const _,
+                Some(transmute(notify_size_set_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_stretch_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::stretch",
-                transmute(notify_stretch_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::stretch\0".as_ptr() as *const _,
+                Some(transmute(notify_stretch_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_stretch_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::stretch-set",
-                transmute(notify_stretch_set_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::stretch-set\0".as_ptr() as *const _,
+                Some(transmute(notify_stretch_set_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_strikethrough_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::strikethrough",
-                transmute(notify_strikethrough_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::strikethrough\0".as_ptr() as *const _,
+                Some(transmute(notify_strikethrough_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_strikethrough_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::strikethrough-set",
-                transmute(notify_strikethrough_set_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::strikethrough-set\0".as_ptr() as *const _,
+                Some(transmute(notify_strikethrough_set_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_style_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::style",
-                transmute(notify_style_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::style\0".as_ptr() as *const _,
+                Some(transmute(notify_style_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_style_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::style-set",
-                transmute(notify_style_set_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::style-set\0".as_ptr() as *const _,
+                Some(transmute(notify_style_set_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_text_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::text",
-                transmute(notify_text_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::text\0".as_ptr() as *const _,
+                Some(transmute(notify_text_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_underline_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::underline",
-                transmute(notify_underline_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::underline\0".as_ptr() as *const _,
+                Some(transmute(notify_underline_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_underline_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::underline-set",
-                transmute(notify_underline_set_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::underline-set\0".as_ptr() as *const _,
+                Some(transmute(notify_underline_set_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_variant_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::variant",
-                transmute(notify_variant_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::variant\0".as_ptr() as *const _,
+                Some(transmute(notify_variant_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_variant_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::variant-set",
-                transmute(notify_variant_set_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::variant-set\0".as_ptr() as *const _,
+                Some(transmute(notify_variant_set_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_weight_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::weight",
-                transmute(notify_weight_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::weight\0".as_ptr() as *const _,
+                Some(transmute(notify_weight_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_weight_set_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::weight-set",
-                transmute(notify_weight_set_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::weight-set\0".as_ptr() as *const _,
+                Some(transmute(notify_weight_set_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_width_chars_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::width-chars",
-                transmute(notify_width_chars_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::width-chars\0".as_ptr() as *const _,
+                Some(transmute(notify_width_chars_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_wrap_mode_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::wrap-mode",
-                transmute(notify_wrap_mode_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::wrap-mode\0".as_ptr() as *const _,
+                Some(transmute(notify_wrap_mode_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_wrap_width_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::wrap-width",
-                transmute(notify_wrap_width_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::wrap-width\0".as_ptr() as *const _,
+                Some(transmute(notify_wrap_width_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn edited_trampoline<P>(this: *mut ffi::GtkCellRendererText, path: *mut libc::c_char, new_text: *mut libc::c_char, f: glib_ffi::gpointer)
+unsafe extern "C" fn edited_trampoline<P, F: Fn(&P, TreePath, &str) + 'static>(this: *mut ffi::GtkCellRendererText, path: *mut libc::c_char, new_text: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P, TreePath, &str) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     let path = from_glib_full(ffi::gtk_tree_path_new_from_string(path));
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked(), path, &String::from_glib_none(new_text))
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast(), path, &GString::from_glib_borrow(new_text))
 }
 
-unsafe extern "C" fn notify_align_set_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_align_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_alignment_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_alignment_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_background_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_background_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_background_rgba_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_background_rgba_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_background_set_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_background_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_editable_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_editable_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_editable_set_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_editable_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_ellipsize_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_ellipsize_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_ellipsize_set_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_ellipsize_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_family_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_family_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_family_set_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_family_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_font_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_font_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_foreground_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_foreground_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_foreground_rgba_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_foreground_rgba_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_foreground_set_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_foreground_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_language_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_language_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_language_set_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_language_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_markup_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_markup_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_max_width_chars_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_max_width_chars_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_placeholder_text_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_placeholder_text_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_rise_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_rise_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_rise_set_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_rise_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_scale_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_scale_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_scale_set_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_scale_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_single_paragraph_mode_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_single_paragraph_mode_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_size_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_size_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_size_points_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_size_points_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_size_set_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_size_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_stretch_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_stretch_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_stretch_set_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_stretch_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_strikethrough_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_strikethrough_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_strikethrough_set_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_strikethrough_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_style_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_style_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_style_set_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_style_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_text_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_text_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_underline_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_underline_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_underline_set_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_underline_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_variant_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_variant_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_variant_set_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_variant_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_weight_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_weight_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_weight_set_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_weight_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_width_chars_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_width_chars_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_wrap_mode_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_wrap_mode_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_wrap_width_trampoline<P>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_wrap_width_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererText, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererText> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellRendererText::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellRendererText::from_glib_borrow(this).unsafe_cast())
+}
+
+impl fmt::Display for CellRendererText {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "CellRendererText")
+    }
 }

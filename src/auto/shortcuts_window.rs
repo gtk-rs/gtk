@@ -9,36 +9,39 @@ use Widget;
 use Window;
 use ffi;
 use glib;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
+use glib::object::ObjectExt;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
-use std::mem;
+use std::fmt;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
-    pub struct ShortcutsWindow(Object<ffi::GtkShortcutsWindow, ffi::GtkShortcutsWindowClass>): Window, Bin, Container, Widget, Buildable;
+    pub struct ShortcutsWindow(Object<ffi::GtkShortcutsWindow, ffi::GtkShortcutsWindowClass, ShortcutsWindowClass>) @extends Window, Bin, Container, Widget, @implements Buildable;
 
     match fn {
         get_type => || ffi::gtk_shortcuts_window_get_type(),
     }
 }
 
-pub trait ShortcutsWindowExt {
-    fn get_property_section_name(&self) -> Option<String>;
+pub const NONE_SHORTCUTS_WINDOW: Option<&ShortcutsWindow> = None;
 
-    fn set_property_section_name(&self, section_name: Option<&str>);
+pub trait ShortcutsWindowExt: 'static {
+    fn get_property_section_name(&self) -> Option<GString>;
 
-    fn get_property_view_name(&self) -> Option<String>;
+    fn set_property_section_name<'a, P: Into<Option<&'a str>>>(&self, section_name: P);
 
-    fn set_property_view_name(&self, view_name: Option<&str>);
+    fn get_property_view_name(&self) -> Option<GString>;
+
+    fn set_property_view_name<'a, P: Into<Option<&'a str>>>(&self, view_name: P);
 
     fn connect_close<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -53,96 +56,104 @@ pub trait ShortcutsWindowExt {
     fn connect_property_view_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<ShortcutsWindow> + IsA<glib::object::Object> + glib::object::ObjectExt> ShortcutsWindowExt for O {
-    fn get_property_section_name(&self) -> Option<String> {
+impl<O: IsA<ShortcutsWindow>> ShortcutsWindowExt for O {
+    fn get_property_section_name(&self) -> Option<GString> {
         unsafe {
-            let mut value = Value::from_type(<String as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "section-name".to_glib_none().0, value.to_glib_none_mut().0);
+            let mut value = Value::from_type(<GString as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"section-name\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
 
-    fn set_property_section_name(&self, section_name: Option<&str>) {
+    fn set_property_section_name<'a, P: Into<Option<&'a str>>>(&self, section_name: P) {
+        let section_name = section_name.into();
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "section-name".to_glib_none().0, Value::from(section_name).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"section-name\0".as_ptr() as *const _, Value::from(section_name).to_glib_none().0);
         }
     }
 
-    fn get_property_view_name(&self) -> Option<String> {
+    fn get_property_view_name(&self) -> Option<GString> {
         unsafe {
-            let mut value = Value::from_type(<String as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "view-name".to_glib_none().0, value.to_glib_none_mut().0);
+            let mut value = Value::from_type(<GString as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"view-name\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
 
-    fn set_property_view_name(&self, view_name: Option<&str>) {
+    fn set_property_view_name<'a, P: Into<Option<&'a str>>>(&self, view_name: P) {
+        let view_name = view_name.into();
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "view-name".to_glib_none().0, Value::from(view_name).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"view-name\0".as_ptr() as *const _, Value::from(view_name).to_glib_none().0);
         }
     }
 
     fn connect_close<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "close",
-                transmute(close_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"close\0".as_ptr() as *const _,
+                Some(transmute(close_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn emit_close(&self) {
-        let _ = self.emit("close", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("close", &[]).unwrap() };
     }
 
     fn connect_search<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "search",
-                transmute(search_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"search\0".as_ptr() as *const _,
+                Some(transmute(search_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn emit_search(&self) {
-        let _ = self.emit("search", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("search", &[]).unwrap() };
     }
 
     fn connect_property_section_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::section-name",
-                transmute(notify_section_name_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::section-name\0".as_ptr() as *const _,
+                Some(transmute(notify_section_name_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_view_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::view-name",
-                transmute(notify_view_name_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::view-name\0".as_ptr() as *const _,
+                Some(transmute(notify_view_name_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn close_trampoline<P>(this: *mut ffi::GtkShortcutsWindow, f: glib_ffi::gpointer)
+unsafe extern "C" fn close_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkShortcutsWindow, f: glib_ffi::gpointer)
 where P: IsA<ShortcutsWindow> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ShortcutsWindow::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&ShortcutsWindow::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn search_trampoline<P>(this: *mut ffi::GtkShortcutsWindow, f: glib_ffi::gpointer)
+unsafe extern "C" fn search_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkShortcutsWindow, f: glib_ffi::gpointer)
 where P: IsA<ShortcutsWindow> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ShortcutsWindow::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&ShortcutsWindow::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_section_name_trampoline<P>(this: *mut ffi::GtkShortcutsWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_section_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkShortcutsWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ShortcutsWindow> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ShortcutsWindow::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&ShortcutsWindow::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_view_name_trampoline<P>(this: *mut ffi::GtkShortcutsWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_view_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkShortcutsWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ShortcutsWindow> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ShortcutsWindow::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&ShortcutsWindow::from_glib_borrow(this).unsafe_cast())
+}
+
+impl fmt::Display for ShortcutsWindow {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "ShortcutsWindow")
+    }
 }

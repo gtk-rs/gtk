@@ -6,57 +6,45 @@ use ApplicationInhibitFlags;
 use Window;
 use ffi;
 use gio;
-use gio_ffi;
-use glib;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
-use std::mem;
+use std::fmt;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
-    pub struct Application(Object<ffi::GtkApplication, ffi::GtkApplicationClass>): [
-        gio::Application => gio_ffi::GApplication,
-        gio::ActionGroup => gio_ffi::GActionGroup,
-        gio::ActionMap => gio_ffi::GActionMap,
-    ];
+    pub struct Application(Object<ffi::GtkApplication, ffi::GtkApplicationClass, ApplicationClass>) @extends gio::Application, @implements gio::ActionGroup, gio::ActionMap;
 
     match fn {
         get_type => || ffi::gtk_application_get_type(),
     }
 }
 
-pub trait GtkApplicationExt {
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn add_accelerator<'a, P: Into<Option<&'a glib::Variant>>>(&self, accelerator: &str, action_name: &str, parameter: P);
+pub const NONE_APPLICATION: Option<&Application> = None;
 
+pub trait GtkApplicationExt: 'static {
     fn add_window<P: IsA<Window>>(&self, window: &P);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
-    fn get_accels_for_action(&self, detailed_action_name: &str) -> Vec<String>;
+    fn get_accels_for_action(&self, detailed_action_name: &str) -> Vec<GString>;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
-    fn get_actions_for_accel(&self, accel: &str) -> Vec<String>;
+    fn get_actions_for_accel(&self, accel: &str) -> Vec<GString>;
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_active_window(&self) -> Option<Window>;
 
     fn get_app_menu(&self) -> Option<gio::MenuModel>;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_menu_by_id(&self, id: &str) -> Option<gio::Menu>;
 
     fn get_menubar(&self) -> Option<gio::MenuModel>;
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_window_by_id(&self, id: u32) -> Option<Window>;
 
     fn get_windows(&self) -> Vec<Window>;
@@ -65,18 +53,12 @@ pub trait GtkApplicationExt {
 
     fn is_inhibited(&self, flags: ApplicationInhibitFlags) -> bool;
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
-    fn list_action_descriptions(&self) -> Vec<String>;
+    fn list_action_descriptions(&self) -> Vec<GString>;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn prefers_app_menu(&self) -> bool;
-
-    #[cfg_attr(feature = "v3_14", deprecated)]
-    fn remove_accelerator<'a, P: Into<Option<&'a glib::Variant>>>(&self, action_name: &str, parameter: P);
 
     fn remove_window<P: IsA<Window>>(&self, window: &P);
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_accels_for_action(&self, detailed_action_name: &str, accels: &[&str]);
 
     fn set_app_menu<'a, P: IsA<gio::MenuModel> + 'a, Q: Into<Option<&'a P>>>(&self, app_menu: Q);
@@ -85,11 +67,12 @@ pub trait GtkApplicationExt {
 
     fn uninhibit(&self, cookie: u32);
 
-    fn get_property_active_window(&self) -> Option<Window>;
-
     fn get_property_register_session(&self) -> bool;
 
     fn set_property_register_session(&self, register_session: bool);
+
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    fn get_property_screensaver_active(&self) -> bool;
 
     fn connect_window_added<F: Fn(&Self, &Window) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -102,252 +85,250 @@ pub trait GtkApplicationExt {
     fn connect_property_menubar_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_register_session_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    fn connect_property_screensaver_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Application> + IsA<glib::object::Object>> GtkApplicationExt for O {
-    fn add_accelerator<'a, P: Into<Option<&'a glib::Variant>>>(&self, accelerator: &str, action_name: &str, parameter: P) {
-        let parameter = parameter.into();
-        let parameter = parameter.to_glib_none();
-        unsafe {
-            ffi::gtk_application_add_accelerator(self.to_glib_none().0, accelerator.to_glib_none().0, action_name.to_glib_none().0, parameter.0);
-        }
-    }
-
+impl<O: IsA<Application>> GtkApplicationExt for O {
     fn add_window<P: IsA<Window>>(&self, window: &P) {
         unsafe {
-            ffi::gtk_application_add_window(self.to_glib_none().0, window.to_glib_none().0);
+            ffi::gtk_application_add_window(self.as_ref().to_glib_none().0, window.as_ref().to_glib_none().0);
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
-    fn get_accels_for_action(&self, detailed_action_name: &str) -> Vec<String> {
+    fn get_accels_for_action(&self, detailed_action_name: &str) -> Vec<GString> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(ffi::gtk_application_get_accels_for_action(self.to_glib_none().0, detailed_action_name.to_glib_none().0))
+            FromGlibPtrContainer::from_glib_full(ffi::gtk_application_get_accels_for_action(self.as_ref().to_glib_none().0, detailed_action_name.to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
-    fn get_actions_for_accel(&self, accel: &str) -> Vec<String> {
+    fn get_actions_for_accel(&self, accel: &str) -> Vec<GString> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(ffi::gtk_application_get_actions_for_accel(self.to_glib_none().0, accel.to_glib_none().0))
+            FromGlibPtrContainer::from_glib_full(ffi::gtk_application_get_actions_for_accel(self.as_ref().to_glib_none().0, accel.to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_active_window(&self) -> Option<Window> {
         unsafe {
-            from_glib_none(ffi::gtk_application_get_active_window(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_application_get_active_window(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_app_menu(&self) -> Option<gio::MenuModel> {
         unsafe {
-            from_glib_none(ffi::gtk_application_get_app_menu(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_application_get_app_menu(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_menu_by_id(&self, id: &str) -> Option<gio::Menu> {
         unsafe {
-            from_glib_none(ffi::gtk_application_get_menu_by_id(self.to_glib_none().0, id.to_glib_none().0))
+            from_glib_none(ffi::gtk_application_get_menu_by_id(self.as_ref().to_glib_none().0, id.to_glib_none().0))
         }
     }
 
     fn get_menubar(&self) -> Option<gio::MenuModel> {
         unsafe {
-            from_glib_none(ffi::gtk_application_get_menubar(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_application_get_menubar(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     fn get_window_by_id(&self, id: u32) -> Option<Window> {
         unsafe {
-            from_glib_none(ffi::gtk_application_get_window_by_id(self.to_glib_none().0, id))
+            from_glib_none(ffi::gtk_application_get_window_by_id(self.as_ref().to_glib_none().0, id))
         }
     }
 
     fn get_windows(&self) -> Vec<Window> {
         unsafe {
-            FromGlibPtrContainer::from_glib_none(ffi::gtk_application_get_windows(self.to_glib_none().0))
+            FromGlibPtrContainer::from_glib_none(ffi::gtk_application_get_windows(self.as_ref().to_glib_none().0))
         }
     }
 
     fn inhibit<'a, 'b, P: IsA<Window> + 'a, Q: Into<Option<&'a P>>, R: Into<Option<&'b str>>>(&self, window: Q, flags: ApplicationInhibitFlags, reason: R) -> u32 {
         let window = window.into();
-        let window = window.to_glib_none();
         let reason = reason.into();
-        let reason = reason.to_glib_none();
         unsafe {
-            ffi::gtk_application_inhibit(self.to_glib_none().0, window.0, flags.to_glib(), reason.0)
+            ffi::gtk_application_inhibit(self.as_ref().to_glib_none().0, window.map(|p| p.as_ref()).to_glib_none().0, flags.to_glib(), reason.to_glib_none().0)
         }
     }
 
     fn is_inhibited(&self, flags: ApplicationInhibitFlags) -> bool {
         unsafe {
-            from_glib(ffi::gtk_application_is_inhibited(self.to_glib_none().0, flags.to_glib()))
+            from_glib(ffi::gtk_application_is_inhibited(self.as_ref().to_glib_none().0, flags.to_glib()))
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
-    fn list_action_descriptions(&self) -> Vec<String> {
+    fn list_action_descriptions(&self) -> Vec<GString> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(ffi::gtk_application_list_action_descriptions(self.to_glib_none().0))
+            FromGlibPtrContainer::from_glib_full(ffi::gtk_application_list_action_descriptions(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn prefers_app_menu(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_application_prefers_app_menu(self.to_glib_none().0))
-        }
-    }
-
-    fn remove_accelerator<'a, P: Into<Option<&'a glib::Variant>>>(&self, action_name: &str, parameter: P) {
-        let parameter = parameter.into();
-        let parameter = parameter.to_glib_none();
-        unsafe {
-            ffi::gtk_application_remove_accelerator(self.to_glib_none().0, action_name.to_glib_none().0, parameter.0);
+            from_glib(ffi::gtk_application_prefers_app_menu(self.as_ref().to_glib_none().0))
         }
     }
 
     fn remove_window<P: IsA<Window>>(&self, window: &P) {
         unsafe {
-            ffi::gtk_application_remove_window(self.to_glib_none().0, window.to_glib_none().0);
+            ffi::gtk_application_remove_window(self.as_ref().to_glib_none().0, window.as_ref().to_glib_none().0);
         }
     }
 
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     fn set_accels_for_action(&self, detailed_action_name: &str, accels: &[&str]) {
         unsafe {
-            ffi::gtk_application_set_accels_for_action(self.to_glib_none().0, detailed_action_name.to_glib_none().0, accels.to_glib_none().0);
+            ffi::gtk_application_set_accels_for_action(self.as_ref().to_glib_none().0, detailed_action_name.to_glib_none().0, accels.to_glib_none().0);
         }
     }
 
     fn set_app_menu<'a, P: IsA<gio::MenuModel> + 'a, Q: Into<Option<&'a P>>>(&self, app_menu: Q) {
         let app_menu = app_menu.into();
-        let app_menu = app_menu.to_glib_none();
         unsafe {
-            ffi::gtk_application_set_app_menu(self.to_glib_none().0, app_menu.0);
+            ffi::gtk_application_set_app_menu(self.as_ref().to_glib_none().0, app_menu.map(|p| p.as_ref()).to_glib_none().0);
         }
     }
 
     fn set_menubar<'a, P: IsA<gio::MenuModel> + 'a, Q: Into<Option<&'a P>>>(&self, menubar: Q) {
         let menubar = menubar.into();
-        let menubar = menubar.to_glib_none();
         unsafe {
-            ffi::gtk_application_set_menubar(self.to_glib_none().0, menubar.0);
+            ffi::gtk_application_set_menubar(self.as_ref().to_glib_none().0, menubar.map(|p| p.as_ref()).to_glib_none().0);
         }
     }
 
     fn uninhibit(&self, cookie: u32) {
         unsafe {
-            ffi::gtk_application_uninhibit(self.to_glib_none().0, cookie);
-        }
-    }
-
-    fn get_property_active_window(&self) -> Option<Window> {
-        unsafe {
-            let mut value = Value::from_type(<Window as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "active-window".to_glib_none().0, value.to_glib_none_mut().0);
-            value.get()
+            ffi::gtk_application_uninhibit(self.as_ref().to_glib_none().0, cookie);
         }
     }
 
     fn get_property_register_session(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "register-session".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"register-session\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_register_session(&self, register_session: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "register-session".to_glib_none().0, Value::from(&register_session).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"register-session\0".as_ptr() as *const _, Value::from(&register_session).to_glib_none().0);
+        }
+    }
+
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    fn get_property_screensaver_active(&self) -> bool {
+        unsafe {
+            let mut value = Value::from_type(<bool as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"screensaver-active\0".as_ptr() as *const _, value.to_glib_none_mut().0);
+            value.get().unwrap()
         }
     }
 
     fn connect_window_added<F: Fn(&Self, &Window) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &Window) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "window-added",
-                transmute(window_added_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"window-added\0".as_ptr() as *const _,
+                Some(transmute(window_added_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_window_removed<F: Fn(&Self, &Window) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &Window) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "window-removed",
-                transmute(window_removed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"window-removed\0".as_ptr() as *const _,
+                Some(transmute(window_removed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_active_window_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::active-window",
-                transmute(notify_active_window_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::active-window\0".as_ptr() as *const _,
+                Some(transmute(notify_active_window_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_app_menu_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::app-menu",
-                transmute(notify_app_menu_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::app-menu\0".as_ptr() as *const _,
+                Some(transmute(notify_app_menu_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_menubar_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::menubar",
-                transmute(notify_menubar_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::menubar\0".as_ptr() as *const _,
+                Some(transmute(notify_menubar_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_register_session_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::register-session",
-                transmute(notify_register_session_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::register-session\0".as_ptr() as *const _,
+                Some(transmute(notify_register_session_trampoline::<Self, F> as usize)), Box_::into_raw(f))
+        }
+    }
+
+    #[cfg(any(feature = "v3_24", feature = "dox"))]
+    fn connect_property_screensaver_active_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::screensaver-active\0".as_ptr() as *const _,
+                Some(transmute(notify_screensaver_active_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn window_added_trampoline<P>(this: *mut ffi::GtkApplication, window: *mut ffi::GtkWindow, f: glib_ffi::gpointer)
+unsafe extern "C" fn window_added_trampoline<P, F: Fn(&P, &Window) + 'static>(this: *mut ffi::GtkApplication, window: *mut ffi::GtkWindow, f: glib_ffi::gpointer)
 where P: IsA<Application> {
-    let f: &&(Fn(&P, &Window) + 'static) = transmute(f);
-    f(&Application::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(window))
+    let f: &F = transmute(f);
+    f(&Application::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(window))
 }
 
-unsafe extern "C" fn window_removed_trampoline<P>(this: *mut ffi::GtkApplication, window: *mut ffi::GtkWindow, f: glib_ffi::gpointer)
+unsafe extern "C" fn window_removed_trampoline<P, F: Fn(&P, &Window) + 'static>(this: *mut ffi::GtkApplication, window: *mut ffi::GtkWindow, f: glib_ffi::gpointer)
 where P: IsA<Application> {
-    let f: &&(Fn(&P, &Window) + 'static) = transmute(f);
-    f(&Application::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(window))
+    let f: &F = transmute(f);
+    f(&Application::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(window))
 }
 
-unsafe extern "C" fn notify_active_window_trampoline<P>(this: *mut ffi::GtkApplication, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_active_window_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkApplication, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Application> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Application::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&Application::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_app_menu_trampoline<P>(this: *mut ffi::GtkApplication, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_app_menu_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkApplication, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Application> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Application::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&Application::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_menubar_trampoline<P>(this: *mut ffi::GtkApplication, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_menubar_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkApplication, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Application> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Application::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&Application::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_register_session_trampoline<P>(this: *mut ffi::GtkApplication, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_register_session_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkApplication, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Application> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Application::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&Application::from_glib_borrow(this).unsafe_cast())
+}
+
+#[cfg(any(feature = "v3_24", feature = "dox"))]
+unsafe extern "C" fn notify_screensaver_active_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkApplication, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+where P: IsA<Application> {
+    let f: &F = transmute(f);
+    f(&Application::from_glib_borrow(this).unsafe_cast())
+}
+
+impl fmt::Display for Application {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Application")
+    }
 }

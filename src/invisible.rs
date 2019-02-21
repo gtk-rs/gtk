@@ -4,18 +4,19 @@
 
 use ffi;
 use gdk;
+use glib::IsA;
 use glib::translate::{ToGlibPtr, from_glib_none};
 use Invisible;
 
 // For some reasons, it's not generated...
-pub trait InvisibleExtManual {
+pub trait InvisibleExtManual: 'static {
     fn get_screen(&self) -> Option<gdk::Screen>;
 }
 
-impl InvisibleExtManual for Invisible {
+impl<T: IsA<Invisible>> InvisibleExtManual for T {
     fn get_screen(&self) -> Option<gdk::Screen> {
         unsafe {
-            from_glib_none(ffi::gtk_invisible_get_screen(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_invisible_get_screen(self.as_ref().to_glib_none().0))
         }
     }
 }

@@ -9,11 +9,9 @@ use std::ffi::CStr;
 lazy_static! {
     pub static ref LEVEL_BAR_OFFSET_FULL: &'static str = unsafe{CStr::from_ptr(ffi::GTK_LEVEL_BAR_OFFSET_FULL).to_str().unwrap()};
 }
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 lazy_static! {
     pub static ref LEVEL_BAR_OFFSET_HIGH: &'static str = unsafe{CStr::from_ptr(ffi::GTK_LEVEL_BAR_OFFSET_HIGH).to_str().unwrap()};
 }
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 lazy_static! {
     pub static ref LEVEL_BAR_OFFSET_LOW: &'static str = unsafe{CStr::from_ptr(ffi::GTK_LEVEL_BAR_OFFSET_LOW).to_str().unwrap()};
 }
@@ -68,14 +66,12 @@ lazy_static! {
 lazy_static! {
     pub static ref PRINT_SETTINGS_ORIENTATION: &'static str = unsafe{CStr::from_ptr(ffi::GTK_PRINT_SETTINGS_ORIENTATION).to_str().unwrap()};
 }
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 lazy_static! {
     pub static ref PRINT_SETTINGS_OUTPUT_BASENAME: &'static str = unsafe{CStr::from_ptr(ffi::GTK_PRINT_SETTINGS_OUTPUT_BASENAME).to_str().unwrap()};
 }
 lazy_static! {
     pub static ref PRINT_SETTINGS_OUTPUT_BIN: &'static str = unsafe{CStr::from_ptr(ffi::GTK_PRINT_SETTINGS_OUTPUT_BIN).to_str().unwrap()};
 }
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 lazy_static! {
     pub static ref PRINT_SETTINGS_OUTPUT_DIR: &'static str = unsafe{CStr::from_ptr(ffi::GTK_PRINT_SETTINGS_OUTPUT_DIR).to_str().unwrap()};
 }
@@ -136,426 +132,6 @@ lazy_static! {
 lazy_static! {
     pub static ref PRINT_SETTINGS_WIN32_DRIVER_VERSION: &'static str = unsafe{CStr::from_ptr(ffi::GTK_PRINT_SETTINGS_WIN32_DRIVER_VERSION).to_str().unwrap()};
 }
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_ABOUT: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_ABOUT).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_ADD: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_ADD).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_APPLY: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_APPLY).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_BOLD: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_BOLD).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_CANCEL: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_CANCEL).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_CAPS_LOCK_WARNING: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_CAPS_LOCK_WARNING).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_CDROM: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_CDROM).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_CLEAR: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_CLEAR).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_CLOSE: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_CLOSE).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_COLOR_PICKER: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_COLOR_PICKER).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_CONNECT: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_CONNECT).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_CONVERT: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_CONVERT).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_COPY: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_COPY).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_CUT: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_CUT).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_DELETE: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_DELETE).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_DIALOG_AUTHENTICATION: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_DIALOG_AUTHENTICATION).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_DIALOG_ERROR: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_DIALOG_ERROR).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_DIALOG_INFO: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_DIALOG_INFO).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_DIALOG_QUESTION: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_DIALOG_QUESTION).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_DIALOG_WARNING: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_DIALOG_WARNING).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_DIRECTORY: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_DIRECTORY).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_DISCARD: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_DISCARD).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_DISCONNECT: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_DISCONNECT).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_DND: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_DND).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_DND_MULTIPLE: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_DND_MULTIPLE).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_EDIT: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_EDIT).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_EXECUTE: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_EXECUTE).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_FILE: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_FILE).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_FIND: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_FIND).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_FIND_AND_REPLACE: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_FIND_AND_REPLACE).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_FLOPPY: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_FLOPPY).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_FULLSCREEN: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_FULLSCREEN).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_GOTO_BOTTOM: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_GOTO_BOTTOM).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_GOTO_FIRST: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_GOTO_FIRST).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_GOTO_LAST: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_GOTO_LAST).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_GOTO_TOP: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_GOTO_TOP).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_GO_BACK: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_GO_BACK).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_GO_DOWN: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_GO_DOWN).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_GO_FORWARD: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_GO_FORWARD).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_GO_UP: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_GO_UP).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_HARDDISK: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_HARDDISK).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_HELP: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_HELP).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_HOME: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_HOME).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_INDENT: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_INDENT).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_INDEX: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_INDEX).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_INFO: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_INFO).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_ITALIC: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_ITALIC).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_JUMP_TO: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_JUMP_TO).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_JUSTIFY_CENTER: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_JUSTIFY_CENTER).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_JUSTIFY_FILL: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_JUSTIFY_FILL).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_JUSTIFY_LEFT: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_JUSTIFY_LEFT).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_JUSTIFY_RIGHT: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_JUSTIFY_RIGHT).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_LEAVE_FULLSCREEN: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_LEAVE_FULLSCREEN).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_MEDIA_FORWARD: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_MEDIA_FORWARD).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_MEDIA_NEXT: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_MEDIA_NEXT).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_MEDIA_PAUSE: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_MEDIA_PAUSE).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_MEDIA_PLAY: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_MEDIA_PLAY).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_MEDIA_PREVIOUS: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_MEDIA_PREVIOUS).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_MEDIA_RECORD: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_MEDIA_RECORD).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_MEDIA_REWIND: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_MEDIA_REWIND).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_MEDIA_STOP: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_MEDIA_STOP).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_MISSING_IMAGE: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_MISSING_IMAGE).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_NETWORK: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_NETWORK).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_NEW: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_NEW).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_NO: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_NO).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_OK: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_OK).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_OPEN: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_OPEN).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_ORIENTATION_LANDSCAPE: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_ORIENTATION_LANDSCAPE).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_ORIENTATION_PORTRAIT: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_ORIENTATION_PORTRAIT).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_ORIENTATION_REVERSE_LANDSCAPE: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_ORIENTATION_REVERSE_LANDSCAPE).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_ORIENTATION_REVERSE_PORTRAIT: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_ORIENTATION_REVERSE_PORTRAIT).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_PAGE_SETUP: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_PAGE_SETUP).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_PASTE: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_PASTE).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_PREFERENCES: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_PREFERENCES).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_PRINT: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_PRINT).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_PRINT_ERROR: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_PRINT_ERROR).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_PRINT_PAUSED: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_PRINT_PAUSED).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_PRINT_PREVIEW: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_PRINT_PREVIEW).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_PRINT_REPORT: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_PRINT_REPORT).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_PRINT_WARNING: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_PRINT_WARNING).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_PROPERTIES: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_PROPERTIES).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_QUIT: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_QUIT).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_REDO: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_REDO).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_REFRESH: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_REFRESH).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_REMOVE: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_REMOVE).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_REVERT_TO_SAVED: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_REVERT_TO_SAVED).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_SAVE: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_SAVE).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_SAVE_AS: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_SAVE_AS).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_SELECT_ALL: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_SELECT_ALL).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_SELECT_COLOR: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_SELECT_COLOR).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_SELECT_FONT: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_SELECT_FONT).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_SORT_ASCENDING: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_SORT_ASCENDING).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_SORT_DESCENDING: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_SORT_DESCENDING).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_SPELL_CHECK: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_SPELL_CHECK).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_STOP: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_STOP).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_STRIKETHROUGH: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_STRIKETHROUGH).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_UNDELETE: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_UNDELETE).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_UNDERLINE: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_UNDERLINE).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_UNDO: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_UNDO).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_UNINDENT: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_UNINDENT).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_YES: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_YES).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_ZOOM_100: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_ZOOM_100).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_ZOOM_FIT: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_ZOOM_FIT).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_ZOOM_IN: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_ZOOM_IN).to_str().unwrap()};
-}
-#[cfg_attr(feature = "v3_10", deprecated)]
-lazy_static! {
-    pub static ref STOCK_ZOOM_OUT: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STOCK_ZOOM_OUT).to_str().unwrap()};
-}
 lazy_static! {
     pub static ref STYLE_CLASS_ACCELERATOR: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STYLE_CLASS_ACCELERATOR).to_str().unwrap()};
 }
@@ -586,7 +162,6 @@ lazy_static! {
 lazy_static! {
     pub static ref STYLE_CLASS_CONTEXT_MENU: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STYLE_CLASS_CONTEXT_MENU).to_str().unwrap()};
 }
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 lazy_static! {
     pub static ref STYLE_CLASS_CSD: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STYLE_CLASS_CSD).to_str().unwrap()};
 }
@@ -596,7 +171,6 @@ lazy_static! {
 lazy_static! {
     pub static ref STYLE_CLASS_DEFAULT: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STYLE_CLASS_DEFAULT).to_str().unwrap()};
 }
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 lazy_static! {
     pub static ref STYLE_CLASS_DESTRUCTIVE_ACTION: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STYLE_CLASS_DESTRUCTIVE_ACTION).to_str().unwrap()};
 }
@@ -618,7 +192,6 @@ lazy_static! {
 lazy_static! {
     pub static ref STYLE_CLASS_EXPANDER: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STYLE_CLASS_EXPANDER).to_str().unwrap()};
 }
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 lazy_static! {
     pub static ref STYLE_CLASS_FLAT: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STYLE_CLASS_FLAT).to_str().unwrap()};
 }
@@ -680,7 +253,6 @@ lazy_static! {
 lazy_static! {
     pub static ref STYLE_CLASS_MENUITEM: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STYLE_CLASS_MENUITEM).to_str().unwrap()};
 }
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 lazy_static! {
     pub static ref STYLE_CLASS_MESSAGE_DIALOG: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STYLE_CLASS_MESSAGE_DIALOG).to_str().unwrap()};
 }
@@ -688,7 +260,6 @@ lazy_static! {
 lazy_static! {
     pub static ref STYLE_CLASS_MONOSPACE: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STYLE_CLASS_MONOSPACE).to_str().unwrap()};
 }
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 lazy_static! {
     pub static ref STYLE_CLASS_NEEDS_ATTENTION: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STYLE_CLASS_NEEDS_ATTENTION).to_str().unwrap()};
 }
@@ -698,7 +269,6 @@ lazy_static! {
 lazy_static! {
     pub static ref STYLE_CLASS_OSD: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STYLE_CLASS_OSD).to_str().unwrap()};
 }
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 lazy_static! {
     pub static ref STYLE_CLASS_OVERSHOOT: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STYLE_CLASS_OVERSHOOT).to_str().unwrap()};
 }
@@ -709,11 +279,9 @@ lazy_static! {
 lazy_static! {
     pub static ref STYLE_CLASS_PAPER: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STYLE_CLASS_PAPER).to_str().unwrap()};
 }
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 lazy_static! {
     pub static ref STYLE_CLASS_POPOVER: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STYLE_CLASS_POPOVER).to_str().unwrap()};
 }
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 lazy_static! {
     pub static ref STYLE_CLASS_POPUP: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STYLE_CLASS_POPUP).to_str().unwrap()};
 }
@@ -778,15 +346,12 @@ lazy_static! {
 lazy_static! {
     pub static ref STYLE_CLASS_STATUSBAR: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STYLE_CLASS_STATUSBAR).to_str().unwrap()};
 }
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 lazy_static! {
     pub static ref STYLE_CLASS_SUBTITLE: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STYLE_CLASS_SUBTITLE).to_str().unwrap()};
 }
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 lazy_static! {
     pub static ref STYLE_CLASS_SUGGESTED_ACTION: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STYLE_CLASS_SUGGESTED_ACTION).to_str().unwrap()};
 }
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 lazy_static! {
     pub static ref STYLE_CLASS_TITLE: &'static str = unsafe{CStr::from_ptr(ffi::GTK_STYLE_CLASS_TITLE).to_str().unwrap()};
 }

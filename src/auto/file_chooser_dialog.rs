@@ -11,13 +11,10 @@ use Widget;
 use Window;
 use ffi;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use std::mem;
-use std::ptr;
+use std::fmt;
 
 glib_wrapper! {
-    pub struct FileChooserDialog(Object<ffi::GtkFileChooserDialog, ffi::GtkFileChooserDialogClass>): Dialog, Window, Bin, Container, Widget, Buildable, FileChooser;
+    pub struct FileChooserDialog(Object<ffi::GtkFileChooserDialog, ffi::GtkFileChooserDialogClass, FileChooserDialogClass>) @extends Dialog, Window, Bin, Container, Widget, @implements Buildable, FileChooser;
 
     match fn {
         get_type => || ffi::gtk_file_chooser_dialog_get_type(),
@@ -28,4 +25,12 @@ impl FileChooserDialog {
     //pub fn new<'a, 'b, 'c, P: Into<Option<&'a str>>, Q: IsA<Window> + 'b, R: Into<Option<&'b Q>>, S: Into<Option<&'c str>>>(title: P, parent: R, action: FileChooserAction, first_button_text: S, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> FileChooserDialog {
     //    unsafe { TODO: call ffi::gtk_file_chooser_dialog_new() }
     //}
+}
+
+pub const NONE_FILE_CHOOSER_DIALOG: Option<&FileChooserDialog> = None;
+
+impl fmt::Display for FileChooserDialog {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "FileChooserDialog")
+    }
 }

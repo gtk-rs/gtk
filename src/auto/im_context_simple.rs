@@ -4,15 +4,12 @@
 
 use IMContext;
 use ffi;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use std::mem;
-use std::ptr;
+use std::fmt;
 
 glib_wrapper! {
-    pub struct IMContextSimple(Object<ffi::GtkIMContextSimple, ffi::GtkIMContextSimpleClass>): IMContext;
+    pub struct IMContextSimple(Object<ffi::GtkIMContextSimple, ffi::GtkIMContextSimpleClass, IMContextSimpleClass>) @extends IMContext;
 
     match fn {
         get_type => || ffi::gtk_im_context_simple_get_type(),
@@ -23,7 +20,7 @@ impl IMContextSimple {
     pub fn new() -> IMContextSimple {
         assert_initialized_main_thread!();
         unsafe {
-            IMContext::from_glib_full(ffi::gtk_im_context_simple_new()).downcast_unchecked()
+            IMContext::from_glib_full(ffi::gtk_im_context_simple_new()).unsafe_cast()
         }
     }
 }
@@ -31,5 +28,13 @@ impl IMContextSimple {
 impl Default for IMContextSimple {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+pub const NONE_IM_CONTEXT_SIMPLE: Option<&IMContextSimple> = None;
+
+impl fmt::Display for IMContextSimple {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "IMContextSimple")
     }
 }

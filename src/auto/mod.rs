@@ -3,866 +3,786 @@
 // DO NOT EDIT
 
 mod about_dialog;
-pub use self::about_dialog::AboutDialog;
+pub use self::about_dialog::{AboutDialog, AboutDialogClass, NONE_ABOUT_DIALOG};
 pub use self::about_dialog::AboutDialogExt;
 
 mod accel_group;
-pub use self::accel_group::AccelGroup;
+pub use self::accel_group::{AccelGroup, AccelGroupClass, NONE_ACCEL_GROUP};
 pub use self::accel_group::AccelGroupExt;
 
 mod accel_label;
-pub use self::accel_label::AccelLabel;
+pub use self::accel_label::{AccelLabel, AccelLabelClass, NONE_ACCEL_LABEL};
 pub use self::accel_label::AccelLabelExt;
 
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 mod action_bar;
-#[cfg(any(feature = "v3_12", feature = "dox"))]
-pub use self::action_bar::ActionBar;
-#[cfg(any(feature = "v3_12", feature = "dox"))]
+pub use self::action_bar::{ActionBar, ActionBarClass, NONE_ACTION_BAR};
 pub use self::action_bar::ActionBarExt;
 
 mod actionable;
-pub use self::actionable::Actionable;
+pub use self::actionable::{Actionable, NONE_ACTIONABLE};
 pub use self::actionable::ActionableExt;
 
 mod adjustment;
-pub use self::adjustment::Adjustment;
+pub use self::adjustment::{Adjustment, AdjustmentClass, NONE_ADJUSTMENT};
 pub use self::adjustment::AdjustmentExt;
 
 mod alignment;
-pub use self::alignment::Alignment;
-pub use self::alignment::AlignmentExt;
+pub use self::alignment::{Alignment, AlignmentClass, NONE_ALIGNMENT};
 
 mod app_chooser_button;
-pub use self::app_chooser_button::AppChooserButton;
+pub use self::app_chooser_button::{AppChooserButton, AppChooserButtonClass, NONE_APP_CHOOSER_BUTTON};
 pub use self::app_chooser_button::AppChooserButtonExt;
 
 mod app_chooser_dialog;
-pub use self::app_chooser_dialog::AppChooserDialog;
+pub use self::app_chooser_dialog::{AppChooserDialog, AppChooserDialogClass, NONE_APP_CHOOSER_DIALOG};
 pub use self::app_chooser_dialog::AppChooserDialogExt;
 
 mod app_chooser_widget;
-pub use self::app_chooser_widget::AppChooserWidget;
+pub use self::app_chooser_widget::{AppChooserWidget, AppChooserWidgetClass, NONE_APP_CHOOSER_WIDGET};
 pub use self::app_chooser_widget::AppChooserWidgetExt;
 
 mod application;
-pub use self::application::Application;
+pub use self::application::{Application, ApplicationClass, NONE_APPLICATION};
 pub use self::application::GtkApplicationExt;
 
 mod application_window;
-pub use self::application_window::ApplicationWindow;
+pub use self::application_window::{ApplicationWindow, ApplicationWindowClass, NONE_APPLICATION_WINDOW};
 pub use self::application_window::ApplicationWindowExt;
 
 mod arrow;
-pub use self::arrow::Arrow;
+pub use self::arrow::{Arrow, ArrowClass, NONE_ARROW};
 pub use self::arrow::ArrowExt;
 
 mod aspect_frame;
-pub use self::aspect_frame::AspectFrame;
+pub use self::aspect_frame::{AspectFrame, AspectFrameClass, NONE_ASPECT_FRAME};
 pub use self::aspect_frame::AspectFrameExt;
 
 mod assistant;
-pub use self::assistant::Assistant;
+pub use self::assistant::{Assistant, AssistantClass, NONE_ASSISTANT};
 pub use self::assistant::AssistantExt;
 
 mod bin;
-pub use self::bin::Bin;
+pub use self::bin::{Bin, BinClass, NONE_BIN};
 pub use self::bin::BinExt;
 
 mod box_;
-pub use self::box_::Box;
+pub use self::box_::{Box, BoxClass, NONE_BOX};
 pub use self::box_::BoxExt;
 
 mod buildable;
-pub use self::buildable::Buildable;
+pub use self::buildable::{Buildable, NONE_BUILDABLE};
 pub use self::buildable::BuildableExt;
 
 mod builder;
-pub use self::builder::Builder;
+pub use self::builder::{Builder, BuilderClass, NONE_BUILDER};
 pub use self::builder::BuilderExt;
 
 mod button;
-pub use self::button::Button;
+pub use self::button::{Button, ButtonClass, NONE_BUTTON};
 pub use self::button::ButtonExt;
 
 mod button_box;
-pub use self::button_box::ButtonBox;
+pub use self::button_box::{ButtonBox, ButtonBoxClass, NONE_BUTTON_BOX};
 pub use self::button_box::ButtonBoxExt;
 
 mod calendar;
-pub use self::calendar::Calendar;
+pub use self::calendar::{Calendar, CalendarClass, NONE_CALENDAR};
 pub use self::calendar::CalendarExt;
 
 mod cell_area;
-pub use self::cell_area::CellArea;
+pub use self::cell_area::{CellArea, CellAreaClass, NONE_CELL_AREA};
 pub use self::cell_area::CellAreaExt;
 
 mod cell_area_box;
-pub use self::cell_area_box::CellAreaBox;
+pub use self::cell_area_box::{CellAreaBox, CellAreaBoxClass, NONE_CELL_AREA_BOX};
 pub use self::cell_area_box::CellAreaBoxExt;
 
 mod cell_area_context;
-pub use self::cell_area_context::CellAreaContext;
+pub use self::cell_area_context::{CellAreaContext, CellAreaContextClass, NONE_CELL_AREA_CONTEXT};
 pub use self::cell_area_context::CellAreaContextExt;
 
 mod cell_editable;
-pub use self::cell_editable::CellEditable;
+pub use self::cell_editable::{CellEditable, NONE_CELL_EDITABLE};
 pub use self::cell_editable::CellEditableExt;
 
 mod cell_layout;
-pub use self::cell_layout::CellLayout;
+pub use self::cell_layout::{CellLayout, NONE_CELL_LAYOUT};
 pub use self::cell_layout::CellLayoutExt;
 
 mod cell_renderer;
-pub use self::cell_renderer::CellRenderer;
+pub use self::cell_renderer::{CellRenderer, CellRendererClass, NONE_CELL_RENDERER};
 pub use self::cell_renderer::CellRendererExt;
 
 mod cell_renderer_accel;
-pub use self::cell_renderer_accel::CellRendererAccel;
+pub use self::cell_renderer_accel::{CellRendererAccel, CellRendererAccelClass, NONE_CELL_RENDERER_ACCEL};
 pub use self::cell_renderer_accel::CellRendererAccelExt;
 
 mod cell_renderer_combo;
-pub use self::cell_renderer_combo::CellRendererCombo;
+pub use self::cell_renderer_combo::{CellRendererCombo, CellRendererComboClass, NONE_CELL_RENDERER_COMBO};
 pub use self::cell_renderer_combo::CellRendererComboExt;
 
 mod cell_renderer_pixbuf;
-pub use self::cell_renderer_pixbuf::CellRendererPixbuf;
+pub use self::cell_renderer_pixbuf::{CellRendererPixbuf, CellRendererPixbufClass, NONE_CELL_RENDERER_PIXBUF};
 pub use self::cell_renderer_pixbuf::CellRendererPixbufExt;
 
 mod cell_renderer_progress;
-pub use self::cell_renderer_progress::CellRendererProgress;
+pub use self::cell_renderer_progress::{CellRendererProgress, CellRendererProgressClass, NONE_CELL_RENDERER_PROGRESS};
 pub use self::cell_renderer_progress::CellRendererProgressExt;
 
 mod cell_renderer_spin;
-pub use self::cell_renderer_spin::CellRendererSpin;
+pub use self::cell_renderer_spin::{CellRendererSpin, CellRendererSpinClass, NONE_CELL_RENDERER_SPIN};
 pub use self::cell_renderer_spin::CellRendererSpinExt;
 
 mod cell_renderer_spinner;
-pub use self::cell_renderer_spinner::CellRendererSpinner;
+pub use self::cell_renderer_spinner::{CellRendererSpinner, CellRendererSpinnerClass, NONE_CELL_RENDERER_SPINNER};
 pub use self::cell_renderer_spinner::CellRendererSpinnerExt;
 
 mod cell_renderer_text;
-pub use self::cell_renderer_text::CellRendererText;
+pub use self::cell_renderer_text::{CellRendererText, CellRendererTextClass, NONE_CELL_RENDERER_TEXT};
 pub use self::cell_renderer_text::CellRendererTextExt;
 
 mod cell_renderer_toggle;
-pub use self::cell_renderer_toggle::CellRendererToggle;
+pub use self::cell_renderer_toggle::{CellRendererToggle, CellRendererToggleClass, NONE_CELL_RENDERER_TOGGLE};
 pub use self::cell_renderer_toggle::CellRendererToggleExt;
 
 mod cell_view;
-pub use self::cell_view::CellView;
+pub use self::cell_view::{CellView, CellViewClass, NONE_CELL_VIEW};
 pub use self::cell_view::CellViewExt;
 
 mod check_button;
-pub use self::check_button::CheckButton;
+pub use self::check_button::{CheckButton, CheckButtonClass, NONE_CHECK_BUTTON};
 
 mod check_menu_item;
-pub use self::check_menu_item::CheckMenuItem;
+pub use self::check_menu_item::{CheckMenuItem, CheckMenuItemClass, NONE_CHECK_MENU_ITEM};
 pub use self::check_menu_item::CheckMenuItemExt;
 
 mod clipboard;
-pub use self::clipboard::Clipboard;
-pub use self::clipboard::ClipboardExt;
+pub use self::clipboard::{Clipboard, ClipboardClass};
 
 mod color_button;
-pub use self::color_button::ColorButton;
+pub use self::color_button::{ColorButton, ColorButtonClass, NONE_COLOR_BUTTON};
 pub use self::color_button::ColorButtonExt;
 
 mod color_chooser;
-pub use self::color_chooser::ColorChooser;
+pub use self::color_chooser::{ColorChooser, NONE_COLOR_CHOOSER};
 pub use self::color_chooser::ColorChooserExt;
 
 mod color_chooser_dialog;
-pub use self::color_chooser_dialog::ColorChooserDialog;
+pub use self::color_chooser_dialog::{ColorChooserDialog, ColorChooserDialogClass, NONE_COLOR_CHOOSER_DIALOG};
 pub use self::color_chooser_dialog::ColorChooserDialogExt;
 
 mod color_chooser_widget;
-pub use self::color_chooser_widget::ColorChooserWidget;
+pub use self::color_chooser_widget::{ColorChooserWidget, ColorChooserWidgetClass, NONE_COLOR_CHOOSER_WIDGET};
 pub use self::color_chooser_widget::ColorChooserWidgetExt;
 
 mod combo_box;
-pub use self::combo_box::ComboBox;
+pub use self::combo_box::{ComboBox, ComboBoxClass, NONE_COMBO_BOX};
 pub use self::combo_box::ComboBoxExt;
 
 mod combo_box_text;
-pub use self::combo_box_text::ComboBoxText;
+pub use self::combo_box_text::{ComboBoxText, ComboBoxTextClass, NONE_COMBO_BOX_TEXT};
 pub use self::combo_box_text::ComboBoxTextExt;
 
 mod container;
-pub use self::container::Container;
+pub use self::container::{Container, ContainerClass, NONE_CONTAINER};
 pub use self::container::ContainerExt;
 
 mod css_provider;
-pub use self::css_provider::CssProvider;
+pub use self::css_provider::{CssProvider, CssProviderClass, NONE_CSS_PROVIDER};
 pub use self::css_provider::CssProviderExt;
 
 mod dialog;
-pub use self::dialog::Dialog;
+pub use self::dialog::{Dialog, DialogClass, NONE_DIALOG};
 pub use self::dialog::DialogExt;
 
 mod drawing_area;
-pub use self::drawing_area::DrawingArea;
+pub use self::drawing_area::{DrawingArea, DrawingAreaClass, NONE_DRAWING_AREA};
 
 mod editable;
-pub use self::editable::Editable;
+pub use self::editable::{Editable, NONE_EDITABLE};
 pub use self::editable::EditableExt;
 
 mod entry;
-pub use self::entry::Entry;
+pub use self::entry::{Entry, EntryClass, NONE_ENTRY};
 pub use self::entry::EntryExt;
 
 mod entry_completion;
-pub use self::entry_completion::EntryCompletion;
+pub use self::entry_completion::{EntryCompletion, EntryCompletionClass, NONE_ENTRY_COMPLETION};
 pub use self::entry_completion::EntryCompletionExt;
 
 mod event_box;
-pub use self::event_box::EventBox;
+pub use self::event_box::{EventBox, EventBoxClass, NONE_EVENT_BOX};
 pub use self::event_box::EventBoxExt;
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 mod event_controller;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
-pub use self::event_controller::EventController;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
+pub use self::event_controller::{EventController, EventControllerClass, NONE_EVENT_CONTROLLER};
 pub use self::event_controller::EventControllerExt;
 
 mod expander;
-pub use self::expander::Expander;
+pub use self::expander::{Expander, ExpanderClass, NONE_EXPANDER};
 pub use self::expander::ExpanderExt;
 
 mod file_chooser;
-pub use self::file_chooser::FileChooser;
+pub use self::file_chooser::{FileChooser, NONE_FILE_CHOOSER};
 pub use self::file_chooser::FileChooserExt;
 
 mod file_chooser_button;
-pub use self::file_chooser_button::FileChooserButton;
+pub use self::file_chooser_button::{FileChooserButton, FileChooserButtonClass, NONE_FILE_CHOOSER_BUTTON};
 pub use self::file_chooser_button::FileChooserButtonExt;
 
 mod file_chooser_dialog;
-pub use self::file_chooser_dialog::FileChooserDialog;
+pub use self::file_chooser_dialog::{FileChooserDialog, FileChooserDialogClass, NONE_FILE_CHOOSER_DIALOG};
 
 #[cfg(any(feature = "v3_20", feature = "dox"))]
 mod file_chooser_native;
 #[cfg(any(feature = "v3_20", feature = "dox"))]
-pub use self::file_chooser_native::FileChooserNative;
+pub use self::file_chooser_native::{FileChooserNative, FileChooserNativeClass, NONE_FILE_CHOOSER_NATIVE};
 #[cfg(any(feature = "v3_20", feature = "dox"))]
 pub use self::file_chooser_native::FileChooserNativeExt;
 
 mod file_chooser_widget;
-pub use self::file_chooser_widget::FileChooserWidget;
+pub use self::file_chooser_widget::{FileChooserWidget, FileChooserWidgetClass, NONE_FILE_CHOOSER_WIDGET};
 pub use self::file_chooser_widget::FileChooserWidgetExt;
 
 mod file_filter;
-pub use self::file_filter::FileFilter;
-pub use self::file_filter::FileFilterExt;
+pub use self::file_filter::{FileFilter, FileFilterClass};
 
 mod fixed;
-pub use self::fixed::Fixed;
+pub use self::fixed::{Fixed, FixedClass, NONE_FIXED};
 pub use self::fixed::FixedExt;
 
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 mod flow_box;
-#[cfg(any(feature = "v3_12", feature = "dox"))]
-pub use self::flow_box::FlowBox;
-#[cfg(any(feature = "v3_12", feature = "dox"))]
+pub use self::flow_box::{FlowBox, FlowBoxClass, NONE_FLOW_BOX};
 pub use self::flow_box::FlowBoxExt;
 
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 mod flow_box_child;
-#[cfg(any(feature = "v3_12", feature = "dox"))]
-pub use self::flow_box_child::FlowBoxChild;
-#[cfg(any(feature = "v3_12", feature = "dox"))]
+pub use self::flow_box_child::{FlowBoxChild, FlowBoxChildClass, NONE_FLOW_BOX_CHILD};
 pub use self::flow_box_child::FlowBoxChildExt;
 
 mod font_button;
-pub use self::font_button::FontButton;
+pub use self::font_button::{FontButton, FontButtonClass, NONE_FONT_BUTTON};
 pub use self::font_button::FontButtonExt;
 
 mod font_chooser;
-pub use self::font_chooser::FontChooser;
+pub use self::font_chooser::{FontChooser, NONE_FONT_CHOOSER};
 pub use self::font_chooser::FontChooserExt;
 
 mod font_chooser_dialog;
-pub use self::font_chooser_dialog::FontChooserDialog;
+pub use self::font_chooser_dialog::{FontChooserDialog, FontChooserDialogClass, NONE_FONT_CHOOSER_DIALOG};
 
 mod font_chooser_widget;
-pub use self::font_chooser_widget::FontChooserWidget;
+pub use self::font_chooser_widget::{FontChooserWidget, FontChooserWidgetClass, NONE_FONT_CHOOSER_WIDGET};
+pub use self::font_chooser_widget::FontChooserWidgetExt;
 
 mod frame;
-pub use self::frame::Frame;
+pub use self::frame::{Frame, FrameClass, NONE_FRAME};
 pub use self::frame::FrameExt;
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 mod gl_area;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-pub use self::gl_area::GLArea;
+pub use self::gl_area::{GLArea, GLAreaClass, NONE_GL_AREA};
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 pub use self::gl_area::GLAreaExt;
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 mod gesture;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
-pub use self::gesture::Gesture;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
+pub use self::gesture::{Gesture, GestureClass, NONE_GESTURE};
 pub use self::gesture::GestureExt;
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 mod gesture_drag;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
-pub use self::gesture_drag::GestureDrag;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
+pub use self::gesture_drag::{GestureDrag, GestureDragClass, NONE_GESTURE_DRAG};
 pub use self::gesture_drag::GestureDragExt;
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 mod gesture_long_press;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
-pub use self::gesture_long_press::GestureLongPress;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
+pub use self::gesture_long_press::{GestureLongPress, GestureLongPressClass, NONE_GESTURE_LONG_PRESS};
 pub use self::gesture_long_press::GestureLongPressExt;
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 mod gesture_multi_press;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
-pub use self::gesture_multi_press::GestureMultiPress;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
+pub use self::gesture_multi_press::{GestureMultiPress, GestureMultiPressClass, NONE_GESTURE_MULTI_PRESS};
 pub use self::gesture_multi_press::GestureMultiPressExt;
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 mod gesture_pan;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
-pub use self::gesture_pan::GesturePan;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
+pub use self::gesture_pan::{GesturePan, GesturePanClass, NONE_GESTURE_PAN};
 pub use self::gesture_pan::GesturePanExt;
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 mod gesture_rotate;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
-pub use self::gesture_rotate::GestureRotate;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
+pub use self::gesture_rotate::{GestureRotate, GestureRotateClass, NONE_GESTURE_ROTATE};
 pub use self::gesture_rotate::GestureRotateExt;
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 mod gesture_single;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
-pub use self::gesture_single::GestureSingle;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
+pub use self::gesture_single::{GestureSingle, GestureSingleClass, NONE_GESTURE_SINGLE};
 pub use self::gesture_single::GestureSingleExt;
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 mod gesture_swipe;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
-pub use self::gesture_swipe::GestureSwipe;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
+pub use self::gesture_swipe::{GestureSwipe, GestureSwipeClass, NONE_GESTURE_SWIPE};
 pub use self::gesture_swipe::GestureSwipeExt;
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 mod gesture_zoom;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
-pub use self::gesture_zoom::GestureZoom;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
+pub use self::gesture_zoom::{GestureZoom, GestureZoomClass, NONE_GESTURE_ZOOM};
 pub use self::gesture_zoom::GestureZoomExt;
 
 mod grid;
-pub use self::grid::Grid;
+pub use self::grid::{Grid, GridClass, NONE_GRID};
 pub use self::grid::GridExt;
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 mod header_bar;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
-pub use self::header_bar::HeaderBar;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
+pub use self::header_bar::{HeaderBar, HeaderBarClass, NONE_HEADER_BAR};
 pub use self::header_bar::HeaderBarExt;
 
 mod im_context;
-pub use self::im_context::IMContext;
+pub use self::im_context::{IMContext, IMContextClass, NONE_IM_CONTEXT};
 pub use self::im_context::IMContextExt;
 
 mod im_context_simple;
-pub use self::im_context_simple::IMContextSimple;
+pub use self::im_context_simple::{IMContextSimple, IMContextSimpleClass, NONE_IM_CONTEXT_SIMPLE};
 
 mod im_multicontext;
-pub use self::im_multicontext::IMMulticontext;
+pub use self::im_multicontext::{IMMulticontext, IMMulticontextClass, NONE_IM_MULTICONTEXT};
 pub use self::im_multicontext::IMMulticontextExt;
 
 mod icon_factory;
-pub use self::icon_factory::IconFactory;
-pub use self::icon_factory::IconFactoryExt;
+pub use self::icon_factory::{IconFactory, IconFactoryClass, NONE_ICON_FACTORY};
 
 mod icon_info;
-pub use self::icon_info::IconInfo;
+pub use self::icon_info::{IconInfo, IconInfoClass, NONE_ICON_INFO};
 pub use self::icon_info::IconInfoExt;
 
 mod icon_theme;
-pub use self::icon_theme::IconTheme;
+pub use self::icon_theme::{IconTheme, IconThemeClass, NONE_ICON_THEME};
 pub use self::icon_theme::IconThemeExt;
 
 mod icon_view;
-pub use self::icon_view::IconView;
+pub use self::icon_view::{IconView, IconViewClass, NONE_ICON_VIEW};
 pub use self::icon_view::IconViewExt;
 
 mod image;
-pub use self::image::Image;
+pub use self::image::{Image, ImageClass, NONE_IMAGE};
 pub use self::image::ImageExt;
 
 mod image_menu_item;
-pub use self::image_menu_item::ImageMenuItem;
-pub use self::image_menu_item::ImageMenuItemExt;
+pub use self::image_menu_item::{ImageMenuItem, ImageMenuItemClass, NONE_IMAGE_MENU_ITEM};
 
 mod info_bar;
-pub use self::info_bar::InfoBar;
+pub use self::info_bar::{InfoBar, InfoBarClass, NONE_INFO_BAR};
 pub use self::info_bar::InfoBarExt;
 
 mod invisible;
-pub use self::invisible::Invisible;
+pub use self::invisible::{Invisible, InvisibleClass, NONE_INVISIBLE};
 pub use self::invisible::InvisibleExt;
 
 mod label;
-pub use self::label::Label;
+pub use self::label::{Label, LabelClass, NONE_LABEL};
 pub use self::label::LabelExt;
 
 mod layout;
-pub use self::layout::Layout;
+pub use self::layout::{Layout, LayoutClass, NONE_LAYOUT};
 pub use self::layout::LayoutExt;
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 mod level_bar;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
-pub use self::level_bar::LevelBar;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
+pub use self::level_bar::{LevelBar, LevelBarClass, NONE_LEVEL_BAR};
 pub use self::level_bar::LevelBarExt;
 
 mod link_button;
-pub use self::link_button::LinkButton;
+pub use self::link_button::{LinkButton, LinkButtonClass, NONE_LINK_BUTTON};
 pub use self::link_button::LinkButtonExt;
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 mod list_box;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
-pub use self::list_box::ListBox;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
+pub use self::list_box::{ListBox, ListBoxClass, NONE_LIST_BOX};
 pub use self::list_box::ListBoxExt;
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 mod list_box_row;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
-pub use self::list_box_row::ListBoxRow;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
+pub use self::list_box_row::{ListBoxRow, ListBoxRowClass, NONE_LIST_BOX_ROW};
 pub use self::list_box_row::ListBoxRowExt;
 
 mod list_store;
-pub use self::list_store::ListStore;
+pub use self::list_store::{ListStore, ListStoreClass, NONE_LIST_STORE};
 pub use self::list_store::GtkListStoreExt;
 
 mod lock_button;
-pub use self::lock_button::LockButton;
+pub use self::lock_button::{LockButton, LockButtonClass, NONE_LOCK_BUTTON};
 pub use self::lock_button::LockButtonExt;
 
 mod menu;
-pub use self::menu::Menu;
-pub use self::menu::MenuExt;
+pub use self::menu::{Menu, MenuClass, NONE_MENU};
+pub use self::menu::GtkMenuExt;
 
 mod menu_bar;
-pub use self::menu_bar::MenuBar;
+pub use self::menu_bar::{MenuBar, MenuBarClass, NONE_MENU_BAR};
 pub use self::menu_bar::MenuBarExt;
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 mod menu_button;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
-pub use self::menu_button::MenuButton;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
+pub use self::menu_button::{MenuButton, MenuButtonClass, NONE_MENU_BUTTON};
 pub use self::menu_button::MenuButtonExt;
 
 mod menu_item;
-pub use self::menu_item::MenuItem;
-pub use self::menu_item::MenuItemExt;
+pub use self::menu_item::{MenuItem, MenuItemClass, NONE_MENU_ITEM};
+pub use self::menu_item::GtkMenuItemExt;
 
 mod menu_shell;
-pub use self::menu_shell::MenuShell;
+pub use self::menu_shell::{MenuShell, MenuShellClass, NONE_MENU_SHELL};
 pub use self::menu_shell::MenuShellExt;
 
 mod menu_tool_button;
-pub use self::menu_tool_button::MenuToolButton;
+pub use self::menu_tool_button::{MenuToolButton, MenuToolButtonClass, NONE_MENU_TOOL_BUTTON};
 pub use self::menu_tool_button::MenuToolButtonExt;
 
 mod message_dialog;
-pub use self::message_dialog::MessageDialog;
+pub use self::message_dialog::{MessageDialog, MessageDialogClass, NONE_MESSAGE_DIALOG};
 pub use self::message_dialog::MessageDialogExt;
 
 mod misc;
-pub use self::misc::Misc;
-pub use self::misc::MiscExt;
+pub use self::misc::{Misc, MiscClass, NONE_MISC};
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 mod model_button;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-pub use self::model_button::ModelButton;
-#[cfg(any(feature = "v3_16", feature = "dox"))]
-pub use self::model_button::ModelButtonExt;
+pub use self::model_button::{ModelButton, ModelButtonClass};
 
 mod mount_operation;
-pub use self::mount_operation::MountOperation;
+pub use self::mount_operation::{MountOperation, MountOperationClass, NONE_MOUNT_OPERATION};
 pub use self::mount_operation::MountOperationExt;
 
 #[cfg(any(feature = "v3_20", feature = "dox"))]
 mod native_dialog;
 #[cfg(any(feature = "v3_20", feature = "dox"))]
-pub use self::native_dialog::NativeDialog;
+pub use self::native_dialog::{NativeDialog, NativeDialogClass, NONE_NATIVE_DIALOG};
 #[cfg(any(feature = "v3_20", feature = "dox"))]
 pub use self::native_dialog::NativeDialogExt;
 
 mod notebook;
-pub use self::notebook::Notebook;
+pub use self::notebook::{Notebook, NotebookClass, NONE_NOTEBOOK};
 pub use self::notebook::NotebookExt;
 
 mod offscreen_window;
-pub use self::offscreen_window::OffscreenWindow;
+pub use self::offscreen_window::{OffscreenWindow, OffscreenWindowClass, NONE_OFFSCREEN_WINDOW};
 pub use self::offscreen_window::OffscreenWindowExt;
 
 mod orientable;
-pub use self::orientable::Orientable;
+pub use self::orientable::{Orientable, NONE_ORIENTABLE};
 pub use self::orientable::OrientableExt;
 
 mod overlay;
-pub use self::overlay::Overlay;
+pub use self::overlay::{Overlay, OverlayClass, NONE_OVERLAY};
 pub use self::overlay::OverlayExt;
 
 #[cfg(any(feature = "v3_22", feature = "dox"))]
 mod pad_controller;
 #[cfg(any(feature = "v3_22", feature = "dox"))]
-pub use self::pad_controller::PadController;
+pub use self::pad_controller::{PadController, PadControllerClass, NONE_PAD_CONTROLLER};
 #[cfg(any(feature = "v3_22", feature = "dox"))]
 pub use self::pad_controller::PadControllerExt;
 
 mod page_setup;
-pub use self::page_setup::PageSetup;
-pub use self::page_setup::PageSetupExt;
+pub use self::page_setup::{PageSetup, PageSetupClass};
 
 mod paned;
-pub use self::paned::Paned;
+pub use self::paned::{Paned, PanedClass, NONE_PANED};
 pub use self::paned::PanedExt;
 
 mod places_sidebar;
-pub use self::places_sidebar::PlacesSidebar;
+pub use self::places_sidebar::{PlacesSidebar, PlacesSidebarClass, NONE_PLACES_SIDEBAR};
 pub use self::places_sidebar::PlacesSidebarExt;
 
 #[cfg(any(not(windows), feature = "dox"))]
 mod plug;
 #[cfg(any(not(windows), feature = "dox"))]
-pub use self::plug::Plug;
+pub use self::plug::{Plug, PlugClass, NONE_PLUG};
 #[cfg(any(not(windows), feature = "dox"))]
 pub use self::plug::PlugExt;
 
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 mod popover;
-#[cfg(any(feature = "v3_12", feature = "dox"))]
-pub use self::popover::Popover;
-#[cfg(any(feature = "v3_12", feature = "dox"))]
+pub use self::popover::{Popover, PopoverClass, NONE_POPOVER};
 pub use self::popover::PopoverExt;
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 mod popover_menu;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-pub use self::popover_menu::PopoverMenu;
+pub use self::popover_menu::{PopoverMenu, PopoverMenuClass, NONE_POPOVER_MENU};
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 pub use self::popover_menu::PopoverMenuExt;
 
 mod print_context;
-pub use self::print_context::PrintContext;
-pub use self::print_context::PrintContextExt;
+pub use self::print_context::{PrintContext, PrintContextClass};
 
 mod print_operation;
-pub use self::print_operation::PrintOperation;
+pub use self::print_operation::{PrintOperation, PrintOperationClass, NONE_PRINT_OPERATION};
 pub use self::print_operation::PrintOperationExt;
 
 mod print_operation_preview;
-pub use self::print_operation_preview::PrintOperationPreview;
+pub use self::print_operation_preview::{PrintOperationPreview, NONE_PRINT_OPERATION_PREVIEW};
 pub use self::print_operation_preview::PrintOperationPreviewExt;
 
 mod print_settings;
-pub use self::print_settings::PrintSettings;
-pub use self::print_settings::PrintSettingsExt;
+pub use self::print_settings::{PrintSettings, PrintSettingsClass};
 
 mod progress_bar;
-pub use self::progress_bar::ProgressBar;
+pub use self::progress_bar::{ProgressBar, ProgressBarClass, NONE_PROGRESS_BAR};
 pub use self::progress_bar::ProgressBarExt;
 
 mod radio_button;
-pub use self::radio_button::RadioButton;
+pub use self::radio_button::{RadioButton, RadioButtonClass, NONE_RADIO_BUTTON};
 pub use self::radio_button::RadioButtonExt;
 
 mod radio_menu_item;
-pub use self::radio_menu_item::RadioMenuItem;
+pub use self::radio_menu_item::{RadioMenuItem, RadioMenuItemClass, NONE_RADIO_MENU_ITEM};
 pub use self::radio_menu_item::RadioMenuItemExt;
 
 mod radio_tool_button;
-pub use self::radio_tool_button::RadioToolButton;
+pub use self::radio_tool_button::{RadioToolButton, RadioToolButtonClass, NONE_RADIO_TOOL_BUTTON};
 pub use self::radio_tool_button::RadioToolButtonExt;
 
 mod range;
-pub use self::range::Range;
+pub use self::range::{Range, RangeClass, NONE_RANGE};
 pub use self::range::RangeExt;
 
 mod recent_chooser;
-pub use self::recent_chooser::RecentChooser;
+pub use self::recent_chooser::{RecentChooser, NONE_RECENT_CHOOSER};
 pub use self::recent_chooser::RecentChooserExt;
 
 mod recent_chooser_dialog;
-pub use self::recent_chooser_dialog::RecentChooserDialog;
+pub use self::recent_chooser_dialog::{RecentChooserDialog, RecentChooserDialogClass, NONE_RECENT_CHOOSER_DIALOG};
 
 mod recent_chooser_menu;
-pub use self::recent_chooser_menu::RecentChooserMenu;
+pub use self::recent_chooser_menu::{RecentChooserMenu, RecentChooserMenuClass, NONE_RECENT_CHOOSER_MENU};
 pub use self::recent_chooser_menu::RecentChooserMenuExt;
 
 mod recent_chooser_widget;
-pub use self::recent_chooser_widget::RecentChooserWidget;
+pub use self::recent_chooser_widget::{RecentChooserWidget, RecentChooserWidgetClass, NONE_RECENT_CHOOSER_WIDGET};
 
 mod recent_filter;
-pub use self::recent_filter::RecentFilter;
-pub use self::recent_filter::RecentFilterExt;
+pub use self::recent_filter::{RecentFilter, RecentFilterClass};
 
 mod recent_manager;
-pub use self::recent_manager::RecentManager;
+pub use self::recent_manager::{RecentManager, RecentManagerClass, NONE_RECENT_MANAGER};
 pub use self::recent_manager::RecentManagerExt;
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 mod revealer;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
-pub use self::revealer::Revealer;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
+pub use self::revealer::{Revealer, RevealerClass, NONE_REVEALER};
 pub use self::revealer::RevealerExt;
 
 mod scale;
-pub use self::scale::Scale;
+pub use self::scale::{Scale, ScaleClass, NONE_SCALE};
 pub use self::scale::ScaleExt;
 
 mod scale_button;
-pub use self::scale_button::ScaleButton;
+pub use self::scale_button::{ScaleButton, ScaleButtonClass, NONE_SCALE_BUTTON};
 pub use self::scale_button::ScaleButtonExt;
 
 mod scrollable;
-pub use self::scrollable::Scrollable;
+pub use self::scrollable::{Scrollable, NONE_SCROLLABLE};
 pub use self::scrollable::ScrollableExt;
 
 mod scrollbar;
-pub use self::scrollbar::Scrollbar;
+pub use self::scrollbar::{Scrollbar, ScrollbarClass, NONE_SCROLLBAR};
 
 mod scrolled_window;
-pub use self::scrolled_window::ScrolledWindow;
+pub use self::scrolled_window::{ScrolledWindow, ScrolledWindowClass, NONE_SCROLLED_WINDOW};
 pub use self::scrolled_window::ScrolledWindowExt;
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 mod search_bar;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
-pub use self::search_bar::SearchBar;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
+pub use self::search_bar::{SearchBar, SearchBarClass, NONE_SEARCH_BAR};
 pub use self::search_bar::SearchBarExt;
 
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 mod search_entry;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
-pub use self::search_entry::SearchEntry;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
+pub use self::search_entry::{SearchEntry, SearchEntryClass, NONE_SEARCH_ENTRY};
 pub use self::search_entry::SearchEntryExt;
 
 mod separator;
-pub use self::separator::Separator;
+pub use self::separator::{Separator, SeparatorClass, NONE_SEPARATOR};
 
 mod separator_menu_item;
-pub use self::separator_menu_item::SeparatorMenuItem;
+pub use self::separator_menu_item::{SeparatorMenuItem, SeparatorMenuItemClass, NONE_SEPARATOR_MENU_ITEM};
 
 mod separator_tool_item;
-pub use self::separator_tool_item::SeparatorToolItem;
+pub use self::separator_tool_item::{SeparatorToolItem, SeparatorToolItemClass, NONE_SEPARATOR_TOOL_ITEM};
 pub use self::separator_tool_item::SeparatorToolItemExt;
 
 mod settings;
-pub use self::settings::Settings;
+pub use self::settings::{Settings, SettingsClass, NONE_SETTINGS};
 pub use self::settings::SettingsExt;
 
 #[cfg(any(feature = "v3_20", feature = "dox"))]
 mod shortcuts_window;
 #[cfg(any(feature = "v3_20", feature = "dox"))]
-pub use self::shortcuts_window::ShortcutsWindow;
+pub use self::shortcuts_window::{ShortcutsWindow, ShortcutsWindowClass, NONE_SHORTCUTS_WINDOW};
 #[cfg(any(feature = "v3_20", feature = "dox"))]
 pub use self::shortcuts_window::ShortcutsWindowExt;
 
 mod size_group;
-pub use self::size_group::SizeGroup;
+pub use self::size_group::{SizeGroup, SizeGroupClass, NONE_SIZE_GROUP};
 pub use self::size_group::SizeGroupExt;
 
 #[cfg(any(not(windows), feature = "dox"))]
 mod socket;
 #[cfg(any(not(windows), feature = "dox"))]
-pub use self::socket::Socket;
+pub use self::socket::{Socket, SocketClass, NONE_SOCKET};
 #[cfg(any(not(windows), feature = "dox"))]
-pub use self::socket::SocketExt;
+pub use self::socket::GtkSocketExt;
 
 mod spin_button;
-pub use self::spin_button::SpinButton;
+pub use self::spin_button::{SpinButton, SpinButtonClass, NONE_SPIN_BUTTON};
 pub use self::spin_button::SpinButtonExt;
 
 mod spinner;
-pub use self::spinner::Spinner;
+pub use self::spinner::{Spinner, SpinnerClass, NONE_SPINNER};
 pub use self::spinner::SpinnerExt;
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 mod stack;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
-pub use self::stack::Stack;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
+pub use self::stack::{Stack, StackClass, NONE_STACK};
 pub use self::stack::StackExt;
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 mod stack_sidebar;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-pub use self::stack_sidebar::StackSidebar;
+pub use self::stack_sidebar::{StackSidebar, StackSidebarClass, NONE_STACK_SIDEBAR};
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 pub use self::stack_sidebar::StackSidebarExt;
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 mod stack_switcher;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
-pub use self::stack_switcher::StackSwitcher;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
+pub use self::stack_switcher::{StackSwitcher, StackSwitcherClass, NONE_STACK_SWITCHER};
 pub use self::stack_switcher::StackSwitcherExt;
 
 mod status_icon;
-pub use self::status_icon::StatusIcon;
+pub use self::status_icon::{StatusIcon, StatusIconClass, NONE_STATUS_ICON};
 pub use self::status_icon::StatusIconExt;
 
 mod statusbar;
-pub use self::statusbar::Statusbar;
+pub use self::statusbar::{Statusbar, StatusbarClass, NONE_STATUSBAR};
 pub use self::statusbar::StatusbarExt;
 
 mod style_context;
-pub use self::style_context::StyleContext;
+pub use self::style_context::{StyleContext, StyleContextClass, NONE_STYLE_CONTEXT};
 pub use self::style_context::StyleContextExt;
 
 mod style_properties;
-pub use self::style_properties::StyleProperties;
+pub use self::style_properties::{StyleProperties, StylePropertiesClass, NONE_STYLE_PROPERTIES};
 pub use self::style_properties::StylePropertiesExt;
 
 mod style_provider;
-pub use self::style_provider::StyleProvider;
+pub use self::style_provider::{StyleProvider, NONE_STYLE_PROVIDER};
 pub use self::style_provider::StyleProviderExt;
 
 mod switch;
-pub use self::switch::Switch;
+pub use self::switch::{Switch, SwitchClass, NONE_SWITCH};
 pub use self::switch::SwitchExt;
 
 mod text_buffer;
-pub use self::text_buffer::TextBuffer;
+pub use self::text_buffer::{TextBuffer, TextBufferClass, NONE_TEXT_BUFFER};
 pub use self::text_buffer::TextBufferExt;
 
 mod text_child_anchor;
-pub use self::text_child_anchor::TextChildAnchor;
+pub use self::text_child_anchor::{TextChildAnchor, TextChildAnchorClass, NONE_TEXT_CHILD_ANCHOR};
 pub use self::text_child_anchor::TextChildAnchorExt;
 
 mod text_mark;
-pub use self::text_mark::TextMark;
+pub use self::text_mark::{TextMark, TextMarkClass, NONE_TEXT_MARK};
 pub use self::text_mark::TextMarkExt;
 
 mod text_tag;
-pub use self::text_tag::TextTag;
+pub use self::text_tag::{TextTag, TextTagClass, NONE_TEXT_TAG};
 pub use self::text_tag::TextTagExt;
 
 mod text_tag_table;
-pub use self::text_tag_table::TextTagTable;
+pub use self::text_tag_table::{TextTagTable, TextTagTableClass, NONE_TEXT_TAG_TABLE};
 pub use self::text_tag_table::TextTagTableExt;
 
 mod text_view;
-pub use self::text_view::TextView;
+pub use self::text_view::{TextView, TextViewClass, NONE_TEXT_VIEW};
 pub use self::text_view::TextViewExt;
 
 mod toggle_button;
-pub use self::toggle_button::ToggleButton;
+pub use self::toggle_button::{ToggleButton, ToggleButtonClass, NONE_TOGGLE_BUTTON};
 pub use self::toggle_button::ToggleButtonExt;
 
 mod toggle_tool_button;
-pub use self::toggle_tool_button::ToggleToolButton;
+pub use self::toggle_tool_button::{ToggleToolButton, ToggleToolButtonClass, NONE_TOGGLE_TOOL_BUTTON};
 pub use self::toggle_tool_button::ToggleToolButtonExt;
 
 mod tool_button;
-pub use self::tool_button::ToolButton;
+pub use self::tool_button::{ToolButton, ToolButtonClass, NONE_TOOL_BUTTON};
 pub use self::tool_button::ToolButtonExt;
 
 mod tool_item;
-pub use self::tool_item::ToolItem;
+pub use self::tool_item::{ToolItem, ToolItemClass, NONE_TOOL_ITEM};
 pub use self::tool_item::ToolItemExt;
 
 mod tool_item_group;
-pub use self::tool_item_group::ToolItemGroup;
+pub use self::tool_item_group::{ToolItemGroup, ToolItemGroupClass, NONE_TOOL_ITEM_GROUP};
 pub use self::tool_item_group::ToolItemGroupExt;
 
 mod tool_palette;
-pub use self::tool_palette::ToolPalette;
+pub use self::tool_palette::{ToolPalette, ToolPaletteClass, NONE_TOOL_PALETTE};
 pub use self::tool_palette::ToolPaletteExt;
 
 mod tool_shell;
-pub use self::tool_shell::ToolShell;
+pub use self::tool_shell::{ToolShell, NONE_TOOL_SHELL};
 pub use self::tool_shell::ToolShellExt;
 
 mod toolbar;
-pub use self::toolbar::Toolbar;
+pub use self::toolbar::{Toolbar, ToolbarClass, NONE_TOOLBAR};
 pub use self::toolbar::ToolbarExt;
 
 mod tooltip;
-pub use self::tooltip::Tooltip;
-pub use self::tooltip::TooltipExt;
+pub use self::tooltip::{Tooltip, TooltipClass};
 
 mod tree_drag_dest;
-pub use self::tree_drag_dest::TreeDragDest;
+pub use self::tree_drag_dest::{TreeDragDest, NONE_TREE_DRAG_DEST};
 pub use self::tree_drag_dest::TreeDragDestExt;
 
 mod tree_drag_source;
-pub use self::tree_drag_source::TreeDragSource;
+pub use self::tree_drag_source::{TreeDragSource, NONE_TREE_DRAG_SOURCE};
 pub use self::tree_drag_source::TreeDragSourceExt;
 
 mod tree_model;
-pub use self::tree_model::TreeModel;
+pub use self::tree_model::{TreeModel, NONE_TREE_MODEL};
 pub use self::tree_model::TreeModelExt;
 
 mod tree_model_filter;
-pub use self::tree_model_filter::TreeModelFilter;
+pub use self::tree_model_filter::{TreeModelFilter, TreeModelFilterClass, NONE_TREE_MODEL_FILTER};
 pub use self::tree_model_filter::TreeModelFilterExt;
 
+mod tree_model_sort;
+pub use self::tree_model_sort::{TreeModelSort, TreeModelSortClass, NONE_TREE_MODEL_SORT};
+pub use self::tree_model_sort::TreeModelSortExt;
+
 mod tree_selection;
-pub use self::tree_selection::TreeSelection;
+pub use self::tree_selection::{TreeSelection, TreeSelectionClass, NONE_TREE_SELECTION};
 pub use self::tree_selection::TreeSelectionExt;
 
 mod tree_sortable;
-pub use self::tree_sortable::TreeSortable;
+pub use self::tree_sortable::{TreeSortable, NONE_TREE_SORTABLE};
 pub use self::tree_sortable::TreeSortableExt;
 
 mod tree_store;
-pub use self::tree_store::TreeStore;
+pub use self::tree_store::{TreeStore, TreeStoreClass, NONE_TREE_STORE};
 pub use self::tree_store::TreeStoreExt;
 
 mod tree_view;
-pub use self::tree_view::TreeView;
+pub use self::tree_view::{TreeView, TreeViewClass, NONE_TREE_VIEW};
 pub use self::tree_view::TreeViewExt;
 
 mod tree_view_column;
-pub use self::tree_view_column::TreeViewColumn;
+pub use self::tree_view_column::{TreeViewColumn, TreeViewColumnClass, NONE_TREE_VIEW_COLUMN};
 pub use self::tree_view_column::TreeViewColumnExt;
 
 mod viewport;
-pub use self::viewport::Viewport;
+pub use self::viewport::{Viewport, ViewportClass, NONE_VIEWPORT};
 pub use self::viewport::ViewportExt;
 
 mod volume_button;
-pub use self::volume_button::VolumeButton;
+pub use self::volume_button::{VolumeButton, VolumeButtonClass, NONE_VOLUME_BUTTON};
 pub use self::volume_button::VolumeButtonExt;
 
 mod widget;
-pub use self::widget::Widget;
+pub use self::widget::{Widget, WidgetClass, NONE_WIDGET};
 pub use self::widget::WidgetExt;
 
 mod window;
-pub use self::window::Window;
+pub use self::window::{Window, WindowClass, NONE_WINDOW};
 pub use self::window::GtkWindowExt;
 
 mod window_group;
-pub use self::window_group::WindowGroup;
+pub use self::window_group::{WindowGroup, WindowGroupClass, NONE_WINDOW_GROUP};
 pub use self::window_group::WindowGroupExt;
 
 mod css_section;
@@ -911,7 +831,6 @@ mod enums;
 pub use self::enums::Align;
 pub use self::enums::ArrowType;
 pub use self::enums::AssistantPageType;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 pub use self::enums::BaselinePosition;
 pub use self::enums::BorderStyle;
 pub use self::enums::BuilderError;
@@ -928,7 +847,6 @@ pub use self::enums::DeleteType;
 pub use self::enums::DirectionType;
 pub use self::enums::DragResult;
 pub use self::enums::EntryIconPosition;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::enums::EventSequenceState;
 pub use self::enums::FileChooserAction;
 pub use self::enums::FileChooserConfirmation;
@@ -939,10 +857,8 @@ pub use self::enums::IconSize;
 pub use self::enums::IconThemeError;
 pub use self::enums::IconViewDropPosition;
 pub use self::enums::ImageType;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 pub use self::enums::InputPurpose;
 pub use self::enums::Justification;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 pub use self::enums::LevelBarMode;
 pub use self::enums::License;
 pub use self::enums::MenuDirectionType;
@@ -957,7 +873,6 @@ pub use self::enums::PackType;
 pub use self::enums::PadActionType;
 pub use self::enums::PageOrientation;
 pub use self::enums::PageSet;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::enums::PanDirection;
 pub use self::enums::PolicyType;
 #[cfg(any(feature = "v3_20", feature = "dox"))]
@@ -970,14 +885,12 @@ pub use self::enums::PrintOperationResult;
 pub use self::enums::PrintPages;
 pub use self::enums::PrintQuality;
 pub use self::enums::PrintStatus;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::enums::PropagationPhase;
 pub use self::enums::RecentChooserError;
 pub use self::enums::RecentManagerError;
 pub use self::enums::RecentSortType;
 pub use self::enums::ReliefStyle;
 pub use self::enums::ResizeMode;
-pub use self::enums::ResponseType;
 pub use self::enums::RevealerTransitionType;
 pub use self::enums::ScrollStep;
 pub use self::enums::ScrollType;
@@ -995,7 +908,6 @@ pub use self::enums::StateType;
 pub use self::enums::TextDirection;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 pub use self::enums::TextExtendSelection;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::enums::TextViewLayer;
 pub use self::enums::TextWindowType;
 pub use self::enums::ToolbarStyle;
@@ -1016,8 +928,8 @@ pub use self::flags::CellRendererState;
 pub use self::flags::DestDefaults;
 pub use self::flags::DialogFlags;
 pub use self::flags::FileFilterFlags;
+pub use self::flags::FontChooserLevel;
 pub use self::flags::IconLookupFlags;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 pub use self::flags::InputHints;
 pub use self::flags::JunctionSides;
 pub use self::flags::PlacesOpenFlags;
@@ -1036,9 +948,7 @@ pub mod functions;
 mod constants;
 #[cfg(any(feature = "v3_20", feature = "dox"))]
 pub use self::constants::LEVEL_BAR_OFFSET_FULL;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 pub use self::constants::LEVEL_BAR_OFFSET_HIGH;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 pub use self::constants::LEVEL_BAR_OFFSET_LOW;
 pub use self::constants::PAPER_NAME_A3;
 pub use self::constants::PAPER_NAME_A4;
@@ -1057,10 +967,8 @@ pub use self::constants::PRINT_SETTINGS_NUMBER_UP;
 pub use self::constants::PRINT_SETTINGS_NUMBER_UP_LAYOUT;
 pub use self::constants::PRINT_SETTINGS_N_COPIES;
 pub use self::constants::PRINT_SETTINGS_ORIENTATION;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 pub use self::constants::PRINT_SETTINGS_OUTPUT_BASENAME;
 pub use self::constants::PRINT_SETTINGS_OUTPUT_BIN;
-#[cfg(any(feature = "v3_6", feature = "dox"))]
 pub use self::constants::PRINT_SETTINGS_OUTPUT_DIR;
 pub use self::constants::PRINT_SETTINGS_OUTPUT_FILE_FORMAT;
 pub use self::constants::PRINT_SETTINGS_OUTPUT_URI;
@@ -1081,111 +989,6 @@ pub use self::constants::PRINT_SETTINGS_SCALE;
 pub use self::constants::PRINT_SETTINGS_USE_COLOR;
 pub use self::constants::PRINT_SETTINGS_WIN32_DRIVER_EXTRA;
 pub use self::constants::PRINT_SETTINGS_WIN32_DRIVER_VERSION;
-pub use self::constants::STOCK_ABOUT;
-pub use self::constants::STOCK_ADD;
-pub use self::constants::STOCK_APPLY;
-pub use self::constants::STOCK_BOLD;
-pub use self::constants::STOCK_CANCEL;
-pub use self::constants::STOCK_CAPS_LOCK_WARNING;
-pub use self::constants::STOCK_CDROM;
-pub use self::constants::STOCK_CLEAR;
-pub use self::constants::STOCK_CLOSE;
-pub use self::constants::STOCK_COLOR_PICKER;
-pub use self::constants::STOCK_CONNECT;
-pub use self::constants::STOCK_CONVERT;
-pub use self::constants::STOCK_COPY;
-pub use self::constants::STOCK_CUT;
-pub use self::constants::STOCK_DELETE;
-pub use self::constants::STOCK_DIALOG_AUTHENTICATION;
-pub use self::constants::STOCK_DIALOG_ERROR;
-pub use self::constants::STOCK_DIALOG_INFO;
-pub use self::constants::STOCK_DIALOG_QUESTION;
-pub use self::constants::STOCK_DIALOG_WARNING;
-pub use self::constants::STOCK_DIRECTORY;
-pub use self::constants::STOCK_DISCARD;
-pub use self::constants::STOCK_DISCONNECT;
-pub use self::constants::STOCK_DND;
-pub use self::constants::STOCK_DND_MULTIPLE;
-pub use self::constants::STOCK_EDIT;
-pub use self::constants::STOCK_EXECUTE;
-pub use self::constants::STOCK_FILE;
-pub use self::constants::STOCK_FIND;
-pub use self::constants::STOCK_FIND_AND_REPLACE;
-pub use self::constants::STOCK_FLOPPY;
-pub use self::constants::STOCK_FULLSCREEN;
-pub use self::constants::STOCK_GOTO_BOTTOM;
-pub use self::constants::STOCK_GOTO_FIRST;
-pub use self::constants::STOCK_GOTO_LAST;
-pub use self::constants::STOCK_GOTO_TOP;
-pub use self::constants::STOCK_GO_BACK;
-pub use self::constants::STOCK_GO_DOWN;
-pub use self::constants::STOCK_GO_FORWARD;
-pub use self::constants::STOCK_GO_UP;
-pub use self::constants::STOCK_HARDDISK;
-pub use self::constants::STOCK_HELP;
-pub use self::constants::STOCK_HOME;
-pub use self::constants::STOCK_INDENT;
-pub use self::constants::STOCK_INDEX;
-pub use self::constants::STOCK_INFO;
-pub use self::constants::STOCK_ITALIC;
-pub use self::constants::STOCK_JUMP_TO;
-pub use self::constants::STOCK_JUSTIFY_CENTER;
-pub use self::constants::STOCK_JUSTIFY_FILL;
-pub use self::constants::STOCK_JUSTIFY_LEFT;
-pub use self::constants::STOCK_JUSTIFY_RIGHT;
-pub use self::constants::STOCK_LEAVE_FULLSCREEN;
-pub use self::constants::STOCK_MEDIA_FORWARD;
-pub use self::constants::STOCK_MEDIA_NEXT;
-pub use self::constants::STOCK_MEDIA_PAUSE;
-pub use self::constants::STOCK_MEDIA_PLAY;
-pub use self::constants::STOCK_MEDIA_PREVIOUS;
-pub use self::constants::STOCK_MEDIA_RECORD;
-pub use self::constants::STOCK_MEDIA_REWIND;
-pub use self::constants::STOCK_MEDIA_STOP;
-pub use self::constants::STOCK_MISSING_IMAGE;
-pub use self::constants::STOCK_NETWORK;
-pub use self::constants::STOCK_NEW;
-pub use self::constants::STOCK_NO;
-pub use self::constants::STOCK_OK;
-pub use self::constants::STOCK_OPEN;
-pub use self::constants::STOCK_ORIENTATION_LANDSCAPE;
-pub use self::constants::STOCK_ORIENTATION_PORTRAIT;
-pub use self::constants::STOCK_ORIENTATION_REVERSE_LANDSCAPE;
-pub use self::constants::STOCK_ORIENTATION_REVERSE_PORTRAIT;
-pub use self::constants::STOCK_PAGE_SETUP;
-pub use self::constants::STOCK_PASTE;
-pub use self::constants::STOCK_PREFERENCES;
-pub use self::constants::STOCK_PRINT;
-pub use self::constants::STOCK_PRINT_ERROR;
-pub use self::constants::STOCK_PRINT_PAUSED;
-pub use self::constants::STOCK_PRINT_PREVIEW;
-pub use self::constants::STOCK_PRINT_REPORT;
-pub use self::constants::STOCK_PRINT_WARNING;
-pub use self::constants::STOCK_PROPERTIES;
-pub use self::constants::STOCK_QUIT;
-pub use self::constants::STOCK_REDO;
-pub use self::constants::STOCK_REFRESH;
-pub use self::constants::STOCK_REMOVE;
-pub use self::constants::STOCK_REVERT_TO_SAVED;
-pub use self::constants::STOCK_SAVE;
-pub use self::constants::STOCK_SAVE_AS;
-pub use self::constants::STOCK_SELECT_ALL;
-pub use self::constants::STOCK_SELECT_COLOR;
-pub use self::constants::STOCK_SELECT_FONT;
-pub use self::constants::STOCK_SORT_ASCENDING;
-pub use self::constants::STOCK_SORT_DESCENDING;
-pub use self::constants::STOCK_SPELL_CHECK;
-pub use self::constants::STOCK_STOP;
-pub use self::constants::STOCK_STRIKETHROUGH;
-pub use self::constants::STOCK_UNDELETE;
-pub use self::constants::STOCK_UNDERLINE;
-pub use self::constants::STOCK_UNDO;
-pub use self::constants::STOCK_UNINDENT;
-pub use self::constants::STOCK_YES;
-pub use self::constants::STOCK_ZOOM_100;
-pub use self::constants::STOCK_ZOOM_FIT;
-pub use self::constants::STOCK_ZOOM_IN;
-pub use self::constants::STOCK_ZOOM_OUT;
 pub use self::constants::STYLE_CLASS_ACCELERATOR;
 pub use self::constants::STYLE_CLASS_ARROW;
 pub use self::constants::STYLE_CLASS_BACKGROUND;
@@ -1196,11 +999,9 @@ pub use self::constants::STYLE_CLASS_CELL;
 pub use self::constants::STYLE_CLASS_CHECK;
 pub use self::constants::STYLE_CLASS_COMBOBOX_ENTRY;
 pub use self::constants::STYLE_CLASS_CONTEXT_MENU;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::constants::STYLE_CLASS_CSD;
 pub use self::constants::STYLE_CLASS_CURSOR_HANDLE;
 pub use self::constants::STYLE_CLASS_DEFAULT;
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 pub use self::constants::STYLE_CLASS_DESTRUCTIVE_ACTION;
 pub use self::constants::STYLE_CLASS_DIM_LABEL;
 pub use self::constants::STYLE_CLASS_DND;
@@ -1208,7 +1009,6 @@ pub use self::constants::STYLE_CLASS_DOCK;
 pub use self::constants::STYLE_CLASS_ENTRY;
 pub use self::constants::STYLE_CLASS_ERROR;
 pub use self::constants::STYLE_CLASS_EXPANDER;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::constants::STYLE_CLASS_FLAT;
 pub use self::constants::STYLE_CLASS_FRAME;
 pub use self::constants::STYLE_CLASS_GRIP;
@@ -1230,22 +1030,17 @@ pub use self::constants::STYLE_CLASS_MARK;
 pub use self::constants::STYLE_CLASS_MENU;
 pub use self::constants::STYLE_CLASS_MENUBAR;
 pub use self::constants::STYLE_CLASS_MENUITEM;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::constants::STYLE_CLASS_MESSAGE_DIALOG;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 pub use self::constants::STYLE_CLASS_MONOSPACE;
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 pub use self::constants::STYLE_CLASS_NEEDS_ATTENTION;
 pub use self::constants::STYLE_CLASS_NOTEBOOK;
 pub use self::constants::STYLE_CLASS_OSD;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::constants::STYLE_CLASS_OVERSHOOT;
 pub use self::constants::STYLE_CLASS_PANE_SEPARATOR;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 pub use self::constants::STYLE_CLASS_PAPER;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::constants::STYLE_CLASS_POPOVER;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::constants::STYLE_CLASS_POPUP;
 pub use self::constants::STYLE_CLASS_PRIMARY_TOOLBAR;
 pub use self::constants::STYLE_CLASS_PROGRESSBAR;
@@ -1268,11 +1063,8 @@ pub use self::constants::STYLE_CLASS_SPINBUTTON;
 pub use self::constants::STYLE_CLASS_SPINNER;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 pub use self::constants::STYLE_CLASS_STATUSBAR;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::constants::STYLE_CLASS_SUBTITLE;
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 pub use self::constants::STYLE_CLASS_SUGGESTED_ACTION;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 pub use self::constants::STYLE_CLASS_TITLE;
 pub use self::constants::STYLE_CLASS_TITLEBAR;
 pub use self::constants::STYLE_CLASS_TOOLBAR;
@@ -1308,11 +1100,9 @@ pub mod traits {
     pub use super::AboutDialogExt;
     pub use super::AccelGroupExt;
     pub use super::AccelLabelExt;
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     pub use super::ActionBarExt;
     pub use super::ActionableExt;
     pub use super::AdjustmentExt;
-    pub use super::AlignmentExt;
     pub use super::AppChooserButtonExt;
     pub use super::AppChooserDialogExt;
     pub use super::AppChooserWidgetExt;
@@ -1344,7 +1134,6 @@ pub mod traits {
     pub use super::CellRendererToggleExt;
     pub use super::CellViewExt;
     pub use super::CheckMenuItemExt;
-    pub use super::ClipboardExt;
     pub use super::ColorButtonExt;
     pub use super::ColorChooserExt;
     pub use super::ColorChooserDialogExt;
@@ -1358,7 +1147,6 @@ pub mod traits {
     pub use super::EntryExt;
     pub use super::EntryCompletionExt;
     pub use super::EventBoxExt;
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     pub use super::EventControllerExt;
     pub use super::ExpanderExt;
     pub use super::FileChooserExt;
@@ -1366,70 +1154,49 @@ pub mod traits {
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     pub use super::FileChooserNativeExt;
     pub use super::FileChooserWidgetExt;
-    pub use super::FileFilterExt;
     pub use super::FixedExt;
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     pub use super::FlowBoxExt;
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     pub use super::FlowBoxChildExt;
     pub use super::FontButtonExt;
     pub use super::FontChooserExt;
+    pub use super::FontChooserWidgetExt;
     pub use super::FrameExt;
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     pub use super::GLAreaExt;
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     pub use super::GestureExt;
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     pub use super::GestureDragExt;
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     pub use super::GestureLongPressExt;
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     pub use super::GestureMultiPressExt;
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     pub use super::GesturePanExt;
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     pub use super::GestureRotateExt;
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     pub use super::GestureSingleExt;
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     pub use super::GestureSwipeExt;
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     pub use super::GestureZoomExt;
     pub use super::GridExt;
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     pub use super::HeaderBarExt;
     pub use super::IMContextExt;
     pub use super::IMMulticontextExt;
-    pub use super::IconFactoryExt;
     pub use super::IconInfoExt;
     pub use super::IconThemeExt;
     pub use super::IconViewExt;
     pub use super::ImageExt;
-    pub use super::ImageMenuItemExt;
     pub use super::InfoBarExt;
     pub use super::InvisibleExt;
     pub use super::LabelExt;
     pub use super::LayoutExt;
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     pub use super::LevelBarExt;
     pub use super::LinkButtonExt;
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     pub use super::ListBoxExt;
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     pub use super::ListBoxRowExt;
     pub use super::GtkListStoreExt;
     pub use super::LockButtonExt;
-    pub use super::MenuExt;
+    pub use super::GtkMenuExt;
     pub use super::MenuBarExt;
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     pub use super::MenuButtonExt;
-    pub use super::MenuItemExt;
+    pub use super::GtkMenuItemExt;
     pub use super::MenuShellExt;
     pub use super::MenuToolButtonExt;
     pub use super::MessageDialogExt;
-    pub use super::MiscExt;
-    #[cfg(any(feature = "v3_16", feature = "dox"))]
-    pub use super::ModelButtonExt;
     pub use super::MountOperationExt;
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     pub use super::NativeDialogExt;
@@ -1439,19 +1206,15 @@ pub mod traits {
     pub use super::OverlayExt;
     #[cfg(any(feature = "v3_22", feature = "dox"))]
     pub use super::PadControllerExt;
-    pub use super::PageSetupExt;
     pub use super::PanedExt;
     pub use super::PlacesSidebarExt;
     #[cfg(any(not(windows), feature = "dox"))]
     pub use super::PlugExt;
-    #[cfg(any(feature = "v3_12", feature = "dox"))]
     pub use super::PopoverExt;
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     pub use super::PopoverMenuExt;
-    pub use super::PrintContextExt;
     pub use super::PrintOperationExt;
     pub use super::PrintOperationPreviewExt;
-    pub use super::PrintSettingsExt;
     pub use super::ProgressBarExt;
     pub use super::RadioButtonExt;
     pub use super::RadioMenuItemExt;
@@ -1459,17 +1222,13 @@ pub mod traits {
     pub use super::RangeExt;
     pub use super::RecentChooserExt;
     pub use super::RecentChooserMenuExt;
-    pub use super::RecentFilterExt;
     pub use super::RecentManagerExt;
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     pub use super::RevealerExt;
     pub use super::ScaleExt;
     pub use super::ScaleButtonExt;
     pub use super::ScrollableExt;
     pub use super::ScrolledWindowExt;
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     pub use super::SearchBarExt;
-    #[cfg(any(feature = "v3_6", feature = "dox"))]
     pub use super::SearchEntryExt;
     pub use super::SeparatorToolItemExt;
     pub use super::SettingsExt;
@@ -1477,14 +1236,12 @@ pub mod traits {
     pub use super::ShortcutsWindowExt;
     pub use super::SizeGroupExt;
     #[cfg(any(not(windows), feature = "dox"))]
-    pub use super::SocketExt;
+    pub use super::GtkSocketExt;
     pub use super::SpinButtonExt;
     pub use super::SpinnerExt;
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     pub use super::StackExt;
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     pub use super::StackSidebarExt;
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     pub use super::StackSwitcherExt;
     pub use super::StatusIconExt;
     pub use super::StatusbarExt;
@@ -1506,11 +1263,11 @@ pub mod traits {
     pub use super::ToolPaletteExt;
     pub use super::ToolShellExt;
     pub use super::ToolbarExt;
-    pub use super::TooltipExt;
     pub use super::TreeDragDestExt;
     pub use super::TreeDragSourceExt;
     pub use super::TreeModelExt;
     pub use super::TreeModelFilterExt;
+    pub use super::TreeModelSortExt;
     pub use super::TreeSelectionExt;
     pub use super::TreeSortableExt;
     pub use super::TreeStoreExt;

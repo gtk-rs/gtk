@@ -2,49 +2,33 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use IconFactory;
-use StyleProperties;
-use WidgetPath;
 use ffi;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use std::mem;
-use std::ptr;
+use std::fmt;
 
 glib_wrapper! {
-    pub struct StyleProvider(Object<ffi::GtkStyleProvider, ffi::GtkStyleProviderIface>);
+    pub struct StyleProvider(Interface<ffi::GtkStyleProvider>);
 
     match fn {
         get_type => || ffi::gtk_style_provider_get_type(),
     }
 }
 
-pub trait StyleProviderExt {
-    #[cfg_attr(feature = "v3_8", deprecated)]
-    fn get_icon_factory(&self, path: &WidgetPath) -> Option<IconFactory>;
+pub const NONE_STYLE_PROVIDER: Option<&StyleProvider> = None;
 
-    #[cfg_attr(feature = "v3_8", deprecated)]
-    fn get_style(&self, path: &WidgetPath) -> Option<StyleProperties>;
-
-    //fn get_style_property<P: IsA</*Ignored*/glib::ParamSpec>>(&self, path: &WidgetPath, state: StateFlags, pspec: &P) -> Option<glib::Value>;
+pub trait StyleProviderExt: 'static {
+    //fn get_style_property(&self, path: &WidgetPath, state: StateFlags, pspec: /*Ignored*/&glib::ParamSpec) -> Option<glib::Value>;
 }
 
 impl<O: IsA<StyleProvider>> StyleProviderExt for O {
-    fn get_icon_factory(&self, path: &WidgetPath) -> Option<IconFactory> {
-        unsafe {
-            from_glib_none(ffi::gtk_style_provider_get_icon_factory(self.to_glib_none().0, path.to_glib_none().0))
-        }
-    }
-
-    fn get_style(&self, path: &WidgetPath) -> Option<StyleProperties> {
-        unsafe {
-            from_glib_full(ffi::gtk_style_provider_get_style(self.to_glib_none().0, path.to_glib_none().0))
-        }
-    }
-
-    //fn get_style_property<P: IsA</*Ignored*/glib::ParamSpec>>(&self, path: &WidgetPath, state: StateFlags, pspec: &P) -> Option<glib::Value> {
+    //fn get_style_property(&self, path: &WidgetPath, state: StateFlags, pspec: /*Ignored*/&glib::ParamSpec) -> Option<glib::Value> {
     //    unsafe { TODO: call ffi::gtk_style_provider_get_style_property() }
     //}
+}
+
+impl fmt::Display for StyleProvider {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "StyleProvider")
+    }
 }

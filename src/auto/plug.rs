@@ -9,22 +9,19 @@ use Widget;
 use Window;
 use ffi;
 use gdk;
-use glib;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
-use std::mem;
+use std::fmt;
 use std::mem::transmute;
-use std::ptr;
 use xlib;
 
 glib_wrapper! {
-    pub struct Plug(Object<ffi::GtkPlug, ffi::GtkPlugClass>): Window, Bin, Container, Widget, Buildable;
+    pub struct Plug(Object<ffi::GtkPlug, ffi::GtkPlugClass, PlugClass>) @extends Window, Bin, Container, Widget, @implements Buildable;
 
     match fn {
         get_type => || ffi::gtk_plug_get_type(),
@@ -35,19 +32,21 @@ impl Plug {
     pub fn new(socket_id: xlib::Window) -> Plug {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_plug_new(socket_id)).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_plug_new(socket_id)).unsafe_cast()
         }
     }
 
     pub fn new_for_display(display: &gdk::Display, socket_id: xlib::Window) -> Plug {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_plug_new_for_display(display.to_glib_none().0, socket_id)).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_plug_new_for_display(display.to_glib_none().0, socket_id)).unsafe_cast()
         }
     }
 }
 
-pub trait PlugExt {
+pub const NONE_PLUG: Option<&Plug> = None;
+
+pub trait PlugExt: 'static {
     fn construct(&self, socket_id: xlib::Window);
 
     fn construct_for_display(&self, display: &gdk::Display, socket_id: xlib::Window);
@@ -65,76 +64,82 @@ pub trait PlugExt {
     fn connect_property_socket_window_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Plug> + IsA<glib::object::Object>> PlugExt for O {
+impl<O: IsA<Plug>> PlugExt for O {
     fn construct(&self, socket_id: xlib::Window) {
         unsafe {
-            ffi::gtk_plug_construct(self.to_glib_none().0, socket_id);
+            ffi::gtk_plug_construct(self.as_ref().to_glib_none().0, socket_id);
         }
     }
 
     fn construct_for_display(&self, display: &gdk::Display, socket_id: xlib::Window) {
         unsafe {
-            ffi::gtk_plug_construct_for_display(self.to_glib_none().0, display.to_glib_none().0, socket_id);
+            ffi::gtk_plug_construct_for_display(self.as_ref().to_glib_none().0, display.to_glib_none().0, socket_id);
         }
     }
 
     fn get_embedded(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_plug_get_embedded(self.to_glib_none().0))
+            from_glib(ffi::gtk_plug_get_embedded(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_id(&self) -> xlib::Window {
         unsafe {
-            ffi::gtk_plug_get_id(self.to_glib_none().0)
+            ffi::gtk_plug_get_id(self.as_ref().to_glib_none().0)
         }
     }
 
     fn get_socket_window(&self) -> Option<gdk::Window> {
         unsafe {
-            from_glib_none(ffi::gtk_plug_get_socket_window(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_plug_get_socket_window(self.as_ref().to_glib_none().0))
         }
     }
 
     fn connect_embedded<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "embedded",
-                transmute(embedded_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"embedded\0".as_ptr() as *const _,
+                Some(transmute(embedded_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_embedded_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::embedded",
-                transmute(notify_embedded_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::embedded\0".as_ptr() as *const _,
+                Some(transmute(notify_embedded_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_socket_window_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::socket-window",
-                transmute(notify_socket_window_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::socket-window\0".as_ptr() as *const _,
+                Some(transmute(notify_socket_window_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn embedded_trampoline<P>(this: *mut ffi::GtkPlug, f: glib_ffi::gpointer)
+unsafe extern "C" fn embedded_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPlug, f: glib_ffi::gpointer)
 where P: IsA<Plug> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Plug::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&Plug::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_embedded_trampoline<P>(this: *mut ffi::GtkPlug, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_embedded_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPlug, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Plug> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Plug::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&Plug::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_socket_window_trampoline<P>(this: *mut ffi::GtkPlug, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_socket_window_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPlug, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Plug> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Plug::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&Plug::from_glib_borrow(this).unsafe_cast())
+}
+
+impl fmt::Display for Plug {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Plug")
+    }
 }

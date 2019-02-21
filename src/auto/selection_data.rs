@@ -6,9 +6,9 @@ use TextBuffer;
 use ffi;
 use gdk;
 use gdk_pixbuf;
+use glib::GString;
+use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
 use std::mem;
 use std::ptr;
 
@@ -27,14 +27,6 @@ impl SelectionData {
     pub fn get_data_type(&self) -> gdk::Atom {
         unsafe {
             from_glib_none(ffi::gtk_selection_data_get_data_type(self.to_glib_none().0))
-        }
-    }
-
-    pub fn get_data_with_length(&self) -> Vec<u8> {
-        unsafe {
-            let mut length = mem::uninitialized();
-            let ret = FromGlibContainer::from_glib_none_num(ffi::gtk_selection_data_get_data_with_length(self.to_glib_none().0, &mut length), length as usize);
-            ret
         }
     }
 
@@ -83,22 +75,22 @@ impl SelectionData {
         }
     }
 
-    pub fn get_text(&self) -> Option<String> {
+    pub fn get_text(&self) -> Option<GString> {
         unsafe {
             from_glib_full(ffi::gtk_selection_data_get_text(self.to_glib_none().0))
         }
     }
 
-    pub fn get_uris(&self) -> Vec<String> {
+    pub fn get_uris(&self) -> Vec<GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gtk_selection_data_get_uris(self.to_glib_none().0))
         }
     }
 
-    pub fn set(&mut self, type_: &gdk::Atom, format: i32, data: &[u8]) {
+    pub fn set(&self, type_: &gdk::Atom, format: i32, data: &[u8]) {
         let length = data.len() as i32;
         unsafe {
-            ffi::gtk_selection_data_set(self.to_glib_none_mut().0, type_.to_glib_none().0, format, data.to_glib_none().0, length);
+            ffi::gtk_selection_data_set(mut_override(self.to_glib_none().0), type_.to_glib_none().0, format, data.to_glib_none().0, length);
         }
     }
 
@@ -127,9 +119,9 @@ impl SelectionData {
         }
     }
 
-    pub fn targets_include_rich_text(&self, buffer: &TextBuffer) -> bool {
+    pub fn targets_include_rich_text<P: IsA<TextBuffer>>(&self, buffer: &P) -> bool {
         unsafe {
-            from_glib(ffi::gtk_selection_data_targets_include_rich_text(self.to_glib_none().0, buffer.to_glib_none().0))
+            from_glib(ffi::gtk_selection_data_targets_include_rich_text(self.to_glib_none().0, buffer.as_ref().to_glib_none().0))
         }
     }
 

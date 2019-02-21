@@ -5,29 +5,27 @@
 use Bin;
 use Buildable;
 use Container;
+use IconSize;
 use Orientation;
 use ReliefStyle;
 use SizeGroup;
 use ToolbarStyle;
 use Widget;
 use ffi;
-use glib;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use pango;
 use signal::Inhibit;
 use std::boxed::Box as Box_;
-use std::mem;
+use std::fmt;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
-    pub struct ToolItem(Object<ffi::GtkToolItem, ffi::GtkToolItemClass>): Bin, Container, Widget, Buildable;
+    pub struct ToolItem(Object<ffi::GtkToolItem, ffi::GtkToolItemClass, ToolItemClass>) @extends Bin, Container, Widget, @implements Buildable;
 
     match fn {
         get_type => || ffi::gtk_tool_item_get_type(),
@@ -49,14 +47,16 @@ impl Default for ToolItem {
     }
 }
 
-pub trait ToolItemExt {
+pub const NONE_TOOL_ITEM: Option<&ToolItem> = None;
+
+pub trait ToolItemExt: 'static {
     fn get_ellipsize_mode(&self) -> pango::EllipsizeMode;
 
     fn get_expand(&self) -> bool;
 
     fn get_homogeneous(&self) -> bool;
 
-    fn get_icon_size(&self) -> i32;
+    fn get_icon_size(&self) -> IconSize;
 
     fn get_is_important(&self) -> bool;
 
@@ -111,226 +111,231 @@ pub trait ToolItemExt {
     fn connect_property_visible_vertical_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<ToolItem> + IsA<glib::object::Object>> ToolItemExt for O {
+impl<O: IsA<ToolItem>> ToolItemExt for O {
     fn get_ellipsize_mode(&self) -> pango::EllipsizeMode {
         unsafe {
-            from_glib(ffi::gtk_tool_item_get_ellipsize_mode(self.to_glib_none().0))
+            from_glib(ffi::gtk_tool_item_get_ellipsize_mode(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_expand(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_tool_item_get_expand(self.to_glib_none().0))
+            from_glib(ffi::gtk_tool_item_get_expand(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_homogeneous(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_tool_item_get_homogeneous(self.to_glib_none().0))
+            from_glib(ffi::gtk_tool_item_get_homogeneous(self.as_ref().to_glib_none().0))
         }
     }
 
-    fn get_icon_size(&self) -> i32 {
+    fn get_icon_size(&self) -> IconSize {
         unsafe {
-            ffi::gtk_tool_item_get_icon_size(self.to_glib_none().0)
+            from_glib(ffi::gtk_tool_item_get_icon_size(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_is_important(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_tool_item_get_is_important(self.to_glib_none().0))
+            from_glib(ffi::gtk_tool_item_get_is_important(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_orientation(&self) -> Orientation {
         unsafe {
-            from_glib(ffi::gtk_tool_item_get_orientation(self.to_glib_none().0))
+            from_glib(ffi::gtk_tool_item_get_orientation(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_proxy_menu_item(&self, menu_item_id: &str) -> Option<Widget> {
         unsafe {
-            from_glib_none(ffi::gtk_tool_item_get_proxy_menu_item(self.to_glib_none().0, menu_item_id.to_glib_none().0))
+            from_glib_none(ffi::gtk_tool_item_get_proxy_menu_item(self.as_ref().to_glib_none().0, menu_item_id.to_glib_none().0))
         }
     }
 
     fn get_relief_style(&self) -> ReliefStyle {
         unsafe {
-            from_glib(ffi::gtk_tool_item_get_relief_style(self.to_glib_none().0))
+            from_glib(ffi::gtk_tool_item_get_relief_style(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_text_alignment(&self) -> f32 {
         unsafe {
-            ffi::gtk_tool_item_get_text_alignment(self.to_glib_none().0)
+            ffi::gtk_tool_item_get_text_alignment(self.as_ref().to_glib_none().0)
         }
     }
 
     fn get_text_orientation(&self) -> Orientation {
         unsafe {
-            from_glib(ffi::gtk_tool_item_get_text_orientation(self.to_glib_none().0))
+            from_glib(ffi::gtk_tool_item_get_text_orientation(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_text_size_group(&self) -> Option<SizeGroup> {
         unsafe {
-            from_glib_none(ffi::gtk_tool_item_get_text_size_group(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_tool_item_get_text_size_group(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_toolbar_style(&self) -> ToolbarStyle {
         unsafe {
-            from_glib(ffi::gtk_tool_item_get_toolbar_style(self.to_glib_none().0))
+            from_glib(ffi::gtk_tool_item_get_toolbar_style(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_use_drag_window(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_tool_item_get_use_drag_window(self.to_glib_none().0))
+            from_glib(ffi::gtk_tool_item_get_use_drag_window(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_visible_horizontal(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_tool_item_get_visible_horizontal(self.to_glib_none().0))
+            from_glib(ffi::gtk_tool_item_get_visible_horizontal(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_visible_vertical(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_tool_item_get_visible_vertical(self.to_glib_none().0))
+            from_glib(ffi::gtk_tool_item_get_visible_vertical(self.as_ref().to_glib_none().0))
         }
     }
 
     fn rebuild_menu(&self) {
         unsafe {
-            ffi::gtk_tool_item_rebuild_menu(self.to_glib_none().0);
+            ffi::gtk_tool_item_rebuild_menu(self.as_ref().to_glib_none().0);
         }
     }
 
     fn retrieve_proxy_menu_item(&self) -> Option<Widget> {
         unsafe {
-            from_glib_none(ffi::gtk_tool_item_retrieve_proxy_menu_item(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_tool_item_retrieve_proxy_menu_item(self.as_ref().to_glib_none().0))
         }
     }
 
     fn set_expand(&self, expand: bool) {
         unsafe {
-            ffi::gtk_tool_item_set_expand(self.to_glib_none().0, expand.to_glib());
+            ffi::gtk_tool_item_set_expand(self.as_ref().to_glib_none().0, expand.to_glib());
         }
     }
 
     fn set_homogeneous(&self, homogeneous: bool) {
         unsafe {
-            ffi::gtk_tool_item_set_homogeneous(self.to_glib_none().0, homogeneous.to_glib());
+            ffi::gtk_tool_item_set_homogeneous(self.as_ref().to_glib_none().0, homogeneous.to_glib());
         }
     }
 
     fn set_is_important(&self, is_important: bool) {
         unsafe {
-            ffi::gtk_tool_item_set_is_important(self.to_glib_none().0, is_important.to_glib());
+            ffi::gtk_tool_item_set_is_important(self.as_ref().to_glib_none().0, is_important.to_glib());
         }
     }
 
     fn set_proxy_menu_item<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, menu_item_id: &str, menu_item: Q) {
         let menu_item = menu_item.into();
-        let menu_item = menu_item.to_glib_none();
         unsafe {
-            ffi::gtk_tool_item_set_proxy_menu_item(self.to_glib_none().0, menu_item_id.to_glib_none().0, menu_item.0);
+            ffi::gtk_tool_item_set_proxy_menu_item(self.as_ref().to_glib_none().0, menu_item_id.to_glib_none().0, menu_item.map(|p| p.as_ref()).to_glib_none().0);
         }
     }
 
     fn set_use_drag_window(&self, use_drag_window: bool) {
         unsafe {
-            ffi::gtk_tool_item_set_use_drag_window(self.to_glib_none().0, use_drag_window.to_glib());
+            ffi::gtk_tool_item_set_use_drag_window(self.as_ref().to_glib_none().0, use_drag_window.to_glib());
         }
     }
 
     fn set_visible_horizontal(&self, visible_horizontal: bool) {
         unsafe {
-            ffi::gtk_tool_item_set_visible_horizontal(self.to_glib_none().0, visible_horizontal.to_glib());
+            ffi::gtk_tool_item_set_visible_horizontal(self.as_ref().to_glib_none().0, visible_horizontal.to_glib());
         }
     }
 
     fn set_visible_vertical(&self, visible_vertical: bool) {
         unsafe {
-            ffi::gtk_tool_item_set_visible_vertical(self.to_glib_none().0, visible_vertical.to_glib());
+            ffi::gtk_tool_item_set_visible_vertical(self.as_ref().to_glib_none().0, visible_vertical.to_glib());
         }
     }
 
     fn toolbar_reconfigured(&self) {
         unsafe {
-            ffi::gtk_tool_item_toolbar_reconfigured(self.to_glib_none().0);
+            ffi::gtk_tool_item_toolbar_reconfigured(self.as_ref().to_glib_none().0);
         }
     }
 
     fn connect_create_menu_proxy<F: Fn(&Self) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "create-menu-proxy",
-                transmute(create_menu_proxy_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"create-menu-proxy\0".as_ptr() as *const _,
+                Some(transmute(create_menu_proxy_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_toolbar_reconfigured<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "toolbar-reconfigured",
-                transmute(toolbar_reconfigured_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"toolbar-reconfigured\0".as_ptr() as *const _,
+                Some(transmute(toolbar_reconfigured_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_is_important_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::is-important",
-                transmute(notify_is_important_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::is-important\0".as_ptr() as *const _,
+                Some(transmute(notify_is_important_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_visible_horizontal_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::visible-horizontal",
-                transmute(notify_visible_horizontal_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::visible-horizontal\0".as_ptr() as *const _,
+                Some(transmute(notify_visible_horizontal_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_visible_vertical_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::visible-vertical",
-                transmute(notify_visible_vertical_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::visible-vertical\0".as_ptr() as *const _,
+                Some(transmute(notify_visible_vertical_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn create_menu_proxy_trampoline<P>(this: *mut ffi::GtkToolItem, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn create_menu_proxy_trampoline<P, F: Fn(&P) -> Inhibit + 'static>(this: *mut ffi::GtkToolItem, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<ToolItem> {
-    let f: &&(Fn(&P) -> Inhibit + 'static) = transmute(f);
-    f(&ToolItem::from_glib_borrow(this).downcast_unchecked()).to_glib()
+    let f: &F = transmute(f);
+    f(&ToolItem::from_glib_borrow(this).unsafe_cast()).to_glib()
 }
 
-unsafe extern "C" fn toolbar_reconfigured_trampoline<P>(this: *mut ffi::GtkToolItem, f: glib_ffi::gpointer)
+unsafe extern "C" fn toolbar_reconfigured_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkToolItem, f: glib_ffi::gpointer)
 where P: IsA<ToolItem> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ToolItem::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&ToolItem::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_is_important_trampoline<P>(this: *mut ffi::GtkToolItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_is_important_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkToolItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolItem> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ToolItem::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&ToolItem::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_visible_horizontal_trampoline<P>(this: *mut ffi::GtkToolItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_visible_horizontal_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkToolItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolItem> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ToolItem::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&ToolItem::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_visible_vertical_trampoline<P>(this: *mut ffi::GtkToolItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_visible_vertical_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkToolItem, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolItem> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ToolItem::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&ToolItem::from_glib_borrow(this).unsafe_cast())
+}
+
+impl fmt::Display for ToolItem {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "ToolItem")
+    }
 }

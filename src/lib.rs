@@ -53,26 +53,31 @@
 //! and run the main event loop:
 //!
 //! ```no_run
-//! # extern crate gtk;
-//! # use gtk::prelude::*;
-//! # use gtk::{Window, WindowType};
+//! extern crate gtk;
+//! extern crate gio;
+//!
+//! // To import all needed traits.
+//! use gtk::prelude::*;
+//! use gio::prelude::*;
+//!
+//! use std::env;
+//!
 //! fn main() {
-//!     gtk::init().unwrap();
-//!     // Create the main window.
-//!     let window = Window::new(WindowType::Toplevel);
-//!     // UI initialization.
-//!     // ...
-//!     // Don't forget to make all widgets visible.
-//!     window.show_all();
-//!     // Handle closing of the window.
-//!     window.connect_delete_event(|_, _| {
-//!         // Stop the main loop.
-//!         gtk::main_quit();
-//!         // Let the default handler destroy the window.
-//!         Inhibit(false)
+//!     let uiapp = gtk::Application::new("org.gtkrsnotes.demo",
+//!                                       gio::ApplicationFlags::FLAGS_NONE)
+//!                                  .expect("Application::new failed");
+//!     uiapp.connect_activate(|app| {
+//!         // We create the main window.
+//!         let win = gtk::ApplicationWindow::new(app);
+//!
+//!         // Then we set its size and a title.
+//!         win.set_default_size(320, 200);
+//!         win.set_title("Basic example");
+//!
+//!         // Don't forget to make all widgets visible.
+//!         win.show_all();
 //!     });
-//!     // Run the main loop.
-//!     gtk::main();
+//!     uiapp.run(&env::args().collect::<Vec<_>>());
 //! }
 //! ```
 //!
@@ -112,9 +117,8 @@
 //!
 //! ## Library versions
 //!
-//! By default this crate provides only GTK+ 3.4 APIs. You can access more
-//! modern APIs by selecting one of the following features: `v3_6`, `v3_8`,
-//! `v3_10`, `v3_12`, `v3_14`, `v3_16`.
+//! By default this crate provides only GTK+ 3.14 APIs. You can access more
+//! modern APIs by selecting one of the following features: `v3_14`, `v3_16`, etc.
 //!
 //! `Cargo.toml` example:
 //!
@@ -165,6 +169,7 @@ extern crate gdk_pixbuf_sys as gdk_pixbuf_ffi;
 extern crate gobject_sys as gobject_ffi;
 extern crate gtk_sys as ffi;
 extern crate cairo_sys as cairo_ffi;
+extern crate pango_sys as pango_ffi;
 #[macro_use]
 extern crate glib;
 extern crate gio;
@@ -172,6 +177,7 @@ extern crate gdk;
 extern crate gdk_pixbuf;
 extern crate cairo;
 extern crate pango;
+extern crate atk;
 
 #[cfg(feature = "futures")]
 extern crate fragile;
@@ -213,23 +219,25 @@ mod auto;
 mod app_chooser;
 mod application;
 mod application_window;
-mod assistant;
 mod buildable;
 mod builder;
 mod border;
+mod cell_renderer_pixbuf;
 mod clipboard;
 mod color_button;
 mod color_chooser;
+mod combo_box;
 mod dialog;
 mod drag_context;
 mod entry_buffer;
-mod entry_completion;
 mod enums;
 mod file_chooser_dialog;
 mod fixed;
+#[cfg(any(feature = "v3_18", feature = "dox"))]
+mod flow_box;
 mod im_context_simple;
 mod invisible;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
+#[cfg(any(feature = "v3_16", feature = "dox"))]
 mod list_box;
 mod list_store;
 mod menu;
@@ -247,6 +255,8 @@ mod radio_tool_button;
 mod recent_chooser_dialog;
 mod recent_data;
 mod requisition;
+mod response_type;
+mod selection_data;
 mod signal;
 #[cfg(any(target_os = "linux", feature = "dox"))]
 mod socket;
@@ -256,6 +266,7 @@ mod target_list;
 mod text_buffer;
 mod text_iter;
 mod tree_model_filter;
+mod tree_model_sort;
 mod tree_row_reference;
 mod tree_sortable;
 mod tree_path;
@@ -282,6 +293,7 @@ pub use pad_action_entry::PadActionEntry;
 pub use page_range::PageRange;
 pub use recent_data::RecentData;
 pub use requisition::Requisition;
+pub use response_type::ResponseType;
 #[cfg(any(target_os = "linux", feature = "dox"))]
 pub use socket::Socket;
 pub use target_entry::TargetEntry;

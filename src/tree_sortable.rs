@@ -4,7 +4,7 @@
 
 use SortType;
 use ffi;
-use glib::object::{Downcast, IsA};
+use glib::object::{Cast, IsA};
 use glib::translate::*;
 use std::mem::{self, transmute};
 use std::cmp::Ordering;
@@ -49,7 +49,7 @@ impl FromGlib<i32> for SortColumn {
     }
 }
 
-pub trait TreeSortableExtManual {
+pub trait TreeSortableExtManual: 'static {
     fn set_default_sort_func<F>(&self, sort_func: F)
         where F: Fn(&Self, &TreeIter, &TreeIter) -> Ordering + 'static;
     fn set_sort_func<F>(&self, sort_column_id: SortColumn, sort_func: F)
@@ -59,33 +59,32 @@ pub trait TreeSortableExtManual {
     fn set_unsorted(&self);
 }
 
-unsafe extern "C" fn trampoline<T>(this: *mut GtkTreeModel, iter: *mut GtkTreeIter,
+unsafe extern "C" fn trampoline<T, F: Fn(&T, &TreeIter, &TreeIter) -> Ordering>(this: *mut GtkTreeModel, iter: *mut GtkTreeIter,
                                    iter2: *mut GtkTreeIter, f: gpointer) -> i32
-where T: IsA<TreeModel> {
-    let f: &&(Fn(&T, &TreeIter, &TreeIter) -> Ordering) = transmute(f);
-    f(&TreeModel::from_glib_none(this).downcast_unchecked(), &from_glib_borrow(iter),
+where T: IsA<TreeSortable> {
+    let f: &F = transmute(f);
+    f(&TreeModel::from_glib_none(this).unsafe_cast(), &from_glib_borrow(iter),
       &from_glib_borrow(iter2)).to_glib()
 }
 
-unsafe extern "C" fn destroy_closure<T>(ptr: gpointer) {
-    Box::<Box<Fn(&T, &TreeIter, &TreeIter) -> Ordering + 'static>>::from_raw(ptr as *mut _);
+unsafe extern "C" fn destroy_closure<T, F: Fn(&T, &TreeIter, &TreeIter) -> Ordering>(ptr: gpointer) {
+    Box::<F>::from_raw(ptr as *mut _);
 }
 
 fn into_raw<F, T>(func: F) -> gpointer
     where F: Fn(&T, &TreeIter, &TreeIter) -> Ordering + 'static {
     skip_assert_initialized!();
-    let func: Box<Box<Fn(&T, &TreeIter, &TreeIter) -> Ordering + 'static>> =
-        Box::new(Box::new(func));
+    let func: Box<F> = Box::new(func);
     Box::into_raw(func) as gpointer
 }
 
-impl<O: IsA<TreeModel> + IsA<TreeSortable>> TreeSortableExtManual for O {
+impl<O: IsA<TreeSortable>> TreeSortableExtManual for O {
     #[inline]
     fn get_sort_column_id(&self) -> Option<(SortColumn, SortType)> {
         unsafe {
             let mut sort_column_id = mem::uninitialized();
             let mut order = mem::uninitialized();
-            ffi::gtk_tree_sortable_get_sort_column_id(self.to_glib_none().0, &mut sort_column_id, &mut order);
+            ffi::gtk_tree_sortable_get_sort_column_id(self.as_ref().to_glib_none().0, &mut sort_column_id, &mut order);
             if sort_column_id != ffi::GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID {
                 Some((from_glib(sort_column_id), from_glib(order)))
             } else {
@@ -97,23 +96,23 @@ impl<O: IsA<TreeModel> + IsA<TreeSortable>> TreeSortableExtManual for O {
     fn set_default_sort_func<F>(&self, sort_func: F)
     where F: Fn(&Self, &TreeIter, &TreeIter) -> Ordering + 'static {
         unsafe {
-            ffi::gtk_tree_sortable_set_default_sort_func(self.to_glib_none().0,
-                                                         Some(trampoline::<Self>),
+            ffi::gtk_tree_sortable_set_default_sort_func(self.as_ref().to_glib_none().0,
+                                                         Some(trampoline::<Self, F>),
                                                          into_raw(sort_func),
-                                                         Some(destroy_closure::<Self>))
+                                                         Some(destroy_closure::<Self, F>))
         }
     }
 
     #[inline]
     fn set_sort_column_id(&self, sort_column_id: SortColumn, order: SortType) {
         unsafe {
-            ffi::gtk_tree_sortable_set_sort_column_id(self.to_glib_none().0, sort_column_id.to_glib(), order.to_glib());
+            ffi::gtk_tree_sortable_set_sort_column_id(self.as_ref().to_glib_none().0, sort_column_id.to_glib(), order.to_glib());
         }
     }
 
     fn set_unsorted(&self) {
         unsafe {
-            ffi::gtk_tree_sortable_set_sort_column_id(self.to_glib_none().0,
+            ffi::gtk_tree_sortable_set_sort_column_id(self.as_ref().to_glib_none().0,
                                                       ffi::GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID,
                                                       SortType::Ascending.to_glib());
         }
@@ -122,11 +121,11 @@ impl<O: IsA<TreeModel> + IsA<TreeSortable>> TreeSortableExtManual for O {
     fn set_sort_func<F>(&self, sort_column_id: SortColumn, sort_func: F)
     where F: Fn(&Self, &TreeIter, &TreeIter) -> Ordering + 'static {
         unsafe {
-            ffi::gtk_tree_sortable_set_sort_func(self.to_glib_none().0,
+            ffi::gtk_tree_sortable_set_sort_func(self.as_ref().to_glib_none().0,
                                                  sort_column_id.to_glib(),
-                                                 Some(trampoline::<Self>),
+                                                 Some(trampoline::<Self, F>),
                                                  into_raw(sort_func),
-                                                 Some(destroy_closure::<Self>))
+                                                 Some(destroy_closure::<Self, F>))
         }
     }
 }

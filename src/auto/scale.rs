@@ -10,23 +10,21 @@ use PositionType;
 use Range;
 use Widget;
 use ffi;
-use glib;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use libc;
 use pango;
 use std::boxed::Box as Box_;
+use std::fmt;
 use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
-    pub struct Scale(Object<ffi::GtkScale, ffi::GtkScaleClass>): Range, Widget, Buildable, Orientable;
+    pub struct Scale(Object<ffi::GtkScale, ffi::GtkScaleClass, ScaleClass>) @extends Range, Widget, @implements Buildable, Orientable;
 
     match fn {
         get_type => || ffi::gtk_scale_get_type(),
@@ -34,24 +32,25 @@ glib_wrapper! {
 }
 
 impl Scale {
-    pub fn new<'a, P: Into<Option<&'a Adjustment>>>(orientation: Orientation, adjustment: P) -> Scale {
+    pub fn new<'a, P: IsA<Adjustment> + 'a, Q: Into<Option<&'a P>>>(orientation: Orientation, adjustment: Q) -> Scale {
         assert_initialized_main_thread!();
         let adjustment = adjustment.into();
-        let adjustment = adjustment.to_glib_none();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_scale_new(orientation.to_glib(), adjustment.0)).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_scale_new(orientation.to_glib(), adjustment.map(|p| p.as_ref()).to_glib_none().0)).unsafe_cast()
         }
     }
 
     pub fn new_with_range(orientation: Orientation, min: f64, max: f64, step: f64) -> Scale {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_scale_new_with_range(orientation.to_glib(), min, max, step)).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_scale_new_with_range(orientation.to_glib(), min, max, step)).unsafe_cast()
         }
     }
 }
 
-pub trait ScaleExt {
+pub const NONE_SCALE: Option<&Scale> = None;
+
+pub trait ScaleExt: 'static {
     fn add_mark<'a, P: Into<Option<&'a str>>>(&self, value: f64, position: PositionType, markup: P);
 
     fn clear_marks(&self);
@@ -87,42 +86,41 @@ pub trait ScaleExt {
     fn connect_property_value_pos_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Scale> + IsA<glib::object::Object>> ScaleExt for O {
+impl<O: IsA<Scale>> ScaleExt for O {
     fn add_mark<'a, P: Into<Option<&'a str>>>(&self, value: f64, position: PositionType, markup: P) {
         let markup = markup.into();
-        let markup = markup.to_glib_none();
         unsafe {
-            ffi::gtk_scale_add_mark(self.to_glib_none().0, value, position.to_glib(), markup.0);
+            ffi::gtk_scale_add_mark(self.as_ref().to_glib_none().0, value, position.to_glib(), markup.to_glib_none().0);
         }
     }
 
     fn clear_marks(&self) {
         unsafe {
-            ffi::gtk_scale_clear_marks(self.to_glib_none().0);
+            ffi::gtk_scale_clear_marks(self.as_ref().to_glib_none().0);
         }
     }
 
     fn get_digits(&self) -> i32 {
         unsafe {
-            ffi::gtk_scale_get_digits(self.to_glib_none().0)
+            ffi::gtk_scale_get_digits(self.as_ref().to_glib_none().0)
         }
     }
 
     fn get_draw_value(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_scale_get_draw_value(self.to_glib_none().0))
+            from_glib(ffi::gtk_scale_get_draw_value(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_has_origin(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_scale_get_has_origin(self.to_glib_none().0))
+            from_glib(ffi::gtk_scale_get_has_origin(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_layout(&self) -> Option<pango::Layout> {
         unsafe {
-            from_glib_none(ffi::gtk_scale_get_layout(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_scale_get_layout(self.as_ref().to_glib_none().0))
         }
     }
 
@@ -130,108 +128,114 @@ impl<O: IsA<Scale> + IsA<glib::object::Object>> ScaleExt for O {
         unsafe {
             let mut x = mem::uninitialized();
             let mut y = mem::uninitialized();
-            ffi::gtk_scale_get_layout_offsets(self.to_glib_none().0, &mut x, &mut y);
+            ffi::gtk_scale_get_layout_offsets(self.as_ref().to_glib_none().0, &mut x, &mut y);
             (x, y)
         }
     }
 
     fn get_value_pos(&self) -> PositionType {
         unsafe {
-            from_glib(ffi::gtk_scale_get_value_pos(self.to_glib_none().0))
+            from_glib(ffi::gtk_scale_get_value_pos(self.as_ref().to_glib_none().0))
         }
     }
 
     fn set_digits(&self, digits: i32) {
         unsafe {
-            ffi::gtk_scale_set_digits(self.to_glib_none().0, digits);
+            ffi::gtk_scale_set_digits(self.as_ref().to_glib_none().0, digits);
         }
     }
 
     fn set_draw_value(&self, draw_value: bool) {
         unsafe {
-            ffi::gtk_scale_set_draw_value(self.to_glib_none().0, draw_value.to_glib());
+            ffi::gtk_scale_set_draw_value(self.as_ref().to_glib_none().0, draw_value.to_glib());
         }
     }
 
     fn set_has_origin(&self, has_origin: bool) {
         unsafe {
-            ffi::gtk_scale_set_has_origin(self.to_glib_none().0, has_origin.to_glib());
+            ffi::gtk_scale_set_has_origin(self.as_ref().to_glib_none().0, has_origin.to_glib());
         }
     }
 
     fn set_value_pos(&self, pos: PositionType) {
         unsafe {
-            ffi::gtk_scale_set_value_pos(self.to_glib_none().0, pos.to_glib());
+            ffi::gtk_scale_set_value_pos(self.as_ref().to_glib_none().0, pos.to_glib());
         }
     }
 
     fn connect_format_value<F: Fn(&Self, f64) -> String + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, f64) -> String + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "format-value",
-                transmute(format_value_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"format-value\0".as_ptr() as *const _,
+                Some(transmute(format_value_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_digits_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::digits",
-                transmute(notify_digits_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::digits\0".as_ptr() as *const _,
+                Some(transmute(notify_digits_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_draw_value_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::draw-value",
-                transmute(notify_draw_value_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::draw-value\0".as_ptr() as *const _,
+                Some(transmute(notify_draw_value_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_has_origin_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::has-origin",
-                transmute(notify_has_origin_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::has-origin\0".as_ptr() as *const _,
+                Some(transmute(notify_has_origin_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_value_pos_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::value-pos",
-                transmute(notify_value_pos_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::value-pos\0".as_ptr() as *const _,
+                Some(transmute(notify_value_pos_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn format_value_trampoline<P>(this: *mut ffi::GtkScale, value: libc::c_double, f: glib_ffi::gpointer) -> *mut libc::c_char
+unsafe extern "C" fn format_value_trampoline<P, F: Fn(&P, f64) -> String + 'static>(this: *mut ffi::GtkScale, value: libc::c_double, f: glib_ffi::gpointer) -> *mut libc::c_char
 where P: IsA<Scale> {
-    let f: &&(Fn(&P, f64) -> String + 'static) = transmute(f);
-    f(&Scale::from_glib_borrow(this).downcast_unchecked(), value).to_glib_full()
+    let f: &F = transmute(f);
+    f(&Scale::from_glib_borrow(this).unsafe_cast(), value).to_glib_full()
 }
 
-unsafe extern "C" fn notify_digits_trampoline<P>(this: *mut ffi::GtkScale, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_digits_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkScale, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Scale> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Scale::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&Scale::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_draw_value_trampoline<P>(this: *mut ffi::GtkScale, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_draw_value_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkScale, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Scale> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Scale::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&Scale::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_has_origin_trampoline<P>(this: *mut ffi::GtkScale, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_has_origin_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkScale, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Scale> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Scale::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&Scale::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_value_pos_trampoline<P>(this: *mut ffi::GtkScale, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_value_pos_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkScale, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Scale> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Scale::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&Scale::from_glib_borrow(this).unsafe_cast())
+}
+
+impl fmt::Display for Scale {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Scale")
+    }
 }

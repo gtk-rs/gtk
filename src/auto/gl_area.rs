@@ -11,29 +11,29 @@ use ffi;
 use gdk;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 use gdk_ffi;
-use glib;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 use glib::signal::SignalHandlerId;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
+#[cfg(any(feature = "v3_16", feature = "dox"))]
 use glib_ffi;
-use gobject_ffi;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 use libc;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 use signal::Inhibit;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 use std::boxed::Box as Box_;
+use std::fmt;
+#[cfg(any(feature = "v3_16", feature = "dox"))]
 use std::mem;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
-    pub struct GLArea(Object<ffi::GtkGLArea, ffi::GtkGLAreaClass>): Widget, Buildable;
+    pub struct GLArea(Object<ffi::GtkGLArea, ffi::GtkGLAreaClass, GLAreaClass>) @extends Widget, @implements Buildable;
 
     match fn {
         get_type => || ffi::gtk_gl_area_get_type(),
@@ -45,7 +45,7 @@ impl GLArea {
     pub fn new() -> GLArea {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_gl_area_new()).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_gl_area_new()).unsafe_cast()
         }
     }
 }
@@ -57,7 +57,9 @@ impl Default for GLArea {
     }
 }
 
-pub trait GLAreaExt {
+pub const NONE_GL_AREA: Option<&GLArea> = None;
+
+pub trait GLAreaExt: 'static {
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn attach_buffers(&self);
 
@@ -113,7 +115,7 @@ pub trait GLAreaExt {
     fn set_use_es(&self, use_es: bool);
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn connect_create_context<F: Fn(&Self) -> gdk::GLContext + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_create_context<F: Fn(&Self) -> Option<gdk::GLContext> + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn connect_render<F: Fn(&Self, &gdk::GLContext) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId;
@@ -140,53 +142,53 @@ pub trait GLAreaExt {
     fn connect_property_use_es_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<GLArea> + IsA<glib::object::Object>> GLAreaExt for O {
+impl<O: IsA<GLArea>> GLAreaExt for O {
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn attach_buffers(&self) {
         unsafe {
-            ffi::gtk_gl_area_attach_buffers(self.to_glib_none().0);
+            ffi::gtk_gl_area_attach_buffers(self.as_ref().to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn get_auto_render(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_gl_area_get_auto_render(self.to_glib_none().0))
+            from_glib(ffi::gtk_gl_area_get_auto_render(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn get_context(&self) -> Option<gdk::GLContext> {
         unsafe {
-            from_glib_none(ffi::gtk_gl_area_get_context(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_gl_area_get_context(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn get_error(&self) -> Option<Error> {
         unsafe {
-            from_glib_none(ffi::gtk_gl_area_get_error(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_gl_area_get_error(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn get_has_alpha(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_gl_area_get_has_alpha(self.to_glib_none().0))
+            from_glib(ffi::gtk_gl_area_get_has_alpha(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn get_has_depth_buffer(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_gl_area_get_has_depth_buffer(self.to_glib_none().0))
+            from_glib(ffi::gtk_gl_area_get_has_depth_buffer(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn get_has_stencil_buffer(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_gl_area_get_has_stencil_buffer(self.to_glib_none().0))
+            from_glib(ffi::gtk_gl_area_get_has_stencil_buffer(self.as_ref().to_glib_none().0))
         }
     }
 
@@ -195,7 +197,7 @@ impl<O: IsA<GLArea> + IsA<glib::object::Object>> GLAreaExt for O {
         unsafe {
             let mut major = mem::uninitialized();
             let mut minor = mem::uninitialized();
-            ffi::gtk_gl_area_get_required_version(self.to_glib_none().0, &mut major, &mut minor);
+            ffi::gtk_gl_area_get_required_version(self.as_ref().to_glib_none().0, &mut major, &mut minor);
             (major, minor)
         }
     }
@@ -203,216 +205,221 @@ impl<O: IsA<GLArea> + IsA<glib::object::Object>> GLAreaExt for O {
     #[cfg(any(feature = "v3_22", feature = "dox"))]
     fn get_use_es(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_gl_area_get_use_es(self.to_glib_none().0))
+            from_glib(ffi::gtk_gl_area_get_use_es(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn make_current(&self) {
         unsafe {
-            ffi::gtk_gl_area_make_current(self.to_glib_none().0);
+            ffi::gtk_gl_area_make_current(self.as_ref().to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn queue_render(&self) {
         unsafe {
-            ffi::gtk_gl_area_queue_render(self.to_glib_none().0);
+            ffi::gtk_gl_area_queue_render(self.as_ref().to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn set_auto_render(&self, auto_render: bool) {
         unsafe {
-            ffi::gtk_gl_area_set_auto_render(self.to_glib_none().0, auto_render.to_glib());
+            ffi::gtk_gl_area_set_auto_render(self.as_ref().to_glib_none().0, auto_render.to_glib());
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn set_error<'a, P: Into<Option<&'a Error>>>(&self, error: P) {
         let error = error.into();
-        let error = error.to_glib_none();
         unsafe {
-            ffi::gtk_gl_area_set_error(self.to_glib_none().0, error.0);
+            ffi::gtk_gl_area_set_error(self.as_ref().to_glib_none().0, error.to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn set_has_alpha(&self, has_alpha: bool) {
         unsafe {
-            ffi::gtk_gl_area_set_has_alpha(self.to_glib_none().0, has_alpha.to_glib());
+            ffi::gtk_gl_area_set_has_alpha(self.as_ref().to_glib_none().0, has_alpha.to_glib());
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn set_has_depth_buffer(&self, has_depth_buffer: bool) {
         unsafe {
-            ffi::gtk_gl_area_set_has_depth_buffer(self.to_glib_none().0, has_depth_buffer.to_glib());
+            ffi::gtk_gl_area_set_has_depth_buffer(self.as_ref().to_glib_none().0, has_depth_buffer.to_glib());
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn set_has_stencil_buffer(&self, has_stencil_buffer: bool) {
         unsafe {
-            ffi::gtk_gl_area_set_has_stencil_buffer(self.to_glib_none().0, has_stencil_buffer.to_glib());
+            ffi::gtk_gl_area_set_has_stencil_buffer(self.as_ref().to_glib_none().0, has_stencil_buffer.to_glib());
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn set_required_version(&self, major: i32, minor: i32) {
         unsafe {
-            ffi::gtk_gl_area_set_required_version(self.to_glib_none().0, major, minor);
+            ffi::gtk_gl_area_set_required_version(self.as_ref().to_glib_none().0, major, minor);
         }
     }
 
     #[cfg(any(feature = "v3_22", feature = "dox"))]
     fn set_use_es(&self, use_es: bool) {
         unsafe {
-            ffi::gtk_gl_area_set_use_es(self.to_glib_none().0, use_es.to_glib());
+            ffi::gtk_gl_area_set_use_es(self.as_ref().to_glib_none().0, use_es.to_glib());
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn connect_create_context<F: Fn(&Self) -> gdk::GLContext + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_create_context<F: Fn(&Self) -> Option<gdk::GLContext> + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) -> gdk::GLContext + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "create-context",
-                transmute(create_context_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"create-context\0".as_ptr() as *const _,
+                Some(transmute(create_context_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn connect_render<F: Fn(&Self, &gdk::GLContext) -> Inhibit + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::GLContext) -> Inhibit + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "render",
-                transmute(render_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"render\0".as_ptr() as *const _,
+                Some(transmute(render_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn connect_resize<F: Fn(&Self, i32, i32) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, i32, i32) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "resize",
-                transmute(resize_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"resize\0".as_ptr() as *const _,
+                Some(transmute(resize_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn connect_property_auto_render_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::auto-render",
-                transmute(notify_auto_render_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::auto-render\0".as_ptr() as *const _,
+                Some(transmute(notify_auto_render_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn connect_property_context_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::context",
-                transmute(notify_context_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::context\0".as_ptr() as *const _,
+                Some(transmute(notify_context_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn connect_property_has_alpha_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::has-alpha",
-                transmute(notify_has_alpha_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::has-alpha\0".as_ptr() as *const _,
+                Some(transmute(notify_has_alpha_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn connect_property_has_depth_buffer_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::has-depth-buffer",
-                transmute(notify_has_depth_buffer_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::has-depth-buffer\0".as_ptr() as *const _,
+                Some(transmute(notify_has_depth_buffer_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn connect_property_has_stencil_buffer_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::has-stencil-buffer",
-                transmute(notify_has_stencil_buffer_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::has-stencil-buffer\0".as_ptr() as *const _,
+                Some(transmute(notify_has_stencil_buffer_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_22", feature = "dox"))]
     fn connect_property_use_es_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::use-es",
-                transmute(notify_use_es_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::use-es\0".as_ptr() as *const _,
+                Some(transmute(notify_use_es_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn create_context_trampoline<P>(this: *mut ffi::GtkGLArea, f: glib_ffi::gpointer) -> *mut gdk_ffi::GdkGLContext
+unsafe extern "C" fn create_context_trampoline<P, F: Fn(&P) -> Option<gdk::GLContext> + 'static>(this: *mut ffi::GtkGLArea, f: glib_ffi::gpointer) -> *mut gdk_ffi::GdkGLContext
 where P: IsA<GLArea> {
-    let f: &&(Fn(&P) -> gdk::GLContext + 'static) = transmute(f);
-    f(&GLArea::from_glib_borrow(this).downcast_unchecked()).to_glib_full()
+    let f: &F = transmute(f);
+    f(&GLArea::from_glib_borrow(this).unsafe_cast()).to_glib_full()
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn render_trampoline<P>(this: *mut ffi::GtkGLArea, context: *mut gdk_ffi::GdkGLContext, f: glib_ffi::gpointer) -> glib_ffi::gboolean
+unsafe extern "C" fn render_trampoline<P, F: Fn(&P, &gdk::GLContext) -> Inhibit + 'static>(this: *mut ffi::GtkGLArea, context: *mut gdk_ffi::GdkGLContext, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<GLArea> {
-    let f: &&(Fn(&P, &gdk::GLContext) -> Inhibit + 'static) = transmute(f);
-    f(&GLArea::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(context)).to_glib()
+    let f: &F = transmute(f);
+    f(&GLArea::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(context)).to_glib()
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn resize_trampoline<P>(this: *mut ffi::GtkGLArea, width: libc::c_int, height: libc::c_int, f: glib_ffi::gpointer)
+unsafe extern "C" fn resize_trampoline<P, F: Fn(&P, i32, i32) + 'static>(this: *mut ffi::GtkGLArea, width: libc::c_int, height: libc::c_int, f: glib_ffi::gpointer)
 where P: IsA<GLArea> {
-    let f: &&(Fn(&P, i32, i32) + 'static) = transmute(f);
-    f(&GLArea::from_glib_borrow(this).downcast_unchecked(), width, height)
+    let f: &F = transmute(f);
+    f(&GLArea::from_glib_borrow(this).unsafe_cast(), width, height)
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn notify_auto_render_trampoline<P>(this: *mut ffi::GtkGLArea, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_auto_render_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGLArea, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<GLArea> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&GLArea::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&GLArea::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn notify_context_trampoline<P>(this: *mut ffi::GtkGLArea, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_context_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGLArea, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<GLArea> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&GLArea::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&GLArea::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn notify_has_alpha_trampoline<P>(this: *mut ffi::GtkGLArea, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_has_alpha_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGLArea, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<GLArea> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&GLArea::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&GLArea::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn notify_has_depth_buffer_trampoline<P>(this: *mut ffi::GtkGLArea, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_has_depth_buffer_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGLArea, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<GLArea> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&GLArea::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&GLArea::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-unsafe extern "C" fn notify_has_stencil_buffer_trampoline<P>(this: *mut ffi::GtkGLArea, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_has_stencil_buffer_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGLArea, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<GLArea> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&GLArea::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&GLArea::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_22", feature = "dox"))]
-unsafe extern "C" fn notify_use_es_trampoline<P>(this: *mut ffi::GtkGLArea, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_use_es_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGLArea, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<GLArea> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&GLArea::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&GLArea::from_glib_borrow(this).unsafe_cast())
+}
+
+impl fmt::Display for GLArea {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "GLArea")
+    }
 }

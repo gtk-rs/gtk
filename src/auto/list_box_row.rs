@@ -9,24 +9,20 @@ use Container;
 use Widget;
 use ffi;
 use glib;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
+use glib::object::ObjectExt;
 use glib::signal::SignalHandlerId;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 use std::boxed::Box as Box_;
-use std::mem;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
+use std::fmt;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
-    pub struct ListBoxRow(Object<ffi::GtkListBoxRow, ffi::GtkListBoxRowClass>): Bin, Container, Widget, Buildable, Actionable;
+    pub struct ListBoxRow(Object<ffi::GtkListBoxRow, ffi::GtkListBoxRowClass, ListBoxRowClass>) @extends Bin, Container, Widget, @implements Buildable, Actionable;
 
     match fn {
         get_type => || ffi::gtk_list_box_row_get_type(),
@@ -34,179 +30,155 @@ glib_wrapper! {
 }
 
 impl ListBoxRow {
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     pub fn new() -> ListBoxRow {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_list_box_row_new()).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_list_box_row_new()).unsafe_cast()
         }
     }
 }
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 impl Default for ListBoxRow {
     fn default() -> Self {
         Self::new()
     }
 }
 
-pub trait ListBoxRowExt {
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
+pub const NONE_LIST_BOX_ROW: Option<&ListBoxRow> = None;
+
+pub trait ListBoxRowExt: 'static {
     fn changed(&self);
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_activatable(&self) -> bool;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_header(&self) -> Option<Widget>;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_index(&self) -> i32;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_selectable(&self) -> bool;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn is_selected(&self) -> bool;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn set_activatable(&self, activatable: bool);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_header<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, header: Q);
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn set_selectable(&self, selectable: bool);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn connect_activate<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn emit_activate(&self);
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_property_activatable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_property_selectable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<ListBoxRow> + IsA<glib::object::Object> + glib::object::ObjectExt> ListBoxRowExt for O {
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
+impl<O: IsA<ListBoxRow>> ListBoxRowExt for O {
     fn changed(&self) {
         unsafe {
-            ffi::gtk_list_box_row_changed(self.to_glib_none().0);
+            ffi::gtk_list_box_row_changed(self.as_ref().to_glib_none().0);
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_activatable(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_list_box_row_get_activatable(self.to_glib_none().0))
+            from_glib(ffi::gtk_list_box_row_get_activatable(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_header(&self) -> Option<Widget> {
         unsafe {
-            from_glib_none(ffi::gtk_list_box_row_get_header(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_list_box_row_get_header(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_index(&self) -> i32 {
         unsafe {
-            ffi::gtk_list_box_row_get_index(self.to_glib_none().0)
+            ffi::gtk_list_box_row_get_index(self.as_ref().to_glib_none().0)
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_selectable(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_list_box_row_get_selectable(self.to_glib_none().0))
+            from_glib(ffi::gtk_list_box_row_get_selectable(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn is_selected(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_list_box_row_is_selected(self.to_glib_none().0))
+            from_glib(ffi::gtk_list_box_row_is_selected(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn set_activatable(&self, activatable: bool) {
         unsafe {
-            ffi::gtk_list_box_row_set_activatable(self.to_glib_none().0, activatable.to_glib());
+            ffi::gtk_list_box_row_set_activatable(self.as_ref().to_glib_none().0, activatable.to_glib());
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_header<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, header: Q) {
         let header = header.into();
-        let header = header.to_glib_none();
         unsafe {
-            ffi::gtk_list_box_row_set_header(self.to_glib_none().0, header.0);
+            ffi::gtk_list_box_row_set_header(self.as_ref().to_glib_none().0, header.map(|p| p.as_ref()).to_glib_none().0);
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn set_selectable(&self, selectable: bool) {
         unsafe {
-            ffi::gtk_list_box_row_set_selectable(self.to_glib_none().0, selectable.to_glib());
+            ffi::gtk_list_box_row_set_selectable(self.as_ref().to_glib_none().0, selectable.to_glib());
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn connect_activate<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "activate",
-                transmute(activate_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"activate\0".as_ptr() as *const _,
+                Some(transmute(activate_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn emit_activate(&self) {
-        let _ = self.emit("activate", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("activate", &[]).unwrap() };
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_property_activatable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::activatable",
-                transmute(notify_activatable_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::activatable\0".as_ptr() as *const _,
+                Some(transmute(notify_activatable_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_property_selectable_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::selectable",
-                transmute(notify_selectable_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::selectable\0".as_ptr() as *const _,
+                Some(transmute(notify_selectable_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
-unsafe extern "C" fn activate_trampoline<P>(this: *mut ffi::GtkListBoxRow, f: glib_ffi::gpointer)
+unsafe extern "C" fn activate_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkListBoxRow, f: glib_ffi::gpointer)
 where P: IsA<ListBoxRow> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ListBoxRow::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&ListBoxRow::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
-unsafe extern "C" fn notify_activatable_trampoline<P>(this: *mut ffi::GtkListBoxRow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_activatable_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkListBoxRow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ListBoxRow> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ListBoxRow::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&ListBoxRow::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
-unsafe extern "C" fn notify_selectable_trampoline<P>(this: *mut ffi::GtkListBoxRow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_selectable_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkListBoxRow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ListBoxRow> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&ListBoxRow::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&ListBoxRow::from_glib_borrow(this).unsafe_cast())
+}
+
+impl fmt::Display for ListBoxRow {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "ListBoxRow")
+    }
 }

@@ -3,390 +3,310 @@
 // DO NOT EDIT
 
 use EventController;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use EventSequenceState;
 use ffi;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use gdk;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use gdk_ffi;
-use glib;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use glib::StaticType;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use glib::Value;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use glib::signal::SignalHandlerId;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use std::boxed::Box as Box_;
+use std::fmt;
 use std::mem;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
-    pub struct Gesture(Object<ffi::GtkGesture, ffi::GtkGestureClass>): EventController;
+    pub struct Gesture(Object<ffi::GtkGesture, ffi::GtkGestureClass, GestureClass>) @extends EventController;
 
     match fn {
         get_type => || ffi::gtk_gesture_get_type(),
     }
 }
 
-pub trait GestureExt {
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
+pub const NONE_GESTURE: Option<&Gesture> = None;
+
+pub trait GestureExt: 'static {
     fn get_bounding_box(&self) -> Option<gdk::Rectangle>;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_bounding_box_center(&self) -> Option<(f64, f64)>;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_device(&self) -> Option<gdk::Device>;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_group(&self) -> Vec<Gesture>;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
-    fn get_last_event(&self, sequence: &gdk::EventSequence) -> Option<gdk::Event>;
+    fn get_last_event<'a, P: Into<Option<&'a gdk::EventSequence>>>(&self, sequence: P) -> Option<gdk::Event>;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_last_updated_sequence(&self) -> Option<gdk::EventSequence>;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_point<'a, P: Into<Option<&'a gdk::EventSequence>>>(&self, sequence: P) -> Option<(f64, f64)>;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_sequence_state(&self, sequence: &gdk::EventSequence) -> EventSequenceState;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_sequences(&self) -> Vec<gdk::EventSequence>;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_window(&self) -> Option<gdk::Window>;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn group<P: IsA<Gesture>>(&self, gesture: &P);
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn handles_sequence<'a, P: Into<Option<&'a gdk::EventSequence>>>(&self, sequence: P) -> bool;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn is_active(&self) -> bool;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn is_grouped_with<P: IsA<Gesture>>(&self, other: &P) -> bool;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn is_recognized(&self) -> bool;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn set_sequence_state(&self, sequence: &gdk::EventSequence, state: EventSequenceState) -> bool;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn set_state(&self, state: EventSequenceState) -> bool;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
-    fn set_window<'a, P: Into<Option<&'a gdk::Window>>>(&self, window: P);
+    fn set_window<'a, P: IsA<gdk::Window> + 'a, Q: Into<Option<&'a P>>>(&self, window: Q);
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn ungroup(&self);
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_property_n_points(&self) -> u32;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_begin<F: Fn(&Self, &gdk::EventSequence) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_cancel<F: Fn(&Self, &gdk::EventSequence) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_end<F: Fn(&Self, &gdk::EventSequence) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_sequence_state_changed<F: Fn(&Self, &gdk::EventSequence, EventSequenceState) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_update<F: Fn(&Self, &gdk::EventSequence) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
-    fn connect_property_n_points_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_property_window_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Gesture> + IsA<glib::object::Object>> GestureExt for O {
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
+impl<O: IsA<Gesture>> GestureExt for O {
     fn get_bounding_box(&self) -> Option<gdk::Rectangle> {
         unsafe {
             let mut rect = gdk::Rectangle::uninitialized();
-            let ret = from_glib(ffi::gtk_gesture_get_bounding_box(self.to_glib_none().0, rect.to_glib_none_mut().0));
+            let ret = from_glib(ffi::gtk_gesture_get_bounding_box(self.as_ref().to_glib_none().0, rect.to_glib_none_mut().0));
             if ret { Some(rect) } else { None }
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_bounding_box_center(&self) -> Option<(f64, f64)> {
         unsafe {
             let mut x = mem::uninitialized();
             let mut y = mem::uninitialized();
-            let ret = from_glib(ffi::gtk_gesture_get_bounding_box_center(self.to_glib_none().0, &mut x, &mut y));
+            let ret = from_glib(ffi::gtk_gesture_get_bounding_box_center(self.as_ref().to_glib_none().0, &mut x, &mut y));
             if ret { Some((x, y)) } else { None }
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_device(&self) -> Option<gdk::Device> {
         unsafe {
-            from_glib_none(ffi::gtk_gesture_get_device(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_gesture_get_device(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_group(&self) -> Vec<Gesture> {
         unsafe {
-            FromGlibPtrContainer::from_glib_container(ffi::gtk_gesture_get_group(self.to_glib_none().0))
+            FromGlibPtrContainer::from_glib_container(ffi::gtk_gesture_get_group(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
-    fn get_last_event(&self, sequence: &gdk::EventSequence) -> Option<gdk::Event> {
+    fn get_last_event<'a, P: Into<Option<&'a gdk::EventSequence>>>(&self, sequence: P) -> Option<gdk::Event> {
+        let sequence = sequence.into();
         unsafe {
-            from_glib_none(ffi::gtk_gesture_get_last_event(self.to_glib_none().0, mut_override(sequence.to_glib_none().0)))
+            from_glib_none(ffi::gtk_gesture_get_last_event(self.as_ref().to_glib_none().0, mut_override(sequence.to_glib_none().0)))
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_last_updated_sequence(&self) -> Option<gdk::EventSequence> {
         unsafe {
-            from_glib_none(ffi::gtk_gesture_get_last_updated_sequence(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_gesture_get_last_updated_sequence(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_point<'a, P: Into<Option<&'a gdk::EventSequence>>>(&self, sequence: P) -> Option<(f64, f64)> {
         let sequence = sequence.into();
         unsafe {
             let mut x = mem::uninitialized();
             let mut y = mem::uninitialized();
-            let ret = from_glib(ffi::gtk_gesture_get_point(self.to_glib_none().0, mut_override(sequence.to_glib_none().0), &mut x, &mut y));
+            let ret = from_glib(ffi::gtk_gesture_get_point(self.as_ref().to_glib_none().0, mut_override(sequence.to_glib_none().0), &mut x, &mut y));
             if ret { Some((x, y)) } else { None }
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_sequence_state(&self, sequence: &gdk::EventSequence) -> EventSequenceState {
         unsafe {
-            from_glib(ffi::gtk_gesture_get_sequence_state(self.to_glib_none().0, mut_override(sequence.to_glib_none().0)))
+            from_glib(ffi::gtk_gesture_get_sequence_state(self.as_ref().to_glib_none().0, mut_override(sequence.to_glib_none().0)))
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_sequences(&self) -> Vec<gdk::EventSequence> {
         unsafe {
-            FromGlibPtrContainer::from_glib_container(ffi::gtk_gesture_get_sequences(self.to_glib_none().0))
+            FromGlibPtrContainer::from_glib_container(ffi::gtk_gesture_get_sequences(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_window(&self) -> Option<gdk::Window> {
         unsafe {
-            from_glib_none(ffi::gtk_gesture_get_window(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_gesture_get_window(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn group<P: IsA<Gesture>>(&self, gesture: &P) {
         unsafe {
-            ffi::gtk_gesture_group(self.to_glib_none().0, gesture.to_glib_none().0);
+            ffi::gtk_gesture_group(self.as_ref().to_glib_none().0, gesture.as_ref().to_glib_none().0);
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn handles_sequence<'a, P: Into<Option<&'a gdk::EventSequence>>>(&self, sequence: P) -> bool {
         let sequence = sequence.into();
         unsafe {
-            from_glib(ffi::gtk_gesture_handles_sequence(self.to_glib_none().0, mut_override(sequence.to_glib_none().0)))
+            from_glib(ffi::gtk_gesture_handles_sequence(self.as_ref().to_glib_none().0, mut_override(sequence.to_glib_none().0)))
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn is_active(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_gesture_is_active(self.to_glib_none().0))
+            from_glib(ffi::gtk_gesture_is_active(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn is_grouped_with<P: IsA<Gesture>>(&self, other: &P) -> bool {
         unsafe {
-            from_glib(ffi::gtk_gesture_is_grouped_with(self.to_glib_none().0, other.to_glib_none().0))
+            from_glib(ffi::gtk_gesture_is_grouped_with(self.as_ref().to_glib_none().0, other.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn is_recognized(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_gesture_is_recognized(self.to_glib_none().0))
+            from_glib(ffi::gtk_gesture_is_recognized(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn set_sequence_state(&self, sequence: &gdk::EventSequence, state: EventSequenceState) -> bool {
         unsafe {
-            from_glib(ffi::gtk_gesture_set_sequence_state(self.to_glib_none().0, mut_override(sequence.to_glib_none().0), state.to_glib()))
+            from_glib(ffi::gtk_gesture_set_sequence_state(self.as_ref().to_glib_none().0, mut_override(sequence.to_glib_none().0), state.to_glib()))
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn set_state(&self, state: EventSequenceState) -> bool {
         unsafe {
-            from_glib(ffi::gtk_gesture_set_state(self.to_glib_none().0, state.to_glib()))
+            from_glib(ffi::gtk_gesture_set_state(self.as_ref().to_glib_none().0, state.to_glib()))
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
-    fn set_window<'a, P: Into<Option<&'a gdk::Window>>>(&self, window: P) {
+    fn set_window<'a, P: IsA<gdk::Window> + 'a, Q: Into<Option<&'a P>>>(&self, window: Q) {
         let window = window.into();
-        let window = window.to_glib_none();
         unsafe {
-            ffi::gtk_gesture_set_window(self.to_glib_none().0, window.0);
+            ffi::gtk_gesture_set_window(self.as_ref().to_glib_none().0, window.map(|p| p.as_ref()).to_glib_none().0);
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn ungroup(&self) {
         unsafe {
-            ffi::gtk_gesture_ungroup(self.to_glib_none().0);
+            ffi::gtk_gesture_ungroup(self.as_ref().to_glib_none().0);
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_property_n_points(&self) -> u32 {
         unsafe {
             let mut value = Value::from_type(<u32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "n-points".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"n-points\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_begin<F: Fn(&Self, &gdk::EventSequence) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::EventSequence) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "begin",
-                transmute(begin_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"begin\0".as_ptr() as *const _,
+                Some(transmute(begin_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_cancel<F: Fn(&Self, &gdk::EventSequence) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::EventSequence) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "cancel",
-                transmute(cancel_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"cancel\0".as_ptr() as *const _,
+                Some(transmute(cancel_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_end<F: Fn(&Self, &gdk::EventSequence) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::EventSequence) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "end",
-                transmute(end_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"end\0".as_ptr() as *const _,
+                Some(transmute(end_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_sequence_state_changed<F: Fn(&Self, &gdk::EventSequence, EventSequenceState) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::EventSequence, EventSequenceState) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "sequence-state-changed",
-                transmute(sequence_state_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"sequence-state-changed\0".as_ptr() as *const _,
+                Some(transmute(sequence_state_changed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_update<F: Fn(&Self, &gdk::EventSequence) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &gdk::EventSequence) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "update",
-                transmute(update_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"update\0".as_ptr() as *const _,
+                Some(transmute(update_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
-    fn connect_property_n_points_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::n-points",
-                transmute(notify_n_points_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_property_window_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::window",
-                transmute(notify_window_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::window\0".as_ptr() as *const _,
+                Some(transmute(notify_window_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
-unsafe extern "C" fn begin_trampoline<P>(this: *mut ffi::GtkGesture, sequence: *mut gdk_ffi::GdkEventSequence, f: glib_ffi::gpointer)
+unsafe extern "C" fn begin_trampoline<P, F: Fn(&P, &gdk::EventSequence) + 'static>(this: *mut ffi::GtkGesture, sequence: *mut gdk_ffi::GdkEventSequence, f: glib_ffi::gpointer)
 where P: IsA<Gesture> {
-    let f: &&(Fn(&P, &gdk::EventSequence) + 'static) = transmute(f);
-    f(&Gesture::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(sequence))
+    let f: &F = transmute(f);
+    f(&Gesture::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(sequence))
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
-unsafe extern "C" fn cancel_trampoline<P>(this: *mut ffi::GtkGesture, sequence: *mut gdk_ffi::GdkEventSequence, f: glib_ffi::gpointer)
+unsafe extern "C" fn cancel_trampoline<P, F: Fn(&P, &gdk::EventSequence) + 'static>(this: *mut ffi::GtkGesture, sequence: *mut gdk_ffi::GdkEventSequence, f: glib_ffi::gpointer)
 where P: IsA<Gesture> {
-    let f: &&(Fn(&P, &gdk::EventSequence) + 'static) = transmute(f);
-    f(&Gesture::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(sequence))
+    let f: &F = transmute(f);
+    f(&Gesture::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(sequence))
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
-unsafe extern "C" fn end_trampoline<P>(this: *mut ffi::GtkGesture, sequence: *mut gdk_ffi::GdkEventSequence, f: glib_ffi::gpointer)
+unsafe extern "C" fn end_trampoline<P, F: Fn(&P, &gdk::EventSequence) + 'static>(this: *mut ffi::GtkGesture, sequence: *mut gdk_ffi::GdkEventSequence, f: glib_ffi::gpointer)
 where P: IsA<Gesture> {
-    let f: &&(Fn(&P, &gdk::EventSequence) + 'static) = transmute(f);
-    f(&Gesture::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(sequence))
+    let f: &F = transmute(f);
+    f(&Gesture::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(sequence))
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
-unsafe extern "C" fn sequence_state_changed_trampoline<P>(this: *mut ffi::GtkGesture, sequence: *mut gdk_ffi::GdkEventSequence, state: ffi::GtkEventSequenceState, f: glib_ffi::gpointer)
+unsafe extern "C" fn sequence_state_changed_trampoline<P, F: Fn(&P, &gdk::EventSequence, EventSequenceState) + 'static>(this: *mut ffi::GtkGesture, sequence: *mut gdk_ffi::GdkEventSequence, state: ffi::GtkEventSequenceState, f: glib_ffi::gpointer)
 where P: IsA<Gesture> {
-    let f: &&(Fn(&P, &gdk::EventSequence, EventSequenceState) + 'static) = transmute(f);
-    f(&Gesture::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(sequence), from_glib(state))
+    let f: &F = transmute(f);
+    f(&Gesture::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(sequence), from_glib(state))
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
-unsafe extern "C" fn update_trampoline<P>(this: *mut ffi::GtkGesture, sequence: *mut gdk_ffi::GdkEventSequence, f: glib_ffi::gpointer)
+unsafe extern "C" fn update_trampoline<P, F: Fn(&P, &gdk::EventSequence) + 'static>(this: *mut ffi::GtkGesture, sequence: *mut gdk_ffi::GdkEventSequence, f: glib_ffi::gpointer)
 where P: IsA<Gesture> {
-    let f: &&(Fn(&P, &gdk::EventSequence) + 'static) = transmute(f);
-    f(&Gesture::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(sequence))
+    let f: &F = transmute(f);
+    f(&Gesture::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(sequence))
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
-unsafe extern "C" fn notify_n_points_trampoline<P>(this: *mut ffi::GtkGesture, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_window_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGesture, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Gesture> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Gesture::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&Gesture::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
-unsafe extern "C" fn notify_window_trampoline<P>(this: *mut ffi::GtkGesture, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Gesture> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Gesture::from_glib_borrow(this).downcast_unchecked())
+impl fmt::Display for Gesture {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Gesture")
+    }
 }
