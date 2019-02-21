@@ -3,33 +3,34 @@
 // DO NOT EDIT
 
 use Buildable;
-use IconSet;
+use IconSize;
 use ImageType;
 use Misc;
 use Widget;
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 use cairo;
 use ffi;
 use gdk_pixbuf;
 use gio;
 use glib;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std;
 use std::boxed::Box as Box_;
+use std::fmt;
 use std::mem;
 use std::mem::transmute;
 use std::ptr;
 
 glib_wrapper! {
-    pub struct Image(Object<ffi::GtkImage, ffi::GtkImageClass>): Misc, Widget, Buildable;
+    pub struct Image(Object<ffi::GtkImage, ffi::GtkImageClass, ImageClass>) @extends Misc, Widget, @implements Buildable;
 
     match fn {
         get_type => || ffi::gtk_image_get_type(),
@@ -40,78 +41,59 @@ impl Image {
     pub fn new() -> Image {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_image_new()).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_image_new()).unsafe_cast()
         }
     }
 
     pub fn new_from_animation<P: IsA<gdk_pixbuf::PixbufAnimation>>(animation: &P) -> Image {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_image_new_from_animation(animation.to_glib_none().0)).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_image_new_from_animation(animation.as_ref().to_glib_none().0)).unsafe_cast()
         }
     }
 
     pub fn new_from_file<P: AsRef<std::path::Path>>(filename: P) -> Image {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_image_new_from_file(filename.as_ref().to_glib_none().0)).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_image_new_from_file(filename.as_ref().to_glib_none().0)).unsafe_cast()
         }
     }
 
-    pub fn new_from_gicon<P: IsA<gio::Icon>>(icon: &P, size: i32) -> Image {
+    pub fn new_from_gicon<P: IsA<gio::Icon>>(icon: &P, size: IconSize) -> Image {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_image_new_from_gicon(icon.to_glib_none().0, size)).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_image_new_from_gicon(icon.as_ref().to_glib_none().0, size.to_glib())).unsafe_cast()
         }
     }
 
-    pub fn new_from_icon_name<'a, P: Into<Option<&'a str>>>(icon_name: P, size: i32) -> Image {
+    pub fn new_from_icon_name<'a, P: Into<Option<&'a str>>>(icon_name: P, size: IconSize) -> Image {
         assert_initialized_main_thread!();
         let icon_name = icon_name.into();
-        let icon_name = icon_name.to_glib_none();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_image_new_from_icon_name(icon_name.0, size)).downcast_unchecked()
-        }
-    }
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    pub fn new_from_icon_set(icon_set: &IconSet, size: i32) -> Image {
-        assert_initialized_main_thread!();
-        unsafe {
-            Widget::from_glib_none(ffi::gtk_image_new_from_icon_set(icon_set.to_glib_none().0, size)).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_image_new_from_icon_name(icon_name.to_glib_none().0, size.to_glib())).unsafe_cast()
         }
     }
 
     pub fn new_from_pixbuf<'a, P: Into<Option<&'a gdk_pixbuf::Pixbuf>>>(pixbuf: P) -> Image {
         assert_initialized_main_thread!();
         let pixbuf = pixbuf.into();
-        let pixbuf = pixbuf.to_glib_none();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_image_new_from_pixbuf(pixbuf.0)).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_image_new_from_pixbuf(pixbuf.to_glib_none().0)).unsafe_cast()
         }
     }
 
     pub fn new_from_resource(resource_path: &str) -> Image {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_image_new_from_resource(resource_path.to_glib_none().0)).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_image_new_from_resource(resource_path.to_glib_none().0)).unsafe_cast()
         }
     }
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    pub fn new_from_stock(stock_id: &str, size: i32) -> Image {
-        assert_initialized_main_thread!();
-        unsafe {
-            Widget::from_glib_none(ffi::gtk_image_new_from_stock(stock_id.to_glib_none().0, size)).downcast_unchecked()
-        }
-    }
-
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     pub fn new_from_surface<'a, P: Into<Option<&'a cairo::Surface>>>(surface: P) -> Image {
         assert_initialized_main_thread!();
         let surface = surface.into();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_image_new_from_surface(mut_override(surface.to_glib_none().0))).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_image_new_from_surface(mut_override(surface.to_glib_none().0))).unsafe_cast()
         }
     }
 }
@@ -122,15 +104,14 @@ impl Default for Image {
     }
 }
 
-pub trait ImageExt {
+pub const NONE_IMAGE: Option<&Image> = None;
+
+pub trait ImageExt: 'static {
     fn clear(&self);
 
     fn get_animation(&self) -> Option<gdk_pixbuf::PixbufAnimation>;
 
-    fn get_gicon(&self) -> (gio::Icon, i32);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_icon_set(&self) -> (IconSet, i32);
+    fn get_gicon(&self) -> (gio::Icon, IconSize);
 
     fn get_pixbuf(&self) -> Option<gdk_pixbuf::Pixbuf>;
 
@@ -142,34 +123,27 @@ pub trait ImageExt {
 
     fn set_from_file<P: AsRef<std::path::Path>>(&self, filename: P);
 
-    fn set_from_gicon<P: IsA<gio::Icon>>(&self, icon: &P, size: i32);
+    fn set_from_gicon<P: IsA<gio::Icon>>(&self, icon: &P, size: IconSize);
 
-    fn set_from_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_name: P, size: i32);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_from_icon_set(&self, icon_set: &IconSet, size: i32);
+    fn set_from_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_name: P, size: IconSize);
 
     fn set_from_pixbuf<'a, P: Into<Option<&'a gdk_pixbuf::Pixbuf>>>(&self, pixbuf: P);
 
     fn set_from_resource<'a, P: Into<Option<&'a str>>>(&self, resource_path: P);
 
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_from_stock(&self, stock_id: &str, size: i32);
-
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_from_surface<'a, P: Into<Option<&'a cairo::Surface>>>(&self, surface: P);
 
     fn set_pixel_size(&self, pixel_size: i32);
 
-    fn get_property_file(&self) -> Option<String>;
+    fn get_property_file(&self) -> Option<GString>;
 
-    fn set_property_file(&self, file: Option<&str>);
+    fn set_property_file<'a, P: Into<Option<&'a str>>>(&self, file: P);
 
-    fn set_property_gicon<P: IsA<gio::Icon> + IsA<glib::object::Object> + glib::value::SetValueOptional>(&self, gicon: Option<&P>);
+    fn set_property_gicon<P: IsA<gio::Icon> + glib::value::SetValueOptional>(&self, gicon: Option<&P>);
 
-    fn get_property_icon_name(&self) -> Option<String>;
+    fn get_property_icon_name(&self) -> Option<GString>;
 
-    fn set_property_icon_name(&self, icon_name: Option<&str>);
+    fn set_property_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_name: P);
 
     fn get_property_icon_size(&self) -> i32;
 
@@ -179,19 +153,11 @@ pub trait ImageExt {
 
     fn get_property_pixbuf_animation(&self) -> Option<gdk_pixbuf::PixbufAnimation>;
 
-    fn set_property_pixbuf_animation<P: IsA<gdk_pixbuf::PixbufAnimation> + IsA<glib::object::Object> + glib::value::SetValueOptional>(&self, pixbuf_animation: Option<&P>);
+    fn set_property_pixbuf_animation<P: IsA<gdk_pixbuf::PixbufAnimation> + glib::value::SetValueOptional>(&self, pixbuf_animation: Option<&P>);
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
-    fn get_property_resource(&self) -> Option<String>;
+    fn get_property_resource(&self) -> Option<GString>;
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
-    fn set_property_resource(&self, resource: Option<&str>);
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn get_property_stock(&self) -> Option<String>;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn set_property_stock(&self, stock: Option<&str>);
+    fn set_property_resource<'a, P: Into<Option<&'a str>>>(&self, resource: P);
 
     fn get_property_use_fallback(&self) -> bool;
 
@@ -211,399 +177,347 @@ pub trait ImageExt {
 
     fn connect_property_pixel_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn connect_property_resource_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[cfg_attr(feature = "v3_10", deprecated)]
-    fn connect_property_stock_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_storage_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_use_fallback_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Image> + IsA<glib::object::Object>> ImageExt for O {
+impl<O: IsA<Image>> ImageExt for O {
     fn clear(&self) {
         unsafe {
-            ffi::gtk_image_clear(self.to_glib_none().0);
+            ffi::gtk_image_clear(self.as_ref().to_glib_none().0);
         }
     }
 
     fn get_animation(&self) -> Option<gdk_pixbuf::PixbufAnimation> {
         unsafe {
-            from_glib_none(ffi::gtk_image_get_animation(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_image_get_animation(self.as_ref().to_glib_none().0))
         }
     }
 
-    fn get_gicon(&self) -> (gio::Icon, i32) {
+    fn get_gicon(&self) -> (gio::Icon, IconSize) {
         unsafe {
             let mut gicon = ptr::null_mut();
             let mut size = mem::uninitialized();
-            ffi::gtk_image_get_gicon(self.to_glib_none().0, &mut gicon, &mut size);
-            (from_glib_none(gicon), size)
-        }
-    }
-
-    fn get_icon_set(&self) -> (IconSet, i32) {
-        unsafe {
-            let mut icon_set = ptr::null_mut();
-            let mut size = mem::uninitialized();
-            ffi::gtk_image_get_icon_set(self.to_glib_none().0, &mut icon_set, &mut size);
-            (from_glib_none(icon_set), size)
+            ffi::gtk_image_get_gicon(self.as_ref().to_glib_none().0, &mut gicon, &mut size);
+            (from_glib_none(gicon), from_glib(size))
         }
     }
 
     fn get_pixbuf(&self) -> Option<gdk_pixbuf::Pixbuf> {
         unsafe {
-            from_glib_none(ffi::gtk_image_get_pixbuf(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_image_get_pixbuf(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_pixel_size(&self) -> i32 {
         unsafe {
-            ffi::gtk_image_get_pixel_size(self.to_glib_none().0)
+            ffi::gtk_image_get_pixel_size(self.as_ref().to_glib_none().0)
         }
     }
 
     fn get_storage_type(&self) -> ImageType {
         unsafe {
-            from_glib(ffi::gtk_image_get_storage_type(self.to_glib_none().0))
+            from_glib(ffi::gtk_image_get_storage_type(self.as_ref().to_glib_none().0))
         }
     }
 
     fn set_from_animation<P: IsA<gdk_pixbuf::PixbufAnimation>>(&self, animation: &P) {
         unsafe {
-            ffi::gtk_image_set_from_animation(self.to_glib_none().0, animation.to_glib_none().0);
+            ffi::gtk_image_set_from_animation(self.as_ref().to_glib_none().0, animation.as_ref().to_glib_none().0);
         }
     }
 
     fn set_from_file<P: AsRef<std::path::Path>>(&self, filename: P) {
         unsafe {
-            ffi::gtk_image_set_from_file(self.to_glib_none().0, filename.as_ref().to_glib_none().0);
+            ffi::gtk_image_set_from_file(self.as_ref().to_glib_none().0, filename.as_ref().to_glib_none().0);
         }
     }
 
-    fn set_from_gicon<P: IsA<gio::Icon>>(&self, icon: &P, size: i32) {
+    fn set_from_gicon<P: IsA<gio::Icon>>(&self, icon: &P, size: IconSize) {
         unsafe {
-            ffi::gtk_image_set_from_gicon(self.to_glib_none().0, icon.to_glib_none().0, size);
+            ffi::gtk_image_set_from_gicon(self.as_ref().to_glib_none().0, icon.as_ref().to_glib_none().0, size.to_glib());
         }
     }
 
-    fn set_from_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_name: P, size: i32) {
+    fn set_from_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_name: P, size: IconSize) {
         let icon_name = icon_name.into();
-        let icon_name = icon_name.to_glib_none();
         unsafe {
-            ffi::gtk_image_set_from_icon_name(self.to_glib_none().0, icon_name.0, size);
-        }
-    }
-
-    fn set_from_icon_set(&self, icon_set: &IconSet, size: i32) {
-        unsafe {
-            ffi::gtk_image_set_from_icon_set(self.to_glib_none().0, icon_set.to_glib_none().0, size);
+            ffi::gtk_image_set_from_icon_name(self.as_ref().to_glib_none().0, icon_name.to_glib_none().0, size.to_glib());
         }
     }
 
     fn set_from_pixbuf<'a, P: Into<Option<&'a gdk_pixbuf::Pixbuf>>>(&self, pixbuf: P) {
         let pixbuf = pixbuf.into();
-        let pixbuf = pixbuf.to_glib_none();
         unsafe {
-            ffi::gtk_image_set_from_pixbuf(self.to_glib_none().0, pixbuf.0);
+            ffi::gtk_image_set_from_pixbuf(self.as_ref().to_glib_none().0, pixbuf.to_glib_none().0);
         }
     }
 
     fn set_from_resource<'a, P: Into<Option<&'a str>>>(&self, resource_path: P) {
         let resource_path = resource_path.into();
-        let resource_path = resource_path.to_glib_none();
         unsafe {
-            ffi::gtk_image_set_from_resource(self.to_glib_none().0, resource_path.0);
+            ffi::gtk_image_set_from_resource(self.as_ref().to_glib_none().0, resource_path.to_glib_none().0);
         }
     }
 
-    fn set_from_stock(&self, stock_id: &str, size: i32) {
-        unsafe {
-            ffi::gtk_image_set_from_stock(self.to_glib_none().0, stock_id.to_glib_none().0, size);
-        }
-    }
-
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_from_surface<'a, P: Into<Option<&'a cairo::Surface>>>(&self, surface: P) {
         let surface = surface.into();
         unsafe {
-            ffi::gtk_image_set_from_surface(self.to_glib_none().0, mut_override(surface.to_glib_none().0));
+            ffi::gtk_image_set_from_surface(self.as_ref().to_glib_none().0, mut_override(surface.to_glib_none().0));
         }
     }
 
     fn set_pixel_size(&self, pixel_size: i32) {
         unsafe {
-            ffi::gtk_image_set_pixel_size(self.to_glib_none().0, pixel_size);
+            ffi::gtk_image_set_pixel_size(self.as_ref().to_glib_none().0, pixel_size);
         }
     }
 
-    fn get_property_file(&self) -> Option<String> {
+    fn get_property_file(&self) -> Option<GString> {
         unsafe {
-            let mut value = Value::from_type(<String as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "file".to_glib_none().0, value.to_glib_none_mut().0);
+            let mut value = Value::from_type(<GString as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"file\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
 
-    fn set_property_file(&self, file: Option<&str>) {
+    fn set_property_file<'a, P: Into<Option<&'a str>>>(&self, file: P) {
+        let file = file.into();
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "file".to_glib_none().0, Value::from(file).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"file\0".as_ptr() as *const _, Value::from(file).to_glib_none().0);
         }
     }
 
-    fn set_property_gicon<P: IsA<gio::Icon> + IsA<glib::object::Object> + glib::value::SetValueOptional>(&self, gicon: Option<&P>) {
+    fn set_property_gicon<P: IsA<gio::Icon> + glib::value::SetValueOptional>(&self, gicon: Option<&P>) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "gicon".to_glib_none().0, Value::from(gicon).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gicon\0".as_ptr() as *const _, Value::from(gicon).to_glib_none().0);
         }
     }
 
-    fn get_property_icon_name(&self) -> Option<String> {
+    fn get_property_icon_name(&self) -> Option<GString> {
         unsafe {
-            let mut value = Value::from_type(<String as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "icon-name".to_glib_none().0, value.to_glib_none_mut().0);
+            let mut value = Value::from_type(<GString as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"icon-name\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
 
-    fn set_property_icon_name(&self, icon_name: Option<&str>) {
+    fn set_property_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_name: P) {
+        let icon_name = icon_name.into();
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "icon-name".to_glib_none().0, Value::from(icon_name).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"icon-name\0".as_ptr() as *const _, Value::from(icon_name).to_glib_none().0);
         }
     }
 
     fn get_property_icon_size(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "icon-size".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"icon-size\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_icon_size(&self, icon_size: i32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "icon-size".to_glib_none().0, Value::from(&icon_size).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"icon-size\0".as_ptr() as *const _, Value::from(&icon_size).to_glib_none().0);
         }
     }
 
     fn set_property_pixbuf(&self, pixbuf: Option<&gdk_pixbuf::Pixbuf>) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "pixbuf".to_glib_none().0, Value::from(pixbuf).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"pixbuf\0".as_ptr() as *const _, Value::from(pixbuf).to_glib_none().0);
         }
     }
 
     fn get_property_pixbuf_animation(&self) -> Option<gdk_pixbuf::PixbufAnimation> {
         unsafe {
             let mut value = Value::from_type(<gdk_pixbuf::PixbufAnimation as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "pixbuf-animation".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"pixbuf-animation\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
 
-    fn set_property_pixbuf_animation<P: IsA<gdk_pixbuf::PixbufAnimation> + IsA<glib::object::Object> + glib::value::SetValueOptional>(&self, pixbuf_animation: Option<&P>) {
+    fn set_property_pixbuf_animation<P: IsA<gdk_pixbuf::PixbufAnimation> + glib::value::SetValueOptional>(&self, pixbuf_animation: Option<&P>) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "pixbuf-animation".to_glib_none().0, Value::from(pixbuf_animation).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"pixbuf-animation\0".as_ptr() as *const _, Value::from(pixbuf_animation).to_glib_none().0);
         }
     }
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
-    fn get_property_resource(&self) -> Option<String> {
+    fn get_property_resource(&self) -> Option<GString> {
         unsafe {
-            let mut value = Value::from_type(<String as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "resource".to_glib_none().0, value.to_glib_none_mut().0);
+            let mut value = Value::from_type(<GString as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"resource\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
-    fn set_property_resource(&self, resource: Option<&str>) {
+    fn set_property_resource<'a, P: Into<Option<&'a str>>>(&self, resource: P) {
+        let resource = resource.into();
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "resource".to_glib_none().0, Value::from(resource).to_glib_none().0);
-        }
-    }
-
-    fn get_property_stock(&self) -> Option<String> {
-        unsafe {
-            let mut value = Value::from_type(<String as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "stock".to_glib_none().0, value.to_glib_none_mut().0);
-            value.get()
-        }
-    }
-
-    fn set_property_stock(&self, stock: Option<&str>) {
-        unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "stock".to_glib_none().0, Value::from(stock).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"resource\0".as_ptr() as *const _, Value::from(resource).to_glib_none().0);
         }
     }
 
     fn get_property_use_fallback(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "use-fallback".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"use-fallback\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_use_fallback(&self, use_fallback: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "use-fallback".to_glib_none().0, Value::from(&use_fallback).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"use-fallback\0".as_ptr() as *const _, Value::from(&use_fallback).to_glib_none().0);
         }
     }
 
     fn connect_property_file_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::file",
-                transmute(notify_file_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::file\0".as_ptr() as *const _,
+                Some(transmute(notify_file_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_gicon_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::gicon",
-                transmute(notify_gicon_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::gicon\0".as_ptr() as *const _,
+                Some(transmute(notify_gicon_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_icon_name_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::icon-name",
-                transmute(notify_icon_name_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::icon-name\0".as_ptr() as *const _,
+                Some(transmute(notify_icon_name_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_icon_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::icon-size",
-                transmute(notify_icon_size_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::icon-size\0".as_ptr() as *const _,
+                Some(transmute(notify_icon_size_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_pixbuf_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::pixbuf",
-                transmute(notify_pixbuf_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::pixbuf\0".as_ptr() as *const _,
+                Some(transmute(notify_pixbuf_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_pixbuf_animation_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::pixbuf-animation",
-                transmute(notify_pixbuf_animation_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::pixbuf-animation\0".as_ptr() as *const _,
+                Some(transmute(notify_pixbuf_animation_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_pixel_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::pixel-size",
-                transmute(notify_pixel_size_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::pixel-size\0".as_ptr() as *const _,
+                Some(transmute(notify_pixel_size_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
-    #[cfg(any(feature = "v3_8", feature = "dox"))]
     fn connect_property_resource_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::resource",
-                transmute(notify_resource_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    fn connect_property_stock_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::stock",
-                transmute(notify_stock_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::resource\0".as_ptr() as *const _,
+                Some(transmute(notify_resource_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_storage_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::storage-type",
-                transmute(notify_storage_type_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::storage-type\0".as_ptr() as *const _,
+                Some(transmute(notify_storage_type_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_use_fallback_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::use-fallback",
-                transmute(notify_use_fallback_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::use-fallback\0".as_ptr() as *const _,
+                Some(transmute(notify_use_fallback_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn notify_file_trampoline<P>(this: *mut ffi::GtkImage, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_file_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkImage, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Image> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Image::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&Image::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_gicon_trampoline<P>(this: *mut ffi::GtkImage, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_gicon_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkImage, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Image> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Image::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&Image::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_icon_name_trampoline<P>(this: *mut ffi::GtkImage, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_icon_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkImage, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Image> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Image::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&Image::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_icon_size_trampoline<P>(this: *mut ffi::GtkImage, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_icon_size_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkImage, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Image> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Image::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&Image::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_pixbuf_trampoline<P>(this: *mut ffi::GtkImage, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_pixbuf_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkImage, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Image> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Image::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&Image::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_pixbuf_animation_trampoline<P>(this: *mut ffi::GtkImage, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_pixbuf_animation_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkImage, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Image> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Image::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&Image::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_pixel_size_trampoline<P>(this: *mut ffi::GtkImage, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_pixel_size_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkImage, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Image> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Image::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&Image::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_8", feature = "dox"))]
-unsafe extern "C" fn notify_resource_trampoline<P>(this: *mut ffi::GtkImage, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_resource_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkImage, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Image> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Image::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&Image::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_stock_trampoline<P>(this: *mut ffi::GtkImage, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_storage_type_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkImage, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Image> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Image::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&Image::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_storage_type_trampoline<P>(this: *mut ffi::GtkImage, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_use_fallback_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkImage, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Image> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Image::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&Image::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_use_fallback_trampoline<P>(this: *mut ffi::GtkImage, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<Image> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&Image::from_glib_borrow(this).downcast_unchecked())
+impl fmt::Display for Image {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Image")
+    }
 }

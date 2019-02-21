@@ -11,23 +11,21 @@ use Orientable;
 use ScaleButton;
 use Widget;
 use ffi;
-use glib;
 use glib::StaticType;
 use glib::Value;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
-use std::mem;
+use std::fmt;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
-    pub struct VolumeButton(Object<ffi::GtkVolumeButton, ffi::GtkVolumeButtonClass>): ScaleButton, Button, Bin, Container, Widget, Buildable, Actionable, Orientable;
+    pub struct VolumeButton(Object<ffi::GtkVolumeButton, ffi::GtkVolumeButtonClass, VolumeButtonClass>) @extends ScaleButton, Button, Bin, Container, Widget, @implements Buildable, Actionable, Orientable;
 
     match fn {
         get_type => || ffi::gtk_volume_button_get_type(),
@@ -38,7 +36,7 @@ impl VolumeButton {
     pub fn new() -> VolumeButton {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_volume_button_new()).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_volume_button_new()).unsafe_cast()
         }
     }
 }
@@ -49,7 +47,9 @@ impl Default for VolumeButton {
     }
 }
 
-pub trait VolumeButtonExt {
+pub const NONE_VOLUME_BUTTON: Option<&VolumeButton> = None;
+
+pub trait VolumeButtonExt: 'static {
     fn get_property_use_symbolic(&self) -> bool;
 
     fn set_property_use_symbolic(&self, use_symbolic: bool);
@@ -57,32 +57,38 @@ pub trait VolumeButtonExt {
     fn connect_property_use_symbolic_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<VolumeButton> + IsA<glib::object::Object>> VolumeButtonExt for O {
+impl<O: IsA<VolumeButton>> VolumeButtonExt for O {
     fn get_property_use_symbolic(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "use-symbolic".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"use-symbolic\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_use_symbolic(&self, use_symbolic: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "use-symbolic".to_glib_none().0, Value::from(&use_symbolic).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"use-symbolic\0".as_ptr() as *const _, Value::from(&use_symbolic).to_glib_none().0);
         }
     }
 
     fn connect_property_use_symbolic_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::use-symbolic",
-                transmute(notify_use_symbolic_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::use-symbolic\0".as_ptr() as *const _,
+                Some(transmute(notify_use_symbolic_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn notify_use_symbolic_trampoline<P>(this: *mut ffi::GtkVolumeButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_use_symbolic_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkVolumeButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<VolumeButton> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&VolumeButton::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&VolumeButton::from_glib_borrow(this).unsafe_cast())
+}
+
+impl fmt::Display for VolumeButton {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "VolumeButton")
+    }
 }

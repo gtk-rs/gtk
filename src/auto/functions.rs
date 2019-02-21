@@ -4,7 +4,6 @@
 
 use AccelGroup;
 use Error;
-use IconSource;
 use Orientation;
 use PageSetup;
 use PositionType;
@@ -13,7 +12,6 @@ use SelectionData;
 use SpinButton;
 use StyleContext;
 use TextBuffer;
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 use TextDirection;
 use TreeModel;
 use TreePath;
@@ -24,9 +22,11 @@ use ffi;
 use gdk;
 use gdk_pixbuf;
 use glib;
+use glib::GString;
 use glib::object::IsA;
 use glib::translate::*;
 use pango;
+use std::boxed::Box as Box_;
 use std::mem;
 use std::ptr;
 
@@ -34,14 +34,14 @@ use std::ptr;
 pub fn accel_groups_activate<P: IsA<glib::Object>>(object: &P, accel_key: u32, accel_mods: gdk::ModifierType) -> bool {
     assert_initialized_main_thread!();
     unsafe {
-        from_glib(ffi::gtk_accel_groups_activate(object.to_glib_none().0, accel_key, accel_mods.to_glib()))
+        from_glib(ffi::gtk_accel_groups_activate(object.as_ref().to_glib_none().0, accel_key, accel_mods.to_glib()))
     }
 }
 
 pub fn accel_groups_from_object<P: IsA<glib::Object>>(object: &P) -> Vec<AccelGroup> {
     assert_initialized_main_thread!();
     unsafe {
-        FromGlibPtrContainer::from_glib_none(ffi::gtk_accel_groups_from_object(object.to_glib_none().0))
+        FromGlibPtrContainer::from_glib_none(ffi::gtk_accel_groups_from_object(object.as_ref().to_glib_none().0))
     }
 }
 
@@ -52,35 +52,33 @@ pub fn accelerator_get_default_mod_mask() -> gdk::ModifierType {
     }
 }
 
-pub fn accelerator_get_label(accelerator_key: u32, accelerator_mods: gdk::ModifierType) -> Option<String> {
+pub fn accelerator_get_label(accelerator_key: u32, accelerator_mods: gdk::ModifierType) -> Option<GString> {
     assert_initialized_main_thread!();
     unsafe {
         from_glib_full(ffi::gtk_accelerator_get_label(accelerator_key, accelerator_mods.to_glib()))
     }
 }
 
-pub fn accelerator_get_label_with_keycode<'a, P: Into<Option<&'a gdk::Display>>>(display: P, accelerator_key: u32, keycode: u32, accelerator_mods: gdk::ModifierType) -> Option<String> {
+pub fn accelerator_get_label_with_keycode<'a, P: Into<Option<&'a gdk::Display>>>(display: P, accelerator_key: u32, keycode: u32, accelerator_mods: gdk::ModifierType) -> Option<GString> {
     assert_initialized_main_thread!();
     let display = display.into();
-    let display = display.to_glib_none();
     unsafe {
-        from_glib_full(ffi::gtk_accelerator_get_label_with_keycode(display.0, accelerator_key, keycode, accelerator_mods.to_glib()))
+        from_glib_full(ffi::gtk_accelerator_get_label_with_keycode(display.to_glib_none().0, accelerator_key, keycode, accelerator_mods.to_glib()))
     }
 }
 
-pub fn accelerator_name(accelerator_key: u32, accelerator_mods: gdk::ModifierType) -> Option<String> {
+pub fn accelerator_name(accelerator_key: u32, accelerator_mods: gdk::ModifierType) -> Option<GString> {
     assert_initialized_main_thread!();
     unsafe {
         from_glib_full(ffi::gtk_accelerator_name(accelerator_key, accelerator_mods.to_glib()))
     }
 }
 
-pub fn accelerator_name_with_keycode<'a, P: Into<Option<&'a gdk::Display>>>(display: P, accelerator_key: u32, keycode: u32, accelerator_mods: gdk::ModifierType) -> Option<String> {
+pub fn accelerator_name_with_keycode<'a, P: Into<Option<&'a gdk::Display>>>(display: P, accelerator_key: u32, keycode: u32, accelerator_mods: gdk::ModifierType) -> Option<GString> {
     assert_initialized_main_thread!();
     let display = display.into();
-    let display = display.to_glib_none();
     unsafe {
-        from_glib_full(ffi::gtk_accelerator_name_with_keycode(display.0, accelerator_key, keycode, accelerator_mods.to_glib()))
+        from_glib_full(ffi::gtk_accelerator_name_with_keycode(display.to_glib_none().0, accelerator_key, keycode, accelerator_mods.to_glib()))
     }
 }
 
@@ -112,55 +110,45 @@ pub fn accelerator_valid(keyval: u32, modifiers: gdk::ModifierType) -> bool {
     }
 }
 
-#[cfg_attr(feature = "v3_10", deprecated)]
-pub fn alternative_dialog_button_order<'a, P: Into<Option<&'a gdk::Screen>>>(screen: P) -> bool {
-    assert_initialized_main_thread!();
-    let screen = screen.into();
-    let screen = screen.to_glib_none();
-    unsafe {
-        from_glib(ffi::gtk_alternative_dialog_button_order(screen.0))
-    }
-}
-
 pub fn bindings_activate<P: IsA<glib::Object>>(object: &P, keyval: u32, modifiers: gdk::ModifierType) -> bool {
     assert_initialized_main_thread!();
     unsafe {
-        from_glib(ffi::gtk_bindings_activate(object.to_glib_none().0, keyval, modifiers.to_glib()))
+        from_glib(ffi::gtk_bindings_activate(object.as_ref().to_glib_none().0, keyval, modifiers.to_glib()))
     }
 }
 
 pub fn bindings_activate_event<P: IsA<glib::Object>>(object: &P, event: &mut gdk::EventKey) -> bool {
     assert_initialized_main_thread!();
     unsafe {
-        from_glib(ffi::gtk_bindings_activate_event(object.to_glib_none().0, event.to_glib_none_mut().0))
+        from_glib(ffi::gtk_bindings_activate_event(object.as_ref().to_glib_none().0, event.to_glib_none_mut().0))
     }
 }
 
-pub fn cairo_should_draw_window(cr: &cairo::Context, window: &gdk::Window) -> bool {
+pub fn cairo_should_draw_window<P: IsA<gdk::Window>>(cr: &cairo::Context, window: &P) -> bool {
     assert_initialized_main_thread!();
     unsafe {
-        from_glib(ffi::gtk_cairo_should_draw_window(mut_override(cr.to_glib_none().0), window.to_glib_none().0))
+        from_glib(ffi::gtk_cairo_should_draw_window(mut_override(cr.to_glib_none().0), window.as_ref().to_glib_none().0))
     }
 }
 
-pub fn cairo_transform_to_window<P: IsA<Widget>>(cr: &cairo::Context, widget: &P, window: &gdk::Window) {
+pub fn cairo_transform_to_window<P: IsA<Widget>, Q: IsA<gdk::Window>>(cr: &cairo::Context, widget: &P, window: &Q) {
     skip_assert_initialized!();
     unsafe {
-        ffi::gtk_cairo_transform_to_window(mut_override(cr.to_glib_none().0), widget.to_glib_none().0, window.to_glib_none().0);
+        ffi::gtk_cairo_transform_to_window(mut_override(cr.to_glib_none().0), widget.as_ref().to_glib_none().0, window.as_ref().to_glib_none().0);
     }
 }
 
-pub fn device_grab_add<P: IsA<Widget>, Q: IsA<gdk::Device>>(widget: &P, device: &Q, block_others: bool) {
+pub fn device_grab_add<P: IsA<Widget>>(widget: &P, device: &gdk::Device, block_others: bool) {
     skip_assert_initialized!();
     unsafe {
-        ffi::gtk_device_grab_add(widget.to_glib_none().0, device.to_glib_none().0, block_others.to_glib());
+        ffi::gtk_device_grab_add(widget.as_ref().to_glib_none().0, device.to_glib_none().0, block_others.to_glib());
     }
 }
 
-pub fn device_grab_remove<P: IsA<Widget>, Q: IsA<gdk::Device>>(widget: &P, device: &Q) {
+pub fn device_grab_remove<P: IsA<Widget>>(widget: &P, device: &gdk::Device) {
     skip_assert_initialized!();
     unsafe {
-        ffi::gtk_device_grab_remove(widget.to_glib_none().0, device.to_glib_none().0);
+        ffi::gtk_device_grab_remove(widget.as_ref().to_glib_none().0, device.to_glib_none().0);
     }
 }
 
@@ -240,7 +228,6 @@ pub fn get_event_widget(event: &mut gdk::Event) -> Option<Widget> {
     }
 }
 
-#[cfg(any(feature = "v3_12", feature = "dox"))]
 pub fn get_locale_direction() -> TextDirection {
     assert_initialized_main_thread!();
     unsafe {
@@ -259,11 +246,11 @@ pub fn grab_get_current() -> Option<Widget> {
     }
 }
 
-//pub fn init_check(argv: /*Unimplemented*/Vec<String>) -> bool {
+//pub fn init_check(argv: /*Unimplemented*/Vec<GString>) -> bool {
 //    unsafe { TODO: call ffi::gtk_init_check() }
 //}
 
-//pub fn init_with_args<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b str>>>(argv: /*Unimplemented*/Vec<String>, parameter_string: P, entries: /*Ignored*/&[&glib::OptionEntry], translation_domain: Q) -> Result<(), Error> {
+//pub fn init_with_args<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b str>>>(argv: /*Unimplemented*/Vec<GString>, parameter_string: P, entries: /*Ignored*/&[&glib::OptionEntry], translation_domain: Q) -> Result<(), Error> {
 //    unsafe { TODO: call ffi::gtk_init_with_args() }
 //}
 
@@ -302,167 +289,170 @@ pub fn main_level() -> u32 {
     }
 }
 
-//pub fn parse_args(argv: /*Unimplemented*/Vec<String>) -> bool {
+//pub fn parse_args(argv: /*Unimplemented*/Vec<GString>) -> bool {
 //    unsafe { TODO: call ffi::gtk_parse_args() }
 //}
 
 pub fn print_run_page_setup_dialog<'a, 'b, P: IsA<Window> + 'a, Q: Into<Option<&'a P>>, R: Into<Option<&'b PageSetup>>>(parent: Q, page_setup: R, settings: &PrintSettings) -> Option<PageSetup> {
     skip_assert_initialized!();
     let parent = parent.into();
-    let parent = parent.to_glib_none();
     let page_setup = page_setup.into();
-    let page_setup = page_setup.to_glib_none();
     unsafe {
-        from_glib_full(ffi::gtk_print_run_page_setup_dialog(parent.0, page_setup.0, settings.to_glib_none().0))
+        from_glib_full(ffi::gtk_print_run_page_setup_dialog(parent.map(|p| p.as_ref()).to_glib_none().0, page_setup.to_glib_none().0, settings.to_glib_none().0))
     }
 }
 
-//pub fn print_run_page_setup_dialog_async<'a, 'b, P: IsA<Window> + 'a, Q: Into<Option<&'a P>>, R: Into<Option<&'b PageSetup>>, S: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(parent: Q, page_setup: R, settings: &PrintSettings, done_cb: /*Unknown conversion*//*Unimplemented*/PageSetupDoneFunc, data: S) {
-//    unsafe { TODO: call ffi::gtk_print_run_page_setup_dialog_async() }
-//}
+pub fn print_run_page_setup_dialog_async<'a, 'b, P: IsA<Window> + 'a, Q: Into<Option<&'a P>>, R: Into<Option<&'b PageSetup>>, S: FnOnce(&PageSetup) + Send + Sync + 'static>(parent: Q, page_setup: R, settings: &PrintSettings, done_cb: S) {
+    skip_assert_initialized!();
+    let parent = parent.into();
+    let page_setup = page_setup.into();
+    let done_cb_data: Box_<S> = Box::new(done_cb);
+    unsafe extern "C" fn done_cb_func<'a, 'b, P: IsA<Window> + 'a, Q: Into<Option<&'a P>>, R: Into<Option<&'b PageSetup>>, S: FnOnce(&PageSetup) + Send + Sync + 'static>(page_setup: *mut ffi::GtkPageSetup, data: glib_ffi::gpointer) {
+        let page_setup = from_glib_borrow(page_setup);
+        let callback: Box_<S> = Box_::from_raw(data as *mut _);
+        (*callback)(&page_setup);
+    }
+    let done_cb = Some(done_cb_func::<'a, 'b, P, Q, R, S> as _);
+    let super_callback0: Box_<S> = done_cb_data;
+    unsafe {
+        ffi::gtk_print_run_page_setup_dialog_async(parent.map(|p| p.as_ref()).to_glib_none().0, page_setup.to_glib_none().0, settings.to_glib_none().0, done_cb, Box::into_raw(super_callback0) as *mut _);
+    }
+}
 
 pub fn propagate_event<P: IsA<Widget>>(widget: &P, event: &mut gdk::Event) {
     skip_assert_initialized!();
     unsafe {
-        ffi::gtk_propagate_event(widget.to_glib_none().0, event.to_glib_none_mut().0);
+        ffi::gtk_propagate_event(widget.as_ref().to_glib_none().0, event.to_glib_none_mut().0);
     }
 }
 
-pub fn render_activity(context: &StyleContext, cr: &cairo::Context, x: f64, y: f64, width: f64, height: f64) {
+pub fn render_activity<P: IsA<StyleContext>>(context: &P, cr: &cairo::Context, x: f64, y: f64, width: f64, height: f64) {
     skip_assert_initialized!();
     unsafe {
-        ffi::gtk_render_activity(context.to_glib_none().0, mut_override(cr.to_glib_none().0), x, y, width, height);
+        ffi::gtk_render_activity(context.as_ref().to_glib_none().0, mut_override(cr.to_glib_none().0), x, y, width, height);
     }
 }
 
-pub fn render_arrow(context: &StyleContext, cr: &cairo::Context, angle: f64, x: f64, y: f64, size: f64) {
+pub fn render_arrow<P: IsA<StyleContext>>(context: &P, cr: &cairo::Context, angle: f64, x: f64, y: f64, size: f64) {
     skip_assert_initialized!();
     unsafe {
-        ffi::gtk_render_arrow(context.to_glib_none().0, mut_override(cr.to_glib_none().0), angle, x, y, size);
+        ffi::gtk_render_arrow(context.as_ref().to_glib_none().0, mut_override(cr.to_glib_none().0), angle, x, y, size);
     }
 }
 
-pub fn render_background(context: &StyleContext, cr: &cairo::Context, x: f64, y: f64, width: f64, height: f64) {
+pub fn render_background<P: IsA<StyleContext>>(context: &P, cr: &cairo::Context, x: f64, y: f64, width: f64, height: f64) {
     skip_assert_initialized!();
     unsafe {
-        ffi::gtk_render_background(context.to_glib_none().0, mut_override(cr.to_glib_none().0), x, y, width, height);
+        ffi::gtk_render_background(context.as_ref().to_glib_none().0, mut_override(cr.to_glib_none().0), x, y, width, height);
     }
 }
 
 #[cfg(any(feature = "v3_20", feature = "dox"))]
-pub fn render_background_get_clip(context: &StyleContext, x: f64, y: f64, width: f64, height: f64) -> gdk::Rectangle {
+pub fn render_background_get_clip<P: IsA<StyleContext>>(context: &P, x: f64, y: f64, width: f64, height: f64) -> gdk::Rectangle {
     skip_assert_initialized!();
     unsafe {
         let mut out_clip = gdk::Rectangle::uninitialized();
-        ffi::gtk_render_background_get_clip(context.to_glib_none().0, x, y, width, height, out_clip.to_glib_none_mut().0);
+        ffi::gtk_render_background_get_clip(context.as_ref().to_glib_none().0, x, y, width, height, out_clip.to_glib_none_mut().0);
         out_clip
     }
 }
 
-pub fn render_check(context: &StyleContext, cr: &cairo::Context, x: f64, y: f64, width: f64, height: f64) {
+pub fn render_check<P: IsA<StyleContext>>(context: &P, cr: &cairo::Context, x: f64, y: f64, width: f64, height: f64) {
     skip_assert_initialized!();
     unsafe {
-        ffi::gtk_render_check(context.to_glib_none().0, mut_override(cr.to_glib_none().0), x, y, width, height);
+        ffi::gtk_render_check(context.as_ref().to_glib_none().0, mut_override(cr.to_glib_none().0), x, y, width, height);
     }
 }
 
-pub fn render_expander(context: &StyleContext, cr: &cairo::Context, x: f64, y: f64, width: f64, height: f64) {
+pub fn render_expander<P: IsA<StyleContext>>(context: &P, cr: &cairo::Context, x: f64, y: f64, width: f64, height: f64) {
     skip_assert_initialized!();
     unsafe {
-        ffi::gtk_render_expander(context.to_glib_none().0, mut_override(cr.to_glib_none().0), x, y, width, height);
+        ffi::gtk_render_expander(context.as_ref().to_glib_none().0, mut_override(cr.to_glib_none().0), x, y, width, height);
     }
 }
 
-pub fn render_extension(context: &StyleContext, cr: &cairo::Context, x: f64, y: f64, width: f64, height: f64, gap_side: PositionType) {
+pub fn render_extension<P: IsA<StyleContext>>(context: &P, cr: &cairo::Context, x: f64, y: f64, width: f64, height: f64, gap_side: PositionType) {
     skip_assert_initialized!();
     unsafe {
-        ffi::gtk_render_extension(context.to_glib_none().0, mut_override(cr.to_glib_none().0), x, y, width, height, gap_side.to_glib());
+        ffi::gtk_render_extension(context.as_ref().to_glib_none().0, mut_override(cr.to_glib_none().0), x, y, width, height, gap_side.to_glib());
     }
 }
 
-pub fn render_focus(context: &StyleContext, cr: &cairo::Context, x: f64, y: f64, width: f64, height: f64) {
+pub fn render_focus<P: IsA<StyleContext>>(context: &P, cr: &cairo::Context, x: f64, y: f64, width: f64, height: f64) {
     skip_assert_initialized!();
     unsafe {
-        ffi::gtk_render_focus(context.to_glib_none().0, mut_override(cr.to_glib_none().0), x, y, width, height);
+        ffi::gtk_render_focus(context.as_ref().to_glib_none().0, mut_override(cr.to_glib_none().0), x, y, width, height);
     }
 }
 
-pub fn render_frame(context: &StyleContext, cr: &cairo::Context, x: f64, y: f64, width: f64, height: f64) {
+pub fn render_frame<P: IsA<StyleContext>>(context: &P, cr: &cairo::Context, x: f64, y: f64, width: f64, height: f64) {
     skip_assert_initialized!();
     unsafe {
-        ffi::gtk_render_frame(context.to_glib_none().0, mut_override(cr.to_glib_none().0), x, y, width, height);
+        ffi::gtk_render_frame(context.as_ref().to_glib_none().0, mut_override(cr.to_glib_none().0), x, y, width, height);
     }
 }
 
-pub fn render_frame_gap(context: &StyleContext, cr: &cairo::Context, x: f64, y: f64, width: f64, height: f64, gap_side: PositionType, xy0_gap: f64, xy1_gap: f64) {
+#[cfg_attr(feature = "v3_24", deprecated)]
+pub fn render_frame_gap<P: IsA<StyleContext>>(context: &P, cr: &cairo::Context, x: f64, y: f64, width: f64, height: f64, gap_side: PositionType, xy0_gap: f64, xy1_gap: f64) {
     skip_assert_initialized!();
     unsafe {
-        ffi::gtk_render_frame_gap(context.to_glib_none().0, mut_override(cr.to_glib_none().0), x, y, width, height, gap_side.to_glib(), xy0_gap, xy1_gap);
+        ffi::gtk_render_frame_gap(context.as_ref().to_glib_none().0, mut_override(cr.to_glib_none().0), x, y, width, height, gap_side.to_glib(), xy0_gap, xy1_gap);
     }
 }
 
-pub fn render_handle(context: &StyleContext, cr: &cairo::Context, x: f64, y: f64, width: f64, height: f64) {
+pub fn render_handle<P: IsA<StyleContext>>(context: &P, cr: &cairo::Context, x: f64, y: f64, width: f64, height: f64) {
     skip_assert_initialized!();
     unsafe {
-        ffi::gtk_render_handle(context.to_glib_none().0, mut_override(cr.to_glib_none().0), x, y, width, height);
+        ffi::gtk_render_handle(context.as_ref().to_glib_none().0, mut_override(cr.to_glib_none().0), x, y, width, height);
     }
 }
 
-pub fn render_icon(context: &StyleContext, cr: &cairo::Context, pixbuf: &gdk_pixbuf::Pixbuf, x: f64, y: f64) {
+pub fn render_icon<P: IsA<StyleContext>>(context: &P, cr: &cairo::Context, pixbuf: &gdk_pixbuf::Pixbuf, x: f64, y: f64) {
     skip_assert_initialized!();
     unsafe {
-        ffi::gtk_render_icon(context.to_glib_none().0, mut_override(cr.to_glib_none().0), pixbuf.to_glib_none().0, x, y);
+        ffi::gtk_render_icon(context.as_ref().to_glib_none().0, mut_override(cr.to_glib_none().0), pixbuf.to_glib_none().0, x, y);
     }
 }
 
-#[cfg_attr(feature = "v3_10", deprecated)]
-pub fn render_icon_pixbuf(context: &StyleContext, source: &IconSource, size: i32) -> Option<gdk_pixbuf::Pixbuf> {
+pub fn render_icon_surface<P: IsA<StyleContext>>(context: &P, cr: &cairo::Context, surface: &cairo::Surface, x: f64, y: f64) {
     skip_assert_initialized!();
     unsafe {
-        from_glib_full(ffi::gtk_render_icon_pixbuf(context.to_glib_none().0, source.to_glib_none().0, size))
+        ffi::gtk_render_icon_surface(context.as_ref().to_glib_none().0, mut_override(cr.to_glib_none().0), mut_override(surface.to_glib_none().0), x, y);
     }
 }
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
-pub fn render_icon_surface(context: &StyleContext, cr: &cairo::Context, surface: &cairo::Surface, x: f64, y: f64) {
+pub fn render_insertion_cursor<P: IsA<StyleContext>, Q: IsA<pango::Layout>>(context: &P, cr: &cairo::Context, x: f64, y: f64, layout: &Q, index: i32, direction: pango::Direction) {
     skip_assert_initialized!();
     unsafe {
-        ffi::gtk_render_icon_surface(context.to_glib_none().0, mut_override(cr.to_glib_none().0), mut_override(surface.to_glib_none().0), x, y);
+        ffi::gtk_render_insertion_cursor(context.as_ref().to_glib_none().0, mut_override(cr.to_glib_none().0), x, y, layout.as_ref().to_glib_none().0, index, direction.to_glib());
     }
 }
 
-pub fn render_insertion_cursor(context: &StyleContext, cr: &cairo::Context, x: f64, y: f64, layout: &pango::Layout, index: i32, direction: pango::Direction) {
+pub fn render_layout<P: IsA<StyleContext>, Q: IsA<pango::Layout>>(context: &P, cr: &cairo::Context, x: f64, y: f64, layout: &Q) {
     skip_assert_initialized!();
     unsafe {
-        ffi::gtk_render_insertion_cursor(context.to_glib_none().0, mut_override(cr.to_glib_none().0), x, y, layout.to_glib_none().0, index, direction.to_glib());
+        ffi::gtk_render_layout(context.as_ref().to_glib_none().0, mut_override(cr.to_glib_none().0), x, y, layout.as_ref().to_glib_none().0);
     }
 }
 
-pub fn render_layout(context: &StyleContext, cr: &cairo::Context, x: f64, y: f64, layout: &pango::Layout) {
+pub fn render_line<P: IsA<StyleContext>>(context: &P, cr: &cairo::Context, x0: f64, y0: f64, x1: f64, y1: f64) {
     skip_assert_initialized!();
     unsafe {
-        ffi::gtk_render_layout(context.to_glib_none().0, mut_override(cr.to_glib_none().0), x, y, layout.to_glib_none().0);
+        ffi::gtk_render_line(context.as_ref().to_glib_none().0, mut_override(cr.to_glib_none().0), x0, y0, x1, y1);
     }
 }
 
-pub fn render_line(context: &StyleContext, cr: &cairo::Context, x0: f64, y0: f64, x1: f64, y1: f64) {
+pub fn render_option<P: IsA<StyleContext>>(context: &P, cr: &cairo::Context, x: f64, y: f64, width: f64, height: f64) {
     skip_assert_initialized!();
     unsafe {
-        ffi::gtk_render_line(context.to_glib_none().0, mut_override(cr.to_glib_none().0), x0, y0, x1, y1);
+        ffi::gtk_render_option(context.as_ref().to_glib_none().0, mut_override(cr.to_glib_none().0), x, y, width, height);
     }
 }
 
-pub fn render_option(context: &StyleContext, cr: &cairo::Context, x: f64, y: f64, width: f64, height: f64) {
+pub fn render_slider<P: IsA<StyleContext>>(context: &P, cr: &cairo::Context, x: f64, y: f64, width: f64, height: f64, orientation: Orientation) {
     skip_assert_initialized!();
     unsafe {
-        ffi::gtk_render_option(context.to_glib_none().0, mut_override(cr.to_glib_none().0), x, y, width, height);
-    }
-}
-
-pub fn render_slider(context: &StyleContext, cr: &cairo::Context, x: f64, y: f64, width: f64, height: f64, orientation: Orientation) {
-    skip_assert_initialized!();
-    unsafe {
-        ffi::gtk_render_slider(context.to_glib_none().0, mut_override(cr.to_glib_none().0), x, y, width, height, orientation.to_glib());
+        ffi::gtk_render_slider(context.as_ref().to_glib_none().0, mut_override(cr.to_glib_none().0), x, y, width, height, orientation.to_glib());
     }
 }
 
@@ -480,46 +470,44 @@ pub fn rgb_to_hsv(r: f64, g: f64, b: f64) -> (f64, f64, f64) {
 pub fn selection_add_target<P: IsA<Widget>>(widget: &P, selection: &gdk::Atom, target: &gdk::Atom, info: u32) {
     skip_assert_initialized!();
     unsafe {
-        ffi::gtk_selection_add_target(widget.to_glib_none().0, selection.to_glib_none().0, target.to_glib_none().0, info);
+        ffi::gtk_selection_add_target(widget.as_ref().to_glib_none().0, selection.to_glib_none().0, target.to_glib_none().0, info);
     }
 }
 
 pub fn selection_clear_targets<P: IsA<Widget>>(widget: &P, selection: &gdk::Atom) {
     skip_assert_initialized!();
     unsafe {
-        ffi::gtk_selection_clear_targets(widget.to_glib_none().0, selection.to_glib_none().0);
+        ffi::gtk_selection_clear_targets(widget.as_ref().to_glib_none().0, selection.to_glib_none().0);
     }
 }
 
 pub fn selection_convert<P: IsA<Widget>>(widget: &P, selection: &gdk::Atom, target: &gdk::Atom, time_: u32) -> bool {
     skip_assert_initialized!();
     unsafe {
-        from_glib(ffi::gtk_selection_convert(widget.to_glib_none().0, selection.to_glib_none().0, target.to_glib_none().0, time_))
+        from_glib(ffi::gtk_selection_convert(widget.as_ref().to_glib_none().0, selection.to_glib_none().0, target.to_glib_none().0, time_))
     }
 }
 
 pub fn selection_owner_set<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(widget: Q, selection: &gdk::Atom, time_: u32) -> bool {
     assert_initialized_main_thread!();
     let widget = widget.into();
-    let widget = widget.to_glib_none();
     unsafe {
-        from_glib(ffi::gtk_selection_owner_set(widget.0, selection.to_glib_none().0, time_))
+        from_glib(ffi::gtk_selection_owner_set(widget.map(|p| p.as_ref()).to_glib_none().0, selection.to_glib_none().0, time_))
     }
 }
 
 pub fn selection_owner_set_for_display<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(display: &gdk::Display, widget: Q, selection: &gdk::Atom, time_: u32) -> bool {
     assert_initialized_main_thread!();
     let widget = widget.into();
-    let widget = widget.to_glib_none();
     unsafe {
-        from_glib(ffi::gtk_selection_owner_set_for_display(display.to_glib_none().0, widget.0, selection.to_glib_none().0, time_))
+        from_glib(ffi::gtk_selection_owner_set_for_display(display.to_glib_none().0, widget.map(|p| p.as_ref()).to_glib_none().0, selection.to_glib_none().0, time_))
     }
 }
 
 pub fn selection_remove_all<P: IsA<Widget>>(widget: &P) {
     skip_assert_initialized!();
     unsafe {
-        ffi::gtk_selection_remove_all(widget.to_glib_none().0);
+        ffi::gtk_selection_remove_all(widget.as_ref().to_glib_none().0);
     }
 }
 
@@ -537,10 +525,9 @@ pub fn set_debug_flags(flags: u32) {
 pub fn show_uri<'a, P: Into<Option<&'a gdk::Screen>>>(screen: P, uri: &str, timestamp: u32) -> Result<(), Error> {
     assert_initialized_main_thread!();
     let screen = screen.into();
-    let screen = screen.to_glib_none();
     unsafe {
         let mut error = ptr::null_mut();
-        let _ = ffi::gtk_show_uri(screen.0, uri.to_glib_none().0, timestamp, &mut error);
+        let _ = ffi::gtk_show_uri(screen.to_glib_none().0, uri.to_glib_none().0, timestamp, &mut error);
         if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
     }
 }
@@ -549,41 +536,12 @@ pub fn show_uri<'a, P: Into<Option<&'a gdk::Screen>>>(screen: P, uri: &str, time
 pub fn show_uri_on_window<'a, P: IsA<Window> + 'a, Q: Into<Option<&'a P>>>(parent: Q, uri: &str, timestamp: u32) -> Result<(), Error> {
     assert_initialized_main_thread!();
     let parent = parent.into();
-    let parent = parent.to_glib_none();
     unsafe {
         let mut error = ptr::null_mut();
-        let _ = ffi::gtk_show_uri_on_window(parent.0, uri.to_glib_none().0, timestamp, &mut error);
+        let _ = ffi::gtk_show_uri_on_window(parent.map(|p| p.as_ref()).to_glib_none().0, uri.to_glib_none().0, timestamp, &mut error);
         if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
     }
 }
-
-//#[cfg_attr(feature = "v3_10", deprecated)]
-//pub fn stock_add(items: /*Ignored*/&[&StockItem]) {
-//    unsafe { TODO: call ffi::gtk_stock_add() }
-//}
-
-//#[cfg_attr(feature = "v3_10", deprecated)]
-//pub fn stock_add_static(items: /*Ignored*/&[&StockItem]) {
-//    unsafe { TODO: call ffi::gtk_stock_add_static() }
-//}
-
-#[cfg_attr(feature = "v3_10", deprecated)]
-pub fn stock_list_ids() -> Vec<String> {
-    assert_initialized_main_thread!();
-    unsafe {
-        FromGlibPtrContainer::from_glib_full(ffi::gtk_stock_list_ids())
-    }
-}
-
-//#[cfg_attr(feature = "v3_10", deprecated)]
-//pub fn stock_lookup(stock_id: &str, item: /*Ignored*/StockItem) -> bool {
-//    unsafe { TODO: call ffi::gtk_stock_lookup() }
-//}
-
-//#[cfg_attr(feature = "v3_10", deprecated)]
-//pub fn stock_set_translate_func<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(domain: &str, func: /*Unknown conversion*//*Unimplemented*/TranslateFunc, data: P, notify: /*Unknown conversion*//*Unimplemented*/DestroyNotify) {
-//    unsafe { TODO: call ffi::gtk_stock_set_translate_func() }
-//}
 
 pub fn targets_include_image(targets: &[&gdk::Atom], writable: bool) -> bool {
     assert_initialized_main_thread!();
@@ -593,11 +551,11 @@ pub fn targets_include_image(targets: &[&gdk::Atom], writable: bool) -> bool {
     }
 }
 
-pub fn targets_include_rich_text(targets: &[&gdk::Atom], buffer: &TextBuffer) -> bool {
+pub fn targets_include_rich_text<P: IsA<TextBuffer>>(targets: &[&gdk::Atom], buffer: &P) -> bool {
     skip_assert_initialized!();
     let n_targets = targets.len() as i32;
     unsafe {
-        from_glib(ffi::gtk_targets_include_rich_text(targets.to_glib_none().0, n_targets, buffer.to_glib_none().0))
+        from_glib(ffi::gtk_targets_include_rich_text(targets.to_glib_none().0, n_targets, buffer.as_ref().to_glib_none().0))
     }
 }
 
@@ -638,25 +596,25 @@ pub fn test_create_simple_window(window_title: &str, dialog_text: &str) -> Optio
 pub fn test_find_label<P: IsA<Widget>>(widget: &P, label_pattern: &str) -> Option<Widget> {
     skip_assert_initialized!();
     unsafe {
-        from_glib_none(ffi::gtk_test_find_label(widget.to_glib_none().0, label_pattern.to_glib_none().0))
+        from_glib_none(ffi::gtk_test_find_label(widget.as_ref().to_glib_none().0, label_pattern.to_glib_none().0))
     }
 }
 
 pub fn test_find_sibling<P: IsA<Widget>>(base_widget: &P, widget_type: glib::types::Type) -> Option<Widget> {
     skip_assert_initialized!();
     unsafe {
-        from_glib_none(ffi::gtk_test_find_sibling(base_widget.to_glib_none().0, widget_type.to_glib()))
+        from_glib_none(ffi::gtk_test_find_sibling(base_widget.as_ref().to_glib_none().0, widget_type.to_glib()))
     }
 }
 
 pub fn test_find_widget<P: IsA<Widget>>(widget: &P, label_pattern: &str, widget_type: glib::types::Type) -> Option<Widget> {
     skip_assert_initialized!();
     unsafe {
-        from_glib_none(ffi::gtk_test_find_widget(widget.to_glib_none().0, label_pattern.to_glib_none().0, widget_type.to_glib()))
+        from_glib_none(ffi::gtk_test_find_widget(widget.as_ref().to_glib_none().0, label_pattern.to_glib_none().0, widget_type.to_glib()))
     }
 }
 
-//pub fn test_init(argvp: /*Unimplemented*/Vec<String>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
+//pub fn test_init(argvp: /*Unimplemented*/Vec<GString>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) {
 //    unsafe { TODO: call ffi::gtk_test_init() }
 //}
 
@@ -675,7 +633,7 @@ pub fn test_register_all_types() {
 pub fn test_slider_get_value<P: IsA<Widget>>(widget: &P) -> f64 {
     skip_assert_initialized!();
     unsafe {
-        ffi::gtk_test_slider_get_value(widget.to_glib_none().0)
+        ffi::gtk_test_slider_get_value(widget.as_ref().to_glib_none().0)
     }
 }
 
@@ -683,23 +641,23 @@ pub fn test_slider_get_value<P: IsA<Widget>>(widget: &P) -> f64 {
 pub fn test_slider_set_perc<P: IsA<Widget>>(widget: &P, percentage: f64) {
     skip_assert_initialized!();
     unsafe {
-        ffi::gtk_test_slider_set_perc(widget.to_glib_none().0, percentage);
+        ffi::gtk_test_slider_set_perc(widget.as_ref().to_glib_none().0, percentage);
     }
 }
 
 #[cfg_attr(feature = "v3_20", deprecated)]
-pub fn test_spin_button_click(spinner: &SpinButton, button: u32, upwards: bool) -> bool {
+pub fn test_spin_button_click<P: IsA<SpinButton>>(spinner: &P, button: u32, upwards: bool) -> bool {
     skip_assert_initialized!();
     unsafe {
-        from_glib(ffi::gtk_test_spin_button_click(spinner.to_glib_none().0, button, upwards.to_glib()))
+        from_glib(ffi::gtk_test_spin_button_click(spinner.as_ref().to_glib_none().0, button, upwards.to_glib()))
     }
 }
 
 #[cfg_attr(feature = "v3_20", deprecated)]
-pub fn test_text_get<P: IsA<Widget>>(widget: &P) -> Option<String> {
+pub fn test_text_get<P: IsA<Widget>>(widget: &P) -> Option<GString> {
     skip_assert_initialized!();
     unsafe {
-        from_glib_full(ffi::gtk_test_text_get(widget.to_glib_none().0))
+        from_glib_full(ffi::gtk_test_text_get(widget.as_ref().to_glib_none().0))
     }
 }
 
@@ -707,7 +665,7 @@ pub fn test_text_get<P: IsA<Widget>>(widget: &P) -> Option<String> {
 pub fn test_text_set<P: IsA<Widget>>(widget: &P, string: &str) {
     skip_assert_initialized!();
     unsafe {
-        ffi::gtk_test_text_set(widget.to_glib_none().0, string.to_glib_none().0);
+        ffi::gtk_test_text_set(widget.as_ref().to_glib_none().0, string.to_glib_none().0);
     }
 }
 
@@ -715,22 +673,21 @@ pub fn test_text_set<P: IsA<Widget>>(widget: &P, string: &str) {
 pub fn test_widget_click<P: IsA<Widget>>(widget: &P, button: u32, modifiers: gdk::ModifierType) -> bool {
     skip_assert_initialized!();
     unsafe {
-        from_glib(ffi::gtk_test_widget_click(widget.to_glib_none().0, button, modifiers.to_glib()))
+        from_glib(ffi::gtk_test_widget_click(widget.as_ref().to_glib_none().0, button, modifiers.to_glib()))
     }
 }
 
 pub fn test_widget_send_key<P: IsA<Widget>>(widget: &P, keyval: u32, modifiers: gdk::ModifierType) -> bool {
     skip_assert_initialized!();
     unsafe {
-        from_glib(ffi::gtk_test_widget_send_key(widget.to_glib_none().0, keyval, modifiers.to_glib()))
+        from_glib(ffi::gtk_test_widget_send_key(widget.as_ref().to_glib_none().0, keyval, modifiers.to_glib()))
     }
 }
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
 pub fn test_widget_wait_for_draw<P: IsA<Widget>>(widget: &P) {
     skip_assert_initialized!();
     unsafe {
-        ffi::gtk_test_widget_wait_for_draw(widget.to_glib_none().0);
+        ffi::gtk_test_widget_wait_for_draw(widget.as_ref().to_glib_none().0);
     }
 }
 
@@ -747,7 +704,7 @@ pub fn tree_get_row_drag_data(selection_data: &SelectionData) -> Option<(Option<
 pub fn tree_set_row_drag_data<P: IsA<TreeModel>>(selection_data: &SelectionData, tree_model: &P, path: &mut TreePath) -> bool {
     skip_assert_initialized!();
     unsafe {
-        from_glib(ffi::gtk_tree_set_row_drag_data(mut_override(selection_data.to_glib_none().0), tree_model.to_glib_none().0, path.to_glib_none_mut().0))
+        from_glib(ffi::gtk_tree_set_row_drag_data(mut_override(selection_data.to_glib_none().0), tree_model.as_ref().to_glib_none().0, path.to_glib_none_mut().0))
     }
 }
 

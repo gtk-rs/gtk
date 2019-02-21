@@ -3,18 +3,13 @@
 // Licensed under the MIT license, see the LICENSE file or <http://opensource.org/licenses/MIT>
 
 use ffi;
-use glib::IsA;
 use glib::translate::*;
 
 use PageRange;
 use PrintSettings;
 
-pub trait PrintSettingsExtManual {
-    fn set_page_ranges(&self, page_ranges: &[PageRange]);
-}
-
-impl<O: IsA<PrintSettings>> PrintSettingsExtManual for O {
-    fn set_page_ranges(&self, page_ranges: &[PageRange]) {
+impl PrintSettings {
+    pub fn set_page_ranges(&self, page_ranges: &[PageRange]) {
         let num_ranges = page_ranges.len() as i32;
         unsafe {
             ffi::gtk_print_settings_set_page_ranges(self.to_glib_none().0,

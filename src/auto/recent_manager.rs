@@ -6,23 +6,23 @@ use Error;
 use RecentData;
 use RecentInfo;
 use ffi;
-use glib;
+use glib::GString;
 use glib::StaticType;
 use glib::Value;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
-use std::mem;
+use std::fmt;
 use std::mem::transmute;
 use std::ptr;
 
 glib_wrapper! {
-    pub struct RecentManager(Object<ffi::GtkRecentManager, ffi::GtkRecentManagerClass>);
+    pub struct RecentManager(Object<ffi::GtkRecentManager, ffi::GtkRecentManagerClass, RecentManagerClass>);
 
     match fn {
         get_type => || ffi::gtk_recent_manager_get_type(),
@@ -51,7 +51,9 @@ impl Default for RecentManager {
     }
 }
 
-pub trait RecentManagerExt {
+pub const NONE_RECENT_MANAGER: Option<&RecentManager> = None;
+
+pub trait RecentManagerExt: 'static {
     fn add_full(&self, uri: &str, recent_data: &RecentData) -> bool;
 
     fn add_item(&self, uri: &str) -> bool;
@@ -68,56 +70,53 @@ pub trait RecentManagerExt {
 
     fn remove_item(&self, uri: &str) -> Result<(), Error>;
 
-    fn get_property_filename(&self) -> Option<String>;
+    fn get_property_filename(&self) -> Option<GString>;
 
     fn get_property_size(&self) -> i32;
 
     fn connect_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_filename_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
     fn connect_property_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<RecentManager> + IsA<glib::object::Object>> RecentManagerExt for O {
+impl<O: IsA<RecentManager>> RecentManagerExt for O {
     fn add_full(&self, uri: &str, recent_data: &RecentData) -> bool {
         unsafe {
-            from_glib(ffi::gtk_recent_manager_add_full(self.to_glib_none().0, uri.to_glib_none().0, recent_data.to_glib_none().0))
+            from_glib(ffi::gtk_recent_manager_add_full(self.as_ref().to_glib_none().0, uri.to_glib_none().0, recent_data.to_glib_none().0))
         }
     }
 
     fn add_item(&self, uri: &str) -> bool {
         unsafe {
-            from_glib(ffi::gtk_recent_manager_add_item(self.to_glib_none().0, uri.to_glib_none().0))
+            from_glib(ffi::gtk_recent_manager_add_item(self.as_ref().to_glib_none().0, uri.to_glib_none().0))
         }
     }
 
     fn get_items(&self) -> Vec<RecentInfo> {
         unsafe {
-            FromGlibPtrContainer::from_glib_full(ffi::gtk_recent_manager_get_items(self.to_glib_none().0))
+            FromGlibPtrContainer::from_glib_full(ffi::gtk_recent_manager_get_items(self.as_ref().to_glib_none().0))
         }
     }
 
     fn has_item(&self, uri: &str) -> bool {
         unsafe {
-            from_glib(ffi::gtk_recent_manager_has_item(self.to_glib_none().0, uri.to_glib_none().0))
+            from_glib(ffi::gtk_recent_manager_has_item(self.as_ref().to_glib_none().0, uri.to_glib_none().0))
         }
     }
 
     fn lookup_item(&self, uri: &str) -> Result<Option<RecentInfo>, Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let ret = ffi::gtk_recent_manager_lookup_item(self.to_glib_none().0, uri.to_glib_none().0, &mut error);
+            let ret = ffi::gtk_recent_manager_lookup_item(self.as_ref().to_glib_none().0, uri.to_glib_none().0, &mut error);
             if error.is_null() { Ok(from_glib_full(ret)) } else { Err(from_glib_full(error)) }
         }
     }
 
     fn move_item<'a, P: Into<Option<&'a str>>>(&self, uri: &str, new_uri: P) -> Result<(), Error> {
         let new_uri = new_uri.into();
-        let new_uri = new_uri.to_glib_none();
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::gtk_recent_manager_move_item(self.to_glib_none().0, uri.to_glib_none().0, new_uri.0, &mut error);
+            let _ = ffi::gtk_recent_manager_move_item(self.as_ref().to_glib_none().0, uri.to_glib_none().0, new_uri.to_glib_none().0, &mut error);
             if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
         }
     }
@@ -125,7 +124,7 @@ impl<O: IsA<RecentManager> + IsA<glib::object::Object>> RecentManagerExt for O {
     fn purge_items(&self) -> Result<i32, Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let ret = ffi::gtk_recent_manager_purge_items(self.to_glib_none().0, &mut error);
+            let ret = ffi::gtk_recent_manager_purge_items(self.as_ref().to_glib_none().0, &mut error);
             if error.is_null() { Ok(ret) } else { Err(from_glib_full(error)) }
         }
     }
@@ -133,15 +132,15 @@ impl<O: IsA<RecentManager> + IsA<glib::object::Object>> RecentManagerExt for O {
     fn remove_item(&self, uri: &str) -> Result<(), Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = ffi::gtk_recent_manager_remove_item(self.to_glib_none().0, uri.to_glib_none().0, &mut error);
+            let _ = ffi::gtk_recent_manager_remove_item(self.as_ref().to_glib_none().0, uri.to_glib_none().0, &mut error);
             if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
         }
     }
 
-    fn get_property_filename(&self) -> Option<String> {
+    fn get_property_filename(&self) -> Option<GString> {
         unsafe {
-            let mut value = Value::from_type(<String as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "filename".to_glib_none().0, value.to_glib_none_mut().0);
+            let mut value = Value::from_type(<GString as StaticType>::static_type());
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"filename\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
@@ -149,50 +148,42 @@ impl<O: IsA<RecentManager> + IsA<glib::object::Object>> RecentManagerExt for O {
     fn get_property_size(&self) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "size".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"size\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn connect_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "changed",
-                transmute(changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
-        }
-    }
-
-    fn connect_property_filename_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::filename",
-                transmute(notify_filename_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"changed\0".as_ptr() as *const _,
+                Some(transmute(changed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_size_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::size",
-                transmute(notify_size_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::size\0".as_ptr() as *const _,
+                Some(transmute(notify_size_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn changed_trampoline<P>(this: *mut ffi::GtkRecentManager, f: glib_ffi::gpointer)
+unsafe extern "C" fn changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRecentManager, f: glib_ffi::gpointer)
 where P: IsA<RecentManager> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&RecentManager::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&RecentManager::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_filename_trampoline<P>(this: *mut ffi::GtkRecentManager, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_size_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRecentManager, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RecentManager> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&RecentManager::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&RecentManager::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_size_trampoline<P>(this: *mut ffi::GtkRecentManager, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
-where P: IsA<RecentManager> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&RecentManager::from_glib_borrow(this).downcast_unchecked())
+impl fmt::Display for RecentManager {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "RecentManager")
+    }
 }

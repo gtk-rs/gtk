@@ -9,15 +9,13 @@ use Orientation;
 use Range;
 use Widget;
 use ffi;
-use glib::object::Downcast;
+use glib::object::Cast;
+use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use std::mem;
-use std::ptr;
+use std::fmt;
 
 glib_wrapper! {
-    pub struct Scrollbar(Object<ffi::GtkScrollbar, ffi::GtkScrollbarClass>): Range, Widget, Buildable, Orientable;
+    pub struct Scrollbar(Object<ffi::GtkScrollbar, ffi::GtkScrollbarClass, ScrollbarClass>) @extends Range, Widget, @implements Buildable, Orientable;
 
     match fn {
         get_type => || ffi::gtk_scrollbar_get_type(),
@@ -25,12 +23,19 @@ glib_wrapper! {
 }
 
 impl Scrollbar {
-    pub fn new<'a, P: Into<Option<&'a Adjustment>>>(orientation: Orientation, adjustment: P) -> Scrollbar {
+    pub fn new<'a, P: IsA<Adjustment> + 'a, Q: Into<Option<&'a P>>>(orientation: Orientation, adjustment: Q) -> Scrollbar {
         assert_initialized_main_thread!();
         let adjustment = adjustment.into();
-        let adjustment = adjustment.to_glib_none();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_scrollbar_new(orientation.to_glib(), adjustment.0)).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_scrollbar_new(orientation.to_glib(), adjustment.map(|p| p.as_ref()).to_glib_none().0)).unsafe_cast()
         }
+    }
+}
+
+pub const NONE_SCROLLBAR: Option<&Scrollbar> = None;
+
+impl fmt::Display for Scrollbar {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Scrollbar")
     }
 }

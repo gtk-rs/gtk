@@ -9,16 +9,13 @@ use Widget;
 use ffi;
 use glib::StaticType;
 use glib::Value;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use std::mem;
-use std::ptr;
+use std::fmt;
 
 glib_wrapper! {
-    pub struct Overlay(Object<ffi::GtkOverlay, ffi::GtkOverlayClass>): Bin, Container, Widget, Buildable;
+    pub struct Overlay(Object<ffi::GtkOverlay, ffi::GtkOverlayClass, OverlayClass>) @extends Bin, Container, Widget, @implements Buildable;
 
     match fn {
         get_type => || ffi::gtk_overlay_get_type(),
@@ -29,7 +26,7 @@ impl Overlay {
     pub fn new() -> Overlay {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_overlay_new()).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_overlay_new()).unsafe_cast()
         }
     }
 }
@@ -40,7 +37,9 @@ impl Default for Overlay {
     }
 }
 
-pub trait OverlayExt {
+pub const NONE_OVERLAY: Option<&Overlay> = None;
+
+pub trait OverlayExt: 'static {
     fn add_overlay<P: IsA<Widget>>(&self, widget: &P);
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
@@ -59,49 +58,55 @@ pub trait OverlayExt {
     //fn connect_get_child_position<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<Overlay> + IsA<Container>> OverlayExt for O {
+impl<O: IsA<Overlay>> OverlayExt for O {
     fn add_overlay<P: IsA<Widget>>(&self, widget: &P) {
         unsafe {
-            ffi::gtk_overlay_add_overlay(self.to_glib_none().0, widget.to_glib_none().0);
+            ffi::gtk_overlay_add_overlay(self.as_ref().to_glib_none().0, widget.as_ref().to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
     fn get_overlay_pass_through<P: IsA<Widget>>(&self, widget: &P) -> bool {
         unsafe {
-            from_glib(ffi::gtk_overlay_get_overlay_pass_through(self.to_glib_none().0, widget.to_glib_none().0))
+            from_glib(ffi::gtk_overlay_get_overlay_pass_through(self.as_ref().to_glib_none().0, widget.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
     fn reorder_overlay<P: IsA<Widget>>(&self, child: &P, position: i32) {
         unsafe {
-            ffi::gtk_overlay_reorder_overlay(self.to_glib_none().0, child.to_glib_none().0, position);
+            ffi::gtk_overlay_reorder_overlay(self.as_ref().to_glib_none().0, child.as_ref().to_glib_none().0, position);
         }
     }
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
     fn set_overlay_pass_through<P: IsA<Widget>>(&self, widget: &P, pass_through: bool) {
         unsafe {
-            ffi::gtk_overlay_set_overlay_pass_through(self.to_glib_none().0, widget.to_glib_none().0, pass_through.to_glib());
+            ffi::gtk_overlay_set_overlay_pass_through(self.as_ref().to_glib_none().0, widget.as_ref().to_glib_none().0, pass_through.to_glib());
         }
     }
 
     fn get_child_index<T: IsA<Widget>>(&self, item: &T) -> i32 {
         unsafe {
             let mut value = Value::from_type(<i32 as StaticType>::static_type());
-            ffi::gtk_container_child_get_property(self.to_glib_none().0, item.to_glib_none().0, "index".to_glib_none().0, value.to_glib_none_mut().0);
+            ffi::gtk_container_child_get_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0 as *mut _, b"index\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_child_index<T: IsA<Widget>>(&self, item: &T, index: i32) {
         unsafe {
-            ffi::gtk_container_child_set_property(self.to_glib_none().0, item.to_glib_none().0, "index".to_glib_none().0, Value::from(&index).to_glib_none().0);
+            ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0 as *mut _, b"index\0".as_ptr() as *const _, Value::from(&index).to_glib_none().0);
         }
     }
 
     //fn connect_get_child_position<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
     //    Out allocation: Gdk.Rectangle
     //}
+}
+
+impl fmt::Display for Overlay {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Overlay")
+    }
 }

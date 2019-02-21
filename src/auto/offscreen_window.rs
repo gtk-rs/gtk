@@ -10,16 +10,13 @@ use Window;
 use cairo;
 use ffi;
 use gdk_pixbuf;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use std::mem;
-use std::ptr;
+use std::fmt;
 
 glib_wrapper! {
-    pub struct OffscreenWindow(Object<ffi::GtkOffscreenWindow, ffi::GtkOffscreenWindowClass>): Window, Bin, Container, Widget, Buildable;
+    pub struct OffscreenWindow(Object<ffi::GtkOffscreenWindow, ffi::GtkOffscreenWindowClass, OffscreenWindowClass>) @extends Window, Bin, Container, Widget, @implements Buildable;
 
     match fn {
         get_type => || ffi::gtk_offscreen_window_get_type(),
@@ -30,7 +27,7 @@ impl OffscreenWindow {
     pub fn new() -> OffscreenWindow {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_offscreen_window_new()).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_offscreen_window_new()).unsafe_cast()
         }
     }
 }
@@ -41,7 +38,9 @@ impl Default for OffscreenWindow {
     }
 }
 
-pub trait OffscreenWindowExt {
+pub const NONE_OFFSCREEN_WINDOW: Option<&OffscreenWindow> = None;
+
+pub trait OffscreenWindowExt: 'static {
     fn get_pixbuf(&self) -> Option<gdk_pixbuf::Pixbuf>;
 
     fn get_surface(&self) -> Option<cairo::Surface>;
@@ -50,13 +49,19 @@ pub trait OffscreenWindowExt {
 impl<O: IsA<OffscreenWindow>> OffscreenWindowExt for O {
     fn get_pixbuf(&self) -> Option<gdk_pixbuf::Pixbuf> {
         unsafe {
-            from_glib_full(ffi::gtk_offscreen_window_get_pixbuf(self.to_glib_none().0))
+            from_glib_full(ffi::gtk_offscreen_window_get_pixbuf(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_surface(&self) -> Option<cairo::Surface> {
         unsafe {
-            from_glib_none(ffi::gtk_offscreen_window_get_surface(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_offscreen_window_get_surface(self.as_ref().to_glib_none().0))
         }
+    }
+}
+
+impl fmt::Display for OffscreenWindow {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "OffscreenWindow")
     }
 }

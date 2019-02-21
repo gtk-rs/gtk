@@ -11,20 +11,19 @@ use ffi;
 use glib;
 use glib::StaticType;
 use glib::Value;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
-use std::mem;
+use std::fmt;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
-    pub struct StackSidebar(Object<ffi::GtkStackSidebar, ffi::GtkStackSidebarClass>): Bin, Container, Widget, Buildable;
+    pub struct StackSidebar(Object<ffi::GtkStackSidebar, ffi::GtkStackSidebarClass, StackSidebarClass>) @extends Bin, Container, Widget, @implements Buildable;
 
     match fn {
         get_type => || ffi::gtk_stack_sidebar_get_type(),
@@ -36,7 +35,7 @@ impl StackSidebar {
     pub fn new() -> StackSidebar {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_stack_sidebar_new()).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_stack_sidebar_new()).unsafe_cast()
         }
     }
 }
@@ -48,60 +47,68 @@ impl Default for StackSidebar {
     }
 }
 
-pub trait StackSidebarExt {
+pub const NONE_STACK_SIDEBAR: Option<&StackSidebar> = None;
+
+pub trait StackSidebarExt: 'static {
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn get_stack(&self) -> Option<Stack>;
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn set_stack(&self, stack: &Stack);
+    fn set_stack<P: IsA<Stack>>(&self, stack: &P);
 
     fn get_property_stack(&self) -> Option<Stack>;
 
-    fn set_property_stack(&self, stack: Option<&Stack>);
+    fn set_property_stack<P: IsA<Stack> + glib::value::SetValueOptional>(&self, stack: Option<&P>);
 
     fn connect_property_stack_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<StackSidebar> + IsA<glib::object::Object>> StackSidebarExt for O {
+impl<O: IsA<StackSidebar>> StackSidebarExt for O {
     #[cfg(any(feature = "v3_16", feature = "dox"))]
     fn get_stack(&self) -> Option<Stack> {
         unsafe {
-            from_glib_none(ffi::gtk_stack_sidebar_get_stack(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_stack_sidebar_get_stack(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn set_stack(&self, stack: &Stack) {
+    fn set_stack<P: IsA<Stack>>(&self, stack: &P) {
         unsafe {
-            ffi::gtk_stack_sidebar_set_stack(self.to_glib_none().0, stack.to_glib_none().0);
+            ffi::gtk_stack_sidebar_set_stack(self.as_ref().to_glib_none().0, stack.as_ref().to_glib_none().0);
         }
     }
 
     fn get_property_stack(&self) -> Option<Stack> {
         unsafe {
             let mut value = Value::from_type(<Stack as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "stack".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"stack\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get()
         }
     }
 
-    fn set_property_stack(&self, stack: Option<&Stack>) {
+    fn set_property_stack<P: IsA<Stack> + glib::value::SetValueOptional>(&self, stack: Option<&P>) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "stack".to_glib_none().0, Value::from(stack).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"stack\0".as_ptr() as *const _, Value::from(stack).to_glib_none().0);
         }
     }
 
     fn connect_property_stack_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::stack",
-                transmute(notify_stack_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::stack\0".as_ptr() as *const _,
+                Some(transmute(notify_stack_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn notify_stack_trampoline<P>(this: *mut ffi::GtkStackSidebar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_stack_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkStackSidebar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<StackSidebar> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&StackSidebar::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&StackSidebar::from_glib_borrow(this).unsafe_cast())
+}
+
+impl fmt::Display for StackSidebar {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "StackSidebar")
+    }
 }

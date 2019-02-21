@@ -5,171 +5,145 @@
 use EventController;
 use Gesture;
 use ffi;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use gdk;
-use glib;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use glib::signal::SignalHandlerId;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use std::boxed::Box as Box_;
-use std::mem;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
+use std::fmt;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
-    pub struct GestureSingle(Object<ffi::GtkGestureSingle, ffi::GtkGestureSingleClass>): Gesture, EventController;
+    pub struct GestureSingle(Object<ffi::GtkGestureSingle, ffi::GtkGestureSingleClass, GestureSingleClass>) @extends Gesture, EventController;
 
     match fn {
         get_type => || ffi::gtk_gesture_single_get_type(),
     }
 }
 
-pub trait GestureSingleExt {
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
+pub const NONE_GESTURE_SINGLE: Option<&GestureSingle> = None;
+
+pub trait GestureSingleExt: 'static {
     fn get_button(&self) -> u32;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_current_button(&self) -> u32;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_current_sequence(&self) -> Option<gdk::EventSequence>;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_exclusive(&self) -> bool;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_touch_only(&self) -> bool;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn set_button(&self, button: u32);
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn set_exclusive(&self, exclusive: bool);
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn set_touch_only(&self, touch_only: bool);
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_property_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_property_exclusive_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_property_touch_only_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<GestureSingle> + IsA<glib::object::Object>> GestureSingleExt for O {
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
+impl<O: IsA<GestureSingle>> GestureSingleExt for O {
     fn get_button(&self) -> u32 {
         unsafe {
-            ffi::gtk_gesture_single_get_button(self.to_glib_none().0)
+            ffi::gtk_gesture_single_get_button(self.as_ref().to_glib_none().0)
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_current_button(&self) -> u32 {
         unsafe {
-            ffi::gtk_gesture_single_get_current_button(self.to_glib_none().0)
+            ffi::gtk_gesture_single_get_current_button(self.as_ref().to_glib_none().0)
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_current_sequence(&self) -> Option<gdk::EventSequence> {
         unsafe {
-            from_glib_full(ffi::gtk_gesture_single_get_current_sequence(self.to_glib_none().0))
+            from_glib_full(ffi::gtk_gesture_single_get_current_sequence(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_exclusive(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_gesture_single_get_exclusive(self.to_glib_none().0))
+            from_glib(ffi::gtk_gesture_single_get_exclusive(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn get_touch_only(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_gesture_single_get_touch_only(self.to_glib_none().0))
+            from_glib(ffi::gtk_gesture_single_get_touch_only(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn set_button(&self, button: u32) {
         unsafe {
-            ffi::gtk_gesture_single_set_button(self.to_glib_none().0, button);
+            ffi::gtk_gesture_single_set_button(self.as_ref().to_glib_none().0, button);
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn set_exclusive(&self, exclusive: bool) {
         unsafe {
-            ffi::gtk_gesture_single_set_exclusive(self.to_glib_none().0, exclusive.to_glib());
+            ffi::gtk_gesture_single_set_exclusive(self.as_ref().to_glib_none().0, exclusive.to_glib());
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn set_touch_only(&self, touch_only: bool) {
         unsafe {
-            ffi::gtk_gesture_single_set_touch_only(self.to_glib_none().0, touch_only.to_glib());
+            ffi::gtk_gesture_single_set_touch_only(self.as_ref().to_glib_none().0, touch_only.to_glib());
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_property_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::button",
-                transmute(notify_button_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::button\0".as_ptr() as *const _,
+                Some(transmute(notify_button_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_property_exclusive_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::exclusive",
-                transmute(notify_exclusive_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::exclusive\0".as_ptr() as *const _,
+                Some(transmute(notify_exclusive_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_property_touch_only_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::touch-only",
-                transmute(notify_touch_only_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::touch-only\0".as_ptr() as *const _,
+                Some(transmute(notify_touch_only_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
-unsafe extern "C" fn notify_button_trampoline<P>(this: *mut ffi::GtkGestureSingle, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_button_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGestureSingle, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<GestureSingle> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&GestureSingle::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&GestureSingle::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
-unsafe extern "C" fn notify_exclusive_trampoline<P>(this: *mut ffi::GtkGestureSingle, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_exclusive_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGestureSingle, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<GestureSingle> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&GestureSingle::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&GestureSingle::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
-unsafe extern "C" fn notify_touch_only_trampoline<P>(this: *mut ffi::GtkGestureSingle, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_touch_only_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGestureSingle, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<GestureSingle> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&GestureSingle::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&GestureSingle::from_glib_borrow(this).unsafe_cast())
+}
+
+impl fmt::Display for GestureSingle {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "GestureSingle")
+    }
 }

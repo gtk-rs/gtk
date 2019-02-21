@@ -19,30 +19,31 @@ use cairo;
 use ffi;
 use gdk;
 use gdk_ffi;
-use glib;
-use glib::object::Downcast;
+use glib::GString;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use libc;
 use std::boxed::Box as Box_;
+use std::fmt;
 use std::mem;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
-    pub struct CellArea(Object<ffi::GtkCellArea, ffi::GtkCellAreaClass>): Buildable, CellLayout;
+    pub struct CellArea(Object<ffi::GtkCellArea, ffi::GtkCellAreaClass, CellAreaClass>) @implements Buildable, CellLayout;
 
     match fn {
         get_type => || ffi::gtk_cell_area_get_type(),
     }
 }
 
-pub trait CellAreaExt {
-    fn activate<P: IsA<Widget>>(&self, context: &CellAreaContext, widget: &P, cell_area: &gdk::Rectangle, flags: CellRendererState, edit_only: bool) -> bool;
+pub const NONE_CELL_AREA: Option<&CellArea> = None;
+
+pub trait CellAreaExt: 'static {
+    fn activate<P: IsA<CellAreaContext>, Q: IsA<Widget>>(&self, context: &P, widget: &Q, cell_area: &gdk::Rectangle, flags: CellRendererState, edit_only: bool) -> bool;
 
     fn activate_cell<P: IsA<Widget>, Q: IsA<CellRenderer>>(&self, widget: &P, renderer: &Q, event: &gdk::Event, cell_area: &gdk::Rectangle, flags: CellRendererState) -> bool;
 
@@ -58,7 +59,6 @@ pub trait CellAreaExt {
 
     fn attribute_disconnect<P: IsA<CellRenderer>>(&self, renderer: &P, attribute: &str);
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn attribute_get_column<P: IsA<CellRenderer>>(&self, renderer: &P, attribute: &str) -> i32;
 
     //fn cell_get<P: IsA<CellRenderer>>(&self, renderer: &P, first_prop_name: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
@@ -69,23 +69,23 @@ pub trait CellAreaExt {
 
     //fn cell_set_valist<P: IsA<CellRenderer>>(&self, renderer: &P, first_property_name: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported);
 
-    fn copy_context(&self, context: &CellAreaContext) -> Option<CellAreaContext>;
+    fn copy_context<P: IsA<CellAreaContext>>(&self, context: &P) -> Option<CellAreaContext>;
 
     fn create_context(&self) -> Option<CellAreaContext>;
 
-    fn event<P: IsA<Widget>>(&self, context: &CellAreaContext, widget: &P, event: &gdk::Event, cell_area: &gdk::Rectangle, flags: CellRendererState) -> i32;
+    fn event<P: IsA<CellAreaContext>, Q: IsA<Widget>>(&self, context: &P, widget: &Q, event: &gdk::Event, cell_area: &gdk::Rectangle, flags: CellRendererState) -> i32;
 
     fn focus(&self, direction: DirectionType) -> bool;
 
-    //fn foreach<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, callback: /*Unknown conversion*//*Unimplemented*/CellCallback, callback_data: P);
+    fn foreach<P: FnMut(&CellRenderer) -> bool>(&self, callback: P);
 
-    //fn foreach_alloc<P: IsA<Widget>, Q: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, context: &CellAreaContext, widget: &P, cell_area: &gdk::Rectangle, background_area: &gdk::Rectangle, callback: /*Unknown conversion*//*Unimplemented*/CellAllocCallback, callback_data: Q);
+    fn foreach_alloc<P: IsA<CellAreaContext>, Q: IsA<Widget>, R: FnMut(&CellRenderer, &gdk::Rectangle, &gdk::Rectangle) -> bool>(&self, context: &P, widget: &Q, cell_area: &gdk::Rectangle, background_area: &gdk::Rectangle, callback: R);
 
-    fn get_cell_allocation<P: IsA<Widget>, Q: IsA<CellRenderer>>(&self, context: &CellAreaContext, widget: &P, renderer: &Q, cell_area: &gdk::Rectangle) -> gdk::Rectangle;
+    fn get_cell_allocation<P: IsA<CellAreaContext>, Q: IsA<Widget>, R: IsA<CellRenderer>>(&self, context: &P, widget: &Q, renderer: &R, cell_area: &gdk::Rectangle) -> gdk::Rectangle;
 
-    fn get_cell_at_position<P: IsA<Widget>>(&self, context: &CellAreaContext, widget: &P, cell_area: &gdk::Rectangle, x: i32, y: i32) -> (CellRenderer, gdk::Rectangle);
+    fn get_cell_at_position<P: IsA<CellAreaContext>, Q: IsA<Widget>>(&self, context: &P, widget: &Q, cell_area: &gdk::Rectangle, x: i32, y: i32) -> (CellRenderer, gdk::Rectangle);
 
-    fn get_current_path_string(&self) -> Option<String>;
+    fn get_current_path_string(&self) -> Option<GString>;
 
     fn get_edit_widget(&self) -> Option<CellEditable>;
 
@@ -97,13 +97,13 @@ pub trait CellAreaExt {
 
     fn get_focus_siblings<P: IsA<CellRenderer>>(&self, renderer: &P) -> Vec<CellRenderer>;
 
-    fn get_preferred_height<P: IsA<Widget>>(&self, context: &CellAreaContext, widget: &P) -> (i32, i32);
+    fn get_preferred_height<P: IsA<CellAreaContext>, Q: IsA<Widget>>(&self, context: &P, widget: &Q) -> (i32, i32);
 
-    fn get_preferred_height_for_width<P: IsA<Widget>>(&self, context: &CellAreaContext, widget: &P, width: i32) -> (i32, i32);
+    fn get_preferred_height_for_width<P: IsA<CellAreaContext>, Q: IsA<Widget>>(&self, context: &P, widget: &Q, width: i32) -> (i32, i32);
 
-    fn get_preferred_width<P: IsA<Widget>>(&self, context: &CellAreaContext, widget: &P) -> (i32, i32);
+    fn get_preferred_width<P: IsA<CellAreaContext>, Q: IsA<Widget>>(&self, context: &P, widget: &Q) -> (i32, i32);
 
-    fn get_preferred_width_for_height<P: IsA<Widget>>(&self, context: &CellAreaContext, widget: &P, height: i32) -> (i32, i32);
+    fn get_preferred_width_for_height<P: IsA<CellAreaContext>, Q: IsA<Widget>>(&self, context: &P, widget: &Q, height: i32) -> (i32, i32);
 
     fn get_request_mode(&self) -> SizeRequestMode;
 
@@ -119,7 +119,7 @@ pub trait CellAreaExt {
 
     fn remove_focus_sibling<P: IsA<CellRenderer>, Q: IsA<CellRenderer>>(&self, renderer: &P, sibling: &Q);
 
-    fn render<P: IsA<Widget>>(&self, context: &CellAreaContext, widget: &P, cr: &cairo::Context, background_area: &gdk::Rectangle, cell_area: &gdk::Rectangle, flags: CellRendererState, paint_focus: bool);
+    fn render<P: IsA<CellAreaContext>, Q: IsA<Widget>>(&self, context: &P, widget: &Q, cr: &cairo::Context, background_area: &gdk::Rectangle, cell_area: &gdk::Rectangle, flags: CellRendererState, paint_focus: bool);
 
     fn request_renderer<P: IsA<CellRenderer>, Q: IsA<Widget>>(&self, renderer: &P, orientation: Orientation, widget: &Q, for_size: i32) -> (i32, i32);
 
@@ -142,28 +142,28 @@ pub trait CellAreaExt {
     fn connect_property_focus_cell_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<CellArea> + IsA<glib::object::Object>> CellAreaExt for O {
-    fn activate<P: IsA<Widget>>(&self, context: &CellAreaContext, widget: &P, cell_area: &gdk::Rectangle, flags: CellRendererState, edit_only: bool) -> bool {
+impl<O: IsA<CellArea>> CellAreaExt for O {
+    fn activate<P: IsA<CellAreaContext>, Q: IsA<Widget>>(&self, context: &P, widget: &Q, cell_area: &gdk::Rectangle, flags: CellRendererState, edit_only: bool) -> bool {
         unsafe {
-            from_glib(ffi::gtk_cell_area_activate(self.to_glib_none().0, context.to_glib_none().0, widget.to_glib_none().0, cell_area.to_glib_none().0, flags.to_glib(), edit_only.to_glib()))
+            from_glib(ffi::gtk_cell_area_activate(self.as_ref().to_glib_none().0, context.as_ref().to_glib_none().0, widget.as_ref().to_glib_none().0, cell_area.to_glib_none().0, flags.to_glib(), edit_only.to_glib()))
         }
     }
 
     fn activate_cell<P: IsA<Widget>, Q: IsA<CellRenderer>>(&self, widget: &P, renderer: &Q, event: &gdk::Event, cell_area: &gdk::Rectangle, flags: CellRendererState) -> bool {
         unsafe {
-            from_glib(ffi::gtk_cell_area_activate_cell(self.to_glib_none().0, widget.to_glib_none().0, renderer.to_glib_none().0, mut_override(event.to_glib_none().0), cell_area.to_glib_none().0, flags.to_glib()))
+            from_glib(ffi::gtk_cell_area_activate_cell(self.as_ref().to_glib_none().0, widget.as_ref().to_glib_none().0, renderer.as_ref().to_glib_none().0, mut_override(event.to_glib_none().0), cell_area.to_glib_none().0, flags.to_glib()))
         }
     }
 
     fn add<P: IsA<CellRenderer>>(&self, renderer: &P) {
         unsafe {
-            ffi::gtk_cell_area_add(self.to_glib_none().0, renderer.to_glib_none().0);
+            ffi::gtk_cell_area_add(self.as_ref().to_glib_none().0, renderer.as_ref().to_glib_none().0);
         }
     }
 
     fn add_focus_sibling<P: IsA<CellRenderer>, Q: IsA<CellRenderer>>(&self, renderer: &P, sibling: &Q) {
         unsafe {
-            ffi::gtk_cell_area_add_focus_sibling(self.to_glib_none().0, renderer.to_glib_none().0, sibling.to_glib_none().0);
+            ffi::gtk_cell_area_add_focus_sibling(self.as_ref().to_glib_none().0, renderer.as_ref().to_glib_none().0, sibling.as_ref().to_glib_none().0);
         }
     }
 
@@ -173,26 +173,25 @@ impl<O: IsA<CellArea> + IsA<glib::object::Object>> CellAreaExt for O {
 
     fn apply_attributes<P: IsA<TreeModel>>(&self, tree_model: &P, iter: &TreeIter, is_expander: bool, is_expanded: bool) {
         unsafe {
-            ffi::gtk_cell_area_apply_attributes(self.to_glib_none().0, tree_model.to_glib_none().0, mut_override(iter.to_glib_none().0), is_expander.to_glib(), is_expanded.to_glib());
+            ffi::gtk_cell_area_apply_attributes(self.as_ref().to_glib_none().0, tree_model.as_ref().to_glib_none().0, mut_override(iter.to_glib_none().0), is_expander.to_glib(), is_expanded.to_glib());
         }
     }
 
     fn attribute_connect<P: IsA<CellRenderer>>(&self, renderer: &P, attribute: &str, column: i32) {
         unsafe {
-            ffi::gtk_cell_area_attribute_connect(self.to_glib_none().0, renderer.to_glib_none().0, attribute.to_glib_none().0, column);
+            ffi::gtk_cell_area_attribute_connect(self.as_ref().to_glib_none().0, renderer.as_ref().to_glib_none().0, attribute.to_glib_none().0, column);
         }
     }
 
     fn attribute_disconnect<P: IsA<CellRenderer>>(&self, renderer: &P, attribute: &str) {
         unsafe {
-            ffi::gtk_cell_area_attribute_disconnect(self.to_glib_none().0, renderer.to_glib_none().0, attribute.to_glib_none().0);
+            ffi::gtk_cell_area_attribute_disconnect(self.as_ref().to_glib_none().0, renderer.as_ref().to_glib_none().0, attribute.to_glib_none().0);
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn attribute_get_column<P: IsA<CellRenderer>>(&self, renderer: &P, attribute: &str) -> i32 {
         unsafe {
-            ffi::gtk_cell_area_attribute_get_column(self.to_glib_none().0, renderer.to_glib_none().0, attribute.to_glib_none().0)
+            ffi::gtk_cell_area_attribute_get_column(self.as_ref().to_glib_none().0, renderer.as_ref().to_glib_none().0, attribute.to_glib_none().0)
         }
     }
 
@@ -212,173 +211,197 @@ impl<O: IsA<CellArea> + IsA<glib::object::Object>> CellAreaExt for O {
     //    unsafe { TODO: call ffi::gtk_cell_area_cell_set_valist() }
     //}
 
-    fn copy_context(&self, context: &CellAreaContext) -> Option<CellAreaContext> {
+    fn copy_context<P: IsA<CellAreaContext>>(&self, context: &P) -> Option<CellAreaContext> {
         unsafe {
-            from_glib_full(ffi::gtk_cell_area_copy_context(self.to_glib_none().0, context.to_glib_none().0))
+            from_glib_full(ffi::gtk_cell_area_copy_context(self.as_ref().to_glib_none().0, context.as_ref().to_glib_none().0))
         }
     }
 
     fn create_context(&self) -> Option<CellAreaContext> {
         unsafe {
-            from_glib_full(ffi::gtk_cell_area_create_context(self.to_glib_none().0))
+            from_glib_full(ffi::gtk_cell_area_create_context(self.as_ref().to_glib_none().0))
         }
     }
 
-    fn event<P: IsA<Widget>>(&self, context: &CellAreaContext, widget: &P, event: &gdk::Event, cell_area: &gdk::Rectangle, flags: CellRendererState) -> i32 {
+    fn event<P: IsA<CellAreaContext>, Q: IsA<Widget>>(&self, context: &P, widget: &Q, event: &gdk::Event, cell_area: &gdk::Rectangle, flags: CellRendererState) -> i32 {
         unsafe {
-            ffi::gtk_cell_area_event(self.to_glib_none().0, context.to_glib_none().0, widget.to_glib_none().0, mut_override(event.to_glib_none().0), cell_area.to_glib_none().0, flags.to_glib())
+            ffi::gtk_cell_area_event(self.as_ref().to_glib_none().0, context.as_ref().to_glib_none().0, widget.as_ref().to_glib_none().0, mut_override(event.to_glib_none().0), cell_area.to_glib_none().0, flags.to_glib())
         }
     }
 
     fn focus(&self, direction: DirectionType) -> bool {
         unsafe {
-            from_glib(ffi::gtk_cell_area_focus(self.to_glib_none().0, direction.to_glib()))
+            from_glib(ffi::gtk_cell_area_focus(self.as_ref().to_glib_none().0, direction.to_glib()))
         }
     }
 
-    //fn foreach<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, callback: /*Unknown conversion*//*Unimplemented*/CellCallback, callback_data: P) {
-    //    unsafe { TODO: call ffi::gtk_cell_area_foreach() }
-    //}
+    fn foreach<P: FnMut(&CellRenderer) -> bool>(&self, callback: P) {
+        let callback_data: P = callback;
+        unsafe extern "C" fn callback_func<P: FnMut(&CellRenderer) -> bool>(renderer: *mut ffi::GtkCellRenderer, data: glib_ffi::gpointer) -> glib_ffi::gboolean {
+            let renderer = from_glib_borrow(renderer);
+            let callback: *mut P = data as *const _ as usize as *mut P;
+            let res = (*callback)(&renderer);
+            res.to_glib()
+        }
+        let callback = Some(callback_func::<P> as _);
+        let super_callback0: &P = &callback_data;
+        unsafe {
+            ffi::gtk_cell_area_foreach(self.as_ref().to_glib_none().0, callback, super_callback0 as *const _ as usize as *mut _);
+        }
+    }
 
-    //fn foreach_alloc<P: IsA<Widget>, Q: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, context: &CellAreaContext, widget: &P, cell_area: &gdk::Rectangle, background_area: &gdk::Rectangle, callback: /*Unknown conversion*//*Unimplemented*/CellAllocCallback, callback_data: Q) {
-    //    unsafe { TODO: call ffi::gtk_cell_area_foreach_alloc() }
-    //}
+    fn foreach_alloc<P: IsA<CellAreaContext>, Q: IsA<Widget>, R: FnMut(&CellRenderer, &gdk::Rectangle, &gdk::Rectangle) -> bool>(&self, context: &P, widget: &Q, cell_area: &gdk::Rectangle, background_area: &gdk::Rectangle, callback: R) {
+        let callback_data: R = callback;
+        unsafe extern "C" fn callback_func<P: IsA<CellAreaContext>, Q: IsA<Widget>, R: FnMut(&CellRenderer, &gdk::Rectangle, &gdk::Rectangle) -> bool>(renderer: *mut ffi::GtkCellRenderer, cell_area: *const gdk_ffi::GdkRectangle, cell_background: *const gdk_ffi::GdkRectangle, data: glib_ffi::gpointer) -> glib_ffi::gboolean {
+            let renderer = from_glib_borrow(renderer);
+            let cell_area = from_glib_borrow(cell_area);
+            let cell_background = from_glib_borrow(cell_background);
+            let callback: *mut R = data as *const _ as usize as *mut R;
+            let res = (*callback)(&renderer, &cell_area, &cell_background);
+            res.to_glib()
+        }
+        let callback = Some(callback_func::<P, Q, R> as _);
+        let super_callback0: &R = &callback_data;
+        unsafe {
+            ffi::gtk_cell_area_foreach_alloc(self.as_ref().to_glib_none().0, context.as_ref().to_glib_none().0, widget.as_ref().to_glib_none().0, cell_area.to_glib_none().0, background_area.to_glib_none().0, callback, super_callback0 as *const _ as usize as *mut _);
+        }
+    }
 
-    fn get_cell_allocation<P: IsA<Widget>, Q: IsA<CellRenderer>>(&self, context: &CellAreaContext, widget: &P, renderer: &Q, cell_area: &gdk::Rectangle) -> gdk::Rectangle {
+    fn get_cell_allocation<P: IsA<CellAreaContext>, Q: IsA<Widget>, R: IsA<CellRenderer>>(&self, context: &P, widget: &Q, renderer: &R, cell_area: &gdk::Rectangle) -> gdk::Rectangle {
         unsafe {
             let mut allocation = gdk::Rectangle::uninitialized();
-            ffi::gtk_cell_area_get_cell_allocation(self.to_glib_none().0, context.to_glib_none().0, widget.to_glib_none().0, renderer.to_glib_none().0, cell_area.to_glib_none().0, allocation.to_glib_none_mut().0);
+            ffi::gtk_cell_area_get_cell_allocation(self.as_ref().to_glib_none().0, context.as_ref().to_glib_none().0, widget.as_ref().to_glib_none().0, renderer.as_ref().to_glib_none().0, cell_area.to_glib_none().0, allocation.to_glib_none_mut().0);
             allocation
         }
     }
 
-    fn get_cell_at_position<P: IsA<Widget>>(&self, context: &CellAreaContext, widget: &P, cell_area: &gdk::Rectangle, x: i32, y: i32) -> (CellRenderer, gdk::Rectangle) {
+    fn get_cell_at_position<P: IsA<CellAreaContext>, Q: IsA<Widget>>(&self, context: &P, widget: &Q, cell_area: &gdk::Rectangle, x: i32, y: i32) -> (CellRenderer, gdk::Rectangle) {
         unsafe {
             let mut alloc_area = gdk::Rectangle::uninitialized();
-            let ret = from_glib_none(ffi::gtk_cell_area_get_cell_at_position(self.to_glib_none().0, context.to_glib_none().0, widget.to_glib_none().0, cell_area.to_glib_none().0, x, y, alloc_area.to_glib_none_mut().0));
+            let ret = from_glib_none(ffi::gtk_cell_area_get_cell_at_position(self.as_ref().to_glib_none().0, context.as_ref().to_glib_none().0, widget.as_ref().to_glib_none().0, cell_area.to_glib_none().0, x, y, alloc_area.to_glib_none_mut().0));
             (ret, alloc_area)
         }
     }
 
-    fn get_current_path_string(&self) -> Option<String> {
+    fn get_current_path_string(&self) -> Option<GString> {
         unsafe {
-            from_glib_none(ffi::gtk_cell_area_get_current_path_string(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_cell_area_get_current_path_string(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_edit_widget(&self) -> Option<CellEditable> {
         unsafe {
-            from_glib_none(ffi::gtk_cell_area_get_edit_widget(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_cell_area_get_edit_widget(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_edited_cell(&self) -> Option<CellRenderer> {
         unsafe {
-            from_glib_none(ffi::gtk_cell_area_get_edited_cell(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_cell_area_get_edited_cell(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_focus_cell(&self) -> Option<CellRenderer> {
         unsafe {
-            from_glib_none(ffi::gtk_cell_area_get_focus_cell(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_cell_area_get_focus_cell(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_focus_from_sibling<P: IsA<CellRenderer>>(&self, renderer: &P) -> Option<CellRenderer> {
         unsafe {
-            from_glib_none(ffi::gtk_cell_area_get_focus_from_sibling(self.to_glib_none().0, renderer.to_glib_none().0))
+            from_glib_none(ffi::gtk_cell_area_get_focus_from_sibling(self.as_ref().to_glib_none().0, renderer.as_ref().to_glib_none().0))
         }
     }
 
     fn get_focus_siblings<P: IsA<CellRenderer>>(&self, renderer: &P) -> Vec<CellRenderer> {
         unsafe {
-            FromGlibPtrContainer::from_glib_none(ffi::gtk_cell_area_get_focus_siblings(self.to_glib_none().0, renderer.to_glib_none().0))
+            FromGlibPtrContainer::from_glib_none(ffi::gtk_cell_area_get_focus_siblings(self.as_ref().to_glib_none().0, renderer.as_ref().to_glib_none().0))
         }
     }
 
-    fn get_preferred_height<P: IsA<Widget>>(&self, context: &CellAreaContext, widget: &P) -> (i32, i32) {
+    fn get_preferred_height<P: IsA<CellAreaContext>, Q: IsA<Widget>>(&self, context: &P, widget: &Q) -> (i32, i32) {
         unsafe {
             let mut minimum_height = mem::uninitialized();
             let mut natural_height = mem::uninitialized();
-            ffi::gtk_cell_area_get_preferred_height(self.to_glib_none().0, context.to_glib_none().0, widget.to_glib_none().0, &mut minimum_height, &mut natural_height);
+            ffi::gtk_cell_area_get_preferred_height(self.as_ref().to_glib_none().0, context.as_ref().to_glib_none().0, widget.as_ref().to_glib_none().0, &mut minimum_height, &mut natural_height);
             (minimum_height, natural_height)
         }
     }
 
-    fn get_preferred_height_for_width<P: IsA<Widget>>(&self, context: &CellAreaContext, widget: &P, width: i32) -> (i32, i32) {
+    fn get_preferred_height_for_width<P: IsA<CellAreaContext>, Q: IsA<Widget>>(&self, context: &P, widget: &Q, width: i32) -> (i32, i32) {
         unsafe {
             let mut minimum_height = mem::uninitialized();
             let mut natural_height = mem::uninitialized();
-            ffi::gtk_cell_area_get_preferred_height_for_width(self.to_glib_none().0, context.to_glib_none().0, widget.to_glib_none().0, width, &mut minimum_height, &mut natural_height);
+            ffi::gtk_cell_area_get_preferred_height_for_width(self.as_ref().to_glib_none().0, context.as_ref().to_glib_none().0, widget.as_ref().to_glib_none().0, width, &mut minimum_height, &mut natural_height);
             (minimum_height, natural_height)
         }
     }
 
-    fn get_preferred_width<P: IsA<Widget>>(&self, context: &CellAreaContext, widget: &P) -> (i32, i32) {
+    fn get_preferred_width<P: IsA<CellAreaContext>, Q: IsA<Widget>>(&self, context: &P, widget: &Q) -> (i32, i32) {
         unsafe {
             let mut minimum_width = mem::uninitialized();
             let mut natural_width = mem::uninitialized();
-            ffi::gtk_cell_area_get_preferred_width(self.to_glib_none().0, context.to_glib_none().0, widget.to_glib_none().0, &mut minimum_width, &mut natural_width);
+            ffi::gtk_cell_area_get_preferred_width(self.as_ref().to_glib_none().0, context.as_ref().to_glib_none().0, widget.as_ref().to_glib_none().0, &mut minimum_width, &mut natural_width);
             (minimum_width, natural_width)
         }
     }
 
-    fn get_preferred_width_for_height<P: IsA<Widget>>(&self, context: &CellAreaContext, widget: &P, height: i32) -> (i32, i32) {
+    fn get_preferred_width_for_height<P: IsA<CellAreaContext>, Q: IsA<Widget>>(&self, context: &P, widget: &Q, height: i32) -> (i32, i32) {
         unsafe {
             let mut minimum_width = mem::uninitialized();
             let mut natural_width = mem::uninitialized();
-            ffi::gtk_cell_area_get_preferred_width_for_height(self.to_glib_none().0, context.to_glib_none().0, widget.to_glib_none().0, height, &mut minimum_width, &mut natural_width);
+            ffi::gtk_cell_area_get_preferred_width_for_height(self.as_ref().to_glib_none().0, context.as_ref().to_glib_none().0, widget.as_ref().to_glib_none().0, height, &mut minimum_width, &mut natural_width);
             (minimum_width, natural_width)
         }
     }
 
     fn get_request_mode(&self) -> SizeRequestMode {
         unsafe {
-            from_glib(ffi::gtk_cell_area_get_request_mode(self.to_glib_none().0))
+            from_glib(ffi::gtk_cell_area_get_request_mode(self.as_ref().to_glib_none().0))
         }
     }
 
     fn has_renderer<P: IsA<CellRenderer>>(&self, renderer: &P) -> bool {
         unsafe {
-            from_glib(ffi::gtk_cell_area_has_renderer(self.to_glib_none().0, renderer.to_glib_none().0))
+            from_glib(ffi::gtk_cell_area_has_renderer(self.as_ref().to_glib_none().0, renderer.as_ref().to_glib_none().0))
         }
     }
 
     fn inner_cell_area<P: IsA<Widget>>(&self, widget: &P, cell_area: &gdk::Rectangle) -> gdk::Rectangle {
         unsafe {
             let mut inner_area = gdk::Rectangle::uninitialized();
-            ffi::gtk_cell_area_inner_cell_area(self.to_glib_none().0, widget.to_glib_none().0, cell_area.to_glib_none().0, inner_area.to_glib_none_mut().0);
+            ffi::gtk_cell_area_inner_cell_area(self.as_ref().to_glib_none().0, widget.as_ref().to_glib_none().0, cell_area.to_glib_none().0, inner_area.to_glib_none_mut().0);
             inner_area
         }
     }
 
     fn is_activatable(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_cell_area_is_activatable(self.to_glib_none().0))
+            from_glib(ffi::gtk_cell_area_is_activatable(self.as_ref().to_glib_none().0))
         }
     }
 
     fn is_focus_sibling<P: IsA<CellRenderer>, Q: IsA<CellRenderer>>(&self, renderer: &P, sibling: &Q) -> bool {
         unsafe {
-            from_glib(ffi::gtk_cell_area_is_focus_sibling(self.to_glib_none().0, renderer.to_glib_none().0, sibling.to_glib_none().0))
+            from_glib(ffi::gtk_cell_area_is_focus_sibling(self.as_ref().to_glib_none().0, renderer.as_ref().to_glib_none().0, sibling.as_ref().to_glib_none().0))
         }
     }
 
     fn remove<P: IsA<CellRenderer>>(&self, renderer: &P) {
         unsafe {
-            ffi::gtk_cell_area_remove(self.to_glib_none().0, renderer.to_glib_none().0);
+            ffi::gtk_cell_area_remove(self.as_ref().to_glib_none().0, renderer.as_ref().to_glib_none().0);
         }
     }
 
     fn remove_focus_sibling<P: IsA<CellRenderer>, Q: IsA<CellRenderer>>(&self, renderer: &P, sibling: &Q) {
         unsafe {
-            ffi::gtk_cell_area_remove_focus_sibling(self.to_glib_none().0, renderer.to_glib_none().0, sibling.to_glib_none().0);
+            ffi::gtk_cell_area_remove_focus_sibling(self.as_ref().to_glib_none().0, renderer.as_ref().to_glib_none().0, sibling.as_ref().to_glib_none().0);
         }
     }
 
-    fn render<P: IsA<Widget>>(&self, context: &CellAreaContext, widget: &P, cr: &cairo::Context, background_area: &gdk::Rectangle, cell_area: &gdk::Rectangle, flags: CellRendererState, paint_focus: bool) {
+    fn render<P: IsA<CellAreaContext>, Q: IsA<Widget>>(&self, context: &P, widget: &Q, cr: &cairo::Context, background_area: &gdk::Rectangle, cell_area: &gdk::Rectangle, flags: CellRendererState, paint_focus: bool) {
         unsafe {
-            ffi::gtk_cell_area_render(self.to_glib_none().0, context.to_glib_none().0, widget.to_glib_none().0, mut_override(cr.to_glib_none().0), background_area.to_glib_none().0, cell_area.to_glib_none().0, flags.to_glib(), paint_focus.to_glib());
+            ffi::gtk_cell_area_render(self.as_ref().to_glib_none().0, context.as_ref().to_glib_none().0, widget.as_ref().to_glib_none().0, mut_override(cr.to_glib_none().0), background_area.to_glib_none().0, cell_area.to_glib_none().0, flags.to_glib(), paint_focus.to_glib());
         }
     }
 
@@ -386,120 +409,126 @@ impl<O: IsA<CellArea> + IsA<glib::object::Object>> CellAreaExt for O {
         unsafe {
             let mut minimum_size = mem::uninitialized();
             let mut natural_size = mem::uninitialized();
-            ffi::gtk_cell_area_request_renderer(self.to_glib_none().0, renderer.to_glib_none().0, orientation.to_glib(), widget.to_glib_none().0, for_size, &mut minimum_size, &mut natural_size);
+            ffi::gtk_cell_area_request_renderer(self.as_ref().to_glib_none().0, renderer.as_ref().to_glib_none().0, orientation.to_glib(), widget.as_ref().to_glib_none().0, for_size, &mut minimum_size, &mut natural_size);
             (minimum_size, natural_size)
         }
     }
 
     fn set_focus_cell<P: IsA<CellRenderer>>(&self, renderer: &P) {
         unsafe {
-            ffi::gtk_cell_area_set_focus_cell(self.to_glib_none().0, renderer.to_glib_none().0);
+            ffi::gtk_cell_area_set_focus_cell(self.as_ref().to_glib_none().0, renderer.as_ref().to_glib_none().0);
         }
     }
 
     fn stop_editing(&self, canceled: bool) {
         unsafe {
-            ffi::gtk_cell_area_stop_editing(self.to_glib_none().0, canceled.to_glib());
+            ffi::gtk_cell_area_stop_editing(self.as_ref().to_glib_none().0, canceled.to_glib());
         }
     }
 
     fn connect_add_editable<F: Fn(&Self, &CellRenderer, &CellEditable, &gdk::Rectangle, TreePath) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &CellRenderer, &CellEditable, &gdk::Rectangle, TreePath) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "add-editable",
-                transmute(add_editable_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"add-editable\0".as_ptr() as *const _,
+                Some(transmute(add_editable_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_apply_attributes<F: Fn(&Self, &TreeModel, &TreeIter, bool, bool) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &TreeModel, &TreeIter, bool, bool) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "apply-attributes",
-                transmute(apply_attributes_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"apply-attributes\0".as_ptr() as *const _,
+                Some(transmute(apply_attributes_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_focus_changed<F: Fn(&Self, &CellRenderer, TreePath) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &CellRenderer, TreePath) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "focus-changed",
-                transmute(focus_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"focus-changed\0".as_ptr() as *const _,
+                Some(transmute(focus_changed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_remove_editable<F: Fn(&Self, &CellRenderer, &CellEditable) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &CellRenderer, &CellEditable) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "remove-editable",
-                transmute(remove_editable_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"remove-editable\0".as_ptr() as *const _,
+                Some(transmute(remove_editable_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_edit_widget_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::edit-widget",
-                transmute(notify_edit_widget_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::edit-widget\0".as_ptr() as *const _,
+                Some(transmute(notify_edit_widget_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_edited_cell_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::edited-cell",
-                transmute(notify_edited_cell_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::edited-cell\0".as_ptr() as *const _,
+                Some(transmute(notify_edited_cell_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_focus_cell_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::focus-cell",
-                transmute(notify_focus_cell_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::focus-cell\0".as_ptr() as *const _,
+                Some(transmute(notify_focus_cell_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn add_editable_trampoline<P>(this: *mut ffi::GtkCellArea, renderer: *mut ffi::GtkCellRenderer, editable: *mut ffi::GtkCellEditable, cell_area: *mut gdk_ffi::GdkRectangle, path: *mut libc::c_char, f: glib_ffi::gpointer)
+unsafe extern "C" fn add_editable_trampoline<P, F: Fn(&P, &CellRenderer, &CellEditable, &gdk::Rectangle, TreePath) + 'static>(this: *mut ffi::GtkCellArea, renderer: *mut ffi::GtkCellRenderer, editable: *mut ffi::GtkCellEditable, cell_area: *mut gdk_ffi::GdkRectangle, path: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<CellArea> {
-    let f: &&(Fn(&P, &CellRenderer, &CellEditable, &gdk::Rectangle, TreePath) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     let path = from_glib_full(ffi::gtk_tree_path_new_from_string(path));
-    f(&CellArea::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(renderer), &from_glib_borrow(editable), &from_glib_borrow(cell_area), path)
+    f(&CellArea::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(renderer), &from_glib_borrow(editable), &from_glib_borrow(cell_area), path)
 }
 
-unsafe extern "C" fn apply_attributes_trampoline<P>(this: *mut ffi::GtkCellArea, model: *mut ffi::GtkTreeModel, iter: *mut ffi::GtkTreeIter, is_expander: glib_ffi::gboolean, is_expanded: glib_ffi::gboolean, f: glib_ffi::gpointer)
+unsafe extern "C" fn apply_attributes_trampoline<P, F: Fn(&P, &TreeModel, &TreeIter, bool, bool) + 'static>(this: *mut ffi::GtkCellArea, model: *mut ffi::GtkTreeModel, iter: *mut ffi::GtkTreeIter, is_expander: glib_ffi::gboolean, is_expanded: glib_ffi::gboolean, f: glib_ffi::gpointer)
 where P: IsA<CellArea> {
-    let f: &&(Fn(&P, &TreeModel, &TreeIter, bool, bool) + 'static) = transmute(f);
-    f(&CellArea::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(model), &from_glib_borrow(iter), from_glib(is_expander), from_glib(is_expanded))
+    let f: &F = transmute(f);
+    f(&CellArea::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(model), &from_glib_borrow(iter), from_glib(is_expander), from_glib(is_expanded))
 }
 
-unsafe extern "C" fn focus_changed_trampoline<P>(this: *mut ffi::GtkCellArea, renderer: *mut ffi::GtkCellRenderer, path: *mut libc::c_char, f: glib_ffi::gpointer)
+unsafe extern "C" fn focus_changed_trampoline<P, F: Fn(&P, &CellRenderer, TreePath) + 'static>(this: *mut ffi::GtkCellArea, renderer: *mut ffi::GtkCellRenderer, path: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<CellArea> {
-    let f: &&(Fn(&P, &CellRenderer, TreePath) + 'static) = transmute(f);
+    let f: &F = transmute(f);
     let path = from_glib_full(ffi::gtk_tree_path_new_from_string(path));
-    f(&CellArea::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(renderer), path)
+    f(&CellArea::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(renderer), path)
 }
 
-unsafe extern "C" fn remove_editable_trampoline<P>(this: *mut ffi::GtkCellArea, renderer: *mut ffi::GtkCellRenderer, editable: *mut ffi::GtkCellEditable, f: glib_ffi::gpointer)
+unsafe extern "C" fn remove_editable_trampoline<P, F: Fn(&P, &CellRenderer, &CellEditable) + 'static>(this: *mut ffi::GtkCellArea, renderer: *mut ffi::GtkCellRenderer, editable: *mut ffi::GtkCellEditable, f: glib_ffi::gpointer)
 where P: IsA<CellArea> {
-    let f: &&(Fn(&P, &CellRenderer, &CellEditable) + 'static) = transmute(f);
-    f(&CellArea::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(renderer), &from_glib_borrow(editable))
+    let f: &F = transmute(f);
+    f(&CellArea::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(renderer), &from_glib_borrow(editable))
 }
 
-unsafe extern "C" fn notify_edit_widget_trampoline<P>(this: *mut ffi::GtkCellArea, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_edit_widget_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellArea, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellArea> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellArea::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellArea::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_edited_cell_trampoline<P>(this: *mut ffi::GtkCellArea, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_edited_cell_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellArea, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellArea> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellArea::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellArea::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_focus_cell_trampoline<P>(this: *mut ffi::GtkCellArea, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_focus_cell_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellArea, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellArea> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&CellArea::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&CellArea::from_glib_borrow(this).unsafe_cast())
+}
+
+impl fmt::Display for CellArea {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "CellArea")
+    }
 }

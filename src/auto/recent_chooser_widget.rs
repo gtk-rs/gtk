@@ -10,15 +10,13 @@ use RecentChooser;
 use RecentManager;
 use Widget;
 use ffi;
-use glib::object::Downcast;
+use glib::object::Cast;
+use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use std::mem;
-use std::ptr;
+use std::fmt;
 
 glib_wrapper! {
-    pub struct RecentChooserWidget(Object<ffi::GtkRecentChooserWidget, ffi::GtkRecentChooserWidgetClass>): Box, Container, Widget, Buildable, Orientable, RecentChooser;
+    pub struct RecentChooserWidget(Object<ffi::GtkRecentChooserWidget, ffi::GtkRecentChooserWidgetClass, RecentChooserWidgetClass>) @extends Box, Container, Widget, @implements Buildable, Orientable, RecentChooser;
 
     match fn {
         get_type => || ffi::gtk_recent_chooser_widget_get_type(),
@@ -29,14 +27,14 @@ impl RecentChooserWidget {
     pub fn new() -> RecentChooserWidget {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_recent_chooser_widget_new()).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_recent_chooser_widget_new()).unsafe_cast()
         }
     }
 
-    pub fn new_for_manager(manager: &RecentManager) -> RecentChooserWidget {
+    pub fn new_for_manager<P: IsA<RecentManager>>(manager: &P) -> RecentChooserWidget {
         skip_assert_initialized!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_recent_chooser_widget_new_for_manager(manager.to_glib_none().0)).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_recent_chooser_widget_new_for_manager(manager.as_ref().to_glib_none().0)).unsafe_cast()
         }
     }
 }
@@ -44,5 +42,13 @@ impl RecentChooserWidget {
 impl Default for RecentChooserWidget {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+pub const NONE_RECENT_CHOOSER_WIDGET: Option<&RecentChooserWidget> = None;
+
+impl fmt::Display for RecentChooserWidget {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "RecentChooserWidget")
     }
 }

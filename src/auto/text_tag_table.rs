@@ -5,21 +5,18 @@
 use Buildable;
 use TextTag;
 use ffi;
-use glib;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
 use std::boxed::Box as Box_;
-use std::mem;
+use std::fmt;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
-    pub struct TextTagTable(Object<ffi::GtkTextTagTable, ffi::GtkTextTagTableClass>): Buildable;
+    pub struct TextTagTable(Object<ffi::GtkTextTagTable, ffi::GtkTextTagTableClass, TextTagTableClass>) @implements Buildable;
 
     match fn {
         get_type => || ffi::gtk_text_tag_table_get_type(),
@@ -41,16 +38,18 @@ impl Default for TextTagTable {
     }
 }
 
-pub trait TextTagTableExt {
-    fn add(&self, tag: &TextTag) -> bool;
+pub const NONE_TEXT_TAG_TABLE: Option<&TextTagTable> = None;
 
-    //fn foreach<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: /*Unknown conversion*//*Unimplemented*/TextTagTableForeach, data: P);
+pub trait TextTagTableExt: 'static {
+    fn add<P: IsA<TextTag>>(&self, tag: &P) -> bool;
+
+    fn foreach<P: FnMut(&TextTag)>(&self, func: P);
 
     fn get_size(&self) -> i32;
 
     fn lookup(&self, name: &str) -> Option<TextTag>;
 
-    fn remove(&self, tag: &TextTag);
+    fn remove<P: IsA<TextTag>>(&self, tag: &P);
 
     fn connect_tag_added<F: Fn(&Self, &TextTag) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -59,74 +58,90 @@ pub trait TextTagTableExt {
     fn connect_tag_removed<F: Fn(&Self, &TextTag) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<TextTagTable> + IsA<glib::object::Object>> TextTagTableExt for O {
-    fn add(&self, tag: &TextTag) -> bool {
+impl<O: IsA<TextTagTable>> TextTagTableExt for O {
+    fn add<P: IsA<TextTag>>(&self, tag: &P) -> bool {
         unsafe {
-            from_glib(ffi::gtk_text_tag_table_add(self.to_glib_none().0, tag.to_glib_none().0))
+            from_glib(ffi::gtk_text_tag_table_add(self.as_ref().to_glib_none().0, tag.as_ref().to_glib_none().0))
         }
     }
 
-    //fn foreach<P: Into<Option</*Unimplemented*/Fundamental: Pointer>>>(&self, func: /*Unknown conversion*//*Unimplemented*/TextTagTableForeach, data: P) {
-    //    unsafe { TODO: call ffi::gtk_text_tag_table_foreach() }
-    //}
+    fn foreach<P: FnMut(&TextTag)>(&self, func: P) {
+        let func_data: P = func;
+        unsafe extern "C" fn func_func<P: FnMut(&TextTag)>(tag: *mut ffi::GtkTextTag, data: glib_ffi::gpointer) {
+            let tag = from_glib_borrow(tag);
+            let callback: *mut P = data as *const _ as usize as *mut P;
+            (*callback)(&tag);
+        }
+        let func = Some(func_func::<P> as _);
+        let super_callback0: &P = &func_data;
+        unsafe {
+            ffi::gtk_text_tag_table_foreach(self.as_ref().to_glib_none().0, func, super_callback0 as *const _ as usize as *mut _);
+        }
+    }
 
     fn get_size(&self) -> i32 {
         unsafe {
-            ffi::gtk_text_tag_table_get_size(self.to_glib_none().0)
+            ffi::gtk_text_tag_table_get_size(self.as_ref().to_glib_none().0)
         }
     }
 
     fn lookup(&self, name: &str) -> Option<TextTag> {
         unsafe {
-            from_glib_none(ffi::gtk_text_tag_table_lookup(self.to_glib_none().0, name.to_glib_none().0))
+            from_glib_none(ffi::gtk_text_tag_table_lookup(self.as_ref().to_glib_none().0, name.to_glib_none().0))
         }
     }
 
-    fn remove(&self, tag: &TextTag) {
+    fn remove<P: IsA<TextTag>>(&self, tag: &P) {
         unsafe {
-            ffi::gtk_text_tag_table_remove(self.to_glib_none().0, tag.to_glib_none().0);
+            ffi::gtk_text_tag_table_remove(self.as_ref().to_glib_none().0, tag.as_ref().to_glib_none().0);
         }
     }
 
     fn connect_tag_added<F: Fn(&Self, &TextTag) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &TextTag) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "tag-added",
-                transmute(tag_added_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"tag-added\0".as_ptr() as *const _,
+                Some(transmute(tag_added_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_tag_changed<F: Fn(&Self, &TextTag, bool) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &TextTag, bool) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "tag-changed",
-                transmute(tag_changed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"tag-changed\0".as_ptr() as *const _,
+                Some(transmute(tag_changed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_tag_removed<F: Fn(&Self, &TextTag) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, &TextTag) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "tag-removed",
-                transmute(tag_removed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"tag-removed\0".as_ptr() as *const _,
+                Some(transmute(tag_removed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn tag_added_trampoline<P>(this: *mut ffi::GtkTextTagTable, tag: *mut ffi::GtkTextTag, f: glib_ffi::gpointer)
+unsafe extern "C" fn tag_added_trampoline<P, F: Fn(&P, &TextTag) + 'static>(this: *mut ffi::GtkTextTagTable, tag: *mut ffi::GtkTextTag, f: glib_ffi::gpointer)
 where P: IsA<TextTagTable> {
-    let f: &&(Fn(&P, &TextTag) + 'static) = transmute(f);
-    f(&TextTagTable::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(tag))
+    let f: &F = transmute(f);
+    f(&TextTagTable::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(tag))
 }
 
-unsafe extern "C" fn tag_changed_trampoline<P>(this: *mut ffi::GtkTextTagTable, tag: *mut ffi::GtkTextTag, size_changed: glib_ffi::gboolean, f: glib_ffi::gpointer)
+unsafe extern "C" fn tag_changed_trampoline<P, F: Fn(&P, &TextTag, bool) + 'static>(this: *mut ffi::GtkTextTagTable, tag: *mut ffi::GtkTextTag, size_changed: glib_ffi::gboolean, f: glib_ffi::gpointer)
 where P: IsA<TextTagTable> {
-    let f: &&(Fn(&P, &TextTag, bool) + 'static) = transmute(f);
-    f(&TextTagTable::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(tag), from_glib(size_changed))
+    let f: &F = transmute(f);
+    f(&TextTagTable::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(tag), from_glib(size_changed))
 }
 
-unsafe extern "C" fn tag_removed_trampoline<P>(this: *mut ffi::GtkTextTagTable, tag: *mut ffi::GtkTextTag, f: glib_ffi::gpointer)
+unsafe extern "C" fn tag_removed_trampoline<P, F: Fn(&P, &TextTag) + 'static>(this: *mut ffi::GtkTextTagTable, tag: *mut ffi::GtkTextTag, f: glib_ffi::gpointer)
 where P: IsA<TextTagTable> {
-    let f: &&(Fn(&P, &TextTag) + 'static) = transmute(f);
-    f(&TextTagTable::from_glib_borrow(this).downcast_unchecked(), &from_glib_borrow(tag))
+    let f: &F = transmute(f);
+    f(&TextTagTable::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(tag))
+}
+
+impl fmt::Display for TextTagTable {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "TextTagTable")
+    }
 }

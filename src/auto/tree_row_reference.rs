@@ -8,10 +8,6 @@ use ffi;
 use glib;
 use glib::object::IsA;
 use glib::translate::*;
-use glib_ffi;
-use gobject_ffi;
-use std::mem;
-use std::ptr;
 
 glib_wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -28,14 +24,14 @@ impl TreeRowReference {
     pub fn new<P: IsA<TreeModel>>(model: &P, path: &TreePath) -> Option<TreeRowReference> {
         skip_assert_initialized!();
         unsafe {
-            from_glib_full(ffi::gtk_tree_row_reference_new(model.to_glib_none().0, mut_override(path.to_glib_none().0)))
+            from_glib_full(ffi::gtk_tree_row_reference_new(model.as_ref().to_glib_none().0, mut_override(path.to_glib_none().0)))
         }
     }
 
     pub fn new_proxy<P: IsA<glib::Object>, Q: IsA<TreeModel>>(proxy: &P, model: &Q, path: &TreePath) -> Option<TreeRowReference> {
         skip_assert_initialized!();
         unsafe {
-            from_glib_full(ffi::gtk_tree_row_reference_new_proxy(proxy.to_glib_none().0, model.to_glib_none().0, mut_override(path.to_glib_none().0)))
+            from_glib_full(ffi::gtk_tree_row_reference_new_proxy(proxy.as_ref().to_glib_none().0, model.as_ref().to_glib_none().0, mut_override(path.to_glib_none().0)))
         }
     }
 
@@ -60,14 +56,14 @@ impl TreeRowReference {
     pub fn deleted<P: IsA<glib::Object>>(proxy: &P, path: &TreePath) {
         assert_initialized_main_thread!();
         unsafe {
-            ffi::gtk_tree_row_reference_deleted(proxy.to_glib_none().0, mut_override(path.to_glib_none().0));
+            ffi::gtk_tree_row_reference_deleted(proxy.as_ref().to_glib_none().0, mut_override(path.to_glib_none().0));
         }
     }
 
     pub fn inserted<P: IsA<glib::Object>>(proxy: &P, path: &TreePath) {
         assert_initialized_main_thread!();
         unsafe {
-            ffi::gtk_tree_row_reference_inserted(proxy.to_glib_none().0, mut_override(path.to_glib_none().0));
+            ffi::gtk_tree_row_reference_inserted(proxy.as_ref().to_glib_none().0, mut_override(path.to_glib_none().0));
         }
     }
 

@@ -5,30 +5,22 @@
 use EventController;
 use Gesture;
 use GestureSingle;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use Widget;
 use ffi;
-use glib;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use glib::signal::SignalHandlerId;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
-use gobject_ffi;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use libc;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use std::boxed::Box as Box_;
+use std::fmt;
 use std::mem;
-#[cfg(any(feature = "v3_14", feature = "dox"))]
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
-    pub struct GestureSwipe(Object<ffi::GtkGestureSwipe, ffi::GtkGestureSwipeClass>): GestureSingle, Gesture, EventController;
+    pub struct GestureSwipe(Object<ffi::GtkGestureSwipe, ffi::GtkGestureSwipeClass, GestureSwipeClass>) @extends GestureSingle, Gesture, EventController;
 
     match fn {
         get_type => || ffi::gtk_gesture_swipe_get_type(),
@@ -36,47 +28,49 @@ glib_wrapper! {
 }
 
 impl GestureSwipe {
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     pub fn new<P: IsA<Widget>>(widget: &P) -> GestureSwipe {
         skip_assert_initialized!();
         unsafe {
-            Gesture::from_glib_full(ffi::gtk_gesture_swipe_new(widget.to_glib_none().0)).downcast_unchecked()
+            Gesture::from_glib_full(ffi::gtk_gesture_swipe_new(widget.as_ref().to_glib_none().0)).unsafe_cast()
         }
     }
 }
 
-pub trait GestureSwipeExt {
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
+pub const NONE_GESTURE_SWIPE: Option<&GestureSwipe> = None;
+
+pub trait GestureSwipeExt: 'static {
     fn get_velocity(&self) -> Option<(f64, f64)>;
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_swipe<F: Fn(&Self, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<GestureSwipe> + IsA<glib::object::Object>> GestureSwipeExt for O {
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
+impl<O: IsA<GestureSwipe>> GestureSwipeExt for O {
     fn get_velocity(&self) -> Option<(f64, f64)> {
         unsafe {
             let mut velocity_x = mem::uninitialized();
             let mut velocity_y = mem::uninitialized();
-            let ret = from_glib(ffi::gtk_gesture_swipe_get_velocity(self.to_glib_none().0, &mut velocity_x, &mut velocity_y));
+            let ret = from_glib(ffi::gtk_gesture_swipe_get_velocity(self.as_ref().to_glib_none().0, &mut velocity_x, &mut velocity_y));
             if ret { Some((velocity_x, velocity_y)) } else { None }
         }
     }
 
-    #[cfg(any(feature = "v3_14", feature = "dox"))]
     fn connect_swipe<F: Fn(&Self, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, f64, f64) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "swipe",
-                transmute(swipe_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"swipe\0".as_ptr() as *const _,
+                Some(transmute(swipe_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-#[cfg(any(feature = "v3_14", feature = "dox"))]
-unsafe extern "C" fn swipe_trampoline<P>(this: *mut ffi::GtkGestureSwipe, velocity_x: libc::c_double, velocity_y: libc::c_double, f: glib_ffi::gpointer)
+unsafe extern "C" fn swipe_trampoline<P, F: Fn(&P, f64, f64) + 'static>(this: *mut ffi::GtkGestureSwipe, velocity_x: libc::c_double, velocity_y: libc::c_double, f: glib_ffi::gpointer)
 where P: IsA<GestureSwipe> {
-    let f: &&(Fn(&P, f64, f64) + 'static) = transmute(f);
-    f(&GestureSwipe::from_glib_borrow(this).downcast_unchecked(), velocity_x, velocity_y)
+    let f: &F = transmute(f);
+    f(&GestureSwipe::from_glib_borrow(this).unsafe_cast(), velocity_x, velocity_y)
+}
+
+impl fmt::Display for GestureSwipe {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "GestureSwipe")
+    }
 }

@@ -8,24 +8,24 @@ use Button;
 use Container;
 use MessageType;
 use Orientable;
+use ResponseType;
 use Widget;
 use ffi;
 use glib;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
+use glib::object::ObjectExt;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
-use libc;
 use std::boxed::Box as Box_;
-use std::mem;
+use std::fmt;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
-    pub struct InfoBar(Object<ffi::GtkInfoBar, ffi::GtkInfoBarClass>): Box, Container, Widget, Buildable, Orientable;
+    pub struct InfoBar(Object<ffi::GtkInfoBar, ffi::GtkInfoBarClass, InfoBarClass>) @extends Box, Container, Widget, @implements Buildable, Orientable;
 
     match fn {
         get_type => || ffi::gtk_info_bar_get_type(),
@@ -36,7 +36,7 @@ impl InfoBar {
     pub fn new() -> InfoBar {
         assert_initialized_main_thread!();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_info_bar_new()).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_info_bar_new()).unsafe_cast()
         }
     }
 
@@ -51,10 +51,12 @@ impl Default for InfoBar {
     }
 }
 
-pub trait InfoBarExt {
-    fn add_action_widget<P: IsA<Widget>>(&self, child: &P, response_id: i32);
+pub const NONE_INFO_BAR: Option<&InfoBar> = None;
 
-    fn add_button(&self, button_text: &str, response_id: i32) -> Option<Button>;
+pub trait InfoBarExt: 'static {
+    fn add_action_widget<P: IsA<Widget>>(&self, child: &P, response_id: ResponseType);
+
+    fn add_button(&self, button_text: &str, response_id: ResponseType) -> Option<Button>;
 
     //fn add_buttons(&self, first_button_text: &str, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs);
 
@@ -67,48 +69,45 @@ pub trait InfoBarExt {
     #[cfg(any(feature = "v3_22_29", feature = "dox"))]
     fn get_revealed(&self) -> bool;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_show_close_button(&self) -> bool;
 
-    fn response(&self, response_id: i32);
+    fn response(&self, response_id: ResponseType);
 
-    fn set_default_response(&self, response_id: i32);
+    fn set_default_response(&self, response_id: ResponseType);
 
     fn set_message_type(&self, message_type: MessageType);
 
-    fn set_response_sensitive(&self, response_id: i32, setting: bool);
+    fn set_response_sensitive(&self, response_id: ResponseType, setting: bool);
 
     #[cfg(any(feature = "v3_22_29", feature = "dox"))]
     fn set_revealed(&self, revealed: bool);
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_show_close_button(&self, setting: bool);
 
     fn connect_close<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn emit_close(&self);
 
-    fn connect_response<F: Fn(&Self, i32) + 'static>(&self, f: F) -> SignalHandlerId;
+    fn connect_response<F: Fn(&Self, ResponseType) + 'static>(&self, f: F) -> SignalHandlerId;
 
     fn connect_property_message_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
     #[cfg(any(feature = "v3_22_29", feature = "dox"))]
     fn connect_property_revealed_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn connect_property_show_close_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<InfoBar> + IsA<glib::object::Object> + glib::object::ObjectExt> InfoBarExt for O {
-    fn add_action_widget<P: IsA<Widget>>(&self, child: &P, response_id: i32) {
+impl<O: IsA<InfoBar>> InfoBarExt for O {
+    fn add_action_widget<P: IsA<Widget>>(&self, child: &P, response_id: ResponseType) {
         unsafe {
-            ffi::gtk_info_bar_add_action_widget(self.to_glib_none().0, child.to_glib_none().0, response_id);
+            ffi::gtk_info_bar_add_action_widget(self.as_ref().to_glib_none().0, child.as_ref().to_glib_none().0, response_id.to_glib());
         }
     }
 
-    fn add_button(&self, button_text: &str, response_id: i32) -> Option<Button> {
+    fn add_button(&self, button_text: &str, response_id: ResponseType) -> Option<Button> {
         unsafe {
-            from_glib_none(ffi::gtk_info_bar_add_button(self.to_glib_none().0, button_text.to_glib_none().0, response_id))
+            from_glib_none(ffi::gtk_info_bar_add_button(self.as_ref().to_glib_none().0, button_text.to_glib_none().0, response_id.to_glib()))
         }
     }
 
@@ -118,149 +117,151 @@ impl<O: IsA<InfoBar> + IsA<glib::object::Object> + glib::object::ObjectExt> Info
 
     fn get_action_area(&self) -> Option<Widget> {
         unsafe {
-            from_glib_none(ffi::gtk_info_bar_get_action_area(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_info_bar_get_action_area(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_content_area(&self) -> Option<Widget> {
         unsafe {
-            from_glib_none(ffi::gtk_info_bar_get_content_area(self.to_glib_none().0))
+            from_glib_none(ffi::gtk_info_bar_get_content_area(self.as_ref().to_glib_none().0))
         }
     }
 
     fn get_message_type(&self) -> MessageType {
         unsafe {
-            from_glib(ffi::gtk_info_bar_get_message_type(self.to_glib_none().0))
+            from_glib(ffi::gtk_info_bar_get_message_type(self.as_ref().to_glib_none().0))
         }
     }
 
     #[cfg(any(feature = "v3_22_29", feature = "dox"))]
     fn get_revealed(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_info_bar_get_revealed(self.to_glib_none().0))
+            from_glib(ffi::gtk_info_bar_get_revealed(self.as_ref().to_glib_none().0))
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn get_show_close_button(&self) -> bool {
         unsafe {
-            from_glib(ffi::gtk_info_bar_get_show_close_button(self.to_glib_none().0))
+            from_glib(ffi::gtk_info_bar_get_show_close_button(self.as_ref().to_glib_none().0))
         }
     }
 
-    fn response(&self, response_id: i32) {
+    fn response(&self, response_id: ResponseType) {
         unsafe {
-            ffi::gtk_info_bar_response(self.to_glib_none().0, response_id);
+            ffi::gtk_info_bar_response(self.as_ref().to_glib_none().0, response_id.to_glib());
         }
     }
 
-    fn set_default_response(&self, response_id: i32) {
+    fn set_default_response(&self, response_id: ResponseType) {
         unsafe {
-            ffi::gtk_info_bar_set_default_response(self.to_glib_none().0, response_id);
+            ffi::gtk_info_bar_set_default_response(self.as_ref().to_glib_none().0, response_id.to_glib());
         }
     }
 
     fn set_message_type(&self, message_type: MessageType) {
         unsafe {
-            ffi::gtk_info_bar_set_message_type(self.to_glib_none().0, message_type.to_glib());
+            ffi::gtk_info_bar_set_message_type(self.as_ref().to_glib_none().0, message_type.to_glib());
         }
     }
 
-    fn set_response_sensitive(&self, response_id: i32, setting: bool) {
+    fn set_response_sensitive(&self, response_id: ResponseType, setting: bool) {
         unsafe {
-            ffi::gtk_info_bar_set_response_sensitive(self.to_glib_none().0, response_id, setting.to_glib());
+            ffi::gtk_info_bar_set_response_sensitive(self.as_ref().to_glib_none().0, response_id.to_glib(), setting.to_glib());
         }
     }
 
     #[cfg(any(feature = "v3_22_29", feature = "dox"))]
     fn set_revealed(&self, revealed: bool) {
         unsafe {
-            ffi::gtk_info_bar_set_revealed(self.to_glib_none().0, revealed.to_glib());
+            ffi::gtk_info_bar_set_revealed(self.as_ref().to_glib_none().0, revealed.to_glib());
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn set_show_close_button(&self, setting: bool) {
         unsafe {
-            ffi::gtk_info_bar_set_show_close_button(self.to_glib_none().0, setting.to_glib());
+            ffi::gtk_info_bar_set_show_close_button(self.as_ref().to_glib_none().0, setting.to_glib());
         }
     }
 
     fn connect_close<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "close",
-                transmute(close_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"close\0".as_ptr() as *const _,
+                Some(transmute(close_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn emit_close(&self) {
-        let _ = self.emit("close", &[]).unwrap();
+        let _ = unsafe { glib::Object::from_glib_borrow(self.to_glib_none().0 as *mut gobject_ffi::GObject).emit("close", &[]).unwrap() };
     }
 
-    fn connect_response<F: Fn(&Self, i32) + 'static>(&self, f: F) -> SignalHandlerId {
+    fn connect_response<F: Fn(&Self, ResponseType) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self, i32) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "response",
-                transmute(response_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"response\0".as_ptr() as *const _,
+                Some(transmute(response_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_message_type_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::message-type",
-                transmute(notify_message_type_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::message-type\0".as_ptr() as *const _,
+                Some(transmute(notify_message_type_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     #[cfg(any(feature = "v3_22_29", feature = "dox"))]
     fn connect_property_revealed_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::revealed",
-                transmute(notify_revealed_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::revealed\0".as_ptr() as *const _,
+                Some(transmute(notify_revealed_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
-    #[cfg(any(feature = "v3_10", feature = "dox"))]
     fn connect_property_show_close_button_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::show-close-button",
-                transmute(notify_show_close_button_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::show-close-button\0".as_ptr() as *const _,
+                Some(transmute(notify_show_close_button_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn close_trampoline<P>(this: *mut ffi::GtkInfoBar, f: glib_ffi::gpointer)
+unsafe extern "C" fn close_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkInfoBar, f: glib_ffi::gpointer)
 where P: IsA<InfoBar> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&InfoBar::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&InfoBar::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn response_trampoline<P>(this: *mut ffi::GtkInfoBar, response_id: libc::c_int, f: glib_ffi::gpointer)
+unsafe extern "C" fn response_trampoline<P, F: Fn(&P, ResponseType) + 'static>(this: *mut ffi::GtkInfoBar, response_id: ffi::GtkResponseType, f: glib_ffi::gpointer)
 where P: IsA<InfoBar> {
-    let f: &&(Fn(&P, i32) + 'static) = transmute(f);
-    f(&InfoBar::from_glib_borrow(this).downcast_unchecked(), response_id)
+    let f: &F = transmute(f);
+    f(&InfoBar::from_glib_borrow(this).unsafe_cast(), from_glib(response_id))
 }
 
-unsafe extern "C" fn notify_message_type_trampoline<P>(this: *mut ffi::GtkInfoBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_message_type_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkInfoBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<InfoBar> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&InfoBar::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&InfoBar::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_22_29", feature = "dox"))]
-unsafe extern "C" fn notify_revealed_trampoline<P>(this: *mut ffi::GtkInfoBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_revealed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkInfoBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<InfoBar> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&InfoBar::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&InfoBar::from_glib_borrow(this).unsafe_cast())
 }
 
-#[cfg(any(feature = "v3_10", feature = "dox"))]
-unsafe extern "C" fn notify_show_close_button_trampoline<P>(this: *mut ffi::GtkInfoBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_show_close_button_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkInfoBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<InfoBar> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&InfoBar::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&InfoBar::from_glib_borrow(this).unsafe_cast())
+}
+
+impl fmt::Display for InfoBar {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "InfoBar")
+    }
 }

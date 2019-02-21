@@ -13,14 +13,14 @@ use gdk_ffi;
 use ColorChooser;
 use Orientation;
 
-pub trait ColorChooserExtManual {
+pub trait ColorChooserExtManual: 'static {
     fn add_palette(&self, orientation: Orientation, colors_per_line: i32, colors: &[RGBA]);
 }
 
 impl<O: IsA<ColorChooser>> ColorChooserExtManual for O {
     fn add_palette(&self, orientation: Orientation, colors_per_line: i32, colors: &[RGBA]) {
         unsafe {
-            ffi::gtk_color_chooser_add_palette(self.to_glib_none().0,
+            ffi::gtk_color_chooser_add_palette(self.as_ref().to_glib_none().0,
                                                orientation.to_glib(),
                                                colors_per_line,
                                                colors.len() as c_int,

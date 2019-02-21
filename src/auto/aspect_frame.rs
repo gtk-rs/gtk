@@ -8,23 +8,21 @@ use Container;
 use Frame;
 use Widget;
 use ffi;
-use glib;
 use glib::StaticType;
 use glib::Value;
-use glib::object::Downcast;
+use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::SignalHandlerId;
-use glib::signal::connect;
+use glib::signal::connect_raw;
 use glib::translate::*;
 use glib_ffi;
 use gobject_ffi;
 use std::boxed::Box as Box_;
-use std::mem;
+use std::fmt;
 use std::mem::transmute;
-use std::ptr;
 
 glib_wrapper! {
-    pub struct AspectFrame(Object<ffi::GtkAspectFrame, ffi::GtkAspectFrameClass>): Frame, Bin, Container, Widget, Buildable;
+    pub struct AspectFrame(Object<ffi::GtkAspectFrame, ffi::GtkAspectFrameClass, AspectFrameClass>) @extends Frame, Bin, Container, Widget, @implements Buildable;
 
     match fn {
         get_type => || ffi::gtk_aspect_frame_get_type(),
@@ -35,14 +33,15 @@ impl AspectFrame {
     pub fn new<'a, P: Into<Option<&'a str>>>(label: P, xalign: f32, yalign: f32, ratio: f32, obey_child: bool) -> AspectFrame {
         assert_initialized_main_thread!();
         let label = label.into();
-        let label = label.to_glib_none();
         unsafe {
-            Widget::from_glib_none(ffi::gtk_aspect_frame_new(label.0, xalign, yalign, ratio, obey_child.to_glib())).downcast_unchecked()
+            Widget::from_glib_none(ffi::gtk_aspect_frame_new(label.to_glib_none().0, xalign, yalign, ratio, obey_child.to_glib())).unsafe_cast()
         }
     }
 }
 
-pub trait AspectFrameExt {
+pub const NONE_ASPECT_FRAME: Option<&AspectFrame> = None;
+
+pub trait AspectFrameExt: 'static {
     fn set(&self, xalign: f32, yalign: f32, ratio: f32, obey_child: bool);
 
     fn get_property_obey_child(&self) -> bool;
@@ -70,122 +69,128 @@ pub trait AspectFrameExt {
     fn connect_property_yalign_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<AspectFrame> + IsA<glib::object::Object>> AspectFrameExt for O {
+impl<O: IsA<AspectFrame>> AspectFrameExt for O {
     fn set(&self, xalign: f32, yalign: f32, ratio: f32, obey_child: bool) {
         unsafe {
-            ffi::gtk_aspect_frame_set(self.to_glib_none().0, xalign, yalign, ratio, obey_child.to_glib());
+            ffi::gtk_aspect_frame_set(self.as_ref().to_glib_none().0, xalign, yalign, ratio, obey_child.to_glib());
         }
     }
 
     fn get_property_obey_child(&self) -> bool {
         unsafe {
             let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "obey-child".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"obey-child\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_obey_child(&self, obey_child: bool) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "obey-child".to_glib_none().0, Value::from(&obey_child).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"obey-child\0".as_ptr() as *const _, Value::from(&obey_child).to_glib_none().0);
         }
     }
 
     fn get_property_ratio(&self) -> f32 {
         unsafe {
             let mut value = Value::from_type(<f32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "ratio".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"ratio\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_ratio(&self, ratio: f32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "ratio".to_glib_none().0, Value::from(&ratio).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"ratio\0".as_ptr() as *const _, Value::from(&ratio).to_glib_none().0);
         }
     }
 
     fn get_property_xalign(&self) -> f32 {
         unsafe {
             let mut value = Value::from_type(<f32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "xalign".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"xalign\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_xalign(&self, xalign: f32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "xalign".to_glib_none().0, Value::from(&xalign).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"xalign\0".as_ptr() as *const _, Value::from(&xalign).to_glib_none().0);
         }
     }
 
     fn get_property_yalign(&self) -> f32 {
         unsafe {
             let mut value = Value::from_type(<f32 as StaticType>::static_type());
-            gobject_ffi::g_object_get_property(self.to_glib_none().0, "yalign".to_glib_none().0, value.to_glib_none_mut().0);
+            gobject_ffi::g_object_get_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"yalign\0".as_ptr() as *const _, value.to_glib_none_mut().0);
             value.get().unwrap()
         }
     }
 
     fn set_property_yalign(&self, yalign: f32) {
         unsafe {
-            gobject_ffi::g_object_set_property(self.to_glib_none().0, "yalign".to_glib_none().0, Value::from(&yalign).to_glib_none().0);
+            gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"yalign\0".as_ptr() as *const _, Value::from(&yalign).to_glib_none().0);
         }
     }
 
     fn connect_property_obey_child_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::obey-child",
-                transmute(notify_obey_child_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::obey-child\0".as_ptr() as *const _,
+                Some(transmute(notify_obey_child_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_ratio_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::ratio",
-                transmute(notify_ratio_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::ratio\0".as_ptr() as *const _,
+                Some(transmute(notify_ratio_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_xalign_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::xalign",
-                transmute(notify_xalign_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::xalign\0".as_ptr() as *const _,
+                Some(transmute(notify_xalign_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 
     fn connect_property_yalign_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe {
-            let f: Box_<Box_<Fn(&Self) + 'static>> = Box_::new(Box_::new(f));
-            connect(self.to_glib_none().0, "notify::yalign",
-                transmute(notify_yalign_trampoline::<Self> as usize), Box_::into_raw(f) as *mut _)
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(self.as_ptr() as *mut _, b"notify::yalign\0".as_ptr() as *const _,
+                Some(transmute(notify_yalign_trampoline::<Self, F> as usize)), Box_::into_raw(f))
         }
     }
 }
 
-unsafe extern "C" fn notify_obey_child_trampoline<P>(this: *mut ffi::GtkAspectFrame, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_obey_child_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAspectFrame, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AspectFrame> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&AspectFrame::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&AspectFrame::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_ratio_trampoline<P>(this: *mut ffi::GtkAspectFrame, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_ratio_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAspectFrame, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AspectFrame> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&AspectFrame::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&AspectFrame::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_xalign_trampoline<P>(this: *mut ffi::GtkAspectFrame, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_xalign_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAspectFrame, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AspectFrame> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&AspectFrame::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&AspectFrame::from_glib_borrow(this).unsafe_cast())
 }
 
-unsafe extern "C" fn notify_yalign_trampoline<P>(this: *mut ffi::GtkAspectFrame, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
+unsafe extern "C" fn notify_yalign_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAspectFrame, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AspectFrame> {
-    let f: &&(Fn(&P) + 'static) = transmute(f);
-    f(&AspectFrame::from_glib_borrow(this).downcast_unchecked())
+    let f: &F = transmute(f);
+    f(&AspectFrame::from_glib_borrow(this).unsafe_cast())
+}
+
+impl fmt::Display for AspectFrame {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "AspectFrame")
+    }
 }
