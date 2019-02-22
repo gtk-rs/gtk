@@ -65,13 +65,9 @@ pub trait DialogExt: 'static {
 
     fn get_header_bar(&self) -> Option<Widget>;
 
-    fn get_response_for_widget<P: IsA<Widget>>(&self, widget: &P) -> i32;
-
     fn get_widget_for_response(&self, response_id: ResponseType) -> Option<Widget>;
 
     fn response(&self, response_id: ResponseType);
-
-    fn run(&self) -> i32;
 
     fn set_default_response(&self, response_id: ResponseType);
 
@@ -115,12 +111,6 @@ impl<O: IsA<Dialog>> DialogExt for O {
         }
     }
 
-    fn get_response_for_widget<P: IsA<Widget>>(&self, widget: &P) -> i32 {
-        unsafe {
-            ffi::gtk_dialog_get_response_for_widget(self.as_ref().to_glib_none().0, widget.as_ref().to_glib_none().0)
-        }
-    }
-
     fn get_widget_for_response(&self, response_id: ResponseType) -> Option<Widget> {
         unsafe {
             from_glib_none(ffi::gtk_dialog_get_widget_for_response(self.as_ref().to_glib_none().0, response_id.to_glib()))
@@ -130,12 +120,6 @@ impl<O: IsA<Dialog>> DialogExt for O {
     fn response(&self, response_id: ResponseType) {
         unsafe {
             ffi::gtk_dialog_response(self.as_ref().to_glib_none().0, response_id.to_glib());
-        }
-    }
-
-    fn run(&self) -> i32 {
-        unsafe {
-            ffi::gtk_dialog_run(self.as_ref().to_glib_none().0)
         }
     }
 

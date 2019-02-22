@@ -758,6 +758,12 @@ manual_traits = ["DialogExtManual"]
     name = "get_content_area"
         [object.function.return]
         nullable = false
+    [[object.function]]
+    name = "run"
+    ignore = true
+    [[object.function]]
+    name = "get_response_for_widget"
+    ignore = true
 
 [[object]]
 name = "Gtk.Editable"
