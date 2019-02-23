@@ -63,7 +63,7 @@
 //! use std::env;
 //!
 //! fn main() {
-//!     let uiapp = gtk::Application::new("org.gtkrsnotes.demo",
+//!     let uiapp = gtk::Application::new(Some("org.gtkrsnotes.demo"),
 //!                                       gio::ApplicationFlags::FLAGS_NONE)
 //!                                  .expect("Application::new failed");
 //!     uiapp.connect_activate(|app| {

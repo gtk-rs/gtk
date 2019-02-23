@@ -28,10 +28,10 @@ pub trait WidgetExtManual: 'static {
 
     fn drag_source_set(&self, start_button_mask: ModifierType, targets: &[TargetEntry], actions: DragAction);
 
-    fn intersect<'a, I: Into<Option<&'a mut Rectangle>>>(
+    fn intersect(
         &self,
         area: &Rectangle,
-        intersection: I,
+        intersection: Option<&mut Rectangle>,
     ) -> bool;
 
     fn override_font(&self, font: &pango::FontDescription);
@@ -76,12 +76,11 @@ impl<O: IsA<Widget>> WidgetExtManual for O {
                                           actions.to_glib())};
     }
 
-    fn intersect<'a, I: Into<Option<&'a mut Rectangle>>>(
+    fn intersect(
         &self,
         area: &Rectangle,
         mut intersection: Option<&mut Rectangle>,
     ) -> bool {
-        let mut intersection = intersection.into();
         unsafe {
             from_glib(ffi::gtk_widget_intersect(self.as_ref().to_glib_none().0, area.to_glib_none().0, intersection.to_glib_none_mut().0))
         }

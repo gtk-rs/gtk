@@ -24,10 +24,10 @@ impl TreeStore {
 }
 
 pub trait TreeStoreExtManual: 'static {
-    fn insert_with_values<'a, I: Into<Option<&'a TreeIter>>, T: Into<Option<u32>>>(
+    fn insert_with_values(
         &self,
-        parent: I,
-        position: T,
+        parent: Option<&TreeIter>,
+        position: Option<u32>,
         columns: &[u32],
         values: &[&ToValue],
     ) -> TreeIter;
@@ -40,15 +40,13 @@ pub trait TreeStoreExtManual: 'static {
 }
 
 impl<O: IsA<TreeStore>> TreeStoreExtManual for O {
-    fn insert_with_values<'a, I: Into<Option<&'a TreeIter>>, T: Into<Option<u32>>>(
+    fn insert_with_values(
         &self,
-        parent: I,
-        position: T,
+        parent: Option<&TreeIter>,
+        position: Option<u32>,
         columns: &[u32],
         values: &[&ToValue],
     ) -> TreeIter {
-        let parent = parent.into();
-        let position = position.into();
         unsafe {
             assert!(position.unwrap_or(0) <= i32::max_value() as u32);
             assert_eq!(columns.len(), values.len());
