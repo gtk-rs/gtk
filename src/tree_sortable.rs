@@ -8,11 +8,13 @@ use glib::object::{Cast, IsA};
 use glib::translate::*;
 use std::mem::{self, transmute};
 use std::cmp::Ordering;
+use std::fmt;
 
 use glib_ffi::gpointer;
 use {TreeIter, TreeModel, TreeSortable};
 use ffi::{GtkTreeIter, GtkTreeModel};
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub enum SortColumn {
     Default,
     Index(u32),
@@ -46,6 +48,15 @@ impl FromGlib<i32> for SortColumn {
                 SortColumn::Index(x as u32)
             }
         }
+    }
+}
+
+impl fmt::Display for SortColumn {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "SortColumn::{}", match *self {
+            SortColumn::Default => "Default",
+            SortColumn::Index(_) => "Index",
+        })
     }
 }
 
