@@ -55,7 +55,7 @@ pub trait CellRendererProgressExt: 'static {
 
     fn get_property_text(&self) -> Option<GString>;
 
-    fn set_property_text<'a, P: Into<Option<&'a str>>>(&self, text: P);
+    fn set_property_text(&self, text: Option<&str>);
 
     fn get_property_text_xalign(&self) -> f32;
 
@@ -119,8 +119,7 @@ impl<O: IsA<CellRendererProgress>> CellRendererProgressExt for O {
         }
     }
 
-    fn set_property_text<'a, P: Into<Option<&'a str>>>(&self, text: P) {
-        let text = text.into();
+    fn set_property_text(&self, text: Option<&str>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"text\0".as_ptr() as *const _, Value::from(text).to_glib_none().0);
         }
@@ -219,37 +218,37 @@ impl<O: IsA<CellRendererProgress>> CellRendererProgressExt for O {
 
 unsafe extern "C" fn notify_inverted_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererProgress, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererProgress> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererProgress::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_pulse_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererProgress, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererProgress> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererProgress::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_text_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererProgress, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererProgress> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererProgress::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_text_xalign_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererProgress, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererProgress> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererProgress::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_text_yalign_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererProgress, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererProgress> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererProgress::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_value_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererProgress, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererProgress> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererProgress::from_glib_borrow(this).unsafe_cast())
 }
 

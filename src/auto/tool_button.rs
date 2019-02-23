@@ -32,10 +32,8 @@ glib_wrapper! {
 }
 
 impl ToolButton {
-    pub fn new<'a, 'b, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>, R: Into<Option<&'b str>>>(icon_widget: Q, label: R) -> ToolButton {
+    pub fn new<P: IsA<Widget>>(icon_widget: Option<&P>, label: Option<&str>) -> ToolButton {
         assert_initialized_main_thread!();
-        let icon_widget = icon_widget.into();
-        let label = label.into();
         unsafe {
             ToolItem::from_glib_none(ffi::gtk_tool_button_new(icon_widget.map(|p| p.as_ref()).to_glib_none().0, label.to_glib_none().0)).unsafe_cast()
         }
@@ -55,13 +53,13 @@ pub trait ToolButtonExt: 'static {
 
     fn get_use_underline(&self) -> bool;
 
-    fn set_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_name: P);
+    fn set_icon_name(&self, icon_name: Option<&str>);
 
-    fn set_icon_widget<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, icon_widget: Q);
+    fn set_icon_widget<P: IsA<Widget>>(&self, icon_widget: Option<&P>);
 
-    fn set_label<'a, P: Into<Option<&'a str>>>(&self, label: P);
+    fn set_label(&self, label: Option<&str>);
 
-    fn set_label_widget<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, label_widget: Q);
+    fn set_label_widget<P: IsA<Widget>>(&self, label_widget: Option<&P>);
 
     fn set_use_underline(&self, use_underline: bool);
 
@@ -111,29 +109,25 @@ impl<O: IsA<ToolButton>> ToolButtonExt for O {
         }
     }
 
-    fn set_icon_name<'a, P: Into<Option<&'a str>>>(&self, icon_name: P) {
-        let icon_name = icon_name.into();
+    fn set_icon_name(&self, icon_name: Option<&str>) {
         unsafe {
             ffi::gtk_tool_button_set_icon_name(self.as_ref().to_glib_none().0, icon_name.to_glib_none().0);
         }
     }
 
-    fn set_icon_widget<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, icon_widget: Q) {
-        let icon_widget = icon_widget.into();
+    fn set_icon_widget<P: IsA<Widget>>(&self, icon_widget: Option<&P>) {
         unsafe {
             ffi::gtk_tool_button_set_icon_widget(self.as_ref().to_glib_none().0, icon_widget.map(|p| p.as_ref()).to_glib_none().0);
         }
     }
 
-    fn set_label<'a, P: Into<Option<&'a str>>>(&self, label: P) {
-        let label = label.into();
+    fn set_label(&self, label: Option<&str>) {
         unsafe {
             ffi::gtk_tool_button_set_label(self.as_ref().to_glib_none().0, label.to_glib_none().0);
         }
     }
 
-    fn set_label_widget<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, label_widget: Q) {
-        let label_widget = label_widget.into();
+    fn set_label_widget<P: IsA<Widget>>(&self, label_widget: Option<&P>) {
         unsafe {
             ffi::gtk_tool_button_set_label_widget(self.as_ref().to_glib_none().0, label_widget.map(|p| p.as_ref()).to_glib_none().0);
         }
@@ -200,37 +194,37 @@ impl<O: IsA<ToolButton>> ToolButtonExt for O {
 
 unsafe extern "C" fn clicked_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkToolButton, f: glib_ffi::gpointer)
 where P: IsA<ToolButton> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ToolButton::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_icon_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkToolButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolButton> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ToolButton::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_icon_widget_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkToolButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolButton> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ToolButton::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_label_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkToolButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolButton> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ToolButton::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_label_widget_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkToolButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolButton> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ToolButton::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_use_underline_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkToolButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ToolButton> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ToolButton::from_glib_borrow(this).unsafe_cast())
 }
 

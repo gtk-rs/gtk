@@ -41,7 +41,7 @@ pub const NONE_GESTURE_MULTI_PRESS: Option<&GestureMultiPress> = None;
 pub trait GestureMultiPressExt: 'static {
     fn get_area(&self) -> Option<gdk::Rectangle>;
 
-    fn set_area<'a, P: Into<Option<&'a gdk::Rectangle>>>(&self, rect: P);
+    fn set_area(&self, rect: Option<&gdk::Rectangle>);
 
     fn connect_pressed<F: Fn(&Self, i32, f64, f64) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -59,8 +59,7 @@ impl<O: IsA<GestureMultiPress>> GestureMultiPressExt for O {
         }
     }
 
-    fn set_area<'a, P: Into<Option<&'a gdk::Rectangle>>>(&self, rect: P) {
-        let rect = rect.into();
+    fn set_area(&self, rect: Option<&gdk::Rectangle>) {
         unsafe {
             ffi::gtk_gesture_multi_press_set_area(self.as_ref().to_glib_none().0, rect.to_glib_none().0);
         }
@@ -93,19 +92,19 @@ impl<O: IsA<GestureMultiPress>> GestureMultiPressExt for O {
 
 unsafe extern "C" fn pressed_trampoline<P, F: Fn(&P, i32, f64, f64) + 'static>(this: *mut ffi::GtkGestureMultiPress, n_press: libc::c_int, x: libc::c_double, y: libc::c_double, f: glib_ffi::gpointer)
 where P: IsA<GestureMultiPress> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&GestureMultiPress::from_glib_borrow(this).unsafe_cast(), n_press, x, y)
 }
 
 unsafe extern "C" fn released_trampoline<P, F: Fn(&P, i32, f64, f64) + 'static>(this: *mut ffi::GtkGestureMultiPress, n_press: libc::c_int, x: libc::c_double, y: libc::c_double, f: glib_ffi::gpointer)
 where P: IsA<GestureMultiPress> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&GestureMultiPress::from_glib_borrow(this).unsafe_cast(), n_press, x, y)
 }
 
 unsafe extern "C" fn stopped_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGestureMultiPress, f: glib_ffi::gpointer)
 where P: IsA<GestureMultiPress> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&GestureMultiPress::from_glib_borrow(this).unsafe_cast())
 }
 

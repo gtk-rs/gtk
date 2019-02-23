@@ -30,9 +30,8 @@ glib_wrapper! {
 }
 
 impl AspectFrame {
-    pub fn new<'a, P: Into<Option<&'a str>>>(label: P, xalign: f32, yalign: f32, ratio: f32, obey_child: bool) -> AspectFrame {
+    pub fn new(label: Option<&str>, xalign: f32, yalign: f32, ratio: f32, obey_child: bool) -> AspectFrame {
         assert_initialized_main_thread!();
-        let label = label.into();
         unsafe {
             Widget::from_glib_none(ffi::gtk_aspect_frame_new(label.to_glib_none().0, xalign, yalign, ratio, obey_child.to_glib())).unsafe_cast()
         }
@@ -167,25 +166,25 @@ impl<O: IsA<AspectFrame>> AspectFrameExt for O {
 
 unsafe extern "C" fn notify_obey_child_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAspectFrame, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AspectFrame> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&AspectFrame::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_ratio_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAspectFrame, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AspectFrame> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&AspectFrame::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_xalign_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAspectFrame, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AspectFrame> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&AspectFrame::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_yalign_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAspectFrame, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AspectFrame> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&AspectFrame::from_glib_borrow(this).unsafe_cast())
 }
 

@@ -98,7 +98,7 @@ pub trait SettingsExt: 'static {
 
     fn get_property_gtk_cursor_theme_name(&self) -> Option<GString>;
 
-    fn set_property_gtk_cursor_theme_name<'a, P: Into<Option<&'a str>>>(&self, gtk_cursor_theme_name: P);
+    fn set_property_gtk_cursor_theme_name(&self, gtk_cursor_theme_name: Option<&str>);
 
     fn get_property_gtk_cursor_theme_size(&self) -> i32;
 
@@ -106,7 +106,7 @@ pub trait SettingsExt: 'static {
 
     fn get_property_gtk_decoration_layout(&self) -> Option<GString>;
 
-    fn set_property_gtk_decoration_layout<'a, P: Into<Option<&'a str>>>(&self, gtk_decoration_layout: P);
+    fn set_property_gtk_decoration_layout(&self, gtk_decoration_layout: Option<&str>);
 
     fn get_property_gtk_dialogs_use_header(&self) -> bool;
 
@@ -158,7 +158,7 @@ pub trait SettingsExt: 'static {
 
     fn get_property_gtk_font_name(&self) -> Option<GString>;
 
-    fn set_property_gtk_font_name<'a, P: Into<Option<&'a str>>>(&self, gtk_font_name: P);
+    fn set_property_gtk_font_name(&self, gtk_font_name: Option<&str>);
 
     fn get_property_gtk_fontconfig_timestamp(&self) -> u32;
 
@@ -166,15 +166,15 @@ pub trait SettingsExt: 'static {
 
     fn get_property_gtk_icon_theme_name(&self) -> Option<GString>;
 
-    fn set_property_gtk_icon_theme_name<'a, P: Into<Option<&'a str>>>(&self, gtk_icon_theme_name: P);
+    fn set_property_gtk_icon_theme_name(&self, gtk_icon_theme_name: Option<&str>);
 
     fn get_property_gtk_im_module(&self) -> Option<GString>;
 
-    fn set_property_gtk_im_module<'a, P: Into<Option<&'a str>>>(&self, gtk_im_module: P);
+    fn set_property_gtk_im_module(&self, gtk_im_module: Option<&str>);
 
     fn get_property_gtk_key_theme_name(&self) -> Option<GString>;
 
-    fn set_property_gtk_key_theme_name<'a, P: Into<Option<&'a str>>>(&self, gtk_key_theme_name: P);
+    fn set_property_gtk_key_theme_name(&self, gtk_key_theme_name: Option<&str>);
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn get_property_gtk_keynav_use_caret(&self) -> bool;
@@ -192,7 +192,7 @@ pub trait SettingsExt: 'static {
 
     fn get_property_gtk_modules(&self) -> Option<GString>;
 
-    fn set_property_gtk_modules<'a, P: Into<Option<&'a str>>>(&self, gtk_modules: P);
+    fn set_property_gtk_modules(&self, gtk_modules: Option<&str>);
 
     fn get_property_gtk_primary_button_warps_slider(&self) -> bool;
 
@@ -200,11 +200,11 @@ pub trait SettingsExt: 'static {
 
     fn get_property_gtk_print_backends(&self) -> Option<GString>;
 
-    fn set_property_gtk_print_backends<'a, P: Into<Option<&'a str>>>(&self, gtk_print_backends: P);
+    fn set_property_gtk_print_backends(&self, gtk_print_backends: Option<&str>);
 
     fn get_property_gtk_print_preview_command(&self) -> Option<GString>;
 
-    fn set_property_gtk_print_preview_command<'a, P: Into<Option<&'a str>>>(&self, gtk_print_preview_command: P);
+    fn set_property_gtk_print_preview_command(&self, gtk_print_preview_command: Option<&str>);
 
     fn get_property_gtk_recent_files_enabled(&self) -> bool;
 
@@ -228,7 +228,7 @@ pub trait SettingsExt: 'static {
 
     fn get_property_gtk_sound_theme_name(&self) -> Option<GString>;
 
-    fn set_property_gtk_sound_theme_name<'a, P: Into<Option<&'a str>>>(&self, gtk_sound_theme_name: P);
+    fn set_property_gtk_sound_theme_name(&self, gtk_sound_theme_name: Option<&str>);
 
     fn get_property_gtk_split_cursor(&self) -> bool;
 
@@ -236,19 +236,19 @@ pub trait SettingsExt: 'static {
 
     fn get_property_gtk_theme_name(&self) -> Option<GString>;
 
-    fn set_property_gtk_theme_name<'a, P: Into<Option<&'a str>>>(&self, gtk_theme_name: P);
+    fn set_property_gtk_theme_name(&self, gtk_theme_name: Option<&str>);
 
     fn get_property_gtk_titlebar_double_click(&self) -> Option<GString>;
 
-    fn set_property_gtk_titlebar_double_click<'a, P: Into<Option<&'a str>>>(&self, gtk_titlebar_double_click: P);
+    fn set_property_gtk_titlebar_double_click(&self, gtk_titlebar_double_click: Option<&str>);
 
     fn get_property_gtk_titlebar_middle_click(&self) -> Option<GString>;
 
-    fn set_property_gtk_titlebar_middle_click<'a, P: Into<Option<&'a str>>>(&self, gtk_titlebar_middle_click: P);
+    fn set_property_gtk_titlebar_middle_click(&self, gtk_titlebar_middle_click: Option<&str>);
 
     fn get_property_gtk_titlebar_right_click(&self) -> Option<GString>;
 
-    fn set_property_gtk_titlebar_right_click<'a, P: Into<Option<&'a str>>>(&self, gtk_titlebar_right_click: P);
+    fn set_property_gtk_titlebar_right_click(&self, gtk_titlebar_right_click: Option<&str>);
 
     fn get_property_gtk_xft_antialias(&self) -> i32;
 
@@ -264,11 +264,11 @@ pub trait SettingsExt: 'static {
 
     fn get_property_gtk_xft_hintstyle(&self) -> Option<GString>;
 
-    fn set_property_gtk_xft_hintstyle<'a, P: Into<Option<&'a str>>>(&self, gtk_xft_hintstyle: P);
+    fn set_property_gtk_xft_hintstyle(&self, gtk_xft_hintstyle: Option<&str>);
 
     fn get_property_gtk_xft_rgba(&self) -> Option<GString>;
 
-    fn set_property_gtk_xft_rgba<'a, P: Into<Option<&'a str>>>(&self, gtk_xft_rgba: P);
+    fn set_property_gtk_xft_rgba(&self, gtk_xft_rgba: Option<&str>);
 
     fn connect_property_gtk_alternative_button_order_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
@@ -492,8 +492,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    fn set_property_gtk_cursor_theme_name<'a, P: Into<Option<&'a str>>>(&self, gtk_cursor_theme_name: P) {
-        let gtk_cursor_theme_name = gtk_cursor_theme_name.into();
+    fn set_property_gtk_cursor_theme_name(&self, gtk_cursor_theme_name: Option<&str>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-cursor-theme-name\0".as_ptr() as *const _, Value::from(gtk_cursor_theme_name).to_glib_none().0);
         }
@@ -521,8 +520,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    fn set_property_gtk_decoration_layout<'a, P: Into<Option<&'a str>>>(&self, gtk_decoration_layout: P) {
-        let gtk_decoration_layout = gtk_decoration_layout.into();
+    fn set_property_gtk_decoration_layout(&self, gtk_decoration_layout: Option<&str>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-decoration-layout\0".as_ptr() as *const _, Value::from(gtk_decoration_layout).to_glib_none().0);
         }
@@ -704,8 +702,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    fn set_property_gtk_font_name<'a, P: Into<Option<&'a str>>>(&self, gtk_font_name: P) {
-        let gtk_font_name = gtk_font_name.into();
+    fn set_property_gtk_font_name(&self, gtk_font_name: Option<&str>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-font-name\0".as_ptr() as *const _, Value::from(gtk_font_name).to_glib_none().0);
         }
@@ -733,8 +730,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    fn set_property_gtk_icon_theme_name<'a, P: Into<Option<&'a str>>>(&self, gtk_icon_theme_name: P) {
-        let gtk_icon_theme_name = gtk_icon_theme_name.into();
+    fn set_property_gtk_icon_theme_name(&self, gtk_icon_theme_name: Option<&str>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-icon-theme-name\0".as_ptr() as *const _, Value::from(gtk_icon_theme_name).to_glib_none().0);
         }
@@ -748,8 +744,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    fn set_property_gtk_im_module<'a, P: Into<Option<&'a str>>>(&self, gtk_im_module: P) {
-        let gtk_im_module = gtk_im_module.into();
+    fn set_property_gtk_im_module(&self, gtk_im_module: Option<&str>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-im-module\0".as_ptr() as *const _, Value::from(gtk_im_module).to_glib_none().0);
         }
@@ -763,8 +758,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    fn set_property_gtk_key_theme_name<'a, P: Into<Option<&'a str>>>(&self, gtk_key_theme_name: P) {
-        let gtk_key_theme_name = gtk_key_theme_name.into();
+    fn set_property_gtk_key_theme_name(&self, gtk_key_theme_name: Option<&str>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-key-theme-name\0".as_ptr() as *const _, Value::from(gtk_key_theme_name).to_glib_none().0);
         }
@@ -822,8 +816,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    fn set_property_gtk_modules<'a, P: Into<Option<&'a str>>>(&self, gtk_modules: P) {
-        let gtk_modules = gtk_modules.into();
+    fn set_property_gtk_modules(&self, gtk_modules: Option<&str>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-modules\0".as_ptr() as *const _, Value::from(gtk_modules).to_glib_none().0);
         }
@@ -851,8 +844,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    fn set_property_gtk_print_backends<'a, P: Into<Option<&'a str>>>(&self, gtk_print_backends: P) {
-        let gtk_print_backends = gtk_print_backends.into();
+    fn set_property_gtk_print_backends(&self, gtk_print_backends: Option<&str>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-print-backends\0".as_ptr() as *const _, Value::from(gtk_print_backends).to_glib_none().0);
         }
@@ -866,8 +858,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    fn set_property_gtk_print_preview_command<'a, P: Into<Option<&'a str>>>(&self, gtk_print_preview_command: P) {
-        let gtk_print_preview_command = gtk_print_preview_command.into();
+    fn set_property_gtk_print_preview_command(&self, gtk_print_preview_command: Option<&str>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-print-preview-command\0".as_ptr() as *const _, Value::from(gtk_print_preview_command).to_glib_none().0);
         }
@@ -951,8 +942,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    fn set_property_gtk_sound_theme_name<'a, P: Into<Option<&'a str>>>(&self, gtk_sound_theme_name: P) {
-        let gtk_sound_theme_name = gtk_sound_theme_name.into();
+    fn set_property_gtk_sound_theme_name(&self, gtk_sound_theme_name: Option<&str>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-sound-theme-name\0".as_ptr() as *const _, Value::from(gtk_sound_theme_name).to_glib_none().0);
         }
@@ -980,8 +970,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    fn set_property_gtk_theme_name<'a, P: Into<Option<&'a str>>>(&self, gtk_theme_name: P) {
-        let gtk_theme_name = gtk_theme_name.into();
+    fn set_property_gtk_theme_name(&self, gtk_theme_name: Option<&str>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-theme-name\0".as_ptr() as *const _, Value::from(gtk_theme_name).to_glib_none().0);
         }
@@ -995,8 +984,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    fn set_property_gtk_titlebar_double_click<'a, P: Into<Option<&'a str>>>(&self, gtk_titlebar_double_click: P) {
-        let gtk_titlebar_double_click = gtk_titlebar_double_click.into();
+    fn set_property_gtk_titlebar_double_click(&self, gtk_titlebar_double_click: Option<&str>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-titlebar-double-click\0".as_ptr() as *const _, Value::from(gtk_titlebar_double_click).to_glib_none().0);
         }
@@ -1010,8 +998,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    fn set_property_gtk_titlebar_middle_click<'a, P: Into<Option<&'a str>>>(&self, gtk_titlebar_middle_click: P) {
-        let gtk_titlebar_middle_click = gtk_titlebar_middle_click.into();
+    fn set_property_gtk_titlebar_middle_click(&self, gtk_titlebar_middle_click: Option<&str>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-titlebar-middle-click\0".as_ptr() as *const _, Value::from(gtk_titlebar_middle_click).to_glib_none().0);
         }
@@ -1025,8 +1012,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    fn set_property_gtk_titlebar_right_click<'a, P: Into<Option<&'a str>>>(&self, gtk_titlebar_right_click: P) {
-        let gtk_titlebar_right_click = gtk_titlebar_right_click.into();
+    fn set_property_gtk_titlebar_right_click(&self, gtk_titlebar_right_click: Option<&str>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-titlebar-right-click\0".as_ptr() as *const _, Value::from(gtk_titlebar_right_click).to_glib_none().0);
         }
@@ -1082,8 +1068,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    fn set_property_gtk_xft_hintstyle<'a, P: Into<Option<&'a str>>>(&self, gtk_xft_hintstyle: P) {
-        let gtk_xft_hintstyle = gtk_xft_hintstyle.into();
+    fn set_property_gtk_xft_hintstyle(&self, gtk_xft_hintstyle: Option<&str>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-xft-hintstyle\0".as_ptr() as *const _, Value::from(gtk_xft_hintstyle).to_glib_none().0);
         }
@@ -1097,8 +1082,7 @@ impl<O: IsA<Settings>> SettingsExt for O {
         }
     }
 
-    fn set_property_gtk_xft_rgba<'a, P: Into<Option<&'a str>>>(&self, gtk_xft_rgba: P) {
-        let gtk_xft_rgba = gtk_xft_rgba.into();
+    fn set_property_gtk_xft_rgba(&self, gtk_xft_rgba: Option<&str>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"gtk-xft-rgba\0".as_ptr() as *const _, Value::from(gtk_xft_rgba).to_glib_none().0);
         }
@@ -1500,296 +1484,296 @@ impl<O: IsA<Settings>> SettingsExt for O {
 
 unsafe extern "C" fn notify_gtk_alternative_button_order_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_alternative_sort_arrows_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_application_prefer_dark_theme_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_cursor_blink_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_cursor_blink_time_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_cursor_blink_timeout_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_cursor_theme_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_cursor_theme_size_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_decoration_layout_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_dialogs_use_header_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_dnd_drag_threshold_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_double_click_distance_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_double_click_time_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_enable_accels_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_enable_animations_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_enable_event_sounds_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_enable_input_feedback_sounds_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_enable_primary_paste_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_entry_password_hint_timeout_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_entry_select_on_focus_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_error_bell_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_font_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_fontconfig_timestamp_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_icon_theme_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_im_module_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_key_theme_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_20", feature = "dox"))]
 unsafe extern "C" fn notify_gtk_keynav_use_caret_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_label_select_on_focus_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_long_press_time_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_modules_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_primary_button_warps_slider_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_print_backends_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_print_preview_command_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_recent_files_enabled_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_recent_files_max_age_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_shell_shows_app_menu_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_shell_shows_desktop_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_shell_shows_menubar_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_sound_theme_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_split_cursor_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_theme_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_titlebar_double_click_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_titlebar_middle_click_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_titlebar_right_click_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_xft_antialias_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_xft_dpi_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_xft_hinting_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_xft_hintstyle_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_gtk_xft_rgba_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSettings, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Settings> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Settings::from_glib_borrow(this).unsafe_cast())
 }
 

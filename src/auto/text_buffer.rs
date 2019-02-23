@@ -39,9 +39,8 @@ glib_wrapper! {
 }
 
 impl TextBuffer {
-    pub fn new<'a, P: IsA<TextTagTable> + 'a, Q: Into<Option<&'a P>>>(table: Q) -> TextBuffer {
+    pub fn new<P: IsA<TextTagTable>>(table: Option<&P>) -> TextBuffer {
         assert_initialized_main_thread!();
-        let table = table.into();
         unsafe {
             from_glib_full(ffi::gtk_text_buffer_new(table.map(|p| p.as_ref()).to_glib_none().0))
         }
@@ -67,9 +66,9 @@ pub trait TextBufferExt: 'static {
 
     fn create_child_anchor(&self, iter: &mut TextIter) -> Option<TextChildAnchor>;
 
-    fn create_mark<'a, P: Into<Option<&'a str>>>(&self, mark_name: P, where_: &TextIter, left_gravity: bool) -> Option<TextMark>;
+    fn create_mark(&self, mark_name: Option<&str>, where_: &TextIter, left_gravity: bool) -> Option<TextMark>;
 
-    //fn create_tag<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b str>>>(&self, tag_name: P, first_property_name: Q, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> Option<TextTag>;
+    //fn create_tag(&self, tag_name: Option<&str>, first_property_name: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> Option<TextTag>;
 
     fn cut_clipboard(&self, clipboard: &Clipboard, default_editable: bool);
 
@@ -166,15 +165,15 @@ pub trait TextBufferExt: 'static {
 
     fn move_mark_by_name(&self, name: &str, where_: &TextIter);
 
-    fn paste_clipboard<'a, P: Into<Option<&'a TextIter>>>(&self, clipboard: &Clipboard, override_location: P, default_editable: bool);
+    fn paste_clipboard(&self, clipboard: &Clipboard, override_location: Option<&TextIter>, default_editable: bool);
 
     fn place_cursor(&self, where_: &TextIter);
 
     //fn register_deserialize_format<P: Fn(&TextBuffer, &TextBuffer, &TextIter, &Vec<u8>, usize, bool, &Error) -> bool + 'static>(&self, mime_type: &str, function: P) -> Option<gdk::Atom>;
 
-    fn register_deserialize_tagset<'a, P: Into<Option<&'a str>>>(&self, tagset_name: P) -> gdk::Atom;
+    fn register_deserialize_tagset(&self, tagset_name: Option<&str>) -> gdk::Atom;
 
-    fn register_serialize_tagset<'a, P: Into<Option<&'a str>>>(&self, tagset_name: P) -> gdk::Atom;
+    fn register_serialize_tagset(&self, tagset_name: Option<&str>) -> gdk::Atom;
 
     fn remove_all_tags(&self, start: &TextIter, end: &TextIter);
 
@@ -282,14 +281,13 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
         }
     }
 
-    fn create_mark<'a, P: Into<Option<&'a str>>>(&self, mark_name: P, where_: &TextIter, left_gravity: bool) -> Option<TextMark> {
-        let mark_name = mark_name.into();
+    fn create_mark(&self, mark_name: Option<&str>, where_: &TextIter, left_gravity: bool) -> Option<TextMark> {
         unsafe {
             from_glib_none(ffi::gtk_text_buffer_create_mark(self.as_ref().to_glib_none().0, mark_name.to_glib_none().0, where_.to_glib_none().0, left_gravity.to_glib()))
         }
     }
 
-    //fn create_tag<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b str>>>(&self, tag_name: P, first_property_name: Q, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> Option<TextTag> {
+    //fn create_tag(&self, tag_name: Option<&str>, first_property_name: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> Option<TextTag> {
     //    unsafe { TODO: call ffi::gtk_text_buffer_create_tag() }
     //}
 
@@ -606,8 +604,7 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
         }
     }
 
-    fn paste_clipboard<'a, P: Into<Option<&'a TextIter>>>(&self, clipboard: &Clipboard, override_location: P, default_editable: bool) {
-        let override_location = override_location.into();
+    fn paste_clipboard(&self, clipboard: &Clipboard, override_location: Option<&TextIter>, default_editable: bool) {
         unsafe {
             ffi::gtk_text_buffer_paste_clipboard(self.as_ref().to_glib_none().0, clipboard.to_glib_none().0, mut_override(override_location.to_glib_none().0), default_editable.to_glib());
         }
@@ -623,15 +620,13 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
     //    unsafe { TODO: call ffi::gtk_text_buffer_register_deserialize_format() }
     //}
 
-    fn register_deserialize_tagset<'a, P: Into<Option<&'a str>>>(&self, tagset_name: P) -> gdk::Atom {
-        let tagset_name = tagset_name.into();
+    fn register_deserialize_tagset(&self, tagset_name: Option<&str>) -> gdk::Atom {
         unsafe {
             from_glib_none(ffi::gtk_text_buffer_register_deserialize_tagset(self.as_ref().to_glib_none().0, tagset_name.to_glib_none().0))
         }
     }
 
-    fn register_serialize_tagset<'a, P: Into<Option<&'a str>>>(&self, tagset_name: P) -> gdk::Atom {
-        let tagset_name = tagset_name.into();
+    fn register_serialize_tagset(&self, tagset_name: Option<&str>) -> gdk::Atom {
         unsafe {
             from_glib_none(ffi::gtk_text_buffer_register_serialize_tagset(self.as_ref().to_glib_none().0, tagset_name.to_glib_none().0))
         }
@@ -847,103 +842,103 @@ impl<O: IsA<TextBuffer>> TextBufferExt for O {
 
 unsafe extern "C" fn apply_tag_trampoline<P, F: Fn(&P, &TextTag, &TextIter, &TextIter) + 'static>(this: *mut ffi::GtkTextBuffer, tag: *mut ffi::GtkTextTag, start: *mut ffi::GtkTextIter, end: *mut ffi::GtkTextIter, f: glib_ffi::gpointer)
 where P: IsA<TextBuffer> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&TextBuffer::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(tag), &from_glib_borrow(start), &from_glib_borrow(end))
 }
 
 unsafe extern "C" fn begin_user_action_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkTextBuffer, f: glib_ffi::gpointer)
 where P: IsA<TextBuffer> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&TextBuffer::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkTextBuffer, f: glib_ffi::gpointer)
 where P: IsA<TextBuffer> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&TextBuffer::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn delete_range_trampoline<P, F: Fn(&P, &TextIter, &TextIter) + 'static>(this: *mut ffi::GtkTextBuffer, start: *mut ffi::GtkTextIter, end: *mut ffi::GtkTextIter, f: glib_ffi::gpointer)
 where P: IsA<TextBuffer> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&TextBuffer::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(start), &from_glib_borrow(end))
 }
 
 unsafe extern "C" fn end_user_action_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkTextBuffer, f: glib_ffi::gpointer)
 where P: IsA<TextBuffer> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&TextBuffer::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn insert_child_anchor_trampoline<P, F: Fn(&P, &TextIter, &TextChildAnchor) + 'static>(this: *mut ffi::GtkTextBuffer, location: *mut ffi::GtkTextIter, anchor: *mut ffi::GtkTextChildAnchor, f: glib_ffi::gpointer)
 where P: IsA<TextBuffer> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&TextBuffer::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(location), &from_glib_borrow(anchor))
 }
 
 unsafe extern "C" fn insert_pixbuf_trampoline<P, F: Fn(&P, &TextIter, &gdk_pixbuf::Pixbuf) + 'static>(this: *mut ffi::GtkTextBuffer, location: *mut ffi::GtkTextIter, pixbuf: *mut gdk_pixbuf_ffi::GdkPixbuf, f: glib_ffi::gpointer)
 where P: IsA<TextBuffer> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&TextBuffer::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(location), &from_glib_borrow(pixbuf))
 }
 
 unsafe extern "C" fn mark_deleted_trampoline<P, F: Fn(&P, &TextMark) + 'static>(this: *mut ffi::GtkTextBuffer, mark: *mut ffi::GtkTextMark, f: glib_ffi::gpointer)
 where P: IsA<TextBuffer> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&TextBuffer::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(mark))
 }
 
 unsafe extern "C" fn mark_set_trampoline<P, F: Fn(&P, &TextIter, &TextMark) + 'static>(this: *mut ffi::GtkTextBuffer, location: *mut ffi::GtkTextIter, mark: *mut ffi::GtkTextMark, f: glib_ffi::gpointer)
 where P: IsA<TextBuffer> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&TextBuffer::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(location), &from_glib_borrow(mark))
 }
 
 unsafe extern "C" fn modified_changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkTextBuffer, f: glib_ffi::gpointer)
 where P: IsA<TextBuffer> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&TextBuffer::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn paste_done_trampoline<P, F: Fn(&P, &Clipboard) + 'static>(this: *mut ffi::GtkTextBuffer, clipboard: *mut ffi::GtkClipboard, f: glib_ffi::gpointer)
 where P: IsA<TextBuffer> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&TextBuffer::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(clipboard))
 }
 
 unsafe extern "C" fn remove_tag_trampoline<P, F: Fn(&P, &TextTag, &TextIter, &TextIter) + 'static>(this: *mut ffi::GtkTextBuffer, tag: *mut ffi::GtkTextTag, start: *mut ffi::GtkTextIter, end: *mut ffi::GtkTextIter, f: glib_ffi::gpointer)
 where P: IsA<TextBuffer> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&TextBuffer::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(tag), &from_glib_borrow(start), &from_glib_borrow(end))
 }
 
 unsafe extern "C" fn notify_copy_target_list_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkTextBuffer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextBuffer> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&TextBuffer::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_cursor_position_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkTextBuffer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextBuffer> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&TextBuffer::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_has_selection_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkTextBuffer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextBuffer> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&TextBuffer::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_paste_target_list_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkTextBuffer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextBuffer> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&TextBuffer::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_text_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkTextBuffer, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<TextBuffer> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&TextBuffer::from_glib_borrow(this).unsafe_cast())
 }
 

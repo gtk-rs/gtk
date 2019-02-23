@@ -42,9 +42,8 @@ impl Button {
         }
     }
 
-    pub fn new_from_icon_name<'a, P: Into<Option<&'a str>>>(icon_name: P, size: IconSize) -> Button {
+    pub fn new_from_icon_name(icon_name: Option<&str>, size: IconSize) -> Button {
         assert_initialized_main_thread!();
-        let icon_name = icon_name.into();
         unsafe {
             Widget::from_glib_none(ffi::gtk_button_new_from_icon_name(icon_name.to_glib_none().0, size.to_glib())).unsafe_cast()
         }
@@ -100,7 +99,7 @@ pub trait ButtonExt: 'static {
     #[cfg(any(not(feature = "v3_20"), feature = "dox"))]
     fn set_focus_on_click(&self, focus_on_click: bool);
 
-    fn set_image<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, image: Q);
+    fn set_image<P: IsA<Widget>>(&self, image: Option<&P>);
 
     fn set_image_position(&self, position: PositionType);
 
@@ -200,8 +199,7 @@ impl<O: IsA<Button>> ButtonExt for O {
         }
     }
 
-    fn set_image<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, image: Q) {
-        let image = image.into();
+    fn set_image<P: IsA<Widget>>(&self, image: Option<&P>) {
         unsafe {
             ffi::gtk_button_set_image(self.as_ref().to_glib_none().0, image.map(|p| p.as_ref()).to_glib_none().0);
         }
@@ -306,49 +304,49 @@ impl<O: IsA<Button>> ButtonExt for O {
 
 unsafe extern "C" fn activate_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkButton, f: glib_ffi::gpointer)
 where P: IsA<Button> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Button::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn clicked_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkButton, f: glib_ffi::gpointer)
 where P: IsA<Button> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Button::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_always_show_image_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Button> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Button::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_image_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Button> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Button::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_image_position_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Button> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Button::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_label_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Button> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Button::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_relief_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Button> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Button::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_use_underline_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Button> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Button::from_glib_borrow(this).unsafe_cast())
 }
 

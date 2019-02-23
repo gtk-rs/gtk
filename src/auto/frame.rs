@@ -32,9 +32,8 @@ glib_wrapper! {
 }
 
 impl Frame {
-    pub fn new<'a, P: Into<Option<&'a str>>>(label: P) -> Frame {
+    pub fn new(label: Option<&str>) -> Frame {
         assert_initialized_main_thread!();
-        let label = label.into();
         unsafe {
             Widget::from_glib_none(ffi::gtk_frame_new(label.to_glib_none().0)).unsafe_cast()
         }
@@ -52,11 +51,11 @@ pub trait FrameExt: 'static {
 
     fn get_shadow_type(&self) -> ShadowType;
 
-    fn set_label<'a, P: Into<Option<&'a str>>>(&self, label: P);
+    fn set_label(&self, label: Option<&str>);
 
     fn set_label_align(&self, xalign: f32, yalign: f32);
 
-    fn set_label_widget<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, label_widget: Q);
+    fn set_label_widget<P: IsA<Widget>>(&self, label_widget: Option<&P>);
 
     fn set_shadow_type(&self, type_: ShadowType);
 
@@ -107,8 +106,7 @@ impl<O: IsA<Frame>> FrameExt for O {
         }
     }
 
-    fn set_label<'a, P: Into<Option<&'a str>>>(&self, label: P) {
-        let label = label.into();
+    fn set_label(&self, label: Option<&str>) {
         unsafe {
             ffi::gtk_frame_set_label(self.as_ref().to_glib_none().0, label.to_glib_none().0);
         }
@@ -120,8 +118,7 @@ impl<O: IsA<Frame>> FrameExt for O {
         }
     }
 
-    fn set_label_widget<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, label_widget: Q) {
-        let label_widget = label_widget.into();
+    fn set_label_widget<P: IsA<Widget>>(&self, label_widget: Option<&P>) {
         unsafe {
             ffi::gtk_frame_set_label_widget(self.as_ref().to_glib_none().0, label_widget.map(|p| p.as_ref()).to_glib_none().0);
         }
@@ -204,31 +201,31 @@ impl<O: IsA<Frame>> FrameExt for O {
 
 unsafe extern "C" fn notify_label_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFrame, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Frame> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Frame::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_label_widget_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFrame, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Frame> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Frame::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_label_xalign_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFrame, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Frame> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Frame::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_label_yalign_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFrame, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Frame> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Frame::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_shadow_type_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFrame, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Frame> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Frame::from_glib_borrow(this).unsafe_cast())
 }
 

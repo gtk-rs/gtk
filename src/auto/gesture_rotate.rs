@@ -60,7 +60,7 @@ impl<O: IsA<GestureRotate>> GestureRotateExt for O {
 
 unsafe extern "C" fn angle_changed_trampoline<P, F: Fn(&P, f64, f64) + 'static>(this: *mut ffi::GtkGestureRotate, angle: libc::c_double, angle_delta: libc::c_double, f: glib_ffi::gpointer)
 where P: IsA<GestureRotate> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&GestureRotate::from_glib_borrow(this).unsafe_cast(), angle, angle_delta)
 }
 

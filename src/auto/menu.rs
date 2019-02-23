@@ -92,27 +92,27 @@ pub trait GtkMenuExt: 'static {
     fn popdown(&self);
 
     //#[cfg_attr(feature = "v3_22", deprecated)]
-    //fn popup<'a, 'b, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>, R: IsA<Widget> + 'b, S: Into<Option<&'b R>>>(&self, parent_menu_shell: Q, parent_menu_item: S, func: Option<Box<dyn FnOnce(&Menu, i32, i32, bool) + 'static>>, button: u32, activate_time: u32);
+    //fn popup<P: IsA<Widget>, Q: IsA<Widget>>(&self, parent_menu_shell: Option<&P>, parent_menu_item: Option<&Q>, func: Option<Box<dyn FnOnce(&Menu, i32, i32, bool) + 'static>>, button: u32, activate_time: u32);
 
     #[cfg(any(feature = "v3_22", feature = "dox"))]
-    fn popup_at_pointer<'a, P: Into<Option<&'a gdk::Event>>>(&self, trigger_event: P);
+    fn popup_at_pointer(&self, trigger_event: Option<&gdk::Event>);
 
     #[cfg(any(feature = "v3_22", feature = "dox"))]
-    fn popup_at_rect<'a, P: IsA<gdk::Window>, Q: Into<Option<&'a gdk::Event>>>(&self, rect_window: &P, rect: &gdk::Rectangle, rect_anchor: gdk::Gravity, menu_anchor: gdk::Gravity, trigger_event: Q);
+    fn popup_at_rect<P: IsA<gdk::Window>>(&self, rect_window: &P, rect: &gdk::Rectangle, rect_anchor: gdk::Gravity, menu_anchor: gdk::Gravity, trigger_event: Option<&gdk::Event>);
 
     #[cfg(any(feature = "v3_22", feature = "dox"))]
-    fn popup_at_widget<'a, P: IsA<Widget>, Q: Into<Option<&'a gdk::Event>>>(&self, widget: &P, widget_anchor: gdk::Gravity, menu_anchor: gdk::Gravity, trigger_event: Q);
+    fn popup_at_widget<P: IsA<Widget>>(&self, widget: &P, widget_anchor: gdk::Gravity, menu_anchor: gdk::Gravity, trigger_event: Option<&gdk::Event>);
 
     //#[cfg_attr(feature = "v3_22", deprecated)]
-    //fn popup_for_device<'a, 'b, 'c, P: Into<Option<&'a gdk::Device>>, Q: IsA<Widget> + 'b, R: Into<Option<&'b Q>>, S: IsA<Widget> + 'c, T: Into<Option<&'c S>>>(&self, device: P, parent_menu_shell: R, parent_menu_item: T, func: Option<Box<dyn Fn(&Menu, i32, i32, bool) + 'static>>, button: u32, activate_time: u32);
+    //fn popup_for_device<P: IsA<Widget>, Q: IsA<Widget>>(&self, device: Option<&gdk::Device>, parent_menu_shell: Option<&P>, parent_menu_item: Option<&Q>, func: Option<Box<dyn Fn(&Menu, i32, i32, bool) + 'static>>, button: u32, activate_time: u32);
 
     fn reorder_child<P: IsA<Widget>>(&self, child: &P, position: i32);
 
     fn reposition(&self);
 
-    fn set_accel_group<'a, P: IsA<AccelGroup> + 'a, Q: Into<Option<&'a P>>>(&self, accel_group: Q);
+    fn set_accel_group<P: IsA<AccelGroup>>(&self, accel_group: Option<&P>);
 
-    fn set_accel_path<'a, P: Into<Option<&'a str>>>(&self, accel_path: P);
+    fn set_accel_path(&self, accel_path: Option<&str>);
 
     fn set_active(&self, index: u32);
 
@@ -120,7 +120,7 @@ pub trait GtkMenuExt: 'static {
 
     fn set_reserve_toggle_size(&self, reserve_toggle_size: bool);
 
-    fn set_screen<'a, P: Into<Option<&'a gdk::Screen>>>(&self, screen: P);
+    fn set_screen(&self, screen: Option<&gdk::Screen>);
 
     #[cfg(any(feature = "v3_22", feature = "dox"))]
     fn get_property_anchor_hints(&self) -> gdk::AnchorHints;
@@ -128,7 +128,7 @@ pub trait GtkMenuExt: 'static {
     #[cfg(any(feature = "v3_22", feature = "dox"))]
     fn set_property_anchor_hints(&self, anchor_hints: gdk::AnchorHints);
 
-    fn set_property_attach_widget<P: IsA<Widget> + glib::value::SetValueOptional>(&self, attach_widget: Option<&P>);
+    fn set_property_attach_widget(&self, attach_widget: Option<&Widget>);
 
     #[cfg(any(feature = "v3_22", feature = "dox"))]
     fn get_property_menu_type_hint(&self) -> gdk::WindowTypeHint;
@@ -262,35 +262,32 @@ impl<O: IsA<Menu>> GtkMenuExt for O {
         }
     }
 
-    //fn popup<'a, 'b, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>, R: IsA<Widget> + 'b, S: Into<Option<&'b R>>>(&self, parent_menu_shell: Q, parent_menu_item: S, func: Option<Box<dyn FnOnce(&Menu, i32, i32, bool) + 'static>>, button: u32, activate_time: u32) {
+    //fn popup<P: IsA<Widget>, Q: IsA<Widget>>(&self, parent_menu_shell: Option<&P>, parent_menu_item: Option<&Q>, func: Option<Box<dyn FnOnce(&Menu, i32, i32, bool) + 'static>>, button: u32, activate_time: u32) {
     //    unsafe { TODO: call ffi::gtk_menu_popup() }
     //}
 
     #[cfg(any(feature = "v3_22", feature = "dox"))]
-    fn popup_at_pointer<'a, P: Into<Option<&'a gdk::Event>>>(&self, trigger_event: P) {
-        let trigger_event = trigger_event.into();
+    fn popup_at_pointer(&self, trigger_event: Option<&gdk::Event>) {
         unsafe {
             ffi::gtk_menu_popup_at_pointer(self.as_ref().to_glib_none().0, trigger_event.to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v3_22", feature = "dox"))]
-    fn popup_at_rect<'a, P: IsA<gdk::Window>, Q: Into<Option<&'a gdk::Event>>>(&self, rect_window: &P, rect: &gdk::Rectangle, rect_anchor: gdk::Gravity, menu_anchor: gdk::Gravity, trigger_event: Q) {
-        let trigger_event = trigger_event.into();
+    fn popup_at_rect<P: IsA<gdk::Window>>(&self, rect_window: &P, rect: &gdk::Rectangle, rect_anchor: gdk::Gravity, menu_anchor: gdk::Gravity, trigger_event: Option<&gdk::Event>) {
         unsafe {
             ffi::gtk_menu_popup_at_rect(self.as_ref().to_glib_none().0, rect_window.as_ref().to_glib_none().0, rect.to_glib_none().0, rect_anchor.to_glib(), menu_anchor.to_glib(), trigger_event.to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v3_22", feature = "dox"))]
-    fn popup_at_widget<'a, P: IsA<Widget>, Q: Into<Option<&'a gdk::Event>>>(&self, widget: &P, widget_anchor: gdk::Gravity, menu_anchor: gdk::Gravity, trigger_event: Q) {
-        let trigger_event = trigger_event.into();
+    fn popup_at_widget<P: IsA<Widget>>(&self, widget: &P, widget_anchor: gdk::Gravity, menu_anchor: gdk::Gravity, trigger_event: Option<&gdk::Event>) {
         unsafe {
             ffi::gtk_menu_popup_at_widget(self.as_ref().to_glib_none().0, widget.as_ref().to_glib_none().0, widget_anchor.to_glib(), menu_anchor.to_glib(), trigger_event.to_glib_none().0);
         }
     }
 
-    //fn popup_for_device<'a, 'b, 'c, P: Into<Option<&'a gdk::Device>>, Q: IsA<Widget> + 'b, R: Into<Option<&'b Q>>, S: IsA<Widget> + 'c, T: Into<Option<&'c S>>>(&self, device: P, parent_menu_shell: R, parent_menu_item: T, func: Option<Box<dyn Fn(&Menu, i32, i32, bool) + 'static>>, button: u32, activate_time: u32) {
+    //fn popup_for_device<P: IsA<Widget>, Q: IsA<Widget>>(&self, device: Option<&gdk::Device>, parent_menu_shell: Option<&P>, parent_menu_item: Option<&Q>, func: Option<Box<dyn Fn(&Menu, i32, i32, bool) + 'static>>, button: u32, activate_time: u32) {
     //    unsafe { TODO: call ffi::gtk_menu_popup_for_device() }
     //}
 
@@ -306,15 +303,13 @@ impl<O: IsA<Menu>> GtkMenuExt for O {
         }
     }
 
-    fn set_accel_group<'a, P: IsA<AccelGroup> + 'a, Q: Into<Option<&'a P>>>(&self, accel_group: Q) {
-        let accel_group = accel_group.into();
+    fn set_accel_group<P: IsA<AccelGroup>>(&self, accel_group: Option<&P>) {
         unsafe {
             ffi::gtk_menu_set_accel_group(self.as_ref().to_glib_none().0, accel_group.map(|p| p.as_ref()).to_glib_none().0);
         }
     }
 
-    fn set_accel_path<'a, P: Into<Option<&'a str>>>(&self, accel_path: P) {
-        let accel_path = accel_path.into();
+    fn set_accel_path(&self, accel_path: Option<&str>) {
         unsafe {
             ffi::gtk_menu_set_accel_path(self.as_ref().to_glib_none().0, accel_path.to_glib_none().0);
         }
@@ -338,8 +333,7 @@ impl<O: IsA<Menu>> GtkMenuExt for O {
         }
     }
 
-    fn set_screen<'a, P: Into<Option<&'a gdk::Screen>>>(&self, screen: P) {
-        let screen = screen.into();
+    fn set_screen(&self, screen: Option<&gdk::Screen>) {
         unsafe {
             ffi::gtk_menu_set_screen(self.as_ref().to_glib_none().0, screen.to_glib_none().0);
         }
@@ -361,7 +355,7 @@ impl<O: IsA<Menu>> GtkMenuExt for O {
         }
     }
 
-    fn set_property_attach_widget<P: IsA<Widget> + glib::value::SetValueOptional>(&self, attach_widget: Option<&P>) {
+    fn set_property_attach_widget(&self, attach_widget: Option<&Widget>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"attach-widget\0".as_ptr() as *const _, Value::from(attach_widget).to_glib_none().0);
         }
@@ -576,71 +570,71 @@ impl<O: IsA<Menu>> GtkMenuExt for O {
 
 unsafe extern "C" fn move_scroll_trampoline<P, F: Fn(&P, ScrollType) + 'static>(this: *mut ffi::GtkMenu, scroll_type: ffi::GtkScrollType, f: glib_ffi::gpointer)
 where P: IsA<Menu> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Menu::from_glib_borrow(this).unsafe_cast(), from_glib(scroll_type))
 }
 
 unsafe extern "C" fn notify_accel_group_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenu, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Menu> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Menu::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_accel_path_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenu, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Menu> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Menu::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_active_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenu, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Menu> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Menu::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_22", feature = "dox"))]
 unsafe extern "C" fn notify_anchor_hints_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenu, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Menu> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Menu::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_attach_widget_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenu, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Menu> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Menu::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_22", feature = "dox"))]
 unsafe extern "C" fn notify_menu_type_hint_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenu, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Menu> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Menu::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_monitor_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenu, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Menu> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Menu::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_22", feature = "dox"))]
 unsafe extern "C" fn notify_rect_anchor_dx_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenu, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Menu> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Menu::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_22", feature = "dox"))]
 unsafe extern "C" fn notify_rect_anchor_dy_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenu, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Menu> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Menu::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_reserve_toggle_size_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenu, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Menu> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Menu::from_glib_borrow(this).unsafe_cast())
 }
 

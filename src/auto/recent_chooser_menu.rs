@@ -84,7 +84,7 @@ impl<O: IsA<RecentChooserMenu>> RecentChooserMenuExt for O {
 
 unsafe extern "C" fn notify_show_numbers_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRecentChooserMenu, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<RecentChooserMenu> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&RecentChooserMenu::from_glib_borrow(this).unsafe_cast())
 }
 

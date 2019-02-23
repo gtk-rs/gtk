@@ -35,17 +35,15 @@ glib_wrapper! {
 }
 
 impl AppChooserDialog {
-    pub fn new<'a, P: IsA<Window> + 'a, Q: Into<Option<&'a P>>, R: IsA<gio::File>>(parent: Q, flags: DialogFlags, file: &R) -> AppChooserDialog {
+    pub fn new<P: IsA<Window>, Q: IsA<gio::File>>(parent: Option<&P>, flags: DialogFlags, file: &Q) -> AppChooserDialog {
         assert_initialized_main_thread!();
-        let parent = parent.into();
         unsafe {
             Widget::from_glib_none(ffi::gtk_app_chooser_dialog_new(parent.map(|p| p.as_ref()).to_glib_none().0, flags.to_glib(), file.as_ref().to_glib_none().0)).unsafe_cast()
         }
     }
 
-    pub fn new_for_content_type<'a, P: IsA<Window> + 'a, Q: Into<Option<&'a P>>>(parent: Q, flags: DialogFlags, content_type: &str) -> AppChooserDialog {
+    pub fn new_for_content_type<P: IsA<Window>>(parent: Option<&P>, flags: DialogFlags, content_type: &str) -> AppChooserDialog {
         assert_initialized_main_thread!();
-        let parent = parent.into();
         unsafe {
             Widget::from_glib_none(ffi::gtk_app_chooser_dialog_new_for_content_type(parent.map(|p| p.as_ref()).to_glib_none().0, flags.to_glib(), content_type.to_glib_none().0)).unsafe_cast()
         }
@@ -104,7 +102,7 @@ impl<O: IsA<AppChooserDialog>> AppChooserDialogExt for O {
 
 unsafe extern "C" fn notify_heading_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAppChooserDialog, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AppChooserDialog> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&AppChooserDialog::from_glib_borrow(this).unsafe_cast())
 }
 

@@ -24,8 +24,7 @@ glib_wrapper! {
 }
 
 impl RecentInfo {
-    pub fn create_app_info<'a, P: Into<Option<&'a str>>>(&self, app_name: P) -> Result<Option<gio::AppInfo>, Error> {
-        let app_name = app_name.into();
+    pub fn create_app_info(&self, app_name: Option<&str>) -> Result<Option<gio::AppInfo>, Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let ret = ffi::gtk_recent_info_create_app_info(self.to_glib_none().0, app_name.to_glib_none().0, &mut error);

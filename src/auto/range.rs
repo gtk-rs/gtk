@@ -399,73 +399,73 @@ impl<O: IsA<Range>> RangeExt for O {
 
 unsafe extern "C" fn adjust_bounds_trampoline<P, F: Fn(&P, f64) + 'static>(this: *mut ffi::GtkRange, value: libc::c_double, f: glib_ffi::gpointer)
 where P: IsA<Range> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Range::from_glib_borrow(this).unsafe_cast(), value)
 }
 
 unsafe extern "C" fn change_value_trampoline<P, F: Fn(&P, ScrollType, f64) -> Inhibit + 'static>(this: *mut ffi::GtkRange, scroll: ffi::GtkScrollType, value: libc::c_double, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Range> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Range::from_glib_borrow(this).unsafe_cast(), from_glib(scroll), value).to_glib()
 }
 
 unsafe extern "C" fn move_slider_trampoline<P, F: Fn(&P, ScrollType) + 'static>(this: *mut ffi::GtkRange, step: ffi::GtkScrollType, f: glib_ffi::gpointer)
 where P: IsA<Range> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Range::from_glib_borrow(this).unsafe_cast(), from_glib(step))
 }
 
 unsafe extern "C" fn value_changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRange, f: glib_ffi::gpointer)
 where P: IsA<Range> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Range::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_adjustment_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRange, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Range> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Range::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_fill_level_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRange, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Range> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Range::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_inverted_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRange, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Range> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Range::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_lower_stepper_sensitivity_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRange, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Range> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Range::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_restrict_to_fill_level_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRange, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Range> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Range::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_round_digits_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRange, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Range> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Range::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_fill_level_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRange, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Range> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Range::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_upper_stepper_sensitivity_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRange, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Range> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Range::from_glib_borrow(this).unsafe_cast())
 }
 

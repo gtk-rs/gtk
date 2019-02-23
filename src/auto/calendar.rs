@@ -495,103 +495,103 @@ impl<O: IsA<Calendar>> CalendarExt for O {
 
 unsafe extern "C" fn day_selected_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCalendar, f: glib_ffi::gpointer)
 where P: IsA<Calendar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Calendar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn day_selected_double_click_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCalendar, f: glib_ffi::gpointer)
 where P: IsA<Calendar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Calendar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn month_changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCalendar, f: glib_ffi::gpointer)
 where P: IsA<Calendar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Calendar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn next_month_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCalendar, f: glib_ffi::gpointer)
 where P: IsA<Calendar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Calendar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn next_year_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCalendar, f: glib_ffi::gpointer)
 where P: IsA<Calendar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Calendar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn prev_month_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCalendar, f: glib_ffi::gpointer)
 where P: IsA<Calendar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Calendar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn prev_year_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCalendar, f: glib_ffi::gpointer)
 where P: IsA<Calendar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Calendar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_day_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCalendar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Calendar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Calendar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_detail_height_rows_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCalendar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Calendar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Calendar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_detail_width_chars_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCalendar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Calendar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Calendar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_month_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCalendar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Calendar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Calendar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_no_month_change_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCalendar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Calendar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Calendar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_day_names_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCalendar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Calendar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Calendar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_details_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCalendar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Calendar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Calendar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_heading_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCalendar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Calendar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Calendar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_week_numbers_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCalendar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Calendar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Calendar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_year_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCalendar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Calendar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Calendar::from_glib_borrow(this).unsafe_cast())
 }
 

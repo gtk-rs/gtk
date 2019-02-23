@@ -100,13 +100,13 @@ impl<O: IsA<EventBox>> EventBoxExt for O {
 
 unsafe extern "C" fn notify_above_child_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEventBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<EventBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&EventBox::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_visible_window_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEventBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<EventBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&EventBox::from_glib_borrow(this).unsafe_cast())
 }
 

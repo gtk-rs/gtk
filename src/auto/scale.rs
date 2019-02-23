@@ -32,9 +32,8 @@ glib_wrapper! {
 }
 
 impl Scale {
-    pub fn new<'a, P: IsA<Adjustment> + 'a, Q: Into<Option<&'a P>>>(orientation: Orientation, adjustment: Q) -> Scale {
+    pub fn new<P: IsA<Adjustment>>(orientation: Orientation, adjustment: Option<&P>) -> Scale {
         assert_initialized_main_thread!();
-        let adjustment = adjustment.into();
         unsafe {
             Widget::from_glib_none(ffi::gtk_scale_new(orientation.to_glib(), adjustment.map(|p| p.as_ref()).to_glib_none().0)).unsafe_cast()
         }
@@ -51,7 +50,7 @@ impl Scale {
 pub const NONE_SCALE: Option<&Scale> = None;
 
 pub trait ScaleExt: 'static {
-    fn add_mark<'a, P: Into<Option<&'a str>>>(&self, value: f64, position: PositionType, markup: P);
+    fn add_mark(&self, value: f64, position: PositionType, markup: Option<&str>);
 
     fn clear_marks(&self);
 
@@ -87,8 +86,7 @@ pub trait ScaleExt: 'static {
 }
 
 impl<O: IsA<Scale>> ScaleExt for O {
-    fn add_mark<'a, P: Into<Option<&'a str>>>(&self, value: f64, position: PositionType, markup: P) {
-        let markup = markup.into();
+    fn add_mark(&self, value: f64, position: PositionType, markup: Option<&str>) {
         unsafe {
             ffi::gtk_scale_add_mark(self.as_ref().to_glib_none().0, value, position.to_glib(), markup.to_glib_none().0);
         }
@@ -206,31 +204,31 @@ impl<O: IsA<Scale>> ScaleExt for O {
 
 unsafe extern "C" fn format_value_trampoline<P, F: Fn(&P, f64) -> String + 'static>(this: *mut ffi::GtkScale, value: libc::c_double, f: glib_ffi::gpointer) -> *mut libc::c_char
 where P: IsA<Scale> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Scale::from_glib_borrow(this).unsafe_cast(), value).to_glib_full()
 }
 
 unsafe extern "C" fn notify_digits_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkScale, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Scale> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Scale::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_draw_value_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkScale, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Scale> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Scale::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_has_origin_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkScale, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Scale> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Scale::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_value_pos_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkScale, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Scale> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Scale::from_glib_borrow(this).unsafe_cast())
 }
 

@@ -58,7 +58,7 @@ pub trait AccelGroupExt: 'static {
 
     fn connect_by_path(&self, accel_path: &str, closure: &glib::Closure);
 
-    fn disconnect<'a, P: Into<Option<&'a glib::Closure>>>(&self, closure: P) -> bool;
+    fn disconnect(&self, closure: Option<&glib::Closure>) -> bool;
 
     fn disconnect_key(&self, accel_key: u32, accel_mods: gdk::ModifierType) -> bool;
 
@@ -100,8 +100,7 @@ impl<O: IsA<AccelGroup>> AccelGroupExt for O {
         }
     }
 
-    fn disconnect<'a, P: Into<Option<&'a glib::Closure>>>(&self, closure: P) -> bool {
-        let closure = closure.into();
+    fn disconnect(&self, closure: Option<&glib::Closure>) -> bool {
         unsafe {
             from_glib(ffi::gtk_accel_group_disconnect(self.as_ref().to_glib_none().0, closure.to_glib_none().0))
         }
@@ -176,25 +175,25 @@ impl<O: IsA<AccelGroup>> AccelGroupExt for O {
 
 unsafe extern "C" fn accel_activate_trampoline<P, F: Fn(&P, &glib::Object, u32, gdk::ModifierType) -> bool + 'static>(this: *mut ffi::GtkAccelGroup, acceleratable: *mut gobject_ffi::GObject, keyval: libc::c_uint, modifier: gdk_ffi::GdkModifierType, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<AccelGroup> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&AccelGroup::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(acceleratable), keyval, from_glib(modifier)).to_glib()
 }
 
 unsafe extern "C" fn accel_changed_trampoline<P, F: Fn(&P, u32, gdk::ModifierType, &glib::Closure) + 'static>(this: *mut ffi::GtkAccelGroup, keyval: libc::c_uint, modifier: gdk_ffi::GdkModifierType, accel_closure: *mut gobject_ffi::GClosure, f: glib_ffi::gpointer)
 where P: IsA<AccelGroup> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&AccelGroup::from_glib_borrow(this).unsafe_cast(), keyval, from_glib(modifier), &from_glib_borrow(accel_closure))
 }
 
 unsafe extern "C" fn notify_is_locked_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAccelGroup, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AccelGroup> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&AccelGroup::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_modifier_mask_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAccelGroup, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AccelGroup> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&AccelGroup::from_glib_borrow(this).unsafe_cast())
 }
 

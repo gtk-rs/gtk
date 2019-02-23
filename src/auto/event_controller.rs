@@ -82,7 +82,7 @@ impl<O: IsA<EventController>> EventControllerExt for O {
 
 unsafe extern "C" fn notify_propagation_phase_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkEventController, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<EventController> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&EventController::from_glib_borrow(this).unsafe_cast())
 }
 

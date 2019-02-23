@@ -228,43 +228,43 @@ impl<O: IsA<FontButton>> FontButtonExt for O {
 
 unsafe extern "C" fn font_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFontButton, f: glib_ffi::gpointer)
 where P: IsA<FontButton> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FontButton::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_font_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFontButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FontButton> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FontButton::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_size_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFontButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FontButton> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FontButton::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_style_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFontButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FontButton> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FontButton::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_title_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFontButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FontButton> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FontButton::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_use_font_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFontButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FontButton> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FontButton::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_use_size_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFontButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FontButton> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FontButton::from_glib_borrow(this).unsafe_cast())
 }
 

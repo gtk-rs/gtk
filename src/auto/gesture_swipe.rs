@@ -65,7 +65,7 @@ impl<O: IsA<GestureSwipe>> GestureSwipeExt for O {
 
 unsafe extern "C" fn swipe_trampoline<P, F: Fn(&P, f64, f64) + 'static>(this: *mut ffi::GtkGestureSwipe, velocity_x: libc::c_double, velocity_y: libc::c_double, f: glib_ffi::gpointer)
 where P: IsA<GestureSwipe> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&GestureSwipe::from_glib_borrow(this).unsafe_cast(), velocity_x, velocity_y)
 }
 

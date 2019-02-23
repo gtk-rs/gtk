@@ -22,9 +22,8 @@ glib_wrapper! {
 }
 
 impl PaperSize {
-    pub fn new<'a, P: Into<Option<&'a str>>>(name: P) -> PaperSize {
+    pub fn new(name: Option<&str>) -> PaperSize {
         assert_initialized_main_thread!();
-        let name = name.into();
         unsafe {
             from_glib_full(ffi::gtk_paper_size_new(name.to_glib_none().0))
         }
@@ -53,9 +52,8 @@ impl PaperSize {
         }
     }
 
-    pub fn new_from_key_file<'a, P: Into<Option<&'a str>>>(key_file: &glib::KeyFile, group_name: P) -> Result<PaperSize, Error> {
+    pub fn new_from_key_file(key_file: &glib::KeyFile, group_name: Option<&str>) -> Result<PaperSize, Error> {
         assert_initialized_main_thread!();
-        let group_name = group_name.into();
         unsafe {
             let mut error = ptr::null_mut();
             let ret = ffi::gtk_paper_size_new_from_key_file(key_file.to_glib_none().0, group_name.to_glib_none().0, &mut error);

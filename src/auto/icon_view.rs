@@ -84,7 +84,7 @@ pub trait IconViewExt: 'static {
 
     fn get_activate_on_single_click(&self) -> bool;
 
-    fn get_cell_rect<'a, P: IsA<CellRenderer> + 'a, Q: Into<Option<&'a P>>>(&self, path: &TreePath, cell: Q) -> Option<gdk::Rectangle>;
+    fn get_cell_rect<P: IsA<CellRenderer>>(&self, path: &TreePath, cell: Option<&P>) -> Option<gdk::Rectangle>;
 
     fn get_column_spacing(&self) -> i32;
 
@@ -154,9 +154,9 @@ pub trait IconViewExt: 'static {
 
     fn set_columns(&self, columns: i32);
 
-    fn set_cursor<'a, P: IsA<CellRenderer> + 'a, Q: Into<Option<&'a P>>>(&self, path: &TreePath, cell: Q, start_editing: bool);
+    fn set_cursor<P: IsA<CellRenderer>>(&self, path: &TreePath, cell: Option<&P>, start_editing: bool);
 
-    fn set_drag_dest_item<'a, P: Into<Option<&'a TreePath>>>(&self, path: P, pos: IconViewDropPosition);
+    fn set_drag_dest_item(&self, path: Option<&TreePath>, pos: IconViewDropPosition);
 
     fn set_item_orientation(&self, orientation: Orientation);
 
@@ -168,7 +168,7 @@ pub trait IconViewExt: 'static {
 
     fn set_markup_column(&self, column: i32);
 
-    fn set_model<'a, P: IsA<TreeModel> + 'a, Q: Into<Option<&'a P>>>(&self, model: Q);
+    fn set_model<P: IsA<TreeModel>>(&self, model: Option<&P>);
 
     fn set_pixbuf_column(&self, column: i32);
 
@@ -182,7 +182,7 @@ pub trait IconViewExt: 'static {
 
     fn set_text_column(&self, column: i32);
 
-    fn set_tooltip_cell<'a, P: IsA<CellRenderer> + 'a, Q: Into<Option<&'a P>>>(&self, tooltip: &Tooltip, path: &TreePath, cell: Q);
+    fn set_tooltip_cell<P: IsA<CellRenderer>>(&self, tooltip: &Tooltip, path: &TreePath, cell: Option<&P>);
 
     fn set_tooltip_column(&self, column: i32);
 
@@ -281,8 +281,7 @@ impl<O: IsA<IconView>> IconViewExt for O {
         }
     }
 
-    fn get_cell_rect<'a, P: IsA<CellRenderer> + 'a, Q: Into<Option<&'a P>>>(&self, path: &TreePath, cell: Q) -> Option<gdk::Rectangle> {
-        let cell = cell.into();
+    fn get_cell_rect<P: IsA<CellRenderer>>(&self, path: &TreePath, cell: Option<&P>) -> Option<gdk::Rectangle> {
         unsafe {
             let mut rect = gdk::Rectangle::uninitialized();
             let ret = from_glib(ffi::gtk_icon_view_get_cell_rect(self.as_ref().to_glib_none().0, mut_override(path.to_glib_none().0), cell.map(|p| p.as_ref()).to_glib_none().0, rect.to_glib_none_mut().0));
@@ -522,15 +521,13 @@ impl<O: IsA<IconView>> IconViewExt for O {
         }
     }
 
-    fn set_cursor<'a, P: IsA<CellRenderer> + 'a, Q: Into<Option<&'a P>>>(&self, path: &TreePath, cell: Q, start_editing: bool) {
-        let cell = cell.into();
+    fn set_cursor<P: IsA<CellRenderer>>(&self, path: &TreePath, cell: Option<&P>, start_editing: bool) {
         unsafe {
             ffi::gtk_icon_view_set_cursor(self.as_ref().to_glib_none().0, mut_override(path.to_glib_none().0), cell.map(|p| p.as_ref()).to_glib_none().0, start_editing.to_glib());
         }
     }
 
-    fn set_drag_dest_item<'a, P: Into<Option<&'a TreePath>>>(&self, path: P, pos: IconViewDropPosition) {
-        let path = path.into();
+    fn set_drag_dest_item(&self, path: Option<&TreePath>, pos: IconViewDropPosition) {
         unsafe {
             ffi::gtk_icon_view_set_drag_dest_item(self.as_ref().to_glib_none().0, mut_override(path.to_glib_none().0), pos.to_glib());
         }
@@ -566,8 +563,7 @@ impl<O: IsA<IconView>> IconViewExt for O {
         }
     }
 
-    fn set_model<'a, P: IsA<TreeModel> + 'a, Q: Into<Option<&'a P>>>(&self, model: Q) {
-        let model = model.into();
+    fn set_model<P: IsA<TreeModel>>(&self, model: Option<&P>) {
         unsafe {
             ffi::gtk_icon_view_set_model(self.as_ref().to_glib_none().0, model.map(|p| p.as_ref()).to_glib_none().0);
         }
@@ -609,8 +605,7 @@ impl<O: IsA<IconView>> IconViewExt for O {
         }
     }
 
-    fn set_tooltip_cell<'a, P: IsA<CellRenderer> + 'a, Q: Into<Option<&'a P>>>(&self, tooltip: &Tooltip, path: &TreePath, cell: Q) {
-        let cell = cell.into();
+    fn set_tooltip_cell<P: IsA<CellRenderer>>(&self, tooltip: &Tooltip, path: &TreePath, cell: Option<&P>) {
         unsafe {
             ffi::gtk_icon_view_set_tooltip_cell(self.as_ref().to_glib_none().0, tooltip.to_glib_none().0, mut_override(path.to_glib_none().0), cell.map(|p| p.as_ref()).to_glib_none().0);
         }
@@ -881,145 +876,145 @@ impl<O: IsA<IconView>> IconViewExt for O {
 
 unsafe extern "C" fn activate_cursor_item_trampoline<P, F: Fn(&P) -> bool + 'static>(this: *mut ffi::GtkIconView, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<IconView> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&IconView::from_glib_borrow(this).unsafe_cast()).to_glib()
 }
 
 unsafe extern "C" fn item_activated_trampoline<P, F: Fn(&P, &TreePath) + 'static>(this: *mut ffi::GtkIconView, path: *mut ffi::GtkTreePath, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&IconView::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(path))
 }
 
 unsafe extern "C" fn move_cursor_trampoline<P, F: Fn(&P, MovementStep, i32) -> bool + 'static>(this: *mut ffi::GtkIconView, step: ffi::GtkMovementStep, count: libc::c_int, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<IconView> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&IconView::from_glib_borrow(this).unsafe_cast(), from_glib(step), count).to_glib()
 }
 
 unsafe extern "C" fn select_all_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn select_cursor_item_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn selection_changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn toggle_cursor_item_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn unselect_all_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_activate_on_single_click_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_column_spacing_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_columns_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_item_orientation_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_item_padding_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_item_width_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_margin_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_markup_column_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_model_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_pixbuf_column_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_reorderable_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_row_spacing_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_selection_mode_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_spacing_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_text_column_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_tooltip_column_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconView, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<IconView> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&IconView::from_glib_borrow(this).unsafe_cast())
 }
 

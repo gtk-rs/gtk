@@ -73,13 +73,13 @@ pub trait IconThemeExt: 'static {
 
     fn list_contexts(&self) -> Vec<GString>;
 
-    fn list_icons<'a, P: Into<Option<&'a str>>>(&self, context: P) -> Vec<GString>;
+    fn list_icons(&self, context: Option<&str>) -> Vec<GString>;
 
     fn load_icon(&self, icon_name: &str, size: i32, flags: IconLookupFlags) -> Result<Option<gdk_pixbuf::Pixbuf>, Error>;
 
     fn load_icon_for_scale(&self, icon_name: &str, size: i32, scale: i32, flags: IconLookupFlags) -> Result<Option<gdk_pixbuf::Pixbuf>, Error>;
 
-    fn load_surface<'a, P: IsA<gdk::Window> + 'a, Q: Into<Option<&'a P>>>(&self, icon_name: &str, size: i32, scale: i32, for_window: Q, flags: IconLookupFlags) -> Result<Option<cairo::Surface>, Error>;
+    fn load_surface<P: IsA<gdk::Window>>(&self, icon_name: &str, size: i32, scale: i32, for_window: Option<&P>, flags: IconLookupFlags) -> Result<Option<cairo::Surface>, Error>;
 
     fn lookup_by_gicon<P: IsA<gio::Icon>>(&self, icon: &P, size: i32, flags: IconLookupFlags) -> Option<IconInfo>;
 
@@ -93,7 +93,7 @@ pub trait IconThemeExt: 'static {
 
     fn rescan_if_needed(&self) -> bool;
 
-    fn set_custom_theme<'a, P: Into<Option<&'a str>>>(&self, theme_name: P);
+    fn set_custom_theme(&self, theme_name: Option<&str>);
 
     fn set_screen(&self, screen: &gdk::Screen);
 
@@ -131,8 +131,7 @@ impl<O: IsA<IconTheme>> IconThemeExt for O {
         }
     }
 
-    fn list_icons<'a, P: Into<Option<&'a str>>>(&self, context: P) -> Vec<GString> {
-        let context = context.into();
+    fn list_icons(&self, context: Option<&str>) -> Vec<GString> {
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gtk_icon_theme_list_icons(self.as_ref().to_glib_none().0, context.to_glib_none().0))
         }
@@ -154,8 +153,7 @@ impl<O: IsA<IconTheme>> IconThemeExt for O {
         }
     }
 
-    fn load_surface<'a, P: IsA<gdk::Window> + 'a, Q: Into<Option<&'a P>>>(&self, icon_name: &str, size: i32, scale: i32, for_window: Q, flags: IconLookupFlags) -> Result<Option<cairo::Surface>, Error> {
-        let for_window = for_window.into();
+    fn load_surface<P: IsA<gdk::Window>>(&self, icon_name: &str, size: i32, scale: i32, for_window: Option<&P>, flags: IconLookupFlags) -> Result<Option<cairo::Surface>, Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let ret = ffi::gtk_icon_theme_load_surface(self.as_ref().to_glib_none().0, icon_name.to_glib_none().0, size, scale, for_window.map(|p| p.as_ref()).to_glib_none().0, flags.to_glib(), &mut error);
@@ -199,8 +197,7 @@ impl<O: IsA<IconTheme>> IconThemeExt for O {
         }
     }
 
-    fn set_custom_theme<'a, P: Into<Option<&'a str>>>(&self, theme_name: P) {
-        let theme_name = theme_name.into();
+    fn set_custom_theme(&self, theme_name: Option<&str>) {
         unsafe {
             ffi::gtk_icon_theme_set_custom_theme(self.as_ref().to_glib_none().0, theme_name.to_glib_none().0);
         }
@@ -223,7 +220,7 @@ impl<O: IsA<IconTheme>> IconThemeExt for O {
 
 unsafe extern "C" fn changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkIconTheme, f: glib_ffi::gpointer)
 where P: IsA<IconTheme> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&IconTheme::from_glib_borrow(this).unsafe_cast())
 }
 

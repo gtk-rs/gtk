@@ -91,7 +91,7 @@ impl<O: IsA<CellAreaBox>> CellAreaBoxExt for O {
 
 unsafe extern "C" fn notify_spacing_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellAreaBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellAreaBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellAreaBox::from_glib_borrow(this).unsafe_cast())
 }
 

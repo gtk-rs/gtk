@@ -8,7 +8,6 @@ use Container;
 use Stack;
 use Widget;
 use ffi;
-use glib;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Cast;
@@ -58,7 +57,7 @@ pub trait StackSidebarExt: 'static {
 
     fn get_property_stack(&self) -> Option<Stack>;
 
-    fn set_property_stack<P: IsA<Stack> + glib::value::SetValueOptional>(&self, stack: Option<&P>);
+    fn set_property_stack(&self, stack: Option<&Stack>);
 
     fn connect_property_stack_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
@@ -86,7 +85,7 @@ impl<O: IsA<StackSidebar>> StackSidebarExt for O {
         }
     }
 
-    fn set_property_stack<P: IsA<Stack> + glib::value::SetValueOptional>(&self, stack: Option<&P>) {
+    fn set_property_stack(&self, stack: Option<&Stack>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"stack\0".as_ptr() as *const _, Value::from(stack).to_glib_none().0);
         }
@@ -103,7 +102,7 @@ impl<O: IsA<StackSidebar>> StackSidebarExt for O {
 
 unsafe extern "C" fn notify_stack_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkStackSidebar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<StackSidebar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&StackSidebar::from_glib_borrow(this).unsafe_cast())
 }
 

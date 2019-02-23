@@ -43,9 +43,8 @@ impl CssProvider {
         }
     }
 
-    pub fn get_named<'a, P: Into<Option<&'a str>>>(name: &str, variant: P) -> Option<CssProvider> {
+    pub fn get_named(name: &str, variant: Option<&str>) -> Option<CssProvider> {
         assert_initialized_main_thread!();
-        let variant = variant.into();
         unsafe {
             from_glib_none(ffi::gtk_css_provider_get_named(name.to_glib_none().0, variant.to_glib_none().0))
         }
@@ -125,7 +124,7 @@ impl<O: IsA<CssProvider>> CssProviderExt for O {
 
 unsafe extern "C" fn parsing_error_trampoline<P, F: Fn(&P, &CssSection, &Error) + 'static>(this: *mut ffi::GtkCssProvider, section: *mut ffi::GtkCssSection, error: *mut glib_ffi::GError, f: glib_ffi::gpointer)
 where P: IsA<CssProvider> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CssProvider::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(section), &from_glib_borrow(error))
 }
 

@@ -55,7 +55,7 @@ pub trait PopoverMenuExt: 'static {
 
     fn get_property_visible_submenu(&self) -> Option<GString>;
 
-    fn set_property_visible_submenu<'a, P: Into<Option<&'a str>>>(&self, visible_submenu: P);
+    fn set_property_visible_submenu(&self, visible_submenu: Option<&str>);
 
     fn get_child_position<T: IsA<Widget>>(&self, item: &T) -> i32;
 
@@ -63,7 +63,7 @@ pub trait PopoverMenuExt: 'static {
 
     fn get_child_submenu<T: IsA<Widget>>(&self, item: &T) -> Option<GString>;
 
-    fn set_child_submenu<'a, P: Into<Option<&'a str>>, T: IsA<Widget>>(&self, item: &T, submenu: P);
+    fn set_child_submenu<T: IsA<Widget>>(&self, item: &T, submenu: Option<&str>);
 
     fn connect_property_visible_submenu_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
@@ -84,8 +84,7 @@ impl<O: IsA<PopoverMenu>> PopoverMenuExt for O {
         }
     }
 
-    fn set_property_visible_submenu<'a, P: Into<Option<&'a str>>>(&self, visible_submenu: P) {
-        let visible_submenu = visible_submenu.into();
+    fn set_property_visible_submenu(&self, visible_submenu: Option<&str>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"visible-submenu\0".as_ptr() as *const _, Value::from(visible_submenu).to_glib_none().0);
         }
@@ -113,8 +112,7 @@ impl<O: IsA<PopoverMenu>> PopoverMenuExt for O {
         }
     }
 
-    fn set_child_submenu<'a, P: Into<Option<&'a str>>, T: IsA<Widget>>(&self, item: &T, submenu: P) {
-        let submenu = submenu.into();
+    fn set_child_submenu<T: IsA<Widget>>(&self, item: &T, submenu: Option<&str>) {
         unsafe {
             ffi::gtk_container_child_set_property(self.to_glib_none().0 as *mut ffi::GtkContainer, item.to_glib_none().0 as *mut _, b"submenu\0".as_ptr() as *const _, Value::from(submenu).to_glib_none().0);
         }
@@ -131,7 +129,7 @@ impl<O: IsA<PopoverMenu>> PopoverMenuExt for O {
 
 unsafe extern "C" fn notify_visible_submenu_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPopoverMenu, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<PopoverMenu> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&PopoverMenu::from_glib_borrow(this).unsafe_cast())
 }
 

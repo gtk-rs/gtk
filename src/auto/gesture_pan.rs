@@ -82,13 +82,13 @@ impl<O: IsA<GesturePan>> GesturePanExt for O {
 
 unsafe extern "C" fn pan_trampoline<P, F: Fn(&P, PanDirection, f64) + 'static>(this: *mut ffi::GtkGesturePan, direction: ffi::GtkPanDirection, offset: libc::c_double, f: glib_ffi::gpointer)
 where P: IsA<GesturePan> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&GesturePan::from_glib_borrow(this).unsafe_cast(), from_glib(direction), offset)
 }
 
 unsafe extern "C" fn notify_orientation_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGesturePan, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<GesturePan> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&GesturePan::from_glib_borrow(this).unsafe_cast())
 }
 

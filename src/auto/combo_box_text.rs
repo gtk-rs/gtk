@@ -49,17 +49,17 @@ impl Default for ComboBoxText {
 pub const NONE_COMBO_BOX_TEXT: Option<&ComboBoxText> = None;
 
 pub trait ComboBoxTextExt: 'static {
-    fn append<'a, P: Into<Option<&'a str>>>(&self, id: P, text: &str);
+    fn append(&self, id: Option<&str>, text: &str);
 
     fn append_text(&self, text: &str);
 
     fn get_active_text(&self) -> Option<GString>;
 
-    fn insert<'a, P: Into<Option<&'a str>>>(&self, position: i32, id: P, text: &str);
+    fn insert(&self, position: i32, id: Option<&str>, text: &str);
 
     fn insert_text(&self, position: i32, text: &str);
 
-    fn prepend<'a, P: Into<Option<&'a str>>>(&self, id: P, text: &str);
+    fn prepend(&self, id: Option<&str>, text: &str);
 
     fn prepend_text(&self, text: &str);
 
@@ -69,8 +69,7 @@ pub trait ComboBoxTextExt: 'static {
 }
 
 impl<O: IsA<ComboBoxText>> ComboBoxTextExt for O {
-    fn append<'a, P: Into<Option<&'a str>>>(&self, id: P, text: &str) {
-        let id = id.into();
+    fn append(&self, id: Option<&str>, text: &str) {
         unsafe {
             ffi::gtk_combo_box_text_append(self.as_ref().to_glib_none().0, id.to_glib_none().0, text.to_glib_none().0);
         }
@@ -88,8 +87,7 @@ impl<O: IsA<ComboBoxText>> ComboBoxTextExt for O {
         }
     }
 
-    fn insert<'a, P: Into<Option<&'a str>>>(&self, position: i32, id: P, text: &str) {
-        let id = id.into();
+    fn insert(&self, position: i32, id: Option<&str>, text: &str) {
         unsafe {
             ffi::gtk_combo_box_text_insert(self.as_ref().to_glib_none().0, position, id.to_glib_none().0, text.to_glib_none().0);
         }
@@ -101,8 +99,7 @@ impl<O: IsA<ComboBoxText>> ComboBoxTextExt for O {
         }
     }
 
-    fn prepend<'a, P: Into<Option<&'a str>>>(&self, id: P, text: &str) {
-        let id = id.into();
+    fn prepend(&self, id: Option<&str>, text: &str) {
         unsafe {
             ffi::gtk_combo_box_text_prepend(self.as_ref().to_glib_none().0, id.to_glib_none().0, text.to_glib_none().0);
         }

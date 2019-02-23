@@ -22,11 +22,11 @@ glib_wrapper! {
 }
 
 impl RecentChooserDialog {
-    //pub fn new<'a, 'b, 'c, P: Into<Option<&'a str>>, Q: IsA<Window> + 'b, R: Into<Option<&'b Q>>, S: Into<Option<&'c str>>>(title: P, parent: R, first_button_text: S, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> RecentChooserDialog {
+    //pub fn new<P: IsA<Window>>(title: Option<&str>, parent: Option<&P>, first_button_text: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> RecentChooserDialog {
     //    unsafe { TODO: call ffi::gtk_recent_chooser_dialog_new() }
     //}
 
-    //pub fn new_for_manager<'a, 'b, 'c, P: Into<Option<&'a str>>, Q: IsA<Window> + 'b, R: Into<Option<&'b Q>>, S: IsA<RecentManager>, T: Into<Option<&'c str>>>(title: P, parent: R, manager: &S, first_button_text: T, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> RecentChooserDialog {
+    //pub fn new_for_manager<P: IsA<Window>, Q: IsA<RecentManager>>(title: Option<&str>, parent: Option<&P>, manager: &Q, first_button_text: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> RecentChooserDialog {
     //    unsafe { TODO: call ffi::gtk_recent_chooser_dialog_new_for_manager() }
     //}
 }

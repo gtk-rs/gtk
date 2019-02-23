@@ -41,7 +41,7 @@ impl Dialog {
         }
     }
 
-    //pub fn new_with_buttons<'a, 'b, 'c, P: Into<Option<&'a str>>, Q: IsA<Window> + 'b, R: Into<Option<&'b Q>>, S: Into<Option<&'c str>>>(title: P, parent: R, flags: DialogFlags, first_button_text: S, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> Dialog {
+    //pub fn new_with_buttons<P: IsA<Window>>(title: Option<&str>, parent: Option<&P>, flags: DialogFlags, first_button_text: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> Dialog {
     //    unsafe { TODO: call ffi::gtk_dialog_new_with_buttons() }
     //}
 }
@@ -182,13 +182,13 @@ impl<O: IsA<Dialog>> DialogExt for O {
 
 unsafe extern "C" fn close_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkDialog, f: glib_ffi::gpointer)
 where P: IsA<Dialog> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Dialog::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn response_trampoline<P, F: Fn(&P, ResponseType) + 'static>(this: *mut ffi::GtkDialog, response_id: ffi::GtkResponseType, f: glib_ffi::gpointer)
 where P: IsA<Dialog> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Dialog::from_glib_borrow(this).unsafe_cast(), from_glib(response_id))
 }
 

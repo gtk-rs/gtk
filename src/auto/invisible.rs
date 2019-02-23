@@ -72,7 +72,7 @@ impl<O: IsA<Invisible>> InvisibleExt for O {
 
 unsafe extern "C" fn notify_screen_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkInvisible, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Invisible> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Invisible::from_glib_borrow(this).unsafe_cast())
 }
 

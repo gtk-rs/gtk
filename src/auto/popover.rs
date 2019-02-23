@@ -31,17 +31,15 @@ glib_wrapper! {
 }
 
 impl Popover {
-    pub fn new<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(relative_to: Q) -> Popover {
+    pub fn new<P: IsA<Widget>>(relative_to: Option<&P>) -> Popover {
         assert_initialized_main_thread!();
-        let relative_to = relative_to.into();
         unsafe {
             Widget::from_glib_none(ffi::gtk_popover_new(relative_to.map(|p| p.as_ref()).to_glib_none().0)).unsafe_cast()
         }
     }
 
-    pub fn new_from_model<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>, R: IsA<gio::MenuModel>>(relative_to: Q, model: &R) -> Popover {
+    pub fn new_from_model<P: IsA<Widget>, Q: IsA<gio::MenuModel>>(relative_to: Option<&P>, model: &Q) -> Popover {
         assert_initialized_main_thread!();
-        let relative_to = relative_to.into();
         unsafe {
             Widget::from_glib_none(ffi::gtk_popover_new_from_model(relative_to.map(|p| p.as_ref()).to_glib_none().0, model.as_ref().to_glib_none().0)).unsafe_cast()
         }
@@ -51,7 +49,7 @@ impl Popover {
 pub const NONE_POPOVER: Option<&Popover> = None;
 
 pub trait PopoverExt: 'static {
-    fn bind_model<'a, 'b, P: IsA<gio::MenuModel> + 'a, Q: Into<Option<&'a P>>, R: Into<Option<&'b str>>>(&self, model: Q, action_namespace: R);
+    fn bind_model<P: IsA<gio::MenuModel>>(&self, model: Option<&P>, action_namespace: Option<&str>);
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn get_constrain_to(&self) -> PopoverConstraint;
@@ -81,7 +79,7 @@ pub trait PopoverExt: 'static {
     fn set_constrain_to(&self, constraint: PopoverConstraint);
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn set_default_widget<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, widget: Q);
+    fn set_default_widget<P: IsA<Widget>>(&self, widget: Option<&P>);
 
     fn set_modal(&self, modal: bool);
 
@@ -89,7 +87,7 @@ pub trait PopoverExt: 'static {
 
     fn set_position(&self, position: PositionType);
 
-    fn set_relative_to<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, relative_to: Q);
+    fn set_relative_to<P: IsA<Widget>>(&self, relative_to: Option<&P>);
 
     #[cfg_attr(feature = "v3_22", deprecated)]
     #[cfg(any(feature = "v3_16", feature = "dox"))]
@@ -114,9 +112,7 @@ pub trait PopoverExt: 'static {
 }
 
 impl<O: IsA<Popover>> PopoverExt for O {
-    fn bind_model<'a, 'b, P: IsA<gio::MenuModel> + 'a, Q: Into<Option<&'a P>>, R: Into<Option<&'b str>>>(&self, model: Q, action_namespace: R) {
-        let model = model.into();
-        let action_namespace = action_namespace.into();
+    fn bind_model<P: IsA<gio::MenuModel>>(&self, model: Option<&P>, action_namespace: Option<&str>) {
         unsafe {
             ffi::gtk_popover_bind_model(self.as_ref().to_glib_none().0, model.map(|p| p.as_ref()).to_glib_none().0, action_namespace.to_glib_none().0);
         }
@@ -191,8 +187,7 @@ impl<O: IsA<Popover>> PopoverExt for O {
     }
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn set_default_widget<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, widget: Q) {
-        let widget = widget.into();
+    fn set_default_widget<P: IsA<Widget>>(&self, widget: Option<&P>) {
         unsafe {
             ffi::gtk_popover_set_default_widget(self.as_ref().to_glib_none().0, widget.map(|p| p.as_ref()).to_glib_none().0);
         }
@@ -216,8 +211,7 @@ impl<O: IsA<Popover>> PopoverExt for O {
         }
     }
 
-    fn set_relative_to<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, relative_to: Q) {
-        let relative_to = relative_to.into();
+    fn set_relative_to<P: IsA<Widget>>(&self, relative_to: Option<&P>) {
         unsafe {
             ffi::gtk_popover_set_relative_to(self.as_ref().to_glib_none().0, relative_to.map(|p| p.as_ref()).to_glib_none().0);
         }
@@ -291,45 +285,45 @@ impl<O: IsA<Popover>> PopoverExt for O {
 
 unsafe extern "C" fn closed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPopover, f: glib_ffi::gpointer)
 where P: IsA<Popover> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Popover::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_20", feature = "dox"))]
 unsafe extern "C" fn notify_constrain_to_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPopover, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Popover> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Popover::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_modal_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPopover, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Popover> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Popover::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_pointing_to_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPopover, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Popover> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Popover::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_position_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPopover, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Popover> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Popover::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_relative_to_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPopover, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Popover> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Popover::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 unsafe extern "C" fn notify_transitions_enabled_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkPopover, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Popover> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Popover::from_glib_borrow(this).unsafe_cast())
 }
 

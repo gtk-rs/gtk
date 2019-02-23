@@ -40,11 +40,11 @@ pub trait GestureExt: 'static {
 
     fn get_group(&self) -> Vec<Gesture>;
 
-    fn get_last_event<'a, P: Into<Option<&'a gdk::EventSequence>>>(&self, sequence: P) -> Option<gdk::Event>;
+    fn get_last_event(&self, sequence: Option<&gdk::EventSequence>) -> Option<gdk::Event>;
 
     fn get_last_updated_sequence(&self) -> Option<gdk::EventSequence>;
 
-    fn get_point<'a, P: Into<Option<&'a gdk::EventSequence>>>(&self, sequence: P) -> Option<(f64, f64)>;
+    fn get_point(&self, sequence: Option<&gdk::EventSequence>) -> Option<(f64, f64)>;
 
     fn get_sequence_state(&self, sequence: &gdk::EventSequence) -> EventSequenceState;
 
@@ -54,7 +54,7 @@ pub trait GestureExt: 'static {
 
     fn group<P: IsA<Gesture>>(&self, gesture: &P);
 
-    fn handles_sequence<'a, P: Into<Option<&'a gdk::EventSequence>>>(&self, sequence: P) -> bool;
+    fn handles_sequence(&self, sequence: Option<&gdk::EventSequence>) -> bool;
 
     fn is_active(&self) -> bool;
 
@@ -66,7 +66,7 @@ pub trait GestureExt: 'static {
 
     fn set_state(&self, state: EventSequenceState) -> bool;
 
-    fn set_window<'a, P: IsA<gdk::Window> + 'a, Q: Into<Option<&'a P>>>(&self, window: Q);
+    fn set_window<P: IsA<gdk::Window>>(&self, window: Option<&P>);
 
     fn ungroup(&self);
 
@@ -115,8 +115,7 @@ impl<O: IsA<Gesture>> GestureExt for O {
         }
     }
 
-    fn get_last_event<'a, P: Into<Option<&'a gdk::EventSequence>>>(&self, sequence: P) -> Option<gdk::Event> {
-        let sequence = sequence.into();
+    fn get_last_event(&self, sequence: Option<&gdk::EventSequence>) -> Option<gdk::Event> {
         unsafe {
             from_glib_none(ffi::gtk_gesture_get_last_event(self.as_ref().to_glib_none().0, mut_override(sequence.to_glib_none().0)))
         }
@@ -128,8 +127,7 @@ impl<O: IsA<Gesture>> GestureExt for O {
         }
     }
 
-    fn get_point<'a, P: Into<Option<&'a gdk::EventSequence>>>(&self, sequence: P) -> Option<(f64, f64)> {
-        let sequence = sequence.into();
+    fn get_point(&self, sequence: Option<&gdk::EventSequence>) -> Option<(f64, f64)> {
         unsafe {
             let mut x = mem::uninitialized();
             let mut y = mem::uninitialized();
@@ -162,8 +160,7 @@ impl<O: IsA<Gesture>> GestureExt for O {
         }
     }
 
-    fn handles_sequence<'a, P: Into<Option<&'a gdk::EventSequence>>>(&self, sequence: P) -> bool {
-        let sequence = sequence.into();
+    fn handles_sequence(&self, sequence: Option<&gdk::EventSequence>) -> bool {
         unsafe {
             from_glib(ffi::gtk_gesture_handles_sequence(self.as_ref().to_glib_none().0, mut_override(sequence.to_glib_none().0)))
         }
@@ -199,8 +196,7 @@ impl<O: IsA<Gesture>> GestureExt for O {
         }
     }
 
-    fn set_window<'a, P: IsA<gdk::Window> + 'a, Q: Into<Option<&'a P>>>(&self, window: Q) {
-        let window = window.into();
+    fn set_window<P: IsA<gdk::Window>>(&self, window: Option<&P>) {
         unsafe {
             ffi::gtk_gesture_set_window(self.as_ref().to_glib_none().0, window.map(|p| p.as_ref()).to_glib_none().0);
         }
@@ -271,37 +267,37 @@ impl<O: IsA<Gesture>> GestureExt for O {
 
 unsafe extern "C" fn begin_trampoline<P, F: Fn(&P, &gdk::EventSequence) + 'static>(this: *mut ffi::GtkGesture, sequence: *mut gdk_ffi::GdkEventSequence, f: glib_ffi::gpointer)
 where P: IsA<Gesture> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Gesture::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(sequence))
 }
 
 unsafe extern "C" fn cancel_trampoline<P, F: Fn(&P, &gdk::EventSequence) + 'static>(this: *mut ffi::GtkGesture, sequence: *mut gdk_ffi::GdkEventSequence, f: glib_ffi::gpointer)
 where P: IsA<Gesture> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Gesture::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(sequence))
 }
 
 unsafe extern "C" fn end_trampoline<P, F: Fn(&P, &gdk::EventSequence) + 'static>(this: *mut ffi::GtkGesture, sequence: *mut gdk_ffi::GdkEventSequence, f: glib_ffi::gpointer)
 where P: IsA<Gesture> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Gesture::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(sequence))
 }
 
 unsafe extern "C" fn sequence_state_changed_trampoline<P, F: Fn(&P, &gdk::EventSequence, EventSequenceState) + 'static>(this: *mut ffi::GtkGesture, sequence: *mut gdk_ffi::GdkEventSequence, state: ffi::GtkEventSequenceState, f: glib_ffi::gpointer)
 where P: IsA<Gesture> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Gesture::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(sequence), from_glib(state))
 }
 
 unsafe extern "C" fn update_trampoline<P, F: Fn(&P, &gdk::EventSequence) + 'static>(this: *mut ffi::GtkGesture, sequence: *mut gdk_ffi::GdkEventSequence, f: glib_ffi::gpointer)
 where P: IsA<Gesture> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Gesture::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(sequence))
 }
 
 unsafe extern "C" fn notify_window_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGesture, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Gesture> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Gesture::from_glib_borrow(this).unsafe_cast())
 }
 

@@ -96,19 +96,19 @@ impl<O: IsA<GestureDrag>> GestureDragExt for O {
 
 unsafe extern "C" fn drag_begin_trampoline<P, F: Fn(&P, f64, f64) + 'static>(this: *mut ffi::GtkGestureDrag, start_x: libc::c_double, start_y: libc::c_double, f: glib_ffi::gpointer)
 where P: IsA<GestureDrag> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&GestureDrag::from_glib_borrow(this).unsafe_cast(), start_x, start_y)
 }
 
 unsafe extern "C" fn drag_end_trampoline<P, F: Fn(&P, f64, f64) + 'static>(this: *mut ffi::GtkGestureDrag, offset_x: libc::c_double, offset_y: libc::c_double, f: glib_ffi::gpointer)
 where P: IsA<GestureDrag> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&GestureDrag::from_glib_borrow(this).unsafe_cast(), offset_x, offset_y)
 }
 
 unsafe extern "C" fn drag_update_trampoline<P, F: Fn(&P, f64, f64) + 'static>(this: *mut ffi::GtkGestureDrag, offset_x: libc::c_double, offset_y: libc::c_double, f: glib_ffi::gpointer)
 where P: IsA<GestureDrag> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&GestureDrag::from_glib_borrow(this).unsafe_cast(), offset_x, offset_y)
 }
 

@@ -54,9 +54,8 @@ impl PrintSettings {
         }
     }
 
-    pub fn new_from_key_file<'a, P: Into<Option<&'a str>>>(key_file: &glib::KeyFile, group_name: P) -> Result<PrintSettings, Error> {
+    pub fn new_from_key_file(key_file: &glib::KeyFile, group_name: Option<&str>) -> Result<PrintSettings, Error> {
         assert_initialized_main_thread!();
-        let group_name = group_name.into();
         unsafe {
             let mut error = ptr::null_mut();
             let ret = ffi::gtk_print_settings_new_from_key_file(key_file.to_glib_none().0, group_name.to_glib_none().0, &mut error);
@@ -299,8 +298,7 @@ impl PrintSettings {
         }
     }
 
-    pub fn load_key_file<'a, P: Into<Option<&'a str>>>(&self, key_file: &glib::KeyFile, group_name: P) -> Result<(), Error> {
-        let group_name = group_name.into();
+    pub fn load_key_file(&self, key_file: &glib::KeyFile, group_name: Option<&str>) -> Result<(), Error> {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = ffi::gtk_print_settings_load_key_file(self.to_glib_none().0, key_file.to_glib_none().0, group_name.to_glib_none().0, &mut error);
@@ -308,8 +306,7 @@ impl PrintSettings {
         }
     }
 
-    pub fn set<'a, P: Into<Option<&'a str>>>(&self, key: &str, value: P) {
-        let value = value.into();
+    pub fn set(&self, key: &str, value: Option<&str>) {
         unsafe {
             ffi::gtk_print_settings_set(self.to_glib_none().0, key.to_glib_none().0, value.to_glib_none().0);
         }
@@ -498,8 +495,7 @@ impl PrintSettings {
         }
     }
 
-    pub fn to_key_file<'a, P: Into<Option<&'a str>>>(&self, key_file: &glib::KeyFile, group_name: P) {
-        let group_name = group_name.into();
+    pub fn to_key_file(&self, key_file: &glib::KeyFile, group_name: Option<&str>) {
         unsafe {
             ffi::gtk_print_settings_to_key_file(self.to_glib_none().0, key_file.to_glib_none().0, group_name.to_glib_none().0);
         }

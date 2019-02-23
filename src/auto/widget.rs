@@ -102,7 +102,7 @@ pub trait WidgetExt: 'static {
 
     fn create_pango_context(&self) -> Option<pango::Context>;
 
-    fn create_pango_layout<'a, P: Into<Option<&'a str>>>(&self, text: P) -> Option<pango::Layout>;
+    fn create_pango_layout(&self, text: Option<&str>) -> Option<pango::Layout>;
 
     fn destroy(&self);
 
@@ -110,7 +110,7 @@ pub trait WidgetExt: 'static {
 
     fn device_is_shadowed(&self, device: &gdk::Device) -> bool;
 
-    fn drag_begin_with_coordinates<'a, P: Into<Option<&'a gdk::Event>>>(&self, targets: &TargetList, actions: gdk::DragAction, button: i32, event: P, x: i32, y: i32) -> Option<gdk::DragContext>;
+    fn drag_begin_with_coordinates(&self, targets: &TargetList, actions: gdk::DragAction, button: i32, event: Option<&gdk::Event>, x: i32, y: i32) -> Option<gdk::DragContext>;
 
     fn drag_check_threshold(&self, start_x: i32, start_y: i32, current_x: i32, current_y: i32) -> bool;
 
@@ -120,7 +120,7 @@ pub trait WidgetExt: 'static {
 
     fn drag_dest_add_uri_targets(&self);
 
-    fn drag_dest_find_target<'a, P: Into<Option<&'a TargetList>>>(&self, context: &gdk::DragContext, target_list: P) -> Option<gdk::Atom>;
+    fn drag_dest_find_target(&self, context: &gdk::DragContext, target_list: Option<&TargetList>) -> Option<gdk::Atom>;
 
     fn drag_dest_get_target_list(&self) -> Option<TargetList>;
 
@@ -129,7 +129,7 @@ pub trait WidgetExt: 'static {
     #[cfg_attr(feature = "v3_22", deprecated)]
     fn drag_dest_set_proxy<P: IsA<gdk::Window>>(&self, proxy_window: &P, protocol: gdk::DragProtocol, use_coordinates: bool);
 
-    fn drag_dest_set_target_list<'a, P: Into<Option<&'a TargetList>>>(&self, target_list: P);
+    fn drag_dest_set_target_list(&self, target_list: Option<&TargetList>);
 
     fn drag_dest_set_track_motion(&self, track_motion: bool);
 
@@ -153,7 +153,7 @@ pub trait WidgetExt: 'static {
 
     fn drag_source_set_icon_pixbuf(&self, pixbuf: &gdk_pixbuf::Pixbuf);
 
-    fn drag_source_set_target_list<'a, P: Into<Option<&'a TargetList>>>(&self, target_list: P);
+    fn drag_source_set_target_list(&self, target_list: Option<&TargetList>);
 
     fn drag_source_unset(&self);
 
@@ -338,9 +338,9 @@ pub trait WidgetExt: 'static {
 
     fn init_template(&self);
 
-    fn input_shape_combine_region<'a, P: Into<Option<&'a cairo::Region>>>(&self, region: P);
+    fn input_shape_combine_region(&self, region: Option<&cairo::Region>);
 
-    fn insert_action_group<'a, P: IsA<gio::ActionGroup> + 'a, Q: Into<Option<&'a P>>>(&self, name: &str, group: Q);
+    fn insert_action_group<P: IsA<gio::ActionGroup>>(&self, name: &str, group: Option<&P>);
 
     fn is_ancestor<P: IsA<Widget>>(&self, ancestor: &P) -> bool;
 
@@ -371,19 +371,19 @@ pub trait WidgetExt: 'static {
     fn mnemonic_activate(&self, group_cycling: bool) -> bool;
 
     #[cfg_attr(feature = "v3_16", deprecated)]
-    fn override_background_color<'a, P: Into<Option<&'a gdk::RGBA>>>(&self, state: StateFlags, color: P);
+    fn override_background_color(&self, state: StateFlags, color: Option<&gdk::RGBA>);
 
     #[cfg_attr(feature = "v3_16", deprecated)]
-    fn override_color<'a, P: Into<Option<&'a gdk::RGBA>>>(&self, state: StateFlags, color: P);
+    fn override_color(&self, state: StateFlags, color: Option<&gdk::RGBA>);
 
     #[cfg_attr(feature = "v3_16", deprecated)]
-    fn override_cursor<'a, 'b, P: Into<Option<&'a gdk::RGBA>>, Q: Into<Option<&'b gdk::RGBA>>>(&self, cursor: P, secondary_cursor: Q);
+    fn override_cursor(&self, cursor: Option<&gdk::RGBA>, secondary_cursor: Option<&gdk::RGBA>);
 
     #[cfg_attr(feature = "v3_16", deprecated)]
-    fn override_font<'a, P: Into<Option<&'a pango::FontDescription>>>(&self, font_desc: P);
+    fn override_font(&self, font_desc: Option<&pango::FontDescription>);
 
     #[cfg_attr(feature = "v3_16", deprecated)]
-    fn override_symbolic_color<'a, P: Into<Option<&'a gdk::RGBA>>>(&self, name: &str, color: P);
+    fn override_symbolic_color(&self, name: &str, color: Option<&gdk::RGBA>);
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
     fn queue_allocate(&self);
@@ -417,7 +417,7 @@ pub trait WidgetExt: 'static {
 
     fn send_focus_change(&self, event: &gdk::Event) -> bool;
 
-    fn set_accel_path<'a, 'b, P: Into<Option<&'a str>>, Q: IsA<AccelGroup> + 'b, R: Into<Option<&'b Q>>>(&self, accel_path: P, accel_group: R);
+    fn set_accel_path<P: IsA<AccelGroup>>(&self, accel_path: Option<&str>, accel_group: Option<&P>);
 
     fn set_allocation(&self, allocation: &Allocation);
 
@@ -441,10 +441,10 @@ pub trait WidgetExt: 'static {
     fn set_focus_on_click(&self, focus_on_click: bool);
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn set_font_map<'a, P: IsA<pango::FontMap> + 'a, Q: Into<Option<&'a P>>>(&self, font_map: Q);
+    fn set_font_map<P: IsA<pango::FontMap>>(&self, font_map: Option<&P>);
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn set_font_options<'a, P: Into<Option<&'a cairo::FontOptions>>>(&self, options: P);
+    fn set_font_options(&self, options: Option<&cairo::FontOptions>);
 
     fn set_halign(&self, align: Align);
 
@@ -490,11 +490,11 @@ pub trait WidgetExt: 'static {
 
     fn set_support_multidevice(&self, support_multidevice: bool);
 
-    fn set_tooltip_markup<'a, P: Into<Option<&'a str>>>(&self, markup: P);
+    fn set_tooltip_markup(&self, markup: Option<&str>);
 
-    fn set_tooltip_text<'a, P: Into<Option<&'a str>>>(&self, text: P);
+    fn set_tooltip_text(&self, text: Option<&str>);
 
-    fn set_tooltip_window<'a, P: IsA<Window> + 'a, Q: Into<Option<&'a P>>>(&self, custom_window: Q);
+    fn set_tooltip_window<P: IsA<Window>>(&self, custom_window: Option<&P>);
 
     fn set_valign(&self, align: Align);
 
@@ -504,11 +504,11 @@ pub trait WidgetExt: 'static {
 
     fn set_visible(&self, visible: bool);
 
-    fn set_visual<'a, P: Into<Option<&'a gdk::Visual>>>(&self, visual: P);
+    fn set_visual(&self, visual: Option<&gdk::Visual>);
 
     fn set_window<P: IsA<gdk::Window>>(&self, window: &P);
 
-    fn shape_combine_region<'a, P: Into<Option<&'a cairo::Region>>>(&self, region: P);
+    fn shape_combine_region(&self, region: Option<&cairo::Region>);
 
     fn show(&self);
 
@@ -857,8 +857,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn create_pango_layout<'a, P: Into<Option<&'a str>>>(&self, text: P) -> Option<pango::Layout> {
-        let text = text.into();
+    fn create_pango_layout(&self, text: Option<&str>) -> Option<pango::Layout> {
         unsafe {
             from_glib_full(ffi::gtk_widget_create_pango_layout(self.as_ref().to_glib_none().0, text.to_glib_none().0))
         }
@@ -880,8 +879,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn drag_begin_with_coordinates<'a, P: Into<Option<&'a gdk::Event>>>(&self, targets: &TargetList, actions: gdk::DragAction, button: i32, event: P, x: i32, y: i32) -> Option<gdk::DragContext> {
-        let event = event.into();
+    fn drag_begin_with_coordinates(&self, targets: &TargetList, actions: gdk::DragAction, button: i32, event: Option<&gdk::Event>, x: i32, y: i32) -> Option<gdk::DragContext> {
         unsafe {
             from_glib_none(ffi::gtk_drag_begin_with_coordinates(self.as_ref().to_glib_none().0, targets.to_glib_none().0, actions.to_glib(), button, mut_override(event.to_glib_none().0), x, y))
         }
@@ -911,8 +909,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn drag_dest_find_target<'a, P: Into<Option<&'a TargetList>>>(&self, context: &gdk::DragContext, target_list: P) -> Option<gdk::Atom> {
-        let target_list = target_list.into();
+    fn drag_dest_find_target(&self, context: &gdk::DragContext, target_list: Option<&TargetList>) -> Option<gdk::Atom> {
         unsafe {
             from_glib_none(ffi::gtk_drag_dest_find_target(self.as_ref().to_glib_none().0, context.to_glib_none().0, target_list.to_glib_none().0))
         }
@@ -936,8 +933,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn drag_dest_set_target_list<'a, P: Into<Option<&'a TargetList>>>(&self, target_list: P) {
-        let target_list = target_list.into();
+    fn drag_dest_set_target_list(&self, target_list: Option<&TargetList>) {
         unsafe {
             ffi::gtk_drag_dest_set_target_list(self.as_ref().to_glib_none().0, target_list.to_glib_none().0);
         }
@@ -1009,8 +1005,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn drag_source_set_target_list<'a, P: Into<Option<&'a TargetList>>>(&self, target_list: P) {
-        let target_list = target_list.into();
+    fn drag_source_set_target_list(&self, target_list: Option<&TargetList>) {
         unsafe {
             ffi::gtk_drag_source_set_target_list(self.as_ref().to_glib_none().0, target_list.to_glib_none().0);
         }
@@ -1585,15 +1580,13 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn input_shape_combine_region<'a, P: Into<Option<&'a cairo::Region>>>(&self, region: P) {
-        let region = region.into();
+    fn input_shape_combine_region(&self, region: Option<&cairo::Region>) {
         unsafe {
             ffi::gtk_widget_input_shape_combine_region(self.as_ref().to_glib_none().0, mut_override(region.to_glib_none().0));
         }
     }
 
-    fn insert_action_group<'a, P: IsA<gio::ActionGroup> + 'a, Q: Into<Option<&'a P>>>(&self, name: &str, group: Q) {
-        let group = group.into();
+    fn insert_action_group<P: IsA<gio::ActionGroup>>(&self, name: &str, group: Option<&P>) {
         unsafe {
             ffi::gtk_widget_insert_action_group(self.as_ref().to_glib_none().0, name.to_glib_none().0, group.map(|p| p.as_ref()).to_glib_none().0);
         }
@@ -1678,37 +1671,31 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn override_background_color<'a, P: Into<Option<&'a gdk::RGBA>>>(&self, state: StateFlags, color: P) {
-        let color = color.into();
+    fn override_background_color(&self, state: StateFlags, color: Option<&gdk::RGBA>) {
         unsafe {
             ffi::gtk_widget_override_background_color(self.as_ref().to_glib_none().0, state.to_glib(), color.to_glib_none().0);
         }
     }
 
-    fn override_color<'a, P: Into<Option<&'a gdk::RGBA>>>(&self, state: StateFlags, color: P) {
-        let color = color.into();
+    fn override_color(&self, state: StateFlags, color: Option<&gdk::RGBA>) {
         unsafe {
             ffi::gtk_widget_override_color(self.as_ref().to_glib_none().0, state.to_glib(), color.to_glib_none().0);
         }
     }
 
-    fn override_cursor<'a, 'b, P: Into<Option<&'a gdk::RGBA>>, Q: Into<Option<&'b gdk::RGBA>>>(&self, cursor: P, secondary_cursor: Q) {
-        let cursor = cursor.into();
-        let secondary_cursor = secondary_cursor.into();
+    fn override_cursor(&self, cursor: Option<&gdk::RGBA>, secondary_cursor: Option<&gdk::RGBA>) {
         unsafe {
             ffi::gtk_widget_override_cursor(self.as_ref().to_glib_none().0, cursor.to_glib_none().0, secondary_cursor.to_glib_none().0);
         }
     }
 
-    fn override_font<'a, P: Into<Option<&'a pango::FontDescription>>>(&self, font_desc: P) {
-        let font_desc = font_desc.into();
+    fn override_font(&self, font_desc: Option<&pango::FontDescription>) {
         unsafe {
             ffi::gtk_widget_override_font(self.as_ref().to_glib_none().0, font_desc.to_glib_none().0);
         }
     }
 
-    fn override_symbolic_color<'a, P: Into<Option<&'a gdk::RGBA>>>(&self, name: &str, color: P) {
-        let color = color.into();
+    fn override_symbolic_color(&self, name: &str, color: Option<&gdk::RGBA>) {
         unsafe {
             ffi::gtk_widget_override_symbolic_color(self.as_ref().to_glib_none().0, name.to_glib_none().0, color.to_glib_none().0);
         }
@@ -1805,9 +1792,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn set_accel_path<'a, 'b, P: Into<Option<&'a str>>, Q: IsA<AccelGroup> + 'b, R: Into<Option<&'b Q>>>(&self, accel_path: P, accel_group: R) {
-        let accel_path = accel_path.into();
-        let accel_group = accel_group.into();
+    fn set_accel_path<P: IsA<AccelGroup>>(&self, accel_path: Option<&str>, accel_group: Option<&P>) {
         unsafe {
             ffi::gtk_widget_set_accel_path(self.as_ref().to_glib_none().0, accel_path.to_glib_none().0, accel_group.map(|p| p.as_ref()).to_glib_none().0);
         }
@@ -1875,16 +1860,14 @@ impl<O: IsA<Widget>> WidgetExt for O {
     }
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn set_font_map<'a, P: IsA<pango::FontMap> + 'a, Q: Into<Option<&'a P>>>(&self, font_map: Q) {
-        let font_map = font_map.into();
+    fn set_font_map<P: IsA<pango::FontMap>>(&self, font_map: Option<&P>) {
         unsafe {
             ffi::gtk_widget_set_font_map(self.as_ref().to_glib_none().0, font_map.map(|p| p.as_ref()).to_glib_none().0);
         }
     }
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn set_font_options<'a, P: Into<Option<&'a cairo::FontOptions>>>(&self, options: P) {
-        let options = options.into();
+    fn set_font_options(&self, options: Option<&cairo::FontOptions>) {
         unsafe {
             ffi::gtk_widget_set_font_options(self.as_ref().to_glib_none().0, options.to_glib_none().0);
         }
@@ -2022,22 +2005,19 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn set_tooltip_markup<'a, P: Into<Option<&'a str>>>(&self, markup: P) {
-        let markup = markup.into();
+    fn set_tooltip_markup(&self, markup: Option<&str>) {
         unsafe {
             ffi::gtk_widget_set_tooltip_markup(self.as_ref().to_glib_none().0, markup.to_glib_none().0);
         }
     }
 
-    fn set_tooltip_text<'a, P: Into<Option<&'a str>>>(&self, text: P) {
-        let text = text.into();
+    fn set_tooltip_text(&self, text: Option<&str>) {
         unsafe {
             ffi::gtk_widget_set_tooltip_text(self.as_ref().to_glib_none().0, text.to_glib_none().0);
         }
     }
 
-    fn set_tooltip_window<'a, P: IsA<Window> + 'a, Q: Into<Option<&'a P>>>(&self, custom_window: Q) {
-        let custom_window = custom_window.into();
+    fn set_tooltip_window<P: IsA<Window>>(&self, custom_window: Option<&P>) {
         unsafe {
             ffi::gtk_widget_set_tooltip_window(self.as_ref().to_glib_none().0, custom_window.map(|p| p.as_ref()).to_glib_none().0);
         }
@@ -2067,8 +2047,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn set_visual<'a, P: Into<Option<&'a gdk::Visual>>>(&self, visual: P) {
-        let visual = visual.into();
+    fn set_visual(&self, visual: Option<&gdk::Visual>) {
         unsafe {
             ffi::gtk_widget_set_visual(self.as_ref().to_glib_none().0, visual.to_glib_none().0);
         }
@@ -2080,8 +2059,7 @@ impl<O: IsA<Widget>> WidgetExt for O {
         }
     }
 
-    fn shape_combine_region<'a, P: Into<Option<&'a cairo::Region>>>(&self, region: P) {
-        let region = region.into();
+    fn shape_combine_region(&self, region: Option<&cairo::Region>) {
         unsafe {
             ffi::gtk_widget_shape_combine_region(self.as_ref().to_glib_none().0, mut_override(region.to_glib_none().0));
         }
@@ -3096,590 +3074,590 @@ impl<O: IsA<Widget>> WidgetExt for O {
 
 unsafe extern "C" fn accel_closures_changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn button_press_event_trampoline<P, F: Fn(&P, &gdk::EventButton) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventButton, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
 unsafe extern "C" fn button_release_event_trampoline<P, F: Fn(&P, &gdk::EventButton) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventButton, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
 unsafe extern "C" fn can_activate_accel_trampoline<P, F: Fn(&P, u32) -> bool + 'static>(this: *mut ffi::GtkWidget, signal_id: libc::c_uint, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), signal_id).to_glib()
 }
 
 unsafe extern "C" fn composited_changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn configure_event_trampoline<P, F: Fn(&P, &gdk::EventConfigure) -> bool + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventConfigure, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
 unsafe extern "C" fn damage_event_trampoline<P, F: Fn(&P, &gdk::EventExpose) -> bool + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventExpose, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
 unsafe extern "C" fn delete_event_trampoline<P, F: Fn(&P, &gdk::Event) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEvent, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_none(event)).to_glib()
 }
 
 unsafe extern "C" fn destroy_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn destroy_event_trampoline<P, F: Fn(&P, &gdk::Event) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEvent, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_none(event)).to_glib()
 }
 
 unsafe extern "C" fn direction_changed_trampoline<P, F: Fn(&P, TextDirection) + 'static>(this: *mut ffi::GtkWidget, previous_direction: ffi::GtkTextDirection, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), from_glib(previous_direction))
 }
 
 unsafe extern "C" fn drag_begin_trampoline<P, F: Fn(&P, &gdk::DragContext) + 'static>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(context))
 }
 
 unsafe extern "C" fn drag_data_delete_trampoline<P, F: Fn(&P, &gdk::DragContext) + 'static>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(context))
 }
 
 unsafe extern "C" fn drag_data_get_trampoline<P, F: Fn(&P, &gdk::DragContext, &SelectionData, u32, u32) + 'static>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, data: *mut ffi::GtkSelectionData, info: libc::c_uint, time: libc::c_uint, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(context), &from_glib_borrow(data), info, time)
 }
 
 unsafe extern "C" fn drag_data_received_trampoline<P, F: Fn(&P, &gdk::DragContext, i32, i32, &SelectionData, u32, u32) + 'static>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, x: libc::c_int, y: libc::c_int, data: *mut ffi::GtkSelectionData, info: libc::c_uint, time: libc::c_uint, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(context), x, y, &from_glib_borrow(data), info, time)
 }
 
 unsafe extern "C" fn drag_drop_trampoline<P, F: Fn(&P, &gdk::DragContext, i32, i32, u32) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, x: libc::c_int, y: libc::c_int, time: libc::c_uint, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(context), x, y, time).to_glib()
 }
 
 unsafe extern "C" fn drag_end_trampoline<P, F: Fn(&P, &gdk::DragContext) + 'static>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(context))
 }
 
 unsafe extern "C" fn drag_failed_trampoline<P, F: Fn(&P, &gdk::DragContext, DragResult) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, result: ffi::GtkDragResult, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(context), from_glib(result)).to_glib()
 }
 
 unsafe extern "C" fn drag_leave_trampoline<P, F: Fn(&P, &gdk::DragContext, u32) + 'static>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, time: libc::c_uint, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(context), time)
 }
 
 unsafe extern "C" fn drag_motion_trampoline<P, F: Fn(&P, &gdk::DragContext, i32, i32, u32) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, context: *mut gdk_ffi::GdkDragContext, x: libc::c_int, y: libc::c_int, time: libc::c_uint, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(context), x, y, time).to_glib()
 }
 
 unsafe extern "C" fn draw_trampoline<P, F: Fn(&P, &cairo::Context) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, cr: *mut cairo_ffi::cairo_t, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(cr)).to_glib()
 }
 
 unsafe extern "C" fn enter_notify_event_trampoline<P, F: Fn(&P, &gdk::EventCrossing) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventCrossing, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
 unsafe extern "C" fn event_trampoline<P, F: Fn(&P, &gdk::Event) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEvent, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_none(event)).to_glib()
 }
 
 unsafe extern "C" fn event_after_trampoline<P, F: Fn(&P, &gdk::Event) + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEvent, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_none(event))
 }
 
 unsafe extern "C" fn focus_trampoline<P, F: Fn(&P, DirectionType) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, direction: ffi::GtkDirectionType, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), from_glib(direction)).to_glib()
 }
 
 unsafe extern "C" fn focus_in_event_trampoline<P, F: Fn(&P, &gdk::EventFocus) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventFocus, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
 unsafe extern "C" fn focus_out_event_trampoline<P, F: Fn(&P, &gdk::EventFocus) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventFocus, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
 unsafe extern "C" fn grab_broken_event_trampoline<P, F: Fn(&P, &gdk::EventGrabBroken) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventGrabBroken, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
 unsafe extern "C" fn grab_focus_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn grab_notify_trampoline<P, F: Fn(&P, bool) + 'static>(this: *mut ffi::GtkWidget, was_grabbed: glib_ffi::gboolean, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), from_glib(was_grabbed))
 }
 
 unsafe extern "C" fn hide_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn hierarchy_changed_trampoline<P, F: Fn(&P, &Option<Widget>) + 'static>(this: *mut ffi::GtkWidget, previous_toplevel: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(previous_toplevel))
 }
 
 unsafe extern "C" fn key_press_event_trampoline<P, F: Fn(&P, &gdk::EventKey) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventKey, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
 unsafe extern "C" fn key_release_event_trampoline<P, F: Fn(&P, &gdk::EventKey) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventKey, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
 unsafe extern "C" fn keynav_failed_trampoline<P, F: Fn(&P, DirectionType) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, direction: ffi::GtkDirectionType, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), from_glib(direction)).to_glib()
 }
 
 unsafe extern "C" fn leave_notify_event_trampoline<P, F: Fn(&P, &gdk::EventCrossing) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventCrossing, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
 unsafe extern "C" fn map_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn mnemonic_activate_trampoline<P, F: Fn(&P, bool) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, group_cycling: glib_ffi::gboolean, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), from_glib(group_cycling)).to_glib()
 }
 
 unsafe extern "C" fn motion_notify_event_trampoline<P, F: Fn(&P, &gdk::EventMotion) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventMotion, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
 unsafe extern "C" fn move_focus_trampoline<P, F: Fn(&P, DirectionType) + 'static>(this: *mut ffi::GtkWidget, direction: ffi::GtkDirectionType, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), from_glib(direction))
 }
 
 unsafe extern "C" fn parent_set_trampoline<P, F: Fn(&P, &Option<Widget>) + 'static>(this: *mut ffi::GtkWidget, old_parent: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(old_parent))
 }
 
 unsafe extern "C" fn popup_menu_trampoline<P, F: Fn(&P) -> bool + 'static>(this: *mut ffi::GtkWidget, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast()).to_glib()
 }
 
 unsafe extern "C" fn property_notify_event_trampoline<P, F: Fn(&P, &gdk::EventProperty) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventProperty, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
 unsafe extern "C" fn proximity_in_event_trampoline<P, F: Fn(&P, &gdk::EventProximity) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventProximity, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
 unsafe extern "C" fn proximity_out_event_trampoline<P, F: Fn(&P, &gdk::EventProximity) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventProximity, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
 unsafe extern "C" fn query_tooltip_trampoline<P, F: Fn(&P, i32, i32, bool, &Tooltip) -> bool + 'static>(this: *mut ffi::GtkWidget, x: libc::c_int, y: libc::c_int, keyboard_mode: glib_ffi::gboolean, tooltip: *mut ffi::GtkTooltip, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), x, y, from_glib(keyboard_mode), &from_glib_borrow(tooltip)).to_glib()
 }
 
 unsafe extern "C" fn realize_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn screen_changed_trampoline<P, F: Fn(&P, &Option<gdk::Screen>) + 'static>(this: *mut ffi::GtkWidget, previous_screen: *mut gdk_ffi::GdkScreen, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(previous_screen))
 }
 
 unsafe extern "C" fn scroll_event_trampoline<P, F: Fn(&P, &gdk::EventScroll) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventScroll, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
 unsafe extern "C" fn selection_clear_event_trampoline<P, F: Fn(&P, &gdk::EventSelection) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventSelection, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
 unsafe extern "C" fn selection_get_trampoline<P, F: Fn(&P, &SelectionData, u32, u32) + 'static>(this: *mut ffi::GtkWidget, data: *mut ffi::GtkSelectionData, info: libc::c_uint, time: libc::c_uint, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(data), info, time)
 }
 
 unsafe extern "C" fn selection_notify_event_trampoline<P, F: Fn(&P, &gdk::EventSelection) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventSelection, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
 unsafe extern "C" fn selection_received_trampoline<P, F: Fn(&P, &SelectionData, u32) + 'static>(this: *mut ffi::GtkWidget, data: *mut ffi::GtkSelectionData, time: libc::c_uint, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(data), time)
 }
 
 unsafe extern "C" fn selection_request_event_trampoline<P, F: Fn(&P, &gdk::EventSelection) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventSelection, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
 unsafe extern "C" fn show_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn show_help_trampoline<P, F: Fn(&P, WidgetHelpType) -> bool + 'static>(this: *mut ffi::GtkWidget, help_type: ffi::GtkWidgetHelpType, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), from_glib(help_type)).to_glib()
 }
 
 unsafe extern "C" fn size_allocate_trampoline<P, F: Fn(&P, &Allocation) + 'static>(this: *mut ffi::GtkWidget, allocation: *mut ffi::GtkAllocation, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_none(allocation))
 }
 
 unsafe extern "C" fn state_flags_changed_trampoline<P, F: Fn(&P, StateFlags) + 'static>(this: *mut ffi::GtkWidget, flags: ffi::GtkStateFlags, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), from_glib(flags))
 }
 
 unsafe extern "C" fn style_updated_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn touch_event_trampoline<P, F: Fn(&P, &gdk::Event) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, object: *mut gdk_ffi::GdkEvent, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_none(object)).to_glib()
 }
 
 unsafe extern "C" fn unmap_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn unrealize_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn window_state_event_trampoline<P, F: Fn(&P, &gdk::EventWindowState) -> Inhibit + 'static>(this: *mut ffi::GtkWidget, event: *mut gdk_ffi::GdkEventWindowState, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(event)).to_glib()
 }
 
 unsafe extern "C" fn notify_app_paintable_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_can_default_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_can_focus_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_composite_child_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_events_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_expand_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_20", feature = "dox"))]
 unsafe extern "C" fn notify_focus_on_click_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_halign_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_has_default_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_has_focus_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_has_tooltip_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_height_request_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_hexpand_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_hexpand_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_is_focus_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_margin_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_margin_bottom_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_margin_end_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_margin_start_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_margin_top_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_name_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_no_show_all_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_opacity_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_parent_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_receives_default_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_scale_factor_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_sensitive_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_tooltip_markup_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_tooltip_text_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_valign_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_vexpand_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_vexpand_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_visible_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_width_request_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_window_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkWidget, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Widget> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Widget::from_glib_borrow(this).unsafe_cast())
 }
 

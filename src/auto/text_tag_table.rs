@@ -124,19 +124,19 @@ impl<O: IsA<TextTagTable>> TextTagTableExt for O {
 
 unsafe extern "C" fn tag_added_trampoline<P, F: Fn(&P, &TextTag) + 'static>(this: *mut ffi::GtkTextTagTable, tag: *mut ffi::GtkTextTag, f: glib_ffi::gpointer)
 where P: IsA<TextTagTable> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&TextTagTable::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(tag))
 }
 
 unsafe extern "C" fn tag_changed_trampoline<P, F: Fn(&P, &TextTag, bool) + 'static>(this: *mut ffi::GtkTextTagTable, tag: *mut ffi::GtkTextTag, size_changed: glib_ffi::gboolean, f: glib_ffi::gpointer)
 where P: IsA<TextTagTable> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&TextTagTable::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(tag), from_glib(size_changed))
 }
 
 unsafe extern "C" fn tag_removed_trampoline<P, F: Fn(&P, &TextTag) + 'static>(this: *mut ffi::GtkTextTagTable, tag: *mut ffi::GtkTextTag, f: glib_ffi::gpointer)
 where P: IsA<TextTagTable> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&TextTagTable::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(tag))
 }
 

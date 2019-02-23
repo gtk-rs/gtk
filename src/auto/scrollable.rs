@@ -39,11 +39,11 @@ pub trait ScrollableExt: 'static {
 
     fn get_vscroll_policy(&self) -> ScrollablePolicy;
 
-    fn set_hadjustment<'a, P: IsA<Adjustment> + 'a, Q: Into<Option<&'a P>>>(&self, hadjustment: Q);
+    fn set_hadjustment<P: IsA<Adjustment>>(&self, hadjustment: Option<&P>);
 
     fn set_hscroll_policy(&self, policy: ScrollablePolicy);
 
-    fn set_vadjustment<'a, P: IsA<Adjustment> + 'a, Q: Into<Option<&'a P>>>(&self, vadjustment: Q);
+    fn set_vadjustment<P: IsA<Adjustment>>(&self, vadjustment: Option<&P>);
 
     fn set_vscroll_policy(&self, policy: ScrollablePolicy);
 
@@ -90,8 +90,7 @@ impl<O: IsA<Scrollable>> ScrollableExt for O {
         }
     }
 
-    fn set_hadjustment<'a, P: IsA<Adjustment> + 'a, Q: Into<Option<&'a P>>>(&self, hadjustment: Q) {
-        let hadjustment = hadjustment.into();
+    fn set_hadjustment<P: IsA<Adjustment>>(&self, hadjustment: Option<&P>) {
         unsafe {
             ffi::gtk_scrollable_set_hadjustment(self.as_ref().to_glib_none().0, hadjustment.map(|p| p.as_ref()).to_glib_none().0);
         }
@@ -103,8 +102,7 @@ impl<O: IsA<Scrollable>> ScrollableExt for O {
         }
     }
 
-    fn set_vadjustment<'a, P: IsA<Adjustment> + 'a, Q: Into<Option<&'a P>>>(&self, vadjustment: Q) {
-        let vadjustment = vadjustment.into();
+    fn set_vadjustment<P: IsA<Adjustment>>(&self, vadjustment: Option<&P>) {
         unsafe {
             ffi::gtk_scrollable_set_vadjustment(self.as_ref().to_glib_none().0, vadjustment.map(|p| p.as_ref()).to_glib_none().0);
         }
@@ -151,25 +149,25 @@ impl<O: IsA<Scrollable>> ScrollableExt for O {
 
 unsafe extern "C" fn notify_hadjustment_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkScrollable, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Scrollable> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Scrollable::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_hscroll_policy_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkScrollable, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Scrollable> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Scrollable::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_vadjustment_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkScrollable, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Scrollable> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Scrollable::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_vscroll_policy_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkScrollable, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Scrollable> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Scrollable::from_glib_borrow(this).unsafe_cast())
 }
 

@@ -22,7 +22,7 @@ glib_wrapper! {
 }
 
 impl FileChooserDialog {
-    //pub fn new<'a, 'b, 'c, P: Into<Option<&'a str>>, Q: IsA<Window> + 'b, R: Into<Option<&'b Q>>, S: Into<Option<&'c str>>>(title: P, parent: R, action: FileChooserAction, first_button_text: S, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> FileChooserDialog {
+    //pub fn new<P: IsA<Window>>(title: Option<&str>, parent: Option<&P>, action: FileChooserAction, first_button_text: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> FileChooserDialog {
     //    unsafe { TODO: call ffi::gtk_file_chooser_dialog_new() }
     //}
 }

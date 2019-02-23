@@ -49,7 +49,7 @@ pub const NONE_GRID: Option<&Grid> = None;
 pub trait GridExt: 'static {
     fn attach<P: IsA<Widget>>(&self, child: &P, left: i32, top: i32, width: i32, height: i32);
 
-    fn attach_next_to<'a, P: IsA<Widget>, Q: IsA<Widget> + 'a, R: Into<Option<&'a Q>>>(&self, child: &P, sibling: R, side: PositionType, width: i32, height: i32);
+    fn attach_next_to<P: IsA<Widget>, Q: IsA<Widget>>(&self, child: &P, sibling: Option<&Q>, side: PositionType, width: i32, height: i32);
 
     fn get_baseline_row(&self) -> i32;
 
@@ -121,8 +121,7 @@ impl<O: IsA<Grid>> GridExt for O {
         }
     }
 
-    fn attach_next_to<'a, P: IsA<Widget>, Q: IsA<Widget> + 'a, R: Into<Option<&'a Q>>>(&self, child: &P, sibling: R, side: PositionType, width: i32, height: i32) {
-        let sibling = sibling.into();
+    fn attach_next_to<P: IsA<Widget>, Q: IsA<Widget>>(&self, child: &P, sibling: Option<&Q>, side: PositionType, width: i32, height: i32) {
         unsafe {
             ffi::gtk_grid_attach_next_to(self.as_ref().to_glib_none().0, child.as_ref().to_glib_none().0, sibling.map(|p| p.as_ref()).to_glib_none().0, side.to_glib(), width, height);
         }
@@ -335,31 +334,31 @@ impl<O: IsA<Grid>> GridExt for O {
 
 unsafe extern "C" fn notify_baseline_row_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGrid, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Grid> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Grid::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_column_homogeneous_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGrid, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Grid> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Grid::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_column_spacing_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGrid, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Grid> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Grid::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_row_homogeneous_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGrid, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Grid> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Grid::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_row_spacing_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkGrid, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<Grid> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Grid::from_glib_borrow(this).unsafe_cast())
 }
 

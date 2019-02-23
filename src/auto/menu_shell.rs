@@ -40,7 +40,7 @@ pub trait MenuShellExt: 'static {
 
     fn append<P: IsA<MenuItem>>(&self, child: &P);
 
-    fn bind_model<'a, 'b, P: IsA<gio::MenuModel> + 'a, Q: Into<Option<&'a P>>, R: Into<Option<&'b str>>>(&self, model: Q, action_namespace: R, with_separators: bool);
+    fn bind_model<P: IsA<gio::MenuModel>>(&self, model: Option<&P>, action_namespace: Option<&str>, with_separators: bool);
 
     fn cancel(&self);
 
@@ -104,9 +104,7 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
         }
     }
 
-    fn bind_model<'a, 'b, P: IsA<gio::MenuModel> + 'a, Q: Into<Option<&'a P>>, R: Into<Option<&'b str>>>(&self, model: Q, action_namespace: R, with_separators: bool) {
-        let model = model.into();
-        let action_namespace = action_namespace.into();
+    fn bind_model<P: IsA<gio::MenuModel>>(&self, model: Option<&P>, action_namespace: Option<&str>, with_separators: bool) {
         unsafe {
             ffi::gtk_menu_shell_bind_model(self.as_ref().to_glib_none().0, model.map(|p| p.as_ref()).to_glib_none().0, action_namespace.to_glib_none().0, with_separators.to_glib());
         }
@@ -269,55 +267,55 @@ impl<O: IsA<MenuShell>> MenuShellExt for O {
 
 unsafe extern "C" fn activate_current_trampoline<P, F: Fn(&P, bool) + 'static>(this: *mut ffi::GtkMenuShell, force_hide: glib_ffi::gboolean, f: glib_ffi::gpointer)
 where P: IsA<MenuShell> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&MenuShell::from_glib_borrow(this).unsafe_cast(), from_glib(force_hide))
 }
 
 unsafe extern "C" fn cancel_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuShell, f: glib_ffi::gpointer)
 where P: IsA<MenuShell> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&MenuShell::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn cycle_focus_trampoline<P, F: Fn(&P, DirectionType) + 'static>(this: *mut ffi::GtkMenuShell, direction: ffi::GtkDirectionType, f: glib_ffi::gpointer)
 where P: IsA<MenuShell> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&MenuShell::from_glib_borrow(this).unsafe_cast(), from_glib(direction))
 }
 
 unsafe extern "C" fn deactivate_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuShell, f: glib_ffi::gpointer)
 where P: IsA<MenuShell> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&MenuShell::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn insert_trampoline<P, F: Fn(&P, &Widget, i32) + 'static>(this: *mut ffi::GtkMenuShell, child: *mut ffi::GtkWidget, position: libc::c_int, f: glib_ffi::gpointer)
 where P: IsA<MenuShell> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&MenuShell::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(child), position)
 }
 
 unsafe extern "C" fn move_current_trampoline<P, F: Fn(&P, MenuDirectionType) + 'static>(this: *mut ffi::GtkMenuShell, direction: ffi::GtkMenuDirectionType, f: glib_ffi::gpointer)
 where P: IsA<MenuShell> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&MenuShell::from_glib_borrow(this).unsafe_cast(), from_glib(direction))
 }
 
 unsafe extern "C" fn move_selected_trampoline<P, F: Fn(&P, i32) -> Inhibit + 'static>(this: *mut ffi::GtkMenuShell, distance: libc::c_int, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<MenuShell> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&MenuShell::from_glib_borrow(this).unsafe_cast(), distance).to_glib()
 }
 
 unsafe extern "C" fn selection_done_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuShell, f: glib_ffi::gpointer)
 where P: IsA<MenuShell> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&MenuShell::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_take_focus_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuShell, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MenuShell> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&MenuShell::from_glib_borrow(this).unsafe_cast())
 }
 

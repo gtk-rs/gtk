@@ -57,7 +57,7 @@ pub const NONE_RADIO_BUTTON: Option<&RadioButton> = None;
 pub trait RadioButtonExt: 'static {
     fn get_group(&self) -> Vec<RadioButton>;
 
-    fn join_group<'a, P: IsA<RadioButton> + 'a, Q: Into<Option<&'a P>>>(&self, group_source: Q);
+    fn join_group<P: IsA<RadioButton>>(&self, group_source: Option<&P>);
 
     fn connect_group_changed<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
@@ -69,8 +69,7 @@ impl<O: IsA<RadioButton>> RadioButtonExt for O {
         }
     }
 
-    fn join_group<'a, P: IsA<RadioButton> + 'a, Q: Into<Option<&'a P>>>(&self, group_source: Q) {
-        let group_source = group_source.into();
+    fn join_group<P: IsA<RadioButton>>(&self, group_source: Option<&P>) {
         unsafe {
             ffi::gtk_radio_button_join_group(self.as_ref().to_glib_none().0, group_source.map(|p| p.as_ref()).to_glib_none().0);
         }
@@ -87,7 +86,7 @@ impl<O: IsA<RadioButton>> RadioButtonExt for O {
 
 unsafe extern "C" fn group_changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkRadioButton, f: glib_ffi::gpointer)
 where P: IsA<RadioButton> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&RadioButton::from_glib_borrow(this).unsafe_cast())
 }
 

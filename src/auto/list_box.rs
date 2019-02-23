@@ -53,7 +53,7 @@ pub const NONE_LIST_BOX: Option<&ListBox> = None;
 
 pub trait ListBoxExt: 'static {
     #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn bind_model<'a, P: IsA<gio::ListModel> + 'a, Q: Into<Option<&'a P>>, R: Fn(&glib::Object) -> Widget + 'static>(&self, model: Q, create_widget_func: R);
+    fn bind_model<P: IsA<gio::ListModel>, Q: Fn(&glib::Object) -> Widget + 'static>(&self, model: Option<&P>, create_widget_func: Q);
 
     fn drag_highlight_row<P: IsA<ListBoxRow>>(&self, row: &P);
 
@@ -85,19 +85,19 @@ pub trait ListBoxExt: 'static {
 
     fn select_all(&self);
 
-    fn select_row<'a, P: IsA<ListBoxRow> + 'a, Q: Into<Option<&'a P>>>(&self, row: Q);
+    fn select_row<P: IsA<ListBoxRow>>(&self, row: Option<&P>);
 
     fn selected_foreach<P: FnMut(&ListBox, &ListBoxRow)>(&self, func: P);
 
     fn set_activate_on_single_click(&self, single: bool);
 
-    fn set_adjustment<'a, P: IsA<Adjustment> + 'a, Q: Into<Option<&'a P>>>(&self, adjustment: Q);
+    fn set_adjustment<P: IsA<Adjustment>>(&self, adjustment: Option<&P>);
 
     fn set_filter_func(&self, filter_func: Option<Box<dyn Fn(&ListBoxRow) -> bool + 'static>>);
 
     fn set_header_func(&self, update_header: Option<Box<dyn Fn(&ListBoxRow, &ListBoxRow) + 'static>>);
 
-    fn set_placeholder<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, placeholder: Q);
+    fn set_placeholder<P: IsA<Widget>>(&self, placeholder: Option<&P>);
 
     fn set_selection_mode(&self, mode: SelectionMode);
 
@@ -140,21 +140,20 @@ pub trait ListBoxExt: 'static {
 
 impl<O: IsA<ListBox>> ListBoxExt for O {
     #[cfg(any(feature = "v3_16", feature = "dox"))]
-    fn bind_model<'a, P: IsA<gio::ListModel> + 'a, Q: Into<Option<&'a P>>, R: Fn(&glib::Object) -> Widget + 'static>(&self, model: Q, create_widget_func: R) {
-        let model = model.into();
-        let create_widget_func_data: Box_<R> = Box::new(create_widget_func);
-        unsafe extern "C" fn create_widget_func_func<'a, P: IsA<gio::ListModel> + 'a, Q: Into<Option<&'a P>>, R: Fn(&glib::Object) -> Widget + 'static>(item: *mut gobject_ffi::GObject, user_data: glib_ffi::gpointer) -> *mut ffi::GtkWidget {
+    fn bind_model<P: IsA<gio::ListModel>, Q: Fn(&glib::Object) -> Widget + 'static>(&self, model: Option<&P>, create_widget_func: Q) {
+        let create_widget_func_data: Box_<Q> = Box::new(create_widget_func);
+        unsafe extern "C" fn create_widget_func_func<P: IsA<gio::ListModel>, Q: Fn(&glib::Object) -> Widget + 'static>(item: *mut gobject_ffi::GObject, user_data: glib_ffi::gpointer) -> *mut ffi::GtkWidget {
             let item = from_glib_borrow(item);
-            let callback: &R = &*(user_data as *mut _);
+            let callback: &Q = &*(user_data as *mut _);
             let res = (*callback)(&item);
             res.to_glib_full()
         }
-        let create_widget_func = Some(create_widget_func_func::<'a, P, Q, R> as _);
-        unsafe extern "C" fn user_data_free_func_func<'a, P: IsA<gio::ListModel> + 'a, Q: Into<Option<&'a P>>, R: Fn(&glib::Object) -> Widget + 'static>(data: glib_ffi::gpointer) {
-            let _callback: Box_<R> = Box_::from_raw(data as *mut _);
+        let create_widget_func = Some(create_widget_func_func::<P, Q> as _);
+        unsafe extern "C" fn user_data_free_func_func<P: IsA<gio::ListModel>, Q: Fn(&glib::Object) -> Widget + 'static>(data: glib_ffi::gpointer) {
+            let _callback: Box_<Q> = Box_::from_raw(data as *mut _);
         }
-        let destroy_call4 = Some(user_data_free_func_func::<'a, P, Q, R> as _);
-        let super_callback0: Box_<R> = create_widget_func_data;
+        let destroy_call4 = Some(user_data_free_func_func::<P, Q> as _);
+        let super_callback0: Box_<Q> = create_widget_func_data;
         unsafe {
             ffi::gtk_list_box_bind_model(self.as_ref().to_glib_none().0, model.map(|p| p.as_ref()).to_glib_none().0, create_widget_func, Box::into_raw(super_callback0) as *mut _, destroy_call4);
         }
@@ -250,8 +249,7 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
         }
     }
 
-    fn select_row<'a, P: IsA<ListBoxRow> + 'a, Q: Into<Option<&'a P>>>(&self, row: Q) {
-        let row = row.into();
+    fn select_row<P: IsA<ListBoxRow>>(&self, row: Option<&P>) {
         unsafe {
             ffi::gtk_list_box_select_row(self.as_ref().to_glib_none().0, row.map(|p| p.as_ref()).to_glib_none().0);
         }
@@ -278,8 +276,7 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
         }
     }
 
-    fn set_adjustment<'a, P: IsA<Adjustment> + 'a, Q: Into<Option<&'a P>>>(&self, adjustment: Q) {
-        let adjustment = adjustment.into();
+    fn set_adjustment<P: IsA<Adjustment>>(&self, adjustment: Option<&P>) {
         unsafe {
             ffi::gtk_list_box_set_adjustment(self.as_ref().to_glib_none().0, adjustment.map(|p| p.as_ref()).to_glib_none().0);
         }
@@ -331,8 +328,7 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
         }
     }
 
-    fn set_placeholder<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, placeholder: Q) {
-        let placeholder = placeholder.into();
+    fn set_placeholder<P: IsA<Widget>>(&self, placeholder: Option<&P>) {
         unsafe {
             ffi::gtk_list_box_set_placeholder(self.as_ref().to_glib_none().0, placeholder.map(|p| p.as_ref()).to_glib_none().0);
         }
@@ -483,61 +479,61 @@ impl<O: IsA<ListBox>> ListBoxExt for O {
 
 unsafe extern "C" fn activate_cursor_row_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkListBox, f: glib_ffi::gpointer)
 where P: IsA<ListBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ListBox::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn move_cursor_trampoline<P, F: Fn(&P, MovementStep, i32) + 'static>(this: *mut ffi::GtkListBox, object: ffi::GtkMovementStep, p0: libc::c_int, f: glib_ffi::gpointer)
 where P: IsA<ListBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ListBox::from_glib_borrow(this).unsafe_cast(), from_glib(object), p0)
 }
 
 unsafe extern "C" fn row_activated_trampoline<P, F: Fn(&P, &ListBoxRow) + 'static>(this: *mut ffi::GtkListBox, row: *mut ffi::GtkListBoxRow, f: glib_ffi::gpointer)
 where P: IsA<ListBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ListBox::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(row))
 }
 
 unsafe extern "C" fn row_selected_trampoline<P, F: Fn(&P, &Option<ListBoxRow>) + 'static>(this: *mut ffi::GtkListBox, row: *mut ffi::GtkListBoxRow, f: glib_ffi::gpointer)
 where P: IsA<ListBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ListBox::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(row))
 }
 
 unsafe extern "C" fn select_all_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkListBox, f: glib_ffi::gpointer)
 where P: IsA<ListBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ListBox::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn selected_rows_changed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkListBox, f: glib_ffi::gpointer)
 where P: IsA<ListBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ListBox::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn toggle_cursor_row_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkListBox, f: glib_ffi::gpointer)
 where P: IsA<ListBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ListBox::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn unselect_all_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkListBox, f: glib_ffi::gpointer)
 where P: IsA<ListBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ListBox::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_activate_on_single_click_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkListBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ListBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ListBox::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_selection_mode_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkListBox, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ListBox> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ListBox::from_glib_borrow(this).unsafe_cast())
 }
 

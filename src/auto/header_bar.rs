@@ -63,17 +63,17 @@ pub trait HeaderBarExt: 'static {
 
     fn pack_start<P: IsA<Widget>>(&self, child: &P);
 
-    fn set_custom_title<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, title_widget: Q);
+    fn set_custom_title<P: IsA<Widget>>(&self, title_widget: Option<&P>);
 
-    fn set_decoration_layout<'a, P: Into<Option<&'a str>>>(&self, layout: P);
+    fn set_decoration_layout(&self, layout: Option<&str>);
 
     fn set_has_subtitle(&self, setting: bool);
 
     fn set_show_close_button(&self, setting: bool);
 
-    fn set_subtitle<'a, P: Into<Option<&'a str>>>(&self, subtitle: P);
+    fn set_subtitle(&self, subtitle: Option<&str>);
 
-    fn set_title<'a, P: Into<Option<&'a str>>>(&self, title: P);
+    fn set_title(&self, title: Option<&str>);
 
     fn get_property_decoration_layout_set(&self) -> bool;
 
@@ -157,15 +157,13 @@ impl<O: IsA<HeaderBar>> HeaderBarExt for O {
         }
     }
 
-    fn set_custom_title<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, title_widget: Q) {
-        let title_widget = title_widget.into();
+    fn set_custom_title<P: IsA<Widget>>(&self, title_widget: Option<&P>) {
         unsafe {
             ffi::gtk_header_bar_set_custom_title(self.as_ref().to_glib_none().0, title_widget.map(|p| p.as_ref()).to_glib_none().0);
         }
     }
 
-    fn set_decoration_layout<'a, P: Into<Option<&'a str>>>(&self, layout: P) {
-        let layout = layout.into();
+    fn set_decoration_layout(&self, layout: Option<&str>) {
         unsafe {
             ffi::gtk_header_bar_set_decoration_layout(self.as_ref().to_glib_none().0, layout.to_glib_none().0);
         }
@@ -183,15 +181,13 @@ impl<O: IsA<HeaderBar>> HeaderBarExt for O {
         }
     }
 
-    fn set_subtitle<'a, P: Into<Option<&'a str>>>(&self, subtitle: P) {
-        let subtitle = subtitle.into();
+    fn set_subtitle(&self, subtitle: Option<&str>) {
         unsafe {
             ffi::gtk_header_bar_set_subtitle(self.as_ref().to_glib_none().0, subtitle.to_glib_none().0);
         }
     }
 
-    fn set_title<'a, P: Into<Option<&'a str>>>(&self, title: P) {
-        let title = title.into();
+    fn set_title(&self, title: Option<&str>) {
         unsafe {
             ffi::gtk_header_bar_set_title(self.as_ref().to_glib_none().0, title.to_glib_none().0);
         }
@@ -320,49 +316,49 @@ impl<O: IsA<HeaderBar>> HeaderBarExt for O {
 
 unsafe extern "C" fn notify_custom_title_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkHeaderBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<HeaderBar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&HeaderBar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_decoration_layout_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkHeaderBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<HeaderBar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&HeaderBar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_decoration_layout_set_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkHeaderBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<HeaderBar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&HeaderBar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_has_subtitle_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkHeaderBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<HeaderBar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&HeaderBar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_close_button_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkHeaderBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<HeaderBar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&HeaderBar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_spacing_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkHeaderBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<HeaderBar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&HeaderBar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_subtitle_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkHeaderBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<HeaderBar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&HeaderBar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_title_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkHeaderBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<HeaderBar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&HeaderBar::from_glib_borrow(this).unsafe_cast())
 }
 

@@ -8,7 +8,6 @@ use TreeIter;
 use TreeModel;
 use TreePath;
 use ffi;
-use glib;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Cast;
@@ -55,7 +54,7 @@ pub trait CellRendererComboExt: 'static {
 
     fn get_property_model(&self) -> Option<TreeModel>;
 
-    fn set_property_model<P: IsA<TreeModel> + glib::value::SetValueOptional>(&self, model: Option<&P>);
+    fn set_property_model(&self, model: Option<&TreeModel>);
 
     fn get_property_text_column(&self) -> i32;
 
@@ -93,7 +92,7 @@ impl<O: IsA<CellRendererCombo>> CellRendererComboExt for O {
         }
     }
 
-    fn set_property_model<P: IsA<TreeModel> + glib::value::SetValueOptional>(&self, model: Option<&P>) {
+    fn set_property_model(&self, model: Option<&TreeModel>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"model\0".as_ptr() as *const _, Value::from(model).to_glib_none().0);
         }
@@ -148,26 +147,26 @@ impl<O: IsA<CellRendererCombo>> CellRendererComboExt for O {
 
 unsafe extern "C" fn changed_trampoline<P, F: Fn(&P, TreePath, &TreeIter) + 'static>(this: *mut ffi::GtkCellRendererCombo, path_string: *mut libc::c_char, new_iter: *mut ffi::GtkTreeIter, f: glib_ffi::gpointer)
 where P: IsA<CellRendererCombo> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     let path = from_glib_full(ffi::gtk_tree_path_new_from_string(path_string));
     f(&CellRendererCombo::from_glib_borrow(this).unsafe_cast(), path, &from_glib_borrow(new_iter))
 }
 
 unsafe extern "C" fn notify_has_entry_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererCombo, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererCombo> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererCombo::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_model_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererCombo, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererCombo> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererCombo::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_text_column_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererCombo, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererCombo> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererCombo::from_glib_borrow(this).unsafe_cast())
 }
 

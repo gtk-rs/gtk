@@ -95,19 +95,19 @@ impl<O: IsA<ColorChooser>> ColorChooserExt for O {
 
 unsafe extern "C" fn color_activated_trampoline<P, F: Fn(&P, &gdk::RGBA) + 'static>(this: *mut ffi::GtkColorChooser, color: *mut gdk_ffi::GdkRGBA, f: glib_ffi::gpointer)
 where P: IsA<ColorChooser> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ColorChooser::from_glib_borrow(this).unsafe_cast(), &from_glib_borrow(color))
 }
 
 unsafe extern "C" fn notify_rgba_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkColorChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ColorChooser> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ColorChooser::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_use_alpha_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkColorChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ColorChooser> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ColorChooser::from_glib_borrow(this).unsafe_cast())
 }
 

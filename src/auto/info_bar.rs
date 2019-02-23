@@ -40,7 +40,7 @@ impl InfoBar {
         }
     }
 
-    //pub fn new_with_buttons<'a, P: Into<Option<&'a str>>>(first_button_text: P, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> InfoBar {
+    //pub fn new_with_buttons(first_button_text: Option<&str>, : /*Unknown conversion*//*Unimplemented*/Fundamental: VarArgs) -> InfoBar {
     //    unsafe { TODO: call ffi::gtk_info_bar_new_with_buttons() }
     //}
 }
@@ -231,32 +231,32 @@ impl<O: IsA<InfoBar>> InfoBarExt for O {
 
 unsafe extern "C" fn close_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkInfoBar, f: glib_ffi::gpointer)
 where P: IsA<InfoBar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&InfoBar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn response_trampoline<P, F: Fn(&P, ResponseType) + 'static>(this: *mut ffi::GtkInfoBar, response_id: ffi::GtkResponseType, f: glib_ffi::gpointer)
 where P: IsA<InfoBar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&InfoBar::from_glib_borrow(this).unsafe_cast(), from_glib(response_id))
 }
 
 unsafe extern "C" fn notify_message_type_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkInfoBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<InfoBar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&InfoBar::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_22_29", feature = "dox"))]
 unsafe extern "C" fn notify_revealed_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkInfoBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<InfoBar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&InfoBar::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_close_button_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkInfoBar, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<InfoBar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&InfoBar::from_glib_borrow(this).unsafe_cast())
 }
 

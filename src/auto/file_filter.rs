@@ -73,8 +73,7 @@ impl FileFilter {
         }
     }
 
-    pub fn set_name<'a, P: Into<Option<&'a str>>>(&self, name: P) {
-        let name = name.into();
+    pub fn set_name(&self, name: Option<&str>) {
         unsafe {
             ffi::gtk_file_filter_set_name(self.to_glib_none().0, name.to_glib_none().0);
         }

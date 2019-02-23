@@ -6,7 +6,6 @@ use Adjustment;
 use CellRenderer;
 use CellRendererText;
 use ffi;
-use glib;
 use glib::StaticType;
 use glib::Value;
 use glib::object::Cast;
@@ -48,7 +47,7 @@ pub const NONE_CELL_RENDERER_SPIN: Option<&CellRendererSpin> = None;
 pub trait CellRendererSpinExt: 'static {
     fn get_property_adjustment(&self) -> Option<Adjustment>;
 
-    fn set_property_adjustment<P: IsA<Adjustment> + glib::value::SetValueOptional>(&self, adjustment: Option<&P>);
+    fn set_property_adjustment(&self, adjustment: Option<&Adjustment>);
 
     fn get_property_climb_rate(&self) -> f64;
 
@@ -74,7 +73,7 @@ impl<O: IsA<CellRendererSpin>> CellRendererSpinExt for O {
         }
     }
 
-    fn set_property_adjustment<P: IsA<Adjustment> + glib::value::SetValueOptional>(&self, adjustment: Option<&P>) {
+    fn set_property_adjustment(&self, adjustment: Option<&Adjustment>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"adjustment\0".as_ptr() as *const _, Value::from(adjustment).to_glib_none().0);
         }
@@ -135,19 +134,19 @@ impl<O: IsA<CellRendererSpin>> CellRendererSpinExt for O {
 
 unsafe extern "C" fn notify_adjustment_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererSpin, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererSpin> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererSpin::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_climb_rate_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererSpin, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererSpin> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererSpin::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_digits_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkCellRendererSpin, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<CellRendererSpin> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&CellRendererSpin::from_glib_borrow(this).unsafe_cast())
 }
 

@@ -18,9 +18,8 @@ glib_wrapper! {
 }
 
 impl TextMark {
-    pub fn new<'a, P: Into<Option<&'a str>>>(name: P, left_gravity: bool) -> TextMark {
+    pub fn new(name: Option<&str>, left_gravity: bool) -> TextMark {
         assert_initialized_main_thread!();
-        let name = name.into();
         unsafe {
             from_glib_full(ffi::gtk_text_mark_new(name.to_glib_none().0, left_gravity.to_glib()))
         }

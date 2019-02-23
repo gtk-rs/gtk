@@ -53,9 +53,9 @@ pub trait AccelLabelExt: 'static {
 
     fn set_accel(&self, accelerator_key: u32, accelerator_mods: gdk::ModifierType);
 
-    fn set_accel_closure<'a, P: Into<Option<&'a glib::Closure>>>(&self, accel_closure: P);
+    fn set_accel_closure(&self, accel_closure: Option<&glib::Closure>);
 
-    fn set_accel_widget<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, accel_widget: Q);
+    fn set_accel_widget<P: IsA<Widget>>(&self, accel_widget: Option<&P>);
 
     fn get_property_accel_closure(&self) -> Option<glib::Closure>;
 
@@ -98,15 +98,13 @@ impl<O: IsA<AccelLabel>> AccelLabelExt for O {
         }
     }
 
-    fn set_accel_closure<'a, P: Into<Option<&'a glib::Closure>>>(&self, accel_closure: P) {
-        let accel_closure = accel_closure.into();
+    fn set_accel_closure(&self, accel_closure: Option<&glib::Closure>) {
         unsafe {
             ffi::gtk_accel_label_set_accel_closure(self.as_ref().to_glib_none().0, accel_closure.to_glib_none().0);
         }
     }
 
-    fn set_accel_widget<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, accel_widget: Q) {
-        let accel_widget = accel_widget.into();
+    fn set_accel_widget<P: IsA<Widget>>(&self, accel_widget: Option<&P>) {
         unsafe {
             ffi::gtk_accel_label_set_accel_widget(self.as_ref().to_glib_none().0, accel_widget.map(|p| p.as_ref()).to_glib_none().0);
         }
@@ -139,13 +137,13 @@ impl<O: IsA<AccelLabel>> AccelLabelExt for O {
 
 unsafe extern "C" fn notify_accel_closure_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAccelLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AccelLabel> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&AccelLabel::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_accel_widget_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkAccelLabel, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<AccelLabel> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&AccelLabel::from_glib_borrow(this).unsafe_cast())
 }
 

@@ -68,7 +68,7 @@ pub trait FontChooserExt: 'static {
     fn set_font_desc(&self, font_desc: &pango::FontDescription);
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn set_font_map<'a, P: IsA<pango::FontMap> + 'a, Q: Into<Option<&'a P>>>(&self, fontmap: Q);
+    fn set_font_map<P: IsA<pango::FontMap>>(&self, fontmap: Option<&P>);
 
     #[cfg(any(feature = "v3_24", feature = "dox"))]
     fn set_language(&self, language: &str);
@@ -87,7 +87,7 @@ pub trait FontChooserExt: 'static {
     fn get_property_language(&self) -> Option<GString>;
 
     #[cfg(any(feature = "v3_22_30", feature = "dox"))]
-    fn set_property_language<'a, P: Into<Option<&'a str>>>(&self, language: P);
+    fn set_property_language(&self, language: Option<&str>);
 
     #[cfg(any(feature = "v3_22_30", feature = "dox"))]
     fn get_property_level(&self) -> FontChooserLevel;
@@ -223,8 +223,7 @@ impl<O: IsA<FontChooser>> FontChooserExt for O {
     }
 
     #[cfg(any(feature = "v3_18", feature = "dox"))]
-    fn set_font_map<'a, P: IsA<pango::FontMap> + 'a, Q: Into<Option<&'a P>>>(&self, fontmap: Q) {
-        let fontmap = fontmap.into();
+    fn set_font_map<P: IsA<pango::FontMap>>(&self, fontmap: Option<&P>) {
         unsafe {
             ffi::gtk_font_chooser_set_font_map(self.as_ref().to_glib_none().0, fontmap.map(|p| p.as_ref()).to_glib_none().0);
         }
@@ -275,8 +274,7 @@ impl<O: IsA<FontChooser>> FontChooserExt for O {
     }
 
     #[cfg(any(feature = "v3_22_30", feature = "dox"))]
-    fn set_property_language<'a, P: Into<Option<&'a str>>>(&self, language: P) {
-        let language = language.into();
+    fn set_property_language(&self, language: Option<&str>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.to_glib_none().0 as *mut gobject_ffi::GObject, b"language\0".as_ptr() as *const _, Value::from(language).to_glib_none().0);
         }
@@ -368,52 +366,52 @@ impl<O: IsA<FontChooser>> FontChooserExt for O {
 
 unsafe extern "C" fn font_activated_trampoline<P, F: Fn(&P, &str) + 'static>(this: *mut ffi::GtkFontChooser, fontname: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<FontChooser> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FontChooser::from_glib_borrow(this).unsafe_cast(), &GString::from_glib_borrow(fontname))
 }
 
 unsafe extern "C" fn notify_font_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFontChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FontChooser> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FontChooser::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_font_desc_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFontChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FontChooser> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FontChooser::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_22_30", feature = "dox"))]
 unsafe extern "C" fn notify_font_features_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFontChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FontChooser> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FontChooser::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_22_30", feature = "dox"))]
 unsafe extern "C" fn notify_language_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFontChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FontChooser> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FontChooser::from_glib_borrow(this).unsafe_cast())
 }
 
 #[cfg(any(feature = "v3_22_30", feature = "dox"))]
 unsafe extern "C" fn notify_level_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFontChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FontChooser> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FontChooser::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_preview_text_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFontChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FontChooser> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FontChooser::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_show_preview_entry_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkFontChooser, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<FontChooser> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&FontChooser::from_glib_borrow(this).unsafe_cast())
 }
 

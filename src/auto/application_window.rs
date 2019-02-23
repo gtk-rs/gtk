@@ -40,7 +40,7 @@ pub trait ApplicationWindowExt: 'static {
     fn get_show_menubar(&self) -> bool;
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
-    fn set_help_overlay<'a, P: IsA<ShortcutsWindow> + 'a, Q: Into<Option<&'a P>>>(&self, help_overlay: Q);
+    fn set_help_overlay<P: IsA<ShortcutsWindow>>(&self, help_overlay: Option<&P>);
 
     fn set_show_menubar(&self, show_menubar: bool);
 
@@ -68,8 +68,7 @@ impl<O: IsA<ApplicationWindow>> ApplicationWindowExt for O {
     }
 
     #[cfg(any(feature = "v3_20", feature = "dox"))]
-    fn set_help_overlay<'a, P: IsA<ShortcutsWindow> + 'a, Q: Into<Option<&'a P>>>(&self, help_overlay: Q) {
-        let help_overlay = help_overlay.into();
+    fn set_help_overlay<P: IsA<ShortcutsWindow>>(&self, help_overlay: Option<&P>) {
         unsafe {
             ffi::gtk_application_window_set_help_overlay(self.as_ref().to_glib_none().0, help_overlay.map(|p| p.as_ref()).to_glib_none().0);
         }
@@ -92,7 +91,7 @@ impl<O: IsA<ApplicationWindow>> ApplicationWindowExt for O {
 
 unsafe extern "C" fn notify_show_menubar_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkApplicationWindow, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<ApplicationWindow> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&ApplicationWindow::from_glib_borrow(this).unsafe_cast())
 }
 

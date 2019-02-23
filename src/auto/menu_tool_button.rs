@@ -29,10 +29,8 @@ glib_wrapper! {
 }
 
 impl MenuToolButton {
-    pub fn new<'a, 'b, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>, R: Into<Option<&'b str>>>(icon_widget: Q, label: R) -> MenuToolButton {
+    pub fn new<P: IsA<Widget>>(icon_widget: Option<&P>, label: Option<&str>) -> MenuToolButton {
         assert_initialized_main_thread!();
-        let icon_widget = icon_widget.into();
-        let label = label.into();
         unsafe {
             ToolItem::from_glib_none(ffi::gtk_menu_tool_button_new(icon_widget.map(|p| p.as_ref()).to_glib_none().0, label.to_glib_none().0)).unsafe_cast()
         }
@@ -99,13 +97,13 @@ impl<O: IsA<MenuToolButton>> MenuToolButtonExt for O {
 
 unsafe extern "C" fn show_menu_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuToolButton, f: glib_ffi::gpointer)
 where P: IsA<MenuToolButton> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&MenuToolButton::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_menu_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMenuToolButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MenuToolButton> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&MenuToolButton::from_glib_borrow(this).unsafe_cast())
 }
 

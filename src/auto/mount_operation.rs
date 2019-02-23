@@ -28,9 +28,8 @@ glib_wrapper! {
 }
 
 impl MountOperation {
-    pub fn new<'a, P: IsA<Window> + 'a, Q: Into<Option<&'a P>>>(parent: Q) -> MountOperation {
+    pub fn new<P: IsA<Window>>(parent: Option<&P>) -> MountOperation {
         assert_initialized_main_thread!();
-        let parent = parent.into();
         unsafe {
             gio::MountOperation::from_glib_full(ffi::gtk_mount_operation_new(parent.map(|p| p.as_ref()).to_glib_none().0)).unsafe_cast()
         }
@@ -46,7 +45,7 @@ pub trait MountOperationExt: 'static {
 
     fn is_showing(&self) -> bool;
 
-    fn set_parent<'a, P: IsA<Window> + 'a, Q: Into<Option<&'a P>>>(&self, parent: Q);
+    fn set_parent<P: IsA<Window>>(&self, parent: Option<&P>);
 
     fn set_screen(&self, screen: &gdk::Screen);
 
@@ -78,8 +77,7 @@ impl<O: IsA<MountOperation>> MountOperationExt for O {
         }
     }
 
-    fn set_parent<'a, P: IsA<Window> + 'a, Q: Into<Option<&'a P>>>(&self, parent: Q) {
-        let parent = parent.into();
+    fn set_parent<P: IsA<Window>>(&self, parent: Option<&P>) {
         unsafe {
             ffi::gtk_mount_operation_set_parent(self.as_ref().to_glib_none().0, parent.map(|p| p.as_ref()).to_glib_none().0);
         }
@@ -126,19 +124,19 @@ impl<O: IsA<MountOperation>> MountOperationExt for O {
 
 unsafe extern "C" fn notify_is_showing_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMountOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MountOperation> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&MountOperation::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_parent_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMountOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MountOperation> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&MountOperation::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_screen_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkMountOperation, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<MountOperation> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&MountOperation::from_glib_borrow(this).unsafe_cast())
 }
 

@@ -14,16 +14,12 @@ use ffi;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 use gio;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
-use glib;
-#[cfg(any(feature = "v3_16", feature = "dox"))]
 use glib::GString;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 use glib::StaticType;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 use glib::Value;
 use glib::object::Cast;
-#[cfg(any(feature = "v3_16", feature = "dox"))]
-use glib::object::IsA;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 use glib::object::ObjectType;
 #[cfg(any(feature = "v3_16", feature = "dox"))]
@@ -100,7 +96,7 @@ impl ModelButton {
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
-    pub fn set_property_icon<P: IsA<gio::Icon> + glib::value::SetValueOptional>(&self, icon: Option<&P>) {
+    pub fn set_property_icon(&self, icon: Option<&gio::Icon>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.as_ptr() as *mut gobject_ffi::GObject, b"icon\0".as_ptr() as *const _, Value::from(icon).to_glib_none().0);
         }
@@ -148,8 +144,7 @@ impl ModelButton {
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
-    pub fn set_property_menu_name<'a, P: Into<Option<&'a str>>>(&self, menu_name: P) {
-        let menu_name = menu_name.into();
+    pub fn set_property_menu_name(&self, menu_name: Option<&str>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.as_ptr() as *mut gobject_ffi::GObject, b"menu-name\0".as_ptr() as *const _, Value::from(menu_name).to_glib_none().0);
         }
@@ -181,8 +176,7 @@ impl ModelButton {
     }
 
     #[cfg(any(feature = "v3_16", feature = "dox"))]
-    pub fn set_property_text<'a, P: Into<Option<&'a str>>>(&self, text: P) {
-        let text = text.into();
+    pub fn set_property_text(&self, text: Option<&str>) {
         unsafe {
             gobject_ffi::g_object_set_property(self.as_ptr() as *mut gobject_ffi::GObject, b"text\0".as_ptr() as *const _, Value::from(text).to_glib_none().0);
         }
@@ -295,55 +289,55 @@ impl Default for ModelButton {
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 unsafe extern "C" fn notify_active_trampoline<F: Fn(&ModelButton) + 'static>(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 unsafe extern "C" fn notify_centered_trampoline<F: Fn(&ModelButton) + 'static>(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 unsafe extern "C" fn notify_icon_trampoline<F: Fn(&ModelButton) + 'static>(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 unsafe extern "C" fn notify_iconic_trampoline<F: Fn(&ModelButton) + 'static>(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 unsafe extern "C" fn notify_inverted_trampoline<F: Fn(&ModelButton) + 'static>(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 unsafe extern "C" fn notify_menu_name_trampoline<F: Fn(&ModelButton) + 'static>(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 unsafe extern "C" fn notify_role_trampoline<F: Fn(&ModelButton) + 'static>(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 #[cfg(any(feature = "v3_16", feature = "dox"))]
 unsafe extern "C" fn notify_text_trampoline<F: Fn(&ModelButton) + 'static>(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 
 #[cfg(any(feature = "v3_24", feature = "dox"))]
 unsafe extern "C" fn notify_use_markup_trampoline<F: Fn(&ModelButton) + 'static>(this: *mut ffi::GtkModelButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer) {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&from_glib_borrow(this))
 }
 

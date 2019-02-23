@@ -93,13 +93,13 @@ impl<O: IsA<Socket>> GtkSocketExt for O {
 
 unsafe extern "C" fn plug_added_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSocket, f: glib_ffi::gpointer)
 where P: IsA<Socket> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Socket::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn plug_removed_trampoline<P, F: Fn(&P) -> bool + 'static>(this: *mut ffi::GtkSocket, f: glib_ffi::gpointer) -> glib_ffi::gboolean
 where P: IsA<Socket> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Socket::from_glib_borrow(this).unsafe_cast()).to_glib()
 }
 

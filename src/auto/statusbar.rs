@@ -119,13 +119,13 @@ impl<O: IsA<Statusbar>> StatusbarExt for O {
 
 unsafe extern "C" fn text_popped_trampoline<P, F: Fn(&P, u32, &str) + 'static>(this: *mut ffi::GtkStatusbar, context_id: libc::c_uint, text: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<Statusbar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Statusbar::from_glib_borrow(this).unsafe_cast(), context_id, &GString::from_glib_borrow(text))
 }
 
 unsafe extern "C" fn text_pushed_trampoline<P, F: Fn(&P, u32, &str) + 'static>(this: *mut ffi::GtkStatusbar, context_id: libc::c_uint, text: *mut libc::c_char, f: glib_ffi::gpointer)
 where P: IsA<Statusbar> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&Statusbar::from_glib_borrow(this).unsafe_cast(), context_id, &GString::from_glib_borrow(text))
 }
 

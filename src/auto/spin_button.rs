@@ -35,9 +35,8 @@ glib_wrapper! {
 }
 
 impl SpinButton {
-    pub fn new<'a, P: IsA<Adjustment> + 'a, Q: Into<Option<&'a P>>>(adjustment: Q, climb_rate: f64, digits: u32) -> SpinButton {
+    pub fn new<P: IsA<Adjustment>>(adjustment: Option<&P>, climb_rate: f64, digits: u32) -> SpinButton {
         assert_initialized_main_thread!();
-        let adjustment = adjustment.into();
         unsafe {
             Widget::from_glib_none(ffi::gtk_spin_button_new(adjustment.map(|p| p.as_ref()).to_glib_none().0, climb_rate, digits)).unsafe_cast()
         }
@@ -54,7 +53,7 @@ impl SpinButton {
 pub const NONE_SPIN_BUTTON: Option<&SpinButton> = None;
 
 pub trait SpinButtonExt: 'static {
-    fn configure<'a, P: IsA<Adjustment> + 'a, Q: Into<Option<&'a P>>>(&self, adjustment: Q, climb_rate: f64, digits: u32);
+    fn configure<P: IsA<Adjustment>>(&self, adjustment: Option<&P>, climb_rate: f64, digits: u32);
 
     fn get_adjustment(&self) -> Adjustment;
 
@@ -120,8 +119,7 @@ pub trait SpinButtonExt: 'static {
 }
 
 impl<O: IsA<SpinButton>> SpinButtonExt for O {
-    fn configure<'a, P: IsA<Adjustment> + 'a, Q: Into<Option<&'a P>>>(&self, adjustment: Q, climb_rate: f64, digits: u32) {
-        let adjustment = adjustment.into();
+    fn configure<P: IsA<Adjustment>>(&self, adjustment: Option<&P>, climb_rate: f64, digits: u32) {
         unsafe {
             ffi::gtk_spin_button_configure(self.as_ref().to_glib_none().0, adjustment.map(|p| p.as_ref()).to_glib_none().0, climb_rate, digits);
         }
@@ -340,49 +338,49 @@ impl<O: IsA<SpinButton>> SpinButtonExt for O {
 
 unsafe extern "C" fn notify_adjustment_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSpinButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<SpinButton> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&SpinButton::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_climb_rate_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSpinButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<SpinButton> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&SpinButton::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_digits_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSpinButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<SpinButton> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&SpinButton::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_numeric_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSpinButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<SpinButton> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&SpinButton::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_snap_to_ticks_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSpinButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<SpinButton> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&SpinButton::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_update_policy_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSpinButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<SpinButton> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&SpinButton::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_value_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSpinButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<SpinButton> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&SpinButton::from_glib_borrow(this).unsafe_cast())
 }
 
 unsafe extern "C" fn notify_wrap_trampoline<P, F: Fn(&P) + 'static>(this: *mut ffi::GtkSpinButton, _param_spec: glib_ffi::gpointer, f: glib_ffi::gpointer)
 where P: IsA<SpinButton> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&SpinButton::from_glib_borrow(this).unsafe_cast())
 }
 

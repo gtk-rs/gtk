@@ -79,7 +79,7 @@ impl<O: IsA<Widget>> WidgetExtManual for O {
     fn intersect<'a, I: Into<Option<&'a mut Rectangle>>>(
         &self,
         area: &Rectangle,
-        intersection: I,
+        mut intersection: Option<&mut Rectangle>,
     ) -> bool {
         let mut intersection = intersection.into();
         unsafe {
