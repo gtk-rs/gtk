@@ -28,13 +28,14 @@ impl<O: IsA<TextBuffer>> TextBufferExtManual for O {
     }
 }
 
-unsafe extern "C" fn insert_text_trampoline<T, F: Fn(&T, &mut TextIter, &str) + 'static>(this: *mut ffi::GtkTextBuffer,
-                                                                                         location: *mut ffi::GtkTextIter,
-                                                                                         text: *mut c_char,
-                                                                                         len: c_int,
-                                                                                         f: glib_ffi::gpointer)
-where T: IsA<TextBuffer> {
-    let f: &F = transmute(f);
+unsafe extern "C" fn insert_text_trampoline<T, F: Fn(&T, &mut TextIter, &str) + 'static>(
+    this: *mut ffi::GtkTextBuffer,
+    location: *mut ffi::GtkTextIter,
+    text: *mut c_char,
+    len: c_int,
+    f: glib_ffi::gpointer,
+) where T: IsA<TextBuffer> {
+    let f: &F = &*(f as *const F);
     f(&TextBuffer::from_glib_borrow(this).unsafe_cast(),
       &mut from_glib_borrow(location),
       str::from_utf8(slice::from_raw_parts(text as *const u8, len as usize)).unwrap())

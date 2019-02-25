@@ -6,7 +6,7 @@ use SortType;
 use ffi;
 use glib::object::{Cast, IsA};
 use glib::translate::*;
-use std::mem::{self, transmute};
+use std::mem;
 use std::cmp::Ordering;
 
 use glib_ffi::gpointer;
@@ -62,7 +62,7 @@ pub trait TreeSortableExtManual: 'static {
 unsafe extern "C" fn trampoline<T, F: Fn(&T, &TreeIter, &TreeIter) -> Ordering>(this: *mut GtkTreeModel, iter: *mut GtkTreeIter,
                                    iter2: *mut GtkTreeIter, f: gpointer) -> i32
 where T: IsA<TreeSortable> {
-    let f: &F = transmute(f);
+    let f: &F = &*(f as *const F);
     f(&TreeModel::from_glib_none(this).unsafe_cast(), &from_glib_borrow(iter),
       &from_glib_borrow(iter2)).to_glib()
 }
